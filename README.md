@@ -65,7 +65,9 @@
 ## Contributing
 
 关于分支/issue及PR, 请查看 [CONTRIBUTING](docs/CONTRIBUTING.md)
+
 [腾讯开源激励计划](https://opensource.tencent.com/contribution) 鼓励开发者的参与和贡献，期待你的加入。
+
 ## FAQ
 
 请查看 [FAQ](https://github.com/Tencent/bk-PaaS/wiki/FAQ)
