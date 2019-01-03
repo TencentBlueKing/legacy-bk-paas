@@ -63,6 +63,7 @@ free-operation of SaaS applications
 ## Contributing
 
 For bk-PaaS branch management, issues, and pr specifications, read the [CONTRIBUTING(In Chinese)](docs/CONTRIBUTING.md)
+
 If you are interested in contributing, check out the [CONTRIBUTING.md], also join our [Tencent OpenSource Plan](https://opensource.tencent.com/contribution).
 
 
