@@ -1,0 +1,127 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel-body" style="margin-left: -60px;margin-bottom: -30px;">
+            <div class="form-inline form-columns app-form">
+              <!-- 应用 ID -->
+              <div class="form-group">
+                <label class="control-label" for="">应用 ID</label>
+                <div class="controls">
+                <input type="text" class="form-control" id="code" name="code" />
+                <span class="required">*</span>
+                <span id="tip_code" class="tips error"></span>
+                  <!--             使用独立域名，appcode中不用下划线改用连接符             -->
+                  <span class="help-block">
+                  由小写英文字母、连接符(-)或数字组成，长度为3~16个字符, 并且以字母开头。
+                  </span>
+                </div>
+              </div>
+
+              <!--应用名称     -->
+              <div class="form-group">
+                <label class="control-label" for="">应用名称</label>
+                <div class="controls">
+                  <input type="text" class="form-control" id="name" name="name" value="" >
+                  <span class="required">*</span>
+                  <span id="tip_name" class="tips error"></span>
+                  <span class="help-block">应用名称，长度小于20个字符。</span>
+                </div>
+              </div>
+              <!-- 应用简介 -->
+              <div class="form-group">
+                <label class="control-label" for="">应用简介</label>
+                <div class="controls">
+                  <input type="text" class="form-control" id="introduction" name="introduction" value="" >
+                  <span class="required">*</span>
+                  <span id="tip_introduction" class="tips error"></span>
+                  <span class="help-block">应用简要介绍，长度小于30个字符。</span>
+                </div>
+              </div>
+              <!-- 开发负责人 -->
+              <hr style="margin-left: 50px;margin-top: 10px;">
+              <div class="form-group">
+                <label class="control-label" for="">负责人</label>
+                <div class="controls">
+                    <input type="hidden" name="developer" id="developer" value="${request.user.username}">
+                    <select multiple="multiple" id="developer_select"  style="width: 545px;">
+                        % for _user in users:
+                            % if _user['username'] == request.user.username:
+                                <option value="${_user['username']}" selected >${_user['username']}</option>
+                            % else:
+                                <option value="${_user['username']}" >${_user['username']}</option>
+                            % endif
+                        % endfor
+                    </select>
+                  <span class="required">*</span>
+                  <span id="tip_developer" class="tips error"></span>
+                  <span class="help-block">负责人可以管理、部署该应用</span>
+                </div>
+              </div>
+              <hr style="margin-left: 50px;margin-top: 10px;">
+              <!--版本控制 start-->
+              <div class="form-group php" isthird=0>
+                <label class="control-label" for="">代码仓库</label>
+                <div class="controls mt5">
+                  %for value, key in vcs_type_choices:
+                    <label class="radio-inline">
+                      <input type="radio" name="vcs_type" value="${value}" 
+                          %if key == "Git":
+                            checked
+                          %endif
+                      > ${key}
+                    </label>
+                  %endfor
+                  <span class="help-block" id="vcs_type_help">通过Git方式获取应用代码</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">仓库地址</label>
+                <div class="controls">
+                  <input type="text" class="form-control" name="vcs_url" id="vcs_url" value="" style="width:270px" title="">
+                  <span class="required">*</span>
+                  <span id="tip_vcs_url" class="tips mt10 mb5 ml150 error"></span>
+                  <span class="help-block" id="vcs_url_help">支持以下协议：http(s)://, git://</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label"><span id="vcs_text">Git</span>账号</label>
+                <div class="controls">
+                  <input type="text" class="form-control" name="vcs_username" id="vcs_username" value="" onblur="APP_CREATE.check_vcs_username()" style="width:270px" title="">
+                  <span class="required">*</span>
+                  <span id="tip_vcs_username" class="tips mt10 mb5 ml150 error"></span>
+                  <span class="help-block"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">密码</label>
+                <div class="controls">
+                  <!-- 防止Firefox下密码自动填充 -->
+                  <input type="text" style="display:none">
+                  <input type="password" style="display:none">
+                  <input type="text" onfocus="this.type='password'" class="form-control" name="vcs_password" id="vcs_password" value="" onblur="APP_CREATE.check_vcs_password()" style="width:270px" title="">
+                  <span class="required">*</span>
+                  <span id="tip_vcs_password" class="tips mt10 mb5 ml150 error"></span>
+                </div>
+              </div>
+              <!--版本控制 end-->
+              <!--开发信息 start-->
+              <hr style="margin-left: 50px;margin-top: 10px;">
+              <div class="form-group">
+                <label class="control-label" for="language">开发语言</label>
+                <div class="controls">
+                  <span>Python（Django 1.8）</span> 
+                  <span class="help-block">推荐基于蓝鲸智云应用开发框架开发; 并按照<a  target="_blank" href="${SITE_URL}guide/newbie/#step3"> 提示 </a>修改配置</span>
+                  
+                </div>
+              </div>
+              <!--开发信息 end-->
+              <!-- form end-->
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<!--     操作按钮  -->
+<div class="t_c mt35">
+    <button type="submit" class="btn btn-green btn-l btn-wm" id="submit_form_create" style="width:130px;height: 60px">创建应用</button>
+</div>

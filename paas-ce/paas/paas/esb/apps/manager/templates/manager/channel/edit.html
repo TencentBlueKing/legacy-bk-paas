@@ -1,0 +1,142 @@
+{% extends "manager/base.html" %}
+{% load bootstrap %}
+{% load i18n %}
+
+{% block main %}
+
+<div class="main-page box-info">
+    <div class="main-header">
+        <span>{% trans "修改通道" %}</span>
+    </div>
+
+    <div class="page-content" style="width: 80%">
+        <form action="" method="post" class="form-inline form-columns">{% csrf_token %}
+            {{ form.name|bootstrap }}
+            {{ form.path|bootstrap }}
+            {{ form.component_system|bootstrap }}
+            {{ form.component_codename|bootstrap }}
+            {{ form.type|bootstrap }}
+            {{ form.timeout_time|bootstrap }}
+
+            {% if comp_conf %}
+            <div class="form-group">
+                <label class="control-label" for="id_comp_conf">{% trans "组件配置" %}</label>
+                <input class="form-control" id="id_comp_conf_val" name="comp_conf" type="hidden" value="{{ comp_conf_val }}">
+                <div class="controls">
+                    <div class="panel-content">
+                        <table id="id_comp_conf" class="table table-header-bg table-hover mb0" style="width: 450px">
+                            <thead style="border-top: 1px solid #ddd;">
+                                <tr>
+                                    <th style="width:25%">{% trans "变量名" %}</th>
+                                    <th style="width:75%">{% trans "变量值" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 展示组件配置 -->
+                                {% for field_conf in comp_conf_group.comp_conf %}
+                                {% if field_conf.key == comp_conf_group.group_field %}
+                                <tr>
+                                    <td style="padding-top: 15px; text-align: left">{{ field_conf.key }}</td>
+                                    <td>
+                                        <select class="form-control" conf_name="{{ field_conf.key }}" value="{{ field_conf.value }}" style="width: 350px">
+                                            {% for group in comp_conf_group.groups %}
+                                            {% if field_conf.value == group.value %}
+                                            <option value="{{ group.value }}" selected="selected">{{ group.label }}</option>
+                                            {% else %}
+                                            <option value="{{ group.value }}">{{ group.label }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr class="{{field_conf.group}}">
+                                    <td style="padding-top: 15px; text-align: left">{{ field_conf.key }}</td>
+                                    <td><input type={{ field_conf.text_type|default:"text" }} class="form-control" conf_name="{{ field_conf.key }}" value="{{ field_conf.value }}" style="width: 350px" /></td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="form-group" style="display: none;">
+                <div class="controls ">
+                    <div class="checkbox">
+                        <label>
+                            <input {% if rate_limit_required %}checked="checked"{% endif %} id="id_rate_limit_required" name="rate_limit_required" type="checkbox"> 
+                            <span>{% trans "开启请求频率限制" %}</span>
+                        </label>
+                                                
+                        <div class="well rate-limit-config-container" {% if not rate_limit_required %}style="display: none;"{% endif %}>
+                            <div class="form-inline">
+                                <input value="{{ rate_limit_conf.tokens }}" type="number" min="0" name="max_allowed_requests" placeholder="{% trans '最大请求数' %}" class="form-control" style="width: 220px">
+                                <select class="form-control" id="id_rate_limit_conf_unit" name="rate_limit_conf_unit" style="width: 120px">
+                                    <option value="second">{% trans "每秒" %}</option>
+                                    <option value="minute">{% trans "每分钟" %}</option>
+                                    <option value="hour">{% trans "每小时" %}</option>
+                                </select>
+                            </div>
+                            <div class="help-block mt10">{% trans "频率限制维度" %}: <strong>{% trans "每个蓝鲸应用" %}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{ form.is_active|bootstrap }}
+            <div class="form-group action">
+                <button type="submit" class="btn btn-primary">{% trans "提交修改" %}</button> 
+                <button type="button" class="btn btn-default cancel">{% trans "取消" %}</button> 
+            </div>
+        </form>
+    </div>
+</div>
+{% include 'manager/system/add_system_tmpl.html' %}
+{% endblock %}
+
+{% block footer %}
+<script src="{{ STATIC_URL }}esb/js/esb_add_system.{{JS_SUFFIX}}"></script>
+<script src="{{ STATIC_URL }}esb/js/channel.{{JS_SUFFIX}}"></script>
+<script type="text/javascript">
+$(function() {
+    $('button.cancel').bind('click', function() {
+       window.location.href = "{% url 'manager.channel.list' %}";
+    });
+    // 添加系统
+    var url_add_system = "{% url 'manager.api.system.add' %}";
+    add_system(url_add_system, '{{ csrf_token }}', $('#id_component_system'));
+
+    $("#id_rate_limit_conf_unit").val("{{ rate_limit_conf.unit }}");
+
+    $("#id_comp_conf select").bind("change", function() {
+        var selected_val = $(this).val();
+        var conf_name = $(this).attr("conf_name");
+        var group_class = "." + conf_name;
+        var selected_group_class = group_class + "_" + selected_val;
+        $("#id_comp_conf").find(selected_group_class).show();
+        $("#id_comp_conf").find(group_class).not(selected_group_class).hide();
+    });
+
+    // 维护 comp_conf
+    $("#id_comp_conf input, #id_comp_conf select").bind('change', function() {
+        var $comp_conf_val = $("#id_comp_conf_val");
+        comp_conf_val = JSON.parse($comp_conf_val.val());        
+        key = $(this).attr("conf_name");
+        val = $(this).val().trim();
+        for (i=0, len=comp_conf_val.length; i<len; i++) {
+            if (comp_conf_val[i][0] == key) {
+                comp_conf_val[i][1] = val;
+                break
+            }
+        }
+        $comp_conf_val.val(JSON.stringify(comp_conf_val));
+    });
+
+    $("#id_comp_conf select").change();
+
+});
+</script>
+{% endblock %}

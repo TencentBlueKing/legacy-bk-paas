@@ -1,0 +1,189 @@
+/**
+* Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+* Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+* Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+* http://opensource.org/licenses/MIT
+* Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+*/
+@charset "utf-8";
+
+.sidebar .navbar-sample1 .navbar-nav a{color:#555759}
+.sidebar{position:fixed; top:0; left:0px; width:180px; height:100%; min-height: 800px; background:#e5e8eb; overflow:auto;}
+.navbar-sample1{position:relative; border:0; border-bottom:3px solid #73797C; z-index:1; clear:both; border-radius:0;}
+li.active{color:#fff;}
+.sidebar .navbar-sample1 .navbar-nav>.active>a{color:#3498db}
+.right_wrapper{height:auto; width:auto; min-width:1200px;float:left; position:absolute; left:180px;z-index:-1}
+.left_wraper{width:180px; height:100%;}
+
+
+.dropdown:hover .menu-top {
+    display: block;
+}
+
+.dropdown-submenu{
+    position:relative;
+}
+
+.dropdown-submenu > .dropdown-menu{
+    top:0;
+    left:100%;
+    margin-top:-6px;
+    margin-left:-1px;
+}
+
+.dropdown-submenu:hover > .dropdown-menu{
+    display:block;
+}
+
+.dropdown-submenu > a:after{
+    display:block;
+    content:" ";
+    float:right;
+    width:0;
+    height:0;
+    border-color:transparent;
+    border-style:solid;
+    border-width:5px 0 5px 5px;
+    border-left-color:#cccccc;
+    margin-top:5px;
+    margin-right:-10px;
+}
+
+.dropdown-submenu:hover > a:after{
+    border-left-color:#ffffff;
+}
+
+.dropdown-submenu .pull-left{
+    float:none;
+}
+
+.dropdown-submenu.pull-left > .dropdown-menu{
+    left:-100%;
+    margin-left:10px;
+    -webkit-border-radius:6px 0 6px 6px;
+    -moz-border-radius:6px 0 6px 6px;
+    border-radius:6px 0 6px 6px;
+}
+
+
+/*二级页面样式 start*/
+.secondary-page .panel{
+    border:none;
+    background: #fafafa;
+}
+.secondary-page .nav-top-div{
+    border:none;
+}
+.secondary-page .doc-content-box{
+    border:none;
+    background: #fff;
+    /*box-shadow: 0 0 16px rgba(0,0,0,0.2);*/
+}
+.secondary-page .dropdown-content{
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    width: 928px;
+    right: -1094px;
+    background: #fafafa;
+}
+.secondary-page .dropdown-content::after{
+    content:"";
+    position: absolute;
+    width: 21px;
+    height: 60px;
+    background: #fafafa;
+    top:0;
+    left:0;
+    z-index: 1000;
+    margin-left: -12px;
+    border-color:#fafafa;
+}
+.sidebar-nav ul a.all-system-title{
+    padding: 26px 0 18px 20px;
+    font-size:16px;
+    line-height: 1;
+    color:#333;
+    cursor: pointer;
+}
+.right-content a{
+    color:#57a3f1;   
+}
+.right-content{
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 14px;
+}
+.secondary-page .dropdown-content .hide-overflow-content a{
+    color:#7b7d8a;
+    font-size:14px;
+
+}
+.secondary-page .dropdown-content .hide-overflow-content a span{
+    color:#bbb;
+    font-size: 12px;  
+}
+.secondary-page .dropdown-content .hide-overflow-content a:hover{
+    color: #57a3f1;
+}
+.secondary-page .sidebar-nav .title-contrl a{
+    font-size: 14px;
+    font-weight:bold;
+    color:#333;
+    padding:10px 0 10px 20px;
+}
+.secondary-page .sidebar-nav .api-list-title{
+    font-size: 14px;
+    font-weight:bold;
+    color:#333;
+    padding:10px 0 10px 20px;
+}
+.secondary-page .sidebar-nav .api-hover-a:hover{
+    border:none;
+    background-color: #57a3f1;
+    color: #fff;
+}
+.secondary-page .sidebar-nav .drop-down-list{
+    font-size: 12px;
+    color:#333;
+}
+.secondary-page .sidebar-nav .api-hover-a{
+    position: relative;
+}
+.secondary-page .sidebar-nav .api-hover-a .add-project-tip{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #57e724;
+    margin-right: 20px;
+    font-size:10px;
+    margin-top: 10px;
+}
+.secondary-page .sidebar-nav .drop-down-list li a{
+    height: 53px;
+    line-height: 53px;
+    padding: 0 0 0 30px;
+    transition: all .0s;
+    padding: 10px 0 0 20px;
+}
+.secondary-page .sidebar-nav .api-hover-a .describe{
+    font-size: 12px;
+    color: #999;
+    padding-top: 3px;
+}
+.secondary-page .sidebar-nav .api-hover-a:hover .describe{
+    color:#fff;
+}
+/*API列表 satrt*/
+.api_docs-list{
+    padding-top: 20px;
+}
+.api_docs-list table tr th{
+    padding:15px 0 15px 15px;
+    line-height: 1;
+    border:none;
+}
+.api_docs-list table tr td{
+    padding: 20px 0 20px 15px;
+    line-height: 1;
+    border:none;
+}
+
+/*API列表 end*/

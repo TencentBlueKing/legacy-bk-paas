@@ -1,0 +1,105 @@
+<%inherit file="/base.html"/>
+
+<!-- 左侧导航 start -->
+<%block name='left_content'>
+    <%
+        user_center = app_create = app_center = developer_tool = newbie_guide = services = server = external_server = faq = esb = saas_center = resource =''
+        relative_path = APP_PATH
+        if relative_path.startswith(SITE_URL + "accounts/profile/"):
+            user_center = 'selected'
+        elif relative_path == (SITE_URL + "app/"):
+            app_create = 'selected'
+        elif relative_path.startswith(SITE_URL + "app/list/"):
+            app_center = 'selected'
+        elif relative_path.startswith(SITE_URL + "guide/tools/"):
+            developer_tool = 'selected'
+        elif relative_path.startswith(SITE_URL + "engine/server/"):
+            server = 'selected'
+        elif relative_path.startswith(SITE_URL + "engine/external_server/"):
+            external_server = 'selected'
+        elif relative_path.startswith(SITE_URL + "esb/channel/list"):
+            esb = 'selected'
+        elif relative_path.startswith(SITE_URL + "guide/services/"):
+            services = 'selected'
+        elif relative_path.startswith(SITE_URL + "guide/newbie/"):
+           newbie_guide = 'selected'
+        elif relative_path.startswith(SITE_URL + "saas/"):
+           saas_center = 'selected'
+        elif relative_path.startswith(SITE_URL + "resource/"):
+            resource = 'selected'
+    %>
+  <div class="menu_box" id="menuBar">
+    <dl class="menu no_extra" style="border-top:none;">
+      <dt class="menu_title clickable ${user_center}">
+      <a href="${SITE_URL}accounts/profile/"><i class="icon_menu icon_menu manage"></i>个人信息</a>
+      </dt>
+    </dl>
+
+    <dl class="menu">
+      <dt class="menu_title">
+      <i class="icon_menu appcenter"></i>应用中心<i class="arrow"></i>
+      </dt>
+      <dd class="menu_item none ${app_create}"><a href="${SITE_URL}app/">应用创建</a></dd>
+      <dd class="menu_item none ${app_center}"><a href="${SITE_URL}app/list/">我的应用</a></dd>
+      <!-- 超级管理员才有权限查看 -->
+      % if request.user.is_staff and request.user.is_superuser:
+        <dd class="menu_item none ${saas_center}"><a href="${SITE_URL}saas/list/">S-mart应用</a></dd>
+      % endif
+    </dl>
+    <!-- 超级管理员才有权限查看 -->
+    % if request.user.is_staff and request.user.is_superuser:
+      <dl class="menu">
+        <dt class="menu_title clickable ${server}">
+        <a href="${SITE_URL}engine/server/"><i class="icon_menu task"></i>服务器信息</a>
+        </dt>
+      </dl>
+      <dl class="menu">
+        <dt class="menu_title clickable ${external_server}">
+        <a href="${SITE_URL}engine/external_server/"><i class="icon_menu db"></i>第三方服务</a>
+        </dt>
+      </dl>
+    % endif
+    <dl class="menu">
+      <dt class="menu_title clickable ${services}">
+      <a href="${SITE_URL}guide/services/"><i class="icon_menu service"></i>服务介绍</a>
+      </dt>
+    </dl>
+
+    <dl class="menu">
+      <dt class="menu_title clickable ${newbie_guide}">
+      <a href="${SITE_URL}guide/newbie/"><i class="icon_menu guide"></i>新手指南</a>
+      </dt>
+    </dl>
+
+    <dl class="menu">
+      <dt class="menu_title clickable ${resource}">
+      <a href="${SITE_URL}resource/"> <i class="bk-icon icon-download f18 t_b mr10"></i>资源下载</a>
+      </dt>
+    </dl>
+
+    <!-- 超级管理员才有权限查看, NOTE: 合并一行, 为了自动化生成开源版本方便 -->
+    % if request.user.is_staff and request.user.is_superuser:
+    <!-- esb manage -->
+    <!-- 超级管理员才有权限查看, NOTE: 合并一行, 为了自动化生成开源版本方便 -->
+    <dl class="menu"> <dt class="menu_title clickable ${esb}"> <a href="${SITE_URL}esb/manager/index/" target="_blank"><i class="icon_menu esb"></i>API网关</a> </dt> </dl>
+    % else:
+    <!-- 超级管理员才有权限查看, NOTE: 合并一行, 为了自动化生成开源版本方便 -->
+    <dl class="menu"> <dt class="menu_title clickable ${esb}"> <a href="${SITE_URL}esb/api_docs/system/" target="_blank"><i class="icon_menu esb"></i>API文档</a> </dt> </dl>
+    % endif
+
+    <dl class="menu">
+        <dt class="menu_title clickable">
+            <a href="http://magicbox.bk.tencent.com/" target="_blank"><i class="icon_menu sample"></i>MagicBox</a>
+        </dt>
+    </dl>
+
+  </div>
+</%block>
+<!-- 左侧导航 end -->
+
+<!-- 右侧内容 start -->
+<%block name="right_content_base">
+    <%block name="right_content">
+    </%block>
+</%block>
+<!-- 右侧内容 end -->

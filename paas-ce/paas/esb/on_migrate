@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source /root/.bkrc
+source $CTRL_DIR/functions
+export BK_ENV=production
+
+workon esb || fail "Abort"
+
+if [ -f esb/management/commands/sync_data_at_deploy.pyc ]; then
+	python manage.py sync_data_at_deploy
+fi

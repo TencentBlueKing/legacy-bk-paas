@@ -1,0 +1,43 @@
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_app.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+    <input type="hidden" value="${app_code}" id="app_code_id">
+    <input type="hidden" value="${app_state}" id="app_state_id">
+    <div class="main_hd">
+	    <h4>&nbsp;</h4>
+	    <div class="title_tab" id="topTab">
+	        <ul class="tab_navs title_tab" data-index="0">
+	            <li data-index="0" class="tab_nav first js_top"><a href="${SITE_URL}saas/${app_code}/info/">基本信息</a></li>
+
+	            <li data-index="0" class="tab_nav first js_top selected"><a href="${SITE_URL}saas/${app_code}/release/record/">发布记录</a></li>
+	        </ul>
+	    </div>
+	</div>
+  % if app_state != 1:
+    <div class="mt10">
+        <select class="form-control" id="app_record" style="width:200px;margin-left:10px;">
+            <option value="0" selected>全部记录</option>
+            <option value="2">上线记录</option>
+            <option value="3">下架记录</option>
+        </select>
+    </div>
+    <div id="record_list"></div>
+  % else:
+    <p class="t_c mt20">没有记录</p>
+  % endif
+</%block>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+$(function(){
+  var app_code = $("#app_code_id").val();
+  var app_state = $("#app_state_id").val();
+  $("#app_record").on('change', function() {
+    var operate_id = $(this).val();
+    if(app_state != '1'){
+      REL_MANAGER.search_app_record(app_code, operate_id);
+    }
+  });
+  $("#app_record").trigger('change');
+  //REL_MANAGER.search_app_record(app_code, 0);
+})
+</script>

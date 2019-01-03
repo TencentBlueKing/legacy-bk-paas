@@ -1,0 +1,92 @@
+<%!
+   def inherit( context ):
+       if not context.get('base_tpl'):
+           return '/base_app.html'
+       else:
+           return context.get('base_tpl')
+%>
+<%inherit file="${inherit(context)}"/>
+
+<%block name="right_content">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_app_env.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<hr/>
+<div class="col_main">
+  <div class="dev_center_wrap dev_center_module">
+    <h4 class="dev_module_title">
+    &nbsp;
+    <button type="button" class="btn-info btn-xs env_add_btn fr"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span>添加变量</button>
+    </h4>
+
+    <table class="table table-bordered dev_env_table" id="user_env_table">
+      <thead>
+        <tr>
+          <th width="30%">变量名</th>
+          <th width="20%">值</th>
+          <th width="15%">生效环境</th>
+          <th width="15%">说明</th>
+          <th width="20%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <input type="hidden" id="app_code" value="${app_code}"/>
+        <div style="display:none;" id="mode_choices_html">
+        ${mode_choices_html}
+        </div>
+        % if env_vars:
+          % for env_var in env_vars:
+          <tr class="env_record">
+            <input  type="hidden" class="env_id" disabled value="${env_var.id}" />
+            <td>
+              <div class="env_key_box">
+                <input class="form-control env_name" disabled value="${env_var.name[6:]}" />
+                <span class="env_prefix">BKAPP_</span>
+              </div>
+            </td>
+            <td>
+              <input class="form-control env_val" disabled value="${env_var.value|h}" />
+            </td>
+            <td>
+              <select class="form-control env_mode" disabled>
+                % for key, value in mode_choices:
+                <option value="${key}"
+                        % if key == env_var.mode:
+                        selected
+                        % endif
+                > ${value} </option>
+                % endfor
+              </select>
+            </td>
+            <td>
+              <input class="form-control env_intro" disabled value="${env_var.intro}" />
+            </td>
+            <td>
+              <button type="button" class="btn-info btn-xs env_save_btn">保存</button>
+              <button type="button" class="btn-xs env_cancel_btn">取消</button>
+              <a href="#" title="编辑" class="dev_env_opera env_edit_btn"><span aria-hidden="true" class="glyphicon glyphicon-edit"></span></a>
+              <a href="#" value="${env_var.id}" title="删除" class="dev_env_opera env_del_btn"><span aria-hidden="true" class="glyphicon glyphicon-remove-circle"></span></a>
+            </td>
+          </tr>
+          % endfor
+        % else:
+          <tr class="env_record" id="no_record_row"><td colspan="5"><center>未设置环境变量</center></td><tr>
+        % endif
+      </tbody>
+    </table>
+
+    <h4 class="dev_module_title mt30">使用说明</h4>
+    <div class="env_introduce_box">
+      <p> 您可以设置应用运行时的环境变量，在进行 <font color='red'>测试部署</font>和<font color='red'>正式部署</font>操作时会生效。</p>
+      <p> 同一个变量, 仅允许配置到 <font color='red'>测试环境</font>和<font color='red'>正式环境</font> 或者<font color='red'>所有环境(包含正式/测试)</font></p>
+      <p> 在您的应用中可以执行
+      <code>Python: os.environ.get('BKAPP_variable_name')</code> / <code>PHP: env('BKAPP_variable_name')</code>
+      访问您设置的环境变量.
+      </p>
+      <p>环境变量名都以"BKAPP_"为前缀，您输入名字时不需要输入前缀。</p>
+      <p>变量名和变量的值均以大小写英文字母，数字或者下划线组成，变量名最大长度为50字符，值的最大长度为100字符。</p>
+      <p>开发框架: 可以使用变量<font color='red'> BKAPP_CONTAINER_MEM </font>设置容器最大内存, 值为整数, 单位M。</p>
+    </div>
+  </div>
+</div>
+</%block>
+
+<script src="${STATIC_URL}js/paas_app_env.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

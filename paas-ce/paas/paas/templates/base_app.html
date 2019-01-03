@@ -1,0 +1,96 @@
+<%inherit file="/base.html"/>
+<!-- 左侧导航 start -->
+<%block name='left_content'>
+    <%
+        app_baseinfo = release_record = release_home = unrelease = ''
+        log = app_env = monitor = ''
+        relative_path = APP_PATH
+        if relative_path == SITE_URL or (relative_path.startswith(SITE_URL + "app/") and relative_path.endswith("info/")):
+            app_baseinfo = 'selected'
+        elif (relative_path.startswith(SITE_URL + "release/") and relative_path.endswith(SITE_URL + "record/")) \
+          or (relative_path.startswith(SITE_URL + "release/") and relative_path.endswith(SITE_URL + "version/")):
+            release_record = 'selected'
+        elif (relative_path.startswith(SITE_URL + "release/") and relative_path.endswith("offline/")):
+            unrelease = 'selected'
+        elif relative_path.startswith(SITE_URL + "release/"):
+            release_home = 'selected'
+        elif relative_path.startswith(SITE_URL + "log/"):
+            log = 'selected'
+        elif (relative_path.startswith(SITE_URL + "app/") and relative_path.endswith(SITE_URL + "env/")):
+            app_env = 'selected'
+        elif relative_path.startswith(SITE_URL + "monitor/"):
+            monitor = 'selected'
+    %>
+    <div class="menu_box" id="menuBar">
+        <dl class="menu" style="border-top:none;">
+            <dt class="menu_title" style="padding: 0;">
+                <a class="" href='${SITE_URL}app/list/' style="padding-left:10px;color:#44B549;"> 《 返回我的应用</a>
+                <div style="padding: 15px 10px 10px;cursor:default">
+                    <div style="display:inline; overflow:visible; position:relative;width:120px;">
+                        <label style="color: #000; width:70px">应用名称：</label>
+                        <span  id="app_info_name_id"></span>
+                    </div>
+                    <div title="${app_code}" style="width:120px;">
+                        <label style="color: #000; width:70px">应用 ID&nbsp&nbsp：</label>
+                        ${app_code}
+                    </div>
+                    <div id="pro-test" style="height:15px;font-size:12px;margin-top:5px;">
+                        <span class="f_l">快捷入口：</span>
+                        <span data-toggle="tooltip" data-placement="top" title="应用未提测或已下架" style="color:#999;width:50px;margin-left:12px;">测试环境</span>
+                        <span data-toggle="tooltip" data-placement="left" title="应用未上线或已下架" style="color:#999;width:50px;margin-left:12px;">正式环境</span>
+                    </div>
+                </div>
+            </dt>
+        </dl>
+        <!--应用管理-->
+        <dl class="menu">
+                <dt class="menu_title">
+                    <i class="icon_menu setting" ></i>应用管理
+                </dt>
+                <dd class="menu_item ${app_baseinfo}"><a href="${SITE_URL}app/${app_code}/info/">基本信息</a></dd>
+                <dd class="menu_item ${app_env}"><a href="${SITE_URL}app/${app_code}/env/">环境变量</a></dd>
+        </dl>
+        <!--应用部署-->
+        <dl class="menu">
+                <dt class="menu_title">
+                    <i class="icon_menu function"></i>应用部署
+                </dt>
+                <dd class="menu_item ${release_home}"><a href="${SITE_URL}release/${app_code}/">发布部署</a></dd>
+                <dd class="menu_item ${unrelease}"><a href="${SITE_URL}release/${app_code}/offline/">下架</a></dd>
+                <dd class="menu_item ${release_record}"><a href="${SITE_URL}release/${app_code}/record/">发布历史</a></dd>
+        </dl>
+    </div>
+</%block>
+<!-- 左侧导航 end -->
+<!-- 右侧内容 start -->
+<%block name="right_content_base">
+    <%
+        title_msg = ''
+        relative_path = APP_PATH
+        if relative_path == SITE_URL or (relative_path.startswith(SITE_URL + "app/") and relative_path.endswith("info/")):
+            title_msg = u'基本信息管理'
+        elif relative_path.startswith(SITE_URL + "release/history") or (relative_path.startswith(SITE_URL + "release/") and relative_path.endswith(SITE_URL + "version/")):
+            title_msg = u'发布历史'
+        elif relative_path.startswith(SITE_URL + "release/"):
+            title_msg = u'发布部署'
+        elif (relative_path.startswith(SITE_URL + "release/") and relative_path.endswith("offline/")):
+            title_msg = u'下架'
+    %>
+    <div class="main_hd">
+        <h5>&nbsp;</h5>
+        <div class="ml10 t_s16">${title_msg}
+        	  <%block name="title_content"></%block>
+            <%doc><div class="f_r mr20"><a class="btn btn-white btn-default" href='${SITE_URL}'>返回首页</a></div></%doc>
+        </div>
+    </div>
+    <%block name="right_content">
+    </%block>
+</%block>
+<!-- 右侧内容 end -->
+<%block name="base_app">
+<script>
+    $(function () {
+        BASE_APP.refresh_app_status('${app_code}');
+    })
+</script>
+</%block>

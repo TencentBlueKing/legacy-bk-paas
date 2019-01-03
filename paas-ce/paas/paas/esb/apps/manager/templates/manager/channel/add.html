@@ -1,0 +1,72 @@
+{% extends "manager/base.html" %}
+{% load bootstrap %}
+{% load i18n %}
+
+{% block main %}
+
+<div class="main-page box-info">
+    <div class="main-header">
+        <span>{% trans "添加新通道" %}</span>
+    </div>
+
+    <div class="page-content" style="width: 80%">
+        <form action="" method="post" class="form-inline form-columns">{% csrf_token %}
+            {{ form.name|bootstrap }}
+            {{ form.path|bootstrap }}
+            {{ form.component_system|bootstrap }}
+            {{ form.component_codename|bootstrap }}
+            {{ form.type|bootstrap }}
+            {{ form.timeout_time|bootstrap }}
+
+            <div class="form-group" style="display: none;">
+                <div class="controls ">
+                    <div class="checkbox">
+                        <label>
+                            <input id="id_rate_limit_required" name="rate_limit_required" type="checkbox"> 
+                            <span>{% trans "开启请求频率限制" %}</span>
+                        </label>
+                                                
+                        <div class="well rate-limit-config-container" style="display: none;">
+                            <div class="form-inline">
+                                <input value="" type="number" min="0" name="max_allowed_requests" placeholder="{% trans '最大请求数' %}" class="form-control" style="width: 220px">
+                                <select class="form-control" id="id_rate_limit_conf_unit" name="rate_limit_conf_unit" style="width: 120px">
+                                    <option value="second">{% trans "每秒" %}</option>
+                                    <option value="minute">{% trans "每分钟" %}</option>
+                                    <option value="hour">{% trans "每小时" %}</option>
+                                </select>
+                            </div>
+                            <div class="help-block mt10">{% trans "频率限制维度" %}: <strong>{% trans "每个蓝鲸应用" %}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{ form.is_active|bootstrap }}
+            <div class="form-group action">
+                <button type="submit" class="btn btn-primary">{% trans "确认添加" %}</button> 
+                <button type="button" class="btn btn-default cancel">{% trans "取消" %}</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+{% include 'manager/system/add_system_tmpl.html' %}
+{% endblock %}
+
+{% block footer %}
+<script src="{{ STATIC_URL }}esb/js/esb_add_system.{{JS_SUFFIX}}"></script>
+<script src="{{ STATIC_URL }}esb/js/channel.{{JS_SUFFIX}}"></script>
+<script type="text/javascript">
+$(function() {
+    $('button.cancel').bind('click', function() {
+       window.location.href = "{% url 'manager.channel.list' %}";
+    });
+    // 添加系统
+    var url_add_system = "{% url 'manager.api.system.add' %}";
+    add_system(url_add_system, '{{ csrf_token }}', $('#id_component_system'));
+
+    // 初始化对应组件代号
+    $("#id_component_system").change();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,143 @@
+<%inherit file="/base_center.html"/>
+
+<%block name="right_content">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_release.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_saas.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+    <!-- 右侧内容 start -->
+    <div class="">
+        <div class="app_center">
+            <div class="box-info full">
+                <div class="main-header">
+                  % if app_code and app_code not in (0, '0'):
+                    <span>部署应用【${app_code}】</span>
+                    　<input type="hidden" id="app_code_id" value="${app_code}">
+                    　<input type="hidden" id="app_state_id" value="${app_state}">
+                  % else:
+                    <span>上传部署新应用</span>
+                  % endif
+                </div>
+                <div class="deploy_box">
+                  <div class="">
+                    <form  id="file_form" enctype="multipart/form-data" method="post" action="${SITE_URL}saas/${app_code}/upload/" class="form form-horizontal">
+                      <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" />
+                      <label class="control-label">部署文件：</label>
+                      <div class="inline-block">
+                        <a href="###" id="saas_upload" class="btn btn-default btn-lg choose-file-btn">选择文件</a>
+                        <div class="inline-block">
+                            <span id="file_version_display" class="import-file-name mr15" online_file="${version_info.get('file_version_display','')}">${version_info.get('file_version_display','')}</span>
+
+
+                            <div id="loading_div" style="display:none"><img alt="loadding" src="${STATIC_URL}img/loading_2_24x24.gif"> 正在上传...</div>
+                            <div id="file_tips_div" style="display:none">
+                              <span class="text-danger"><i class="bk-icon icon-exclamation-triangle t_b"></i> 请先选择要部署的文件</span>
+                            </div>
+                        </div>
+                        <input name="saas_file" id="saas_file" type="file">
+                      </div>
+                      <div class="pull-right">
+                        <button type="button" id="saas_app_online" n_btn="saas_deploy" class="btn btn-success btn-lg deploy_btn" data-id="online_form">一键部署</button>
+                      </div>
+                      <div id="import_msg" class="import-validate text-success"></div>
+                      <div class="popover bottom deploy_popover deploy_detail" style="display:none; max-width: 940px">
+                        <div class="popover-content">
+                          <div id="release_msg_pro"></div>
+                        </div>
+                      </div>
+                    </form>
+
+                    <span id="saas_app_version_id" style="display:none">${version_info.get('id', '')}</span>
+                    <iframe name="target_frame" style="display:none;"></iframe>
+
+                    <div class="deploy_tab_box" id="deploy_input">
+                        <div class="">
+                            <!--正式部署start -->
+                            <div id="online_form" n_form style="display:none;">
+                            </div>
+                            <!--正式部署end-->
+
+                        </div>
+                    </div>
+
+                    <!--流程图-->
+                    <div id="release-flow-before" class="pt20" style="display:none;">
+                    </div>
+                    <div id="release-flow" class="pt20 mb10" style="display:none;">
+                    </div>
+                    <div id="tips_info" class="pt20 mr30" style="margin-left:20px;max-width:820px;">
+                    </div>
+
+                    <div id="detail_button_2" style="margin-top:15px; margin-left:30px;display:none;">
+                      <a href="javascript:REL_MANAGER.get_app_release_detail()" title="点击查看详情" >
+                      <span aria-hidden="true" class="glyphicon glyphicon-list" style="margin-right:5px;"></span>
+                      <span id="detail_click">点击查看详情</span>
+                      </a>
+                    </div>
+
+                    <div id="detail_log" class="mt20" style="display:none;">
+                      <textarea id="detail_info" class="form-control" style="height:300px;background-color: #000; color: #FFF;" readonly="">部署日志：------create virtualenv for test1------
+                      </textarea>
+                  </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 右侧内容 end -->
+</%block>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+$(function (argument) {
+    $('.choose-file-btn').click(function(event) {
+        //触发选择文件的按钮
+        $('#saas_file').trigger('click');
+    });
+    $('#saas_file').on('change', function(){
+        // 把路径去掉，只显示文件名
+        var tag = $('.import-file-name').text($('#saas_file').val().split('\\')[$('#saas_file').val().split('\\').length-1]);
+        if (!tag) {
+            $('.import-file-name').text($('#saas_file').val().split('/')[$('#saas_file').val().split('/').length-1])
+        };
+    });
+
+    $("#saas_file").on("change", function(event) {
+      $("#import_msg").html($("#loading_div").html());
+       //oMsg.text("加载中...");
+       file_form.target="target_frame";
+       $('#saas_app_online').attr({"disabled":"disabled"});
+       $('#saas_upload').attr({"disabled":"disabled"});
+       file_form.submit();
+    });
+
+    $('#saas_file').on('click', function(){
+      this.value = null;
+    });
+
+    var app_code = $("#app_code_id").val();
+    var app_state = $("#app_state_id").val();
+
+    // 未部署的应用外，其他应用需要轮询当前状态
+    if(app_code && app_state != '1'){
+      // 正在部署，则显示状态图
+      if(app_state == '8' || app_state == '9' || app_state == '10'){
+        $('button[n_btn=saas_deploy]').attr({"disabled":"disabled"});
+        REL_MANAGER.refresh_roll(app_code, app_state, '#release_msg_pro', '部署', 2);
+      }
+      // 发起状态更新
+      if (app_code != '0') {
+        REL_MANAGER.check_unfinished_task(app_code);
+      }
+    }
+
+})
+//上线操作
+$('#saas_app_online').live('click', function(){
+  var saas_app_version_id = $("#saas_app_version_id").text();
+  var app_code = $("#app_code_id").val();
+  var app_state = $("#app_state_id").val();
+  if (!saas_app_version_id){
+    $("#import_msg").html($("#file_tips_div").html());
+    return false;
+  }
+  REL_MANAGER.confirm_saas_app_online(this, app_code, saas_app_version_id, app_state);
+})
+</script>

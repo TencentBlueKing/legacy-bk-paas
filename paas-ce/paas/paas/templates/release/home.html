@@ -1,0 +1,269 @@
+<%inherit file="/base_app.html"/>
+
+<%block name="right_content">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_release.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<!-- 部署-start -->
+% if app:
+<div class="deploy_box">
+    <div class="deploy_block env_block">
+        <h4>运行状态</h4>
+
+        <!-- 运行环境列表start -->
+        <table class="table env_list">
+            <tbody>
+                <tr>
+                    <!--测试环境-->
+                    <td>
+                        <strong class="env_name">测试环境</strong>
+                        % if app.is_already_test and app.state not in [1]:
+                            <span class="status status_success" name_state="test">正在运行</span>
+                        % else:
+                            % if not app.is_already_test and app.state not in [1]:
+                                <span class="status status_normal" name_state="test">已下架</span>
+                            % else:
+                                <span class="status status_normal" name_state="test">未部署</span>
+                            % endif
+                        % endif
+                        <span id="test_state">
+                            % if app.is_already_test and app.state not in [1]:
+                                <a href="${app_test_url}" target='_blank' id="deploy_test_url">
+                                    <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>马上访问
+                                </a>
+                            % else:
+                                <span class="glyphicon glyphicon-chevron-right ml40" style="color:#999;"
+                                data-toggle="tooltip" data-placement="right" title="应用未进行测试部署或者已经下架，访问入口关闭！"></span>
+                                马上访问
+                            % endif
+
+                        </span>
+                    </td>
+
+                    <!--正式环境-->
+                    <td>
+                        <strong class="env_name">正式环境</strong>
+                        % if app.is_already_online and app.state not in [0, 1]:
+                            <span class="status status_success" name_state="pro">正在运行</span>
+                        % else:
+                            % if not app.is_already_online and app.state in [0]:
+                                <span class="status status_normal" name_state="pro">已下架</span>
+                            % else:
+                                <span class="status status_normal" name_state="pro">未部署</span>
+                            % endif
+                        % endif
+                        <span id="pro_state">
+                            % if app.is_already_online and app.state not in [0, 1]:
+                                <a href="${app_prod_url}" target='_blank' id="deploy_pro_url">
+                                    <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>马上访问
+                                </a>
+                            % else:
+                                <span class="glyphicon glyphicon-chevron-right ml40" style="color:#999;"
+                                data-toggle="tooltip" data-placement="right" title="应用未进行上线部署或者已经下架，访问入口关闭！"></span>
+                                马上访问
+                            % endif
+                        </span>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <!-- 运行环境列表end -->
+    </div>
+
+    <!--部署操作-->
+    <div class="deploy_block">
+
+    <h4>部署操作
+      % if app.state in [8]:
+      <span class="ml40 appstate">应用正在“测试部署”，请稍后进行其他操作！</span>
+      % elif app.state in [9]:
+      <span class="ml40 appstate">应用正在“正式部署”，请稍后进行其他操作！</span>
+      % elif app.state in [10]:
+      <span class="ml40 appstate">应用正在“下架”，请稍后进行其他操作！</span>
+      % else:
+        % if lastest_record:
+        <span class="ml20 appstate" style="font-size: 14px;margin-top: 5px;">
+          <a href="${SITE_URL}release/${app_code}/record/" title="最近操作">
+            最近操作：${lastest_record['username']} 于${lastest_record['datetime']} 进行${lastest_record['operate_type']}操作${lastest_record['result']}
+          </a>
+        </span>
+        % endif
+      % endif
+      <span style="float: right;font-size: 14px;margin-top: 5px;">
+        <a target="_blank" href="${SITE_URL}guide/newbie/#step3" title="开发框架代码&配置修改">
+          开发框架代码 & 配置修改
+          <span aria-hidden="true" class="glyphicon glyphicon-question-sign"></span>
+        </a>
+        <!-- <a href="${SITE_URL}guide/faq" target="_blank" title="下载本地安装包" style="margin-left:20px;"> -->
+          <!-- 下载本地安装包 -->
+          <!-- <span aria-hidden="true" class="glyphicon glyphicon-question-sign"></span> -->
+        <!-- </a> -->
+      </span>
+    </h4>
+
+        <div class="deploy_tab_box" id="deploy_input">
+            <ul class="nav nav-tabs nav-justified" id="deploy_tab">
+
+              % if page != "unrelease":
+
+                <!--测试部署tab-->
+                <li class="active" class="width: 50px;" role="presentation" data-id="test_form"><a href="#">测试部署</a></li>
+
+                <!--正式部署tab-->
+                % if app.state in [3]:
+                    <li role="presentation" class="" data-id="online_form" ><a href="#"><span aria-hidden="true" class="glyphicon glyphicon-ban-circle" style="display:none;"></span>正式部署</a></li>
+                % elif app.state in [4]:
+                  <li role="presentation" class="disabled_status" data-id="online_form" ><a href="#" title="应用已上线，请重新测试部署后，再进行正式部署"><span aria-hidden="true" class="glyphicon glyphicon-ban-circle"></span>正式部署</a></li>
+                % elif app.state in [0]:
+                  <li role="presentation" class="disabled_status" data-id="online_form" ><a href="#" title="应用已下架，请重新测试部署后，再进行正式部署"><span aria-hidden="true" class="glyphicon glyphicon-ban-circle"></span>正式部署</a></li>
+                % else:
+                    <li role="presentation" class="disabled_status" data-id="online_form" ><a href="#" title="应用未部署，请测试部署后，再进行正式部署"><span aria-hidden="true" class="glyphicon glyphicon-ban-circle"></span>正式部署</a></li>
+                % endif
+
+              % else:
+
+                <!--下架tab-->
+                % if app.state in [0, 3, 4] and (app.is_already_test or app.is_already_online):
+                    <li role="presentation" class="" data-id="offline_form" ><a href="#"><span aria-hidden="true" class="glyphicon glyphicon-ban-circle" style="display:none;"></span>下架</a>
+                    <li class="disabled_status" data-id="placeholder" > </li>
+
+                % else:
+                    <li role="presentation" class="disabled_status" data-id="offline_form" ><a href="#" title="应用未部署或者已下架，不能进行下架操作" ><span aria-hidden="true" class="glyphicon glyphicon-ban-circle"></span>下架</a>
+                    <li class="disabled_status" data-id="placeholder" > </li>
+                % endif
+
+              % endif
+
+
+            </ul>
+            <!--操作-->
+            <div class="deploy_content">
+                <!-- 测试部署表单start -->
+                <div id="test_form" n_form>
+                </div>
+                <!-- 测试部署表单end -->
+
+                <!--正式部署start -->
+                <div id="online_form" n_form style="display:none;">
+                </div>
+                <!--正式部署end-->
+
+                <!-- 下架操作表单start -->
+                <div id="offline_form" n_form
+                  % if page != "unrelease":
+                  style="display:none;"
+                  % endif
+                >
+
+
+                </div>
+                <!-- 下架操作表单end -->
+            </div>
+        </div>
+
+        <!--流程图-->
+        <div id="release-flow-before" class="pt20" style="display:none;">
+        </div>
+        <div id="release-flow" class="pt20 mb10" style="display:none;">
+        </div>
+        <div id="tips_info" class="pt20 mr30" style="margin-left:20px;max-width:820px;">
+        </div>
+
+        <div id="detail_button_2" style="margin-top:15px; margin-left:30px;display:none;">
+            <a href="javascript:REL_MANAGER.get_app_release_detail()" title="点击查看详情" >
+                <span aria-hidden="true" class="glyphicon glyphicon-list" style="margin-right:5px;"></span>
+                <span id="detail_click">点击查看详情</span>
+            </a>
+        </div>
+        <div id="detail_log" style="margin-top:15px; margin-left:30px;display:none;">
+            <textarea id="detail_info" class="form-control" style="width:850px; height:300px;background-color: #000; color: #FFF;" readonly>
+            </textarea>
+        </div>
+
+    </div>
+</div>
+<!-- 部署end -->
+% else:
+    <div class="error-app">您访问的应用信息不存在！</div>
+% endif
+</%block>
+
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script type="text/javascript">
+  var first_load = true;
+  var app_code = '${app_code}';
+  $(function(){
+
+    $('#deploy_tab').find('li[role="presentation"]').on('click',function() {
+      var msg_id = '';
+      var show_tip = '';
+      var type = undefined;
+      % if app.state == 8:
+        var msg_id = '#release_msg_test';
+        var show_tip = '测试';
+        var type = 1;
+      % elif app.state == 9:
+        var msg_id = '#release_msg_pro';
+        var show_tip = '上线';
+        var type = 2;
+      % endif
+
+      var app_state = ${app.state};
+      var obj = $(this);
+      var static_url = '${STATIC_URL}';
+
+      % if page == "unrelease":
+        var is_disabled = obj.hasClass("disabled_status");
+        if (is_disabled) {
+          obj.removeClass("disabled_status")
+        }
+        REL_MANAGER.deploy_tab_show(obj, first_load, app_code, app_state, msg_id, show_tip, type, static_url);
+        if (is_disabled) {
+          obj.addClass("disabled_status")
+        }
+      % else:
+        REL_MANAGER.deploy_tab_show(obj, first_load, app_code, app_state, msg_id, show_tip, type, static_url);
+      % endif
+
+      // REL_MANAGER.deploy_tab_show(obj, first_load, app_code, app_state, msg_id, show_tip, type, static_url);
+      // 置为false
+      if (app_state == 8 || app_state == 9 || app_state == 10) {
+        first_load = false;
+      }
+    });
+
+    $('#deploy_tab').find('li:eq(0)').click();
+
+    // 发起状态更新
+    REL_MANAGER.check_unfinished_task(app_code);
+
+    // ---------------------- operation --------------------------------
+    // 测试环境celery选择
+    $('#is_use_celery').live('click', function(){
+      var is_checked = $(this).attr('checked');
+      REL_MANAGER.check_use_celery(is_checked);
+    })
+    $('#is_use_celery_beat').live('click', function(){
+      var is_checked = $(this).attr('checked');
+      REL_MANAGER.check_use_celery_beat(is_checked);
+    })
+
+    //删除操作
+    $('#app_del').live('click', function(){
+      REL_MANAGER.app_del(this, '${app_code}');
+    })
+    //提测操作
+    $('#app_test').live('click', function(){
+      REL_MANAGER.app_test(this, '${app_code}');
+    })
+
+    //上线操作
+    $('#app_online').live('click', function(){
+      REL_MANAGER.app_online(this, '${app_code}');
+    })
+
+    //下架测试环境
+    $('#app_offline').live('click', function(){
+      REL_MANAGER.app_offline(this, '${app_code}');
+    })
+  });
+</script>

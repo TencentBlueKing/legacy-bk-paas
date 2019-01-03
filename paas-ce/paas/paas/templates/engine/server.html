@@ -1,0 +1,97 @@
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+<!-- 右侧内容 start -->
+<div class="box-info full">
+  <div class="main-header">
+    <span>服务器信息</span>
+  </div>
+  <div class="dev_center_module">
+    <h4 class="dev_module_title">
+            &nbsp
+           <button type="button" class="btn-info btn-xs env_add_btn f_r"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span>添加服务器信息</button>
+    </h4>
+     <table class="table table-bordered dev_env_table mt10" id="user_env_table">
+        <thead>
+            <tr>
+                <th width="16%">服务器ID</th>
+                <th width="16%">Token</th>
+                <th width="14%">IP</th>
+                <th width="10%">Agent端口</th>
+                <th width="11%">App服务端口</th>
+                <th width="14%">类别</th>
+                <th width="6%">启用</th>
+                <th width="13%">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        % if servers:
+            % for server in servers:
+                <tr class="env_record">
+                    <input  type="hidden" class="server_id" disabled value="${server.id}" />
+                    <td>
+                        <span class="s_id">${server.s_id}</span>
+                    </td>
+                    <td>
+                        <span class="server_token">${server.token}</span>
+                    </td>
+                    <td>
+                        <input class="form-control server_ip" disabled value="${server.ip_address}" placeholder="请输入服务器IP"/>
+                    </td>
+                    <td>
+                        <input  type="number" min="1" max="65535" class="form-control server_port" disabled value="${server.ip_port}" placeholder="请输入Agent端口"/>
+                    </td>
+                    <td>
+                        <input  type="number" min="1" max="65535" class="form-control app_port" disabled value="${server.app_port}" placeholder="请输入App服务端口"/>
+                    </td>
+                    <td>
+                        <select class="form-control server_cate" disabled placeholder="请选择服务器类别">
+                            <option value="tapp" ${'selected' if server.category=='tapp' else ''} >测试服务器</option>
+                            <option value="app" ${'selected' if server.category=='app' else ''}  >正式服务器</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span class="server_active" data="${'1' if server.is_active else '0'}">${u"是" if server.is_active else u"否"}</span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn-info btn-xs env_save_btn">保存</button>
+                        <button type="button" class="btn-xs env_cancel_btn">取消</button>
+                        <!-- 未激活服务器才能编辑，修改ip、端口等信息 -->
+                        % if not server.is_active:
+                            <a href="###" title="编辑" class="dev_env_opera env_edit_btn"><span aria-hidden="true" class="glyphicon glyphicon-edit"></span></a>
+                        % endif
+                        <a href="###" value="${server.id}" title="删除" class="dev_env_opera env_del_btn"><span aria-hidden="true" class="glyphicon glyphicon-remove-circle"></span></a>
+                        % if not server.is_active:
+                            <a href="###" title="激活" class="dev_env_opera env_active_btn"><span aria-hidden="true" class="glyphicon glyphicon-saved"></span></a>
+                        % else:
+                            <a href="###" title="刷新" class="dev_env_opera env_refresh_btn"><span aria-hidden="true" class="glyphicon  glyphicon-refresh"></span></a>
+                        % endif
+                    </td>
+                </tr>
+            % endfor
+        % else:
+            <tr id="no_record_row"><td colspan="8"><center>没有服务器信息</center></td></tr>
+        % endif
+        </tbody>
+    </table>
+    <h4 class="dev_module_title mt30">使用说明</h4>
+    <div class="env_introduce_box">
+        <p>AppServer是在蓝鲸智云上注册的应用部署的服务器 </p>
+        <p>Agent端口：PaaSAgent 的启动端口 </p>
+        <p>App服务端口：App服务器上，App代理服务Nginx端口 </p>
+        <p>如果要停用已激活的服务器，点击页面上的删除按钮(<span aria-hidden="true" class="glyphicon glyphicon-remove-circle" style="color: #44b549;"></span>)删除服务器即可；删除后， 将无法在该机器上部署应用</p>
+        <p>如果启用新的机器， 则之后的部署操作， 都会在新的机器上进行；此时若 nginx 没有变更，用户访问服务还是老机器上的，需变更 nginx，将测试/正式环境指向新的机器，并重新加载配置</p>
+        <p>如果进行机器迁移， 即要停用某个机器， 将服务迁移到新的机器，请按以下步骤执行：<br>
+            <span class="ml20">1. 停用老机器</span> <br>
+            <span class="ml20">2. 注册并激活新机器</span> <br>
+            <span class="ml20">3. 对所有已上线应用， 执行重新上线</span> <br>
+            <span class="ml20">4. 修改nginx.conf中测试/正式环境机器配置， 重新加载配置</span> <br>
+            <span class="ml20">5. 完成迁移</span> <br>
+        </p>
+        <p>测试环境/正式环境分别只能激活一台服务器</p>
+        <p>如果用到数据库， 需要对激活的服务器授权</p>
+        <p>只有管理员可以管理服务器信息 </p>
+    </div>
+  </div>
+</div>
+</%block>
+<script src="${STATIC_URL}js/paas_engine.${JS_SUFFIX}"></script>

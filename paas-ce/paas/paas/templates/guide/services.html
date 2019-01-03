@@ -1,0 +1,124 @@
+<%inherit file="/base_center.html"/>
+
+<%block name="right_content">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_guide.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+
+<div data-index="0" class="col_main">
+    <div class="box-info full" >
+        <div class="main-header"><span>服务介绍</span></div>
+        <div class="">
+            <div class="service-wrap">
+               <div class="service-tab service-tab0">
+                    <ul class="nav nav-tabs">
+                        <li class="item active">
+                            <a href="javascript:;">
+                                <span class="service-icon service-icon1"></span>
+                                <span class="zh">创建应用</span>
+                            </a>
+                        </li>
+                        <li class="item">
+                            <a href="javascript:;">
+                                <span class="service-icon service-icon2"></span>
+                                <span class="zh">自动部署</span>
+                            </a>
+                        </li>
+                        <li class="item">
+                            <a href="javascript:;">
+                                <span class="service-icon service-icon7"></span>
+                                <span class="zh">安全</span>
+                            </a>
+                        </li>
+                        <!-- <li class="item">
+                            <a href="javascript:;">
+                                <span class="service-icon service-icon9"></span>
+                                <span class="zh">第三方服务</span>
+                            </a>
+                        </li> -->
+                    </ul>
+                    <div class="service-inner service-inner0">
+                        <!--应用管理开始-->
+                        <div class="inner-item row">
+                            <div class="item">
+                                <div class="text-area col-md-12">
+                                    <h4><a href="${SITE_URL}app/">快速创建</a></h4>
+                                    <div>蓝鲸智云提供应用全自助创建服务。</div>
+                                    <div>另外，除了快速创建应用以外，应用基本信息管理也是全自助模式开放。</div>
+                                </div>
+                                <!-- <div class="image-area col-md-3">
+                                </div> -->
+                            </div>
+                            <div class="item">
+                                <div class="text-area col-md-12">
+                                    <h4>角色管理</h4>
+                                    <div>蓝鲸智云应用维护者角色分为创建者、负责人；其中，系统超级管理员拥有所有应用的管理权限。</div>
+                                </div>
+                                <!-- <div class="image-area col-md-3">
+                                </div> -->
+                            </div>
+                         </div>
+                        <!--应用管理结束-->
+                        <!--自动部署开始-->
+                        <div class="div-hide inner-item row" style="display: none;">
+                            <div class="item">
+                                <div class="text-area col-md-12">
+                              <h4>自动部署</h4>
+                                    <div>蓝鲸智云提供在线一键自动部署蓝鲸智云应用服务。</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--自动部署结束-->
+                        <!--安全开始-->
+                        <div class="inner-item row div-hide" style="display: none;">
+                            <div class="item">
+                                <div class="text-area col-md-12">
+                                    <h4>web安全方案</h4>
+                                    <div>蓝鲸智云应用开发框架集成了常见web安全防护方案，包括SQL注入、跨站、挂马，为蓝鲸智云应用安全保驾护航。</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--安全结束-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</%block>
+
+<script>
+$(function(){
+    var switch_item = function () {
+        var tab_items = $('div.service-tab0 ul.nav-tabs li.item');
+        var content_items = $('div.service-inner0 div.inner-item');
+        var c_name = 'active';
+
+        tab_items.bind('click', function (e) {
+            var target = $(this);
+            var index = target.index();
+            tab_items.removeClass(c_name);
+            target.addClass(c_name);
+            content_items.hide().eq(index).show();
+        })
+
+        var tab_items1 = $('div.service-tab1 ul.nav-tabs li.item');
+        var content_items1 = $('div.service-inner1 div.inner-item');
+
+        tab_items1.bind('click', function (e) {
+            var target = $(this);
+            var index = target.index();
+            tab_items1.removeClass(c_name);
+            target.addClass(c_name);
+            content_items1.hide().eq(index).show();
+        })
+    }
+    switch_item();
+
+    $('ul.tab_navs li').click(function(){
+            $('ul.tab_navs li').removeClass('selected');
+            $(this).addClass('selected');
+            var index = $(this).attr('data-index');
+            $('div[data-index]').hide();
+            $('div[data-index='+index+']').show();
+        });
+})
+</script>

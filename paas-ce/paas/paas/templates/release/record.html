@@ -1,0 +1,26 @@
+<%inherit file="/release/base_history.html"/>
+<%block name="content">
+<div class="mt10">
+    <select class="form-control" onchange="search_app_record(this);" id="app_record" style="width:200px;margin-left:10px;">
+        <option value="0" selected>全部记录</option>
+        <option value="1">提测记录</option>
+        <option value="2">上线记录</option>
+        <option value="3">下架记录</option>
+    </select>
+</div>
+<div id="record_list">
+
+</div>
+</%block>
+
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+$(function(){
+  var app_code = '${app_code}';
+  $("#app_record").on('change', function() {
+    var operate_id = $(this).val();
+    REL_MANAGER.search_app_record(app_code, operate_id);
+  });
+  REL_MANAGER.search_app_record(app_code, 0);
+})
+</script>

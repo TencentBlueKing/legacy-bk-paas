@@ -1,0 +1,103 @@
+{% extends "bkaccount/base.html" %}
+{% load i18n %}
+{% block body_content %}
+<div class="box-info full pg20 user_info_div">
+  <div class="dev_center_module">
+    <h4 class="dev_module_title">
+        <span style="color:red;font-size:14px" id="error_msg" class="">{{error_msg}}</span>
+        <span style="color:green;font-size:14px" id="error_msg" class="">{{success_msg}}</span>
+    	{% if request.user.is_superuser %}
+            &nbsp
+           <button type="button" class="btn-primary btn-xs user_btn user_export_btn f_r"><span aria-hidden="true" class="glyphicon glyphicon-export"></span>{% trans '导出' %}</button>
+           <button type="button" class="btn-info btn-xs user_btn user_import_btn f_r"><span aria-hidden="true" class="glyphicon glyphicon-import"></span>{% trans '批量导入' %}</button>
+           <button type="button" class="btn-success btn-xs user_add_btn f_r"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span>{% trans '新增用户' %}</button>
+        {% else %}
+        	{% trans '用户信息' %}
+        {% endif %}
+    </h4>
+    {% if request.user.is_superuser %}
+    <div id="seacher_input" class="form-inline" style="margin-top: -5px;">
+    {% else %}
+    <div id="seacher_input" class="form-inline" style="margin-top: -5px;display:none">
+    {% endif %}
+        <input id="search_data" type="text" class="form-control" style="width:250px" placeholder="{% trans '查询：按用户名、中文名' %}" onkeyup="enter_keyword(event);">
+        <select class="form-control"  id="search_role" style="">
+            <option value="" selected="">{% trans '所有用户' %}</option>
+            <option value="1">{% trans '管理员' %}</option>
+            <option value="0">{% trans '普通用户' %}</option>
+            <option value="2">{% trans '开发者' %}</option>
+            <option value="3">{% trans '职能化' %}</option>
+            <option value="4">{% trans '审计员' %}</option>
+        </select>
+        <button id="serach_user" class="btn btn-azure btn-min-w" style="margin-top:9px;height:34px">{% trans '查询' %}</button>
+        <p style="display: inline-block;float:right;margin-top: 17px;">{% trans '新增用户的默认密码为：' %}<code>{{default_paasword}}</code> </p>
+    </div>
+    <div id="user_table_div" class="clearfix">
+    </div>
+  </div>
+	<h5 class="">{% trans '温馨提示:' %}</h5>
+	<hr style="margin-top:10px;margin-bottom:10px">
+	<div class="user_introduce_box">
+        {% blocktrans trimmed %}
+	    <p><code>管理员</code>可以管理所有用户的信息，具有所有权限</p>
+	    <p><code>普通用户</code>可以管理自己的用户信息和访问 “工作台”</p>
+        <p><code>开发者</code>可以管理自己的用户信息、访问 “工作台” 和访问 “开发者中心”</p>
+        <p><code>职能化用户</code>在普通用户权限上还拥有SaaS应用 “标准运维” 的职能化权限</p>
+        <p><code>审计员</code>在普通用户权限上还拥有SaaS应用 “标准运维”和作业平台的审计权限</p>
+        {% endblocktrans %}
+	</div>
+</div>
+
+<div id="user_import_div" style="display:none">
+    <form class="form-horizontal" action="{{SITE_URL}}accounts/user/import/" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <div class="mt10 mb10">
+            <label class="password_label">{% trans '选择文件：' %}<span style="color:red">*</span> </label>
+            <input style="display:inline" name="data_files" id="data_files" type="file">
+            <button type="button" class="btn-success btn-xs user_btn import_btn" ><span aria-hidden="true" class="glyphicon glyphicon-import"></span>{% trans '导入用户' %}</button>
+            <button type="submit" id="sumbit_import" style="display:none">{% trans '提交' %}</button>
+        </div>
+        <div>
+            <a href="{{STATIC_URL}}{% trans 'bk_user_import.xls' %}">{% trans '点击下载EXCEL模板' %}</a>
+            <span style="color:red" id="error_msg" class="ml20"></span>
+        </div>
+        <div class="alert" style="margin-top:10px;">
+            <p>{% trans '注意：' %}</p>
+            {% blocktrans trimmed %}
+            <p>1.请下载<a href="{{STATIC_URL}}bk_user_import.xls">EXCEL模板</a>文件填写用户数据</p>
+            <p>2.<code>用户名</code>为必填，包含数字和字母，长度在4-20个字符</p>
+            <p>3.<code>用户名</code>为唯一标识，重复导入会覆盖已有数据</p>
+            <p>4.导入用户默认密码为：<code>{{default_paasword}}</code></p>
+            <p>5.文件后缀名必须为：<code>.xls</code>或<code>.xlsx</code> </p>
+            <p>6.导入失败请检查EXCEL格式规范，或重新下载模板填写</p>
+            {% endblocktrans %}
+        </div>
+    </from>
+    <span id="password_tip" style="color:red"></span>
+</div>
+
+<div id="change_password_div" style="display:none">
+    <div>
+        <label class="password_label">{% trans '新密码：' %}<span style="color:red">*</span> </label>
+        <!-- 防止Firefox下密码自动填充 -->
+        <input type="text" style="display:none">
+        <input type="password" style="display:none">
+        <input class="form-control password_input" id="id_password1" name="password1"  type="text" onfocus="this.type='password'">
+        <span style="color:red;display:none" class="error_tip ml10">{% trans '必填' %}</span>
+        <p style="margin-left: 105px;" class="tip ml10" id="pattern_tip">{% blocktrans with sp_char='!@#$%^*()_-+=' %}请输入密码，长度在8-20个字符，可支持数字、字母以及{{ sp_char }}，必须保证密码包含大小写字母和数字 {% endblocktrans %}</p>
+    </div>
+    <div class='mt5'>
+        <label class="password_label">{% trans '确认密码' %}：<span style="color:red">*</span> </label>
+        <input class="form-control password_input" id="id_password2" name="password2"  type="text" onfocus="this.type='password'" placeholder="{% trans '再次输入密码' %}">
+        <span style="color:red;display:none" class="error_tip ml10">{% trans '必填' %}</span>
+    </div>
+    <span id="password_tip" style="color:red;margin-left: 105px;"></span>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{{STATIC_URL}}js/users.{{JS_SUFFIX}}?v={{STATIC_VERSION}}"></script>
+    <script type="text/javascript">
+        $(function(){$('#serach_user').click();})
+    </script>
+{% endblock %}

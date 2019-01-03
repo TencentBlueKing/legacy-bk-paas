@@ -1,0 +1,48 @@
+{
+  "name": "bk-gulp",
+  "version": "1.0.0",
+  "description": "bk-gulp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "jshint static/js/*.js",
+    "build-js": "uglifyjs static/js/app.js > dist/js/app.min.js",
+    "build-css": "uglifycss static/css/app.css > dist/css/app.min.css",
+    "build": "npm run build-js && npm run build-css",
+    "prebuild-js": "npm run lint",
+    "clean": "find static -name '*.npm.*' -delete",
+    "list": "find static -name '*.npm.*'"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "miya",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-cache": "^0.4.5",
+    "gulp-concat": "^2.6.1",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-jshint": "^2.0.4",
+    "gulp-load-plugins": "^1.4.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-size": "^2.1.0",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-watch": "^4.3.11",
+    "gulp-zip": "^3.2.0",
+    "jshint": "^2.9.4",
+    "jshint-stylish": "^2.2.1",
+    "plumber": "^0.4.8",
+    "uglifyjs": "^2.4.10",
+    "vinyl-paths": "^2.1.0",
+    "gulp-header": "^1.8.8"
+  }
+}

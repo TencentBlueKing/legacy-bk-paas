@@ -1,0 +1,120 @@
+<%inherit file="/base_center.html"/>
+
+<%block name="right_content">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_release.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_saas.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+    <!-- 右侧内容 start -->
+    <div class="">
+        <div class="app_center">
+            <div class="box-info full">
+                <div class="main-header">
+                    <span>下架应用【${app_code}】</span>
+                    <input type="hidden" id="app_code_id" value="${app_code}">
+                    <input type="hidden" id="app_state_id" value="${app_state}">
+                </div>
+                <div class="deploy_box">
+                  <form class="form form-horizontal">
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-xs-2 control-label">当前部署文件：</label>
+                      <div class="col-xs-7">
+                        <label class="control-label not-bold">${file_name}</label>
+                      </div>
+                      <div class="col-xs-2">
+                        <button type="button" id="app_offline" n_btn="saas_deploy" class="btn btn-success btn-lg deploy_btn mb0">下架</button>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-xs-2 control-label">当前部署版本：</label>
+                      <div class="col-xs-6">
+                        <label class="control-label not-bold">${version}</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-xs-2 control-label">文件大小：</label>
+                      <div class="col-xs-6">
+                        <label class="control-label not-bold">${file_size} (M)</label>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-xs-2 control-label">MD5：</label>
+                      <div class="col-xs-6">
+                        <label class="control-label not-bold">${md5}</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-xs-2 control-label">配置信息：</label>
+                      <div class="col-xs-7">
+                        <pre style="max-height:200px;white-space: normal; border:none; border-radius:inherit;background-color: rgba(244, 244, 244, 0.65);">${settings}</pre>
+                      </div>
+                    </div>
+
+                    <div class="deploy_box">
+                      <div class="popover bottom deploy_popover deploy_detail" style="display:none; max-width: 940px">
+                          <div class="popover-content">
+                            <div id="release_msg_offline"></div>
+                          </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="deploy_tab_box" id="deploy_input">
+                    <div class="">
+                        <!--正式部署start -->
+                        <div id="offline_form" n_form style="display:none;">
+                        </div>
+                        <!--正式部署end-->
+
+                    </div>
+                </div>
+
+                <!--流程图-->
+                <div id="release-flow-before" class="pt20" style="display:none;">
+                </div>
+                <div id="release-flow" class="pt20 mb10" style="display:none;">
+                </div>
+                <div id="tips_info" class="pt20 mr30" style="margin-left:20px;max-width:820px;">
+                </div>
+
+                <div id="detail_button_2" style="margin-top:15px; margin-left:30px;display:none;">
+                  <a href="javascript:REL_MANAGER.get_app_release_detail()" title="点击查看详情" >
+                  <span aria-hidden="true" class="glyphicon glyphicon-list" style="margin-right:5px;"></span>
+                  <span id="detail_click">点击查看详情</span>
+                  </a>
+                </div>
+
+                <div id="detail_log" class="mt20" style="display:none;">
+                    <textarea id="detail_info" class="form-control" style="height:300px;background-color: #000; color: #FFF;" readonly=""></textarea>
+                </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 右侧内容 end -->
+</%block>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+  $(function(){
+    // 正在部署，则显示状态图
+    var app_code = $("#app_code_id").val();
+    var app_state = $("#app_state_id").val();
+
+    // 未部署的应用外，其他应用需要轮询当前状态
+    if(app_code && app_state != '1'){
+      if(app_state == '8' || app_state == '9' || app_state == '10'){
+        $('button[n_btn=saas_deploy]').attr({"disabled":"disabled"});
+        REL_MANAGER.refresh_roll(app_code, app_state, '#release_msg_pro', '下架', 3);
+      }
+      // 发起状态更新
+      REL_MANAGER.check_unfinished_task(app_code);
+    }
+  })
+  // 下架操作
+  $('#app_offline').live('click', function(){
+      var app_code = $("#app_code_id").val();
+      REL_MANAGER.confirm_saas_app_offline(this, app_code);
+  })
+</script>

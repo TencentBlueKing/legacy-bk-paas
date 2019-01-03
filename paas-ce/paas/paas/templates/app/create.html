@@ -1,0 +1,35 @@
+<!-- 应用 创建页面  -->
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_profile.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<!-- 右侧内容 start -->
+<div class="box-info full">
+  <div class="main-header">
+    <span>基本信息填写</span>
+  </div>
+  <div class="create_flow">
+      <!--     错误提示信息     -->
+      % if error:
+        <div class="the-notes danger">
+          <span class="">应用创建失败，请重新填写！错误信息：${error}!</span>
+        </div>
+      % endif
+      <!-- 应用 信息填写     -->
+      <div id="app_info">
+        <form  id="form_app" style="font-family:微软雅黑" method="post" action='${SITE_URL}app/'  onsubmit="return APP_CREATE.validate_form(this)">
+          <input type='hidden' name='csrfmiddlewaretoken' value='${csrf_token}'>
+          <%include file="create_detail.part" />
+        </form>
+      </div>
+  </div>
+</div>
+</%block>
+<!-- 右侧内容 end -->
+
+<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}"></script>
+<script>
+// 重置 是清空详细描述
+$("#reset_btn").click(function(){
+  $('.tips').text('');
+})
+</script>

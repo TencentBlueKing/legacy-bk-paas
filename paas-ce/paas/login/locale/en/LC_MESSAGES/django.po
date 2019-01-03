@@ -1,0 +1,1543 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-26 23:33+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\bkaccount\accounts.py:125
+msgid "缺少参数bk_token"
+msgstr "Missing parameters bk_token"
+
+#: .\bkaccount\accounts.py:135
+msgid "参数bk_token非法"
+msgstr "Parameters bk_token is illegal"
+
+#: .\bkaccount\accounts.py:146
+#, python-format
+msgid "不存在bk_token[%s]的记录"
+msgstr "Record of bk_token [%s] does not exist"
+
+#: .\bkaccount\accounts.py:153
+msgid "登录态已注销"
+msgstr "login status has been logged out"
+
+#: .\bkaccount\accounts.py:157
+msgid "登录态已过期"
+msgstr "Login status has expired"
+
+#: .\bkaccount\accounts.py:161
+msgid "登录态有效期不合法"
+msgstr "Login validity is illegal"
+
+#: .\bkaccount\admin.py:20
+msgid "Personal info"
+msgstr ""
+
+#: .\bkaccount\admin.py:21
+msgid "Contact info"
+msgstr ""
+
+#: .\bkaccount\admin.py:22
+msgid "Permissions"
+msgstr ""
+
+#: .\bkaccount\admin.py:23
+msgid "Important dates"
+msgstr ""
+
+#: .\bkaccount\constants.py:33 .\templates\account\user_table.part:46
+#: .\templates\account\user_table.part:54 .\templates\account\users.html:28
+msgid "普通用户"
+msgstr "staff"
+
+#: .\bkaccount\constants.py:34
+msgid "超级管理员"
+msgstr "superuser"
+
+#: .\bkaccount\constants.py:35 .\templates\account\user_table.part:48
+#: .\templates\account\user_table.part:55 .\templates\account\users.html:29
+msgid "开发者"
+msgstr "developer"
+
+#: .\bkaccount\constants.py:36
+msgid "职能化用户"
+msgstr "operator"
+
+#: .\bkaccount\constants.py:37 .\templates\account\user_table.part:50
+#: .\templates\account\user_table.part:57 .\templates\account\users.html:31
+msgid "审计员"
+msgstr "auditor"
+
+#: .\bkaccount\constants.py:71
+msgid "中文"
+msgstr "Chinese"
+
+#: .\bkaccount\constants.py:72
+msgid "英文"
+msgstr "English"
+
+#: .\bkaccount\manager.py:52
+#, python-format
+msgid "用户名[%s]不存在"
+msgstr "Username [%s] does not exist"
+
+#: .\bkaccount\manager.py:149
+#, python-format
+msgid "用户[%s]密码重置失败"
+msgstr "User [%s] password reset failed"
+
+#: .\bkaccount\manager.py:167
+#, python-format
+msgid "个人[%s]信息修改失败"
+msgstr "[%s] Personal information modification failed"
+
+#: .\bkaccount\manager.py:194 .\bkaccount\manager.py:235
+#, python-format
+msgid "账号为：%s 的用户是最后一个管理员，不可修改其角色"
+msgstr ""
+"Username: %s user is the last administrator, and his role cannot be modified"
+
+#: .\bkaccount\manager.py:260
+#, python-format
+msgid "账号为：%s 的用户已经存在"
+msgstr "Username: %s user already exists"
+
+#: .\bkaccount\manager.py:263
+#, python-format
+msgid "保存用户信息(%s)出错"
+msgstr "Save user(%s) information failed"
+
+#: .\bkaccount\manager.py:296
+msgid "内置admin用户不可删除"
+msgstr "Built in admin user cannot be deleted"
+
+#: .\bkaccount\manager.py:299
+msgid "最后一个管理员用户，不允许删除"
+msgstr "The user as the last administrator is not permitted to be deleted"
+
+#: .\bkaccount\manager.py:304
+#, python-format
+msgid "用户(%s)删除失败"
+msgstr "User (%s) delete failed"
+
+#: .\bkaccount\manager.py:318
+msgid "用户密码重置失败"
+msgstr "User password reset failed"
+
+#: .\bkaccount\manager.py:328
+msgid "已经绑定了微信，请解绑后再重新绑定！"
+msgstr "WeChat has been bound, please unbind and then bind again"
+
+#: .\bkaccount\manager.py:332
+msgid "该微信号已经被绑定过了"
+msgstr "The WeChat ID has been bound"
+
+#: .\bkaccount\manager.py:339
+msgid "绑定用户微信信息失败"
+msgstr "Bound user WeChat information failed"
+
+#: .\bkaccount\manager.py:350
+msgid "账号未绑定过微信号，无法解绑"
+msgstr "The user has not been bound with a WeChat ID, so it cannot be unbound"
+
+#: .\bkaccount\manager.py:354
+msgid "解绑用户微信信息失败"
+msgstr "Unbound user WeChat information failed"
+
+#: .\bkaccount\manager.py:385
+msgid "记录成功"
+msgstr "Record succeeded"
+
+#: .\bkaccount\manager.py:387
+msgid "用户登录记录失败"
+msgstr "User login record failed"
+
+#: .\bkaccount\models.py:43
+msgid "date joined"
+msgstr ""
+
+#: .\bkaccount\models.py:51
+msgid "user"
+msgstr ""
+
+#: .\bkaccount\models.py:52
+msgid "users"
+msgstr ""
+
+#: .\bkaccount\models.py:123
+msgid "create_time"
+msgstr ""
+
+#: .\bkaccount\utils.py:83
+#, python-format
+msgid "导出数据出现错误:%s"
+msgstr "Export data error: %s"
+
+#: .\bkaccount\validators.py:16
+#, python-format
+msgid ""
+"用户名【%s】错误，只能包含数字、字母、下划线和点，长度在4-20个字符，且必须以"
+"字母或数字开头"
+msgstr ""
+"Username [%s] error, it can only contain numbers, letters, underline and "
+"dots, with a length of 4-20 characters and must start with letters or number"
+
+#: .\bkaccount\validators.py:25
+#, python-format
+msgid ""
+"中文名【%s】错误，只能包含数字、字母、中文汉字、下划线，长度在1-16个字符"
+msgstr ""
+"Nickname [%s] error, it can only contain numbers, letters and underscores, "
+"with a length of 1-16 characters"
+
+#: .\bkaccount\validators.py:34
+#, python-format
+msgid "手机号【%s】错误，仅支持中国大陆手机号码（11位数字）"
+msgstr "Phone number [%s] error, it only supports 10-digit phone number"
+
+#: .\bkaccount\validators.py:43
+#, python-format
+msgid "email【%s】格式错误"
+msgstr "Email format [%s] error"
+
+#: .\bkaccount\validators.py:52
+msgid ""
+"密码只支持数字、字母或!@#$%^*()_-+=，长度在8-20个字符，且必须保证包含大小写字"
+"母和数字"
+msgstr ""
+"The password only supports numbers, letters, or !@#$%^*()_-+=, with a length "
+"of 8 to 20 characters and must contain uppercase and lowercase and numbers"
+
+#: .\bkaccount\validators.py:61
+msgid "密码不能为空"
+msgstr "Password can not be empty"
+
+#: .\bkaccount\validators.py:63
+msgid "两次输入的新密码不一致"
+msgstr "Two passwords entered in twice are not the same"
+
+#: .\bkaccount\validators.py:80
+#, python-format
+msgid "用户%s不存在"
+msgstr "User [%s] does not exist"
+
+#: .\bkaccount\validators.py:99
+#, python-format
+msgid "批量导入用户，解析文件名出错:%s"
+msgstr "Batch import users, file name parse error: %s"
+
+#: .\bkaccount\validators.py:102
+msgid "文件格式错误，只支持：.xls 和 .xlsx 文件"
+msgstr "File format error, only supports files in .xls and .xlsx formats"
+
+#: .\bkaccount\views.py:115 .\bkaccount\views.py:142 .\bkaccount\views.py:161
+#: .\bkaccount\views.py:189 .\role_manage\views.py:56
+msgid "非管理员用户, 没有权限进行操作, 请找管理员申请权限!"
+msgstr ""
+"Non-administrator users do not have permissions to operate, so please apply "
+"for permissions to the administrator."
+
+#: .\bkaccount\views.py:131
+msgid "保存用户信息成功"
+msgstr "Save user information succeeded"
+
+#: .\bkaccount\views.py:150
+#, python-format
+msgid "用户(%s)删除成功"
+msgstr "User (%s) delete succeeded "
+
+#: .\bkaccount\views.py:203
+msgid "文件解析出错，请下载 EXCEL模板文件 填写用户数据"
+msgstr ""
+"File parse error, please download EXCEL template file and fill in user data"
+
+#: .\bkaccount\views.py:207
+msgid "导入数据为空"
+msgstr "Import data is empty"
+
+#: .\bkaccount\views.py:240
+#, python-format
+msgid "用户导入出现异常%s"
+msgstr "An exception occurred while user importing data; %s"
+
+#: .\bkaccount\views.py:242
+msgid "用户导入成功"
+msgstr "User import succeeded"
+
+#: .\bkaccount\views.py:258 .\templates\account\user_role_manage_table.part:26
+#: .\templates\account\user_table.part:19
+msgid "用户名"
+msgstr "username"
+
+#: .\bkaccount\views.py:258 .\templates\account\user_table.part:20
+msgid "中文名"
+msgstr "nickname"
+
+#: .\bkaccount\views.py:258 .\templates\account\user_table.part:21
+msgid "联系电话"
+msgstr "phone"
+
+#: .\bkaccount\views.py:258 .\templates\account\user_table.part:22
+msgid "常用邮箱"
+msgstr "email"
+
+#: .\bkaccount\views.py:258 .\templates\account\user_table.part:23
+msgid "角色"
+msgstr "role"
+
+#: .\bkaccount\views_api.py:26 .\bkaccount\views_api_v2.py:29
+msgid "用户验证成功"
+msgstr "User authentication succeeded"
+
+#: .\bkaccount\views_api.py:50 .\bkaccount\views_api.py:70
+#: .\bkaccount\views_api.py:99 .\bkaccount\views_api_v2.py:54
+#: .\bkaccount\views_api_v2.py:75 .\bkaccount\views_api_v2.py:105
+#: .\role_manage\views_api.py:40 .\role_manage\views_api_v2.py:42
+msgid "用户信息获取成功"
+msgstr "Get user information succeeded"
+
+#: .\bkaccount\views_api.py:84 .\bkaccount\views_api.py:112
+#: .\bkaccount\views_api.py:150 .\bkaccount\views_api.py:191
+#: .\bkaccount\views_api.py:224 .\bkaccount\views_api.py:254
+#: .\bkaccount\views_api.py:279 .\bkaccount\views_api_v2.py:90
+#: .\role_manage\views_api.py:25 .\role_manage\views_api_v2.py:27
+msgid "请求参数格式错误,必须为json格式"
+msgstr "Request parameters format error, it must be in json format"
+
+#: .\bkaccount\views_api.py:95 .\role_manage\views_api.py:36
+msgid "缺少参数:username_list"
+msgstr "Missing parameters: username_list"
+
+#: .\bkaccount\views_api.py:123 .\bkaccount\views_api.py:161
+#: .\bkaccount\views_api.py:201
+msgid "您的权限不足"
+msgstr "Your permission is insufficient"
+
+#: .\bkaccount\views_api.py:137
+msgid "密码重置成功"
+msgstr "Password reset succeeded"
+
+#: .\bkaccount\views_api.py:178
+msgid "用户信息修改成功"
+msgstr "User information modification succeeded"
+
+#: .\bkaccount\views_api.py:211
+msgid "用户角色修改成功"
+msgstr "User role modification succeeded"
+
+#: .\bkaccount\views_api.py:234
+msgid "参数错误，wx_userid 不能为空"
+msgstr "Parameter error, wx_userid cannot be empty"
+
+#: .\bkaccount\views_api.py:241
+msgid "绑定成功"
+msgstr "Binding succeeded"
+
+#: .\bkaccount\views_api.py:266
+msgid "解绑成功"
+msgstr "Unbinding succeeded"
+
+#: .\bkaccount\views_api.py:290
+msgid "参数错误，language和timezone不能同时为空"
+msgstr ""
+"Parameter error, language and timezone can not both be empty at the same time"
+
+#: .\bkaccount\views_api.py:293
+msgid "设置成功"
+msgstr "Set successfully"
+
+#: .\bkaccount\views_api_v2.py:101 .\role_manage\views_api_v2.py:38
+#, fuzzy
+#| msgid "缺少参数:username_list"
+msgid "缺少参数:bk_username_list"
+msgstr "Missing parameters: username_list"
+
+#: .\common\license_utils.py:28
+#, python-format
+msgid "证书文件(platform.cert)不存在: %s"
+msgstr "Certificate file (platform.cert) does not exist: %s"
+
+#: .\common\license_utils.py:31
+#, python-format
+msgid "密钥文件(platform.key)不存在: %s"
+msgstr "Secret key file (platform.key) does not exist: %s"
+
+#: .\common\license_utils.py:39
+msgid "证书文件(platform.cert)为空或已被损坏"
+msgstr "Certificate file (platform.cert) is empty or has been damaged"
+
+#: .\common\license_utils.py:55
+msgid "license_server请求校验证书异常"
+msgstr ""
+"Exceptions occurred in request license server to certificate validation"
+
+#: .\common\license_utils.py:108
+msgid "证书不可用，请求未返回有效期或返回格式有误"
+msgstr ""
+"Certificate is not available, the request did not return a valid period or "
+"the return format is incorrect"
+
+#: .\common\license_utils.py:109
+msgid "证书校验成功"
+msgstr "Certificate validation succeeded"
+
+#: .\conf\default.py:182
+msgid "English"
+msgstr "英文"
+
+#: .\conf\default.py:183
+msgid "简体中文"
+msgstr "Simplified Chinese"
+
+#: .\healthz\views.py:67
+#, python-format
+msgid "配置文件不正确, 缺失对应配置: %s"
+msgstr ""
+"Configuration file is incorrect, with corresponding configurations missed: %s"
+
+#: .\healthz\views.py:78
+#, python-format
+msgid "数据库连接存在问题: %s"
+msgstr "There is a problem with database connection: %s"
+
+#: .\healthz\views.py:87
+#, python-format
+msgid "企业证书无效：%s; 只影响桌面版本信息的展示"
+msgstr ""
+"Enterprise certificate is invalid: %s; it just has an impact on the "
+"demonstration of desktop version information "
+
+#: .\role_manage\constants.py:6
+msgid "管控平台"
+msgstr "Control System"
+
+#: .\role_manage\constants.py:7
+msgid "作业平台"
+msgstr "Job System"
+
+#: .\role_manage\constants.py:8
+msgid "配置平台"
+msgstr "Configuration System"
+
+#: .\role_manage\constants.py:9
+msgid "集成平台"
+msgstr "Integration System"
+
+#: .\role_manage\constants.py:10
+msgid "网络平台"
+msgstr "Network System"
+
+#: .\role_manage\constants.py:11
+msgid "蓝鲸监控"
+msgstr "BK Monitor"
+
+#: .\role_manage\constants.py:12
+msgid "日志检索"
+msgstr "Log-Search"
+
+#: .\role_manage\constants.py:13
+msgid "故障自愈"
+msgstr "Fault Auto-recovery"
+
+#: .\role_manage\constants.py:14
+msgid "标准运维"
+msgstr "Standard OPS"
+
+#: .\role_manage\constants.py:15
+msgid "Agent安装"
+msgstr "Agent Install"
+
+#: .\role_manage\constants.py:16
+msgid "数据平台"
+msgstr "Data System"
+
+#: .\role_manage\constants.py:17
+msgid "数据平台官网"
+msgstr "DataWeb"
+
+#: .\role_manage\constants.py:18
+msgid "开发框架"
+msgstr "Python Framework"
+
+#: .\role_manage\constants.py:19
+msgid "开发样例"
+msgstr "Python Framework demo"
+
+#: .\role_manage\constants.py:20
+msgid "包管理"
+msgstr "CDMan"
+
+#: .\role_manage\constants.py:21
+msgid "审批系统"
+msgstr "Approval System"
+
+#: .\role_manage\constants.py:22
+msgid "经费管理"
+msgstr "Funds Manage"
+
+#: .\role_manage\constants.py:23
+msgid "会议管理"
+msgstr "Meeting Manage"
+
+#: .\role_manage\constants.py:27 .\templates\account\user_table.part:47
+#: .\templates\account\users.html:27
+msgid "管理员"
+msgstr "superuser"
+
+#: .\role_manage\constants.py:28
+msgid "操作员"
+msgstr "operator"
+
+#: .\role_manage\views.py:63
+msgid "保存成功"
+msgstr "Save succeeded"
+
+#: .\templates\401.html:6
+msgid "未登录蓝鲸智云平台(401页)"
+msgstr "Have not logged in BlueKing platform (page 401)"
+
+#: .\templates\401.html:20
+msgid "您需要登录蓝鲸智云"
+msgstr "You need to log in BlueKing"
+
+#: .\templates\401.html:21
+msgid "立即登录"
+msgstr "Log in right now"
+
+#: .\templates\403.html:6
+msgid "您没有访问权限(403页)"
+msgstr "You have no access permissions (Page 403)"
+
+#: .\templates\403.html:20
+msgid "您没有访问权限，请联系系统管理员添加"
+msgstr ""
+"You have no access permissions, please contact system administrator to add"
+
+#: .\templates\404.html:6
+msgid "页面找不到（404页）"
+msgstr "Page Not Found (404)"
+
+#: .\templates\404.html:20
+msgid "页面找不到了"
+msgstr "Page Not Found"
+
+#: .\templates\500.html:6
+msgid "系统异常(500页)"
+msgstr "System exception (page 500)"
+
+#: .\templates\500.html:20
+msgid "系统出现异常"
+msgstr "Exceptions occurred in system"
+
+#: .\templates\500.html:21
+msgid "努力恢复中，请稍后再试......"
+msgstr "Trying to recover, please try again later..."
+
+#: .\templates\50x.html:6 .\templates\50x.html.py:19
+msgid "服务故障，努力修复中..."
+msgstr "Service failure, trying to repair ..."
+
+#: .\templates\50x.html:20
+msgid "服务出现故障，我们正在紧急修复，给您带来不便，敬请谅解。"
+msgstr ""
+"Service failure, we are trying our best to do emergency repair. Please "
+"understand for the inconvenience."
+
+#: .\templates\account\agreement.part:6
+msgid ""
+"<div class=\"title\">腾讯蓝鲸智云软件许可及服务协议</div> <div class="
+"\"detail-list\"> <p class=\"title\">【首部及导言】</p> <p>欢迎您使用腾讯蓝鲸"
+"智云软件及服务。</p> <p>为使用腾讯蓝鲸智云软件（以下简称“本软件”）及服务，您"
+"应当阅读并遵守《腾讯蓝鲸智云软件许可及服务协议》（以下简称“本协议”），以及"
+"《腾讯服务协议》。请您务必审慎阅读、充分理解各条款内容，特别是免除或者限制责"
+"任的条款，以及开通或使用某项服务的单独协议，并选择接受或不接受。限制、免责条"
+"款可能以加粗形式提示您注意。</p> <p>除非您已阅读并接受本协议所有条款，否则您"
+"无权下载、安装或使用本软件及相关服务。您的下载、安装、使用、登录等行为即视为"
+"您已阅读并同意上述协议的约束。</p> <p class=\"title\">一、【协议的范围】</p> "
+"<p>1.1【协议适用主体范围】</p> <p>本协议是您与腾讯之间关于您下载、安装、使"
+"用、复制本软件，以及使用腾讯相关服务所订立的协议。</p> <p>1.2【协议关系及冲突"
+"条款】</p> <p>本协议被视为《腾讯服务协议》（链接地址：http://www.qq.com/"
+"contract.shtml，若链接地址变更的，则以变更后的链接地址所对应的内容为准；其他"
+"链接地址变更的情形，均适用前述约定。）的补充协议，是其不可分割的组成部分，与"
+"其构成统一整体。本协议与上述内容存在冲突的，以本协议为准。</p> <p>本协议内容"
+"同时包括腾讯可能不断发布的关于本服务的相关协议、业务规则等内容。上述内容一经"
+"正式发布，即为本协议不可分割的组成部分，您同样应当遵守。</p> <p class=\"title"
+"\">二、【关于本服务】</p> <p>2.1【本服务的内容】</p> <p>本服务内容是指蓝鲸智"
+"云产品以及相关服务，包括但不限于提供的基础运维平台（如“配置平台”、“作业平"
+"台”、“管控平台”等），PaaS服务（如“AppEngine”、“开发者中心”、“应用开发框"
+"架”、“组件”、“前端Magicbox”等），SaaS服务（如监控告警、持续集成、持续部署、辅"
+"助运营等），以及支撑上述服务的其他相关产品，为用户提供完善的基础服务设施，以"
+"使用户快速、便捷的创建、部署和管理应用的软件许可及服务（以下简称“本服务”）。"
+"</p> <p>2.2 【本服务的形式】</p> <p> 您使用本服务需要下载腾讯蓝鲸智云产品软"
+"件，对于这些软件，腾讯给予您一项个人的、不可转让及非排他性的许可。您仅可为访"
+"问或使用本服务的目的而使用这些软件及服务。</p> <p>2.3 【本服务许可的范围】</"
+"p> <p>2.3.1 腾讯给予您一项不可转让及非排他性的许可，以使用本软件。您可以为非"
+"商业目的在单一台终端设备上安装、使用、显示、运行本软件。</p> <p>2.3.2 您可以"
+"为使用本软件及服务的目的复制本软件的一个副本，仅用作备份。备份副本必须包含原"
+"软件中含有的所有著作权信息。</p> <p>2.3.3 本条及本协议其他条款未明示授权的其"
+"他一切权利仍由腾讯保留，您在行使这些权利时须另外取得腾讯的书面许可。腾讯如果"
+"未行使前述任何权利，并不构成对该权利的放弃。</p> <p class=\"title\">三、【软"
+"件的获取】</p> <p>3.1 您可以直接从腾讯的网站上获取本软件，也可以从得到腾讯授"
+"权的第三方获取。</p> <p>3.2 如果您从未经腾讯授权的第三方获取本软件或与本软件"
+"名称相同的安装程序，腾讯无法保证该软件能够正常使用，并对因此给您造成的损失不"
+"予负责。</p> <p class=\"title\">四、【软件的安装与卸载】</p> <p>4.1 腾讯可能"
+"为不同的需求开发了不同的软件版本，您应当根据实际情况选择下载合适的版本进行安"
+"装。</p> <p>4.2 下载安装程序后，您需要按照该程序提示的步骤正确安装。</p> "
+"<p>4.3 为提供更加优质、安全的服务，在本软件安装时腾讯可能推荐您安装其他软件，"
+"您可以选择安装或不安装。</p> <p>4.4 如果您不再需要使用本软件或者需要安装新版"
+"软件，可以自行卸载。如果您愿意帮助腾讯改进产品服务，请告知卸载的原因。</p> "
+"<p class=\"title\">五、【软件的更新】</p> <p>5.1 为了改善用户体验、完善服务内"
+"容，腾讯将不断努力开发新的服务，并为您不时提供软件更新（这些更新可能会采取软"
+"件替换、修改、功能强化、版本升级等形式）。</p> <p>5.2 为了保证本软件及服务的"
+"安全性和功能的一致性，腾讯有权不经向您特别通知而对软件进行更新，或者对软件的"
+"部分功能效果进行改变或限制。</p> <p>5.3 本软件新版本发布后，旧版本的软件可能"
+"无法使用。腾讯不保证旧版本软件继续可用及相应的客户服务，请您随时核对并下载最"
+"新版本。</p> <p class=\"title\">六、【用户个人信息保护】</p> <p>6.1保护用户个"
+"人信息是腾讯的一项基本原则。腾讯将按照本协议及《隐私政策》（链接地址：http://"
+"www.qq.com/privacy.htm）的规定收集、使用、储存和分享您的个人信息。本协议对个"
+"人信息保护规定的内容与上述《隐私政策》有相冲突的，及本协议对个人信息保护相关"
+"内容未作明确规定的，均应以《隐私政策》的内容为准。</p> <p>6.2腾讯将会采取合理"
+"的措施保护用户的个人信息。除法律法规规定的情形外，未经用户许可腾讯不会向第三"
+"方公开、透露用户个人信息。腾讯对相关信息采用专业加密存储与传输方式，保障用户"
+"个人信息的安全。</p> <p>6.3 您在注册帐号或使用本服务的过程中，可能需要提供一"
+"些必要的信息，若国家法律法规或政策有特殊规定的，您需要提供真实的身份信息。基"
+"于某些产品功能，腾讯会需要您提供使用该功能的非关联用户身份的相关信息，您同意"
+"腾讯基于上述目的收集上述信息，若您不提供或提供的信息不完整，则无法使用本服务"
+"或在使用过程中受到限制。</p> <p class=\"title\">七、【主权利义务条款】</p> "
+"<p>7.1 【帐号使用规范】</p> <p>7.1.1 用户有责任妥善保管注册帐户信息及帐户密码"
+"的安全，用户需要对注册帐户以及密码下的行为承担法律责任。用户同意在任何情况下"
+"不向他人透露帐户及密码信息。在您怀疑他人在使用您的帐号时，请您及时处理。</p> "
+"<p>7.1.2 管理员账号使用者，则可以创建多个账号，所创建的所有账号，由创建的人对"
+"账号承担保密的责任。</p> <p>7.1.3 非管理员账号使用者，应妥善保管账号密码的安"
+"全，若存在密码修改等事宜，应求助所创建账号的管理员。</p> <p>7.1.4 腾讯蓝鲸智"
+"云产品的账户密码安全，均由软件使用者承担相关法律责任。</p> <p>7.2【用户注意事"
+"项】</p> <p>7.2.1 您理解并同意：为了向您提供有效的服务，本软件会利用您终端的"
+"处理器和带宽等资源。本软件使用过程中可能产生数据流量的费用，用户需自行向运营"
+"商了解相关资费信息，并自行承担相关费用。</p> <p>7.2.2 您理解并同意：</p> "
+"<p>7.2.2.1 您在本软件的应用市场中添加的第三方软件，由第三方享有一切合法权利。"
+"因第三方软件引发的任何纠纷，由该第三方负责解决，腾讯不承担任何责任。 腾讯不对"
+"第三方软件或技术提供客服支持，若用户需要获取支持，请与该软件或技术提供商联"
+"系。</p> <p>7.2.2.2 本软件对涉及到的第三方软件的安装信息及升级信息等一切信息"
+"的安全性、合法性、兼容性、无害性等不承担任何担保及保证，由此而产生的任何法律"
+"纠纷，由该第三方负责解决，腾讯不承担任何责任。</p> <p>7.2.2.3 本软件所涉及到"
+"的任何第三方软件，其一切法律权利归第三方权利人所享有，用户下载、安装、使用第"
+"三方软件受该软件许可协议所约束。在第三方软件使用过程中所产生的任何纠纷，均由"
+"该第三方负责解决，腾讯不承担任何责任。</p> <p>7.2.2.4 本软件供用户用来下载、"
+"安装腾讯和/或第三方软件，并不能识别用户利用本软件下载、安装的第三方软件是否有"
+"合法来源。若您为有关软件的权利人，不愿本软件为您的软件提供用户下载、安装、使"
+"用的服务，可按本协议约定的联系方式联系我们（联系邮箱：【*】，联系电话："
+"【*】），我们将会积极配合进行处理。</p> <p>7.2.3 您在使用本软件某一特定服务"
+"时，该服务可能会另有单独的协议、相关业务规则等（以下统称为“单独协议”），您在"
+"使用该项服务前请阅读并同意相关的单独协议。</p> <p>7.2.4 您理解并同意腾讯将会"
+"尽其商业上的合理努力保障您在本软件及服务中的数据存储安全，但是，腾讯并不能就"
+"此提供完全保证，包括但不限于以下情形：</p> <p>7.2.4.1 腾讯不对您在本软件及服"
+"务中相关数据的删除或储存失败负责；</p> <p>7.2.4.2 腾讯有权根据实际情况自行决"
+"定单个用户在本软件及服务中数据的最长储存期限，并在服务器上为其分配数据最大存"
+"储空间等。您可根据自己的需要自行备份本软件及服务中的相关数据；</p> "
+"<p>7.2.4.3 如果您停止使用本软件及服务或服务被终止或取消，腾讯可以从服务器上永"
+"久地删除您的数据。服务停止、终止或取消后，腾讯没有义务向您返还任何数据。</p> "
+"<p>7.3【第三方产品和服务】</p> <p>7.3.1 您在本软件的应用市场中添加第三方提供"
+"的产品或服务时，除遵守本协议约定外，还应遵守第三方的用户协议。腾讯和第三方对"
+"可能出现的纠纷在法律规定和约定的范围内各自承担责任。</p> <p>7.3.2 腾讯不保证"
+"您在应用市场中添加的第三方产品或服务的安全性、准确性、有效性及其他不确定的风"
+"险，由此若引发的任何争议及损害，与腾讯无关，腾讯不承担任何责任。</p> <p "
+"class=\"title\">八、【用户行为规范】</p> <p>8.1【信息内容规范】</p> <p>8.1.1 "
+"本条所述信息内容是指用户使用本软件及服务过程中所制作、复制、发布、传播的任何"
+"内容。</p> <p>8.1.2 您理解并同意，腾讯蓝鲸智云一直致力于为用户提供完善的基础"
+"服务设施，您不得利用本软件及服务制作、复制、发布、传播如下干扰腾讯蓝鲸智云正"
+"常运营，以及侵犯其他用户或第三方合法权益的内容，包括但不限于：</p> "
+"<p>8.1.2.1 发布、传送、传播、储存违反国家法律、危害国家安全统一、社会稳定、公"
+"序良俗、社会公德以及侮辱、诽谤、淫秽或含有任何性或性暗示的、暴力的内容；</p> "
+"<p>8.1.2.2 发布、传送、传播、储存侵害他人名誉权、肖像权、知识产权、商业秘密等"
+"合法权利的内容；</p> <p>8.1.2.3 涉及他人隐私、个人信息或资料的；</p> "
+"<p>8.1.2.4 发表、传送、传播骚扰、广告信息及垃圾信息；</p> <p>8.1.2.5 其他违反"
+"法律法规、政策及公序良俗、社会公德或干扰【腾讯蓝鲸智云】正常运营和侵犯其他用"
+"户或第三方合法权益内容的信息。</p> <p>8.2【软件使用规范】</p> <p>除非法律允许"
+"或腾讯书面许可，您使用本软件过程中不得从事下列行为：</p> <p>8.2.1 删除本软件"
+"及其副本上关于著作权的信息；</p> <p>8.2.2 对本软件进行反向工程、反向汇编、反"
+"向编译，或者以其他方式尝试发现本软件的源代码；</p> <p>8.2.3 对腾讯拥有知识产"
+"权的内容进行使用、出租、出借、复制、修改、链接、转载、汇编、发表、出版、建立"
+"镜像站点等；</p> <p>8.2.4 对本软件或者本软件运行过程中释放到任何终端内存中的"
+"数据、软件运行过程中客户端与服务器端的交互数据，以及本软件运行所必需的系统数"
+"据，进行复制、修改、 增加、删除、挂接运行或创作任何衍生作品，形式包括但不限于"
+"使用插件、外挂或非腾讯经授权的第三方工具/服务接入本软件和相关系统；</p> "
+"<p>8.2.5 通过修改或伪造软件运行中的指令、数据，增加、删减、变动软件的功能或运"
+"行效果，或者将用于上述用途的软件、方法进行运营或向公众传播，无论这些行为是否"
+"为商业目的；</p> <p>8.2.6 通过非腾讯开发、授权的第三方软件、插件、外挂、系"
+"统，登录或使用腾讯软件及服务，或制作、发布、传播上述工具；</p> <p>8.2.7 自行"
+"或者授权他人、第三方软件对本软件及其组件、模块、数据进行干扰；</p> <p>8.2.8 "
+"其他未经腾讯明示授权的行为。</p> <p>8.3【服务运营规范】</p> <p>除非法律允许或"
+"腾讯书面许可，您使用本服务过程中不得从事下列行为：</p> <p>8.3.1 提交、发布虚"
+"假信息，或冒充、利用他人名义的；</p> <p>8.3.2 诱导其他用户点击链接页面或分享"
+"信息的；</p> <p>8.3.3 虚构事实、隐瞒真相以误导、欺骗他人的；</p> <p>8.3.4 侵"
+"害他人名誉权、肖像权、知识产权、商业秘密等合法权利的；</p> <p>8.3.5 未经腾讯"
+"书面许可利用帐号和任何功能，以及第三方运营平台进行推广或互相推广的；</p> "
+"<p>8.3.6 利用帐号或本软件及服务从事任何违法犯罪活动的；</p> <p>8.3.7 制作、发"
+"布与以上行为相关的方法、工具，或对此类方法、工具进行运营或传播，无论这些行为"
+"是否为商业目的；</p> <p>8.3.8 其他违反法律法规规定、侵犯其他用户合法权益、干"
+"扰产品正常运营或腾讯未明示授权的行为。</p> <p>8.4 【对自己行为负责】</p> <p>"
+"您充分了解并同意，您必须为自己注册帐号下的一切行为负责，包括您所发表的任何内"
+"容以及由此产生的任何后果。您应对本服务中的内容自行加以判断，并承担因使用内容"
+"而引起的所有风险，包括因对内容的正确性、完整性或实用性的依赖而产生的风险。腾"
+"讯无法且不会对因前述风险而导致的任何损失或损害承担责任。</p> <p>8.5【违约处"
+"理】</p> <p>8.5.1 如果腾讯发现或收到他人举报或投诉用户违反本协议约定的，腾讯"
+"有权不经通知随时对相关内容进行删除，并视行为情节对违规帐号处以包括但不限于警"
+"告、限制或禁止使用全部或部分功能、帐号封禁直至注销的处罚，并公告处理结果。</"
+"p> <p>8.5.2 您理解并同意，腾讯有权依合理判断对违反有关法律法规或本协议规定的"
+"行为进行处罚，对违法违规的任何用户采取适当的法律行动，并依据法律法规保存有关"
+"信息向有关部门报告等，用户应独自承担由此而产生的一切法律责任。</p> <p>8.5.3 "
+"您理解并同意，因您违反本协议或相关服务条款的规定，导致或产生第三方主张的任何"
+"索赔、要求或损失，您应当独立承担责任；腾讯因此遭受损失的，您也应当一并赔偿。"
+"</p> <p class=\"title\">九、【知识产权声明】</p> <p>9.1 腾讯是本软件的知识产"
+"权权利人。本软件的一切著作权、商标权、专利权、商业秘密等知识产权，以及与本软"
+"件相关的所有信息内容（包括但不限于文字、图片、音频、视频、图表、界面设计、版"
+"面框架、有关数据或电子文档等）均受中华人民共和国法律法规和相应的国际条约保"
+"护，腾讯享有上述知识产权。</p> <p>9.2 未经腾讯书面同意，您不得为任何商业或非"
+"商业目的自行或许可任何第三方实施、利用、转让上述知识产权，腾讯保留追究上述行"
+"为法律责任的权利。</p> <p class=\"title\">十、【终端安全责任】</p> <p>10.1 您"
+"理解并同意，本软件同大多数互联网软件一样，可能会受多种因素影响，包括但不限于"
+"用户原因、网络服务质量、社会环境等；也可能会受各种安全问题的侵扰，包括但不限"
+"于他人非法利用用户资料，进行现实中的骚扰；用户下载安装的其他软件或访问的其他"
+"网站中可能含有病毒、木马程序或其他恶意程序，威胁您的终端设备信息和数据安全，"
+"继而影响本软件的正常使用等。因此，您应加强信息安全及个人信息的保护意识，注意"
+"密码保护，以免遭受损失。</p> <p>10.2 您不得制作、发布、使用、传播用于窃取其他"
+"用户帐号及个人信息、财产的恶意程序。</p> <p>10.3 维护软件安全与正常使用是腾讯"
+"和您的共同责任，腾讯将按照行业标准合理审慎地采取必要技术措施保护您的终端设备"
+"信息和数据安全，但是您承认和同意腾讯并不能就此提供完全保证。</p> <p class="
+"\"title\">十一、【第三方软件或技术】</p> <p>11.1 本软件可能会使用第三方软件或"
+"技术（包括本软件可能使用的开源代码和公共领域代码等，下同），这种使用已经获得"
+"合法授权。</p> <p>11.2 本软件如果使用了第三方的软件或技术，腾讯将按照相关法规"
+"或约定，对相关的协议或其他文件，可能通过本协议附件、在本软件安装包特定文件夹"
+"中打包等形式进行展示，它们可能会以“软件使用许可协议”、“授权协议”、“开源代码许"
+"可证”或其他形式来表达。前述通过各种形式展现的相关协议或其他文件，均是本协议不"
+"可分割的组成部分，与本协议具有同等的法律效力，您应当遵守这些要求。如果您没有"
+"遵守这些要求，该第三方或者国家机关可能会对您提起诉讼、罚款或采取其他制裁措"
+"施，并要求腾讯给予协助，您应当自行承担法律责任。</p> <p>11.3 如因本软件使用的"
+"第三方软件或技术引发的任何纠纷，应由该第三方负责解决，腾讯不承担任何责任。腾"
+"讯不对第三方软件或技术提供客服支持，若您需要获取支持，请与第三方联系。</p> "
+"<p class=\"title\">十二、【其他】</p> <p>12.1 您使用本软件即视为您已阅读并同"
+"意受本协议的约束。腾讯有权在必要时修改本协议条款。您可以在本软件的最新版本中"
+"查阅相关协议条款。本协议条款变更后，如果您继续使用本软件，即视为您已接受修改"
+"后的协议。如果您不接受修改后的协议，应当停止使用本软件。</p> <p>12.2 本协议签"
+"订地为中华人民共和国广东省深圳市南山区。</p> <p>12.3 本协议的成立、生效、履"
+"行、解释及纠纷解决，适用中华人民共和国大陆地区法律（不包括冲突法）。</p> "
+"<p>12.4 若您和腾讯之间发生任何纠纷或争议，首先应友好协商解决；协商不成的，您"
+"同意将纠纷或争议提交本协议签订地有管辖权的人民法院管辖。</p> <p>12.5 本协议所"
+"有条款的标题仅为阅读方便，本身并无实际涵义，不能作为本协议涵义解释的依据。</"
+"p> <p>12.6 本协议条款无论因何种原因部分无效或不可执行，其余条款仍有效，对双方"
+"具有约束力。</p> <p>12.7 本协议可能由多种语言书就。如果存在中文版本与其他语言"
+"的版本相冲突的地方，以中文版本为准。（正文完）</p> <p>腾讯公司</p> </div>"
+msgstr ""
+"<div class=\"title\">Tencent BlueKing Software Licensing and Service "
+"Agreement</div><div class=\"detail-list\">    <p class=\"title\">Preamble</"
+"p>    <p>Welcome to use Tencent BlueKing Software and relevant services!</"
+"p>    <p>You must read and comply with the Tencent BlueKing Software "
+"Licensing and Service Agreement (hereinafter referred to as the \"Agreement"
+"\") and Tencent Service Agreement in order to use Tencent BlueKing Software "
+"(hereinafter referred to as the \"Software\") and relevant services. Please "
+"carefully read and fully understand the content of each term of the "
+"Agreement, in particular the terms with respect to exemption or limitation "
+"of liability, and any separate agreements relating to activating or using "
+"some specific services, and choose to accept them or not. Terms relating to "
+"exemption or limitation of liability may be marked in bold form for your "
+"attention.</p>    <p>You may not download, install or use the Software and "
+"related services unless you have read and accepted all the terms of this "
+"Agreement. Your act of downloading, installation, use and logging of the "
+"Software shall be deemed that you have read and agreed to be bound by the "
+"Agreement.</p>    <p class=\"title\">1.  Scope of the Agreement</p>    "
+"<p>1.1.    Applicable Parties</p>    <p>This Agreement is entered into by "
+"and between you and Tencent regarding your downloading, installing, using "
+"and copying of the Software and your act of using related services of "
+"Tencent.</p>    <p>1.2.    Agreements Relationship and Conflicting Terms</"
+"p>    <p>This Agreement shall be taken as a supplementary agreement to the "
+"Tencent Service Agreement (weblink: http://www.qq.com/contract.shtml. If the "
+"web link addresses change, the content directed by the changed link address "
+"shall apply. In the event of the other changes to other web link addresses "
+"as mentioned in this Agreement, the foregoing clause shall apply as well), "
+"and shall forms an integral part of such agreement and constitute one and "
+"the same document together with such agreement. In the event of any "
+"inconsistency between this Agreement and the Tencent Service Agreement, this "
+"Agreement shall prevail.</p>    <p>This Agreement also includes relevant "
+"agreements, business rules and other contents regarding the Services that "
+"Tencent may publish from time to time, which, immediately upon being "
+"officially published, will constitute an integral part of this Agreement and "
+"should also be complied by you.</p>    <p class=\"title\">2.  The Services</"
+"p>    <p>2.1.    Contents of the Services</p>    <p>The services referred "
+"herein refer to BlueKing products and related services, including but not "
+"limited to the basic operation and maintenance platform (such as "
+"\"configuration platform\", \"operating platform\", \"control platform\"), "
+"PaaS services (such as \"AppEngine\" , Developer Center, Application "
+"Development Framework, Modules, Front-end Magicbox), SaaS services (such as "
+"monitoring alarms, continuous integration, continuous deployment, ancillary "
+"operations), as well as other related products that support the above "
+"services , and the software licenses and services that provide users with "
+"complete basic services facilities to enable users to create, deploy and "
+"manage applications in a quick and convenient manner (hereinafter referred "
+"to as the \"Services\").</p>    <p>2.2.    Form of the Services</p>    "
+"<p>You need to download BlueKing software to use the Services. Tencent "
+"grants you a non-transferable and non-exclusive license for your personal "
+"use of the Software. You may only use the software and services for the "
+"purpose of accessing to or using the Services.</p>    <p>2.3.    Scope of "
+"License of the Services</p>    <p>2.3.1.  Tencent grants you a non-"
+"transferable and non-exclusive license to use the Software. You may install, "
+"use, display and run the Software for a non-commercial purpose on a single "
+"terminal device.</p>    <p>2.3.2.  You may make one copy of the Software for "
+"the purpose of using the Software and Services, and shall only use the copy "
+"as a backup. The copy must contain all copyright information contained in "
+"the original Software.</p>    <p>2.3.3.  Tencent reserves all other rights "
+"that are not expressly authorized by this Article 2.3 and other terms of "
+"this Agreement. You shall separately obtain Tencent's written consent for "
+"exercise of such unauthorized rights. Tencent’s failure to exercise any of "
+"the above-mentioned rights does not constitute a waiver of such rights.</"
+"p>    <p class=\"title\">3.  Acquisition of the Software</p>    <p>3.1.    "
+"You can obtain the Software directly from Tencent's website or from a third "
+"party authorized by Tencent.</p>    <p>3.2.    If you obtain the Software or "
+"any installation program with the name same as this Software from any third "
+"party without authorization by Tencent, Tencent cannot guarantee that such "
+"software will operate properly and therefore takes no responsibility for any "
+"loss caused to you due to the use of such software.</p>    <p class=\"title"
+"\">4.  Installation and Uninstallation of the Software</p>    <p>4.1.    "
+"Tencent may develop different versions of the Software for different "
+"terminal devices. You should choose an appropriate version for installation "
+"according to the actual condition.</p>    <p>4.2.    After downloading the "
+"installation program, you need to follow the steps suggested by the program "
+"to achieve correct installation.</p>    <p>4.3.    In order to provide a "
+"quality and secure service, Tencent may recommend other software to you "
+"during your installation of the Software, which you can choose to install or "
+"not.</p>    <p>4.4.    If you no longer need to use the Software, or need to "
+"install the new version of the Software, you can uninstall the Software. If "
+"you want to help Tencent improve the product and services, please inform us "
+"of the reasons for uninstallation.</p>    <p class=\"title\">5.  Software "
+"Update</p>    <p>5.1.    In order to improve user experience and the "
+"contents of service, Tencent will continue to develop new services and from "
+"time to time provide you with software updates (in the form of software "
+"replacement, modification, feature enhancement and version upgrade, etc.).</"
+"p>    <p>5.2.    In order to ensure the security and consistency of "
+"functionality of the Software and Services, Tencent reserves the right to "
+"update the Software, or change or restrict partial functionality of the "
+"Software without giving you any special notice.</p>    <p>5.3.    After the "
+"new version of the Software is released, older versions of the Software may "
+"not be available. In that case, Tencent does not guarantee that the old "
+"versions of the Software and corresponding customer services continue to be "
+"available. Please check and download the latest version at any time.</p>    "
+"<p class=\"title\">6.  Protection of the User’s Personal Information</p>    "
+"<p>6.1.    Protecting user's personal information is a basic principle "
+"upheld by Tencent. Tencent will collect, use, store and share your personal "
+"information in accordance with this Agreement and the Privacy Policy (web "
+"link address: http://www.qq.com/privacy.htm). In case of any inconsistency "
+"and discrepancy between the provisions of this Agreement on the protection "
+"of personal information and those of the Privacy Policy, or this Agreement "
+"fails to clearly provide any aspect of personal information protection, the "
+"relevant provisions of Privacy Policy shall prevail.</p>    <p>6.2.    "
+"Tencent will take reasonable measures to protect the user's personal "
+"information. Unless otherwise provided by laws and regulations, Tencent will "
+"not make public or disclose the user's personal information to any third "
+"party without permission of the users. Tencent adopts professional "
+"encryption storage and transmission methods for related information, in "
+"order to protect the user's personal information.</p>    <p>6.3.    You may "
+"need to provide certain necessary information in order to register an "
+"account or to use the Services. And you may need to provide real identity "
+"information if that is a requirement provided by the laws, regulations or "
+"policies. Based on certain product features, Tencent may require you to "
+"provide identity information of non-affiliated users who use relevant "
+"features. You permit Tencent to collect such information for such purposes "
+"and acknowledge that you will not be able to use the Services or your use of "
+"the Services may be subject to certain restrictions if you fail to provide "
+"or provide incomplete information.</p>    <p class=\"title\">7.  Rights and "
+"Obligations</p>    <p>7.1.    Account Use Rules</p>    <p>7.1.1.  Each user "
+"shall be responsible for properly safekeeping its registered account "
+"information and account password and shall be liable for any acts taken "
+"under its registered account and the password. Users agree that they shall "
+"not disclose account and password information to others under any "
+"circumstances. When you suspect that others are using your account, please "
+"deal with the situation promptly.</p>    <p>7.1.2.  The user of the "
+"administrator account can create more than one accounts and shall be "
+"responsible for properly safekeeping the information of all accounts created "
+"by it.</p>    <p>7.1.3.  The user of non-administrator account should "
+"properly safekeeping the account password and should ask help from the "
+"account administrator if it intends to change the password.</p>    "
+"<p>7.1.4.  Legal liabilities related to or in connection with account "
+"password safety of Tencent BlueKing products shall be borne by the software "
+"users.</p>    <p>7.2.    Cautions</p>    <p>7.2.1.  You understand and agree "
+"that the Software will use the processor, bandwidth and other resources of "
+"your terminal device in order to provide you with effective services. The "
+"costs of data traffic may incur during use of the Software, and the user "
+"shall consult the telecommunication operator about the fee rate and bear "
+"relevant costs on its own.</p>    <p>7.2.2.  You understand and agree:</"
+"p>    <p>7.2.2.1.    All legal rights related to the third-party software "
+"you acquire from o the application stores of the Software shall be owned the "
+"third party. Any dispute arising from third party software shall be resolved "
+"by the third party in question, and Tencent does not assume any "
+"responsibility. Tencent does not provide customer service support for any "
+"third party software or technology. If you need any support, please contact "
+"the third party in question.</p>    <p>7.2.2.2.    The Software contains no "
+"guarantee for the safety, legality, compatibility and harmlessness of the "
+"information of the related third party software, including the installation "
+"information and upgrade information. Any dispute arising hereunder shall be "
+"resolved by the third party in question, and Tencent does not assume any "
+"responsibility.</p>    <p>7.2.2.3.    All legal rights regarding any third "
+"party software related to the Software are the property of the third party. "
+"The download, installation and use of the third party software shall be "
+"subject to the software license agreement of such third party software. Any "
+"dispute arising from third party software shall be resolved by the third "
+"party in question, and Tencent does not assume any responsibility.  </p>    "
+"<p>7.2.2.4.    This Software will be used by users to download and install "
+"Tencent and / or third party software. However, we cannot identify whether "
+"the third party software that users download or install by using this "
+"Software are properly licensed. If you are the owner of related third party "
+"software and do not want your software to be downloaded, installed and used "
+"through this Software, you may contact us via the contact details listed in "
+"this Agreement（Contact Email [*], Contact Phone Number [*]）. We will deal "
+"with relevant situation in an active manner.</p>    <p>7.2.3.  When you use "
+"a particular service of this Software, the service may be governed by "
+"separate agreements and related business rules, etc. (hereinafter "
+"collectively referred to as the \"Separate Agreement\"). Please read and "
+"agree to relevant Separate Agreement before you use the service.</p>    "
+"<p>7.2.4.  You understand and agree that Tencent will make its commercially "
+"reasonable efforts to maintain your data stored in the Software and Services "
+"safe, but Tencent cannot guarantee that your data is absolutely safe, "
+"especially:</p>    <p>7.2.4.1.    Tencent is not responsible for deletion or "
+"failure of storage of relevant data in the Software and Services;</p>    "
+"<p>7.2.4.2.    Tencent is entitled to decide at its discretion the longest "
+"period of data storage in the Software and Services for each user according "
+"to the actual situation, and allocate the maximum space in the server for "
+"data storage of each user, etc. You can back up relevant data in the "
+"Software and Services on your own according to your own needs;</p>    "
+"<p>7.2.4.3.    If you stop using the Software and Services or the Services "
+"are terminated or canceled, Tencent can permanently delete your data from "
+"the server. When the Services are stopped, terminated or canceled, Tencent "
+"is not obligated to return any data to you.</p>    <p>7.3.    Third-Party "
+"Products and Services</p>    <p>7.3.1.  When you acquire products or "
+"services provided by any third party from the application store of this "
+"Software, you shall comply with the user agreement of the third party in "
+"addition to this Agreement. Tencent and the third party shall assume their "
+"respective responsibilities separately for any possible dispute between them "
+"within the scope prescribed by laws and stipulated by agreements.</p>    "
+"<p>7.3.2.  Tencent does not guarantee the security, accuracy, effectiveness "
+"and other uncertain risks of products or services provided by any third "
+"party which you acquire from the application store of this Software. Any "
+"dispute or damage arises therefrom is irrelevant to Tencent, Tencent "
+"therefore will not assume any responsibility.</p>    <p class=\"title\">8.  "
+"Users’ Codes of Conduct</p>    <p>8.1.    Information Content Specification</"
+"p>    <p>8.1.1.  Information contents contained in this Article refer to any "
+"content produced, copied, published or transmitted by users during the use "
+"of the Software and Services.</p>    <p>8.1.2.  You understand and agree "
+"that Tencent BlueKing has always been committed to providing users with "
+"perfect basic service facilities. You shall not use the Software and "
+"Services to produce, copy, publish, or transmit the contents interfering "
+"with normal operation of BlueKing or infringing lawful rights and interests "
+"of other users or third parties, including but not limited to the following:"
+"</p>    <p>8.1.2.1.    You may not publish, transmit, spread, and store "
+"contents which violate national laws and regulations, endanger national "
+"security and unity, undermine social stability, undermine public order and "
+"social morality, insult or slander others, disseminate obscenity or contain "
+"any sexual or sexual connotation or violent contents;</p>    <p>8.1.2.2.    "
+"You may not publish, transmit, spread, and store contents infringing "
+"legitimate rights of others, including the right of reputation, right of "
+"portrait, intellectual property right and trade secrets;</p>    "
+"<p>8.1.2.3.    You may not publish, transmit, spread, and store contents "
+"relating to others’ privacy, personal information or materials;</p>    "
+"<p>8.1.2.4.    You may not publish, transmit and spread harassment and "
+"advertising information and spam; </p>    <p>8.1.2.5.    Other information "
+"that violates laws, regulations, policies, public order and social morality, "
+"or interferes with the normal operation of Tencent BlueKing or infringes the "
+"legitimate rights and interests of other users or third parties, which "
+"information is also prohibited to published, transmit and spread.</p>    "
+"<p>8.2.    Software Usage Specification</p>    <p>Unless permitted by law or "
+"with Tencent's written consent, you may not engage in any of the following "
+"acts in the course of your use of the Software:</p>    <p>8.2.1.  Delete the "
+"copyright information on the Software and its copies;</p>    <p>8.2.2.  "
+"Conduct reverse engineering, reverse assembly and reverse compiling on the "
+"Software, or other attempt to find the source code of the Software;</p>    "
+"<p>8.2.3.  Use, rent, lend, copy, modify, link, reprint, compile, release, "
+"publish or establish a mirror site or through other means utilize the "
+"contents of intellectual property rights that Tencent owns;</p>    "
+"<p>8.2.4.  Copy, modify, add, delete and mount the data stored in any "
+"terminal memory by the Software or during the operation of the Software, the "
+"interactive data between the client and the server during operation of the "
+"Software, and the system data necessary for operation of the Software, or "
+"create any derivative works by using means such as plug-ins, add-ons or "
+"third-party tools/services unauthorized by Tencent to access the Software "
+"and related systems;</p>    <p>8.2.5.  Add, delete, change the functions or "
+"operating effects of the Software by modifying or forging the instructions "
+"and data of the Software, or operate or disseminate to the public the "
+"software and methods used for the purposes described above, regardless "
+"whether such acts are for commercial purposes or not;</p>    <p>8.2.6.  "
+"Login or use Tencent Software and Services through any third-party software, "
+"plug-in, add-on or system that are not developed or authorized by Tencent, "
+"or produce, publish, disseminate those tools;</p>    <p>8.2.7.  Interfere "
+"with the Software and its components, modules and data on your own or by "
+"authorizing others or third-party software to do so;</p>    <p>8.2.8.  Other "
+"acts not expressly authorized by Tencent.</p>    <p>8.3.    Service "
+"Operation Requirements</p>    <p>Unless permitted by law or with Tencent's "
+"written consent, you may not engage in the following acts in the course of "
+"your use of the Services:</p>    <p>8.3.1.  Submit and publish false "
+"information, or impersonate others or use the name of others;</p>    "
+"<p>8.3.2.  Induce other users to click on the links or share information;</"
+"p>    <p>8.3.3.  Fabricate facts or conceal the truth to mislead or deceive "
+"others;</p>    <p>8.3.4.  Infringe legitimate rights of others including "
+"right of reputation, right of portrait, intellectual property right and "
+"trade secrets;</p>    <p>8.3.5.  Utilize any account, any function and any "
+"third-party operating platform to conduct promotion or mutual promotion "
+"without Tencent’s written consent;</p>    <p>8.3.6.  Utilize any account or "
+"the Software and Services to engage in any illegal and criminal activities;</"
+"p>    <p>8.3.7.  Produce or publish the methods or tools related to the "
+"above-mentioned acts, or operate or disseminate such methods or tools, "
+"regardless whether such acts are for commercial purposes or not;</p>    "
+"<p>8.3.8.  Other acts violating laws and regulations, infringing the "
+"legitimate rights and interests of other users, interfering with normal "
+"operation of the products or not expressly authorized by Tencent.</p>    "
+"<p>8.4.    Be Accountable for Your Own Acts</p>    <p>You fully understand "
+"and agree that you must be responsible for all acts under your account, "
+"including any content you published and any consequences arising therefrom. "
+"You shall evaluate the contents of the Service by yourself and assume all "
+"risks arising from the use of the contents, including the risks arising from "
+"reliance on the correctness, completeness or usefulness of the contents. "
+"Tencent cannot and will not be responsible for any loss or damage caused by "
+"the foregoing risks.</p>    <p>8.5.    Treatment for Breach of Contract</"
+"p>    <p>8.5.1.  If Tencent finds or receives any report or complaint from "
+"others against users on violation to the Agreement, Tencent is entitled to "
+"remove relevant contents at any time without sending you any notice, impose "
+"punishment such as warning, restriction or prohibition of the use of some or "
+"all of the functions, banning or cancellation of the account, and announce "
+"the results of treatment to the public regarding the violating account.</"
+"p>    <p>8.5.2.  You understand and agree that Tencent is entitled to, by "
+"using its own reasonable discretion, punish any action that violates "
+"relevant laws and regulations or provisions of the Agreement, take "
+"appropriate legal action against any user in violation of any laws and "
+"regulations, and preserve relevant information in accordance with related "
+"laws and regulations and report to relevant departments, etc. Users shall "
+"bear all the legal responsibilities arising therefrom.</p>    <p>8.5.3.  You "
+"understand and agree that you shall be solely liable for any third party "
+"claims, requests or losses arising out of or in connection with your breach "
+"of the provisions of the Agreement or relevant terms of the Services. You "
+"shall also compensation Tencent for any losses Tencent has suffered which "
+"can be attributed to your violation.</p>    <p class=\"title\">9.  Statement "
+"on Intellectual Property Rights</p>    <p>9.1.    Tencent is the holder of "
+"the intellectual property rights of the Software. All intellectual property "
+"rights related to the Software, including copyright, trademark, patent and "
+"trade secrets and all information related to this Software (including but "
+"not limited to text, images, audio, video, graphics, interface design, "
+"layout framework, relevant data or electronic documents) are protected by "
+"laws and regulations of the People's Republic of China and corresponding "
+"international treaties. Tencent enjoys the above intellectual property "
+"rights.</p>    <p>9.2.    You may not or permit any third party to "
+"implement, use, or transfer any of the above intellectual property rights "
+"for any commercial or non-commercial purpose without the prior written "
+"consent of Tencent. Tencent reserves all the rights to hold you liable for "
+"the abovementioned actions.</p>    <p class=\"title\">10. Responsibility of "
+"Terminal Security</p>    <p>10.1.   You understand and agree that the "
+"Software, like most Internet software, may be affected by a variety of "
+"factors including but not limited to users’ reasons, network service quality "
+"and social environment. It also may be interfered by various security "
+"issues, including but not limited to illegal use of user information by "
+"others to conduct harassment in real life. Other software downloaded and "
+"installed and websites visited by the user may contain viruses, Trojans or "
+"other malicious programs, which may endanger the security of information and "
+"data in your terminal device and in turn affect the normal use of the "
+"Software. Therefore, you should strengthen the awareness of information "
+"security and protection of personal information, and pay attention to "
+"password protection, to avoid any loss.</p>    <p>10.2.   You shall not "
+"produce, publish, use, and disseminate any malicious program which can be "
+"used to steal other users’ accounts, personal information, or property.</"
+"p>    <p>10.3.   It is the common responsibility of you and Tencent to "
+"maintain software security and normal use. Tencent will take reasonably and "
+"prudently technical measures to protect information and data security of "
+"your terminal device in accordance with industry standards, but you "
+"acknowledge and agree that Tencent cannot therefore provide a complete "
+"guarantee.</p>    <p class=\"title\">11. Third-Party Software or Technology</"
+"p>    <p>11.1.   The Software may use third-party software or technology "
+"(including the open source code and public domain code that may be used for "
+"the Software, similarly hereinafter), and such use has been legally "
+"authorized.</p>    <p>11.2.   If any third-party software or technology is "
+"adopted for the Software, Tencent will demonstrate the relevant agreements "
+"or other documents in accordance with relevant laws and regulations through "
+"annexes of this Agreement, a package in a specific folder of the "
+"installation package of the Software or other forms, which may be expressed "
+"as \"Software License Agreement\", \"License Agreement\", \"Open Source "
+"License\" or other forms. The foregoing relevant agreements and other "
+"documents presented through various forms are an integral part of this "
+"Agreement and shall have the same legal effect as this Agreement. You shall "
+"comply with all these requirements. If you fail to do so, such third party "
+"or competent authorities may file a lawsuit, impose fines, or take other "
+"sanctions against you and require Tencent to provide assistance. You shall "
+"be solely liable for relevant legal responsibilities.</p>    <p>11.3.   Any "
+"dispute arising from a third party software or technology adopted by the "
+"Software should be resolved by the third party in question, and Tencent does "
+"not assume any responsibility. Tencent does not provide customer service "
+"support for any third-party software or technology. If you need any support, "
+"please contact the third party in question.</p>    <p class=\"title\">12. "
+"Miscellaneous</p>    <p>12.1.   Your use of the Software shall be deemed "
+"that you have read and agreed to be bound by this Agreement. Tencent "
+"reserves the right to modify the terms of this Agreement when necessary. You "
+"can refer to the terms of the Agreement in the latest version of this "
+"Software. If you continue to use the Software upon any change to the terms "
+"of this Agreement, you shall be deemed as having accepted the amended "
+"Agreement. You should stop using the Software if you do not accept the "
+"modified Agreement.</p>    <p>12.2.   This Agreement is executed in Nanshan "
+"District, Shenzhen City, Guangdong Province of the People's Republic of "
+"China.</p>    <p>12.3.   The formation, effectiveness, performance, "
+"interpretation and dispute resolution of this Agreement shall be governed by "
+"the laws of the Mainland of the People's Republic of China, without giving "
+"effect to the principles of conflict of laws.</p>    <p>12.4.   If any "
+"dispute arises between you and Tencent, the dispute shall be first resolved "
+"by friendly negotiation; where the negotiation fails, you agree to submit "
+"the dispute to the people's court with jurisdiction at the place of "
+"execution of this Agreement.</p>    <p>12.5.   The headings of all the terms "
+"of this Agreement are for convenience only and do not have any actual "
+"meaning. They shall not be taken as a basis for the interpretation of the "
+"meaning of this Agreement.</p>    <p>12.6.   Where any provision of this "
+"Agreement are found to be invalid or unenforceable for any reason, the "
+"remaining provisions shall remain in force and binding on both parties. </"
+"p>    <p>12.7.   This Agreement may be written in different languages.  In "
+"case of any inconsistency and discrepancy between the Chinese version and "
+"any version of other language, the Chinese version shall prevail. (End)</"
+"p>    <p> Tencent</p></div>"
+
+#: .\templates\account\agreement.part:124
+msgid "已阅读"
+msgstr "I know"
+
+#: .\templates\account\base.html:11
+msgid "用户管理|蓝鲸智云企业版"
+msgstr "User Management|BlueKing"
+
+#: .\templates\account\base.html:12
+msgid ""
+"开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,"
+"运维开发,蓝鲸企业版,企业版,作业平台,集成平台,配置平台,管控平台"
+msgstr ""
+"Developer Center, Game OPS, OPS, Server Management, Module Configuration, "
+"Monitoring, Tencent Game, BlueKing, DevOps, OPS Development, BlueKing "
+"Enterprise, Enterprise, Job System, Integration System, Configuration "
+"System, Control System"
+
+#: .\templates\account\base.html:13
+msgid ""
+"蓝鲸智云软件企业版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变"
+"中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。"
+"该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵"
+"守《蓝鲸智云软件用户服务协议》。"
+msgstr ""
+"BlueKing Enterprise is a PaaS-based technology solution developed by "
+"BlueKing team, aiming at changing the OPS industry in China, helping "
+"enterprises rapidly achieve basic OPS support capability and enhancing "
+"technical staff's DevOps capabilities. It supports CC/JOB/PaaS."
+
+#: .\templates\account\base.html:42 .\templates\account\base.html.py:97
+#: .\templates\account\login.html:69
+msgid "蓝鲸智云桌面"
+msgstr "BlueKing Desktop"
+
+#: .\templates\account\base.html:43
+msgid "img/logo/logo_user_01.png"
+msgstr "img/logo/logo_user_01_en.png"
+
+#: .\templates\account\base.html:45
+msgid "蓝鲸智云用户管理"
+msgstr "BlueKing User Management"
+
+#: .\templates\account\base.html:46
+msgid "img/logo/logo_user_02.png"
+msgstr "img/logo/logo_user_02_en.png"
+
+#: .\templates\account\base.html:67 .\templates\admin\base_site.html:14
+#: .\templates\admin\login.html:21
+msgid "注销"
+msgstr "Logout"
+
+#: .\templates\account\base.html:82
+msgid "返回顶部"
+msgstr "Back top"
+
+#: .\templates\account\base.html:85
+msgid "返回底部"
+msgstr "Back bottom"
+
+#: .\templates\account\base.html:94 .\templates\account\login.html:66
+msgid "QQ咨询"
+msgstr "QQ"
+
+#: .\templates\account\base.html:95 .\templates\account\login.html:67
+msgid "蓝鲸论坛"
+msgstr "BlueKing Forum"
+
+#: .\templates\account\base.html:96 .\templates\account\login.html:68
+msgid "蓝鲸官网"
+msgstr "Blueking Official"
+
+#: .\templates\account\base.html:100
+msgid "蓝鲸智云 版权所有"
+msgstr " "
+
+#: .\templates\account\login.html:10
+msgid "登录|蓝鲸智云企业版"
+msgstr "Login|BlueKing"
+
+#: .\templates\account\login.html:16
+msgid "img/logo/bk_login.png"
+msgstr "img/logo/bk_login_en.png"
+
+#: .\templates\account\login.html:38
+msgid "账户或者密码错误，请重新输入"
+msgstr "Username or password is incorrect"
+
+#: .\templates\account\login.html:44
+msgid "请输入用户名"
+msgstr "Please enter your username"
+
+#: .\templates\account\login.html:48
+msgid "请输入用户密码"
+msgstr "Please enter your password"
+
+#: .\templates\account\login.html:55
+msgid "登录"
+msgstr "SIGN IN"
+
+#: .\templates\account\login.html:56
+msgid "查看用户协议"
+msgstr "Agreement"
+
+#: .\templates\account\login.html:78
+msgid ""
+"您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果"
+msgstr ""
+"Your browser is not Chrome, we recommend using the latest version of Chrome "
+"for the best experience"
+
+#: .\templates\account\login.html:82
+msgid "企业证书校验无效，请联系系统管理员处理"
+msgstr ""
+"Enterprise certificate verification ineffective, please contact the system "
+"administrator"
+
+#: .\templates\account\no_right.html:5
+msgid "你不是管理员, 没有用户管理的权限!"
+msgstr ""
+"You are not an administrator, so you have no permissions for user management!"
+
+#: .\templates\account\no_right.html:6
+msgid "请找管理员申请权限!"
+msgstr "Please contact administrator to apply for permissions!"
+
+#: .\templates\account\user_role_manage_table.part:50
+msgid "没有用户配置了平台角色"
+msgstr "No user has configured the platform role"
+
+#: .\templates\account\user_table.part:24
+msgid "操作"
+msgstr "operation"
+
+#: .\templates\account\user_table.part:49
+#: .\templates\account\user_table.part:56 .\templates\account\users.html:30
+msgid "职能化"
+msgstr "operator"
+
+#: .\templates\account\user_table.part:62
+msgid "取消"
+msgstr "Cancel"
+
+#: .\templates\account\user_table.part:63 .\templates\account\users.html:62
+msgid "保存"
+msgstr "Save"
+
+#: .\templates\account\user_table.part:64
+msgid "编辑"
+msgstr "Edit"
+
+#: .\templates\account\user_table.part:65
+msgid "重置密码"
+msgstr "Reset Passowrd"
+
+#: .\templates\account\user_table.part:67
+msgid "删除"
+msgstr "Delete"
+
+#: .\templates\account\user_table.part:73
+msgid "没有数据"
+msgstr "No data"
+
+#: .\templates\account\user_table.part:85
+#: .\templates\account\user_table.part:87
+msgid "上一页"
+msgstr "Previous"
+
+#: .\templates\account\user_table.part:109
+#: .\templates\account\user_table.part:111
+msgid "下一页"
+msgstr "Next"
+
+#: .\templates\account\users.html:11
+msgid "统一角色管理"
+msgstr "Unified role management"
+
+#: .\templates\account\users.html:12
+msgid "导出"
+msgstr "Export"
+
+#: .\templates\account\users.html:13
+msgid "批量导入"
+msgstr "Batch import"
+
+#: .\templates\account\users.html:14
+msgid "新增用户"
+msgstr "Add user"
+
+#: .\templates\account\users.html:16
+msgid "用户信息"
+msgstr "User information"
+
+#: .\templates\account\users.html:24
+msgid "查询：按用户名、中文名"
+msgstr "search: by username, nickname"
+
+#: .\templates\account\users.html:26
+msgid "所有用户"
+msgstr "All users"
+
+#: .\templates\account\users.html:33
+msgid "查询"
+msgstr "Search"
+
+#: .\templates\account\users.html:34
+msgid "新增用户的默认密码为："
+msgstr "Default password of new user is "
+
+#: .\templates\account\users.html:39
+msgid "温馨提示:"
+msgstr "Tips:"
+
+#: .\templates\account\users.html:42
+msgid ""
+"<p><code>管理员</code>可以管理所有用户的信息，具有所有权限</p> <p><code>普通"
+"用户</code>可以管理自己的用户信息和访问 “桌面”</p> <p><code>开发者</code>可以"
+"管理自己的用户信息、访问 “桌面” 和访问 “开发者中心”</p> <p><code>职能化用户</"
+"code>在普通用户权限上还拥有SaaS应用 “标准运维” 的职能化权限</p> <p><code>审计"
+"员</code>在普通用户权限上还拥有SaaS应用 “标准运维”和作业平台的审计权限</p>"
+msgstr ""
+"<p><code>Superuser</code>can manage the information of all users, provided "
+"with all permissions</p><p><code>Staff</code>can manage the user information "
+"of his own and access the blueking desktop</p><p><code>Developer</code>can "
+"manage the user information of his own, and can access the blueking desktop "
+"and developer center</p><p><code>Operator</code>owns the operation "
+"permission of SaaS APP - Standard OPS, in addition the permissions of common "
+"users</p><p><code>Auditor</code>owns the audit permission of SaaS APP - "
+"Standard OPS and Job System, in addition the permissions of common users</p>"
+
+#: .\templates\account\users.html:56
+msgid "用户信息管理"
+msgstr "User information management"
+
+#: .\templates\account\users.html:59
+msgid "添加用户："
+msgstr "Add user: "
+
+#: .\templates\account\users.html:61
+msgid "添加"
+msgstr "Add"
+
+#: .\templates\account\users.html:73
+msgid "选择文件："
+msgstr "Select file:"
+
+#: .\templates\account\users.html:75
+msgid "导入用户"
+msgstr "Import user"
+
+#: .\templates\account\users.html:76
+msgid "提交"
+msgstr "Submit"
+
+#: .\templates\account\users.html:79
+msgid "bk_user_import.xls"
+msgstr "bk_user_import_en.xls"
+
+#: .\templates\account\users.html:79
+msgid "点击下载EXCEL模板"
+msgstr "Click to download EXCEL template"
+
+#: .\templates\account\users.html:83
+msgid "注意："
+msgstr "Note:"
+
+#: .\templates\account\users.html:84
+#, python-format
+msgid ""
+"<p>1.请下载<a href=\"%(STATIC_URL)sbk_user_import.xls\">EXCEL模板</a>文件填写"
+"用户数据</p> <p>2.<code>用户名</code>为必填，包含数字和字母，长度在4-20个字符"
+"</p> <p>3.<code>用户名</code>为唯一标识，重复导入会覆盖已有数据</p> <p>4.导入"
+"用户默认密码为：<code>%(default_paasword)s</code></p> <p>5.文件后缀名必须为："
+"<code>.xls</code>或<code>.xlsx</code> </p> <p>6.导入失败请检查EXCEL格式规范，"
+"或重新下载模板填写</p>"
+msgstr ""
+"<p>1. Please download <a href=\"%(STATIC_URL)sbk_user_import_en.xls\">EXCEL "
+"template file </a>and fill in user data</p><p>2.<code>Username</code> is "
+"required, including numbers and letters, the length of 4-20 characters</"
+"p><p>3.<code>Username</code> a unique identifier, duplicate import will "
+"overwrite existing data</p><p>4. Default passowrd of imported users: <code>"
+"%(default_paasword)s</code></p><p>5. The file extension must be <code>.xls</"
+"code> or <code>.xlsx</code> </p><p>6. If import failed, please check the "
+"EXCEL format specification, or re-download the template to fill in</p>"
+
+#: .\templates\account\users.html:99
+msgid "新密码："
+msgstr "Password: "
+
+#: .\templates\account\users.html:104 .\templates\account\users.html.py:110
+msgid "必填"
+msgstr "Required"
+
+#: .\templates\account\users.html:105
+#, python-format
+msgid ""
+"请输入密码，长度在8-20个字符，可支持数字、字母以及%(sp_char)s，必须保证密码包"
+"含大小写字母和数字 "
+msgstr ""
+"Please enter the password, the length of 8-20 characters, support numbers, "
+"letters and %(sp_char)s, must ensure that the password contains uppercase "
+"letters and numbers"
+
+#: .\templates\account\users.html:108
+msgid "确认密码"
+msgstr "Comfirm"
+
+#: .\templates\account\users.html:109
+msgid "再次输入密码"
+msgstr "Input password again"
+
+#: .\templates\admin\base_site.html:4
+msgid "管理"
+msgstr "Management"
+
+#: .\templates\admin\base_site.html:7
+msgid "蓝鲸智云后台管理"
+msgstr "BlueKing Backstage management"
+
+#: .\templates\admin\base_site.html:12
+msgid "修改密码"
+msgstr "Change Password"
+
+#: .\templates\admin\login.html:7
+msgid "您暂时不能访问该站点的后台管理，这是以下原因造成的："
+msgstr ""
+"You are currently not able to access the site's backend management for the "
+"following reasons."
+
+#: .\templates\admin\login.html:15 .\templates\admin\login.html.py:17
+msgid "用户"
+msgstr "user"
+
+#: .\templates\admin\login.html:15
+msgid "未激活！"
+msgstr "inactivated"
+
+#: .\templates\admin\login.html:17
+msgid "没有管理员权限，请联系管理员！"
+msgstr ""
+" do not have administrator privileges, please contact the administrator!"
+
+#: .\templates\csrf_failure.html:6 .\templates\csrf_failure.html.py:20
+msgid "CSRF验证失败"
+msgstr "CSRF verification failed"
+
+#: .\templates\csrf_failure.html:22
+msgid ""
+"您看到此消息是由于该站点在提交表单时需要一个CSRF cookie。此项是出于安全考虑，"
+"以确保您的浏览器没有被第三方劫持。"
+msgstr ""
+"You see this message because the site needs a CSRF cookie when submitting "
+"the form. This is for security reasons to make sure your browser is not "
+"hijacked by a third party."
+
+#: .\templates\csrf_failure.html:23
+msgid ""
+"如果您已经设置浏览器禁用cookies，请重新启用，至少针对这个站点，全部HTTPS请"
+"求，或者同源请求（same-origin）启用cookies。"
+msgstr ""
+"If you have set your browser to disable cookies, please enable it again, "
+"enabling cookies at least for this site, for all HTTPS requests, or same-"
+"origin requests."
+
+#: .\templates\csrf_failure.html:24
+msgid "重新登录"
+msgstr "Login again"
+
+#~ msgid "img/logo/login_text.png"
+#~ msgstr "img/logo/login_text_en.png"
+
+#~ msgid "密码"
+#~ msgstr "password"
+
+#~ msgid "用户名密码错误"
+#~ msgstr "Username or password is incorrect"
+
+#~ msgid "请下载"
+#~ msgstr "Please download "
+
+#~ msgid "EXCEL模板"
+#~ msgstr "EXCEL template"
+
+#~ msgid "文件填写用户数据"
+#~ msgstr " file and fill in user data"
+
+#~ msgid "为必填，包含数字和字母，长度在4-20个字符"
+#~ msgstr ""
+#~ " is required, including numbers and letters, the length of 4-20 characters"
+
+#~ msgid "为唯一标识，重复导入会覆盖已有数据"
+#~ msgstr ""
+#~ " is a unique identifier, duplicate import will overwrite existing data"
+
+#~ msgid "导入用户默认密码为："
+#~ msgstr "Default passowrd of imported users is "
+
+#~ msgid "文件后缀名必须为："
+#~ msgstr "The file extension must be "
+
+#~ msgid "或"
+#~ msgstr " or "
+
+#~ msgid "导入失败请检查EXCEL格式规范，或重新下载模板填写"
+#~ msgstr ""
+#~ "Import failed, please check the EXCEL format specification, or re-"
+#~ "download the template to fill in"
+
+#~ msgid "可以管理所有用户的信息，具有所有权限"
+#~ msgstr ""
+#~ " can manage the information of all users, provided with all permissions"
+
+#~ msgid "可以管理自己的用户信息和访问 “桌面” "
+#~ msgstr ""
+#~ " can manage the user information of his own and access the blueking "
+#~ "desktop"
+
+#~ msgid "可以管理自己的用户信息、访问 “桌面” 和访问 “开发者中心” "
+#~ msgstr ""
+#~ " can manage the user information of his own, and can access the blueking "
+#~ "desktop and developer center"
+
+#~ msgid "在普通用户权限上还拥有SaaS应用 “标准运维” 的轻应用权限"
+#~ msgstr ""
+#~ " owns the light app permission of SaaS APP - Standard OPS, in addition "
+#~ "the permissions of common users"
+
+#~ msgid "QQ【%s】错误，只能包含数字，长度在5-13个字符"
+#~ msgstr ""
+#~ "QQ [%s] Error, it can only contain numbers, with a length of 5-13 "
+#~ "characters"
+
+#~ msgid "QQ"
+#~ msgstr "QQ"

@@ -1,0 +1,69 @@
+<style>
+.inactive{
+	color:#b1bcc5;
+}
+.ml120{
+	margin-left:120px;
+}
+</style>
+<div class="ml30">
+	<div class="">
+		% if operate_id == 3:
+			<span class="icon_goback" title="正在测试部署中不能返回">返回上一层</span>
+			<span style="font-size: 16px;margin-left:10px;color:#F3BA41;">正在进行测试部署，请稍候...</span>
+		% elif operate_id == 4:
+			<span class="icon_goback" title="正在上线部署中不能返回">返回上一层</span>
+			<span style="font-size: 16px;margin-left:10px;color:#F3BA41;">正在进行上线部署，请稍候...</span>
+    % elif operate_id == 5:
+			<span class="icon_goback" title="正在下架中不能返回">返回上一层</span>
+			<span style="font-size: 16px;margin-left:10px;color:#F3BA41;">正在进行下架操作，请稍候...</span>
+
+		% elif operate_id == 0:
+			<a class="icon_goback" href="###" onclick=${"REL_MANAGER.back_saas()" if is_saas else "REL_MANAGER.back()"} title="返回上一层">返回上一层</a>
+			% if is_success:
+				<span style="font-size: 16px;margin-left:10px;color:#44b549;">测试部署成功</span>
+			% else:
+				<span style="font-size: 16px;margin-left:10px;color:#F00;">测试部署失败</span>
+			% endif
+
+		% elif operate_id == 1:
+			<a class="icon_goback" href="###" onclick=${"REL_MANAGER.back_saas()" if is_saas else "REL_MANAGER.back()"} title="返回上一层">返回上一层</a>
+			% if is_success:
+				<span style="font-size: 16px;margin-left:10px;color:#44b549;">上线部署成功</span>
+			% else:
+				<span style="font-size: 16px;margin-left:10px;color:#F00;">上线部署失败</span>
+			% endif
+
+		% elif operate_id == 2:
+			<a class="icon_goback" href="###" onclick=${"REL_MANAGER.back_saas()" if is_saas else "REL_MANAGER.back()"} title="返回上一层">返回上一层</a>
+			% if is_success:
+				<span style="font-size: 16px;margin-left:10px;color:#44b549;">下架成功</span>
+			% else:
+				<span style="font-size: 16px;margin-left:10px;color:#F00;">下架失败</span>
+			% endif
+		% endif
+	</div>
+
+  <input id="logs" type="hidden" value="${event_log | h}">
+</div>
+<script>
+$(function(){
+	$("#detail_button").show();
+  var logs = $("#logs").val();
+  $("#detail_info").text(logs);
+
+  // if operate_id in [0, 1, 2]:
+    // if($("#detail_log").is(":hidden") && !$("#release-flow").is(":hidden")){
+    if($("#detail_log").is(":hidden")){
+      $("#detail_log").show();
+      var scrollTop = $("#detail_info")[0].scrollHeight;
+      $("#detail_info").scrollTop(scrollTop);
+      $("#detail_click").html("点击隐藏详情");
+    } else {
+      // scroll to bottom
+      var scrollTop = $("#detail_info")[0].scrollHeight;
+      $("#detail_info").scrollTop(scrollTop - $("#detail_info").height());
+    }
+  // endif
+})
+</script>

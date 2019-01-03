@@ -1,0 +1,70 @@
+% if app:
+        <form class="form form-horizontal">
+        <div class="form-group error alert alert-danger" id="test_form_error" style="display: none"></div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-xs-2 control-label">部署版本</label>
+            <div class="col-xs-6">
+              <input type="text" class="form-control" disabled="" value="${vcs_url}">
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-xs-2 control-label">启用服务</label>
+
+              % if is_service_rabbitmq_active:
+              <div class="col-xs-6">
+                <label class="mr20">
+                  % if app.is_use_celery:
+                  <input type="checkbox" id="is_use_celery" checked="checked"/>
+                  % else:
+                  <input type="checkbox" id="is_use_celery" />
+                  % endif
+                  启用celery</label>
+
+                <label class="mr20">
+                  % if app.is_use_celery_beat:
+                  <input type="checkbox" id="is_use_celery_beat" checked="checked"/>
+                  % else:
+                  <input type="checkbox" id="is_use_celery_beat" />
+                  % endif
+                  启用周期性任务</label>
+              </div>
+              <div class="col-xs-4"></div>
+              % else:
+              <div class="col-xs-9">
+                <label class="mr20">
+                  <input type="checkbox" id="is_use_celery" disabled/>
+                  <S>启用celery</S></label>
+
+                <label class="mr20">
+                  <input type="checkbox" id="is_use_celery_beat" disabled/>
+                  <S>启用周期性任务</S></label>
+                <br>
+                <font color='red'> 未注册激活第三方服务: Rabbitmq. 无法启用celery和周期性任务.</font><a href="${SITE_URL}engine/external_server/"> [蓝鲸智云-开发者中心-第三方服务] </a>
+              </div>
+              % endif
+        </div>
+
+        <!--测试部署操作-->
+        <div class="form-group">
+            <label for="inputEmail3" class="col-xs-2 control-label"></label>
+            <div class="col-xs-10">
+                <button type="button" id="app_test" n_btn='deploy' class="
+                % if app.state in [8, 9, 10]:
+                disabled
+                % endif
+                btn btn-success btn-lg deploy_btn">一键部署</button>
+            </div>
+        </div>
+        <!--测试部署详情-->
+        <div class="popover bottom deploy_popover deploy_detail" style="display:none;">
+              <div class="popover-content">
+                <div id="release_msg_test"></div>
+            </div>
+        </div>
+        </form>
+% else:
+    <div>获取测试部署信息失败！</div>
+% endif

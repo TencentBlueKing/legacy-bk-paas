@@ -1,0 +1,262 @@
+/**
+* Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+* Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+* Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+* http://opensource.org/licenses/MIT
+* Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+*/
+html,body {
+    height: 100%;
+    font-family: microsoft yahei, Arial, sans-serif, "\xe8\x93\x9d\xe9\xb2\xb8\xe6\x99\xba\xe8\x90\xa5";
+}
+.body.page_index {
+    min-height:calc(100% - 151px);
+}
+
+.btn-default,.btn-link {
+    color: #333;
+}
+.btn-default:hover, .btn-default:focus, .btn-link:hover {
+    color: #808080;
+}
+
+.header {
+    width: 100%;
+    min-width: 1180px;  
+    line-height: 1;
+}
+.header .header-inner {
+    width: 1180px;
+    margin: 0 auto;
+}
+.header {
+    background: white;
+    border-bottom: 2px solid #6fc673; 
+}
+.header .header-inner {
+    height: 63px; 
+}
+.header .logo {
+    margin-top: 12px;
+    display: inline-block; 
+}
+.header .list {
+    float: right;
+    list-style: none;
+    padding-top: 17px; 
+}
+.header .list li {
+    float: left;
+    margin-right: 12px;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 2px solid white; 
+}
+.header .list li a {
+    color: #666;
+    letter-spacing: 1px; 
+}
+.header .list li a:hover {
+    color: #6FC673; 
+}
+.header .list li.active {
+    border: 2px solid #6FC673;
+    border-radius: 15px; 
+}
+.header .list li.active a {
+    color: #6FC673; 
+}
+
+.account {
+    padding-top: 14px;
+}
+.account_info .nickname {
+    margin-top: 12px;
+}
+
+.row-selected td {
+    background-color: #ffc !important;
+}
+
+
+.form-columns .form-group .controls textarea {
+    width: 80%;
+}
+.form-group.action {
+    margin-left: 135px;
+}
+.form-columns .form-group .controls input[type="text"], 
+.form-columns .form-group .controls input[type="url"], 
+.form-columns .form-group .controls input[type="password"],
+.form-columns .form-group .controls select {
+    width: 450px;
+}
+.form-columns .form-group .controls .checkbox {
+    margin-left: 19%;
+}
+.form-group-inline {
+    margin-bottom: 15px;
+}
+.form-group-inline .form-control {
+    width: 100%;
+}
+.kv-rows, .pair-add-row {
+    margin-left: 155px;
+}
+.add-system{
+    color: #a09f9f;
+    font-size: 18px;
+}
+.glyphicon {
+    position: relative;
+    top: 2px;
+    display: inline-block;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.esb_url>.btn{
+    height: 23px;
+    width: 75px;
+    padding: 0;
+    margin: 0;
+    font-size: 10px;
+    line-height: 0.5;
+}
+body.menu-active .mymodal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-top: -6px;
+}
+.dropdown .show-resource-url {
+    position: relative;
+}
+.dropdown-content {
+    z-index: 41;
+    display: none;
+    position: absolute;
+    width: 410px;
+    top: 41px;
+    right: 0;
+    padding: 6px 8px 0 8px;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+}
+.dropdown-content:before,.dropdown-content:after {
+	content: "";
+	position: absolute;
+	border-left: 7px solid transparent;
+	border-right: 7px solid transparent;
+	top: -7px;
+	right: 37px;
+	margin-left: -10px;
+}
+.dropdown-content:before {
+    border-bottom: 7px solid rgba(0, 0, 0, 0.5);
+    margin-bottom: 5px;
+}
+
+.dropdown-content:after{
+    border-bottom: 7px solid #fff;
+    margin-bottom: -2px;
+    z-index: 1;
+}
+.dropdown-content .btn-link-url {
+    padding: 3px 4px;
+    color: #337ab7;
+    height: 34px;
+}
+.dropdown-content .form-control {
+    height: 34px;
+}
+.dropdown-content .tooltip-inner {
+    width: 100px;
+}
+.dropdown-content input.invoke-url {
+    background-color: white;
+}
+.btn {
+    min-width: 15px;
+}
+button.btn {
+    height: 34px;
+    line-height: 28px;
+}
+.input-group-btn>.btn {
+    cursor: pointer;
+    margin-bottom: 5px;
+    padding-right: 5px;
+}
+.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+    margin-left: -25px;
+    z-index: 1;
+}
+.input-group-btn>.btn:hover, .input-group-btn>.btn:focus, .input-group-btn>.btn:active {
+    z-index: 1;
+}
+
+.channel-name-inactive {
+    color: #999;
+    text-decoration: line-through;
+}
+
+
+.panel-title-text{
+  position: relative;
+  padding: 3px 15px;
+  display: inline-block;
+  background-color: #147BD0;
+  color: white;
+  float: left;
+  font-size: 15px;
+}
+.panel-title-text:before{display: inline-block;width:6px;height: 100%;background: #147BD0 ;content: ' ';position: absolute;right: -8px;top: 0;opacity: 0.7;}
+.panel-title-text:after{display: inline-block;width:5px;height: 100%;background: #147BD0 ;content: ' ';position: absolute;right: -15px;top: 0;opacity: 0.4;}
+
+.dropdown-menu {
+    text-align: left;
+}
+.btn-group>.dropdown-menu {
+    font-size: 14px;
+}
+
+.rate-limit-config-container {
+    display: inline-block;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.king-notice-box.king-notice-success {
+    background: url(../img/notice_success_icon.png) no-repeat left center;
+}
+.king-notice-box.king-notice-fail {
+    background: url(../img/notice_fail_icon.png) no-repeat left center;
+}
+.king-notice-box {
+    margin-left: 10px;
+    padding: 10px;
+    padding-left: 33px;
+    text-align: left;
+    display: inline-block;
+}
+.king-notice-box .king-notice-text {
+    margin: 0;
+    line-height: 30px;
+    padding-left: 8px;
+    min-width: 150px;
+}

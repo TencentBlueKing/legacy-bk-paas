@@ -1,0 +1,19 @@
+[flake8]
+# ignore = W292,E722
+exclude =
+    *migrations*,
+    *.pyc,
+    .git,
+    __pycache__,
+    node_modules/*,
+    */templates_module*,
+    templates_module*
+    */bin/*,
+    ./esb/lib/gse/*
+
+max-line-length=120
+max-complexity=12
+format=pylint
+show_source = True
+statistics = True
+count = True

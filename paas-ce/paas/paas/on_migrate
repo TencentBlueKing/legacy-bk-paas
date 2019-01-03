@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source /root/.bkrc
+source $CTRL_DIR/functions
+export BK_ENV=production
+
+workon paas || fail "Abort"
+python manage.py migrate  || fail "Abort"

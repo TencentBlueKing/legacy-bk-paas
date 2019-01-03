@@ -1,0 +1,26 @@
+<%inherit file="/base_app.html"/>
+
+<%block name="right_content">
+<div class="main_hd">
+    <h4>&nbsp;</h4>
+    <div class="title_tab" id="topTab">
+        <ul class="tab_navs title_tab" data-index="0">
+            <li data-index="0" class="tab_nav first js_top
+          %if tab == 'record':
+          selected
+          %endif
+        "><a href="${SITE_URL}release/${app_code}/record/">发布记录</a></li>
+
+            <li data-index="0" class="tab_nav first js_top
+          %if tab == 'version':
+          selected
+          %endif
+          "><a href="${SITE_URL}release/${app_code}/version/">版本历史</a></li>
+        </ul>
+    </div>
+</div>
+
+<%block name="content">
+</%block>
+
+</%block>

@@ -1,0 +1,161 @@
+/**
+* Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+* Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+* Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+* http://opensource.org/licenses/MIT
+* Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+*/
+.form-group:hover > label{
+  color:inherit;
+}
+.form-group label{
+  font-weight:normal;
+}
+h4{
+  font-size:13px;
+  margin-top:3px;
+}
+
+.main_bd {
+	padding:20px 80px
+}
+.account_setting_item {
+	*zoom:1;
+	border-top:1px solid #e7e7eb;
+	padding:24px 0
+}
+.account_setting_item:after {
+	content:"\200B";
+	display:block;
+	height:0;
+	clear:both
+}
+.account_setting_item:first-child {
+	border-top-width:0
+}
+.account_setting_item.no_extra {
+	border-bottom-width:0
+}
+.account_setting_item:hover {
+	background-color:#fff
+}
+.account_setting_item h4 {
+	float:left;
+	width:130px;
+	margin-right:20px;
+	font-weight:400;
+	font-style:normal
+}
+.account_setting_item .meta_opr {
+	float:right;
+	margin-left:16px;
+	word-wrap:break-word;
+	word-break:break-all;
+	text-align:right;
+	color:#8d8d8d
+}
+.account_setting_item .meta_opr .btn {
+	background-color:#fff;
+	background-image:-moz-linear-gradient(top,#fff 0,#fff 100%);
+	background-image:-webkit-gradient(linear,0 0,0 100%,from(#fff),to(#fff));
+	background-image:-webkit-linear-gradient(top,#fff 0,#fff 100%);
+	background-image:-o-linear-gradient(top,#fff 0,#fff 100%);
+	background-image:linear-gradient(to bottom,#fff 0,#fff 100%);
+	border-color:#e6e7ec;
+	color:#222;
+	height:30px;
+	line-height:30px;
+	*line-height:28px;
+	width:auto;
+	padding-left:14px;
+	padding-right:14px
+}
+.account_setting_item .meta_opr .btn button {
+	color:#222
+}
+.account_setting_item .meta_opr .btn:hover {
+	background-color:#e6e7ec;
+	background-image:-moz-linear-gradient(top,#e6e7ec 0,#e6e7ec 100%);
+	background-image:-webkit-gradient(linear,0 0,0 100%,from(#e6e7ec),to(#e6e7ec));
+	background-image:-webkit-linear-gradient(top,#e6e7ec 0,#e6e7ec 100%);
+	background-image:-o-linear-gradient(top,#e6e7ec 0,#e6e7ec 100%);
+	background-image:linear-gradient(to bottom,#e6e7ec 0,#e6e7ec 100%);
+	border-color:#dadbe0;
+	box-shadow:none;
+	-moz-box-shadow:none;
+	-webkit-box-shadow:none;
+	color:#000
+}
+.account_setting_item .meta_opr .btn:hover button {
+	color:#222
+}
+.account_setting_item .meta_opr a {
+	margin-left:14px
+}
+.account_setting_item .meta_content {
+	display:table-cell;
+	vertical-align:top;
+	float:none;
+	width:auto;
+	*display:block;
+	*zoom:1;
+	word-wrap:break-word;
+	word-break:break-all
+}
+.account_setting_item .meta_content:after {
+	content:" . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+	visibility:hidden;
+	clear:both;
+	height:0!important;
+	display:block;
+	line-height:0
+}
+.account_setting_item .meta_content .avatar {
+	width:80px;
+	height:80px;
+	background:transparent url(/mpres/htmledition/images/icon/page-setting/avatar/icon_avatar_default1eae8e.png) no-repeat 0 0
+}
+.account_setting_item .meta_content .dropdown_menu {
+	margin-right:16px;
+	vertical-align:top
+}
+.account_setting_item .meta_content .icon_verify_checked {
+	margin-top:-3px;
+	margin-left:3px
+}
+.account_setting_item .meta_content .tips {
+	color:#8d8d8d
+}
+.account_setting_item .meta_content .meta_preview {
+	margin-top:6px
+}
+.account_setting_item .meta_content .meta_preview img {
+	width:224px;
+	height:149px
+}
+.account_setting_item .meta_content .meta_preview p {
+	color:#a3a3a3;
+	margin-top:-6px;
+	padding-left:88px
+}
+.right_tip{
+	margin-left: 10px;
+	font-size: 10px !important;
+	color: #999;
+}
+.password_label{
+	width: 100px;
+}
+.password_input{
+	width: 200px;
+	height: 30px;
+	margin-bottom: 10px;
+	display: inline-block;
+}
+.app-form .form-group{
+    margin-bottom: 7px;
+}
+
+.app-form p{
+    border: 0px;
+}

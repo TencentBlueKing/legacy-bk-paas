@@ -1,0 +1,540 @@
+{% extends "api_docs/base.html" %}
+{% load i18n %}
+
+{% block header %}
+<link href="{{ STATIC_URL }}esb/api_docs/css/index.{{CSS_SUFFIX}}" rel="stylesheet">
+<link href="{{ STATIC_URL }}esb/assets/metis_menu-2.6.1/metisMenu.min.css" rel="stylesheet">
+
+{% block system_api_header %}
+{% endblock %}
+
+{% endblock %}
+
+{% block main %}
+    <style>
+        /*左侧导航*/
+        .king-layout1-sidebar {
+            float: left;
+            margin-right: -100%;
+            width: 100%;
+            position: relative;
+            z-index: 99;
+            height: 100%;
+            background-color: #f3f3f3;
+        }
+        .king-vertical-nav4 {
+            min-width: 160px;
+            min-height: 100%;
+            margin: 0;
+            border-right: 1px solid #dddddd;
+            background-color: #f9f9f9;
+            z-index: 10;
+        }
+        .sidebar-inner .system-name {
+            font-size: 15px;
+            padding: 12px 20px;
+            color: #333;
+            border-bottom: 1px solid #f9f9f9;
+            border-top: 1px solid #f9f9f9;
+        }
+        .menu-icon {
+            width: 16px;
+            height: 12px;
+            background-image: url("{{ STATIC_URL }}esb/api_docs/img/system_img/custom_icon.png");
+            position: absolute;
+            left: 0;
+            top: 29px;
+            background-size: 149px 127px;
+            background-position: -61px -106px;
+            cursor:pointer;
+            margin-left: 214px;
+        }
+        .king-vertical-nav4 .navi > li > a {
+            display: block;
+            padding: 12px 20px;
+            font-size: 15px;
+            line-height: 25px;
+            color: #222;
+            text-decoration: none;
+            border-top: 1px solid #eaeaea;
+            border-radius: 4px;
+        }
+        .king-vertical-nav4 .navi > li > a:hover {
+            color: #3982C4;
+            background-color: #D8D6D6;
+        }
+        .nav-top-div{
+            height: 100%;
+            position: relative;
+            z-index: 0;
+            opacity: 1;
+            border-bottom: 1px solid #eaeaea;
+            border-radius: 4px;
+        }
+        /*二级导航*/
+        .king-vertical-nav4 .navi .sub-menu li {
+            line-height: 20px;
+            padding-left: 0;
+            padding-bottom: 10px;
+        }
+        .king-vertical-nav4 .navi .sub-menu li a {
+            color: #222;
+            font-size: 15px;
+            display: block;
+            border: hidden;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .a-active-style{
+            background-color: #D8D6D6;
+            color: #3982C4;
+        }
+        .hide-overflow-content{
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            overflow:hidden;
+            width: 150px;
+        }
+        /*展示其它系统api*/
+        .king-vertical-nav4 .navi > li .other-system-display {
+            display: block;
+            font-size: 15px;
+            padding: 12px 20px;
+            border-bottom: 1px solid #eaeaea;
+            border-top: 1px solid #eaeaea;
+            font-weight: normal;
+            cursor: pointer;
+            color: #555;
+            box-sizing: content-box;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            z-index: 99;
+        }
+
+        .dropdown-content {
+            /*max-height: 500px;
+            overflow-y: scroll;
+            overflow-x: hidden;*/
+            overflow-y: inherit;
+            display: none;
+            position: absolute;
+            background-color: #f9f8f8;
+            width: 600px;
+            min-height: 300px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 27px 10px 10px 34px;
+            font-size: 13px;
+            right: -735px;
+            top: -1px;
+            z-index: 99;
+        }
+        .secondary-page .hover-li:hover .dropdown-content {
+            display: block;
+            /*float: right;*/
+        }
+        .secondary-page .hover-li{
+            cursor:pointer;
+        }
+        /*右侧内容展示*/
+        #all_api_info table {
+            margin:20px 20px 0 0px;
+        }
+        #all_api_info table th, td {
+            padding: 15px 0 15px 15px;
+            line-height: 1;
+            color:#333;
+            /*border: 1px solid #e8eaec;*/
+        }
+        #all_api_info table th {
+            background: #e5e5e5;
+            font-weight: bold;
+        }
+        #all_api_info table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+        #api_docs h3{
+            font-size: 15px;
+        }
+        #api_docs p{
+            font-size: 14px;
+        }
+        #api_docs table{
+            /*border: 1px solid #eaeaea;*/
+            width: 100%;
+        }
+        #api_docs table th{
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+        #all_api_info table tbody tr a{
+            color:#57a3f1;
+        }
+        #all_api_info table tbody tr td{
+            color:#666666;
+        }
+        #api_docs pre{
+            background-color: #f8f8f8;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        #api_docs ul {
+            list-style: disc;
+        }
+
+        .icon-no {
+            display: inline-block;
+            background-image: url("{{ STATIC_URL }}esb/api_docs/img/system_img/custom_icon.png");
+            width: 21px;
+            height: 21px;
+            vertical-align: -5px;
+            background-size: 149px 127px;
+            background-position: 0 -106px;
+        }
+        .document tt {
+            margin: 0 2px;
+            padding: 0 5px;
+            white-space: nowrap;
+            border: 1px solid #eaeaea;
+            background-color: #f8f8f8;
+            border-radius: 3px;
+            font-size: 75%;
+        }
+
+        .sidebar {
+          display: block;
+          float: left;
+          width: 250px;
+          background: #333;
+        }
+        .content {
+          display: block;
+          overflow: hidden;
+          width: auto;
+        }
+        .sidebar-nav {
+            padding-bottom: 20px;
+          /*border-bottom: 1px solid rgba(0, 0, 0, 0.3);*/
+          background-image: -webkit-linear-gradient(left, color-stop(#333333 10px), color-stop(#222222 10px));
+          background-image: linear-gradient(to right, #f9f9f9 10px, #f9f9f9 10px);
+          background-repeat: repeat-x;
+          filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#ff222222', GradientType=1);
+        }
+        .sidebar-nav ul {
+          padding: 0;
+          margin: 0;
+          list-style: none;
+        }
+        .sidebar-nav a, .sidebar-nav a:hover, .sidebar-nav a:focus, .sidebar-nav a:active {
+          outline: none;
+        }
+        .sidebar-nav ul li, .sidebar-nav ul a {
+          display: block;
+        }
+        .sidebar-nav ul a {
+          /*padding: 21px 21px;*/
+          color: #000000;
+          /*border-top: 1px solid rgba(173, 169, 169, 0.3);*/
+          /*box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.05) inset;
+          text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5);*/
+        }
+        .sidebar-nav ul a:hover, .sidebar-nav ul a:focus, .sidebar-nav ul a:active {
+          color: #000;
+          text-decoration: none;
+        }
+        .sidebar-nav ul ul a {
+          padding: 10px 30px;
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar-nav ul ul a:hover, .sidebar-nav ul ul a:focus, .sidebar-nav ul ul a:active {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+        .sidebar-nav-item {
+          padding-left: 5px;
+        }
+        .sidebar-nav-item-icon {
+          padding-right: 5px;
+        }
+        #rtlh3 small {
+            transform: rotateY(180deg);
+            display: inline-block;
+        }
+        .metismenu .arrow {
+          float: right;
+          line-height: 1.42857;
+        }
+        *[dir="rtl"] .metismenu .arrow {
+          float: left;
+        }
+
+        .metismenu .glyphicon.arrow:before {
+          content: "\e079";
+        }
+        .metismenu .active > a > .glyphicon.arrow:before {
+          content: "\e114";
+        }
+
+        .metismenu .fa.arrow:before {
+          content: "\f104";
+        }
+        .metismenu .active > a > .fa.arrow:before {
+          content: "\f107";
+        }
+
+        /*
+         * Require Ionicons
+         * http://ionicons.com/
+        */
+
+        .metismenu .ion.arrow:before {
+          content: "\f3d2"
+        }
+        .metismenu .active > a > .ion.arrow:before {
+          content: "\f3d0";
+        }
+        .metismenu .plus-times {
+          float: right;
+        }
+        *[dir="rtl"] .metismenu .plus-times {
+          float: left;
+        }
+        .metismenu .fa.plus-times:before {
+          content: "\f067";
+        }
+        .metismenu .active > a > .fa.plus-times {
+          -webkit-transform: rotate(45deg);
+              -ms-transform: rotate(45deg);
+               -o-transform: rotate(45deg);
+                  transform: rotate(45deg);
+        }
+        .metismenu .plus-minus {
+          float: right;
+        }
+        *[dir="rtl"] .metismenu .plus-minus {
+          float: left;
+        }
+        .metismenu .fa.plus-minus:before {
+          content: "\f067";
+        }
+        .metismenu .active > a > .fa.plus-minus:before {
+          content: "\f068";
+        }
+        .metismenu .collapse {
+          display: none;
+        }
+        .metismenu .collapse.in {
+          display: block;
+        }
+        .metismenu .collapsing {
+          position: relative;
+          height: 0;
+          overflow: hidden;
+          -webkit-transition-timing-function: ease;
+               -o-transition-timing-function: ease;
+                  transition-timing-function: ease;
+          -webkit-transition-duration: .35s;
+               -o-transition-duration: .35s;
+                  transition-duration: .35s;
+          -webkit-transition-property: height, visibility;
+          -o-transition-property: height, visibility;
+          transition-property: height, visibility;
+        }
+
+        .metismenu .has-arrow {
+          position: relative;
+        }
+
+        .metismenu .has-arrow::after {
+          position: absolute;
+          content: '';
+          width: .5em;
+          height: .5em;
+          border-width: 1px 0 0 1px;
+          border-style: solid;
+          border-color: #fff;
+          right: 1em;
+          -webkit-transform: rotate(-45deg) translate(0, -50%);
+              -ms-transform: rotate(-45deg) translate(0, -50%);
+               -o-transform: rotate(-45deg) translate(0, -50%);
+                  transform: rotate(-45deg) translate(0, -50%);
+          -webkit-transform-origin: top;
+              -ms-transform-origin: top;
+               -o-transform-origin: top;
+                  transform-origin: top;
+          top: 50%;
+          -webkit-transition: all .3s ease-out;
+          -o-transition: all .3s ease-out;
+          transition: all .3s ease-out;
+        }
+
+        *[dir="rtl"] .metismenu .has-arrow::after {
+          right: auto;
+          left: 1em;
+          -webkit-transform: rotate(135deg) translate(0, -50%);
+              -ms-transform: rotate(135deg) translate(0, -50%);
+               -o-transform: rotate(135deg) translate(0, -50%);
+                  transform: rotate(135deg) translate(0, -50%);
+        }
+
+        .metismenu .active > .has-arrow::after,
+        .metismenu .has-arrow[aria-expanded="true"]::after {
+          -webkit-transform: rotate(-135deg) translate(0, -50%);
+              -ms-transform: rotate(-135deg) translate(0, -50%);
+               -o-transform: rotate(-135deg) translate(0, -50%);
+                  transform: rotate(-135deg) translate(0, -50%);
+        }
+        .metismenu .has-arrow::after {
+            position: absolute;
+            content: '';
+            width: .5em;
+            height: .5em;
+            border-width: 1px 0 0 1px;
+            border-style: solid;
+            border-color: #000000;
+            right: 1em;
+        }
+        .doc-container{
+            overflow: hidden;
+            display: flex;
+            display: -weblit-flex;
+            background: #fafafa;
+        }
+        .doc-catalogue-box{
+            width: 300px;
+        }
+        .doc-content-box{
+            width: 100%;
+            min-height: 600px;
+            border-left: 1px solid #ddd;
+            padding: 26px 0 0 20px;
+            background: #fff;
+        }
+        .custome-active{
+            background-color: #D8D6D6;color: #3982C4;
+        }
+    </style>
+
+    <div class="secondary-page">
+        <div style="height: inherit">
+            <div class="left-container panel-body" style="padding: 0">
+                <!--针对系统的展示-->
+                <div class="doc-container" id="system_api_info">
+                    <div class="doc-catalogue-box" style="height: 100%;min-height: 600px;">
+                        <div class="king-layout1-sidebar column">
+                            <div class="nav-top-div">
+                                <div>
+                                    <nav class="sidebar-nav" style="height:100%;width:250px;">
+                                        <ul class="metismenu" id="menu">
+                                            <li class="hover-li" style="border-bottom:1px solid #e5e5e5">
+                                                <div class="other-system-display dropdown">
+                                                    <a class="all-system-title">{% trans "所有系统" %}</a>
+                                                    <i class="menu-icon" style=""></i>
+                                                    <div class="dropdown-content">
+                                                        <div class="row">
+                                                            {% for info in other_system_info %}
+                                                                <div class="col-md-4" style="min-height:220px;">
+                                                                    <span style="padding: 5px 10px; font-size: 14px;font-weight: bold; color:#333">{{info.label}}</span>
+                                                                    <div style="padding: 10px;">
+                                                                        {% for system_info in info.systems %}
+                                                                            <div class="hide-overflow-content" title="{{system_info.label}}({{ system_info.name }})">
+                                                                                <a class="hide-overflow-content" style="padding: 2px 3px;" href="{% url 'api_info_by_system' system_name=system_info.name|lower %}">
+                                                                                    {{system_info.label}} <span style="color: #bbb; font-size: 12px;">{{ system_info.name }}</span>
+                                                                                </a>
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="system-name title-contrl">
+                                                    <a><b>{{ curr_system_info.label }}</b>&nbsp;<span style="color: #333;font-size:14px;font-weight:bold">{{ curr_system_info.name|upper }}</span></a>
+                                                </div>
+                                            </li>
+                                            <li class="title-contrl">
+                                                {% if not flag %}
+                                                <a href="{% url 'api_info_by_system' system_name=curr_system_info.name %}" class='a-active-style' id="system_desc" name="desc"><span>{% trans "简介" %}</span></a>
+                                                {% else %}
+                                                <a href="{% url 'api_info_by_system' system_name=curr_system_info.name %}"  id="system_desc" name="desc"><span>{% trans "简介" %}</span></a>
+                                                {% endif %}
+                                            </li>
+                                            <li class="active ">
+                                            <a style="padding-bottom:20px;" class="api-list-title" href="javascript:void(0);"><span>{% trans "API列表" %}&nbsp;<span style="color: #7b7d8a;font-weight:normal">{% trans "总数" %} {{ curr_api_info|length }}</span></span>
+                                                    <span style="padding-right:20px;" class="pull-right"><i class="bk-icon icon-angle-down"></i></span>
+                                                </a>
+                                                <ul aria-expanded="true" class="collapse in drop-down-list">
+                                                    {% for info in curr_api_info %}
+                                                    <li>
+                                                        {% if flag and info.id == api_info.id %}
+                                                            <a class="a-active-style api-hover-a" style="border:none;background-color: #57a3f1;color: #fff;" href="{% url 'api_doc_by_api_name' system_name=curr_system_info.name api_name=info.name %}" value="{{ info.id }}" name="{{ info.name }}" title="{{ info.name }}--{{ info.label }}">
+                                                                <div class="hide-overflow-content">{{ info.name }}</div>
+                                                                <div style="color:#fff;" class="describe  hide-overflow-content  ">{{ info.label }}</div>
+                                                            </a>
+                                                        {% else %}
+                                                            <a class="api-hover-a" href="{% url 'api_doc_by_api_name' system_name=curr_system_info.name api_name=info.name %}" value="{{ info.id }}" name="{{ info.name }}" title="{{ info.name }}--{{ info.label }}">
+                                                                <div class="hide-overflow-content text-hid ">{{ info.name }}</div>
+                                                                <div class="describe hide-overflow-content ">{{ info.label }}</div>
+                                                                {% if info.is_new_api %}
+                                                                <span class="add-project-tip">new </span>
+                                                                {% endif %}
+                                                            </a>
+                                                        {% endif %}
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doc-content-box">
+                        <div style="margin: 0 10px 10px 10px;">
+                            <!--右侧的内容展示-->
+                            <div class="row"">
+                                <div class="right-content">
+                                    <a href="{% url 'esb_api_docs' %}">{% trans "蓝鲸API文档" %}</a> > <a href="{% url 'api_info_by_system' system_name=curr_system_info.name %}">{{ curr_system_info.label }}</a> ><span id="curr_breadcrumb"></span>
+                                </div>
+                            </div>
+
+                            <div id="right-content" style="min-height: 600px;max-width: 880px;">
+                                {% block right_container %}
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ STATIC_URL }}esb/assets/metis_menu-2.6.1/metisMenu.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        $("#top-nav-menu").find("li[name=api_docs]").addClass("active");
+        $('#menu').metisMenu();
+        $(".drop-down-list li").each(function(index,val){
+            var _this = $(this);
+            var a = _this.find('.describe').text();
+            if(a !== ''){
+                _this.find('a').css({
+                    'line-height':'normal',
+                    'padding-top':'11px'
+                });
+                // $('.add-project-tip').css({
+                //     'line-height':'53px'
+                // })
+            }else{
+                _this.find('a').css({
+                    'line-height':'53px',
+                    'margin-top':'0'
+                });
+            }
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{
+    // Details: https://github.com/victorporof/Sublime-JSHint#using-your-own-jshintrc-options
+    // Example: https://github.com/jshint/jshint/blob/master/examples/.jshintrc
+    // Documentation: http://www.jshint.com/docs/options/
+
+    "asi": true,
+    "lastsemic": false,
+    "laxcomma": true,
+    "sub": true,
+    "eqeqeq": false,
+    "browser": true,
+    "node": true,
+    "jquery": true,
+    "esnext": true,
+    "strict": false,
+    "globalstrict": true,
+    "quotmark": false,   // true
+    "undef": false,  // true
+    "unused": true,
+    "scripturl": true,
+    "globals": {
+        "define": false,
+        "module": true,
+        "export": true,
+        "console": false
+    }
+
+}

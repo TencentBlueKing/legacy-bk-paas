@@ -1,0 +1,19 @@
+## ESB 健康检查 checklist
+
+### 检查 settings 配置
+1. 以下配置必须存在
+    ESB_TOKEN, PAAS_HOST, HOST_BK_LOGIN
+    HOST_CC, HOST_FTA
+
+
+### 检查 DB 服务是否正常，且以下库表已经创建
+    esb_component_system
+    esb_channel
+    esb_function_controller
+    esb_buffet_component
+
+
+### 检查 ESB 访问的后端接口是否正常，主要检查以下系统
+    BK_LOGIN
+    CC
+    FTA

@@ -1,0 +1,36 @@
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+<div class="">
+    <div class="box-info full">
+        <div class="main-header">
+            <span>
+                资源下载
+            </span>
+        </div>
+        % if resources:
+          <div class="download-list">
+            % for i in resources:
+                <div class="download-item">
+                    <div class="download-logo">
+                        <img src="${i["icon_url"]}" alt="">
+                    </div>
+                    <div class="download-detail">
+                        <h5 class="download-title">${i["name"]}</h5>
+                        <div class="download-metadata">
+                            <span class="download-version">版本号：${i["version"]}</span>
+                            <span class="download-size">大小：${i["size"]}</span>
+                        </div>
+                        <a href="${i["download_url"]}" class="download-btn" target="_blank">下载</a>
+                        % if i["doc_url"]:
+                        <a href="${i["doc_url"]}" class="doc-url-btn" target="_blank">查看文档</a>
+                        % endif
+                    </div>
+                </div>
+            % endfor
+          </div>
+        % else:
+          <div class="paas-no-item">无可用资源</div>
+        % endif
+    </div>
+</div>
+</%block>

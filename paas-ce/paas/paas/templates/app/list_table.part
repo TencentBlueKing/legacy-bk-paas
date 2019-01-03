@@ -1,0 +1,81 @@
+<table data-sortable="" class="table table-hover table-striped" data-sortable-initialized="true">
+    <thead total_app="${total}">
+        <tr>
+            <th style="width:20%">应用ID</th>
+            <th style="width:15%">应用名称</th>
+            <th style="width:10%">创建者</th>
+            <th style="width:10%">创建时间</th>
+            <th style="width:10%">状态</th>
+            <th style="width:25%;">常用功能</th>
+        </tr>
+    </thead>
+    <tbody>
+        % if app_list:
+            % for _app in app_list:
+            <tr>
+                <td style="vertical-align:middle;">
+                    <div style="margin-right:10px;display: inline-block;" class="app-logo-edit">
+                        <a href="###" title="点击更换logo" onclick="BASE_APP.modify_app_logo('${_app.code}', 0)" style="display: inherit;padding: 0;">
+                            <img id="app_logo_now" style='width:40px;height:40px' src="${_app.logo_url}" onerror="javascript:this.src='${STATIC_URL}img/app_logo/default.png';">
+                            <div class="app-logo-edit-mask">
+                                <i class="bk-icon icon-edit t_b mr1 mb1 t_s12"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="${SITE_URL}app/${_app.code}/info/" class="hit" title='${_app.code}'>${_app.code}</a>
+                </td>
+                <td style="vertical-align:middle;" title="${_app.name}">
+                        % if len(_app.name) > 16:
+                            ${_app.name[0:16]}...
+                        % else:
+                            ${_app.name}
+                        % endif
+                </td>
+                <!--     创建时间     -->
+                <td style="vertical-align:middle;">${_app.creater}</td>
+                <td style="vertical-align:middle;">${_app.created_date_display}</td>
+                <!--状态-->
+                <td style="vertical-align:middle;">
+                    % if _app.state in [0, 10]:
+                        <label class="label label-default">${_app.state_display}</label>
+                    % elif _app.state in [1]:
+                        <label class="label label-warning">${_app.state_display}</label>
+                    % elif _app.state in [3, 8]:
+                            <label class="label label-info">${_app.state_display}</label>
+                    % elif _app.state in [4, 9]:
+                        <label class="label label-success">${_app.state_display}</label>
+                    % endif
+                </td>
+                <td style="vertical-align:middle;">
+                    <a href="${SITE_URL}release/${_app.code}" target="_blank" class="hit mr10">部署</a>
+                    <!-- 未部署 且是 当前用户创建的 应用 才可以删除-->
+                    % if _app.state in [1] and request.user.username == _app.creater:
+                        <a href="###" onclick="REL_MANAGER.app_del(this, '${_app.code}');" app_code="_app.code"  class="app_del hit mr10">删除</a>
+                    % endif
+                    % if _app.state in [0, 1] or (not _app.is_already_test and not _app.is_already_online):
+                        <a href="###" class="hit mr10"></a>
+                    % else:
+                        <a href="${_app.app_test_url}" target="_blank" class="hit mr10">测试地址</a>
+                    % endif
+
+                    % if _app.state in [0, 1] or (not _app.is_already_online):
+                        <a href="###" class="hit mr10"></a>
+                    % else:
+                        <a href="${_app.app_prod_url}" target="_blank" class="hit mr10">正式地址</a>
+                    % endif
+                </td>
+            </tr>
+            % endfor
+        % else:
+    <tr id="none">
+      <td colspan="9" style="text-align: center">您还没有相关应用信息
+    </tr>
+        % endif
+    </tbody>
+</table>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}"></script>
+<script>
+$(function(){
+    $("#seacher_input").show();
+})
+</script>

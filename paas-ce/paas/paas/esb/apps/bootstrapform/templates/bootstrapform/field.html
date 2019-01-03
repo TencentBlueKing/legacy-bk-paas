@@ -1,0 +1,82 @@
+{% load bootstrap %}
+{% load i18n %}
+
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    {% if field|is_checkbox %}
+        <div class="controls {{ classes.single_value }}">
+            <div class="checkbox">
+                {% if field.auto_id %}
+                    <label {% if field.field.required and form.required_css_class %}class="{{ form.required_css_class }}"{% endif %}>
+                        {{ field }} <span>{{ field.label }}</span>
+                    </label>
+                {% endif %}
+                {% for error in field.errors %}
+                    <span class="help-block {{ form.error_css_class }}">{{ error }}</span>
+                {% endfor %}
+
+                {% if field.help_text %}
+                    <p class="help-block">
+                        {{ field.help_text|safe }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    {% elif field|is_radio %}
+        {% if field.auto_id %}
+            <label class="control-label {{ classes.label }} {% if field.field.required %}{{ form.required_css_class }}{% endif %}">{{ field.label }}</label>
+        {% endif %}
+        <div class="{{ classes.value }}">
+            {% for choice in field %}
+                <div class="radio">
+                    <label>
+                        {{ choice.tag }}
+                        {{ choice.choice_label }}
+                    </label>
+                </div>
+            {% endfor %}
+
+            {% for error in field.errors %}
+                <span class="help-block {{ form.error_css_class }}">{{ error }}</span>
+            {% endfor %}
+
+            {% if field.help_text %}
+            <p class="help-block">
+                {{ field.help_text|safe }}
+            </p>
+            {% endif %}
+        </div>
+    {% else %}
+        {% if field.auto_id %}
+            <label class="control-label {{ classes.label }} {% if field.field.required %}{{ form.required_css_class }}{% endif %}" for="{{ field.auto_id }}">{{ field.label }}</label>
+        {% endif %}
+
+        <div class="controls {{ classes.value }}{% if field|is_multiple_checkbox %} multiple-checkbox{% endif %}">
+            {{ field }}
+
+            {% if field.field.required %}
+                <span class="required">*</span>
+            {% endif %}
+
+            {% if field.name == 'component_system' %}
+            <a href="javascript:void(0)" class="add-system" title="{% trans '创建新系统' %}">
+                  <i class="bk-icon icon-plus" style="font-size: 15px; font-weight: bolder; margin-top: 5px;"></i>
+                </a>
+            {% endif %}
+            {% if field.name == 'system' %}
+            <a href="javascript:void(0)" class="add-system" title="{% trans '创建新系统' %}">
+                  <i class="bk-icon icon-plus" style="font-size: 15px; font-weight: bolder; margin-top: 5px;"></i>
+                </a>
+            {% endif %}
+
+            {% for error in field.errors %}
+                <span id="tip_{{ field.html_name }}" class="tips error {{ form.error_css_class }}">{% trans error %}</span>
+            {% endfor %}
+
+            {% if field.help_text %}
+                <p class="help-block">
+                    {{ field.help_text|safe }}
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

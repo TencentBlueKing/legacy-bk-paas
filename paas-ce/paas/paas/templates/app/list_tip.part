@@ -1,0 +1,19 @@
+<div class="app-tip" style="margin-left:250px;margin-top:20px;">
+    <div style="margin-bottom:20px;">
+        <p>您还没有应用，<a href="${SITE_URL}app/">立即创建</a></p>
+    </div>
+    <div style="float:left;">
+        <p>流程介绍：</p>
+    </div>
+    <div>
+        <div class="app-flowp">
+            1 创建应用<br>
+            填写应用信息，创建应用
+        </div>
+        <div class="app-flowp">
+            2 应用部署<br>
+            支持部署到测试、正式两个环境<br>
+            支持应用下架
+        </div>
+    </div>
+</div>

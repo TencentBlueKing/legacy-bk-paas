@@ -1,0 +1,80 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="icon" type="image/x-icon" href="{{STATIC_URL}}favicon.ico">
+        <link href="{{STATIC_URL}}css/bk.{{CSS_SUFFIX}}" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}assets/bk-icon-2.0/iconfont.css" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}css/login.{{CSS_SUFFIX}}?v={{STATIC_VERSION}}" rel="stylesheet" type="text/css" />
+        <title>{% trans '登录|蓝鲸智云' %}</title>
+    </head>
+    <body>
+        <div class="page-content">
+            <div class="login-from">
+                <div class="logo-title">
+                    <img src="{{STATIC_URL}}img/logo/bk_login.png" height="32" width="311" alt="">
+                </div>
+                <div class="from-detail">
+                    <form action="{{ app_path }}" method="post" id="login-form" onsubmit="return refresh_token()">{% csrf_token %}
+                        <div class="is-danger-tip">
+                            {% if form.errors or form.non_field_errors %}
+                                <i class="bk-icon icon-exclamation-circle-shape"></i><span>{% trans '账户或者密码错误，请重新输入' %}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-login">
+                            <div class="user group-control">
+                                <i class="bk-icon icon-user"></i>
+                                <input id="user" type="text" name="username" placeholder="{% trans '请输入用户名' %}" >
+                            </div>
+                            <div class="pwd group-control">
+                                <i class="bk-icon icon-password"></i>
+                                <input class="password" id="password" type="password" name="password" value="" placeholder="{% trans '请输入用户密码' %}">
+                            </div>
+                            <div>
+                                <input type="hidden" name="next" value="{{ next }}" />
+                                <input type="hidden" name="app_id" value="{{app_id }}">
+                            </div>
+                            <div class="btn-content clearfix">
+                                <button class="login-btn">{% trans '登录' %}</button>
+                                <span class="protocol-btn">{% trans '查看用户协议' %}</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <footer class="footer">
+                <p class="logo-qt">
+                    <img class="img-logo" src="{{STATIC_URL}}img/logo/qtlogo.png"><span>{% trans '青藤云安全提供安全检测' %}</span>
+                </p>
+                <p>
+                    <a id="contact_us" class="link">{% trans 'QQ咨询' %}(800802001)</a>
+                    | <a href="http://bbs.bk.tencent.com/forum.php" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '蓝鲸论坛' %}</a>
+                    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '蓝鲸官网' %}</a>
+                    | <a href="/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '蓝鲸智云工作台' %}</a>
+                    |<a class="follow-us" href="###">{% trans '关注我们' %}
+                    <span class="qr-box">
+                        <span class="qr">
+                            <img src="{{STATIC_URL}}img/logo/qr.png">
+                            <span class="qr-caret"></span>
+                        </span>
+                    </span>
+                    </a>
+                </p>
+                <p>Copyright © 2012-{{NOW.year}} Tencent BlueKing. All Rights Reserved.</p>
+                <p>蓝鲸智云 版权所有</p>
+            </footer>
+        </div>
+        <!-- 查看用户协议 -->
+        {% include "login/agreement.part" %}
+        <!-- 浏览器验证 -->
+        <div class="error-message-content is-chrome">
+            <span>{% trans '您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果' %}</span><i class="bk-icon icon-close-circle-shape" id="close-chrome"></i>
+        </div>
+    </body>
+    <!-- js 国际化 -->
+    <script type="text/javascript" src="{{SITE_URL}}jsi18n/i18n/"></script>
+    <script src="{{STATIC_URL}}assets/jquery-1.10.2.min.js"></script>
+    <script src="{{STATIC_URL}}js/login.{{JS_SUFFIX}}?v={{STATIC_VERSION}}"></script>
+
+</html>

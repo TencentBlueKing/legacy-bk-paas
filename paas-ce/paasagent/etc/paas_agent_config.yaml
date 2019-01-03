@@ -1,0 +1,15 @@
+auth:
+  sid: bdb209f0-747a-4011-9c8b-9e10b2aceace  # agent sid
+  token: 41ea9d39-8c01-46e4-b7cd-62651fb5b018 # agent token
+settings:
+  CONTROLLER_SERVER_URL: 'http://www.bking.com' # App Engine地址
+  BASE_PATH: 'TPL_AGENT_ROOT' # eg. /data/paas
+  BASE_APP_PATH: 'TPL_AGENT_ROOT/paas_agent'
+  USE_PYPI: 'true'
+  AGENT_LOG_PATH: 'TPL_AGENT_ROOT/logs/agent.log'
+  TEMPLATE_PATH: 'etc/templates'
+  BUILD_PATH: 'etc/build'
+  EXECUTE_TIME_LIMIT: 300
+  PYTHON_PIP: 'http://pypi.douban.com/simple/'
+port: 4245
+ip: ''

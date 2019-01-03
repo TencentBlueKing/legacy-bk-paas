@@ -1,0 +1,347 @@
+---
+  
+- path: /v2/cc/update_business_enable_status/
+  name: update_business_enable_status
+  label: 修改业务启用状态 
+  label_en: update the business enable status
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/biz/status/{flag}/{bk_supplier_account}/{bk_biz_id}
+  dest_http_method: PUT  
+
+  
+- path: /v2/cc/create_inst/
+  name: create_inst
+  label: 创建实例
+  label_en: create a new inst
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/inst/{bk_supplier_account}/{bk_obj_id}
+  dest_http_method: POST
+  
+- path: /v2/cc/search_inst/
+  name: search_inst
+  label: 查询实例
+  label_en: search insts by condition
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/inst/association/search/owner/{bk_supplier_account}/object/{bk_obj_id}
+  dest_http_method: POST
+  
+- path: /v2/cc/update_inst/
+  name: update_inst
+  label: 更新对象实例
+  label_en: update a inst
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/inst/{bk_supplier_account}/{bk_obj_id}/{bk_inst_id}
+  dest_http_method: PUT
+ 
+  
+- path: /v2/cc/delete_inst/
+  name: delete_inst
+  label: 删除实例
+  label_en: delete a inst
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/inst/{bk_supplier_account}/{bk_obj_id}/{bk_inst_id}
+  dest_http_method: DELETE
+  
+  
+- path: /v2/cc/search_inst_association_topo/
+  name: search_inst_association_topo
+  label: 查询实例关联拓扑
+  label_en: query the instance association topology
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/inst/search/topo/owner/{bk_supplier_account}/object/{bk_obj_id}/inst/{bk_inst_id}
+  dest_http_method: POST
+  
+- path: /v2/cc/create_object/
+  name: create_object
+  label: 创建模型
+  label_en: query  create a object
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object
+  dest_http_method: POST
+  extra_param_fields : bk_supplier_account, creator
+  
+- path: /v2/cc/delete_object/
+  name: delete_object
+  label: 删除模型
+  label_en: query  delete a object
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object/{id}
+  dest_http_method: DELETE
+  
+- path: /v2/cc/update_object/
+  name: update_object
+  label: 更新定义
+  label_en: query  update a object
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object/{id}
+  dest_http_method: PUT
+  extra_param_fields : bk_supplier_account
+  
+- path: /v2/cc/search_objects/
+  name: search_objects
+  label: 查询模型
+  label_en:  search  object
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/objects
+  dest_http_method: POST
+  extra_param_fields : bk_supplier_account
+  
+- path: /v2/cc/search_object_topo/
+  name: search_object_topo
+  label: 查询普通模型拓扑
+  label_en: search a object topo
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/objects/topo
+  dest_http_method: POST
+  
+- path: /v2/cc/search_object_topo_graphics/
+  name: search_object_topo_graphics
+  label: 查询拓扑图
+  label_en: search a topo graphics
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/objects/topographics/scope_type/{scope_type}/scope_id/{scope_id}/action/search
+  dest_http_method: POST
+  
+  
+- path: /v2/cc/create_classification/
+  name: create_classification
+  label: 添加模型分类
+  label_en: create a object classification
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:   /api/v3/object/classification
+  dest_http_method: POST
+  
+  
+- path: /v2/cc/delete_classification/
+  name: delete_classification
+  label: 删除模型分类
+  label_en: delete the classification by the id
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object/classification/{id}
+  dest_http_method: DELETE
+  
+- path: /v2/cc/update_classification/
+  name: update_classification
+  label: 更新模型分类
+  label_en: update the  object classification
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object/classification/{id}
+  dest_http_method: PUT
+  
+- path: /v2/cc/search_classifications/
+  name: search_classifications
+  label: 查询模型分类
+  label_en: search all classifications
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object/classifications
+  dest_http_method: POST
+  
+- path: /v2/cc/create_object_attribute/
+  name: create_object_attribute
+  label: 创建模型属性
+  label_en: create object attribute
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object/attr
+  dest_http_method: POST
+  extra_param_fields : bk_supplier_account,creator
+  
+- path: /v2/cc/delete_object_attribute/
+  name: delete_object_attribute
+  label: 删除对象模型属性
+  label_en: delete   object attribute
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object/attr/{id}
+  dest_http_method: DELETE
+
+- path: /v2/cc/update_object_attribute/
+  name: update_object_attribute
+  label: 更新对象模型属性
+  label_en: update the  object attribute
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object/attr/{id}
+  dest_http_method: PUT
+  
+- path: /v2/cc/search_object_attribute/
+  name: search_object_attribute
+  label: 查询对象模型属性
+  label_en: search object attribute
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/object/attr/search
+  dest_http_method: POST
+  extra_param_fields : bk_supplier_account
+  
+- path: /v2/cc/get_role_privilege/
+  name: get_role_privilege
+  label: 获取角色绑定权限
+  label_en: get role privilege
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/topo/privilege/{bk_supplier_account}/{bk_obj_id}/{bk_property_id}
+  dest_http_method: GET
+  
+
+  
+- path: /v2/cc/create_user_group/
+  name: create_user_group
+  label: 新建用户分组
+  label_en: create user group
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/topo/privilege/group/{bk_supplier_account}
+  dest_http_method: POST
+  
+- path: /v2/cc/update_user_group/
+  name: update_user_group
+  label: 更新用户分组
+  label_en: update user group
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/topo/privilege/group/{bk_supplier_account}/{group_id}
+  dest_http_method: PUT
+  
+- path: /v2/cc/search_user_group/
+  name: search_user_group
+  label: 查询用户分组
+  label_en: search user group
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/topo/privilege/group/{bk_supplier_account}/search
+  dest_http_method: POST
+  
+- path: /v2/cc/delete_user_group/
+  name: delete_user_group
+  label: 删除用户分组
+  label_en: delete user group
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/topo/privilege/group/{bk_supplier_account}/{bk_group_id}
+  dest_http_method: DELETE
+  
+- path: /v2/cc/search_group_privilege/
+  name: search_group_privilege
+  label: 查询分组权限
+  label_en: search  group privilege
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/topo/privilege/group/{bk_supplier_account}/{bk_group_id}
+  dest_http_method: GET
+  extra_param_fields : bk_supplier_account
+  
+- path: /v2/cc/get_user_privilege/
+  name: get_user_privilege
+  label: 查询用户权限
+  label_en: get user privilege
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/topo/privilege/user/detail/{bk_supplier_account}/{user_name}
+  dest_http_method: GET
+  extra_param_fields : bk_supplier_account
+  
+- path: /v2/cc/subscribe_event/
+  name: subscribe_event
+  label: 订阅事件
+  label_en: subscribe event
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/event/subscribe/{supplier_account}/{bk_biz_id}
+  dest_http_method: POST
+  
+- path: /v2/cc/unsubcribe_event/
+  name: unsubcribe_event
+  label: 退订事件
+  label_en: event unsubscribe
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/event/subscribe/{supplier_account}/{bk_biz_id}/{subscription_id}
+  dest_http_method: DELETE
+  
+- path: /v2/cc/update_event_subscribe/
+  name: update_event_subscribe
+  label: 修改订阅
+  label_en: update the event subscription
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/event/subscribe/{supplier_account}/{bk_biz_id}/{subscription_id}
+  dest_http_method: PUT
+  
+- path: /v2/cc/search_subscription/
+  name: search_subscription
+  label: 查询订阅
+  label_en: search event subscription
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/event/subscribe/search/{supplier_account}/{bk_biz_id}
+  dest_http_method: POST
+  
+- path: /v2/cc/testing_connection/
+  name: testing_connection
+  label: 测试推送（只测试连通性）
+  label_en: connectivity testing
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/event/subscribe/telnet
+  dest_http_method: POST
+      
+- path: /v2/cc/get_operation_log/
+  name: get_operation_log
+  label: 获取操作日志
+  label_en: get operation log
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/audit/search
+  dest_http_method: POST
+  
+

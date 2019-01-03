@@ -1,0 +1,98 @@
+{% extends "manager/buffet_comp/base.html" %}
+{% load bootstrap %}
+{% load i18n %}
+
+{% block main %}
+
+<style type="text/css" media="screen">
+.component-groups .system-name {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 40px;
+}
+.component-groups .overflow-hidden {
+     text-overflow: ellipsis;
+     overflow: hidden;
+     white-space: nowrap;
+}
+</style>
+
+{% include "manager/buffet_comp/helpers/buffet_tab.html" with hilight="list" %} 
+<div class="mymodal-backdrop"></div>
+<div class="row">
+    <div class="col-md-12">
+        {% regroup items by system as system_list %}
+
+        <ul class="component-groups list-unstyled">
+            {% for system in system_list %}
+            <li><span class="system-name">{{ system.grouper.name|default:"BUFFET" }}</span>
+                <table data-sortable="" class="table table-hover table-striped" data-sortable-initialized="true">
+                <colgroup>
+                    <col></col>
+                    <col width="200px"></col>
+                    <col width="300px"></col>
+                    <col width="160px"></col>
+                </colgroup>
+                {% for item in system.list %}
+                <tr>
+                    <td>
+                        <p class="overflow-hidden" style="width: 480px;">
+                        <a href="{% url 'manager.buffet_comp.edit' item.pk %}" title="[{{ item.registed_http_method }}] {{ item.registed_path }}">
+                            [{{ item.registed_http_method }}]
+                            {{ item.registed_path }}
+                        </a>
+                        </p>
+                    </td>
+                    <td>
+                        <p class="overflow-hidden" style="width: 200px" title="{{ item.name }}">
+                        {{ item.name }}
+                        </p>
+                    </td>
+                    <td>{{ item.created_time|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        <div class="dropdown esb_url">
+                            <button class="btn btn-success show_esb_url" title="{% trans 'API地址' %}" id="{{ item.pk }}" style="width: inherit;">
+                                {% trans "API地址" %}
+                                <i class="bk-icon icon-arrow-down"></i>
+                            </button>
+                            <div class="dropdown-content">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <a class="btn btn-default btn-link-url" href="{{ host }}{{ item.registed_path }}" target="_blank">
+                                            <i class="bk-icon icon-chain" style="color: #337ab7"></i>
+                                        </a>
+                                    </span>
+                                    <input type="text" class="form-control invoke-url" onfocus="this.select()" value="{{ host }}{{ item.registed_path }}" readonly>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default copy-to-clipboard" data-toggle="tooltip" data-placement="bottom" title="{% trans '复制到剪贴板' %}">
+                                            <i class="bk-icon icon-clipboard"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            </li>
+            {% empty %}
+            <li>
+                <table data-sortable="" class="table table-hover table-striped" data-sortable-initialized="true">
+                    <tr>
+                        <td colspan="5" style="text-align: center">{% trans "您还没有相关自助接入API信息" %}
+                    </tr>
+                </table>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div>
+    {{ pager.get_bootstrap_display|safe }} 
+</div>
+{% endblock %}
+
+{% block footer %}
+<script src="{{ STATIC_URL }}esb/js/buffet_list.{{JS_SUFFIX}}"></script>
+{%  endblock %}

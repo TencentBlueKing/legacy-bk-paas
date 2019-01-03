@@ -1,0 +1,12 @@
+{
+  "name": "apidoc",
+  "version": "1.0.0",
+  "description": "",
+  "title": "ESB文档|蓝鲸智云社区版",
+  "url" : "",
+  "sampleUrl": false,
+  "template": {
+      "withCompare": true,
+      "withGenerator": true
+  }
+}

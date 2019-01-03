@@ -1,0 +1,57 @@
+<div class="mt10 ml10 mr10">
+    <table data-sortable="" class="table table-hover table-striped" data-sortable-initialized="true">
+        <thead>
+            <tr>
+                <th style="width:10%">操作类型</th>
+                <th style="width:15%">操作人</th>
+                <th style="width:12%">操作结果</th>
+                <th style="width:17%">操作时间</th>
+                <th style="width:32%">选择参数</th>
+                <th style="width:10%">&nbsp;&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            % if record_list:
+                % for record in record_list:
+                    <tr style="cursor: pointer;">
+                        <td>${record['operate_type']}</td>
+                        <td>${record['operate_user']}</td>
+                        % if record['is_done']:
+                          % if record['is_success']:
+                              <td><label class="label label-success">成功</label></td>
+                          % else:
+                              <td><label class="label label-danger">失败</label></td>
+                          % endif
+                        % else:
+                          <td><label class="label label-success">正在处理...</label></td>
+                        % endif
+                        <td>${record['operate_time']}</td>
+                        <td>${record['extra_data']}</td>
+                        <td><i class="glyphicon glyphicon-chevron-down" style="color:silver"></i></td>
+                    </tr>
+                    <tr class='detail' style="display:none;">
+                        <td colspan="6">
+                        <pre style='width: 954px;line-height: 10px;'>${record['detail']}<hr>${record['task_detail']}</pre>
+                        </td>
+                    </tr>
+                % endfor
+            % else:
+                <tr id="none">
+                     <td colspan="6" style="text-align: center;">没有记录
+                 </tr>
+            % endif
+        </tbody>
+    </table>
+</div>
+
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+  $(function(){
+    $("table tbody tr").click(function () {
+      var obj = $(this);
+      REL_MANAGER.pub_record_show(obj);
+    })
+  });
+
+</script>
+

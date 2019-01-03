@@ -1,0 +1,54 @@
+<%inherit file="/release/base_history.html"/>
+
+<%block name="content">
+<div id="record_list">
+    <table class="table border_top mt5 mb20" style="text-align:left;" id="table">
+     %if version_list:
+            % for version in version_list:
+            <tr class="border_bottom" id="message" style="cursor: pointer">
+            <td style="width:25%">
+              <p class="ml5 mb5"><span style="color:#999999">版本号：</span>${version['version']}</p>
+              <p class="ml5 mb5 "><span style="color:#999999">发布者：</span>${version['publisher']}</p>
+              <p class="ml5 mb5"><span style="color:#999999">发布日期：</span>${version['pubdate']}</p>
+            </td>
+
+            <td style="width:35%">
+              <div class="row-fluid ml5">
+                <span class="t_b span3" id="info" style="color:#008000">更新特性：</span>
+                <span class="span9" id="feature_l" style="margin-left:-20px">
+                  % if version['features']:
+                    % for feature in version['features']:
+                    <div class="mt5">${feature}</div>
+                    % endfor
+                  % else:
+                    <div class="mt5">暂无特性信息</div>
+                  % endif
+                </span>
+              </div>
+            </td>
+
+            <td style="width:30%">
+              <div class="row-fluid ml5">
+                <span class="t_b span3" id="info" style="color:#FF0033">修复BUG：</span>
+                <span class="span9" id="feature_l" style="margin-left:-30px">
+                  % if version['bug']:
+                  % for bug in version['bug']:
+                  <div class="mt5">${bug}</div>
+                  % endfor
+                  % else:
+                  <div class="mt5">暂无bug信息</div>
+                  % endif
+                </span>
+              </div>
+            </td>
+
+            </tr>
+            % endfor
+        % else:
+          <tr id="none" class="t_c">
+            <td colspan="5">没有版本信息
+          </tr>
+        % endif
+    </table>
+</div>
+</%block>

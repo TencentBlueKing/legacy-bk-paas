@@ -1,0 +1,43 @@
+{% extends "api_docs/system_api_base.html" %}
+{% load i18n %}
+
+{% block right_container %}
+{% endblock %}
+
+{% block footer %}
+{% verbatim %}
+<script type="text/x-mustache-template" id="tmpl-api-list-content">
+    <div class="row" style="margin-top: 20px;min-height: 600px;">
+        <div>
+            {{ system_summary }}
+        </div>
+        <div id="all_api_info" style="padding-top: 10px;">
+            <table>
+                <thead>
+                    {% endverbatim %}
+                    <th width="405px">{% trans "资源名称" %}</th>
+                    <th width="575px">{% trans "资源描述" %}</th>
+                    {% verbatim %}
+                </thead>
+                <tbody>
+                    {{#api_info_by_system}}
+                    <tr>
+                        <td><a href="javascript:void(0)" name="{{ name }}">{{name}}</a></td>
+                        <td>{{label}}</td>
+                    </tr>
+                    {{/api_info_by_system}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+{% endverbatim %}
+
+<script src="{{ STATIC_URL }}esb/api_docs/js/system_info.{{ JS_SUFFIX }}" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    //scrolltotop.controlHTML='<a href="#top" id="scrolltotop"></a>';
+    //scrolltotop.init();
+    var root_url = "{% url 'api_info_by_system' system_name=curr_system_info.name %}";
+    var desc_content_url = "{% url 'api.get_apis_by_system' system_name=curr_system_info.name %}";
+</script>
+{% endblock %}

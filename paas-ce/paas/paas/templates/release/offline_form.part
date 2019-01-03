@@ -1,0 +1,45 @@
+% if app:
+    <form class="form form-horizontal">
+        <div class="form-group error alert alert-danger" id="offline_form_error" style="display: none"></div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-xs-2 control-label">下架环境</label>
+            <div class="col-xs-10">
+               <label>
+                 % if app.is_already_test:
+                 <input type="checkbox" id="t_check" value='0' checked> 测试环境
+                 % else:
+                 <input type="checkbox" id="t_check" value='0' disabled='disabled'> 测试环境
+                 % endif
+                </label>
+
+                <label class="ml40">
+                  % if app.is_already_online:
+                  <input type="checkbox" id="o_check" value='1' checked> 正式环境
+                  % else:
+                  <input type="checkbox" id="o_check" value='1' disabled='disabled'> 正式环境
+                  % endif
+                </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputEmail3" class="col-xs-2 control-label"></label>
+            <div class="col-xs-10">
+
+                <button type="button" id="app_offline" n_btn='deploy' class="
+                % if app.state in [8, 9, 10] or (not (app.is_already_test or app.is_already_online)):
+                disabled
+                % endif
+                btn btn-success btn-lg deploy_btn">下架</button>
+
+              </div>
+          </div>
+          <div class="popover bottom deploy_popover deploy_detail" style="display:none;">
+            <div class="popover-content">
+                <div id="release_msg_offline"></div>
+            </div>
+        </div>
+    </form>
+% else:
+    <div>获取下架信息失败！</div>
+% endif

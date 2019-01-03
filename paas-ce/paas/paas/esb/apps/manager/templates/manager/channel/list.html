@@ -1,0 +1,180 @@
+{% extends "manager/base.html" %}
+{% load i18n %}
+
+{% block header %}
+    <link href='{{ STATIC_URL }}esb/css/helper.{{CSS_SUFFIX}}' rel="stylesheet">
+    <style>
+        #table_channels table tr th{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        #table_channels table tr td:nth-child(-n+5){
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .search-form-label {
+            font-weight: normal;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+<div class="main-page box-info">
+    <div class="mymodal-backdrop"></div>
+    <div class="main-header">
+        <span>{% trans "组件通道列表" %}</span>
+        {% if channel_exists %}
+        <a class="btn btn-danger btn-min-w f_r mr10" id="channels_delete" href="javascript:;">
+          <i class="bk-icon icon-close" style="font-size: 15px; margin-top: 2px;"></i> 
+          {% trans "删除" %}</a>
+        {% endif %}
+        <a class="btn btn-primary btn-min-w f_r mr10" href="{% url 'manager.channel.add' %}">
+          <i class="bk-icon icon-plus" style="font-size: 15px; margin-top: 2px;"></i>
+          {% trans "添加一个新的通道" %}</a>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-md-9">
+                <div id="search_channel" class="form-inline" style="margin-top: -10px; width: 1100px;">
+                    <label class="search-form-label" for="id_search_channel_system">{% trans "系统" %}</label>
+                    <select id="search_channel_system" class="mr10" style="min-width: 200px;">
+                        {% for system in systems %}
+                        <option value={{ system.name }}>{{ system.label }}</option>
+                        {% endfor %}
+                    </select>
+                    <label class="search-form-label" for="id_search_channel_path">{% trans "请求路径" %}</label>
+                    <input id="search_channel_path" type="text" class="form-control mr10" style="min-width: 170px;"/>
+                    <button id="search_channel_btn" class="btn btn-azure btn-min-w" style="margin-top:9px;height:34px">{% trans "搜索" %}</button>
+                </div>
+                <div id="table_channels">
+
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 40px;">
+                <div class="panel panel-info">
+                    <div class="panel-heading ng-binding" style="font-size: 18px;">{% trans "帮助" %}</div>
+                    <div class="panel-body">
+                        <div style="" class="document">
+                            {{ channel_term_html|safe }}
+                            <p style="margin-top: 10px;">{% trans "更多详情请查看" %}<a target="_blank" href="{% url 'guide.page.index' %}">
+                                <i class="bk-icon icon-question-circle" style="margin-top: 2px;font-weight: bold"></i>
+                                {% trans "使用指南" %}
+                            </a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% verbatim %}
+<script type="text/x-mustache-template" id="tmpl_channel_list">
+    <table class="table table-hover table-striped" data-sortable-initialized="true" style="table-layout: fixed; text-align: left;">
+        <thead>
+            <tr>
+                {% endverbatim %}
+                <th style="width:3%">#</th>
+                <th style="width:25%;">{% trans "通道名称" %}</th>
+                <th style="width:23%">{% trans "请求路径" %}</th>
+                <th style="width:13%">{% trans "更新时间" %}</th>
+                <th style="width:10%">{% trans "是否开启" %}</th>
+                <th style="width:12%"></th>
+                {% verbatim %}
+            </tr>
+        </thead>
+        <tbody>
+
+        {{#each data}}
+        <tr>
+            <td>
+                <input type="checkbox" name="channel_id" value="{{id}}" />
+            </td>
+            <td>
+                <a href="{{channel_edit_url id}}" {% endverbatim %} title="{% trans '编辑' %}">{% verbatim %}
+                {{#if is_active}}
+                {{label}}
+                {{else}}
+                {% endverbatim %}
+                <span class="channel-name-inactive"><span style="font-weight: bold;color: red">({% trans "已关闭" %}){% verbatim %}</span>{{label}}</span>
+                {{/if}}
+                <i class="bk-icon icon-edit" style="font-weight: bolder; font-size: 12px; margin-top: 2px;"></i>
+            </td>
+            <td>{{path}}</td>
+            <td>{{last_modified_time}}</td>
+            <td>
+                {{#if is_active}}
+                <img style="margin-left: 35px" src="{{static_url}}esb/img/icon-yes.gif" alt="True">
+                {{else}}
+                <img style="margin-left: 35px" src="{{static_url}}esb/img/icon-no.gif" alt="False">
+                {{/if}}
+            </td>
+            <td>
+                <div class="dropdown esb_url">
+                    {% endverbatim %}
+                    <button class="btn btn-success show_esb_url" title="{% trans 'API地址' %}" {% verbatim %} id="{{id}}" style="width: inherit;">
+                    {% endverbatim %}
+                        {% trans "API地址" %}
+                        <i class="bk-icon icon-arrow-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <div class="input-group">
+                            <span class="input-group-btn" data-toggle="tooltip" data-placement="bottom" title="{% trans '跳转到浏览器' %}">
+                            {% verbatim %}
+                                <a class="btn btn-default btn-link-url" href="{{host}}{{path}}" target="_blank">
+                                    <i class="bk-icon icon-chain" style="color: #337ab7"></i>
+                                </a>
+                            </span>
+                            <input type="text" class="form-control invoke-url" onfocus="this.select()" value="{{host}}{{path}}" readonly>
+                            <span class="input-group-btn">
+                                {% endverbatim %}
+                                <button class="btn btn-default copy-to-clipboard" data-toggle="tooltip" data-placement="bottom" title="{% trans '复制到剪贴板' %}">
+                                    <i class="bk-icon icon-clipboard"></i>
+                                </button>
+                                {% verbatim %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+        {{^data}}
+        <tr>
+            {% endverbatim %}
+            <td colspan="6" style="text-align: center">{% trans "您还没有相关组件通道信息" %}
+            {% verbatim %}
+        </tr>
+        {{/data}}
+        </tbody>
+    </table>
+</script>
+{% endverbatim %}
+
+<script type="text/javascript" charset="utf-8">
+var UrlMaker = {
+    'tmpls': { 
+        channel_list: "{% url 'manager.api.channel.list' %}",
+        channel_edit: "{% url 'manager.channel.edit' channel_id="__CHANNEL_ID__" %}",
+        channel_deleted: "{% url 'manager.channel.deleted' %}",
+    },
+    'make': function(tmpl_name, params) {
+        var self = this;
+        var result = self.tmpls[tmpl_name];
+        $.each(params || {}, function(k, v){
+            k = '__' + k.toUpperCase() + '__';
+            result = result.replace(k, v);
+        });
+        return result;
+    }
+}
+</script>
+
+<script src="{{ STATIC_URL }}esb/js/channel_list.{{ JS_SUFFIX }}" type="text/javascript" charset="utf-8"></script>
+{% endblock %}

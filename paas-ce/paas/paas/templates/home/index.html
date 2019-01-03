@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+      //在js中使用site_url,则这个javascript片段一定要保留
+      var site_url = "${SITE_URL}";            // app的url前缀,在ajax调用的时候，应该加上该前缀
+      var static_url = "${STATIC_URL}";
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>工作台|蓝鲸智云社区版</title>
+	<meta name="keywords" content="开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台" />
+	<meta name="description" content="蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<link href="${STATIC_URL}favicon.ico" rel="Shortcut Icon">
+    <!-- 以下两个插件用于在IE8以及以下版本浏览器支持HTML5元素和媒体查询，如果不需要用可以移除 -->
+    <!--[if lt IE 9]>
+    <script src="${STATIC_URL}assets/html5shiv-3.7.2.min.js"></script>
+    <script src="${STATIC_URL}assets/respond-1.4.2.min.js"></script>
+    <![endif]-->
+    <link href="${STATIC_URL}assets/jquery-ui-1.11.0.custom/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}assets/bk-icon-2.0/iconfont.css">
+    <!-- bkdialog -->
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}assets/bkDialog-2.0/css/dialog.css">
+    <link rel="stylesheet" href="${STATIC_URL}home/css/index.${CSS_SUFFIX}?v=${STATIC_VERSION}"/>
+    <link rel="stylesheet" href="${STATIC_URL}user_center/css/weixin.${CSS_SUFFIX}?v=${STATIC_VERSION}"/>
+</head>
+<body>
+	<nav class="navbar">
+		<a href="${SITE_URL}" class="logo">
+			<img src="${STATIC_URL}home/images/logo.png" style="border: 0;">
+		</a>
+		<ul class="nav-list">
+			<li class="active">
+				<a href="${SITE_URL}">
+					<p>应用面板</p>
+					<span class="line"></span>
+				</a>
+			</li>
+			% if request.user.has_developer_perm:
+			<li>
+				<a href="${SITE_URL}app/list/" target="_blank">
+					<p>开发者中心</p>
+					<span class="line"></span>
+				</a>
+			</li>
+			% endif
+		</ul>
+		<div class="userInfo">
+			<span class="userName">${request.user.username}</span>
+			<div class="userImg">
+				<img class="avatar" src="${STATIC_URL}home/images/avatar.png"/>
+				% if request.user.is_superuser:
+					<i class="crown"></i>
+				% endif
+			</div>
+			<span class="caret"></span>
+			<div class="dropdown">
+				<span class="caret-up"></span>
+				<ul class="dropdown-menu">
+					% if request.user.has_developer_perm:
+					<li>
+						<a href="${SITE_URL}accounts/profile/" target="_blank">
+							<i class="icon icon-userinfo"></i><span>个人信息</span>
+						</a>
+					</li>
+					% else:
+					<li>
+						<a href="/login/accounts/user/list/" target="_blank">
+							<i class="icon icon-userinfo"></i><span>个人信息</span>
+						</a>
+					</li>
+					% endif
+					% if request.user.is_superuser:
+						<li>
+							<a href="/login/accounts/user/list/" target="_blank">
+								<i class="icon icon-um"></i><span>用户管理</span>
+							</a>
+						</li>
+					% endif
+                    % if wx_type:
+                        <li id="weixin_action">
+                            % if wx_userid:
+                                <a href="###" class="unbind_weixin"><i class="icon icon-unbind-weixin"></i><span>解绑微信</span></a>
+                            % else:
+                                % if wx_type == 'mp':
+                                    <a href="###" class="bind_mp_weixin"><i class="icon icon-bind-weixin"></i><span>绑定微信</span></a>
+                                % elif wx_type == 'qy' or wx_type == 'qywx':
+                                    <a href="###" class="bind_qy_weixin"><i class="icon icon-bind-weixin"></i><span>绑定微信</span></a>
+                                % endif
+                            % endif
+                        </li>
+                    % endif
+					<li>
+						<a href="${SITE_URL}accounts/logout/">
+							<i class="icon icon-logout"></i><span>注销</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container cl">
+		<div class="main-left">
+			<div class="left-title cl">
+				<p>应用面板</p>
+				<div class="conf">
+					<div class="edit active">
+						<i class="gear"></i>
+						<span>排序</span>
+					</div>
+					<div class="comp">完成</div>
+				</div>
+			</div>
+			<ul class="app-list cl" id="app-list">
+			% for index, user_app in enumerate(user_app_list):
+			    <li class="app-list-item"  app_code="${user_app.get('code')}" style="display:${'' if index < first_show_count else 'none'}">
+			        <a href="${user_app.get('link')}" target="_blank">
+			            <img class="item" src="${user_app.get('logo') if index < first_show_count else ''}" img_url="${user_app.get('logo')}"  onerror="javascript:this.src='${STATIC_URL}home/images/img-zw.png';"/>
+			            <p class="item-detail">${user_app.get('name', '--')}</p>
+			            % if user_app.get('introduction', ''):
+			            <span class="mask">
+			                <span class="mask-text">${user_app.get('introduction')}</span>
+			            </span>
+			            % endif
+			        </a>
+			    </li>
+			% endfor
+			</ul>
+			% if user_app_count > first_show_count:
+				<div class="loadMore">
+					<p class="load-text">加载更多</p>
+					<img class="loading" src="${STATIC_URL}home/images/loading.png"/>
+				</div>
+			% endif
+		</div>
+		<div class="main-right">
+			<p class="right-title">常用链接</p>
+			<ul class="list">
+				<li class="list-item">
+					<a target="_blank" href="http://bk.tencent.com/s-mart/">蓝鲸S-mart</a>
+				</li>
+				<li class="list-item">
+					<a target="_blank" href="https://cloud.tencent.com/developer/edu/major-100008">视频教程</a>
+				</li>
+				<li class="list-item">
+          <a target="_blank" href="http://bk.tencent.com/docs/">帮助文档</a>
+				</li>
+				<li class="list-item">
+					<a target="_blank" href="http://magicbox.bk.tencent.com/">MagicBox</a>
+				</li>
+				% if request.user.is_superuser:
+					<li class="list-item">
+						<a target="_blank" href="/login/accounts/user/list/">用户管理</a>
+					</li>
+				% endif
+				% if request.user.has_developer_perm:
+				<li class="list-item">
+					<a target="_blank" href="${SITE_URL}accounts/profile/">个人信息</a>
+				</li>
+				% else:
+				<li class="list-item">
+					<a target="_blank" href="/login/accounts/">个人信息</a>
+				</li>
+				% endif
+				<li class="list-item">
+					<a target="_blank" href="http://bk.tencent.com/info/#laws">服务协议</a>
+				</li>
+				% for _l in links:
+					<li class="list-item">
+						<a target="_blank" href="${_l.link}">${_l.name}</a>
+					</li>
+				% endfor
+			</ul>
+		</div>
+	</div>
+	<footer class="footer">
+        <p class="logo-qt">
+            <img class="img-logo" src="${STATIC_URL}home/images/qtlogo.png"><span>青藤云安全提供安全检测</span>
+        </p>
+		<p>
+		    <a id="contact_us" class="link">QQ咨询(800802001)</a>
+		    | <a href="http://bbs.bk.tencent.com/forum.php" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸论坛</a>
+		    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸官网</a>
+		    | <a href="${SITE_URL}" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸智云工作台</a>
+		    |<a class="follow-us" href="###">关注我们<span class="qr-box"><span class="qr"><img src="${STATIC_URL}home/images/qr.png"></span><span class="qr-caret"></span></span></a>
+		</p>
+		<p>Copyright © 2012-${NOW.year} Tencent BlueKing. All Rights Reserved.</p>
+		<p>蓝鲸智云 版权所有</p>
+	</footer>
+    <script src="${STATIC_URL}assets/jquery-1.10.2.min.js"></script>
+    <script src="${STATIC_URL}assets/jquery-ui-1.11.0.custom/jquery-ui.js"></script>
+    <script src="${STATIC_URL}home/js/csrftoken_v3.${JS_SUFFIX}"></script>
+    <!-- bkdialog -->
+    <script src="${STATIC_URL}assets/bkDialog-2.0/js/dialog.js"></script>
+	<script src="${STATIC_URL}home/js/index.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+    <script src="${STATIC_URL}user_center/js/weixin.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+</body>
+</html>

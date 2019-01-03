@@ -1,0 +1,103 @@
+{% extends "manager/base.html" %}
+{% load i18n %}
+
+{% block header %}
+    <link href='{{ STATIC_URL }}esb/css/helper.{{CSS_SUFFIX}}' rel="stylesheet">
+    <style>
+    #table_systems .overflow-hidden {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    #table_systems .width200 {
+        width: 200px;
+    }
+    </style>
+{% endblock %}
+{% block main %}
+<div class="main-page box-info">
+    <div class="main-header">
+        <span>{% trans "系统列表" %}</span>
+        {% if systems %}
+        <a class="btn btn-danger btn-min-w f_r mr10" id="systems_delete" href="javascript:;"><i class="bk-icon icon-close" style="font-size: 15px; margin-top: 2px;"></i>  {% trans "删除" %}</a>
+        {% endif %}
+        <a class="btn btn-primary btn-min-w f_r mr10" href="{% url 'manager.system.add' %}"><i class="bk-icon icon-plus" style="font-size: 15px; margin-top: 2px;"></i>  {% trans "添加一个新的系统" %}</a>
+    </div>
+
+    <div class="page-content">
+        <div class="row">
+            <div class="col-md-9">
+                <div id="table_systems">
+                    <table class="table table-hover table-striped" data-sortable-initialized="true" style="text-align: left;">
+                        <thead>
+                            <tr>
+                                <th style="width:20%">#</th>
+                                <th style="width:20%">{% trans "系统名称" %}</th>
+                                <th style="width: 200px">{% trans "系统标签" %}</th>
+                                <th style="width: 200px">{% trans "系统负责人" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for system in systems %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="system_id" value="{{system.id}}" />
+                            </td>
+                            <td>
+                                {{ system.name|escape }}
+                                <a href="{% url 'manager.system.edit' system.id %}" title="{% trans '编辑' %}">
+                                  <i class="bk-icon icon-edit" style="font-weight: bolder"></i></a>
+                            </td>
+                            <td><p class="overflow-hidden width200" title="{{ system.label_display|escape }}">{{ system.label_display|escape }}</p></td>
+                            <td><p class="overflow-hidden width200" title="{{ system.interface_admin|escape }}">{{ system.interface_admin|escape }}</p></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="text-align: center">{% trans "您还没有相关组件系统信息" %}
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading ng-binding" style="font-size: 18px;">{% trans "帮助" %}</div>
+                        <div class="panel-body">
+                            <div style="" class="document">
+                                {{ system_term_html|safe }}
+                                <p style="margin-top: 10px;">{% trans "更多详情请查看" %}<a target="_blank" href="{% url 'guide.page.index' %}">
+                                <i class="bk-icon icon-question-circle" style="margin-top: 2px;font-weight: bold"></i>
+                                    {% trans "使用指南" %}
+                                </a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" charset="utf-8">
+var UrlMaker = {
+    'tmpls': { 
+        system_deleted: "{% url 'manager.system.deleted' %}",
+    },
+    'make': function(tmpl_name, params) {
+        var self = this;
+        var result = self.tmpls[tmpl_name];
+        $.each(params || {}, function(k, v){
+            k = '__' + k.toUpperCase() + '__';
+            result = result.replace(k, v);
+        });
+        return result;
+    }
+}
+</script>
+
+<script src="{{ STATIC_URL }}esb/js/system_list.{{JS_SUFFIX}}"></script>
+{% endblock %}

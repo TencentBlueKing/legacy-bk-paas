@@ -1,0 +1,102 @@
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+<!-- 右侧内容 start -->
+<div class="box-info full">
+  <div class="main-header">
+    <span>第三方服务信息</span>
+  </div>
+  <div class="dev_center_module">
+    <h4 class="dev_module_title">
+            &nbsp
+           <button type="button" class="btn-info btn-xs env_add_btn f_r"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span>添加第三方服务</button>
+    </h4>
+     <table class="table table-bordered dev_env_table mt10" id="user_env_table">
+        <thead>
+            <tr>
+                <th width="14%">IP</th>
+                <th width="10%">端口</th>
+                <th width="15%">用户名</th>
+                <th width="15%">密码</th>
+                <th width="16%">类别</th>
+                <th width="6%">启用</th>
+                <th width="13%">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        % if servers:
+            % for server in servers:
+                <tr class="env_record">
+                    <input  type="hidden" class="server_id" disabled value="${server.id}" />
+                    <td>
+                        <input class="form-control server_ip" disabled value="${server.server_data.get('ip_address') or ''}" placeholder="请输入服务器IP"/>
+                    </td>
+                    <td>
+                        <input  type="number" min="1" max="65535" class="form-control server_port" disabled value="${server.server_data.get('ip_port', '')}" placeholder="请输入端口"/>
+                    </td>
+                    <td>
+                        <input class="form-control username" disabled value="${server.server_data.get('username', '')}" placeholder="请输入用户名"/>
+                    </td>
+                    <td>
+                        <input class="form-control password" disabled value="${server.server_data.get('password', '')}" placeholder="请输入密码"/>
+                    </td>
+                    <td>
+                        <select class="form-control server_cate" disabled placeholder="请选择服务器类型">
+                            % for cate in third_cates:
+                                <option value="${cate[0]}" ${'selected' if server.category=='${cate[0]}' else ''} >${cate[1]}</option>
+                            % endfor
+                        </select>
+                    </td>
+                    <td>
+                        <span class="server_active" data="${'1' if server.is_active else '0'}">${u"是" if server.is_active else u"否"}</span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn-info btn-xs env_save_btn">保存</button>
+                        <button type="button" class="btn-xs env_cancel_btn">取消</button>
+                        % if not server.is_active:
+                            <a href="###" title="编辑" class="dev_env_opera env_edit_btn"><span aria-hidden="true" class="glyphicon glyphicon-edit"></span></a>
+                        % endif
+                        <a href="###" value="${server.id}" title="删除" class="dev_env_opera env_del_btn"><span aria-hidden="true" class="glyphicon glyphicon-remove-circle"></span></a>
+                        % if not server.is_active:
+                            <a href="###" title="激活" class="dev_env_opera env_active_btn"><span aria-hidden="true" class="glyphicon glyphicon-saved"></span></a>
+                        % else:
+                            <a href="###" title="刷新" class="dev_env_opera env_refresh_btn"><span aria-hidden="true" class="glyphicon  glyphicon-refresh"></span></a>
+                        % endif
+                    </td>
+                </tr>
+            % endfor
+        % else:
+            <tr id="no_record_row"><td colspan="8"><center>没有第三方服务信息</center></td></tr>
+        % endif
+        </tbody>
+    </table>
+    <h4 class="dev_module_title mt30">使用说明</h4>
+    <div class="env_introduce_box">
+        <p>RabbitMQ服务是用来做应用后台任务（celery任务）的消息队列 </p>
+        <p>RabbitMQ服务可部署在任意一台服务器上，但需保证<code>15672</code>和<code>5672</code>端口未被占用 </p>
+        <p>端口默认<code>15672</code>(一般不需要更改) </p>
+        <p>只能添加一台RabbitMQ服务 </p>
+        <p>只有管理员可以管理第三方服务信息 </p>
+        <hr>
+        <div>第三方服务信息添加后，还需要在服务器上部署 RabbitMQ，RabbitMQ部署步骤如下（RabbitMQ软件包在蓝鲸智云PaaS项目的“extras_V*.tar.gz”目录中）：<br>
+          <span class="ml20">1.解压软件包 <code>tar zxvf extras_V*.tar.gz</code></span><br>
+          <span class="ml20">2.进入rabbitmq目录，执行install.sh安装脚本，执行时，请设置rabbitmq的管理员的用户名和密码（<code>用户名和密码请与页面上填写的保持一致</code>）</span> <br>
+          <pre class="ml20">
+$ cd extras/rabbitmq
+# 安装rabbitmq(涉及到erl的安装，时间较久)
+$ ./install.sh -u 管理员账户 -p 管理员密码
+# 默认安装到了/data/paas/service/rabbitmq下面
+# 检测是否启动成功
+# 查看mq服务状态
+$ /data/paas/service/rabbitmq/sbin/rabbitmqctl status
+# 查看web api接口服务是否启动
+$ lsof -i:15672
+# 查看mq服务是否启动
+$ lsof -i:5672</pre>
+           <span class="ml20">3. 点击页面上的激活按钮(<span aria-hidden="true" class="glyphicon glyphicon-saved"></span>)激活服务器 <br>
+        </div>
+        <hr>
+    </div>
+  </div>
+</div>
+</%block>
+<script src="${STATIC_URL}js/paas_engine_third.${JS_SUFFIX}"></script>

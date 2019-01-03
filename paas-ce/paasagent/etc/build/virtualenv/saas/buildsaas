@@ -1,0 +1,142 @@
+#! /bin/bash
+
+# Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+# Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+# Licensed under the MIT License (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://opensource.org/licenses/MIT
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+exec 2>&1
+
+export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/root/bin:${BASE_PATH}/.envs/paas_agent/bin:$PATH"
+
+# ========================= helper functions start ===============================
+
+function if_fail_then_exit() {
+    if [ "$1" != "0" ]; then
+        echo "$2"
+        exit $1
+    fi
+}
+
+# ========================= helper functions end ===============================
+
+CODE_PATH="$APP_PATH/code"
+CONF_PATH="$APP_PATH/conf"
+ENV_PATH="$CONF_PATH/env"
+RUN_PATH="$APP_PATH/run"
+VCS_TYPE="$VCS_TYPE"
+APP_CODE="$APP_CODE"
+
+mkdir -p "$APP_PATH" "$CODE_PATH" "$CONF_PATH" "$RUN_PATH" "$LOG_PATH"
+touch $ENV_PATH
+export WORKON_HOME="${BASE_APP_PATH}apps/Envs"
+
+#  offline
+if [ "$HANDLE" = "OFF" ]; then 
+    echo "starting offline job"
+    if [ -e "$RUN_PATH/supervisord.pid" ]; then
+        echo "remove process"
+        kill -SIGTERM `cat $RUN_PATH/supervisord.pid`
+        while [ -e "$RUN_PATH/supervisord.sock" ]
+        do
+          echo "waiting process stop"
+          sleep 1
+        done
+        rm $RUN_PATH/uwsgi.pid
+        rm $RUN_PATH/uwsgi.sock
+        echo "process stop done"
+    fi
+    if [ "$APP_PATH" != "/" ]; then
+      rm -rf "$APP_PATH"
+    fi
+    if [ "$LOG_PATH" != "/" ]; then
+      rm -rf "$LOG_PATH"
+    fi
+    rm -rf "$WORKON_HOME/$APP_CODE"
+    echo "Job Done"
+    exit
+fi
+
+if [ -d "$SaaS_PATH/$APP_CODE" ]; then
+    rm -rf "$SaaS_PATH/$APP_CODE"
+fi
+
+echo "------create virtualenv for $APP_CODE------"
+export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python"
+source /usr/bin/virtualenvwrapper.sh
+cd "$RUN_PATH" || exit 1
+if [ ! -e "$WORKON_HOME/$APP_CODE/bin/activate" ]; then
+  mkvirtualenv "$APP_CODE" --system-site-packages
+  deactivate
+fi
+source "$WORKON_HOME/$APP_CODE/bin/activate"
+source "$ENV_PATH"
+echo "------create virtualenv success------"
+
+echo "------Extract app_code for $APP_CODE------"
+cd "$SaaS_PATH" || exit 1
+tar -xzf $FILE_NAME
+if_fail_then_exit "$?" "------Extract app_code fail------"
+echo "------Extract app_code success------"
+cd $CODE_PATH
+if [ -d $APP_CODE ]; then
+    mv $APP_CODE $APP_CODE.$(date '+%Y-%m-%d-%H-%M-%S')
+fi
+mv $SaaS_PATH/$APP_CODE/src $CODE_PATH/$APP_CODE
+cd "$CODE_PATH/$APP_CODE" || exit 1
+
+if [ "$YUM_LIST" != "" ]; then
+    echo "------yum install------"
+    yum install -y $YUM_LIST
+    if_fail_then_exit "$?" "------yum $YUM_LIST fail------"
+    echo "------yum install success------"
+fi
+
+echo "------pip install------"
+pip install supervisor==3.3.3 uwsgi==2.0.13.1 -i $PYPI_SERVER_URL --trusted-host $PYPI_SERVER_HOST
+if_fail_then_exit "$?" "------pip install supervisor uwsgi fail------"
+if [ "$PIP_LIST" != "" ]; then
+    pip install $PIP_LIST --no-index --find-links=$SaaS_PATH/$APP_CODE/pkgs
+    if_fail_then_exit "$?" "------pip install $PIP_LIST fail------"
+fi
+echo "------pip install success------"
+
+echo "------change db------"
+python manage.py syncdb --noinput && \
+python manage.py migrate --noinput && \
+echo "------change db success------" || exit 1
+
+python manage.py createcachetable django_cache > /dev/null
+
+chown -R apps.apps "$APP_PATH" "$LOG_PATH"
+
+if [ -e "$RUN_PATH/supervisord.sock" ]; then
+    echo "------ restart app server ------"
+    su -m - apps <<EOF
+    export LC_ALL=en_US.UTF-8
+    $WORKON_HOME/$APP_CODE/bin/supervisorctl -c  $CONF_PATH/supervisord.conf update
+    $WORKON_HOME/$APP_CODE/bin/supervisorctl -c  $CONF_PATH/supervisord.conf restart all
+EOF
+else
+    echo "------ start app server ------"
+    su -m - apps <<EOF
+    export LC_ALL=en_US.UTF-8
+    $WORKON_HOME/$APP_CODE/bin/supervisord -c $CONF_PATH/supervisord.conf
+EOF
+fi
+
+sleep 2
+$WORKON_HOME/$APP_CODE/bin/supervisorctl -c  $CONF_PATH/supervisord.conf status | grep "$APP_CODE"_uwsgi | grep RUNNING &>/dev/null
+if_fail_then_exit "$?" "Job Fail"
+echo "Job Done"
+
+rm -rf $SaaS_PATH/$APP_CODE

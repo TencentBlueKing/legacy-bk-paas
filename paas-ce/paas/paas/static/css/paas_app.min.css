@@ -1,0 +1,8 @@
+/**
+* Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+* Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+* Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+* http://opensource.org/licenses/MIT
+* Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+*/
+.app-flowp{text-align:center;margin-left:80px;margin-top:10px;width:320px;border:1px solid #e5e5e5;border-radius:5px;padding:15px 5px}.app-tip p{font-size:14px;display:block;color:#5b5b5b;border-bottom:none}.t_grey{color:#999}.form-control:focus,.form-control:hover{border-color:#66afe9;outline:0;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}.can_a{color:#FBC15E}.app-logo-edit a{position:relative}.app-logo-edit-mask{position:absolute;width:40px;height:40px;background:rgba(0,0,0,.5);left:0;top:0;text-align:center;line-height:40px;color:#fff;display:none}.app-logo-edit-mask i{position:absolute;right:0;bottom:0}.app-logo-edit a:hover .app-logo-edit-mask{display:block}

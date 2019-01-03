@@ -1,0 +1,130 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>{% trans "API网关|蓝鲸智云社区版" %}</title>
+<meta name="keywords" content="{% trans '开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台' %}" />
+<meta name="description" content="{% trans '蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。' %}"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="author" content=""/>
+<link rel="icon" type="image/x-icon" href="{{ STATIC_URL }}esb/favicon.ico">
+<link href="{{ STATIC_URL }}assets/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="{{ STATIC_URL }}css/base.{{CSS_SUFFIX}}" rel="stylesheet"/>
+<link href='{{ STATIC_URL }}css/layout_head.{{CSS_SUFFIX}}' rel="stylesheet">
+<link href='{{ STATIC_URL }}esb/css/base.{{CSS_SUFFIX}}' rel="stylesheet">
+<!--select2-->
+<link href='{{ STATIC_URL }}esb/assets/select2-3.5.3/select2.css' rel="stylesheet"/>
+
+<!-- bk-icon-font -->
+<link href="{{ STATIC_URL }}assets/bk-icon-2.0/iconfont.css" rel="stylesheet"/>
+
+<!--dialog-->
+<link href="{{ STATIC_URL }}esb/assets/bkDialog-1.0/css/ui-dialog.css" type="text/css" rel="stylesheet"/>
+
+<!--i18n-->
+<script type="text/javascript" src="{{ SITE_URL  }}jsi18n/i18n/"></script>
+
+<!-- JQuery -->
+<script src="{{ STATIC_URL }}esb/assets/jquery-1.10.2.min.js" type="text/javascript"></script>
+
+<!--csrftoken-->
+<script src="{{ STATIC_URL }}esb/js/csrftoken.{{ JS_SUFFIX }}" type="text/javascript" charset="utf-8"></script>
+
+{% block header %}
+{% endblock %}
+
+<style>
+</style>
+
+</head>
+<body>
+<div class="header">
+    <!--头部横向导航 start -->
+    <div class="header-inner">
+        <a title="{% trans '蓝鲸智云工作台' %}" href="{{SITE_URL}}" class="logo"><img src="{{ STATIC_URL }}{% trans 'esb/img/logo_esb_01.png' %}" alt=""></a>
+        <a title="{% trans '蓝鲸智云API网关' %}" href="{% url 'manager.index' %}" class="logo"><img src="{{ STATIC_URL }}{% trans 'esb/img/logo_esb_02.png' %}" alt=""></a>
+        <div class="account">
+            <div class="account_meta account_info account_meta_primary">
+                {% if request.user and request.user.username %}
+                <a href="{{SITE_URL}}accounts/profile/" class="nickname" title="{{request.user.username}}">{{request.user.username}}</a>
+                {% else %}
+                <a href="{{SITE_URL}}accounts/profile/" class="nickname" title=""></a>
+                {% endif %}
+                <a href="{{SITE_URL}}accounts/profile/"><img src="{{STATIC_URL}}img/getheadimg.jpg" class="avatar"><i class="crown"></i></a>
+            </div>
+            {% if request.user.username %}
+            <div class="account_meta account_logout account_meta_primary"><a id="logout" href="{{LOGOUT_URL}}">{% trans "注销" %}</a></div>
+            {% endif %}
+        </div>
+        <ul class="list" id="main-nav">
+            {% for menu_item in menu_items %}
+                {% if menu_item.is_real_url %}
+                    <li><a href="{{ menu_item.path }}" target="_blank">{% trans menu_item.label context "menu" %}</a></li>
+                {% else %}
+                    {% if menu_item.name == menu_active_item %}
+                    <li class="active"><a href="{% url menu_item.path %}"{% if menu_item.is_blank %} target="_blank"{% endif %}>{% trans menu_item.label context "menu" %}</a></li>
+                    {% else %}
+                    <li><a href="{% url menu_item.path %}"{% if menu_item.is_blank %} target="_blank"{% endif %}>{% trans menu_item.label context "menu" %}</a></li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <!--头部横向导航 end -->
+</div>
+
+<!--中间主体内容 start-->
+<div id="body" class="body page_index">
+    <div id="js_container_box" class="container_box cell_layout side_l" ref="containerBox">
+        {% block container %}
+        <div class="">
+            {% block main %}
+            {% endblock %}
+        </div>
+        {% endblock %}
+    </div>
+</div>
+<!--中间主体内容 end-->
+
+<!--尾部声明 start-->
+{% include "mainsite/footer.html" %}
+
+<!-- JQuery -->
+<script src="{{ STATIC_URL }}esb/assets/jquery.json-2.6.0.min.js"></script>
+<script src="{{ STATIC_URL }}esb/assets/jquery.cookie-1.4.1.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}esb/assets/jquery.validate-1.11.0.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}esb/assets/moment-with-locales-2.10.6.min.js" type="text/javascript"></script>
+
+<!-- bootstrap -->
+<script src="{{ STATIC_URL }}assets/bootstrap-3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!-- bkdialog -->
+<script src="{{ STATIC_URL }}esb/assets/bkDialog-1.0/js/dialog.js" type="text/javascript"></script>
+
+<!-- select2 -->
+<script src="{{ STATIC_URL }}esb/assets/select2-3.5.3/select2.min.js" type="text/javascript"></script>
+
+<!-- basic -->
+<script src="{{ STATIC_URL }}esb/assets/handlebars-3.0.1.js" type="text/javascript"></script>
+
+<!-- backbone.js -->
+<script src="{{ STATIC_URL }}esb/assets/underscore-1.8.3-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="{{ STATIC_URL }}esb/assets/backbone-1.3.3-min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- custom -->
+<script src="{{ STATIC_URL }}esb/js/core.{{JS_SUFFIX}}" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/core.{{JS_SUFFIX}}" type="text/javascript"></script>
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<script>
+    moment.locale("{{ LANGUAGE_CODE }}");
+</script>
+
+{% block footer %}
+{% endblock %}
+<!--尾部声明 end-->
+
+</body>
+</html>

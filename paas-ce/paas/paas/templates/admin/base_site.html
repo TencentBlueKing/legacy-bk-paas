@@ -1,0 +1,18 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | 管理{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">蓝鲸智云后台管理</h1>
+{% endblock %}
+
+{% block userlinks %}
+    {% if site_url %}
+        <a href="{{ site_url }}">蓝鲸智云平台</a> /
+    {% endif %}
+    {% if user.has_usable_password %}
+        <a href="{% url 'admin:password_change' %}">修改密码</a> /
+    {% endif %}
+    <a href="{{LOGOUT_URL}}?c_url=/admin">注销</a>
+{% endblock %}

@@ -1,0 +1,12 @@
+django==1.8.11
+dj-static==0.0.6
+pycrypto==2.6.1
+requests==2.9.1
+pymysql==0.6.7
+gunicorn==19.6.0
+uWSGI==2.0.13.1
+xlrd==1.0.0
+xlwt==1.1.2
+gevent==1.1.2
+pytz==2016.6.1
+python-dateutil==2.6.0

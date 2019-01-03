@@ -1,0 +1,61 @@
+<style type="text/css">
+	.copy-btn{
+		margin: 0 5px 5px 0;
+    	font-size: 12px;
+    	font-weight: normal;
+    	box-sizing: content-box;
+	    height: 22px !important;
+	    line-height: 22px !important;
+    	margin-right: 5px;
+    	padding: 0px;
+    	width: 40px;
+    	min-width: 40px;
+	}
+	.show-text{
+		width: 	650px;
+		border-radius: 0;
+    min-height: 45px;
+        background-color: #e1f4e2 !important;
+    padding: 8px;
+    word-wrap: break-word;
+	}
+</style>
+<h4 class="dev_module_title mb20">激活码申请流程:</h4>
+<div class="env_introduce_box"> 
+% if mac_info:
+	<span> 1.系统检测到您的 AppServer 的MAC地址为: <a class="btn btn-success btn-lg copy-btn" id="copy_mac">复制</a></span><br>
+	<div class="show-text" id="mac_text">${mac_info}</div>
+% else:
+	<span> 1.请查看你所有的AppServer（包括正式和测试服务器）的MAC地址，多个MAC地址以英文分号(;)分隔</span> <br>
+% endif
+
+% if is_base_info == '1':
+	<span> 2.根据您的应用ID：<code>${app_code}</code> 和第一步获取到的 <code>MAC地址</code>，到下面的链接地址申请激活码</span> <br>
+	<span><a href="http://o.qcloud.com/console/?app=product-download&url=/deploy_token_product_page" target="_blank">http://o.qcloud.com/console/?app=product-download&url=/deploy_token_product_page</a></span> 
+% else:
+	<span> 2.请填写<code>应用ID</code></span> <br>
+	<span> 3.根据您的<code>应用ID</code>和第一步获取到的<code>MAC地址</code>，到下面的链接地址申请激活码</span> <br>
+	<span><a href="http://o.qcloud.com/console/?app=product-download&url=/deploy_token_product_page" target="_blank">http://o.qcloud.com/console/?app=product-download&url=/deploy_token_product_page</a></span> 
+% endif
+	<hr>
+	<p><code>AppServer</code>是在蓝鲸智云上注册的应用部署的服务器,
+	% if active_server_ips:
+		您目前已激活的服务器有： <a href="${SITE_URL}engine/server/" target="_blank"> 点击查看详情</a></p>
+		<div class="show-text">${active_server_ips}</div>
+	% else:
+		您目前还没有激活服务器，<a href="${SITE_URL}engine/server/" target="_blank">点击这里</a> 添加并激活服务器</p>
+	% endif
+	
+	<p><code>MAC地址</code>变更后（新增或修改AppServer），需要重新申请激活码</p>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#copy_mac').on('copy', function(e){
+    	var mac_text = $("#mac_text").text();
+        e.clipboardData.clearData();
+        e.clipboardData.setData("text/plain", mac_text);
+        e.preventDefault();
+        art.dialog({id: 'bktips', width: 300,icon: 'succeed',lock: true,content: '复制成功'}).time(1);
+    })
+});
+</script>

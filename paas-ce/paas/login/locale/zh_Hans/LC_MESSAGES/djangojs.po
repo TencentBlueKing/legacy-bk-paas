@@ -1,0 +1,367 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-26 23:34+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\static\admin\js\SelectFilter2.js:45
+#, javascript-format
+msgid "Available %s"
+msgstr "Available %s"
+
+#: .\static\admin\js\SelectFilter2.js:46
+#, javascript-format
+msgid ""
+"This is the list of available %s. You may choose some by selecting them in "
+"the box below and then clicking the \"Choose\" arrow between the two boxes."
+msgstr ""
+"This is the list of available %s. You may choose some by selecting them in "
+"the box below and then clicking the \"Choose\" arrow between the two boxes."
+
+#: .\static\admin\js\SelectFilter2.js:53
+#, javascript-format
+msgid "Type into this box to filter down the list of available %s."
+msgstr "Type into this box to filter down the list of available %s."
+
+#: .\static\admin\js\SelectFilter2.js:57
+msgid "Filter"
+msgstr "Filter"
+
+#: .\static\admin\js\SelectFilter2.js:61
+msgid "Choose all"
+msgstr "Choose all"
+
+#: .\static\admin\js\SelectFilter2.js:61
+#, javascript-format
+msgid "Click to choose all %s at once."
+msgstr "Click to choose all %s at once."
+
+#: .\static\admin\js\SelectFilter2.js:67
+msgid "Choose"
+msgstr "Choose"
+
+#: .\static\admin\js\SelectFilter2.js:69
+msgid "Remove"
+msgstr "Remove"
+
+#: .\static\admin\js\SelectFilter2.js:75
+#, javascript-format
+msgid "Chosen %s"
+msgstr "Chosen %s"
+
+#: .\static\admin\js\SelectFilter2.js:76
+#, javascript-format
+msgid ""
+"This is the list of chosen %s. You may remove some by selecting them in the "
+"box below and then clicking the \"Remove\" arrow between the two boxes."
+msgstr ""
+"This is the list of chosen %s. You may remove some by selecting them in the "
+"box below and then clicking the \"Remove\" arrow between the two boxes."
+
+#: .\static\admin\js\SelectFilter2.js:80
+msgid "Remove all"
+msgstr "Remove all"
+
+#: .\static\admin\js\SelectFilter2.js:80
+#, javascript-format
+msgid "Click to remove all chosen %s at once."
+msgstr "Click to remove all chosen %s at once."
+
+#: .\static\admin\js\actions.js:22 .\static\admin\js\actions.min.js:1
+msgid "%(sel)s of %(cnt)s selected"
+msgid_plural "%(sel)s of %(cnt)s selected"
+msgstr[0] "%(sel)s of %(cnt)s selected"
+
+#: .\static\admin\js\actions.js:114 .\static\admin\js\actions.min.js:4
+msgid ""
+"You have unsaved changes on individual editable fields. If you run an "
+"action, your unsaved changes will be lost."
+msgstr ""
+"You have unsaved changes on individual editable fields. If you run an "
+"action, your unsaved changes will be lost."
+
+#: .\static\admin\js\actions.js:126 .\static\admin\js\actions.min.js:5
+msgid ""
+"You have selected an action, but you haven't saved your changes to "
+"individual fields yet. Please click OK to save. You'll need to re-run the "
+"action."
+msgstr ""
+"You have selected an action, but you haven't saved your changes to "
+"individual fields yet. Please click OK to save. You'll need to re-run the "
+"action."
+
+#: .\static\admin\js\actions.js:128 .\static\admin\js\actions.min.js:5
+msgid ""
+"You have selected an action, and you haven't made any changes on individual "
+"fields. You're probably looking for the Go button rather than the Save "
+"button."
+msgstr ""
+"You have selected an action, and you haven't made any changes on individual "
+"fields. You're probably looking for the Go button rather than the Save "
+"button."
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:79
+#, javascript-format
+msgid "Note: You are %s hour ahead of server time."
+msgid_plural "Note: You are %s hours ahead of server time."
+msgstr[0] "Note: You are %s hours ahead of server time."
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:87
+#, javascript-format
+msgid "Note: You are %s hour behind server time."
+msgid_plural "Note: You are %s hours behind server time."
+msgstr[0] "Note: You are %s hour behind server time."
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:114
+#: .\static\admin\js\admin\DateTimeShortcuts.js:149
+msgid "Now"
+msgstr "Now"
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:118
+msgid "Clock"
+msgstr "Clock"
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:146
+msgid "Choose a time"
+msgstr "Choose a time"
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:150
+msgid "Midnight"
+msgstr "Midnight"
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:151
+msgid "6 a.m."
+msgstr "6 a.m."
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:152
+msgid "Noon"
+msgstr "Noon"
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:156
+#: .\static\admin\js\admin\DateTimeShortcuts.js:276
+msgid "Cancel"
+msgstr "Cancel"
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:216
+#: .\static\admin\js\admin\DateTimeShortcuts.js:269
+msgid "Today"
+msgstr "Today"
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:220
+msgid "Calendar"
+msgstr "Calendar"
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:267
+msgid "Yesterday"
+msgstr "Yesterday"
+
+#: .\static\admin\js\admin\DateTimeShortcuts.js:271
+msgid "Tomorrow"
+msgstr "Tomorrow"
+
+#: .\static\admin\js\calendar.js:8
+msgid ""
+"January February March April May June July August September October November "
+"December"
+msgstr ""
+"January February March April May June July August September October November "
+"December"
+
+#: .\static\admin\js\calendar.js:9
+msgid "S M T W T F S"
+msgstr "S M T W T F S"
+
+#: .\static\admin\js\collapse.js:8 .\static\admin\js\collapse.js:19
+#: .\static\admin\js\collapse.min.js:1
+msgid "Show"
+msgstr "Show"
+
+#: .\static\admin\js\collapse.js:16 .\static\admin\js\collapse.min.js:1
+msgid "Hide"
+msgstr "Hide"
+
+#: .\static\js\csrftoken.js:20 .\static\js\csrftoken.js:31
+#: .\static\js\csrftoken.min.js:1
+msgid "提示"
+msgstr "提示"
+
+#: .\static\js\csrftoken.js:33 .\static\js\csrftoken.min.js:1
+msgid "系统出现异常："
+msgstr "系统出现异常："
+
+#: .\static\js\role_manage.js:3 .\static\js\role_manage.js:11
+#: .\static\js\role_manage.min.js:1
+msgid "输入用户名"
+msgstr "输入用户名"
+
+#: .\static\js\role_manage.js:26 .\static\js\role_manage.min.js:1
+#, fuzzy
+#| msgid "用户"
+msgid "用户("
+msgstr "用户("
+
+#: .\static\js\role_manage.js:26 .\static\js\role_manage.min.js:1
+msgid ")已存在"
+msgstr ")已存在"
+
+#: .\static\js\users.js:13 .\static\js\users.min.js:1
+msgid "不可同时修改多个用户信息，请先保存编辑中的用户信息"
+msgstr "不可同时修改多个用户信息，请先保存编辑中的用户信息"
+
+#: .\static\js\users.js:44 .\static\js\users.js:220 .\static\js\users.min.js:1
+msgid "请输入用户名"
+msgstr "请输入用户名"
+
+#: .\static\js\users.js:47 .\static\js\users.min.js:1
+msgid "请输入姓名"
+msgstr "请输入姓名"
+
+#: .\static\js\users.js:50 .\static\js\users.min.js:1
+msgid "请输入联系电话"
+msgstr "请输入联系电话"
+
+#: .\static\js\users.js:53 .\static\js\users.js:223 .\static\js\users.min.js:1
+msgid "请输入邮箱"
+msgstr "请输入邮箱"
+
+#: .\static\js\users.js:57 .\static\js\users.min.js:1
+msgid "普通用户"
+msgstr "普通用户"
+
+#: .\static\js\users.js:58 .\static\js\users.min.js:1
+msgid "管理员"
+msgstr "管理员"
+
+#: .\static\js\users.js:59 .\static\js\users.min.js:1
+msgid "开发者"
+msgstr "开发者"
+
+#: .\static\js\users.js:60 .\static\js\users.min.js:1
+msgid "职能化"
+msgstr "职能化"
+
+#: .\static\js\users.js:61 .\static\js\users.min.js:1
+msgid "审计员"
+msgstr "审计员"
+
+#: .\static\js\users.js:65 .\static\js\users.js:309 .\static\js\users.js:328
+#: .\static\js\users.min.js:1
+msgid "取消"
+msgstr "取消"
+
+#: .\static\js\users.js:66 .\static\js\users.min.js:1
+msgid "保存"
+msgstr "保存"
+
+#: .\static\js\users.js:67 .\static\js\users.min.js:1
+msgid "编辑"
+msgstr "编辑"
+
+#: .\static\js\users.js:68 .\static\js\users.min.js:1
+msgid "删除"
+msgstr "删除"
+
+#: .\static\js\users.js:69 .\static\js\users.js:324 .\static\js\users.js:331
+#: .\static\js\users.min.js:1
+msgid "重置密码"
+msgstr "重置密码"
+
+#: .\static\js\users.js:88 .\static\js\users.min.js:1
+msgid "批量导入用户"
+msgstr "批量导入用户"
+
+#: .\static\js\users.js:101 .\static\js\users.min.js:1
+msgid "请选择一个文件"
+msgstr "请选择一个文件"
+
+#: .\static\js\users.js:116 .\static\js\users.min.js:1
+#, fuzzy
+#| msgid ""
+#| "用户名只能包含数字、字母和点，且长度在4-20个字符, 且必须以字母或数字开头"
+msgid ""
+"用户名只能包含数字、字母、下划线和点，且长度在4-20个字符, 且必须以字母或数字"
+"开头"
+msgstr ""
+"用户名只能包含数字、字母和点，且长度在4-20个字符, 且必须以字母或数字开头"
+
+#: .\static\js\users.js:121 .\static\js\users.min.js:1
+msgid "中文名只能包含数字、字母、中文汉字、下划线，长度在1-16个字符"
+msgstr "中文名只能包含数字、字母、中文汉字、下划线，长度在1-16个字符"
+
+#: .\static\js\users.js:126 .\static\js\users.min.js:1
+msgid "仅支持中国大陆手机号码（11位数字）"
+msgstr "仅支持中国大陆手机号码（11位数字）"
+
+#: .\static\js\users.js:131 .\static\js\users.min.js:1
+msgid "请输入正确的邮箱格式"
+msgstr "请输入正确的邮箱格式"
+
+#: .\static\js\users.js:136 .\static\js\users.min.js:1
+msgid "请选择角色"
+msgstr "请选择角色"
+
+#: .\static\js\users.js:155 .\static\js\users.min.js:1
+msgid "保存成功"
+msgstr "保存成功"
+
+#: .\static\js\users.js:165 .\static\js\users.min.js:1
+msgid "保存失败"
+msgstr "保存失败"
+
+#: .\static\js\users.js:183 .\static\js\users.min.js:1
+msgid "添加成功"
+msgstr "添加成功"
+
+#: .\static\js\users.js:196 .\static\js\users.min.js:1
+msgid "添加失败"
+msgstr "添加失败"
+
+#: .\static\js\users.js:221 .\static\js\users.min.js:1
+msgid "请输入中文名"
+msgstr "请输入中文名"
+
+#: .\static\js\users.js:222 .\static\js\users.min.js:1
+msgid "请输入手机号"
+msgstr "请输入手机号"
+
+#: .\static\js\users.js:282 .\static\js\users.min.js:1
+msgid "您确定删除该用户吗?"
+msgstr "您确定删除该用户吗?"
+
+#: .\static\js\users.js:282 .\static\js\users.min.js:1
+msgid "用户名 : "
+msgstr "用户名 : "
+
+#: .\static\js\users.js:285 .\static\js\users.min.js:1
+msgid "删除确认"
+msgstr "删除确认"
+
+#: .\static\js\users.js:291 .\static\js\users.min.js:1
+msgid "正在进行删除操作，请稍后..."
+msgstr "正在进行删除操作，请稍后..."
+
+#: .\static\js\users.js:308 .\static\js\users.min.js:1
+msgid "确认删除"
+msgstr "确认删除"
+
+#: .\static\js\users.js:358 .\static\js\users.min.js:1
+msgid "两次输入的新密码不一致"
+msgstr "两次输入的新密码不一致"
+
+#: .\static\js\users.js:389 .\static\js\users.min.js:1
+msgid "密码重置成功"
+msgstr "密码重置成功"

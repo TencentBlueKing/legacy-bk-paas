@@ -1,0 +1,26 @@
+{% load bootstrap %}
+{% load i18n %}
+
+<style>
+#system_info .form-group .control-label {
+    width: 20%;
+}
+#system_info .form-group .controls {
+    width: 75%;
+}
+</style>
+
+<div id='system-add-tmpl' style="display: none;overflow-x: hidden">
+    <form id="system_info" class="form-inline form-columns">
+        {{ system_form.name|bootstrap }}
+        {{ system_form.label|bootstrap }}
+        {{ system_form.interface_admin|bootstrap }}
+        {{ system_form.execute_timeout|bootstrap }}
+        {{ system_form.query_timeout|bootstrap }}
+        {{ system_form.remark|bootstrap }}
+    </form>
+    <div class="form-group action">
+        <button class="btn btn-primary" id="add_system_btn">{% trans "确认添加" %}</button>
+        <button class="btn btn-default" id="cancel_system_btn">{% trans "取消" %}</button>
+    </div>
+</div>

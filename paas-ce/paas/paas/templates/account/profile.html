@@ -1,0 +1,75 @@
+<%inherit file="/base_center.html"/>
+
+<%block name="right_content">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_profile.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<!-- 右侧内容 start -->
+<div class="">
+  <div class="box-info full" >
+    <div class="main-header"><span>个人信息</span></div>
+    <div class="main_bd">
+      <div class="account_setting_area" id="svn_info">
+        <ul>
+          <li class="account_setting_item">
+            <h4>用户名：</h4>
+            <div class="meta_content">
+              ${username}
+            </div>
+          </li>
+          <li class="account_setting_item">
+            <h4>中文名：</h4>
+            <div class="meta_content">
+              ${chname}
+            </div>
+          </li>
+          <li class="account_setting_item">
+            <h4>联系电话：</h4>
+            <div class="meta_content">
+                ${phone}
+            </div>
+          </li>
+          <li class="account_setting_item">
+            <h4>常用邮箱：</h4>
+            <div class="meta_content">
+                ${email}
+            </div>
+          </li>
+          <li class="account_setting_item">
+              <h4>常用操作：</h4>
+              <div class="meta_content">
+                  <a href="###" id="show_modify_user" >修改个人信息</a>
+                  <a href="###" id="show_password_change" class="ml50">重置密码</a>
+              </div>
+          </li>
+          % if request.user.is_superuser:
+            <li class="account_setting_item">
+              <h4>用户管理：</h4>
+              <div class="meta_content">
+                  <a target="_blank" href="${user_manage_url}">用户管理</a>
+              </div>
+            </li>
+          % endif
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 右侧内容 end -->
+<div id="change_password_div" style="display:none">
+    <div>
+        <label class="password_label">新密码：<span style="color:red">*</span> </label>
+        <!-- 防止Firefox下密码自动填充 -->
+        <input type="text" style="display:none">
+        <input type="password" style="display:none">
+        <input class="form-control password_input" id="id_password1" name="password1"  type="text" onfocus="this.type='password'">
+        <span style="color:red;display:none" class="error_tip ml10">必填</span>
+        <p style="margin-left: 105px;" class="tip ml10" id="pattern_tip">请输入密码，长度在8-20个字符，可支持数字、字母以及!@#$%^*()_-+=，必须保证密码包含大小写字母和数字</p>
+    </div>
+    <div class="mt5">
+        <label class="password_label">确认密码：<span style="color:red">*</span> </label>
+        <input class="form-control password_input" id="id_password2" name="password2"  type="text" onfocus="this.type='password'">
+        <span style="color:red;display:none" class="error_tip ml10">必填</span>
+    </div>
+    <span id="password_tip" style="color:red;margin-left: 100px;"></span>
+</div>
+</%block>
+<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

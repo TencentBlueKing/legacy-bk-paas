@@ -1,0 +1,94 @@
+/**
+* Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+* Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+* Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+* http://opensource.org/licenses/MIT
+* Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+*/
+@charset "utf-8";
+
+.main-nav{margin:0 -15px;padding:15px 0 20px 0;border-bottom:1px solid #ddd}
+.king-bg-blue{background-color: #62a8ea !important;}
+
+/*===================================================*
+ * 步骤流程
+\*===================================================*/
+.king-pearls{margin-bottom:22px;}
+.king-pearls.row{display:block;margin: 0 -60px;}
+.king-pearl{position:relative;float:left;width:20%;padding:0;margin:0;text-align:center;}
+.king-pearl:after,.king-pearl:before{position:absolute;top:17px;z-index:0;width:50%;height:2px;content:"";background-color:#62a8ea;}
+.king-pearl:before{left:0}
+.king-pearl:after{right:0}
+.king-pearl:first-child:before,
+.king-pearl:last-child:after{display:none!important}
+.king-pearl-icon,
+.king-pearl-number{position:relative;z-index:1;display:inline-block;width:36px;height:36px;line-height:30px;color:#62a8ea;text-align:center;background:#fff;border-radius:50%;border:3px solid #62a8ea}
+.king-pearl-number{font-size:18px}
+.king-pearl-icon{font-size:18px}
+.king-pearl-title{margin:.5em auto;display:block;width:80px;font-size:14px;color:#526069;margin-bottom:0;overflow:hidden;text-overflow:ellipsis;word-wrap:normal;white-space:nowrap}
+
+/*===================================================*\
+ * 时间轴 timeline
+\*===================================================*/
+.king-timeline{position:relative;margin:33px 0;padding:0 18px;list-style:none;}
+.king-timeline:before{content:'';position:absolute;top:0px;bottom:0;width:4px;background:#ddd;left:34px;margin:0;border-radius:2px;}
+.king-timeline > li{position:relative;margin-bottom:15px;}
+.king-timeline > li:before,.king-timeline > li:after{content:" ";display:table;}
+.king-timeline > li:after{clear:both;}
+.king-timeline > li > .king-timeline-header{position: relative;cursor: pointer;}
+.king-timeline > li > .king-timeline-header .bk-icon{
+	font-size: 8px;
+	width: auto;height: auto;
+	position: absolute;top: 10px;right: 10px;margin: 0px;
+	-webkit-transition: all .5s ease-in-out 0s;
+	-o-transition: all .5s ease-in-out 0s;
+	-moz-transition: all .5s ease-in-out 0s;
+	transition: all .5s ease-in-out 0s;
+	transform: scale(0.8,0.8);
+}
+.king-timeline > li > .king-timeline-header .fa{
+	width: auto;height: auto;
+	position: absolute;top: 10px;right: 10px;margin: 0px;
+	-webkit-transition: all .5s ease-in-out 0s;
+	-o-transition: all .5s ease-in-out 0s;
+	-moz-transition: all .5s ease-in-out 0s;
+	transition: all .5s ease-in-out 0s;
+}
+.king-timeline > li > .king-timeline-item{margin-top:15px;background:#fff;color:#444;margin-left:60px;margin-right:15px;padding:0;position:relative;}
+.king-timeline > li > .king-timeline-item p{margin: 0px;padding:0px;line-height: 28px;font-size: 14px;border: none;}
+.king-timeline > li > .king-timeline-item img{margin: 15px 0;}
+.king-timeline > li > .king-timeline-item .red{color: red;}
+.king-timeline > li > .king-timeline-item > .time{color:#999;float:right;padding:10px;font-size:12px;}
+.king-timeline > li > .king-timeline-item > .king-timeline-header{margin:0;color:#555;border-bottom:1px solid #eee;padding:10px;font-size:14px;line-height:1.1;}
+.king-timeline > li > .king-timeline-item > .king-timeline-header > a{font-weight:600;}
+.king-timeline > li > .king-timeline-item > .king-timeline-body,
+.king-timeline > li > .king-timeline-item > .king-timeline-footer{padding:15px 15px 30px 5px;}
+.king-timeline > li .king-timeline-header{height:36px;line-height: 36px;border-bottom: 1px solid #ddd;font-size: 16px;font-weight: 400;color: #666;}
+.king-timeline > li .king-timeline-header > span.num{display:inline-block;width: 36px;height: 36px;margin-right:14px;background-color:#fff;border-radius:4px;color:#fff;border-radius:0;font-weight:normal;text-align: center;line-height: 36px;font-weight:600;}
+.king-timeline > li > .bk-icon,
+.king-timeline > li > .fa,
+.king-timeline > li > .glyphicon,
+.king-timeline > li > .ion{width:30px;height:30px;font-size:15px;line-height:30px;position:absolute;color:#fff;background:#d2d6de;border-radius:50%;text-align:center;left:3px;top:0;}
+
+.king-timeline > li.open > .king-timeline-header .bk-icon,
+.king-timeline > li.open > .king-timeline-header .fa{
+	-webkit-transform:rotate(-180deg);
+	-moz-transform:rotate(-180deg);
+	-o-transform:rotate(-180deg);
+	-ms-transform:rotate(-180deg);
+	transform:rotate(-180deg) scale(0.8,0.8);
+}
+
+.guide-list li, .guide-list span{margin-left: 20px;list-style-type:decimal;line-height: 28px;color: #666666;}
+.guide-list ul li{margin-left: 20px;list-style-type: lower-roman;}
+.guide-list .three-list{margin-bottom: 20px;}
+
+.tab-navs-cont{padding: 0 15px;}
+
+.faq-list:before{background: transparent;}
+.faq-list > li > .king-timeline-item{margin-left: 46px;}
+.faq-list > li > .king-timeline-item dt{position: relative;margin-bottom:15px;font-size: 14px;font-weight: 400;color: #333;}
+/*.faq-list > li > .king-timeline-item dt.question:before{content:"\e085";position: absolute;top: 50%;left: -20px;margin-top:-10px;font-family: 'Glyphicons Halflings';color: #999;}*/
+.faq-list > li > .king-timeline-item dd{margin-bottom: 25px;color: #787878;}
+.faq-list > li > .king-timeline-item dd p{margin-top: 15px;color: #787878;}
+.faq-list > li > .king-timeline-item dd .tit{color: #999;}

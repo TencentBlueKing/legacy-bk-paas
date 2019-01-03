@@ -1,0 +1,124 @@
+{% extends "manager/buffet_comp/base.html" %}
+{% load bootstrap %}
+{% load i18n %}
+
+{% block main %}
+
+{% include "manager/buffet_comp/helpers/buffet_tab.html" with title=item.name %}
+
+<div class="row">
+    <div class="col-md-12">
+        <form action="" method="post" name="form-apply" class="form-inline form-columns" style="margin-bottom: 24px">{% csrf_token %}
+            <div class="well">
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>{% trans "注册配置" %}</h4>
+                    </div>
+                    <div class="col-md-10">
+                        {{ form.id }}
+                        {{ form.name|bootstrap }}
+                        {{ form.system|bootstrap }}
+                        {{ form.registed_http_method|bootstrap }}
+                        {{ form.registed_path|bootstrap }}
+                        {{ form.type|bootstrap }}
+                        {{ form.timeout_time|bootstrap }}
+                    </div>
+                </div>
+            </div>
+            <div class="well">
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>{% trans "请求发出前" %}</h4>
+                    </div>
+                    <div class="col-md-10">
+                        <div id="pair-extra-headers" class="form-group"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="well">
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>{% trans "请求目的地" %}</h4>
+                    </div>
+                    <div class="col-md-10">
+                        {{ form.dest_url|bootstrap }}
+                        {{ form.dest_http_method|bootstrap }}
+                        {{ form.favor_post_ctype|bootstrap }}
+                    </div>
+                </div>
+            </div>
+
+            {{ form.extra_headers }}
+            <button type="submit" class="btn btn-primary">{% trans "确认修改" %}</button> 
+            <button type="button" class="btn btn-default cancel">{% trans "取消" %}</button> 
+        </form>
+    </div>
+</div>
+{% include 'manager/system/add_system_tmpl.html' %}
+{% endblock %}
+
+{% block footer %}
+
+{% verbatim %}
+<script type="text/x-mustache-template" id="tmpl-kvip">
+<label class="control-label">{{ label }}</label>
+    <div class="kv-rows">
+    {{{ part_rows }}}
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <button type="button" class="btn btn-default pair-add-row">
+            <span class="glyphicon glyphicon-plus"></span>
+            {% endverbatim %}
+            {% trans "添加一行" %}
+            {% verbatim %}
+        </button>
+      </div>
+    </div>
+</script>
+
+<script type="text/x-mustache-template" id="tmpl-kvip-row">
+<div class="row kv-row">
+    <div class="col-md-5 form-group-inline">
+      <input class="form-control" type="text" placeholder="key" name="key" value="{{ key }}" />
+    </div>
+    <div class="col-md-5 form-group-inline">
+      <input class="form-control" type="text" placeholder="value" name="value" value="{{ value }}" />
+    </div>
+    <div class="form-group-inline">
+      <button type="button" class="pair-remove-row btn btn-link">
+        <span class="glyphicon glyphicon-remove"></span> 
+        {% endverbatim %}
+        {% trans "删除" %}
+        {% verbatim %}
+      </button>
+    </div>
+  </div>
+</script>
+{% endverbatim %}
+
+<script type="text/javascript" charset="utf-8">
+var UrlMaker = {
+    'tmpls': {
+        system_add: "{% url 'manager.api.system.add' %}",
+        buffet_list: "{% url 'manager.buffet_comp.list' %}",
+    },
+    'make': function(tmpl_name, params) {
+        var result = this.tmpls[tmpl_name];
+        $.each(params || {}, function(k, v){
+            k = '__' + k.toUpperCase() + '__';
+            result = result.replace(k, v);
+        });
+        return result;
+    }
+};
+
+var current_conf = {
+    'extra_headers': {{ form.extra_headers.value|default:"{}"|safe }},
+    'csrf_token': '{{ csrf_token }}',
+};
+
+</script>
+<script src="{{ STATIC_URL }}esb/js/esb_add_system.{{JS_SUFFIX}}"></script>
+<script src="{{ STATIC_URL }}esb/js/buffet_update.{{JS_SUFFIX}}"></script>
+{% endblock %}

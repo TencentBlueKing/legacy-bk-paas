@@ -1,0 +1,71 @@
+{% extends "mainsite/base.html" %}
+{% load i18n %}
+
+{% block header %}
+    <link href='{{ STATIC_URL }}esb/css/md2html.{{CSS_SUFFIX}}' rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+<div class="panel panel-default">
+    <div class="panel-body" style="padding: 0">
+        <div  style="display: table; margin: 0;width: 1200px !important;">
+            <div class="col-md-2 table-cell" style="padding: 0; background: #f9f9f9; border-right: 1px solid #e6e6e6;width: 200px !important; overflow:hidden;">
+                <div class="left-sidebar">
+                    <ul class="nav nav-sidebar left-nav-menus" style="padding-top: 0;">
+                        {% for name, title in pages %}
+                        <li>
+                        <a name="{{name}}" href="{% url 'guide.page' name=name %}">
+                            {% trans title %}
+                        </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <script type="text/javascript" charset="utf-8">
+                    $('ul.left-nav-menus').find('[name="{{ current_page }}"]').parent().addClass('active');
+                </script>
+            </div>
+
+            <div class="col-md-10 table-cell" style="width: 1000px !important;">
+                <div class="document">
+                    <div class="padding-body">
+                        {{ html_part|safe }}
+                    </div>
+                </div>
+                {% if current_page != 'index' %}
+                <div style="padding: 0 28px 30px 28px;">
+                    <hr style="color: #eeeeee; background-color: #eeeeee;height: 2px; margin-bottom: 5px;">
+                    <a href="javascript:void(0)"><span id="pre_name"></span></a>
+                    <a href="javascript:void(0)" class="pull-right"><span id="next_name"></span></a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    <script type="application/javascript" charset="utf-8">
+        $(function(){
+            var pre_html = $('ul.left-nav-menus').find('[name="{{ current_page }}"]').parent().prev().find('a');
+            var next_html = $('ul.left-nav-menus').find('[name="{{ current_page }}"]').parent().next().find('a');
+            var pre_name = pre_html.attr('name');
+            var next_name = next_html.attr('name');
+            var pre_text = pre_html.text();
+            var next_text = next_html.text();
+            if(pre_text){
+                $("#pre_name").text('← '+pre_text);
+            }
+            if(next_text){
+                $('#next_name').text(next_text+' →');
+            }
+            var url = '{% url "guide.page" name='__URL__' %}';
+            var pre_url = url.replace('__URL__', pre_name);
+            var next_url = url.replace('__URL__', next_name);
+            $("#pre_name").parent().attr('href', pre_url);
+            $("#next_name").parent().attr('href', next_url);
+        });
+    </script>
+{% endblock %}

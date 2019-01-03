@@ -1,0 +1,100 @@
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_app.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+        <input type="hidden" value="${app_code}" id="app_code_id">
+        <div class="main_hd">
+            <h4>&nbsp;</h4>
+            <div class="title_tab" id="topTab">
+                <ul class="tab_navs title_tab" data-index="0">
+                    <li data-index="0" class="tab_nav first js_top selected"><a href="${SITE_URL}saas/${app_code}/info/">基本信息</a></li>
+
+                    <li data-index="0" class="tab_nav first js_top "><a href="${SITE_URL}saas/${app_code}/release/record/">发布记录</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="ml50 app-info mt30">
+            <div class="t_b mb10">基本信息</div>
+            <div class="row">
+                <div class="col-sm-4 col-xs-4">
+                    <font class="t_grey">应用ID：</font>${app_info.get('code', '--')}
+                </div>
+                <div class="col-sm-8 col-xs-8">
+                    <font class="t_grey">应用名称：</font>${app_info.get('name', '--') }
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="ml50 app-info">
+            <div class="t_b mb10">访问地址
+            </div>
+            <div class="row">
+                <div class="col-sm-10 col-xs-10">
+                    <font class="t_grey">访问地址：</font> <span id="prod_access_span"></span>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="ml50 app-info">
+            <div class="t_b mb10">应用简介
+            </div>
+            <div class="row">
+                <div class="col-sm-10 col-xs-10">
+                    <div class="introduction">${app_info.get('introduction', '--')}</div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+        <div class="ml50 version-info mt30">
+            <div class="t_b mb10">当前版本信息</div>
+            <div class="row">
+                <div class="col-sm-4 col-xs-4">
+                    <font class="t_grey">部署版本：</font>${app_info.get('version', '--') or '--'}
+                </div>
+                <div class="col-sm-8 col-xs-8">
+                    <font class="t_grey">部署文件：</font>${app_info.get('file_name', '--') or '--'}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 col-xs-4">
+                    <font class="t_grey">文件大小：</font>${app_info.get('file_size', '--') or '--'} (M)
+                </div>
+                <div class="col-sm-8 col-xs-8">
+                    <font class="t_grey">MD5：</font>${app_info.get('md5', '--') or '--'}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-10 col-xs-10">
+                    <font class="t_grey">配置信息：</font><br>
+                    <pre style="max-height:200px;white-space: normal; border:none; border-radius:inherit; background-color: rgba(244, 244, 244, 0.65);">${app_info.get('settings', '--') or '--'}</pre>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+
+        <div class="ml50">
+            <div class="t_b mb10">删除应用</div>
+            <div class="row">
+                <div class="col-sm-10 col-xs-10">
+                    % if app_info.get('state', '') == 1:
+                        <div class="mb5">请在删除前与其他同事提前沟通，确定<a href="###" onclick="REL_MANAGER.saas_app_del(this, '${app_info.get('code', '')}');" app_code="${app_info.get('code', '')}" class="hit saas_app_del"><strong>删除</strong></a>!</div>
+                    % else:
+                        <div class="mb5">只有未部署的应用才能删除，已部署过的应用不能删除！</div>
+                    % endif
+                </div>
+            </div>
+        </div>
+        <hr/>
+
+</%block>
+
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}"></script>
+<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}"></script>
+<script type="text/javascript">
+    $(function(){
+        APP_INFO.get_access_info('${app_code}');
+    })
+</script>

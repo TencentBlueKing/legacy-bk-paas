@@ -1,0 +1,63 @@
+<%inherit file="/base_center.html"/>
+
+<%block name="right_content">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_app.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+    <!-- 右侧内容 start -->
+    <div class="">
+        <div class="app_center">
+            <div class="box-info full">
+                <div class="main-header"><span>S-mart应用</span>
+                    <a class="btn btn-green btn-min-w f_r mr10" href="${SITE_URL}saas/0/release/">上传部署新应用</a>
+                </div>
+                <!--     工具栏 start    -->
+                <div class="data-table-toolbar">
+                    <!--         搜索 start             -->
+                    <div class="row">
+                      <div class="col-md-10" style="padding-left:5px;">
+                        <div id="seacher_input" class="form-inline" style="margin-top:-5px;display: none;">
+                          <input id="search_app" type="text" class="form-control" style="width:250px" placeholder="搜索：按名称、编码" >
+                          <span class="close" id="close_span" style="display:none;position:absolute;left:231px;margin-top:16px;cursor: pointer;background-color:#bbbbbb;border-radius:10px;text-align:center;width:22px;height:22px">×</span>
+                          <select class="form-control"  id="set_hide_offline" style="">
+                            <option value="0" selected>隐藏已下架应用</option>
+                            <option value="1">显示已下架应用</option>
+                          </select>
+                          <button id="j_display_all_app"  class="btn btn-azure btn-min-w" style="margin-top:9px;height:34px">搜索</button>
+                        </div>
+                      </div>
+
+                    <a class="f_r" href="http://bk.tencent.com/s-mart/?from=bk_community_devcenter" target="_blank" style="font-size: 13px;margin-top:-10px;">获取更多应用</a>
+                    </div>
+                    <!--     搜索 end    -->
+                </div>
+                <!--     工具栏 end    -->
+                <div class="table-responsive">
+                  <!--     app table -->
+                  <div id="table_app">
+                  </div>
+
+                  <!--     app 总数展示    -->
+                  <div class="col-md-2" style="padding-left:0px;">
+                    <div id="app_num_div" class="form-inline mt10" style="display:none;">共 <strong style="color:red;" id="app_num"></strong> 个应用</div>
+                  </div>
+
+                  <!--     分页 开始    -->
+                  <div class="f_r form-inline mt10" id="page">
+                    <div id="pagination_id" class="btn-group"></div>
+                  </div>
+                  <!--    分页 结束      -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 右侧内容 end -->
+</%block>
+
+<!--  分页的样式文件    -->
+<script src="${STATIC_URL}js/pagination.${JS_SUFFIX}"></script>
+<script src="${STATIC_URL}js/paas_saas.${JS_SUFFIX}"></script>
+<script>
+$(function(){
+   // 查询app列表
+  $("#j_display_all_app").click();
+});
+</script>

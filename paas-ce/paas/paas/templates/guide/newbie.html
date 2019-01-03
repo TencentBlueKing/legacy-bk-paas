@@ -1,0 +1,254 @@
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+    <link href="${STATIC_URL}css/guide_newbie.${CSS_SUFFIX}" rel="stylesheet">
+    <%
+      import settings
+      img_dir = 'dev_guide_qcloud'
+    %>
+    <!-- 右侧内容 start -->
+    <div class="col_main">
+        <!-- 根据开发者中心内容 ，嵌入时可拷贝col_main 中的代码到对应开发者中心的节点内 -->
+        <div class="box-info full">
+            <div class="main-header"><span>新手指南</span></div>
+            <div class="main-nav">
+                <div class="king-pearls row">
+                    <div class="king-pearl">
+                        <a data-index="0" class="anchor-link" href="#step1">
+                            <span class="king-pearl-number">1</span>
+                            <span class="king-pearl-title">安装环境</span>
+                        </a>
+                    </div>
+                    <div class="king-pearl">
+                        <a data-index="1" class="anchor-link" href="#step2">
+                            <span class="king-pearl-number">2</span>
+                            <span class="king-pearl-title">创建应用</span>
+                        </a>
+                    </div>
+                    <div class="king-pearl">
+                        <a data-index="2" class="anchor-link" href="#step3">
+                            <span class="king-pearl-number">3</span>
+                            <span class="king-pearl-title">配置修改</span>
+                        </a>
+                    </div>
+                    <div class="king-pearl">
+                        <a data-index="3" class="anchor-link" href="#step4">
+                            <span class="king-pearl-number">4</span>
+                            <span class="king-pearl-title">开发项目</span>
+                        </a>
+                    </div>
+                    <div class="king-pearl">
+                        <a data-index="4" class="anchor-link" href="#step5">
+                            <span class="king-pearl-number">5</span>
+                            <span class="king-pearl-title">部署项目</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <ul class="king-timeline">
+				<li class="time-label open">
+                    <a name="step1"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">1</span>本地开发环境安装 <i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item">
+                        <div class="king-timeline-body">
+                            <ol class="guide-list">
+                                <li>本地环境搭建镜像，<a href="http://bkopen-10032816.file.myqcloud.com/paas/bk-django1.8-u2.box" target="_blank">点击下载</a> ;</li>
+                                <li>使用文档，<a href="http://bkopen-10032816.file.myqcloud.com/paas/蓝鲸智云统一开发环境搭建指南.docx" target="_blank">点击下载</a> ;</li>
+                                <br>
+                                <strong>注意：应用测试、正式部署时会自动安装运行环境，并部署应用</strong>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+                <li class="time-label open">
+                    <a name="step2"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">2</span>通过以下几个步骤来创建您的应用 <i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item">
+                        <div class="king-timeline-body">
+                            <ol class="guide-list">
+                                <li>点击左侧导航中的“应用创建”;</li>
+                                <li>填写应用基本注册信息（应用 ID、代码仓库信息等）;</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+                <li class="time-label open">
+                    <a name="step3"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">3</span>配置修改 <i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item">
+                        <div class="king-timeline-body">
+                            <strong>示例1：<a href="${SITE_URL}media/framework.tar.gz">点击下载应用开发框架代码 </a> ，将框架代码放到自己的代码仓库中，并按以下提示修改：</strong>
+                            <ol class="guide-list">
+                                <li>conf/default.py 文件：APP_ID 和 APP_TOKEN
+                                    <span>（蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中可以查看到这两个值的信息）;</span>
+                                </li>
+                                <li>conf/default.py 文件：BK_PAAS_HOST的值设置为: <code>${paas_host}</code>;
+                                </li>
+                                <li>conf/settings_development.py 文件：DATABASES（请创建本地开发数据库，并修改配置信息）;</li>
+                                <li>conf/settings_testing.py 文件：DATABASES（请创建测试环境数据库，并修改配置信息）;</li>
+                                <li>conf/settings_production.py 文件：DATABASES（请创建正式环境数据库，并修改配置信息）。</li>
+                                <p class="mt5"><strong><code>注意：</code>测试环境 和 正式环境 的数据库需要对 AppServer 授权</strong>
+                                (
+                                % if active_server_ips:
+                                    <code>${active_server_ips}</code>
+                                % else:
+                                    <a href="${SITE_URL}engine/server/" target="_blank">添加并激活 AppServer</a>
+                                % endif
+                                )
+                                </p>
+                                <li class="mt10">若需要使用 celery，请修改以下配置：(<a href="http://bkopen-10032816.file.myqcloud.com/paas/celery_packages.zip">点击下载 celery 开发指引</a>)</li>
+                                <span class="ml40">conf/default.py 文件：IS_USE_CELERY的值设置为: <code>True</code></span><br>
+                                <span class="ml40">conf/default.py 文件：BROKER_URL_DEV（请创建本地开发的 celery消息队列，并修改配置信息，推荐使用 RabbitMQ）</span><br>
+                                <span class="ml40">conf/default.py 文件：CELERY_IMPORTS（添加celery任务模块）</span>
+                            </ol>
+                            <br>
+
+                            <strong>示例2：非蓝鲸智云应用框架开发的应用，请检查以下配置信息(<a href="${STATIC_URL}assets/bksite.zip">点击下载示例代码</a>) ：</strong>
+
+                            <ol class="guide-list">
+                                <li>
+                                    settings.py文件中添加 APP_ID 和 APP_TOKEN
+                                    <span>（蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中可以查看到这两个值的信息);</span>
+                                </li>
+                                <li>
+                                    在工程目录下添加 requirements.txt文件，并在 requirements.txt 中添加包依赖信息;
+                                </li>
+                                <li>
+                                    请修改 mysite/settings.py 中的 DATABASES信息（请创建数据库，并修改配置信息）;
+                                </li>
+                                <li>
+                                    请确认 uwsgi.py 文件在根目录下，也就是跟 manage.py 同级目录下。
+                                </li>
+                            </ol>
+
+                        </div>
+                    </div>
+                </li>
+
+                <li class="time-label">
+                    <a name="step4"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">4</span>开发项目 <i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item" style="overflow: hidden; display: none;">
+                        <div class="king-timeline-body">
+                            <ol class="guide-list">
+                            <strong id='step4.2'>Django1.8数据库操作</strong>
+
+                                    <div id="django18_db">
+                                        <p>蓝鲸智云应用使用Django1.8自带的Migration来管理数据库。Migration是django自带的同步models和数据库的数据迁移工具，Migration能够检测对models的更改并同步到数据库。</p>
+                                        <p>Migration的使用（<a href="###" id="show_migrate" class="show_simple_18">查看详细使用</a>）方法如下:</p>
+                                        <div id="simple_migrate" style="display: block;">
+                                            <ol>
+                                                <li>执行 manage.py migrate;</li>
+                                                <li>执行 manage.py startapp yourappname、添加yourappname到config/default.py文件"INSTALLED_APPS_CUSTOM"中;</li>
+                                                <li>在django的models.py中建立数据库模型后，执行manage.py makemigrations yourappname;</li>
+                                                <li>执行manage.py migrate yourappname。</li>
+                                            </ol>
+                                            <p>注意： 必须按上面的步骤顺序执行，在执行第（1）步时最好不要加入自己的app，除非您保证自己的app已经有migration的initial文件。</p>
+                                        </div>
+                                        <div id="detail_migrate" style="display: none;">
+                                            <ol>
+                                                <li>执行 manage.py migrate（作用是在数据库中创建django自带的表，包括django_migrations的表，用来存放数据库的变更历史）;</li>
+                                                <li>执行 manage.py startapp yourappname、添加yourappname到config/settings_custom.py文件"INSTALLED_APPS_CUSTOM"中;</li>
+                                                <li>在django的models.py中建立数据库模型后，执行manage.py makemigrations yourappname;</li>
+                                                <li>步骤（3）执行成功后再执行manage.py migrate yourappname ，这时候数据库中已经建立了您定义的表;</li>
+                                                <li>在工程中新增app，只需再次执行2—4的步骤即可; </li>
+                                                <li>更改models.py的内容，只需执行manage.py makemigrations yourappname和 manage.py migrate yourappname即可。</li>
+                                            </ol>
+                                            <p>注意： 必须按上面的步骤顺序执行，在执行第（1）步时最好不要加入自己的app，除非您保证自己的app已经有migration的initial文件。</p>
+                                        </div>
+                                    </div>
+                            </ol>
+                            <ol class="guide-list mt10">
+                                <strong id='step4.3'>本地启动项目</strong>
+                                <div>
+                                    <ol>
+                                        <li>本地配置host：127.0.0.1 dev.xxx.xxx（注意：必须与PaaS平台主站在同一个一级域名）;</li>
+                                        <li>执行python manage.py runserver 127.0.0.1:8000 启动项目;</li>
+                                        <li>访问http://dev.xxx.xxx:8000/ 即可进行本地开发调试。</li>
+                                    </ol>
+                                </div>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="time-label">
+                    <a name="step5"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">5</span>部署项目 <i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item" style="overflow: hidden; display: none;">
+                        <div class="king-timeline-body">
+                            <p>操作入口：“我的应用 -> 点击应用ID -> 应用部署” </p>
+                            <ol class="guide-list">
+                                <li>测试部署：将应用代码在测试环境上进行部署，部署成功后就可以在测试环境中使用您的应用。</li>
+                                <li>正式部署：将应用代码在正式环境上进行部署，部署成功后就可以在正式环境中使用您的应用。</li>
+                                <li>下架操作：系统将应用代码从您选择的环境上撤销部署，届时用户将无法访问该应用，但是该应用的数据库依然保留。</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <i class="bk-icon icon-clock king-bg-gray"></i>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 右侧内容 end -->
+</%block>
+
+<script type="text/javascript">
+$(function() {
+    // 锚点跳转并打开对应步骤
+    var  anchor_links = $('.anchor-link'),
+         time_label = $('.time-label');
+
+    anchor_links.click(function() {
+        var index = $(this).attr('data-index');
+        if ($(time_label[index]).hasClass('open')) {
+            return;
+        }else{
+            $(time_label[index]).addClass('open');
+            $(time_label[index]).children(".king-timeline-item").slideDown(350);
+        };
+    });
+
+    $(".king-timeline-header").click(function(e) {
+        e.preventDefault();
+        var time_li = $(this).parent("li");
+        var time_cont = $(this).next(".king-timeline-item");
+
+        if (time_li.hasClass("open")) {
+            time_cont.slideUp(350);
+            time_li.removeClass("open");
+        } else {
+            time_cont.slideDown(350);
+            time_li.addClass("open");
+        }
+    });
+    $("#show_south").click(function(){
+            if($("#show_south").hasClass("show_simple")){
+                $("#show_south").removeClass("show_simple");
+                $("#show_south").html("查看简单使用");
+                $("#simple_south").hide();
+                $("#detail_south").show();
+            }else{
+                $("#show_south").addClass("show_simple");
+                $("#show_south").html("查看详细使用");
+                $("#detail_south").hide();
+                $("#simple_south").show();
+            }
+        });
+    $("#show_migrate").click(function(){
+            if($("#show_migrate").hasClass("show_simple_18")){
+                $("#show_migrate").removeClass("show_simple_18");
+                $("#show_migrate").html("查看简单使用");
+                $("#simple_migrate").hide();
+                $("#detail_migrate").show();
+            }else{
+                $("#show_migrate").addClass("show_simple_18");
+                $("#show_migrate").html("查看详细使用");
+                $("#detail_migrate").hide();
+                $("#simple_migrate").show();
+            }
+        });
+});
+</script>
