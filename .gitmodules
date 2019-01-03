@@ -1,0 +1,3 @@
+[submodule "saas/bk-cicdkit"]
+	path = saas/bk-cicdkit
+	url = https://github.com/Tencent/bk-cicdkit
