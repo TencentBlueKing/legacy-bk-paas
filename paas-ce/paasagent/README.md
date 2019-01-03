@@ -2,7 +2,7 @@
 
 ## 简介
 
-paasagent目录是蓝鲸智云PaaS平台中应用引擎(appengine)对应的agent模块源码目录。
+paasagent目录是蓝鲸智云PaaS平台中应用引擎(appengine)对应的agent模块源码目录
 
 主要作用是:
 
