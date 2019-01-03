@@ -60,9 +60,11 @@ free-operation of SaaS applications
 
 <img src="docs/resource/img/bk_qq_group.png" width="250" hegiht="250" align=center />
 
-## Contribute
+## Contributing
 
 For bk-PaaS branch management, issues, and pr specifications, read the [CONTRIBUTING(In Chinese)](docs/CONTRIBUTING.md)
+
+If you are interested in contributing, check out the [CONTRIBUTING.md], also join our [Tencent OpenSource Plan](https://opensource.tencent.com/contribution).
 
 
 ## FAQ
@@ -71,4 +73,4 @@ For bk-PaaS branch management, issues, and pr specifications, read the [CONTRIBU
 
 ## License
 
-bk-PaaS is based on the MIT protocol. Please refer to [LICENSE](LICENSE)
+bk-PaaS is based on the MIT protocol. Please refer to [LICENSE](LICENSE.txt)
