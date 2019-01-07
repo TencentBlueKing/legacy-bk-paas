@@ -1,0 +1,11 @@
+language: python
+python:
+  - '2.7'
+
+install:
+  - pip install mock pytz flake8 coverage
+  - pip install -r paas-ce/paas/paas/requirements.txt
+
+script:
+  - cd paas-ce/paas
+  - flake8 --config=.flake8 .
