@@ -101,7 +101,7 @@ class SendMpWeixin(Component, SetupConfMixin):
             if is_message_base64:
                 try:
                     message = base64.b64decode(message)
-                except:
+                except Exception:
                     pass
             return message
 

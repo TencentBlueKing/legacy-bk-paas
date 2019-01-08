@@ -49,7 +49,7 @@ class SMTPClient(object):
             smtp = self.get_smtp_client()
             smtp.sendmail(mail_sender, all_receiver, msg.as_string())
             smtp.quit()
-        except:
+        except Exception:
             logger.exception('%s send mail exception, server: %s:%s',
                              bk_error_codes.REQUEST_SMTP_ERROR.code, self.smtp_host, self.smtp_port)
             return {'result': False, 'message': 'Failed to send mail'}

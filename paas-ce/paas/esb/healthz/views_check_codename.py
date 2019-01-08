@@ -47,7 +47,7 @@ def check_custom_codename(request):
     if component_codename:
         try:
             prefix, sys_name, component_name = component_codename.split('.')
-        except:
+        except Exception:
             return HttpResponse('codename "%s" does not math the rule generic.xxx.xxx, please check'
                                 % component_codename)
         if component_codename in component_manager.get_registed_components():

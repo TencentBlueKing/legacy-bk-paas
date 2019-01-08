@@ -118,7 +118,7 @@ class RateLimiter(BaseRateLimiter):
         try:
             rv_last_ts = float(self.redisdb.get(rk_last_ts))
             rv_tokens = float(self.redisdb.get(rk_tokens))
-        except:
+        except Exception:
             # Inintilize values if not exists
             rv_last_ts = time.time()
             rv_tokens = rule.tokens

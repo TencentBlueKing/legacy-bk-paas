@@ -17,7 +17,7 @@ from esb.management.utils import constants
 from .channel_tools import ChannelClient
 try:
     from esb.management.utils import ee_constants as x_constants
-except:
+except Exception:
     from esb.management.utils import ec_constants as x_constants
 
 import logging
@@ -136,7 +136,7 @@ class ConfClient(object):
         conf_path = os.path.join(CUSTOM_APIS_REL_PATH, 'conf.py')
         try:
             return import_module(fpath_to_module(conf_path))
-        except:
+        except Exception:
             return None
 
     def _get_channels_by_config(self, channels_config, is_default=False):

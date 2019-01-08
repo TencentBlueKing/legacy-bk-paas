@@ -238,7 +238,7 @@ class BasicHttpClient(object):
         if response_type == 'json':
             try:
                 return json.loads(resp_text)
-            except:
+            except Exception:
                 raise ValueError('interface response is not the JSON format')
 
         return resp_text
@@ -259,7 +259,7 @@ class HttpClient(BasicHttpClient):
     def get_default_headers(self):
         try:
             request_headers = self.component.request.headers
-        except:
+        except Exception:
             return {}
 
         if not isinstance(request_headers, dict):
@@ -439,7 +439,7 @@ class RequestHelperClient(BasicHttpClient):
                 else:
                     try:
                         resp_text = json.dumps(resp)
-                    except:
+                    except Exception:
                         resp_text = str(resp)
 
                 result = resp
@@ -452,7 +452,7 @@ class RequestHelperClient(BasicHttpClient):
         if not isinstance(request_params, basestring):
             try:
                 request_params = json.dumps(request_params)
-            except:
+            except Exception:
                 request_params = str(request_params)
         datetime_end = timezone.now()
         msecs_cost = (datetime_end - datetime_start).total_seconds() * 1000

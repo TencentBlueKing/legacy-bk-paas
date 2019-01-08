@@ -18,7 +18,7 @@ class WEIXINClient(object):
         result = self.http_client.request(method, host=configs.host, path=path, params=params, data=data)
         try:
             err_code = result.get('errcode')
-        except:
+        except Exception:
             return {
                 'result': False,
                 'message': 'An exception occurred while requesting business WeChat service, '

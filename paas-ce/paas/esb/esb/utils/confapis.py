@@ -145,7 +145,7 @@ class ConfapisManager(object):
             for _config in config:
                 try:
                     _config = ConfigForm.clean(_config)
-                except:
+                except Exception:
                     logger.exception('Confapis clean data error. config: %s', json.dumps(_config))
                     continue
                 system_config.append((_config['path'], _config['config']))
@@ -155,7 +155,7 @@ class ConfapisManager(object):
         """Get and Check yaml content"""
         try:
             config = load_yaml(config_path) or []
-        except:
+        except Exception:
             logger.exception('Load confapis yaml config fail. config_path: %s', config_path)
             return []
         if not isinstance(config, (tuple, list)):
@@ -168,7 +168,7 @@ class ConfapisManager(object):
         if os.path.isfile(fpath):
             try:
                 return read_file(fpath)
-            except:
+            except Exception:
                 logger.exception('Read file error. fpath=%s', fpath)
         return ''
 

@@ -25,7 +25,7 @@ from django.conf.global_settings import *  # noqa
 try:
     import pymysql
     pymysql.install_as_MySQLdb()
-except:
+except Exception:
     pass
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

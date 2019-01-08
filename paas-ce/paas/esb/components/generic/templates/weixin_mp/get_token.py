@@ -49,7 +49,7 @@ class GetToken(Component, SetupConfMixin):
         # 获取现有的token信息
         try:
             wx_access_token = WxmpAccessToken.objects.get(wx_app_id=wx_app_id)
-        except:
+        except Exception:
             wx_access_token = None
 
         if not wx_access_token or wx_access_token.has_expired() or need_new_token:

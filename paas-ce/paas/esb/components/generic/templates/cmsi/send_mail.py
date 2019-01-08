@@ -101,7 +101,7 @@ class SendMail(Component, SetupConfMixin):
             if data['is_content_base64']:
                 try:
                     data['content'] = base64.b64decode(data['content'])
-                except:
+                except Exception:
                     pass
             return data
 

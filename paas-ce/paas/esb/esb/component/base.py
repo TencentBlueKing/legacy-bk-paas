@@ -382,7 +382,7 @@ class ComponentsManager(object):
                     try:
                         module = import_module(fpath_to_module(filename))
                         self.register_by_module(module, config=config)
-                    except:
+                    except Exception:
                         logger.exception('%s Error when register file %s, skip',
                                          bk_error_codes.COMPONENT_REGISTER_ERROR.code, filename)
 
@@ -412,7 +412,7 @@ class ComponentsManager(object):
                         obj.__module__ == module.__name__:
                     cls_comp = obj
                     return cls_comp
-            except:
+            except Exception:
                 pass
         return
 

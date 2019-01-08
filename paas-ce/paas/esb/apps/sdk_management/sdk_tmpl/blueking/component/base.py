@@ -53,7 +53,7 @@ class ComponentAPI(object):
             if e.resp is not None:
                 try:
                     return e.resp.json()
-                except:
+                except Exception:
                     pass
             return {'result': False, 'message': e.error_message, 'data': None}
 
@@ -104,6 +104,6 @@ class ComponentAPI(object):
             if not json_resp and self.default_return_value is not None:
                 return self.default_return_value
             return json_resp
-        except:
+        except Exception:
             raise ComponentAPIException(
                 self, 'Return data format is incorrect, which shall be unified as json', resp=resp)

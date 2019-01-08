@@ -157,7 +157,7 @@ class SignatureValidator(BaseValidator):
             raise ValidationError('Parameter bk_nonce does not exist')
         try:
             nonce = int(bk_nonce)
-        except:
+        except Exception:
             raise ValidationError('Parameter bk_nonce is illegal')
         if nonce <= 0:
             raise ValidationError('Parameter bk_nonce is illegal, it must be a positive integer')
@@ -171,7 +171,7 @@ class SignatureValidator(BaseValidator):
             raise ValidationError('Parameter bk_timestamp does not exist')
         try:
             timestamp = int(bk_timestamp)
-        except:
+        except Exception:
             raise ValidationError('Parameter bk_timestamp is illegal, due to non-time format')
 
         # 有效期为300s

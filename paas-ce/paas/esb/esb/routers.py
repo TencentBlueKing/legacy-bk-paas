@@ -23,7 +23,7 @@ from esb.component.buffet import get_buffet_comp_manager
 # 把当前目录切换到项目目录，因为后面用到的路径都是相对路径
 try:
     os.chdir(settings.BASE_DIR)
-except:
+except Exception:
     pass
 
 
@@ -64,7 +64,7 @@ def router_view(channel_type, request, path):
     # 超时时间处理
     try:
         timeout_time = timeout_handler(esb_channel, comp_cls)
-    except:
+    except Exception:
         timeout_time = settings.REQUEST_TIMEOUT_SECS
     # 针对本次请求存储timeout和系统名
     # 系统名用于访问频率控制
@@ -150,7 +150,7 @@ def buffet_component_view(request, path):
     # 针对本次请求存储
     try:
         timeout_time = timeout_handler_for_buffet(buffet_comp_obj)
-    except:
+    except Exception:
         timeout_time = settings.REQUEST_TIMEOUT_SECS
     request.g.timeout = timeout_time
 

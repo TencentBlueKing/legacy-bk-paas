@@ -28,7 +28,7 @@ class GetToken(Component, SetupConfMixin):
     def get_wx_config(self):
         try:
             send_weixin_channel = ESBChannel.objects.get(path='/cmsi/send_weixin/')
-        except:
+        except Exception:
             raise CommonAPIError(
                 'Channel with path [/cmsi/send_weixin/] does not exist, can not get WeChat configuration')
         return dict(json.loads(send_weixin_channel.comp_conf))

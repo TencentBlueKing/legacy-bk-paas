@@ -79,7 +79,7 @@ class SendSms(Component, SetupConfMixin):
             if is_content_base64:
                 try:
                     content = base64.b64decode(content)
-                except:
+                except Exception:
                     pass
             return content
 

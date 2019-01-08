@@ -182,7 +182,7 @@ class BaseChannel(object):
         except RequestBlockedException, e:
             response = error_codes.REQUEST_BLOCKED.format_prompt(e.message).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except:
+        except Exception:
             logger.exception('Request exception, request_id=%s, path=%s' % (request.g.request_id, request.path))
             response = CommonAPIError('Component error, please contact the component developer to handle it.')\
                 .code.as_dict()
@@ -300,13 +300,13 @@ class ChannelManager(object):
                     comp_conf = json.loads(channel.comp_conf) if channel.comp_conf else None
                     if isinstance(comp_conf, (tuple, list)):
                         comp_conf = dict(comp_conf)
-                except:
+                except Exception:
                     logger.error('%s channel comp_conf is not a json string. channel path=%s',
                                  bk_error_codes.COMPONENT_COMP_CONF_ERROR.code, _path)
                     comp_conf = None
                 try:
                     channel_conf = channel.channel_conf
-                except:
+                except Exception:
                     logger.error('get channel channel_conf error. channel path=%s', _path)
                     channel_conf = None
 

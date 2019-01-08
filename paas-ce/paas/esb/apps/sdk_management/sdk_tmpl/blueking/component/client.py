@@ -22,7 +22,7 @@ from .utils import get_signature
 # shutdown urllib3's warning
 try:
     requests.packages.urllib3.disable_warnings()
-except:
+except Exception:
     pass
 
 
@@ -66,7 +66,7 @@ class BaseComponentClient(object):
         try:
             from django.utils import translation
             return translation.get_language()
-        except:
+        except Exception:
             return None
 
     def set_bk_api_ver(self, bk_api_ver):

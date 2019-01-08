@@ -196,7 +196,7 @@ def get_client_ip(request):
         client_ip = request.META.get('REMOTE_ADDR', '')
     try:
         client_ip = re.findall(r'[\d.]{7,15}', client_ip)
-    except:
+    except Exception:
         logger.exception('request: %s' % request)
         client_ip = ''
     else:
@@ -226,7 +226,7 @@ def get_request_params(request):
         if request.body and request.body.strip().startswith('{'):
             try:
                 request_params = json.loads(request.body)
-            except:
+            except Exception:
                 logger.exception('request.body should be a json: %s', request.body)
                 raise error_codes.COMMON_ERROR.format_prompt(
                     'Request JSON string is wrong in format, which cannot be analyzed.', replace=True)

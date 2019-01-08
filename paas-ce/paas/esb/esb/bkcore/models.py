@@ -111,7 +111,7 @@ class ESBChannel(models.Model):
     def extra_info_json(self):
         try:
             return json.loads(self.extra_info)
-        except:
+        except Exception:
             return {}
 
 

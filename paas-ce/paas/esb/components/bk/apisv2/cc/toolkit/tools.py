@@ -57,7 +57,7 @@ class CCClient(object):
     def format_response(self, response):
         try:
             response = json.loads(response)
-        except:
+        except Exception:
             return {
                 'result': False,
                 'code': 1306000,
@@ -65,7 +65,7 @@ class CCClient(object):
             }
         try:
             bk_error_code = response['bk_error_code']
-        except:
+        except Exception:
             logger.exception('response: %s', response)
             raise CommonAPIError(
                 'An exception occurred while requesting CC interface, '

@@ -42,7 +42,7 @@ class CCClient(object):
         response = self.request('POST', host, path, data=data, headers=headers, **kwargs)
         try:
             code = str(response['code'])
-        except:
+        except Exception:
             logger.exception('response: %s', response)
             raise CommonAPIError(
                 'An exception occurred while requesting CC interface, '

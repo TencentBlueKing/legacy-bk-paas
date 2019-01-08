@@ -33,7 +33,7 @@ class SopsComponent(ConfComponent):
         )
         try:
             response['code'] = 0 if response['result'] else 1306000
-        except:
+        except Exception:
             raise error_codes.THIRD_PARTY_RESULT_ERROR.format_prompt(args=configs.SYSTEM_NAME)
 
         self.response.payload = response

@@ -164,7 +164,7 @@ class ListField(Field):
             result = json.loads(value)
             if isinstance(result, list):
                 return result
-        except:
+        except Exception:
             pass
 
         value = self.to_python_unicode(value).strip()
