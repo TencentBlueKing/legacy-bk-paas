@@ -52,7 +52,6 @@
 
 - [故障自愈](https://github.com/Tencent/bk-fta-solutions)
 - [标准运维](https://github.com/Tencent/bk-sops)
-- [CICDkit](https://github.com/Tencent/bk-cicdkit)
 
 ## Support
 
