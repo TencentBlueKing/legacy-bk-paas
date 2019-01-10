@@ -48,7 +48,6 @@ free-operation of SaaS applications
 
 - [Fault Auto-recovery](https://github.com/Tencent/bk-fta-solutions)
 - [Standard OPS](https://github.com/Tencent/bk-sops)
-- [CICDkit](https://github.com/Tencent/bk-cicdkit)
 
 ## Support
 
