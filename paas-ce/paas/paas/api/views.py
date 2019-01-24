@@ -93,7 +93,8 @@ class AppInfoV2APIView(View):
         if app_codes:
             app_code_list = app_codes.split(';')
             query = query.filter(code__in=app_code_list)
-        extra_fields_set = set(fields.split(';')) & set(['introduction', 'creator', 'developer']) if fields else set()
+        support_fields = ['introduction', 'creator', 'developer', 'tag']
+        extra_fields_set = set(fields.split(';')) & set(support_fields) if fields else set()
 
         # 按照创建时间逆排序
         query = query.order_by('-created_date')
@@ -109,6 +110,12 @@ class AppInfoV2APIView(View):
                 item.update({'creator': app.creater})
             if 'developer' in extra_fields_set:
                 item.update({'developer': app.developer_str})
+            if 'tag' in extra_fields_set:
+                if app.tags:
+                    item.update({'tag': app.tags.to_dict()})
+                else:
+                    item.update({'tag': {}})
+
             app_list.append(item)
 
         return JsonResponse({

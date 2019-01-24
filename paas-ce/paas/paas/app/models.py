@@ -48,6 +48,12 @@ class AppTags(models.Model):
         verbose_name = "应用分类信息"
         verbose_name_plural = "应用分类信息"
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "code": self.code,
+        }
+
 
 class App(models.Model):
     """
