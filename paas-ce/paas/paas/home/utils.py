@@ -13,7 +13,7 @@ import json
 
 from django.conf import settings
 
-from app.models import App
+from app.models import App, DesktopSettings
 from home.constants import SYS_APP_INFO, LinkTypeEnum
 from home.models import UsefulLinks, UserSettings
 
@@ -60,6 +60,9 @@ def get_user_apps(username):
     # 判断是否有其他已经上线的应用
     new_online_app_info_list = App.objects.gen_user_new_online_app_info_list_for_dashboard(app_code_list)
     user_app_list.extend(new_online_app_info_list)
+
+    # check the app desktopsettings, is_display
+    user_app_list = [i for i in user_app_list if DesktopSettings.objects.is_app_display(i['code'])]
 
     # 初始化时，判断 SaaS 应用是否全部在其中
     all_saas_link = UsefulLinks.objects.filter(is_active=True, link_type=LinkTypeEnum.SAAS.value)

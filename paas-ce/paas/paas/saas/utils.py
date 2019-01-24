@@ -18,8 +18,8 @@ from django.db import connections, transaction
 from django.shortcuts import HttpResponse
 from django.utils.html import escape
 
-from app.constants import AppStateEnum
-from app.models import App, SecureInfo
+from app.constants import AppStateEnum, DESKTOP_DEFAULT_APP_IS_DISPLAY
+from app.models import App, SecureInfo, DesktopSettings
 from common.constants import LogoImgRelatedDirEnum
 from common.log import logger
 from components.engine import register_app
@@ -323,6 +323,13 @@ def save_app_info(code, name, is_create=True, **app_info):
         # 数据库名称修改为：应用code
         app_sec_info.db_name = code
         app_sec_info.save()
+
+        # app desktop info
+        desktop = app_info.get("desktop") or {}
+        app_desktop_info, _ = DesktopSettings.objects.get_or_create(app_code=code)
+        app_desktop_info.is_display = desktop.get("is_display", DESKTOP_DEFAULT_APP_IS_DISPLAY)
+        app_desktop_info.save()
+
     return True, '', app
 
 
