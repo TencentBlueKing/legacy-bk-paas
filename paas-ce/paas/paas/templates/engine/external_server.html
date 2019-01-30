@@ -77,24 +77,6 @@
         <p>只能添加一台RabbitMQ服务 </p>
         <p>只有管理员可以管理第三方服务信息 </p>
         <hr>
-        <div>第三方服务信息添加后，还需要在服务器上部署 RabbitMQ，RabbitMQ部署步骤如下（RabbitMQ软件包在蓝鲸智云PaaS项目的“extras_V*.tar.gz”目录中）：<br>
-          <span class="ml20">1.解压软件包 <code>tar zxvf extras_V*.tar.gz</code></span><br>
-          <span class="ml20">2.进入rabbitmq目录，执行install.sh安装脚本，执行时，请设置rabbitmq的管理员的用户名和密码（<code>用户名和密码请与页面上填写的保持一致</code>）</span> <br>
-          <pre class="ml20">
-$ cd extras/rabbitmq
-# 安装rabbitmq(涉及到erl的安装，时间较久)
-$ ./install.sh -u 管理员账户 -p 管理员密码
-# 默认安装到了/data/paas/service/rabbitmq下面
-# 检测是否启动成功
-# 查看mq服务状态
-$ /data/paas/service/rabbitmq/sbin/rabbitmqctl status
-# 查看web api接口服务是否启动
-$ lsof -i:15672
-# 查看mq服务是否启动
-$ lsof -i:5672</pre>
-           <span class="ml20">3. 点击页面上的激活按钮(<span aria-hidden="true" class="glyphicon glyphicon-saved"></span>)激活服务器 <br>
-        </div>
-        <hr>
     </div>
   </div>
 </div>

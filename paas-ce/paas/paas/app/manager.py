@@ -12,7 +12,7 @@ from __future__ import unicode_literals
 from django.db.models import Q
 from django.db import models
 
-from app.constants import AppStateEnum
+from app.constants import AppStateEnum, DESKTOP_DEFAULT_APP_IS_DISPLAY
 
 
 class AppManager(models.Manager):
@@ -103,3 +103,14 @@ class SecureInfoManager(models.Manager):
         if not info:
             return False
         return True
+
+
+class DesktopSettingsManager(models.Manager):
+    def is_app_display(self, app_code):
+        # if is useful links
+        if app_code.startswith("_"):
+            return True
+
+        if not self.filter(app_code=app_code).exists():
+            return DESKTOP_DEFAULT_APP_IS_DISPLAY
+        return self.get(app_code=app_code).is_display
