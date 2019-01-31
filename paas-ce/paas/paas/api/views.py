@@ -25,9 +25,9 @@ from api.constants import ApiErrorCodeEnumV2
 from app.models import App
 from home.models import UsefulLinks
 from home.constants import LinkTypeEnum
-from api.forms import (LightAppCreationForm, LightAppEditionForm,
-                       LightAppChangeBaseInfoForm, LightAppLogoModifiedForm)
-from api.utils import generate_file_by_base64
+from api.forms import (LightAppCreateForm, LightAppEditForm,
+                       LightAppChangeBaseInfoForm, LightAppLogoModifyForm)
+from api.utils import trans_b64_to_content_file
 
 
 class AppInfoAPIView(View):
@@ -129,34 +129,28 @@ class AppInfoV2APIView(View):
 
 
 class LightAppView(View):
+    action = ""
     request_body_params = {}
 
     @method_decorator(csrf_exempt)
     @method_decorator(login_exempt)
     @method_decorator(esb_required_v2)
     def dispatch(self, request, *args, **kwargs):
-        handler_map = {
-            "create_app": "post",
-            "edit_app": "put",
-            "del_app": "delete",
-            "modify_app_logo": "put_logo",
-        }
         if request.method.lower() in self.http_method_names:
-            handler_path = request.path.split('/')[-2]
-            self.set_body_params(request, *args, **kwargs)
-            handler = getattr(self, handler_map.get(handler_path), self.http_method_not_allowed)
+            self.request_body_params = self._get_body_params(request)
+            handler = getattr(self, self.action, self.http_method_not_allowed)
         else:
             handler = self.http_method_not_allowed
         return handler(request, *args, **kwargs)
 
-    def set_body_params(self, request, *args, **kwargs):
+    def _get_body_params(self, request):
         try:
-            self.request_body_params = json.loads(request.body) if request.body else {}
+            return json.loads(request.body) if request.body else {}
         except Exception:
-            self.request_body_params = {}
+            return {}
 
     def post(self, request, *args, **kwargs):
-        form = LightAppCreationForm(self.request_body_params)
+        form = LightAppCreateForm(self.request_body_params)
         if not form.is_valid():
             message = first_error_message(form)
             return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
@@ -175,7 +169,7 @@ class LightAppView(View):
         return ApiV2OKJsonResponse("创建轻应用成功", data=data)
 
     def put(self, request, *args, **kwargs):
-        form = LightAppEditionForm(self.request_body_params)
+        form = LightAppEditForm(self.request_body_params)
         if not form.is_valid():
             message = first_error_message(form)
             return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
@@ -192,7 +186,7 @@ class LightAppView(View):
         return ApiV2OKJsonResponse("app 修改成功", data={})
 
     def put_logo(self, request, *args, **kwargs):
-        form = LightAppLogoModifiedForm(self.request_body_params)
+        form = LightAppLogoModifyForm(self.request_body_params)
         if not form.is_valid():
             message = first_error_message(form)
             return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
@@ -200,7 +194,7 @@ class LightAppView(View):
         is_ok, link = UsefulLinks.objects.is_useful_link(form.cleaned_data["bk_light_app_code"])
 
         try:
-            link.logo = generate_file_by_base64(form.cleaned_data["logo"])
+            link.logo = trans_b64_to_content_file(form.cleaned_data["logo"])
             link.save()
         except Exception as e:
             # 保存logo时出错

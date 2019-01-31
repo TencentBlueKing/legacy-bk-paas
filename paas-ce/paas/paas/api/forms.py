@@ -26,12 +26,10 @@ class LightAppBaseForm(forms.Form):
         if len(name) > 20:
             return False, "应用名称长度不能超过20个字符"
 
+        query = UsefulLinks.objects.filter(name=name)
         if old_name:
-            exists = UsefulLinks.objects.filter(name=name).exclude(name=old_name).exists()
-        else:
-            exists = UsefulLinks.objects.filter(name=name).exists()
-
-        if exists:
+            query = query.exclude(name=old_name)
+        if query.exists():
             return False, "应用名称[{}]已存在".format(name)
         return True, "校验通过"
 
@@ -63,7 +61,7 @@ class LightAppChangeBaseInfoForm(LightAppBaseForm):
         return bk_light_app_code
 
 
-class LightAppCreationForm(LightAppBaseForm):
+class LightAppCreateForm(LightAppBaseForm):
     bk_app_code = forms.CharField()
     bk_light_app_name = forms.CharField()
     app_url = forms.CharField()
@@ -97,7 +95,7 @@ class LightAppCreationForm(LightAppBaseForm):
         return app_url
 
 
-class LightAppEditionForm(LightAppChangeBaseInfoForm):
+class LightAppEditForm(LightAppChangeBaseInfoForm):
     bk_light_app_name = forms.CharField(required=False)
     app_url = forms.CharField(required=False)
     introduction = forms.CharField(required=False)
@@ -124,7 +122,7 @@ class LightAppEditionForm(LightAppChangeBaseInfoForm):
         return app_url
 
 
-class LightAppLogoModifiedForm(LightAppChangeBaseInfoForm):
+class LightAppLogoModifyForm(LightAppChangeBaseInfoForm):
     logo = forms.CharField()
 
     def clean_logo(self):

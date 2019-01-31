@@ -14,7 +14,7 @@ import uuid
 from django.core.files.base import ContentFile
 
 
-def generate_file_by_base64(value):
+def trans_b64_to_content_file(value):
     image_data = base64.b64decode(value)
     image_name = ''.join(['data:image/png;base64,', str(uuid.uuid4()), '.png'])
     return ContentFile(image_data, image_name)

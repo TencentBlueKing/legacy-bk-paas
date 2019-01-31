@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 from django.conf.urls import url
 
 from api import views
+from api.constants import LightAppAPIActionEnum
 
 urlpatterns = [
     # 应用基本信息API(已接入ESB)
@@ -23,9 +24,9 @@ urlpatterns = [
     url(r'^v2/app/info/$', views.AppInfoV2APIView.as_view()),
 
     # 轻应用API(已接入ESB)
-    url(r'^v2/modify_app_logo/$', views.LightAppView.as_view()),
-    url(r'^v2/edit_app/$', views.LightAppView.as_view()),
-    url(r'^v2/del_app/$', views.LightAppView.as_view()),
-    url(r'^v2/create_app/$', views.LightAppView.as_view()),
+    url(r'^v2/create_app/$', views.LightAppView.as_view(action=LightAppAPIActionEnum.POST.value)),
+    url(r'^v2/edit_app/$', views.LightAppView.as_view(action=LightAppAPIActionEnum.PUT.value)),
+    url(r'^v2/del_app/$', views.LightAppView.as_view(action=LightAppAPIActionEnum.DELETE.value)),
+    url(r'^v2/modify_app_logo/$', views.LightAppView.as_view(action=LightAppAPIActionEnum.PUT_LOGO.value)),
 
 ]
