@@ -8,15 +8,50 @@ Unless required by applicable law or agreed to in writing, software distributed 
 """ # noqa
 
 from __future__ import unicode_literals
+import urlparse
 
 from django import forms
+from django.conf import settings
 
+from common.log import logger
 from home.models import UsefulLinks
 from app.models import App
-from app_maker.utils import validate_app_url, validate_light_app_name
 
 
-class LightAppChangeBaseInfoForm(forms.Form):
+class LightAppBaseForm(forms.Form):
+    def validate_light_app_name(self, name, old_name):
+        """
+        校验app名称
+        """
+        if len(name) > 20:
+            return False, "应用名称长度不能超过20个字符"
+
+        if old_name:
+            exists = UsefulLinks.objects.filter(name=name).exclude(name=old_name).exists()
+        else:
+            exists = UsefulLinks.objects.filter(name=name).exists()
+
+        if exists:
+            return False, "应用名称[{}]已存在".format(name)
+        return True, "校验通过"
+
+    def validate_app_url(self, url):
+        """
+        判断url是否在当前域名下
+        """
+        try:
+            url_pares = urlparse.urlparse(url)
+            hostname = url_pares.hostname
+            paas_domain = settings.PAAS_DOMAIN.split(":")[0] if settings.PAAS_DOMAIN else ''
+            if not hostname or hostname == paas_domain:
+                return True, ''
+            return False, "APP链接不合法，链接不在当前域名下"
+        except Exception as e:
+            logger.error("获取url的域名出错:%s, url:%s" % (e, url))
+            return False, "校验APP链接异常"
+
+
+class LightAppChangeBaseInfoForm(LightAppBaseForm):
     bk_light_app_code = forms.CharField()
 
     def clean_bk_light_app_code(self):
@@ -28,7 +63,7 @@ class LightAppChangeBaseInfoForm(forms.Form):
         return bk_light_app_code
 
 
-class LightAppCreationForm(forms.Form):
+class LightAppCreationForm(LightAppBaseForm):
     bk_app_code = forms.CharField()
     bk_light_app_name = forms.CharField()
     app_url = forms.CharField()
@@ -44,7 +79,7 @@ class LightAppCreationForm(forms.Form):
     def clean_bk_light_app_name(self):
         bk_light_app_name = self.cleaned_data["bk_light_app_name"]
         # for create, the old_name is ''
-        valid, message = validate_light_app_name(bk_light_app_name, '')
+        valid, message = self.validate_light_app_name(bk_light_app_name, '')
         if not valid:
             self.add_error('bk_light_app_name', message)
 
@@ -55,7 +90,7 @@ class LightAppCreationForm(forms.Form):
         if not app_url:
             self.add_error("app_url", "APP链接不能为空")
         else:
-            valid, message = validate_app_url(app_url)
+            valid, message = self.validate_app_url(app_url)
             if not valid:
                 self.add_error("app_url", message)
 
@@ -70,11 +105,11 @@ class LightAppEditionForm(LightAppChangeBaseInfoForm):
     def clean_bk_light_app_name(self):
         bk_light_app_name = self.cleaned_data["bk_light_app_name"]
         if bk_light_app_name:
-            bk_light_app_code = self.cleaned_data["bk_light_app_code"]
+            bk_light_app_code = self.cleaned_data.get('bk_light_app_code')
             is_ok, link = UsefulLinks.objects.is_useful_link(bk_light_app_code)
             if is_ok:
                 old_app_name = link.name
-                valid, message = validate_light_app_name(bk_light_app_name, old_app_name)
+                valid, message = self.validate_light_app_name(bk_light_app_name, old_app_name)
                 if not valid:
                     self.add_error('bk_light_app_name', message)
 
@@ -82,7 +117,7 @@ class LightAppEditionForm(LightAppChangeBaseInfoForm):
 
     def clean_app_url(self):
         app_url = self.cleaned_data['app_url']
-        valid, message = validate_app_url(app_url)
+        valid, message = self.validate_app_url(app_url)
         if not valid:
             self.add_error("app_url", message)
 

@@ -8,24 +8,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 """ # noqa
 
 from __future__ import unicode_literals
+import base64
+import uuid
 
-from django.conf.urls import url
+from django.core.files.base import ContentFile
 
-from api import views
 
-urlpatterns = [
-    # 应用基本信息API(已接入ESB)
-    url(r'^app_info/$', views.AppInfoAPIView.as_view()),
-    url(r'^v2/app_info/$', views.AppInfoV2APIView.as_view()),
-
-    # please use the new apis below
-    # after format
-    url(r'^v2/app/info/$', views.AppInfoV2APIView.as_view()),
-
-    # 轻应用API(已接入ESB)
-    url(r'^v2/modify_app_logo/$', views.LightAppView.as_view()),
-    url(r'^v2/edit_app/$', views.LightAppView.as_view()),
-    url(r'^v2/del_app/$', views.LightAppView.as_view()),
-    url(r'^v2/create_app/$', views.LightAppView.as_view()),
-
-]
+def generate_file_by_base64(value):
+    image_data = base64.b64decode(value)
+    image_name = ''.join(['data:image/png;base64,', str(uuid.uuid4()), '.png'])
+    return ContentFile(image_data, image_name)
