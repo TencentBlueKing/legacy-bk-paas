@@ -45,7 +45,8 @@ def get_user_apps(username):
             continue
 
         # 处理第三方应用的数据, code is like `_1` or `_123`
-        is_user_link, user_link_obj = UsefulLinks.objects.is_userful_link(code)
+        is_user_link, user_link_obj = UsefulLinks.objects.is_useful_link(code)
+
         if is_user_link and user_link_obj.is_active:
             # 添加存在并已激活的应用数据
             user_app_list.append(user_link_obj.to_dict())
@@ -65,7 +66,8 @@ def get_user_apps(username):
     user_app_list = [i for i in user_app_list if DesktopSettings.objects.is_app_display(i['code'])]
 
     # 初始化时，判断 SaaS 应用是否全部在其中
-    all_saas_link = UsefulLinks.objects.filter(is_active=True, link_type=LinkTypeEnum.SAAS.value)
+    all_saas_link = UsefulLinks.objects.filter(is_active=True,
+                                               link_type__in=[LinkTypeEnum.SAAS.value, LinkTypeEnum.LIGHT_APP.value])
     for _saas in all_saas_link:
         if _saas.code not in app_code_list:
             user_app_list.append(_saas.to_dict())

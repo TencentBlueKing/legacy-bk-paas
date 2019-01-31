@@ -8,6 +8,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 """ # noqa
 
 from __future__ import unicode_literals
+import json
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -15,9 +16,18 @@ from django.views.generic import View
 from django.http import JsonResponse
 
 from account.decorators import login_exempt
-from api.decorators import esb_required, esb_required_v2
-from app.models import App
+from common.utils import first_error_message
+from common.log import logger
 from common.responses import OKJsonResponse
+from api.decorators import esb_required, esb_required_v2
+from api.response import ApiV2FailJsonResponse, ApiV2OKJsonResponse
+from api.constants import ApiErrorCodeEnumV2
+from app.models import App
+from home.models import UsefulLinks
+from home.constants import LinkTypeEnum
+from api.forms import (LightAppCreateForm, LightAppEditForm,
+                       LightAppChangeBaseInfoForm, LightAppLogoModifyForm)
+from api.utils import trans_b64_to_content_file
 
 
 class AppInfoAPIView(View):
@@ -123,3 +133,91 @@ class AppInfoV2APIView(View):
             "bk_error_code": 0,
             "data": app_list
         })
+
+
+class LightAppView(View):
+    action = ""
+    request_body_params = {}
+
+    @method_decorator(csrf_exempt)
+    @method_decorator(login_exempt)
+    @method_decorator(esb_required_v2)
+    def dispatch(self, request, *args, **kwargs):
+        if request.method.lower() in self.http_method_names:
+            self.request_body_params = self._get_body_params(request)
+            handler = getattr(self, self.action, self.http_method_not_allowed)
+        else:
+            handler = self.http_method_not_allowed
+        return handler(request, *args, **kwargs)
+
+    def _get_body_params(self, request):
+        try:
+            return json.loads(request.body) if request.body else {}
+        except Exception:
+            return {}
+
+    def post(self, request, *args, **kwargs):
+        form = LightAppCreateForm(self.request_body_params)
+        if not form.is_valid():
+            message = first_error_message(form)
+            return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
+
+        parent_app = App.objects.get(code=form.cleaned_data["bk_app_code"])
+
+        # 保存应用信息到数据库
+        link = UsefulLinks.objects.create(
+            name=form.cleaned_data["bk_light_app_name"],
+            link=form.cleaned_data["app_url"],
+            link_type=LinkTypeEnum.LIGHT_APP.value,
+            introduction=form.cleaned_data["introduction"] or parent_app.introduction
+        )
+        data = {'bk_light_app_code': link.code}
+
+        return ApiV2OKJsonResponse("创建轻应用成功", data=data)
+
+    def put(self, request, *args, **kwargs):
+        form = LightAppEditForm(self.request_body_params)
+        if not form.is_valid():
+            message = first_error_message(form)
+            return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
+
+        light_app = UsefulLinks.objects.get_light_app_or_none(form.cleaned_data["bk_light_app_code"])
+
+        # 保存应用基本信息
+        light_app.introduction = form.cleaned_data["introduction"] or light_app.introduction
+        light_app.name = form.cleaned_data["bk_light_app_name"] or light_app.name
+        light_app.link = form.cleaned_data["app_url"] or light_app.link
+        light_app.save()
+
+        return ApiV2OKJsonResponse("app 修改成功", data={})
+
+    def put_logo(self, request, *args, **kwargs):
+        form = LightAppLogoModifyForm(self.request_body_params)
+        if not form.is_valid():
+            message = first_error_message(form)
+            return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
+
+        light_app = UsefulLinks.objects.get_light_app_or_none(form.cleaned_data["bk_light_app_code"])
+
+        try:
+            light_app.logo = trans_b64_to_content_file(form.cleaned_data["logo"])
+            light_app.save()
+        except Exception as e:
+            # 保存logo时出错
+            logger.exception(u"save app logo fail: %s" % e)
+            return ApiV2FailJsonResponse("logo 数据格式不合法", code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
+
+        return ApiV2OKJsonResponse("app logo修改成功", data={})
+
+    def delete(self, request, *args, **kwargs):
+        form = LightAppChangeBaseInfoForm(self.request_body_params)
+        if not form.is_valid():
+            message = first_error_message(form)
+            return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
+
+        light_app = UsefulLinks.objects.get_light_app_or_none(form.cleaned_data["bk_light_app_code"])
+
+        # 将app状态标记为下架
+        light_app.is_active = False
+        light_app.save()
+        return ApiV2OKJsonResponse("app 下架成功", data={})

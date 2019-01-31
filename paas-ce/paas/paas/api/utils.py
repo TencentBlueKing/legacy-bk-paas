@@ -8,28 +8,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 """ # noqa
 
 from __future__ import unicode_literals
+import base64
+import uuid
 
-from django.db import models
-
-from home.constants import LinkTypeEnum
-
-
-class UserAppsManager(models.Manager):
-    pass
+from django.core.files.base import ContentFile
 
 
-class UsefulLinksManager(models.Manager):
-    def get_light_app_or_none(self, code):
-        try:
-            return self.get(id=int(code[1:]), link_type=LinkTypeEnum.LIGHT_APP.value)
-        except Exception:
-            return None
-
-    def is_useful_link(self, code):
-        try:
-            return True, self.get(id=int(code[1:]))
-        except Exception:
-            return False, None
-
-    def get_common_links(self):
-        return self.filter(is_active=True, link_type=LinkTypeEnum.COMMON.value)
+def trans_b64_to_content_file(value):
+    image_data = base64.b64decode(value)
+    image_name = ''.join(['data:image/png;base64,', str(uuid.uuid4()), '.png'])
+    return ContentFile(image_data, image_name)

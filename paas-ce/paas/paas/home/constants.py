@@ -38,12 +38,14 @@ SYS_APP_INFO = {
 class LinkTypeEnum(Enum):
     COMMON = 0
     SAAS = 1
+    LIGHT_APP = 2
 
 
 # Home 中常用链接类型
 LINK_TYPE_CHOICES = [
     (LinkTypeEnum.COMMON.value, "普通链接"),
     (LinkTypeEnum.SAAS.value, "SaaS链接"),
+    (LinkTypeEnum.LIGHT_APP.value, "轻应用"),
 ]
 
 # 首次显示应用的个数
