@@ -54,8 +54,8 @@ class LightAppChangeBaseInfoForm(LightAppBaseForm):
 
     def clean_bk_light_app_code(self):
         bk_light_app_code = self.cleaned_data["bk_light_app_code"]
-        is_ok, link = UsefulLinks.objects.is_useful_link(bk_light_app_code)
-        if not is_ok:
+        light_app = UsefulLinks.objects.get_light_app_or_none(bk_light_app_code)
+        if not light_app:
             self.add_error("bk_light_app_code", "轻应用不存在")
 
         return bk_light_app_code
@@ -104,9 +104,9 @@ class LightAppEditForm(LightAppChangeBaseInfoForm):
         bk_light_app_name = self.cleaned_data["bk_light_app_name"]
         if bk_light_app_name:
             bk_light_app_code = self.cleaned_data.get('bk_light_app_code')
-            is_ok, link = UsefulLinks.objects.is_useful_link(bk_light_app_code)
-            if is_ok:
-                old_app_name = link.name
+            light_app = UsefulLinks.objects.get_light_app_or_none(bk_light_app_code)
+            if light_app:
+                old_app_name = light_app.name
                 valid, message = self.validate_light_app_name(bk_light_app_name, old_app_name)
                 if not valid:
                     self.add_error('bk_light_app_name', message)

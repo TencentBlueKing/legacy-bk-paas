@@ -161,7 +161,7 @@ class LightAppView(View):
         link = UsefulLinks.objects.create(
             name=form.cleaned_data["bk_light_app_name"],
             link=form.cleaned_data["app_url"],
-            link_type=LinkTypeEnum.SAAS.value,
+            link_type=LinkTypeEnum.LIGHT_APP.value,
             introduction=form.cleaned_data["introduction"] or parent_app.introduction
         )
         data = {'bk_light_app_code': link.code}
@@ -174,14 +174,13 @@ class LightAppView(View):
             message = first_error_message(form)
             return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
 
-        is_ok, link = UsefulLinks.objects.is_useful_link(form.cleaned_data["bk_light_app_code"])
+        light_app = UsefulLinks.objects.get_light_app_or_none(form.cleaned_data["bk_light_app_code"])
 
         # 保存应用基本信息
-        introduction = form.cleaned_data["introduction"]
-        link.introduction = introduction if introduction else link.introduction
-        link.name = form.cleaned_data["bk_light_app_name"] if form.cleaned_data["bk_light_app_name"] else link.name
-        link.link = form.cleaned_data["app_url"] if form.cleaned_data["app_url"] else link.link
-        link.save()
+        light_app.introduction = form.cleaned_data["introduction"] or light_app.introduction
+        light_app.name = form.cleaned_data["bk_light_app_name"] or light_app.name
+        light_app.link = form.cleaned_data["app_url"] or light_app.link
+        light_app.save()
 
         return ApiV2OKJsonResponse("app 修改成功", data={})
 
@@ -191,11 +190,11 @@ class LightAppView(View):
             message = first_error_message(form)
             return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
 
-        is_ok, link = UsefulLinks.objects.is_useful_link(form.cleaned_data["bk_light_app_code"])
+        light_app = UsefulLinks.objects.get_light_app_or_none(form.cleaned_data["bk_light_app_code"])
 
         try:
-            link.logo = trans_b64_to_content_file(form.cleaned_data["logo"])
-            link.save()
+            light_app.logo = trans_b64_to_content_file(form.cleaned_data["logo"])
+            light_app.save()
         except Exception as e:
             # 保存logo时出错
             logger.exception(u"save app logo fail: %s" % e)
@@ -209,9 +208,9 @@ class LightAppView(View):
             message = first_error_message(form)
             return ApiV2FailJsonResponse(message, code=ApiErrorCodeEnumV2.PARAM_NOT_VALID.value)
 
-        is_ok, link = UsefulLinks.objects.is_useful_link(form.cleaned_data["bk_light_app_code"])
+        light_app = UsefulLinks.objects.get_light_app_or_none(form.cleaned_data["bk_light_app_code"])
 
         # 将app状态标记为下架
-        link.is_active = False
-        link.save()
+        light_app.is_active = False
+        light_app.save()
         return ApiV2OKJsonResponse("app 下架成功", data={})

@@ -62,7 +62,8 @@ def get_user_apps(username):
     user_app_list.extend(new_online_app_info_list)
 
     # 初始化时，判断 SaaS 应用是否全部在其中
-    all_saas_link = UsefulLinks.objects.filter(is_active=True, link_type=LinkTypeEnum.SAAS.value)
+    all_saas_link = UsefulLinks.objects.filter(is_active=True,
+                                               link_type__in=[LinkTypeEnum.SAAS.value, LinkTypeEnum.LIGHT_APP.value])
     for _saas in all_saas_link:
         if _saas.code not in app_code_list:
             user_app_list.append(_saas.to_dict())

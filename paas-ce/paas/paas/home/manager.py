@@ -19,6 +19,12 @@ class UserAppsManager(models.Manager):
 
 
 class UsefulLinksManager(models.Manager):
+    def get_light_app_or_none(self, code):
+        try:
+            return self.get(id=int(code[1:]), link_type=LinkTypeEnum.LIGHT_APP.value)
+        except Exception:
+            return None
+
     def is_useful_link(self, code):
         try:
             return True, self.get(id=int(code[1:]))
