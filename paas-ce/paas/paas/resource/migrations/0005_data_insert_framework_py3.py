@@ -15,7 +15,7 @@ from django.db import migrations
 def load_data(apps, schema_editor):
     Resource = apps.get_model("resource", "Resource")
     Resource(name="Python3 开发框架",
-             version="1.0.1",
+             version="1.0.2",
              size="1.1M",
              display=True,
              icon_url="/static/img/resource/framework_py3.png",
