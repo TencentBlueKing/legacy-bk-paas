@@ -79,6 +79,9 @@ class UsefulLinks(models.Model):
 
     @property
     def code(self):
+        """
+        like _1 _123
+        """
         return '_{id}'.format(id=self.pk)
 
     def to_dict(self):
