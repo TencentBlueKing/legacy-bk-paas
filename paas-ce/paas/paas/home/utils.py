@@ -45,7 +45,7 @@ def get_user_apps(username):
             continue
 
         # 处理第三方应用的数据
-        is_user_link, user_link_obj = UsefulLinks.objects.is_userful_link(code)
+        is_user_link, user_link_obj = UsefulLinks.objects.is_useful_link(code)
         if is_user_link and user_link_obj.is_active:
             # 添加存在并已激活的应用数据
             user_app_list.append(user_link_obj.to_dict())

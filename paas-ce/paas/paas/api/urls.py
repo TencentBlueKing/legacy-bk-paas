@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 from django.conf.urls import url
 
 from api import views
+from app_maker import views as app_maker_views
 
 
 urlpatterns = [
@@ -22,5 +23,11 @@ urlpatterns = [
     # please use the new apis below
     # after format
     url(r'^v2/app/info/$', views.AppInfoV2APIView.as_view()),
+
+    # 轻应用API(已接入ESB)
+    url(r'^v2/modify_app_logo/$', app_maker_views.ModifyLightAppLogoView.as_view()),
+    url(r'^v2/edit_app/$', app_maker_views.EditLightAppView.as_view()),
+    url(r'^v2/del_app/$', app_maker_views.DeleteLightAppView.as_view()),
+    url(r'^v2/create_app/$', app_maker_views.CreateLightAppView.as_view()),
 
 ]

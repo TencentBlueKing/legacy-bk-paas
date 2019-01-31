@@ -10,6 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 from __future__ import unicode_literals
 
 from django.db import models
+from django.conf import settings
 
 from common.constants import LogoImgRelatedDirEnum
 from home.constants import LINK_TYPE_CHOICES, LinkTypeEnum
@@ -84,7 +85,7 @@ class UsefulLinks(models.Model):
         return {
             'name': self.name,
             'link': self.link,
-            'logo': self.logo.url,
+            'logo': self.logo.url if self.logo else '{}img/app_logo/default.png'.format(settings.STATIC_URL),
             'introduction': self.introduction,
             'code': self.code
         }

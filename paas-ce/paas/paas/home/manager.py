@@ -19,7 +19,7 @@ class UserAppsManager(models.Manager):
 
 
 class UsefulLinksManager(models.Manager):
-    def is_userful_link(self, code):
+    def is_useful_link(self, code):
         try:
             return True, self.get(id=int(code[1:]))
         except Exception:
