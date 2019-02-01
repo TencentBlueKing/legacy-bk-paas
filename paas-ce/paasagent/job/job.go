@@ -53,7 +53,10 @@ type (
 func postEventLog(appCode string, eventID string, data *EventLog) {
 	controllerServerURL := viper.GetString("settings.CONTROLLER_SERVER_URL")
 	eventUrl := controllerServerURL + "/v1/apps/" + appCode + "/events/" + eventID
-	core.DoPost(eventUrl, data)
+	_, _, err := core.DoPost(eventUrl, data)
+	if err != nil {
+		log.Printf("postEventLog url %s error: %s\n", eventUrl, err)
+	}
 }
 
 func (appJob AppJob) getBaseAppPath() string {
@@ -298,7 +301,7 @@ func (appJob AppJob) runCmd(envMap map[string]string) error {
 		return core.KillCmdProcess(cmd.Process.Pid)
 	case err = <-done:
 		if err != nil {
-			postEventLog(appJob.AppCode, appJob.EventID, &EventLog{Status: core.FAILURE, Log: ""})
+			postEventLog(appJob.AppCode, appJob.EventID, &EventLog{Status: core.FAILURE, Log: fmt.Sprintf("%s\r\n", err)})
 			log.Println("error waiting for Cmd", err)
 		} else {
 			log.Println("RunJob end ... ...")
