@@ -160,3 +160,5 @@ LOGGING = {
         },
     }
 }
+
+HTTP_TIMEOUT = 5
