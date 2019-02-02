@@ -9,12 +9,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 import requests
 from requests.status_codes import codes
 
+from django.conf import settings
 from .exceptions import BadResponse
 
 
 def http_request(method, url, desired_code=codes.ok, **kwargs):
     if "timeout" not in kwargs:
-        kwargs["timeout"] = 5
+        kwargs["timeout"] = settings.HTTP_TIMEOUT
 
     resp = requests.request(method, url, **kwargs)
     if resp.status_code == desired_code:
