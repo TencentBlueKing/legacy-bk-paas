@@ -12,6 +12,7 @@ Query individual flow template details of the business
 |---------------|------------|--------|---------------|
 | bk_biz_id     | string     |   YES   |  the business ID   |
 | template_id   | string     |   YES   |  the task ID       |
+|   template_source | string   | NO    | source of flow，default value is business. business: from business, common: from common flow |
 
 ### Request Parameters Example
 
@@ -21,7 +22,8 @@ Query individual flow template details of the business
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
     "bk_biz_id": "1",
-    "template_id": "30"
+    "template_id": "30",
+    "template_source": "business",
 }
 ```
 

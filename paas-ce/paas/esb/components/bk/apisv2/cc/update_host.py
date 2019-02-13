@@ -41,7 +41,7 @@ class UpdateHost(Component):
     |-----------|------------|--------|------------|
     | bk_host_name    |  string  | {{ _("否") }}     | {{ _("主机名") }} |
 
-    **注意：输入的字段为主机定义的属性**
+    **{{ _("注意：输入的字段为主机定义的属性") }}**
 
     ### {{ _("请求参数示例") }}
 
@@ -82,7 +82,7 @@ class UpdateHost(Component):
 
         def clean(self):
             data = self.cleaned_data
-            data['data'].update(bk_host_id=','.join(data['bk_host_id']))
+            data['data'].update(bk_host_id=','.join(map(str, data['bk_host_id'])))
             return data['data']
 
     def handle(self):

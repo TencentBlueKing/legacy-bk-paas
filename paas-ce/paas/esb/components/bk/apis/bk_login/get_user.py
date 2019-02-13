@@ -71,6 +71,14 @@ class GetUser(Component):
     class Form(BaseComponentForm):
         bk_token = forms.CharField(label='login token', required=False)
         username = forms.CharField(label='username', required=False)
+        bk_username = forms.CharField(label='bk_username', required=False)
+
+        def clean(self):
+            data = self.cleaned_data
+            return {
+                'bk_token': data['bk_token'],
+                'username': data['username'] or data['bk_username'],
+            }
 
     def handle(self):
         self.response.payload = self.outgoing.http_client.get(

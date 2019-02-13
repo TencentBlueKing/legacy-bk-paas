@@ -12,7 +12,7 @@ import base64
 from django import forms
 
 from components.component import Component, SetupConfMixin
-from common.forms import BaseComponentForm, ListField, DefaultBooleanField
+from common.forms import BaseComponentForm, ListField, DefaultBooleanField, TypeCheckField
 from common.base_utils import str_bool
 from common.constants import API_TYPE_OP
 from .toolkit import configs, tools, send_mail_with_smtp
@@ -44,7 +44,17 @@ class SendMail(Component, SetupConfMixin):
     | cc__username       |  string    | {{ _("否") }}     | {{ _("抄送人，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若cc、cc__username同时存在，以cc为准") }} |
     | body_format        |  string    | {{ _("否") }}     | {{ _("邮件格式，包含'Html', 'Text'，默认为'Html'") }} |
     | is_content_base64  |  bool      | {{ _("否") }}     | {{ _("邮件内容是否base64编码，默认False，不编码，请使用base64.b64encode方法编码") }} |
+    | attachments        |  bool      | {{ _("否") }}     | {{ _("邮件附件") }} |
 
+    ##### attachments
+
+    | {{ _("字段") }}               |  {{ _("类型") }}      | {{ _("必选") }}   |  {{ _("描述") }}      |
+    |--------------------|------------|--------|------------|
+    | filename           |  string    | {{ _("是") }}     | {{ _("文件名") }}  |
+    | content            |  string    | {{ _("是") }}     | {{ _("文件内容，文件内容为原文件内容的 base64 编码字符串") }}  |
+    | type               |  string    | {{ _("否") }}     | {{ _("文件类型，默认为文件名后缀，如 a.png 文件类型为 'png'") }} |
+    | disposition        |  string    | {{ _("否") }}     | {{ _("文件 Content-Disposition，图片文件(type=image, jpg, png, jpeg)默认为 'inline'，其他文件默认为 'attachment'")  }}  |
+    | content_id         |  string    | {{ _("否") }}     | {{ _("文件 Content-ID，文件为图片文件时生效；默认为 '<文件名>'") }} |
 
     ### {{ _("请求参数示例") }}
 
@@ -88,6 +98,7 @@ class SendMail(Component, SetupConfMixin):
         is_content_base64 = DefaultBooleanField(
             label='content is encoded by base64 or not', default=False, required=False)
         body_format = forms.CharField(label='email format', required=False)
+        attachments = TypeCheckField(label='attachments', promise_type=list, required=False)
 
         def clean(self):
             data = self.cleaned_data
@@ -103,7 +114,23 @@ class SendMail(Component, SetupConfMixin):
                     data['content'] = base64.b64decode(data['content'])
                 except Exception:
                     pass
+            if data['attachments']:
+                data['attachments'] = [
+                    SendMail.AttachmentForm(attachment).get_cleaned_data_or_error()
+                    for attachment in data['attachments']
+                ]
             return data
+
+    class AttachmentForm(BaseComponentForm):
+        filename = forms.CharField(label='filename', required=True)
+        content = forms.CharField(label='content', required=True)
+        type = forms.CharField(label='type', required=False)
+        disposition = forms.CharField(label='disposition', required=False)
+        content_id = forms.CharField(label='content_id', required=False)
+
+        def clean(self):
+            self.cleaned_data['content'] = base64.b64decode(self.cleaned_data['content'])
+            return self.cleaned_data
 
     def handle(self):
         # 默认支持通过 SMTP 服务器或第三方接口发送邮件，

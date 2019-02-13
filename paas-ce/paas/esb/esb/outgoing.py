@@ -110,7 +110,7 @@ class BasicHttpClient(object):
         """
         Send a request to given destination
 
-        :param str method: One of "GET/POST/HEAD/DELETE"
+        :param str method: One of "GET/POST"
         :param str host: host, such as "http://www.qq.com/"
         :param str path: request path, like "/account/login/"
         :param str/dict params: params in query string
@@ -201,18 +201,12 @@ class BasicHttpClient(object):
             request_exception=request_exception
         )
 
-    # GET/POST/HEAD/DELETE requests
+    # GET/POST requests
 
     def get(self, *args, **kwargs):
         return self.request('GET', *args, **kwargs)
 
     def post(self, *args, **kwargs):
-        return self.request('POST', *args, **kwargs)
-
-    def head(self, *args, **kwargs):
-        return self.request('GET', *args, **kwargs)
-
-    def delete(self, *args, **kwargs):
         return self.request('POST', *args, **kwargs)
 
     @staticmethod
@@ -271,6 +265,20 @@ class HttpClient(BasicHttpClient):
             if key in request_headers
         ])
 
+    def prepare_bk_header(self, headers={}):
+        if self.component.request:
+            bkapi_headers = {
+                'X-Bkapi-Request-Id': self.component.request.request_id,
+            }
+        else:
+            bkapi_headers = {}
+
+        request_headers = {}
+        request_headers.update(self.get_default_headers())
+        request_headers.update(bkapi_headers)
+        request_headers.update(headers)
+        return request_headers
+
     def request(self, method, host, path, params=None, data=None, headers={}, response_type='json',
                 max_retries=0, response_encoding=None, request_encoding=None, verify=False, cert=None,
                 timeout=None, allow_non_200=False, files=None):
@@ -297,8 +305,7 @@ class HttpClient(BasicHttpClient):
         if not timeout:
             timeout = timeout_time if timeout_time else REQUEST_TIMEOUT_SECS
 
-        req_headers = self.get_default_headers()
-        req_headers.update(headers)
+        req_headers = self.prepare_bk_header(headers)
 
         # 调用BasicHttpClient.request来发送请求
         r = self._request(

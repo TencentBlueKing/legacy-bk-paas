@@ -24,7 +24,7 @@ class ConfigForm(object):
         'label_en': {'required': False},
         'api_type': {'required': False, 'choices': ['query', 'operate']},
         'suggest_method': {'required': False, 'choices': ['GET', 'POST']},
-        'method': {'required': False, 'choices': ['GET', 'POST']},
+        'method': {'required': False, 'choices': ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']},
         'comp_codename': {'required': True},
         'dest_path': {'required': True},
         'dest_http_method': {'required': True, 'choices': ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']},

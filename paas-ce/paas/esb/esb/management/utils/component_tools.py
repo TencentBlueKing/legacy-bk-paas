@@ -6,11 +6,15 @@ Licensed under the MIT License (the "License"); you may not use this file except
 http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """ # noqa
+import os
 import re
+from importlib import import_module
 
 from django.utils import translation
 from django.template import engines
 
+from common.log import logger
+from common.base_utils import read_file, smart_unicode
 from esb.component.base import get_components_manager
 from esb.utils.confapis import get_confapis_manager
 
@@ -43,7 +47,6 @@ class ComponentClient(object):
             'component_label': self.get_component_label(),
             'component_type': self.get_api_type(),
             'suggest_method': self.get_suggest_method(),
-            'comp_doc': self.comp_doc,
             'doc_md': self.get_comp_doc_md(),
             'is_confapi': self.is_confapi,
             'label_en': self.get_component_label_en(),
@@ -66,6 +69,10 @@ class ComponentClient(object):
         return self.comp_class.api_type
 
     def get_component_label(self):
+        api_label = getattr(self.comp_class, 'label', '')
+        if api_label:
+            return api_label
+
         api_label = re.search(r'apiLabel\s*(.+)', self.comp_doc)
         if api_label:
             api_label = api_label.group(1).strip()
@@ -78,9 +85,13 @@ class ComponentClient(object):
         return api_label
 
     def get_component_label_en(self):
-        return ''
+        return getattr(self.comp_class, 'label_en', '')
 
     def get_suggest_method(self):
+        suggest_method = getattr(self.comp_class, 'suggest_method', '')
+        if suggest_method:
+            return suggest_method.upper()
+
         api_method = re.search(r'apiMethod\s*(.+)', self.comp_doc)
         if api_method:
             api_method = api_method.group(1).strip()
@@ -93,10 +104,44 @@ class ComponentClient(object):
         return comp_doc if isinstance(comp_doc, unicode) else comp_doc.decode('utf-8')
 
     def get_comp_doc_md(self):
+        if self.is_comp_doc_md_from_mdfile():
+            return self.get_comp_doc_md_from_mdfile()
+        else:
+            return self.get_comp_doc_md_from_compdoc()
+
+    def get_comp_doc_md_from_compdoc(self):
         return {
             'en': self.comp_doc,
             'zh-hans': self.comp_doc,
         }
+
+    def is_comp_doc_md_from_mdfile(self):
+        apidoc_en_fpath = self._get_apidoc_fpath(language='en')
+        apidoc_zhhans_fpath = self._get_apidoc_fpath(language='zh_hans')
+        if os.path.isfile(apidoc_en_fpath) or os.path.isfile(apidoc_zhhans_fpath):
+            return True
+        return False
+
+    def get_comp_doc_md_from_mdfile(self):
+        apidoc_en = self._get_apidoc_content(language='en')
+        apidoc_zhhans = self._get_apidoc_content(language='zh_hans')
+        return {
+            'en': smart_unicode(apidoc_en),
+            'zh-hans': smart_unicode(apidoc_zhhans),
+        }
+
+    def _get_apidoc_content(self, language='en'):
+        fpath = self._get_apidoc_fpath(language=language)
+        if os.path.isfile(fpath):
+            try:
+                return read_file(fpath)
+            except Exception:
+                logger.exception('Read file error. fpath=%s', fpath)
+        return ''
+
+    def _get_apidoc_fpath(self, language='en'):
+        component_module_path = import_module(self.comp_class.__module__).__file__
+        return os.path.join(os.path.dirname(component_module_path), 'apidocs', language, '%s.md' % self.component_name)
 
 
 class ConfapiComponentClient(ComponentClient):

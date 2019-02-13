@@ -12,9 +12,11 @@
 |---------------|------------|--------|------------------|
 |   bk_biz_id    |   string     |   是   |  模板所属业务ID |
 |   template_id     |   string     |   是   |  模板ID |
+|   template_source | string   | 否         | 流程模板来源，business:默认值，业务流程，common：公共流程 |
 |   name     |   string     |   是   |  任务名称 |
 |   flow_type     |   string     |   否   |  任务流程类型，common: 常规流程，common_func：职能化流程 |
 |   constants     |   dict     |   否   |  任务全局参数，详细信息见下面说明 |
+|   exclude_task_nodes_id | list |   否   |  跳过执行的节点ID列表 |
 
 #### constants.KEY
 
