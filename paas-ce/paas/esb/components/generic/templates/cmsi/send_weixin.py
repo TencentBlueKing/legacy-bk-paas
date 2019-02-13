@@ -37,6 +37,8 @@ class SendWeixin(Component, SetupConfMixin):
     | receiver           |  string    | {{ _("否") }}     | {{ _("微信接收者，包含绑定在指定公众号上的微信用户的 openid 或 企业号上的微信用户的用户ID，多个以逗号分隔") }} |
     | receiver__username |  string    | {{ _("否") }}     | {{ _("微信接收者，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准") }} |
     | data               |  dict      | {{ _("是") }}     | {{ _("消息内容") }} |
+    | wx_qy_agentid      |  string    | {{ _("否") }}     | agentid of WeChat app |
+    | wx_qy_corpsecret   |  string    | {{ _("否") }}     | secret of WeChat app |
 
     #### {{ _("data 参数包含内容") }}
 
@@ -153,16 +155,23 @@ class SendWeixin(Component, SetupConfMixin):
     def handle(self):
         # 微信类型，包括微信公众号"mp"，微信企业号"qy"
         self.wx_type = getattr(self, 'wx_type', '') or getattr(configs, 'wx_type', '')
+
         # 微信公众号配置
         # 组件会根据 wx_app_id & wx_secret 申请微信的 access_token，
         # 业务如希望集中管理 access_token，可优化 components/apis/weixin_mp/get_token.py 中 access_token 获取逻辑
         self.wx_app_id = getattr(self, 'wx_app_id', '') or getattr(configs, 'wx_app_id', '')
         self.wx_secret = getattr(self, 'wx_secret', '') or getattr(configs, 'wx_secret', '')
         self.wx_template_id = getattr(self, 'wx_template_id', '') or getattr(configs, 'wx_template_id', '')
+
         # 微信企业号配置
+        # 支持蓝鲸应用传递企业微信应用账号信息 wx_qy_corpsecret + wx_qy_agentid ，以实现通过不同企业微信应用发送消息
         self.wx_qy_corpid = getattr(self, 'wx_qy_corpid', '') or getattr(configs, 'wx_qy_corpid', '')
-        self.wx_qy_corpsecret = getattr(self, 'wx_qy_corpsecret', '') or getattr(configs, 'wx_qy_corpsecret', '')
-        self.wx_qy_agentid = getattr(self, 'wx_qy_agentid', '') or getattr(configs, 'wx_qy_agentid', '')
+        self.wx_qy_corpsecret = self.request.kwargs.get('wx_qy_corpsecret') \
+            or getattr(self, 'wx_qy_corpsecret', '') \
+            or getattr(configs, 'wx_qy_corpsecret', '')
+        self.wx_qy_agentid = self.request.kwargs.get('wx_qy_agentid') \
+            or getattr(self, 'wx_qy_agentid', '') \
+            or getattr(configs, 'wx_qy_agentid', '')
 
         data = self.form_data
         # 根据蓝鲸平台用户数据，将用户名转换为微信用户ID

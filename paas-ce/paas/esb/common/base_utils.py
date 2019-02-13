@@ -215,9 +215,9 @@ def get_client_real_ip(request):
 
 
 def get_request_params(request):
-    if request.method not in ('GET', 'POST'):
-        raise error_codes.COMMON_ERROR.format_prompt(
-            'Request method error, please apply GET or POST request.', replace=True)
+    # if request.method not in ('GET', 'POST'):
+    #     raise error_codes.COMMON_ERROR.format_prompt(
+    #         'Request method error, please apply GET or POST request.', replace=True)
     # "GET"方法
     if request.method == 'GET':
         request_params = dict(request.GET.items())

@@ -45,8 +45,8 @@ class CCClient(object):
         except Exception:
             logger.exception('response: %s', response)
             raise CommonAPIError(
-                'An exception occurred while requesting CC interface, '
-                'please contact the component developer to handle it.')
+                'An error occurred while requesting CC interface, '
+                'the response content does not contain code field.')
 
         if code != '0':
             return {

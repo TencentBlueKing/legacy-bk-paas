@@ -33,7 +33,11 @@ class QCloudSmsClient(object):
     def post(self, path, data):
         result = self.http_client.post(configs.host, path, data=json.dumps(data))
         if result.get('ErrorCode'):
-            return {'result': False, 'message': result.get('ErrorInfo', u'出现未知错误'), 'data': result}
+            return {
+                'result': False,
+                'message': result.get('ErrorInfo', u'An unknown error has occurred'),
+                'data': result
+            }
         if result['result'] == 0:
             return {
                 'result': True,

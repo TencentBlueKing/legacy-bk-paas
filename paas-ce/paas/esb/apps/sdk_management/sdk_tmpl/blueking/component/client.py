@@ -13,8 +13,8 @@ import json
 import time
 import random
 import logging
-import urlparse
 
+from .compat import urlparse
 from . import conf
 from . import collections
 from .utils import get_signature
@@ -133,7 +133,7 @@ class ComponentClientWithSignature(BaseComponentClient):
         if method == 'POST':
             params = {}
 
-        url_path = urlparse.urlparse(url).path
+        url_path = urlparse(url).path
         # signature always in GET params
         params.update({
             'bk_timestamp': int(time.time()),

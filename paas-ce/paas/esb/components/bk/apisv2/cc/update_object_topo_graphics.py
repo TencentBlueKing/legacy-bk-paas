@@ -51,7 +51,7 @@ class UpdateObjectTopoGraphics(Component):
     | bk_obj_icon | string | {{ _("否") }} | {{ _("对象模型的图标") }} |
 
 
-    **注意**：
+    **{{ _("注意") }}**：
 
     - {{ _("scope_type,scope_id 唯一确定一张图") }}
 

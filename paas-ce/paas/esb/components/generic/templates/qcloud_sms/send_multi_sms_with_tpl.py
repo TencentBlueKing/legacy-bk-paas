@@ -21,15 +21,15 @@ class SendMultiSmsWithTpl(Component, SetupConfMixin):
     api_type = API_TYPE_OP
 
     class Form(BaseComponentForm):
-        sdk_app_id = forms.CharField(label=u'腾讯云sdkappid', required=True)
-        app_key = forms.CharField(label=u'腾讯云appkey', required=True)
-        sign = forms.CharField(label=u'短信签名', required=False)
-        tpl_id = forms.IntegerField(label=u'短信模版ID', required=True)
-        params = TypeCheckField(label=u'模版参数', promise_type=list, required=False)
-        nation_code = forms.CharField(label=u'国家码', required=False)
-        phone_numbers = ListField(label=u'不带国家码的手机号', required=True)
-        extend = forms.CharField(label=u'通道扩展码', required=False)
-        ext = forms.CharField(label=u'服务端原样返回的参数', required=False)
+        sdk_app_id = forms.CharField(label='tencent cloud sdkappid', required=True)
+        app_key = forms.CharField(label='tencent cloud appkey', required=True)
+        sign = forms.CharField(label='sms signature', required=False)
+        tpl_id = forms.IntegerField(label='template id', required=True)
+        params = TypeCheckField(label='template params', promise_type=list, required=False)
+        nation_code = forms.CharField(label='nation code', required=False)
+        phone_numbers = ListField(label='phone numbers', required=True)
+        extend = forms.CharField(label='extend', required=False)
+        ext = forms.CharField(label='ext', required=False)
 
         def clean(self):
             data = self.cleaned_data
