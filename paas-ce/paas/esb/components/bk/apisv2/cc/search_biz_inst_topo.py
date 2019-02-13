@@ -57,21 +57,21 @@ class SearchBizInstTopo(Component):
         "data": [
             {
                 "bk_inst_id": 2,
-                "bk_inst_name": "蓝鲸",
+                "bk_inst_name": "blueking",
                 "bk_obj_id": "biz",
-                "bk_obj_name": "业务",
+                "bk_obj_name": "business",
                 "child": [
                     {
                         "bk_inst_id": 3,
-                        "bk_inst_name": "作业平台",
+                        "bk_inst_name": "job",
                         "bk_obj_id": "set",
-                        "bk_obj_name": "集群",
+                        "bk_obj_name": "set",
                         "child": [
                             {
                                 "bk_inst_id": 5,
                                 "bk_inst_name": "job",
                                 "bk_obj_id": "module",
-                                "bk_obj_name": "模块",
+                                "bk_obj_name": "module",
                                 "child": []
                             }
                         ]
