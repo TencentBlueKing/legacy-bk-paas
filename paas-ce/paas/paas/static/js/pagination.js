@@ -243,7 +243,8 @@ jQuery.fn.pagination = function(opt){
             $(".loading_example").show();
             $.get(opts.url+(opts.url.indexOf('?')<0?"?page=":"page=")+page_index,function(data){
                 //请求的字符串转换为json对象
-                var get_data =  eval("("+data+")");
+                // var get_data =  eval("("+data+")");
+                var get_data = data;
                 //请求的表格数据添加到table对象
                 $(opts.table_obj).html(get_data.data);
                 total_num = get_data.total_num;
