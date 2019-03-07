@@ -63,10 +63,8 @@ def dynamic_upload_to(instance, filename):
     """
     根据链接类型，决定存储的目录
     """
-    file_dir = [
-        LogoImgRelatedDirEnum.ICON.value,
-        LogoImgRelatedDirEnum.APP.value
-    ][instance.link_type == LinkTypeEnum.LIGHT_APP.value]
+    file_dir = (LogoImgRelatedDirEnum.APP.value
+                if instance.link_type == LinkTypeEnum.LIGHT_APP.value else LogoImgRelatedDirEnum.ICON.value)
     return os.path.join(file_dir, filename)
 
 
