@@ -457,7 +457,7 @@
   label: 绑定进程到模块
   label_en: bind process to module
   suggest_method: POST
-  api_type: query
+  api_type: operate
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/proc/module/{bk_supplier_account}/{bk_biz_id}/{bk_process_id}/{bk_module_name}
   dest_http_method: PUT
@@ -467,7 +467,18 @@
   label: 解绑进程模块
   label_en: delete process module bind relationship
   suggest_method: POST
-  api_type: query
+  api_type: operate
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/proc/module/{bk_supplier_account}/{bk_biz_id}/{bk_process_id}/{bk_module_name}
   dest_http_method: DELETE
+  
+- path: /v2/cc/find_host_by_module/
+  name: find_host_by_module
+  label: 根据模块查询主机
+  label_en: find host by module
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/modulehost
+  dest_http_method: POST
+  
