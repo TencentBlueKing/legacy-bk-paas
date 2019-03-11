@@ -23,7 +23,12 @@ class BkBackend(ModelBackend):
     """
 
     def authenticate(self, request):
-        is_login, username = is_bk_token_valid(request)
+        try:
+            is_login, username = is_bk_token_valid(request)
+        except Exception:
+            logger.exception("is_bk_token_valid raise exception")
+            return None
+
         if not is_login:
             return None
 
