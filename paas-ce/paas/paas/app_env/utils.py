@@ -27,7 +27,7 @@ def _validate_env_var_name(name):
 
 
 def _validate_env_var_value(value):
-    if not value:
+    if value is None or value == "":
         return False, "变量值不能为空!"
     if len(value) > 1000:
         return False, "变量值不能超过1000个字符!"

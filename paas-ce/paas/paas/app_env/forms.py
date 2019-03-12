@@ -21,7 +21,7 @@ class AppEnvForm(forms.Form):
                                                           "max_length": "变量名不能超过50个字符!"},
                            validators=[RegexValidator(r'^[a-zA-Z0-9_]+$', message="请输入合法的变量名, 只允许字母数字下划线!")])
     value = forms.CharField(max_length=100, error_messages={
-        "required": "变量名不能为空!",
+        "required": "变量值不能为空!",
         "max_length": "变量值不能超过1000个字符!"
     })
     intro = forms.CharField()

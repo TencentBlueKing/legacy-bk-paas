@@ -35,8 +35,6 @@ class AppEnvVarManager(models.Manager):
         for env in env_var_list:
             key = env.get("key")
             value = env.get("value")
-            if not (key and value):
-                continue
 
             is_valid, message = validate_env_var(key, value)
             if not is_valid:
