@@ -227,6 +227,7 @@ class SaaSAppVersion(models.Model):
         author = settings.get("author", '')
         category = settings.get("category", u'其它')
         desktop = settings.get("desktop") or {}
+        env = settings.get("env") or []
 
         # 1. 判断app_code是否重复了, 重复则报错
         app_info = {
@@ -236,7 +237,8 @@ class SaaSAppVersion(models.Model):
             'is_use_celery': is_use_celery,
             'is_use_celery_beat': is_use_celery,
             'category': category,
-            'desktop': desktop
+            'desktop': desktop,
+            'env': env
         }
 
         return True, 'success', app_info

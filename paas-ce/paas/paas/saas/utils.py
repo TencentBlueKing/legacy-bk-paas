@@ -20,6 +20,7 @@ from django.utils.html import escape
 
 from app.constants import AppStateEnum, DESKTOP_DEFAULT_APP_IS_DISPLAY
 from app.models import App, SecureInfo, DesktopSettings
+from app_env.models import AppEnvVar
 from common.constants import LogoImgRelatedDirEnum
 from common.log import logger
 from components.engine import register_app
@@ -143,6 +144,7 @@ def save_saas_app_info(app_config, saas_upload_file):
     language_support = app_config.get('language_support', "")
     desktop = app_config.get("desktop")
     date = app_config.get("date")
+    env = app_config.get("env")
 
     # fix xss error, this value are all from app.yml
     # 2018-05-22 escape begin
@@ -175,7 +177,8 @@ def save_saas_app_info(app_config, saas_upload_file):
         'date': date,
         'pip': pip,
         'yum': yum,
-        'desktop': desktop
+        'desktop': desktop,
+        'env': env
     }
 
     # start to save info
@@ -329,6 +332,14 @@ def save_app_info(code, name, is_create=True, **app_info):
         app_desktop_info, _ = DesktopSettings.objects.get_or_create(app_code=code)
         app_desktop_info.is_display = desktop.get("is_display", DESKTOP_DEFAULT_APP_IS_DISPLAY)
         app_desktop_info.save()
+
+        try:
+            # app env var
+            env = app_info.get("env") or []
+            if env:
+                AppEnvVar.objects.add_env_vars(code, env)
+        except Exception:
+            logger.exception("Insert App Env var from app.yml fail! %s", code)
 
     return True, '', app
 
