@@ -35,7 +35,11 @@ class AppEnvVarManager(models.Manager):
         for env in env_var_list:
             key = env.get("key")
             value = env.get("value")
+            if (not key) or (value is None):
+                continue
 
+            key = str(key)
+            value = str(value)
             is_valid, message = validate_env_var(key, value)
             if not is_valid:
                 logger.error("App: %s [key=%s, value=%s] invalid, %s", app_code, key, value, message)
