@@ -65,7 +65,7 @@ class BkUserManager(BaseUserManager):
         return {
             'username': user.username,
             'chname': user.chname,
-            'qq': '',
+            'qq': user.qq,
             'phone': user.phone,
             'email': user.email,
             'role': str(user.role_code),
@@ -78,7 +78,7 @@ class BkUserManager(BaseUserManager):
         return {
             'bk_username': user.username,
             'chname': user.chname,
-            'qq': '',
+            'qq': user.qq,
             'phone': user.phone,
             'email': user.email,
             'bk_role': user.role_code,
@@ -276,7 +276,6 @@ class BkUserManager(BaseUserManager):
         """
         user, _c = self.get_or_create(username=username)
         user.chname = chname
-        user.qq = ''
         user.phone = phone
         user.email = email
         # 新增用户
