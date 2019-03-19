@@ -2,7 +2,8 @@
 
 # 3.2.4
 
-- update: python 3 frmaework
+- update: python3 frmaework
+- update: python framwork to support https dev
 
 # 3.2.3
 
