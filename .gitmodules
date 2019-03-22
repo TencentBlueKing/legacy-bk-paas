@@ -1,6 +1,3 @@
 [submodule "saas/bk-sops"]
 	path = saas/bk-sops
 	url = https://github.com/Tencent/bk-sops
-[submodule "saas/bk-fta-solutions"]
-	path = saas/bk-fta-solutions
-	url = https://github.com/Tencent/bk-fta-solutions
