@@ -50,7 +50,6 @@
 
 ## 蓝鲸开源SaaS应用列表
 
-- [故障自愈](https://github.com/Tencent/bk-fta-solutions)
 - [标准运维](https://github.com/Tencent/bk-sops)
 
 ## Support
