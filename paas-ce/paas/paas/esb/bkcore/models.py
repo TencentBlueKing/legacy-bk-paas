@@ -16,6 +16,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext, pgettext
+from django.utils.functional import cached_property
 
 from esb.bkcore.constants import DEFAULT_DOC_CATEGORY
 from esb.common.django_utils import get_cur_language
@@ -141,8 +142,8 @@ class ESBChannel(models.Model):
     def name_display(self):
         cur_language = get_cur_language()
         if cur_language == 'en':
-            extra_info = self.extra_info_json()
-            if extra_info.get('is_confapi') and extra_info.get('label_en'):
+            extra_info = self.extra_info_json
+            if extra_info.get('label_en'):
                 return extra_info['label_en']
 
         if self.is_official:
@@ -151,14 +152,26 @@ class ESBChannel(models.Model):
 
     @property
     def is_confapi(self):
-        extra_info = self.extra_info_json()
-        return extra_info.get('is_confapi', False)
+        return self.extra_info_json.get('is_confapi', False)
 
+    @property
     def extra_info_json(self):
         try:
             return json.loads(self.extra_info)
         except Exception:
             return {}
+
+    @cached_property
+    def comp_conf_json(self):
+        try:
+            return json.loads(self.comp_conf)
+        except Exception:
+            return {}
+
+    @property
+    def allow_edit_comp_conf(self):
+        """是否允许编辑字段 comp_conf，仅 list 数据支持更新，比如 send_mail 配置"""
+        return self.comp_conf_json and isinstance(self.comp_conf_json, (list, tuple))
 
 
 class FunctionController(models.Model):
