@@ -12,14 +12,21 @@ function add_system(url_add_system, csrf_token, system_id) {
             id: 'add_system_dialog',
             title: '<span style="font-size: 15px;">'+gettext('添加新组件系统')+'</span>',
             content: $('#system-add-tmpl'),
-            width: 800,
+            width: 830,
             fixed: true,
         });
 
         add_system_dialog.showModal();
     });
 
-    $('#add_system_btn').bind('click', function () {
+    $('#add_system_btn').bind('click', function (event) {
+        event.preventDefault()
+
+        var is_valid_form = document.getElementById("system_info").reportValidity();
+        if (!is_valid_form) {
+            return false;
+        }
+
         var continue_flag = true
         if(!$("#system-add-tmpl").find('#id_name').val()){
             $("#system-add-tmpl").find('.form-group').eq(0).addClass('has-error');
