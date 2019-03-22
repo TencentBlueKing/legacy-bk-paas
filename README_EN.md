@@ -46,7 +46,6 @@ free-operation of SaaS applications
 
 ## SaaS List
 
-- [Fault Auto-recovery](https://github.com/Tencent/bk-fta-solutions)
 - [Standard OPS](https://github.com/Tencent/bk-sops)
 
 ## Support
