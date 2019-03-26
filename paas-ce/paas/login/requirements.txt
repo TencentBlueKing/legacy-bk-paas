@@ -1,7 +1,7 @@
 django==1.8.11
 dj-static==0.0.6
 pycrypto==2.6.1
-requests==2.9.1
+requests==2.21.0
 pymysql==0.6.7
 gunicorn==19.6.0
 uWSGI==2.0.13.1
