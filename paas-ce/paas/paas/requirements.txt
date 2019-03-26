@@ -2,13 +2,13 @@ django==1.8.11
 dj-static==0.0.6
 mako==1.0.4
 pycrypto==2.6.1
-requests==2.9.1
+requests==2.21.0
 gunicorn==19.6.0
 uWSGI==2.0.13.1
 elasticsearch==2.3.0
 pymysql==0.6.7
 redis==2.10.5
-PyYAML==3.11
+PyYAML==5.1
 Pillow==3.4.2
 gevent==1.1.2
 pytz==2016.6.1
