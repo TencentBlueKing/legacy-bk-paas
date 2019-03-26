@@ -1,6 +1,6 @@
 Django==1.8.11
 PyMySQL==0.6.7
-requests==2.9.1
+requests==2.21.0
 celery==3.1.18
 kombu==3.0.35
 django-celery==3.2.1
@@ -20,7 +20,7 @@ six==1.10.0
 SQLAlchemy==1.0.12
 stevedore==1.17.1
 suds==0.4
-urllib3==1.16
+urllib3==1.24.1
 amqp==1.4.9
 anyjson==0.3.3
 billiard==3.3.0.23
