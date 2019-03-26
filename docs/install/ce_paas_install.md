@@ -45,7 +45,7 @@ $ pip install -r requirements.txt
 $ vim conf/settings_development.py
 
 # 执行migration, 其中 login / paas 两个项目需要做 migration
-python manager.py migrate
+python manage.py migrate
 
 # 拉起服务
 $ python manage.py runserver 8001
