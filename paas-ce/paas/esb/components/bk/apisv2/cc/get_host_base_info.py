@@ -57,12 +57,12 @@ class GetHostBaseInfo(Component):
         "data": [
             {
                 "bk_property_id": "bk_host_name",
-                "bk_property_name": "主机名",
+                "bk_property_name": "host name",
                 "bk_property_value": "centos7"
             },
             {
                 "bk_property_id": "bk_host_id",
-                "bk_property_name": "主机ID",
+                "bk_property_name": "host ID",
                 "bk_property_value": "10000"
             }
         ]

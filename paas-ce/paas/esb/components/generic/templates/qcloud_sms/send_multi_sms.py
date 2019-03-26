@@ -21,14 +21,14 @@ class SendMultiSms(Component, SetupConfMixin):
     api_type = API_TYPE_OP
 
     class Form(BaseComponentForm):
-        sdk_app_id = forms.CharField(label=u'腾讯云sdkappid', required=True)
-        app_key = forms.CharField(label=u'腾讯云appkey', required=True)
-        sms_type = forms.IntegerField(label=u'短信类型', required=False)
-        nation_code = forms.CharField(label=u'国家码', required=False)
-        phone_numbers = ListField(label=u'不带国家码的手机号', required=True)
-        content = forms.CharField(label=u'消息内容', required=True)
-        extend = forms.CharField(label=u'通道扩展码', required=False)
-        ext = forms.CharField(label=u'服务端原样返回的参数', required=False)
+        sdk_app_id = forms.CharField(label='tencent cloud sdkappid', required=True)
+        app_key = forms.CharField(label='tencent cloud appkey', required=True)
+        sms_type = forms.IntegerField(label='sms type', required=False)
+        nation_code = forms.CharField(label='nation code', required=False)
+        phone_numbers = ListField(label='phone numbers', required=True)
+        content = forms.CharField(label='content', required=True)
+        extend = forms.CharField(label='extend', required=False)
+        ext = forms.CharField(label='ext', required=False)
 
         def clean(self):
             data = self.cleaned_data

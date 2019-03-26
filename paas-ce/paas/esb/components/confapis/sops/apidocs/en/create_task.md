@@ -12,9 +12,11 @@ Create a task with a flow template
 |---------------|------------|--------|------------------|
 |   bk_biz_id    |   string     |   YES   |  the business ID |
 |   template_id  |   string     |   YES   |  the flow template ID |
+|   template_source | string   | NO    | source of flow，default value is business. business: from business, common: from common flow |
 |   name         |   string     |   YES   |  Task name |
 |   flow_type    |   string     |   NO    |  flow type，common: common flow，common_func：functional flow |
 |   constants    |   dict       |   NO    |  global variables，details are described below |
+|   exclude_task_nodes_id | list |   NO   |  nodes id not be executed, which are set ignore in flow |
 
 #### constants.KEY
 

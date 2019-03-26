@@ -26,6 +26,11 @@ COMPONENT_STATUSES = FancyDict((
 API_TYPE_OP = 'operate'
 API_TYPE_Q = 'query'
 
+HTTP_METHOD = FancyDict((
+    ('GET', 'GET'),
+    ('POST', 'POST'),
+))
+
 
 BK_SYSTEMS = {
     'BK_LOGIN': {

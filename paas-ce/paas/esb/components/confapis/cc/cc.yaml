@@ -9,7 +9,16 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/biz/status/{flag}/{bk_supplier_account}/{bk_biz_id}
   dest_http_method: PUT  
-
+  
+- path: /v2/cc/batch_delete_set/
+  name: batch_delete_set
+  label: 批量删除集群 
+  label_en: delete set batch
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/set/{bk_biz_id}/batch
+  dest_http_method: DELETE  
   
 - path: /v2/cc/create_inst/
   name: create_inst
@@ -40,7 +49,16 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path:  /api/v3/inst/{bk_supplier_account}/{bk_obj_id}/{bk_inst_id}
   dest_http_method: PUT
- 
+  
+- path: /v2/cc/batch_update_inst/
+  name: batch_update_inst
+  label: 批量更新对象实例
+  label_en: update inst batch
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/inst/{bk_supplier_account}/{bk_obj_id}/batch
+  dest_http_method: PUT
   
 - path: /v2/cc/delete_inst/
   name: delete_inst
@@ -52,6 +70,15 @@
   dest_path:  /api/v3/inst/{bk_supplier_account}/{bk_obj_id}/{bk_inst_id}
   dest_http_method: DELETE
   
+- path: /v2/cc/batch_delete_inst/
+  name: batch_delete_inst
+  label: 批量删除实例
+  label_en: delete inst batch
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path:  /api/v3/inst/{bk_supplier_account}/{bk_obj_id}/batch
+  dest_http_method: DELETE
   
 - path: /v2/cc/search_inst_association_topo/
   name: search_inst_association_topo
@@ -333,7 +360,27 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path:  /api/v3/event/subscribe/telnet
   dest_http_method: POST
-      
+    
+- path: /v2/cc/transfer_sethost_to_idle_module/
+  name: transfer_sethost_to_idle_module
+  label: 清空业务下集群/模块中主机
+  label_en: transfer host in set or module to idle module
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/modules/idle/set
+  dest_http_method: POST
+  
+- path: /v2/cc/clone_host_property/
+  name: clone_host_property
+  label: 克隆主机属性
+  label_en: clone host property
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/property/clone
+  dest_http_method: PUT
+  
 - path: /v2/cc/get_operation_log/
   name: get_operation_log
   label: 获取操作日志
@@ -343,5 +390,95 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/audit/search
   dest_http_method: POST
-  
 
+- path: /v2/cc/add_host_lock/
+  name: add_host_lock
+  label: 新加主机锁
+  label_en: add host lock
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/host/lock
+  dest_http_method: POST
+
+- path: /v2/cc/delete_host_lock/
+  name: delete_host_lock
+  label: 删除主机锁
+  label_en: delete host lock
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/host/lock
+  dest_http_method: DELETE
+
+
+- path: /v2/cc/search_host_lock/
+  name: search_host_lock
+  label: 查询主机锁
+  label_en: search host lock
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/host/lock/search
+  dest_http_method: POST
+
+- path: /v2/cc/get_mainline_object_topo/
+  name: get_mainline_object_topo
+  label: 查询主线模型的业务拓扑
+  label_en: get mainline object's business topology
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/topo/model/{bk_supplier_account}
+  dest_http_method: GET
+  
+- path: /v2/cc/get_biz_internal_module/
+  name: get_biz_internal_module
+  label: 查询业务的空闲机和故障机模块
+  label_en: get business's fault and idle modules
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/topo/internal/{bk_supplier_account}/{bk_biz_id}
+  dest_http_method: GET
+  
+- path: /v2/cc/get_process_bind_module/
+  name: get_process_bind_module
+  label: 查询进程绑定模块
+  label_en: get module bind with process
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/proc/module/{bk_supplier_account}/{bk_biz_id}/{bk_process_id}
+  dest_http_method: GET
+  
+- path: /v2/cc/bind_process_module/
+  name: bind_process_module
+  label: 绑定进程到模块
+  label_en: bind process to module
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/proc/module/{bk_supplier_account}/{bk_biz_id}/{bk_process_id}/{bk_module_name}
+  dest_http_method: PUT
+  
+- path: /v2/cc/delete_process_module_bind/
+  name: delete_process_module_bind
+  label: 解绑进程模块
+  label_en: delete process module bind relationship
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/proc/module/{bk_supplier_account}/{bk_biz_id}/{bk_process_id}/{bk_module_name}
+  dest_http_method: DELETE
+  
+- path: /v2/cc/find_host_by_module/
+  name: find_host_by_module
+  label: 根据模块查询主机
+  label_en: find host by module
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/modulehost
+  dest_http_method: POST
+  

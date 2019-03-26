@@ -7,6 +7,7 @@ http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """ # noqa
 import json
+import copy
 
 from common.log import logger_api, logger
 from common.base_utils import datetime_format
@@ -23,6 +24,11 @@ class BasicRequestLogger(object):
             kwargs = request.g.kwargs_copy
         else:
             kwargs = request.g.kwargs
+
+        if request.g.system_name == 'CMSI' and request.g.component_alias_name == 'send_mail':
+            kwargs = copy.copy(kwargs)
+            kwargs.pop('attachments', None)
+
         msecs_cost = (request.g.ts_request_end - request.g.ts_request_start) * 1000
         if isinstance(response, dict):
             message = response and response.get('message', '')

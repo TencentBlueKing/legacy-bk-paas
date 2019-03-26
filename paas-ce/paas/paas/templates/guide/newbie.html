@@ -75,6 +75,7 @@
                     <a name="step3"></a>
                     <div class="king-timeline-header"><span class="king-bg-blue num">3</span>配置修改 <i class="bk-icon icon-angle-down pull-right"></i></div>
                     <div class="king-timeline-item">
+                        <div><strong>Python（Django）：</strong></div>
                         <div class="king-timeline-body">
                             <strong>示例1：<a href="${SITE_URL}media/framework.tar.gz">点击下载应用开发框架代码 </a> ，将框架代码放到自己的代码仓库中，并按以下提示修改：</strong>
                             <ol class="guide-list">
@@ -103,7 +104,6 @@
                             <br>
 
                             <strong>示例2：非蓝鲸智云应用框架开发的应用，请检查以下配置信息(<a href="${STATIC_URL}assets/bksite.zip">点击下载示例代码</a>) ：</strong>
-
                             <ol class="guide-list">
                                 <li>
                                     settings.py文件中添加 APP_ID 和 APP_TOKEN
@@ -119,8 +119,39 @@
                                     请确认 uwsgi.py 文件在根目录下，也就是跟 manage.py 同级目录下。
                                 </li>
                             </ol>
+                        </div>
+
+                        <div><strong>Python3（Django）：</strong></div>
+                        <div class="king-timeline-body">
+                            <strong>示例1：<a href="${SITE_URL}media/framework_py3.tar.gz">点击下载Python3应用开发框架代码 </a> ，将框架代码放到自己的代码仓库中，并按以下提示修改：</strong>
+                            <ol class="guide-list">
+                                <li>config/__init__.py 文件: `APP_CODE`(应用ID) 和 `SECRET_KEY`(应用TOKEN)
+                                    <span>（蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中可以查看到这两个值的信息）;</span>
+                                </li>
+
+                                <li>config/__init__.py 文件: BK_PAAS_HOST的值设置为: <code>${paas_host}</code>;
+                                </li>
+                                <li>config/dev.py 文件：DATABASES（请创建本地开发数据库，并修改配置信息）;</li>
+                                <li>config/stag.py 文件：DATABASES（请创建测试环境数据库，并修改配置信息）;</li>
+                                <li>config/prod.py 文件：DATABASES（请创建正式环境数据库，并修改配置信息）。</li>
+                                <p class="mt5"><strong><code>注意：</code>测试环境 和 正式环境 的数据库需要对 AppServer 授权</strong>
+                                (
+                                % if active_server_ips:
+                                    <code>${active_server_ips}</code>
+                                % else:
+                                    <a href="${SITE_URL}engine/server/" target="_blank">添加并激活 AppServer</a>
+                                % endif
+                                )
+                                </p>
+                                <li class="mt10">若需要使用 celery，请修改以下配置：(<a href="http://bkopen-10032816.file.myqcloud.com/paas/celery_packages.zip">点击下载 celery 开发指引</a>)</li>
+                                <span class="ml40">config/default.py 文件：IS_USE_CELERY的值设置为: <code>True</code></span><br>
+                                <span class="ml40">config/dev.py 文件：BROKER_URL（请创建本地开发的 celery消息队列，并修改配置信息，推荐使用 RabbitMQ）</span><br>
+                                <span class="ml40">config/default.py 文件：CELERY_IMPORTS（添加celery任务模块）</span>
+                            </ol>
+                            <br>
 
                         </div>
+
                     </div>
                 </li>
 

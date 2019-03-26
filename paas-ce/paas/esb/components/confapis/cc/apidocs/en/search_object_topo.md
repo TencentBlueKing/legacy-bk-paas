@@ -45,7 +45,7 @@ search object topology
            "to": {
                "bk_classification_id": "bk_host_manage",
                "bk_obj_id": "plat",
-               "bk_obj_name": "云区域",
+               "bk_obj_name": "cloud area",
                "position": "{\"bk_host_manage\":{\"x\":-172,\"y\":-160}}",
                "bk_supplier_account": "0"
            }

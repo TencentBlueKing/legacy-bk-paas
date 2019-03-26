@@ -46,7 +46,7 @@ def validate_receiver(receiver, contact_way='phone'):
         else:
             error_contact_user.append(user_contact)
     if error_contact_user:
-        raise CommonAPIError(u'用户消息发送失败。以下用户联系方式格式错误：%s，请进行检查' % ','.join(error_contact_user))
+        raise CommonAPIError('User message failed to send. The following users contact format are incorrect: %s, please check' % ','.join(error_contact_user))  # noqa
     return valid_receiver
 
 
@@ -65,7 +65,7 @@ def get_receiver_with_username(receiver__username=None,    # noqa
     from components.bk.apis.bk_login.get_batch_user import GetBatchUser
     user_result = GetBatchUser().invoke(kwargs={'username_list': username_list})
     if not user_result['result']:
-        raise CommonAPIError(u'根据用户名批量获取用户联系方式失败，%s' % user_result['message'])
+        raise CommonAPIError(u'Failed to get users contact information based on username, %s' % user_result['message'])
 
     result = {}
     not_exist_user = []
@@ -99,13 +99,14 @@ def get_receiver_with_username(receiver__username=None,    # noqa
 
     _extra_user_error_msg = []
     if not_exist_user:
-        _extra_user_error_msg.append(u'以下用户不是蓝鲸用户：%s' % ','.join(not_exist_user))
+        _extra_user_error_msg.append(u'The following users are not blueking users: %s' % ','.join(not_exist_user))
     if error_contact_user:
-        _extra_user_error_msg.append(u'以下用户联系方式格式错误：%s' % ','.join(error_contact_user))
+        _extra_user_error_msg.append(u'The following users contact format are incorrect: %s'
+                                     % ','.join(error_contact_user))
     result['_extra_user_error_msg'] = ';'.join(_extra_user_error_msg)
 
     if receiver__username and not result.get('receiver'):
-        raise CommonAPIError(u'全部用户消息发送失败。%s' % result['_extra_user_error_msg'])
+        raise CommonAPIError(u'All users message failed to be sent. %s' % result['_extra_user_error_msg'])
 
     return result
 
@@ -114,7 +115,7 @@ def get_user_contact_with_username(username_list=None, contact_way='phone'):
     from components.bk.apis.bk_login.get_batch_user import GetBatchUser
     user_result = GetBatchUser().invoke(kwargs={'username_list': username_list})
     if not user_result['result']:
-        raise CommonAPIError(u'根据用户名批量获取用户联系方式失败，%s' % user_result['message'])
+        raise CommonAPIError(u'Failed to get users contact information based on username, %s' % user_result['message'])
 
     user_contact_info = {}
     not_exist_user = []
@@ -133,13 +134,14 @@ def get_user_contact_with_username(username_list=None, contact_way='phone'):
 
     _extra_user_error_msg = []
     if not_exist_user:
-        _extra_user_error_msg.append(u'以下用户不是蓝鲸用户：%s' % ','.join(not_exist_user))
+        _extra_user_error_msg.append(u'The following users are not blueking users: %s' % ','.join(not_exist_user))
     if error_contact_user:
-        _extra_user_error_msg.append(u'以下用户联系方式格式错误：%s' % ','.join(error_contact_user))
+        _extra_user_error_msg.append(u'The following users contact format are incorrect: %s'
+                                     % ','.join(error_contact_user))
     _extra_user_error_msg = ';'.join(_extra_user_error_msg)
 
     if not user_contact_info:
-        raise CommonAPIError(u'全部用户联系方式获取失败。%s' % _extra_user_error_msg)
+        raise CommonAPIError(u'All users contact information failed to get, %s' % _extra_user_error_msg)
 
     return {
         'user_contact_info': user_contact_info,

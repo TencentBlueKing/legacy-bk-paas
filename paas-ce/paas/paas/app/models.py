@@ -18,7 +18,7 @@ from django.db.models.deletion import SET_NULL
 from app.constants import (DB_TYPE_CHOICES, LANGUAGE_CHOICES, STATE_CHOICES,
                            STATE_CHOICES_DISPALY_DICT, VCS_TYPE_CHOICES,
                            AppStateEnum, LanguageEnum, VCSTypeEnum, DBTypeEnum)
-from app.manager import AppManager, SecureInfoManager
+from app.manager import AppManager, SecureInfoManager, DesktopSettingsManager
 from common.utils import should_update_logo, get_app_logo
 from common.constants import LogoImgRelatedDirEnum
 
@@ -47,6 +47,12 @@ class AppTags(models.Model):
         db_table = 'paas_apptags'
         verbose_name = "应用分类信息"
         verbose_name_plural = "应用分类信息"
+
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "code": self.code,
+        }
 
 
 class App(models.Model):
@@ -259,3 +265,20 @@ class SecureInfo(models.Model):
         db_table = 'paas_app_secureinfo'
         verbose_name = "应用安全相关信息"
         verbose_name_plural = "应用安全相关信息"
+
+
+class DesktopSettings(models.Model):
+    """应用桌面属性
+    """
+    app_code = models.CharField("对应的appcode", max_length=30, unique=True)
+    is_display = models.BooleanField("是否在桌面展示", default=True)
+
+    objects = DesktopSettingsManager()
+
+    def __unicode__(self):
+        return self.app_code
+
+    class Meta:
+        db_table = 'paas_app_desktop_settings'
+        verbose_name = "应用桌面属性"
+        verbose_name_plural = "应用桌面属性"
