@@ -30,7 +30,7 @@ def agent_header(sid, token):
     return {
         "Content-Type": "application/json",
         "X-ID": str(sid),
-        "X-TOKEN": token
+        "X-TOKEN": str(token)
     }
 
 
