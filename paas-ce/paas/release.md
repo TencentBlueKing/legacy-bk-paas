@@ -1,5 +1,9 @@
 # 蓝鲸智云 PaaS 社区版版本记录
 
+# 3.2.5
+
+- bugfix: fix a lot of front-end issues
+
 # 3.2.4
 
 - update: python3 frmaework
