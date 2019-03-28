@@ -46,14 +46,14 @@
 	        		<option value="0" {% if obj.role_code == 0 %} selected {% endif %}>{% trans '普通用户' %}</option>
                     <option value="1" {% if obj.role_code == 1 %} selected {% endif %}>{% trans '管理员' %}</option>
                     <option value="2" {% if obj.role_code == 2 %} selected {% endif %}>{% trans '开发者' %}</option>
-                    <option value="3" {% if obj.role_code == 3 %} selected {% endif %}>{% trans '职能化' %}</option>
+                    <option value="3" {% if obj.role_code == 3 %} selected {% endif %}>{% trans '职能化用户' %}</option>
                     <option value="4" {% if obj.role_code == 4 %} selected {% endif %}>{% trans '审计员' %}</option>
                 </select>
 		    {% else %}
 		    	<select class="form-control u_role" disabled style="width:90px">
                     {% if obj.role_code == 0 %}<option value="0" selected>{% trans '普通用户' %}</option>{% endif %}
                     {% if obj.role_code == 2 %}<option value="2" selected>{% trans '开发者' %}</option>{% endif %}
-                    {% if obj.role_code == 3 %}<option value="3" selected>{% trans '职能化' %}</option>{% endif %}
+                    {% if obj.role_code == 3 %}<option value="3" selected>{% trans '职能化用户' %}</option>{% endif %}
                     {% if obj.role_code == 4 %}<option value="4" selected>{% trans '审计员' %}</option>{% endif %}
                 </select>
 		    {% endif %}

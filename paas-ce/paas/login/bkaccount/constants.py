@@ -35,7 +35,7 @@ RoleCodeEnum = enum(
 
 ROLECODE_CHOICES = [
     (RoleCodeEnum.STAFF, _(u"普通用户")),
-    (RoleCodeEnum.SUPERUSER, _(u"超级管理员")),
+    (RoleCodeEnum.SUPERUSER, _(u"管理员")),
     (RoleCodeEnum.DEVELOPER, _(u"开发者")),
     (RoleCodeEnum.OPERATOR, _(u"职能化用户")),
     (RoleCodeEnum.AUDITOR, _(u"审计员"))

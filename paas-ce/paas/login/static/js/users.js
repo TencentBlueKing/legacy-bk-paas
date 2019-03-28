@@ -64,7 +64,7 @@ $('.user_add_btn').on('click',function(){
             '           <option value="0">'+ gettext("普通用户") +'</option>',
             '           <option value="1">'+ gettext("管理员") +'</option>',
             '           <option value="2">'+ gettext("开发者") +'</option>',
-            '           <option value="3">'+ gettext("职能化") +'</option>',
+            '           <option value="3">'+ gettext("职能化用户") +'</option>',
             '           <option value="4">'+ gettext("审计员") +'</option>',
             '       </select>',
             '   </td>',
