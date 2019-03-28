@@ -2,7 +2,9 @@
 
 # 3.2.4
 
-- update: python 3 frmaework
+- update: python3 frmaework
+- update: python framwork to support https dev
+- bugfix: add old login account manager url
 
 # 3.2.3
 
