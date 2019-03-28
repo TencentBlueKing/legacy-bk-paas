@@ -29,7 +29,7 @@ def has_active_thirdserver(category):
 def agent_header(sid, token):
     return {
         "Content-Type": "application/json",
-        "X-ID": sid,
+        "X-ID": str(sid),
         "X-TOKEN": token
     }
 
