@@ -105,7 +105,7 @@ $(function() {
             },
             'click .show_esb_url': function(ev) {
                 $('body').addClass('menu-active');
-                $('#' + ev.target.id).parent('.dropdown').find('.dropdown-content').show();
+                $(ev.currentTarget).find('.dropdown-content').show();
             },
             'click .copy-to-clipboard': function(ev) {
                 var btn = ev.currentTarget;
