@@ -4,8 +4,8 @@
 <div class="box-info full pg20 user_info_div">
   <div class="dev_center_module">
     <h4 class="dev_module_title">
-        <span style="color:red;font-size:14px" id="error_msg" class="">{{error_msg}}</span>
-        <span style="color:green;font-size:14px" id="error_msg" class="">{{success_msg}}</span>
+        <span style="color:red;font-size:14px;width: 860px; float: left; display: block; word-wrap: break-word;" id="error_msg" class="">{{error_msg}}</span>
+        <span style="color:green;font-size:14px">{{success_msg}}</span>
     	{% if request.user.is_superuser %}
             &nbsp
            <button type="button" class="btn-primary btn-xs user_btn user_export_btn f_r"><span aria-hidden="true" class="glyphicon glyphicon-export"></span>{% trans '导出' %}</button>
@@ -26,7 +26,7 @@
             <option value="1">{% trans '管理员' %}</option>
             <option value="0">{% trans '普通用户' %}</option>
             <option value="2">{% trans '开发者' %}</option>
-            <option value="3">{% trans '职能化' %}</option>
+            <option value="3">{% trans '职能化用户' %}</option>
             <option value="4">{% trans '审计员' %}</option>
         </select>
         <button id="serach_user" class="btn btn-azure btn-min-w" style="margin-top:9px;height:34px">{% trans '查询' %}</button>
@@ -65,14 +65,14 @@
             <p>{% trans '注意：' %}</p>
             {% blocktrans trimmed %}
             <p>1.请下载<a href="{{STATIC_URL}}bk_user_import.xls">EXCEL模板</a>文件填写用户数据</p>
-            <p>2.<code>用户名</code>为必填，包含数字和字母，长度在4-20个字符</p>
+            <p>2.<code>用户名</code>为必填，包含数字、字母、下划线和点，长度在4-20个字符</p>
             <p>3.<code>用户名</code>为唯一标识，重复导入会覆盖已有数据</p>
             <p>4.导入用户默认密码为：<code>{{default_paasword}}</code></p>
             <p>5.文件后缀名必须为：<code>.xls</code>或<code>.xlsx</code> </p>
             <p>6.导入失败请检查EXCEL格式规范，或重新下载模板填写</p>
             {% endblocktrans %}
         </div>
-    </from>
+    </form>
     <span id="password_tip" style="color:red"></span>
 </div>
 

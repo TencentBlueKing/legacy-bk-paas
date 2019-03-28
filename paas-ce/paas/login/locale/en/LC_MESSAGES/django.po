@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-26 23:33+0800\n"
+"POT-Creation-Date: 2019-03-28 20:33+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,203 +17,133 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\bkaccount\accounts.py:125
+#: bkaccount/accounts.py:127
 msgid "缺少参数bk_token"
 msgstr "Missing parameters bk_token"
 
-#: .\bkaccount\accounts.py:135
+#: bkaccount/accounts.py:136
 msgid "参数bk_token非法"
 msgstr "Parameters bk_token is illegal"
 
-#: .\bkaccount\accounts.py:146
-#, python-format
-msgid "不存在bk_token[%s]的记录"
+#: bkaccount/accounts.py:152
+#, fuzzy
+#| msgid "不存在bk_token[%s]的记录"
+msgid "不存在该bk_token的记录"
 msgstr "Record of bk_token [%s] does not exist"
 
-#: .\bkaccount\accounts.py:153
+#: bkaccount/accounts.py:159
 msgid "登录态已注销"
 msgstr "login status has been logged out"
 
-#: .\bkaccount\accounts.py:157
+#: bkaccount/accounts.py:163
 msgid "登录态已过期"
 msgstr "Login status has expired"
 
-#: .\bkaccount\accounts.py:161
+#: bkaccount/accounts.py:167
 msgid "登录态有效期不合法"
 msgstr "Login validity is illegal"
 
-#: .\bkaccount\admin.py:20
-msgid "Personal info"
-msgstr ""
-
-#: .\bkaccount\admin.py:21
-msgid "Contact info"
-msgstr ""
-
-#: .\bkaccount\admin.py:22
-msgid "Permissions"
-msgstr ""
-
-#: .\bkaccount\admin.py:23
-msgid "Important dates"
-msgstr ""
-
-#: .\bkaccount\constants.py:33 .\templates\account\user_table.part:46
-#: .\templates\account\user_table.part:54 .\templates\account\users.html:28
+#: bkaccount/constants.py:37 templates/bkaccount/user_table.part:46
+#: templates/bkaccount/user_table.part:54 templates/bkaccount/users.html:27
 msgid "普通用户"
 msgstr "staff"
 
-#: .\bkaccount\constants.py:34
-msgid "超级管理员"
+#: bkaccount/constants.py:38 templates/bkaccount/user_table.part:47
+#: templates/bkaccount/users.html:26
+msgid "管理员"
 msgstr "superuser"
 
-#: .\bkaccount\constants.py:35 .\templates\account\user_table.part:48
-#: .\templates\account\user_table.part:55 .\templates\account\users.html:29
+#: bkaccount/constants.py:39 templates/bkaccount/user_table.part:48
+#: templates/bkaccount/user_table.part:55 templates/bkaccount/users.html:28
 msgid "开发者"
 msgstr "developer"
 
-#: .\bkaccount\constants.py:36
+#: bkaccount/constants.py:40 templates/bkaccount/user_table.part:49
+#: templates/bkaccount/user_table.part:56 templates/bkaccount/users.html:29
 msgid "职能化用户"
 msgstr "operator"
 
-#: .\bkaccount\constants.py:37 .\templates\account\user_table.part:50
-#: .\templates\account\user_table.part:57 .\templates\account\users.html:31
+#: bkaccount/constants.py:41 templates/bkaccount/user_table.part:50
+#: templates/bkaccount/user_table.part:57 templates/bkaccount/users.html:30
 msgid "审计员"
 msgstr "auditor"
 
-#: .\bkaccount\constants.py:71
+#: bkaccount/constants.py:75
 msgid "中文"
 msgstr "Chinese"
 
-#: .\bkaccount\constants.py:72
+#: bkaccount/constants.py:76
 msgid "英文"
 msgstr "English"
 
-#: .\bkaccount\manager.py:52
-#, python-format
-msgid "用户名[%s]不存在"
-msgstr "Username [%s] does not exist"
-
-#: .\bkaccount\manager.py:149
-#, python-format
-msgid "用户[%s]密码重置失败"
-msgstr "User [%s] password reset failed"
-
-#: .\bkaccount\manager.py:167
-#, python-format
-msgid "个人[%s]信息修改失败"
-msgstr "[%s] Personal information modification failed"
-
-#: .\bkaccount\manager.py:194 .\bkaccount\manager.py:235
-#, python-format
-msgid "账号为：%s 的用户是最后一个管理员，不可修改其角色"
-msgstr ""
-"Username: %s user is the last administrator, and his role cannot be modified"
-
-#: .\bkaccount\manager.py:260
-#, python-format
-msgid "账号为：%s 的用户已经存在"
-msgstr "Username: %s user already exists"
-
-#: .\bkaccount\manager.py:263
-#, python-format
-msgid "保存用户信息(%s)出错"
-msgstr "Save user(%s) information failed"
-
-#: .\bkaccount\manager.py:296
-msgid "内置admin用户不可删除"
-msgstr "Built in admin user cannot be deleted"
-
-#: .\bkaccount\manager.py:299
-msgid "最后一个管理员用户，不允许删除"
-msgstr "The user as the last administrator is not permitted to be deleted"
-
-#: .\bkaccount\manager.py:304
-#, python-format
-msgid "用户(%s)删除失败"
-msgstr "User (%s) delete failed"
-
-#: .\bkaccount\manager.py:318
-msgid "用户密码重置失败"
-msgstr "User password reset failed"
-
-#: .\bkaccount\manager.py:328
-msgid "已经绑定了微信，请解绑后再重新绑定！"
-msgstr "WeChat has been bound, please unbind and then bind again"
-
-#: .\bkaccount\manager.py:332
-msgid "该微信号已经被绑定过了"
-msgstr "The WeChat ID has been bound"
-
-#: .\bkaccount\manager.py:339
-msgid "绑定用户微信信息失败"
-msgstr "Bound user WeChat information failed"
-
-#: .\bkaccount\manager.py:350
-msgid "账号未绑定过微信号，无法解绑"
-msgstr "The user has not been bound with a WeChat ID, so it cannot be unbound"
-
-#: .\bkaccount\manager.py:354
-msgid "解绑用户微信信息失败"
-msgstr "Unbound user WeChat information failed"
-
-#: .\bkaccount\manager.py:385
-msgid "记录成功"
-msgstr "Record succeeded"
-
-#: .\bkaccount\manager.py:387
-msgid "用户登录记录失败"
-msgstr "User login record failed"
-
-#: .\bkaccount\models.py:43
-msgid "date joined"
+#: bkaccount/forms.py:70
+msgid "名称长度不能超过16个字符"
 msgstr ""
 
-#: .\bkaccount\models.py:51
-msgid "user"
+#: bkaccount/forms.py:73
+msgid "手机号长度不能超过11个字符"
 msgstr ""
 
-#: .\bkaccount\models.py:52
-msgid "users"
-msgstr ""
-
-#: .\bkaccount\models.py:123
-msgid "create_time"
-msgstr ""
-
-#: .\bkaccount\utils.py:83
-#, python-format
-msgid "导出数据出现错误:%s"
-msgstr "Export data error: %s"
-
-#: .\bkaccount\validators.py:16
-#, python-format
-msgid ""
-"用户名【%s】错误，只能包含数字、字母、下划线和点，长度在4-20个字符，且必须以"
-"字母或数字开头"
-msgstr ""
-"Username [%s] error, it can only contain numbers, letters, underline and "
-"dots, with a length of 4-20 characters and must start with letters or number"
-
-#: .\bkaccount\validators.py:25
-#, python-format
-msgid ""
-"中文名【%s】错误，只能包含数字、字母、中文汉字、下划线，长度在1-16个字符"
+#: bkaccount/forms.py:81
+#, fuzzy
+#| msgid ""
+#| "中文名【%s】错误，只能包含数字、字母、中文汉字、下划线，长度在1-16个字符"
+msgid "中文名错误，只能包含数字、字母、中文汉字、下划线，长度在1-16个字符"
 msgstr ""
 "Nickname [%s] error, it can only contain numbers, letters and underscores, "
 "with a length of 1-16 characters"
 
-#: .\bkaccount\validators.py:34
-#, python-format
-msgid "手机号【%s】错误，仅支持中国大陆手机号码（11位数字）"
+#: bkaccount/forms.py:88
+#, fuzzy
+#| msgid "手机号【%s】错误，仅支持中国大陆手机号码（11位数字）"
+msgid "手机号错误，仅支持11位数字的号码"
 msgstr "Phone number [%s] error, it only supports 10-digit phone number"
 
-#: .\bkaccount\validators.py:43
-#, python-format
-msgid "email【%s】格式错误"
-msgstr "Email format [%s] error"
+#: bkaccount/forms.py:94
+#, fuzzy
+#| msgid "密码不能为空"
+msgid "用户名不能为空"
+msgstr "Password can not be empty"
 
-#: .\bkaccount\validators.py:52
+#: bkaccount/forms.py:95
+msgid "用户名长度不能超过20个字符"
+msgstr ""
+
+#: bkaccount/forms.py:96
+msgid "用户名长度不能少于4个字符"
+msgstr ""
+
+#: bkaccount/forms.py:104
+#, fuzzy
+#| msgid ""
+#| "用户名【%s】错误，只能包含数字、字母、下划线和点，长度在4-20个字符，且必须"
+#| "以字母或数字开头"
+msgid ""
+"用户名错误，只能包含数字、字母、下划线和点，长度在4-20个字符，且必须以字母或"
+"数字开头"
+msgstr ""
+"Username [%s] error, it can only contain numbers, letters, underline and "
+"dots, with a length of 4-20 characters and must start with letters or number"
+
+#: bkaccount/forms.py:110 bkaccount/forms.py:122 bkaccount/forms.py:132
+#, fuzzy
+#| msgid "密码不能为空"
+msgid "新密码不能为空"
+msgstr "Password can not be empty"
+
+#: bkaccount/forms.py:111 bkaccount/forms.py:133
+msgid "密码长度不能超过20个字符"
+msgstr ""
+
+#: bkaccount/forms.py:112 bkaccount/forms.py:134
+msgid "密码长度不能少于8个字符"
+msgstr ""
+
+#: bkaccount/forms.py:124
+msgid "两次输入的新密码不一致"
+msgstr "Two passwords entered in twice are not the same"
+
+#: bkaccount/forms.py:126 bkaccount/forms.py:141
 msgid ""
 "密码只支持数字、字母或!@#$%^*()_-+=，长度在8-20个字符，且必须保证包含大小写字"
 "母和数字"
@@ -221,342 +151,597 @@ msgstr ""
 "The password only supports numbers, letters, or !@#$%^*()_-+=, with a length "
 "of 8 to 20 characters and must contain uppercase and lowercase and numbers"
 
-#: .\bkaccount\validators.py:61
-msgid "密码不能为空"
-msgstr "Password can not be empty"
+#: bkaccount/forms.py:146
+#, fuzzy
+#| msgid "参数错误，wx_userid 不能为空"
+msgid "wx_userid 不能为空"
+msgstr "Parameter error, wx_userid cannot be empty"
 
-#: .\bkaccount\validators.py:63
-msgid "两次输入的新密码不一致"
-msgstr "Two passwords entered in twice are not the same"
+#: bkaccount/forms.py:150
+msgid "文件必须上传"
+msgstr ""
 
-#: .\bkaccount\validators.py:80
-#, python-format
-msgid "用户%s不存在"
-msgstr "User [%s] does not exist"
-
-#: .\bkaccount\validators.py:99
-#, python-format
-msgid "批量导入用户，解析文件名出错:%s"
+#: bkaccount/forms.py:157
+#, fuzzy
+#| msgid "批量导入用户，解析文件名出错:%s"
+msgid "批量导入用户，解析文件名出错"
 msgstr "Batch import users, file name parse error: %s"
 
-#: .\bkaccount\validators.py:102
+#: bkaccount/forms.py:159
 msgid "文件格式错误，只支持：.xls 和 .xlsx 文件"
 msgstr "File format error, only supports files in .xls and .xlsx formats"
 
-#: .\bkaccount\views.py:115 .\bkaccount\views.py:142 .\bkaccount\views.py:161
-#: .\bkaccount\views.py:189 .\role_manage\views.py:56
-msgid "非管理员用户, 没有权限进行操作, 请找管理员申请权限!"
+#: bkaccount/manager.py:61
+msgid "用户名不存在"
+msgstr ""
+
+#: bkaccount/manager.py:159 bkaccount/manager.py:325
+msgid "用户密码重置失败"
+msgstr "User password reset failed"
+
+#: bkaccount/manager.py:176
+#, fuzzy
+#| msgid "个人[%s]信息修改失败"
+msgid "个人信息修改失败"
+msgstr "[%s] Personal information modification failed"
+
+#: bkaccount/manager.py:201
+#, fuzzy
+#| msgid "账号为：%s 的用户是最后一个管理员，不可修改其角色"
+msgid "该用户是最后一个管理员，不可修改其角色"
+msgstr ""
+"Username: %s user is the last administrator, and his role cannot be modified"
+
+#: bkaccount/manager.py:242
+#, fuzzy
+#| msgid "账号为：%s 的用户是最后一个管理员，不可修改其角色"
+msgid "用户是最后一个管理员，不可修改其角色"
+msgstr ""
+"Username: %s user is the last administrator, and his role cannot be modified"
+
+#: bkaccount/manager.py:267
+#, fuzzy
+#| msgid "账号为：%s 的用户已经存在"
+msgid "用户已经存在"
+msgstr "Username: %s user already exists"
+
+#: bkaccount/manager.py:270
+#, fuzzy
+#| msgid "保存用户信息(%s)出错"
+msgid "保存用户信息出错"
+msgstr "Save user(%s) information failed"
+
+#: bkaccount/manager.py:303
+msgid "内置admin用户不可删除"
+msgstr "Built in admin user cannot be deleted"
+
+#: bkaccount/manager.py:306
+msgid "最后一个管理员用户，不允许删除"
+msgstr "The user as the last administrator is not permitted to be deleted"
+
+#: bkaccount/manager.py:311
+#, fuzzy
+#| msgid "用户(%s)删除失败"
+msgid "用户删除失败"
+msgstr "User (%s) delete failed"
+
+#: bkaccount/manager.py:335
+msgid "已经绑定了微信，请解绑后再重新绑定！"
+msgstr "WeChat has been bound, please unbind and then bind again"
+
+#: bkaccount/manager.py:339
+msgid "该微信号已经被绑定过了"
+msgstr "The WeChat ID has been bound"
+
+#: bkaccount/manager.py:346
+msgid "绑定用户微信信息失败"
+msgstr "Bound user WeChat information failed"
+
+#: bkaccount/manager.py:357
+msgid "账号未绑定过微信号，无法解绑"
+msgstr "The user has not been bound with a WeChat ID, so it cannot be unbound"
+
+#: bkaccount/manager.py:361
+msgid "解绑用户微信信息失败"
+msgstr "Unbound user WeChat information failed"
+
+#: bkaccount/manager.py:392
+msgid "记录成功"
+msgstr "Record succeeded"
+
+#: bkaccount/manager.py:394
+msgid "用户登录记录失败"
+msgstr "User login record failed"
+
+#: bkaccount/models.py:51
+msgid "date joined"
+msgstr ""
+
+#: bkaccount/models.py:59
+msgid "user"
+msgstr ""
+
+#: bkaccount/models.py:60
+msgid "users"
+msgstr ""
+
+#: bkaccount/models.py:125
+msgid "create_time"
+msgstr ""
+
+#: bkaccount/utils.py:36
+msgid "用户不存在"
+msgstr ""
+
+#: bkaccount/utils.py:96
+#, fuzzy
+#| msgid "导出数据出现错误:%s"
+msgid "导出数据出现错误"
+msgstr "Export data error: %s"
+
+#: bkaccount/views.py:147
+msgid "保存用户信息成功"
+msgstr "Save user information succeeded"
+
+#: bkaccount/views.py:159
+#, fuzzy
+#| msgid "用户(%s)删除成功"
+msgid "用户删除成功"
+msgstr "User (%s) delete succeeded "
+
+#: bkaccount/views.py:175
+#, fuzzy
+#| msgid "修改密码"
+msgid "修改密码成功"
+msgstr "Change Password"
+
+#: bkaccount/views.py:183 common/mixins/base.py:31 common/mixins/base.py:45
+#, fuzzy
+#| msgid "非管理员用户, 没有权限进行操作, 请找管理员申请权限!"
+msgid "非管理员, 没有权限进行操作, 请找管理员申请权限!"
 msgstr ""
 "Non-administrator users do not have permissions to operate, so please apply "
 "for permissions to the administrator."
 
-#: .\bkaccount\views.py:131
-msgid "保存用户信息成功"
-msgstr "Save user information succeeded"
-
-#: .\bkaccount\views.py:150
-#, python-format
-msgid "用户(%s)删除成功"
-msgstr "User (%s) delete succeeded "
-
-#: .\bkaccount\views.py:203
+#: bkaccount/views.py:196
 msgid "文件解析出错，请下载 EXCEL模板文件 填写用户数据"
 msgstr ""
 "File parse error, please download EXCEL template file and fill in user data"
 
-#: .\bkaccount\views.py:207
-msgid "导入数据为空"
+#: bkaccount/views.py:199
+#, fuzzy
+#| msgid "导入数据为空"
+msgid "导入数据不能为空"
 msgstr "Import data is empty"
 
-#: .\bkaccount\views.py:240
-#, python-format
-msgid "用户导入出现异常%s"
+#: bkaccount/views.py:219
+#, fuzzy
+#| msgid "用户导入出现异常%s"
+msgid "用户导入出现异常 {}"
 msgstr "An exception occurred while user importing data; %s"
 
-#: .\bkaccount\views.py:242
-msgid "用户导入成功"
-msgstr "User import succeeded"
-
-#: .\bkaccount\views.py:258 .\templates\account\user_role_manage_table.part:26
-#: .\templates\account\user_table.part:19
+#: bkaccount/views.py:230 templates/bkaccount/user_table.part:19
 msgid "用户名"
 msgstr "username"
 
-#: .\bkaccount\views.py:258 .\templates\account\user_table.part:20
+#: bkaccount/views.py:230 templates/bkaccount/user_table.part:20
 msgid "中文名"
 msgstr "nickname"
 
-#: .\bkaccount\views.py:258 .\templates\account\user_table.part:21
+#: bkaccount/views.py:230 templates/bkaccount/user_table.part:21
 msgid "联系电话"
 msgstr "phone"
 
-#: .\bkaccount\views.py:258 .\templates\account\user_table.part:22
+#: bkaccount/views.py:230 templates/bkaccount/user_table.part:22
 msgid "常用邮箱"
 msgstr "email"
 
-#: .\bkaccount\views.py:258 .\templates\account\user_table.part:23
+#: bkaccount/views.py:230 templates/bkaccount/user_table.part:23
 msgid "角色"
 msgstr "role"
 
-#: .\bkaccount\views_api.py:26 .\bkaccount\views_api_v2.py:29
+#: bkaccount/views_api.py:31 bkaccount/views_api_v2.py:29
 msgid "用户验证成功"
 msgstr "User authentication succeeded"
 
-#: .\bkaccount\views_api.py:50 .\bkaccount\views_api.py:70
-#: .\bkaccount\views_api.py:99 .\bkaccount\views_api_v2.py:54
-#: .\bkaccount\views_api_v2.py:75 .\bkaccount\views_api_v2.py:105
-#: .\role_manage\views_api.py:40 .\role_manage\views_api_v2.py:42
+#: bkaccount/views_api.py:52 bkaccount/views_api.py:69
+#: bkaccount/views_api.py:92 bkaccount/views_api_v2.py:50
+#: bkaccount/views_api_v2.py:67 bkaccount/views_api_v2.py:90
 msgid "用户信息获取成功"
 msgstr "Get user information succeeded"
 
-#: .\bkaccount\views_api.py:84 .\bkaccount\views_api.py:112
-#: .\bkaccount\views_api.py:150 .\bkaccount\views_api.py:191
-#: .\bkaccount\views_api.py:224 .\bkaccount\views_api.py:254
-#: .\bkaccount\views_api.py:279 .\bkaccount\views_api_v2.py:90
-#: .\role_manage\views_api.py:25 .\role_manage\views_api_v2.py:27
+#: bkaccount/views_api.py:77 bkaccount/views_api.py:100
+#: bkaccount/views_api.py:121 bkaccount/views_api.py:144
+#: bkaccount/views_api_v2.py:75
 msgid "请求参数格式错误,必须为json格式"
 msgstr "Request parameters format error, it must be in json format"
 
-#: .\bkaccount\views_api.py:95 .\role_manage\views_api.py:36
+#: bkaccount/views_api.py:88
 msgid "缺少参数:username_list"
 msgstr "Missing parameters: username_list"
 
-#: .\bkaccount\views_api.py:123 .\bkaccount\views_api.py:161
-#: .\bkaccount\views_api.py:201
-msgid "您的权限不足"
-msgstr "Your permission is insufficient"
-
-#: .\bkaccount\views_api.py:137
+#: bkaccount/views_api.py:113
 msgid "密码重置成功"
 msgstr "Password reset succeeded"
 
-#: .\bkaccount\views_api.py:178
+#: bkaccount/views_api.py:136
 msgid "用户信息修改成功"
 msgstr "User information modification succeeded"
 
-#: .\bkaccount\views_api.py:211
-msgid "用户角色修改成功"
-msgstr "User role modification succeeded"
-
-#: .\bkaccount\views_api.py:234
-msgid "参数错误，wx_userid 不能为空"
-msgstr "Parameter error, wx_userid cannot be empty"
-
-#: .\bkaccount\views_api.py:241
+#: bkaccount/views_api.py:157
 msgid "绑定成功"
 msgstr "Binding succeeded"
 
-#: .\bkaccount\views_api.py:266
+#: bkaccount/views_api.py:165
 msgid "解绑成功"
 msgstr "Unbinding succeeded"
 
-#: .\bkaccount\views_api.py:290
-msgid "参数错误，language和timezone不能同时为空"
-msgstr ""
-"Parameter error, language and timezone can not both be empty at the same time"
-
-#: .\bkaccount\views_api.py:293
-msgid "设置成功"
-msgstr "Set successfully"
-
-#: .\bkaccount\views_api_v2.py:101 .\role_manage\views_api_v2.py:38
+#: bkaccount/views_api_v2.py:86
 #, fuzzy
 #| msgid "缺少参数:username_list"
 msgid "缺少参数:bk_username_list"
 msgstr "Missing parameters: username_list"
 
-#: .\common\license_utils.py:28
-#, python-format
-msgid "证书文件(platform.cert)不存在: %s"
-msgstr "Certificate file (platform.cert) does not exist: %s"
-
-#: .\common\license_utils.py:31
-#, python-format
-msgid "密钥文件(platform.key)不存在: %s"
-msgstr "Secret key file (platform.key) does not exist: %s"
-
-#: .\common\license_utils.py:39
-msgid "证书文件(platform.cert)为空或已被损坏"
-msgstr "Certificate file (platform.cert) is empty or has been damaged"
-
-#: .\common\license_utils.py:55
-msgid "license_server请求校验证书异常"
-msgstr ""
-"Exceptions occurred in request license server to certificate validation"
-
-#: .\common\license_utils.py:108
-msgid "证书不可用，请求未返回有效期或返回格式有误"
-msgstr ""
-"Certificate is not available, the request did not return a valid period or "
-"the return format is incorrect"
-
-#: .\common\license_utils.py:109
-msgid "证书校验成功"
-msgstr "Certificate validation succeeded"
-
-#: .\conf\default.py:182
+#: conf/default.py:183
 msgid "English"
 msgstr "英文"
 
-#: .\conf\default.py:183
+#: conf/default.py:184
 msgid "简体中文"
 msgstr "Simplified Chinese"
 
-#: .\healthz\views.py:67
-#, python-format
-msgid "配置文件不正确, 缺失对应配置: %s"
+#: healthz/views.py:44
+#, fuzzy
+#| msgid "配置文件不正确, 缺失对应配置: %s"
+msgid "配置文件不正确, 缺失对应配置: {}"
 msgstr ""
 "Configuration file is incorrect, with corresponding configurations missed: %s"
 
-#: .\healthz\views.py:78
-#, python-format
-msgid "数据库连接存在问题: %s"
+#: healthz/views.py:54
+#, fuzzy
+#| msgid "数据库连接存在问题: %s"
+msgid "数据库连接存在问题: {}"
 msgstr "There is a problem with database connection: %s"
 
-#: .\healthz\views.py:87
-#, python-format
-msgid "企业证书无效：%s; 只影响桌面版本信息的展示"
-msgstr ""
-"Enterprise certificate is invalid: %s; it just has an impact on the "
-"demonstration of desktop version information "
-
-#: .\role_manage\constants.py:6
-msgid "管控平台"
-msgstr "Control System"
-
-#: .\role_manage\constants.py:7
-msgid "作业平台"
-msgstr "Job System"
-
-#: .\role_manage\constants.py:8
-msgid "配置平台"
-msgstr "Configuration System"
-
-#: .\role_manage\constants.py:9
-msgid "集成平台"
-msgstr "Integration System"
-
-#: .\role_manage\constants.py:10
-msgid "网络平台"
-msgstr "Network System"
-
-#: .\role_manage\constants.py:11
-msgid "蓝鲸监控"
-msgstr "BK Monitor"
-
-#: .\role_manage\constants.py:12
-msgid "日志检索"
-msgstr "Log-Search"
-
-#: .\role_manage\constants.py:13
-msgid "故障自愈"
-msgstr "Fault Auto-recovery"
-
-#: .\role_manage\constants.py:14
-msgid "标准运维"
-msgstr "Standard OPS"
-
-#: .\role_manage\constants.py:15
-msgid "Agent安装"
-msgstr "Agent Install"
-
-#: .\role_manage\constants.py:16
-msgid "数据平台"
-msgstr "Data System"
-
-#: .\role_manage\constants.py:17
-msgid "数据平台官网"
-msgstr "DataWeb"
-
-#: .\role_manage\constants.py:18
-msgid "开发框架"
-msgstr "Python Framework"
-
-#: .\role_manage\constants.py:19
-msgid "开发样例"
-msgstr "Python Framework demo"
-
-#: .\role_manage\constants.py:20
-msgid "包管理"
-msgstr "CDMan"
-
-#: .\role_manage\constants.py:21
-msgid "审批系统"
-msgstr "Approval System"
-
-#: .\role_manage\constants.py:22
-msgid "经费管理"
-msgstr "Funds Manage"
-
-#: .\role_manage\constants.py:23
-msgid "会议管理"
-msgstr "Meeting Manage"
-
-#: .\role_manage\constants.py:27 .\templates\account\user_table.part:47
-#: .\templates\account\users.html:27
-msgid "管理员"
-msgstr "superuser"
-
-#: .\role_manage\constants.py:28
-msgid "操作员"
-msgstr "operator"
-
-#: .\role_manage\views.py:63
-msgid "保存成功"
-msgstr "Save succeeded"
-
-#: .\templates\401.html:6
+#: templates/401.html:6
 msgid "未登录蓝鲸智云平台(401页)"
 msgstr "Have not logged in BlueKing platform (page 401)"
 
-#: .\templates\401.html:20
+#: templates/401.html:20
 msgid "您需要登录蓝鲸智云"
 msgstr "You need to log in BlueKing"
 
-#: .\templates\401.html:21
+#: templates/401.html:21
 msgid "立即登录"
 msgstr "Log in right now"
 
-#: .\templates\403.html:6
+#: templates/403.html:6
 msgid "您没有访问权限(403页)"
 msgstr "You have no access permissions (Page 403)"
 
-#: .\templates\403.html:20
+#: templates/403.html:20
 msgid "您没有访问权限，请联系系统管理员添加"
 msgstr ""
 "You have no access permissions, please contact system administrator to add"
 
-#: .\templates\404.html:6
+#: templates/404.html:6
 msgid "页面找不到（404页）"
 msgstr "Page Not Found (404)"
 
-#: .\templates\404.html:20
+#: templates/404.html:20
 msgid "页面找不到了"
 msgstr "Page Not Found"
 
-#: .\templates\500.html:6
+#: templates/500.html:6
 msgid "系统异常(500页)"
 msgstr "System exception (page 500)"
 
-#: .\templates\500.html:20
+#: templates/500.html:20
 msgid "系统出现异常"
 msgstr "Exceptions occurred in system"
 
-#: .\templates\500.html:21
+#: templates/500.html:21
 msgid "努力恢复中，请稍后再试......"
 msgstr "Trying to recover, please try again later..."
 
-#: .\templates\50x.html:6 .\templates\50x.html.py:19
+#: templates/50x.html:6 templates/50x.html.py:19
 msgid "服务故障，努力修复中..."
 msgstr "Service failure, trying to repair ..."
 
-#: .\templates\50x.html:20
+#: templates/50x.html:20
 msgid "服务出现故障，我们正在紧急修复，给您带来不便，敬请谅解。"
 msgstr ""
 "Service failure, we are trying our best to do emergency repair. Please "
 "understand for the inconvenience."
 
-#: .\templates\account\agreement.part:6
+#: templates/bkaccount/base.html:11
+#, fuzzy
+#| msgid "用户管理|蓝鲸智云企业版"
+msgid "用户管理|蓝鲸智云社区版"
+msgstr "User Management|BlueKing"
+
+#: templates/bkaccount/base.html:12
+#, fuzzy
+#| msgid ""
+#| "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,"
+#| "devops,运维开发,蓝鲸企业版,企业版,作业平台,集成平台,配置平台,管控平台"
+msgid ""
+"开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,"
+"运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台"
+msgstr ""
+"Developer Center, Game OPS, OPS, Server Management, Module Configuration, "
+"Monitoring, Tencent Game, BlueKing, DevOps, OPS Development, BlueKing "
+"Enterprise, Enterprise, Job System, Integration System, Configuration "
+"System, Control System"
+
+#: templates/bkaccount/base.html:13
+#, fuzzy
+#| msgid ""
+#| "蓝鲸智云软件企业版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改"
+#| "变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能"
+#| "力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查"
+#| "阅并遵守《蓝鲸智云软件用户服务协议》。"
+msgid ""
+"蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变"
+"中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。"
+"该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵"
+"守《蓝鲸智云软件用户服务协议》。"
+msgstr ""
+"BlueKing Enterprise is a PaaS-based technology solution developed by "
+"BlueKing team, aiming at changing the OPS industry in China, helping "
+"enterprises rapidly achieve basic OPS support capability and enhancing "
+"technical staff's DevOps capabilities. It supports CC/JOB/PaaS."
+
+#: templates/bkaccount/base.html:43 templates/bkaccount/base.html.py:98
+#: templates/login/login.html:54
+#, fuzzy
+#| msgid "蓝鲸智云后台管理"
+msgid "蓝鲸智云工作台"
+msgstr "BlueKing Backstage management"
+
+#: templates/bkaccount/base.html:44
+msgid "img/logo/logo_user_01.png"
+msgstr "img/logo/logo_user_01_en.png"
+
+#: templates/bkaccount/base.html:46
+msgid "蓝鲸智云用户管理"
+msgstr "BlueKing User Management"
+
+#: templates/bkaccount/base.html:47
+msgid "img/logo/logo_user_02.png"
+msgstr "img/logo/logo_user_02_en.png"
+
+#: templates/bkaccount/base.html:68
+msgid "注销"
+msgstr "Logout"
+
+#: templates/bkaccount/base.html:83
+msgid "返回顶部"
+msgstr "Back top"
+
+#: templates/bkaccount/base.html:86
+msgid "返回底部"
+msgstr "Back bottom"
+
+#: templates/bkaccount/base.html:95 templates/login/login.html:51
+msgid "QQ咨询"
+msgstr "QQ"
+
+#: templates/bkaccount/base.html:96 templates/login/login.html:52
+msgid "蓝鲸论坛"
+msgstr "BlueKing Forum"
+
+#: templates/bkaccount/base.html:97 templates/login/login.html:53
+msgid "蓝鲸官网"
+msgstr "Blueking Official"
+
+#: templates/bkaccount/base.html:101
+msgid "蓝鲸智云 版权所有"
+msgstr " "
+
+#: templates/bkaccount/user_table.part:24
+msgid "操作"
+msgstr "operation"
+
+#: templates/bkaccount/user_table.part:62
+msgid "取消"
+msgstr "Cancel"
+
+#: templates/bkaccount/user_table.part:63
+msgid "保存"
+msgstr "Save"
+
+#: templates/bkaccount/user_table.part:64
+msgid "编辑"
+msgstr "Edit"
+
+#: templates/bkaccount/user_table.part:65
+msgid "重置密码"
+msgstr "Reset Passowrd"
+
+#: templates/bkaccount/user_table.part:67
+msgid "删除"
+msgstr "Delete"
+
+#: templates/bkaccount/user_table.part:73
+msgid "没有数据"
+msgstr "No data"
+
+#: templates/bkaccount/user_table.part:85
+#: templates/bkaccount/user_table.part:87
+msgid "上一页"
+msgstr "Previous"
+
+#: templates/bkaccount/user_table.part:109
+#: templates/bkaccount/user_table.part:111
+msgid "下一页"
+msgstr "Next"
+
+#: templates/bkaccount/users.html:11
+msgid "导出"
+msgstr "Export"
+
+#: templates/bkaccount/users.html:12
+msgid "批量导入"
+msgstr "Batch import"
+
+#: templates/bkaccount/users.html:13
+msgid "新增用户"
+msgstr "Add user"
+
+#: templates/bkaccount/users.html:15
+msgid "用户信息"
+msgstr "User information"
+
+#: templates/bkaccount/users.html:23
+msgid "查询：按用户名、中文名"
+msgstr "search: by username, nickname"
+
+#: templates/bkaccount/users.html:25
+msgid "所有用户"
+msgstr "All users"
+
+#: templates/bkaccount/users.html:32
+msgid "查询"
+msgstr "Search"
+
+#: templates/bkaccount/users.html:33
+msgid "新增用户的默认密码为："
+msgstr "Default password of new user is "
+
+#: templates/bkaccount/users.html:38
+msgid "温馨提示:"
+msgstr "Tips:"
+
+#: templates/bkaccount/users.html:41
+#, fuzzy
+#| msgid ""
+#| "<p><code>管理员</code>可以管理所有用户的信息，具有所有权限</p> <p><code>普"
+#| "通用户</code>可以管理自己的用户信息和访问 “桌面”</p> <p><code>开发者</"
+#| "code>可以管理自己的用户信息、访问 “桌面” 和访问 “开发者中心”</p> <p><code>"
+#| "职能化用户</code>在普通用户权限上还拥有SaaS应用 “标准运维” 的职能化权限</"
+#| "p> <p><code>审计员</code>在普通用户权限上还拥有SaaS应用 “标准运维”和作业平"
+#| "台的审计权限</p>"
+msgid ""
+"<p><code>管理员</code>可以管理所有用户的信息，具有所有权限</p> <p><code>普通"
+"用户</code>可以管理自己的用户信息和访问 “工作台”</p> <p><code>开发者</code>可"
+"以管理自己的用户信息、访问 “工作台” 和访问 “开发者中心”</p> <p><code>职能化用"
+"户</code>在普通用户权限上还拥有SaaS应用 “标准运维” 的职能化权限</p> <p><code>"
+"审计员</code>在普通用户权限上还拥有SaaS应用 “标准运维”和作业平台的审计权限</"
+"p>"
+msgstr ""
+"<p><code>Superuser</code>can manage the information of all users, provided "
+"with all permissions</p><p><code>Staff</code>can manage the user information "
+"of his own and access the blueking desktop</p><p><code>Developer</code>can "
+"manage the user information of his own, and can access the blueking desktop "
+"and developer center</p><p><code>Operator</code>owns the operation "
+"permission of SaaS APP - Standard OPS, in addition the permissions of common "
+"users</p><p><code>Auditor</code>owns the audit permission of SaaS APP - "
+"Standard OPS and Job System, in addition the permissions of common users</p>"
+
+#: templates/bkaccount/users.html:55
+msgid "选择文件："
+msgstr "Select file:"
+
+#: templates/bkaccount/users.html:57
+msgid "导入用户"
+msgstr "Import user"
+
+#: templates/bkaccount/users.html:58
+msgid "提交"
+msgstr "Submit"
+
+#: templates/bkaccount/users.html:61
+msgid "bk_user_import.xls"
+msgstr "bk_user_import_en.xls"
+
+#: templates/bkaccount/users.html:61
+msgid "点击下载EXCEL模板"
+msgstr "Click to download EXCEL template"
+
+#: templates/bkaccount/users.html:65
+msgid "注意："
+msgstr "Note:"
+
+#: templates/bkaccount/users.html:66
+#, fuzzy, python-format
+#| msgid ""
+#| "<p>1.请下载<a href=\"%(STATIC_URL)sbk_user_import.xls\">EXCEL模板</a>文件"
+#| "填写用户数据</p> <p>2.<code>用户名</code>为必填，包含数字和字母，长度在"
+#| "4-20个字符</p> <p>3.<code>用户名</code>为唯一标识，重复导入会覆盖已有数据"
+#| "</p> <p>4.导入用户默认密码为：<code>%(default_paasword)s</code></p> <p>5."
+#| "文件后缀名必须为：<code>.xls</code>或<code>.xlsx</code> </p> <p>6.导入失败"
+#| "请检查EXCEL格式规范，或重新下载模板填写</p>"
+msgid ""
+"<p>1.请下载<a href=\"%(STATIC_URL)sbk_user_import.xls\">EXCEL模板</a>文件填写"
+"用户数据</p> <p>2.<code>用户名</code>为必填，包含数字、字母、下划线和点，长度"
+"在4-20个字符</p> <p>3.<code>用户名</code>为唯一标识，重复导入会覆盖已有数据</"
+"p> <p>4.导入用户默认密码为：<code>%(default_paasword)s</code></p> <p>5.文件后"
+"缀名必须为：<code>.xls</code>或<code>.xlsx</code> </p> <p>6.导入失败请检查"
+"EXCEL格式规范，或重新下载模板填写</p>"
+msgstr ""
+"<p>1. Please download <a href=\"%(STATIC_URL)sbk_user_import_en.xls\">EXCEL "
+"template file </a>and fill in user data</p><p>2.<code>Username</code> is "
+"required, including numbers and letters, the length of 4-20 characters</"
+"p><p>3.<code>Username</code> a unique identifier, duplicate import will "
+"overwrite existing data</p><p>4. Default passowrd of imported users: <code>"
+"%(default_paasword)s</code></p><p>5. The file extension must be <code>.xls</"
+"code> or <code>.xlsx</code> </p><p>6. If import failed, please check the "
+"EXCEL format specification, or re-download the template to fill in</p>"
+
+#: templates/bkaccount/users.html:81
+msgid "新密码："
+msgstr "Password: "
+
+#: templates/bkaccount/users.html:86 templates/bkaccount/users.html.py:92
+msgid "必填"
+msgstr "Required"
+
+#: templates/bkaccount/users.html:87
+#, python-format
+msgid ""
+"请输入密码，长度在8-20个字符，可支持数字、字母以及%(sp_char)s，必须保证密码包"
+"含大小写字母和数字 "
+msgstr ""
+"Please enter the password, the length of 8-20 characters, support numbers, "
+"letters and %(sp_char)s, must ensure that the password contains uppercase "
+"letters and numbers"
+
+#: templates/bkaccount/users.html:90
+msgid "确认密码"
+msgstr "Comfirm"
+
+#: templates/bkaccount/users.html:91
+msgid "再次输入密码"
+msgstr "Input password again"
+
+#: templates/csrf_failure.html:6 templates/csrf_failure.html.py:20
+msgid "CSRF验证失败"
+msgstr "CSRF verification failed"
+
+#: templates/csrf_failure.html:22
+msgid ""
+"您看到此消息是由于该站点在提交表单时需要一个CSRF cookie。此项是出于安全考虑，"
+"以确保您的浏览器没有被第三方劫持。"
+msgstr ""
+"You see this message because the site needs a CSRF cookie when submitting "
+"the form. This is for security reasons to make sure your browser is not "
+"hijacked by a third party."
+
+#: templates/csrf_failure.html:23
+msgid ""
+"如果您已经设置浏览器禁用cookies，请重新启用，至少针对这个站点，全部HTTPS请"
+"求，或者同源请求（same-origin）启用cookies。"
+msgstr ""
+"If you have set your browser to disable cookies, please enable it again, "
+"enabling cookies at least for this site, for all HTTPS requests, or same-"
+"origin requests."
+
+#: templates/csrf_failure.html:24
+msgid "重新登录"
+msgstr "Login again"
+
+#: templates/login/agreement.part:6
 msgid ""
 "<div class=\"title\">腾讯蓝鲸智云软件许可及服务协议</div> <div class="
 "\"detail-list\"> <p class=\"title\">【首部及导言】</p> <p>欢迎您使用腾讯蓝鲸"
@@ -1107,373 +1292,217 @@ msgstr ""
 "any version of other language, the Chinese version shall prevail. (End)</"
 "p>    <p> Tencent</p></div>"
 
-#: .\templates\account\agreement.part:124
+#: templates/login/agreement.part:124
 msgid "已阅读"
 msgstr "I know"
 
-#: .\templates\account\base.html:11
-msgid "用户管理|蓝鲸智云企业版"
-msgstr "User Management|BlueKing"
-
-#: .\templates\account\base.html:12
-msgid ""
-"开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,"
-"运维开发,蓝鲸企业版,企业版,作业平台,集成平台,配置平台,管控平台"
-msgstr ""
-"Developer Center, Game OPS, OPS, Server Management, Module Configuration, "
-"Monitoring, Tencent Game, BlueKing, DevOps, OPS Development, BlueKing "
-"Enterprise, Enterprise, Job System, Integration System, Configuration "
-"System, Control System"
-
-#: .\templates\account\base.html:13
-msgid ""
-"蓝鲸智云软件企业版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变"
-"中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。"
-"该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵"
-"守《蓝鲸智云软件用户服务协议》。"
-msgstr ""
-"BlueKing Enterprise is a PaaS-based technology solution developed by "
-"BlueKing team, aiming at changing the OPS industry in China, helping "
-"enterprises rapidly achieve basic OPS support capability and enhancing "
-"technical staff's DevOps capabilities. It supports CC/JOB/PaaS."
-
-#: .\templates\account\base.html:42 .\templates\account\base.html.py:97
-#: .\templates\account\login.html:69
-msgid "蓝鲸智云桌面"
-msgstr "BlueKing Desktop"
-
-#: .\templates\account\base.html:43
-msgid "img/logo/logo_user_01.png"
-msgstr "img/logo/logo_user_01_en.png"
-
-#: .\templates\account\base.html:45
-msgid "蓝鲸智云用户管理"
-msgstr "BlueKing User Management"
-
-#: .\templates\account\base.html:46
-msgid "img/logo/logo_user_02.png"
-msgstr "img/logo/logo_user_02_en.png"
-
-#: .\templates\account\base.html:67 .\templates\admin\base_site.html:14
-#: .\templates\admin\login.html:21
-msgid "注销"
-msgstr "Logout"
-
-#: .\templates\account\base.html:82
-msgid "返回顶部"
-msgstr "Back top"
-
-#: .\templates\account\base.html:85
-msgid "返回底部"
-msgstr "Back bottom"
-
-#: .\templates\account\base.html:94 .\templates\account\login.html:66
-msgid "QQ咨询"
-msgstr "QQ"
-
-#: .\templates\account\base.html:95 .\templates\account\login.html:67
-msgid "蓝鲸论坛"
-msgstr "BlueKing Forum"
-
-#: .\templates\account\base.html:96 .\templates\account\login.html:68
-msgid "蓝鲸官网"
-msgstr "Blueking Official"
-
-#: .\templates\account\base.html:100
-msgid "蓝鲸智云 版权所有"
-msgstr " "
-
-#: .\templates\account\login.html:10
-msgid "登录|蓝鲸智云企业版"
+#: templates/login/login.html:10
+#, fuzzy
+#| msgid "登录|蓝鲸智云企业版"
+msgid "登录|蓝鲸智云"
 msgstr "Login|BlueKing"
 
-#: .\templates\account\login.html:16
-msgid "img/logo/bk_login.png"
-msgstr "img/logo/bk_login_en.png"
-
-#: .\templates\account\login.html:38
+#: templates/login/login.html:22
 msgid "账户或者密码错误，请重新输入"
 msgstr "Username or password is incorrect"
 
-#: .\templates\account\login.html:44
+#: templates/login/login.html:28
 msgid "请输入用户名"
 msgstr "Please enter your username"
 
-#: .\templates\account\login.html:48
+#: templates/login/login.html:32
 msgid "请输入用户密码"
 msgstr "Please enter your password"
 
-#: .\templates\account\login.html:55
+#: templates/login/login.html:39
 msgid "登录"
 msgstr "SIGN IN"
 
-#: .\templates\account\login.html:56
+#: templates/login/login.html:40
 msgid "查看用户协议"
 msgstr "Agreement"
 
-#: .\templates\account\login.html:78
+#: templates/login/login.html:48
+msgid "青藤云安全提供安全检测"
+msgstr ""
+
+#: templates/login/login.html:55
+msgid "关注我们"
+msgstr ""
+
+#: templates/login/login.html:72
 msgid ""
 "您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果"
 msgstr ""
 "Your browser is not Chrome, we recommend using the latest version of Chrome "
 "for the best experience"
 
-#: .\templates\account\login.html:82
-msgid "企业证书校验无效，请联系系统管理员处理"
-msgstr ""
-"Enterprise certificate verification ineffective, please contact the system "
-"administrator"
+#~ msgid "用户名[%s]不存在"
+#~ msgstr "Username [%s] does not exist"
 
-#: .\templates\account\no_right.html:5
-msgid "你不是管理员, 没有用户管理的权限!"
-msgstr ""
-"You are not an administrator, so you have no permissions for user management!"
+#~ msgid "用户[%s]密码重置失败"
+#~ msgstr "User [%s] password reset failed"
 
-#: .\templates\account\no_right.html:6
-msgid "请找管理员申请权限!"
-msgstr "Please contact administrator to apply for permissions!"
+#~ msgid "email【%s】格式错误"
+#~ msgstr "Email format [%s] error"
 
-#: .\templates\account\user_role_manage_table.part:50
-msgid "没有用户配置了平台角色"
-msgstr "No user has configured the platform role"
+#~ msgid "用户%s不存在"
+#~ msgstr "User [%s] does not exist"
 
-#: .\templates\account\user_table.part:24
-msgid "操作"
-msgstr "operation"
+#~ msgid "用户导入成功"
+#~ msgstr "User import succeeded"
 
-#: .\templates\account\user_table.part:49
-#: .\templates\account\user_table.part:56 .\templates\account\users.html:30
-msgid "职能化"
-msgstr "operator"
+#~ msgid "您的权限不足"
+#~ msgstr "Your permission is insufficient"
 
-#: .\templates\account\user_table.part:62
-msgid "取消"
-msgstr "Cancel"
+#~ msgid "用户角色修改成功"
+#~ msgstr "User role modification succeeded"
 
-#: .\templates\account\user_table.part:63 .\templates\account\users.html:62
-msgid "保存"
-msgstr "Save"
+#~ msgid "参数错误，language和timezone不能同时为空"
+#~ msgstr ""
+#~ "Parameter error, language and timezone can not both be empty at the same "
+#~ "time"
 
-#: .\templates\account\user_table.part:64
-msgid "编辑"
-msgstr "Edit"
+#~ msgid "设置成功"
+#~ msgstr "Set successfully"
 
-#: .\templates\account\user_table.part:65
-msgid "重置密码"
-msgstr "Reset Passowrd"
+#~ msgid "证书文件(platform.cert)不存在: %s"
+#~ msgstr "Certificate file (platform.cert) does not exist: %s"
 
-#: .\templates\account\user_table.part:67
-msgid "删除"
-msgstr "Delete"
+#~ msgid "密钥文件(platform.key)不存在: %s"
+#~ msgstr "Secret key file (platform.key) does not exist: %s"
 
-#: .\templates\account\user_table.part:73
-msgid "没有数据"
-msgstr "No data"
+#~ msgid "证书文件(platform.cert)为空或已被损坏"
+#~ msgstr "Certificate file (platform.cert) is empty or has been damaged"
 
-#: .\templates\account\user_table.part:85
-#: .\templates\account\user_table.part:87
-msgid "上一页"
-msgstr "Previous"
+#~ msgid "license_server请求校验证书异常"
+#~ msgstr ""
+#~ "Exceptions occurred in request license server to certificate validation"
 
-#: .\templates\account\user_table.part:109
-#: .\templates\account\user_table.part:111
-msgid "下一页"
-msgstr "Next"
+#~ msgid "证书不可用，请求未返回有效期或返回格式有误"
+#~ msgstr ""
+#~ "Certificate is not available, the request did not return a valid period "
+#~ "or the return format is incorrect"
 
-#: .\templates\account\users.html:11
-msgid "统一角色管理"
-msgstr "Unified role management"
+#~ msgid "证书校验成功"
+#~ msgstr "Certificate validation succeeded"
 
-#: .\templates\account\users.html:12
-msgid "导出"
-msgstr "Export"
+#~ msgid "企业证书无效：%s; 只影响桌面版本信息的展示"
+#~ msgstr ""
+#~ "Enterprise certificate is invalid: %s; it just has an impact on the "
+#~ "demonstration of desktop version information "
 
-#: .\templates\account\users.html:13
-msgid "批量导入"
-msgstr "Batch import"
+#~ msgid "管控平台"
+#~ msgstr "Control System"
 
-#: .\templates\account\users.html:14
-msgid "新增用户"
-msgstr "Add user"
+#~ msgid "作业平台"
+#~ msgstr "Job System"
 
-#: .\templates\account\users.html:16
-msgid "用户信息"
-msgstr "User information"
+#~ msgid "配置平台"
+#~ msgstr "Configuration System"
 
-#: .\templates\account\users.html:24
-msgid "查询：按用户名、中文名"
-msgstr "search: by username, nickname"
+#~ msgid "集成平台"
+#~ msgstr "Integration System"
 
-#: .\templates\account\users.html:26
-msgid "所有用户"
-msgstr "All users"
+#~ msgid "网络平台"
+#~ msgstr "Network System"
 
-#: .\templates\account\users.html:33
-msgid "查询"
-msgstr "Search"
+#~ msgid "蓝鲸监控"
+#~ msgstr "BK Monitor"
 
-#: .\templates\account\users.html:34
-msgid "新增用户的默认密码为："
-msgstr "Default password of new user is "
+#~ msgid "日志检索"
+#~ msgstr "Log-Search"
 
-#: .\templates\account\users.html:39
-msgid "温馨提示:"
-msgstr "Tips:"
+#~ msgid "故障自愈"
+#~ msgstr "Fault Auto-recovery"
 
-#: .\templates\account\users.html:42
-msgid ""
-"<p><code>管理员</code>可以管理所有用户的信息，具有所有权限</p> <p><code>普通"
-"用户</code>可以管理自己的用户信息和访问 “桌面”</p> <p><code>开发者</code>可以"
-"管理自己的用户信息、访问 “桌面” 和访问 “开发者中心”</p> <p><code>职能化用户</"
-"code>在普通用户权限上还拥有SaaS应用 “标准运维” 的职能化权限</p> <p><code>审计"
-"员</code>在普通用户权限上还拥有SaaS应用 “标准运维”和作业平台的审计权限</p>"
-msgstr ""
-"<p><code>Superuser</code>can manage the information of all users, provided "
-"with all permissions</p><p><code>Staff</code>can manage the user information "
-"of his own and access the blueking desktop</p><p><code>Developer</code>can "
-"manage the user information of his own, and can access the blueking desktop "
-"and developer center</p><p><code>Operator</code>owns the operation "
-"permission of SaaS APP - Standard OPS, in addition the permissions of common "
-"users</p><p><code>Auditor</code>owns the audit permission of SaaS APP - "
-"Standard OPS and Job System, in addition the permissions of common users</p>"
+#~ msgid "标准运维"
+#~ msgstr "Standard OPS"
 
-#: .\templates\account\users.html:56
-msgid "用户信息管理"
-msgstr "User information management"
+#~ msgid "Agent安装"
+#~ msgstr "Agent Install"
 
-#: .\templates\account\users.html:59
-msgid "添加用户："
-msgstr "Add user: "
+#~ msgid "数据平台"
+#~ msgstr "Data System"
 
-#: .\templates\account\users.html:61
-msgid "添加"
-msgstr "Add"
+#~ msgid "数据平台官网"
+#~ msgstr "DataWeb"
 
-#: .\templates\account\users.html:73
-msgid "选择文件："
-msgstr "Select file:"
+#~ msgid "开发框架"
+#~ msgstr "Python Framework"
 
-#: .\templates\account\users.html:75
-msgid "导入用户"
-msgstr "Import user"
+#~ msgid "开发样例"
+#~ msgstr "Python Framework demo"
 
-#: .\templates\account\users.html:76
-msgid "提交"
-msgstr "Submit"
+#~ msgid "包管理"
+#~ msgstr "CDMan"
 
-#: .\templates\account\users.html:79
-msgid "bk_user_import.xls"
-msgstr "bk_user_import_en.xls"
+#~ msgid "审批系统"
+#~ msgstr "Approval System"
 
-#: .\templates\account\users.html:79
-msgid "点击下载EXCEL模板"
-msgstr "Click to download EXCEL template"
+#~ msgid "经费管理"
+#~ msgstr "Funds Manage"
 
-#: .\templates\account\users.html:83
-msgid "注意："
-msgstr "Note:"
+#~ msgid "会议管理"
+#~ msgstr "Meeting Manage"
 
-#: .\templates\account\users.html:84
-#, python-format
-msgid ""
-"<p>1.请下载<a href=\"%(STATIC_URL)sbk_user_import.xls\">EXCEL模板</a>文件填写"
-"用户数据</p> <p>2.<code>用户名</code>为必填，包含数字和字母，长度在4-20个字符"
-"</p> <p>3.<code>用户名</code>为唯一标识，重复导入会覆盖已有数据</p> <p>4.导入"
-"用户默认密码为：<code>%(default_paasword)s</code></p> <p>5.文件后缀名必须为："
-"<code>.xls</code>或<code>.xlsx</code> </p> <p>6.导入失败请检查EXCEL格式规范，"
-"或重新下载模板填写</p>"
-msgstr ""
-"<p>1. Please download <a href=\"%(STATIC_URL)sbk_user_import_en.xls\">EXCEL "
-"template file </a>and fill in user data</p><p>2.<code>Username</code> is "
-"required, including numbers and letters, the length of 4-20 characters</"
-"p><p>3.<code>Username</code> a unique identifier, duplicate import will "
-"overwrite existing data</p><p>4. Default passowrd of imported users: <code>"
-"%(default_paasword)s</code></p><p>5. The file extension must be <code>.xls</"
-"code> or <code>.xlsx</code> </p><p>6. If import failed, please check the "
-"EXCEL format specification, or re-download the template to fill in</p>"
+#~ msgid "保存成功"
+#~ msgstr "Save succeeded"
 
-#: .\templates\account\users.html:99
-msgid "新密码："
-msgstr "Password: "
+#~ msgid "蓝鲸智云桌面"
+#~ msgstr "BlueKing Desktop"
 
-#: .\templates\account\users.html:104 .\templates\account\users.html.py:110
-msgid "必填"
-msgstr "Required"
+#~ msgid "img/logo/bk_login.png"
+#~ msgstr "img/logo/bk_login_en.png"
 
-#: .\templates\account\users.html:105
-#, python-format
-msgid ""
-"请输入密码，长度在8-20个字符，可支持数字、字母以及%(sp_char)s，必须保证密码包"
-"含大小写字母和数字 "
-msgstr ""
-"Please enter the password, the length of 8-20 characters, support numbers, "
-"letters and %(sp_char)s, must ensure that the password contains uppercase "
-"letters and numbers"
+#~ msgid "企业证书校验无效，请联系系统管理员处理"
+#~ msgstr ""
+#~ "Enterprise certificate verification ineffective, please contact the "
+#~ "system administrator"
 
-#: .\templates\account\users.html:108
-msgid "确认密码"
-msgstr "Comfirm"
+#~ msgid "你不是管理员, 没有用户管理的权限!"
+#~ msgstr ""
+#~ "You are not an administrator, so you have no permissions for user "
+#~ "management!"
 
-#: .\templates\account\users.html:109
-msgid "再次输入密码"
-msgstr "Input password again"
+#~ msgid "请找管理员申请权限!"
+#~ msgstr "Please contact administrator to apply for permissions!"
 
-#: .\templates\admin\base_site.html:4
-msgid "管理"
-msgstr "Management"
+#~ msgid "没有用户配置了平台角色"
+#~ msgstr "No user has configured the platform role"
 
-#: .\templates\admin\base_site.html:7
-msgid "蓝鲸智云后台管理"
-msgstr "BlueKing Backstage management"
+#~ msgid "职能化"
+#~ msgstr "operator"
 
-#: .\templates\admin\base_site.html:12
-msgid "修改密码"
-msgstr "Change Password"
+#~ msgid "统一角色管理"
+#~ msgstr "Unified role management"
 
-#: .\templates\admin\login.html:7
-msgid "您暂时不能访问该站点的后台管理，这是以下原因造成的："
-msgstr ""
-"You are currently not able to access the site's backend management for the "
-"following reasons."
+#~ msgid "用户信息管理"
+#~ msgstr "User information management"
 
-#: .\templates\admin\login.html:15 .\templates\admin\login.html.py:17
-msgid "用户"
-msgstr "user"
+#~ msgid "添加用户："
+#~ msgstr "Add user: "
 
-#: .\templates\admin\login.html:15
-msgid "未激活！"
-msgstr "inactivated"
+#~ msgid "添加"
+#~ msgstr "Add"
 
-#: .\templates\admin\login.html:17
-msgid "没有管理员权限，请联系管理员！"
-msgstr ""
-" do not have administrator privileges, please contact the administrator!"
+#~ msgid "管理"
+#~ msgstr "Management"
 
-#: .\templates\csrf_failure.html:6 .\templates\csrf_failure.html.py:20
-msgid "CSRF验证失败"
-msgstr "CSRF verification failed"
+#~ msgid "您暂时不能访问该站点的后台管理，这是以下原因造成的："
+#~ msgstr ""
+#~ "You are currently not able to access the site's backend management for "
+#~ "the following reasons."
 
-#: .\templates\csrf_failure.html:22
-msgid ""
-"您看到此消息是由于该站点在提交表单时需要一个CSRF cookie。此项是出于安全考虑，"
-"以确保您的浏览器没有被第三方劫持。"
-msgstr ""
-"You see this message because the site needs a CSRF cookie when submitting "
-"the form. This is for security reasons to make sure your browser is not "
-"hijacked by a third party."
+#~ msgid "用户"
+#~ msgstr "user"
 
-#: .\templates\csrf_failure.html:23
-msgid ""
-"如果您已经设置浏览器禁用cookies，请重新启用，至少针对这个站点，全部HTTPS请"
-"求，或者同源请求（same-origin）启用cookies。"
-msgstr ""
-"If you have set your browser to disable cookies, please enable it again, "
-"enabling cookies at least for this site, for all HTTPS requests, or same-"
-"origin requests."
+#~ msgid "未激活！"
+#~ msgstr "inactivated"
 
-#: .\templates\csrf_failure.html:24
-msgid "重新登录"
-msgstr "Login again"
+#~ msgid "没有管理员权限，请联系管理员！"
+#~ msgstr ""
+#~ " do not have administrator privileges, please contact the administrator!"
 
 #~ msgid "img/logo/login_text.png"
 #~ msgstr "img/logo/login_text_en.png"

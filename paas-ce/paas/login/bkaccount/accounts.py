@@ -137,7 +137,12 @@ class Account(AccountSingleton):
         if not plain_bk_token:
             return False, None, error_msg
 
-        token_info = plain_bk_token.split('|')
+        try:
+            token_info = plain_bk_token.split('|')
+        except Exception as error:
+            token_info = []
+            logger.exception("token info wrong, error: {}".format(error))
+
         if not token_info or len(token_info) < 3:
             return False, None, error_msg
 
