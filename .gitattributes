@@ -1,3 +1,1 @@
-static/* linguist-vendored
-bk-PaaS/paas-ce/paas/paas/static/* linguist-vendored
-*.jslinguist-language=python
+*.js linguist-language=python
