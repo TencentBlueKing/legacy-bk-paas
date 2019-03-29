@@ -1,2 +1,3 @@
 static/* linguist-vendored
 bk-PaaS/paas-ce/paas/paas/static/* linguist-vendored
+*.css linguist-language=python
