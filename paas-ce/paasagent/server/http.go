@@ -138,6 +138,7 @@ func Run() error {
 	e.POST("/v1/app/online", appOnlineHandler)
 	e.POST("/v1/app/offline", appOfflineHandler)
 	e.GET("/v1/app/healthz", healthzHandler)
+	// check if paasagent is alive
 	e.GET("/healthz", healthzCheckHandler)
 
 	port := viper.GetInt("port")

@@ -38,7 +38,7 @@ func DoGet(url string) (gorequest.Response, string, error) {
 
 }
 
-// DoPost do pos request
+// DoPost do post request
 func DoPost(url string, data interface{}) (gorequest.Response, string, error) {
 	reqAgent := newReqAgent("POST", url)
 	resp, body, errs := reqAgent.Send(data).End()
