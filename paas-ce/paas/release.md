@@ -3,6 +3,7 @@
 # 3.2.5
 
 - bugfix: fix a lot of front-end issues
+- update: avatar 
 
 # 3.2.4
 
