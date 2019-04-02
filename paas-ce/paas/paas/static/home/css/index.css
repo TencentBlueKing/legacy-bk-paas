@@ -110,6 +110,8 @@ ul, li{
 }
 .avatar{
 	margin: 2px;
+	width: 32px;
+	height: 32px;
 }
 .crown{
 	position: absolute;
