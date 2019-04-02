@@ -51,9 +51,10 @@
 		<div class="userInfo">
 			<span class="userName">${request.user.username}</span>
 			<div class="userImg">
-				<img class="avatar" src="${STATIC_URL}home/images/avatar.png"/>
 				% if request.user.is_superuser:
-					<i class="crown"></i>
+					<img class="avatar" src="${STATIC_URL}img/getadminheadimg.jpg"/>
+				% else:
+					<img class="avatar" src="${STATIC_URL}img/getheadimg.jpg"/>
 				% endif
 			</div>
 			<span class="caret"></span>

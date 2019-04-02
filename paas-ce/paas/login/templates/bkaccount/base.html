@@ -58,9 +58,10 @@
                           {% endif %}
                           </a>
                           <a href="###">
-                            <img src="{{STATIC_URL}}img/getheadimg.jpg"  class="avatar">
-                            {%  if request.user.is_superuser %}
-                                  <i class="crown"></i>
+                            {% if request.user.is_superuser %}
+                              <img src="{{STATIC_URL}}img/getadminheadimg.jpg" class="avatar">
+                            {% else %}
+                              <img src="{{STATIC_URL}}img/getheadimg.jpg" class="avatar">
                             {%  endif %}
                           </a>
                     </div>
