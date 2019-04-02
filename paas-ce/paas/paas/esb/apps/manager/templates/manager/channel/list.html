@@ -32,11 +32,11 @@
         <span>{% trans "组件通道列表" %}</span>
         {% if channel_exists %}
         <a class="btn btn-danger btn-min-w f_r mr10" id="channels_delete" href="javascript:;">
-          <i class="bk-icon icon-close" style="font-size: 14px; margin-top: 2px; margin-right: 2px;"></i> 
+          <i class="bk-icon icon-delete" style="margin-top: 1px; margin-right: 2px;"></i> 
           {% trans "删除" %}</a>
         {% endif %}
         <a class="btn btn-primary btn-min-w f_r mr10" href="{% url 'manager.channel.add' %}">
-          <i class="bk-icon icon-plus" style="font-size: 14px; margin-top: 2px; margin-right: 2px;"></i>
+          <i class="bk-icon icon-plus" style="margin-top: 1px; margin-right: 2px;"></i>
           {% trans "添加通道" %}</a>
     </div>
     <div class="page-content">
@@ -125,7 +125,7 @@
                     <button class="btn btn-success " title="{% trans 'API地址' %}" {% verbatim %} id="{{id}}">
                     {% endverbatim %}
                         {% trans "API地址" %}
-                        <i class="bk-icon icon-arrow-down"></i>
+                        <i class="bk-icon icon-down-shape"></i>
                     </button>
                     <div class="dropdown-content">
                         <div class="input-group">

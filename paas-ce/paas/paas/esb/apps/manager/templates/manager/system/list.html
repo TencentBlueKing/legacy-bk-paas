@@ -24,9 +24,13 @@
     <div class="main-header">
         <span>{% trans "系统列表" %}</span>
         {% if systems %}
-        <a class="btn btn-danger btn-min-w f_r mr10" id="systems_delete" href="javascript:;"><i class="bk-icon icon-close" style="font-size: 14px; margin-top: 2px; margin-right: 2px;"></i>  {% trans "删除" %}</a>
+        <a class="btn btn-danger btn-min-w f_r mr10" id="systems_delete" href="javascript:;">
+            <i class="bk-icon icon-delete" style="margin-top: 1px; margin-right: 2px;"></i>  
+            {% trans "删除" %}</a>
         {% endif %}
-        <a class="btn btn-primary btn-min-w f_r mr10" href="{% url 'manager.system.add' %}"><i class="bk-icon icon-plus" style="font-size: 14px; margin-top: 2px; margin-right: 2px;"></i>  {% trans "添加系统" %}</a>
+        <a class="btn btn-primary btn-min-w f_r mr10" href="{% url 'manager.system.add' %}">
+            <i class="bk-icon icon-plus" style="margin-top: 1px; margin-right: 2px;"></i>  
+            {% trans "添加系统" %}</a>
     </div>
 
     <div class="page-content">
