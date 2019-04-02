@@ -174,12 +174,15 @@ class MailPoller(object):
     def filter(self, mails, sent_from=None, sent_to=None, subject=None, before=None, since=None,
                fetch_header_already=False):
         result_list = []
-        mails = mails if fetch_header_already else self.iter_fetch_chunks(mails=mails, criteria=self.CRITERIA_HEADER,)
+        mails = mails
+        if not fetch_header_already:
+            for index in range(0, len(mails)):
+                self.fetch_header(mails[index * 100:(index + 1) * 100])
         sent_from = sent_from.split(",") if sent_from else ()
         sent_to = sent_to.split(",") if sent_to else ()
         subject = [subject] if subject else []
         for mail in mails:
-            if ((before and before <= mail.time) or (since and since > mail.time)):
+            if (before and before <= mail.time) or (since and since > mail.time):
                 continue
             if sent_from and not contain_one(mail.sender, sent_from):
                 continue
@@ -197,7 +200,7 @@ class MailPoller(object):
 
     def fetch(self, mails, criteria=None):
         mail_mappings = {str(mail.uid): mail for mail in mails}
-        status, result = self.imap_client.fetch(",".join(mail_mappings.keys()), criteria or self.CRITERIA,)
+        status, result = self.imap_client.fetch(",".join(mail_mappings.keys()), criteria or self.CRITERIA, )
         if status != "OK":
             raise Exception("fetch mail[%s] failed", mail_mappings.keys())
 
