@@ -60,9 +60,10 @@
                         <div class="account_meta account_info account_meta_primary">
                               <a href="${SITE_URL}accounts/profile/" class="nickname" title="${request.user.username if request.user and request.user.username else ''}">${request.user.username if request.user and request.user.username else ''}</a>
                                <a href="${SITE_URL}accounts/profile/">
-                                <img src="${STATIC_URL}img/getheadimg.jpg" class="avatar">
                                 % if request.user.is_superuser:
-                                  <i class="crown"></i>
+                                  <img src="${STATIC_URL}img/getadminheadimg.jpg" class="avatar">
+                                % else:
+                                  <img src="${STATIC_URL}img/getheadimg.jpg" class="avatar">
                                 % endif
                                </a>
                         </div>
