@@ -27,7 +27,7 @@ import (
 	"paasagent/job"
 )
 
-// DeployData be used
+// DeployData used for app deployment
 type DeployData struct {
 	AppCode      string                 `json:"app_code"`
 	Mode         string                 `json:"mode"`

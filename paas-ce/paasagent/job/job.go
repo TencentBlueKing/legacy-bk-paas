@@ -31,7 +31,6 @@ import (
 )
 
 type (
-	// AppJob used
 	AppJob struct {
 		AppCode      string
 		Mode         string
@@ -43,7 +42,7 @@ type (
 		SaaSSettings map[string]interface{}
 	}
 
-	// EventLog used
+	// EventLog
 	EventLog struct {
 		Status string `json:"status"`
 		Log    string `json:"log"`
@@ -131,6 +130,7 @@ func (appJob AppJob) generateConfig() error {
 	return err
 }
 
+// getEnvs generates environment variables for app runtime
 func (appJob AppJob) getEnvs() map[string]string {
 	envMap := make(map[string]string)
 	if appJob.Handle == "ON" {
@@ -265,6 +265,7 @@ func (appJob AppJob) runCmd(envMap map[string]string) error {
 		done <- cmd.Wait()
 	}()
 
+	// execute build or buildsaas script to build app runtime environment and start app
 	go func() {
 		status := core.PENDING
 		var line string
@@ -286,6 +287,7 @@ func (appJob AppJob) runCmd(envMap map[string]string) error {
 		syncDone <- struct{}{}
 	}()
 
+	// if the build script task times out, it will be killed
 	timeOutSeconds := viper.GetInt("settings.EXECUTE_TIME_LIMIT")
 	select {
 	case <-time.After(time.Second * time.Duration(timeOutSeconds)):

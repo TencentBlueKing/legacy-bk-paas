@@ -28,7 +28,7 @@ import (
 	"text/template"
 )
 
-// IsDirExists be used
+// IsDirExists
 func IsDirExists(path string) bool {
 	fi, err := os.Stat(path)
 	if err != nil {
@@ -37,7 +37,7 @@ func IsDirExists(path string) bool {
 	return fi.IsDir()
 }
 
-// KillCmdProcess be used
+// KillCmdProcess
 func KillCmdProcess(pid int) error {
 	err := syscall.Kill(-pid, syscall.SIGKILL)
 	if err != nil {
@@ -46,7 +46,7 @@ func KillCmdProcess(pid int) error {
 	return err
 }
 
-// GetMacAddrs be used
+// GetMacAddrs
 func GetMacAddrs() ([]string, error) {
 	macAddrs := []string{}
 	interfaces, err := net.Interfaces()
@@ -63,7 +63,7 @@ func GetMacAddrs() ([]string, error) {
 	return macAddrs, nil
 }
 
-// DownLoadFile be used
+// DownLoadFile download the saas archive from platform
 func DownLoadFile(url string, dstPath string) error {
 	tokens := strings.Split(url, "/")
 	fileName := tokens[len(tokens)-1]
@@ -95,7 +95,7 @@ func DownLoadFile(url string, dstPath string) error {
 	return nil
 }
 
-// ComputeMd5 be used
+// ComputeMd5
 func ComputeMd5(filePath string) ([]byte, error) {
 	var result []byte
 	file, err := os.Open(filePath)
@@ -110,7 +110,7 @@ func ComputeMd5(filePath string) ([]byte, error) {
 	return hash.Sum(result), nil
 }
 
-// GetProjPath be used
+// GetProjPath
 func GetProjPath() string {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
@@ -120,6 +120,7 @@ func GetProjPath() string {
 	return curlPath[:strings.LastIndex(curlPath, "/")]
 }
 
+// RenderTemplate renders configuration file like uwsgi.ini
 func RenderTemplate(templateFile string, destFile string, context map[string]string) error {
 	tmpl, err := template.ParseFiles(templateFile)
 	if err != nil {
