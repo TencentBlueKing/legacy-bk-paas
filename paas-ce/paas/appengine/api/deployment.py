@@ -106,7 +106,6 @@ class DeployController(object):
             return self.bk_app_event.id, 1, str(e)
 
     def _request(self, bk_servers, handle):
-        logger.error(self.bk_app.app_envs[self.mode])
         params = {
             "app_code": self.bk_app.app_code,
             "event_id": str(self.bk_app_event.id),
