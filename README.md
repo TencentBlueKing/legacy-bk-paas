@@ -40,7 +40,7 @@
 
 - [安装部署PaaS](docs/install/ce_paas_install.md)
 - [安装部署PaaSAgent](docs/install/ce_paas_agent_install.md)
-- [替换已安装的蓝鲸社区版指引](docs/install/replace_ce_with_opensource.md)
+- [替换已安装的蓝鲸社区版指引](https://docs.bk.tencent.com/bk_osed/replace_paas_with_opensource_version.html#osed)
 
 
 ## Release
