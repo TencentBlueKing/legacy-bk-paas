@@ -101,7 +101,6 @@ if_fail_then_exit "$?" "------pip install fail------"
 echo "------pip install success------"
 
 echo "------change db------"
-python manage.py syncdb --noinput && \
 python manage.py migrate --noinput && \
 echo "------change db success------" || exit 1
 

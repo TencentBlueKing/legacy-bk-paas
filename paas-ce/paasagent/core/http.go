@@ -22,7 +22,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// newReqAgent be used
 func newReqAgent(method string, url string) *gorequest.SuperAgent {
 	sid := viper.GetString("auth.sid")
 	token := viper.GetString("auth.token")
@@ -31,7 +30,7 @@ func newReqAgent(method string, url string) *gorequest.SuperAgent {
 	return request.Set("Content-Type", "application/json").Set("X-ID", sid).Set("X-TOKEN", token)
 }
 
-// DoGet be used
+// DoGet do get request
 func DoGet(url string) (gorequest.Response, string, error) {
 	reqAgent := newReqAgent("GET", url)
 	resp, body, errs := reqAgent.End()
@@ -39,7 +38,7 @@ func DoGet(url string) (gorequest.Response, string, error) {
 
 }
 
-// DoPost be used
+// DoPost do post request
 func DoPost(url string, data interface{}) (gorequest.Response, string, error) {
 	reqAgent := newReqAgent("POST", url)
 	resp, body, errs := reqAgent.Send(data).End()

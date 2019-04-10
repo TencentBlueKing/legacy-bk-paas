@@ -44,7 +44,9 @@ $ go version
 $ echo $GOPATH
 
 # 编译并安装paasagent
-$ ln -s paas-ce/paasagent $GOPATH/src/paasagent
+$ mkdir -p $GOPATH/src
+$ cd paas-ce
+$ ln -s $PWD/paasagent $GOPATH/src/paasagent
 $ cd $GOPATH/src/paasagent
 $ make
 $ mkdir -p $AGENT_ROOT/paas_agent  /data/paas/logs/paas_agent
