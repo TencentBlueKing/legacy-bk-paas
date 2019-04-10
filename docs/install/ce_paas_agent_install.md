@@ -67,6 +67,7 @@ $ chmod +x build/virtualenv/build  build/virtualenv/saas/buildsaas
 #### 3. 蓝鲸智云开发者中心注册服务器
 
 开发者中心部署成功后, 访问`PAAS_DOMAIN`配置的域名，在**蓝鲸智云开发者中心->服务器信息**页面中，点击`添加服务器信息`按钮, 添加一台测试和正式app服务器。后台会自动生成服务器对应的`服务器ID(sid)`和`Token(stoken)`字段
+
 注意: 开发者中心所在的服务器需要保证网络与app服务器互通
 
 #### 4. 配置etc/paas_agent_config.yaml文件
