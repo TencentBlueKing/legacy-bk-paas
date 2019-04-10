@@ -19,5 +19,5 @@ headers = {
 }
 
 host = SmartHost(
-    host_prod=getattr(settings, 'BK_PAAS_HOST', '')
+    host_prod=getattr(settings, 'PAAS_HOST', '')
 )

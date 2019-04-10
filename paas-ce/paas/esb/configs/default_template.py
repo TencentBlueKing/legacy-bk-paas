@@ -30,13 +30,10 @@ ESB_TOKEN = '41f076b7-afce-46eb-9e85-dab245eb0931'
 # Third party system host
 
 # paas host
-PAAS_HOST = 'http://127.0.0.1:8003'
+PAAS_HOST = 'http://127.0.0.1:8001'
 
 # host for bk login
 HOST_BK_LOGIN = 'http://127.0.0.1:8003'
-
-# host for bk paas
-BK_PAAS_HOST = 'http://127.0.0.1:8003'
 
 # host for cc
 HOST_CC = ''
