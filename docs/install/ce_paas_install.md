@@ -7,8 +7,8 @@
 
 ## 部署说明
 
-- `paas-ce` web侧一个4个项目: paas/appengine/login/esb; 均是基于Django开发的
-- 四个项目共用一个数据库
+- `paas-ce` web侧一共4个项目: paas/appengine/login/esb; 均是基于Django开发的
+- 4个项目共用一个数据库
 - 项目部署过程一致; 过程中需要注意每个项目的配置文件及拉起的端口号(每个项目需要使用不同的端口号)
 - 可以部署在同一台机器上, 使用不同端口号即可
 
@@ -39,7 +39,7 @@
     LOGIN_HOST = "http://127.0.0.1:8003"
     ```
 
-- 部署 appengine 
+- 部署 appengine
 - 部署 esb, 配置文件中需要配置login/paas的地址
 
     ```
@@ -73,7 +73,7 @@ CREATE DATABASE IF NOT EXISTS open_paas DEFAULT CHARACTER SET utf8 COLLATE utf8_
 注意:　`paas/login/appengine/esb`部署方式相同, 使用不同的`virtualenv`以及启动端口
 
 
-开发者中心paas部署为例: 
+开发者中心paas部署为例:
 
 ```
 # 虚拟环境, 自动进入paas virtualenv
@@ -108,9 +108,9 @@ login/conf/settings_development.py
 # appengine
 appengine/controller/settings.py
 
-# esb  
+# esb
 # 注意, 默认default.py不存在, 需要复制模板修改 `cp default_template.py default.py`
-esb/configs/default.py    
+esb/configs/default.py
 ```
 
 配置文件注意事项:
@@ -123,7 +123,7 @@ esb/configs/default.py
 日志位置: 如果是`python manage.py runserver`拉起, 可以在终端看到请求日志
 
 ```
-# ROOT is bk-PaaS/paas-ce/paas/
+# ROOT_DIR is bk-PaaS/paas-ce/paas/
 
 paas/logs
   ├── paas.log
