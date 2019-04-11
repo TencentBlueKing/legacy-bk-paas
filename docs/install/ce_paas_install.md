@@ -157,7 +157,26 @@ esb/logs/
 
 ## 部署到生产环境
 
-- 部署生产环境时, 使用`settings_production.py`以及设置环境变量`BK_ENV="production"`
+
+
+- 部署到生产, 配置文件位置:
+
+    ```
+    # paas, 可以参考 settings_production.py.sample
+    paas/conf/settings_production.py
+
+    # login, 可以参考 settings_production.py.sample
+    login/conf/settings_production.py
+
+    # appengine
+    appengine/controller/settings.py
+
+    # esb
+    # 注意, 默认default.py不存在, 需要复制模板修改 `cp default_template.py default.py`
+    esb/configs/default.py
+    ```
+
+- 部署生产环境时, 需要设置环境变量`BK_ENV="production"`, 然后启动进程
 - 生产的配置文件可以参考 `paas-ce/paas/examples/settings`
 - 做`nginx`反向代理可以参考 `paas-ce/paas/examples/nginx_paas.conf`
 - 使用`supervisord`托管可以参考 `paas-ce/paas/examples/supervisord.conf`

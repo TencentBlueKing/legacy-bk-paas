@@ -16,7 +16,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'open_paas',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -26,28 +26,30 @@ DATABASES = {
 # Log settings
 LOG_LEVEL = 'INFO'
 
-SECRET_KEY = 'XEz7VLlQNdIq9iFl1t6LtWobQEcG4ayoPa2esHwatkHZxiuDf0'
-
 # esb app_token
 ESB_TOKEN = '41f076b7-afce-46eb-9e85-dab245eb0931'
 
+# Third party system host
+
 # paas host
-PAAS_HOST = 'bking.com'
+PAAS_HOST = 'http://127.0.0.1:8001'
 
 # Third party system host
 # host for bk login
-HOST_BK_LOGIN = 'bking.com'
+HOST_BK_LOGIN = 'http://127.0.0.1:8003'
 
-# host for cc, default 80 for http/8443 for https
+# host for cc
 HOST_CC = ''
-# host for job, default 80 for http/8443 for https
-HOST_JOB = ''
-# host for gse, default 80 for http/8443 for https
-HOST_GSE = ''
-# host for DATA，数据平台监控告警系统, default 80 for http/8443 for https
-HOST_DATA = ''
-# host for fta,  default 80 for http/8443 for https
+
+# host for cc v3
+HOST_CC_V3 = ''
+
+# host for fta
 HOST_FTA = ''
 
-# esb ssl root dir
-SSL_ROOT_DIR = ''
+# Redis config
+USE_SENTINEL = False
+REDIS_HOST = ''
+REDIS_PORT = 6379
+REDIS_PASSWORD = ''
+REDIS_MASTER_NAME = ''
