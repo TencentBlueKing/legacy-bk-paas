@@ -29,7 +29,9 @@ DATABASES = {
 }
 
 # domain
-PAAS_DOMAIN = 'bking.com'
+PAAS_DOMAIN = 'www.bking.com'
+# 注意生产环境使用nginx反向代理不需要配置LOGIN_DOMAIN变量(删除即可)
+
 # inner domain, use consul domain,  for api
 PAAS_INNER_DOMAIN = ''
 HTTP_SCHEMA = 'http'

@@ -15,7 +15,8 @@ DEBUG = False
 if not DEBUG:
     STATIC_ROOT = 'static'
 
-SITE_URL = "/"
+# 生产环境, 使用nginx反向代理 /login/static/
+SITE_URL = "/login/"
 
 STATIC_URL = "/static/"
 
