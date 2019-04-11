@@ -32,7 +32,7 @@ from django.views.i18n import javascript_catalog
 from django.views import i18n as django_i18n_views
 
 
-urlpatterns = [
+base_urlpatterns = [
     # 登录页面
     url(r'^$', views.LoginView.as_view()),
     url(r'^logout/$', views.LogoutView.as_view()),
@@ -44,7 +44,12 @@ urlpatterns = [
     url(r'^api/v2/get_user/$', views_api_v2.UserView.as_view()),
     url(r'^api/v2/get_batch_users/$', views_api_v2.BatchUsersView.as_view()),
     url(r'^api/v2/get_all_users/$', views_api_v2.AllUsersView.as_view()),
+]
 
+urlpatterns = [
+    url(r'^', include(base_urlpatterns)),
+    # 支持本地开发
+    url(r'^login/', include(base_urlpatterns)),
     # 检查统一登录是否正常运行
     url(r'^healthz/', include("healthz.urls")),
     # 反搜索
