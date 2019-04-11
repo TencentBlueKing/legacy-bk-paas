@@ -25,9 +25,9 @@ DATABASES = {
 }
 
 # domain
-PAAS_DOMAIN = 'bking.com'
+PAAS_DOMAIN = 'www.bking.com:8001'
 # inner domain, use consul domain,  for api
-PAAS_INNER_DOMAIN = 'bking.com'
+PAAS_INNER_DOMAIN = ''
 HTTP_SCHEMA = 'http'
 
 

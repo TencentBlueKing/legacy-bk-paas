@@ -29,7 +29,10 @@ DATABASES = {
 }
 
 # domain
-PAAS_DOMAIN = 'bking.com'
+PAAS_DOMAIN = 'www.bking.com:8001'
+# 跳转到本地开发使用的login服务, 仅本地开发用. 注意生产环境使用nginx反向代理不需要配置LOGIN_DOMAIN变量(删除即可)
+LOGIN_DOMAIN = 'www.bking.com:8003'
+
 # inner domain, use consul domain,  for api
 PAAS_INNER_DOMAIN = ''
 HTTP_SCHEMA = 'http'
