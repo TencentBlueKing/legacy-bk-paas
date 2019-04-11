@@ -84,7 +84,7 @@ $ cd paas-ce/paas/paas/
 # 安装依赖
 $ pip install -r requirements.txt
 
-# 修改配置文件, 配置数据库,域名等
+# 修改配置文件, 配置数据库,域名等; 注意如果是本地开发需要配置 LOGIN_DOMAIN
 $ vim conf/settings_development.py
 
 # 注意, login / paas 务必要执行migrate
@@ -115,9 +115,9 @@ esb/configs/default.py
 配置文件注意事项:
 
 1. 数据库配置: `HOST/PORT/USER/PASSWORD`
-2. 涉及域名: 默认为`bking.com`, 如果自定义域名, 需修改4个配置文件中所有相关位置; `PAAS_DOMAIN`及`BK_COOKIE_DOMAIN`
+2. 涉及域名: 默认为`www.bking.com`, 如果自定义域名, 需修改4个配置文件中所有相关位置; `PAAS_DOMAIN`及`BK_COOKIE_DOMAIN`
 3. `SECRET_KEY` / `ESB_TOKEN`, 修改, 且4个文件这两个变量值保持一致
-4. `USERNAME` / `PASSWORD` 修改`login/settings_production.py`中初始化用户名密码, 超级管理员用户名密码, 建议强密码
+4. `USERNAME` / `PASSWORD` 修改`login/conf/settings_development.py`中初始化用户名密码, 超级管理员用户名密码, 建议强密码(注意, 生产环境中配置文件为`login/conf/settings_production.py`)
 
 日志位置: 如果是`python manage.py runserver`拉起, 可以在终端看到请求日志
 
@@ -140,7 +140,7 @@ esb/logs/
 
 #### 3. 访问
 
-假设配置`PAAS_DOMAIN`为`www.bking.com`, 部署机器IP为`127.0.0.1`
+假设配置`PAAS_DOMAIN`为`www.bking.com:8001`, 部署机器IP为`127.0.0.1`
 
 修改本地hosts
 
@@ -150,7 +150,7 @@ esb/logs/
 
 `http://www.bking.com:8001` 可以访问到开发者中心
 
-**注意** 登录用户名密码是`login/settings_production.py`中配置的 `USERNAME` / `PASSWORD`
+**注意** 登录用户名密码是`login/conf/settings_development.py`中配置的 `USERNAME` / `PASSWORD`
 
 ----
 
@@ -175,6 +175,7 @@ esb/logs/
 - 部署生产环境时, 需要设置环境变量`BK_ENV="production"`, 然后启动进程
 
 - 生产的配置文件可以参考 `paas-ce/paas/examples/settings`
-- 做`nginx`反向代理可以参考 `paas-ce/paas/examples/nginx_paas.conf`
+- 做`nginx`反向代理可以参考 `paas-ce/paas/examples/nginx_paas.conf`; 注意如果使用nginx反向代理, 需确认 `login/conf/settings_*.py` 中 `SITE_URL = "/login/"`(否则登录页面静态资源404)
 - 使用`supervisord`托管可以参考 `paas-ce/paas/examples/supervisord.conf`
 - `PAAS_INNER_DOMAIN`及`HTTP_SCHEMA`是给全站https配置的, 当开启了https, 则配置这两个变量, 前者是paas的内网地址, 此时`PAAS_DOMAIN`为外网https地址
+- 登录用户名密码是`login/conf/settings_production.py`中配置的 `USERNAME` / `PASSWORD`
