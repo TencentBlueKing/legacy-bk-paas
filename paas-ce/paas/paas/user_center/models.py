@@ -27,7 +27,7 @@ class WxBkUserTmpRecord(models.Model):
 
     class Meta:
         verbose_name = "微信与蓝鲸用户绑定过程临时表"
-        verbose_name_plural = "微信与蓝鲸用户绑定过程临时表"
+        verbose_name_plural = verbose_name
         db_table = 'console_wx_bkuser_tmp_record'
 
     def __unicode__(self):
