@@ -15,7 +15,7 @@
 
 ### 请求参数示例
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -27,7 +27,7 @@
 
 ### 返回结果示例
 
-```python
+```
 {
     "data": {
         "creator": "admin",
@@ -111,7 +111,154 @@
         "instance_name": "job输出变量测试_20190117121300",
         "end_time": "2019-01-17 04:13:15",
         "executor": "admin",
-        "template_id": "266"
+        "template_id": "266",
+        "task_url": "http://bk_sops_host/taskflow/execute/3/?instance_id=15364",
+        "pipeline_tree": {
+            "activities": {
+                "node9b5ae13799d63e179f0ce3088b62": {
+                    "outgoing": "line27bc7b4ccbcf37ddb9d1f6572a04",
+                    "incoming": "line490caa49d2a03e64829693281032",
+                    "name": "timing",
+                    "error_ignorable": false,
+                    "component": {
+                        "code": "sleep_timer",
+                        "data": {
+                            "bk_timing": {
+                                "hook": false,
+                                "value": "2"
+                            }
+                        }
+                    },
+                    "stage_name": "步骤1",
+                    "can_retry": true,
+                    "isSkipped": true,
+                    "type": "ServiceActivity",
+                    "optional": false,
+                    "id": "node9b5ae13799d63e179f0ce3088b62",
+                    "loop": null
+                },
+                "node880ded556c6c3c269be3cedc64b6": {
+                    "outgoing": "line490caa49d2a03e64829693281032",
+                    "incoming": "lineb83161d6e0593ad68d9ec73a961b",
+                    "name": "暂停",
+                    "error_ignorable": false,
+                    "component": {
+                        "code": "pause_node",
+                        "data": {}
+                    },
+                    "stage_name": "步骤1",
+                    "can_retry": true,
+                    "isSkipped": true,
+                    "type": "ServiceActivity",
+                    "optional": true,
+                    "id": "node880ded556c6c3c269be3cedc64b6",
+                    "loop": null
+                }
+            },
+            "end_event": {
+                "type": "EmptyEndEvent",
+                "outgoing": "",
+                "incoming": "line27bc7b4ccbcf37ddb9d1f6572a04",
+                "id": "node5c48f37aa9f0351e8b43ab6a2295",
+                "name": ""
+            },
+            "outputs": [],
+            "flows": {
+                "line490caa49d2a03e64829693281032": {
+                    "is_default": false,
+                    "source": "node880ded556c6c3c269be3cedc64b6",
+                    "id": "line490caa49d2a03e64829693281032",
+                    "target": "node9b5ae13799d63e179f0ce3088b62"
+                },
+                "lineb83161d6e0593ad68d9ec73a961b": {
+                    "is_default": false,
+                    "source": "noded383bc1d7387391f889c6bab18b8",
+                    "id": "lineb83161d6e0593ad68d9ec73a961b",
+                    "target": "node880ded556c6c3c269be3cedc64b6"
+                },
+                "line27bc7b4ccbcf37ddb9d1f6572a04": {
+                    "is_default": false,
+                    "source": "node9b5ae13799d63e179f0ce3088b62",
+                    "id": "line27bc7b4ccbcf37ddb9d1f6572a04",
+                    "target": "node5c48f37aa9f0351e8b43ab6a2295"
+                }
+            },
+            "gateways": {},
+            "line": [
+                {
+                    "source": {
+                        "id": "node9b5ae13799d63e179f0ce3088b62",
+                        "arrow": "Right"
+                    },
+                    "target": {
+                        "id": "node5c48f37aa9f0351e8b43ab6a2295",
+                        "arrow": "Left"
+                    },
+                    "id": "line27bc7b4ccbcf37ddb9d1f6572a04"
+                },
+                {
+                    "source": {
+                        "id": "node880ded556c6c3c269be3cedc64b6",
+                        "arrow": "Right"
+                    },
+                    "target": {
+                        "id": "node9b5ae13799d63e179f0ce3088b62",
+                        "arrow": "Left"
+                    },
+                    "id": "line490caa49d2a03e64829693281032"
+                },
+                {
+                    "source": {
+                        "id": "noded383bc1d7387391f889c6bab18b8",
+                        "arrow": "Right"
+                    },
+                    "id": "lineb83161d6e0593ad68d9ec73a961b",
+                    "target": {
+                        "id": "node880ded556c6c3c269be3cedc64b6",
+                        "arrow": "Left"
+                    }
+                }
+            ],
+            "start_event": {
+                "type": "EmptyStartEvent",
+                "outgoing": "lineb83161d6e0593ad68d9ec73a961b",
+                "incoming": "",
+                "id": "noded383bc1d7387391f889c6bab18b8",
+                "name": ""
+            },
+            "id": "node7ef6970d06ad3bc092594cb5ec5f",
+            "constants": {},
+            "location": [
+                {
+                    "stage_name": "步骤1",
+                    "name": "暂停",
+                    "y": 135,
+                    "x": 300,
+                    "type": "tasknode",
+                    "id": "node880ded556c6c3c269be3cedc64b6"
+                },
+                {
+                    "y": 150,
+                    "x": 1000,
+                    "type": "endpoint",
+                    "id": "node5c48f37aa9f0351e8b43ab6a2295"
+                },
+                {
+                    "stage_name": "步骤1",
+                    "name": "timing",
+                    "y": 135,
+                    "x": 595,
+                    "type": "tasknode",
+                    "id": "node9b5ae13799d63e179f0ce3088b62"
+                },
+                {
+                    "y": 150,
+                    "x": 80,
+                    "type": "startpoint",
+                    "id": "noded383bc1d7387391f889c6bab18b8"
+                }
+            ]
+        }
     },
     "result": true
 }
@@ -143,13 +290,15 @@
 |  executor         |  string    |  任务执行人     |
 |  constants        |  dict      |  输入的全局变量，详情见下面说明 |
 |  outputs          |  list      |  任务输出参数，详情见下面说明 |
+|  task_url     |    str     |    任务实例链接     |
+|  pipeline_tree     |    dict     |    任务实例树     |
 
-#### data[constants].KEY
+#### data.constants.KEY
 
 全局变量 KEY，${key} 格式
 
 
-#### data[constants].VALUE
+#### data.constants.VALUE
 |   字段   |  类型  |           描述             |
 | ------------ | ---------- | ------------------------------ |
 |  key      |    string    |      同 KEY     |
@@ -162,10 +311,22 @@
 |  source_info   |   dict  |  source_type=component_inputs/component_outputs 时有效，变量的来源节点信息 |
 
 
-###### data[outputs][] 
+#### data.outputs[] 
 |      字段     |     类型   |               描述             |
 | ------------  | ---------- | ------------------------------ |
 |  name         | string     | 输出参数名称                   |
 |  value        | string、int、bool、dict、list | 输出参数值  |
 |  key          | string     | 输出参数 KEY                   |
 |  preset       | bool       | 是否是标准插件定义中预设输出变量   |
+
+#### data.pipeline_tree
+
+| 字段      | 类型      | 描述      |
+|-----------|----------|-----------|
+|  start_event      |    dict    |      开始节点信息     |
+|  end_event      |    dict    |      结束节点信息    |
+|  activities      |    dict    |      任务节点（原子和子流程）信息    |
+|  gateways      |    dict    |      网关节点（并行网关、分支网关和汇聚网关）信息    |
+|  flows      |    dict    |     顺序流（节点连线）信息    |
+|  constants      |    dict    |  全局变量信息，详情见下面    |
+|  outputs      |    list    |  模板输出信息，标记 constants 中的输出字段    |

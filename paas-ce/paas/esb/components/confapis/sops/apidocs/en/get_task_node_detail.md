@@ -18,7 +18,7 @@ Query a task node execution details
 
 ### Request Parameters Example
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -33,7 +33,7 @@ Query a task node execution details
 
 ### Return Result Example
 
-```python
+```
 {
     "message": "",
     "data": {
@@ -84,7 +84,7 @@ Query a task node execution details
 }
 ```
 
-### Return Result Parameters DescriptionExample
+### Return Result Description
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -108,7 +108,7 @@ Query a task node execution details
 |  ex_data      | string     | failure detail of this node，format is json or HTML、string |
 |  histories    | list       | retry records, details are described below   |
 
-##### outputs[]
+#### data.outputs[]
 | Field      | Type      | Description      |
 | ------------  | ---------- | ------------------------------ |
 |  name         | string     | name of output variable                   |
@@ -117,7 +117,7 @@ Query a task node execution details
 |  preset       | bool       | where to display in Standard Plugins   |
 
 
-##### histories[]
+#### data.histories[]
 |      名称     |     类型   |               说明             |
 | ------------  | ---------- | ------------------------------ |
 |  start_time   | string     | start time    |

@@ -16,7 +16,7 @@ Query individual flow template details of the business
 
 ### Request Parameters Example
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -29,7 +29,7 @@ Query individual flow template details of the business
 
 ### Return Result Example
 
-```python
+```
 {
     "result": true,
     "data": {
@@ -179,7 +179,7 @@ Query individual flow template details of the business
 }
 ```
 
-### Return Result Parameters DescriptionExample
+### Return Result Description
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|

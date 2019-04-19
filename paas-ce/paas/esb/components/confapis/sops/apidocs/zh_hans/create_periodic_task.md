@@ -13,9 +13,9 @@
 |   template_id    |   string     |   是   |  用于创建任务的模板ID |
 |   bk_biz_id    |   string     |   是   |  任务所属业务ID |
 |   name    |   string     |   是   |  要创建的周期任务名称 |
-|   cron    |   object     |   是   |  要创建的周期任务调度策略 |
-|   constants    |   object     |   否   | 任务全局参数，详细信息见下面说明 |
-|   exclude_task_nodes_id    |   array     |   否   |  跳过执行的节点ID列表 |
+|   cron    |   dict     |   是   |  要创建的周期任务调度策略 |
+|   constants    |   dict     |   否   | 任务全局参数，详细信息见下面说明 |
+|   exclude_task_nodes_id    |   list     |   否   |  跳过执行的节点ID列表 |
 
 #### constants.KEY
 
@@ -37,7 +37,7 @@
 
 ### 请求参数示例
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -53,7 +53,7 @@
 
 ### 返回结果示例
 
-```python
+```
 {
     "message": "",
     "data": {
@@ -216,7 +216,7 @@
 |  data        |    dict      |      result=true 时成功数据，详细信息请见下面说明     |
 |  message        |    string      |      result=false 时错误信息     |
 
-#### data 说明
+#### data
 
 |   名称   |  类型  |           说明             |
 | ------------ | ---------- | ------------------------------ |
@@ -228,10 +228,10 @@
 |  enabled      |    bool    |    是否激活   |
 |  id      |    int    |    周期任务 ID   |
 |  template_id      |    string    |    用于创建该任务的模板 ID   |
-|  form      |    object    |    该周期任务的参数表单对象   |
-|  pipeline_tree      |    object    |    该周期任务的实例树   |
+|  form      |    dict    |    该周期任务的参数表单对象   |
+|  pipeline_tree      |    dict    |    该周期任务的实例树   |
 
-#### data.pipeline_tree 说明
+#### data.pipeline_tree
 
 |   名称   |  类型  |           说明             |
 | ------------ | ---------- | ------------------------------ |
@@ -243,12 +243,11 @@
 |  constants      |    dict    |  全局变量信息，详情见下面    |
 |  outputs      |    list    |  模板输出信息，标记 constants 中的输出字段    |
 
-#### data.form, data.pipeline_tree.constants 说明
+#### data.form.KEY, data.pipeline_tree.constants.KEY
 
-KEY：
 全局变量 KEY，${key} 格式
 
-VALUE：
+#### data.form.VALUE, data.pipeline_tree.constants.VALUE
 
 |   名称   |  类型  |           说明             |
 | ------------ | ---------- | ------------------------------ |
@@ -258,5 +257,5 @@ VALUE：
 |  desc      |    string    |      变量说明   |
 |  source_type      |    string    |      变量来源, 取值范围 custom: 自定义变量，component_inputs: 从原子输入参数勾选，component_outputs：从原子输出结果中勾选   |
 |  custom_type      |    string    |      source_type=custom 时有效，自定义变量类型， 取值范围 input: 输入框，textarea: 文本框，datetime: 日期时间，int: 整数|
-|  source_tag      |    string    |      source_type=component_inputs|component_outputs 时有效，变量的来源原子   |
-|  source_info   |   dict  |  source_type=component_inputs|component_outputs 时有效，变量的来源节点信息 |
+|  source_tag      |    string    |      source_type=component_inputs/component_outputs 时有效，变量的来源原子   |
+|  source_info   |   dict  |  source_type=component_inputs/component_outputs 时有效，变量的来源节点信息 |
