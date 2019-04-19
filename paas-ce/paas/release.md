@@ -4,6 +4,7 @@
 
 - bugfix: fix a lot of front-end issues
 - update: avatar 
+- update: esb update sops confapis, cmsi send_voice_msg support tencentcloud api
 
 # 3.2.4
 
