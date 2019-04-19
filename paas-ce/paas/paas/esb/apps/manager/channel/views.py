@@ -268,7 +268,7 @@ class EditChannelView(View):
                     },
                 ]
             }
-        elif path == '/cmsi/send_sms/':
+        elif path in ['/cmsi/send_sms/', '/cmsi/send_voice_msg/']:
             comp_conf = dict(comp_conf)
             return {
                 # 字段配置
