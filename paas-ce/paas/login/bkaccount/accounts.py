@@ -119,7 +119,7 @@ class Account(AccountSingleton):
             retry_count += 1
         return bk_token, datetime.datetime.fromtimestamp(expire_time, timezone.get_current_timezone())
 
-    def _decrypt_token(bk_token):
+    def _decrypt_token(self, bk_token):
         try:
             plain_bk_token = decrypt(bk_token)
         except Exception as error:
