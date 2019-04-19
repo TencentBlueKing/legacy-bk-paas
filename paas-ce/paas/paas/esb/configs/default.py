@@ -58,8 +58,8 @@ menu_items = [
 BK_SYSTEMS = {
     'BK_LOGIN': {
         'name': 'BK_LOGIN',
-        'label': ugettext(u'蓝鲸登录平台'),
-        'remark': ugettext(u'蓝鲸登录平台，管理用户登录验证，及用户信息'),
+        'label': ugettext(u'蓝鲸统一登录'),
+        'remark': ugettext(u'蓝鲸统一登录，管理用户登录验证，及用户信息'),
     },
     'BK_PAAS': {
         'name': 'BK_PAAS',

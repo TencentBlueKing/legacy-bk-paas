@@ -24,7 +24,7 @@ constant value
 
 ### Request Parameters Example
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -37,7 +37,7 @@ constant value
 
 ### Return Result Example
 
-```python
+```
 {
     "data": {
         "${bk_timing}": {
@@ -62,7 +62,7 @@ constant value
 }
 ```
 
-### Return Result Parameters DescriptionExample
+### Return Result Description
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -86,4 +86,3 @@ KEY, the format is like ${key}
 |  custom_type  | string   |      custom type, which is not empty when source_type is custom,  the value is input ,or textarea, or datetime, or int |
 |  source_tag   | string   |      source tag and atom info, which is not empty when source_type is  component_inputs or component_outputs  |
 |  source_info | dict    |        source info about task node ID  |
-

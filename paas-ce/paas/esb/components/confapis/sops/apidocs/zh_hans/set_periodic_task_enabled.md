@@ -16,7 +16,7 @@
 
 ### 请求参数示例
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -29,7 +29,7 @@
 
 ### 返回结果示例
 
-```python
+```
 {
     "data": {
         "enabled": false

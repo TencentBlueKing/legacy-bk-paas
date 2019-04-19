@@ -12,7 +12,7 @@
 |---------------|------------|--------|------------------|
 |   task_id    |   string     |   是   |  周期任务ID |
 |   bk_biz_id    |   string     |   是   |  模板所属业务ID |
-|   constants    |   object     |   否   | 任务全局参数，详细信息见下面说明 |
+|   constants    |   dict     |   否   | 任务全局参数，详细信息见下面说明 |
 
 #### constants.KEY
 
@@ -24,7 +24,7 @@
 
 ### 请求参数示例
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -37,7 +37,7 @@
 
 ### 返回结果示例
 
-```python
+```
 {
     "data": {
         "${bk_timing}": {
@@ -83,5 +83,5 @@
 |  desc      |    string    |      变量说明   |
 |  source_type      |    string    |      变量来源, 取值范围 custom: 自定义变量，component_inputs: 从原子输入参数勾选，component_outputs：从原子输出结果中勾选   |
 |  custom_type      |    string    |      source_type=custom 时有效，自定义变量类型， 取值范围 input: 输入框，textarea: 文本框，datetime: 日期时间，int: 整数|
-|  source_tag      |    string    |      source_type=component_inputs|component_outputs 时有效，变量的来源原子   |
-|  source_info   |   dict  |  source_type=component_inputs|component_outputs 时有效，变量的来源节点信息 |
+|  source_tag      |    string    |      source_type=component_inputs/component_outputs 时有效，变量的来源原子   |
+|  source_info   |   dict  |  source_type=component_inputs/component_outputs 时有效，变量的来源节点信息 |

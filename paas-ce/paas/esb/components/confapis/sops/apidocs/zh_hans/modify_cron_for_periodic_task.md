@@ -12,7 +12,7 @@
 |---------------|------------|--------|------------------|
 |   task_id    |   string     |   是   |  周期任务ID |
 |   bk_biz_id    |   string     |   是   |  模板所属业务ID |
-|   cron    |   object     |   否   | 调度策略对象 |
+|   cron    |   dict     |   否   | 调度策略对象 |
 
 #### cron
  
@@ -26,7 +26,7 @@
 
 ### 请求参数示例
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -39,7 +39,7 @@
 
 ### 返回结果示例
 
-```python
+```
 {
     "data": {
         "cron": "*/1 15 * * * (m/h/d/dM/MY)"

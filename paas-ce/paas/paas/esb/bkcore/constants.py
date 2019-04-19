@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 SYSTEMS = [
     {
         'name': 'BK_LOGIN',
-        'label': _(u'蓝鲸登录平台'),
+        'label': _(u'蓝鲸统一登录'),
     },
     {
         'name': 'CC',
