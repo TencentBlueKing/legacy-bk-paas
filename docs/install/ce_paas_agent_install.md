@@ -2,7 +2,7 @@
 
 ## 系统要求
 
-- Python版本: python2.7
+- Python版本: python2.7/python3.6.7
 - Go
 - Nginx
 - Linux环境
@@ -11,19 +11,32 @@
 
 #### 1. 基础环境初始化
 
-python 2.7环境初始化
+python 环境初始化
 
 ```
-# 必须是python2.7
+# 确认基础python环境是python2.7
 $ python --version
 Python 2.7.15
 
+# 执行以下命令确定python的安装路径
+$ which python
+
 # 安装 virtualenv 及 预装包
 $ pip install virtualenv virtualenvwrapper
+$ pip install supervisor==3.3.3
 $ pip install -r paas-ce/paasagent/etc/build/packages/requirements.txt
 
-$ which python
+# 如果使用python3，建议将python3安装到/opt/py36目录下
+# 从源码包编译安装python3.6.7时，可能需要手动建立python和pip的软链
+$ cd /opt/py36/bin
+$ ln -s python3.6 python
+$ ln -s pip3 pip
+
+# 确认python3的版本
+$ /opt/py36/bin/python --version
+Python 3.6.7
 ```
+
 
 构建目录及新建用户
 
@@ -60,7 +73,7 @@ $ sed -i "s#TPL_AGENT_ROOT#${AGENT_ROOT}#g" paas_agent_config.yaml nginx/paasage
 $ chmod +x build/virtualenv/build  build/virtualenv/saas/buildsaas
 ```
 
-注意: `build` 和 `buildsaas` 中的 `VIRTUALENVWRAPPER_PYTHON` 变量需要设置正确的 python 路径，默认`/usr/bin/python`, 如果上一步`which python`的返回结果不是`/usr/bin/python`, 需要修改为对应正确的路径.
+注意: `build` 和 `buildsaas` 中的 `VIRTUALENVWRAPPER_PYTHON` 变量需要设置正确的 python 路径，默认`/usr/bin/python`, 如果上一步`which python`的返回结果不是`/usr/bin/python`, 需要修改为对应正确的路径；如果用到了python3，`PYTHON3_PATH`也需要设置成正确的路径，默认`/opt/py36`
 
 #### 3. 蓝鲸智云开发者中心注册服务器
 
