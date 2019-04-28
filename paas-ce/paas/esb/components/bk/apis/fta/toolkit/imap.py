@@ -182,7 +182,7 @@ class MailPoller(object):
         sent_to = sent_to.split(",") if sent_to else ()
         subject = [subject] if subject else []
         for mail in mails:
-            if (before and before <= mail.time) or (since and since > mail.time):
+            if mail.time is None or (before and before <= mail.time) or (since and since > mail.time):
                 continue
             if sent_from and not contain_one(mail.sender, sent_from):
                 continue
@@ -190,7 +190,6 @@ class MailPoller(object):
                 continue
             if subject and not contain_one(mail.subject, subject):
                 continue
-
             result_list.append(mail)
         return result_list
 
@@ -200,7 +199,7 @@ class MailPoller(object):
 
     def fetch(self, mails, criteria=None):
         mail_mappings = {str(mail.uid): mail for mail in mails}
-        status, result = self.imap_client.fetch(",".join(mail_mappings.keys()), criteria or self.CRITERIA, )
+        status, result = self.imap_client.fetch(",".join(mail_mappings.keys()), criteria or self.CRITERIA)
         if status != "OK":
             raise Exception("fetch mail[%s] failed", mail_mappings.keys())
 
