@@ -65,13 +65,13 @@ js.aq.qq.com
 由于ESB发送微信消息需要调用微信获取AccessToken接口，所以需要在“基本配置 → 公众号开发者信息 → IP白名单”中配置蓝鲸PaaS部署的机器IP
 
 ##### 2. 微信公众平台上已配置了服务器配置
-联系配置了服务器配置的人员，请其协助将在服务器地址响应的服务中添加调用http://{paas_domain}/console/user_center/weixin/mp/callback/（透传微信事件推送）
+联系配置了服务器配置的人员，请其协助将在服务器地址响应的服务中添加调用http://{paas_domain}/console/user_center/weixin/mp/callback/（透传微信事件推送） （<font style="color:red">非80端口则paas_domain需带上端口，若是ssl，则需将http改为https</font>）
 
 ##### 3. 微信公众平台上未配置服务器配置
 填写服务器配置（填写完，<font style="color:red">先不要点击提交</font>）
 
 * url 填写外网能够访问到的URL（暂时称为weixin_server_url）
-同时需要配置反向代理，将weixin_server_url 转发到企业蓝鲸平台http://{paas_domain}/console/user_center/weixin/mp/callback/
+同时需要配置反向代理，将weixin_server_url 转发到企业蓝鲸平台http://{paas_domain}/console/user_center/weixin/mp/callback/ （<font style="color:red">非80端口则paas_domain需带上端口，若是ssl，则需将http改为https</font>）
 * Token 英文或数字，长度为3-32字符，请自行定义随机填写
 * EncodingAESKey 点击随机生成即可
 * 消息加解密方式，选择明文模式即可（任何一种模式都不影响）
@@ -101,7 +101,7 @@ js.aq.qq.com
 * 配置Web网页登录授权回调域
 
 “企业微信 → 企业应用 → 选择对应的应用 → 企业微信授权登录 → 设置 → Web网页
- → 设置授权回调域” 设置{paas_domain}为登录授权回调域
+ → 设置授权回调域” 设置{paas_domain}为登录授权回调域 （<font style="color:red">非80端口则paas_domain需带上端口</font>）
 
 #### 蓝鲸平台 → API网关
 > <font style="font-size:14px;">蓝鲸微信组件配置入口：http:/{paas_domain}/esb/manager/index/, 通道管理 → 找到通道名称为“发送微信消息”的组件 → 组件配置
