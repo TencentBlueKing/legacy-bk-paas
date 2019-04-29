@@ -97,9 +97,11 @@ class UsefulLinks(models.Model):
         # 对于轻应用，需要保持固定名称，其他随机即可
         if self.link_type == LinkTypeEnum.LIGHT_APP.value:
             logo_name = '{}.png'.format(self.code)
-            self.logo.name = logo_name
-            # 判断之前是否存在，存在则先删除
-            delete_exist_logo_file(dynamic_upload_to(self, logo_name))
+            # 对于名字不符合code命名(上层保证了新图片名称是uuid)，说明logo是新上传的，则需要进行修改
+            if self.logo.name != logo_name:
+                self.logo.name = logo_name
+                # 判断之前是否存在，存在则先删除
+                delete_exist_logo_file(dynamic_upload_to(self, logo_name))
         # save操作
         super(UsefulLinks, self).save(*args, **kwargs)
 
