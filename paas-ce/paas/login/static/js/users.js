@@ -95,18 +95,18 @@ $('.user_import_btn').on('click', function(){
         title:gettext("批量导入用户"),
         lock: true,
         width: 560,
-        content: $("#user_import_div").get(0)
+        content: $("#user_import_div").get(0),
+    })
+    // 导入用户
+    $('#user_import_div').on('click', '.import_btn', function(){
+        var user_file = $("#data_files").val();
+        if(user_file){
+            $("#sumbit_import").click();
+        }else{
+            $("#error_msg").text(gettext('请选择一个文件'));
+        }
     })
     $("#error_msg").text('');
-})
-// 导入用户
-$('#user_import_div').on('click', '.import_btn', function(){
-    var user_file = $("#data_files").val();
-    if(user_file){
-        $("#sumbit_import").click();
-    }else{
-        $("#error_msg").text(gettext('请选择一个文件'));
-    }
 })
 // 保存
 $('#user_table_div').on('click','.user_save_btn',function(){
