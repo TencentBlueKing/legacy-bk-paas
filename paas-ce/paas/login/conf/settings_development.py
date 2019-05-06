@@ -15,6 +15,7 @@ DEBUG = True
 if not DEBUG:
     STATIC_ROOT = 'static'
 
+# 本地开发登录页面静态资源, 注意: 生产环境使用nginx反向代理需要改成 SITE_URL = "/login/"
 SITE_URL = "/"
 
 STATIC_URL = "/static/"
