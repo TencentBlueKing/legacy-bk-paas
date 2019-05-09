@@ -51,8 +51,7 @@
                     <div class="king-timeline-item">
                         <div class="king-timeline-body">
                             <ol class="guide-list">
-                                <li>本地环境搭建镜像，<a href="http://bkopen-10032816.file.myqcloud.com/paas/bk-django1.8-u2.box" target="_blank">点击下载</a> ;</li>
-                                <li>使用文档，<a href="http://bkopen-10032816.file.myqcloud.com/paas/蓝鲸智云统一开发环境搭建指南.docx" target="_blank">点击下载</a> ;</li>
+                                <li>本地开发环境搭建教程 <a href="https://docs.bk.tencent.com/blueapps/USAGE.html#2-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88python%EF%BC%89" target="_blank">点击了解</a> ;</li>
                                 <br>
                                 <strong>注意：应用测试、正式部署时会自动安装运行环境，并部署应用</strong>
                             </ol>
@@ -83,7 +82,7 @@
                                     <span>（蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中可以查看到这两个值的信息）;</span>
                                 </li>
 
-                                <li>config/__init__.py 文件: BK_PAAS_HOST的值设置为: <code>${paas_host}</code>;
+                                <li>config/__init__.py 文件: BK_URL 的值设置为: <code>${paas_host}</code>;
                                 </li>
                                 <li>config/dev.py 文件：DATABASES（请创建本地开发数据库，并修改配置信息）;</li>
                                 <li>config/stag.py 文件：DATABASES（请创建测试环境数据库，并修改配置信息）;</li>
