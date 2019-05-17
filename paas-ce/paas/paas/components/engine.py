@@ -112,6 +112,7 @@ def register_app(app_code, name, language, auth_token=''):
     - name: app名称
     - language: 语言
     """
+    return True, 'success', '123'
     url = "{host}/v1/apps/".format(host=settings.ENGINE_HOST)
     data = dict(app_code=app_code, name=name, app_lang=language)
     headers = _gen_header(app_code, auth_token)

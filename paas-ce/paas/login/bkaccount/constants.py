@@ -14,6 +14,10 @@ import pytz
 from django.utils.translation import ugettext as _
 
 from common.constants import enum
+import sys
+reload(sys)
+sys.setdefaultencoding('gb18030')
+
 
 
 # 用户名校验规则：包含数字和字母，长度在4-20个字符

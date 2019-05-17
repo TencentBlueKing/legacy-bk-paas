@@ -138,9 +138,9 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 
 # CSS 文件后缀名
-CSS_SUFFIX = 'min.css'
+CSS_SUFFIX = 'css'
 # JS 文件后缀名
-JS_SUFFIX = 'min.js'
+JS_SUFFIX = 'js'
 
 # CSRF 验证失败处理函数
 CSRF_FAILURE_VIEW = 'account.views.csrf_failure'

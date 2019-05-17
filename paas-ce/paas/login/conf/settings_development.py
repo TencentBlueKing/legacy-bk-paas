@@ -26,8 +26,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',   # 默认用mysql
         'NAME': 'open_paas',
         'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
