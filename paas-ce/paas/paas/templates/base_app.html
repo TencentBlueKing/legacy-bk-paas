@@ -71,10 +71,10 @@
             title_msg = u'基本信息管理'
         elif relative_path.startswith(SITE_URL + "release/history") or (relative_path.startswith(SITE_URL + "release/") and relative_path.endswith(SITE_URL + "version/")):
             title_msg = u'发布历史'
-        elif relative_path.startswith(SITE_URL + "release/"):
-            title_msg = u'发布部署'
         elif (relative_path.startswith(SITE_URL + "release/") and relative_path.endswith("offline/")):
             title_msg = u'下架'
+        elif relative_path.startswith(SITE_URL + "release/"):
+            title_msg = u'发布部署'
     %>
     <div class="main_hd">
         <h5>&nbsp;</h5>
