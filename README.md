@@ -20,8 +20,6 @@
     - appengine: 蓝鲸应用引擎
 - PaaSAgent（paas-ce/paasagent）: 蓝鲸应用引擎Agent（golang [[labstack/echo](https://github.com/labstack/echo)]）
 
-
-
 ## Overview
 
 - [架构设计](docs/overview/architecture.md)
