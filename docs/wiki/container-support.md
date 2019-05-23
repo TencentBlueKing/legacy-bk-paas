@@ -32,13 +32,11 @@
 
 ## 部署
 
-#### 拉取镜像
+#### 1. 拉取镜像
 
 当你有了docker的环境后，就可以在**终端**拉取bk-PaaS的体验镜像了。
 
-bk-PaaS用于体验的镜像存储于腾讯云的镜像公共镜像仓库。
-
-仓库地址在[这里](https://console.cloud.tencent.com/tke/registry/qcloud/default/detail/tag?rid=1&reponame=bk.io%252Fpaas-standalone)
+bk-PaaS用于体验的镜像存储于腾讯云的镜像公共镜像仓库。 仓库地址在[这里](https://console.cloud.tencent.com/tke/registry/qcloud/default/detail/tag?rid=1&reponame=bk.io%252Fpaas-standalone)
 
 目前有一个tag为**latest**的镜像, 方便大家体验最新版本; 未来会提供与release版本一致的镜像，
 
@@ -49,11 +47,12 @@ bk-PaaS用于体验的镜像存储于腾讯云的镜像公共镜像仓库。
 
 
 拉取命令：
+
 ```shell
 docker pull ccr.ccs.tencentyun.com/bk.io/paas-standalone:latest
 ```
 
-#### 启动容器
+#### 2. 启动容器
 
 执行如下命令，bk-PaaS容器服务即可启动。
 
@@ -63,7 +62,7 @@ docker run -d --name="bk-paas" -p 8000-8003:8000-8003 ccr.ccs.tencentyun.com/bk.
 
 这里端口映射: `appengine 8000/ paas 8001 / esb 8002 / login 8003`
 
-#### 配置host及访问
+#### 3. 配置host及访问
 
 
 配置host
@@ -72,7 +71,7 @@ docker run -d --name="bk-paas" -p 8000-8003:8000-8003 ccr.ccs.tencentyun.com/bk.
 127.0.0.1 www.bking.com
 ```
 
-此时你可以打开浏览器，访问`http://www.bking.com:8001` 即可体验最新版的蓝鲸智云PaaS平台服务。
+此时你可以打开浏览器，访问`http://www.bking.com:8001`, 使用默认用户名密码(admin/admin)登录, 即可体验最新版的蓝鲸智云PaaS平台服务。
 
 **恭喜你，你正在体验最新的蓝鲸智云PaaS平台服务。**
 
