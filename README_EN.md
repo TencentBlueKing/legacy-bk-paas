@@ -41,7 +41,7 @@ free-operation of SaaS applications
 
 - [Install PaaS(In Chinese)](docs/install/ce_paas_install.md)
 - [Install PaaSAgent(In Chinese)](docs/install/ce_paas_agent_install.md)
-- [Replace the installed ce version(In Chinese)](https://docs.bk.tencent.com/bk_osed/replace_paas_with_opensource_version.html#osed)
+- [Replace the installed ce version(In Chinese)](https://docs.bk.tencent.com/bk_osed/guide.html#osed)
 
 ## Release
 
