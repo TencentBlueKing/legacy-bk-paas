@@ -73,7 +73,7 @@
         % endif
     </tbody>
 </table>
-<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}"></script>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
 <script>
 $(function(){
     $("#seacher_input").show();
