@@ -168,8 +168,8 @@
         </div><hr/>
 </%block>
 
-<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}"></script>
-<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}"></script>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
 <script type="text/javascript">
     $(function(){
         APP_INFO.get_access_info('${app_code}');
