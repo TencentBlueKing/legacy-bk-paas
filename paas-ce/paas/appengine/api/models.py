@@ -5,7 +5,7 @@ Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
 Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-""" # noqa
+"""  # noqa
 import uuid
 import json
 import logging
@@ -125,9 +125,26 @@ class BkAppEnv(models.Model):
         ordering = ('created_at',)
 
 
+class BkEvent(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    event_type = models.CharField(max_length=200)
+    status = models.CharField(max_length=200)
+    message = models.TextField(default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "engine_events"
+        verbose_name = "father event"
+        ordering = ("created_at",)
+
+
 class BkAppEvent(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     bk_app = models.ForeignKey(BkApp)
+    bk_event_id = models.CharField(max_length=128, default="-1")
+    is_master = models.BooleanField(default=True)
+    server_id = models.IntegerField(default=-1)
     event_type = models.CharField(max_length=200)
     status = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)

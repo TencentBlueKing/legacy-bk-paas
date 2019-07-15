@@ -5,7 +5,7 @@ Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
 Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-""" # noqa
+"""  # noqa
 
 from __future__ import unicode_literals
 
@@ -22,7 +22,6 @@ from engine.manager import BkServerManager, ExternalServerManager
 
 
 class BkCluster(models.Model):
-
     name = models.CharField(max_length=20)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -38,7 +37,6 @@ class BkCluster(models.Model):
 
 
 class BkApp(models.Model):
-
     name = models.CharField(max_length=20)
     logo = models.CharField(max_length=100)
     app_code = models.CharField(max_length=100, unique=True)
@@ -70,7 +68,6 @@ class BkApp(models.Model):
 
 
 class BkAppToken(models.Model):
-
     bk_app = models.ForeignKey(BkApp, on_delete=models.CASCADE)
     key = models.UUIDField(default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -155,7 +152,6 @@ class ThirdServer(models.Model):
 
 
 class BkHostingShip(models.Model):
-
     bk_app = models.ForeignKey(BkApp)
     bk_server = models.ForeignKey(BkServer)
     is_active = models.BooleanField(default=True)
@@ -173,7 +169,6 @@ class BkHostingShip(models.Model):
 
 
 class BkAppEnv(models.Model):
-
     bk_app = models.ForeignKey(BkApp)
     mode = models.CharField(max_length=200)
     key = models.CharField(max_length=200)
@@ -187,10 +182,26 @@ class BkAppEnv(models.Model):
         ordering = ('created_at',)
 
 
-class BkAppEvent(models.Model):
+class BkEvent(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    event_type = models.CharField(max_length=200)
+    status = models.CharField(max_length=200)
+    message = models.TextField(default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = "engine_events"
+        verbose_name = "father event"
+        ordering = ("created_at",)
+
+
+class BkAppEvent(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     bk_app = models.ForeignKey(BkApp)
+    bk_event_id = models.CharField(max_length=128, default="-1")
+    is_master = models.BooleanField(default=True)
+    server_id = models.IntegerField(default=-1)
     event_type = models.CharField(max_length=200)
     status = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -210,7 +221,6 @@ class BkAppEvent(models.Model):
 
 
 class BkAppEventLog(models.Model):
-
     bk_app_event = models.ForeignKey(BkAppEvent)
     log = models.TextField()
 

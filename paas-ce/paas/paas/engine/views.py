@@ -92,17 +92,6 @@ class ActivateServerView(SuperuserRequiredMixin, View):
         if server.is_active:
             return OKJsonResponse("服务器已激活")
 
-        # V1 版本 判断 测试环境/正式环境 分别只能激活一台服务器
-        active_server = BkServer.objects.category_has_active_server(server.category, server_id)
-        if active_server:
-            message = "已经有一台{} [IP:{}, 端口:{}] 被激活<br><br>不能再激活其他{}".format(
-                active_server.get_category_display(),
-                active_server.ip_address,
-                active_server.ip_port,
-                active_server.get_category_display()
-            )
-            return FailJsonResponse(message)
-
         ok, message = activate_agent(server_id)
         if not ok:
             return FailJsonResponse("服务器激活失败: {}".format(message))

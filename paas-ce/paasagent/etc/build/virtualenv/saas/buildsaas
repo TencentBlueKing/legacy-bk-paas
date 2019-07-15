@@ -110,12 +110,14 @@ if [ "$PIP_LIST" != "" ]; then
 fi
 echo "------pip install success------"
 
-echo "------change db------"
-python manage.py syncdb --noinput && \
-python manage.py migrate --noinput && \
-echo "------change db success------" || exit 1
-
-python manage.py createcachetable django_cache > /dev/null
+if ["$IS_MASTER" == "true"]; then
+    echo "------change db------"
+    python manage.py syncdb --noinput && \
+    python manage.py migrate --noinput && \
+    echo "------change db success------" || exit 1
+    python manage.py createcachetable django_cache > /dev/null
+else
+    echo "------This node is not master node, skip then migration of database------"
 
 chown -R apps.apps "$APP_PATH" "$LOG_PATH"
 

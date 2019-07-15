@@ -39,6 +39,7 @@ type (
 		Handle       string
 		DeployToken  string
 		Envs         map[string]interface{}
+		ISMaster     bool
 		DeployVars   map[string]interface{}
 		SaaSSettings map[string]interface{}
 	}
@@ -79,8 +80,10 @@ func (appJob AppJob) getCtx4Conf() map[string]string {
 		isUseCelery = appJob.Envs["IS_USE_CELERY"].(string)
 	}
 	isUseCeleryBeat := "false"
-	if _, ok := appJob.Envs["IS_USE_CELERY_BEAT"]; ok {
-		isUseCeleryBeat = appJob.Envs["IS_USE_CELERY_BEAT"].(string)
+	if appJob.ISMaster {
+		if _, ok := appJob.Envs["IS_USE_CELERY_BEAT"]; ok {
+			isUseCeleryBeat = appJob.Envs["IS_USE_CELERY_BEAT"].(string)
+		}
 	}
 	environment := "BK_ENV=\"production\""
 	if appJob.Mode == "test" {
@@ -148,6 +151,9 @@ func (appJob AppJob) getEnvs() map[string]string {
 				envMap["VCS_PATH"] = fmt.Sprintf("%s//%s:%s@%s",
 					pathArray[0], vcsUsername, vcsPassword, pathArray[1])
 			}
+		}
+		if appJob.ISMaster == true {
+			envMap["IS_MASTER"] = "true"
 		}
 	}
 
