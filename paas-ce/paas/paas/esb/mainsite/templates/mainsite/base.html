@@ -51,7 +51,11 @@
                 {% else %}
                 <a href="{{SITE_URL}}accounts/profile/" class="nickname" title=""></a>
                 {% endif %}
-                <a href="{{SITE_URL}}accounts/profile/"><img src="{{STATIC_URL}}img/getheadimg.jpg" class="avatar"><i class="crown"></i></a>
+                {% if request.user and request.user.is_superuser %}
+                <a href="{{SITE_URL}}accounts/profile/"><img src="{{STATIC_URL}}img/getadminheadimg.jpg" class="avatar"></a>
+                {% else %}
+                <a href="{{SITE_URL}}accounts/profile/"><img src="{{STATIC_URL}}img/getheadimg.jpg" class="avatar"></a>
+                {% endif %}
             </div>
             {% if request.user.username %}
             <div class="account_meta account_logout account_meta_primary"><a id="logout" href="{{LOGOUT_URL}}">{% trans "注销" %}</a></div>
