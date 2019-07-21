@@ -172,9 +172,17 @@ class AppLogsViewSet(AppView):
         # 判断从服务器是否存在错误日志
         failed_slave_bk_app_events = models.BkAppEvent.objects.filter(bk_event_id=event_id, is_master=False,
                                                                       status="FAILURE")
-        if failed_slave_bk_app_events:
-            log_content = u"%s \n\nWarning: Slave-Node failed, " \
-                          u"Slave-node log: %s" % (log_content, failed_slave_bk_app_events[0].logs)
+        for failed_slave_bk_app_event in failed_slave_bk_app_events:
+            log_content += u"\n\nWarning: Slave-Node failed, app_event_id: %s" \
+                           u"Slave-node log: %s" % (failed_slave_bk_app_event.id,
+                                                    failed_slave_bk_app_event.logs)
+
+        # 主服务器已完成，从服务器未完成
+        if master_bk_app_event.status == "SUCCESS":
+            if father_event.status == "SUCCESS":
+                log_content += u"All Nodes success..."
+            else:
+                log_content += u"Waitting other Node..."
 
         return OKJsonResponse(
             data={

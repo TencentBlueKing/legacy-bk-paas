@@ -77,6 +77,7 @@ func appJobHandler(c echo.Context, handle string) error {
 				AppCode:      jobData.AppCode,
 				Mode:         jobData.Mode,
 				Envs:         map[string]interface{}{"BK_VERSION": "2.0"},
+				ISMaster:     jobData.ISMaster,
 				EventID:      jobData.EventID,
 				DeployToken:  jobData.DeployToken,
 				DeployVars:   jobData.DeployVars,

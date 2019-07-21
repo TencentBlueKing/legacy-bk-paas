@@ -134,7 +134,7 @@ class DeployController(object):
                     is_master=bk_hosting_ship.is_master
                 )
 
-                self._request(assigned_servers, "offline", bk_hosting_ship.is_master)
+                self._request(assigned_server, "offline", bk_hosting_ship.is_master)
             return self.bk_event.id, 0, "job delivered"
         except Exception, e:
             self._fail_bk_event(str(e))
