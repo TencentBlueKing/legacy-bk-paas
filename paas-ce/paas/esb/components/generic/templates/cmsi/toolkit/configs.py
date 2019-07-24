@@ -28,7 +28,7 @@ mail_sender = 'blueking@bking.com'
 
 
 # 通过第三方接口发送邮件的配置
-dest_url = ''  # 第三方接口完整路径
+dest_url = ''  # 邮件第三方接口完整路径
 
 # send_weixin 组件微信消息类型配置
 wx_type = 'qy'
@@ -46,3 +46,34 @@ wx_qy_agentid = ''
 # 发送短信腾讯云配置 sdkappid 对应的 appkey，需要业务方高度保密
 qcloud_app_id = ''
 qcloud_app_key = ''
+
+# cmsi支持的信息发送类型
+msg_type = [
+    {
+        "type": "weixin",
+        "label": u"微信",
+        "label_en": "weixin"
+    },
+    {
+        "type": "mail",
+        "label": u"邮件",
+        "label_en": "mail"
+    },
+    {
+        "type": "sms",
+        "label": u"短信",
+        "label_en": "sms"
+    },
+    {
+        "type": "voice",
+        "label": u"语音",
+        "label_en": "voice"
+    }
+]
+
+msg_type_map = {
+    "weixin": "send_weixin",
+    "mail": "send_mail",
+    "sms": "send_sms",
+    "voice": "send_voice_msg"
+}

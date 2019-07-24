@@ -90,7 +90,7 @@ class SendWeixin(Component, SetupConfMixin):
         def clean(self):
             data = self.cleaned_data
 
-            if not(data['receiver'] or data['receiver__username']):
+            if not (data['receiver'] or data['receiver__username']):
                 raise forms.ValidationError(
                     'WeChat receiver [receiver, receiver__username] shall not be empty at the same time')
             if data['receiver']:
