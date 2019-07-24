@@ -482,3 +482,44 @@
   dest_path: /api/v3/findmany/modulehost
   dest_http_method: POST
   
+- path: /v2/cc/find_object_association/
+  name: find_object_association
+  label: 查询模型之间的关联关系
+  label_en: find object's association
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/find/objectassociation
+  dest_http_method: POST
+  
+- path: /v2/cc/find_instance_association/
+  name: find_instance_association
+  label: 查询模型实例之间的关联关系
+  label_en: find association between object's instance
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/find/instassociation
+  dest_http_method: POST
+    
+- path: /v2/cc/add_instance_association/
+  name: add_instance_association
+  label: 新建模型实例之间的关联关系
+  label_en: add association between object's instance
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/create/instassociation
+  dest_http_method: POST
+  
+- path: /v2/cc/delete_instance_association/
+  name: delete_instance_association
+  label: 删除模型实例之间的关联关系
+  label_en: delete association between object's instance
+  method: DELETE
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/delete/instassociation/{id}
+  dest_http_method: DELETE
+  
+  

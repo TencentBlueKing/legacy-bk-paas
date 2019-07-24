@@ -109,11 +109,11 @@ class SendVoiceMsg(Component, SetupConfMixin):
             return data
 
     def handle(self):
-        # QCloud 短信配置
+        # QCloud 语音配置
         self.qcloud_app_id = getattr(self, 'qcloud_app_id', '') or getattr(configs, 'qcloud_app_id', '')
         self.qcloud_app_key = getattr(self, 'qcloud_app_key', '') or getattr(configs, 'qcloud_app_key', '')
 
-        data = self.request.kwargs
+        data = self.form_data
         # 将 receiver__username 中的用户名，转换为接口需要的 user_list_information 信息
         if data['receiver__username']:
             user_data = tools.get_user_contact_with_username(

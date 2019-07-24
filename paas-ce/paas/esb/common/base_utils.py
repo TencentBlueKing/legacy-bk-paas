@@ -262,3 +262,26 @@ def load_yaml(path):
 def read_file(path):
     with open(path, 'r') as fp:
         return fp.read()
+
+
+def html_escape(html, is_json=False):
+    """
+    Replace special characters "&", "<" and ">" to HTML-safe sequences.
+    If the optional flag quote is true, the quotation mark character (")
+    is also translated.
+    rewrite the cgi method
+    @param html: html代码
+    @param is_json: 是否为json串（True/False） ，默认为False
+    """
+    # &转换
+    if not is_json:
+        html = html.replace('&', '&amp;')  # Must be done first!
+    # <>转换
+    html = html.replace("<", "&lt;")
+    html = html.replace(">", "&gt;")
+    # 单双引号转换
+    if not is_json:
+        # html = html.replace(' ', "&nbsp;")
+        html = html.replace('"', "&quot;")
+        html = html.replace("'", "&#39;")
+    return html
