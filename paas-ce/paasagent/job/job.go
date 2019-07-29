@@ -31,7 +31,6 @@ import (
 )
 
 type (
-	// AppJob used
 	AppJob struct {
 		AppCode      string
 		Mode         string
@@ -44,7 +43,7 @@ type (
 		SaaSSettings map[string]interface{}
 	}
 
-	// EventLog used
+	// EventLog
 	EventLog struct {
 		Status string `json:"status"`
 		Log    string `json:"log"`
@@ -55,7 +54,10 @@ type (
 func postEventLog(appCode string, eventID string, data *EventLog) {
 	controllerServerURL := viper.GetString("settings.CONTROLLER_SERVER_URL")
 	eventUrl := controllerServerURL + "/v1/apps/" + appCode + "/events/" + eventID
-	core.DoPost(eventUrl, data)
+	_, _, err := core.DoPost(eventUrl, data)
+	if err != nil {
+		log.Printf("postEventLog url %s error: %s\n", eventUrl, err)
+	}
 }
 
 func (appJob AppJob) getBaseAppPath() string {
@@ -134,6 +136,7 @@ func (appJob AppJob) generateConfig() error {
 	return err
 }
 
+// getEnvs generates environment variables for app runtime
 func (appJob AppJob) getEnvs() map[string]string {
 	envMap := make(map[string]string)
 	if appJob.Handle == "ON" {
@@ -175,6 +178,7 @@ func (appJob AppJob) getEnvs() map[string]string {
 		envMap["BK_ENV"] = "testing"
 	}
 
+	// user app and s-mart app use different build scripts
 	envMap["BUILD_ENTRY"] = "/virtualenv/build"
 	if appJob.isSaaSDeploy() {
 		envMap["BUILD_ENTRY"] = "/virtualenv/saas/buildsaas"
@@ -244,7 +248,6 @@ func (appJob AppJob) runCmd(envMap map[string]string) error {
 		cmdEnv = append(cmdEnv, fmt.Sprintf("%s=%s", k, v))
 	}
 
-	// execute shell
 	binary, err := exec.LookPath(appJob.getBuildPath() + envMap["BUILD_ENTRY"])
 	if err != nil {
 		log.Println("exec.LookPath error", err)
@@ -261,6 +264,7 @@ func (appJob AppJob) runCmd(envMap map[string]string) error {
 
 	startTime := time.Now()
 
+	// execute build or buildsaas script to build app runtime environment and start app
 	if err = cmd.Start(); err != nil {
 		log.Println("cmd.Start error", err)
 		return err
@@ -271,6 +275,7 @@ func (appJob AppJob) runCmd(envMap map[string]string) error {
 		done <- cmd.Wait()
 	}()
 
+	// scan the output of the running script and post to open_paas
 	go func() {
 		status := core.PENDING
 		var line string
@@ -292,6 +297,7 @@ func (appJob AppJob) runCmd(envMap map[string]string) error {
 		syncDone <- struct{}{}
 	}()
 
+	// if the build script task times out, it will be killed
 	timeOutSeconds := viper.GetInt("settings.EXECUTE_TIME_LIMIT")
 	select {
 	case <-time.After(time.Second * time.Duration(timeOutSeconds)):
@@ -301,7 +307,7 @@ func (appJob AppJob) runCmd(envMap map[string]string) error {
 		return core.KillCmdProcess(cmd.Process.Pid)
 	case err = <-done:
 		if err != nil {
-			postEventLog(appJob.AppCode, appJob.EventID, &EventLog{Status: core.FAILURE, Log: ""})
+			postEventLog(appJob.AppCode, appJob.EventID, &EventLog{Status: core.FAILURE, Log: fmt.Sprintf("%s\r\n", err)})
 			log.Println("error waiting for Cmd", err)
 		} else {
 			log.Println("RunJob end ... ...")

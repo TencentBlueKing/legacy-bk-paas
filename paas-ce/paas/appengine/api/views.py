@@ -41,7 +41,9 @@ class AgentViewSet(BaseView):
         except Exception, e:
             bk_server.is_active = False
             bk_server.save()
-            return FailJsonResponse("active server ip %s exception: %s" % (agent_ip, e))
+            err_msg = "active server ip %s exception: %s" % (agent_ip, e)
+            logger.exception(err_msg)
+            return FailJsonResponse(err_msg)
 
     def post(self, request):
         form_data = forms.AgentRegisterForm(request.json_data)
@@ -82,7 +84,9 @@ class AgentActiveViewSet(BaseView):
         except Exception, e:
             bk_server.is_active = False
             bk_server.save()
-            return FailJsonResponse("active server id %s exception: %s" % (server_id, e))
+            err_msg = "active server id %s exception: %s" % (server_id, e)
+            logger.exception(err_msg)
+            return FailJsonResponse(err_msg)
 
 
 class AppViewSet(AppView):
@@ -274,7 +278,9 @@ class AgentHealthCheckView(View):
             check_agent_health(bk_server)
             return OKJsonResponse()
         except Exception, e:
-            return FailJsonResponse("health check failed: %s" % e)
+            err_msg = "health check failed: %s" % e
+            logger.exception(err_msg)
+            return FailJsonResponse(err_msg)
 
 
 class ServiceHealthCheckView(View):
@@ -284,6 +290,7 @@ class ServiceHealthCheckView(View):
             server_manager.health_check(server_id)
             return OKJsonResponse()
         except Exception, e:
+            logger.exception(e)
             return FailJsonResponse(str(e))
 
 
@@ -320,6 +327,7 @@ class ServiceServerViewSet(BaseView):
             return OKJsonResponse()
         except Exception, e:
             err_msg = "%s registered, but active failed: %s" % (server_ip, e)
+            logger.exception(err_msg)
             return FailJsonResponse(err_msg)
 
     def put(self, request, service_name, server_id):
@@ -346,6 +354,7 @@ class ServiceServerViewSet(BaseView):
             service_server.is_active = False
             service_server.save()
             err_msg = "%s registered, but active failed: %s" % (server_id, e)
+            logger.exception(err_msg)
             return FailJsonResponse(err_msg)
 
 
@@ -400,7 +409,9 @@ class AgentRegistryView(View):
         except Exception, e:
             bk_server.is_active = False
             bk_server.save()
-            return JsonResponse({"msg": "active server ip %s exception: %s" % (agent_ip, e)}, status=400)
+            err_msg = "active server ip %s exception: %s" % (agent_ip, e)
+            logger.exception(err_msg)
+            return JsonResponse({"msg": err_msg}, status=400)
 
 
 # MqRegistryView will be deprecated
@@ -433,4 +444,5 @@ class MqRegistryView(View):
             return JsonResponse({"mq_ip": server_ip})
         except Exception, e:
             err_msg = "%s registered, but active failed: %s" % (server_ip, e)
+            logger.exception(err_msg)
             return JsonResponse({"msg": err_msg}, status=400)
