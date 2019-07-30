@@ -41,7 +41,20 @@ function get_user(page){
     }, function(data){
         $("#user_table_div").html(data);
     })
- }
+}
+
+function get_all_users(page){
+    var url = site_url + 'accounts/user/list/query/';
+    $.get(url, {
+        'page': page,
+        'search_data': '',
+        'search_role': ''
+    }, function(data){
+        $("#user_table_div").html(data);
+    })
+}
+
+
  //添加用户
 $('.user_add_btn').on('click',function(){
     if(is_user_edit_status())return false;
@@ -160,6 +173,7 @@ $('#user_table_div').on('click','.user_save_btn',function(){
                     curRecord.removeClass('user_edit_status');
                     var cur_page = $("#current_page").val();
                     get_user(cur_page);
+                    // get_all_users(1);
                 }else{
                     art.dialog({id: 'bktips', width: 300, icon: 'error', lock: true, content: data.message});
                 }
@@ -178,7 +192,8 @@ $('#user_table_div').on('click','.user_save_btn',function(){
                 curRecord.find('input').attr('disabled','disabled');
                 curRecord.find('select').attr('disabled','disabled');
                 curRecord.removeClass('user_edit_status');
-                get_user(1);
+                // get_user(1);
+                get_all_users(1);
             }else{
                 art.dialog({id: 'bktips', width: 300,icon: 'error',lock: true,content: data.message});
                 //curRecord.remove();
@@ -283,7 +298,8 @@ $('#user_table_div').on('click','.user_del_btn',function(){
                         if(data.result){
                             art.dialog({id: 'bktips', width: 300,icon: 'succeed',lock: true,content: data.message}).time(2);
                             curRecord.remove();
-                            get_user(1);
+                            // get_user(1);
+                            get_all_users(1);
                         }else{
                             art.dialog({id: 'bktips', width: 300,icon: 'error',lock: true,content: data.message});
                         }
