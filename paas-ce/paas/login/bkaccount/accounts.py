@@ -328,13 +328,14 @@ class Account(AccountSingleton):
                             expires=expire_time,
                             domain=settings.BK_COOKIE_DOMAIN,
                             httponly=True)
+        # NOTE: DO NOT SET THE LANGUAGE COOKIE HERE BEFORE I18N is AVAILABLE
         # set cookie for app or platform
-        bk_user_info, is_created = UserInfo.objects.get_or_create(user=user)
-        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, bk_user_info.language,
-                            # max_age=settings.LANGUAGE_COOKIE_AGE,
-                            expires=expire_time,
-                            path=settings.LANGUAGE_COOKIE_PATH,
-                            domain=settings.LANGUAGE_COOKIE_DOMAIN)
+        # bk_user_info, is_created = UserInfo.objects.get_or_create(user=user)
+        # response.set_cookie(settings.LANGUAGE_COOKIE_NAME, bk_user_info.language,
+        #                     # max_age=settings.LANGUAGE_COOKIE_AGE,
+        #                     expires=expire_time,
+        #                     path=settings.LANGUAGE_COOKIE_PATH,
+        #                     domain=settings.LANGUAGE_COOKIE_DOMAIN)
         return response
 
     def login_redirect_response(self, request, redirect_url, is_from_logout):
