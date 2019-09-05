@@ -28,7 +28,7 @@ from django.utils import timezone
 
 from common.log import logger
 from bkaccount.encryption import encrypt, decrypt, salt
-from bkaccount.models import Loignlog, BkToken, UserInfo
+from bkaccount.models import Loignlog, BkToken
 
 
 class AccountSingleton(object):
