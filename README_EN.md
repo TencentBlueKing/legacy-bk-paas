@@ -33,11 +33,15 @@ free-operation of SaaS applications
 - Multi-environment support: allowing developers to test and release SaaS application in different environment
 - BlueKing S-mart application support: deploy S-mart application via file upload [more S-mart Application](http://bk.tencent.com/s-mart)
 
+## Experience
+
+- [Quick start via Docker container(In Chinese)](docs/wiki/container-support.md)
+
 ## Install
 
 - [Install PaaS(In Chinese)](docs/install/ce_paas_install.md)
 - [Install PaaSAgent(In Chinese)](docs/install/ce_paas_agent_install.md)
-- [Replace the installed ce version(In Chinese)](https://docs.bk.tencent.com/bk_osed/replace_paas_with_opensource_version.html#osed)
+- [Replace the installed ce version(In Chinese)](https://docs.bk.tencent.com/bk_osed/guide.html#osed)
 
 ## Release
 
