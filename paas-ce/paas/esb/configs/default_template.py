@@ -6,8 +6,6 @@ Licensed under the MIT License (the "License"); you may not use this file except
 http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """ # noqa
-"""项目 settings 配置模板
-"""
 
 # Generic Django project settings
 DEBUG = False
@@ -24,6 +22,10 @@ DATABASES = {
     }
 }
 
+
+# Log settings
+LOG_LEVEL = 'INFO'
+
 # esb app_token
 ESB_TOKEN = '41f076b7-afce-46eb-9e85-dab245eb0931'
 
@@ -32,6 +34,7 @@ ESB_TOKEN = '41f076b7-afce-46eb-9e85-dab245eb0931'
 # paas host
 PAAS_HOST = 'http://127.0.0.1:8001'
 
+# Third party system host
 # host for bk login
 HOST_BK_LOGIN = 'http://127.0.0.1:8003'
 

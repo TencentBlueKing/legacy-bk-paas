@@ -36,11 +36,15 @@
 - 多环境部署：支持多环境部署SaaS应用, 方便开发者进行测试验证及生产环境发布
 - 可插拔式应用：支持蓝鲸S-mart应用上传部署, 方便蓝鲸S-mart应用部署移植 [更多应用](http://bk.tencent.com/s-mart)
 
+## Experience
+
+- [极速体验容器化部署蓝鲸智云PaaS平台](docs/wiki/container-support.md)
+
 ## Install
 
 - [安装部署PaaS](docs/install/ce_paas_install.md)
 - [安装部署PaaSAgent](docs/install/ce_paas_agent_install.md)
-- [替换已安装的蓝鲸社区版指引](docs/install/replace_ce_with_opensource.md)
+- [替换已安装的蓝鲸社区版指引](https://docs.bk.tencent.com/bk_osed/guide.html#osed)
 
 
 ## Release
