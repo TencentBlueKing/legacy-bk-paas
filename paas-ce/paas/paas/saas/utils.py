@@ -94,7 +94,8 @@ def extract_logo_file(filename, path, saas_app_code):
     def match_func(name):
         if not isinstance(name, unicode):
             name = name.decode("utf-8")
-        return name.endswith(app_logo_name) and len(name.split("/")) == 3
+        # support logo file in x/{app_code}.png or x/src/{app_code}.png
+        return name.endswith(app_logo_name) and (len(name.split("/")) in (2, 3))
 
     ok, message, content = _get_file_from_tar_file(filename, path, match_func)
     if not ok:
