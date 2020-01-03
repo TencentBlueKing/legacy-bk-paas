@@ -2,6 +2,8 @@
 
 <img src="docs/resource/img/bk_paas_en.png" />
 
+--------------------
+
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/Tencent/bk-PaaS/blob/master/LICENSE) [![Release Version](https://img.shields.io/badge/release-3.0.0-brightgreen.svg)](https://github.com/Tencent/bk-PaaS/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/bk-PaaS/pulls)
 
 The BlueKing PaaS is an open development platform that allows developers to create, develop, deploy and manage SaaS applications quickly and easily.
@@ -51,8 +53,8 @@ free-operation of SaaS applications
 
 ## Support
 
-- [wiki](https://github.com/Tencent/bk-PaaS/wiki)
-- [FAQ](https://github.com/Tencent/bk-PaaS/wiki/FAQ)
+- [Wiki(In Chinese)](https://github.com/Tencent/bk-PaaS/wiki)
+- [FAQ(In Chinese)](https://github.com/Tencent/bk-PaaS/wiki/FAQ)
 - [white paper(In Chinese)](http://docs.bk.tencent.com/product_white_paper/paas/)
 - [bk forum](https://bk.tencent.com/s-mart/community)
 - [bk DevOps online video tutorial(In Chinese)](https://cloud.tencent.com/developer/edu/major-100008)
