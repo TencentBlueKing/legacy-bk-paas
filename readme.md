@@ -1,5 +1,3 @@
-# 蓝鲸智云PaaS平台（社区版）
-
 <img src="docs/resource/img/bk_paas_zh.png" />
 
 ----------
@@ -8,6 +6,8 @@
 
 
 [(English Documents Available)](readme_en.md)
+
+> **社区版**
 
 蓝鲸智云PaaS平台是一个开放式的开发平台，让开发者可以方便快捷地创建、开发、部署和管理SaaS应用。
 
