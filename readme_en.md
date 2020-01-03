@@ -1,8 +1,10 @@
-# The BlueKing PaaS (Community Edition)
+![](docs/resource/img/bk_paas_en.png)
+---
 
-<img src="docs/resource/img/logo.png" width="250" hegiht="10" align=center />
+[![license](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/Tencent/bk-PaaS/blob/master/LICENSE) [![Release Version](https://img.shields.io/badge/release-3.0.0-brightgreen.svg)](https://github.com/Tencent/bk-PaaS/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/bk-PaaS/pulls)
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/Tencent/bk-PaaS/blob/master/LICENSE) [![Release Version](https://img.shields.io/badge/release-3.0.0-blue.svg)](https://github.com/Tencent/bk-PaaS/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/Tencent/bk-PaaS/pulls)
+
+> **Community Edition**
 
 The BlueKing PaaS is an open development platform that allows developers to create, develop, deploy and manage SaaS applications quickly and easily.
 
@@ -37,23 +39,22 @@ free-operation of SaaS applications
 
 - [Quick start via Docker container(In Chinese)](docs/wiki/container-support.md)
 
-## Install
+## Getting started
 
 - [Install PaaS(In Chinese)](docs/install/ce_paas_install.md)
 - [Install PaaSAgent(In Chinese)](docs/install/ce_paas_agent_install.md)
 - [Replace the installed ce version(In Chinese)](https://docs.bk.tencent.com/bk_osed/guide.html#osed)
 
-## Release
+## Roadmap
 
 - [PaaS release log(In Chinese)](paas-ce/paas/release.md)
 - [PaaSAgent release log(In Chinese)](paas-ce/paasagent/release.md)
 
-## SaaS List
-
-- [Standard OPS](https://github.com/Tencent/bk-sops)
 
 ## Support
 
+- [Wiki(In Chinese)](https://github.com/Tencent/bk-PaaS/wiki)
+- [FAQ(In Chinese)](https://github.com/Tencent/bk-PaaS/wiki/FAQ)
 - [white paper(In Chinese)](http://docs.bk.tencent.com/product_white_paper/paas/)
 - [bk forum](https://bk.tencent.com/s-mart/community)
 - [bk DevOps online video tutorial(In Chinese)](https://cloud.tencent.com/developer/edu/major-100008)
@@ -62,16 +63,21 @@ free-operation of SaaS applications
 
 <img src="docs/resource/img/bk_qq_group.png" width="250" hegiht="250" align=center />
 
+## BlueKing Community
+
+- [BK-CI](https://github.com/Tencent/bk-ci)：a continuous integration and continuous delivery system that can easily present your R & D process to you.
+- [BK-BCS](https://github.com/Tencent/bk-bcs)：a basic container service platform which provides orchestration and management for micro-service business.
+- [BK-BCS-SaaS](https://github.com/Tencent/bk-bcs-saas)：a SaaS provides users with highly scalable, flexible and easy-to-use container products and services.
+- [BK-PaaS](https://github.com/Tencent/bk-PaaS)：an development platform that allows developers to create, develop, deploy and manage SaaS applications easily and quickly.
+- [BK-SOPS](https://github.com/Tencent/bk-sops)：an lightweight scheduling SaaS  for task flow scheduling and execution through a visual graphical interface. 
+- [BK-CMDB](https://github.com/Tencent/bk-cmdb)：an enterprise-level configuration management platform for assets and applications.
+
 ## Contributing
 
-For bk-PaaS branch management, issues, and pr specifications, read the [CONTRIBUTING(In Chinese)](docs/CONTRIBUTING.md)
+If you have good ideas or suggestions, please let us know by Issues or Pull Requests and contribute to the Blue Whale Open Source Community. For bk-PaaS branch management, issues, and pr specifications, read the [CONTRIBUTING(In Chinese)](docs/CONTRIBUTING.md)
 
 If you are interested in contributing, check out the [CONTRIBUTING.md], also join our [Tencent OpenSource Plan](https://opensource.tencent.com/contribution).
 
-
-## FAQ
-
-[FAQ](https://github.com/Tencent/bk-PaaS/wiki/FAQ)
 
 ## License
 
