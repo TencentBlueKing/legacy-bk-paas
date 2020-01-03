@@ -1,11 +1,12 @@
-# 蓝鲸智云PaaS平台（社区版）
-<img src="docs/resource/img/logo.png" width="250" hegiht="10" align=center />
+![](docs/resource/img/bk_paas_zh.png)
+---
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/Tencent/bk-PaaS/blob/master/LICENSE) [![Release Version](https://img.shields.io/badge/release-3.2.2-blue.svg)](https://github.com/Tencent/bk-PaaS/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/Tencent/bk-PaaS/pulls) [![](https://travis-ci.com/Tencent/bk-PaaS.svg?token=ypkHQqxUR3Y3ctuD7qFS&branch=master)](https://travis-ci.com/Tencent/bk-PaaS)
+[![license](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/Tencent/bk-PaaS/blob/master/LICENSE) [![Release Version](https://img.shields.io/badge/release-3.2.2-brightgreen.svg)](https://github.com/Tencent/bk-PaaS/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/bk-PaaS/pulls) [![](https://travis-ci.com/Tencent/bk-PaaS.svg?token=ypkHQqxUR3Y3ctuD7qFS&branch=master)](https://travis-ci.com/Tencent/bk-PaaS)
 
 
+[(English Documents Available)](readme_en.md)
 
-[(English Documents Available)](README_EN.md)
+> **社区版**
 
 蓝鲸智云PaaS平台是一个开放式的开发平台，让开发者可以方便快捷地创建、开发、部署和管理SaaS应用。
 
@@ -40,24 +41,22 @@
 
 - [极速体验容器化部署蓝鲸智云PaaS平台](docs/wiki/container-support.md)
 
-## Install
+## Getting started
 
 - [安装部署PaaS](docs/install/ce_paas_install.md)
 - [安装部署PaaSAgent](docs/install/ce_paas_agent_install.md)
 - [替换已安装的蓝鲸社区版指引](https://docs.bk.tencent.com/bk_osed/guide.html#osed)
 
 
-## Release
+## Roadmap
 
 - [PaaS 版本日志](paas-ce/paas/release.md)
 - [PaaSAgent 版本日志](paas-ce/paasagent/release.md)
 
-## 蓝鲸开源SaaS应用列表
-
-- [标准运维](https://github.com/Tencent/bk-sops)
-
 ## Support
 
+- [wiki](https://github.com/Tencent/bk-PaaS/wiki)
+- [FAQ](https://github.com/Tencent/bk-PaaS/wiki/FAQ)
 - [白皮书](http://docs.bk.tencent.com/product_white_paper/paas/)
 - [蓝鲸论坛](https://bk.tencent.com/s-mart/community)
 - [蓝鲸 DevOps 在线视频教程](https://cloud.tencent.com/developer/edu/major-100008)
@@ -66,15 +65,20 @@
 
 <img src="docs/resource/img/bk_qq_group.png" width="250" hegiht="250" align=center />
 
+## BlueKing Community
+
+- [BK-CI](https://github.com/Tencent/bk-ci)：蓝鲸持续集成平台是一个开源的持续集成和持续交付系统，可以轻松将你的研发流程呈现到你面前。
+- [BK-BCS](https://github.com/Tencent/bk-bcs)：蓝鲸容器管理平台是以容器技术为基础，为微服务业务提供编排管理的基础服务平台。
+- [BK-BCS-SaaS](https://github.com/Tencent/bk-bcs-saas)：蓝鲸容器管理平台SaaS基于原生Kubernetes和Mesos自研的两种模式，提供给用户高度可扩展、灵活易用的容器产品服务。
+- [BK-PaaS](https://github.com/Tencent/bk-PaaS)：蓝鲸PaaS平台是一个开放式的开发平台，让开发者可以方便快捷地创建、开发、部署和管理SaaS应用。
+- [BK-SOPS](https://github.com/Tencent/bk-sops)：标准运维（SOPS）是通过可视化的图形界面进行任务流程编排和执行的系统，是蓝鲸体系中一款轻量级的调度编排类SaaS产品。
+- [BK-CMDB](https://github.com/Tencent/bk-cmdb)：蓝鲸配置平台是一个面向资产及应用的企业级配置管理平台。
+
 ## Contributing
 
-关于分支/issue及PR, 请查看 [CONTRIBUTING](docs/CONTRIBUTING.md)
+如果你有好的意见或建议，欢迎给我们提 Issues 或 Pull Requests，为蓝鲸开源社区贡献力量。关于分支/issue及PR, 请查看 [CONTRIBUTING](docs/CONTRIBUTING.md)
 
 [腾讯开源激励计划](https://opensource.tencent.com/contribution) 鼓励开发者的参与和贡献，期待你的加入。
-
-## FAQ
-
-请查看 [FAQ](https://github.com/Tencent/bk-PaaS/wiki/FAQ)
 
 ## License
 
