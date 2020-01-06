@@ -89,11 +89,11 @@ get operation log
                     "header":[
                         {
                             "bk_property_id":"bk_host_innerip",
-                            "bk_property_name":"内网IP"
+                            "bk_property_name":"InnerIP"
                         },
                         {
                             "bk_property_id":"bk_host_outerip",
-                            "bk_property_name":"外网IP"
+                            "bk_property_name":"OutterIP"
                         }
                     ],
                     "type":"map"

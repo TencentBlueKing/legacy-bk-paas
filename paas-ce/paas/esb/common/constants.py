@@ -26,12 +26,17 @@ COMPONENT_STATUSES = FancyDict((
 API_TYPE_OP = 'operate'
 API_TYPE_Q = 'query'
 
+HTTP_METHOD = FancyDict((
+    ('GET', 'GET'),
+    ('POST', 'POST'),
+))
+
 
 BK_SYSTEMS = {
     'BK_LOGIN': {
         'name': 'BK_LOGIN',
-        'label': _(u'蓝鲸登录平台'),
-        'remark': u'蓝鲸登录平台，管理用户登录验证，及用户信息',
+        'label': _(u'蓝鲸统一登录'),
+        'remark': u'蓝鲸统一登录，管理用户登录验证，及用户信息',
     },
     'BK_PAAS': {
         'name': 'BK_PAAS',

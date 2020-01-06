@@ -18,8 +18,9 @@ from django.db import connections, transaction
 from django.shortcuts import HttpResponse
 from django.utils.html import escape
 
-from app.constants import AppStateEnum
-from app.models import App, SecureInfo
+from app.constants import AppStateEnum, DESKTOP_DEFAULT_APP_IS_DISPLAY
+from app.models import App, SecureInfo, DesktopSettings
+from app_env.models import AppEnvVar
 from common.constants import LogoImgRelatedDirEnum
 from common.log import logger
 from components.engine import register_app
@@ -93,7 +94,8 @@ def extract_logo_file(filename, path, saas_app_code):
     def match_func(name):
         if not isinstance(name, unicode):
             name = name.decode("utf-8")
-        return name.endswith(app_logo_name) and len(name.split("/")) == 3
+        # support logo file in x/{app_code}.png or x/src/{app_code}.png
+        return name.endswith(app_logo_name) and (len(name.split("/")) in (2, 3))
 
     ok, message, content = _get_file_from_tar_file(filename, path, match_func)
     if not ok:
@@ -143,6 +145,7 @@ def save_saas_app_info(app_config, saas_upload_file):
     language_support = app_config.get('language_support', "")
     desktop = app_config.get("desktop")
     date = app_config.get("date")
+    env = app_config.get("env")
 
     # fix xss error, this value are all from app.yml
     # 2018-05-22 escape begin
@@ -175,7 +178,8 @@ def save_saas_app_info(app_config, saas_upload_file):
         'date': date,
         'pip': pip,
         'yum': yum,
-        'desktop': desktop
+        'desktop': desktop,
+        'env': env
     }
 
     # start to save info
@@ -323,6 +327,21 @@ def save_app_info(code, name, is_create=True, **app_info):
         # 数据库名称修改为：应用code
         app_sec_info.db_name = code
         app_sec_info.save()
+
+        # app desktop info
+        desktop = app_info.get("desktop") or {}
+        app_desktop_info, _ = DesktopSettings.objects.get_or_create(app_code=code)
+        app_desktop_info.is_display = desktop.get("is_display", DESKTOP_DEFAULT_APP_IS_DISPLAY)
+        app_desktop_info.save()
+
+        try:
+            # app env var
+            env = app_info.get("env") or []
+            if env:
+                AppEnvVar.objects.add_env_vars(code, env)
+        except Exception:
+            logger.exception("Insert App Env var from app.yml fail! %s", code)
+
     return True, '', app
 
 

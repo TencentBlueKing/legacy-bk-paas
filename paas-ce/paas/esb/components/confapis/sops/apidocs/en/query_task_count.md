@@ -68,7 +68,7 @@ Query task instance classification statistics
 }
 ```
 
-### Return Result Parameters DescriptionExample
+### Return Result Description
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -83,7 +83,7 @@ Query task instance classification statistics
 |  total      |    int    |      total number of tasks obtained by filter criteria    |
 |  groups     |    list   |      sort statistic details by filter criteria   |
 
-#### data.groups
+#### data.groups[]
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
 |  code      |    string    |      classification statistic type coding    |

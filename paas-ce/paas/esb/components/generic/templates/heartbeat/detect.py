@@ -22,8 +22,8 @@ class Detect(Component):
     sys_name = configs.SYSTEM_NAME
 
     class Form(BaseComponentForm):
-        timestamp = forms.IntegerField(label=u'心跳时间', required=True)
-        sleep_time = forms.IntegerField(label=u'Sleep时间', required=False)
+        timestamp = forms.IntegerField(label='timestamp', required=True)
+        sleep_time = forms.IntegerField(label='sleep time', required=False)
 
     def handle(self):
         if self.form_data.get('sleep_time'):

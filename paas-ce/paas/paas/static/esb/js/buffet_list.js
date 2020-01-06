@@ -7,9 +7,9 @@
 */
 $(function(){
     $('[data-toggle="tooltip"]').tooltip();
-    $('.show_esb_url').bind('click', function () {
+    $('.show_esb_url').bind('click', function (ev) {
         $('body').addClass('menu-active');
-        $('#'+this.id).parent('.dropdown').find('.dropdown-content').show();
+        $(ev.currentTarget).find('.dropdown-content').show();
     });
     $('.mymodal-backdrop').bind('click', function () {
         $('body').removeClass('menu-active');

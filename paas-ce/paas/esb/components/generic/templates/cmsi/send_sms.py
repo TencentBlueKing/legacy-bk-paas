@@ -95,9 +95,6 @@ class SendSms(Component, SetupConfMixin):
         self.qcloud_app_id = getattr(self, 'qcloud_app_id', '') or getattr(configs, 'qcloud_app_id', '')
         self.qcloud_app_key = getattr(self, 'qcloud_app_key', '') or getattr(configs, 'qcloud_app_key', '')
 
-        # 第三方接口地址配置
-        self.dest_url = getattr(self, 'dest_url', '') or getattr(configs, 'send_sms_dest_url', '')
-
         data = self.request.kwargs
         if data['receiver']:
             tools.validate_receiver(data['receiver'], contact_way=self.contact_way)

@@ -9,7 +9,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 import copy
 import json
 
-from common.log import logger
 from common.errors import CommonAPIError
 
 from . import configs
@@ -61,27 +60,25 @@ class CCClient(object):
             return {
                 'result': False,
                 'code': 1306000,
-                'message': 'Request interface error, response: %s' % response,
+                'message': 'Request interface error, the response content is not a json string: %s' % response,
             }
-        try:
-            bk_error_code = response['bk_error_code']
-        except Exception:
-            logger.exception('response: %s', response)
-            raise CommonAPIError(
-                'An exception occurred while requesting CC interface, '
-                'please contact the component developer to handle it.')
 
-        if bk_error_code == 0:
+        bk_error_code = response.get('bk_error_code', response.get('code'))
+        if bk_error_code is None:
+            raise CommonAPIError(
+                'An error occurred while requesting CC interface, '
+                'the response content does not contain bk_error_code field.')
+        elif bk_error_code == 0:
             return {
                 'result': True,
                 'code': 0,
                 'data': response.get('data'),
-                'message': response.get('bk_error_msg') or '',
+                'message': response.get('bk_error_msg', response.get('message')) or '',
             }
         else:
             return {
                 'result': False,
                 'code': bk_error_code,
                 'data': response.get('data'),
-                'message': response.get('bk_error_msg') or '',
+                'message': response.get('bk_error_msg', response.get('message')) or '',
             }

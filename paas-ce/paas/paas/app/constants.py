@@ -82,3 +82,6 @@ DB_TYPE_CHOICES = [
     (DBTypeEnum.SQLSERVER.value, 'SQL Server'),
 ]
 DB_TYPE_VALID_VALUES = dict(DB_TYPE_CHOICES).keys()
+
+# app desktop info
+DESKTOP_DEFAULT_APP_IS_DISPLAY = True

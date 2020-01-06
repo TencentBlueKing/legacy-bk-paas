@@ -16,7 +16,7 @@ Query periodic task detail
 
 ### Request Parameters Example
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -28,7 +28,7 @@ Query periodic task detail
 
 ### Return Result Example
 
-```python
+```
 {
     "message": "",
     "data": {
@@ -223,7 +223,7 @@ Query periodic task detail
 }
 ```
 
-### Return Result Parameters DescriptionExample
+### Return Result Description
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -243,11 +243,11 @@ Query periodic task detail
 |  enabled      |    bool    |   is the task enabled   |
 |  id      |    int    |    task id   |
 |  template_id      |    string    |    template id for the task   |
-|  form      |    object    |    form object for the task   |
-|  pipeline_tree      |    object    |    flow tree for the task   |
+|  form      |    dict    |    form dict for the task   |
+|  pipeline_tree      |    dict    |    flow tree for the task   |
 
 
-#### data.pipeline_tree DescriptionExample
+#### data.pipeline_tree
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|

@@ -14,7 +14,7 @@ Query periodic task for business
 
 ### Request Parameters Example
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -25,7 +25,7 @@ Query periodic task for business
 
 ### Return Result Example
 
-```python
+```
 {
     "data": [
         {
@@ -63,7 +63,7 @@ Query periodic task for business
 }
 ```
 
-### Return Result Parameters DescriptionExample
+### Return Result Description
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -83,4 +83,3 @@ Query periodic task for business
 |  enabled      |    bool    |   is the task enabled   |
 |  id      |    int    |    task id   |
 |  template_id      |    string    |    template id for the task   |
-

@@ -26,6 +26,7 @@ def fpath_to_module(fpath):
     """Transform a filepath to a module string
     """
     prefix = settings.BASE_DIR
+    fpath = os.path.normpath(fpath)
     if fpath.startswith(prefix):
         fpath = fpath[len(prefix):]
     # 去掉目录前的斜杠
@@ -116,7 +117,7 @@ RE_PATH_VARIABLE = re.compile(r'\{([A-Za-z0-9_-]+)\}')
 def preprocess_path_tmpl(path):
     """预处理形如"/users/{username}"的可变路径模板
     """
-    return RE_PATH_VARIABLE.sub(r'(?P<\1>[\w-]+)', path)
+    return RE_PATH_VARIABLE.sub(r'(?P<\1>[^/]+)', path)
 
 
 def has_path_vars(path):

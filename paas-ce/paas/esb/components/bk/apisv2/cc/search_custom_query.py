@@ -35,7 +35,7 @@ class SearchCustomQuery(Component):
     |-----------|------------|--------|------------|
     | bk_supplier_account | string     | {{ _("否") }}     | {{ _("开发商账号") }} |
     | bk_biz_id |  int     | {{ _("是") }}     | {{ _("业务ID") }} |
-    | condition |  dict    | {{ _("是") }}     | {{ _("查询条件，condition 字段为自定义api的属性字段, 可以是create_user,modify_user, name") }} |
+    | condition |  dict    | {{ _("否") }}     | {{ _("查询条件，condition 字段为自定义api的属性字段, 可以是create_user,modify_user, name") }} |
     | start     |  int     | {{ _("是") }}     | {{ _("记录开始位置") }} |
     | limit     |  int     | {{ _("是") }}     | {{ _("每页限制条数,最大200") }} |
 
@@ -128,7 +128,7 @@ class SearchCustomQuery(Component):
 
     class Form(BaseComponentForm):
         bk_biz_id = forms.IntegerField(label='business id', required=True)
-        condition = TypeCheckField(label='condition', promise_type=dict, required=True)
+        condition = TypeCheckField(label='condition', promise_type=dict, required=False)
         start = forms.IntegerField(label='start', required=True)
         limit = forms.IntegerField(label='limit', required=True)
 
@@ -136,11 +136,7 @@ class SearchCustomQuery(Component):
             data = self.cleaned_data
             return {
                 'bk_biz_id': data['bk_biz_id'],
-                'data': {
-                    'condition': data['condition'],
-                    'start': data['start'],
-                    'limit': data['limit']
-                }
+                'data': self.get_cleaned_data_when_exist(keys=['condition', 'start', 'limit'])
             }
 
     def handle(self):

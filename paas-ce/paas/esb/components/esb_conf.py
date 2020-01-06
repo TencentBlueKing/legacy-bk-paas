@@ -73,6 +73,8 @@ config = {
                     '/v2/cmsi/send_mail/': '/cmsi/send_mail/',
                     '/v2/cmsi/send_sms/': '/cmsi/send_sms/',
                     '/v2/cmsi/send_weixin/': '/cmsi/send_weixin/',
+                    '/v2/cmsi/get_msg_type/': '/cmsi/get_msg_type/',
+                    '/v2/cmsi/send_msg/': '/cmsi/send_msg/',
                 },
                 'preset_channels': [
                     # CC v2
@@ -396,6 +398,8 @@ config = {
                         'comp_codename': 'generic.cmsi.send_voice_msg',
                         'comp_conf_to_db': [
                             ('dest_url', ''),
+                            ('qcloud_app_id', ''),
+                            ('qcloud_app_key', ''),
                         ]
                     }),
                     ('/cmsi/send_mail/', {
@@ -431,6 +435,18 @@ config = {
                             ('wx_qy_corpsecret', ''),
                             ('wx_qy_agentid', ''),
                         ]
+                    }),
+                    ('/cmsi/get_msg_type/', {
+                        'comp_codename': 'generic.cmsi.get_msg_type',
+                        'comp_conf_to_db': [
+                            ('weixin', True),
+                            ('mail', True),
+                            ('sms', True),
+                            ('voice', True),
+                        ]
+                    }),
+                    ('/cmsi/send_msg/', {
+                        'comp_codename': 'generic.cmsi.send_msg'
                     }),
 
                     # FTA

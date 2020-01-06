@@ -20,3 +20,10 @@ class ApiErrorCodeEnumV2(Enum):
     ESB_NOT_VALID = 1301103
     APP_NOT_EXIST = 1301104
     NO_PERMISSION = 1301105
+
+
+class LightAppAPIActionEnum(Enum):
+    POST = "post"
+    PUT = "put"
+    DELETE = "delete"
+    PUT_LOGO = "put_logo"

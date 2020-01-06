@@ -28,7 +28,7 @@ from django.utils import timezone
 
 from common.log import logger
 from bkaccount.encryption import encrypt, decrypt, salt
-from bkaccount.models import Loignlog, BkToken, UserInfo
+from bkaccount.models import Loignlog, BkToken
 
 
 class AccountSingleton(object):
@@ -119,13 +119,7 @@ class Account(AccountSingleton):
             retry_count += 1
         return bk_token, datetime.datetime.fromtimestamp(expire_time, timezone.get_current_timezone())
 
-    def _is_bk_token_valid(self, bk_token):
-        """
-        验证用户登录态
-        """
-        if not bk_token:
-            error_msg = _("缺少参数bk_token")
-            return False, None, error_msg
+    def _decrypt_token(self, bk_token):
         try:
             plain_bk_token = decrypt(bk_token)
         except Exception as error:
@@ -135,9 +129,28 @@ class Account(AccountSingleton):
         # 参数bk_token非法
         error_msg = _("参数bk_token非法")
         if not plain_bk_token:
+            return False, error_msg, None
+
+        try:
+            token_info = plain_bk_token.split('|')
+        except Exception as error:
+            token_info = []
+            logger.exception("token info wrong, error: {}".format(error))
+
+        return True, None, token_info
+
+    def _is_bk_token_valid(self, bk_token):
+        """
+        验证用户登录态
+        """
+        if not bk_token:
+            error_msg = _("缺少参数bk_token")
             return False, None, error_msg
 
-        token_info = plain_bk_token.split('|')
+        ok, error_msg, token_info = self._decrypt_token(bk_token)
+        if not ok:
+            return False, None, error_msg
+
         if not token_info or len(token_info) < 3:
             return False, None, error_msg
 
@@ -315,13 +328,14 @@ class Account(AccountSingleton):
                             expires=expire_time,
                             domain=settings.BK_COOKIE_DOMAIN,
                             httponly=True)
+        # NOTE: DO NOT SET THE LANGUAGE COOKIE HERE BEFORE I18N is AVAILABLE
         # set cookie for app or platform
-        bk_user_info, is_created = UserInfo.objects.get_or_create(user=user)
-        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, bk_user_info.language,
-                            # max_age=settings.LANGUAGE_COOKIE_AGE,
-                            expires=expire_time,
-                            path=settings.LANGUAGE_COOKIE_PATH,
-                            domain=settings.LANGUAGE_COOKIE_DOMAIN)
+        # bk_user_info, is_created = UserInfo.objects.get_or_create(user=user)
+        # response.set_cookie(settings.LANGUAGE_COOKIE_NAME, bk_user_info.language,
+        #                     # max_age=settings.LANGUAGE_COOKIE_AGE,
+        #                     expires=expire_time,
+        #                     path=settings.LANGUAGE_COOKIE_PATH,
+        #                     domain=settings.LANGUAGE_COOKIE_DOMAIN)
         return response
 
     def login_redirect_response(self, request, redirect_url, is_from_logout):

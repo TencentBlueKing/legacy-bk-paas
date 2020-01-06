@@ -102,13 +102,20 @@ class VCSInfoForm(forms.Form):
 
 class AppQueryForm(forms.Form):
     keyword = forms.CharField(required=False)
-    hide_offline = forms.IntegerField(initial=0)
+    hide_offline = forms.CharField(initial="0")
     page = forms.IntegerField(required=False, initial=1)
     page_size = forms.IntegerField(required=False)
 
     def clean_keyword(self):
         keyword = self.cleaned_data["keyword"]
         return keyword.replace('&nbsp;', ' ').strip()
+
+    def clean_hide_offline(self):
+        try:
+            hide_offline = int(self.cleaned_data["hide_offline"])
+            return hide_offline
+        except Exception:
+            return 0
 
     def clean_page_size(self):
         page_size = self.cleaned_data["page_size"]

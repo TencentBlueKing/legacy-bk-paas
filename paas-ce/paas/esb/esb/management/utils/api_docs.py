@@ -22,8 +22,8 @@ from esb.utils import config
 
 class ApiDocManager(object):
 
-    def __init__(self):
-        self.is_update_all_api_doc = False
+    def __init__(self, is_update_all_api_doc=False):
+        self.is_update_all_api_doc = is_update_all_api_doc
         self.all_doc_md_md5 = self.get_all_doc_md_md5()
 
     def get_api_doc(self, channel):
@@ -39,16 +39,15 @@ class ApiDocManager(object):
         return self.all_doc_md_md5.get(path)
 
     def get_all_doc_md_md5(self):
-        components = ESBChannel.objects.values_list('id', 'path')
-        components = dict(components)
+        components = dict(ESBChannel.objects.values_list('id', 'path'))
         all_doc_md_md5 = {}
         api_docs = ComponentAPIDoc.objects.values('component_id', 'doc_md_md5')
         for api_doc in api_docs:
             component_id = api_doc['component_id']
-            key = components.get(component_id)
-            if not key:
+            path = components.get(component_id)
+            if not path:
                 continue
-            all_doc_md_md5[key] = api_doc['doc_md_md5']
+            all_doc_md_md5[path] = api_doc['doc_md_md5']
         return all_doc_md_md5
 
 

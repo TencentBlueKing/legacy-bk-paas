@@ -7,7 +7,6 @@ http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """ # noqa
 import json
-
 from django import forms
 
 from components.component import Component, SetupConfMixin
@@ -110,7 +109,11 @@ class SendVoiceMsg(Component, SetupConfMixin):
             return data
 
     def handle(self):
-        data = self.request.kwargs
+        # QCloud 语音配置
+        self.qcloud_app_id = getattr(self, 'qcloud_app_id', '') or getattr(configs, 'qcloud_app_id', '')
+        self.qcloud_app_key = getattr(self, 'qcloud_app_key', '') or getattr(configs, 'qcloud_app_key', '')
+
+        data = self.form_data
         # 将 receiver__username 中的用户名，转换为接口需要的 user_list_information 信息
         if data['receiver__username']:
             user_data = tools.get_user_contact_with_username(
@@ -139,6 +142,36 @@ class SendVoiceMsg(Component, SetupConfMixin):
                     'result': False,
                     'data': result.get('data'),
                     'message': u'Some users failed to send voice. %s' % data['_extra_user_error_msg'],
+                }
+            self.response.payload = result
+        elif self.qcloud_app_id and self.qcloud_app_key:
+            params = {
+                'user_list_information': data['user_list_information'],
+                'auto_read_message': data['auto_read_message'],
+                'qcloud_app_id': self.qcloud_app_id,
+                'qcloud_app_key': self.qcloud_app_key
+            }
+            ret = self.invoke_other('generic.qcloud_voice.send_voice_msg', kwargs=params)
+
+            if not ret['failed'] and data.get('_extra_user_error_msg'):
+                result = {
+                    'result': False,
+                    'data': ret,
+                    'message': u'Some users failed to send voice. %s' % data['_extra_user_error_msg'],
+                }
+            elif ret['failed']:
+                result = {
+                    'result': False,
+                    'data': ret,
+                    'message': 'Some users failed to send voice. %s' % ",".join(
+                        map(lambda x: x['username'], ret['failed'])
+                    )
+                }
+            else:
+                result = {
+                    'result': True,
+                    'data': ret,
+                    'message': 'OK'
                 }
             self.response.payload = result
         else:

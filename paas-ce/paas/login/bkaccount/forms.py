@@ -66,8 +66,12 @@ class UserQueryForm(forms.Form):
 
 
 class BaseUserInfoForm(forms.Form):
-    chname = forms.CharField(max_length=16)
-    phone = forms.CharField(max_length=11)
+    chname = forms.CharField(max_length=16, error_messages={
+        "max_length": _("名称长度不能超过16个字符")
+    })
+    phone = forms.CharField(max_length=11, error_messages={
+        "max_length": _("手机号长度不能超过11个字符")
+    })
     email = forms.EmailField(max_length=254)
 
     def clean_chname(self):

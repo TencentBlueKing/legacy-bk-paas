@@ -12,7 +12,7 @@ modify crontab for periodic task
 |---------------|------------|--------|------------------|
 |   task_id    |   string     |   YES   |  task ID |
 |   bk_biz_id    |   string     |   YES   |  business ID |
-|   cron    |   object     |   YES   |  crontab object |
+|   cron    |   dict     |   YES   |  crontab dict |
 
 #### cron
  
@@ -26,7 +26,7 @@ modify crontab for periodic task
 
 ### Request Parameters Example
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -39,7 +39,7 @@ modify crontab for periodic task
 
 ### Return Result Example
 
-```python
+```
 {
     "data": {
         "cron": "*/1 15 * * * (m/h/d/dM/MY)"
@@ -48,7 +48,7 @@ modify crontab for periodic task
 }
 ```
 
-### Return Result Parameters DescriptionExample
+### Return Result Description
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -61,4 +61,3 @@ modify crontab for periodic task
 | Field      | Type      | Description      |
 | ------------ | ---------- | ------------------------------ |
 |  cron      |    string    |      crontab expression    |
-

@@ -50,10 +50,10 @@
                     </td>
                     <td>{{ item.created_time|date:"Y-m-d H:i" }}</td>
                     <td>
-                        <div class="dropdown esb_url">
-                            <button class="btn btn-success show_esb_url" title="{% trans 'API地址' %}" id="{{ item.pk }}" style="width: inherit;">
+                        <div class="dropdown esb_url show_esb_url">
+                            <button class="btn btn-success" title="{% trans 'API地址' %}" id="{{ item.pk }}">
                                 {% trans "API地址" %}
-                                <i class="bk-icon icon-arrow-down"></i>
+                                <i class="bk-icon icon-down-shape"></i>
                             </button>
                             <div class="dropdown-content">
                                 <div class="input-group">
