@@ -40,7 +40,7 @@ class ComponentAPI(object):
         self.url = self.get_url_with_api_ver()
         try:
             return self._call(*args, **kwargs)
-        except ComponentAPIException, e:
+        except ComponentAPIException as e:
             # Combine log message
             log_message = [e.error_message, ]
             log_message.append('url=%(url)s' % {'url': e.api_obj.url})
@@ -75,7 +75,7 @@ class ComponentAPI(object):
         # Request remote server
         try:
             resp = self.client.request(self.method, self.url, params=params, data=data)
-        except Exception, e:
+        except Exception as e:
             logger.exception('Error occurred when requesting method=%s url=%s',
                              self.method, self.url)
             raise ComponentAPIException(self, u'Request component error, Exception: %s' % str(e))

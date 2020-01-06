@@ -51,9 +51,10 @@
 		<div class="userInfo">
 			<span class="userName">${request.user.username}</span>
 			<div class="userImg">
-				<img class="avatar" src="${STATIC_URL}home/images/avatar.png"/>
 				% if request.user.is_superuser:
-					<i class="crown"></i>
+					<img class="avatar" src="${STATIC_URL}img/getadminheadimg.jpg"/>
+				% else:
+					<img class="avatar" src="${STATIC_URL}img/getheadimg.jpg"/>
 				% endif
 			</div>
 			<span class="caret"></span>
@@ -169,7 +170,7 @@
 					<a target="_blank" href="http://bk.tencent.com/info/#laws">服务协议</a>
 				</li>
 				% for _l in links:
-					<li class="list-item">
+					<li class="list-item" style="text-overflow: ellipsis;overflow: hidden;">
 						<a target="_blank" href="${_l.link}">${_l.name}</a>
 					</li>
 				% endfor
@@ -192,7 +193,7 @@
 	</footer>
     <script src="${STATIC_URL}assets/jquery-1.10.2.min.js"></script>
     <script src="${STATIC_URL}assets/jquery-ui-1.11.0.custom/jquery-ui.js"></script>
-    <script src="${STATIC_URL}home/js/csrftoken_v3.${JS_SUFFIX}"></script>
+    <script src="${STATIC_URL}home/js/csrftoken_v3.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
     <!-- bkdialog -->
     <script src="${STATIC_URL}assets/bkDialog-2.0/js/dialog.js"></script>
 	<script src="${STATIC_URL}home/js/index.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

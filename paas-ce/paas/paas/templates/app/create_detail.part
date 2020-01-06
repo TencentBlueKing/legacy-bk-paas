@@ -64,7 +64,7 @@
                 <div class="controls mt5">
                   %for value, key in vcs_type_choices:
                     <label class="radio-inline">
-                      <input type="radio" name="vcs_type" value="${value}" 
+                      <input type="radio" name="vcs_type" value="${value}"
                           %if key == "Git":
                             checked
                           %endif
@@ -109,9 +109,9 @@
               <div class="form-group">
                 <label class="control-label" for="language">开发语言</label>
                 <div class="controls">
-                  <span>Python（Django 1.8）</span> 
+                  <span>Python（Django 1.11）</span>
                   <span class="help-block">推荐基于蓝鲸智云应用开发框架开发; 并按照<a  target="_blank" href="${SITE_URL}guide/newbie/#step3"> 提示 </a>修改配置</span>
-                  
+
                 </div>
               </div>
               <!--开发信息 end-->

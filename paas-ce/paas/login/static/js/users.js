@@ -41,7 +41,20 @@ function get_user(page){
     }, function(data){
         $("#user_table_div").html(data);
     })
- }
+}
+
+function get_all_users(page){
+    var url = site_url + 'accounts/user/list/query/';
+    $.get(url, {
+        'page': page,
+        'search_data': '',
+        'search_role': ''
+    }, function(data){
+        $("#user_table_div").html(data);
+    })
+}
+
+
  //添加用户
 $('.user_add_btn').on('click',function(){
     if(is_user_edit_status())return false;
@@ -64,7 +77,7 @@ $('.user_add_btn').on('click',function(){
             '           <option value="0">'+ gettext("普通用户") +'</option>',
             '           <option value="1">'+ gettext("管理员") +'</option>',
             '           <option value="2">'+ gettext("开发者") +'</option>',
-            '           <option value="3">'+ gettext("职能化") +'</option>',
+            '           <option value="3">'+ gettext("职能化用户") +'</option>',
             '           <option value="4">'+ gettext("审计员") +'</option>',
             '       </select>',
             '   </td>',
@@ -95,18 +108,18 @@ $('.user_import_btn').on('click', function(){
         title:gettext("批量导入用户"),
         lock: true,
         width: 560,
-        content: $("#user_import_div").get(0)
+        content: $("#user_import_div").get(0),
+    })
+    // 导入用户
+    $('#user_import_div').on('click', '.import_btn', function(){
+        var user_file = $("#data_files").val();
+        if(user_file){
+            $("#sumbit_import").click();
+        }else{
+            $("#error_msg").text(gettext('请选择一个文件'));
+        }
     })
     $("#error_msg").text('');
-})
-// 导入用户
-$('#user_import_div').on('click', '.import_btn', function(){
-    var user_file = $("#data_files").val();
-    if(user_file){
-        $("#sumbit_import").click();
-    }else{
-        $("#error_msg").text(gettext('请选择一个文件'));
-    }
 })
 // 保存
 $('#user_table_div').on('click','.user_save_btn',function(){
@@ -160,6 +173,7 @@ $('#user_table_div').on('click','.user_save_btn',function(){
                     curRecord.removeClass('user_edit_status');
                     var cur_page = $("#current_page").val();
                     get_user(cur_page);
+                    // get_all_users(1);
                 }else{
                     art.dialog({id: 'bktips', width: 300, icon: 'error', lock: true, content: data.message});
                 }
@@ -178,7 +192,8 @@ $('#user_table_div').on('click','.user_save_btn',function(){
                 curRecord.find('input').attr('disabled','disabled');
                 curRecord.find('select').attr('disabled','disabled');
                 curRecord.removeClass('user_edit_status');
-                get_user(1);
+                // get_user(1);
+                get_all_users(1);
             }else{
                 art.dialog({id: 'bktips', width: 300,icon: 'error',lock: true,content: data.message});
                 //curRecord.remove();
@@ -283,7 +298,8 @@ $('#user_table_div').on('click','.user_del_btn',function(){
                         if(data.result){
                             art.dialog({id: 'bktips', width: 300,icon: 'succeed',lock: true,content: data.message}).time(2);
                             curRecord.remove();
-                            get_user(1);
+                            // get_user(1);
+                            get_all_users(1);
                         }else{
                             art.dialog({id: 'bktips', width: 300,icon: 'error',lock: true,content: data.message});
                         }

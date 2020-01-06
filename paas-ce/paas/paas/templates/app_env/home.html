@@ -8,9 +8,12 @@
 <%inherit file="${inherit(context)}"/>
 
 <%block name="right_content">
+<p style="font-size: 0.8em; margin-left: 4px">环境变量</p>
 <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_app_env.${CSS_SUFFIX}?v=${STATIC_VERSION}">
 <hr/>
+
 <div class="col_main">
+
   <div class="dev_center_wrap dev_center_module">
     <h4 class="dev_module_title">
     &nbsp;
@@ -82,7 +85,7 @@
       访问您设置的环境变量.
       </p>
       <p>环境变量名都以"BKAPP_"为前缀，您输入名字时不需要输入前缀。</p>
-      <p>变量名和变量的值均以大小写英文字母，数字或者下划线组成，变量名最大长度为50字符，值的最大长度为100字符。</p>
+      <p>变量名和变量的值均以大小写英文字母，数字或者下划线组成，变量名最大长度为50字符，值的最大长度为1000字符。</p>
       <p>开发框架: 可以使用变量<font color='red'> BKAPP_CONTAINER_MEM </font>设置容器最大内存, 值为整数, 单位M。</p>
     </div>
   </div>

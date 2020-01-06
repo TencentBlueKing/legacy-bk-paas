@@ -295,7 +295,8 @@ class ChannelManager(object):
         for _path in (path, path_another):
             channel = ESBChannel.objects.filter(path=_path).first()
             # 从数据库查询出来需要为结果添加channel_classes
-            if channel:
+            if channel and method in ['GET', 'POST']:
+                # 如果通道配置从 DB 获取，则 method 应属于 [GET, POST]
                 try:
                     comp_conf = json.loads(channel.comp_conf) if channel.comp_conf else None
                     if isinstance(comp_conf, (tuple, list)):

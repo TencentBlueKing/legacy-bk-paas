@@ -15,7 +15,7 @@
 
 ### 请求参数示例
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -27,7 +27,7 @@
 
 ### 返回结果示例
 
-```python
+```
 {
     "message": "",
     "data": {
@@ -242,10 +242,10 @@
 |  enabled      |    bool    |    是否激活   |
 |  id      |    int    |    周期任务 ID   |
 |  template_id      |    string    |    用于创建该任务的模板 ID   |
-|  form      |    object    |    该周期任务的参数表单对象   |
-|  pipeline_tree      |    object    |    该周期任务的实例树   |
+|  form      |    dict    |    该周期任务的参数表单对象   |
+|  pipeline_tree      |    dict    |    该周期任务的实例树   |
 
-#### data.pipeline_tree 说明
+#### data.pipeline_tree
 |   名称   |  类型  |           说明             |
 | ------------ | ---------- | ------------------------------ |
 |  start_event      |    dict    |      开始节点信息     |
@@ -270,5 +270,5 @@
 |  desc      |    string    |      变量说明   |
 |  source_type      |    string    |      变量来源, 取值范围 custom: 自定义变量，component_inputs: 从原子输入参数勾选，component_outputs：从原子输出结果中勾选   |
 |  custom_type      |    string    |      source_type=custom 时有效，自定义变量类型， 取值范围 input: 输入框，textarea: 文本框，datetime: 日期时间，int: 整数|
-|  source_tag      |    string    |      source_type=component_inputs|component_outputs 时有效，变量的来源原子   |
-|  source_info   |   dict  |  source_type=component_inputs|component_outputs 时有效，变量的来源节点信息 |
+|  source_tag      |    string    |      source_type=component_inputs/component_outputs 时有效，变量的来源原子   |
+|  source_info   |   dict  |  source_type=component_inputs/component_outputs 时有效，变量的来源节点信息 |

@@ -23,7 +23,7 @@
       <!-- bkdialog -->
       <link rel="stylesheet" type="text/css" href="${STATIC_URL}assets/bkDialog-1.0/css/ui-dialog.css">
       <!-- 顶部导航css 私有样式 -->
-      <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/layout_head.${CSS_SUFFIX}">
+      <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/layout_head.${CSS_SUFFIX}?v=${STATIC_VERSION}">
       <!-- base 基本样式 -->
       <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/base.${CSS_SUFFIX}?v=${STATIC_VERSION}">
       <!--select2-->
@@ -60,9 +60,10 @@
                         <div class="account_meta account_info account_meta_primary">
                               <a href="${SITE_URL}accounts/profile/" class="nickname" title="${request.user.username if request.user and request.user.username else ''}">${request.user.username if request.user and request.user.username else ''}</a>
                                <a href="${SITE_URL}accounts/profile/">
-                                <img src="${STATIC_URL}img/getheadimg.jpg" class="avatar">
                                 % if request.user.is_superuser:
-                                  <i class="crown"></i>
+                                  <img src="${STATIC_URL}img/getadminheadimg.jpg" class="avatar">
+                                % else:
+                                  <img src="${STATIC_URL}img/getheadimg.jpg" class="avatar">
                                 % endif
                                </a>
                         </div>
@@ -102,7 +103,7 @@
           <div id="return_top" class="return_btn return_top" href="#" title="返回顶部" style="display:none;">
           <span aria-hidden="true" class="glyphicon glyphicon-chevron-up"></span>
         </div>
-        <div id="return_bottom" class="return_btn return_bottom" href="#" title="返回顶部" style="display:none;">
+        <div id="return_bottom" class="return_btn return_bottom" href="#" title="返回底部" style="display:none;">
           <span aria-hidden="true" class="glyphicon glyphicon-chevron-down"></span>
         </div>
 

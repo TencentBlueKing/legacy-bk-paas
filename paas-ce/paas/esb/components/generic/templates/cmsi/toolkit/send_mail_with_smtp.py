@@ -36,7 +36,10 @@ class SMTPClient(object):
         mail_sender = kwargs['sender']
         all_receiver = kwargs['receiver'] + kwargs['cc']
 
-        msg = MIMEMultipart()
+        if kwargs.get('mime_subtype'):
+            msg = MIMEMultipart(kwargs['mime_subtype'])
+        else:
+            msg = MIMEMultipart()
         msg['Subject'] = Header(smart_str(kwargs['title']), 'utf-8')
         msg['From'] = mail_sender
         msg['To'] = COMMASPACE.join(kwargs['receiver'])
@@ -44,6 +47,9 @@ class SMTPClient(object):
 
         # 添加邮件内容
         self.add_content_to_msg(msg, kwargs['content'], kwargs.get('body_format'))
+
+        # 加载附件
+        self.add_attachment_to_msg(msg, kwargs.get('attachments'))
 
         try:
             smtp = self.get_smtp_client()
@@ -61,7 +67,7 @@ class SMTPClient(object):
         msgtxt = MIMEText(smart_str(content), body_format, 'utf-8')
         mail_msg.attach(msgtxt)
 
-    def add_attachment_to_msg(self, mail_msg, attachment):
+    def add_attachment_to_msg(self, mail_msg, attachments):
         """
         :param attachment:
         [
@@ -72,22 +78,27 @@ class SMTPClient(object):
             }
         ]
         """
-        for file_info in attachment:
-            file_name = file_info['file_name']
-            file_content = file_info['file_content']
-            file_type = file_name.split('.')['-1'] or file_info.get('file_type', 'attachment')
+        for f_info in attachments or []:
+            _filename = f_info.get('filename', '')
+            _content = f_info.get('content', '')
+            _type = f_info.get('type') or _filename.split('.')[-1] or 'attachment'
+            _disposition = f_info.get('disposition', '')
             # 添加二进制附件
-            if file_type in ['image', 'jpg', 'png', 'jpeg']:
-                att = MIMEImage(file_content)
-                att.add_header('Content-ID', '<%s>' % file_name)
-                mail_msg.attach(att)
+            if _type in ['image', 'jpg', 'png', 'jpeg']:
+                content_id = f_info.get('content_id') or '<%s>' % _filename
+                _disposition = _disposition or 'inline'
+                msgImage = MIMEImage(_content, name=_filename)
+                msgImage.add_header('Content-ID', content_id)
+                msgImage.add_header('Content-Disposition', _disposition, filename=_filename)
+                mail_msg.attach(msgImage)
             else:
-                ctype, encoding = mimetypes.guess_type(file_name)
+                _disposition = _disposition or 'attachment'
+                ctype, encoding = mimetypes.guess_type(_filename)
                 if ctype is None or encoding is not None:
                     ctype = 'application/octet-stream'
                 maintype, subtype = ctype.split('/', 1)
-                att = MIMEImage(file_content, _subtype=subtype)
-                att.add_header('Content-Disposition', 'attachment', filename=file_name)
+                att = MIMEImage(_content, _subtype=subtype)
+                att.add_header('Content-Disposition', _disposition, filename=_filename)
                 mail_msg.attach(att)
 
     def get_smtp_client(self):

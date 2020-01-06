@@ -13,7 +13,7 @@ Create a periodic task
 |   template_id    |   string     |   YES   |  ID of template which used to create task |
 |   bk_biz_id    |   string     |   YES   |  business ID |
 |   name    |   string     |   YES   |  name of task |
-|   cron    |   object     |   YES   |  crontab object |
+|   cron    |   dict     |   YES   |  crontab dict |
 |   flow_type    |   string     |   NO    |  flow type，common: common flow，common_func：functional flow |
 |   constants    |   dict       |   NO    |  global variables，details are described below |
 
@@ -37,7 +37,7 @@ constant value
 
 ### Request Parameters Example
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -53,7 +53,7 @@ constant value
 
 ### Return Result Example
 
-```python
+```
 {
     "message": "",
     "data": {
@@ -248,7 +248,7 @@ constant value
 }
 ```
 
-### Return Result Parameters DescriptionExample
+### Return Result Description
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -268,11 +268,11 @@ constant value
 |  enabled      |    bool    |   is the task enabled   |
 |  id      |    int    |    task id   |
 |  template_id      |    string    |    template id for the task   |
-|  form      |    object    |    form object for the task   |
-|  pipeline_tree      |    object    |    flow tree for the task   |
+|  form      |    dict    |    form dict for the task   |
+|  pipeline_tree      |    dict    |    flow tree for the task   |
 
 
-#### data.pipeline_tree DescriptionExample
+#### data.pipeline_tree
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|

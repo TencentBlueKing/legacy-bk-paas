@@ -68,7 +68,7 @@
             <div class="row">
                 <div class="col-sm-10 col-xs-10">
                     <font class="t_grey">配置信息：</font><br>
-                    <pre style="max-height:200px;white-space: normal; border:none; border-radius:inherit; background-color: rgba(244, 244, 244, 0.65);">${app_info.get('settings', '--') or '--'}</pre>
+                    <pre style="max-height:200px;white-space: pre-wrap; border:none; border-radius:inherit; background-color: rgba(244, 244, 244, 0.65);">${app_info.get('settings', '--') or '--'}</pre>
                 </div>
             </div>
 
@@ -91,8 +91,8 @@
 
 </%block>
 
-<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}"></script>
-<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}"></script>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
 <script type="text/javascript">
     $(function(){
         APP_INFO.get_access_info('${app_code}');

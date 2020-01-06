@@ -1,5 +1,8 @@
 # 蓝鲸智云 PaaSAgent 社区版版本记录
 
+# 3.1.02
+- 支持python3
+
 # 3.1.01
 - 去除syncdb
 - postEventLog增加错误日志输出

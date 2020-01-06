@@ -104,7 +104,7 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
 
-STATIC_VERSION = '0.0.6'
+STATIC_VERSION = '0.0.7'
 
 # CSS 文件后缀名
 CSS_SUFFIX = 'min.css'

@@ -144,7 +144,7 @@ class ErrorCodes(object):
     """
 
     error_codes = (
-        # 13063xx, user error
+        # 13064xx, user error
         ErrorCode('OPERATOR_REQUIRED', 1306401, 'You must specify the current operator'),
         ErrorCode('USER_PERMISSION_DENIED', 1306402, 'User permission is insufficient'),
         ErrorCode('APP_PERMISSION_DENIED', 1306403, 'APP permission is insufficient'),

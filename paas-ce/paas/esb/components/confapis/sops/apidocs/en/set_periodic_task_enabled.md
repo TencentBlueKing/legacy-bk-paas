@@ -17,7 +17,7 @@ modify task activation status
 
 ### Request Parameters Example
 
-```python
+```
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -30,7 +30,7 @@ modify task activation status
 
 ### Return Result Example
 
-```python
+```
 {
     "data": {
         "enabled": false
@@ -39,7 +39,7 @@ modify task activation status
 }
 ```
 
-### Return Result Parameters DescriptionExample
+### Return Result Description
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -52,5 +52,3 @@ modify task activation status
 | Field      | Type      | Description      |
 | ------------ | ---------- | ------------------------------ |
 |  enabled      |    bool    |      whether the task is activate    |
-
-

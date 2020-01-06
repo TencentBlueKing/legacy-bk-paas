@@ -3,7 +3,7 @@
 <!-- 左侧导航 start -->
 <%block name='left_content'>
     <%
-        user_center = app_create = app_center = developer_tool = newbie_guide = services = server = external_server = faq = esb = saas_center = resource =''
+        user_center = app_create = app_center = developer_tool = newbie_guide = services = server = external_server = faq = esb = saas_center = ''
         relative_path = APP_PATH
         if relative_path.startswith(SITE_URL + "accounts/profile/"):
             user_center = 'selected'
@@ -25,8 +25,6 @@
            newbie_guide = 'selected'
         elif relative_path.startswith(SITE_URL + "saas/"):
            saas_center = 'selected'
-        elif relative_path.startswith(SITE_URL + "resource/"):
-            resource = 'selected'
     %>
   <div class="menu_box" id="menuBar">
     <dl class="menu no_extra" style="border-top:none;">
@@ -72,10 +70,11 @@
     </dl>
 
     <dl class="menu">
-      <dt class="menu_title clickable ${resource}">
-      <a href="${SITE_URL}resource/"> <i class="bk-icon icon-download f18 t_b mr10"></i>资源下载</a>
+      <dt class="menu_title clickable">
+      <a href="https://docs.bk.tencent.com/download/" target="_blank"> <i class="bk-icon icon-download f18 t_b mr10"></i>资源下载</a>
       </dt>
     </dl>
+
 
     <!-- 超级管理员才有权限查看, NOTE: 合并一行, 为了自动化生成开源版本方便 -->
     % if request.user.is_staff and request.user.is_superuser:

@@ -298,7 +298,9 @@ func (appJob AppJob) runCmd(envMap map[string]string) error {
 		timeoutStr := fmt.Sprintf("Task execution timeout, and the time is limited to %d seconds\r\n", timeOutSeconds)
 		postEventLog(appJob.AppCode, appJob.EventID, &EventLog{Status: core.FAILURE, Log: timeoutStr})
 		log.Println("Deployment task execution timeout")
-		return core.KillCmdProcess(cmd.Process.Pid)
+		core.KillCmdProcess(cmd.Process.Pid)
+		err = <-done
+		return err
 	case err = <-done:
 		if err != nil {
 			postEventLog(appJob.AppCode, appJob.EventID, &EventLog{Status: core.FAILURE, Log: fmt.Sprintf("%s\r\n", err)})

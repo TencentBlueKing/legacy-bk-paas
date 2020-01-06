@@ -6,7 +6,6 @@ Licensed under the MIT License (the "License"); you may not use this file except
 http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """ # noqa
-
 import json
 
 from django.shortcuts import render
@@ -14,8 +13,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.http import Http404
+from django.utils.translation import ugettext as _
 
-from common.log import logger
 from esb.bkcore.models import ESBChannel, ComponentSystem
 from esb.common.decorators import is_user_super
 from esb.common.django_utils import i18n_form, get_cur_language
@@ -97,21 +96,9 @@ class EditChannelView(View):
         channel = ESBChannel.objects.get(id=channel_id)
 
         channel.name = channel.name_display
-        if channel.is_confapi:
-            # confapi 不更新 comp_conf
-            channel.comp_conf = None
 
         form = EditESBChannelForm(instance=channel)
         system_form = ComponentSystemForm()
-        try:
-            if channel.comp_conf:
-                comp_conf = json.loads(channel.comp_conf)
-            else:
-                comp_conf = None
-        except Exception:
-            logger.error('esb channel comp_conf is not json, channel_id: %s, comp_conf: %s',
-                         channel_id, channel.comp_conf)
-            comp_conf = None
 
         try:
             rate_limit_conf = json.loads(channel.rate_limit_conf)
@@ -122,11 +109,12 @@ class EditChannelView(View):
             rate_limit_tokens = ''
             rate_limit_unit = 'second'
 
-        _comp_conf_group = self.comp_conf_group(channel.path, comp_conf)
-        # 可在 comp_conf_group 中新增字段，用户在通道管理页面上可看到并更新新增字段
-        if _comp_conf_group:
+        if channel.allow_edit_comp_conf:
+            # 可在 comp_conf_group 中新增字段，用户在通道管理页面上可看到并更新新增字段
+            _comp_conf_group = self.comp_conf_group(channel.path, channel.comp_conf_json)
             _comp_conf_val = json.dumps([(conf['key'], conf['value']) for conf in _comp_conf_group['comp_conf']])
         else:
+            _comp_conf_group = None
             _comp_conf_val = ''
 
         form = i18n_form(form)
@@ -142,7 +130,6 @@ class EditChannelView(View):
             'system_form': system_form,
             'menu_items': menu_items,
             'menu_active_item': menu_active_item,
-            'comp_conf': comp_conf,
             'comp_conf_val': _comp_conf_val,
             'rate_limit_required': channel.rate_limit_required,
             'comp_conf_group': _comp_conf_group,
@@ -162,8 +149,9 @@ class EditChannelView(View):
         if channel.is_official:
             unchanged_data['name'] = channel.name
         if channel.is_confapi:
-            unchanged_data['comp_conf'] = channel.comp_conf
             unchanged_data['component_name'] = channel.component_name
+        if not channel.allow_edit_comp_conf:
+            unchanged_data['comp_conf'] = channel.comp_conf
 
         form = EditESBChannelForm(post_data, instance=channel)
         if form.is_valid():
@@ -184,8 +172,6 @@ class EditChannelView(View):
         """
         注意：生成结果的 comp_conf 中不能有 key 值相同的项，否则，数据库中 comp_conf 也会出现多余的重复字段
         """
-        if not comp_conf:
-            return None
         if path == '/cmsi/send_weixin/':
             comp_conf = dict(comp_conf)
             return {
@@ -193,8 +179,8 @@ class EditChannelView(View):
                 'group_field': 'wx_type',
                 # 参数分组可选值
                 'groups': [
-                    {'value': 'qywx', 'label': u'企业微信'},
-                    {'value': 'mp', 'label': u'微信公众号'},
+                    {'value': 'qywx', 'label': _(u'企业微信')},
+                    {'value': 'mp', 'label': _(u'微信公众号')},
                 ],
                 # 字段配置
                 'comp_conf': [
@@ -282,7 +268,7 @@ class EditChannelView(View):
                     },
                 ]
             }
-        elif path == '/cmsi/send_sms/':
+        elif path in ['/cmsi/send_sms/', '/cmsi/send_voice_msg/']:
             comp_conf = dict(comp_conf)
             return {
                 # 字段配置

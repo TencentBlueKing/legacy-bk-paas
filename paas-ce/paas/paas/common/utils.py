@@ -46,14 +46,14 @@ def should_update_logo(app_code, app_logo_name):
     # if cmp(logo_name, app_logo_name):
     if logo_name != app_logo_name:
         # logo_name = LogoImgRelatedDirEnum.APP.value + '/' + str(app_code) + logo_ext
-        _delete_exist_logo_file(logo_name)
+        delete_exist_logo_file(logo_name)
         # 指定图片名称
         # self.logo.name = LogoImgRelatedDirEnum.APP.value + '/' + str(app_code) + logo_ext
         return True, logo_name
     return False, None
 
 
-def _delete_exist_logo_file(name):
+def delete_exist_logo_file(name):
     _file = os.path.join(settings.MEDIA_ROOT, name)
     if os.path.exists(_file):
         os.remove(_file)

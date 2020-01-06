@@ -49,7 +49,7 @@
                     <font class="t_grey">首次上线：</font>${app_info.get('first_online_time',  '--') or '--'}
                 </div>
                 <div class="col-sm-4 col-xs-4">
-                    <font class="t_grey">开发语言：</font>Python（Django 1.8）
+                    <font class="t_grey">开发语言：</font>Python
                 </div>
             </div>
             <div class="row mt5 chmt">
@@ -168,8 +168,8 @@
         </div><hr/>
 </%block>
 
-<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}"></script>
-<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}"></script>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
 <script type="text/javascript">
     $(function(){
         APP_INFO.get_access_info('${app_code}');

@@ -31,7 +31,7 @@ class SearchBizInstTopo(Component):
 
     | {{ _("字段") }}      |  {{ _("类型") }}      | {{ _("必选") }}   |  {{ _("描述") }}      |
     |-----------|------------|--------|------------|
-    | bk_supplier_account |  string  | {{ _("否") }}     | {{ _("开发商帐号") }} |
+    | bk_supplier_account |  string  | {{ _("否") }}     | {{ _("开发商账号") }} |
     | bk_biz_id           |  int     | {{ _("是") }}     | {{ _("业务id") }} |
     | level               |  int     | {{ _("否") }}     | {{ _("拓扑的层级索引，索引取值从0开始，默认值为2，当设置为 -1 的时候会读取完整的业务实例拓扑") }} |
 
@@ -57,21 +57,21 @@ class SearchBizInstTopo(Component):
         "data": [
             {
                 "bk_inst_id": 2,
-                "bk_inst_name": "蓝鲸",
+                "bk_inst_name": "blueking",
                 "bk_obj_id": "biz",
-                "bk_obj_name": "业务",
+                "bk_obj_name": "business",
                 "child": [
                     {
                         "bk_inst_id": 3,
-                        "bk_inst_name": "作业平台",
+                        "bk_inst_name": "job",
                         "bk_obj_id": "set",
-                        "bk_obj_name": "集群",
+                        "bk_obj_name": "set",
                         "child": [
                             {
                                 "bk_inst_id": 5,
                                 "bk_inst_name": "job",
                                 "bk_obj_id": "module",
-                                "bk_obj_name": "模块",
+                                "bk_obj_name": "module",
                                 "child": []
                             }
                         ]

@@ -9,6 +9,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 """
 Core models for the project.
 """
+import re
 import json
 import datetime
 
@@ -93,6 +94,12 @@ class ESBChannel(models.Model):
     @property
     def api_path(self):
         return '/api/c/compapi/%s/' % self.path.strip('/')
+
+    @property
+    def api_version(self):
+        if self.component_codename.startswith('generic.v2.'):
+            return 'v2'
+        return ''
 
     @property
     def channel_conf(self):
@@ -228,6 +235,16 @@ class ESBBuffetComponent(models.Model):
 
     def get_extra_params(self):
         return json.loads(self.extra_params or '{}')
+
+    @property
+    def api_path(self):
+        return '/api/c/self-service-api/%s/' % self.registed_path.strip('/')
+
+    @property
+    def api_name(self):
+        path_2_name = re.findall(r'[a-zA-Z0-9]+', self.registed_path.lower())
+        path_2_name.insert(0, self.registed_http_method.lower())
+        return '_'.join(path_2_name)
 
 
 class ESBBuffetMapping(models.Model):

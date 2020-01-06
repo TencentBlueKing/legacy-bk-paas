@@ -78,6 +78,11 @@ $('#user_env_table').on('click','.env_save_btn',function(){
         curRecord.find('.password').focus();
         return false;
     }
+    if (password.match(/[\u3400-\u9FBF]/)) {
+        art.dialog({id: 'bktips', width: 300,icon: 'error',lock: true,content: '密码不能包含中文字符'}).time(1);
+        curRecord.find('.password').focus();
+        return false;
+    }
     if (!server_cate){
         art.dialog({id: 'bktips', width: 300,icon: 'error',lock: true,content: '请选择服务器类型'}).time(1);
         curRecord.find('.server_cate').focus();
