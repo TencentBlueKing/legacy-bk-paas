@@ -487,6 +487,13 @@ config = {
                         'is_hidden': True
                     }),
 
+                    # ESB
+                    ('/v2/esb/get_systems/', {
+                        'comp_codename': 'generic.v2.esb.get_systems'
+                    }),
+                    ('/v2/esb/get_components/', {
+                        'comp_codename': 'generic.v2.esb.get_components'
+                    }),
                 ]
             },
             'esb': {
