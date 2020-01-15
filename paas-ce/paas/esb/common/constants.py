@@ -73,4 +73,9 @@ BK_SYSTEMS = {
         'label': _(u'蓝鲸监控'),
         'remark': u'蓝鲸监控',
     },
+    'ESB': {
+        'name': 'ESB',
+        'label': u'API网关',
+        'remark': u'API网关',
+    },
 }

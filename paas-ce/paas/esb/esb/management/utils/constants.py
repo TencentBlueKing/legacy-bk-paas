@@ -46,6 +46,6 @@ SYSTEM_DOC_CATEGORY = [
         'name': 'management_tools',
         'label': u'管理工具',
         'priority': 50,
-        'systems': ['SOPS', 'MONITOR']
+        'systems': ['SOPS', 'MONITOR', 'ESB']
     },
 ]
