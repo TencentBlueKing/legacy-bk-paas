@@ -8,10 +8,16 @@ get mainline object's business topology
 
 #### Request Parameters Example
 
+| Field                 |  Type      | Required	   |  Description                 |
+|----------------------|------------|--------|-----------------------|
+| bk_supplier_account  | string     | Yes     | Supplier account            |
+
 ### Request Parameters Example
 
 ``` python
-
+{
+    "bk_supplier_account":"0"
+}
 ```
 
 ### Return Result Example
@@ -19,8 +25,8 @@ get mainline object's business topology
 ```python
 {
   "result": true,
-  "bk_error_code": 0,
-  "bk_error_msg": "success",
+  "code": 0,
+  "message": "success",
   "data": [
     {
       "bk_obj_id": "biz",

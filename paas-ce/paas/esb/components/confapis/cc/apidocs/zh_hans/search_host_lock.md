@@ -29,8 +29,8 @@
 
 {
     "result": true,
-    "bk_error_code": 0,
-    "bk_error_msg": "success",
+    "code": 0,
+    "message": "success",
     "data": {
         "127.0.0.1": true,
         "127.0.0.2": false

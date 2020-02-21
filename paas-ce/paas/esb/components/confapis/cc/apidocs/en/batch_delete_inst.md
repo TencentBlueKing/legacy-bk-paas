@@ -11,7 +11,7 @@ delete object instances in batches
 | Field                |  Type       | Required	   | Description                            |
 |---------------------|-------------|--------|----------------------------------|
 | bk_supplier_account | string      | Yes     | Supplier account                       |
-| bk_obj_id           | string      | Yes     | Object ID, when the deleted object is a cloud, it is a plat |
+| bk_obj_id           | string      | Yes     | Object ID |
 | inst_ids            | int array   |Yes      | Instance ID group                       |
 
 

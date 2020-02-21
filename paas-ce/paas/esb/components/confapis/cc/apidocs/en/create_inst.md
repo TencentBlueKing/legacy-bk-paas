@@ -10,17 +10,18 @@ create instance
 
 | Field                       |  Type      | Required	   |  Description                                      |
 |----------------------------|------------|--------|--------------------------------------------|
-| bk_obj_id                  | string     | Yes     | Object ID, new cloud is a plat                 |
+| bk_obj_id                  | string     | Yes     | Object ID                 |
 | bk_supplier_account        | string     | No     | Supplier account, please fill '0' by independent deployment                |
-| bk_inst_name/bk_cloud_name | string     | Yes     | Instance ID,when new object is a cloud,it is bk_cloud_name |
+| bk_inst_name | string     | Yes     | Instance ID |
 | bk_biz_id                  | int        | No     | Business ID                                     |
 
-
+Note: other object's attribute filed can also be the request parameters.
 
 ### Request Parameters Example
 
 ```python
 {
+    "bk_obj_id: "switch",
     "bk_inst_name": "example18",
     "bk_supplier_account": "0",
     "bk_biz_id": 0

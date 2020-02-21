@@ -10,33 +10,15 @@ find host by module id
 
 | Field                 |  Type      | Required	   |  Description          |
 |----------------------|------------|--------|-----------------------------|
-| metadata           | object     | Yes    | request meta data             |
+| bk_biz_id            | int        | Yes    | bussiness ID                |
 | bk_module_ids | int array     | Yes   | module id array |
 | page                | object     | Yes   | page condition                |
-
-
-metadata params
-
-| Field                 |  Type      | Required	   |  Description         |
-|---------------------|------------|--------|-----------------------------|
-| label           | string map     | Yes     |the label data request should with, such as biz info |
-
-
-label params
-
-| Field                 |  Type      | Required	   |  Description         |
-|---------------------|------------|--------|-----------------------------|
-| bk_biz_id           | string      | Yes     | bussiness ID |
 
 ### Request Parameters Example
 
 ``` python
 {
-    "metadata":{
-        "label":{
-            "bk_biz_id":"3"
-        }
-    },
+    "bk_biz_id":3,
     "bk_module_ids":[
         56
     ],
@@ -53,8 +35,8 @@ label params
 
 {
     "result":true,
-    "bk_error_code":0,
-    "bk_error_msg":"success",
+    "code":0,
+    "message":"success",
     "data":{
         "count":1,
         "info":[
@@ -64,7 +46,7 @@ label params
                         "bk_biz_developer":"",
                         "bk_biz_id":2,
                         "bk_biz_maintainer":"admin",
-                        "bk_biz_name":"蓝鲸"
+                        "bk_biz_name":"BlueKing"
                     }
                 ],
                 "host":{
@@ -96,7 +78,7 @@ label params
                 },
                 "module":[
                     {
-                        "TopModuleName":"蓝鲸##公共组件##consul",
+                        "TopModuleName":"BlueKing##common##consul",
                         "bk_bak_operator":"",
                         "bk_biz_id":2,
                         "bk_module_id":35,
@@ -113,7 +95,7 @@ label params
                 ],
                 "set":[
                     {
-                        "TopSetName":"蓝鲸##公共组件",
+                        "TopSetName":"BlueKing##common",
                         "bk_biz_id":2,
                         "bk_capacity":null,
                         "bk_parent_id":3,
@@ -121,7 +103,7 @@ label params
                         "bk_set_desc":"111",
                         "bk_set_env":"3",
                         "bk_set_id":8,
-                        "bk_set_name":"公共组件",
+                        "bk_set_name":"common",
                         "bk_supplier_account":"0",
                         "create_time":"2018-05-16T21:03:22.692+08:00",
                         "default":0,

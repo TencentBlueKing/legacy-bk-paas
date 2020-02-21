@@ -20,7 +20,12 @@
 ### 请求参数示例
 
 ```python
-
+{
+    "bk_supplier_account":"0",
+    "bk_biz_id":3,
+    "bk_process_id":14,
+    "bk_module_name":"db"
+}
 ```
 
 
@@ -30,8 +35,8 @@
 
 {
     "result":true,
-    "bk_error_code":0,
-    "bk_error_msg":"",
+    "code":0,
+    "message":"",
     "data":"success"
 }
 ```

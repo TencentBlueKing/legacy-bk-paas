@@ -1,6 +1,6 @@
 ### Functional description
 
-get business's idle and fault modules.
+get business's idle, fault and recycle modules.
 
 ### Request Parameters
 
@@ -32,6 +32,10 @@ get business's idle and fault modules.
       {
         "bk_module_id": 4,
         "bk_module_name": "fault machine"
+      },
+      {
+        "bk_module_id": 5,
+        "bk_module_name": "recycle machine"
       }
     ]
   }
@@ -44,8 +48,8 @@ get business's idle and fault modules.
 
 | Field       | Type     | Description         |
 |------------|----------|--------------|
-|bk_set_id | int64 | the set id that idle and fault machine belongs to  |
-|bk_set_name | string |the set name that idle and fault machine belongs to |
+|bk_set_id | int64 | the set id that idle, fault and recycle module belongs to  |
+|bk_set_name | string |the set name that idle, fault and recycle module belongs to |
 
 #### module description
 | Field       | Type     | Description         |
