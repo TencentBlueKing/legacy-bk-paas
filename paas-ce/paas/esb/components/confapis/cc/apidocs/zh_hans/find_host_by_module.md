@@ -10,32 +10,15 @@
 
 | 字段                |  类型      | 必选   |  描述                       |
 |---------------------|------------|--------|-----------------------------|
-| metadata           | object     | 是     | 请求元数据                      |
+| bk_biz_id           | int        | 是     | 业务ID |
 | bk_module_ids | int array     | 是     | 模块ID数组 |
 | page                | object     | 是     | 分页参数                    |
-
-metadata参数
-
-| 字段                |  类型      | 必选   |  描述                       |
-|---------------------|------------|--------|-----------------------------|
-| label           | string map     | 是     | 请求中需要携带的信息，例如业务ID |
-
-label参数
-
-| 字段                |  类型      | 必选   |  描述                       |
-|---------------------|------------|--------|-----------------------------|
-| bk_biz_id           | string      | 是     | 业务ID |
-
 
 ### 请求参数示例
 
 ```python
 {
-    "metadata":{
-        "label":{
-            "bk_biz_id":"3"
-        }
-    },
+    "bk_biz_id":3,
     "bk_module_ids":[
         56
     ],
@@ -51,8 +34,8 @@ label参数
 ```python
 {
     "result":true,
-    "bk_error_code":0,
-    "bk_error_msg":"success",
+    "code":0,
+    "message":"success",
     "data":{
         "count":1,
         "info":[
@@ -138,8 +121,8 @@ label参数
 | 名称  | 类型  | 说明 |
 |---|---|---|---|
 | result | bool | 请求成功与否。true:请求成功；false请求失败 |
-| bk_error_code | int | 错误编码。 0表示success，>0表示失败错误 |
-| bk_error_msg | string | 请求失败返回的错误信息 |
+| code | int | 错误编码。 0表示success，>0表示失败错误 |
+| message | string | 请求失败返回的错误信息 |
 | data | object| 请求返回的数据 |
 
 data 字段说明：

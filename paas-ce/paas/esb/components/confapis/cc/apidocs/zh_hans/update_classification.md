@@ -26,7 +26,6 @@
     "bk_classification_icon": "icon-cc-business"
 }
 ```
-```
 
 ### 返回结果示例
 

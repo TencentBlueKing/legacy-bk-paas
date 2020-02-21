@@ -69,7 +69,7 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path:  /api/v3/inst/{bk_supplier_account}/{bk_obj_id}/{bk_inst_id}
   dest_http_method: DELETE
-  
+
 - path: /v2/cc/batch_delete_inst/
   name: batch_delete_inst
   label: 批量删除实例
@@ -153,7 +153,6 @@
   dest_path: /api/v3/objects/topographics/scope_type/{scope_type}/scope_id/{scope_id}/action/search
   dest_http_method: POST
   
-  
 - path: /v2/cc/create_classification/
   name: create_classification
   label: 添加模型分类
@@ -163,7 +162,6 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path:   /api/v3/object/classification
   dest_http_method: POST
-  
   
 - path: /v2/cc/delete_classification/
   name: delete_classification
@@ -237,80 +235,6 @@
   dest_http_method: POST
   extra_param_fields : bk_supplier_account
   
-- path: /v2/cc/get_role_privilege/
-  name: get_role_privilege
-  label: 获取角色绑定权限
-  label_en: get role privilege
-  suggest_method: GET
-  api_type: query
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/topo/privilege/{bk_supplier_account}/{bk_obj_id}/{bk_property_id}
-  dest_http_method: GET
-  
-
-  
-- path: /v2/cc/create_user_group/
-  name: create_user_group
-  label: 新建用户分组
-  label_en: create user group
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/topo/privilege/group/{bk_supplier_account}
-  dest_http_method: POST
-  
-- path: /v2/cc/update_user_group/
-  name: update_user_group
-  label: 更新用户分组
-  label_en: update user group
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/topo/privilege/group/{bk_supplier_account}/{group_id}
-  dest_http_method: PUT
-  
-- path: /v2/cc/search_user_group/
-  name: search_user_group
-  label: 查询用户分组
-  label_en: search user group
-  suggest_method: POST
-  api_type: query
-  comp_codename: generic.v2.cc.cc_component
-  dest_path:  /api/v3/topo/privilege/group/{bk_supplier_account}/search
-  dest_http_method: POST
-  
-- path: /v2/cc/delete_user_group/
-  name: delete_user_group
-  label: 删除用户分组
-  label_en: delete user group
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/topo/privilege/group/{bk_supplier_account}/{bk_group_id}
-  dest_http_method: DELETE
-  
-- path: /v2/cc/search_group_privilege/
-  name: search_group_privilege
-  label: 查询分组权限
-  label_en: search  group privilege
-  suggest_method: POST
-  api_type: query
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/topo/privilege/group/{bk_supplier_account}/{bk_group_id}
-  dest_http_method: GET
-  extra_param_fields : bk_supplier_account
-  
-- path: /v2/cc/get_user_privilege/
-  name: get_user_privilege
-  label: 查询用户权限
-  label_en: get user privilege
-  suggest_method: POST
-  api_type: query
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/topo/privilege/user/detail/{bk_supplier_account}/{user_name}
-  dest_http_method: GET
-  extra_param_fields : bk_supplier_account
-  
 - path: /v2/cc/subscribe_event/
   name: subscribe_event
   label: 订阅事件
@@ -361,6 +285,36 @@
   dest_path:  /api/v3/event/subscribe/telnet
   dest_http_method: POST
     
+- path: /v2/cc/list_biz_hosts/
+  name: list_biz_hosts
+  label: 查询业务下的主机
+  label_en: list host with business id
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/app/{bk_biz_id}/list_hosts
+  dest_http_method: POST
+    
+- path: /v2/cc/list_biz_hosts_topo/
+  name: list_biz_hosts_topo
+  label: 查询业务下的主机和拓扑信息
+  label_en: list hosts under business with their topology information
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/app/{bk_biz_id}/list_hosts_topo
+  dest_http_method: POST
+
+- path: /v2/cc/list_hosts_without_biz/
+  name: list_hosts_without_biz
+  label: 没有业务ID的主机查询
+  label_en: list host without business id
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/list_hosts_without_app
+  dest_http_method: POST
+    
 - path: /v2/cc/transfer_sethost_to_idle_module/
   name: transfer_sethost_to_idle_module
   label: 清空业务下集群/模块中主机
@@ -381,6 +335,16 @@
   dest_path: /api/v3/hosts/property/clone
   dest_http_method: PUT
   
+- path: /v2/cc/batch_update_host/
+  name: batch_update_host
+  label: 批量更新主机属性
+  label_en: update host batch
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/property/batch
+  dest_http_method: PUT
+
 - path: /v2/cc/get_operation_log/
   name: get_operation_log
   label: 获取操作日志
@@ -441,37 +405,7 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/topo/internal/{bk_supplier_account}/{bk_biz_id}
   dest_http_method: GET
-  
-- path: /v2/cc/get_process_bind_module/
-  name: get_process_bind_module
-  label: 查询进程绑定模块
-  label_en: get module bind with process
-  suggest_method: GET
-  api_type: query
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/proc/module/{bk_supplier_account}/{bk_biz_id}/{bk_process_id}
-  dest_http_method: GET
-  
-- path: /v2/cc/bind_process_module/
-  name: bind_process_module
-  label: 绑定进程到模块
-  label_en: bind process to module
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/proc/module/{bk_supplier_account}/{bk_biz_id}/{bk_process_id}/{bk_module_name}
-  dest_http_method: PUT
-  
-- path: /v2/cc/delete_process_module_bind/
-  name: delete_process_module_bind
-  label: 解绑进程模块
-  label_en: delete process module bind relationship
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/proc/module/{bk_supplier_account}/{bk_biz_id}/{bk_process_id}/{bk_module_name}
-  dest_http_method: DELETE
-  
+   
 - path: /v2/cc/find_host_by_module/
   name: find_host_by_module
   label: 根据模块查询主机
@@ -522,4 +456,342 @@
   dest_path: /api/v3/delete/instassociation/{id}
   dest_http_method: DELETE
   
-  
+- path: /v2/cc/find_host_topo_relation/
+  name: find_host_topo_relation
+  label: 获取主机与拓扑的关系
+  label_en: get the relationship between host and topology
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/host/topo/relation/read
+  dest_http_method: POST
+
+- path: /v2/cc/search_cloud_area/
+  name: search_cloud_area
+  label: 查询云区域
+  label_en: Query cloud area
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/cloudarea
+  dest_http_method: POST
+
+- path: /v2/cc/create_cloud_area/
+  name: create_cloud_area
+  label: 创建云区域
+  label_en: create a cloud area
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/create/cloudarea
+  dest_http_method: POST
+
+- path: /v2/cc/update_cloud_area/
+  name: update_cloud_area
+  label: 更新云区域
+  label_en: update cloud area
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/update/cloudarea/{bk_cloud_id}
+  dest_http_method: PUT
+
+- path: /v2/cc/delete_cloud_area/
+  name: delete_cloud_area
+  label: 删除云区域
+  label_en: delete cloud area
+  method: DELETE
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/delete/cloudarea/{bk_cloud_id}
+  dest_http_method: DELETE
+
+- path: /v2/cc/list_service_category/
+  name: list_service_category
+  label: 查询服务分类列表
+  label_en: list service categories
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/proc/service_category
+  dest_http_method: POST
+
+- path: /v2/cc/create_service_category/
+  name: create_service_category
+  label: 新建服务分类
+  label_en: create service category
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/create/proc/service_category
+  dest_http_method: POST
+
+- path: /v2/cc/update_service_category/
+  name: update_service_category
+  label: 更新服务分类
+  label_en: update service category
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/update/proc/service_category
+  dest_http_method: PUT
+
+- path: /v2/cc/delete_service_category/
+  name: delete_service_category
+  label: 删除服务分类
+  label_en: delete service category
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/delete/proc/service_category
+  dest_http_method: DELETE
+
+- path: /v2/cc/create_service_template/
+  name: create_service_template
+  label: 新建服务模板
+  label_en: create service template
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/create/proc/service_template
+  dest_http_method: POST
+
+- path: /v2/cc/update_service_template/
+  name: update_service_template
+  label: 更新服务模板
+  label_en: update service template
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/update/proc/service_template
+  dest_http_method: PUT
+
+- path: /v2/cc/get_service_template/
+  name: get_service_template
+  label: 获取服务模板
+  label_en: get service template
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/find/proc/service_template/{service_template_id}
+  dest_http_method: GET
+
+- path: /v2/cc/list_service_template/
+  name: list_service_template
+  label: 服务模板列表查询
+  label_en: list service template
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/proc/service_template
+  dest_http_method: POST
+
+- path: /v2/cc/delete_service_template/
+  name: delete_service_template
+  label: 删除服务模板
+  label_en: delete service template
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/delete/proc/service_template
+  dest_http_method: DELETE
+
+- path: /v2/cc/batch_create_proc_template/
+  name: batch_create_proc_template
+  label: 批量创建进程模板
+  label_en: batch create proc template
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/createmany/proc/proc_template
+  dest_http_method: POST
+
+- path: /v2/cc/update_proc_template/
+  name: update_proc_template
+  label: 更新进程模板
+  label_en: update proc template
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/update/proc/proc_template
+  dest_http_method: PUT
+
+- path: /v2/cc/delete_proc_template/
+  name: delete_proc_template
+  label: 删除进程模板
+  label_en: batch delete proc template
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/deletemany/proc/proc_template
+  dest_http_method: DELETE
+
+- path: /v2/cc/get_proc_template/
+  name: get_proc_template
+  label: 获取进程模板
+  label_en: get proc template
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/find/proc/proc_template/id/{process_template_id}
+  dest_http_method: GET
+
+- path: /v2/cc/list_proc_template/
+  name: list_proc_template
+  label: 查询进程模板列表
+  label_en: list proc template
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/proc/proc_template
+  dest_http_method: POST
+
+- path: /v2/cc/create_service_instance/
+  name: create_service_instance
+  label: 创建服务实例
+  label_en: create service instance
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/create/proc/service_instance
+  dest_http_method: POST
+
+- path: /v2/cc/list_service_instance/
+  name: list_service_instance
+  label: 查询服务实例列表
+  label_en: list service instance
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/proc/service_instance
+  dest_http_method: POST
+
+- path: /v2/cc/list_service_instance_by_host/
+  name: list_service_instance_by_host
+  label: 通过主机查询关联的服务实例列表
+  label_en: list service instance by host
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/proc/service_instance/with_host
+  dest_http_method: POST
+
+- path: /v2/cc/list_service_instance_detail/
+  name: list_service_instance_detail
+  label: 获取服务实例详细信息
+  label_en: list service instance detail
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/proc/service_instance/details
+  dest_http_method: POST
+
+- path: /v2/cc/delete_service_instance/
+  name: delete_service_instance
+  label: 删除服务实例
+  label_en: delete service instance
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/deletemany/proc/service_instance
+  dest_http_method: DELETE
+
+- path: /v2/cc/add_label_for_service_instance/
+  name: add_label_for_service_instance
+  label: 为服务实例添加标签
+  label_en: add label for service instance
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/createmany/proc/service_instance/labels
+  dest_http_method: POST
+
+- path: /v2/cc/remove_label_from_service_instance/
+  name: remove_label_from_service_instance
+  label: 从服务实例移除标签
+  label_en: remove label from service instance
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/deletemany/proc/service_instance/labels
+  dest_http_method: DELETE
+
+- path: /v2/cc/create_process_instance/
+  name: create_process_instance
+  label: 创建进程实例
+  label_en: create process instance
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/create/proc/process_instance
+  dest_http_method: POST
+
+- path: /v2/cc/update_process_instance/
+  name: update_process_instance
+  label: 更新进程实例
+  label_en: update process instance
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/update/proc/process_instance
+  dest_http_method: PUT
+
+- path: /v2/cc/delete_process_instance/
+  name: delete_process_instance
+  label: 删除进程实例
+  label_en: delete process instance
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/delete/proc/process_instance
+  dest_http_method: DELETE
+
+- path: /v2/cc/list_process_instance/
+  name: list_process_instance
+  label: 查询进程实例列表
+  label_en: list process instance
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/delete/proc/process_instance
+  dest_http_method: POST
+
+- path: /v2/cc/search_inst_asst_object_inst_base_info
+  name: search_inst_asst_object_inst_base_info
+  label:  查询实例关联模型实例基本信息
+  label_en: query instance association model instance basic information
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/inst/association/association_object/inst_base_info
+  dest_http_method: POST
+
+- path: /v2/cc/update_host_cloud_area_field/
+  name: update_host_cloud_area_field
+  label:  更新主机的云区域字段
+  label_en: update host's cloud area field (bk_cloud_id)
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/updatemany/hosts/cloudarea_field
+  dest_http_method: PUT
+
+- path: /v2/cc/search_hostidentifier/
+  name: search_hostidentifier
+  label:  根据条件查询主机身份
+  label_en: search host identifier
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/identifier/host/search
+
+
+- path: /v2/cc/host_install_bk/
+  label:  机器新加到蓝鲸业务拓扑中
+  label_en: host added to Blue Whale business topology
+  method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/host/install/bk
+  dest_http_method: POST
+  is_hidden: true

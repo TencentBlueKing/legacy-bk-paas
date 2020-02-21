@@ -14,7 +14,9 @@ delete association between object's instance.
 ### Request Parameters Example
 
 ``` json
-
+{
+    "id": 1
+}
 ```
 
 ### Return Result Example
@@ -35,5 +37,8 @@ delete association between object's instance.
 
 | Field       | Type     | Description         |
 |------------|----------|--------------|
-
+| result | bool | request success or failed. true:success；false: failed |
+| code | int | error code. 0: success, >0: something error |
+| message | string | error info description |
+| data | object | response data |
 

@@ -18,9 +18,7 @@ delete object attribute
 ```python
 
 {
-    "delete":{
     "id" : 0
-    }    
 }
 ```
 
