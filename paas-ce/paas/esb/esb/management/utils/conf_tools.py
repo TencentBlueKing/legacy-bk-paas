@@ -9,11 +9,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 import os
 from importlib import import_module
 
-from common.constants import BK_SYSTEMS
+from components.constants import BK_SYSTEMS, SYSTEM_DOC_CATEGORY
 from components.esb_conf import CUSTOM_APIS_REL_PATH
 from esb.utils import fpath_to_module, config
 from esb.utils.confapis import get_confapis_manager
-from esb.management.utils import constants
 from .channel_tools import ChannelClient
 try:
     from esb.management.utils import ee_constants as x_constants
@@ -57,7 +56,7 @@ class ConfClient(object):
 
     @property
     def default_system_doc_category(self):
-        return getattr(constants, 'SYSTEM_DOC_CATEGORY', [])
+        return SYSTEM_DOC_CATEGORY
 
     @property
     def default_systems(self):

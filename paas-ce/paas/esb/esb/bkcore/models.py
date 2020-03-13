@@ -16,7 +16,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 
-from common.constants import BK_SYSTEMS
+from components.constants import BK_SYSTEMS
 
 
 class ComponentSystem(models.Model):
