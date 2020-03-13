@@ -102,12 +102,15 @@ class ConfComponent(BaseComponent, SetupConfMixin):
 
         if self.dest_http_method == 'GET':
             params, data = params, None
+            headers = {}
         else:
             params, data = None, json.dumps(params)
+            headers = {'Content-Type': 'application/json'}
         return {
             'path': path,
             'params': params,
             'data': data,
+            'headers': headers,
         }
 
     def get_extra_param_fields(self):

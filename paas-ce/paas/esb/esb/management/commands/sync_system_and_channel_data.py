@@ -32,21 +32,29 @@ class Command(BaseCommand):
         self.force = options['force']
         self.warning_msgs = []
 
+        self.update_doc_category()
         self.update_systems()
         self.update_channels()
-        self.update_doc_category()
         self.update_buffet_components()
+        self.update_system_doc_category()
 
         for msg in self.warning_msgs:
             logger.warning(msg)
         logger.info('Sync system/channels done')
 
     def update_systems(self):
-        default_update_fields = ['label', 'remark', 'interface_admin']
+        default_update_fields = ['label', 'remark', 'interface_admin', 'doc_category_id']
         force_update_fields = ['execute_timeout', 'query_timeout']
+
+        doc_categories = self.get_doc_categories()
 
         conf_client = conf_tools.ConfClient()
         for system in conf_client.systems:
+            # 将系统配置中系统文档名称转换为系统分类ID
+            doc_category = doc_categories.get(system.get('doc_category'))
+            if doc_category:
+                system['doc_category_id'] = doc_category.id
+
             component_system, created = ComponentSystem.objects.get_or_create(
                 name=system['name'],
                 defaults=self.get_by_fields(system, default_update_fields + force_update_fields)
@@ -73,7 +81,11 @@ class Command(BaseCommand):
 
         conf_client = conf_tools.ConfClient()
         for system_name, channels in conf_client.channels.items():
-            system = ComponentSystem.objects.get(name=system_name)
+            try:
+                system = ComponentSystem.objects.get(name=system_name)
+            except ComponentSystem.DoesNotExist:
+                logger.warning('system %s does not exist, channels will not sync to db', system_name)
+                continue
             for channel in channels:
                 is_hidden = channel.get('is_hidden', False)
                 is_deprecated = channel.get('is_deprecated', False)
@@ -122,11 +134,19 @@ class Command(BaseCommand):
     def update_doc_category(self):
         conf_client = conf_tools.ConfClient()
         for system_doc_category in conf_client.system_doc_category:
-            doc_category, created = SystemDocCategory.objects.get_or_create(
+            SystemDocCategory.objects.get_or_create(
                 name=system_doc_category['label'],
                 defaults={
                     'priority': system_doc_category['priority'],
                 }
+            )
+
+    def update_system_doc_category(self):
+        conf_client = conf_tools.ConfClient()
+        for system_doc_category in conf_client.system_doc_category:
+            # update_doc_category 已创建文档分类
+            doc_category = SystemDocCategory.objects.get(
+                name=system_doc_category['label'],
             )
             ComponentSystem.objects.filter(doc_category_id__isnull=True)\
                 .filter(name__in=system_doc_category['systems'])\
@@ -169,6 +189,12 @@ class Command(BaseCommand):
                 if self.force:
                     obj.__dict__.update(self.get_by_fields(component, force_update_fields))
                 obj.save()
+
+    def get_doc_categories(self):
+        return {
+            category.name: category
+            for category in SystemDocCategory.objects.all()
+        }
 
     def get_by_fields(self, obj, fields):
         return dict([
