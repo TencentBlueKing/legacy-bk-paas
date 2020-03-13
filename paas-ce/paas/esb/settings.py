@@ -143,7 +143,8 @@ if not os.path.exists(LOG_DIR):
 # 100M, total 1G
 LOG_MAX_BYTES = 104857600
 LOG_BACKUP_COUNT = 10
-LOG_CLASS = 'logging.handlers.RotatingFileHandler'
+# LOG_CLASS = 'logging.handlers.RotatingFileHandler'
+LOG_CLASS = 'cloghandler.ConcurrentRotatingFileHandler'
 
 
 def get_loggings(log_level):
