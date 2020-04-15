@@ -8,6 +8,7 @@
 - Linux环境
 
 ## 安装部署
+
 PaaSAgent需要部署在满足系统要求的app服务器上。建议最少准备两台服务器，分别用于测试和正式环境
 
 #### 1. 基础环境初始化
@@ -37,7 +38,6 @@ $ ln -s pip3 pip
 $ /opt/py36/bin/python --version
 Python 3.6.7
 ```
-
 
 构建目录及新建用户
 

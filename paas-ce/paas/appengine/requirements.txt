@@ -1,6 +1,6 @@
 django==1.8.11
-pymysql==0.6.7
+pymysql==0.9.3
 requests==2.21.0
 gunicorn==19.9.0
-uWSGI==2.0.13.1
+uWSGI==2.0.15
 gevent==1.1.2

@@ -4,9 +4,9 @@ mako==1.0.4
 pycrypto==2.6.1
 requests==2.21.0
 gunicorn==19.9.0
-uWSGI==2.0.13.1
+uWSGI==2.0.15
 elasticsearch==2.3.0
-pymysql==0.6.7
+pymysql==0.9.3
 redis==2.10.5
 PyYAML==5.1
 Pillow==3.4.2
