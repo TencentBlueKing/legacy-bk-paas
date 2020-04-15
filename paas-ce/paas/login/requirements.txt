@@ -10,3 +10,5 @@ xlwt==1.1.2
 gevent==1.1.2
 pytz==2016.6.1
 python-dateutil==2.6.0
+xlrd==1.2.0
+xlwt==1.1.2
