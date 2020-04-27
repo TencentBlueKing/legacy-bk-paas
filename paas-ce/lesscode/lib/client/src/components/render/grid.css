@@ -1,0 +1,109 @@
+/**
+ * Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+ * Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://opensource.org/licenses/MIT
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+@import "@/css/mixins/clearfix";
+
+.bk-layout-grid-row-wrapper {
+    ~ .bk-layout-grid-row-wrapper {
+        margin-top: 10px;
+    }
+}
+
+.bk-layout-grid-row {
+     @mixin clearfix;
+    position: relative;
+    /* margin: 10px 0; */
+    z-index: 10;
+    border: 1px dashed rgba(204, 204, 204, 0.5);
+
+    &.row-hover {
+        border: 1px dashed #3a84ff;
+    }
+    &.selected {
+        border: 1px solid #3a84ff;
+    }
+
+    .bk-layout-grid-col {
+        border: 1px dashed #ccc;
+
+        ~ .bk-layout-grid-col {
+            border-left: 1px dashed #ccc;
+        }
+    }
+
+    .bk-layout-grid-col > .bk-layout-grid-row {
+        margin: 0 auto;
+    }
+
+    &.selected {
+        & > .add-column,
+        & > .add-clone {
+            position: absolute;
+            display: block;
+        }
+    }
+    .add-column,
+    .add-clone {
+        position: absolute;
+        display: none;
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+        color: #fff;
+        text-align: center;
+        line-height: 20px;
+        border-radius: 50%;
+        background: #3A84FF;
+        cursor: pointer;
+    }
+    .add-column {
+        top: 50%;
+        right: -10px;
+        transform: translateY(-50%);
+    }
+    .add-clone {
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .target-in-column {
+        min-height: 80px;
+        height: 100%;
+        /* padding: 10px; */
+        padding: 5px;
+    }
+
+    .grid-context-menu {
+        position: fixed;
+        background: #fff;
+        border: solid 1px rgba(0, 0, 0, .2);
+        border-radius: 3px;
+        z-index: 999;
+        display: none;
+        border: 1px solid #eee;
+        box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, .1);
+        border-radius: 1px;
+        a {
+            width: 75px;
+            height: 28px;
+            line-height: 25px;
+            text-align: center;
+            display: block;
+            color: #63656e;
+            padding: 2px;
+            &:hover {
+                background-color: #3a84ff;
+                color: #fff;
+            }
+        }
+    }
+}
