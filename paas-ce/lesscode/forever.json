@@ -1,0 +1,11 @@
+{
+    "uid": "lesscode",
+    "append": true,
+    "script": "lib/server/app.browser.js",
+    "sourceDir": "./",
+    "workingDir": "./",
+    "minUptime": 1000,
+    "logFile": "./logs/forever.log",
+    "outFile": "./logs/out.log",
+    "errFile": "./logs/err.log"
+}
