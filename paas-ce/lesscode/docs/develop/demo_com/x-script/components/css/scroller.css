@@ -1,0 +1,20 @@
+/**
+ * @file scroller mixin
+ *
+ * usage:
+ *      @mixin scroller;
+ *      @mixin scroller red;
+ *      @mixin scroller green, 2px;
+ */
+
+@define-mixin scroller $backgroundColor: #dcdee5, $width: 4px {
+    &::-webkit-scrollbar {
+        width: $width;
+        height: $width;
+    }
+    &::-webkit-scrollbar-thumb {
+        height: 5px;
+        border-radius: 2px;
+        background-color: $backgroundColor;
+    }
+}
