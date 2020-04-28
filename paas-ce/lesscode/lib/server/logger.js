@@ -13,6 +13,7 @@ const { resolve } = require('path')
 const log4js = require('koa-log4')
 
 const IS_DEV = process.env.NODE_ENV === 'development'
+console.error(12312)
 
 log4js.configure({
     appenders: {
