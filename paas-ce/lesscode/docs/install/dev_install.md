@@ -8,7 +8,9 @@
 
 > 下面描述中
 > 主库：指 https://github.com/Tencent/bk-PaaS
+>
 > fork 仓库：指 https://github.com/{YourName}/bk-PaaS
+>
 > 本地仓库：指从 fork 仓库 clone 到本地的仓库
 
 1. fork 主库 [bk-PaaS](https://github.com/Tencent/bk-PaaS) 到你自己的 github 仓库
