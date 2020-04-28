@@ -6,7 +6,6 @@
 
 ## 本地开发环境搭建以及开发流程
 
-> 下面描述中
 > 主库：指 https://github.com/Tencent/bk-PaaS
 >
 > fork 仓库：指 https://github.com/{YourName}/bk-PaaS
