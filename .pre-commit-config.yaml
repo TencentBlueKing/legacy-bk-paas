@@ -1,6 +1,0 @@
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v2.2.3
-  hooks:
-  -   id: flake8
-      args: [--max-line-length=120]
-      verbose: true
