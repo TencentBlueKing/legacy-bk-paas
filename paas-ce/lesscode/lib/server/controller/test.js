@@ -61,7 +61,7 @@ const Test = {
                                 create_time: '2019-11-19 17:52:08',
                                 cluster_id: 2,
                                 port: 10004,
-                                domain_name: '10.10.1.1',
+                                domain_name: '127.0.0.1',
                                 is_editable: true,
                                 state: true
                             },
@@ -74,7 +74,7 @@ const Test = {
                                 create_time: '2019-11-19 17:52:08',
                                 cluster_id: 3,
                                 port: 10004,
-                                domain_name: '10.10.1.2',
+                                domain_name: '127.0.0.1',
                                 is_editable: true,
                                 state: false
                             },

@@ -2,5 +2,5 @@
   rev: v2.2.3
   hooks:
   -   id: flake8
-      args: [--max-line-length=131]
+      args: [--max-line-length=120]
       verbose: true
