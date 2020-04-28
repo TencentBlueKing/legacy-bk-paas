@@ -1,0 +1,87 @@
+/**
+ * Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+ * Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://opensource.org/licenses/MIT
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+.component-wrapper {
+    z-index: 100000;
+    margin: 5px;
+    /* margin: 10px; */
+    &.grid {
+        ~ .grid {
+            margin-top: 10px;
+        }
+    }
+
+    &.selected {
+        position: relative;
+        z-index: 100000;
+        &:before {
+            position: absolute !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            display: block !important;
+            z-index: 99999 !important;
+            content: "" !important;
+            border: 1px solid #ea3636 !important;
+            cursor: default !important;
+            pointer-events: auto !important;
+        }
+    }
+
+    .component-context-menu {
+        position: fixed;
+        background: #fff;
+        border: solid 1px rgba(0, 0, 0, .2);
+        border-radius: 3px;
+        z-index: 100001;
+        display: none;
+        border: 1px solid #eee;
+        box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, .1);
+        border-radius: 1px;
+        a {
+            width: 75px;
+            height: 28px;
+            line-height: 25px;
+            text-align: center;
+            display: block;
+            color: #63656e;
+            padding: 2px;
+            &:hover {
+                background-color: #ea3636;
+                color: #fff;
+            }
+        }
+    }
+}
+
+.component-wrapper-hover {
+    position: relative;
+    z-index: 100000;
+    &:before {
+        position: absolute !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        display: block !important;
+        z-index: 99999 !important;
+        content: "" !important;
+        border: 1px dashed #ea3636 !important;
+        cursor: default !important;
+        pointer-events: auto !important;
+    }
+    &.in-column-ghost {
+        &:before {
+            border: none !important;
+        }
+    }
+}
