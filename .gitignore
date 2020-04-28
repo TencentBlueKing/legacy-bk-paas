@@ -131,3 +131,6 @@ open_paas_unittest
 .DS_Store
 .vscode/
 # End of https://www.gitignore.io/api/python
+
+# lesscode pre-commie
+.pre-commit-config.yaml
