@@ -2,7 +2,7 @@
 
 ## 分支管理说明
 
-可视化开发平台江使用 [lesscode-develop](https://github.com/Tencent/bk-PaaS/tree/lesscode-develop), [lesscode-master](https://github.com/Tencent/bk-PaaS/tree/lesscode-master) 两个分支进行迭代。其中 lesscode-master 为稳定版分支，每次 release 都会基于这个分支；lesscode-develop 为日常开发的分支。
+可视化开发平台使用 [lesscode-develop](https://github.com/Tencent/bk-PaaS/tree/lesscode-develop), [lesscode-master](https://github.com/Tencent/bk-PaaS/tree/lesscode-master) 两个分支进行迭代。其中 lesscode-master 为稳定版分支，每次 release 都会基于这个分支；lesscode-develop 为日常开发的分支。
 
 ## 本地开发环境搭建以及开发流程
 
