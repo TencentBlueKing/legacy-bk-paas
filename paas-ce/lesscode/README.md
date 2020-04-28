@@ -87,7 +87,7 @@
 > 安装 Node.js 参见[官方文档](https://nodejs.org/)。安装完成后，注意设置 node 到 PATH 中
 
 ## 分支说明
-可视化开发平台使用 [lesscode-develop](/tree/lesscode-develop/paas-ce/lesscode), [lesscode-master](/tree/lesscode-master/paas-ce/lesscode) 两个分支进行迭代。其中 lesscode-master 为稳定版分支，每次 release 都会基于这个分支；lesscode-develop 为日常开发的分支，给可视化开发平台贡献代码统一向主库 [bk-PaaS](https://github.com/Tencent/bk-PaaS) 的  [lesscode-develop](https://github.com/Tencent/bk-PaaS/tree/lesscode-develop) 分支提 pr。
+可视化开发平台使用 lesscode-develop, lesscode-master 两个分支进行迭代。其中 lesscode-master 为稳定版分支，每次 release 都会基于这个分支；lesscode-develop 为日常开发的分支，给可视化开发平台贡献代码统一向主库 [bk-PaaS](https://github.com/Tencent/bk-PaaS) 的  [lesscode-develop](https://github.com/Tencent/bk-PaaS/tree/lesscode-develop) 分支提 pr。
 
 ## 安装部署
 - [本地开发部署](./docs/install/dev_install.md)
