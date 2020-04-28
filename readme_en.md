@@ -19,6 +19,8 @@ The BlueKing PaaS Community Edition contains:
     - appengine: Application Engine
 - PaaSAgent（paas-ce/paasagent）: Application Engine Agent（golang [[labstack/echo](https://github.com/labstack/echo)]）
 
+- LessCode（paas-ce/lesscode）: Visual development platform, provides front-end page online visual drag-and-drop assembly, configuration editing, source code generation, secondary development and other capabilities，[document](https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md)
+
 ## Overview
 
 - [Architecture(In Chinese)](docs/overview/architecture.md)
@@ -34,6 +36,7 @@ free-operation of SaaS applications
 - API Gateway: support docking the system API via online self-service access or component code access
 - Multi-environment support: allowing developers to test and release SaaS application in different environment
 - BlueKing S-mart application support: deploy S-mart application via file upload [more S-mart Application](http://bk.tencent.com/s-mart)
+- Visual development platform：Provide front-end page online visual drag-and-drop assembly, configuration editing, source code generation, secondary development and other capabilities，[document](https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md)
 
 ## Experience
 
