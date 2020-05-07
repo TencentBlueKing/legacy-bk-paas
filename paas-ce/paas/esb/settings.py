@@ -110,8 +110,10 @@ USE_I18N = True
 USE_L10N = True
 
 # timezone
+#If USE_TZ is True, this will be an aware datetime representing the current time in UTC. 
+#it will not depend on the timezone of the server the app is running from.
 TIME_ZONE = 'Asia/Shanghai'
-USE_TZ = True
+USE_TZ = False
 
 
 # language
