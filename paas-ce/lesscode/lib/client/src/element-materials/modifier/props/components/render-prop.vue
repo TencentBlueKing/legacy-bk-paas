@@ -13,10 +13,11 @@
     <div class="modifier-prop">
         <template v-if="formCom.length < 2">
             <div class="prop-name" :class="classes">
-                {{ name }}（{{ formCom[0].typeName }}）
-                <i class="bk-icon icon-info-circle" v-if="name !== 'slots'"
-                    v-bk-tooltips="{ content: '该属性的用法提示' }"
-                ></i>
+                {{ name }}（{{ formCom[0].typeName | propTypeFormat }}）
+                <i
+                    v-if="name !== 'slots'"
+                    class="bk-icon icon-info-circle"
+                    v-bk-tooltips="{ content: '该属性的用法提示' }" />
             </div>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in formCom">
@@ -34,12 +35,18 @@
         <template v-else>
             <div class="prop-name" :class="classes">
                 {{ name }}
-                <i class="bk-icon icon-info-circle" v-if="name !== 'slots'"
-                    v-bk-tooltips="{ content: '该属性的用法提示' }"
-                ></i>
+                <i
+                    v-if="name !== 'slots'"
+                    class="bk-icon icon-info-circle"
+                    v-bk-tooltips="{ content: '该属性的用法提示' }" />
             </div>
             <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;">
-                <bk-radio-button v-for="item in formCom" :key="item.typeName" :value="item.typeName">{{ item.typeName }}</bk-radio-button>
+                <bk-radio-button
+                    v-for="item in formCom"
+                    :key="item.typeName"
+                    :value="item.typeName">
+                    {{ item.typeName | propTypeFormat }}
+                </bk-radio-button>
             </bk-radio-group>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in formCom">
@@ -86,6 +93,11 @@
 
     export default {
         name: 'render-prop-modifier',
+        filters: {
+            propTypeFormat (propType) {
+                return `${propType.substring(0, 1).toUpperCase()}${propType.substring(1).toLowerCase()}`
+            }
+        },
         props: {
             name: {
                 type: String,
@@ -234,9 +246,10 @@
                 background: #ccc;
             }
             .icon-info-circle {
-                margin-left: 4px;
+                padding: 4px;
                 color: #979BA5;
                 font-size: 16px;
+                cursor: pointer;
             }
         }
         .prop-action {
