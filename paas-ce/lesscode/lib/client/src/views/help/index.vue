@@ -16,7 +16,7 @@
                 <div class="main-top">
                     <div class="page-title">
                         <div class="page-name">
-                            可视化布局帮助文档
+                            可视化开发帮助文档
                         </div>
                     </div>
                 </div>

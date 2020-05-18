@@ -43,7 +43,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="javascript: void(0);">可视化布局</a>
+                        <a href="javascript: void(0);">可视化开发</a>
                         <div class="mg-sub-nav">
                             <ol>
                                 <dt>PC端</dt>
