@@ -123,6 +123,7 @@
         methods: {
             // 初始化底部工具（反馈、回到头部）
             initFootTools () {
+                console.log(1)
                 const topBtn = document.getElementById('mg-top')
                 this.isTop = true
                 // 滚动条滚动时触发
