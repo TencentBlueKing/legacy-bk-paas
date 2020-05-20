@@ -24,16 +24,20 @@ export default {
     props: {
         title: {
             type: 'string',
-            val: 'hello world'
+            val: 'hello world',
+            tips: '原生 html title 属性'
         },
         size: {
             type: 'string',
+            val: 'normal',
             options: ['small', 'normal', 'large'],
-            val: 'normal'
+            tips: '按钮尺寸'
         },
         theme: {
             type: 'string',
-            options: ['default', 'primary', 'success', 'warning', 'danger']
+            val: 'default',
+            options: ['default', 'primary', 'success', 'warning', 'danger'],
+            tips: '按钮类型、主题'
         },
         disabled: {
             type: 'boolean',

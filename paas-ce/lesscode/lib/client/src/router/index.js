@@ -26,7 +26,6 @@ const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/404')
 const MainHelpEntry = () => import(/* webpackChunkName: 'index' */'@/views/help')
 const AnimateNumber = () => import(/* webpackChunkName: 'animate-number' */'@/views/help/docs/animate-number.md')
 const Badge = () => import(/* webpackChunkName: 'badge' */'@/views/help/docs/badge.md')
-const Button = () => import(/* webpackChunkName: 'button' */'@/views/help/docs/button.md')
 const CheckboxGroup = () => import(/* webpackChunkName: 'checkbox-group' */'@/views/help/docs/checkbox-group.md')
 const Custom = () => import(/* webpackChunkName: 'custom' */'@/views/help/docs/custom.md')
 const DatePicker = () => import(/* webpackChunkName: 'date-picker' */'@/views/help/docs/date-picker.md')
@@ -83,7 +82,6 @@ const routes = [
         children: [
             { path: 'animate-number', name: 'animateNumber', component: AnimateNumber },
             { path: 'badge', name: 'badge', component: Badge },
-            { path: 'button', name: 'button', component: Button },
             { path: 'checkbox-group', name: 'checkboxGroup', component: CheckboxGroup },
             { path: 'custom', name: 'custom', component: Custom },
             { path: 'date-picker', name: 'datePicker', component: DatePicker },
