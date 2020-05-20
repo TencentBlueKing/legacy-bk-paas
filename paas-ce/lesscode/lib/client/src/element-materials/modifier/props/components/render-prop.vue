@@ -14,10 +14,7 @@
         <template v-if="formCom.length < 2">
             <div class="prop-name" :class="classes">
                 {{ name }}（{{ formCom[0].typeName | propTypeFormat }}）
-                <i
-                    v-if="name !== 'slots'"
-                    class="bk-icon icon-info-circle"
-                    v-bk-tooltips="{ content: '该属性的用法提示' }" />
+                <i v-if="name !== 'slots' && describe.tips" class="bk-icon icon-info-circle" v-bk-tooltips="describe.tips" />
             </div>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in formCom">
@@ -35,10 +32,7 @@
         <template v-else>
             <div class="prop-name" :class="classes">
                 {{ name }}
-                <i
-                    v-if="name !== 'slots'"
-                    class="bk-icon icon-info-circle"
-                    v-bk-tooltips="{ content: '该属性的用法提示' }" />
+                <i v-if="name !== 'slots' && describe.tips" class="bk-icon icon-info-circle" v-bk-tooltips="describe.tips" />
             </div>
             <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;">
                 <bk-radio-button
