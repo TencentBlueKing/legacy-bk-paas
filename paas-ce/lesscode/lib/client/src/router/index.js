@@ -50,7 +50,6 @@ const Switcher = () => import(/* webpackChunkName: 'switcher' */'@/views/help/do
 const Tab = () => import(/* webpackChunkName: 'tab' */'@/views/help/docs/tab.md')
 const Table = () => import(/* webpackChunkName: 'table' */'@/views/help/docs/table.md')
 const TagInput = () => import(/* webpackChunkName: 'tag-input' */'@/views/help/docs/tag-input.md')
-const Text = () => import(/* webpackChunkName: 'text' */'@/views/help/docs/text.md')
 const TimePicker = () => import(/* webpackChunkName: 'time-picker' */'@/views/help/docs/time-picker.md')
 const Timeline = () => import(/* webpackChunkName: 'timeline' */'@/views/help/docs/timeline.md')
 const Transfer = () => import(/* webpackChunkName: 'transfer' */'@/views/help/docs/transfer.md')
@@ -106,7 +105,6 @@ const routes = [
             { path: 'tab', name: 'tab', component: Tab },
             { path: 'table', name: 'table', component: Table },
             { path: 'tag-input', name: 'tagInput', component: TagInput },
-            { path: 'text', name: 'text', component: Text },
             { path: 'time-picker', name: 'timePicker', component: TimePicker },
             { path: 'timeline', name: 'timeline', component: Timeline },
             { path: 'transfer', name: 'transfer', component: Transfer },
