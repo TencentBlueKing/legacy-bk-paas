@@ -32,7 +32,6 @@ const DatePicker = () => import(/* webpackChunkName: 'date-picker' */'@/views/he
 const Diff = () => import(/* webpackChunkName: 'diff' */'@/views/help/docs/diff.md')
 const Exception = () => import(/* webpackChunkName: 'exception' */'@/views/help/docs/exception.md')
 const Grid = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/grid.md')
-const Input = () => import(/* webpackChunkName: 'input' */'@/views/help/docs/input.md')
 const Intro = () => import(/* webpackChunkName: 'intro' */'@/views/help/docs/intro.md')
 const Pagination = () => import(/* webpackChunkName: 'pagination' */'@/views/help/docs/pagination.md')
 const Progress = () => import(/* webpackChunkName: 'progress' */'@/views/help/docs/progress.md')
@@ -86,7 +85,6 @@ const routes = [
             { path: 'diff', name: 'diff', component: Diff },
             { path: 'exception', name: 'exception', component: Exception },
             { path: 'grid', name: 'grid', component: Grid },
-            { path: 'input', name: 'input', component: Input },
             { path: 'intro', name: 'intro', component: Intro, alias: '' },
             { path: 'pagination', name: 'pagination', component: Pagination },
             { path: 'progress', name: 'progress', component: Progress },
