@@ -23,11 +23,13 @@ export default {
     props: {
         type: {
             type: 'string',
-            val: '404'
+            val: '404',
+            options: ['403', '404', '500', 'building'],
+            tips: '异常类型'
         },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

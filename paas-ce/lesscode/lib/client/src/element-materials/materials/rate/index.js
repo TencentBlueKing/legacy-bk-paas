@@ -16,27 +16,33 @@ export default {
     icon: 'bk-drag-rate',
     group: '表单',
     order: 1,
-    events: ['score'],
+    events: [{
+        name: 'score', tips: '评分的时候触发该回调事件，回调参数为选中的分数'
+    }],
     styles: ['margin', 'display'],
     props: {
         rate: {
             type: 'number',
-            val: 0
+            val: 0,
+            tips: '显示的分数'
         },
         width: {
             type: 'number',
-            val: 15
+            val: 15,
+            tips: '星星的宽度'
         },
         height: {
             type: 'number',
-            val: 16
+            val: 16,
+            tips: '星星的高度'
         },
         edit: {
             type: 'boolean',
             val: true
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

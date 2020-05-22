@@ -16,7 +16,9 @@ export default {
     icon: 'bk-drag-radio',
     group: '表单',
     order: 1,
-    events: ['change'],
+    events: [{
+        name: 'change', tips: '单选组选中的值改变时触发此回调函数，回调参数为当前单选组选中值'
+    }],
     styles: ['margin'],
     props: {
         slots: {

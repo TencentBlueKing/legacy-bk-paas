@@ -27,10 +27,12 @@ export default {
         },
         digits: {
             type: 'number',
-            val: 2
+            val: 2,
+            tips: '数字的位数'
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

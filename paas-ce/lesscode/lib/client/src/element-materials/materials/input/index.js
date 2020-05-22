@@ -9,6 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { formatLink } from '@/common/util'
+
 export default {
     name: 'input',
     type: 'bk-input',
@@ -95,20 +97,17 @@ export default {
         'left-icon': {
             type: 'string',
             tips: {
-                html: `左边显示的 icon，<a style="color: #72A7FF; text-decoration: underline;" target="_blank"
-                    href="https://magicbox.bk.tencent.com/components_vue/2.0/example/index.html#/icon">查看支持的 icon</a>`
+                html: '左边显示的 icon，' + formatLink({ content: '查看支持的 icon' })
             }
         },
         'right-icon': {
             type: 'string',
             tips: {
-                html: `右边显示的 icon，<a style="color: #72A7FF; text-decoration: underline;" target="_blank"
-                    href="https://magicbox.bk.tencent.com/components_vue/2.0/example/index.html#/icon">查看支持的 icon</a>`
+                html: '右边显示的 icon，' + formatLink({ content: '查看支持的 icon' })
             }
         },
         precision: {
-            // todo type number
-            type: 'string',
+            type: 'number',
             options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
             tips: '保留小数位'
         },

@@ -14,7 +14,7 @@
         <ul v-if="eventKeys.length">
             <li v-for="event in eventKeys" :key="event.name" class="event-item">
                 <h3 class="event-title">
-                    {{ event.name }}<i v-if="event.tips" class="bk-icon icon-info-circle" v-bk-tooltips="event.tips" />
+                    {{ event.name }}<i v-if="event.tips" class="bk-icon icon-info-circle" v-bk-tooltips="transformTipsWidth(event.tips)" />
                 </h3>
                 <bk-select class="event-choose" ref="eventChooseComp" :value="eventValues[event.name]" @clear="choose({ id: '' }, event.name)">
                     <bk-option-group
@@ -45,6 +45,7 @@
 <script>
     import { mapGetters, mapMutations } from 'vuex'
     import methods from '@/components/methods'
+    import { transformTipsWidth } from '@/common/util'
 
     export default {
         name: 'modifier-events',
@@ -70,7 +71,8 @@
             return {
                 showMethod: false,
                 eventKeys: [],
-                eventValues: []
+                eventValues: [],
+                transformTipsWidth
             }
         },
         computed: {
