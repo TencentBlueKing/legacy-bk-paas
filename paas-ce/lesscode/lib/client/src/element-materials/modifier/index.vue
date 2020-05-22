@@ -11,12 +11,20 @@
 
 <template>
     <div class="material-modifier">
-        <bk-tab :active.sync="tabPanelActive" :type="currentTabPanelType" ext-cls="king-tab">
+        <bk-tab :active.sync="tabPanelActive" :type="currentTabPanelType" ext-cls="king-tab" @tab-change="handleModifier">
             <bk-tab-panel
                 v-for="(tabPanel, panelIndex) in tabPanels"
                 v-bind="tabPanel"
                 :key="panelIndex">
-                <div class="material-modifier-container">
+                <div :class="['material-modifier-container', { pt20: showAttrLink }]">
+                    <a
+                        class="bk-link is-primary material-modifier-link"
+                        v-if="showAttrLink"
+                        @click="handleViewDetail">
+                        <i class="bk-link-icon is-left bk-drag-icon bk-drag-jump-link"></i>
+                        <span class="bk-link-text">查看属性详情</span>
+                    </a>
+
                     <component
                         :is="modifierCom"
                         :material-config="materialComConfig"
@@ -128,12 +136,15 @@
                 //     return this.tabPanelActive === 'props' ? {} : []
                 // }
                 return this.material[this.tabPanelActive]
+            },
+            showAttrLink () {
+                return this.curSelectedComponentData.tabPanelActive && this.curSelectedComponentData.tabPanelActive === 'props'
             }
         },
         watch: {
             curSelectedComponentData (componentData) {
                 // 默认展示props设置tab
-                this.tabPanelActive = 'props'
+                this.tabPanelActive = componentData.tabPanelActive
                 // 选中某个组件，获取获取该组件的renderStyles，renderProps，renderEvents作为本次操作的默认值
                 const { renderStyles = {}, renderProps = {}, renderEvents = {} } = componentData
                 this.modifier = {
@@ -157,12 +168,16 @@
                     ...payload
                 })
 
+                modifier.tabPanelActive = this.tabPanelActive
                 this.modifier = modifier
                 console.log('from modifier', modifier)
                 bus.$emit('on-update-props', {
                     componentId: this.curSelectedComponentData.componentId,
                     modifier
                 })
+            },
+            handleViewDetail () {
+                window.open(`${window.location.origin}/help/${this.curSelectedComponentData.name}?anchor=`) // anchor值待确定
             }
         }
     }
@@ -199,10 +214,18 @@
             }
             .material-modifier-container {
                 @mixin scroller;
-                height: calc(100vh - 167px - 93px);
+                height: calc(100vh - 167px - 48px);
                 padding-bottom: 20px;
                 overflow-y: auto;
                 position: relative;
+                .material-modifier-link {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    .bk-link-icon, .bk-link-text {
+                        font-size: 12px;
+                    }
+                }
                 .empty {
                     position: absolute;
                     top: 50%;

@@ -171,9 +171,10 @@
              */
             updatePropsHandler (data) {
                 if (data.componentId === this.renderData.componentId) {
-                    const { renderStyles = {}, renderProps = {} } = data.modifier
+                    const { renderStyles = {}, renderProps = {}, tabPanelActive = 'props' } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
+                    this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
                 }
             },

@@ -153,7 +153,7 @@
                 <div class="selected-component-info" v-if="curSelectedComponentData.componentId && !collapseSide.right">
                     <div class="component-id">{{curSelectedComponentData.componentId}}</div>
                     <div class="action-wrapper">
-                        <bk-button title="primary" @click="showDeleteElement" id="del-component-right-sidebar">删除</bk-button>
+                        <bk-button title="primary" size="small" @click="showDeleteElement" id="del-component-right-sidebar">删除</bk-button>
                     </div>
                 </div>
                 <material-modifier />
@@ -297,6 +297,7 @@
                 componentId: 'grid-' + uuid(),
                 name: 'grid',
                 type: 'render-grid',
+                tabPanelActive: 'props',
                 renderProps: {
                     'margin-horizontal': {
                         type: 'number',
@@ -440,6 +441,7 @@
 
                 this.curDragingComponent = {
                     componentId: id,
+                    tabPanelActive: 'props', // 默认tab选中的面板
                     name,
                     type,
                     renderProps: renderProps,
@@ -545,6 +547,7 @@
                             componentId: 'grid-' + uuid(),
                             'name': 'grid',
                             'type': 'render-grid',
+                            'tabPanelActive': 'props',
                             'renderProps': {
                                 'margin-horizontal': {
                                     'type': 'number',

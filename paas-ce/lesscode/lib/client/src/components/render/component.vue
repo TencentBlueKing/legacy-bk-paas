@@ -194,10 +194,11 @@
             updatePropsHandler (data) {
                 if (data.componentId === this.renderData.componentId) {
                     // debugger
-                    const { renderStyles = {}, renderProps = {}, renderEvents = {} } = data.modifier
+                    const { renderStyles = {}, renderProps = {}, renderEvents = {}, tabPanelActive = 'props' } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
                     this.renderData.renderEvents = renderEvents
+                    this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
 
                     // 把组件的 display 样式更改同步到 .component-wrapper 元素上

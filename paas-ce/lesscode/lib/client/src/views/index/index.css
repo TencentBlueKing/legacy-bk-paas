@@ -95,11 +95,12 @@ $headerHeight: 64px;
             background: #FFF;
 
             .selected-component-info {
+                display: flex;
                 border-bottom: 1px solid #dcdee5;
-                text-align: center;
-                padding: 15px 0;
-                .action-wrapper {
-                    margin-top: 10px;
+                padding: 10px 26px;
+                .component-id {
+                    flex: 1;
+                    line-height: 26px;
                 }
             }
 
@@ -405,6 +406,7 @@ $headerHeight: 64px;
                     }
 
                     &:hover {
+                        border: 1px solid #3A84FF;
                         background: #3A84FF;
                         color: #FFF;
                     }

@@ -20,9 +20,7 @@
                     <bk-input :value="item.label" @change="val => handleChange(val, 'label', index)" />
                 </div>
                 <div class="option-item">
-                    <div class="label">prop
-                        <i class="bk-icon icon-info-circle" v-bk-tooltips="{ content: '该属性的用法提示' }"></i>
-                    </div>
+                    <div class="label" v-bk-tooltips="{ content: '该属性的用法提示' }">prop</div>
                     <bk-input :value="item.prop" @change="val => handleChange(val, 'prop', index)" />
                 </div>
                 <div class="option-item">
