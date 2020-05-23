@@ -23,26 +23,32 @@ export default {
     props: {
         percent: {
             type: 'number',
-            val: 0.3
+            val: 0.3,
+            tips: '显示目前进度，可选值 0 < percent < 1'
         },
-        radius: {
+        width: {
             type: 'string',
-            val: '100px'
+            val: '100px',
+            tips: '圆环的大小'
         },
         'num-show': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否显示目前百分数值'
         },
         'num-style': {
             type: 'object',
-            val: { fontSize: '16px' }
+            val: { fontSize: '16px' },
+            tips: '设置显示百分数的 css 样式'
         },
         title: {
-            type: 'string'
+            type: 'string',
+            tips: '标题名，默认不显示'
         },
         'title-style': {
             type: 'object',
-            val: { fontSize: '16px' }
+            val: { fontSize: '16px' },
+            tips: '设置 title 的 css 样式'
         },
         config: {
             type: 'object',
@@ -50,10 +56,12 @@ export default {
                 strokeWidth: 10,
                 bgColor: '#f0f1f5',
                 activeColor: '#2dcb56'
-            }
+            },
+            tips: '设置进度圆环的颜色 bgColor、宽度 strokeWidth、背景色 bgColor'
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

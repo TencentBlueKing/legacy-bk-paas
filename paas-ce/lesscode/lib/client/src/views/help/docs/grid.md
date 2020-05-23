@@ -1,61 +1,13 @@
 ## 栅格布局
 
-基础文字基础文字基础文字基础文字基础文字
+可视化开发采用栅格布局，组件栏有单格、两格、三格、四格组件可快速拖动生成页面布局。
 
-### 单格
+<img src="../../../images/help/grid1.png" alt="grid" width="340">
 
-基础文字基础文字基础文字基础文字基础文字。`行内代码`
+每个栅格组件都可以增加列数，最多 12 列。我们建议在拖拽布局时采用 12 等分或 24 等分的原则进行规划。
 
-[链接](/help/intro)
+<img src="../../../images/help/grid2.png" alt="grid" width="800">
 
-### 多格
+你也可以通过修改尺寸、外边距等样式来实现更加灵活的布局。
 
-块级代码
-
-```js
-import Vue from 'vue'
-import App from './App'
-import router from './router'
-
-// 全量引入 bk-magic-vue
-import bkMagic from '{{BASE_LIB_NAME}}'
-// 全量引入 bk-magic-vue 样式
-import '{{BASE_LIB_NAME}}/dist/bk-magic-vue.min.css'
-
-Vue.use(bkMagic)
-
-new Vue({
-    el: '#root',
-    router,
-    template: '<App />',
-    components: {App}
-})
-```
-
-### 三级标题3
-
-:::info
-info提示info提示info提示info提示info提示
-
-info提示
-:::
-
-:::tip
-tip提示tip提示tip提示tip提示tip提示
-
-tip提示
-:::
-
-:::warning
-warning提示warning提示warning提示warning提示warning提示
-
-warning提示
-:::
-
-:::danger
-danger提示danger提示danger提示danger提示danger提示
-
-danger提示
-:::
-
-
+<img src="../../../images/help/grid3.png" alt="grid" width="1000">

@@ -29,18 +29,6 @@
                             <div class="nav-content" :class="$route.name === 'grid' ? 'nav-active' : ''" @click="jump('grid')">栅格布局</div>
                             <div class="nav-content" :class="$route.name === 'custom' ? 'nav-active' : ''" @click="jump('custom')">自定义组件</div>
                         </div>
-                        <template v-for="(group, groupIndex) in componentGroupList">
-                            <div class="nav-item" :key="groupIndex">
-                                <div class="nav-title">{{group}}</div>
-                                <template v-for="(component, componentIndex) in componentGroups[group]">
-                                    <div class="nav-content" :class="$route.name === camelCase(component.name) ? 'nav-active' : ''"
-                                        :key="componentIndex" @click="jump(camelCase(component.name))">
-                                        <i class="bk-drag-icon" :class="component.icon"></i>
-                                        <span class="name">{{component.displayName}}</span>
-                                    </div>
-                                </template>
-                            </div>
-                        </template>
                     </div>
                 </div>
             </aside>
@@ -52,8 +40,6 @@
 </template>
 
 <script>
-    import { camelCase } from 'change-case'
-    import componentList from '@/element-materials/materials'
     import { getActualTop } from '@/common/util'
 
     import customComponents from '@/custom'
@@ -62,45 +48,10 @@
         components: {
             ...customComponents
         },
-        data () {
-            const componentGroupList = ['基础', '表单', '导航', '数据', '反馈']
-
-            return {
-                componentList,
-                componentGroupList,
-                componentSearchResult: null,
-                camelCase: camelCase
-            }
-        },
-        computed: {
-            componentGroups () {
-                const componentGroups = {}
-
-                // 分组
-                componentList.forEach(component => {
-                    const groupName = component.group
-                    const componentGroup = componentGroups[groupName]
-                    if (componentGroup) {
-                        componentGroup.push(component)
-                    } else {
-                        componentGroups[groupName] = [component]
-                    }
-                })
-
-                // 组内排序
-                Object.values(componentGroups).forEach(list => {
-                    list.sort((a, b) => a.order - b.order)
-                })
-
-                return componentGroups
-            }
-        },
         watch: {
             '$route' (to, from) {
                 this.adjustAnchor()
             }
-        },
-        created () {
         },
         mounted () {
             this.adjustAnchor()

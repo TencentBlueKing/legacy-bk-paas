@@ -16,7 +16,17 @@ export default {
     icon: 'bk-drag-tag',
     group: '表单',
     order: 1,
-    events: ['change', 'select', 'remove', 'removeAll'],
+    events: [{
+        name: 'change', tips: '数据发生变化时回调函数，回调参数（tags）'
+    }, {
+        name: 'select', tips: '选择数据后的回调函数，回调参数'
+    }, {
+        name: 'remove', tips: '删除数据后的回调函数，回调参数'
+    }, {
+        name: 'removeAll', tips: '一键清空数据后的回调函数，回调参数'
+    }, {
+        name: 'blur', tips: '输入状态时失焦点的回调函数，回调参数（input, tags）'
+    }],
     styles: ['size', 'margin', 'display'],
     props: {
         list: {
@@ -34,11 +44,12 @@ export default {
                 { id: 'chognqing', name: '重庆' },
                 { id: 'taibei', name: '台北' },
                 { id: 'haikou', name: '海口' }
-            ]
+            ],
+            tips: '下拉菜单所需的数据列表'
         },
         placeholder: {
             type: 'string',
-            val: ''
+            tips: '空白提示'
         },
         disabled: {
             type: 'boolean',
@@ -46,55 +57,71 @@ export default {
         },
         'save-key': {
             type: 'string',
-            val: ''
+            val: 'id',
+            tips: '循环 list 时，保存字段的 key 值'
         },
         'search-key': {
             type: 'string',
-            val: ''
+            val: 'name',
+            tips: '输入时，搜索的 key 值'
         },
         'display-key': {
             type: 'string',
-            val: ''
+            val: 'name',
+            tips: '循环 list 时，显示字段的 key 值'
         },
         'has-delete-icon': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否显示删除按钮'
+        },
+        clearable: {
+            type: 'boolean',
+            val: true,
+            tips: '是否允许清空'
         },
         'allow-create': {
             type: 'boolean',
-            val: true
+            val: false,
+            tips: '是否允许自定义标签输入'
         },
         'max-data': {
             type: 'number',
-            val: -1
+            val: -1,
+            tips: '是否限制可选个数，-1为不限制'
         },
         'use-group': {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否显示分组'
         },
         'max-result': {
             type: 'number',
-            val: 10
+            val: 10,
+            tips: '下拉列表搜索结果显示个数，默认为 10'
         },
         'content-width': {
             type: 'number',
-            val: 190
+            val: 190,
+            tips: '自定义设置下拉弹框的宽度，单选会撑满因此失效'
         },
         'content-max-width': {
             type: 'number',
-            val: 300
+            val: 300,
+            tips: '自定义设置下拉弹框的长度'
         },
         separator: {
             type: 'string',
-            val: ''
+            tips: '输入分隔符号，支持批量输入'
         },
         'left-space': {
             type: 'number',
-            val: 0
+            val: 0,
+            tips: '文字与左边框距离'
         },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

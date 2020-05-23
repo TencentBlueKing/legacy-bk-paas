@@ -16,13 +16,25 @@ export default {
     icon: 'bk-drag-switcher',
     group: '表单',
     order: 1,
-    events: ['change'],
+    events: [{
+        name: 'change', tips: '状态发生变化时回调函数，回调参数为新的状态值（Boolean）'
+    }],
     styles: ['margin', 'display', 'backgroundColor'],
     defaultStyles: {
         display: 'inline-block'
     },
     props: {
-        selected: {
+        theme: {
+            type: 'string',
+            options: ['primary', 'success'],
+            val: 'success'
+        },
+        size: {
+            type: 'string',
+            options: ['', 'large', 'small'],
+            tips: '尺寸，显示文本时此属性无效'
+        },
+        value: {
             type: 'boolean',
             val: false
         },
@@ -32,31 +44,32 @@ export default {
         },
         'is-outline': {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否为描边效果'
         },
         'is-square': {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否为方形效果'
         },
         'show-text': {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否显示文本'
         },
         'on-text': {
             type: 'string',
-            val: 'ON'
+            val: 'ON',
+            tips: '打开状态显示的文本'
         },
         'off-text': {
             type: 'string',
-            val: 'OFF'
-        },
-        theme: {
-            type: 'string',
-            options: ['primary', 'success'],
-            val: 'success'
+            val: 'OFF',
+            tips: '关闭状态显示文本'
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

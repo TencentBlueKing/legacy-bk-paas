@@ -16,47 +16,66 @@ export default {
     icon: 'bk-drag-upload',
     group: '表单',
     order: 1,
-    events: ['on-done', 'on-progress', 'on-success', 'on-error'],
+    events: [{
+        name: 'on-done', tips: '所有文件上传完毕后的事件，回调参数（fileList）'
+    }, {
+        name: 'on-progress', tips: '文件上传进行时的事件，回调参数（e, file，fileList）'
+    }, {
+        name: 'on-success', tips: '文件上传成功后的事件，回调参数（file，fileList）'
+    }, {
+        name: 'on-error', tips: '文件上传失败后的事件，回调参数（file，fileList）'
+    }],
     styles: ['size', 'margin'],
     props: {
         accept: {
             type: 'string',
-            val: '*'
+            val: '*',
+            tips: '可选的文件类型，参考 input 元素的 accept 属性'
         },
         url: {
             type: 'string',
-            val: 'https://jsonplaceholder.typicode.com/posts/'
+            val: 'https://jsonplaceholder.typicode.com/posts/',
+            tips: '服务器地址'
         },
         // array object
         header: {
-            type: 'string'
+            type: ['array', 'object'],
+            val: [],
+            tips: '请求头 { name: " ", value: " " }'
         },
         name: {
             type: 'string',
-            val: 'upload_file'
+            val: 'upload_file',
+            tips: '后台读取文件的 key'
         },
         // Number, Object 限制上传文件体积 { maxFileSize: 1, maxImgSize: 1 }
         size: {
-            type: 'number',
-            val: 5
+            type: ['number', 'object'],
+            val: 5,
+            tips: '限制上传文件体积 { maxFileSize: 1, maxImgSize: 1 }'
         },
         tip: {
-            type: 'string'
+            type: 'string',
+            tips: '提示信息'
         },
         'delay-time': {
             type: 'number',
-            val: 0
+            val: 0,
+            tips: '上传完毕后列表消失时间'
         },
         multiple: {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否支持多选'
         },
         'with-credentials': {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否允许带上 cookie'
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

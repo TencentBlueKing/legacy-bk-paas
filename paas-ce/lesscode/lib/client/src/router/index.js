@@ -24,40 +24,10 @@ const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/404')
 
 const MainHelpEntry = () => import(/* webpackChunkName: 'index' */'@/views/help')
-const AnimateNumber = () => import(/* webpackChunkName: 'animate-number' */'@/views/help/docs/animate-number.md')
-const Badge = () => import(/* webpackChunkName: 'badge' */'@/views/help/docs/badge.md')
-const Button = () => import(/* webpackChunkName: 'button' */'@/views/help/docs/button.md')
-const CheckboxGroup = () => import(/* webpackChunkName: 'checkbox-group' */'@/views/help/docs/checkbox-group.md')
 const Custom = () => import(/* webpackChunkName: 'custom' */'@/views/help/docs/custom.md')
-const DatePicker = () => import(/* webpackChunkName: 'date-picker' */'@/views/help/docs/date-picker.md')
-const Diff = () => import(/* webpackChunkName: 'diff' */'@/views/help/docs/diff.md')
-const Exception = () => import(/* webpackChunkName: 'exception' */'@/views/help/docs/exception.md')
 const Grid = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/grid.md')
-const Image = () => import(/* webpackChunkName: 'image' */'@/views/help/docs/image.md')
-const Input = () => import(/* webpackChunkName: 'input' */'@/views/help/docs/input.md')
 const Intro = () => import(/* webpackChunkName: 'intro' */'@/views/help/docs/intro.md')
-const Pagination = () => import(/* webpackChunkName: 'pagination' */'@/views/help/docs/pagination.md')
-const Progress = () => import(/* webpackChunkName: 'progress' */'@/views/help/docs/progress.md')
-const RadioGroup = () => import(/* webpackChunkName: 'radio-group' */'@/views/help/docs/radio-group.md')
-const Rate = () => import(/* webpackChunkName: 'rate' */'@/views/help/docs/rate.md')
-const RoundProgress = () => import(/* webpackChunkName: 'round-progress' */'@/views/help/docs/round-progress.md')
-const SearchSelect = () => import(/* webpackChunkName: 'search-select' */'@/views/help/docs/search-select.md')
-const Select = () => import(/* webpackChunkName: 'select' */'@/views/help/docs/select.md')
-const Slider = () => import(/* webpackChunkName: 'slider' */'@/views/help/docs/slider.md')
 const Start = () => import(/* webpackChunkName: 'start' */'@/views/help/docs/start.md')
-const Steps = () => import(/* webpackChunkName: 'steps' */'@/views/help/docs/steps.md')
-const Swiper = () => import(/* webpackChunkName: 'swiper' */'@/views/help/docs/swiper.md')
-const Switcher = () => import(/* webpackChunkName: 'switcher' */'@/views/help/docs/switcher.md')
-const Tab = () => import(/* webpackChunkName: 'tab' */'@/views/help/docs/tab.md')
-const Table = () => import(/* webpackChunkName: 'table' */'@/views/help/docs/table.md')
-const TagInput = () => import(/* webpackChunkName: 'tag-input' */'@/views/help/docs/tag-input.md')
-const Text = () => import(/* webpackChunkName: 'text' */'@/views/help/docs/text.md')
-const TimePicker = () => import(/* webpackChunkName: 'time-picker' */'@/views/help/docs/time-picker.md')
-const Timeline = () => import(/* webpackChunkName: 'timeline' */'@/views/help/docs/timeline.md')
-const Transfer = () => import(/* webpackChunkName: 'transfer' */'@/views/help/docs/transfer.md')
-const Tree = () => import(/* webpackChunkName: 'tree' */'@/views/help/docs/tree.md')
-const Upload = () => import(/* webpackChunkName: 'upload' */'@/views/help/docs/upload.md')
-const ZoomImage = () => import(/* webpackChunkName: 'zoom-image' */'@/views/help/docs/zoom-image.md')
 
 const routes = [
     {
@@ -81,40 +51,10 @@ const routes = [
         path: '/help',
         component: MainHelpEntry,
         children: [
-            { path: 'animate-number', name: 'animateNumber', component: AnimateNumber },
-            { path: 'badge', name: 'badge', component: Badge },
-            { path: 'button', name: 'button', component: Button },
-            { path: 'checkbox-group', name: 'checkboxGroup', component: CheckboxGroup },
             { path: 'custom', name: 'custom', component: Custom },
-            { path: 'date-picker', name: 'datePicker', component: DatePicker },
-            { path: 'diff', name: 'diff', component: Diff },
-            { path: 'exception', name: 'exception', component: Exception },
             { path: 'grid', name: 'grid', component: Grid },
-            { path: 'image', name: 'image', component: Image },
-            { path: 'input', name: 'input', component: Input },
             { path: 'intro', name: 'intro', component: Intro, alias: '' },
-            { path: 'pagination', name: 'pagination', component: Pagination },
-            { path: 'progress', name: 'progress', component: Progress },
-            { path: 'radio-group', name: 'radioGroup', component: RadioGroup },
-            { path: 'rate', name: 'rate', component: Rate },
-            { path: 'round-progress', name: 'roundProgress', component: RoundProgress },
-            { path: 'search-select', name: 'searchSelect', component: SearchSelect },
-            { path: 'select', name: 'select', component: Select },
-            { path: 'slider', name: 'slider', component: Slider },
-            { path: 'start', name: 'start', component: Start },
-            { path: 'steps', name: 'steps', component: Steps },
-            { path: 'swiper', name: 'swiper', component: Swiper },
-            { path: 'switcher', name: 'switcher', component: Switcher },
-            { path: 'tab', name: 'tab', component: Tab },
-            { path: 'table', name: 'table', component: Table },
-            { path: 'tag-input', name: 'tagInput', component: TagInput },
-            { path: 'text', name: 'text', component: Text },
-            { path: 'time-picker', name: 'timePicker', component: TimePicker },
-            { path: 'timeline', name: 'timeline', component: Timeline },
-            { path: 'transfer', name: 'transfer', component: Transfer },
-            { path: 'tree', name: 'tree', component: Tree },
-            { path: 'upload', name: 'upload', component: Upload },
-            { path: 'zoom-image', name: 'zoomImage', component: ZoomImage }
+            { path: 'start', name: 'start', component: Start }
         ]
     },
     {

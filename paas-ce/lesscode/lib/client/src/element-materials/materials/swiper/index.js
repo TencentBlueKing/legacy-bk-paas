@@ -21,20 +21,28 @@ export default {
     icon: 'bk-drag-swiper',
     group: '数据',
     order: 1,
-    events: ['index-change'],
+    events: [{
+        name: 'index-change', tips: '图片索引改变时触发该事件，回调参数为当前图片的索引'
+    }],
     styles: ['size', 'margin', 'display'],
     props: {
         'is-loop': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否开启图片轮播'
         },
-        height: {
+        'loop-time': {
             type: 'number',
-            val: 300
+            val: 8000,
+            tips: '轮播间隔'
         },
         width: {
             type: 'number',
             val: 600
+        },
+        height: {
+            type: 'number',
+            val: 300
         },
         pics: {
             type: ['array', 'remote'],
@@ -48,13 +56,9 @@ export default {
                 { url: exmapleSecondImgUrl }
             ]
         },
-        'loop-time': {
-            type: 'number',
-            val: 8000
-        },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }
