@@ -297,6 +297,7 @@
                 componentId: 'grid-' + uuid(),
                 name: 'grid',
                 type: 'render-grid',
+                tabPanelActive: 'props',
                 renderProps: {
                     'margin-horizontal': {
                         type: 'number',
@@ -440,6 +441,7 @@
 
                 this.curDragingComponent = {
                     componentId: id,
+                    tabPanelActive: 'props', // 默认tab选中的面板
                     name,
                     type,
                     renderProps: renderProps,
@@ -543,24 +545,25 @@
                     confirmFn () {
                         const mockCurSelectComponentData = {
                             componentId: 'grid-' + uuid(),
-                            'name': 'grid',
-                            'type': 'render-grid',
-                            'renderProps': {
+                            name: 'grid',
+                            type: 'render-grid',
+                            tabPanelActive: 'props',
+                            renderProps: {
                                 'margin-horizontal': {
-                                    'type': 'number',
-                                    'val': 0
+                                    type: 'number',
+                                    val: 0
                                 },
                                 'margin-vertical': {
-                                    'type': 'number',
-                                    'val': 0
+                                    type: 'number',
+                                    val: 0
                                 },
-                                'slots': {
-                                    'type': 'column',
-                                    'val': [{ 'span': 1, 'children': [], 'width': '100%' }]
+                                slots: {
+                                    type: 'column',
+                                    val: [{ 'span': 1, 'children': [], 'width': '100%' }]
                                 }
                             },
-                            'renderStyles': {},
-                            'renderEvents': {}
+                            renderStyles: {},
+                            renderEvents: {}
                         }
 
                         me.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
