@@ -405,6 +405,7 @@ $headerHeight: 64px;
                     }
 
                     &:hover {
+                        border: 1px solid #3A84FF;
                         background: #3A84FF;
                         color: #FFF;
                     }
