@@ -12,9 +12,8 @@
 <template>
     <div class="modifier-prop">
         <template v-if="formCom.length < 2">
-            <div class="prop-name" :class="classes" v-bk-tooltips="{ disabled: name === 'slots' || !formCom[0].tips, content: formCom[0].tips }">
+            <div class="prop-name" :class="classes" v-bk-tooltips="computedTips">
                 {{ name }}（{{ formCom[0].typeName | propTypeFormat }}）
-                <i v-if="name !== 'slots' && describe.tips" class="bk-icon icon-info-circle" v-bk-tooltips="computedTips" />
             </div>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in formCom">
@@ -30,9 +29,8 @@
             </div>
         </template>
         <template v-else>
-            <div class="prop-name" :class="classes" v-bk-tooltips="{ disabled: name === 'slots' || !formCom[0].tips, content: formCom[0].tips }">
+            <div class="prop-name" :class="classes" v-bk-tooltips="computedTips">
                 {{ name }}
-                <i v-if="name !== 'slots' && describe.tips" class="bk-icon icon-info-circle" v-bk-tooltips="computedTips" />
             </div>
             <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;">
                 <bk-radio-button
@@ -62,7 +60,6 @@
     </div>
 </template>
 <script>
-    import tips from './strategy/attrInstructTips'
     import TypeRemote from './strategy/remote'
     import TypeBoolean from './strategy/boolean'
     import TypeColumn from './strategy/column'
@@ -115,7 +112,12 @@
         },
         computed: {
             computedTips () {
-                return transformTipsWidth(this.describe.tips)
+                const tip = transformTipsWidth(this.describe.tips)
+                const disabled = name === 'slots' || !tip
+                return typeof tip === 'string' ? {
+                    disabled,
+                    content: tip
+                } : Object.assign(tip, { disabled })
             },
             formCom () {
                 const config = this.describe
@@ -162,8 +164,7 @@
                         const renderType = Array.isArray(config.options) ? 'select' : typeMap[propType]
                         res.push({
                             typeName: propType,
-                            typeCom: comMap[renderType],
-                            tips: tips[this.name]
+                            typeCom: comMap[renderType]
                         })
                     }
                     return res

@@ -186,7 +186,7 @@ export function json2Query (param, key) {
     } else {
         Object.keys(param).forEach(p => {
             const value = param[p]
-            const k = (key === null || key === '' || key === undefined)
+            const k = isEmpty(key)
                 ? p
                 : key + (param instanceof Array ? '[' + p + ']' : '.' + p)
             paramStr += separator + json2Query(value, k)
@@ -551,8 +551,9 @@ export function formatLink ({ content = '', href = 'https://magicbox.bk.tencent.
  */
 export function transformTipsWidth (tips, width = 290) {
     const limitStrLength = 22
-
-    if (typeof tips === 'string') {
+    if (isEmpty(tips)) {
+        return ''
+    } else if (typeof tips === 'string') {
         if (tips.length >= limitStrLength) {
             return { width, content: tips }
         }
@@ -561,4 +562,11 @@ export function transformTipsWidth (tips, width = 290) {
     }
 
     return tips
+}
+/**
+ * 非空校验
+ * @param {*} obj
+ */
+export function isEmpty (obj) {
+    return obj === null || obj === '' || obj === undefined
 }
