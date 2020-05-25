@@ -11,7 +11,7 @@
 
 <template>
     <div class="material-modifier">
-        <bk-tab :active.sync="tabPanelActive" :type="currentTabPanelType" ext-cls="king-tab">
+        <bk-tab :active.sync="tabPanelActive" :type="currentTabPanelType" ext-cls="king-tab" @tab-change="handleModifier">
             <bk-tab-panel
                 v-for="(tabPanel, panelIndex) in tabPanels"
                 v-bind="tabPanel"
@@ -133,7 +133,8 @@
         watch: {
             curSelectedComponentData (componentData) {
                 // 默认展示props设置tab
-                this.tabPanelActive = 'props'
+                // this.tabPanelActive = 'props'
+                this.tabPanelActive = componentData.tabPanelActive
                 // 选中某个组件，获取获取该组件的renderStyles，renderProps，renderEvents作为本次操作的默认值
                 const { renderStyles = {}, renderProps = {}, renderEvents = {} } = componentData
                 this.modifier = {
@@ -157,6 +158,7 @@
                     ...payload
                 })
 
+                modifier.tabPanelActive = this.tabPanelActive
                 this.modifier = modifier
                 console.log('from modifier', modifier)
                 bus.$emit('on-update-props', {

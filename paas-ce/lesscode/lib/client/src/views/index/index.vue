@@ -153,7 +153,7 @@
                 <div class="selected-component-info" v-if="curSelectedComponentData.componentId && !collapseSide.right">
                     <div class="component-id">{{curSelectedComponentData.componentId}}</div>
                     <div class="action-wrapper">
-                        <bk-button title="primary" @click="showDeleteElement" id="del-component-right-sidebar">删除</bk-button>
+                        <bk-button title="primary" size="small" @click="showDeleteElement" id="del-component-right-sidebar">删除</bk-button>
                     </div>
                 </div>
                 <material-modifier />
@@ -297,6 +297,7 @@
                 componentId: 'grid-' + uuid(),
                 name: 'grid',
                 type: 'render-grid',
+                tabPanelActive: 'props',
                 renderProps: {
                     'margin-horizontal': {
                         type: 'number',
@@ -440,6 +441,7 @@
 
                 this.curDragingComponent = {
                     componentId: id,
+                    tabPanelActive: 'props', // 默认tab选中的面板
                     name,
                     type,
                     renderProps: renderProps,
@@ -543,24 +545,25 @@
                     confirmFn () {
                         const mockCurSelectComponentData = {
                             componentId: 'grid-' + uuid(),
-                            'name': 'grid',
-                            'type': 'render-grid',
-                            'renderProps': {
+                            name: 'grid',
+                            type: 'render-grid',
+                            tabPanelActive: 'props',
+                            renderProps: {
                                 'margin-horizontal': {
-                                    'type': 'number',
-                                    'val': 0
+                                    type: 'number',
+                                    val: 0
                                 },
                                 'margin-vertical': {
-                                    'type': 'number',
-                                    'val': 0
+                                    type: 'number',
+                                    val: 0
                                 },
-                                'slots': {
-                                    'type': 'column',
-                                    'val': [{ 'span': 1, 'children': [], 'width': '100%' }]
+                                slots: {
+                                    type: 'column',
+                                    val: [{ 'span': 1, 'children': [], 'width': '100%' }]
                                 }
                             },
-                            'renderStyles': {},
-                            'renderEvents': {}
+                            renderStyles: {},
+                            renderEvents: {}
                         }
 
                         me.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
