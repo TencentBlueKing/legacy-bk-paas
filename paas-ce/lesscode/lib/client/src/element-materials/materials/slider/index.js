@@ -36,10 +36,12 @@ export default {
         },
         'show-tip': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: 'hover 时是否显示提示'
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

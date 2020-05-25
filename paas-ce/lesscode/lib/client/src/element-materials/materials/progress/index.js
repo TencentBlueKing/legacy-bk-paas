@@ -16,7 +16,6 @@ export default {
     icon: 'bk-drag-progress',
     group: '数据',
     order: 1,
-    events: ['process-changed'],
     styles: ['size', 'margin'],
     props: {
         theme: {
@@ -26,7 +25,8 @@ export default {
         },
         percent: {
             type: 'number',
-            val: 0.3
+            val: 0.3,
+            tips: '进度百分比'
         },
         size: {
             type: 'string',
@@ -34,28 +34,34 @@ export default {
             val: 'normal'
         },
         'stroke-width': {
-            type: 'number'
-        },
-        color: {
-            type: 'string'
+            type: 'number',
+            tips: '进度条的宽度，单位 px'
         },
         'text-inside': {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '进度条显示文字内置在进度条内'
+        },
+        color: {
+            type: 'string',
+            tips: '进度条背景色'
         },
         'show-text': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否显示进度条文字内容'
         },
         'title-style': {
             type: 'object',
             val: {
                 fontSize: '16px',
                 verticalAlign: 'middle'
-            }
+            },
+            tips: '设置 title 的样式'
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

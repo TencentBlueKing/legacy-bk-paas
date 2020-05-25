@@ -194,6 +194,7 @@
             updatePropsHandler (data) {
                 if (data.componentId === this.renderData.componentId) {
                     // debugger
+                    // const { renderStyles = {}, renderProps = {}, renderEvents = {} } = data.modifier
                     const { renderStyles = {}, renderProps = {}, renderEvents = {}, tabPanelActive = 'props' } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps

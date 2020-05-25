@@ -545,25 +545,25 @@
                     confirmFn () {
                         const mockCurSelectComponentData = {
                             componentId: 'grid-' + uuid(),
-                            'name': 'grid',
-                            'type': 'render-grid',
-                            'tabPanelActive': 'props',
-                            'renderProps': {
+                            name: 'grid',
+                            type: 'render-grid',
+                            tabPanelActive: 'props',
+                            renderProps: {
                                 'margin-horizontal': {
-                                    'type': 'number',
-                                    'val': 0
+                                    type: 'number',
+                                    val: 0
                                 },
                                 'margin-vertical': {
-                                    'type': 'number',
-                                    'val': 0
+                                    type: 'number',
+                                    val: 0
                                 },
-                                'slots': {
-                                    'type': 'column',
-                                    'val': [{ 'span': 1, 'children': [], 'width': '100%' }]
+                                slots: {
+                                    type: 'column',
+                                    val: [{ 'span': 1, 'children': [], 'width': '100%' }]
                                 }
                             },
-                            'renderStyles': {},
-                            'renderEvents': {}
+                            renderStyles: {},
+                            renderEvents: {}
                         }
 
                         me.curDragingComponent = Object.assign({}, mockCurSelectComponentData)

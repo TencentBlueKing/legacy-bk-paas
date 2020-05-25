@@ -14,6 +14,7 @@
         <template v-if="formCom.length < 2">
             <div class="prop-name" :class="classes" v-bk-tooltips="{ disabled: name === 'slots' || !formCom[0].tips, content: formCom[0].tips }">
                 {{ name }}（{{ formCom[0].typeName | propTypeFormat }}）
+                <i v-if="name !== 'slots' && describe.tips" class="bk-icon icon-info-circle" v-bk-tooltips="computedTips" />
             </div>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in formCom">
@@ -31,6 +32,7 @@
         <template v-else>
             <div class="prop-name" :class="classes" v-bk-tooltips="{ disabled: name === 'slots' || !formCom[0].tips, content: formCom[0].tips }">
                 {{ name }}
+                <i v-if="name !== 'slots' && describe.tips" class="bk-icon icon-info-circle" v-bk-tooltips="computedTips" />
             </div>
             <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;">
                 <bk-radio-button
@@ -75,6 +77,7 @@
     import TypeTableColumn from './strategy/table-column'
     import TypeOption from './strategy/option.vue'
     import TypeCollapse from './strategy/collapse.vue'
+    import { transformTipsWidth } from '@/common/util'
 
     const getRealValue = (type, target) => {
         if (type === 'array' || type === 'object') {
@@ -111,6 +114,9 @@
             }
         },
         computed: {
+            computedTips () {
+                return transformTipsWidth(this.describe.tips)
+            },
             formCom () {
                 const config = this.describe
                 const comMap = {
