@@ -178,6 +178,8 @@
     "transliteration": "~2.1.8",
     "url-loader": "~2.2.0",
     "vue": "~2.6.10",
+    "vue-echarts": "^3.0.9",
+    "vue-json-viewer": "^2.2.11",
     "vue-loader": "~15.7.1",
     "vue-markdown-loader": "~2.4.1",
     "vue-router": "~3.1.3",
