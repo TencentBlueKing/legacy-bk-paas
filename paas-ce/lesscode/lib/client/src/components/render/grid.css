@@ -48,6 +48,7 @@
         & > .add-clone {
             position: absolute;
             display: block;
+            line-height: 19px;
         }
     }
     .add-column,

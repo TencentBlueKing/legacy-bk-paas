@@ -37,15 +37,17 @@ export default {
         format: {
             type: 'string',
             options: ['line-by-line', 'side-by-side'],
-            val: 'side-by-side'
+            val: 'side-by-side',
+            tips: '展示方式'
         },
         context: {
             type: 'number',
-            val: 5
+            val: 5,
+            tips: '不同地方间隔多少行不隐藏'
         },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

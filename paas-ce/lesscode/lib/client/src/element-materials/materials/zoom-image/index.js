@@ -28,11 +28,12 @@ export default {
     props: {
         'src': {
             type: 'string',
-            val: exmapleFirstImgUrl
+            val: exmapleFirstImgUrl,
+            tips: '图片地址'
         },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

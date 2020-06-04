@@ -525,12 +525,40 @@ export function validateRoundNumber (val) {
  * @return {boolean}
  */
 export function computeIsDifferent (arr) {
-    for (let i = 0; i < arr.length - 1; i++) {
-        for (let j = i + 1; j < arr.length; j++) {
-            if (arr[i] !== arr[j]) {
-                return true
-            }
+    const first = arr[0]
+    for (const item of arr) {
+        if (item !== first) {
+            return true
         }
     }
     return false
+}
+
+/**
+ * 返回一个 tips 内的超链接 html 字符串
+ */
+export function formatLink ({ content = '', href = 'https://magicbox.bk.tencent.com/components_vue/2.0/example/index.html#/icon' } = {}) {
+    return `<a style="color: #72A7FF; text-decoration: underline;" target="_blank" href="${href}">${content}</a>`
+}
+
+/**
+ * 给内容长于 limitStrLength tips 加默认宽度
+ *
+ * @param {string|object} tips
+ * @param {number} width tips 设置宽度
+ *
+ * @return {object}
+ */
+export function transformTipsWidth (tips, width = 290) {
+    const limitStrLength = 22
+
+    if (typeof tips === 'string') {
+        if (tips.length >= limitStrLength) {
+            return { width, content: tips }
+        }
+    } else if (tips.html || (tips.content && tips.content.length >= limitStrLength)) {
+        return { width, ...tips }
+    }
+
+    return tips
 }

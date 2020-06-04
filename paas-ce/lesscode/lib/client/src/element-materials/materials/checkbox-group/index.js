@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     styles: ['margin'],
-    events: ['change'],
+    events: [{ name: 'change' }],
     props: {
         slots: {
             name: 'bk-checkbox',

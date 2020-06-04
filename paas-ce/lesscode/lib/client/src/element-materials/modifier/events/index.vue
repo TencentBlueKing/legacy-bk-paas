@@ -12,15 +12,17 @@
 <template>
     <section>
         <ul v-if="eventKeys.length">
-            <li v-for="event in eventKeys" :key="event" class="event-item">
-                <h3 class="event-title">{{ event }}</h3>
-                <bk-select class="event-choose" ref="eventChooseComp" :value="eventValues[event]" @clear="choose({ id: '' }, event)">
+            <li v-for="event in eventKeys" :key="event.name" class="event-item">
+                <h3 class="event-title">
+                    {{ event.name }}<i v-if="event.tips" class="bk-icon icon-info-circle" v-bk-tooltips="transformTipsWidth(event.tips)" />
+                </h3>
+                <bk-select class="event-choose" ref="eventChooseComp" :value="eventValues[event.name]" @clear="choose({ id: '' }, event.name)">
                     <bk-option-group
                         v-for="(group, index) in functionGroup"
                         :name="group.name"
                         :key="index">
                         <bk-option v-for="option in group.children"
-                            @click.native="choose(option, event)"
+                            @click.native="choose(option, event.name)"
                             :key="option.id"
                             :id="option.id"
                             :name="option.name">
@@ -43,6 +45,7 @@
 <script>
     import { mapGetters, mapMutations } from 'vuex'
     import methods from '@/components/methods'
+    import { transformTipsWidth } from '@/common/util'
 
     export default {
         name: 'modifier-events',
@@ -68,7 +71,8 @@
             return {
                 showMethod: false,
                 eventKeys: [],
-                eventValues: []
+                eventValues: [],
+                transformTipsWidth
             }
         },
         computed: {
@@ -144,6 +148,12 @@
             word-break: keep-all;
             margin: 0;
             padding: 0;
+            .icon-info-circle {
+                padding: 4px;
+                color: #979BA5;
+                font-size: 16px;
+                cursor: pointer;
+            }
         }
         .event-choose {
             width: 100%;
