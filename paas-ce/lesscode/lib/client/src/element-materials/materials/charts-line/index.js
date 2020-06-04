@@ -13,7 +13,7 @@ export default {
     name: 'chart-line',
     type: 'chart',
     displayName: '折线图',
-    icon: 'bk-drag-image',
+    icon: 'bk-drag-line-chart',
     group: '图表',
     order: 1,
     events: [],

@@ -13,7 +13,7 @@ export default {
     name: 'chart-bar',
     type: 'chart',
     displayName: '柱状图',
-    icon: 'bk-drag-grid-3',
+    icon: 'bk-drag-histogram',
     group: '图表',
     order: 1,
     events: [],

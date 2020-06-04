@@ -13,7 +13,7 @@ export default {
     name: 'chart-pie',
     type: 'chart',
     displayName: '饼状图',
-    icon: 'bk-drag-roundprogress',
+    icon: 'bk-drag-pie-chart',
     group: '图表',
     order: 1,
     events: [],
