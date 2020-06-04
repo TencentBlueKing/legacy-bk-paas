@@ -66,7 +66,6 @@ const codeMixin = {
 
         generateComponment (item) {
             item = Object.assign(item, { componentId: camelCase(item.componentId.replace(/-/g, '')) })
-            console.log(item, camelCase(item.componentId.replace('-', '')))
             if (item.name.startsWith('chart-')) {
                 this.generateCharts(item)
                 const widthStr = item.renderProps.width && item.renderProps.width.val ? `width: ${item.renderProps.width.val}px;` : ''
@@ -388,7 +387,6 @@ const codeMixin = {
             this.dataTemplate(item.componentId, JSON.stringify(item.renderProps.options.val))
             if (this.chartTypeArr.indexOf(type) === -1) {
                 this.chartTypeArr.push(type)
-                console.log(this.chartTypeArr)
             }
         }
     }

@@ -109,7 +109,6 @@
                         this.isShow = false
                     }
                 } catch (err) {
-                    console.log(err, 2)
                     this.$bkMessage({
                         theme: 'error',
                         message: '请输入正确的json格式数据'
