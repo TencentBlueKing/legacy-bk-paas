@@ -1,6 +1,6 @@
 # pkg used in prod env should be added to requirements_prod.txt also
 
-Django==1.8.11
+Django==1.11.29
 requests==2.21.0
 jinja2==2.8
 sqlalchemy==1.0.12
