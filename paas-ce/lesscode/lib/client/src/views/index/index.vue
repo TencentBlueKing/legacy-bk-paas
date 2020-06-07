@@ -236,7 +236,7 @@
         mixins: [codeMixin],
         data () {
             const componentGroupFolded = {}
-            const componentGroupList = ['栅格布局', '基础', '表单', '导航', '数据', '反馈', '自定义组件']
+            const componentGroupList = ['栅格布局', '基础', '表单', '导航', '数据', '反馈', '图表', '自定义组件']
             componentGroupList.forEach(group => {
                 componentGroupFolded[group] = false
             })

@@ -29,8 +29,12 @@ import { bkDiff } from 'bk-magic-vue'
 import bkText from '@/components/patch/text'
 import bkImage from '@/components/patch/image'
 
+import chart from '@/components/patch/chart'
+
 Vue.use(bkText)
 Vue.use(bkImage)
+
+Vue.use(chart)
 
 // components use
 Vue.use(bkBadge)
