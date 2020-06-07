@@ -48,8 +48,28 @@
                     <div class="action-item" @click="test1">
                         mock
                     </div> -->
-                    <div class="action-item text" @click="showFunManage">
-                        函数管理
+                    <div class="action-item text" @click="showFunManage" v-bk-tooltips="{ content: '函数管理', placements: ['bottom'] }">
+                        <i class="bk-drag-icon bk-drag-diff"></i>
+                    </div>
+                    <div class="action-item text quick-operation"
+                        :class="showQuickOperation === true ? 'active' : ''"
+                        @click="toggleShowQuickOperation(true)"
+                        v-bk-clickoutside="toggleShowQuickOperation"
+                    >
+                        <i class="bk-drag-icon bk-drag-keyboard"></i>
+                        <section class="operation-main" v-if="showQuickOperation === true">
+                            <h5 class="operation-title"><span class="title-main">快捷键说明</span><i class="bk-icon icon-close" @click.stop="toggleShowQuickOperation(false)"></i></h5>
+                            <ul class="operation-list">
+                                <li v-for="(operation, index) in quickOperationList" :key="index" class="operation-item">
+                                    <span class="operation-keys">
+                                        <span v-for="(key, keyIndex) in operation.keys" :key="key">
+                                            <span class="operation-key">{{ key }}</span><span v-if="keyIndex !== operation.keys.length - 1" class="operation-plus">+</span>
+                                        </span>
+                                    </span>
+                                    <span class="operation-name">{{ operation.name }}</span>
+                                </li>
+                            </ul>
+                        </section>
                     </div>
                     <!-- <div class="action-item">
                         <i class="bk-drag-icon bk-drag-play"></i>
@@ -135,10 +155,11 @@
                     ghost-class="target-ghost"
                     chosen-class="target-chosen"
                     drag-class="target-drag"
+                    @choose="onGridChoose(arguments)"
                     @change="log"
                     @end="targetAreaEndHandler"
                 >
-                    <render-grid v-for="item in targetData" :key="item.componentId" :component-data="item">
+                    <render-grid v-for="item in targetData" :key="item.renderKey" :component-data="item">
                     </render-grid>
                 </vue-draggable>
             </div>
@@ -238,7 +259,20 @@
                     headerPosition: 'left',
                     item: {}
                 },
-                placeholderElemDisplay: ''
+                placeholderElemDisplay: '',
+                hasCtrl: false,
+                startDragPosition: {},
+                showQuickOperation: false,
+                quickOperationList: [
+                    { keys: ['Ctrl', 'C'], name: '复制' },
+                    { keys: ['Delete'], name: '快速删除' },
+                    { keys: ['Ctrl', 'V'], name: '粘贴' },
+                    { keys: ['Tab'], name: '切换下一个表单' },
+                    { keys: ['Ctrl', 'Z'], name: '撤销' },
+                    { keys: ['↑'], name: '增加数值' },
+                    { keys: ['Ctrl', 'Y'], name: '恢复' },
+                    { keys: ['↓'], name: '减少数值' }
+                ]
             }
         },
         computed: {
@@ -248,7 +282,8 @@
                 'draggableTargetGroup',
                 'curSelectedComponentData',
                 'functionGroup',
-                'pageData'
+                'pageData',
+                'copyData'
             ]),
 
             mainContentClass () {
@@ -295,6 +330,7 @@
 
             const mockCurSelectComponentData = {
                 componentId: 'grid-' + uuid(),
+                renderKey: uuid(),
                 name: 'grid',
                 type: 'render-grid',
                 tabPanelActive: 'props',
@@ -319,9 +355,10 @@
             this.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
             this.setCurSelectedComponentData(this.curDragingComponent)
             this.setTargetData([this.curDragingComponent])
-
             window.test = this.test
             window.test1 = this.test1
+            window.addEventListener('keydown', this.quickOperation)
+            window.addEventListener('keyup', this.judgeCtrl)
         },
         mounted () {
             window.addEventListener('beforeunload', function (e) {
@@ -335,8 +372,79 @@
                 'setTargetData',
                 'setDraggableSourceGroup',
                 'setCurSelectedComponentData',
-                'setFunctionGroup'
+                'setFunctionGroup',
+                'setCopyData',
+                'pushTargetHistory',
+                'backTargetHistory',
+                'forwardTargetHistory'
             ]),
+
+            toggleShowQuickOperation (val) {
+                this.showQuickOperation = val
+            },
+
+            judgeCtrl (event) {
+                switch (event.keyCode) {
+                    case 17:
+                        this.hasCtrl = false
+                        break
+                }
+            },
+
+            quickOperation (event) {
+                switch (event.keyCode) {
+                    case 17:
+                        this.hasCtrl = true
+                        break
+                    case 67:
+                        this.putComponentData()
+                        break
+                    case 86:
+                        this.copyComponent()
+                        break
+                    case 88:
+                        const copyData = cloneDeep(this.curSelectedComponentData)
+                        this.setCopyData(copyData)
+                        this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
+                        this.confirmDelComponent()
+                        break
+                    case 90:
+                        this.backTargetHistory()
+                        break
+                    case 89:
+                        this.forwardTargetHistory()
+                        break
+                    case 46:
+                        this.deleteComponent()
+                        break
+                }
+            },
+
+            deleteComponent () {
+                const delBtn = document.querySelector('#del-component-right-sidebar')
+                delBtn && delBtn.click()
+            },
+
+            putComponentData () {
+                if (!this.hasCtrl) return
+                const copyData = cloneDeep(this.curSelectedComponentData)
+                this.setCopyData(copyData)
+            },
+
+            copyComponent () {
+                if (!this.hasCtrl || Object.keys(this.copyData).length <= 0) return
+                const copyNode = this.$td(this.curSelectedComponentData.componentId).appendChild(this.copyData, true)
+                const pos = copyNode.getNodePosition()
+                const pushData = {
+                    parentId: pos.parent && pos.parent.componentId,
+                    component: copyNode.value(),
+                    columnIndex: pos.columnIndex,
+                    childrenIndex: pos.childrenIndex,
+                    type: 'add'
+                }
+
+                this.pushTargetHistory(pushData)
+            },
 
             /***
              * 显示函数管理面版
@@ -442,6 +550,7 @@
                 this.curDragingComponent = {
                     componentId: id,
                     tabPanelActive: 'props', // 默认tab选中的面板
+                    renderKey: uuid(),
                     name,
                     type,
                     renderProps: renderProps,
@@ -507,7 +616,44 @@
                 ]
             },
 
-            log (evt) {
+            onGridChoose (e) {
+                const evt = e[0]
+                const curChooseComponent = this.targetData[evt.oldIndex]
+                this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
+            },
+
+            log (evt, column) {
+                const addEle = evt.added
+                const removedEle = evt.removed
+                const moveEle = evt.moved
+                const element = (addEle || removedEle || moveEle).element
+                const pos = this.$td().getNodePosition(element.componentId)
+
+                const pushData = {
+                    parentId: pos.parent && pos.parent.componentId,
+                    component: element,
+                    columnIndex: pos.columnIndex,
+                    childrenIndex: pos.childrenIndex
+                }
+                if (addEle) {
+                    pushData.type = 'add'
+                }
+                if (removedEle) {
+                    pushData.type = 'remove'
+                    pushData.parentId = this.startDragPosition.parent && this.startDragPosition.parent.componentId
+                    pushData.columnIndex = this.startDragPosition.columnIndex
+                    pushData.childrenIndex = this.startDragPosition.childrenIndex
+                }
+                if (moveEle) {
+                    pushData.type = 'move'
+                    pushData.sourceParentNodeId = pushData.parentId
+                    pushData.sourceColumnIndex = pos.columnIndex
+                    pushData.sourceChildrenIndex = moveEle.oldIndex
+                    pushData.targetParentNodeId = pushData.parentId
+                    pushData.targetColumnIndex = pos.columnIndex
+                    pushData.targetChildrenIndex = moveEle.newIndex
+                }
+                this.pushTargetHistory(pushData)
                 // console.warn('evt', evt)
                 // const data = evt.moved
                 // if (data) {
@@ -545,6 +691,7 @@
                     confirmFn () {
                         const mockCurSelectComponentData = {
                             componentId: 'grid-' + uuid(),
+                            renderKey: uuid(),
                             name: 'grid',
                             type: 'render-grid',
                             tabPanelActive: 'props',
@@ -565,7 +712,12 @@
                             renderStyles: {},
                             renderEvents: {}
                         }
-
+                        const pushData = {
+                            oldTargetData: me.targetData,
+                            newTargetData: [mockCurSelectComponentData],
+                            type: 'clear'
+                        }
+                        me.pushTargetHistory(pushData)
                         me.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
                         me.setCurSelectedComponentData(me.curDragingComponent)
                         me.setTargetData([me.curDragingComponent])
@@ -606,10 +758,19 @@
                     }
                     return ''
                 }
+                const pos = this.$td().getNodePosition(componentId)
+                const pushData = {
+                    parentId: pos.parent && pos.parent.componentId,
+                    component: this.delComponentConf.item,
+                    columnIndex: pos.columnIndex,
+                    childrenIndex: pos.childrenIndex,
+                    type: 'remove'
+                }
                 del(targetData, componentId)
                 this.setTargetData(targetData)
                 this.refreshDragAreaKey = +new Date()
                 this.setCurSelectedComponentData({})
+                this.pushTargetHistory(pushData)
             },
 
             /**
@@ -674,7 +835,7 @@
                 if (data) {
                     this.setTargetData(data)
                 } else {
-                    this.setTargetData([{ 'componentId': 'grid8B6FFD74', 'name': 'grid', 'type': 'render-grid', 'renderProps': { 'margin-horizontal': { 'type': 'number', 'val': 0 }, 'margin-vertical': { 'type': 'number', 'val': 0 }, 'slots': { 'type': 'column', 'val': [{ 'span': 1, 'children': [{ 'componentId': 'input8B753E61', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {} }, { 'componentId': 'input482301F3', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {} }, { 'componentId': 'inputB0159B6D', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {} }], 'width': '50%' }, { 'span': 1, 'children': [{ 'componentId': 'transfer01163C24', 'name': 'transfer', 'type': 'bk-transfer', 'renderProps': { 'display-key': { 'type': 'string', 'val': 'name' }, 'setting-key': { 'type': 'string', 'val': 'id' }, 'sortable': { 'type': 'boolean', 'val': false } }, 'renderStyles': {}, 'renderEvents': {} }], 'width': '50%' }] } }, 'renderStyles': {}, 'renderEvents': {} }])
+                    this.setTargetData([{ 'componentId': 'grid8B6FFD74', 'renderKey': 'grid8B6FFD74', 'name': 'grid', 'type': 'render-grid', 'renderProps': { 'margin-horizontal': { 'type': 'number', 'val': 0 }, 'margin-vertical': { 'type': 'number', 'val': 0 }, 'slots': { 'type': 'column', 'val': [{ 'span': 1, 'children': [{ 'componentId': 'input8B753E61', 'renderKey': 'input8B753E61', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {} }, { 'componentId': 'input482301F3', 'renderKey': 'input482301F3', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {} }, { 'componentId': 'inputB0159B6D', 'renderKey': 'inputB0159B6D', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {} }], 'width': '50%' }, { 'span': 1, 'children': [{ 'componentId': 'transfer01163C24', 'renderKey': 'transfer01163C24', 'name': 'transfer', 'type': 'bk-transfer', 'renderProps': { 'display-key': { 'type': 'string', 'val': 'name' }, 'setting-key': { 'type': 'string', 'val': 'id' }, 'sortable': { 'type': 'boolean', 'val': false } }, 'renderStyles': {}, 'renderEvents': {} }], 'width': '50%' }] } }, 'renderStyles': {}, 'renderEvents': {} }])
                 }
             }
         }

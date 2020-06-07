@@ -152,7 +152,8 @@
         methods: {
             ...mapMutations('drag', [
                 'setCurSelectedComponentData',
-                'setTargetData'
+                'setTargetData',
+                'pushTargetHistory'
             ]),
 
             /**
@@ -194,6 +195,12 @@
             updatePropsHandler (data) {
                 if (data.componentId === this.renderData.componentId) {
                     // debugger
+                    const pushData = {
+                        type: 'update',
+                        component: _.cloneDeep(this.renderData),
+                        modifier: data.modifier
+                    }
+                    this.pushTargetHistory(pushData)
                     // const { renderStyles = {}, renderProps = {}, renderEvents = {} } = data.modifier
                     const { renderStyles = {}, renderProps = {}, renderEvents = {}, tabPanelActive = 'props' } = data.modifier
                     this.renderData.renderStyles = renderStyles

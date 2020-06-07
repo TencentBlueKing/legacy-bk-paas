@@ -24,6 +24,9 @@ import header from '@/components/header.vue'
 import '@/common/bkmagic'
 import '@icon-cool/bk-icon-vue-drag-vis'
 import VueContextMenu from '@xunlei/vue-context-menu'
+import targetData from '@/common/targetData.js'
+
+Vue.prototype.$td = targetData
 
 Vue.use(VueContextMenu)
 
