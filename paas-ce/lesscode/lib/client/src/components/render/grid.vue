@@ -42,7 +42,7 @@
                 >
                     <render-component
                         v-for="itemInColumn in column.children"
-                        :key="itemInColumn.componentId"
+                        :key="itemInColumn.renderKey"
                         :component-data="itemInColumn" />
                 </vue-draggable>
             </render-col>
@@ -83,13 +83,15 @@
                 renderData: {},
                 renderDataSlot: null,
                 bindProps: {},
+                startDragPosition: {},
                 contextMenuVisible: false,
                 contextMenuTarget: null
             }
         },
         computed: {
             ...mapGetters('drag', [
-                'targetData'
+                'targetData',
+                'curSelectedComponentData'
             ])
         },
         watch: {
@@ -124,7 +126,8 @@
         methods: {
             ...mapMutations('drag', [
                 'setCurSelectedComponentData',
-                'setTargetData'
+                'setTargetData',
+                'pushTargetHistory'
             ]),
 
             /**
@@ -171,6 +174,12 @@
              */
             updatePropsHandler (data) {
                 if (data.componentId === this.renderData.componentId) {
+                    const pushData = {
+                        type: 'update',
+                        component: _.cloneDeep(this.renderData),
+                        modifier: data.modifier
+                    }
+                    this.pushTargetHistory(pushData)
                     // const { renderStyles = {}, renderProps = {} } = data.modifier
                     const { renderStyles = {}, renderProps = {}, tabPanelActive = 'props' } = data.modifier
                     this.renderData.renderStyles = renderStyles
@@ -181,13 +190,44 @@
             },
 
             log (e, column) {
-                // console.warn(column)
-                // console.error('eeeee', e, column)
+                const evt = e[0] || {}
+                const addEle = evt.added
+                const removedEle = evt.removed
+                const moveEle = evt.moved
+                const element = (addEle || removedEle || moveEle).element
+                const pos = this.$td().getNodePosition(element.componentId)
+
+                const pushData = {
+                    parentId: pos.parent && pos.parent.componentId,
+                    component: element,
+                    columnIndex: pos.columnIndex,
+                    childrenIndex: pos.childrenIndex
+                }
+                if (addEle) {
+                    pushData.type = 'add'
+                }
+                if (removedEle) {
+                    pushData.type = 'remove'
+                    pushData.parentId = this.startDragPosition.parent && this.startDragPosition.parent.componentId
+                    pushData.columnIndex = this.startDragPosition.columnIndex
+                    pushData.childrenIndex = this.startDragPosition.childrenIndex
+                }
+                if (moveEle) {
+                    pushData.type = 'move'
+                    pushData.sourceParentNodeId = pushData.parentId
+                    pushData.sourceColumnIndex = pos.columnIndex
+                    pushData.sourceChildrenIndex = moveEle.oldIndex
+                    pushData.targetParentNodeId = pushData.parentId
+                    pushData.targetColumnIndex = pos.columnIndex
+                    pushData.targetChildrenIndex = moveEle.newIndex
+                }
+                this.pushTargetHistory(pushData)
             },
 
             onChoose (e, column) {
                 const evt = e[0]
                 const curChooseComponent = column.children[evt.oldIndex]
+                this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
                 this.groupType = curChooseComponent.type === 'render-grid' ? 'render-grid' : 'component'
             },
 
@@ -254,6 +294,7 @@
 
                 parentRow.splice(selfIndex + 1, 0, {
                     componentId: this.componentData.name + '-' + uuid(),
+                    renderKey: uuid(),
                     name: this.componentData.name,
                     type: this.componentData.type,
                     renderProps,

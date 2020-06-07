@@ -86,7 +86,8 @@
             async loadFile () {
                 this.isLoading = true
                 this.targetData = JSON.parse(localStorage.getItem('layout-target-data'))
-                const code = this.getCode().replace('export default', 'module.exports =')
+                let code = this.getCode().replace('export default', 'module.exports =')
+                code = code.replace('components: { chart: ECharts },', '')
                 const res = httpVueLoader(code)
                 setTimeout(() => {
                     Vue.component('preview-page', res)

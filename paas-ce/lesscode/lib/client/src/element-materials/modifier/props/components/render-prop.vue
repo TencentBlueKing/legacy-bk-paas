@@ -76,6 +76,7 @@
     import TypeTableColumn from './strategy/table-column'
     import TypeOption from './strategy/option.vue'
     import TypeCollapse from './strategy/collapse.vue'
+    import TypeJson from './strategy/jsonView.vue'
     import { transformTipsWidth } from '@/common/util'
 
     const getRealValue = (type, target) => {
@@ -132,7 +133,8 @@
                     'table-column': TypeTableColumn,
                     'option': TypeOption,
                     'collapse': TypeCollapse,
-                    'remote': TypeRemote
+                    'remote': TypeRemote,
+                    'json': TypeJson
                 }
 
                 let realType = config.type
@@ -151,7 +153,8 @@
                     'table-column': 'table-column',
                     'option': 'option',
                     'collapse': 'collapse',
-                    'remote': 'remote'
+                    'remote': 'remote',
+                    'json': 'json'
                 }
                 if (typeof config.type === 'string') {
                     realType = [config.type]
