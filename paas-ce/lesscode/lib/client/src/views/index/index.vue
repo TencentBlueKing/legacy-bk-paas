@@ -385,6 +385,7 @@
 
             judgeCtrl (event) {
                 switch (event.keyCode) {
+                    case 91:
                     case 17:
                         this.hasCtrl = false
                         break
@@ -393,6 +394,7 @@
 
             quickOperation (event) {
                 switch (event.keyCode) {
+                    case 91:
                     case 17:
                         this.hasCtrl = true
                         break
@@ -412,6 +414,7 @@
                         this.backTargetHistory()
                         break
                     case 89:
+                        event.preventDefault()
                         this.forwardTargetHistory()
                         break
                     case 46:
