@@ -377,11 +377,11 @@ $headerHeight: 64px;
                             margin: 0 15px;
                         }
                         >span:first-child .operation-key {
-                            width: 60px;
+                            width: 80px;
                         }
                     }
                     &:nth-child(odd) {
-                        margin-right: 99px;
+                        margin-right: 70px;
                     }
                 }
             }
