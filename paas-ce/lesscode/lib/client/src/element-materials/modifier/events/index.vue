@@ -34,9 +34,8 @@
                 </bk-select>
             </li>
         </ul>
-        <div class="empty" v-else>
+        <div class="no-event" v-else>
             <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无事件</span>
-            <span v-else>请选择组件</span>
         </div>
         <methods :is-show.sync="showMethod"></methods>
     </section>

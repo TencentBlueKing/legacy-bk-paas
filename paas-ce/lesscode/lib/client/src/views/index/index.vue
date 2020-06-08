@@ -16,17 +16,11 @@
                 <div class="page-name">
                     可视化开发
                 </div>
-                <!-- <div class="back">
-                    <i class="bk-drag-icon bk-drag-arrow-back"></i>
-                </div>
-                <div class="page-name">
-                    单据详情页【配置平台】
-                </div> -->
             </div>
             <div class="function-and-tool">
                 <ul class="function-tabs">
                     <li class="tab-item" @click="handleToolAction('edit')" :class="actionSelected === 'edit' ? 'active' : ''">编辑</li>
-                    <li class="tab-item" @click="handleToolAction('vueCode')" :class="actionSelected === 'vueCode' ? 'active' : ''">Vue 源码</li>
+                    <li class="tab-item" @click="handleToolAction('vueCode')" :class="actionSelected === 'vueCode' ? 'active' : ''">查看源码</li>
                 </ul>
                 <div class="tool-actions">
                     <!-- <div class="action-item" v-bk-tooltips="{ content: '撤销', placements: ['bottom'] }">
@@ -81,6 +75,12 @@
                         <i class="bk-drag-icon bk-drag-play"></i>
                     </div> -->
                 </div>
+            </div>
+            <div class="changelog" @click="goChangelog" v-bk-tooltips="{ content: '更新日志', placements: ['bottom'] }">
+                <i class="bk-drag-icon bk-drag-update-log-fill"></i>
+            </div>
+            <div class="github-link" @click="goGithub" v-bk-tooltips="{ content: 'Github', placements: ['bottom'] }">
+                <i class="bk-drag-icon bk-drag-github-logo"></i>
             </div>
         </div>
         <div class="main-container">
@@ -827,6 +827,20 @@
                     theme: 'error',
                     message: errTips
                 })
+            },
+
+            /**
+             * 跳转到开源版 github
+             */
+            goGithub () {
+                window.open('https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md')
+            },
+
+            goChangelog () {
+                const routerUrl = this.$router.resolve({
+                    name: 'changelog'
+                })
+                window.open(routerUrl.href, '_blank')
             },
 
             test () {

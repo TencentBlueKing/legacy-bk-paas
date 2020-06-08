@@ -28,6 +28,7 @@ const Custom = () => import(/* webpackChunkName: 'custom' */'@/views/help/docs/c
 const Grid = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/grid.md')
 const Intro = () => import(/* webpackChunkName: 'intro' */'@/views/help/docs/intro.md')
 const Start = () => import(/* webpackChunkName: 'start' */'@/views/help/docs/start.md')
+const Changelog = () => import(/* webpackChunkName: 'start' */'@/views/changelog/index.md')
 
 const routes = [
     {
@@ -54,7 +55,8 @@ const routes = [
             { path: 'custom', name: 'custom', component: Custom },
             { path: 'grid', name: 'grid', component: Grid },
             { path: 'intro', name: 'intro', component: Intro, alias: '' },
-            { path: 'start', name: 'start', component: Start }
+            { path: 'start', name: 'start', component: Start },
+            { path: 'changelog', name: 'changelog', component: Changelog }
         ]
     },
     {

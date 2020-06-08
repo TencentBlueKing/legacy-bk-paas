@@ -55,7 +55,8 @@
                 pageType: 'preview',
                 comp: 'LoadingComponent',
                 isLoading: false,
-                targetData: []
+                targetData: [],
+                minHeight: 0
             }
         },
         computed: {
@@ -78,8 +79,11 @@
         },
         mounted () {
             // window.addEventListener('beforeunload', this.deleTmpFile)
+            this.minHeight = window.innerHeight
+            window.addEventListener('resize', this.resizeHandler)
         },
         destroyed () {
+            window.removeEventListener('resize', this.resizeHandler)
             // this.deleTmpFile()
         },
         methods: {
@@ -117,10 +121,14 @@
                 this.$store.dispatch('vueCode/deleteTmpFile', {
                     fileName: this.fileName
                 })
+            },
+            resizeHandler () {
+                this.minHeight = window.innerHeight
             }
         },
-        template: `<div>
-            <component :is="comp" :is-loading="isLoading" :url="url"/>
-        </div>`
+        template: ''
+            + '<div :style="{ \'min-height\': minHeight + \'px\' }">'
+            + '<component :is="comp" :is-loading="isLoading" :url="url"/>'
+            + '</div>'
     }
 </script>
