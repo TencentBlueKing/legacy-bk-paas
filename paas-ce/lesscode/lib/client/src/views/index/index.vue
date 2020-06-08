@@ -264,13 +264,13 @@
                 startDragPosition: {},
                 showQuickOperation: false,
                 quickOperationList: [
-                    { keys: ['Ctrl', 'C'], name: '复制' },
+                    { keys: ['Ctrl / Cmd', 'C'], name: '复制' },
                     { keys: ['Delete'], name: '快速删除' },
-                    { keys: ['Ctrl', 'V'], name: '粘贴' },
+                    { keys: ['Ctrl / Cmd', 'V'], name: '粘贴' },
                     { keys: ['Tab'], name: '切换下一个表单' },
-                    { keys: ['Ctrl', 'Z'], name: '撤销' },
+                    { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
                     { keys: ['↑'], name: '增加数值' },
-                    { keys: ['Ctrl', 'Y'], name: '恢复' },
+                    { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
                     { keys: ['↓'], name: '减少数值' }
                 ]
             }
