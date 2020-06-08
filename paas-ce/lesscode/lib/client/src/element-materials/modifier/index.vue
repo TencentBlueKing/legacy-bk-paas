@@ -211,7 +211,9 @@
                 padding-bottom: 20px;
                 overflow-y: auto;
                 position: relative;
-                .empty {
+                .no-style,
+                .no-prop,
+                .no-event {
                     position: absolute;
                     top: 50%;
                     left: 50%;
@@ -246,6 +248,12 @@
                     border-color: $newRedColor !important;
                 }
             }
+        }
+        .empty {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 </style>
