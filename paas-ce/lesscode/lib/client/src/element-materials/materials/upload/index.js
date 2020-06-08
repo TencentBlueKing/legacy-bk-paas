@@ -35,11 +35,13 @@ export default {
         url: {
             type: 'string',
             val: 'https://jsonplaceholder.typicode.com/posts/',
-            tips: '服务器地址'
+            tips: '上传服务地址'
         },
         // array object
         header: {
             type: ['array', 'object'],
+            // type 为数组时才需要 defaultVals 配置
+            defaultVals: [[], {}],
             val: [],
             tips: '请求头 { name: " ", value: " " }'
         },
@@ -51,6 +53,7 @@ export default {
         // Number, Object 限制上传文件体积 { maxFileSize: 1, maxImgSize: 1 }
         size: {
             type: ['number', 'object'],
+            defaultVals: [5, {}],
             val: 5,
             tips: '限制上传文件体积 { maxFileSize: 1, maxImgSize: 1 }'
         },

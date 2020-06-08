@@ -21,9 +21,8 @@
                     @on-change="handleChange" />
             </template>
         </template>
-        <div class="empty" v-else>
+        <div class="no-prop" v-else>
             <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无属性</span>
-            <span v-else>请选择组件</span>
         </div>
     </div>
 </template>

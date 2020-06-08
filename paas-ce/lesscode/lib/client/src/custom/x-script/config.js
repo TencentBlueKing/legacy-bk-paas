@@ -13,7 +13,6 @@ export default {
     name: 'x-script',
     type: 'x-script',
     displayName: 'x-script',
-    events: ['selected', 'toggle', 'change', 'clear'],
     styles: ['size', 'padding', 'margin', 'font', 'backgroundColor'],
     props: {
         // input
@@ -22,7 +21,8 @@ export default {
             val: 'hello world'
         },
         placeholder: {
-            type: 'string'
+            type: 'string',
+            tips: '空白提示'
         },
         disabled: {
             type: 'boolean',
@@ -33,16 +33,19 @@ export default {
             val: true
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         },
         // button
         title: {
             type: 'string',
-            val: 'hello world'
+            val: 'hello world',
+            tips: '原生 html title 属性'
         },
         'button-theme': {
             type: 'string',
-            options: ['default', 'primary', 'success', 'warning', 'danger', 'text']
+            options: ['default', 'primary', 'success', 'warning', 'danger', 'text'],
+            tips: '按钮类型、主题'
         },
         /**
          * 以下 prop 在接入系统时必填，否则将使用前端数据
@@ -51,22 +54,26 @@ export default {
         // 获取业务列表接口地址
         'biz-list-ajax-url': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '获取业务列表接口地址'
         },
         // 获取指定业务下所有脚本的接口地址
         'script-list-ajax-url': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '获取指定业务下所有脚本的接口地址'
         },
         // 执行脚本接口地址
         'execute-ajax-url': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '执行脚本接口地址'
         },
         // 系统接口通用参数
         'system-info': {
             type: 'object',
-            val: {}
+            val: {},
+            tips: '系统接口通用参数'
         }
     }
 }

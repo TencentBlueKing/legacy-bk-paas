@@ -93,7 +93,7 @@ export default {
             }
             if (state.targetHistory.length > 50) state.targetHistory.pop()
         },
-        
+
         backTargetHistory (state) {
             if (state.curHistoryIndex >= state.targetHistory.length) return
             const pushData = state.targetHistory[state.curHistoryIndex]
