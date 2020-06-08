@@ -12,8 +12,8 @@
 <template>
     <div>
         <div class="column-title">
-            <span>列配置：</span>
-            <i class="bk-icon icon-info-circle" v-bk-tooltips="{ allowHtml: true, content: '#column-title-tips' }"></i>
+            <span class="label" v-bk-tooltips="{ allowHtml: true, content: '#column-title-tips' }">列配置: </span>
+            <!-- <i class="bk-icon icon-info-circle" v-bk-tooltips="{ allowHtml: true, content: '#column-title-tips' }"></i> -->
             <div id="column-title-tips">
                 <p>每一列栅格宽度占比为</p>
                 <p>该列配置值占总列配置值的百分比</p>
@@ -107,10 +107,14 @@
         font-size: 14px;
         font-weight: 500;
         color: #606266;
-        > .icon-info-circle {
+        /* > .icon-info-circle {
             margin-left: 6px;
             font-size: 16px;
             color: #979BA5;
+        } */
+        .label {
+            border-bottom: 1px dashed #979ba5;
+            cursor: pointer;
         }
     }
     .column-list {

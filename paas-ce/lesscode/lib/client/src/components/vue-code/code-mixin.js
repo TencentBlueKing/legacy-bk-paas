@@ -30,13 +30,8 @@ const codeMixin = {
                 'bk-radio-group': 'bk-radio',
                 'bk-tab': 'bk-tab-panel'
             },
-            checkboxGroupVModelList: []
+            chartTypeArr: []
         }
-    },
-    computed: {
-        // ...mapGetters('drag', [
-        //     'getMethodById'
-        // ])
     },
     watch: {
         refreshGenerateCodeKey () {
@@ -48,7 +43,7 @@ const codeMixin = {
             this.methodsStr = ''
             this.createdStr = ''
             this.existFunc = []
-            this.checkboxGroupVModelList = []
+            this.chartTypeArr = []
         }
     },
     methods: {
@@ -70,15 +65,25 @@ const codeMixin = {
         },
 
         generateComponment (item) {
-            // item.componentId = item.componentId.replace('_', '')
-            const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId)
-            const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles)
-            const itemEvents = this.getItemEvents(item.renderEvents)
+            item = Object.assign(item, { componentId: camelCase(item.componentId.replace(/-/g, '')) })
+            if (item.name.startsWith('chart-')) {
+                this.generateCharts(item)
+                const widthStr = item.renderProps.width && item.renderProps.width.val ? `width: ${item.renderProps.width.val}px;` : ''
+                const heightStr = `height:${item.renderProps.height.val || 0}px;`
+                return `<div style="${widthStr}${heightStr}">
+                            <chart :options="${item.componentId}" :auto-resize="true"></chart>
+                        </div>\n`
+            } else {
+                // item.componentId = item.componentId.replace('_', '')
+                const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId)
+                const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles)
+                const itemEvents = this.getItemEvents(item.renderEvents)
 
-            return `
-                    <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents}>
-                        ${this.renderSlot(item.type, item.renderProps.slots, item.componentId)}
-                    </${item.type}>`
+                return `
+                        <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents}>
+                            ${this.renderSlot(item.type, item.renderProps.slots, item.componentId)}
+                        </${item.type}>`
+            }
         },
         generateCss () {
             const head = `<style lang="css">
@@ -107,6 +112,10 @@ const codeMixin = {
                             .bk-form-checkbox {
                                 margin-right: 20px;
                             }
+                            .echarts {
+                                width: 100%,;
+                                height: 100%;
+                            }
                             /* 还原 bk-button 组件的 vertical-align 样式 */
                             .bk-layout-col button.bk-button {
                                 vertical-align: baseline;
@@ -124,13 +133,18 @@ const codeMixin = {
             return '<template>\n<section class="container">' + this.generateCode(this.targetData) + '\n</section>\n</template>\n\n'
         },
         generateScript () {
-            let scriptContent = `${this.getData() ? `${this.getData()},` : ''}
+            const importContent = this.getImportContent()
+            let scriptContent = `${this.getComponents() ? `${this.getComponents()},` : ''}
+                            ${this.getData() ? `${this.getData()},` : ''}
                             ${this.getCreated() ? `${this.getCreated()},` : ''}
                             ${this.getMethods() ? `${this.getMethods()},` : ''}`
             if (scriptContent.endsWith(',')) {
                 scriptContent = scriptContent.substr(0, scriptContent.length - 1)
             }
-            return `<script>export default { ${scriptContent} }<\/script>\n`
+            return `<script>
+                ${importContent}
+                export default { ${scriptContent} }
+                <\/script>\n`
         },
         generateCode (v) {
             const len = v.length
@@ -326,6 +340,28 @@ const codeMixin = {
             }
             return created
         },
+        getComponents () {
+            let componentStr = ''
+            if (this.chartTypeArr && this.chartTypeArr.length) {
+                componentStr = 'components: { chart: ECharts }'
+            }
+            return componentStr
+        },
+        getImportContent () {
+            let importStr = ''
+            if (this.chartTypeArr && this.chartTypeArr.length) {
+                importStr = `
+                    const ECharts = require('vue-echarts/components/ECharts.vue')
+                    require('echarts/lib/component/tooltip')
+                    require('echarts/lib/component/title')
+                    require('echarts/lib/component/legend')
+                `
+                for(const i in this.chartTypeArr) {
+                    importStr += `require('echarts/lib/chart/${this.chartTypeArr[i]}')\n`
+                }
+            }
+            return importStr
+        },
         dataTemplate (key, value) {
             this.dataStr += `'${key}': ${value},\n`
         },
@@ -342,11 +378,16 @@ const codeMixin = {
                 async get${key} () {
                     ${contentStr}
                 },\n`
-
-
         },
         createdTemplate (key) {
             this.createdStr += `this.get${key}()\n`
+        },
+        generateCharts (item) {
+            const type = item.name.replace('chart-', '')
+            this.dataTemplate(item.componentId, JSON.stringify(item.renderProps.options.val))
+            if (this.chartTypeArr.indexOf(type) === -1) {
+                this.chartTypeArr.push(type)
+            }
         }
     }
 }
