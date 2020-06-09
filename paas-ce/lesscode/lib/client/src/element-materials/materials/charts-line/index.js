@@ -66,8 +66,8 @@ export default {
                     color: ['#66AEDE'],
                     data: [8, 3, 5, 8, 5]
                 }]
-            }
-        },
-        tips: '图表配置，配置项同echarts'
+            },
+            tips: '图表配置，配置项同echarts'
+        }
     }
 }
