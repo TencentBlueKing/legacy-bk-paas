@@ -14,7 +14,7 @@
         <ul v-if="eventKeys.length">
             <li v-for="event in eventKeys" :key="event.name" class="event-item">
                 <h3 class="event-title">
-                    {{ event.name }}<i v-if="event.tips" class="bk-icon icon-info-circle" v-bk-tooltips="transformTipsWidth(event.tips)" />
+                    <span class="label" v-bk-tooltips="transformTipsWidth(event.tips)">{{ event.name }}</span>
                 </h3>
                 <bk-select class="event-choose" ref="eventChooseComp" :value="eventValues[event.name]" @clear="choose({ id: '' }, event.name)">
                     <bk-option-group
@@ -147,10 +147,8 @@
             word-break: keep-all;
             margin: 0;
             padding: 0;
-            .icon-info-circle {
-                padding: 4px;
-                color: #979BA5;
-                font-size: 16px;
+            .label {
+                border-bottom: 1px dashed #979ba5;
                 cursor: pointer;
             }
         }

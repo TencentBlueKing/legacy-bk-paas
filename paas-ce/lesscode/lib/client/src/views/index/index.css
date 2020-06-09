@@ -122,6 +122,9 @@ $headerHeight: 64px;
                 .bk-tab-label-wrapper {
                     padding: 0;
                 }
+                .empty {
+                    display: none;
+                }
             }
         }
         .collapse-icon {
