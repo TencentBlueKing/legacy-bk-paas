@@ -113,7 +113,7 @@ const codeMixin = {
                                 margin-right: 20px;
                             }
                             .echarts {
-                                width: 100%,;
+                                width: 100%;
                                 height: 100%;
                             }
                             /* 还原 bk-button 组件的 vertical-align 样式 */

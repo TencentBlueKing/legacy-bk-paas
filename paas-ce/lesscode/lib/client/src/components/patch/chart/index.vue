@@ -54,7 +54,8 @@
     }
 </script>
 
-<style>
+<style scoped>
+    /* 不加 scoped 会被 vue-echarts 默认的 .echarts 样式覆盖 */
     .echarts {
         width: 100%;
         height: 100%;
