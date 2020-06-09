@@ -244,13 +244,10 @@
                 showQuickOperation: false,
                 quickOperationList: [
                     { keys: ['Ctrl / Cmd', 'C'], name: '复制' },
-                    { keys: ['Delete'], name: '快速删除' },
                     { keys: ['Ctrl / Cmd', 'V'], name: '粘贴' },
-                    { keys: ['Tab'], name: '切换下一个表单' },
                     { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
-                    { keys: ['↑'], name: '增加数值' },
                     { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
-                    { keys: ['↓'], name: '减少数值' }
+                    { keys: ['Delete'], name: '快速删除' }
                 ]
             }
         },
@@ -387,10 +384,7 @@
                         this.copyComponent()
                         break
                     case 88:
-                        const copyData = cloneDeep(this.curSelectedComponentData)
-                        this.setCopyData(copyData)
-                        this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
-                        this.confirmDelComponent()
+                        this.cutComponent()
                         break
                     case 90:
                         this.backTargetHistory()
@@ -405,6 +399,20 @@
                 }
             },
 
+            cutComponent () {
+                if (!this.hasCtrl) return
+                const selection = window.getSelection()
+                const selectionTxt = selection.toString()
+                if (selectionTxt) {
+                    this.setCopyData({})
+                } else {
+                    const copyData = cloneDeep(this.curSelectedComponentData)
+                    this.setCopyData(copyData)
+                    this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
+                    this.confirmDelComponent()
+                }
+            },
+
             deleteComponent () {
                 const delBtn = document.querySelector('#del-component-right-sidebar')
                 delBtn && delBtn.click()
@@ -412,7 +420,10 @@
 
             putComponentData () {
                 if (!this.hasCtrl) return
-                const copyData = cloneDeep(this.curSelectedComponentData)
+                const selection = window.getSelection()
+                const selectionTxt = selection.toString()
+                let copyData = cloneDeep(this.curSelectedComponentData)
+                if (selectionTxt) copyData = {}
                 this.setCopyData(copyData)
             },
 
