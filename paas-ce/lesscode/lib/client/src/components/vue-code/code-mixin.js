@@ -65,7 +65,7 @@ const codeMixin = {
         },
 
         generateComponment (item) {
-            item = Object.assign(item, { componentId: camelCase(item.componentId.replace(/-/g, '')) })
+            item = Object.assign({}, item, { componentId: camelCase(item.componentId.replace(/-/g, '')) })
             if (item.name.startsWith('chart-')) {
                 this.generateCharts(item)
                 const widthStr = item.renderProps.width && item.renderProps.width.val ? `width: ${item.renderProps.width.val}px;` : ''
@@ -113,7 +113,7 @@ const codeMixin = {
                                 margin-right: 20px;
                             }
                             .echarts {
-                                width: 100%,;
+                                width: 100%;
                                 height: 100%;
                             }
                             /* 还原 bk-button 组件的 vertical-align 样式 */

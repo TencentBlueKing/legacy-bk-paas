@@ -74,10 +74,12 @@
     }
 
     .mac {
-        font-family: PingFang SC, Microsoft Yahei, Helvetica, Aria;
+        /* font-family: PingFang SC, Microsoft Yahei, Helvetica, Aria; */
+        font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
     }
 
     .win {
-        font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria;
+        /* font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria; */
+        font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
     }
 </style>

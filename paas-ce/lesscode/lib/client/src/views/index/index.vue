@@ -16,17 +16,11 @@
                 <div class="page-name">
                     可视化开发
                 </div>
-                <!-- <div class="back">
-                    <i class="bk-drag-icon bk-drag-arrow-back"></i>
-                </div>
-                <div class="page-name">
-                    单据详情页【配置平台】
-                </div> -->
             </div>
             <div class="function-and-tool">
                 <ul class="function-tabs">
                     <li class="tab-item" @click="handleToolAction('edit')" :class="actionSelected === 'edit' ? 'active' : ''">编辑</li>
-                    <li class="tab-item" @click="handleToolAction('vueCode')" :class="actionSelected === 'vueCode' ? 'active' : ''">Vue 源码</li>
+                    <li class="tab-item" @click="handleToolAction('vueCode')" :class="actionSelected === 'vueCode' ? 'active' : ''">查看源码</li>
                 </ul>
                 <div class="tool-actions">
                     <!-- <div class="action-item" v-bk-tooltips="{ content: '撤销', placements: ['bottom'] }">
@@ -42,12 +36,6 @@
                         @click="handleClearAll">
                         <i class="bk-drag-icon bk-drag-delete"></i>
                     </div>
-                    <!-- <div class="action-item" @click="test">
-                        test
-                    </div>
-                    <div class="action-item" @click="test1">
-                        mock
-                    </div> -->
                     <div class="action-item text" @click="showFunManage" v-bk-tooltips="{ content: '函数管理', placements: ['bottom'] }">
                         <i class="bk-drag-icon bk-drag-diff"></i>
                     </div>
@@ -71,16 +59,13 @@
                             </ul>
                         </section>
                     </div>
-                    <!-- <div class="action-item">
-                        <i class="bk-drag-icon bk-drag-play"></i>
-                    </div>
-                    <div class="action-item">
-                        <i class="bk-drag-icon bk-drag-play"></i>
-                    </div>
-                    <div class="action-item">
-                        <i class="bk-drag-icon bk-drag-play"></i>
-                    </div> -->
                 </div>
+            </div>
+            <div class="changelog" @click="goChangelog" v-bk-tooltips="{ content: '更新日志', placements: ['bottom'] }">
+                <i class="bk-drag-icon bk-drag-update-log-fill"></i>
+            </div>
+            <div class="github-link" @click="goGithub" v-bk-tooltips="{ content: 'Github', placements: ['bottom'] }">
+                <i class="bk-drag-icon bk-drag-github-logo"></i>
             </div>
         </div>
         <div class="main-container">
@@ -163,9 +148,6 @@
                     </render-grid>
                 </vue-draggable>
             </div>
-            <!-- <div class="main-content" v-if="actionSelected === 'preview'">
-                <preview class="preview-area" :target-data="targetData"></preview>
-            </div> -->
             <div class="main-content" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
                 <vue-code class="code-area" :target-data="targetData"></vue-code>
             </div>
@@ -213,7 +195,6 @@
     import { uuid, removeClassWithNodeClass } from '@/common/util'
     import RenderGrid from '@/components/render/grid'
     import MaterialModifier from '@/element-materials/modifier'
-    // import Preview from '@/components/preview'
     import VueCode from '@/components/vue-code'
     import Methods from '@/components/methods'
     import codeMixin from '@/components/vue-code/code-mixin'
@@ -221,12 +202,10 @@
 
     import customComponents from '@/custom'
 
-    // import Img from '@/images/component-preview.png'
     export default {
         components: {
             RenderGrid,
             MaterialModifier,
-            // Preview,
             VueCode,
             Methods,
             ComponentSearch,
@@ -353,12 +332,15 @@
             }
 
             this.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
-            this.setCurSelectedComponentData(this.curDragingComponent)
+            // this.setCurSelectedComponentData(this.curDragingComponent)
             this.setTargetData([this.curDragingComponent])
-            window.test = this.test
-            window.test1 = this.test1
+
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
+
+            // for test
+            window.test = this.test
+            window.test1 = this.test1
         },
         mounted () {
             window.addEventListener('beforeunload', function (e) {
@@ -827,6 +809,20 @@
                     theme: 'error',
                     message: errTips
                 })
+            },
+
+            /**
+             * 跳转到开源版 github
+             */
+            goGithub () {
+                window.open('https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md')
+            },
+
+            goChangelog () {
+                const routerUrl = this.$router.resolve({
+                    name: 'changelog'
+                })
+                window.open(routerUrl.href, '_blank')
             },
 
             test () {

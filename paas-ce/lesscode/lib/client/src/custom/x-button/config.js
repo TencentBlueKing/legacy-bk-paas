@@ -13,7 +13,9 @@ export default {
     name: 'x-button',
     type: 'x-button',
     displayName: 'x-button',
-    events: ['click'],
+    events: [
+        { name: 'click', tips: '点击事件' }
+    ],
     styles: ['size', 'padding', 'margin', 'font', 'border', 'background'],
     props: {
         title: {
