@@ -405,7 +405,7 @@
                 const selectionTxt = selection.toString()
                 if (selectionTxt) {
                     this.setCopyData({})
-                } else {
+                } else if (Object.keys(this.curSelectedComponentData).length) {
                     const copyData = cloneDeep(this.curSelectedComponentData)
                     this.setCopyData(copyData)
                     this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
