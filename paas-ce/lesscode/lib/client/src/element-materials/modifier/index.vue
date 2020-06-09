@@ -29,6 +29,9 @@
                 </div>
             </bk-tab-panel>
         </bk-tab>
+        <div class="empty" v-if="!Object.keys(curSelectedComponentData).length">
+            <span>请选择组件</span>
+        </div>
     </div>
 </template>
 <script>

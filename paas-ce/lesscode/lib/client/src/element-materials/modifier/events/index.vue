@@ -14,7 +14,7 @@
         <ul v-if="eventKeys.length">
             <li v-for="event in eventKeys" :key="event.name" class="event-item">
                 <h3 class="event-title">
-                    {{ event.name }}<i v-if="event.tips" class="bk-icon icon-info-circle" v-bk-tooltips="transformTipsWidth(event.tips)" />
+                    <span class="label" v-bk-tooltips="transformTipsWidth(event.tips)">{{ event.name }}</span>
                 </h3>
                 <bk-select class="event-choose" ref="eventChooseComp" :value="eventValues[event.name]" @clear="choose({ id: '' }, event.name)">
                     <bk-option-group
@@ -34,9 +34,8 @@
                 </bk-select>
             </li>
         </ul>
-        <div class="empty" v-else>
+        <div class="no-event" v-else>
             <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无事件</span>
-            <span v-else>请选择组件</span>
         </div>
         <methods :is-show.sync="showMethod"></methods>
     </section>
@@ -148,10 +147,8 @@
             word-break: keep-all;
             margin: 0;
             padding: 0;
-            .icon-info-circle {
-                padding: 4px;
-                color: #979BA5;
-                font-size: 16px;
+            .label {
+                border-bottom: 1px dashed #979ba5;
                 cursor: pointer;
             }
         }

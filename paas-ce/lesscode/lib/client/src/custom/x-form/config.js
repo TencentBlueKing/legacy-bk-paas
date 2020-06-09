@@ -13,7 +13,6 @@ export default {
     name: 'x-form',
     type: 'x-form',
     displayName: 'x-form',
-    events: ['selected', 'toggle', 'change', 'clear'],
     styles: ['padding', 'margin', 'font', 'backgroundColor'],
     props: {
         // input
@@ -22,7 +21,8 @@ export default {
             val: 'hello world'
         },
         placeholder: {
-            type: 'string'
+            type: 'string',
+            tips: '空白提示'
         },
         disabled: {
             type: 'boolean',
@@ -33,37 +33,45 @@ export default {
             val: true
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         },
         // button
         title: {
             type: 'string',
-            val: 'hello world'
+            val: 'hello world',
+            tips: '原生 html title 属性'
         },
         'button-text': {
             type: 'string',
-            val: '按钮'
+            val: '按钮',
+            tips: '按钮文案'
         },
         'button-submit-url': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '点击按钮发送请求的异步地址'
         },
         'button-theme': {
             type: 'string',
-            options: ['default', 'primary', 'success', 'warning', 'danger', 'text']
+            options: ['default', 'primary', 'success', 'warning', 'danger', 'text'],
+            tips: '按钮类型、主题'
         },
         // select
         'select-value': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '当前被选中的值'
         },
         'select-show-select-all': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否显示全选选项，仅当开启 select-multiple 时生效'
         },
         'select-multiple': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否多选'
         },
         'select-disabled': {
             type: 'boolean',
@@ -75,7 +83,8 @@ export default {
         },
         'select-ajax-url': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '下拉框获取数据的异步地址'
         },
         'select-render-list': {
             type: 'array',
@@ -86,7 +95,8 @@ export default {
                 { id: 4, name: '跳舞' },
                 { id: 5, name: '健身' },
                 { id: 6, name: '骑车' }
-            ]
+            ],
+            tips: '下拉框的数据'
         }
     }
 }

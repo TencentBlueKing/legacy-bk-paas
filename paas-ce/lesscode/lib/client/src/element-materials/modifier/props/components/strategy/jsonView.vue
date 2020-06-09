@@ -162,7 +162,7 @@
             }
         }
     }
-    
+
     .option-add {
         font-size: 12px;
         cursor: pointer;
