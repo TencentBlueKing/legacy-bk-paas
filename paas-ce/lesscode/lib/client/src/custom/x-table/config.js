@@ -13,20 +13,22 @@ export default {
     name: 'x-table',
     type: 'x-table',
     displayName: 'x-table',
-    events: ['selected', 'toggle', 'change', 'clear'],
     styles: ['size', 'padding', 'margin', 'font', 'backgroundColor'],
     props: {
         'get-table-list-ajax-url': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '获取表格数据的异步地址'
         },
         'post-edit-table-list-ajax-url': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '新建数据异步地址'
         },
         'del-table-list-ajax-url': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '删除表格中某条数据的异步地址'
         }
     }
 }

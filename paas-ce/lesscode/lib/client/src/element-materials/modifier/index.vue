@@ -24,11 +24,14 @@
                         :last-props="modifier.renderProps"
                         :last-events="modifier.renderEvents"
                         :component-id="curSelectedComponentData.componentId"
-                        :key="curSelectedComponentData.componentId"
+                        :key="curSelectedComponentData.renderKey"
                         @on-change="handleModifier" />
                 </div>
             </bk-tab-panel>
         </bk-tab>
+        <div class="empty" v-if="!Object.keys(curSelectedComponentData).length">
+            <span>请选择组件</span>
+        </div>
     </div>
 </template>
 <script>
@@ -131,17 +134,20 @@
             }
         },
         watch: {
-            curSelectedComponentData (componentData) {
-                // 默认展示props设置tab
-                // this.tabPanelActive = 'props'
-                this.tabPanelActive = componentData.tabPanelActive
-                // 选中某个组件，获取获取该组件的renderStyles，renderProps，renderEvents作为本次操作的默认值
-                const { renderStyles = {}, renderProps = {}, renderEvents = {} } = componentData
-                this.modifier = {
-                    renderStyles,
-                    renderProps,
-                    renderEvents
-                }
+            curSelectedComponentData: {
+                handler (componentData) {
+                    // 默认展示props设置tab
+                    // this.tabPanelActive = 'props'
+                    this.tabPanelActive = componentData.tabPanelActive
+                    // 选中某个组件，获取获取该组件的renderStyles，renderProps，renderEvents作为本次操作的默认值
+                    const { renderStyles = {}, renderProps = {}, renderEvents = {} } = componentData
+                    this.modifier = {
+                        renderStyles,
+                        renderProps,
+                        renderEvents
+                    }
+                },
+                deep: true
             }
         },
         created () {
@@ -205,7 +211,9 @@
                 padding-bottom: 20px;
                 overflow-y: auto;
                 position: relative;
-                .empty {
+                .no-style,
+                .no-prop,
+                .no-event {
                     position: absolute;
                     top: 50%;
                     left: 50%;
@@ -240,6 +248,12 @@
                     border-color: $newRedColor !important;
                 }
             }
+        }
+        .empty {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 </style>

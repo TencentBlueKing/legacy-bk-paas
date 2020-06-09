@@ -146,7 +146,7 @@ module.exports = {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: resolve(__dirname, '../../../node_modules', 'url-loader'),
                 options: {
-                    limit: 10000,
+                    limit: true,
                     name: posix.join('static', 'images/[name].[hash:7].[ext]')
                 }
             },

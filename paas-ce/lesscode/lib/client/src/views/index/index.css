@@ -122,6 +122,9 @@ $headerHeight: 64px;
                 .bk-tab-label-wrapper {
                     padding: 0;
                 }
+                .empty {
+                    display: none;
+                }
             }
         }
         .collapse-icon {
@@ -240,17 +243,6 @@ $headerHeight: 64px;
         width: 300px;
         align-items: center;
         padding-left: 22px;
-        .back {
-            width: 38px;
-            height: 38px;
-            line-height: 38px;
-            text-align: center;
-            color: #3A84FF;
-
-            .bk-drag-arrow-back {
-                font-weight: 700;
-            }
-        }
         .page-name {
             font-size: 16px;
             color: #63656E;
@@ -260,8 +252,27 @@ $headerHeight: 64px;
     .function-and-tool {
         flex: auto;
         position: relative;
-        margin-right: 300px;
+        margin-right: 220px;
         margin-left: 20px;
+    }
+
+    .github-link,
+    .changelog {
+        height: 52px;
+        width: 30px;
+        font-size: 16px;
+        line-height: 52px;
+        text-align: center;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .change-log {
+        font-size: 12px;
+        position: absolute;
+        margin-top: 2px;
+        left: 110px;
+        cursor: pointer;
     }
 
     .function-tabs {
@@ -311,6 +322,79 @@ $headerHeight: 64px;
             &.active {
                 color: #3A84FF;
                 border-bottom: 2px solid #3A84FF;
+            }
+            &.quick-operation {
+                position: relative;
+            }
+
+            .operation-main {
+                position: absolute;
+                width: 530px;
+                height: 290px;
+                left: 0;
+                top: 60px;
+                background: #fff;
+                color: #000;
+                z-index: 15;
+                box-shadow: 0pt 4pt 12pt 0pt rgba(0,0,0,0.2);
+                padding: 10px 24px 30px;
+                cursor: default;
+                &:before {
+                    position: absolute;
+                    content: '';
+                    width: 12px;
+                    height: 12px;
+                    transform: rotate(45deg);
+                    left: 13px;
+                    top: -6px;
+                    background: #fff;
+                }
+                .operation-title {
+                    margin: 0;
+                    padding: 0;
+                    line-height: 26px;
+                    font-size: 20px;
+                    font-weight: normal;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: 22px;
+                    .icon-close {
+                        position: absolute;
+                        font-size: 32px;
+                        right: 6px;
+                        top: 0;
+                        color: #979ba5;
+                        cursor: pointer;
+                    }
+                }
+                .operation-item {
+                    float: left;
+                    margin: 10px 0;
+                    line-height: 28px;
+                    font-size: 12px;
+                    color: #63656e;
+                    .operation-keys {
+                        margin-right: 26px;
+                        .operation-key {
+                            display: inline-block;
+                            width: 40px;
+                            height: 30px;
+                            border: 1pt solid #c4c6cc;
+                            border-radius: 2px;
+                        }
+                        .operation-plus {
+                            display: inline-block;
+                            margin: 0 15px;
+                        }
+                        >span:first-child .operation-key {
+                            width: 80px;
+                        }
+                    }
+                    &:nth-child(odd) {
+                        margin-right: 70px;
+                    }
+                }
             }
         }
     }

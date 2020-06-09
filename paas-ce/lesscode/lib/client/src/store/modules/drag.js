@@ -8,6 +8,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import targetDataTool from '@/common/targetData.js'
+import cloneDeep from 'lodash.clonedeep'
 
 export default {
     namespaced: true,
@@ -35,10 +37,19 @@ export default {
 
         functionGroup: [],
 
+        copyData: {},
+
+        targetHistory: [],
+
+        curHistoryIndex: 0,
+
         // 用于生成 json 配置的数据
         astData: []
     },
     mutations: {
+        setCopyData (state, selectedComponent) {
+            state.copyData = selectedComponent
+        },
         setFunctionGroup (state, functionGroup) {
             localStorage.setItem('functionGroup', JSON.stringify(functionGroup))
             state.functionGroup = functionGroup
@@ -61,12 +72,87 @@ export default {
         },
         setPageData (state, pageData) {
             state.pageData = Object.assign({}, pageData)
+        },
+
+        pushTargetHistory (state, pushData) {
+            state.targetHistory = state.targetHistory.slice(state.curHistoryIndex)
+            state.curHistoryIndex = 0
+            const topPushData = state.targetHistory[0]
+            const isExis = pushData.component && !Array.isArray(targetDataTool(pushData.component.componentId).value())
+            if (pushData.type === 'remove' && topPushData.type === 'add' && topPushData.component.componentId === pushData.component.componentId && isExis) {
+                topPushData.type = 'move'
+                topPushData.sourceParentNodeId = pushData.parentId
+                topPushData.sourceColumnIndex = pushData.columnIndex
+                topPushData.sourceChildrenIndex = pushData.childrenIndex
+
+                topPushData.targetParentNodeId = topPushData.parentId
+                topPushData.targetColumnIndex = topPushData.columnIndex
+                topPushData.targetChildrenIndex = topPushData.childrenIndex
+            } else {
+                state.targetHistory.unshift(cloneDeep(pushData))
+            }
+            if (state.targetHistory.length > 50) state.targetHistory.pop()
+        },
+
+        backTargetHistory (state) {
+            if (state.curHistoryIndex >= state.targetHistory.length) return
+            const pushData = state.targetHistory[state.curHistoryIndex]
+            state.curHistoryIndex++
+            const targetData = targetDataTool()
+            const component = pushData.component
+            const parentId = pushData.parentId
+            switch (pushData.type) {
+                case 'update':
+                    targetData.update(component)
+                    break
+                case 'add':
+                    targetData.remove(component.componentId)
+                    break
+                case 'remove':
+                    targetData.appendChildByIndex(component, parentId, pushData.columnIndex, pushData.childrenIndex)
+                    break
+                case 'move':
+                    targetData.move(pushData.targetParentNodeId, pushData.targetColumnIndex, pushData.targetChildrenIndex, pushData.sourceParentNodeId, pushData.sourceColumnIndex, pushData.sourceChildrenIndex)
+                    break
+                case 'clear':
+                    targetData.setTargetData(pushData.oldTargetData)
+                    break
+            }
+        },
+
+        forwardTargetHistory (state) {
+            if (state.curHistoryIndex <= 0) return
+            state.curHistoryIndex--
+            const pushData = state.targetHistory[state.curHistoryIndex]
+            const targetData = targetDataTool()
+            const component = pushData.component
+            const parentId = pushData.parentId
+            switch (pushData.type) {
+                case 'update':
+                    const modifier = pushData.modifier
+                    Object.assign(component, modifier)
+                    targetData.update(component)
+                    break
+                case 'add':
+                    targetData.appendChildByIndex(component, parentId, pushData.columnIndex, pushData.childrenIndex)
+                    break
+                case 'remove':
+                    targetData.remove(component.componentId)
+                    break
+                case 'move':
+                    targetData.move(pushData.sourceParentNodeId, pushData.sourceColumnIndex, pushData.sourceChildrenIndex, pushData.targetParentNodeId, pushData.targetColumnIndex, pushData.targetChildrenIndex)
+                    break
+                case 'clear':
+                    targetData.setTargetData(pushData.newTargetData)
+                    break
+            }
         }
     },
     getters: {
         draggableSourceGroup: state => state.draggableSourceGroup,
         draggableTargetGroup: state => state.draggableTargetGroup,
         targetData: state => state.targetData,
+        copyData: state => state.copyData,
         astData: state => state.astData,
         curSelectedComponentData: state => state.curSelectedComponentData,
         pageData: state => state.pageData,
@@ -95,8 +181,7 @@ export default {
                                         'function getMockData (res) {',
                                         '\tthis.$http.get("/test/getMockData")',
                                         '\t.then((res) => {',
-                                        '\t\tconst data = JSON.stringify(res)',
-                                        '\t\talert(data)',
+                                        '\t\treturn res.data',
                                         '\t})',
                                         '}'
                                     ].join('\n')
