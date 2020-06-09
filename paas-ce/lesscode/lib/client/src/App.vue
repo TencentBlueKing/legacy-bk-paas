@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <section v-if="emptyPage">
+    <section v-if="emptyPage" class="preview-page">
         <router-view />
     </section>
     <section v-else>
@@ -66,6 +66,11 @@
         height: 100%;
         font-size: 14px;
         color: #63656e;
+    }
+
+    .preview-page {
+        height: 99vh;
+        overflow: auto;
     }
 
     .mac {
