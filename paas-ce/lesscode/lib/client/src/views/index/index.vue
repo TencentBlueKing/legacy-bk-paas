@@ -131,7 +131,7 @@
             </aside>
 
             <!-- 这里用 v-show，切换源码或者预览时，如果时 v-if，那么 grid.vue 里的 renderDataSlot 会重置，这个值并没有存在 store 中 -->
-            <div class="main-content" :class="mainContentClass" @click="dragWrapperClickHandler" v-show="actionSelected === 'edit'">
+            <div class="main-content" :class="mainContentClass" @click="dragWrapperClickHandler" v-bk-clickoutside="toggleQuickOperation" v-show="actionSelected === 'edit'">
                 <vue-draggable
                     :key="refreshDragAreaKey"
                     class="target-drag-area"
@@ -145,7 +145,7 @@
                     @change="log"
                     @end="targetAreaEndHandler"
                 >
-                    <render-grid v-for="item in targetData" :key="item.renderKey" :component-data="item">
+                    <render-grid v-for="item in targetData" :key="item.renderKey" :component-data="item" @toggleQuickOperation="toggleQuickOperation">
                     </render-grid>
                 </vue-draggable>
             </div>
@@ -249,7 +249,8 @@
                     { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
                     { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
                     { keys: ['Delete'], name: '快速删除' }
-                ]
+                ],
+                isInDragArea: false
             }
         },
         computed: {
@@ -359,6 +360,10 @@
                 'forwardTargetHistory'
             ]),
 
+            toggleQuickOperation (val) {
+                this.isInDragArea = val === true
+            },
+
             toggleShowQuickOperation (val) {
                 this.showQuickOperation = val
             },
@@ -373,6 +378,7 @@
             },
 
             quickOperation (event) {
+                if (!this.isInDragArea) return
                 switch (event.keyCode) {
                     case 91:
                     case 17:
@@ -401,17 +407,12 @@
             },
 
             cutComponent () {
-                if (!this.hasCtrl) return
-                const selection = window.getSelection()
-                const selectionTxt = selection.toString()
-                if (selectionTxt) {
-                    this.setCopyData({})
-                } else if (Object.keys(this.curSelectedComponentData || {}).length) {
-                    const copyData = cloneDeep(this.curSelectedComponentData)
-                    this.setCopyData(copyData)
-                    this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
-                    this.confirmDelComponent()
-                }
+                if (!this.hasCtrl || Object.keys(this.curSelectedComponentData || {}).length <= 0) return
+
+                const copyData = cloneDeep(this.curSelectedComponentData)
+                this.setCopyData(copyData)
+                this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
+                this.confirmDelComponent()
             },
 
             deleteComponent () {
@@ -421,10 +422,7 @@
 
             putComponentData () {
                 if (!this.hasCtrl) return
-                const selection = window.getSelection()
-                const selectionTxt = selection.toString()
-                let copyData = cloneDeep(this.curSelectedComponentData)
-                if (selectionTxt) copyData = {}
+                const copyData = cloneDeep(this.curSelectedComponentData)
                 this.setCopyData(copyData)
             },
 
@@ -432,15 +430,17 @@
                 if (!this.hasCtrl || Object.keys(this.copyData).length <= 0) return
                 const copyNode = this.$td(this.curSelectedComponentData.componentId).appendChild(this.copyData, true)
                 const pos = copyNode.getNodePosition()
-                const pushData = {
-                    parentId: pos.parent && pos.parent.componentId,
-                    component: copyNode.value(),
-                    columnIndex: pos.columnIndex,
-                    childrenIndex: pos.childrenIndex,
-                    type: 'add'
-                }
+                if (pos) {
+                    const pushData = {
+                        parentId: pos.parent && pos.parent.componentId,
+                        component: copyNode.value(),
+                        columnIndex: pos.columnIndex,
+                        childrenIndex: pos.childrenIndex,
+                        type: 'add'
+                    }
 
-                this.pushTargetHistory(pushData)
+                    this.pushTargetHistory(pushData)
+                }
             },
 
             /***
@@ -497,7 +497,7 @@
             dragWrapperClickHandler (e) {
                 removeClassWithNodeClass('.bk-layout-grid-row', 'selected')
                 removeClassWithNodeClass('.component-wrapper', 'selected')
-
+                this.toggleQuickOperation(true)
                 this.setCurSelectedComponentData({})
             },
 
@@ -614,6 +614,7 @@
             },
 
             onGridChoose (e) {
+                this.toggleQuickOperation(true)
                 const evt = e[0]
                 const curChooseComponent = this.targetData[evt.oldIndex]
                 this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)

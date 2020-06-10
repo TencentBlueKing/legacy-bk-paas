@@ -77,9 +77,9 @@ export default {
         pushTargetHistory (state, pushData) {
             state.targetHistory = state.targetHistory.slice(state.curHistoryIndex)
             state.curHistoryIndex = 0
-            const topPushData = state.targetHistory[0]
+            const topPushData = state.targetHistory[0] || {}
             const isExis = pushData.component && !Array.isArray(targetDataTool(pushData.component.componentId).value())
-            if (topPushData && pushData.type === 'remove' && topPushData.type === 'add' && topPushData.component.componentId === pushData.component.componentId && isExis) {
+            if (pushData.type === 'remove' && topPushData.type === 'add' && topPushData.component.componentId === pushData.component.componentId && isExis) {
                 topPushData.type = 'move'
                 topPushData.sourceParentNodeId = pushData.parentId
                 topPushData.sourceColumnIndex = pushData.columnIndex
@@ -130,8 +130,7 @@ export default {
             switch (pushData.type) {
                 case 'update':
                     const modifier = pushData.modifier
-                    Object.assign(component, modifier)
-                    targetData.update(component)
+                    targetData.update(Object.assign({}, component, modifier))
                     break
                 case 'add':
                     targetData.appendChildByIndex(component, parentId, pushData.columnIndex, pushData.childrenIndex)

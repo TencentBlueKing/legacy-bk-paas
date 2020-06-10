@@ -225,6 +225,7 @@
             },
 
             onChoose (e, column) {
+                this.$emit('toggleQuickOperation', true)
                 const evt = e[0]
                 const curChooseComponent = column.children[evt.oldIndex]
                 this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
