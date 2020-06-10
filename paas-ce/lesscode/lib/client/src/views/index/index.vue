@@ -42,6 +42,7 @@
                     <div class="action-item text quick-operation"
                         :class="showQuickOperation === true ? 'active' : ''"
                         @click="toggleShowQuickOperation(true)"
+                        v-bk-tooltips="{ content: '快捷键说明', placements: ['bottom'] }"
                         v-bk-clickoutside="toggleShowQuickOperation"
                     >
                         <i class="bk-drag-icon bk-drag-keyboard"></i>
