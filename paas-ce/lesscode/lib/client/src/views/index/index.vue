@@ -131,7 +131,7 @@
             </aside>
 
             <!-- 这里用 v-show，切换源码或者预览时，如果时 v-if，那么 grid.vue 里的 renderDataSlot 会重置，这个值并没有存在 store 中 -->
-            <div class="main-content" :class="mainContentClass" @click="dragWrapperClickHandler" v-bk-clickoutside="toggleQuickOperation" v-show="actionSelected === 'edit'">
+            <div class="main-content" :class="mainContentClass" @click="dragWrapperClickHandler" v-show="actionSelected === 'edit'">
                 <vue-draggable
                     :key="refreshDragAreaKey"
                     class="target-drag-area"
@@ -145,7 +145,7 @@
                     @change="log"
                     @end="targetAreaEndHandler"
                 >
-                    <render-grid v-for="item in targetData" :key="item.renderKey" :component-data="item" @toggleQuickOperation="toggleQuickOperation">
+                    <render-grid v-for="item in targetData" :key="item.renderKey" :component-data="item">
                     </render-grid>
                 </vue-draggable>
             </div>
@@ -193,7 +193,7 @@
     import cloneDeep from 'lodash.clonedeep'
 
     import componentList from '@/element-materials/materials'
-    import { uuid, removeClassWithNodeClass } from '@/common/util'
+    import { uuid, removeClassWithNodeClass, getNodeWithClass } from '@/common/util'
     import RenderGrid from '@/components/render/grid'
     import MaterialModifier from '@/element-materials/modifier'
     import VueCode from '@/components/vue-code'
@@ -336,6 +336,7 @@
 
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
+            window.addEventListener('click', this.toggleQuickOperation, true)
 
             // for test
             window.test = this.test
@@ -347,6 +348,11 @@
                 (e || window.event).returnValue = confirmationMessage
                 return confirmationMessage
             })
+        },
+        beforeDestroy () {
+            window.removeEventListener('keydown', this.quickOperation)
+            window.removeEventListener('keyup', this.judgeCtrl)
+            window.removeEventListener('click', this.toggleQuickOperation, true)
         },
         methods: {
             ...mapMutations('drag', [
@@ -360,8 +366,9 @@
                 'forwardTargetHistory'
             ]),
 
-            toggleQuickOperation (val) {
-                this.isInDragArea = val === true
+            toggleQuickOperation (event) {
+                const mainNode = getNodeWithClass(event.target, 'target-drag-area')
+                this.isInDragArea = mainNode && mainNode.classList.contains('target-drag-area')
             },
 
             toggleShowQuickOperation (val) {
@@ -497,7 +504,7 @@
             dragWrapperClickHandler (e) {
                 removeClassWithNodeClass('.bk-layout-grid-row', 'selected')
                 removeClassWithNodeClass('.component-wrapper', 'selected')
-                this.toggleQuickOperation(true)
+
                 this.setCurSelectedComponentData({})
             },
 
@@ -614,7 +621,6 @@
             },
 
             onGridChoose (e) {
-                this.toggleQuickOperation(true)
                 const evt = e[0]
                 const curChooseComponent = this.targetData[evt.oldIndex]
                 this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
