@@ -29,6 +29,8 @@
     }
     &.selected {
         border: 1px solid #3a84ff;
+        /* 可避免右键弹出菜单被后一个 grid 遮住的问题 */
+        z-index: 11;
     }
 
     .bk-layout-grid-col {

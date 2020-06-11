@@ -367,6 +367,26 @@
                 'forwardTargetHistory'
             ]),
 
+            /**
+             * 检测是否能删除组件
+             *
+             * @return {boolean} 是否可以删除
+             */
+            checkIsDelComponent () {
+                const { type, componentId } = this.curSelectedComponentData
+                if (type === 'render-grid'
+                    && this.targetData.length === 1 && componentId === this.targetData[0].componentId
+                ) {
+                    this.$bkMessage({
+                        theme: 'warning',
+                        limit: 1,
+                        message: '画布中至少要有一个栅格布局'
+                    })
+                    return false
+                }
+                return true
+            },
+
             toggleQuickOperation (event) {
                 const mainNode = getNodeWithClass(event.target, 'target-drag-area')
                 this.isInDragArea = mainNode && mainNode.classList.contains('target-drag-area')
@@ -419,6 +439,10 @@
 
             cutComponent () {
                 if (!this.hasCtrl || Object.keys(this.curSelectedComponentData || {}).length <= 0) return
+
+                if (!this.checkIsDelComponent()) {
+                    return
+                }
 
                 const copyData = cloneDeep(this.curSelectedComponentData)
                 this.setCopyData(copyData)
@@ -739,6 +763,9 @@
              * 显示删除选中的元素弹框
              */
             showDeleteElement () {
+                if (!this.checkIsDelComponent()) {
+                    return
+                }
                 this.delComponentConf.visiable = true
                 this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
             },
