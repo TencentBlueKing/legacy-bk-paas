@@ -36,10 +36,10 @@
                         @click="handleClearAll">
                         <i class="bk-drag-icon bk-drag-delete"></i>
                     </div>
-                    <div class="action-item text" @click="showFunManage" v-bk-tooltips="{ content: '函数管理', placements: ['bottom'] }">
+                    <div class="action-item" @click="showFunManage" v-bk-tooltips="{ content: '函数管理', placements: ['bottom'] }">
                         <i class="bk-drag-icon bk-drag-diff"></i>
                     </div>
-                    <div class="action-item text quick-operation"
+                    <div class="action-item quick-operation"
                         :class="showQuickOperation === true ? 'active' : ''"
                         @click="toggleShowQuickOperation(true)"
                         v-bk-tooltips="{ content: '快捷键说明', placements: ['bottom'] }"
@@ -248,7 +248,7 @@
                     { keys: ['Ctrl / Cmd', 'V'], name: '粘贴' },
                     { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
                     { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
-                    { keys: ['Delete'], name: '快速删除' }
+                    { keys: ['Delete / Backspace'], name: '快速删除' }
                 ],
                 isInDragArea: false,
                 refreshVueCodeKey: +new Date()
@@ -402,12 +402,15 @@
                         this.cutComponent()
                         break
                     case 90:
-                        this.backTargetHistory()
+                        if (this.hasCtrl) this.backTargetHistory()
                         break
                     case 89:
-                        event.preventDefault()
-                        this.forwardTargetHistory()
+                        if (this.hasCtrl) {
+                            event.preventDefault()
+                            this.forwardTargetHistory()
+                        }
                         break
+                    case 8:
                     case 46:
                         this.deleteComponent()
                         break
