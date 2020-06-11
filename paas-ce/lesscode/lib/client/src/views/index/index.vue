@@ -193,7 +193,7 @@
     import cloneDeep from 'lodash.clonedeep'
 
     import componentList from '@/element-materials/materials'
-    import { uuid, removeClassWithNodeClass } from '@/common/util'
+    import { uuid, removeClassWithNodeClass, getNodeWithClass } from '@/common/util'
     import RenderGrid from '@/components/render/grid'
     import MaterialModifier from '@/element-materials/modifier'
     import VueCode from '@/components/vue-code'
@@ -249,7 +249,8 @@
                     { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
                     { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
                     { keys: ['Delete'], name: '快速删除' }
-                ]
+                ],
+                isInDragArea: false
             }
         },
         computed: {
@@ -335,6 +336,7 @@
 
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
+            window.addEventListener('click', this.toggleQuickOperation, true)
 
             // for test
             window.test = this.test
@@ -347,6 +349,11 @@
                 return confirmationMessage
             })
         },
+        beforeDestroy () {
+            window.removeEventListener('keydown', this.quickOperation)
+            window.removeEventListener('keyup', this.judgeCtrl)
+            window.removeEventListener('click', this.toggleQuickOperation, true)
+        },
         methods: {
             ...mapMutations('drag', [
                 'setTargetData',
@@ -358,6 +365,11 @@
                 'backTargetHistory',
                 'forwardTargetHistory'
             ]),
+
+            toggleQuickOperation (event) {
+                const mainNode = getNodeWithClass(event.target, 'target-drag-area')
+                this.isInDragArea = mainNode && mainNode.classList.contains('target-drag-area')
+            },
 
             toggleShowQuickOperation (val) {
                 this.showQuickOperation = val
@@ -373,6 +385,7 @@
             },
 
             quickOperation (event) {
+                if (!this.isInDragArea) return
                 switch (event.keyCode) {
                     case 91:
                     case 17:
@@ -401,17 +414,12 @@
             },
 
             cutComponent () {
-                if (!this.hasCtrl) return
-                const selection = window.getSelection()
-                const selectionTxt = selection.toString()
-                if (selectionTxt) {
-                    this.setCopyData({})
-                } else if (Object.keys(this.curSelectedComponentData || {}).length) {
-                    const copyData = cloneDeep(this.curSelectedComponentData)
-                    this.setCopyData(copyData)
-                    this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
-                    this.confirmDelComponent()
-                }
+                if (!this.hasCtrl || Object.keys(this.curSelectedComponentData || {}).length <= 0) return
+
+                const copyData = cloneDeep(this.curSelectedComponentData)
+                this.setCopyData(copyData)
+                this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
+                this.confirmDelComponent()
             },
 
             deleteComponent () {
@@ -421,10 +429,7 @@
 
             putComponentData () {
                 if (!this.hasCtrl) return
-                const selection = window.getSelection()
-                const selectionTxt = selection.toString()
-                let copyData = cloneDeep(this.curSelectedComponentData)
-                if (selectionTxt) copyData = {}
+                const copyData = cloneDeep(this.curSelectedComponentData)
                 this.setCopyData(copyData)
             },
 
@@ -432,15 +437,17 @@
                 if (!this.hasCtrl || Object.keys(this.copyData).length <= 0) return
                 const copyNode = this.$td(this.curSelectedComponentData.componentId).appendChild(this.copyData, true)
                 const pos = copyNode.getNodePosition()
-                const pushData = {
-                    parentId: pos.parent && pos.parent.componentId,
-                    component: copyNode.value(),
-                    columnIndex: pos.columnIndex,
-                    childrenIndex: pos.childrenIndex,
-                    type: 'add'
-                }
+                if (pos) {
+                    const pushData = {
+                        parentId: pos.parent && pos.parent.componentId,
+                        component: copyNode.value(),
+                        columnIndex: pos.columnIndex,
+                        childrenIndex: pos.childrenIndex,
+                        type: 'add'
+                    }
 
-                this.pushTargetHistory(pushData)
+                    this.pushTargetHistory(pushData)
+                }
             },
 
             /***
