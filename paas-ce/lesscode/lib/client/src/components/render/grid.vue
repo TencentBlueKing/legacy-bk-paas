@@ -345,6 +345,7 @@
 
                 parentRow.splice(selfIndex + 1, 0, {
                     componentId: this.componentData.name + '-' + uuid(),
+                    tabPanelActive: this.componentData.tabPanelActive,
                     renderKey: uuid(),
                     name: this.componentData.name,
                     type: this.componentData.type,
