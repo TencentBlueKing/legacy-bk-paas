@@ -23,6 +23,7 @@
                 :show="contextMenuVisible"
                 @update:show="show => contextMenuVisible = show">
                 <a href="javascript:;" @click="handleContextmenuDelete">删除</a>
+                <a href="javascript:;" @click="handleContextmenuClearGrid">清空</a>
             </context-menu>
             <render-col v-bind="column" :key="columnIndex" v-for="(column, columnIndex) in renderDataSlot.val"
                 :class="columnIndex === renderDataSlot.val.length - 1 ? 'last' : ''">
@@ -49,6 +50,19 @@
             <div class="add-column" @click="handleAddColumn">+</div>
             <div class="add-clone" @click="handleAddClone">+</div>
         </render-row>
+        <bk-dialog v-model="clearGridConf.visiable"
+            class="del-component-dialog"
+            theme="primary"
+            :mask-close="false"
+            :header-position="clearGridConf.headerPosition"
+            title="清空"
+            @confirm="confirmClearGrid"
+            @cancel="cancelClearGrid"
+            @after-leave="afterLeaveClearGrid">
+            <div>
+                <p>确认清空{{renderData.name}}组件【{{renderData.componentId}}】？</p>
+            </div>
+        </bk-dialog>
     </div>
 </template>
 
@@ -85,7 +99,11 @@
                 bindProps: {},
                 startDragPosition: {},
                 contextMenuVisible: false,
-                contextMenuTarget: null
+                contextMenuTarget: null,
+                clearGridConf: {
+                    visiable: false,
+                    headerPosition: 'left'
+                }
             }
         },
         computed: {
@@ -139,6 +157,39 @@
                     delBtn && delBtn.click()
                 }, 0)
                 this.contextMenuVisible = false
+            },
+
+            /**
+             * 右键清空 grid
+             */
+            handleContextmenuClearGrid () {
+                this.clearGridConf.visiable = true
+            },
+
+            /**
+             * 显示清空 grid 的弹框
+             */
+            confirmClearGrid () {
+                const renderData = Object.assign({}, this.renderData)
+                renderData.renderProps.slots.val.forEach(v => {
+                    v.children = []
+                })
+                this.renderData = Object.assign({}, renderData)
+                this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
+                this.contextMenuVisible = false
+            },
+
+            /**
+             * 取消清空 grid 的弹框
+             */
+            cancelClearGrid () {
+                this.clearGridConf.visiable = false
+            },
+
+            /**
+             * 取消清空 grid 的弹框 afterLeave 回调
+             */
+            afterLeaveClearGrid () {
             },
 
             /**
