@@ -394,6 +394,9 @@ $headerHeight: 64px;
                     &:nth-child(odd) {
                         margin-right: 50px;
                     }
+                    &:last-child .operation-keys span.operation-key{
+                        width: 160px;
+                    }
                 }
             }
         }
