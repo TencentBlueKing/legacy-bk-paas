@@ -150,7 +150,7 @@
                 </vue-draggable>
             </div>
             <div class="main-content" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
-                <vue-code class="code-area" :target-data="targetData"></vue-code>
+                <vue-code class="code-area" :key="refreshVueCodeKey" :target-data="targetData"></vue-code>
             </div>
 
             <aside class="main-right-sidebar" :class="{ 'is-collapse': collapseSide.right }">
@@ -250,7 +250,8 @@
                     { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
                     { keys: ['Delete'], name: '快速删除' }
                 ],
-                isInDragArea: false
+                isInDragArea: false,
+                refreshVueCodeKey: +new Date()
             }
         },
         computed: {
@@ -725,6 +726,8 @@
                         me.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
                         me.setCurSelectedComponentData(me.curDragingComponent)
                         me.setTargetData([me.curDragingComponent])
+
+                        me.refreshVueCodeKey = +new Date()
                     }
                 })
             },
