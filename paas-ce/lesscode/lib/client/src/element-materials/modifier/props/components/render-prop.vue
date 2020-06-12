@@ -14,7 +14,7 @@
         <template v-if="formCom.length < 2">
             <div class="prop-name" :class="classes">
                 <span class="label" v-if="name !== 'slots' && describe.tips" v-bk-tooltips="computedTips">{{ name }}({{ formCom[0].typeName | propTypeFormat }})</span>
-                <span v-else v-bk-tooltips="computedTips">{{ name }}({{ formCom[0].typeName | propTypeFormat }})</span>
+                <span v-else>{{ name }}({{ formCom[0].typeName | propTypeFormat }})</span>
             </div>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in formCom">
