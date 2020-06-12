@@ -16,7 +16,17 @@ export default {
     icon: 'bk-drag-date',
     group: '表单',
     order: 1,
-    events: ['change', 'clear', 'open-change', 'pick-success'],
+    events: [{
+        name: 'change', tips: '日期改变事件，参数为当前选择的日期以及当前日历组件的类型，回调参数（date, type）'
+    }, {
+        name: 'clear', tips: '日历面板点击清空事件，无参数'
+    }, {
+        name: 'open-change', tips: '日历面板弹出或收起事件，回调参数为日历面板展开收起的状态'
+    }, {
+        name: 'pick-success', tips: '日历面板选择日期后，点击确定选择成功的事件，无参数'
+    }, {
+        name: 'shortcut-change', tips: '快捷项改变事件，回调参数（value, index）'
+    }],
     styles: ['size', 'margin', 'display'],
     defaultStyles: {
         display: 'inline-block'
@@ -27,10 +37,12 @@ export default {
             type: 'string',
             regExp: /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/,
             // 正则校验错误时的提示文本，默认值为"格式错误，请重新输入"
-            regErrorText: '请输入正确的日期格式，如"2020-01-01"'
+            regErrorText: '请输入正确的日期格式，如"2020-01-01"',
+            tips: '日期，如"2020-01-01"'
         },
         placeholder: {
-            type: 'string'
+            type: 'string',
+            tips: '占位文案'
         },
         type: {
             type: 'string',
@@ -45,12 +57,14 @@ export default {
         'font-size': {
             type: 'string',
             options: ['normal', 'medium', 'large'],
-            val: 'normal'
+            val: 'normal',
+            tips: '设置组件主体内容字体大小：normal--12px；medium--14px；large--16px'
         },
         placement: {
             type: 'string',
             options: ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end'],
-            val: 'bottom-start'
+            val: 'bottom-start',
+            tips: '日历面板出现的位置'
         },
         editable: {
             type: 'boolean',
@@ -60,12 +74,17 @@ export default {
             type: 'boolean',
             val: false
         },
-        'hide-disabled-options': {
+        readonly: {
             type: 'boolean',
             val: false
         },
+        clearable: {
+            type: 'boolean',
+            val: true
+        },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

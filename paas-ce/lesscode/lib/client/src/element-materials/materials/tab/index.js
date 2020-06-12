@@ -16,12 +16,19 @@ export default {
     icon: 'bk-drag-tab',
     group: '导航',
     order: 1,
-    events: ['tab-change', 'close-panel', 'add-panel'],
+    events: [{
+        name: 'tab-change', tips: '选项卡切换时调用，回调参数（name）'
+    }, {
+        name: 'close-panel', tips: '关闭选项卡时调用，回调参数（index, panel）'
+    }, {
+        name: 'add-panel', tips: '新增选项卡时调用'
+    }],
     styles: ['size', 'margin', 'display'],
     props: {
         active: {
             type: 'string',
-            val: 'Tab-1'
+            val: 'Tab-1',
+            tips: '当前显示的选项卡名称'
         },
         type: {
             type: 'string',
@@ -31,27 +38,37 @@ export default {
         'tab-position': {
             type: 'string',
             options: ['left', 'right', 'top'],
-            val: 'top'
-        },
-        closable: {
-            type: 'boolean',
-            val: false
-        },
-        addable: {
-            type: 'boolean',
-            val: false
+            val: 'top',
+            tips: '选项卡位置'
         },
         'scroll-step': {
             type: 'number',
-            val: 200
+            val: 200,
+            tips: '可滚动时，每次滚动的像素'
+        },
+        closable: {
+            type: 'boolean',
+            val: false,
+            tips: '是否可关闭选项卡'
+        },
+        addable: {
+            type: 'boolean',
+            val: false,
+            tips: '是否可新增选项卡'
+        },
+        'show-header': {
+            type: 'boolean',
+            val: true,
+            tips: '是否显示选项卡头部'
+        },
+        'validate-active': {
+            type: 'boolean',
+            val: true,
+            tips: '是否校验ActiveName，true：如果active匹配不到，默认激活第一个Tab，触发tab-change；false：active匹配不到不显示'
         },
         'ext-cls': {
             type: 'string',
             val: ''
-        },
-        'validate-active': {
-            type: 'boolean',
-            val: true
         },
         slots: {
             name: 'bk-tab-panel',

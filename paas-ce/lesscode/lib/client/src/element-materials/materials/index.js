@@ -48,6 +48,10 @@ import text from './text'
 import image from './image'
 import zoomImage from './zoom-image'
 
+import chartsLine from './charts-line'
+import chartsBar from './charts-bar'
+import chartsPie from './charts-pie'
+
 import { customComponentsConfigs } from '@/custom'
 
 export default Object.seal([
@@ -88,5 +92,8 @@ export default Object.seal([
     pagination,
     text,
     image,
-    zoomImage
+    zoomImage,
+    chartsLine,
+    chartsBar,
+    chartsPie
 ])

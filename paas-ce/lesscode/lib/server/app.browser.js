@@ -128,7 +128,11 @@ async function startServer () {
         app.use(await koaWebpack({
             compiler: compiler,
             hotClient: {
-                allEntries: true
+                allEntries: true,
+                host: {
+                    client: '*',
+                    server: '0.0.0.0'
+                }
             },
             devMiddleware: {
                 publicPath: webpackDevConf.output.publicPath,

@@ -16,28 +16,41 @@ export default {
     icon: 'bk-drag-select',
     group: '表单',
     order: 1,
-    events: ['selected', 'toggle', 'change', 'clear'],
+    events: [{
+        name: 'selected', tips: '选择列表时调用，多选时，回调参数均为数组（value, option(s)）'
+    }, {
+        name: 'toggle', tips: '切换下拉折叠状态时调用，回调参数（Boolean）'
+    }, {
+        name: 'change', tips: '选项发生变化时调用，回调参数（newValue, oldValue）'
+    }, {
+        name: 'clear', tips: '清空已选项时调用，回调参数（oldValue）'
+    }],
     styles: ['size', 'padding', 'margin', 'display', 'font', 'border', 'backgroundColor'],
     props: {
         value: {
-            type: 'string',
-            val: ''
+            type: ['string', 'array', 'number'],
+            val: '',
+            tips: '当前被选中的值'
         },
         multiple: {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否多选'
         },
         'show-select-all': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否显示全选选项，仅当开启multiple时生效'
         },
         'scroll-height': {
             type: 'number',
-            val: 216
+            val: 216,
+            tips: '下拉列表滚动高度'
         },
         placeholder: {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '未选择数据时的空白提示'
         },
         disabled: {
             type: 'boolean',
@@ -49,43 +62,51 @@ export default {
         },
         loading: {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否加载中'
         },
         clearable: {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否允许清空'
         },
         searchable: {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否显示搜索框'
         },
         'search-ignore-case': {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '搜索选项时是否忽略大小写'
         },
         'popover-min-width': {
             type: 'number',
-            val: 0
+            val: 0,
+            tips: '设置下拉列表的最小宽度, 默认的列表宽度跟组件保持一致'
         },
         'popover-width': {
             type: 'number',
-            val: 0
+            val: 0,
+            tips: '设置下拉列表的宽度, 默认的列表宽度跟组件保持一致'
         },
         'font-size': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '设置下拉已选择及列表的字体大小'
         },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         },
         'ext-popover-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在下拉菜单的 DOM .bk-select-dropdown-content 上'
         },
         'z-index': {
             type: 'number',
-            val: 2500
+            val: 2500,
+            tips: '弹出层的 z-index'
         },
         slots: {
             name: 'bk-option',

@@ -9,6 +9,39 @@
  * specific language governing permissions and limitations under the License.
  */
 
+/***
+ * 遍历targetData
+ * parentCallBack 是遍历到grid时候的回调
+ * childCallBack  是遍历到组件节点的回调
+ */
+export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
+    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
+    const renderProps = grid.renderProps || {}
+    const slots = renderProps.slots || {}
+    const columns = slots.val || []
+    columns.forEach((column, columnIndex) => {
+        const children = column.children || []
+        children.forEach((component, index) => {
+            if (component.type === 'render-grid') {
+                walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
+            } else {
+                if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
+            }
+        })
+    })
+}
+
+export function findComponentParentGrid (targetData, id) {
+    let componentParentGrid = null
+    targetData.forEach((grid, index) => {
+        const callBack = (data, parent, index, parentGrid) => {
+            if (data.componentId === id) componentParentGrid = parentGrid
+        }
+        walkGrid(targetData, grid, callBack, callBack, index)
+    })
+    return componentParentGrid
+}
+
 /**
  * 函数柯里化
  *
@@ -186,9 +219,7 @@ export function json2Query (param, key) {
     } else {
         Object.keys(param).forEach(p => {
             const value = param[p]
-            const k = (key === null || key === '' || key === undefined)
-                ? p
-                : key + (param instanceof Array ? '[' + p + ']' : '.' + p)
+            const k = isEmpty(key) ? p : key + (param instanceof Array ? '[' + p + ']' : '.' + p)
             paramStr += separator + json2Query(value, k)
         })
     }
@@ -379,7 +410,7 @@ export function uuid (len = 8, radix = 16) {
 export function getNodeWithClass (node, cls) {
     let parent = node
 
-    while (!parent.classList.contains(cls)) {
+    while (parent.parentNode !== document && !parent.classList.contains(cls)) {
         parent = parent.parentNode
     }
 
@@ -422,22 +453,14 @@ export function splitValueAndUnit (type, string) {
 }
 
 export const findComponent = (target, componentId) => {
-    const len = target.length
-    for (let i = 0; i < len; i++) {
-        const item = target[i]
-        if (item.componentId === componentId) {
-            return item
+    let res = ''
+    target.forEach((grid, index) => {
+        const callBack = (data) => {
+            if (data.componentId === componentId) res = data
         }
-
-        if (item.children) {
-            return findComponent(item.children, componentId)
-        } else if (
-            item.renderProps.slots && item.renderProps.slots.type === 'column'
-        ) {
-            return findComponent(item.renderProps.slots.val, componentId)
-        }
-    }
-    return ''
+        walkGrid(target, grid, callBack, callBack, index)
+    })
+    return res
 }
 export const findComponentParentRow = (target, componentId) => {
     const len = target.length
@@ -525,12 +548,50 @@ export function validateRoundNumber (val) {
  * @return {boolean}
  */
 export function computeIsDifferent (arr) {
-    for (let i = 0; i < arr.length - 1; i++) {
-        for (let j = i + 1; j < arr.length; j++) {
-            if (arr[i] !== arr[j]) {
-                return true
-            }
+    const first = arr[0]
+    for (const item of arr) {
+        if (item !== first) {
+            return true
         }
     }
     return false
+}
+
+/**
+ * 返回一个 tips 内的超链接 html 字符串
+ */
+export function formatLink ({ content = '', href = 'https://magicbox.bk.tencent.com/components_vue/2.0/example/index.html#/icon' } = {}) {
+    return `<a style="color: #72A7FF; text-decoration: underline;" target="_blank" href="${href}">${content}</a>`
+}
+
+/**
+ * 给内容长于 limitStrLength tips 加默认宽度
+ *
+ * @param {string|object} tips
+ * @param {number} width tips 设置宽度
+ *
+ * @return {object}
+ */
+export function transformTipsWidth (tips, width = 290) {
+    const limitStrLength = 22
+
+    if (isEmpty(tips)) {
+        return ''
+    } else if (typeof tips === 'string') {
+        if (tips.length >= limitStrLength) {
+            return { width, content: tips }
+        }
+    } else if (tips.html || (tips.content && tips.content.length >= limitStrLength)) {
+        return { width, ...tips }
+    }
+
+    return tips
+}
+
+/**
+ * 非空校验
+ * @param {*} obj
+ */
+export function isEmpty (obj) {
+    return obj === null || obj === '' || obj === undefined
 }

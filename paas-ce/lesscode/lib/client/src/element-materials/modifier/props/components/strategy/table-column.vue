@@ -20,8 +20,8 @@
                     <bk-input :value="item.label" @change="val => handleChange(val, 'label', index)" />
                 </div>
                 <div class="option-item">
-                    <div class="label">prop
-                        <i class="bk-icon icon-info-circle" v-bk-tooltips="{ content: '该属性的用法提示' }"></i>
+                    <div class="label">
+                        <span class="show-tip" v-bk-tooltips="{ content: '该列对应的字段名' }">prop</span>
                     </div>
                     <bk-input :value="item.prop" @change="val => handleChange(val, 'prop', index)" />
                 </div>
@@ -115,6 +115,11 @@
             text-align: right;
             &.bold-label {
                 font-weight: bold;
+            }
+            .show-tip {
+                border-bottom: 1px dashed #979ba5;
+                cursor: pointer;
+                padding-bottom: 2px;
             }
         }
     }
