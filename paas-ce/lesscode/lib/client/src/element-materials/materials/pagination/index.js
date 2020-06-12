@@ -16,37 +16,68 @@ export default {
     icon: 'bk-drag-pagination',
     group: '数据',
     order: 1,
-    events: ['change', 'limit-change'],
+    events: [{
+        name: 'change', tips: '当前页码变化时的回调，回调参数：变化后的页码'
+    }, {
+        name: 'limit-change', tips: '当前分页尺寸变化时的回调，回调参数：变化后的分页尺寸(即每页显示的条数)'
+    }],
     styles: ['size', 'margin', 'display'],
     defaultStyles: {
         display: 'block'
     },
     props: {
-        limit: {
-            type: 'number',
-            options: [10, 20, 50, 100],
-            val: 10
-        },
         count: {
             type: 'number',
-            val: 10
+            val: 10,
+            tips: '总数据量'
         },
         current: {
             type: 'number',
-            val: 1
+            val: 1,
+            tips: '当前页码，正整数，支持.sync修饰符'
+        },
+        limit: {
+            type: 'number',
+            val: 10,
+            tips: '每页显示条数(须存在于limit-list中)'
+        },
+        'limit-list': {
+            type: 'array',
+            val: [10, 20, 50, 100],
+            tips: '每页显示条数可选项配置'
+        },
+        'show-limit': {
+            type: 'boolean',
+            val: true,
+            tips: '是否显示附加功能（调整每页显示条数）'
+        },
+        location: {
+            type: 'string',
+            options: ['left', 'right'],
+            val: 'right',
+            tips: '每页显示条数控件位置'
+        },
+        align: {
+            type: 'string',
+            options: ['left', 'center', 'right'],
+            val: 'left',
+            tips: '分页控件位置，优先级高于location'
         },
         type: {
             type: 'string',
             options: ['default', 'compact'],
-            val: 'default'
+            val: 'default',
+            tips: '组件外观类型'
         },
-        'limit-list': {
-            type: 'array',
-            val: [10, 20, 50, 100]
+        size: {
+            type: 'string',
+            options: ['default', 'small'],
+            val: 'default',
+            tips: '页码尺寸大小'
         },
-        'show-limit': {
-            type: 'boolean',
-            val: true
+        'ext-cls': {
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

@@ -12,15 +12,18 @@
 <template>
     <section>
         <ul v-if="eventKeys.length">
-            <li v-for="event in eventKeys" :key="event" class="event-item">
-                <h3 class="event-title">{{ event }}</h3>
-                <bk-select class="event-choose" ref="eventChooseComp" :value="eventValues[event]" @clear="choose({ id: '' }, event)">
+            <li v-for="event in eventKeys" :key="event.name" class="event-item">
+                <h3 class="event-title">
+                    <span class="label" v-if="event.tips" v-bk-tooltips="transformTipsWidth(event.tips)">{{ event.name }}</span>
+                    <span v-else>{{ event.name }}</span>
+                </h3>
+                <bk-select class="event-choose" ref="eventChooseComp" :value="eventValues[event.name]" @clear="choose({ id: '' }, event.name)">
                     <bk-option-group
                         v-for="(group, index) in functionGroup"
                         :name="group.name"
                         :key="index">
                         <bk-option v-for="option in group.children"
-                            @click.native="choose(option, event)"
+                            @click.native="choose(option, event.name)"
                             :key="option.id"
                             :id="option.id"
                             :name="option.name">
@@ -32,9 +35,8 @@
                 </bk-select>
             </li>
         </ul>
-        <div class="empty" v-else>
+        <div class="no-event" v-else>
             <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无事件</span>
-            <span v-else>请选择组件</span>
         </div>
         <methods :is-show.sync="showMethod"></methods>
     </section>
@@ -43,6 +45,7 @@
 <script>
     import { mapGetters, mapMutations } from 'vuex'
     import methods from '@/components/methods'
+    import { transformTipsWidth } from '@/common/util'
 
     export default {
         name: 'modifier-events',
@@ -68,7 +71,8 @@
             return {
                 showMethod: false,
                 eventKeys: [],
-                eventValues: []
+                eventValues: [],
+                transformTipsWidth
             }
         },
         computed: {
@@ -144,6 +148,10 @@
             word-break: keep-all;
             margin: 0;
             padding: 0;
+            .label {
+                border-bottom: 1px dashed #979ba5;
+                cursor: pointer;
+            }
         }
         .event-choose {
             width: 100%;

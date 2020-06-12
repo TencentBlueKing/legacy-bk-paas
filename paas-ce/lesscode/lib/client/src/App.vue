@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <section v-if="emptyPage">
+    <section v-if="emptyPage" class="preview-page">
         <router-view />
     </section>
     <section v-else>
@@ -68,11 +68,18 @@
         color: #63656e;
     }
 
+    .preview-page {
+        height: 99vh;
+        overflow: auto;
+    }
+
     .mac {
-        font-family: PingFang SC, Microsoft Yahei, Helvetica, Aria;
+        /* font-family: PingFang SC, Microsoft Yahei, Helvetica, Aria; */
+        font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
     }
 
     .win {
-        font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria;
+        /* font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria; */
+        font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
     }
 </style>

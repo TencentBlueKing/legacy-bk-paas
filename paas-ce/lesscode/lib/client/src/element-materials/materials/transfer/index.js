@@ -16,7 +16,10 @@ export default {
     icon: 'bk-drag-transfer',
     group: '表单',
     order: 1,
-    events: ['change'],
+    events: [{
+        name: 'change',
+        tips: '数据源改变触发，回调参数为（sourceList/targetList/targetValueList）'
+    }],
     styles: ['size', 'margin'],
     props: {
         title: {
@@ -25,23 +28,23 @@ export default {
         },
         'empty-content': {
             type: 'array',
-            val: []
+            val: [],
+            tips: '无数据时显示文案'
         },
         'display-key': {
             type: 'string',
-            val: 'name'
+            val: 'name',
+            tips: '循环 list 时，显示字段的 key 值'
         },
         'setting-key': {
             type: 'string',
-            val: 'id'
+            val: 'id',
+            tips: '具有唯一标识的 key 值'
         },
         'sort-key': {
             type: 'string',
-            val: ''
-        },
-        sortable: {
-            type: 'boolean',
-            val: false
+            val: '',
+            tips: '排序所依据的 key'
         },
         'source-list': {
             type: ['array', 'remote'],
@@ -58,15 +61,32 @@ export default {
                 { id: 'chognqing', name: '重庆' },
                 { id: 'taibei', name: '台北' },
                 { id: 'haikou', name: '海口' }
-            ]
+            ],
+            tips: '穿梭框数据源'
         },
         'target-list': {
             type: 'array',
-            val: []
+            val: [],
+            tips: '已选择的数据'
+        },
+        searchable: {
+            type: 'boolean',
+            val: false,
+            tips: '是否允许左侧搜索（以display-key来匹配）'
+        },
+        sortable: {
+            type: 'boolean',
+            val: false,
+            tips: '是否设置排序'
+        },
+        'always-show-close': {
+            type: 'boolean',
+            val: false,
+            tips: '是否一直显示关闭icon'
         },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

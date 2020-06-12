@@ -16,7 +16,11 @@ export default {
     icon: 'bk-drag-time-2',
     group: '表单',
     order: 1,
-    events: ['change', 'open-change'],
+    events: [{
+        name: 'change', tips: '时间改变事件，回调参数为当前选择的时间'
+    }, {
+        name: 'open-change', tips: '面板弹出或收起事件，参数为面板展开收起的状态，回调参数为新的状态'
+    }],
     styles: ['size', 'margin', 'display'],
     defaultStyles: {
         display: 'inline-block'
@@ -24,10 +28,12 @@ export default {
     props: {
         // Date String Array
         value: {
-            type: 'string'
+            type: ['string', 'array'],
+            tips: '时间选择器组件的值，可以是 Date 或字符串或数组，只有在 timerange 类型时才支持数组'
         },
         placeholder: {
-            type: 'string'
+            type: 'string',
+            tips: '空白提示'
         },
         type: {
             type: 'string',
@@ -36,17 +42,20 @@ export default {
         },
         format: {
             type: 'string',
-            val: 'HH:mm:ss'
+            val: 'HH:mm:ss',
+            tips: '格式，不配置 ss 时即不显示秒'
         },
         'font-size': {
             type: 'string',
             options: ['normal', 'medium', 'large'],
-            val: 'normal'
+            val: 'normal',
+            tips: '设置组件主体内容字体大小：normal--12px；medium--14px；large--16px'
         },
         placement: {
             type: 'string',
             options: ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end'],
-            val: 'bottom-start'
+            val: 'bottom-start',
+            tips: '面板出现的位置'
         },
         editable: {
             type: 'boolean',
@@ -58,10 +67,12 @@ export default {
         },
         'enter-mode': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '是否开启回车模式'
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

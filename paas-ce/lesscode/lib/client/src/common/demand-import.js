@@ -20,7 +20,7 @@ import {
     bkPopover, bkProcess, bkProgress, bkRadio, bkRadioButton, bkRadioGroup, bkRoundProgress, bkRow, bkSearchSelect, bkSelect,
     bkColorPicker, bkSideslider, bkSlider, bkSteps, bkSwitcher, bkTab, bkTabPanel, bkTable, bkTableColumn, bkTagInput,
     bkTimePicker, bkTimeline, bkTransfer, bkTree, bkUpload, bkClickoutside, bkTooltips, bkSwiper, bkRate, bkAnimateNumber,
-    bkVirtualScroll, bkPopconfirm, bkZoomImage
+    bkVirtualScroll, bkPopconfirm, bkZoomImage, bkLink
 } from 'bk-magic-vue'
 
 // bkDiff 组件体积较大且不是很常用，因此注释掉。如果需要，打开注释即可
@@ -29,8 +29,12 @@ import { bkDiff } from 'bk-magic-vue'
 import bkText from '@/components/patch/text'
 import bkImage from '@/components/patch/image'
 
+import chart from '@/components/patch/chart'
+
 Vue.use(bkText)
 Vue.use(bkImage)
+
+Vue.use(chart)
 
 // components use
 Vue.use(bkBadge)
@@ -85,6 +89,7 @@ Vue.use(bkAnimateNumber)
 Vue.use(bkVirtualScroll)
 Vue.use(bkPopconfirm)
 Vue.use(bkZoomImage)
+Vue.use(bkLink)
 // bkDiff 组件体积较大且不是很常用，因此注释了。如果需要，打开注释即可
 Vue.use(bkDiff)
 

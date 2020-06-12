@@ -16,24 +16,38 @@ export default {
     icon: 'bk-drag-tree',
     group: '数据',
     order: 1,
-    events: ['on-click', 'on-check', 'on-expanded', 'on-drag-node', 'async-load-nodes'],
+    events: [{
+        name: 'on-click', tips: '节点点击触发，回调参数为当前点击节点 node'
+    }, {
+        name: 'on-check', tips: '多选时，多选框 chang 触发（单选时不生效），回调参数为当前选择节点 node'
+    }, {
+        name: 'on-expanded', tips: '节点展开/收起触发，回调参数为操作节点'
+    }, {
+        name: 'on-drag-node', tips: '节点拖拽结束触发，回调参数（dragNode / targetNode）'
+    }, {
+        name: 'async-load-nodes', tips: '异步加载节点数据，回调参数为当前加载节点 node'
+    }],
     styles: ['size', 'margin'],
     props: {
         'node-key': {
             type: 'string',
-            val: 'id'
+            val: 'id',
+            tips: '具有唯一标识的key值'
         },
         'show-icon': {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '节点是否可配置icon'
         },
         multiple: {
             type: 'boolean',
-            val: true
+            val: true,
+            tips: '单选/多选标识'
         },
         'has-border': {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否显示边框'
         },
         data: {
             type: ['array', 'remote'],
@@ -46,11 +60,12 @@ export default {
                     title: 'tree node1',
                     id: 1
                 }
-            ]
+            ],
+            tips: 'tree 数据源'
         },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

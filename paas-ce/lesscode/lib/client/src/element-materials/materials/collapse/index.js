@@ -16,20 +16,22 @@ export default {
     icon: 'bk-drag-collapse',
     group: '数据',
     order: 1,
-    events: ['item-click'],
+    events: [{ name: 'item-click' }],
     styles: ['size', 'margin', 'color', 'backgroundColor'],
     props: {
         'active-name': {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '当前激活面板的 name'
         },
         accordion: {
             type: 'boolean',
-            val: false
+            val: false,
+            tips: '是否使用手风琴效果'
         },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         },
         slots: {
             name: 'bk-collapse-item',

@@ -23,6 +23,7 @@
                 :show="contextMenuVisible"
                 @update:show="show => contextMenuVisible = show">
                 <a href="javascript:;" @click="handleContextmenuDelete">删除</a>
+                <a href="javascript:;" @click="handleContextmenuClearGrid">清空</a>
             </context-menu>
             <render-col v-bind="column" :key="columnIndex" v-for="(column, columnIndex) in renderDataSlot.val"
                 :class="columnIndex === renderDataSlot.val.length - 1 ? 'last' : ''">
@@ -42,13 +43,26 @@
                 >
                     <render-component
                         v-for="itemInColumn in column.children"
-                        :key="itemInColumn.componentId"
+                        :key="itemInColumn.renderKey"
                         :component-data="itemInColumn" />
                 </vue-draggable>
             </render-col>
             <div class="add-column" @click="handleAddColumn">+</div>
             <div class="add-clone" @click="handleAddClone">+</div>
         </render-row>
+        <bk-dialog v-model="clearGridConf.visiable"
+            class="del-component-dialog"
+            theme="primary"
+            :mask-close="false"
+            :header-position="clearGridConf.headerPosition"
+            title="清空"
+            @confirm="confirmClearGrid"
+            @cancel="cancelClearGrid"
+            @after-leave="afterLeaveClearGrid">
+            <div>
+                <p>确认清空{{renderData.name}}组件【{{renderData.componentId}}】？</p>
+            </div>
+        </bk-dialog>
     </div>
 </template>
 
@@ -83,13 +97,19 @@
                 renderData: {},
                 renderDataSlot: null,
                 bindProps: {},
+                startDragPosition: {},
                 contextMenuVisible: false,
-                contextMenuTarget: null
+                contextMenuTarget: null,
+                clearGridConf: {
+                    visiable: false,
+                    headerPosition: 'left'
+                }
             }
         },
         computed: {
             ...mapGetters('drag', [
-                'targetData'
+                'targetData',
+                'curSelectedComponentData'
             ])
         },
         watch: {
@@ -124,7 +144,8 @@
         methods: {
             ...mapMutations('drag', [
                 'setCurSelectedComponentData',
-                'setTargetData'
+                'setTargetData',
+                'pushTargetHistory'
             ]),
 
             /**
@@ -136,6 +157,39 @@
                     delBtn && delBtn.click()
                 }, 0)
                 this.contextMenuVisible = false
+            },
+
+            /**
+             * 右键清空 grid
+             */
+            handleContextmenuClearGrid () {
+                this.clearGridConf.visiable = true
+            },
+
+            /**
+             * 显示清空 grid 的弹框
+             */
+            confirmClearGrid () {
+                const renderData = Object.assign({}, this.renderData)
+                renderData.renderProps.slots.val.forEach(v => {
+                    v.children = []
+                })
+                this.renderData = Object.assign({}, renderData)
+                this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
+                this.contextMenuVisible = false
+            },
+
+            /**
+             * 取消清空 grid 的弹框
+             */
+            cancelClearGrid () {
+                this.clearGridConf.visiable = false
+            },
+
+            /**
+             * 取消清空 grid 的弹框 afterLeave 回调
+             */
+            afterLeaveClearGrid () {
             },
 
             /**
@@ -171,21 +225,60 @@
              */
             updatePropsHandler (data) {
                 if (data.componentId === this.renderData.componentId) {
-                    const { renderStyles = {}, renderProps = {} } = data.modifier
+                    const pushData = {
+                        type: 'update',
+                        component: _.cloneDeep(this.renderData),
+                        modifier: data.modifier
+                    }
+                    this.pushTargetHistory(pushData)
+                    // const { renderStyles = {}, renderProps = {} } = data.modifier
+                    const { renderStyles = {}, renderProps = {}, tabPanelActive = 'props' } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
+                    this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
                 }
             },
 
             log (e, column) {
-                // console.warn(column)
-                // console.error('eeeee', e, column)
+                const evt = e[0] || {}
+                const addEle = evt.added
+                const removedEle = evt.removed
+                const moveEle = evt.moved
+                const element = (addEle || removedEle || moveEle).element
+                const pos = this.$td().getNodePosition(element.componentId)
+
+                const pushData = {
+                    parentId: pos.parent && pos.parent.componentId,
+                    component: element,
+                    columnIndex: pos.columnIndex,
+                    childrenIndex: pos.childrenIndex
+                }
+                if (addEle) {
+                    pushData.type = 'add'
+                }
+                if (removedEle) {
+                    pushData.type = 'remove'
+                    pushData.parentId = this.startDragPosition.parent && this.startDragPosition.parent.componentId
+                    pushData.columnIndex = this.startDragPosition.columnIndex
+                    pushData.childrenIndex = this.startDragPosition.childrenIndex
+                }
+                if (moveEle) {
+                    pushData.type = 'move'
+                    pushData.sourceParentNodeId = pushData.parentId
+                    pushData.sourceColumnIndex = pos.columnIndex
+                    pushData.sourceChildrenIndex = moveEle.oldIndex
+                    pushData.targetParentNodeId = pushData.parentId
+                    pushData.targetColumnIndex = pos.columnIndex
+                    pushData.targetChildrenIndex = moveEle.newIndex
+                }
+                this.pushTargetHistory(pushData)
             },
 
             onChoose (e, column) {
                 const evt = e[0]
                 const curChooseComponent = column.children[evt.oldIndex]
+                this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
                 this.groupType = curChooseComponent.type === 'render-grid' ? 'render-grid' : 'component'
             },
 
@@ -252,6 +345,8 @@
 
                 parentRow.splice(selfIndex + 1, 0, {
                     componentId: this.componentData.name + '-' + uuid(),
+                    tabPanelActive: this.componentData.tabPanelActive,
+                    renderKey: uuid(),
                     name: this.componentData.name,
                     type: this.componentData.type,
                     renderProps,

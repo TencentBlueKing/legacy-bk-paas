@@ -23,15 +23,18 @@ export default {
     props: {
         text: {
             type: 'string',
-            val: 'text'
+            val: 'text',
+            tips: '文字内容'
         },
         desc: {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '文字描述，hover 时会浮现提示内容'
         },
         extCls: {
             type: 'string',
-            val: ''
+            val: '',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

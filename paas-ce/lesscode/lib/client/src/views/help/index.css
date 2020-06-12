@@ -80,6 +80,8 @@ $headerHeight: 64px;
                 font-size: 14px;
                 color: #5e6d82;
                 line-height: 1.5em;
+                display: inline-block;
+                margin: 0;
             }
 
             a {
@@ -398,10 +400,19 @@ $headerHeight: 64px;
                 }
                 h6 {
                     margin: 0;
-                    margin-bottom: -10px;
                     font-style: italic;
                 }
+                .changelog-img {
+                    max-width: 300px;
+                    max-height: 500px;
+                    display: block;
+                }
             }
+
+            .help-img {
+                display: block;
+            }
+
 
             .tips-block {
                 position: relative;
@@ -483,6 +494,12 @@ $headerHeight: 64px;
             .page-name {
                 font-size: 16px;
                 color: #63656E;
+                .back {
+                    font-size: 18px;
+                    margin-left: 5px;
+                    cursor: pointer;
+                    color: #3a84ff;
+                }
             }
         }
     }

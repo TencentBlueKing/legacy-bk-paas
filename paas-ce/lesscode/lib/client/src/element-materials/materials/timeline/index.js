@@ -16,7 +16,10 @@ export default {
     icon: 'bk-drag-timeline',
     group: '数据',
     order: 1,
-    events: ['select'],
+    events: [{
+        name: 'select',
+        tips: '点击标题触发，回调参数为相应点击项的数据data'
+    }],
     styles: ['margin'],
     props: {
         list: {
@@ -27,10 +30,12 @@ export default {
                 { tag: '一天前', content: '由<strong>王五</strong>部署到预发布环境' },
                 { tag: '2天前', content: '<div>由<strong>王五</strong>上线到<span style="color: #3c96ff;">蓝鲸市场</span></div>' },
                 { tag: '一周前', content: '由<strong>李四</strong>部署到<p style="color: #ff5656">生产环境</p>并发布至<strong>应用市场</strong>' }
-            ]
+            ],
+            tips: '时间轴数据源'
         },
         'ext-cls': {
-            type: 'string'
+            type: 'string',
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

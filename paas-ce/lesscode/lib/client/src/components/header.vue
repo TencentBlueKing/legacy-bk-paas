@@ -39,16 +39,22 @@
                                 <dd>
                                     <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#mobile/show">jQuery组件</a>
                                 </dd>
+                                <dd>
+                                    <a target="_blank" href="https://developers.weixin.qq.com/miniprogram/dev/component/">微信小程序官方组件</a>
+                                </dd>
                             </ol>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="javascript: void(0);">可视化布局</a>
+                        <a href="javascript: void(0);">可视化开发</a>
                         <div class="mg-sub-nav">
                             <ol>
                                 <dt>PC端</dt>
                                 <dd>
                                     <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#build/show">jQuery组件</a>
+                                </dd>
+                                <dd>
+                                    <a target="_blank" href="https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md">Vue组件</a>
                                 </dd>
                             </ol>
                             <ol>

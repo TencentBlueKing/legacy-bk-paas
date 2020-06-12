@@ -69,7 +69,10 @@ module.exports = {
                             source: 'src',
                             img: 'src',
                             image: 'xlink:href'
-                        }
+                        },
+                        include: [
+                            resolve(__dirname, '../../../node_modules', 'vue-echarts')
+                        ]
                     }
                 }
             },
@@ -93,7 +96,9 @@ module.exports = {
                         include: [
                             resolve(__dirname, '..', 'src'),
                             resolve(__dirname, '../../../node_modules', 'bk-magic-vue'),
-                            resolve(__dirname, '../../../node_modules', 'monaco-editor')
+                            resolve(__dirname, '../../../node_modules', 'monaco-editor'),
+                            resolve(__dirname, '../../../node_modules', 'vue-echarts'),
+                            resolve(__dirname, '../../../node_modules', 'resize-detector')
                         ],
                         cacheDirectory: resolve(__dirname, '..', '.webpack_cache'),
                         presets: [
@@ -141,7 +146,7 @@ module.exports = {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: resolve(__dirname, '../../../node_modules', 'url-loader'),
                 options: {
-                    limit: 10000,
+                    limit: true,
                     name: posix.join('static', 'images/[name].[hash:7].[ext]')
                 }
             },
