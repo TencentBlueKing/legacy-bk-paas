@@ -8,8 +8,19 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+const testModel = require('../model/test')
 
 const Data = {
+    // 测试数据库接口
+    async createTestData (ctx) {
+        await testModel.createTestData()
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data: '创建数据成功'
+        })
+    },
+
     async getApiData (ctx) {
         try {
             const body = ctx.request.body || {}
@@ -25,7 +36,32 @@ const Data = {
                 message: err.message
             })
         }
-    }
+    },
+
+    async getMockData (ctx) {
+        const count = 20
+        const data = []
+        for (let i = 0; i < count; i++) {
+            data.push({
+                id: i,
+                projectId: `id-${i}`,
+                projectCode: `code-${i}`,
+                projectName: `项目-${i}`,
+                name: `名称-${i}`
+            })
+        }
+        try {
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
 }
 
 module.exports = Data
