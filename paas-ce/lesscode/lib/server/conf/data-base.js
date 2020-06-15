@@ -8,8 +8,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+const path = require('path')
 
-module.exports = process.env.NODE_ENV === 'production'
+const config = process.env.NODE_ENV === 'production'
     ? {
         database: process.env.GCS_MYSQL_NAME,
         username: process.env.GCS_MYSQL_USER,
@@ -20,9 +21,26 @@ module.exports = process.env.NODE_ENV === 'production'
     }
     : {
         database: 'vue_visualization',
-        username: 'root',
-        password: 'wanglei223',
+        username: 'xxx',
+        password: 'xxx',
         host: 'localhost',
-        port: 5000,
+        port: 3306,
         dialect: 'mysql'
     }
+
+module.exports = {
+    type: 'mysql',
+    host: config.host,
+    port: config.port,
+    username: config.username,
+    password: config.password,
+    database: config.database,
+    entities: [path.resolve(__dirname, '..', 'model/entities/!(Base){.js,.ts}')],
+    logging: true, // 开启所有数据库信息打印
+    logger: 'advanced-console', // 高亮字体的打印信息
+    synchronize: true,
+    migrationsRun: false,
+    extra: {
+        connectionLimit:  5
+    }
+}
