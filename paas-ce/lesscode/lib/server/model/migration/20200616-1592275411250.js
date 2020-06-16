@@ -1,4 +1,4 @@
-export class updateTest1592275411247 {
+export class update1592275411250 {
 
     async up(queryRunner) {
         await queryRunner.renameColumn('test', 'projectEnglish', 'projectEnglish2')

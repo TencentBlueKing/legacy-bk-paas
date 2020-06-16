@@ -1,4 +1,4 @@
-const Base = require('./Base')
+const Base = require('./base')
 const { Entity, Column } = require('typeorm')
 
 @Entity()
