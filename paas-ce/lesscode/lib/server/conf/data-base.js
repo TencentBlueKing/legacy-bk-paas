@@ -35,11 +35,13 @@ module.exports = {
     username: config.username,
     password: config.password,
     database: config.database,
-    entities: [path.resolve(__dirname, '..', 'model/entities/!(Base){.js,.ts}')],
+    entities: [path.resolve(__dirname, '..', 'model/entities/!(base){.js,.ts}')],
     logging: true, // 开启所有数据库信息打印
     logger: 'advanced-console', // 高亮字体的打印信息
-    synchronize: true,
-    migrationsRun: false,
+    synchronize: true, // 第一次部署开启
+    migrationsRun: false, // 后续更改表结构使用 migration
+    migrationsTableName: 'visualization_migration_table',
+    migrations: [path.resolve(__dirname, '..', 'model/migration/*.js')],
     extra: {
         connectionLimit:  5
     }
