@@ -53,6 +53,7 @@
 
 <style lang="postcss">
     @import './css/reset.css';
+    @import './css/common.css';
     @import './css/bk-patch.css';
     @import "@/css/mixins/scroller";
 
