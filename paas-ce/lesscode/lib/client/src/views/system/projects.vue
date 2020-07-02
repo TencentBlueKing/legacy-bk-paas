@@ -32,15 +32,13 @@
             <div class="project-list">
                 <div class="project-item" v-for="(project, index) in projectList" :key="index">
                     <div class="item-bd">
-                        <template v-if="project.pageCount > 0">
+                        <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
                             <div class="preview">
                                 <img :src="projectPreivewImg" alt="项目缩略预览">
                             </div>
                             <div class="desc">
                                 <p class="desc-text">
-                                    项目xxx是一款面向应用的 CMDB，在 ITIL 体系里，CMDB 是构建其它流程平台是一款面向应用的 CMDB，在 ITIL 体系里，
-                                    CMDB 是构建其它流程平台是一款面向应用的 CMDB，在 ITIL 体系里，CMDB 是构建其它流程平台是一款面向应用的 CMDB，
-                                    在 ITIL 体系里，CMDB 是构建其它流程的基石，而在蓝鲸智云体系里，配置平台就扮演着基石的角色，为应用提供了各种运维场景的配置数据服务
+                                    {{project.projectDesc}}
                                 </p>
                             </div>
                         </template>
@@ -48,8 +46,8 @@
                     </div>
                     <div class="item-ft">
                         <div class="col">
-                            <h3 class="name">{{index}}. {{project.projectName}}</h3>
-                            <div class="stat">testuser 45 分钟前更新</div>
+                            <h3 class="name">{{project.projectName}}</h3>
+                            <div class="stat"><vnodes :vnode="getUpdateInfo(project)"></vnodes></div>
                         </div>
                         <div class="col">
                             <bk-dropdown-menu>
@@ -79,20 +77,26 @@
 
         <bk-dialog v-model="dialog.create.visible"
             theme="primary"
+            title="创建项目"
             width="600"
             :mask-close="false"
+            :auto-close="false"
             header-position="left"
-            title="创建项目">
-            <bk-form :label-width="90" :model="dialog.create.formData">
-                <bk-form-item label="项目名称" :required="true" :property="'name'">
-                    <bk-input v-model="dialog.create.formData.name"></bk-input>
+            @confirm="handleCreateConfirm">
+            <bk-form ref="createForm" :label-width="90" :rules="dialog.create.formRules" :model="dialog.create.formData">
+                <bk-form-item label="项目名称" required property="projectName">
+                    <bk-input maxlength="60" v-model="dialog.create.formData.projectName"
+                        placeholder="请输入项目名称，60个字符以内">
+                    </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目ID" :required="true" :property="'id'">
-                    <bk-input v-model="dialog.create.formData.id"></bk-input>
+                <bk-form-item label="项目ID" required property="projectCode">
+                    <bk-input maxlength="255" v-model="dialog.create.formData.projectCode"
+                        placeholder="请输入，由字母、数字、中划线或下划线组成">
+                    </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目简介" :required="true" :property="'desc'">
+                <bk-form-item label="项目简介" required property="projectDesc">
                     <bk-input
-                        v-model="dialog.create.formData.desc"
+                        v-model="dialog.create.formData.projectDesc"
                         :type="'textarea'"
                         :rows="3"
                         :maxlength="100">
@@ -105,21 +109,61 @@
 
 <script>
     import projectPreivewImg from '@/images/homeBg.jpg'
+    import dayjs from 'dayjs'
+    import relativeTime from 'dayjs/plugin/relativeTime'
+    import 'dayjs/locale/zh-cn'
+    dayjs.extend(relativeTime)
+    dayjs.locale('zh-cn')
 
     export default {
+        components: {
+            vnodes: {
+                functional: true,
+                render: (h, ctx) => ctx.props.vnode
+            }
+        },
         data () {
             return {
                 keyword: '',
-                projectList: Array(20).fill({
-                    projectName: '项目xxx',
-                    pageCount: Math.round(Math.random()),
-                    collected: false
-                }),
+                projectList: [],
+                pageMap: {},
                 projectPreivewImg,
                 dialog: {
                     create: {
                         visible: false,
-                        formData: {}
+                        formData: {
+                            projectName: '',
+                            projectCode: '',
+                            projectDesc: ''
+                        },
+                        formRules: {
+                            projectName: [
+                                {
+                                    required: true,
+                                    message: '必填项',
+                                    trigger: 'blur'
+                                }
+                            ],
+                            projectCode: [
+                                {
+                                    required: true,
+                                    message: '必填项',
+                                    trigger: 'blur'
+                                },
+                                {
+                                    regex: /^[\w-]+$/,
+                                    message: '需由字母、数字、中划线或下划线组成',
+                                    trigger: 'blur'
+                                }
+                            ],
+                            projectDesc: [
+                                {
+                                    required: true,
+                                    message: '必填项',
+                                    trigger: 'blur'
+                                }
+                            ]
+                        }
                     }
                 }
             }
@@ -131,15 +175,43 @@
             }
         },
         created () {
+            this.getProjectList()
         },
         methods: {
             beforeRouteUpdate (to, from, next) {
                 console.log(to, from)
                 next()
             },
+            async getProjectList () {
+                try {
+                    const { projectList, pageMap } = await this.$store.dispatch('project/query', { data: {} })
+                    this.projectList = projectList
+                    this.pageMap = pageMap
+                } catch (e) {
+                    console.error(e)
+                }
+            },
+            getUpdateInfo (project) {
+                const latestPage = this.pageMap[project.id] ? this.pageMap[project.id][0] : null
+                return (
+                    latestPage
+                        ? <span>{latestPage.updateUser || 'admin'} {dayjs(latestPage.updateTime).fromNow()}更新</span>
+                        : <span>{project.createUser || 'admin'} {dayjs(project.createTime).fromNow()}创建</span>
+                )
+            },
             handleCreate () {
-                console.log('create')
                 this.dialog.create.visible = true
+            },
+            async handleCreateConfirm () {
+                try {
+                    await this.$refs.createForm.validate()
+                    const data = this.dialog.create.formData
+                    await this.$store.dispatch('project/create', { data })
+                    this.messageSuccess('项目创建成功')
+                    this.dialog.create.visible = false
+                } catch (e) {
+                    console.log(e)
+                }
             }
         }
     }
@@ -196,10 +268,10 @@
             }
             &:hover {
                 .desc {
-                    display: block;
+                    transform: translateY(0%);
                 }
                 .favorite-btn {
-                    display: block;
+                    opacity: 1;
                 }
                 .preview {
                     &::before {
@@ -209,10 +281,11 @@
             }
 
             .favorite-btn {
-                display: none;
                 position: absolute;
                 right: 16px;
                 top: 16px;
+                opacity: 0;
+                transition: all .3s ease;
 
                 .bk-drag-icon {
                     font-size: 18px;
@@ -247,6 +320,7 @@
                 height: 166px;
                 background: #fff;
                 border-radius: 4px 4px 0px 0px;
+                overflow: hidden;
             }
             .item-ft {
                 display: flex;
@@ -276,13 +350,14 @@
                 }
             }
             .desc {
-                display: none;
                 position: absolute;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
                 padding: 28px 26px 28px 21px;
+                transform: translateY(100%);
+                transition: all .375s ease-in-out;
 
                 .desc-text {
                     font-size: 12px;
