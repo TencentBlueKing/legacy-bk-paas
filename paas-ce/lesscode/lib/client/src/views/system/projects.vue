@@ -65,8 +65,9 @@
                     </div>
                     <span
                         class="favorite-btn"
-                        v-bk-tooltips.top="{ content: project.collected ? '取消收藏' : '添加收藏' }">
-                        <i :class="['bk-drag-icon', `bk-drag-favorite${project.collected ? '' : '-o' }`]"></i>
+                        v-bk-tooltips.top="{ content: project.favorite ? '取消收藏' : '添加收藏' }"
+                        @click="handleClickFavorite(project)">
+                        <i :class="['bk-drag-icon', `bk-drag-favorite${project.favorite ? '' : '-o' }`]"></i>
                     </span>
                 </div>
             </div>
@@ -184,7 +185,8 @@
             },
             async getProjectList () {
                 try {
-                    const { projectList, pageMap } = await this.$store.dispatch('project/query', { data: {} })
+                    const params = {}
+                    const { projectList, pageMap } = await this.$store.dispatch('project/query', { config: { params } })
                     this.projectList = projectList
                     this.pageMap = pageMap
                 } catch (e) {
@@ -210,7 +212,23 @@
                     this.messageSuccess('项目创建成功')
                     this.dialog.create.visible = false
                 } catch (e) {
-                    console.log(e)
+                    console.error(e)
+                }
+            },
+            async handleClickFavorite (project) {
+                try {
+                    const favorite = project.favorite ? 0 : 1
+                    const data = {
+                        id: project.id,
+                        fields: { favorite }
+                    }
+                    await this.$store.dispatch('project/update', { data })
+                    this.messageSuccess(`${favorite ? '添加' : '取消'}成功`)
+
+                    // 更新数据状态
+                    project.favorite = favorite
+                } catch (e) {
+                    console.error(e)
                 }
             }
         }

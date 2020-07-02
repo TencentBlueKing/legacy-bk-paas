@@ -27,7 +27,7 @@ export default {
         return getRepository(Project).findOne({ projectCode })
     },
 
-    qeuryProject ({ where = '', params }) {
+    qeuryProject ({ condition = '', params = {} }) {
         return getRepository(Project)
             .createQueryBuilder('project')
             // .orderBy('project.id', 'DESC')
@@ -41,5 +41,9 @@ export default {
             .select(['pageName', 'updateTime', 'updateUser', 'project_page.projectId'])
             .orderBy('page.updateTime', 'DESC')
             .getRawMany()
+    },
+
+    updateProject (id, fields = {}) {
+        return getRepository(Project).update(id, fields)
     }
 }

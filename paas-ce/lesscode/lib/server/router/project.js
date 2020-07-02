@@ -10,13 +10,14 @@
  */
 
 const Router = require('koa-router')
-const { createProject, queryProject } = require('../controller/project')
+const { createProject, queryProject, updateProject } = require('../controller/project')
 
 const router = new Router({
     prefix: '/api/project'
 })
 
 router.post('/create', createProject)
-router.post('/query', queryProject)
+router.get('/query', queryProject)
+router.put('/update', updateProject)
 
 module.exports = router

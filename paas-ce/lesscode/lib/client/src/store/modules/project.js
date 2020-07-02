@@ -26,8 +26,14 @@ export default {
                 return data
             })
         },
-        query ({ commit }, { data, config }) {
-            return http.post('/project/query', data, config).then(response => {
+        query ({ commit }, { config }) {
+            return http.get('/project/query', config).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        update ({ commit }, { data, config }) {
+            return http.put('/project/update', data, config).then(response => {
                 const data = response.data || ''
                 return data
             })

@@ -81,5 +81,23 @@ module.exports = {
                 pageMap
             }
         })
+    },
+
+    async updateProject (ctx) {
+        try {
+            const { id, fields } = ctx.request.body
+            const { affected } = await projectModel.updateProject(id, fields)
+            ctx.send({
+                code: 0,
+                message: 'OK',
+                data: affected
+            })
+        } catch (e) {
+            ctx.send({
+                code: 99999,
+                message: e.message,
+                data: null
+            })
+        }
     }
 }
