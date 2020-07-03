@@ -30,7 +30,7 @@
         </div>
         <div class="page-body">
             <div class="project-list">
-                <div class="project-item" v-for="(project, index) in projectList" :key="index">
+                <div class="project-item" v-for="project in projectList" :key="project.id">
                     <div class="item-bd">
                         <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
                             <div class="preview">
@@ -50,15 +50,15 @@
                             <div class="stat"><vnodes :vnode="getUpdateInfo(project)"></vnodes></div>
                         </div>
                         <div class="col">
-                            <bk-dropdown-menu>
+                            <bk-dropdown-menu :ref="`moreActionDropdown${project.id}`">
                                 <span slot="dropdown-trigger" class="more-menu-trigger">
                                     <i class="bk-drag-icon bk-drag-more-dot"></i>
                                 </span>
                                 <ul class="bk-dropdown-list" slot="dropdown-content">
-                                    <li><a href="javascript:;">下载源码</a></li>
-                                    <li><a href="javascript:;">重命名</a></li>
-                                    <li><a href="javascript:;">复制</a></li>
-                                    <li><a href="javascript:;">删除</a></li>
+                                    <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
+                                    <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
+                                    <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
+                                    <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li>
                                 </ul>
                             </bk-dropdown-menu>
                         </div>
@@ -77,13 +77,14 @@
         </div>
 
         <bk-dialog v-model="dialog.create.visible"
+            render-directive="if"
             theme="primary"
             title="创建项目"
             width="600"
             :mask-close="false"
             :auto-close="false"
             header-position="left"
-            @confirm="handleCreateConfirm">
+            @value-change="handleCreateDialogToggle">
             <bk-form ref="createForm" :label-width="90" :rules="dialog.create.formRules" :model="dialog.create.formData">
                 <bk-form-item label="项目名称" required property="projectName">
                     <bk-input maxlength="60" v-model="dialog.create.formData.projectName"
@@ -104,6 +105,39 @@
                     </bk-input>
                 </bk-form-item>
             </bk-form>
+            <div class="dialog-footer" slot="footer">
+                <bk-button
+                    theme="primary"
+                    :loading="dialog.create.loading"
+                    @click="handleCreateConfirm">确定</bk-button>
+                <bk-button @click="handleCreateCancel" :disabled="dialog.create.loading">取消</bk-button>
+            </div>
+        </bk-dialog>
+
+        <bk-dialog v-model="dialog.rename.visible"
+            theme="primary"
+            title="重命名"
+            width="600"
+            :mask-close="false"
+            :auto-close="false"
+            header-position="left"
+            @after-leave="handleRenameAfterLeave">
+            <bk-form ref="renameForm" class="rename-form" :label-width="90" :rules="dialog.rename.formRules" :model="dialog.rename.formData">
+                <bk-form-item label="项目名称" required property="projectName">
+                    <bk-input ref="projectRenameInput"
+                        maxlength="60"
+                        v-model="dialog.rename.formData.projectName"
+                        placeholder="请输入项目名称，60个字符以内">
+                    </bk-input>
+                </bk-form-item>
+            </bk-form>
+            <div class="dialog-footer" slot="footer">
+                <bk-button
+                    theme="primary"
+                    :loading="dialog.rename.loading"
+                    @click="handleRenameConfirm">确定</bk-button>
+                <bk-button @click="handleRenameCancel" :disabled="dialog.rename.loading">取消</bk-button>
+            </div>
         </bk-dialog>
     </main>
 </template>
@@ -115,6 +149,12 @@
     import 'dayjs/locale/zh-cn'
     dayjs.extend(relativeTime)
     dayjs.locale('zh-cn')
+
+    const defaultCreateFormData = {
+        projectName: '',
+        projectCode: '',
+        projectDesc: ''
+    }
 
     export default {
         components: {
@@ -132,11 +172,8 @@
                 dialog: {
                     create: {
                         visible: false,
-                        formData: {
-                            projectName: '',
-                            projectCode: '',
-                            projectDesc: ''
-                        },
+                        loading: false,
+                        formData: { ...defaultCreateFormData },
                         formRules: {
                             projectName: [
                                 {
@@ -165,8 +202,25 @@
                                 }
                             ]
                         }
+                    },
+                    rename: {
+                        visible: false,
+                        loading: false,
+                        formData: {
+                            projectName: ''
+                        },
+                        formRules: {
+                            projectName: [
+                                {
+                                    required: true,
+                                    message: '必填项',
+                                    trigger: 'blur'
+                                }
+                            ]
+                        }
                     }
-                }
+                },
+                activatedProject: {}
             }
         },
         watch: {
@@ -208,11 +262,18 @@
                 try {
                     await this.$refs.createForm.validate()
                     const data = this.dialog.create.formData
+
+                    this.dialog.create.loading = true
                     await this.$store.dispatch('project/create', { data })
+
                     this.messageSuccess('项目创建成功')
                     this.dialog.create.visible = false
+
+                    // TODO用当前条件重新执行一次列表查询
                 } catch (e) {
                     console.error(e)
+                } finally {
+                    this.dialog.create.loading = false
                 }
             },
             async handleClickFavorite (project) {
@@ -230,6 +291,76 @@
                 } catch (e) {
                     console.error(e)
                 }
+            },
+            async handleRenameConfirm () {
+                try {
+                    await this.$refs.renameForm.validate()
+
+                    const { id, projectName } = this.dialog.rename.formData
+                    const data = {
+                        id: id,
+                        fields: { projectName }
+                    }
+                    this.dialog.rename.loading = true
+
+                    const checkNameResult = await this.checkProjectName(projectName)
+                    if (!checkNameResult) {
+                        return
+                    }
+
+                    await this.$store.dispatch('project/update', { data })
+
+                    this.messageSuccess('重命名成功')
+                    this.dialog.rename.visible = false
+
+                    const activeProject = this.projectList.find(project => project.id === id)
+                    if (activeProject) {
+                        activeProject.projectName = projectName
+                    }
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    this.dialog.rename.loading = false
+                }
+            },
+            async checkProjectName (name) {
+                const res = await this.$store.dispatch('project/checkname', {
+                    data: { name },
+                    config: { globalError: false }
+                })
+                if (res.code !== 0) {
+                    this.messageError(res.message)
+                    return false
+                }
+                return true
+            },
+            handleCreateCancel () {
+                this.dialog.create.visible = false
+            },
+            handleRenameCancel () {
+                this.dialog.rename.visible = false
+            },
+            handleCreateDialogToggle () {
+                this.dialog.create.formData = { ...defaultCreateFormData }
+            },
+            handleRenameAfterLeave () {
+                this.dialog.rename.formData.projectName = ''
+            },
+            async handleDownloadSource () {
+            },
+            async handleRename (project) {
+                this.activatedProject = project
+                this.$refs[`moreActionDropdown${project.id}`][0].hide()
+                this.dialog.rename.visible = true
+                this.dialog.rename.formData.projectName = project.projectName
+                this.dialog.rename.formData.id = project.id
+                setTimeout(() => {
+                    this.$refs.projectRenameInput && this.$refs.projectRenameInput.$el.querySelector('input').focus()
+                }, 0)
+            },
+            async handleCopy () {
+            },
+            async handleDelete () {
             }
         }
     }
@@ -410,6 +541,16 @@
                 color: #979BA5;
                 padding: 4px 0;
             }
+        }
+    }
+
+    .rename-form {
+        margin: 12px 0;
+    }
+
+    /deep/ .dialog-footer {
+        button + button {
+            margin-left: 4px;
         }
     }
 </style>

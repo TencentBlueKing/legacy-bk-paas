@@ -99,5 +99,28 @@ module.exports = {
                 data: null
             })
         }
+    },
+
+    async checkname (ctx) {
+        const { name } = ctx.request.body
+        const res = {
+            code: 0,
+            message: 'OK',
+            data: null
+        }
+        try {
+            const foundNameProject = await projectModel.findOneProjectByName(name)
+            if (foundNameProject) {
+                res.code = 10001
+                res.message = '项目名称已经存在'
+            }
+            ctx.send(res)
+        } catch (e) {
+            ctx.send({
+                code: 99999,
+                message: e.message,
+                data: null
+            })
+        }
     }
 }

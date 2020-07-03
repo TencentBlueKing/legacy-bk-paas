@@ -37,6 +37,11 @@ export default {
                 const data = response.data || ''
                 return data
             })
+        },
+        checkname ({ commit }, { data, config }) {
+            return http.post('/project/checkname', data, config).then(response => {
+                return response
+            })
         }
     }
 }
