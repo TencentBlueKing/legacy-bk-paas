@@ -8,25 +8,41 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+const { getRepository, getConnection, getManager } = require('typeorm')
+const Test = require('./entities/test')
 
-const Sequelize = require('sequelize')
-const db = require('./index')
+// 数据库测试示例，项目开始后会删除
+module.exports = {
+    findProjectByName () {
+        const projectRepository = getRepository(Test)
+        return projectRepository.find({
+            select: ['projectName'],
+            where: {
+                projectName: 'TestProject'
+            },
+            order: {
+                id: 'DESC'
+            },
+            skip: 0,
+            take: 10
+        })
+    },
 
-// 定义test表结构
-const Test = db.defineModel('test', {
-    // test ID
-    id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    }
-})
+    createTestData () {
+        return getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(Test)
+            .values([
+                { projectName: 'TestProject', projectEnglish: 'projectEnglish' }
+            ])
+            .execute()
+    },
 
-const model = {
-    async create (data) {
-        const test = await Test.create(data)
-        return test
+    async updateDataByName () {
+        const entityManager = getManager()
+        const testData = await entityManager.findOne(Test, 1)
+        testData.projectName = 'firstTest'
+        await entityManager.save(user)
     }
 }
-
-module.exports = model

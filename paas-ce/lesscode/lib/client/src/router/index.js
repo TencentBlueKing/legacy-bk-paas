@@ -18,6 +18,9 @@ import preload from '@/common/preload'
 
 Vue.use(VueRouter)
 
+const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
+const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
+
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
@@ -57,6 +60,18 @@ const routes = [
             { path: 'intro', name: 'intro', component: Intro, alias: '' },
             { path: 'start', name: 'start', component: Start },
             { path: 'changelog', name: 'changelog', component: Changelog }
+        ]
+    },
+    {
+        path: '/system',
+        component: SystemEntry,
+        redirect: { name: 'projects' },
+        children: [
+            {
+                path: 'projects',
+                name: 'projects',
+                component: Projects
+            }
         ]
     },
     {
