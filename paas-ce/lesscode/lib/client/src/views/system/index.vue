@@ -6,10 +6,10 @@
             </div>
             <div class="side-bd">
                 <nav class="nav-list">
-                    <router-link tag="div" class="nav-item" :to="{ name: 'projects', query: { filter: '' } }">
+                    <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="projects">
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
                     </router-link>
-                    <router-link tag="div" class="nav-item" :to="'account'">
+                    <router-link tag="div" class="nav-item" to="account">
                         <i class="bk-drag-icon bk-drag-member"></i>账号管理
                     </router-link>
                 </nav>
@@ -21,7 +21,7 @@
             </div>
         </aside>
         <div class="breadcrumbs">
-            <h3 class="current">项目列表</h3>
+            <h3 class="current">{{$route.meta.title}}</h3>
         </div>
         <div class="main-container">
             <router-view :key="$route.path"></router-view>

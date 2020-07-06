@@ -20,6 +20,7 @@ Vue.use(VueRouter)
 
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
+const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
 
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
@@ -70,7 +71,18 @@ const routes = [
             {
                 path: 'projects',
                 name: 'projects',
-                component: Projects
+                component: Projects,
+                meta: {
+                    title: '项目列表'
+                }
+            },
+            {
+                path: 'account',
+                name: 'account',
+                component: Account,
+                meta: {
+                    title: '账号管理'
+                }
             }
         ]
     },

@@ -50,7 +50,36 @@ module.exports = {
     },
 
     async queryProject (ctx) {
-        const projectList = await projectModel.qeuryProject({})
+        const { filter = '', q } = ctx.request.query
+        const query = {
+            condition: [],
+            params: {}
+        }
+
+        if (q) {
+            query.condition.push('(project.projectName LIKE :q OR project.projectDesc LIKE :q)')
+            query.params = { q: `%${q}%` }
+        }
+
+        switch (filter) {
+            case 'my':
+                query.condition.push('project.createUser = :user')
+                query.params.user = 'test'
+                break
+            case 'favorite':
+                query.condition.push('project.favorite = :favorite')
+                query.params.favorite = 1
+                break
+            case 'share':
+                break
+            default:
+        }
+
+        if (Array.isArray(query.condition) && query.condition.length) {
+            query.condition = query.condition.join(' AND ')
+        }
+
+        const projectList = await projectModel.qeuryProject(query)
         const pageList = await projectModel.queryProjectPage()
 
         // 按projectId分组
@@ -78,7 +107,8 @@ module.exports = {
             message: '',
             data: {
                 projectList,
-                pageMap
+                pageMap,
+                ctx: { filter, q }
             }
         })
     },

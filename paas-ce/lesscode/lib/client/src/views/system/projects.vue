@@ -3,77 +3,77 @@
         <div class="page-head">
             <bk-button theme="primary" @click="handleCreate">新建</bk-button>
             <ul class="filter-links">
-                <router-link tag="li"
-                    :class="['link-item', { 'router-link-exact-active': !$route.query.filter }]"
-                    :to="{ name: 'projects', query: { filter: '' } }">
-                    全部项目
-                </router-link>
-                <router-link tag="li" class="link-item" :to="{ name: 'projects', query: { filter: 'my' } }">
-                    我创建的
-                </router-link>
-                <router-link tag="li" class="link-item" :to="{ name: 'projects', query: { filter: 'favorite' } }">
-                    我收藏的
-                </router-link>
-                <router-link tag="li" class="link-item" :to="{ name: 'projects', query: { filter: 'share' } }">
-                    我的共享
-                </router-link>
+                <li
+                    v-for="(link, index) in filterLinks"
+                    :key="index"
+                    :class="['link-item', { 'active': filter === link.value }]"
+                    @click="handleClickFilter(link.value)">
+                    {{link.name}}
+                </li>
             </ul>
             <div class="extra">
                 <bk-input
-                    :style="{ width: '400px' }"
+                    style="width: 400px"
                     placeholder="请输入项目名称或描述"
                     :clearable="true"
                     :right-icon="'bk-icon icon-search'"
-                    v-model="keyword">
+                    v-model="keyword"
+                    @clear="handleSearchClear"
+                    @enter="handleSearchEnter">
                 </bk-input>
             </div>
         </div>
-        <div class="page-body">
-            <div class="project-list">
-                <div class="project-item" v-for="project in projectList" :key="project.id">
-                    <div class="item-bd">
-                        <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
-                            <div class="preview">
-                                <img :src="projectPreivewImg" alt="项目缩略预览">
-                            </div>
-                            <div class="desc">
-                                <p class="desc-text">
-                                    {{project.projectDesc}}
-                                </p>
-                            </div>
-                        </template>
-                        <div class="empty" v-else>暂无页面</div>
-                    </div>
-                    <div class="item-ft">
-                        <div class="col">
-                            <h3 class="name">{{project.projectName}}</h3>
-                            <div class="stat"><vnodes :vnode="getUpdateInfo(project)"></vnodes></div>
+        <div class="page-body" v-bkloading="{ isLoading: pageLoading, opacity: 1 }">
+            <div class="page-body-inner" v-show="!pageLoading">
+                <div class="project-list" v-show="projectList.length">
+                    <div class="project-item" v-for="project in projectList" :key="project.id">
+                        <div class="item-bd">
+                            <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
+                                <div class="preview">
+                                    <img :src="projectPreivewImg" alt="项目缩略预览">
+                                </div>
+                                <div class="desc">
+                                    <p class="desc-text">
+                                        {{project.projectDesc}}
+                                    </p>
+                                </div>
+                            </template>
+                            <div class="empty" v-else>暂无页面</div>
                         </div>
-                        <div class="col">
-                            <bk-dropdown-menu :ref="`moreActionDropdown${project.id}`">
-                                <span slot="dropdown-trigger" class="more-menu-trigger">
-                                    <i class="bk-drag-icon bk-drag-more-dot"></i>
-                                </span>
-                                <ul class="bk-dropdown-list" slot="dropdown-content">
-                                    <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
-                                    <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
-                                    <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
-                                    <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li>
-                                </ul>
-                            </bk-dropdown-menu>
+                        <div class="item-ft">
+                            <div class="col">
+                                <h3 class="name">{{project.projectName}}</h3>
+                                <div class="stat"><vnodes :vnode="getUpdateInfo(project)"></vnodes></div>
+                            </div>
+                            <div class="col">
+                                <bk-dropdown-menu :ref="`moreActionDropdown${project.id}`">
+                                    <span slot="dropdown-trigger" class="more-menu-trigger">
+                                        <i class="bk-drag-icon bk-drag-more-dot"></i>
+                                    </span>
+                                    <ul class="bk-dropdown-list" slot="dropdown-content">
+                                        <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
+                                        <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
+                                        <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
+                                        <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li>
+                                    </ul>
+                                </bk-dropdown-menu>
+                            </div>
                         </div>
+                        <span
+                            class="favorite-btn"
+                            v-bk-tooltips.top="{ content: project.favorite ? '取消收藏' : '添加收藏' }"
+                            @click="handleClickFavorite(project)">
+                            <i :class="['bk-drag-icon', `bk-drag-favorite${project.favorite ? '' : '-o' }`]"></i>
+                        </span>
                     </div>
-                    <span
-                        class="favorite-btn"
-                        v-bk-tooltips.top="{ content: project.favorite ? '取消收藏' : '添加收藏' }"
-                        @click="handleClickFavorite(project)">
-                        <i :class="['bk-drag-icon', `bk-drag-favorite${project.favorite ? '' : '-o' }`]"></i>
-                    </span>
+                </div>
+                <div class="empty" v-show="!projectList.length">
+                    <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
+                        <div v-if="$route.query.q">无搜索结果</div>
+                        <div v-else>暂无项目，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link></div>
+                    </bk-exception>
                 </div>
             </div>
-            <bk-exception v-if="!projectList.length" class="exception-wrap-item exception-part" type="empty" scene="part">
-                暂无项目，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link>
-            </bk-exception>
         </div>
 
         <bk-dialog v-model="dialog.create.visible"
@@ -165,10 +165,16 @@
         },
         data () {
             return {
-                keyword: '',
+                keyword: this.$route.query.q || '',
                 projectList: [],
                 pageMap: {},
                 projectPreivewImg,
+                filterLinks: [
+                    { name: '全部项目', value: '' },
+                    { name: '我创建的', value: 'my' },
+                    { name: '我收藏的', value: 'favorite' },
+                    { name: '我的共享', value: 'share' }
+                ],
                 dialog: {
                     create: {
                         visible: false,
@@ -220,31 +226,40 @@
                         }
                     }
                 },
-                activatedProject: {}
+                activatedProject: {},
+                pageLoading: true
+            }
+        },
+        computed: {
+            filter () {
+                return this.$route.query.filter || ''
             }
         },
         watch: {
-            '$route.query': function (query) {
-                const { filter } = query
-                console.log(filter)
+            $route: function () {
+                this.getProjectList()
+            },
+            keyword (val) {
+                if (!val) {
+                    this.handleSearchClear()
+                }
             }
         },
         created () {
             this.getProjectList()
         },
         methods: {
-            beforeRouteUpdate (to, from, next) {
-                console.log(to, from)
-                next()
-            },
             async getProjectList () {
+                this.pageLoading = true
                 try {
-                    const params = {}
+                    const params = this.$route.query
                     const { projectList, pageMap } = await this.$store.dispatch('project/query', { config: { params } })
                     this.projectList = projectList
                     this.pageMap = pageMap
                 } catch (e) {
                     console.error(e)
+                } finally {
+                    this.pageLoading = false
                 }
             },
             getUpdateInfo (project) {
@@ -269,7 +284,8 @@
                     this.messageSuccess('项目创建成功')
                     this.dialog.create.visible = false
 
-                    // TODO用当前条件重新执行一次列表查询
+                    // 在当前条件下获取新的列表
+                    this.getProjectList()
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -361,6 +377,21 @@
             async handleCopy () {
             },
             async handleDelete () {
+            },
+            handleClickFilter (filter = '') {
+                const query = { ...this.$route.query, ...{ filter } }
+                this.updateRoute({ query })
+            },
+            handleSearchClear (a, b) {
+                const query = { ...this.$route.query, ...{ q: '' } }
+                this.updateRoute({ query })
+            },
+            handleSearchEnter (value) {
+                const query = { ...this.$route.query, ...{ q: value } }
+                this.updateRoute({ query })
+            },
+            updateRoute (location) {
+                this.$router.push(location).catch(e => e)
             }
         }
     }
@@ -381,7 +412,7 @@
                 background: #E1ECFF;
             }
 
-            &.router-link-exact-active {
+            &.active {
                 background: #E1ECFF;
                 color: #3A84FF;
             }

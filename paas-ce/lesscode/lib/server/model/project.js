@@ -31,6 +31,7 @@ export default {
         return getRepository(Project)
             .createQueryBuilder('project')
             // .orderBy('project.id', 'DESC')
+            .where(condition, params)
             .getMany()
     },
 
