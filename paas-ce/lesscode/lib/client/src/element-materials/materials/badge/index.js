@@ -9,6 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { formatLink } from '@/common/util'
+
 export default {
     name: 'badge',
     type: 'bk-badge',
@@ -16,7 +18,11 @@ export default {
     icon: 'bk-drag-badge',
     group: '数据',
     order: 1,
-    events: ['hover', 'leave'],
+    events: [{
+        name: 'hover', tips: '广播给父组件 mouseover 事件'
+    }, {
+        name: 'leave', tips: '广播给父组件 mouseleave 事件'
+    }],
     styles: ['size', 'margin', 'display', 'font', 'backgroundColor'],
     defaultStyles: {
         display: 'inline-block'
@@ -24,35 +30,41 @@ export default {
     props: {
         theme: {
             type: 'string',
-            val: 'primary'
+            options: ['primary', 'info', 'warning', 'danger', 'success'],
+            val: 'primary',
+            tips: '主题色'
         },
         val: {
             type: 'string',
-            val: ''
+            val: '1',
+            tips: '标记内容'
         },
         icon: {
             type: 'string',
-            val: ''
+            val: '',
+            tips: {
+                html: '组件显示图标；当设置 icon 时，将忽略设置的 val 值，' + formatLink({ content: '查看支持的 icon' })
+            }
         },
         max: {
             type: 'number',
-            val: ''
+            val: '',
+            tips: '组件显示的最大值，当 value 超过 max，显示数字 +；仅当设置了 Number 类型的 value 值时生效'
         },
         dot: {
             type: 'boolean',
-            val: false
-        },
-        visible: {
-            type: 'boolean',
-            val: true
+            val: false,
+            tips: '是否仅显示小圆点；当设置 dot 为 true 时，val, icon, max 均会被忽略'
         },
         position: {
             type: 'string',
-            val: 'top-right'
+            val: 'top-right',
+            options: ['top-right', 'bottom-right', 'bottom-left', 'top-left'],
+            tips: '组件相对于其兄弟组件的位置'
         },
         'ext-cls': {
             type: 'string',
-            val: ''
+            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         },
         slots: {
             name: 'text',

@@ -55,7 +55,8 @@
                 pageType: 'preview',
                 comp: 'LoadingComponent',
                 isLoading: false,
-                targetData: []
+                targetData: [],
+                minHeight: 0
             }
         },
         computed: {
@@ -78,15 +79,19 @@
         },
         mounted () {
             // window.addEventListener('beforeunload', this.deleTmpFile)
+            this.minHeight = window.innerHeight
+            window.addEventListener('resize', this.resizeHandler)
         },
         destroyed () {
+            window.removeEventListener('resize', this.resizeHandler)
             // this.deleTmpFile()
         },
         methods: {
             async loadFile () {
                 this.isLoading = true
                 this.targetData = JSON.parse(localStorage.getItem('layout-target-data'))
-                const code = this.getCode().replace('export default', 'module.exports =')
+                let code = this.getCode().replace('export default', 'module.exports =')
+                code = code.replace('components: { chart: ECharts },', '')
                 const res = httpVueLoader(code)
                 setTimeout(() => {
                     Vue.component('preview-page', res)
@@ -116,10 +121,14 @@
                 this.$store.dispatch('vueCode/deleteTmpFile', {
                     fileName: this.fileName
                 })
+            },
+            resizeHandler () {
+                this.minHeight = window.innerHeight
             }
         },
-        template: `<div>
-            <component :is="comp" :is-loading="isLoading" :url="url"/>
-        </div>`
+        template: ''
+            + '<div :style="{ \'min-height\': minHeight + \'px\' }">'
+            + '<component :is="comp" :is-loading="isLoading" :url="url"/>'
+            + '</div>'
     }
 </script>

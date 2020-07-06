@@ -224,11 +224,17 @@
             },
 
             saveMethods () {
-                this.saveCurrentMethod()
-                this.setFunctionGroup(this.currentFunctionGroup)
-                this.$emit('update:isShow', false)
-                this.activeName = ''
-                this.selectMethod = {}
+                const me = this
+                me.$bkInfo({
+                    title: '确认保存？',
+                    confirmFn: () => {
+                        me.saveCurrentMethod()
+                        me.setFunctionGroup(me.currentFunctionGroup)
+                        me.$emit('update:isShow', false)
+                        me.activeName = ''
+                        me.selectMethod = {}
+                    }
+                })
             },
 
             saveCurrentMethod () {

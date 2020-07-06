@@ -13,11 +13,8 @@
     <div class="modifier-prop">
         <template v-if="formCom.length < 2">
             <div class="prop-name" :class="classes">
-                {{ name }}（{{ formCom[0].typeName | propTypeFormat }}）
-                <i
-                    v-if="name !== 'slots'"
-                    class="bk-icon icon-info-circle"
-                    v-bk-tooltips="{ content: '该属性的用法提示' }" />
+                <span class="label" v-if="name !== 'slots' && describe.tips" v-bk-tooltips="computedTips">{{ name }}({{ formCom[0].typeName | propTypeFormat }})</span>
+                <span v-else>{{ name }}({{ formCom[0].typeName | propTypeFormat }})</span>
             </div>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in formCom">
@@ -34,11 +31,8 @@
         </template>
         <template v-else>
             <div class="prop-name" :class="classes">
-                {{ name }}
-                <i
-                    v-if="name !== 'slots'"
-                    class="bk-icon icon-info-circle"
-                    v-bk-tooltips="{ content: '该属性的用法提示' }" />
+                <span class="label" v-if="name !== 'slots' && describe.tips" v-bk-tooltips="computedTips">{{ name }}</span>
+                <span v-else>{{ name }}</span>
             </div>
             <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;">
                 <bk-radio-button
@@ -82,6 +76,8 @@
     import TypeTableColumn from './strategy/table-column'
     import TypeOption from './strategy/option.vue'
     import TypeCollapse from './strategy/collapse.vue'
+    import TypeJson from './strategy/jsonView.vue'
+    import { transformTipsWidth } from '@/common/util'
 
     const getRealValue = (type, target) => {
         if (type === 'array' || type === 'object') {
@@ -118,6 +114,15 @@
             }
         },
         computed: {
+            computedTips () {
+                const tip = transformTipsWidth(this.describe.tips)
+                const disabled = name === 'slots' || !tip
+                return typeof tip === 'string' ? {
+                    disabled,
+                    content: tip
+                } : Object.assign(tip, { disabled })
+                // return transformTipsWidth(this.describe.tips)
+            },
             formCom () {
                 const config = this.describe
                 const comMap = {
@@ -134,7 +139,8 @@
                     'table-column': TypeTableColumn,
                     'option': TypeOption,
                     'collapse': TypeCollapse,
-                    'remote': TypeRemote
+                    'remote': TypeRemote,
+                    'json': TypeJson
                 }
 
                 let realType = config.type
@@ -153,7 +159,8 @@
                     'table-column': 'table-column',
                     'option': 'option',
                     'collapse': 'collapse',
-                    'remote': 'remote'
+                    'remote': 'remote',
+                    'json': 'json'
                 }
                 if (typeof config.type === 'string') {
                     realType = [config.type]
@@ -245,12 +252,16 @@
                 font-size: 0;
                 background: #ccc;
             }
-            .icon-info-circle {
+            .label {
+                border-bottom: 1px dashed #979ba5;
+                cursor: pointer;
+            }
+            /* .icon-info-circle {
                 padding: 4px;
                 color: #979BA5;
                 font-size: 16px;
                 cursor: pointer;
-            }
+            } */
         }
         .prop-action {
             width: 100%;

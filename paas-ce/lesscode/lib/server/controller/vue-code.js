@@ -88,67 +88,6 @@ async function createFile (filePath) {
     }
 }
 
-// const formatCode = prettier.format(`
-// <template>
-//     <section class="container">
-//         <div class="bk-layout-row">
-//             <div class="bk-layout-col" style="width: 100%">
-//                 <bk-button title="hello world" size="normal" :disabled="false" class="button2EC446F2" @click="test1">
-//                     基础按钮sytd
-//                 </bk-button>
-//             </div>
-//         </div>
-//     </section>
-// </template>
-
-// <script>
-//     export default {
-//         methods: {
-//             test1 (res) {
-//                 return res.data
-//             }
-//         }
-//     }
-// </script>
-// <style lang="css">
-//     .container {
-//         margin: 10px;
-//     }
-//     .bk-layout-row {
-//         display: flex;
-//     }
-//     .bk-layout-row:after {
-//         display: block;
-//         clear: both;
-//         content: '';
-//         font-size: 0;
-//         height: 0;
-//         visibility: hidden;
-//     }
-//     .bk-layout-col {
-//         float: left;
-//         position: relative;
-//         min-height: 1px;
-//     }
-//     /* 还原 bk-button 组件的 vertical-align 样式 */
-//     .bk-layout-col button.bk-button {
-//         vertical-align: baseline;
-//     }
-
-//     .button2EC446F2 {
-//         display: inline-block;
-//     }
-// </style>
-// `, {
-//     vueIndentScriptAndStyle: true,
-//     semi: false,
-//     parser: 'vue',
-//     tabWidth: 4,
-//     // singleQuote: true,
-//     printWidth: 120,
-//     endOfLine: 'crlf'
-// })
-
 // async function test () {
 //     await createFile(path.join(__dirname, ESLINT_TMP_FILE_PATH))
 //     const report = cli.executeOnText(formatCode, ESLINT_TMP_FILE_PATH)
@@ -213,7 +152,7 @@ const VueCode = {
     async formatCode (ctx) {
         try {
             const post = ctx.request.body || {}
-            const formatCode = prettier.format(post.code, {
+            let formatCode = prettier.format(post.code, {
                 vueIndentScriptAndStyle: true,
                 semi: false,
                 parser: 'vue',
@@ -222,9 +161,9 @@ const VueCode = {
                 printWidth: 120,
                 endOfLine: 'crlf'
             })
-            // formatCode = formatCode.replace('data() {\n', 'data () {\n')
-            // formatCode = formatCode.replace(/\(\) {\n/g, ' () {\n')
-            // formatCode = formatCode.replace(/\((.*)\) {\n/g, ' ($1) {\n')
+            // 正则替换两种格式的require为import
+            formatCode = formatCode.replace(/const (.*) = require\((.*)\)/g, 'import $1 from $2')
+            formatCode = formatCode.replace(/require\((.*)\)/g, 'import $1')
 
             await createFile(path.join(__dirname, ESLINT_TMP_FILE_PATH))
             const report = cli.executeOnText(formatCode, ESLINT_TMP_FILE_PATH)

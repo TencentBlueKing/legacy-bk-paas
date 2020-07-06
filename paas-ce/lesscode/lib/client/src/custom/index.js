@@ -11,10 +11,12 @@
 
 import Vue from 'vue'
 
+import components from './components.json'
+
 const customComponents = {}
 const customComponentsConfig = []
 
-export const customComponentList = ['x-form', 'x-script', 'x-table']
+export const customComponentList = Object.keys(components)
 
 customComponentList.forEach(name => {
     const ref = require('@/custom/' + name)
