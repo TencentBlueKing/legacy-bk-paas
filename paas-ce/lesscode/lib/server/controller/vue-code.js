@@ -161,7 +161,6 @@ const VueCode = {
                 printWidth: 120,
                 endOfLine: 'crlf'
             })
-
             // 正则替换两种格式的require为import
             formatCode = formatCode.replace(/const (.*) = require\((.*)\)/g, 'import $1 from $2')
             formatCode = formatCode.replace(/require\((.*)\)/g, 'import $1')

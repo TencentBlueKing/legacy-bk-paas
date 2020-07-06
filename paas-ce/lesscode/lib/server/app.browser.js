@@ -8,6 +8,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+require('reflect-metadata')
+require('@babel/register')
 
 const http = require('http')
 const { resolve } = require('path')
@@ -34,6 +36,9 @@ const errorMiddleware = require('./middleware/error')
 const jsonSendMiddleware = require('./middleware/json-send')
 const { CODE } = require('./util')
 const httpConf = require('./conf/http')
+
+const { createConnection } = require('typeorm')
+const dataBaseConf = require('./conf/data-base')
 
 async function startServer () {
     const PORT = httpConf.port
@@ -128,7 +133,11 @@ async function startServer () {
         app.use(await koaWebpack({
             compiler: compiler,
             hotClient: {
-                allEntries: true
+                allEntries: true,
+                host: {
+                    client: '*',
+                    server: '0.0.0.0'
+                }
             },
             devMiddleware: {
                 publicPath: webpackDevConf.output.publicPath,
@@ -175,4 +184,4 @@ async function startServer () {
     })
 }
 
-startServer()
+createConnection(dataBaseConf).then(startServer).catch((err) => console.error(err))

@@ -95,6 +95,7 @@
         //     }
         // },
         created () {
+            this.localValue = this.defaultValue
             this.initJsonStr = JSON.stringify(this.defaultValue, null, 4)
         },
         methods: {
@@ -162,12 +163,9 @@
             }
         }
     }
-
     .option-add {
         font-size: 12px;
         cursor: pointer;
-        &:hover {
-            color: #3a84ff
-        }
+        color: #3a84ff
     }
 </style>

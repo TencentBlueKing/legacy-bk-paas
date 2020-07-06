@@ -351,6 +351,10 @@ const codeMixin = {
             let importStr = ''
             if (this.chartTypeArr && this.chartTypeArr.length) {
                 importStr = `
+                    /**
+                     * 请先安装 echarts 相关依赖: npm install echarts vue-echarts
+                     * 更多使用请参考：https://github.com/ecomfe/vue-echarts#usage
+                     */
                     const ECharts = require('vue-echarts/components/ECharts.vue')
                     require('echarts/lib/component/tooltip')
                     require('echarts/lib/component/title')

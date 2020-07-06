@@ -36,12 +36,13 @@
                         @click="handleClearAll">
                         <i class="bk-drag-icon bk-drag-delete"></i>
                     </div>
-                    <div class="action-item text" @click="showFunManage" v-bk-tooltips="{ content: '函数管理', placements: ['bottom'] }">
+                    <div class="action-item" @click="showFunManage" v-bk-tooltips="{ content: '函数管理', placements: ['bottom'] }">
                         <i class="bk-drag-icon bk-drag-diff"></i>
                     </div>
-                    <div class="action-item text quick-operation"
+                    <div class="action-item quick-operation"
                         :class="showQuickOperation === true ? 'active' : ''"
                         @click="toggleShowQuickOperation(true)"
+                        v-bk-tooltips="{ content: '快捷键说明', placements: ['bottom'] }"
                         v-bk-clickoutside="toggleShowQuickOperation"
                     >
                         <i class="bk-drag-icon bk-drag-keyboard"></i>
@@ -149,7 +150,7 @@
                 </vue-draggable>
             </div>
             <div class="main-content" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
-                <vue-code class="code-area" :target-data="targetData"></vue-code>
+                <vue-code class="code-area" :key="refreshVueCodeKey" :target-data="targetData"></vue-code>
             </div>
 
             <aside class="main-right-sidebar" :class="{ 'is-collapse': collapseSide.right }">
@@ -192,7 +193,7 @@
     import cloneDeep from 'lodash.clonedeep'
 
     import componentList from '@/element-materials/materials'
-    import { uuid, removeClassWithNodeClass } from '@/common/util'
+    import { uuid, removeClassWithNodeClass, getNodeWithClass } from '@/common/util'
     import RenderGrid from '@/components/render/grid'
     import MaterialModifier from '@/element-materials/modifier'
     import VueCode from '@/components/vue-code'
@@ -244,14 +245,13 @@
                 showQuickOperation: false,
                 quickOperationList: [
                     { keys: ['Ctrl / Cmd', 'C'], name: '复制' },
-                    { keys: ['Delete'], name: '快速删除' },
                     { keys: ['Ctrl / Cmd', 'V'], name: '粘贴' },
-                    { keys: ['Tab'], name: '切换下一个表单' },
                     { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
-                    { keys: ['↑'], name: '增加数值' },
                     { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
-                    { keys: ['↓'], name: '减少数值' }
-                ]
+                    { keys: ['Delete / Backspace'], name: '快速删除' }
+                ],
+                isInDragArea: false,
+                refreshVueCodeKey: +new Date()
             }
         },
         computed: {
@@ -337,6 +337,7 @@
 
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
+            window.addEventListener('click', this.toggleQuickOperation, true)
 
             // for test
             window.test = this.test
@@ -349,6 +350,11 @@
                 return confirmationMessage
             })
         },
+        beforeDestroy () {
+            window.removeEventListener('keydown', this.quickOperation)
+            window.removeEventListener('keyup', this.judgeCtrl)
+            window.removeEventListener('click', this.toggleQuickOperation, true)
+        },
         methods: {
             ...mapMutations('drag', [
                 'setTargetData',
@@ -360,6 +366,31 @@
                 'backTargetHistory',
                 'forwardTargetHistory'
             ]),
+
+            /**
+             * 检测是否能删除组件
+             *
+             * @return {boolean} 是否可以删除
+             */
+            checkIsDelComponent () {
+                const { type, componentId } = this.curSelectedComponentData
+                if (type === 'render-grid'
+                    && this.targetData.length === 1 && componentId === this.targetData[0].componentId
+                ) {
+                    this.$bkMessage({
+                        theme: 'warning',
+                        limit: 1,
+                        message: '画布中至少要有一个栅格布局'
+                    })
+                    return false
+                }
+                return true
+            },
+
+            toggleQuickOperation (event) {
+                const mainNode = getNodeWithClass(event.target, 'target-drag-area')
+                this.isInDragArea = mainNode && mainNode.classList.contains('target-drag-area')
+            },
 
             toggleShowQuickOperation (val) {
                 this.showQuickOperation = val
@@ -375,6 +406,7 @@
             },
 
             quickOperation (event) {
+                if (!this.isInDragArea) return
                 switch (event.keyCode) {
                     case 91:
                     case 17:
@@ -387,22 +419,35 @@
                         this.copyComponent()
                         break
                     case 88:
-                        const copyData = cloneDeep(this.curSelectedComponentData)
-                        this.setCopyData(copyData)
-                        this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
-                        this.confirmDelComponent()
+                        this.cutComponent()
                         break
                     case 90:
-                        this.backTargetHistory()
+                        if (this.hasCtrl) this.backTargetHistory()
                         break
                     case 89:
-                        event.preventDefault()
-                        this.forwardTargetHistory()
+                        if (this.hasCtrl) {
+                            event.preventDefault()
+                            this.forwardTargetHistory()
+                        }
                         break
+                    case 8:
                     case 46:
                         this.deleteComponent()
                         break
                 }
+            },
+
+            cutComponent () {
+                if (!this.hasCtrl || Object.keys(this.curSelectedComponentData || {}).length <= 0) return
+
+                if (!this.checkIsDelComponent()) {
+                    return
+                }
+
+                const copyData = cloneDeep(this.curSelectedComponentData)
+                this.setCopyData(copyData)
+                this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
+                this.confirmDelComponent()
             },
 
             deleteComponent () {
@@ -420,15 +465,17 @@
                 if (!this.hasCtrl || Object.keys(this.copyData).length <= 0) return
                 const copyNode = this.$td(this.curSelectedComponentData.componentId).appendChild(this.copyData, true)
                 const pos = copyNode.getNodePosition()
-                const pushData = {
-                    parentId: pos.parent && pos.parent.componentId,
-                    component: copyNode.value(),
-                    columnIndex: pos.columnIndex,
-                    childrenIndex: pos.childrenIndex,
-                    type: 'add'
-                }
+                if (pos) {
+                    const pushData = {
+                        parentId: pos.parent && pos.parent.componentId,
+                        component: copyNode.value(),
+                        columnIndex: pos.columnIndex,
+                        childrenIndex: pos.childrenIndex,
+                        type: 'add'
+                    }
 
-                this.pushTargetHistory(pushData)
+                    this.pushTargetHistory(pushData)
+                }
             },
 
             /***
@@ -706,6 +753,8 @@
                         me.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
                         me.setCurSelectedComponentData(me.curDragingComponent)
                         me.setTargetData([me.curDragingComponent])
+
+                        me.refreshVueCodeKey = +new Date()
                     }
                 })
             },
@@ -714,6 +763,9 @@
              * 显示删除选中的元素弹框
              */
             showDeleteElement () {
+                if (!this.checkIsDelComponent()) {
+                    return
+                }
                 this.delComponentConf.visiable = true
                 this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
             },
