@@ -37,7 +37,7 @@ const jsonSendMiddleware = require('./middleware/json-send')
 const { CODE } = require('./util')
 const httpConf = require('./conf/http')
 
-const { createConnection } =  require('typeorm')
+const { createConnection } = require('typeorm')
 const dataBaseConf = require('./conf/data-base')
 
 async function startServer () {
