@@ -10,6 +10,7 @@
  */
 const path = require('path')
 
+// 用于配置线上和本地开发数据库
 const config = process.env.NODE_ENV === 'production'
     ? {
         database: process.env.GCS_MYSQL_NAME,
@@ -38,10 +39,8 @@ module.exports = {
     entities: [path.resolve(__dirname, '..', 'model/entities/!(base){.js,.ts}')],
     logging: true, // 开启所有数据库信息打印
     logger: 'advanced-console', // 高亮字体的打印信息
-    synchronize: true, // 第一次部署开启
-    migrationsRun: false, // 后续更改表结构使用 migration
-    migrationsTableName: 'visualization_migration_table',
-    migrations: [path.resolve(__dirname, '..', 'model/migration/*.js')],
+    synchronize: false, // 自动同步数据库表结构，有删除数据风险，推荐关闭
+    migrationsRun: false, // 会自动执行更新SQL，推荐手动执行脚本，关闭该选项
     extra: {
         connectionLimit:  5
     }
