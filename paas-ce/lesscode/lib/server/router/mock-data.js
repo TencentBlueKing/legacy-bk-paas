@@ -9,14 +9,15 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const fs = require('fs')
-const path = require('path')
-const files = fs.readdirSync(path.resolve(__dirname, './')).filter(name => name !== 'index.js')
+const { getApiData, getMockData, createTestData } = require('../controller/mock-data')
+const Router = require('koa-router')
 
-const serviceMap = {}
-files.forEach(name => {
-    const service = name.substring(0, name.length - 3)
-    serviceMap[service] = require(`./${name}`)
+const router = new Router({
+    prefix: '/api/data'
 })
 
-module.exports = serviceMap
+router.post('/getApiData', getApiData)
+router.get('/getMockData', getMockData)
+router.put('/createTestData', createTestData)
+
+module.exports = router

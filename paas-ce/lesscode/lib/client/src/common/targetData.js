@@ -87,7 +87,7 @@ class TargetData {
     update (newNode) {
         const node = this.find(newNode.componentId)
         const oldNode = node.value()
-        const parent = node.parent().value()
+        const parent = node.parent().value() || {}
         parent.renderKey = uuid()
         newNode.renderKey = uuid()
         const curNode = Object.assign(oldNode, newNode)

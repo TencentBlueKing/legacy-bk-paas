@@ -410,7 +410,7 @@ export function uuid (len = 8, radix = 16) {
 export function getNodeWithClass (node, cls) {
     let parent = node
 
-    while (!parent.classList.contains(cls)) {
+    while (parent.parentNode !== document && !parent.classList.contains(cls)) {
         parent = parent.parentNode
     }
 
