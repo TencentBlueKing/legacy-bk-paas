@@ -92,7 +92,7 @@
 ## 安装部署
 - [本地开发部署](./docs/install/dev_install.md)
 - [生产环境部署](./docs/install/prod_install.md)
-- [数据库部署](./docs/install/database.md)
+- [数据库说明](./docs/install/database.md)
 
 ## 开发文档
 - [自定义组件开发文档](./docs/develop/dev_com.md)
