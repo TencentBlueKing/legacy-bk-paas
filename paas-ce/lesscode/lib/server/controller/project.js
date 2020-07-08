@@ -10,10 +10,16 @@
  */
 
 import projectModel from '../model/project'
+const { CODE } = require('../util')
 
 module.exports = {
     async createProject (ctx) {
-        const data = ctx.request.body
+        const projectData = ctx.request.body
+        const userProjectRoleData = {
+            userId: 1,
+            roleId: 1
+        }
+
         try {
             const res = {
                 code: 0,
@@ -21,31 +27,29 @@ module.exports = {
                 data: null
             }
 
+            const { projectName, projectCode } = projectData
+
             // 检查名称和英文ID的唯一性
-            const { projectName, projectCode } = data
             const [foundNameProject, foundCodeProject] = await Promise.all([
                 projectModel.findOneProjectByName(projectName),
                 projectModel.findOneProjectByCode(projectCode)
             ])
 
             if (foundNameProject) {
-                res.code = 10001
-                res.message = '项目名称已经存在'
-            } else if (foundCodeProject) {
-                res.code = 10002
-                res.message = '项目ID已经存在'
-            } else {
-                const { id } = await projectModel.createProject(data)
-                res.data = id
+                ctx.throw(200, '项目名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
             }
+
+            if (foundCodeProject) {
+                ctx.throw(200, '项目ID已经存在', { code: CODE.BIZ.PROJECT_ID_EXISTED })
+            }
+
+            const { projectId } = await projectModel.createProject(projectData, userProjectRoleData)
+
+            res.data = projectId
 
             ctx.send(res)
         } catch (e) {
-            ctx.send({
-                code: 99999,
-                message: e.message,
-                data: null
-            })
+            ctx.throw(e)
         }
     },
 

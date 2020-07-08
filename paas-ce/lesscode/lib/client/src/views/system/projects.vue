@@ -79,7 +79,7 @@
         <bk-dialog v-model="dialog.create.visible"
             render-directive="if"
             theme="primary"
-            title="创建项目"
+            :title="isCopy ? '复制项目' : '创建项目'"
             width="600"
             :mask-close="false"
             :auto-close="false"
@@ -153,7 +153,8 @@
     const defaultCreateFormData = {
         projectName: '',
         projectCode: '',
-        projectDesc: ''
+        projectDesc: '',
+        copyFrom: null
     }
 
     export default {
@@ -233,6 +234,9 @@
         computed: {
             filter () {
                 return this.$route.query.filter || ''
+            },
+            isCopy () {
+                return this.dialog.create.formData.copyFrom !== null
             }
         },
         watch: {
@@ -269,9 +273,6 @@
                         ? <span>{latestPage.updateUser || 'admin'} {dayjs(latestPage.updateTime).fromNow()}更新</span>
                         : <span>{project.createUser || 'admin'} {dayjs(project.createTime).fromNow()}创建</span>
                 )
-            },
-            handleCreate () {
-                this.dialog.create.visible = true
             },
             async handleCreateConfirm () {
                 try {
@@ -357,10 +358,22 @@
                 this.dialog.rename.visible = false
             },
             handleCreateDialogToggle () {
+                console.log(defaultCreateFormData, 'handleCreateDialogToggle')
                 this.dialog.create.formData = { ...defaultCreateFormData }
             },
             handleRenameAfterLeave () {
                 this.dialog.rename.formData.projectName = ''
+            },
+            handleCreate () {
+                defaultCreateFormData.copyFrom = null
+                defaultCreateFormData.projectName = ''
+                this.dialog.create.visible = true
+            },
+            async handleCopy (project) {
+                this.$refs[`moreActionDropdown${project.id}`][0].hide()
+                defaultCreateFormData.copyFrom = project.id
+                defaultCreateFormData.projectName = `${project.projectName}-copy`
+                this.dialog.create.visible = true
             },
             async handleDownloadSource () {
             },
@@ -373,8 +386,6 @@
                 setTimeout(() => {
                     this.$refs.projectRenameInput && this.$refs.projectRenameInput.$el.querySelector('input').focus()
                 }, 0)
-            },
-            async handleCopy () {
             },
             async handleDelete () {
             },

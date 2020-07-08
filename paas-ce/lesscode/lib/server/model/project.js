@@ -8,15 +8,63 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { getRepository } from 'typeorm'
+import { getConnection, getRepository } from 'typeorm'
 import Project from './entities/project'
 import Page from './entities/page'
+import UserProjectRole from './entities/user-project-role'
+import ProjectComp from './entities/project-comp'
+import ProjectFuncGroup from './entities/project-func-group'
+import ProjectPage from './entities/project-page'
 
 export default {
-    createProject (data) {
-        const repository = getRepository(Project)
-        const project = repository.create(data)
-        return repository.save(project)
+    createProject (projectData, userProjectRoleData) {
+        const project = getRepository(Project).create(projectData)
+
+        return getConnection().transaction(async transactionalEntityManager => {
+            // 创建项目基本信息记录
+            const { id: projectId } = await transactionalEntityManager.save(project)
+
+            // 创建用户项目角色关联记录
+            userProjectRoleData.projectId = projectId
+            const userProjectRole = getRepository(UserProjectRole).create(userProjectRoleData)
+            await transactionalEntityManager.save(userProjectRole)
+
+            // 复制项目
+            if (projectData.copyFrom) {
+                // copy项目中的组件/函数/页面
+                const [projectCompCopyValues, projectFuncGroupCopyValues, projectPageCopyValues] = await Promise.all([
+                    getRepository(ProjectComp)
+                        .createQueryBuilder('projectComp')
+                        .where('projectComp.projectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany(),
+                    getRepository(ProjectFuncGroup)
+                        .createQueryBuilder('projectFuncGroup')
+                        .where('projectFuncGroup.projectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany(),
+                    getRepository(ProjectPage)
+                        .createQueryBuilder('projectPage')
+                        .where('projectPage.projectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany()
+                ])
+
+                const getNewValue = (item) => {
+                    const { id, ...others } = item
+                    others.projectId = projectId
+                    return others
+                }
+                const projectCompValues = getRepository(ProjectComp).create(projectCompCopyValues.map(getNewValue))
+                const projectFuncGroupValues = getRepository(ProjectFuncGroup).create(projectFuncGroupCopyValues.map(getNewValue))
+                const projectPageValues = getRepository(ProjectPage).create(projectPageCopyValues.map(getNewValue))
+
+                await Promise.all([
+                    await transactionalEntityManager.save(projectCompValues),
+                    await transactionalEntityManager.save(projectFuncGroupValues),
+                    await transactionalEntityManager.save(projectPageValues)
+                ])
+            }
+
+            return { projectId }
+        })
     },
 
     findOneProjectByName (projectName) {
