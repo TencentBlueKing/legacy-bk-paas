@@ -28,14 +28,6 @@ export default class Project extends Base {
         type: 'int',
         nullable: false,
         default: '0',
-        comment: '是否收藏：0 否，1 是'
-    })
-    favorite
-
-    @Column({
-        type: 'int',
-        nullable: false,
-        default: '0',
         comment: '项目状态：0 为正常，1 为私有，2 为删除'
     })
     status

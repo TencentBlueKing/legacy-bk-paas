@@ -15,6 +15,7 @@ import UserProjectRole from './entities/user-project-role'
 import ProjectComp from './entities/project-comp'
 import ProjectFuncGroup from './entities/project-func-group'
 import ProjectPage from './entities/project-page'
+import ProjectFavourite from './entities/project-favourite'
 
 export default {
     createProject (projectData, userProjectRoleData) {
@@ -94,5 +95,16 @@ export default {
 
     updateProject (id, fields = {}) {
         return getRepository(Project).update(id, fields)
+    },
+
+    addFavorite (data) {
+        const repository = getRepository(ProjectFavourite)
+        const projectFavourite = repository.create(data)
+        return repository.save(projectFavourite)
+    },
+
+    removeFavorite (data) {
+        const repository = getRepository(ProjectFavourite)
+        return repository.delete(data)
     }
 }

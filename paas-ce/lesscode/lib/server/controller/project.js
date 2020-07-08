@@ -127,11 +127,30 @@ module.exports = {
                 data: affected
             })
         } catch (e) {
+            ctx.throw(e)
+        }
+    },
+
+    async favorite (ctx) {
+        const { id, favorite } = ctx.request.body
+        const data = {
+            userId: 1,
+            projectId: id
+        }
+
+        try {
+            if (favorite) {
+                await projectModel.addFavorite(data)
+            } else {
+                await projectModel.removeFavorite(data)
+            }
             ctx.send({
-                code: 99999,
-                message: e.message,
+                code: 0,
+                message: 'OK',
                 data: null
             })
+        } catch (e) {
+            ctx.throw(e)
         }
     },
 
@@ -145,16 +164,11 @@ module.exports = {
         try {
             const foundNameProject = await projectModel.findOneProjectByName(name)
             if (foundNameProject) {
-                res.code = 10001
-                res.message = '项目名称已经存在'
+                ctx.throw(200, '项目名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
             }
             ctx.send(res)
         } catch (e) {
-            ctx.send({
-                code: 99999,
-                message: e.message,
-                data: null
-            })
+            ctx.throw(e)
         }
     }
 }

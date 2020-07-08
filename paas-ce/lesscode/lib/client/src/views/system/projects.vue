@@ -298,9 +298,9 @@
                     const favorite = project.favorite ? 0 : 1
                     const data = {
                         id: project.id,
-                        fields: { favorite }
+                        favorite
                     }
-                    await this.$store.dispatch('project/update', { data })
+                    await this.$store.dispatch('project/favorite', { data })
                     this.messageSuccess(`${favorite ? '添加' : '取消'}成功`)
 
                     // 更新数据状态
