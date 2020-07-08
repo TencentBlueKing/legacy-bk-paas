@@ -20,6 +20,7 @@ Vue.use(VueRouter)
 
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
+const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/system/component-manage')
 
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
@@ -71,6 +72,11 @@ const routes = [
                 path: 'projects',
                 name: 'projects',
                 component: Projects
+            },
+            {
+                path: 'component-manage',
+                name: 'componentManage',
+                component: ComponentManage
             }
         ]
     },
