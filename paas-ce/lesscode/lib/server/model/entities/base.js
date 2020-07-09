@@ -1,4 +1,4 @@
-const { PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn } = require('typeorm')
+const { PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, Column } = require('typeorm')
 
 class Base {
     // 自动增量值自动生成ID

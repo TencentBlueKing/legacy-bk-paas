@@ -16,7 +16,7 @@ export class func extends base {
     funcBody
 
     // 函数分类ID
-    @Column({ type: "int", length: 11 })
+    @Column({ type: "int" })
     funcGroupId
 
     // 函数简介
@@ -36,6 +36,6 @@ export class func extends base {
     funcApiData
 
     // 是否公开
-    @Column({ type: "int", length: 11 })
+    @Column({ type: "int" })
     publicFlag
 }

@@ -8,6 +8,6 @@ export class func_group extends base {
     groupName
 
     // 父group节点的id
-    @Column({ type: "int", length: 11 })
+    @Column({ type: "int" })
     parentId
 }
