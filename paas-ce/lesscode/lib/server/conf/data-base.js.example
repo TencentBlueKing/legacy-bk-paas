@@ -13,19 +13,19 @@ const path = require('path')
 // 用于配置线上和本地开发数据库
 const config = process.env.NODE_ENV === 'production'
     ? {
-        database: process.env.GCS_MYSQL_NAME,
-        username: process.env.GCS_MYSQL_USER,
-        password: process.env.GCS_MYSQL_PASSWORD,
-        host: process.env.GCS_MYSQL_HOST,
-        port: process.env.GCS_MYSQL_PORT,
+        database: process.env.GCS_MYSQL_NAME,        // 线上数据库名
+        username: process.env.GCS_MYSQL_USER,        // 线上数据库用户名
+        password: process.env.GCS_MYSQL_PASSWORD,    // 线上数据库密码
+        host: process.env.GCS_MYSQL_HOST,            // 线上host
+        port: process.env.GCS_MYSQL_PORT,            // 线上端口
         dialect: 'mysql'
     }
     : {
-        database: 'vue_visualization',
-        username: 'xxx',
-        password: 'xxx',
-        host: 'localhost',
-        port: 3306,
+        database: 'vue_visualization',               // 本地开发数据库名
+        username: 'xxx',                             // 本地开发数据库用户名
+        password: 'xxx',                             // 本地开发数据库密码
+        host: 'localhost',                           // 本地开发host
+        port: 3306,                                  // 本地开发端口
         dialect: 'mysql'
     }
 
@@ -37,10 +37,10 @@ module.exports = {
     password: config.password,
     database: config.database,
     entities: [path.resolve(__dirname, '..', 'model/entities/!(base){.js,.ts}')],
-    logging: true, // 开启所有数据库信息打印
+    logging: true,              // 开启所有数据库信息打印
     logger: 'advanced-console', // 高亮字体的打印信息
-    synchronize: false, // 自动同步数据库表结构，有删除数据风险，推荐关闭
-    migrationsRun: false, // 会自动执行更新SQL，推荐手动执行脚本，关闭该选项
+    synchronize: false,         // 自动同步数据库表结构，有删除数据风险，推荐关闭
+    migrationsRun: false,       // 会自动执行更新SQL，推荐手动执行脚本，关闭该选项
     extra: {
         connectionLimit:  5
     }

@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const { getApiData, getMockData, createTestData } = require('../controller/mock-data')
+const { getApiData, getMockData } = require('../controller/mock-data')
 const Router = require('koa-router')
 
 const router = new Router({
@@ -18,6 +18,5 @@ const router = new Router({
 
 router.post('/getApiData', getApiData)
 router.get('/getMockData', getMockData)
-router.put('/createTestData', createTestData)
 
 module.exports = router
