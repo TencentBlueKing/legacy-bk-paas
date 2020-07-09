@@ -38,6 +38,12 @@ export default {
                 return data
             })
         },
+        delete ({ commit }, { config }) {
+            return http.delete('/project/delete', config).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
         favorite ({ commit }, { data, config }) {
             return http.post('/project/favorite', data, config).then(response => {
                 const data = response.data || ''

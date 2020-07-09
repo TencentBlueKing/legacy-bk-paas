@@ -121,7 +121,7 @@
             :mask-close="false"
             :auto-close="false"
             header-position="left"
-            @after-leave="handleRenameAfterLeave">
+            @after-leave="handleRenameDialogAfterLeave">
             <bk-form ref="renameForm" class="rename-form" :label-width="90" :rules="dialog.rename.formRules" :model="dialog.rename.formData">
                 <bk-form-item label="项目名称" required property="projectName">
                     <bk-input ref="projectRenameInput"
@@ -134,9 +134,39 @@
             <div class="dialog-footer" slot="footer">
                 <bk-button
                     theme="primary"
+                    :disabled="activatedProject.projectName === dialog.rename.formData.projectName"
                     :loading="dialog.rename.loading"
                     @click="handleRenameConfirm">确定</bk-button>
                 <bk-button @click="handleRenameCancel" :disabled="dialog.rename.loading">取消</bk-button>
+            </div>
+        </bk-dialog>
+
+        <bk-dialog v-model="dialog.delete.visible"
+            render-directive="if"
+            theme="primary"
+            ext-cls="delete-dialog-wrapper"
+            title="确认删除该项目？"
+            width="500"
+            footer-position="center"
+            :mask-close="false"
+            :auto-close="false"
+            @value-change="handleDeleteDialogToggle">
+            <bk-form ref="deleteForm" class="delete-form" :label-width="0" :rules="dialog.delete.formRules" :model="dialog.delete.formData">
+                <p class="confirm-name">请输入<em title="复制名称">“{{activatedProject.projectName}}”</em>确认</p>
+                <bk-form-item property="projectName">
+                    <bk-input
+                        maxlength="60"
+                        v-model="dialog.delete.formData.projectName"
+                        placeholder="请输入项目名称">
+                    </bk-input>
+                </bk-form-item>
+            </bk-form>
+            <div class="dialog-footer" slot="footer">
+                <bk-button
+                    theme="danger"
+                    :loading="dialog.delete.loading"
+                    @click="handleDeleteConfirm">删除</bk-button>
+                <bk-button @click="handleDeleteCancel" :disabled="dialog.delete.loading">取消</bk-button>
             </div>
         </bk-dialog>
     </main>
@@ -221,6 +251,29 @@
                                 {
                                     required: true,
                                     message: '必填项',
+                                    trigger: 'blur'
+                                }
+                            ]
+                        }
+                    },
+                    delete: {
+                        visible: false,
+                        loading: false,
+                        formData: {
+                            projectName: ''
+                        },
+                        formRules: {
+                            projectName: [
+                                {
+                                    required: true,
+                                    message: '必填项',
+                                    trigger: 'blur'
+                                },
+                                {
+                                    validator: (val) => {
+                                        return this.activatedProject.projectName === val
+                                    },
+                                    message: '名称不一致，请重试',
                                     trigger: 'blur'
                                 }
                             ]
@@ -318,7 +371,7 @@
 
                     const { id, projectName } = this.dialog.rename.formData
                     const data = {
-                        id: id,
+                        id,
                         fields: { projectName }
                     }
                     this.dialog.rename.loading = true
@@ -343,6 +396,26 @@
                     this.dialog.rename.loading = false
                 }
             },
+            async handleDeleteConfirm () {
+                try {
+                    await this.$refs.deleteForm.validate()
+
+                    const { id } = this.dialog.delete.formData
+                    const data = { id }
+                    this.dialog.delete.loading = true
+
+                    await this.$store.dispatch('project/delete', { config: { data } })
+
+                    this.messageSuccess('删除成功')
+                    this.dialog.delete.visible = false
+
+                    this.getProjectList()
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    this.dialog.delete.loading = false
+                }
+            },
             async checkProjectName (name) {
                 const res = await this.$store.dispatch('project/checkname', {
                     data: { name },
@@ -360,12 +433,17 @@
             handleRenameCancel () {
                 this.dialog.rename.visible = false
             },
+            handleDeleteCancel () {
+                this.dialog.delete.visible = false
+            },
             handleCreateDialogToggle () {
-                console.log(defaultCreateFormData, 'handleCreateDialogToggle')
                 this.dialog.create.formData = { ...defaultCreateFormData }
             },
-            handleRenameAfterLeave () {
+            handleRenameDialogAfterLeave () {
                 this.dialog.rename.formData.projectName = ''
+            },
+            handleDeleteDialogToggle () {
+                this.dialog.delete.formData.projectName = ''
             },
             handleCreate () {
                 defaultCreateFormData.copyFrom = null
@@ -373,7 +451,7 @@
                 this.dialog.create.visible = true
             },
             async handleCopy (project) {
-                this.$refs[`moreActionDropdown${project.id}`][0].hide()
+                this.hideDropdownMenu(project)
                 defaultCreateFormData.copyFrom = project.id
                 defaultCreateFormData.projectName = `${project.projectName}-copy`
                 this.dialog.create.visible = true
@@ -382,7 +460,8 @@
             },
             async handleRename (project) {
                 this.activatedProject = project
-                this.$refs[`moreActionDropdown${project.id}`][0].hide()
+                this.hideDropdownMenu(project)
+
                 this.dialog.rename.visible = true
                 this.dialog.rename.formData.projectName = project.projectName
                 this.dialog.rename.formData.id = project.id
@@ -390,7 +469,12 @@
                     this.$refs.projectRenameInput && this.$refs.projectRenameInput.$el.querySelector('input').focus()
                 }, 0)
             },
-            async handleDelete () {
+            async handleDelete (project) {
+                this.activatedProject = project
+                this.hideDropdownMenu(project)
+
+                this.dialog.delete.visible = true
+                this.dialog.delete.formData.id = project.id
             },
             handleClickFilter (filter = '') {
                 const query = { ...this.$route.query, ...{ filter } }
@@ -406,6 +490,9 @@
             },
             updateRoute (location) {
                 this.$router.push(location).catch(e => e)
+            },
+            hideDropdownMenu (project) {
+                this.$refs[`moreActionDropdown${project.id}`][0].hide()
             }
         }
     }
@@ -596,6 +683,32 @@
     /deep/ .dialog-footer {
         button + button {
             margin-left: 4px;
+        }
+    }
+
+    /deep/ .delete-dialog-wrapper {
+        .delete-form {
+            .confirm-name {
+                margin: 16px 0 8px 0;
+                font-size: 14px;
+                em {
+                    font-style: normal;
+                    font-weight: 700;
+                    cursor: pointer;
+                }
+            }
+        }
+        .bk-dialog-footer {
+            text-align: center;
+            padding: 0 65px 40px;
+            background-color: #fff;
+            border: none;
+            border-radius: 0;
+        }
+        .dialog-footer {
+            button {
+                width: 86px;
+            }
         }
     }
 </style>

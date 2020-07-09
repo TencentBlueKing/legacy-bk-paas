@@ -10,7 +10,14 @@
  */
 
 const Router = require('koa-router')
-const { createProject, queryProject, updateProject, favorite, checkname } = require('../controller/project')
+const {
+    createProject,
+    queryProject,
+    updateProject,
+    deleteProject,
+    favorite,
+    checkname
+} = require('../controller/project')
 
 const router = new Router({
     prefix: '/api/project'
@@ -19,6 +26,7 @@ const router = new Router({
 router.post('/create', createProject)
 router.get('/query', queryProject)
 router.put('/update', updateProject)
+router.delete('/delete', deleteProject)
 router.post('/favorite', favorite)
 router.post('/checkname', checkname)
 

@@ -167,6 +167,21 @@ module.exports = {
         }
     },
 
+    async deleteProject (ctx) {
+        try {
+            const { id } = ctx.request.body
+            const fields = { status: 2 }
+            const { affected } = await projectModel.updateProject(id, fields)
+            ctx.send({
+                code: 0,
+                message: 'OK',
+                data: affected
+            })
+        } catch (e) {
+            ctx.throw(e)
+        }
+    },
+
     async favorite (ctx) {
         const { id, favorite } = ctx.request.body
         const data = {
