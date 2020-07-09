@@ -21,6 +21,10 @@ Vue.use(VueRouter)
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 
+const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
+const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
+const Member = () => import(/* webpackChunkName: 'member' */'@/views/project/member')
+
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
@@ -73,6 +77,27 @@ const routes = [
                 component: Projects
             }
         ]
+    },
+    {
+        path: '/project/:projectId',
+        component: ProjectEntry,
+        children: [
+            {
+                path: '',
+                redirect: { name: 'pageList' }
+            },
+            {
+                path: 'page',
+                name: 'pageList',
+                component: Page
+            },
+            {
+                path: 'member',
+                name: 'memberManage',
+                component: Member
+            }
+        ]
+
     },
     {
         path: '*',
