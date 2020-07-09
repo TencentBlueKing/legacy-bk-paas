@@ -11,12 +11,17 @@
 
 import projectModel from '../model/project'
 const { CODE } = require('../util')
+const presetUser = {
+    id: 3,
+    name: 'view_a'
+}
 
 module.exports = {
     async createProject (ctx) {
         const projectData = ctx.request.body
+        projectData.createUser = presetUser.name
         const userProjectRoleData = {
-            userId: 1,
+            userId: presetUser.id,
             roleId: 1
         }
 
@@ -65,26 +70,49 @@ module.exports = {
             query.params = { q: `%${q}%` }
         }
 
+        let projectList = []
         switch (filter) {
             case 'my':
                 query.condition.push('project.createUser = :user')
-                query.params.user = 'test'
+                query.params.user = presetUser.name
+                query.condition = query.condition.join(' AND ')
+                projectList = await projectModel.queryMyCreateProject(query)
                 break
             case 'favorite':
-                query.condition.push('project.favorite = :favorite')
-                query.params.favorite = 1
+                query.condition.push('favourite.userId = :userId')
+                query.params.userId = presetUser.id
+                query.condition = query.condition.join(' AND ')
+                projectList = await projectModel.queryMyFavoriteProject(query)
                 break
             case 'share':
+                query.condition.push('user_project_role.userId = :userId')
+                query.params.userId = presetUser.id
+                query.condition = query.condition.join(' AND ')
+                projectList = await projectModel.queryShareWithProject(query)
                 break
             default:
+                query.condition.push('user_project_role.userId = :userId')
+                query.params.userId = presetUser.id
+                query.condition = query.condition.join(' AND ')
+                projectList = await projectModel.queryAllProject(query)
+                break
         }
 
-        if (Array.isArray(query.condition) && query.condition.length) {
-            query.condition = query.condition.join(' AND ')
+        // 获取项目下的页面
+        let pageList = []
+        if (projectList.length) {
+            const projectIds = projectList.map(project => project.id)
+            pageList = await projectModel.queryProjectPage({
+                condition: 'project_page.projectId IN (:...projectIds)',
+                params: { projectIds }
+            })
         }
 
-        const projectList = await projectModel.qeuryProject(query)
-        const pageList = await projectModel.queryProjectPage()
+        // 获取已收藏的项目
+        const favoritetList = await projectModel.queryMyFavoriteProject({
+            condition: 'favourite.userId = :userId',
+            params: { userId: presetUser.id }
+        })
 
         // 按projectId分组
         const pageMap = {}
@@ -96,14 +124,23 @@ module.exports = {
             }
         })
 
-        // 按页面更新时间倒序
+        // 按页面更新时间和创建时间倒序
         projectList.forEach(project => {
-            if (pageMap[project.id]) {
-                project['pageUpdateTime'] = pageMap[project.id][0].updateTime
+            const projectId = project.id
+            if (pageMap[projectId]) {
+                project['pageUpdateTime'] = pageMap[projectId][0].updateTime
             }
+            project['favorite'] = favoritetList.find(item => item.id === projectId) ? 1 : 0
         })
         projectList.sort((a, b) => {
-            return b.pageUpdateTime - a.pageUpdateTime
+            if (!a.pageUpdateTime && !b.pageUpdateTime) {
+                return 0
+            } else if (!a.pageUpdateTime && b.pageUpdateTime) {
+                return 1
+            } else if (a.pageUpdateTime && !b.pageUpdateTime) {
+                return -1
+            }
+            return new Date(b.pageUpdateTime) - new Date(a.pageUpdateTime)
         })
 
         ctx.send({
@@ -111,8 +148,7 @@ module.exports = {
             message: '',
             data: {
                 projectList,
-                pageMap,
-                ctx: { filter, q }
+                pageMap
             }
         })
     },
@@ -134,7 +170,7 @@ module.exports = {
     async favorite (ctx) {
         const { id, favorite } = ctx.request.body
         const data = {
-            userId: 1,
+            userId: presetUser.id,
             projectId: id
         }
 

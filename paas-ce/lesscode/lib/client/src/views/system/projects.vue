@@ -305,6 +305,9 @@
 
                     // 更新数据状态
                     project.favorite = favorite
+                    if (this.filter === 'favorite') {
+                        this.getProjectList()
+                    }
                 } catch (e) {
                     console.error(e)
                 }

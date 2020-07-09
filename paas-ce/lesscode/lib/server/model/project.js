@@ -17,6 +17,16 @@ import ProjectFuncGroup from './entities/project-func-group'
 import ProjectPage from './entities/project-page'
 import ProjectFavourite from './entities/project-favourite'
 
+const projectSelectFields = [
+    'project.id',
+    'project.projectCode',
+    'project.projectName',
+    'project.projectDesc',
+    'project.status',
+    'project.createTime',
+    'project.createUser'
+]
+
 export default {
     createProject (projectData, userProjectRoleData) {
         const project = getRepository(Project).create(projectData)
@@ -76,19 +86,55 @@ export default {
         return getRepository(Project).findOne({ projectCode })
     },
 
-    qeuryProject ({ condition = '', params = {} }) {
+    queryAllProject ({ condition = '', params = {} }) {
         return getRepository(Project)
             .createQueryBuilder('project')
-            // .orderBy('project.id', 'DESC')
-            .where(condition, params)
+            .innerJoinAndSelect('r_user_project_role', 'user_project_role', 'user_project_role.projectId = project.id')
+            .select(projectSelectFields)
+            .where('project.status != 2')
+            .andWhere(condition, params)
+            .orderBy('project.id', 'DESC')
             .getMany()
     },
 
-    queryProjectPage () {
+    queryMyCreateProject ({ condition = '', params = {} }) {
+        return getRepository(Project)
+            .createQueryBuilder('project')
+            .select(projectSelectFields)
+            .where('project.status != 2')
+            .andWhere(condition, params)
+            .orderBy('project.id', 'DESC')
+            .getMany()
+    },
+
+    queryMyFavoriteProject ({ condition = '', params = {} }) {
+        return getRepository(Project)
+            .createQueryBuilder('project')
+            .innerJoinAndSelect('r_favourite', 'favourite', 'favourite.projectId = project.id')
+            .select(projectSelectFields)
+            .where('project.status != 2')
+            .andWhere(condition, params)
+            .orderBy('project.id', 'DESC')
+            .getMany()
+    },
+
+    queryShareWithProject ({ condition = '', params = {} }) {
+        return getRepository(Project)
+            .createQueryBuilder('project')
+            .innerJoinAndSelect('r_user_project_role', 'user_project_role', 'user_project_role.projectId = project.id AND user_project_role.roleId != 1')
+            .select(projectSelectFields)
+            .where('project.status != 2')
+            .andWhere(condition, params)
+            .orderBy('project.id', 'DESC')
+            .getMany()
+    },
+
+    queryProjectPage ({ condition = '', params = {} }) {
         return getRepository(Page)
             .createQueryBuilder('page')
             .innerJoinAndSelect('r_project_page', 'project_page', 'project_page.pageId = page.id')
-            .select(['pageName', 'updateTime', 'updateUser', 'project_page.projectId'])
+            .select(['pageName', 'updateTime', 'updateUser', 'projectId'])
+            .where(condition, params)
             .orderBy('page.updateTime', 'DESC')
             .getRawMany()
     },
