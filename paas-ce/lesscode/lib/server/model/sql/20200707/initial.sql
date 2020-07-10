@@ -23,7 +23,7 @@ CREATE TABLE `comp`  (
   INDEX `category_id`(`categoryId`) USING BTREE,
   INDEX `latest_version_id`(`latestVersionId`) USING BTREE,
   INDEX `belongProjectId`(`belongProjectId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '自定义组件表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '自定义组件表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of comp
@@ -43,7 +43,7 @@ CREATE TABLE `comp_category`  (
   `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人，默认当前用户',
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '组件分类表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '组件分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of comp_category
@@ -64,15 +64,14 @@ CREATE TABLE `func`  (
   `updateTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
   `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人，默认当前用户',
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
+  `funcSummary` tinytext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '函数简介',
+  `funcType` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '函数模板类型',
+  `funcMethod` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '远程函数方法',
+  `funcApiData` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '远程函数数据体',
+  `publicFlag` int(11) UNSIGNED ZEROFILL NULL DEFAULT 00000000000 COMMENT '是否公开',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `funcGroupId`(`funcGroupId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '函数表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of func
--- ----------------------------
-INSERT INTO `func` VALUES (1, 'clearData', NULL, NULL, 1, '2020-06-03 11:19:58', '2020-06-03 11:19:58', NULL, NULL);
-INSERT INTO `func` VALUES (2, 'clearData', NULL, NULL, 1, '2020-06-03 11:26:06', '2020-06-03 15:28:56', NULL, NULL);
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '函数表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for func_group
@@ -87,15 +86,12 @@ CREATE TABLE `func_group`  (
   `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人，默认当前用户',
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '函数分类表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '函数分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of func_group
 -- ----------------------------
-INSERT INTO `func_group` VALUES (1, '默认方法', -1, '2020-06-03 12:00:16', '2020-06-03 17:29:21', NULL, NULL);
-INSERT INTO `func_group` VALUES (2, '公开方法', -1, '2020-06-03 12:00:16', '2020-06-03 15:19:45', NULL, NULL);
-INSERT INTO `func_group` VALUES (3, 'hiei1-group1', -1, '2020-06-03 12:00:16', '2020-06-03 15:29:38', NULL, NULL);
-INSERT INTO `func_group` VALUES (4, 'hiei1-group1', -1, '2020-06-03 15:21:28', '2020-06-03 15:21:28', NULL, NULL);
+INSERT INTO `func_group` VALUES (1, '默认分类', -1, '2020-06-03 12:00:16', '2020-07-09 17:21:32', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for operate_log
@@ -126,14 +122,7 @@ CREATE TABLE `page`  (
   `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人，默认当前用户',
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '页面表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of page
--- ----------------------------
-INSERT INTO `page` VALUES (1, 'hiei1-page1', '[{\"componentId\":\"grid-23275ecf\",\"name\":\"grid\",\"type\":\"render-grid\",\"tabPanelActive\":\"props\",\"renderProps\":{\"margin-horizontal\":{\"type\":\"number\",\"val\":0},\"margin-vertical\":{\"type\":\"number\",\"val\":0},\"slots\":{\"type\":\"column\",\"val\":[{\"span\":1,\"children\":[{\"componentId\":\"button-c2ead190\",\"tabPanelActive\":\"props\",\"name\":\"button\",\"type\":\"bk-button\",\"renderProps\":{\"title\":{\"type\":\"string\",\"val\":\"hello world\",\"tips\":\"原生 html title 属性\"},\"size\":{\"type\":\"string\",\"val\":\"normal\",\"options\":[\"small\",\"normal\",\"large\"],\"tips\":\"按钮尺寸\"},\"theme\":{\"type\":\"string\",\"val\":\"default\",\"options\":[\"default\",\"primary\",\"success\",\"warning\",\"danger\"],\"tips\":\"按钮类型、主题\"},\"disabled\":{\"type\":\"boolean\",\"val\":false},\"slots\":{\"name\":\"text\",\"type\":\"text\",\"val\":\"基础按钮\"}},\"renderStyles\":{\"display\":\"inline-block\"},\"renderEvents\":{}}],\"width\":\"100%\"}]}},\"renderStyles\":{},\"renderEvents\":{}}]', '<template>\n    <section class=\"container\">\n        <div class=\"bk-layout-row grid-23275ecf\">\n            <div class=\"bk-layout-col\" style=\"width: 100%\">\n                <bk-button\n                    title=\"hello world\"\n                    size=\"normal\"\n                    theme=\"default\"\n                    :disabled=\"false\"\n                    class=\"bk-layout-component button-c2ead190\"\n                >\n                    基础按钮\n                </bk-button>\n            </div>\n        </div>\n    </section>\n</template>\n\n<script>\n    export default {}\n</script>\n<style lang=\"css\">\n    .container {\n        margin: 10px;\n    }\n    .bk-layout-row {\n        display: flex;\n    }\n    .bk-layout-row:after {\n        display: block;\n        clear: both;\n        content: \'\';\n        font-size: 0;\n        height: 0;\n        visibility: hidden;\n    }\n    .bk-layout-col {\n        float: left;\n        position: relative;\n        min-height: 1px;\n    }\n    .bk-form-radio {\n        margin-right: 20px;\n    }\n    .bk-form-checkbox {\n        margin-right: 20px;\n    }\n    /* 还原 bk-button 组件的 vertical-align 样式 */\n    .bk-layout-col button.bk-button {\n        vertical-align: baseline;\n    }\n    /* 每个组件之间默认外边距 5px */\n    .bk-layout-component {\n        margin: 5px;\n    }\n\n    .button-c2ead190 {\n        display: inline-block;\n    }\n</style>', 0, '2020-06-03 12:00:29', '2020-06-03 12:00:29', NULL, NULL);
-INSERT INTO `page` VALUES (2, 'hiei1-page2', 'aaa', 'bbb', 0, '2020-06-03 12:00:29', '2020-06-03 12:00:29', NULL, NULL);
-INSERT INTO `page` VALUES (3, 'jack1-page1', '111', '222', 0, '2020-06-03 12:00:29', '2020-06-03 12:00:29', NULL, NULL);
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '页面表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for perm
@@ -148,7 +137,7 @@ CREATE TABLE `perm`  (
   `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人，默认当前用户',
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of perm
@@ -194,13 +183,6 @@ CREATE TABLE `project`  (
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '项目表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of project
--- ----------------------------
-INSERT INTO `project` VALUES (4, 'hiei1', 'hieiproject1', NULL, 0, '2020-06-03 12:00:46', '2020-06-03 12:00:46', NULL, NULL);
-INSERT INTO `project` VALUES (5, 'jack1', 'jackproject1', 'descsdsd', 0, '2020-06-03 12:00:46', '2020-06-03 14:28:50', NULL, NULL);
-INSERT INTO `project` VALUES (6, 'hiei2', 'hieiproject2', NULL, 0, '2020-06-03 12:00:46', '2020-06-03 12:00:46', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for r_favourite
@@ -255,12 +237,6 @@ CREATE TABLE `r_project_func_group`  (
   INDEX `project_id`(`projectId`) USING BTREE,
   INDEX `r_project_func_group_ibfk_2`(`funcGroupId`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '项目/函数关联表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of r_project_func_group
--- ----------------------------
-INSERT INTO `r_project_func_group` VALUES (5, 4, 1);
-INSERT INTO `r_project_func_group` VALUES (6, 4, 4);
 
 -- ----------------------------
 -- Table structure for r_project_page
@@ -399,7 +375,7 @@ CREATE TABLE `user`  (
   `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人，默认当前用户',
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
@@ -423,7 +399,7 @@ CREATE TABLE `version`  (
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `component_id`(`componentId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '自定义组件版本表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '自定义组件版本表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of version
