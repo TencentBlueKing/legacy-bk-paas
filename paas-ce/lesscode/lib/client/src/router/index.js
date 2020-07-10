@@ -88,12 +88,14 @@ const routes = [
                 meta: {
                     title: '账号管理'
                 }
-                component: Projects
             },
             {
                 path: 'component-manage',
                 name: 'componentManage',
-                component: ComponentManage
+                component: ComponentManage,
+                meta: {
+                    title: '自定义组件库'
+                }
             }
         ]
     },
