@@ -71,7 +71,7 @@ const codeMixin = {
                 const widthStr = item.renderProps.width && item.renderProps.width.val ? `width: ${item.renderProps.width.val}px;` : ''
                 const heightStr = `height:${item.renderProps.height.val || 0}px;`
                 return `<div style="${widthStr}${heightStr}">
-                            <chart :options="${item.componentId}" :auto-resize="true"></chart>
+                            <chart :options="${item.componentId}" autoresize></chart>
                         </div>\n`
             } else {
                 // item.componentId = item.componentId.replace('_', '')
