@@ -9,16 +9,22 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from "typeorm";
-import base from './base'
+// const { saveAsFile, formatCode, deleteTmpFile } = require('../controller/vue-code')
+const Router = require('koa-router')
+const {
+    list,
+    create,
+    update,
+    categoryDelete
+} = require('../controller/component-category-manage')
 
-@Entity()
-export class func_group extends base {
-    // 函数文件夹名字
-    @Column({ type: "varchar", length: 255 })
-    groupName
+const router = new Router({
+    prefix: '/api/componentCategoryManage'
+})
 
-    // 父group节点的id
-    @Column({ type: "int" })
-    parentId
-}
+router.get('/list', list)
+router.get('/create', create)
+router.get('/update', update)
+router.get('/delete', categoryDelete)
+
+module.exports = router

@@ -9,16 +9,25 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from "typeorm";
-import base from './base'
+const Router = require('koa-router')
+const {
+    createProject,
+    queryProject,
+    updateProject,
+    deleteProject,
+    favorite,
+    checkname
+} = require('../controller/project')
 
-@Entity()
-export class func_group extends base {
-    // 函数文件夹名字
-    @Column({ type: "varchar", length: 255 })
-    groupName
+const router = new Router({
+    prefix: '/api/project'
+})
 
-    // 父group节点的id
-    @Column({ type: "int" })
-    parentId
-}
+router.post('/create', createProject)
+router.get('/query', queryProject)
+router.put('/update', updateProject)
+router.delete('/delete', deleteProject)
+router.post('/favorite', favorite)
+router.post('/checkname', checkname)
+
+module.exports = router

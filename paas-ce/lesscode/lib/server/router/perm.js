@@ -9,16 +9,13 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from "typeorm";
-import base from './base'
+const Router = require('koa-router')
+const { getUserPerm } = require('../controller/perm')
 
-@Entity()
-export class func_group extends base {
-    // 函数文件夹名字
-    @Column({ type: "varchar", length: 255 })
-    groupName
+const router = new Router({
+    prefix: '/api/perm'
+})
 
-    // 父group节点的id
-    @Column({ type: "int" })
-    parentId
-}
+router.get('/userPerm', getUserPerm)
+
+module.exports = router
