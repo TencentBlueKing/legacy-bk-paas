@@ -1,19 +1,19 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
-@Entity({ name: 'r_project_func_group', comment: '项目/函数关联表' })
+@Entity({ name: 'r_favourite', comment: '项目收藏表' })
 export default class ProjectComp {
     @PrimaryGeneratedColumn()
     id
 
     @Column({
         type: 'int',
-        comment: 'project 表主键'
+        comment: 'user 表主键'
     })
-    projectId
+    userId
 
     @Column({
         type: 'int',
-        comment: 'function 表主键'
+        comment: 'project 表主键'
     })
-    funcGroupId
+    projectId
 }

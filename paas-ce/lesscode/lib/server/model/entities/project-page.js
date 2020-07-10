@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
-@Entity({ name: 'r_project_func_group', comment: '项目/函数关联表' })
+@Entity({ name: 'r_project_page', comment: '项目/页面关联表' })
 export default class ProjectComp {
     @PrimaryGeneratedColumn()
     id
@@ -13,7 +13,7 @@ export default class ProjectComp {
 
     @Column({
         type: 'int',
-        comment: 'function 表主键'
+        comment: 'page 表主键'
     })
-    funcGroupId
+    pageId
 }
