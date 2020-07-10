@@ -9,44 +9,24 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column, AfterInsert } from "typeorm";
+import { Entity, Column } from "typeorm";
 import base from './base'
 
 @Entity()
-export class func extends base {
-    // 函数名字
+export class user extends base {
+    // 用户名
     @Column({ type: "varchar", length: 255 })
-    funcName
+    username
 
-    // 函数参数
-    @Column({ type: "tinytext" })
-    funcParams
-
-    // 函数内容
-    @Column({ type: "mediumtext" })
-    funcBody
-
-    // 函数分类ID
+    // QQ
     @Column({ type: "int" })
-    funcGroupId
+    qq
 
-    // 函数简介
-    @Column({ type: "tinytext" })
-    funcSummary
-
-    // 函数模板类型
+    // 微信
     @Column({ type: "varchar", length: 255 })
-    funcType
+    wx
 
-    // 远程函数方法
+    // 企业版/社区版账号（外部版）
     @Column({ type: "varchar", length: 255 })
-    funcMethod
-
-    // 远程函数数据体
-    @Column({ type: "text" })
-    funcApiData
-
-    // 是否公开
-    @Column({ type: "int" })
-    publicFlag
+    bk
 }
