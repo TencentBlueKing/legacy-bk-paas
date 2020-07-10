@@ -23,7 +23,7 @@ class Base {
     // 创造时间，自动生成
     @CreateDateColumn()
     createTime
-
+  
     // 创造该记录用户，自动生成
     @Column({ type: "varchar", length: 255 })
     createUser
