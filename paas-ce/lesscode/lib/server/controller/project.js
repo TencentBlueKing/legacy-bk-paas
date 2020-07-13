@@ -12,8 +12,8 @@
 import projectModel from '../model/project'
 const { CODE } = require('../util')
 const presetUser = {
-    id: 3,
-    name: 'view_a'
+    id: 1,
+    name: 'admin'
 }
 
 module.exports = {

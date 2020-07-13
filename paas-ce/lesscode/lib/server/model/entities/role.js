@@ -9,16 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from "typeorm";
-import base from './base'
+import { Entity, Column } from 'typeorm';
+import Base from './base'
 
-@Entity()
-export class role extends base {
+@Entity({ name: 'role', comment: '角色表' })
+export default class extends Base {
     // 角色 ID
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: 'varchar', length: 255 })
     roleCode
 
     // 角色名称
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: 'varchar', length: 255 })
     roleName
 }

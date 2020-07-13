@@ -9,16 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from "typeorm";
-import base from './base'
+import { Entity, Column } from 'typeorm'
+import Base from './base'
 
-@Entity()
-export class perm extends base {
+@Entity({ name: 'perm', comment: '权限表' })
+export default class extends Base {
     // 权限Code
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: 'varchar', length: 255 })
     permCode
 
     // 权限描述
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: 'varchar', length: 255 })
     permDesc
 }

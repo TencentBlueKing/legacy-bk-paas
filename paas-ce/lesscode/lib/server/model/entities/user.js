@@ -9,24 +9,24 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from "typeorm";
-import base from './base'
+import { Entity, Column } from 'typeorm'
+import Base from './base'
 
-@Entity()
-export class user extends base {
+@Entity({ name: 'user', comment: '用户表' })
+export default class extends Base {
     // 用户名
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: 'varchar', length: 255 })
     username
 
     // QQ
-    @Column({ type: "int" })
+    @Column({ type: 'int' })
     qq
 
     // 微信
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: 'varchar', length: 255 })
     wx
 
     // 企业版/社区版账号（外部版）
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: 'varchar', length: 255 })
     bk
 }

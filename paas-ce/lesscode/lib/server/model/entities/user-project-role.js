@@ -9,20 +9,20 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from "typeorm";
-import base from './base'
+import { Entity, Column } from 'typeorm'
+import Base from './base'
 
-@Entity()
-export class r_user_project_role extends base {
+@Entity({ name: 'r_user_project_role', comment: '用户/项目/角色关联表' })
+export default class extends Base {
     // user 表主键
-    @Column({ type: "int" })
+    @Column({ type: 'int' })
     userId
 
     // project 表主键
-    @Column({ type: "int" })
+    @Column({ type: 'int' })
     projectId
 
     // role 表主键
-    @Column({ type: "int" })
+    @Column({ type: 'int' })
     roleId
 }

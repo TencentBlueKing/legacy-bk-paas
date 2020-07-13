@@ -133,7 +133,7 @@ export default {
         return getRepository(Page)
             .createQueryBuilder('page')
             .innerJoinAndSelect('r_project_page', 'project_page', 'project_page.pageId = page.id')
-            .select(['pageName', 'updateTime', 'updateUser', 'projectId'])
+            .select(['page.pageName', 'page.updateTime', 'page.updateUser', 'project_page.projectId'])
             .where(condition, params)
             .orderBy('page.updateTime', 'DESC')
             .getRawMany()

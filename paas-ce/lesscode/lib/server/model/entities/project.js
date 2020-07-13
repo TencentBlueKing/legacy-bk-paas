@@ -1,8 +1,8 @@
 import { Entity, Column } from 'typeorm'
 import Base from './base'
 
-@Entity({ comment: '项目表' })
-export default class Project extends Base {
+@Entity({ name: 'project', comment: '项目表' })
+export default class extends Base {
     @Column({
         type: 'varchar',
         length: 255, // default

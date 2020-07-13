@@ -1,8 +1,8 @@
 import { Entity, Column } from 'typeorm'
 import Base from './base'
 
-@Entity({ comment: '页面表' })
-export default class Page extends Base {
+@Entity({ name: 'page', comment: '页面表' })
+export default class extends Base {
     @Column({
         type: 'varchar',
         comment: '项目 ID 即英文名称'
