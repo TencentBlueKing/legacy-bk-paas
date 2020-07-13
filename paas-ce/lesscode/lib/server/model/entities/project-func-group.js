@@ -1,10 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Entity, Column } from 'typeorm'
+import Base from './base'
 
 @Entity({ name: 'r_project_func_group', comment: '项目/函数关联表' })
-export default class ProjectComp {
-    @PrimaryGeneratedColumn()
-    id
-
+export default class extends Base {
     @Column({
         type: 'int',
         comment: 'project 表主键'

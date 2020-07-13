@@ -12,13 +12,21 @@
 import { Entity, Column } from 'typeorm'
 import Base from './base'
 
-@Entity({ name: 'func_group', comment: '函数分类表' })
+@Entity({ name: 'user', comment: '用户表' })
 export default class extends Base {
-    // 函数文件夹名字
+    // 用户名
     @Column({ type: 'varchar', length: 255 })
-    groupName
+    username
 
-    // 父group节点的id
+    // QQ
     @Column({ type: 'int' })
-    parentId
+    qq
+
+    // 微信
+    @Column({ type: 'varchar', length: 255 })
+    wx
+
+    // 企业版/社区版账号（外部版）
+    @Column({ type: 'varchar', length: 255 })
+    bk
 }

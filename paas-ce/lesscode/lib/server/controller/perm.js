@@ -8,17 +8,26 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import { getUserPerms } from '../model/perm'
 
-import { Entity, Column } from 'typeorm'
-import Base from './base'
-
-@Entity({ name: 'func_group', comment: '函数分类表' })
-export default class extends Base {
-    // 函数文件夹名字
-    @Column({ type: 'varchar', length: 255 })
-    groupName
-
-    // 父group节点的id
-    @Column({ type: 'int' })
-    parentId
+const Perm = {
+    async getUserPerm (ctx) {
+        try {
+            const query = ctx.request.query || {}
+            const projectId = query.projectId
+            const username = query.username || ctx.username
+            const data = await getUserPerms(projectId,  username)
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    }
 }
+
+module.exports = Perm

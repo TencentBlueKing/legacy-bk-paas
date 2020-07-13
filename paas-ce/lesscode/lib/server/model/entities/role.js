@@ -9,16 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from 'typeorm'
+import { Entity, Column } from 'typeorm';
 import Base from './base'
 
-@Entity({ name: 'func_group', comment: '函数分类表' })
+@Entity({ name: 'role', comment: '角色表' })
 export default class extends Base {
-    // 函数文件夹名字
+    // 角色 ID
     @Column({ type: 'varchar', length: 255 })
-    groupName
+    roleCode
 
-    // 父group节点的id
-    @Column({ type: 'int' })
-    parentId
+    // 角色名称
+    @Column({ type: 'varchar', length: 255 })
+    roleName
 }

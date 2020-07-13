@@ -12,13 +12,13 @@
 import { Entity, Column } from 'typeorm'
 import Base from './base'
 
-@Entity({ name: 'func_group', comment: '函数分类表' })
+@Entity({ name: 'perm', comment: '权限表' })
 export default class extends Base {
-    // 函数文件夹名字
+    // 权限Code
     @Column({ type: 'varchar', length: 255 })
-    groupName
+    permCode
 
-    // 父group节点的id
-    @Column({ type: 'int' })
-    parentId
+    // 权限描述
+    @Column({ type: 'varchar', length: 255 })
+    permDesc
 }

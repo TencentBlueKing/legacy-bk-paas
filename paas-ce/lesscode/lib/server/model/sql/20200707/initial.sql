@@ -71,7 +71,7 @@ CREATE TABLE `func`  (
   `publicFlag` int(11) UNSIGNED ZEROFILL NULL DEFAULT 00000000000 COMMENT '是否公开',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `funcGroupId`(`funcGroupId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '函数表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '函数表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for func_group
@@ -105,7 +105,7 @@ CREATE TABLE `operate_log`  (
   `operateTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `operate_user_id`(`operateUserId`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '操作日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '操作日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for page
@@ -122,7 +122,7 @@ CREATE TABLE `page`  (
   `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人，默认当前用户',
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '页面表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '页面表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for perm
@@ -192,6 +192,10 @@ CREATE TABLE `r_favourite`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL COMMENT 'user 表主键',
   `projectId` int(11) NOT NULL COMMENT 'project 表主键',
+  `updateTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `createTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间',
+  `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`userId`) USING BTREE,
   INDEX `project_id`(`projectId`) USING BTREE
@@ -200,7 +204,7 @@ CREATE TABLE `r_favourite`  (
 -- ----------------------------
 -- Records of r_favourite
 -- ----------------------------
-INSERT INTO `r_favourite` VALUES (2, 1, 5);
+INSERT INTO `r_favourite` VALUES (2, 1, 5, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for r_project_comp
@@ -209,6 +213,10 @@ DROP TABLE IF EXISTS `r_project_comp`;
 CREATE TABLE `r_project_comp`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `projectId` int(11) NOT NULL COMMENT 'project 表主键',
+  `updateTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `createTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间',
+  `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `compId` int(11) NOT NULL COMMENT 'component 表主键',
   `useVersionId` int(11) NOT NULL COMMENT '当前使用的自定义组件的版本 id',
   `pageIds` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '[]' COMMENT 'page 表主键的集合',
@@ -222,8 +230,8 @@ CREATE TABLE `r_project_comp`  (
 -- ----------------------------
 -- Records of r_project_comp
 -- ----------------------------
-INSERT INTO `r_project_comp` VALUES (1, 4, 1, 1, '[1, 2]');
-INSERT INTO `r_project_comp` VALUES (2, 4, 2, 3, '[1]');
+INSERT INTO `r_project_comp` VALUES (1, 4, NULL, NULL, NULL, NULL, 1, 1, '[1, 2]');
+INSERT INTO `r_project_comp` VALUES (2, 4, NULL, NULL, NULL, NULL, 2, 3, '[1]');
 
 -- ----------------------------
 -- Table structure for r_project_func_group
@@ -232,6 +240,10 @@ DROP TABLE IF EXISTS `r_project_func_group`;
 CREATE TABLE `r_project_func_group`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `projectId` int(11) NOT NULL COMMENT 'project 表主键',
+  `updateTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `createTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间',
+  `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `funcGroupId` int(11) NOT NULL COMMENT 'function 表主键',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `project_id`(`projectId`) USING BTREE,
@@ -245,6 +257,10 @@ DROP TABLE IF EXISTS `r_project_page`;
 CREATE TABLE `r_project_page`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `projectId` int(11) NOT NULL COMMENT 'project 表主键',
+  `updateTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `createTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间',
+  `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `pageId` int(11) NOT NULL COMMENT 'page 表主键',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `project_id`(`projectId`) USING BTREE,
@@ -254,9 +270,9 @@ CREATE TABLE `r_project_page`  (
 -- ----------------------------
 -- Records of r_project_page
 -- ----------------------------
-INSERT INTO `r_project_page` VALUES (2, 4, 1);
-INSERT INTO `r_project_page` VALUES (3, 4, 2);
-INSERT INTO `r_project_page` VALUES (4, 5, 3);
+INSERT INTO `r_project_page` VALUES (2, 4, NULL, NULL, NULL, NULL, 1);
+INSERT INTO `r_project_page` VALUES (3, 4, NULL, NULL, NULL, NULL, 2);
+INSERT INTO `r_project_page` VALUES (4, 5, NULL, NULL, NULL, NULL, 3);
 
 -- ----------------------------
 -- Table structure for r_role_perm
@@ -266,6 +282,10 @@ CREATE TABLE `r_role_perm`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `roleId` int(11) NOT NULL COMMENT 'role 表主键',
   `permId` int(11) NOT NULL COMMENT 'perm 表主键',
+  `updateTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `createTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间',
+  `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `perm_id`(`roleId`) USING BTREE,
   INDEX `operate_id`(`permId`) USING BTREE
@@ -274,44 +294,44 @@ CREATE TABLE `r_role_perm`  (
 -- ----------------------------
 -- Records of r_role_perm
 -- ----------------------------
-INSERT INTO `r_role_perm` VALUES (1, 1, 1);
-INSERT INTO `r_role_perm` VALUES (2, 1, 2);
-INSERT INTO `r_role_perm` VALUES (3, 1, 3);
-INSERT INTO `r_role_perm` VALUES (4, 1, 4);
-INSERT INTO `r_role_perm` VALUES (5, 1, 5);
-INSERT INTO `r_role_perm` VALUES (6, 1, 6);
-INSERT INTO `r_role_perm` VALUES (7, 1, 7);
-INSERT INTO `r_role_perm` VALUES (8, 1, 8);
-INSERT INTO `r_role_perm` VALUES (9, 1, 9);
-INSERT INTO `r_role_perm` VALUES (10, 1, 10);
-INSERT INTO `r_role_perm` VALUES (11, 1, 11);
-INSERT INTO `r_role_perm` VALUES (12, 1, 12);
-INSERT INTO `r_role_perm` VALUES (13, 1, 13);
-INSERT INTO `r_role_perm` VALUES (14, 1, 14);
-INSERT INTO `r_role_perm` VALUES (15, 1, 15);
-INSERT INTO `r_role_perm` VALUES (16, 1, 16);
-INSERT INTO `r_role_perm` VALUES (17, 1, 17);
-INSERT INTO `r_role_perm` VALUES (21, 1, 18);
-INSERT INTO `r_role_perm` VALUES (22, 1, 19);
-INSERT INTO `r_role_perm` VALUES (23, 1, 20);
-INSERT INTO `r_role_perm` VALUES (24, 2, 5);
-INSERT INTO `r_role_perm` VALUES (25, 2, 6);
-INSERT INTO `r_role_perm` VALUES (26, 2, 7);
-INSERT INTO `r_role_perm` VALUES (27, 2, 8);
-INSERT INTO `r_role_perm` VALUES (28, 2, 9);
-INSERT INTO `r_role_perm` VALUES (29, 2, 10);
-INSERT INTO `r_role_perm` VALUES (30, 2, 11);
-INSERT INTO `r_role_perm` VALUES (31, 2, 12);
-INSERT INTO `r_role_perm` VALUES (32, 2, 13);
-INSERT INTO `r_role_perm` VALUES (33, 2, 14);
-INSERT INTO `r_role_perm` VALUES (34, 2, 15);
-INSERT INTO `r_role_perm` VALUES (35, 2, 16);
-INSERT INTO `r_role_perm` VALUES (36, 2, 17);
-INSERT INTO `r_role_perm` VALUES (37, 3, 11);
-INSERT INTO `r_role_perm` VALUES (38, 1, 21);
-INSERT INTO `r_role_perm` VALUES (39, 1, 22);
-INSERT INTO `r_role_perm` VALUES (40, 1, 23);
-INSERT INTO `r_role_perm` VALUES (41, 1, 24);
+INSERT INTO `r_role_perm` VALUES (1, 1, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (2, 1, 2, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (3, 1, 3, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (4, 1, 4, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (5, 1, 5, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (6, 1, 6, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (7, 1, 7, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (8, 1, 8, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (9, 1, 9, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (10, 1, 10, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (11, 1, 11, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (12, 1, 12, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (13, 1, 13, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (14, 1, 14, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (15, 1, 15, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (16, 1, 16, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (17, 1, 17, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (21, 1, 18, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (22, 1, 19, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (23, 1, 20, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (24, 2, 5, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (25, 2, 6, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (26, 2, 7, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (27, 2, 8, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (28, 2, 9, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (29, 2, 10, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (30, 2, 11, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (31, 2, 12, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (32, 2, 13, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (33, 2, 14, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (34, 2, 15, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (35, 2, 16, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (36, 2, 17, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (37, 3, 11, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (38, 1, 21, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (39, 1, 22, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (40, 1, 23, NULL, NULL, NULL, NULL);
+INSERT INTO `r_role_perm` VALUES (41, 1, 24, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for r_user_project_role
@@ -321,21 +341,16 @@ CREATE TABLE `r_user_project_role`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL COMMENT 'user 表主键',
   `projectId` int(11) NOT NULL COMMENT 'project 表主键',
+  `updateTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `createTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间',
+  `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `roleId` int(11) NOT NULL COMMENT 'role 表主键',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`userId`) USING BTREE,
   INDEX `project_id`(`projectId`) USING BTREE,
   INDEX `role_id`(`roleId`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户/项目/角色关联表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of r_user_project_role
--- ----------------------------
-INSERT INTO `r_user_project_role` VALUES (1, 1, 4, 1);
-INSERT INTO `r_user_project_role` VALUES (2, 2, 5, 1);
-INSERT INTO `r_user_project_role` VALUES (3, 1, 6, 1);
-INSERT INTO `r_user_project_role` VALUES (4, 2, 4, 2);
-INSERT INTO `r_user_project_role` VALUES (5, 3, 4, 3);
 
 -- ----------------------------
 -- Table structure for role
@@ -376,13 +391,6 @@ CREATE TABLE `user`  (
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES (1, 'hieiwang', NULL, NULL, NULL, '2020-06-03 12:01:08', '2020-06-03 12:01:08', NULL, NULL);
-INSERT INTO `user` VALUES (2, 'jack', NULL, NULL, NULL, '2020-06-03 12:01:08', '2020-06-03 12:01:08', NULL, NULL);
-INSERT INTO `user` VALUES (3, 'view_a', NULL, NULL, NULL, '2020-06-03 12:01:08', '2020-06-03 12:01:08', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for version

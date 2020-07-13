@@ -1,8 +1,8 @@
-const Base = require('./base')
-const { Entity, Column } = require('typeorm')
+import { Entity, Column } from 'typeorm'
+import Base from './base'
 
-@Entity()
-class CompCategory extends Base {
+@Entity({ name: 'comp_category', comment: '组件分类表' })
+export default class extends Base {
     @Column({ type: 'int' })
     id
 
@@ -21,5 +21,3 @@ class CompCategory extends Base {
     @Column({ type: 'varchar' })
     updateUser
 }
-
-module.exports = CompCategory
