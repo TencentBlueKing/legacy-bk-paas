@@ -9,9 +9,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const { PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, Column, BeforeInsert, BeforeUpdate } = require('typeorm')
+import { PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, Column, BeforeInsert, BeforeUpdate } from 'typeorm'
 
-class Base {
+export default class Base {
     // 自动增量值自动生成ID
     @PrimaryGeneratedColumn()
     id
@@ -23,13 +23,13 @@ class Base {
     // 创造时间，自动生成
     @CreateDateColumn()
     createTime
-  
+
     // 创造该记录用户，自动生成
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: 'varchar', length: 255 })
     createUser
 
     // 更新该记录用户，自动生成
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: 'varchar', length: 255 })
     updateUser
 
     // 插入数据写入用户名
@@ -46,5 +46,3 @@ class Base {
         this.updateUser = 'admin'
     }
 }
-
-module.exports = Base
