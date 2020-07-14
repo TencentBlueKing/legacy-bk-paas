@@ -9,14 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const { getApiData, getMockData } = require('../controller/mock-data')
-const Router = require('koa-router')
+import { Entity, Column } from 'typeorm'
+import Base from './base'
 
-const router = new Router({
-    prefix: '/api/data'
-})
+@Entity({ name: 'perm', comment: '权限表' })
+export default class extends Base {
+    // 权限Code
+    @Column({ type: 'varchar', length: 255 })
+    permCode
 
-router.post('/getApiData', getApiData)
-router.get('/getMockData', getMockData)
-
-module.exports = router
+    // 权限描述
+    @Column({ type: 'varchar', length: 255 })
+    permDesc
+}

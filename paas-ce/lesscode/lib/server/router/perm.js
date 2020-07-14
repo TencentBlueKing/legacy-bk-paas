@@ -9,14 +9,13 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const { getApiData, getMockData } = require('../controller/mock-data')
 const Router = require('koa-router')
+const { getUserPerm } = require('../controller/perm')
 
 const router = new Router({
-    prefix: '/api/data'
+    prefix: '/api/perm'
 })
 
-router.post('/getApiData', getApiData)
-router.get('/getMockData', getMockData)
+router.get('/userPerm', getUserPerm)
 
 module.exports = router

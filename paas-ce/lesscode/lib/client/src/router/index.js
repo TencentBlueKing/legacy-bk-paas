@@ -20,6 +20,12 @@ Vue.use(VueRouter)
 
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
+const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
+const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/system/component-manage')
+
+const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
+const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
+const Member = () => import(/* webpackChunkName: 'member' */'@/views/project/member')
 
 const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
@@ -74,7 +80,26 @@ const routes = [
             {
                 path: 'projects',
                 name: 'projects',
-                component: Projects
+                component: Projects,
+                meta: {
+                    title: '项目列表'
+                }
+            },
+            {
+                path: 'account',
+                name: 'account',
+                component: Account,
+                meta: {
+                    title: '账号管理'
+                }
+            },
+            {
+                path: 'component-manage',
+                name: 'componentManage',
+                component: ComponentManage,
+                meta: {
+                    title: '自定义组件库'
+                }
             }
         ]
     },
