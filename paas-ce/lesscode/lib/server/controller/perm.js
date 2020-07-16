@@ -8,37 +8,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-const Data = {
-    async getApiData (ctx) {
-        try {
-            const body = ctx.request.body || {}
-            const url = body.url
-            const type = body.type || 'get'
-            ctx.http.defaults.withCredentials = true
-            if (ctx.cookies.request.headers.cookie) ctx.http.defaults.headers.Cookie = ctx.cookies.request.headers.cookie
-            const re = await ctx.http[type](url)
-            ctx.send(re.data)
-        } catch (err) {
-            console.error(err)
-            ctx.throwError({
-                message: err.message
-            })
-        }
-    },
+import { getUserPerms } from '../model/perm'
 
-    async getMockData (ctx) {
-        const count = 20
-        const data = []
-        for (let i = 0; i < count; i++) {
-            data.push({
-                id: i,
-                projectId: `id-${i}`,
-                projectCode: `code-${i}`,
-                projectName: `项目-${i}`,
-                name: `名称-${i}`
-            })
-        }
+const Perm = {
+    async getUserPerm (ctx) {
         try {
+            const query = ctx.request.query || {}
+            const projectId = query.projectId
+            const username = query.username || ctx.username
+            const data = await getUserPerms(projectId,  username)
             ctx.send({
                 code: 0,
                 message: 'success',
@@ -49,7 +27,7 @@ const Data = {
                 message: err.message
             })
         }
-    },
+    }
 }
 
-module.exports = Data
+module.exports = Perm

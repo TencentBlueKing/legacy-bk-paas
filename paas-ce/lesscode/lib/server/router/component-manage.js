@@ -9,14 +9,24 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const { getApiData, getMockData } = require('../controller/mock-data')
+// const { saveAsFile, formatCode, deleteTmpFile } = require('../controller/vue-code')
 const Router = require('koa-router')
+const {
+    list,
+    useing,
+    create,
+    update,
+    compDelete
+} = require('../controller/component-manage')
 
 const router = new Router({
-    prefix: '/api/data'
+    prefix: '/api/componentManage'
 })
 
-router.post('/getApiData', getApiData)
-router.get('/getMockData', getMockData)
+router.get('/list', list)
+router.get('/useing', useing)
+router.post('/create', create)
+router.get('/update', update)
+router.get('/delete', compDelete)
 
 module.exports = router

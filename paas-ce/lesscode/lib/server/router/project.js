@@ -9,14 +9,25 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const { getApiData, getMockData } = require('../controller/mock-data')
 const Router = require('koa-router')
+const {
+    createProject,
+    queryProject,
+    updateProject,
+    deleteProject,
+    favorite,
+    checkname
+} = require('../controller/project')
 
 const router = new Router({
-    prefix: '/api/data'
+    prefix: '/api/project'
 })
 
-router.post('/getApiData', getApiData)
-router.get('/getMockData', getMockData)
+router.post('/create', createProject)
+router.get('/query', queryProject)
+router.put('/update', updateProject)
+router.delete('/delete', deleteProject)
+router.post('/favorite', favorite)
+router.post('/checkname', checkname)
 
 module.exports = router
