@@ -9,14 +9,24 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const { getApiData, getMockData } = require('../controller/mock-data')
-const Router = require('koa-router')
+import { Entity, Column } from 'typeorm'
+import Base from './base'
 
-const router = new Router({
-    prefix: '/api/data'
-})
+@Entity({ name: 'user', comment: '用户表' })
+export default class extends Base {
+    // 用户名
+    @Column({ type: 'varchar', length: 255 })
+    username
 
-router.post('/getApiData', getApiData)
-router.get('/getMockData', getMockData)
+    // QQ
+    @Column({ type: 'int' })
+    qq
 
-module.exports = router
+    // 微信
+    @Column({ type: 'varchar', length: 255 })
+    wx
+
+    // 企业版/社区版账号（外部版）
+    @Column({ type: 'varchar', length: 255 })
+    bk
+}
