@@ -1,10 +1,15 @@
+import Comp from '../model/entities/comp'
 const { getRepository } = require('typeorm')
-const Comp = require('../model/entities/comp')
 
 // 所有组件
 export const list = async (ctx) => {
     try {
-        const res = await getRepository(Comp).find()
+        const { category } = ctx.query
+        const params = {}
+        if (category) {
+            params.categoryId = category
+        }
+        const res = await getRepository(Comp).find(params)
 
         ctx.send({
             code: 0,
@@ -46,15 +51,28 @@ export const useing = async (ctx) => {
 // 新建组件
 export const create = async (ctx) => {
     try {
+        const {
+            compCode,
+            compName,
+            compPath,
+            version,
+            categoryId,
+            isPublic,
+            description,
+            log
+        } = ctx.request.body
+
         const comp = new Comp()
-        comp.compCode = 1
-        comp.compName = 'test_comp'
-        comp.compPath = 'path'
+        comp.compCode = compCode
+        comp.compName = compName
+        comp.compPath = compPath
+        comp.categoryId = categoryId
+        comp.latestVersionId = version
         comp.belongProjectId = 1
-        comp.categoryId = 1
-        comp.latestVersionId = 1
-        comp.isPublic = 0
+        comp.isPublic = isPublic
         comp.status = 1
+        comp.description = description
+        comp.log = log
         comp.createUser = 'admin'
         comp.updateUser = 'admin'
 
@@ -97,7 +115,59 @@ export const update = async (ctx) => {
     }
 }
 
+export const detail = async (ctx) => {
+    try {
+        const compRepository = getRepository(Comp)
+        const row = await compRepository.findOne(ctx.query.id)
+
+        const {
+            compCode,
+            compName,
+            compPath,
+            categoryId,
+            latestVersionId,
+            isPublic,
+            description,
+            log
+        } = row
+
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data: {
+                compCode,
+                compName,
+                compPath,
+                categoryId,
+                version: latestVersionId,
+                isPublic,
+                description,
+                log
+            }
+        })
+    } catch (error) {
+        ctx.send({
+            code: -1,
+            message: error.message,
+            data: null
+        })
+    }
+}
+
 // 删除组件
 export const compDelete = (ctx) => {
 
+}
+
+// 删除组件
+export const upload = (ctx) => {
+    ctx.send({
+        code: 0,
+        message: 'success',
+        data: {
+            compName: `compName_${Math.random()}`,
+            compCode: `compCode_${Math.random()}`,
+            compPath: '/a/b/c'
+        }
+    })
 }
