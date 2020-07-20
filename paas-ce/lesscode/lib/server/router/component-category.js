@@ -16,15 +16,15 @@ const {
     create,
     update,
     categoryDelete
-} = require('../controller/component-category-manage')
+} = require('../controller/component-category')
 
 const router = new Router({
-    prefix: '/api/componentCategoryManage'
+    prefix: '/api/componentCategory'
 })
 
 router.get('/list', list)
-router.get('/create', create)
-router.get('/update', update)
-router.get('/delete', categoryDelete)
+router.post('/create', create)
+router.post('/update', update)
+router.delete('/delete', categoryDelete)
 
 module.exports = router
