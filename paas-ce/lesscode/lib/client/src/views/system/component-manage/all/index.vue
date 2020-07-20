@@ -1,32 +1,32 @@
 <template>
     <div>
         <layout>
-            <template slot="left">
-                <class-list />
-            </template>
-            <render-list />
+            <render-category slot="left" @on-change="handleCategoryChange" />
+            <render-list v-if="categoryId" :category="categoryId" />
         </layout>
     </div>
 </template>
 <script>
     import Layout from './components/layout'
-    import ClassList from './components/class-list'
+    import RenderCategory from './components/render-category'
     import RenderList from './components/render-list'
 
     export default {
         name: '',
         components: {
             Layout,
-            ClassList,
+            RenderCategory,
             RenderList
         },
         data () {
-            return {}
+            return {
+                categoryId: 0
+            }
         },
-
-        methods: {}
+        methods: {
+            handleCategoryChange (category) {
+                this.categoryId = category
+            }
+        }
     }
 </script>
-<style lang='postcss'>
-
-</style>

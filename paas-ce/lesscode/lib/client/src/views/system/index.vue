@@ -130,6 +130,8 @@
         }
 
         .breadcrumbs {
+            position: relative;
+            z-index: 99;
             display: flex;
             align-items: center;
             height: var(--breadcrumb-height);

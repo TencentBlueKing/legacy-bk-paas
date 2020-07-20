@@ -14,19 +14,23 @@ const Router = require('koa-router')
 const {
     list,
     useing,
+    detail,
     create,
     update,
-    compDelete
-} = require('../controller/component-manage')
+    compDelete,
+    upload
+} = require('../controller/component')
 
 const router = new Router({
-    prefix: '/api/componentManage'
+    prefix: '/api/component'
 })
 
 router.get('/list', list)
 router.get('/useing', useing)
+router.get('/detail', detail)
 router.post('/create', create)
-router.get('/update', update)
-router.get('/delete', compDelete)
+router.post('/update', update)
+router.delete('/delete', compDelete)
+router.post('/upload', upload)
 
 module.exports = router
