@@ -1,5 +1,5 @@
+import Comp from '../model/entities/comp'
 const { getRepository } = require('typeorm')
-const Comp = require('../model/entities/comp')
 
 // 所有组件
 export const list = async (ctx) => {

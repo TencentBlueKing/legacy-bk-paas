@@ -1,11 +1,11 @@
+import CompCategory from '../model/entities/comp-category'
 const { getRepository } = require('typeorm')
-const CompCategory = require('../model/entities/comp-category')
 
 // 所有组件分类
 export const list = async (ctx) => {
     try {
         const res = await getRepository(CompCategory).find()
-
+        console.log(CompCategory)
         ctx.send({
             code: 0,
             message: 'success',
