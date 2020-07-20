@@ -10,25 +10,25 @@
  */
 
 import { getRepository } from 'typeorm'
-import { func } from './entities/func'
-import { func_group } from './entities/func-group'
-import { r_project_func_group } from './entities/project-func-group'
+import Func from './entities/func'
+import FuncGroup from './entities/func-group'
+import ProjectFuncGroup from './entities/project-func-group'
 
 module.exports = {
     getGroupList (projectId) {
-        return getRepository(func_group).createQueryBuilder('func_group')
-            .leftJoinAndSelect(r_project_func_group, "t", "t.funcGroupId = func_group.id")
-            .where("t.projectId = :projectId", { projectId })
+        return getRepository(FuncGroup).createQueryBuilder('func_group')
+            .leftJoinAndSelect(ProjectFuncGroup, 't', 't.funcGroupId = func_group.id')
+            .where('t.projectId = :projectId', { projectId })
             .getMany()
     },
 
     deleteFuncGroup (groupId) {
-        const groupRepository = getRepository(func_group)
+        const groupRepository = getRepository(FuncGroup)
         return groupRepository.delete({ where: { id: groupId } })
     },
 
     async editFuncGroup (group) {
-        const groupRepository = getRepository(func_group)
+        const groupRepository = getRepository(FuncGroup)
         const oldData = await groupRepository.findOne({ where: { id: group.id } })
         Object.assign(oldData, group)
         const res = await groupRepository.save(oldData)
@@ -36,23 +36,23 @@ module.exports = {
     },
 
     getFuncList (groupId) {
-        const funcRepository = getRepository(func)
+        const funcRepository = getRepository(Func)
         return funcRepository.find({ where: { funcGroupId: groupId } })
     },
 
     addFunction (funcData) {
-        const funcRepository = getRepository(func)
+        const funcRepository = getRepository(Func)
         const newFunc = funcRepository.create(funcData)
         return funcRepository.save(newFunc)
     },
 
     deleteFunction (funcId) {
-        const funcRepository = getRepository(func)
+        const funcRepository = getRepository(Func)
         return funcRepository.delete({ where: { id: funcId } })
     },
 
     async editFunction (funcData) {
-        const funcRepository = getRepository(func)
+        const funcRepository = getRepository(Func)
         const oldData = await funcRepository.findOne({ where: { id: funcData.id } })
         Object.assign(oldData, funcData)
         const res = await funcRepository.save(oldData)

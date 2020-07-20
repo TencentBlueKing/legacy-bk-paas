@@ -9,21 +9,21 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { getRepository } from "typeorm"
+import { getRepository } from 'typeorm'
 
-import { perm } from "./entities/perm"
-import { role } from "./entities/role"
-import { r_role_perm } from "./entities/role-perm"
-import { user } from "./entities/user"
-import { r_user_project_role } from "./entities/user-project-role"
+import Perm from './entities/perm'
+import Role from './entities/role'
+import RolePerm from './entities/role-perm'
+import User from './entities/user'
+import UserProjectRole from './entities/user-project-role'
 
 module.exports = {
     getUserPerms (projectId, username) {
-        return getRepository(user).createQueryBuilder('user')
-            .leftJoinAndSelect(r_user_project_role, 'userProjectRole', 'user.id = userProjectRole.userId')
-            .leftJoinAndSelect(role, 'role', 'role.id = userProjectRole.roleId')
-            .leftJoinAndSelect(r_role_perm, 'rolePerm', 'rolePerm.roleId = role.id')
-            .leftJoinAndSelect(perm, 'perm', 'perm.id = rolePerm.permId')
+        return getRepository(User).createQueryBuilder('user')
+            .leftJoinAndSelect(UserProjectRole, 'userProjectRole', 'user.id = userProjectRole.userId')
+            .leftJoinAndSelect(Role, 'role', 'role.id = userProjectRole.roleId')
+            .leftJoinAndSelect(RolePerm, 'rolePerm', 'rolePerm.roleId = role.id')
+            .leftJoinAndSelect(Perm, 'perm', 'perm.id = rolePerm.permId')
             .where('user.username = :username', { username })
             .andWhere('userProjectRole.projectId = :projectId', { projectId })
             .select('perm.permCode', 'permCode')
@@ -31,11 +31,11 @@ module.exports = {
     },
 
     async existingPermission (projectId, username, permCode) {
-        const res = await getRepository(user).createQueryBuilder('user')
-            .leftJoinAndSelect(r_user_project_role, 'userProjectRole', 'user.id = userProjectRole.userId')
-            .leftJoinAndSelect(role, 'role', 'role.id = userProjectRole.roleId')
-            .leftJoinAndSelect(r_role_perm, 'rolePerm', 'rolePerm.roleId = role.id')
-            .leftJoinAndSelect(perm, 'perm', 'perm.id = rolePerm.permId')
+        const res = await getRepository(User).createQueryBuilder('user')
+            .leftJoinAndSelect(UserProjectRole, 'userProjectRole', 'user.id = userProjectRole.userId')
+            .leftJoinAndSelect(Role, 'role', 'role.id = userProjectRole.roleId')
+            .leftJoinAndSelect(RolePerm, 'rolePerm', 'rolePerm.roleId = role.id')
+            .leftJoinAndSelect(Perm, 'perm', 'perm.id = rolePerm.permId')
             .where('user.username = :username', { username })
             .andWhere('userProjectRole.projectId = :projectId', { projectId })
             .andWhere('perm.permCode = :permCode', { permCode })
