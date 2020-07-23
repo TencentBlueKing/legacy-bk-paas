@@ -60,6 +60,7 @@
             },
             
             handleShowOperation () {
+                this.componentId = ''
                 this.isShowOperation = true
             },
             handleUpdate (component) {
