@@ -9,20 +9,21 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from 'typeorm'
-import Base from './base'
+const Router = require('koa-router')
+const { getAllGroupFunc, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction } = require('../controller/function')
 
-@Entity({ name: 'func_group', comment: '函数分类表' })
-export default class extends Base {
-    // 函数文件夹名字
-    @Column({ type: 'varchar', length: 255 })
-    groupName
+const router = new Router({
+    prefix: '/api/function'
+})
 
-    // 父group节点的id
-    @Column({ type: 'int' })
-    parentId
+router.get('/getGroupList', getGroupList)
+router.post('/addFuncGroup', addFuncGroup)
+router.put('/editFuncGroups', editFuncGroups)
+router.delete('/deleteFuncGroup', deleteFuncGroup)
+router.post('/addFunction', addFunction)
+router.get('/getFuncList', getFuncList)
+router.put('/editFunction', editFunction)
+router.delete('/deleteFunction', deleteFunction)
+router.get('/getAllGroupFunc', getAllGroupFunc)
 
-    // 排序
-    @Column({ type: 'int' })
-    order
-}
+module.exports = router

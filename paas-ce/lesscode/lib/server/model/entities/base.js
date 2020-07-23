@@ -32,6 +32,10 @@ export default class Base {
     @Column({ type: 'varchar', length: 255 })
     updateUser
 
+    // 是否删除，默认值为0，表示未删除，1为已删除
+    @Column({ type: 'int' })
+    deleteFlag
+
     // 插入数据写入用户名
     // tofix: 登陆以后，拿到登陆用户名取代admin
     @BeforeInsert()

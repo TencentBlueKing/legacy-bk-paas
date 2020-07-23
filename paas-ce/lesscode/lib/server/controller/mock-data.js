@@ -8,15 +8,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+function strToJson(str){
+    var json = (new Function("return " + str))()
+    return json
+}
+
 const Data = {
     async getApiData (ctx) {
         try {
             const body = ctx.request.body || {}
             const url = body.url
             const type = body.type || 'get'
+            let apiData = body.apiData
+            if (apiData) apiData = strToJson(apiData)
             ctx.http.defaults.withCredentials = true
             if (ctx.cookies.request.headers.cookie) ctx.http.defaults.headers.Cookie = ctx.cookies.request.headers.cookie
-            const re = await ctx.http[type](url)
+            const re = await ctx.http[type](url, apiData)
             ctx.send(re.data)
         } catch (err) {
             console.error(err)
@@ -49,7 +56,7 @@ const Data = {
                 message: err.message
             })
         }
-    },
+    }
 }
 
 module.exports = Data
