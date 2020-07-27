@@ -13,7 +13,6 @@
                 :class="{ active: activeId === item.id }"
                 :key="item.id"
                 @click="handleSelect(item.id)">
-                <i class="bk-drag-icon bk-drag-folder-fill" />
                 <div class="name">{{ item.category }}</div>
                 <div class="action">
                     <div class="btn" @click.stop="handleEdit(item, $event)" role="operation">
@@ -222,6 +221,9 @@
                             color: #3A84FF;
                             background: #fff;
                         }
+                    }
+                    .bk-drag-close-small{
+                        font-size: 20px;;
                     }
                 }
                 .count{

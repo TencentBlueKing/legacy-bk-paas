@@ -20,13 +20,18 @@
 
     export default {
         name: '',
-
+        props: {
+            initWidth: {
+                type: Number,
+                default: 337
+            }
+        },
         data () {
             return {
                 offsetTop: 0,
                 isToggleLeft: false,
                 isResize: false,
-                width: 337
+                width: this.initWidth
             }
         },
         computed: {
@@ -68,6 +73,7 @@
             },
             handleToggle () {
                 this.isToggleLeft = !this.isToggleLeft
+                this.$emit('resize', 0)
             },
             handleMouseDown (event) {
                 this.left = this.$refs.layoutLeft.getBoundingClientRect().left
@@ -75,18 +81,23 @@
                 document.body.style.userSelect = 'none'
             },
             handleMouseUp () {
+                if (!this.isStartResize) {
+                    return
+                }
                 this.isStartResize = false
                 document.body.style.userSelect = 'initial'
+                this.$emit('resize', this.width)
             },
             handleMouseMove: _.throttle(function (event) {
                 if (!this.isStartResize) {
                     return
                 }
                 const width = event.clientX - this.left
-                if (width < 200) {
+                if (width < 240 || width > 450) {
                     return
                 }
                 this.width = width
+                this.$emit('resize', this.width)
             }, 20)
         }
     }
@@ -115,7 +126,7 @@
             background: #FAFBFD;
             .wraper{
                 height: 100%;
-                overflow-y: scroll;
+                overflow-y: auto;
             }
             .toggle-btn{
                 position: absolute;
@@ -129,8 +140,11 @@
                 height: 50px;
                 color: #fff;
                 border-radius: 0 8px 8px 0;
-                background: #3A84FF;
+                background: #C4C6CC;
                 cursor: pointer;
+                &:hover {
+                    background: #3A84FF;
+                }
             }
         }
         .divide{
@@ -157,7 +171,7 @@
             flex: 1;
             height: 100%;
             background: #fff;
-            overflow-y: scroll;
+            overflow-y: auto;
         }
     }
 </style>
