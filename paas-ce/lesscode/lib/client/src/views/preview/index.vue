@@ -14,6 +14,7 @@
     import httpVueLoader from '@/common/http-vue-loader'
     import codeMixin from '@/components/vue-code/code-mixin'
     import { customComponentList } from '@/custom'
+    import { mapActions } from 'vuex'
 
     customComponentList.forEach(name => {
         const ref = require('@/custom/' + name)
@@ -69,6 +70,7 @@
         },
         async created () {
             if (this.fileName) {
+                await this.getAllGroupFuncs(1)
                 await this.loadFile()
             } else {
                 this.$bkMessage({
@@ -87,6 +89,10 @@
             // this.deleTmpFile()
         },
         methods: {
+            ...mapActions('functions', [
+                'getAllGroupFuncs'
+            ]),
+
             async loadFile () {
                 this.isLoading = true
                 this.targetData = JSON.parse(localStorage.getItem('layout-target-data'))

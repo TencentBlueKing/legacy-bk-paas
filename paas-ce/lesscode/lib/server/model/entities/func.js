@@ -49,4 +49,12 @@ export default class extends Base {
     // 是否公开
     @Column({ type: 'int' })
     publicFlag
+
+    // 远程函数url
+    @Column({ type: 'varchar', length: 255 })
+    funcApiUrl
+
+    // 排序
+    @Column({ type: 'int' })
+    order
 }

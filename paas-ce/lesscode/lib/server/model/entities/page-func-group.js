@@ -12,17 +12,13 @@
 import { Entity, Column } from 'typeorm'
 import Base from './base'
 
-@Entity({ name: 'func_group', comment: '函数分类表' })
+@Entity({ name: 'r_page_func_group', comment: '页面函数关联表' })
 export default class extends Base {
-    // 函数文件夹名字
-    @Column({ type: 'varchar', length: 255 })
-    groupName
-
-    // 父group节点的id
+    // page id
     @Column({ type: 'int' })
-    parentId
+    pageId
 
-    // 排序
+    // 函数id
     @Column({ type: 'int' })
-    order
+    funcId
 }
