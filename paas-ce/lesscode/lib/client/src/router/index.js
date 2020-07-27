@@ -27,10 +27,6 @@ const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
 const Member = () => import(/* webpackChunkName: 'member' */'@/views/project/member')
 
-const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
-const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
-const Member = () => import(/* webpackChunkName: 'member' */'@/views/project/member')
-
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')

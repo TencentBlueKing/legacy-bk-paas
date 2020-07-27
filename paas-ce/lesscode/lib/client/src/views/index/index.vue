@@ -830,30 +830,9 @@
                     localStorage.removeItem('layout-target-data')
                     localStorage.setItem('layout-target-data', JSON.stringify(this.targetData))
                     const routerUrl = this.$router.resolve({
-                        name: 'preview',
-                        query: {
-                            tmpFile: 'vue-layout-demo' + Math.random().toString().substr(5) + '.vue'
-                        }
+                        name: 'preview'
                     })
                     window.open(routerUrl.href, '_blank')
-
-                    // const code = this.getCode()
-                    // const res = await this.$store.dispatch('vueCode/saveVueFile', { code })
-                    // console.error(res)
-                    // if (res) {
-                    //     setTimeout(() => {
-                    //         const routerUrl = this.$router.resolve({
-                    //             name: 'preview',
-                    //             query: {
-                    //                 tmpFile: res
-                    //             }
-                    //         })
-                    //         console.error(routerUrl)
-                    //         window.open(routerUrl.href, '_blank')
-                    //     }, 10)
-                    // } else {
-                    //     errTips = '预览异常'
-                    // }
                 } catch (err) {
                     errTips = err.message || err || '预览异常'
                 }

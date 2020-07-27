@@ -27,7 +27,7 @@
             <div class="page-body-inner" v-show="!pageLoading">
                 <div class="project-list" v-show="projectList.length">
                     <div class="project-item" v-for="project in projectList" :key="project.id">
-                        <div class="item-bd">
+                        <div class="item-bd" @click="toPage(project.id)">
                             <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
                                 <div class="preview">
                                     <img :src="projectPreivewImg" alt="项目缩略预览">
@@ -62,7 +62,7 @@
                         <span
                             class="favorite-btn"
                             v-bk-tooltips.top="{ content: project.favorite ? '取消收藏' : '添加收藏' }"
-                            @click="handleClickFavorite(project)">
+                            @click.stop="handleClickFavorite(project)">
                             <i :class="['bk-drag-icon', `bk-drag-favorite${project.favorite ? '' : '-o' }`]"></i>
                         </span>
                     </div>
@@ -306,6 +306,14 @@
             this.getProjectList()
         },
         methods: {
+            toPage (projectId) {
+                this.$router.push({
+                    name: 'pageList',
+                    params: {
+                        projectId
+                    }
+                })
+            },
             async getProjectList () {
                 this.pageLoading = true
                 try {

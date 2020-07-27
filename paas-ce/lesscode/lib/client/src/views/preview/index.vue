@@ -59,32 +59,15 @@
                 minHeight: 0
             }
         },
-        computed: {
-            url () {
-                return './static/' + this.fileName
-            },
-            fileName () {
-                return (this.$route.query && this.$route.query.tmpFile) || ''
-            }
-        },
         async created () {
-            if (this.fileName) {
-                await this.loadFile()
-            } else {
-                this.$bkMessage({
-                    theme: 'error',
-                    message: '预览异常'
-                })
-            }
+            await this.loadFile()
         },
         mounted () {
-            // window.addEventListener('beforeunload', this.deleTmpFile)
             this.minHeight = window.innerHeight
             window.addEventListener('resize', this.resizeHandler)
         },
         destroyed () {
             window.removeEventListener('resize', this.resizeHandler)
-            // this.deleTmpFile()
         },
         methods: {
             async loadFile () {
@@ -117,18 +100,13 @@
                 //     this.isLoading = false
                 // }
             },
-            deleTmpFile () {
-                this.$store.dispatch('vueCode/deleteTmpFile', {
-                    fileName: this.fileName
-                })
-            },
             resizeHandler () {
                 this.minHeight = window.innerHeight
             }
         },
         template: ''
             + '<div :style="{ \'min-height\': minHeight + \'px\' }">'
-            + '<component :is="comp" :is-loading="isLoading" :url="url"/>'
+            + '<component :is="comp" :is-loading="isLoading"/>'
             + '</div>'
     }
 </script>
