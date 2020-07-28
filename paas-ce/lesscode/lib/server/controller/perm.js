@@ -16,7 +16,7 @@ const Perm = {
             const query = ctx.request.query || {}
             const projectId = query.projectId
             const username = query.username || ctx.username
-            const data = await getUserPerms(projectId,  username)
+            const data = await getUserPerms(projectId, username)
             ctx.send({
                 code: 0,
                 message: 'success',

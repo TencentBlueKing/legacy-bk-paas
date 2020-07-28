@@ -248,7 +248,7 @@
                     createTime: date
                 })
             },
-            
+
             submitFunc () {
                 this.$refs.func.validate().then((postData) => {
                     if (!postData) return
