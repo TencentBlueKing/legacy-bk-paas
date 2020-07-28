@@ -67,7 +67,7 @@ export const copyPage = async (ctx) => {
             projectId
         }
         
-        const { pageId: postId, pageName: postName } = pageData
+        const { id: postId, pageName: postName } = pageData
         const prePage = await getRepository(Page).findOne(postId)
         const newPageData = Object.assign(prePage, { pageName: postName, id: undefined })
         const { id } = await PageModel.createPage(newPageData, projectPageData)
