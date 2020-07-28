@@ -25,7 +25,7 @@ export const create = async (ctx) => {
     try {
         const category = new CompCategory()
         category.category = ctx.request.body.category
-        
+
         const rowId = await getRepository(CompCategory).save(category)
 
         ctx.send({

@@ -128,7 +128,7 @@
                 if (isDupName) {
                     this.messageError('分类重名')
                 }
-                
+
                 if (this.editCategory.id) {
                     await this.$store.dispatch('components/categoryUpdate', {
                         id: this.editCategory.id,
@@ -141,7 +141,7 @@
                     })
                     this.messageSuccess('添加组件分类成功')
                 }
-                
+
                 this.handleHideCreate()
                 this.fetchData()
             },
@@ -237,7 +237,7 @@
                 }
             }
         }
-        
+
     }
     .category-operation{
         position: absolute;
