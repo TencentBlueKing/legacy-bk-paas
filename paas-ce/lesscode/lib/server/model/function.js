@@ -57,7 +57,7 @@ const func = {
         return getConnection().transaction(async transactionalEntityManager => {
             const groupId = query.id
             const projectId = query.projectId
-            const deleteFuncGroup = await transactionalEntityManager.findOne(FuncGroup, {id: groupId})
+            const deleteFuncGroup = await transactionalEntityManager.findOne(FuncGroup, { id: groupId })
             deleteFuncGroup.deleteFlag = 1
             deleteFuncGroup.order = 0
             const deleteProjFuncGroup = await transactionalEntityManager.findOne(ProjectFuncGroup, { funcGroupId: groupId, projectId })
@@ -118,7 +118,7 @@ const func = {
         const funcRepository = getRepository(Func)
         const oldFuncList = await funcRepository.find({ id: In(funcList.map(x => x.id)) })
         oldFuncList.forEach(func => {
-            const newFunc= funcList.find(x => x.id === func.id)
+            const newFunc = funcList.find(x => x.id === func.id)
             newFunc.funcParams = (newFunc.funcParams || []).join(',')
             Object.assign(func, newFunc)
         })
