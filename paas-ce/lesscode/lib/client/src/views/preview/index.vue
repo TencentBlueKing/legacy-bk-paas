@@ -61,8 +61,15 @@
             }
         },
         async created () {
-            await this.getAllGroupFuncs(1)
-            await this.loadFile()
+            if (this.fileName) {
+                await this.getAllGroupFuncs(1)
+                await this.loadFile()
+            } else {
+                this.$bkMessage({
+                    theme: 'error',
+                    message: '预览异常'
+                })
+            }
         },
         mounted () {
             this.minHeight = window.innerHeight
