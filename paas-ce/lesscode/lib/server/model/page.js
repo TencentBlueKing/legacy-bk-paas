@@ -14,6 +14,7 @@ import Page from './entities/page'
 import ProjectPage from './entities/project-page'
 
 module.exports = {
+    // 获取项目下可见的页面列表
     getProjectPages (projectId) {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
@@ -22,6 +23,7 @@ module.exports = {
             .getMany()
     },
 
+    // check页面名称是否存在
     checkProjectPageExist (projectId, pageName) {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
@@ -30,14 +32,15 @@ module.exports = {
             .getMany()
     },
 
+    // 创建页面
     createPage (pageData, projectPageData) {
         const page = getRepository(Page).create(pageData)
 
         return getConnection().transaction(async transactionalEntityManager => {
-            // 创建项目基本信息记录
+            // 创建页面表相关信息
             const { id: pageId } = await transactionalEntityManager.save(page)
 
-            // 创建用户项目角色关联记录
+            // 创建项目页面关联记录
             projectPageData.pageId = pageId
 
             const projectPage = getRepository(ProjectPage).create(projectPageData)
@@ -46,45 +49,4 @@ module.exports = {
             return { id: pageId }
         })
     }
-
-    // getGroupList (projectId) {
-    
-    // },
-
-    // deleteFuncGroup (groupId) {
-    //     const groupRepository = getRepository(FuncGroup)
-    //     return groupRepository.delete({ where: { id: groupId } })
-    // },
-
-    // async editFuncGroup (group) {
-    //     const groupRepository = getRepository(FuncGroup)
-    //     const oldData = await groupRepository.findOne({ where: { id: group.id } })
-    //     Object.assign(oldData, group)
-    //     const res = await groupRepository.save(oldData)
-    //     return res
-    // },
-
-    // getFuncList (groupId) {
-    //     const funcRepository = getRepository(Func)
-    //     return funcRepository.find({ where: { funcGroupId: groupId } })
-    // },
-
-    // addFunction (funcData) {
-    //     const funcRepository = getRepository(Func)
-    //     const newFunc = funcRepository.create(funcData)
-    //     return funcRepository.save(newFunc)
-    // },
-
-    // deleteFunction (funcId) {
-    //     const funcRepository = getRepository(Func)
-    //     return funcRepository.delete({ where: { id: funcId } })
-    // },
-
-    // async editFunction (funcData) {
-    //     const funcRepository = getRepository(Func)
-    //     const oldData = await funcRepository.findOne({ where: { id: funcData.id } })
-    //     Object.assign(oldData, funcData)
-    //     const res = await funcRepository.save(oldData)
-    //     return res
-    // }
 }
