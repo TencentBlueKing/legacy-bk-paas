@@ -133,8 +133,8 @@ DROP TABLE IF EXISTS `page`;
 CREATE TABLE `page`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pageName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `content` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '页面的 targetData（JSON 串）',
-  `sourceCode` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '页面源代码',
+  `content` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '页面的 targetData（JSON 串）',
+  `sourceCode` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '页面源代码',
   `status` int(11) NOT NULL DEFAULT 0 COMMENT '项目状态：0 为正常，1 为私有，2 为删除',
   `createTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `updateTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
