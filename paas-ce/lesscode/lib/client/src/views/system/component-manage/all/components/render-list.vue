@@ -58,7 +58,7 @@
                 })
                 this.isLoading = false
             },
-            
+
             handleShowOperation () {
                 this.componentId = ''
                 this.isShowOperation = true

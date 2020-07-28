@@ -347,7 +347,7 @@
                     id: this.delObj.id,
                     projectId: 1
                 }
-                
+
                 const deleteFuncGroup = () => this.deleteGroup(postData)
                 const deleteFunc = () => {
                     const funcList = this.curGroup.functionList || []

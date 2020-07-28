@@ -61,7 +61,7 @@
 </template>
 
 <script>
-    import pagePreivewImg from '@/images/pageDemo.png'
+    import pagePreivewImg from '@/images/page-demo.png'
     import pageDialog from '@/components/project/pageDialog'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
