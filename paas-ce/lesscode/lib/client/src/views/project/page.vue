@@ -1,5 +1,5 @@
 <template>
-    <main class="pages pages-content">
+    <main class="pages pages-content" v-bkloading="{ isLoading: isLoading, opacity: 1 }">
         <div class="pages-head">
             <bk-button theme="primary" @click="handleCreate">新建</bk-button>
             <div class="extra">
@@ -62,7 +62,7 @@
 
 <script>
     import pagePreivewImg from '@/images/page-demo.png'
-    import pageDialog from '@/components/project/pageDialog'
+    import pageDialog from '@/components/project/page-dialog'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
@@ -80,7 +80,8 @@
                 keyword: '',
                 renderList: [],
                 pageList: [],
-                pagePreivewImg
+                pagePreivewImg,
+                isLoading: true
             }
         },
         computed: {
@@ -89,15 +90,22 @@
             }
         },
         async created () {
-            this.getPageList()
+            await this.getPageList()
         },
         methods: {
             async getPageList () {
-                this.pageList = await this.$store.dispatch('page/getList', { projectId: this.projectId })
-                if (this.keyword) {
-                    this.renderList = this.pageList.filter(item => item.pageName.indexOf(this.keyword) !== -1)
-                } else {
-                    this.renderList = this.pageList
+                this.isLoading = true
+                try {
+                    this.pageList = await this.$store.dispatch('page/getList', { projectId: this.projectId })
+                    if (this.keyword) {
+                        this.renderList = this.pageList.filter(item => item.pageName.indexOf(this.keyword) !== -1)
+                    } else {
+                        this.renderList = this.pageList
+                    }
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    this.isLoading = false
                 }
             },
             handleCreate () {
@@ -196,7 +204,6 @@
         }
         .pages-body {
             display: flex;
-            flex: 1;
              .empty {
                 flex: 1;
                 display: flex;

@@ -100,7 +100,7 @@
                             pageName: this.dialog.formData.pageName,
                             projectId: this.projectId
                         }
-                        
+
                     })
                     if (nameExist) return
                     const res = await this.$store.dispatch(this.requestMethod, {
@@ -115,11 +115,13 @@
                             message: `${this.actionName}成功`
                         })
                         this.dialog.visible = false
-                        if (this.action === 'create') {
-                            this.$router.push('/')
-                        } else {
-                            this.reflashList()
-                        }
+                        // TODO: 路由连起来之后再跳转
+                        // if (this.action === 'create') {
+                        //     this.$router.push('/')
+                        // } else {
+                        //     this.reflashList()
+                        // }
+                        this.reflashList()
                     }
                 } catch (err) {
                     console.error(err)
