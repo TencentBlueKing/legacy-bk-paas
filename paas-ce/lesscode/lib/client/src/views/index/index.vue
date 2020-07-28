@@ -169,7 +169,7 @@
             </aside>
         </div>
 
-        <Methods :is-show.sync="isShowFun"></Methods>
+        <Methods :show.sync="isShowFun"></Methods>
 
         <bk-dialog v-model="delComponentConf.visiable"
             class="del-component-dialog"
@@ -189,7 +189,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex'
+    import { mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
 
     import componentList from '@/element-materials/materials'
@@ -260,7 +260,6 @@
                 'draggableSourceGroup',
                 'draggableTargetGroup',
                 'curSelectedComponentData',
-                'functionGroup',
                 'pageData',
                 'copyData'
             ]),
@@ -305,8 +304,6 @@
             }
         },
         created () {
-            this.setFunctionGroup(this.functionGroup)
-
             const mockCurSelectComponentData = {
                 componentId: 'grid-' + uuid(),
                 renderKey: uuid(),
@@ -344,6 +341,9 @@
             window.test1 = this.test1
         },
         mounted () {
+            this.getAllGroupFuncs(1).catch((err) => {
+                this.$bkMessage({ theme: 'error', message: err.message || err })
+            })
             window.addEventListener('beforeunload', function (e) {
                 const confirmationMessage = '...';
                 (e || window.event).returnValue = confirmationMessage
@@ -360,11 +360,14 @@
                 'setTargetData',
                 'setDraggableSourceGroup',
                 'setCurSelectedComponentData',
-                'setFunctionGroup',
                 'setCopyData',
                 'pushTargetHistory',
                 'backTargetHistory',
                 'forwardTargetHistory'
+            ]),
+
+            ...mapActions('functions', [
+                'getAllGroupFuncs'
             ]),
 
             /**
