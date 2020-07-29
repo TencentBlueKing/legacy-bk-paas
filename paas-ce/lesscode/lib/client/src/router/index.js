@@ -42,23 +42,6 @@ const Changelog = () => import(/* webpackChunkName: 'start' */'@/views/changelog
 
 const routes = [
     {
-        path: `/${APP_CODE}`,
-        component: MainEntry,
-        alias: '',
-        children: [
-            {
-                path: '',
-                name: 'new',
-                component: Index
-            },
-            {
-                path: 'preview',
-                name: 'preview',
-                component: Preview
-            }
-        ]
-    },
-    {
         path: '/help',
         component: MainHelpEntry,
         children: [
@@ -70,7 +53,7 @@ const routes = [
         ]
     },
     {
-        path: '/system',
+        path: '/',
         component: SystemEntry,
         redirect: { name: 'projects' },
         children: [
@@ -117,7 +100,7 @@ const routes = [
                 redirect: { name: 'pageList' }
             },
             {
-                path: 'page',
+                path: 'pages',
                 name: 'pageList',
                 component: Page
             },
@@ -127,7 +110,23 @@ const routes = [
                 component: Member
             }
         ]
-
+    },
+    {
+        path: `/project/:projectId/page/:pageId`,
+        component: MainEntry,
+        alias: '',
+        children: [
+            {
+                path: '',
+                name: 'new',
+                component: Index
+            },
+            {
+                path: 'preview',
+                name: 'preview',
+                component: Preview
+            }
+        ]
     },
     {
         path: '*',

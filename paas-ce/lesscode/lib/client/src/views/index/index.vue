@@ -13,7 +13,7 @@
     <main class="app-main">
         <div class="main-top">
             <div class="page-title">
-                <div class="page-name">
+                <div class="page-name" @click="generatePreviewImg">
                     可视化开发
                 </div>
             </div>
@@ -200,6 +200,7 @@
     import Methods from '@/components/methods'
     import codeMixin from '@/components/vue-code/code-mixin'
     import ComponentSearch from './component-search'
+    import html2canvas from 'html2canvas'
 
     import customComponents from '@/custom'
 
@@ -845,6 +846,20 @@
                 })
             },
 
+            generatePreviewImg () {
+                if (this.actionSelected !== 'edit' || !this.$route.params.pageId) return
+                html2canvas(document.querySelector('.main-content')).then((canvas) => {
+                    const imgData = canvas.toDataURL('image/png')
+                    this.$store.dispatch('page/update', {
+                        data: {
+                            pageData: {
+                                id: parseInt(this.$route.params.pageId),
+                                previewImg: imgData
+                            }
+                        }
+                    })
+                })
+            },
             /**
              * 跳转到开源版 github
              */
