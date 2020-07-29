@@ -19,7 +19,7 @@
                 <div class="page-item" v-for="(page, index) in renderList" :key="index">
                     <div class="item-bd">
                         <div class="preview">
-                            <img :src="pagePreivewImg" alt="项目缩略预览">
+                            <img :src="page.previewImg || pagePreivewImg" alt="页面缩略预览">
                             <div class="mask">
                                 <div class="operate-btns">
                                     <bk-button class="edit-btn" theme="primary" @click="handleEditPage(page.id)">编辑</bk-button>
@@ -124,7 +124,7 @@
                 if (!code) {
                     this.$bkMessage({
                         theme: 'error',
-                        message: '源码为空'
+                        message: '该页面为空页面，无源码生成'
                     })
                     return
                 }
@@ -162,9 +162,22 @@
                 })
             },
             handleEditPage (id) {
-                this.$router.push('/')
+                this.$router.push({
+                    name: 'new',
+                    params: {
+                        projectId: this.projectId,
+                        pageId: id
+                    }
+                })
             },
-            handlePreview (content) {
+            handlePreview (page) {
+                if (!page.content) {
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: '该页面为空页面，请先编辑页面'
+                    })
+                    return
+                }
                 window.open('/preview', '_blank')
             },
             handleSearch (clear = false) {
