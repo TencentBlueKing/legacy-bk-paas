@@ -39,8 +39,10 @@ export default class Base {
     // 插入数据写入用户名
     // tofix: 登陆以后，拿到登陆用户名取代admin
     @BeforeInsert()
-    updateCreateUser () {
+    beforeInsert () {
         this.createUser = 'admin'
+        this.updateUser = 'admin'
+        this.updateTime = new Date()
     }
 
     // 更新数据写入用户名

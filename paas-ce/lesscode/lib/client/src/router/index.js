@@ -22,7 +22,7 @@ const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system'
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
 const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/system/component-manage')
-const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/system/function-manage')
+const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/project/function-manage')
 
 const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
@@ -97,14 +97,6 @@ const routes = [
                 meta: {
                     title: '自定义组件库'
                 }
-            },
-            {
-                path: 'function-manage',
-                name: 'functionManage',
-                component: FunctionManage,
-                meta: {
-                    title: '函数库'
-                }
             }
         ]
     },
@@ -120,6 +112,14 @@ const routes = [
                 path: 'page',
                 name: 'pageList',
                 component: Page
+            },
+            {
+                path: 'functionManage',
+                name: 'functionManage',
+                component: FunctionManage,
+                meta: {
+                    title: '函数库'
+                }
             },
             {
                 path: 'member',

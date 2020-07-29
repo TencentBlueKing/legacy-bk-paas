@@ -12,9 +12,6 @@
                     <router-link tag="div" class="nav-item" :to="{ name: 'componentManage', query: { filter: '' } }">
                         <i class="bk-drag-icon bk-drag-project-list"></i>自定义组件库
                     </router-link>
-                    <router-link tag="div" class="nav-item" :to="{ name: 'functionManage', query: { filter: '' } }">
-                        <i class="bk-drag-icon bk-drag-function-fill"></i>函数库
-                    </router-link>
                     <router-link tag="div" class="nav-item" :to="'account'">
                         <i class="bk-drag-icon bk-drag-member"></i>账号管理
                     </router-link>
