@@ -17,7 +17,8 @@ module.exports = {
             const projectId = query.projectId
             const groupList = await getGroupList(projectId, '')
             const groupIds = groupList.map(x => x.id)
-            const allFuncList = await getFuncList(groupIds, '')
+            let allFuncList = []
+            if (groupIds.length) allFuncList = await getFuncList(groupIds, '')
             const funcIds = allFuncList.map(x => x.id)
             let pageList = []
             if (funcIds.length) pageList = await getFuncRelatePageList(funcIds)
@@ -26,7 +27,7 @@ module.exports = {
                 group.functionList = functionList.map((func) => {
                     const pages = pageList.filter(x => x.funcId === func.id)
                     func.pages = pages
-                    func.funcParams = func.funcParams.split(',').filter(x => x !== '')
+                    func.funcParams = (func.funcParams || '').split(',').filter(x => x !== '')
                     return func
                 })
             })

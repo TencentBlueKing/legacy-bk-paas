@@ -342,7 +342,8 @@
             window.test1 = this.test1
         },
         mounted () {
-            this.getAllGroupFuncs(1).catch((err) => {
+            const projectId = this.$route.params.projectId || 1
+            this.getAllGroupFuncs(projectId).catch((err) => {
                 this.$bkMessage({ theme: 'error', message: err.message || err })
             })
             window.addEventListener('beforeunload', function (e) {

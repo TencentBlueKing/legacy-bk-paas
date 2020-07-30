@@ -61,7 +61,8 @@
             }
         },
         async created () {
-            await this.getAllGroupFuncs(1)
+            const projectId = this.$route.params.projectId || 1
+            await this.getAllGroupFuncs(projectId)
             await this.loadFile()
         },
         mounted () {
