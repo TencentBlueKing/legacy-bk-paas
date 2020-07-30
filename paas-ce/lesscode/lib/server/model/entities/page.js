@@ -22,6 +22,12 @@ export default class extends Base {
     sourceCode
 
     @Column({
+        type: 'mediumtext',
+        comment: '预览图base64'
+    })
+    previewImg
+
+    @Column({
         type: 'int',
         nullable: false,
         default: '0',

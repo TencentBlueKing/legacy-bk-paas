@@ -88,7 +88,6 @@
                     this.comp = 'preview-page'
                     this.isLoading = false
                 }, 300)
-
                 // this.isLoading = true
                 // try {
                 //     const res = await httpVueLoader(this.url)
