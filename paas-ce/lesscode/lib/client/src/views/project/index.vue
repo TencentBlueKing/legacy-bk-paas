@@ -39,6 +39,11 @@
                         title: '页面列表',
                         icon: 'list-fill',
                         toPath: 'pages'
+                    },
+                    {
+                        title: '函数库',
+                        icon: 'function-fill',
+                        toPath: 'functionManage'
                     }
                     // {
                     //     title: '成员管理',

@@ -1,6 +1,6 @@
 <template>
-    <section>
-        <span v-for="item in list.slice(0, 1)" :key="item" class="label-item">{{ item }}</span>
+    <section class="label-list-home">
+        <span v-for="item in list.slice(0, 1)" :key="item" :class="['label-item', 'label-first', { only: list.length === 1 }]" :title="item">{{ item }}</span>
         <bk-popconfirm trigger="click" confirm-text="" cancel-text="" ext-cls="label-pop" v-if="list.slice(1).length">
             <div slot="content">
                 <ul class="label-list">
@@ -22,6 +22,25 @@
 </script>
 
 <style lang="postcss" scoped>
+    .label-list-home {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        .label-first {
+            max-width: calc(100% - 24px);
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            &.only {
+                max-width: 100%;
+            }
+        }
+        .label-more {
+            width: 24px;
+            margin: 0;
+        }
+    }
     .label-item {
         color: #63656e;
         background: #f0f1f5;

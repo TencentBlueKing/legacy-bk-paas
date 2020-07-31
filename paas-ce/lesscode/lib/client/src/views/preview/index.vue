@@ -67,10 +67,13 @@
             }
         },
         async created () {
-            await this.getAllGroupFuncs(1)
+            const projectId = this.$route.params.projectId || 1
+            await this.getAllGroupFuncs(projectId)
+
             if (this.fromPageList) {
                 this.pageDetail = await this.$store.dispatch('page/detail', { pageId: this.$route.params.pageId })
             }
+            
             await this.loadFile()
         },
         mounted () {

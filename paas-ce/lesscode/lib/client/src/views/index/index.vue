@@ -364,6 +364,7 @@
             let initData = []
             try {
                 initData = this.pageDetail.content ? JSON.parse(this.pageDetail.content) : [this.curDragingComponent]
+                this.refreshDragAreaKey = +new Date()
             } catch (err) {
                 initData = [this.curDragingComponent]
                 this.$bkMesseage({
@@ -371,6 +372,7 @@
                     message: 'targetData格式错误'
                 })
             }
+            console.log(initData, 11234)
             this.setTargetData(initData)
 
             this.projectDetail = await this.$store.dispatch('project/detail', { projectId: this.projectId }) || {}
@@ -380,7 +382,8 @@
             window.test1 = this.test1
         },
         mounted () {
-            this.getAllGroupFuncs(1).catch((err) => {
+            const projectId = this.$route.params.projectId || 1
+            this.getAllGroupFuncs(projectId).catch((err) => {
                 this.$bkMessage({ theme: 'error', message: err.message || err })
             })
 
