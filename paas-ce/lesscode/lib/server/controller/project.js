@@ -221,5 +221,21 @@ module.exports = {
         } catch (e) {
             ctx.throw(e)
         }
+    },
+
+    async projectDetail (ctx) {
+        try {
+            const { projectId } = ctx.request.query
+            const detail = await projectModel.findProjectDetail({ id: projectId })
+            ctx.send({
+                code: 0,
+                message: 'OK',
+                data: detail
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
     }
 }

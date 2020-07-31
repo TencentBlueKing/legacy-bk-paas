@@ -242,10 +242,47 @@ $headerHeight: 64px;
         display: flex;
         width: 300px;
         align-items: center;
-        padding-left: 22px;
         .page-name {
-            font-size: 16px;
-            color: #63656E;
+            .bk-drag-icon {
+                padding: 10px;
+                cursor: pointer;
+            }
+            .bk-drag-arrow-back {
+                font-size: 13px;
+                color: #3a84ff;
+            }
+            .template-logo svg{
+                vertical-align: middle;
+            }
+            .seperate-line {
+                width: 1px;
+                color: #d8d8d8;
+                margin: 0 -6px;
+            }
+            .name-content {
+                cursor: default;
+                margin-left: 10px;
+                width: 210px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                span {
+                    /* display: inline-block; */
+                    display: inline-flex;
+                    width: 105px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+                .page-name-span {
+                    font-size: 16px;
+                    color: #313238;
+                }
+                .project-name-span {
+                    font-size: 14px;
+                    color: #979BA5;
+                }
+            }
         }
     }
 

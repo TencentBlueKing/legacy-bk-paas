@@ -38,7 +38,7 @@
                     {
                         title: '页面列表',
                         icon: 'list-fill',
-                        toPath: 'page'
+                        toPath: 'pages'
                     }
                     // {
                     //     title: '成员管理',

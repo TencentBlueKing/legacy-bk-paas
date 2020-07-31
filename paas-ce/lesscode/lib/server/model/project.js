@@ -86,6 +86,11 @@ export default {
         return getRepository(Project).findOne({ projectCode })
     },
 
+    findProjectDetail (params) {
+        const queryParams = Object.assign({}, params, { deleteFlag: 0 })
+        return getRepository(Project).findOne(queryParams)
+    },
+
     queryAllProject ({ condition = '', params = {} }) {
         return getRepository(Project)
             .createQueryBuilder('project')
