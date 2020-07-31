@@ -372,7 +372,6 @@
                     message: 'targetData格式错误'
                 })
             }
-            console.log(initData, 11234)
             this.setTargetData(initData)
 
             this.projectDetail = await this.$store.dispatch('project/detail', { projectId: this.projectId }) || {}
