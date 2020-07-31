@@ -195,4 +195,7 @@
             opacity: 0.9;
         }
     }
+    /deep/ .monaco-editor {
+        padding-top: 20px;
+    }
 </style>

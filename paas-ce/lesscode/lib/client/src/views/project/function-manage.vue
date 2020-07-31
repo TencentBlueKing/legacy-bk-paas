@@ -1,7 +1,7 @@
 <template>
     <article>
         <layout>
-            <section slot="left">
+            <section slot="left" class="function-left">
                 <h3 class="list-head">
                     <bk-input class="head-input" placeholder="请输入" :clearable="true" right-icon="bk-icon icon-search" v-model="searchGroupStr"></bk-input>
                     <bk-popconfirm trigger="click" confirm-text="" cancel-text="" :on-hide="() => (groupNameErrMessage = '')">
@@ -14,23 +14,25 @@
                                 v-model="groupNameStr"
                                 right-icon="loading"
                                 v-bkloading="{ isLoading: isAddLoading }"
+                                ref="addGroupInput"
                             ></bk-input>
                             <p class="input-err-message" v-if="groupNameErrMessage">{{ groupNameErrMessage }}</p>
                         </div>
-                        <i class="bk-icon icon-plus" @click="groupNameStr = ''"></i>
+                        <i class="bk-icon icon-plus" @click="handleAddGroup" v-bk-tooltips.top="'添加分类'"></i>
                     </bk-popconfirm>
                 </h3>
 
                 <vue-draggable v-model="groupList"
-                    :group="{ name: 'function-list' }"
+                    class="group-list"
+                    :group="{ name: 'group-list' }"
                     :sort="searchGroupStr === ''"
                     v-bkloading="{ isLoading: isLoadingGroup }"
                 >
                     <li v-for="group in groupList" :key="group.id" :class="['function-item', { select: group.id === curGroupId }]" @mousedown.self="curGroupId = group.id">
                         <i class="bk-drag-icon bk-drag-grag-fill hover-show" @mousedown.self="curGroupId = group.id"></i>
                         <i class="bk-drag-icon bk-drag-folder-fill" @mousedown.self="curGroupId = group.id"></i>
-                        <span class="item-name" @mousedown.self="curGroupId = group.id">{{ group.groupName }}</span>
-                        <bk-popconfirm trigger="click" confirm-text="" cancel-text="" class="mr7" :on-hide="() => (groupNameErrMessage = '', group.showChange = false)">
+                        <span :class="['item-name', { 'show-tool-name': group.showChange }]" @mousedown.self="curGroupId = group.id" :title="group.groupName">{{ group.groupName }}</span>
+                        <bk-popconfirm trigger="click" confirm-text="" cancel-text="" class="item-tool-box edit-box" :on-hide="() => (groupNameErrMessage = '', group.showChange = false)">
                             <div slot="content">
                                 <bk-input :class="['add-function-group', { 'input-error': groupNameErrMessage }]"
                                     placeholder="请输入函数分类"
@@ -39,17 +41,22 @@
                                     @input="groupNameErrMessage = ''"
                                     v-model="group.tempName"
                                     v-bkloading="{ isLoading: isAddLoading }"
+                                    :ref="group.id"
                                 ></bk-input>
                                 <p class="input-err-message" v-if="groupNameErrMessage">{{ groupNameErrMessage }}</p>
                             </div>
                             <span :class="['item-tool', 'hover-show', { 'click-show': group.showChange }]" @click="openChange(group)"><i class="bk-icon icon-edit2"></i></span>
                         </bk-popconfirm>
-                        <bk-popover :disabled="group.functionList.length <= 0" content="该分类下有函数，不能删除" class="mr7">
+                        <bk-popover :disabled="group.functionList.length <= 0" content="该分类下有函数，不能删除" class="item-tool-box del-box">
                             <i :class="['bk-icon', 'icon-close', 'hover-show', 'disable', { 'click-show': group.showChange }]" v-if="+group.functionList.length"></i>
                             <span :class="['item-tool', 'hover-show', { 'click-show': group.showChange }]" @click="deleteItem(group.id, `删除分类（${group.groupName}）`, true)" v-else><i class="bk-icon icon-close"></i></span>
                         </bk-popover>
                         <span class="item-num" @mousedown.self="curGroupId = group.id">{{ (group.functionList || []).length }}</span>
                     </li>
+                    <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part" v-if="groupList.length <= 0">
+                        <div v-if="!searchGroupStr">暂无分类</div>
+                        <div v-else>暂无搜索结果</div>
+                    </bk-exception>
                 </vue-draggable>
             </section>
 
@@ -64,6 +71,7 @@
                     :header-border="false"
                     :header-cell-style="{ background: '#f0f1f5' }"
                     v-bkloading="{ isLoading: isLoadingFunc }"
+                    class="function-table"
                 >
                     <bk-table-column label="函数名称" prop="funcName" show-overflow-tooltip></bk-table-column>
                     <bk-table-column label="所属分类" prop="funcGroupId" :formatter="groupFormatter" show-overflow-tooltip></bk-table-column>
@@ -77,13 +85,13 @@
                             <label-list :list="[props.row.updateUser].filter(x => x)"></label-list>
                         </template>
                     </bk-table-column>
-                    <bk-table-column label="更新时间" prop="updateTime" :formatter="timeFormatter"></bk-table-column>
+                    <bk-table-column label="更新时间" prop="updateTime" :formatter="timeFormatter" show-overflow-tooltip sortable></bk-table-column>
                     <bk-table-column label="引用界面">
                         <template slot-scope="props">
                             <label-list :list="(props.row.pages || []).map(x => x.pageName)"></label-list>
                         </template>
                     </bk-table-column>
-                    <bk-table-column label="操作">
+                    <bk-table-column label="操作" width="180">
                         <template slot-scope="props">
                             <span class="table-bth" @click="editFunction(props.row)">编辑</span>
                             <span class="table-bth" @click="copyRow(props.row)">复制</span>
@@ -127,7 +135,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex'
     import dayjs from 'dayjs'
-    import layout from './component-manage/all/components/layout'
+    import layout from '@/views/system/component-manage/all/components/layout'
     import funcForm from '@/components/methods/funcForm'
     import labelList from '@/components/methods/label-list.vue'
 
@@ -213,6 +221,13 @@
                 'addGroup'
             ]),
 
+            handleAddGroup () {
+                this.groupNameStr = ''
+                setTimeout(() => {
+                    this.$refs.addGroupInput.focus()
+                }, 200)
+            },
+
             addFunction () {
                 this.funcObj.show = true
                 this.funcObj.isEdit = false
@@ -283,7 +298,8 @@
 
             getGroupList () {
                 this.isLoadingGroup = true
-                this.getAllGroupFuncs(1).then(() => {
+                const projectId = this.$route.params.projectId
+                this.getAllGroupFuncs(projectId).then(() => {
                     const firstGroup = this.funcGroups[0] || {}
                     this.curGroupId = firstGroup.id
                 }).finally(() => {
@@ -301,6 +317,10 @@
             openChange (group) {
                 this.$set(group, 'tempName', group.groupName)
                 this.$set(group, 'showChange', true)
+                setTimeout(() => {
+                    const el = this.$refs[group.id][0]
+                    if (el) el.focus()
+                }, 200)
             },
 
             requestDelete () {
@@ -364,8 +384,8 @@
                     const nameNum = {}
                     let hasRepeatName = false
                     nameList.forEach((name) => {
-                        if (nameNum.name) hasRepeatName = true
-                        else nameNum.name = 1
+                        if (nameNum[name]) hasRepeatName = true
+                        else nameNum[name] = 1
                     })
                     if (hasRepeatName) reject(new Error('不能创建相同名字的分类'))
                     else if (nameList.some(x => x === '')) reject(new Error('分类名不能为空'))
@@ -386,7 +406,7 @@
             },
 
             groupFormatter (obj, con, val) {
-                const curGroup = this.groupList.find(x => x.id === val) || {}
+                const curGroup = this.funcGroups.find(x => x.id === val) || {}
                 return curGroup.groupName
             }
         }
@@ -403,6 +423,7 @@
 
     .function-main {
         width: 100%;
+        height: 100%;
         padding: 16px 24px 16px 14px;
         .function-head {
             display: flex;
@@ -413,6 +434,13 @@
             font-weight: normal;
             .head-input {
                 width: 400px;
+            }
+        }
+        .function-table {
+            height: calc(100% - 46px);
+            /deep/ .bk-table-body-wrapper {
+                height: calc(100% - 43px);
+                overflow-y: auto;
             }
         }
         .table-bth {
@@ -431,6 +459,7 @@
         padding: 0 20px 0 14px;
         cursor: grab;
         color: #63656e;
+        position: relative;
         /deep/ &.sortable-ghost {
             border: 1px dashed #3a84ff;
             padding: 0 19px 0 13px;
@@ -463,9 +492,21 @@
         }
         .item-name {
             flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            &.show-tool-name {
+                padding-right: 75px;
+            }
         }
-        .mr7 {
-            margin-right: 7px;
+        .item-tool-box {
+            position: absolute;
+            &.edit-box {
+                right: 95px;
+            }
+            &.del-box {
+                right: 55px;
+            }
         }
         .item-tool {
             cursor: pointer;
@@ -514,6 +555,9 @@
                 background: #a2c5fd;
                 color: #ffffff;
             }
+            .item-name {
+                padding-right: 75px;
+            }
         }
     }
 
@@ -530,6 +574,22 @@
         .icon-plus {
             cursor: pointer;
             font-size: 26px;
+            &:hover {
+                color: #3a84ff;
+            }
+        }
+    }
+
+    .function-left {
+        height: 100%;
+        .group-list {
+            height: calc(100% - 63px);
+            overflow-y: auto;
+            .exception-wrap-item {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+            }
         }
     }
 

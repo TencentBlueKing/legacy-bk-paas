@@ -61,7 +61,8 @@
             }
         },
         async created () {
-            await this.getAllGroupFuncs(1)
+            const projectId = this.$route.params.projectId || 1
+            await this.getAllGroupFuncs(projectId)
             await this.loadFile()
         },
         mounted () {
@@ -87,7 +88,6 @@
                     this.comp = 'preview-page'
                     this.isLoading = false
                 }, 300)
-
                 // this.isLoading = true
                 // try {
                 //     const res = await httpVueLoader(this.url)

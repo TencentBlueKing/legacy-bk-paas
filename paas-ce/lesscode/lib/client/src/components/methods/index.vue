@@ -207,7 +207,8 @@
 
             initData () {
                 this.isLoadingGroup = true
-                this.getAllGroupFuncs(1).then(() => {
+                const projectId = this.$route.params.projectId
+                this.getAllGroupFuncs(projectId).then(() => {
                     const firstGroup = this.funcGroups[0] || {}
                     this.openGroupIds.push(firstGroup.id)
                     const funcList = firstGroup.functionList || []
@@ -411,8 +412,8 @@
                     const nameNum = {}
                     let hasRepeatName = false
                     nameList.forEach((name) => {
-                        if (nameNum.name) hasRepeatName = true
-                        else nameNum.name = 1
+                        if (nameNum[name]) hasRepeatName = true
+                        else nameNum[name] = 1
                     })
                     if (hasRepeatName) reject(new Error('不能创建相同名字的分类'))
                     else if (nameList.some(x => x === '')) reject(new Error('分类名不能为空'))
