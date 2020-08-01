@@ -50,6 +50,15 @@ async function startServer () {
     // @see https://github.com/koajs/koa/wiki/Error-Handling
     app.use(async (ctx, next) => {
         try {
+            // const bkToken = ctx.cookies.get('bk_token')
+            // console.error('bkToken', bkToken)
+            // if (!bkToken) {
+            //     ctx.status = 302
+            //     ctx.redirect('httpConf.lesscodeUrl)
+            //     return
+            // } else {
+            //     await next()
+            // }
             await next()
         } catch (err) {
             const status = err.status
