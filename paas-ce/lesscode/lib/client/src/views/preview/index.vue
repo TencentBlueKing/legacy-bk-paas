@@ -53,6 +53,7 @@
         mixins: [codeMixin],
         data () {
             return {
+                pageDetail: {},
                 pageType: 'preview',
                 comp: 'LoadingComponent',
                 isLoading: false,
@@ -60,9 +61,19 @@
                 minHeight: 0
             }
         },
+        computed: {
+            fromPageList () {
+                return this.$route.query.type && this.$route.query.type === 'fromList'
+            }
+        },
         async created () {
             const projectId = this.$route.params.projectId || 1
             await this.getAllGroupFuncs(projectId)
+
+            if (this.fromPageList) {
+                this.pageDetail = await this.$store.dispatch('page/detail', { pageId: this.$route.params.pageId })
+            }
+            
             await this.loadFile()
         },
         mounted () {
@@ -79,7 +90,19 @@
 
             async loadFile () {
                 this.isLoading = true
-                this.targetData = JSON.parse(localStorage.getItem('layout-target-data'))
+                try {
+                    if (this.fromPageList) {
+                        this.targetData = JSON.parse(this.pageDetail.content)
+                    } else {
+                        this.targetData = JSON.parse(localStorage.getItem('layout-target-data'))
+                    }
+                } catch (err) {
+                    this.$bkMesseage({
+                        theme: 'error',
+                        message: 'targetData格式错误'
+                    })
+                }
+                
                 let code = this.getCode().replace('export default', 'module.exports =')
                 code = code.replace('components: { chart: ECharts },', '')
                 const res = httpVueLoader(code)

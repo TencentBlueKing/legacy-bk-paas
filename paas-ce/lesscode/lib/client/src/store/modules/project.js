@@ -14,10 +14,15 @@ import http from '@/api'
 export default {
     namespaced: true,
     state: {
+        currentProject: {}
     },
     mutations: {
+        setCurrentProject (state, project) {
+            state.currentProject = Object.assign({}, project)
+        }
     },
     getters: {
+        getCurrentProject: state => state.currentProject
     },
     actions: {
         create ({ commit }, { data, config }) {
@@ -53,6 +58,12 @@ export default {
         checkname ({ commit }, { data, config }) {
             return http.post('/project/checkname', data, config).then(response => {
                 return response
+            })
+        },
+        detail ({ commit }, { projectId }) {
+            return http.get(`/project/detail?projectId=${projectId}`).then(response => {
+                const data = response.data || ''
+                return data
             })
         }
     }

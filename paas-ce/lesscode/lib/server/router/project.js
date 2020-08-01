@@ -16,7 +16,8 @@ const {
     updateProject,
     deleteProject,
     favorite,
-    checkname
+    checkname,
+    projectDetail
 } = require('../controller/project')
 
 const router = new Router({
@@ -29,5 +30,6 @@ router.put('/update', updateProject)
 router.delete('/delete', deleteProject)
 router.post('/favorite', favorite)
 router.post('/checkname', checkname)
+router.get('/detail', projectDetail)
 
 module.exports = router

@@ -23,6 +23,7 @@ import { bus } from '@/common/bus'
 import header from '@/components/header.vue'
 import '@/common/bkmagic'
 import '@icon-cool/bk-icon-vue-drag-vis'
+import '@icon-cool/bk-icon-vue-drag-vis/src/index'
 import VueContextMenu from '@xunlei/vue-context-menu'
 import targetData from '@/common/targetData.js'
 

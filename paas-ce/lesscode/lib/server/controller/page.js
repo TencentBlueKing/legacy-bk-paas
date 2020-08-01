@@ -132,3 +132,21 @@ export const checkName = async (ctx) => {
         })
     }
 }
+
+// 页面详情
+export const pageDetail = async (ctx) => {
+    try {
+        const { pageId } = ctx.request.query
+        const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
+        const detail = await getRepository(Page).findOne(queryParams)
+        ctx.send({
+            code: 0,
+            message: 'OK',
+            data: detail
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message || err
+        })
+    }
+}

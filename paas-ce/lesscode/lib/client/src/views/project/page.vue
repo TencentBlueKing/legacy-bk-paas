@@ -178,7 +178,7 @@
                     })
                     return
                 }
-                window.open('/preview', '_blank')
+                window.open(`/project/${this.projectId}/page/${page.id}/preview?type=fromList`, '_blank')
             },
             handleSearch (clear = false) {
                 if (clear) {
