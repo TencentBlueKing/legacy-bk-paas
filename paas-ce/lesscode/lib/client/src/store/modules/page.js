@@ -54,6 +54,12 @@ export default {
             return http.post('/page/checkName', data).then(response => {
                 return response.data || ''
             })
+        },
+        detail ({ commit }, { pageId }) {
+            return http.get(`/page/detail?pageId=${pageId}`).then(response => {
+                const data = response.data || ''
+                return data
+            })
         }
     }
 }
