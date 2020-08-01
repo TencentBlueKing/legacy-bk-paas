@@ -16,7 +16,8 @@ const {
     updatePage,
     copyPage,
     deletePage,
-    checkName
+    checkName,
+    pageDetail
 } = require('../controller/page')
 
 const router = new Router({
@@ -29,5 +30,6 @@ router.put('/update', updatePage)
 router.post('/copy', copyPage)
 router.delete('/delete', deletePage)
 router.post('/checkName', checkName)
+router.get('/detail', pageDetail)
 
 module.exports = router

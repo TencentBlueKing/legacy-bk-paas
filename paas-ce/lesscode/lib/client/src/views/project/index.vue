@@ -38,7 +38,7 @@
                     {
                         title: '页面列表',
                         icon: 'list-fill',
-                        toPath: 'page'
+                        toPath: 'pages'
                     },
                     {
                         title: '函数库',
