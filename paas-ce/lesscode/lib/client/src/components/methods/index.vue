@@ -1,395 +1,463 @@
-<!--
-  Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
-  Copyright (C) 2017-2019 THL A29 Limited, a Tencent company. All rights reserved.
-  Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-  http://opensource.org/licenses/MIT
-  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
-  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
-  specific language governing permissions and limitations under the License.
--->
-
 <template>
-    <bk-dialog :value="isShow"
-        class="method-main"
-        :confirm-fn="saveMethods"
-        @cancel="cancelMethod"
-        render-directive="if"
-        ok-text="保存"
-        :transfer="true"
-        :draggable="true"
-        :mask-close="false"
-        width="900"
-        title="函数管理">
-        <main class="method-main">
-            <bk-collapse v-model="activeName" class="method-list">
-                <h3 class="list-name">函数库</h3>
-                <bk-collapse-item @contextmenu.prevent="" :name="funGroup.name" v-for="(funGroup, index) in currentFunctionGroup" :key="funGroup.name">
-                    <div @mousedown="showAddMethod(funGroup)" class="method-fold">
-                        <span :title="funGroup.name">{{ funGroup.name }}</span>
-                        <bk-icon type="plus" @mousedown.stop="addMethod($event, index)" />
+    <transition name="fade">
+        <article class="function-home" v-if="show" @mousedown.self="closeFunction">
+            <layout class="function-main method-layout" @resize="resizeLayOut" :init-width="initWidth <= 240 ? 240 : initWidth" ref="methodMain">
+                <section slot="left" class="func-left">
+                    <h3 class="left-title">
+                        <span>函数库</span>
+                        <bk-popconfirm trigger="click" confirm-text="" cancel-text="" :on-hide="() => (groupNameErrMessage = '')">
+                            <div slot="content">
+                                <bk-input :class="['add-function-group', { 'input-error': groupNameErrMessage }]"
+                                    placeholder="请输入函数分类，多个分类 / 分隔，回车结束"
+                                    @enter="addFunctionGroup"
+                                    @focus="groupNameErrMessage = ''"
+                                    @input="groupNameErrMessage = ''"
+                                    v-model="groupNameStr"
+                                    right-icon="loading"
+                                    v-bkloading="{ isLoading: isAddLoading }"
+                                ></bk-input>
+                                <p class="input-err-message" v-if="groupNameErrMessage">{{ groupNameErrMessage }}</p>
+                            </div>
+                            <i class="bk-icon icon-plus" @click="groupNameStr = ''" v-bk-tooltips="{ content: '添加分类', placements: ['top'] }"></i>
+                        </bk-popconfirm>
+                    </h3>
+
+                    <bk-input class="left-input" placeholder="函数名称" :clearable="true" right-icon="bk-icon icon-search" v-model="searchFunctionStr"></bk-input>
+
+                    <vue-draggable v-model="groupList"
+                        :sort="true"
+                        :group="{ name: 'group-list' }"
+                        tag="ul"
+                        class="scroll-main group-list"
+                    >
+                        <li v-for="group in groupList" :key="group.id">
+                            <bk-input v-if="changeGroupIds.includes(group.id)"
+                                v-model="tempName"
+                                @enter="handleChangeGroupName(group)"
+                                @blur="handleChangeBlur(group.id)"
+                                v-bkloading="{ isLoading: isAddLoading }"
+                                size="small"
+                                :ref="group.id"
+                                class="change-group-name"
+                            ></bk-input>
+                            <h3 :class="[{ select: selectGroup === group.id }, 'group-item']" @click.self="expandGroup(group)" v-else>
+                                <i class="bk-drag-icon bk-drag-grag-fill hover-show" @click.self="expandGroup(group)"></i>
+                                <i class="bk-drag-icon bk-drag-angle-up-fill fold-icon" v-if="openGroupIds.includes(group.id)" @click.self="expandGroup(group)"></i>
+                                <i class="bk-drag-icon bk-drag-angle-right-fill fold-icon" v-else @click.self="expandGroup(group)"></i>
+                                <i class="bk-drag-icon bk-drag-folder-fill" @click.self="expandGroup(group)"></i>
+                                <span class="item-name" @click.self="expandGroup(group)" :title="group.groupName">{{ group.groupName }}</span>
+                                <bk-popconfirm trigger="click" ext-cls="label-pop" confirm-text="" cancel-text="" class="mr7" placement="bottom-start" :on-hide="() => (selectGroup = '')">
+                                    <div slot="content">
+                                        <ul class="more-list">
+                                            <li class="list-item" @click="changeGroupName(group)">重命名</li>
+                                            <li class="disable list-item" v-if="group.functionList.length" v-bk-tooltips="{ content: '该分类下有函数，不能删除', placements: ['bottom'] }">删除</li>
+                                            <li class="list-item" @click.stop="deleteItem(group.id, `删除分类（${group.groupName}）`, true)" v-else>删除</li>
+                                        </ul>
+                                    </div>
+                                    <i class="bk-drag-icon bk-drag-more-dot item-tool hover-show" @click="selectGroup = group.id"></i>
+                                </bk-popconfirm>
+                                <i class="bk-drag-icon bk-drag-add-line item-tool hover-show" @click.stop="handleAddFunc(group)" v-bk-tooltips="{ content: '添加函数', placements: ['top'] }"></i>
+                                <span class="item-num" @click.self="expandGroup(group)">{{ (group.functionList || []).length }}</span>
+                            </h3>
+                            <ul v-if="openGroupIds.includes(group.id)">
+                                <li v-for="func in group.functionList" :key="func.id" :class="['func-item', { select: func.id === chooseId }]" @click="chooseFunction(func)">
+                                    <span class="func-name" :title="func.funcName">{{ func.funcName }}</span>
+                                    <i class="bk-drag-icon bk-drag-close-line item-tool hover-show" @click.stop="deleteItem(func.id, `删除函数【${func.funcName}】后，引用该函数的页面将受影响`, false)"></i>
+                                </li>
+                            </ul>
+                        </li>
+                    </vue-draggable>
+                </section>
+
+                <main class="func-main">
+                    <func-form class="func-form" size="small" :func-data="curFunc" ref="func" @formChange="formChanged = true"></func-form>
+
+                    <footer class="main-footer">
+                        <bk-button theme="primary" @click="saveFunc" :loading="isSaving" :disabled="!formChanged">保存</bk-button>
+                    </footer>
+                </main>
+
+                <bk-dialog v-model="delObj.show"
+                    render-directive="if"
+                    theme="primary"
+                    ext-cls="delete-dialog-wrapper"
+                    title="确定删除？"
+                    width="400"
+                    footer-position="center"
+                    :mask-close="false"
+                    :auto-close="false"
+                >
+                    <p class="delete-content">{{ delObj.name }}</p>
+                    <div class="dialog-footer" slot="footer">
+                        <bk-button
+                            theme="danger"
+                            :loading="delObj.loading"
+                            @click="requestDelete">删除</bk-button>
+                        <bk-button @click="delObj.show = false" :disabled="delObj.loading">取消</bk-button>
                     </div>
-                    <div slot="content">
-                        <ul @contextmenu.prevent="" class="group-children" v-if="funGroup.children && funGroup.children.length">
-                            <li v-for="fun in funGroup.children"
-                                :key="fun.name"
-                                :title="fun.name"
-                                :class="[{ 'active': selectMethod.id === fun.id }, 'group-item']"
-                                @click="chooseMethod(fun)"
-                                @mousedown="showAddMethod(funGroup, fun)"
-                            >
-                                {{ fun.name }}
-                            </li>
-                        </ul>
-                        <span v-else class="group-item method-empty">暂无函数</span>
-                    </div>
-                </bk-collapse-item>
-                <bk-icon @click="addGroup" class="add-fold" type="folder-plus" />
-            </bk-collapse>
+                </bk-dialog>
 
-            <section class="method-item">
-                <ul class="method-head" ref="method-head">
-                    <li class="head-item" v-if="selectMethod.id">
-                        <span class="head-title">函数名:</span>
-                        <span class="head-item-name" v-if="selectMethod.funName">{{ selectMethod.funName }}</span>
-                        <span class="head-item-click" @click="changeFunName">修改</span>
-                    </li>
-                    <li class="head-item" v-if="selectMethod.id">
-                        <span class="head-title">参数:</span>
-                        <span class="head-item-param" v-for="param in selectMethod.funParam" :key="param">
-                            {{ param }}<bk-icon type="close" @click="deleteFunParam(param)" />
-                        </span>
-                        <span class="head-item-click" @click="addFunParam">新增</span>
-                    </li>
-                </ul>
-                <section ref="monaco" class="method-body" :style="`height: ${height}`"></section>
-            </section>
-
-            <ul class="method-menu" @contextmenu.prevent="" v-bk-clickoutside="closeAddMethods" v-if="isShowAddMethods" :style="`left: ${addLeft}px; top: ${addTop}px`">
-                <li class="add-item" @click="addGroup" v-if="!currentMethod.child">添加文件夹</li>
-                <li class="add-item" @click="addMethod" v-if="!currentMethod.child">添加函数</li>
-                <li class="add-item" @click="deleteMethod">删除</li>
-            </ul>
-
-            <bk-dialog v-model="isShowName" :title="dialogTitle" header-position="left" :confirm-fn="confirmAddMethod" @cancel="methodName = ''">
-                <bk-input v-model="methodName" :placeholder="dialogPlaceHolder"></bk-input>
-            </bk-dialog>
-        </main>
-    </bk-dialog>
+                <section class="icon-style">
+                    <span v-if="!isFull">
+                        <i class="bk-drag-icon bk-drag-code-full-screen" @click="openFullScreen"></i>
+                        <i class="bk-drag-icon bk-drag-close-line" @click="closeFunction"></i>
+                    </span>
+                    <span v-else @click="exitFullScreen" class="un-full-screen" style="right: 20px;">
+                        <i class="bk-drag-icon bk-drag-un-full-screen"></i>
+                        <span>退出全屏</span>
+                    </span>
+                </section>
+            </layout>
+        </article>
+    </transition>
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex'
-    import { uuid } from '@/common/util.js'
-    // import * as monaco from 'monaco-editor'
-    import { bkIcon } from 'bk-magic-vue'
+    import { mapActions, mapGetters } from 'vuex'
+    import layout from '@/views/system/component-manage/all/components/layout'
+    import funcForm from '@/components/methods/funcForm'
 
     export default {
         components: {
-            bkIcon
+            layout,
+            funcForm
         },
 
         props: {
-            isShow: {
-                type: Boolean
-            }
+            show: Boolean
         },
 
         data () {
             return {
-                activeName: '',
-                monacoInstance: {},
-                isShowAddMethods: false,
-                addLeft: 0,
-                addTop: 0,
-                isShowName: false,
-                currentFunctionGroup: {},
-                currentMethod: {},
-                methodName: '',
-                dialogTitle: '',
-                dialogPlaceHolder: '',
-                selectMethod: {},
-                height: '100%'
+                initWidth: document.documentElement.offsetWidth * 260 / 1920,
+                groupNameErrMessage: '',
+                groupNameStr: '',
+                searchFunctionStr: '',
+                chooseId: '',
+                selectGroup: '',
+                isAddLoading: false,
+                isLoadingGroup: false,
+                isSaving: false,
+                tempName: '',
+                isFull: false,
+                formChanged: false,
+                loadingGroupIds: [],
+                openGroupIds: [],
+                changeGroupIds: [],
+                delObj: {
+                    id: '',
+                    isDeleteGroup: false,
+                    loading: false,
+                    show: false,
+                    name: ''
+                }
             }
         },
 
         computed: {
-            ...mapGetters('drag', ['functionGroup'])
+            ...mapGetters('functions', ['funcGroups']),
+
+            groupList: {
+                get () {
+                    const funcReg = new RegExp(this.searchFunctionStr)
+                    const groupCopy = JSON.parse(JSON.stringify(this.funcGroups))
+                    groupCopy.forEach((group) => (group.functionList = group.functionList.filter(x => funcReg.test(x.funcName))))
+                    return groupCopy
+                },
+                set (list) {
+                    let order = 0
+                    list.forEach((group) => {
+                        group.order = order
+                        order++
+                    })
+                    this.editGroups(list)
+                }
+            },
+
+            curGroup () {
+                return this.funcGroups.find((group) => {
+                    return (group.functionList || []).findIndex((func) => (func.id === this.chooseId)) > -1
+                }) || {}
+            },
+
+            curFunc () {
+                return (this.curGroup.functionList || []).find(x => x.id === this.chooseId) || {}
+            }
         },
 
         watch: {
-            isShow (val) {
-                if (!val) return
-
-                this.currentFunctionGroup = JSON.parse(JSON.stringify(this.functionGroup))
-                setTimeout(() => {
-                    this.monacoInstance = monaco.editor.create(this.$refs.monaco, {
-                        value: '',
-                        language: 'javascript',
-                        fontSize: 14,
-                        fontFamily: 'Consolas',
-                        cursorBlinking: 'solid',
-                        theme: 'vs-dark',
-                        automaticLayout: true
-                    })
-                    const firstGroup = this.currentFunctionGroup[0] || {}
-                    const firstMethod = firstGroup.children[0] || {}
-                    this.activeName = firstGroup.name
-                    this.chooseMethod(firstMethod)
-                }, 0)
+            show (val) {
+                if (val) {
+                    this.initData()
+                    window.addEventListener('resize', this.handleFullScreen)
+                } else {
+                    window.removeEventListener('resize', this.handleFullScreen)
+                }
             }
         },
 
         methods: {
-            ...mapMutations('drag', ['setFunctionGroup']),
+            ...mapActions('functions', [
+                'getAllGroupFuncs',
+                'addFunc',
+                'editFunc',
+                'deleteGroup',
+                'deleteFunc',
+                'editGroups',
+                'addGroup'
+            ]),
 
-            confirmAddMethod () {},
-
-            changeFunName () {
-                this.isShowName = true
-                this.methodName = this.selectMethod.funName
-                this.dialogTitle = '修改函数名称'
-                this.dialogPlaceHolder = '请输入函数名称，由大小写英文字母、下划线和数字组成'
-                this.confirmAddMethod = () => {
-                    const currentName = this.methodName.trim()
-                    if (currentName === '') {
-                        this.$bkMessage({ message: '函数名不能为空', theme: 'error', limit: 1 })
-                        return
-                    }
-
-                    if (/[^a-zA-Z0-9_]/g.test(currentName)) {
-                        this.$bkMessage({ message: '函数名称只能由大小写英文字母、下划线和数字组成', theme: 'error', limit: 1 })
-                        // this.methodName = ''
-                        return
-                    }
-
-                    let repeatIndex = this.currentFunctionGroup.findIndex((group) => {
-                        const currentChildren = group.children
-                        return currentChildren.findIndex(x => x.funName === currentName && x.id !== this.selectMethod.id) > -1
-                    })
-
-                    while (repeatIndex > -1) {
-                        this.methodName = `${this.methodName}_copy`
-                        repeatIndex = this.currentFunctionGroup.findIndex((group) => {
-                            const currentChildren = group.children
-                            return currentChildren.findIndex(x => x.funName === this.methodName && x.id !== this.selectMethod.id) > -1
-                        })
-                    }
-
-                    this.selectMethod.name = this.methodName
-                    this.selectMethod.funName = this.methodName
-                    this.isShowName = false
-                }
+            initData () {
+                this.isLoadingGroup = true
+                const projectId = this.$route.params.projectId
+                this.getAllGroupFuncs(projectId).then(() => {
+                    const firstGroup = this.funcGroups[0] || {}
+                    this.openGroupIds.push(firstGroup.id)
+                    const funcList = firstGroup.functionList || []
+                    const firFunc = funcList[0] || {}
+                    this.chooseId = firFunc.id
+                }).catch((err) => {
+                    this.$bkMessage({ theme: 'error', message: err.message || err })
+                }).finally(() => {
+                    this.isLoadingGroup = false
+                })
             },
 
-            addFunParam () {
-                this.isShowName = true
-                this.dialogTitle = '新增参数'
-                this.dialogPlaceHolder = '请输入参数名称，可以是大小写英文字母、下划线和数字'
-                this.confirmAddMethod = () => {
-                    if (this.methodName.trim() === '') {
-                        this.$bkMessage({ message: '参数名不能为空', theme: 'error', limit: 1 })
-                        return
-                    }
-                    if (/[^a-zA-Z0-9_]/g.test(this.methodName)) {
-                        this.$bkMessage({ message: '参数名称只能由大小写英文字母、下划线和数字组成', theme: 'error', limit: 1 })
-                        // this.methodName = ''
-                        return
-                    }
-                    let methodName = this.methodName
-                    let repeatIndex = this.selectMethod.funParam.findIndex((fun) => (fun === methodName))
-                    while (repeatIndex > -1) {
-                        methodName = `${methodName}_copy`
-                        repeatIndex = this.selectMethod.funParam.findIndex((fun) => (fun === methodName))
-                    }
-
-                    this.selectMethod.funParam.push(methodName)
-                    this.methodName = ''
-                    this.updateLayout()
-                    this.isShowName = false
-                }
-            },
-
-            deleteFunParam (param) {
+            chooseFunction (func) {
                 const confirmFn = () => {
-                    const index = this.selectMethod.funParam.findIndex(x => x === param)
-                    this.selectMethod.funParam.splice(index, 1)
-                    this.updateLayout()
-                }
-
-                this.$bkInfo({
-                    title: '确认删除该参数？',
-                    confirmFn
-                })
-            },
-
-            saveMethods () {
-                const me = this
-                me.$bkInfo({
-                    title: '确认保存？',
-                    confirmFn: () => {
-                        me.saveCurrentMethod()
-                        me.setFunctionGroup(me.currentFunctionGroup)
-                        me.$emit('update:isShow', false)
-                        me.activeName = ''
-                        me.selectMethod = {}
-                    }
-                })
-            },
-
-            saveCurrentMethod () {
-                if (!this.selectMethod.id) return
-
-                this.selectMethod.funBody = this.monacoInstance.getValue()
-                this.selectMethod.code = `function ${this.selectMethod.funName} (${this.selectMethod.funParam}) {${this.selectMethod.funBody}}`.replace('// 这里直接写函数体内容，具体请参考系统方法，这里的this指向VUE组件实例\r\n', '')
-            },
-
-            cancelMethod () {
-                this.$emit('update:isShow', false)
-                this.activeName = ''
-                this.selectMethod = {}
-            },
-
-            closeAddMethods () {
-                this.isShowAddMethods = false
-            },
-
-            chooseMethod (method) {
-                this.saveCurrentMethod()
-                this.monacoInstance.setValue(method.funBody)
-                this.selectMethod = method
-                this.updateLayout()
-            },
-
-            updateLayout () {
-                this.$nextTick().then(() => {
-                    const headRef = this.$refs['method-head']
-                    this.height = `calc(100% - ${headRef.offsetHeight}px)`
-                    this.monacoInstance.layout()
-                    this.focusEditor()
-                })
-            },
-
-            showAddMethod (parent, child) {
-                if (event.button !== 2) return
-                this.addLeft = event.pageX - 3
-                this.addTop = event.pageY - 3
-                this.isShowAddMethods = true
-                this.currentMethod = { parent, child }
-            },
-
-            addGroup () {
-                this.isShowName = true
-                this.dialogTitle = '新增文件夹'
-                this.dialogPlaceHolder = '请输入文件夹名称'
-                this.isShowAddMethods = false
-                this.confirmAddMethod = () => {
-                    this.methodName = this.methodName.trim()
-                    if (this.methodName === '') {
-                        this.$bkMessage({ message: '文件夹名不能为空', theme: 'error', limit: 1 })
-                        return
-                    }
-                    const id = uuid()
-                    const currentGroup = this.currentMethod.parent ? this.currentMethod.parent : this.currentFunctionGroup[this.currentFunctionGroup.length - 1]
-                    let repeatIndex = this.currentFunctionGroup.findIndex(x => x.name === this.methodName)
-                    while (repeatIndex > -1) {
-                        this.methodName = `${this.methodName}_copy`
-                        repeatIndex = this.currentFunctionGroup.findIndex(x => x.name === this.methodName)
-                    }
-                    const index = this.currentFunctionGroup.findIndex((x) => (x.id === currentGroup.id))
-                    this.currentFunctionGroup.splice(index + 1, 0, { name: this.methodName, id, children: [] })
-                    this.saveCurrentMethod()
-                    this.currentMethod = {}
-                    this.methodName = ''
-                    this.isShowName = false
-                }
-            },
-
-            addMethod (event, index) {
-                this.isShowName = true
-                this.isShowAddMethods = false
-                this.dialogTitle = '新增函数'
-                this.dialogPlaceHolder = '请输入函数名称，由大小写英文字母、下划线和数字组成'
-                this.confirmAddMethod = () => {
-                    this.methodName = this.methodName.trim()
-                    if (this.methodName === '') {
-                        this.$bkMessage({ message: '函数名称不能为空', theme: 'error', limit: 1 })
-                        return
-                    }
-                    if (/[^a-zA-Z0-9_]/g.test(this.methodName)) {
-                        this.$bkMessage({ message: '函数名称只能由大小写英文字母、下划线和数字组成', theme: 'error', limit: 1 })
-                        // this.methodName = ''
-                        return
-                    }
-                    this.saveCurrentMethod()
-                    const id = uuid()
-
-                    let repeatIndex = this.currentFunctionGroup.findIndex((group) => {
-                        const currentChildren = group.children
-                        return currentChildren.findIndex(x => x.funName === this.methodName) > -1
+                    this.saveFunc().then(() => {
+                        this.chooseId = func.id
                     })
-
-                    while (repeatIndex > -1) {
-                        this.methodName = `${this.methodName}_copy`
-                        repeatIndex = this.currentFunctionGroup.findIndex((group) => {
-                            const currentChildren = group.children
-                            return currentChildren.findIndex(x => x.funName === this.methodName) > -1
-                        })
-                    }
-                    const newMethod = {
-                        id,
-                        funParam: [],
-                        funName: this.methodName,
-                        funBody: '// 这里直接写函数体内容，具体请参考系统方法，这里的this指向VUE组件实例\r\n',
-                        name: this.methodName,
-                        code: ''
-                    }
-                    const currentGroup = index === undefined ? this.currentMethod.parent : this.currentFunctionGroup[index]
-                    currentGroup.children.push(newMethod)
-
-                    if (Array.isArray(this.activeName)) {
-                        const activeIndex = this.activeName.findIndex(x => x === currentGroup.name)
-                        if (activeIndex < 0) this.activeName.push(currentGroup.name)
-                    } else {
-                        this.activeName = this.activeName ? currentGroup.name : [this.activeName, currentGroup.name]
-                    }
-                    this.monacoInstance.setValue(newMethod.funBody)
-                    this.updateLayout()
-                    this.currentMethod = {}
-                    this.selectMethod = newMethod
-                    this.methodName = ''
-                    this.isShowName = false
+                }
+                const cancelFn = () => {
+                    this.chooseId = func.id
+                    this.formChanged = false
+                }
+                if (this.formChanged) {
+                    this.$bkInfo({
+                        title: '确认切换',
+                        subTitle: '不保存则会丢失当前数据',
+                        okText: '保存并切换',
+                        cancelText: '不保存',
+                        closeIcon: false,
+                        confirmFn,
+                        cancelFn
+                    })
+                } else {
+                    cancelFn()
                 }
             },
 
-            focusEditor () {
-                const editorModel = this.monacoInstance.getModel()
-                const line = editorModel.getLineCount()
-                const lastStr = editorModel.getLineContent(line)
-                const lastStrLength = lastStr.length + 1
-                this.monacoInstance.setSelection(new monaco.Selection(line, lastStrLength, line, lastStrLength))
-                this.monacoInstance.focus()
-            },
-
-            deleteMethod () {
-                if (this.currentMethod.parent.id === 'system') {
-                    this.$bkMessage({ theme: 'error', message: '系统方法，不能删除', limit: 1 })
-                    return
-                }
-
+            closeFunction () {
                 const confirmFn = () => {
-                    if (this.currentMethod.child) {
-                        const childIndex = this.currentMethod.parent.children.findIndex((x) => (x.id === this.currentMethod.child.id))
-                        this.currentMethod.parent.children.splice(childIndex, 1)
-                    } else {
-                        const parentIndex = this.currentFunctionGroup.findIndex((x) => (x.id === this.currentMethod.parent.id))
-                        this.currentFunctionGroup.splice(parentIndex, 1)
-                    }
+                    this.$emit('update:show', false)
+                    this.formChanged = false
+                }
+                if (this.formChanged) {
+                    this.$bkInfo({
+                        title: '请确认是否关闭',
+                        subTitle: '存在未保存的函数，关闭后不会保存更改',
+                        confirmFn
+                    })
+                } else {
+                    confirmFn()
+                }
+            },
+
+            handleChangeBlur (id) {
+                const index = this.changeGroupIds.findIndex(x => x === id)
+                if (index > -1) this.changeGroupIds.splice(index, 1)
+            },
+
+            handleChangeGroupName (group) {
+                this.checkGroupName(this.tempName).then(() => {
+                    this.isAddLoading = true
+                    const postData = [Object.assign({}, group, { groupName: this.tempName })]
+                    return this.editGroups(postData).then(() => {
+                        this.$bkMessage({ theme: 'success', message: '修改成功' })
+                    }).finally(() => {
+                        this.isAddLoading = false
+                    })
+                }).catch((err) => {
+                    if (this.tempName !== group.groupName) this.$bkMessage({ theme: 'error', message: err.message || err })
+                }).finally(() => {
+                    const index = this.changeGroupIds.findIndex(x => x === group.id)
+                    this.changeGroupIds.splice(index, 1)
+                })
+            },
+
+            changeGroupName (group) {
+                this.changeGroupIds.push(group.id)
+                this.tempName = group.groupName
+                this.clickEmptyArea()
+                this.$nextTick(() => {
+                    const inputRef = this.$refs[group.id][0]
+                    inputRef.focus()
+                })
+            },
+
+            handleAddFunc (group) {
+                const untitledFunc = {
+                    funcName: 'Untitled',
+                    funcGroupId: group.id,
+                    funcType: 0
+                }
+                const funcList = group.functionList || []
+                let index = funcList.findIndex(x => x.funcName === untitledFunc.funcName)
+                while (index >= 0) {
+                    if (/\d$/.test(untitledFunc.funcName)) untitledFunc.funcName = untitledFunc.funcName.replace(/\d$/, a => +a + 1)
+                    else untitledFunc.funcName = 'Untitled 1'
+                    index = funcList.findIndex(x => x.funcName === untitledFunc.funcName)
                 }
 
-                this.$bkInfo({
-                    title: '确认删除该函数？',
-                    confirmFn
+                this.addFunc({ groupId: group.id, func: untitledFunc }).then((res) => {
+                    if (!this.openGroupIds.includes(group.id)) this.openGroupIds.push(group.id)
+                    this.chooseId = res.id
+                    this.$bkMessage({ theme: 'success', message: '添加函数成功' })
+                }).catch((err) => {
+                    this.$bkMessage({ theme: 'error', message: err.message || err })
+                })
+            },
+
+            saveFunc () {
+                return this.$refs.func.validate().then((postData) => {
+                    if (!postData) return
+                    this.isSaving = true
+                    return this.editFunc({ groupId: this.curGroup.id, func: postData }).then((res) => {
+                        if (!this.openGroupIds.includes(res.funcGroupId)) this.openGroupIds.push(res.funcGroupId)
+                        this.chooseId = res.id
+                        this.formChanged = false
+                        this.$bkMessage({ theme: 'success', message: '修改函数成功' })
+                    }).catch((err) => {
+                        this.$bkMessage({ theme: 'error', message: err.message || err })
+                    }).finally(() => {
+                        this.isSaving = false
+                    })
+                })
+            },
+
+            deleteItem (id, name, isDeleteGroup) {
+                this.delObj.show = true
+                this.delObj.id = id
+                this.delObj.name = name
+                this.delObj.isDeleteGroup = isDeleteGroup
+                this.clickEmptyArea()
+            },
+
+            requestDelete () {
+                this.delObj.loading = true
+                const projectId = this.$route.params.projectId
+                const postData = { id: this.delObj.id, projectId }
+
+                const deleteFuncGroup = () => this.deleteGroup(postData)
+                const deleteFunc = () => {
+                    const curGroup = this.funcGroups.find(group => group.functionList.find(func => func.id === this.delObj.id))
+                    const funcList = curGroup.functionList || []
+                    return this.deleteFunc({ groupId: curGroup.id, funcId: this.delObj.id }).then(() => {
+                        if (this.delObj.id === this.chooseId) {
+                            this.formChanged = false
+                            const firstGroup = this.groupList[0]
+                            const curFuncList = funcList.length ? funcList : firstGroup.functionList
+                            const firstFunc = curFuncList[0]
+                            this.chooseId = firstFunc.id
+                        }
+                    })
+                }
+
+                const curMethod = this.delObj.isDeleteGroup ? deleteFuncGroup : deleteFunc
+                curMethod().then(() => {
+                    this.$bkMessage({ theme: 'success', message: '删除成功' })
+                    this.delObj.show = false
+                }).catch((err) => {
+                    this.$bkMessage({ theme: 'error', message: err.message || err })
+                }).finally(() => {
+                    this.delObj.loading = false
+                })
+            },
+
+            expandGroup (group) {
+                const index = this.openGroupIds.findIndex(x => x === group.id)
+                if (index > -1) this.openGroupIds.splice(index, 1)
+                else this.openGroupIds.push(group.id)
+            },
+
+            clickEmptyArea () {
+                const btn = document.createElement('button')
+                document.body.appendChild(btn)
+                btn.click()
+                document.body.removeChild(btn)
+            },
+
+            addFunctionGroup () {
+                this.checkGroupName(this.groupNameStr).then(() => {
+                    this.isAddLoading = true
+                    const projectId = this.$route.params.projectId
+                    const postData = {
+                        inputStr: this.groupNameStr,
+                        projectId
+                    }
+                    this.addGroup(postData).then((res) => {
+                        this.groupNameStr = ''
+                        this.clickEmptyArea()
+                        this.$bkMessage({ theme: 'success', message: '添加成功' })
+                    }).finally(() => {
+                        this.isAddLoading = false
+                    })
+                }).catch((err) => {
+                    this.groupNameErrMessage = err.message
+                })
+            },
+
+            checkGroupName (name = '') {
+                return new Promise((resolve, reject) => {
+                    const nameList = name.split('/')
+                    const nameNum = {}
+                    let hasRepeatName = false
+                    nameList.forEach((name) => {
+                        if (nameNum[name]) hasRepeatName = true
+                        else nameNum[name] = 1
+                    })
+                    if (hasRepeatName) reject(new Error('不能创建相同名字的分类'))
+                    else if (nameList.some(x => x === '')) reject(new Error('分类名不能为空'))
+                    else if (this.groupList.find(x => nameList.includes(x.groupName))) reject(new Error('分类名重复，请修改后重试'))
+                    else resolve()
+                })
+            },
+
+            resizeLayOut (width) {
+                this.$refs.func.resize(width)
+            },
+
+            exitFullScreen () {
+                const exitMethod = document.exitFullscreen // W3C
+                if (exitMethod) {
+                    exitMethod.call(document)
+                }
+            },
+
+            openFullScreen () {
+                const element = this.$refs.methodMain.$el
+                const fullScreenMethod = element.requestFullScreen // W3C
+                    || element.webkitRequestFullScreen // FireFox
+                    || element.webkitExitFullscreen // Chrome等
+                    || element.msRequestFullscreen // IE11
+                if (fullScreenMethod) {
+                    fullScreenMethod.call(element)
+                } else {
+                    this.$bkMessage({
+                        showClose: true,
+                        message: '此浏览器不支持全屏操作，请使用chrome浏览器',
+                        type: 'warning'
+                    })
+                }
+            },
+
+            handleFullScreen () {
+                this.isFull = document.fullscreenElement
+                this.$nextTick(() => {
+                    const leftEle = document.querySelector('.func-left')
+                    const width = leftEle.offsetWidth
+                    if (this.$refs.func) this.$refs.func.resize(width)
                 })
             }
         }
@@ -397,176 +465,309 @@
 </script>
 
 <style lang="postcss" scoped>
-    .method-main {
-        /deep/ .bk-dialog-tool {
-            min-height: 20px;
-        }
-        /deep/ .bk-dialog-header {
-            padding: 3px 24px 12px;
-        }
-        /deep/ .bk-dialog-body {
-            padding: 14px;
-        }
-        /deep/ .bk-dialog {
-            position: initial;
-            /* &.ease-enter-active.ease-enter-to {
-                animation: none!important;
-            } */
-            .bk-dialog-content {
-                top: calc(50vh - 324px)!important;
-            }
-        }
-    }
-
-    .method-menu {
+    .function-home {
         position: fixed;
-        background: #252526;
-        box-shadow: #000000 1px 1px 1px 1px;
-        width: 150px;
-        padding: 7px 0;
-        line-height: 32px;
-        .add-item {
-            padding: 0 20px;
-            color: #cccccc;
-            cursor: pointer;
-            &:hover {
-                background: #094771;
-            }
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 2000;
+        .function-main {
+            position: absolute;
+            width: 67.7%;
+            height: 61.5% !important;
+            min-height: 61.5%;
+            top: 19.8%;
+            left: 16.1%;
+            border-radius: 2px;
+            box-shadow: 0px 4px 12px 0px rgba(0,0,0,0.2);
         }
     }
 
-    .method-main {
-        height: 500px;
-        display: flex;
-        .method-list {
-            font-family: Consolas;
-            flex-basis: 150px;
-            background: #252526;
-            color: #cccccc;
-            position: relative;
-            .list-name {
-                height: 30px;
-                line-height: 30px;
-                font-size: 15px;
-                font-weight: normal;
-                text-align: center;
-                margin: 0;
-                padding: 0;
-                border-bottom: 1px solid #2a2d2e;
-                border-right: 1px solid #2a2d2e;
-            }
-            .method-fold {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                span {
-                    flex: 1;
-                    max-width: 90px;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                }
-            }
-            .add-fold {
-                position: absolute;
-                bottom: 50px;
-                left: 50%;
-                transform: translateX(-50%);
-                display: block;
-                cursor: pointer;
-            }
-            /deep/ .bk-collapse-item-header{
-                height: 30px;
-                line-height: 30px;
-                .bk-icon {
-                    vertical-align: middle;
-                }
-                &:hover {
-                    color: #cccccc;
-                    background: #2a2d2e;
-                }
-            }
-            /deep/ .bk-collapse-item-content {
-                padding: 0;
-            }
-            .group-item {
-                color: #cccccc;
-                cursor: pointer;
+    .func-left {
+        height: 100%;
+        overflow: hidden;
+        background: #fff;
+        .group-list {
+            height: calc(100% - 115px);
+            margin-bottom: 10px;
+            overflow-y: auto;
+            .change-group-name {
+                margin: 5px 0;
+                padding: 0 4px;
                 height: 22px;
                 line-height: 22px;
-                padding: 0 15px 0 20px;
-                max-width: 150px;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                &:hover {
-                    background: #2a2d2e;
-                }
-                &.active {
-                    background: #37373d;
-                }
-                &.method-empty:hover {
-                    cursor: context-menu;
-                    background: #252526;
+            }
+            /deep/ .sortable-ghost {
+                border: 1px dashed #3a84ff;
+                height: 32px;
+                line-height: 32px;
+                box-sizing: border-box;
+                .group-item {
+                    height: 30px;
+                    line-height: 30px;
+                    padding: 0 8px 0 19px;
                 }
             }
         }
-        .method-item {
-            height: 100%;
+        .scroll-main::-webkit-scrollbar {
+            width: 6px;
+            height: 5px;
+        }
+        .scroll-main::-webkit-scrollbar-thumb {
+            border-radius: 20px;
+            background-color: #dcdee5;
+            -webkit-box-shadow: inset 0 0 6px hsla(0, 0%, 80%, .3);
+        }
+    }
+
+    .func-main {
+        height: 100%;
+        overflow: hidden;
+        .func-form {
+            height: calc(100% - 50px);
+        }
+        .main-footer {
+            padding: 9px 20px;
+            height: 50px;
+            background: #fafbfd;
+            border: 1px solid #dcdee5;
+        }
+    }
+
+    .left-title {
+        margin: 0;
+        padding: 0 14px 0 22px;
+        height: 57px;
+        font-weight: normal;
+        color: #63656e;
+        border-bottom: 1px solid #dcdee5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .icon-plus {
+            cursor: pointer;
+            font-size: 26px;
+            &:hover {
+                color: #3a84ff;
+            }
+        }
+    }
+
+    .func-item {
+        display: flex;
+        align-items: center;
+        padding: 0 9px 0 65px;
+        color: #63656e;
+        line-height: 32px;
+        cursor: pointer;
+        font-size: 12px;
+        .hover-show {
+            display: none;
+        }
+        .func-name {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            .method-head {
-                padding: 0 5px;
-                background: #252526;
-                color: #cccccc;
-                .head-item {
-                    line-height: 20px;
-                    margin-top: 6px;
-                    position: relative;
-                    padding-left: 60px;
-                    .head-title {
-                        position: absolute;
-                        left: 0;
-                        text-align: right;
-                        width: 60px;
-                    }
-                    &-name {
-                        display: inline-block;
-                        margin: 0 6px;
-                    }
-                    &-param {
-                        display: inline-block;
-                        margin: 0 6px;
-                        margin-bottom: 6px;
-                        border: 1px solid #fff;
-                        border-radius: 10px;
-                        padding: 2px 7px;
-                        line-height: 12px;
-                        font-size: 12px;
-                        /deep/ .icon-close {
-                            cursor: pointer;
-                            &:hover {
-                                color: #3c96ff;
-                            }
-                        }
-                    }
-                    &-click {
-                        cursor: pointer;
-                        color: #3c96ff;
-                        display: inline-block;
-                        margin-bottom: 6px;
-                        margin-left: 10px;
-                    }
-                    .head-input {
-                        margin: 0 16px;
-                        flex: 1;
-                    }
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .bk-drag-icon {
+            font-size: 12px;
+        }
+        &:hover, &.select {
+            background: #e1ecff;
+            color: #3a84ff;
+            .hover-show {
+                display: block;
+            }
+        }
+    }
+
+    .item-tool {
+        height: 22px;
+        width: 22px;
+        line-height: 22px;
+        text-align: center;
+        font-size: 16px;
+        display: inline-block;
+        cursor: pointer;
+        &:hover {
+            border-radius: 100px;
+            background: #fafbfd;
+        }
+    }
+
+    .group-item {
+        height: 32px;
+        display: flex;
+        align-items: center;
+        padding: 0 9px 0 20px;
+        margin: 0;
+        font-weight: normal;
+        font-size: 12px;
+        cursor: pointer;
+        position: relative;
+        .item-num {
+            margin-left: 10px;
+            height: 20px;
+            border-radius: 2px;
+            background: #f0f1f5;
+            color: #979ba5;
+            font-size: 12px;
+            line-height: 20px;
+            padding: 0 6px;
+            position: absolute;
+            right: 9px;
+            top: 6px;
+        }
+        i.hover-show {
+            display: none;
+        }
+        .mr7 {
+            margin-right: 7px;
+        }
+        .item-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        &:hover, &.select {
+            background: #e1ecff;
+            color: #3a84ff;
+            padding-left: 4px;
+            .bk-drag-icon {
+                color: #3a84ff;
+            }
+            .hover-show {
+                display: block;
+            }
+            .item-num {
+                background: #a2c5fd;
+                color: #ffffff;
+            }
+        }
+        .bk-drag-icon {
+            color: #c4c6cc;
+            font-size: 12px;
+            &.bk-drag-grag-fill {
+                color: #c4c6cc;
+                margin-right: 4px;
+            }
+            &.bk-drag-folder-fill {
+                margin: 0 12px 0 8px;
+                font-size: 14px;
+            }
+            &.bk-drag-add-line {
+                margin-right: 36px;
+            }
+        }
+        .fold-icon {
+            font-size: 10px;
+        }
+    }
+
+    /deep/ .more-list {
+        padding: 5px 0;
+        width: 77px;
+        .list-item {
+            margin: 0;
+            padding: 0 11px;
+            line-height: 32px;
+            &:hover {
+                background: #e1ecff;
+                color: #3a84ff;
+                cursor: pointer;
+            }
+            &.disable {
+                cursor: not-allowed;
+                color: rgb(196, 198, 204);
+                background: rgb(255, 255, 255);
+            }
+        }
+    }
+
+    .left-input {
+        width: calc(100% - 12px);
+        margin: 9px 6px 7px;
+    }
+
+    .add-function-group {
+        width: 340px;
+        margin-top: 6px;
+    }
+
+    .input-error {
+        /deep/ input {
+            border-color: #ff5656;
+            color: #ff5656;
+        }
+    }
+
+    .input-err-message {
+        margin: 5px 0 -7px 0;
+        padding: 0;
+        color: #ff5656;
+    }
+
+    /deep/ .delete-dialog-wrapper {
+        .delete-content {
+            text-align: center;
+            font-size: 14px;
+            color: #63656e;
+        }
+        .bk-dialog-footer {
+            text-align: center;
+            padding: 0 65px 30px;
+            background-color: #fff;
+            border: none;
+            border-radius: 0;
+        }
+        .dialog-footer {
+            button {
+                width: 86px;
+                &:first-child {
+                    margin-right: 10px;
                 }
             }
-            .method-body {
-                flex: 1;
+        }
+    }
+    .icon-style {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        z-index: 1;
+        color: #C4C6CC;
+        cursor: pointer;
+        .bk-drag-icon {
+            width: 16px;
+            height: 16px;
+            color: #979ba5;
+            display: inline-block;
+        }
+        .un-full-screen {
+            width: 108px;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            opacity: 0.7;
+            background: #000000;
+            border-radius: 2px;
+            padding: 3px 6px;
+            &:hover {
+                opacity: 0.9;
             }
+        }
+    }
+</style>
+<style lang="postcss">
+    .label-pop {
+        .tippy-tooltip, .bk-popconfirm-content {
+            padding: 0;
+        }
+        .popconfirm-content {
+            margin: 0;
         }
     }
 </style>

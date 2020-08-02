@@ -4,11 +4,11 @@
             <div class="side-hd">
                 <i class="back-icon bk-drag-icon bk-drag-arrow-back" title="返回项目列表" @click="toProjects"></i>
                 <span class="seperate-line">|</span>
-                <bk-select ext-cls="select-project" v-model="projectId" :clearable="false">
+                <bk-select ext-cls="select-project" v-model="projectId" :clearable="false" @selected="changeProject">
                     <bk-option v-for="option in projectList"
                         :key="option.id"
                         :id="option.id"
-                        :name="option.name">
+                        :name="option.projectName">
                     </bk-option>
                 </bk-select>
             </div>
@@ -38,24 +38,20 @@
                     {
                         title: '页面列表',
                         icon: 'list-fill',
-                        toPath: 'page'
+                        toPath: 'pages'
                     },
                     {
-                        title: '成员管理',
-                        icon: 'user-group',
-                        toPath: 'member'
+                        title: '函数库',
+                        icon: 'function-fill',
+                        toPath: 'functionManage'
                     }
+                    // {
+                    //     title: '成员管理',
+                    //     icon: 'user-group',
+                    //     toPath: 'member'
+                    // }
                 ],
-                projectList: [
-                    {
-                        id: 'test',
-                        name: 'lesscode-test'
-                    },
-                    {
-                        id: 'test1',
-                        name: '测试项目'
-                    }
-                ]
+                projectList: []
             }
         },
         computed: {
@@ -64,12 +60,30 @@
             }
         },
         created () {
-            this.projectId = this.$route.params.projectId
+            this.projectId = parseInt(this.$route.params.projectId)
+            this.getProjectList()
         },
         methods: {
             toProjects () {
                 this.$router.push({
                     name: 'projects'
+                })
+            },
+            async getProjectList () {
+                try {
+                    const { projectList } = await this.$store.dispatch('project/query', { config: {} })
+                    this.projectList = projectList
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    this.pageLoading = false
+                }
+            },
+            changeProject (id) {
+                this.$router.replace({
+                    params: {
+                        projectId: id
+                    }
                 })
             }
         }

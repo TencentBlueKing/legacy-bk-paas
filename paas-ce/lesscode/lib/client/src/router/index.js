@@ -22,6 +22,7 @@ const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system'
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
 const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/system/component-manage')
+const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/project/function-manage')
 
 const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
@@ -41,23 +42,6 @@ const Changelog = () => import(/* webpackChunkName: 'start' */'@/views/changelog
 
 const routes = [
     {
-        path: `/${APP_CODE}`,
-        component: MainEntry,
-        alias: '',
-        children: [
-            {
-                path: '',
-                name: 'new',
-                component: Index
-            },
-            {
-                path: 'preview',
-                name: 'preview',
-                component: Preview
-            }
-        ]
-    },
-    {
         path: '/help',
         component: MainHelpEntry,
         children: [
@@ -69,7 +53,7 @@ const routes = [
         ]
     },
     {
-        path: '/system',
+        path: '/',
         component: SystemEntry,
         redirect: { name: 'projects' },
         children: [
@@ -108,9 +92,17 @@ const routes = [
                 redirect: { name: 'pageList' }
             },
             {
-                path: 'page',
+                path: 'pages',
                 name: 'pageList',
                 component: Page
+            },
+            {
+                path: 'functionManage',
+                name: 'functionManage',
+                component: FunctionManage,
+                meta: {
+                    title: '函数库'
+                }
             },
             {
                 path: 'member',
@@ -118,7 +110,23 @@ const routes = [
                 component: Member
             }
         ]
-
+    },
+    {
+        path: `/project/:projectId/page/:pageId`,
+        component: MainEntry,
+        alias: '',
+        children: [
+            {
+                path: '',
+                name: 'new',
+                component: Index
+            },
+            {
+                path: 'preview',
+                name: 'preview',
+                component: Preview
+            }
+        ]
     },
     {
         path: '*',

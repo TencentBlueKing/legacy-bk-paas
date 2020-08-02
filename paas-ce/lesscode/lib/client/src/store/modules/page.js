@@ -14,54 +14,49 @@ import http from '@/api'
 export default {
     namespaced: true,
     state: {
-        currentProject: {}
     },
     mutations: {
-        setCurrentProject (state, project) {
-            state.currentProject = Object.assign({}, project)
-        }
     },
     getters: {
-        getCurrentProject: state => state.currentProject
     },
     actions: {
-        create ({ commit }, { data, config }) {
-            return http.post('/project/create', data, config).then(response => {
+        create ({ commit }, { data = {} }) {
+            return http.post('/page/create', data).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        query ({ commit }, { config }) {
-            return http.get('/project/query', config).then(response => {
+        getList ({ commit }, { projectId }) {
+            return http.get(`/page/getList?projectId=${projectId}`).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        update ({ commit }, { data, config }) {
-            return http.put('/project/update', data, config).then(response => {
+        update ({ commit }, { data = {} }) {
+            return http.put('/page/update', data).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        delete ({ commit }, { config }) {
-            return http.delete('/project/delete', config).then(response => {
+        copy ({ commit }, { data = {} }) {
+            return http.post('/page/copy', data).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        favorite ({ commit }, { data, config }) {
-            return http.post('/project/favorite', data, config).then(response => {
+        delete ({ commit }, { pageId }) {
+            return http.delete(`/page/delete?pageId=${pageId}`).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        checkname ({ commit }, { data, config }) {
-            return http.post('/project/checkname', data, config).then(response => {
-                return response
+        checkName ({ commit }, { data = {} }) {
+            return http.post('/page/checkName', data).then(response => {
+                return response.data || ''
             })
         },
-        detail ({ commit }, { projectId }) {
-            return http.get(`/project/detail?projectId=${projectId}`).then(response => {
+        detail ({ commit }, { pageId }) {
+            return http.get(`/page/detail?pageId=${pageId}`).then(response => {
                 const data = response.data || ''
                 return data
             })

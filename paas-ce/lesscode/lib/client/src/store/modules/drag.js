@@ -35,8 +35,6 @@ export default {
             }
         },
 
-        functionGroup: [],
-
         copyData: {},
 
         targetHistory: [],
@@ -49,10 +47,6 @@ export default {
     mutations: {
         setCopyData (state, selectedComponent) {
             state.copyData = selectedComponent
-        },
-        setFunctionGroup (state, functionGroup) {
-            localStorage.setItem('functionGroup', JSON.stringify(functionGroup))
-            state.functionGroup = functionGroup
         },
         setDraggableSourceGroup (state, group) {
             state.draggableSourceGroup = Object.assign({}, group)
@@ -154,72 +148,7 @@ export default {
         copyData: state => state.copyData,
         astData: state => state.astData,
         curSelectedComponentData: state => state.curSelectedComponentData,
-        pageData: state => state.pageData,
-        functionGroup (state) {
-            if (state.functionGroup && state.functionGroup.length) {
-                return state.functionGroup
-            } else {
-                const res = JSON.parse(localStorage.getItem('functionGroup'))
-                        || [{
-                            name: '系统方法',
-                            id: 'system',
-                            children: [
-                                {
-                                    name: 'getMockData',
-                                    id: 'getMockData',
-                                    funName: 'getMockData',
-                                    funParam: [],
-                                    funBody: [
-                                        'this.$http.get("/test/getMockData")',
-                                        '.then((res) => {',
-                                        '\tconst data = JSON.stringify(res)',
-                                        '\talert(data)',
-                                        '})'
-                                    ].join('\n'),
-                                    code: [
-                                        'function getMockData (res) {',
-                                        '\tthis.$http.get("/test/getMockData")',
-                                        '\t.then((res) => {',
-                                        '\t\treturn res.data',
-                                        '\t})',
-                                        '}'
-                                    ].join('\n')
-                                },
-                                {
-                                    name: 'clearData',
-                                    id: 'clearData',
-                                    funName: 'clearData',
-                                    funParam: ['res'],
-                                    funBody: [
-                                        'return res.data'
-                                    ].join('\n'),
-                                    code: [
-                                        'function clearData (res) {',
-                                        '\treturn res.data',
-                                        '}'
-                                    ].join('\n')
-                                }
-                            ]
-                        }]
-                state.functionGroup = res
-                return res
-            }
-        },
-        getMethodById: (state) => (methodId) => {
-            let returnMethod = {
-                id: '',
-                funName: '',
-                code: 'function emptyFunc () {}'
-            }
-            state.functionGroup.forEach((group) => {
-                const funChildren = group.children || []
-                const method = funChildren.find(x => x.id === methodId)
-                if (method) {
-                    returnMethod = method
-                }
-            })
-            return returnMethod
-        }
+        pageData: state => state.pageData
     },
     actions: {
 

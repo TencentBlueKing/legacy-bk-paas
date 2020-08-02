@@ -16,6 +16,8 @@ import ProjectComp from './entities/project-comp'
 import ProjectFuncGroup from './entities/project-func-group'
 import ProjectPage from './entities/project-page'
 import ProjectFavourite from './entities/project-favourite'
+import FuncGroup from './entities/func-group'
+import Func from './entities/func'
 
 const projectSelectFields = [
     'project.id',
@@ -25,6 +27,27 @@ const projectSelectFields = [
     'project.status',
     'project.createTime',
     'project.createUser'
+]
+
+const defaultGroup = {
+    groupName: '默认分类'
+}
+const defaultFunc = [
+    {
+        funcName: 'getMockData',
+        funcBody: 'this.$http.get(\"/data/getMockData\").then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n})',
+        funcSummary: '获取mock数据',
+        funcType: 0
+    },
+    {
+        funcName: 'getApiData',
+        funcParams: 'res',
+        funcBody: 'const data = res.data || []\r\nreturn data',
+        funcSummary: '远程函数，获取数据',
+        funcType: 1,
+        funcMethod: 'get',
+        funcApiUrl: 'api/data/getMockData',
+    }
 ]
 
 export default {
@@ -72,6 +95,14 @@ export default {
                     await transactionalEntityManager.save(projectFuncGroupValues),
                     await transactionalEntityManager.save(projectPageValues)
                 ])
+            } else {
+                const funcGroup = getRepository(FuncGroup).create(defaultGroup)
+                const { id: funcGroupId } = await transactionalEntityManager.save(funcGroup)
+                defaultFunc.forEach((func) => (func.funcGroupId = funcGroupId))
+                const funcs = getRepository(Func).create(defaultFunc)
+                await transactionalEntityManager.save(funcs)
+                const projectFuncGroup = getRepository(ProjectFuncGroup).create({ projectId, funcGroupId })
+                await transactionalEntityManager.save(projectFuncGroup)
             }
 
             return { projectId }
@@ -84,6 +115,11 @@ export default {
 
     findOneProjectByCode (projectCode) {
         return getRepository(Project).findOne({ projectCode })
+    },
+
+    findProjectDetail (params) {
+        const queryParams = Object.assign({}, params, { deleteFlag: 0 })
+        return getRepository(Project).findOne(queryParams)
     },
 
     queryAllProject ({ condition = '', params = {} }) {

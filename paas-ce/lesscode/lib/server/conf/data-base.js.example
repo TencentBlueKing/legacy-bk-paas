@@ -13,20 +13,34 @@ const path = require('path')
 // 用于配置线上和本地开发数据库
 const config = process.env.NODE_ENV === 'production'
     ? {
-        database: process.env.GCS_MYSQL_NAME,        // 线上数据库名
-        username: process.env.GCS_MYSQL_USER,        // 线上数据库用户名
-        password: process.env.GCS_MYSQL_PASSWORD,    // 线上数据库密码
-        host: process.env.GCS_MYSQL_HOST,            // 线上host
-        port: process.env.GCS_MYSQL_PORT,            // 线上端口
-        dialect: 'mysql'
+        // 线上数据库名
+        database: process.env.GCS_MYSQL_NAME,
+        // 线上数据库用户名
+        username: process.env.GCS_MYSQL_USER,
+        // 线上数据库密码
+        password: process.env.GCS_MYSQL_PASSWORD,
+        // 线上host
+        host: process.env.GCS_MYSQL_HOST,
+        // 线上端口
+        port: process.env.GCS_MYSQL_PORT,
+        dialect: 'mysql',
+        // 线上记录日志类型，默认为记录 error 日志
+        logging: ['error']
     }
     : {
-        database: 'vue_visualization',               // 本地开发数据库名
-        username: 'xxx',                             // 本地开发数据库用户名
-        password: 'xxx',                             // 本地开发数据库密码
-        host: 'localhost',                           // 本地开发host
-        port: 3306,                                  // 本地开发端口
-        dialect: 'mysql'
+        // 本地开发数据库名
+        database: 'lesscode',
+        // 本地开发数据库用户名
+        username: 'xxx',
+        // 本地开发数据库密码
+        password: 'xxx',
+        // 本地开发host
+        host: 'localhost',
+        // 本地开发端口
+        port: 3306,
+        dialect: 'mysql',
+        // 本地记录日志类型，默认为记录所有日志
+        logging: true
     }
 
 module.exports = {
@@ -37,11 +51,15 @@ module.exports = {
     password: config.password,
     database: config.database,
     entities: [path.resolve(__dirname, '..', 'model/entities/!(base){.js,.ts}')],
-    logging: true,              // 开启所有数据库信息打印
-    logger: 'advanced-console', // 高亮字体的打印信息
-    synchronize: false,         // 自动同步数据库表结构，有删除数据风险，推荐关闭
-    migrationsRun: false,       // 会自动执行更新SQL，推荐手动执行脚本，关闭该选项
+    // 启用数据库记录
+    logging: config.logging,
+    // 高亮字体的打印信息
+    logger: 'advanced-console',
+    // 自动同步数据库表结构，有删除数据风险，推荐关闭
+    synchronize: false,
+    // 会自动执行更新SQL，推荐手动执行脚本，关闭该选项
+    migrationsRun: false,
     extra: {
-        connectionLimit:  5
+        connectionLimit: 5
     }
 }

@@ -9,22 +9,27 @@
  * specific language governing permissions and limitations under the License.
  */
 
-// const { saveAsFile, formatCode, deleteTmpFile } = require('../controller/vue-code')
 const Router = require('koa-router')
 const {
-    list,
-    create,
-    update,
-    categoryDelete
-} = require('../controller/component-category-manage')
+    createPage,
+    getPageList,
+    updatePage,
+    copyPage,
+    deletePage,
+    checkName,
+    pageDetail
+} = require('../controller/page')
 
 const router = new Router({
-    prefix: '/api/componentCategoryManage'
+    prefix: '/api/Page'
 })
 
-router.get('/list', list)
-router.get('/create', create)
-router.get('/update', update)
-router.get('/delete', categoryDelete)
+router.post('/create', createPage)
+router.get('/getList', getPageList)
+router.put('/update', updatePage)
+router.post('/copy', copyPage)
+router.delete('/delete', deletePage)
+router.post('/checkName', checkName)
+router.get('/detail', pageDetail)
 
 module.exports = router

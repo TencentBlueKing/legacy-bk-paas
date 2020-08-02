@@ -14,54 +14,71 @@ import http from '@/api'
 export default {
     namespaced: true,
     state: {
-        currentProject: {}
     },
     mutations: {
-        setCurrentProject (state, project) {
-            state.currentProject = Object.assign({}, project)
-        }
     },
     getters: {
-        getCurrentProject: state => state.currentProject
     },
     actions: {
-        create ({ commit }, { data, config }) {
-            return http.post('/project/create', data, config).then(response => {
+        list (state, params = {}) {
+            return http.get('/component/list', { params }).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        query ({ commit }, { config }) {
-            return http.get('/project/query', config).then(response => {
+        useing (state, params = {}) {
+            return http.get('/component/useing', { params }).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        update ({ commit }, { data, config }) {
-            return http.put('/project/update', data, config).then(response => {
+        detail (state, params) {
+            return http.get('/component/detail', { params }).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        delete ({ commit }, { config }) {
-            return http.delete('/project/delete', config).then(response => {
+        create (state, params) {
+            return http.post('/component/create', params).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        favorite ({ commit }, { data, config }) {
-            return http.post('/project/favorite', data, config).then(response => {
+        update (state, params) {
+            return http.post('/component/update', params).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        checkname ({ commit }, { data, config }) {
-            return http.post('/project/checkname', data, config).then(response => {
-                return response
+        upload () {
+            return http.get('/component/upload').then(response => {
+                const data = response.data || ''
+                return data
             })
         },
-        detail ({ commit }, { projectId }) {
-            return http.get(`/project/detail?projectId=${projectId}`).then(response => {
+
+        categoryList (state) {
+            return http.get('/componentCategory/list').then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+
+        categoryCreate (state, params) {
+            return http.post('/componentCategory/create', params).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        categoryUpdate (state, params) {
+            return http.post('/componentCategory/update', params).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+
+        categoryDelete (stae, params) {
+            return http.delete('/componentCategory/delete', { params }).then(response => {
                 const data = response.data || ''
                 return data
             })

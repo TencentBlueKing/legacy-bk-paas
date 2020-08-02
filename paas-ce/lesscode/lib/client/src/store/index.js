@@ -15,6 +15,9 @@ import Vuex from 'vuex'
 import drag from './modules/drag'
 import vueCode from './modules/vue-code'
 import project from './modules/project'
+import components from './modules/components'
+import page from './modules/page'
+import functions from './modules/functions'
 import http from '@/api'
 import { unifyObjectStyle, json2Query } from '@/common/util'
 
@@ -25,7 +28,10 @@ const store = new Vuex.Store({
     modules: {
         drag,
         vueCode,
-        project
+        project,
+        components,
+        page,
+        functions
     },
     // 公共 store
     state: {
