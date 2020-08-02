@@ -325,7 +325,8 @@
 
             requestDelete () {
                 this.delObj.loading = true
-                const postData = { id: this.delObj.id, projectId: 1 }
+                const projectId = this.$route.params.projectId
+                const postData = { id: this.delObj.id, projectId }
 
                 const deleteFuncGroup = () => this.deleteGroup(postData).then(() => {
                     if (this.delObj.id === this.curGroupId) {
@@ -362,9 +363,10 @@
             addFunctionGroup () {
                 this.checkGroupName(this.groupNameStr).then(() => {
                     this.isAddLoading = true
+                    const projectId = this.$route.params.projectId
                     const postData = {
                         inputStr: this.groupNameStr,
-                        projectId: 1
+                        projectId
                     }
                     this.addGroup(postData).then((res) => {
                         this.groupNameStr = ''
