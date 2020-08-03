@@ -44,7 +44,7 @@ export const updatePage = async (ctx) => {
     try {
         const { pageData } = ctx.request.body
         const PageRepository = getRepository(Page)
-       
+
         const { id } = await PageRepository.save(pageData)
 
         ctx.send({
@@ -66,7 +66,7 @@ export const copyPage = async (ctx) => {
         const projectPageData = {
             projectId
         }
-        
+
         const { id: postId, pageName: postName } = pageData
         const prePage = await getRepository(Page).findOne(postId)
         const newPageData = Object.assign(prePage, { pageName: postName, id: undefined })

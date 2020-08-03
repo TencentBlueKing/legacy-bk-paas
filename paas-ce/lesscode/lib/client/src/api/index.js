@@ -163,7 +163,7 @@ function handleReject (error, config) {
         const { status, data } = error.response
         const nextError = { message: error.message, response: error.response }
         if (status === 401) {
-            bus.$emit('show-login-modal')
+            bus.$emit('redirect-login', nextError.response.data.data || {})
         } else if (data && data.message) {
             nextError.message = data.message
         } else if (status === 500) {
