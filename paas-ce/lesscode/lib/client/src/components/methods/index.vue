@@ -185,13 +185,15 @@
             }
         },
 
-        created () {
-            this.initData()
-            window.addEventListener('resize', this.handleFullScreen)
-        },
-
-        beforeDestroy () {
-            window.removeEventListener('resize', this.handleFullScreen)
+        watch: {
+            show (val) {
+                if (val) {
+                    this.initData()
+                    window.addEventListener('resize', this.handleFullScreen)
+                } else {
+                    window.removeEventListener('resize', this.handleFullScreen)
+                }
+            }
         },
 
         methods: {
@@ -344,15 +346,14 @@
 
             requestDelete () {
                 this.delObj.loading = true
-                const postData = {
-                    id: this.delObj.id,
-                    projectId: 1
-                }
+                const projectId = this.$route.params.projectId
+                const postData = { id: this.delObj.id, projectId }
 
                 const deleteFuncGroup = () => this.deleteGroup(postData)
                 const deleteFunc = () => {
-                    const funcList = this.curGroup.functionList || []
-                    return this.deleteFunc({ groupId: this.curGroup.id, funcId: this.delObj.id }).then(() => {
+                    const curGroup = this.funcGroups.find(group => group.functionList.find(func => func.id === this.delObj.id))
+                    const funcList = curGroup.functionList || []
+                    return this.deleteFunc({ groupId: curGroup.id, funcId: this.delObj.id }).then(() => {
                         if (this.delObj.id === this.chooseId) {
                             this.formChanged = false
                             const firstGroup = this.groupList[0]
@@ -390,9 +391,10 @@
             addFunctionGroup () {
                 this.checkGroupName(this.groupNameStr).then(() => {
                     this.isAddLoading = true
+                    const projectId = this.$route.params.projectId
                     const postData = {
                         inputStr: this.groupNameStr,
-                        projectId: 1
+                        projectId
                     }
                     this.addGroup(postData).then((res) => {
                         this.groupNameStr = ''
@@ -455,7 +457,7 @@
                 this.$nextTick(() => {
                     const leftEle = document.querySelector('.func-left')
                     const width = leftEle.offsetWidth
-                    this.$refs.func.resize(width)
+                    if (this.$refs.func) this.$refs.func.resize(width)
                 })
             }
         }
