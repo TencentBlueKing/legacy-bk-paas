@@ -20,17 +20,23 @@
                     :class="['func-temp', { select: form.funcType === temp.id }]"
                 >{{ temp.name }}</span>
             </bk-form-item>
-            <template v-if="form.funcType === 0">
-                <bk-form-item label="参数" key="funcParams" property="funcParams" :rules="[nameRule]" error-display-type="normal">
-                    <bk-tag-input v-model="form.funcParams"
+            <bk-form-item label="参数" key="funcParams" property="funcParams" :rules="[nameRule]" error-display-type="normal">
+                <bk-tag-input v-model="form.funcParams"
+                    placeholder="请输入参数名称，由大小写英文字母、下划线、数字组成"
+                    :list="[]"
+                    :allow-create="true"
+                    :has-delete-icon="true">
+                </bk-tag-input>
+            </bk-form-item>
+            <template v-if="form.funcType === 1">
+                <bk-form-item label="远程参数" key="funcCallBackParams" property="remoteParams" :rules="[nameRule]" error-display-type="normal">
+                    <bk-tag-input v-model="form.remoteParams"
                         placeholder="请输入参数名称，由大小写英文字母、下划线、数字组成"
                         :list="[]"
                         :allow-create="true"
                         :has-delete-icon="true">
                     </bk-tag-input>
                 </bk-form-item>
-            </template>
-            <template v-else>
                 <bk-form-item label="Api Url" :required="true" :rules="[requireRule('Api Url')]" key="funcApiUrl" property="funcApiUrl" error-display-type="normal">
                     <bk-input v-model="form.funcApiUrl"></bk-input>
                 </bk-form-item>
@@ -45,14 +51,6 @@
                 </bk-form-item>
                 <bk-form-item label="Api Data" key="funcApiData" property="funcApiData">
                     <bk-input v-model="form.funcApiData" type="textarea" :rows="3" :maxlength="100"></bk-input>
-                </bk-form-item>
-                <bk-form-item label="回调参数" key="funcCallBackParams" property="funcParams" :rules="[nameRule]" error-display-type="normal">
-                    <bk-tag-input v-model="form.funcParams"
-                        placeholder="请输入参数名称，由大小写英文字母、下划线、数字组成"
-                        :list="[]"
-                        :allow-create="true"
-                        :has-delete-icon="true">
-                    </bk-tag-input>
                 </bk-form-item>
             </template>
             <bk-form-item label="函数简介" property="funcSummary" key="funcSummary">
@@ -91,6 +89,7 @@
                     funcGroupId: undefined,
                     funcType: 0,
                     funcParams: [],
+                    remoteParams: [],
                     funcApiUrl: '',
                     funcMethod: 'get',
                     funcApiData: '',

@@ -35,13 +35,13 @@ const defaultGroup = {
 const defaultFunc = [
     {
         funcName: 'getMockData',
-        funcBody: 'this.$http.get(\"/data/getMockData\").then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n})',
+        funcBody: 'return this.$http.get(\"/data/getMockData\").then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n    return res.data\r\n})',
         funcSummary: '获取mock数据',
         funcType: 0
     },
     {
         funcName: 'getApiData',
-        funcParams: 'res',
+        remoteParams: 'res',
         funcBody: 'const data = res.data || []\r\nreturn data',
         funcSummary: '远程函数，获取数据',
         funcType: 1,
