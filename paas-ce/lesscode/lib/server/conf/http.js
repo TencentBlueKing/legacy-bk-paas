@@ -12,9 +12,17 @@
 module.exports = process.env.NODE_ENV === 'production'
     ? {
         port: 5000,
-        protocol: 'http'
+        protocol: 'http',
+        // 企业版/社区版 url 地址
+        hostUrl: '',
+        // lesscode 访问地址
+        lesscodeUrl: 'http://xxx.com'
     }
     : {
         port: 5000,
-        protocol: 'http'
+        protocol: 'http',
+        // 企业版/社区版 url 地址
+        hostUrl: '',
+        // lesscode 访问地址
+        lesscodeUrl: 'http://xxx.com'
     }
