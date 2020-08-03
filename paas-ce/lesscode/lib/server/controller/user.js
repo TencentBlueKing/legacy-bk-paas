@@ -9,23 +9,67 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const User = {
-    getUserInfo (ctx) {
-        try {
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data: {
-                    avatar_url: '',
-                    username: 'admin'
-                }
-            })
-        } catch (err) {
-            ctx.throwError({
-                message: err.message
-            })
-        }
-    }
+import UserModel from '../model/user'
+// import User from '../model/entities/user'
+// import { getRepository } from 'typeorm'
+
+export const findUserByBk = async bkUsername => {
+    const ret = await UserModel.findOneByBk(bkUsername)
+    return ret
 }
 
-module.exports = User
+export const addUser = async userData => {
+    const { id } = await UserModel.addUser(userData)
+    return id
+}
+
+// export const getUserByBk = async ctx => {
+//     try {
+//         const query = ctx.request.query || {}
+//         const bkUsername = query.bk_username
+//         const res = await findUserByBk(bkUsername)
+//         ctx.send({
+//             code: 0,
+//             message: 'success',
+//             data: res
+//         })
+//     } catch (err) {
+//         console.error(err)
+//         ctx.throwError({
+//             message: err.message
+//         })
+//     }
+// }
+
+// export const getUserByBk = async (ctx) => {
+//     try {
+//         const { projectId, pageData } = ctx.request.body
+//         const projectPageData = {
+//             projectId
+//         }
+//         const { id } = await PageModel.createPage(pageData, projectPageData)
+//         ctx.send({
+//             code: 0,
+//             message: 'success',
+//             data: id
+//         })
+//     } catch (err) {
+//         ctx.throwError({
+//             message: err.message
+//         })
+//     }
+// }
+
+export const getUserInfo = ctx => {
+    try {
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data: ctx.session.userInfo
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message
+        })
+    }
+}
