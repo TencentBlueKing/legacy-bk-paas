@@ -11,6 +11,8 @@
 
 import { PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, Column, BeforeInsert, BeforeUpdate } from 'typeorm'
 
+export const curLoginUsername = {}
+
 export default class Base {
     // 自动增量值自动生成ID
     @PrimaryGeneratedColumn()
@@ -40,6 +42,7 @@ export default class Base {
     // tofix: 登陆以后，拿到登陆用户名取代admin
     @BeforeInsert()
     beforeInsert () {
+        console.log('beforeInsert curLoginUsername', curLoginUsername)
         this.createUser = 'admin'
         this.updateUser = 'admin'
         this.updateTime = new Date()
@@ -49,6 +52,7 @@ export default class Base {
     // tofix: 登陆以后，拿到登陆用户名取代admin
     @BeforeUpdate()
     updateUpdateUser () {
+        console.log('updateUpdateUser curLoginUsername', curLoginUsername)
         this.updateUser = 'admin'
     }
 }
