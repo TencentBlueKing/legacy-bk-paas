@@ -9,24 +9,18 @@
  * specific language governing permissions and limitations under the License.
  */
 
-module.exports = process.env.NODE_ENV === 'production'
-    ? {
-        port: 5000,
-        protocol: 'http',
-        // 企业版/社区版 base url
-        hostUrl: '',
-        // 应用 ID
-        appCode: '',
-        // 应用 TOKEN
-        appSecret: ''
+import { getRepository } from 'typeorm'
+import User from './entities/user'
+
+module.exports = {
+    findOneByBk (bkUserName) {
+        return getRepository(User).findOne({ bk: bkUserName })
+    },
+
+    // 创建用户
+    addUser (data) {
+        const repository = getRepository(User)
+        const user = repository.create(data)
+        return repository.save(user)
     }
-    : {
-        port: 5000,
-        protocol: 'http',
-        // 企业版/社区版 base url
-        hostUrl: '',
-        // 应用 ID
-        appCode: '',
-        // 应用 TOKEN
-        appSecret: ''
-    }
+}

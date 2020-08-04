@@ -73,7 +73,7 @@
             if (this.fromPageList) {
                 this.pageDetail = await this.$store.dispatch('page/detail', { pageId: this.$route.params.pageId })
             }
-            
+
             await this.loadFile()
         },
         mounted () {
@@ -102,7 +102,7 @@
                         message: 'targetData格式错误'
                     })
                 }
-                
+
                 let code = this.getCode().replace('export default', 'module.exports =')
                 code = code.replace('components: { chart: ECharts },', '')
                 const res = httpVueLoader(code)

@@ -82,3 +82,14 @@ exports.CODE = {
         NOT_DEFINED: 9999
     }
 }
+
+/**
+ * 判断请求是否是 ajax 异步请求
+ *
+ * @param {Object} req request 对象
+ *
+ * @return {boolean} 返回结果
+ */
+exports.isAjaxReq = req => {
+    return req.get('X-Requested-With') || (req.header.accept || '').indexOf('json') > -1
+}

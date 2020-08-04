@@ -136,6 +136,7 @@
     "koa-log4": "~2.3.2",
     "koa-mount": "~4.0.0",
     "koa-router": "~7.4.0",
+    "koa-session": "~6.0.0",
     "koa-static": "~5.0.0",
     "koa-webpack": "~5.2.4",
     "koa2-connect-history-api-fallback": "~0.1.2",
