@@ -16,6 +16,8 @@ const httpConf = require('../conf/http')
 const { CODE, isAjaxReq } = require('../util')
 const { findUserByBk, addUser } = require('../controller/user')
 
+const { curLoginUsername } = require('../model/entities/base')
+
 module.exports = () => {
     return async function (ctx, next) {
         try {
@@ -71,6 +73,7 @@ module.exports = () => {
                         })
                     }
                 }
+                curLoginUsername.username = ctx.session.userInfo.bk_username
                 await next()
             }
         } catch (err) {
