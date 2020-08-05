@@ -10,7 +10,7 @@
 <script>
     import AllComponent from './all'
     import UseingComponent from './useing'
-    
+
     export default {
         name: '',
         components: {

@@ -243,6 +243,8 @@ $headerHeight: 64px;
         width: 300px;
         align-items: center;
         .page-name {
+            display: flex;
+            align-items: center;
             .bk-drag-icon {
                 padding: 10px;
                 cursor: pointer;
@@ -251,37 +253,21 @@ $headerHeight: 64px;
                 font-size: 13px;
                 color: #3a84ff;
             }
-            .template-logo svg{
+            .template-logo svg {
                 vertical-align: middle;
             }
             .seperate-line {
                 width: 1px;
                 color: #d8d8d8;
-                margin: 0 -6px;
+                margin-left: -2px;
             }
             .name-content {
                 cursor: default;
                 margin-left: 10px;
-                width: 210px;
+                width: 220px;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
-                span {
-                    /* display: inline-block; */
-                    display: inline-flex;
-                    width: 105px;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                }
-                .page-name-span {
-                    font-size: 16px;
-                    color: #313238;
-                }
-                .project-name-span {
-                    font-size: 14px;
-                    color: #979BA5;
-                }
             }
         }
     }

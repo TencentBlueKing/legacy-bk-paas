@@ -21,10 +21,11 @@
             </transition>
         </div>
     </section>
-
 </template>
 <script>
     import { mapGetters } from 'vuex'
+
+    import { bus } from './common/bus'
 
     export default {
         name: 'app',
@@ -42,11 +43,14 @@
             }
         },
 
-        created () {
+        mounted () {
             const platform = window.navigator.platform.toLowerCase()
             if (platform.indexOf('win') === 0) {
                 this.systemCls = 'win'
             }
+            bus.$on('redirect-login', data => {
+                window.location.replace(data.loginUrl)
+            })
         }
     }
 </script>
