@@ -22,6 +22,10 @@ export default class extends Base {
     @Column({ type: 'tinytext' })
     funcParams
 
+    // 回调函数参数
+    @Column({ type: 'tinytext' })
+    remoteParams
+
     // 函数内容
     @Column({ type: 'mediumtext' })
     funcBody

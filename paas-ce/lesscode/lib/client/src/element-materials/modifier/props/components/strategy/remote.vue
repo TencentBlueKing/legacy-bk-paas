@@ -17,7 +17,7 @@
                 v-for="(group, index) in funcGroups"
                 :name="group.groupName"
                 :key="index">
-                <bk-option v-for="option in group.functionList.filter(x => x.funcType === 1)"
+                <bk-option v-for="option in group.functionList"
                     :key="option.id"
                     :id="option.id"
                     :name="option.funcName">
