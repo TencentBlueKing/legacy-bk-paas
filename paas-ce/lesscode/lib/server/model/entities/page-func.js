@@ -21,4 +21,8 @@ export default class extends Base {
     // 函数id
     @Column({ type: 'int' })
     funcId
+
+    // 项目id
+    @Column({ type: 'int' })
+    projectId
 }
