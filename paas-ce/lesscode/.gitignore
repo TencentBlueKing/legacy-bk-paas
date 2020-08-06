@@ -27,3 +27,4 @@ lib/client/static/lib.bundle.js
 lib/client/static/vue-layout-demo*.vue
 !lib/client/static/ResizeSensor.js
 lib/server/conf/data-base.js
+lib/server/conf/http.js
