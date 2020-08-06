@@ -12,7 +12,7 @@
 import { Entity, Column } from 'typeorm'
 import Base from './base'
 
-@Entity({ name: 'r_page_func_group', comment: '页面函数关联表' })
+@Entity({ name: 'r_page_func', comment: '页面函数关联表' })
 export default class extends Base {
     // page id
     @Column({ type: 'int' })
