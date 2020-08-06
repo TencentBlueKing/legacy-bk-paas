@@ -10,7 +10,7 @@
  */
 
 import { PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, Column, BeforeInsert, BeforeUpdate } from 'typeorm'
-import { RequestContext } from '../../middleware/requestContext'
+import { RequestContext } from '../../middleware/request-context'
 
 export default class Base {
     // 自动增量值自动生成ID
@@ -38,20 +38,18 @@ export default class Base {
     deleteFlag
 
     // 插入数据写入用户名
-    // tofix: 登陆以后，拿到登陆用户名取代admin
     @BeforeInsert()
     beforeInsert () {
         const currentUser = RequestContext.getCurrentUser()
-        this.createUser = currentUser.bk_username
-        this.updateUser = currentUser.bk_username
+        this.createUser = currentUser.username
+        this.updateUser = currentUser.username
         this.updateTime = new Date()
     }
 
     // 更新数据写入用户名
-    // tofix: 登陆以后，拿到登陆用户名取代admin
     @BeforeUpdate()
     updateUpdateUser () {
         const currentUser = RequestContext.getCurrentUser()
-        this.updateUser = currentUser.bk_username
+        this.updateUser = currentUser.username
     }
 }
