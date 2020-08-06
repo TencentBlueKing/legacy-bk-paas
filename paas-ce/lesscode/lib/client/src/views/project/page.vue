@@ -51,7 +51,7 @@
             </div>
             <div class="empty" v-show="!pageList.length || !renderList.length">
                 <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
-                    <div v-if="!pageList.length">暂无页面，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link></div>
+                    <div v-if="!pageList.length" class="empty-page">暂无页面，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link></div>
                     <div v-else>无搜索结果</div>
                 </bk-exception>
             </div>
@@ -217,14 +217,20 @@
         }
         .pages-body {
             display: flex;
+            flex: 1;
              .empty {
                 flex: 1;
                 display: flex;
                 align-items: center;
+                .empty-page {
+                    display: flex;
+                    align-items: center;
+                }
             }
             .page-list {
                 display: flex;
                 flex-wrap: wrap;
+                align-content: flex-start;
 
                 .page-item {
                     position: relative;
