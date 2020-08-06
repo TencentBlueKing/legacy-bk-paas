@@ -79,12 +79,7 @@
                     </div>
                 </div>
             </div>
-            <div class="changelog" @click="goChangelog" v-bk-tooltips="{ content: '更新日志', placements: ['bottom'] }">
-                <i class="bk-drag-icon bk-drag-update-log-fill"></i>
-            </div>
-            <div class="github-link" @click="goGithub" v-bk-tooltips="{ content: 'Github', placements: ['bottom'] }">
-                <i class="bk-drag-icon bk-drag-github-logo"></i>
-            </div>
+            <extra-links></extra-links>
         </div>
         <div class="main-container">
             <aside class="main-left-sidebar" :class="{ 'is-collapse': collapseSide.left }">
@@ -217,6 +212,7 @@
     import Methods from '@/components/methods'
     import codeMixin from '@/components/vue-code/code-mixin'
     import ComponentSearch from './component-search'
+    import ExtraLinks from '@/components/ui/extra-links'
     import html2canvas from 'html2canvas'
 
     import customComponents from '@/custom'
@@ -228,6 +224,7 @@
             VueCode,
             Methods,
             ComponentSearch,
+            ExtraLinks,
 
             ...customComponents
         },
@@ -913,19 +910,6 @@
                 } catch (err) {
                     console.log(err)
                 }
-            },
-            /**
-             * 跳转到开源版 github
-             */
-            goGithub () {
-                window.open('https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md')
-            },
-
-            goChangelog () {
-                const routerUrl = this.$router.resolve({
-                    name: 'changelog'
-                })
-                window.open(routerUrl.href, '_blank')
             },
 
             leavePage (routeName) {
