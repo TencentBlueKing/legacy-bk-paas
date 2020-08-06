@@ -16,6 +16,7 @@ const { resolve } = require('path')
 const Koa = require('koa')
 const bodyparser = require('koa-bodyparser')
 const json = require('koa-json')
+const session = require('koa-session')
 const koaStatic = require('koa-static')
 const views = require('co-views')
 const koaMount = require('koa-mount')
@@ -40,25 +41,39 @@ const httpConf = require('./conf/http')
 const { createConnection } = require('typeorm')
 const dataBaseConf = require('./conf/data-base')
 
+const SESSION_CONFIG = {
+    // cookie key
+    key: 'lesscode-session',
+    // cookie 的过期时间，毫秒
+    maxAge: 86400000,
+    // 自动提交到响应头
+    autoCommit: true,
+    // 是否允许重写
+    overwrite: true,
+    httpOnly: true,
+    // 是否签名
+    signed: true,
+    // 每次响应时是否刷新 session 的有效期
+    rolling: false,
+    // 在 session 快过期时是否刷新 session 的有效期
+    renew: false
+}
+
 async function startServer () {
     const PORT = httpConf.port
     const IS_DEV = process.env.NODE_ENV === 'development'
 
     const app = new Koa()
 
-    // 统一错误处理，
+    // session 加密密钥
+    app.keys = ['lesscode login secret']
+
+    app.use(session(SESSION_CONFIG, app))
+
+    // 统一处理，
     // @see https://github.com/koajs/koa/wiki/Error-Handling
     app.use(async (ctx, next) => {
         try {
-            // const bkToken = ctx.cookies.get('bk_token')
-            // console.error('bkToken', bkToken)
-            // if (!bkToken) {
-            //     ctx.status = 302
-            //     ctx.redirect('httpConf.lesscodeUrl)
-            //     return
-            // } else {
-            //     await next()
-            // }
             await next()
         } catch (err) {
             const status = err.status
@@ -100,13 +115,13 @@ async function startServer () {
         logger.error(err)
     })
 
-    app.use(errorMiddleware())
     app.use(bodyparser())
     app.use(json())
 
+    app.use(errorMiddleware())
     app.use(httpMiddleware())
-    app.use(authMiddleware())
     app.use(jsonSendMiddleware())
+    app.use(authMiddleware())
 
     app.use(koaMount(
         '/static', koaStatic(resolve(__dirname, '..', IS_DEV ? 'client/static' : 'client/dist/static')))

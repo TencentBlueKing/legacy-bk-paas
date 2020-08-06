@@ -54,7 +54,8 @@ const codeMixin = {
             let returnMethod = {
                 id: '',
                 funcName: 'emptyFunc',
-                funcBody: ''
+                previewStr: '',
+                vueCodeStr: ''
             }
             this.funcGroups.forEach((group) => {
                 const funChildren = group.functionList || []
@@ -63,6 +64,19 @@ const codeMixin = {
                     returnMethod = method
                 }
             })
+            const paramsStr = (returnMethod.funcParams || []).join(', ')
+            function addFuncStr (funcBody) {
+                return `${returnMethod.funcName} (${paramsStr}) { ${funcBody} }`
+            }
+            if (returnMethod.funcType === 1) {
+                const remoteParams = (returnMethod.remoteParams || []).join(', ')
+                const data = { url: returnMethod.funcApiUrl, type: returnMethod.funcMethod, apiData: returnMethod.funcApiData }
+                returnMethod.previewStr = addFuncStr(`return this.$store.dispatch('getApiData', ${JSON.stringify(data)}).then((${remoteParams}) => { ${returnMethod.funcBody} })`)
+                returnMethod.vueCodeStr = addFuncStr(`return this.$http.${returnMethod.funcMethod}('${returnMethod.funcApiUrl}'${returnMethod.funcApiData ? `, ${returnMethod.funcApiData}` : ''}).then((${remoteParams}) => { ${returnMethod.funcBody} })`)
+            } else {
+                returnMethod.previewStr = addFuncStr(returnMethod.funcBody)
+                returnMethod.vueCodeStr = addFuncStr(returnMethod.funcBody)
+            }
             return returnMethod
         },
 
@@ -249,9 +263,10 @@ const codeMixin = {
                     const fun = this.getMethodById(events[key])
                     if (fun.id) {
                         eventStr += `@${key}="${fun.funcName}" `
+                        const contentStr = this.pageType === 'vueCode' ? fun.vueCodeStr : fun.previewStr
                         if (this.existFunc.indexOf(events[key]) === -1) {
                             this.existFunc.push(events[key])
-                            this.methodsStr += `${fun.funcName} (${(fun.funcParams || []).join(', ')}) { ${fun.funcBody} },`
+                            this.methodsStr += `${ contentStr },`
                         }
                     }
                 }
@@ -372,18 +387,16 @@ const codeMixin = {
         },
         remoteMethodsTemplate (key, payload) {
             const method = this.getMethodById(payload.methodId)
-            const data = {
-                url: method.funcApiUrl,
-                type: method.funcMethod,
-                apiData: method.funcApiData
-            }
-            const previewStr = `this.${key} = await this.$store.dispatch('getApiData', ${JSON.stringify(data)}).then((${(method.funcParams || []).join(', ')}) => { ${method.funcBody} })`
-            const vueCodeStr = `this.${key} = await this.$http.${method.funcMethod}('${method.funcApiUrl}').then((${(method.funcParams || []).join(', ')}) => { ${method.funcBody} })`
-            const contentStr = this.pageType === 'vueCode' ? vueCodeStr : previewStr
+            const contentStr = this.pageType === 'vueCode' ? method.vueCodeStr : method.previewStr
             this.methodsStr += `
                 async get${key} () {
-                    ${contentStr}
-                },\n`
+                    this.${key} = await this.${method.funcName}()
+                },`
+
+            if (this.existFunc.indexOf(method.id) === -1) {
+                this.existFunc.push(method.id)
+                this.methodsStr += `${contentStr},`
+            }
         },
         createdTemplate (key) {
             this.createdStr += `this.get${key}()\n`
