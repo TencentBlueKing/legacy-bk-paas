@@ -20,7 +20,7 @@ module.exports = {
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
             .where('t.projectId = :projectId', { projectId })
             .andWhere('page.deleteFlag = 0')
-            .orderBy('page.updateTime', 'DESC')
+            .orderBy('page.createTime', 'DESC')
             .getMany()
     },
 

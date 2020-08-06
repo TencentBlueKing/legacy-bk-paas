@@ -103,6 +103,7 @@ const func = {
     addFunction (funcData) {
         const funcRepository = getRepository(Func)
         funcData.funcParams = (funcData.funcParams || []).join(',')
+        funcData.remoteParams = (funcData.remoteParams || []).join(',')
         const newFunc = funcRepository.create(funcData)
         return funcRepository.save(newFunc)
     },
@@ -120,6 +121,7 @@ const func = {
         oldFuncList.forEach(func => {
             const newFunc = funcList.find(x => x.id === func.id)
             newFunc.funcParams = (newFunc.funcParams || []).join(',')
+            newFunc.remoteParams = (newFunc.remoteParams || []).join(',')
             Object.assign(func, newFunc)
         })
         const res = await funcRepository.save(oldFuncList)

@@ -22,7 +22,7 @@
                         v-for="(group, index) in funcGroups"
                         :name="group.groupName"
                         :key="index">
-                        <bk-option v-for="option in group.functionList.filter(x => x.funcType === 0)"
+                        <bk-option v-for="option in group.functionList"
                             @click.native="choose(option, event.name)"
                             :key="option.id"
                             :id="option.id"
