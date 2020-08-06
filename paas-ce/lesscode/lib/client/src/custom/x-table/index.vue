@@ -109,15 +109,15 @@
         props: {
             getTableListAjaxUrl: {
                 type: String,
-                default: ''
+                default: '/data/getXTableData'
             },
             postEditTableListAjaxUrl: {
                 type: String,
-                default: ''
+                default: '/data/getXTableData'
             },
             delTableListAjaxUrl: {
                 type: String,
-                default: ''
+                default: '/data/getXTableData'
             }
         },
         data () {
@@ -248,7 +248,8 @@
             async getTableData () {
                 if (this.getTableListAjaxUrl) {
                     await this.$http.get(this.getTableListAjaxUrl, { ...this.systemInfo }).then(res => {
-                        this.reloadTable.splice(0, this.reloadTable.length, ...res.data.info)
+                        this.tableData = res.data.msg
+                        this.reloadTable = false
                     })
                 } else {
                     try {
@@ -299,12 +300,16 @@
                 this.dialog.show = true
                 if (this.postEditTableListAjaxUrl) {
                     await this.$http.post(this.postEditTableListAjaxUrl, { ...this.editSourceId }).then(res => {
-                        this.properties.source_name = res.data.cluster_config.cluster_name
-                        this.properties.es_host = res.data.msg.cluster_config.domain_name
-                        this.number = this.properties.es_port = res.data.cluster_config.port
-                        this.properties.es_user = res.data.msg.cluster_config.username
-                        this.properties.es_password = '******'
-                        this.cluster_config.cluster_id = this.editSourceId
+                        this.tableData = res.data.msg
+                        this.reloadTable = false
+                        if (res.data.msg[this.editSourceId - 1]) {
+                            this.properties.source_name = res.data.msg[this.editSourceId - 1].cluster_config.cluster_name
+                            this.properties.es_host = res.data.msg[this.editSourceId - 1].cluster_config.domain_name
+                            this.number = this.properties.es_port = res.data.msg[this.editSourceId - 1].cluster_config.port
+                            this.properties.es_user = res.data.msg[this.editSourceId - 1].cluster_config.username
+                            this.properties.es_password = '******'
+                            this.cluster_config.cluster_id = this.editSourceId
+                        }
                     })
                 } else {
                     try {
@@ -338,7 +343,9 @@
                         })
                         if (this.delTableListAjaxUrl) {
                             this.$http.get(this.delTableListAjaxUrl, { ...obj }).then(res => {
-                                this.reloadTable.splice(0, this.reloadTable.length, ...res.data.info)
+                                this.$bkLoading.hide()
+                                this.reloadTable = true
+                                this.getTableData()
                             })
                         } else {
                             try {
