@@ -247,8 +247,8 @@ CREATE TABLE `r_page_func`  (
   `createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `funcId` int(11) NOT NULL COMMENT 'function 表主键',
-  `projectId` int(11) NOT NULL COMMENT 'project 表主键',
   `deleteFlag` int(11) NULL DEFAULT 0 COMMENT '是否删除，1代表已删除',
+  `projectId` int(11) NOT NULL COMMENT 'project 表主键',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
