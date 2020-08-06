@@ -24,7 +24,12 @@
             <h3 class="current">{{ currentPage.title }}</h3>
         </div>
         <div class="main-container">
-            <router-view :key="$route.path"></router-view>
+            <router-view :key="$route.path" v-if="!projectNotExist"></router-view>
+            <div v-else class="exception-page">
+                <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
+                    <div>项目id不存在</div>
+                </bk-exception>
+            </div>
         </div>
     </main>
 </template>
@@ -57,6 +62,9 @@
         computed: {
             currentPage () {
                 return this.navList.find(item => (this.$route.path.indexOf(`/${item.toPath}`) > 0))
+            },
+            projectNotExist () {
+                return !this.projectList.filter(item => item.id === this.projectId).length
             }
         },
         created () {
@@ -156,6 +164,12 @@
         .main-container {
             height: calc(100% - var(--breadcrumb-height));
             overflow: auto;
+
+            .exception-page {
+                height: 100%;
+                display: flex;
+                align-items: center;
+            }
         }
 
         .nav-list {
@@ -178,8 +192,8 @@
                     background: #F6F6F9;
                 }
                 &.router-link-active {
-                    background: #3a84ff;
-                    color: #fff;
+                    background: #E1ECFF;
+                    color: #3A84FF;
                 }
             }
         }

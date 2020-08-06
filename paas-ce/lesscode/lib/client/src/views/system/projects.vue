@@ -26,23 +26,25 @@
         <div class="page-body" v-bkloading="{ isLoading: pageLoading, opacity: 1 }">
             <div class="page-body-inner" v-show="!pageLoading">
                 <div class="project-list" v-show="projectList.length">
-                    <div class="project-item" v-for="project in projectList" :key="project.id">
+                    <div :class="['project-item', { favorite: project.favorite }]" v-for="project in projectList" :key="project.id">
                         <div class="item-bd" @click="toPage(project.id)">
                             <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
                                 <div class="preview">
-                                    <img :src="projectPreivewImg" alt="项目缩略预览">
-                                </div>
-                                <div class="desc">
-                                    <p class="desc-text">
-                                        {{project.projectDesc}}
-                                    </p>
+                                    <img :src="pageMap[project.id][0].previewImg || projectPreivewImg" alt="项目缩略预览">
                                 </div>
                             </template>
-                            <div class="empty" v-else>暂无页面</div>
+                            <div class="empty" v-else>
+                                暂无页面
+                            </div>
+                            <div class="desc">
+                                <p class="desc-text">
+                                    {{project.projectDesc}}
+                                </p>
+                            </div>
                         </div>
                         <div class="item-ft">
                             <div class="col">
-                                <h3 class="name">{{project.projectName}}</h3>
+                                <h3 class="name" :title="project.projectName">{{project.projectName}}</h3>
                                 <div class="stat"><vnodes :vnode="getUpdateInfo(project)"></vnodes></div>
                             </div>
                             <div class="col">
@@ -52,6 +54,7 @@
                                     </span>
                                     <ul class="bk-dropdown-list" slot="dropdown-content">
                                         <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
+                                        <li><a href="javascript:;" @click="toPage(project.id)">页面管理</a></li>
                                         <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
                                         <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li>
@@ -70,7 +73,12 @@
                 <div class="empty" v-show="!projectList.length">
                     <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
                         <div v-if="$route.query.q">无搜索结果</div>
-                        <div v-else>暂无项目，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link></div>
+                        <div v-else>
+                            暂无项目
+                            <span v-show="!filter.length || filter === 'my'">
+                                ，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link>
+                            </span>
+                        </div>
                     </bk-exception>
                 </div>
             </div>
@@ -173,7 +181,7 @@
 </template>
 
 <script>
-    import projectPreivewImg from '@/images/homeBg.jpg'
+    import projectPreivewImg from '@/images/page-demo.png'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
@@ -306,14 +314,6 @@
             this.getProjectList()
         },
         methods: {
-            toPage (projectId) {
-                this.$router.push({
-                    name: 'pageList',
-                    params: {
-                        projectId
-                    }
-                })
-            },
             async getProjectList () {
                 this.pageLoading = true
                 try {
@@ -331,8 +331,8 @@
                 const latestPage = this.pageMap[project.id] ? this.pageMap[project.id][0] : null
                 return (
                     latestPage
-                        ? <span>{latestPage.updateUser || 'admin'} {dayjs(latestPage.updateTime).fromNow()}更新</span>
-                        : <span>{project.createUser || 'admin'} {dayjs(project.createTime).fromNow()}创建</span>
+                        ? <span class="user">{latestPage.updateUser || 'admin'} {dayjs(latestPage.updateTime).fromNow()}更新</span>
+                        : <span class="user">{project.createUser || 'admin'} {dayjs(project.createTime).fromNow()}创建</span>
                 )
             },
             async handleCreateConfirm () {
@@ -341,13 +341,14 @@
                     const data = this.dialog.create.formData
 
                     this.dialog.create.loading = true
-                    await this.$store.dispatch('project/create', { data })
+                    const projectId = await this.$store.dispatch('project/create', { data })
 
                     this.messageSuccess('项目创建成功')
                     this.dialog.create.visible = false
 
-                    // 在当前条件下获取新的列表
-                    this.getProjectList()
+                    setTimeout(() => {
+                        this.toPage(projectId)
+                    }, 300)
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -501,12 +502,22 @@
             },
             hideDropdownMenu (project) {
                 this.$refs[`moreActionDropdown${project.id}`][0].hide()
+            },
+            toPage (projectId) {
+                this.$router.push({
+                    name: 'pageList',
+                    params: {
+                        projectId
+                    }
+                })
             }
         }
     }
 </script>
 
 <style lang="postcss" scoped>
+    @import "@/css/mixins/ellipsis";
+
     .filter-links {
         display: flex;
         align-items: center;
@@ -537,7 +548,7 @@
             position: relative;
             flex: none;
             width: 312px;
-            height: 243px;
+            height: 242px;
             margin: 0 14px 30px 0;
             padding: 6px;
             background: #fff;
@@ -566,6 +577,24 @@
                     &::before {
                         background: rgba(0, 0, 0, 0.4);
                     }
+                }
+
+                .empty {
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.4);
+                    }
+                }
+            }
+
+            &.favorite {
+                .favorite-btn {
+                    opacity: 1;
                 }
             }
 
@@ -661,6 +690,7 @@
             }
             .empty {
                 display: flex;
+                position: relative;
                 align-items: center;
                 justify-content: center;
                 font-size: 14px;
@@ -675,6 +705,7 @@
                 font-size: 14px;
                 font-weight: 700;
                 color: #63656E;
+                @mixin ellipsis 240px, block;
             }
             .stat {
                 font-size: 12px;
@@ -716,6 +747,15 @@
         .dialog-footer {
             button {
                 width: 86px;
+            }
+        }
+    }
+
+    @media screen and (max-width: 1280px) {
+        .project-list {
+            .project-item {
+                width: 310px;
+                height: 240px;
             }
         }
     }

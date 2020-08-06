@@ -11,6 +11,7 @@
 import { getConnection, getRepository } from 'typeorm'
 import Project from './entities/project'
 import Page from './entities/page'
+import Comp from './entities/comp'
 import UserProjectRole from './entities/user-project-role'
 import ProjectComp from './entities/project-comp'
 import ProjectFuncGroup from './entities/project-func-group'
@@ -26,7 +27,8 @@ const projectSelectFields = [
     'project.projectDesc',
     'project.status',
     'project.createTime',
-    'project.createUser'
+    'project.createUser',
+    'project.deleteFlag'
 ]
 
 const defaultGroup = {
@@ -46,7 +48,7 @@ const defaultFunc = [
         funcSummary: '远程函数，获取数据',
         funcType: 1,
         funcMethod: 'get',
-        funcApiUrl: 'api/data/getMockData',
+        funcApiUrl: 'api/data/getMockData'
     }
 ]
 
@@ -81,20 +83,94 @@ export default {
                         .getMany()
                 ])
 
-                const getNewValue = (item) => {
-                    const { id, ...others } = item
-                    others.projectId = projectId
-                    return others
-                }
-                const projectCompValues = getRepository(ProjectComp).create(projectCompCopyValues.map(getNewValue))
-                const projectFuncGroupValues = getRepository(ProjectFuncGroup).create(projectFuncGroupCopyValues.map(getNewValue))
-                const projectPageValues = getRepository(ProjectPage).create(projectPageCopyValues.map(getNewValue))
+                if (projectCompCopyValues.length) {
+                    const compIdList = projectCompCopyValues.map(item => item.compId)
+                    const copyComps = await getRepository(Comp)
+                        .createQueryBuilder('comp')
+                        .where('comp.id IN (:...ids)', { ids: compIdList })
+                        .getMany()
 
-                await Promise.all([
-                    await transactionalEntityManager.save(projectCompValues),
-                    await transactionalEntityManager.save(projectFuncGroupValues),
+                    const saveCopyComps = getRepository(Comp).create(copyComps.map(item => {
+                        const { id, createTime, updateTime, ...others } = item
+                        others.belongProjectId = projectId
+                        return others
+                    }))
+                    const newCompList = await transactionalEntityManager.save(saveCopyComps)
+                    const projectCompValues = getRepository(ProjectComp).create(projectCompCopyValues.map((item, index) => {
+                        const { id, createTime, updateTime, ...others } = item
+                        others.projectId = projectId
+                        others.compId = newCompList[index].id
+                        return others
+                    }))
+                    await transactionalEntityManager.save(projectCompValues)
+                }
+
+                if (projectFuncGroupCopyValues.length) {
+                    const funcGroupIdList = projectFuncGroupCopyValues.map(item => item.funcGroupId)
+                    // 得到要复制的主体数据
+                    const copyFuncGroups = await getRepository(FuncGroup)
+                        .createQueryBuilder('funcGroup')
+                        .where('funcGroup.id IN (:...ids)', { ids: funcGroupIdList })
+                        .getMany()
+                    const copyFuncs = await getRepository(Func)
+                        .createQueryBuilder('func')
+                        .where('func.funcGroupId IN (:...funcGroupIds)', { funcGroupIds: funcGroupIdList })
+                        .getMany()
+
+                    // 新建函数组主体数据
+                    const saveCopyFuncGroups = getRepository(FuncGroup).create(copyFuncGroups.map(item => {
+                        const { id, createTime, updateTime, ...others } = item
+                        return others
+                    }))
+                    const newFuncGroupList = await transactionalEntityManager.save(saveCopyFuncGroups)
+
+                    // 复制出的新函数中的分组id需要与新添加的函数组id对应
+                    const funcGroupIdMap = {}
+                    funcGroupIdList.forEach((id, index) => {
+                        funcGroupIdMap[id] = newFuncGroupList[index].id
+                    })
+                    // 新建函数主体数据
+                    const saveCopyFuncs = getRepository(Func).create(copyFuncs.map(item => {
+                        const { id, createTime, updateTime, ...others } = item
+                        others.funcGroupId = funcGroupIdMap[others.funcGroupId]
+                        return others
+                    }))
+                    await transactionalEntityManager.save(saveCopyFuncs)
+
+                    // 新建函数组与项目关联关系数据
+                    const projectFuncGroupValues = getRepository(ProjectFuncGroup).create(projectFuncGroupCopyValues.map((item, index) => {
+                        const { id, createTime, updateTime, ...others } = item
+                        others.projectId = projectId
+                        // 分组id为新建得到的分组id
+                        others.funcGroupId = newFuncGroupList[index].id
+                        return others
+                    }))
+                    await transactionalEntityManager.save(projectFuncGroupValues)
+                }
+
+                if (projectPageCopyValues.length) {
+                    const pageIdList = projectPageCopyValues.map(item => item.pageId)
+                    const copyPages = await getRepository(Page)
+                        .createQueryBuilder('page')
+                        .where('page.id IN (:...ids)', { ids: pageIdList })
+                        .getMany()
+
+                    // 先新建页面主体数据，再新建关联关系数据
+                    const saveCopyPages = getRepository(Page).create(copyPages.map(item => {
+                        const { id, createTime, updateTime, ...others } = item
+                        // 页面名称不能重复
+                        others.pageName = `${item.pageName}-copy`
+                        return others
+                    }))
+                    const newPageList = await transactionalEntityManager.save(saveCopyPages)
+                    const projectPageValues = getRepository(ProjectPage).create(projectPageCopyValues.map((item, index) => {
+                        const { id, createTime, updateTime, ...others } = item
+                        others.projectId = projectId
+                        others.pageId = newPageList[index].id
+                        return others
+                    }))
                     await transactionalEntityManager.save(projectPageValues)
-                ])
+                }
             } else {
                 const funcGroup = getRepository(FuncGroup).create(defaultGroup)
                 const { id: funcGroupId } = await transactionalEntityManager.save(funcGroup)
@@ -127,7 +203,7 @@ export default {
             .createQueryBuilder('project')
             .innerJoinAndSelect('r_user_project_role', 'user_project_role', 'user_project_role.projectId = project.id')
             .select(projectSelectFields)
-            .where('project.status != 2')
+            .where('project.deleteFlag != 1')
             .andWhere(condition, params)
             .orderBy('project.id', 'DESC')
             .getMany()
@@ -137,7 +213,7 @@ export default {
         return getRepository(Project)
             .createQueryBuilder('project')
             .select(projectSelectFields)
-            .where('project.status != 2')
+            .where('project.deleteFlag != 1')
             .andWhere(condition, params)
             .orderBy('project.id', 'DESC')
             .getMany()
@@ -148,7 +224,7 @@ export default {
             .createQueryBuilder('project')
             .innerJoinAndSelect('r_favourite', 'favourite', 'favourite.projectId = project.id')
             .select(projectSelectFields)
-            .where('project.status != 2')
+            .where('project.deleteFlag != 1')
             .andWhere(condition, params)
             .orderBy('project.id', 'DESC')
             .getMany()
@@ -159,7 +235,7 @@ export default {
             .createQueryBuilder('project')
             .innerJoinAndSelect('r_user_project_role', 'user_project_role', 'user_project_role.projectId = project.id AND user_project_role.roleId != 1')
             .select(projectSelectFields)
-            .where('project.status != 2')
+            .where('project.deleteFlag != 1')
             .andWhere(condition, params)
             .orderBy('project.id', 'DESC')
             .getMany()
@@ -169,7 +245,12 @@ export default {
         return getRepository(Page)
             .createQueryBuilder('page')
             .innerJoinAndSelect('r_project_page', 'project_page', 'project_page.pageId = page.id')
-            .select(['page.pageName', 'page.updateTime', 'page.updateUser', 'project_page.projectId'])
+            .select(['page.pageName as pageName',
+                'page.updateTime as updateTime',
+                'page.updateUser as updateUser',
+                'page.previewImg as previewImg',
+                'project_page.projectId as projectId'
+            ])
             .where(condition, params)
             .orderBy('page.updateTime', 'DESC')
             .getRawMany()

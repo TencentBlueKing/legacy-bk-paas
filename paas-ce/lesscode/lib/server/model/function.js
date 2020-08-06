@@ -13,7 +13,7 @@ import { getRepository, getConnection, In, Like } from 'typeorm'
 import Func from './entities/func'
 import FuncGroup from './entities/func-group'
 import ProjectFuncGroup from './entities/project-func-group'
-import PageFuncGroup from './entities/page-func-group'
+import PageFuncGroup from './entities/page-func'
 import Page from './entities/page'
 
 const func = {
