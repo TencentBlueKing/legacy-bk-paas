@@ -65,12 +65,17 @@ module.exports = () => {
                         httpsAgent: new https.Agent({ rejectUnauthorized: false })
                     })
                     ctx.session.userInfo = { ...response.data.data }
-                    const isInDB = await findUserByBk(ctx.session.userInfo.bk_username)
-                    if (!isInDB) {
-                        await addUser({
+                    const userData = await findUserByBk(ctx.session.userInfo.bk_username)
+                    if (!userData) {
+                        const userId = await addUser({
                             username: ctx.session.userInfo.bk_username,
                             bk: ctx.session.userInfo.bk_username
                         })
+                        ctx.session.userInfo.id = userId
+                        ctx.session.userInfo.username = ctx.session.userInfo.bk_username
+                    } else {
+                        ctx.session.userInfo.id = userData.id
+                        ctx.session.userInfo.username = userData.username
                     }
                 }
                 curLoginUsername.username = ctx.session.userInfo.bk_username
