@@ -16,9 +16,9 @@
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="projects">
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
                     </router-link>
-                    <router-link tag="div" class="nav-item" :to="{ name: 'componentManage', query: { filter: '' } }">
+                    <!-- <router-link tag="div" class="nav-item" :to="{ name: 'componentManage', query: { filter: '' } }">
                         <i class="bk-drag-icon bk-drag-project-list"></i>自定义组件库
-                    </router-link>
+                    </router-link> -->
                     <router-link tag="div" class="nav-item" :to="'account'">
                         <i class="bk-drag-icon bk-drag-member"></i>账号管理
                     </router-link>

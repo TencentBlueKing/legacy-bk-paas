@@ -15,8 +15,7 @@ const querystring = require('querystring')
 const httpConf = require('../conf/http')
 const { CODE, isAjaxReq } = require('../util')
 const { findUserByBk, addUser } = require('../controller/user')
-
-const { curLoginUsername } = require('../model/entities/base')
+const { setRequestContext } = require('./request-context')
 
 module.exports = () => {
     return async function (ctx, next) {
@@ -67,6 +66,7 @@ module.exports = () => {
                     ctx.session.userInfo = { ...response.data.data }
                     const userData = await findUserByBk(ctx.session.userInfo.bk_username)
                     if (!userData) {
+                        setRequestContext(ctx)
                         const userId = await addUser({
                             username: ctx.session.userInfo.bk_username,
                             bk: ctx.session.userInfo.bk_username
@@ -78,7 +78,6 @@ module.exports = () => {
                         ctx.session.userInfo.username = userData.username
                     }
                 }
-                curLoginUsername.username = ctx.session.userInfo.bk_username
                 await next()
             }
         } catch (err) {

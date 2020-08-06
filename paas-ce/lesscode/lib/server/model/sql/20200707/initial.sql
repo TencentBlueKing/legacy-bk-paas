@@ -29,8 +29,8 @@ CREATE TABLE `comp`  (
 -- ----------------------------
 -- Records of comp
 -- ----------------------------
-INSERT INTO `comp` VALUES (1, 'x-script', 'x-script', '/a/b/c', 4, 1, 2, 0, 0, '2020-06-02 16:43:06', '2020-06-03 02:18:13', NULL, NULL, 0);
-INSERT INTO `comp` VALUES (2, 'x-table', 'x-table', '/q/w/e', 5, 1, 1, 0, 0, '2020-06-02 16:43:06', '2020-06-03 02:18:14', NULL, NULL, 0);
+-- INSERT INTO `comp` VALUES (1, 'x-script', 'x-script', '/a/b/c', 4, 1, 2, 0, 0, '2020-06-02 16:43:06', '2020-06-03 02:18:13', NULL, NULL, 0);
+-- INSERT INTO `comp` VALUES (2, 'x-table', 'x-table', '/q/w/e', 5, 1, 1, 0, 0, '2020-06-02 16:43:06', '2020-06-03 02:18:14', NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for comp_category
@@ -50,8 +50,8 @@ CREATE TABLE `comp_category`  (
 -- ----------------------------
 -- Records of comp_category
 -- ----------------------------
-INSERT INTO `comp_category` VALUES (1, '默认分类', '2020-06-03 12:00:04', '2020-06-03 12:00:04', NULL, NULL, 0);
-INSERT INTO `comp_category` VALUES (2, 'a/b/c/d', '2020-07-20 21:42:41', '2020-07-20 21:42:41', 'admin', NULL, 0);
+-- INSERT INTO `comp_category` VALUES (1, '默认分类', '2020-06-03 12:00:04', '2020-06-03 12:00:04', NULL, NULL, 0);
+-- INSERT INTO `comp_category` VALUES (2, 'a/b/c/d', '2020-07-20 21:42:41', '2020-07-20 21:42:41', 'admin', NULL, 0);
 
 -- ----------------------------
 -- Table structure for func
@@ -71,7 +71,7 @@ CREATE TABLE `func`  (
   `funcType` int(11) NULL DEFAULT NULL COMMENT '函数模板类型',
   `funcMethod` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '远程函数方法',
   `funcApiData` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '远程函数数据体',
-  `publicFlag` int(11) UNSIGNED ZEROFILL NULL DEFAULT 00000000000 COMMENT '是否公开',
+  `publicFlag` int(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '是否公开',
   `funcApiUrl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '远程函数URL',
   `deleteFlag` int(11) NULL DEFAULT 0 COMMENT '是否删除，1代表已删除',
   `order` int(11) NULL DEFAULT NULL COMMENT '排序',
@@ -82,8 +82,8 @@ CREATE TABLE `func`  (
 -- ----------------------------
 -- Records of func
 -- ----------------------------
-INSERT INTO `func` VALUES (192, 'getMockData', '', 'return this.$http.get(\"/data/getMockData\").then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n    return res.data\r\n})', 1, '2020-07-23 23:08:55', '2020-07-23 23:18:17', 'admin', 'admin', '获取mock数据', 0, 'GET', '', 00000000000, '', 0, NULL, NULL);
-INSERT INTO `func` VALUES (193, 'getApiData', 'res', 'const data = res.data || []\r\nreturn data', 1, '2020-07-23 23:08:56', '2020-07-23 23:12:35', 'admin', 'admin', '远程函数，获取数据', 1, 'get', '', 00000000000, 'api/data/getMockData', 0, NULL, 'res');
+INSERT INTO `func` VALUES (192, 'getMockData', '', 'return this.$http.get(\"/data/getMockData\").then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n    return res.data\r\n})', 1, '2020-07-23 23:08:55', '2020-07-23 23:18:17', '', '', '获取mock数据', 0, 'GET', '', 0, '', 0, NULL, NULL);
+INSERT INTO `func` VALUES (193, 'getApiData', 'res', 'const data = res.data || []\r\nreturn data', 1, '2020-07-23 23:08:56', '2020-07-23 23:12:35', '', '', '远程函数，获取数据', 1, 'get', '', 0, 'api/data/getMockData', 0, NULL, 'res');
 
 -- ----------------------------
 -- Table structure for func_group
@@ -105,7 +105,7 @@ CREATE TABLE `func_group`  (
 -- ----------------------------
 -- Records of func_group
 -- ----------------------------
-INSERT INTO `func_group` VALUES (1, '默认分类', -1, '2020-07-23 23:08:08', '2020-07-23 23:08:28', 'admin', NULL, 1, 0);
+INSERT INTO `func_group` VALUES (1, '默认分类', -1, '2020-07-23 23:08:08', '2020-07-23 23:08:28', '', NULL, 1, 0);
 
 -- ----------------------------
 -- Table structure for operate_log
@@ -210,7 +210,7 @@ CREATE TABLE `project`  (
 -- ----------------------------
 -- Records of project
 -- ----------------------------
-INSERT INTO `project` VALUES (1, '1', 'test', 'test', 0, '2020-07-23 23:06:41', '2020-07-23 23:06:41', NULL, NULL, 0);
+-- INSERT INTO `project` VALUES (1, '1', 'test', 'test', 0, '2020-07-23 23:06:41', '2020-07-23 23:06:41', NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for r_favourite
@@ -233,13 +233,13 @@ CREATE TABLE `r_favourite`  (
 -- ----------------------------
 -- Records of r_favourite
 -- ----------------------------
-INSERT INTO `r_favourite` VALUES (2, 1, 5, NULL, NULL, NULL, NULL, 0);
+-- INSERT INTO `r_favourite` VALUES (2, 1, 5, NULL, NULL, NULL, NULL, 0);
 
 -- ----------------------------
--- Table structure for r_page_func_group
+-- Table structure for r_page_func
 -- ----------------------------
-DROP TABLE IF EXISTS `r_page_func_group`;
-CREATE TABLE `r_page_func_group`  (
+DROP TABLE IF EXISTS `r_page_func`;
+CREATE TABLE `r_page_func`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pageId` int(11) NOT NULL COMMENT 'page 表主键',
   `updateTime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
@@ -248,6 +248,7 @@ CREATE TABLE `r_page_func_group`  (
   `updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `funcId` int(11) NOT NULL COMMENT 'function 表主键',
   `deleteFlag` int(11) NULL DEFAULT 0 COMMENT '是否删除，1代表已删除',
+  `projectId` int(11) NOT NULL COMMENT 'project 表主键',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -276,8 +277,8 @@ CREATE TABLE `r_project_comp`  (
 -- ----------------------------
 -- Records of r_project_comp
 -- ----------------------------
-INSERT INTO `r_project_comp` VALUES (1, 4, NULL, NULL, NULL, NULL, 1, 1, '[1, 2]', 0);
-INSERT INTO `r_project_comp` VALUES (2, 4, NULL, NULL, NULL, NULL, 2, 3, '[1]', 0);
+-- INSERT INTO `r_project_comp` VALUES (1, 4, NULL, NULL, NULL, NULL, 1, 1, '[1, 2]', 0);
+-- INSERT INTO `r_project_comp` VALUES (2, 4, NULL, NULL, NULL, NULL, 2, 3, '[1]', 0);
 
 -- ----------------------------
 -- Table structure for r_project_func_group
@@ -300,7 +301,7 @@ CREATE TABLE `r_project_func_group`  (
 -- ----------------------------
 -- Records of r_project_func_group
 -- ----------------------------
-INSERT INTO `r_project_func_group` VALUES (207, 1, NULL, NULL, 'admin', NULL, 1, 0);
+-- INSERT INTO `r_project_func_group` VALUES (207, 1, NULL, NULL, 'admin', NULL, 1, 0);
 
 -- ----------------------------
 -- Table structure for r_project_page
@@ -403,8 +404,8 @@ CREATE TABLE `r_user_project_role`  (
 -- ----------------------------
 -- Records of r_user_project_role
 -- ----------------------------
-INSERT INTO `r_user_project_role` VALUES (6, 1, 8, NULL, NULL, 'admin', NULL, 1, 0);
-INSERT INTO `r_user_project_role` VALUES (7, 1, 9, NULL, NULL, 'admin', NULL, 1, 0);
+-- INSERT INTO `r_user_project_role` VALUES (6, 1, 8, NULL, NULL, 'admin', NULL, 1, 0);
+-- INSERT INTO `r_user_project_role` VALUES (7, 1, 9, NULL, NULL, 'admin', NULL, 1, 0);
 
 -- ----------------------------
 -- Table structure for role
@@ -469,8 +470,8 @@ CREATE TABLE `version`  (
 -- ----------------------------
 -- Records of version
 -- ----------------------------
-INSERT INTO `version` VALUES (1, 1, '0.0.1', '初始化', '2020-06-03 12:01:16', '2020-06-03 12:01:16', NULL, NULL, 0);
-INSERT INTO `version` VALUES (2, 1, '0.0.2', '修复 bug', '2020-06-03 12:01:16', '2020-06-03 12:01:16', NULL, NULL, 0);
-INSERT INTO `version` VALUES (3, 2, '0.0.1', '初始化 x-table', '2020-06-03 12:01:16', '2020-06-03 12:01:16', NULL, NULL, 0);
+-- INSERT INTO `version` VALUES (1, 1, '0.0.1', '初始化', '2020-06-03 12:01:16', '2020-06-03 12:01:16', NULL, NULL, 0);
+-- INSERT INTO `version` VALUES (2, 1, '0.0.2', '修复 bug', '2020-06-03 12:01:16', '2020-06-03 12:01:16', NULL, NULL, 0);
+-- INSERT INTO `version` VALUES (3, 2, '0.0.1', '初始化 x-table', '2020-06-03 12:01:16', '2020-06-03 12:01:16', NULL, NULL, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

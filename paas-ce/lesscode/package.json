@@ -153,6 +153,7 @@
     "monaco-editor": "~0.20.0",
     "monaco-editor-webpack-plugin": "~1.9.0",
     "mysql2": "~1.7.0",
+    "node-request-context": "^1.0.5",
     "nodemon": "~1.19.3",
     "optimize-css-assets-webpack-plugin": "~5.0.3",
     "ora": "~4.0.2",

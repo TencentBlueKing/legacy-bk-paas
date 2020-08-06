@@ -35,6 +35,8 @@ const authMiddleware = require('./middleware/auth')
 const httpMiddleware = require('./middleware/http')
 const errorMiddleware = require('./middleware/error')
 const jsonSendMiddleware = require('./middleware/json-send')
+const { requestContextMiddleware } = require('./middleware/request-context')
+
 const { CODE } = require('./util')
 const httpConf = require('./conf/http')
 
@@ -122,6 +124,7 @@ async function startServer () {
     app.use(httpMiddleware())
     app.use(jsonSendMiddleware())
     app.use(authMiddleware())
+    app.use(requestContextMiddleware())
 
     app.use(koaMount(
         '/static', koaStatic(resolve(__dirname, '..', IS_DEV ? 'client/static' : 'client/dist/static')))
