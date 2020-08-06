@@ -35,7 +35,7 @@ const authMiddleware = require('./middleware/auth')
 const httpMiddleware = require('./middleware/http')
 const errorMiddleware = require('./middleware/error')
 const jsonSendMiddleware = require('./middleware/json-send')
-const { requestContextMiddleware } = require('./middleware/requestContext')
+const { requestContextMiddleware } = require('./middleware/request-context')
 
 const { CODE } = require('./util')
 const httpConf = require('./conf/http')

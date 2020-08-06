@@ -15,7 +15,7 @@ const querystring = require('querystring')
 const httpConf = require('../conf/http')
 const { CODE, isAjaxReq } = require('../util')
 const { findUserByBk, addUser } = require('../controller/user')
-const { setRequestContext } = require('./requestContext')
+const { setRequestContext } = require('./request-context')
 
 module.exports = () => {
     return async function (ctx, next) {
