@@ -11,17 +11,14 @@
 
 import projectModel from '../model/project'
 const { CODE } = require('../util')
-const presetUser = {
-    id: 1,
-    name: 'admin'
-}
 
 module.exports = {
     async createProject (ctx) {
         const projectData = ctx.request.body
-        projectData.createUser = presetUser.name
+        const userInfo = ctx.session.userInfo
+        projectData.createUser = userInfo.username
         const userProjectRoleData = {
-            userId: presetUser.id,
+            userId: userInfo.id,
             roleId: 1
         }
 
@@ -59,6 +56,7 @@ module.exports = {
     },
 
     async queryProject (ctx) {
+        const userInfo = ctx.session.userInfo
         const { filter = '', q } = ctx.request.query
         const query = {
             condition: [],
@@ -74,25 +72,25 @@ module.exports = {
         switch (filter) {
             case 'my':
                 query.condition.push('project.createUser = :user')
-                query.params.user = presetUser.name
+                query.params.user = userInfo.username
                 query.condition = query.condition.join(' AND ')
                 projectList = await projectModel.queryMyCreateProject(query)
                 break
             case 'favorite':
                 query.condition.push('favourite.userId = :userId')
-                query.params.userId = presetUser.id
+                query.params.userId = userInfo.id
                 query.condition = query.condition.join(' AND ')
                 projectList = await projectModel.queryMyFavoriteProject(query)
                 break
             case 'share':
                 query.condition.push('user_project_role.userId = :userId')
-                query.params.userId = presetUser.id
+                query.params.userId = userInfo.id
                 query.condition = query.condition.join(' AND ')
                 projectList = await projectModel.queryShareWithProject(query)
                 break
             default:
                 query.condition.push('user_project_role.userId = :userId')
-                query.params.userId = presetUser.id
+                query.params.userId = userInfo.id
                 query.condition = query.condition.join(' AND ')
                 projectList = await projectModel.queryAllProject(query)
                 break
@@ -107,11 +105,12 @@ module.exports = {
                 params: { projectIds }
             })
         }
+        console.log(pageList, 'pageListpageList')
 
         // 获取已收藏的项目
         const favoritetList = await projectModel.queryMyFavoriteProject({
             condition: 'favourite.userId = :userId',
-            params: { userId: presetUser.id }
+            params: { userId: userInfo.id }
         })
 
         // 按projectId分组
@@ -132,16 +131,16 @@ module.exports = {
             }
             project['favorite'] = favoritetList.find(item => item.id === projectId) ? 1 : 0
         })
-        projectList.sort((a, b) => {
-            if (!a.pageUpdateTime && !b.pageUpdateTime) {
-                return 0
-            } else if (!a.pageUpdateTime && b.pageUpdateTime) {
-                return 1
-            } else if (a.pageUpdateTime && !b.pageUpdateTime) {
-                return -1
-            }
-            return new Date(b.pageUpdateTime) - new Date(a.pageUpdateTime)
-        })
+        // projectList.sort((a, b) => {
+        //     if (!a.pageUpdateTime && !b.pageUpdateTime) {
+        //         return 0
+        //     } else if (!a.pageUpdateTime && b.pageUpdateTime) {
+        //         return 1
+        //     } else if (a.pageUpdateTime && !b.pageUpdateTime) {
+        //         return -1
+        //     }
+        //     return new Date(b.pageUpdateTime) - new Date(a.pageUpdateTime)
+        // })
 
         ctx.send({
             code: 0,
@@ -170,7 +169,7 @@ module.exports = {
     async deleteProject (ctx) {
         try {
             const { id } = ctx.request.body
-            const fields = { status: 2 }
+            const fields = { deleteFlag: 1 }
             const { affected } = await projectModel.updateProject(id, fields)
             ctx.send({
                 code: 0,
@@ -184,8 +183,9 @@ module.exports = {
 
     async favorite (ctx) {
         const { id, favorite } = ctx.request.body
+        const userInfo = ctx.session.userInfo
         const data = {
-            userId: presetUser.id,
+            userId: userInfo.id,
             projectId: id
         }
 

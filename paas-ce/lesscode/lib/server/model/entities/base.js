@@ -43,8 +43,8 @@ export default class Base {
     @BeforeInsert()
     beforeInsert () {
         console.log('beforeInsert curLoginUsername', curLoginUsername)
-        this.createUser = 'admin'
-        this.updateUser = 'admin'
+        this.createUser = curLoginUsername.username
+        this.updateUser = curLoginUsername.username
         this.updateTime = new Date()
     }
 
@@ -53,6 +53,6 @@ export default class Base {
     @BeforeUpdate()
     updateUpdateUser () {
         console.log('updateUpdateUser curLoginUsername', curLoginUsername)
-        this.updateUser = 'admin'
+        this.updateUser = curLoginUsername.username
     }
 }
