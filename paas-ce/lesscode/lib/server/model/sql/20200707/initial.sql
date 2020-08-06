@@ -75,15 +75,15 @@ CREATE TABLE `func`  (
   `funcApiUrl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '远程函数URL',
   `deleteFlag` int(11) NULL DEFAULT 0 COMMENT '是否删除，1代表已删除',
   `order` int(11) NULL DEFAULT NULL COMMENT '排序',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `funcGroupId`(`funcGroupId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 192 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '函数表' ROW_FORMAT = Dynamic;
+  `remoteParams` tinytext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '回调函数参数，逗号分隔字符串',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 207 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '函数表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of func
 -- ----------------------------
-INSERT INTO `func` VALUES (192, 'getMockData', '', 'this.$http.get(\"/data/getMockData\").then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n})', 1, '2020-07-23 23:08:55', '2020-07-23 23:18:17', 'admin', 'admin', '获取mock数据', 0, 'GET', '', 00000000000, '', 0, NULL);
-INSERT INTO `func` VALUES (193, 'getApiData', 'res', 'const data = res.data || []\r\nreturn data', 1, '2020-07-23 23:08:56', '2020-07-23 23:12:35', 'admin', 'admin', '远程函数，获取数据', 1, 'get', '', 00000000000, 'api/data/getMockData', 0, NULL);
+INSERT INTO `func` VALUES (192, 'getMockData', '', 'return this.$http.get(\"/data/getMockData\").then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n    return res.data\r\n})', 1, '2020-07-23 23:08:55', '2020-07-23 23:18:17', 'admin', 'admin', '获取mock数据', 0, 'GET', '', 00000000000, '', 0, NULL, NULL);
+INSERT INTO `func` VALUES (193, 'getApiData', 'res', 'const data = res.data || []\r\nreturn data', 1, '2020-07-23 23:08:56', '2020-07-23 23:12:35', 'admin', 'admin', '远程函数，获取数据', 1, 'get', '', 00000000000, 'api/data/getMockData', 0, NULL, 'res');
 
 -- ----------------------------
 -- Table structure for func_group

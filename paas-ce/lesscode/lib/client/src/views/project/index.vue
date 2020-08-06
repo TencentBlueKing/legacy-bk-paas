@@ -4,7 +4,7 @@
             <div class="side-hd">
                 <i class="back-icon bk-drag-icon bk-drag-arrow-back" title="返回项目列表" @click="toProjects"></i>
                 <span class="seperate-line">|</span>
-                <bk-select ext-cls="select-project" v-model="projectId" :clearable="false" @selected="changeProject">
+                <bk-select ext-cls="select-project" v-model="projectId" :clearable="false" :searchable="true" @selected="changeProject">
                     <bk-option v-for="option in projectList"
                         :key="option.id"
                         :id="option.id"

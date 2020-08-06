@@ -28,6 +28,7 @@ module.exports = {
                     const pages = pageList.filter(x => x.funcId === func.id)
                     func.pages = pages
                     func.funcParams = (func.funcParams || '').split(',').filter(x => x !== '')
+                    func.remoteParams = (func.remoteParams || '').split(',').filter(x => x !== '')
                     return func
                 })
             })
@@ -114,6 +115,7 @@ module.exports = {
             const postData = ctx.request.body
             const data = await addFunction(postData)
             data.funcParams = data.funcParams.split(',').filter(x => x !== '')
+            data.remoteParams = data.remoteParams.split(',').filter(x => x !== '')
             ctx.send({
                 code: 0,
                 message: 'success',
@@ -139,6 +141,7 @@ module.exports = {
                 const pages = pageList.filter(x => x.funcId === func.id)
                 func.pages = pages
                 func.funcParams = func.funcParams.split(',').filter(x => x !== '')
+                func.remoteParams = func.remoteParams.split(',').filter(x => x !== '')
             })
             ctx.send({
                 code: 0,
@@ -158,6 +161,7 @@ module.exports = {
             const data = await editFunction([postData])
             data.forEach((func) => {
                 func.funcParams = func.funcParams.split(',').filter(x => x !== '')
+                func.remoteParams = func.remoteParams.split(',').filter(x => x !== '')
             })
             ctx.send({
                 code: 0,
