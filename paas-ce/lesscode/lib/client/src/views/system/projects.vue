@@ -542,6 +542,7 @@
     .project-list {
         display: flex;
         flex-wrap: wrap;
+        align-content: flex-start;
         margin-top: 10px;
 
         .project-item {
@@ -549,7 +550,7 @@
             flex: none;
             width: 312px;
             height: 242px;
-            margin: 0 14px 30px 0;
+            margin: 0 14px 40px 0;
             padding: 6px;
             background: #fff;
             border-radius: 0px 6px 6px 6px;
@@ -567,8 +568,10 @@
                 background: linear-gradient(-160deg, transparent 9px, #dcdee5 0)
             }
             &:hover {
+                box-shadow: 1px 2px 8px 2px rgba(0, 0 ,0 , 0.11);
+
                 .desc {
-                    transform: translateY(0%);
+                    display: block;
                 }
                 .favorite-btn {
                     opacity: 1;
@@ -607,7 +610,7 @@
 
                 .bk-drag-icon {
                     font-size: 18px;
-                    color: #63656E;
+                    color: #FAFBFD;
                     cursor: pointer;
                 }
                 .bk-drag-favorite {
@@ -668,14 +671,13 @@
                 }
             }
             .desc {
+                display: none;
                 position: absolute;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
                 padding: 28px 26px 28px 21px;
-                transform: translateY(100%);
-                transition: all .375s ease-in-out;
 
                 .desc-text {
                     font-size: 12px;
