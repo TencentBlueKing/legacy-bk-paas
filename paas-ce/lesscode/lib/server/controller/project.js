@@ -105,7 +105,6 @@ module.exports = {
                 params: { projectIds }
             })
         }
-        console.log(pageList, 'pageListpageList')
 
         // 获取已收藏的项目
         const favoritetList = await projectModel.queryMyFavoriteProject({

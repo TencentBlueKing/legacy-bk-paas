@@ -62,7 +62,7 @@
     @import "@/css/mixins/ellipsis";
 
     .layout {
-        --side-hd-height: 50px;
+        --side-hd-height: 52px;
         --side-ft-height: 50px;
         --aside-width: 258px;
         --footer-height: 50px;
@@ -101,6 +101,7 @@
                 color: #313238;
                 margin: 0;
                 padding-left: 12px;
+                white-space: nowrap;
             }
         }
 
@@ -193,7 +194,7 @@
                 height: 42px;
                 line-height: 42px;
                 padding: 0 12px 0 22px;
-                margin: 4px 0;
+                margin: 0;
                 white-space: nowrap;
                 cursor: pointer;
 
