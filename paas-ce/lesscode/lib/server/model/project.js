@@ -11,6 +11,7 @@
 import { getConnection, getRepository } from 'typeorm'
 import Project from './entities/project'
 import Page from './entities/page'
+import PageFunc from './entities/page-func'
 import Comp from './entities/comp'
 import UserProjectRole from './entities/user-project-role'
 import ProjectComp from './entities/project-comp'
@@ -105,6 +106,7 @@ export default {
                     await transactionalEntityManager.save(projectCompValues)
                 }
 
+                const funcIdMap = {}
                 if (projectFuncGroupCopyValues.length) {
                     const funcGroupIdList = projectFuncGroupCopyValues.map(item => item.funcGroupId)
                     // 得到要复制的主体数据
@@ -135,7 +137,11 @@ export default {
                         others.funcGroupId = funcGroupIdMap[others.funcGroupId]
                         return others
                     }))
-                    await transactionalEntityManager.save(saveCopyFuncs)
+
+                    const newFuncList = await transactionalEntityManager.save(saveCopyFuncs)
+                    copyFuncs.forEach((item, index) => {
+                        funcIdMap[item.id] = newFuncList[index].id
+                    })
 
                     // 新建函数组与项目关联关系数据
                     const projectFuncGroupValues = getRepository(ProjectFuncGroup).create(projectFuncGroupCopyValues.map((item, index) => {
@@ -154,12 +160,14 @@ export default {
                         .createQueryBuilder('page')
                         .where('page.id IN (:...ids)', { ids: pageIdList })
                         .getMany()
+                    const copyPageFuncs = await getRepository(PageFunc)
+                        .createQueryBuilder('pageFuncs')
+                        .where('pageFuncs.pageId IN (:...pageIds)', { pageIds: pageIdList })
+                        .getMany()
 
                     // 先新建页面主体数据，再新建关联关系数据
                     const saveCopyPages = getRepository(Page).create(copyPages.map(item => {
                         const { id, createTime, updateTime, ...others } = item
-                        // 页面名称不能重复
-                        others.pageName = `${item.pageName}-copy`
                         return others
                     }))
                     const newPageList = await transactionalEntityManager.save(saveCopyPages)
@@ -170,6 +178,22 @@ export default {
                         return others
                     }))
                     await transactionalEntityManager.save(projectPageValues)
+
+                    // 新建页面函数关联记录
+                    if (Object.keys(funcIdMap).length) {
+                        const pageIdMap = {}
+                        pageIdList.forEach((id, index) => {
+                            pageIdMap[id] = newPageList[index].id
+                        })
+                        const saveCopyPageFuncs = getRepository(PageFunc).create(copyPageFuncs.map(item => {
+                            const { id, createTime, updateTime, ...others } = item
+                            others.pageId = pageIdMap[others.pageId]
+                            others.funcId = funcIdMap[others.funcId]
+                            others.projectId = projectId
+                            return others
+                        }))
+                        await transactionalEntityManager.save(saveCopyPageFuncs)
+                    }
                 }
             } else {
                 const funcGroup = getRepository(FuncGroup).create(defaultGroup)

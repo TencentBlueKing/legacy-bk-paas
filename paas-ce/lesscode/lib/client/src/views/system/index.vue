@@ -16,9 +16,9 @@
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="projects">
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
                     </router-link>
-                    <router-link tag="div" class="nav-item" :to="{ name: 'componentManage', query: { filter: '' } }">
+                    <!-- <router-link tag="div" class="nav-item" :to="{ name: 'componentManage', query: { filter: '' } }">
                         <i class="bk-drag-icon bk-drag-project-list"></i>自定义组件库
-                    </router-link>
+                    </router-link> -->
                     <router-link tag="div" class="nav-item" :to="'account'">
                         <i class="bk-drag-icon bk-drag-member"></i>账号管理
                     </router-link>
@@ -62,7 +62,7 @@
     @import "@/css/mixins/ellipsis";
 
     .layout {
-        --side-hd-height: 50px;
+        --side-hd-height: 52px;
         --side-ft-height: 50px;
         --aside-width: 258px;
         --footer-height: 50px;
@@ -101,6 +101,7 @@
                 color: #313238;
                 margin: 0;
                 padding-left: 12px;
+                white-space: nowrap;
             }
         }
 
@@ -193,7 +194,7 @@
                 height: 42px;
                 line-height: 42px;
                 padding: 0 12px 0 22px;
-                margin: 4px 0;
+                margin: 0;
                 white-space: nowrap;
                 cursor: pointer;
 
