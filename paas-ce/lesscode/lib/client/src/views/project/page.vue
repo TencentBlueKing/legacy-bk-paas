@@ -18,12 +18,13 @@
             <div class="page-list">
                 <div class="page-item" v-for="(page, index) in renderList" :key="index">
                     <div class="item-bd">
-                        <div class="preview">
-                            <img :src="page.previewImg || pagePreivewImg" alt="页面缩略预览">
+                        <div class="preview" @click="handleEditPage(page.id)">
+                            <img v-if="page.previewImg" :src="page.previewImg" alt="页面缩略预览">
+                            <div class="empty-preview-img" v-else>页面为空</div>
                             <div class="mask">
                                 <div class="operate-btns">
-                                    <bk-button class="edit-btn" theme="primary" @click="handleEditPage(page.id)">编辑</bk-button>
-                                    <bk-button class="preview-btn" @click="handlePreview(page)">预览</bk-button>
+                                    <bk-button class="edit-btn" theme="primary">编辑</bk-button>
+                                    <bk-button class="preview-btn" @click.stop="handlePreview(page)">预览</bk-button>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="empty" v-show="!pageList.length || !renderList.length">
+            <div class="empty" v-show="(!pageList.length || !renderList.length) && !isLoading">
                 <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
                     <div v-if="!pageList.length" class="empty-page">暂无页面，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link></div>
                     <div v-else>无搜索结果</div>
@@ -89,6 +90,13 @@
                 return this.$route.params.projectId
             }
         },
+        watch: {
+            keyword (val) {
+                if (!val) {
+                    this.handleSearch(false)
+                }
+            }
+        },
         async created () {
             await this.getPageList()
         },
@@ -117,7 +125,7 @@
             async handleCopy (page) {
                 this.action = 'copy'
                 this.$refs.pageDialog.dialog.formData.id = page.id
-                this.$refs.pageDialog.dialog.formData.pageName = `${page.pageName}_copy`
+                this.$refs.pageDialog.dialog.formData.pageName = `${page.pageName}-copy`
                 this.$refs.pageDialog.dialog.visible = true
             },
             async handleDownloadSource (code) {
@@ -174,7 +182,8 @@
                 if (!page.content) {
                     this.$bkMessage({
                         theme: 'error',
-                        message: '该页面为空页面，请先编辑页面'
+                        message: '该页面为空页面，请先编辑页面',
+                        limit: 1
                     })
                     return
                 }
@@ -185,7 +194,7 @@
                     this.keyword = ''
                     this.renderList = this.pageList
                 } else {
-                    this.renderList = this.pageList.filter(item => item.pageName.indexOf(this.keyword) !== -1)
+                    this.renderList = this.pageList.filter(item => item.pageName.toLowerCase().indexOf(this.keyword.toLowerCase()) !== -1)
                 }
             },
             hideDropdownMenu (pageId) {
@@ -297,6 +306,18 @@
                         border-radius: 4px 4px 0px 0px;
                         img {
                             max-width: 100%;
+                        }
+
+                        .empty-preview-img {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 14px;
+                            font-weight: 700;
+                            color: #C4C6CC;
+                            height: 100%;
+                            background: #f0f1f5;
+                            border-radius: 4px 4px 0px 0px;
                         }
 
                         .mask {
