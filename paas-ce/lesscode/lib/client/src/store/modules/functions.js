@@ -33,7 +33,7 @@ export default {
             return http.post(`${perfix}/addFunction`, func).then((res = {}) => {
                 const newFunc = res.data || {}
                 const curGroup = state.funcGroups.find((group) => (group.id === groupId)) || {}
-                curGroup.functionList.push(newFunc)
+                curGroup.functionList.unshift(newFunc)
                 return newFunc
             })
         },
@@ -50,19 +50,18 @@ export default {
         editFunc ({ state }, { groupId, func }) {
             return http.put(`${perfix}/editFunction`, func).then((res) => {
                 const data = res.data || []
-                const newFunc = data[0]
-                const newGroupId = func.funcGroupId
-                const groups = state.funcGroups
-                const oldGroup = groups.find(x => x.id === groupId)
-                const curFunc = oldGroup.functionList.find(x => x.id === func.id)
-                Object.assign(curFunc, newFunc)
-                if (newGroupId !== groupId) {
-                    const curGroup = groups.find(x => x.id === newGroupId)
+                const newFunc = data[0] || {}
+                if (newFunc.updateTime !== func.updateTime) {
+                    const groups = state.funcGroups
+                    const oldGroup = groups.find(x => x.id === groupId)
+                    const curFunc = oldGroup.functionList.find(x => x.id === func.id)
+                    Object.assign(curFunc, newFunc)
+                    const curGroup = groups.find(x => x.id === func.funcGroupId)
                     const oldIndex = oldGroup.functionList.findIndex(x => x.id === func.id)
                     oldGroup.functionList.splice(oldIndex, 1)
-                    curGroup.functionList.push(curFunc)
+                    curGroup.functionList.unshift(curFunc)
                 }
-                return curFunc
+                return newFunc
             })
         },
 

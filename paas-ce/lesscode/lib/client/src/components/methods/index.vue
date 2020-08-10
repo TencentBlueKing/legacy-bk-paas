@@ -8,7 +8,7 @@
                         <bk-popconfirm trigger="click" confirm-text="" cancel-text="" :on-hide="() => (groupNameErrMessage = '')">
                             <div slot="content">
                                 <bk-input :class="['add-function-group', { 'input-error': groupNameErrMessage }]"
-                                    placeholder="请输入函数分类，多个分类 / 分隔，回车结束"
+                                    placeholder="请输入函数分类，多个分类 / 分隔，回车保存"
                                     @enter="addFunctionGroup"
                                     @focus="groupNameErrMessage = ''"
                                     @input="groupNameErrMessage = ''"
@@ -62,7 +62,11 @@
                             <ul v-if="openGroupIds.includes(group.id)">
                                 <li v-for="func in group.functionList" :key="func.id" :class="['func-item', { select: func.id === chooseId }]" @click="chooseFunction(func)">
                                     <span class="func-name" :title="func.funcName">{{ func.funcName }}</span>
-                                    <i class="bk-drag-icon bk-drag-close-line item-tool hover-show" @click.stop="deleteItem(func.id, `删除函数【${func.funcName}】后，引用该函数的页面将受影响`, false)"></i>
+                                    <i class="bk-drag-icon bk-drag-close-line item-tool hover-show"
+                                        @click.stop="deleteItem(func.id, `删除函数【${func.funcName}】`, false)"
+                                        v-if="(func.pages || []).length <= 0"
+                                    ></i>
+                                    <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-else @click.stop v-bk-tooltips="{ content: '该函数被页面引用，请修改后再删除', placements: ['top'] }"></i>
                                 </li>
                             </ul>
                         </li>
@@ -159,7 +163,7 @@
 
             groupList: {
                 get () {
-                    const funcReg = new RegExp(this.searchFunctionStr)
+                    const funcReg = new RegExp(this.searchFunctionStr, 'i')
                     const groupCopy = JSON.parse(JSON.stringify(this.funcGroups))
                     groupCopy.forEach((group) => (group.functionList = group.functionList.filter(x => funcReg.test(x.funcName))))
                     return groupCopy
@@ -302,12 +306,18 @@
                     funcGroupId: group.id,
                     funcType: 0
                 }
-                const funcList = group.functionList || []
-                let index = funcList.findIndex(x => x.funcName === untitledFunc.funcName)
+                const groups = this.funcGroups || []
+                let index = groups.findIndex((group) => {
+                    const funcList = group.functionList || []
+                    return funcList.find(x => x.funcName === untitledFunc.funcName)
+                })
                 while (index >= 0) {
                     if (/\d$/.test(untitledFunc.funcName)) untitledFunc.funcName = untitledFunc.funcName.replace(/\d$/, a => +a + 1)
                     else untitledFunc.funcName = 'Untitled 1'
-                    index = funcList.findIndex(x => x.funcName === untitledFunc.funcName)
+                    index = groups.findIndex((group) => {
+                        const funcList = group.functionList || []
+                        return funcList.find(x => x.funcName === untitledFunc.funcName)
+                    })
                 }
 
                 this.addFunc({ groupId: group.id, func: untitledFunc }).then((res) => {
@@ -581,6 +591,9 @@
             .hover-show {
                 display: block;
             }
+        }
+        .disable {
+            cursor: not-allowed;
         }
     }
 
