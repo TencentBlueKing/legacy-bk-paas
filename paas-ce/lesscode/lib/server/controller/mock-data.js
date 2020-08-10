@@ -57,6 +57,89 @@ const Data = {
                 message: err.message
             })
         }
+    },
+
+    async getXTableData (ctx) {
+        const data = {
+            msg: [
+                {
+                    cluster_config: {
+                        creator: 'system',
+                        cluster_name: '测试1',
+                        create_time: '2019-11-19 17:52:08',
+                        cluster_id: 1,
+                        port: 10004,
+                        domain_name: '',
+                        is_editable: false,
+                        state: true
+                    },
+                    is_editable: true
+                },
+                {
+                    cluster_config: {
+                        creator: 'system',
+                        cluster_name: '测试2',
+                        create_time: '2019-11-19 17:52:08',
+                        cluster_id: 2,
+                        port: 10004,
+                        domain_name: '127.0.0.1',
+                        is_editable: true,
+                        state: true
+                    },
+                    is_editable: true
+                },
+                {
+                    cluster_config: {
+                        creator: 'system',
+                        cluster_name: '测试3',
+                        create_time: '2019-11-19 17:52:08',
+                        cluster_id: 3,
+                        port: 10004,
+                        domain_name: '127.0.0.1',
+                        is_editable: true,
+                        state: false
+                    },
+                    is_editable: true
+                },
+                {
+                    cluster_config: {
+                        creator: 'system',
+                        cluster_name: '测试4',
+                        create_time: '2019-11-19 17:52:08',
+                        cluster_id: 4,
+                        port: 10004,
+                        domain_name: '',
+                        is_editable: true,
+                        state: true
+                    },
+                    is_editable: true
+                },
+                {
+                    cluster_config: {
+                        creator: 'system',
+                        cluster_name: '搜索测试5',
+                        create_time: '2019-11-19 17:52:08',
+                        cluster_id: 5,
+                        port: 10004,
+                        domain_name: '',
+                        is_editable: false,
+                        state: false
+                    },
+                    is_editable: false
+                }
+            ]
+        }
+        try {
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
     }
 }
 

@@ -10,8 +10,7 @@
  */
 
 import { PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, Column, BeforeInsert, BeforeUpdate } from 'typeorm'
-
-export const curLoginUsername = {}
+import { RequestContext } from '../../middleware/request-context'
 
 export default class Base {
     // 自动增量值自动生成ID
@@ -39,20 +38,18 @@ export default class Base {
     deleteFlag
 
     // 插入数据写入用户名
-    // tofix: 登陆以后，拿到登陆用户名取代admin
     @BeforeInsert()
     beforeInsert () {
-        console.log('beforeInsert curLoginUsername', curLoginUsername)
-        this.createUser = 'admin'
-        this.updateUser = 'admin'
+        const currentUser = RequestContext.getCurrentUser()
+        this.createUser = currentUser.username
+        this.updateUser = currentUser.username
         this.updateTime = new Date()
     }
 
     // 更新数据写入用户名
-    // tofix: 登陆以后，拿到登陆用户名取代admin
     @BeforeUpdate()
     updateUpdateUser () {
-        console.log('updateUpdateUser curLoginUsername', curLoginUsername)
-        this.updateUser = 'admin'
+        const currentUser = RequestContext.getCurrentUser()
+        this.updateUser = currentUser.username
     }
 }

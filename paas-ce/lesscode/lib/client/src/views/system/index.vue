@@ -2,16 +2,23 @@
     <main :class="['layout', { 'aside-folded': asideFolded }]">
         <aside class="aside">
             <div class="side-hd">
-                <h2 class="app-name">可视化开发平台</h2>
+                <div class="brand">
+                    <span class="bk-drag-icon app-logo">
+                        <svg aria-hidden="true" width="22" height="22">
+                            <use xlink:href="#bk-drag-template-logo"></use>
+                        </svg>
+                    </span>
+                    <h2 class="app-name">可视化开发平台</h2>
+                </div>
             </div>
             <div class="side-bd">
                 <nav class="nav-list">
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="projects">
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
                     </router-link>
-                    <router-link tag="div" class="nav-item" :to="{ name: 'componentManage', query: { filter: '' } }">
+                    <!-- <router-link tag="div" class="nav-item" :to="{ name: 'componentManage', query: { filter: '' } }">
                         <i class="bk-drag-icon bk-drag-project-list"></i>自定义组件库
-                    </router-link>
+                    </router-link> -->
                     <router-link tag="div" class="nav-item" :to="'account'">
                         <i class="bk-drag-icon bk-drag-member"></i>账号管理
                     </router-link>
@@ -25,6 +32,7 @@
         </aside>
         <div class="breadcrumbs">
             <h3 class="current">{{$route.meta.title}}</h3>
+            <extra-links></extra-links>
         </div>
         <div class="main-container">
             <router-view :key="$route.path"></router-view>
@@ -36,7 +44,11 @@
 </template>
 
 <script>
+    import ExtraLinks from '@/components/ui/extra-links'
     export default {
+        components: {
+            ExtraLinks
+        },
         data () {
             return {
                 currentYear: new Date().getUTCFullYear(),
@@ -76,13 +88,20 @@
             }
         }
 
-        .app-name {
-            font-size: 16px;
-            font-weight: normal;
-            color: #313238;
-            margin: 0;
-            padding-left: 12px;
-            @mixin ellipsis 100%;
+        .brand {
+            display: flex;
+            align-items: center;
+            margin-left: 22px;
+            .app-logo {
+                font-size: 0;
+            }
+            .app-name {
+                font-size: 16px;
+                font-weight: normal;
+                color: #313238;
+                margin: 0;
+                padding-left: 12px;
+            }
         }
 
         .aside {
@@ -96,6 +115,8 @@
             transition: width .2s cubic-bezier(0.4, 0, 0.2, 1);
 
             .side-hd {
+                display: flex;
+                justify-content: space-between;
                 height: var(--side-hd-height);
                 line-height: var(--side-hd-height);
             }
@@ -134,11 +155,10 @@
             z-index: 99;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             height: var(--breadcrumb-height);
             background: #fff;
-            /* border: 1px solid #f0f1f5; */
-            /* box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1); */
-            box-shadow: 0 3px 4px 0 rgba(64,112,203,.06);
+            box-shadow: 0 3px 4px 0 rgba(64, 112, 203, .06);
             padding-left: 24px;
             .current {
                 color: #000;
@@ -179,14 +199,14 @@
 
                 .bk-drag-icon {
                     font-size: 16px;
-                    margin-right: 22px;
+                    margin-right: 16px;
                 }
                 &:hover {
                     background: #F6F6F9;
                 }
                 &.router-link-active {
-                    background: #3a84ff;
-                    color: #fff;
+                    background: #E1ECFF;
+                    color: #3A84FF;
                 }
             }
         }

@@ -202,8 +202,8 @@
                     background: #F6F6F9;
                 }
                 &.router-link-active {
-                    background: #3a84ff;
-                    color: #fff;
+                    background: #E1ECFF;
+                    color: #3A84FF;
                 }
             }
         }

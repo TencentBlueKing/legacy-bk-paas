@@ -13,7 +13,7 @@ import { getRepository, getConnection, In, Like } from 'typeorm'
 import Func from './entities/func'
 import FuncGroup from './entities/func-group'
 import ProjectFuncGroup from './entities/project-func-group'
-import PageFuncGroup from './entities/page-func-group'
+import PageFunc from './entities/page-func'
 import Page from './entities/page'
 
 const func = {
@@ -93,10 +93,10 @@ const func = {
 
     getFuncRelatePageList (funcIds) {
         return getRepository(Page).createQueryBuilder('page')
-            .leftJoin(PageFuncGroup, 'pageFuncGroup', 'page.id = pageFuncGroup.pageId AND pageFuncGroup.deleteFlag = 0')
-            .where('pageFuncGroup.funcId IN (:...funcIds)', { funcIds })
+            .leftJoin(PageFunc, 'PageFunc', 'page.id = PageFunc.pageId AND PageFunc.deleteFlag = 0')
+            .where('PageFunc.funcId IN (:...funcIds)', { funcIds })
             .andWhere('page.deleteFlag = :deleteFlag', { deleteFlag: 0 })
-            .select('page.*, pageFuncGroup.funcId AS funcId')
+            .select('page.*, PageFunc.funcId AS funcId')
             .getRawMany()
     },
 
