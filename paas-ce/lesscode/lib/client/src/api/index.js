@@ -166,10 +166,11 @@ function handleReject (error, config) {
             bus.$emit('redirect-login', nextError.response.data.data || {})
         } else if (data && data.message) {
             nextError.message = data.message
+            messageError(nextError.message)
         } else if (status === 500) {
             nextError.message = '服务器内部出错'
+            messageError(nextError.message)
         }
-        messageError(nextError.message)
         console.error(nextError.message)
         return Promise.reject(nextError)
     }
