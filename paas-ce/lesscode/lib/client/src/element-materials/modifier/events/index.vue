@@ -22,11 +22,14 @@
                         v-for="(group, index) in funcGroups"
                         :name="group.groupName"
                         :key="index">
-                        <bk-option v-for="option in group.functionList"
+                        <bk-option class="function-option"
+                            v-for="option in group.functionList"
                             @click.native="choose(option, event.name)"
                             :key="option.id"
                             :id="option.id"
                             :name="option.funcName">
+                            <span class="funtion-name" :title="option.funcName">{{option.funcName}}</span>
+                            <i class="bk-icon icon-info" v-bk-tooltips="option.funcSummary || '该函数暂无描述'"></i>
                         </bk-option>
                     </bk-option-group>
                     <div slot="extension" style="cursor: pointer;" @click="showMethodDialog">

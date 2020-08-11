@@ -86,7 +86,7 @@ const func = {
                 funcName: Like(`%${funcName}%`)
             },
             order: {
-                order: 'DESC'
+                updateTime: 'DESC'
             }
         })
     },
