@@ -915,7 +915,7 @@
             leavePage (routeName) {
                 this.$bkInfo({
                     title: '确认离开?',
-                    subTitle: `离开页面前请确认相应的修改已保存`,
+                    subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
                     confirmFn: async () => {
                         this.$router.push({
                             name: routeName,
