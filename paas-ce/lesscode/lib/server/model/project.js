@@ -203,7 +203,7 @@ export default {
                 const funcGroup = getRepository(FuncGroup).create(defaultGroup)
                 const { id: funcGroupId } = await transactionalEntityManager.save(funcGroup)
                 const curCtx = RequestContext.getCurrentCtx()
-                const  defaultFunc = getDefaultFunc(curCtx.origin)
+                const defaultFunc = getDefaultFunc(curCtx.origin)
                 defaultFunc.forEach((func) => (func.funcGroupId = funcGroupId))
                 const funcs = getRepository(Func).create(defaultFunc)
                 await transactionalEntityManager.save(funcs)
