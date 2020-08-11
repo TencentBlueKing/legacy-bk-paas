@@ -4,7 +4,7 @@
             <div class="side-hd">
                 <i class="back-icon bk-drag-icon bk-drag-arrow-back" title="返回项目列表" @click="toProjects"></i>
                 <span class="seperate-line">|</span>
-                <bk-select ext-cls="select-project" v-model="projectId" :clearable="false" :searchable="true" @selected="changeProject">
+                <bk-select ext-cls="select-project" ext-popover-cls="select-project-dropdown" v-model="projectId" :clearable="false" :searchable="true" @selected="changeProject">
                     <bk-option v-for="option in projectList"
                         :key="option.id"
                         :id="option.id"
@@ -23,7 +23,7 @@
         <div class="breadcrumbs">
             <h3 class="current">{{ currentPage.title }}</h3>
         </div>
-        <div class="main-container">
+        <div class="main-container" v-show="!pageLoading">
             <router-view :key="$route.path" v-if="!projectNotExist"></router-view>
             <div v-else class="exception-page">
                 <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
@@ -38,6 +38,7 @@
     export default {
         data () {
             return {
+                pageLoading: false,
                 projectId: '',
                 navList: [
                     {
@@ -79,6 +80,7 @@
             },
             async getProjectList () {
                 try {
+                    this.pageLoading = true
                     const { projectList } = await this.$store.dispatch('project/query', { config: {} })
                     this.projectList = projectList
                 } catch (e) {
@@ -100,6 +102,10 @@
 
 <style lang="postcss">
     @import "@/css/mixins/ellipsis";
+
+    .select-project-dropdown .bk-select-search-input {
+        padding: 0 10px 0 30px;
+    }
 
     .project-layout {
         --side-hd-height: 52px;
@@ -139,6 +145,10 @@
                     width: 190px;
                     border: none;
                     margin-left: 5px;
+                    .bk-select-name {
+                        font-size: 16px;
+                        color: #313238;
+                    }
                 }
             }
             .side-bd {
