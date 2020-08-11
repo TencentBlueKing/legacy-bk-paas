@@ -38,7 +38,7 @@
                     </bk-tag-input>
                 </bk-form-item>
                 <bk-form-item label="Api Url" :required="true" :rules="[requireRule('Api Url')]" :key="`${form.id}funcApiUrl`" property="funcApiUrl" error-display-type="normal">
-                    <bk-input v-model="form.funcApiUrl"></bk-input>
+                    <bk-input v-model="form.funcApiUrl" :placeholder="`请输入接口URL，例如：${locationOrigin}/api/data/getMockData`"></bk-input>
                 </bk-form-item>
                 <bk-form-item label="Method" :required="true" :rules="[requireRule('Method')]" :key="`${form.id}funcMethod`" property="funcMethod" error-display-type="normal">
                     <bk-select v-model="form.funcMethod" :clearable="false" :popover-options="{ appendTo: 'parent' }">
@@ -50,7 +50,7 @@
                     </bk-select>
                 </bk-form-item>
                 <bk-form-item label="Api Data" :key="`${form.id}funcApiData`" property="funcApiData">
-                    <bk-input v-model="form.funcApiData" type="textarea" :rows="3" :maxlength="100"></bk-input>
+                    <bk-input v-model="form.funcApiData" type="textarea" :rows="3" :maxlength="100" placeholder="请输入请求体数据包，例如：{ name: 'jack', age: 17 }"></bk-input>
                 </bk-form-item>
             </template>
             <bk-form-item label="函数简介" property="funcSummary" :key="`${form.id}funcSummary`">
@@ -97,6 +97,7 @@
                     funcBody: '',
                     id: undefined
                 },
+                locationOrigin: location.origin,
                 startInit: false,
                 formChanged: false,
                 formType: 'horizontal',

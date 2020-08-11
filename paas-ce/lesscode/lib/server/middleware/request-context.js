@@ -31,6 +31,12 @@ class RequestContext {
         }
         return {}
     }
+
+    static getCurrentCtx () {
+        const curRequestContext = RequestContext.currentRequestContext()
+        if (curRequestContext) return curRequestContext.ctx
+        return {}
+    }
 }
 
 const setRequestContext = (ctx) => {
