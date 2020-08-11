@@ -1,64 +1,66 @@
 <template>
-    <main class="pages pages-content" v-bkloading="{ isLoading: isLoading, opacity: 1 }">
-        <div class="pages-head">
-            <bk-button theme="primary" @click="handleCreate">新建</bk-button>
-            <div class="extra">
-                <bk-input
-                    :style="{ width: '400px' }"
-                    placeholder="请输入页面名称"
-                    :clearable="true"
-                    :right-icon="'bk-icon icon-search'"
-                    v-model="keyword"
-                    @clear="handleSearch(true)"
-                    @enter="handleSearch(false)">
-                </bk-input>
+    <section v-bkloading="{ isLoading: isLoading }" style="height: 100%">
+        <main class="pages pages-content" v-show="!isLoading">
+            <div class="pages-head">
+                <bk-button theme="primary" @click="handleCreate">新建</bk-button>
+                <div class="extra">
+                    <bk-input
+                        :style="{ width: '400px' }"
+                        placeholder="请输入页面名称"
+                        :clearable="true"
+                        :right-icon="'bk-icon icon-search'"
+                        v-model="keyword"
+                        @clear="handleSearch(true)"
+                        @enter="handleSearch(false)">
+                    </bk-input>
+                </div>
             </div>
-        </div>
-        <div class="pages-body">
-            <div class="page-list">
-                <div class="page-item" v-for="(page, index) in renderList" :key="index">
-                    <div class="item-bd">
-                        <div class="preview" @click="handleEditPage(page.id)">
-                            <img v-if="page.previewImg" :src="page.previewImg" alt="页面缩略预览">
-                            <div class="empty-preview-img" v-else>页面为空</div>
-                            <div class="mask">
-                                <div class="operate-btns">
-                                    <bk-button class="edit-btn" theme="primary">编辑</bk-button>
-                                    <bk-button class="preview-btn" @click.stop="handlePreview(page)">预览</bk-button>
+            <div class="pages-body">
+                <div class="page-list">
+                    <div class="page-item" v-for="(page, index) in renderList" :key="index">
+                        <div class="item-bd">
+                            <div class="preview" @click="handleEditPage(page.id)">
+                                <img v-if="page.previewImg" :src="page.previewImg" alt="页面缩略预览">
+                                <div class="empty-preview-img" v-else>页面为空</div>
+                                <div class="mask">
+                                    <div class="operate-btns">
+                                        <bk-button class="edit-btn" theme="primary">编辑</bk-button>
+                                        <bk-button class="preview-btn" @click.stop="handlePreview(page)">预览</bk-button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="item-ft">
-                        <div class="col">
-                            <h3 class="name" :title="page.pageName">{{page.pageName}}</h3>
-                            <div class="stat">{{ page.updateUser || page.createUser }} {{ getRelativeTime(page.updateTime) }}更新</div>
-                        </div>
-                        <div class="col">
-                            <bk-dropdown-menu :ref="`moreActionDropdown${page.id}`">
-                                <span slot="dropdown-trigger" class="more-menu-trigger">
-                                    <i class="bk-drag-icon bk-drag-more-dot"></i>
-                                </span>
-                                <ul class="bk-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(page.id)">
-                                    <li><a href="javascript:;" @click="handleDownloadSource(page.sourceCode)">下载源码</a></li>
-                                    <li><a href="javascript:;" @click="handleRename(page)">重命名</a></li>
-                                    <li><a href="javascript:;" @click="handleCopy(page)">复制</a></li>
-                                    <li><a href="javascript:;" @click="handleDelete(page)">删除</a></li>
-                                </ul>
-                            </bk-dropdown-menu>
+                        <div class="item-ft">
+                            <div class="col">
+                                <h3 class="name" :title="page.pageName">{{page.pageName}}</h3>
+                                <div class="stat">{{ page.updateUser || page.createUser }} {{ getRelativeTime(page.updateTime) }}更新</div>
+                            </div>
+                            <div class="col">
+                                <bk-dropdown-menu :ref="`moreActionDropdown${page.id}`">
+                                    <span slot="dropdown-trigger" class="more-menu-trigger">
+                                        <i class="bk-drag-icon bk-drag-more-dot"></i>
+                                    </span>
+                                    <ul class="bk-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(page.id)">
+                                        <li><a href="javascript:;" @click="handleDownloadSource(page.sourceCode)">下载源码</a></li>
+                                        <li><a href="javascript:;" @click="handleRename(page)">重命名</a></li>
+                                        <li><a href="javascript:;" @click="handleCopy(page)">复制</a></li>
+                                        <li><a href="javascript:;" @click="handleDelete(page)">删除</a></li>
+                                    </ul>
+                                </bk-dropdown-menu>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="empty" v-show="(!pageList.length || !renderList.length) && !isLoading">
+                    <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
+                        <div v-if="!pageList.length" class="empty-page">暂无页面，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link></div>
+                        <div v-else>无搜索结果</div>
+                    </bk-exception>
+                </div>
             </div>
-            <div class="empty" v-show="(!pageList.length || !renderList.length) && !isLoading">
-                <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
-                    <div v-if="!pageList.length" class="empty-page">暂无页面，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link></div>
-                    <div v-else>无搜索结果</div>
-                </bk-exception>
-            </div>
-        </div>
-        <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :reflash-list="getPageList"></page-dialog>
-    </main>
+            <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :reflash-list="getPageList"></page-dialog>
+        </main>
+    </section>
 </template>
 
 <script>
