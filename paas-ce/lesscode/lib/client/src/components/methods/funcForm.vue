@@ -1,7 +1,7 @@
 <template>
     <section :class="size" class="add-function">
         <bk-form :label-width="84" :model="form" slot="content" class="add-main-form" ref="funcForm" :form-type="formType">
-            <bk-form-item label="函数名称" :required="true" :rules="[requireRule('函数名称'), nameRepeatRule(), groupNameRule]" key="funcName" property="funcName" error-display-type="normal">
+            <bk-form-item label="函数名称" :required="true" :rules="[requireRule('函数名称'), nameRepeatRule, groupNameRule]" :key="`${form.id}funcName`" property="funcName" error-display-type="normal">
                 <bk-input v-model="form.funcName"></bk-input>
             </bk-form-item>
             <bk-form-item label="所属分类" :required="true" :rules="[requireRule('所属分类')]" key="funcGroupId" property="funcGroupId" error-display-type="normal">
@@ -13,14 +13,14 @@
                     </bk-option>
                 </bk-select>
             </bk-form-item>
-            <bk-form-item label="模板" key="funcType" property="funcType">
+            <bk-form-item label="模板" :key="`${form.id}funcType`" property="funcType">
                 <span v-for="temp in tempList"
                     :key="temp.id"
                     @click="form.funcType = temp.id"
                     :class="['func-temp', { select: form.funcType === temp.id }]"
                 >{{ temp.name }}</span>
             </bk-form-item>
-            <bk-form-item label="参数" key="funcParams" property="funcParams" :rules="[nameRule]" error-display-type="normal">
+            <bk-form-item label="参数" :key="`${form.id}funcParams`" property="funcParams" :rules="[nameRule]" error-display-type="normal">
                 <bk-tag-input v-model="form.funcParams"
                     placeholder="请输入参数名称，由大小写英文字母、下划线、数字组成"
                     :list="[]"
@@ -29,7 +29,7 @@
                 </bk-tag-input>
             </bk-form-item>
             <template v-if="form.funcType === 1">
-                <bk-form-item label="远程参数" key="funcCallBackParams" property="remoteParams" :rules="[nameRule]" error-display-type="normal">
+                <bk-form-item label="远程参数" :key="`${form.id}funcCallBackParams`" property="remoteParams" :rules="[nameRule]" error-display-type="normal">
                     <bk-tag-input v-model="form.remoteParams"
                         placeholder="请输入参数名称，由大小写英文字母、下划线、数字组成"
                         :list="[]"
@@ -37,11 +37,11 @@
                         :has-delete-icon="true">
                     </bk-tag-input>
                 </bk-form-item>
-                <bk-form-item label="Api Url" :required="true" :rules="[requireRule('Api Url')]" key="funcApiUrl" property="funcApiUrl" error-display-type="normal">
-                    <bk-input v-model="form.funcApiUrl"></bk-input>
+                <bk-form-item label="Api Url" :required="true" :rules="[requireRule('Api Url')]" :key="`${form.id}funcApiUrl`" property="funcApiUrl" error-display-type="normal">
+                    <bk-input v-model="form.funcApiUrl" :placeholder="`请输入接口URL，例如：${locationOrigin}/api/data/getMockData`"></bk-input>
                 </bk-form-item>
-                <bk-form-item label="Method" :required="true" :rules="[requireRule('Method')]" key="funcMethod" property="funcMethod" error-display-type="normal">
-                    <bk-select v-model="form.funcMethod" :popover-options="{ appendTo: 'parent' }">
+                <bk-form-item label="Method" :required="true" :rules="[requireRule('Method')]" :key="`${form.id}funcMethod`" property="funcMethod" error-display-type="normal">
+                    <bk-select v-model="form.funcMethod" :clearable="false" :popover-options="{ appendTo: 'parent' }">
                         <bk-option v-for="option in methodList"
                             :key="option.id"
                             :id="option.id"
@@ -49,11 +49,11 @@
                         </bk-option>
                     </bk-select>
                 </bk-form-item>
-                <bk-form-item label="Api Data" key="funcApiData" property="funcApiData">
-                    <bk-input v-model="form.funcApiData" type="textarea" :rows="3" :maxlength="100"></bk-input>
+                <bk-form-item label="Api Data" :key="`${form.id}funcApiData`" property="funcApiData">
+                    <bk-input v-model="form.funcApiData" type="textarea" :rows="3" :maxlength="100" placeholder="请输入请求体数据包，例如：{ name: 'jack', age: 17 }"></bk-input>
                 </bk-form-item>
             </template>
-            <bk-form-item label="函数简介" property="funcSummary" key="funcSummary">
+            <bk-form-item label="函数简介" property="funcSummary" :key="`${form.id}funcSummary`">
                 <bk-input v-model="form.funcSummary" type="textarea" :rows="3" :maxlength="100"></bk-input>
             </bk-form-item>
         </bk-form>
@@ -97,6 +97,7 @@
                     funcBody: '',
                     id: undefined
                 },
+                locationOrigin: location.origin,
                 startInit: false,
                 formChanged: false,
                 formType: 'horizontal',
@@ -126,18 +127,22 @@
                     { name: 'TRACE', id: 'trace' },
                     { name: 'CONNECT', id: 'connect' },
                     { name: 'PATCH', id: 'patch' }
-                ]
+                ],
+                nameRepeatRule: {
+                    validator: (val) => {
+                        return !this.funcGroups.some((group) => {
+                            const functionList = group.functionList || []
+                            return functionList.some((func) => (func.funcName === val && func.id !== this.form.id))
+                        })
+                    },
+                    message: `函数名称在当前项目下重复，请修改后重试`,
+                    trigger: 'blur'
+                }
             }
         },
 
         computed: {
-            ...mapGetters('functions', ['funcGroups']),
-
-            curGroup () {
-                const groupId = this.form.funcGroupId
-                const group = this.funcGroups.find(x => x.id === groupId) || {}
-                return group
-            }
+            ...mapGetters('functions', ['funcGroups'])
         },
 
         watch: {
@@ -152,7 +157,7 @@
                         funcType: 0,
                         funcParams: [],
                         funcApiUrl: '',
-                        funcMethod: 'GET',
+                        funcMethod: 'get',
                         funcApiData: '',
                         funcSummary: '',
                         funcBody: '',
@@ -197,14 +202,6 @@
                 return {
                     required: true,
                     message: `${name}是必填项，请修改后重试`,
-                    trigger: 'blur'
-                }
-            },
-
-            nameRepeatRule () {
-                return {
-                    validator: (val) => (!(this.curGroup.functionList || []).find(x => (x.funcName === val && x.id !== this.form.id))),
-                    message: `函数名称在${this.curGroup.groupName}分类下重复，请修改后重试`,
                     trigger: 'blur'
                 }
             },

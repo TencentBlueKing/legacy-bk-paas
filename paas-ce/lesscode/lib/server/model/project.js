@@ -20,6 +20,7 @@ import ProjectPage from './entities/project-page'
 import ProjectFavourite from './entities/project-favourite'
 import FuncGroup from './entities/func-group'
 import Func from './entities/func'
+import { RequestContext } from '../middleware/request-context'
 
 const projectSelectFields = [
     'project.id',
@@ -35,23 +36,26 @@ const projectSelectFields = [
 const defaultGroup = {
     groupName: '默认分类'
 }
-const defaultFunc = [
-    {
-        funcName: 'getMockData',
-        funcBody: 'return this.$http.get(\"/data/getMockData\").then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n    return res.data\r\n})',
-        funcSummary: '获取mock数据',
-        funcType: 0
-    },
-    {
-        funcName: 'getApiData',
-        remoteParams: 'res',
-        funcBody: 'const data = res.data || []\r\nreturn data',
-        funcSummary: '远程函数，获取数据',
-        funcType: 1,
-        funcMethod: 'get',
-        funcApiUrl: 'api/data/getMockData'
-    }
-]
+
+const getDefaultFunc = function (host) {
+    return [
+        {
+            funcName: 'getMockData',
+            funcBody: `return this.$http.get(\"${host}/api/data/getMockData\").then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n    return res.data\r\n})`,
+            funcSummary: '获取mock数据',
+            funcType: 0
+        },
+        {
+            funcName: 'getApiData',
+            remoteParams: 'res',
+            funcBody: 'const data = res.data || []\r\nreturn data',
+            funcSummary: '远程函数，获取数据',
+            funcType: 1,
+            funcMethod: 'get',
+            funcApiUrl: `${host}/api/data/getMockData`
+        }
+    ]
+}
 
 export default {
     createProject (projectData, userProjectRoleData) {
@@ -198,6 +202,8 @@ export default {
             } else {
                 const funcGroup = getRepository(FuncGroup).create(defaultGroup)
                 const { id: funcGroupId } = await transactionalEntityManager.save(funcGroup)
+                const curCtx = RequestContext.getCurrentCtx()
+                const defaultFunc = getDefaultFunc(curCtx.origin)
                 defaultFunc.forEach((func) => (func.funcGroupId = funcGroupId))
                 const funcs = getRepository(Func).create(defaultFunc)
                 await transactionalEntityManager.save(funcs)

@@ -37,7 +37,7 @@
         computed: {
             styles () {
                 return {
-                    height: `calc(100vh - ${this.offsetTop}px - 50px)`
+                    height: `calc(100vh - ${this.offsetTop}px)`
                 }
             },
             leftStyles () {
@@ -108,6 +108,7 @@
     .all-component-page-layout{
         position: relative;
         display: flex;
+        z-index: 1;
         &.toggle{
             .layout-left{
                 width: 0 !important;
