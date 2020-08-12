@@ -494,12 +494,11 @@ $headerHeight: 64px;
             .page-name {
                 font-size: 16px;
                 color: #63656E;
-                .back {
-                    font-size: 18px;
-                    margin-left: 5px;
-                    cursor: pointer;
-                    color: #3a84ff;
-                }
+                padding-left: 12px;
+            }
+            .app-logo {
+                font-size: 0;
+                cursor: pointer;
             }
         }
     }
