@@ -70,9 +70,9 @@
                 return !this.projectList.filter(item => item.id === this.projectId).length
             }
         },
-        created () {
+        async created () {
             this.projectId = parseInt(this.$route.params.projectId)
-            this.getProjectList()
+            await this.getProjectList()
             if (this.projectNotExist) {
                 this.timer = setInterval(() => {
                     this.countdown--
