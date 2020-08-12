@@ -11,7 +11,7 @@
 
 <template>
     <header class="mg-header">
-        <a href="https://magicbox.bk.tencent.com/static_api/v3/main/index.html" class="mg-logo">
+        <a :href="`${host}/${path}/main/index.html`" class="mg-logo">
             <img class="logo" src="../images/svg/bk-logo.svg" data-src="../images/bk-logo.svg">
             <img class="logo-text" src="../images/svg/bk-text.svg" data-src="../images/bk-text.svg">
             <strong>MagicBox</strong>
@@ -25,19 +25,19 @@
                             <ol>
                                 <dt>PC端</dt>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html">jQuery组件1.0</a>
+                                    <a :href="`${host}/${path}/index.html`" :data-active="`${host}/${path}/index.html#detail/show\\?id=\\S+?&isPro=0`">jQuery组件1.0</a>
                                 </dd>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#index?isPro=1">jQuery组件2.0</a>
+                                    <a :href="`${host}/${path}/index.html#index?isPro=1`" :data-active="`${host}/${path}/index.html#detail/show\\?id=\\S+?&isPro=1`">jQuery组件2.0</a>
                                 </dd>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/">Vue组件</a>
+                                    <a :href="`${host}/${path}/components_vue/2.0/example/index.html`" :data-active="`/components_vue/\\S+?/`">Vue组件</a>
                                 </dd>
                             </ol>
                             <ol>
                                 <dt>移动端</dt>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#mobile/show">jQuery组件</a>
+                                    <a :href="`${host}/${path}/index.html#mobile/show`" :data-active="`${host}/${path}/index.html#mobile_detail/show\\?id=\\S+?`">jQuery组件</a>
                                 </dd>
                                 <dd>
                                     <a target="_blank" href="https://developers.weixin.qq.com/miniprogram/dev/component/">微信小程序官方组件</a>
@@ -45,22 +45,22 @@
                             </ol>
                         </div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a href="javascript: void(0);">可视化开发</a>
                         <div class="mg-sub-nav">
                             <ol>
                                 <dt>PC端</dt>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#build/show">jQuery组件</a>
+                                    <a :href="`${host}/${path}/index.html#build/show`">jQuery组件</a>
                                 </dd>
                                 <dd>
-                                    <a target="_blank" href="https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md">Vue组件</a>
+                                    <a class="active" target="_blank" href="https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md">Vue组件</a>
                                 </dd>
                             </ol>
                             <ol>
                                 <dt>移动端</dt>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#mobile_build/show">jQuery组件</a>
+                                    <a :href="`${host}/${path}/index.html#mobile_build/show`">jQuery组件</a>
                                 </dd>
                                 <dd>
                                     <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#wx_build/show">微信小程序</a>
@@ -69,7 +69,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#templates">套餐样例</a>
+                        <a :href="`${host}/${path}/index.html#templates`">套餐样例</a>
                     </li>
                     <li class="nav-item">
                         <a href="javascript: void(0);">帮助</a>
@@ -77,431 +77,290 @@
                             <ol>
                                 <dt>规范</dt>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#doc/show?id=html_structure">前端规范</a>
+                                    <a href="https://bk.tencent.com/docs/document/5.1/19/4125" target="_blank">前端规范</a>
                                 </dd>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#design">设计规范</a>
+                                    <a :href="`${host}/${path}/index.html#design`">设计规范</a>
                                 </dd>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#css">辅助样式</a>
+                                    <a :href="`${host}/${path}/index.html#css`">辅助样式</a>
                                 </dd>
                             </ol>
                             <ol>
                                 <dt>下载</dt>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#about/show">模板下载</a>
+                                    <a :href="`${host}/${path}/index.html#about/show`">模板下载</a>
                                 </dd>
                                 <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#plugin">组件包下载</a>
+                                    <a :href="`${host}/${path}/index.html#plugin`">组件包下载</a>
                                 </dd>
                             </ol>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#start">新手起步</a>
+                        <a :href="`${host}/${path}/index.html#start`">新手起步</a>
+                    </li>
+                    <li>
+                        <a href="https://bk.tencent.com/s-mart/community" target="_blank">论坛交流</a>
                     </li>
                 </ul>
             </nav>
-        </div>
 
-        <div class="magic-button">
-            <a href="javascript:;" class="magic-top" id="mg-top" @click="handleGoTop" style="opacity: 0;">
-                <img src="../images/back_top.png" data-src="../images/back_top.png">
-            </a>
+            <template v-if="userName">
+                <div class="mg-user" id="mg-user">
+                    <strong class="name" id="mg-name">{{userName}}</strong>
+                </div>
+                <a href="javascript: void(0);" class="mg-login" @click="goLogin">退出</a>
+            </template>
+            <template v-else>
+                <a href="javascript: void(0);" class="mg-login" @click="goLogin">登录</a>
+            </template>
         </div>
     </header>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
         name: 'app-header',
         data () {
             return {
-                isTop: true,
-                timer: 0
+                userName: '',
+                host: 'https://magicbox.bk.tencent.com',
+                path: 'static_api/v3'
             }
         },
         computed: {
+            ...mapGetters(['user'])
         },
         mounted () {
-            this.init()
+            this.userName = this.user.username
         },
         methods: {
-            // 初始化底部工具（反馈、回到头部）
-            initFootTools () {
-                const topBtn = document.getElementById('mg-top')
-                this.isTop = true
-                // 滚动条滚动时触发
-                window.onscroll = function () {
-                    // 在滚动的时候增加判断,忘了的话很容易出错
-                    const osTop = document.documentElement.scrollTop || document.body.scrollTop
-                    if (osTop >= 200) {
-                        topBtn.style.opacity = '1'
-                    } else {
-                        topBtn.style.opacity = '0'
-                    }
-                    if (!this.isTop) {
-                        clearInterval(this.timer)
-                    }
-                    this.isTop = false
-                }
-            },
-
-            handleGoTop () {
-                this.isTop = false
-                clearInterval(this.timer)
-                this.timer = setInterval(() => {
-                    const osTop = document.documentElement.scrollTop || document.body.scrollTop
-                    // 减小的速度
-                    const isSpeed = Math.floor(-osTop / 6)
-                    document.documentElement.scrollTop = document.body.scrollTop = osTop + isSpeed
-                    // 判断，然后清除定时器
-                    if (osTop < 200) {
-                        console.log('clear')
-                        clearInterval(this.timer)
-                    }
-                    this.isTop = true
-                }, 30)
-            },
-
-            // 初始化
-            init () {
-                this.initFootTools()
+            goLogin () {
+                window.location.href = this.user.loginRedirectUrl + '&c_url=' + encodeURIComponent(window.location.href)
             }
         }
     }
 </script>
 
-<style lang="postcss" scoped>
-    $navColor: #FFF;
-    $f16: 16px;
-    $f14: 14px;
-    $f13: 13px;
-    $f12: 12px;
-
-    html,
-    body,
-    div,
-    p,
-    ul,
-    li,
-    h1,
-    h2,
-    h3 {
-        padding: 0;
-        margin: 0;
+<style scoped>
+    html,body,div,p,ul,li,h1,h2,h3 {
+        padding:0;
+        margin:0;
     }
-
     strong {
-        font-weight: normal;
+        font-weight:normal;
     }
-
     a {
-        text-decoration: none;
+        text-decoration:none;
     }
-
     img {
-        vertical-align: middle;
+        vertical-align:middle;
     }
     * {
-        box-sizing: border-box;
-        outline: none;
+        box-sizing:border-box;
+        outline:none;
     }
-
     .fl {
-        float: left;
+        float:left;
     }
-
     .fr {
-        float: right;
+        float:right;
     }
-
     .f16 {
-        font-size: $f16;
+        font-size:16px;
     }
-
     .f14 {
-        font-size: $f14;
+        font-size:14px;
     }
-
     .f13 {
-        font-size: $f13;
+        font-size:13px;
     }
-
     .f12 {
-        font-size: $f12;
+        font-size:12px;
     }
-
     .hide {
-        display: none;
+        display:none;
     }
-
     .show {
-        display: block;
+        display:block;
     }
-
     .mg-header {
-        width: 100%;
-        min-width: 1280px;
-        height: 64px;
-        background: #14182F;
-        color: #FFF;
-        padding: 0 32px;
-        z-index: 1000;
-        position: fixed;
-        top: 0;
-
-        .mg-header-right {
-            float: right;
-        }
+        width:100%;
+        min-width:1280px;
+        height:64px;
+        background:#14182F;
+        color:#FFF;
+        padding:0 32px;
+        z-index:1000;
+        position:fixed;
+        top:0;
     }
-
+    .mg-header .mg-header-right {
+        float:right;
+    }
     .mg-logo {
-        float: left;
-        height: 64px;
-        color: #FFF;
-        font-size: 18px;
-        padding-top: 10px;
-
-        .logo {
-            vertical-align: middle;
-            height: 44px;
-            margin-right: 2px;
-        }
-
-        .logo-text {
-            vertical-align: middle;
-            height: 32px;
-            margin-right: 15px;
-        }
-
-        strong {
-            vertical-align: middle;
-            line-height: 31px;
-            border-left: 1px solid rgba(255, 255, 255, .3);
-            padding-left: 15px;
-            color: #FFF;
-        }
-
+        float:left;
+        height:64px;
+        color:#FFF;
+        font-size:18px;
+        padding-top:10px;
     }
-
+    .mg-logo .logo {
+        vertical-align:middle;
+        height:44px;
+        margin-right:2px;
+    }
+    .mg-logo .logo-text {
+        vertical-align:middle;
+        height:32px;
+        margin-right:15px;
+    }
+    .mg-logo strong {
+        vertical-align:middle;
+        line-height:31px;
+        border-left:1px solid rgba(255,255,255,0.3);
+        padding-left:15px;
+        color:#FFF;
+    }
     .mg-nav {
-        float: left;
-        margin: 20px 0 0 0;
-        border-right: 1px solid #373839;
-
-        > ul {
-            list-style: none;
-            float: right;
-
-            &::after {
-                content: '';
-                display: inline-block;
-                clear: both;
-            }
-
-            li {
-                float: left;
-                padding: 0 24px;
-                position: relative;
-
-                &:hover {
-                    .mg-sub-nav {
-                        display: flex;
-                    }
-
-                    > a {
-                        color: #4F94FE;
-                    }
-                }
-            }
-
-            a {
-                color: $navColor;
-                line-height: 14px;
-                text-decoration: none;
-                font-size: 14px;
-                transition: color ease 0.3s;
-
-                &:hover {
-                    color: #4F94FE;
-                }
-            }
-        }
-
-        .mg-sub-nav {
-            width: 310px;
-            background: #14182F;
-            position: absolute;
-            padding: 25px;
-            justify-content: space-between;
-            display: none;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 4px;
-            opacity: 0;
-            animation: fadeIn forwards ease 0.5s;
-            color: #C4C6CC;
-
-            > ol {
-                min-width: 110px;
-                float: left;
-                padding: 0;
-                margin: 15px 0 0;
-
-                dt {
-                    font-size: 14px;
-                    padding-bottom: 10px;
-                    border-bottom: 1px solid rgba(255, 255, 255, .3);
-                    margin-bottom: 8px;
-                }
-
-                dd {
-                    color: #FFF;
-                    font-size: $f12;
-                    line-height: 30px;
-                    padding: 0;
-                    margin: 0;
-                    text-align: left;
-
-                    > a {
-                        line-height: 30px;
-                    }
-                }
-            }
-        }
+        float:left;
+        margin:23px 0 0 0;
+        border-right:1px solid #373839;
     }
-
+    .mg-nav > ul {
+        list-style:none;
+        float:right;
+    }
+    .mg-nav > ul::after {
+        content:'';
+        display:inline-block;
+        clear:both;
+    }
+    .mg-nav > ul li {
+        float:left;
+        padding:0 24px;
+        position:relative;
+    }
+    .mg-nav > ul li:hover .mg-sub-nav {
+        display:flex;
+    }
+    .mg-nav > ul li:hover > a {
+        color:#4F94FE;
+    }
+    .mg-nav > ul li.active > a {
+        color:#4F94FE;
+    }
+    .mg-nav > ul li.active::after {
+        content:'';
+        position:absolute;
+        left:0;
+        top:37px;
+        width:calc(100% - 44px);
+        height:4px;
+        margin-left:22px;
+        background:#4F94FE;
+    }
+    .mg-nav > ul li.active:hover::after {
+        display:none;
+    }
+    .mg-nav > ul a {
+        color:#FFF;
+        line-height:14px;
+        text-decoration:none;
+        font-size:14px;
+        transition:color ease 0.3s;
+    }
+    .mg-nav > ul a:hover,.mg-nav > ul a.active {
+        color:#4F94FE;
+    }
+    .mg-nav .mg-sub-nav {
+        width:310px;
+        background:#14182F;
+        position:absolute;
+        padding:25px;
+        justify-content:space-between;
+        display:none;
+        left:50%;
+        transform:translateX(-50%);
+        border-radius:4px;
+        opacity:0;
+        animation:fadeIn forwards ease 0.5s;
+        color:#C4C6CC;
+    }
+    .mg-nav .mg-sub-nav > ol {
+        min-width:110px;
+        float:left;
+        padding:0;
+        margin:15px 0 0;
+    }
+    .mg-nav .mg-sub-nav > ol dt {
+        font-size:14px;
+        padding-bottom:10px;
+        border-bottom:1px solid rgba(255,255,255,0.3);
+        margin-bottom:8px;
+    }
+    .mg-nav .mg-sub-nav > ol dd {
+        color:#FFF;
+        font-size:12px;
+        line-height:30px;
+        padding:0;
+        margin:0;
+        text-align:left;
+    }
+    .mg-nav .mg-sub-nav > ol dd > a {
+        line-height:30px;
+    }
+    .mg-nav .mg-sub-nav > ol dd > span {
+        font-size:14px;
+        color:#ccc;
+    }
+    .mg-nav .mg-sub-nav.more {
+        width:auto;
+        padding:18px;
+    }
+    .mg-nav .mg-sub-nav.more > ol {
+        min-width:86px;
+    }
     .mg-user {
-        min-width: 100px;
-        float: left;
-        margin: 19px 0 0 0;
-        padding-left: 24px;
-        font-size: 14px;
-        color: $navColor;
-
-        .avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            vertical-align: middle;
-            margin-right: 5px;
-        }
+        min-width:100px;
+        float:left;
+        margin:23px 0 0 0;
+        padding-left:24px;
+        font-size:14px;
+        color:#FFF;
     }
-
     .mg-login {
-        float: left;
-        line-height: 28px;
-        margin: 19px 0 0 24px;
-        font-size: 14px;
-        color: $navColor;
-
-        &:hover {
-            color: #FFF;
-        }
+        float:left;
+        line-height:28px;
+        margin:18px 0 0 24px;
+        font-size:14px;
+        color:#FFF;
     }
-
-    .magic-button{
-        position: fixed;
-        right: 10px;
-        bottom: 50px;
-        a {
-            display: block;
-            width: 30px;
-            height: 30px;
-            line-height: 26px;
-            text-align: center;
-            background: #9a9a9a;
-            border-radius: 2px;
-            opacity: 0.7;
-            &:hover{
-                background: #454545;
-            }
-
-            > img {
-                width: 16px;
-            }
-        }
-        .magic-feedback{
-            margin-top: 5px;
-        }
+    .mg-login:hover {
+        color:#FFF;
     }
-
-    @media screen and (max-width: 1980px) {
+    @media screen and (max-width:1980px) {
         body {
-            background-size: 55% auto;
+            background-size:55% auto;
         }
     }
-
-    @media screen and (max-width: 1680px) {
+    @media screen and (max-width:1680px) {
         .my-components {
-            margin-bottom: 50px;
+            margin-bottom:50px;
         }
-
     }
-
-    @media screen and (max-width: 1280px) {
-        .mg-user,
-        .mg-login,
-        .mg-nav > ul a,
-        .mg-nav .mg-sub-nav > ol dt {
-            font-size: $f12;
+    @media screen and (max-width:1280px) {
+        .mg-user,.mg-login,.mg-nav > ul a,.mg-nav .mg-sub-nav > ol dt {
+            font-size:12px;
         }
-
-        .mg-nav > ul a {
-            font-size: $f12;
+        .mg-nav > ul a,.mg-nav .mg-sub-nav > ol dd > span {
+            font-size:12px;
         }
-
         .mg-nav .mg-sub-nav {
-            padding: 15px 25px;
-        }
-    }
-
-    @keyframes expand {
-        from {
-            width: 10%;
-        }
-
-        to {
-            width: 100%;
-        }
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-
-        to {
-            opacity: 1;
-        }
-    }
-
-    @keyframes fadeInDown {
-        0% {
-            top: -20px;
-            opacity: 0;
-        }
-
-        100% {
-            top: 5px;
-            opacity: 1;
-        }
-    }
-
-    @keyframes fadeOutDown {
-        0% {
-            top: 10px;
-            opacity: 1;
-        }
-
-        5% {
-            opacity: 0.2;
-        }
-
-        100% {
-            top: 100px;
-            opacity: 0;
+            padding:15px 25px;
         }
     }
 </style>

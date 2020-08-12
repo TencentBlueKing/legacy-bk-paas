@@ -27,7 +27,7 @@
             <router-view :key="$route.path" v-if="!projectNotExist"></router-view>
             <div v-else class="exception-page">
                 <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
-                    <div>项目id不存在</div>
+                    <div>项目id不存在，系统将在{{countdown}}后返回项目列表页</div>
                 </bk-exception>
             </div>
         </div>
@@ -57,7 +57,9 @@
                     //     toPath: 'member'
                     // }
                 ],
-                projectList: []
+                projectList: [],
+                countdown: 3,
+                timer: null
             }
         },
         computed: {
@@ -68,9 +70,19 @@
                 return !this.projectList.filter(item => item.id === this.projectId).length
             }
         },
-        created () {
+        async created () {
             this.projectId = parseInt(this.$route.params.projectId)
-            this.getProjectList()
+            await this.getProjectList()
+            if (this.projectNotExist) {
+                this.timer = setInterval(() => {
+                    this.countdown--
+                    if (this.countdown === 0) {
+                        clearInterval(this.timer)
+                        this.timer = null
+                        this.toProjects()
+                    }
+                }, 1000)
+            }
         },
         methods: {
             toProjects () {
