@@ -7,7 +7,7 @@
     </div>
 </template>
 <script>
-    import Layout from './components/layout'
+    import Layout from '@/components/ui/layout'
     import RenderCategory from './components/render-category'
     import RenderList from './components/render-list'
 
