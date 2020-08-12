@@ -20,13 +20,7 @@ const { setRequestContext } = require('./request-context')
 module.exports = () => {
     return async function (ctx, next) {
         try {
-            // console.error(11111, isAjaxReq(ctx.request))
             const bkToken = ctx.cookies.get('bk_token')
-            // console.error('bkToken', bkToken)
-            // console.error()
-            // console.error(ctx.session)
-            // console.error(ctx.url)
-            // console.error()
             const hostUrl = httpConf.hostUrl.replace(/\/$/, '')
             const loginRedirectUrl = `${hostUrl}/login/?app_id=${httpConf.appCode}`
             if (!bkToken) {
@@ -69,7 +63,7 @@ module.exports = () => {
                     return
                 }
 
-                ctx.session.userInfo = { ...data }
+                ctx.session.userInfo = { ...data, ...{ loginRedirectUrl } }
                 const userData = await findUserByBk(ctx.session.userInfo.bk_username)
 
                 if (!userData) {

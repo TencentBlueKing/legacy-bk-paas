@@ -20,7 +20,6 @@ export const findUserByBk = async bkUsername => {
 
 export const addUser = async userData => {
     const res = await UserModel.addUser(userData)
-    console.error('adduser', res)
     return res.id
 }
 
