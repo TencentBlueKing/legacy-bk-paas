@@ -19,8 +19,8 @@ export const findUserByBk = async bkUsername => {
 }
 
 export const addUser = async userData => {
-    const { id } = await UserModel.addUser(userData)
-    return id
+    const res = await UserModel.addUser(userData)
+    return res.id
 }
 
 // export const getUserByBk = async ctx => {

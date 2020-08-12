@@ -4,7 +4,7 @@
             <div class="side-hd">
                 <i class="back-icon bk-drag-icon bk-drag-arrow-back" title="返回项目列表" @click="toProjects"></i>
                 <span class="seperate-line">|</span>
-                <bk-select ext-cls="select-project" v-model="projectId" :clearable="false" :searchable="true" @selected="changeProject">
+                <bk-select ext-cls="select-project" ext-popover-cls="select-project-dropdown" v-model="projectId" :clearable="false" :searchable="true" @selected="changeProject">
                     <bk-option v-for="option in projectList"
                         :key="option.id"
                         :id="option.id"
@@ -23,11 +23,11 @@
         <div class="breadcrumbs">
             <h3 class="current">{{ currentPage.title }}</h3>
         </div>
-        <div class="main-container">
+        <div class="main-container" v-show="!pageLoading">
             <router-view :key="$route.path" v-if="!projectNotExist"></router-view>
             <div v-else class="exception-page">
                 <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
-                    <div>项目id不存在</div>
+                    <div>项目id不存在，系统将在{{countdown}}后返回项目列表页</div>
                 </bk-exception>
             </div>
         </div>
@@ -38,6 +38,7 @@
     export default {
         data () {
             return {
+                pageLoading: false,
                 projectId: '',
                 navList: [
                     {
@@ -56,7 +57,9 @@
                     //     toPath: 'member'
                     // }
                 ],
-                projectList: []
+                projectList: [],
+                countdown: 3,
+                timer: null
             }
         },
         computed: {
@@ -67,9 +70,19 @@
                 return !this.projectList.filter(item => item.id === this.projectId).length
             }
         },
-        created () {
+        async created () {
             this.projectId = parseInt(this.$route.params.projectId)
-            this.getProjectList()
+            await this.getProjectList()
+            if (this.projectNotExist) {
+                this.timer = setInterval(() => {
+                    this.countdown--
+                    if (this.countdown === 0) {
+                        clearInterval(this.timer)
+                        this.timer = null
+                        this.toProjects()
+                    }
+                }, 1000)
+            }
         },
         methods: {
             toProjects () {
@@ -79,6 +92,7 @@
             },
             async getProjectList () {
                 try {
+                    this.pageLoading = true
                     const { projectList } = await this.$store.dispatch('project/query', { config: {} })
                     this.projectList = projectList
                 } catch (e) {
@@ -100,6 +114,10 @@
 
 <style lang="postcss">
     @import "@/css/mixins/ellipsis";
+
+    .select-project-dropdown .bk-select-search-input {
+        padding: 0 10px 0 30px;
+    }
 
     .project-layout {
         --side-hd-height: 52px;
@@ -139,6 +157,10 @@
                     width: 190px;
                     border: none;
                     margin-left: 5px;
+                    .bk-select-name {
+                        font-size: 16px;
+                        color: #313238;
+                    }
                 }
             }
             .side-bd {
@@ -148,11 +170,13 @@
         }
 
         .breadcrumbs {
+            position: relative;
+            z-index: 99;
             display: flex;
             align-items: center;
             height: var(--breadcrumb-height);
             background: #fff;
-            box-shadow: 0 3px 4px 0 rgba(64,112,203,.06);
+            box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.1);
             padding-left: 24px;
             .current {
                 color: #000;

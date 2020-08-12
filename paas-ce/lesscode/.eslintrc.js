@@ -26,7 +26,8 @@ module.exports = {
         APP_CODE: false,
         ENV: false,
         monaco: false,
-        ResizeSensor: false
+        ResizeSensor: false,
+        define: false
     },
     // add your custom rules hered
     rules: {

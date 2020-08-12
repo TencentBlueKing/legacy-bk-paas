@@ -20,16 +20,10 @@ const { setRequestContext } = require('./request-context')
 module.exports = () => {
     return async function (ctx, next) {
         try {
-            // console.error(11111, isAjaxReq(ctx.request))
             const bkToken = ctx.cookies.get('bk_token')
-            // console.error('bkToken', bkToken)
-            // console.error()
-            // console.error(ctx.session)
-            // console.error(ctx.url)
-            // console.error()
             const hostUrl = httpConf.hostUrl.replace(/\/$/, '')
+            const loginRedirectUrl = `${hostUrl}/login/?app_id=${httpConf.appCode}`
             if (!bkToken) {
-                const loginRedirectUrl = `${hostUrl}/login/?app_id=${httpConf.appCode}`
                 // 非 ajax 异步请求，页面跳转到登录
                 if (!isAjaxReq(ctx.request)) {
                     ctx.status = 302
@@ -46,38 +40,45 @@ module.exports = () => {
                 }
                 return
             } else {
-                if (!ctx.session.userInfo) {
-                    // 写入 ctx.session
-                    const params = querystring.stringify({
-                        bk_app_code: httpConf.appCode,
-                        bk_app_secret: httpConf.appSecret,
-                        bk_token: bkToken
-                    })
-                    const response = await axios({
-                        withCredentials: true,
-                        url: `${hostUrl}/api/c/compapi/v2/bk_login/get_user/?${params}`,
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        responseType: 'json',
-                        httpsAgent: new https.Agent({ rejectUnauthorized: false })
-                    })
-                    ctx.session.userInfo = { ...response.data.data }
-                    const userData = await findUserByBk(ctx.session.userInfo.bk_username)
-                    if (!userData) {
-                        setRequestContext(ctx)
-                        const userId = await addUser({
-                            username: ctx.session.userInfo.bk_username,
-                            bk: ctx.session.userInfo.bk_username
-                        })
-                        ctx.session.userInfo.id = userId
-                        ctx.session.userInfo.username = ctx.session.userInfo.bk_username
-                    } else {
-                        ctx.session.userInfo.id = userData.id
-                        ctx.session.userInfo.username = userData.username
-                    }
+                const params = querystring.stringify({
+                    bk_app_code: httpConf.appCode,
+                    bk_app_secret: httpConf.appSecret,
+                    bk_token: bkToken
+                })
+                const response = await axios({
+                    withCredentials: true,
+                    url: `${hostUrl}/api/c/compapi/v2/bk_login/get_user/?${params}`,
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    responseType: 'json',
+                    httpsAgent: new https.Agent({ rejectUnauthorized: false })
+                })
+
+                const { code, data } = response.data
+                if (code !== 0) {
+                    ctx.status = 302
+                    ctx.redirect(`${loginRedirectUrl}&c_url=${encodeURIComponent(ctx.href)}`)
+                    return
                 }
+
+                ctx.session.userInfo = { ...data, ...{ loginRedirectUrl } }
+                const userData = await findUserByBk(ctx.session.userInfo.bk_username)
+
+                if (!userData) {
+                    setRequestContext(ctx)
+                    const userId = await addUser({
+                        username: ctx.session.userInfo.bk_username,
+                        bk: ctx.session.userInfo.bk_username
+                    })
+                    ctx.session.userInfo.id = userId
+                    ctx.session.userInfo.username = ctx.session.userInfo.bk_username
+                } else {
+                    ctx.session.userInfo.id = userData.id
+                    ctx.session.userInfo.username = userData.username
+                }
+
                 await next()
             }
         } catch (err) {

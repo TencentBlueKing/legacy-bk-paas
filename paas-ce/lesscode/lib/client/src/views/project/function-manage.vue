@@ -7,7 +7,7 @@
                     <bk-popconfirm trigger="click" confirm-text="" cancel-text="" :on-hide="() => (groupNameErrMessage = '')">
                         <div slot="content">
                             <bk-input :class="['add-function-group', { 'input-error': groupNameErrMessage }]"
-                                placeholder="请输入函数分类，多个分类 / 分隔，回车结束"
+                                placeholder="请输入函数分类，多个分类 / 分隔，回车保存"
                                 @enter="addFunctionGroup"
                                 @focus="groupNameErrMessage = ''"
                                 @input="groupNameErrMessage = ''"
@@ -73,7 +73,11 @@
                     v-bkloading="{ isLoading: isLoadingFunc }"
                     class="function-table"
                 >
-                    <bk-table-column label="函数名称" prop="funcName" show-overflow-tooltip></bk-table-column>
+                    <bk-table-column label="函数名称" prop="funcName" show-overflow-tooltip>
+                        <template slot-scope="props">
+                            <span>{{ props.row.funcName || '--' }}</span>
+                        </template>
+                    </bk-table-column>
                     <bk-table-column label="所属分类" prop="funcGroupId" :formatter="groupFormatter" show-overflow-tooltip></bk-table-column>
                     <bk-table-column label="简介" prop="funcSummary" show-overflow-tooltip>
                         <template slot-scope="props">
@@ -95,7 +99,8 @@
                         <template slot-scope="props">
                             <span class="table-bth" @click="editFunction(props.row)">编辑</span>
                             <span class="table-bth" @click="copyRow(props.row)">复制</span>
-                            <span class="table-bth" @click="deleteItem(props.row.id, `删除函数【${props.row.funcName}】后，引用该函数的页面将受影响`, false)">删除</span>
+                            <span class="table-bth" @click="deleteItem(props.row.id, `删除函数【${props.row.funcName}】`, false)" v-if="(props.row.pages || []).length <= 0">删除</span>
+                            <span class="table-bth disable" v-bk-tooltips="{ content: '该函数被页面引用，请修改后再删除', placements: ['top'] }" v-else>删除</span>
                         </template>
                     </bk-table-column>
                 </bk-table>
@@ -105,7 +110,7 @@
         <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" @hidden="closeAddFunction">
             <func-form :func-data="funcObj.form" class="add-function" ref="func" slot="content"></func-form>
             <section slot="footer" class="add-footer">
-                <bk-button theme="primary" @click="submitFunc">提交</bk-button>
+                <bk-button theme="primary" @click="submitFunc" :loading="funcObj.loading">提交</bk-button>
                 <bk-button @click="closeAddFunction">取消</bk-button>
             </section>
         </bk-sideslider>
@@ -135,7 +140,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex'
     import dayjs from 'dayjs'
-    import layout from '@/views/system/component-manage/all/components/layout'
+    import layout from '@/components/ui/layout'
     import funcForm from '@/components/methods/funcForm'
     import labelList from '@/components/methods/label-list.vue'
 
@@ -166,6 +171,7 @@
                 funcObj: {
                     show: false,
                     isEdit: false,
+                    loading: false,
                     title: '',
                     form: {}
                 }
@@ -177,7 +183,7 @@
 
             groupList: {
                 get () {
-                    const searchReg = new RegExp(this.searchGroupStr)
+                    const searchReg = new RegExp(this.searchGroupStr, 'i')
                     const list = this.funcGroups.filter((group) => searchReg.test(group.groupName))
                     const groupIds = list.map(x => x.id)
                     if (!groupIds.includes(this.curGroupId)) {
@@ -201,7 +207,7 @@
             },
 
             curFuncList () {
-                const searchReg = new RegExp(this.searchFunStr)
+                const searchReg = new RegExp(this.searchFunStr, 'i')
                 return (this.curGroup.functionList || []).filter((func) => searchReg.test(func.funcName))
             }
         },
@@ -267,6 +273,7 @@
             submitFunc () {
                 this.$refs.func.validate().then((postData) => {
                     if (!postData) return
+                    this.funcObj.loading = true
                     const add = () => this.addFunc({ groupId: this.curGroupId, func: postData })
                     const edit = () => this.editFunc({ groupId: this.curGroupId, func: postData })
 
@@ -275,6 +282,8 @@
                         this.curGroupId = postData.funcGroupId
                         this.closeAddFunction()
                         this.$bkMessage({ theme: 'success', message: `${this.funcObj.title}成功` })
+                    }).catch(err => this.$bkMessage({ theme: 'error', message: err.message || err })).finally(() => {
+                        this.funcObj.loading = false
                     })
                 })
             },
@@ -286,7 +295,7 @@
                     funcType: 0,
                     funcParams: [],
                     funcApiUrl: '',
-                    funcMethod: 'GET',
+                    funcMethod: 'get',
                     funcApiData: '',
                     funcSummary: '',
                     funcBody: '',
@@ -444,12 +453,23 @@
                 height: calc(100% - 43px);
                 overflow-y: auto;
             }
+            .max-tabel-prop {
+                display: block;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: normal;
+            }
         }
         .table-bth {
             color: #3a84ff;
             margin-right: 17px;
             display: inline-block;
             cursor: pointer;
+            &.disable {
+                color: #b9bbc1;
+                cursor: not-allowed;
+            }
         }
     }
 

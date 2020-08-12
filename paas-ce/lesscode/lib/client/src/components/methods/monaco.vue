@@ -195,7 +195,10 @@
             opacity: 0.9;
         }
     }
-    /deep/ .monaco-editor {
+    /deep/ .monaco-editor .overflow-guard {
         padding-top: 20px;
+        .margin {
+            padding-top: 20px;
+        }
     }
 </style>

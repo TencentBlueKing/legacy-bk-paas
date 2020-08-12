@@ -11,15 +11,14 @@
 
 const httpConf = require('../conf/http')
 const axios = require('axios')
-// const { getIP } = require('../util')
+const { getIP } = require('../util')
 
-// const host = process.env.NODE_ENV === 'production' ? getIP() : 'localhost'
+const host = process.env.NODE_ENV === 'production' ? getIP() : 'localhost'
 
 const instance = axios.create({
     withCredentials: true,
-    // baseURL: httpConf.protocol + '://' + getIP() + ':' + httpConf.port
-    // baseURL: httpConf.protocol + '://' + host + ':' + httpConf.port
-    baseURL: httpConf.protocol + '://localhost:' + httpConf.port
+    baseURL: httpConf.protocol + '://' + host + ':' + httpConf.port
+    // baseURL: httpConf.protocol + '://localhost:' + httpConf.port
 })
 
 instance.interceptors.response.use(response => response, error => Promise.reject(error))
