@@ -110,7 +110,7 @@
         <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" @hidden="closeAddFunction">
             <func-form :func-data="funcObj.form" class="add-function" ref="func" slot="content"></func-form>
             <section slot="footer" class="add-footer">
-                <bk-button theme="primary" @click="submitFunc">提交</bk-button>
+                <bk-button theme="primary" @click="submitFunc" :loading="funcObj.loading">提交</bk-button>
                 <bk-button @click="closeAddFunction">取消</bk-button>
             </section>
         </bk-sideslider>
@@ -140,7 +140,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex'
     import dayjs from 'dayjs'
-    import layout from '@/views/system/component-manage/all/components/layout'
+    import layout from '@/components/ui/layout'
     import funcForm from '@/components/methods/funcForm'
     import labelList from '@/components/methods/label-list.vue'
 
@@ -171,6 +171,7 @@
                 funcObj: {
                     show: false,
                     isEdit: false,
+                    loading: false,
                     title: '',
                     form: {}
                 }
@@ -272,6 +273,7 @@
             submitFunc () {
                 this.$refs.func.validate().then((postData) => {
                     if (!postData) return
+                    this.funcObj.loading = true
                     const add = () => this.addFunc({ groupId: this.curGroupId, func: postData })
                     const edit = () => this.editFunc({ groupId: this.curGroupId, func: postData })
 
@@ -280,6 +282,8 @@
                         this.curGroupId = postData.funcGroupId
                         this.closeAddFunction()
                         this.$bkMessage({ theme: 'success', message: `${this.funcObj.title}成功` })
+                    }).catch(err => this.$bkMessage({ theme: 'error', message: err.message || err })).finally(() => {
+                        this.funcObj.loading = false
                     })
                 })
             },

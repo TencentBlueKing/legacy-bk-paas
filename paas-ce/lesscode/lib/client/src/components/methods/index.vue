@@ -118,7 +118,7 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex'
-    import layout from '@/views/system/component-manage/all/components/layout'
+    import layout from '@/components/ui/layout'
     import funcForm from '@/components/methods/funcForm'
 
     export default {

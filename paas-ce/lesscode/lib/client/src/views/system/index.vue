@@ -159,7 +159,7 @@
             justify-content: space-between;
             height: var(--breadcrumb-height);
             background: #fff;
-            box-shadow: 0 3px 4px 0 rgba(64, 112, 203, .06);
+            box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.1);
             padding-left: 24px;
             .current {
                 color: #000;
