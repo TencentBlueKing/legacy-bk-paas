@@ -19,7 +19,6 @@
                 :key="index">
                 <bk-option class="function-option"
                     v-for="option in group.functionList"
-                    @click.native="choose(option, event.name)"
                     :key="option.id"
                     :id="option.id"
                     :name="option.funcName">
@@ -31,6 +30,7 @@
                 <i class="bk-icon icon-plus-circle"></i>新增函数
             </div>
         </bk-select>
+        <bk-button @click="getApiData" theme="primary" class="remote-button">获取数据</bk-button>
         <methods :show.sync="showMethod"></methods>
     </section>
 </template>
@@ -80,12 +80,62 @@
             saveChange () {
                 this.change(this.name, this.defaultValue, this.type, JSON.parse(JSON.stringify(this.remoteData)))
             },
+
             showMethodDialog () {
-                const eventChooseComp = this.$refs.eventChooseComp[0]
+                const eventChooseComp = this.$refs.eventChooseComp
                 if (eventChooseComp) {
                     eventChooseComp.close()
                 }
                 this.showMethod = true
+            },
+
+            getMethod (methodId) {
+                let returnMethod
+                this.funcGroups.forEach((group) => {
+                    const funChildren = group.functionList || []
+                    const method = funChildren.find(x => x.id === methodId)
+                    if (method) {
+                        returnMethod = method
+                    }
+                })
+                const Fn = Function
+                let returnFun
+                if (returnMethod.funcType === 1) {
+                    const remoteParams = (returnMethod.remoteParams || []).join(', ')
+                    const data = { url: returnMethod.funcApiUrl, type: returnMethod.funcMethod, apiData: returnMethod.funcApiData }
+                    returnFun = new Fn(`return this.$store.dispatch('getApiData', ${JSON.stringify(data)}).then((${remoteParams}) => { ${returnMethod.funcBody} })`).bind(this)
+                } else {
+                    returnFun = new Fn(returnMethod.funcBody).bind(this)
+                }
+                return returnFun
+            },
+
+            async getApiData () {
+                if (!this.remoteData.methodId) {
+                    this.$bkMessage({ theme: 'error', message: '请先选择函数' })
+                    return
+                }
+
+                let method
+                try {
+                    method = this.getMethod(this.remoteData.methodId)
+                } catch (error) {
+                    this.$bkMessage({ theme: 'error', message: '函数格式有误，请修改后再试' })
+                    return
+                }
+
+                try {
+                    const res = await method()
+                    const message = this.remoteValidate(res)
+                    if (message) {
+                        this.$bkMessage({ theme: 'error', message })
+                    } else {
+                        this.change(this.name, res, this.type, JSON.parse(JSON.stringify(this.remoteData)))
+                        this.$bkMessage({ theme: 'success', message: '获取数据成功', limit: 1 })
+                    }
+                } catch (error) {
+                    this.$bkMessage({ theme: 'error', message: '获取数据失败，请检查函数是否正确', limit: 1 })
+                }
             }
         }
     }
