@@ -10,11 +10,9 @@
  */
 
 import axios from 'axios'
-import cookie from 'cookie'
 
 import CachedPromise from './cached-promise'
 import RequestQueue from './request-queue'
-import { bus } from '../common/bus'
 import { messageError } from '@/common/bkmagic'
 
 // axios 实例
@@ -43,7 +41,7 @@ const http = {
     cancel: requestId => Promise.all([http.cancelRequest(requestId), http.cancelCache(requestId)])
 }
 
-const methodsWithoutData = ['delete', 'get', 'head', 'options']
+const methodsWithoutData = ['delete', 'get', 'head', 'options', 'connect', 'trace']
 const methodsWithData = ['post', 'put', 'patch']
 const allMethods = [...methodsWithoutData, ...methodsWithData]
 
@@ -134,12 +132,8 @@ async function getPromise (method, url, data, userConfig = {}) {
  * @param {Function} promise 完成函数
  * @param {Function} promise 拒绝函数
  */
-function handleResponse ({ config, response, resolve, reject }) {
-    if (response.code !== 0 && config.globalError) {
-        reject({ message: response.message })
-    } else {
-        resolve(config.originalResponse ? response : response.data, config)
-    }
+function handleResponse ({ config, response, resolve }) {
+    resolve(response, config)
     http.queue.delete(config.requestId)
 }
 
@@ -157,24 +151,10 @@ function handleReject (error, config) {
     }
 
     http.queue.delete(config.requestId)
-
-    if (config.globalError && error.response) {
-        const { status, data } = error.response
-        const nextError = { message: error.message, response: error.response }
-        if (status === 401) {
-            bus.$emit('redirect-login', nextError.response.data.data || {})
-        } else if (data && data.message) {
-            nextError.message = data.message
-            messageError(nextError.message)
-        } else if (status === 500) {
-            nextError.message = '服务器内部出错'
-            messageError(nextError.message)
-        }
-        console.error(nextError.message)
-        return Promise.reject(nextError)
-    }
-    messageError(error.message)
-    console.error(error.message)
+    let errMessage = error.message || error
+    if (typeof errMessage === 'string' && errMessage.match(/Network Error/)) errMessage = 'Network Error，网络不可用，有可能是跨域原因引起'
+    messageError(errMessage)
+    console.error(error)
     return Promise.reject(error)
 }
 
@@ -225,13 +205,3 @@ function getCancelToken () {
 }
 
 export default http
-
-// 跨域处理
-export function injectCSRFTokenToHeaders () {
-    const CSRFToken = cookie.parse(document.cookie).bkiam_csrftoken
-    if (CSRFToken !== undefined) {
-        axiosInstance.defaults.headers.common['X-CSRFToken'] = CSRFToken
-    } else {
-        console.warn('Can not find bkiam_csrftoken in document.cookie')
-    }
-}

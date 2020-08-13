@@ -635,6 +635,8 @@
             text-align: center;
             font-size: 14px;
             color: #63656e;
+            margin: 0;
+            word-break: break-all;
         }
         .bk-dialog-footer {
             text-align: center;

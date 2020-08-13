@@ -313,7 +313,7 @@
                 })
                 while (index >= 0) {
                     if (/\d$/.test(untitledFunc.funcName)) untitledFunc.funcName = untitledFunc.funcName.replace(/\d$/, a => +a + 1)
-                    else untitledFunc.funcName = 'Untitled 1'
+                    else untitledFunc.funcName = 'Untitled1'
                     index = groups.findIndex((group) => {
                         const funcList = group.functionList || []
                         return funcList.find(x => x.funcName === untitledFunc.funcName)
@@ -729,6 +729,8 @@
             text-align: center;
             font-size: 14px;
             color: #63656e;
+            margin: 0;
+            word-break: break-all;
         }
         .bk-dialog-footer {
             text-align: center;
