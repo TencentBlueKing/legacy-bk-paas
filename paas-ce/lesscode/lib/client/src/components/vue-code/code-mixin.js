@@ -71,8 +71,8 @@ const codeMixin = {
             if (returnMethod.funcType === 1) {
                 const remoteParams = (returnMethod.remoteParams || []).join(', ')
                 const data = { url: returnMethod.funcApiUrl, type: returnMethod.funcMethod, apiData: returnMethod.funcApiData }
-                returnMethod.previewStr = addFuncStr(`return this.$store.dispatch('getApiData', ${JSON.stringify(data)}).then((${remoteParams}) => { ${returnMethod.funcBody} })`)
-                returnMethod.vueCodeStr = addFuncStr(`return this.$http.${returnMethod.funcMethod}('${returnMethod.funcApiUrl}'${returnMethod.funcApiData ? `, ${returnMethod.funcApiData}` : ''}).then((${remoteParams}) => { ${returnMethod.funcBody} })`)
+                returnMethod.previewStr = addFuncStr(`return this.$store.dispatch('getApiData', ${JSON.stringify(data)}).then((${remoteParams}) => { ${returnMethod.funcBody} }).catch((err) => { console.error(err) })`)
+                returnMethod.vueCodeStr = addFuncStr(`return this.$http.${returnMethod.funcMethod}('${returnMethod.funcApiUrl}'${returnMethod.funcApiData ? `, ${returnMethod.funcApiData}` : ''}).then((${remoteParams}) => { ${returnMethod.funcBody} }).catch((err) => { console.error(err) })`)
             } else {
                 returnMethod.previewStr = addFuncStr(returnMethod.funcBody)
                 returnMethod.vueCodeStr = addFuncStr(returnMethod.funcBody)

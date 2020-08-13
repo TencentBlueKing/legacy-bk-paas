@@ -26,7 +26,9 @@ import '@icon-cool/bk-icon-vue-drag-vis'
 import '@icon-cool/bk-icon-vue-drag-vis/src/index'
 import VueContextMenu from '@xunlei/vue-context-menu'
 import targetData from '@/common/targetData.js'
-
+import pureAxios from '@/api/pureAxios.js'
+// 用户调用接口使用，无业务逻辑，直接返回数据
+Vue.prototype.$http = pureAxios
 Vue.prototype.$td = targetData
 
 Vue.use(VueContextMenu)

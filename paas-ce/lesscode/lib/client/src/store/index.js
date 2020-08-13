@@ -92,7 +92,7 @@ const store = new Vuex.Store({
         },
 
         getApiData ({ state }, data) {
-            return http.post('/data/getApiData', data).then(response => {
+            return http.post('/data/getApiData', data, { globalError: false }).then(response => {
                 return response
             })
         },

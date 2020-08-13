@@ -20,7 +20,7 @@
                     :class="['func-temp', { select: form.funcType === temp.id }]"
                 >{{ temp.name }}</span>
             </bk-form-item>
-            <bk-form-item label="参数" :key="`${form.id}funcParams`" property="funcParams" :rules="[nameRule]" error-display-type="normal">
+            <bk-form-item label="参数" :key="`${form.id}funcParams`" property="funcParams" :rules="[nameRule]" error-display-type="normal" desc="调用该函数参入的参数列表，输入后按回车添加参数">
                 <bk-tag-input v-model="form.funcParams"
                     placeholder="请输入参数名称，由大小写英文字母、下划线、数字组成"
                     :list="[]"
@@ -29,7 +29,7 @@
                 </bk-tag-input>
             </bk-form-item>
             <template v-if="form.funcType === 1">
-                <bk-form-item label="远程参数" :key="`${form.id}funcCallBackParams`" property="remoteParams" :rules="[nameRule]" error-display-type="normal">
+                <bk-form-item label="远程参数" :key="`${form.id}funcCallBackParams`" property="remoteParams" :rules="[nameRule]" error-display-type="normal" desc="接口回调函数的参数列表，输入后按回车添加参数">
                     <bk-tag-input v-model="form.remoteParams"
                         placeholder="请输入参数名称，由大小写英文字母、下划线、数字组成"
                         :list="[]"
@@ -38,7 +38,7 @@
                     </bk-tag-input>
                 </bk-form-item>
                 <bk-form-item label="Api Url" :required="true" :rules="[requireRule('Api Url')]" :key="`${form.id}funcApiUrl`" property="funcApiUrl" error-display-type="normal">
-                    <bk-input v-model="form.funcApiUrl" :placeholder="`请输入接口URL，例如：${locationOrigin}/api/data/getMockData`"></bk-input>
+                    <bk-input v-model="form.funcApiUrl" :placeholder="`请输入接口 URL，例如：${locationOrigin}/api/data/getMockData`"></bk-input>
                 </bk-form-item>
                 <bk-form-item label="Method" :required="true" :rules="[requireRule('Method')]" :key="`${form.id}funcMethod`" property="funcMethod" error-display-type="normal">
                     <bk-select v-model="form.funcMethod" :clearable="false" :popover-options="{ appendTo: 'parent' }">
@@ -49,7 +49,7 @@
                         </bk-option>
                     </bk-select>
                 </bk-form-item>
-                <bk-form-item label="Api Data" :key="`${form.id}funcApiData`" property="funcApiData">
+                <bk-form-item label="Api Data" :key="`${form.id}funcApiData`" property="funcApiData" desc="HTTP 请求（例如 POST）的请求体数据包。如果是GET请求，请在 Api Url 中填写请求头参数">
                     <bk-input v-model="form.funcApiData" type="textarea" :rows="3" :maxlength="100" placeholder="请输入请求体数据包，例如：{ name: 'jack', age: 17 }"></bk-input>
                 </bk-form-item>
             </template>
@@ -104,7 +104,7 @@
                 monacoHeight: '100%',
                 monacoWidth: '100%',
                 groupNameRule: {
-                    validator: val => /[A-Za-z_0-9]*/.test(val),
+                    validator: val => /^[A-Za-z_0-9]*$/.test(val),
                     message: '由大小写英文字母、下划线、数字组成',
                     trigger: 'blur'
                 },
