@@ -143,8 +143,12 @@
             </aside>
 
             <!-- 这里用 v-show，切换源码或者预览时，如果时 v-if，那么 grid.vue 里的 renderDataSlot 会重置，这个值并没有存在 store 中 -->
-            <div class="main-content" :class="mainContentClass" @click="dragWrapperClickHandler" v-show="actionSelected === 'edit'">
+            <div class="main-content" v-bkloading="{ isLoading: contentLoading, opacity: 1 }"
+                :class="mainContentClass"
+                @click="dragWrapperClickHandler"
+                v-show="actionSelected === 'edit'">
                 <vue-draggable
+                    v-show="!contentLoading"
                     :key="refreshDragAreaKey"
                     class="target-drag-area"
                     :list="targetData"
@@ -268,7 +272,8 @@
                     { keys: ['Delete / Backspace'], name: '快速删除' }
                 ],
                 isInDragArea: false,
-                refreshVueCodeKey: +new Date()
+                refreshVueCodeKey: +new Date(),
+                contentLoading: true
             }
         },
         computed: {
@@ -330,6 +335,7 @@
         },
         async created () {
             this.pageDetail = await this.$store.dispatch('page/detail', { pageId: this.pageId }) || {}
+            this.contentLoading = false
             const mockCurSelectComponentData = {
                 componentId: 'grid-' + uuid(),
                 renderKey: uuid(),
@@ -387,16 +393,13 @@
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
 
-            window.addEventListener('beforeunload', function (e) {
-                const confirmationMessage = '...';
-                (e || window.event).returnValue = confirmationMessage
-                return confirmationMessage
-            })
+            window.addEventListener('beforeunload', this.beforeunloadConfirm)
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)
             window.removeEventListener('keyup', this.judgeCtrl)
             window.removeEventListener('click', this.toggleQuickOperation, true)
+            window.removeEventListener('beforeunload', this.beforeunloadConfirm)
         },
         methods: {
             ...mapMutations('drag', [
@@ -481,6 +484,12 @@
                         this.deleteComponent()
                         break
                 }
+            },
+
+            beforeunloadConfirm (event) {
+                const confirmationMessage = '...';
+                (event || window.event).returnValue = confirmationMessage
+                return confirmationMessage
             },
 
             cutComponent () {

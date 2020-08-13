@@ -53,11 +53,11 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list" slot="dropdown-content">
-                                        <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
+                                        <!-- <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li> -->
                                         <li><a href="javascript:;" @click="toPage(project.id)">页面管理</a></li>
                                         <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
-                                        <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li>
+                                        <!-- <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li> -->
                                     </ul>
                                 </bk-dropdown-menu>
                             </div>
