@@ -18,6 +18,16 @@ import preload from '@/common/preload'
 
 Vue.use(VueRouter)
 
+const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
+const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
+const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
+const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/system/component-manage')
+const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/project/function-manage')
+
+const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
+const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
+const Member = () => import(/* webpackChunkName: 'member' */'@/views/project/member')
+
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
@@ -32,7 +42,77 @@ const Changelog = () => import(/* webpackChunkName: 'start' */'@/views/changelog
 
 const routes = [
     {
-        path: `/${APP_CODE}`,
+        path: '/help',
+        component: MainHelpEntry,
+        children: [
+            { path: 'custom', name: 'custom', component: Custom },
+            { path: 'grid', name: 'grid', component: Grid },
+            { path: 'intro', name: 'intro', component: Intro, alias: '' },
+            { path: 'start', name: 'start', component: Start },
+            { path: 'changelog', name: 'changelog', component: Changelog }
+        ]
+    },
+    {
+        path: '/',
+        component: SystemEntry,
+        redirect: { name: 'projects' },
+        children: [
+            {
+                path: 'projects',
+                name: 'projects',
+                component: Projects,
+                meta: {
+                    title: '项目列表'
+                }
+            },
+            {
+                path: 'account',
+                name: 'account',
+                component: Account,
+                meta: {
+                    title: '账号管理'
+                }
+            },
+            {
+                path: 'component-manage',
+                name: 'componentManage',
+                component: ComponentManage,
+                meta: {
+                    title: '自定义组件库'
+                }
+            }
+        ]
+    },
+    {
+        path: '/project/:projectId',
+        component: ProjectEntry,
+        children: [
+            {
+                path: '',
+                redirect: { name: 'pageList' }
+            },
+            {
+                path: 'pages',
+                name: 'pageList',
+                component: Page
+            },
+            {
+                path: 'functionManage',
+                name: 'functionManage',
+                component: FunctionManage,
+                meta: {
+                    title: '函数库'
+                }
+            },
+            {
+                path: 'member',
+                name: 'memberManage',
+                component: Member
+            }
+        ]
+    },
+    {
+        path: `/project/:projectId/page/:pageId`,
         component: MainEntry,
         alias: '',
         children: [
@@ -46,17 +126,6 @@ const routes = [
                 name: 'preview',
                 component: Preview
             }
-        ]
-    },
-    {
-        path: '/help',
-        component: MainHelpEntry,
-        children: [
-            { path: 'custom', name: 'custom', component: Custom },
-            { path: 'grid', name: 'grid', component: Grid },
-            { path: 'intro', name: 'intro', component: Intro, alias: '' },
-            { path: 'start', name: 'start', component: Start },
-            { path: 'changelog', name: 'changelog', component: Changelog }
         ]
     },
     {

@@ -2,7 +2,10 @@ module.exports = {
     root: true,
     parserOptions: {
         parser: 'babel-eslint',
-        sourceType: 'module'
+        sourceType: 'module',
+        ecmaFeatures: {
+            legacyDecorators: true
+        }
     },
     env: {
         browser: true
@@ -23,7 +26,8 @@ module.exports = {
         APP_CODE: false,
         ENV: false,
         monaco: false,
-        ResizeSensor: false
+        ResizeSensor: false,
+        define: false
     },
     // add your custom rules hered
     rules: {

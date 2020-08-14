@@ -8,12 +8,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+require('reflect-metadata')
+require('@babel/register')
 
 const http = require('http')
 const { resolve } = require('path')
 const Koa = require('koa')
 const bodyparser = require('koa-bodyparser')
 const json = require('koa-json')
+const session = require('koa-session')
 const koaStatic = require('koa-static')
 const views = require('co-views')
 const koaMount = require('koa-mount')
@@ -32,8 +35,31 @@ const authMiddleware = require('./middleware/auth')
 const httpMiddleware = require('./middleware/http')
 const errorMiddleware = require('./middleware/error')
 const jsonSendMiddleware = require('./middleware/json-send')
+const { requestContextMiddleware } = require('./middleware/request-context')
+
 const { CODE } = require('./util')
 const httpConf = require('./conf/http')
+
+const { createConnection } = require('typeorm')
+const dataBaseConf = require('./conf/data-base')
+
+const SESSION_CONFIG = {
+    // cookie key
+    key: 'lesscode-session',
+    // cookie 的过期时间，毫秒
+    maxAge: 86400000,
+    // 自动提交到响应头
+    autoCommit: true,
+    // 是否允许重写
+    overwrite: true,
+    httpOnly: true,
+    // 是否签名
+    signed: true,
+    // 每次响应时是否刷新 session 的有效期
+    rolling: false,
+    // 在 session 快过期时是否刷新 session 的有效期
+    renew: false
+}
 
 async function startServer () {
     const PORT = httpConf.port
@@ -41,7 +67,12 @@ async function startServer () {
 
     const app = new Koa()
 
-    // 统一错误处理，
+    // session 加密密钥
+    app.keys = ['lesscode login secret']
+
+    app.use(session(SESSION_CONFIG, app))
+
+    // 统一处理，
     // @see https://github.com/koajs/koa/wiki/Error-Handling
     app.use(async (ctx, next) => {
         try {
@@ -86,13 +117,14 @@ async function startServer () {
         logger.error(err)
     })
 
-    app.use(errorMiddleware())
     app.use(bodyparser())
     app.use(json())
 
+    app.use(errorMiddleware())
     app.use(httpMiddleware())
-    app.use(authMiddleware())
     app.use(jsonSendMiddleware())
+    app.use(authMiddleware())
+    app.use(requestContextMiddleware())
 
     app.use(koaMount(
         '/static', koaStatic(resolve(__dirname, '..', IS_DEV ? 'client/static' : 'client/dist/static')))
@@ -179,4 +211,4 @@ async function startServer () {
     })
 }
 
-startServer()
+createConnection(dataBaseConf).then(startServer).catch((err) => console.error(err))

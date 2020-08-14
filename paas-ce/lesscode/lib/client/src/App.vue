@@ -21,10 +21,11 @@
             </transition>
         </div>
     </section>
-
 </template>
 <script>
     import { mapGetters } from 'vuex'
+
+    import { bus } from './common/bus'
 
     export default {
         name: 'app',
@@ -42,17 +43,21 @@
             }
         },
 
-        created () {
+        mounted () {
             const platform = window.navigator.platform.toLowerCase()
             if (platform.indexOf('win') === 0) {
                 this.systemCls = 'win'
             }
+            bus.$on('redirect-login', data => {
+                window.location.replace(data.loginUrl)
+            })
         }
     }
 </script>
 
 <style lang="postcss">
     @import './css/reset.css';
+    @import './css/common.css';
     @import './css/bk-patch.css';
     @import "@/css/mixins/scroller";
 

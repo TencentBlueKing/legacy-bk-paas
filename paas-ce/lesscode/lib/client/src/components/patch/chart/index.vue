@@ -11,9 +11,9 @@
 
 <template>
     <div v-if="height" :style="computedStyle">
-        <echart :options="options" :auto-resize="true"></echart>
+        <echart :options="options" autoresize></echart>
     </div>
-    <echart v-else :options="options" :auto-resize="true"></echart>
+    <echart v-else :options="options" autoresize></echart>
 </template>
 
 <script>

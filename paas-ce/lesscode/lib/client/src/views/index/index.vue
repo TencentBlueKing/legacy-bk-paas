@@ -14,7 +14,19 @@
         <div class="main-top">
             <div class="page-title">
                 <div class="page-name">
-                    可视化开发
+                    <i class="bk-drag-icon bk-drag-arrow-back" title="返回页面列表" @click="leavePage('pageList')"></i>
+                    <span class="seperate-line">|</span>
+                    <span class="bk-drag-icon template-logo" title="返回项目列表" @click="leavePage('projects')">
+                        <svg aria-hidden="true" width="16" height="16">
+                            <use xlink:href="#bk-drag-template-logo"></use>
+                        </svg>
+                    </span>
+                    <span class="seperate-line">|</span>
+                    <span class="name-content" :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
+                        {{ pageDetail.pageName }}【{{ projectDetail.projectName }}】
+                        <!-- <span :title="pageDetail.pageName" class="page-name-span">{{ pageDetail.pageName }}</span>
+                        【<span :title="projectDetail.projectName" class="project-name-span">{{ projectDetail.projectName }}</span>】 -->
+                    </span>
                 </div>
             </div>
             <div class="function-and-tool">
@@ -26,6 +38,11 @@
                     <!-- <div class="action-item" v-bk-tooltips="{ content: '撤销', placements: ['bottom'] }">
                         <i class="bk-drag-icon bk-drag-undo"></i>
                     </div> -->
+                    <div class="action-item" :class="actionSelected === 'save' ? 'active' : ''"
+                        v-bk-tooltips="{ content: '保存', placements: ['bottom'] }"
+                        @click="handleSave">
+                        <i class="bk-drag-icon bk-drag-save"></i>
+                    </div>
                     <div class="action-item" :class="actionSelected === 'preview' ? 'active' : ''"
                         v-bk-tooltips="{ content: '预览', placements: ['bottom'] }"
                         @click="handlePreview">
@@ -62,12 +79,7 @@
                     </div>
                 </div>
             </div>
-            <div class="changelog" @click="goChangelog" v-bk-tooltips="{ content: '更新日志', placements: ['bottom'] }">
-                <i class="bk-drag-icon bk-drag-update-log-fill"></i>
-            </div>
-            <div class="github-link" @click="goGithub" v-bk-tooltips="{ content: 'Github', placements: ['bottom'] }">
-                <i class="bk-drag-icon bk-drag-github-logo"></i>
-            </div>
+            <extra-links></extra-links>
         </div>
         <div class="main-container">
             <aside class="main-left-sidebar" :class="{ 'is-collapse': collapseSide.left }">
@@ -131,8 +143,12 @@
             </aside>
 
             <!-- 这里用 v-show，切换源码或者预览时，如果时 v-if，那么 grid.vue 里的 renderDataSlot 会重置，这个值并没有存在 store 中 -->
-            <div class="main-content" :class="mainContentClass" @click="dragWrapperClickHandler" v-show="actionSelected === 'edit'">
+            <div class="main-content" v-bkloading="{ isLoading: contentLoading, opacity: 1 }"
+                :class="mainContentClass"
+                @click="dragWrapperClickHandler"
+                v-show="actionSelected === 'edit'">
                 <vue-draggable
+                    v-show="!contentLoading"
                     :key="refreshDragAreaKey"
                     class="target-drag-area"
                     :list="targetData"
@@ -169,7 +185,7 @@
             </aside>
         </div>
 
-        <Methods :is-show.sync="isShowFun"></Methods>
+        <Methods :show.sync="isShowFun"></Methods>
 
         <bk-dialog v-model="delComponentConf.visiable"
             class="del-component-dialog"
@@ -189,7 +205,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex'
+    import { mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
 
     import componentList from '@/element-materials/materials'
@@ -200,6 +216,8 @@
     import Methods from '@/components/methods'
     import codeMixin from '@/components/vue-code/code-mixin'
     import ComponentSearch from './component-search'
+    import ExtraLinks from '@/components/ui/extra-links'
+    import html2canvas from 'html2canvas'
 
     import customComponents from '@/custom'
 
@@ -210,6 +228,7 @@
             VueCode,
             Methods,
             ComponentSearch,
+            ExtraLinks,
 
             ...customComponents
         },
@@ -222,6 +241,8 @@
             })
 
             return {
+                pageDetail: {},
+                projectDetail: {},
                 componentList: componentList,
                 componentGroupList,
                 collapseSide: {
@@ -251,7 +272,8 @@
                     { keys: ['Delete / Backspace'], name: '快速删除' }
                 ],
                 isInDragArea: false,
-                refreshVueCodeKey: +new Date()
+                refreshVueCodeKey: +new Date(),
+                contentLoading: true
             }
         },
         computed: {
@@ -260,10 +282,17 @@
                 'draggableSourceGroup',
                 'draggableTargetGroup',
                 'curSelectedComponentData',
-                'functionGroup',
                 'pageData',
                 'copyData'
             ]),
+
+            projectId () {
+                return this.$route.params.projectId || ''
+            },
+
+            pageId () {
+                return this.$route.params.pageId || ''
+            },
 
             mainContentClass () {
                 return {
@@ -304,9 +333,9 @@
                 return componentGroups
             }
         },
-        created () {
-            this.setFunctionGroup(this.functionGroup)
-
+        async created () {
+            this.pageDetail = await this.$store.dispatch('page/detail', { pageId: this.pageId }) || {}
+            this.contentLoading = false
             const mockCurSelectComponentData = {
                 componentId: 'grid-' + uuid(),
                 renderKey: uuid(),
@@ -333,22 +362,44 @@
 
             this.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
             // this.setCurSelectedComponentData(this.curDragingComponent)
-            this.setTargetData([this.curDragingComponent])
 
-            window.addEventListener('keydown', this.quickOperation)
-            window.addEventListener('keyup', this.judgeCtrl)
-            window.addEventListener('click', this.toggleQuickOperation, true)
+            // 设置初始targetData
+            let initData = []
+            try {
+                initData = this.pageDetail.content ? JSON.parse(this.pageDetail.content) : [this.curDragingComponent]
+                this.refreshDragAreaKey = +new Date()
+            } catch (err) {
+                initData = [this.curDragingComponent]
+                this.$bkMesseage({
+                    theme: 'error',
+                    message: 'targetData格式错误'
+                })
+            }
+            this.setTargetData(initData)
+
+            this.projectDetail = await this.$store.dispatch('project/detail', { projectId: this.projectId }) || {}
 
             // for test
             window.test = this.test
             window.test1 = this.test1
         },
         mounted () {
-            window.addEventListener('beforeunload', function (e) {
-                const confirmationMessage = '...';
-                (e || window.event).returnValue = confirmationMessage
-                return confirmationMessage
+            const projectId = this.$route.params.projectId || 1
+            this.getAllGroupFuncs(projectId).catch((err) => {
+                this.$bkMessage({ theme: 'error', message: err.message || err })
             })
+
+            window.addEventListener('keydown', this.quickOperation)
+            window.addEventListener('keyup', this.judgeCtrl)
+            window.addEventListener('click', this.toggleQuickOperation, true)
+
+            window.addEventListener('beforeunload', this.beforeunloadConfirm)
+        },
+        beforeDestroy () {
+            window.removeEventListener('keydown', this.quickOperation)
+            window.removeEventListener('keyup', this.judgeCtrl)
+            window.removeEventListener('click', this.toggleQuickOperation, true)
+            window.removeEventListener('beforeunload', this.beforeunloadConfirm)
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)
@@ -360,11 +411,14 @@
                 'setTargetData',
                 'setDraggableSourceGroup',
                 'setCurSelectedComponentData',
-                'setFunctionGroup',
                 'setCopyData',
                 'pushTargetHistory',
                 'backTargetHistory',
                 'forwardTargetHistory'
+            ]),
+
+            ...mapActions('functions', [
+                'getAllGroupFuncs'
             ]),
 
             /**
@@ -435,6 +489,12 @@
                         this.deleteComponent()
                         break
                 }
+            },
+
+            beforeunloadConfirm (event) {
+                const confirmationMessage = '...';
+                (event || window.event).returnValue = confirmationMessage
+                return confirmationMessage
             },
 
             cutComponent () {
@@ -830,30 +890,9 @@
                     localStorage.removeItem('layout-target-data')
                     localStorage.setItem('layout-target-data', JSON.stringify(this.targetData))
                     const routerUrl = this.$router.resolve({
-                        name: 'preview',
-                        query: {
-                            tmpFile: 'vue-layout-demo' + Math.random().toString().substr(5) + '.vue'
-                        }
+                        name: 'preview'
                     })
                     window.open(routerUrl.href, '_blank')
-
-                    // const code = this.getCode()
-                    // const res = await this.$store.dispatch('vueCode/saveVueFile', { code })
-                    // console.error(res)
-                    // if (res) {
-                    //     setTimeout(() => {
-                    //         const routerUrl = this.$router.resolve({
-                    //             name: 'preview',
-                    //             query: {
-                    //                 tmpFile: res
-                    //             }
-                    //         })
-                    //         console.error(routerUrl)
-                    //         window.open(routerUrl.href, '_blank')
-                    //     }, 10)
-                    // } else {
-                    //     errTips = '预览异常'
-                    // }
                 } catch (err) {
                     errTips = err.message || err || '预览异常'
                 }
@@ -863,18 +902,44 @@
                 })
             },
 
-            /**
-             * 跳转到开源版 github
-             */
-            goGithub () {
-                window.open('https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md')
+            handleSave () {
+                try {
+                    html2canvas(document.querySelector('.main-content')).then((canvas) => {
+                        const imgData = canvas.toDataURL('image/png')
+                        const res = this.$store.dispatch('page/update', {
+                            data: {
+                                pageData: {
+                                    id: parseInt(this.$route.params.pageId),
+                                    content: JSON.stringify(this.targetData),
+                                    sourceCode: this.getCode(),
+                                    previewImg: this.actionSelected !== 'vueCode' ? imgData : undefined
+                                }
+                            }
+                        })
+                        res && this.$bkMessage({
+                            theme: 'success',
+                            message: '保存成功'
+                        })
+                    })
+                } catch (err) {
+                    console.log(err)
+                }
             },
 
-            goChangelog () {
-                const routerUrl = this.$router.resolve({
-                    name: 'changelog'
+            leavePage (routeName) {
+                this.$bkInfo({
+                    title: '确认离开?',
+                    subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                    confirmFn: async () => {
+                        this.$router.push({
+                            name: routeName,
+                            params: {
+                                projectId: this.projectId,
+                                pageId: this.pageId
+                            }
+                        })
+                    }
                 })
-                window.open(routerUrl.href, '_blank')
             },
 
             test () {

@@ -14,6 +14,7 @@
     import httpVueLoader from '@/common/http-vue-loader'
     import codeMixin from '@/components/vue-code/code-mixin'
     import { customComponentList } from '@/custom'
+    import { mapActions } from 'vuex'
 
     customComponentList.forEach(name => {
         const ref = require('@/custom/' + name)
@@ -52,6 +53,7 @@
         mixins: [codeMixin],
         data () {
             return {
+                pageDetail: {},
                 pageType: 'preview',
                 comp: 'LoadingComponent',
                 isLoading: false,
@@ -60,36 +62,47 @@
             }
         },
         computed: {
-            url () {
-                return './static/' + this.fileName
-            },
-            fileName () {
-                return (this.$route.query && this.$route.query.tmpFile) || ''
+            fromPageList () {
+                return this.$route.query.type && this.$route.query.type === 'fromList'
             }
         },
         async created () {
-            if (this.fileName) {
-                await this.loadFile()
-            } else {
-                this.$bkMessage({
-                    theme: 'error',
-                    message: '预览异常'
-                })
+            const projectId = this.$route.params.projectId || 1
+            await this.getAllGroupFuncs(projectId)
+
+            if (this.fromPageList) {
+                this.pageDetail = await this.$store.dispatch('page/detail', { pageId: this.$route.params.pageId })
             }
+
+            await this.loadFile()
         },
         mounted () {
-            // window.addEventListener('beforeunload', this.deleTmpFile)
             this.minHeight = window.innerHeight
             window.addEventListener('resize', this.resizeHandler)
         },
         destroyed () {
             window.removeEventListener('resize', this.resizeHandler)
-            // this.deleTmpFile()
         },
         methods: {
+            ...mapActions('functions', [
+                'getAllGroupFuncs'
+            ]),
+
             async loadFile () {
                 this.isLoading = true
-                this.targetData = JSON.parse(localStorage.getItem('layout-target-data'))
+                try {
+                    if (this.fromPageList) {
+                        this.targetData = JSON.parse(this.pageDetail.content)
+                    } else {
+                        this.targetData = JSON.parse(localStorage.getItem('layout-target-data'))
+                    }
+                } catch (err) {
+                    this.$bkMesseage({
+                        theme: 'error',
+                        message: 'targetData格式错误'
+                    })
+                }
+
                 let code = this.getCode().replace('export default', 'module.exports =')
                 code = code.replace('components: { chart: ECharts },', '')
                 const res = httpVueLoader(code)
@@ -98,7 +111,6 @@
                     this.comp = 'preview-page'
                     this.isLoading = false
                 }, 300)
-
                 // this.isLoading = true
                 // try {
                 //     const res = await httpVueLoader(this.url)
@@ -117,18 +129,13 @@
                 //     this.isLoading = false
                 // }
             },
-            deleTmpFile () {
-                this.$store.dispatch('vueCode/deleteTmpFile', {
-                    fileName: this.fileName
-                })
-            },
             resizeHandler () {
                 this.minHeight = window.innerHeight
             }
         },
         template: ''
             + '<div :style="{ \'min-height\': minHeight + \'px\' }">'
-            + '<component :is="comp" :is-loading="isLoading" :url="url"/>'
+            + '<component :is="comp" :is-loading="isLoading"/>'
             + '</div>'
     }
 </script>

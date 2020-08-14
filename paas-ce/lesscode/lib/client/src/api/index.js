@@ -9,7 +9,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import Vue from 'vue'
 import axios from 'axios'
 import cookie from 'cookie'
 
@@ -136,7 +135,7 @@ async function getPromise (method, url, data, userConfig = {}) {
  * @param {Function} promise 拒绝函数
  */
 function handleResponse ({ config, response, resolve, reject }) {
-    if (!response.data && config.globalError) {
+    if (response.code !== 0 && config.globalError) {
         reject({ message: response.message })
     } else {
         resolve(config.originalResponse ? response : response.data, config)
@@ -163,13 +162,14 @@ function handleReject (error, config) {
         const { status, data } = error.response
         const nextError = { message: error.message, response: error.response }
         if (status === 401) {
-            bus.$emit('show-login-modal')
+            bus.$emit('redirect-login', nextError.response.data.data || {})
         } else if (data && data.message) {
             nextError.message = data.message
+            messageError(nextError.message)
         } else if (status === 500) {
             nextError.message = '服务器内部出错'
+            messageError(nextError.message)
         }
-        messageError(nextError.message)
         console.error(nextError.message)
         return Promise.reject(nextError)
     }
@@ -223,8 +223,6 @@ function getCancelToken () {
         cancelExcutor
     }
 }
-
-Vue.prototype.$http = http
 
 export default http
 

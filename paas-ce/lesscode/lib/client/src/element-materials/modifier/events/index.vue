@@ -19,14 +19,17 @@
                 </h3>
                 <bk-select class="event-choose" ref="eventChooseComp" :value="eventValues[event.name]" @clear="choose({ id: '' }, event.name)">
                     <bk-option-group
-                        v-for="(group, index) in functionGroup"
-                        :name="group.name"
+                        v-for="(group, index) in funcGroups"
+                        :name="group.groupName"
                         :key="index">
-                        <bk-option v-for="option in group.children"
+                        <bk-option class="function-option"
+                            v-for="option in group.functionList"
                             @click.native="choose(option, event.name)"
                             :key="option.id"
                             :id="option.id"
-                            :name="option.name">
+                            :name="option.funcName">
+                            <span class="funtion-name" :title="option.funcName">{{option.funcName}}</span>
+                            <i class="bk-icon icon-info" v-bk-tooltips="option.funcSummary || '该函数暂无描述'"></i>
                         </bk-option>
                     </bk-option-group>
                     <div slot="extension" style="cursor: pointer;" @click="showMethodDialog">
@@ -38,7 +41,7 @@
         <div class="no-event" v-else>
             <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无事件</span>
         </div>
-        <methods :is-show.sync="showMethod"></methods>
+        <methods :show.sync="showMethod"></methods>
     </section>
 </template>
 
@@ -76,7 +79,8 @@
             }
         },
         computed: {
-            ...mapGetters('drag', ['functionGroup', 'pageData', 'curSelectedComponentData'])
+            ...mapGetters('drag', ['pageData', 'curSelectedComponentData']),
+            ...mapGetters('functions', ['funcGroups'])
         },
         watch: {
             materialConfig: {
