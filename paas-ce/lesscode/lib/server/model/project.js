@@ -215,12 +215,20 @@ export default {
         })
     },
 
-    findOneProjectByName (projectName) {
-        return getRepository(Project).findOne({ projectName })
+    findOneProjectByNameAndUserId (projectName, userId) {
+        return getRepository(Project).createQueryBuilder('project')
+            .leftJoinAndSelect(UserProjectRole, 't', 't.projectId = project.id')
+            .where('project.projectName = :projectName', { projectName })
+            .andWhere('t.userId = :userId', { userId })
+            .getMany()
     },
 
-    findOneProjectByCode (projectCode) {
-        return getRepository(Project).findOne({ projectCode })
+    findOneProjectByCodeAndUserId (projectCode, userId) {
+        return getRepository(Project).createQueryBuilder('project')
+            .leftJoinAndSelect(UserProjectRole, 't', 't.projectId = project.id')
+            .where('project.projectCode = :projectCode', { projectCode })
+            .andWhere('t.userId = :userId', { userId })
+            .getMany()
     },
 
     findProjectDetail (params) {

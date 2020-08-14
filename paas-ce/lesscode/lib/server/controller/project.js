@@ -33,15 +33,15 @@ module.exports = {
 
             // 检查名称和英文ID的唯一性
             const [foundNameProject, foundCodeProject] = await Promise.all([
-                projectModel.findOneProjectByName(projectName),
-                projectModel.findOneProjectByCode(projectCode)
+                projectModel.findOneProjectByNameAndUserId(projectName, userInfo.id),
+                projectModel.findOneProjectByCodeAndUserId(projectCode, userInfo.id)
             ])
 
-            if (foundNameProject) {
+            if (foundNameProject && foundNameProject.length) {
                 ctx.throw(200, '项目名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
             }
 
-            if (foundCodeProject) {
+            if (foundCodeProject && foundCodeProject.length) {
                 ctx.throw(200, '项目ID已经存在', { code: CODE.BIZ.PROJECT_ID_EXISTED })
             }
 
@@ -212,8 +212,8 @@ module.exports = {
             data: null
         }
         try {
-            const foundNameProject = await projectModel.findOneProjectByName(name)
-            if (foundNameProject) {
+            const foundNameProject = await projectModel.findOneProjectByNameAndUserId(name, ctx.session.userInfo.id)
+            if (foundNameProject && foundNameProject.length) {
                 ctx.throw(200, '项目名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
             }
             ctx.send(res)
