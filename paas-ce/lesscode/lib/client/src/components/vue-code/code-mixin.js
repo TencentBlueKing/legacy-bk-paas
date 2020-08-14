@@ -199,12 +199,13 @@ const codeMixin = {
         },
         getPropsStr (type, props, compId) {
             let propsStr = ''
-            compId = camelCase(compId)
+            const preCompId = camelCase(compId)
 
             for (const i in props) {
                 if (i !== 'slots') {
                     let propsValue = ''
                     let putToData = false
+                    compId = `${preCompId}${camelCase(i)}`
                     if (typeof props[i].val === 'object' && props[i].type === 'array') {
                         this.dataTemplate(compId, JSON.stringify(props[i].val))
                         putToData = true
