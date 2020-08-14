@@ -11,4 +11,11 @@
 
 import Vue from 'vue'
 import bkMagicVue from 'bk-magic-vue'
+import bkText from '@/components/patch/text'
+import bkImage from '@/components/patch/image'
+import chart from '@/components/patch/chart'
+
+Vue.use(bkText)
+Vue.use(bkImage)
+Vue.use(chart)
 Vue.use(bkMagicVue)

@@ -1,0 +1,32 @@
+/* page */
+.page-content {
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .page-head {
+        display: flex;
+        margin-bottom: 20px;
+
+        .extra {
+            flex: none;
+            margin-left: auto;
+        }
+    }
+    .page-body {
+        display: flex;
+        flex: 1;
+
+        .page-body-inner {
+            display: flex;
+            flex: 1;
+        }
+
+        .empty {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+    }
+}

@@ -74,7 +74,22 @@ exports.CODE = {
         PROJECT_NOT_FOUND: 4040,
         // 项目页面描述文件未找到
         JSON_NOT_FOUND: 4041,
+        // 项目名称已经存在
+        PROJECT_NAME_EXISTED: 4042,
+        // 项目ID已经存在
+        PROJECT_ID_EXISTED: 4043,
         // 未定义的业务逻辑错误
         NOT_DEFINED: 9999
     }
+}
+
+/**
+ * 判断请求是否是 ajax 异步请求
+ *
+ * @param {Object} req request 对象
+ *
+ * @return {boolean} 返回结果
+ */
+exports.isAjaxReq = req => {
+    return req.get('X-Requested-With') || (req.header.accept || '').indexOf('json') > -1
 }

@@ -8,7 +8,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
+import { mapGetters } from 'vuex'
 import { paramCase, camelCase } from 'change-case'
 
 const codeMixin = {
@@ -46,21 +46,37 @@ const codeMixin = {
             this.chartTypeArr = []
         }
     },
+    computed: {
+        ...mapGetters('functions', ['funcGroups'])
+    },
     methods: {
         getMethodById (methodId) {
             let returnMethod = {
                 id: '',
-                funName: '',
-                code: 'function emptyFunc () {}'
+                funcName: 'emptyFunc',
+                previewStr: '',
+                vueCodeStr: ''
             }
-            const functionGroup = JSON.parse(localStorage.getItem('functionGroup'))
-            functionGroup.forEach((group) => {
-                const funChildren = group.children || []
+            this.funcGroups.forEach((group) => {
+                const funChildren = group.functionList || []
                 const method = funChildren.find(x => x.id === methodId)
                 if (method) {
                     returnMethod = method
                 }
             })
+            const paramsStr = (returnMethod.funcParams || []).join(', ')
+            function addFuncStr (funcBody) {
+                return `${returnMethod.funcName} (${paramsStr}) { ${funcBody} }`
+            }
+            if (returnMethod.funcType === 1) {
+                const remoteParams = (returnMethod.remoteParams || []).join(', ')
+                const data = { url: returnMethod.funcApiUrl, type: returnMethod.funcMethod, apiData: returnMethod.funcApiData }
+                returnMethod.previewStr = addFuncStr(`return this.$store.dispatch('getApiData', ${JSON.stringify(data)}).then((${remoteParams}) => { ${returnMethod.funcBody} }).catch((err) => { console.error(err) })`)
+                returnMethod.vueCodeStr = addFuncStr(`return this.$http.${returnMethod.funcMethod}('${returnMethod.funcApiUrl}'${returnMethod.funcApiData ? `, ${returnMethod.funcApiData}` : ''}).then((${remoteParams}) => { ${returnMethod.funcBody} }).catch((err) => { console.error(err) })`)
+            } else {
+                returnMethod.previewStr = addFuncStr(returnMethod.funcBody)
+                returnMethod.vueCodeStr = addFuncStr(returnMethod.funcBody)
+            }
             return returnMethod
         },
 
@@ -71,7 +87,7 @@ const codeMixin = {
                 const widthStr = item.renderProps.width && item.renderProps.width.val ? `width: ${item.renderProps.width.val}px;` : ''
                 const heightStr = `height:${item.renderProps.height.val || 0}px;`
                 return `<div style="${widthStr}${heightStr}">
-                            <chart :options="${item.componentId}" :auto-resize="true"></chart>
+                            <chart :options="${item.componentId}" autoresize></chart>
                         </div>\n`
             } else {
                 // item.componentId = item.componentId.replace('_', '')
@@ -183,12 +199,13 @@ const codeMixin = {
         },
         getPropsStr (type, props, compId) {
             let propsStr = ''
-            compId = camelCase(compId)
+            const preCompId = camelCase(compId)
 
             for (const i in props) {
                 if (i !== 'slots') {
                     let propsValue = ''
                     let putToData = false
+                    compId = `${preCompId}${camelCase(i)}`
                     if (typeof props[i].val === 'object' && props[i].type === 'array') {
                         this.dataTemplate(compId, JSON.stringify(props[i].val))
                         putToData = true
@@ -245,12 +262,12 @@ const codeMixin = {
             if (typeof events === 'object' && Object.keys(events).length) {
                 for (const key in events) {
                     const fun = this.getMethodById(events[key])
-                    if (fun.funName) {
-                        eventStr += `@${key}="${fun.funName}" `
+                    if (fun.id) {
+                        eventStr += `@${key}="${fun.funcName}" `
+                        const contentStr = this.pageType === 'vueCode' ? fun.vueCodeStr : fun.previewStr
                         if (this.existFunc.indexOf(events[key]) === -1) {
                             this.existFunc.push(events[key])
-                            const code = fun.code.replace('function ', '')
-                            this.methodsStr += `${code},`
+                            this.methodsStr += `${ contentStr },`
                         }
                     }
                 }
@@ -371,17 +388,16 @@ const codeMixin = {
         },
         remoteMethodsTemplate (key, payload) {
             const method = this.getMethodById(payload.methodId)
-            const data = {
-                url: payload.url,
-                type: payload.method
-            }
-            const previewStr = `this.${key} = await this.$store.dispatch('getApiData', ${JSON.stringify(data)}).then(${method.code})`
-            const vueCodeStr = `this.${key} = await this.$http.${payload.method}('${payload.url}').then(${method.code})`
-            const contentStr = this.pageType === 'vueCode' ? vueCodeStr : previewStr
+            const contentStr = this.pageType === 'vueCode' ? method.vueCodeStr : method.previewStr
             this.methodsStr += `
                 async get${key} () {
-                    ${contentStr}
-                },\n`
+                    this.${key} = await this.${method.funcName}()
+                },`
+
+            if (this.existFunc.indexOf(method.id) === -1) {
+                this.existFunc.push(method.id)
+                this.methodsStr += `${contentStr},`
+            }
         },
         createdTemplate (key) {
             this.createdStr += `this.get${key}()\n`

@@ -97,8 +97,8 @@ module.exports = {
                             resolve(__dirname, '..', 'src'),
                             resolve(__dirname, '../../../node_modules', 'bk-magic-vue'),
                             resolve(__dirname, '../../../node_modules', 'monaco-editor'),
-                            resolve(__dirname, '../../../node_modules', 'vue-echarts'),
-                            resolve(__dirname, '../../../node_modules', 'resize-detector')
+                            resolve(__dirname, '../../../node_modules', 'vue-echarts')
+                            // resolve(__dirname, '../../../node_modules', 'resize-detector')
                         ],
                         cacheDirectory: resolve(__dirname, '..', '.webpack_cache'),
                         presets: [
