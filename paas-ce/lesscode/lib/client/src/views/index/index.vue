@@ -401,11 +401,6 @@
             window.removeEventListener('click', this.toggleQuickOperation, true)
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
         },
-        beforeDestroy () {
-            window.removeEventListener('keydown', this.quickOperation)
-            window.removeEventListener('keyup', this.judgeCtrl)
-            window.removeEventListener('click', this.toggleQuickOperation, true)
-        },
         methods: {
             ...mapMutations('drag', [
                 'setTargetData',

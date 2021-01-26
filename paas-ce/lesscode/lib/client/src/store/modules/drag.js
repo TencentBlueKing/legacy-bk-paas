@@ -41,12 +41,6 @@ export default {
 
         curHistoryIndex: 0,
 
-        copyData: {},
-
-        targetHistory: [],
-
-        curHistoryIndex: 0,
-
         // 用于生成 json 配置的数据
         astData: []
     },
