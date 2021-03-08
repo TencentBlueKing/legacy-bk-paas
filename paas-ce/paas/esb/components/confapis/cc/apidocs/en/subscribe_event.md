@@ -1,6 +1,6 @@
 ### Functional description
 
-订阅事件subscribe event
+subscribe event
 
 ### Request Parameters
 

@@ -47,15 +47,15 @@ get operation log
 
 {
     "result":true,
-    "bk_error_code":0,
-    "bk_error_msg":null,
+    "code":0,
+    "message":null,
     "data":{
         "count":1,
         "info":[
             {
                 "bk_supplier_account":"0",
                 "bk_biz_id":1,
-                "op_desc":"修改主机",
+                "op_desc":"Modify host",
                 "op_type":2,
                 "op_target":"host",
                 "operator":"admin",
@@ -112,8 +112,8 @@ get operation log
 | Field       | Type     | Description         |
 |------------|----------|--------------|
 | result | bool |request result true or false|
-| bk_error_code | int  |error code. 0 represent success, >0 represent failure code |
-| bk_error_msg | string |error message from failed request|
+| code | int  |error code. 0 represent success, >0 represent failure code |
+| message | string |error message from failed request|
 | data | object  |the data response|
 
 #### data ：

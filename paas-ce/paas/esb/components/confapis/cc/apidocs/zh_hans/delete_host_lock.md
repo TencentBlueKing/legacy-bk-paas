@@ -1,6 +1,6 @@
 ### 功能描述
 
-新加主机锁，如果主机已经加过锁，同样提示加锁成功
+删除主机锁
 
 ### 请求参数
 
@@ -29,8 +29,8 @@
 
 {
     "result": true,
-    "bk_error_code": 0,
-    "bk_error_msg": "success",
+    "code": 0,
+    "message": "success",
     "data": null
 }
 ```

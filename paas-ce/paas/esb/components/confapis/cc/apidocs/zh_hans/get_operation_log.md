@@ -49,8 +49,8 @@
 
 {
     "result":true,
-    "bk_error_code":0,
-    "bk_error_msg":null,
+    "code":0,
+    "message":null,
     "data":{
         "count":1,
         "info":[
@@ -116,8 +116,8 @@
 | 名称  | 类型  | 描述 |
 |---|---|---|
 | result | bool | 请求成功与否。true:请求成功；false请求失败 |
-| bk_error_code | int | 错误编码。 0表示success，>0表示失败错误 |
-| bk_error_msg | string | 请求失败返回的错误信息 |
+| code | int | 错误编码。 0表示success，>0表示失败错误 |
+| message | string | 请求失败返回的错误信息 |
 | data | object | 请求返回的数据 |
 
 #### data 字段说明：

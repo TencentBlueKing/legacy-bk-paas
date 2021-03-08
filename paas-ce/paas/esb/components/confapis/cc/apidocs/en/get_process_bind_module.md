@@ -18,8 +18,11 @@ get process bind module
 ### Request Parameters Example
 
 ```python
-
-
+{
+    "bk_supplier_account":"0",
+    "bk_biz_id":3,
+    "bk_process_id":14
+}
 ```
 
 ### Return Result Example
@@ -28,8 +31,8 @@ get process bind module
 
 {
     "result":true,
-    "bk_error_code":0,
-    "bk_error_msg":"",
+    "code":0,
+    "message":"",
     "data":[
         {
             "bk_module_name":"db",
@@ -50,8 +53,8 @@ get process bind module
 | Field       | Type     | Description         |
 |------------|----------|--------------|
 | result | bool |request result true or false|
-| bk_error_code | int  |error code. 0 represent success, >0 represent failure code |
-| bk_error_msg | string |error message from failed request|
+| code | int  |error code. 0 represent success, >0 represent failure code |
+| message | string |error message from failed request|
 | data | object  |the data response|
 
 #### data ：

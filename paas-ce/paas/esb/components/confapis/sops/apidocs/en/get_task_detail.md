@@ -129,7 +129,7 @@ Query a task execution details
                             }
                         }
                     },
-                    "stage_name": "步骤1",
+                    "stage_name": "stage1",
                     "can_retry": true,
                     "isSkipped": true,
                     "type": "ServiceActivity",
@@ -140,13 +140,13 @@ Query a task execution details
                 "node880ded556c6c3c269be3cedc64b6": {
                     "outgoing": "line490caa49d2a03e64829693281032",
                     "incoming": "lineb83161d6e0593ad68d9ec73a961b",
-                    "name": "暂停",
+                    "name": "pause",
                     "error_ignorable": false,
                     "component": {
                         "code": "pause_node",
                         "data": {}
                     },
-                    "stage_name": "步骤1",
+                    "stage_name": "stage1",
                     "can_retry": true,
                     "isSkipped": true,
                     "type": "ServiceActivity",
@@ -230,8 +230,8 @@ Query a task execution details
             "constants": {},
             "location": [
                 {
-                    "stage_name": "步骤1",
-                    "name": "暂停",
+                    "stage_name": "stage1",
+                    "name": "pause",
                     "y": 135,
                     "x": 300,
                     "type": "tasknode",
@@ -244,7 +244,7 @@ Query a task execution details
                     "id": "node5c48f37aa9f0351e8b43ab6a2295"
                 },
                 {
-                    "stage_name": "步骤1",
+                    "stage_name": "stage1",
                     "name": "timing",
                     "y": 135,
                     "x": 595,

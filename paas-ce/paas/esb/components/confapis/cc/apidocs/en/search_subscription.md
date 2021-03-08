@@ -8,7 +8,27 @@ search subscription
 
 #### General Parameters
 
-    None
+| Field                |  Type      | Required	   |  Description                       |
+|---------------------|------------|--------|-----------------------------|
+| bk_biz_id           | string     | Yes     | Business ID                      |
+| bk_supplier_account | string     | Yes     | Supplier account,please fill '0' by independent deployment  |
+| page                | object     | Yes     | Page parameters                    |
+| condition           | object     | No     | Search condition                    |
+| fields              |string array| No     | Search fields                  |
+
+##### page
+
+| Field      |  Type      | Required	   |  Description                |
+|-----------|------------|--------|----------------------|
+| start     |  int       | Yes     | The record of start position         |
+| limit     |  int       | Yes     | Limit number of each page,maximum 200 |
+| sort      |  string    | No     | Sort fields             |
+
+##### condition
+
+| Field      |  Type      | Required	   |  Description      |
+|-----------|------------|--------|------------|
+| subscription_name  |string      |Yes      | Here is a sample data, which needs to be set as identifier of the model, and configure English name on page |     
 
 ### Request Parameters Example
 

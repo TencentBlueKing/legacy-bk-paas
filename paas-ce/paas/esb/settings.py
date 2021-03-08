@@ -134,14 +134,17 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
 
 
 # logging
-LOG_DIR = os.environ.get('PAAS_LOGGING_DIR') or os.path.join(BASE_DIR, 'logs')
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(os.path.dirname(PROJECT_PATH))
+LOG_DIR = os.environ.get('PAAS_LOGGING_DIR') or os.path.join(PARENT_DIR, 'logs/open_paas')
 if not os.path.exists(LOG_DIR):
     os.mkdir(LOG_DIR)
 
 # 100M, total 1G
 LOG_MAX_BYTES = 104857600
 LOG_BACKUP_COUNT = 10
-LOG_CLASS = 'logging.handlers.RotatingFileHandler'
+# LOG_CLASS = 'logging.handlers.RotatingFileHandler'
+LOG_CLASS = 'cloghandler.ConcurrentRotatingFileHandler'
 
 
 def get_loggings(log_level):

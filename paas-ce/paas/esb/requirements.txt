@@ -9,6 +9,8 @@ redis==2.10.5
 thrift==0.10.0
 gevent==1.1.2
 pytz==2016.6.1
+enum34==1.1.6
+ConcurrentLogHandler==0.9.1
 
 # encrypt
 pycrypto==2.6.1
