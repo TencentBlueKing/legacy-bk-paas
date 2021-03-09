@@ -1,0 +1,117 @@
+- model: api.bkcluster
+  pk: 1
+  fields:
+    name: ieod
+    is_active: True
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+
+- model: api.bkapp
+  pk: 1
+  fields:
+    name: app-template
+    app_code: app-template
+    app_lang: Python
+    app_type: 0
+    is_active: True
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+
+- model: api.bkapptoken
+  pk: 1
+  fields:
+    key: 0103c74f6b87490289bf2b93d9922564
+    bk_app: 1
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+
+- model: api.bkserver
+  pk: 1
+  fields:
+    name: IEOD_1
+    s_id: feb4aaa0-385a-488a-b754-5479510e633b
+    token: feb4aaa0-385a-488a-b754-5479510e622a 
+    ip_address: 127.0.0.1
+    ip_port: 8003
+    category: app
+    is_active: True
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+
+- model: api.bkhostingship
+  pk: 1
+  fields:
+    bk_app: 1
+    bk_server: 1
+    is_master: True
+    is_active: True
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+
+- model: api.bkappenv
+  pk: 1
+  fields:
+    bk_app: 1
+    mode: test
+    key: workers.max
+    value: 3
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+- model: api.bkappenv
+  pk: 2
+  fields:
+    bk_app: 1
+    mode: test
+    key: workers.min
+    value: 1
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+- model: api.bkappenv
+  pk: 3
+  fields:
+    bk_app: 1
+    mode: test
+    key: workers.max
+    value: 16
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+- model: api.bkappenv
+  pk: 4
+  fields:
+    bk_app: 1
+    mode: test
+    key: workers.min
+    value: 10
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+
+- model: api.bkappevent
+  pk: dbb4aaa0-385a-488a-b754-5479510e622a
+  fields:
+    bk_app: 1
+    event_type: app.test.online
+    status: Success
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+
+- model: api.bkappeventlog
+  pk: 1
+  fields:
+    bk_app_event: dbb4aaa0-385a-488a-b754-5479510e622a
+    log: line1
+    created_at: 2016-03-24T17:41:28+00:00
+    updated_at: 2016-03-24T17:41:28+00:00
+- model: api.bkappeventlog
+  pk: 2
+  fields:
+    bk_app_event: dbb4aaa0-385a-488a-b754-5479510e622a
+    log: line2
+    created_at: 2016-03-24T17:41:29+00:00
+    updated_at: 2016-03-24T17:41:29+00:00
+- model: api.bkappeventlog
+  pk: 3
+  fields:
+    bk_app_event: dbb4aaa0-385a-488a-b754-5479510e622a
+    log: line3
+    created_at: 2016-03-24T17:41:30+00:00
+    updated_at: 2016-03-24T17:41:30+00:00
