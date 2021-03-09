@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Copyright © 2012-2017 Tencent BlueKing. All Rights Reserved. 蓝鲸智云 版权所有
+Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS
+Community Edition) available.
+Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+You may obtain a copy of the License at http://opensource.org/licenses/MIT
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext as _
@@ -63,15 +71,11 @@ class App(models.Model):
     is_already_online = models.BooleanField(u"是否已经上线", default=False, help_text=u"app正式环境未下架，该字段为True。")
 
     first_test_time = models.DateTimeField(u"应用首次提测时间", help_text=u"记录应用首次提测时间", blank=True, null=True, db_index=True)
-    first_online_time = models.DateTimeField(
-        u"应用首次上线时间", help_text=u"记录应用首次上线时间", blank=True, null=True, db_index=True
-    )
+    first_online_time = models.DateTimeField(u"应用首次上线时间", help_text=u"记录应用首次上线时间", blank=True, null=True, db_index=True)
     # 开发者信息
     developer = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=u"开发者", related_name="developers")
     # APP语言
-    language = models.CharField(
-        u"语言", choices=LANGUAGE_CHOICES, default="python", max_length=50, blank=True, null=True
-    )
+    language = models.CharField(u"语言", choices=LANGUAGE_CHOICES, default="python", max_length=50, blank=True, null=True)
 
     # celery
     is_use_celery = models.BooleanField(u"app是否使用celery", default=False, help_text=u"选项: true(是)，false(否)")
