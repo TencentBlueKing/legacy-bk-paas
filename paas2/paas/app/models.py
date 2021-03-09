@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Copyright © 2012-2017 Tencent BlueKing. All Rights Reserved. 蓝鲸智云 版权所有
+Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS
+Community Edition) available.
+Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+You may obtain a copy of the License at http://opensource.org/licenses/MIT
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+
 import time
 import os
 import datetime
@@ -85,9 +93,7 @@ class App(models.Model):
 
     state = models.SmallIntegerField(_l(u"应用开发状态"), choices=STATE_CHOICES, help_text=_l(u"app的开发状态"), default=1)
     tags = models.ForeignKey(AppTags, help_text=_l(u"应用分类"), blank=True, null=True, on_delete=SET_NULL)
-    is_already_test = models.BooleanField(
-        _l(u"是否已经提测"), default=False, help_text=_l(u"app在测试环境下架或者开发中状态，修改该字段为False。")
-    )
+    is_already_test = models.BooleanField(_l(u"是否已经提测"), default=False, help_text=_l(u"app在测试环境下架或者开发中状态，修改该字段为False。"))
     is_already_online = models.BooleanField(_l(u"是否已经上线"), default=False, help_text=_l(u"app正式环境未下架，该字段为True。"))
 
     first_test_time = models.DateTimeField(

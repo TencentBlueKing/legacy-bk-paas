@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-validators
+Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS
+Community Edition) available.
+Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+You may obtain a copy of the License at http://opensource.org/licenses/MIT
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
 
 import yaml
@@ -103,9 +110,7 @@ def validate_and_extract_tar_file(filename, path):
         message = _(u"%s 文件格式错误, 无法正常打开, 请确认后重新上传") % filename
         return False, message, None
 
-    app_yml_path_list = [
-        m.name for m in tar_file_members if m.name.endswith("app.yml") and len(m.name.split("/")) == 2
-    ]
+    app_yml_path_list = [m.name for m in tar_file_members if m.name.endswith("app.yml") and len(m.name.split("/")) == 2]
     if not app_yml_path_list:
         message = u"There is no app.yml in %s" % filename
         logger.error(message)

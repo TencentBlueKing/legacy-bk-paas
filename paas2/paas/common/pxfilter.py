@@ -1,5 +1,19 @@
 # -*- coding: utf-8 -*-
 """
+Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS
+Community Edition) available.
+Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+You may obtain a copy of the License at http://opensource.org/licenses/MIT
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+"""
+
+import re
+from HTMLParser import HTMLParser
+
+"""
 Python 富文本XSS过滤类
 @package XssHtml
 @version 0.1
@@ -23,8 +37,6 @@ Python 2.6+ or 3.2+
 Cannot defense xss in browser which is belowed IE7
 浏览器版本：IE7+ 或其他浏览器，无法防御IE6及以下版本浏览器中的XSS
 """
-import re
-from HTMLParser import HTMLParser
 
 
 class XssHtml(HTMLParser):
