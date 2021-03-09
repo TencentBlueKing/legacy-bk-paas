@@ -1,0 +1,146 @@
+<style>
+.detail td table tr td {
+  border-style: solid;
+  border-width: 0 0 1px 1px;
+  border-color: #dadada;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+table thead th {
+  text-align:center;
+}
+</style>
+<div class="grid">
+  <div style="display: none" id="error_msg_div">
+  </div>
+  <table class="table table-bordered table-header-bg table-hover mt10">
+    <thead>
+      <tr>
+        <th> ${_(u'告警类型')}</th>
+        <th> ${_(u'日志级别')}</th>
+        <th> ${_(u'时间')}</th>
+        <th> ${_(u'接收人')}</th>
+        <th> </th>
+      </tr>
+    </thead>
+
+    <tbody>
+    % if records:
+      % for obj in records:
+      <tr style="cursor: pointer;" title="${_(u'点击查看详情')}" class="${}">
+        <td>
+          ${ obj.alarm_type_display }
+        </td>
+        <td>
+          ${ obj.extra }
+        </td>
+        <td>
+          ${ obj.alarm_time }
+        </td>
+        <td>
+          ${ obj.alarm_receiver }
+        </td>
+				<td><i class="glyphicon glyphicon-chevron-down" style="color:silver"></i></td>
+      </tr>
+
+			<tr class="detail" style="display: none">
+        <td colspan="5">
+          <table style="border-style: solid;border-width: 1px;border-color: darkgray; width:100%; text-align:left;">
+            <tr><td style="width:134px;">${_(u'告警类型:')}</td>  <td> ${ obj.alarm_type_display } </td></tr>
+            <tr><td >${_(u'时间:')}</td>                          <td> ${ obj.alarm_time } </td></tr>
+            <tr><td >${_(u'原因:')}</td>                          <td style="white-space: normal;" > ${ obj.alarm_reason } </td></tr>
+            <tr><td >${_(u'内容:')}</td>                          <td style="white-space: normal;" > ${ obj.alarm_content_display } </td></tr>
+          </table>
+        </br>
+
+        </td>
+      </tr>
+
+      % endfor
+    % else:
+    <tr class="tc"><td colspan="100">${_(u'没有数据')}</td></tr>
+    % endif
+    </tbody>
+  </table>
+</div>
+
+
+<div class="pull-right">
+  <div class="pagination" style="margin-top: 0">
+    <%
+                # 计算分页临近页数代码
+                from django.conf import settings
+                # 分页临近页数
+                adjacent_pages = getattr(settings, 'ADJACENT_PAGES', 3)
+                start_page = max(records.number - adjacent_pages, 1)
+                if start_page < adjacent_pages:
+                    start_page = 1
+                end_page = records.number + adjacent_pages + 1
+                if end_page > records.paginator.num_pages - adjacent_pages + 2:
+                    end_page = records.paginator.num_pages + 1
+                page_numbers = [n for n in range(start_page, end_page)]
+                show_first =  1 not in page_numbers
+                show_last =  records.paginator.num_pages not in page_numbers
+            %>
+
+
+    <span class="step-links">
+        <ul class="pagination pagination-centered" style="margin-top: 0">
+          % if records.has_previous():
+          <li><a href="#" onclick="javascript:go_page(${ records.previous_page_number() })">${_(u'上一页')}</a></li>
+          % else:
+          <li class="disabled"><a href="#" onclick="return false;">${_(u'上一页')}</a></li>
+          % endif
+
+          %if show_first:
+          <li><a href="#" onclick="javascript:go_page(1)">1</a></li>
+          <li class="disabled ellipsis"><a href="###">...</a></li>
+          % endif
+
+          % for page in page_numbers:
+          % if records.number != page:
+          <li><a href="#" onclick="javascript:go_page(${ page })"> ${ page } </a></li>
+          % else:
+          <li class="active"><a href="#" onclick="return false;"> ${ page } </a></li>
+          % endif
+          % endfor
+
+          % if show_last:
+          <li class="disabled ellipsis"><a href="###">...</a></li>
+          <li><a href="#" onclick="javascript:go_page(${ records.paginator.num_pages })">${records.paginator.num_pages}</a></li>
+          % endif
+
+          % if records.has_next():
+          <li><a href="#" onclick="javascript:go_page(${ records.next_page_number() })">${_(u'下一页')}</a></li>
+          % else:
+          <li class="disabled"><a href="#" onclick="return false;">${_(u'下一页')}</a></li>
+          % endif
+        </ul>
+    </span>
+  </div>
+</div>
+
+<script>
+
+$(function(){
+
+	$("table tbody tr").click(function (){
+		var tr_obj = $(this).next('tr');
+		if (tr_obj.attr('class') == 'detail'){
+			// 显示、隐藏组件内容
+			var is_hiden = $(tr_obj).is(":hidden");
+			var icon_obj = $(this).find('i');
+			if(is_hiden){
+				$(this).next('tr').css('display', '');
+				icon_obj.removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+			}else{
+				$(this).next('tr').css('display', 'none');
+				icon_obj.removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down")
+			}
+
+		}
+	});
+
+});
+</script>

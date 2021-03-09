@@ -1,0 +1,9 @@
+#!/bin/bash
+
+source /root/.bkrc
+source $CTRL_DIR/functions
+export BK_ENV=production
+export PAAS_LOGGING_DIR=$BK_HOME/logs/open_paas
+
+workon open_paas-paas || fail "Abort"
+python manage.py migrate  || fail "Abort"

@@ -1,0 +1,301 @@
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+    <link href="${STATIC_URL}css/guide_newbie.${CSS_SUFFIX}" rel="stylesheet">
+    <%
+      import settings
+      img_dir = 'dev_guide_qcloud'
+    %>
+    <!-- 右侧内容 start -->
+    <div class="col_main">
+        <!-- 根据开发者中心内容 ，嵌入时可拷贝col_main 中的代码到对应开发者中心的节点内 -->
+        <div class="box-info full">
+          <div class="main-header"><span>${_(u'新手指南')}</span></div>
+            <div class="main-nav">
+                <div class="king-pearls row">
+                    <div class="king-pearl">
+                        <a data-index="0" class="anchor-link" href="#step1">
+                            <span class="king-pearl-number">1</span>
+                            <span class="king-pearl-title">${_(u'安装环境')}</span>
+                        </a>
+                    </div>
+                    <div class="king-pearl">
+                        <a data-index="1" class="anchor-link" href="#step2">
+                            <span class="king-pearl-number">2</span>
+                            <span class="king-pearl-title">${_(u'创建应用')}</span>
+                        </a>
+                    </div>
+                    <div class="king-pearl">
+                        <a data-index="2" class="anchor-link" href="#step3">
+                            <span class="king-pearl-number">3</span>
+                            <span class="king-pearl-title">${_(u'配置修改')}</span>
+                        </a>
+                    </div>
+                    <div class="king-pearl">
+                        <a data-index="3" class="anchor-link" href="#step4">
+                            <span class="king-pearl-number">4</span>
+                            <span class="king-pearl-title">${_(u'开发项目')}</span>
+                        </a>
+                    </div>
+                    <div class="king-pearl">
+                        <a data-index="4" class="anchor-link" href="#step5">
+                            <span class="king-pearl-number">5</span>
+                            <span class="king-pearl-title">${_(u'部署项目')}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <ul class="king-timeline">
+				<li class="time-label open">
+                    <a name="step1"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">1</span>${_(u'安装环境 ')}<i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item">
+                        <div class="king-timeline-body">
+                            <ol class="guide-list">
+                              <li>${_(u'本地开发环境搭建教程')} <a href="https://docs.bk.tencent.com/blueapps/USAGE.html#2-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88python%EF%BC%89" target="_blank">${_(u'点击了解')}</a> ;</li>
+                                <br>
+                                <strong>${_(u'注意：应用测试、正式部署时会自动安装运行环境，并部署应用')}</strong>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+                <li class="time-label open">
+                    <a name="step2"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">2</span>${_(u'创建应用')} <i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item">
+                        <div class="king-timeline-body">
+                            <ol class="guide-list">
+                              <li>${_(u'点击左侧导航中的“我的应用 - 应用创建”;')}</li>
+                              <li>${_(u'填写应用基本注册信息（应用 ID、代码仓库信息等）;')}</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+                <li class="time-label open">
+                    <a name="step3"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">3</span>${_(u'配置修改')}<i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item">
+                        <div><strong>${_(u'Python开发框架')}（2.0.0）：</strong></div>
+                        <div class="king-timeline-body">
+                          <strong>${_(u'示例1：')}<a href="${SITE_URL}download/framework_3.3.1.92.tar.gz">${_(u'点击下载Python开发框架(2.0.0)代码')}</a> ${_(u'，将框架代码放到自己的代码仓库中，并按以下提示修改：')}</strong>
+                            <ol class="guide-list">
+                                <li>${_(u'config/__init__.py 文件: `APP_CODE`(应用ID) 和 `SECRET_KEY`(应用TOKEN)')}
+                                    <span>${_(u'（蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中可以查看到这两个值的信息）;')}</span>
+                                </li>
+
+                                <li>${_(u'config/__init__.py 文件: BK_URL 的值设置为: ')}<code>${paas_host}</code>;
+                                </li>
+                                <li>${_(u'config/dev.py 文件：DATABASES（请创建本地开发数据库，并修改配置信息）;')}</li>
+                                <li>${_(u'config/stag.py 文件：DATABASES（请创建测试环境数据库，并修改配置信息）;')}</li>
+                                <li>${_(u'config/prod.py 文件：DATABASES（请创建正式环境数据库，并修改配置信息）。')}</li>
+                                <p class="mt5"><strong><code>${_(u'注意：')}</code>${_(u'测试环境 和 正式环境 的数据库需要对 AppServer 授权')}</strong>
+                                (
+                                % if active_server_ips:
+                                    <code>${active_server_ips}</code>
+                                % else:
+                                    <a href="${SITE_URL}engine/server/" target="_blank">${_(u'添加并激活 AppServer')}</a>
+                                % endif
+                                )
+                                </p>
+                                <li class="mt10">${_(u'若需要使用 celery，请修改以下配置：')}(<a href="http://bkopen-10032816.file.myqcloud.com/paas/celery_packages.zip">${_(u'点击下载 celery 开发指引')}</a>)</li>
+                                <span class="ml40">${_(u'config/default.py 文件：IS_USE_CELERY的值设置为: ')}<code>True</code></span><br>
+                                <span class="ml40">${_(u'config/dev.py 文件：BROKER_URL（请创建本地开发的 celery消息队列，并修改配置信息，推荐使用 RabbitMQ）')}</span><br>
+                                <span class="ml40">${_(u'config/default.py 文件：CELERY_IMPORTS（添加celery任务模块）')}</span>
+                            </ol>
+                            <br>
+                        </div>
+
+                        <div><strong>${_(u'Python开发框架')}（1.0.0）：</strong></div>
+                        <div class="king-timeline-body">
+                          <strong>${_(u'示例1：')} &nbsp;<a href="${SITE_URL}download/framework.tar.gz">${_(u'点击下载Python开发框架(1.0.0)代码')}</a> ，${_(u'将框架代码放到自己的代码仓库中，并按以下提示修改：')}</strong>
+                            <ol class="guide-list">
+                              <li>${_(u'conf/default.py 文件：APP_ID 和 APP_TOKEN')}
+                                  <span>${_(u'（蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中可以查看到这两个值的信息）;')}</span>
+                                </li>
+                                <li>${_(u'conf/default.py 文件：BK_PAAS_HOST的值设置为: ')}<code>${paas_host}</code>;
+                                </li>
+                                <li>${_(u'conf/settings_development.py 文件：DATABASES（请创建本地开发数据库，并修改配置信息）;')}</li>
+                                <li>${_(u'conf/settings_testing.py 文件：DATABASES（请创建测试环境数据库，并修改配置信息）;')}</li>
+                                <li>${_(u'conf/settings_production.py 文件：DATABASES（请创建正式环境数据库，并修改配置信息）。')}</li>
+                                <p class="mt5"><strong><code>${_(u'注意：')}</code>${_(u'测试环境 和 正式环境 的数据库需要对 AppServer 授权')}</strong>
+                                (
+                                % if active_server_ips:
+                                    <code>${active_server_ips}</code>
+                                % else:
+                                <a href="${SITE_URL}engine/servers/" target="_blank">${_(u'添加并激活 AppServer')}</a>
+                                % endif
+                                )
+                                </p>
+                                <li class="mt10">${_(u'若需要使用 celery，请修改以下配置：')}(<a href="http://bkopen-10032816.file.myqcloud.com/paas/celery_packages.zip">${_(u'点击下载 celery 开发指引')}</a>)</li>
+                                <span class="ml40">${_(u'conf/default.py 文件：IS_USE_CELERY的值设置为: ')}<code>True</code></span><br>
+                                <span class="ml40">${_(u'conf/default.py 文件：BROKER_URL_DEV（请创建本地开发的 celery消息队列，并修改配置信息，推荐使用 RabbitMQ）')}</span><br>
+                                <span class="ml40">${_(u'conf/default.py 文件：CELERY_IMPORTS（添加celery任务模块）')}</span>
+                            </ol>
+                            <br>
+
+                            <strong>${_(u'示例2：非蓝鲸智云应用框架开发的应用，请检查以下配置信息')}(<a href="${SITE_URL}download/bksite.zip">${_(u'点击下载示例代码')}</a>) ：</strong>
+
+                            <ol class="guide-list">
+                                <li>
+                                  ${_(u'settings.py文件中添加 APP_ID 和 APP_TOKEN')}
+                                    <span>${_(u'（蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中可以查看到这两个值的信息);')}</span>
+                                </li>
+                                <li>
+                                  ${_(u'在工程目录下添加 requirements.txt文件，并在 requirements.txt 中添加包依赖信息;')}
+                                </li>
+                                <li>
+                                  ${_(u'请修改 mysite/settings.py 中的 DATABASES信息（请创建数据库，并修改配置信息）;')}
+                                </li>
+                                <li>
+                                  ${_(u'请确认 uwsgi.py 文件在根目录下，也就是跟 manage.py 同级目录下。')}
+                                </li>
+                            </ol>
+                        </div>
+
+
+                        <%doc>
+                        <div><strong>Java（Spring-boot）：</strong></div>
+                        <div class="king-timeline-body">
+                          <strong><a href="${SITE_URL}download/framework_java.tar.gz">${_(u'点击下载应用开发框架代码 ')}</a> ，${_(u'将框架代码放到自己的代码仓库中，并按以下提示修改：')}</strong>
+                            <ol class="guide-list">
+                              <li>${_(u'配置文件修改')}</br>
+                                    (1) src/main/resources/application-development.properties: </br>
+                                    app.id 和 app.token
+                                    <span>${_(u'（蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中可以查看到这两个值的信息）;')}</span></br>
+                                    bk.paas.host
+                                    <span>（${_(u'蓝鲸智云开发者中心的域名：')}<code>${paas_host}</code>）;</span></br>
+                                    app.server.host
+                                    <span>${_(u'（本地开发环境自行配置Hosts调试，主域名为与paas开发环境一样，子域名可以自行设置）;')}</span></br>
+                                    server.port
+                                    <span>${_(u'（本地开发服务访问端口，默认8080，可以修改为指定的端口）;')}</span></br>
+                                    spring.datasource.url, spring.datasource.username 和 spring.datasource.password</br>
+                                    <span>${_(u'（先创建好本地数据库(create database)，并修改相应信息）;')}</span></br>
+
+                                    (2) pom.xml: </br>
+                                    pkg.app.id
+                                    <span>${_(u'（填写你的应用ID，与上面的的app.id一样,否则会影响打包部署）;')}</span></br>
+
+                                    (3) src/main/resource/logback-spring.xml: </br>
+                                    ${_(u'这个文件为日志框架的入口配置文件，可以里面修改springProfile不同环境的配置日志级别')}<br>
+
+                                    (4) package/app.yml: </br>
+                                    ${_(u'这个文件是用于将本项目做成一个蓝鲸smart应用，需要按该文档上描述的正确填写，否则会导致Smart应用失败。')}<br>
+
+                                    (5) ${_(u'应用logo')}: </br>
+                                    ${_(u'将应用logo以当前应用的app_code命名成为 app_code.png，放package目录下，见bkjava.png这个默认的logo')}<br>
+
+                                    (6) bkjava/settings.xml: </br>
+                                    ${_(u'需要加入开发者的私有仓库，并配置到IDEA中的maven作为配置文件，保证能下载到Maven依赖')}</br>
+
+                                    (7) src/main/resources/application-testing.properties: </br>
+                                    spring.datasource.url, spring.datasource.username ${_(u'和')} spring.datasource.password</br>
+                                    <span>${_(u'（先创建好测试环境数据(create database)，并修改相应信息）;')}</span></br>
+
+                                    (8) src/main/resources/application-production.properties: </br>
+                                    spring.datasource.url, spring.datasource.username 和 spring.datasource.password</br>
+                                    <span>${_(u'（先创建好生产环境数据(create database)，并修改相应信息）。')}</span></br>
+                                </li>
+                                <li>${_(u'本地运行开发框架')}</br>
+                                    ${_(u'在IDE开发工具中 可以直接启动 BKWebApplication类。')}</br>
+                                    ${_(u'或者通过本地命令行执行 mvn spring-boot:run 启动。（需要本地安装maven）')}</br>
+                                    ${_(u'Maven下载地址')} http://maven.apache.org/surefire/download.cgi</br>
+                                </li>
+                                <li>${_(u'Java开发框架其他说明')}</br>
+                                     ${_(u'具体见工程里面的README.md 说明文档')}</br>
+                                </li>
+                                <p class="mt5"><strong><code>${_(u'注意：')}</code>${_(u'测试环境 和 正式环境 的数据库需要对 AppServer 授权')}</strong>
+                                (
+                                % if active_server_ips:
+                                    <code>${active_server_ips}</code>
+                                % else:
+                                <a href="${SITE_URL}engine/servers/" target="_blank">${_(u'添加并激活 AppServer')}</a>
+                                % endif
+                                )
+                                </p>
+                            </ol>
+                        </div>
+                        </%doc>
+
+                    </div>
+                </li>
+
+                <li class="time-label">
+                    <a name="step4"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">4</span>${_(u'开发项目')}<i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item" style="overflow: hidden; display: none;">
+                      <div><strong>${_(u'Python（Django）版：')}</strong></div>
+                        <div class="king-timeline-body">
+                            <ol class="guide-list">
+                              <strong id='step4.2'>${_(u'Django 数据库操作')}</strong>
+
+                                    <div id="django18_db">
+                                      <p>${_(u'蓝鲸智云应用使用Django自带的Migration来管理数据库。Migration是Django自带的同步models和数据库的数据迁移工具，Migration能够检测对models的更改并同步到数据库。')}</p>
+                                        <p>${_(u'Migration的使用')}（<a href="###" id="show_migrate" class="show_simple_18">${_(u'查看详细使用')}</a>）${_(u'方法如下:')}</p>
+                                        <div id="simple_migrate" style="display: block;">
+                                            <ol>
+                                              <li>${_(u'执行 manage.py migrate;')}</li>
+                                                <li>${_(u'执行 manage.py startapp yourappname、添加yourappname到config/default.py文件"INSTALLED_APPS"中;')}</li>
+                                                <li>${_(u'在Django的models.py中建立数据库模型后，执行manage.py makemigrations yourappname;')}</li>
+                                                <li>${_(u'执行manage.py migrate yourappname。')}</li>
+                                            </ol>
+                                            <p>${_(u'注意： 必须按上面的步骤顺序执行，在执行第（1）步时最好不要加入自己的app，除非您保证自己的app已经有migration的initial文件。')}</p>
+                                        </div>
+                                        <div id="detail_migrate" style="display: none;">
+                                            <ol>
+                                              <li>${_(u'执行 manage.py migrate（作用是在数据库中创建Django自带的表，包括Django_migrations的表，用来存放数据库的变更历史）;')}</li>
+                                              <li>${_(u'执行 manage.py startapp yourappname、添加yourappname到config/settings_custom.py文件"INSTALLED_APPS"中;')}</li>
+                                              <li>${_(u'在Django的models.py中建立数据库模型后，执行manage.py makemigrations yourappname;')}</li>
+                                              <li>${_(u'步骤（3）执行成功后再执行manage.py migrate yourappname ，这时候数据库中已经建立了您定义的表;')}</li>
+                                              <li>${_(u'在工程中新增app，只需再次执行2—4的步骤即可; ')}</li>
+                                              <li>${_(u'更改models.py的内容，只需执行manage.py makemigrations yourappname和 manage.py migrate yourappname即可。')}</li>
+                                            </ol>
+                                            <p>${_(u'注意： 必须按上面的步骤顺序执行，在执行第（1）步时最好不要加入自己的app，除非您保证自己的app已经有migration的initial文件。')}</p>
+                                        </div>
+                                    </div>
+                            </ol>
+                            <ol class="guide-list mt10">
+                              <strong id='step4.3'>${_(u'本地启动项目')}</strong>
+                                <div>
+                                    <ol>
+                                      <li>${_(u'本地配置host：127.0.0.1 dev.xxx.xxx（注意：必须与PaaS平台主站在同一个一级域名）;')}</li>
+                                        <li>${_(u'执行python manage.py runserver 127.0.0.1:8000 启动项目;')}</li>
+                                        <li>${_(u'访问http://dev.xxx.xxx:8000/ 即可进行本地开发调试。')}</li>
+                                    </ol>
+                                </div>
+                            </ol>
+                        </div>
+
+
+                        <%doc>
+                        <div><strong>Java（Spring-boot）：</strong></div>
+                        <div class="king-timeline-body">
+                          <div>${_(u'请下载并参考')}<a href="${SITE_URL}download/framework_java.tar.gz">${_(u'Java版开发框架')}</a>${_(u'中README.md文件。')}</div>
+                        </div>
+                        </%doc>
+
+                    </div>
+                </li>
+
+                <li class="time-label">
+                    <a name="step5"></a>
+                    <div class="king-timeline-header"><span class="king-bg-blue num">5</span>${_(u'部署项目')}<i class="bk-icon icon-angle-down pull-right"></i></div>
+                    <div class="king-timeline-item" style="overflow: hidden; display: none;">
+                        <div class="king-timeline-body">
+                          <p>${_(u'操作入口：“我的应用 -> 点击应用ID -> 应用部署” ')}</p>
+                            <ol class="guide-list">
+                              <li>${_(u'测试部署：将应用代码在测试环境上进行部署，部署成功后就可以在测试环境中使用您的应用。')}</li>
+                              <li>${_(u'正式部署：将应用代码在正式环境上进行部署，部署成功后就可以在正式环境中使用您的应用。')}</li>
+                              <li>${_(u'下架操作：系统将应用代码从您选择的环境上撤销部署，届时用户将无法访问该应用，但是该应用的数据库依然保留。')}</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <i class="bk-icon icon-clock king-bg-gray"></i>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 右侧内容 end -->
+</%block>
+<script src="${STATIC_URL}js/paas_guide_newbie.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

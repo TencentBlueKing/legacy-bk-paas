@@ -1,0 +1,151 @@
+<%!
+   def inherit( context ):
+       if not context.get('base_tpl'):
+           return '/base_app.html'
+       else:
+           return context.get('base_tpl')
+%>
+<%inherit file="${inherit(context)}"/>
+<%block name="right_content">
+     % if not (storage_info and auth_info):
+        <p style="color: red;text-align: center">${_(u'无法访问CEPH, 请联系管理员, 确认PaaS中配置的CEPH服务正确')}</p>
+        <p style="color: red;text-align: center">${_(u'注意: 此时无法执行部署操作')}</p>
+     % else:
+
+        <h4>&nbsp;</h4>
+        <div class="title_tab" id="topTab">
+            <ul class="tab_navs title_tab">
+                <li data-index="0" class="tab_nav first js_top selected"><a href="###">${_(u'概况')}</a></li>
+                <li data-index="1" class="tab_nav  js_top"><a href="###">${_(u'鉴权信息')}</a></li>
+            </ul>
+        </div>
+        <div data-index="0" class="mt20">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="">
+                            <section>
+                                <div class="f_r">
+                                    <span class="ml5">${storage_info.get('cur_quota_rate')}%</span>
+                                </div>
+                                <div class="progress">
+                                    <div style="width: ${storage_info.get('show_rate')}%" class="progress-bar progress-bar-info "></div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="">
+                            <div class="panel mb0 panel-profile">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <span>${_(u'占用空间')}</span>
+                                        <span class="f_r"> ${storage_info.get('cur_quota')} MB / ${storage_info.get('max_size')} GB</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span>${_(u'对象数量')}</span>
+                                        <span class="f_r"> ${storage_info.get('cur_object')}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="">
+                            <section class="">
+                                <table class="table table-out-bordered table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 35%;">Bucket Name</th>
+                                            <th style="width: 20%;">${_(u'对象数量')}</th>
+                                            <th style="width: 25%;">${_(u'占用空间')}</th>
+                                            <th style="width: 25%;">${_(u'说明')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="text-align: left;">
+                                        <tr>
+                                            <td>${auth_info.get('test_bucket_name')}</td>
+                                            <td>${storage_info.get('cur_object_test')}</td>
+                                            <td>${storage_info.get('cur_quota_test')} MB</td>
+                                            <td>${_(u'测试环境')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>${auth_info.get('prod_bucket_name')}</td>
+                                            <td>${storage_info.get('cur_object_prod')}</td>
+                                            <td>${storage_info.get('cur_quota_prod')} MB</td>
+                                            <td>${_(u'正式环境')}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dev_center_wrap">
+                <div class="dev_center_module">
+                  <h4 class="dev_module_title mt30">${_(u'使用说明')}</h4>
+                    <div class="env_introduce_box">
+                        <p>${_(u'可以使用')} <a target="_blank" href="https://pypi.org/project/django-storages/">django-storage</a> ${_(u'或者')} <a target="_blank" href="https://pypi.org/project/boto3/">boto3</a> ${_(u'模块来访问服务，')}</p>
+                        <p>${_(u'配置项：(请将下列配置项添加到')} <code>config/default.py</code> ${_(u'文件中, 然后在项目中直接引用)')}</p>
+                        <pre class="highlight"><code>
+    <span class="c"># ${_(u'RGW 相关配置')}</span>
+    <span class="n">RGW_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="s">os.environ.get('RGW_ACCESS_KEY_ID')</span>
+    <span class="n">RGW_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="s">os.environ.get('RGW_SECRET_ACCESS_KEY')</span>
+    <span class="n">RGW_BUCKET_NAME</span> <span class="o">=</span> <span class="s">os.environ.get('RGW_BUCKET_NAME')</span>
+    <span class="n">RGW_ENDPOINT_URL</span> <span class="o">=</span> <span class="s">os.environ.get('RGW_ENDPOINT_URL')</span>
+                        </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div data-index="1" style="display:none;">
+            <div class="container-fluid mt20">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="">
+                            <section class="auth-info">
+                                <table class="table table-out-bordered table-bordered table-hover">
+                                    <tbody style="text-align: left;">
+                                        <tr>
+                                            <td><b>RGW ACCESS KEY ID</b></td>
+                                            <td>${auth_info.get('aws_access_key_id', '')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>RGW SECRET ACCESS KEY</b></td>
+                                            <td>${auth_info.get('aws_secret_access_key', '')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>RGW ENDPOINT URL</b></td>
+                                            <td>${auth_info.get('rgw_url')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>BUCKET NAME</b></td>
+                                            <td>
+                                            ${auth_info.get('test_bucket_name', '')}<br>
+                                            ${auth_info.get('prod_bucket_name', '')}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dev_center_wrap">
+                <div class="dev_center_module">
+                    <h4 class="dev_module_title mt30">${_(u'使用说明')}</h4>
+                    <div class="env_introduce_box">
+                        <p>${_(u'对象存储服务初始化时，默认为应用创建两个 bucket ，分别供测试环境与正式环境使用。')}</p>
+                        <p>${_(u'你无法对 bucket 进行新增和删除操作。')}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+     % endif
+
+
+</%block>
+<script src="${STATIC_URL}js/paas_app_storage.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

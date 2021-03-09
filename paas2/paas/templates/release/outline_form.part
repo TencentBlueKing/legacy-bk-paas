@@ -1,0 +1,45 @@
+% if app:
+    <form class="form form-horizontal">
+        <div class="form-group error alert alert-danger" id="outline_form_error" style="display: none"></div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-xs-3 control-label">${_(u'下架环境')}</label>
+            <div class="col-xs-9">
+               <label>
+                 % if app.is_already_test:
+                 <input type="checkbox" id="t_check" value='0' checked> ${_(u'测试环境')}
+                 % else:
+                 <input type="checkbox" id="t_check" value='0' disabled='disabled'> ${_(u'测试环境')}
+                 % endif
+                </label>
+
+                <label class="ml40">
+                  % if app.is_already_online:
+                  <input type="checkbox" id="o_check" value='1' checked> ${_(u'正式环境')}
+                  % else:
+                  <input type="checkbox" id="o_check" value='1' disabled='disabled'> ${_(u'正式环境')}
+                  % endif
+                </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputEmail3" class="col-xs-3 control-label"></label>
+            <div class="col-xs-9">
+
+                <button type="button" id="app_outline" n_btn='deploy' class="
+                % if app.state in [8, 9, 10] or (not (app.is_already_test or app.is_already_online)):
+                disabled
+                % endif
+                btn btn-success btn-lg deploy_btn">${_(u'下架')}</button>
+
+              </div>
+          </div>
+          <div class="popover bottom deploy_popover deploy_detail" style="display:none;">
+            <div class="popover-content">
+                <div id="release_msg_outline"></div>
+            </div>
+        </div>
+    </form>
+% else:
+    <div>${_(u'获取下架信息失败！')}</div>
+% endif

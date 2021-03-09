@@ -1,0 +1,25 @@
+<div class="mt30" style="width:406px">
+	<div>
+        <label class="password_label">&nbsp&nbsp 中文名：<span style="color:red">*</span> </label>
+        <input class="form-control password_input" id="chname" name="chname" value="${request.user.chname}" type="text">
+        <span style="color:red;display:none" class="error_tip ml10">必填</span>
+    </div>
+    <div>
+        <label class="password_label">联系电话：<span style="color:red">*</span> </label>
+        <input class="form-control password_input" id="phone" name="phone"  value="${request.user.phone}" type="text" >
+        <span style="color:red;display:none" class="error_tip ml10">必填</span>
+    </div>
+    <div>
+        <label class="password_label">常用邮箱：<span style="color:red">*</span> </label>
+        <input class="form-control password_input" id="email" name="email"  value="${request.user.email}" type="text" >
+        <span style="color:red;display:none" class="error_tip ml10">必填</span>
+    </div>
+    <div>
+        <label class="password_label"></label>
+        <span id="error_tip" class="mb10" style="color:red"></span>
+    </div>
+    <div class="t_c mt10">
+	    <button onclick="APP_PROFILE.modify_user_info()" type="button" class="btn btn-green" id="submit_form_create">保存</button>
+	    <button onclick="APP_PROFILE.cancel_edit()" type="button" class="btn btn-black ml10" id="reset_btn">取消</button>
+	</div>
+</div>

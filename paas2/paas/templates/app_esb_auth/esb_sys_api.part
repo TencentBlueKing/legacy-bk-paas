@@ -1,0 +1,175 @@
+<div class="mt20 ml10 mr10">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="the-notes success" style="margin-top:0px;">
+                <h3>${sys_name}<div class="f_r">${_(u'共')}${total_api}${_(u'个API')}</div>
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    % if esb_api_by_level:
+        % for level, api_list in esb_api_by_level.iteritems():
+            <table data-sortable="" class="table" data-sortable-initialized="true">
+                <tbody>
+                    <tr style="background-color: #f2f2f2;">
+                        <td colspan="2">
+                          <button type="button" class="btn btn-info btn-xs fr" style="margin-bottom:0px;" id="batch-submit-${level}"> ${_(u'批量申请')} </button>
+                          <button type="button" class="btn btn-default btn-xs fr" style="background-color:white; color:gray;margin-bottom:0px;" id="batch-reset-${level}"> ${_(u'重置')} </button>
+                        </td>
+                        <td style="vertical-align: middle;">
+                            ${_(ESB_API_AUTH_LEVEL_DICT[level])}: ${total_level_api[level]} ${_(u'个')} API
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="level-${level}">
+                        <th style="width:10%">
+                          <input type="checkbox" name="" id="batch-select-${level}">
+                        </th>
+                        <th style="width:20%">${_(u'API')}</th>
+                        <th style="width:40%">${_(u'说明')}</th>
+                        <th style="width:15%">${_(u'拥有权限')}</th>
+                        <th style="width:15%">${_(u'申请状态')}</th>
+                    </tr>
+
+                    % for index, i in enumerate(api_list):
+                        <tr class="api_back level-${level}" style="height:30px;">
+                            <td style="width:10%; vertical-align:middle;">
+                                % if i['app_has_component_perm'] or i['apply_status'] == 'applying':
+                                <input type="checkbox" name="" id="batch-select-${level}-item-${index}" disabled />
+                                % else:
+                                <input type="checkbox" name="" id="batch-select-${level}-item-${index}" data-apiid="${i['id']}" data-apiname="${i['name']}" >
+                                % endif
+                            </td>
+                            <td style="width:20%; vertical-align:middle;">${i['name']}</td>
+                            <td style="width:40%; vertical-align:middle;">${i['label']}</td>
+                            <td style="width:15%; vertical-align:middle;">
+                                % if i['app_has_component_perm']:
+                                    <i class='glyphicon glyphicon-ok mr5' style="color:limegreen"></i><span>${_(u'已拥有权限')}</span>
+                                % else:
+                                    <i class='glyphicon glyphicon-remove mr5' style="color:red"></i><span>${_(u'未获得权限')}</span>
+                                % endif
+                            </td>
+                            <td style="width:15%; vertical-align:middle;">
+                                % if i['app_has_component_perm']:
+                                    <span>${_(u'已审批通过')}</span>
+                                % elif i['apply_status'] == 'unapply':
+                                    <button class="btn btn-green btn-xs apply_single" style="margin-bottom:0px; height:30px;" title="${_(u'申请')}" data-apiname="${i['name']}" data-apiid="${i['id']}">${_(u'申请')}</button>
+                                % elif i['apply_status'] == 'applying':
+                                    <span>${_(u'申请中，待审批')}</span>
+                                % elif i['apply_status'] == 'reject':
+                                    <span style="margin-right:5px;">${_(u'已驳回')}</span>
+                                    <button class="btn btn-green btn-xs apply_single" title="${_(u'重新申请')}" data-apiname="${i['name']}" data-apiid="${i['id']}">${_(u'重新申请')}</button>
+                                % endif
+                            </td>
+                        </tr>
+                    % endfor
+                </tbody>
+            </table>
+        % endfor
+    % else:
+        <div style="text-align: center;">${_(u'暂无API')}</div>
+    % endif
+</div>
+<script>
+  var app_code = "${app_code}";
+  var sys_name = "${sys_name}";
+	$(function(){
+		$("[id^='batch-select-']", this).click(function(e) {
+      var allChecked = this.checked;
+
+      // console.log(allChecked);
+      // console.log(this.id);
+
+      var item_id_select = "[id^='" + this.id + "-item-']";
+      $(item_id_select).each(
+      function(){
+        //console.log(this.disabled);
+        if (!this.disabled) {
+          this.checked = allChecked;
+        }
+      })
+
+		});
+
+		$("[id^='batch-reset-']", this).click(function(e) {
+      var level = this.id.split("-")[2];
+
+      var id_select = "[id^='batch-select-" + level + "']"
+      $(id_select).each(
+      function(){
+        if (!this.disabled) {
+          this.checked = false;
+        }
+      })
+
+		});
+
+		$("[id^='batch-submit-']", this).click(function(e) {
+      var level = this.id.split("-")[2];
+      var id_select = "[id^='batch-select-" + level + "-item-']"
+
+      var api_list = []
+      $(id_select).each(
+      function(){
+        console.log(this.checked)
+        console.log($(this).attr("data-apiid"))
+
+        if (this.checked) {
+          var api_id = $(this).attr("data-apiid");
+          var api_name = $(this).attr("data-apiname");
+
+          var api_data = api_id + ":" + api_name;
+
+          api_list.push(api_data);
+        }
+      })
+
+      if (api_list.length > 0) {
+        $.post(site_url + 'esb_auth/esb_api_auth_batch_apply/' + app_code + '/'+ sys_name +'/', {
+          'api_list': api_list.join(","),
+        }, function(res){
+          if(res.result){
+            art.dialog({
+              title: gettext("温馨提示"),
+              width: 450,
+              icon: 'succeed',
+              lock: true,
+              content: gettext("权限申请已提交，请耐心等待审批！"),
+              ok: function(){},
+              okVal: gettext("关闭"),
+              time: 2
+            });
+            get_esb_sys_api_html(sys_name);
+          }else{
+            art.dialog({
+              title: gettext("温馨提示"),
+              width: 450,
+              icon: 'error',
+              lock: true,
+              content: gettext("权限申请提交失败") + res.message,
+              ok: function(){},
+              okVal: gettext("关闭"),
+              time: 2
+            });
+          }
+        }, 'json');
+
+      } else {
+            art.dialog({
+              title: gettext("温馨提示"),
+              width: 450,
+              icon: 'warning',
+              lock: true,
+              content: gettext("请勾选需要申请的API"),
+              ok: function(){},
+              okVal: gettext("关闭"),
+              time: 2
+            });
+      }
+
+		});
+  });
+</script>
+<script src="${STATIC_URL}js/paas_app_esb_auth.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

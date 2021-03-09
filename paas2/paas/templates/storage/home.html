@@ -1,0 +1,35 @@
+<%!
+   def inherit( context ):
+       if not context.get('base_tpl'):
+           return '/base_app.html'
+       else:
+           return context.get('base_tpl')
+%>
+<%inherit file="${inherit(context)}"/>
+
+<%block name="right_content">
+    <hr/>
+    <div class="t_c mt30">
+         <!-- 服务介绍 -->
+        <h2>${_(u'对象存储服务')}</h2>
+        <div class="mt20">
+            <p>${_(u'平台为开发者提供了对象存储服务，您可以用它来存储应用中用户上传的图片、文件等内容。')}</p>
+            <p>${_(u'它完全兼容 Amazon S3 存储协议，使用起来就像访问本地文件系统那么方便。')}</p>
+        </div>
+        <div class="mt40">
+         % if not is_rgw_url_accessable:
+            <p style="color: red">${_(u'无法访问CEPH, 请联系管理员, 确认PaaS中配置的CEPH服务正确')}</p>
+         % else:
+
+            % if is_bk_storage_open:
+              <a class="btn btn-green btn-l btn-min-w" style="height: 55px" href="###" id="apply_storage" app_code="${app_code}">${_(u'获取 1G 存储空间')}</a>
+              <p style="color: red" id="apply_info"></p>
+            % else:
+              <h4>${_(u'敬请期待')}...</h4>
+            % endif
+        % endif
+
+        </div>
+    </div>
+</%block>
+<script src="${STATIC_URL}js/paas_app_storage.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

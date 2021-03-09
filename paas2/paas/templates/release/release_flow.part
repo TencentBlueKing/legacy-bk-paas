@@ -1,0 +1,53 @@
+<style>
+.inactive{
+    color:#b1bcc5;
+}
+.ml120{
+    margin-left:120px;
+}
+</style>
+<div class="ml30">
+    <div class="">
+        % if operate_id == 3:
+            <span class="icon_goback" title="${_(u'正在测试部署中不能返回')}">${_(u'返回上一层')}</span>
+            <span style="font-size: 16px;margin-left:10px;color:#F3BA41;">${_(u'正在进行测试部署，请稍候...')}</span>
+        % elif operate_id == 4:
+            <span class="icon_goback" title="${_(u'正在上线部署中不能返回')}">${_(u'返回上一层')}</span>
+            <span style="font-size: 16px;margin-left:10px;color:#F3BA41;">${_(u'正在进行上线部署，请稍候...')}</span>
+    % elif operate_id == 5:
+            <span class="icon_goback" title="${_(u'正在下架中不能返回')}">${_(u'返回上一层')}</span>
+            <span style="font-size: 16px;margin-left:10px;color:#F3BA41;">${_(u'正在进行下架操作，请稍候...')}</span>
+
+
+        % elif operate_id == 0:
+            <% saas_go_back_func = "REL_MANAGER.back_saas('%s', '%s', '%s')" % (app_code, "online", 'test')  %>
+            <a class="icon_goback" href="###" onclick=${'"'+saas_go_back_func+'"' if is_saas else "REL_MANAGER.back()"} title="${_(u'返回上一层')}">${_(u'返回上一层')}</a>
+            % if is_success:
+                <span style="font-size: 16px;margin-left:10px;color:#44b549;">${_(u'测试部署成功')}</span>
+            % else:
+                <span style="font-size: 16px;margin-left:10px;color:#F00;">${_(u'测试部署失败')}</span>
+            % endif
+
+        % elif operate_id == 1:
+            <% saas_go_back_func = "REL_MANAGER.back_saas('%s', '%s', '%s')" % (app_code, "online", 'prod')  %>
+            <a class="icon_goback" href="###" onclick=${'"'+saas_go_back_func+'"' if is_saas else "REL_MANAGER.back()"} title="${_(u'返回上一层')}">${_(u'返回上一层')}</a>
+            % if is_success:
+                <span style="font-size: 16px;margin-left:10px;color:#44b549;">${_(u'上线部署成功')}</span>
+            % else:
+                <span style="font-size: 16px;margin-left:10px;color:#F00;">${_(u'上线部署失败')}</span>
+            % endif
+
+        % elif operate_id == 2:
+            <% saas_go_back_func = "REL_MANAGER.back_saas('%s', '%s', '%s')" % (app_code, "offline", mode)  %>
+            <a class="icon_goback" href="###" onclick=${'"'+saas_go_back_func+'"' if is_saas else "REL_MANAGER.back()"} title="${_(u'返回上一层')}">${_(u'返回上一层')}</a>
+            % if is_success:
+                <span style="font-size: 16px;margin-left:10px;color:#44b549;">${_(u'下架成功')}</span>
+            % else:
+                <span style="font-size: 16px;margin-left:10px;color:#F00;">${_(u'下架失败')}</span>
+            % endif
+        % endif
+    </div>
+
+  <input id="logs" type="hidden" value="${event_log | h}">
+</div>
+<script src="${STATIC_URL}js/paas_release_flow.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

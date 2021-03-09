@@ -1,0 +1,3515 @@
+# English translations for PROJECT.
+# Copyright (C) 2017 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-12-23 17:20+0800\n"
+"PO-Revision-Date: 2017-11-27 11:19+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: common/flocale.py:17
+msgid "蓝鲸统一登录"
+msgstr "Login System"
+
+#: common/flocale.py:18
+msgid "蓝鲸统一登录，管理用户登录验证，及用户信息"
+msgstr ""
+"BlueKing Login System, managing user login authentication and user "
+"information"
+
+#: common/flocale.py:22 common/flocale.py:23
+msgid "蓝鲸开发者中心"
+msgstr "Developer Center"
+
+#: common/flocale.py:27
+msgid "蓝鲸配置平台"
+msgstr "Configuration System"
+
+#: common/flocale.py:28
+msgid "蓝鲸配置平台是一款面向应用的CMDB，在ITIL体系里，CMDB是构建其它流程的基石，而在蓝鲸智云体系里，配置平台就扮演着基石的角色，为应用提供了各种运维场景的配置数据服务。"
+msgstr ""
+"The BlueKing Configuration System is an application-oriented CMDB. In the"
+" ITIL system, CMDB is the cornerstone for building other processes, while"
+" in BlueKing cloud system, the configuration system serves as a "
+"cornerstone and provides app with configuration data services in various "
+"O&M scenarios."
+
+#: common/flocale.py:32 common/flocale.py:33
+msgid "蓝鲸管控平台"
+msgstr "Control System"
+
+#: common/flocale.py:37
+msgid "蓝鲸作业平台V2(不推荐)"
+msgstr "Job System V2(Deprecated)"
+
+#: common/flocale.py:38 common/flocale.py:45
+msgid "作业平台（Job）是一套基于蓝鲸智云管控平台Agent管道之上的基础操作平台，具备大并发处理能力；除了支持脚本执行、文件拉取/分发、定时任务等一系列可实现的基础运维场景以外，还运用流程化的理念很好的将零碎的单个任务组装成一个作业流程；而每个任务都可做为一个原子节点，提供给其它系统和平台调度，实现调度自动化。"
+msgstr ""
+"BlueKing Job System (Job) is a set of basic operating platform based on "
+"the BlueKing cloud control platform Agent channel, presenting a large "
+"concurrent processing capability; in addition to a series of achievable "
+"basic O&M scenarios such as script execution, file pull / dispatch, and "
+"scheduled tasks, it also depends on the concept of process flow to "
+"assemble fragmented individual tasks into a single workflow; each task "
+"can be used as an atomic node to provide to other systems and platforms "
+"for dispatching, so as to achieve automated dispatching."
+
+#: common/flocale.py:44
+msgid "蓝鲸作业平台V3"
+msgstr "Job System V3"
+
+#: common/flocale.py:51
+msgid "蓝鲸消息管理"
+msgstr "Message Management"
+
+#: common/flocale.py:52
+msgid "蓝鲸消息管理，用于支持向用户发送多种类型的消息，包括邮件、短信、语音通知等"
+msgstr ""
+"BlueKing Message Management, used for sending various types of messages "
+"to the user, including email, SMS, voice notification etc."
+
+#: common/flocale.py:56 common/flocale.py:57
+msgid "标准运维"
+msgstr "Standard OPS"
+
+#: common/flocale.py:61 common/flocale.py:62
+msgid "监控平台"
+msgstr "Monitor"
+
+#: common/flocale.py:66 common/flocale.py:67
+msgid "监控平台V3"
+msgstr "Monitor V3"
+
+#: common/flocale.py:71 common/flocale.py:72
+msgid "用户管理"
+msgstr "User Management"
+
+#: common/flocale.py:76 common/flocale.py:77
+msgid "API网关"
+msgstr "API Gateway"
+
+#: common/flocale.py:81 common/flocale.py:82
+msgid "流程服务"
+msgstr "ITSM"
+
+#: common/flocale.py:86 common/flocale.py:87
+msgid "日志平台"
+msgstr "Log Search"
+
+#: common/flocale.py:91 common/flocale.py:92
+msgid "权限中心"
+msgstr "IAM"
+
+#: common/flocale.py:96 common/flocale.py:97
+msgid "文档中心"
+msgstr "Docs Center"
+
+#: common/flocale.py:101 common/flocale.py:102
+msgid "数据平台"
+msgstr "Data"
+
+#: common/flocale.py:106 common/flocale.py:107
+msgid "蓝鲸基础服务配置平台"
+msgstr "Basic Service Configuration Platform"
+
+#: components/esb_conf.py:51
+msgid "通用参数"
+msgstr "General Parameters"
+
+#: components/bk/apis/bk_login/get_all_user.py:25
+#: components/bk/apis/bk_login/get_batch_user.py:23
+#: components/bk/apis/bk_login/get_batch_user.py:60
+#: components/bk/apis/bk_login/get_batch_user.py:66
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:26
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:60
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:66
+#: components/bk/apis/bk_login/get_user.py:51
+#: components/bk/apis/bk_login/get_user.py:57
+#: components/bk/apis/bk_login/is_login.py:21
+#: components/bk/apis/bk_paas/get_app_info.py:23
+#: components/bk/apis/gse/proc_create_session.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:78
+#: components/bk/apis/gse/proc_run_command.py:31
+#: components/bk/apis/job/change_cron_status.py:26
+#: components/bk/apis/job/execute_platform_task.py:26
+#: components/bk/apis/job/execute_platform_task.py:35
+#: components/bk/apis/job/execute_platform_task.py:50
+#: components/bk/apis/job/execute_task.py:26
+#: components/bk/apis/job/execute_task.py:34
+#: components/bk/apis/job/execute_task.py:47
+#: components/bk/apis/job/execute_task_ext.py:28
+#: components/bk/apis/job/fast_execute_script.py:26
+#: components/bk/apis/job/fast_execute_script.py:39
+#: components/bk/apis/job/fast_push_file.py:26
+#: components/bk/apis/job/fast_push_file.py:37
+#: components/bk/apis/job/fast_push_file.py:46
+#: components/bk/apis/job/get_agent_status.py:26
+#: components/bk/apis/job/get_agent_status.py:33
+#: components/bk/apis/job/get_agent_status.py:73
+#: components/bk/apis/job/get_cron.py:26
+#: components/bk/apis/job/get_proc_result.py:30
+#: components/bk/apis/job/get_task.py:26
+#: components/bk/apis/job/get_task_detail.py:26
+#: components/bk/apis/job/get_task_ip_log.py:26
+#: components/bk/apis/job/get_task_ip_log.py:83
+#: components/bk/apis/job/get_task_result.py:26
+#: components/bk/apis/job/get_task_result.py:106
+#: components/bk/apis/job/gse_proc_operate.py:26
+#: components/bk/apis/job/gse_proc_operate.py:34
+#: components/bk/apis/job/gse_proc_operate.py:47
+#: components/bk/apis/job/gse_push_file.py:26
+#: components/bk/apis/job/gse_push_file.py:37
+#: components/bk/apis/job/gse_push_file.py:44
+#: components/bk/apis/job/gse_set_base_report.py:40
+#: components/bk/apis/job/save_cron.py:26 components/esb_conf.py:53
+#: components/generic/templates/cmsi/send_mail.py:29
+#: components/generic/templates/cmsi/send_mail.py:44
+#: components/generic/templates/cmsi/send_mp_weixin.py:28
+#: components/generic/templates/cmsi/send_mp_weixin.py:35
+#: components/generic/templates/cmsi/send_qy_weixin.py:25
+#: components/generic/templates/cmsi/send_sms.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:34
+#: components/generic/templates/cmsi/send_weixin.py:28
+#: components/generic/templates/cmsi/send_weixin.py:38
+msgid "字段"
+msgstr "Field"
+
+#: components/bk/apis/bk_login/get_all_user.py:25
+#: components/bk/apis/bk_login/get_batch_user.py:23
+#: components/bk/apis/bk_login/get_batch_user.py:60
+#: components/bk/apis/bk_login/get_batch_user.py:66
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:26
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:60
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:66
+#: components/bk/apis/bk_login/get_user.py:51
+#: components/bk/apis/bk_login/get_user.py:57
+#: components/bk/apis/bk_login/is_login.py:21
+#: components/bk/apis/bk_paas/get_app_info.py:23
+#: components/bk/apis/gse/proc_create_session.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:78
+#: components/bk/apis/gse/proc_run_command.py:31
+#: components/bk/apis/job/change_cron_status.py:26
+#: components/bk/apis/job/execute_platform_task.py:26
+#: components/bk/apis/job/execute_platform_task.py:35
+#: components/bk/apis/job/execute_platform_task.py:50
+#: components/bk/apis/job/execute_task.py:26
+#: components/bk/apis/job/execute_task.py:34
+#: components/bk/apis/job/execute_task.py:47
+#: components/bk/apis/job/execute_task_ext.py:28
+#: components/bk/apis/job/fast_execute_script.py:26
+#: components/bk/apis/job/fast_execute_script.py:39
+#: components/bk/apis/job/fast_push_file.py:26
+#: components/bk/apis/job/fast_push_file.py:37
+#: components/bk/apis/job/fast_push_file.py:46
+#: components/bk/apis/job/get_agent_status.py:26
+#: components/bk/apis/job/get_agent_status.py:33
+#: components/bk/apis/job/get_agent_status.py:73
+#: components/bk/apis/job/get_cron.py:26
+#: components/bk/apis/job/get_proc_result.py:30
+#: components/bk/apis/job/get_task.py:26
+#: components/bk/apis/job/get_task_detail.py:26
+#: components/bk/apis/job/get_task_ip_log.py:26
+#: components/bk/apis/job/get_task_ip_log.py:83
+#: components/bk/apis/job/get_task_result.py:26
+#: components/bk/apis/job/get_task_result.py:106
+#: components/bk/apis/job/gse_proc_operate.py:26
+#: components/bk/apis/job/gse_proc_operate.py:34
+#: components/bk/apis/job/gse_proc_operate.py:47
+#: components/bk/apis/job/gse_push_file.py:26
+#: components/bk/apis/job/gse_push_file.py:37
+#: components/bk/apis/job/gse_push_file.py:44
+#: components/bk/apis/job/gse_set_base_report.py:40
+#: components/bk/apis/job/save_cron.py:26 components/esb_conf.py:53
+#: components/generic/templates/cmsi/send_mail.py:29
+#: components/generic/templates/cmsi/send_mail.py:44
+#: components/generic/templates/cmsi/send_mp_weixin.py:28
+#: components/generic/templates/cmsi/send_mp_weixin.py:35
+#: components/generic/templates/cmsi/send_qy_weixin.py:25
+#: components/generic/templates/cmsi/send_sms.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:34
+#: components/generic/templates/cmsi/send_weixin.py:28
+#: components/generic/templates/cmsi/send_weixin.py:38
+msgid "类型"
+msgstr "Type"
+
+#: components/bk/apis/bk_login/get_all_user.py:25
+#: components/bk/apis/bk_login/get_batch_user.py:23
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:26
+#: components/bk/apis/bk_login/is_login.py:21
+#: components/bk/apis/bk_paas/get_app_info.py:23
+#: components/bk/apis/gse/proc_create_session.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:27
+#: components/bk/apis/gse/proc_run_command.py:31
+#: components/bk/apis/job/change_cron_status.py:26
+#: components/bk/apis/job/execute_platform_task.py:26
+#: components/bk/apis/job/execute_platform_task.py:35
+#: components/bk/apis/job/execute_platform_task.py:50
+#: components/bk/apis/job/execute_task.py:26
+#: components/bk/apis/job/execute_task.py:34
+#: components/bk/apis/job/execute_task.py:47
+#: components/bk/apis/job/execute_task_ext.py:28
+#: components/bk/apis/job/fast_execute_script.py:26
+#: components/bk/apis/job/fast_execute_script.py:39
+#: components/bk/apis/job/fast_push_file.py:26
+#: components/bk/apis/job/fast_push_file.py:37
+#: components/bk/apis/job/fast_push_file.py:46
+#: components/bk/apis/job/get_agent_status.py:26
+#: components/bk/apis/job/get_agent_status.py:33
+#: components/bk/apis/job/get_cron.py:26
+#: components/bk/apis/job/get_proc_result.py:30
+#: components/bk/apis/job/get_task.py:26
+#: components/bk/apis/job/get_task_detail.py:26
+#: components/bk/apis/job/get_task_ip_log.py:26
+#: components/bk/apis/job/get_task_result.py:26
+#: components/bk/apis/job/gse_proc_operate.py:26
+#: components/bk/apis/job/gse_proc_operate.py:34
+#: components/bk/apis/job/gse_proc_operate.py:47
+#: components/bk/apis/job/gse_push_file.py:26
+#: components/bk/apis/job/gse_push_file.py:37
+#: components/bk/apis/job/gse_push_file.py:44
+#: components/bk/apis/job/gse_set_base_report.py:40
+#: components/bk/apis/job/save_cron.py:26 components/esb_conf.py:53
+#: components/generic/templates/cmsi/send_mail.py:29
+#: components/generic/templates/cmsi/send_mail.py:44
+#: components/generic/templates/cmsi/send_mp_weixin.py:28
+#: components/generic/templates/cmsi/send_mp_weixin.py:35
+#: components/generic/templates/cmsi/send_qy_weixin.py:25
+#: components/generic/templates/cmsi/send_sms.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:34
+#: components/generic/templates/cmsi/send_weixin.py:28
+#: components/generic/templates/cmsi/send_weixin.py:38
+msgid "必选"
+msgstr "Required"
+
+#: components/bk/apis/bk_login/get_all_user.py:25
+#: components/bk/apis/bk_login/get_batch_user.py:23
+#: components/bk/apis/bk_login/get_batch_user.py:60
+#: components/bk/apis/bk_login/get_batch_user.py:66
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:26
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:60
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:66
+#: components/bk/apis/bk_login/get_user.py:51
+#: components/bk/apis/bk_login/get_user.py:57
+#: components/bk/apis/bk_login/is_login.py:21
+#: components/bk/apis/bk_paas/get_app_info.py:23
+#: components/bk/apis/gse/proc_create_session.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:78
+#: components/bk/apis/gse/proc_run_command.py:31
+#: components/bk/apis/job/change_cron_status.py:26
+#: components/bk/apis/job/execute_platform_task.py:26
+#: components/bk/apis/job/execute_platform_task.py:35
+#: components/bk/apis/job/execute_platform_task.py:50
+#: components/bk/apis/job/execute_task.py:26
+#: components/bk/apis/job/execute_task.py:34
+#: components/bk/apis/job/execute_task.py:47
+#: components/bk/apis/job/execute_task_ext.py:28
+#: components/bk/apis/job/fast_execute_script.py:26
+#: components/bk/apis/job/fast_execute_script.py:39
+#: components/bk/apis/job/fast_push_file.py:26
+#: components/bk/apis/job/fast_push_file.py:37
+#: components/bk/apis/job/fast_push_file.py:46
+#: components/bk/apis/job/get_agent_status.py:26
+#: components/bk/apis/job/get_agent_status.py:33
+#: components/bk/apis/job/get_agent_status.py:73
+#: components/bk/apis/job/get_cron.py:26
+#: components/bk/apis/job/get_proc_result.py:30
+#: components/bk/apis/job/get_task.py:26
+#: components/bk/apis/job/get_task_detail.py:26
+#: components/bk/apis/job/get_task_ip_log.py:26
+#: components/bk/apis/job/get_task_ip_log.py:83
+#: components/bk/apis/job/get_task_result.py:26
+#: components/bk/apis/job/get_task_result.py:106
+#: components/bk/apis/job/gse_proc_operate.py:26
+#: components/bk/apis/job/gse_proc_operate.py:34
+#: components/bk/apis/job/gse_proc_operate.py:47
+#: components/bk/apis/job/gse_push_file.py:26
+#: components/bk/apis/job/gse_push_file.py:37
+#: components/bk/apis/job/gse_push_file.py:44
+#: components/bk/apis/job/gse_set_base_report.py:40
+#: components/bk/apis/job/save_cron.py:26 components/esb_conf.py:53
+#: components/generic/templates/cmsi/send_mail.py:29
+#: components/generic/templates/cmsi/send_mail.py:44
+#: components/generic/templates/cmsi/send_mp_weixin.py:28
+#: components/generic/templates/cmsi/send_mp_weixin.py:35
+#: components/generic/templates/cmsi/send_qy_weixin.py:25
+#: components/generic/templates/cmsi/send_sms.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:34
+#: components/generic/templates/cmsi/send_weixin.py:28
+#: components/generic/templates/cmsi/send_weixin.py:38
+msgid "描述"
+msgstr "Description"
+
+#: components/bk/apis/bk_login/get_batch_user.py:25
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:28
+#: components/bk/apis/bk_login/is_login.py:23
+#: components/bk/apis/bk_login/is_login.py:24
+#: components/bk/apis/bk_login/is_login.py:25
+#: components/bk/apis/gse/proc_create_session.py:29
+#: components/bk/apis/gse/proc_create_session.py:30
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:29
+#: components/bk/apis/gse/proc_run_command.py:33
+#: components/bk/apis/gse/proc_run_command.py:34
+#: components/bk/apis/gse/proc_run_command.py:35
+#: components/bk/apis/job/change_cron_status.py:28
+#: components/bk/apis/job/change_cron_status.py:29
+#: components/bk/apis/job/change_cron_status.py:30
+#: components/bk/apis/job/execute_platform_task.py:28
+#: components/bk/apis/job/execute_platform_task.py:30
+#: components/bk/apis/job/execute_platform_task.py:52
+#: components/bk/apis/job/execute_platform_task.py:53
+#: components/bk/apis/job/execute_platform_task.py:54
+#: components/bk/apis/job/execute_task.py:28
+#: components/bk/apis/job/execute_task.py:29
+#: components/bk/apis/job/execute_task.py:30
+#: components/bk/apis/job/execute_task.py:39
+#: components/bk/apis/job/execute_task.py:40
+#: components/bk/apis/job/execute_task.py:49
+#: components/bk/apis/job/execute_task.py:50
+#: components/bk/apis/job/execute_task.py:51
+#: components/bk/apis/job/execute_task_ext.py:30
+#: components/bk/apis/job/execute_task_ext.py:31
+#: components/bk/apis/job/execute_task_ext.py:32
+#: components/bk/apis/job/fast_execute_script.py:28
+#: components/bk/apis/job/fast_execute_script.py:29
+#: components/bk/apis/job/fast_execute_script.py:32
+#: components/bk/apis/job/fast_execute_script.py:33
+#: components/bk/apis/job/fast_execute_script.py:34
+#: components/bk/apis/job/fast_execute_script.py:35
+#: components/bk/apis/job/fast_execute_script.py:41
+#: components/bk/apis/job/fast_execute_script.py:42
+#: components/bk/apis/job/fast_push_file.py:28
+#: components/bk/apis/job/fast_push_file.py:29
+#: components/bk/apis/job/fast_push_file.py:30
+#: components/bk/apis/job/fast_push_file.py:31
+#: components/bk/apis/job/fast_push_file.py:33
+#: components/bk/apis/job/fast_push_file.py:40
+#: components/bk/apis/job/fast_push_file.py:41
+#: components/bk/apis/job/fast_push_file.py:42
+#: components/bk/apis/job/fast_push_file.py:48
+#: components/bk/apis/job/fast_push_file.py:49
+#: components/bk/apis/job/get_agent_status.py:28
+#: components/bk/apis/job/get_agent_status.py:29
+#: components/bk/apis/job/get_agent_status.py:35
+#: components/bk/apis/job/get_agent_status.py:36
+#: components/bk/apis/job/get_cron.py:28
+#: components/bk/apis/job/get_proc_result.py:32
+#: components/bk/apis/job/get_proc_result.py:33
+#: components/bk/apis/job/get_task.py:28
+#: components/bk/apis/job/get_task_detail.py:28
+#: components/bk/apis/job/get_task_detail.py:29
+#: components/bk/apis/job/get_task_ip_log.py:28
+#: components/bk/apis/job/get_task_result.py:28
+#: components/bk/apis/job/gse_proc_operate.py:28
+#: components/bk/apis/job/gse_proc_operate.py:29
+#: components/bk/apis/job/gse_proc_operate.py:30
+#: components/bk/apis/job/gse_proc_operate.py:36
+#: components/bk/apis/job/gse_proc_operate.py:37
+#: components/bk/apis/job/gse_proc_operate.py:38
+#: components/bk/apis/job/gse_proc_operate.py:39
+#: components/bk/apis/job/gse_proc_operate.py:49
+#: components/bk/apis/job/gse_proc_operate.py:50
+#: components/bk/apis/job/gse_push_file.py:28
+#: components/bk/apis/job/gse_push_file.py:29
+#: components/bk/apis/job/gse_push_file.py:30
+#: components/bk/apis/job/gse_push_file.py:33
+#: components/bk/apis/job/gse_push_file.py:39
+#: components/bk/apis/job/gse_push_file.py:40
+#: components/bk/apis/job/gse_push_file.py:46
+#: components/bk/apis/job/gse_push_file.py:47
+#: components/bk/apis/job/gse_set_base_report.py:27
+#: components/bk/apis/job/gse_set_base_report.py:28
+#: components/bk/apis/job/gse_set_base_report.py:29
+#: components/bk/apis/job/gse_set_base_report.py:30
+#: components/bk/apis/job/gse_set_base_report.py:31
+#: components/bk/apis/job/gse_set_base_report.py:32
+#: components/bk/apis/job/gse_set_base_report.py:33
+#: components/bk/apis/job/gse_set_base_report.py:34
+#: components/bk/apis/job/gse_set_base_report.py:35
+#: components/bk/apis/job/gse_set_base_report.py:36
+#: components/bk/apis/job/gse_set_base_report.py:42
+#: components/bk/apis/job/gse_set_base_report.py:43
+#: components/bk/apis/job/save_cron.py:28
+#: components/bk/apis/job/save_cron.py:29
+#: components/bk/apis/job/save_cron.py:30
+#: components/bk/apis/job/save_cron.py:32 components/esb_conf.py:55
+#: components/esb_conf.py:56 components/generic/templates/cmsi/send_mail.py:34
+#: components/generic/templates/cmsi/send_mail.py:35
+#: components/generic/templates/cmsi/send_mail.py:46
+#: components/generic/templates/cmsi/send_mail.py:47
+#: components/generic/templates/cmsi/send_mp_weixin.py:30
+#: components/generic/templates/cmsi/send_mp_weixin.py:31
+#: components/generic/templates/cmsi/send_mp_weixin.py:37
+#: components/generic/templates/cmsi/send_mp_weixin.py:38
+#: components/generic/templates/cmsi/send_qy_weixin.py:27
+#: components/generic/templates/cmsi/send_qy_weixin.py:28
+#: components/generic/templates/cmsi/send_sms.py:32
+#: components/generic/templates/cmsi/send_voice_msg.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:36
+#: components/generic/templates/cmsi/send_weixin.py:32
+#: components/generic/templates/cmsi/send_weixin.py:40
+#: components/generic/templates/cmsi/send_weixin.py:41
+msgid "是"
+msgstr "Yes"
+
+#: components/bk/apis/bk_login/is_login.py:23 components/esb_conf.py:55
+msgid "应用ID"
+msgstr "APP ID"
+
+#: components/esb_conf.py:56
+msgid "安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取"
+msgstr ""
+"APP Secret(APP TOKEN), which can be got via BlueKing Developer Center -> "
+"Click APP ID -> Basic Info "
+
+#: components/bk/apis/bk_login/get_all_user.py:27
+#: components/bk/apis/bk_paas/get_app_info.py:25
+#: components/bk/apis/gse/proc_run_command.py:36
+#: components/bk/apis/job/execute_platform_task.py:29
+#: components/bk/apis/job/execute_platform_task.py:31
+#: components/bk/apis/job/execute_platform_task.py:37
+#: components/bk/apis/job/execute_platform_task.py:38
+#: components/bk/apis/job/execute_platform_task.py:39
+#: components/bk/apis/job/execute_platform_task.py:40
+#: components/bk/apis/job/execute_platform_task.py:41
+#: components/bk/apis/job/execute_platform_task.py:42
+#: components/bk/apis/job/execute_platform_task.py:43
+#: components/bk/apis/job/execute_platform_task.py:44
+#: components/bk/apis/job/execute_platform_task.py:45
+#: components/bk/apis/job/execute_platform_task.py:46
+#: components/bk/apis/job/execute_task.py:36
+#: components/bk/apis/job/execute_task.py:37
+#: components/bk/apis/job/execute_task.py:38
+#: components/bk/apis/job/execute_task.py:41
+#: components/bk/apis/job/execute_task.py:42
+#: components/bk/apis/job/execute_task.py:43
+#: components/bk/apis/job/fast_execute_script.py:30
+#: components/bk/apis/job/fast_execute_script.py:31
+#: components/bk/apis/job/fast_push_file.py:32
+#: components/bk/apis/job/fast_push_file.py:39
+#: components/bk/apis/job/get_cron.py:29 components/bk/apis/job/get_cron.py:30
+#: components/bk/apis/job/get_cron.py:31 components/bk/apis/job/get_cron.py:32
+#: components/bk/apis/job/get_cron.py:33 components/bk/apis/job/get_cron.py:34
+#: components/bk/apis/job/get_cron.py:35 components/bk/apis/job/get_cron.py:36
+#: components/bk/apis/job/get_cron.py:37 components/bk/apis/job/get_task.py:29
+#: components/bk/apis/job/get_task.py:30 components/bk/apis/job/get_task.py:31
+#: components/bk/apis/job/get_task.py:32 components/bk/apis/job/get_task.py:33
+#: components/bk/apis/job/get_task.py:34 components/bk/apis/job/get_task.py:35
+#: components/bk/apis/job/gse_proc_operate.py:40
+#: components/bk/apis/job/gse_proc_operate.py:41
+#: components/bk/apis/job/gse_proc_operate.py:42
+#: components/bk/apis/job/gse_proc_operate.py:43
+#: components/bk/apis/job/gse_push_file.py:31
+#: components/bk/apis/job/gse_push_file.py:32
+#: components/bk/apis/job/save_cron.py:31 components/esb_conf.py:57
+#: components/esb_conf.py:58 components/generic/templates/cmsi/send_mail.py:31
+#: components/generic/templates/cmsi/send_mail.py:32
+#: components/generic/templates/cmsi/send_mail.py:33
+#: components/generic/templates/cmsi/send_mail.py:36
+#: components/generic/templates/cmsi/send_mail.py:37
+#: components/generic/templates/cmsi/send_mail.py:38
+#: components/generic/templates/cmsi/send_mail.py:39
+#: components/generic/templates/cmsi/send_mail.py:40
+#: components/generic/templates/cmsi/send_mail.py:48
+#: components/generic/templates/cmsi/send_mail.py:49
+#: components/generic/templates/cmsi/send_mail.py:50
+#: components/generic/templates/cmsi/send_mp_weixin.py:39
+#: components/generic/templates/cmsi/send_mp_weixin.py:40
+#: components/generic/templates/cmsi/send_mp_weixin.py:41
+#: components/generic/templates/cmsi/send_sms.py:30
+#: components/generic/templates/cmsi/send_sms.py:31
+#: components/generic/templates/cmsi/send_sms.py:33
+#: components/generic/templates/cmsi/send_voice_msg.py:29
+#: components/generic/templates/cmsi/send_voice_msg.py:30
+#: components/generic/templates/cmsi/send_voice_msg.py:37
+#: components/generic/templates/cmsi/send_weixin.py:30
+#: components/generic/templates/cmsi/send_weixin.py:31
+#: components/generic/templates/cmsi/send_weixin.py:33
+#: components/generic/templates/cmsi/send_weixin.py:34
+#: components/generic/templates/cmsi/send_weixin.py:42
+#: components/generic/templates/cmsi/send_weixin.py:43
+#: components/generic/templates/cmsi/send_weixin.py:44
+msgid "否"
+msgstr "No"
+
+#: components/esb_conf.py:57
+msgid "当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取"
+msgstr ""
+"Current user login token, bk_token or bk_username must be valid, bk_token"
+" can be got by Cookie"
+
+#: components/esb_conf.py:58
+msgid "当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户"
+msgstr ""
+"Current user username, APP in the white list, can use this field to "
+"specify the current user"
+
+#: components/bk/apis/bk_login/get_all_user.py:12
+#: components/bk/apis/bk_login/get_all_user.py:17
+msgid "获取所有用户信息"
+msgstr "get all users"
+
+#: components/bk/apis/bk_login/get_all_user.py:15
+#: components/bk/apis/bk_login/get_batch_user.py:13
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:16
+#: components/bk/apis/bk_login/get_user.py:15
+#: components/bk/apis/bk_login/is_login.py:15
+#: components/bk/apis/bk_paas/get_app_info.py:13
+#: components/bk/apis/devops/devops_component.py:11
+#: components/bk/apis/gse/proc_create_session.py:17
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:17
+#: components/bk/apis/gse/proc_run_command.py:21
+#: components/bk/apis/job/change_cron_status.py:16
+#: components/bk/apis/job/execute_platform_task.py:16
+#: components/bk/apis/job/execute_task.py:16
+#: components/bk/apis/job/execute_task_ext.py:16
+#: components/bk/apis/job/fast_execute_script.py:16
+#: components/bk/apis/job/fast_push_file.py:16
+#: components/bk/apis/job/get_agent_status.py:16
+#: components/bk/apis/job/get_cron.py:16
+#: components/bk/apis/job/get_proc_result.py:20
+#: components/bk/apis/job/get_task.py:16
+#: components/bk/apis/job/get_task_detail.py:16
+#: components/bk/apis/job/get_task_ip_log.py:16
+#: components/bk/apis/job/get_task_result.py:16
+#: components/bk/apis/job/gse_proc_operate.py:16
+#: components/bk/apis/job/gse_push_file.py:16
+#: components/bk/apis/job/gse_set_base_report.py:15
+#: components/bk/apis/job/save_cron.py:16
+#: components/generic/templates/cmsi/send_mail.py:19
+#: components/generic/templates/cmsi/send_mp_weixin.py:18
+#: components/generic/templates/cmsi/send_qy_weixin.py:15
+#: components/generic/templates/cmsi/send_sms.py:18
+#: components/generic/templates/cmsi/send_voice_msg.py:16
+#: components/generic/templates/cmsi/send_weixin.py:18
+msgid "功能描述"
+msgstr "Functional description"
+
+#: components/bk/apis/bk_login/get_all_user.py:19
+#: components/bk/apis/bk_login/get_batch_user.py:17
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:20
+#: components/bk/apis/bk_login/get_user.py:19
+#: components/bk/apis/bk_login/is_login.py:19
+#: components/bk/apis/bk_paas/get_app_info.py:17
+#: components/bk/apis/devops/devops_component.py:15
+#: components/bk/apis/gse/proc_create_session.py:21
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:21
+#: components/bk/apis/gse/proc_run_command.py:25
+#: components/bk/apis/job/change_cron_status.py:20
+#: components/bk/apis/job/execute_platform_task.py:20
+#: components/bk/apis/job/execute_task.py:20
+#: components/bk/apis/job/execute_task_ext.py:22
+#: components/bk/apis/job/fast_execute_script.py:20
+#: components/bk/apis/job/fast_push_file.py:20
+#: components/bk/apis/job/get_agent_status.py:20
+#: components/bk/apis/job/get_cron.py:20
+#: components/bk/apis/job/get_proc_result.py:24
+#: components/bk/apis/job/get_task.py:20
+#: components/bk/apis/job/get_task_detail.py:20
+#: components/bk/apis/job/get_task_ip_log.py:20
+#: components/bk/apis/job/get_task_result.py:20
+#: components/bk/apis/job/gse_proc_operate.py:20
+#: components/bk/apis/job/gse_push_file.py:20
+#: components/bk/apis/job/gse_set_base_report.py:19
+#: components/bk/apis/job/save_cron.py:20
+#: components/generic/templates/cmsi/send_mail.py:23
+#: components/generic/templates/cmsi/send_mp_weixin.py:22
+#: components/generic/templates/cmsi/send_qy_weixin.py:19
+#: components/generic/templates/cmsi/send_sms.py:22
+#: components/generic/templates/cmsi/send_voice_msg.py:20
+#: components/generic/templates/cmsi/send_weixin.py:22
+msgid "请求参数"
+msgstr "Request Parameters"
+
+#: components/bk/apis/bk_login/get_all_user.py:23
+#: components/bk/apis/bk_login/get_batch_user.py:21
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:24
+#: components/bk/apis/bk_paas/get_app_info.py:21
+#: components/bk/apis/gse/proc_create_session.py:25
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:25
+#: components/bk/apis/gse/proc_run_command.py:29
+#: components/bk/apis/job/change_cron_status.py:24
+#: components/bk/apis/job/execute_platform_task.py:24
+#: components/bk/apis/job/execute_task.py:24
+#: components/bk/apis/job/execute_task_ext.py:26
+#: components/bk/apis/job/fast_execute_script.py:24
+#: components/bk/apis/job/fast_push_file.py:24
+#: components/bk/apis/job/get_agent_status.py:24
+#: components/bk/apis/job/get_cron.py:24
+#: components/bk/apis/job/get_proc_result.py:28
+#: components/bk/apis/job/get_task.py:24
+#: components/bk/apis/job/get_task_detail.py:24
+#: components/bk/apis/job/get_task_ip_log.py:24
+#: components/bk/apis/job/get_task_result.py:24
+#: components/bk/apis/job/gse_proc_operate.py:24
+#: components/bk/apis/job/gse_push_file.py:24
+#: components/bk/apis/job/gse_set_base_report.py:23
+#: components/bk/apis/job/save_cron.py:24
+#: components/generic/templates/cmsi/send_mail.py:27
+#: components/generic/templates/cmsi/send_mp_weixin.py:26
+#: components/generic/templates/cmsi/send_qy_weixin.py:23
+#: components/generic/templates/cmsi/send_sms.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:24
+#: components/generic/templates/cmsi/send_weixin.py:26
+msgid "接口参数"
+msgstr "Interface Parameters"
+
+#: components/bk/apis/bk_login/get_all_user.py:27
+#: components/bk/apis/bk_login/get_batch_user.py:68
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:68
+#: components/bk/apis/bk_login/get_user.py:59
+msgid "用户角色，0：普通用户，1：超级管理员，2：开发者，3：职能化用户，4：审计员"
+msgstr "User role, 0: staff, 1: superuser, 2: developer, 3: operator, 4: auditor"
+
+#: components/bk/apis/bk_login/get_all_user.py:29
+#: components/bk/apis/bk_login/get_batch_user.py:27
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:30
+#: components/bk/apis/bk_login/get_user.py:23
+#: components/bk/apis/bk_login/is_login.py:27
+#: components/bk/apis/bk_paas/get_app_info.py:27
+#: components/bk/apis/devops/devops_component.py:19
+#: components/bk/apis/gse/proc_create_session.py:32
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:31
+#: components/bk/apis/gse/proc_run_command.py:38
+#: components/bk/apis/job/change_cron_status.py:32
+#: components/bk/apis/job/execute_platform_task.py:56
+#: components/bk/apis/job/execute_task.py:53
+#: components/bk/apis/job/execute_task_ext.py:34
+#: components/bk/apis/job/fast_execute_script.py:44
+#: components/bk/apis/job/fast_push_file.py:51
+#: components/bk/apis/job/get_agent_status.py:38
+#: components/bk/apis/job/get_cron.py:39
+#: components/bk/apis/job/get_proc_result.py:35
+#: components/bk/apis/job/get_task.py:37
+#: components/bk/apis/job/get_task_detail.py:31
+#: components/bk/apis/job/get_task_ip_log.py:30
+#: components/bk/apis/job/get_task_result.py:30
+#: components/bk/apis/job/gse_proc_operate.py:52
+#: components/bk/apis/job/gse_push_file.py:49
+#: components/bk/apis/job/gse_set_base_report.py:45
+#: components/bk/apis/job/save_cron.py:34
+#: components/generic/templates/cmsi/send_mail.py:52
+#: components/generic/templates/cmsi/send_mp_weixin.py:43
+#: components/generic/templates/cmsi/send_qy_weixin.py:30
+#: components/generic/templates/cmsi/send_sms.py:35
+#: components/generic/templates/cmsi/send_voice_msg.py:39
+#: components/generic/templates/cmsi/send_weixin.py:46
+msgid "请求参数示例"
+msgstr "Request Parameters Example"
+
+#: components/bk/apis/bk_login/get_all_user.py:39
+#: components/bk/apis/bk_login/get_batch_user.py:38
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:41
+#: components/bk/apis/bk_login/get_user.py:32
+#: components/bk/apis/bk_login/is_login.py:37
+#: components/bk/apis/bk_paas/get_app_info.py:37
+#: components/bk/apis/devops/devops_component.py:29
+#: components/bk/apis/gse/proc_create_session.py:44
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:42
+#: components/bk/apis/gse/proc_run_command.py:52
+#: components/bk/apis/job/change_cron_status.py:45
+#: components/bk/apis/job/execute_platform_task.py:84
+#: components/bk/apis/job/execute_task.py:84
+#: components/bk/apis/job/execute_task_ext.py:54
+#: components/bk/apis/job/fast_execute_script.py:64
+#: components/bk/apis/job/fast_push_file.py:82
+#: components/bk/apis/job/get_agent_status.py:55
+#: components/bk/apis/job/get_cron.py:51
+#: components/bk/apis/job/get_proc_result.py:47
+#: components/bk/apis/job/get_task.py:55
+#: components/bk/apis/job/get_task_detail.py:43
+#: components/bk/apis/job/get_task_ip_log.py:41
+#: components/bk/apis/job/get_task_result.py:41
+#: components/bk/apis/job/gse_proc_operate.py:82
+#: components/bk/apis/job/gse_push_file.py:78
+#: components/bk/apis/job/gse_set_base_report.py:71
+#: components/bk/apis/job/save_cron.py:48
+#: components/generic/templates/cmsi/send_mail.py:66
+#: components/generic/templates/cmsi/send_mp_weixin.py:60
+#: components/generic/templates/cmsi/send_qy_weixin.py:42
+#: components/generic/templates/cmsi/send_sms.py:48
+#: components/generic/templates/cmsi/send_voice_msg.py:54
+#: components/generic/templates/cmsi/send_weixin.py:63
+msgid "返回结果示例"
+msgstr "Return Result Example"
+
+#: components/bk/apis/bk_login/get_batch_user.py:10
+#: components/bk/apis/bk_login/get_batch_user.py:15
+msgid "获取多个用户信息"
+msgstr "Get multiple user information"
+
+#: components/bk/apis/bk_login/get_batch_user.py:25
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:28
+msgid "待获取信息的用户名列表"
+msgstr "Username list for information to be got"
+
+#: components/bk/apis/bk_login/get_batch_user.py:58
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:58
+#: components/bk/apis/bk_login/get_user.py:49
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:74
+#: components/bk/apis/job/get_proc_result.py:72
+msgid "返回结果参数说明"
+msgstr "Return Result Parameters Description"
+
+#: components/bk/apis/bk_login/get_batch_user.py:62
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:62
+#: components/bk/apis/bk_login/get_user.py:53
+msgid "返回数据，成功返回请求数据"
+msgstr "Return data, successfully return request data"
+
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:13
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:18
+msgid "获取多个用户在平台应用的角色"
+msgstr "Get the roles applied by multiple users on the platform"
+
+#: components/bk/apis/bk_login/get_user.py:12
+#: components/bk/apis/bk_login/get_user.py:17
+msgid "获取用户信息"
+msgstr "get user"
+
+#: components/bk/apis/bk_login/is_login.py:12
+#: components/bk/apis/bk_login/is_login.py:17
+msgid "验证用户登录态"
+msgstr "validate the login status of user"
+
+#: components/bk/apis/bk_login/is_login.py:24
+msgid "应用TOKEN，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取"
+msgstr ""
+"APP TOKEN, which can be got via BlueKing Developer Center -> Click APP ID"
+" -> Basic Info "
+
+#: components/bk/apis/bk_login/is_login.py:25
+msgid "当前用户登录态，bk_token与username必须一个有效，bk_token可以通过Cookie获取"
+msgstr ""
+"Current user login token, bk_token or username must be valid, bk_token "
+"can be got by Cookie"
+
+#: components/bk/apis/bk_paas/get_app_info.py:10
+#: components/bk/apis/bk_paas/get_app_info.py:15
+msgid "获取应用信息"
+msgstr "get application info"
+
+#: components/bk/apis/bk_paas/get_app_info.py:25
+msgid "目标蓝鲸应用ID，多个以英文逗号分隔，为空则表示所有应用"
+msgstr "Target BlueKing APP ID, separated by commas, and Empty represents all apps"
+
+#: components/bk/apis/devops/devops_component.py:13
+msgid "Devops Component"
+msgstr "Devops Component"
+
+#: components/bk/apis/gse/proc_create_session.py:14
+#: components/bk/apis/gse/proc_create_session.py:19
+msgid "进程管理：新建 session"
+msgstr "Process management: new session"
+
+#: components/bk/apis/gse/proc_create_session.py:29
+msgid "配置平台业务ID，在[配置平台]-[开发商视图]的业务管理页面可查询"
+msgstr ""
+"Configuration system business ID, Get on the business management page of "
+"[Configuration system] - [Developer View]"
+
+#: components/bk/apis/gse/proc_create_session.py:30
+msgid "环境类型，配置平台集群的标准属性；可选值为 1（中文含义：测试环境），2（体验环境），3（正式环境）"
+msgstr ""
+"Environment type, standard properties of the configuration system set; "
+"optional values: 1: test environment, 2: experience environment, and 3: "
+"production environment"
+
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:14
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:19
+msgid "进程管理：获取任务结果"
+msgstr "Process management: get task result"
+
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:29
+msgid "执行命令后产生的任务ID，可在proc_run_command接口中找到"
+msgstr ""
+"The task ID generated after executing the command, can be found in the "
+"proc_run_command interface"
+
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:80
+msgid "任务状态码，0表示成功，804表示执行中，其他表示失败"
+msgstr ""
+"Task status codes: 0 means success, 804 means in execution, and other "
+"means failure"
+
+#: components/bk/apis/gse/proc_run_command.py:18
+#: components/bk/apis/gse/proc_run_command.py:23
+msgid "进程管理：执行命令"
+msgstr "Process management: run command"
+
+#: components/bk/apis/gse/proc_run_command.py:33
+msgid "新建Session后产生的会话ID，可在proc_create_session接口中找到"
+msgstr ""
+"The session ID generated after the new session is created, can be found "
+"in the proc_create_session interface"
+
+#: components/bk/apis/gse/proc_run_command.py:34
+msgid "命令动作，可选值：createcfg（含义：从配置模板生成配置），pushcfg（将createcfg生成的配置下发至服务器），start（启动进程），stop（停止进程），restart（重启进程），reload（重新加载进程），kill（Kill进程），noauto（将进程注册为非托管状态，进程crash后不自动拉起），autoproc（将进程注册为托管状态，进程crash后可自动拉起），check（检查进程实例），getremotecfg（获取业务机器的配置文件）"
+msgstr ""
+"Command actions, optional values: createcfg (meaning: generate "
+"configuration from the configuration template), pushcfg (send the "
+"configuration generated by createcfg to the server), start (start "
+"process), stop (stop process), restart (restart process), reload (reload "
+"process), kill (Kill process), noauto (the process is registered as an "
+"unmanaged state, so the process does not automatically pull up after the "
+"crash), autoproc (the process registered as a managed state, so the "
+"process can be automatically pulled up after the crash), check (Check the"
+" process instance), and getremotecfg (get the configuration file of the "
+"business machine)"
+
+#: components/bk/apis/gse/proc_run_command.py:35
+msgid "进程实例ID，可在[配置平台]-[进程管理]-[进程模块绑定]页面找到，例如 \"公共组件.nginx.1.1\""
+msgstr ""
+"The process instance ID, can be found in the [Configuration system] - "
+"[Process Management] - [Process Module Binding] page, such as "
+"\"common.nginx.1.1\""
+
+#: components/bk/apis/gse/proc_run_command.py:36
+msgid "过滤主机IP。比如进程实例ID为*.*.*.*，ipaddr为\"10.0.0.1\"，则执行10.0.0.1上的所有进程实例"
+msgstr ""
+"Filtered host IP. For example, the process instance ID is *. *. *. *, and"
+" ipaddr is \"10.0.0.1\", then execute all process instances on 10.0.0.1"
+
+#: components/bk/apis/job/change_cron_status.py:13
+msgid "更新定时作业状态"
+msgstr "Update cron status"
+
+#: components/bk/apis/job/change_cron_status.py:18
+msgid "更新定时作业状态，如启动或暂停；操作者必须是业务的创建人或运维"
+msgstr ""
+"Update cron job status, such as startup or pause; operator must be the "
+"creator or OPS of the business"
+
+#: components/bk/apis/job/change_cron_status.py:28
+#: components/bk/apis/job/execute_task.py:28
+#: components/bk/apis/job/execute_task_ext.py:30
+#: components/bk/apis/job/fast_execute_script.py:28
+#: components/bk/apis/job/fast_push_file.py:28
+#: components/bk/apis/job/get_agent_status.py:28
+#: components/bk/apis/job/get_cron.py:28
+#: components/bk/apis/job/get_proc_result.py:32
+#: components/bk/apis/job/get_task.py:28
+#: components/bk/apis/job/get_task_detail.py:28
+#: components/bk/apis/job/gse_proc_operate.py:28
+#: components/bk/apis/job/gse_push_file.py:28
+#: components/bk/apis/job/gse_set_base_report.py:27
+#: components/bk/apis/job/save_cron.py:28
+msgid "业务ID"
+msgstr "Business ID"
+
+#: components/bk/apis/job/change_cron_status.py:29
+msgid "作业状态，1.启动、2.暂停"
+msgstr "Job status, 1. startup, 2. pause"
+
+#: components/bk/apis/job/change_cron_status.py:30
+msgid "定时任务ID"
+msgstr "Cron job ID"
+
+#: components/bk/apis/job/execute_platform_task.py:13
+#: components/bk/apis/job/execute_platform_task.py:18
+msgid "启动平台作业"
+msgstr "Execute platform job"
+
+#: components/bk/apis/job/execute_platform_task.py:28
+#: components/bk/apis/job/execute_task.py:29
+#: components/bk/apis/job/execute_task_ext.py:31
+msgid "作业ID"
+msgstr "Task ID"
+
+#: components/bk/apis/job/execute_platform_task.py:29
+msgid "源业务ID"
+msgstr "Source Business ID"
+
+#: components/bk/apis/job/execute_platform_task.py:30
+msgid "目标业务ID"
+msgstr "Target Business ID"
+
+#: components/bk/apis/job/execute_platform_task.py:31
+msgid "步骤参数"
+msgstr "Step parameters"
+
+#: components/bk/apis/job/execute_platform_task.py:37
+#: components/bk/apis/job/execute_task.py:36
+msgid "脚本超时时间"
+msgstr "Script timeout"
+
+#: components/bk/apis/job/execute_platform_task.py:38
+#: components/bk/apis/job/execute_task.py:37
+msgid "脚本参数"
+msgstr "Script parameters"
+
+#: components/bk/apis/job/execute_platform_task.py:39
+msgid "执行脚本步骤的脚本内容，base64编码后的内容，与scriptId二选一，二者同时存在，以scriptId为准"
+msgstr ""
+"The script contents of the execute script step, the base64 encoded "
+"contents, and this is alternative to the scriptId. If both exist at the "
+"same time, use scriptId"
+
+#: components/bk/apis/job/execute_platform_task.py:40
+msgid "执行脚本的类型，1.shell脚本、2.bat脚本、3.perl脚本、4.python脚本、5(Powershell脚本)；如果scriptContent存在，则必填"
+msgstr ""
+"Script Type: 1. shell script, 2. bat script, 3. perl script, 4. python "
+"script, 5. Powershell script; Required if scriptContent exists"
+
+#: components/bk/apis/job/execute_platform_task.py:41
+msgid "IP列表格式，云区域ID:IP，多个之间逗号分割，例如1:10.0.0.1,1:10.0.0.2"
+msgstr ""
+"IP list in the format: subnet ID:IP, separate by commas, such as "
+"1:10.0.0.1,1:10.0.0.2"
+
+#: components/bk/apis/job/execute_platform_task.py:42
+#: components/bk/apis/job/execute_task.py:38
+msgid "脚本ID"
+msgstr "Script ID"
+
+#: components/bk/apis/job/execute_platform_task.py:43
+#: components/bk/apis/job/execute_task.py:39
+msgid "步骤ID，可以只指定某几步执行"
+msgstr "Step ID, you can only specify a few steps to execute"
+
+#: components/bk/apis/job/execute_platform_task.py:44
+#: components/bk/apis/job/execute_task.py:41
+msgid "执行账户账户名"
+msgstr "account name"
+
+#: components/bk/apis/job/execute_platform_task.py:45
+#: components/bk/apis/job/execute_task.py:42
+#: components/bk/apis/job/fast_push_file.py:30
+msgid "目标路径"
+msgstr "Target path"
+
+#: components/bk/apis/job/execute_platform_task.py:46
+#: components/bk/apis/job/execute_task.py:43
+msgid "源文件信息，整个参数替换，不支持内部某个变量替换。格式参考下面说明"
+msgstr ""
+"Source file information, entire parameters are replaced, while "
+"replacement of an internal variable is not supported. The format is "
+"explained below"
+
+#: components/bk/apis/job/execute_platform_task.py:52
+msgid "文件路径，如：/tmp/t.txt"
+msgstr "File path, such as: /tmp/t.txt"
+
+#: components/bk/apis/job/execute_platform_task.py:53
+#: components/bk/apis/job/execute_task.py:50
+msgid "源文件服务器地址，格式为：子网ID:IP，多个之间逗号分割"
+msgstr "Source file server address in the format: subnetID:IP, separated by commas"
+
+#: components/bk/apis/job/execute_platform_task.py:54
+#: components/bk/apis/job/execute_task.py:51
+msgid "源文件机器执行账户账户名"
+msgstr "account name in source file host"
+
+#: components/bk/apis/job/execute_task.py:13
+#: components/bk/apis/job/execute_task.py:18
+msgid "根据作业模板ID启动作业"
+msgstr "Execute job according to job template ID"
+
+#: components/bk/apis/job/execute_task.py:30
+msgid "步骤参数，每项的具体参数见下面描述"
+msgstr "Step parameters, the specific parameters of each item are described below"
+
+#: components/bk/apis/job/execute_task.py:40
+msgid "IP列表格式：子网ID:IP，多个之间逗号，分割，例如：1:10.0.0.1,1:10.0.0.2"
+msgstr ""
+"IP list in the format: subnetID:IP, separate by commas, such as "
+"1:10.0.0.1,1:10.0.0.2"
+
+#: components/bk/apis/job/execute_task.py:49
+msgid "源文件路径，如：/tmp/t.txt"
+msgstr "Source file path, such as: /tmp/t.txt"
+
+#: components/bk/apis/job/execute_task_ext.py:13
+#: components/bk/apis/job/execute_task_ext.py:18
+msgid "启动作业Ext(带全局变量启动)"
+msgstr "Execute job Ext (Start with global variables)"
+
+#: components/bk/apis/job/execute_task_ext.py:20
+msgid "如果全局变量的类型为IP，参数值必须包含groupIds或ipList。没有设置的参数将使用作业模版中的默认值"
+msgstr ""
+"If the global variable type is IP, the parameter value must contain "
+"groupIds or ipList. Parameters that are not set will use the default "
+"values in the task template"
+
+#: components/bk/apis/job/execute_task_ext.py:32
+msgid "全局变量信息，作业包含的全局变量和类型可以通过接口“查询作业模板详情”(get_task_detail)获取"
+msgstr ""
+"Global variable information, global variables and types contained in the "
+"task can be got via the interface get_task_detail"
+
+#: components/bk/apis/job/fast_execute_script.py:13
+#: components/bk/apis/job/fast_execute_script.py:18
+msgid "快速执行脚本"
+msgstr "Fast execute script"
+
+#: components/bk/apis/job/fast_execute_script.py:29
+msgid "执行脚本步骤的脚本内容，base64编码后的内容"
+msgstr ""
+"The script contents of the execute script step, the base64 encoded "
+"contents"
+
+#: components/bk/apis/job/fast_execute_script.py:30
+msgid "脚本执行超时时间，范围60~72000，默认1000，单位为秒"
+msgstr ""
+"Script execution timeout, range: 60~72000, default is 1000, the unit is "
+"second"
+
+#: components/bk/apis/job/fast_execute_script.py:31
+msgid "脚本执行参数"
+msgstr "Script execution parameters"
+
+#: components/bk/apis/job/fast_execute_script.py:32
+msgid "脚本类型：1(shell脚本)、2(bat脚本)、3(perl脚本)、4(python脚本)、5(Powershell脚本)"
+msgstr "script type: 1.shell; 2.bat; 3.perl; 4.python; 5.powershell"
+
+#: components/bk/apis/job/fast_execute_script.py:33
+msgid "目标机器，包含内容见下面描述"
+msgstr "Target hosts, the contents are described below"
+
+#: components/bk/apis/job/fast_execute_script.py:34
+#: components/bk/apis/job/fast_push_file.py:33
+#: components/bk/apis/job/gse_push_file.py:33
+msgid "目标机器账户名"
+msgstr "account name"
+
+#: components/bk/apis/job/fast_execute_script.py:35
+msgid "是否敏感参数: 1是, 0不是(默认为0)"
+msgstr "A sensitive parameter or not: 1 yes, 0 not (default 0)"
+
+#: components/bk/apis/job/fast_execute_script.py:41
+#: components/bk/apis/job/fast_push_file.py:48
+#: components/bk/apis/job/get_agent_status.py:35
+#: components/bk/apis/job/gse_proc_operate.py:49
+#: components/bk/apis/job/gse_push_file.py:46
+#: components/bk/apis/job/gse_set_base_report.py:42
+msgid "IP地址"
+msgstr "IP Address"
+
+#: components/bk/apis/job/fast_execute_script.py:42
+#: components/bk/apis/job/fast_push_file.py:49
+#: components/bk/apis/job/get_agent_status.py:36
+#: components/bk/apis/job/gse_proc_operate.py:50
+#: components/bk/apis/job/gse_push_file.py:47
+#: components/bk/apis/job/gse_set_base_report.py:43
+msgid "子网ID"
+msgstr "Subnet ID"
+
+#: components/bk/apis/job/fast_push_file.py:13
+#: components/bk/apis/job/fast_push_file.py:18
+msgid "快速分发文件"
+msgstr "Fast push file"
+
+#: components/bk/apis/job/fast_push_file.py:29
+msgid "源文件信息，包含内容见下面参数描述"
+msgstr "Source file information, the contents are described below"
+
+#: components/bk/apis/job/fast_push_file.py:31
+msgid "目标机器，包含内容见下面参数描述"
+msgstr "Target host, the contents are described below"
+
+#: components/bk/apis/job/fast_push_file.py:32
+msgid "目标机器所属业务，全业务需要"
+msgstr "Business to which the target host belongs, all business needs"
+
+#: components/bk/apis/job/fast_push_file.py:39
+msgid "源机器所属业务，全业务需要"
+msgstr "Business to which the source host belongs, all business needs"
+
+#: components/bk/apis/job/fast_push_file.py:40
+msgid "源文件路径"
+msgstr "Source file path"
+
+#: components/bk/apis/job/fast_push_file.py:41
+msgid "IP信息，其中包含ip（源文件服务器IP）和source（IP的子网ID）"
+msgstr ""
+"IP information, including ip (source file server IP) and source (IP "
+"subnet ID)"
+
+#: components/bk/apis/job/fast_push_file.py:42
+msgid "源文件服务器账户名"
+msgstr "Source file server account name"
+
+#: components/bk/apis/job/get_agent_status.py:13
+#: components/bk/apis/job/get_agent_status.py:18
+msgid "查询Agent状态"
+msgstr "Get Agent status"
+
+#: components/bk/apis/job/get_agent_status.py:29
+msgid "IP信息，每项条目包含信息见下面参数描述"
+msgstr "IP information, the specific parameters of each item are described below"
+
+#: components/bk/apis/job/get_agent_status.py:75
+msgid "主机Agent状态，1.正常; 0.异常"
+msgstr "Host Agent status code, 1: normal; 0: abnormal"
+
+#: components/bk/apis/job/get_cron.py:13 components/bk/apis/job/get_cron.py:18
+msgid "查询业务下定时作业信息"
+msgstr "Get cron list"
+
+#: components/bk/apis/job/get_cron.py:29
+msgid "定时任务ID，如果存在，则忽略其他筛选条件，只查询这个指定的作业信息"
+msgstr ""
+"Cron job ID; if it exists, ignore other screening conditions, and only "
+"get this specified job information"
+
+#: components/bk/apis/job/get_cron.py:30 components/bk/apis/job/save_cron.py:29
+msgid "定时作业的名称"
+msgstr "Cron job name"
+
+#: components/bk/apis/job/get_cron.py:31
+msgid "作业的状态：1.已启动、2.已暂停、3.已完成"
+msgstr "Job status, 1. started, 2. paused, 3. completed"
+
+#: components/bk/apis/job/get_cron.py:32 components/bk/apis/job/get_task.py:30
+msgid "作业创建人"
+msgstr "Job creator"
+
+#: components/bk/apis/job/get_cron.py:33 components/bk/apis/job/get_task.py:31
+msgid "最后修改人"
+msgstr "Last modifier"
+
+#: components/bk/apis/job/get_cron.py:34 components/bk/apis/job/get_task.py:32
+msgid "创建起始时间，YYYY-MM-DD格式"
+msgstr "Creation start time, in YYYY-MM-DD format"
+
+#: components/bk/apis/job/get_cron.py:35 components/bk/apis/job/get_task.py:33
+msgid "创建结束时间，YYYY-MM-DD格式"
+msgstr "Creation end time, in YYYY-MM-DD format"
+
+#: components/bk/apis/job/get_cron.py:36 components/bk/apis/job/get_task.py:34
+msgid "最后修改起始时间，YYYY-MM-DD格式"
+msgstr "Last modification start time, in YYYY-MM-DD format"
+
+#: components/bk/apis/job/get_cron.py:37 components/bk/apis/job/get_task.py:35
+msgid "最后修改结束时间，YYYY-MM-DD格式"
+msgstr "Last modification end time, in YYYY-MM-DD format"
+
+#: components/bk/apis/job/get_proc_result.py:17
+#: components/bk/apis/job/get_proc_result.py:22
+msgid "查询进程操作结果"
+msgstr "Get process result"
+
+#: components/bk/apis/job/get_proc_result.py:33
+msgid "GSE任务ID"
+msgstr "GSE Task ID"
+
+#: components/bk/apis/job/get_proc_result.py:76
+msgid "任务状态码，0表示任务已经结束，115表示任务正在执行"
+msgstr ""
+"Task status code, 0 represents task has been completed and 115 represents"
+" the task in under execution"
+
+#: components/bk/apis/job/get_proc_result.py:77
+msgid "各IP实际执行结果"
+msgstr "Actual execution results of each IP"
+
+#: components/bk/apis/job/get_task.py:13 components/bk/apis/job/get_task.py:18
+msgid "查询作业模板"
+msgstr "Get job list"
+
+#: components/bk/apis/job/get_task.py:29
+msgid "作业名称"
+msgstr "Job name"
+
+#: components/bk/apis/job/get_task_detail.py:13
+#: components/bk/apis/job/get_task_detail.py:18
+msgid "查询作业模板详情"
+msgstr "Get job detail"
+
+#: components/bk/apis/job/get_task_detail.py:29
+msgid "作业模板ID"
+msgstr "Job ID"
+
+#: components/bk/apis/job/get_task_ip_log.py:13
+#: components/bk/apis/job/get_task_ip_log.py:18
+msgid "根据作业实例ID查询作业执行日志"
+msgstr "Get job instance log"
+
+#: components/bk/apis/job/get_task_ip_log.py:28
+#: components/bk/apis/job/get_task_result.py:28
+msgid "作业实例ID"
+msgstr "Job instance ID"
+
+#: components/bk/apis/job/get_task_ip_log.py:85
+msgid ""
+"主机任务状态码，1.Agent异常; 3.上次已成功; 5.等待执行; 7.正在执行; 9.执行成功; 11.任务失败; 12.任务下发失败; "
+"13.任务超时; 15.任务日志错误; 101.脚本执行失败; 102.脚本执行超时; 103.脚本执行被终止; 104.脚本返回码非零; "
+"202.文件传输失败; 203.源文件不存在; 310.Agent异常; 311.用户名不存在; 320.文件获取失败; 321.文件超出限制; "
+"329.文件传输错误; 399.任务执行出错"
+msgstr ""
+"Host Job status code, 1. Agent abnormal; 3. last time succeeded; 5. "
+"Waiting for execution; 7. In execution; 9. Execution succeeded; 11. Job "
+"failed; 12. Job sending down failed; 13. Job timeout; 15. Job log error; "
+"101. Script execution failed; 102. Script execution timeout; 103. Script "
+"execution terminated; 104. Script return code non-zero; 202. File "
+"transfer failed; 203. Source file does not exist; 310. Agent abnormal; "
+"311. User name does not exist; 320. Get File failed; 321. File exceeds "
+"limit; 329. File transfer error; 339. Job execution error"
+
+#: components/bk/apis/job/get_task_result.py:13
+#: components/bk/apis/job/get_task_result.py:18
+msgid "根据作业实例 ID 查询作业执行状态"
+msgstr "Get the job execution status based on the job instance ID"
+
+#: components/bk/apis/job/get_task_result.py:108
+msgid ""
+"任务状态码，1.未执行; 2.正在执行; 3.执行成功; 4.执行失败; 5.跳过; 6.忽略错误; 7.等待用户; 8.手动结束; "
+"9.状态异常; 10.步骤强制终止中; 11.步骤强制终止成功; 12.步骤强制终止失败"
+msgstr ""
+"Task status code, 1. Not executed; 2. In execution; 3. Execution "
+"succeeded; 4. Execution failed; 5. Skip; 6. Ignore the error; 7. Wait for"
+" the user; 8. Manually end it; 9. Abnormal status; 10. Step forced "
+"termination; 11. Step forced termination succeeded; 12. Steps forced "
+"termination failed"
+
+#: components/bk/apis/job/gse_proc_operate.py:13
+#: components/bk/apis/job/gse_proc_operate.py:18
+msgid "进程操作"
+msgstr "Process operation"
+
+#: components/bk/apis/job/gse_proc_operate.py:29
+msgid ""
+"操作类型，可选值：0:启动进程(start); 1:停止进程(stop); 2:进程状态查询; 3:注册托管进程; 4:取消托管进程; "
+"7:重启进程(restart); 8:重新加载进程(reload); 9:杀死进程(kill)"
+msgstr ""
+"Operation type, optional values: 0: start process; 1: stop process; 2: "
+"get process status; 3: register managed process; 4: cancel managed "
+"process; 7: restart process; 8: reload process; 9: kill process"
+
+#: components/bk/apis/job/gse_proc_operate.py:30
+msgid "待操作进程信息"
+msgstr "Information of the process to be operated"
+
+#: components/bk/apis/job/gse_proc_operate.py:36
+#: components/bk/apis/job/gse_set_base_report.py:36
+msgid "IP列表"
+msgstr "IP list"
+
+#: components/bk/apis/job/gse_proc_operate.py:37
+msgid "进程路径，例如/usr/local/gse/gseagent/plugins/unifyTlogc/sbin"
+msgstr "Process path, such as: /usr/local/gse/gseagent/plugins/unifyTlogc/sbin"
+
+#: components/bk/apis/job/gse_proc_operate.py:38
+msgid "进程名称，例如bk_gse_unifyTlogc"
+msgstr "Process name, such as: bk_gse_unifyTlogc"
+
+#: components/bk/apis/job/gse_proc_operate.py:39
+msgid ""
+"pid文件所在路径, "
+"例如/usr/local/gse/gseagent/plugins/unifyTlogc/log/bk_gse_unifyTlogc.pid"
+msgstr ""
+"pid file path, such as: "
+"/usr/local/gse/gseagent/plugins/unifyTlogc/log/bk_gse_unifyTlogc.pid"
+
+#: components/bk/apis/job/gse_proc_operate.py:40
+msgid "系统用户名，不传默认为root"
+msgstr "System username, default is root"
+
+#: components/bk/apis/job/gse_proc_operate.py:41
+msgid ""
+"进程操作控制脚本的扩展名: "
+"sh:默认值shell适于Linux或cygwin,bat:windows的dos脚本,ps1:windows的Powershell脚本;注意：这个是针对ip_list参数下所有IP统一配置，所以确保接口传递的ip_list参数下所有IP都能支持指定的脚本。"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:42
+msgid "进程使用cpu限制，超过限制agent会根据配置的cmd_shell_ext调用相应类型的stopCmd停止进程。"
+msgstr "Cpu limit"
+
+#: components/bk/apis/job/gse_proc_operate.py:43
+msgid "进程使用mem限制，超过限制agent会根据配置的cmd_shell_ext调用相应类型的stopCmd停止进程。"
+msgstr "Memory limit"
+
+#: components/bk/apis/job/gse_push_file.py:13
+#: components/bk/apis/job/gse_push_file.py:18
+msgid "文件内容推送"
+msgstr "File content push"
+
+#: components/bk/apis/job/gse_push_file.py:29
+msgid "文件列表"
+msgstr "File list"
+
+#: components/bk/apis/job/gse_push_file.py:30
+msgid "文件目标路径"
+msgstr "File target path"
+
+#: components/bk/apis/job/gse_push_file.py:31
+msgid "目标机器"
+msgstr "Target host"
+
+#: components/bk/apis/job/gse_push_file.py:32
+msgid "蓝鲸配置平台动态分组ID，多个之间逗号分隔，和ip_list至少一个必选，如果两个同时存在，则以group_ids为准"
+msgstr ""
+"BlueKing configuration system dynamic group ID, separated by commas, and "
+"between it and ip_list, at least one is required, if both exist at the "
+"same time, use group_ids"
+
+#: components/bk/apis/job/gse_push_file.py:39
+#: components/generic/templates/cmsi/send_mail.py:46
+msgid "文件名"
+msgstr "File name"
+
+#: components/bk/apis/job/gse_push_file.py:40
+msgid "文件内容，文件内容为空，则放弃执行该文件，base64编码后的内容"
+msgstr ""
+"File content, if the file content is empty, give up execution of the "
+"file, and base64 encoded content"
+
+#: components/bk/apis/job/gse_set_base_report.py:12
+#: components/bk/apis/job/gse_set_base_report.py:17
+msgid "开启/关闭Agent基础数据采集上报功能"
+msgstr "Enable / disable agent basic data collection and reporting function"
+
+#: components/bk/apis/job/gse_set_base_report.py:28
+msgid "系统信息上报dataid，为-1则关闭上报"
+msgstr "System information report dataid, If it is -1, close report"
+
+#: components/bk/apis/job/gse_set_base_report.py:29
+msgid "cpu信息上报dataid，为-1则关闭上报"
+msgstr "cup information report dataid, If it is -1, close report"
+
+#: components/bk/apis/job/gse_set_base_report.py:30
+msgid "mem信息上报dataid，为-1则关闭上报"
+msgstr "mem information report dataid, If it is -1, close report"
+
+#: components/bk/apis/job/gse_set_base_report.py:31
+msgid "网卡信息上报dataid，为-1则关闭上报"
+msgstr "NIC information report dataid, If it is -1, close report"
+
+#: components/bk/apis/job/gse_set_base_report.py:32
+msgid "磁盘IO信息上报dataid，为-1则关闭上报"
+msgstr "Disk IO information report dataid, If it is -1, close report"
+
+#: components/bk/apis/job/gse_set_base_report.py:33
+msgid "进程信息上报dataid，为-1则关闭上报"
+msgstr "Process information report dataid, If it is -1, close report"
+
+#: components/bk/apis/job/gse_set_base_report.py:34
+msgid "crontab上报dataid，为-1则关闭上报"
+msgstr "crontab report dataid, If it is -1, close report"
+
+#: components/bk/apis/job/gse_set_base_report.py:35
+msgid "iptables信息上报dataid，为-1则关闭上报"
+msgstr "iptables information report dataid, If it is -1, close report"
+
+#: components/bk/apis/job/save_cron.py:13
+msgid "新建或保存定时作业"
+msgstr "Save cron"
+
+#: components/bk/apis/job/save_cron.py:18
+msgid "新建或保存定时作业；新建定时作业，作业状态默认为暂停；操作者必须是业务的创建人或运维"
+msgstr ""
+"Create a new or save a cron job; create a new cron job, the default job "
+"status is pause, and the operator must be the creator or OPS of the "
+"business"
+
+#: components/bk/apis/job/save_cron.py:30
+msgid "要定时执行的作业的作业ID"
+msgstr "The job ID of the job to be executed periodically"
+
+#: components/bk/apis/job/save_cron.py:31
+msgid "定时任务ID，更新定时任务时，必须传这个值"
+msgstr "Cron job ID; Newly built optional, required to amend"
+
+#: components/bk/apis/job/save_cron.py:32
+msgid "定时任务crontab的定时规则，各自段含义为：秒 分 时 日 月 周 年（可选），如: 0 0/5 * * * ?  表示每5分钟执行一次"
+msgstr ""
+"Cron rules for the cron task crontab, the meaning of each field: second, "
+"minute, day, month, week, year (optional), such as: 0 0/5 * * *? "
+"indicates execution once every 5 minutes"
+
+#: components/generic/templates/cmsi/send_mail.py:16
+#: components/generic/templates/cmsi/send_mail.py:21
+msgid "发送邮件"
+msgstr "Send email"
+
+#: components/generic/templates/cmsi/send_mail.py:31
+msgid "邮件接收者，包含邮件完整地址，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+"Email recipients, including complete email address, separated by commas; "
+"if receiver and receiver__username exist at the same time, be subject to "
+"receiver"
+
+#: components/generic/templates/cmsi/send_mail.py:32
+msgid "邮件接收者，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+"Email recipients, including username, user shall register on the BlueKing"
+" platform, separated by commas; if receiver and receiver__username exist "
+"at the same time, be subject to receiver"
+
+#: components/generic/templates/cmsi/send_mail.py:33
+msgid "发件人"
+msgstr "sender"
+
+#: components/generic/templates/cmsi/send_mail.py:34
+msgid "邮件主题"
+msgstr "Email subject"
+
+#: components/generic/templates/cmsi/send_mail.py:35
+msgid "邮件内容"
+msgstr "Email content"
+
+#: components/generic/templates/cmsi/send_mail.py:36
+msgid "抄送人，包含邮件完整地址，多个以逗号分隔"
+msgstr "CC, including complete address of the email, separated by commas"
+
+#: components/generic/templates/cmsi/send_mail.py:37
+msgid "抄送人，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若cc、cc__username同时存在，以cc为准"
+msgstr ""
+"CC, including username, user shall register on the BlueKing platform, "
+"separated by commas; if cc and cc__username exist at the same time, be "
+"subject to cc"
+
+#: components/generic/templates/cmsi/send_mail.py:38
+msgid "邮件格式，包含'Html', 'Text'，默认为'Html'"
+msgstr "Email format, including 'Html', 'Text', the default is 'Html'"
+
+#: components/generic/templates/cmsi/send_mail.py:39
+msgid "邮件内容是否base64编码，默认False，不编码，请使用base64.b64encode方法编码"
+msgstr ""
+"Whether the Email content is encoded by base64, the default is False, "
+"meaning not encoded; please encode by the base64.b64encode method"
+
+#: components/generic/templates/cmsi/send_mail.py:40
+msgid "邮件附件"
+msgstr "Mail attachment"
+
+#: components/generic/templates/cmsi/send_mail.py:47
+msgid "文件内容，文件内容为原文件内容的 base64 编码字符串"
+msgstr ""
+"File content, the content of the file is the base64 encoded string of the"
+" original file content"
+
+#: components/generic/templates/cmsi/send_mail.py:48
+msgid "文件类型，默认为文件名后缀，如 a.png 文件类型为 'png'"
+msgstr ""
+"File type, default is the file name suffix, such as a.png file type is "
+"'png'"
+
+#: components/generic/templates/cmsi/send_mail.py:49
+msgid ""
+"文件 Content-Disposition，图片文件(type=image, jpg, png, jpeg)默认为 "
+"'inline'，其他文件默认为 'attachment'"
+msgstr ""
+"File Content-Disposition, image file (type=image, jpg, png, jpeg) "
+"defaults to 'inline', other files default to 'attachment'"
+
+#: components/generic/templates/cmsi/send_mail.py:50
+msgid "文件 Content-ID，文件为图片文件时生效；默认为 '<文件名>'"
+msgstr ""
+"File Content-ID, effective when the file is an image file; default is "
+"'<filename>'"
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:15
+#: components/generic/templates/cmsi/send_mp_weixin.py:20
+msgid "发送公众号微信消息"
+msgstr "Send WeChat official account message"
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:30
+msgid "微信接收者，包含绑定在指定公众号上的微信用户的 openid，多个以逗号分隔"
+msgstr ""
+"Wechat receiver, including openid of WeChat user bound on the specified "
+"official account, separated by commas"
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:31
+#: components/generic/templates/cmsi/send_weixin.py:32
+msgid "消息内容"
+msgstr "Message content"
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:37
+#: components/generic/templates/cmsi/send_weixin.py:40
+msgid "通知头部文字"
+msgstr "Notification header text"
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:38
+#: components/generic/templates/cmsi/send_weixin.py:41
+msgid "通知文字"
+msgstr "Notification text"
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:39
+#: components/generic/templates/cmsi/send_weixin.py:42
+msgid "通知发送时间，默认为当前时间 \"YYYY-mm-dd HH:MM\""
+msgstr ""
+"Notification sending time, the default is currrent time with format "
+"\"YYYY-mm-dd HH:MM\""
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:40
+#: components/generic/templates/cmsi/send_weixin.py:43
+msgid "通知尾部文字"
+msgstr "Notification tail text"
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:41
+#: components/generic/templates/cmsi/send_weixin.py:44
+msgid "通知文字message是否base64编码，默认False，不编码，若编码请使用base64.b64encode方法"
+msgstr "Has the notification text been encoded by base64 or not"
+
+#: components/generic/templates/cmsi/send_qy_weixin.py:12
+#: components/generic/templates/cmsi/send_qy_weixin.py:17
+msgid "发送企业微信"
+msgstr "Send WeChat corporation message"
+
+#: components/generic/templates/cmsi/send_qy_weixin.py:27
+msgid "微信接收者，包含企业微信用户ID，多个以逗号分隔"
+msgstr ""
+"WeChat receiver, including user ID of WeChat user bound on the "
+"corporation ID, separated by commas"
+
+#: components/generic/templates/cmsi/send_qy_weixin.py:28
+msgid "消息内容，长度最长为2048字符"
+msgstr "Message content, the maximum length is 2048 characters"
+
+#: components/generic/templates/cmsi/send_sms.py:15
+#: components/generic/templates/cmsi/send_sms.py:20
+msgid "发送短信"
+msgstr "Send SMS"
+
+#: components/generic/templates/cmsi/send_sms.py:30
+msgid "短信接收者，包含接收者电话号码，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+"SMS receiver, including the receiver's phone number, separated by commas;"
+" if receiver and receiver__username are present at the same time, the "
+"receiver shall prevail"
+
+#: components/generic/templates/cmsi/send_sms.py:31
+msgid "短信接收者，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+"SMS receiver, including username, user shall register on the BlueKing "
+"platform, separated by commas; if receiver and receiver__username are "
+"present at the same time, the receiver shall prevail"
+
+#: components/generic/templates/cmsi/send_sms.py:32
+msgid "短信内容"
+msgstr "SMS content"
+
+#: components/generic/templates/cmsi/send_sms.py:33
+msgid "消息内容是否base64编码，默认False，不编码，请使用base64.b64encode方法编码"
+msgstr ""
+"Whether the SMS content is encoded by base64, the default is False, "
+"meaning not encoded; please encode by the base64.b64encode method"
+
+#: components/generic/templates/cmsi/send_voice_msg.py:13
+#: components/generic/templates/cmsi/send_voice_msg.py:18
+msgid "公共语音通知"
+msgstr "Public voice notice"
+
+#: components/generic/templates/cmsi/send_voice_msg.py:28
+msgid "自动语音读字信息"
+msgstr "Auto voice reading information"
+
+#: components/generic/templates/cmsi/send_voice_msg.py:29
+msgid "待通知的用户列表，自动语音通知列表，若user_list_information、receiver__username同时存在，以user_list_information为准"
+msgstr ""
+"List of users to be notified, auto voice notification list, if "
+"user_list_information and receiver__username exist at the same time, the "
+"user_list_information will prevail"
+
+#: components/generic/templates/cmsi/send_voice_msg.py:30
+msgid "待通知的用户列表，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若user_list_information、receiver__username同时存在，以user_list_information为准"
+msgstr ""
+"List of users to be notified, including username, user shall register on "
+"the BlueKing platform, separated by commas; if user_list_information and "
+"receiver__username exist at the same time, the user_list_information will"
+" prevail"
+
+#: components/generic/templates/cmsi/send_voice_msg.py:36
+msgid "被通知人"
+msgstr "Person notified"
+
+#: components/generic/templates/cmsi/send_voice_msg.py:37
+msgid "被通知人手机号"
+msgstr "Mobile number of the person notified"
+
+#: components/generic/templates/cmsi/send_weixin.py:15
+msgid "发送微信消息"
+msgstr "Send WeChat message"
+
+#: components/generic/templates/cmsi/send_weixin.py:20
+msgid "发送微信消息，支持微信公众号消息，及微信企业号消息"
+msgstr ""
+"Send WeChat message, with WeChat official account message and WeChat "
+"corporation message available"
+
+#: components/generic/templates/cmsi/send_weixin.py:30
+msgid "微信接收者，包含绑定在指定公众号上的微信用户的 openid 或 企业号上的微信用户的用户ID，多个以逗号分隔"
+msgstr ""
+"WeChat message receiver, including openid of WeChat user bound on the "
+"specified official account or user ID of WeChat user bound on the "
+"corporation ID, separated by commas"
+
+#: components/generic/templates/cmsi/send_weixin.py:31
+msgid "微信接收者，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+"WeChat message receiver, including username, user shall register on the "
+"BlueKing platform, separated by commas; if receiver and "
+"receiver__username are present at the same time, the receiver shall "
+"prevail"
+
+#: components/generic/templates/cmsi/send_weixin.py:36
+msgid "data 参数包含内容"
+msgstr "The data parameter contains content"
+
+#: esb/management/utils/api_docs.py:38
+msgid "请求地址"
+msgstr "Request address"
+
+#: esb/management/utils/api_docs.py:45
+msgid "请求方法"
+msgstr "Request method"
+
+#~ msgid "用户名"
+#~ msgstr "username"
+
+#~ msgid "用户QQ"
+#~ msgstr "qq"
+
+#~ msgid "语言"
+#~ msgstr "language"
+
+#~ msgid "手机号"
+#~ msgstr "phone number"
+
+#~ msgid "企业号用户USERID/公众号用户OPENID"
+#~ msgstr "wechat enterprise USERID or OPENID"
+
+#~ msgid "邮箱"
+#~ msgstr "email"
+
+#~ msgid "中文名"
+#~ msgstr "chinese name"
+
+#~ msgid "时区"
+#~ msgstr "time zone"
+
+#~ msgid "批量获取用户信息"
+#~ msgstr "get users"
+
+#~ msgid "用户名列表"
+#~ msgstr "username list"
+
+#~ msgid "批量获取用户各平台角色信息"
+#~ msgstr "get role of the users in platforms"
+
+#~ msgid "登录票据"
+#~ msgstr "login token"
+
+#~ msgid "产品代号"
+#~ msgstr "application id"
+
+#~ msgid "用户登录态验证"
+#~ msgstr "check is login"
+
+#~ msgid "创建轻应用"
+#~ msgstr "create application"
+
+#~ msgid "轻应用名称"
+#~ msgstr "light application name"
+
+#~ msgid "应用链接"
+#~ msgstr "application url"
+
+#~ msgid "应用开发者用户名，多个以分号';'分隔"
+#~ msgstr "developer, use `;` to split multiple developers"
+
+#~ msgid ""
+#~ "应用分类，可选分类： "
+#~ "\"OpsTools\"（运维工具），\"MonitorAlarm\"（监控告警），\"ConfManage\"（配置管理），\"DevTools\"（开发工具），\"EnterpriseIT\"（企业IT），\"OfficeApp\"（办公应用），\"Other\"（其它）。如果传入空参数或不是上诉分类，则使用"
+#~ " \"Other\""
+#~ msgstr ""
+#~ "application category, options: OpsTools / "
+#~ "MonitorAlarm / ConfManage / DevTools /"
+#~ " EnterpriseIT/ OfficeApp / Other"
+
+#~ msgid "应用的简介"
+#~ msgstr "application introduction"
+
+#~ msgid "应用在桌面打开窗口宽度"
+#~ msgstr "width of application in console"
+
+#~ msgid "应用在桌面打开窗口高度"
+#~ msgstr "应用在桌面打开窗口高度"
+
+#~ msgid "下架轻应用"
+#~ msgstr "delete a light application"
+
+#~ msgid "轻应用的 ID"
+#~ msgstr "light application id"
+
+#~ msgid "编辑轻应用"
+#~ msgstr "edit application"
+
+#~ msgid "应用分类"
+#~ msgstr "application category"
+
+#~ msgid "获取应用信息，支持批量获取"
+#~ msgstr "get application info, bulk supported"
+
+#~ msgid "target_app_code 表示应用 ID，多个 ID 以英文分号分隔，target_app_code 为空则表示所有应用"
+#~ msgstr ""
+#~ "query target application id, `;` split"
+#~ " multiple IDs, empty means all "
+#~ "applications"
+
+#~ msgid ""
+#~ "fields 需要返回的字段，多个字段以英文分号分割，如果不传或传入 \"\"，则返回应用的 "
+#~ "bk_app_code、bk_app_name "
+#~ "字段。可选的字段有：bk_app_code（应用ID），bk_app_name（应用名），introduction（应用简介），creator（创建者），developer（开发人员）"
+#~ msgstr ""
+#~ "return fields, split multiple filds via"
+#~ " `;`; if empty, will return "
+#~ "`bk_app_code`/`bk_app_name`. option fields: "
+#~ "`bk_app_code`/`bk_app_name`/`introduction`/`creator`/`developer`"
+
+#~ msgid "修改轻应用 logo"
+#~ msgstr "modify application logo"
+
+#~ msgid "png 格式图片文件的 Base64 编码字符串"
+#~ msgstr "logo, png file which encoded with base64"
+
+#~ msgid "新增主机到资源池"
+#~ msgstr "add host to resource"
+
+#~ msgid "开发商账号"
+#~ msgstr "supplier account code"
+
+#~ msgid "主机信息"
+#~ msgstr "host info"
+
+#~ msgid "主机内网ip"
+#~ msgstr "host inner ip"
+
+#~ msgid "主机导入来源,以api方式导入为3"
+#~ msgstr "host import source"
+
+#~ msgid "云区域ID"
+#~ msgstr "Cloud area ID"
+
+#~ msgid "绑定角色权限"
+#~ msgstr "bind role privilege"
+
+#~ msgid "模型ID"
+#~ msgstr "Object ID"
+
+#~ msgid "模型对应用户角色属性ID"
+#~ msgstr "The user property ID of model"
+
+#~ msgid "角色权限数据，输入为空数组则不绑定任何权限"
+#~ msgstr ""
+#~ "Role privilege data, if the input "
+#~ "is an empty array, no privileges "
+#~ "are bound."
+
+#~ msgid "主机编辑"
+#~ msgstr "Host update"
+
+#~ msgid "主机转移"
+#~ msgstr "Host transfer"
+
+#~ msgid "主机拓扑编辑"
+#~ msgstr "Host topology update"
+
+#~ msgid "自定义api"
+#~ msgstr "Custom api"
+
+#~ msgid "进程管理"
+#~ msgstr "Manage proc"
+
+#~ msgid "业务数据"
+#~ msgstr "Data"
+
+#~ msgid "运维人员"
+#~ msgstr "the maintainers"
+
+#~ msgid "产品人员"
+#~ msgstr "the productor"
+
+#~ msgid "开发人员"
+#~ msgstr "the developer"
+
+#~ msgid "测试人员"
+#~ msgstr "the tester"
+
+#~ msgid "注意：此处的输入参数仅对必填以及系统内置的参数做了说明，其余需要填写的参数取决于用户自己定义的属性字段"
+#~ msgstr ""
+#~ "Note: The input parameters here only "
+#~ "describe the required parameters and the"
+#~ " built-in parameters of the system."
+#~ " The other parameters that need to"
+#~ " be filled in depend on the "
+#~ "attribute fields defined by the user."
+
+#~ msgid "添加自定义API"
+#~ msgstr "create customize query"
+
+#~ msgid "添加自定义api"
+#~ msgstr "create customize query"
+
+#~ msgid "通用查询条件"
+#~ msgstr "common search query parameters"
+
+#~ msgid "收藏的名称"
+#~ msgstr "the name of user api"
+
+#~ msgid "对象名,可以为biz,set,module,host,object"
+#~ msgstr "object name, it can be biz,set,module,host,object"
+
+#~ msgid "查询输出字段"
+#~ msgstr "fields output"
+
+#~ msgid "查询条件"
+#~ msgstr "search condition"
+
+#~ msgid "对象的字段"
+#~ msgstr "field of object"
+
+#~ msgid "操作符, $eq为相等，$neq为不等，$in为属于，$nin为不属于"
+#~ msgstr "$eq is equal,$in is belongs, $nin is not belong,$neq is not equal"
+
+#~ msgid "字段对应的值"
+#~ msgstr "the value of field"
+
+#~ msgid "自定义api主键ID"
+#~ msgstr "Primary key ID"
+
+#~ msgid "创建模块"
+#~ msgstr "create module"
+
+#~ msgid "集群id"
+#~ msgstr "the set id"
+
+#~ msgid "父实例节点的ID，当前实例节点的上一级实例节点，在拓扑结构中对于module一般指的是set的bk_set_id"
+#~ msgstr "the parent inst id"
+
+#~ msgid "创建集群"
+#~ msgstr "create set"
+
+#~ msgid "集群数据"
+#~ msgstr "data"
+
+#~ msgid "父节点的ID"
+#~ msgstr "the parent inst identifier"
+
+#~ msgid "集群名字"
+#~ msgstr "set name"
+
+#~ msgid "0-普通集群，1-内置模块集合，默认为0"
+#~ msgstr "0-normal set, 1-built-in set, default is 0"
+
+#~ msgid "注意：其它需要的字段由模型定义"
+#~ msgstr "Note: Other optional fields are defined by the model"
+
+#~ msgid "业务id"
+#~ msgstr "the business id"
+
+#~ msgid "删除自定义API"
+#~ msgstr "delete customize query"
+
+#~ msgid "删除自定义api"
+#~ msgstr "delete customize query"
+
+#~ msgid "主键ID"
+#~ msgstr "Primary key ID"
+
+#~ msgid "删除主机"
+#~ msgstr "delete host"
+
+#~ msgid "主机id，多个以逗号分隔"
+#~ msgstr "host id join by \",\""
+
+#~ msgid "模块id"
+#~ msgstr "module ID"
+
+#~ msgid "根据自定义api获取数据"
+#~ msgstr "get customize query data"
+
+#~ msgid "记录开始位置"
+#~ msgstr "start record"
+
+#~ msgid "每页限制条数,最大200"
+#~ msgstr "page limit, max is 200"
+
+#~ msgid "记录条数"
+#~ msgstr "the num of record"
+
+#~ msgid "主机实际数据"
+#~ msgstr "host data"
+
+#~ msgid "主机所属的业务信息"
+#~ msgstr "host biz info"
+
+#~ msgid "主机所属的集群信息"
+#~ msgstr "host set info"
+
+#~ msgid "主机所属的模块信息"
+#~ msgstr "host module info"
+
+#~ msgid "主机自身属性"
+#~ msgstr "host attr info"
+
+#~ msgid "获取自定义API详情"
+#~ msgstr "get customize query detail"
+
+#~ msgid "获取自定义api详情"
+#~ msgstr "get customize query detail"
+
+#~ msgid "创建时间"
+#~ msgstr "create time"
+
+#~ msgid "创建者"
+#~ msgstr "creator"
+
+#~ msgid "自定义api信息"
+#~ msgstr "the query info"
+
+#~ msgid "更新时间"
+#~ msgstr "last update time"
+
+#~ msgid "修改者"
+#~ msgstr "modify user"
+
+#~ msgid "自定义api命名"
+#~ msgstr "the name of api"
+
+#~ msgid "获取主机详情"
+#~ msgstr "get host detail"
+
+#~ msgid "获取主机基础信息详情"
+#~ msgstr "get host base info"
+
+#~ msgid "属性id"
+#~ msgstr "property ID"
+
+#~ msgid "属性名称"
+#~ msgstr "property name"
+
+#~ msgid "属性值"
+#~ msgstr "property value"
+
+#~ msgid "查询业务实例拓扑"
+#~ msgstr "query business instance topology"
+
+#~ msgid "拓扑的层级索引，索引取值从0开始，默认值为2，当设置为 -1 的时候会读取完整的业务实例拓扑"
+#~ msgstr "the topology level, read full topology when set to -1"
+
+#~ msgid "实例ID"
+#~ msgstr "the inst ID"
+
+#~ msgid "实例用于展示的名字"
+#~ msgstr "the name of the instance is used to display"
+
+#~ msgid "模型图标的名字"
+#~ msgstr "the object's icon"
+
+#~ msgid "模型用于展示的名字"
+#~ msgstr "the name of the object is used to display"
+
+#~ msgid "当前节点下的所有实例的集合"
+#~ msgstr "Collection of all instances under the current node"
+
+#~ msgid "查询业务"
+#~ msgstr "search the business"
+
+#~ msgid "指定查询的字段，参数为业务的任意属性，如果不填写字段信息，系统会返回业务的所有字段"
+#~ msgstr "need to show"
+
+#~ msgid "查询条件，参数为业务的任意属性，如果不写代表搜索全部数据"
+#~ msgstr "search condition"
+
+#~ msgid "分页条件"
+#~ msgstr "page condition"
+
+#~ msgid "排序字段，通过在字段前面增加 -，如 sort:\"-field\" 可以表示按照字段 field降序"
+#~ msgstr "the field for sort"
+
+#~ msgid "业务实际数据"
+#~ msgstr "business info"
+
+#~ msgid "查询自定义API"
+#~ msgstr "search customize query"
+
+#~ msgid "查询自定义api"
+#~ msgstr "search customize query"
+
+#~ msgid "查询条件，condition 字段为自定义api的属性字段, 可以是create_user,modify_user, name"
+#~ msgstr "search condition"
+
+#~ msgid "自定义api数据"
+#~ msgstr "detail of record"
+
+#~ msgid "根据条件查询主机"
+#~ msgstr "search host by condition"
+
+#~ msgid "主机ip列表"
+#~ msgstr "ip condition"
+
+#~ msgid "组合条件"
+#~ msgstr "comb condition"
+
+#~ msgid "按表达式搜索"
+#~ msgstr "search by pattern condition"
+
+#~ msgid "ip 数组"
+#~ msgstr "ip list for search"
+
+#~ msgid "是否根据ip精确搜索"
+#~ msgstr "is the exact query"
+
+#~ msgid ""
+#~ "bk_host_innerip只匹配内网ip,bk_host_outerip只匹配外网ip, "
+#~ "bk_host_innerip,bk_host_outerip同时匹配"
+#~ msgstr "bk_host_innerip match lan ip, bk_host_outerip match wan ip"
+
+#~ msgid "排序字段"
+#~ msgstr "the field for sort"
+
+#~ msgid "查询实例详情"
+#~ msgstr "search inst by object"
+
+#~ msgid "查询给定模型的实例信息"
+#~ msgstr "search inst by object"
+
+#~ msgid "自定义模型ID，查询区域时为plat"
+#~ msgstr "the object id, when search bk cloud it should be plat"
+
+#~ msgid "指定查询的字段"
+#~ msgstr "need to show"
+
+#~ msgid "fields参数说明"
+#~ msgstr "fields parameter description"
+
+#~ msgid "参数为查询的目标实例对应的模型定义的所有字段"
+#~ msgstr ""
+#~ "The parameter is all the fields "
+#~ "defined by the model corresponding to"
+#~ " the target instance of the query"
+
+#~ msgid "condition 参数说明"
+#~ msgstr "condition parameter description"
+
+#~ msgid "condition 参数为查询的目标实例对应的模型定义的所有字段"
+#~ msgstr ""
+#~ "The condition parameter is all the "
+#~ "fields defined by the model "
+#~ "corresponding to the target instance of"
+#~ " the query"
+
+#~ msgid "info 集合中元素的数量"
+#~ msgstr "the inst count"
+
+#~ msgid "查询的模型的实例集合"
+#~ msgstr "the set of instances of the model being queried"
+
+#~ msgid "云区域名"
+#~ msgstr "the cloud name"
+
+#~ msgid "查询模块"
+#~ msgstr "search module"
+
+#~ msgid "查询字段，字段来自于模块定义的属性字段"
+#~ msgstr "search fields"
+
+#~ msgid "查询条件，字段来自于模块定义的属性字段"
+#~ msgstr "search condition"
+
+#~ msgid "每页限制条数"
+#~ msgstr "page limit"
+
+#~ msgid "数据数量"
+#~ msgstr "the data item count"
+
+#~ msgid "结果集，其中，所有字段均为模块定义的属性字段"
+#~ msgstr "the data result array"
+
+#~ msgid "查询集群"
+#~ msgstr "search set"
+
+#~ msgid "查询字段，所有字段均为set定义的字段，这些字段包括预置字段，也包括用户自定义字段"
+#~ msgstr "search fields"
+
+#~ msgid "查询条件，所有字段均为Set定义的字段，这些字段包括预置字段，也包括用户自定义字段"
+#~ msgstr "search condition"
+
+#~ msgid "结果集，其中，所有字段均为集群定义的属性字段"
+#~ msgstr "the data result array"
+
+#~ msgid "业务内主机转移模块"
+#~ msgstr "transfer host to module in biz"
+
+#~ msgid "覆盖或者追加,会删除原有关系. true是更新，false是覆盖"
+#~ msgstr "cover or pursue, true will cover"
+
+#~ msgid "上交主机到业务的故障机模块"
+#~ msgstr "transfer host to fault module"
+
+#~ msgid "上交主机到业务的空闲机模块"
+#~ msgstr "transfer host to idle module"
+
+#~ msgid "上交主机至资源池"
+#~ msgstr "transfer host to resource module"
+
+#~ msgid "资源池主机分配至业务的空闲机模块"
+#~ msgstr "transfer resource host to idle module"
+
+#~ msgid "修改业务"
+#~ msgstr "update business"
+
+#~ msgid "更新业务信息"
+#~ msgstr "update the business"
+
+#~ msgid "更新自定义API"
+#~ msgstr "update customize query"
+
+#~ msgid "更新自定义api"
+#~ msgstr "update customize query"
+
+#~ msgid "主机ID，多个以逗号分隔"
+#~ msgstr "host ID"
+
+#~ msgid "主机数据"
+#~ msgstr "host data"
+
+#~ msgid "主机名"
+#~ msgstr "host name"
+
+#~ msgid "注意：输入的字段为主机定义的属性"
+#~ msgstr "Note: The fields entered are the properties defined by the host"
+
+#~ msgid "更新模块"
+#~ msgstr "update module"
+
+#~ msgid "模块数据"
+#~ msgstr "module data"
+
+#~ msgid "注意：输入的字段为模块定义的属性"
+#~ msgstr "Note: The fields entered are the properties defined by the module."
+
+#~ msgid "更新拓扑图"
+#~ msgstr "update a topo graphics"
+
+#~ msgid "图形范围类型,可选global,biz,cls(当前只有global)"
+#~ msgstr "the graphical scope type, could be global, biz, cls"
+
+#~ msgid "图形范围类型下的ID,如果为global,则填0"
+#~ msgstr ""
+#~ "the id under the graphical scope, "
+#~ "should be 0 when socope type is"
+#~ " global"
+
+#~ msgid "更新方法,可选update,override"
+#~ msgstr ""
+#~ "modify action, could be update--only "
+#~ "update the specified node, override--"
+#~ "override the graphics with the specified"
+#~ " node"
+
+#~ msgid "更新数据"
+#~ msgstr "update data"
+
+#~ msgid "节点类型,可选obj,inst"
+#~ msgstr "node type, could be obj, inst"
+
+#~ msgid "对象模型的ID"
+#~ msgstr "the object identifier"
+
+#~ msgid "节点在图中的位置"
+#~ msgstr "the node position in the graphics"
+
+#~ msgid "前端扩展字段"
+#~ msgstr "the extention field for frondend"
+
+#~ msgid "对象模型的图标"
+#~ msgstr "the object icon"
+
+#~ msgid "注意"
+#~ msgstr "Note"
+
+#~ msgid "scope_type,scope_id 唯一确定一张图"
+#~ msgstr "scope_type,scope_id uniquely determined a graphics"
+
+#~ msgid "node_type,bk_obj_id,bk_inst_id 三者唯一确定每张图的一个节点，故必填"
+#~ msgstr ""
+#~ "node_type,bk_obj_id,bk_inst_id, the three uniquely"
+#~ " determine one node of each graph,"
+#~ " so it is required"
+
+#~ msgid "更新集群"
+#~ msgstr "update set"
+
+#~ msgid "注意：用户自定义的字段也可以作为参数传入"
+#~ msgstr "Note: User-defined fields can also be passed in as parameters"
+
+#~ msgid "获取后台域名"
+#~ msgstr "get cicdkit nginx"
+
+#~ msgid "Agent心跳信息查询"
+#~ msgstr "query agent heartbeat info"
+
+#~ msgid "查询agent心跳详细信息。数据非实时，延时1分钟内。"
+#~ msgstr "query agent hearbeat detailed information"
+
+#~ msgid "主机列表"
+#~ msgstr "host list"
+
+#~ msgid "格式为：bk_cloud_id:ip"
+#~ msgstr "The format is: bk_cloud_id:ip"
+
+#~ msgid "主机IP地址"
+#~ msgstr "IP address"
+
+#~ msgid "agent版本号"
+#~ msgstr "agent version"
+
+#~ msgid "agent的上级节点ip"
+#~ msgstr "IP address of agent's parent node"
+
+#~ msgid "agent的上级节点端口"
+#~ msgstr "port of agent's parent node"
+
+#~ msgid "Agent在线状态查询"
+#~ msgstr "query agent online status"
+
+#~ msgid "查询agent实时在线状态"
+#~ msgstr "query whether agents are online or offline"
+
+#~ msgid "agent在线状态，0为不在线，1为在线"
+#~ msgstr "agent online status, 0 for offline and 1 for online"
+
+#~ msgid "作业类回调报文描述"
+#~ msgstr "Callback post data description"
+
+#~ msgid "此组件仅用于展示回调协议文档"
+#~ msgstr "This component is only used to display the callback protocol document"
+
+#~ msgid "对作业执行类的请求传入的回调bk_callback_url地址进行回调时所传递的报文结构描述"
+#~ msgstr ""
+#~ "A description of the structure of "
+#~ "the message passed when callbacks to "
+#~ "the callback bk_callback_url passed in "
+#~ "to the job execution class request"
+
+#~ msgid ""
+#~ "作业状态码: 1.未执行; 2.正在执行; 3.执行成功; 4.执行失败; "
+#~ "5.跳过; 6.忽略错误; 7.等待用户; 8.手动结束; 9.状态异常; "
+#~ "10.步骤强制终止中; 11.步骤强制终止成功; 12.步骤强制终止失败"
+#~ msgstr ""
+#~ "Job status code, 1. Not executed; "
+#~ "2. In execution; 3. Execution succeeded;"
+#~ " 4. Execution failed; 5. Skip; 6. "
+#~ "Ignore the error; 7. Wait for the"
+#~ " user; 8. Manually end it; 9. "
+#~ "Abnormal status; 10. Step forced "
+#~ "termination; 11. Step forced termination "
+#~ "succeeded; 12. Steps forced termination "
+#~ "failed"
+
+#~ msgid "步骤块中包含的各个步骤执行状态"
+#~ msgstr "Job step instance status info Array"
+
+#~ msgid "作业步骤实例ID"
+#~ msgstr "Job step instance ID."
+
+#~ msgid ""
+#~ "作业步骤状态码: 1.未执行; 2.正在执行; 3.执行成功; 4.执行失败; "
+#~ "5.跳过; 6.忽略错误; 7.等待用户; 8.手动结束; 9.状态异常; "
+#~ "10.步骤强制终止中; 11.步骤强制终止成功; 12.步骤强制终止失败"
+#~ msgstr ""
+#~ "Step status code, 1. Not executed; "
+#~ "2. In execution; 3. Execution succeeded;"
+#~ " 4. Execution failed; 5. Skip; 6. "
+#~ "Ignore the error; 7. Wait for the"
+#~ " user; 8. Manually end it; 9. "
+#~ "Abnormal status; 10. Step forced "
+#~ "termination; 11. Step forced termination "
+#~ "succeeded; 12. Steps forced termination "
+#~ "failed"
+
+#~ msgid "回调响应"
+#~ msgstr "Callback response"
+
+#~ msgid "回调成功以HTTP状态为准，如果成功，则状态码200，其他表示失败，Job会对失败的做一次重试，如还失败，则忽略失败，不再回调。"
+#~ msgstr ""
+#~ "The success of the callback is "
+#~ "based on the HTTP status. If it"
+#~ " succeeds, the status code is 200."
+#~ " Others indicate that the job fails."
+#~ " The job will try again for the"
+#~ " failure. If it fails, it ignores "
+#~ "the failure and does not call "
+#~ "back."
+
+#~ msgid "启动作业"
+#~ msgstr "Execute job"
+
+#~ msgid "根据作业模板ID启动作业。支持全局变量，如果全局变量的类型为IP，参数值必须包含custom_query_id或ip_list。没有设置的参数将使用作业模版中的默认值。"
+#~ msgstr ""
+#~ "Execute job according to job ID. "
+#~ "If the global variable type is IP,"
+#~ " the parameter value must contain "
+#~ "custom_query_id or ip_list. Parameters that"
+#~ " are not set will use the "
+#~ "default values in the job template."
+
+#~ msgid "指定要执行或自定义参数的步骤数组，要执行全部步骤可不传此参数，见下面steps结构定义"
+#~ msgstr ""
+#~ "Specify the steps to execute or "
+#~ "customize the parameters, omitting the "
+#~ "parameters if you want to perform "
+#~ "all steps. See steps Description"
+
+#~ msgid ""
+#~ "全局变量信息，作业包含的全局变量和类型，可以通过接口“查询作业模板详情” "
+#~ "(get_job_detail)获取。对于作业中的全局变量值，如果global_vars包含该变量信息，那么会使用api指定的值；否则使用全局变量默认值"
+#~ msgstr ""
+#~ "Global variable information, global variables"
+#~ " and types contained in the job "
+#~ "can be got via the interface "
+#~ "get_job_detail.For global variable values in"
+#~ " the job, if global_vars contains the"
+#~ " variable, the value specified by the"
+#~ " api is used; otherwise, the global"
+#~ " variable default value is used."
+
+#~ msgid "回调URL，当任务执行完成后，JOB会调用该URL告知任务执行结果。回调协议参考callback_protocol组件文档"
+#~ msgstr ""
+#~ "Callback URL, when the task is "
+#~ "completed, JOB will call the URL "
+#~ "to inform the task execution results."
+#~ " Callback protocol reference callback_protocol"
+#~ " component documentation"
+
+#~ msgid "全局变量id，唯一标识。如果id为空，那么使用name作为唯一标识"
+#~ msgstr ""
+#~ "global variable id.If id is empty, "
+#~ "then use name as the unique "
+#~ "identifier"
+
+#~ msgid "全局变量name"
+#~ msgstr "global variable"
+
+#~ msgid "字符串全局变量值，此字段仅在字符串类型变量有效。"
+#~ msgstr ""
+#~ "String Global variable value. This field"
+#~ " is valid only for string type "
+#~ "global variables."
+
+#~ msgid "配置平台上的自定义查询id列表。ip_list与custom_query_id之间任意选一或并存，ip数据会去重合并，此字段仅在IP类型变量有效。"
+#~ msgstr ""
+#~ "Dynamic grouping id on the configuration"
+#~ " platforms. Select one of ip_list and"
+#~ " custom_query_id, or coexist, ip data "
+#~ "will be merged. This field is "
+#~ "valid only for IP type global "
+#~ "variables."
+
+#~ msgid "IP对象数组。ip_list与custom_query_id之间任意选一或并存，ip数据会去重合并，此字段仅在IP类型变量有效。"
+#~ msgstr ""
+#~ "IP Object Array. See ip_list "
+#~ "Description. Select one of ip_list and"
+#~ " custom_query_id, or coexist, ip data "
+#~ "will be merged. This field is "
+#~ "valid only for IP type global "
+#~ "variables."
+
+#~ msgid "步骤ID"
+#~ msgstr "Step ID"
+
+#~ msgid "脚本ID，如果不更改脚本，则不传"
+#~ msgstr "Script ID"
+
+#~ msgid "脚本类型：1(shell脚本)、2(bat脚本)、3(perl脚本)、4(python脚本)、5(powershell脚本)，当script_content有内容时必填"
+#~ msgstr ""
+#~ "Script type: 1.shell 2.bat 3.perl "
+#~ "4.python 5.powershell. Required when "
+#~ "script_content has content"
+
+#~ msgid "脚本内容Base64，如果同时传了script_id和script_content，则script_id优先"
+#~ msgstr ""
+#~ "Script content with base64. If both "
+#~ "pass script_id and script_content priority "
+#~ "is script_id"
+
+#~ msgid "脚本参数Base64"
+#~ msgstr "Script params with base64"
+
+#~ msgid "脚本超时时间，秒。默认1000，取值范围60-86400"
+#~ msgstr "Timeout in seconds, 1000 default, the range 60-86400"
+
+#~ msgid "执行帐号名/别名"
+#~ msgstr "OS account name, or 'Account Alias' in [Account Management] Features"
+
+#~ msgid "SQL执行的db帐号ID，SQL步骤必填"
+#~ msgstr ""
+#~ "Database Account Id in [Account "
+#~ "Management->DB Account] Features. SQL step "
+#~ "is required for it"
+
+#~ msgid "文件传输目标路径"
+#~ msgstr "File transfer target path"
+
+#~ msgid "源文件对象数组，见下面file_source定义"
+#~ msgstr "Source file object Array"
+
+#~ msgid "配置平台上的自定义查询id列表。ip_list与custom_query_id之间任意选一或并存，ip数据会去重合并"
+#~ msgstr ""
+#~ "Dynamic grouping id on the configuration"
+#~ " platforms. Select one of ip_list and"
+#~ " custom_query_id, or coexist, ip data "
+#~ "will be merged"
+
+#~ msgid "IP对象数组。ip_list与custom_query_id之间任意选一或并存，ip数据会去重合并"
+#~ msgstr ""
+#~ "IP Object Array. See ip_list "
+#~ "Description. Select one of ip_list and"
+#~ " custom_query_id, or coexist, ip data "
+#~ "will be merged"
+
+#~ msgid "源文件的绝对路径数组，支持多个文件"
+#~ msgstr "Absolute path of the source file Array"
+
+#~ msgid "启动平台作业，用于从A业务服务器传文件到B业务的服务器（不同业务间的服务器文件传输）"
+#~ msgstr ""
+#~ "Execute platform jobs according to job"
+#~ " ID, Transfer file from Business A's"
+#~ " Server To Business B's Server etc."
+
+#~ msgid "自定义作业名称"
+#~ msgstr "custom task name"
+
+#~ msgid ""
+#~ "脚本参数Base64。注意：如果有多个参数，比如\"param1 param2\"这种，需要对\"param1 "
+#~ "param2\"整体进行base64编码，而不是对每个参数进行base64编码再拼接起来"
+#~ msgstr ""
+#~ "Script params with base64. Note: If "
+#~ "there are multiple parameters, such as"
+#~ " \"param1 param2\", you need to "
+#~ "base64 encode the whole \"param1 "
+#~ "param2\" instead of base64 encoding each"
+#~ " parameter."
+
+#~ msgid "敏感参数将会在执行详情页面上隐藏, 0:不是（默认），1:是"
+#~ msgstr "Hides the parameters on the web page. 0:no, 1:yes"
+
+#~ msgid "快速执行SQL脚本"
+#~ msgstr "Fast execute SQL"
+
+#~ msgid "SQL脚本ID"
+#~ msgstr "SQL Script ID"
+
+#~ msgid "SQL执行的db帐号ID，必填, 从帐号管理-DB帐号处获得。"
+#~ msgstr ""
+#~ "Database Account Id in [Account "
+#~ "Management->DB Account] Features. required"
+
+#~ msgid "IP对象数组，见下面ip_list结构定义"
+#~ msgstr "IP Object Array. See ip_list Description"
+
+#~ msgid "定时作业名称"
+#~ msgstr "Cron job name"
+
+#~ msgid "定时任务ID，如果存在则忽略其他筛选条件，只查询这个指定的作业信息"
+#~ msgstr ""
+#~ "Cron job ID; if it exists, ignore"
+#~ " other screening conditions, and only "
+#~ "get this specified job information"
+
+#~ msgid "定时作业状态：1.已启动、2.已暂停"
+#~ msgstr "Scheduled job status: 1.Started, 2.Paused"
+
+#~ msgid "定时作业创建人帐号"
+#~ msgstr "Cron job creator"
+
+#~ msgid "作业修改人帐号"
+#~ msgstr "Job last modifier"
+
+#~ msgid "默认0表示从第1条记录开始返回"
+#~ msgstr "The default 0, said from the first record to return"
+
+#~ msgid "返回记录数量，不传此参数默认返回全部"
+#~ msgstr "Return the number of records, Return all by default"
+
+#~ msgid "定时作业ID"
+#~ msgstr "Cron job ID"
+
+#~ msgid "定时任务crontab的定时规则，各自段含义为：秒 分 时 日 月 周 年（可选），如: 0 0/5 * * * ? 表示每5分钟执行一次"
+#~ msgstr ""
+#~ "Cron rules for the cron job "
+#~ "crontab, the meaning of each field: "
+#~ "second, minute, day, month, week, year"
+#~ " (optional), such as: 0 0/5 * ? "
+#~ "indicates execution once every 5 minutes"
+
+#~ msgid "作业创建人帐号"
+#~ msgstr "Job creator"
+
+#~ msgid "创建时间，YYYY-MM-DD HH:mm:ss格式"
+#~ msgstr "Creation time, in YYYY-MM-DD HH:mm:ss format"
+
+#~ msgid "最后修改时间，YYYY-MM-DD HH:mm:ss格式"
+#~ msgstr "Last modification time, in YYYY-MM-DD HH:mm:ss format"
+
+#~ msgid "根据作业模板ID查询作业模板详情"
+#~ msgstr "Get job template details"
+
+#~ msgid "作业标签ID，1.未分类、2.运营发布、3.故障处理、4.常用工具、5.产品自助、6.测试专用、7.持续集成"
+#~ msgstr ""
+#~ "Job tag id. 1.Unclassified, 2.Operation "
+#~ "Release, 3.Troubleshooting, 4.Common Tools, "
+#~ "5.Product Self, 6.For Test, 7.For CI"
+
+#~ msgid "步骤数量"
+#~ msgstr "Number of steps"
+
+#~ msgid "步骤对象"
+#~ msgstr "Job step base info Array"
+
+#~ msgid "全局变量信息"
+#~ msgstr "Global variable information"
+
+#~ msgid "作业步骤ID"
+#~ msgstr "Job step ID"
+
+#~ msgid "作业步骤名称"
+#~ msgstr "step Name"
+
+#~ msgid "步骤类型：1.脚本步骤; 2.文件步骤; 4.SQL步骤"
+#~ msgstr "Step types: 1. Script steps; 2. File steps; 4. SQL steps"
+
+#~ msgid "步骤块在作业中的顺序"
+#~ msgstr "block order"
+
+#~ msgid "步骤块名称"
+#~ msgstr "Job step block name"
+
+#~ msgid "作业步骤创建人帐号"
+#~ msgstr "Job step creator"
+
+#~ msgid "作业步骤修改人帐号"
+#~ msgstr "Job step last modifier"
+
+#~ msgid "最后修改时间，YYYY-MM-DD HH:mm:ss"
+#~ msgstr "Job modify time, in YYYY-MM-DD HH:mm:ss format"
+
+#~ msgid "0.执行完成后不暂停(默认); 1.执行完成后暂停"
+#~ msgstr "0. Executed without pause (default); 1. Paused"
+
+#~ msgid "脚本ID。当type=1或4时才有这个字段。"
+#~ msgstr "Script ID. This field is only available when type=1 or 4."
+
+#~ msgid "脚本参数。当type=1或4时并且有值时才有这个字段。"
+#~ msgstr "Script param. This field is only available when type=1 or 4."
+
+#~ msgid "脚本内容。当type=1或4时才有这个字段。"
+#~ msgstr "Script content. This field is only available when type=1 or 4."
+
+#~ msgid "敏感参数将会在执行详情页面上隐藏, 0.不是（默认），1.是。当type=1时才有这个字段。"
+#~ msgstr ""
+#~ "Hides the parameters on the web "
+#~ "page. 0.no; 1.yes;  This field is "
+#~ "only available when type=1."
+
+#~ msgid "当前步骤在作业中的顺序号"
+#~ msgstr "The order of the current step in the step block"
+
+#~ msgid "当type=1或4时并且有值时才有这个字段。脚本类型：1(shell脚本)、2(bat脚本)、3(perl脚本)、4(python脚本)、5(Powershell脚本)"
+#~ msgstr ""
+#~ "This field is only available when "
+#~ "type=1 or 4 and has a value. "
+#~ "script type: 1.shell; 2.bat; 3.perl; "
+#~ "4.python; 5.powershell"
+
+#~ msgid "文件传输目标路径，当type=2时并且有值时才有这个字段"
+#~ msgstr ""
+#~ "File transfer target path. This field"
+#~ " is only available when type = "
+#~ "2 and has a value"
+
+#~ msgid "源文件对象数组，当type=2时并且有值时才有这个字段，见下面file_source定义"
+#~ msgstr ""
+#~ "Source file object Array. This field "
+#~ "is only available when type = 2"
+#~ " and has a value"
+
+#~ msgid "配置平台上的自定义查询id列表，有值时才有这个字段"
+#~ msgstr ""
+#~ "Dynamic grouping id on the configuration"
+#~ " platforms. Only when there is value"
+#~ " in this field"
+
+#~ msgid "全局变量ID，唯一标识"
+#~ msgstr "Global var ID"
+
+#~ msgid "全局变量数据类型：1:字符，2:IP，3:索引数组，4:关联数组"
+#~ msgstr ""
+#~ "Global variable data type: 1:String, "
+#~ "2:IP, 3:Index Array, 4: Associative "
+#~ "Array"
+
+#~ msgid "全局变量类型：1:云参，2:上下文参数，3:IP"
+#~ msgstr "Global variable category: 1:Cloud Param, 2:Context Param, 3:IP"
+
+#~ msgid "全局变量的名称"
+#~ msgstr "Global variable name"
+
+#~ msgid "字符串类型的全局变量值，当type=1时有这个字段"
+#~ msgstr "String Global Variable's value. Only available when type = 1"
+
+#~ msgid "变量描述"
+#~ msgstr "Global Variable's description."
+
+#~ msgid "配置平台上的自定义查询ID列表，当type=2时并且有值时才有这个字段"
+#~ msgstr ""
+#~ "Dynamic grouping id on the configuration"
+#~ " platforms. This field is only "
+#~ "available when type = 2 and has"
+#~ " a value"
+
+#~ msgid "IP对象数组，当type=2时并且有值时才有这个字段，见下面ip_list结构定义"
+#~ msgstr ""
+#~ "IP Object Array. See ip_list "
+#~ "Description. This field is only "
+#~ "available when type = 2 and has"
+#~ " a value"
+
+#~ msgid "引用了这个IP全局变量的步骤ID列表，当type=2时并且有值时才有这个字段"
+#~ msgstr ""
+#~ "The list of step's id that "
+#~ "reference this IP global variable.  This"
+#~ " field is only available when type"
+#~ " = 2 and has a value"
+
+#~ msgid "IP对象数组，当有值时才有这个字段，见下面ip_list结构定义"
+#~ msgstr ""
+#~ "IP Object Array. This field is "
+#~ "only available when has a value. "
+#~ "See ip_list Description"
+
+#~ msgid "配置平台上的自定义查询ID列表，当有值时才有这个字段"
+#~ msgstr ""
+#~ "Dynamic grouping id on the configuration"
+#~ " platforms. This field is only "
+#~ "available when has a value"
+
+#~ msgid "获取作业实例全局变量的值"
+#~ msgstr "Get job instance global variable value"
+
+#~ msgid "步骤实例ID"
+#~ msgstr "step instance id"
+
+#~ msgid "变量名称"
+#~ msgstr "global variable name"
+
+#~ msgid "变量值"
+#~ msgstr "global variable value"
+
+#~ msgid "变量分类,1:云参,2:上下文参数,3:全局IP"
+#~ msgstr "variable category,1:cloud-variable,2:context-variable,3:ip-variable"
+
+#~ msgid "变量数据类型,1:字符,2:IP,3:索引数组,4:关联数组"
+#~ msgstr "variable data type,1:string,2:ip,3:index array,4:associative array"
+
+#~ msgid "作业是否结束"
+#~ msgstr "Whether the job is over"
+
+#~ msgid "作业实例名称"
+#~ msgstr "Job instance Name"
+
+#~ msgid "当前步骤下所有ip的日志，按tag分类或ip的执行状态(ip_status)归类存放"
+#~ msgstr "All ip execution logs in the current step"
+
+#~ msgid "脚本用 job_success/job_fail 函数返回的标签内容"
+#~ msgstr "Script returns with job_success / job_fail function label content"
+
+#~ msgid "ip 日志内容"
+#~ msgstr "ip log content"
+
+#~ msgid "开始执行时间，YYYY-MM-DD HH:mm:ss"
+#~ msgstr "Job start time, in YYYY-MM-DD HH:mm:ss format"
+
+#~ msgid "执行结束时间，YYYY-MM-DD HH:mm:ss格式"
+#~ msgstr "Job finish time, in YYYY-MM-DD HH:mm:ss format"
+
+#~ msgid "总耗时，秒"
+#~ msgstr "Job execute total time (seconds)"
+
+#~ msgid "步骤重试次数"
+#~ msgstr "Step retries"
+
+#~ msgid "作业执行中出错码"
+#~ msgstr "Job execution error code"
+
+#~ msgid "shell脚本退出码; 0正常; 非0异常"
+#~ msgstr "Shell script exit code. 0 Normal, non-0 abnormal"
+
+#~ msgid "作业脚本输出的日志内容"
+#~ msgstr "The job script output log content"
+
+#~ msgid "查询作业执行状态"
+#~ msgstr "Get job instance status"
+
+#~ msgid "作业实例基本信息"
+#~ msgstr "Job instance base info"
+
+#~ msgid "作业步骤块数组"
+#~ msgstr "Job step instance block info Array"
+
+#~ msgid "作业执行人帐号"
+#~ msgstr "Job operator"
+
+#~ msgid "开始执行时间，YYYY-MM-DD HH:mm:ss格式"
+#~ msgstr "Job start time, in YYYY-MM-DD HH:mm:ss format"
+
+#~ msgid "作业启动方式: 1.页面启动; 2.API调用; 3.定时任务"
+#~ msgstr "Job start way: 1.Web;2.API;3.Timed"
+
+#~ msgid "作业模板ID，如果不是从作业模板启动的则为-1"
+#~ msgstr "Job ID. -1 if not started by (execute_job/execute_platform_job)"
+
+#~ msgid "当前执行的步骤实例ID"
+#~ msgstr "The currently executing step instance ID"
+
+#~ msgid "步骤块类型：1.脚本步骤; 2.文件步骤; 4.SQL步骤"
+#~ msgstr "Step block types: 1. Script steps; 2. File steps; 4. SQL steps"
+
+#~ msgid "步骤块顺序"
+#~ msgstr "block order"
+
+#~ msgid "步骤块中包含的各个步骤对象"
+#~ msgstr "Job step instance base info Array"
+
+#~ msgid "作业模板步骤ID，如果不是从作业模板启动的则为-1"
+#~ msgstr "Job step ID. -1 if not started from job template"
+
+#~ msgid "当前步骤在步骤块中的顺序"
+#~ msgstr "The order of the current step in the step block"
+
+#~ msgid "当前步骤可操作的指令"
+#~ msgstr "Current step operation instruction Array"
+
+#~ msgid "每个服务器的作业执行状态"
+#~ msgstr "Job execution status for server"
+
+#~ msgid "操作命令编码，命令标识"
+#~ msgstr "operation code"
+
+#~ msgid "操作命令名称, 比如'强制终止'"
+#~ msgstr "opeartion name"
+
+#~ msgid ""
+#~ "作业执行状态:1.Agent异常; 5.等待执行; 7.正在执行; 9.执行成功; "
+#~ "11.执行失败; 12.任务下发失败; 403.任务强制终止成功; 404.任务强制终止失败"
+#~ msgstr ""
+#~ "Job execution status: 1. Agent "
+#~ "exception; 5. Waiting for execution; 7."
+#~ " Executing; 9. Execution succeeded; 11. "
+#~ "Execution failed; 12. Task failed to "
+#~ "deliver; 403. Task forced termination "
+#~ "succeeded; 404. Task forced termination "
+#~ "failed"
+
+#~ msgid "作业名称，模糊匹配"
+#~ msgstr "Job name with fuzzy matching"
+
+#~ msgid "作业模板中的步骤数量"
+#~ msgstr "Job Step Num"
+
+#~ msgid "查询业务下的执行账号"
+#~ msgstr "Get os account"
+
+#~ msgid "账号ID"
+#~ msgstr "account id"
+
+#~ msgid "账号名称"
+#~ msgstr "account name"
+
+#~ msgid "账号创建人"
+#~ msgstr "account creator"
+
+#~ msgid "账号对应的OS"
+#~ msgstr "OS for the account"
+
+#~ msgid "账号别名"
+#~ msgstr "account alias"
+
+#~ msgid "账号创建时间"
+#~ msgstr "account create time"
+
+#~ msgid "查询用户有权限的DB帐号列表"
+#~ msgstr "Get own db account list"
+
+#~ msgid "db帐号ID,主键，执行脚本或作业的接口请求传递参数时用此参数"
+#~ msgstr "DB Account ID"
+
+#~ msgid "帐号别名"
+#~ msgstr "db account alias"
+
+#~ msgid "进程操作结果查询"
+#~ msgstr "Get proc result"
+
+#~ msgid "操作服务器上的进程结果查询"
+#~ msgstr "Query the result of the process on the server"
+
+#~ msgid "预留字段。GSE任务状态码"
+#~ msgstr "Reserved field. GSE Task status code"
+
+#~ msgid "真正的数据，依赖于GSE数据结构"
+#~ msgstr "result data"
+
+#~ msgid "查询脚本详情"
+#~ msgstr "Get Script Detail"
+
+#~ msgid "业务ID，如果查询公共脚本可不传"
+#~ msgstr "Business ID, not necessary when getting public script"
+
+#~ msgid "脚本名称"
+#~ msgstr "script name"
+
+#~ msgid "脚本版本号"
+#~ msgstr "script version"
+
+#~ msgid "脚本版本备注"
+#~ msgstr "script version remarks"
+
+#~ msgid "脚本类型"
+#~ msgstr "script type"
+
+#~ msgid "脚本创建人"
+#~ msgstr "creator"
+
+#~ msgid "是否公共脚本"
+#~ msgstr "is public script"
+
+#~ msgid "脚本创建时间"
+#~ msgstr "script create time"
+
+#~ msgid "脚本最近一次修改人"
+#~ msgstr "script last modify user"
+
+#~ msgid "脚本最近一次修改时间"
+#~ msgstr "script last modify time"
+
+#~ msgid "脚本内容"
+#~ msgstr "script content"
+
+#~ msgid "查询脚本列表"
+#~ msgstr "Get Script List"
+
+#~ msgid "是否公共脚本。true:公共脚本；false:业务脚本。默认值为false"
+#~ msgstr ""
+#~ "is_public_script.true:public script;false:application "
+#~ "script.default:false"
+
+#~ msgid "是否需要返回脚本内容。true:返回脚本内容；false：不返回脚本内容。默认为false。"
+#~ msgstr ""
+#~ "true:return script content;false:do not return"
+#~ " script content.default:false"
+
+#~ msgid "分页查询-每页纪录数，默认为20。如果传入0或者不传，表示不分页"
+#~ msgstr ""
+#~ "Paging query-page size.default:20.if the "
+#~ "value equals 0,will return all script"
+#~ " list"
+
+#~ msgid "脚本类型。0：所有脚本类型，1：shell，2：bat，3：perl，4：python，5：powershell，6：sql。默认值为0"
+#~ msgstr "Script type.0:all type,1:shell,2:bat,3:perl,4:python,5:powershell,6:sql"
+
+#~ msgid "脚本名称，支持模糊查询"
+#~ msgstr "script name"
+
+#~ msgid "对服务器上的进程进行注册托管/取消托管"
+#~ msgstr "Manage the process on the server"
+
+#~ msgid "操作类型，可选值：1:注册托管进程; 2:取消托管进程"
+#~ msgstr ""
+#~ "Process operation type. 1: Registration "
+#~ "managed process; 2: Unmanaged process"
+
+#~ msgid "进程操作参数数组，见下面process_infos结构定义"
+#~ msgstr "Process operation parameters array. See process_infos Description"
+
+#~ msgid "进程名称, 例如bk_gse"
+#~ msgstr "Process Name."
+
+#~ msgid "进程属主（联系人）"
+#~ msgstr "Process owner."
+
+#~ msgid "进程路径, 例如/usr/local/gse/sbin"
+#~ msgstr "Process installation path"
+
+#~ msgid "进程的pid文件所在路径"
+#~ msgstr "The path process pid file."
+
+#~ msgid "进程配置文件路径"
+#~ msgstr "The path process config file."
+
+#~ msgid "进程日志文件路径"
+#~ msgstr "The path process log file."
+
+#~ msgid "进程启动命令"
+#~ msgstr "Process startup command."
+
+#~ msgid "进程停止命令"
+#~ msgstr "Process stop command."
+
+#~ msgid "进程重启命令"
+#~ msgstr "Process restart command."
+
+#~ msgid "进程reload命令"
+#~ msgstr "Process reload command."
+
+#~ msgid "进程kill命令"
+#~ msgstr "Process kill command."
+
+#~ msgid "CC定义的进程功能ID"
+#~ msgstr "CC defined process function ID."
+
+#~ msgid "CC定义的进程实例ID"
+#~ msgstr "CC defined process instance ID."
+
+#~ msgid "Agent管理进程索引key。当索引key为空的话。索引key采用setup_path+proc_name。注：如果有两个托管进程setup_path+proc_name相同，请指定value_key"
+#~ msgstr ""
+#~ "Agent management process index key. When"
+#~ " the index key is empty. The "
+#~ "index key uses 'setup_path+proc_name'. Note:"
+#~ " If there are two managed processes"
+#~ " 'setup_path+proc_name' the same, specify "
+#~ "the value_key."
+
+#~ msgid "进程托管类型，0:周期执行进程，1:常驻进程，2:单次执行进程。默认0"
+#~ msgstr ""
+#~ "Process hosting type, 0: periodic "
+#~ "execution process, 1: resident process, "
+#~ "2: single execution process. The default"
+#~ " is 0."
+
+#~ msgid "进程使用cpu限制，取值范围[0, 100]，10表示10%，超过限制agent会根据配置的stop_cmd停止进程。"
+#~ msgstr "Cpu limit, range [0, 100]."
+
+#~ msgid "进程使用mem限制，取值范围[0, 100]，10表示10%，超过限制agent会根据配置的stop_cmd停止进程。"
+#~ msgstr "Memory limit, range [0, 100]."
+
+#~ msgid "进程循环执行周期，type为0时cycle_time需要指定。"
+#~ msgstr ""
+#~ "Process cycle execution cycle. When type"
+#~ " is 0, cycle_time needs to be "
+#~ "specified."
+
+#~ msgid "进程实例个数。"
+#~ msgstr "The number of process instances."
+
+#~ msgid "进程操作超时时间。"
+#~ msgstr "Process operation timeout."
+
+#~ msgid "操作服务器上的进程"
+#~ msgstr "Operate the process on the server"
+
+#~ msgid ""
+#~ "操作类型，可选值：0:启动进程(start); 1:停止进程(stop); 2:进程状态查询; "
+#~ "3:注册托管进程; 4:取消托管进程; 7:重启进程(restart); "
+#~ "8:重新加载进(reload); 9:杀死进程(kill)"
+#~ msgstr ""
+#~ "Process operation type 0: Start process"
+#~ " 1: Stop process 2: Process status"
+#~ " query 3: Registration managed process "
+#~ "4: Unmanaged process 7: Restart process"
+#~ " 8: Reload process (Reload); 9: kill"
+#~ " process (kill)"
+
+#~ msgid ""
+#~ "进程的pid文件所在路径, "
+#~ "例如/usr/local/gse/gseagent/plugins/unifyTlogc/log/bk_gse_unifyTlogc.pid"
+#~ msgstr "The path process pid file"
+
+#~ msgid "系统帐号，默认不传为root"
+#~ msgstr "OS account name, default is root"
+
+#~ msgid "操作服务器上的进程-v2版本"
+#~ msgstr "Operate the process on the server-v2"
+
+#~ msgid "分发配置文件"
+#~ msgstr "Push config file"
+
+#~ msgid "分发配置文件，此接口用于分发配置文件等小的纯文本文件"
+#~ msgstr ""
+#~ "Distribute a configuration file that is"
+#~ " used to distribute small, plain text"
+#~ " files, such as configuration files"
+
+#~ msgid "源文件对象数组，见下面file_list定义"
+#~ msgstr "Source file object Array"
+
+#~ msgid "文件名称"
+#~ msgstr "The file name"
+
+#~ msgid "文件内容Base64"
+#~ msgstr "file content with base64."
+
+#~ msgid "定时作业名称，新建时必填，修改时选填"
+#~ msgstr "Cron job name. When creating a new mandatory, optional modifying"
+
+#~ msgid ""
+#~ "定时任务crontab的定时规则，新建时必填，修改时选填，各字段含义为：秒 分 时 日 月"
+#~ " 周 年（可选），如: 0 0/5 * * * ?"
+#~ " 表示每5分钟执行一次"
+#~ msgstr ""
+#~ "Cron rules for the cron job "
+#~ "crontab, the meaning of each field: "
+#~ "second, minute, day, month, week, year"
+#~ " (optional), such as: 0 0/5 * ? "
+#~ "indicates execution once every 5 "
+#~ "minutes. When creating a new mandatory,"
+#~ " optional modifying"
+
+#~ msgid "定时状态，1.启动、2.暂停"
+#~ msgstr "Timing status, 1. startup, 2. pause"
+
+#~ msgid "新建业务"
+#~ msgstr "New business"
+
+#~ msgid "业务名"
+#~ msgstr "Business Name"
+
+#~ msgid "运维人员, 多个人之间用逗号分隔"
+#~ msgstr "OPS, separated by commas"
+
+#~ msgid "产品人员，多个人之间用逗号分隔"
+#~ msgstr "PM, separated by commas"
+
+#~ msgid "开发人员，多个人之间用逗号分隔"
+#~ msgstr "Developer, separated by commas"
+
+#~ msgid "测试人员，多个人之间用逗号分隔"
+#~ msgstr "Test Staff, separated by commas"
+
+#~ msgid "操作者，多个人之间用逗号分隔"
+#~ msgstr "Operator, separated by commas"
+
+#~ msgid "公司名,cmdb配置文件中定义的constants.php中的 COMPANY_NAME"
+#~ msgstr ""
+#~ "Company name, COMPANY_NAME defined in "
+#~ "cmdb configuration file constants.php"
+
+#~ msgid "业务拓扑级别，2或者3"
+#~ msgstr "Business topology level, 2 or 3"
+
+#~ msgid "生成周期，1: 测试中, 2: 已上线, 3: 停运其中的一个值"
+#~ msgstr ""
+#~ "Life cycle, 1: In test, 2: On-"
+#~ "line, 3: Stop running; Choose one "
+#~ "of these values"
+
+#~ msgid "新建模块"
+#~ msgstr "New module"
+
+#~ msgid "集群ID"
+#~ msgstr "Set ID"
+
+#~ msgid "模块名，多个用英文逗号分隔"
+#~ msgstr "Module name, separated by commas"
+
+#~ msgid "操作人"
+#~ msgstr "Operator"
+
+#~ msgid "备份操作人"
+#~ msgstr "Backup operator"
+
+#~ msgid "模块类型，1: 普通, 2: 数据库"
+#~ msgstr "Module type, 1: Common, 2: Database"
+
+#~ msgid "模块属性，自定义属性用customerxx来修改"
+#~ msgstr "Module property, custom property can be modified using customerxx"
+
+#~ msgid "新增子网ID"
+#~ msgstr "New subnet ID"
+
+#~ msgid "子网名称"
+#~ msgstr "Subnet name"
+
+#~ msgid "新建集群"
+#~ msgstr "New Set"
+
+#~ msgid "集群名称，多个以半角逗号分隔"
+#~ msgstr "Set name, separated by commas"
+
+#~ msgid "中文名称"
+#~ msgstr "Chinese Name"
+
+#~ msgid "分组标识"
+#~ msgstr "Group flag"
+
+#~ msgid "环境类型，包含1：测试 2：体验 3：正式，默认为3"
+#~ msgstr ""
+#~ "Environment types, including 1: Test 2:"
+#~ " Experience 3: Production, the default "
+#~ "is 3"
+
+#~ msgid "服务状态，包含0：关闭，1：开启，默认为1"
+#~ msgstr "Service status, including 0: off, 1: on, the default is 1"
+
+#~ msgid "设计容量"
+#~ msgstr "Capacity"
+
+#~ msgid "克隆主机属性"
+#~ msgstr "Clone host properties"
+
+#~ msgid "主机（内网IP）"
+#~ msgstr "Source host (intranet IP)"
+
+#~ msgid "目标主机（内网IP）"
+#~ msgstr "Target host (intranet IP)"
+
+#~ msgid "删除业务"
+#~ msgstr "Delete business "
+
+#~ msgid "从业务空闲机集群中删除主机"
+#~ msgstr "Delete host from the business idle machine set"
+
+#~ msgid "从业务空闲机集群中删除主机，如果主机在当前业务下不存在，也提示不在空闲机集群的错误信息"
+#~ msgstr ""
+#~ "Delete host from the business idle "
+#~ "machine set; If the host does not"
+#~ " exist in the current business, it"
+#~ " also prompts an error message that"
+#~ " it is not in the idle machine"
+#~ " set"
+
+#~ msgid "主机ID"
+#~ msgstr "Host ID"
+
+#~ msgid "删除模块"
+#~ msgstr "Delete module"
+
+#~ msgid "模块ID, 多个ID用英文逗号分隔"
+#~ msgstr "Module ID, separated by commas"
+
+#~ msgid "删除子网"
+#~ msgstr "Delete subnet"
+
+#~ msgid "删除集群"
+#~ msgstr "Delete set"
+
+#~ msgid "清空集群下所有主机"
+#~ msgstr "Empty all hosts in the set"
+
+#~ msgid "编辑业务"
+#~ msgstr "Edit business"
+
+#~ msgid "导入主机到业务"
+#~ msgstr "Import the host to business"
+
+#~ msgid "将主机导入到业务下面。如果业务不存在，将导入到资源池中，如果主机已经存在，将会删除原有主机与模块的关系"
+#~ msgstr ""
+#~ "Import the host to the business. "
+#~ "If the business does not exist, "
+#~ "the host will be imported into the"
+#~ " resource pool, and if the host "
+#~ "already exists, the relation between "
+#~ "original host and module will be "
+#~ "deleted"
+
+#~ msgid "IP地址，多个用英文逗号分隔"
+#~ msgstr "IP address, separated by commas"
+
+#~ msgid "主机名, 多个用英文逗号分隔"
+#~ msgstr "Host name, separated by commas"
+
+#~ msgid "集群名"
+#~ msgstr "Set name"
+
+#~ msgid "模块名"
+#~ msgstr "Module name"
+
+#~ msgid "操作系统类型，linux或windows"
+#~ msgstr "OS type, linux or windows"
+
+#~ msgid "查询业务下Agent状态"
+#~ msgstr "Get business Agent status"
+
+#~ msgid "失败"
+#~ msgstr "Failure"
+
+#~ msgid "没权利访问业务"
+#~ msgstr "No right to access the business"
+
+#~ msgid "查询业务信息"
+#~ msgstr "Get business infomation"
+
+#~ msgid "查询用户有权限的业务"
+#~ msgstr "Get bussinesses that user has permissions to access"
+
+#~ msgid "是否不显示已经停止运行的业务，默认为False"
+#~ msgstr ""
+#~ "Whether not to display the business "
+#~ "that has stopped running, the default"
+#~ " is False"
+
+#~ msgid "为1表示系统默认创建业务"
+#~ msgstr "1 indicates the business created by default by the system"
+
+#~ msgid "错误详情，api_spec为配置平台接口的错误信息"
+#~ msgstr ""
+#~ "Error details, api_spec is an error "
+#~ "message returned by the configuration "
+#~ "system interface"
+
+#~ msgid "根据用户角色查询用户业务"
+#~ msgstr "Get user business by user role"
+
+#~ msgid "用户角色，多个以逗号分隔，可选值为：Maintainers,ProductPm,Cooperation等"
+#~ msgstr ""
+#~ "User role, separated by commas, optional"
+#~ " values: Maintainers, ProductPm, Cooperation "
+#~ "etc."
+
+#~ msgid "查询业务主机列表"
+#~ msgstr "Get business host list"
+
+#~ msgid "查询业务列表"
+#~ msgstr "Get business list"
+
+#~ msgid "查询公共业务的业务ID"
+#~ msgstr "Get business ID of common business"
+
+#~ msgid "根据开发商ID、子网ID、主机IP获取主机信息"
+#~ msgstr "Get host info according to company ID, subnet ID and host IP"
+
+#~ msgid "开发商ID"
+#~ msgstr "Company ID"
+
+#~ msgid "主机ip"
+#~ msgstr "Host IP"
+
+#~ msgid "获取主机开发商"
+#~ msgstr "Get host company"
+
+#~ msgid "主机内网IP，多个以逗号分隔"
+#~ msgstr "Host intranet IP, separated by commas"
+
+#~ msgid "根据主机属性的值group主机列表"
+#~ msgstr "Group host list according to host property value"
+
+#~ msgid "主机属性字段"
+#~ msgstr "Host property field"
+
+#~ msgid "根据IP查询主机信息"
+#~ msgstr "Get host info according to IP"
+
+#~ msgid "主机IP(内网IP或外网IP)"
+#~ msgstr "Host IP (Intranet IP or extranet IP)"
+
+#~ msgid "根据 set 属性查询主机"
+#~ msgstr "Get host according to set properties"
+
+#~ msgid "大区ID，多个以逗号分隔"
+#~ msgstr "Set ID, separated by commas"
+
+#~ msgid "Set 环境类型，多个以逗号分隔"
+#~ msgstr "Set environment type, separated by commas"
+
+#~ msgid "Set 开放状态，多个以逗号分隔"
+#~ msgstr "Set service status, separated by commas"
+
+#~ msgid "模块名称，多个以逗号分隔"
+#~ msgstr "Module name, separated by commas "
+
+#~ msgid "查询业务下IP及ProxyIP"
+#~ msgstr "Get business IP and Proxy IP"
+
+#~ msgid "内网IP列表，多个以逗号分隔"
+#~ msgstr "Intranet IP list, separated by commas"
+
+#~ msgid "查询模块主机列表"
+#~ msgstr "Get module host list"
+
+#~ msgid "模块ID"
+#~ msgstr "Module ID"
+
+#~ msgid "查询业务下的所有模块"
+#~ msgstr "Get all modules under the business"
+
+#~ msgid "根据 set 属性查询模块"
+#~ msgstr "Get module according to set properties"
+
+#~ msgid "查询子网列表"
+#~ msgstr "Get subnet list"
+
+#~ msgid "获取刷新进程实例状态"
+#~ msgstr "Get proc config instance status"
+
+#~ msgid "任务ID"
+#~ msgstr "Task ID"
+
+#~ msgid "包含True和False，其中True表示成功，False表示失败"
+#~ msgstr "Includes True and False, which True means success, False means failure"
+
+#~ msgid "返回错误码，其中\"00\"表示成功，其它表示失败"
+#~ msgstr "Returned error code, which \"00\" means success, other means failure"
+
+#~ msgid "返回数据，成功返回请求数据，可根据其中的 status，判断任务当前状态，0为正在更新中，1为成功，其他为失败"
+#~ msgstr ""
+#~ "Data, according to the status to "
+#~ "determine the current status of the "
+#~ "task, 0 means updating, 1 means "
+#~ "success, other means failure"
+
+#~ msgid "返回错误消息"
+#~ msgstr "Error message"
+
+#~ msgid "查询进程端口"
+#~ msgstr "Get process port"
+
+#~ msgid "查询属性列表"
+#~ msgstr "Get property list"
+
+#~ msgid "属性类型，包含1:业务，2:集群，3:模块，4:主机"
+#~ msgstr "Property type, optional values: 1: business, 2: set, 3: module, 4: host"
+
+#~ msgid "查询Set主机列表"
+#~ msgstr "Get Set host list"
+
+#~ msgid "获取所有 set 属性"
+#~ msgstr "Get all set properties"
+
+#~ msgid "根据 set 属性获取 set"
+#~ msgstr "Get set according to set properties "
+
+#~ msgid "Set 环境类型"
+#~ msgstr "Set environment type"
+
+#~ msgid "Set 开放状态"
+#~ msgstr "Set service status"
+
+#~ msgid "查询业务拓扑树"
+#~ msgstr "Get business topological tree"
+
+#~ msgid "修改主机自定义属性"
+#~ msgstr "Modify host custom properties"
+
+#~ msgid "自定义属性"
+#~ msgstr "Custom properties"
+
+#~ msgid "更新主机gse agent proxy 状态"
+#~ msgstr "Update host gse agent proxy status"
+
+#~ msgid "主机子网ID"
+#~ msgstr "Host subnet ID"
+
+#~ msgid "主机内网IP"
+#~ msgstr "Host intranet IP"
+
+#~ msgid "状态，包含1: 设置gse proxy, 0: 删除gse proxy"
+#~ msgstr "Status, optional values: 1: set gse proxy, 0: delete gse proxy"
+
+#~ msgid "更新主机的gse agent状态"
+#~ msgstr "Update host gse agent status"
+
+#~ msgid "Proxy信息，Proxy中每项包含内容见下面参数描述"
+#~ msgstr ""
+#~ "Proxy info, see parameters described "
+#~ "below for contents of each item in"
+#~ " Proxy"
+
+#~ msgid "内网IP"
+#~ msgstr "Intranet IP"
+
+#~ msgid "外网IP"
+#~ msgstr "Extranet IP"
+
+#~ msgid "更新主机属性"
+#~ msgstr "Update host property"
+
+#~ msgid ""
+#~ "标准属性数据, 数组格式；允许修改的标准属性：HostName, BakOperator, "
+#~ "Operator, Description, Source, OSName, "
+#~ "DeviceClass, Mem, Cpu, osType"
+#~ msgstr ""
+#~ "Standard property data, array format; "
+#~ "Standard properties that allow modification:"
+#~ " HostName, BakOperator, Operator, Description,"
+#~ " Source, OSName, DeviceClass, Mem, Cpu, "
+#~ "osType"
+
+#~ msgid "修改主机模块"
+#~ msgstr "Modify host module"
+
+#~ msgid "目标模块ID，多个以逗号分隔"
+#~ msgstr "Target module ID, separated by commas"
+
+#~ msgid "更新主机云子网"
+#~ msgstr "Update host cloud subnet"
+
+#~ msgid "主机现子网ID"
+#~ msgstr "Host current subnet ID"
+
+#~ msgid "变更后的子网ID"
+#~ msgstr "Subnet ID after change"
+
+#~ msgid "修改模块属性"
+#~ msgstr "Modify module property"
+
+#~ msgid "模块ID，多个以半角逗号分隔"
+#~ msgstr "Module ID, separated by commas"
+
+#~ msgid "模块名称，模块ID多个时无效"
+#~ msgstr "Module name, it is invalid when there are multiple module IDs"
+
+#~ msgid "维护人"
+#~ msgstr "Operator"
+
+#~ msgid "备份维护人"
+#~ msgstr "Backup Operator"
+
+#~ msgid "类型，包含1：普通模块 2：数据库"
+#~ msgstr "Module type, optional values: 1: common module 2: database"
+
+#~ msgid "刷新进程配置实例"
+#~ msgstr "Update proc config instance"
+
+#~ msgid "环境类型；可选值：1：测试环境，2：体验环境，3：正式环境"
+#~ msgstr "Environment types, including 1: Test 2: Experience 3: Production"
+
+#~ msgid ""
+#~ "返回数据，成功返回请求数据，可根据其中的 task_id，利用接口 "
+#~ "get_proc_config_instance_status 查询任务结果"
+#~ msgstr ""
+#~ "Data, according to the task_id, using"
+#~ " the interface get_proc_config_instance_status, "
+#~ "can query the task result"
+
+#~ msgid "更新集群属性"
+#~ msgstr "Update set property"
+
+#~ msgid "集群名称"
+#~ msgstr "Set name"
+
+#~ msgid "修改集群服务状态"
+#~ msgstr "Modify set service status"
+
+#~ msgid "服务状态，包含0：关闭 1：开启"
+#~ msgstr "Service status, optional values: 0: off, 1: on"
+
+#~ msgid "蓝鲸监控"
+#~ msgstr "Monitor"
+
+#~ msgid "蓝鲸监控V3"
+#~ msgstr "Monitor V3"
+
+#~ msgid "服务流程管理"
+#~ msgstr "ITSM"
+
+#~ msgid "日志检索"
+#~ msgstr "Log Search"

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+      //在js中使用site_url,则这个javascript片段一定要保留
+      var site_url = "${SITE_URL}";            // app的url前缀,在ajax调用的时候，应该加上该前缀
+      var static_url = "${STATIC_URL}";
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>工作台|蓝鲸智云社区版</title>
+	<meta name="keywords" content="开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台" />
+	<meta name="description" content="蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<link href="${STATIC_URL}favicon.ico" rel="Shortcut Icon">
+    <!-- 以下两个插件用于在IE8以及以下版本浏览器支持HTML5元素和媒体查询，如果不需要用可以移除 -->
+    <!--[if lt IE 9]>
+    <script src="${STATIC_URL}assets/html5shiv-3.7.2.min.js"></script>
+    <script src="${STATIC_URL}assets/respond-1.4.2.min.js"></script>
+    <![endif]-->
+	<link rel="stylesheet" type="text/css" href="${STATIC_URL}assets/bk-icon-2.0/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="${STATIC_URL}assets/paas-icons/style.css">
+    <!-- bkdialog -->
+    <link rel="stylesheet" href="${STATIC_URL}home/css/index.${CSS_SUFFIX}?v=${STATIC_VERSION}"/>
+	<link rel="stylesheet" href="${STATIC_URL}user_center/css/weixin.${CSS_SUFFIX}?v=${STATIC_VERSION}"/>
+	<script src="${STATIC_URL}assets/paas-icons/iconcool.js"></script>
+</head>
+<body>
+	<nav class="navbar">
+		<a href="${SITE_URL}" class="logo">
+			<img src="${STATIC_URL}home/images/logo.png" style="border: 0;">
+		</a>
+		<ul class="nav-list">
+			<li class="active">
+				<a href="${SITE_URL}">
+					<p>应用列表</p>
+				</a>
+			</li>
+			<li>
+				<a href="${SITE_URL}app/list/" target="_blank">
+					<p>开发者中心</p>
+				</a>
+			</li>
+		</ul>
+		<div class="userInfo">
+			<div class="userImg">
+				% if request.user.is_superuser:
+					<img class="avatar" src="${STATIC_URL}img/getadminheadimg.jpg"/>
+				% else:
+					<img class="avatar" src="${STATIC_URL}img/getheadimg.jpg"/>
+				% endif
+			</div>
+			<span class="userName">${request.user.username}</span>
+			<span class="caret"></span>
+			<div class="dropdown">
+				<span class="caret-up"></span>
+				<ul class="dropdown-menu">
+					<li>
+						<a href="${SITE_URL}accounts/profile/" target="_blank">
+							<!-- <i class="icon icon-userinfo"></i> -->
+							<i class="list-icon paasee-icon icon-info-fill--2"></i>
+							<span>个人信息</span>
+						</a>
+					</li>
+					<!-- % if request.user.is_superuser: -->
+					<!--   <li> -->
+					<!--     <a href="/o/bk_user_manage" target="_blank"> -->
+					<!--       [> <i class="icon icon-um"></i> <] -->
+					<!--       <i class="list-icon bk-icon icon-user"></i> -->
+					<!--       <span>用户管理</span> -->
+					<!--     </a> -->
+					<!--   </li> -->
+					<!-- % endif -->
+                    % if wx_type:
+                        <li id="weixin_action">
+                            % if wx_userid:
+                                <a href="###" class="unbind_weixin">
+									<!-- <i class="icon icon-unbind-weixin"></i> -->
+									<i class="list-icon bk-icon icon-chain"></i>
+									<span>解绑微信</span></a>
+                            % else:
+                                % if wx_type == 'mp':
+                                    <a href="###" class="bind_mp_weixin">
+										<!-- <i class="icon icon-bind-weixin"></i> -->
+										<i class="list-icon bk-icon icon-chain"></i>
+										<span>绑定微信</span></a>
+                                % elif wx_type == 'qy' or wx_type == 'qywx':
+                                    <a href="###" class="bind_qy_weixin">
+										<!-- <i class="icon icon-bind-weixin"></i> -->
+										<i class="list-icon bk-icon icon-chain"></i>
+										<span>绑定微信</span>
+									</a>
+                                % endif
+                            % endif
+                        </li>
+                    % endif
+
+					<!-- <li> -->
+					<!--   <a href="https://bk.tencent.com/docs/markdown/6.0/PaaS平台/产品白皮书/产品简介/README.md" target="_blank"> -->
+					<!--     [> <i class="icon icon-docs"></i> <] -->
+					<!--     <i class="list-icon bk-icon icon-order"></i> -->
+					<!--     <span>产品文档</span> -->
+					<!--   </a> -->
+					<!-- </li> -->
+
+					<li>
+						<a href="${SITE_URL}accounts/logout/">
+							<!-- <i class="icon icon-logout"></i> -->
+							<i class="list-icon paasee-icon icon-logout-fill"></i>
+							<span>注销</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div id="particles-js" class="particles-box"></div>
+	<div class="container cl">
+		<div class="top">
+			<div class="datatime">
+        <div class="month">${greeting.get("month")}月</div>
+        <div class="day">${greeting.get("day")}</div>
+			</div>
+			<div class="text-wrapper">
+				<p class="welcome-text">Hi，${request.user.username}，欢迎来到蓝鲸社区版工作台！ </p>
+        <p class="tip">${greeting.get("message")}</p>
+			</div>
+		</div>
+		<div class="main-left">
+			<div class="left-title cl">
+				<p>应用列表</p>
+				<!-- <div class="conf">
+					<div class="edit active">
+						<i class="gear"></i>
+						<span>排序</span>
+					</div>
+					<div class="comp">完成</div>
+				</div> -->
+			</div>
+			<ul class="app-list cl" id="app-list">
+			% for index, user_app in enumerate(user_app_list):
+			    <li class="app-list-item"  app_code="${user_app.get('code')}">
+			        <a class="linker" href="${user_app.get('link')}" target="_blank">
+			            <div class="app-logo">
+							<img class="item" src="${user_app.get('logo')}" img_url="${user_app.get('logo')}"  onerror="javascript:this.src='${STATIC_URL}img/app_logo/default.png';"/>
+						</div>
+			            <p class="item-detail">${user_app.get('name', '--')}</p>
+						% if user_app.get('introduction', ''):
+						<div class="tooltip-icon" tip-content="${user_app.get('introduction')}">
+							<i class="icon paasee-icon icon-info-line"></i>
+						</div>
+						<div class="drag-icon">
+							<i class="icon paasee-icon icon-grag-fill"></i>
+						</div>
+			            <!-- <span class="mask">
+			                <span class="mask-text">${user_app.get('introduction')}</span>
+			            </span> -->
+			            % endif
+			        </a>
+			    </li>
+			% endfor
+			</ul>
+			<!-- % if user_app_count > first_show_count: -->
+			<!--   <div class="loadMore"> -->
+			<!--     <p class="load-text">加载更多</p> -->
+			<!--     <img class="loading" src="${STATIC_URL}home/images/loading.png"/> -->
+			<!--   </div> -->
+			<!-- % endif -->
+		</div>
+		<div class="main-right">
+			<div class="main-panel" style="margin-bottom: 16px;">
+				<p class="right-title"> 帮助指引</p>
+				<ul class="list special">
+					<li class="list-item">
+						<a target="_blank" href="${SITE_URL}download/docs/quick-start-v6.0.pdf">
+							<div class="help-icon">
+								<svg aria-hidden="true" style="width: 32px; height: 24px;">
+									<use xlink:href="#icon-light"></use>
+								</svg>
+							</div>
+							快速入门
+						</a>
+					</li>
+					<li class="list-item">
+							<a target="_blank" href="http://bk.tencent.com/docs/">
+								<div class="help-icon">
+										<svg aria-hidden="true" style="width: 32px; height: 18px;">
+											<use xlink:href="#icon-doc"></use>
+										</svg>
+									</div>
+								帮助文档
+							</a>
+						</li>
+				</ul>
+			</div>
+
+			<div class="main-panel">
+				<p class="right-title">常用链接</p>
+				<ul class="list">
+					<li class="list-item">
+						<a target="_blank" href="http://bk.tencent.com/s-mart/">蓝鲸S-mart</a>
+					</li>
+					<li class="list-item">
+						<a target="_blank" href="https://ke.qq.com/course/3030664?taid=10315536490446472">视频教程</a>
+					</li>
+					<li class="list-item">
+						<a target="_blank" href="http://magicbox.bk.tencent.com/">MagicBox</a>
+					</li>
+					<!-- % if request.user.is_superuser: -->
+					<!--   <li class="list-item"> -->
+					<!--     <a target="_blank" href="/o/bk_user_manage">用户管理</a> -->
+					<!--   </li> -->
+					<!-- % endif -->
+					<!-- <li class="list-item"> -->
+					<!--   <a target="_blank" href="${SITE_URL}accounts/profile/">个人信息</a> -->
+					<!-- </li> -->
+					<li class="list-item">
+						<a target="_blank" href="http://bk.tencent.com/info/#laws">服务协议</a>
+					</li>
+					% for _l in links:
+						<li class="list-item" style="text-overflow: ellipsis;overflow: hidden;">
+							<a target="_blank" href="${_l.link}">${_l.name}</a>
+						</li>
+					% endfor
+				</ul>
+			</div>
+		</div>
+	</div>
+	<footer class="footer">
+		<p>
+		    <a id="contact_us" class="link">QQ咨询(800802001)</a>
+		    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸论坛</a>
+		    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸官网</a>
+		    <!-- | <a href="${SITE_URL}" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸智云工作台</a> -->
+		    |<a class="follow-us" href="###">关注我们<span class="qr-box"><span class="qr"><img src="${STATIC_URL}home/images/qr.png"></span><span class="qr-caret"></span></span></a>
+		</p>
+		<p>Copyright © 2012-${NOW.year} Tencent BlueKing. All Rights Reserved.</p>
+		<p>蓝鲸智云 版权所有</p>
+	</footer>
+    <script src="{{STATIC_URL}}assets/jquery-1.10.2.min.js"></script>
+	<script src="${STATIC_URL}home/js/Sortable.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+    <script src="${STATIC_URL}home/js/csrftoken_v3.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+    <!-- bkdialog -->
+	<script src="${STATIC_URL}home/js/popper.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+	<script src="${STATIC_URL}home/js/tippy-bundle.umd.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+	<script src="${STATIC_URL}home/js/index.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+	<script src="${STATIC_URL}user_center/js/weixin.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+	<!-- scripts -->
+	<script src="${STATIC_URL}home/js/particles.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+	<script src="${STATIC_URL}home/js/app.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+</body>
+</html>

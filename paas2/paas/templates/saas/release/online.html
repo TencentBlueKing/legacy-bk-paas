@@ -1,0 +1,70 @@
+<%inherit file="/base_saas.html"/>
+
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_release.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_saas.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<%block name="right_content">
+  <div class="main_hd">
+    <h4>&nbsp;</h4>
+    <div class="title_tab" id="topTab">
+      <ul class="tab_navs title_tab" data-index="0">
+          <li data-index="0" id="tab_0" class="tab_nav first js_top selected"><a href="###">${_(u'测试环境')}</a></li>
+          <li data-index="1" id="tab_1" class="tab_nav js_top"><a href="###">${_(u'正式环境')}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="app_center">
+    <div class="box-info full">
+
+      <div id="env_page"></div>
+
+
+      <hr/>
+      <h4 class="dev_module_title mt30 mb10">${_(u'部署说明')}</h4>
+      <div class="env_introduce_box">
+        <p>${_(u'蓝鲸应用包：又称为APP包，SaaS包，可从“蓝鲸S-mart”获取。')}</p>
+        <p>${_(u'点击“一键部署”会将当前应用包重新部署，不对数据库有任何影响。')}</p>
+        <p>${_(u'若更新应用包，“选择新版应用包”，点击“一键部署”即可，应用的数据库将自动升级。')}</p>
+        <p>${_(u'“一键部署”过程中，会影响应用的使用，影响时长取决于应用部署时间。')}</p>
+        <p>${_(u'如果选择低于之前线上的版本, 可能会导致部署失败. 因为数据库变更无法回滚, 某些字段增删导致老版本程序无法运行。')}</p>
+        <p>${_(u'部署服务器列表: 展示当前已激活的所有服务器。')}</p>
+        <p>${_(u'部署服务器: 如果第一次部署, 默认从激活服务器中选择两台自动勾选; 如果之前已经部署过, 将会自动勾选上一次部署选择的服务器。')}</p>
+        <p>${_(u'部署服务器: 服务器会自动将应用部署到用户勾选服务器; 如果取消勾选某台服务器, 部署成功后该服务器上对应应用会被下线。')}</p>
+      </div>
+
+    </div>
+  </div>
+
+
+</%block>
+
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+  function refresh_btn_status() {
+  }
+
+$(function(){
+    $('ul.tab_navs li').click(function(){
+      $('ul.tab_navs li').removeClass('selected');
+      $(this).addClass('selected');
+      var index = $(this).attr('data-index');
+
+      REL_MANAGER.start_or_stop_loop(0, '', '', '', '', '');
+
+      if (index == 0){
+        $("#env_page").load(site_url + 'saas/release/online/env/${app_code}/?mode=test');
+      } else if (index == 1){
+        $("#env_page").load(site_url + 'saas/release/online/env/${app_code}/?mode=prod');
+      }
+
+    });
+
+    // do click from url params
+    var to_tab = "${tab}";
+    if (to_tab == "1") {
+      $("#tab_1").click();
+    } else {
+      $("#tab_0").click();
+    }
+})
+</script>

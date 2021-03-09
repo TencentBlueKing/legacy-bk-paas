@@ -1,0 +1,70 @@
+# -*- coding: utf-8 -*-
+import json
+
+from django.utils.encoding import force_unicode
+from django.http import HttpResponse
+from django.shortcuts import _get_queryset
+from django.utils import translation
+
+
+def get_object_or_None(klass, *args, **kwargs):  # noqa
+    """
+    Uses get() to return an object or None if the object does not exist.
+
+    klass may be a Model, Manager, or QuerySet object. All other passed
+    arguments and keyword arguments are used in the get() query.
+
+    Note: Like with get(), a MultipleObjectsReturned will be raised if more than one
+    object is found.
+    """
+    queryset = _get_queryset(klass)
+    try:
+        return queryset.get(*args, **kwargs)
+    except queryset.model.DoesNotExist:
+        return None
+
+
+class JsonResponse(HttpResponse):
+    def __init__(self, content, *args, **kwargs):
+        content = json.dumps(content, ensure_ascii=False)
+        super(JsonResponse, self).__init__(content, content_type="application/json; charset=utf-8", *args, **kwargs)
+
+
+def get_error_prompt(form):
+    """Get error messages for form"""
+    content = []
+    fields = form.fields.keys()
+    for k, v in sorted(form.errors.items(), key=lambda x: fields.index(x[0]) if x[0] in fields else -1):
+        _msg = force_unicode(v[0])
+        b_field = form[k] if k in form.fields else None
+        # Get the default error messages
+        messages = {}
+        if b_field:
+            for c in reversed(b_field.field.__class__.__mro__):
+                messages.update(getattr(c, "default_error_messages", {}))
+
+        if b_field and _msg in messages.values():
+            content.append(u"%s [%s] %s" % (b_field.label, b_field.name, _msg))
+        else:
+            content.append(u"%s" % _msg)
+    return force_unicode(content[0])
+
+
+def i18n_form(form):
+    from django.utils.translation import ugettext as _
+
+    fields = form.visible_fields()
+    for field in fields:
+        field.label = _(field.label)
+        field.help_text = _(field.help_text)
+        if getattr(field.field, "choices", []):
+            choices = [(value, _(label)) for value, label in field.field.choices]
+            setattr(field.field, "choices", choices)
+    return form
+
+
+def get_cur_language():
+    cur_language = translation.get_language()
+    if cur_language not in ["zh-hans"]:
+        cur_language = "en"
+    return cur_language

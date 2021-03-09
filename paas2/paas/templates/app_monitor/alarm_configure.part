@@ -1,0 +1,517 @@
+<!-- 复用下拉组件 -->
+<%def name="alarm_cycle_select(id, default)">
+<td style="vertical-align:middle; text-align:center;">${_(u'告警周期')}</td>
+        <td>
+            <select id="${id}" class="form-control" style="width: 100px;float: left;margin-right: 10px;">
+                    <option value="300"
+                            %if default in ("5m", 300, "300"):
+                                selected="selected"
+                            %endif
+                                >  5 ${_(u'分钟')}</option>
+                    <option value="600"
+                            %if default in ("10m", 600, "600"):
+                                selected="selected"
+                            %endif
+                                > 10 ${_(u'分钟')}</option>
+                    <option value="1800"
+                            %if default in ("30m", 1800, "1800"):
+                                selected="selected"
+                            %endif
+                                > 30 ${_(u'分钟')}</option>
+                    <option value="3600"
+                            %if default in ("1h", 3600, "3600"):
+                                selected="selected"
+                            %endif
+                                > 1 ${_(u'小时')}</option>
+                    <option value="10800"
+                            %if default in ("3h", 10800, "10800"):
+                                selected="selected"
+                            %endif
+                                > 3 ${_(u'小时')}</option>
+                    <option value="21600"
+                            %if default in ("6h", 21600, "21600"):
+                                selected="selected"
+                            %endif
+                                > 6 ${_(u'小时')}</option>
+                    <option value="43200"
+                            %if default in ("12h", 43200, "43200"):
+                                selected="selected"
+                            %endif
+                                > 12 ${_(u'小时')}</option>
+                </select>
+                <p class="desc" style="margin-top: 8px; margin-left: 20px;">${_(u'一个周期内发生的所有错误将合并成一次告警发送')}</p>
+        </td>
+</%def>
+
+<!-- 复用checkbox -->
+<%def name="log_level(id, selected)">
+  % for i in ["CRITICAL","ERROR","WARNING","INFO","DEBUG"]:
+  <span class="config_checkbox">
+    <input class="input_checkbox" type="checkbox" id="${id}_${i}"
+                                                  % if i in selected:
+                                                  checked="checked"
+                                                  % endif
+                                                  />
+    <label class="input_checkbox_label" for="${id}_${i}" style="margin-bottom: 0px;font-weight: 100">
+      ${i}</label>
+  </span>
+  % endfor
+</%def>
+
+<!-- 复用checkbox -->
+<%def name="ratio_andornot(id, relation)">
+  <input type="radio" name="${id}_operator" value="or" id="${id}_operator_or"
+                                                      %if relation == "or":
+                                                      checked="checked"
+                                                      %endif
+                                                      />
+  <label class="input_checkbox_label" for="${id}_operator_or" style="margin-bottom: 0px;font-weight: 100">
+    &nbsp; OR</label>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input type="radio" name="${id}_operator" value="and" id="${id}_operator_and"
+                                                      %if relation == "and":
+                                                      checked="checked"
+                                                      %endif
+                                                      />
+  <label class="input_checkbox_label" for="${id}_operator_and" style="margin-bottom: 0px;font-weight: 100">
+    &nbsp; AND</label>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input type="radio" name="${id}_operator" value="exclude" id="${id}_operator_exclude"
+                                                          %if relation == "exclude":
+                                                          checked="checked"
+                                                          %endif
+                                                          />
+  <label class="input_checkbox_label" for="${id}_operator_exclude" style="margin-bottom: 0px;font-weight: 100">
+    &nbsp; EXCLUDE</label>
+
+  <span class="desc ml30">${_(u'OR 满足条件之一，AND 满足所有条件，EXCLUDE 屏蔽关键字。')}</span>
+</%def>
+
+<%
+    receive = config.get("receive")
+    email_receivers = receive.get("email", {}).get("list", [])
+%>
+
+
+<div class="highlight_box_wrp" id="menu_setting">
+    <div class="highlight_box icon_wrap icon_small border" id="div_stop">
+        <div class="opr">
+        % if is_open:
+        <a href="javascript:;" class="btn btn-red btn-min-w" onclick="switch_control(0, '${app_code}')"> ${_(u'停用')}</a>
+        % else:
+        <a href="javascript:;" class="btn btn-green btn-min-w" onclick="switch_control(1, '${app_code}')"> ${_(u'开启')}</a>
+        % endif
+        </div>
+        <span class="icon ${'unlock' if is_open else 'lock'}"></span>
+        %if is_open:
+        <h4 class="title">${_(u'已开启监控告警服务')}</h4>
+        %else:
+        <h4 class="title">${_(u'未开启监控告警服务')}</h4>
+        %endif
+
+        <p class="desc">${_(u'监控告警功能是基于应用正式环境的日志数据，及配置的告警条件进行监控，并告警给告警接收人，有助于您及时了解应用运行情况和处理突发事件。')}</p>
+        <p class="desc" style="color:red;"> ${_(u'注意: 监控告警可用依赖于 1. 需确保在API网关中已接入邮件服务 2. 需部署日志采集及监控告警服务')}</p>
+
+        % if is_open and not email_receivers:
+        <p class="desc" style="color:red;"> ${_(u'当前没有配置告警接收, 告警邮件将无法发送! 请填写告警接收人邮箱并保存! ')}</p>
+        % endif
+
+    </div>
+</div>
+
+
+% if is_open:
+<%
+    django_config = config.get('django')
+    component_config = config.get('component')
+    celery_config = config.get('celery')
+    http_config  = config.get('http')
+    receive_config = config.get('receive')
+
+    alarm_list = config.get('alarm_list')
+
+    # django
+    django_log_levels = django_config.get('log_levels')
+    django_keyword = django_config.get('keyword')
+    django_operator = django_config.get('operator')
+    django_alarm_cycle = django_config.get("cycle")
+
+    # component
+    component_log_levels = component_config.get('log_levels')
+    component_alarm_cycle = component_config.get("cycle")
+
+    # celery
+    celery_log_levels = celery_config.get('log_levels')
+    celery_keyword = celery_config.get('keyword')
+    celery_operator = celery_config.get('operator')
+    celery_alarm_cycle = celery_config.get("cycle")
+
+    # http
+    http_status_codes = http_config.get('http_status_codes',[])
+    request_time_select = http_config.get('request_time_select',"false")
+    request_time_gt_or_lt = http_config.get('request_time_gt_or_lt',"gt")
+    request_time_delay_ms = http_config.get('request_time_delay_ms',"2000")
+    http_alarm_cycle = http_config.get("cycle", 300)
+
+    email_receivers = ';'.join(receive_config.get('email', {}).get("list"))
+
+
+%>
+        <!-- 告警接收方式 -->
+        <div class="col-md-6 col-xs-6 config-box">
+          <div class="panel panel-default" style="margin-bottom:0;border-radius:0">
+            <div class="panel-heading config_check" id="basic_toggle_4">
+              <span style="font-size:15px;vertical-align:top;float:right;">
+                <i id="basic-alarm-icon-4" class="glyphicon glyphicon-chevron-up" style="color:silver"></i>
+              </span>
+              <span>${_(u'告警接收')}</span>
+              <span class="desc ml35">${_(u'告警接收人邮箱、接收方式及接收的告警类型等配置')}</span>
+            </div>
+            <div id="basic_alarm_4" class="basic_alarm" style="display: block;">
+              <div class="panel-body" style="padding: 0px;">
+                <div class="table-responsive">
+                  <table class="table  table-bordered" style="margin-bottom: 10px;">
+                    <tbody>
+
+                      <tr>
+                        <td style="vertical-align:middle; text-align:center;width:100px;">${_(u'接收人邮箱')}</td>
+                        <td>
+                          <input type="text" class="form-control" id="email_receivers"
+                                                                  %if email_receivers:
+                                                                  value="${email_receivers}"
+                                                                  %endif
+                                                                  >
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="vertical-align:middle; text-align:center;width:100px;">${_(u'接收方式')}</td>
+                        <td>
+                          <span class="config_checkbox">
+                            <input class="input_checkbox" type="checkbox" name="receive_type_email" id="receive_type_email"
+                                                                                                    checked="checked" disabled="disabled" readonly
+                                                                                                                      />
+                            <label class="input_checkbox_label" for="receive_type_email" style="margin-bottom: 0px;font-weight: 100">
+                              &nbsp; ${_(u'邮箱')}</label>
+                          </span>
+
+                          <span class="desc ml30">${_(u'目前仅支持邮件告警。多个邮箱请用英文的;隔开，如xxx@qq.com;yyy@qq.com. 告警邮件将会发送到对应邮箱')}</span>
+
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td style="vertical-align:middle; text-align:center;">${_(u'接收类型')}</td>
+                        <td>
+                          <span class="config_checkbox">
+                            <input class="input_checkbox" type="checkbox" name="receive_list" id="receive_django"
+                                                                                              % if "django" in alarm_list:
+                                                                                              checked="checked"
+                                                                                              % endif
+                                                                                              />
+                            <label class="input_checkbox_label" for="receive_django" style="margin-bottom: 0px;font-weight: 100">
+                              &nbsp; ${_(u'普通告警')}</label>
+                          </span>
+                          <span class="config_checkbox">
+                            <input class="input_checkbox" type="checkbox" name="receive_list" id="receive_component"
+                                                                                              % if "component" in alarm_list:
+                                                                                              checked="checked"
+                                                                                              % endif
+                                                                                              />
+                            <label class="input_checkbox_label" for="receive_component" style="margin-bottom: 0px;font-weight: 100">
+                              &nbsp; ${_(u'组件告警')}</label>
+                          </span>
+                          <span class="config_checkbox">
+                            <input class="input_checkbox" type="checkbox" name="receive_list" id="receive_http"
+                                                                                              checked="checked" disabled="disabled" readonly
+                                                                                                                />
+                            <label class="input_checkbox_label" for="receive_http" style="margin-bottom: 0px;font-weight: 100">
+                              &nbsp; ${_(u'HTTP告警')}</label>
+                          </span>
+
+                          <span class="config_checkbox">
+                            <input class="input_checkbox" type="checkbox" name="receive_list" id="receive_celery"
+                                                                                              % if "celery" in alarm_list or celery_select:
+                                                                                              checked="checked"
+                                                                                              % endif
+                                                                                              disabled="disabled" readonly
+                                                                                              />
+                            <label class="input_checkbox_label" for="receive_celery" style="margin-bottom: 0px;font-weight: 100">
+                              &nbsp;${_(u'Celery告警')}</label>
+                          </span>
+
+                          <span class="desc ml30">${_(u'只有选择的告警类型会被发送。')}</span>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+                <a class="btn btn-green btn-min-w config_btn" id="receive_config_btn" app_code="${app_code}" >
+                  ${_(u'保存')}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- 业务  -->
+        <div class="col-md-6 col-xs-6 config-box">
+          <div class="panel panel-default" style="margin-bottom:0;border-radius:0">
+            <div class="panel-heading config_check" id="basic_toggle_2" title="${_(u'展开详情')}">
+              <span style="font-size:15px;vertical-align:top;float:right;">
+                <i id="basic-alarm-icon-2" class="glyphicon glyphicon-chevron-down" style="color:silver"></i>
+              </span>
+              <span>
+                ${_(u'普通告警')}
+              </span>
+              <span class="desc ml35">${_(u'基于应用普通日志的等级、关键字的告警配置')}</span>
+            </div>
+            <div id="basic_alarm_2" class="basic_alarm">
+              <div class="panel-body" style="padding: 0px;">
+                <div class="table-responsive">
+                  <table class="table table-bordered" style="margin-bottom: 10px;">
+                    <tbody>
+                      <tr>
+                        <td style="vertical-align:middle; text-align:center;width: 100px;">${_(u'日志等级')}</td>
+                        <td>
+                          ${log_level("django", django_log_levels)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>
+                          ${ratio_andornot("django", django_operator)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="vertical-align:middle; text-align:center;">${_(u'关键字')}</td>
+                        <td>
+                          <input type="textarea" class="form-control" id="django_keyword"
+                                                                      value="${django_keyword}"
+                                                                      >
+                                                                      <p class="desc" style="margin-top: 5px;">${_(u'多个关键字请用英文的;隔开，如keyword1;keyword2。')}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        ${alarm_cycle_select("django_alarm_cycle", django_alarm_cycle)}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <a class="btn btn-green btn-min-w config_btn"  id="django_config_btn" app_code="${app_code}">
+                  </i>${_(u'保存')}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- 组件 -->
+        <div class="col-md-6 col-xs-6 config-box">
+          <div class="panel panel-default" style="margin-bottom:0;border-radius:0">
+            <div class="panel-heading config_check" id="basic_toggle_1" title="${_(u'展开详情')}">
+              <span style="font-size:15px;vertical-align:top;float: right;">
+                <i id="basic-alarm-icon-1" class="glyphicon glyphicon-chevron-down" style="color:silver"></i>
+              </span>
+              <span>
+                ${_(u'组件告警')}
+              </span>
+              <span class="desc" style="margin-left: 37px;">${_(u'基于应用组件调用日志等级的告警配置')}</span>
+            </div>
+            <div id="basic_alarm_1" class="basic_alarm">
+              <div class="panel-body" style="padding:0px;">
+                <div class="table-responsive">
+                  <table class="table table-bordered" style="margin-bottom: 10px;">
+                    <tbody>
+
+                      <tr>
+                        <td style="vertical-align:middle; text-align:center;width: 100px;">${_(u'日志等级')}</td>
+                        <td>
+                          ${log_level("component", component_log_levels)}
+                        </td>
+                      </tr>
+                      <tr>
+                        ${alarm_cycle_select("component_alarm_cycle", component_alarm_cycle)}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <a class="btn btn-green btn-min-w config_btn" id="component_config_btn" app_code="${app_code}" >
+                  ${_(u'保存')}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- HTTP -->
+        <div class="col-md-6 col-xs-6 config-box" >
+          <div class="panel panel-default" style="margin-bottom:0;border-radius:0">
+            <div class="panel-heading config_check" id="basic_toggle_0" title="${_(u'展开详情')}">
+              <span style="font-size:15px;vertical-align:top;float:right;">
+                <i id="basic-alarm-icon-0" class="glyphicon glyphicon-chevron-down" style="color:silver"></i>
+
+              </span>
+              <span>
+                ${_(u'HTTP告警')}
+              </span>
+              <span class="desc" style="margin-left: 29px;">${_(u'基于应用uWSGI日志分析的HTTP请求返回码、请求时长以及负载的告警配置')}</span>
+            </div>
+            <div id="basic_alarm_0" class="basic_alarm">
+              <span id="notification" style="display:none;"></span>
+              <div class="panel-body" style="padding: 0px;">
+                <div class="table-responsive">
+                  <table class="table table-bordered" style="margin-bottom: 10px;">
+                    <tbody>
+
+                      <tr>
+                        <td style="vertical-align:middle; text-align:center;width:100px;">${_(u'请求返回码')}</td>
+
+                        <td>
+                          % for i in ["50x"]:
+                          <span class="config_checkbox">
+                            <input class="input_checkbox" type="checkbox" id="http_${i}"
+                                                                          % if i == '50x':
+                                                                          checked="checked" disabled="disabled" readonly
+                                                                                            % elif i in http_status_codes:
+                                                                                            checked="checked"
+                                                                                            % endif
+
+                                                                                            />
+                            <label class="input_checkbox_label" for="http_${i}" style="margin-bottom: 0px;font-weight: 100">
+                              ${i}</label>
+                          </span>
+                          % endfor
+
+
+                          % for i in ["40x"]:
+                          <span class="config_checkbox">
+                            <input class="input_checkbox" type="checkbox" id="http_${i}"
+                                                                          % if i in http_status_codes:
+                                                                          checked="checked"
+                                                                          % endif
+                                                                          />
+                            <label class="input_checkbox_label" for="http_${i}" style="margin-bottom: 0px;font-weight: 100">
+                              ${i}</label>
+                          </span>
+                          % endfor
+                          <span class="desc" >${_(u'‘50x’：所有以‘50’开头的返回码，‘40x’：所有以‘40’开头的返回码。')}</span>
+                          <br />
+
+                          <%doc>
+                          <span class="config_checkbox">
+                            <input class="input_checkbox" type="checkbox" id="http_error" style="margin-top:10px;"
+                                                                                          % if 'error' in http_status_codes:
+                                                                                          checked="checked"
+                                                                                          % endif
+                                                                                          />
+                            <label class="input_checkbox_label" for="http_error" style="margin-bottom: 0px;font-weight: 100">
+                              error</label>
+                            <span class="desc" style="margin-left: 95px;" >${_(u'Nginx错误日志')}</span>
+                          </span>
+                          </%doc>
+
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="vertical-align:middle; text-align:center;">${_(u'请求时长')}</td>
+                        <td>
+                          <div>
+                            <div style="float:left;margin-right: 10px;">
+                              <input id="request_select_val" type="hidden" value="${request_time_select}"/>
+                              <input class="input_checkbox" type="checkbox" id="request_time_select"
+                                                                            style="margin-top: 10px;"
+                                                                            /><label style="margin: 0px 0px 0px 7px;font-size: 13px;font-weight: 100;"
+                                                                                     for="request_time_select" class="input_checkbox_label"
+                                                                                                               >${_(u'开启')}&nbsp;</label>
+                            </div>
+                            <div class="select_values">
+                              <input id="gt_or_lt_val" type="hidden" value="${request_time_gt_or_lt}"/>
+                              <select id="request_time_gt_or_lt" class="form-control request_input""
+                              style="width: 80px;float: left;margin-right: 10px;">
+                                <option value="gt">${_(u'大于')}</option>
+                                <option value="lt">${_(u'小于')}</option>
+                              </select>
+                              <input id="request_time_delay_ms" type="text" value="${request_time_delay_ms}"
+                              class="form-control request_input" style="width: 100px;float: left;"/>
+                              <label style="margin: 8px 0px 0px 7px;font-size: 13px;font-weight: 100;">${_(u'毫秒')}</label>
+                              <span class="desc" style="margin-left: 30px;">${_(u'开启后，应用请求时长超过设置值，您将收到告警。')}</span>
+                              <span id="delay_time_tips" style="margin-left:0px;color:red;display:none"></span>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                      ${alarm_cycle_select("http_alarm_cycle", http_alarm_cycle)}
+                      </tr>
+
+
+                    </tbody>
+                  </table>
+                </div>
+                <a class="btn btn-green btn-min-w config_btn" id="http_config_btn" app_code="${app_code}" >
+                ${_(u'保存')}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Celery -->
+        <div class="col-md-6 col-xs-6 config-box">
+              <div class="panel panel-default" style="margin-bottom:0;border-radius:0">
+                <div class="panel-heading config_check" id="basic_toggle_3" title="${_(u'展开详情')}">
+                        <span style="font-size:15px;vertical-align:top;float: right;">
+                            <i id="basic-alarm-icon-3" class="glyphicon glyphicon-chevron-down" style="color:silver"></i>
+                        </span>
+                        <span>
+                        ${_(u'Celery告警')}
+                        </span>
+                        <span class="desc" style="margin-left: 23px;">${_(u'基于应用 Celery日志的等级、关键字的告警配置')}</span>
+                  </div>
+                  <div id="basic_alarm_3" class="basic_alarm">
+                  <div class="panel-body" style="padding: 0px;">
+                      <div class="table-responsive">
+                          <table class="table table-bordered" style="margin-bottom: 10px;">
+                              <tbody>
+
+                                   <tr>
+                                     <td style="vertical-align:middle; text-align:center;width: 100px;">${_(u'日志等级')}</td>
+                                      <td>
+                                          ${log_level("celery", celery_log_levels)}
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td></td>
+                                      <td>
+                                      ${ratio_andornot("celery", celery_operator)}
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="vertical-align:middle; text-align:center;">${_(u'关键字')}</td>
+                                      <td>
+                                          <input type="text" class="form-control" id="celery_keyword"
+                                          value="${celery_keyword}"
+                                          >
+                                          <p class="desc" style="margin-top: 5px;">${_(u'多个关键字请用英文的;隔开，如keyword1;keyword2。')}</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                        ${alarm_cycle_select("celery_alarm_cycle", celery_alarm_cycle)}
+                                  </tr>
+
+                              </tbody>
+                          </table>
+                    </div>
+                     <a class="btn btn-green btn-min-w config_btn" id="celery_config_btn" app_code="${app_code}">
+                     ${_(u'保存')}</a>
+                  </div>
+              </div>
+              </div>
+        </div>
+
+% endif
+<script src="${STATIC_URL}js/paas_app_monitor.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

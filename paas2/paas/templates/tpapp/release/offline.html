@@ -1,0 +1,26 @@
+<%inherit file="/base_tpapp.html"/>
+
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_release.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_saas.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<%block name="right_content">
+  <div class="app_center">
+    <div class="pl15 pt0">
+      <div>
+          <font>${_(u'下架操作')}：</font>
+          % if not app_state in [4, 9] or not is_already_online:
+            <span>${_(u'应用未上线或者已下架')}</span>
+          % else:
+            <button class="btn btn-success btn-lg tpapp_deploy_btn" onclick="javascript:REL_MANAGER.tpapp_release_task(this, '${app_code}', 'offline', '${STATIC_URL}')">${_(u'下架')}</button>
+          % endif
+          <span class="ml10" id="release_tips"></span>
+      </div>
+      <hr/>
+      <h4 class="dev_module_title mt30 mb10">${_(u'下架说明')}</h4>
+      <div class="env_introduce_box">
+        <p>${_(u'下架成功后，应用将从“桌面-应用市场”中下架')}</p>
+        <p>${_(u'下架过程仅仅改变了应用的状态，不对原系统造成任何影响！')}</p>
+      </div>
+    </div>
+  </div>
+</%block>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

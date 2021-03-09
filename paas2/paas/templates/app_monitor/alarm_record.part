@@ -1,0 +1,96 @@
+<div class="data_form_wrap data_form_default_wrap clearfix ml20">
+  <div>
+    <div class="form-inline" style="margin-top:20px;margin-right:-10px;margin-left:-10px" >
+
+      <span class="ml10 level" style="">${_(u'类型:')}</span>
+      <select id="alarm_type" name="alarm_type" class="form-control ml10 level" style="width: 120px">
+        <option value="all">${_(u'全部')}</option>
+        <option value="django">${_(u'普通')}</option>
+        <option value="component">${_(u'组件')}</option>
+        <option value="http">HTTP</option>
+        <option value="celery">Celery</option>
+      </select>
+
+      <span id='msg_name' style="margin-left: 30px;">${_(u'关键字:')}</span>
+      <input id="keyword" type="text" class="form-control ml10" style="width:295px" placeholder="${_(u'请输入查询字符')}" onkeyup="enter_keyword(event);">
+
+      <br/>
+
+      <span class="ml10 level" style="">${_(u'时间:')}</span>
+      <select id="alarm_time" class="form-control ml10" style="width: 120px;">
+        <option value="1h">${_(u'最近1小时')}</option>
+        <option value="12h">${_(u'最近12小时')}</option>
+        <option value="1d">${_(u'最近1天')}</option>
+        <option value="7d">${_(u'最近7天')}</option>
+        <option value="14d">${_(u'最近14天')}</option>
+        <option value="diy">${_(u'自定义')}</option>
+      </select>
+      <input type="text" class="form-control ml10" style="width:355px;margin-left:30px;display:none;" id="datepicker" placeholder="${_(u'选择日期...')}">
+      <input type="hidden" id="alarm_time_begin" value="">
+      <input type="hidden" id="alarm_time_end" value="">
+
+      <button id="search_btn"  class="btn btn-azure btn-min-w ml10" style="margin-top:9px;margin-left: 30px;height:34px;">${_(u'搜索')}</button>
+
+    </div>
+
+  </div>
+</div>
+
+
+<div class="data_form_wrap data_form_default_wrap clearfix ml20 mr20">
+  <div id="grid">
+  </div>
+</div>
+
+
+
+
+<style>
+.k-grid tbody tr {
+  height: 30px;
+}
+</style>
+
+<!-- 日期选择    -->
+<script src="${STATIC_URL}assets/daterangepicker/moment.min.js"></script>
+<script src="${STATIC_URL}assets/daterangepicker/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}assets/daterangepicker/daterangepicker.css">
+<script src="${STATIC_URL}js/paas_app_monitor_alarm.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+function go_page(page) {
+  var page_size = 20;
+  var alarm_type = $("#alarm_type").val();
+  var keyword = $("#keyword").val();
+  var alarm_time = $("#alarm_time").val();
+  var alarm_time_begin = $("#alarm_time_begin").val();
+  var alarm_time_end = $("#alarm_time_end").val();
+
+  var url = site_url+'monitor/get_alarm_records/${app_code}/';
+  console.log("go page: " + page);
+  console.log("url: "+ url)
+  $.getJSON(url, {
+    page: page,
+    page_size: page_size,
+    alarm_type: alarm_type,
+    keyword: keyword,
+    alarm_time: alarm_time,
+    alarm_time_begin: alarm_time_begin,
+    alarm_time_end: alarm_time_end
+  }, function(data){
+    console.log(data.result);
+    if (data.result) {
+      console.log("set html:")
+      $("#grid").html(data.html);
+    }
+  })
+}
+
+$(function(){
+  $("#search_btn").click(function() {
+    go_page(1);
+  });
+
+  $("#search_btn").click();
+
+});
+</script>

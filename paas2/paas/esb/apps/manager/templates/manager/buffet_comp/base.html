@@ -1,0 +1,24 @@
+{% extends "manager/base.html" %}
+{% load i18n %}
+
+{% block container %}
+<style type="text/css" media="screen">
+.form-group .control-label {
+    margin-bottom: 5px;
+} 
+</style>
+
+<div class="main-page box-info">
+    <div class="main-header">
+        <span>{% trans "自助接入" %}</span>
+        <a href="{% url 'guide.page' name='buffet_component' %}" title="{% trans '跳转到使用指南' %}" target="_blank">
+            <i class="bk-icon icon-question-circle" style="margin-top: 2px;font-weight: bold"></i>
+        </a>
+    </div>
+
+    {% block main %}
+    {% endblock %}
+
+</div>
+
+{% endblock %}

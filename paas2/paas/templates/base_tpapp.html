@@ -1,0 +1,102 @@
+<%inherit file="/base.html"/>
+<!-- 左侧导航 start -->
+<%block name='left_content'>
+    <%
+        app_baseinfo = release_record = release_online = unrelease = esb_auth = ''
+        relative_path = APP_PATH
+        if relative_path == SITE_URL or relative_path.startswith(SITE_URL + "tpapp/info/"):
+            app_baseinfo = 'selected'
+        elif relative_path.startswith(SITE_URL + "tpapp/release/record/"):
+            release_record = 'selected'
+        elif relative_path.startswith(SITE_URL + "tpapp/release/offline/"):
+            unrelease = 'selected'
+        elif relative_path.startswith(SITE_URL + "tpapp/release/online/"):
+            release_online = 'selected'
+        elif relative_path.startswith(SITE_URL + "esb_auth/"):
+            esb_auth = 'selected'
+    %>
+    <div class="menu_box" id="menuBar">
+        <dl class="menu" style="border-top:none;">
+            <dt class="menu_title" style="padding: 0;">
+                <a class="" href='${SITE_URL}tpapp/list/' style="padding-left:10px;color:#44B549;"> 《 ${_(u'返回外链应用')}</a>
+                <div style="padding: 15px 10px 10px;cursor:default">
+                    <!-- <div style="display:inline; overflow:visible; position:relative;width:120px;"> -->
+                    <div style="overflow:hidden; position:relative;width:190px;">
+                        <label style="color: #000; width:70px">${_(u'应用名称')}：</label>
+                        <span id="app_info_name_id"></span>
+                    </div>
+                    <div title="${app_code}" style="width:120px;">
+                        <label style="color: #000; width:70px">${_(u'应用 ID')}&nbsp&nbsp：</label>
+                        ${app_code}
+                    </div>
+                    <div id="pro-test" style="height:15px;font-size:12px;margin-top:5px;">
+                        <span class="f_l">${_(u'快捷入口')}：</span>
+                        <span data-toggle="tooltip" data-placement="left" title="${_(u'应用未上线或已下架')}" style="color:#999;width:50px;margin-left:13.5px;">${_(u'访问地址')}</span>
+                    </div>
+                </div>
+            </dt>
+        </dl>
+        <!--应用管理-->
+        <dl class="menu">
+                <dt class="menu_title">
+                    <i class="icon_menu setting" ></i>${_(u'应用管理')}
+                </dt>
+                <dd class="menu_item ${app_baseinfo}"><a href="${SITE_URL}tpapp/info/${app_code}">${_(u'基本信息')}</a></dd>
+        </dl>
+        <!--应用部署-->
+        <dl class="menu">
+                <dt class="menu_title">
+                    <i class="icon_menu function"></i>${_(u'应用部署')}
+                </dt>
+                <dd class="menu_item ${release_online}"><a href="${SITE_URL}tpapp/release/online/${app_code}/">${_(u'发布部署')}</a></dd>
+                <dd class="menu_item ${unrelease}"><a href="${SITE_URL}tpapp/release/offline/${app_code}/">${_(u'下架')}</a></dd>
+                <dd class="menu_item ${release_record}"><a href="${SITE_URL}tpapp/release/record/${app_code}/">${_(u'发布历史')}</a></dd>
+        </dl>
+        <!--服务-->
+        <dl class="menu">
+                <dt class="menu_title">
+                    <i class="icon_menu task"></i>${_(u'服务')}
+                </dt>
+                <dd class="menu_item ${esb_auth}"><a href="${SITE_URL}esb_auth/${app_code}/?is_tpapp=1">${_(u'API权限')}</a></dd>
+        </dl>
+    </div>
+</%block>
+<!-- 左侧导航 end -->
+<!-- 右侧内容 start -->
+<%block name="right_content_base">
+    <%
+        title_msg = ''
+        relative_path = APP_PATH
+        if relative_path == SITE_URL or relative_path.startswith(SITE_URL + "tpapp/info/"):
+            title_msg = u'基本信息'
+        elif relative_path.startswith(SITE_URL + "tpapp/release/record/"):
+            title_msg = u'发布历史'
+        elif relative_path.startswith(SITE_URL + "tpapp/release/offline/"):
+            title_msg = u'下架'
+        elif relative_path.startswith(SITE_URL + "tpapp/release/online/"):
+            title_msg = u'发布部署'
+        elif relative_path.startswith(SITE_URL + "esb_auth/"):
+            title_msg = u'API权限'
+    %>
+    <div class="main_hd">
+        <h5>&nbsp;</h5>
+        <div class="ml10 t_s16">${_(title_msg)}
+        	<%block name="title_content"></%block>
+        </div>
+    </div>
+
+    % if not relative_path.startswith(SITE_URL + "esb_auth/"):
+    <hr/>
+    % endif
+
+    <%block name="right_content">
+    </%block>
+</%block>
+<!-- 右侧内容 end -->
+<%block name="base_app">
+<script>
+    $(function () {
+        BASE_APP.refresh_tpapp_status('${app_code}');
+    })
+</script>
+</%block>

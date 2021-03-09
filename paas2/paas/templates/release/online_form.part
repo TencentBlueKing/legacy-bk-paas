@@ -1,0 +1,97 @@
+<!--上线申请 TODO-->
+% if app:
+          <!-- 正式部署表单start -->
+          <form class="form form-horizontal">
+          % if app.state in [4]:
+          <div class="form-group error alert alert-danger" id="online_form_error">
+            <span aria-hidden="true" class="glyphicon glyphicon-info-sign"></span>${_(u'应用已上线，请重新测试部署后，再执行正式部署操作！')}
+          % elif app.state in [0]:
+          <div class="form-group error alert alert-danger" id="online_form_error">
+            <span aria-hidden="true" class="glyphicon glyphicon-info-sign"></span>${_(u'应用已下架，请重新测试部署后，再执行正式部署操作！')}
+          % elif app.state in [1]:
+          <div class="form-group error alert alert-danger" id="online_form_error">
+            <span aria-hidden="true" class="glyphicon glyphicon-info-sign"></span>${_(u'应用未进行测试部署，请测试部署后，再执行正式部署操作！')}
+          % else:
+          <div class="form-group error alert alert-danger" id="online_form_error" style="display: none">
+          % endif
+          </div>
+
+          <div class="form-group">
+            <label for="inputEmail3" class="col-xs-3 control-label">${_(u'部署版本')}</label>
+            <div class="col-xs-6">
+                  <input type="text" class="form-control" disabled="" value="${vcs_url}">
+            </div>
+            </div>
+          </div>
+
+          % if vcs_type == "git":
+          <div class="form-group">
+              <label for="inputEmail3" class="col-xs-3 control-label">${_(u'部署分支/Tag')}</label>
+              <div class="col-xs-6">
+                <input type="text" class="form-control" disabled="" value="${checkout_target}">
+              </div>
+              <div class="col-xs-4"></div>
+          </div>
+          % endif
+
+          <div class="form-group">
+            <label for="inputEmail3" class="col-xs-3 control-label">${_(u'部署服务器')}</label>
+            <div class="col-xs-6">
+              % if servers:
+                % for server in servers:
+                <input type="checkbox" name="servers" id="servers" value="${server.id}"
+                                                  % if server.id in hostships:
+                                                    checked
+                                                  % endif
+                > ${server.ip_address}:${server.ip_port} </input> <br>
+                % endfor
+              % else:
+                ${_(u"当前没有可用的[正式服务器], 无法进行操作. 请到<a href='/engine/servers/'> [蓝鲸智云-开发者中心-服务器信息] </a> 注册并激活服务器")}
+              % endif
+            </div>
+            </div>
+          </div>
+          <div class="form-group" style="display: none;">
+            <label for="inputEmail3" class="col-xs-3 control-label">${_(u'显示新特性')}</label>
+            <div class="col-xs-10">
+              <label><input type="checkbox" id="is_tips"> ${_(u'是否显示新特性')}</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-xs-3 control-label">${_(u'更新特性')}</label>
+            <div class="col-xs-6">
+              <textarea  rows="4" class="form-control" value="" id="features" placeholder="${_(u'请输入内容...')}" />
+            </div>
+            <div class="col-xs-4">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-xs-3 control-label">${_(u'修改bug')}</label>
+            <div class="col-xs-6">
+              <textarea rows="4" class="form-control" id="bugs" value="" placeholder="${_(u'请输入内容...')}" />
+            </div>
+            <div class="col-xs-4">
+            </div>
+          </div>
+
+            <div class="form-group">
+              <label for="inputEmail3" class="col-xs-2 control-label"></label>
+              <div class="col-xs-10">
+
+                <button type="button" id="app_online" n_btn='deploy' class="
+                % if app.state in [0, 4, 8, 9, 10] or not servers:
+                disabled
+                % endif
+                btn btn-success btn-lg deploy_btn">${_(u'一键部署')}</button>
+
+              </div>
+            </div>
+            <div class="popover bottom deploy_popover deploy_detail" style="display:none;">
+                <div class="popover-content">
+                  <div id="release_msg_pro"></div>
+                </div>
+          </div>
+        </form>
+% else:
+    <div>${_(u'获取正式部署信息失败！')}</div>
+% endif

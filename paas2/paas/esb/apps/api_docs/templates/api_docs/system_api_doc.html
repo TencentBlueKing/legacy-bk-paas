@@ -1,0 +1,48 @@
+{% extends "api_docs/system_api_base.html" %}
+
+{% block system_api_header %}
+<link href="{{ STATIC_URL }}esb/api_docs/css/md_render.{{ CSS_SUFFIX }}" rel="stylesheet">
+{% endblock %}
+
+{% block right_container %}
+    <div id="api_docs" class="api_docs-list" style="margin-left: -5px;min-height: 600px;">
+    </div>
+    <div style="border-bottom: 1px solid #eaeaea;padding-bottom: 10px; margin-right: 3px;margin-top: 10px; display: none;"></div>
+    <div id="user_feedback" style="padding-top: 15px; display: none;">
+    </div>
+
+    {% verbatim %}
+        <script type="text/x-mustache-template" id="tmpl-feedback-default">
+            <span>以上信息是否解决您的问题？</span>
+            <div style="margin-top: 10px;">
+                <a id="ok" type="button" class="btn btn-primary" style="margin-right: 20px;">是</a>
+                <a id="question" type="button" class="btn btn-default">否</a>
+            </div>
+        </script>
+        <script type="text/x-mustache-template" id="tmpl-feedback-content">
+            <span class="icon-no"></span>
+            <span>为了我们更有效的优化资料库，以及针对性的改善我们的服务，我们很需要您进一步的反馈信息：</span>
+            <div style="margin-top: 10px;">
+                <div style="padding-bottom: 10px">
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+                <a id="submit" type="button" class="btn btn-primary" style="margin-right: 20px;">提交</a>
+                <a id="cancel" type="button" class="btn btn-default">取消</a>
+            </div>
+        </script>
+    {% endverbatim %}
+
+{% endblock %}
+
+{% block footer %}
+<script src="{{ STATIC_URL }}esb/api_docs/js/system_api_docs_info.{{ JS_SUFFIX }}" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    //scrolltotop.controlHTML='<a href="#top" id="scrolltotop"></a>';
+    //scrolltotop.init();
+    var api_id = "{{api_info.id}}";
+    var system_name = "{{ curr_system_info.name }}";
+    var component_name = "{{ api_info.name }}";
+    var docs_content_url = "{% url 'api.get_api_doc_by_api' system_name=curr_system_info.name api_id=api_info.id %}";
+    var submit_url = "{% url 'api.submit_the_advice' %}";
+</script>
+{% endblock %}

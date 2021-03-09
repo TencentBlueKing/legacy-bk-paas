@@ -1,0 +1,143 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel-body" style="margin-left: -60px;margin-bottom: -30px;">
+            <div class="form-inline form-columns app-form">
+              <!-- 应用 ID -->
+              <div class="form-group">
+                <label class="control-label" for="">${_(u'应用 ID')}</label>
+                <div class="controls">
+                <input type="text" class="form-control" id="code" name="code" />
+                <span class="required">*</span>
+                <span id="tip_code" class="tips error"></span>
+                  <!--             使用独立域名，appcode中不用下划线改用连接符             -->
+                  <span class="help-block">
+                  ${_(u'由小写英文字母、连接符(-)或数字组成，长度为3~16个字符, 并且以字母开头。')}
+                  </span>
+                </div>
+              </div>
+
+              <!--应用名称     -->
+              <div class="form-group">
+                <label class="control-label" for="">${_(u'应用名称')}</label>
+                <div class="controls">
+                  <input type="text" class="form-control" id="name" name="name" value="" >
+                  <span class="required">*</span>
+                  <span id="tip_name" class="tips error"></span>
+                  <span class="help-block">${_(u'应用名称，长度小于20个字符。')}</span>
+                </div>
+              </div>
+              <!-- 应用简介 -->
+              <div class="form-group">
+                <label class="control-label" for="">${_(u'应用简介')}</label>
+                <div class="controls">
+                  <input type="text" class="form-control" id="introduction" name="introduction" value="" >
+                  <span class="required">*</span>
+                  <span id="tip_introduction" class="tips error"></span>
+                  <span class="help-block">${_(u'应用简要介绍，长度小于30个字符。')}</span>
+                </div>
+              </div>
+              <!-- 应用分类 -->
+              <div class="form-group">
+                <label class="control-label" for="">${_(u'应用分类')}</label>
+                <div class="controls">
+                    <select class="form-control" name="app_tags" id="app_tags" style="">
+                        % for tag in tags:
+                            <option value="${tag[0]}">${tag[1]}</option>
+                        % endfor
+                    </select>
+                    <span class="required">*</span>
+                    <span id="tip_tags" class="tips error"></span>
+                </div>
+              </div>
+              <hr style="margin-left: 50px;margin-top: 10px;">
+              <!--版本控制 start-->
+              <div class="form-group">
+                <label class="control-label" for="">${_(u'初始化框架')}</label>
+                <div class="controls mt5">
+                    <label class="radio-inline">
+                      <input type="radio" name="is_init_app" value="1">${_(u'是')}
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="is_init_app" value="0" checked>${_(u'否')}
+                    </label>
+                  <span class="help-block" id="is_init_app_help">${_(u'创建应用时自动根据应用信息将开发框架代码初始化，并提供初始应用代码的下载')}</span>
+                </div>
+              </div>
+              <div class="form-group php">
+                <label class="control-label" for="">${_(u'代码仓库')}</label>
+                <div class="controls mt5">
+                  %for value, key in vcs_type_choices:
+                    <label class="radio-inline">
+                      <input type="radio" name="vcs_type" value="${value}"
+                          %if key == "Git":
+                            checked
+                          %endif
+                      > ${key}
+                    </label>
+                  %endfor
+                  <span class="help-block" id="vcs_type_help">${_(u'通过Git方式获取应用代码')}</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">${_(u'仓库地址')}</label>
+                <div class="controls">
+                  <input type="text" class="form-control" name="vcs_url" id="vcs_url" value="" style="width:270px" title="">
+                  <span class="required">*</span>
+                  <span id="tip_vcs_url" class="tips mt10 mb5 ml150 error"></span>
+                  <span class="help-block" id="vcs_url_help">${_(u'支持以下协议')}：http(s)://, git://</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label"><span id="vcs_text">Git</span> ${_(u'账号')} </label>
+                <div class="controls">
+                  <input type="text" class="form-control" name="vcs_username" id="vcs_username" value="" onblur="APP_CREATE.check_vcs_username()" style="width:270px" title="">
+                  <span class="required">*</span>
+                  <span id="tip_vcs_username" class="tips mt10 mb5 ml150 error"></span>
+                  <span class="help-block"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">${_(u'密码')}</label>
+                <div class="controls">
+                  <!-- 防止Firefox下密码自动填充 -->
+                  <input type="text" style="display:none">
+                  <input type="password" style="display:none">
+                  <input type="text" onfocus="this.type='password'" class="form-control" name="vcs_password" id="vcs_password" value="" onblur="APP_CREATE.check_vcs_password()" style="width:270px" title="">
+                  <span class="required">*</span>
+                  <span id="tip_vcs_password" class="tips mt10 mb5 ml150 error"></span>
+                </div>
+              </div>
+              <!--版本控制 end-->
+              <!--开发信息 start-->
+              <hr style="margin-left: 50px;margin-top: 10px;">
+              <div class="form-group">
+                <label class="control-label" for="language">${_(u'开发语言')}</label>
+                <div class="controls">
+                        <%doc>
+                        <label class="radio-inline">
+                            <input type="radio" name="language" value="python" checked readonly><span>Python（Django）</span>
+                        </label>
+                        </%doc>
+
+                        <input type="hidden" name="language" value="python">
+                        <span class="help-block":>Python（Django）</span>
+                    <%doc>
+                    <label class="radio-inline">
+                        <input type="radio" name="language" value="java"><span>Java（Spring-boot）</span>
+                    </label>
+                    </%doc>
+                  <span class="help-block">${_(u'推荐基于蓝鲸智云应用开发框架开发; 并按照')}<a  target="_blank" href="${SITE_URL}guide/newbie/#step3"> ${_(u'提示 ')} </a> ${_(u'修改配置')} </span>
+                </div>
+              </div>
+              <!--开发信息 end-->
+              <!-- form end-->
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<!--     操作按钮  -->
+<div class="t_c mt35">
+    <button type="submit" class="btn btn-green btn-l btn-wm" id="submit_form_create" style="width:180px;height: 60px">${_(u'创建应用')}</button>
+</div>

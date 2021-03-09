@@ -1,0 +1,228 @@
+<table class="table table-hover table-striped">
+	<thead total_app="${total}">
+		<tr>
+			<th style="width:7%">${_(u'环境')}</th>
+			<th style="width:8%">${_(u'类型')}</th>
+			<th style="width:10%">${_(u'日志级别')}</th>
+			% if log_type == 'uwsgi':
+				<th style="width:23%">${_(u'时间')}</th>
+				<th style="width:10%">${_(u'响应时间ms')}</th>
+				<th style="width:42%">URI</th>
+			% elif log_type ==  'gunicorn':
+				<th style="width:23%">${_(u'时间')}</th>
+				<th style="width:10%">${_(u'响应时间s')}</th>
+				<th style="width:42%">URI</th>
+			% elif log_type == 'nginx':
+				<th style="width:23%">${_(u'时间')}</th>
+				<th style="width:10%">${_(u'响应时间s')}</th>
+				<th style="width:42%">URI</th>
+			% else:
+				<th style="width:20%">${_(u'时间')}</th>
+				<th style="width:55%">${_(u'信息')}</th>
+			% endif
+		</tr>
+	</thead>
+
+    <%def name="log_level_label(value)">
+        % if value in ("INFO", "200"):
+            <% label_class="label-success" %>
+        % elif value in ("WARNING", "401", "403", "404"):
+            <% label_class="label-warning" %>
+        % elif value in ("ERROR", "500"):
+            <% label_class="label-danger" %>
+        % elif value == "DEBUG":
+            <% label_class="label-primary" %>
+        % else:
+            <% label_class="label-default" %>
+        % endif
+
+        <label class="label ${label_class}" style="width:70px; display:block; font-size:12px;padding-left: 6px;padding-right: 6px;">
+            % if value:
+                ${value}
+            % else:
+                -
+            % endif
+        </label>
+
+    </%def>
+
+    <%def name="tr_class(value)">
+        % if value in ("WARNING", "ERROR", "500", "401", "403", "404"):
+            <% tr_class="warning" %>
+        % else:
+            <% tr_class="" %>
+        % endif
+        <tr style="cursor: pointer;" title="${_(u'点击查看详情')}" class="${tr_class}">
+    </%def>
+
+	<tbody style="text-align:left;">
+		% if log_list:
+			% for _log in log_list:
+
+        ${tr_class(_log['log_level'])}
+				<td>${_log['run_mode']}</td>
+				<td>
+					% if _log['log_type'] == 'biz' or _log['log_type'] == 'django':
+            Django
+					% elif _log['log_type'] == 'com' or _log['log_type'] == 'component':
+            Component
+					% elif _log['log_type'] == 'celery':
+						Celery
+					% elif _log['log_type'] == 'uwsgi':
+						uWSGI
+					% elif _log['log_type'] == 'gunicorn':
+						Gunicorn
+					% elif _log['log_type'] == 'nginx':
+						Nginx
+          % else:
+            ${_log['log_type']}
+					% endif
+				</td>
+        <td>
+          ${log_level_label(_log['log_level'])}
+        </td>
+				<td>${_log['time_stamp']}</td>
+				% if log_type in ('uwsgi', 'gunicorn'):
+					<td>${_log['resp_time']}</td>
+					<td>
+						<a href="###" onclick="" class="hit">
+							% if len(_log['uri']) > 50:
+								${_log['uri'][0:50]}...
+							% else:
+								${_log['uri']}
+							% endif
+						</a>
+					</td>
+				% elif log_type == 'nginx':
+					<td>${_log['resp_time']}</td>
+					<td>
+						<a href="###" onclick="" class="hit">
+              ${_log['uri']}
+						</a>
+					</td>
+				% else:
+					<td>
+						<a href="###" onclick="" class="hit">
+							% if len(_log['msg']) > 80:
+								${_log['msg'][0:80]}...
+							% else:
+								${_log['msg']}
+							% endif
+						</a>
+					</td>
+				% endif
+
+				<td><i class="glyphicon glyphicon-chevron-down" style="color:silver"></i></td>
+			</tr>
+
+			<tr class="detail" style="display: none">
+				<td colspan="${7 if log_type in ('uwsgi', 'gunicorn') else 6}">
+		              <table  class="table  table-striped" style="text-align:left;">
+		        % if log_type == 'celery':
+		              		<tr>
+		     					<td style="width: 15%">worker</td>
+				     			<td style="width: 85%">${_log['worker']}</td>
+			              	</tr>
+		              		<tr>
+				     			<td style="width: 15%">${_(u'日志信息')}</td>
+				     			<td style="width: 85%">${_log['msg']}</td>
+			              	</tr>
+						% elif log_type in ('uwsgi', 'gunicorn'):
+			              	<tr>
+		     					<td style="width: 15%">URI</td>
+				     			<td style="width: 85%">${_log['uri']}</td>
+			              	</tr>
+			              	<tr>
+				     			<td style="width: 15%">${_(u'日志信息')}</td>
+				     			<td style="width: 85%">${_log['msg']}</td>
+			              	</tr>
+			             % elif log_type == 'nginx':
+			              	<tr>
+				     			<td style="width: 15%">${_(u'客户端IP')}</td>
+				     			<td style="width: 85%">${_log['remote_addr']}</td>
+			              	</tr>
+			              	<tr>
+		     					<td style="width: 15%">URI</td>
+				     			<td style="width: 85%">${_log['uri']}</td>
+			              	</tr>
+			              	<tr>
+		     					<td style="width: 15%">${_(u'URI参数')}</td>
+				     			<td style="width: 85%">${_log['args'] | h}</td>
+			              	</tr>
+			              	<tr>
+		     					<td style="width: 15%">${_(u'请求数据')}</td>
+				     			<td style="width: 85%">${_log['body'] | h}</td>
+			              	</tr>
+			              	<tr>
+				     			<td style="width: 15%">${_(u'日志信息')}</td>
+				     			<td style="width: 85%">${_log['msg']}</td>
+			              	</tr>
+			      % else:
+ 			          <tr>
+		     					<td style="width: 15%">${_(u'文件')}</td>
+				     			<td style="width: 85%">${_log['file']}</td>
+			              	</tr>
+ 			              	<tr>
+		     					<td style="width: 15%">${_(u'函数')}</td>
+				     			<td style="width: 85%">${_log['func']}</td>
+			              	</tr>
+ 			              	<tr>
+		     					<td style="width: 15%">${_(u'行号')}</td>
+				     			<td style="width: 85%">${_log['lno']}</td>
+			              	</tr>
+ 			              	<tr>
+		     					<td style="width: 15%">${_(u'日志信息')}</td>
+                  % if log_type != 'com':
+				     			  <td style="width: 85%">${_log['msg']}</td>
+                  % else:
+				     			  <td style="width: 85%">_log['msg']}</td>
+                  % endif
+			          </tr>
+			     % endif
+		              </table>
+				</td>
+	     	</tr>
+			% endfor
+		% else:
+			<tr style="text-align: center">
+          <td colspan="${6 if log_type in ('uwsgi','nginx', 'gunicorn') else 5}" style="text-align: center">${_(u'没有数据')}</td>
+	     	</tr>
+        % if error_message:
+			<tr style="text-align: center; word-wrap:break-word; word-break: break-word;">
+          <td colspan="${6 if log_type in ('uwsgi','nginx', 'gunicorn') else 5}" style="text-align: center">${error_message}</td>
+	     	</tr>
+        % endif
+		% endif
+	</tbody>
+</table>
+
+<script>
+	function view_msg(obj){
+		// 日志信息
+		var tr_obj = $(obj).parents('tr').next('tr');
+		// 显示、隐藏组件内容
+		var is_hiden = $(tr_obj).is(":hidden");
+		if(is_hiden){
+			$(obj).parents('tr').next('tr').css('display', '');
+		}else{
+			$(obj).parents('tr').next('tr').css('display', 'none');
+		}
+	}
+
+	$("table tbody tr").click(function (){
+		var tr_obj = $(this).next('tr');
+		if (tr_obj.attr('class') == 'detail'){
+			// 显示、隐藏组件内容
+			var is_hiden = $(tr_obj).is(":hidden");
+			var icon_obj = $(this).find('i');
+			if(is_hiden){
+				$(this).next('tr').css('display', '');
+				icon_obj.removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+			}else{
+				$(this).next('tr').css('display', 'none');
+				icon_obj.removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down")
+			}
+
+		}
+	})
+</script>

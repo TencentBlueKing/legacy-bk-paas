@@ -1,0 +1,69 @@
+<%inherit file="/base_saas.html"/>
+
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_release.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_saas.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<%block name="right_content">
+  <div class="main_hd">
+    <h4>&nbsp;</h4>
+    <div class="title_tab" id="topTab">
+      <ul class="tab_navs title_tab" data-index="0">
+          <li data-index="0" id="tab_0" class="tab_nav first js_top selected"><a href="###">${_(u'测试环境')}</a></li>
+          <li data-index="1" id="tab_1" class="tab_nav js_top"><a href="###">${_(u'正式环境')}</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+<!-- <div class=""> -->
+  <div class="app_center">
+    <div class="box-info full">
+
+      <div id="env_page"></div>
+
+      <hr/>
+      <h4 class="dev_module_title mt30 mb10">${_(u'下架说明')}</h4>
+      <div class="env_introduce_box">
+        <p>${_(u'下架后，访问地址失效，应用入口从"桌面"和"应用市场"下线')}</p>
+        <p>${_(u'下架后，数据库信息不丢失，可以重新部署')}</p>
+      </div>
+    </div>
+  </div>
+
+
+</%block>
+
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+$(function(){
+    $('ul.tab_navs li').click(function(){
+      $('ul.tab_navs li').removeClass('selected');
+      $(this).addClass('selected');
+      var index = $(this).attr('data-index');
+
+      REL_MANAGER.start_or_stop_loop(0, '', '', '', '', '');
+
+      // $('div[data-index]').hide();
+      // $("#env_page").empty();
+      // $("#env_page").html('');
+
+      if (index == 0){
+        // $("#env_test").load(site_url + 'saas/release/offline/env/${app_code}/?mode=test');
+        $("#env_page").load(site_url + 'saas/release/offline/env/${app_code}/?mode=test');
+      } else if (index == 1){
+        // $("#env_prod").load(site_url + 'saas/release/offline/env/${app_code}/?mode=prod');
+        $("#env_page").load(site_url + 'saas/release/offline/env/${app_code}/?mode=prod');
+      }
+
+      // $('div[data-index='+index+']').show();
+    });
+
+    // do click from url params
+    var to_tab = "${tab}";
+    if (to_tab == "1") {
+      $("#tab_1").click();
+    } else {
+      $("#tab_0").click();
+    }
+
+})
+</script>

@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-03 21:54+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: api_docs/js/system_api_docs_info.js:57
+#: api_docs/js/system_api_docs_info.min.js:1 api_docs/js/system_info.js:50
+#: api_docs/js/system_info.min.js:1
+msgid "API列表"
+msgstr "API列表"
+
+#: api_docs/js/system_api_docs_info.js:65
+#: api_docs/js/system_api_docs_info.min.js:1
+msgid "暂无文档，请联系 API 负责人处理"
+msgstr "暂无文档，请联系 API 负责人处理"
+
+#: api_docs/js/system_api_docs_info.js:78
+#: api_docs/js/system_api_docs_info.min.js:1
+msgid "感谢您的反馈！"
+msgstr "感谢您的反馈！"
+
+#: api_docs/js/system_info.js:52 api_docs/js/system_info.min.js:1
+msgid "简介"
+msgstr "简介"
+
+#: js/buffet_list.js:19 js/buffet_list.min.js:1 js/channel_list.js:111
+#: js/channel_list.min.js:1
+msgid "已复制"
+msgstr "已复制"
+
+#: js/buffet_list.js:21 js/buffet_list.min.js:1 js/channel_list.js:113
+#: js/channel_list.min.js:1
+msgid "复制失败，请手动复制"
+msgstr "复制失败，请手动复制"
+
+#: js/buffet_update.js:4 js/buffet_update.min.js:1
+msgid "请求额外头信息"
+msgstr "请求额外头信息"
+
+#: js/channel_list.js:41 js/channel_list.js.c:65 js/channel_list.min.js:1
+#: js/esb_add_system.js:62 js/esb_add_system.js.c:71
+#: js/esb_add_system.min.js:1 js/system_list.js:25 js/system_list.js.c:44
+#: js/system_list.min.js:1
+msgid "消息"
+msgstr "消息"
+
+#: js/channel_list.js:41 js/channel_list.min.js:1
+msgid "请先选择待删除的通道！"
+msgstr "请先选择待删除的通道！"
+
+#: js/channel_list.js:46 js/channel_list.min.js:1 js/system_list.js:29
+#: js/system_list.min.js:1
+msgid "删除确认"
+msgstr "删除确认"
+
+#: js/channel_list.js:49 js/channel_list.min.js:1
+msgid "该操作不可恢复，是否继续？"
+msgstr "该操作不可恢复，是否继续？"
+
+#: js/channel_list.js:58 js/channel_list.min.js:1
+#, c-format
+msgid "成功删除 %s 个通道！"
+msgid_plural "成功删除 %s 个通道！"
+msgstr[0] "成功删除 %s 个通道！"
+msgstr[1] "成功删除 %s 个通道！"
+
+#: js/channel_list.js:71 js/channel_list.min.js:1 js/system_list.js:50
+#: js/system_list.min.js:1
+msgid "确认删除"
+msgstr "确认删除"
+
+#: js/channel_list.js:72 js/channel_list.min.js:1 js/system_list.js:51
+#: js/system_list.min.js:1
+msgid "取消"
+msgstr "取消"
+
+#: js/esb_add_system.js:6 js/esb_add_system.min.js:1
+msgid "添加新组件系统"
+msgstr "添加新组件系统"
+
+#: js/esb_add_system.js:28 js/esb_add_system.js.c:39
+#: js/esb_add_system.min.js:1
+msgid "这个字段是必填项。"
+msgstr "这个字段是必填项。"
+
+#: js/esb_add_system.js:62 js/esb_add_system.min.js:1
+msgid "系统创建成功"
+msgstr "系统创建成功"
+
+#: js/esb_add_system.js:71 js/esb_add_system.min.js:1
+msgid "系统创建失败"
+msgstr "系统创建失败"
+
+#: js/system_list.js:25 js/system_list.min.js:1
+msgid "请先选择待删除的系统！"
+msgstr "请先选择待删除的系统！"
+
+#: js/system_list.js:32 js/system_list.min.js:1
+msgid "该操作将删除关联的通道和组件，且不可恢复，是否继续？"
+msgstr "该操作将删除关联的通道和组件，且不可恢复，是否继续？"
+
+#: js/system_list.js:37 js/system_list.min.js:1
+#, c-format
+msgid "成功删除 %s 个系统！"
+msgid_plural "成功删除 %s 个系统！"
+msgstr[0] "成功删除 %s 个系统！"
+msgstr[1] "成功删除 %s 个系统！"
+
+#: status/js/index/views.js:18 status/js/index/views.min.js:1
+msgid "可用率恢复至 100%"
+msgstr "可用率恢复至 100%"
+
+#: status/js/index/views.js:21 status/js/index/views.min.js:1
+#, c-format
+msgid "低可用持续时间: <strong> %s 分钟</strong>"
+msgid_plural "低可用持续时间: <strong> %s 分钟</strong>"
+msgstr[0] "低可用持续时间: <strong> %s 分钟</strong>"
+msgstr[1] "低可用持续时间: <strong> %s 分钟</strong>"
+
+#: status/js/index/views.js:33 status/js/index/views.min.js:1
+msgid "可用率下降至"
+msgstr "可用率下降至"
+
+#: status/js/index/views.js:34 status/js/index/views.min.js:1
+msgid "调用错误数/总次数"
+msgstr "调用错误数/总次数"
+
+#: status/js/index/views.js:37 status/js/index/views.min.js:1
+#, c-format
+msgid "偶发 %s 次请求错误"
+msgid_plural "偶发 %s 次请求错误"
+msgstr[0] "偶发 %s 次请求错误"
+msgstr[1] "偶发 %s 次请求错误"
+
+#: status/js/index/views.js:108 status/js/index/views.min.js:1
+msgid "获取实时运营数据失败"
+msgstr "获取实时运营数据失败"
+
+#: status/js/index/views.js:122 status/js/index/views.min.js:1
+msgid "获取系统错误事件失败"
+msgstr "获取系统错误事件失败"
+
+#: status/js/system_index/views.js:193 status/js/system_index/views.min.js:1
+msgid "获取系统最新状态数据失败"
+msgstr "获取系统最新状态数据失败"
+
+#: status/js/system_index/views.js:199 status/js/system_index/views.min.js:1
+msgid "系统最新状态数据为空"
+msgstr "系统最新状态数据为空"
+
+#: status/js/system_index/views.js:223 status/js/system_index/views.js.c:263
+#: status/js/system_index/views.js:304 status/js/system_index/views.js.c:390
+#: status/js/system_index/views.min.js:1
+msgid "可用率"
+msgstr "可用率"
+
+#: status/js/system_index/views.js:224 status/js/system_index/views.js.c:266
+#: status/js/system_index/views.js:410 status/js/system_index/views.min.js:1
+msgid "请求数"
+msgstr "请求数"
+
+#: status/js/system_index/views.js:225 status/js/system_index/views.js.c:269
+#: status/js/system_index/views.js:306 status/js/system_index/views.js.c:429
+#: status/js/system_index/views.min.js:1
+msgid "平均响应时间"
+msgstr "平均响应时间"
+
+#: status/js/system_index/views.js:225 status/js/system_index/views.js.c:272
+#: status/js/system_index/views.js:306 status/js/system_index/views.js.c:449
+#: status/js/system_index/views.min.js:1
+msgid "统计响应时间"
+msgstr "统计响应时间"
+
+#: status/js/system_index/views.js:237 status/js/system_index/views.min.js:1
+msgid "系统实时概况"
+msgstr "系统实时概况"
+
+#: status/js/system_index/views.js:489 status/js/system_index/views.min.js:1
+msgid "获取系统概况数据失败"
+msgstr "获取系统概况数据失败"
+
+#: status/js/system_index/views.js:552 status/js/system_index/views.min.js:1
+msgid "获取请求详情数据失败"
+msgstr "获取请求详情数据失败"
+
+#: status/js/system_index/views.js:599 status/js/system_index/views.min.js:1
+msgid "提示"
+msgstr "提示"
+
+#: status/js/system_index/views.js:614 status/js/system_index/views.min.js:1
+msgid "错误请求详情"
+msgstr "错误请求详情"

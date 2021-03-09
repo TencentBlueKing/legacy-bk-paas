@@ -1,0 +1,165 @@
+<table class="table table-hover table-striped">
+	<thead total_app="${total}">
+		<tr>
+			<th style="width:8%">${_(u'环境')}</th> <th style="width:12%">${_(u'类型')}</th>
+			<th style="width:10%">${_(u'日志级别')}</th>
+
+      <th style="width:20%">${_(u'时间')}</th>
+      <th style="width:50%">${_(u'日志信息')}</th>
+		</tr>
+	</thead>
+
+    <%def name="log_level_label(value)">
+        % if value in ("INFO", "200"):
+            <% label_class="label-success" %>
+        % elif value in ("WARNING", "401", "403", "404"):
+            <% label_class="label-warning" %>
+        % elif value in ("ERROR", "500"):
+            <% label_class="label-danger" %>
+        % elif value == "DEBUG":
+            <% label_class="label-primary" %>
+        % else:
+            <% label_class="label-default" %>
+        % endif
+
+        <label class="label ${label_class}" style="width:70px; display:block; font-size:12px;padding-left: 6px;padding-right: 6px;">
+            % if value:
+                ${value}
+            % else:
+                -
+            % endif
+        </label>
+
+    </%def>
+
+    <%def name="tr_class(value)">
+        % if value in ("WARNING", "ERROR", "500", "401", "403", "404"):
+            <% tr_class="warning" %>
+        % else:
+            <% tr_class="" %>
+        % endif
+        <tr style="cursor: pointer;" title="${_(u'点击查看详情')}" class="${tr_class}">
+    </%def>
+
+	<tbody style="text-align:left;">
+		% if log_list:
+			% for _log in log_list:
+
+        ${tr_class(_log['levelname'])}
+				<td>${_log['run_mode']}</td>
+				<td>
+					% if _log['log_type'] == 'access':
+            Access
+					% elif _log['log_type'] == 'app':
+            App
+					% elif _log['log_type'] == 'framework':
+            Framework
+					% endif
+				</td>
+        <td>
+          ${log_level_label(_log['levelname'])}
+        </td>
+				<td>${_log['asctime']}</td>
+				% if log_type == 'access':
+					<td>
+						<a href="###" onclick="" class="hit">
+							% if len(_log['message']) > 50:
+								${_log['message'][0:50]}...
+							% else:
+								${_log['message']}
+							% endif
+						</a>
+					</td>
+				% else:
+					<td>
+						<a href="###" onclick="" class="hit">
+							% if len(_log['message']) > 80:
+								${_log['message'][0:80]}...
+							% else:
+								${_log['message']}
+							% endif
+						</a>
+					</td>
+				% endif
+
+				<td><i class="glyphicon glyphicon-chevron-down" style="color:silver"></i></td>
+			</tr>
+
+			<tr class="detail" style="display: none">
+				<td colspan="5">
+          <table  class="table  table-striped" style="text-align:left;">
+
+            % if log_type == "access":
+              <tr>
+                <td style="width: 15%">Method</td>
+                <td style="width: 85%">${_log['method']}</td>
+              </tr>
+              <tr>
+                <td style="width: 15%">${_(u'日志信息')}</td>
+                <td style="width: 85%">${_log['message']}</td>
+              </tr>
+              <tr>
+                <td style="width: 15%">Refer</td>
+                <td style="width: 85%">${_log['refer']}</td>
+              </tr>
+              <tr>
+                <td style="width: 15%">UserAgent</td>
+                <td style="width: 85%">${_log['ua']}</td>
+              </tr>
+            % else:
+              <tr>
+                <td style="width: 15%">FuncName</td>
+                <td style="width: 85%">${_log['funcName']}</td>
+              </tr>
+              <tr>
+                <td style="width: 15%">${_(u'日志信息')}</td>
+                <td style="width: 85%">${_log['message']}</td>
+              </tr>
+            % endif
+          </table>
+				</td>
+	     	</tr>
+			% endfor
+		% else:
+      <tr style="text-align: center">
+        <td colspan="5" style="text-align: center">${_(u'没有数据')}</td>
+      </tr>
+      % if error_message:
+      <tr style="text-align: center; word-wrap:break-word; word-break: break-word;">
+        <td colspan="5" style="text-align: center">${error_message}</td>
+      </tr>
+      % endif
+		% endif
+	</tbody>
+</table>
+
+<script>
+	function view_msg(obj){
+		// 日志信息
+		var tr_obj = $(obj).parents('tr').next('tr');
+		// 显示、隐藏组件内容
+		var is_hiden = $(tr_obj).is(":hidden");
+		if(is_hiden){
+			$(obj).parents('tr').next('tr').css('display', '');
+		}else{
+			$(obj).parents('tr').next('tr').css('display', 'none');
+		}
+	}
+
+	$("table tbody tr").click(function (){
+		var tr_obj = $(this).next('tr');
+		if (tr_obj.attr('class') == 'detail'){
+			// 显示、隐藏组件内容
+			var is_hiden = $(tr_obj).is(":hidden");
+			var icon_obj = $(this).find('i');
+			if(is_hiden){
+				$(this).next('tr').css('display', '');
+				icon_obj.removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+			}else{
+				$(this).next('tr').css('display', 'none');
+				icon_obj.removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down")
+			}
+
+		}
+	})
+</script>

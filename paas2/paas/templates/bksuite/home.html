@@ -1,0 +1,33 @@
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+<!-- 右侧内容 start -->
+<div class="box-info full">
+  <div class="main-header">
+    <span>${_(u'版本信息')}</span>
+  </div>
+  <div class="dev_center_module">
+     <table class="table table-bordered dev_env_table mt10" id="user_env_table">
+        <thead>
+            <tr>
+                <th width="34%">${_(u'产品名称')}</th>
+                <th width="33%">${_(u'产品编码')}</th>
+                <th width="33%">${_(u'版本')}</th>
+            </tr>
+        </thead>
+        <tbody>
+        % if all_production:
+            % for i in all_production:
+                <tr class="env_record">
+                    <td>${i.get('name', '--')}</td>
+                    <td>${i.get('code', '--')}</td>
+                    <td>${i.get('version', '--')}</td>
+                </tr>
+            % endfor
+        % else:
+            <tr id="no_record_row"><td colspan="3" style="text-align: center;">${_(u'没有版本信息')}</td></tr>
+        % endif
+        </tbody>
+    </table>
+  </div>
+</div>
+</%block>

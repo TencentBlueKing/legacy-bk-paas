@@ -1,0 +1,30 @@
+<%inherit file="/base_tpapp.html"/>
+
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_release.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_saas.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<%block name="right_content">
+  <div class="app_center">
+    <div class="pl15 pt0">
+      <div>
+          <font>${_(u'系统链接')}：</font>
+          <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; display: inline-flex; width: 460px;" >${external_url}</span>
+      </div>
+      <div class="mt15">
+          <font>${_(u'部署操作')}：</font>
+          % if app_state in [4, 9] and is_already_online:
+            <span>${_(u'应用已经上线，无需重复上线')}</span>
+          % else:
+            <button class="btn btn-success btn-lg tpapp_deploy_btn" onclick="javascript:REL_MANAGER.tpapp_release_task(this, '${app_code}', 'online', '${STATIC_URL}')">${_(u'一键部署')}</button>
+          % endif
+          <span class="ml10" id="release_tips"></span>
+      </div>
+      <hr/>
+      <h4 class="dev_module_title mt30 mb10">${_(u'部署说明')}</h4>
+      <div class="env_introduce_box">
+        <p>${_(u'部署成功后，应用将上线到“桌面-应用市场”')}</p>
+        <p>${_(u'部署过程仅仅改变了应用的状态，不对原系统造成任何影响')}</p>
+      </div>
+    </div>
+  </div>
+</%block>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>

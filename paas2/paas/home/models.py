@@ -1,0 +1,169 @@
+# -*- coding: utf-8 -*-
+# from __future__ import unicode_literals
+
+import os
+
+# import json
+
+from django.db import models
+from django.conf import settings
+
+# from common.log import logger
+from home.constants import LogoImgRelatedDirEnum
+
+# from home.utils import delete_exist_logo_file
+from home.constants import LINK_TYPE_CHOICES, LinkTypeEnum
+from home.manager import UsefulLinksManager, UserAppsManager
+
+
+# class UserAppsManager(models.Manager):
+#     def add_app(self, userapp, appcode):
+#         """
+#         收藏应用
+#         """
+#         try:
+#             apps = json.loads(userapp.apps)
+#             if appcode not in apps:
+#                 apps.append(appcode)
+#             userapp.apps = json.dumps(apps)
+#             userapp.save()
+#             return True
+#         except Exception, e:
+#             logger.error(u"add_app error: %s" % e)
+#             return False
+
+#     def del_app(self, userapp, appcode):
+#         """
+#         取消收藏
+#         """
+#         try:
+#             if not userapp:
+#                 return False
+#             apps = json.loads(userapp.apps)
+#             if appcode in apps:
+#                 apps.remove(appcode)
+#             userapp.apps = json.dumps(apps)
+#             userapp.save()
+#             return True
+#         except Exception, e:
+#             logger.error(u"add_app error: %s" % e)
+#             return False
+def delete_exist_logo_file(name):
+    _file = os.path.join(settings.MEDIA_ROOT, name)
+    if os.path.exists(_file):
+        os.remove(_file)
+
+
+class UserApps(models.Model):
+    """
+    用户收藏应用信息
+    """
+
+    username = models.CharField(u"用户名称", max_length=128, unique=True)
+    apps = models.TextField(u"应用列表", default="", blank=True, null=True, help_text=u"格式：json数据[code1,code2,code3]")
+
+    objects = UserAppsManager()
+
+    def __unicode__(self):
+        return "%s" % self.username
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        db_table = "paas_userapps"
+        verbose_name = u"用户收藏应用"
+        verbose_name_plural = u"用户收藏应用"
+
+
+class UserSettings(models.Model):
+    """
+    首页上用户自定义的应用列表
+    """
+
+    username = models.CharField(u"用户名称", max_length=128, unique=True)
+    apps = models.TextField(u"应用列表", default="", blank=True, null=True, help_text=u"格式：json数据[code1,code2,code3]")
+
+    def __unicode__(self):
+        return "%s" % self.username
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        db_table = "paas_usersettings"
+        verbose_name = u"用户自定义的应用列表"
+        verbose_name_plural = u"用户自定义的应用列表"
+
+
+def dynamic_upload_to(instance, filename):
+    """
+    根据链接类型，决定存储的目录
+    """
+    file_dir = (
+        LogoImgRelatedDirEnum.APP.value
+        if instance.link_type == LinkTypeEnum.LIGHT_APP.value
+        else LogoImgRelatedDirEnum.ICON.value
+    )
+    return os.path.join(file_dir, filename)
+
+
+class UsefulLinks(models.Model):
+    """
+    常用链接
+    """
+
+    name = models.CharField(u"名称", max_length=128)
+    link = models.CharField(u"链接", max_length=128)
+    link_type = models.SmallIntegerField("类型", choices=LINK_TYPE_CHOICES, default=LinkTypeEnum.COMMON.value)
+    logo = models.ImageField(upload_to=dynamic_upload_to, blank=True, null=True)
+    introduction = models.TextField("应用简介", default="", blank=True, null=True)
+    is_active = models.BooleanField("是否激活", default=True)
+    created_time = models.DateTimeField("创建时间", auto_now_add=True, blank=True, null=True)
+
+    objects = UsefulLinksManager()
+
+    def __unicode__(self):
+        return "%s" % self.name
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        """
+        保存前修改 logo 存放路径
+        """
+        if not self.logo:
+            return super(UsefulLinks, self).save(*args, **kwargs)
+        # 对于轻应用，需要保持固定名称，其他随机即可
+        if self.link_type == LinkTypeEnum.LIGHT_APP.value:
+            logo_name = "{}.png".format(self.code)
+            # 对于名字不符合code命名(上层保证了新图片名称是uuid)，说明logo是新上传的，则需要进行修改
+            if self.logo.name != logo_name:
+                self.logo.name = logo_name
+                # 判断之前是否存在，存在则先删除
+                delete_exist_logo_file(dynamic_upload_to(self, logo_name))
+        # save操作
+        super(UsefulLinks, self).save(*args, **kwargs)
+
+    @property
+    def code(self):
+        """
+        like _1 _123
+        """
+        return "_{id}".format(id=self.pk)
+
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "link": self.link,
+            "logo": self.logo.url if self.logo else "{}img/app_logo/default.png".format(settings.STATIC_URL),
+            "introduction": self.introduction,
+            "code": self.code,
+        }
+
+    class Meta:
+        db_table = "paas_usefullinks"
+        ordering = ["created_time"]
+        verbose_name = u"常用链接"
+        verbose_name_plural = u"常用链接"

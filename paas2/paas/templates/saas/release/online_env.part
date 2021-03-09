@@ -1,0 +1,181 @@
+<!-- 右侧内容 start -->
+<div class="deploy_box">
+  <form class="form form-horizontal">
+    <input type="hidden" id="app_code" value="${app_code}">
+    <input type="hidden" id="app_state" value="${app_state}">
+    <input type="hidden" id="mode" value="${mode}">
+    <input type="hidden" id="is_already_deployed" value="${is_already_deployed}">
+    <input type="hidden" id="is_outline_processing" value="${is_outline_processing}">
+    <input type="hidden" id="is_online_processing" value="${is_online_processing}">
+    <div id="version_info" online_version="${version}" current_version="">
+
+    <div class="form-group" style="padding-left: 15px;">
+      <label class="control-label" style="width: 90px; text-align: left;">${_(u'部署状态')}：</label>
+
+      <div class="inline-block">
+        <h4>
+          <label class="label label-default">${deployed_status}</label>
+        </h4>
+      </div>
+
+    </div>
+
+    <div class="form-group" style="padding-left: 15px;">
+      <label class="control-label" style="width: 90px; text-align: left;">${_(u'部署版本')}：</label>
+      <div class="inline-block">
+        <label class="control-label not-bold">${version}</label>
+      </div>
+    </div>
+
+    <div class="form-group" style="padding-left: 15px;">
+      <label class="control-label" style="width: 90px; text-align: left;">${_(u'选择版本')}：</label>
+      <div class="inline-block">
+        <select class="form-control" id="saas_app_version_id">
+          <!-- % if not is_already_deployed: -->
+          <!-- <option value="" selected> </option> -->
+          <!-- % endif -->
+
+          % for v in version_list:
+          <option value='${v.get("id")}' version='${v.get("version")}'
+            % if version == v.get("version"):
+              selected
+            % endif
+          > ${v.get("version")} - ${v.get("file_name")} - ${v.get("file_uploaded_at")} </option>
+          % endfor
+        </select>
+      </div>
+    </div>
+
+    % if mode == "prod":
+    <div class="form-group" style="padding-left: 15px;">
+      <label class="control-label" style="width: 90px; text-align: left;">${_(u'部署服务器')}：</label>
+      <div class="inline-block">
+              % if servers:
+                % for server in servers:
+                <input type="checkbox" name="servers" id="servers" value="${server.id}"
+                                                  % if server.id in hostships:
+                                                    checked
+                                                  % endif
+                                                    > ${server.ip_address}:${server.ip_port} </input> <br>
+                % endfor
+              % else:
+                ${_(u"当前没有可用的[正式服务器], 无法进行操作. 请到<a href='/engine/servers/'> [蓝鲸智云-开发者中心-服务器信息] </a> 注册并激活服务器")}
+              % endif
+      </div>
+    </div>
+    % endif
+
+
+    <div class="form-group" style="padding-left: 15px;">
+      <label class="control-label" style="width: 90px; text-align: left;">${_(u'部署操作')}：</label>
+      <div class="inline-block">
+        <button type="button" id="saas_app_online" n_btn="saas_deploy" class="btn btn-success btn-lg deploy_btn" data-id="online_form"
+                                                                                                              % if mode=="prod" and not servers:
+                                                                                                                 disabled
+                                                                                                              % endif
+          >
+            % if mode=="prod":
+                 ${_(u'部署至正式环境')}
+            % else:
+                 ${_(u'部署至测试环境')}
+            % endif
+        </button>
+      </div>
+    </div>
+
+    <div class="popover bottom deploy_popover deploy_detail" style="display:none; max-width: 940px">
+      <div class="popover-content">
+        <div id="release_msg_pro"></div>
+      </div>
+    </div>
+  </form>
+
+  <iframe name="target_frame" style="display:none;"></iframe>
+
+  <div class="deploy_tab_box" id="deploy_input">
+    <div class="">
+      <!--正式部署start TODO-->
+      <div id="online_form" n_form style="display:none;">
+      </div>
+      <!--正式部署end-->
+
+    </div>
+  </div>
+
+  <!--流程图-->
+  <div id="release-flow-before" class="pt20" style="display:none;">
+  </div>
+  <div id="release-flow" class="pt20 mb10" style="display:none;">
+  </div>
+  <div id="tips_info" class="pt20 mr30" style="margin-left:20px;max-width:820px;">
+  </div>
+
+  <div id="detail_button_2" style="margin-top:15px; margin-left:30px;display:none;">
+    <a href="javascript:REL_MANAGER.get_app_release_detail()" title="${_(u'点击查看详情')}" >
+      <span aria-hidden="true" class="glyphicon glyphicon-list" style="margin-right:5px;"></span>
+      <span id="detail_click">${_(u'点击查看详情')}</span>
+    </a>
+  </div>
+
+  <div id="detail_log" class="mt20" style="display:none;">
+    <textarea id="detail_info" class="form-control" style="height:300px;background-color: #000; color: #FFF;" readonly="">${_(u'部署日志')}：------create virtualenv for test1------
+    </textarea>
+  </div>
+
+
+</div>
+</div>
+<!-- 右侧内容 end -->
+<script>
+  $(function () {
+    var app_code = $("#app_code").val();
+    var app_state = $("#app_state").val();
+    var mode = $("#mode").val();
+    var is_outline_processing = $("#is_outline_processing").val();
+    var is_online_processing = $("#is_online_processing").val();
+
+    // 未部署的应用外，其他应用需要轮询当前状态
+    if(app_code && app_state != '1'){
+      // 正在部署，则显示状态图
+      // if(app_state == '8' || app_state == '9'){
+      // if((app_state == '8' && mode == 'test') || (app_state == '9' &&  mode == 'prod')){
+      if (is_online_processing == "True") {
+        $('button[n_btn=saas_deploy]').attr({"disabled":"disabled"});
+        REL_MANAGER.refresh_roll(app_code, app_state, '#release_msg_pro', '部署', 2);
+      }
+      // 发起状态更新
+      REL_MANAGER.check_unfinished_task(app_code);
+    }
+
+    //上线操作
+    $('#saas_app_online').on('click', function(){
+      var saas_app_version_id = $("#saas_app_version_id").val();
+
+      var option = $('option:selected', $("#saas_app_version_id"));
+      $("#version_info").attr("current_version", option.attr("version"))
+
+      var mode = $("#mode").val();
+      var app_state = $("#app_state").val();
+      if (!saas_app_version_id){
+        $("#import_msg").html($("#file_tips_div").html());
+        return false;
+      }
+      // TODO: get ther servers use select, and do alert
+
+      // get servers
+      var checked_servers = [];
+      $.each($("input[name='servers']:checked"), function(){
+          checked_servers.push($(this).val());
+      });
+
+      if (mode == "prod" && checked_servers.length < 1) {
+        art.dialog({id: 'bktips',width: 300,icon: 'warning',lock: true,content: gettext("请至少选择一台服务器")}).time(2);
+        return false;
+      }
+      // console.log(checked_servers)
+      var servers = checked_servers.join(",")
+      // console.log(servers)
+      REL_MANAGER.confirm_saas_app_online(this, saas_app_version_id, app_state, mode, servers);
+    })
+  })
+</script>

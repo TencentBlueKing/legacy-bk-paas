@@ -1,0 +1,40 @@
+.document {
+    padding: 10px 5px;
+}
+.document li p.first {
+    display: inline-block;
+}
+
+.document ul, .document ol {
+    padding-left: 15px;
+    list-style: initial;
+}
+
+.document ul :first-child, .document ol :first-child {
+    margin-top: 0;
+}
+.document ul li {
+    margin: 3px 0;
+    padding: 0;
+}
+
+.document ul :last-child, .document ol :last-child {
+    margin-bottom: 0;
+}
+.panel-info {
+    border-color: #dddddd;
+}
+.panel-info>.panel-heading {
+    color: #31708f;
+    background-color: #f9f9f9;
+    border-color: #dddddd;
+}
+.panel-heading {
+    padding: 5px 10px;
+    border-bottom: 1px solid transparent;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+.panel-body {
+    padding: 5px 15px;
+}

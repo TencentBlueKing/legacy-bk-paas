@@ -1,0 +1,71 @@
+{% extends "manager/base.html" %}
+{% load bootstrap %}
+{% load i18n %}
+
+{% block header %}
+<style>
+.classify-code-height {
+    height: 100px;
+    overflow-y: scroll;
+    width: 100%;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+
+<div class="main-page box-info">
+    <div class="main-header">
+        <span>{% trans "修改系统" %}</span>
+    </div>
+
+    <div class="page-content" style="width: 80%">
+        <form action="" method="post" class="form-inline form-columns">{% csrf_token %}
+            {{ form.name|bootstrap }}
+            {{ form.label|bootstrap }}
+
+            <div class="form-group">
+                <label class="control-label" for="id_doc_category">{% trans "文档分类" %}</label>
+                <div class="controls">
+                    <div class="input-group dropdown" style="display: table; margin-top: 0px;">
+                        <input id="id_doc_category" name="doc_category" type="text" maxlength="16" class="form-control classify-code dropdown-toggle" style="width: 412px;" value="{{ system.doc_category.name_display }}" {% if system.is_official %}disabled{% endif %}/> 
+                        {% if not system.is_official %}
+                        <ul class="dropdown-menu classify-code-height"> 
+                            {% for doc_category in doc_category_list %}
+                            <li><a href="javascript:;" data-value="{{ doc_category.id }}">{{ doc_category.name_display }}</a></li>
+                            {% endfor %}
+                        </ul> 
+                        {% endif %}
+                        <span role="button" class="input-group-addon dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 38px;"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>            
+
+            {{ form.interface_admin|bootstrap }}
+            {{ form.execute_timeout|bootstrap }}
+            {{ form.query_timeout|bootstrap }}
+            {{ form.remark|bootstrap }}
+
+            <div class="form-group action">
+                <button type="submit" class="btn btn-primary">{% trans "提交修改" %}</button> 
+                <button type="button" class="btn btn-default cancel">{% trans "取消" %}</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+$(function() {
+    $('button.cancel').bind('click', function() {
+       window.location.href = "{% url 'manager.system.list' %}"; 
+    });    
+
+    $('.dropdown-menu a').click(function() {
+        $(this).closest('.dropdown').find('input.classify-code').val($(this).text());
+    });
+});
+</script>
+{% endblock %}

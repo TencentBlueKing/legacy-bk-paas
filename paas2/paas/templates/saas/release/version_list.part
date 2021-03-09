@@ -1,0 +1,20 @@
+<table class="table table-bordered mt10">
+  <thead>
+    <tr>
+      <th width="20%" style="text-align: center;">${_(u'版本')}</th>
+      <th width="30%" style="text-align: center;">${_(u'文件名')}</th>
+      <th width="20%" style="text-align: center;">${_(u'文件大小')}</th>
+      <th width="30%" style="text-align: center;">${_(u'上传时间')}</th>
+    </tr>
+  </thead>
+  <tbody>
+    % for v in version_list:
+    <tr>
+      <td>${v.get("version")}</td>
+      <td>${v.get("file_name")}</td>
+      <td>${v.get("file_size")}M</td>
+      <td>${v.get("file_uploaded_at")}</td>
+    </tr>
+    % endfor
+  </tbody>
+</table>

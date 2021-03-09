@@ -1,0 +1,22 @@
+<div class="app-tip" style="margin-left:250px;margin-top:20px;">
+    <div style="margin-bottom:20px;">
+        <p>${_(u'您还没有应用，')}<a href="${SITE_URL}app/create/">${_(u'立即创建')}</a></p>
+    </div>
+    <div style="float:left;">
+        <p>${_(u'流程介绍：')}</p>
+    </div>
+    <div>
+        <div class="app-flowp">
+            ${_(u'1 创建应用')}<br>
+            ${_(u'填写应用信息，创建应用')}
+        </div>
+        <div class="app-flowp">
+            ${_(u'2 应用部署')}<br>
+            ${_(u'支持部署到测试、正式两个环境')}<br>
+            ${_(u'支持应用下架')}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#page").hide();
+</script>

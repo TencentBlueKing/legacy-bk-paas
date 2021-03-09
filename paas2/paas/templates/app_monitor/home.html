@@ -1,0 +1,102 @@
+<%!
+   def inherit( context ):
+       if not context.get('base_tpl'):
+           return '/base_app.html'
+       else:
+           return context.get('base_tpl')
+%>
+<%inherit file="${inherit(context)}"/>
+
+<%block name="right_content">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_monitor.min.css?v=${STATIC_VERSION}">
+
+  <style>
+  .success,.error {
+      width: 160px;
+      height: 35px;
+      text-align:center;
+      font-size: 15px;
+      padding-top:10px;
+  }
+
+  .k-autocomplete {
+      width: 250px;
+      vertical-align: middle;
+  }
+
+  .error_level.k-input {
+    padding-bottom: 4px;
+    padding-top: 6px;
+  }
+  </style>
+
+
+  <div class="main_hd">
+    <h4>&nbsp;</h4>
+    <div class="title_tab" id="topTab">
+      <ul class="tab_navs title_tab" data-index="0">
+        <li data-index="0" id="tab_0" class="tab_nav first js_top selected"><a href="###">${_(u'告警配置')}</a></li>
+        <li data-index="1" id="tab_1" class="tab_nav js_top"><a href="###">${_(u'告警记录')}</a></li>
+
+      </ul>
+    </div>
+  </div>
+
+  <div data-index="0" style="display:none;">
+    <div id="alarm_configure"></div>
+  </div>
+
+  <div data-index="1" style="display:none;">
+    <div id="alarm_record"></div>
+  </div>
+
+  <script id="successTemplate" type="text/x-kendo-template">
+              <div class="success">
+                  <p>#= message #</p>
+              </div>
+  </script>
+
+  <script id="errorTemplate" type="text/x-kendo-template">
+      <div class="error">
+            <p>#= message #</p>
+      </div>
+  </script>
+
+</%block>
+
+<script>
+$(function(){
+    $('ul.tab_navs li').click(function(){
+      $('ul.tab_navs li').removeClass('selected');
+      $(this).addClass('selected');
+      var index = $(this).attr('data-index');
+
+      if (index == 0){
+        // $("#alarm_configure").html("<img src='${STATIC_URL}img/loading.gif' style='width:100px;height:100px;margin-top:140px;'").css('text-align','center');
+        $("#alarm_configure").load(site_url + 'monitor/configure/${app_code}/');
+      } else if (index == 1){
+        // $("#alarm_record").html("<img src='${STATIC_URL}img/loading.gif' style='width:100px;height:100px;margin-top:140px;' text-align='center'></img>").css('text-align','center');
+        $("#alarm_record").load(site_url + 'monitor/record/${app_code}/');
+      }
+      // else if (index == 2) {
+      //   // $("#alarm_staticstics").html("<img src='${STATIC_URL}img/loading.gif' style='width:100px;height:100px;margin-top:140px;' text-align='center'></img>").css('text-align','center');
+      //   $("#alarm_staticstics").load(site_url + 'monitor/statistic/${app_code}/');
+      // }
+
+      $('div[data-index]').hide();
+      $('div[data-index='+index+']').show();
+    });
+
+    // do click from url params
+    var to_tab = "${tab}";
+    if (to_tab == "1") {
+      $("#tab_1").click();
+    } else {
+      $("#tab_0").click();
+    }
+    // else if (to_tab == "2") {
+    //   $("#tab_2").click();
+    // }
+
+})
+</script>

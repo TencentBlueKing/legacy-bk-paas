@@ -1,0 +1,34 @@
+{% load i18n %}
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" id="buffet-tab" style="margin-bottom: 20px">
+            <li name="list">
+                <a href="{% url 'manager.buffet_comp.list' %}">
+                  <i class="bk-icon icon-list" style="font-weight: bolder; margin-top: 2px;"></i>  
+                  {% trans "已接入" %}
+                </a>
+            </li>
+            <li name="apply">
+                <a href="{% url 'manager.buffet_comp.apply' %}">
+                    <i class="bk-icon icon-plus" style="font-weight: bolder; margin-top: 2px;"></i>
+                    {% trans "申请接入" %}
+                </a>
+            </li>
+            {% if title %}
+            <li class="active" name="custom">
+                <a href="{% url 'manager.buffet_comp.apply' %}">
+                    {{ title }}
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+$(function (){
+    {% if hilight %}
+        $('#buffet-tab li[name="{{hilight}}"]').addClass("active");
+    {% endif %}
+}); 
+</script>

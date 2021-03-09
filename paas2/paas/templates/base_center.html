@@ -1,0 +1,118 @@
+<%inherit file="/base.html"/>
+
+<%!
+    from common.filters import auth
+%>
+
+<!-- 左侧导航 start -->
+<%block name='left_content'>
+    <%
+        app_create = app_center = developer_tool = newbie_guide = services = ''
+        servers = third_servers = faq = esb = saas_center = tpapp_center = bksuite = ''
+        relative_path = APP_PATH
+        if relative_path.startswith(SITE_URL + "app/create/"):
+            app_create = 'selected'
+        elif relative_path.startswith(SITE_URL + "app/list/"):
+            app_center = 'selected'
+        elif relative_path.startswith(SITE_URL + "guide/tools/"):
+            developer_tool = 'selected'
+        elif relative_path.startswith(SITE_URL + "engine/servers/"):
+            servers = 'selected'
+        elif relative_path.startswith(SITE_URL + "engine/third_servers/"):
+            third_servers = 'selected'
+        elif relative_path.startswith(SITE_URL + "esb/channel/list"):
+            esb = 'selected'
+        elif relative_path.startswith(SITE_URL + "guide/services/"):
+            services = 'selected'
+        elif relative_path.startswith(SITE_URL + "guide/newbie/"):
+           newbie_guide = 'selected'
+        elif relative_path.startswith(SITE_URL + "saas/"):
+           saas_center = 'selected'
+        elif relative_path.startswith(SITE_URL + "tpapp/"):
+            tpapp_center = 'selected'
+        elif relative_path.startswith(SITE_URL + "bksuite/"):
+            bksuite = 'selected'
+    %>
+  <div class="menu_box" id="menuBar">
+    <dl class="menu no_extra" style="border-top:none;">
+      <dt class="menu_title clickable ${services}">
+      <a href="${SITE_URL}guide/services/"><i class="icon_menu service"></i> ${_(u'服务介绍')}</a>
+      </dt>
+    </dl>
+
+
+    <dl class="menu">
+      <dt class="menu_title">
+      <i class="icon_menu appcenter"></i> ${_(u'应用中心')}<i class="arrow"></i>
+      </dt>
+
+      <dd class="menu_item none ${app_create}" style="margin-left: 4px;"><a href="${SITE_URL}app/create/"> ${_(u'应用创建')}</a></dd>
+
+      <dd class="menu_item none ${app_center}" style="margin-left: 4px;"><a href="${SITE_URL}app/list/"> ${_(u'我的应用')}</a></dd>
+      <!-- 超级管理员才有权限查看 -->
+      % if auth.has_smart_manage_permission(request.user.username):
+        <dd class="menu_item none ${saas_center}" style="margin-left: 4px;"><a href="${SITE_URL}saas/list/"> ${_(u'S-mart应用')}</a></dd>
+      % endif
+
+      % if EDITION == "ee":
+      <dd class="menu_item none ${tpapp_center}" style="margin-left: 4px;"><a href="${SITE_URL}tpapp/list/"> ${_(u'外链应用')}</a></dd>
+      % endif
+    </dl>
+
+    % if auth.has_system_ops_permission(request.user.username):
+      <dl class="menu">
+        <dt class="menu_title clickable ${servers}">
+        <a href="${SITE_URL}engine/servers/"><i class="icon_menu task"></i> ${_(u'服务器信息')}</a>
+        </dt>
+      </dl>
+      <dl class="menu">
+        <dt class="menu_title clickable ${third_servers}">
+        <a href="${SITE_URL}engine/third_servers/"><i class="icon_menu db"></i> ${_(u'第三方服务')}</a>
+        </dt>
+      </dl>
+    % endif
+
+
+    <dl class="menu">
+      <dt class="menu_title clickable ${newbie_guide}">
+      <a href="${SITE_URL}guide/newbie/"><i class="icon_menu guide"></i> ${_(u'新手指南')}</a>
+      </dt>
+    </dl>
+
+    <dl class="menu">
+      <dt class="menu_title clickable">
+      <a href="https://docs.bk.tencent.com/download/" target="_blank"> <i class="bk-icon icon-download f18 t_b mr10"></i> ${_(u'资源下载')}</a>
+      </dt>
+    </dl>
+
+    <!-- 超级管理员才有权限查看, NOTE: 合并一行, 为了自动化生成开源版本方便 -->
+    % if auth.has_apigateway_manage_permission(request.user.username):
+    <!-- esb manage -->
+    <dl class="menu"> <dt class="menu_title clickable ${esb}"> <a href="${SITE_URL}esb/manager/index/" target="_blank"><i class="icon_menu esb"></i> ${_(u'API网关')}</a> </dt> </dl>
+    % else:
+    <!-- esb doc -->
+    <dl class="menu"> <dt class="menu_title clickable ${esb}"> <a href="${SITE_URL}esb/api_docs/system/" target="_blank"><i class="icon_menu esb"></i> ${_(u'API文档')}</a> </dt> </dl>
+    % endif
+
+    <dl class="menu">
+        <dt class="menu_title clickable">
+            <a href="http://magicbox.bk.tencent.com/" target="_blank"><i class="icon_menu function"></i> MagicBox</a>
+        </dt>
+    </dl>
+    % if auth.has_system_ops_permission(request.user.username):
+      <dl class="menu">
+        <dt class="menu_title clickable ${bksuite}">
+        <a href="${SITE_URL}bksuite/"><i class="icon_menu sample"></i> ${_(u'版本信息')}</a>
+        </dt>
+      </dl>
+    % endif
+  </div>
+</%block>
+<!-- 左侧导航 end -->
+
+<!-- 右侧内容 start -->
+<%block name="right_content_base">
+    <%block name="right_content">
+    </%block>
+</%block>
+<!-- 右侧内容 end -->

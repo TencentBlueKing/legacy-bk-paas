@@ -1,0 +1,240 @@
+<%!
+   def inherit( context ):
+       if not context.get('base_tpl'):
+           return '/base_app.html'
+       else:
+           return context.get('base_tpl')
+%>
+<%inherit file="${inherit(context)}"/>
+
+<%block name="right_content">
+<style>
+    .btn-cancel {
+        background-color: #ccc;
+    }
+</style>
+
+% if not is_allow:
+    <h4 style="margin-top:40px;text-align:center;">${_(u'日志查询功能暂未开放')}</h4>
+% else:
+
+<!-- <div class="main_hd"> -->
+<!--   <h4>&nbsp;</h4> -->
+<!--   <div class="title_tab" id="topTab"> -->
+<!--     <ul class="tab_navs title_tab" data-index="0"> -->
+<!--       <li class="tab_nav first js_top selected"><a href="${SITE_URL}log/${app_code}/">${_(u'日志查询')}</a></li> -->
+<!--     </ul> -->
+<!--   </div> -->
+<!-- </div> -->
+<hr>
+
+<div class="highlight_box_wrp" style="margin: 10px;">
+  <!--     工具栏 start    -->
+  <div class="data-table-toolbar">
+    <div class="row">
+      <!--         搜索 start             -->
+      <!--     只按日志内容查询， 具体搜索条件 TODO    -->
+      <div class="col-md-12">
+        <div class="form-inline" style="margin-top:-5px;margin-right:-10px;margin-left:-10px" >
+
+          <br/>
+          <span id="log_time_text" style=margin-bottom:10px;"">${_(u'时间')}:</span>
+
+          <select id="log_time" class="form-control ml10" style="width: 150px; margin-bottom: 10px;">
+            <!-- <option value="5m">最近5分钟</option> -->
+            <option value="1h">${_(u'最近1小时')}</option>
+            <option value="3h">${_(u'最近3小时')}</option>
+            <option value="6h">${_(u'最近6小时')}</option>
+            <option value="12h">${_(u'最近12小时')}</option>
+            <option value="1d">${_(u'最近1天')}</option>
+            <option value="3d">${_(u'最近3天')}</option>
+            <option value="7d">${_(u'最近7天')}</option>
+            <option value="diy">${_(u'自定义')}</option>
+
+          </select>
+          <input type="text" class="form-control ml10" style="width:320px;margin-bottom: 10px; display:none;" id="datepicker" placeholder="${_(u'选择日期...')}">
+          <input type="hidden" id="log_time_begin" value="">
+          <input type="hidden" id="log_time_end" value="">
+
+          <br/>
+
+          <span id="run_mode_text" >${_(u'环境')}:</span>
+          <select id="run_mode" class="form-control ml10" style="width: 120px">
+            <option value="">${_(u'全部')}</option>
+            <option value="TEST">${_(u'测试')}</option>
+            <option value="PRODUCT">${_(u'正式')}</option>
+          </select>
+          <span class="ml10">${_(u'类型')}:</span>
+
+          % if language == "python":
+            <select id="log_type" class="form-control ml10" style="width: 125px" onchange="change_log_type(this)">
+              <option value="django">${_(u'应用日志')}</option>
+              <option value="uwsgi">${_(u'访问日志')}</option>
+              <option value="component">${_(u'组件调用')}</option>
+              <option value="celery">${_(u'Celery日志')}</option>
+            </select>
+          % else:
+            <select id="log_type" class="form-control ml10" style="width: 115px" onchange="change_log_type(this)">
+              <option value="app">${_(u'应用日志')}</option>
+              <option value="access">${_(u'访问日志')}</option>
+              <option value="framework">${_(u'框架日志')}</option>
+            </select>
+          % endif
+
+          <span class="ml10 level" style="">${_(u'日志级别')}:</span>
+          <select id="log_level" class="form-control ml10 level" style="width: 110px">
+            <option value="">${_(u'全部')}</option>
+            <option value="ERROR">ERROR</option>
+            <option value="INFO">INFO</option>
+            <option value="WARNING">WARNING</option>
+            <option value="DEBUG">DEBUG</option>
+            <option value="CRITICAL">CRITICAL</option>
+          </select>
+
+          % if language == "python":
+          <span class="ml10 func" style="">${_(u'函数名')}:</span>
+          <select id="func_list" class="form-control ml10 func" style='max-width: 200px;' >
+            <option value="">${_(u'请选择')}</option>
+          </select>
+          % endif
+
+          <span class="ml10 order" style="display:none;">${_(u'排序')}:</span>
+          <select id="order" class="form-control ml10 order" style='max-width: 200px; display:none;' >
+            <option value="timestamp" selected="selected" id="timestamp">${_(u'发生时间')}</option>
+            <option value="resp_time">${_(u'响应时间')}</option>
+          </select>
+
+
+          <br/>
+          <span id='msg_name'>${_(u'信息')}:</span>
+          <input id="log_msg" type="text" class="form-control ml10" style="width:295px" placeholder="${_(u'请输入查询字符')}" onkeyup="enter_keyword(event);">
+          <span class="close" style="position:absolute;left:320px;margin-top:16px;cursor: pointer;background-color:#bbbbbb;border-radius:10px;text-align:center;width:22px;height:22px" onclick="delete_input(this)">×</span>
+          <input type="checkbox" checked id="precise_search" style="margin-left: 10px; margin-right: 10px;" /><label for="precise_search" >${_(u'精确查找')}</label>
+          <button id="j_display_all_app"  class="btn btn-azure btn-min-w ml10" style="margin-top:9px;margin-left: 10px;height:34px;border: none;">${_(u'搜索')}</button>
+          <button id="export_csv"  class="btn btn-success btn-min-w ml10" style="padding-left:24px; padding-right:24px;margin-top:9px;margin-left: 12px;height:34px;border: none;">${_(u'导出前1000条')}</button>
+
+        </div>
+
+        <div class="form-inline" style="" >
+        </div>
+      </div>
+      <div class="col-md-6">
+      </div>
+    </div>
+    <!--     搜索 end    -->
+
+  </div>
+  <!--     工具栏 end    -->
+  <div class="table-responsive">
+    <!--     app table -->
+    <div id="table_app">
+    </div>
+    <!--     分页 开始    -->
+    <div class="f_r form-inline show mt10 mb30" id="page">
+      <div class="mb5" id='page_goto'><input id='number_page' class="form-control" style='height: 30px;width:60px' /><button id="page_number_search" class="btn btn-azure btn-min-w ml10" style="">${_(u'跳转')}</button></div>
+      <div id="pagination_id" class="btn-group"></div>
+    </div>
+    <!--    分页 结束      -->
+  </div>
+</div>
+% endif
+</%block>
+
+<!-- 日期选择    -->
+<script src="${STATIC_URL}assets/daterangepicker/moment.min.js"></script>
+<script src="${STATIC_URL}assets/daterangepicker/daterangepicker.js"></script>
+<!--  分页    -->
+<script src="${STATIC_URL}js/pagination.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}assets/daterangepicker/daterangepicker.css">
+<script src="${STATIC_URL}js/paas_app_log.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+  // 应用搜索
+  $("#j_display_all_app").click(function(){
+    var log_time = $("#log_time").val();
+    var log_time_begin = $("#log_time_begin").val();
+    var log_time_end = $("#log_time_end").val();
+    var log_type = $("#log_type").val();
+    var run_mode = $("#run_mode").val();
+    var log_level = $("#log_level").val();
+    var msg = $.trim($("#log_msg").val());
+    var func_name = $.trim($("#func_list").val());
+    var order = $("#order").val();
+    $("#table_app").html("<img src='${STATIC_URL}img/loading.gif' style='width:100px;height:100px;margin-left: 40%;margin-top: 250px; opacity: 0.4;' text-align='center'></img>");
+    $("#pagination_id").hide();
+    $("#page_goto").hide();
+    var precise_search = $("#precise_search").attr('checked');
+    if (precise_search){
+      var pcheck = 1;
+    }else{
+      var pcheck = 0;
+    }
+    //分页请求
+    var opt={url:'${SITE_URL}log/search/${app_code}/?log_type='+log_type+'&run_mode='+run_mode+'&log_level='+log_level+'&msg='+encodeURIComponent(msg)+'&log_time='+log_time+'&log_time_begin='+encodeURIComponent(log_time_begin)+'&log_time_end='+encodeURIComponent(log_time_end)+'&func_name='+ func_name+'&pcheck='+pcheck+'&order='+order+'&',
+      items_per_page:20,
+      current_page:1,
+      callback:callback_fun,
+      table_obj:'#table_app',
+      num_display_items: 3,
+    };
+    $("#pagination_id").pagination(opt);
+    $("#number_page").val(1);
+  })
+  // 应用搜索
+  $("#page_number_search").click(function(){
+    var log_time = $("#log_time").val();
+    var log_time_begin = $("#log_time_begin").val();
+    var log_time_end = $("#log_time_end").val();
+    var log_type = $("#log_type").val();
+    var run_mode = $("#run_mode").val();
+    var log_level = $("#log_level").val();
+    var msg = $.trim($("#log_msg").val());
+    var func_name = $.trim($("#func_list").val());
+    $("#table_app").html("<img src='${STATIC_URL}img/loading.gif' style='width:100px;height:100px;margin-left: 40%;margin-top: 250px; opacity: 0.4;' text-align='center'></img>");
+    $("#pagination_id").hide();
+    var page = parseInt($("#number_page").val());
+    if (!page || page <=0 ){
+      // page = 1;
+      // art.dialog({id: 'bktips',width: 300,icon: 'warning',lock: false, content: gettext('错误的搜索参数! 页码格式错误, 只能为正整数')});
+      alarm_invalid_page_number();
+      return
+    }
+
+    var precise_search = $("#precise_search").attr('checked');
+    if (precise_search){
+      var pcheck = 1;
+    }else{
+      var pcheck = 0;
+    }
+    //分页请求
+    var opt={url:'${SITE_URL}log/search/${app_code}/?log_type='+log_type+'&run_mode='+run_mode+'&log_level='+log_level+'&msg='+encodeURIComponent(msg)+'&log_time='+log_time+'&log_time_begin='+encodeURIComponent(log_time_begin)+'&log_time_end='+encodeURIComponent(log_time_end)+'&func_name='+ func_name+'&pcheck='+pcheck+'&order='+order+'&',
+      items_per_page:20,
+      current_page:page,
+      callback:callback_fun,
+      table_obj:'#table_app',
+      num_display_items: 3,
+    };
+    $("#pagination_id").pagination(opt);
+  })
+
+  // 应用搜索
+  $("#export_csv").click(function(){
+    var log_time = $("#log_time").val();
+    var log_type = $("#log_type").val();
+    var run_mode = $("#run_mode").val();
+    var log_level = $("#log_level").val();
+    var msg = $.trim($("#log_msg").val());
+    var func_name = $.trim($("#func_list").val());
+    var order = $("#order").val();
+    var precise_search = $("#precise_search").attr('checked');
+    if (precise_search){
+      var pcheck = 1;
+    }else{
+      var pcheck = 0;
+    }
+    //分页请求
+    var url = '${SITE_URL}log/search/${app_code}/?log_type='+log_type+'&run_mode='+run_mode+'&log_level='+log_level+'&msg='+encodeURIComponent(msg)+'&log_time='+log_time+'&func_name='+ func_name+'&pcheck='+pcheck+'&order='+order+'&is_down=1';
+    window.open(url);
+  })
+
+
+</script>

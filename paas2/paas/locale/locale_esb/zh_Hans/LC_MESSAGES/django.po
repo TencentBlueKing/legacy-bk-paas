@@ -1,0 +1,1331 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-03 21:54+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: apps/api_docs/api_views.py:76 apps/api_docs/views.py:109
+msgid "暂无系统简介"
+msgstr ""
+
+#: apps/api_docs/api_views.py:103
+msgid "满足需求"
+msgstr ""
+
+#: apps/api_docs/templates/api_docs/index.html:133
+msgid "蓝鲸API查询"
+msgstr ""
+
+#: apps/api_docs/templates/api_docs/index.html:136
+msgid "快速查找接口"
+msgstr ""
+
+#: apps/api_docs/templates/api_docs/system_api_base.html:432
+msgid "所有系统"
+msgstr ""
+
+#: apps/api_docs/templates/api_docs/system_api_base.html:461
+#: apps/api_docs/templates/api_docs/system_api_base.html:463
+msgid "简介"
+msgstr ""
+
+#: apps/api_docs/templates/api_docs/system_api_base.html:467
+msgid "API列表"
+msgstr ""
+
+#: apps/api_docs/templates/api_docs/system_api_base.html:467
+msgid "总数"
+msgstr ""
+
+#: apps/api_docs/templates/api_docs/system_api_base.html:502
+msgid "蓝鲸API文档"
+msgstr ""
+
+#: apps/api_docs/templates/api_docs/system_api_index.html:18
+msgid "资源名称"
+msgstr ""
+
+#: apps/api_docs/templates/api_docs/system_api_index.html:19
+msgid "资源描述"
+msgstr ""
+
+#: apps/api_docs/views.py:18 apps/manager/system/forms.py:16
+#: apps/manager/templates/manager/system/list.html:44 apps/status/models.py:11
+#: bkcore/models.py:21
+msgid "系统名称"
+msgstr ""
+
+#: apps/bootstrapform/templates/bootstrapform/field.html:61
+#: apps/bootstrapform/templates/bootstrapform/field.html:66
+msgid "创建新系统"
+msgstr ""
+
+#: apps/guide/views.py:18
+msgid "API网关介绍"
+msgstr ""
+
+#: apps/guide/views.py:19
+msgid "组件编码"
+msgstr ""
+
+#: apps/guide/views.py:20
+#: apps/manager/templates/manager/buffet_comp/base.html:13
+msgid "自助接入"
+msgstr ""
+
+#: apps/guide/views.py:21
+msgid "API调用说明"
+msgstr ""
+
+#: apps/guide/views.py:22
+msgid "自定义配置管理"
+msgstr ""
+
+#: apps/guide/views.py:23
+msgid "CMSI消息组件"
+msgstr ""
+
+#: apps/guide/views.py:28
+msgid "微信消息组件"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:30 apps/manager/channel/forms.py:16
+#: bkcore/models.py:80 bkcore/models.py:240
+msgid "执行API"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:31 apps/manager/channel/forms.py:17
+#: bkcore/models.py:81 bkcore/models.py:241
+msgid "查询API"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:34
+msgid "API名称"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:36 apps/manager/channel/forms.py:25
+#: bkcore/models.py:93
+msgid "所属系统"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:43 bkcore/models.py:247
+msgid "目标接口地址"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:46
+msgid "可使用 http://domain.com/users/{username}/ 形式的路径变量"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:49
+msgid "目标接口请求类型"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:54 bkcore/models.py:249
+msgid "编码POST参数方式"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:57
+msgid "默认使用 json 编码请求参数，选择 form 后使用 form-urlencoded 编码"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:60 bkcore/models.py:250
+msgid "额外请求头信息"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:65 bkcore/models.py:251
+msgid "额外请求参数"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:71 bkcore/models.py:253
+msgid "注册到的API路径"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:73
+msgid ""
+"以斜杠开头，只能包含斜杠、大小写字母、数字、下划线，如：\"/host/"
+"get_host_list/\"，可额外包含路径变量，如 \"/users/{username}/\"；注册到的请求"
+"类型+注册到的API路径，在自助接入中需全局唯一"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:77
+msgid "输入的路径不符合要求"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:80 bkcore/models.py:254
+msgid "注册到的请求类型"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:86
+msgid "对请求参数应用mapping"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:91
+msgid "对返回结果应用mapping"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:96 apps/manager/channel/forms.py:51
+#: bkcore/models.py:100 bkcore/models.py:267
+msgid "超时时长"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:99 apps/manager/channel/forms.py:54
+#: apps/manager/system/forms.py:29 apps/manager/system/forms.py:40
+msgid "输入格式不正确"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:104 apps/manager/channel/forms.py:59
+#: bkcore/models.py:100 bkcore/models.py:268
+msgid "单位秒，未设置时以所属系统超时时长为准"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:108 apps/manager/channel/forms.py:63
+#: bkcore/models.py:101 bkcore/models.py:269
+msgid "API类型"
+msgstr ""
+
+#: apps/manager/buffet_comp/forms.py:123 apps/manager/buffet_comp/forms.py:143
+#, python-format
+msgid "路径 %s 已经被占用了，请修改"
+msgstr ""
+
+#: apps/manager/channel/forms.py:20 bkcore/models.py:84
+msgid "无限制"
+msgstr ""
+
+#: apps/manager/channel/forms.py:21 bkcore/models.py:85
+msgid "普通权限"
+msgstr ""
+
+#: apps/manager/channel/forms.py:31 bkcore/models.py:91
+msgid "通道路径"
+msgstr ""
+
+#: apps/manager/channel/forms.py:35
+msgid ""
+"通道路径，以斜杠开头，只能包含斜杠、字母、数字、下划线(_)、连接符(-)，一般设"
+"置为\"/system_name/component_name/\"，例如\"/host/get_host_list/\"；通道路径"
+"需唯一"
+msgstr ""
+
+#: apps/manager/channel/forms.py:37
+msgid "输入的通道路径不符合要求"
+msgstr ""
+
+#: apps/manager/channel/forms.py:41 bkcore/models.py:94
+msgid "对应组件代号"
+msgstr ""
+
+#: apps/manager/channel/forms.py:45
+msgid ""
+"组件代号，只能包含小写字母、数字、下划线或点号，由三部分组成：\"前缀"
+"(generic).系统名小写.组件类名小写\"，例如 \"generic.host.get_host_list\""
+msgstr ""
+
+#: apps/manager/channel/forms.py:47 apps/manager/channel/forms.py:102
+msgid "输入的组件代号不符合要求"
+msgstr ""
+
+#: apps/manager/channel/forms.py:69
+#: apps/manager/templates/manager/channel/list.html:90 bkcore/models.py:103
+msgid "权限级别"
+msgstr ""
+
+#: apps/manager/channel/forms.py:73
+msgid ""
+"无权限，应用不需申请API权限；普通权限，应用需在开发者中心申请API权限，审批通"
+"过后访问"
+msgstr ""
+
+#: apps/manager/channel/forms.py:88 apps/manager/channel/forms.py:139
+msgid "通道路径已存在"
+msgstr ""
+
+#: apps/manager/channel/views.py:175
+msgid "企业微信"
+msgstr ""
+
+#: apps/manager/channel/views.py:176
+msgid "微信公众号"
+msgstr ""
+
+#: apps/manager/system/forms.py:21
+msgid "输入的系统名称不符合要求"
+msgstr ""
+
+#: apps/manager/system/forms.py:23
+msgid "系统唯一标识，由英文字母、下划线(_)或数字组成，并且以字母开头"
+msgstr ""
+
+#: apps/manager/system/forms.py:26 bkcore/models.py:30
+msgid "执行类超时时长"
+msgstr ""
+
+#: apps/manager/system/forms.py:33 apps/manager/system/forms.py:44
+#: bkcore/models.py:31 bkcore/models.py:33
+msgid "单位秒，未设置时超时时长为30秒"
+msgstr ""
+
+#: apps/manager/system/forms.py:37 bkcore/models.py:32
+msgid "查询类超时时长"
+msgstr ""
+
+#: apps/manager/system/forms.py:48 bkcore/models.py:29
+msgid "备注"
+msgstr ""
+
+#: apps/manager/system/forms.py:86
+msgid "默认系统名称，不能使用"
+msgstr ""
+
+#: apps/manager/system/forms.py:88 apps/manager/system/forms.py:97
+msgid "系统名称已存在"
+msgstr ""
+
+#: apps/manager/system/forms.py:101
+msgid "默认系统名称，不能修改"
+msgstr ""
+
+#: apps/manager/system/forms.py:103
+msgid "系统下存在通道，不能修改"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/apply.html:15
+#: apps/manager/templates/manager/buffet_comp/edit.html:15
+msgid "注册配置"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/apply.html:30
+#: apps/manager/templates/manager/buffet_comp/edit.html:31
+msgid "请求发出前"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/apply.html:40
+#: apps/manager/templates/manager/buffet_comp/edit.html:41
+msgid "请求目的地"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/apply.html:51
+msgid "确认申请"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/apply.html:52
+#: apps/manager/templates/manager/buffet_comp/edit.html:53
+#: apps/manager/templates/manager/channel/add.html:48
+#: apps/manager/templates/manager/channel/edit.html:93
+#: apps/manager/templates/manager/system/add.html:49
+#: apps/manager/templates/manager/system/add_system_tmpl.html:24
+#: apps/manager/templates/manager/system/edit.html:51
+msgid "取消"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/apply.html:72
+#: apps/manager/templates/manager/buffet_comp/edit.html:73
+msgid "添加一行"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/apply.html:89
+#: apps/manager/templates/manager/buffet_comp/edit.html:92
+#: apps/manager/templates/manager/channel/list.html:36
+#: apps/manager/templates/manager/system/list.html:29
+msgid "删除"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/base.html:14
+#: apps/manager/templates/manager/index.html:21
+msgid "跳转到使用指南"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/edit.html:52
+msgid "确认修改"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/helpers/buffet_tab.html:8
+msgid "已接入"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/helpers/buffet_tab.html:14
+msgid "申请接入"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/list.html:54
+#: apps/manager/templates/manager/buffet_comp/list.html:55
+#: apps/manager/templates/manager/channel/list.html:125
+#: apps/manager/templates/manager/channel/list.html:127
+msgid "API地址"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/list.html:67
+#: apps/manager/templates/manager/channel/list.html:141
+msgid "复制到剪贴板"
+msgstr ""
+
+#: apps/manager/templates/manager/buffet_comp/list.html:83
+msgid "您还没有相关自助接入API信息"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/add.html:9
+msgid "添加新通道"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/add.html:27
+#: apps/manager/templates/manager/channel/edit.html:72
+msgid "开启请求频率限制"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/add.html:32
+#: apps/manager/templates/manager/channel/edit.html:77
+msgid "最大请求数"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/add.html:34
+#: apps/manager/templates/manager/channel/edit.html:79
+msgid "每秒"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/add.html:35
+#: apps/manager/templates/manager/channel/edit.html:80
+msgid "每分钟"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/add.html:36
+#: apps/manager/templates/manager/channel/edit.html:81
+msgid "每小时"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/add.html:39
+#: apps/manager/templates/manager/channel/edit.html:84
+msgid "频率限制维度"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/add.html:39
+#: apps/manager/templates/manager/channel/edit.html:84
+msgid "每个蓝鲸应用"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/add.html:47
+#: apps/manager/templates/manager/system/add.html:48
+#: apps/manager/templates/manager/system/add_system_tmpl.html:23
+msgid "确认添加"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/edit.html:9
+msgid "修改通道"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/edit.html:24 bkcore/models.py:102
+msgid "组件配置"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/edit.html:31
+msgid "变量名"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/edit.html:32
+msgid "变量值"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/edit.html:92
+#: apps/manager/templates/manager/system/edit.html:50
+msgid "提交修改"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:32
+msgid "组件通道列表"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:40
+msgid "添加通道"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:46 bkcore/models.py:245
+msgid "系统"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:52
+#: apps/manager/templates/manager/channel/list.html:89
+msgid "请求路径"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:54
+msgid "搜索"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:62
+#: apps/manager/templates/manager/system/list.html:74
+msgid "帮助"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:66
+#: apps/manager/templates/manager/system/list.html:78
+msgid "更多详情请查看"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:68
+#: apps/manager/templates/manager/index.html:29
+#: apps/manager/templates/manager/system/list.html:80
+msgid "使用指南"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:88 bkcore/models.py:90
+msgid "通道名称"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:91
+msgid "是否校验频率"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:104
+#: apps/manager/templates/manager/system/list.html:57
+msgid "编辑"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:109
+msgid "已关闭"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:132
+msgid "跳转到浏览器"
+msgstr ""
+
+#: apps/manager/templates/manager/channel/list.html:155
+msgid "您还没有相关组件通道信息"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:20
+msgid "API网关简介"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:27
+msgid "更多内容请查看"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:32
+msgid "API网关接入方式简述"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:34
+msgid ""
+"组件编码接入：编码组件逻辑，并通过注册系统以及组件通道，提供API服务。适用于需"
+"自定义处理逻辑的场景。"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:35
+msgid ""
+"在线自助接入：通过在线配置接口信息，提供API服务。适用于将HTTP协议、无需特殊处"
+"理的接口，直接对接的场景。"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:38
+msgid "组件编码接入流程"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:39
+msgid "跳转到组件编码介绍"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:45
+msgid "根据需求编码组件逻辑"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:46
+msgid "编码具体组件逻辑"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:53
+msgid "点击`系统管理`，注册组件所属系统"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:54
+#: apps/manager/templates/manager/index.html:91
+msgid "注册系统"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:60
+msgid "点击`通道管理`，注册编码的组件信息"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:61
+msgid "添加组件通道"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:67
+msgid "按指令`重启服务`"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:68
+msgid "重启服务"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:74
+#: apps/manager/templates/manager/index.html:104
+msgid "完成接入"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:75
+#: apps/manager/templates/manager/index.html:105
+msgid "完成"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:83
+msgid "在线自助接入流程"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:84
+msgid "跳转到自助接入介绍"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:90
+msgid "点击`系统管理`，注册API所属系统"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:97
+msgid "点击`自助接入`，配置API及对接接口的信息"
+msgstr ""
+
+#: apps/manager/templates/manager/index.html:98
+msgid "添加API配置"
+msgstr ""
+
+#: apps/manager/templates/manager/system/add.html:19
+msgid "添加新系统"
+msgstr ""
+
+#: apps/manager/templates/manager/system/add.html:28
+#: apps/manager/templates/manager/system/edit.html:28
+msgid "文档分类"
+msgstr ""
+
+#: apps/manager/templates/manager/system/edit.html:19
+msgid "修改系统"
+msgstr ""
+
+#: apps/manager/templates/manager/system/list.html:25
+msgid "系统列表"
+msgstr ""
+
+#: apps/manager/templates/manager/system/list.html:33
+msgid "添加系统"
+msgstr ""
+
+#: apps/manager/templates/manager/system/list.html:45 bkcore/models.py:22
+msgid "系统标签"
+msgstr ""
+
+#: apps/manager/templates/manager/system/list.html:46
+msgid "系统负责人"
+msgstr ""
+
+#: apps/manager/templates/manager/system/list.html:65
+msgid "您还没有相关组件系统信息"
+msgstr ""
+
+#: apps/status/models.py:12
+msgid "事件类型"
+msgstr ""
+
+#: apps/status/models.py:13
+msgid "事件内容"
+msgstr ""
+
+#: apps/status/models.py:14
+msgid "事件时间戳"
+msgstr ""
+
+#: apps/status/models.py:15 bkcore/models.py:99 bkcore/models.py:180
+#: bkcore/models.py:197 bkcore/models.py:316 bkcore/models.py:342
+#: bkcore/models.py:343 bkcore/models.py:385 bkcore/models.py:416
+msgid "创建时间"
+msgstr ""
+
+#: apps/status/templates/status/index.html:219
+#: apps/status/templates/status/system_index.html:166
+msgid "运行数据"
+msgstr ""
+
+#: apps/status/templates/status/index.html:221
+#: apps/status/templates/status/system_index.html:168
+msgid "实时运行数据"
+msgstr ""
+
+#: apps/status/templates/status/index.html:230
+msgid "所有运营系统实时概况"
+msgstr ""
+
+#: apps/status/templates/status/index.html:242
+msgid "最近 1 分钟"
+msgstr ""
+
+#: apps/status/templates/status/index.html:243
+msgid "最近 10 分钟"
+msgstr ""
+
+#: apps/status/templates/status/index.html:244
+msgid "最近 30 分钟"
+msgstr ""
+
+#: apps/status/templates/status/index.html:245
+msgid "最近 1 小时"
+msgstr ""
+
+#: apps/status/templates/status/index.html:246
+msgid "最近 6 小时"
+msgstr ""
+
+#: apps/status/templates/status/index.html:247
+msgid "最近 12 小时"
+msgstr ""
+
+#: apps/status/templates/status/index.html:248
+msgid "最近 24 小时"
+msgstr ""
+
+#: apps/status/templates/status/index.html:270
+#: apps/status/templates/status/system_index.html:188
+msgid "每分钟自动刷新"
+msgstr ""
+
+#: apps/status/templates/status/index.html:302
+#: apps/status/templates/status/index.html:365
+msgid "暂无数据"
+msgstr ""
+
+#: apps/status/templates/status/index.html:325
+#, python-format
+msgid "可用率低于 100%%"
+msgstr ""
+
+#: apps/status/templates/status/index.html:340
+#: apps/status/templates/status/system_index.html:515
+msgid "响应时间长于 5s"
+msgstr ""
+
+#: apps/status/templates/status/index.html:355
+msgid "次"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:180
+msgid "系统最新状态"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:227
+msgid "请求详情"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:238
+msgid "按组件"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:239
+msgid "按 APP"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:240
+msgid "按 URL"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:277
+msgid "负责人"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:287
+msgid "暂无"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:309
+msgid "组件名"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:310
+#: apps/status/templates/status/system_index.html:369
+#: apps/status/templates/status/system_index.html:425
+msgid "错误"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:310
+#: apps/status/templates/status/system_index.html:369
+#: apps/status/templates/status/system_index.html:425
+msgctxt "table header"
+msgid "总次数"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:311
+#: apps/status/templates/status/system_index.html:370
+#: apps/status/templates/status/system_index.html:426
+msgctxt "table header"
+msgid "统计响应时间"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:312
+#: apps/status/templates/status/system_index.html:371
+#: apps/status/templates/status/system_index.html:427
+msgctxt "table header"
+msgid "平均响应时间"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:313
+#: apps/status/templates/status/system_index.html:372
+#: apps/status/templates/status/system_index.html:428
+#: apps/status/templates/status/system_index.html:491
+msgid "可用率"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:327
+#: apps/status/templates/status/system_index.html:384
+#: apps/status/templates/status/system_index.html:442
+msgid "查看错误详情"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:344
+#: apps/status/templates/status/system_index.html:401
+#: apps/status/templates/status/system_index.html:459
+msgid "没有找到任何请求数据"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:473
+#: apps/status/templates/status/system_index.html:486
+#: apps/status/templates/status/system_index.html:505
+msgid "查看曲线图"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:478
+msgid "请求数"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:495
+#, python-format
+msgid "该系统在指定时间范围内可用率低于 100%%"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:510
+msgid "统计响应时间"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:511
+msgid "根据百分位计算出的响应时间，相比平均响应时间，更能反映问题"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:537
+msgid "此处最多展示最近 200 条错误信息"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:547
+msgid "时间"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:548
+msgid "错误信息"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:549
+msgid "耗时"
+msgstr ""
+
+#: apps/status/templates/status/system_index.html:550
+msgid "响应状态"
+msgstr ""
+
+#: apps/status/utils.py:56
+msgid "请求出现错误，请联系系统负责人处理"
+msgstr ""
+
+#: apps/status/utils.py:58
+msgid "您没有权限!"
+msgstr ""
+
+#: bkcore/constants.py:8
+msgid "是否跳过用户身份验证"
+msgstr ""
+
+#: bkcore/constants.py:14
+msgid "默认分类"
+msgstr ""
+
+#: bkcore/models.py:22
+msgid "系统简要说明"
+msgstr ""
+
+#: bkcore/models.py:23
+msgid "组件开发负责人"
+msgstr ""
+
+#: bkcore/models.py:24
+msgid "系统接口负责人"
+msgstr ""
+
+#: bkcore/models.py:25
+msgid "记录系统接口负责人，以便进行消息通知或直接联系，长度为128字符以内"
+msgstr ""
+
+#: bkcore/models.py:26
+msgid "系统链接"
+msgstr ""
+
+#: bkcore/models.py:27
+msgid "标准的HTTP链接，多个以分号分隔"
+msgstr ""
+
+#: bkcore/models.py:28
+msgid "系统所属组织"
+msgstr ""
+
+#: bkcore/models.py:34
+msgid "文档分类ID"
+msgstr ""
+
+#: bkcore/models.py:86
+msgid "敏感权限"
+msgstr ""
+
+#: bkcore/models.py:87
+msgid "特殊权限"
+msgstr ""
+
+#: bkcore/models.py:90
+msgid "通道名称，长度限制为64字符，例如\"查询服务器列表\""
+msgstr ""
+
+#: bkcore/models.py:91
+msgid "通道请求路径，例如\"/host/get_host_list/\""
+msgstr ""
+
+#: bkcore/models.py:92
+msgid "请求类型"
+msgstr ""
+
+#: bkcore/models.py:95
+msgid ""
+"对应的组件代号，该组件必须注册到API网关中，例如 \"generic.host.get_host_list"
+"\""
+msgstr ""
+
+#: bkcore/models.py:96
+msgid "组件英文名"
+msgstr ""
+
+#: bkcore/models.py:97
+msgid "是否开启"
+msgstr ""
+
+#: bkcore/models.py:98
+msgid "最后更新时间"
+msgstr ""
+
+#: bkcore/models.py:104
+msgid "是否隐藏"
+msgstr ""
+
+#: bkcore/models.py:104
+msgid "是否显示文档，及是否在权限申请中展示"
+msgstr ""
+
+#: bkcore/models.py:105
+msgid "是否校验访问频率"
+msgstr ""
+
+#: bkcore/models.py:106
+msgid "请求频率配置"
+msgstr ""
+
+#: bkcore/models.py:107
+msgid ""
+"限制访问频率，允许多种规则，例如{\"app_ratelimit\": {\"__default\": {\"token"
+"\":1000, \"minute\": 1}, \"gcloud\": {\"token\":1000, \"minute\": 1}}}"
+msgstr ""
+
+#: bkcore/models.py:173
+msgid "功能code"
+msgstr ""
+
+#: bkcore/models.py:174
+msgid "功能名称"
+msgstr ""
+
+#: bkcore/models.py:175
+msgid "是否开启该功能"
+msgstr ""
+
+#: bkcore/models.py:176
+msgid "控制功能是否对外开放，若选择，则该功能将对外开放"
+msgstr ""
+
+#: bkcore/models.py:177
+msgid "功能测试白名单"
+msgstr ""
+
+#: bkcore/models.py:178
+msgid "支持两种格式数据，以逗号、分号分隔的字符串，及JSON格式字符串"
+msgstr ""
+
+#: bkcore/models.py:179
+msgid "功能描述"
+msgstr ""
+
+#: bkcore/models.py:192
+msgid "蓝鲸智云应用编码"
+msgstr ""
+
+#: bkcore/models.py:193
+msgid "用户名"
+msgstr ""
+
+#: bkcore/models.py:194
+msgid "token内容"
+msgstr ""
+
+#: bkcore/models.py:195
+msgid "token过期时间"
+msgstr ""
+
+#: bkcore/models.py:196 bkcore/models.py:435
+msgid "最后访问时间"
+msgstr ""
+
+#: bkcore/models.py:244
+msgid "名称"
+msgstr ""
+
+#: bkcore/models.py:248
+msgid "HTTP请求类型"
+msgstr ""
+
+#: bkcore/models.py:259
+msgid "状态"
+msgstr ""
+
+#: bkcore/models.py:261
+msgid "输入Mappings"
+msgstr ""
+
+#: bkcore/models.py:262 bkcore/models.py:264
+msgid "JSON格式数据"
+msgstr ""
+
+#: bkcore/models.py:263
+msgid "输出Mappings"
+msgstr ""
+
+#: bkcore/models.py:313
+msgid "应用编码"
+msgstr ""
+
+#: bkcore/models.py:313
+msgid "此处请用英文字母"
+msgstr ""
+
+#: bkcore/models.py:314
+msgid "应用Token"
+msgstr ""
+
+#: bkcore/models.py:315
+msgid "应用简介"
+msgstr ""
+
+#: bkcore/models.py:338
+msgid "组件ID"
+msgstr ""
+
+#: bkcore/models.py:338
+msgid "对应 ESBChannel 中的组件ID"
+msgstr ""
+
+#: bkcore/models.py:339
+msgid "组件文档（MD格式）"
+msgstr ""
+
+#: bkcore/models.py:340
+msgid "组件文档（HTML格式）"
+msgstr ""
+
+#: bkcore/models.py:360 bkcore/models.py:361
+msgid "API文档"
+msgstr ""
+
+#: bkcore/models.py:383
+msgid "分类名称"
+msgstr ""
+
+#: bkcore/models.py:384
+msgid "优先级"
+msgstr ""
+
+#: bkcore/models.py:384
+msgid "展示时，数字小的展示在前面"
+msgstr ""
+
+#: bkcore/models.py:391 bkcore/models.py:392
+msgid "系统文档分类"
+msgstr ""
+
+#: bkcore/models.py:413
+msgid "蓝鲸应用编码"
+msgstr ""
+
+#: bkcore/models.py:414
+msgid "API ID"
+msgstr ""
+
+#: bkcore/models.py:415
+msgid "APP访问API过期时间"
+msgstr ""
+
+#: bkcore/models.py:417
+msgid "APP最后访问时间"
+msgstr ""
+
+#: bkcore/models.py:423 bkcore/models.py:424
+msgid "APP API权限"
+msgstr ""
+
+#: bkcore/models.py:432
+msgid "微信APPID"
+msgstr ""
+
+#: bkcore/models.py:433
+msgid "凭证"
+msgstr ""
+
+#: bkcore/models.py:434
+msgid "凭证过期时间"
+msgstr ""
+
+#: bkcore/models.py:439 bkcore/models.py:440
+msgid "微信公众号AccessToken"
+msgstr ""
+
+#: common/decorators.py:22
+msgid "您没有访问权限，请联系系统管理员添加！"
+msgstr ""
+
+#: common/exceptions.py:18
+#, python-format
+msgid "请求Elasticsearch超时（read timeout=%s），请稍后重试"
+msgstr ""
+
+#: common/exceptions.py:25
+msgid "系统未配置Elasticsearch地址，请联系系统负责人处理"
+msgstr ""
+
+#: common/exceptions.py:32
+msgid "连接Elasticsearch出现错误，请检查配置的Elasticsearch服务是否正常"
+msgstr ""
+
+#: common/exceptions.py:39
+msgid "查询Elasticsearch出现错误，请联系系统负责人处理"
+msgstr ""
+
+#: common/exceptions.py:46
+#, python-format
+msgid "查询Elasticsearch出现错误，请检查 index [%s] 是否存在"
+msgstr ""
+
+#: configs/default.py:8
+msgctxt "menu"
+msgid "简介"
+msgstr ""
+
+#: configs/default.py:13
+msgctxt "menu"
+msgid "系统管理"
+msgstr ""
+
+#: configs/default.py:18
+msgctxt "menu"
+msgid "通道管理"
+msgstr ""
+
+#: configs/default.py:23
+msgctxt "menu"
+msgid "自助接入"
+msgstr ""
+
+#: configs/default.py:28
+msgctxt "menu"
+msgid "运行数据"
+msgstr ""
+
+#: configs/default.py:33
+msgctxt "menu"
+msgid "使用指南"
+msgstr ""
+
+#: configs/default.py:38
+msgctxt "menu"
+msgid "API文档"
+msgstr ""
+
+#: configs/default.py:53
+msgid "蓝鲸统一登录"
+msgstr ""
+
+#: configs/default.py:54
+msgid "蓝鲸统一登录，管理用户登录验证，及用户信息"
+msgstr ""
+
+#: configs/default.py:58 configs/default.py:59
+msgid "蓝鲸开发者中心"
+msgstr ""
+
+#: configs/default.py:63
+msgid "蓝鲸配置平台"
+msgstr ""
+
+#: configs/default.py:64
+msgid ""
+"蓝鲸配置平台是一款面向应用的CMDB，在ITIL体系里，CMDB是构建其它流程的基石，而"
+"在蓝鲸智云体系里，配置平台就扮演着基石的角色，为应用提供了各种运维场景的配置"
+"数据服务。"
+msgstr ""
+
+#: configs/default.py:68 configs/default.py:69
+msgid "蓝鲸管控平台"
+msgstr ""
+
+#: configs/default.py:73
+msgid "蓝鲸作业平台"
+msgstr ""
+
+#: configs/default.py:74
+msgid ""
+"作业平台（Job）是一套基于蓝鲸智云管控平台Agent管道之上的基础操作平台，具备大"
+"并发处理能力；除了支持脚本执行、文件拉取/分发、定时任务等一系列可实现的基础运"
+"维场景以外，还运用流程化的理念很好的将零碎的单个任务组装成一个作业流程；而每"
+"个任务都可做为一个原子节点，提供给其它系统和平台调度，实现调度自动化。"
+msgstr ""
+
+#: configs/default.py:78
+msgid "蓝鲸消息管理"
+msgstr ""
+
+#: configs/default.py:79
+msgid ""
+"蓝鲸消息管理，用于支持向用户发送多种类型的消息，包括邮件、短信、语音通知等"
+msgstr ""
+
+#: configs/default.py:83 configs/default.py:84
+msgid "标准运维"
+msgstr ""
+
+#: configs/default.py:88 configs/default.py:89
+msgid "监控平台"
+msgstr ""
+
+#: configs/default.py:93 configs/default.py:94
+msgid "监控平台V3"
+msgstr ""
+
+#: configs/default.py:98 configs/default.py:99
+msgid "用户管理"
+msgstr ""
+
+#: configs/default.py:103 configs/default.py:104
+msgid "API网关"
+msgstr ""
+
+#: configs/default.py:108 configs/default.py:109
+msgid "流程服务"
+msgstr ""
+
+#: configs/default.py:113 configs/default.py:114
+msgid "日志平台"
+msgstr ""
+
+#: configs/default.py:118 configs/default.py:119
+msgid "权限中心"
+msgstr ""
+
+#: configs/default.py:123 configs/default.py:124
+msgid "文档中心"
+msgstr ""
+
+#: configs/default.py:128 configs/default.py:129
+msgid "数据平台"
+msgstr ""
+
+#: configs/default.py:137
+msgctxt "doccategory"
+msgid "默认分类"
+msgstr ""
+
+#: configs/default.py:141
+msgctxt "doccategory"
+msgid "基础用户服务"
+msgstr ""
+
+#: configs/default.py:145
+msgctxt "doccategory"
+msgid "配置管理"
+msgstr ""
+
+#: configs/default.py:149
+msgctxt "doccategory"
+msgid "主机管控"
+msgstr ""
+
+#: configs/default.py:153
+msgctxt "doccategory"
+msgid "管理工具"
+msgstr ""
+
+#: mainsite/templates/mainsite/base.html:6
+msgid "API网关|蓝鲸智云企业版"
+msgstr ""
+
+#: mainsite/templates/mainsite/base.html:7
+msgid ""
+"开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,"
+"运维开发,蓝鲸企业版,企业版,作业平台,集成平台,配置平台,管控平台"
+msgstr ""
+
+#: mainsite/templates/mainsite/base.html:8
+msgid ""
+"蓝鲸智云软件企业版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变"
+"中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。"
+"该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵"
+"守《蓝鲸智云软件用户服务协议》。"
+msgstr ""
+
+#: mainsite/templates/mainsite/base.html:45
+#: mainsite/templates/mainsite/footer.html:8
+msgid "蓝鲸智云桌面"
+msgstr ""
+
+#: mainsite/templates/mainsite/base.html:45
+msgid "esb/img/logo_esb_01.png"
+msgstr ""
+
+#: mainsite/templates/mainsite/base.html:46
+msgid "蓝鲸智云API网关"
+msgstr ""
+
+#: mainsite/templates/mainsite/base.html:46
+msgid "esb/img/logo_esb_02.png"
+msgstr ""
+
+#: mainsite/templates/mainsite/base.html:57
+msgid "注销"
+msgstr ""
+
+#: mainsite/templates/mainsite/footer.html:5
+msgid "QQ咨询(800802001)"
+msgstr ""
+
+#: mainsite/templates/mainsite/footer.html:6
+msgid "蓝鲸论坛"
+msgstr ""
+
+#: mainsite/templates/mainsite/footer.html:7
+msgid "蓝鲸官网"
+msgstr ""

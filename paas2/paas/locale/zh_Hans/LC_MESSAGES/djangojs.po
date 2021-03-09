@@ -1,0 +1,1479 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: static/js/jquery-1.7.2.min.js:2
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-04-28 16:10+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: media/framework/static/admin/js/SelectFilter2.js:45
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:45
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:45
+#: static/admin/js/SelectFilter2.js:45
+#, javascript-format
+msgid "Available %s"
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:46
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:46
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:46
+#: static/admin/js/SelectFilter2.js:46
+#, javascript-format
+msgid ""
+"This is the list of available %s. You may choose some by selecting them in "
+"the box below and then clicking the \"Choose\" arrow between the two boxes."
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:53
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:53
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:53
+#: static/admin/js/SelectFilter2.js:53
+#, javascript-format
+msgid "Type into this box to filter down the list of available %s."
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:57
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:57
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:57
+#: static/admin/js/SelectFilter2.js:57
+msgid "Filter"
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:61
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:61
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:61
+#: static/admin/js/SelectFilter2.js:61
+msgid "Choose all"
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:61
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:61
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:61
+#: static/admin/js/SelectFilter2.js:61
+#, javascript-format
+msgid "Click to choose all %s at once."
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:67
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:67
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:67
+#: static/admin/js/SelectFilter2.js:67
+msgid "Choose"
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:69
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:69
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:69
+#: static/admin/js/SelectFilter2.js:69
+msgid "Remove"
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:75
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:75
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:75
+#: static/admin/js/SelectFilter2.js:75
+#, javascript-format
+msgid "Chosen %s"
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:76
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:76
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:76
+#: static/admin/js/SelectFilter2.js:76
+#, javascript-format
+msgid ""
+"This is the list of chosen %s. You may remove some by selecting them in the "
+"box below and then clicking the \"Remove\" arrow between the two boxes."
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:80
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:80
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:80
+#: static/admin/js/SelectFilter2.js:80
+msgid "Remove all"
+msgstr ""
+
+#: media/framework/static/admin/js/SelectFilter2.js:80
+#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:80
+#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:80
+#: static/admin/js/SelectFilter2.js:80
+#, javascript-format
+msgid "Click to remove all chosen %s at once."
+msgstr ""
+
+#: media/framework/static/admin/js/actions.js:22
+#: media/framework/static/admin/js/actions.min.js:1
+#: media/saas_files/bk_app_template/src/static/admin/js/actions.js:22
+#: media/saas_files/bk_app_template/src/static/admin/js/actions.min.js:1
+#: media/saas_files/bk_framework/src/static/admin/js/actions.js:22
+#: media/saas_files/bk_framework/src/static/admin/js/actions.min.js:1
+#: static/admin/js/actions.js:22 static/admin/js/actions.min.js:1
+msgid "%(sel)s of %(cnt)s selected"
+msgid_plural "%(sel)s of %(cnt)s selected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: media/framework/static/admin/js/actions.js:114
+#: media/framework/static/admin/js/actions.min.js:4
+#: media/saas_files/bk_app_template/src/static/admin/js/actions.js:114
+#: media/saas_files/bk_app_template/src/static/admin/js/actions.min.js:4
+#: media/saas_files/bk_framework/src/static/admin/js/actions.js:114
+#: media/saas_files/bk_framework/src/static/admin/js/actions.min.js:4
+#: static/admin/js/actions.js:114 static/admin/js/actions.min.js:4
+msgid ""
+"You have unsaved changes on individual editable fields. If you run an "
+"action, your unsaved changes will be lost."
+msgstr ""
+
+#: media/framework/static/admin/js/actions.js:126
+#: media/framework/static/admin/js/actions.min.js:5
+#: media/saas_files/bk_app_template/src/static/admin/js/actions.js:126
+#: media/saas_files/bk_app_template/src/static/admin/js/actions.min.js:5
+#: media/saas_files/bk_framework/src/static/admin/js/actions.js:126
+#: media/saas_files/bk_framework/src/static/admin/js/actions.min.js:5
+#: static/admin/js/actions.js:126 static/admin/js/actions.min.js:5
+msgid ""
+"You have selected an action, but you haven't saved your changes to "
+"individual fields yet. Please click OK to save. You'll need to re-run the "
+"action."
+msgstr ""
+
+#: media/framework/static/admin/js/actions.js:128
+#: media/framework/static/admin/js/actions.min.js:5
+#: media/saas_files/bk_app_template/src/static/admin/js/actions.js:128
+#: media/saas_files/bk_app_template/src/static/admin/js/actions.min.js:5
+#: media/saas_files/bk_framework/src/static/admin/js/actions.js:128
+#: media/saas_files/bk_framework/src/static/admin/js/actions.min.js:5
+#: static/admin/js/actions.js:128 static/admin/js/actions.min.js:5
+msgid ""
+"You have selected an action, and you haven't made any changes on individual "
+"fields. You're probably looking for the Go button rather than the Save "
+"button."
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:79
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:79
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:79
+#: static/admin/js/admin/DateTimeShortcuts.js:79
+#, javascript-format
+msgid "Note: You are %s hour ahead of server time."
+msgid_plural "Note: You are %s hours ahead of server time."
+msgstr[0] ""
+msgstr[1] ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:87
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:87
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:87
+#: static/admin/js/admin/DateTimeShortcuts.js:87
+#, javascript-format
+msgid "Note: You are %s hour behind server time."
+msgid_plural "Note: You are %s hours behind server time."
+msgstr[0] ""
+msgstr[1] ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:114
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:149
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:114
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:149
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:114
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:149
+#: static/admin/js/admin/DateTimeShortcuts.js:114
+#: static/admin/js/admin/DateTimeShortcuts.js:149
+msgid "Now"
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:118
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:118
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:118
+#: static/admin/js/admin/DateTimeShortcuts.js:118
+msgid "Clock"
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:146
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:146
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:146
+#: static/admin/js/admin/DateTimeShortcuts.js:146
+msgid "Choose a time"
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:150
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:150
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:150
+#: static/admin/js/admin/DateTimeShortcuts.js:150
+msgid "Midnight"
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:151
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:151
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:151
+#: static/admin/js/admin/DateTimeShortcuts.js:151
+msgid "6 a.m."
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:152
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:152
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:152
+#: static/admin/js/admin/DateTimeShortcuts.js:152
+msgid "Noon"
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:156
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:276
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:156
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:276
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:156
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:276
+#: static/admin/js/admin/DateTimeShortcuts.js:156
+#: static/admin/js/admin/DateTimeShortcuts.js:276
+msgid "Cancel"
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:216
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:269
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:216
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:269
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:216
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:269
+#: static/admin/js/admin/DateTimeShortcuts.js:216
+#: static/admin/js/admin/DateTimeShortcuts.js:269
+msgid "Today"
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:220
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:220
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:220
+#: static/admin/js/admin/DateTimeShortcuts.js:220
+msgid "Calendar"
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:267
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:267
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:267
+#: static/admin/js/admin/DateTimeShortcuts.js:267
+msgid "Yesterday"
+msgstr ""
+
+#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:271
+#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:271
+#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:271
+#: static/admin/js/admin/DateTimeShortcuts.js:271
+msgid "Tomorrow"
+msgstr ""
+
+#: media/framework/static/admin/js/calendar.js:8
+#: media/saas_files/bk_app_template/src/static/admin/js/calendar.js:8
+#: media/saas_files/bk_framework/src/static/admin/js/calendar.js:8
+#: static/admin/js/calendar.js:8
+msgid ""
+"January February March April May June July August September October November "
+"December"
+msgstr ""
+
+#: media/framework/static/admin/js/calendar.js:9
+#: media/saas_files/bk_app_template/src/static/admin/js/calendar.js:9
+#: media/saas_files/bk_framework/src/static/admin/js/calendar.js:9
+#: static/admin/js/calendar.js:9
+msgid "S M T W T F S"
+msgstr ""
+
+#: media/framework/static/admin/js/collapse.js:8
+#: media/framework/static/admin/js/collapse.js:19
+#: media/framework/static/admin/js/collapse.min.js:1
+#: media/saas_files/bk_app_template/src/static/admin/js/collapse.js:8
+#: media/saas_files/bk_app_template/src/static/admin/js/collapse.js:19
+#: media/saas_files/bk_app_template/src/static/admin/js/collapse.min.js:1
+#: media/saas_files/bk_framework/src/static/admin/js/collapse.js:8
+#: media/saas_files/bk_framework/src/static/admin/js/collapse.js:19
+#: media/saas_files/bk_framework/src/static/admin/js/collapse.min.js:1
+#: static/admin/js/collapse.js:8 static/admin/js/collapse.js:19
+#: static/admin/js/collapse.min.js:1
+msgid "Show"
+msgstr ""
+
+#: media/framework/static/admin/js/collapse.js:16
+#: media/framework/static/admin/js/collapse.min.js:1
+#: media/saas_files/bk_app_template/src/static/admin/js/collapse.js:16
+#: media/saas_files/bk_app_template/src/static/admin/js/collapse.min.js:1
+#: media/saas_files/bk_framework/src/static/admin/js/collapse.js:16
+#: media/saas_files/bk_framework/src/static/admin/js/collapse.min.js:1
+#: static/admin/js/collapse.js:16 static/admin/js/collapse.min.js:1
+msgid "Hide"
+msgstr ""
+
+#: static/assets/jquery-ui-1.11.0.custom/jquery-ui.min.js:10
+msgid "'"
+msgstr ""
+
+#: static/esb/api_docs/js/system_api_docs_info.js:57
+#: static/esb/api_docs/js/system_api_docs_info.min.js:1
+#: static/esb/api_docs/js/system_info.js:50
+#: static/esb/api_docs/js/system_info.min.js:1
+msgid "API列表"
+msgstr ""
+
+#: static/esb/api_docs/js/system_api_docs_info.js:65
+#: static/esb/api_docs/js/system_api_docs_info.min.js:1
+msgid "暂无文档，请联系 API 负责人处理"
+msgstr ""
+
+#: static/esb/api_docs/js/system_api_docs_info.js:78
+#: static/esb/api_docs/js/system_api_docs_info.min.js:1
+msgid "感谢您的反馈！"
+msgstr ""
+
+#: static/esb/api_docs/js/system_info.js:52
+#: static/esb/api_docs/js/system_info.min.js:1
+msgid "简介"
+msgstr ""
+
+#: static/esb/assets/moment-with-locales-2.10.6.min.js:1
+msgid "\n"
+msgstr ""
+
+#: static/esb/js/buffet_list.js:19 static/esb/js/buffet_list.min.js:1
+#: static/esb/js/channel_list.js:111 static/esb/js/channel_list.min.js:1
+msgid "已复制"
+msgstr ""
+
+#: static/esb/js/buffet_list.js:21 static/esb/js/buffet_list.min.js:1
+#: static/esb/js/channel_list.js:113 static/esb/js/channel_list.min.js:1
+msgid "复制失败，请手动复制"
+msgstr ""
+
+#: static/esb/js/buffet_update.js:4 static/esb/js/buffet_update.min.js:1
+msgid "请求额外头信息"
+msgstr ""
+
+#: static/esb/js/channel_list.js:41 static/esb/js/channel_list.js:65
+#: static/esb/js/channel_list.min.js:1 static/esb/js/esb_add_system.js:62
+#: static/esb/js/esb_add_system.js:71 static/esb/js/esb_add_system.min.js:1
+#: static/esb/js/system_list.js:25 static/esb/js/system_list.js:44
+#: static/esb/js/system_list.min.js:1
+msgid "消息"
+msgstr ""
+
+#: static/esb/js/channel_list.js:41 static/esb/js/channel_list.min.js:1
+msgid "请先选择待删除的通道！"
+msgstr ""
+
+#: static/esb/js/channel_list.js:46 static/esb/js/channel_list.min.js:1
+#: static/esb/js/system_list.js:29 static/esb/js/system_list.min.js:1
+#: static/js/paas_app_env.js:151 static/js/paas_app_env.min.js:1
+#: static/js/paas_engine.js:211 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:222 static/js/paas_engine_third.min.js:1
+#: static/js/paas_release.js:9 static/js/paas_release.min.js:1
+msgid "删除确认"
+msgstr "删除确认"
+
+#: static/esb/js/channel_list.js:49 static/esb/js/channel_list.min.js:1
+msgid "该操作不可恢复，是否继续？"
+msgstr ""
+
+#: static/esb/js/channel_list.js:58 static/esb/js/channel_list.min.js:1
+#, javascript-format
+msgid "成功删除 %s 个通道！"
+msgid_plural "成功删除 %s 个通道！"
+msgstr[0] ""
+
+#: static/esb/js/channel_list.js:71 static/esb/js/channel_list.min.js:1
+#: static/esb/js/system_list.js:50 static/esb/js/system_list.min.js:1
+#: static/js/paas_engine.js:231 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:242 static/js/paas_engine_third.min.js:1
+msgid "确认删除"
+msgstr "确认删除"
+
+#: static/esb/js/channel_list.js:72 static/esb/js/channel_list.min.js:1
+#: static/esb/js/system_list.js:51 static/esb/js/system_list.min.js:1
+#: static/js/paas_app.js:18 static/js/paas_app.min.js:1
+#: static/js/paas_app_analysis.js:7 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_env.js:130 static/js/paas_app_env.js:172
+#: static/js/paas_app_env.min.js:1 static/js/paas_app_log.js:91
+#: static/js/paas_app_log.min.js:1 static/js/paas_app_monitor.js:43
+#: static/js/paas_app_monitor.min.js:1 static/js/paas_app_monitor_alarm.js:16
+#: static/js/paas_app_monitor_alarm.min.js:1 static/js/paas_base.js:164
+#: static/js/paas_base.min.js:1 static/js/paas_engine.js:46
+#: static/js/paas_engine.js:232 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:41 static/js/paas_engine_third.js:243
+#: static/js/paas_engine_third.min.js:1 static/js/paas_release.js:36
+#: static/js/paas_release.js:239 static/js/paas_release.js:263
+#: static/js/paas_release.min.js:1
+msgid "取消"
+msgstr "取消"
+
+#: static/esb/js/esb_add_system.js:6 static/esb/js/esb_add_system.min.js:1
+msgid "添加新组件系统"
+msgstr ""
+
+#: static/esb/js/esb_add_system.js:28 static/esb/js/esb_add_system.js:39
+#: static/esb/js/esb_add_system.min.js:1
+msgid "这个字段是必填项。"
+msgstr ""
+
+#: static/esb/js/esb_add_system.js:62 static/esb/js/esb_add_system.min.js:1
+msgid "系统创建成功"
+msgstr ""
+
+#: static/esb/js/esb_add_system.js:71 static/esb/js/esb_add_system.min.js:1
+msgid "系统创建失败"
+msgstr ""
+
+#: static/esb/js/system_list.js:25 static/esb/js/system_list.min.js:1
+msgid "请先选择待删除的系统！"
+msgstr ""
+
+#: static/esb/js/system_list.js:32 static/esb/js/system_list.min.js:1
+msgid "该操作将删除关联的通道和组件，且不可恢复，是否继续？"
+msgstr ""
+
+#: static/esb/js/system_list.js:37 static/esb/js/system_list.min.js:1
+#, javascript-format
+msgid "成功删除 %s 个系统！"
+msgid_plural "成功删除 %s 个系统！"
+msgstr[0] ""
+
+#: static/esb/status/js/index/views.js:18
+#: static/esb/status/js/index/views.min.js:1
+msgid "可用率恢复至 100%"
+msgstr ""
+
+#: static/esb/status/js/index/views.js:21
+#: static/esb/status/js/index/views.min.js:1
+#, javascript-format
+msgid "低可用持续时间: <strong> %s 分钟</strong>"
+msgid_plural "低可用持续时间: <strong> %s 分钟</strong>"
+msgstr[0] ""
+
+#: static/esb/status/js/index/views.js:33
+#: static/esb/status/js/index/views.min.js:1
+msgid "可用率下降至"
+msgstr ""
+
+#: static/esb/status/js/index/views.js:34
+#: static/esb/status/js/index/views.min.js:1
+msgid "调用错误数/总次数"
+msgstr ""
+
+#: static/esb/status/js/index/views.js:37
+#: static/esb/status/js/index/views.min.js:1
+#, javascript-format
+msgid "偶发 %s 次请求错误"
+msgid_plural "偶发 %s 次请求错误"
+msgstr[0] ""
+
+#: static/esb/status/js/index/views.js:108
+#: static/esb/status/js/index/views.min.js:1
+msgid "获取实时运营数据失败"
+msgstr ""
+
+#: static/esb/status/js/index/views.js:122
+#: static/esb/status/js/index/views.min.js:1
+msgid "获取系统错误事件失败"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:193
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "获取系统最新状态数据失败"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:199
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "系统最新状态数据为空"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:223
+#: static/esb/status/js/system_index/views.js:263
+#: static/esb/status/js/system_index/views.js:304
+#: static/esb/status/js/system_index/views.js:390
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "可用率"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:224
+#: static/esb/status/js/system_index/views.js:266
+#: static/esb/status/js/system_index/views.js:410
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "请求数"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:225
+#: static/esb/status/js/system_index/views.js:269
+#: static/esb/status/js/system_index/views.js:306
+#: static/esb/status/js/system_index/views.js:429
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "平均响应时间"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:225
+#: static/esb/status/js/system_index/views.js:272
+#: static/esb/status/js/system_index/views.js:306
+#: static/esb/status/js/system_index/views.js:449
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "统计响应时间"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:237
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "系统实时概况"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:489
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "获取系统概况数据失败"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:552
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "获取请求详情数据失败"
+msgstr ""
+
+#: static/esb/status/js/system_index/views.js:599
+#: static/esb/status/js/system_index/views.min.js:1 static/js/core.js:25
+#: static/js/core.js:36 static/js/core.min.js:1
+msgid "提示"
+msgstr "提示"
+
+#: static/esb/status/js/system_index/views.js:614
+#: static/esb/status/js/system_index/views.min.js:1
+msgid "错误请求详情"
+msgstr ""
+
+#: static/js/core.js:38 static/js/core.min.js:1
+msgid "系统出现异常："
+msgstr "系统出现异常："
+
+#: static/js/paas_app.js:14 static/js/paas_app.js:21
+#: static/js/paas_app.min.js:1
+msgid "重置密码"
+msgstr "重置密码"
+
+#: static/js/paas_app.js:49 static/js/paas_app.min.js:1
+msgid "两次输入的新密码不一致"
+msgstr "两次输入的新密码不一致"
+
+#: static/js/paas_app.js:80 static/js/paas_app.min.js:1
+msgid "密码重置成功"
+msgstr "密码重置成功"
+
+#: static/js/paas_app.js:92 static/js/paas_app.min.js:1
+msgid "修改密码"
+msgstr "修改密码"
+
+#: static/js/paas_app.js:103 static/js/paas_app.min.js:1
+msgid ""
+"中文名只能包含数字、字母、中文汉字、<br><span style='margin-left:105px'>下划"
+"线，长度在1-16个字符</span>"
+msgstr ""
+"中文名只能包含数字、字母、中文汉字、<br><span style='margin-left:105px'>下划"
+"线，长度在1-16个字符</span>"
+
+#: static/js/paas_app.js:109 static/js/paas_app.min.js:1
+msgid "QQ只能包含数字，长度在5-13个字符"
+msgstr "QQ只能包含数字，长度在5-13个字符"
+
+#: static/js/paas_app.js:115 static/js/paas_app.min.js:1
+msgid "联系电话只能为11位数字"
+msgstr "联系电话只能为11位数字"
+
+#: static/js/paas_app.js:121 static/js/paas_app.min.js:1
+msgid "请输入正确的邮箱"
+msgstr "请输入正确的邮箱"
+
+#: static/js/paas_app.js:139 static/js/paas_app.min.js:1
+msgid "用户信息修改成功"
+msgstr "用户信息修改成功"
+
+#: static/js/paas_app.js:181 static/js/paas_app.min.js:1
+#: static/js/paas_saas.js:26 static/js/paas_saas.min.js:1
+#: static/js/paas_tpapp.js:26 static/js/paas_tpapp.min.js:1
+msgid "错误的搜索参数! 参数中不能包含符号[&]"
+msgstr "错误的搜索参数! 参数中不能包含符号[&]"
+
+#: static/js/paas_app.js:259 static/js/paas_app.min.js:1
+msgid "请填写应用 ID"
+msgstr "请填写应用 ID"
+
+#: static/js/paas_app.js:276 static/js/paas_app.min.js:1
+msgid "请填写应用名称"
+msgstr "请填写应用名称"
+
+#: static/js/paas_app.js:293 static/js/paas_app.min.js:1
+msgid "请填写应用简介"
+msgstr "请填写应用简介"
+
+#: static/js/paas_app.js:296 static/js/paas_app.min.js:1
+msgid "长度不能超过30个字符"
+msgstr "长度不能超过30个字符"
+
+#: static/js/paas_app.js:330 static/js/paas_app.min.js:1
+msgid "请填写正确的系统URL，支持http和https"
+msgstr "请填写正确的系统URL，支持http和https"
+
+#: static/js/paas_app.js:343 static/js/paas_app.js:373
+#: static/js/paas_app.min.js:1
+msgid "请填写正确的仓库地址"
+msgstr "请填写正确的仓库地址"
+
+#: static/js/paas_app.js:385 static/js/paas_app.min.js:1
+msgid "请填写账号"
+msgstr "请填写账号"
+
+#: static/js/paas_app.js:399 static/js/paas_app.min.js:1
+msgid "请填写密码"
+msgstr "请填写密码"
+
+#: static/js/paas_app.js:413 static/js/paas_app.min.js:1
+msgid "请填写HOST"
+msgstr "请填写HOST"
+
+#: static/js/paas_app.js:424 static/js/paas_app.min.js:1
+msgid "请填写端口，必须为数字"
+msgstr "请填写端口，必须为数字"
+
+#: static/js/paas_app.js:435 static/js/paas_app.min.js:1
+msgid "请填写数据库用户名"
+msgstr "请填写数据库用户名"
+
+#: static/js/paas_app.js:446 static/js/paas_app.min.js:1
+msgid "宽度超过10000px，请设置合适的宽度"
+msgstr "宽度超过10000px，请设置合适的宽度"
+
+#: static/js/paas_app.js:450 static/js/paas_app.min.js:1
+msgid "高度超过10000px，请设置合适的宽度"
+msgstr "高度超过10000px，请设置合适的宽度"
+
+#: static/js/paas_app.js:455 static/js/paas_app.min.js:1
+msgid "请填写宽度，必须为正整数"
+msgstr "请填写宽度，必须为正整数"
+
+#: static/js/paas_app.js:461 static/js/paas_app.min.js:1
+msgid "请填写高度，必须为正整数"
+msgstr "请填写高度，必须为正整数"
+
+#: static/js/paas_app.js:489 static/js/paas_app.js:510
+#: static/js/paas_app.min.js:1
+msgid "正在创建应用，请稍后..."
+msgstr "正在创建应用，请稍后..."
+
+#: static/js/paas_app.js:682 static/js/paas_app.min.js:1
+msgid "\"应用未提测或已下架\""
+msgstr "\"应用未提测或已下架\""
+
+#: static/js/paas_app.js:688 static/js/paas_app.js:700
+#: static/js/paas_app.min.js:1
+msgid "\"应用未上线或已下架\""
+msgstr "\"应用未上线或已下架\""
+
+#: static/js/paas_app.js:718 static/js/paas_app.min.js:1
+msgid "激活码申请流程"
+msgstr "激活码申请流程"
+
+#: static/js/paas_app.js:791 static/js/paas_app.js:865
+#: static/js/paas_app.min.js:1 static/js/paas_app_env.js:131
+#: static/js/paas_app_env.min.js:1 static/js/paas_engine.js:47
+#: static/js/paas_engine.min.js:1 static/js/paas_engine_third.js:42
+#: static/js/paas_engine_third.min.js:1
+msgid "编辑"
+msgstr "编辑"
+
+#: static/js/paas_app.js:804 static/js/paas_app.js:883
+#: static/js/paas_app.js:922 static/js/paas_app.min.js:1
+msgid "显示密码"
+msgstr "显示密码"
+
+#: static/js/paas_app.js:821 static/js/paas_app.min.js:1
+#: static/js/paas_app_env.js:129 static/js/paas_app_env.min.js:1
+#: static/js/paas_engine.js:45 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:40 static/js/paas_engine_third.min.js:1
+msgid "保存"
+msgstr "保存"
+
+#: static/js/paas_app.js:898 static/js/paas_app.min.js:1
+msgid "支持以下协议：http(s)://, git://"
+msgstr "支持以下协议：http(s)://, git://"
+
+#: static/js/paas_app.js:899 static/js/paas_app.min.js:1
+msgid "通过Git方式获取应用代码"
+msgstr "通过Git方式获取应用代码"
+
+#: static/js/paas_app.js:903 static/js/paas_app.min.js:1
+msgid ""
+"支持以下协议：http(s)://, svn://<br>请确保 <code>requirements.txt</code> 文件"
+"在该目录下"
+msgstr ""
+"支持以下协议：http(s)://, svn://<br>请确保 <code>requirements.txt</code> 文件"
+"在该目录下"
+
+#: static/js/paas_app.js:904 static/js/paas_app.min.js:1
+msgid "通过SVN方式获取应用代码"
+msgstr "通过SVN方式获取应用代码"
+
+#: static/js/paas_app.js:917 static/js/paas_app.min.js:1
+msgid "隐藏密码"
+msgstr "隐藏密码"
+
+#: static/js/paas_app_analysis.js:6 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_env.js:171 static/js/paas_app_env.min.js:1
+#: static/js/paas_app_log.js:90 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor.js:42 static/js/paas_app_monitor.min.js:1
+#: static/js/paas_app_monitor_alarm.js:15
+#: static/js/paas_app_monitor_alarm.min.js:1 static/js/paas_base.js:160
+#: static/js/paas_base.min.js:1 static/js/paas_release.js:35
+#: static/js/paas_release.min.js:1
+msgid "确定"
+msgstr "确定"
+
+#: static/js/paas_app_analysis.js:8 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:94 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:19
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "周"
+msgstr "周"
+
+#: static/js/paas_app_analysis.js:9 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:95 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:20
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "自定义"
+msgstr "自定义"
+
+#: static/js/paas_app_analysis.js:11 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:97 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:22
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "日"
+msgstr "日"
+
+#: static/js/paas_app_analysis.js:12 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:98 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:23
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "一"
+msgstr "一"
+
+#: static/js/paas_app_analysis.js:13 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:99 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:24
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "二"
+msgstr "二"
+
+#: static/js/paas_app_analysis.js:14 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:100 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:25
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "三"
+msgstr "三"
+
+#: static/js/paas_app_analysis.js:15 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:101 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:26
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "四"
+msgstr "四"
+
+#: static/js/paas_app_analysis.js:16 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:102 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:27
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "五"
+msgstr "五"
+
+#: static/js/paas_app_analysis.js:17 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:103 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:28
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "六"
+msgstr "六"
+
+#: static/js/paas_app_analysis.js:20 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:106 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:31
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "一月"
+msgstr "一月"
+
+#: static/js/paas_app_analysis.js:21 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:107 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:32
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "二月"
+msgstr "二月"
+
+#: static/js/paas_app_analysis.js:22 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:108 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:33
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "三月"
+msgstr "三月"
+
+#: static/js/paas_app_analysis.js:23 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:109 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:34
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "四月"
+msgstr "四月"
+
+#: static/js/paas_app_analysis.js:24 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:110 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:35
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "五月"
+msgstr "五月"
+
+#: static/js/paas_app_analysis.js:25 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:111 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:36
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "六月"
+msgstr "六月"
+
+#: static/js/paas_app_analysis.js:26 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:112 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:37
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "七月"
+msgstr "七月"
+
+#: static/js/paas_app_analysis.js:27 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:113 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:38
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "八月"
+msgstr "八月"
+
+#: static/js/paas_app_analysis.js:28 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:114 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:39
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "九月"
+msgstr "九月"
+
+#: static/js/paas_app_analysis.js:29 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:115 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:40
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "十月"
+msgstr "十月"
+
+#: static/js/paas_app_analysis.js:30 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:116 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:41
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "十一月"
+msgstr "十一月"
+
+#: static/js/paas_app_analysis.js:31 static/js/paas_app_analysis.min.js:1
+#: static/js/paas_app_log.js:117 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:42
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "十二月"
+msgstr "十二月"
+
+#: static/js/paas_app_analysis.js:41 static/js/paas_app_analysis.min.js:1
+msgid "按日"
+msgstr "按日"
+
+#: static/js/paas_app_analysis.js:41 static/js/paas_app_analysis.min.js:1
+msgid "按月"
+msgstr "按月"
+
+#: static/js/paas_app_analysis.js:49 static/js/paas_app_analysis.min.js:1
+msgid "数据正在加载，请稍等..."
+msgstr "数据正在加载，请稍等..."
+
+#: static/js/paas_app_analysis.js:75 static/js/paas_app_analysis.min.js:1
+msgid "应用访问量"
+msgstr "应用访问量"
+
+#: static/js/paas_app_analysis.js:81 static/js/paas_app_analysis.js:99
+#: static/js/paas_app_analysis.min.js:1
+msgid "访问量"
+msgstr "访问量"
+
+#: static/js/paas_app_analysis.js:81 static/js/paas_app_analysis.js:104
+#: static/js/paas_app_analysis.min.js:1
+msgid "用户量"
+msgstr "用户量"
+
+#: static/js/paas_app_env.js:58 static/js/paas_app_env.js:115
+#: static/js/paas_app_env.min.js:1
+msgid "请输入变量名"
+msgstr "请输入变量名"
+
+#: static/js/paas_app_env.js:63 static/js/paas_app_env.js:120
+#: static/js/paas_app_env.min.js:1
+msgid "请输入变量值"
+msgstr "请输入变量值"
+
+#: static/js/paas_app_env.js:68 static/js/paas_app_env.js:126
+#: static/js/paas_app_env.min.js:1
+msgid "请输入说明"
+msgstr "请输入说明"
+
+#: static/js/paas_app_env.js:89 static/js/paas_app_env.min.js:1
+#: static/js/paas_engine.js:102 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:109 static/js/paas_engine_third.min.js:1
+msgid "保存成功"
+msgstr "保存成功"
+
+#: static/js/paas_app_env.js:99 static/js/paas_app_env.min.js:1
+#: static/js/paas_app_monitor.js:210 static/js/paas_app_monitor.min.js:1
+msgid "保存失败!"
+msgstr "保存失败!"
+
+#: static/js/paas_app_env.js:132 static/js/paas_app_env.min.js:1
+#: static/js/paas_engine.js:48 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:43 static/js/paas_engine_third.min.js:1
+msgid "删除"
+msgstr "删除"
+
+#: static/js/paas_app_env.js:155 static/js/paas_app_env.min.js:1
+msgid "您确定删除该环境变量吗?"
+msgstr "您确定删除该环境变量吗?"
+
+#: static/js/paas_app_env.js:157 static/js/paas_app_env.min.js:1
+#: static/js/paas_engine.js:217 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:228 static/js/paas_engine_third.min.js:1
+msgid "正在进行删除操作，请稍后..."
+msgstr "正在进行删除操作，请稍后..."
+
+#: static/js/paas_app_esb_auth.js:13 static/js/paas_app_esb_auth.js:25
+#: static/js/paas_app_esb_auth.min.js:1 static/js/paas_app_monitor.js:30
+#: static/js/paas_app_monitor.js:58 static/js/paas_app_monitor.min.js:1
+#: static/js/paas_base.js:136 static/js/paas_base.min.js:1
+#: static/js/paas_release.js:23 static/js/paas_release.js:227
+#: static/js/paas_release.js:254 static/js/paas_release.js:673
+#: static/js/paas_release.js:695 static/js/paas_release.min.js:1
+msgid "温馨提示"
+msgstr "温馨提示"
+
+#: static/js/paas_app_esb_auth.js:17 static/js/paas_app_esb_auth.min.js:1
+msgid "权限申请已提交，请耐心等待审批！"
+msgstr "权限申请已提交，请耐心等待审批！"
+
+#: static/js/paas_app_esb_auth.js:19 static/js/paas_app_esb_auth.js:31
+#: static/js/paas_app_esb_auth.min.js:1 static/js/paas_app_monitor.js:36
+#: static/js/paas_app_monitor.js:64 static/js/paas_app_monitor.min.js:1
+#: static/js/paas_release.js:29 static/js/paas_release.js:682
+#: static/js/paas_release.js:702 static/js/paas_release.min.js:1
+msgid "关闭"
+msgstr "关闭"
+
+#: static/js/paas_app_log.js:5 static/js/paas_app_log.min.js:1
+msgid "请选择"
+msgstr "请选择"
+
+#: static/js/paas_app_log.js:37 static/js/paas_app_log.js:48
+#: static/js/paas_app_log.min.js:1
+msgid "全部"
+msgstr "全部"
+
+#: static/js/paas_app_log.js:55 static/js/paas_app_log.min.js:1
+msgid "信息:"
+msgstr "信息:"
+
+#: static/js/paas_app_log.js:89 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:14
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid " 至 "
+msgstr " 至 "
+
+#: static/js/paas_app_log.js:92 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:17
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "从"
+msgstr "从"
+
+#: static/js/paas_app_log.js:93 static/js/paas_app_log.min.js:1
+#: static/js/paas_app_monitor_alarm.js:18
+#: static/js/paas_app_monitor_alarm.min.js:1
+msgid "到"
+msgstr "到"
+
+#: static/js/paas_app_log.js:147 static/js/paas_app_log.min.js:1
+msgid "错误的搜索参数! 页码格式错误, 只能为正整数"
+msgstr "错误的搜索参数! 页码格式错误, 只能为正整数"
+
+#: static/js/paas_app_monitor.js:2 static/js/paas_app_monitor.min.js:1
+msgid "开启"
+msgstr "开启"
+
+#: static/js/paas_app_monitor.js:2 static/js/paas_app_monitor.min.js:1
+msgid "停用"
+msgstr "停用"
+
+#: static/js/paas_app_monitor.js:3 static/js/paas_app_monitor.min.js:1
+msgid "您确定"
+msgstr "您确定"
+
+#: static/js/paas_app_monitor.js:3 static/js/paas_app_monitor.min.js:1
+msgid "监控告警服务吗"
+msgstr "监控告警服务吗"
+
+#: static/js/paas_app_monitor.js:5 static/js/paas_app_monitor.min.js:1
+msgid "后您将无法接收告警。"
+msgstr "后您将无法接收告警。"
+
+#: static/js/paas_app_monitor.js:7 static/js/paas_app_monitor.min.js:1
+msgid "后您可以自定义告警配置。"
+msgstr "后您可以自定义告警配置。"
+
+#: static/js/paas_app_monitor.js:97 static/js/paas_app_monitor.min.js:1
+msgid "输入值不合法!必须为正整数!"
+msgstr "输入值不合法!必须为正整数!"
+
+#: static/js/paas_app_monitor.js:170 static/js/paas_app_monitor.min.js:1
+msgid "请输入告警接收人邮箱!"
+msgstr "请输入告警接收人邮箱!"
+
+#: static/js/paas_app_monitor.js:178 static/js/paas_app_monitor.min.js:1
+msgid "请输入正确的邮箱地址, 多个邮箱请用英文的';'隔开! "
+msgstr "请输入正确的邮箱地址, 多个邮箱请用英文的';'隔开! "
+
+#: static/js/paas_app_monitor.js:208 static/js/paas_app_monitor.min.js:1
+msgid "保存成功!"
+msgstr "保存成功!"
+
+#: static/js/paas_app_monitor.js:242 static/js/paas_app_monitor.min.js:1
+msgid "展开详情"
+msgstr "展开详情"
+
+#: static/js/paas_app_monitor.js:267 static/js/paas_app_monitor.min.js:1
+msgid "输入值不合法!"
+msgstr "输入值不合法!"
+
+#: static/js/paas_base.js:56 static/js/paas_base.js:63
+#: static/js/paas_base.js:70 static/js/paas_base.js:77
+#: static/js/paas_base.js:110 static/js/paas_base.js:115
+#: static/js/paas_base.min.js:1
+msgid "快捷入口"
+msgstr "快捷入口"
+
+#: static/js/paas_base.js:57 static/js/paas_base.js:64
+#: static/js/paas_base.js:71 static/js/paas_base.js:78
+#: static/js/paas_base.min.js:1
+msgid "测试环境"
+msgstr "测试环境"
+
+#: static/js/paas_base.js:58 static/js/paas_base.js:65
+#: static/js/paas_base.js:72 static/js/paas_base.js:79
+#: static/js/paas_base.min.js:1
+msgid "正式环境"
+msgstr "正式环境"
+
+#: static/js/paas_base.js:64 static/js/paas_base.js:71
+#: static/js/paas_base.min.js:1
+msgid "应用未提测或已下架"
+msgstr "应用未提测或已下架"
+
+#: static/js/paas_base.js:65 static/js/paas_base.js:79
+#: static/js/paas_base.js:116 static/js/paas_base.min.js:1
+msgid "应用未上线或已下架"
+msgstr "应用未上线或已下架"
+
+#: static/js/paas_base.js:111 static/js/paas_base.js:116
+#: static/js/paas_base.min.js:1
+msgid "访问地址"
+msgstr "访问地址"
+
+#: static/js/paas_base.js:144 static/js/paas_base.min.js:1
+msgid "请选择要上传的图片"
+msgstr "请选择要上传的图片"
+
+#: static/js/paas_base.js:148 static/js/paas_base.min.js:1
+msgid "上传图片必须为png格式"
+msgstr "上传图片必须为png格式"
+
+#: static/js/paas_base.js:152 static/js/paas_base.min.js:1
+msgid "图片大小限制为6M"
+msgstr "图片大小限制为6M"
+
+#: static/js/paas_engine.js:6 static/js/paas_engine.min.js:1
+msgid "不可同时修改多个服务信息，请先保存编辑中的服务信息"
+msgstr "不可同时修改多个服务信息，请先保存编辑中的服务信息"
+
+#: static/js/paas_engine.js:27 static/js/paas_engine.min.js:1
+msgid "请输入服务器IP"
+msgstr "请输入服务器IP"
+
+#: static/js/paas_engine.js:30 static/js/paas_engine.min.js:1
+msgid "请输入Agent端口"
+msgstr "请输入Agent端口"
+
+#: static/js/paas_engine.js:33 static/js/paas_engine.min.js:1
+msgid "请输入App服务端口"
+msgstr "请输入App服务端口"
+
+#: static/js/paas_engine.js:36 static/js/paas_engine.js:84
+#: static/js/paas_engine.min.js:1
+msgid "请选择服务器类别"
+msgstr "请选择服务器类别"
+
+#: static/js/paas_engine.js:37 static/js/paas_engine.min.js:1
+msgid "测试服务器"
+msgstr "测试服务器"
+
+#: static/js/paas_engine.js:38 static/js/paas_engine.min.js:1
+msgid "正式服务器"
+msgstr "正式服务器"
+
+#: static/js/paas_engine.js:42 static/js/paas_engine.js:296
+#: static/js/paas_engine.min.js:1 static/js/paas_engine_third.js:37
+#: static/js/paas_engine_third.js:305 static/js/paas_engine_third.min.js:1
+msgid "否"
+msgstr "否"
+
+#: static/js/paas_engine.js:49 static/js/paas_engine.js:298
+#: static/js/paas_engine.min.js:1 static/js/paas_engine_third.js:44
+#: static/js/paas_engine_third.js:307 static/js/paas_engine_third.min.js:1
+msgid "激活"
+msgstr "激活"
+
+#: static/js/paas_engine.js:69 static/js/paas_engine.min.js:1
+msgid "请输入正确的IP地址"
+msgstr "请输入正确的IP地址"
+
+#: static/js/paas_engine.js:74 static/js/paas_engine.min.js:1
+msgid "请输入正确的Agent端口"
+msgstr "请输入正确的Agent端口"
+
+#: static/js/paas_engine.js:79 static/js/paas_engine.min.js:1
+msgid "请输入正确的App服务端口"
+msgstr "请输入正确的App服务端口"
+
+#: static/js/paas_engine.js:110 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:117 static/js/paas_engine_third.min.js:1
+msgid "保存失败"
+msgstr "保存失败"
+
+#: static/js/paas_engine.js:126 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:135 static/js/paas_engine_third.min.js:1
+msgid "添加成功"
+msgstr "添加成功"
+
+#: static/js/paas_engine.js:140 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:147 static/js/paas_engine_third.min.js:1
+msgid "添加失败"
+msgstr "添加失败"
+
+#: static/js/paas_engine.js:204 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:215 static/js/paas_engine_third.min.js:1
+msgid "您确定删除该服务器吗?"
+msgstr "您确定删除该服务器吗?"
+
+#: static/js/paas_engine.js:204 static/js/paas_engine.js:246
+#: static/js/paas_engine.js:278 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:287 static/js/paas_engine_third.min.js:1
+msgid "Agent端口"
+msgstr "Agent端口"
+
+#: static/js/paas_engine.js:208 static/js/paas_engine.min.js:1
+msgid ""
+"该服务器已经激活，删除后将不能在该机器上部署应用<br>请确认不再使用后再删除"
+msgstr ""
+"该服务器已经激活，删除后将不能在该机器上部署应用<br>请确认不再使用后再删除"
+
+#: static/js/paas_engine.js:246 static/js/paas_engine.min.js:1
+msgid "正在检测服务器上的agent状态，请稍后...."
+msgstr "正在检测服务器上的agent状态，请稍后...."
+
+#: static/js/paas_engine.js:258 static/js/paas_engine.js:289
+#: static/js/paas_engine.min.js:1 static/js/paas_engine_third.js:267
+#: static/js/paas_engine_third.js:298 static/js/paas_engine_third.min.js:1
+msgid "是"
+msgstr "是"
+
+#: static/js/paas_engine.js:278 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:287 static/js/paas_engine_third.min.js:1
+msgid "正在刷新服务器上的agent状态，请稍后...."
+msgstr "正在刷新服务器上的agent状态，请稍后...."
+
+#: static/js/paas_engine.js:291 static/js/paas_engine.min.js:1
+#: static/js/paas_engine_third.js:300 static/js/paas_engine_third.min.js:1
+msgid "刷新"
+msgstr "刷新"
+
+#: static/js/paas_engine_third.js:7 static/js/paas_engine_third.min.js:1
+msgid "不可同时修改多个第三方服务信息，请先保存编辑中的第三方服务信息"
+msgstr "不可同时修改多个第三方服务信息，请先保存编辑中的第三方服务信息"
+
+#: static/js/paas_engine_third.js:20 static/js/paas_engine_third.min.js:1
+msgid "请输入服务器地址, 存在多个用英文分号分隔"
+msgstr "请输入服务器地址, 存在多个用英文分号分隔"
+
+#: static/js/paas_engine_third.js:23 static/js/paas_engine_third.min.js:1
+msgid "请输入端口"
+msgstr "请输入端口"
+
+#: static/js/paas_engine_third.js:26 static/js/paas_engine_third.min.js:1
+msgid "请输入用户名"
+msgstr "请输入用户名"
+
+#: static/js/paas_engine_third.js:29 static/js/paas_engine_third.min.js:1
+msgid "请输入密码"
+msgstr "请输入密码"
+
+#: static/js/paas_engine_third.js:32 static/js/paas_engine_third.js:90
+#: static/js/paas_engine_third.min.js:1
+msgid "请选择服务器类型"
+msgstr "请选择服务器类型"
+
+#: static/js/paas_engine_third.js:33 static/js/paas_engine_third.min.js:1
+msgid "RabbitMQ服务"
+msgstr "RabbitMQ服务"
+
+#: static/js/paas_engine_third.js:65 static/js/paas_engine_third.min.js:1
+msgid "请输入正确的地址"
+msgstr "请输入正确的地址"
+
+#: static/js/paas_engine_third.js:70 static/js/paas_engine_third.min.js:1
+msgid "请输入正确的端口"
+msgstr "请输入正确的端口"
+
+#: static/js/paas_engine_third.js:75 static/js/paas_engine_third.min.js:1
+msgid "请输入正确的用户名"
+msgstr "请输入正确的用户名"
+
+#: static/js/paas_engine_third.js:80 static/js/paas_engine_third.min.js:1
+msgid "请输入正确的密码"
+msgstr "请输入正确的密码"
+
+#: static/js/paas_engine_third.js:85 static/js/paas_engine_third.min.js:1
+msgid "密码不能包含中文字符"
+msgstr "密码不能包含中文字符"
+
+#: static/js/paas_engine_third.js:215 static/js/paas_engine_third.js:258
+#: static/js/paas_engine_third.min.js:1
+msgid "端口"
+msgstr "端口"
+
+#: static/js/paas_engine_third.js:219 static/js/paas_engine_third.min.js:1
+msgid "该服务器已经激活，删除后应用中的celery任务将不能正常执行"
+msgstr "该服务器已经激活，删除后应用中的celery任务将不能正常执行"
+
+#: static/js/paas_engine_third.js:219 static/js/paas_engine_third.min.js:1
+msgid "请确认不再使用后再删除"
+msgstr "请确认不再使用后再删除"
+
+#: static/js/paas_engine_third.js:258 static/js/paas_engine_third.min.js:1
+msgid "正在检测服务器状态，请稍后...."
+msgstr "正在检测服务器状态，请稍后...."
+
+#: static/js/paas_engine_third.js:258 static/js/paas_engine_third.js:287
+#: static/js/paas_engine_third.min.js:1
+msgid "地址"
+msgstr "地址"
+
+#: static/js/paas_guide_newbie.js:32 static/js/paas_guide_newbie.js:45
+#: static/js/paas_guide_newbie.min.js:1
+msgid "查看简单使用"
+msgstr "查看简单使用"
+
+#: static/js/paas_guide_newbie.js:37 static/js/paas_guide_newbie.js:50
+#: static/js/paas_guide_newbie.min.js:1
+msgid "查看详细使用"
+msgstr "查看详细使用"
+
+#: static/js/paas_release.js:13 static/js/paas_release.min.js:1
+msgid "您确定要删除应用"
+msgstr "您确定要删除应用"
+
+#: static/js/paas_release.js:66 static/js/paas_release.min.js:1
+msgid "部署分支/Tag不能为空"
+msgstr ""
+
+#: static/js/paas_release.js:100 static/js/paas_release.min.js:1
+msgid "请至少选择一台服务器"
+msgstr ""
+
+#: static/js/paas_release.js:129 static/js/paas_release.min.js:1
+msgid "请选择下架环境！"
+msgstr "请选择下架环境！"
+
+#: static/js/paas_release.js:167 static/js/paas_release.js:196
+#: static/js/paas_release.min.js:1
+msgid "上线部署"
+msgstr "上线部署"
+
+#: static/js/paas_release.js:169 static/js/paas_release.js:194
+#: static/js/paas_release.min.js:1
+msgid "测试部署"
+msgstr "测试部署"
+
+#: static/js/paas_release.js:171 static/js/paas_release.js:198
+#: static/js/paas_release.js:309 static/js/paas_release.min.js:1
+msgid "下架"
+msgstr "下架"
+
+#: static/js/paas_release.js:174 static/js/paas_release.min.js:1
+msgid "正在提交"
+msgstr "正在提交"
+
+#: static/js/paas_release.js:174 static/js/paas_release.min.js:1
+msgid "请求，请稍后..."
+msgstr "请求，请稍后..."
+
+#: static/js/paas_release.js:201 static/js/paas_release.min.js:1
+msgid "操作执行失败，错误详情："
+msgstr "操作执行失败，错误详情："
+
+#: static/js/paas_release.js:231 static/js/paas_release.min.js:1
+msgid ""
+"<span>您确认下架该应用吗?<br><br>下架后用户将无法访问该应用<br>但应用的数据库"
+"依然保留</span>"
+msgstr ""
+"<span>您确认下架该应用吗?<br><br>下架后用户将无法访问该应用<br>但应用的数据库"
+"依然保留</span>"
+
+#: static/js/paas_release.js:238 static/js/paas_release.js:262
+#: static/js/paas_release.js:681 static/js/paas_release.js:701
+#: static/js/paas_release.min.js:1
+msgid "确认"
+msgstr "确认"
+
+#: static/js/paas_release.js:258 static/js/paas_release.min.js:1
+msgid "<span>您确认重新部署该应用吗?<br><br>当前环境运行版本："
+msgstr "<span>您确认重新部署该应用吗?<br><br>当前环境运行版本："
+
+#: static/js/paas_release.js:258 static/js/paas_release.min.js:1
+msgid "<br>您要部署的版本："
+msgstr "<br>您要部署的版本："
+
+#: static/js/paas_release.js:274 static/js/paas_release.min.js:1
+msgid "正在提交部署请求，请稍后..."
+msgstr "正在提交部署请求，请稍后..."
+
+#: static/js/paas_release.js:291 static/js/paas_release.min.js:1
+msgid "部署操作执行失败，错误详情："
+msgstr "部署操作执行失败，错误详情："
+
+#: static/js/paas_release.js:307 static/js/paas_release.min.js:1
+msgid "部署"
+msgstr "部署"
+
+#: static/js/paas_release.js:315 static/js/paas_release.min.js:1
+msgid "正在"
+msgstr "正在"
+
+#: static/js/paas_release.js:315 static/js/paas_release.min.js:1
+msgid "中，请耐心等待</span>"
+msgstr "中，请耐心等待</span>"
+
+#: static/js/paas_release.js:320 static/js/paas_release.min.js:1
+msgid "成功"
+msgstr "成功"
+
+#: static/js/paas_release.js:323 static/js/paas_release.min.js:1
+msgid "失败，原因"
+msgstr "失败，原因"
+
+#: static/js/paas_release.js:435 static/js/paas_release.min.js:1
+msgid "应用已上线，请重新测试部署后，再执行正式部署操作！"
+msgstr "应用已上线，请重新测试部署后，再执行正式部署操作！"
+
+#: static/js/paas_release.js:464 static/js/paas_release.min.js:1
+msgid "应用已下架，请您重新测试部署后，再进行正式部署操作！"
+msgstr "应用已下架，请您重新测试部署后，再进行正式部署操作！"
+
+#: static/js/paas_release.js:478 static/js/paas_release.min.js:1
+msgid "请重新测试部署后，再进行正式部署！"
+msgstr "请重新测试部署后，再进行正式部署！"
+
+#: static/js/paas_release.js:500 static/js/paas_release.min.js:1
+msgid "请测试部署后，再进行正式部署"
+msgstr "请测试部署后，再进行正式部署"
+
+#: static/js/paas_release.js:509 static/js/paas_release.js:514
+#: static/js/paas_release.js:519 static/js/paas_release.js:520
+#: static/js/paas_release.min.js:1
+msgid "马上访问"
+msgstr "马上访问"
+
+#: static/js/paas_release.js:511 static/js/paas_release.js:516
+#: static/js/paas_release.min.js:1
+msgid "正在运行"
+msgstr "正在运行"
+
+#: static/js/paas_release.js:519 static/js/paas_release.min.js:1
+msgid "应用未进行上线部署或者已经下架，访问入口关闭！"
+msgstr "应用未进行上线部署或者已经下架，访问入口关闭！"
+
+#: static/js/paas_release.js:520 static/js/paas_release.min.js:1
+msgid "应用未进行测试部署或者已经下架，访问入口关闭！"
+msgstr "应用未进行测试部署或者已经下架，访问入口关闭！"
+
+#: static/js/paas_release.js:523 static/js/paas_release.js:527
+#: static/js/paas_release.min.js:1
+msgid "已下架"
+msgstr "已下架"
+
+#: static/js/paas_release.js:537 static/js/paas_release.js:570
+#: static/js/paas_release.min.js:1
+msgid "点击查看详情"
+msgstr "点击查看详情"
+
+#: static/js/paas_release.js:567 static/js/paas_release.min.js:1
+#: static/js/paas_release_flow.js:12 static/js/paas_release_flow.min.js:1
+msgid "点击隐藏详情"
+msgstr "点击隐藏详情"
+
+#: static/js/paas_release.js:677 static/js/paas_release.min.js:1
+msgid ""
+"您确认该应用没有使用celery吗？取消celery部署后，应用相关celery功能将不能使"
+"用！"
+msgstr ""
+"您确认该应用没有使用celery吗？取消celery部署后，应用相关celery功能将不能使"
+"用！"
+
+#: static/js/paas_release.js:699 static/js/paas_release.min.js:1
+msgid ""
+"取消“周期性任务”部署，已有周期性任务执行将会失效！您确认取消“周期性任务”部署"
+"吗？"
+msgstr ""
+"取消“周期性任务”部署，已有周期性任务执行将会失效！您确认取消“周期性任务”部署"
+"吗？"
+
+#: static/js/pagination.js:37 static/js/pagination.js:228
+#: static/js/pagination.min.js:1
+msgid "正在努力加载数据。。。"
+msgstr "正在努力加载数据。。。"
+
+#: static/js/pagination.js:146 static/js/pagination.js:148
+#: static/js/pagination.min.js:1
+msgid "上一页"
+msgstr "上一页"
+
+#: static/js/pagination.js:184 static/js/pagination.js:186
+#: static/js/pagination.min.js:1
+msgid "下一页"
+msgstr "下一页"
+
+#: static/js/pagination.js:210 static/js/pagination.min.js:1
+msgid "每页显示行"
+msgstr "每页显示行"
+
+#: static/js/utils.js:31 static/js/utils.min.js:1
+msgid "不能包含中文字符!"
+msgstr "不能包含中文字符!"
+
+#~ msgid "请填写开发负责人"
+#~ msgstr "请填写开发负责人"
+
+#~ msgid "负责人，可选多个"
+#~ msgstr "负责人，可选多个"
+
+#~ msgid "仓库信息错误"
+#~ msgstr "仓库信息错误"

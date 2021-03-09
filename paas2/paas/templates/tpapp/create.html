@@ -1,0 +1,107 @@
+<!-- 应用 创建页面  -->
+<%inherit file="/base_center.html"/>
+<%block name="right_content">
+<link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_profile.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+<!-- 右侧内容 start -->
+<div class="box-info full">
+  <div class="main-header">
+    <span>${_(u'基本信息填写')}</span>
+  </div>
+  <div class="create_flow">
+      <!--     错误提示信息     -->
+      % if error:
+        <div class="the-notes danger">
+          <span class="">${_(u'应用创建失败，请重新填写！错误信息：')}${error}!</span>
+        </div>
+      % endif
+      <!-- 应用 信息填写     -->
+      <div id="app_info">
+        <form  id="form_app" style="font-family:微软雅黑" method="post" action='${SITE_URL}tpapp/create/'  onsubmit="return APP_CREATE.validate_tpapp_form(this)">
+          <input type='hidden' name='csrfmiddlewaretoken' value='${csrf_token}'>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="panel-body" style="margin-left: -60px;margin-bottom: -30px;">
+                      <div class="form-inline form-columns app-form">
+                        <!-- 应用 ID -->
+                        <div class="form-group">
+                          <label class="control-label" for="">${_(u'应用 ID')}</label>
+                          <div class="controls">
+                          <input type="text" class="form-control" id="code" name="code" />
+                          <span class="required">*</span>
+                          <span id="tip_code" class="tips error"></span>
+                            <!--             使用独立域名，appcode中不用下划线改用连接符             -->
+                            <span class="help-block">
+                              ${_(u'由小写英文字母、连接符(-)或数字组成，长度为3~16个字符, 并且以字母开头。')}
+                            </span>
+                          </div>
+                        </div>
+
+                        <!--应用名称     -->
+                        <div class="form-group">
+                          <label class="control-label" for="">${_(u'应用名称')}</label>
+                          <div class="controls">
+                            <input type="text" class="form-control" id="name" name="name" value="" >
+                            <span class="required">*</span>
+                            <span id="tip_name" class="tips error"></span>
+                            <span class="help-block">${_(u'应用名称，长度小于20个字符。')}</span>
+                          </div>
+                        </div>
+                        <!-- 应用简介 -->
+                        <div class="form-group">
+                          <label class="control-label" for="">${_(u'应用简介')}</label>
+                          <div class="controls">
+                            <input type="text" class="form-control" id="introduction" name="introduction" value="" >
+                            <span class="required">*</span>
+                            <span id="tip_introduction" class="tips error"></span>
+                            <span class="help-block">${_(u'应用简要介绍，长度小于30个字符。')}</span>
+                          </div>
+                        </div>
+                        <!-- 应用分类 -->
+                        <div class="form-group">
+                          <label class="control-label" for="">${_(u'应用分类')}</label>
+                          <div class="controls">
+                              <select class="form-control" name="app_tags" id="app_tags" style="">
+                                  % for tag in tags:
+                                      <option value="${tag[0]}">${tag[1]}</option>
+                                  % endfor
+                              </select>
+                              <span class="required">*</span>
+                              <span id="tip_tags" class="tips error"></span>
+                          </div>
+                        </div>
+                        <!-- 系统链接 -->
+                        <hr style="margin-left: 50px;margin-top: 10px;">
+                        <div class="form-group">
+                          <label class="control-label">${_(u'系统链接')}</label>
+                          <div class="controls">
+                            <input type="text" class="form-control" name="external_url" id="external_url" value="" style="width:270px" title="">
+                            <span class="required">*</span>
+                            <span id="tip_external_url" class="tips mt10 mb5 ml150 error"></span>
+                            <span class="help-block" id="external_url_help">${_(u'系统访问链接, 支持协议：http或https, 如: http://bk.tencent.com')}</span>
+                          </div>
+                        </div>
+                        <!--开发信息 end-->
+                        <!-- form end-->
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <hr/>
+          <!--     操作按钮  -->
+          <div class="t_c mt35">
+            <button type="submit" class="btn btn-green btn-l btn-wm" id="submit_form_create" style="width:180px;height: 60px">${_(u'创建应用')}</button>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+</%block>
+<!-- 右侧内容 end -->
+
+<script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}"></script>
+<script>
+// 重置 是清空详细描述
+$("#reset_btn").click(function(){
+  $('.tips').text('');
+})
+</script>

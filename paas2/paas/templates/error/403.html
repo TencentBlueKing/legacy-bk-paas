@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> ${_(u'没有权限访问或操作此资源')} </title>
+<script type="text/javascript" src="${SITE_URL}jsi18n/i18n/"></script>
+<link href="${STATIC_URL}css/base.${CSS_SUFFIX}?v=${STATIC_VERSION}" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+  body {
+    min-width: initial !important;
+    background: none;
+  }
+  .permission-content {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 30px;
+  }
+  .permission-content .permission-header {
+    text-align: center;
+  }
+  .permission-content .permission-header .locked-icon {
+    height: 60px;
+  }
+  .permission-content .permission-header h3 {
+    margin: 10px 0 30px;
+    color: #979ba5;
+    font-size: 24px;
+  }
+  .permission-content .permission-table {
+    width: 100%;
+    /* height: 100px; */
+    color: #63656e;
+    border: 1px solid #dcdee5;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  .permission-content .permission-table th, .permission-content .permission-table td {
+    padding: 12px 18px;
+    font-size: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dcdee5;
+    border-right: 1px solid #dcdee5;
+  }
+  .permission-content .permission-table th {
+    color: #313238;
+    background: #fafbfd;
+  }
+  .permission-content .table-content {
+    max-height: 180px;
+    border-bottom: 1px solid #dcdee5;
+    border-top: none;
+    overflow: auto;
+  }
+  .permission-content .table-content .permission-table {
+    border-top: none;
+    border-bottom: none;
+  }
+  .permission-content .table-content .permission-table td:last-child {
+    border-right: none;
+  }
+  .permission-content .table-content .permission-table tr:last-child td {
+    border-bottom: none;
+  }
+  .permission-content .table-content .no-data {
+    text-align: center;
+    color: #999;
+  }
+  .bk-dialog-footer.bk-d-footer {
+    height: 50px;
+    line-height: 50px;
+  }
+  .bk-dialog-footer.bk-d-footer .permission-footer {
+    padding: 0 24px;
+    text-align: right;
+  }
+  .bk-dialog-footer.bk-d-footer .bk-button {
+    height: 32px;
+    line-height: 30px;
+  }
+</style>
+<script language="javascript" type="text/javascript">
+  function windowClose() {
+    if (navigator.userAgent.indexOf("Firefox") != -1 || navigator.userAgent.indexOf("Chrome") !=-1) {
+      window.location.href="about:blank";
+      window.close();
+    } else {
+      window.opener = null;
+      window.open("", "_self");
+      window.close();
+    }
+  }
+</script>
+</head>
+
+<body>
+
+<%!
+    from common.filters import auth
+%>
+
+  <div class="permission-content" slot="content">
+    <div class="permission-header">
+      <span class="title-icon">
+        <img src="${STATIC_URL}img/lock-closed.svg" class="locked-icon" alt="locked-icon" />
+      </span>
+      <h3> ${_(u'没有权限访问或操作此资源')} </h3>
+    </div>
+    <table class="permission-table table-header">
+      <thead>
+        <tr>
+          <th width="60%"> ${_(u'资源')} </th>
+          <th width="40%"> ${_(u'需要申请的权限')} </th>
+        </tr>
+      </thead>
+    </table>
+    <div class="table-content">
+      <table class="permission-table">
+        <tbody>
+          <%
+             actions = application["actions"]
+          %>
+          % for action in actions:
+          <tr>
+            <td width="60%">
+              % if "related_resource_types" in action:
+                <%
+                    related_resource_types = action["related_resource_types"]
+                %>
+                % if related_resource_types:
+                  % for rrt in related_resource_types:
+                      <%
+                          resources = rrt["instances"]
+                      %>
+                      % for ris in resources:
+                          % for instance in ris:
+                            ${auth.get_resource_type_name(instance["type"])}: ${instance["name"]} (${instance["id"]})
+                          % endfor
+                      % endfor
+                  % endfor
+                % else:
+                  --
+                % endif
+              % else:
+                  --
+              % endif
+            </td>
+            <td width="40%">
+                ${auth.get_action_name(action["id"])}
+            </td>
+          </tr>
+          % endfor
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bk-dialog-footer bk-d-footer">
+    <div style="display:inline-block; float:right; text-align:right;">
+      <a class="btn btn-azure btn-min-w ml10" href="${apply_url}" target="_blank"> ${_(u'去申请')} </a>
+      <button type="button" class="btn btn-default btn-min-w ml10" style="color: #969292; height: 30px;border-width:0.5px;" onclick="windowClose();"> ${_(u'取消')} </button>
+    </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

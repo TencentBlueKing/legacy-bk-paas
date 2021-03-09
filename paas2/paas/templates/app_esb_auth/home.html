@@ -1,0 +1,70 @@
+<%!
+   def inherit( context ):
+       if not context.get('base_tpl'):
+           return '/base_app.html'
+       else:
+           return context.get('base_tpl')
+%>
+<%inherit file="${inherit(context)}"/>
+
+<%block name="right_content">
+<style type="text/css">
+	.select2-results {
+    	max-height: 200px;
+	}
+</style>
+<hr>
+<div data-index="0" class="mt10">
+	% if esb_sys_list:
+		<div class="title_tab" id="topTab">
+			<div class="ml10" style="display:inline-block;">
+			    <!-- select2 静态 start -->
+			    <select id="esb_sys_select2" style="width:300px;">
+			    	% for i in esb_sys_list:
+                % if i['name'] == esb_system:
+			        	  <option value="${i['name']}" selected>${i['label']}（${i['name']}）</option>
+                % else:
+			        	  <option value="${i['name']}">${i['label']}（${i['name']}）</option>
+                % endif
+			        % endfor
+			    </select>
+			    <!-- select2 静态 end -->
+          <a href="${SITE_URL}esb/api_docs/system/" target="_blank" title="${_(u'API文档')}" style="font-size: 14px;margin-left: 560px;">
+          <i class="fa fa-book mr5" aria-hidden="false"></i>${_(u'API文档')}
+				</a>
+			</div>
+		</div>
+	% else:
+  <div class="t_c">${_(u'没有组件资源')}</div>
+	% endif
+	<div id="api_list">
+
+	</div>
+</div>
+</%block>
+<script type="text/javascript">
+	function get_esb_sys_api_html(sys_name){
+		$.get('${SITE_URL}esb_auth/get_esb_api/${app_code}/'+sys_name+'/', {}, function(html_data){
+			$("#api_list").html(html_data);
+		}, 'html');
+	}
+	$(function(){
+		var esb_sys_select2 = $("#esb_sys_select2").select2();
+
+    // register the on change
+		$("#esb_sys_select2").on("change", function(e) {
+			console.log(e.val);
+			get_esb_sys_api_html(e.val);
+		});
+
+    // load and reload
+		if($("#esb_sys_select2").find('option').length > 0){
+
+			var sys_name = $("#esb_sys_select2").val();
+      if (!sys_name) {
+			  var sys_name = $("#esb_sys_select2").find('option').eq(0).attr('value');
+      }
+			get_esb_sys_api_html(sys_name);
+		}
+	})
+</script>

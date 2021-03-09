@@ -1,0 +1,124 @@
+{% extends "manager/base.html" %}
+{% load i18n %}
+
+{% block header %}
+<link href='{{ STATIC_URL }}esb/assets/sFlow-1.0/sFlow.min.css' rel="stylesheet">
+<style>
+.flow-box {
+    width: 150px;    
+}
+</style>
+{% endblock %}
+<script src="{{ STATIC_URL }}esb/assets/sFlow-1.0/sFlow.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $('#flow_one').flowList();
+    $('#flow_two').flowList();
+</script>
+{% block main %}
+<div class="main-page box-info">
+    <div class="main-header">
+        <span>{% trans "API网关简介" %}</span>
+        <a href="{% url 'guide.page.index' %}" title="{% trans '跳转到使用指南' %}" target="_blank">
+            <i class="bk-icon icon-question-circle" style="margin-top: 2px;font-weight: bold"></i>
+        </a>
+    </div>
+    <div class="page-content" style="margin: 5px 30px; line-height: 25px">
+        {{ index_html|safe }}
+        <p style="margin-top: 10px;">{% trans "更多内容请查看" %}<a target="_blank" href="{% url 'guide.page.index' %}">
+            <i class="bk-icon icon-question-circle" style="margin-top: 2px;font-weight: bold"></i>
+            {% trans "使用指南" %}
+        </a></p>
+        <div style="padding-top: 25px;">
+            <span style="font-weight: bold">{% trans "API网关接入方式简述" %}</span>
+            <div>
+                <p>{% trans "组件编码接入：编码组件逻辑，并通过注册系统以及组件通道，提供API服务。适用于需自定义处理逻辑的场景。" %}</p>
+                <p>{% trans "在线自助接入：通过在线配置接口信息，提供API服务。适用于将HTTP协议、无需特殊处理的接口，直接对接的场景。" %}</p>
+            </div>
+            <div style="margin-top: 25px;">
+                <span style="font-weight: bold">{% trans "组件编码接入流程" %}
+                    <a href="{% url 'guide.page' name='add_new_component' %}" title="{% trans '跳转到组件编码介绍' %}" target="_blank">
+                <i class="bk-icon icon-question-circle" style="margin-top: 2px;"></i>
+                </a>
+                </span>
+                <ul class="pl0 flow-box-list" id="flow_one">
+                    <li class="flow-box">
+                    <div class="p10 flow-one-bg-success" data-toggle="tooltip" data-placement="top" title="{% trans '根据需求编码组件逻辑' %}">
+                            {% trans "编码具体组件逻辑" %}
+                        </div>
+                        <div class="flow-arrow">
+                            <div></div>
+                        </div>
+                    </li>
+                    <li class="flow-box">
+                    <div class="p10 flow-one-bg-success"data-toggle="tooltip" data-placement="top" title="{% trans '点击`系统管理`，注册组件所属系统' %}">
+                        {% trans "注册系统" %}</div>
+                        <div class="flow-arrow">
+                            <div></div>
+                        </div>
+                    </li>
+                    <li class="flow-box">
+                    <div class="p10 flow-one-bg-success" data-toggle="tooltip" data-placement="top" title="{% trans '点击`通道管理`，注册编码的组件信息' %}">
+                        {% trans "添加组件通道" %}</div>
+                        <div class="flow-arrow">
+                            <div></div>
+                        </div>
+                    </li>
+                    <li class="flow-box">
+                    <div class="p10 flow-one-bg-success" data-toggle="tooltip" data-placement="top" title="{% trans '按指令`重启服务`' %}">
+                        {% trans "重启服务" %}</div>
+                        <div class="flow-arrow">
+                            <div></div>
+                        </div>
+                    </li>
+                    <li class="flow-box">
+                    <div class="p10 flow-one-bg-success" data-toggle="tooltip" data-placement="top" title="{% trans '完成接入' %}">
+                        {% trans "完成" %}</div>
+                        <div class="flow-arrow">
+                            <div></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div style="margin-top: 30px;">
+                <span style="font-weight: bold;">{% trans "在线自助接入流程" %}
+                    <a href="{% url 'guide.page' name='buffet_component' %}" title="{% trans '跳转到自助接入介绍' %}" target="_blank">
+                    <i class="bk-icon icon-question-circle" style="margin-top: 2px;"></i>
+                    </a>
+                </span>
+                <ul class="pl0 flow-box-list" id="flow_two">
+                    <li class="flow-box">
+                    <div class="p10 flow-two-bg-success" data-toggle="tooltip" data-placement="top" title="{% trans '点击`系统管理`，注册API所属系统' %}">
+                        {% trans "注册系统" %}</div>
+                        <div class="flow-arrow">
+                            <div></div>
+                        </div>
+                    </li>
+                    <li class="flow-box">
+                    <div class="p10 flow-two-bg-success" data-toggle="tooltip" data-placement="top" title="{% trans '点击`自助接入`，配置API及对接接口的信息' %}">
+                        {% trans "添加API配置" %}</div>
+                        <div class="flow-arrow">
+                            <div></div>
+                        </div>
+                    </li>
+                    <li class="flow-box">
+                    <div class="p10 flow-two-bg-success" data-toggle="tooltip" data-placement="top" title="{% trans '完成接入' %}">
+                        {% trans "完成" %}</div>
+                        <div class="flow-arrow">
+                            <div></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<script src="{{ STATIC_URL }}esb/assets/sFlow-1.0/sFlow.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $('[data-toggle="tooltip"]').tooltip();
+    $('#flow_one').flowList();
+    $('#flow_two').flowList();
+</script>
+{% endblock %}

@@ -1,0 +1,180 @@
+<%!
+   def inherit( context ):
+       if not context.get('base_tpl'):
+           return '/base_saas.html'
+       else:
+           return context.get('base_tpl')
+%>
+<%inherit file="${inherit(context)}"/>
+
+<%block name="right_content">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_release.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_saas.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+
+    % if base_tpl != "/base_center.html":
+        <hr/>
+    % endif
+    <!-- 右侧内容 start -->
+    <div class="">
+        <div class="app_center">
+            <div class="box-info full" style="padding-top: 0px;">
+                % if base_tpl == "/base_center.html":
+                <div class="main-header">
+                    <span>${_(u'上传新应用')}</span>
+                </div>
+                % endif
+                <div class="deploy_box" style="padding-top: 0px;">
+                  <div class="">
+                    <form  id="file_form" enctype="multipart/form-data" method="post" action="${SITE_URL}saas/upload/${app_code}/" class="form form-horizontal">
+                      <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" />
+
+                      % if base_tpl != "/base_center.html":
+                      <div class="form-group" style="padding-left: 15px;">
+                        <label class="control-label">${_(u'应用当前状态')}：</label>
+
+                        <div class="inline-block">
+                        <h4>
+                        <!-- ${app_state_display} -->
+                        <label class="label label-default">${app_state_display}</label>
+                        </h4>
+                        </div>
+                      </div>
+
+                      <div class="form-group" style="padding-left: 15px;">
+                        <label class="control-label">${_(u'正式环境版本')}：</label>
+
+                        <div class="inline-block">
+                        <h4>
+                        <label class="label label-default">${online_version}</label>
+                        </h4>
+                        </div>
+                      </div>
+
+                      <div class="form-group" style="padding-left: 15px;">
+                        <label class="control-label">${_(u'测试环境版本')}：</label>
+
+                        <div class="inline-block">
+                        <h4>
+                        <label class="label label-default">${test_version}</label>
+                        </h4>
+                        </div>
+                      </div>
+                      % endif
+
+
+                      <div class="form-group" style="padding-left: 15px;">
+                        <label class="control-label">${_(u'上传文件操作')}：</label>
+                        <div class="inline-block">
+                          <a href="###" class="btn btn-default btn-lg choose-file-btn">${_(u'上传文件')}</a>
+                          <div class="inline-block">
+                            <div id="loading_div" style="display:none"><img alt="loadding" src="${STATIC_URL}img/loading_2_24x24.gif"> ${_(u'正在上传...')}</div>
+                            <div id="file_tips_div" style="display:none">
+                              <span class="text-danger"><i class="bk-icon icon-exclamation-triangle t_b"></i> ${_(u'请先选择要部署的文件')}</span>
+                            </div>
+
+                          </div>
+                          <input name="saas_file" id="saas_file" type="file">
+
+                        </div>
+
+                        <div class="inline-block">
+                          <div id="import_msg" class="import-validate text-success"></div>
+                        </div>
+                      </div>
+
+
+                      % if base_tpl != "/base_center.html":
+                      <div class="form-group" style="padding-left: 15px;">
+                        <label class="control-label">${_(u'最近版本')}：</label>
+                      </div>
+                      <div id="version_list" class="form-group" style="padding-left: 15px;">
+                      </div>
+                      % else:
+                        <div id="to_deploy" class="form-group" style="padding-left: 15px;">
+                        </div>
+                      % endif
+
+                    </form>
+
+                    <iframe name="target_frame" style="display:none;"></iframe>
+
+                    <div class="deploy_tab_box" id="deploy_input">
+                        <div class="">
+                            <!--正式部署start TODO-->
+                            <div id="online_form" n_form style="display:none;">
+                            </div>
+                            <!--正式部署end-->
+
+                        </div>
+                    </div>
+
+                    <!--流程图-->
+                    <div id="release-flow-before" class="pt20" style="display:none;">
+                    </div>
+                    <div id="release-flow" class="pt20 mb10" style="display:none;">
+                    </div>
+                    <div id="tips_info" class="pt20 mr30" style="margin-left:20px;max-width:820px;">
+                    </div>
+
+                    <div id="detail_button_2" style="margin-top:15px; margin-left:30px;display:none;">
+                      <a href="javascript:REL_MANAGER.get_app_release_detail()" title="${_(u'点击查看详情')}" >
+                      <span aria-hidden="true" class="glyphicon glyphicon-list" style="margin-right:5px;"></span>
+                      <span id="detail_click">${_(u'点击查看详情')}</span>
+                      </a>
+                    </div>
+
+                    <div id="detail_log" class="mt20" style="display:none;">
+                      <textarea id="detail_info" class="form-control" style="height:300px;background-color: #000; color: #FFF;" readonly="">${_(u'部署日志')}：------create virtualenv for test1------
+                      </textarea>
+                    </div>
+
+                      <hr/>
+                      <h4 class="dev_module_title mt30 mb10">${_(u'上传版本说明')}</h4>
+                      <div class="env_introduce_box">
+                        <p>${_(u'蓝鲸应用包：又称为APP包，SaaS包，可从“蓝鲸S-mart”获取')}</p>
+                        <p>${_(u'当前状态："开发中"，"测试中"，"已上线"，"已下架"')}</p>
+                        <p>${_(u'上传成功后，可以到"发布部署"页面，将应用部署到测试环境或正式环境')}</p>
+                      </div>
+
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 右侧内容 end -->
+</%block>
+<script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script>
+  function load_version_list() {
+    url = "${SITE_URL}saas/release/upload/version_list/${app_code}/"
+    $.get(url, {}, function(data) {
+      $("#version_list").html(data)
+    })
+  }
+
+$(function (argument) {
+    load_version_list();
+    $('.choose-file-btn').click(function(event) {
+        //触发选择文件的按钮
+        $('#saas_file').trigger('click');
+    });
+    $('#saas_file').on('change', function(){
+        // 把路径去掉，只显示文件名
+        var tag = $('.import-file-name').text($('#saas_file').val().split('\\')[$('#saas_file').val().split('\\').length-1]);
+        if (!tag) {
+            $('.import-file-name').text($('#saas_file').val().split('/')[$('#saas_file').val().split('/').length-1])
+        };
+    });
+
+    $("#saas_file").on("change", function(event) {
+      $("#import_msg").html($("#loading_div").html());
+      file_form.target="target_frame";
+      file_form.submit();
+      setTimeout(load_version_list, 2000)
+    });
+
+    $("#saas_file").on("click", function() {
+      this.value = null;
+    })
+})
+</script>
