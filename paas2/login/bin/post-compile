@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if [ "${BUILD_ENGINE}" == "landun" ]; then
+    find bin/ -type f ! -name pre-run -delete || true
+fi
