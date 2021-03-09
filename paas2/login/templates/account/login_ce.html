@@ -1,0 +1,103 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="icon" type="image/x-icon" href="{{STATIC_URL}}favicon.ico">
+        <link href="{{STATIC_URL}}css_ce/bk.{{CSS_SUFFIX}}" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}assets/bk-icon-2.0/iconfont.css" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}css_ce/login.{{CSS_SUFFIX}}?v={{STATIC_VERSION}}" rel="stylesheet" type="text/css" />
+        <title>登录|蓝鲸智云</title>
+
+        {% if is_plain %}
+          <style>
+              .login-from {
+                left: 50% !important;
+                top: 50% !important;
+                margin: 0 !important;
+                transform: translate(-50%, -50%);
+                border-radius: 0 !important;
+              }
+              .logo-title {
+                border-radius: 0 !important;
+              }
+              .protocol-btn {
+                display: none !important;
+              }
+              .footer {
+                display: none !important;
+              }
+              .page-content {
+                background: #e3eefa !important;
+              }
+          </style>
+        {% endif %}
+    </head>
+    <body>
+        <div class="page-content">
+            <div class="login-from">
+                <div class="logo-title">
+                    <img src="{{STATIC_URL}}img/logo_ce/bk_login.png" height="32" width="311" alt="">
+                </div>
+                <div class="from-detail">
+                    <form action="{{ app_path }}" method="post" id="login-form" onsubmit="return refresh_token()">{% csrf_token %}
+                        <div class="is-danger-tip">
+                            {% if error_message %}
+                            <i class="bk-icon icon-exclamation-circle-shape"></i><span>{{ error_message }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-login">
+                            <div class="user group-control">
+                                <i class="bk-icon icon-user"></i>
+                                <input id="user" type="text" name="username" placeholder="请输入用户名" >
+                            </div>
+                            <div class="pwd group-control">
+                                <i class="bk-icon icon-password"></i>
+                                <input class="password" id="password" type="password" name="password" value="" placeholder="请输入用户密码">
+                            </div>
+                            <div>
+                                <input type="hidden" name="next" value="{{ next }}" />
+                                <input type="hidden" name="app_id" value="{{app_id }}">
+                            </div>
+                            <div class="btn-content clearfix">
+                                <button class="login-btn">登录</button>
+                                <span class="protocol-btn">查看用户协议</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <footer class="footer">
+                <p>
+                    <a id="contact_us" class="link">QQ咨询(800802001)</a>
+                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸论坛</a>
+                    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸官网</a>
+                    | <a href="/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸智云工作台</a>
+                    |<a class="follow-us" href="###">关注我们
+                    <span class="qr-box">
+                        <span class="qr">
+                            <img src="{{STATIC_URL}}img/logo_ce/qr.png">
+                            <span class="qr-caret"></span>
+                        </span>
+                    </span>
+                    </a>
+                </p>
+                <p>Copyright © 2012-{{NOW.year}} Tencent BlueKing. All Rights Reserved.</p>
+                <p>蓝鲸智云 版权所有</p>
+            </footer>
+        </div>
+        <!-- 查看用户协议 -->
+        {% include "account/agreement.part" %}
+        <!-- 浏览器验证 -->
+        <div class="error-message-content is-chrome">
+            <span>您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果</span><i class="bk-icon icon-close-circle-shape" id="close-chrome"></i>
+        </div>
+    </body>
+    <!-- js 国际化 -->
+    <!--
+    <script type="text/javascript" src="{{SITE_URL}}jsi18n/i18n/"></script>
+    -->
+    <script src="{{STATIC_URL}}assets/jquery-1.10.2.min.js"></script>
+    <script src="{{STATIC_URL}}js_ce/login.{{JS_SUFFIX}}?v={{STATIC_VERSION}}"></script>
+
+</html>

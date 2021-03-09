@@ -1,0 +1,115 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="icon" type="image/x-icon" href="{{STATIC_URL}}favicon.ico">
+        <link href="{{STATIC_URL}}css/bk.{{CSS_SUFFIX}}" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}assets/bk-icon-2.0/iconfont.css" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}css/login.{{CSS_SUFFIX}}?v={{STATIC_VERSION}}" rel="stylesheet" type="text/css" />
+        <title>{% trans '登录|蓝鲸智云企业版' %}</title>
+    </head>
+    <body>
+        <div class="page-content">
+            <div class="login-from">
+                <div class="logo-title">
+                    <img src="{{STATIC_URL}}{% trans 'img/logo/logo_cn.svg' %}" height="33" width="178" alt="">
+                </div>
+                {% if not custom_login  %}
+                <div class="from-detail">
+                    <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+                        <div class="is-danger-tip">
+                            {% if error_message %}
+                            <i class="bk-icon icon-exclamation-circle-shape"></i><span>{{ error_message }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-login">
+                            <div class="user group-control">
+                                <i class="bk-icon icon-user"></i>
+                                <input id="user" type="text" name="username" placeholder="{% trans '用户名/邮箱/手机号' %}" autocomplete="off">
+                                <ul class="user-domain-list" id="user-domain-list">
+
+                                <input id="domains" type="hidden" name="domains" value="{{categories}}" >
+
+                            </div>
+                            <div class="pwd group-control">
+                                <i class="bk-icon icon-lock"></i>
+                                <input class="password" id="password" type="password" name="password" value="" placeholder="{% trans '密码' %}">
+                            </div>
+                            <div>
+                                <input type="hidden" name="next" value="{{ next }}" />
+                                <input type="hidden" name="app_id" value="{{ app_id }}">
+                            </div>
+                            <div class="btn-content clearfix">
+                                <button class="login-btn" type="button" id="login-btn">{% trans '登录' %}</button>
+                                <!--<span class="protocol-btn">{% trans '查看用户协议' %}</span>-->
+                            </div>
+                            <div class="action clearfix">
+
+                                {% if "/plain/" not in APP_PATH %}
+                                <a href="javascript: void(0);" class="protocol-btn fl">{% trans '查看用户协议' %}</a>
+                                {% endif %}
+
+                                <a href="{{ reset_password_url }}" class="password-btn fr" target="_blank">{% trans '忘记密码？' %}</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="language-switcher">
+                    <form id="language-form" action="{{SITE_URL}}i18n/setlang/" method="post">{% csrf_token %}
+                        <input name="next" type="hidden" value="{{ redirect_to }}" />
+                        <select name="language" style="display: none;">
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            {% for language in languages %}
+                                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                                    {{ language.name_local }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <a href="javascript: void(0);">
+                            <img class="{% if LANGUAGE_CODE == 'en' %} en {% endif %}" src="{{STATIC_URL}}{% trans 'img/logo/btn_cn.png' %}" />
+                        </a>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+            </div>
+            <!-- 鲸鱼 -->
+            <div class="whales-point-line"></div>
+
+            <!-- disable footer when /plain/ -->
+            {% if "/plain/" not in APP_PATH %}
+            <div class="footer">
+                <div class="footer-menu">
+                    <a id="contact_us" class="link">{% trans 'QQ咨询' %}(800802001)</a>
+                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '蓝鲸论坛' %}</a>
+                    | <a href="https://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '蓝鲸官网' %}</a>
+                    | <a href="https://{{CUR_DOMIAN}}/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '蓝鲸智云桌面' %}</a>
+                    <p>Copyright © 2012-{{NOW.year}} Tencent BlueKing. All Rights Reserved.</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <!-- 查看用户协议 -->
+        {% include "account/agreement.part" %}
+        <!-- 浏览器验证 -->
+        <div class="error-message-content is-chrome">
+            <span>{% trans '您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果' %}</span><i class="bk-icon icon-close-circle-shape" id="close-chrome"></i>
+        </div>
+        <!-- 和证书过期验证 -->
+        <div class="error-message-content is-certificate" {% if not is_license_ok %} data-ok="0" {% endif %}>
+            <span>{% trans '企业证书校验无效，请联系系统管理员处理' %}</span><i class="bk-icon icon-close-circle-shape" id="close-certificate"></i>
+        </div>
+    </body>
+    <!-- js 国际化 -->
+    <script type="text/javascript" src="{{SITE_URL}}jsi18n/i18n/"></script>
+    <script src="{{STATIC_URL}}assets/jquery-1.10.2.min.js"></script>
+    <script src="{{STATIC_URL}}js/login.{{JS_SUFFIX}}?v={{STATIC_VERSION}}"></script>
+    <script type="text/javascript">
+        {% if login_redirect_to %}
+        window.open("{{login_redirect_to}}");
+        {% endif %}
+    </script>
+</html>

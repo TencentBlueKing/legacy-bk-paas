@@ -1,0 +1,8 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% block body_content %}
+    <div class="dev_center_wrap dev_center_module" data-index="0" style="display: block;">
+    	<div class="t_c mt30">{% trans '你不是管理员, 没有用户管理的权限!' %}</div>
+        <div class="t_c mt30">{% trans '请找管理员申请权限!' %}</div>
+    </div>
+{% endblock %}

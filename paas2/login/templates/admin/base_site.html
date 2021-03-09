@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans '管理' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans '蓝鲸智云后台管理' %}</h1>
+{% endblock %}
+
+{% block userlinks %}
+    {% if user.has_usable_password %}
+        <a href="{% url 'admin:password_change' %}">{% trans '修改密码' %}</a> /
+    {% endif %}
+    <a href="{{LOGOUT_URL}}?c_url=/admin">{% trans '注销' %}</a>
+{% endblock %}

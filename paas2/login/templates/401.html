@@ -1,0 +1,25 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{% trans '未登录蓝鲸智云平台(401页)' %}</title>
+<link href="/static/css/base.min.css?v=1.0.1" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+	body {
+		min-width: initial !important;
+		background: none;
+	}
+</style>
+</head>
+
+<body style="font-family:Microsoft Yahei;" class="king-errorpage-middle">
+	<!--HTML-->
+	<div class="king-exception-box king-login-page">
+		<img src="/static/img/error/401.png">           
+		<h1>{% trans '您需要登录蓝鲸智云' %}</h1>
+		<a href="{{LOGOUT_URL}}" style="cursor:pointer;">{% trans '立即登录' %}</a>
+	</div>
+</body>
+
+</html>

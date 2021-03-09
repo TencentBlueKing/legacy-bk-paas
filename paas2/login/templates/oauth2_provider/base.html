@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/x-icon" href="{{STATIC_URL}}favicon.ico">
+
+    <!-- bootstrap CSS 公共样式 -->
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}assets/bootstrap-3.1.1/css/bootstrap.min.css">
+    <!-- 图标 CSS 公共样式 -->
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}assets/bk-icon-2.0/iconfont.css">
+    <!-- select2 插件 -->
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}assets/select2-3.5.2/select2.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}assets/bkDialog-1.0/css/ui-dialog.css">
+    <!-- 顶部导航css 私有样式 -->
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/layout_head.{{CSS_SUFFIX}}">
+    <!-- base 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/base.{{CSS_SUFFIX}}?v={{STATIC_VERSION}}">
+
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+        .block-center {
+            max-width: 500px;
+            padding: 19px 29px 29px;
+            margin: 0 auto 20px;
+            background-color: #fff;
+            border: 1px solid #e5e5e5;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+        }
+        .block-center .block-center-heading {
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    {% block content %}
+    {% endblock content %}
+</div>
+
+</body>
+</html>

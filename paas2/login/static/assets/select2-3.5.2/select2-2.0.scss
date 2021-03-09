@@ -1,0 +1,98 @@
+$basic: #ccc;
+$focus: #57a3f1;
+$hoverItemColor: #f3f3f3;
+$optsColor: #666;
+$selecteItemBorder: #e5e5e5;
+$resultsTextColor: #666;
+$global: '.select2';
+
+#{$global}{
+	&-container{
+		#{$global}-choice{
+			height: 36px;
+			border-radius: 1px;
+			border-color: $basic;
+			& > #{$global}-chosen{
+				font-size: 14px;
+				line-height: 34px;
+			}
+			#{$global}-arrow{
+				width: 34px;
+				border: none;
+				b{
+					background: {
+						image: url("triangle.png");
+						repeat: no-repeat;
+						size: 10px 6px;
+						position: 50% 50%;
+					}
+				}
+			}
+		}
+		&-multi{
+			&#{$global}-container-active{
+				#{$global}-choices{
+					border-color: $focus;
+				}
+			}
+		}
+	}
+	&-dropdown-open{
+		#{$global}-choice{
+			border-color: $focus;
+			background-color: #fff;
+		}
+	}
+	&-drop-active{
+		border: 1px solid #ddd;
+		box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.11);
+		border-radius: 3px;
+		margin-top: 5px;
+	}
+	&-results{
+		margin: 0;
+		padding: 0;
+		li{
+			padding: 14px 15px;
+			cursor: pointer;
+			border-bottom: 1px solid $hoverItemColor;
+			&#{$global}-result-with-children{
+				padding-left: 0;
+				padding-right: 0;
+				padding-bottom: 0;
+				& > #{$global}-result-label{
+					padding-left: 5px;
+					padding-bottom: 5px;
+				}
+			}
+		}
+		#{$global}-result-label{
+			padding: 0;
+			line-height: 1;
+		}
+		#{$global}-highlighted{
+			background-color: $hoverItemColor;
+			color: $resultsTextColor;
+		}
+		#{$global}-no-results{
+			padding: 14px 15px;
+		}
+	}
+	&-drop{
+		color: $resultsTextColor;
+	}
+	&-search{
+		padding: 14px 15px;
+		input{
+		    margin: 0;
+		    border-top: none;
+		    border-left: none;
+		    border-right: none;
+		}
+	}
+	&-result-with-children{
+		li{
+			border-bottom: none;
+		}
+	}
+}
