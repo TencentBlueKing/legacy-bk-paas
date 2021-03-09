@@ -1,0 +1,741 @@
+---
+
+- path: /data/databus/add_connector/
+  name: databus_add_connector
+  label: databus_add_connector
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/add_connector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/add_es_connector/
+  name: databus_add_es_connector
+  label: 添加es入库
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/add_es_connector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/add_hdfs_connector/
+  name: databus_add_hdfs_connector
+  label: databus_add_hdfs_connector
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/add_hdfs_connector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/add_jdbc_connector/
+  name: databus_add_jdbc_connector
+  label: 添加jdbc入库
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/add_jdbc_connector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/add_offline_task/
+  name: databus_add_offline_task
+  label: databus_add_offline_task
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/add_offline_task
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/check_deployment_task/
+  name: databus_check_deployment_task
+  label: databus_check_deployment_task
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/check_deployment_task
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/collector/create_exporter/
+  name: create_exporter
+  label: 创建exporter
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/create_exporter
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/deploy_exporter/
+  name: deploy_exporter
+  label: 部署exporter
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/deploy_exporter
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/download_shell_collector/
+  name: download_shell_collector
+  label: 部署脚本
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/download_shell_collector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/start_exporter/
+  name: start_exporter
+  label: 启动exporter
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/start_exporter
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/start_shell_collector/
+  name: start_shell_collector
+  label: 启动脚本采集
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/start_shell_collector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/stop_exporter/
+  name: stop_exporter
+  label: 停止exporter
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/stop_exporter
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/stop_shell_collector/
+  name: stop_shell_collector
+  label: 停止脚本采集
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/stop_shell_collector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/test_exporter/
+  name: test_exporter
+  label: 测试exporter
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/test_exporter
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/test_shell_collector/
+  name: test_shell_collector
+  label: 测试采集脚本
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/test_shell_collector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/upload_file/
+  name: upload_file
+  label: 上传文件
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/upload_file/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/create_all_base_info_dataids/
+  name: databus_create_all_base_info_dataids
+  label: 创建一套基础性能数据dataid
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/create_all_base_info_dataids
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/create_data_id/
+  name: databus_create_data_id
+  label: 创建dataid
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/create_data_id
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/delete_etl/
+  name: databus_delete_etl
+  label: databus_delete_etl
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/delete_etl
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/delete_offline_tasks_7days_ago/
+  name: databus_delete_offline_tasks_7days_ago
+  label: databus_delete_offline_tasks_7days_ago
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/delete_offline_tasks_7days_ago
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/deploy_base_info/
+  name: databus_deploy_base_info
+  label: 部署基础性能采集
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/deploy_base_info
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/deploy_beats_collector/
+  name: databus_deploy_beats_collector
+  label: databus_deploy_beats_collector
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/deploy_beats_collector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/deploy_collector/
+  name: databus_deploy_collector
+  label: 部署采集器
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/deploy_collector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/deploy_multiple_collector/
+  name: databus_deploy_multiple_collector
+  label: 批量部署采集器
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/deploy_multiple_collector/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/deploy_process_ports_collector/
+  name: deploy_process_ports_collector
+  label: 部署进程采集器
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/deploy_process_ports_collector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/deploy_tsdb/
+  name: databus_deploy_tsdb
+  label: databus_deploy_tsdb
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/deploy_tsdb
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/finish_offline_task/
+  name: databus_finish_offline_task
+  label: databus_finish_offline_task
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/finish_offline_task
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_condition_operator/
+  name: databus_get_condition_operator
+  label: 判断条件符号
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_condition_operator
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_data_id/
+  name: databus_get_data_id
+  label: 获取dataid的基本字段信息
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_data_id
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_data_src_item/
+  name: databus_get_data_src_item
+  label: databus_get_data_src_item
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_data_src_item
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_deployment_detail/
+  name: databus_get_deployment_detail
+  label: databus_get_deployment_detail
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_deployment_detail
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_encoding/
+  name: databus_get_encoding
+  label: 获取编码列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_encoding
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_etl_info/
+  name: databus_get_etl_info
+  label: databus_get_etl_info
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_etl_info
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_field_delimiter/
+  name: databus_get_field_delimiter
+  label: 获取分隔符
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_field_delimiter
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_field_type/
+  name: databus_get_field_type
+  label: 获取字段类型列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_field_type
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_file_frequency/
+  name: databus_get_file_frequency
+  label: 获取文件更新频率列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_file_frequency
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_offline_task_info/
+  name: databus_get_offline_task_info
+  label: databus_get_offline_task_info
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_offline_task_info
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_offline_tasks/
+  name: databus_get_offline_tasks
+  label: databus_get_offline_tasks
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_offline_tasks
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_time_format/
+  name: databus_get_time_format
+  label: databus_get_time_format
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_time_format
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/healthz/
+  name: databus_healthz
+  label: databus_healthz
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/healthz
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/kafka/list_cluster_info
+  name: list_cluster_info
+  label: 获取kafka集群列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/kafka/list_cluster_info
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/list_connector_cluster/
+  name: databus_list_connector_cluster
+  label: databus_list_connector_cluster
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/list_connector_cluster/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/list_datasets/
+  name: databus_list_datasets
+  label: 获取业务下的数据集
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/list_datasets
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/list_etl_template/
+  name: databus_list_etl_template
+  label: databus_list_etl_template
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/list_etl_template
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/list_fields/
+  name: databus_list_fields
+  label: 获取字段信息
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/list_fields
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/list_op_platform/
+  name: databus_list_op_platform
+  label: databus_list_op_platform
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/list_op_platform
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/list_reserved_dataid/
+  name: list_reserved_dataid
+  label: 获取内置dataid信息
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/list_reserved_dataid
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/restart_connector/
+  name: databus_restart_connector
+  label: databus_restart_connector
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/restart_connector/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/save_etl_by_template/
+  name: databus_save_etl_by_template
+  label: databus_save_etl_by_template
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/save_etl_by_template
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/stop_collector_by_dataid/
+  name: databus_stop_collector_by_dataid
+  label: 停用采集任务
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/stop_collector_by_dataid
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/stop_connector/
+  name: databus_stop_connector
+  label: databus_stop_connector
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /databus/stop_connector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/tail_kafka/
+  name: databus_tail_kafka
+  label: databus_tail_kafka
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/tail_kafka
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/tail_rt_kafka/
+  name: databus_tail_rt_kafka
+  label: databus_tail_rt_kafka
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/tail_rt_kafka
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/update_offline_task_info/
+  name: databus_update_offline_task_info
+  label: databus_update_offline_task_info
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /databus/update_offline_task_info
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/config/list_raw_data/
+  name: list_raw_data
+  label: 获取数据源列表
+  label_en: list raw data
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/list_raw_data/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/config/get_raw_data/
+  name: get_raw_data
+  label: dataid 详情(新版)
+  label_en: get_raw_data
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/get_raw_data/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/config/list_data_source/
+  name: list_data_source
+  label: 列举字段分割符
+  label_en: list_data_source
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/list_data_source/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/config/list_data_category/
+  name: list_data_category
+  label: 列举数据源分类
+  label_en: list_data_category
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/list_data_category/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/config/list_data_scenario/
+  name: list_data_scenario
+  label: 获取接入场景
+  label_en: list_data_scenario
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/list_data_scenario/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/config/save_etl/
+  name: save_etl
+  label: 提交清洗配置
+  label_en: save_etl
+  method: POST
+  api_type: operate
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/save_etl/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/verify_etl_conf/
+  name: verify_etl_conf
+  label: 调试清洗配置
+  label_en: verify_etl_conf
+  method: POST
+  api_type: operate
+  comp_codename: generic.data.data_component
+  dest_path: /databus/verify_etl_conf/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/config/get_etl/
+  name: get_etl
+  label: 提交清洗配置
+  label_en: get_etl
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/get_etl/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/config/list_etl/
+  name: list_etl
+  label: 列举清洗配置
+  label_en: list_etl
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/list_etl/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/config/list_databus_task_error/
+  name: list_databus_task_error
+  label: 列举总线任务失败错误码
+  label_en: list_databus_task_error
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/list_databus_task_error/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/collector/submit_deploy_plan/
+  name: submit_deploy_plan
+  label: 提交部署计划
+  label_en: submit_deploy_plan
+  method: POST
+  api_type: operate
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/submit_deploy_plan/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/suspend_collector/
+  name: suspend_collector
+  label: 停止采集器
+  label_en: suspend_collector
+  method: POST
+  api_type: operate
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/suspend_collector/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/resume_collector/
+  name: resume_collector
+  label: 重新部署采集器
+  label_en: resume_collector
+  method: POST
+  api_type: operate
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/resume_collector/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/collector/get_deploy_summary/
+  name: get_deploy_summary
+  label: 查询部署统计
+  label_en: get_deploy_summary
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/get_deploy_summary/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/collector/get_deploy_change_log/
+  name: get_deploy_change_log
+  label: 查询部署变更日志
+  label_en: get_deploy_change_log
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/get_deploy_change_log/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/collector/get_deploy_state/
+  name: get_deploy_state
+  label: 查询部署状态
+  label_en: get_deploy_state
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/get_deploy_state/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/collector/get_deploy_plan/
+  name: get_deploy_plan
+  label: 查询部署计划
+  label_en: get_deploy_plan
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/get_deploy_plan/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/collector/get_deploy_log/
+  name: get_deploy_log
+  label: 采集器执行历史
+  label_en: get_deploy_log
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/collector/get_deploy_log/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/get_etl_hint/
+  name: get_etl_hint
+  label: 智能推荐算子
+  label_en: get_raw_data
+  method: POST
+  api_type: operate
+  comp_codename: generic.data.data_component
+  dest_path: /databus/get_etl_hint/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/config/get_etl_template/
+  name: get_etl_template
+  label: 接入场景模板
+  label_en: list raw data
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/get_etl_template/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/databus/add_etl_connector
+  name: add_etl_connector
+  label: 添加清洗connector
+  label_en: add_etl_connector
+  method: POST
+  api_type: operate
+  comp_codename: generic.data.data_component
+  dest_path: /databus/add_etl_connector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/add_tsdb_connector
+  name: add_tsdb_connector
+  label: 添加TSDB shipper connector
+  label_en: add_tsdb_connector
+  method: POST
+  api_type: operate
+  comp_codename: generic.data.data_component
+  dest_path: /databus/add_tsdb_connector
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/databus/config/list_field_type/
+  name: list_field_type
+  label: 获取字段类型列表
+  label_en: list raw data
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /databus/config/list_field_type/
+  dest_http_method: GET
+  is_hidden: true
+

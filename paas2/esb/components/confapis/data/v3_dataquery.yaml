@@ -1,0 +1,17 @@
+- path: /data/v3/dataquery/health/
+  name: v3_dataquery_health_post
+  label: 查询模块健康检查接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataquery/health/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataquery/query/
+  name: v3_dataquery_query_post
+  label: 查询数据
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataquery/query/
+  dest_http_method: POST
+  is_hidden: true

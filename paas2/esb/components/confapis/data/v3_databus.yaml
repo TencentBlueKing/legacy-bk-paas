@@ -1,0 +1,341 @@
+- path: /data/v3/databus/cleans/
+  name: v3_databus_cleans_get
+  label: 获取清洗配置列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/cleans/
+  name: v3_databus_cleans_post
+  label: 创建清洗配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/cleans/factors/
+  name: v3_databus_cleans_factors_get
+  label: 获取清洗算子列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/factors/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/cleans/hint/
+  name: v3_databus_cleans_hint_post
+  label: 获取清洗配置算子推荐
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/hint/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/cleans/list_errors/
+  name: v3_databus_cleans_list_errors_get
+  label: 获取清洗错误提示列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/list_errors/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/cleans/time_formats/
+  name: v3_databus_cleans_time_formats_get
+  label: 获取清洗时间格式列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/time_formats/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/cleans/verify/
+  name: v3_databus_cleans_verify_post
+  label: 验证清洗规则
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/verify/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/cleans/{processing_id}/
+  name: v3_databus_cleans__processing_id__delete
+  label: 删除清洗配置
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/{processing_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/databus/cleans/{processing_id}/
+  name: v3_databus_cleans__processing_id__get
+  label: 获取总线清洗配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/{processing_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/cleans/{processing_id}/
+  name: v3_databus_cleans__processing_id__put
+  label: 更新清洗配置
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/cleans/{processing_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/databus/data_storages/
+  name: v3_databus_data_storages_get
+  label: 获取入库列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/data_storages/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/data_storages/{result_table_id}/
+  name: v3_databus_data_storages__result_table_id__get
+  label: 获取数据入库详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/data_storages/{result_table_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/data_storages/
+  name: v3_databus_data_storages_post
+  label: 添加入库
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/data_storages/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/data_storages/oplog/
+  name: v3_databus_data_storages_oplog_get
+  label: 查询历史记录
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/data_storages/oplog/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/data_storages/raw_data_fields/
+  name: v3_databus_data_storages_raw_data_fields_get
+  label: 查询场景原始数据字段列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/data_storages/raw_data_fields/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/data_storages/raw_data_source/
+  name: v3_databus_data_storages_raw_data_source_get
+  label: 查询数据源列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/data_storages/raw_data_source/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/data_storages/{result_table_id}/
+  name: v3_databus_data_storages__result_table_id__put
+  label: 修改入库
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/data_storages/{result_table_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/databus/data_storages/{result_table_id}/
+  name: v3_databus_data_storages__result_table_id__delete
+  label: 删除入库
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/data_storages/{result_table_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/databus/rawdatas/{raw_data_id}/tail/
+  name: v3_databus_rawdatas__raw_data_id__tail_get
+  label: 获取最近上报的rawdata数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/rawdatas/{raw_data_id}/tail/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/rawdatas/{raw_data_id}/badmsg/
+  name: v3_databus_rawdatas__raw_data_id__badmsg_get
+  label: 获取raw_data清洗失败的消息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/rawdatas/{raw_data_id}/badmsg/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/result_tables/{rt_id}/
+  name: v3_databus_result_tables__rt_id__get
+  label: 获取总线所需的rt配置信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/result_tables/{rt_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/result_tables/{rt_id}/tail/
+  name: v3_databus_result_tables__rt_id__tail_get
+  label: 获取rt最近数条数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/result_tables/{rt_id}/tail/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/tasks/
+  name: v3_databus_tasks_post
+  label: 创建清洗分发任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/tasks/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/tasks/{rt_id}/
+  name: v3_databus_tasks__rt_id__delete
+  label: 停止清洗，分发任务
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/tasks/{rt_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/databus/tasks/{rt_id}/
+  name: v3_databus_tasks__rt_id__get
+  label: 通过result table id查询kafka connect任务路由信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/tasks/{rt_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/clusters/
+  name: v3_databus_clusters_get
+  label: 获取总线任务集群列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/clusters/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/clusters/
+  name: v3_databus_clusters_post
+  label: 创建总线任务集群配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/clusters/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/clusters/check_all/
+  name: v3_databus_clusters_check_all_get
+  label: 检查所有总线集群内任务运行状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/clusters/check_all/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/clusters/{cluster_name}/
+  name: v3_databus_clusters__cluster_name__get
+  label: 获取总线任务集群信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/clusters/{cluster_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/clusters/{cluster_name}/check/
+  name: v3_databus_clusters__cluster_name__check_get
+  label: 检查单个总线集群中connector运行状况
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/clusters/{cluster_name}/check/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/clusters/{cluster_name}/connectors/
+  name: v3_databus_clusters__cluster_name__connectors_get
+  label: 列出总线集群下所有的connector列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/clusters/{cluster_name}/connectors/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/clusters/{cluster_name}/connectors/{connector_name}/
+  name: v3_databus_clusters__cluster_name__connectors__connector_name__get
+  label: 获取总线任务详细信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/clusters/{cluster_name}/connectors/{connector_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/channels/
+  name: v3_databus_channels_get
+  label: 获取总线channel配置列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/channels/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/channels/{channel_name}/
+  name: v3_databus_channels__channel_name
+  label: 查询队列链接信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/channels/{channel_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/tasks/
+  name: v3_databus_tasks_get
+  label: 获取总线任务列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/tasks/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/admin/search_topic/
+  name: v3_databus_admin_search_topic_get
+  label: 过滤出topic信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/admin/search_topic/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/{data_type}/{data_set}/set_topic/
+  name: v3_databus__data_type___data_set__set_topic_post
+  label: 设置topic信息
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/{data_type}/{data_set}/set_topic/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/migrations/get_clusters/
+  name: v3_databus_migrations_get_clusters_get
+  label: 数据迁移的集群列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/migrations/get_clusters/
+  dest_http_method: GET
+  is_hidden: true

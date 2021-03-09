@@ -1,0 +1,33 @@
+## ESB 健康检查 checklist
+
+### 检查 settings 配置
+1. 以下配置必须存在
+    ESB_TOKEN, SSL_ROOT_DIR, PAAS_HOST, HOST_BK_LOGIN
+    HOST_CC, HOST_JOB, HOST_DATA, HOST_FTA, REDIS_HOST
+    REDIS_PORT, REDIS_PASSWORD, GSE_PROC_HOST, GSE_PROC_PORT
+
+2. 检查 SSL_ROOT_DIR 文件夹是否存在，且文件夹下的以下文件必须存在
+    job_esb_api_client.crt
+    job_esb_api_client.key
+    gseca.crt
+    gse_esb_api_client.crt
+    gse_esb_api_client.key
+
+
+### 检查 DB 服务是否正常，且以下库表已经创建
+    esb_component_system
+    esb_channel
+    esb_function_controller
+    esb_buffet_component
+
+
+### 检查 Redis 服务是否正常
+
+
+### 检查 ESB 访问的后端接口是否正常，主要检查以下系统
+    BK_LOGIN
+    CC
+    JOB
+    DATA
+    GSE
+    FTA

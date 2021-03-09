@@ -1,0 +1,11 @@
+---
+
+- path: /v2/log_search/esquery_search/
+  name: esquery_search
+  label: 日志查询接口
+  label_en: log search api
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.log_search.log_search_component
+  dest_path: /o/bk_log_search/api/v1/esquery/search/
+  dest_http_method: POST

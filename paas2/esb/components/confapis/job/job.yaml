@@ -1,0 +1,270 @@
+---
+# Execute API
+- path: /v2/job/execute_job/
+  name: execute_job
+  label: 执行作业
+  label_en: Execute job
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/execute_job/
+  dest_http_method: POST
+  
+- path: /v2/job/fast_execute_script/
+  name: fast_execute_script
+  label: 快速执行脚本
+  label_en: Fast execute script
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/fast_execute_script/
+  dest_http_method: POST
+
+- path: /v2/job/fast_execute_sql/
+  name: fast_execute_sql
+  label: 快速执行SQL
+  label_en: Fast execute SQL
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/fast_execute_sql/
+  dest_http_method: POST  
+  
+- path: /v2/job/fast_push_file/
+  name: fast_push_file
+  label: 快速分发文件
+  label_en: Fast distribute file
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/fast_push_file/
+  dest_http_method: POST
+  
+- path: /v2/job/push_config_file/
+  name: push_config_file
+  label: 分发配置文件
+  label_en: Distribute config file
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/push_config_file/
+  dest_http_method: POST
+
+- path: /v2/job/operate_step_instance/
+  name: operate_step_instance
+  label: 步骤实例操作
+  label_en: Operate step instance
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/operate_step_instance/
+  dest_http_method: POST
+  
+- path: /v2/job/operate_job_instance/
+  name: operate_job_instance
+  label: 作业实例操作
+  label_en: Operate job instance
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/operate_job_instance/
+  dest_http_method: POST
+  
+- path: /v2/job/get_job_instance_status/
+  name: get_job_instance_status
+  label: 根据作业实例 ID 查询作业执行状态
+  label_en: Get the job execution status based on the job instance ID
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/get_job_instance_status/
+  dest_http_method: POST
+  
+- path: /v2/job/get_step_instance_status/
+  name: get_step_instance_status
+  label: 查询作业步骤的执行状态
+  label_en: Get job step instance execution status
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/get_step_instance_status/
+  dest_http_method: POST
+  
+- path: /v2/job/get_job_instance_log/
+  name: get_job_instance_log
+  label: 根据作业实例ID查询作业执行日志
+  label_en: Get job instance log
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/get_job_instance_log/
+  dest_http_method: POST
+  
+- path: /v2/job/get_job_instance_global_var_value/
+  name: get_job_instance_global_var_value
+  label: 获取作业实例全局变量值
+  label_en: Get job instance global variable value
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/get_job_instance_global_var_value/
+  dest_http_method: POST
+  is_hidden: True
+
+# Job management API
+- path: /v2/job/get_job_list/
+  name: get_job_list
+  label: Deprecated 查询作业执行方案列表
+  label_en: Deprecated Get job execution plan list
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-manage/get_job_list/
+  dest_http_method: POST
+  
+- path: /v2/job/get_job_detail/
+  name: get_job_detail
+  label: 查询执行方案详情
+  label_en: Get job execution plan detail
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-manage/get_job_detail/
+  dest_http_method: POST
+  
+- path: /v2/job/get_script_list/
+  name: get_script_list
+  label: 查询脚本列表
+  label_en: Get script list
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-manage/get_script_list/
+  dest_http_method: POST
+  
+- path: /v2/job/get_public_script_list/
+  name: get_public_script_list
+  label: 查询公共脚本列表
+  label_en: Get public script list
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-manage/get_public_script_list/
+  dest_http_method: POST
+
+- path: /v2/job/get_script_detail/
+  name: get_script_detail
+  label: 查询脚本详情
+  label_en: Get script detail
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-manage/get_script_detail/
+  dest_http_method: POST
+  
+- path: /v2/job/get_os_account/
+  name: get_os_account
+  label: 查询业务下的执行账号
+  label_en: Get system accounts
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-manage/get_os_account/
+  dest_http_method: POST
+  
+- path: /v2/job/get_own_db_account_list/
+  name: get_own_db_account_list
+  label: 查询用户有权限的DB帐号列表
+  label_en: Get own db account list
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-manage/get_own_db_account_list/
+  dest_http_method: POST
+
+# Job Crontab API
+- path: /v2/job/get_cron_list/
+  name: get_cron_list
+  label: 查询业务下定时作业信息
+  label_en: Get crontab job list
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-crontab/get_cron_list/
+  dest_http_method: POST
+  
+- path: /v2/job/save_cron/
+  name: save_cron
+  label: 新建或保存定时作业
+  label_en: Create or update crontab job
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-crontab/save_cron/
+  dest_http_method: POST
+  
+- path: /v2/job/update_cron_status/
+  name: update_cron_status
+  label: 更新定时作业状态，如启动或暂停
+  label_en: Update crontab job status, such as startup or stop
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-crontab/update_cron_status/
+  dest_http_method: POST
+  
+# GSE API
+- path: /v2/job/get_proc_result/
+  name: get_proc_result
+  label: 操作服务器上的进程结果查询
+  label_en: Query the result of the process on the server
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/get_proc_result/
+  dest_http_method: POST
+  is_hidden: True
+  
+- path: /v2/job/manage_proc/
+  name: manage_proc
+  label: 对服务器上的进程进行注册托管/取消托管
+  label_en: Manage the process on the server
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/manage_proc/
+  dest_http_method: POST
+  is_hidden: True
+  
+- path: /v2/job/operate_proc/
+  name: operate_proc
+  label: 操作服务器上的进程
+  label_en: Operate the process on the server
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/operate_proc/
+  dest_http_method: POST
+  is_hidden: True
+    
+- path: /v2/job/operate_process/
+  name: operate_process
+  label: 操作服务器上的进程-v2版本
+  label_en: Operate the process on the server-v2
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/operate_process/
+  dest_http_method: POST
+  is_hidden: True
+  
+- path: /v2/job/set_base_report/
+  name: set_base_report
+  label: 开启/关闭Agent基础数据采集上报功能
+  label_en: Enable / disable agent basic data collection and reporting function
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.job.job_component
+  dest_path: /api/job/v2/job-execute/set_base_report/
+  dest_http_method: POST
+  is_hidden: True

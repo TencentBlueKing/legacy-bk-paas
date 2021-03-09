@@ -1,0 +1,57 @@
+---
+
+- path: /data/modelflow/model/
+  name: get_batch_model_info
+  label: 获取批量的模型信息
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /algorithm/v2/model/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/modelflow/model/{model_id}/version/
+  name: get_all_model_version_by_id
+  label: 查询所有模型版本
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /algorithm/v2/model/{model_id}/version/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/modelflow/model/{model_id}/version/{model_version_id}/
+  name: get_model_info_by_version
+  label: 查询指定模型版本信息
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /algorithm/v2/model/{model_id}/version/{model_version_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/modelflow/model_stats/
+  name: get_project_model_list
+  label: 批量获取项目下的模型列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /algorithm/v2/model_stats/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/modelflow/sample/
+  name: get_sample_list
+  label: 查询样本库列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /algorithm/v2/sample/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/modelflow/modelflow_url/
+  name: modelflow_url
+  label: 获取连线ModelFlow地址
+  label_en: get modeflow url
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /algorithm/v2/modelflow_url/
+  dest_http_method: GET
+  is_hidden: true

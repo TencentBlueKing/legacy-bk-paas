@@ -1,0 +1,8 @@
+- path: /data/v3/bksql/api/v1/convert/table-names/
+  name: v3_bksql_api_v1_convert_table-names
+  label: 根据SQL解析出结果表名
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/bksql/api/v1/convert/table-names/
+  dest_http_method: POST
+  is_hidden: true

@@ -1,0 +1,135 @@
+
+- path: /data/v3/datacube/healthz/
+  name: v3_datacube_healthz_get
+  label: 健康状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/healthz/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datacube/session/sessions/
+  name: v3_datacube_session_sessions_post
+  label: 新建分析session
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/session/sessions/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/datacube/session/sessions/
+  name: v3_datacube_session_sessions_list
+  label: 获取分析session列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/session/sessions/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datacube/session/sessions/{id}/
+  name: v3_datacube_session_sessions_get
+  label: 获取分析session详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/session/sessions/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datacube/session/sessions/{id}/
+  name: v3_datacube_session_sessions_patch
+  label: 更新分析session部分信息
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/session/sessions/{id}/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/datacube/session/sessions/{id}/
+  name: v3_datacube_session_sessions_put
+  label: 更新分析session信息
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/session/sessions/{id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/datacube/session/sessions/{id}/
+  name: v3_datacube_session_sessions_delete
+  label: 删除分析session
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/session/sessions/{id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/datacube/session/sessions/by_key/
+  name: v3_datacube_session_sessions_by_key
+  label: 根据key获取分析session详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/session/sessions/by_key/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datacube/session/sessions/start/
+  name: v3_datacube_session_sessions_start
+  label: 创建一个session
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/session/sessions/start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/datacube/engine/engines/start/
+  name: v3_datacube_engine_engines_start
+  label: 启动分析引擎
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/engine/engines/start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/datacube/engine/engines/close/
+  name: v3_datacube_engine_engines_start
+  label: 停止分析引擎
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/engine/engines/close/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/datacube/sync/result_tables/
+  name: v3_datacube_sync_result_tables
+  label: 同步结果表元数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/sync/result_tables/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datacube/sync/deleted_result_tables/
+  name: v3_datacube_sync_deleted_result_tables
+  label: 同步已删除结果表元数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/sync/deleted_result_tables/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datacube/sync/bizs/
+  name: v3_datacube_sync_bizs
+  label: 同步业务元数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/sync/bizs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datacube/sync/projects/
+  name: v3_datacube_sync_projects
+  label: 同步项目元数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datacube/sync/projects/
+  dest_http_method: GET
+  is_hidden: true

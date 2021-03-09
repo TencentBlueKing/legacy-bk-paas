@@ -1,0 +1,622 @@
+---
+
+- path: /data/monitor/alarm/alarm_sources/
+  name: monitor_alarm_alarm_sources
+  label: 新增告警源
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarm_sources
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarm_sources/
+  name: monitor_alarm_alarm_sources
+  label: 查询告警源列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarm_sources
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarm_sources/notice_group/{id}/
+  name: ja_alarm_alarm_sources_notice_group_id
+  label: ja_alarm_alarm_sources_notice_group_id
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarm_sources/notice_group/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarm_sources/{id}/
+  name: monitor_alarm_alarm_sources_id
+  label: 查询告警源
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarm_sources/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarm_sources/{id}/
+  name: monitor_alarm_alarm_sources_id
+  label: 编辑告警源
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarm_sources/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarm_sources/{id}/delete/
+  name: monitor_alarm_alarm_sources_id_delete
+  label: 删除告警源
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/del_alarm_sources/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarms/
+  name: monitor_alarm_alarms
+  label: 查询告警列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarms
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarms/cnts/
+  name: monitor_alarm_alarms_cnts
+  label: 查询告警汇总数量
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarms/cnts/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarms/dimension_cnts/
+  name: monitor_alarm_alarms_dimension_cnts
+  label: 按维度查询告警条数
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarms/dimension_cnts
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarms/freq_alarms/
+  name: monitor_alarm_alarms_freq_alarms
+  label: 查询频繁告警列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarms/freq_alarms
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarms/{id}/
+  name: monitor_alarm_alarms_id
+  label: 查询告警详情
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarms/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/alarms/{id}/status_confirm/
+  name: monitor_alarm_alarms_id_status_confirm
+  label: 用户确认告警状态
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/alarms/{id}/status_confirm
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/biz_custom_event_data_id/{id}/
+  name: ja_alarm_biz_custom_event_data_id
+  label: ja_alarm_biz_custom_event_data_id
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/biz_custom_event_data_id/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/collect_incident_alarm/{id}/
+  name: monitor_alarm_collect_incident_alarm_id
+  label: 查询告警汇总窗口告警实例
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/collect_incident_alarm/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/converge_configs/
+  name: monitor_alarm_converge_configs
+  label: 新建收敛配置
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/converge_configs
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/converge_configs/
+  name: monitor_alarm_converge_configs
+  label: 查询所有收敛详情
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/converge_configs
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/converge_configs/{id}/
+  name: monitor_alarm_converge_configs_id
+  label: 编辑收敛配置
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/converge_configs/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/converge_configs/{id}/
+  name: monitor_alarm_converge_configs_id
+  label: 查询指定监控收敛配置
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/converge_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/converge_configs/{id}/delete/
+  name: monitor_alarm_converge_configs_id_delete
+  label: 删除收敛配置
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/del_converge_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_configs/
+  name: monitor_alarm_notice_configs
+  label: 查询通知方式列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/notice_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_configs/
+  name: monitor_alarm_notice_configs
+  label: 新增通知方式
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/notice_configs/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_configs/{id}/
+  name: monitor_alarm_notice_configs_id
+  label: 查询通知列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/notice_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_configs/{id}/
+  name: monitor_alarm_notice_configs_id
+  label: 更新通知方式
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/notice_configs/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_configs/{id}/delete/
+  name: monitor_alarm_notice_configs_id_delete
+  label: 删除通知方式
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/del_notice_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_groups/
+  name: ja_alarm_notice_groups
+  label: ja_alarm_notice_groups
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/notice_groups/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_groups/
+  name: ja_alarm_notice_groups
+  label: ja_alarm_notice_groups
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/notice_groups/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_groups/{id}/
+  name: ja_alarm_notice_groups_id
+  label: ja_alarm_notice_groups_id
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/notice_groups/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_groups/{id}/
+  name: ja_alarm_notice_groups_id
+  label: ja_alarm_notice_groups_id
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/notice_groups/{id}/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/notice_groups/{id}/delete/
+  name: ja_alarm_del_notice_groups_id
+  label: ja_alarm_del_notice_groups_id
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/del_notice_groups/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/shield_configs/
+  name: monitor_alarm_shield_configs
+  label: 设置告警屏蔽
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/shield_configs/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/shield_configs/
+  name: monitor_alarm_shield_configs
+  label: 查询告警屏蔽列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/shield_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/shield_configs/{id}/
+  name: monitor_alarm_shield_configs_id
+  label: 编辑告警屏蔽策略
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/shield_configs/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/shield_configs/{id}/
+  name: monitor_alarm_shield_configs_id
+  label: 查询告警屏蔽策略
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/shield_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/shield_configs/{id}/delete/
+  name: monitor_alarm_shield_configs_id_delete
+  label: 删除告警屏蔽策略
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/del_shield_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/solution_configs/
+  name: monitor_alarm_solution_configs
+  label: 创建告警处理策略
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/solution_configs/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/solution_configs/
+  name: monitor_alarm_solution_configs
+  label: 查询告警处理策略列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/solution_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/solution_configs/{id}/
+  name: monitor_alarm_solution_configs_id
+  label: 查询告警处理策略
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/solution_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/alarm/solution_configs/{id}/
+  name: monitor_alarm_solution_configs_id
+  label: 更新告警处理策略
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/solution_configs/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/alarm/solution_configs/{id}/delete/
+  name: monitor_alarm_solution_configs_id_delete
+  label: 删除告警处理策略
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/alarm/del_solution_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/agent_status/
+  name: monitor_monitor_agent_status
+  label: 查询对应业务的agent状态
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/agent_status
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/basealarm_defs/
+  name: monitor_monitor_basealarm_defs
+  label: 查询基础性能监控指标列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/basealarm_defs
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/basealarm_defs/{id}/
+  name: monitor_monitor_basealarm_defs_id
+  label: 查询基础性能监控指标
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/basealarm_defs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/detect_algorithm_configs/
+  name: monitor_monitor_detect_algorithm_configs
+  label: 新增异常检测算法配置
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/detect_algorithm_configs
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/detect_algorithm_configs/
+  name: monitor_monitor_detect_algorithm_configs
+  label: 查询异常检测算法配置列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/detect_algorithm_configs
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/detect_algorithm_configs/{id}/
+  name: monitor_monitor_detect_algorithm_configs_id
+  label: 查询异常检测算法配置
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/detect_algorithm_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/detect_algorithm_configs/{id}/
+  name: monitor_monitor_detect_algorithm_configs_id
+  label: 编辑异常检测算法配置
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/detect_algorithm_configs/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/detect_algorithm_configs/{id}/delete/
+  name: monitor_monitor_detect_algorithm_configs_id_delete
+  label: 删除异常检测算法配置
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/del_detect_algorithm_configs/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitor_items/
+  name: monitor_monitor_monitor_items
+  label: 新增监控项
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/monitor_items
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitor_items/
+  name: monitor_monitor_monitor_items
+  label: 查询监控项列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/monitor_items
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitor_items/{id}/
+  name: monitor_monitor_monitor_items_id
+  label: 查询监控项
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/monitor_items/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitor_items/{id}/
+  name: monitor_monitor_monitor_items_id
+  label: 编辑监控项
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/monitor_items/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitor_items/{id}/delete/
+  name: monitor_monitor_monitor_items_id_delete
+  label: 删除监控项
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/del_monitor_items/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitors/
+  name: monitor_monitor_monitors
+  label: 新增监控源
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/monitors
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitors/
+  name: monitor_monitor_monitors
+  label: 查询监控源列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/monitors
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitors/{id}/
+  name: monitor_monitor_monitors_id
+  label: 查询监控源
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/monitors/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitors/{id}/
+  name: monitor_monitor_monitors_id
+  label: 编辑监控源
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/monitors/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/monitors/{id}/delete/
+  name: monitor_monitor_monitors_id_delete
+  label: 删除监控源
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/del_monitors/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/performance_monitor_items/
+  name: monitor_monitor_performance_monitor_items
+  label: 新增基础性能监控指标
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/performance_monitor_items
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/performance_monitor_items/
+  name: monitor_monitor_performance_monitor_items
+  label: 查询基础性能监控指标列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/performance_monitor_items
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/performance_monitor_items/snapshot/
+  name: monitor_monitor_performance_monitor_items_snapshot
+  label: 查询快照监控指标列表
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/performance_monitor_items/snapshot/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/performance_monitor_items/snapshot/{id}/
+  name: monitor_monitor_performance_monitor_items_snapshot_id
+  label: 查询快照监控指标
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/performance_monitor_items/snapshot/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/performance_monitor_items/{id}/
+  name: monitor_monitor_performance_monitor_items_id
+  label: 查询基础性能监控指标
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/performance_monitor_items/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/performance_monitor_items/{id}/
+  name: monitor_monitor_performance_monitor_items_id
+  label: 编辑基础性能监控指标
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/performance_monitor_items/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/performance_monitor_items/{id}/delete/
+  name: monitor_monitor_performance_monitor_items_id_delete
+  label: 删除基础性能监控指标
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/del_performance_monitor_items/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/publish_collect_config/
+  name: monitor_monitor_publish_collect_config
+  label: 下发采集配置
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/publish_collect_config
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/query_collect_status/
+  name: monitor_monitor_query_collect_status
+  label: 查询采集配置下发状态
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/query_collect_status
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/query_ip_report_status/
+  name: monitor_monitor_query_ip_report_status
+  label: 查询IP上报状态
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/query_ip_report_status
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/monitor/monitor/source_custom_couplein/
+  name: monitor_monitor_source_custom_couplein
+  label: 接入日志数据源
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/source_custom_couplein
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/monitor/monitor/source_performance_couplein/
+  name: monitor_monitor_source_performance_couplein
+  label: 接入基础性能数据源
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /ja/monitor/source_performance_couplein
+  dest_http_method: POST
+  is_hidden: true

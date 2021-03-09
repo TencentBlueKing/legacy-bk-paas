@@ -1,0 +1,665 @@
+- path: /data/v3/datamanage/dmonitor/alert_configs/
+  name: v3_datamanage_dmonitor_alert_configs_post
+  label: 创建告警策略配置配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_configs/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/alert_configs/
+  name: v3_datamanage_dmonitor_alert_configs_get
+  label: 获取告警策略配置列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/alert_configs/{type}/{id}/
+  name: v3_datamanage_dmonitor_alert_configs__type___id__get
+  label: 获取告警策略配置详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_configs/{type}/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/alert_configs/{id}/
+  name: v3_datamanage_dmonitor_alert_configs__id__patch
+  label: 修改部分告警策略配置配置
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_configs/{id}/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/alert_configs/{id}/
+  name: v3_datamanage_dmonitor_alert_configs__id__delete
+  label: 删除告警策略配置配置
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_configs/{id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/alert_configs/{id}/
+  name: v3_datamanage_dmonitor_alert_configs__id__get
+  label: 获取告警策略配置详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_configs/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/alert_details/
+  name: v3_datamanage_dmonitor_alert_details_get
+  label: 查询告警列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_details/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/alert_details/summary/
+  name: v3_datamanage_dmonitor_alert_details_summary
+  label: 查询告警汇总
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_details/summary/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/alerts/
+  name: v3_datamanage_dmonitor_alerts_get
+  label: 查询汇总告警列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alerts/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/metrics/query/
+  name: v3_datamanage_dmonitor_metrics_query_post
+  label: 查询数据质量TSDB中的监控指标
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/metrics/query/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/datamanage/healthz/
+  name: v3_datamanage_healthz_get
+  label: 健康状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/healthz/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/notify_ways/
+  name: v3_datamanage_dmonitor_notify_ways_get
+  label: 获取告警方式
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/notify_ways/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datamanage/dmonitor/metrics/report/
+  name: dmonitor_metrics_report
+  label: 指标上报
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/metrics/report/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamap/retrieve/get_tag_sort_count/
+  name: v3_datamanage_datamap_retrieve_get_tag_sort_count_get
+  label: 获取标签按数据集个数排序信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamap/retrieve/get_tag_sort_count/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamap/retrieve/search/
+  name: v3_datamanage_datamap_retrieve_search_post
+  label: 条件查询接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamap/retrieve/search/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamap/retrieve/get_basic_info/
+  name: v3_datamanage_datamap_retrieve_get_basic_info_post
+  label: 悬浮框查询接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamap/retrieve/get_basic_info/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamap/retrieve/search_summary/
+  name: v3_datamanage_datamap_retrieve_search_summary_post
+  label: 汇总查询接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamap/retrieve/search_summary/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamap/retrieve/get_basic_list/
+  name: v3_datamanage_datamap_retrieve_get_basic_list_post
+  label: 获取基础列表信息接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamap/retrieve/get_basic_list/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dmonitor/metrics/{measurement}/
+  name: v3_datamanage_dmonitor_metrics_measurement_query_get
+  label: 查询数据集数据质量指标
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/metrics/{measurement}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dmonitor/alert_details/{id}/
+  name: v3_datamanage_dmonitor_alert_details__id__get
+  label: 查询单个告警详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_details/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dmonitor/alert_details/mine/
+  name: v3_datamanage_dmonitor_alert_details_mine_get
+  label: 查询我的告警列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_details/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dmonitor/alert_targets/mine/
+  name: v3_datamanage_dmonitor_alert_targets_mine_get
+  label: 查询我的告警对象列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_targets/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dmonitor/alert_configs/mine/
+  name: v3_datamanage_dmonitor_alert_configs_mine_get
+  label: 查询我的告警配置列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_configs/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dmonitor/data_sets/{data_set_id}/
+  name: v3_datamanage_dmonitor_data_sets__data_set_id__get
+  label: 获取基础列表信息接口
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/data_sets/{data_set_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/lifecycle/heat/heat_metric_by_influxdb/
+  name: v3_datamanage_lifecycle_heat_heat_metric_by_influxdb_get
+  label: 热度得分
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/lifecycle/heat/heat_metric_by_influxdb/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/lifecycle/range/range_metric_by_influxdb/
+  name: v3_datamanage_lifecycle_range_range_metric_by_influxdb_get
+  label: 广度得分
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/lifecycle/range/range_metric_by_influxdb/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamart/source_tag_scenario/{access_scenario_id}/
+  name: v3_datamanage_datamart_source_tag_scenario__access_scenario_id__get
+  label: 根据接入类型获取数据来源列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamart/source_tag_scenario/{access_scenario_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/lifecycle/range/list_range_metric_by_influxdb/
+  name: v3_datamanage_lifecycle_range_list_range_metric_by_influxdb_get
+  label: 获取广度评分和指标变化趋势
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/lifecycle/range/list_range_metric_by_influxdb/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/lifecycle/heat/list_heat_metric_by_influxdb/
+  name: v3_datamanage_lifecycle_heat_list_heat_metric_by_influxdb_get
+  label: 获取热度评分和指标变化趋势
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/lifecycle/heat/list_heat_metric_by_influxdb/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/lifecycle/ranking/range_heat_ranking_by_influxdb/
+  name: v3_datamanage_lifecycle_ranking_range_heat_ranking_by_influxdb_get
+  label: 获取广度和热度评分和排名
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/lifecycle/ranking/range_heat_ranking_by_influxdb/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamap/retrieve/get_data_dict_list/
+  name: v3_datamanage_datamap_retrieve_get_data_dict_list_post
+  label: 获取基础列表信息接口,只获得列表,不获得统计信息
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamap/retrieve/get_data_dict_list/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamap/retrieve/get_data_dict_count/
+  name: v3_datamanage_datamap_retrieve_get_data_dict_count_post
+  label: 获取基础列表信息接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamap/retrieve/get_data_dict_count/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/query/popular_query/
+  name: v3_datamanage_datastocktake_query_popular_query_get
+  label: 获取最近热门查询表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/query/popular_query/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/ops/tools/report_user_behavior/
+  name: v3_datamanage_ops_tools_report_user_behavior
+  label: 上报用户行为
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/ops/tools/report_user_behavior/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/data_source/distribution/
+  name: v3_datamanage_datastocktake_data_source_distribution_post
+  label: 数据来源分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/data_source/distribution/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/data_source/detail_distribution/
+  name: v3_datamanage_datastocktake_data_source_detail_distribution_post
+  label: 数据来源分布（详细）
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/data_source/detail_distribution/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/data_type/distribution/
+  name: v3_datamanage_datastocktake_data_type_distribution_post
+  label: 数据类型分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/data_type/distribution/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamap/retrieve/datamap_summary/
+  name: v3_datamanage_datamap_retrieve_datamap_summary_post
+  label: 查询汇总信息
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamap/retrieve/datamap_summary/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/sankey_diagram/distribution/
+  name: v3_datamanage_datastocktake_sankey_diagram_distribution_post
+  label: 桑基图接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/sankey_diagram/distribution/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/tag_type/info/
+  name: v3_datamanage_datastocktake_tag_type_info_get
+  label: 获取tag分类配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/tag_type/info/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datamart/tag_type/info/
+  name: v3_datamanage_datamart_tag_type_info_get
+  label: 基础包获取tag分类配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datamart/tag_type/info/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/node_count/distribution/
+  name: v3_datamanage_datastocktake_node_count_distribution_get
+  label: 获取所有数据后继节点分布
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/node_count/distribution/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/score_distribution/range/
+  name: v3_datamanage_datastocktake_score_distribution_range_get
+  label: 获取所有数据的广度评分分布
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/score_distribution/range/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/score_distribution/heat/
+  name: v3_datamanage_datastocktake_score_distribution_heat_get
+  label: 获取所有数据的热度评分分布
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/score_distribution/heat/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/day_query_count/distribution/
+  name: v3_datamanage_datastocktake_day_query_count_distribution_get
+  label: 获取所有数据的查询次数分布
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/day_query_count/distribution/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/application/app_code_count_distribution/
+  name: v3_datamanage_datastocktake_application_app_code_count_distribution_get
+  label: 获取所有数据的应用APP分布
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/application/app_code_count_distribution/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/application/biz_count_distribution/
+  name: v3_datamanage_datastocktake_application_biz_count_distribution_get
+  label: 获取所有数据的应用业务分布
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/application/biz_count_distribution/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/application/project_count_distribution/
+  name: v3_datamanage_datastocktake_application_project_count_distribution_get
+  label: 获取所有数据的应用项目分布
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/application/project_count_distribution/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/node_count/distribution_filter/
+  name: v3_datamanage_datastocktake_node_count_distribution_filter_post
+  label: 获取所有数据后继节点分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/node_count/distribution_filter/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/score_distribution/heat_filter/
+  name: v3_datamanage_datastocktake_score_distribution_heat_filter_post
+  label: 获取所有数据的热度评分分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/score_distribution/heat_filter/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/score_distribution/range_filter/
+  name: v3_datamanage_datastocktake_score_distribution_range_filter_post
+  label: 获取所有数据的广度评分分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/score_distribution/range_filter/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/day_query_count/distribution_filter/
+  name: v3_datamanage_datastocktake_day_query_count_distribution_filter_post
+  label: 获取所有数据的查询次数分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/day_query_count/distribution_filter/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/application/project_count_distribution_filter/
+  name: v3_datamanage_datastocktake_application_project_count_distribution_filter_post
+  label: 获取所有数据的应用项目分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/application/project_count_distribution_filter/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/application/biz_count_distribution_filter/
+  name: v3_datamanage_datastocktake_application_biz_count_distribution_filter_post
+  label: 获取所有数据的应用业务分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/application/biz_count_distribution_filter/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/application/app_code_count_distribution_filter/
+  name: v3_datamanage_datastocktake_application_app_code_count_distribution_filter_post
+  label: 获取所有数据的应用APP分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/application/app_code_count_distribution_filter/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dstan/standard_publicity/standards/
+  name: v3_datamanage_dstan_standard_publicity_standards_post
+  label: 获取标准公示列表
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dstan/standard_publicity/standards/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dstan/standard_publicity/get_standard_info/
+  name: v3_datamanage_dstan_standard_publicity_get_standard_info_get
+  label: 获取标准详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dstan/standard_publicity/get_standard_info/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/score_distribution/heat_score/
+  name: v3_datamanage_datastocktake_score_distribution_heat_score_get
+  label: 获取所有数据的热度评分列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/score_distribution/heat_score/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/datastocktake/score_distribution/range_score/
+  name: v3_datamanage_datastocktake_score_distribution_range_score_get
+  label: 获取所有数据的广度评分列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/datastocktake/score_distribution/range_score/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dstan/standard/search/
+  name: v3_datamanage_dstan_standard_search_get
+  label: 获取标准列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dstan/standard/search/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dstan/standard_publicity/tag_dict/
+  name: v3_datamanage_dstan_standard_publicity_tag_dict_get
+  label: 获取标签字典
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dstan/standard_publicity/tag_dict/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dstan/standard/get_standard/
+  name: v3_datamanage_dstan_standard_get_standard_get
+  label: 获取数据标准详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dstan/standard/get_standard/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dmonitor/batch_executions/
+  name: v3_datamanage_dmonitor_batch_executions_get
+  label: 获取离线执行记录
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/batch_executions/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dmonitor/batch_schedules/
+  name: v3_datamanage_dmonitor_batch_schedules_get
+  label: 获取离线任务调度信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/batch_schedules/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dstan/standard_publicity/standards/simple/
+  name: v3_datamanage_dstan_standard_publicity_standards_simple_get
+  label: 数据标准级联选框接口
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dstan/standard_publicity/standards/simple/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dmonitor/alert_shields/
+  name: v3_datamanage_dmonitor_alert_shields_post
+  label: 创建告警屏蔽
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dmonitor/alert_shields/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/datamanage/dstan/standard_publicity/is_standard/
+  name: v3_datamanage_dstan_standard_publicity_is_standard_get
+  label: 判断数据集是否标准
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/dstan/standard_publicity/is_standard/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datamanage/lifecycle/data_change/data_trace/
+  name: v3_datamanage_lifecycle_data_change_data_trace_get
+  label: 数据足迹
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/lifecycle/data_change/data_trace/
+  dest_http_method: GET
+  is_hidden: true

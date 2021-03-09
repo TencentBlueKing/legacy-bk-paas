@@ -1,0 +1,142 @@
+---
+
+- path: /v2/itsm/get_tickets/
+  name: get_tickets
+  label: 获取单据列表
+  label_en: get tickets
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/get_tickets/
+  dest_http_method: POST
+  
+- path: /v2/itsm/create_ticket/
+  name: create_ticket
+  label: 创建单据
+  label_en: create ticket
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/create_ticket/
+  dest_http_method: POST
+  
+- path: /v2/itsm/operate_ticket/
+  name: operate_ticket
+  label: 处理单据
+  label_en: operate ticket
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/operate_ticket/
+  dest_http_method: POST
+  
+- path: /v2/itsm/operate_node/
+  name: operate_node
+  label: 处理单据节点
+  label_en: operate ticket node
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/operate_node/
+  dest_http_method: POST
+  
+- path: /v2/itsm/get_ticket_info/
+  name: get_ticket_info
+  label: 单据详情查询
+  label_en: get ticket info
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/get_ticket_info/
+  dest_http_method: GET
+  
+- path: /v2/itsm/ticket_approval_result/
+  name: ticket_approval_result
+  label: 审批结果查询
+  label_en: ticket approval result
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/ticket_approval_result/
+  dest_http_method: POST
+  
+- path: /v2/itsm/token/verify/
+  name: token_verify
+  label: token校验
+  label_en: token verify
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/token/verify/
+  dest_http_method: POST
+  
+  
+- path: /v2/itsm/callback_failed_ticket/
+  name: callback_failed_ticket
+  label: 回调失败的单据
+  label_en: callback failed ticket
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/callback_failed_ticket/
+  dest_http_method: GET
+  
+- path: /v2/itsm/get_ticket_logs/
+  name: get_ticket_logs
+  label: 单据日志查询
+  label_en: get ticket logs
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/get_ticket_logs/
+  dest_http_method: GET
+
+- path: /v2/itsm/get_ticket_status/
+  name: get_ticket_status
+  label: 单据状态查询
+  label_en: get ticket status
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/get_ticket_status/
+  dest_http_method: GET
+
+- path: /v2/itsm/get_services/
+  name: get_services
+  label: 服务列表查询
+  label_en: get services
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/service/get_services/
+  dest_http_method: GET
+  
+- path: /v2/itsm/get_service_detail/
+  name: get_service_detail
+  label: 服务详情查询
+  label_en: get service detail
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/service/get_service_detail/
+  dest_http_method: GET
+  
+- path: /v2/itsm/get_service_catalogs/
+  name: get_service_catalogs
+  label: 服务目录查询
+  label_en: get service catalogs
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/service/get_service_catalogs/
+  dest_http_method: GET
+  
+- path: /v2/itsm/get_service_roles/
+  name: get_service_roles
+  label: 服务角色查询
+  label_en: get service roles
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/service/get_service_roles/
+  dest_http_method: GET

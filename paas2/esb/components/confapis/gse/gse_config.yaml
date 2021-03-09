@@ -1,0 +1,87 @@
+- path: /v2/gse/config_add_streamto/
+  name: config_add_streamto
+  label: 新增数据接收端配置 
+  label_en: Add data streamto config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_config_component
+  dest_path: /dataroute/v1/add_streamto
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/config_update_streamto/
+  name: config_update_streamto
+  label: 修改数据接收端配置 
+  label_en: Update data streamto config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_config_component
+  dest_path: /dataroute/v1/update_streamto
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/config_delete_streamto/
+  name: config_delete_streamto
+  label: 删除数据接收端配置 
+  label_en: Delete data streamto config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_config_component
+  dest_path: /dataroute/v1/delete_streamto
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/config_query_streamto/
+  name: config_query_streamto
+  label: 查询数据接收端配置 
+  label_en: Query data streamto config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_config_component
+  dest_path: /dataroute/v1/query_streamto
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/config_add_route/
+  name: config_add_route
+  label: 注册路由配置 
+  label_en: Add route config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_config_component
+  dest_path: /dataroute/v1/add_route
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/config_update_route/
+  name: config_update_route
+  label: 修改数据接收端配置 
+  label_en: Update route config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_config_component
+  dest_path: /dataroute/v1/update_route
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/config_delete_route/
+  name: config_delete_route
+  label: 删除数据接收端配置 
+  label_en: Delete route config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_config_component
+  dest_path: /dataroute/v1/delete_route
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/config_query_route/
+  name: config_query_route
+  label: 查询数据接收端配置 
+  label_en: Query route config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_config_component
+  dest_path: /dataroute/v1/query_route
+  dest_http_method: POST
+  is_hidden: True

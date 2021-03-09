@@ -1,0 +1,19 @@
+---
+
+- path: /data/authapi/auth_apply/
+  name: authapi_auth_apply
+  label: authapi_auth_apply
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /authapi/auth_apply
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/authapi/check_auth/
+  name: authapi_check_auth
+  label: authapi_check_auth
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /authapi/check_auth
+  dest_http_method: GET
+  is_hidden: true

@@ -1,0 +1,189 @@
+- path: /data/v3/storekit/common/
+  name: v3_storekit_common_get
+  label: 获取公共信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/common/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/storage_cluster_configs/
+  name: v3_storekit_storage_cluster_configs_get
+  label: 获取全部存储集群信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/storage_cluster_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/storage_cluster_expires_configs/
+  name: v3_storekit_storage_cluster_expires_configs_get
+  label: 获取全部过期时间配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/storage_cluster_expires_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/storage_result_tables/{result_table_id}/get_schema_and_sql/
+  name: v3_storekit_storage_result_tables__result_table_id__get_schema_and_sql_get
+  label: 获取rt关联对应物理存储的schema, 默认查询语句, 存储的查询顺序
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/storage_result_tables/{result_table_id}/get_schema_and_sql/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/storage_scenario_configs/
+  name: v3_storekit_storage_scenario_configs_get
+  label: 获取全部存储场景信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/storage_scenario_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/es/create_index/
+  name: v3_storekit_es_create_index_post
+  label: 创建index
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/es/create_index/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/storekit/storage_result_tables/
+  name: v3_storekit_storage_result_tables_post
+  label: 新增rt与存储的关联关系
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/storage_result_tables/
+  dest_http_method: POST
+  is_hidden: true
+  
+- path: /data/v3/storekit/storage_cluster_expires_configs/{cluster_name}/
+  name: v3_storekit_storage_cluster_expires_configs__cluster_name
+  label: 集群过期时间查询
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/storage_cluster_expires_configs/{cluster_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/storage_cluster_configs/{cluster_name}/
+  name: v3_storekit_storage_cluster_configs__cluster_name
+  label: 查询集群详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/storage_cluster_configs/{cluster_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/common/get_result_table_ids_by_cluster_type_and_name/
+  name: v3_storekit_common_get_result_table_ids_by_cluster_type_and_name_get
+  label: 根据集群类型获取表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/common/get_result_table_ids_by_cluster_type_and_name/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/task/delete_data/
+  name: v3_storekit_task_delete_data_post
+  label: 存储的过期数据清理
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/task/delete_data/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/storekit/task/get_storage_task_logs/
+  name: v3_storekit_task_get_storage_task_logs_get
+  label: 获取数据清理日志
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/task/get_storage_task_logs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/common/check_storage_health/
+  name: v3_storekit_common_check_storage_health_post
+  label: 存储连接校验
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/common/check_storage_health/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/storekit/common/password_encode/
+  name: v3_storekit_common_password_encode_post
+  label: 获取数据库加密密码
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/common/password_encode/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/storekit/clusters/
+  name: v3_storekit_clusters
+  label: 获取存储集群列表信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/clusters/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/clusters/{cluster_type}/
+  name: v3_storekit_clusters__cluster_type
+  label: 获取存储集群列表信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/clusters/{cluster_type}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/storekit/clusters/{cluster_type}/{cluster_name}/
+  name: v3_storekit_clusters__cluster_type__cluster_name
+  label: 获取存储集群信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/clusters/{cluster_type}/{cluster_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/scenarios/
+  name: v3_storekit_scenarios
+  label: 存储场景基本信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/scenarios/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/scenarios/common/
+  name: v3_storekit_scenarios_common
+  label: 基本信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/scenarios/common/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/common/password_encode/
+  name: v3_storekit_common_password_encode_get
+  label: 获取数据库加密密码
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/common/password_encode/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/storekit/result_tables/{result_table_id}/schema_and_sql/
+  name: v3_storekit_result_tables__result_table_id__schema_and_sql_get
+  label: 获取rt关联对应物理存储的schema, 默认查询语句, 存储的查询顺序
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/storekit/result_tables/{result_table_id}/schema_and_sql/
+  dest_http_method: GET
+  is_hidden: true

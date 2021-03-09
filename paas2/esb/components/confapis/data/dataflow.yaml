@@ -1,0 +1,385 @@
+---
+
+- path: /data/dataflow/batch/hdfs/get_hdfs_source_info/
+  name: dataflow_batch_hdfs_get_hdfs_source_info
+  label: dataflow_batch_hdfs_get_hdfs_source_info
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/batch/hdfs/get_hdfs_source_info
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/bksql/list_bksql_functions_info/
+  name: dataflow_flow_bksql_list_bksql_functions_info
+  label: dataflow_flow_bksql_list_bksql_functions_info
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/bksql/list_bksql_functions_info
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{flow_id}/list_monitor_data/
+  name: dataflow_flow_flows_flow_id_list_monitor_data
+  label: dataflow_flow_flows_flow_id_list_monitor_data
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{flow_id}/list_monitor_data
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/
+  name: dataflow_flow_flows_id
+  label: dataflow_flow_flows_id
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/
+  name: dataflow_flow_flows_id
+  label: dataflow_flow_flows_id
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/get_graph/
+  name: dataflow_flow_flows_id_get_graph
+  label: dataflow_flow_flows_id_get_graph
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/get_graph
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/get_latest_deploy_info/
+  name: dataflow_flow_flows_id_get_latest_deploy_info
+  label: dataflow_flow_flows_id_get_latest_deploy_info
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/get_latest_deploy_info
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/list_deploy_info/
+  name: dataflow_flow_flows_id_list_deploy_info
+  label: dataflow_flow_flows_id_list_deploy_info
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/list_deploy_info
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/monitor/
+  name: dataflow_flow_flows_id_monitor
+  label: dataflow_flow_flows_id_monitor
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/monitor
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/query_debug/
+  name: dataflow_flow_flows_id_query_debug
+  label: dataflow_flow_flows_id_query_debug
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/query_debug
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/query_debug_detail/
+  name: dataflow_flow_flows_id_query_debug_detail
+  label: dataflow_flow_flows_id_query_debug_detail
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/query_debug_detail
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/query_debugger/
+  name: dataflow_flow_flows_id_query_debugger
+  label: dataflow_flow_flows_id_query_debugger
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/query_debugger
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/restart/
+  name: dataflow_flow_flows_id_restart
+  label: dataflow_flow_flows_id_restart
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/restart
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/start/
+  name: dataflow_flow_flows_id_start
+  label: dataflow_flow_flows_id_start
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/start
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/start_debug/
+  name: dataflow_flow_flows_id_start_debug
+  label: dataflow_flow_flows_id_start_debug
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/start_debug
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/start_debugger/
+  name: dataflow_flow_flows_id_start_debugger
+  label: dataflow_flow_flows_id_start_debugger
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/start_debugger
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/stop/
+  name: dataflow_flow_flows_id_stop
+  label: dataflow_flow_flows_id_stop
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/stop
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/stop_debug/
+  name: dataflow_flow_flows_id_stop_debug
+  label: dataflow_flow_flows_id_stop_debug
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/stop_debug
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/stop_debugger/
+  name: dataflow_flow_flows_id_stop_debugger
+  label: dataflow_flow_flows_id_stop_debugger
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/stop_debugger
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flow/{id}/update_graph/
+  name: dataflow_flow_flows_id_update_graph
+  label: dataflow_flow_flows_id_update_graph
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/{id}/update_graph
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/
+  name: dataflow_flow_flows
+  label: dataflow_flow_flows
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/
+  name: dataflow_flow_flows
+  label: dataflow_flow_flows
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/list_latest_flows/
+  name: dataflow_flow_flows_list_latest_flows
+  label: dataflow_flow_flows_list_latest_flows
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/list_latest_flows
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/list_rela_by_dataid/
+  name: dataflow_flow_flows_list_rela_by_dataid
+  label: dataflow_flow_flows_list_rela_by_dataid
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/list_rela_by_dataid
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/list_rela_by_rtid/
+  name: dataflow_flow_flows_list_rela_by_rtid
+  label: dataflow_flow_flows_list_rela_by_rtid
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/list_rela_by_rtid
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/list_rela_count_by_dataid/
+  name: dataflow_flow_flows_list_rela_count_by_dataid
+  label: dataflow_flow_flows_list_rela_count_by_dataid
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/list_rela_count_by_dataid
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/list_rela_count_by_project_id/
+  name: dataflow_flow_flows_list_rela_count_by_project_id
+  label: dataflow_flow_flows_list_rela_count_by_project_id
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/list_rela_count_by_project_id
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/multi_destroy/
+  name: dataflow_flow_flows_multi_destroy
+  label: dataflow_flow_flows_multi_destroy
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/multi_destroy
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/multi_restart/
+  name: dataflow_flow_flows_multi_restart
+  label: dataflow_flow_flows_multi_restart
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/multi_restart
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/multi_start/
+  name: dataflow_flow_flows_multi_start
+  label: dataflow_flow_flows_multi_start
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/multi_start
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/multi_stop/
+  name: dataflow_flow_flows_multi_stop
+  label: dataflow_flow_flows_multi_stop
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/multi_stop
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/node/{node_id}/
+  name: dataflow_flow_nodes_node_id
+  label: dataflow_flow_nodes_node_id
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/nodes/{node_id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/node/{node_id}/
+  name: dataflow_flow_nodes_node_id
+  label: dataflow_flow_nodes_node_id
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/nodes/{node_id}
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/node/{node_id}/list_monitor_data/
+  name: dataflow_flow_nodes_node_id_list_monitor_data
+  label: dataflow_flow_nodes_node_id_list_monitor_data
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/nodes/{node_id}/list_monitor_data
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/nodes/
+  name: dataflow_flow_nodes
+  label: dataflow_flow_nodes
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/nodes
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/nodes/
+  name: dataflow_flow_nodes
+  label: dataflow_flow_nodes
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/nodes
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/dataflow/flow/nodes/list_calculate_nodes/
+  name: dataflow_flow_nodes_list_calculate_nodes
+  label: dataflow_flow_nodes_list_calculate_nodes
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/nodes/list_calculate_nodes
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/nodes/list_storage_nodes/
+  name: dataflow_flow_nodes_list_storage_nodes
+  label: dataflow_flow_nodes_list_storage_nodes
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/nodes/list_storage_nodes
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/healthz/
+  name: dataflow_healthz
+  label: dataflow_healthz
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/healthz
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/nodes/get_by_instance_id/
+  name: get_by_instance_id
+  label: 通过算法实例ID获取节点
+  label_en: get node by instance_id
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/nodes/get_by_instance_id
+  dest_http_method: GET 
+  is_hidden: true
+  
+- path: /data/dataflow/flow/projects/{project_id}/
+  name: get_project
+  label: 查询项目详情
+  label_en: get project detail
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/projects/{project_id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/dataflow/flow/flows/get_link_rules_config/
+  name: get_link_rules_config
+  label: 获取连线规则配置
+  label_en: list raw data
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /dataflow/flow/flows/get_link_rules_config
+  dest_http_method: GET
+  is_hidden: true

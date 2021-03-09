@@ -1,0 +1,859 @@
+---
+
+- path: /v2/nodeman/package/
+  name: register_package
+  label: 注册插件包信息
+  label_en: add plugin package
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/package/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/nodeman/process/
+  name: register_process
+  label: 注册插件信息
+  label_en: add plugin
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/process/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/nodeman/process_info/
+  name: register_process_info
+  label: 注册插件安装信息
+  label_en: add plugin control info
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/process_info/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/nodeman/{bk_biz_id}/tasks/
+  name: add_task
+  label: 新增任务
+  label_en: add new job
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/{bk_biz_id}/tasks/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/nodeman/process/{process_name}/
+  name: get_process_by_name
+  label: 根据插件名获取插件信息
+  label_en: get process info
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/process/{process_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/nodeman/{process_name}/package/
+  name: get_package_by_name
+  label: 根据插件名获取插件包信息
+  label_en: get process package info
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/{process_name}/package/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/nodeman/process_info/{process_name}/
+  name: get_process_info_by_name
+  label: 根据插件名获取插件安装信息
+  label_en: get process control info
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/process_info/{process_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/nodeman/{bk_biz_id}/tasks/{job_id}/
+  name: get_task_info
+  label: 根据id获取任务执行信息
+  label_en: get job info
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/{bk_biz_id}/tasks/{job_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/nodeman/{bk_biz_id}/host_status/get_host/
+  name: get_host
+  label: 根据插件获取机器信息
+  label_en: get host info
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/{bk_biz_id}/host_status/get_host/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/nodeman/get_log/
+  name: get_log
+  label: 获取日志
+  label_en: fetch log
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/{bk_biz_id}/logs/{host_id}
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/nodeman/get_task_info/
+  name: get_task_info
+  label: 根据id获取任务执行信息
+  label_en: get task info by id
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/{bk_biz_id}/tasks/{job_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/nodeman/create_task/
+  name: create_task
+  label: 新增任务
+  label_en: create new task
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/{bk_biz_id}/tasks/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/nodeman/create_cloud/
+  name: create_cloud
+  label: 新增云区域
+  label_en: create cloud name
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/{bk_biz_id}/clouds/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/nodeman/get_clouds/
+  name: get_cloud
+  label: 查询云区域
+  label_en: get_clouds
+  suggest_method: GET
+  api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/{bk_biz_id}/clouds/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/nodeman/query_hosts/
+  name: query_hosts
+  label: 获取主机信息
+  label_en: query hosts
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/hosts/
+  dest_http_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_render_config_template
+  label: 渲染插件配置模板
+  label_en: null
+  dest_path: /backend/api/plugin/render_config_template/
+  path: /v2/nodeman/plugin_render_config_template/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_start_debug
+  label: 启动插件调试
+  label_en: null
+  dest_path: /backend/api/plugin/start_debug/
+  path: /v2/nodeman/plugin_start_debug/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_query_debug
+  label: 查询插件调试状态
+  label_en: null
+  dest_path: /backend/api/plugin/query_debug/
+  path: /v2/nodeman/plugin_query_debug/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_stop_debug
+  label: 停止插件调试
+  label_en: null
+  dest_path: /backend/api/plugin/stop_debug/
+  path: /v2/nodeman/plugin_stop_debug/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_create_register_task
+  label: 创建插件注册任务
+  label_en: null
+  dest_path: /backend/api/plugin/create_register_task/
+  path: /v2/nodeman/plugin_create_register_task/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_query_register_task
+  label: 查询插件注册任务状态
+  label_en: null
+  dest_path: /backend/api/plugin/query_register_task/
+  path: /v2/nodeman/plugin_query_register_task/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_info
+  label: 查询插件信息
+  label_en: null
+  dest_path: /backend/api/plugin/info/
+  path: /v2/nodeman/plugin_info/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_create_config_template
+  label: 创建插件配置模板
+  label_en: null
+  dest_path: /backend/api/plugin/create_config_template/
+  path: /v2/nodeman/plugin_create_config_template/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_release
+  label: 发布插件包
+  label_en: null
+  dest_path: /backend/api/plugin/release/
+  path: /v2/nodeman/plugin_release/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_release_config_template
+  label: 发布插件配置模板
+  label_en: null
+  dest_path: /backend/api/plugin/release_config_template/
+  path: /v2/nodeman/plugin_release_config_template/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_delete
+  label: 删除插件
+  label_en: null
+  dest_path: /backend/api/plugin/delete/
+  path: /v2/nodeman/plugin_delete/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_create_export_task
+  label: 创建插件包导出任务
+  label_en: null
+  dest_path: /backend/api/plugin/create_export_task/
+  path: /v2/nodeman/plugin_create_export_task/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_query_export_task
+  label: 查询插件包导出任务状态
+  label_en: null
+  dest_path: /backend/api/plugin/query_export_task/
+  path: /v2/nodeman/plugin_query_export_task/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_create
+  label: 创建订阅配置
+  label_en: null
+  dest_path: /backend/api/subscription/create/
+  path: /v2/nodeman/subscription_create/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_info
+  label: 查询订阅配置信息
+  label_en: null
+  dest_path: /backend/api/subscription/info/
+  path: /v2/nodeman/subscription_info/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_update
+  label: 更新订阅配置
+  label_en: null
+  dest_path: /backend/api/subscription/update/
+  path: /v2/nodeman/subscription_update/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_delete
+  label: 删除订阅配置
+  label_en: null
+  dest_path: /backend/api/subscription/delete/
+  path: /v2/nodeman/subscription_delete/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_run
+  label: 执行订阅下发任务
+  label_en: null
+  dest_path: /backend/api/subscription/run/
+  path: /v2/nodeman/subscription_run/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_task_result
+  label: 查询订阅任务状态
+  label_en: null
+  dest_path: /backend/api/subscription/task_result/
+  path: /v2/nodeman/subscription_task_result/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_switch
+  label: 启停订阅配置
+  label_en: null
+  dest_path: /backend/api/subscription/switch/
+  path: /v2/nodeman/subscription_switch/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_instance_status
+  label: 查询订阅实例状态
+  label_en: null
+  dest_path: /backend/api/subscription/instance_status/
+  path: /v2/nodeman/subscription_instance_status/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_task_result_detail
+  label: 查询订阅任务中实例的详细状态
+  label_en: null
+  dest_path: /backend/api/subscription/task_result_detail/
+  path: /v2/nodeman/subscription_task_result_detail/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- path: /v2/nodeman/get_clouds_by_biz/
+  name: get_clouds_by_biz
+  label: 查询业务下的云区域列表
+  label_en: Query cloud area list
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  dest_path: /gateway/clouds/
+  dest_http_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_render_config_template
+  label: 渲染配置模板
+  label_en: null
+  dest_path: /backend/api/plugin/render_config_template/
+  path: /v2/nodeman/backend/api/plugin/render_config_template/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_start_debug
+  label: 开始调试
+  label_en: null
+  dest_path: /backend/api/plugin/start_debug/
+  path: /v2/nodeman/backend/api/plugin/start_debug/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_query_debug
+  label: 查询调试结果
+  label_en: null
+  dest_path: /backend/api/plugin/query_debug/
+  path: /v2/nodeman/backend/api/plugin/query_debug/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_stop_debug
+  label: 停止调试
+  label_en: null
+  dest_path: /backend/api/plugin/stop_debug/
+  path: /v2/nodeman/backend/api/plugin/stop_debug/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_create_register_task
+  label: 创建注册任务
+  label_en: null
+  dest_path: /backend/api/plugin/create_register_task/
+  path: /v2/nodeman/backend/api/plugin/create_register_task/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_query_register_task
+  label: 查询插件注册任务
+  label_en: null
+  dest_path: /backend/api/plugin/query_register_task/
+  path: /v2/nodeman/backend/api/plugin/query_register_task/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_info
+  label: 查询插件信息
+  label_en: null
+  dest_path: /backend/api/plugin/info/
+  path: /v2/nodeman/backend/api/plugin/info/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_create_config_template
+  label: 创建配置模板
+  label_en: null
+  dest_path: /backend/api/plugin/create_config_template/
+  path: /v2/nodeman/backend/api/plugin/create_config_template/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_release
+  label: 发布插件
+  label_en: null
+  dest_path: /backend/api/plugin/release/
+  path: /v2/nodeman/backend/api/plugin/release/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_release_config_template
+  label: 发布配置模板
+  label_en: null
+  dest_path: /backend/api/plugin/release_config_template/
+  path: /v2/nodeman/backend/api/plugin/release_config_template/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_delete
+  label: 删除插件
+  label_en: null
+  dest_path: /backend/api/plugin/delete/
+  path: /v2/nodeman/backend/api/plugin/delete/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_create_export_task
+  label: 触发插件打包导出
+  label_en: null
+  dest_path: /backend/api/plugin/create_export_task/
+  path: /v2/nodeman/backend/api/plugin/create_export_task/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: plugin_query_export_task
+  label: 获取一个导出任务结果
+  label_en: null
+  dest_path: /backend/api/plugin/query_export_task/
+  path: /v2/nodeman/backend/api/plugin/query_export_task/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_create
+  label: 创建订阅任务
+  label_en: null
+  dest_path: /backend/api/subscription/create/
+  path: /v2/nodeman/backend/api/subscription/create/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_info
+  label: 订阅详情
+  label_en: null
+  dest_path: /backend/api/subscription/info/
+  path: /v2/nodeman/backend/api/subscription/info/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_update
+  label: 更新订阅
+  label_en: null
+  dest_path: /backend/api/subscription/update/
+  path: /v2/nodeman/backend/api/subscription/update/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_delete
+  label: 删除订阅
+  label_en: null
+  dest_path: /backend/api/subscription/delete/
+  path: /v2/nodeman/backend/api/subscription/delete/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_run
+  label: 执行订阅
+  label_en: null
+  dest_path: /backend/api/subscription/run/
+  path: /v2/nodeman/backend/api/subscription/run/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_retry
+  label: 重试失败的任务
+  label_en: null
+  dest_path: /backend/api/subscription/retry/
+  path: /v2/nodeman/backend/api/subscription/retry/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_revoke
+  label: 终止正在执行的任务
+  label_en: null
+  dest_path: /backend/api/subscription/revoke/
+  path: /v2/nodeman/backend/api/subscription/revoke/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_task_result
+  label: 任务执行结果
+  label_en: null
+  dest_path: /backend/api/subscription/task_result/
+  path: /v2/nodeman/backend/api/subscription/task_result/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_switch
+  label: 订阅启停
+  label_en: null
+  dest_path: /backend/api/subscription/switch/
+  path: /v2/nodeman/backend/api/subscription/switch/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_instance_status
+  label: 查询订阅运行状态
+  label_en: null
+  dest_path: /backend/api/subscription/instance_status/
+  path: /v2/nodeman/backend/api/subscription/instance_status/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_task_result_detail
+  label: 任务执行详细结果
+  label_en: null
+  dest_path: /backend/api/subscription/task_result_detail/
+  path: /v2/nodeman/backend/api/subscription/task_result_detail/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_task_result_detail
+  label: 采集任务执行详细结果
+  label_en: null
+  dest_path: /backend/api/subscription/collect_task_result_detail/
+  path: /v2/nodeman/backend/api/subscription/collect_task_result_detail/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: fetch_commands
+  label: 获取命令
+  label_en: null
+  dest_path: /backend/api/subscription/fetch_commands/
+  path: /v2/nodeman/backend/api/subscription/fetch_commands/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: get_job_log
+  label: 查询日志
+  label_en: null
+  dest_path: /api/job/{job_id}/log/
+  path: /v2/nodeman/api/job/log/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: job_details
+  label: 查询任务详情
+  label_en: null
+  dest_path: /api/job/{job_id}/details/
+  path: /v2/nodeman/api/job/details/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: job_install
+  label: 主机安装
+  label_en: null
+  dest_path: /api/job/install/
+  path: /v2/nodeman/api/job/install/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: job_operate
+  label: 主机操作
+  label_en: null
+  dest_path: /api/job/operate/
+  path: /v2/nodeman/api/job/operate/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: ap_list
+  label: 接入点列表
+  label_en: null
+  dest_path: /api/ap/
+  path: /v2/nodeman/api/ap/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: remove_host
+  label: 移除主机
+  label_en: null
+  dest_path: /api/host/remove_host/
+  path: /v2/nodeman/api/host/remove_host/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: search_host_plugin
+  label: 查询主机插件
+  label_en: null
+  dest_path: /api/plugin/search/
+  path: /v2/nodeman/api/plugin/search/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: cloud_list
+  label: 查询云区域
+  label_en: null
+  dest_path: /api/cloud/
+  path: /v2/nodeman/api/cloud/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+  
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: operate_plugin
+  label: 插件操作任务
+  label_en: null
+  dest_path: /api/plugin/operate/
+  path: /v2/nodeman/api/plugin/operate/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: list_hosts
+  label: 查询主机列表
+  label_en: null
+  dest_path: /api/host/search/
+  path: /v2/nodeman/api/host/search/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+ 
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: list_biz_proxies
+  label: 查询业务下云区域下Proxy主机列表
+  label_en: null
+  dest_path: /api/host/biz_proxies/
+  path: /v2/nodeman/api/host/biz_proxies/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+  
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: list_cloud_proxies
+  label: 查询云区域下Proxy主机列表
+  label_en: null
+  dest_path: /api/host/proxies/
+  path: /v2/nodeman/api/host/proxies/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: list_processes
+  label: 查询插件列表
+  label_en: null
+  dest_path: /api/plugin/{category}/process/
+  path: /v2/nodeman/api/plugin/process/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: list_packages
+  label: 查询插件包列表
+  label_en: null
+  dest_path: /api/plugin/{name}/package/
+  path: /v2/nodeman/api/plugin/package/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true

@@ -1,0 +1,1513 @@
+# Translations template for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-12-23 17:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: common/flocale.py:17
+msgid "蓝鲸统一登录"
+msgstr ""
+
+#: common/flocale.py:18
+msgid "蓝鲸统一登录，管理用户登录验证，及用户信息"
+msgstr ""
+
+#: common/flocale.py:22 common/flocale.py:23
+msgid "蓝鲸开发者中心"
+msgstr ""
+
+#: common/flocale.py:27
+msgid "蓝鲸配置平台"
+msgstr ""
+
+#: common/flocale.py:28
+msgid "蓝鲸配置平台是一款面向应用的CMDB，在ITIL体系里，CMDB是构建其它流程的基石，而在蓝鲸智云体系里，配置平台就扮演着基石的角色，为应用提供了各种运维场景的配置数据服务。"
+msgstr ""
+
+#: common/flocale.py:32 common/flocale.py:33
+msgid "蓝鲸管控平台"
+msgstr ""
+
+#: common/flocale.py:37
+msgid "蓝鲸作业平台V2(不推荐)"
+msgstr ""
+
+#: common/flocale.py:38 common/flocale.py:45
+msgid "作业平台（Job）是一套基于蓝鲸智云管控平台Agent管道之上的基础操作平台，具备大并发处理能力；除了支持脚本执行、文件拉取/分发、定时任务等一系列可实现的基础运维场景以外，还运用流程化的理念很好的将零碎的单个任务组装成一个作业流程；而每个任务都可做为一个原子节点，提供给其它系统和平台调度，实现调度自动化。"
+msgstr ""
+
+#: common/flocale.py:44
+msgid "蓝鲸作业平台V3"
+msgstr ""
+
+#: common/flocale.py:51
+msgid "蓝鲸消息管理"
+msgstr ""
+
+#: common/flocale.py:52
+msgid "蓝鲸消息管理，用于支持向用户发送多种类型的消息，包括邮件、短信、语音通知等"
+msgstr ""
+
+#: common/flocale.py:56 common/flocale.py:57
+msgid "标准运维"
+msgstr ""
+
+#: common/flocale.py:61 common/flocale.py:62
+msgid "监控平台"
+msgstr ""
+
+#: common/flocale.py:66 common/flocale.py:67
+msgid "监控平台V3"
+msgstr ""
+
+#: common/flocale.py:71 common/flocale.py:72
+msgid "用户管理"
+msgstr ""
+
+#: common/flocale.py:76 common/flocale.py:77
+msgid "API网关"
+msgstr ""
+
+#: common/flocale.py:81 common/flocale.py:82
+msgid "流程服务"
+msgstr ""
+
+#: common/flocale.py:86 common/flocale.py:87
+msgid "日志平台"
+msgstr ""
+
+#: common/flocale.py:91 common/flocale.py:92
+msgid "权限中心"
+msgstr ""
+
+#: common/flocale.py:96 common/flocale.py:97
+msgid "文档中心"
+msgstr ""
+
+#: common/flocale.py:101 common/flocale.py:102
+msgid "数据平台"
+msgstr ""
+
+#: common/flocale.py:106 common/flocale.py:107
+msgid "蓝鲸基础服务配置平台"
+msgstr ""
+
+#: components/esb_conf.py:51
+msgid "通用参数"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:25
+#: components/bk/apis/bk_login/get_batch_user.py:23
+#: components/bk/apis/bk_login/get_batch_user.py:60
+#: components/bk/apis/bk_login/get_batch_user.py:66
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:26
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:60
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:66
+#: components/bk/apis/bk_login/get_user.py:51
+#: components/bk/apis/bk_login/get_user.py:57
+#: components/bk/apis/bk_login/is_login.py:21
+#: components/bk/apis/bk_paas/get_app_info.py:23
+#: components/bk/apis/gse/proc_create_session.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:78
+#: components/bk/apis/gse/proc_run_command.py:31
+#: components/bk/apis/job/change_cron_status.py:26
+#: components/bk/apis/job/execute_platform_task.py:26
+#: components/bk/apis/job/execute_platform_task.py:35
+#: components/bk/apis/job/execute_platform_task.py:50
+#: components/bk/apis/job/execute_task.py:26
+#: components/bk/apis/job/execute_task.py:34
+#: components/bk/apis/job/execute_task.py:47
+#: components/bk/apis/job/execute_task_ext.py:28
+#: components/bk/apis/job/fast_execute_script.py:26
+#: components/bk/apis/job/fast_execute_script.py:39
+#: components/bk/apis/job/fast_push_file.py:26
+#: components/bk/apis/job/fast_push_file.py:37
+#: components/bk/apis/job/fast_push_file.py:46
+#: components/bk/apis/job/get_agent_status.py:26
+#: components/bk/apis/job/get_agent_status.py:33
+#: components/bk/apis/job/get_agent_status.py:73
+#: components/bk/apis/job/get_cron.py:26
+#: components/bk/apis/job/get_proc_result.py:30
+#: components/bk/apis/job/get_task.py:26
+#: components/bk/apis/job/get_task_detail.py:26
+#: components/bk/apis/job/get_task_ip_log.py:26
+#: components/bk/apis/job/get_task_ip_log.py:83
+#: components/bk/apis/job/get_task_result.py:26
+#: components/bk/apis/job/get_task_result.py:106
+#: components/bk/apis/job/gse_proc_operate.py:26
+#: components/bk/apis/job/gse_proc_operate.py:34
+#: components/bk/apis/job/gse_proc_operate.py:47
+#: components/bk/apis/job/gse_push_file.py:26
+#: components/bk/apis/job/gse_push_file.py:37
+#: components/bk/apis/job/gse_push_file.py:44
+#: components/bk/apis/job/gse_set_base_report.py:40
+#: components/bk/apis/job/save_cron.py:26 components/esb_conf.py:53
+#: components/generic/templates/cmsi/send_mail.py:29
+#: components/generic/templates/cmsi/send_mail.py:44
+#: components/generic/templates/cmsi/send_mp_weixin.py:28
+#: components/generic/templates/cmsi/send_mp_weixin.py:35
+#: components/generic/templates/cmsi/send_qy_weixin.py:25
+#: components/generic/templates/cmsi/send_sms.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:34
+#: components/generic/templates/cmsi/send_weixin.py:28
+#: components/generic/templates/cmsi/send_weixin.py:38
+msgid "字段"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:25
+#: components/bk/apis/bk_login/get_batch_user.py:23
+#: components/bk/apis/bk_login/get_batch_user.py:60
+#: components/bk/apis/bk_login/get_batch_user.py:66
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:26
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:60
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:66
+#: components/bk/apis/bk_login/get_user.py:51
+#: components/bk/apis/bk_login/get_user.py:57
+#: components/bk/apis/bk_login/is_login.py:21
+#: components/bk/apis/bk_paas/get_app_info.py:23
+#: components/bk/apis/gse/proc_create_session.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:78
+#: components/bk/apis/gse/proc_run_command.py:31
+#: components/bk/apis/job/change_cron_status.py:26
+#: components/bk/apis/job/execute_platform_task.py:26
+#: components/bk/apis/job/execute_platform_task.py:35
+#: components/bk/apis/job/execute_platform_task.py:50
+#: components/bk/apis/job/execute_task.py:26
+#: components/bk/apis/job/execute_task.py:34
+#: components/bk/apis/job/execute_task.py:47
+#: components/bk/apis/job/execute_task_ext.py:28
+#: components/bk/apis/job/fast_execute_script.py:26
+#: components/bk/apis/job/fast_execute_script.py:39
+#: components/bk/apis/job/fast_push_file.py:26
+#: components/bk/apis/job/fast_push_file.py:37
+#: components/bk/apis/job/fast_push_file.py:46
+#: components/bk/apis/job/get_agent_status.py:26
+#: components/bk/apis/job/get_agent_status.py:33
+#: components/bk/apis/job/get_agent_status.py:73
+#: components/bk/apis/job/get_cron.py:26
+#: components/bk/apis/job/get_proc_result.py:30
+#: components/bk/apis/job/get_task.py:26
+#: components/bk/apis/job/get_task_detail.py:26
+#: components/bk/apis/job/get_task_ip_log.py:26
+#: components/bk/apis/job/get_task_ip_log.py:83
+#: components/bk/apis/job/get_task_result.py:26
+#: components/bk/apis/job/get_task_result.py:106
+#: components/bk/apis/job/gse_proc_operate.py:26
+#: components/bk/apis/job/gse_proc_operate.py:34
+#: components/bk/apis/job/gse_proc_operate.py:47
+#: components/bk/apis/job/gse_push_file.py:26
+#: components/bk/apis/job/gse_push_file.py:37
+#: components/bk/apis/job/gse_push_file.py:44
+#: components/bk/apis/job/gse_set_base_report.py:40
+#: components/bk/apis/job/save_cron.py:26 components/esb_conf.py:53
+#: components/generic/templates/cmsi/send_mail.py:29
+#: components/generic/templates/cmsi/send_mail.py:44
+#: components/generic/templates/cmsi/send_mp_weixin.py:28
+#: components/generic/templates/cmsi/send_mp_weixin.py:35
+#: components/generic/templates/cmsi/send_qy_weixin.py:25
+#: components/generic/templates/cmsi/send_sms.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:34
+#: components/generic/templates/cmsi/send_weixin.py:28
+#: components/generic/templates/cmsi/send_weixin.py:38
+msgid "类型"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:25
+#: components/bk/apis/bk_login/get_batch_user.py:23
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:26
+#: components/bk/apis/bk_login/is_login.py:21
+#: components/bk/apis/bk_paas/get_app_info.py:23
+#: components/bk/apis/gse/proc_create_session.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:27
+#: components/bk/apis/gse/proc_run_command.py:31
+#: components/bk/apis/job/change_cron_status.py:26
+#: components/bk/apis/job/execute_platform_task.py:26
+#: components/bk/apis/job/execute_platform_task.py:35
+#: components/bk/apis/job/execute_platform_task.py:50
+#: components/bk/apis/job/execute_task.py:26
+#: components/bk/apis/job/execute_task.py:34
+#: components/bk/apis/job/execute_task.py:47
+#: components/bk/apis/job/execute_task_ext.py:28
+#: components/bk/apis/job/fast_execute_script.py:26
+#: components/bk/apis/job/fast_execute_script.py:39
+#: components/bk/apis/job/fast_push_file.py:26
+#: components/bk/apis/job/fast_push_file.py:37
+#: components/bk/apis/job/fast_push_file.py:46
+#: components/bk/apis/job/get_agent_status.py:26
+#: components/bk/apis/job/get_agent_status.py:33
+#: components/bk/apis/job/get_cron.py:26
+#: components/bk/apis/job/get_proc_result.py:30
+#: components/bk/apis/job/get_task.py:26
+#: components/bk/apis/job/get_task_detail.py:26
+#: components/bk/apis/job/get_task_ip_log.py:26
+#: components/bk/apis/job/get_task_result.py:26
+#: components/bk/apis/job/gse_proc_operate.py:26
+#: components/bk/apis/job/gse_proc_operate.py:34
+#: components/bk/apis/job/gse_proc_operate.py:47
+#: components/bk/apis/job/gse_push_file.py:26
+#: components/bk/apis/job/gse_push_file.py:37
+#: components/bk/apis/job/gse_push_file.py:44
+#: components/bk/apis/job/gse_set_base_report.py:40
+#: components/bk/apis/job/save_cron.py:26 components/esb_conf.py:53
+#: components/generic/templates/cmsi/send_mail.py:29
+#: components/generic/templates/cmsi/send_mail.py:44
+#: components/generic/templates/cmsi/send_mp_weixin.py:28
+#: components/generic/templates/cmsi/send_mp_weixin.py:35
+#: components/generic/templates/cmsi/send_qy_weixin.py:25
+#: components/generic/templates/cmsi/send_sms.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:34
+#: components/generic/templates/cmsi/send_weixin.py:28
+#: components/generic/templates/cmsi/send_weixin.py:38
+msgid "必选"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:25
+#: components/bk/apis/bk_login/get_batch_user.py:23
+#: components/bk/apis/bk_login/get_batch_user.py:60
+#: components/bk/apis/bk_login/get_batch_user.py:66
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:26
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:60
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:66
+#: components/bk/apis/bk_login/get_user.py:51
+#: components/bk/apis/bk_login/get_user.py:57
+#: components/bk/apis/bk_login/is_login.py:21
+#: components/bk/apis/bk_paas/get_app_info.py:23
+#: components/bk/apis/gse/proc_create_session.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:27
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:78
+#: components/bk/apis/gse/proc_run_command.py:31
+#: components/bk/apis/job/change_cron_status.py:26
+#: components/bk/apis/job/execute_platform_task.py:26
+#: components/bk/apis/job/execute_platform_task.py:35
+#: components/bk/apis/job/execute_platform_task.py:50
+#: components/bk/apis/job/execute_task.py:26
+#: components/bk/apis/job/execute_task.py:34
+#: components/bk/apis/job/execute_task.py:47
+#: components/bk/apis/job/execute_task_ext.py:28
+#: components/bk/apis/job/fast_execute_script.py:26
+#: components/bk/apis/job/fast_execute_script.py:39
+#: components/bk/apis/job/fast_push_file.py:26
+#: components/bk/apis/job/fast_push_file.py:37
+#: components/bk/apis/job/fast_push_file.py:46
+#: components/bk/apis/job/get_agent_status.py:26
+#: components/bk/apis/job/get_agent_status.py:33
+#: components/bk/apis/job/get_agent_status.py:73
+#: components/bk/apis/job/get_cron.py:26
+#: components/bk/apis/job/get_proc_result.py:30
+#: components/bk/apis/job/get_task.py:26
+#: components/bk/apis/job/get_task_detail.py:26
+#: components/bk/apis/job/get_task_ip_log.py:26
+#: components/bk/apis/job/get_task_ip_log.py:83
+#: components/bk/apis/job/get_task_result.py:26
+#: components/bk/apis/job/get_task_result.py:106
+#: components/bk/apis/job/gse_proc_operate.py:26
+#: components/bk/apis/job/gse_proc_operate.py:34
+#: components/bk/apis/job/gse_proc_operate.py:47
+#: components/bk/apis/job/gse_push_file.py:26
+#: components/bk/apis/job/gse_push_file.py:37
+#: components/bk/apis/job/gse_push_file.py:44
+#: components/bk/apis/job/gse_set_base_report.py:40
+#: components/bk/apis/job/save_cron.py:26 components/esb_conf.py:53
+#: components/generic/templates/cmsi/send_mail.py:29
+#: components/generic/templates/cmsi/send_mail.py:44
+#: components/generic/templates/cmsi/send_mp_weixin.py:28
+#: components/generic/templates/cmsi/send_mp_weixin.py:35
+#: components/generic/templates/cmsi/send_qy_weixin.py:25
+#: components/generic/templates/cmsi/send_sms.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:34
+#: components/generic/templates/cmsi/send_weixin.py:28
+#: components/generic/templates/cmsi/send_weixin.py:38
+msgid "描述"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_batch_user.py:25
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:28
+#: components/bk/apis/bk_login/is_login.py:23
+#: components/bk/apis/bk_login/is_login.py:24
+#: components/bk/apis/bk_login/is_login.py:25
+#: components/bk/apis/gse/proc_create_session.py:29
+#: components/bk/apis/gse/proc_create_session.py:30
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:29
+#: components/bk/apis/gse/proc_run_command.py:33
+#: components/bk/apis/gse/proc_run_command.py:34
+#: components/bk/apis/gse/proc_run_command.py:35
+#: components/bk/apis/job/change_cron_status.py:28
+#: components/bk/apis/job/change_cron_status.py:29
+#: components/bk/apis/job/change_cron_status.py:30
+#: components/bk/apis/job/execute_platform_task.py:28
+#: components/bk/apis/job/execute_platform_task.py:30
+#: components/bk/apis/job/execute_platform_task.py:52
+#: components/bk/apis/job/execute_platform_task.py:53
+#: components/bk/apis/job/execute_platform_task.py:54
+#: components/bk/apis/job/execute_task.py:28
+#: components/bk/apis/job/execute_task.py:29
+#: components/bk/apis/job/execute_task.py:30
+#: components/bk/apis/job/execute_task.py:39
+#: components/bk/apis/job/execute_task.py:40
+#: components/bk/apis/job/execute_task.py:49
+#: components/bk/apis/job/execute_task.py:50
+#: components/bk/apis/job/execute_task.py:51
+#: components/bk/apis/job/execute_task_ext.py:30
+#: components/bk/apis/job/execute_task_ext.py:31
+#: components/bk/apis/job/execute_task_ext.py:32
+#: components/bk/apis/job/fast_execute_script.py:28
+#: components/bk/apis/job/fast_execute_script.py:29
+#: components/bk/apis/job/fast_execute_script.py:32
+#: components/bk/apis/job/fast_execute_script.py:33
+#: components/bk/apis/job/fast_execute_script.py:34
+#: components/bk/apis/job/fast_execute_script.py:35
+#: components/bk/apis/job/fast_execute_script.py:41
+#: components/bk/apis/job/fast_execute_script.py:42
+#: components/bk/apis/job/fast_push_file.py:28
+#: components/bk/apis/job/fast_push_file.py:29
+#: components/bk/apis/job/fast_push_file.py:30
+#: components/bk/apis/job/fast_push_file.py:31
+#: components/bk/apis/job/fast_push_file.py:33
+#: components/bk/apis/job/fast_push_file.py:40
+#: components/bk/apis/job/fast_push_file.py:41
+#: components/bk/apis/job/fast_push_file.py:42
+#: components/bk/apis/job/fast_push_file.py:48
+#: components/bk/apis/job/fast_push_file.py:49
+#: components/bk/apis/job/get_agent_status.py:28
+#: components/bk/apis/job/get_agent_status.py:29
+#: components/bk/apis/job/get_agent_status.py:35
+#: components/bk/apis/job/get_agent_status.py:36
+#: components/bk/apis/job/get_cron.py:28
+#: components/bk/apis/job/get_proc_result.py:32
+#: components/bk/apis/job/get_proc_result.py:33
+#: components/bk/apis/job/get_task.py:28
+#: components/bk/apis/job/get_task_detail.py:28
+#: components/bk/apis/job/get_task_detail.py:29
+#: components/bk/apis/job/get_task_ip_log.py:28
+#: components/bk/apis/job/get_task_result.py:28
+#: components/bk/apis/job/gse_proc_operate.py:28
+#: components/bk/apis/job/gse_proc_operate.py:29
+#: components/bk/apis/job/gse_proc_operate.py:30
+#: components/bk/apis/job/gse_proc_operate.py:36
+#: components/bk/apis/job/gse_proc_operate.py:37
+#: components/bk/apis/job/gse_proc_operate.py:38
+#: components/bk/apis/job/gse_proc_operate.py:39
+#: components/bk/apis/job/gse_proc_operate.py:49
+#: components/bk/apis/job/gse_proc_operate.py:50
+#: components/bk/apis/job/gse_push_file.py:28
+#: components/bk/apis/job/gse_push_file.py:29
+#: components/bk/apis/job/gse_push_file.py:30
+#: components/bk/apis/job/gse_push_file.py:33
+#: components/bk/apis/job/gse_push_file.py:39
+#: components/bk/apis/job/gse_push_file.py:40
+#: components/bk/apis/job/gse_push_file.py:46
+#: components/bk/apis/job/gse_push_file.py:47
+#: components/bk/apis/job/gse_set_base_report.py:27
+#: components/bk/apis/job/gse_set_base_report.py:28
+#: components/bk/apis/job/gse_set_base_report.py:29
+#: components/bk/apis/job/gse_set_base_report.py:30
+#: components/bk/apis/job/gse_set_base_report.py:31
+#: components/bk/apis/job/gse_set_base_report.py:32
+#: components/bk/apis/job/gse_set_base_report.py:33
+#: components/bk/apis/job/gse_set_base_report.py:34
+#: components/bk/apis/job/gse_set_base_report.py:35
+#: components/bk/apis/job/gse_set_base_report.py:36
+#: components/bk/apis/job/gse_set_base_report.py:42
+#: components/bk/apis/job/gse_set_base_report.py:43
+#: components/bk/apis/job/save_cron.py:28
+#: components/bk/apis/job/save_cron.py:29
+#: components/bk/apis/job/save_cron.py:30
+#: components/bk/apis/job/save_cron.py:32 components/esb_conf.py:55
+#: components/esb_conf.py:56 components/generic/templates/cmsi/send_mail.py:34
+#: components/generic/templates/cmsi/send_mail.py:35
+#: components/generic/templates/cmsi/send_mail.py:46
+#: components/generic/templates/cmsi/send_mail.py:47
+#: components/generic/templates/cmsi/send_mp_weixin.py:30
+#: components/generic/templates/cmsi/send_mp_weixin.py:31
+#: components/generic/templates/cmsi/send_mp_weixin.py:37
+#: components/generic/templates/cmsi/send_mp_weixin.py:38
+#: components/generic/templates/cmsi/send_qy_weixin.py:27
+#: components/generic/templates/cmsi/send_qy_weixin.py:28
+#: components/generic/templates/cmsi/send_sms.py:32
+#: components/generic/templates/cmsi/send_voice_msg.py:28
+#: components/generic/templates/cmsi/send_voice_msg.py:36
+#: components/generic/templates/cmsi/send_weixin.py:32
+#: components/generic/templates/cmsi/send_weixin.py:40
+#: components/generic/templates/cmsi/send_weixin.py:41
+msgid "是"
+msgstr ""
+
+#: components/bk/apis/bk_login/is_login.py:23 components/esb_conf.py:55
+msgid "应用ID"
+msgstr ""
+
+#: components/esb_conf.py:56
+msgid "安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:27
+#: components/bk/apis/bk_paas/get_app_info.py:25
+#: components/bk/apis/gse/proc_run_command.py:36
+#: components/bk/apis/job/execute_platform_task.py:29
+#: components/bk/apis/job/execute_platform_task.py:31
+#: components/bk/apis/job/execute_platform_task.py:37
+#: components/bk/apis/job/execute_platform_task.py:38
+#: components/bk/apis/job/execute_platform_task.py:39
+#: components/bk/apis/job/execute_platform_task.py:40
+#: components/bk/apis/job/execute_platform_task.py:41
+#: components/bk/apis/job/execute_platform_task.py:42
+#: components/bk/apis/job/execute_platform_task.py:43
+#: components/bk/apis/job/execute_platform_task.py:44
+#: components/bk/apis/job/execute_platform_task.py:45
+#: components/bk/apis/job/execute_platform_task.py:46
+#: components/bk/apis/job/execute_task.py:36
+#: components/bk/apis/job/execute_task.py:37
+#: components/bk/apis/job/execute_task.py:38
+#: components/bk/apis/job/execute_task.py:41
+#: components/bk/apis/job/execute_task.py:42
+#: components/bk/apis/job/execute_task.py:43
+#: components/bk/apis/job/fast_execute_script.py:30
+#: components/bk/apis/job/fast_execute_script.py:31
+#: components/bk/apis/job/fast_push_file.py:32
+#: components/bk/apis/job/fast_push_file.py:39
+#: components/bk/apis/job/get_cron.py:29 components/bk/apis/job/get_cron.py:30
+#: components/bk/apis/job/get_cron.py:31 components/bk/apis/job/get_cron.py:32
+#: components/bk/apis/job/get_cron.py:33 components/bk/apis/job/get_cron.py:34
+#: components/bk/apis/job/get_cron.py:35 components/bk/apis/job/get_cron.py:36
+#: components/bk/apis/job/get_cron.py:37 components/bk/apis/job/get_task.py:29
+#: components/bk/apis/job/get_task.py:30 components/bk/apis/job/get_task.py:31
+#: components/bk/apis/job/get_task.py:32 components/bk/apis/job/get_task.py:33
+#: components/bk/apis/job/get_task.py:34 components/bk/apis/job/get_task.py:35
+#: components/bk/apis/job/gse_proc_operate.py:40
+#: components/bk/apis/job/gse_proc_operate.py:41
+#: components/bk/apis/job/gse_proc_operate.py:42
+#: components/bk/apis/job/gse_proc_operate.py:43
+#: components/bk/apis/job/gse_push_file.py:31
+#: components/bk/apis/job/gse_push_file.py:32
+#: components/bk/apis/job/save_cron.py:31 components/esb_conf.py:57
+#: components/esb_conf.py:58 components/generic/templates/cmsi/send_mail.py:31
+#: components/generic/templates/cmsi/send_mail.py:32
+#: components/generic/templates/cmsi/send_mail.py:33
+#: components/generic/templates/cmsi/send_mail.py:36
+#: components/generic/templates/cmsi/send_mail.py:37
+#: components/generic/templates/cmsi/send_mail.py:38
+#: components/generic/templates/cmsi/send_mail.py:39
+#: components/generic/templates/cmsi/send_mail.py:40
+#: components/generic/templates/cmsi/send_mail.py:48
+#: components/generic/templates/cmsi/send_mail.py:49
+#: components/generic/templates/cmsi/send_mail.py:50
+#: components/generic/templates/cmsi/send_mp_weixin.py:39
+#: components/generic/templates/cmsi/send_mp_weixin.py:40
+#: components/generic/templates/cmsi/send_mp_weixin.py:41
+#: components/generic/templates/cmsi/send_sms.py:30
+#: components/generic/templates/cmsi/send_sms.py:31
+#: components/generic/templates/cmsi/send_sms.py:33
+#: components/generic/templates/cmsi/send_voice_msg.py:29
+#: components/generic/templates/cmsi/send_voice_msg.py:30
+#: components/generic/templates/cmsi/send_voice_msg.py:37
+#: components/generic/templates/cmsi/send_weixin.py:30
+#: components/generic/templates/cmsi/send_weixin.py:31
+#: components/generic/templates/cmsi/send_weixin.py:33
+#: components/generic/templates/cmsi/send_weixin.py:34
+#: components/generic/templates/cmsi/send_weixin.py:42
+#: components/generic/templates/cmsi/send_weixin.py:43
+#: components/generic/templates/cmsi/send_weixin.py:44
+msgid "否"
+msgstr ""
+
+#: components/esb_conf.py:57
+msgid "当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取"
+msgstr ""
+
+#: components/esb_conf.py:58
+msgid "当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:12
+#: components/bk/apis/bk_login/get_all_user.py:17
+msgid "获取所有用户信息"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:15
+#: components/bk/apis/bk_login/get_batch_user.py:13
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:16
+#: components/bk/apis/bk_login/get_user.py:15
+#: components/bk/apis/bk_login/is_login.py:15
+#: components/bk/apis/bk_paas/get_app_info.py:13
+#: components/bk/apis/devops/devops_component.py:11
+#: components/bk/apis/gse/proc_create_session.py:17
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:17
+#: components/bk/apis/gse/proc_run_command.py:21
+#: components/bk/apis/job/change_cron_status.py:16
+#: components/bk/apis/job/execute_platform_task.py:16
+#: components/bk/apis/job/execute_task.py:16
+#: components/bk/apis/job/execute_task_ext.py:16
+#: components/bk/apis/job/fast_execute_script.py:16
+#: components/bk/apis/job/fast_push_file.py:16
+#: components/bk/apis/job/get_agent_status.py:16
+#: components/bk/apis/job/get_cron.py:16
+#: components/bk/apis/job/get_proc_result.py:20
+#: components/bk/apis/job/get_task.py:16
+#: components/bk/apis/job/get_task_detail.py:16
+#: components/bk/apis/job/get_task_ip_log.py:16
+#: components/bk/apis/job/get_task_result.py:16
+#: components/bk/apis/job/gse_proc_operate.py:16
+#: components/bk/apis/job/gse_push_file.py:16
+#: components/bk/apis/job/gse_set_base_report.py:15
+#: components/bk/apis/job/save_cron.py:16
+#: components/generic/templates/cmsi/send_mail.py:19
+#: components/generic/templates/cmsi/send_mp_weixin.py:18
+#: components/generic/templates/cmsi/send_qy_weixin.py:15
+#: components/generic/templates/cmsi/send_sms.py:18
+#: components/generic/templates/cmsi/send_voice_msg.py:16
+#: components/generic/templates/cmsi/send_weixin.py:18
+msgid "功能描述"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:19
+#: components/bk/apis/bk_login/get_batch_user.py:17
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:20
+#: components/bk/apis/bk_login/get_user.py:19
+#: components/bk/apis/bk_login/is_login.py:19
+#: components/bk/apis/bk_paas/get_app_info.py:17
+#: components/bk/apis/devops/devops_component.py:15
+#: components/bk/apis/gse/proc_create_session.py:21
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:21
+#: components/bk/apis/gse/proc_run_command.py:25
+#: components/bk/apis/job/change_cron_status.py:20
+#: components/bk/apis/job/execute_platform_task.py:20
+#: components/bk/apis/job/execute_task.py:20
+#: components/bk/apis/job/execute_task_ext.py:22
+#: components/bk/apis/job/fast_execute_script.py:20
+#: components/bk/apis/job/fast_push_file.py:20
+#: components/bk/apis/job/get_agent_status.py:20
+#: components/bk/apis/job/get_cron.py:20
+#: components/bk/apis/job/get_proc_result.py:24
+#: components/bk/apis/job/get_task.py:20
+#: components/bk/apis/job/get_task_detail.py:20
+#: components/bk/apis/job/get_task_ip_log.py:20
+#: components/bk/apis/job/get_task_result.py:20
+#: components/bk/apis/job/gse_proc_operate.py:20
+#: components/bk/apis/job/gse_push_file.py:20
+#: components/bk/apis/job/gse_set_base_report.py:19
+#: components/bk/apis/job/save_cron.py:20
+#: components/generic/templates/cmsi/send_mail.py:23
+#: components/generic/templates/cmsi/send_mp_weixin.py:22
+#: components/generic/templates/cmsi/send_qy_weixin.py:19
+#: components/generic/templates/cmsi/send_sms.py:22
+#: components/generic/templates/cmsi/send_voice_msg.py:20
+#: components/generic/templates/cmsi/send_weixin.py:22
+msgid "请求参数"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:23
+#: components/bk/apis/bk_login/get_batch_user.py:21
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:24
+#: components/bk/apis/bk_paas/get_app_info.py:21
+#: components/bk/apis/gse/proc_create_session.py:25
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:25
+#: components/bk/apis/gse/proc_run_command.py:29
+#: components/bk/apis/job/change_cron_status.py:24
+#: components/bk/apis/job/execute_platform_task.py:24
+#: components/bk/apis/job/execute_task.py:24
+#: components/bk/apis/job/execute_task_ext.py:26
+#: components/bk/apis/job/fast_execute_script.py:24
+#: components/bk/apis/job/fast_push_file.py:24
+#: components/bk/apis/job/get_agent_status.py:24
+#: components/bk/apis/job/get_cron.py:24
+#: components/bk/apis/job/get_proc_result.py:28
+#: components/bk/apis/job/get_task.py:24
+#: components/bk/apis/job/get_task_detail.py:24
+#: components/bk/apis/job/get_task_ip_log.py:24
+#: components/bk/apis/job/get_task_result.py:24
+#: components/bk/apis/job/gse_proc_operate.py:24
+#: components/bk/apis/job/gse_push_file.py:24
+#: components/bk/apis/job/gse_set_base_report.py:23
+#: components/bk/apis/job/save_cron.py:24
+#: components/generic/templates/cmsi/send_mail.py:27
+#: components/generic/templates/cmsi/send_mp_weixin.py:26
+#: components/generic/templates/cmsi/send_qy_weixin.py:23
+#: components/generic/templates/cmsi/send_sms.py:26
+#: components/generic/templates/cmsi/send_voice_msg.py:24
+#: components/generic/templates/cmsi/send_weixin.py:26
+msgid "接口参数"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:27
+#: components/bk/apis/bk_login/get_batch_user.py:68
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:68
+#: components/bk/apis/bk_login/get_user.py:59
+msgid "用户角色，0：普通用户，1：超级管理员，2：开发者，3：职能化用户，4：审计员"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:29
+#: components/bk/apis/bk_login/get_batch_user.py:27
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:30
+#: components/bk/apis/bk_login/get_user.py:23
+#: components/bk/apis/bk_login/is_login.py:27
+#: components/bk/apis/bk_paas/get_app_info.py:27
+#: components/bk/apis/devops/devops_component.py:19
+#: components/bk/apis/gse/proc_create_session.py:32
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:31
+#: components/bk/apis/gse/proc_run_command.py:38
+#: components/bk/apis/job/change_cron_status.py:32
+#: components/bk/apis/job/execute_platform_task.py:56
+#: components/bk/apis/job/execute_task.py:53
+#: components/bk/apis/job/execute_task_ext.py:34
+#: components/bk/apis/job/fast_execute_script.py:44
+#: components/bk/apis/job/fast_push_file.py:51
+#: components/bk/apis/job/get_agent_status.py:38
+#: components/bk/apis/job/get_cron.py:39
+#: components/bk/apis/job/get_proc_result.py:35
+#: components/bk/apis/job/get_task.py:37
+#: components/bk/apis/job/get_task_detail.py:31
+#: components/bk/apis/job/get_task_ip_log.py:30
+#: components/bk/apis/job/get_task_result.py:30
+#: components/bk/apis/job/gse_proc_operate.py:52
+#: components/bk/apis/job/gse_push_file.py:49
+#: components/bk/apis/job/gse_set_base_report.py:45
+#: components/bk/apis/job/save_cron.py:34
+#: components/generic/templates/cmsi/send_mail.py:52
+#: components/generic/templates/cmsi/send_mp_weixin.py:43
+#: components/generic/templates/cmsi/send_qy_weixin.py:30
+#: components/generic/templates/cmsi/send_sms.py:35
+#: components/generic/templates/cmsi/send_voice_msg.py:39
+#: components/generic/templates/cmsi/send_weixin.py:46
+msgid "请求参数示例"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_all_user.py:39
+#: components/bk/apis/bk_login/get_batch_user.py:38
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:41
+#: components/bk/apis/bk_login/get_user.py:32
+#: components/bk/apis/bk_login/is_login.py:37
+#: components/bk/apis/bk_paas/get_app_info.py:37
+#: components/bk/apis/devops/devops_component.py:29
+#: components/bk/apis/gse/proc_create_session.py:44
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:42
+#: components/bk/apis/gse/proc_run_command.py:52
+#: components/bk/apis/job/change_cron_status.py:45
+#: components/bk/apis/job/execute_platform_task.py:84
+#: components/bk/apis/job/execute_task.py:84
+#: components/bk/apis/job/execute_task_ext.py:54
+#: components/bk/apis/job/fast_execute_script.py:64
+#: components/bk/apis/job/fast_push_file.py:82
+#: components/bk/apis/job/get_agent_status.py:55
+#: components/bk/apis/job/get_cron.py:51
+#: components/bk/apis/job/get_proc_result.py:47
+#: components/bk/apis/job/get_task.py:55
+#: components/bk/apis/job/get_task_detail.py:43
+#: components/bk/apis/job/get_task_ip_log.py:41
+#: components/bk/apis/job/get_task_result.py:41
+#: components/bk/apis/job/gse_proc_operate.py:82
+#: components/bk/apis/job/gse_push_file.py:78
+#: components/bk/apis/job/gse_set_base_report.py:71
+#: components/bk/apis/job/save_cron.py:48
+#: components/generic/templates/cmsi/send_mail.py:66
+#: components/generic/templates/cmsi/send_mp_weixin.py:60
+#: components/generic/templates/cmsi/send_qy_weixin.py:42
+#: components/generic/templates/cmsi/send_sms.py:48
+#: components/generic/templates/cmsi/send_voice_msg.py:54
+#: components/generic/templates/cmsi/send_weixin.py:63
+msgid "返回结果示例"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_batch_user.py:10
+#: components/bk/apis/bk_login/get_batch_user.py:15
+msgid "获取多个用户信息"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_batch_user.py:25
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:28
+msgid "待获取信息的用户名列表"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_batch_user.py:58
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:58
+#: components/bk/apis/bk_login/get_user.py:49
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:74
+#: components/bk/apis/job/get_proc_result.py:72
+msgid "返回结果参数说明"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_batch_user.py:62
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:62
+#: components/bk/apis/bk_login/get_user.py:53
+msgid "返回数据，成功返回请求数据"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:13
+#: components/bk/apis/bk_login/get_batch_user_platform_role.py:18
+msgid "获取多个用户在平台应用的角色"
+msgstr ""
+
+#: components/bk/apis/bk_login/get_user.py:12
+#: components/bk/apis/bk_login/get_user.py:17
+msgid "获取用户信息"
+msgstr ""
+
+#: components/bk/apis/bk_login/is_login.py:12
+#: components/bk/apis/bk_login/is_login.py:17
+msgid "验证用户登录态"
+msgstr ""
+
+#: components/bk/apis/bk_login/is_login.py:24
+msgid "应用TOKEN，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取"
+msgstr ""
+
+#: components/bk/apis/bk_login/is_login.py:25
+msgid "当前用户登录态，bk_token与username必须一个有效，bk_token可以通过Cookie获取"
+msgstr ""
+
+#: components/bk/apis/bk_paas/get_app_info.py:10
+#: components/bk/apis/bk_paas/get_app_info.py:15
+msgid "获取应用信息"
+msgstr ""
+
+#: components/bk/apis/bk_paas/get_app_info.py:25
+msgid "目标蓝鲸应用ID，多个以英文逗号分隔，为空则表示所有应用"
+msgstr ""
+
+#: components/bk/apis/devops/devops_component.py:13
+msgid "Devops Component"
+msgstr ""
+
+#: components/bk/apis/gse/proc_create_session.py:14
+#: components/bk/apis/gse/proc_create_session.py:19
+msgid "进程管理：新建 session"
+msgstr ""
+
+#: components/bk/apis/gse/proc_create_session.py:29
+msgid "配置平台业务ID，在[配置平台]-[开发商视图]的业务管理页面可查询"
+msgstr ""
+
+#: components/bk/apis/gse/proc_create_session.py:30
+msgid "环境类型，配置平台集群的标准属性；可选值为 1（中文含义：测试环境），2（体验环境），3（正式环境）"
+msgstr ""
+
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:14
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:19
+msgid "进程管理：获取任务结果"
+msgstr ""
+
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:29
+msgid "执行命令后产生的任务ID，可在proc_run_command接口中找到"
+msgstr ""
+
+#: components/bk/apis/gse/proc_get_task_result_by_id.py:80
+msgid "任务状态码，0表示成功，804表示执行中，其他表示失败"
+msgstr ""
+
+#: components/bk/apis/gse/proc_run_command.py:18
+#: components/bk/apis/gse/proc_run_command.py:23
+msgid "进程管理：执行命令"
+msgstr ""
+
+#: components/bk/apis/gse/proc_run_command.py:33
+msgid "新建Session后产生的会话ID，可在proc_create_session接口中找到"
+msgstr ""
+
+#: components/bk/apis/gse/proc_run_command.py:34
+msgid "命令动作，可选值：createcfg（含义：从配置模板生成配置），pushcfg（将createcfg生成的配置下发至服务器），start（启动进程），stop（停止进程），restart（重启进程），reload（重新加载进程），kill（Kill进程），noauto（将进程注册为非托管状态，进程crash后不自动拉起），autoproc（将进程注册为托管状态，进程crash后可自动拉起），check（检查进程实例），getremotecfg（获取业务机器的配置文件）"
+msgstr ""
+
+#: components/bk/apis/gse/proc_run_command.py:35
+msgid "进程实例ID，可在[配置平台]-[进程管理]-[进程模块绑定]页面找到，例如 \"公共组件.nginx.1.1\""
+msgstr ""
+
+#: components/bk/apis/gse/proc_run_command.py:36
+msgid "过滤主机IP。比如进程实例ID为*.*.*.*，ipaddr为\"10.0.0.1\"，则执行10.0.0.1上的所有进程实例"
+msgstr ""
+
+#: components/bk/apis/job/change_cron_status.py:13
+msgid "更新定时作业状态"
+msgstr ""
+
+#: components/bk/apis/job/change_cron_status.py:18
+msgid "更新定时作业状态，如启动或暂停；操作者必须是业务的创建人或运维"
+msgstr ""
+
+#: components/bk/apis/job/change_cron_status.py:28
+#: components/bk/apis/job/execute_task.py:28
+#: components/bk/apis/job/execute_task_ext.py:30
+#: components/bk/apis/job/fast_execute_script.py:28
+#: components/bk/apis/job/fast_push_file.py:28
+#: components/bk/apis/job/get_agent_status.py:28
+#: components/bk/apis/job/get_cron.py:28
+#: components/bk/apis/job/get_proc_result.py:32
+#: components/bk/apis/job/get_task.py:28
+#: components/bk/apis/job/get_task_detail.py:28
+#: components/bk/apis/job/gse_proc_operate.py:28
+#: components/bk/apis/job/gse_push_file.py:28
+#: components/bk/apis/job/gse_set_base_report.py:27
+#: components/bk/apis/job/save_cron.py:28
+msgid "业务ID"
+msgstr ""
+
+#: components/bk/apis/job/change_cron_status.py:29
+msgid "作业状态，1.启动、2.暂停"
+msgstr ""
+
+#: components/bk/apis/job/change_cron_status.py:30
+msgid "定时任务ID"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:13
+#: components/bk/apis/job/execute_platform_task.py:18
+msgid "启动平台作业"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:28
+#: components/bk/apis/job/execute_task.py:29
+#: components/bk/apis/job/execute_task_ext.py:31
+msgid "作业ID"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:29
+msgid "源业务ID"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:30
+msgid "目标业务ID"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:31
+msgid "步骤参数"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:37
+#: components/bk/apis/job/execute_task.py:36
+msgid "脚本超时时间"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:38
+#: components/bk/apis/job/execute_task.py:37
+msgid "脚本参数"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:39
+msgid "执行脚本步骤的脚本内容，base64编码后的内容，与scriptId二选一，二者同时存在，以scriptId为准"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:40
+msgid "执行脚本的类型，1.shell脚本、2.bat脚本、3.perl脚本、4.python脚本、5(Powershell脚本)；如果scriptContent存在，则必填"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:41
+msgid "IP列表格式，云区域ID:IP，多个之间逗号分割，例如1:10.0.0.1,1:10.0.0.2"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:42
+#: components/bk/apis/job/execute_task.py:38
+msgid "脚本ID"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:43
+#: components/bk/apis/job/execute_task.py:39
+msgid "步骤ID，可以只指定某几步执行"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:44
+#: components/bk/apis/job/execute_task.py:41
+msgid "执行账户账户名"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:45
+#: components/bk/apis/job/execute_task.py:42
+#: components/bk/apis/job/fast_push_file.py:30
+msgid "目标路径"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:46
+#: components/bk/apis/job/execute_task.py:43
+msgid "源文件信息，整个参数替换，不支持内部某个变量替换。格式参考下面说明"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:52
+msgid "文件路径，如：/tmp/t.txt"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:53
+#: components/bk/apis/job/execute_task.py:50
+msgid "源文件服务器地址，格式为：子网ID:IP，多个之间逗号分割"
+msgstr ""
+
+#: components/bk/apis/job/execute_platform_task.py:54
+#: components/bk/apis/job/execute_task.py:51
+msgid "源文件机器执行账户账户名"
+msgstr ""
+
+#: components/bk/apis/job/execute_task.py:13
+#: components/bk/apis/job/execute_task.py:18
+msgid "根据作业模板ID启动作业"
+msgstr ""
+
+#: components/bk/apis/job/execute_task.py:30
+msgid "步骤参数，每项的具体参数见下面描述"
+msgstr ""
+
+#: components/bk/apis/job/execute_task.py:40
+msgid "IP列表格式：子网ID:IP，多个之间逗号，分割，例如：1:10.0.0.1,1:10.0.0.2"
+msgstr ""
+
+#: components/bk/apis/job/execute_task.py:49
+msgid "源文件路径，如：/tmp/t.txt"
+msgstr ""
+
+#: components/bk/apis/job/execute_task_ext.py:13
+#: components/bk/apis/job/execute_task_ext.py:18
+msgid "启动作业Ext(带全局变量启动)"
+msgstr ""
+
+#: components/bk/apis/job/execute_task_ext.py:20
+msgid "如果全局变量的类型为IP，参数值必须包含groupIds或ipList。没有设置的参数将使用作业模版中的默认值"
+msgstr ""
+
+#: components/bk/apis/job/execute_task_ext.py:32
+msgid "全局变量信息，作业包含的全局变量和类型可以通过接口“查询作业模板详情”(get_task_detail)获取"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:13
+#: components/bk/apis/job/fast_execute_script.py:18
+msgid "快速执行脚本"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:29
+msgid "执行脚本步骤的脚本内容，base64编码后的内容"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:30
+msgid "脚本执行超时时间，范围60~72000，默认1000，单位为秒"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:31
+msgid "脚本执行参数"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:32
+msgid "脚本类型：1(shell脚本)、2(bat脚本)、3(perl脚本)、4(python脚本)、5(Powershell脚本)"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:33
+msgid "目标机器，包含内容见下面描述"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:34
+#: components/bk/apis/job/fast_push_file.py:33
+#: components/bk/apis/job/gse_push_file.py:33
+msgid "目标机器账户名"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:35
+msgid "是否敏感参数: 1是, 0不是(默认为0)"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:41
+#: components/bk/apis/job/fast_push_file.py:48
+#: components/bk/apis/job/get_agent_status.py:35
+#: components/bk/apis/job/gse_proc_operate.py:49
+#: components/bk/apis/job/gse_push_file.py:46
+#: components/bk/apis/job/gse_set_base_report.py:42
+msgid "IP地址"
+msgstr ""
+
+#: components/bk/apis/job/fast_execute_script.py:42
+#: components/bk/apis/job/fast_push_file.py:49
+#: components/bk/apis/job/get_agent_status.py:36
+#: components/bk/apis/job/gse_proc_operate.py:50
+#: components/bk/apis/job/gse_push_file.py:47
+#: components/bk/apis/job/gse_set_base_report.py:43
+msgid "子网ID"
+msgstr ""
+
+#: components/bk/apis/job/fast_push_file.py:13
+#: components/bk/apis/job/fast_push_file.py:18
+msgid "快速分发文件"
+msgstr ""
+
+#: components/bk/apis/job/fast_push_file.py:29
+msgid "源文件信息，包含内容见下面参数描述"
+msgstr ""
+
+#: components/bk/apis/job/fast_push_file.py:31
+msgid "目标机器，包含内容见下面参数描述"
+msgstr ""
+
+#: components/bk/apis/job/fast_push_file.py:32
+msgid "目标机器所属业务，全业务需要"
+msgstr ""
+
+#: components/bk/apis/job/fast_push_file.py:39
+msgid "源机器所属业务，全业务需要"
+msgstr ""
+
+#: components/bk/apis/job/fast_push_file.py:40
+msgid "源文件路径"
+msgstr ""
+
+#: components/bk/apis/job/fast_push_file.py:41
+msgid "IP信息，其中包含ip（源文件服务器IP）和source（IP的子网ID）"
+msgstr ""
+
+#: components/bk/apis/job/fast_push_file.py:42
+msgid "源文件服务器账户名"
+msgstr ""
+
+#: components/bk/apis/job/get_agent_status.py:13
+#: components/bk/apis/job/get_agent_status.py:18
+msgid "查询Agent状态"
+msgstr ""
+
+#: components/bk/apis/job/get_agent_status.py:29
+msgid "IP信息，每项条目包含信息见下面参数描述"
+msgstr ""
+
+#: components/bk/apis/job/get_agent_status.py:75
+msgid "主机Agent状态，1.正常; 0.异常"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:13 components/bk/apis/job/get_cron.py:18
+msgid "查询业务下定时作业信息"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:29
+msgid "定时任务ID，如果存在，则忽略其他筛选条件，只查询这个指定的作业信息"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:30 components/bk/apis/job/save_cron.py:29
+msgid "定时作业的名称"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:31
+msgid "作业的状态：1.已启动、2.已暂停、3.已完成"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:32 components/bk/apis/job/get_task.py:30
+msgid "作业创建人"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:33 components/bk/apis/job/get_task.py:31
+msgid "最后修改人"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:34 components/bk/apis/job/get_task.py:32
+msgid "创建起始时间，YYYY-MM-DD格式"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:35 components/bk/apis/job/get_task.py:33
+msgid "创建结束时间，YYYY-MM-DD格式"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:36 components/bk/apis/job/get_task.py:34
+msgid "最后修改起始时间，YYYY-MM-DD格式"
+msgstr ""
+
+#: components/bk/apis/job/get_cron.py:37 components/bk/apis/job/get_task.py:35
+msgid "最后修改结束时间，YYYY-MM-DD格式"
+msgstr ""
+
+#: components/bk/apis/job/get_proc_result.py:17
+#: components/bk/apis/job/get_proc_result.py:22
+msgid "查询进程操作结果"
+msgstr ""
+
+#: components/bk/apis/job/get_proc_result.py:33
+msgid "GSE任务ID"
+msgstr ""
+
+#: components/bk/apis/job/get_proc_result.py:76
+msgid "任务状态码，0表示任务已经结束，115表示任务正在执行"
+msgstr ""
+
+#: components/bk/apis/job/get_proc_result.py:77
+msgid "各IP实际执行结果"
+msgstr ""
+
+#: components/bk/apis/job/get_task.py:13 components/bk/apis/job/get_task.py:18
+msgid "查询作业模板"
+msgstr ""
+
+#: components/bk/apis/job/get_task.py:29
+msgid "作业名称"
+msgstr ""
+
+#: components/bk/apis/job/get_task_detail.py:13
+#: components/bk/apis/job/get_task_detail.py:18
+msgid "查询作业模板详情"
+msgstr ""
+
+#: components/bk/apis/job/get_task_detail.py:29
+msgid "作业模板ID"
+msgstr ""
+
+#: components/bk/apis/job/get_task_ip_log.py:13
+#: components/bk/apis/job/get_task_ip_log.py:18
+msgid "根据作业实例ID查询作业执行日志"
+msgstr ""
+
+#: components/bk/apis/job/get_task_ip_log.py:28
+#: components/bk/apis/job/get_task_result.py:28
+msgid "作业实例ID"
+msgstr ""
+
+#: components/bk/apis/job/get_task_ip_log.py:85
+msgid ""
+"主机任务状态码，1.Agent异常; 3.上次已成功; 5.等待执行; 7.正在执行; 9.执行成功; 11.任务失败; 12.任务下发失败; "
+"13.任务超时; 15.任务日志错误; 101.脚本执行失败; 102.脚本执行超时; 103.脚本执行被终止; 104.脚本返回码非零; "
+"202.文件传输失败; 203.源文件不存在; 310.Agent异常; 311.用户名不存在; 320.文件获取失败; 321.文件超出限制; "
+"329.文件传输错误; 399.任务执行出错"
+msgstr ""
+
+#: components/bk/apis/job/get_task_result.py:13
+#: components/bk/apis/job/get_task_result.py:18
+msgid "根据作业实例 ID 查询作业执行状态"
+msgstr ""
+
+#: components/bk/apis/job/get_task_result.py:108
+msgid ""
+"任务状态码，1.未执行; 2.正在执行; 3.执行成功; 4.执行失败; 5.跳过; 6.忽略错误; 7.等待用户; 8.手动结束; "
+"9.状态异常; 10.步骤强制终止中; 11.步骤强制终止成功; 12.步骤强制终止失败"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:13
+#: components/bk/apis/job/gse_proc_operate.py:18
+msgid "进程操作"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:29
+msgid ""
+"操作类型，可选值：0:启动进程(start); 1:停止进程(stop); 2:进程状态查询; 3:注册托管进程; 4:取消托管进程; "
+"7:重启进程(restart); 8:重新加载进程(reload); 9:杀死进程(kill)"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:30
+msgid "待操作进程信息"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:36
+#: components/bk/apis/job/gse_set_base_report.py:36
+msgid "IP列表"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:37
+msgid "进程路径，例如/usr/local/gse/gseagent/plugins/unifyTlogc/sbin"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:38
+msgid "进程名称，例如bk_gse_unifyTlogc"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:39
+msgid ""
+"pid文件所在路径, "
+"例如/usr/local/gse/gseagent/plugins/unifyTlogc/log/bk_gse_unifyTlogc.pid"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:40
+msgid "系统用户名，不传默认为root"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:41
+msgid ""
+"进程操作控制脚本的扩展名: "
+"sh:默认值shell适于Linux或cygwin,bat:windows的dos脚本,ps1:windows的Powershell脚本;注意：这个是针对ip_list参数下所有IP统一配置，所以确保接口传递的ip_list参数下所有IP都能支持指定的脚本。"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:42
+msgid "进程使用cpu限制，超过限制agent会根据配置的cmd_shell_ext调用相应类型的stopCmd停止进程。"
+msgstr ""
+
+#: components/bk/apis/job/gse_proc_operate.py:43
+msgid "进程使用mem限制，超过限制agent会根据配置的cmd_shell_ext调用相应类型的stopCmd停止进程。"
+msgstr ""
+
+#: components/bk/apis/job/gse_push_file.py:13
+#: components/bk/apis/job/gse_push_file.py:18
+msgid "文件内容推送"
+msgstr ""
+
+#: components/bk/apis/job/gse_push_file.py:29
+msgid "文件列表"
+msgstr ""
+
+#: components/bk/apis/job/gse_push_file.py:30
+msgid "文件目标路径"
+msgstr ""
+
+#: components/bk/apis/job/gse_push_file.py:31
+msgid "目标机器"
+msgstr ""
+
+#: components/bk/apis/job/gse_push_file.py:32
+msgid "蓝鲸配置平台动态分组ID，多个之间逗号分隔，和ip_list至少一个必选，如果两个同时存在，则以group_ids为准"
+msgstr ""
+
+#: components/bk/apis/job/gse_push_file.py:39
+#: components/generic/templates/cmsi/send_mail.py:46
+msgid "文件名"
+msgstr ""
+
+#: components/bk/apis/job/gse_push_file.py:40
+msgid "文件内容，文件内容为空，则放弃执行该文件，base64编码后的内容"
+msgstr ""
+
+#: components/bk/apis/job/gse_set_base_report.py:12
+#: components/bk/apis/job/gse_set_base_report.py:17
+msgid "开启/关闭Agent基础数据采集上报功能"
+msgstr ""
+
+#: components/bk/apis/job/gse_set_base_report.py:28
+msgid "系统信息上报dataid，为-1则关闭上报"
+msgstr ""
+
+#: components/bk/apis/job/gse_set_base_report.py:29
+msgid "cpu信息上报dataid，为-1则关闭上报"
+msgstr ""
+
+#: components/bk/apis/job/gse_set_base_report.py:30
+msgid "mem信息上报dataid，为-1则关闭上报"
+msgstr ""
+
+#: components/bk/apis/job/gse_set_base_report.py:31
+msgid "网卡信息上报dataid，为-1则关闭上报"
+msgstr ""
+
+#: components/bk/apis/job/gse_set_base_report.py:32
+msgid "磁盘IO信息上报dataid，为-1则关闭上报"
+msgstr ""
+
+#: components/bk/apis/job/gse_set_base_report.py:33
+msgid "进程信息上报dataid，为-1则关闭上报"
+msgstr ""
+
+#: components/bk/apis/job/gse_set_base_report.py:34
+msgid "crontab上报dataid，为-1则关闭上报"
+msgstr ""
+
+#: components/bk/apis/job/gse_set_base_report.py:35
+msgid "iptables信息上报dataid，为-1则关闭上报"
+msgstr ""
+
+#: components/bk/apis/job/save_cron.py:13
+msgid "新建或保存定时作业"
+msgstr ""
+
+#: components/bk/apis/job/save_cron.py:18
+msgid "新建或保存定时作业；新建定时作业，作业状态默认为暂停；操作者必须是业务的创建人或运维"
+msgstr ""
+
+#: components/bk/apis/job/save_cron.py:30
+msgid "要定时执行的作业的作业ID"
+msgstr ""
+
+#: components/bk/apis/job/save_cron.py:31
+msgid "定时任务ID，更新定时任务时，必须传这个值"
+msgstr ""
+
+#: components/bk/apis/job/save_cron.py:32
+msgid "定时任务crontab的定时规则，各自段含义为：秒 分 时 日 月 周 年（可选），如: 0 0/5 * * * ?  表示每5分钟执行一次"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:16
+#: components/generic/templates/cmsi/send_mail.py:21
+msgid "发送邮件"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:31
+msgid "邮件接收者，包含邮件完整地址，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:32
+msgid "邮件接收者，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:33
+msgid "发件人"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:34
+msgid "邮件主题"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:35
+msgid "邮件内容"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:36
+msgid "抄送人，包含邮件完整地址，多个以逗号分隔"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:37
+msgid "抄送人，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若cc、cc__username同时存在，以cc为准"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:38
+msgid "邮件格式，包含'Html', 'Text'，默认为'Html'"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:39
+msgid "邮件内容是否base64编码，默认False，不编码，请使用base64.b64encode方法编码"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:40
+msgid "邮件附件"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:47
+msgid "文件内容，文件内容为原文件内容的 base64 编码字符串"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:48
+msgid "文件类型，默认为文件名后缀，如 a.png 文件类型为 'png'"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:49
+msgid ""
+"文件 Content-Disposition，图片文件(type=image, jpg, png, jpeg)默认为 "
+"'inline'，其他文件默认为 'attachment'"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mail.py:50
+msgid "文件 Content-ID，文件为图片文件时生效；默认为 '<文件名>'"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:15
+#: components/generic/templates/cmsi/send_mp_weixin.py:20
+msgid "发送公众号微信消息"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:30
+msgid "微信接收者，包含绑定在指定公众号上的微信用户的 openid，多个以逗号分隔"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:31
+#: components/generic/templates/cmsi/send_weixin.py:32
+msgid "消息内容"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:37
+#: components/generic/templates/cmsi/send_weixin.py:40
+msgid "通知头部文字"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:38
+#: components/generic/templates/cmsi/send_weixin.py:41
+msgid "通知文字"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:39
+#: components/generic/templates/cmsi/send_weixin.py:42
+msgid "通知发送时间，默认为当前时间 \"YYYY-mm-dd HH:MM\""
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:40
+#: components/generic/templates/cmsi/send_weixin.py:43
+msgid "通知尾部文字"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_mp_weixin.py:41
+#: components/generic/templates/cmsi/send_weixin.py:44
+msgid "通知文字message是否base64编码，默认False，不编码，若编码请使用base64.b64encode方法"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_qy_weixin.py:12
+#: components/generic/templates/cmsi/send_qy_weixin.py:17
+msgid "发送企业微信"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_qy_weixin.py:27
+msgid "微信接收者，包含企业微信用户ID，多个以逗号分隔"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_qy_weixin.py:28
+msgid "消息内容，长度最长为2048字符"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_sms.py:15
+#: components/generic/templates/cmsi/send_sms.py:20
+msgid "发送短信"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_sms.py:30
+msgid "短信接收者，包含接收者电话号码，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_sms.py:31
+msgid "短信接收者，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_sms.py:32
+msgid "短信内容"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_sms.py:33
+msgid "消息内容是否base64编码，默认False，不编码，请使用base64.b64encode方法编码"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_voice_msg.py:13
+#: components/generic/templates/cmsi/send_voice_msg.py:18
+msgid "公共语音通知"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_voice_msg.py:28
+msgid "自动语音读字信息"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_voice_msg.py:29
+msgid "待通知的用户列表，自动语音通知列表，若user_list_information、receiver__username同时存在，以user_list_information为准"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_voice_msg.py:30
+msgid "待通知的用户列表，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若user_list_information、receiver__username同时存在，以user_list_information为准"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_voice_msg.py:36
+msgid "被通知人"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_voice_msg.py:37
+msgid "被通知人手机号"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_weixin.py:15
+msgid "发送微信消息"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_weixin.py:20
+msgid "发送微信消息，支持微信公众号消息，及微信企业号消息"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_weixin.py:30
+msgid "微信接收者，包含绑定在指定公众号上的微信用户的 openid 或 企业号上的微信用户的用户ID，多个以逗号分隔"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_weixin.py:31
+msgid "微信接收者，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准"
+msgstr ""
+
+#: components/generic/templates/cmsi/send_weixin.py:36
+msgid "data 参数包含内容"
+msgstr ""
+
+#: esb/management/utils/api_docs.py:38
+msgid "请求地址"
+msgstr ""
+
+#: esb/management/utils/api_docs.py:45
+msgid "请求方法"
+msgstr ""
+

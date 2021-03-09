@@ -1,0 +1,332 @@
+- path: /data/v3/access/category/
+  name: v3_access_category_get
+  label: 获取数据分类列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/category/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/collector/app_key/
+  name: v3_access_collector_app_key_get
+  label: 根据bk_biz_id获取appkey列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collector/app_key/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/collector/data_struct/{bk_biz_id}/
+  name: v3_access_collector_data_struct__bk_biz_id__get
+  label: 根据bk_biz_id获取数据结构列表ODM
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collector/data_struct/{bk_biz_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/collector/data_struct/{bk_biz_id}/detail/
+  name: v3_access_collector_data_struct__bk_biz_id__detail_get
+  label: 根据bk_biz_id获取数据结构详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collector/data_struct/{bk_biz_id}/detail/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/collector/data_struct/{bk_biz_id}/tables/
+  name: v3_access_collector_data_struct__bk_biz_id__tables_get
+  label: 根据bk_biz_id和name获取数据结构列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collector/data_struct/{bk_biz_id}/tables/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/collector/task_log/
+  name: v3_access_collector_task_log_get
+  label: 查询当前数据源历史任务
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collector/task_log/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/collector/tqos/
+  name: v3_access_collector_tqos_get
+  label: 根据bk_biz_id获取tqos列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collector/tqos/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/collector/upload/
+  name: v3_access_collector_upload_post
+  label: 上传文件
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collector/upload/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/collector/{data_scenario}/check/
+  name: v3_access_collector__data_scenario__check_post
+  label: 接入场景检测
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collector/{data_scenario}/check/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/collectorhub/{raw_data_id}/start/
+  name: v3_access_collectorhub__raw_data_id__start_post
+  label: 启动单个采集器
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collectorhub/{raw_data_id}/start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/collectorhub/{raw_data_id}/status/
+  name: v3_access_collectorhub__raw_data_id__status_get
+  label: 查询部署状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collectorhub/{raw_data_id}/status/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/collectorhub/{raw_data_id}/status/history/
+  name: v3_access_collectorhub__raw_data_id__status_history_get
+  label: 查询历史部署状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collectorhub/{raw_data_id}/status/history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/collectorhub/{raw_data_id}/stop/
+  name: v3_access_collectorhub__raw_data_id__stop_post
+  label: 停止单个采集器
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collectorhub/{raw_data_id}/stop/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/collectorhub/{raw_data_id}/summary/
+  name: v3_access_collectorhub__raw_data_id__summary_get
+  label: 查询部署状态统计
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collectorhub/{raw_data_id}/summary/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/db_type/
+  name: v3_access_db_type_get
+  label: 获取数据库类型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/db_type/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/delimiter/
+  name: v3_access_delimiter_get
+  label: 获取分隔符列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/delimiter/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/deploy_plan/
+  name: v3_access_deploy_plan_post
+  label: 提交接入部署计划
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/deploy_plan/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/deploy_plan/{raw_data_id}/
+  name: v3_access_deploy_plan_delete
+  label: 删除部署计划
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/deploy_plan/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/access/deploy_plan/{raw_data_id}/
+  name: v3_access_deploy_plan__raw_data_id__put
+  label: 更新接入部署计划
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/deploy_plan/{raw_data_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/access/deploy_plan/{raw_data_id}/
+  name: v3_access_deploy_plan__raw_data_id__get
+  label: 查询部署计划
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/deploy_plan/{raw_data_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/deploy_plan/{raw_data_id}/history/
+  name: v3_access_deploy_plan__raw_data_id__history_get
+  label: 接入变更历史
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/deploy_plan/{raw_data_id}/history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/encode/
+  name: v3_access_encode_get
+  label: 获取字符编码列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/encode/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/field_type/
+  name: v3_access_field_type_get
+  label: 获取数据类型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/field_type/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/host_config/
+  name: v3_access_host_config_get
+  label: 获取采集器服务端配置列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/host_config/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/rawdata/
+  name: v3_access_rawdata_post
+  label: 创建RawData
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/rawdata/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/rawdata/
+  name: v3_access_rawdata_get
+  label: 获取源数据列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/rawdata/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/rawdata/app_code/
+  name: v3_access_rawdata_app_code_get
+  label: 获取bk_app_code列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/rawdata/app_code/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/rawdata/mine/
+  name: v3_access_rawdata_mine_get
+  label: 我有管理权限的源数据列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/rawdata/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/rawdata/{raw_data_id}/
+  name: v3_access_rawdata__raw_data_id__delete
+  label: 删除源数据
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/rawdata/{raw_data_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/access/rawdata/{raw_data_id}/
+  name: v3_access_rawdata__raw_data_id__patch
+  label: 更新源数据
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/rawdata/{raw_data_id}/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/access/rawdata/{raw_data_id}/
+  name: v3_access_rawdata__raw_data_id__get
+  label: 获取单个实例详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/rawdata/{raw_data_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/scenario/
+  name: v3_access_scenario_get
+  label: 获取数据场景列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/scenario/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/source/
+  name: v3_access_source_get
+  label: 获取数据来源列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/source/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/source/{access_scenario_id}/
+  name: v3_access_source__access_scenario_id__get
+  label: 根据access_scenario_id获取数据来源列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/source/{access_scenario_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/time_format/
+  name: v3_access_time_format_get
+  label: 获取时间格式列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/time_format/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/tdw/tid/
+  name: v3_access_tdw_tid
+  label: 根据topicid获取接口列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/tdw/tid/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/access/rawdata/query_by_name/
+  name: v3_access_query_by_name_get
+  label: 获取raw_data
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/rawdata/query_by_name/
+  dest_http_method: GET
+  is_hidden: true

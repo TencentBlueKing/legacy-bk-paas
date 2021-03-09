@@ -1,0 +1,19 @@
+---
+
+- path: /data/bksql/api/v1/convert/query/
+  name: bksql_api_v1_convert_query
+  label: bksql_api_v1_convert_query
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /bksql/api/v1/convert/query
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/bksql/api/v1/convert/real-time/
+  name: bksql_api_v1_convert_real_time
+  label: bksql_api_v1_convert_real_time
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /bksql/api/v1/convert/real-time
+  dest_http_method: POST
+  is_hidden: true

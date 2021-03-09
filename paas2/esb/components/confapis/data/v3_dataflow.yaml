@@ -1,0 +1,656 @@
+- path: /data/v3/dataflow/batch/hdfs/result_tables/{result_table_id}/new_line/
+  name: v3_dataflow_batch_hdfs_result_tables__result_table_id__new_line_get
+  label: 获取结果表在hdfs上的最新数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/batch/hdfs/result_tables/{result_table_id}/new_line/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/bksql/bksql_func_info/
+  name: v3_dataflow_flow_bksql_bksql_func_info_get
+  label: 获取bksql函数库信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/bksql/bksql_func_info/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/
+  name: v3_dataflow_flow_flows_post
+  label: 创建Flow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/
+  name: v3_dataflow_flow_flows_get
+  label: 获取Flow列表信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/link_rules_info/
+  name: v3_dataflow_flow_flows_link_rules_info_get
+  label: 查询节点连线规则配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/link_rules_info/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/list_rela_by_rtid/
+  name: v3_dataflow_flow_flows_list_rela_by_rtid_get
+  label: 通过rtid获取DataFlow列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/list_rela_by_rtid/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/multi_destroy/
+  name: v3_dataflow_flow_flows_multi_destroy_delete
+  label: 批量删除DataFlow
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/multi_destroy/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/multi_start/
+  name: v3_dataflow_flow_flows_multi_start_post
+  label: 批量启动DataFlow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/multi_start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/multi_stop/
+  name: v3_dataflow_flow_flows_multi_stop_post
+  label: 批量停止DataFlow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/multi_stop/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/node_config_info/
+  name: v3_dataflow_flow_flows_node_config_info_get
+  label: 查询节点配置信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/node_config_info/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/projects/count/
+  name: v3_dataflow_flow_flows_projects_count_get
+  label: 通过project_id获取flow相关数量，支持批量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/projects/count/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/
+  name: v3_dataflow_flow_flows__fid__get
+  label: 获取DataFlow信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/debuggers/start/
+  name: v3_dataflow_flow_flows__fid__debuggers_start_post
+  label: 开始调试flow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/debuggers/start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/debuggers/{debugger_id}/
+  name: v3_dataflow_flow_flows__fid__debuggers__debugger_id__get
+  label: 获取调试信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/debuggers/{debugger_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/debuggers/{debugger_id}/stop/
+  name: v3_dataflow_flow_flows__fid__debuggers__debugger_id__stop_post
+  label: 停止调试flow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/debuggers/{debugger_id}/stop/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/deploy_data/
+  name: v3_dataflow_flow_flows__fid__deploy_data_post
+  label: 获取flow所有部署信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/deploy_data/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/graph/
+  name: v3_dataflow_flow_flows__fid__graph_get
+  label: 获取DataFlow图信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/graph/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/graph/
+  name: v3_dataflow_flow_flows__fid__graph_put
+  label: 更新DataFlow图信息
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/graph/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/latest_deploy_data/
+  name: v3_dataflow_flow_flows__fid__latest_deploy_data_get
+  label: 获取flow最近部署信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/latest_deploy_data/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/monitor_data/
+  name: v3_dataflow_flow_flows__fid__monitor_data_get
+  label: 根据fid获取监控打点信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/monitor_data/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/nodes/
+  name: v3_dataflow_flow_flows__fid__nodes_post
+  label: 新增节点
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/nodes/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/nodes/{nid}/
+  name: v3_dataflow_flow_flows__fid__nodes__nid__delete
+  label: 删除节点
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/nodes/{nid}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/nodes/{nid}/
+  name: v3_dataflow_flow_flows__fid__nodes__nid__get
+  label: 获取节点信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/nodes/{nid}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/nodes/{nid}/
+  name: v3_dataflow_flow_flows__fid__nodes__nid__put
+  label: 更新节点
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/nodes/{nid}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/nodes/{nid}/monitor_data/
+  name: v3_dataflow_flow_flows__fid__nodes__nid__monitor_data_get
+  label: 根据nid获取监控打点信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/nodes/{nid}/monitor_data/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/restart/
+  name: v3_dataflow_flow_flows__fid__restart_post
+  label: 重启DataFlow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/restart/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/start/
+  name: v3_dataflow_flow_flows__fid__start_post
+  label: 启动DataFlow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/stop/
+  name: v3_dataflow_flow_flows__fid__stop_post
+  label: 停止DataFlow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/stop/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/versions/
+  name: v3_dataflow_flow_flows__fid__versions_get
+  label: 获取DataFlow历史版本
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/versions/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/
+  name: v3_dataflow_flow_flows__flow_id__patch
+  label: 更新DataFlow信息
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/
+  name: v3_dataflow_flow_flows__flow_id__delete
+  label: 删除DataFlow
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/nodes/calculate_nodes/
+  name: v3_dataflow_flow_nodes_calculate_nodes_get
+  label: 通过结果表查询得到计算节点，支持批量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/nodes/calculate_nodes/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/nodes/storage_nodes/
+  name: v3_dataflow_flow_nodes_storage_nodes_get
+  label: 通过结果表查询得到存储节点，支持批量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/nodes/storage_nodes/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/healthz/
+  name: v3_dataflow_healthz_get
+  label: 健康状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/healthz/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/upload/
+  name: v3_dataflow_flow_flows__flow_id__upload_post
+  label: 上传文件
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/upload/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/nodes/processing_nodes/
+  name: v3_dataflow_flow_nodes_processing_nodes_get
+  label: 通过RT获取计算节点
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/nodes/processing_nodes/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/create_tdw_source/
+  name: v3_dataflow_flow__flows_id__create_tdw_source
+  label: 创建TDW存量表对应的结果表
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/create_tdw_source
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/update_tdw_source/
+  name: v3_dataflow_flow__flows_id__update_tdw_source
+  label: 更新TDW存量表对应的结果表
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/update_tdw_source
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/remove_tdw_source/
+  name: v3_dataflow_flow__flows_id__remove_tdw_source
+  label: 删除TDW存量表对应的结果表
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/remove_tdw_source
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/custom_calculates/apply/
+  name: v3_dataflow_flow__flows_id__custom_calculates_apply
+  label: 申请补算任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/custom_calculates/apply/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/custom_calculates/cancel/
+  name: v3_dataflow_flow__flows_id__custom_calculates_cancel
+  label: 撤销补算任务的申请
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/custom_calculates/cancel/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/custom_calculates/start/
+  name: v3_dataflow_flow__flows_id__custom_calculates_start
+  label: 提交补算任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/custom_calculates/start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/custom_calculates/stop/
+  name: v3_dataflow_flow__flows_id__custom_calculates_stop
+  label: 停止补算任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/custom_calculates/stop/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/custom_calculates/{recalculate_id}/
+  name: v3_dataflow_flow_flows__fid__custom_calculates__recalculate_id__get
+  label: 获取当前flow重算任务状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/custom_calculates/{recalculate_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/cluster_groups/
+  name: v3_dataflow_flow__flows_id__cluster_groups
+  label: 获取任务可用的计算集群（按dataflow自定义的顺序和数据进行返回）
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/cluster_groups/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/graph/
+  name: v3_dataflow_flow__flows_id__graph
+  label: 获取任务图信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/graph/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/
+  name: v3_dataflow_flow_udfs_get
+  label: 获取自定义函数列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/
+  name: v3_dataflow_flow_udfs_post
+  label: 创建函数
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/
+  name: v3_dataflow_flow_udfs_put
+  label: 更新函数
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/code_frame/
+  name: v3_dataflow_flow_udfs_code_frame
+  label: 获取udf代码框架
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/code_frame/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/get_debug_data/
+  name: v3_dataflow_flow_get_debug_data
+  label: 获取udf调试数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/get_debug_data/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/debuggers/{debugger_id}/latest/
+  name: v3_dataflow_flow__function_name__debuggers__debugger_id__latest
+  label: 获取udf调试信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/debuggers/{debugger_id}/latest/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/debuggers/start/
+  name: v3_dataflow_flow__function_name__debuggers_start
+  label: 获取udf调试信息
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/debuggers/start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/edit/
+  name: v3_dataflow_flow_udfs_edit
+  label: 编辑指定自定义函数(上锁)
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/edit/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/unlock/
+  name: v3_dataflow_flow_udfs_unlock
+  label: 解锁自定义函数
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/unlock/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/export/
+  name: v3_dataflow_flow_flows__flow_id__export
+  label: 按照create_flow的格式导出flow
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/export/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{flow_id}/create/
+  name: v3_dataflow_flow_flows__flow_id__create
+  label: 传入各信息在一个空flow中初始化一个完整的flow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{flow_id}/create/
+  dest_http_method: POST
+  is_hidden: true
+  
+- path: /data/v3/dataflow/flow/flows/create/
+  name: v3_dataflow_flow_flows_create
+  label: 传入各信息新建一个完整的flow
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/create/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/
+  name: v3_dataflow_flow_udfs__function_name
+  label: 获取指定自定义函数
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/release/
+  name: v3_dataflow_flow_udfs__function_name__release
+  label: 发布函数
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/release/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/support_python_packages/
+  name: v3_dataflow_flow_udfs_support_python_packages
+  label: 支持python版本的接口
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/support_python_packages/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/get_related_info/
+  name: v3_dataflow_flow_udfs__function_name__get_related_info
+  label: udf函数详情查询项目/Flow和节点的关联关系
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/get_related_info/
+  dest_http_method: GET
+  is_hidden: true
+ 
+- path: /data/v3/dataflow/flow/udfs/{function_name}/check_example_sql/
+  name: v3_dataflow_flow_udfs__function_name__check_example_sql
+  label: 样例SQL语法检测
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/check_example_sql/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/node_type_config/
+  name: v3_dataflow_flow_node_type_config_get
+  label: 查询节点配置信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/node_type_config/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/udfs/{function_name}/debuggers/get_latest_config/
+  name: v3_dataflow_flow_udfs__function_name__debuggers_get_latest_config_get
+  label: 获取函数最近调试信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/debuggers/get_latest_config/
+  dest_http_method: GET
+  is_hidden: true
+  
+- path: /data/v3/dataflow/flow/flows/{fid}/versions/draft/
+  name: v3_dataflow_flow_flows__fid__versions_draft_get
+  label: 获取指定 flow 草稿信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/versions/draft/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/list_function_doc/
+  name: v3_dataflow_flow_list_function_doc_get
+  label: 获取函数
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/list_function_doc/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/node_link_rules/
+  name: v3_dataflow_flow_node_link_rules_get
+  label: 获取节点连线规则
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/node_link_rules/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/batch/data_makeup/sql_column/
+  name: v3_dataflow_batch_data_makeup_sql_column_get
+  label: 获取sql字段名
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/batch/data_makeup/sql_column/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/nodes/{nid}/data_makeup/
+  name: v3_dataflow_flow_flows__fid__nodes__nid__data_makeup_post
+  label: 提交数据补齐
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/nodes/{nid}/data_makeup/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/nodes/{nid}/data_makeup/check_execution/
+  name: v3_dataflow_flow_flows__fid__nodes__nid__data_makeup_check_execution_get
+  label: 查看补齐结果
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/nodes/{nid}/data_makeup/check_execution/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/nodes/{nid}/data_makeup/status_list/
+  name: v3_dataflow_flow_flows__fid__nodes__nid__data_makeup_status_list_get
+  label: 查询执行记录
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/nodes/{nid}/data_makeup/status_list/
+  dest_http_method: GET
+  is_hidden: true
+  
+- path: /data/v3/dataflow/flow/udfs/{function_name}/
+  name: v3_dataflow_flow_udfs__function_name__delete
+  label: 删除函数
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/udfs/{function_name}/
+  dest_http_method: DELETE
+  is_hidden: true

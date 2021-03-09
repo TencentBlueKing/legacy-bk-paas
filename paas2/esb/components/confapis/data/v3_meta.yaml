@@ -1,0 +1,417 @@
+- path: /data/v3/meta/cluster_group_configs/
+  name: v3_meta_cluster_group_configs_get
+  label: 获取集群组列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/cluster_group_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/dm_category_configs/
+  name: v3_meta_dm_category_configs_get
+  label: 获取数据域信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/dm_category_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/encoding_configs/
+  name: v3_meta_encoding_configs_get
+  label: 获取字符编码列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/encoding_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/projects/
+  name: v3_meta_projects_post
+  label: 新建项目
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/projects/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/meta/projects/
+  name: v3_meta_projects_get
+  label: 获取项目列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/projects/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/projects/mine/
+  name: v3_meta_projects_mine_get
+  label: 获取项目列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/projects/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/projects/{project_id}/
+  name: v3_meta_projects__project_id__delete
+  label: 删除项目
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/projects/{project_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/meta/projects/{project_id}/
+  name: v3_meta_projects__project_id__get
+  label: 获取项目
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/projects/{project_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/projects/{project_id}/
+  name: v3_meta_projects__project_id__put
+  label: 修改项目信息
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/projects/{project_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/meta/projects/{project_id}/disabled/
+  name: v3_meta_projects__project_id__disabled_patch
+  label: 软删除项目
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/projects/{project_id}/disabled/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/meta/projects/{project_id}/enabled/
+  name: v3_meta_projects__project_id__enabled_patch
+  label: 恢复项目
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/projects/{project_id}/enabled/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/meta/result_tables/
+  name: v3_meta_result_tables_get
+  label: 获取结果表列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/result_tables/mine/
+  name: v3_meta_result_tables_mine_get
+  label: 获取我有权限的结果表列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/result_tables/{result_table_id}/
+  name: v3_meta_result_tables__result_table_id__get
+  label: 获取单个结果表实例的信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/{result_table_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/result_tables/{result_table_id}/
+  name: v3_meta_result_tables__result_table_id__put
+  label: 更新单个结果表实例的信息
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/{result_table_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/meta/result_tables/{result_table_id}/
+  name: v3_meta_result_tables__result_table_id__delete
+  label: 删除单个结果表实例的信息
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/{result_table_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/meta/result_tables/{result_table_id}/fields/
+  name: v3_meta_result_tables__result_table_id__fields_get
+  label: 获取结果表字段信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/{result_table_id}/fields/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/result_tables/{result_table_id}/storages/
+  name: v3_meta_result_tables__result_table_id__storages_get
+  label: 获取结果表的存储信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/{result_table_id}/storages/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/result_tables/scenes/
+  name: v3_meta_result_tables_scenes_get
+  label: 按场景获取存储表信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/scenes/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/time_format_configs/
+  name: v3_meta_time_format_configs_get
+  label: 获取时间格式列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/time_format_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/operation_configs/
+  name: v3_meta_operation_configs
+  label: 获取操作配置(功能开关)
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/operation_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/data_processings/{processing_id}/
+  name: v3_meta_data_processings_get
+  label: 查询结果表数据处理信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/data_processings/{processing_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tdw/app_groups/mine/
+  name: v3_meta_tdw_app_groups_get
+  label: 用户有权限的TDW应用组
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tdw/app_groups/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tdw/app_groups/{group_name}/
+  name: v3_meta_tdw_app_groups__group_name__get
+  label: 查询应用组信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tdw/app_groups/{group_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/field_type_configs/
+  name: v3_meta_field_type_configs_get
+  label: 查询字段类型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/field_type_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tdw/tables/access_existed_lz_id/
+  name: v3_meta_tdw_tables_access_existed_lz_id_get
+  label: 获取TDW表的洛子id
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tdw/tables/access_existed_lz_id/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/tag/geog_tags/
+  name: v3_meta_tag_geog_tags_get
+  label: 查询区域标签列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tag/geog_tags/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tag/geog_tags/{code}/
+  name: v3_meta_tag_geog_tags__code__get
+  label: 查询指定区域标签列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tag/geog_tags/{code}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tag/tags/{code}/
+  name: v3_meta_tag_tags__code__get
+  label: 查询单个标签信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tag/tags/{code}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tag/targets/
+  name: v3_meta_tag_targets_get
+  label: 检索实体&标签&关联信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tag/targets/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/lineage/
+  name: v3_meta_lineage_get
+  label: 获取数据的血缘信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/lineage/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/basic/entity/complex_search/
+  name: v3_meta_basic_entity_complex_search_post
+  label: 原生后端查询语言搜索
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/basic/entity/complex_search/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/meta/tdw/tables/{table_id}/
+  name: v3_meta_tdw_tables__table_id__get
+  label: 获取单个TDW表实例的信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tdw/tables/{table_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tdw/tables/
+  name: v3_meta_tdw_tables_get
+  label: 获取多个TDW表实例的信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tdw/tables/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/platform_configs/
+  name: v3_meta_platform_configs_get
+  label: 获取渠道配置表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/platform_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tdw/tables/modify_table_comment/
+  name: v3_meta_tdw_tables_modify_table_comment_post
+  label: 修改tdw表描述
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tdw/tables/modify_table_comment/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/meta/tdw/tables/modify_table_column_comment/
+  name: v3_meta_tdw_tables_modify_table_column_comment_post
+  label: 修改tdw表字段描述
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tdw/tables/modify_table_column_comment/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/meta/tag/targets_experimental/
+  name: v3_meta_tag_targets_experimental_get
+  label: 基于图存储的通用标签查询
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tag/targets_experimental/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/basic/asset/query_via_erp/
+  name: v3_meta_basic_asset_query_via_erp_post
+  label: erp查询
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/basic/asset/query_via_erp/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/meta/bizs/
+  name: v3_meta_bizs_get
+  label: 获取业务信息列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/bizs/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/bizs/{bk_biz_id}/
+  name: v3_meta_bizs__bk_biz_id__get
+  label: 获取指定业务信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/bizs/{bk_biz_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/analyse/similarity/info/
+  name: v3_meta_analyse_similarity_info
+  label: 元数据相似信息
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/analyse/similarity/info/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/meta/job_status_configs/
+  name: v3_meta_job_status_configs_get
+  label: 获取任务状态列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/job_status_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/meta/result_tables/{result_table_id}/geog_area/
+  name: v3_meta_result_tables__result_table_id__geog_area_get
+  label: 获取结果表所属地域
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/{result_table_id}/geog_area/
+  dest_http_method: GET
+  is_hidden: true

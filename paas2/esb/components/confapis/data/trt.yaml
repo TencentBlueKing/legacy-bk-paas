@@ -1,0 +1,91 @@
+---
+
+- path: /data/trt/del_trt_storage/
+  name: del_trt_storage
+  label: del_trt_storage
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /trt/del_trt_storage
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/trt/delete_result_table/
+  name: trt_delete_result_table
+  label: trt_delete_result_table
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /trt/delete_result_table
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/trt/dict_config_storage_fields/
+  name: trt_dict_config_storage_fields
+  label: trt_dict_config_storage_fields
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /trt/dict_config_storage_fields
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/trt/dict_result_table_fields/
+  name: trt_dict_result_table_fields
+  label: trt_dict_result_table_fields
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /trt/dict_result_table_fields
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/trt/get_result_table/
+  name: trt_get_result_table
+  label: trt_get_result_table
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /trt/get_result_table
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/trt/healthz/
+  name: trt_healthz
+  label: trt_healthz
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /trt/healthz
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/trt/list_result_table_detail_by_biz/
+  name: trt_list_result_table_detail_by_biz
+  label: list_result_table_detail_by_biz
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /trt/list_result_table_detail_by_biz
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/trt/list_result_tables/
+  name: trt_list_result_tables
+  label: trt_list_result_tables
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /trt/list_result_tables
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/trt/save_trt_storage/
+  name: save_trt_storage
+  label: save_trt_storage
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /trt/save_trt_storage
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/trt/set_result_table/
+  name: trt_set_result_table
+  label: trt_set_result_table
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /trt/set_result_table
+  dest_http_method: POST
+  is_hidden: true

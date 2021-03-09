@@ -1,0 +1,224 @@
+- path: /data/v3/datalab/healthz/
+  name: v3_datalab_healthz_get
+  label: 健康状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/healthz/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/projects/mine/
+  name: v3_datalab_projects_mine_get
+  label: 获取指定用户的个人探索项目
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/projects/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/projects/count/
+  name: v3_datalab_projects_count_get
+  label: 获取指定项目查询和笔记的数量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/projects/count/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/favorites/
+  name: v3_datalab_favorites_post
+  label: 新增置顶表
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/favorites/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/datalab/favorites/cancel/
+  name: v3_datalab_favorites_cancel_delete
+  label: 取消置顶表
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/favorites/cancel/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/datalab/favorites/{project_id}/
+  name: v3_datalab_favorites__project_id__get
+  label: 获取项目的置顶表列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/favorites/{project_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/notebooks/
+  name: v3_datalab_notebooks_post
+  label: 创建笔记任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/notebooks/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/datalab/notebooks/{notebook_id}/
+  name: v3_datalab_notebooks__notebook_id__delete
+  label: 删除笔记任务
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/notebooks/{notebook_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/datalab/notebooks/{notebook_id}/
+  name: v3_datalab_notebooks__notebook_id__get
+  label: 获取笔记任务详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/notebooks/{notebook_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/notebooks/
+  name: v3_datalab_notebooks_get
+  label: 获取项目下的笔记任务列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/notebooks/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/notebooks/{notebook_id}/
+  name: v3_datalab_notebooks__notebook_id__put
+  label: 重命名笔记任务
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/notebooks/{notebook_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/datalab/notebooks/retrieve_id/
+  name: v3_datalab_notebooks_retrieve_id_get
+  label: 获取笔记任务id
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/notebooks/retrieve_id/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/notebooks/library/
+  name: v3_datalab_notebooks_library_get
+  label: 查看笔记支持的机器学习库
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/notebooks/library/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/notebooks/{notebook_id}/lock/
+  name: v3_datalab_notebooks__notebook_id__lock_get
+  label: 判断此时笔记任务有没有被用户占用
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/notebooks/{notebook_id}/lock/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/
+  name: v3_datalab_queries_post
+  label: 创建查询任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/{query_id}/
+  name: v3_datalab_queries__query_id__delete
+  label: 删除查询任务
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/{query_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/available_storage/
+  name: v3_datalab_queries_available_storage_get
+  label: 获取查询任务支持的存储
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/available_storage/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/{query_id}/history/
+  name: v3_datalab_queries__query_id__history_get
+  label: 查看查询历史
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/{query_id}/history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/{query_id}/result/
+  name: v3_datalab_queries__query_id__result_get
+  label: 查看查询结果集
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/{query_id}/result/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/{query_id}/stage/
+  name: v3_datalab_queries__query_id__stage_get
+  label: 查看SQL作业轨迹
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/{query_id}/stage/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/{query_id}/
+  name: v3_datalab_queries__query_id__get
+  label: 获取查询任务详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/{query_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/{query_id}/lock/
+  name: v3_datalab_queries__query_id__lock_get
+  label: 判断此时查询任务有没有被用户占用
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/{query_id}/lock/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/
+  name: v3_datalab_queries_get
+  label: 获取项目下的查询任务列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/{query_id}/
+  name: v3_datalab_queries__query_id__put
+  label: 更新查询任务
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/{query_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/datalab/queries/{query_id}/download/
+  name: v3_datalab_queries__query_id__download_get
+  label: 获取下载秘钥
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/{query_id}/download/
+  dest_http_method: GET
+  is_hidden: true

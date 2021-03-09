@@ -1,0 +1,155 @@
+﻿- path: /v2/gse/operate_proc_multi/
+  name: operate_proc_multi
+  label: 进程操作
+  label_en: process operation
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v2/proc/multioperate
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/sync_proc_status/
+  name: sync_proc_status
+  label: 同步进程状态信息
+  label_en: sync process status
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v1/proc/syncstatus
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/gse/operate_proc_v2/
+  name: operate_proc_v2
+  label: 进程操作
+  label_en: process operation
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v2/proc/operate
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/get_proc_operate_result_v2/
+  name: get_proc_operate_result_v2
+  label: 查询进程操作结果
+  label_en: query process operation result
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v2/proc/operate
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/gse/get_proc_status_v2/
+  name: get_proc_status_v2
+  label: 查询进程状态信息
+  label_en: query process status
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v2/proc/status
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/gse/register_proc_info/
+  name: register_proc_info
+  label: 注册进程信息
+  label_en: register process information
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v1/proc/procinfo
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/update_proc_info/
+  name: update_proc_info
+  label: 更新进程信息
+  label_en: update process info
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v1/proc/procinfo
+  dest_http_method: PUT
+  is_hidden: True
+  
+- path: /v2/gse/unregister_proc_info/
+  name: unregister_proc_info
+  label: 注销进程信息
+  label_en: unregister process info
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v1/proc/procinfo
+  dest_http_method: DELETE
+  is_hidden: True
+  
+- path: /v2/gse/operate_proc/
+  name: operate_proc
+  label: 进程操作
+  label_en: process operation
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v1/proc/operate
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/get_proc_operate_result/
+  name: get_proc_operate_result
+  label: 查询进程操作结果
+  label_en: query process operation result
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v1/proc/operate
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/gse/get_proc_status/
+  name: get_proc_status
+  label: 查询进程状态信息
+  label_en: query process status
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v1/proc/status
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/gse/set_process_group_info/
+  name: set_process_group_info
+  label: 设置进程组信息
+  label_en: set process group information
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v1/proc/groupinfo
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/gse/get_process_group_info/
+  name: get_process_group_info
+  label: 查询进程组信息
+  label_en: query process group information
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.gse.gse_component
+  dest_host_group: pms
+  dest_path: /procapi/v1/proc/groupinfo
+  dest_http_method: GET
+  is_hidden: True

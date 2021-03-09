@@ -1,0 +1,17 @@
+- path: /data/v3/queryengine/healthz/
+  name: v3_queryengine_healthz_get
+  label: 查询引擎健康检查接口
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/queryengine/healthz/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/queryengine/query/
+  name: v3_queryengine_query_sync_post
+  label: 同步查询数据
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/queryengine/query_sync/
+  dest_http_method: POST
+  is_hidden: true

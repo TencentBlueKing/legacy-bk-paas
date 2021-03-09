@@ -1,0 +1,81 @@
+---
+
+- path: /v2/iam/application/
+  name: application
+  label: 接入系统权限申请
+  label_en: application for access system
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/application/
+  dest_http_method: POST
+
+- path: /v2/iam/authorization/instance/
+  name: authorization_instance
+  label: 资源实例授权与回收
+  label_en: resource instance authorization
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/authorization/instance/
+  dest_http_method: POST
+
+- path: /v2/iam/authorization/path/
+  name: authorization_path
+  label: 资源拓扑授权与回收
+  label_en: resource path authorization
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/authorization/path/
+  dest_http_method: POST
+
+- path: /v2/iam/authorization/batch_instance/
+  name: authorization_batch_instance
+  label: 批量资源实例授权与回收
+  label_en: batch resource instance authorization
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/authorization/batch_instance/
+  dest_http_method: POST
+
+- path: /v2/iam/authorization/batch_path/
+  name: authorization_batch_path
+  label: 批量资源拓扑授权与回收
+  label_en: batch resource path authorization
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/authorization/batch_path/
+  dest_http_method: POST
+
+- path: /v2/iam/authorization/resource_creator_action/
+  name: authorization_resource_creator_action
+  label: 新建关联授权
+  label_en: resource creator authorization
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/authorization/resource_creator_action/
+  dest_http_method: POST
+
+- path: /v2/iam/authorization/batch_resource_creator_action/
+  name: authorization_batch_resource_creator_action
+  label: 新建关联批量资源授权
+  label_en: resource creator batch resources authorization
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/authorization/batch_resource_creator_action/
+  dest_http_method: POST
+
+- path: /v2/iam/authorization/resource_creator_action_attribute/
+  name: authorization_resource_creator_action_attribute
+  label: 新建关联资源属性授权
+  label_en: resource creator resources attribute authorization
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/authorization/resource_creator_action_attribute/
+  dest_http_method: POST

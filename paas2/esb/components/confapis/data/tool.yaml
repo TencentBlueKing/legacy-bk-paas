@@ -1,0 +1,129 @@
+---
+
+- path: /data/tool/check_table_exist/
+  name: tool_check_table_exist
+  label: tsdb检查表是否存在
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /tool/tsdb/check_table_exist
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/tool/es/create_index/
+  name: tool_es_create_index
+  label: tool_es_create_index
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /tool/es/create_index
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/tool/es/delete_index/
+  name: tool_es_delete_index
+  label: tool_es_delete_index
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /tool/es/delete_index
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/tool/es/is_index_exist/
+  name: tool_es_is_index_exist
+  label: tool_es_is_index_exist
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /tool/es/is_index_exist
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/tool/healthz/
+  name: tool_healthz
+  label: tool_healthz
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /tool/healthz
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/tool/mysql/create_db/
+  name: tool_mysql_create_db
+  label: tool_mysql_create_db
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /tool/mysql/create_db
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/tool/mysql/create_table/
+  name: tool_mysql_create_table
+  label: tool_mysql_create_table
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /tool/mysql/create_table
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/tool/mysql/is_db_exist/
+  name: tool_mysql_is_db_exist
+  label: tool_mysql_is_db_exist
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /tool/mysql/is_db_exist
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/tool/mysql/is_table_exist/
+  name: tool_mysql_is_table_exist
+  label: tool_mysql_is_table_exist
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /tool/mysql/is_table_exist
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/tool/tsdb/add_backends/
+  name: tool_tsdb_add_backends
+  label: tool_tsdb_add_backends
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /tool/tsdb/add_backends
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/tool/tsdb/create_db/
+  name: tool_tsdb_create_db
+  label: tool_tsdb_create_db
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /tool/tsdb/create_db
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/tool/tsdb/drop_db/
+  name: tool_tsdb_drop_db
+  label: tool_tsdb_drop_db
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /tool/tsdb/drop_db
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/tool/tsdb/list_backends/
+  name: tool_tsdb_list_backends
+  label: tool_tsdb_list_backends
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /tool/tsdb/list_backends
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/tool/es/list_rt_es
+  name: list_rt_es
+  label: 查询存储包含ES的rt_id
+  label_en: list rt_id which storages contain es
+  method: GET
+  api_type: query
+  comp_codename: generic.data.data_component
+  dest_path: /tool/es/list_rt_es
+  dest_http_method: GET
+  is_hidden: true

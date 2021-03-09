@@ -1,0 +1,71 @@
+- path: /data/v3/algorithm/v2/model/
+  name: v3_algorithm_model
+  label: 查询模型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/algorithm/v2/model/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/algorithm/v2/sample/
+  name: v3_algorithm_sample
+  label: 样本库列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/algorithm/v2/sample/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/algorithm/v2/model/{model_id}/version/{version_id}/
+  name: v3_algorithm_model_version
+  label: 查询模型版本记录
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/algorithm/v2/model/{model_id}/version/{version_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/algorithm/healthz/
+  name: v3_algorithm_healthz
+  label: 算法模块检查状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/algorithm/healthz/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/algorithm/v2/model/{model_id}/version/
+  name: v3_algorithm_model_version_list
+  label: 获取模型版本列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/algorithm/v2/model/{model_id}/version/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/algorithm/v2/model_stats/
+  name: v3_algorithm_model_version_list
+  label: 获取模型统计数量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/algorithm/v2/model_stats/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/algorithm/v2/modelflow_url/
+  name: v3_algorithm_model_version_list
+  label: 获取modelflow访问url
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/algorithm/v2/modelflow_url/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/algorithm/v2/model/{model_id}/
+  name: v3_algorithm_model_info
+  label: 查询模型信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/algorithm/v2/model/{model_id}/
+  dest_http_method: GET
+  is_hidden: true

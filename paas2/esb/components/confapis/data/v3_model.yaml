@@ -1,0 +1,305 @@
+- path: /data/v3/model/v2/process_model/release_model/
+  name: v3_model_v2_process_model_release_model
+  label: 模型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/process_model/release_model/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/process_model/
+  name: v3_model_v2_process_model_list
+  label: 流程化模型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/process_model/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/process_model/{model_id}/
+  name: v3_model_v2_process_model_delete
+  label: 删除模型
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/process_model/{model_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/model/v2/process_model/{model_id}/release/{release_id}/
+  name: v3_model_v2_process_model_model_id_release_release_id
+  label: 模型配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/process_model/{model_id}/release/{release_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/scene/
+  name: v3_model_v2_scene_list
+  label: 场景列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/scene/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/
+  name: v3_model_v2_sample_set_list
+  label: 样本集列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/
+  name: v3_model_v2_sample_set_create
+  label: 创建样本集
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/
+  name: v3_model_v2_sample_set
+  label: 样本集详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/
+  name: v3_model_v2_sample_set_delete
+  label: 样本集详情
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/
+  name: v3_model_v2_sample_set_patch
+  label: 按照场景设置样本集属性
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/models/
+  name: v3_model_v2_sample_set_models
+  label: 样本集使用情况
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/models/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/copy/
+  name: v3_model_v2_sample_set_copy
+  label: 复制样本集
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/copy/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/result_table/{result_table_id}/query/
+  name: v3_model_v2_sample_set_result_table_query
+  label: 基于样本集信息去拿rt信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/result_table/{result_table_id}/query/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/result_table/{result_table_id}/freq/
+  name: v3_model_v2_sample_set_result_table_freq
+  label: 基于样本集信息去拿rt信息对比频率
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/result_table/{result_table_id}/freq/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/prepare/
+  name: v3_model_v2_sample_set_prepare
+  label: 添加至样本数据筛选
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/prepare/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/sample/
+  name: v3_model_v2_sample_set_sample_get
+  label: 样本集样本列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/sample/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/sample/
+  name: v3_model_v2_sample_set_sample_create
+  label: 创建样本集样本
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/sample/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/sample/{sample_id}/
+  name: v3_model_v2_sample_set_sample_get
+  label: 获取样本集指定样本
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/sample/{sample_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/sample/delete/
+  name: v3_model_v2_sample_set_sample_delete
+  label: 删除样本
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/sample/delete/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/sample/{sample_id}/remark/
+  name: v3_model_v2_sample_set_sample_remark
+  label: 样本备注
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/sample/{sample_id}/remark/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/sample/{sample_id}/label/
+  name: v3_model_v2_sample_set_sample_label
+  label: 样本标注
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/sample/{sample_id}/label/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/result_table/
+  name: v3_model_v2_sample_set_result_table_list
+  label: 查询样本集下有哪些rt表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/result_table/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/preview/
+  name: v3_model_v2_sample_set_preview
+  label: 样本数据预览
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/preview/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/stat/
+  name: v3_model_v2_sample_set_stat
+  label: 样本数据分布
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/stat/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/freq/
+  name: v3_model_v2_sample_set_freq
+  label: 判断样本数据频度和rt频度是否一致
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/freq/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/result_table/
+  name: v3_model_v2_result_table
+  label: 数据结果表列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/result_table/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/result_table/{result_table_id}/field/
+  name: v3_model_v2_result_table_field
+  label: 数据结果表字段
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/result_table/{result_table_id}/field/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/result_table/aggregation/
+  name: v3_model_v2_result_table_aggregation
+  label: 聚合方法列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/result_table/aggregation/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/result_table/{result_table_id}/group/
+  name: v3_model_v2_result_table_group
+  label: 数据结果表曲线列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/result_table/{result_table_id}/group/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/result_table/{result_table_id}/query/
+  name: v3_model_v2_result_table_query
+  label: 根据RT查数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/result_table/{result_table_id}/query/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/sample/prepare/
+  name: v3_model_v2_sample_set_sample_prepare
+  label: 添加至样本数据筛选2
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/sample/prepare/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/model/v2/sample_set/{sample_set_id}/auto_labeling/
+  name: v3_model_v2_sample_set_sample_auto_labeling
+  label: 添加自动标注异常
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/sample_set/{sample_set_id}/auto_labeling/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/model/v2/job/{job_id}/result/
+  name: v3_model_v2_job_result
+  label: 任务结果返回
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/v2/job/{job_id}/result/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/model/healthz/
+  name: v3_model_healthz
+  label: 模型服务健康检查
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/model/healthz/
+  dest_http_method: GET
+  is_hidden: true

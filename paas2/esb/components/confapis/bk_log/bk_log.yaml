@@ -1,0 +1,135 @@
+---
+
+- path: /v2/bk_log/esquery_search/
+  name: esquery_search
+  label: 日志系统索引集查询接口
+  label_en: bk_log index-set search api
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/esquery/search/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/esquery_dsl/
+  name: esquery_dsl
+  label: ES-DSL查询接口
+  label_en: ES DSL query api
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/esquery/dsl/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/esquery_mapping/
+  name: esquery_mapping
+  label: ES-MAPPING查询接口
+  label_en: ES-MAPPING query api
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/esquery/mapping/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/esquery_scroll/
+  name: esquery_scroll
+  label: ES-SCROLL查询接口
+  label_en: ES-SCROLL query api
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/esquery/scroll/
+  dest_http_method: POST
+  is_hidden: True
+
+
+- path: /v2/bk_log/esquery_indices/
+  name: esquery_indices
+  label: ES-INDICES查询接口
+  label_en: ES-INDICES query api
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/esquery/indices/
+  dest_http_method: GET
+  is_hidden: True
+
+
+- path: /v2/bk_log/esquery_cluster/
+  name: esquery_cluster
+  label: ES-集群信息
+  label_en: ES-MAPPING query api
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/esquery/cluster/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/search_index_set/
+  name: search_index_set
+  label: 日志系统-索引集列表
+  label_en: bk_log index-set list api
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/search_index_set/{index_set_id}/fields/
+  name: index_set_fields
+  label: 日志系统-索引集字段
+  label_en: bk_log index-set fields
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/{index_set_id}/fields/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/search_index_set/operators/
+  name: search_operators
+  label: 日志系统-检索条件
+  label_en: bk_log search operators
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/operators/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/create_index_set/
+  name: create_index_set
+  label: 日志系统-创建索引集
+  label_en: bk_log create index-set
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/update_index_set/
+  name: update_index_set
+  label: 日志系统-更新索引集
+  label_en: bk_log update index-set
+  method: PUT
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/
+  dest_http_method: PUT
+  is_hidden: True
+
+- path: /v2/bk_log/replace_index_set/
+  name: replace_index_set
+  label: 日志系统-创建或更新索引集
+  label_en: bk_log update or create index-set
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/replace/
+  dest_http_method: POST
+  is_hidden: True

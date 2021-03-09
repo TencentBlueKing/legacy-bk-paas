@@ -1,0 +1,11 @@
+fail_fast: true
+repos:
+- repo: https://github.com/timothycrosley/isort
+  rev: 4.3.21-2
+  hooks:
+  - id: isort
+    additional_dependencies: [toml]
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.4.0
+  hooks:
+  - id: flake8

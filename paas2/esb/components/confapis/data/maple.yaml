@@ -1,0 +1,19 @@
+---
+
+- path: /data/maple/es_delete_index/
+  name: maple_es_delete_index
+  label: maple_es_delete_index
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /maple/es_delete_index
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/maple/get_data/
+  name: maple_get_data
+  label: maple_get_data
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /maple/get_data
+  dest_http_method: POST
+  is_hidden: true

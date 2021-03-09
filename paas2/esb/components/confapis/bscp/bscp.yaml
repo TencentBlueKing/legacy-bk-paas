@@ -1,0 +1,609 @@
+- path: /v2/bscp/create_app/
+  name: create_app
+  label: 创建应用
+  label_en: create app
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app
+  dest_http_method: POST
+
+- path: /v2/bscp/update_app/
+  name: update_app
+  label: 更新应用信息
+  label_en: update app
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}
+  dest_http_method: PUT
+
+- path: /v2/bscp/get_app/
+  name: get_app
+  label: 查询指定应用信息
+  label_en: query target app info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app
+  dest_http_method: GET
+
+- path: /v2/bscp/get_app_list/
+  name: get_app_list
+  label: 查询应用列表
+  label_en: query app list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list/biz/{biz_id}/app
+  dest_http_method: POST
+
+- path: /v2/bscp/delete_app/
+  name: delete_app
+  label: 删除应用
+  label_en: delete app
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}
+  dest_http_method: DELETE
+
+- path: /v2/bscp/create_config/
+  name: create_config
+  label: 创建配置
+  label_en: create config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/config
+  dest_http_method: POST
+
+- path: /v2/bscp/update_config/
+  name: update_config
+  label: 更新配置信息
+  label_en: update config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/config/{cfg_id}
+  dest_http_method: PUT
+
+- path: /v2/bscp/get_config/
+  name: get_config
+  label: 查询指定配置信息
+  label_en: query target config info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/config
+  dest_http_method: GET
+
+- path: /v2/bscp/get_config_list/
+  name: get_config_list
+  label: 查询配置列表
+  label_en: query config list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/config
+  dest_http_method: POST
+
+- path: /v2/bscp/delete_config/
+  name: delete_config
+  label: 删除配置
+  label_en: delete config
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/config/{cfg_id}
+  dest_http_method: DELETE
+
+- path: /v2/bscp/get_commit/
+  name: get_commit
+  label: 查询单提交信息
+  label_en: query target commit info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/commit/{commit_id}
+  dest_http_method: GET
+
+- path: /v2/bscp/get_commit_list/
+  name: get_commit_list
+  label: 查询配置历史单提交记录
+  label_en: query commit list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/commit
+  dest_http_method: POST
+
+- path: /v2/bscp/get_release/
+  name: get_release
+  label: 查询单版本信息
+  label_en: query target release info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/release/{release_id}
+  dest_http_method: GET
+
+- path: /v2/bscp/get_release_list/
+  name: get_release_list
+  label: 查询配置历史单版本记录
+  label_en: query release list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/release
+  dest_http_method: POST
+
+- path: /v2/bscp/create_multi_commit_with_content/
+  name: create_multi_commit_with_content
+  label: 创建混合提交, 附带内容
+  label_en: create multi commit with contents
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_commit_with_content
+  dest_http_method: POST
+
+- path: /v2/bscp/update_multi_commit/
+  name: update_multi_commit
+  label: 更新混合提交信息
+  label_en: update multi commit
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_commit/{multi_commit_id}
+  dest_http_method: PUT
+
+- path: /v2/bscp/get_multi_commit/
+  name: get_multi_commit
+  label: 查询指定混合提交信息
+  label_en: query target multi commit info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_commit/{multi_commit_id}
+  dest_http_method: GET
+
+- path: /v2/bscp/get_multi_commit_list/
+  name: get_multi_commit_list
+  label: 查询混合提交列表
+  label_en: query multi commit list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/multi_commit
+  dest_http_method: POST
+
+- path: /v2/bscp/cancel_multi_commit/
+  name: cancel_multi_commit
+  label: 撤销混合提交
+  label_en: cancel multi commit
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/cancel/biz/{biz_id}/app/{app_id}/multi_commit/{multi_commit_id}
+  dest_http_method: POST
+
+- path: /v2/bscp/confirm_multi_commit/
+  name: confirm_multi_commit
+  label: 确认混合提交
+  label_en: confirm multi commit
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/confirm/biz/{biz_id}/app/{app_id}/multi_commit/{multi_commit_id}
+  dest_http_method: POST
+
+- path: /v2/bscp/create_multi_release/
+  name: create_multi_release
+  label: 创建混合版本
+  label_en: create multi release
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_release
+  dest_http_method: POST
+
+- path: /v2/bscp/update_multi_release/
+  name: update_multi_release
+  label: 更新混合版本信息
+  label_en: update multi release
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
+  dest_http_method: PUT
+
+- path: /v2/bscp/get_multi_release/
+  name: get_multi_release
+  label: 查询指定混合版本信息
+  label_en: query target multi release info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
+  dest_http_method: GET
+
+- path: /v2/bscp/get_multi_release_list/
+  name: get_multi_release_list
+  label: 查询混合版本列表
+  label_en: query multi release list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/multi_release
+  dest_http_method: POST
+
+- path: /v2/bscp/cancel_multi_release/
+  name: cancel_multi_release
+  label: 撤销混合版本
+  label_en: cancel multi release
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/cancel/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
+  dest_http_method: POST
+
+- path: /v2/bscp/publish_multi_release/
+  name: publish_multi_release
+  label: 发布混合版本
+  label_en: publish multi release
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/publish/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
+  dest_http_method: POST
+
+- path: /v2/bscp/rollback_multi_release/
+  name: rollback_multi_release
+  label: 回滚混合版本
+  label_en: rollback multi release
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/rollback/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
+  dest_http_method: POST
+
+- path: /v2/bscp/reload_multi_release/
+  name: reload_multi_release
+  label: Reload混合版本
+  label_en: reload multi release
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/reload
+  dest_http_method: POST
+
+- path: /v2/bscp/get_content_list/
+  name: get_content_list
+  label: 查询配置提交内容列表
+  label_en: get config commit content list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/content
+  dest_http_method: POST
+
+- path: /v2/bscp/get_content_by_instance/
+  name: get_content_by_instance
+  label: 根据实例信息查询其匹配的配置提交内容
+  label_en: get config commit content by instance info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/find_by_inst/biz/{biz_id}/app/{app_id}/content
+  dest_http_method: POST
+
+- path: /v2/bscp/get_content_by_labels/
+  name: get_content_by_labels
+  label: 根据标签集合查询其匹配的配置提交内容
+  label_en: get config commit content by labels
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/find_by_labels/biz/{biz_id}/app/{app_id}/content
+  dest_http_method: POST
+
+- path: /v2/bscp/create_strategy/
+  name: create_strategy
+  label: 创建策略
+  label_en: create strategy
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/strategy
+  dest_http_method: POST
+
+- path: /v2/bscp/get_strategy/
+  name: get_strategy
+  label: 查询指定策略信息
+  label_en: query target strategy info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/strategy
+  dest_http_method: GET
+
+- path: /v2/bscp/get_strategy_list/
+  name: get_strategy_list
+  label: 查询应用的策略列表
+  label_en: query strategy list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/strategy
+  dest_http_method: POST
+
+- path: /v2/bscp/delete_strategy/
+  name: delete_strategy
+  label: 删除策略
+  label_en: delete strategy
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/strategy/{strategy_id}
+  dest_http_method: DELETE
+
+- path: /v2/bscp/get_app_instance_release/
+  name: get_app_instance_release
+  label: 查询指定应用实例当前生效版本信息
+  label_en: quert effected release info of target app instance
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/app_instance_release
+  dest_http_method: POST
+
+- path: /v2/bscp/get_effected_app_instance_list/
+  name: get_effected_app_instance_list
+  label: 查询已生效指定版本的应用实例列表
+  label_en: quert app instance list which effected target release
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list_effected/biz/{biz_id}/app/{app_id}/app_instance
+  dest_http_method: POST
+
+- path: /v2/bscp/get_matched_app_instance_list/
+  name: get_matched_app_instance_list
+  label: 查询指定版本或策略匹配的应用实例列表
+  label_en: quert app instance list which matched target release or strategy
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list_matched/biz/{biz_id}/app/{app_id}/app_instance
+  dest_http_method: POST
+
+- path: /v2/bscp/get_reachable_app_instance_list/
+  name: get_reachable_app_instance_list
+  label: 查询指定条件内可触达的应用实例列表
+  label_en: quert reachable app instance list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list_reachable/biz/{biz_id}/app/{app_id}/app_instance
+  dest_http_method: POST
+
+- path: /v2/bscp/get_history_app_instance_list/
+  name: get_history_app_instance_list
+  label: 查询历史应用实例列表
+  label_en: quert history app instance list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list_history/biz/{biz_id}/app/{app_id}/app_instance
+  dest_http_method: POST
+
+- path: /v2/bscp/create_procattr/
+  name: create_procattr
+  label: 创建主机应用归属信息
+  label_en: create app process attribute
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/procattr
+  dest_http_method: POST
+
+- path: /v2/bscp/update_procattr/
+  name: update_procattr
+  label: 更新主机应用绑定信息
+  label_en: update app process attribute
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/procattr
+  dest_http_method: PUT
+
+- path: /v2/bscp/get_procattr/
+  name: get_procattr
+  label: 查询主机应用归属信息
+  label_en: query target app process attribute info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/procattr
+  dest_http_method: GET
+
+- path: /v2/bscp/get_procattr_list_by_app/
+  name: get_procattr_list_by_app
+  label: 查询指定应用绑定的主机列表
+  label_en: query process attribute host list by app
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list_by_app/procattr
+  dest_http_method: POST
+
+- path: /v2/bscp/get_procattr_list_by_host/
+  name: get_procattr_list_by_host
+  label: 查询指定主机上的应用绑定列表
+  label_en: query process attribute app list by host
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list_by_host/procattr
+  dest_http_method: POST
+
+- path: /v2/bscp/delete_procattr/
+  name: delete_procattr
+  label: 删除主机应用绑定
+  label_en: delete app process attribute
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/procattr
+  dest_http_method: DELETE
+
+- path: /v2/bscp/create_template/
+  name: create_template
+  label: 创建模板
+  label_en: create template
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template
+  dest_http_method: POST
+
+- path: /v2/bscp/update_template/
+  name: update_template
+  label: 更新模板信息
+  label_en: update template
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}
+  dest_http_method: PUT
+
+- path: /v2/bscp/get_template/
+  name: get_template
+  label: 查询指定模板信息
+  label_en: query target template info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}
+  dest_http_method: GET
+
+- path: /v2/bscp/get_template_list/
+  name: get_template_list
+  label: 查询模板列表
+  label_en: query template list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/list/biz/{biz_id}/template
+  dest_http_method: POST
+
+- path: /v2/bscp/delete_template/
+  name: delete_template
+  label: 删除模板
+  label_en: delete template
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}
+  dest_http_method: DELETE
+
+- path: /v2/bscp/render_template/
+  name: render_template
+  label: 渲染模板
+  label_en: render template
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/render/biz/{biz_id}/template/{template_id}
+  dest_http_method: POST
+
+- path: /v2/bscp/create_template_bind/
+  name: create_template_bind
+  label: 创建模板绑定
+  label_en: create template bind
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/template_bind
+  dest_http_method: POST
+
+- path: /v2/bscp/get_template_bind/
+  name: get_template_bind
+  label: 查询指定模板绑定信息
+  label_en: query target template bind info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/template_bind
+  dest_http_method: GET
+
+- path: /v2/bscp/get_template_bind_list/
+  name: get_template_bind_list
+  label: 查询模板绑定列表
+  label_en: query template bind list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/list/biz/{biz_id}/template_bind
+  dest_http_method: POST
+
+- path: /v2/bscp/delete_template_bind/
+  name: delete_template_bind
+  label: 删除模板绑定
+  label_en: delete template bind
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/template_bind
+  dest_http_method: DELETE
+
+- path: /v2/bscp/create_template_version/
+  name: create_template_version
+  label: 创建模板版本
+  label_en: create template version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/version
+  dest_http_method: POST
+
+- path: /v2/bscp/get_template_version/
+  name: get_template_version
+  label: 查询指定模板版本信息
+  label_en: query target template version info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/version/{version_id}
+  dest_http_method: GET
+
+- path: /v2/bscp/get_template_version_list/
+  name: get_template_version_list
+  label: 查询模板版本列表
+  label_en: query template version list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/list/biz/{biz_id}/template/{template_id}/version
+  dest_http_method: POST
+
+- path: /v2/bscp/update_template_version/
+  name: update_template_version
+  label: 更新模板版本
+  label_en: update template version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/version/{version_id}
+  dest_http_method: PUT
+
+- path: /v2/bscp/delete_template_version/
+  name: delete_template_version
+  label: 删除模板版本
+  label_en: delete template version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/version/{version_id}
+  dest_http_method: DELETE

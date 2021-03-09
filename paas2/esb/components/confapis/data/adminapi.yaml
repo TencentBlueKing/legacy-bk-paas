@@ -1,0 +1,154 @@
+---
+
+- path: /data/adminapi/bk/query_bkdata_config_conn/
+  name: adminapi_bk_query_bkdata_config_conn
+  label: adminapi_bk_query_bkdata_config_conn
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/bk/query_bkdata_config_conn
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/clusters/databus/clusters/
+  name: adminapi_clusters_databus_clusters
+  label: adminapi_clusters_databus_clusters
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/clusters/databus/clusters/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/clusters/databus/connectors/
+  name: adminapi_clusters_databus_connectors
+  label: adminapi_clusters_databus_connectors
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/clusters/databus/connectors/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/admin_alerts/
+  name: adminapi_dmonitor_admin_alerts
+  label: adminapi_dmonitor_admin_alerts
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/admin_alerts/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/do_alert_send/
+  name: adminapi_dmonitor_do_alert_send
+  label: adminapi_dmonitor_do_alert_send
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/do_alert_send/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/do_alert_send/
+  name: adminapi_dmonitor_do_alert_send
+  label: adminapi_dmonitor_do_alert_send
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/do_alert_send/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/global_monitor_config/
+  name: adminapi_dmonitor_global_monitor_config
+  label: adminapi_dmonitor_global_monitor_config
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/global_monitor_config/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/global_monitor_config/
+  name: adminapi_dmonitor_global_monitor_config
+  label: adminapi_dmonitor_global_monitor_config
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/global_monitor_config/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/monitors/
+  name: adminapi_dmonitor_monitors
+  label: adminapi_dmonitor_monitors
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/monitors/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/monitors/
+  name: adminapi_dmonitor_monitors
+  label: adminapi_dmonitor_monitors
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/monitors/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/monitors/{monitor_id}/
+  name: adminapi_dmonitor_monitors_monitor_id
+  label: adminapi_dmonitor_monitors_monitor_id
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/monitors/{monitor_id}/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/monitors/{monitor_id}/
+  name: adminapi_dmonitor_monitors_monitor_id
+  label: adminapi_dmonitor_monitors_monitor_id
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/monitors/{monitor_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/monitors/{monitor_id}/delete/
+  name: adminapi_dmonitor_monitors_monitor_id_delete
+  label: adminapi_dmonitor_monitors_monitor_id_delete
+  method: POST
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/monitors/{monitor_id}/delete/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/monitors/{monitor_id}/delete/
+  name: adminapi_dmonitor_monitors_monitor_id_delete
+  label: adminapi_dmonitor_monitors_monitor_id_delete
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/monitors/{monitor_id}/delete/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/query/
+  name: adminapi_dmonitor_query
+  label: adminapi_dmonitor_query
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/query
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/dmonitor/rt_status/
+  name: adminapi_dmonitor_rt_status
+  label: adminapi_dmonitor_rt_status
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/dmonitor/rt_status
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/adminapi/healthz/
+  name: adminapi_healthz
+  label: adminapi_healthz
+  method: GET
+  comp_codename: generic.data.data_component
+  dest_path: /adminapi/healthz
+  dest_http_method: GET
+  is_hidden: true

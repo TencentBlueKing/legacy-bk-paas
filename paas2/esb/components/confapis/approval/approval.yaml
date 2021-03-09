@@ -1,0 +1,34 @@
+---
+
+- path: /v2/approval/add_workitems/
+  name: add_workitems
+  label: 新增审批单据
+  label_en: add workitems
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.approval.approval_component
+  dest_path: /o/bk_approval/gateway/workitem/add/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/approval/close_workitems/
+  name: close_workitems
+  label: 关闭审批单据
+  label_en: close workitems
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.approval.approval_component
+  dest_path: /o/bk_approval/gateway/workitem/close/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/approval/discard_workitems/
+  name: discard_workitems
+  label: 撤销审批单据
+  label_en: discard workitems
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.approval.approval_component
+  dest_path: /o/bk_approval/gateway/workitem/discard/
+  dest_http_method: POST
+  is_hidden: True

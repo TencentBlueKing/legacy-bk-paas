@@ -1,0 +1,442 @@
+- path: /data/v3/auth/projects/{project_id}/cluster_group/
+  name: v3_auth_projects__project_id__cluster_group_get
+  label: 列举项目有权限的集群组
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/cluster_group/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/projects/{project_id}/data/
+  name: v3_auth_projects__project_id__data_get
+  label: 列举项目相关数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/data/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/projects/{project_id}/role_users/
+  name: v3_auth_projects__project_id__role_users_get
+  label: 列举项目相关用户
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/role_users/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/projects/{project_id}/role_users/
+  name: v3_auth_projects__project_id__role_users_put
+  label: 更新项目相关用户
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/role_users/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/auth/raw_data/{raw_data_id}/cluster_group/
+  name: v3_auth_raw_data__raw_data_id__cluster_group_get
+  label: 列举 raw_data 有权限的集群组
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/raw_data/{raw_data_id}/cluster_group/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/roles/
+  name: v3_auth_roles_get
+  label: 角色列表，再补充审批员的角色
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/roles/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/roles/multi_update_roles/
+  name: v3_auth_roles_multi_update_roles_put
+  label: 批量更新角色用户
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/roles/multi_update_roles/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/auth/roles/user_role/
+  name: v3_auth_roles_user_role_get
+  label: 用户有权限的所有角色及对象
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/roles/user_role/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/roles/{role_id}/
+  name: v3_auth_roles__role_id__get
+  label: 角色详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/roles/{role_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tickets/
+  name: v3_auth_tickets_post
+  label: 创建单据
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tickets/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/auth/tickets/
+  name: v3_auth_tickets_get
+  label: 获取单据列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tickets/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tickets/ticket_status/
+  name: v3_auth_tickets_ticket_status_get
+  label: 获取单据状态列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tickets/ticket_status/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tickets/ticket_types/
+  name: v3_auth_tickets_ticket_types_get
+  label: 获取单据类型
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tickets/ticket_types/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tickets/{ticket_id}/
+  name: v3_auth_tickets__ticket_id__get
+  label: 查询单据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tickets/{ticket_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/ticket_states/
+  name: v3_auth_ticket_states_get
+  label: 获取单据列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/ticket_states/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/ticket_states/todo_count/
+  name: v3_auth_ticket_states_todo_count_get
+  label: 获取待办数量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/ticket_states/todo_count/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/ticket_states/{id}/approve/
+  name: v3_auth_ticket_states__id__approve_post
+  label: 审批单据
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/ticket_states/{id}/approve/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/auth/ticket_states/{ticket_state_id}/
+  name: v3_auth_ticket_states__ticket_state_id__get
+  label: 查询单据及关联状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/ticket_states/{ticket_state_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tickets/distinct_project/
+  name: v3_auth_tickets_distinct_project_get
+  label: 获取已经申请的project信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tickets/distinct_project/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tokens/
+  name: v3_auth_token_perm_post
+  label: 创建token
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tokens/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/auth/tokens/
+  name: v3_auth_token_perm_get
+  label: 获取Token列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tokens/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tokens/{id}/
+  name: v3_auth_token_perm__id__get
+  label: 查询token
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tokens/{id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tokens/{id}/
+  name: v3_auth_token_perm__id__put
+  label: 校验 Token 权限 参数同创建
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tokens/{id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/auth/tokens/{id}/plaintext/
+  name: v3_auth_token_perm__id__put
+  label: 获取Token密钥
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tokens/{id}/plaintext/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/users/scope_dimensions/
+  name: v3_auth_users_scope_dimensions_get
+  label: 获取用户有权限的维度列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/users/scope_dimensions/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/users/{user_id}/scopes/
+  name: v3_auth_users__user_id__scopes_get
+  label: 获取用户有权限的对象范围
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/users/{user_id}/scopes/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/users/{user_id}/bizs/
+  name: v3_auth_users__user_id__bizs_get
+  label: 获取用户有权限的业务
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/users/{user_id}/bizs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/users/{user_id}/check/
+  name: v3_auth_users__user_id__check_post
+  label: 校验用户与对象权限
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/users/{user_id}/check/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/auth/objects/
+  name: v3_auth_objects_post
+  label: 对象列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/objects/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/objects/objects_scope_action/
+  name: v3_auth_objects_objects_scope_action_get
+  label: 对象及权限列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/objects/objects_scope_action/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/projects/{project_id}/biz_tickets_count/
+  name: v3_auth_projects__project_id__biz_tickets_count_get
+  label: 查询项目申请业务数据的数量统计
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/biz_tickets_count/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/projects/{project_id}/data_tickets/
+  name: v3_auth_projects__project_id__data_tickets_get
+  label: 项目已申请的结果表单据信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/data_tickets/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/projects/{project_id}/bizs/
+  name: v3_auth_projects__project_id__bizs_get
+  label: 项目有权限的业务
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/bizs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tdw/user/
+  name: v3_auth_tdw_user_get
+  label: 查询用户的TDW用户信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tdw/user/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tdw/user/
+  name: v3_auth_tdw_user_post
+  label: 绑定用户的TDW用户信息
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tdw/user/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/auth/tdw/user/get_db_with_select_priv/
+  name: v3_auth_tdw_user_get_db_with_select_priv_get
+  label: 用户有读权限的TDW库
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tdw/user/get_db_with_select_priv/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/tdw/user/get_tables_by_db_name/
+  name: v3_auth_tdw_user_get_tables_by_db_name_get
+  label: 用户有读权限的TDW表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tdw/user/get_tables_by_db_name/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/auth/tdw/user/get_clusters_by_user/
+  name: v3_auth_tdw_user_get_clusters_by_user_get
+  label: 用户有权限的集群
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tdw/user/get_clusters_by_user/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/auth/tdw/user/get_db_with_create_priv/
+  name: v3_auth_tdw_user_get_db_with_create_priv_get
+  label: 用户有写权限的TDW库
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tdw/user/get_db_with_create_priv/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/auth/users/operation_configs/
+  name: v3_auth_users_operation_configs_get
+  label: 返回用户有权限的功能开关
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/users/operation_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/auth/roles/{role_id}/users/
+  name: v3_auth_roles__role_id__users_get
+  label: 列举角色用户
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/roles/{role_id}/users/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/auth/users/batch_check/
+  name: v3_auth_users_batch_check_post
+  label: 批量校验用户与对象权限
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/users/batch_check/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/auth/tdw/user/check_table_perm/
+  name: v3_auth_tdw_user_check_table_perm_post
+  label: 查询用户是否有TDW表权限
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tdw/user/check_table_perm/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/auth/tokens/{id}/renewal/
+  name: v3_auth_tokens__id__renewal_post
+  label: Token 续期
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tokens/{id}/renewal/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/auth/users/handover/
+  name: v3_auth_users_handover_post
+  label: 权限交接
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/users/handover/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/auth/sensitivity/
+  name: v3_auth_sensitivity_get
+  label: 敏感度配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/sensitivity/
+  dest_http_method: GET
+  is_hidden: true
+  
+
+- path: /data/v3/auth/sensitivity/update_dataset/
+  name: v3_auth_sensitivity_update_dataset_post
+  label: 更新数据集的敏感度信息
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/sensitivity/update_dataset/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/auth/sensitivity/retrieve_dataset/
+  name: v3_auth_sensitivity_retrieve_dataset_get
+  label: 获取数据集的敏感度信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/sensitivity/retrieve_dataset/
+  dest_http_method: GET
+  is_hidden: true

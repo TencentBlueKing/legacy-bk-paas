@@ -1,0 +1,208 @@
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v1/department_list/
+  is_hidden: true
+  label: 查询全部部门列表 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Query department list
+  name: department_list
+  path: /v2/usermanage/department_list/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v1/department/{id}/
+  is_hidden: true
+  label: 查询指定部门信息 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Query department information
+  name: department
+  path: /v2/usermanage/department/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: POST
+  dest_path: /api/v1/department/batch/
+  is_hidden: true
+  label: 批量查询指定部门信息 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Batch Query department information
+  name: department_batch
+  path: /v2/usermanage/department_batch/
+  suggest_method: POST
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v1/department/{id}/profile/
+  is_hidden: true
+  label: 查询指定部门成员信息 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Query department members
+  name: department_profile
+  path: /v2/usermanage/department_profile/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v1/profile/{id}/
+  is_hidden: true
+  label: 查询成员详情信息 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Query member detail
+  name: profile
+  path: /v2/usermanage/profile/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v1/department/{id}/ancestor/
+  is_hidden: false
+  label: 查询部门全部祖先 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Query department ancestor
+  name: department_ancestor
+  path: /v2/usermanage/department_ancestor/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v1/search/profile/
+  is_hidden: true
+  label: 搜索成员 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Query member
+  name: search_profile
+  path: /v2/usermanage/search_profile/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v1/search/department/
+  is_hidden: true
+  label: 搜索部门 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Query department
+  name: search_department
+  path: /v2/usermanage/search_department/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v1/profile_list/
+  is_hidden: true
+  label: 获取所有用户信息 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Query all members
+  name: get_all_users
+  path: /v2/usermanage/get_all_users/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: POST
+  dest_path: /api/v1/profile_batch/
+  is_hidden: true
+  label: 批量获取用户信息 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
+  label_en: Query some members
+  name: get_batch_users
+  path: /v2/usermanage/get_batch_users/
+  suggest_method: POST
+  
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v2/profiles/
+  is_hidden: false
+  label: 查询用户 (v2)
+  label_en: Query users
+  name: list_users
+  path: /v2/usermanage/list_users/
+  suggest_method: GET
+  
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v2/departments/
+  is_hidden: false
+  label: 查询部门 (v2)
+  label_en: Query departments
+  name: list_departments
+  path: /v2/usermanage/list_departments/
+  suggest_method: GET
+  
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v2/profiles/{id}/
+  is_hidden: false
+  label: 查询单个用户信息 (v2)
+  label_en: Query singel user
+  name: retrieve_user
+  path: /v2/usermanage/retrieve_user/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v2/departments/{id}/
+  is_hidden: false
+  label: 查询单个部门信息 (v2)
+  label_en: Query singel department
+  name: retrieve_department
+  path: /v2/usermanage/retrieve_department/
+  suggest_method: GET
+  
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v2/profiles/{id}/departments
+  is_hidden: false
+  label: 查询用户的部门信息 (v2)
+  label_en: Query profile departments
+  name: list_profile_departments
+  path: /v2/usermanage/list_profile_departments/
+  suggest_method: GET
+  
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v2/departments/{id}/profiles
+  is_hidden: false
+  label: 查询部门的用户信息 (v2)
+  label_en: Query department profiles
+  name: list_department_profiles
+  path: /v2/usermanage/list_department_profiles/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v2/edges/department_profile/
+  is_hidden: true
+  label: 拉取用户 & 组织关联关系 (v2)
+  label_en: Query relations between departments & profiles
+  name: list_edges_department_profile
+  path: /v2/usermanage/list_edges_department_profile/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v2/edges/leader/
+  is_hidden: true
+  label: 拉取用户 & 领导关联关系 (v2)
+  label_en: Query relations betrween profiles & leaders
+  name: list_edges_leader_profile
+  path: /v2/usermanage/list_edges_leader_profile/
+  suggest_method: GET
+  
+- api_type: query
+  comp_codename: generic.v2.usermanage.usermanage_component
+  dest_http_method: GET
+  dest_path: /api/v2/categories/
+  is_hidden: true
+  label: 拉取用户目录列表
+  label_en: Query categories
+  name: list_categories
+  path: /v2/usermanage/list_categories/
+  suggest_method: GET

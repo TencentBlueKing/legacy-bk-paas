@@ -1,0 +1,12 @@
+---
+
+- path: /v2/bk_docs_center/get_doc_link_by_path/
+  name: get_doc_link_by_path
+  label: 根据md名查询md所在链接
+  label_en: Query the link of the document according to the MD name
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_docs_center.bk_docs_center_component
+  dest_path: /o/bk_docs_center/api/v1/get_doc_link_by_path/
+  dest_http_method: POST
+  is_hidden: False
