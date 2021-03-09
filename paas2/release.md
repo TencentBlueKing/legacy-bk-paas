@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.8
+    - change: move to Github
+
 # 2.12.7
     - add: EXTERNAL_THEME in console's settings for custom css
 
