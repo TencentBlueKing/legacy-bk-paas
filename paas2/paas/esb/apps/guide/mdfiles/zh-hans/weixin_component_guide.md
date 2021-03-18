@@ -26,6 +26,7 @@ qyapi.weixin.qq.com
 mp.weixin.qq.com
 # 企业微信
 open.work.weixin.qq.com
+wwcdn.weixin.qq.com
 rescdn.qqmail.com
 js.aq.qq.com
 ```
