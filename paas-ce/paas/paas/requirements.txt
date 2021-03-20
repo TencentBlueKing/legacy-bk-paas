@@ -15,7 +15,7 @@ pytz==2016.6.1
 enum34==1.1.6
 
 # for esb
-jinja2==2.8
+jinja2==2.11.3
 django-bootstrap-form==3.2.1
 Markdown==2.6.6
 pygments==2.1.3
