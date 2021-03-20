@@ -9,7 +9,7 @@ httplib2==0.9.1
 xlrd==1.0.0
 xlwt==1.1.2
 Mako==1.0.4
-Jinja2==2.8
+Jinja2==2.11.3
 MarkupSafe==0.23
 meld3==1.0.2
 pbr==1.10.0
