@@ -37,7 +37,7 @@ class LoginMiddleware(object):
         if getattr(view, "login_exempt", False):
             return None
 
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             get_csrf_token(request)
             return None
 
