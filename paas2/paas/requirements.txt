@@ -1,4 +1,4 @@
-django==1.8.19
+django==1.11.29
 dj-static==0.0.6
 mako==1.0.4
 pycrypto==2.6.1
@@ -30,7 +30,7 @@ enum34==1.1.6
 django-environ==0.4.5
 
 # iam
-bk_iam==1.0.9
+bk_iam==1.1.9
 
 # prometheus metrics
 django-prometheus==1.0.15

@@ -26,7 +26,8 @@ class AuditEventLogAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
-    readonly_fields = AuditEventLog._meta.get_all_field_names()
+    # readonly_fields = AuditEventLog._meta.get_all_field_names()
+    readonly_fields = [f.name for f in AuditEventLog._meta.get_fields()]
 
 
 admin.site.register(AuditEventLog, AuditEventLogAdmin)

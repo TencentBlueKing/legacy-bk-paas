@@ -15,10 +15,9 @@ from django.db import models
 from .constants import ApiTypeEnum
 
 # just for remove django warning
-import warnings
-from django.utils.deprecation import RemovedInDjango19Warning
-
-warnings.simplefilter("ignore", RemovedInDjango19Warning)
+# import warnings
+# from django.utils.deprecation import RemovedInDjango19Warning
+# warnings.simplefilter("ignore", RemovedInDjango19Warning)
 
 
 class API(models.Model):
