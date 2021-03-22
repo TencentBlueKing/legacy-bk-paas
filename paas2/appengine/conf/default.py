@@ -16,6 +16,7 @@ import os
 try:
     import pymysql
 
+    pymysql.version_info = (1, 3, 13, "final", 0)
     pymysql.install_as_MySQLdb()
 except Exception:
     pass
@@ -129,7 +130,7 @@ LOGGING = {
     "handlers": {
         "null": {
             "level": "DEBUG",
-            "class": "django.utils.log.NullHandler",
+            "class": "logging.NullHandler",
         },
         "mail_admins": {"level": "ERROR", "class": "django.utils.log.AdminEmailHandler"},
         "console": {"level": "DEBUG", "class": "logging.StreamHandler", "formatter": "simple"},
