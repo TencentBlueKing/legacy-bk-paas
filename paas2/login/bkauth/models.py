@@ -106,6 +106,7 @@ class User(models.AbstractBaseUser, models.AnonymousUser):
         ok, message, _data = upsert_user(self.username, **data)
         return ok, message
 
+    @property
     def is_authenticated(self):
         if not self.bk_token:
             return False

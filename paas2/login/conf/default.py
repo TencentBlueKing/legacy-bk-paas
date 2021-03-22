@@ -20,6 +20,7 @@ from django.utils.functional import SimpleLazyObject
 try:
     import pymysql
 
+    pymysql.version_info = (1, 3, 13, "final", 0)
     pymysql.install_as_MySQLdb()
 except Exception:
     pass
@@ -28,7 +29,7 @@ PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT, PROJECT_MODULE_NAME = os.path.split(PROJECT_PATH)
 BASE_DIR = os.path.dirname(os.path.dirname(PROJECT_PATH))
 
-EDITION = os.environ.get("BK_PAAS_EDITION", "ee")
+EDITION = os.environ.get("BK_PAAS_EDITION", "ce")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -88,11 +89,11 @@ MAKO_TEMPLATE_MODULE_DIR = os.path.join(PROJECT_ROOT, "templates_module")
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.template.context_processors.debug",
-    "django.core.context_processors.request",
+    "django.template.context_processors.request",
     "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.csrf",
+    "django.template.context_processors.csrf",
     "common.context_processors.site_settings",
-    "django.core.context_processors.i18n",
+    "django.template.context_processors.i18n",
     "django.contrib.messages.context_processors.messages",
 )
 
@@ -293,7 +294,7 @@ LOGGING = {
     "handlers": {
         "null": {
             "level": "DEBUG",
-            "class": "django.utils.log.NullHandler",
+            "class": "logging.NullHandler",
         },
         "mail_admins": {"level": "ERROR", "class": "django.utils.log.AdminEmailHandler"},
         "console": {"level": "DEBUG", "class": "logging.StreamHandler", "formatter": "simple"},
