@@ -131,7 +131,7 @@ class SendVoiceMsg(Component, SetupConfMixin):
                     "mobile_phone": contact_info["telephone"],
                     "nation_code": contact_info.get("nation_code"),
                 }
-                for username, contact_info in user_data["user_contact_info"].iteritems()
+                for username, contact_info in user_data["user_contact_info"].items()
             ]
             data["_extra_user_error_msg"] = user_data["_extra_user_error_msg"]
 
@@ -166,7 +166,7 @@ class SendVoiceMsg(Component, SetupConfMixin):
                     "result": False,
                     "data": ret,
                     "message": "Some users failed to send voice. %s"
-                    % ",".join(map(lambda x: x["username"], ret["failed"])),
+                    % ",".join([x["username"] for x in ret["failed"]]),
                 }
             else:
                 result = {"result": True, "data": ret, "message": "OK"}

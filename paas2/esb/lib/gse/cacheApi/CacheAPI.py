@@ -18,6 +18,7 @@ specific language governing permissions and limitations under the License.
 #  options string: py
 #
 
+from builtins import object
 from thrift.Thrift import TType, TMessageType, TFrozenDict, TException, TApplicationException
 from thrift.protocol.TProtocol import TProtocolException
 import sys
@@ -2323,7 +2324,7 @@ class quireBusinessInfo_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2395,7 +2396,7 @@ class quireBusinessInfo_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2468,7 +2469,7 @@ class quireIpInfo_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2540,7 +2541,7 @@ class quireIpInfo_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2613,7 +2614,7 @@ class quireProcInfo_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2685,7 +2686,7 @@ class quireProcInfo_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2758,7 +2759,7 @@ class quireSystem_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2830,7 +2831,7 @@ class quireSystem_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2903,7 +2904,7 @@ class quireCpu_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2975,7 +2976,7 @@ class quireCpu_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3048,7 +3049,7 @@ class quireMem_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3120,7 +3121,7 @@ class quireMem_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3193,7 +3194,7 @@ class quireNet_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3265,7 +3266,7 @@ class quireNet_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3338,7 +3339,7 @@ class quireDisk_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3410,7 +3411,7 @@ class quireDisk_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3483,7 +3484,7 @@ class quireDiskUsed_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3555,7 +3556,7 @@ class quireDiskUsed_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3628,7 +3629,7 @@ class quireProcess_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3700,7 +3701,7 @@ class quireProcess_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3773,7 +3774,7 @@ class quireLocalInfo_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3845,7 +3846,7 @@ class quireLocalInfo_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3918,7 +3919,7 @@ class quireArch_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3990,7 +3991,7 @@ class quireArch_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4063,7 +4064,7 @@ class quireCroud_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4135,7 +4136,7 @@ class quireCroud_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4208,7 +4209,7 @@ class quireIpTable_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4280,7 +4281,7 @@ class quireIpTable_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4353,7 +4354,7 @@ class quireAlarm_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4425,7 +4426,7 @@ class quireAlarm_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4498,7 +4499,7 @@ class quireAllProc_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4570,7 +4571,7 @@ class quireAllProc_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4643,7 +4644,7 @@ class quireAllPort_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4715,7 +4716,7 @@ class quireAllPort_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4788,7 +4789,7 @@ class quireMultiInfos_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4860,7 +4861,7 @@ class quireMultiInfos_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4933,7 +4934,7 @@ class quireHistoryCpu_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5005,7 +5006,7 @@ class quireHistoryCpu_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5078,7 +5079,7 @@ class quireHistoryMem_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5150,7 +5151,7 @@ class quireHistoryMem_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5223,7 +5224,7 @@ class quireHistoryNet_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5295,7 +5296,7 @@ class quireHistoryNet_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5368,7 +5369,7 @@ class quireHistoryDisk_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5440,7 +5441,7 @@ class quireHistoryDisk_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5513,7 +5514,7 @@ class quireHistoryDiskUsed_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5585,7 +5586,7 @@ class quireHistoryDiskUsed_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5658,7 +5659,7 @@ class quireHistoryProcess_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5730,7 +5731,7 @@ class quireHistoryProcess_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5803,7 +5804,7 @@ class quireHistoryLocalInfo_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5875,7 +5876,7 @@ class quireHistoryLocalInfo_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5948,7 +5949,7 @@ class quireHistoryArch_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6020,7 +6021,7 @@ class quireHistoryArch_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6093,7 +6094,7 @@ class quireHistoryCroud_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6165,7 +6166,7 @@ class quireHistoryCroud_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6238,7 +6239,7 @@ class quireHistoryIpTable_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6310,7 +6311,7 @@ class quireHistoryIpTable_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6383,7 +6384,7 @@ class quireHistoryAlarm_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6455,7 +6456,7 @@ class quireHistoryAlarm_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6528,7 +6529,7 @@ class quireHistoryAllProc_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6600,7 +6601,7 @@ class quireHistoryAllProc_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6673,7 +6674,7 @@ class quireHistoryAllPort_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6745,7 +6746,7 @@ class quireHistoryAllPort_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6818,7 +6819,7 @@ class quireLostAgentInfo_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6890,7 +6891,7 @@ class quireLostAgentInfo_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6963,7 +6964,7 @@ class quireAgentStatus_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7035,7 +7036,7 @@ class quireAgentStatus_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7079,7 +7080,7 @@ class quireAllIp_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7151,7 +7152,7 @@ class quireAllIp_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7224,7 +7225,7 @@ class quireMultiIp_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7296,7 +7297,7 @@ class quireMultiIp_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7369,7 +7370,7 @@ class flushAgentInfo_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7441,7 +7442,7 @@ class flushAgentInfo_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7514,7 +7515,7 @@ class get_agent_status_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7586,7 +7587,7 @@ class get_agent_status_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7659,7 +7660,7 @@ class get_agent_info_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7731,7 +7732,7 @@ class get_agent_info_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):

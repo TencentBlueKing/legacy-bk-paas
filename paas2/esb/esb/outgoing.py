@@ -10,11 +10,16 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 import json
 import time
-import urlparse
+import urllib.parse
 import socket
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 import requests
 from requests.exceptions import ReadTimeout, SSLError
@@ -81,8 +86,8 @@ def encode_dict(d, encoding="utf-8"):
     :param str encoding: 需要转换的目标编码
     """
     result = {}
-    for k, v in d.iteritems():
-        if isinstance(v, unicode):
+    for k, v in d.items():
+        if isinstance(v, str):
             result[k] = v.encode(encoding)
         else:
             result[k] = v
@@ -108,7 +113,7 @@ class BasicHttpClient(object):
         """
         使用一个完整的 url 来替代 host 和 path 参数
         """
-        parsed_url = urlparse.urlparse(url)
+        parsed_url = urllib.parse.urlparse(url)
         host = "%s://%s" % (parsed_url.scheme, parsed_url.netloc)
         return self.request(method, host, parsed_url.path, *args, **kwargs)
 
@@ -451,7 +456,7 @@ class HttpClient(BasicHttpClient):
         """
         使用一个完整的 url 来替代 host 和 path 参数
         """
-        parsed_url = urlparse.urlparse(url)
+        parsed_url = urllib.parse.urlparse(url)
         host = "%s://%s" % (parsed_url.scheme, parsed_url.netloc)
         path = "%s?%s" % (parsed_url.path, parsed_url.query) if parsed_url.query else parsed_url.path
         return self.request(method, host, path, *args, **kwargs)

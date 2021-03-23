@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from builtins import str
 def convert_user_info(user):
     return {
         "username": user.get("bk_username", ""),

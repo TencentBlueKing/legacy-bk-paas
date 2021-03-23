@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from builtins import object
 from .component_tools import ComponentClient, ConfapiComponentClient
 
 """

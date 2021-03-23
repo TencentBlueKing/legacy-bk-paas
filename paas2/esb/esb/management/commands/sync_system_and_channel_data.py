@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from past.builtins import basestring
 import json
 import logging
 from optparse import make_option
@@ -112,7 +113,7 @@ class Command(BaseCommand):
         default_update_fields = ["name", "component_codename", "component_name", "method"]
         force_update_fields = ["component_system_id", "type", "is_hidden", "timeout_time"]
         conf_client = conf_tools.ConfClient()
-        for system_name, channels in conf_client.channels.items():
+        for system_name, channels in list(conf_client.channels.items()):
             try:
                 system = ComponentSystem.objects.get(name=system_name)
             except ComponentSystem.DoesNotExist:

@@ -18,6 +18,8 @@ specific language governing permissions and limitations under the License.
 #  options string: py
 #
 
+from builtins import range
+from builtins import object
 from thrift.Thrift import TType, TMessageType, TFrozenDict, TException, TApplicationException
 from thrift.protocol.TProtocol import TProtocolException
 import sys
@@ -261,7 +263,7 @@ class Proc_Command(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -520,7 +522,7 @@ class CmdResult(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -718,7 +720,7 @@ class Proc_AsyncRsp(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -845,7 +847,7 @@ class Proc_SyncRsp(object):
         if self.content is not None:
             oprot.writeFieldBegin("content", TType.MAP, 3)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.content))
-            for kiter14, viter15 in self.content.items():
+            for kiter14, viter15 in list(self.content.items()):
                 oprot.writeString(kiter14.encode("utf-8") if sys.version_info[0] == 2 else kiter14)
                 oprot.writeString(viter15.encode("utf-8") if sys.version_info[0] == 2 else viter15)
             oprot.writeMapEnd()
@@ -861,7 +863,7 @@ class Proc_SyncRsp(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1039,7 +1041,7 @@ class TaskResponse(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1134,7 +1136,7 @@ class AppEnvType(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1257,7 +1259,7 @@ class AppInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1378,7 +1380,7 @@ class AppList(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1511,7 +1513,7 @@ class CCUser(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1757,7 +1759,7 @@ class proc_command(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2014,7 +2016,7 @@ class cmd_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2192,7 +2194,7 @@ class task_response(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2390,7 +2392,7 @@ class proc_async_rsp(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2517,7 +2519,7 @@ class proc_sync_rsp(object):
         if self.result is not None:
             oprot.writeFieldBegin("result", TType.MAP, 3)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.result))
-            for kiter86, viter87 in self.result.items():
+            for kiter86, viter87 in list(self.result.items()):
                 oprot.writeString(kiter86.encode("utf-8") if sys.version_info[0] == 2 else kiter86)
                 oprot.writeString(viter87.encode("utf-8") if sys.version_info[0] == 2 else viter87)
             oprot.writeMapEnd()
@@ -2533,7 +2535,7 @@ class proc_sync_rsp(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2666,7 +2668,7 @@ class user_info(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):

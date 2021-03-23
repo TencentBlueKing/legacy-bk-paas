@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import os
 
 # import traceback
@@ -74,5 +75,5 @@ def check_custom_codename(request):
     if file_import_error:
         error_msg.append("\n")
         error_msg.append("There are some components loaded exception, please repair:")
-        error_msg.extend(["\n".join(item) for item in sorted(file_import_error.iteritems(), key=lambda x: x[0])])
+        error_msg.extend(["\n".join(item) for item in sorted(iter(file_import_error.items()), key=lambda x: x[0])])
     return HttpResponse(content="\n".join(error_msg) or "OK", content_type="text/plain")

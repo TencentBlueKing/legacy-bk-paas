@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import os
 import copy
 import json
@@ -310,7 +311,7 @@ class CompRequest(object):
     def _get_clean_raw_query(self, ctype):
         query = self.wsgi_request.GET.copy()
         query = self._clean_sensitive_params(query)
-        return query.urlencode() if ctype == "form" else json.dumps(dict(query.items()))
+        return query.urlencode() if ctype == "form" else json.dumps(dict(list(query.items())))
 
     def _get_clean_raw_body(self, ctype):
         if self.wsgi_request.body and self.wsgi_request.body.strip().startswith("{"):
@@ -320,7 +321,7 @@ class CompRequest(object):
         else:
             body = self.wsgi_request.POST.copy()
             body = self._clean_sensitive_params(body)
-            return body.urlencode() if ctype == "form" else json.dumps(dict(body.items()))
+            return body.urlencode() if ctype == "form" else json.dumps(dict(list(body.items())))
 
     def _clean_sensitive_params(self, params):
         for key in self.SENSITIVE_PARAMS_KEY:

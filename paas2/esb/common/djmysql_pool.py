@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import logging
 
 from sqlalchemy import exc
@@ -71,7 +72,7 @@ def patch_mysql(pool_options={}):  # noqa
                 conv = kwargs["conv"]
                 if isinstance(conv, dict):
                     items = []
-                    for k, v in conv.items():
+                    for k, v in list(conv.items()):
                         if isinstance(v, list):
                             v = hashablelist(v)
                         items.append((k, v))
@@ -80,7 +81,7 @@ def patch_mysql(pool_options={}):  # noqa
                 ssl = kwargs["ssl"]
                 if isinstance(ssl, dict):
                     items = []
-                    for k, v in ssl.items():
+                    for k, v in list(ssl.items()):
                         if isinstance(v, list):
                             v = hashablelist(v)
                         items.append((k, v))

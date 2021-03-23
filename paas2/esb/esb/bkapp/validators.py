@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from past.builtins import cmp
+from builtins import str
 import time
 import hmac
 import base64
@@ -111,7 +113,7 @@ class SignatureValidator(BaseValidator):
         if getattr(request, "__esb_skip_signature__", False):
             return
 
-        req_get_params = dict(request.GET.items())
+        req_get_params = dict(list(request.GET.items()))
 
         # 将 signature 参数从参数字典中拿掉
         signature = req_get_params.pop("bk_signature", None) or req_get_params.pop("signature", None)
@@ -140,7 +142,7 @@ class SignatureValidator(BaseValidator):
         校验signature有效
         """
         # 校验signature
-        req_params = "&".join(["%s=%s" % (k, v) for k, v in sorted(params.iteritems(), key=lambda x: x[0])])
+        req_params = "&".join(["%s=%s" % (k, v) for k, v in sorted(iter(params.items()), key=lambda x: x[0])])
         message = "%s%s?%s" % (method, path, req_params)
         for valid_app_secret in valid_app_secret_list:
             sign = base64.b64encode(hmac.new(str(valid_app_secret), message, hashlib.sha1).digest())

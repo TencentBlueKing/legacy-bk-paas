@@ -10,6 +10,9 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
+from builtins import range
+from past.builtins import basestring
 import re
 import json
 import yaml
@@ -112,7 +115,7 @@ def smart_str(s, encoding="utf-8"):
     """
     转换一个字符串或者unicode为指定的编码
     """
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         return s.encode(encoding)
     elif s and encoding != "utf-8":
         return s.decode("utf-8", "ignore").encode(encoding, "ignore")
@@ -124,7 +127,7 @@ def smart_unicode(s, encoding="utf-8"):
     """
     转换一个字符串或者unicode为unicode
     """
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         return s
     return s.decode(encoding, "ignore")
 
@@ -147,14 +150,14 @@ def smart_unicode_v2(s, encoding=None):
             encoding = chardet.detect(s)["encoding"]
         return encoding or "utf-8"
 
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         return s
     if encoding is None:
         encoding = guess_encoding(s)
     try:
-        s = unicode(s, encoding, errors="replace")
+        s = str(s, encoding, errors="replace")
     except (LookupError, TypeError):
-        s = unicode(s, errors="replace")
+        s = str(s, errors="replace")
     return s
 
 
@@ -171,7 +174,7 @@ def get_not_empty_value(kwargs):
     获取非空数据，去除数据为空字段
     """
     data = {}
-    for k, v in kwargs.items():
+    for k, v in list(kwargs.items()):
         if v not in (None, "", [], {}):
             data[k] = v
     return data
@@ -221,7 +224,7 @@ def get_request_params(request):
     #         'Request method error, please apply GET or POST request.', replace=True)
     # "GET"方法
     if request.method == "GET":
-        request_params = dict(request.GET.items())
+        request_params = dict(list(request.GET.items()))
     else:
         # "POST"方法
         if request.body and request.body.strip().startswith("{"):
@@ -233,7 +236,7 @@ def get_request_params(request):
                     "Request JSON string is wrong in format, which cannot be analyzed.", replace=True
                 )
         else:
-            request_params = dict(request.POST.items())
+            request_params = dict(list(request.POST.items()))
     return request_params
 
 

@@ -10,14 +10,12 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-import re
 import json
+import re
+from builtins import object
 
-from cachetools import cached, TTLCache
-
-from common.constants import CACHE_MAXSIZE, CacheTimeLevel
-from common.constants import FunctionControllerCodeEnum
-from esb.bkcore.models import FunctionController
+from cachetools import TTLCache, cached
+from common.constants import CACHE_MAXSIZE, CacheTimeLevel, FunctionControllerCodeEnum
 
 
 class FunctionControllerClient(object):
@@ -65,6 +63,8 @@ class FunctionControllerClient(object):
 
     @classmethod
     def save_jwt_key(cls, private_key, public_key):
+        from esb.bkcore.models import FunctionController
+
         FunctionController.objects.get_or_create(
             func_code=FunctionControllerCodeEnum.JWT_KEY.value,
             defaults={

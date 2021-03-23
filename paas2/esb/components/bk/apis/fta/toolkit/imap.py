@@ -14,6 +14,9 @@ specific language governing permissions and limitations under the License.
 # import gevent.monkey
 # gevent.monkey.patch_all()
 
+from builtins import str
+from builtins import range
+from builtins import object
 import email
 import email.header
 import imaplib
@@ -69,7 +72,7 @@ class EMail(dict):
 
     @classmethod
     def _get_payload(cls, message, charset=None):
-        if isinstance(message, (str, unicode)):
+        if isinstance(message, (str, str)):
             return message
         payload = []
         for i in message.walk():
@@ -77,7 +80,7 @@ class EMail(dict):
                 continue
             if i.get_content_type() in cls.AVALIABLE_CONTENT_TYPE:
                 data = i.get_payload(decode=True)
-                if isinstance(data, (str, unicode)):
+                if isinstance(data, (str, str)):
                     content_charset = i.get_content_charset(charset)
                     if content_charset:
                         data = data.decode(content_charset, "ignore")
@@ -99,7 +102,7 @@ class EMail(dict):
         else:
             charset = self.charset
 
-        self.update({k: self.decode(v, charset) for k, v in raw.items()})
+        self.update({k: self.decode(v, charset) for k, v in list(raw.items())})
         self.sender = self.get("From")
         self.receiver = self.get("To")
         self.subject = self.get("Subject")
@@ -202,9 +205,9 @@ class MailPoller(object):
 
     def fetch(self, mails, criteria=None):
         mail_mappings = {str(mail.uid): mail for mail in mails}
-        status, result = self.imap_client.fetch(",".join(mail_mappings.keys()), criteria or self.CRITERIA)
+        status, result = self.imap_client.fetch(",".join(list(mail_mappings.keys())), criteria or self.CRITERIA)
         if status != "OK":
-            raise Exception("fetch mail[%s] failed", mail_mappings.keys())
+            raise Exception("fetch mail[%s] failed", list(mail_mappings.keys()))
 
         for i in result:
             if len(i) < 2:

@@ -10,13 +10,9 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from django.conf import settings
 from common.djmysql_pool import patch_mysql
+from django.conf import settings
 
 patch_mysql(pool_options=settings.DJ_POOL_OPTIONS)
 
-from .utils.config import load_config  # noqa
-
-
-# load config for esb
-load_config()
+default_app_config = "esb.apps.ESBAppConfig"

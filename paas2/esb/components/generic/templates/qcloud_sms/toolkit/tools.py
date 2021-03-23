@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import json
 import random
 import time
@@ -26,7 +27,7 @@ class QCloudSmsClient(object):
         return random.randint(100000, 999999)
 
     def get_cur_time(self):
-        return long(time.time())
+        return int(time.time())
 
     def calculate_sig(self, app_key, rnd, cur_time, mobiles):
         text = "appkey=%s&random=%s&time=%s&mobile=%s" % (app_key, rnd, cur_time, ",".join(mobiles))

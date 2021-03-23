@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import copy
 import json
 import re
@@ -155,7 +156,7 @@ class BaseChannel(object):
     def get_headers(self, request):
         """"""
         headers = {}
-        for key, value in request.META.iteritems():
+        for key, value in request.META.items():
             if key.startswith("HTTP_") and value and key not in self.IGNORE_HEADERS:
                 headers[self.capitalize_header(key[5:])] = value
         return headers
@@ -393,7 +394,7 @@ class ChannelManager(object):
             path = "/%s" % path
 
         channels = self.preset_channels_with_path_vars.get(method, {})
-        for value in channels.values():
+        for value in list(channels.values()):
             matched_obj = value["re_path"].match(path)
             if matched_obj:
                 # 把匹配到的path变量作为结果返回
@@ -414,8 +415,8 @@ class ChannelManager(object):
             {"raw_path": channel.path, "channel": channel, "classes": self.get_default_channel_classes()}
             for channel in ESBChannel.objects.all()
         ]
-        for channels in self.preset_channels.values():
-            result.extend(channels.values())
+        for channels in list(self.preset_channels.values()):
+            result.extend(list(channels.values()))
         return result
 
     def register_channel_groups(self, channel_classes, channels, rewrite_channels):
@@ -471,7 +472,7 @@ def get_channel_manager():
         manager = ChannelManager()
         # 配置中如果定义了默认的channel_classes,使用默认值
         default_channel_classes = channel_config.get("default_channel_classes")
-        for group_name, channel_group_conf in channel_config["channel_groups"].items():
+        for group_name, channel_group_conf in list(channel_config["channel_groups"].items()):
             manager.register_channel_groups(
                 channel_group_conf["channel_classes"],
                 channel_group_conf["preset_channels"],

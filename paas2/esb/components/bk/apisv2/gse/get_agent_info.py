@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import json
 
 from django import forms
@@ -71,7 +72,7 @@ class GetAgentInfo(Component):
             }
 
         ret_data = {}
-        for key, value in response.result.items():
+        for key, value in list(response.result.items()):
             try:
                 value = json.loads(value)
             except Exception:

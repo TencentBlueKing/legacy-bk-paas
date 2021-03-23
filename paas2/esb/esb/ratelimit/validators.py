@@ -46,7 +46,7 @@ class ApiRateLimitValidator(BaseValidator):
             conf = copy.deepcopy(conf)
             tokens = int(conf.pop("tokens"))
             limiter.add_rule(tokens, conf)
-            rate_limit_message.extend(["%s/%s%s" % (tokens, val, key) for key, val in conf.iteritems()])
+            rate_limit_message.extend(["%s/%s%s" % (tokens, val, key) for key, val in conf.items()])
 
         try:
             result = limiter.acquire()
