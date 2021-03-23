@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from builtins import str
 import json
 import requests
 

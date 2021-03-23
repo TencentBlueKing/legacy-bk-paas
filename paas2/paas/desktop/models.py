@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _l
@@ -32,7 +33,7 @@ class Wallpaper(models.Model):
     def __unicode__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         db_table = "console_desktop_wallpaper"
         verbose_name = _l(u"壁纸管理")
         verbose_name_plural = _l(u"壁纸管理")
@@ -92,7 +93,7 @@ class UserSettings(models.Model):
     def __unicode__(self):
         return self.user.username
 
-    class Meta:
+    class Meta(object):
         db_table = "console_desktop_usersettings"
         verbose_name = _l(u"用户桌面设置")
         verbose_name_plural = _l(u"用户桌面设置")
@@ -128,7 +129,7 @@ class UserApp(models.Model):
     def __unicode__(self):
         return "%s-%s" % (self.user, self.app)
 
-    class Meta:
+    class Meta(object):
         db_table = "console_desktop_userapp"
         unique_together = ("user", "app")
         ordering = ["id"]

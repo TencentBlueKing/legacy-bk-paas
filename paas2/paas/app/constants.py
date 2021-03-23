@@ -65,13 +65,13 @@ LANGUAGE_CHOICES = [
     (LanguageEnum.JAVA, "Java"),
     (LanguageEnum.PHP, "PHP"),
 ]
-LANGUAGE_VALID_VALUES = dict(LANGUAGE_CHOICES).keys()
+LANGUAGE_VALID_VALUES = list(dict(LANGUAGE_CHOICES).keys())
 
 VCS_TYPE_CHOICES = [
     (0, u"Git"),
     (1, u"SVN"),
 ]
-VCS_TYPE_VALID_VALUES = dict(VCS_TYPE_CHOICES).keys()
+VCS_TYPE_VALID_VALUES = list(dict(VCS_TYPE_CHOICES).keys())
 
 
 DB_TYPE_CHOICES = [
@@ -84,7 +84,7 @@ DB_TYPE_CHOICES = [
     ("db2", "DB2"),
     ("sqlserver", "SQL Server"),
 ]
-DB_TYPE_VALID_VALUES = dict(DB_TYPE_CHOICES).keys()
+DB_TYPE_VALID_VALUES = list(dict(DB_TYPE_CHOICES).keys())
 
 APP_TAGS_CHOICES = [
     (_(u"运维工具"), "OpsTools"),

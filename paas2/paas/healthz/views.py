@@ -11,11 +11,14 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import os
 
 import redis
 import requests
-import urlparse
+import urllib.parse
 
 from django.http import JsonResponse
 from django.conf import settings
@@ -103,7 +106,7 @@ def _check_database():
 
 
 def _remove_password_from_url(url):
-    parsed = urlparse.urlparse(url)
+    parsed = urllib.parse.urlparse(url)
     if parsed.username or parsed.password:
         replaced = parsed._replace(netloc="{}:{}@{}".format(parsed.username, "******", parsed.hostname))
         return replaced.geturl()
@@ -123,7 +126,7 @@ def _check_hosts():
     if settings.EDITION == "ee":
         hosts["es_host"] = es_host
 
-    for name, host in hosts.iteritems():
+    for name, host in hosts.items():
         try:
             if not host.startswith("http"):
                 host = "http://%s" % host

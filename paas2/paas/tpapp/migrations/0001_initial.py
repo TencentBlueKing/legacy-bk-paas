@@ -13,6 +13,7 @@ specific language governing permissions and limitations under the License.
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from builtins import str
 import uuid
 from django.db import migrations
 

@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from past.builtins import basestring
+from builtins import object
 import re
 import json
 
@@ -82,7 +84,7 @@ class ESBChannelForm(forms.ModelForm):
         help_text=_(u"无权限，应用不需申请API权限；普通权限，应用需在开发者中心申请API权限，审批通过后访问"),
     )
 
-    class Meta:
+    class Meta(object):
         model = ESBChannel
         # component_system 需要放在前面，name 和 component_codename 参数校验，依赖它的值
         fields = [
@@ -139,7 +141,7 @@ class ESBChannelForm(forms.ModelForm):
 
     def clean(self):
         data = self.cleaned_data
-        for key, val in data.iteritems():
+        for key, val in data.items():
             if isinstance(val, basestring):
                 data[key] = val.strip()
         return data

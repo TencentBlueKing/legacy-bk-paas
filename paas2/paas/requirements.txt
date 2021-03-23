@@ -34,3 +34,4 @@ bk_iam==1.1.9
 
 # prometheus metrics
 django-prometheus==1.0.15
+future==0.18.2

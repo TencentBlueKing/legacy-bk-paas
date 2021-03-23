@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import os
 import tempfile
 from distutils.dir_util import copy_tree
@@ -34,7 +35,7 @@ class BaseTemplater(object):
 
     def handle(self, framework_path, init_info):
         """generate app code"""
-        for file_relative_path, modify_content in init_info.iteritems():
+        for file_relative_path, modify_content in init_info.items():
             file_path = os.path.join(framework_path, file_relative_path)
             with open(file_path, "r") as sources:
                 lines = sources.readlines()
@@ -42,7 +43,7 @@ class BaseTemplater(object):
                 # rewrite each line by find init_info
                 for line in lines:
                     current_line = ""
-                    for modify_key, replace_value in modify_content.iteritems():
+                    for modify_key, replace_value in modify_content.items():
                         if line.find(modify_key) >= 0:
                             current_line = line.replace(modify_key, replace_value)
                     current_line = line if current_line == "" else current_line

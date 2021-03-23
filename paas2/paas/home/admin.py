@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django import forms
 from django.contrib import admin
 
@@ -33,7 +34,7 @@ class UsefulLinksForm(forms.ModelForm):
         if cleaned_data.get("link_type") == LinkTypeEnum.SAAS.value and not cleaned_data.get("logo"):
             raise forms.ValidationError("选择 SaaS 类型的链接必须上传 Logo")
 
-    class Meta:
+    class Meta(object):
         model = UsefulLinks
         fields = "__all__"
 

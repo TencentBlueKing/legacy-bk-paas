@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import json
 import uuid
 
@@ -38,7 +39,7 @@ class BkCluster(models.Model):
     def __unicode__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_clusters"
         verbose_name = "cluster info"
         ordering = ("created_at",)
@@ -70,7 +71,7 @@ class BkApp(models.Model):
     def __unicode__(self):
         return self.app_code
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_apps"
         verbose_name = "app info"
         ordering = ("created_at",)
@@ -86,7 +87,7 @@ class BkAppToken(models.Model):
     def __unicode__(self):
         return self.key
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_app_tokens"
         verbose_name = "app token"
         ordering = ("created_at",)
@@ -110,7 +111,7 @@ class BkServer(models.Model):
 
     objects = BkServerManager()
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_servers"
         verbose_name = _l(u"服务器信息")
         verbose_name_plural = _l(u"服务器信息")
@@ -164,7 +165,7 @@ class ThirdServer(models.Model):
         cate = self.get_category_display()
         return _(cate)
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_third_servers"
         verbose_name = _l(u"第三方服务器信息")
         verbose_name_plural = _l(u"第三方服务器信息")
@@ -186,7 +187,7 @@ class BkHostingShip(models.Model):
 
     objects = BkHostingShipManager()
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_hosting_ships"
         verbose_name = "router map"
         ordering = ("created_at",)
@@ -204,7 +205,7 @@ class BkAppEnv(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_app_envs"
         verbose_name = "app env"
         ordering = ("created_at",)
@@ -218,7 +219,7 @@ class BkEvent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_events"
         verbose_name = "father event"
         ordering = ("created_at",)
@@ -243,7 +244,7 @@ class BkAppEvent(models.Model):
             logs += event_log.log
         return logs
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_app_events"
         verbose_name = "app event"
         ordering = ("created_at",)
@@ -257,7 +258,7 @@ class BkAppEventLog(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_app_event_logs"
         verbose_name = "app event log"
         ordering = ("created_at",)
@@ -273,7 +274,7 @@ class BkAppBindPort(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
+    class Meta(object):
         db_table = "engine_app_bind_port"
         verbose_name = "app bind port"
         unique_together = ("bk_app", "mode", "port")

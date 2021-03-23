@@ -10,6 +10,9 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from past.builtins import cmp
+from builtins import str
+from builtins import object
 import time
 import os
 import datetime
@@ -68,7 +71,7 @@ class AppTags(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         ordering = ("index",)
         db_table = "paas_apptags"
         verbose_name = _l(u"应用分类信息")
@@ -371,7 +374,7 @@ class App(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_app"
         verbose_name = _l(u"应用基本信息")
         verbose_name_plural = _l(u"应用基本信息")
@@ -423,7 +426,7 @@ class SecureInfo(models.Model):
     def __unicode__(self):
         return self.app_code
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_app_secureinfo"
         verbose_name = _l(u"应用安全相关信息")
         verbose_name_plural = _l(u"应用安全相关信息")

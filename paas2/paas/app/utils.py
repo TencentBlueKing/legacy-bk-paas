@@ -110,7 +110,7 @@ def modify_app_desktop_info(app_code, request):
     open_mode = request.POST.get("open_mode")
     if width <= 0 or height <= 0:
         return False, _(u"宽度和高度必须为正整数")
-    if open_mode not in OPENMODE_DICT.keys():
+    if open_mode not in list(OPENMODE_DICT.keys()):
         return False, _(u"打开方式选择配置不正确")
     app.width = width
     app.height = height

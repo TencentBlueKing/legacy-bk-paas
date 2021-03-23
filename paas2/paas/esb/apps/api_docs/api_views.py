@@ -106,7 +106,7 @@ class GetApiDocByApiId(BaseApiCls):
 
 class SubmitTheAdvice(BaseApiCls):
     def post(self, request):
-        data = dict(request.POST.items())
+        data = dict(list(request.POST.items()))
         FeedbackForComponentDocs(
             operator=request.user.username,
             board="",
@@ -118,7 +118,7 @@ class SubmitTheAdvice(BaseApiCls):
 
 class CheckComponentExist(BaseApiCls):
     def get(self, request):
-        data = dict(request.GET.items())
+        data = dict(list(request.GET.items()))
         try:
             system_obj = ComponentSystem.objects.get(name=data["system"])
         except Exception:

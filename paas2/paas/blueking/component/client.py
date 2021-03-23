@@ -10,12 +10,15 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import requests
 import json
 import time
 import random
 import logging
-import urlparse
+import urllib.parse
 
 from . import conf
 from . import collections
@@ -154,7 +157,7 @@ class ComponentClientWithSignature(BaseComponentClient):
         if method == "POST":
             params = {}
 
-        url_path = urlparse.urlparse(url).path
+        url_path = urllib.parse.urlparse(url).path
         # signature always in GET params
         params.update(
             {

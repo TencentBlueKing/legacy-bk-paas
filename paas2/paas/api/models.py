@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -30,7 +31,7 @@ class ApiWhiteList(models.Model):
     def __str__(self):
         return self.api_name
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_apiwhitelist"
         verbose_name = _(u"PaaS提供的接口白名单")
         verbose_name_plural = _(u"PaaS提供的接口白名单")

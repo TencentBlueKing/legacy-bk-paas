@@ -11,6 +11,9 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from builtins import chr
+from builtins import str
+from builtins import range
 import hashlib
 import random
 from base64 import urlsafe_b64encode, urlsafe_b64decode
@@ -81,4 +84,4 @@ def salt(length=8):
     生成长度为length 的随机字符串
     """
     aplhabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    return "".join(map(lambda _: random.choice(aplhabet), range(length)))
+    return "".join([random.choice(aplhabet) for _ in range(length)])

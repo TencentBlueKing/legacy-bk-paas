@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from past.builtins import basestring
+from builtins import object
 from django import forms
 from django.utils.translation import ugettext as _
 
@@ -55,14 +57,14 @@ class ComponentSystemForm(forms.ModelForm):
         widget=forms.Textarea(attrs={"rows": "5"}),
     )
 
-    class Meta:
+    class Meta(object):
         model = ComponentSystem
         fields = ["name", "label", "interface_admin", "remark", "execute_timeout", "query_timeout"]
 
     def add_and_clean_doc_category(self):
         # 添加新分类
         doc_category_name = self.data.get("doc_category") or DEFAULT_DOC_CATEGORY
-        category_name_map = dict([(category["label"], name) for name, category in SYSTEM_DOC_CATEGORY.iteritems()])
+        category_name_map = dict([(category["label"], name) for name, category in SYSTEM_DOC_CATEGORY.items()])
         doc_category_name = category_name_map.get(doc_category_name) or doc_category_name
         obj, _ = SystemDocCategory.objects.get_or_create(name=doc_category_name)
         self.instance.doc_category_id = obj.id
@@ -78,7 +80,7 @@ class ComponentSystemForm(forms.ModelForm):
 
     def clean(self):
         data = self.cleaned_data
-        for key, val in data.iteritems():
+        for key, val in data.items():
             if isinstance(val, basestring):
                 data[key] = val.strip()
         return data

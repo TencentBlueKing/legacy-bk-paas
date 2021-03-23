@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from builtins import str
 from django.db import models
 from django.db.models import Q
 from django.conf import settings
@@ -75,7 +76,7 @@ class SecureInfoManager(models.Manager):
             )
 
         # 值转成字符串
-        for key, value in envs.iteritems():
+        for key, value in envs.items():
             envs[key] = str(value)
 
         return envs

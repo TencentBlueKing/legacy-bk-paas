@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import range
+from builtins import object
 import os
 import random
 import string
@@ -61,7 +63,7 @@ class AppInitializer(object):
         """
         生成开发框架存储的文件地址: {app_code}_{random_str}_{time}.tar.gz
         """
-        random_str = "".join(map(lambda _: random.choice(string.lowercase), range(10)))
+        random_str = "".join([random.choice(string.lowercase) for _ in range(10)])
         create_time = self.app.created_date.strftime("%Y%m%d%H%M%S")
         filtname = "{}_{}_{}.tar.gz".format(self.app.code, random_str, create_time)
         return os.path.join(settings.MEDIA_ROOT, APP_INIT_PROJECT_FILES, filtname)

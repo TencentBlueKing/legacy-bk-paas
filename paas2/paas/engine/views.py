@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import json
 from django.utils.translation import ugettext as _
 
@@ -140,7 +141,7 @@ def active_server(request):
         return _gen_json(False, error_message)
 
     s_id = str(server.s_id)
-    if s_id not in agents.keys():
+    if s_id not in list(agents.keys()):
         error_message = u"%s 服务器上未安装Agent, 请安装Agent后重试" % PaaSErrorCodes.E1301103_PAASAGENT_NOT_INSTALLED
         logger.info(error_message)
         error_message = _(u"%s 服务器上未安装Agent, 请安装Agent后重试") % PaaSErrorCodes.E1301103_PAASAGENT_NOT_INSTALLED

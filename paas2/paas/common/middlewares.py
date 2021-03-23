@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import re
 import json
 
@@ -174,7 +175,7 @@ class CheckXssMiddleware(object):
         """
         try:
             result_type = "html"
-            for script_path, script_v in check_path_list.items():
+            for script_path, script_v in list(check_path_list.items()):
                 is_path = re.match(r"^%s" % script_path, path)
                 if is_path and param in script_v:
                     result_type = escape_type

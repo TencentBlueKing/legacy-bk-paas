@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django.conf import settings
 from django.utils import translation
 from django.contrib.auth import logout as auth_logout, get_user_model
