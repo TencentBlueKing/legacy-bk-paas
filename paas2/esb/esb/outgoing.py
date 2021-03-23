@@ -430,7 +430,7 @@ class HttpClient(BasicHttpClient):
             }
             # 添加访问记录
             logger_api.info(json.dumps(api_log))
-        except Exception, e:
+        except Exception as e:
             logger.warning(u"logger api exception: %s" % e)
 
         # 为了记录这一次请求的api log，延迟抛出异常
@@ -505,7 +505,7 @@ class RequestHelperClient(BasicHttpClient):
                 resp = getattr(handler, action)(*args, **kwargs)
             else:
                 resp = handler(*args, **kwargs)
-        except Exception, e:
+        except Exception as e:
             logger.exception(
                 "%s error occured when request sys_name: %s, component_name: %s",
                 bk_error_codes.REQUEST_THIRD_PARTY_ERROR.code,
@@ -572,7 +572,7 @@ class RequestHelperClient(BasicHttpClient):
             }
             # 添加访问记录
             logger_api.info(json.dumps(api_log))
-        except Exception, e:
+        except Exception as e:
             logger.warning(u"logger api exception: %s" % e)
 
         # 为了记录这一次请求的api log，延迟抛出异常

@@ -10,13 +10,11 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import object
 import logging
+from builtins import object
 
-from sqlalchemy import exc
-from sqlalchemy import event
-from sqlalchemy.pool import manage
-from sqlalchemy.pool import Pool
+from sqlalchemy import event, exc
+from sqlalchemy.pool import Pool, manage
 
 POOL_PESSIMISTIC_MODE = False
 POOL_SETTINGS = {}
@@ -54,7 +52,7 @@ def _on_connect(*args, **kwargs):
 def patch_mysql(pool_options={}):  # noqa
     class hashabledict(dict):  # noqa
         def __hash__(self):
-            return hash(tuple(sorted(self.items())))
+            return hash(tuple(sorted((str(k), v) for k, v in self.items())))
 
     class hashablelist(list):  # noqa
         def __hash__(self):

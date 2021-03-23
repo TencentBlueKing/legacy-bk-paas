@@ -112,7 +112,7 @@ class BaseComponent(object):
         self.before_handle()
         try:
             self.handle()
-        except APIError, e:
+        except APIError as e:
             self.response.payload = e.code.as_dict()
         self.after_handle()
         return self.response.get_payload()

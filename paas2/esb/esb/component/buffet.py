@@ -73,7 +73,7 @@ class BuffetComponentMaker(object):
                 if RE_PATH_VARIABLE.search(parsed_url.path):
                     try:
                         path = parsed_url.path.format(**self.request.path_vars.val_dict)
-                    except KeyError, e:
+                    except KeyError as e:
                         raise error_codes.BUFFET_CANNOT_FORMAT_PATH.format_prompt("{%s}" % e.args[0])
 
                 # 拼装请求参数

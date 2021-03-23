@@ -118,7 +118,7 @@ class GSEProcServerClient(BaseGSEClient):
             response = req_helper_client.request(
                 self.thrift_client, action=command_str, args=args, kwargs=kwargs, is_response_parse=False
             )
-        except RequestThirdPartyException, e:
+        except RequestThirdPartyException as e:
             raise e
         except Exception:
             logger.exception("%s access gse service fail.", bk_error_codes.REQUEST_GSE_ERROR.code)

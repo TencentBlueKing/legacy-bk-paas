@@ -61,5 +61,5 @@ class BasicRequestLogger(object):
             }
             # Log to logstash, type="pyls-comp-request"
             logger_api.info(json.dumps(request_log))
-        except Exception, e:
+        except Exception as e:
             logger.warning("logger reqeust exception: %s" % e)

@@ -112,7 +112,7 @@ class BaseChannel(object):
         for validator in self.request_validators:
             try:
                 validator.validate(request)
-            except ValidationError, e:
+            except ValidationError as e:
                 raise CommonAPIError(e.message)
 
     def log_request(self, request, response):
@@ -186,21 +186,21 @@ class BaseChannel(object):
                 self.comp.set_request(CompRequest(wsgi_request=request))
 
                 response = self.comp.invoke()
-        except APIError, e:
+        except APIError as e:
             response = e.code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.ARGUMENT_ERROR
-        except RequestThirdPartyException, e:
+        except RequestThirdPartyException as e:
             response = error_codes.REQUEST_THIRD_PARTY_ERROR.format_prompt(
                 e.get_message(), replace=True
             ).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except RequestSSLException, e:
+        except RequestSSLException as e:
             response = error_codes.REQUEST_SSL_ERROR.format_prompt(e.get_message(), replace=True).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except TestHostNotFoundException, e:
+        except TestHostNotFoundException as e:
             response = error_codes.TEST_HOST_NOT_FOUND.code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except RequestBlockedException, e:
+        except RequestBlockedException as e:
             response = error_codes.REQUEST_BLOCKED.format_prompt(e.message).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
         except Exception:
