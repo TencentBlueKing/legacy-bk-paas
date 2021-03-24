@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.9
+    - bugfix: fix home page js 404
+
 # 2.12.8
     - change: move to Github
 
