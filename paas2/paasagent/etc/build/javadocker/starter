@@ -1,0 +1,31 @@
+#! /bin/bash
+export LC_ALL=en_US.UTF-8
+
+if_fail_then_exit() {
+    if [ "$1" != "0" ]; then
+        echo "$2"
+        exit $1
+    fi
+}
+
+APP_MAIN=org.springframework.boot.loader.WarLauncher
+TARGET_HOME="/data/app/code/target"
+
+if [ $SaaS_PATH ]; then
+    :
+else
+    echo "------STARTING: tar app ${APP_ID}-bin.tar.gz------"
+    tar zxf "${TARGET_HOME}/${APP_ID}-bin.tar.gz" -C "${TARGET_HOME}"
+    if_fail_then_exit "$?" "------FAILURE: tar app ${APP_ID}-bin.tar.gz------"
+    echo "------SUCCESS: tar app ${APP_ID}-bin.tar.gz------" || exit
+fi
+
+APP_HOME="/data/app/code/target/${APP_ID}"
+WAR_FILE=${APP_HOME}/${APP_ID}-exec.war
+
+JAVA_OPTS="-server -Dfile.encoding=UTF-8"
+JAVA_OPTS="$JAVA_OPTS -Xms${BKAPP_CONTAINER_MEM}M -Xmx${BKAPP_CONTAINER_MEM}M"
+
+export JAVA_OPTS
+
+/cache/.bk/env/bin/supervisord -c /data/app/conf/supervisord.conf --nodaemon

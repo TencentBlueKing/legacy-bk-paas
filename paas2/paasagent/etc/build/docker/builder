@@ -1,0 +1,51 @@
+#!/bin/bash
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/bin
+exec 2>&1
+
+cd ${BASH_SOURCE%/*} >/dev/null
+export LOG_FILE=/tmp/${0##*/}-$(date +%Y%m%d_%H%M%S).log
+
+CODE_PATH=${APP_CONTAINER_PATH}"code"
+CONF_PATH=${APP_CONTAINER_PATH}"conf"
+RUN_PATH=${APP_CONTAINER_PATH}"run"
+LOG_PATH=${APP_CONTAINER_PATH}"logs"
+
+PYTHON_BIN_PATH="/cache/.bk/env/bin/"
+PACKAGES_CONTAINER_PATH="/data/pkgs/"
+export PATH=$PYTHON_BIN_PATH:$PATH
+
+echo "------  starting pip install"
+cd $CODE_PATH
+
+# add for app with yum.txt
+if [ -f yum.txt ]; then
+    echo "------- start yum install --------"
+    yum clean all
+    http_proxy=$BK_PROXY https_proxy=$BK_PROXY yum install -y yum-plugin-ovl
+    http_proxy=$BK_PROXY https_proxy=$BK_PROXY yum install -y $(cat yum.txt | tr '\n' ' ')
+    [ $? -eq 0 ] || { echo "---- FAILURE: Yum $(cat yum.txt | tr '\n' ' ') ------"; exit 1; }
+    echo "------ SUCCESS: Yum Install ------"
+fi
+
+if [[ "$USE_PYPI" = "true" ]]; then
+    echo "------  online mode. install from pypi source:$PYPI_SERVER_URL"
+    echo "------  has proxy: ${BK_PROXY:-None}"
+    http_proxy=$BK_PROXY https_proxy=$BK_PROXY \
+        ${PYTHON_BIN_PATH}pip install -r requirements.txt \
+        -i $PYPI_SERVER_URL --trusted-host $PYPI_SERVER_HOST
+else
+    echo "------  offline mode, trying to install packages from local disk"
+    ${PYTHON_BIN_PATH}pip install -r requirements.txt --no-index --find-links=$PACKAGES_CONTAINER_PATH
+fi
+
+[ $? -eq 0 ] && echo "------  pip install successfully completed" \
+             || { echo "------  pip install failed. abort"; exit 1; }
+
+# 创建apps组和用户
+groupadd -g $APPS_GID apps
+useradd apps -u $APPS_UID -g $APPS_GID -b /home
+
+# 切换到apps用户
+chown -R apps:apps ${APP_CONTAINER_PATH}
+su -m apps -c "/build/starter"

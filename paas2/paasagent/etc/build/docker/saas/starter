@@ -1,0 +1,39 @@
+#! /bin/bash
+exec 2>&1
+if_fail_then_exit() {
+    if [ "$1" != "0" ]; then
+        echo "$2"
+        exit $1
+    fi
+}
+
+export LC_ALL=en_US.UTF-8
+
+CODE_PATH=${APP_CONTAINER_PATH}"code"
+CONF_PATH=${APP_CONTAINER_PATH}"conf"
+RUN_PATH=${APP_CONTAINER_PATH}"run"
+LOG_PATH=${APP_CONTAINER_PATH}"logs"
+
+PYTHON_BIN_PATH="/cache/.bk/env/bin/"
+
+cd $CODE_PATH
+
+if [ "$IS_MASTER" = "true" ]; then
+    echo "------STARTING: Migrate Database------"
+    ${PYTHON_BIN_PATH}python manage.py migrate --noinput
+    if_fail_then_exit "$?" "------FAILURE: Migrate Database------"
+    echo "------SUCCESS: Migrate Database------" || exit
+
+    echo "------STARTING: Create Cache Table------"
+    ${PYTHON_BIN_PATH}python manage.py createcachetable django_cache > /dev/null 2>&1
+    if_fail_then_exit "$?" "------FAILURE: Create Cache Table------"
+    echo "------SUCCESS: Create Cache Table------"
+else
+    echo "This node is not master node, skip the migration of database"
+fi
+
+echo "------STARTING: Start App Server------"
+if [ -e "$RUN_PATH/supervisord.sock" ]; then
+    rm -rf $RUN_PATH/supervisord.sock
+fi
+${PYTHON_BIN_PATH}supervisord -c $CONF_PATH/supervisord.conf --nodaemon
