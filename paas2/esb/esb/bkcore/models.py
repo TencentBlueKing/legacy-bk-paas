@@ -10,10 +10,10 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import object
 import datetime
 import json
 import re
+from builtins import object
 
 from components.constants import BK_SYSTEMS
 from django.db import models
@@ -147,7 +147,7 @@ class FunctionController(models.Model):
         db_table = "esb_function_controller"
 
     def __unicode__(self):
-        return self.__code__
+        return self.func_code
 
 
 class UserAuthToken(models.Model):
