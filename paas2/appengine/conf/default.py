@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from builtins import range
 import os
 
 try:
@@ -174,4 +175,4 @@ LOGGING = {
 }
 
 PORT_MAX_TRIES = 5
-PORT_POOLS = range(20000, 30000)
+PORT_POOLS = list(range(20000, 30000))

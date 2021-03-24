@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import json
 import re
 import logging
@@ -492,7 +493,7 @@ class AppEventLogViewSet(BaseAgentViewSet):
                 slave_event_status_list = models.BkAppEvent.objects.filter(bk_event_id=father_event_id).values_list(
                     "status", flat=True
                 )
-                if len(filter(lambda x: x != "SUCCESS", slave_event_status_list)) == 0:
+                if len([x for x in slave_event_status_list if x != "SUCCESS"]) == 0:
                     father_event_instance.status = "SUCCESS"
                     father_event_instance.save()
 

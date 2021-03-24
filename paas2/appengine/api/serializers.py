@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 Classes to serialize the RESTful representation of OpenPaaS API models.
 """
 
+from builtins import object
 from rest_framework import serializers
 
 from api import models
@@ -23,7 +24,7 @@ class BkAppSerializer(serializers.ModelSerializer):
     token = serializers.ReadOnlyField(required=False)
     app_envs = serializers.ReadOnlyField(required=False)
 
-    class Meta:
+    class Meta(object):
         """Metadata options for a :class:`AppSerializer`."""
 
         model = models.BkApp
@@ -34,7 +35,7 @@ class BkAppEventSerializer(serializers.ModelSerializer):
 
     logs = serializers.ReadOnlyField(required=False)
 
-    class Meta:
+    class Meta(object):
         """Metadata options for a :class:`AppSerializer`."""
 
         model = models.BkAppEvent
