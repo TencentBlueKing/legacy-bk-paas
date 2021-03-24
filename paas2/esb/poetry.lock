@@ -881,6 +881,29 @@ optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "tox"
+version = "3.23.0"
+description = "tox is a generic virtualenv management and test command line tool"
+category = "dev"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+
+[package.dependencies]
+virtualenv = ">=16.0.0,<20.0.0 || >20.0.0,<20.0.1 || >20.0.1,<20.0.2 || >20.0.2,<20.0.3 || >20.0.3,<20.0.4 || >20.0.4,<20.0.5 || >20.0.5,<20.0.6 || >20.0.6,<20.0.7 || >20.0.7"
+packaging = ">=14"
+filelock = ">=3.0.0"
+py = ">=1.4.17"
+importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
+colorama = {version = ">=0.4.1", markers = "platform_system == \"Windows\""}
+toml = ">=0.9.4"
+six = ">=1.14.0"
+pluggy = ">=0.12.0"
+
+[package.extras]
+docs = ["pygments-github-lexers (>=0.0.5)", "sphinx (>=2.0.0)", "sphinxcontrib-autoprogram (>=0.1.5)", "towncrier (>=18.5.0)"]
+testing = ["flaky (>=3.4.0)", "freezegun (>=0.3.11)", "psutil (>=5.6.1)", "pytest (>=4.0.0)", "pytest-cov (>=2.5.1)", "pytest-mock (>=1.10.0)", "pytest-randomly (>=1.0.0)", "pytest-xdist (>=1.22.2)", "pathlib2 (>=2.3.3)"]
+
+[[package]]
 name = "traitlets"
 version = "4.3.3"
 description = "Traitlets Python config system"
@@ -983,7 +1006,7 @@ testing = ["pathlib2", "unittest2", "jaraco.itertools", "func-timeout"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^2.7 || ^3.6"
-content-hash = "708ceb52a7a342dd970fe06a0f7f4435ba7ef8acb4651a679cd128481ad8e535"
+content-hash = "616a743f52c5323fbb8aa7cef0997aa75f3b95868414d09fd1d6aef6566df389"
 
 [metadata.files]
 appdirs = [
@@ -1432,6 +1455,10 @@ thrift = [
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
     {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
+]
+tox = [
+    {file = "tox-3.23.0-py2.py3-none-any.whl", hash = "sha256:e007673f3595cede9b17a7c4962389e4305d4a3682a6c5a4159a1453b4f326aa"},
+    {file = "tox-3.23.0.tar.gz", hash = "sha256:05a4dbd5e4d3d8269b72b55600f0b0303e2eb47ad5c6fe76d3576f4c58d93661"},
 ]
 traitlets = [
     {file = "traitlets-4.3.3-py2.py3-none-any.whl", hash = "sha256:70b4c6a1d9019d7b4f6846832288f86998aa3b9207c6821f3578a6a6a467fe44"},

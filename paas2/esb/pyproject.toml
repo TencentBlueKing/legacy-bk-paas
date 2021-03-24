@@ -46,6 +46,7 @@ mock = "3.0.5"
 isort = "*"
 pre-commit = "*"
 ipdb = "*"
+tox = "^3.23.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
