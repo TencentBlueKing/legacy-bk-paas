@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import zip
+from builtins import object
 from django.db import connections
 
 from common.log import logger
@@ -29,7 +31,7 @@ class SqlOperate(object):
 
     def dictfetchall(self, cursor):
         columns = [col[0] for col in cursor.description]
-        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return [dict(list(zip(columns, row))) for row in cursor.fetchall()]
 
     def simple_query(self, sql):
         """

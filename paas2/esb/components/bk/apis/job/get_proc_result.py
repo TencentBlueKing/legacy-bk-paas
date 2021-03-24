@@ -114,7 +114,7 @@ class GetProcResult(Component):
 
         if result.get("data", {}).get("m_rsp"):
             new_m_rsp = {}
-            for k_ip, info in result["data"]["m_rsp"].iteritems():
+            for k_ip, info in list(result["data"]["m_rsp"].items()):
                 try:
                     new_m_rsp[k_ip] = json.loads(info)
                 except Exception:

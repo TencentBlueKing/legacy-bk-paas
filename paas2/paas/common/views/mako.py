@@ -12,6 +12,8 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+from past.builtins import basestring
+from builtins import object
 from django.core.exceptions import ImproperlyConfigured
 from django.http import JsonResponse
 from django.template.response import TemplateResponse

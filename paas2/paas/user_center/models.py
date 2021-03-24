@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
+from builtins import object
 from django.db import models
 
 from common.constants import APPROVAL_RESULT_CHOICE, RoleCodeEnum
@@ -31,7 +33,7 @@ class RoleApplyReocrd(models.Model):
     approval_time = models.DateTimeField(u"审批时间", null=True, blank=True)
     approval_reason = models.TextField(u"审批原因", blank=True, null=True)
 
-    class Meta:
+    class Meta(object):
         verbose_name = u"用户角色权限表"
         verbose_name_plural = u"用户角色权限表"
         db_table = "console_user_role_apply_record"
@@ -52,7 +54,7 @@ class WxBkUserTmpRecord(models.Model):
 
     objects = WxBkUserTmpRecordManager()
 
-    class Meta:
+    class Meta(object):
         verbose_name = u"微信与蓝鲸用户绑定过程临时表"
         verbose_name_plural = u"微信与蓝鲸用户绑定过程临时表"
         db_table = "console_wx_bkuser_tmp_record"

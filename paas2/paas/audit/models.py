@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import uuid
 
 from django.db import models
@@ -41,7 +42,7 @@ class AuditEventLog(models.Model):
 
     comment = models.TextField(null=True, blank=True)
 
-    class Meta:
+    class Meta(object):
         db_table = "audit_event_log"
         verbose_name = _l(u"操作审计日志")
         verbose_name_plural = _l(u"操作审计日志")

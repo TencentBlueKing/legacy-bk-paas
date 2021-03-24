@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import json
 
 from django.db import models
@@ -124,7 +125,7 @@ class Record(models.Model):
     def __unicode__(self):
         return "%s" % (self.app_code)
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_release_record"
         verbose_name = _l(u"应用部署操作信息")
         verbose_name_plural = _l(u"应用部署操作信息")
@@ -155,7 +156,7 @@ class Version(models.Model):
     def __unicode__(self):
         return "%s(%s)" % (self.app.name, self.version)
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_release_version"
         verbose_name = _l(u"应用发布版本信息")
         verbose_name_plural = _l(u"应用发布版本信息")
@@ -173,7 +174,7 @@ class VersionDetail(models.Model):
     def __unicode__(self):
         return self.features
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_release_versiondetail"
         verbose_name = u"应用特征信息"
         verbose_name_plural = u"应用特征信息"
@@ -197,7 +198,7 @@ class UserOperateRecord(models.Model):
     def __unicode__(self):
         return "%s" % (self.app_code)
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_release_useroperaterecord"
         verbose_name = _l(u"用户操作流水日志")
         verbose_name_plural = _l(u"用户操作流水日志")

@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import json
 import re
 import logging
@@ -32,6 +33,8 @@ from api.utils import (
     check_rabbitmq,
     apply_mq_res,
     get_category_by_mode,
+)
+from api.tools import (
     update_app_routers,
     delete_server_from_routers,
 )
@@ -118,7 +121,7 @@ class AgentHealthCheckView(View):
                     _agents[str(sid)] = {"code": 0, "mac": result.get("mac", "")}
                 else:
                     _agents[str(sid)] = {"code": 1}
-        except Exception, e:
+        except Exception as e:
             return JsonResponse({"msg": "health check failed: %s" % e}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
         return JsonResponse({"agents": _agents})
 
@@ -142,7 +145,7 @@ class ServiceViewSet(GenericViewSet):
                     return JsonResponse({"code": 1, "msg": data})
             else:
                 return JsonResponse({"code": 0, "msg": ""})
-        except Exception, e:
+        except Exception as e:
             return JsonResponse({"code": 1, "msg": str(e)})
 
 
@@ -408,7 +411,7 @@ class AppLogViewSet(BaseAppViewSet):
         event_id = self.kwargs["event_id"]
         try:
             father_event = models.BkEvent.objects.get(id=event_id)
-        except Exception, e:
+        except Exception as e:
             logger.error(
                 u"%s Get BkEvent failed: %s, event_id: %s" % (EngineErrorCodes.E1304001_DATABASE_ERROR, e, event_id)
             )
@@ -419,7 +422,7 @@ class AppLogViewSet(BaseAppViewSet):
 
         try:
             master_bk_app_event = models.BkAppEvent.objects.get(bk_event_id=event_id, is_master=True)
-        except Exception, e:
+        except Exception as e:
             logger.error(
                 u"%s Query Master log failed: %s, event_id: %s"
                 % (EngineErrorCodes.E1304001_DATABASE_ERROR, e, event_id)
@@ -430,7 +433,7 @@ class AppLogViewSet(BaseAppViewSet):
 
         try:
             slave_bk_app_events = models.BkAppEvent.objects.filter(bk_event_id=event_id, is_master=False)
-        except Exception, e:
+        except Exception as e:
             logger.error(
                 u"%s Query Slave log failed: %s, event_id: %s" % (EngineErrorCodes.E1304001_DATABASE_ERROR, e, event_id)
             )
@@ -492,7 +495,7 @@ class AppEventLogViewSet(BaseAgentViewSet):
                 slave_event_status_list = models.BkAppEvent.objects.filter(bk_event_id=father_event_id).values_list(
                     "status", flat=True
                 )
-                if len(filter(lambda x: x != "SUCCESS", slave_event_status_list)) == 0:
+                if len([x for x in slave_event_status_list if x != "SUCCESS"]) == 0:
                     father_event_instance.status = "SUCCESS"
                     father_event_instance.save()
 
@@ -565,7 +568,7 @@ class AgentRegistryView(View):
                 return JsonResponse({"agent_ip": bk_server.ip_address})
             error_msg = "active %s fail, the paas_agent return: %s" % (agent_ip, result)
             return JsonResponse({"msg": error_msg})
-        except Exception, e:
+        except Exception as e:
             return JsonResponse({"msg": "%s" % e}, status=400)
 
 
@@ -605,7 +608,7 @@ class MqRegistryView(View):
                 models.ThirdServer.objects.update_or_create(category=category, defaults=defaults)
                 return JsonResponse({"code": 0, "mq_ip": mq_ip})
             return JsonResponse({"code": 1, "msg": data})
-        except Exception, e:
+        except Exception as e:
             return JsonResponse({"code": 1, "msg": "%s" % e}, status=400)
 
 
@@ -613,7 +616,7 @@ class BkServersViewSet(APIView):
     def delete(self, request, server_id):
         try:
             delete_server_from_routers(server_id)
-        except Exception, e:
+        except Exception as e:
             logger.exception("delete_server_from_routers error!")
             return JsonResponse({"code": EngineErrorCodes.E1304401_ROUTER_ERROR, "msg": "delete server error: %s" % e})
 

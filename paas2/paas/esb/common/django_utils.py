@@ -12,7 +12,8 @@ specific language governing permissions and limitations under the License.
 
 import json
 
-from django.utils.encoding import force_unicode
+# from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text as force_unicode
 from django.http import HttpResponse
 from django.shortcuts import _get_queryset
 from django.utils import translation
@@ -44,8 +45,8 @@ class JsonResponse(HttpResponse):
 def get_error_prompt(form):
     """Get error messages for form"""
     content = []
-    fields = form.fields.keys()
-    for k, v in sorted(form.errors.items(), key=lambda x: fields.index(x[0]) if x[0] in fields else -1):
+    fields = list(form.fields.keys())
+    for k, v in sorted(list(form.errors.items()), key=lambda x: fields.index(x[0]) if x[0] in fields else -1):
         _msg = force_unicode(v[0])
         b_field = form[k] if k in form.fields else None
         # Get the default error messages
@@ -54,7 +55,7 @@ def get_error_prompt(form):
             for c in reversed(b_field.field.__class__.__mro__):
                 messages.update(getattr(c, "default_error_messages", {}))
 
-        if b_field and _msg in messages.values():
+        if b_field and _msg in list(messages.values()):
             content.append(u"%s [%s] %s" % (b_field.label, b_field.name, _msg))
         else:
             content.append(u"%s" % _msg)

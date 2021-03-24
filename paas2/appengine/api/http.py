@@ -17,6 +17,7 @@ Rules:
 3. 以统一的header头发送请求
 """
 
+from builtins import str
 import requests
 
 # from common.log import logging

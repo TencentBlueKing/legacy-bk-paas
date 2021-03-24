@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import datetime
 
 from django.utils import timezone
@@ -30,7 +31,7 @@ def parse_datetime(date_string, default, format=DATETIME_FORMAT_STRING):
         # from native time to local time
         current_tz = timezone.get_current_timezone()
         dt = current_tz.localize(dt)
-    except Exception, e:
+    except Exception as e:
         logger.error("parse datetime fail! %s. [datetime=%s]" % (str(e), date_string))
         dt = default
     return dt

@@ -11,7 +11,9 @@ specific language governing permissions and limitations under the License.
 """
 
 
-import urlparse
+from future import standard_library
+standard_library.install_aliases()
+import urllib.parse
 
 from django.conf import settings
 from django.utils.translation import ugettext as _
@@ -36,7 +38,7 @@ def validate_app_url(url):
     if not url:
         return False, _(u"APP链接不能为空")
     try:
-        url_pares = urlparse.urlparse(url)
+        url_pares = urllib.parse.urlparse(url)
         netloc = url_pares.netloc
         paas_domain = _get_paas_domain()
         if not netloc or netloc.startswith(paas_domain):
@@ -79,7 +81,7 @@ def check_request_valid(request):
     """
     try:
         if "HTTP_REFERER" in request.META:
-            http_host = urlparse.urlparse(request.META["HTTP_REFERER"]).netloc
+            http_host = urllib.parse.urlparse(request.META["HTTP_REFERER"]).netloc
         else:
             http_host = ""
         paas_domain = _get_paas_domain()

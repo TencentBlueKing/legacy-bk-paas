@@ -11,11 +11,13 @@ specific language governing permissions and limitations under the License.
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from builtins import range
 import os
 
 try:
     import pymysql
 
+    pymysql.version_info = (1, 3, 13, "final", 0)
     pymysql.install_as_MySQLdb()
 except Exception:
     pass
@@ -129,7 +131,7 @@ LOGGING = {
     "handlers": {
         "null": {
             "level": "DEBUG",
-            "class": "django.utils.log.NullHandler",
+            "class": "logging.NullHandler",
         },
         "mail_admins": {"level": "ERROR", "class": "django.utils.log.AdminEmailHandler"},
         "console": {"level": "DEBUG", "class": "logging.StreamHandler", "formatter": "simple"},
@@ -173,4 +175,4 @@ LOGGING = {
 }
 
 PORT_MAX_TRIES = 5
-PORT_POOLS = range(20000, 30000)
+PORT_POOLS = list(range(20000, 30000))

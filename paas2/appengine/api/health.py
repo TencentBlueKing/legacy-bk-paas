@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import logging
 
 import requests
@@ -57,7 +58,7 @@ def get_rabbitmq_status():
                 "Rabbitmq service exception: request status code %s" % r.status_code,
             )
 
-    except Exception, e:
+    except Exception as e:
         err_msg = str(e)
         logger.exception("%s %s" % (EngineErrorCodes.E1304201_RABBITMQ_ERROR, err_msg))
         return EngineErrorCodes.E1304201_RABBITMQ_ERROR, "Rabbitmq service exception: %s" % err_msg
@@ -96,7 +97,7 @@ def get_paasagent_status_by_mode(bk_servers, mode="test"):
         try:
             headers = http._gen_header(sid, token)
             resp = requests.get(url=url, headers=headers, timeout=10)
-        except Exception, e:
+        except Exception as e:
             err_msg = "paasagent healthz FAIL! Request exception! url=%s, sid=%s, token=%s, error=%s" % (
                 url,
                 sid,

@@ -58,7 +58,7 @@ class DataComponent(BaseComponent, SetupConfMixin):
             path_vars = self.request.path_vars and self.request.path_vars.val_dict or {}
             try:
                 path = self.dest_path.format(**path_vars)
-            except KeyError, e:
+            except KeyError as e:
                 raise error_codes.BUFFET_CANNOT_FORMAT_PATH.format_prompt("{%s}" % e.args[0])
 
         # 请求参数

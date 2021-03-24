@@ -1,4 +1,4 @@
-Django==1.8.19
+Django==1.11.29
 djangorestframework==3.3.3
 Markdown==2.6.6
 requests==2.21.0
@@ -13,3 +13,4 @@ python-consul==1.1.0
 
 # for config
 django-environ==0.4.5
+future==0.18.2

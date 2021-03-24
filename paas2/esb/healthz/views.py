@@ -67,7 +67,7 @@ def check_settings():
         "JOB": ["job_esb_api_client.crt", "job_esb_api_client.key"],
         "GSE": ["gseca.crt", "gse_esb_api_client.crt", "gse_esb_api_client.key"],
     }
-    for system_name, ssl_files in ssl_files_config.iteritems():
+    for system_name, ssl_files in list(ssl_files_config.items()):
         for file_name in ssl_files:
             path = os.path.join(settings.SSL_ROOT_DIR, file_name)
             if not os.path.exists(path):

@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 from django import forms, VERSION as DJANGO_VERSION
 from django.template import Context
 from django.template.loader import get_template

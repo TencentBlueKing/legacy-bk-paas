@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from account.models import BkUser
@@ -23,7 +24,7 @@ class BkUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kargs):
         super(BkUserCreationForm, self).__init__(*args, **kargs)
 
-    class Meta:
+    class Meta(object):
         model = BkUser
         fields = ("username",)
 
@@ -39,6 +40,6 @@ class BkUserChangeForm(UserChangeForm):
     def __init__(self, *args, **kargs):
         super(BkUserChangeForm, self).__init__(*args, **kargs)
 
-    class Meta:
+    class Meta(object):
         model = BkUser
         fields = ("username", "password")

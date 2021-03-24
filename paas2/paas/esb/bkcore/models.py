@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import datetime
 import json
 
@@ -41,7 +42,7 @@ class ComponentSystem(models.Model):
     query_timeout = models.IntegerField(_(u"查询类超时时长"), null=True, blank=True, help_text=_(u"单位秒，未设置时超时时长为30秒"))
     doc_category_id = models.IntegerField(_(u"文档分类ID"), null=True, blank=True)
 
-    class Meta:
+    class Meta(object):
         ordering = ["name"]
         db_table = "esb_component_system"
 
@@ -124,7 +125,7 @@ class ESBChannel(models.Model):
     )  # noqa
     extra_info = models.TextField(u"额外信息", default="", blank=True, help_text=u"存储组件额外信息，用于文档展示等")
 
-    class Meta:
+    class Meta(object):
         db_table = "esb_channel"
         unique_together = ("path", "method")
 
@@ -221,7 +222,7 @@ class FunctionController(models.Model):
     func_desc = models.TextField(_(u"功能描述"), null=True, default="", blank=True)
     created_time = models.DateTimeField(_(u"创建时间"), auto_now_add=True)
 
-    class Meta:
+    class Meta(object):
         db_table = "esb_function_controller"
 
     def __unicode__(self):
@@ -241,7 +242,7 @@ class UserAuthToken(models.Model):
     def __unicode__(self):
         return self.auth_token
 
-    class Meta:
+    class Meta(object):
         db_table = "esb_user_auth_token"
 
     def touch(self):
@@ -314,7 +315,7 @@ class ESBBuffetComponent(models.Model):
     def __unicode__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         db_table = "esb_buffet_component"
 
     def get_extra_headers(self):
@@ -339,7 +340,7 @@ class ESBBuffetMapping(models.Model):
     def __unicode__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         db_table = "esb_buffet_component_mapping"
 
     def get_info(self):
@@ -357,7 +358,7 @@ class AppAccount(models.Model):
     def __unicode__(self):
         return self.app_code
 
-    class Meta:
+    class Meta(object):
         db_table = "esb_app_account"
 
 
@@ -366,7 +367,7 @@ class ModelWithBoard(models.Model):
 
     board = models.CharField(max_length=64, null=True, blank=True, db_index=True)
 
-    class Meta:
+    class Meta(object):
         abstract = True
 
 
@@ -396,7 +397,7 @@ class ComponentAPIDoc(ModelWithBoard):
                 pass
         return self.doc_html
 
-    class Meta:
+    class Meta(object):
         verbose_name = _(u"API文档")
         verbose_name_plural = _(u"API文档")
         db_table = "esb_api_doc"
@@ -413,7 +414,7 @@ class FeedbackForComponentDocs(ModelWithBoard):
     def __unicode__(self):
         return "<operator:%s-component_id:%s>" % (self.operator, self.component_id)
 
-    class Meta:
+    class Meta(object):
         verbose_name = u"接口反馈"
         verbose_name_plural = u"接口反馈"
         db_table = "esb_api_doc_feedback"
@@ -429,7 +430,7 @@ class SystemDocCategory(models.Model):
     def __unicode__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         verbose_name = _(u"系统文档分类")
         verbose_name_plural = _(u"系统文档分类")
         ordering = ["priority", "id"]
@@ -462,7 +463,7 @@ class AppComponentPerm(models.Model):
     def __unicode__(self):
         return "<app_code: %s, component_id: %s>" % (self.app_code, self.component_id)
 
-    class Meta:
+    class Meta(object):
         verbose_name = _(u"APP API权限")
         verbose_name_plural = _(u"APP API权限")
         db_table = "esb_app_component_perm"
@@ -477,7 +478,7 @@ class WxmpAccessToken(models.Model):
     expires = models.DateTimeField(_(u"凭证过期时间"))
     last_updated_time = models.DateTimeField(_(u"最后访问时间"), default=timezone.now)
 
-    class Meta:
+    class Meta(object):
         db_table = "esb_wxmp_access_token"
         verbose_name = _(u"微信公众号AccessToken")
         verbose_name_plural = _(u"微信公众号AccessToken")

@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+from builtins import object
 from django.db import models
 
 from bkaccount.manager import LoginLogManager
@@ -34,7 +35,7 @@ class Loignlog(models.Model):
     def __unicode__(self):
         return "%s(%s)" % (self.user.chname, self.user.username)
 
-    class Meta:
+    class Meta(object):
         db_table = "login_bklog"
         verbose_name = "用户登录日志"
         verbose_name_plural = "用户登录日志"
@@ -54,7 +55,7 @@ class BkToken(models.Model):
     def __uincode__(self):
         return self.token
 
-    class Meta:
+    class Meta(object):
         db_table = "login_bktoken"
         verbose_name = "登录票据"
         verbose_name_plural = "登录票据"

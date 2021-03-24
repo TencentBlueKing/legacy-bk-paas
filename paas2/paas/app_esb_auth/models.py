@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django.db import models
 
 from common.constants import APPROVAL_RESULT_CHOICE
@@ -34,7 +35,7 @@ class EsbAuthApplyReocrd(models.Model):
 
     objects = ESBAuthApplyRecordManager()
 
-    class Meta:
+    class Meta(object):
         verbose_name = u"app组件申请记录表"
         verbose_name_plural = u"app组件申请记录表"
         db_table = "paas_app_esb_auth_apply_record"

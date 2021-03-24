@@ -9,8 +9,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from __future__ import division
 
 
+from past.utils import old_div
 import hashlib
 from common.log import logger
 
@@ -22,7 +24,7 @@ def file_size_bytes_to_m(size):
 
     file_size = None
     try:
-        file_size = round(size / 1024 / 1024.0, 2)
+        file_size = round(old_div(size, 1024 / 1024.0), 2)
     except TypeError:
         logger.exception(u"文件大小转换出错")
     return file_size

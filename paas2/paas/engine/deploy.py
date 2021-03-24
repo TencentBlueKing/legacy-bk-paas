@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from builtins import str
 import json
 
 from django.utils.translation import ugettext as _
@@ -156,7 +157,7 @@ def app_to_test_task(app_code, app, username):
         )
 
         return True, event_id, None
-    except Exception, e:
+    except Exception as e:
         logger.info(u"[app:%s] %s" % (app_code, u"Test deployment events submission failed"))
         msg = u"[app:%s] Submission for test task failed, error：%s" % (app_code, e)
         logger.exception(msg)
@@ -228,7 +229,7 @@ def app_to_online_task(app_code, app, username, is_tips, features, bugs, servers
         record.update_fields(event_id=event_id, message=msg, is_tips=int(is_tips), extra_data=json.dumps(extra_data))
 
         return is_success, event_id, None
-    except Exception, e:
+    except Exception as e:
         # 上线部署事件提交失败
         logger.info(u"[app:%s] %s" % (app_code, u"Online deployment events submission failed"))
         msg = u"[app:%s] There were abnormalities in execution of online tasks, error: %s" % (app_code, e)
@@ -286,7 +287,7 @@ def app_to_outline_task(app_code, app, username, mode):
         record.update_fields(event_id=event_ids[0], message=msg, extra_data=json.dumps(extra_data))
 
         return is_success, event_ids[0]
-    except Exception, e:
+    except Exception as e:
         # 下架事件提交失败
         logger.info(u"[app:%s] %s" % (app_code, u"Removal events submission failed"))
         msg = u"[app:%s] Removal task failed error：%s" % (app_code, e)
@@ -392,7 +393,7 @@ def saas_app_to_online_task(saas_app_version, username, mode, servers=None):
         record.update_fields(event_id=event_id, message=msg, is_tips=int(is_tips), extra_data=json.dumps(extra_data))
 
         return is_success, event_id, None
-    except Exception, e:
+    except Exception as e:
         logger.info(u"[app:%s] %s" % (app_code, u"Saas App %s event submit fail" % deploy_name))
         msg = u"Saas App [app:%s] app %s Exceptions occurred in execution, error: %s" % (app_code, deploy_name, e)
         logger.exception(msg)

@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import json
 
 from django.shortcuts import render
@@ -122,7 +123,7 @@ class EditChannelView(View):
             rate_limit_conf = json.loads(channel.rate_limit_conf)
             default_rate_limit_conf = rate_limit_conf["app_ratelimit"]["__default"][0]
             rate_limit_tokens = default_rate_limit_conf.pop("tokens", "")
-            rate_limit_unit = default_rate_limit_conf.keys()[0]
+            rate_limit_unit = list(default_rate_limit_conf.keys())[0]
         except Exception:
             rate_limit_tokens = ""
             rate_limit_unit = "second"

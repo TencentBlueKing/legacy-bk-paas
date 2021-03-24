@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+from builtins import str
 from cachetools import cached, TTLCache
 
 from components import usermgr_api

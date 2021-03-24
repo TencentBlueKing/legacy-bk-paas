@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from past.builtins import basestring
 from django import forms
 from django.utils.translation import ugettext as _
 
@@ -17,7 +18,7 @@ from esb.bkcore.models import ESBBuffetComponent, ESBBuffetMapping, ComponentSys
 
 
 def clean_data(data):
-    for key, val in data.iteritems():
+    for key, val in list(data.items()):
         if isinstance(val, basestring):
             data[key] = val.strip()
     return data

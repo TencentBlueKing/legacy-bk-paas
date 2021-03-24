@@ -11,11 +11,8 @@ specific language governing permissions and limitations under the License.
 """
 
 
-from __future__ import unicode_literals
-
-
 def enum(**enums):
-    return type(str("Enum"), (), enums)
+    return type("Enum", (), enums)
 
 
 DATETIME_FORMAT_STRING = "%Y-%m-%d %H:%M:%S"
@@ -35,4 +32,4 @@ USERMGR_BKLOGIN_FIELD_MAP = {
     "qq": "qq",
 }
 
-BKLOGIN_USERMGR_FIELD_MAP = dict((v, k) for k, v in USERMGR_BKLOGIN_FIELD_MAP.iteritems())
+BKLOGIN_USERMGR_FIELD_MAP = dict((v, k) for k, v in list(USERMGR_BKLOGIN_FIELD_MAP.items()))

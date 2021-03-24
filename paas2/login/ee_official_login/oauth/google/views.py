@@ -10,7 +10,9 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-import urlparse
+from future import standard_library
+standard_library.install_aliases()
+import urllib.parse
 
 from django.contrib.auth import authenticate
 
@@ -53,7 +55,7 @@ def login(request):
     # oauth2.0 特有处理逻辑，防止csrf攻击
     # 处理state参数
     state = request.GET.get("state", "")
-    state_dict = dict(urlparse.parse_qsl(state))
+    state_dict = dict(urllib.parse.parse_qsl(state))
     app_id = state_dict.get("app_id")
     redirect_to = state_dict.get(REDIRECT_FIELD_NAME, "")
     state_from_session = request.session.get("state")

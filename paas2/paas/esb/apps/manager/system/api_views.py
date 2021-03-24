@@ -47,5 +47,5 @@ class AddSystemView(View):
             data["display_name"] = form.instance.get_display_name()
             return JsonResponse({"result": True, "data": data})
 
-        error_message = ";".join([",".join([_(err) for err in field_error]) for field_error in form.errors.values()])
+        error_message = ";".join([",".join([_(err) for err in field_error]) for field_error in list(form.errors.values())])
         return JsonResponse({"result": False, "error_message": error_message})

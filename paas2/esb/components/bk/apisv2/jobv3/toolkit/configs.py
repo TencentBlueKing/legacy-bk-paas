@@ -10,8 +10,10 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from future import standard_library
+standard_library.install_aliases()
 import os.path
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from django.conf import settings
 

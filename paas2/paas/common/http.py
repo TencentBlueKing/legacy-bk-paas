@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from builtins import str
 import json
 import requests
 
@@ -83,7 +84,7 @@ def _http_request(method, url, headers=None, data=None, timeout=None, verify=Fal
             resp = requests.put(url=url, headers=headers, json=data, verify=verify)
         else:
             return False, {"msg": "method not supported"}
-    except requests.exceptions.RequestException, e:
+    except requests.exceptions.RequestException as e:
         logger.exception("engine http request error! type: %s, url: %s, data: %s" % (method, url, str(data)))
         return False, {"msg": str(e)}
     else:

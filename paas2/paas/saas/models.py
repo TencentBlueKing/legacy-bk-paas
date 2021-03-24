@@ -10,6 +10,9 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from past.builtins import cmp
+from builtins import str
+from builtins import object
 import os
 import time
 import json
@@ -202,7 +205,7 @@ class SaaSApp(models.Model):
     def __str__(self):
         return self.code
 
-    class Meta:
+    class Meta(object):
         ordering = ("-code",)
         db_table = "paas_saas_app"
         verbose_name = _l(u"SaaS 应用")
@@ -299,7 +302,7 @@ class SaaSAppVersion(models.Model):
     def __str__(self):
         return "%s %s %s" % (self.id, self.version, self.upload_file)
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_saas_app_version"
         verbose_name = _l(u"SaaS 应用版本")
         verbose_name_plural = _l(u"SaaS 应用版本")
@@ -340,7 +343,7 @@ class SaaSUploadFile(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         ordering = ("-uploaded_at",)
         db_table = "paas_saas_upload_file"
         verbose_name = _l(u"SaaS上传安装包")

@@ -10,13 +10,16 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import csv
 import codecs
 
 try:
-    import cStringIO as StringIO
+    import io as StringIO
 except Exception:
-    import StringIO
+    import io
 
 
 def escape(s, fromtype, is_json):
@@ -75,7 +78,7 @@ def unescape_message(s):
     return s
 
 
-class UnicodeWriter:
+class UnicodeWriter(object):
     """
     A CSV writer which will write rows to CSV file "f",
     which is encoded in the given encoding.
@@ -83,7 +86,7 @@ class UnicodeWriter:
 
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         # Redirect output to a queue
-        self.queue = StringIO.StringIO()
+        self.queue = io.StringIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
         # 写入BOM，解决中文显示乱码

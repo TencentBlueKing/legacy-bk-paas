@@ -9,15 +9,14 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from __future__ import absolute_import
 
+from builtins import str
 import json
-import random
 import logging
 import requests
 
 from django.conf import settings
-import models
-import http
 import consul
 
 logger = logging.getLogger("root")
@@ -58,34 +57,6 @@ def parse_event_type(event_type):
     return {"mode": mode, "handle": handle}
 
 
-def get_assigned_servers(app_code, mode):
-    category = get_category_by_mode(mode)
-    hs_qset = models.BkHostingShip.objects.select_related("bk_server").filter(
-        bk_app__app_code=app_code, is_active=True, bk_server__category=category
-    )
-    servers = []
-    for hs in hs_qset:
-        servers.append(hs.bk_server)
-    return servers
-
-
-def register_app_routers(app_code, mode):
-    r_key = generate_consul_key(app_code, mode)
-    try:
-        servers = get_assigned_servers(app_code, mode)
-        server_ips = []
-        for s in servers:
-            server_ips.append("%s:%s" % (s.ip_address, s.app_port))
-
-        if server_ips:
-            c = consul_client()
-            c.kv.put(r_key, json.dumps(server_ips))
-            logger.info("register_app_router %s %s success" % (app_code, mode))
-
-    except Exception:
-        logger.exception("register_app_router %s %s failed" % (app_code, mode))
-
-
 def unresgister_app_routers(app_code, mode):
     r_key = generate_consul_key(app_code, mode)
     try:
@@ -97,15 +68,6 @@ def unresgister_app_routers(app_code, mode):
         logger.exception("unresgister_app_router %s %s failed" % (app_code, mode))
 
 
-def update_app_routers(app_code, event_type):
-    e_data = parse_event_type(event_type)
-    mode, handle = e_data["mode"], e_data["handle"]
-    if handle == "online":
-        register_app_routers(app_code, mode)
-    else:
-        unresgister_app_routers(app_code, mode)
-
-
 def delete_server_backend(client, app_code, mode, server_backend):
     r_key = generate_consul_key(app_code, mode)
     backends_json = client.kv.get(r_key)[1]["Value"]
@@ -113,15 +75,6 @@ def delete_server_backend(client, app_code, mode, server_backend):
     backends.remove(server_backend)
     if backends:
         client.kv.put(r_key, json.dumps(backends))
-
-
-def delete_server_from_routers(server_id):
-    bk_server = models.BkServer.objects.get(id=server_id)
-    hs_qsets = models.BkHostingShip.objects.select_related("bk_app__app_code").filter(bk_server=bk_server)
-    c = consul_client()
-    for hs in hs_qsets:
-        mode = get_mode_by_category(bk_server.category)
-        delete_server_backend(c, hs.bk_app.app_code, mode, "%s:%s" % (bk_server.ip_address, bk_server.app_port))
 
 
 def merge_two_dicts(x, y):
@@ -142,8 +95,7 @@ def get_mode_by_category(category):
 
 
 def check_rabbitmq(server_info, admin_account):
-    """
-    """
+    """"""
     try:
         url = "http://%s:%s/api/overview" % (server_info["server_ip"], server_info["server_port"])
         r = requests.get(url, auth=(admin_account["name"], admin_account["password"]))
@@ -153,7 +105,7 @@ def check_rabbitmq(server_info, admin_account):
             return False, "Administrator account information error"
         else:
             return False, "Rabbitmq service exception"
-    except Exception, e:
+    except Exception as e:
         return False, str(e)
 
 
@@ -189,50 +141,6 @@ def apply_mq_res(server_info, admin_account, user_account, vhost):
     if r.status_code != 204:
         logger.exception("Vhost mirror policy create failed, status_code is %s" % r.status_code)
     return
-
-
-class PortManager(object):
-    """
-    manager port for app container, especially for java
-    """
-
-    def __init__(self, bk_app, mode, server_ids=None, port_pools=settings.PORT_POOLS):
-        self.bk_app = bk_app
-        self.mode = mode
-        self.server_ids = server_ids
-        self.port_pools = port_pools
-
-    def _get_available_port(self):
-        used_ports = list(models.BkAppBindPort.objects.filter(mode=self.mode).values_list("port", flat=True))
-        available_ports = list(set(self.port_pools) - set(used_ports))
-        for _ in range(settings.PORT_MAX_TRIES):
-            available_port = random.choice(available_ports)
-            if self._check_port_available(available_port):
-                return available_port
-        raise ValueError("Port allocation failed after being tried %s times" % settings.PORT_MAX_TRIES)
-
-    def bind_app_to_port(self):
-        try:
-            available_port = models.BkAppBindPort.objects.get(bk_app=self.bk_app, mode=self.mode).port
-        except models.BkAppBindPort.DoesNotExist:
-            available_port = self._get_available_port()
-            models.BkAppBindPort.objects.create(bk_app=self.bk_app, mode=self.mode, port=available_port)
-        return available_port
-
-    def recycle_app_port(self):
-        models.BkAppBindPort.objects.filter(bk_app=self.bk_app, mode=self.mode).delete()
-
-    def _check_port_available(self, port):
-        if not self.server_ids:
-            raise ValueError("No servers")
-
-        for server_id in self.server_ids:
-            server = models.BkServer.objects.get(id=server_id)
-            url = "http://%s:%s/v1/app/ports/%s" % (server.ip_address, server.ip_port, port)
-            ret, data = http.http_get(url, server.s_id, server.token, "", timeout=5)
-            if not ret or data["error"] != 0 or data["already_use"]:
-                return False
-        return True
 
 
 def is_paasagent_active(server):

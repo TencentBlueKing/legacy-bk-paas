@@ -10,9 +10,13 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from past.builtins import basestring
+from builtins import object
 import re
 import json
-import urlparse
+import urllib.parse
 
 from jinja2 import Template
 from django.http import HttpResponse
@@ -61,7 +65,7 @@ class BuffetComponentMaker(object):
 
                 dest_http_method = self.get_dest_request_method(db_buffet_obj)
 
-                parsed_url = urlparse.urlparse(db_buffet_obj.dest_url)
+                parsed_url = urllib.parse.urlparse(db_buffet_obj.dest_url)
                 host = "%s://%s" % (parsed_url.scheme, parsed_url.netloc)
 
                 # 替换目标地址中的变量模板
@@ -69,7 +73,7 @@ class BuffetComponentMaker(object):
                 if RE_PATH_VARIABLE.search(parsed_url.path):
                     try:
                         path = parsed_url.path.format(**self.request.path_vars.val_dict)
-                    except KeyError, e:
+                    except KeyError as e:
                         raise error_codes.BUFFET_CANNOT_FORMAT_PATH.format_prompt("{%s}" % e.args[0])
 
                 # 拼装请求参数
@@ -115,7 +119,7 @@ class BuffetComponentMaker(object):
                 """
                 :访问后端接口，更新headers中Content-Type
                 """
-                headers_keys = [key.lower() for key in headers.keys()]
+                headers_keys = [key.lower() for key in list(headers.keys())]
                 if not ("content-type" in headers_keys or "content_type" in headers_keys):
                     headers.update({"Content-Type": content_type})
                 return headers

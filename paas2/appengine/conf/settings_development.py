@@ -17,9 +17,9 @@ DEBUG = False
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",  # 默认用mysql
-        "NAME": "open_paas_eedev",
+        "NAME": "open_paas",
         "USER": "root",
-        "PASSWORD": "123456",
+        "PASSWORD": "",
         "HOST": "127.0.0.1",
         "PORT": "3306",
     }

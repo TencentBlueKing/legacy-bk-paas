@@ -29,8 +29,8 @@ def get_error_prompt(form):
     Get error messages for form
     """
     content = []
-    fields = form.fields.keys()
-    for k, v in sorted(form.errors.items(), key=lambda x: fields.index(x[0]) if x[0] in fields else -1):
+    fields = list(form.fields.keys())
+    for k, v in sorted(list(form.errors.items()), key=lambda x: fields.index(x[0]) if x[0] in fields else -1):
         _msg = force_unicode(v[0])
         b_field = form._safe_get_field(k)
         # Get the default error messages
@@ -39,7 +39,7 @@ def get_error_prompt(form):
             for c in reversed(b_field.field.__class__.__mro__):
                 messages.update(getattr(c, "default_error_messages", {}))
 
-        if b_field and _msg in messages.values():
+        if b_field and _msg in list(messages.values()):
             content.append(u"%s [%s] %s" % (b_field.label, b_field.name, _msg))
         else:
             content.append(u"%s" % _msg)
@@ -118,10 +118,10 @@ class BaseComponentForm(forms.Form):
         """
         Get cleaned_data of key when key in self.data
         """
-        keys = keys or self.fields.keys()
+        keys = keys or list(self.fields.keys())
         if isinstance(keys, dict):
             return dict(
-                [(key_dst, self.cleaned_data[key_src]) for key_src, key_dst in keys.items() if key_src in self.data]
+                [(key_dst, self.cleaned_data[key_src]) for key_src, key_dst in list(keys.items()) if key_src in self.data]
             )
         else:
             return dict([(key, self.cleaned_data[key]) for key in keys if key in self.data])

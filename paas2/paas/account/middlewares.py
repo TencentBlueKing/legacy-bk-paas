@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import AnonymousUser
@@ -37,7 +38,7 @@ class LoginMiddleware(object):
         if getattr(view, "login_exempt", False):
             return None
 
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             get_csrf_token(request)
             return None
 

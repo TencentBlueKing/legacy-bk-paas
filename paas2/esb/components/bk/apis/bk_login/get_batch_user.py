@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 from common.forms import BaseComponentForm, ListField
 from common.constants import API_TYPE_Q
 from components.component import Component
@@ -91,6 +92,6 @@ class GetBatchUser(Component):
     def handle(self):
         result = self.invoke_other("generic.v2.usermanage.get_batch_users", kwargs=self.form_data)
         result["code"] = "00" if result["code"] == 0 else str(result["code"])
-        for username, user in (result["data"] or {}).items():
+        for username, user in list((result["data"] or {}).items()):
             result["data"][username] = tools.convert_user_info(user)
         self.response.payload = result

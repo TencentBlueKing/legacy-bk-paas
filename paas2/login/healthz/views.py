@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from builtins import str
 import os
 
 from django.http import JsonResponse
@@ -73,7 +74,7 @@ def _check_settings():
                 "database": settings.DATABASES.get("default", {}).get("NAME"),
             },
         }
-    except Exception, e:
+    except Exception as e:
         return False, _(u"配置文件不正确, 缺失对应配置: %s") % str(e), LoginErrorCodes.E1302001_BASE_SETTINGS_ERROR
 
     return True, "ok", 0
@@ -85,7 +86,7 @@ def _check_database():
 
         objs = BkToken.objects.all()[:3]
         [o.token for o in objs]
-    except Exception, e:
+    except Exception as e:
         return False, _(u"数据库连接存在问题: %s") % str(e), LoginErrorCodes.E1302002_BASE_DATABASE_ERROR
 
     return True, "ok", 0

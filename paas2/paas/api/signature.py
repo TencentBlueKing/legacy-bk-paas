@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
+from builtins import object
 import json
 import time
 import base64
@@ -113,12 +115,12 @@ class Sign(object):
         return _signature
 
     def clean_get(self):
-        params = dict(self.request.GET.items())
+        params = dict(list(self.request.GET.items()))
         params.pop("Signature", None)
         return params
 
     def clean_post(self):
-        params = dict(self.request.GET.items())
+        params = dict(list(self.request.GET.items()))
         params.pop("Signature", None)
         params["Data"] = self.request.body
         # request.POST中无参数，则将request.body中的push进request.POST中

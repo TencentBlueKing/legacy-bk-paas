@@ -5,10 +5,10 @@ description = ""
 authors = []
 
 [tool.poetry.dependencies]
-python = "^2.7"
-Django = "1.8.19"
+python = "^2.7 || ^3.6"
+Django = "1.11.29"
 requests = "2.21.0"
-jinja2 = "2.8"
+jinja2 = "2.11.3"
 markdown = "2.6.6"
 markupsafe = "1.1.1"
 pyasn1 = "0.4.8"
@@ -37,14 +37,16 @@ Pygments = "2.1.3"
 django-environ = "0.4.5"
 pytest-django = "3.9.0"
 pytest = "4.6.11"
+future = "0.18.2"
 
 [tool.poetry.dev-dependencies]
-flake8 = "3.8.3"
-ipython = "5.10.0"
+flake8 = "*"
+ipython = "*"
 mock = "3.0.5"
-isort = "4.3.21"
-pre-commit = "1.21.0"
-ipdb = "0.13.3"
+isort = "*"
+pre-commit = "*"
+ipdb = "*"
+tox = "^3.23.0"
 
 [build-system]
 requires = ["poetry>=0.12"]

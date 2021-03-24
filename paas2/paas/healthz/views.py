@@ -11,11 +11,14 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import os
 
 import redis
 import requests
-import urlparse
+import urllib.parse
 
 from django.http import JsonResponse
 from django.conf import settings
@@ -84,7 +87,7 @@ def _check_settings():
                 "database": settings.DATABASES.get("default", {}).get("NAME"),
             },
         }
-    except Exception, e:
+    except Exception as e:
         return False, _(u"配置文件不正确, 缺失对应配置: %s") % str(e), PaaSErrorCodes.E1301001_BASE_SETTINGS_ERROR
 
     return True, "ok", 0
@@ -96,14 +99,14 @@ def _check_database():
 
         objs = SaaSAppVersion.objects.all()[:3]
         [o.version for o in objs]
-    except Exception, e:
+    except Exception as e:
         return False, _(u"数据库连接存在问题: %s") % str(e), PaaSErrorCodes.E1301002_BASE_DATABASE_ERROR
 
     return True, "ok", 0
 
 
 def _remove_password_from_url(url):
-    parsed = urlparse.urlparse(url)
+    parsed = urllib.parse.urlparse(url)
     if parsed.username or parsed.password:
         replaced = parsed._replace(netloc="{}:{}@{}".format(parsed.username, "******", parsed.hostname))
         return replaced.geturl()
@@ -123,12 +126,12 @@ def _check_hosts():
     if settings.EDITION == "ee":
         hosts["es_host"] = es_host
 
-    for name, host in hosts.iteritems():
+    for name, host in list(hosts.items()):
         try:
             if not host.startswith("http"):
                 host = "http://%s" % host
             requests.get(host, timeout=10)
-        except Exception, e:
+        except Exception as e:
             return (
                 False,
                 _(u"第三方依赖连接超时: name=%s, host=%s,  error=%s") % (name, _remove_password_from_url(host), str(e)),
@@ -151,7 +154,7 @@ def _warning_redis():
             socket_timeout=10,
         )
         r.ping()
-    except Exception, e:
+    except Exception as e:
         data["redis"] = _(u"%s Redis连接存在问题: %s; 将导致监控告警不可用") % (PaaSErrorCodes.E1301004_BASE_REDIS_ERROR, str(e))
     else:
         data["reids"] = "ok"

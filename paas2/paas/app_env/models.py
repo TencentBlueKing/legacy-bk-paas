@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 
+from builtins import object
 from django.db import models
 
 from app_env.constants import ENV_MODE_TYPE_CHOICES
@@ -36,7 +37,7 @@ class AppEnvVar(models.Model):
     def __unicode__(self):
         return "ENV:%s=%s" % (self.name, self.value)
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_app_envvars"
         unique_together = ("app_code", "mode", "name")
         verbose_name = u"应用环境变量"

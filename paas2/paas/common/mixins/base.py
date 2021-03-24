@@ -13,6 +13,7 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+from builtins import object
 from account.decorators import developer_limit_exempt
 
 

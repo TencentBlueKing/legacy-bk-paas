@@ -10,13 +10,15 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
+
 
 class CheckException(Exception):
     def __init__(self, message):
         self.message = message
 
     def __str__(self):
-        return self.message.encode("utf-8") if isinstance(self.message, unicode) else self.message
+        return self.message.encode("utf-8") if isinstance(self.message, str) else self.message
 
     def get_message(self):
         return self.message

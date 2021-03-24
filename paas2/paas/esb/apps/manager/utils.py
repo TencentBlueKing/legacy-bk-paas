@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import os
 
 import markdown
@@ -20,7 +21,7 @@ def md2html(name):
     app_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(app_dir, "templates/manager/mdfiles", "%s.md" % name)
     with open(file_path) as fp:
-        md_content = unicode(fp.read(), "utf-8")
+        md_content = str(fp.read(), "utf-8")
         html_content = markdown.markdown(
             md_content,
             extensions=[

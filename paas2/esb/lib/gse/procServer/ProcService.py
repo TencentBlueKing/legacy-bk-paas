@@ -18,6 +18,7 @@ specific language governing permissions and limitations under the License.
 #  options string: py
 #
 
+from builtins import object
 from thrift.Thrift import TType, TMessageType, TFrozenDict, TException, TApplicationException
 from thrift.protocol.TProtocol import TProtocolException
 import sys
@@ -2500,7 +2501,7 @@ class login_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2572,7 +2573,7 @@ class login_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2683,7 +2684,7 @@ class logout_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2755,7 +2756,7 @@ class logout_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2828,7 +2829,7 @@ class getUserApps_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2900,7 +2901,7 @@ class getUserApps_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3030,7 +3031,7 @@ class selectApp_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3102,7 +3103,7 @@ class selectApp_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3213,7 +3214,7 @@ class cancelTask_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3285,7 +3286,7 @@ class cancelTask_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3396,7 +3397,7 @@ class createSession_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3468,7 +3469,7 @@ class createSession_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3541,7 +3542,7 @@ class start_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3613,7 +3614,7 @@ class start_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3686,7 +3687,7 @@ class stop_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3758,7 +3759,7 @@ class stop_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3831,7 +3832,7 @@ class restart_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3903,7 +3904,7 @@ class restart_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -3976,7 +3977,7 @@ class kill_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4048,7 +4049,7 @@ class kill_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4121,7 +4122,7 @@ class reload_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4193,7 +4194,7 @@ class reload_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4266,7 +4267,7 @@ class autoproc_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4338,7 +4339,7 @@ class autoproc_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4411,7 +4412,7 @@ class noauto_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4483,7 +4484,7 @@ class noauto_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4556,7 +4557,7 @@ class runshell_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4628,7 +4629,7 @@ class runshell_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4701,7 +4702,7 @@ class createcfg_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4773,7 +4774,7 @@ class createcfg_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4846,7 +4847,7 @@ class pushcfg_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4918,7 +4919,7 @@ class pushcfg_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -4991,7 +4992,7 @@ class check_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5063,7 +5064,7 @@ class check_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5136,7 +5137,7 @@ class listproc_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5208,7 +5209,7 @@ class listproc_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5281,7 +5282,7 @@ class checkagent_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5353,7 +5354,7 @@ class checkagent_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5426,7 +5427,7 @@ class diffcfg_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5498,7 +5499,7 @@ class diffcfg_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5571,7 +5572,7 @@ class getremotecfg_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5643,7 +5644,7 @@ class getremotecfg_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5716,7 +5717,7 @@ class checkconf_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5788,7 +5789,7 @@ class checkconf_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5861,7 +5862,7 @@ class runcmd_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -5933,7 +5934,7 @@ class runcmd_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6024,7 +6025,7 @@ class getCommandResult_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6096,7 +6097,7 @@ class getCommandResult_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6170,7 +6171,7 @@ class getCommandDetail_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6242,7 +6243,7 @@ class getCommandDetail_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6354,7 +6355,7 @@ class getCfgFileContent_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6426,7 +6427,7 @@ class getCfgFileContent_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6500,7 +6501,7 @@ class getTaskResultById_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6572,7 +6573,7 @@ class getTaskResultById_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6682,7 +6683,7 @@ class history_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6754,7 +6755,7 @@ class history_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6869,7 +6870,7 @@ class create_session_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -6941,7 +6942,7 @@ class create_session_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7014,7 +7015,7 @@ class start_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7086,7 +7087,7 @@ class start_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7159,7 +7160,7 @@ class stop_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7231,7 +7232,7 @@ class stop_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7304,7 +7305,7 @@ class restart_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7376,7 +7377,7 @@ class restart_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7449,7 +7450,7 @@ class kill_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7521,7 +7522,7 @@ class kill_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7594,7 +7595,7 @@ class reload_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7666,7 +7667,7 @@ class reload_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7739,7 +7740,7 @@ class auto_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7811,7 +7812,7 @@ class auto_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7884,7 +7885,7 @@ class noauto_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -7956,7 +7957,7 @@ class noauto_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -8029,7 +8030,7 @@ class create_config_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -8101,7 +8102,7 @@ class create_config_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -8174,7 +8175,7 @@ class push_config_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -8246,7 +8247,7 @@ class push_config_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -8319,7 +8320,7 @@ class check_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -8391,7 +8392,7 @@ class check_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -8465,7 +8466,7 @@ class get_result_by_id_v2_args(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -8537,7 +8538,7 @@ class get_result_by_id_v2_result(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):

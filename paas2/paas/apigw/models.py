@@ -10,15 +10,15 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django.db import models
 
 from .constants import ApiTypeEnum
 
 # just for remove django warning
-import warnings
-from django.utils.deprecation import RemovedInDjango19Warning
-
-warnings.simplefilter("ignore", RemovedInDjango19Warning)
+# import warnings
+# from django.utils.deprecation import RemovedInDjango19Warning
+# warnings.simplefilter("ignore", RemovedInDjango19Warning)
 
 
 class API(models.Model):
@@ -68,7 +68,7 @@ class API(models.Model):
     def __unicode__(self):
         return "<API: %s>" % self.api_name
 
-    class Meta:
+    class Meta(object):
         verbose_name = u"API信息"
         verbose_name_plural = u"API信息"
         db_table = "apigw_api"
@@ -87,7 +87,7 @@ class Stage(models.Model):
     def __unicode__(self):
         return "<Stage: %s>" % self.stage_name
 
-    class Meta:
+    class Meta(object):
         verbose_name = u"Stage部署环境"
         verbose_name_plural = u"Stage部署环境"
         unique_together = ("api_id", "stage_name")
@@ -135,7 +135,7 @@ class Resource(models.Model):
     def __unicode__(self):
         return "<path: %s>" % self.path
 
-    class Meta:
+    class Meta(object):
         verbose_name = u"Resource接口信息"
         verbose_name_plural = u"Resource接口信息"
         db_table = "apigw_resource"
@@ -155,7 +155,7 @@ class StageRelatedResouece(models.Model):
     def __unicode__(self):
         return "<api_id: %s, stage_id: %s, resource_id: %s>" % (self.api_id, self.stage_id, self.resource_id)
 
-    class Meta:
+    class Meta(object):
         verbose_name = u"管理Stage和Resource关系"
         verbose_name_plural = u"管理Stage和Resource关系"
         db_table = "apigw_stage_related_resource"

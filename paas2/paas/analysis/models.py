@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _l
@@ -34,7 +35,7 @@ class AppUseRecord(models.Model):
     def __unicode__(self):
         return "%s(%s)" % (self.user, self.app)
 
-    class Meta:
+    class Meta(object):
         db_table = "console_analysis_appuserecord"
         verbose_name = _l(u"App访问记录数据")
         verbose_name_plural = _l(u"App访问记录数据")
@@ -55,7 +56,7 @@ class AppLiveness(models.Model):
     def __unicode__(self):
         return "%s(%s)" % (self.user, self.app)
 
-    class Meta:
+    class Meta(object):
         db_table = "console_analysis_appliveness"
         verbose_name = _l(u"app页面点击量活跃度统计")
         verbose_name_plural = _l(u"app页面点击量活跃度统计")
@@ -78,7 +79,7 @@ class AppOnlineTimeRecord(models.Model):
     def __unicode__(self):
         return "%s(%s)" % (self.user, self.app_code)
 
-    class Meta:
+    class Meta(object):
         db_table = "console_analysis_apponlinetimerecord"
         verbose_name = _l(u"app在线时长统计")
         verbose_name_plural = _l(u"app在线时长统计")

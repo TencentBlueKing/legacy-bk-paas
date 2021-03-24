@@ -9,7 +9,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from __future__ import print_function
 
+from builtins import str
+from builtins import range
 import random
 import base64
 import uuid
@@ -27,7 +30,7 @@ def _salt(length=2):
     生成长度为length 的随机字符串
     """
     ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz"  # noqa
-    return "".join(map(lambda _: random.choice(ALPHABET), range(length)))
+    return "".join([random.choice(ALPHABET) for _ in range(length)])
 
 
 def generate_app_maker_code(parent_code):
@@ -44,7 +47,7 @@ def generate_app_maker_code(parent_code):
     cnt = 0
     while cnt < 10:
         app_maker_code = "%s%s%s" % (parent_code, APP_MAKER_CODE_CONNECTOR, _salt(slat_len))
-        print app_maker_code
+        print(app_maker_code)
         is_app_code_valid, app_code_msg = validate_app_code(app_maker_code)
         if is_app_code_valid:
             break

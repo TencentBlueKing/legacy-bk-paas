@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 
 # from __future__ import unicode_literals
 
+from builtins import object
 import os
 
 # import json
@@ -81,7 +82,7 @@ class UserApps(models.Model):
     def __str__(self):
         return self.username
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_userapps"
         verbose_name = u"用户收藏应用"
         verbose_name_plural = u"用户收藏应用"
@@ -101,7 +102,7 @@ class UserSettings(models.Model):
     def __str__(self):
         return self.username
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_usersettings"
         verbose_name = u"用户自定义的应用列表"
         verbose_name_plural = u"用户自定义的应用列表"
@@ -173,7 +174,7 @@ class UsefulLinks(models.Model):
             "code": self.code,
         }
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_usefullinks"
         ordering = ["created_time"]
         verbose_name = u"常用链接"

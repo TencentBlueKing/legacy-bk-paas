@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from enum import Enum
 from django.conf import settings
 from django.db import models
@@ -87,7 +88,7 @@ class BkUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 
-    class Meta:
+    class Meta(object):
         verbose_name = _("user")
         verbose_name_plural = _("users")
 
@@ -166,7 +167,7 @@ class Loignlog(models.Model):
     def __unicode__(self):
         return "%s(%s)" % (self.user.chname, self.user.username)
 
-    class Meta:
+    class Meta(object):
         verbose_name = _l(u"用户登录日志")
         verbose_name_plural = _l(u"用户登录日志")
 
@@ -183,6 +184,6 @@ class BkToken(models.Model):
     def __uincode__(self):
         return self.token
 
-    class Meta:
+    class Meta(object):
         verbose_name = _l(u"登录票据")
         verbose_name_plural = _l(u"登录票据")

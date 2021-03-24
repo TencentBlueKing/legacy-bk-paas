@@ -12,6 +12,8 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+from past.builtins import basestring
+from builtins import object
 from django.contrib.auth import models
 from django.db import models as db_models
 from django.utils import timezone
@@ -38,7 +40,7 @@ class User(models.AbstractBaseUser, models.AnonymousUser):
             args = (None, timezone.now(), args[0])
 
         super(User, self).__init__(*args)
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             setattr(self, k, v)
 
     def init_fields(self):
@@ -106,6 +108,7 @@ class User(models.AbstractBaseUser, models.AnonymousUser):
         ok, message, _data = upsert_user(self.username, **data)
         return ok, message
 
+    @property
     def is_authenticated(self):
         if not self.bk_token:
             return False

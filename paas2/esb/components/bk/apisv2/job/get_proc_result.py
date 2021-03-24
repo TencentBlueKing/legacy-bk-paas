@@ -65,7 +65,7 @@ class GetProcResult(Component):
             return result
 
         new_data = {}
-        for key, info in result["data"]["result"].items():
+        for key, info in list(result["data"]["result"].items()):
             try:
                 new_data[key] = json.loads(info)
                 if "content" in new_data[key]:

@@ -12,13 +12,13 @@ specific language governing permissions and limitations under the License.
 
 import os
 import re
+from builtins import object, str
 from importlib import import_module
 
-from django.utils import translation
-from django.template import engines
-
-from common.log import logger
 from common.base_utils import read_file, smart_unicode
+from common.log import logger
+from django.template import engines
+from django.utils import translation
 from esb.component.base import get_components_manager
 from esb.utils.confapis import get_confapis_manager
 
@@ -105,7 +105,7 @@ class ComponentClient(object):
 
     def get_comp_doc(self):
         comp_doc = self.comp_class.__doc__ or ""
-        return comp_doc if isinstance(comp_doc, unicode) else comp_doc.decode("utf-8")
+        return comp_doc if isinstance(comp_doc, str) else comp_doc.decode("utf-8")
 
     def get_comp_doc_md(self):
         if self.is_comp_doc_md_from_mdfile():

@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
 import os
 import tarfile
 import json
@@ -729,7 +730,7 @@ def _save_app_info(code, name, is_create=True, **app_info):  # noqa
                         logger.error(u"wrong env key [%s] in app.yml is not starts with BKAPP_" % key)
                         continue
 
-                    if isinstance(value, unicode):
+                    if isinstance(value, str):
                         value = value.encode("utf-8")
 
                     value = str(value)

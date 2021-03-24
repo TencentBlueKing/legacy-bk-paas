@@ -12,7 +12,10 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
-import urllib
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+import urllib.request, urllib.parse, urllib.error
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -44,7 +47,7 @@ def login_failed_response(request, redirect_to, app_id):
         query["app_id"] = app_id
 
     if query:
-        redirect_url = "%s?%s" % (BK_LOGIN_URL, urllib.urlencode(query))
+        redirect_url = "%s?%s" % (BK_LOGIN_URL, urllib.parse.urlencode(query))
     response = HttpResponseRedirect(redirect_url)
     response = set_bk_token_invalid(request, response)
     return response

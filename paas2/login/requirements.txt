@@ -1,4 +1,4 @@
-django==1.8.19
+django==1.11.29
 django-braces==1.13.0
 dj-static==0.0.6
 pycrypto==2.6.1
@@ -19,3 +19,4 @@ cachetools==3.1.1
 django-environ==0.4.5
 # prometheus metrics
 django-prometheus==1.0.15
+future==0.18.2

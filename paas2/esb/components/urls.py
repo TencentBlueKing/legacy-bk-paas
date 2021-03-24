@@ -10,14 +10,13 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from esb import routers
 
-
-urlpatterns = patterns(
-    "",
-    url(r"^compapi/(.*?)$", "esb.routers.api_router_view"),
-    url(r"^self-service-api/(.*?)$", "esb.routers.buffet_component_view"),
-)
+urlpatterns = [
+    url(r"^compapi/(.*?)$", routers.api_router_view),
+    url(r"^self-service-api/(.*?)$", routers.buffet_component_view),
+]
 
 
 # 处理404和500请求
