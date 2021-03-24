@@ -33,6 +33,8 @@ from api.utils import (
     check_rabbitmq,
     apply_mq_res,
     get_category_by_mode,
+)
+from api.tools import (
     update_app_routers,
     delete_server_from_routers,
 )

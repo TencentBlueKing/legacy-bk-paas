@@ -12,7 +12,8 @@ specific language governing permissions and limitations under the License.
 
 import json
 
-from django.utils.encoding import force_unicode
+# from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text as force_unicode
 from django.http import HttpResponse
 from django.shortcuts import _get_queryset
 from django.utils import translation

@@ -19,6 +19,7 @@ import copy
 import logging
 
 from django.db import models
+from django.conf import settings
 
 from api.constants import (
     SERVER_CATEGORY_CHOICES,
@@ -27,10 +28,9 @@ from api.constants import (
     THIRD_SERVER_CATEGORY_CHOICES,
 )
 from api import http
+
 from api.utils import (
     get_category_by_mode,
-    PortManager,
-    get_assigned_servers,
     is_online_event,
     parse_event_type,
     is_paasagent_active,
@@ -479,3 +479,58 @@ class BkAppBindPort(models.Model):
         verbose_name = "app bind port"
         unique_together = ("bk_app", "mode", "port")
         ordering = ("created_at",)
+
+
+def get_assigned_servers(app_code, mode):
+    category = get_category_by_mode(mode)
+    hs_qset = BkHostingShip.objects.select_related("bk_server").filter(
+        bk_app__app_code=app_code, is_active=True, bk_server__category=category
+    )
+    servers = []
+    for hs in hs_qset:
+        servers.append(hs.bk_server)
+    return servers
+
+
+class PortManager(object):
+    """
+    manager port for app container, especially for java
+    """
+
+    def __init__(self, bk_app, mode, server_ids=None, port_pools=settings.PORT_POOLS):
+        self.bk_app = bk_app
+        self.mode = mode
+        self.server_ids = server_ids
+        self.port_pools = port_pools
+
+    def _get_available_port(self):
+        used_ports = list(BkAppBindPort.objects.filter(mode=self.mode).values_list("port", flat=True))
+        available_ports = list(set(self.port_pools) - set(used_ports))
+        for _ in range(settings.PORT_MAX_TRIES):
+            available_port = random.choice(available_ports)
+            if self._check_port_available(available_port):
+                return available_port
+        raise ValueError("Port allocation failed after being tried %s times" % settings.PORT_MAX_TRIES)
+
+    def bind_app_to_port(self):
+        try:
+            available_port = BkAppBindPort.objects.get(bk_app=self.bk_app, mode=self.mode).port
+        except BkAppBindPort.DoesNotExist:
+            available_port = self._get_available_port()
+            BkAppBindPort.objects.create(bk_app=self.bk_app, mode=self.mode, port=available_port)
+        return available_port
+
+    def recycle_app_port(self):
+        BkAppBindPort.objects.filter(bk_app=self.bk_app, mode=self.mode).delete()
+
+    def _check_port_available(self, port):
+        if not self.server_ids:
+            raise ValueError("No servers")
+
+        for server_id in self.server_ids:
+            server = BkServer.objects.get(id=server_id)
+            url = "http://%s:%s/v1/app/ports/%s" % (server.ip_address, server.ip_port, port)
+            ret, data = http.http_get(url, server.s_id, server.token, "", timeout=5)
+            if not ret or data["error"] != 0 or data["already_use"]:
+                return False
+        return True

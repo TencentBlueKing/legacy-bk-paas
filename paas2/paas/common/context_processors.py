@@ -19,8 +19,6 @@ from django.utils.translation import ugettext as _
 """
 context_processor for common(setting)
 ** 除setting外的其他context_processor内容，均采用组件的方式(string)
-
-Copyright © 2012-2017 Tencent BlueKing. All Rights Reserved. 蓝鲸智云 版权所有
 """
 
 

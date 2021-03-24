@@ -12,7 +12,9 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+from builtins import str
 from future import standard_library
+
 standard_library.install_aliases()
 from django.utils import timezone
 import urllib.parse
@@ -26,7 +28,7 @@ context_processor for common(setting)
 
 
 def site_settings(request):
-    real_static_url = urllib.parse.urljoin(settings.SITE_URL, "." + settings.STATIC_URL)
+    real_static_url = urllib.parse.urljoin(str(settings.SITE_URL), str("." + settings.STATIC_URL))
     cur_domain = request.get_host()
     return {
         "LOGIN_URL": settings.LOGIN_URL,

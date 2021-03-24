@@ -15,7 +15,7 @@ from django.conf import settings
 
 
 def enum(**enums):
-    return type(b"Enum", (), enums)
+    return type("Enum", (), enums)
 
 
 PaaSErrorCodes = enum(
