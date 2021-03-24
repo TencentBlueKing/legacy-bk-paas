@@ -1,0 +1,55 @@
+#! /bin/bash
+exec 2>&1
+
+if_fail_then_exit() {
+    if [ "$1" != "0" ]; then
+        echo "$2"
+        exit
+    fi
+}
+
+export JAVA_HOME=/usr/local/java
+export JAVA_BIN=/usr/local/java/bin
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export JAVA_HOME JAVA_BIN PATH CLASSPATH
+
+MAVEN_HOME=/data/apache-maven-3.3.9
+export MAVEN_HOME
+export PATH=${PATH}:${MAVEN_HOME}/bin
+# mvn clean package 内存大小设置
+export MAVEN_OPTS="-Xmx${BKAPP_CONTAINER_MEM}M -Xms${BKAPP_CONTAINER_MEM}M"
+
+# /data/app/code
+# /data/app/code/package
+# /data/app/code/package/src
+cd "/data/app/code"
+
+if [ $SaaS_PATH ]; then
+    # /data/app/code/target/${APP_ID}
+    cp -r target/${APP_ID}/static ./
+else
+    echo "------STARTING: mvn clean package------"
+    echo "it will take several seconds, please wait..."
+    mvn --settings settings.xml -q clean
+    mvn --settings settings.xml -q package -P pkg -Dmaven.test.skip=true
+    if_fail_then_exit "$?" "------FAILURE: mvn clean package------"
+    cp -r target/static ./
+    echo "------SUCCESS: mvn clean package------"
+fi
+
+# 创建apps组和用户
+groupadd -g $APPS_GID apps
+useradd apps -u $APPS_UID -g $APPS_GID -b /home
+
+# echo "------nginx start------"
+NGINX_PATH=/cache/.bk/nginx
+rm -rf /data/app/run/nginx.sock
+rm -rf /data/app/run/nginx.pid
+sed -i "s/APP_ID/${APP_ID}/g" $NGINX_PATH/conf/nginx.conf
+sed -i "s/JAVA_PORT/${CONTAINER_PORT}/g" $NGINX_PATH/conf/nginx.conf
+$NGINX_PATH/sbin/nginx
+
+# 切换到apps用户
+chown -R apps:apps ${APP_CONTAINER_PATH}
+su -m apps -c "/build/starter"

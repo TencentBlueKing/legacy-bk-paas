@@ -1,0 +1,26 @@
+auth:
+  sid: ''  # agent sid
+  token: '' # agent token
+settings:
+  CONTROLLER_SERVER_URL: 'http://www.bking.com' # App Engine地址
+  BASE_APP_PATH: 'TPL_AGENT_ROOT/paas_agent'
+  USE_PYPI: 'true'
+  USE_DOCKER: 'true'
+  UID: '' # 对容器所挂载的主机目录有权限的uid
+  GID: '' # 对容器所挂载的主机目录有权限的gid
+  IMAGE_NAME: 'bkbase/python2:1.0'
+
+  AGENT_LOG_PATH: 'TPL_AGENT_ROOT/logs/agent.log'
+  TEMPLATE_PATH: 'paas_agent/etc/templates'
+  BUILD_PATH: 'paas_agent/etc/build'
+  EXECUTE_TIME_LIMIT: 300
+  PYTHON_PIP: 'http://pypi.douban.com/simple/'
+
+java_settings:
+  IMAGE_NAME: 'bkbase/java:1.0'
+
+python3_settings:
+  IMAGE_NAME: 'bkbase/python3:1.0'
+
+port: 4245
+ip: ''

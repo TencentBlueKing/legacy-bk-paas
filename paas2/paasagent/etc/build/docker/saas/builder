@@ -1,0 +1,45 @@
+#!/bin/bash
+# 该脚本运行在启动的docker容器中，用于安装yum依赖和pip包依赖
+# 然后创建apps账号后，用apps账号调用starter脚本，运行Python工程
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/bin
+exec 2>&1
+
+cd ${BASH_SOURCE%/*} >/dev/null
+export LOG_FILE=/tmp/${0##*/}-$(date +%Y%m%d_%H%M%S).log
+
+CODE_PATH=${APP_CONTAINER_PATH}"code"
+CONF_PATH=${APP_CONTAINER_PATH}"conf"
+RUN_PATH=${APP_CONTAINER_PATH}"run"
+LOG_PATH=${APP_CONTAINER_PATH}"logs"
+
+PYTHON_BIN_PATH="/cache/.bk/env/bin/"
+PACKAGES_CONTAINER_PATH="/data/pkgs/"
+export PATH=$PYTHON_BIN_PATH:$PATH
+
+if [ "$YUM_LIST" != "" ]; then
+    echo "------- start yum install --------"
+    yum clean all
+    rpm --rebuilddb
+    http_proxy=$BK_PROXY https_proxy=$BK_PROXY yum install -y yum-plugin-ovl
+    http_proxy=$BK_PROCY https_proxy=$BK_PROXY yum install -y $YUM_LIST
+    [ $? -eq 0 ] || { echo "---- FAILURE: Yum $YUM_LIST ------"; exit 1; }
+    echo "------ SUCCESS: Yum Install ------"
+fi
+
+if [ "$PIP_LIST" != "" ]; then
+    echo "------ STARTING: pip Install ------"
+
+    echo "------ install packages from local ------"
+    ${PYTHON_BIN_PATH}pip install $PIP_LIST --no-index --find-links=$PACKAGES_CONTAINER_PATH
+    [ $? -eq 0 ] || { echo "------ FAILURE: pip Install $PIP_LIST ------"; exit 1; }
+    echo "------ SUCCESS: pip Install ------"
+fi
+
+# 创建apps组和用户
+groupadd -g $APPS_GID apps
+useradd apps -u $APPS_UID -g $APPS_GID -b /home
+
+# 切换到apps用户
+chown -R apps:apps ${APP_CONTAINER_PATH} ${PYTHON_BIN_PATH}
+su -m apps -c "/build/starter"
