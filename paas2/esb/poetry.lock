@@ -346,6 +346,43 @@ docs = ["sphinx", "rst.linker", "jaraco.packaging"]
 
 [[package]]
 name = "ipdb"
+version = "0.13.4"
+description = "IPython-enabled pdb"
+category = "dev"
+optional = false
+python-versions = ">=2.7"
+
+[package.dependencies]
+ipython = [
+    {version = ">=5.1.0,<6.0.0", markers = "python_version == \"2.7\""},
+    {version = ">=5.1.0", markers = "python_version >= \"3.4\""},
+]
+
+[[package]]
+name = "ipdb"
+version = "0.13.5"
+description = "IPython-enabled pdb"
+category = "dev"
+optional = false
+python-versions = ">=2.7"
+
+[package.dependencies]
+ipython = {version = ">=5.1.0,<6.0.0", markers = "python_version == \"2.7\""}
+
+[[package]]
+name = "ipdb"
+version = "0.13.6"
+description = "IPython-enabled pdb"
+category = "dev"
+optional = false
+python-versions = ">=2.7"
+
+[package.dependencies]
+ipython = {version = ">=5.1.0,<6.0.0", markers = "python_version == \"2.7\""}
+toml = {version = ">=0.10.2", markers = "python_version == \"2.7\" or python_version == \"3.6\" or python_version > \"3.6\""}
+
+[[package]]
+name = "ipdb"
 version = "0.13.7"
 description = "IPython-enabled pdb"
 category = "dev"
@@ -354,7 +391,7 @@ python-versions = ">=2.7"
 
 [package.dependencies]
 ipython = {version = ">=5.1.0,<6.0.0", markers = "python_version == \"2.7\""}
-toml = {version = ">=0.10.2", markers = "python_version == \"2.7\""}
+toml = {version = ">=0.10.2", markers = "python_version == \"2.7\" or python_version == \"3.6\" or python_version > \"3.6\""}
 
 [[package]]
 name = "ipython"
@@ -945,8 +982,8 @@ testing = ["pathlib2", "unittest2", "jaraco.itertools", "func-timeout"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^2.7"
-content-hash = "7a09645907650d778b2ebe1a6d11ddd4726356cf8eabaa337d871b824bffd896"
+python-versions = "^2.7 || ^3.6"
+content-hash = "708ceb52a7a342dd970fe06a0f7f4435ba7ef8acb4651a679cd128481ad8e535"
 
 [metadata.files]
 appdirs = [
@@ -1153,6 +1190,9 @@ importlib-resources = [
     {file = "importlib_resources-3.3.1.tar.gz", hash = "sha256:0ed250dbd291947d1a298e89f39afcc477d5a6624770503034b72588601bcc05"},
 ]
 ipdb = [
+    {file = "ipdb-0.13.4.tar.gz", hash = "sha256:c85398b5fb82f82399fc38c44fe3532c0dde1754abee727d8f5cfcc74547b334"},
+    {file = "ipdb-0.13.5.tar.gz", hash = "sha256:521e55ade3d3f5e459df6474cfb1d1ef6d44ab4155f829695c7c3dc2a8ce5b2b"},
+    {file = "ipdb-0.13.6.tar.gz", hash = "sha256:1aa37e19e5b3b96c930fe7fe97193a54202c23a8d1b1c7763f76553f5b275731"},
     {file = "ipdb-0.13.7.tar.gz", hash = "sha256:178c367a61c1039e44e17c56fcc4a6e7dc11b33561261382d419b6ddb4401810"},
 ]
 ipython = [
