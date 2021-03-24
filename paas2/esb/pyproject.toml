@@ -5,10 +5,10 @@ description = ""
 authors = []
 
 [tool.poetry.dependencies]
-python = "^2.7 || ^3.6"
+python = "^3.6"
 Django = "1.11.29"
 requests = "2.21.0"
-jinja2 = "2.8"
+jinja2 = "2.11.3"
 markdown = "2.6.6"
 markupsafe = "1.1.1"
 pyasn1 = "0.4.8"
