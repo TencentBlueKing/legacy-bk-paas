@@ -130,4 +130,5 @@ open_paas_unittest
 
 .DS_Store
 .vscode/
+.idea/
 # End of https://www.gitignore.io/api/python
