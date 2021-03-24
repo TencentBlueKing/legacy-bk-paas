@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.0
+    - add: support python2/3 both
+
 # 2.12.9
     - bugfix: fix home page js 404
 
