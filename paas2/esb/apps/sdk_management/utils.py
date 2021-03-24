@@ -12,12 +12,10 @@ specific language governing permissions and limitations under the License.
 
 import os
 import shutil
-import string
 
+from apps.sdk_management.constants import API_COMPONENT_TMPL, API_PY_TMPL, COLLECTIONS_PY_TMPL
 from django.conf import settings
 from jinja2 import Template
-
-from apps.sdk_management.constants import COLLECTIONS_PY_TMPL, API_PY_TMPL, API_COMPONENT_TMPL
 
 
 class SDKGenerator(object):
@@ -33,7 +31,7 @@ class SDKGenerator(object):
 
     def get_available_channels(self, channels):
         new_channels = {}
-        for system_name, sub_channels in channels.iteritems():
+        for system_name, sub_channels in channels.items():
             new_sub_channels = [
                 channel for channel in sub_channels if channel["suggest_method"] and not channel["no_sdk"]
             ]
@@ -101,15 +99,17 @@ class SDKGenerator(object):
                         description=channel["component_label"].encode("utf-8"),
                     )
                 )
+
+        apis_str = "".join(apis)
         return Template(API_PY_TMPL).render(
             system_name_smart=self.smart_system_name(system_name),
             system_name=system_name,
-            apis="".join(apis).decode("utf-8"),
+            apis=apis_str.decode("utf-8") if hasattr(apis_str, "decode") else apis_str,
         )
 
     def smart_system_name(self, system_name):
         if "_" in system_name:
-            system_name = "".join(string.capitalize(word) for word in system_name.split("_"))
+            system_name = "".join(word.capitalize() for word in system_name.split("_"))
         return system_name
 
     def write_content_to_file(self, content, file_path):
@@ -134,10 +134,13 @@ class SDKGenerator(object):
         for path, channel in channels_v2.items():
             if path in channels_v1:
                 if channels_v1[path]["suggest_method"] != channel["suggest_method"]:
-                    print "channel method different: v1=%s, v2=%s, path=%s" % (
-                        channels_v1[path]["suggest_method"],
-                        channel["suggest_method"],
-                        path,
+                    print(
+                        "channel method different: v1=%s, v2=%s, path=%s"
+                        % (
+                            channels_v1[path]["suggest_method"],
+                            channel["suggest_method"],
+                            path,
+                        )
                     )
                 channels_v1_v2.append(channel)
                 channels_v1.pop(path)

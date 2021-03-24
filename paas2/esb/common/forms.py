@@ -10,15 +10,15 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-import re
 import json
+import re
 
 from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
-from django.utils.encoding import force_unicode, smart_unicode
 from django.forms import Field
 from django.forms.utils import ErrorDict
+from django.utils.encoding import force_text, smart_text
 
 from common.base_utils import FancyDict, str_bool
 from common.errors import CommonAPIError
@@ -31,7 +31,7 @@ def get_error_prompt(form):
     content = []
     fields = list(form.fields.keys())
     for k, v in sorted(list(form.errors.items()), key=lambda x: fields.index(x[0]) if x[0] in fields else -1):
-        _msg = force_unicode(v[0])
+        _msg = force_text(v[0])
         b_field = form._safe_get_field(k)
         # Get the default error messages
         messages = {}
@@ -43,7 +43,7 @@ def get_error_prompt(form):
             content.append(u"%s [%s] %s" % (b_field.label, b_field.name, _msg))
         else:
             content.append(u"%s" % _msg)
-    return force_unicode(content[0])
+    return force_text(content[0])
 
 
 class BaseComponentForm(forms.Form):
@@ -121,7 +121,11 @@ class BaseComponentForm(forms.Form):
         keys = keys or list(self.fields.keys())
         if isinstance(keys, dict):
             return dict(
-                [(key_dst, self.cleaned_data[key_src]) for key_src, key_dst in list(keys.items()) if key_src in self.data]
+                [
+                    (key_dst, self.cleaned_data[key_src])
+                    for key_src, key_dst in list(keys.items())
+                    if key_src in self.data
+                ]
             )
         else:
             return dict([(key, self.cleaned_data[key]) for key in keys if key in self.data])
@@ -149,7 +153,7 @@ class ListField(Field):
         "Returns a Unicode object."
         if value in validators.EMPTY_VALUES:
             return ""
-        return smart_unicode(value)
+        return smart_text(value)
 
     def to_python(self, value):
         # 如果传入的数据类型本身就是list（ 比如用json loads过来的数据结构来校验），直接返回

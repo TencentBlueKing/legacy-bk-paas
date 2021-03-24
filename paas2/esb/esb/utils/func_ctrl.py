@@ -12,7 +12,7 @@ specific language governing permissions and limitations under the License.
 
 import json
 import re
-from builtins import object
+from builtins import bytes, object
 
 from cachetools import TTLCache, cached
 from common.constants import CACHE_MAXSIZE, CacheTimeLevel, FunctionControllerCodeEnum
@@ -64,6 +64,11 @@ class FunctionControllerClient(object):
 
     @classmethod
     def save_jwt_key(cls, private_key, public_key):
+        if isinstance(private_key, bytes):
+            private_key = private_key.decode("utf-8")
+
+        if isinstance(public_key, bytes):
+            public_key = public_key.decode("utf-8")
 
         FunctionController.objects.get_or_create(
             func_code=FunctionControllerCodeEnum.JWT_KEY.value,

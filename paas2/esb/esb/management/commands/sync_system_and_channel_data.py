@@ -10,15 +10,14 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from past.builtins import basestring
 import json
 import logging
-from optparse import make_option
 
 from common.constants import API_TYPE_Q
 from django.core.management.base import BaseCommand
 from esb.bkcore.models import ComponentSystem, ESBBuffetComponent, ESBChannel, SystemDocCategory
 from esb.management.utils import conf_tools
+from past.builtins import basestring
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +27,8 @@ update system and channel data to db
 
 
 class Command(BaseCommand):
-
-    option_list = BaseCommand.option_list + (
-        make_option("--force", action="store_true", dest="force", help="Force data update to db"),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument("--force", action="store_true", dest="force", help="Force data update to db")
 
     def handle(self, *args, **options):
         self.force = options["force"]

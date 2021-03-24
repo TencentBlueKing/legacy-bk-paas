@@ -32,7 +32,7 @@ from common.errors import (
 from common.log import logger, logger_api
 from django.conf import settings
 from django.utils import timezone
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_bytes
 from past.builtins import basestring
 from requests.exceptions import ReadTimeout, SSLError
 
@@ -409,7 +409,7 @@ class HttpClient(BasicHttpClient):
             params = json.dumps(params)
         datetime_end = timezone.now()
         msecs_cost = (datetime_end - datetime_start).total_seconds() * 1000
-        exception_name = smart_str(r.request_exception) if r.request_exception else None
+        exception_name = smart_bytes(r.request_exception) if r.request_exception else None
 
         try:
             api_log = {
@@ -553,7 +553,7 @@ class RequestHelperClient(BasicHttpClient):
                 request_params = str(request_params)
         datetime_end = timezone.now()
         msecs_cost = (datetime_end - datetime_start).total_seconds() * 1000
-        exception_name = smart_str(request_exception) if request_exception else None
+        exception_name = smart_bytes(request_exception) if request_exception else None
 
         # Log to logstash, Use type="pyls-comp-api"
         try:
