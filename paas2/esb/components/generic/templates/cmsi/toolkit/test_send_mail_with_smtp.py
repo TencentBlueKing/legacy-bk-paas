@@ -13,9 +13,8 @@ specific language governing permissions and limitations under the License.
 from __future__ import print_function
 
 import smtplib
-
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from email.utils import COMMASPACE
 
 
