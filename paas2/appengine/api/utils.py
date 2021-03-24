@@ -145,8 +145,7 @@ def get_mode_by_category(category):
 
 
 def check_rabbitmq(server_info, admin_account):
-    """
-    """
+    """"""
     try:
         url = "http://%s:%s/api/overview" % (server_info["server_ip"], server_info["server_port"])
         r = requests.get(url, auth=(admin_account["name"], admin_account["password"]))
@@ -156,7 +155,7 @@ def check_rabbitmq(server_info, admin_account):
             return False, "Administrator account information error"
         else:
             return False, "Rabbitmq service exception"
-    except Exception, e:
+    except Exception as e:
         return False, str(e)
 
 
