@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from __future__ import unicode_literals
+from __future__ import print_function
 
 from django.db import migrations
 
@@ -47,7 +48,7 @@ def load_data(apps, schema_editor):
         confmanage_tag = AppTags.objects.get(code='ConfManage')
         App.objects.filter(code='bk_cc').update(tags=confmanage_tag)
     except Exception as error:
-        print error
+        print(error)
 
 
 class Migration(migrations.Migration):

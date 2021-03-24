@@ -106,7 +106,7 @@ class UserOperateRecordManager(models.Manager):
             # extra_data=extra_data,
             # ).save()
             result = True
-        except Exception, e:
+        except Exception as e:
             # 用户操作记录创建失败，error：%s
             logger.exception(u"record user operation fail，error：%s" % e)
             result = False
@@ -132,7 +132,7 @@ class VersionManager(models.Manager):
         try:
             self.create(app=appobj, version=version, publisher=username, pubdate=timezone.now())
             self.get(app=appobj, version=version).versiondetail_set.create(bug=bugs, features=features)
-        except Exception, e:
+        except Exception as e:
             # 创建发布新版本失败!%s
             logger.exception(u"create version fail!%s" % e)
             return False

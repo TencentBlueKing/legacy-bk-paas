@@ -65,7 +65,7 @@ def texteditor_escape(str_escape):
         parser.feed(str_escape)
         parser.close()
         return parser.get_html()
-    except Exception, e:
+    except Exception as e:
         # js脚本注入检测发生异常，错误信息：%s
         logger.error(u"There are abnormalities in script injection detection, Error message: %s" % e)
         return str_escape
@@ -100,7 +100,7 @@ class CheckXssMiddleware(object):
             request.GET = self.__escape_data(request.path, request.GET, escape_type)
             # post参数转换
             request.POST = self.__escape_data(request.path, request.POST, escape_type)
-        except Exception, e:
+        except Exception as e:
             # CheckXssMiddleware 转换失败！错误信息：%s
             logger.error(u"CheckXssMiddleware Conversion failed! Error message: %s" % e)
         return None
@@ -135,7 +135,7 @@ class CheckXssMiddleware(object):
                             new_value = _get_value
                         else:
                             new_value = html_escape(_get_value)
-                    except Exception, e:
+                    except Exception as e:
                         # CheckXssMiddleware GET/POST参数 转换失败！%s
                         logger.error(u"CheckXssMiddleware GET/POST Parameters conversion failed: %s" % e)
                         new_value = _get_value
@@ -180,7 +180,7 @@ class CheckXssMiddleware(object):
                 if is_path and param in script_v:
                     result_type = escape_type
                     break
-        except Exception, e:
+        except Exception as e:
             # CheckXssMiddleware 特殊path处理失败！错误信息%s
             logger.error(u"CheckXssMiddleware Special path processing failed! Error message: %s" % e)
         return result_type

@@ -141,7 +141,7 @@ class ESBChannelForm(forms.ModelForm):
 
     def clean(self):
         data = self.cleaned_data
-        for key, val in data.items():
+        for key, val in list(data.items()):
             if isinstance(val, basestring):
                 data[key] = val.strip()
         return data

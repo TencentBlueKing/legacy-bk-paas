@@ -38,7 +38,7 @@ class ComponentAPI(object):
     def __call__(self, *args, **kwargs):
         try:
             return self._call(*args, **kwargs)
-        except ComponentAPIException, e:
+        except ComponentAPIException as e:
             # Combine log message
             log_message = [
                 e.error_message,
@@ -77,7 +77,7 @@ class ComponentAPI(object):
         # Request remote server
         try:
             resp = self.client.request(self.method, self.url, params=params, data=data)
-        except Exception, e:
+        except Exception as e:
             logger.exception("Error occurred when requesting method=%s url=%s", self.method, self.url)
             raise ComponentAPIException(self, "Component call error, Exception: %s" % str(e))
 

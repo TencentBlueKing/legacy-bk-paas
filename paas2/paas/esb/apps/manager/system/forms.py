@@ -64,7 +64,7 @@ class ComponentSystemForm(forms.ModelForm):
     def add_and_clean_doc_category(self):
         # 添加新分类
         doc_category_name = self.data.get("doc_category") or DEFAULT_DOC_CATEGORY
-        category_name_map = dict([(category["label"], name) for name, category in SYSTEM_DOC_CATEGORY.items()])
+        category_name_map = dict([(category["label"], name) for name, category in list(SYSTEM_DOC_CATEGORY.items())])
         doc_category_name = category_name_map.get(doc_category_name) or doc_category_name
         obj, _ = SystemDocCategory.objects.get_or_create(name=doc_category_name)
         self.instance.doc_category_id = obj.id
@@ -80,7 +80,7 @@ class ComponentSystemForm(forms.ModelForm):
 
     def clean(self):
         data = self.cleaned_data
-        for key, val in data.items():
+        for key, val in list(data.items()):
             if isinstance(val, basestring):
                 data[key] = val.strip()
         return data

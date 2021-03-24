@@ -18,7 +18,7 @@ from esb.bkcore.models import ESBBuffetComponent, ESBBuffetMapping, ComponentSys
 
 
 def clean_data(data):
-    for key, val in data.items():
+    for key, val in list(data.items()):
         if isinstance(val, basestring):
             data[key] = val.strip()
     return data

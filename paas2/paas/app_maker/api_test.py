@@ -9,6 +9,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from __future__ import print_function
 
 from builtins import str
 import json
@@ -64,8 +65,8 @@ def create_maker_app(creator, app_name, app_url, developer):
     params["Signature"] = signature
     params.pop("Data", None)
     result = requests.post(CREATE_APP_URL, params=params, data=data)
-    print result
-    print result.content
+    print(result)
+    print(result.content)
     return result
 
 
@@ -91,8 +92,8 @@ def edit_maker_app(operator, app_maker_code, app_name="", app_url="", developer=
     params["Signature"] = signature
     params.pop("Data", None)
     result = requests.post(EDIT_APP_URL, params=params, data=data)
-    print result
-    print result.content
+    print(result)
+    print(result.content)
     return result
 
 
@@ -112,8 +113,8 @@ def del_maker_app(operator, app_maker_code):
     params["Signature"] = signature
     params.pop("Data", None)
     result = requests.post(DEL_APP_URL, params=params, data=data)
-    print result
-    print result.content
+    print(result)
+    print(result.content)
     return result
 
 
