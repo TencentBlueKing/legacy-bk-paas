@@ -13,6 +13,8 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import object
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
@@ -100,7 +102,7 @@ class Application(models.Model):
 
     objects = ApplicationManager()
 
-    class Meta:
+    class Meta(object):
         db_table = "login_bk_oauth2_application"
 
     @property

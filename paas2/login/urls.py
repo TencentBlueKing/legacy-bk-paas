@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 
 
 from __future__ import unicode_literals
+from __future__ import absolute_import
 
 from django.conf.urls import include, url
 from django.conf import settings
@@ -20,10 +21,10 @@ from django.views.i18n import javascript_catalog
 from django.views import i18n as django_i18n_views
 from decorator_include import decorator_include
 
-from bkauth import views as auth_views
-from healthz import views as healthz_views
-from bkauth.decorators import login_exempt
-from api import views as views_api
+from .bkauth import views as auth_views
+from .healthz import views as healthz_views
+from .bkauth.decorators import login_exempt
+from .api import views as views_api
 
 
 urlpatterns = [

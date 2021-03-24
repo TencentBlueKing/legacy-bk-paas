@@ -11,6 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from __future__ import unicode_literals
+from __future__ import print_function
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -150,8 +151,8 @@ try:
     if LOGIN_TYPE == "custom_login":
         INSTALLED_APPS = tuple(list(INSTALLED_APPS) + getattr(custom_conf_module, "CUSTOM_INSTALLED_APPS", []))
     # 支持自定义登录 patch 原有的所有URL 和 添加自定义 Application  END
-except ImportError, e:
-    print "load custom_login settings fail!", e
+except ImportError as e:
+    print("load custom_login settings fail!", e)
     LOGIN_TYPE = "bk_login"
 ##################
 # AUTHENTICATION #

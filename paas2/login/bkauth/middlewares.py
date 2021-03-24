@@ -12,6 +12,8 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import object
 from django.conf import settings
 from django.shortcuts import resolve_url
 from django.utils import translation

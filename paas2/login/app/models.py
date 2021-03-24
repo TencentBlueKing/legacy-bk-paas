@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext as _
@@ -42,7 +43,7 @@ class AppTags(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         ordering = ("index",)
         db_table = "paas_apptags"
         verbose_name = u"应用分类信息"
@@ -120,7 +121,7 @@ class App(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         db_table = "paas_app"
         verbose_name = u"应用基本信息"
         verbose_name_plural = u"应用基本信息"

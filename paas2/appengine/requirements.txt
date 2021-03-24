@@ -13,3 +13,4 @@ python-consul==1.1.0
 
 # for config
 django-environ==0.4.5
+future==0.18.2

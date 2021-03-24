@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 
 
 from __future__ import unicode_literals
+from builtins import object
 import pytz
 
 from django.utils import timezone

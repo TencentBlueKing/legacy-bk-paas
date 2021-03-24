@@ -11,10 +11,11 @@ specific language governing permissions and limitations under the License.
 """
 
 from __future__ import unicode_literals
+from __future__ import absolute_import
 
 from django.conf import settings
 
-from http import http_post, http_get
+from .http import http_post, http_get
 from common.log import logger
 
 """

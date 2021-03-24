@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+from builtins import object
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 

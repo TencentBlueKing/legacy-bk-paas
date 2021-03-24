@@ -9,6 +9,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from __future__ import print_function
 
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
@@ -52,7 +53,7 @@ class OauthBackend(ModelBackend):
             user.display_name = userinfo.get("display_name")
             user.email = userinfo.get("email")
             user.telephone = userinfo.get("telephone")
-            print user
+            print(user)
 
             # 同步用户到用户管理 sync to usermgr
             ok, message = user.sync_to_usermgr()

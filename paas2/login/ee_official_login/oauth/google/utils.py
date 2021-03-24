@@ -10,7 +10,11 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-import urllib
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+import urllib.request, urllib.parse, urllib.error
 import random
 
 import requests
@@ -36,11 +40,11 @@ def gen_oauth_login_url(extra_param):
     # 由于google校验redirect_uri是精准匹配的，所有redirect_uri中无法带参数，只能放置在state中处理
     extra_param = {} if extra_param is None or not isinstance(extra_param, dict) else extra_param
     extra_param["security_token"] = gen_oauth_state_security_token()
-    state = "&".join(["%s=%s" % (k, v) for k, v in extra_param.items() if v is not None and v != ""])
+    state = "&".join(["%s=%s" % (k, v) for k, v in list(extra_param.items()) if v is not None and v != ""])
     # 跳转到 google 登录的URL
     google_oauth_login_url = "%s?%s" % (
         google_setting.GOOGLE_OAUTH_LOGIN_URL,
-        urllib.urlencode(
+        urllib.parse.urlencode(
             {
                 "response_type": "code",
                 "client_id": google_setting.CLIENT_ID,
