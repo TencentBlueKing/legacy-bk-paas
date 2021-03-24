@@ -1,0 +1,405 @@
+#!/bin/bash
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/bin
+exec 2>&1
+unset HASTTY
+
+red_echo ()      { [ "$HASTTY" == 1 ] && echo -e "\033[031;1m$@\033[0m" || echo "$@"; }
+blue_echo ()     { [ "$HASTTY" == 1 ] && echo -e "\033[034;1m$@\033[0m" || echo "$@"; }
+green_echo ()    { [ "$HASTTY" == 1 ] && echo -e "\033[032;1m$@\033[0m" || echo "$@"; }
+bblue_echo ()    { [ "$HASTTY" == 1 ] && echo -e "\033[044;1m$@\033[0m" || echo "$@"; }
+
+get_lan_ip  () {
+   ip addr | \
+       awk -F'[ /]+' '/inet/{
+               split($3, N, ".")
+               if ($3 ~ /^192.168/) {
+                   print $3
+               }
+               if (($3 ~ /^172/) && (N[2] >= 16) && (N[2] <= 31)) {
+                   print $3
+               }
+               if ($3 ~ /^10\./) {
+                   print $3
+               }
+          }'
+
+   return $?
+}
+
+log () {
+   # 打印消息, 并记录到日志, 日志文件由 LOG_FILE 变量定义
+   local retval=$?
+   local timestamp=$(date +%Y%m%d-%H%M%S)
+   local level=INFO
+   local func_seq=$(echo ${FUNCNAME[@]} | sed 's/ /-/g')
+   local logfile=${LOG_FILE:=/tmp/bkc.log}
+
+   echo "[$(blue_echo $LAN_IP)]$timestamp $BASH_LINENO   $@"
+   echo "[$(blue_echo $LAN_IP)]$timestamp $level|$BASH_LINENO|${func_seq} $@" >>$logfile
+   return $retval
+}
+
+err () {
+   # 打印错误消息, 并返回非0
+   # 屏幕输出使用红色字体
+   local timestamp=$(date +%Y%m%d-%H%M%S)
+   local level=ERROR
+   local func_seq=$(echo ${FUNCNAME[@]} | sed 's/ /-/g')
+   local logfile=${LOG_FILE:=/tmp/bkc.log}
+
+
+   echo "[$(red_echo $LAN_IP)]$timestamp $BASH_LINENO   $(red_echo $@)"
+   echo "[$(red_echo $LAN_IP)]$timestamp $level|$BASH_LINENO|${func_seq} $@" >> $logfile
+
+   return 1
+}
+
+fail () {
+   # 打印错误消息,并以非0值退出程序
+   # 参数1: 消息内容
+   # 参数2: 可选, 返回值, 若不提供默认返回1
+   local timestamp=$(date +%Y%m%d-%H%M%S)
+   local level=FATAL
+   local retval=${2:-1}
+   local func_seq=$(echo ${FUNCNAME[@]} | sed 's/ /-/g')
+   local logfile=${LOG_FILE:=/tmp/bkc.log}
+
+   echo "[$(red_echo $LAN_IP)]$timestamp $BASH_LINENO   $(red_echo $@)"
+   echo "[$(red_echo $LAN_IP)]$timestamp $level|$BASH_LINENO|${func_seq} $@" >> $logfile
+
+   exit $retval
+}
+
+ok () {
+   # 打印标准输出(绿色消息), 说明某个过程执行成功, 状态码为0
+   local timestamp=$(date +%Y%m%d-%H%M%S)
+   local level=INFO
+   local func_seq=$(echo ${FUNCNAME[@]} | sed 's/ /-/g')
+   local logfile=${LOG_FILE:=/tmp/bkc.log}
+
+   echo "[$(green_echo $LAN_IP)]$timestamp $BASH_LINENO   $(green_echo $@)"
+   echo "[$(green_echo $LAN_IP)]$timestamp $level|$BASH_LINENO|${func_seq} $@" >> $logfile
+
+   return 0
+}
+
+step () {
+   # 打印步骤信息, 并记录当前步骤节点
+   # 输出使用带背景的红色
+   echo ""
+   l=$(( (70 - $(wc -c <<<"$@"))/2 ))
+   str="$(printf "%${l}s$@%${l}s" " " " ")"
+   bblue_echo "$str"
+}
+
+assert () {
+    local check_ret=$?
+    local msg="$1"
+    local err="$2"
+
+    if [ $check_ret -eq 0 ]; then
+        ok "$msg"
+    else
+        fail "$err"
+    fi
+}
+
+remove_app () {
+    # $1: string  - app_code
+    # $2: int (optional) - reserve the latest N containers with the same name of 'app_code'
+    local app_code=$1
+    local reserve=$2
+
+    can_ids=(
+        $(docker ps -a | awk '$NF ~ /^'$app_code'-[0-9]{10}/{print $NF}')
+        $(docker ps -a | awk '$NF ~ /^'$app_code'[0-9]{10}/{print $NF}')
+    )
+
+    for id in ${can_ids[@]}; do
+        [ $id == "$reserve" ] && continue
+        # ignore aufs error
+        docker stop $id && docker rm -f $id >/dev/null
+    done
+
+    return 0
+}
+
+mount_objects () {
+    local YUM_BASE_PATHS LOCAL_MEDIA p
+
+    YUM_BASE_PATHS=(
+        /etc/yum.repos.d
+        /etc/yum
+        /etc/pki
+        /etc/yum.conf
+    )
+
+    LOCAL_MEDIA=( $(find_local_media) )
+
+    log "mount directories/files:"
+    export MOUNT_OPTION=""
+    for p in  ${YUM_BASE_PATHS[@]} ${LOCAL_MEDIA[@]} $EXTRA_DOCKER_VOLUMN; do
+        [ ! -e $p ] && continue
+        log "  - $p"
+        MOUNT_OPTION+=" -v $p:$p"
+    done
+    
+    if [ ! -z "$BKAPP_ENABLE_SHARED_FS" ]; then
+        MOUNT_OPTION+=" -v $CODE_PATH/$APP_CODE/USERRES:$CODE_CONTAINER_PATH/USERRES"
+    fi
+
+    return 0
+}
+
+start_container () {
+    # 启动容器
+    local ID
+    local ret=1
+
+    tmpenv=$(mktemp /tmp/dockerenv.XXXX.$APP_CODE.env)
+    echo $ContainerEnvs | sed -r 's/ ?--env /\n/g' >$tmpenv
+    sed -r -i 's/LIST="(.*)"$/LIST=\1/' $tmpenv
+    ID=$(eval "docker run --name=$CONTAINER_NAME --net=host \
+        -v $CODE_PATH/$APP_CODE:$CODE_CONTAINER_PATH \
+        -v $APP_PATH:$APP_CONTAINER_PATH \
+        -v $BUILDER_PATH:$BUILDER_CONTAINER_PATH \
+        -v $HOST_LOG_PATH:$LOG_CONTAINER_PATH \
+        -v $LOCAL_PACKAGES_PATH:$PKGS_CONTAINER_PATH \
+        -v /etc/localtime:/etc/localtime \
+        $MOUNT_OPTION \
+        --env-file $tmpenv \
+        --env BK_PROXY=$BK_PROXY \
+        -m $MAX_MEM \
+        -c $MAX_CPU_SHARES \
+        -d $IMAGE_NAME sh ${BUILDER_CONTAINER_PATH}builder")
+    assert "create app container done" "create app container failed.[JOB FAILURE]"
+    rm -f $tmpenv
+
+    log "mount opton:"
+    log " - $CODE_PATH/$APP_CODE:$CODE_CONTAINER_PATH"
+    log " - $APP_PATH:$APP_CONTAINER_PATH"
+    log " - $BUILDER_PATH:$BUILDER_CONTAINER_PATH"
+    log " - $HOST_LOG_PATH:$LOG_CONTAINER_PATH"
+    log " - $LOCAL_PACKAGES_PATH:$PKGS_CONTAINER_PATH"
+    log " - $CODE_PATH/$APP_CODE/USERRES:$CODE_CONTAINER_PATH/USERRES"
+
+    if [ ! -z $ID ]; then
+        log "app container created. id:$ID, name:$CONTAINER_NAME"
+
+        docker logs $ID | tee $temp_log
+        local temp_log=$(mktemp /tmp/XXXXXXX)
+        local last_pos=$(cat $temp_log |wc -l)
+
+        while true; do
+            docker logs $ID | tail -n +$((last_pos+1)) >$temp_log
+            new_lines=$(cat $temp_log |wc -l)
+            last_pos=$(( last_pos + new_lines ))
+            cat $temp_log
+
+            if grep -q "_uwsgi entered RUNNING state" $temp_log; then
+                ret=0
+                break
+            fi
+            sleep 1
+            if [ "$(docker ps -a --filter id=$ID --filter status=exited | wc -l)" = "2" ]; then
+                docker logs $ID | tail -n +$((last_pos+1)) >$temp_log
+                new_lines=$(cat $temp_log |wc -l)
+                last_pos=$(( last_pos + new_lines ))
+                cat $temp_log
+                ret=1
+                break
+            fi
+        done
+
+        rm -f $temp_log
+        if [ "$ret" == 0 ]; then
+            if remove_app $APP_CODE $CONTAINER_NAME; then
+                log "remove old app($APP_CODE) done."
+            else
+                err "remove old app($APP_CODE) failed"
+            fi
+            return 0
+        fi
+    fi
+
+    return 1
+}
+
+find_local_media () {
+    awk '/baseurl=file/{
+            x=$0;
+            y=1;
+            next
+        }
+        y && /file/{
+            x = x " " $0
+        }END{print x}' /etc/yum.repos.d/* | \
+            grep -oP '(?<=file://)[^\s]*' | \
+            grep -v '/etc/pki' | \
+            sort -u
+}
+
+cd ${BASH_SOURCE%/*} >/dev/null
+timestart=$(date +%Y%m%d_%H%M%S)
+export LOG_FILE=/tmp/${0##*/}-$timestart.log
+export LAN_IP=$(get_lan_ip | head -1)
+
+WORK_DIR=$PWD
+
+if [ -z "$INSTALL_PATH" ]; then
+    BK_HOME=$INSTALL_PATH
+else
+    BK_HOME=${WORK_DIR%%/paas_agent*}
+fi
+
+if [ -z "$BK_PROXY" ]; then
+    if [ -f $BK_HOME/bin/globals.env ]; then
+        source $BK_HOME/bin/globals.env
+    fi
+fi
+
+export PROJECT_HOME=${WORK_DIR%etc/*}
+export DOCKER_BIN_PATH=$PROJECT_HOME/bin
+
+CODE_PATH=${APP_PATH}"code"
+CONF_PATH=${APP_PATH}"conf"
+RUN_PATH=${APP_PATH}"run"
+
+TIMESTAMP=$(date '+%s')
+CONTAINER_NAME=$APP_CODE-$TIMESTAMP
+
+CODE_CONTAINER_PATH=${APP_CONTAINER_PATH}"code/"
+LOG_CONTAINER_PATH=${APP_CONTAINER_PATH}"logs/"${APP_CODE}"/"
+
+LOCAL_PACKAGES_PATH=$BK_HOME/paas_agent/support-files/pkgs
+PKGS_CONTAINER_PATH="/data/pkgs/"
+BUILDER_CONTAINER_PATH=/build/
+
+export PATH=$DOCKER_BIN_PATH:$PATH
+
+if [ "$HANDLE" == "OFF" ]; then
+    remove_app $APP_CODE
+    assert "remove app($APP_CODE) done. SUCCESS: Offline Job." "remove app($APP_CODE) failed.[JOB FAILURE]"
+    rm -f $RUN_PATH/{supervisord,uwsgi}.{pid,sock}
+    exit $?
+fi
+
+while getopts m:c: opt; do
+    case $opt in
+        m)  MAX_CANTAINER_MEM=$OPTARG ;;
+        c)  MAX_CAN_CPU=$OPTARG ;;
+    esac
+done
+
+MAX_MEM=${MAX_CANTAINER_MEM:-$BKAPP_CONTAINER_MEM}m
+MAX_CPU_SHARES=${MAX_CAN_CPU:-512}
+
+if [ -z "$MAX_MEM" ]; then
+    MAX_MEM=${_MAX_MEM:-512m}
+fi
+
+log "var BKAPP_CONTAINER_MEM: $BKAPP_CONTAINER_MEM"
+log "real max_mem: $MAX_MEM"
+
+step "-------- start to deploy app: $APP_CODE -------"
+log "create directories:"
+log "    - $APP_PATH"
+log "    - $CODE_PATH/$APP_CODE"
+log "    - $CONF_PATH"
+log "    - $RUN_PATH"
+log "    - $HOST_LOG_PATH"
+log "    - $SaaS_PATH"
+
+mkdir -p $APP_PATH $CODE_PATH/$APP_CODE $CONF_PATH \
+         $RUN_PATH $HOST_LOG_PATH $SaaS_PATH || fail "create directory failed."
+
+# 拉取代码到临时目录下
+code_tempdir=`mktemp -d /tmp/tmpd.XXXXXX`
+cd $code_tempdir || fail "cd $code_tempdir failed"
+
+if [ "$VCS_TYPE" == "git" ]; then
+    log "pull code to '$CODE_PATH/$APP_CODE' from git"
+    git clone --quiet $VCS_PATH $APP_CODE >/dev/null
+    assert "pull code done" "pull code failed.[JOB FAILURE]"
+    if [ ! -z "$VCS_CHECKOUT_TARGET" ]; then
+      cd $code_tempdir/$APP_CODE || fail "cd $code_tempdir/$APP_CODE failed"
+      git checkout $VCS_CHECKOUT_TARGET >/dev/null
+      assert "checkout code done" "checkout code failed.[JOB FAILURE]"
+    fi
+else
+    log "pull code to '$CODE_PATH/$APP_CODE' from svn"
+    svn co $VCS_PATH $APP_CODE \
+        --non-interactive \
+        --no-auth-cache \
+        --username=$VCS_USERNAME \
+        --password=$VCS_PASSWORD >/dev/null
+    assert "pull code done" "pull code failed.[JOB FAILURE]"
+fi
+
+log "remove old files of projects"
+cd $CODE_PATH || fail "cd $CODE_PATH failed."
+if [ ! -z "$BKAPP_ENABLE_SHARED_FS" ]; then
+    rm -f $CODE_PATH/$APP_CODE/USERRES
+fi
+rm -rf $APP_CODE
+
+log "rsync new files to $CODE_PATH/$APP_CODE"
+rsync -a $code_tempdir/$APP_CODE/ $CODE_PATH/$APP_CODE/
+rm -rf $code_tempdir
+
+# 部署时, 为App 共享目录建立软连接。
+if [ ! -z "$BKAPP_ENABLE_SHARED_FS" ]; then
+    NFS_DIR=$INSTALL_PATH/public/paas_agent/share/$APP_CODE
+    mkdir -p $NFS_DIR
+    chown apps.apps $NFS_DIR
+    ln -s $NFS_DIR $CODE_PATH/$APP_CODE/USERRES
+fi
+step "-------- create app container --------"
+log "mount files/directories to docker container"
+mount_objects $APP_CODE
+
+# 处理用户自定义启动脚本
+if [ -f "$CODE_PATH/$APP_CODE/support-files/uwsgi.ini" ]; then
+    rsync -a $CODE_PATH/$APP_CODE/support-files/uwsgi.ini $CONF_PATH/$APP_CODE.ini
+    sed -i "s~{{.app_container_path}}~$APP_CONTAINER_PATH~g" $CONF_PATH/$APP_CODE.ini
+    sed -i "s~{{.app_code}}~$APP_CODE~g" $CONF_PATH/$APP_CODE.ini
+fi
+
+if [ -f "$CODE_PATH/$APP_CODE/support-files/supervisord.conf" ]; then
+    rsync -a $CODE_PATH/$APP_CODE/support-files/supervisord.conf $CONF_PATH/
+
+    if [ "$USE_CELERY_BEAT" = "true" -a "$IS_MASTER" = "true" ]; then
+        cat << EOF >> $CONF_PATH/supervisord.conf
+
+[program:{{.app_code}}_beat]
+command = /cache/.bk/env/bin/python {{.app_container_path}}code/manage.py celery beat
+directory = {{.app_container_path}}code/
+stdout_logfile = {{.app_container_path}}logs/{{.app_code}}/celery.log
+redirect_stderr = true
+stopwaitsecs = 10
+autorestart = true
+environment = {{.environment}}
+EOF
+    fi
+    sed -i "s~{{.app_container_path}}~$APP_CONTAINER_PATH~g" $CONF_PATH/supervisord.conf
+    sed -i "s~{{.app_code}}~$APP_CODE~g" $CONF_PATH/supervisord.conf
+    sed -i "s~{{.node_name}}~$NODE_NAME~g" $CONF_PATH/supervisord.conf
+    sed -i "s~{{.environment}}~$ENVIRONMENT~g" $CONF_PATH/supervisord.conf
+fi
+
+if [ -f "$CODE_PATH/$APP_CODE/runtime.txt" ]; then
+    RUNTIME=`cat $CODE_PATH/$APP_CODE/runtime.txt`
+    if [[ $RUNTIME =~ [P|p]ython(-)*3.* ]]; then
+        IMAGE_NAME=$PYTHON3_IMAGE_NAME
+        if [ "$BK_ENV" == "testing" ]; then
+            echo "mount = /t/$APP_CODE=wsgi.py" >> $CONF_PATH/$APP_CODE.ini
+        else
+            echo "mount = /o/$APP_CODE=wsgi.py" >> $CONF_PATH/$APP_CODE.ini
+        fi
+        echo "manage-script-name = true" >> $CONF_PATH/$APP_CODE.ini
+    fi
+fi
+
+start_container
+assert "SUCCESS: Online Job. [JOB SUCCESS]" "[JOB FAILURE]"

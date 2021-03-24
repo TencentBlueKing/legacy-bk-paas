@@ -1,0 +1,90 @@
+#! /bin/bash
+
+unset HASTTY
+
+red_echo ()      { [ "$HASTTY" == 1 ] && echo -e "\033[031;1m$@\033[0m" || echo "$@"; }
+blue_echo ()     { [ "$HASTTY" == 1 ] && echo -e "\033[034;1m$@\033[0m" || echo "$@"; }
+green_echo ()    { [ "$HASTTY" == 1 ] && echo -e "\033[032;1m$@\033[0m" || echo "$@"; }
+bblue_echo ()    { [ "$HASTTY" == 1 ] && echo -e "\033[044;1m$@\033[0m" || echo "$@"; }
+
+log () {
+   # 打印消息, 并记录到日志, 日志文件由 LOG_FILE 变量定义
+   local retval=$?
+   local timestamp=$(date +%Y%m%d-%H%M%S)
+   local level=INFO
+   local func_seq=$(echo ${FUNCNAME[@]} | sed 's/ /-/g')
+   local logfile=${LOG_FILE:=/tmp/bkc.log}
+
+   echo "[$(blue_echo $LAN_IP)]$timestamp $BASH_LINENO   $@"
+   echo "[$(blue_echo $LAN_IP)]$timestamp $level|$BASH_LINENO|${func_seq} $@" >>$logfile
+   return $retval
+}
+
+ok () {
+   local timestamp=$(date +%Y%m%d-%H%M%S)
+   local level=INFO
+   local func_seq=$(echo ${FUNCNAME[@]} | sed 's/ /-/g')
+   local logfile=${LOG_FILE:=/tmp/bkc.log}
+
+   echo "$timestamp $BASH_LINENO   $(green_echo $@)"
+   echo "$timestamp $level|$BASH_LINENO|${func_seq} $@" >> $logfile
+
+   return 0
+}
+
+fail () {
+   local timestamp=$(date +%Y%m%d-%H%M%S)
+   local level=FATAL
+   local retval=${2:-1}
+   local func_seq=$(echo ${FUNCNAME[@]} | sed 's/ /-/g')
+   local logfile=${LOG_FILE:=/tmp/bkc.log}
+
+   echo "$timestamp $BASH_LINENO   $(red_echo $@)"
+   echo "$timestamp $level|$BASH_LINENO|${func_seq} $@" >> $logfile
+
+   exit $retval
+}
+
+assert () {
+    local check_ret=$?
+    local msg="$1"
+    local err="$2"
+
+    if [ $check_ret -eq 0 ]; then
+        ok "$msg"
+    else
+        fail "$err"
+    fi
+}
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/bin
+exec 2>&1
+
+export LC_ALL=en_US.UTF-8
+
+CODE_PATH=${APP_CONTAINER_PATH}"code"
+CONF_PATH=${APP_CONTAINER_PATH}"conf"
+RUN_PATH=${APP_CONTAINER_PATH}"run"
+LOG_PATH=${APP_CONTAINER_PATH}"logs"
+
+PYTHON_BIN_PATH="/cache/.bk/env/bin/"
+
+cd $CODE_PATH
+
+if [ "$IS_MASTER" = "true" ]; then
+    log "------starting: migrate database------"
+    ${PYTHON_BIN_PATH}python manage.py migrate --noinput
+    assert "------success: migrate database------" "------failure: migrate database------"
+
+    log "------starting: create cache table------"
+    ${PYTHON_BIN_PATH}python manage.py createcachetable django_cache > /dev/null 2>&1
+    assert "------success: create cache table------" "------failure: create cache table------"
+else
+    ok "This node is not master node, skip the migration of database"
+fi
+
+log "------starting: start app server------"
+if [ -e "$RUN_PATH/supervisord.sock" ]; then
+    rm $RUN_PATH/supervisord.sock
+fi
+${PYTHON_BIN_PATH}supervisord -c $CONF_PATH/supervisord.conf --nodaemon

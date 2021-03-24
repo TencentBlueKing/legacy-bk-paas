@@ -1,0 +1,162 @@
+#! /bin/bash
+
+exec 2>&1
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/bin
+
+# 母机上执行，创建Docker容器
+while getopts 'm:c:' opt; do
+case $opt in
+    m) M=${OPTARG} ;;
+    c) C=${OPTARG} ;;
+    ?)
+    echo "wrong args $opt, should be -m, -c"
+    exit 1
+    ;;
+esac
+done
+
+MODULE_HOME=${BASH_SOURCE%/paas_agent*}
+DOCKER_BIN_PATH=$MODULE_HOME/paas_agent/bin
+
+function if_fail_then_exit() {
+    if [ "$1" != "0" ]; then
+        echo "$2"
+        exit
+    fi
+}
+
+CONTAINER_MEM_LIMIT="${BKAPP_CONTAINER_MEM:="512"}"
+CONTAINER_MEM_LIMIT=`expr $CONTAINER_MEM_LIMIT + 256`
+
+M="${CONTAINER_MEM_LIMIT}m"
+C="${C:="1024"}"
+
+CODE_PATH=${APP_PATH}"code"
+CONF_PATH=${APP_PATH}"conf"
+RUN_PATH=${APP_PATH}"run"
+
+TIMESTAMP=$(date '+%s')
+NEWNAME=$APP_CODE$TIMESTAMP
+
+CODE_CONTAINER_PATH=${APP_CONTAINER_PATH}"code/"
+LOG_CONTAINER_PATH=${APP_CONTAINER_PATH}"logs/"${APP_CODE}"/"
+
+PKGS_CONTAINER_PATH="/data/maven_repo"
+BUILDER_CONTAINER_PATH="/build/"
+
+# 在母机创建相应的目录
+echo "------STARTING: Create Related Directory------"
+mkdir -p $APP_PATH $CODE_PATH $CONF_PATH $RUN_PATH $HOST_LOG_PATH
+echo "------SUCCESS: Create Related Directory------"
+
+# 下架操作, 删除容器
+if [[ "$HANDLE" = "OFF" ]]; then
+    echo "------STARTING: Offline Job------"
+    if [ -e "$RUN_PATH/supervisord.pid" ]; then
+        echo "------Removing Old Containers------"
+        eval "$DOCKER_BIN_PATH/docker ps -a | awk '\$NF ~ /^$APP_CODE[0-9]{10}$/ {print \$1}' |  xargs $DOCKER_BIN_PATH/docker rm -f " > /dev/null 2>&1
+        rm -rf $RUN_PATH/supervisord.pid
+        rm -rf $RUN_PATH/supervisord.sock
+        rm -rf $RUN_PATH/nginx.pid
+        rm -rf $RUN_PATH/nginx.sock
+        if_fail_then_exit "$?" "------FAILURE: Remove Old Containers Failed And Offline Job Failed------"
+        echo "------Removed Old Containers------"
+    fi
+    echo "------SUCCESS: Offline Job------"
+    exit
+fi
+
+echo "------STARTING: Online Job------"
+
+cd $CODE_PATH
+# 删除母机上的旧代码
+if [ -d $APP_CODE ]; then
+    rm -rf $APP_CODE
+fi
+
+if [ $SaaS_PATH ]; then
+    echo "------STARTING: extract code from ${SaaS_PATH} of ${APP_CODE}------"
+    mkdir -p "$CODE_PATH/$APP_CODE/target"
+    tar zxf "${SaaS_PATH}/${FILE_NAME}" -C "$CODE_PATH/$APP_CODE/target"
+    if_fail_then_exit "$?" "------FAILURE: extract code------"
+    echo "------SUCCESS: extract done------"
+else
+    echo "------STARTING: Pull Code------"
+    # unzip /root/bkjava.zip -d $CODE_PATH/$APP_CODE
+    echo "getting code from $VCS_TYPE"
+    if [ "$VCS_TYPE" = "git" ]; then
+      git clone $VCS_PATH $APP_CODE > /dev/null 2>&1
+    else
+      svn checkout $VCS_PATH $APP_CODE --non-interactive --no-auth-cache --username=$VCS_USERNAME --password=$VCS_PASSWORD > /dev/null 2>&1
+    fi
+    if_fail_then_exit "$?" "------FAILURE: Pull Code And Online Job------"
+    cd $APP_CODE || exit 1
+    cp -r src/main/webapp/static ./ &> /dev/null
+    echo "------SUCCESS: Pull Code------"
+fi
+
+echo "------STARTING: Create Container for $APP_CODE------"
+
+# cp /root/supervisord.conf $CONF_PATH
+
+# rm old container first
+eval "$DOCKER_BIN_PATH/docker ps -a | awk '\$NF ~ /^$APP_CODE[0-9]{10}$/ {print \$1}' |  xargs $DOCKER_BIN_PATH/docker rm -f" > /dev/null 2>&1
+
+# 启动容器
+tmpenv=$(mktemp /tmp/dockerenv.XXXX.$APP_CODE.env)
+echo $ContainerEnvs | sed -r 's/ ?--env /\n/g' >$tmpenv
+sed -r -i 's/LIST="(.*)"$/LIST=\1/' $tmpenv
+ID=$(eval "$DOCKER_BIN_PATH/docker run --name=$NEWNAME --net=host \
+-v $CODE_PATH/$APP_CODE:$CODE_CONTAINER_PATH \
+-v $APP_PATH:$APP_CONTAINER_PATH \
+-v $BUILDER_PATH:$BUILDER_CONTAINER_PATH \
+-v $HOST_LOG_PATH:$LOG_CONTAINER_PATH \
+-v $LOCAL_PACKAGES_PATH:$PKGS_CONTAINER_PATH \
+--env-file $tmpenv -m $M -c $C -d $IMAGE_NAME sh ${BUILDER_CONTAINER_PATH}builder")
+
+if_fail_then_exit "$?" "------FAILURE: Create Container And Online Job------"
+rm -f $tmpenv
+
+if  [ -z $ID ]; then
+    echo "------FAILURE: Create Container And Online Job------"
+    exit
+else
+    echo "starting app build job in container, container:$ID, container_name:$NEWNAME"
+    echo "------SUCCESS: Create Container------"
+    $DOCKER_BIN_PATH/docker logs $ID | tee $temp_log
+    temp_log=$(mktemp /tmp/XXXXXXX)
+    last_pos=$(cat $temp_log |wc -l)
+
+    while true; do
+        $DOCKER_BIN_PATH/docker logs $ID | tail -n +$((last_pos+1)) >$temp_log
+        new_lines=$(cat $temp_log |wc -l)
+        last_pos=$(( last_pos + new_lines ))
+        cat $temp_log
+
+        if grep -q "_java entered RUNNING state" $temp_log; then
+            ret=0
+            break
+        fi
+        sleep 1
+        if [ "$($DOCKER_BIN_PATH/docker ps -a --filter id=$ID --filter status=exited | wc -l)" = "2" ]; then
+            ret=1
+            break
+        fi
+    done
+
+    rm -f $temp_log
+
+    if [ "$ret" == 0 ]; then
+        echo "------SUCCESS: Java Process Started------"
+        echo "------SUCCESS: Online Job------"
+        exit 0
+    else
+        # Clean Container
+        $DOCKER_BIN_PATH/docker rm -f $ID >/dev/null
+        echo "------FAILURE: Online Job------"
+        exit
+    fi
+
+fi
+
