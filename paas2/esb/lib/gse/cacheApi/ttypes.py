@@ -18,6 +18,8 @@ specific language governing permissions and limitations under the License.
 #  options string: py
 #
 
+from builtins import range
+from builtins import object
 from thrift.Thrift import TType, TMessageType, TFrozenDict, TException, TApplicationException
 from thrift.protocol.TProtocol import TProtocolException
 import sys
@@ -127,7 +129,7 @@ class CacheHost(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -220,7 +222,7 @@ class CacheUser(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -313,7 +315,7 @@ class CacheIpInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -474,7 +476,7 @@ class RequestInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -594,7 +596,7 @@ class AgentStatusRequestInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -769,7 +771,7 @@ class AgentStatusInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -906,7 +908,7 @@ class AgentStatusResponse(object):
         if self.result is not None:
             oprot.writeFieldBegin("result", TType.MAP, 2)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.result))
-            for kiter21, viter22 in self.result.items():
+            for kiter21, viter22 in list(self.result.items()):
                 oprot.writeString(kiter21.encode("utf-8") if sys.version_info[0] == 2 else kiter21)
                 oprot.writeString(viter22.encode("utf-8") if sys.version_info[0] == 2 else viter22)
             oprot.writeMapEnd()
@@ -930,7 +932,7 @@ class AgentStatusResponse(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1072,7 +1074,7 @@ class ResponseInfo(object):
         if self.result is not None:
             oprot.writeFieldBegin("result", TType.MAP, 3)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.result))
-            for kiter30, viter31 in self.result.items():
+            for kiter30, viter31 in list(self.result.items()):
                 oprot.writeString(kiter30.encode("utf-8") if sys.version_info[0] == 2 else kiter30)
                 oprot.writeString(viter31.encode("utf-8") if sys.version_info[0] == 2 else viter31)
             oprot.writeMapEnd()
@@ -1092,7 +1094,7 @@ class ResponseInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1193,7 +1195,7 @@ class MultipleBzIdIp(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1303,7 +1305,7 @@ class MultiResponse(object):
         if self.result is not None:
             oprot.writeFieldBegin("result", TType.MAP, 3)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.result))
-            for kiter46, viter47 in self.result.items():
+            for kiter46, viter47 in list(self.result.items()):
                 oprot.writeString(kiter46.encode("utf-8") if sys.version_info[0] == 2 else kiter46)
                 oprot.writeString(viter47.encode("utf-8") if sys.version_info[0] == 2 else viter47)
             oprot.writeMapEnd()
@@ -1315,7 +1317,7 @@ class MultiResponse(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1472,7 +1474,7 @@ class LostAgentInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1620,7 +1622,7 @@ class LostAgentResponse(object):
         if self.result is not None:
             oprot.writeFieldBegin("result", TType.MAP, 4)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.result))
-            for kiter55, viter56 in self.result.items():
+            for kiter55, viter56 in list(self.result.items()):
                 oprot.writeString(kiter55.encode("utf-8") if sys.version_info[0] == 2 else kiter55)
                 oprot.writeString(viter56.encode("utf-8") if sys.version_info[0] == 2 else viter56)
             oprot.writeMapEnd()
@@ -1636,7 +1638,7 @@ class LostAgentResponse(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1841,7 +1843,7 @@ class CacheHistoryInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -1957,7 +1959,7 @@ class ProxyInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2160,7 +2162,7 @@ class FlushAgentInfo(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2255,7 +2257,7 @@ class cache_ip_info(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2336,7 +2338,7 @@ class agent_status_request(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):
@@ -2438,7 +2440,7 @@ class agent_status_response(object):
         if self.result is not None:
             oprot.writeFieldBegin("result", TType.MAP, 1)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.result))
-            for kiter85, viter86 in self.result.items():
+            for kiter85, viter86 in list(self.result.items()):
                 oprot.writeString(kiter85.encode("utf-8") if sys.version_info[0] == 2 else kiter85)
                 oprot.writeString(viter86.encode("utf-8") if sys.version_info[0] == 2 else viter86)
             oprot.writeMapEnd()
@@ -2458,7 +2460,7 @@ class agent_status_response(object):
         return
 
     def __repr__(self):
-        L = ["%s=%r" % (key, value) for key, value in self.__dict__.items()]
+        L = ["%s=%r" % (key, value) for key, value in list(self.__dict__.items())]
         return "%s(%s)" % (self.__class__.__name__, ", ".join(L))
 
     def __eq__(self, other):

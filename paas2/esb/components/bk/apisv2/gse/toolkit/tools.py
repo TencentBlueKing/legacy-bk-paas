@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import range
+from builtins import object
 from django.conf import settings
 from thrift.transport import TSSLSocket
 from thrift.transport import TTransport

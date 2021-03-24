@@ -9,6 +9,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from __future__ import print_function
 
 import json
 from optparse import make_option
@@ -42,5 +43,5 @@ class Command(BaseCommand):
             ],
         }
         result = GetAgentStatus().invoke(kwargs=kwargs)
-        print "check_job_ssl:", json.dumps(result)
+        print("check_job_ssl:", json.dumps(result))
         assert result["result"], result["message"]

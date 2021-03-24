@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import str
+from builtins import map
 from django import forms
 
 from common.forms import BaseComponentForm
@@ -80,5 +82,5 @@ class GetAllUser(Component):
     def handle(self):
         result = self.invoke_other("generic.v2.usermanage.get_all_users", kwargs=self.form_data)
         result["code"] = "00" if result["code"] == 0 else str(result["code"])
-        result["data"] = map(tools.convert_user_info, result["data"] or [])
+        result["data"] = list(map(tools.convert_user_info, result["data"] or []))
         self.response.payload = result

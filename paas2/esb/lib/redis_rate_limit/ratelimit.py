@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import time
 import logging
 
@@ -203,7 +204,7 @@ class Rule(object):
 
     @classmethod
     def period_to_seonds(cls, period):
-        for unit, seconds in cls.time_unit_to_seconds.items():
+        for unit, seconds in list(cls.time_unit_to_seconds.items()):
             if unit in period:
                 period_seconds = period[unit] * seconds
                 break

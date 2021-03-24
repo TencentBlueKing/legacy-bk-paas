@@ -29,6 +29,6 @@ class GetBatchUsers(Component):
 
     def handle(self):
         result = self.invoke_other("generic.v2.usermanage.get_batch_users", kwargs=self.form_data)
-        for username, user in (result["data"] or {}).items():
+        for username, user in list((result["data"] or {}).items()):
             result["data"][username] = tools.convert_user_info(user)
         self.response.payload = result

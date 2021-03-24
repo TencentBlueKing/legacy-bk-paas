@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import map
+from builtins import object
 import re
 import os
 import copy
@@ -123,7 +125,7 @@ class Command(BaseCommand):
     def _get_msg_str(self, msg):
         msg = copy.copy(msg)
         msg[0] = re.sub("^(msgid|msgstr) ", "", msg[0])
-        msg = map(eval, msg)
+        msg = list(map(eval, msg))
         return "".join(msg)
 
 

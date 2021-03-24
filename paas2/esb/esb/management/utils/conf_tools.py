@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import logging
 import os
 from importlib import import_module
@@ -40,11 +41,11 @@ class ConfClient(object):
     def channels(self):
         all_channels = self.default_channels
 
-        for system_name, system_channels in self.custom_channels.iteritems():
+        for system_name, system_channels in list(self.custom_channels.items()):
             all_channels.setdefault(system_name, [])
             all_channels[system_name].extend(system_channels)
 
-        for system_name, system_channels in self.confapis_channels.iteritems():
+        for system_name, system_channels in list(self.confapis_channels.items()):
             all_channels.setdefault(system_name, [])
             all_channels[system_name].extend(system_channels)
 
@@ -60,7 +61,7 @@ class ConfClient(object):
 
     @property
     def default_systems(self):
-        return BK_SYSTEMS.values()
+        return list(BK_SYSTEMS.values())
 
     @property
     def default_channels(self):
@@ -100,7 +101,7 @@ class ConfClient(object):
         """
         channels = []
         channel_groups = config.ESB_CONFIG["config"]["channel_groups"]
-        for channel_group_conf in channel_groups.values():
+        for channel_group_conf in list(channel_groups.values()):
             channels.extend(channel_group_conf["preset_channels"])
         return channels
 

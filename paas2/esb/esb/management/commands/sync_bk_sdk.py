@@ -32,7 +32,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         conf_client = conf_tools.ConfClient()
         sdk_channels = conf_client.default_channels
-        for system_name, system_channels in conf_client.confapis_channels.iteritems():
+        for system_name, system_channels in list(conf_client.confapis_channels.items()):
             sdk_channels.setdefault(system_name, [])
             sdk_channels[system_name].extend(system_channels)
 

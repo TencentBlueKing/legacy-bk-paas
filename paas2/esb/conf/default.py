@@ -24,6 +24,7 @@ env.read_env(env.str("ENV_FILE", ".env"))
 try:
     import pymysql
 
+    pymysql.version_info = (1, 3, 13, "final", 0)
     pymysql.install_as_MySQLdb()
 except Exception:
     pass
@@ -85,7 +86,7 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
-                "django.core.context_processors.i18n",
+                "django.template.context_processors.i18n",
                 "django.contrib.messages.context_processors.messages",
             ],
         },
@@ -165,7 +166,7 @@ def get_loggings(log_level):
         "handlers": {
             "null": {
                 "level": "DEBUG",
-                "class": "django.utils.log.NullHandler",
+                "class": "logging.NullHandler",
             },
             "console": {
                 "level": "INFO",

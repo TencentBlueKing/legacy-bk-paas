@@ -9,8 +9,11 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from __future__ import print_function
 
-import urlparse
+from future import standard_library
+standard_library.install_aliases()
+import urllib.parse
 
 from esb.bkcore.models import ESBBuffetComponent
 
@@ -21,7 +24,7 @@ def make_esb_conf_with_buffet_data():
     buffets = ESBBuffetComponent.objects.filter(system_id=system_id).order_by("registed_path")
     esb_conf = []
     for component in buffets:
-        parsed_url = urlparse.urlparse(component.dest_url)
+        parsed_url = urllib.parse.urlparse(component.dest_url)
         esb_conf.append(
             u"""
                     ('%s%s', {
@@ -44,6 +47,6 @@ def make_esb_conf_with_buffet_data():
                 component.name,
             )
         )
-    print "".join(esb_conf)
+    print("".join(esb_conf))
 
-    print "count: %s" % len(esb_conf)
+    print("count: %s" % len(esb_conf))

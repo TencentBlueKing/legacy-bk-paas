@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import object
 import json
 import textwrap
 
@@ -106,7 +107,7 @@ class APIDoc(object):
 
     def get_doc_html(self):
         doc_html = {}
-        for language, _doc_md in self.doc_md.items():
+        for language, _doc_md in list(self.doc_md.items()):
             doc_html[language] = self.format_md_to_html(_doc_md)
         return doc_html
 
@@ -118,7 +119,7 @@ class APIDoc(object):
 
     def update_doc_md(self):
         doc_md = {}
-        for language, _doc_md in self.api_data["doc_md"].items():
+        for language, _doc_md in list(self.api_data["doc_md"].items()):
             with translation.override(language):
                 common_args_desc = self.get_doc_common_args()
                 self.jinja2_context["common_args_desc"] = textwrap.dedent(common_args_desc)

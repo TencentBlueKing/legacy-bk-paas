@@ -16,6 +16,7 @@ import re
 import string
 import time
 import uuid
+from builtins import object, str
 
 from common.base_utils import FancyDict, get_client_ip, get_request_params, str_bool
 from common.base_validators import ValidationError
@@ -111,7 +112,7 @@ class BaseChannel(object):
         for validator in self.request_validators:
             try:
                 validator.validate(request)
-            except ValidationError, e:
+            except ValidationError as e:
                 raise CommonAPIError(e.message)
 
     def log_request(self, request, response):
@@ -155,15 +156,14 @@ class BaseChannel(object):
     def get_headers(self, request):
         """"""
         headers = {}
-        for key, value in request.META.iteritems():
+        for key, value in list(request.META.items()):
             if key.startswith("HTTP_") and value and key not in self.IGNORE_HEADERS:
                 headers[self.capitalize_header(key[5:])] = value
         return headers
 
     @staticmethod
     def capitalize_header(header):
-        """capitalize django header
-        """
+        """capitalize django header"""
         return "-".join(string.capitalize(s) for s in header.split("_"))
 
     def handle_request(self, request):
@@ -185,21 +185,21 @@ class BaseChannel(object):
                 self.comp.set_request(CompRequest(wsgi_request=request))
 
                 response = self.comp.invoke()
-        except APIError, e:
+        except APIError as e:
             response = e.code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.ARGUMENT_ERROR
-        except RequestThirdPartyException, e:
+        except RequestThirdPartyException as e:
             response = error_codes.REQUEST_THIRD_PARTY_ERROR.format_prompt(
                 e.get_message(), replace=True
             ).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except RequestSSLException, e:
+        except RequestSSLException as e:
             response = error_codes.REQUEST_SSL_ERROR.format_prompt(e.get_message(), replace=True).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except TestHostNotFoundException, e:
+        except TestHostNotFoundException as e:
             response = error_codes.TEST_HOST_NOT_FOUND.code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except RequestBlockedException, e:
+        except RequestBlockedException as e:
             response = error_codes.REQUEST_BLOCKED.format_prompt(e.message).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
         except Exception:
@@ -284,7 +284,9 @@ class ChannelManager(object):
     Manager for Channels, query database to find the matching channel.
     """
 
-    def __init__(self,):
+    def __init__(
+        self,
+    ):
         """
         :preset_channels example:
         {
@@ -393,7 +395,7 @@ class ChannelManager(object):
             path = "/%s" % path
 
         channels = self.preset_channels_with_path_vars.get(method, {})
-        for value in channels.values():
+        for value in list(channels.values()):
             matched_obj = value["re_path"].match(path)
             if matched_obj:
                 # 把匹配到的path变量作为结果返回
@@ -414,8 +416,8 @@ class ChannelManager(object):
             {"raw_path": channel.path, "channel": channel, "classes": self.get_default_channel_classes()}
             for channel in ESBChannel.objects.all()
         ]
-        for channels in self.preset_channels.values():
-            result.extend(channels.values())
+        for channels in list(self.preset_channels.values()):
+            result.extend(list(channels.values()))
         return result
 
     def register_channel_groups(self, channel_classes, channels, rewrite_channels):
@@ -471,7 +473,7 @@ def get_channel_manager():
         manager = ChannelManager()
         # 配置中如果定义了默认的channel_classes,使用默认值
         default_channel_classes = channel_config.get("default_channel_classes")
-        for group_name, channel_group_conf in channel_config["channel_groups"].items():
+        for group_name, channel_group_conf in list(channel_config["channel_groups"].items()):
             manager.register_channel_groups(
                 channel_group_conf["channel_classes"],
                 channel_group_conf["preset_channels"],

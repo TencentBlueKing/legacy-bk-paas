@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from builtins import map
+from builtins import object
 import json
 import os
 
@@ -38,7 +40,7 @@ class ConfigForm(object):
 
     @classmethod
     def clean(cls, data):
-        for field, conf in ConfigForm.fields.items():
+        for field, conf in list(ConfigForm.fields.items()):
             value = data.get(field)
             if conf.get("required") and not value:
                 raise Exception(u"param %s is required" % field)
@@ -93,7 +95,7 @@ class ConfapisManager(object):
         ]
         """
         conf = []
-        map(conf.extend, self.apis_conf.values())
+        list(map(conf.extend, list(self.apis_conf.values())))
         return conf
 
     def reloadall(self):

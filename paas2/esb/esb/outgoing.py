@@ -10,29 +10,35 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from future import standard_library
+
+standard_library.install_aliases()
 import json
-import time
-import urlparse
 import socket
-from urlparse import urljoin
+import time
+import urllib.parse
+from builtins import object, str
+from urllib.parse import urljoin
 
 import requests
-from requests.exceptions import ReadTimeout, SSLError
-from django.utils.encoding import smart_str
-from django.utils import timezone
-from django.conf import settings
-
 from common.base_utils import FancyDict, datetime_format
 from common.bkerrors import bk_error_codes
 from common.errors import (
+    RequestSSLException,
     RequestThirdPartyException,
     TestHostNotFoundException,
     request_third_party_error_codes,
-    RequestSSLException,
 )
 from common.log import logger, logger_api
+from django.conf import settings
+from django.utils import timezone
+from django.utils.encoding import smart_str
+from past.builtins import basestring
+from requests.exceptions import ReadTimeout, SSLError
+
 from esb.bkapp.models import BKApp
 from esb.utils.jwt_utils import JWTClient
+
 from .utils import SmartHost, get_ssl_root_dir
 
 """
@@ -81,8 +87,8 @@ def encode_dict(d, encoding="utf-8"):
     :param str encoding: 需要转换的目标编码
     """
     result = {}
-    for k, v in d.iteritems():
-        if isinstance(v, unicode):
+    for k, v in list(d.items()):
+        if isinstance(v, str):
             result[k] = v.encode(encoding)
         else:
             result[k] = v
@@ -108,7 +114,7 @@ class BasicHttpClient(object):
         """
         使用一个完整的 url 来替代 host 和 path 参数
         """
-        parsed_url = urlparse.urlparse(url)
+        parsed_url = urllib.parse.urlparse(url)
         host = "%s://%s" % (parsed_url.scheme, parsed_url.netloc)
         return self.request(method, host, parsed_url.path, *args, **kwargs)
 
@@ -350,8 +356,7 @@ class HttpClient(BasicHttpClient):
         files=None,
         with_jwt_header=False,
     ):
-        """Send a request to given destination
-        """
+        """Send a request to given destination"""
         datetime_start = timezone.now()
         # 判断component是否被request初始化过，如果没有，默认访问正式环境，而且request_id为None
         if self.component.request:
@@ -425,7 +430,7 @@ class HttpClient(BasicHttpClient):
             }
             # 添加访问记录
             logger_api.info(json.dumps(api_log))
-        except Exception, e:
+        except Exception as e:
             logger.warning(u"logger api exception: %s" % e)
 
         # 为了记录这一次请求的api log，延迟抛出异常
@@ -451,7 +456,7 @@ class HttpClient(BasicHttpClient):
         """
         使用一个完整的 url 来替代 host 和 path 参数
         """
-        parsed_url = urlparse.urlparse(url)
+        parsed_url = urllib.parse.urlparse(url)
         host = "%s://%s" % (parsed_url.scheme, parsed_url.netloc)
         path = "%s?%s" % (parsed_url.path, parsed_url.query) if parsed_url.query else parsed_url.path
         return self.request(method, host, path, *args, **kwargs)
@@ -463,7 +468,9 @@ class RequestHelperClient(BasicHttpClient):
     def __init__(self, component):
         self.component = component
 
-    def request(self, handler, action="", args=[], kwargs={}, timeout=None, api_name="", is_response_parse=True):  # noqa
+    def request(
+        self, handler, action="", args=[], kwargs={}, timeout=None, api_name="", is_response_parse=True
+    ):  # noqa
         datetime_start = timezone.now()
         # 判断component是否被request初始化过，如果没有，默认为访问正式环境，
         # 而且request_id为None
@@ -500,7 +507,7 @@ class RequestHelperClient(BasicHttpClient):
                 resp = getattr(handler, action)(*args, **kwargs)
             else:
                 resp = handler(*args, **kwargs)
-        except Exception, e:
+        except Exception as e:
             logger.exception(
                 "%s error occured when request sys_name: %s, component_name: %s",
                 bk_error_codes.REQUEST_THIRD_PARTY_ERROR.code,
@@ -567,13 +574,15 @@ class RequestHelperClient(BasicHttpClient):
             }
             # 添加访问记录
             logger_api.info(json.dumps(api_log))
-        except Exception, e:
+        except Exception as e:
             logger.warning(u"logger api exception: %s" % e)
 
         # 为了记录这一次请求的api log，延迟抛出异常
         # UPDATE: xx系统xx接口出错,状态码: xx,错误消息:xx
         if request_exception:
             raise RequestThirdPartyException(
-                request_exception, system_name=system_name, interface_name=component_name,
+                request_exception,
+                system_name=system_name,
+                interface_name=component_name,
             )
         return result

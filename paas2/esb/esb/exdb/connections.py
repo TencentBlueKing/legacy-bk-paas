@@ -10,7 +10,9 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-import urllib
+from future import standard_library
+standard_library.install_aliases()
+import urllib.request, urllib.parse, urllib.error
 
 from sqlalchemy import create_engine
 from django.conf import settings
@@ -29,7 +31,7 @@ def make_sa_conn_string(config_dict, driver_type="pymysql"):
     return "mysql+%(driver_type)s://%(user)s:%(password)s@%(host)s:%(port)s/%(db)s?charset=utf8" % {
         "driver_type": driver_type,
         "user": config_dict["USER"],
-        "password": urllib.quote(config_dict["PASSWORD"]),
+        "password": urllib.parse.quote(config_dict["PASSWORD"]),
         "host": config_dict["HOST"],
         "port": config_dict["PORT"],
         "db": config_dict["NAME"],
