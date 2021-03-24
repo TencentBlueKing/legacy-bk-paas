@@ -11,13 +11,14 @@ specific language governing permissions and limitations under the License.
 """
 
 import base64
+from builtins import str
 
+from common.constants import API_TYPE_OP
+from common.forms import BaseComponentForm, DefaultBooleanField, ListField, TypeCheckField
+from components.component import Component, SetupConfMixin
 from django import forms
 from django.utils import timezone
 
-from components.component import Component, SetupConfMixin
-from common.forms import BaseComponentForm, ListField, TypeCheckField, DefaultBooleanField
-from common.constants import API_TYPE_OP
 from .toolkit import configs, tools
 
 

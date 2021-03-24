@@ -147,7 +147,7 @@ class FunctionController(models.Model):
         db_table = "esb_function_controller"
 
     def __unicode__(self):
-        return self.func_code
+        return self.__code__
 
 
 class UserAuthToken(models.Model):

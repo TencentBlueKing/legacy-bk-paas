@@ -10,7 +10,6 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import object
 import os
 import shutil
 import string
@@ -34,7 +33,7 @@ class SDKGenerator(object):
 
     def get_available_channels(self, channels):
         new_channels = {}
-        for system_name, sub_channels in channels.items():
+        for system_name, sub_channels in channels.iteritems():
             new_sub_channels = [
                 channel for channel in sub_channels if channel["suggest_method"] and not channel["no_sdk"]
             ]
@@ -58,7 +57,7 @@ class SDKGenerator(object):
         self.write_content_to_file(content, collections_py_path)
 
     def generate_apis_files(self):
-        for system_name, channels in list(self.channels.items()):
+        for system_name, channels in self.channels.items():
             content = self.get_api_file_content(system_name, channels)
             file_path = "blueking/component/apis/{system_name}.py".format(system_name=system_name.lower())
             api_file_path = os.path.join(self.target_dir, file_path)
@@ -132,7 +131,7 @@ class SDKGenerator(object):
 
         channels_v1_v2 = []
         channels_only_v2 = []
-        for path, channel in list(channels_v2.items()):
+        for path, channel in channels_v2.items():
             if path in channels_v1:
                 if channels_v1[path]["suggest_method"] != channel["suggest_method"]:
                     print "channel method different: v1=%s, v2=%s, path=%s" % (
@@ -147,5 +146,5 @@ class SDKGenerator(object):
         return [
             [("v2",), channels_only_v2],
             [("", "v2"), channels_v1_v2],
-            [("",), list(channels_v1.values())],
+            [("",), channels_v1.values()],
         ]

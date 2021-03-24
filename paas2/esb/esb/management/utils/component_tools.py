@@ -10,16 +10,15 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import object
 import os
 import re
+from builtins import object, str
 from importlib import import_module
 
-from django.utils import translation
-from django.template import engines
-
-from common.log import logger
 from common.base_utils import read_file, smart_unicode
+from common.log import logger
+from django.template import engines
+from django.utils import translation
 from esb.component.base import get_components_manager
 from esb.utils.confapis import get_confapis_manager
 

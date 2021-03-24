@@ -10,8 +10,6 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from future import standard_library
-standard_library.install_aliases()
 import sys
 
 _ver = sys.version_info
@@ -22,9 +20,9 @@ is_py3 = _ver[0] == 3
 
 
 if is_py2:
-    from urllib.parse import urlparse
+    from urlparse import urlparse
 
-    str = str
+    str = unicode
 
 elif is_py3:
     from urllib.parse import urlparse  # noqa

@@ -10,17 +10,17 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import str
-from builtins import range
-from past.builtins import basestring
-import re
-import json
-import yaml
 import datetime
 import decimal
-import string
-import random
 import hashlib
+import json
+import random
+import re
+import string
+from builtins import range, str
+
+import yaml
+from past.builtins import basestring
 
 from common.errors import error_codes
 from common.log import logger
@@ -91,8 +91,8 @@ class FancyDict(dict):
 
 def smart_lower(value):
     """
-        >>> smart_lower('RequestFriendHandler')
-        'request_friend_handler'
+    >>> smart_lower('RequestFriendHandler')
+    'request_friend_handler'
     """
     result = [value[0].lower()]
     for c in value[1:]:
@@ -104,8 +104,8 @@ def smart_lower(value):
 
 def smart_upper(value):
     """
-        >>> smart_upper('request_friend_handler')
-        'requestFriendHandler'
+    >>> smart_upper('request_friend_handler')
+    'requestFriendHandler'
     """
     value_list = value.split("_")
     return "".join(string.capitalize(word) if i != 0 else word for i, word in enumerate(value_list))

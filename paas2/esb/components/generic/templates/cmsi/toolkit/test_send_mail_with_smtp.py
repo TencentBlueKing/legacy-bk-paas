@@ -10,6 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from __future__ import print_function
 
 import smtplib
 
@@ -19,7 +20,7 @@ from email.utils import COMMASPACE
 
 
 def send_mail(smtp_host, smtp_port, smtp_user, smtp_pwd, smtp_usessl, smtp_usetls, mail_sender, receiver):
-    print "1. build mail content"
+    print("1. build mail content")
     # Create message container
     msg = MIMEMultipart()
     msg["Subject"] = "This is a test email"
@@ -35,7 +36,7 @@ def send_mail(smtp_host, smtp_port, smtp_user, smtp_pwd, smtp_usessl, smtp_usetl
     # the HTML message, is best and preferred.
     msg.attach(part2)
 
-    print "2. connect smtp client"
+    print("2. connect smtp client")
     if smtp_usessl:
         smtp = smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=10)
     else:
@@ -47,14 +48,14 @@ def send_mail(smtp_host, smtp_port, smtp_user, smtp_pwd, smtp_usessl, smtp_usetl
         smtp.starttls()
         smtp.ehlo()
 
-    print "3. login via username/password"
+    print("3. login via username/password")
     smtp.login(smtp_user, smtp_pwd)
 
-    print "4. do send mail"
+    print("4. do send mail")
     smtp.sendmail(mail_sender, receiver, msg.as_string())
 
     smtp.quit()
-    print "5. done"
+    print("5. done")
     return True
 
 

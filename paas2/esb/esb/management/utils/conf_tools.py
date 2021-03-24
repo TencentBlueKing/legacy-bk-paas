@@ -41,11 +41,11 @@ class ConfClient(object):
     def channels(self):
         all_channels = self.default_channels
 
-        for system_name, system_channels in self.custom_channels.items():
+        for system_name, system_channels in list(self.custom_channels.items()):
             all_channels.setdefault(system_name, [])
             all_channels[system_name].extend(system_channels)
 
-        for system_name, system_channels in self.confapis_channels.items():
+        for system_name, system_channels in list(self.confapis_channels.items()):
             all_channels.setdefault(system_name, [])
             all_channels[system_name].extend(system_channels)
 

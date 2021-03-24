@@ -142,7 +142,7 @@ class SignatureValidator(BaseValidator):
         校验signature有效
         """
         # 校验signature
-        req_params = "&".join(["%s=%s" % (k, v) for k, v in sorted(iter(params.items()), key=lambda x: x[0])])
+        req_params = "&".join(["%s=%s" % (k, v) for k, v in sorted(iter(list(params.items())), key=lambda x: x[0])])
         message = "%s%s?%s" % (method, path, req_params)
         for valid_app_secret in valid_app_secret_list:
             sign = base64.b64encode(hmac.new(str(valid_app_secret), message, hashlib.sha1).digest())

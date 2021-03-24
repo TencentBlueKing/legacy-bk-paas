@@ -75,5 +75,5 @@ def check_custom_codename(request):
     if file_import_error:
         error_msg.append("\n")
         error_msg.append("There are some components loaded exception, please repair:")
-        error_msg.extend(["\n".join(item) for item in sorted(iter(file_import_error.items()), key=lambda x: x[0])])
+        error_msg.extend(["\n".join(item) for item in sorted(iter(list(file_import_error.items())), key=lambda x: x[0])])
     return HttpResponse(content="\n".join(error_msg) or "OK", content_type="text/plain")

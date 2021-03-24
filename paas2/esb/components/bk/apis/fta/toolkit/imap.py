@@ -14,18 +14,15 @@ specific language governing permissions and limitations under the License.
 # import gevent.monkey
 # gevent.monkey.patch_all()
 
-from builtins import str
-from builtins import range
-from builtins import object
 import email
 import email.header
 import imaplib
 import time
+from builtins import object, range, str
 
-from gevent.pool import Pool
 import arrow
-
 from common.log import logger
+from gevent.pool import Pool
 
 LOCALE_TZ = time.strftime("%Z", time.localtime())
 pool = Pool(1000)
@@ -72,7 +69,7 @@ class EMail(dict):
 
     @classmethod
     def _get_payload(cls, message, charset=None):
-        if isinstance(message, (str, str)):
+        if isinstance(message, str):
             return message
         payload = []
         for i in message.walk():
@@ -80,7 +77,7 @@ class EMail(dict):
                 continue
             if i.get_content_type() in cls.AVALIABLE_CONTENT_TYPE:
                 data = i.get_payload(decode=True)
-                if isinstance(data, (str, str)):
+                if isinstance(data, str):
                     content_charset = i.get_content_charset(charset)
                     if content_charset:
                         data = data.decode(content_charset, "ignore")

@@ -16,6 +16,7 @@ from builtins import object
 
 from cachetools import TTLCache, cached
 from common.constants import CACHE_MAXSIZE, CacheTimeLevel, FunctionControllerCodeEnum
+from esb.bkcore.models import FunctionController
 
 
 class FunctionControllerClient(object):
@@ -63,7 +64,6 @@ class FunctionControllerClient(object):
 
     @classmethod
     def save_jwt_key(cls, private_key, public_key):
-        from esb.bkcore.models import FunctionController
 
         FunctionController.objects.get_or_create(
             func_code=FunctionControllerCodeEnum.JWT_KEY.value,

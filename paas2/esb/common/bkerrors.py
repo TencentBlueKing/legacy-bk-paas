@@ -82,7 +82,7 @@ class BkErrorCodes(object):
         self._error_codes_dict = dict(
             [
                 (code_name, ErrorCode(code_name, **error_code))
-                for code_name, error_code in bk_error_codes_conf.items()
+                for code_name, error_code in list(bk_error_codes_conf.items())
             ]
         )
 

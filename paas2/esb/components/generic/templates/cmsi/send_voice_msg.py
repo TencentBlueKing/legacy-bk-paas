@@ -131,7 +131,7 @@ class SendVoiceMsg(Component, SetupConfMixin):
                     "mobile_phone": contact_info["telephone"],
                     "nation_code": contact_info.get("nation_code"),
                 }
-                for username, contact_info in user_data["user_contact_info"].items()
+                for username, contact_info in list(user_data["user_contact_info"].items())
             ]
             data["_extra_user_error_msg"] = user_data["_extra_user_error_msg"]
 

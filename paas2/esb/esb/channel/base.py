@@ -10,13 +10,13 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import object
 import copy
 import json
 import re
 import string
 import time
 import uuid
+from builtins import object, str
 
 from common.base_utils import FancyDict, get_client_ip, get_request_params, str_bool
 from common.base_validators import ValidationError
@@ -156,15 +156,14 @@ class BaseChannel(object):
     def get_headers(self, request):
         """"""
         headers = {}
-        for key, value in request.META.items():
+        for key, value in list(request.META.items()):
             if key.startswith("HTTP_") and value and key not in self.IGNORE_HEADERS:
                 headers[self.capitalize_header(key[5:])] = value
         return headers
 
     @staticmethod
     def capitalize_header(header):
-        """capitalize django header
-        """
+        """capitalize django header"""
         return "-".join(string.capitalize(s) for s in header.split("_"))
 
     def handle_request(self, request):
@@ -285,7 +284,9 @@ class ChannelManager(object):
     Manager for Channels, query database to find the matching channel.
     """
 
-    def __init__(self,):
+    def __init__(
+        self,
+    ):
         """
         :preset_channels example:
         {
