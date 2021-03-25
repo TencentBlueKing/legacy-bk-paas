@@ -11,20 +11,15 @@ specific language governing permissions and limitations under the License.
 """
 from __future__ import print_function
 
-from optparse import make_option
-
 from django.core.management.base import BaseCommand, CommandError
-
-from esb.bkcore.models import ESBChannel, AppComponentPerm
+from esb.bkcore.models import AppComponentPerm, ESBChannel
 
 
 class Command(BaseCommand):
-
-    option_list = BaseCommand.option_list + (
-        make_option("--app_code", action="store", dest="app_code"),
-        make_option("--system_name", action="store", dest="system_name"),
-        make_option("--component_name", action="store", dest="component_name"),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument("--app_code", action="store", dest="app_code")
+        parser.add_argument("--system_name", action="store", dest="system_name")
+        parser.add_argument("--component_name", action="store", dest="component_name")
 
     def handle(self, *args, **options):
         app_code = options["app_code"]

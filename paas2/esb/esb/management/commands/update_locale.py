@@ -10,20 +10,16 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import map
-from builtins import object
-import re
-import os
 import copy
 import json
-from optparse import make_option
-
-from django.conf import settings
-from django.core.management.base import BaseCommand
+import logging
+import os
+import re
+from builtins import map, object
 
 from common.base_utils import read_file
-
-import logging
+from django.conf import settings
+from django.core.management.base import BaseCommand
 
 logger = logging.getLogger(__name__)
 
@@ -31,11 +27,9 @@ BASE_DIR = settings.BASE_DIR
 
 
 class Command(BaseCommand):
-
-    option_list = BaseCommand.option_list + (
-        make_option("--force", action="store_true", dest="force", help="Force update locale file"),
-        make_option("--parse", action="store_true", dest="parse", help="only parse and print translation info"),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument("--force", action="store_true", dest="force", help="Force update locale file")
+        parser.add_argument("--parse", action="store_true", dest="parse", help="only parse and print translation info")
 
     def handle(self, *args, **options):
         self.force = options["force"]

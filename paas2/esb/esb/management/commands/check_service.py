@@ -12,7 +12,6 @@ specific language governing permissions and limitations under the License.
 from __future__ import print_function
 
 import json
-from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
@@ -22,10 +21,8 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-
-    option_list = BaseCommand.option_list + (
-        make_option("--service", action="store", dest="service", help="Service name"),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument("--service", action="store", dest="service", help="Service name")
 
     def handle(self, *args, **options):
         self.check_job_ssl()
