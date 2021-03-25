@@ -12,7 +12,7 @@ PyYAML==5.1
 Pillow==3.4.2
 gevent==1.1.2
 pytz==2016.6.1
-python-dateutil==2.6.0
+python-dateutil==2.8.1
 boto==2.43.0
 cachetools==3.1.1
 ConcurrentLogHandler==0.9.1
