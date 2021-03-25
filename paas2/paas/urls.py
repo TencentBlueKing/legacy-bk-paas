@@ -90,12 +90,11 @@ else:
 # for upload/download
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 from account.decorators import login_exempt  # noqa
+from django.views.static import serve  # noqa
 
 # import django.views  # noqa
-import django.contrib  # noqa
 
-# static_serve = login_exempt(django.views.static.serve)
-static_serve = login_exempt(django.contrib.staticfiles.views.serve)
+static_serve = login_exempt(serve)
 urlpatterns.append(url(r"^media/(?P<path>.*)$", static_serve, {"document_root": settings.MEDIA_ROOT}))
 
 # download for default resources
