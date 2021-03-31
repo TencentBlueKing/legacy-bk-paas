@@ -14,7 +14,7 @@
 | template_id  |  string    | 是     | 模板ID     |
 | version_tag  |  string    | 是     | 版本TAG  (max_length: 64)  |
 | content_id   |  string    | 是     | 版本内容ID, SHA256值（与上传内容时计算的资源ID一致）(min_length: 64, max_length: 64) |
-| content_size |  string    | 是     | 版本内容大小 (单位：字节) |
+| content_size |  integer   | 是     | 版本内容大小 |
 | memo         |  string    | 否     | 备注 (max_length: 64) |
 
 ### 请求参数示例

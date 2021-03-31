@@ -32,14 +32,14 @@
 {
         "bk_set_name":"set1",
         "bk_module_name":"module2",
-        "bk_host_innerip":"127.127.0.1",
+        "bk_host_innerip":"127.0.0.1",
         "bk_cloud_id":0,
         "host_info":{
                 "bk_comment":"test bk_comment 1",
                 "bk_os_type":"1"
         },
         "proc_info":{
-                "p1":{"bind_ip":"127.127.0.1"}
+                "p1":{"description":"xxx"}
         }
 }
 

@@ -15,8 +15,9 @@
 
 ### 请求参数示例
 
-``` python
+``` json
 {
+    "bk_cloud_id": 5,
 	"bk_cloud_name": "云区域1"
 }
 
@@ -25,8 +26,7 @@
 ### 返回结果示例
 
 
-```python
-
+```json
 {
     "result": true,
     "code": 0,

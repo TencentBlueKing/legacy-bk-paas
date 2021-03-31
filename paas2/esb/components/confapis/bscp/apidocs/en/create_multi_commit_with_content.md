@@ -29,7 +29,7 @@ create new multi commit for N configs of one app with contents
 | Field         | Type      | Required | Description |
 |---------------|-----------|----------|-------------|
 | content_id    |  string   | Y        | content sha256 id (min_length: 64, max_length: 64) |
-| content_size  |  string   | N        | content size (unit: byte) |
+| content_size  |  integer  | N        | content size |
 | labels_or     |  array    | N        | content index labels OR list  |
 | labels_and    |  array    | N        | content index labels AND list  |
 

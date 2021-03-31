@@ -29,7 +29,7 @@
 | 字段         |  类型     | 必选   |  描述      |
 |--------------|-----------|--------|------------|
 | content_id   |  string   | 是     | 内容ID，SHA256值（与上传内容时计算的资源ID一致）(min_length: 64, max_length: 64) |
-| content_size |  string   | 否     | 内容大小 (单位: 字节) |
+| content_size |  integer  | 否     | 内容大小 |
 | labels_or    |  array    | 否     | 内容索引逻辑或KV列表  |
 | labels_and   |  array    | 否     | 内容索引逻辑与KV列表  |
 

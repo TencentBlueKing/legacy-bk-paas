@@ -50,7 +50,7 @@ list service instances with processes info
 
 ### Return Result Example
 
-```python
+```json
 {
   "result": true,
   "code": 0,
@@ -62,7 +62,7 @@ list service instances with processes info
       {
         "bk_biz_id": 1,
         "id": 49,
-        "name": "10.27.0.9_p1_81",
+        "name": "p1_81",
         "service_template_id": 50,
         "bk_host_id": 11,
         "bk_module_id": 56,
@@ -75,7 +75,6 @@ list service instances with processes info
         "process_instances": [
           {
             "process": {
-              "bk_biz_id": 1,
               "proc_num": 0,
               "stop_cmd": "",
               "restart_cmd": "",
@@ -83,25 +82,29 @@ list service instances with processes info
               "bk_process_id": 43,
               "bk_func_name": "p1",
               "work_path": "",
-              "bind_ip": "0.0.0.0",
               "priority": 0,
               "reload_cmd": "",
               "bk_process_name": "p1",
-              "port": "81",
               "pid_file": "",
               "auto_start": false,
-              "auto_time_gap": 0,
               "last_time": "2019-07-22T09:54:50.927+08:00",
               "create_time": "2019-07-22T09:54:50.927+08:00",
               "bk_biz_id": 3,
               "start_cmd": "",
-              "bk_func_id": "",
               "user": "",
               "timeout": 0,
-              "protocol": "1",
               "description": "",
               "bk_supplier_account": "0",
-              "bk_start_param_regex": ""
+              "bk_start_param_regex": "",
+              "bind_info": [
+                {
+                    "enable": true,
+                    "ip": "127.0.0.1",
+                    "port": "80",
+                    "protocol": "1",
+                    "template_row_id": 1234
+                }
+              ]
             },
             "relation": {
               "bk_biz_id": 1,

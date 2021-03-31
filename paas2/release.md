@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.10
+    - esb: update cc/usermanage/bscp/bk_log apis
+
 # 2.12.9
     - bugfix: fix home page js 404
 

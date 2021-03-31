@@ -13,7 +13,8 @@ render template
 | biz_id       |  string    | Y        | business id |
 | template_id  |  string    | Y        | template id |
 | version_id   |  string    | Y        | version id  |
-| variables    |  string    | Y        | render variables (JSON raw string) |
+| variables    |  string    | N        | render variables (JSON raw string) |
+| var_group_id |  string    | N        | inner variable group id |
 
 ### Request Parameters Example
 

@@ -16,35 +16,32 @@ batch update process info
 
 ### Request Parameters Example
 
-```python
+```json
 {
   "bk_biz_id": 1,
   "processes": [
     {
       "bk_process_id": 43,
       "bk_supplier_account": "0",
-      "bind_ip": "1",
       "description": "",
       "start_cmd": "",
       "restart_cmd": "",
       "pid_file": "",
       "auto_start": false,
       "timeout": 30,
-      "protocol": "1",
       "auto_time_gap": 60,
       "reload_cmd": "",
       "bk_func_name": "java",
       "work_path": "/data/bkee",
       "stop_cmd": "",
       "face_stop_cmd": "",
-      "port": "8008,8443",
       "bk_process_name": "job_java",
       "user": "",
       "proc_num": 1,
       "priority": 1,
       "bk_biz_id": 2,
       "bk_func_id": "",
-       "bind_info": [
+      "bind_info": [
         {
             "enable": false,  
             "ip": "127.0.0.1",  

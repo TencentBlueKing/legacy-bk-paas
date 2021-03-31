@@ -33,7 +33,7 @@ condition params
 | bk_obj_asst_id           | string     | Yes     | object's association unique id|
 | bk_asst_id           | string     | NO     | object's association kind unique name|
 | bk_obj_id           | string     | NO     | the association's source object's id|
-| bk_asst_id           | string     | NO     | the association's destination object's id|
+| bk_asst_obj_id           | string     | NO     | the association's destination object's id|
 
 
 ### Request Parameters Example

@@ -11,7 +11,7 @@ Query department info
 
 | field      |  type      | required   |  description      |
 |-----------|------------|--------|------------|
-| lookup_field | string | no | lookup on which field, 'id' as default|
+| id | string | yes | query department id, e.g. 1122 |
 | fields | string | no | response fields, e.g. "name,id" |
 
 
@@ -19,6 +19,7 @@ Query department info
 
 ``` json
 {
+  "id": 1122,
   "fields": "name,id"
 }
 ```

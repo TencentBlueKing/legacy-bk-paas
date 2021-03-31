@@ -12,8 +12,8 @@ create template
 |----------------|-----------|----------|-------------|
 | biz_id         |  string   | Y        | business id     |
 | name           |  string   | Y        | template name (max_length: 64)  |
-| file_name      |  string   | Y        | config file name, e.g. server.yaml (max_length: 64)  |
-| file_path      |  string   | Y        | config file path, e.g. /etc (max_length: 256) |
+| cfg_name       |  string   | Y        | config file name, e.g. server.yaml (max_length: 64)  |
+| cfg_fpath      |  string   | Y        | config file path, e.g. /etc (max_length: 256) |
 | user           |  string   | Y        | file user in system, e.g. root (max_length: 64) |
 | user_group     |  string   | Y        | file user group in system, e.g. root (max_length: 64) |
 | file_privilege |  string   | Y        | file privilege，e.g. 0755 (min_length: 4, max_length: 4) |
@@ -31,8 +31,8 @@ create template
     "bk_token": "xxx",
     "biz_id": "xxx",
     "name": "server.yaml.template",
-    "file_name": "server.yaml",
-    "file_path": "/etc",
+    "cfg_name": "server.yaml",
+    "cfg_fpath": "/etc",
     "user": "root",
     "user_group": "root",
     "file_privilege": "0755",

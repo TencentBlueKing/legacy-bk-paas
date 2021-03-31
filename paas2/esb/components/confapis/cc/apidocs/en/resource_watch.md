@@ -15,7 +15,7 @@ watch and get the change of a kind of resource's event.
 | bk_fields           | array string   | Depends on resource | the resource event fields you want to return, the host resource need to be set.  |
 | bk_start_from       | Int64          | No     | watch from a unix seconds time, It is the number of seconds that have elapsed since the Unix epoch, minus leap seconds;  |
 | bk_cursor           | string         | No     | a cursor to represent the event you are watched at, you can use a cursor to watch the next event after it. |
-| bk_resource         | string         | Yes     | resource you can watch, now is host, host_relation, biz, set, module, set_template。"host" means a host's detail info, "host_relation" means host's relation with biz, set and module, "biz" means a biz's detail info, "set" means a set's detail info, "module" means a module's detail info, "set_template" means a set_template's detail info |
+| bk_resource         | string         | Yes     | resource you can watch, now is host, host_relation, biz, set, module, set_template, process. "host" means a host's detail info, "host_relation" means host's relation with biz, set and module, "biz" means a biz's detail info, "set" means a set's detail info, "module" means a module's detail info, "set_template" means a set_template's detail info, "process" means a process's detail info |
 | bk_supplier_account | string         | Yes    | supplier account                                                  |
 
 

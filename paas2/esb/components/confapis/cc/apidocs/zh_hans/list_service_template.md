@@ -12,57 +12,50 @@
 |----------------------|------------|--------|-----------------------|
 | bk_biz_id           | int    | 是   | 业务ID         |
 | service_category_id         | int  | 否   | 服务分类ID |
+| search         | string  | 否   | 按服务模版名查询，默认为空 |
+| is_exact         | bool  | 否   | 是否精确匹配服务模版名，默认为否，和search参数搭配使用，在search参数不为空的情况下有效（v3.9.19） |
 
 
 ### 请求参数示例
 
-```python
+```json
 {
-  "bk_biz_id": 1,
-  "service_category_id": 1,
-  "page": {
-    "start": 0,
-    "limit": 10,
-    "sort": "-name"
-  }
+    "bk_biz_id": 1,
+    "service_category_id": 1,
+    "search": "test2",
+    "is_exact": true,
+    "page": {
+        "start": 0,
+        "limit": 10,
+        "sort": "-name"
+    }
 }
 ```
 
 ### 返回结果示例
 
-```python
+```json
 {
-  "result": true,
-  "code": 0,
-  "message": "success",
-  "permission": null,
-  "data": {
-    "count": 2,
-    "info": [
-      {
-        "bk_biz_id": 1,
-        "id": 51,
-        "name": "test3",
-        "service_category_id": 1,
-        "creator": "admin",
-        "modifier": "admin",
-        "create_time": "2019-09-18T20:31:34.627+08:00",
-        "last_time": "2019-09-18T20:31:34.627+08:00",
-        "bk_supplier_account": "0"
-      },
-      {
-	"bk_biz_id": 1,
-        "id": 50,
-        "name": "test2",
-        "service_category_id": 1,
-        "creator": "admin",
-        "modifier": "admin",
-        "create_time": "2019-09-18T20:31:29.607+08:00",
-        "last_time": "2019-09-18T20:31:29.607+08:00",
-        "bk_supplier_account": "0"
-      }
-    ]
-  }
+    "result": true,
+    "code": 0,
+    "message": "success",
+    "permission": null,
+    "data": {
+        "count": 1,
+        "info": [
+            {
+                "bk_biz_id": 1,
+                "id": 50,
+                "name": "test2",
+                "service_category_id": 1,
+                "creator": "admin",
+                "modifier": "admin",
+                "create_time": "2019-09-18T20:31:29.607+08:00",
+                "last_time": "2019-09-18T20:31:29.607+08:00",
+                "bk_supplier_account": "0"
+            }
+        ]
+    }
 }
 ```
 

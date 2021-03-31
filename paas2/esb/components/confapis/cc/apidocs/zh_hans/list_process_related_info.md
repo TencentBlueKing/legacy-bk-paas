@@ -31,6 +31,7 @@
 | ---  | ---  | ---  | --- |
 | start|int|No|记录开始位置，默认为0 |
 | limit|int|Yes|每页限制条数,最大500 |
+| sort  | string | 否   | 排序字段，'-'表示倒序, 只能是进程的字段，默认按bk_process_id排序 |
 
 
 ### 请求参数示例
@@ -75,7 +76,8 @@
     ],
     "page": {
         "start": 0,
-        "limit": 100
+        "limit": 100,
+        "sort": "bk_process_id"
     }
 }
 ```
