@@ -50,8 +50,8 @@ query template list
                 "biz_id": "XXX",
                 "template_id": "T-0b67a798-e9c1-11e9-8c23-525400f99278",
                 "name": "server.yaml.template",
-                "filt_name": "server.yaml",
-                "file_path": "/etc",
+                "cfg_name": "server.yaml",
+                "cfg_fpath": "/etc",
                 "user": "root",
                 "user_group": "root",
                 "file_privilege": "0755",
@@ -86,8 +86,8 @@ query template list
 | biz_id         |  string   | business id  |
 | template_id    |  string   | template id  |
 | name           |  string   | template name |
-| file_name      |  string   | config file name, e.g. server.yaml |
-| file_path      |  string   | config file path, e.g. /etc |
+| cfg_name       |  string   | config file name, e.g. server.yaml |
+| cfg_fpath      |  string   | config file path, e.g. /etc |
 | user           |  string   | file user in system, e.g. root |
 | user_group     |  string   | file user group in system, e.g. root |
 | file_privilege |  string   | file privilege，e.g. 0755 |

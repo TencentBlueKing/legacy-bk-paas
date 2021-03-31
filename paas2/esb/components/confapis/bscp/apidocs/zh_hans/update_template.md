@@ -13,8 +13,8 @@
 | biz_id         |  string    | 是     | 业务ID     |
 | template_id    |  string    | 是     | 模板ID     |
 | name           |  string    | 是     | 模板名称 (max_length: 64) |
-| file_name      |  string    | 是     | 配置名称, 例如server.yaml (max_length: 64) |
-| file_path      |  string    | 是     | 配置相对路径, 例如/etc (max_length: 256) |
+| cfg_name       |  string    | 是     | 配置名称, 例如server.yaml (max_length: 64) |
+| cfg_fpath      |  string    | 是     | 配置相对路径, 例如/etc (max_length: 256) |
 | user           |  string    | 是     | 归属用户信息, 例如root (max_length: 64) |
 | user_group     |  string    | 是     | 归属用户组信息, 例如root (max_length: 64) |
 | file_privilege |  string    | 是     | 文件权限，例如0755 (min_length: 4, max_length: 4) |
@@ -33,8 +33,8 @@
     "biz_id": "xxx",
     "template_id": "T-0b67a798-e9c1-11e9-8c23-525400f99278",
     "name": "server.yaml.template",
-    "file_name": "server.yaml",
-    "file_path": "/etc",
+    "cfg_name": "server.yaml",
+    "cfg_fpath": "/etc",
     "user": "root",
     "user_group": "root",
     "file_privilege": "0755",

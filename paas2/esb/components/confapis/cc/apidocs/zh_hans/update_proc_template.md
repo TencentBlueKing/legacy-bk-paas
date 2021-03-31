@@ -89,7 +89,7 @@ value: 进程的值，不同的字段类型不一样
 
 ### 返回结果示例
 
-```python
+```json
 {
   "result": true,
   "code": 0,
@@ -124,10 +124,6 @@ value: 进程的值，不同的字段类型不一样
         "value": "",
         "as_default_value": false
       },
-      "bind_ip": {
-        "value": "1",
-        "as_default_value": false
-      },
       "priority": {
         "value": null,
         "as_default_value": false
@@ -139,10 +135,6 @@ value: 进程的值，不同的字段类型不一样
       "bk_process_name": {
         "value": "p1",
         "as_default_value": true
-      },
-      "port": {
-        "value": "",
-        "as_default_value": false
       },
       "pid_file": {
         "value": "",
@@ -170,10 +162,6 @@ value: 进程的值，不同的字段类型不一样
       },
       "timeout": {
         "value": null,
-        "as_default_value": false
-      },
-      "protocol": {
-        "value": "1",
         "as_default_value": false
       },
       "description": {

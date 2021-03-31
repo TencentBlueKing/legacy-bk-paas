@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.12.10
+    - esb: update cc/usermanage/bscp/bk_log apis
+    - esb: add bk_apigateway/bk_paas3 to user-auth-unrequired wlist
+
 # 2.12.9
     - bugfix: fix home page js 404
 

@@ -29,6 +29,7 @@ list process related info according to condition (v3.9.13)
 | ----- | ---- | -------- | -------------------------------- |
 | start | int  | Yes      | start record                     |
 | limit | int  | Yes      | page limit, maximum value is 500 |
+| sort  | string | No       | the field for sort, '-' represent decending order, default sorted by bk_process_id |
 
 ### Request Parameters Example
 
@@ -72,7 +73,8 @@ list process related info according to condition (v3.9.13)
     ],
     "page": {
         "start": 0,
-        "limit": 100
+        "limit": 100,
+        "sort": "bk_process_id"
     }
 }
 ```
