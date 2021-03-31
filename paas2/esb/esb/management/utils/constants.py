@@ -19,7 +19,8 @@ FUNCTION_CONTROLLERS = [
         "func_name": "Whether to skip user authentication",
         "wlist": (
             "bk_cmdb,bk_fta_solutions,bk_gse,bk_iam,bk_job,bk_monitor,bk_nodeman,"
-            "bk_paas,bk_paas_log_alert,bk_usermgr,bk_sops,bk_log_search,bk_bklog"
+            "bk_paas,bk_paas_log_alert,bk_usermgr,bk_sops,bk_log_search,bk_bklog,"
+            "bk_paas3,bk_lesscode,bk_apigateway"
         ),
     }
 ]
