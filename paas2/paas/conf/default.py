@@ -153,7 +153,7 @@ STATIC_URL = SITE_URL + "static/"
 
 STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"),)
 
-STATIC_VERSION = "0.2.0"
+STATIC_VERSION = "0.2.1"
 
 PLATFORM_VERSION = "2.0.0"
 
