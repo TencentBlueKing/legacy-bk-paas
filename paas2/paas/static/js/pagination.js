@@ -45,7 +45,14 @@ jQuery.fn.pagination = function(opt){
                 var get_data =  eval("("+data+")");
                 //请求的表格数据添加到table对象
                 $(opts.table_obj).html(get_data.data);
-                total_num = get_data.total_num;
+
+                // total_num = get_data.total_num;
+                if (typeof get_data.total_num == "object" && typeof get_data.total_num.value == "number") {
+                    total_num = get_data.total_num.value;
+                } else {
+                    total_num = get_data.total_num;
+                }
+
                 extends_par = get_data.extends_par;
                 if(total_num>=0){
                     draw_link(total_num);
@@ -185,6 +192,7 @@ jQuery.fn.pagination = function(opt){
             }else{
                 append_item(opts.current_page+1,{text:gettext("下一页"), classes:"disabled"});
             }
+
 
             if (total_num == 0){
                 $('#pagination_id').hide();
