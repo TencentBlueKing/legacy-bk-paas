@@ -82,6 +82,8 @@ def get_user_apps(username):
 
     # 重新保存应用列表排序
     user_app_code_list = [_app.get("code") for _app in user_app_list]
+    seen = set()
+    user_app_code_list = [x for x in user_app_code_list if not (x in seen or seen.add(x))]
     user_settings.apps = json.dumps(user_app_code_list)
     user_settings.save()
 
