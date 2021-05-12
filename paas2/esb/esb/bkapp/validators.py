@@ -10,12 +10,12 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from past.builtins import cmp
-from builtins import str
 import time
 import hmac
 import base64
 import hashlib
+
+from django.utils.encoding import force_bytes
 
 from common.base_validators import BaseValidator, ValidationError
 from common.errors import error_codes
@@ -145,8 +145,10 @@ class SignatureValidator(BaseValidator):
         req_params = "&".join(["%s=%s" % (k, v) for k, v in sorted(iter(list(params.items())), key=lambda x: x[0])])
         message = "%s%s?%s" % (method, path, req_params)
         for valid_app_secret in valid_app_secret_list:
-            sign = base64.b64encode(hmac.new(str(valid_app_secret), message, hashlib.sha1).digest())
-            if cmp(sign, signature) == 0:
+            sign = base64.b64encode(
+                hmac.new(force_bytes(valid_app_secret), force_bytes(message), hashlib.sha1).digest()
+            )
+            if force_bytes(sign) == force_bytes(signature):
                 return True
         return False
 

@@ -16,7 +16,7 @@ from django.test import TestCase
 
 from common.constants import HTTP_METHOD
 from esb.component.base import get_components_manager
-from .channel_tools import ChannelClient
+from esb.management.utils.channel_tools import ChannelClient
 
 
 class TestChannelClient(TestCase):

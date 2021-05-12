@@ -12,7 +12,7 @@ specific language governing permissions and limitations under the License.
 
 from django.test import TestCase
 
-from .confapis import ConfapisChannelManager
+from esb.channel.confapis import ConfapisChannelManager
 
 
 class TestConfapisChannelManager(TestCase):

@@ -16,11 +16,11 @@ import hashlib
 import json
 import random
 import re
-import string
 from builtins import range, str
 
 import yaml
 from past.builtins import basestring
+from django.utils.encoding import force_bytes
 
 from common.errors import error_codes
 from common.log import logger
@@ -108,7 +108,7 @@ def smart_upper(value):
     'requestFriendHandler'
     """
     value_list = value.split("_")
-    return "".join(string.capitalize(word) if i != 0 else word for i, word in enumerate(value_list))
+    return "".join(word.capitalize() if i != 0 else word for i, word in enumerate(value_list))
 
 
 def smart_str(s, encoding="utf-8"):
@@ -227,7 +227,7 @@ def get_request_params(request):
         request_params = dict(list(request.GET.items()))
     else:
         # "POST"方法
-        if request.body and request.body.strip().startswith("{"):
+        if request.body and request.body.strip().startswith(force_bytes("{")):
             try:
                 request_params = json.loads(request.body)
             except Exception:
