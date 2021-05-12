@@ -63,7 +63,7 @@ class AppInitializer(object):
         """
         生成开发框架存储的文件地址: {app_code}_{random_str}_{time}.tar.gz
         """
-        random_str = "".join([random.choice(string.lowercase) for _ in range(10)])
+        random_str = "".join([random.choice(string.ascii_lowercase) for _ in range(10)])
         create_time = self.app.created_date.strftime("%Y%m%d%H%M%S")
         filtname = "{}_{}_{}.tar.gz".format(self.app.code, random_str, create_time)
         return os.path.join(settings.MEDIA_ROOT, APP_INIT_PROJECT_FILES, filtname)
