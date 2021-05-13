@@ -13,7 +13,7 @@ i18n_cp:
 	cp locale/locale_api/en/LC_MESSAGES/django.* ../paas/locale/locale_api/en/LC_MESSAGES/
 
 poetry.lock: pyproject.toml
-	poetry lock
+	poetry lock --no-update
 
 requirements_dev.txt: poetry.lock
 	poetry export -f requirements.txt --without-hashes --dev -o requirements_dev.txt
