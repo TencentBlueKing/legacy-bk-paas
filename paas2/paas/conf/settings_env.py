@@ -73,7 +73,12 @@ ENGINE_HOST = env.str("BK_PAAS_APPENGINE_LOCAL_URL", "http://appengine.bk-paas.s
 LOGIN_HOST = env.str("BK_PAAS_LOGIN_LOCAL_URL", "http://login.bk-paas.svc")
 # 用户管理内部接口地址
 BK_USERMGR_HOST = env.str("BK_USERMGR_LOCAL_ADDR", "backend.bk-usermgr.svc")
-
+# PaaS3.0 的访问地址
+BK_PAAS3_URL = env.str("BK_PAAS3_URL", "")
+# API 网关访问地址
+BK_APIGW_URL = env.str("BK_APIGW_URL", "")
+# API 网关文档中心地址
+BK_APIGW_DOC_URL = env.str("BK_APIGW_DOC_URL", "")
 
 # third-party hosts
 # host for cc

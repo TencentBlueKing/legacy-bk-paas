@@ -7,7 +7,11 @@
         <div class="app_center">
             <div class="box-info full">
                 <div class="main-header"><span>${_(u'外链应用')}</span>
+                  % if BK_PAAS3_URL:
+                    <a class="btn btn-green btn-min-w f_r mr10" href="###" onclick="recommend_paas3()">${_(u'创建外链应用')}</a>
+                  % else:
                     <a class="btn btn-green btn-min-w f_r mr10" href="${SITE_URL}tpapp/create/">${_(u'创建外链应用')}</a>
+                  % endif
                 </div>
                 <!--     工具栏 start    -->
                 <div class="data-table-toolbar">
