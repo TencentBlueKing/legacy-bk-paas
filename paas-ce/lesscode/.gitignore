@@ -32,6 +32,8 @@ upload
 !lib/client/src/element-materials/**/upload
 temp
 npmTemp
+lib/server/conf/data-base.js
+lib/server/conf/http.js
 
 !lib/server/project-template/project-init-code/bin
 lib/server/project-template/project-target*
