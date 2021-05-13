@@ -10,43 +10,41 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.utils.translation import ugettext as _
 
 from common.decorators import has_apigateway_manage_permission_for_classfunc
+from esb.apps.mixins import TemplateRenderMixin
 from esb.bkcore.models import ComponentSystem
 from esb.bkcore.constants import DEFAULT_DOC_CATEGORY
 from esb.common.django_utils import i18n_form, get_cur_language
-from esb.configs.default import menu_items
 from .forms import ComponentSystemForm, EditComponentSystemForm, SystemDocCategory
 from ..utils import md2html
 
 menu_active_item = "system_manager"
 
 
-class SystemListView(View):
+class SystemListView(View, TemplateRenderMixin):
     """System list page"""
 
     @has_apigateway_manage_permission_for_classfunc
     def get(self, request):
         systems = ComponentSystem.objects.all().order_by("name")
         cur_language = get_cur_language()
-        return render(
+        return self.render(
             request,
             "manager/system/list.html",
             {
                 "systems": systems,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
                 "system_term_html": md2html("%s/system" % cur_language),
             },
         )
 
 
-class AddSystemView(View):
+class AddSystemView(View, TemplateRenderMixin):
     """Add ComponentSystem view"""
 
     @has_apigateway_manage_permission_for_classfunc
@@ -54,14 +52,13 @@ class AddSystemView(View):
         form = ComponentSystemForm()
         doc_category_list = SystemDocCategory.objects.all()
         form = i18n_form(form)
-        return render(
+        return self.render(
             request,
             "manager/system/add.html",
             {
                 "form": form,
                 "default_doc_category": _(DEFAULT_DOC_CATEGORY),
                 "doc_category_list": doc_category_list,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
@@ -73,22 +70,22 @@ class AddSystemView(View):
             form.save()
             form.add_and_clean_doc_category()
             return HttpResponseRedirect(reverse("manager.system.list"))
+
         form = i18n_form(form)
         doc_category_list = SystemDocCategory.objects.all()
-        return render(
+        return self.render(
             request,
             "manager/system/add.html",
             {
                 "form": form,
                 "default_doc_category": _(DEFAULT_DOC_CATEGORY),
                 "doc_category_list": doc_category_list,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
 
 
-class EditSystemView(View):
+class EditSystemView(View, TemplateRenderMixin):
     """Edit system view"""
 
     @has_apigateway_manage_permission_for_classfunc
@@ -108,14 +105,13 @@ class EditSystemView(View):
 
         doc_category_list = SystemDocCategory.objects.all()
         form = i18n_form(form)
-        return render(
+        return self.render(
             request,
             "manager/system/edit.html",
             {
                 "form": form,
                 "system": system,
                 "doc_category_list": doc_category_list,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
@@ -139,13 +135,12 @@ class EditSystemView(View):
             return HttpResponseRedirect(reverse("manager.system.list"))
         form = i18n_form(form)
         doc_category_list = SystemDocCategory.objects.all()
-        return render(
+        return self.render(
             request,
             "manager/system/edit.html",
             {
                 "form": form,
                 "doc_category_list": doc_category_list,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )

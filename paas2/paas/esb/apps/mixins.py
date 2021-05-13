@@ -10,28 +10,24 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from django.views.generic import View
+from django.shortcuts import render
 
-from common.decorators import has_apigateway_manage_permission_for_classfunc
-from esb.apps.mixins import TemplateRenderMixin
-from esb.common.django_utils import get_cur_language
-from ..utils import md2html
+from esb.configs.default import menu_items, BK_APIGW_URL, APIGATEWAY_ENABLED, MENU_ITEM_BUFFET_HIDDEN
 
 
-menu_active_item = "manager_index"
+class TemplateRenderMixin(object):
+    def _get_generic_context(self):
+        return {
+            "menu_items": menu_items,
+            "BK_APIGW_URL": BK_APIGW_URL,
+            "APIGATEWAY_ENABLED": APIGATEWAY_ENABLED,
+            "MENU_ITEM_BUFFET_HIDDEN": MENU_ITEM_BUFFET_HIDDEN,
+        }
 
+    def render(self, request, template_name, context=None, *args, **kwargs):
+        context = context or {}
 
-class IndexView(View, TemplateRenderMixin):
-    """Index page"""
+        for key, value in self._get_generic_context().items():
+            context.setdefault(key, value)
 
-    @has_apigateway_manage_permission_for_classfunc
-    def get(self, request):
-        cur_language = get_cur_language()
-        return self.render(
-            request,
-            "manager/index.html",
-            {
-                "menu_active_item": menu_active_item,
-                "index_html": md2html("%s/index" % cur_language),
-            },
-        )
+        return render(request, template_name, context, *args, **kwargs)

@@ -10,8 +10,29 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+import environ
 from django.conf import settings
 from django.utils.translation import pgettext, ugettext
+
+env = environ.Env()
+
+
+def get_value_from_settings_or_environ(key, cast, default):
+    # 从环境变量，djang settings 获取，或使用默认值
+    value = env.get_value(key, cast=cast, default=None)
+    if value is not None:
+        return value
+
+    value = getattr(settings, key, None)
+    if value is not None:
+        return env.parse_value(value, cast)
+
+    return default
+
+
+BK_APIGW_URL = get_value_from_settings_or_environ("BK_APIGW_URL", str, "")
+APIGATEWAY_ENABLED = bool(BK_APIGW_URL)
+MENU_ITEM_BUFFET_HIDDEN = get_value_from_settings_or_environ("MENU_ITEM_BUFFET_HIDDEN", bool, False)
 
 
 menu_items = [
@@ -26,12 +47,16 @@ menu_items = [
         "label": pgettext("menu", u"通道管理"),
         "path": "manager.channel.list",
     },
-    {
-        "name": "buffet_manager",
-        "label": pgettext("menu", u"自助接入"),
-        "path": "manager.buffet_comp.list",
-    },
 ]
+
+if not MENU_ITEM_BUFFET_HIDDEN:
+    menu_items += [
+        {
+            "name": "buffet_manager",
+            "label": pgettext("menu", u"自助接入"),
+            "path": "manager.buffet_comp.list",
+        },
+    ]
 
 if settings.EDITION == "ee":
     menu_items += [
@@ -46,7 +71,7 @@ if settings.EDITION == "ee":
 menu_items += [
     {
         "name": "api_docs",
-        "label": pgettext("menu", u"API文档"),
+        "label": pgettext("menu", u"组件API文档" if APIGATEWAY_ENABLED else u"API文档"),
         "path": "esb_api_docs",
     },
 ]

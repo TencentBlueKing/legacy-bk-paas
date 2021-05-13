@@ -46,8 +46,13 @@
 <div class="header">
     <!--头部横向导航 start -->
     <div class="header-inner">
+        {% if APIGATEWAY_ENABLED %}
+        <a title="{% trans '蓝鲸API Gateway' %}" href="{{ BK_APIGW_URL }}" class="logo"><img src="{{ STATIC_URL }}{% trans 'esb/img/logo_apigateway.png' %}" alt="" style="height: 40px; margin-right: 6px;"></a>
+        <a title="{% trans '组件管理' %}" href="{% url 'manager.index' %}" class="logo"><img src="{{ STATIC_URL }}{% trans 'esb/img/logo_apigateway_esb.png' %}" alt="" style="height: 40px;"></a>
+        {% else %}
         <a title="{% trans '蓝鲸智云桌面' %}" href="{{SITE_URL}}" class="logo"><img src="{{ STATIC_URL }}{% trans 'esb/img/logo_esb_01.png' %}" alt=""></a>
         <a title="{% trans '蓝鲸智云API网关' %}" href="{% url 'manager.index' %}" class="logo"><img src="{{ STATIC_URL }}{% trans 'esb/img/logo_esb_02.png' %}" alt=""></a>
+        {% endif %}
         <div class="account">
             <div class="account_meta account_info account_meta_primary">
                 {% if request.user and request.user.username %}
