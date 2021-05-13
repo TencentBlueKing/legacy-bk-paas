@@ -1,0 +1,21 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        ".git",
+        "node_modules/**/node_modules"
+    ],
+    "verbose": false,
+    "execMap": {
+        "js": "node lib/server/app.browser.js"
+    },
+    "events": {
+    },
+    "watch": [
+        "./lib/server"
+    ],
+    "exec": "node lib/server/app.browser.js",
+    "env": {
+        "NODE_ENV": "development"
+    },
+    "ext": "js,json"
+}

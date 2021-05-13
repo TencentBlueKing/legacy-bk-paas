@@ -4,6 +4,12 @@
             <div class="side-hd">
                 <i class="back-icon bk-drag-icon bk-drag-arrow-back" title="返回项目列表" @click="toProjects"></i>
                 <span class="seperate-line">|</span>
+                <span class="bk-drag-icon template-logo" title="返回项目列表" @click="toProjects">
+                    <svg aria-hidden="true" width="16" height="16">
+                        <use xlink:href="#bk-drag-logo"></use>
+                    </svg>
+                </span>
+                <span class="seperate-line">|</span>
                 <bk-select ext-cls="select-project" ext-popover-cls="select-project-dropdown" v-model="projectId" :clearable="false" :searchable="true" @selected="changeProject">
                     <bk-option v-for="option in projectList"
                         :key="option.id"
@@ -12,30 +18,31 @@
                     </bk-option>
                 </bk-select>
             </div>
-            <div class="side-bd">
+            <div class="side-bd" :class="{ 'no-click': pageLoading }">
                 <nav class="nav-list">
-                    <router-link tag="div" class="nav-item" v-for="item in navList" :key="item.toPath" :to="item.toPath">
+                    <router-link tag="div" class="nav-item" v-for="item in navList" :key="item.title" :to="item.toPath">
                         <i :class="`bk-drag-icon bk-drag-${item.icon}`"></i>{{ item.title }}
                     </router-link>
                 </nav>
             </div>
         </aside>
         <div class="breadcrumbs">
-            <h3 class="current">{{ currentPage.title }}</h3>
+            <h3 class="current">{{ currentPage }}</h3>
+            <extra-links></extra-links>
         </div>
-        <div class="main-container" v-show="!pageLoading">
-            <router-view :key="$route.path" v-if="!projectNotExist"></router-view>
-            <div v-else class="exception-page">
-                <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
-                    <div>项目id不存在，系统将在{{countdown}}后返回项目列表页</div>
-                </bk-exception>
-            </div>
+        <!-- 使用v-if因子组件依赖获取的项目信息 -->
+        <div class="main-container" v-bkloading="{ isLoading: pageLoading }">
+            <router-view v-if="!pageLoading" :key="$route.path"></router-view>
         </div>
     </main>
 </template>
 
 <script>
+    import ExtraLinks from '@/components/ui/extra-links'
     export default {
+        components: {
+            ExtraLinks
+        },
         data () {
             return {
                 pageLoading: false,
@@ -47,15 +54,47 @@
                         toPath: 'pages'
                     },
                     {
+                        title: '自定义组件库',
+                        icon: 'template-fill',
+                        toPath: {
+                            name: 'componentManage'
+                        }
+                    },
+                    {
                         title: '函数库',
                         icon: 'function-fill',
-                        toPath: 'functionManage'
+                        toPath: 'function-manage'
+                    },
+                    {
+                        title: '变量管理',
+                        icon: 'variable-manage',
+                        toPath: 'variable-manage'
+                    },
+                    {
+                        title: '布局模板实例',
+                        icon: 'template-fill-2',
+                        toPath: 'layout'
+                    },
+                    {
+                        title: '路由配置',
+                        icon: 'router',
+                        toPath: 'routes'
+                    },
+                    {
+                        title: '成员管理',
+                        icon: 'user-group',
+                        toPath: 'member-manage'
+                    },
+                    {
+                        title: '基本信息',
+                        icon: 'info-fill',
+                        toPath: 'basic'
+                    },
+                    {
+                        title: '操作审计',
+                        icon: 'audit',
+                        toPath: 'logs'
                     }
-                    // {
-                    //     title: '成员管理',
-                    //     icon: 'user-group',
-                    //     toPath: 'member'
-                    // }
                 ],
                 projectList: [],
                 countdown: 3,
@@ -64,31 +103,37 @@
         },
         computed: {
             currentPage () {
-                return this.navList.find(item => (this.$route.path.indexOf(`/${item.toPath}`) > 0))
-            },
-            projectNotExist () {
-                return !this.projectList.filter(item => item.id === this.projectId).length
+                return this.$route.meta.title
             }
+        },
+        // watch: {
+        //     '$route': {
+        //         handler (to, from) {
+        //             console.error(to)
+        //         },
+        //         immediate: true
+        //     }
+        // },
+        beforeRouteUpdate (to, from, next) {
+            this.projectId = parseInt(to.params.projectId)
+            this.setCurrentProject()
+            next()
         },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             await this.getProjectList()
-            if (this.projectNotExist) {
-                this.timer = setInterval(() => {
-                    this.countdown--
-                    if (this.countdown === 0) {
-                        clearInterval(this.timer)
-                        this.timer = null
-                        this.toProjects()
-                    }
-                }, 1000)
-            }
+            this.setCurrentProject()
         },
         methods: {
             toProjects () {
                 this.$router.push({
                     name: 'projects'
                 })
+            },
+            async setCurrentProject () {
+                const project = this.projectList.find(item => item.id === this.projectId)
+                this.$store.commit('project/setCurrentProject', project)
+                await this.$store.dispatch('member/setCurUserPermInfo', project)
             },
             async getProjectList () {
                 try {
@@ -102,6 +147,7 @@
                 }
             },
             changeProject (id) {
+                this.$store.dispatch('member/setCurUserPermInfo', { id })
                 this.$router.replace({
                     params: {
                         projectId: id
@@ -144,22 +190,32 @@
                 display: flex;
                 align-items: center;
                 .back-icon {
-                    margin-left: 13px;
                     color: #3a84ff;
-                    padding: 12px;
+                    padding: 10px;
                     cursor: pointer;
+                }
+                .template-logo {
+                    margin: 0 10px;
+                    cursor: pointer;
+                    svg {
+                        vertical-align: middle;
+                    }
                 }
                 .seperate-line {
                     width: 1px;
                     color: #d8d8d8;
+                    margin-left: -2px;
                 }
                 .select-project {
-                    width: 190px;
+                    width: 186px;
                     border: none;
-                    margin-left: 5px;
+                    margin-left: 2px;
                     .bk-select-name {
                         font-size: 16px;
                         color: #313238;
+                    }
+                    &.is-focus {
+                        box-shadow: none;
                     }
                 }
             }
@@ -167,13 +223,17 @@
                 height: calc(100% - var(--side-hd-height) - var(--side-ft-height));
                 overflow-y: auto;
             }
+            .no-click {
+                pointer-events: none;
+            }
         }
 
         .breadcrumbs {
             position: relative;
-            z-index: 99;
+            z-index: 1;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             height: var(--breadcrumb-height);
             background: #fff;
             box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.1);

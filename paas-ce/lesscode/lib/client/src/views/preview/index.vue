@@ -9,133 +9,55 @@
   specific language governing permissions and limitations under the License.
 -->
 
+<template>
+    <iframe :src="previewUrl" frameborder="0" class="preview-home" ref="iframe" @load="initDefaultPath"></iframe>
+</template>
+
 <script>
-    import Vue from 'vue'
-    import httpVueLoader from '@/common/http-vue-loader'
-    import codeMixin from '@/components/vue-code/code-mixin'
-    import { customComponentList } from '@/custom'
-    import { mapActions } from 'vuex'
-
-    customComponentList.forEach(name => {
-        const ref = require('@/custom/' + name)
-        const com = ref.default
-        const componentName = ref.config.type
-        Vue.component(componentName, com)
-    })
-
-    const LoadingComponent = Vue.component('loading-component', {
-        props: {
-            isLoading: {
-                type: Boolean,
-                default: false
-            }
-        },
-        data () {
-            return {
-                height: window.innerHeight
-            }
-        },
-        template: `
-            <div class="loading" :style="{ height: height + 'px' }" v-bkloading="{ isLoading: true }"></div>
-        `
-    })
-    /* eslint-disable */
-    const ErrComponent = Vue.component('err-component', {
-        template: '<span>err</span>'
-    })
-    /* eslint-enable */
-
     export default {
-        name: 'preview',
-        components: {
-            LoadingComponent
-        },
-        mixins: [codeMixin],
         data () {
             return {
-                pageDetail: {},
-                pageType: 'preview',
-                comp: 'LoadingComponent',
-                isLoading: false,
-                targetData: [],
-                minHeight: 0
+                previewUrl: `${window.location.origin}/preview.html`
             }
         },
-        computed: {
-            fromPageList () {
-                return this.$route.query.type && this.$route.query.type === 'fromList'
-            }
-        },
-        async created () {
-            const projectId = this.$route.params.projectId || 1
-            await this.getAllGroupFuncs(projectId)
 
-            if (this.fromPageList) {
-                this.pageDetail = await this.$store.dispatch('page/detail', { pageId: this.$route.params.pageId })
-            }
+        created () {
+            window.addEventListener('message', this.handleUrl)
+        },
 
-            await this.loadFile()
+        beforeDestroy () {
+            window.removeEventListener('message', this.handleUrl)
         },
-        mounted () {
-            this.minHeight = window.innerHeight
-            window.addEventListener('resize', this.resizeHandler)
-        },
-        destroyed () {
-            window.removeEventListener('resize', this.resizeHandler)
-        },
+
         methods: {
-            ...mapActions('functions', [
-                'getAllGroupFuncs'
-            ]),
-
-            async loadFile () {
-                this.isLoading = true
-                try {
-                    if (this.fromPageList) {
-                        this.targetData = JSON.parse(this.pageDetail.content)
-                    } else {
-                        this.targetData = JSON.parse(localStorage.getItem('layout-target-data'))
-                    }
-                } catch (err) {
-                    this.$bkMesseage({
-                        theme: 'error',
-                        message: 'targetData格式错误'
-                    })
+            initDefaultPath () {
+                const val = this.$route
+                const data = {
+                    fullPath: val.fullPath.replace(/\/preview\/project\/\d+/, ''),
+                    query: val.query,
+                    type: 'initRouter'
                 }
-
-                let code = this.getCode().replace('export default', 'module.exports =')
-                code = code.replace('components: { chart: ECharts },', '')
-                const res = httpVueLoader(code)
-                setTimeout(() => {
-                    Vue.component('preview-page', res)
-                    this.comp = 'preview-page'
-                    this.isLoading = false
-                }, 300)
-                // this.isLoading = true
-                // try {
-                //     const res = await httpVueLoader(this.url)
-                //     setTimeout(() => {
-                //         Vue.component('preview-page', res)
-                //         this.comp = 'preview-page'
-                //         this.isLoading = false
-                //     }, 300)
-                // } catch (e) {
-                //     console.error(e)
-                //     this.comp = 'ErrComponent'
-                //     this.$bkMessage({
-                //         theme: 'error',
-                //         message: e.message || e.data.msg || e.statusText
-                //     })
-                //     this.isLoading = false
-                // }
+                this.sendDataToIframe(data)
             },
-            resizeHandler () {
-                this.minHeight = window.innerHeight
+
+            sendDataToIframe (data) {
+                this.$refs.iframe.contentWindow.postMessage((data), '\*')
+            },
+
+            handleUrl (res) {
+                const data = res.data || {}
+                const iframePath = data.name === '404' ? '/404' : (data.fullPath || '/')
+                const url = `/preview/project/${this.$route.params.projectId}${iframePath}`
+                if (data.type !== 'preview') return
+                history.replaceState({ url: url, title: document.title }, document.title, url)
             }
-        },
-        template: ''
-            + '<div :style="{ \'min-height\': minHeight + \'px\' }">'
-            + '<component :is="comp" :is-loading="isLoading"/>'
-            + '</div>'
+        }
     }
 </script>
+
+<style lang="postcss" scoped>
+    .preview-home {
+        width: 100vw;
+        height: 100vh;
+    }
+</style>

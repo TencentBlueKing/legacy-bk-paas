@@ -9,91 +9,21 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import grid1 from './grid/column1'
-import grid2 from './grid/column2'
-import grid3 from './grid/column3'
-import grid4 from './grid/column4'
+import bkComponents, { bkComponentGroupList } from './bk'
+import elementComponents, { elementComponentGroupList } from './element'
 
-// import layoutDemo from './layout-demo'
-// import form from './form'
-import input from './input'
-import button from './button'
-import steps from './steps'
-import switcher from './switcher'
-import datePicker from './date-picker'
-import timePicker from './time-picker'
-import upload from './upload'
-import timeline from './timeline'
-import progress from './progress'
-import roundProgress from './round-progress'
-import animateNumber from './animate-number'
-import rate from './rate'
-import slider from './slider'
-import tab from './tab'
-import radioGroup from './radio-group'
-import checkboxGroup from './checkbox-group'
-import table from './table'
-import diff from './diff'
-import swiper from './swiper'
-import tree from './tree'
-import select from './select'
-import tagInput from './tag-input'
-import searchSelect from './search-select'
-import transfer from './transfer'
-import badge from './badge'
-// import collapse from './collapse'
-import exception from './exception'
-import pagination from './pagination'
-import text from './text'
-import image from './image'
-import zoomImage from './zoom-image'
+import { componentConfigs as complexComponentConfigs } from '@blueking/bkui-vue-complex'
 
-import chartsLine from './charts-line'
-import chartsBar from './charts-bar'
-import chartsPie from './charts-pie'
+complexComponentConfigs.forEach(item => {
+    item.group = '复合组件'
+    item.isComplexComponent = true
+    item.icon = item.icon || 'bk-drag-custom-comp-default'
+})
+bkComponentGroupList.push('复合组件')
 
-import { customComponentsConfigs } from '@/custom'
-
-export default Object.seal([
-    ...customComponentsConfigs,
-    grid1,
-    grid2,
-    grid3,
-    grid4,
-    // layoutDemo,
-    // form,
-    input,
-    button,
-    steps,
-    switcher,
-    datePicker,
-    timePicker,
-    upload,
-    timeline,
-    progress,
-    roundProgress,
-    animateNumber,
-    rate,
-    slider,
-    tab,
-    radioGroup,
-    checkboxGroup,
-    diff,
-    swiper,
-    tree,
-    select,
-    tagInput,
-    searchSelect,
-    transfer,
-    badge,
-    table,
-    exception,
-    // collapse,
-    pagination,
-    text,
-    image,
-    zoomImage,
-    chartsLine,
-    chartsBar,
-    chartsPie
-])
+export default {
+    bk: bkComponents.concat(...complexComponentConfigs),
+    bkComponentGroupList,
+    element: elementComponents,
+    elementComponentGroupList
+}

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+echo "heroku pre-build 在npm install前执行"

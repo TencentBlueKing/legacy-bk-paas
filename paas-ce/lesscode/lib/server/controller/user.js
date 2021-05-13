@@ -12,6 +12,10 @@
 import UserModel from '../model/user'
 // import User from '../model/entities/user'
 // import { getRepository } from 'typeorm'
+const httpConf = require('../conf/http')
+const axios = require('axios')
+const querystring = require('querystring')
+const https = require('https')
 
 export const findUserByBk = async bkUsername => {
     const ret = await UserModel.findOneByBk(bkUsername)
@@ -66,6 +70,134 @@ export const getUserInfo = ctx => {
             code: 0,
             message: 'success',
             data: ctx.session.userInfo
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message
+        })
+    }
+}
+
+export const getAllUser = async ctx => {
+    try {
+        const bkToken = ctx.cookies.get('bk_token')
+        const params = querystring.stringify({
+            bk_app_code: httpConf.appCode,
+            bk_app_secret: httpConf.appSecret,
+            bk_token: bkToken
+        })
+        const response = await axios({
+            withCredentials: true,
+            url: `${httpConf.hostUrl}/api/c/compapi/v2/bk_login/get_all_users/?${params}`,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Cookie: ctx.cookies.request.headers.cookie
+            },
+            responseType: 'json',
+            httpsAgent: new https.Agent({ rejectUnauthorized: false })
+        })
+        const { data } = response.data
+        const userList = data.map((item) => {
+            item.id = item.bk_username || item.english_name
+            item.name = item.bk_username || item.english_name
+            return item
+        })
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data: userList
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message
+        })
+    }
+}
+
+export const getMember = async ctx => {
+    try {
+        const query = ctx.request.query || {}
+        const projectId = query.projectId
+        const name = query.name
+        const data = await UserModel.getMember(projectId, name)
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message
+        })
+    }
+}
+
+export const addMembers = async ctx => {
+    try {
+        const postData = ctx.request.body
+        await UserModel.addMembers(postData)
+        ctx.send({
+            code: 0,
+            message: 'success'
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message
+        })
+    }
+}
+
+export const editMember = async ctx => {
+    try {
+        const postData = ctx.request.body
+        await UserModel.editMember(postData)
+        ctx.send({
+            code: 0,
+            message: 'success'
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message
+        })
+    }
+}
+
+export const deleteMember = async ctx => {
+    try {
+        const query = ctx.request.query || {}
+        const id = query.id
+        await UserModel.deleteMember(id)
+        ctx.send({
+            code: 0,
+            message: 'success'
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message
+        })
+    }
+}
+
+export const setCurUserPermInfo = async ctx => {
+    try {
+        const project = ctx.request.body || {}
+        const projectId = project.id
+        const userInfo = ctx.session.userInfo || {}
+        const permsInfo = await UserModel.getMemberPermInfo(projectId, userInfo.id)
+        const data = {
+            permCodes: []
+        }
+        permsInfo.forEach((perm) => {
+            data.roleName = perm.roleName
+            data.roleId = perm.roleId
+            data.permCodes.push(perm.permCode)
+        })
+        ctx.session.permsInfo = data
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data
         })
     } catch (err) {
         ctx.throwError({

@@ -25,7 +25,7 @@ module.exports = {
             .leftJoinAndSelect(RolePerm, 'rolePerm', 'rolePerm.roleId = role.id')
             .leftJoinAndSelect(Perm, 'perm', 'perm.id = rolePerm.permId')
             .where('user.username = :username', { username })
-            .andWhere('userProjectRole.projectId = :projectId', { projectId })
+            .andWhere('userProjectRole.projectId = :projectId AND userProjectRole.deleteFlag = 0', { projectId })
             .select('perm.permCode', 'permCode')
             .getRawMany()
     },
@@ -37,7 +37,7 @@ module.exports = {
             .leftJoinAndSelect(RolePerm, 'rolePerm', 'rolePerm.roleId = role.id')
             .leftJoinAndSelect(Perm, 'perm', 'perm.id = rolePerm.permId')
             .where('user.username = :username', { username })
-            .andWhere('userProjectRole.projectId = :projectId', { projectId })
+            .andWhere('userProjectRole.projectId = :projectId AND userProjectRole.deleteFlag = 0', { projectId })
             .andWhere('perm.permCode = :permCode', { permCode })
             .getRawMany()
         return res.length > 0

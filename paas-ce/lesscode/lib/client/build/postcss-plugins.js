@@ -54,7 +54,6 @@ module.exports = function (loader) {
             // see https://github.com/csstools/postcss-preset-env#options
             stage: 0,
             autoprefixer: {
-                grid: true
             }
         }),
         // 这个插件可以在写 nested 样式时省略开头的 &

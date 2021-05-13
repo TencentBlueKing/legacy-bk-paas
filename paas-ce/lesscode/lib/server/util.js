@@ -10,6 +10,8 @@
  */
 
 const os = require('os')
+const eslintConfig = require('./conf/eslint-config')
+const { ESLint } = require('eslint')
 
 /**
  * 获取本机的真实 ip
@@ -78,6 +80,8 @@ exports.CODE = {
         PROJECT_NAME_EXISTED: 4042,
         // 项目ID已经存在
         PROJECT_ID_EXISTED: 4043,
+        // 项目ID非法
+        PROJECT_ID_INVALID: 4044,
         // 未定义的业务逻辑错误
         NOT_DEFINED: 9999
     }
@@ -92,4 +96,277 @@ exports.CODE = {
  */
 exports.isAjaxReq = req => {
     return req.get('X-Requested-With') || (req.header.accept || '').indexOf('json') > -1
+}
+
+/**
+ * 将parentId列表转换为children树结构列表
+ *
+ * @param {Array} list 列表
+ * @param {Number} pid 根parentId值
+ * @param {String} childDataKey 子节点数据键名
+ *
+ * @return {Array} 树结构列表
+ */
+exports.list2tree = (list = [], pid = -1, childDataKey = 'children') => {
+    function tree (pid) {
+        const arr = []
+        list.filter(item => item.parentId === pid)
+            .forEach(item => {
+                arr.push({
+                    ...item,
+                    [childDataKey]: tree(item.id)
+                })
+            })
+        return arr
+    }
+    return tree(pid)
+}
+
+/**
+ * 将列表路径打平并返回为以路径作为key的Map
+ *
+ * @param {Array} list 列表
+ * @param {Number} pid 根parentId值
+ *
+ * @return {Map} 扁平的路径map
+ */
+exports.flattenListPath = (list = [], pid = -1, prefixKey) => {
+    function getPath (node) {
+        if (node.parentId === pid) {
+            return node.path
+        } else {
+            const parent = list.find(item => item.id === node.parentId)
+            return [node.path].concat(getPath(parent))
+        }
+    }
+
+    const flattenList = []
+    list.forEach(item => {
+        flattenList.push({
+            ...item,
+            fullPath: [].concat(getPath(item))
+        })
+    })
+
+    const pathMap = new Map()
+    flattenList.forEach(item => {
+        const { fullPath, ...node } = item
+        if (prefixKey) {
+            pathMap.set([item[prefixKey]].concat(fullPath.reverse()).join('/'), node)
+        } else {
+            pathMap.set(fullPath.reverse().join('/'), node)
+        }
+    })
+    return pathMap
+}
+
+/**
+ * 生成 uuid
+ *
+ * @param {Number} len 长度
+ * @param {Number} radix 基数
+ *
+ * @return {string} uuid
+ */
+export function uuid (len = 8, radix = 16) {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+    const uuid = []
+    radix = radix || chars.length
+
+    if (len) {
+        let i
+        // Compact form
+        for (i = 0; i < len; i++) {
+            uuid[i] = chars[0 | Math.random() * radix]
+        }
+    } else {
+        // rfc4122, version 4 form
+        let r
+
+        // rfc4122 requires these characters
+        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
+        uuid[14] = '4'
+
+        let i
+        // Fill in random data.  At i==19 set the high bits of clock sequence as
+        // per rfc4122, sec. 4.1.5
+        for (i = 0; i < 36; i++) {
+            if (!uuid[i]) {
+                r = 0 | Math.random() * 16
+                uuid[i] = chars[(i === 19) ? (r & 0x3) | 0x8 : r]
+            }
+        }
+    }
+
+    return uuid.join('')
+}
+
+export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
+    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
+    const renderProps = grid.renderProps || {}
+    const slots = renderProps.slots || {}
+    let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
+    let isLayoutSupportDialog = false
+    if (grid.name === 'dialog') { // 暂时为兼容dialog做特殊处理，后续添加新的交互式组件，注意修改此处条件
+        const slot = ((grid.renderProps || {}).slots || {}).val || []
+        columns = typeof slot === 'string' ? [] : slot.renderProps.slots.val
+        isLayoutSupportDialog = typeof slot !== 'string'
+    }
+
+    columns.forEach((column, columnIndex) => {
+        const children = column.children || []
+        children.forEach((component, index) => {
+            if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
+                walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
+            } else if ((component.renderProps || {}).slots && ((component.renderProps || {}).slots || {}).name === 'layout') {
+                childCallBack(component, children, index, grid, columnIndex)
+                walkGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
+            } else {
+                if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
+            }
+        })
+    })
+}
+
+export function ansiparse (str) {
+    ansiparse.foregroundColors = {
+        '30': 'rgba(0,0,0,1)',
+        '31': 'rgba(247,49,49,1)',
+        '32': 'rgba(127,202,84,1)',
+        '33': 'rgba(246,222,84,1)',
+        '34': 'rgba(0,0,255,1)',
+        '35': 'rgba(255,0,255,1)',
+        '36': 'rgba(0,255,255,1)',
+        '37': 'rgba(255,255,255,1)',
+        '90': 'rgba(128,128,128,1)'
+    }
+
+    ansiparse.backgroundColors = {
+        '40': 'rgba(0,0,0,1)',
+        '41': 'rgba(247,49,49,1)',
+        '42': 'rgba(127,202,84,1)',
+        '43': 'rgba(246,222,84,1)',
+        '44': 'rgba(0,0,255,1)',
+        '45': 'rgba(255,0,255,1)',
+        '46': 'rgba(0,255,255,1)',
+        '47': 'rgba(255,255,255,1)'
+    }
+
+    ansiparse.styles = {
+        '1': 'bold',
+        '3': 'italic',
+        '4': 'underline'
+    }
+
+    let matchingControl = null
+    let matchingData = null
+    let matchingText = ''
+    let ansiState = []
+    const result = []
+    let state = {}
+
+    const eraseChar = function () {
+        let index
+        let message
+        if (matchingText.length) {
+            matchingText = matchingText.substr(0, matchingText.length - 1)
+        } else if (result.length) {
+            index = result.length - 1
+            message = result[index].message
+            if (message.length === 1) result.pop()
+            else result[index].message = message.substr(0, message.length - 1)
+        }
+    }
+
+    for (let i = 0; i < str.length; i++) {
+        if (matchingControl !== null) {
+            if (matchingControl === '\u001b' && str[i] === '\[') {
+                if (matchingText) {
+                    state.message = matchingText
+                    result.push(state)
+                    state = {}
+                    matchingText = ''
+                }
+
+                matchingControl = null
+                matchingData = ''
+            } else {
+                matchingText += matchingControl + str[i]
+                matchingControl = null
+            }
+            continue
+        } else if (matchingData !== null) {
+            if (str[i] === ';') {
+                ansiState.push(matchingData)
+                matchingData = ''
+            } else if (str[i] === 'm') {
+                ansiState.push(matchingData)
+                matchingData = null
+                matchingText = ''
+                ansiState.forEach(function (ansiCode) {
+                    if (ansiparse.foregroundColors[ansiCode]) {
+                        state.color = ansiparse.foregroundColors[ansiCode]
+                    } else if (ansiparse.backgroundColors[ansiCode]) {
+                        state.backgroundColor = ansiparse.backgroundColors[ansiCode]
+                    } else if (ansiCode === 39) {
+                        delete state.color
+                    } else if (ansiCode === 49) {
+                        delete state.backgroundColor
+                    } else if (ansiparse.styles[ansiCode]) {
+                        state[ansiparse.styles[ansiCode]] = true
+                    } else if (ansiCode === 22) {
+                        state.bold = false
+                    } else if (ansiCode === 23) {
+                        state.italic = false
+                    } else if (ansiCode === 24) {
+                        state.underline = false
+                    }
+                })
+                ansiState = []
+            } else {
+                matchingData += str[i]
+            }
+            continue
+        }
+
+        if (str[i] === '\u001b') {
+            matchingControl = str[i]
+        } else if (str[i] === '\u0008') {
+            eraseChar()
+        } else {
+            matchingText += str[i]
+        }
+    }
+
+    if (matchingText) {
+        state.message = matchingText + (matchingControl || '')
+        result.push(state)
+    }
+    return result
+}
+
+export async function checkFuncEslint (func) {
+    const globals = {};
+    [...(func.funcParams || []), ...(func.remoteParams || [])].forEach((key) => {
+        globals[key] = true
+    })
+    const options = {
+        useEslintrc: true,
+        overrideConfig: {
+            ...eslintConfig,
+            globals
+        }
+    }
+    const eslint = new ESLint(options)
+    const code = (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
+        const key = funcCode || dirKey
+        return `this['${key}']`
+    })
+    const results = await eslint.lintText(code || '')
+    const formatter = await eslint.loadFormatter('stylish')
+    const formateRes = formatter.format(results)
+    const errStrArr = ansiparse(formateRes)
+    let mes = ''
+    if (errStrArr.length) mes = `eslint检查不通过：\n${errStrArr.map((err) => (err.message)).join('')}`
+    return mes
 }

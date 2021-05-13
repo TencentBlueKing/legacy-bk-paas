@@ -135,7 +135,7 @@ async function getPromise (method, url, data, userConfig = {}) {
  * @param {Function} promise 拒绝函数
  */
 function handleResponse ({ config, response, resolve, reject }) {
-    if (response.code !== 0 && config.globalError) {
+    if (response.code !== 0 && config.globalError && !response.businessError) {
         reject({ message: response.message })
     } else {
         resolve(config.originalResponse ? response : response.data, config)
@@ -157,7 +157,6 @@ function handleReject (error, config) {
     }
 
     http.queue.delete(config.requestId)
-
     if (config.globalError && error.response) {
         const { status, data } = error.response
         const nextError = { message: error.message, response: error.response }
@@ -173,9 +172,10 @@ function handleReject (error, config) {
         console.error(nextError.message)
         return Promise.reject(nextError)
     }
-    messageError(error.message)
-    console.error(error.message)
-    return Promise.reject(error)
+    const errMessage = (error.response && error.response.data && error.response.data.message) || error.message
+    messageError(errMessage)
+    console.error(errMessage)
+    return Promise.reject(new Error(errMessage))
 }
 
 /**
@@ -203,7 +203,7 @@ function initConfig (method, url, userConfig) {
         // 当路由变更时取消请求
         cancelWhenRouteChange: true,
         // 取消上次请求
-        cancelPrevious: true
+        cancelPrevious: false
     }
     return Object.assign(defaultConfig, userConfig)
 }

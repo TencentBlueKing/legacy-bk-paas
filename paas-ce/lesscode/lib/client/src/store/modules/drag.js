@@ -15,25 +15,26 @@ export default {
     namespaced: true,
     state: {
         // 左侧组件列表 draggable 的 group 配置
-        draggableSourceGroup: { name: 'render-grid', pull: 'clone', put: false },
+        // draggableSourceGroup: { name: 'render-grid', pull: 'clone', put: false },
+        draggableSourceGroup: { pull: 'clone', put: false },
         // 右侧组件列表 draggable 的 group 配置
-        draggableTargetGroup: { name: 'render-grid', put: ['render-grid'] },
+        // draggableTargetGroup: { name: 'render-grid', put: ['render-grid'] },
+        // draggableTargetGroup: { name: 'render-grid', put: ['render-grid', 'free-layout'] },
+        draggableTargetGroup: { put: ['render-grid', 'free-layout', 'interactive'] },
+        // draggableTargetGroup: {
+        //     put (to, from) {
+        //         // Return true to allow, return false to disallow
+        //         return ['render-grid', 'free-layout']
+        //     }
+        // },
         // 当前选中的组件的数据
         curSelectedComponentData: {},
-        targetData: [],
+        // 当前template 的数据
+        curTemplateData: {},
 
-        pageData: {
-            lifeCycle: {
-                beforeCreate: '',
-                created: '',
-                beforeMount: '',
-                mounted: '',
-                beforeupdate: '',
-                updated: '',
-                beforeDestroy: '',
-                destroyed: ''
-            }
-        },
+        freeLayoutItemPlaceholderPointerEvents: 'none',
+
+        targetData: [],
 
         copyData: {},
 
@@ -62,12 +63,14 @@ export default {
         },
         setCurSelectedComponentData (state, selectedComponent) {
             state.curSelectedComponentData = Object.assign({}, selectedComponent)
-            // state.curSelectedComponentData = selectedComponent
         },
-        setPageData (state, pageData) {
-            state.pageData = Object.assign({}, pageData)
+        setFreeLayoutItemPlaceholderPointerEvents (state, freeLayoutItemPlaceholderPointerEvents) {
+            state.freeLayoutItemPlaceholderPointerEvents = freeLayoutItemPlaceholderPointerEvents
         },
-
+        setCurTemplateData (state, payload) {
+            console.log('from teplate data == ', payload)
+            state.curTemplateData = payload
+        },
         pushTargetHistory (state, pushData) {
             state.targetHistory = state.targetHistory.slice(state.curHistoryIndex)
             state.curHistoryIndex = 0
@@ -148,9 +151,8 @@ export default {
         copyData: state => state.copyData,
         astData: state => state.astData,
         curSelectedComponentData: state => state.curSelectedComponentData,
-        pageData: state => state.pageData
+        curTemplateData: state => state.curTemplateData,
+        freeLayoutItemPlaceholderPointerEvents: state => state.freeLayoutItemPlaceholderPointerEvents
     },
-    actions: {
-
-    }
+    actions: {}
 }

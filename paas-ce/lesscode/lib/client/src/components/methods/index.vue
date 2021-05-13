@@ -1,11 +1,13 @@
 <template>
     <transition name="fade">
-        <article class="function-home" v-if="show" @mousedown.self="closeFunction">
-            <layout class="function-main method-layout" @resize="resizeLayOut" :init-width="initWidth <= 240 ? 240 : initWidth" ref="methodMain">
+        <article class="function-home" v-if="show">
+            <layout class="function-main method-layout" @resize="resizeLayOut" :init-width="initWidth <= 240 ? 240 : initWidth" ref="methodMain" v-bkloading="{ isLoading: isLoadingGroup }">
                 <section slot="left" class="func-left">
                     <h3 class="left-title">
                         <span>函数库</span>
-                        <bk-popconfirm trigger="click" confirm-text="" cancel-text="" :on-hide="() => (groupNameErrMessage = '')">
+                        <bk-popconfirm trigger="click" confirm-text="" cancel-text=""
+                            :on-hide="() => (groupNameErrMessage = '')"
+                            theme="light func-group-add-name">
                             <div slot="content">
                                 <bk-input :class="['add-function-group', { 'input-error': groupNameErrMessage }]"
                                     placeholder="请输入函数分类，多个分类 / 分隔，回车保存"
@@ -50,8 +52,11 @@
                                     <div slot="content">
                                         <ul class="more-list">
                                             <li class="list-item" @click="changeGroupName(group)">重命名</li>
-                                            <li class="disable list-item" v-if="group.functionList.length" v-bk-tooltips="{ content: '该分类下有函数，不能删除', placements: ['bottom'] }">删除</li>
-                                            <li class="list-item" @click.stop="deleteItem(group.id, `删除分类（${group.groupName}）`, true)" v-else>删除</li>
+                                            <li class="disable list-item" v-if="userPerm.roleId === 2" v-bk-tooltips="{ content: '无删除权限', placements: ['bottom'] }">删除</li>
+                                            <template v-else>
+                                                <li class="disable list-item" v-if="group.functionList.length" v-bk-tooltips="{ content: '该分类下有函数，不能删除', placements: ['bottom'] }">删除</li>
+                                                <li class="list-item" @click.stop="deleteItem(group.id, group.groupName, true)" v-else>删除</li>
+                                            </template>
                                         </ul>
                                     </div>
                                     <i class="bk-drag-icon bk-drag-more-dot item-tool hover-show" @click="selectGroup = group.id"></i>
@@ -61,12 +66,22 @@
                             </h3>
                             <ul v-if="openGroupIds.includes(group.id)">
                                 <li v-for="func in group.functionList" :key="func.id" :class="['func-item', { select: func.id === chooseId }]" @click="chooseFunction(func)">
-                                    <span class="func-name" :title="func.funcName">{{ func.funcName }}</span>
-                                    <i class="bk-drag-icon bk-drag-close-line item-tool hover-show"
-                                        @click.stop="deleteItem(func.id, `删除函数【${func.funcName}】`, false)"
-                                        v-if="(func.pages || []).length <= 0"
-                                    ></i>
-                                    <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-else @click.stop v-bk-tooltips="{ content: '该函数被页面引用，请修改后再删除', placements: ['top'] }"></i>
+                                    <span class="func-name" :title="`${func.funcName}(${func.funcCode})`">{{ func.funcName }}</span>
+                                    <template v-if="func.id">
+                                        <i class="bk-drag-icon bk-drag-copy item-tool hover-show"
+                                            @click.stop="handleCopyFunc(group, func)"
+                                        ></i>
+                                        <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-if="userPerm.roleId === 2" @click.stop v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }"></i>
+                                        <template v-else>
+                                            <i class="bk-drag-icon bk-drag-close-line item-tool hover-show"
+                                                @click.stop="deleteItem(func.id, func.funcName, false)"
+                                                v-if="(func.pages || []).length <= 0 && !func.useFlag && !func.useInVar"
+                                            ></i>
+                                            <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-if="(func.pages || []).length > 0" @click.stop v-bk-tooltips="{ content: '该函数被页面引用，请修改后再删除', placements: ['top'] }"></i>
+                                            <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-else-if="func.useFlag" @click.stop v-bk-tooltips="{ content: '该函数被函数引用，请修改后再删除', placements: ['top'] }"></i>
+                                            <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-else-if="func.useInVar" @click.stop v-bk-tooltips="{ content: '该函数被计算变量引用，请修改后再删除', placements: ['top'] }"></i>
+                                        </template>
+                                    </template>
                                 </li>
                             </ul>
                         </li>
@@ -91,7 +106,7 @@
                     :mask-close="false"
                     :auto-close="false"
                 >
-                    <p class="delete-content">{{ delObj.name }}</p>
+                    <p class="delete-content">{{ delObj.nameTips }}</p>
                     <div class="dialog-footer" slot="footer">
                         <bk-button
                             theme="danger"
@@ -103,6 +118,7 @@
 
                 <section class="icon-style">
                     <span v-if="!isFull">
+                        <i class="bk-icon icon-info-circle" v-bk-tooltips="methodTip()"></i>
                         <i class="bk-drag-icon bk-drag-code-full-screen" @click="openFullScreen"></i>
                         <i class="bk-drag-icon bk-drag-close-line" @click="closeFunction"></i>
                     </span>
@@ -119,7 +135,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex'
     import layout from '@/components/ui/layout'
-    import funcForm from '@/components/methods/funcForm'
+    import funcForm from '@/components/methods/func-form'
 
     export default {
         components: {
@@ -128,7 +144,8 @@
         },
 
         props: {
-            show: Boolean
+            show: Boolean,
+            selectFuncCode: String
         },
 
         data () {
@@ -154,18 +171,28 @@
                     loading: false,
                     show: false,
                     name: ''
-                }
+                },
+                templateFunc: {}
             }
         },
 
         computed: {
             ...mapGetters('functions', ['funcGroups']),
-
+            ...mapGetters('member', ['userPerm']),
+            ...mapGetters('page', ['pageDetail']),
+            projectId () {
+                return parseInt(this.$route.params.projectId)
+            },
             groupList: {
                 get () {
                     const funcReg = new RegExp(this.searchFunctionStr, 'i')
                     const groupCopy = JSON.parse(JSON.stringify(this.funcGroups))
-                    groupCopy.forEach((group) => (group.functionList = group.functionList.filter(x => funcReg.test(x.funcName))))
+                    groupCopy.forEach((group) => {
+                        let functionList = group.functionList || []
+                        if (group.id === this.templateFunc.groupId && this.templateFunc.groupId) functionList.push(this.templateFunc.func)
+                        functionList = functionList.filter(x => funcReg.test(x.funcName))
+                        group.functionList = functionList
+                    })
                     return groupCopy
                 },
                 set (list) {
@@ -179,7 +206,7 @@
             },
 
             curGroup () {
-                return this.funcGroups.find((group) => {
+                return this.groupList.find((group) => {
                     return (group.functionList || []).findIndex((func) => (func.id === this.chooseId)) > -1
                 }) || {}
             },
@@ -195,6 +222,7 @@
                     this.initData()
                     window.addEventListener('resize', this.handleFullScreen)
                 } else {
+                    this.templateFunc = {}
                     window.removeEventListener('resize', this.handleFullScreen)
                 }
             }
@@ -210,16 +238,41 @@
                 'editGroups',
                 'addGroup'
             ]),
+            ...mapActions('variable', ['getAllVariable']),
+
+            methodTip () {
+                const commentMap = {
+                    0: ` 1. 空白函数，函数内容完全由用户编写\r\n 2. 这里编辑管理的函数，用于画布页面的属性配置和事件绑定\r\n 3. 用于属性时：函数需要返回值，该返回值将会赋值给属性\r\n 4. 用于事件时：函数将在事件触发时执行\r\n 5. 可以使用 lesscode.变量标识，必须通过编辑器自动补全功能选择对应变量，来获取或者修改变量值\r\n 6. 可以使用 lesscode.方法名，必须通过编辑器自动补全功能选择对应函数，来调用项目中的函数\r\n 7. 用于属性时示例如下：\r\n    return Promise.all([\r\n        this.$http.get(\'${location.origin}/api/data/getMockData\'),\r\n        this.$http.post(\'${location.origin}/api/data/postMockData\', { value: 2 })\r\n    ]).then(([getDataRes, postDataRes]) => {\r\n        return [...getDataRes.data, ...postDataRes.data]\r\n    })\r\n`,
+                    1: ` 1. 远程函数，系统将会根据参数组成 Ajax 请求，由用户在这里编写 Ajax 回调函数\r\n 2. 这里编辑管理的函数，用于画布页面的属性配置和事件绑定\r\n 3. 用于属性时：函数需要返回值，该返回值将会赋值给属性\r\n 4. 用于事件时：事件触发时候，系统将发起 Ajax 请求，然后执行用户编写的回调函数\r\n 5. 可以使用 lesscode.变量标识，必须通过编辑器自动补全功能选择对应变量，来获取或者修改变量值\r\n 6. 可以使用 lesscode.方法名，必须通过编辑器自动补全功能选择对应函数，来调用项目中的函数\r\n 7. 示例如下：return res.data`
+                }
+                const funcForm = this.$refs.func || {}
+                const curEditFunc = funcForm.form || {}
+                return {
+                    placement: 'left-start',
+                    theme: 'light',
+                    content: `<pre class="component-method-tip">${commentMap[+curEditFunc.funcType] || ''}</pre>`
+                }
+            },
 
             initData () {
                 this.isLoadingGroup = true
                 const projectId = this.$route.params.projectId
                 this.getAllGroupFuncs(projectId).then(() => {
-                    const firstGroup = this.funcGroups[0] || {}
-                    this.openGroupIds.push(firstGroup.id)
-                    const funcList = firstGroup.functionList || []
-                    const firFunc = funcList[0] || {}
-                    this.chooseId = firFunc.id
+                    let curGroup = this.funcGroups[0] || {}
+                    const funcList = curGroup.functionList || []
+                    let curFunc = funcList[0] || {}
+                    if (this.selectFuncCode) {
+                        (this.funcGroups || []).forEach((group) => {
+                            const funcList = group.functionList || []
+                            const func = funcList.find((fun) => (fun.funcCode === this.selectFuncCode))
+                            if (func) {
+                                curGroup = group
+                                curFunc = func
+                            }
+                        })
+                    }
+                    this.openGroupIds.push(curGroup.id)
+                    this.chooseId = curFunc.id
                 }).catch((err) => {
                     this.$bkMessage({ theme: 'error', message: err.message || err })
                 }).finally(() => {
@@ -228,14 +281,16 @@
             },
 
             chooseFunction (func) {
+                if (this.chooseId === func.id) return
                 const confirmFn = () => {
-                    this.saveFunc().then(() => {
-                        this.chooseId = func.id
+                    this.saveFunc().finally(() => {
+                        cancelFn()
                     })
                 }
                 const cancelFn = () => {
                     this.chooseId = func.id
                     this.formChanged = false
+                    this.templateFunc = {}
                 }
                 if (this.formChanged) {
                     this.$bkInfo({
@@ -276,7 +331,7 @@
             handleChangeGroupName (group) {
                 this.checkGroupName(this.tempName).then(() => {
                     this.isAddLoading = true
-                    const postData = [Object.assign({}, group, { groupName: this.tempName })]
+                    const postData = [Object.assign({}, group, { groupName: this.tempName, projectId: this.projectId })]
                     return this.editGroups(postData).then(() => {
                         this.$bkMessage({ theme: 'success', message: '修改成功' })
                     }).finally(() => {
@@ -300,44 +355,154 @@
                 })
             },
 
-            handleAddFunc (group) {
-                const untitledFunc = {
-                    funcName: 'Untitled',
-                    funcGroupId: group.id,
-                    funcType: 0
-                }
-                const groups = this.funcGroups || []
-                let index = groups.findIndex((group) => {
-                    const funcList = group.functionList || []
-                    return funcList.find(x => x.funcName === untitledFunc.funcName)
-                })
-                while (index >= 0) {
-                    if (/\d$/.test(untitledFunc.funcName)) untitledFunc.funcName = untitledFunc.funcName.replace(/\d$/, a => +a + 1)
-                    else untitledFunc.funcName = 'Untitled1'
-                    index = groups.findIndex((group) => {
+            handleCopyFunc (group, func) {
+                const copyFunc = () => {
+                    const { id, ...rest } = func
+                    const groups = this.funcGroups || []
+                    let index = groups.findIndex((group) => {
                         const funcList = group.functionList || []
-                        return funcList.find(x => x.funcName === untitledFunc.funcName)
+                        return funcList.find(x => x.funcName === rest.funcName)
+                    })
+                    while (index >= 0) {
+                        rest.funcName += 'Copy'
+                        index = groups.findIndex((group) => {
+                            const funcList = group.functionList || []
+                            return funcList.find(x => x.funcName === rest.funcName)
+                        })
+                    }
+
+                    let codeIndex = groups.findIndex((group) => {
+                        const funcList = group.functionList || []
+                        return funcList.find(x => x.funcCode === rest.funcCode)
+                    })
+                    while (codeIndex >= 0) {
+                        rest.funcCode += 'Copy'
+                        codeIndex = groups.findIndex((group) => {
+                            const funcList = group.functionList || []
+                            return funcList.find(x => x.funcCode === rest.funcCode)
+                        })
+                    }
+
+                    if (!rest.projectId) {
+                        rest.projectId = this.projectId
+                    }
+                    this.templateFunc = {
+                        groupId: group.id,
+                        func: rest
+                    }
+                    this.chooseId = undefined
+                    this.formChanged = true
+                }
+
+                const confirmFn = () => {
+                    this.saveFunc().finally(() => {
+                        copyFunc()
                     })
                 }
 
-                this.addFunc({ groupId: group.id, func: untitledFunc }).then((res) => {
-                    if (!this.openGroupIds.includes(group.id)) this.openGroupIds.push(group.id)
-                    this.chooseId = res.id
-                    this.$bkMessage({ theme: 'success', message: '添加函数成功' })
-                }).catch((err) => {
-                    this.$bkMessage({ theme: 'error', message: err.message || err })
-                })
+                if (this.formChanged) {
+                    this.$bkInfo({
+                        title: '确认复制',
+                        subTitle: '不保存则会丢失当前数据',
+                        okText: '保存并切换',
+                        cancelText: '不保存',
+                        closeIcon: false,
+                        confirmFn,
+                        cancelFn: copyFunc
+                    })
+                } else {
+                    copyFunc()
+                }
+            },
+
+            handleAddFunc (group) {
+                const addFunc = () => {
+                    const untitledFunc = {
+                        funcName: 'Untitled',
+                        funcCode: '',
+                        funcGroupId: group.id,
+                        funcType: 0
+                    }
+                    const groups = this.funcGroups || []
+                    let index = groups.findIndex((group) => {
+                        const funcList = group.functionList || []
+                        return funcList.find(x => x.funcName === untitledFunc.funcName)
+                    })
+                    while (index >= 0) {
+                        if (/(\d)+$/.test(untitledFunc.funcName)) untitledFunc.funcName = untitledFunc.funcName.replace(/(\d)+$/, a => +a + 1)
+                        else untitledFunc.funcName = `${untitledFunc.funcName}1`
+                        index = groups.findIndex((group) => {
+                            const funcList = group.functionList || []
+                            return funcList.find(x => x.funcName === untitledFunc.funcName)
+                        })
+                    }
+                    if (!untitledFunc.projectId) {
+                        untitledFunc.projectId = this.projectId
+                    }
+                    this.templateFunc = {
+                        groupId: group.id,
+                        func: untitledFunc
+                    }
+                    this.chooseId = undefined
+                    this.formChanged = true
+                }
+
+                const confirmFn = () => {
+                    this.saveFunc().finally(() => {
+                        addFunc()
+                    })
+                }
+
+                if (this.formChanged) {
+                    this.$bkInfo({
+                        title: '确认复制',
+                        subTitle: '不保存则会丢失当前数据',
+                        okText: '保存并切换',
+                        cancelText: '不保存',
+                        closeIcon: false,
+                        confirmFn,
+                        cancelFn: addFunc
+                    })
+                } else {
+                    addFunc()
+                }
             },
 
             saveFunc () {
                 return this.$refs.func.validate().then((postData) => {
                     if (!postData) return
+                    if (!postData.projectId) {
+                        postData.projectId = this.projectId
+                    }
                     this.isSaving = true
-                    return this.editFunc({ groupId: this.curGroup.id, func: postData }).then((res) => {
-                        if (!this.openGroupIds.includes(res.funcGroupId)) this.openGroupIds.push(res.funcGroupId)
-                        this.chooseId = res.id
-                        this.formChanged = false
-                        this.$bkMessage({ theme: 'success', message: '修改函数成功' })
+                    const h = this.$createElement
+                    const varWhere = { projectId: this.$route.params.projectId, pageCode: this.pageDetail.pageCode, effectiveRange: 0 }
+                    const editFunc = () => {
+                        return this.editFunc({ groupId: this.curGroup.id, func: postData, h, varWhere }).then((res) => {
+                            if (!res) return
+                            const projectId = this.$route.params.projectId
+                            return this.getAllGroupFuncs(projectId).then(() => {
+                                if (!this.openGroupIds.includes(res.funcGroupId)) this.openGroupIds.push(res.funcGroupId)
+                                this.chooseId = res.id
+                                this.formChanged = false
+                                this.$bkMessage({ theme: 'success', message: '修改函数成功' })
+                            })
+                        })
+                    }
+                    const addFunc = () => {
+                        const groupId = this.templateFunc.groupId
+                        return this.addFunc({ groupId, func: postData, h, varWhere }).then((res) => {
+                            if (!res) return
+                            if (!this.openGroupIds.includes(groupId)) this.openGroupIds.push(groupId)
+                            this.chooseId = res.id
+                            this.formChanged = false
+                            this.templateFunc = {}
+                            this.$bkMessage({ theme: 'success', message: '添加函数成功' })
+                        })
+                    }
+                    const method = postData.id ? editFunc : addFunc
+                    return method().then(() => {
+                        this.getAllVariable(varWhere)
                     }).catch((err) => {
                         this.$bkMessage({ theme: 'error', message: err.message || err })
                     }).finally(() => {
@@ -350,6 +515,7 @@
                 this.delObj.show = true
                 this.delObj.id = id
                 this.delObj.name = name
+                this.delObj.nameTips = isDeleteGroup ? `删除分类（${name}）` : `删除函数【${name}】`
                 this.delObj.isDeleteGroup = isDeleteGroup
                 this.clickEmptyArea()
             },
@@ -357,13 +523,13 @@
             requestDelete () {
                 this.delObj.loading = true
                 const projectId = this.$route.params.projectId
-                const postData = { id: this.delObj.id, projectId }
+                const postData = { id: this.delObj.id, name: this.delObj.name, projectId }
 
                 const deleteFuncGroup = () => this.deleteGroup(postData)
                 const deleteFunc = () => {
                     const curGroup = this.funcGroups.find(group => group.functionList.find(func => func.id === this.delObj.id))
                     const funcList = curGroup.functionList || []
-                    return this.deleteFunc({ groupId: curGroup.id, funcId: this.delObj.id }).then(() => {
+                    return this.deleteFunc({ groupId: curGroup.id, funcId: this.delObj.id, projectId, funcName: this.delObj.name }).then(() => {
                         if (this.delObj.id === this.chooseId) {
                             this.formChanged = false
                             const firstGroup = this.groupList[0]
@@ -371,6 +537,7 @@
                             const firstFunc = curFuncList[0]
                             this.chooseId = firstFunc.id
                         }
+                        return this.getAllVariable({ projectId, pageCode: this.pageDetail.pageCode, effectiveRange: 0 })
                     })
                 }
 
@@ -476,7 +643,7 @@
 
 <style lang="postcss" scoped>
     .function-home {
-        position: fixed;
+        position: fixed !important;
         top: 0;
         left: 0;
         bottom: 0;
@@ -576,6 +743,9 @@
         .hover-show {
             display: none;
         }
+        .bk-drag-copy {
+            margin-right: 4px;
+        }
         .func-name {
             flex: 1;
             overflow: hidden;
@@ -594,6 +764,7 @@
         }
         .disable {
             cursor: not-allowed;
+            width: 22px;
         }
     }
 
@@ -783,6 +954,11 @@
         }
         .popconfirm-content {
             margin: 0;
+        }
+    }
+    .tippy-tooltip {
+        &.func-group-add-name-theme {
+            box-shadow: 0 0 3px 0 #929292;
         }
     }
 </style>

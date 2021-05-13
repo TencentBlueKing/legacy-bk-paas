@@ -5,9 +5,15 @@ import Base from './base'
 export default class extends Base {
     @Column({
         type: 'varchar',
-        comment: '项目 ID 即英文名称'
+        comment: '页面名称'
     })
     pageName
+
+    @Column({
+        type: 'varchar',
+        comment: '页面 ID 即英文名称'
+    })
+    pageCode
 
     @Column({
         type: 'mediumtext',
@@ -26,6 +32,12 @@ export default class extends Base {
         comment: '预览图base64'
     })
     previewImg
+
+    @Column({
+        type: 'tinytext',
+        comment: '页面生命周期'
+    })
+    lifeCycle
 
     @Column({
         type: 'int',

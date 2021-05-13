@@ -43,7 +43,7 @@
 <style lang="postcss">
     .member-container {
         margin: 16px 24px;
-        
+
         .member-content {
             margin-top: 14px;
             min-width: 1000px;

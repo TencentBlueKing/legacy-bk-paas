@@ -21,13 +21,15 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const postcssPlugins = require('./postcss-plugins')
 const ReplaceStaticUrlPlugin = require('./replace-static-url-plugin')
 const clientConf = require('./conf')
+const { pathToNodeModules } = require('./util')
 const baseConf = require('./webpack.base.conf')
 const manifest = require('../static/lib-manifest.json')
 
 module.exports = merge(baseConf, {
     mode: 'production',
     entry: {
-        main: resolve(__dirname, '..', 'src/main.js')
+        main: [resolve(__dirname, '..', 'src/main.js')],
+        preview: [resolve(__dirname, '..', 'src/preview/index.js')]
     },
     output: {
         path: resolve(__dirname, '..', 'dist'),
@@ -121,20 +123,88 @@ module.exports = merge(baseConf, {
         rules: [
             {
                 test: /\.(css|postcss)?$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
+                // use: [
+                //     MiniCssExtractPlugin.loader,
+                //     {
+                //         loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
+                //         options: {
+                //             modules: true,
+                //             importLoaders: 1
+                //         }
+                //     },
+                //     {
+                //         loader: resolve(__dirname, pathToNodeModules, 'postcss-loader'),
+                //         options: {
+                //             ident: 'postcss',
+                //             plugins: loader => postcssPlugins(loader)
+                //         }
+                //     }
+                // ]
+                oneOf: [
+                    // 匹配 js 中 import xxx from 'xxx.css'
                     {
-                        loader: resolve(__dirname, '../../../node_modules', 'css-loader'),
-                        options: {
-                            importLoaders: 1
-                        }
+                        resourceQuery: /import_css_specifier/,
+                        use: [
+                            MiniCssExtractPlugin.loader,
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
+                                options: {
+                                    modules: {
+                                        localIdentName: '[name]_[local]_[hash:base64:5]'
+                                    },
+                                    importLoaders: 1
+                                }
+                            },
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'postcss-loader'),
+                                options: {
+                                    ident: 'postcss',
+                                    plugins: loader => postcssPlugins(loader)
+                                }
+                            }
+                        ]
                     },
+                    // 这里匹配 `<style module>`
                     {
-                        loader: resolve(__dirname, '../../../node_modules', 'postcss-loader'),
-                        options: {
-                            ident: 'postcss',
-                            plugins: loader => postcssPlugins(loader)
-                        }
+                        resourceQuery: /module/,
+                        use: [
+                            MiniCssExtractPlugin.loader,
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
+                                options: {
+                                    modules: {
+                                        localIdentName: '[name]_[local]_[hash:base64:5]'
+                                    },
+                                    importLoaders: 1
+                                }
+                            },
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'postcss-loader'),
+                                options: {
+                                    ident: 'postcss',
+                                    plugins: loader => postcssPlugins(loader)
+                                }
+                            }
+                        ]
+                    },
+                    // 这里匹配普通的 `<style>` 或 `<style scoped>`
+                    {
+                        use: [
+                            MiniCssExtractPlugin.loader,
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
+                                options: {
+                                    importLoaders: 1
+                                }
+                            },
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'postcss-loader'),
+                                options: {
+                                    ident: 'postcss',
+                                    plugins: loader => postcssPlugins(loader)
+                                }
+                            }
+                        ]
                     }
                 ]
             }
@@ -152,6 +222,7 @@ module.exports = merge(baseConf, {
             filename: 'index.html',
             template: resolve(__dirname, '..', 'index.html'),
             inject: true,
+            chunks: ['main'],
             minify: {
                 removeComments: true,
                 collapseWhitespace: true,
@@ -162,7 +233,27 @@ module.exports = merge(baseConf, {
             // chunksSortMode: 'dependency',
             // webpack4 这个属性暂时设置为 none，参见 https://github.com/jantimon/html-webpack-plugin/issues/870
             chunksSortMode: 'none',
-            staticUrl: clientConf.build.staticUrl
+            staticUrl: clientConf.build.staticUrl,
+            BKPAAS_ENVIRONMENT: clientConf.build.BKPAAS_ENVIRONMENT
+        }),
+
+        new HtmlWebpackPlugin({
+            filename: 'preview.html',
+            template: resolve(__dirname, '..', 'preview.html'),
+            inject: true,
+            chunks: ['preview'],
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true
+            },
+            sourceMap: true,
+            // 如果打开 vendor 和 manifest 那么需要配置 chunksSortMode 保证引入 script 的顺序
+            // chunksSortMode: 'dependency',
+            // webpack4 这个属性暂时设置为 none，参见 https://github.com/jantimon/html-webpack-plugin/issues/870
+            chunksSortMode: 'none',
+            staticUrl: clientConf.build.staticUrl,
+            BKPAAS_ENVIRONMENT: clientConf.build.BKPAAS_ENVIRONMENT
         }),
 
         new MiniCssExtractPlugin({
