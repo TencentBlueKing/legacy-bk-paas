@@ -21,24 +21,35 @@ Vue.use(VueRouter)
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
-const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/system/component-manage')
+const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/project/component-manage')
 const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/project/function-manage')
+const MemberManage = () => import(/* webpackChunkName: 'index' */'@/views/project/member-manage')
+const VariableManage = () => import(/* webpackChunkName: 'index' */'@/views/project/variable-manage')
 
 const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
-const Member = () => import(/* webpackChunkName: 'member' */'@/views/project/member')
+const RouterManage = () => import(/* webpackChunkName: 'route' */'@/views/project/router-manage')
+const Basic = () => import(/* webpackChunkName: 'basic' */'@/views/project/basic')
+const Logs = () => import(/* webpackChunkName: 'basic' */'@/views/project/logs')
+const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/layout')
 
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
-const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/404')
+const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
 
 const MainHelpEntry = () => import(/* webpackChunkName: 'index' */'@/views/help')
 const Custom = () => import(/* webpackChunkName: 'custom' */'@/views/help/docs/custom.md')
 const Grid = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/grid.md')
+const LayoutGuide = () => import(/* webpackChunkName: 'layout-guide' */'@/views/help/docs/layout.md')
 const Intro = () => import(/* webpackChunkName: 'intro' */'@/views/help/docs/intro.md')
 const Start = () => import(/* webpackChunkName: 'start' */'@/views/help/docs/start.md')
-const Changelog = () => import(/* webpackChunkName: 'start' */'@/views/changelog/index.md')
+const Develop = () => import(/* webpackChunkName: 'develop' */'@/views/help/docs/develop.md')
+const Changelog = () => import(/* webpackChunkName: 'changelog' */'@/views/changelog/index.md')
+const TableSearch = () => import(/* webpackChunkName: 'case-table-search' */'@/views/help/docs/case-table-search.md')
+const Method = () => import(/* webpackChunkName: 'method' */'@/views/help/docs/method.md')
+const Variable = () => import(/* webpackChunkName: 'variable' */'@/views/help/docs/variable.md')
+const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
 
 const routes = [
     {
@@ -47,9 +58,16 @@ const routes = [
         children: [
             { path: 'custom', name: 'custom', component: Custom },
             { path: 'grid', name: 'grid', component: Grid },
+            { path: 'grid', name: '', component: Grid },
+            { path: 'layout', name: 'layout-guide', component: LayoutGuide },
             { path: 'intro', name: 'intro', component: Intro, alias: '' },
             { path: 'start', name: 'start', component: Start },
-            { path: 'changelog', name: 'changelog', component: Changelog }
+            { path: 'develop', name: 'develop', component: Develop },
+            { path: 'changelog', name: 'changelog', component: Changelog },
+            { path: 'case-table-search', name: 'table-search', component: TableSearch },
+            { path: 'method', name: 'method', component: Method },
+            { path: 'variable', name: 'variable', component: Variable },
+            { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc }
         ]
     },
     {
@@ -72,6 +90,25 @@ const routes = [
                 meta: {
                     title: '账号管理'
                 }
+            }
+        ]
+    },
+    {
+        name: 'project-entry',
+        path: '/project/:projectId',
+        components: {
+            default: ProjectEntry,
+            permission: require('@/views/status/non-exist-project').default
+        },
+        redirect: { name: 'pageList' },
+        children: [
+            {
+                path: 'pages',
+                name: 'pageList',
+                component: Page,
+                meta: {
+                    title: '页面列表'
+                }
             },
             {
                 path: 'component-manage',
@@ -80,24 +117,9 @@ const routes = [
                 meta: {
                     title: '自定义组件库'
                 }
-            }
-        ]
-    },
-    {
-        path: '/project/:projectId',
-        component: ProjectEntry,
-        children: [
-            {
-                path: '',
-                redirect: { name: 'pageList' }
             },
             {
-                path: 'pages',
-                name: 'pageList',
-                component: Page
-            },
-            {
-                path: 'functionManage',
+                path: 'function-manage',
                 name: 'functionManage',
                 component: FunctionManage,
                 meta: {
@@ -105,28 +127,75 @@ const routes = [
                 }
             },
             {
-                path: 'member',
+                path: 'variable-manage',
+                name: 'variableManage',
+                component: VariableManage,
+                meta: {
+                    title: '变量管理'
+                }
+            },
+            {
+                path: 'layout',
+                name: 'layout',
+                component: Layout,
+                meta: {
+                    title: '布局模板实例'
+                }
+            },
+            {
+                path: 'routes',
+                name: 'routes',
+                component: RouterManage,
+                meta: {
+                    title: '路由配置'
+                }
+            },
+            {
+                path: 'member-manage',
                 name: 'memberManage',
-                component: Member
+                component: MemberManage,
+                meta: {
+                    title: '成员管理'
+                }
+            },
+            {
+                path: 'basic',
+                name: 'basicInfo',
+                component: Basic,
+                meta: {
+                    title: '基本信息'
+                }
+            },
+            {
+                path: 'logs',
+                name: 'logs',
+                component: Logs,
+                meta: {
+                    title: '操作审计'
+                }
             }
         ]
     },
     {
+        name: 'page-entry',
         path: `/project/:projectId/page/:pageId`,
-        component: MainEntry,
-        alias: '',
+        components: {
+            default: MainEntry,
+            permission: require('@/views/status/non-exist-project').default
+        },
+        redirect: { name: 'new' },
         children: [
             {
                 path: '',
                 name: 'new',
                 component: Index
-            },
-            {
-                path: 'preview',
-                name: 'preview',
-                component: Preview
             }
         ]
+    },
+    {
+        path: '/preview/project/:projectId/*',
+        name: 'preview',
+        component: Preview
     },
     {
         path: '*',
@@ -152,6 +221,35 @@ const cancelRequest = async () => {
     await http.cancel(requestQueue.map(request => request.requestId))
 }
 
+const checkViewAuth = async (to) => {
+    const topRoute = to.matched[0]
+    let hasPermission = true
+
+    if (topRoute.name === 'project-entry') {
+        const res = await store.dispatch('project/verify', { data: { id: to.params.projectId } })
+        hasPermission = res.data
+    }
+
+    if (topRoute.name === 'page-entry') {
+        const res = await store.dispatch('page/verify', { data: { id: to.params.pageId, projectId: to.params.projectId } })
+        hasPermission = res.data
+    }
+
+    // if (to.name === 'preview') {
+    //     const res = await store.dispatch('page/verifyPreview', { data: { id: to.params.pageId } })
+    //     const data = res.data || {}
+    //     hasPermission = data.isPageCreator
+    // }
+
+    if (hasPermission) {
+        Vue.set(topRoute.meta, 'view', 'default')
+    } else {
+        Vue.set(topRoute.meta, 'view', 'permission')
+    }
+
+    return Promise.resolve()
+}
+
 let preloading = true
 let canceling = true
 let pageMethodExecuting = true
@@ -160,7 +258,14 @@ router.beforeEach(async (to, from, next) => {
     canceling = true
     await cancelRequest()
     canceling = false
-    next()
+    try {
+        Vue.set(to.meta, 'authed', false)
+        await checkViewAuth(to)
+        Vue.set(to.meta, 'authed', true)
+        next()
+    } catch (e) {
+        console.error(e)
+    }
 })
 
 router.afterEach(async (to, from) => {

@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <bk-select :value="value" :ext-cls="extCls" :clearable="false" @change="$emit('change', $event)">
+    <bk-select :value="value" :ext-cls="extCls" ext-popover-cls="king-select-dropdown" :clearable="false" @change="$emit('change', $event)">
         <bk-option id="px" name="px"></bk-option>
         <bk-option id="%" name="%"></bk-option>
     </bk-select>
@@ -56,6 +56,16 @@
             width: 45px;
             .bk-select-name {
                 margin-left: 6px;
+            }
+        }
+    }
+
+    .king-select-dropdown {
+        .bk-options .bk-option-content {
+            padding: 0;
+            text-align: center;
+            .bk-option-content-default {
+                padding: 0;
             }
         }
     }

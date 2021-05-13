@@ -7,38 +7,29 @@ export default class extends Base {
     id
 
     @Column({ type: 'varchar' })
-    compCode
+    type
 
     @Column({ type: 'varchar' })
-    compName
+    name
 
     @Column({ type: 'varchar' })
-    compPath
-
-    @Column({ type: 'int' })
-    belongProjectId
+    displayName
 
     @Column({ type: 'int' })
     categoryId
 
     @Column({ type: 'int' })
-    latestVersionId
+    belongProjectId
 
-    @Column({ type: 'int' })
+    @Column({
+        type: 'int',
+        comment: '组件公开：0 不公开，1 公开'
+    })
     isPublic
 
-    @Column({ type: 'int' })
+    @Column({
+        type: 'int',
+        comment: '组件状态：0 为已发布，1 为已下架'
+    })
     status
-
-    @Column({ type: 'datetime' })
-    createTime
-
-    @Column({ type: 'datetime' })
-    updateTime
-
-    @Column({ type: 'varchar' })
-    createUser
-
-    @Column({ type: 'varchar' })
-    updateUser
 }

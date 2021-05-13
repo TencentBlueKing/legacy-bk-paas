@@ -10,6 +10,7 @@
  */
 
 import http from '@/api'
+import { bkMessage } from 'bk-magic-vue'
 
 export default {
     namespaced: true,
@@ -36,9 +37,11 @@ export default {
                 return data
             })
         },
-        deleteTmpFile ({ state }, { fileName }) {
-            return http.post('/vueCode/deleteTmpFile', { fileName }).then(response => {
+        getPageCode ({ state }, data) {
+            return http.post('/vueCode/getPageCode', data).then(response => {
                 const data = response.data || {}
+                const codeErrMessage = response.codeErrMessage || ''
+                if (codeErrMessage) bkMessage({ theme: 'warning', message: codeErrMessage })
                 return data
             })
         }

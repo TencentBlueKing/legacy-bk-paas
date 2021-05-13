@@ -18,6 +18,7 @@ const router = new Router({
 
 router.post('/getApiData', getApiData)
 router.get('/getMockData', getMockData)
+router.post('/postMockData', getMockData)
 router.get('/getXTableData', getXTableData)
 router.post('/getXTableData', getXTableData)
 

@@ -12,17 +12,19 @@
 const https = require('https')
 const axios = require('axios')
 const querystring = require('querystring')
+const unless = require('koa-unless')
 const httpConf = require('../conf/http')
 const { CODE, isAjaxReq } = require('../util')
 const { findUserByBk, addUser } = require('../controller/user')
 const { setRequestContext } = require('./request-context')
+const { createDemoProject } = require('../controller/project')
 
 module.exports = () => {
-    return async function (ctx, next) {
+    const authMiddleware = async function (ctx, next) {
         try {
             const bkToken = ctx.cookies.get('bk_token')
             const hostUrl = httpConf.hostUrl.replace(/\/$/, '')
-            const loginRedirectUrl = `${hostUrl}/login/?app_id=${httpConf.appCode}`
+            const loginRedirectUrl = `${httpConf.loginUrl}?app_id=${httpConf.appCode}`
             if (!bkToken) {
                 // 非 ajax 异步请求，页面跳转到登录
                 if (!isAjaxReq(ctx.request)) {
@@ -74,6 +76,18 @@ module.exports = () => {
                     })
                     ctx.session.userInfo.id = userId
                     ctx.session.userInfo.username = ctx.session.userInfo.bk_username
+                    await createDemoProject({
+                        userInfo: {
+                            username: ctx.session.userInfo.bk_username,
+                            id: ctx.session.userInfo.id
+                        },
+                        projectData: {
+                            copyFrom: null,
+                            projectCode: 'demo',
+                            projectName: 'Demo项目',
+                            projectDesc: '欢迎使用蓝鲸可视化开发平台，这是为您提供的Demo项目，欢迎体验。'
+                        }
+                    })
                 } else {
                     ctx.session.userInfo.id = userData.id
                     ctx.session.userInfo.username = userData.username
@@ -102,4 +116,7 @@ module.exports = () => {
             ctx.app.emit('error', err, ctx)
         }
     }
+
+    authMiddleware.unless = unless
+    return authMiddleware
 }

@@ -9,16 +9,22 @@
  * specific language governing permissions and limitations under the License.
  */
 
-// const { saveAsFile, formatCode, deleteTmpFile } = require('../controller/vue-code')
 const Router = require('koa-router')
 const {
     list,
     useing,
     detail,
+    versionDetail,
     create,
     update,
+    off,
+    online,
     compDelete,
-    upload
+    upload,
+    nameMap,
+    categoryCount,
+    updatePageComp,
+    scope
 } = require('../controller/component')
 
 const router = new Router({
@@ -28,9 +34,16 @@ const router = new Router({
 router.get('/list', list)
 router.get('/useing', useing)
 router.get('/detail', detail)
+router.get('/version-detail', versionDetail)
 router.post('/create', create)
 router.post('/update', update)
+router.post('/off', off)
+router.post('/online', online)
 router.delete('/delete', compDelete)
 router.post('/upload', upload)
+router.get('/name-map', nameMap)
+router.get('/category-count', categoryCount)
+router.put('/page-using-version', updatePageComp)
+router.post('/scope', scope)
 
 module.exports = router

@@ -1,15 +1,33 @@
+import { getConnection, getRepository } from 'typeorm'
+import _ from 'lodash'
 import CompCategory from '../model/entities/comp-category'
-const { getRepository } = require('typeorm')
+import * as ComponentCategoryModel from '../model/component-category'
+import * as ComponentModel from '../model/component'
+import OperationLogger from '../service/operation-logger'
 
 // 所有组件分类
 export const list = async (ctx) => {
     try {
-        const res = await getRepository(CompCategory).find()
-        console.log(CompCategory)
+        const { belongProjectId } = ctx.query
+        const params = {}
+        if (belongProjectId) {
+            params.belongProjectId = belongProjectId
+        }
+        const res = await ComponentCategoryModel.all(params)
+        const preList = []
+        const nextList = []
+        for (let i = 0; i < res.length; i++) {
+            const current = res[i]
+            if (current.order > -1) {
+                preList.push(current)
+            } else {
+                nextList.push(current)
+            }
+        }
         ctx.send({
             code: 0,
             message: 'success',
-            data: res
+            data: [...preList, ...nextList]
         })
     } catch (error) {
         ctx.send({
@@ -22,18 +40,59 @@ export const list = async (ctx) => {
 
 // 新建分类
 export const create = async (ctx) => {
+    const operationLogger = new OperationLogger(ctx)
     try {
-        const category = new CompCategory()
-        category.category = ctx.request.body.category
+        const { name, belongProjectId } = ctx.request.body
+        if (!name) {
+            throw new Error('分类名不能为空')
+        }
+        if (!belongProjectId) {
+            throw new Error('项目id不能为空')
+        }
+        await getConnection().transaction(async transactionalEntityManager => {
+            const categoryList = name.split('/')
+            const createQueue = []
+            const valueMap = {}
+            for (let i = 0; i < categoryList.length; i++) {
+                const currentCategory = categoryList[i]
+                if (valueMap[currentCategory]) {
+                    continue
+                }
+                // 分类已存在
+                const record = await ComponentCategoryModel.getOne({
+                    name: categoryList[i],
+                    belongProjectId,
+                    deleteFlag: 0
+                })
+                if (record) {
+                    continue
+                }
+                const category = getRepository(CompCategory).create({
+                    name: categoryList[i],
+                    belongProjectId,
+                    order: -1
+                })
+                createQueue.push(
+                    transactionalEntityManager.save(category)
+                )
+                valueMap[currentCategory] = true
+            }
+            await Promise.all(createQueue)
+        })
 
-        const rowId = await getRepository(CompCategory).save(category)
-
+        operationLogger.success({
+            operateTarget: `分类名称：${name}`
+        })
         ctx.send({
             code: 0,
             message: 'success',
-            data: rowId
+            data: ''
         })
     } catch (error) {
+        const { name, belongProjectId } = ctx.request.body
+        operationLogger.error(error, {
+            operateTarget: !name ? `项目ID：${belongProjectId}` : `分类名称：${name}`
+        })
         ctx.send({
             code: -1,
             message: error.message,
@@ -44,23 +103,79 @@ export const create = async (ctx) => {
 
 // 编辑分类
 export const update = async (ctx) => {
+    const operationLogger = new OperationLogger(ctx)
     try {
-        const { id, category } = ctx.request.body
-        if (!id) {
-            throw new Error('id不能为空')
+        const checkFileds = ['id', 'name', 'belongProjectId']
+        for (let i = 0; i < checkFileds.length; i++) {
+            const currentfield = checkFileds[i]
+            const currentFieldValue = ctx.request.body[currentfield]
+            if (!currentFieldValue) {
+                throw new Error(`${currentfield}不能为空`)
+            }
         }
-        if (!category) {
-            throw new Error('分类名不能为空')
-        }
-        const compCategoryRepository = getRepository(CompCategory)
-        const compCategory = await compCategoryRepository.findOne(id)
-        if (!compCategory) {
-            throw new Error('分类不存在')
-        }
-        compCategory.category = category
-        compCategory.updateUser = 'admin'
 
-        await compCategoryRepository.save(compCategory)
+        const { id, name, belongProjectId } = ctx.request.body
+
+        // 分类已存在
+        const record = await ComponentCategoryModel.getOne({
+            name,
+            belongProjectId
+        })
+        if (record) {
+            throw new Error(`分类已存在`)
+        }
+        await ComponentCategoryModel.updateById(id, {
+            name
+        })
+
+        operationLogger.success({
+            operateTarget: `分类名称：${name}`
+        })
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data: ''
+        })
+    } catch (error) {
+        const { id, name } = ctx.request.body
+        operationLogger.error(error, {
+            operateTarget: !name ? `分类ID：${id}` : `分类名称：${name}`
+        })
+        ctx.send({
+            code: -1,
+            message: error.message,
+            data: null
+        })
+    }
+}
+
+// 排序
+export const sort = async (ctx) => {
+    try {
+        const { belongProjectId, list } = ctx.request.body
+        if (!belongProjectId) {
+            throw new Error('项目id不能为空')
+        }
+        if (!list || !_.isArray(list) || list.length < 1) {
+            throw new Error('非法数据')
+        }
+        await getConnection().transaction(async transactionalEntityManager => {
+            const updateQueue = []
+            for (let i = 0; i < list.length; i++) {
+                const currentCategory = list[i]
+                const record = await ComponentCategoryModel.getOne({
+                    id: currentCategory.id
+                })
+                if (!record) {
+                    continue
+                }
+                record.order = i
+                updateQueue.push(
+                    transactionalEntityManager.save(record)
+                )
+            }
+            await Promise.all(updateQueue)
+        })
 
         ctx.send({
             code: 0,
@@ -78,19 +193,36 @@ export const update = async (ctx) => {
 
 // 删除分类
 export const categoryDelete = async (ctx) => {
+    const operationLogger = new OperationLogger(ctx)
     try {
-        const compCategoryRepository = getRepository(CompCategory)
+        const id = parseInt(ctx.query.id)
+        if (!id) {
+            throw new Error('id不能为空')
+        }
 
-        await compCategoryRepository.delete({
-            id: ctx.query.id
+        const record = await ComponentModel.getOne({
+            categoryId: id,
+            deleteFlag: 0
         })
 
+        if (record) {
+            throw new Error('该分类下有组件信息，不能删除')
+        }
+
+        await ComponentCategoryModel.removeById(id)
+
+        operationLogger.success({
+            operateTarget: !ctx.query.name ? `分类ID：${ctx.query.id}` : `分类名称：${ctx.query.name}`
+        })
         ctx.send({
             code: 0,
             message: 'success',
             data: ''
         })
     } catch (error) {
+        operationLogger.error(error, {
+            operateTarget: !ctx.query.name ? `分类ID：${ctx.query.id}` : `分类名称：${ctx.query.name}`
+        })
         ctx.send({
             code: -1,
             message: error.message,

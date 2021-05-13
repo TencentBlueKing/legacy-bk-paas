@@ -19,8 +19,10 @@ class RequestContext {
     }
 
     static currentRequestContext () {
+        let res = ''
         const session = getNamespace(RequestContext.spaceName)
-        return session.get(RequestContext.name)
+        if (session) res = session.get(RequestContext.name)
+        return res
     }
 
     static getCurrentUser () {

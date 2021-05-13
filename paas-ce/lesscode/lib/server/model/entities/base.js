@@ -40,16 +40,23 @@ export default class Base {
     // 插入数据写入用户名
     @BeforeInsert()
     beforeInsert () {
-        const currentUser = RequestContext.getCurrentUser()
-        this.createUser = currentUser.username
-        this.updateUser = currentUser.username
+        const currentUser = RequestContext.getCurrentUser() || {}
+        this.createUser = currentUser.username || this.createUser
+        this.updateUser = currentUser.username || this.updateUser
+        this.createTime = new Date()
         this.updateTime = new Date()
     }
 
     // 更新数据写入用户名
     @BeforeUpdate()
     updateUpdateUser () {
-        const currentUser = RequestContext.getCurrentUser()
-        this.updateUser = currentUser.username
+        const updateBySystem = this.updateBySystem
+        if (!updateBySystem) {
+            const currentUser = RequestContext.getCurrentUser() || {}
+            this.updateUser = currentUser.username || this.updateUser
+            this.updateTime = new Date()
+        } else {
+            delete this.updateBySystem
+        }
     }
 }

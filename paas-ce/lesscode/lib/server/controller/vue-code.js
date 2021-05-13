@@ -8,142 +8,27 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import VueCodeModel from '../model/vue-code'
+import PageCodeModel from '../model/page-code'
+import routeModel from '../model/route'
+import variableModel from '../model/variable'
 
-const fs = require('fs')
-const path = require('path')
-const prettier = require('prettier')
-const CLIEngine = require('eslint').CLIEngine
-const appRoot = require('app-root-path')
+import { getNameMap } from '../model/component'
+import { allGroupFuncDetail } from '../model/function'
+import OperationLogger from '../service/operation-logger'
 
-const IS_DEV = process.env.NODE_ENV === 'development'
-
-const STATIC_URL = IS_DEV ? './lib/client/static/' : './lib/client/dist/static/'
-
-const cli = new CLIEngine({
-    fix: true,
-    useEslintrc: true,
-    allowInlineConfig: false,
-    reportUnusedDisableDirectives: true,
-    cwd: path.join(__dirname)
-})
-
-const ESLINT_TMP_FILE_PATH = 'eslint-fix-tmp.vue'
-
-/**
- * 读取文件
- *
- * @param {String} filePath 文件路径，绝对路径
- */
-async function read (curPath) {
-    const ret = await fs.readFileSync(curPath, 'utf8')
-    return ret
-}
-
-/**
- * 删除文件
- *
- * @param {String} filePath 文件路径，绝对路径
- */
-const deleteFile = filePath => {
-    if (!fs.existsSync(filePath)) {
-        console.log('deleteFile 路径不存在')
-        return
-    }
-    return new Promise((resolve, reject) => {
-        fs.unlink(filePath, (err, data) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(data)
-            }
-        })
-    })
-}
-
-const readFile = (path, opts = 'utf8') =>
-    new Promise((resolve, reject) => {
-        fs.readFile(path, opts, (err, data) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(data)
-            }
-        })
-    })
-
-const writeFile = (path, data, opts = 'utf8') =>
-    new Promise((resolve, reject) => {
-        fs.writeFile(path, data, opts, (err) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve()
-            }
-        })
-    })
-
-async function createFile (filePath) {
-    if (!fs.existsSync(filePath)) {
-        await fs.writeFileSync(filePath, '', 'utf8')
-    }
-}
-
-// async function test () {
-//     await createFile(path.join(__dirname, ESLINT_TMP_FILE_PATH))
-//     const report = cli.executeOnText(formatCode, ESLINT_TMP_FILE_PATH)
-
-//     CLIEngine.outputFixes(report)
-//     const ret = await read(path.join(__dirname, ESLINT_TMP_FILE_PATH))
-//     // deleteFile(path.join(__dirname, ESLINT_TMP_FILE_PATH))
-//     console.error(+new Date())
-//     console.error()
-//     console.error(ret)
-// }
-
-// test()
-
-/**
- * sleep 函数
- *
- * @param {number} ms 毫秒数
- */
-// function sleep (ms) {
-//     return new Promise(resolve => setTimeout(resolve, ms))
-// }
+const AU = require('ansi_up')
+const ansiUp = new AU.default  // eslint-disable-line
 
 const VueCode = {
     async saveAsFile (ctx) {
         try {
-            const post = ctx.request.body || {}
-            let code = post.code
-            code = code.replace('export default', 'module.exports =')
-            // const formatCode = prettier.format(post.code, { semi: false, parser: 'vue', tabWidth: 4 })
-            const fileName = 'vue-layout-demo' + Math.random().toString().substr(5) + '.vue'
-            // const filePath = STATIC_URL + 'demo' + Math.random() + '.vue'
-            const filePath = STATIC_URL + fileName
-            console.error(filePath)
-            console.error(appRoot.resolve(filePath))
-            // await fs.writeFileSync(appRoot.resolve(filePath), code, { encoding: 'utf8' })
-            await writeFile(appRoot.resolve(filePath), code, { encoding: 'utf8' })
-            const ret = await readFile(appRoot.resolve(filePath))
-            console.log(`
-                ------------------------------------------------
-            `)
-            console.log(ret)
-            console.log(`
-                ------------------------------------------------
-            `)
-            console.log()
-            console.log()
-
             ctx.send({
                 code: 0,
                 message: 'success',
-                data: fileName,
-                content: ret
+                data: ''
             })
         } catch (err) {
-            console.log(err, 'save err')
             ctx.throwError({
                 message: err.message
             })
@@ -152,53 +37,81 @@ const VueCode = {
     async formatCode (ctx) {
         try {
             const post = ctx.request.body || {}
-            let formatCode = prettier.format(post.code, {
-                vueIndentScriptAndStyle: true,
-                semi: false,
-                parser: 'vue',
-                tabWidth: 4,
-                singleQuote: true,
-                printWidth: 120,
-                endOfLine: 'crlf'
-            })
-            // 正则替换两种格式的require为import
-            formatCode = formatCode.replace(/const (.*) = require\((.*)\)/g, 'import $1 from $2')
-            formatCode = formatCode.replace(/require\((.*)\)/g, 'import $1')
-
-            await createFile(path.join(__dirname, ESLINT_TMP_FILE_PATH))
-            const report = cli.executeOnText(formatCode, ESLINT_TMP_FILE_PATH)
-            CLIEngine.outputFixes(report)
-
-            const ret = await read(path.join(__dirname, ESLINT_TMP_FILE_PATH))
-            await deleteFile(path.join(__dirname, ESLINT_TMP_FILE_PATH))
+            const ret = await VueCodeModel.formatCode(post.code)
 
             ctx.send({
                 code: 0,
                 message: 'success',
                 // ret 为空的话，说明 formatCode 是 eslint 检测正确的
-                data: ret || formatCode
+                data: ret
             })
         } catch (err) {
-            console.log(err, 'format err')
             ctx.throwError({
                 message: err.message
             })
         }
     },
-    async deleteTmpFile (ctx) {
+    async getPageCode (ctx) {
+        const operationLogger = new OperationLogger(ctx)
         try {
-            const post = ctx.request.body || {}
-            const filePath = STATIC_URL + post.fileName
-            await deleteFile(appRoot.resolve(filePath))
+            const {
+                pageType = 'vueCode',
+                projectId = '',
+                lifeCycle,
+                pageId,
+                layoutContent,
+                targetData = [],
+                isEmpty = false,
+                from,
+                withNav
+            } = ctx.request.body
+
+            const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([getNameMap(), allGroupFuncDetail(projectId), routeModel.findProjectRoute(projectId), variableModel.getAll({ projectId })])
+            const curPage = routeList.find((route) => (route.pageId === +pageId)) || {}
+            const variableList = [
+                ...allVarableList.filter(variable => variable.effectiveRange === 0),
+                ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && variable.pageCode === curPage.pageCode))
+            ]
+            let curLayoutCon = {}
+            if (withNav) {
+                curLayoutCon = layoutContent || JSON.parse(curPage.layoutContent || '{}')
+                const routeMap = {}
+                routeList.forEach((route) => {
+                    routeMap[route.pageCode] = route.pageId
+                });
+                [...(curLayoutCon.menuList || []), ...(curLayoutCon.topMenuList || [])].forEach((nav) => {
+                    if (nav.pageCode) nav.pageId = routeMap[nav.pageCode];
+                    (nav.children || []).forEach((child) => {
+                        child.pageId = routeMap[child.pageCode]
+                    })
+                })
+            }
+            const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
+            const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, curPage.layoutType, variableList)
+
+            // 此接口被多方调用，目前仅收集下载页面源码
+            if (from === 'download_page') {
+                operationLogger.success()
+            }
+
             ctx.send({
                 code: 0,
                 message: 'success',
-                data: 'delete suc'
+                data: code,
+                codeErrMessage
             })
         } catch (err) {
-            console.log(err, 'delete err')
-            ctx.throwError({
-                message: err.message
+            console.log('controller error')
+            // ctx.throwError({
+            //     message: err.message
+            // })
+            if (ctx.request.body.from === 'download_page') {
+                operationLogger.error(err)
+            }
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data: ansiUp.ansi_to_html(err.message || err)
             })
         }
     }

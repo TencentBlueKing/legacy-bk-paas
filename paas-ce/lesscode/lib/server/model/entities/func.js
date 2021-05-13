@@ -18,6 +18,10 @@ export default class extends Base {
     @Column({ type: 'varchar', length: 255 })
     funcName
 
+    // 函数标识
+    @Column({ type: 'varchar', length: 255 })
+    funcCode
+
     // 函数参数
     @Column({ type: 'tinytext' })
     funcParams
@@ -45,6 +49,10 @@ export default class extends Base {
     // 远程函数方法
     @Column({ type: 'varchar', length: 255 })
     funcMethod
+
+    // 远程函数是否携带 Token
+    @Column({ type: 'int' })
+    withToken
 
     // 远程函数数据体
     @Column({ type: 'text' })

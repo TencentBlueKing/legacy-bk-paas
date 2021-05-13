@@ -17,6 +17,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 const postcssPlugins = require('./postcss-plugins')
 const clientConf = require('./conf')
+const { pathToNodeModules } = require('./util')
 const baseConf = require('./webpack.base.conf')
 const manifest = require('../static/lib-manifest.json')
 
@@ -25,7 +26,8 @@ const webpackConfig = merge(baseConf, {
 
     entry: {
         // 必须是数组，适配 webpack-hot-client
-        main: [resolve(__dirname, '..', 'src/main.js')]
+        main: [resolve(__dirname, '..', 'src/main.js')],
+        preview: [resolve(__dirname, '..', 'src/preview/index.js')]
     },
 
     // output: {
@@ -40,20 +42,88 @@ const webpackConfig = merge(baseConf, {
         rules: [
             {
                 test: /\.(css|postcss)$/,
-                use: [
-                    resolve(__dirname, '../../../node_modules', 'vue-style-loader'),
+                // use: [
+                //     resolve(__dirname, pathToNodeModules, 'vue-style-loader'),
+                //     {
+                //         loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
+                //         options: {
+                //             modules: true,
+                //             importLoaders: 1
+                //         }
+                //     },
+                //     {
+                //         loader: resolve(__dirname, pathToNodeModules, 'postcss-loader'),
+                //         options: {
+                //             ident: 'postcss',
+                //             plugins: loader => postcssPlugins(loader)
+                //         }
+                //     }
+                // ]
+                oneOf: [
+                    // 匹配 js 中 import xxx from 'xxx.css'
                     {
-                        loader: resolve(__dirname, '../../../node_modules', 'css-loader'),
-                        options: {
-                            importLoaders: 1
-                        }
+                        resourceQuery: /import_css_specifier/,
+                        use: [
+                            resolve(__dirname, pathToNodeModules, 'vue-style-loader'),
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
+                                options: {
+                                    modules: {
+                                        localIdentName: '[name]_[local]_[hash:base64:5]'
+                                    },
+                                    importLoaders: 1
+                                }
+                            },
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'postcss-loader'),
+                                options: {
+                                    ident: 'postcss',
+                                    plugins: loader => postcssPlugins(loader)
+                                }
+                            }
+                        ]
                     },
+                    // 这里匹配 `<style module>`
                     {
-                        loader: resolve(__dirname, '../../../node_modules', 'postcss-loader'),
-                        options: {
-                            ident: 'postcss',
-                            plugins: loader => postcssPlugins(loader)
-                        }
+                        resourceQuery: /module/,
+                        use: [
+                            resolve(__dirname, pathToNodeModules, 'vue-style-loader'),
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
+                                options: {
+                                    modules: {
+                                        localIdentName: '[name]_[local]_[hash:base64:5]'
+                                    },
+                                    importLoaders: 1
+                                }
+                            },
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'postcss-loader'),
+                                options: {
+                                    ident: 'postcss',
+                                    plugins: loader => postcssPlugins(loader)
+                                }
+                            }
+                        ]
+                    },
+                    // 这里匹配普通的 `<style>` 或 `<style scoped>`
+                    {
+                        use: [
+                            resolve(__dirname, pathToNodeModules, 'vue-style-loader'),
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
+                                options: {
+                                    importLoaders: 1
+                                }
+                            },
+                            {
+                                loader: resolve(__dirname, pathToNodeModules, 'postcss-loader'),
+                                options: {
+                                    ident: 'postcss',
+                                    plugins: loader => postcssPlugins(loader)
+                                }
+                            }
+                        ]
                     }
                 ]
             }
@@ -75,7 +145,18 @@ const webpackConfig = merge(baseConf, {
             filename: 'index.html',
             template: resolve(__dirname, '..', 'index-dev.html'),
             inject: true,
-            staticUrl: clientConf.dev.staticUrl
+            chunks: ['main'],
+            staticUrl: clientConf.dev.staticUrl,
+            BKPAAS_ENVIRONMENT: clientConf.dev.BKPAAS_ENVIRONMENT
+        }),
+
+        new HtmlWebpackPlugin({
+            filename: 'preview.html',
+            template: resolve(__dirname, '..', 'preview.html'),
+            inject: true,
+            chunks: ['preview'],
+            staticUrl: clientConf.dev.staticUrl,
+            BKPAAS_ENVIRONMENT: clientConf.dev.BKPAAS_ENVIRONMENT
         }),
 
         new FriendlyErrorsPlugin()
