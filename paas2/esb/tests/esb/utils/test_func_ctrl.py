@@ -9,14 +9,22 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import pytest
+from builtins import object
+
+from common.constants import FunctionControllerCodeEnum
+from esb.bkcore.models import FunctionController
+from esb.utils.func_ctrl import FunctionControllerClient
+from esb.utils.jwt_utils import JWTKey
+
+pytestmark = pytest.mark.django_db
 
 
-class CheckException(Exception):
-    def __init__(self, message):
-        self.message = message
+class TestFunctionControllerClient(object):
+    def test_save_jwt_key(self):
+        assert not FunctionController.objects.filter(func_code=FunctionControllerCodeEnum.JWT_KEY.value).exists()
 
-    def __str__(self):
-        return self.message
+        private_key, public_key = JWTKey().generate()
+        FunctionControllerClient.save_jwt_key(private_key, public_key)
 
-    def get_message(self):
-        return self.message
+        assert FunctionController.objects.filter(func_code=FunctionControllerCodeEnum.JWT_KEY.value).exists()

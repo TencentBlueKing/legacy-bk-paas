@@ -25,7 +25,6 @@ from requests.exceptions import ReadTimeout, SSLError
 from django.conf import settings
 from django.utils.encoding import force_bytes, force_text
 from django.utils import timezone
-from django.utils.encoding import smart_bytes
 
 from common.base_utils import FancyDict, datetime_format
 from common.bkerrors import bk_error_codes
@@ -407,7 +406,7 @@ class HttpClient(BasicHttpClient):
             params = json.dumps(params)
         datetime_end = timezone.now()
         msecs_cost = (datetime_end - datetime_start).total_seconds() * 1000
-        exception_name = smart_bytes(r.request_exception) if r.request_exception else None
+        exception_name = force_text(r.request_exception) if r.request_exception else None
 
         try:
             api_log = {
@@ -551,7 +550,7 @@ class RequestHelperClient(BasicHttpClient):
                 request_params = force_text(request_params)
         datetime_end = timezone.now()
         msecs_cost = (datetime_end - datetime_start).total_seconds() * 1000
-        exception_name = smart_bytes(request_exception) if request_exception else None
+        exception_name = force_text(request_exception) if request_exception else None
 
         # Log to logstash, Use type="pyls-comp-api"
         try:
