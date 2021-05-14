@@ -13,6 +13,7 @@ import datetime
 import json
 
 import pytest
+from django.utils import timezone
 
 from common import base_utils
 
@@ -208,8 +209,8 @@ def test_get_request_params(request_factory, method, data, content_type, expecte
     "value, expected",
     [
         (1620973760, "2021-05-14 06:29:20"),
-        (datetime.datetime(2021, 5, 14, 14, 29, 16, tzinfo=datetime.timezone.utc), "2021-05-14 14:29:16"),
-        (datetime.datetime(2021, 5, 14, 14, 29, 16, tzinfo=datetime.timezone.utc).date(), "2021-05-14"),
+        (datetime.datetime(2021, 5, 14, 14, 29, 16, tzinfo=timezone.utc), "2021-05-14 14:29:16"),
+        (datetime.datetime(2021, 5, 14, 14, 29, 16, tzinfo=timezone.utc).date(), "2021-05-14"),
     ]
 )
 def test_datetime_format(value, expected):
