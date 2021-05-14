@@ -11,13 +11,14 @@ specific language governing permissions and limitations under the License.
 """
 
 import base64
-from builtins import str
+
+from django import forms
+from django.utils import timezone
+from django.utils.encoding import force_text
 
 from common.constants import API_TYPE_OP
 from common.forms import BaseComponentForm, DefaultBooleanField, ListField, TypeCheckField
 from components.component import Component, SetupConfMixin
-from django import forms
-from django.utils import timezone
 
 from .toolkit import configs, tools
 
@@ -148,7 +149,7 @@ class SendWeixin(Component, SetupConfMixin):
     def get_qy_msg_content(self, data):
         new_data = [
             data["heading"],
-            data["message"].decode("utf-8") if isinstance(data["message"], str) else data["message"],
+            force_text(data["message"]),
         ]
 
         if data.get("date"):
