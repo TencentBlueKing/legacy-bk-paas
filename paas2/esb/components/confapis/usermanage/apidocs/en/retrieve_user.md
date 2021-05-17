@@ -11,14 +11,17 @@ Query user info
 
 | field      |  type      | required   |  description      |
 |-----------|------------|--------|------------|
-| lookup_field | string | no | lookup on which field, 'username' as default|
+| id | string | yes | query username, e.g. "admin" |
+| lookup_field | string | no | lookup on which field, 'username' as default, only key field only, which contain: username, id|
 | fields | string | no | response fields, e.g. "username,id" |
 
 
 ### sample request parameters
 
+Query a profile which has 'admin' as username, only return selected fields (`username`, `id`)
 ``` json
 {
+  "id": "admin",
   "fields": "username,id"
 }
 ```

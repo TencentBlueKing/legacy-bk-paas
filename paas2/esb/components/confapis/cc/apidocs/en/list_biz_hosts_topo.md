@@ -186,7 +186,7 @@ reference: <https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuild
 | Field      | Type      | Description      |
 |-----------|-----------|-----------|
 | host     | dict       | the num of record |
-| info      | array     | host data |
+| topo      | array     | host data |
 
 #### data.info.host
 | Field      | Type      | Description      |

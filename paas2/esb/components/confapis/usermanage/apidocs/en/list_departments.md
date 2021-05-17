@@ -13,7 +13,7 @@ List all departments
 |-----------|------------|--------|------------|
 | lookup_field | string | no | lookup on which field, 'id' as default|
 | page | int | no | page num |
-| no_page | bool | no | wether return all records, false as default |
+| ~~no_page~~ | bool | no | deprecated, please remove this param |
 | page_size | int | no | page size |
 | fields | string | no | response fields, e.g. "username,id" |
 | exact_lookups | string | no | exact lookup list, e.g. "jack,pony" |
@@ -24,8 +24,7 @@ List all departments
 
 ``` json
 {
-  "fields": "name,id",
-  "no_page": true
+  "fields": "name,id"
 }
 ```
 

@@ -1,7 +1,17 @@
 Release Log
 ===============================
+# 2.13.1
+    - update: sync with newest branch
+
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.11
+    - bugfix: paas app_log missing page div while pagination
+
+# 2.12.10
+    - esb: update cc/usermanage/bscp/bk_log apis
+    - esb: add bk_apigateway/bk_paas3 to user-auth-unrequired wlist
 
 # 2.12.9
     - bugfix: fix home page js 404

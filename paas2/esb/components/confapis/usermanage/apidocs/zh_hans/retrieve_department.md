@@ -11,14 +11,16 @@
 
 | 字段      |  类型      | 必须   |  描述      |
 |-----------|------------|--------|------------|
-| lookup_field | 字符串 | 否 | 查询字段, 默认为 'username'|
-| fields | 字符串 | 否 | 返回字段, 例如 "username,id" |
+| id | 字符串 | 是 | 查询目标组织的 id，例如 1122 |
+| fields | 字符串 | 否 | 返回字段, 例如 "name,id" |
 
 
 ### 请求参数示例 
 
+查找 id 为 1122 的组织，只返回 name、id 字段
 ``` json
 {
+  "id": 1122,
   "fields": "name,id"
 }
 ```
@@ -30,7 +32,7 @@
     "code": 0,
     "data": {
         "id": 4,
-        "username": "PaaS",
+        "name": "PaaS",
     },
     "result": true
 }

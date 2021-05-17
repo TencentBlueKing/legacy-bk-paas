@@ -15,8 +15,9 @@ update cloud area
 
 ### Request Parameters Example
 
-``` python
+``` json
 {
+    "bk_cloud_id": 5,
 	"bk_cloud_name": "cloudname1"
 }
 
@@ -25,8 +26,7 @@ update cloud area
 ### Return Result Example
 
 
-```python
-
+```json
 {
     "result": true,
     "code": 0,

@@ -1,6 +1,6 @@
 ### Functional description
 
-delete customize query
+transfer host to recycle module
 
 ### Request Parameters
 
@@ -11,8 +11,8 @@ delete customize query
 | Field      |  Type      | Required   |  Description      |
 |-----------|------------|--------|------------|
 | bk_supplier_account | string     | No     | supplier account code |
-| bk_biz_id |  int     | Yes     | Business ID |
-| id        |  string  | Yes     | Primary key ID |
+| bk_biz_id     |  int     | Yes     | Business ID |
+| bk_host_id    |  array   | Yes     | Host ID |
 
 ### Request Parameters Example
 
@@ -21,9 +21,12 @@ delete customize query
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_supplier_account": "123456789",
+    "bk_supplier_account": "0",
     "bk_biz_id": 1,
-    "id": "xxx"
+    "bk_host_id": [
+        9,
+        10
+    ]
 }
 ```
 
@@ -34,7 +37,7 @@ delete customize query
 {
     "result": true,
     "code": 0,
-    "message": "",
-    "data": {}
+    "message": "success",
+    "data": null
 }
 ```

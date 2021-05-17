@@ -57,7 +57,7 @@
   comp_codename: generic.v2.usermanage.usermanage_component
   dest_http_method: GET
   dest_path: /api/v1/department/{id}/ancestor/
-  is_hidden: false
+  is_hidden: true
   label: 查询部门全部祖先 (旧版接口，不推荐使用，后续会下架，请尽快迁移)
   label_en: Query department ancestor
   name: department_ancestor

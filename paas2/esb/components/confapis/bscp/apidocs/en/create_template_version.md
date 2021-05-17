@@ -14,7 +14,7 @@ create template version
 | template_id  |  string    | Y        | template id |
 | version_tag  |  string    | Y        | version tag (max_length: 64)  |
 | content_id   |  string    | Y        | content sha256 id (min_length: 64, max_length: 64) |
-| content_size |  string    | Y        | content size (unit: byte) |
+| content_size |  integer   | Y        | content size |
 | memo         |  string    | N        | memo description (max_length: 64) |
 
 ### Request Parameters Example

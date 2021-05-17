@@ -35,7 +35,7 @@ condition params
 | bk_obj_asst_id           | string     | Yes     | 模型关联关系的唯一id|
 | bk_asst_id           | string     | NO     | 关联类型的唯一id|
 | bk_obj_id           | string     | NO     | 源模型id|
-| bk_asst_id           | string     | NO     | 目标模型id|
+| bk_asst_obj_id           | string     | NO     | 目标模型id|
 
 
 ### 请求参数示例
