@@ -13,7 +13,6 @@ specific language governing permissions and limitations under the License.
 import copy
 import json
 import re
-import string
 import time
 import uuid
 from builtins import object, str
@@ -103,7 +102,7 @@ class BaseChannel(object):
         """
         create request_id
         """
-        return uuid.uuid4().get_hex()
+        return uuid.uuid4().hex
 
     def validate_request(self, request):
         """
@@ -164,7 +163,7 @@ class BaseChannel(object):
     @staticmethod
     def capitalize_header(header):
         """capitalize django header"""
-        return "-".join(string.capitalize(s) for s in header.split("_"))
+        return "-".join(s.capitalize() for s in header.split("_"))
 
     def handle_request(self, request):
         """

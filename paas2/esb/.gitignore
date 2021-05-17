@@ -81,13 +81,9 @@ ENV/
 # Spyder project settings
 .spyderproject
 
-../db.sqlite3
 templates_module/
 run/
-uwsgi.ini
-tests/
 MakefileSyncConfapisEE
-MakefileSyncConfapisCE
 
 # for dev
-.env
+.envrc

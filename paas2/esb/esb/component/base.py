@@ -16,6 +16,8 @@ import copy
 import json
 from importlib import import_module
 
+from django.utils.encoding import force_bytes
+
 from common.bkerrors import bk_error_codes
 from common.errors import APIError, error_codes
 from common.base_utils import smart_lower, FancyDict, str_bool
@@ -314,7 +316,7 @@ class CompRequest(object):
         return query.urlencode() if ctype == "form" else json.dumps(dict(list(query.items())))
 
     def _get_clean_raw_body(self, ctype):
-        if self.wsgi_request.body and self.wsgi_request.body.strip().startswith("{"):
+        if self.wsgi_request.body and self.wsgi_request.body.strip().startswith(force_bytes("{")):
             body = json.loads(self.wsgi_request.body)
             body = self._clean_sensitive_params(body)
             return body if ctype == "form" else json.dumps(body)
@@ -417,7 +419,7 @@ class ComponentsManager(object):
         """
         fpath, base_fname = os.path.split(filename)
         # Components are not in toolkit folder
-        if fpath.endswith("/toolkit") or fpath.endswith("/apidoc"):
+        if fpath.endswith("/toolkit") or fpath.endswith("/apidoc") or fpath.endswith("/__pycache__"):
             return False
         return is_py_file(base_fname) and not base_fname.startswith("_") and base_fname not in self.blist_comp_fnames
 

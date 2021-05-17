@@ -20,6 +20,7 @@ import hmac
 import random
 
 import requests
+from django.utils.encoding import force_bytes
 
 TEST_APP_CODE = "gcloud"
 TEST_APP_TOKEN = "ea2f8a3e-b808-4b60-866b-522d90f659cc"
@@ -44,7 +45,7 @@ def compute_signature(method, host, url, params, secret_key):
     """
     params = "&".join(["%s=%s" % (i, params[i]) for i in sorted(params)])
     message = "%s%s%s?%s" % (method, host, url, params)
-    digest_make = hmac.new(str(secret_key), str(message), hashlib.sha1).digest()
+    digest_make = hmac.new(force_bytes(secret_key), force_bytes(message), hashlib.sha1).digest()
     _signature = base64.b64encode(digest_make)
     return _signature
 

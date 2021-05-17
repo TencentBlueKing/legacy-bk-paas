@@ -1,4 +1,4 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 """
 Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS
 Community Edition) available.
@@ -16,7 +16,7 @@ from django.test import TestCase
 
 from common.constants import HTTP_METHOD
 from esb.component.base import get_components_manager
-from .channel_tools import ChannelClient
+from esb.management.utils.channel_tools import ChannelClient
 
 
 class TestChannelClient(TestCase):

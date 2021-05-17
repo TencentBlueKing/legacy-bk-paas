@@ -13,9 +13,12 @@ i18n_cp:
 	cp locale/locale_api/en/LC_MESSAGES/django.* ../paas/locale/locale_api/en/LC_MESSAGES/
 
 poetry.lock: pyproject.toml
-	poetry lock
+	poetry lock --no-update
 
-requirements.txt: poetry.lock
+requirements_dev.txt: poetry.lock
+	poetry export -f requirements.txt --without-hashes --dev -o requirements_dev.txt
+
+requirements.txt: poetry.lock requirements_dev.txt
 	poetry export -f requirements.txt --without-hashes -o requirements.txt
 
 VERSION: pyproject.toml
@@ -26,4 +29,8 @@ update: VERSION requirements.txt
 
 .PHONY: test
 test:
-	pytest
+	. conf/unittest_env && pytest \
+		--ds settings \
+		--reuse-db \
+		--maxfail 1 \
+		tests

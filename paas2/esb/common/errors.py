@@ -26,7 +26,10 @@ def wrap_error_code(code):
 
 
 class BaseException(Exception):
-    pass
+
+    def __init__(self, message=""):
+        self.message = message
+        super(BaseException, self).__init__(self.message)
 
 
 class RequestThirdPartyException(BaseException):

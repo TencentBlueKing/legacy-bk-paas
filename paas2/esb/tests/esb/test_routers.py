@@ -16,7 +16,7 @@ from common.errors import APIError, error_codes
 from django.http import Http404
 from django.test import TestCase
 
-from . import routers
+from esb import routers
 
 
 class PatchesTestCase(TestCase):

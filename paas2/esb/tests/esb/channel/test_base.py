@@ -1,4 +1,4 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 """
 Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS
 Community Edition) available.
@@ -13,6 +13,8 @@ specific language governing permissions and limitations under the License.
 
 import json
 
+import pytest
+
 import mock
 from common import errors
 from common.base_validators import ValidationError
@@ -20,8 +22,7 @@ from common.constants import COMPONENT_STATUSES
 from common.errors import error_codes
 from django.test import TestCase
 from esb.bkcore.models import ESBChannel
-
-from .base import BaseChannel, ChannelManager
+from esb.channel.base import BaseChannel, ChannelManager
 
 
 class TestChannelManager(TestCase):
@@ -132,8 +133,9 @@ class TestChannelManager(TestCase):
         self.assertIsNone(path_vars)
 
 
-class TestBaseChannel(TestCase):
-    def setUp(self):
+class TestBaseChannel(object):
+    @pytest.fixture(autouse=True)
+    def setup_fixtures(self):
         self.request = mock.MagicMock(META={"REMOTE_ADDR": "127.0.0.1"})
         self.comp_class = mock.MagicMock()
         self.comp = self.comp_class.return_value
@@ -156,7 +158,7 @@ class TestBaseChannel(TestCase):
             "headers",
             "channel_conf",
         ]:
-            self.assertTrue(hasattr(self.request.g, attr), attr)
+            assert hasattr(self.request.g, attr), attr
 
     def test_invoke_exceptions(self):
         for raises, status, error_code in [
@@ -192,8 +194,8 @@ class TestBaseChannel(TestCase):
             response = self.channel.handle_request(self.request)
             result = json.loads(response.content)
 
-            self.assertEqual(self.request.g.component_status, status)
-            self.assertEqual(result["code"], error_code.code.code)
+            assert self.request.g.component_status == status
+            assert result["code"] == error_code.code.code
 
     def test_invoke_comp(self):
         for result, status in [
@@ -203,7 +205,7 @@ class TestBaseChannel(TestCase):
             self.comp.invoke.return_value = result
             self.channel.handle_request(self.request)
 
-            self.assertEqual(self.request.g.component_status, status)
+            assert self.request.g.component_status == status
 
     def test_validate_error(self):
         request_validator = mock.MagicMock()
@@ -213,5 +215,15 @@ class TestBaseChannel(TestCase):
         response = channel.handle_request(self.request)
 
         result = json.loads(response.content)
-        self.assertEqual(self.request.g.component_status, COMPONENT_STATUSES.ARGUMENT_ERROR)
-        self.assertEqual(result["code"], error_codes.COMMON_ERROR.code.code)
+
+        assert self.request.g.component_status == COMPONENT_STATUSES.ARGUMENT_ERROR
+        assert result["code"] == error_codes.COMMON_ERROR.code.code
+
+    @pytest.mark.parametrize(
+        'header, expected',
+        [
+            ('X_BK_TOKEN', 'X-Bk-Token'),
+        ]
+    )
+    def test_capitalize_header(self, header, expected):
+        assert expected == BaseChannel.capitalize_header(header)

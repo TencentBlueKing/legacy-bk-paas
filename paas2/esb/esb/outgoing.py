@@ -17,10 +17,15 @@ import json
 import socket
 import time
 import urllib.parse
-from builtins import object, str
+from builtins import object
 from urllib.parse import urljoin
 
 import requests
+from requests.exceptions import ReadTimeout, SSLError
+from django.conf import settings
+from django.utils.encoding import force_bytes, force_text
+from django.utils import timezone
+
 from common.base_utils import FancyDict, datetime_format
 from common.bkerrors import bk_error_codes
 from common.errors import (
@@ -30,12 +35,7 @@ from common.errors import (
     request_third_party_error_codes,
 )
 from common.log import logger, logger_api
-from django.conf import settings
-from django.utils import timezone
-from django.utils.encoding import smart_bytes
 from past.builtins import basestring
-from requests.exceptions import ReadTimeout, SSLError
-
 from esb.bkapp.models import BKApp
 from esb.utils.jwt_utils import JWTClient
 
@@ -88,10 +88,7 @@ def encode_dict(d, encoding="utf-8"):
     """
     result = {}
     for k, v in list(d.items()):
-        if isinstance(v, str):
-            result[k] = v.encode(encoding)
-        else:
-            result[k] = v
+        result[k] = force_bytes(v, encoding=encoding)
     return result
 
 
@@ -409,7 +406,7 @@ class HttpClient(BasicHttpClient):
             params = json.dumps(params)
         datetime_end = timezone.now()
         msecs_cost = (datetime_end - datetime_start).total_seconds() * 1000
-        exception_name = smart_bytes(r.request_exception) if r.request_exception else None
+        exception_name = force_text(r.request_exception) if r.request_exception else None
 
         try:
             api_log = {
@@ -537,7 +534,7 @@ class RequestHelperClient(BasicHttpClient):
                     try:
                         resp_text = json.dumps(resp)
                     except Exception:
-                        resp_text = str(resp)
+                        resp_text = force_text(resp)
 
                 result = resp
 
@@ -550,10 +547,10 @@ class RequestHelperClient(BasicHttpClient):
             try:
                 request_params = json.dumps(request_params)
             except Exception:
-                request_params = str(request_params)
+                request_params = force_text(request_params)
         datetime_end = timezone.now()
         msecs_cost = (datetime_end - datetime_start).total_seconds() * 1000
-        exception_name = smart_bytes(request_exception) if request_exception else None
+        exception_name = force_text(request_exception) if request_exception else None
 
         # Log to logstash, Use type="pyls-comp-api"
         try:

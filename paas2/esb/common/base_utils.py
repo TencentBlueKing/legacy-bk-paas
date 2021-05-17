@@ -16,11 +16,11 @@ import hashlib
 import json
 import random
 import re
-import string
 from builtins import range, str
 
 import yaml
 from past.builtins import basestring
+from django.utils.encoding import force_bytes, force_text, smart_bytes, smart_text
 
 from common.errors import error_codes
 from common.log import logger
@@ -67,7 +67,7 @@ def str_bool(value):
     """
     if isinstance(value, basestring):
         value = value.strip()
-        if value.lower() in ("0", "false"):
+        if force_text(value.lower()) in ("0", "false"):
             return False
     return bool(value)
 
@@ -108,28 +108,21 @@ def smart_upper(value):
     'requestFriendHandler'
     """
     value_list = value.split("_")
-    return "".join(string.capitalize(word) if i != 0 else word for i, word in enumerate(value_list))
+    return "".join(word.capitalize() if i != 0 else word for i, word in enumerate(value_list))
 
 
 def smart_str(s, encoding="utf-8"):
     """
     转换一个字符串或者unicode为指定的编码
     """
-    if isinstance(s, str):
-        return s.encode(encoding)
-    elif s and encoding != "utf-8":
-        return s.decode("utf-8", "ignore").encode(encoding, "ignore")
-    else:
-        return str(s)
+    return smart_bytes(s, encoding="utf-8", errors="ignore")
 
 
 def smart_unicode(s, encoding="utf-8"):
     """
     转换一个字符串或者unicode为unicode
     """
-    if isinstance(s, str):
-        return s
-    return s.decode(encoding, "ignore")
+    return smart_text(s, encoding="utf-8", errors="ignore")
 
 
 def smart_unicode_v2(s, encoding=None):
@@ -219,25 +212,21 @@ def get_client_real_ip(request):
 
 
 def get_request_params(request):
-    # if request.method not in ('GET', 'POST'):
-    #     raise error_codes.COMMON_ERROR.format_prompt(
-    #         'Request method error, please apply GET or POST request.', replace=True)
     # "GET"方法
     if request.method == "GET":
-        request_params = dict(list(request.GET.items()))
-    else:
-        # "POST"方法
-        if request.body and request.body.strip().startswith("{"):
-            try:
-                request_params = json.loads(request.body)
-            except Exception:
-                logger.exception("request.body should be a json: %s", request.body)
-                raise error_codes.COMMON_ERROR.format_prompt(
-                    "Request JSON string is wrong in format, which cannot be analyzed.", replace=True
-                )
-        else:
-            request_params = dict(list(request.POST.items()))
-    return request_params
+        return dict(list(request.GET.items()))
+
+    # "POST"方法
+    if request.body and request.body.strip().startswith(force_bytes("{")):
+        try:
+            return json.loads(request.body)
+        except Exception:
+            logger.exception("request.body should be a json: %s", request.body)
+            raise error_codes.COMMON_ERROR.format_prompt(
+                "Request JSON string is wrong in format, which cannot be analyzed.", replace=True
+            )
+
+    return dict(list(request.POST.items()))
 
 
 def datetime_format(dt):
@@ -255,7 +244,7 @@ def datetime_format(dt):
 
 def get_md5(src):
     m = hashlib.md5()
-    m.update(smart_str(src))
+    m.update(force_bytes(src))
     return m.hexdigest()
 
 
@@ -286,7 +275,6 @@ def html_escape(html, is_json=False):
     html = html.replace(">", "&gt;")
     # 单双引号转换
     if not is_json:
-        # html = html.replace(' ', "&nbsp;")
         html = html.replace('"', "&quot;")
         html = html.replace("'", "&#39;")
     return html

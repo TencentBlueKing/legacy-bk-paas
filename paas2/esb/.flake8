@@ -1,0 +1,14 @@
+[flake8]
+ignore = C901,F405,F403,W504,E741,E125,W503,F841,E203,E231,F541,W292
+exclude =
+    *migrations*,
+    *.pyc,
+    .git,
+    __pycache__,
+    venv,
+max-line-length = 119
+max-complexity = 12
+format = pylint
+show_source = True
+statistics = True
+count = True
