@@ -31,6 +31,7 @@ get operation log
 | resource_name  | string       | No       | resource name                                     |
 | category       | string       | No       | resource category defined for UI                  |
 | label          | string array | No       | resource label                                    |
+| fuzzy_query    | bool         | No       | use fuzzy query or not when searching with resource name, **fuzzy query has low efficiency and poor performance** |
 
 ### Request Parameters Example
 
@@ -63,7 +64,8 @@ get operation log
     },
     "start": 0,
     "limit": 10,
-    "sort": "-operation_time"
+    "sort": "-operation_time",
+    "fuzzy_query": false
 }
 ```
 

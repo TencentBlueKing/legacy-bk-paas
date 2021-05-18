@@ -11,12 +11,11 @@ specific language governing permissions and limitations under the License.
 """
 
 from django.views.generic import View
-from django.shortcuts import render
 from django.http import Http404
 from django.utils.translation import ugettext as _
 
+from esb.apps.mixins import TemplateRenderMixin
 from esb.bkcore.models import ESBChannel, ComponentSystem
-from esb.configs.default import menu_items
 from .utils import get_system_category
 
 menu_active_item = "api_docs"
@@ -29,7 +28,7 @@ class TranslateTest(View):
         return HttpResponse(_(u"系统名称"))
 
 
-class BaseDocsCategory(View):
+class BaseDocsCategory(View, TemplateRenderMixin):
     def get_base_category(self):
         """获取文档分类"""
         return get_system_category()
@@ -99,12 +98,11 @@ class Index(BaseDocsCategory):
     def get(self, request):
         docs_category = self.get_base_category()
 
-        return render(
+        return self.render(
             request,
             "api_docs/index.html",
             {
                 "docs_category": docs_category,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
@@ -124,11 +122,10 @@ class ApiInfoBySystem(BaseDocsCategory):
             "api_info_by_system": list(curr_api_info),
             "system_summary": system_info.get("system_remark") or _(u"暂无系统简介"),
             "flag": False,
-            "menu_items": menu_items,
             "menu_active_item": menu_active_item,
         }
         data.update(all_system_info)
-        return render(request, "api_docs/system_api_index.html", data)
+        return self.render(request, "api_docs/system_api_index.html", data)
 
 
 class ApiDocByApiName(BaseDocsCategory):
@@ -144,8 +141,7 @@ class ApiDocByApiName(BaseDocsCategory):
             "curr_api_info": curr_api_info,
             "api_info": api_info,
             "flag": True,
-            "menu_items": menu_items,
             "menu_active_item": menu_active_item,
         }
         data.update(all_system_info)
-        return render(request, "api_docs/system_api_doc.html", data)
+        return self.render(request, "api_docs/system_api_doc.html", data)

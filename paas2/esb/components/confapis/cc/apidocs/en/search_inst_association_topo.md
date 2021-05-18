@@ -29,27 +29,29 @@ search instance association topology
 ### Return Result Example
 
 ```python
-
 {
-    "result": true,
-    "code": 0,
-    "message": "",
-    "data": [{
-        "bk_inst_id":0,
-		"bk_inst_name": "",
-		"bk_obj_icon": "icon-cc-business",
-		"bk_obj_id": "biz",
-		"bk_obj_name": "biz",
-        "count": 1,
-		"children": [{
-			"bk_inst_id": 2,
-			"bk_inst_name": "blueking",
-			"bk_obj_icon": "",
-			"bk_obj_id": "biz",
-			"bk_obj_name": "biz"
-		}],
-	
-	}]
+    "result":true,
+    "code":0,
+    "message":"",
+    "data":[
+        {
+            "bk_inst_id":0,
+            "bk_inst_name":"",
+            "bk_obj_icon":"icon-cc-business",
+            "bk_obj_id":"biz",
+            "bk_obj_name":"业务",
+            "count":1,
+            "children":[
+                {
+                    "bk_inst_id":2,
+                    "bk_inst_name":"蓝鲸",
+                    "bk_obj_icon":"",
+                    "bk_obj_id":"biz",
+                    "bk_obj_name":"业务"
+                }
+            ]
+        }
+    ]
 }
 ```
 

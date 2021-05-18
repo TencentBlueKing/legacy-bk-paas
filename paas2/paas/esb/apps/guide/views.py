@@ -14,11 +14,10 @@ import copy
 import markdown
 from markdown.extensions.headerid import HeaderIdExtension
 from django.views.generic import View
-from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 from common.decorators import has_apigateway_manage_permission_for_classfunc
-from esb.configs.default import menu_items
+from esb.apps.mixins import TemplateRenderMixin
 from esb.common.django_utils import get_cur_language
 from .utils import mdfile_by_name
 
@@ -42,7 +41,7 @@ ZH_PAGES.extend(
 )
 
 
-class Page(View):
+class Page(View, TemplateRenderMixin):
     @has_apigateway_manage_permission_for_classfunc
     def get(self, request, name):
         with open(mdfile_by_name(name)) as fp:
@@ -61,14 +60,13 @@ class Page(View):
             )
         cur_language = get_cur_language()
 
-        return render(
+        return self.render(
             request,
             "guide/page.html",
             {
                 "pages": ZH_PAGES if cur_language == "zh-hans" else PAGES,
                 "current_page": name,
                 "html_part": html_part,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )

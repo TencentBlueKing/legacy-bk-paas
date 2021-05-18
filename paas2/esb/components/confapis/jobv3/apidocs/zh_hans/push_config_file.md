@@ -11,6 +11,7 @@
 | 字段        |  类型      | 必选   |  描述      |
 |-------------|------------|--------|------------|
 | bk_biz_id        |  long       | 是     | 业务ID |
+| task_name        |  string     | 否     | 自定义作业名称 |
 | account_alias  |  string    | 是     | 执行帐号别名 |
 | file_target_path |  string    | 是     | 文件传输目标路径 |
 | file_list        |  array     | 是     | 源文件对象数组，见下面file定义 |
