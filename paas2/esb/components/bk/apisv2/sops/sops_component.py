@@ -39,8 +39,7 @@ class SopsComponent(ConfComponent):
         )
 
         try:
-            if "code" not in response:
-                response["code"] = 0 if response["result"] else 1306000
+            response.setdefault("code", 0 if response["result"] else 1306000)
         except Exception:
             raise error_codes.THIRD_PARTY_RESULT_ERROR.format_prompt(args=configs.SYSTEM_NAME)
 
