@@ -37,7 +37,7 @@
       <!--select2-->
       <link href="${STATIC_URL}assets/select2-3.5.3/select2.css?v=1" rel="stylesheet">
       <!-- paas-dialog -->
-      <link href="${STATIC_URL}css/paas-dialog.css?v=${STATIC_VERSION}" rel="stylesheet">
+      <link href="${STATIC_URL}css/paas-dialog.css?v=${STATIC_VERSION}111" rel="stylesheet">
     </%block>
     <style>
       html,body{
@@ -184,13 +184,14 @@
       <!-- js 国际化 -->
       <script type="text/javascript" src="${SITE_URL}jsi18n/i18n/"></script>
       <!-- paas-dialog -->
-      <script src="${STATIC_URL}js/paas-dialog.js?v=${STATIC_VERSION}"></script>
+      <script src="${STATIC_URL}js/paas-dialog.js?v=${STATIC_VERSION}dfddf"></script>
       <div class="paas-dialog-wrapper">
         <div class="paas-dialog-box">
           <div class="paas-dialog-content">
             <div class="paas-dialog-header">
               <span class="close">&times;</span>
-              <span class="paas-dialog-header-title"></span>
+              <span class="paas-dialog-header-title">${_(u'马上体验全新蓝鲸开发者中心')}
+              </span>
             </div>
             <div class="paas-dialog-body">
               <p style="color: #313238;">${_(u'蓝鲸开发者中心已经推出全新版本，包含以下特性：')}</p>
@@ -216,7 +217,7 @@
         function recommend_paas3(){
           var paas3_mask = new PaasDialog({
             width: '565px',
-            title: gettext('马上体验全新蓝鲸开发者中心'),
+            // title: gettext("马上体验全新蓝鲸开发者中心"),
             url: '${BK_PAAS3_URL}'
           });
           paas3_mask.show();

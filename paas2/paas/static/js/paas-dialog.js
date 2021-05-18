@@ -1,12 +1,10 @@
 class PaasDialog {
     constructor(config = {}){
         this.cancle = config.cancle  || null;
-        this.title = config.title || "";
         this.width = config.width || '80%';
         this.url = config.url || "";
         this.setProps();
         this.init();
-        this.renderTitle();
         this.handle();
     }
     setProps(){
@@ -14,7 +12,6 @@ class PaasDialog {
         this.diaglogContent = document.querySelector(".paas-dialog-content");
         this.closeIcon = document.querySelector(".paas-dialog-header>.close");
         this.maskBody = document.querySelector(".paas-dialog-body");
-        this.titleNode = document.querySelector(".paas-dialog-header-title");
         this.createBtn = document.querySelector(".paas-create-btn");
     }
     init(){
@@ -59,8 +56,5 @@ class PaasDialog {
         let str = temNode.innerHTML;
         temNode = clone_node = null;
         return str;
-    }
-    renderTitle(){
-        this.titleNode.innerHTML = this.title;
     }
 }
