@@ -17,22 +17,9 @@ from django.utils.translation import pgettext, ugettext
 env = environ.Env()
 
 
-def get_value_from_settings_or_environ(key, cast, default):
-    # 从环境变量，djang settings 获取，或使用默认值
-    value = env.get_value(key, cast=cast, default=None)
-    if value is not None:
-        return value
-
-    value = getattr(settings, key, None)
-    if value is not None:
-        return env.parse_value(value, cast)
-
-    return default
-
-
-BK_APIGW_URL = get_value_from_settings_or_environ("BK_APIGW_URL", str, "")
+BK_APIGW_URL = env.str("BK_APIGW_URL", "")
 APIGATEWAY_ENABLED = bool(BK_APIGW_URL)
-MENU_ITEM_BUFFET_HIDDEN = get_value_from_settings_or_environ("MENU_ITEM_BUFFET_HIDDEN", bool, False)
+MENU_ITEM_BUFFET_HIDDEN = env.bool("MENU_ITEM_BUFFET_HIDDEN", False)
 
 
 menu_items = [

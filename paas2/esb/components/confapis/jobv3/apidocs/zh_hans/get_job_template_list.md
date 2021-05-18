@@ -19,7 +19,7 @@
 | last_modify_time_start |  long      | 否     | 最后修改起始时间，Unix 时间戳 |
 | last_modify_time_end   |  long      | 否     | 最后修改结束时间，Unix 时间戳 |
 | start                  |  int       | 否     | 默认0表示从第1条记录开始返回 |
-| length                 |  int       | 否     | 返回记录数量，不传此参数默认返回 20 条 |
+| length                 |  int       | 否     | 单次返回最大记录数，最大1000，不传默认为20 |
 
 ### 请求参数示例
 
@@ -45,20 +45,25 @@
 
 ```json
 {
-  "result": true,
-  "code": 0,
-  "message": "success",
-  "data": [
-    {
-      "bk_biz_id": 1,
-      "id": 100,
-      "name": "test",
-      "creator": "admin",
-      "create_time": 1546272000000,
-      "last_modify_user": "admin",
-      "last_modify_time": 1546272000000
+    "result": true, 
+    "code": 0, 
+    "message": "success", 
+    "data": {
+        "data": [
+            {
+                "bk_biz_id": 1, 
+                "id": 100, 
+                "name": "test", 
+                "creator": "admin", 
+                "create_time": 1546272000000, 
+                "last_modify_user": "admin", 
+                "last_modify_time": 1546272000000
+            }
+        ], 
+        "start": 0, 
+        "length": 20, 
+        "total": 1
     }
-  ]
 }
 ```
 

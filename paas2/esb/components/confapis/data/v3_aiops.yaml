@@ -1,0 +1,890 @@
+- path: /data/v3/aiops/algorithm/
+  name: v3_aiops_get_algorithm_list
+  label: 可选算法列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/algorithm/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/algorithm/
+  name: v3_aiops_create_custom_algorithm
+  label: 创建自定义算法
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/algorithm/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/algorithm/{algorithm_name}/
+  name: v3_aiops_get_custom_algorithm_info
+  label: 获取单个自定义算法
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/algorithm/{algorithm_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/algorithm/{algorithm_name}/
+  name: v3_aiops_update_custom_algorithm
+  label: 更新自定义算法
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/algorithm/{algorithm_name}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/aiops/algorithm/demo/
+  name: v3_aiops_get_algorithm_demo
+  label: 获取算法示例
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/algorithm/demo/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/algorithm/check_field/
+  name: v3_aiops_get_algorithm_check_field
+  label: 检查算法字段匹配情况
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/algorithm/check_field/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/args/validate/
+  name: v3_aiops_validate_args
+  label: 参数的校验, 包括sample_value和 value
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/args/validate/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/enum/run_env/
+  name: v3_aiops_get_run_env_list
+  label: 可用运行环境列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/enum/run_env/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/enum/algorithm_framework/
+  name: v3_aiops_get_algorithm_framework_list
+  label: 可用算法框架列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/enum/algorithm_framework/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/data/type/
+  name: v3_aiops_get_available_data_type_list
+  label: 数据类型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/data/type/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/enum/aggregation_method/
+  name: v3_aiops_available_aggregation_methods
+  label: 可用的聚合函数列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/enum/aggregation_method/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/
+  name: v3_aiops_create_model_info
+  label: 模型创建
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/
+  name: v3_aiops_get_model_info_list
+  label: 模型创建
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/
+  name: v3_aiops_get_model_info
+  label: 更新模型配置
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/
+  name: v3_aiops_update_model_info
+  label: 获取模型信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/
+  name: v3_aiops_delete_model_info
+  label: 删除模型
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/aiops/models/mine/
+  name: v3_aiops_models_mine
+  label: 我的模型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/processing_clusters/
+  name: v3_aiops_get_project_has_permission_processing_clusters
+  label: 项目可用计算集群
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/processing_clusters/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/storage_clusters/
+  name: v3_aiops_get_project_has_permission_storage_clusters
+  label: 项目可用存储集群
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/storage_clusters/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/
+  name: v3_aiops_create_model_experiment
+  label: 创建实验
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/
+  name: v3_aiops_list_AIOps_Model_experiment
+  label: 实验列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/
+  name: v3_aiops_get_aiops_model_experiment_info
+  label: 查询实验信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/
+  name: v3_aiops_update_model_experiment
+  label: 更新实验
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/
+  name: v3_aiops_delete_model_experiment
+  label: 删除实验
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/config/
+  name: v3_aiops_get_AIOps_Model_experiment_config
+  label: 实验配置支持单个步骤配置获取
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/config/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/copy/
+  name: v3_aiops_copy_AIOps_Model_experiment
+  label: 复制实验
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/copy/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/commit/
+  name: v3_aiops_commit_experiment
+  label: 实验提交
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/commit/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/
+  name: v3_aiops_basic_model_list
+  label: 备选模型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/
+  name: v3_aiops_create_basic_model
+  label: 备选模型创建
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/upload/
+  name: v3_aiops_upload_model_file
+  label: 上传备选模型文件
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/upload/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/
+  name: v3_aiops_get_basic_model_info
+  label: 获取备选模型信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/
+  name: v3_aiops_update_basic_Model
+  label: 更新备选模型配置
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/
+  name: v3_aiops_delete_basic_model
+  label: 删除备选模型
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/distribution/
+  name: v3_aiops_basic_model_dataset_distribution
+  label: 备选模型数据集特征分布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/distribution/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/preview/
+  name: v3_aiops_basic_model_dataset_preview
+  label: 备选模型样本集数据预览
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/preview/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/training_status/
+  name: v3_aiops_basic_model_training_result
+  label: 备选模型训练状态列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/training_status/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/evaluation_status/
+  name: v3_aiops_get_basic_models_evaluation_status
+  label: 备选模型评估状态列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/evaluation_status/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_result/
+  name: v3_aiops_basic_model_training_result
+  label: 单个备选模型训练结果
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_result/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/evaluation_result/
+  name: v3_aiops_get_single_basic_model_evaluation_result
+  label: 备选模型评估结果
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/evaluation_result/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/change_disable_status/
+  name: v3_aiops_change_basic_model_training_or_evaluation_disable_status
+  label: 切换备选模型训练/评估禁用状态
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/change_disable_status/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_visualization/
+  name: v3_aiops_training_visualization
+  label: 训练结果可视化
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_visualization/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/evaluation_visualization/
+  name: v3_aiops_evaluation_visualization
+  label: 算法评估可视化
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/evaluation_visualization/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/pre_commit/
+  name: v3_aiops_model_pre_commit_experiment
+  label: 实验提交前查看配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/pre_commit/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/serving_input/
+  name: v3_aiops_model_experiment_serving_input
+  label: 模型定义应用输入列表
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/serving_input/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/training_input/
+  name: v3_aiops_model_experiment_training_input
+  label: 模型定义应用输入列表
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/training_input/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/sample_fields/
+  name: v3_aiops_model_experiment_sample_fields
+  label: 样本集备选的输入字段列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/sample_fields/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/
+  name: v3_aiops_execute_AIOps_Experiment_by_step
+  label: 执行实验步骤
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/status/
+  name: v3_aiops_model_experiment_nodes_execute_status
+  label: 实验步骤状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/status/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/result/
+  name: v3_aiops_model_experiment_nodes_execute_result
+  label: 实验步骤运行结果
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/result/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/node/update_result/
+  name: v3_aiops_model_update_experiment_step_result
+  label: 更新模型工程实验步骤的状态/结果
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/node/update_result/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/releases/{model_release_id}/
+  name: v3_aiops_model_release_info
+  label: 发布模型的配置信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/releases/{model_release_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/release/
+  name: v3_aiops_model_release
+  label: 获取备选模型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/release/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/release/{model_release_id}/
+  name: v3_aiops_model_release_basic_model_info
+  label: 发布模型的配置信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/release/{model_release_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/release/{model_experiment_id}/{basic_model_id}/
+  name: v3_aiops_model_release_basic_model
+  label: 备选模型发布
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/release/{model_experiment_id}/{basic_model_id}/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/release/{model_experiment_id}/{basic_model_id}/config/
+  name: v3_aiops_model_release_basic_model_config
+  label: 获取备选模型发布配置信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/release/{model_experiment_id}/{basic_model_id}/config/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/
+  name: v3_aiops_create_AIOps_SampleSet
+  label: 创建样本集
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/
+  name: v3_aiops_get_AIOps_SampleSet_list
+  label: 可选样本集列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/mine/
+  name: v3_aiops_sample_set_mine
+  label: 获取用户自己的样本集列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/mine/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/result_table/
+  name: v3_aiops_project_has_permission_result_tables
+  label: 获取项目有权限的结果数据列表（包含匹配检查）
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/result_table/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/result_table/{result_table_id}/detail/
+  name: v3_aiops_result_table_detail
+  label: 获取RT基本信息（包含字段匹配）
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/result_table/{result_table_id}/detail/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/result_table/{result_table_id}/groups/
+  name: v3_aiops_sample_set_result_table_groups
+  label: 获取用户自己的样本集列表
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/result_table/{result_table_id}/groups/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/
+  name: v3_aiops_sample_set_detail
+  label: 样本集基本信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/
+  name: v3_aiops_delete_AIOps_SampleSet
+  label: 删除样本集
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/
+  name: v3_aiops_update_AIOps_SampleSet_info
+  label: 样本集基本信息编辑
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/debug_mode/
+  name: v3_aiops_sample_set_debug_mode
+  label: 样本集的调试模式
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/debug_mode/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/distribution/
+  name: v3_aiops_sample_set_distribution
+  label: 样本集distribution接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/distribution/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/label/define/
+  name: v3_aiops_get_sample_set_label_define
+  label: 获取样本集标注定义信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/label/define/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/label/define/
+  name: v3_aiops_sample_set_label_define
+  label: 修改样本集标注字段定义
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/label/define/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/preview/
+  name: v3_aiops_sample_set_preview
+  label: 样本集preview接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/preview/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/result_table/
+  name: v3_aiops_sample_set_submit_result_table
+  label: 提交RT，添加RT到临时数据库中
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/result_table/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/result_table/lines/
+  name: v3_aiops_sample_set_result_table_lines
+  label: 获取样本集已添加的结果数据及曲线（临时表数据）
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/result_table/lines/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/
+  name: v3_aiops_sample_set_delete_rt_curve
+  label: rt或曲线删除接口
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/extract/auto_collect/
+  name: v3_aiops_sample_set_delete_auto_collect
+  label: 自动修改样本集的配置删除接口
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/extract/auto_collect/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/extract/auto_collect/
+  name: v3_aiops_sample_set_extract_auto_collect
+  label: 自动修改样本集的配置添加接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/extract/auto_collect/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/extract/auto_collect/config/
+  name: v3_aiops_sample_set_get_config
+  label: 获取自动修改样本集的配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/extract/auto_collect/config/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/label/mapping/
+  name: v3_aiops_get_label_mapping
+  label: 获取样本集标注映射信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/label/mapping/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/label/mapping/
+  name: v3_aiops_create_label_mapping
+  label: 修改样本集标注字段定义
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/label/mapping/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/submit/apply/
+  name: v3_aiops_sample_set_submit_apply
+  label: 样本集执行提交接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/submit/apply/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/submit/config/
+  name: v3_aiops_sample_set_submit_config
+  label: 修改样本集修改配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/submit/config/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/submit/diff/
+  name: v3_aiops_sample_set_submit_diff
+  label: 样本集提交差异信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/submit/diff/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/submit/revert/
+  name: v3_aiops_sample_set_submit_revert
+  label: 放弃样本集修改
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/submit/revert/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/submit/status/
+  name: v3_aiops_sample_set_submit_status
+  label: 提交样本集状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/submit/status/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/submit/update_storage/
+  name: v3_aiops_sample_set_submit_update_storage
+  label: 修改样本集修改存储配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/submit/update_storage/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/curve/
+  name: v3_aiops_get_AIOps_SampleSet_curve_list
+  label: 样本曲线列表和样本数据概览
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/curve/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/scenes/
+  name: v3_aiops_scenes
+  label: v3_aiops_scenes
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/scenes/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/templates/
+  name: v3_aiops_templates
+  label: 模型模版列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/templates/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/operation_log/
+  name: v3_aiops_get_operation_log
+  label: 获取模型/样本集操作列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/operation_log/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/operation_log/filter_candidate/
+  name: v3_aiops_get_operation_log_filter_candidate
+  label: 获取操作记录候选过滤条件
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/operation_log/filter_candidate/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/user_log/
+  name: v3_aiops_get_user_debug_logs
+  label: 获取操作记录候选过滤条件
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/user_log/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/serving/
+  name: v3_aiops_serving_create
+  label: 创建应用实例
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/serving/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/serving/{data_processing_id}/
+  name: v3_aiops_serving_retrieve
+  label: 当前模型实例的应用信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/serving/{data_processing_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/serving/overview/
+  name: v3_aiops_serving_overview
+  label: 模型当前应用状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/serving/overview/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/serving/models/
+  name: v3_aiops_list_serving_model
+  label: 可以应用的模型列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/serving/models/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/serving/debug/
+  name: v3_aiops_serving_model_debug
+  label: 应用中的模型调试
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/serving/debug/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/serving/result_table/{result_table_id}/fields/
+  name: v3_aiops_serving_result_table_fields
+  label: 应用输入rt的fields
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/serving/result_table/{result_table_id}/fields/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/lease/take/
+  name: v3_aiops_take_AIOps_Lease
+  label: 获取租约锁
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/lease/take/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/lease/status/
+  name: v3_aiops_AIOps_Lease_status
+  label: 当前租约锁状态
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/lease/status/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/lease/terminate/
+  name: v3_aiops_terminate_AIOps_Lease
+  label: 解除租约锁
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/lease/terminate/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/visualizations/
+  name: v3_aiops_get_aiops_visualizations
+  label: 通用可视化方案查询接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/visualizations/
+  dest_http_method: POST
+  is_hidden: true
