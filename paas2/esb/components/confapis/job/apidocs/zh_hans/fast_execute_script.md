@@ -15,7 +15,7 @@
 | task_name      |  string    | 否     | 自定义作业名称 |
 | script_content |  string    | 否     | 脚本内容Base64，如果同时传了script_id和script_content，则script_id优先 |
 | script_param   |  string    | 否     | 脚本参数Base64。注意：如果有多个参数，比如&#34;param1 param2&#34;这种，需要对&#34;param1 param2&#34;整体进行base64编码，而不是对每个参数进行base64编码再拼接起来 |
-| script_timeout |  long       | 否     | 脚本超时时间，秒。默认1000，取值范围60-86400 |
+| script_timeout |  long       | 否     | 脚本超时时间，秒。默认7200，取值范围60-86400 |
 | account        |  string    | 是     | 执行帐号名/别名 |
 | is_param_sensitive |  int   | 否     | 敏感参数将会在执行详情页面上隐藏, 0:不是（默认），1:是 |
 | script_type    |  int       | 否     | 脚本类型：1(shell脚本)、2(bat脚本)、3(perl脚本)、4(python脚本)、5(Powershell脚本) |

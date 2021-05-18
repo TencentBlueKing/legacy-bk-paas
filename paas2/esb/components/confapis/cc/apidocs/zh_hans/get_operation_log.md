@@ -30,6 +30,7 @@
 | resource_name  | string       | 否   | 资源名称                   |
 | category       | string       | 否   | 前端使用的资源分类         |
 | label          | string array | 否   | 资源标签                   |
+| fuzzy_query    | bool         | 否   | 是否使用模糊查询对资源名称进行查询，**模糊查询效率低，性能差** |
 
 
 ### 请求参数示例
@@ -63,7 +64,8 @@
     },
     "start": 0,
     "limit": 10,
-    "sort": "-operation_time"
+    "sort": "-operation_time",
+    "fuzzy_query": false
 }
 ```
 

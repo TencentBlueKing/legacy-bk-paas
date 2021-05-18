@@ -15,7 +15,7 @@ Fast execute script
 | task_name      |  string    | No     | custom task name |
 | script_content |  string    | No     | Script content with base64. If both pass script_id and script_content priority is script_id |
 | script_param   |  string    | No     | Script params with base64. Note: If there are multiple parameters, such as &#34;param1 param2&#34;, you need to base64 encode the whole &#34;param1 param2&#34; instead of base64 encoding each parameter. |
-| script_timeout |  int       | No     | Timeout in seconds, 1000 default, the range 60-86400 |
+| script_timeout |  int       | No     | Timeout in seconds, 7200 default, the range 60-86400 |
 | account        |  string    | Yes     | OS account name, or &#39;Account Alias&#39; in [Account Management] Features |
 | is_param_sensitive |  int   | No     | Hides the parameters on the web page. 0:no, 1:yes |
 | script_type    |  int       | No     | script type: 1.shell; 2.bat; 3.perl; 4.python; 5.powershell |
