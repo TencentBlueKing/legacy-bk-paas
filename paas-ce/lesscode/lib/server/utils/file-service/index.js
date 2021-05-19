@@ -1,10 +1,14 @@
 const fs = require('fs')
 const request = require('request')
 const path = require('path')
-// const { logger } = require('../../logger')
 
-const config = require('../../conf/bk-repo')
-
+// bk-repo.js配置文件不存在时赋值空对象
+let config
+try {
+    config = require('../../conf/bk-repo')
+} catch(_) {
+    config = {}
+}
 const headers = {
     'Authorization': 'Basic ' + Buffer.from(config.BKREPO_USERNAME + ':' + config.BKREPO_PASSWORD).toString('base64')
 }

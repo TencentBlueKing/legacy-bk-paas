@@ -14,7 +14,14 @@ import PageComp from './entities/page-comp'
 import Page from './entities/page'
 import Comp from './entities/comp'
 import Version from './entities/version'
-const npmConf = require('../conf/npm')
+
+// npm.js配置文件不存在时赋值空对象
+let npmConf
+try {
+    npmConf = require('../conf/npm')
+} catch(_) {
+    npmConf = {}
+}
 
 export const getAll = async function (params) {
     const res = await getRepository(PageComp).find(
