@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.2
+    - update: bugfix for python3/upgrade gevent to 1.15.0
+
 # 2.13.1
     - update: sync with newest branch
 
