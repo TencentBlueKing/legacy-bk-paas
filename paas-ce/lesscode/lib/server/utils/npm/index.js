@@ -5,7 +5,14 @@
 const fse = require('fs-extra')
 const path = require('path')
 const { spawn, exec } = require('child_process')
-const config = require('../../conf/npm')
+
+// npm.js配置文件不存在时赋值空对象
+let config
+try {
+    config = require('../../conf/npm')
+} catch(_) {
+    config = {}
+}
 
 const npmLogin = (cmd, userName, passWord, email) => {
     return new Promise((resolve, reject) => {

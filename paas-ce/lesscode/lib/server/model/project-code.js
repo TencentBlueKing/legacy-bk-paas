@@ -16,8 +16,14 @@ import VariableModel from './variable'
 import * as PageCompModel from './page-comp'
 import * as ComponentModel from './component'
 import { uuid, walkGrid } from '../util'
-const npmConf = require('../conf/npm')
 const httpConf = require('../conf/http')
+// npm.js配置文件不存在时赋值空对象
+let npmConf
+try {
+    npmConf = require('../conf/npm')
+} catch(_) {
+    npmConf = {}
+}
 
 const fs = require('fs')
 const path = require('path')

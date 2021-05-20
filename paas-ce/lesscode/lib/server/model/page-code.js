@@ -15,7 +15,13 @@ import VueCodeModel from './vue-code'
 import { RequestContext } from '../middleware/request-context'
 
 const httpConf = require('../conf/http')
-const npmConf = require('../conf/npm')
+// npm.js配置文件不存在时赋值空对象
+let npmConf
+try {
+    npmConf = require('../conf/npm')
+} catch(_) {
+    npmConf = {}
+}
 
 class PageCode {
     targetData = []

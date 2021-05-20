@@ -15,7 +15,7 @@
 
 #### lesscode/lib/server/conf/db-migrate.json (用于自动执行db导入和变更)
 
-依照 [db-migrate.json](../../lib/server/conf/db-migrate.json) 的注释填写本地开发和线上运行时的数据库的配置信息。
+在 `lesscode/lib/server/conf` 中新建 `db-migrate.json` 文件（复制 `db-migrate.json.example`，并删除 `.example`即可）。然后依照 [db-migrate.json.example](../../lib/server/conf/db-migrate.json.example) 的注释填写本地开发和线上运行时的数据库的配置信息。
 
 #### http.js (蓝鲸社区版相关配置)
 
@@ -23,8 +23,8 @@
 
 #### bk-repo.js (蓝鲸制品库相关配置，用到自定义组件功能时需填写，未用到则可以忽略此文件)
 
-依照 [bk-repo.js](../../lib/server/conf/bk-repo.js) 的注释填写本地开发和线上运行时蓝鲸制品库的配置信息。
+在 `lesscode/lib/server/conf` 中新建 `bk-repo.js` 文件（复制 `bk-repo.js.example`，并删除 `.example`即可）。然后依照 [bk-repo.js.example](../../lib/server/conf/bk-repo.js.example) 的注释填写本地开发和线上运行时蓝鲸制品库的配置信息。
 
 #### npm.js (npm镜像仓库配置，用到自定义组件功能时需填写，未用到则可以忽略此文件)
 
-依照 [npm.js](../../lib/server/conf/npm.js) 的注释填写本地开发和线上运行时的npm镜像仓库的配置信息。
+在 `lesscode/lib/server/conf` 中新建 `npm.js` 文件（复制 `npm.js.example`，并删除 `.example`即可）。然后依照 [npm.js.example](../../lib/server/conf/npm.js.example) 的注释填写本地开发和线上运行时的npm镜像仓库的配置信息。
