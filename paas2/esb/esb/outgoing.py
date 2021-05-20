@@ -277,7 +277,8 @@ class BasicHttpClient(object):
         # Add prefix for host if not given, default to http:
         if not host.startswith("http"):
             host = "http://%s" % host
-        return urljoin(host, path)
+
+        return urljoin(force_text(host), force_text(path))
 
     @staticmethod
     def format_resp(resp_text, encoding="utf-8", response_type="json"):
@@ -326,7 +327,7 @@ class HttpClient(BasicHttpClient):
                 jwt_client = JWTClient(
                     BKApp(self.component.request.app_code, verified=True), self.component.current_user
                 )
-                bkapi_headers["X-Bkapi-JWT"] = jwt_client.encode()
+                bkapi_headers["X-Bkapi-JWT"] = force_text(jwt_client.encode())
 
         request_headers = {}
         request_headers.update(self.get_default_headers())
@@ -514,7 +515,7 @@ class RequestHelperClient(BasicHttpClient):
             # for SOAPTimeoutError
             if isinstance(e, socket.timeout):
                 request_exception = ReadTimeout(
-                    "Third-party system interface response timeout, " "did not return data in %s seconds" % timeout
+                    "Third-party system interface response timeout, did not return data in %s seconds" % timeout
                 )
             else:
                 request_exception = e

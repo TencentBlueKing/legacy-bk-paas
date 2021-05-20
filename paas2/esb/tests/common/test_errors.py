@@ -11,7 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 import pytest
 
-from common.errors import BaseException
+from common.errors import BaseException, RequestThirdPartyException, RequestSSLException
 
 
 class TestBaseException(object):
@@ -20,3 +20,21 @@ class TestBaseException(object):
             raise BaseException("test error")
 
         assert err.value.message == "test error"
+
+
+class TestRequestThirdPartyException(object):
+    def test_get_message(self):
+        ex = RequestThirdPartyException(Exception("test"), "TEST", "echo")
+
+        assert str(ex) != ""
+        assert ex.get_message() != ""
+
+
+class TestRequestSSLException(object):
+    def test_get_message(self):
+        raw_exc = Exception("test")
+        raw_exc.cert = ("path1", "path2")
+        raw_exc.SSL_ROOT_DIR = "/path/to/ssl"
+        ex = RequestSSLException(raw_exc, "TEST", "echo")
+
+        assert ex.get_message() != ""

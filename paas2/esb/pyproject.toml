@@ -40,6 +40,7 @@ pytest = "4.6.11"
 future = "0.18.2"
 
 [tool.poetry.dev-dependencies]
+pytest-mock = "2.0.0"
 flake8 = "*"
 ipython = "*"
 mock = "3.0.5"

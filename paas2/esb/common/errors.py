@@ -46,7 +46,7 @@ class RequestThirdPartyException(BaseException):
         return (
             u"Component request third-party system [%s] interface [%s] error: %s, "
             "please try again later or contact component developer to handle this"
-            % (self.system_name, self.interface_name, self.raw_exc.message)
+            % (self.system_name, self.interface_name, self.raw_exc)
         )
 
     def get_message(self):
@@ -56,7 +56,7 @@ class RequestThirdPartyException(BaseException):
         return (
             u"Component request third-party system [%s] interface [%s] error: %s, "
             "please try again later or contact component developer to handle this"
-            % (self.system_name, self.interface_name, self.raw_exc.message)
+            % (self.system_name, self.interface_name, self.raw_exc)
         )
 
 

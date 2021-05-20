@@ -12,7 +12,8 @@ specific language governing permissions and limitations under the License.
 import pytest
 from django.utils.encoding import force_bytes
 
-from esb.outgoing import encode_dict
+from esb.utils import SmartHost
+from esb.outgoing import encode_dict, BasicHttpClient
 
 
 @pytest.mark.parametrize(
@@ -39,3 +40,52 @@ from esb.outgoing import encode_dict
 def test_encode_dict(data, expected):
     result = encode_dict(data)
     assert result == expected
+
+
+class TestBasicHttpClient(object):
+    def test_request_by_url(self, mocker):
+        def side_effect(*args, **kwargs):
+            return args, kwargs
+
+        mocker.patch(
+            "esb.outgoing.BasicHttpClient.request",
+            side_effect=side_effect,
+        )
+
+        client = BasicHttpClient()
+        args, kwargs = client.request_by_url("GET", "http://demo.example.com/test/", k1="v1")
+        assert args == ("GET", "http://demo.example.com", "/test/")
+        assert kwargs == {"k1": "v1"}
+
+    @pytest.mark.parametrize(
+        "host, path, use_test_env, expected",
+        [
+            (
+                "http://demo.example.com",
+                "/test/",
+                False,
+                "http://demo.example.com/test/",
+            ),
+            (
+                "demo.example.com",
+                "/test/",
+                False,
+                "http://demo.example.com/test/",
+            ),
+            (
+                SmartHost(host_prod="https://demo.example.com"),
+                "/test/",
+                False,
+                "https://demo.example.com/test/",
+            ),
+            (
+                SmartHost(host_prod="", host_test="https://demo.example.com"),
+                "/test/",
+                True,
+                "https://demo.example.com/test/",
+            ),
+        ]
+    )
+    def test_make_url(self, host, path, use_test_env, expected):
+        result = BasicHttpClient.make_url(host, path, use_test_env)
+        assert result == expected
