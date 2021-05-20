@@ -10,7 +10,7 @@ pymysql==0.6.7
 redis==2.10.5
 PyYAML==5.1
 Pillow==6.2.2
-gevent==1.1.2
+gevent==1.5.0
 pytz==2016.6.1
 python-dateutil==2.8.1
 boto==2.43.0
