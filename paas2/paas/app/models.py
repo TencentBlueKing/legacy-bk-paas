@@ -122,7 +122,7 @@ class App(models.Model):
     # 是否作为SaaS服务，即通过直接上传包部署
     is_saas = models.BooleanField(_l(u"是否为SaaS服务"), default=False, help_text=_l(u"SaaS服务，即通过直接上传包部署"))
     # 应用图标
-    logo = models.ImageField(upload_to=APP_LOGO_IMG_RELATED, blank=True, null=True)
+    logo = models.ImageField(upload_to=APP_LOGO_IMG_RELATED, blank=True, null=True, max_length=500)
 
     # NOTE: 不要再加新的字段了, 新需求考虑额外一对一的表是否能解决问题
     # NOTE: 桌面相关的应该提取独立表的

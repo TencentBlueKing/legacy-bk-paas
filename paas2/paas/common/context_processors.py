@@ -40,4 +40,10 @@ def site_settings(request):
         # 本地 css 后缀名
         "CSS_SUFFIX": settings.CSS_SUFFIX,
         "EXTERNAL_THEME": settings.EXTERNAL_THEME,
+        # PaaS3.0 的访问地址
+        "BK_PAAS3_URL": settings.BK_PAAS3_URL,
+        # API 网关访问地址
+        "BK_APIGW_URL": settings.BK_APIGW_URL,
+        # API 网关文档中心地址
+        "BK_APIGW_DOC_URL": settings.BK_APIGW_DOC_URL,
     }

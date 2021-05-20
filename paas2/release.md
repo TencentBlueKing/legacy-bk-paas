@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.12.12
+    - add: support jump to PaaS3.0
+    - change: the max_length of the app logo field is changed to 500
+
 # 2.12.11
     - bugfix: paas app_log missing page div while pagination
 

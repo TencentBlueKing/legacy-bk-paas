@@ -36,6 +36,8 @@
       <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/base.${CSS_SUFFIX}?v=${STATIC_VERSION}">
       <!--select2-->
       <link href="${STATIC_URL}assets/select2-3.5.3/select2.css?v=1" rel="stylesheet">
+      <!-- paas-dialog -->
+      <link href="${STATIC_URL}css/paas_dialog.${CSS_SUFFIX}?v=${STATIC_VERSION}" rel="stylesheet">
     </%block>
     <style>
       html,body{
@@ -69,6 +71,10 @@
                     <input type='hidden' name='csrfmiddlewaretoken' value='${csrf_token}'>
                     <div class="account">
                         <div class="account_meta account_info account_meta_primary">
+                              % if BK_PAAS3_URL:
+                              <a href="${BK_PAAS3_URL}" target="_blank" class="mr40" style="font-size:16px;color:#459ae9;">${_(u'体验新版开发者中心')}</a>
+                              % endif
+
                               % if EDITION == "ee":
                               <a href="#" class="nickname" title="${request.user.username if request.user and request.user.username else ''}">${request.user.username if request.user and request.user.username else ''}</a>
                                <a href="#">
@@ -177,6 +183,45 @@
       <script src="${STATIC_URL}js/paas_base.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
       <!-- js 国际化 -->
       <script type="text/javascript" src="${SITE_URL}jsi18n/i18n/"></script>
+      <!-- paas-dialog -->
+      <script src="${STATIC_URL}js/paas_dialog.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+      <div class="paas-dialog-wrapper">
+        <div class="paas-dialog-box">
+          <div class="paas-dialog-content">
+            <div class="paas-dialog-header">
+              <span class="close">&times;</span>
+              <span class="paas-dialog-header-title">${_(u'马上体验全新蓝鲸开发者中心')}
+              </span>
+            </div>
+            <div class="paas-dialog-body">
+              <p style="color: #313238;">${_(u'蓝鲸开发者中心已经推出全新版本，包含以下特性：')}</p>
+              <ul class="content">
+                <li class="item">1. ${_(u'全新设计的用户界面，给您更友好的体验')}</li>
+                <li class="item">2. ${_(u'支持使用 Node.js、Python 等语言开发应用')}</li>
+                <li class="item">3. ${_(u'支持前后端分离的开发模式')}</li>
+                <li class="item">4. ${_(u'支持自定义后台进程及启动命令')}</li>
+                <li class="item">5. ${_(u'支持使用对象存储（bk-repo） 等“增强服务”')}</li>
+                <li class="item">6. ${_(u'全面升级的应用开发框架')}</li>
+              </ul>
+              <p style="margin-bottom: 20px; font-weight: bold; color: #313238;">
+                ${_(u'当前旧版已不再支持新应用创建，感谢您的支持。')}
+              </p>
+            </div>
+            <div class="paas-dialog-foot">
+              <button class="paas-create-btn">${_(u'去新版创建应用')}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        function recommend_paas3(){
+          var paas3_mask = new PaasDialog({
+            width: '565px',
+            url: '${BK_PAAS3_URL}'
+          });
+          paas3_mask.show();
+        }
+      </script>
       <!-- 兼容性设置 -->
       <!--[if lt IE 6]>\xe8\x93\x9d\xe9\xb2\xb8\xe6\x99\xba\xe8\x90\xa5\x20\xe7\x89\x88\xe6\x9d\x83\xe6\x89\x80\xe6\x9c\x89<![endif]-->
       <%block name="base_app">
