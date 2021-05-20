@@ -232,7 +232,7 @@
       var pcheck = 0;
     }
     //分页请求
-    var url = '${SITE_URL}log/search/${app_code}/?log_type='+log_type+'&run_mode='+run_mode+'&log_level='+log_level+'&msg='+encodeURIComponent(msg)+'&log_time='+log_time+'&func_name='+ func_name+'&pcheck='+pcheck+'&order='+order+'&is_down=1';
+    var url = '${SITE_URL}log/search/${app_code}/?log_type='+log_type+'&run_mode='+run_mode+'&log_level='+log_level+'&msg='+encodeURIComponent(msg)+'&log_time='+log_time+'&log_time_begin='+encodeURIComponent(log_time_begin)+'&log_time_end='+encodeURIComponent(log_time_end)+'&func_name='+ func_name+'&pcheck='+pcheck+'&order='+order+'&is_down=1';
     window.open(url);
   })
 
