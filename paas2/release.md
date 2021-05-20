@@ -1,8 +1,14 @@
 Release Log
 ===============================
-# 2.12.12
-    - add: support jump to PaaS3.0
+# 2.12.13
+    - add: Compatible with PaaS3.0
     - change: the max_length of the app logo field is changed to 500
+
+# 2.12.12
+    - esb: Compatible with PaaS3.0
+    - esb: update configuration components CC, JOBV3, BKDATA, NODEMAN
+    - esb: BKDATA add anew module:aiops
+    - esb: supports returning SOPS's own error code
 
 # 2.12.11
     - bugfix: paas app_log missing page div while pagination
