@@ -14,6 +14,7 @@ list difference between the service template and service instances (v3.9.19)
 | ---------- | --------- | -------- | ------------------------------------------------------------ |
 | bk_biz_id  | int64       | Yes      | Business ID                                                  |
 |bk_module_id|int64 array|Yes|module id array|
+|partial_compare|bool|No|whether need compare partial and finish in advance，default is false|
 
 ### Request Parameters Example
 
@@ -23,7 +24,8 @@ list difference between the service template and service instances (v3.9.19)
         60,
         61
     ],
-    "bk_biz_id": 3
+    "bk_biz_id": 3,
+    "partial_compare": false
 }
 ```
 

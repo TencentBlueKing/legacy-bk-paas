@@ -16,6 +16,7 @@ search instance by the associated instance
 | bk_supplier_account | string     | Yes     | Supplier account,please fill '0' by independent deployment  |
 | page                | object     | Yes     | Page parameters                    |
 | condition           | object     | No     | the associated model instance condition                    |
+| time_condition           | object     | No     | the model instance time condition                    |
 | fields              | map | No     | the model attribution fields to return,key is Object ID，value is the fields to return |
 
 #### page
@@ -32,7 +33,22 @@ search instance by the associated instance
 |-----------|------------|--------|------------|
 | field     |string      |Yes      | Value of model field                                                |
 | operator  |string      |Yes      | value : $regex $eq $ne                                           |
-| value     |string      |Yes      | Value of model field                                   |          
+| value     |string      |Yes      | Value of model field                                   |
+
+#### time_condition
+
+| Field | Type   | Required | Description                          |
+| ----- | ------ | -------- | ------------------------------------ |
+| oper  | string | Yes      | operator, only support "and" for now |
+| rules | array  | Yes      | search time condition                |
+
+#### rules
+
+| Field | Type   | Required | Description                                   |
+| ----- | ------ | -------- | --------------------------------------------- |
+| field | string | Yes      | Value of model field                          |
+| start | string | Yes      | start time in the form of yyyy-MM-dd hh:mm:ss |
+| end   | string | Yes      | end time in the form of yyyy-MM-dd hh:mm:ss   |
 
 
 ### Request Parameters Example
@@ -60,6 +76,16 @@ search instance by the associated instance
                 "field": "operator",
                 "operator": "$regex",
                 "value": "admin"
+            }
+        ]
+    },
+    "time_condition": {
+        "oper": "and",
+        "rules": [
+            {
+                "field": "create_time",
+                "start": "2021-05-13 01:00:00",
+                "end": "2021-05-14 01:00:00"
             }
         ]
     }

@@ -14,6 +14,7 @@
 |---|---|---|---|
 | bk_biz_id  | int64       | Yes      | 业务ID |
 |bk_module_ids|int64 array|Yes|模块ID列表|
+|partial_compare|bool|No|是否部分比较而提前结束，一旦有单个模块与服务模版有差异则提前结束比较过程，默认为否|
 
 
 ### 请求参数示例
@@ -24,7 +25,8 @@
         60,
         61
     ],
-    "bk_biz_id": 3
+    "bk_biz_id": 3,
+    "partial_compare": false
 }
 ```
 

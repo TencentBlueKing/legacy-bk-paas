@@ -116,18 +116,26 @@
         "name": "xxx",
         "file_info": {
           "file_source": [
-            {
-              "file_list": [
-                "/tmp/REGEX:[a-z]*.txt"
-              ],
-              "server": {
-                "variable": "servers"
-              },
-              "account": {
-                "id": 1,
-                "name": "root"
-              }
-            }
+                {
+                  "file_list": [
+                    "/tmp/REGEX:[a-z]*.txt"
+                  ],
+                  "server": {
+                    "variable": "servers"
+                  },
+                  "account": {
+                    "id": 1,
+                    "name": "root"
+                  },
+                  "file_type": 1
+                },
+                {
+                 "file_list": [
+                     "testbucket/test.txt"
+                 ],
+                 "file_type": 3,
+                 "file_source_id": 1
+                }
           ],
           "file_destination": {
             "path": "/tmp/",
@@ -273,6 +281,8 @@
 | file_list       | array   | 源文件的绝对路径数组，支持多个文件 |
 | account         | object  | 执行帐号名/别名 |
 | server          | object  | 目标服务器 |
+| file_type        | int     | 文件源类型，1：服务器文件，2：本地文件，3：第三方文件源文件 |
+| file_source_id  | int     | 文件源类型为第三方文件源文件时的第三方文件源Id |
 
 #### file_destination
 | 字段            | 类型     | 描述      |
