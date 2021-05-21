@@ -19,7 +19,7 @@ env = environ.Env()
 
 BK_APIGW_URL = env.str("BK_APIGW_URL", "")
 APIGATEWAY_ENABLED = bool(BK_APIGW_URL)
-MENU_ITEM_BUFFET_HIDDEN = env.bool("MENU_ITEM_BUFFET_HIDDEN", False)
+BK_ESB_MENU_ITEM_BUFFET_HIDDEN = env.bool("BK_ESB_MENU_ITEM_BUFFET_HIDDEN", False)
 
 
 menu_items = [
@@ -36,7 +36,7 @@ menu_items = [
     },
 ]
 
-if not MENU_ITEM_BUFFET_HIDDEN:
+if not BK_ESB_MENU_ITEM_BUFFET_HIDDEN:
     menu_items += [
         {
             "name": "buffet_manager",

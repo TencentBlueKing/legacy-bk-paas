@@ -12,7 +12,7 @@ specific language governing permissions and limitations under the License.
 
 from django.shortcuts import render
 
-from esb.configs.default import menu_items, BK_APIGW_URL, APIGATEWAY_ENABLED, MENU_ITEM_BUFFET_HIDDEN
+from esb.configs.default import menu_items, BK_APIGW_URL, APIGATEWAY_ENABLED
 
 
 class TemplateRenderMixin(object):
@@ -21,7 +21,6 @@ class TemplateRenderMixin(object):
             "menu_items": menu_items,
             "BK_APIGW_URL": BK_APIGW_URL,
             "APIGATEWAY_ENABLED": APIGATEWAY_ENABLED,
-            "MENU_ITEM_BUFFET_HIDDEN": MENU_ITEM_BUFFET_HIDDEN,
         }
 
     def render(self, request, template_name, context=None, *args, **kwargs):
