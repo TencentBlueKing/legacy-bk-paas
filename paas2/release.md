@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.14
+    - esb: rename env MENU_ITEM_BUFFET_HIDDEN to BK_ESB_MENU_ITEM_BUFFET_HIDDEN
+
 # 2.12.13
     - add: Compatible with PaaS3.0
     - change: the max_length of the app logo field is changed to 500
