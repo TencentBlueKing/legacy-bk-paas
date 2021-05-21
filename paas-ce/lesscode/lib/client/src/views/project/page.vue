@@ -2,7 +2,9 @@
     <section v-bkloading="{ isLoading: isLoading }" style="height: 100%">
         <main class="pages pages-content" v-show="!isLoading">
             <div class="pages-head">
-                <bk-button theme="primary" @click="handleCreate">新建</bk-button>
+                <bk-button theme="primary" @click="handleCreate">新建页面</bk-button>
+                <bk-button @click="handlePreviewProject">预览项目</bk-button>
+                <bk-button @click="handleDownLoadProject">源码下载</bk-button>
                 <div class="extra">
                     <bk-input
                         :style="{ width: '400px' }"
@@ -20,7 +22,7 @@
                     <div class="page-item" v-for="(page, index) in renderList" :key="index">
                         <div class="item-bd">
                             <div class="preview" @click="handleEditPage(page.id)">
-                                <img v-if="page.previewImg" :src="page.previewImg" alt="页面缩略预览">
+                                <img v-if="page.previewImg" :src="getPreviewImg(page.previewImg)" alt="页面缩略预览">
                                 <div class="empty-preview-img" v-else>页面为空</div>
                                 <div class="mask">
                                     <div class="operate-btns">
@@ -41,10 +43,10 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(page.id)">
-                                        <li><a href="javascript:;" @click="handleDownloadSource(page.sourceCode)">下载源码</a></li>
+                                        <li><a href="javascript:;" @click="handleDownloadSource(page.content, page.id, page.lifeCycle)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="handleRename(page)">重命名</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(page)">复制</a></li>
-                                        <li><a href="javascript:;" @click="handleDelete(page)">删除</a></li>
+                                        <li><a href="javascript:;" @click="handleDelete(page)" :class="{ 'g-no-permission': userPerm.roleId === 2 }" v-bk-tooltips="{ content: '无删除权限', placements: ['right'], disabled: userPerm.roleId === 1 }">删除</a></li>
                                     </ul>
                                 </bk-dropdown-menu>
                             </div>
@@ -58,14 +60,17 @@
                     </bk-exception>
                 </div>
             </div>
-            <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :reflash-list="getPageList"></page-dialog>
+            <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :refresh-list="getPageList"></page-dialog>
+            <download-dialog ref="downloadDialog"></download-dialog>
         </main>
     </section>
 </template>
 
 <script>
-    import pagePreivewImg from '@/images/page-demo.png'
+    import { mapGetters } from 'vuex'
+    import preivewErrImg from '@/images/preview-error.png'
     import pageDialog from '@/components/project/page-dialog'
+    import downloadDialog from '@/views/system/components/download-dialog'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
@@ -74,7 +79,8 @@
 
     export default {
         components: {
-            pageDialog
+            pageDialog,
+            downloadDialog
         },
         data () {
             return {
@@ -83,13 +89,20 @@
                 keyword: '',
                 renderList: [],
                 pageList: [],
-                pagePreivewImg,
                 isLoading: true
             }
         },
         computed: {
+            ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('project', ['currentProject']),
             projectId () {
                 return this.$route.params.projectId
+            },
+            pageId () {
+                return this.$route.params.pageId || ''
+            },
+            userPerm () {
+                return this.$store.getters['member/userPerm'] || { roleId: 2 }
             }
         },
         watch: {
@@ -122,28 +135,41 @@
                 this.action = 'create'
                 this.$refs.pageDialog.dialog.formData.id = undefined
                 this.$refs.pageDialog.dialog.formData.pageName = ''
+                this.$refs.pageDialog.dialog.formData.pageCode = ''
+                this.$refs.pageDialog.dialog.formData.pageRoute = ''
                 this.$refs.pageDialog.dialog.visible = true
+            },
+            handlePreviewProject () {
+                window.open(`/preview/project/${this.projectId}/`, '_blank')
             },
             async handleCopy (page) {
                 this.action = 'copy'
                 this.$refs.pageDialog.dialog.formData.id = page.id
                 this.$refs.pageDialog.dialog.formData.pageName = `${page.pageName}-copy`
+                this.$refs.pageDialog.dialog.formData.pageCode = ''
+                this.$refs.pageDialog.dialog.formData.pageRoute = ''
                 this.$refs.pageDialog.dialog.visible = true
             },
-            async handleDownloadSource (code) {
-                if (!code) {
+            async handleDownloadSource (targetData, pageId, lifeCycle) {
+                if (!targetData) {
                     this.$bkMessage({
                         theme: 'error',
                         message: '该页面为空页面，无源码生成'
                     })
                     return
                 }
-                this.$store.dispatch('vueCode/formatCode', {
-                    code
+                console.log('页面列表的下载')
+                this.$store.dispatch('vueCode/getPageCode', {
+                    targetData: JSON.parse(targetData),
+                    projectId: this.projectId,
+                    lifeCycle,
+                    pageId,
+                    layoutContent: this.pageLayout.layoutContent,
+                    from: 'download_page'
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
                     const blob = new Blob([res])
-                    downlondEl.download = 'magicbox-vue-layout.vue'
+                    downlondEl.download = `bklesscode-${pageId}.vue`
                     downlondEl.href = URL.createObjectURL(blob)
                     downlondEl.style.display = 'none'
                     document.body.appendChild(downlondEl)
@@ -155,10 +181,14 @@
                 this.action = 'rename'
                 this.currentName = page.pageName
                 this.$refs.pageDialog.dialog.formData.pageName = page.pageName
+                this.$refs.pageDialog.dialog.formData.pageCode = page.pageCode
+                this.$refs.pageDialog.dialog.formData.pageRoute = page.pageRoute
                 this.$refs.pageDialog.dialog.formData.id = page.id
                 this.$refs.pageDialog.dialog.visible = true
             },
             handleDelete (page) {
+                if (this.userPerm.roleId === 2) return
+
                 this.$bkInfo({
                     title: '确认删除?',
                     subTitle: `确认删除  “页面${page.pageName}”?`,
@@ -189,7 +219,12 @@
                     })
                     return
                 }
-                window.open(`/project/${this.projectId}/page/${page.id}/preview?type=fromList`, '_blank')
+                window.open(`/preview/project/${this.projectId}/?pageCode=${page.pageCode}`, '_blank')
+            },
+            handleDownLoadProject () {
+                this.$refs.downloadDialog.isShow = true
+                this.$refs.downloadDialog.projectId = this.projectId
+                this.$refs.downloadDialog.projectName = this.currentProject.projectName
             },
             handleSearch (clear = false) {
                 if (clear) {
@@ -204,6 +239,12 @@
             },
             getRelativeTime (time) {
                 return dayjs(time).fromNow() || ''
+            },
+            getPreviewImg (previewImg) {
+                if (previewImg && previewImg.length > 30) {
+                    return previewImg
+                }
+                return preivewErrImg
             }
         }
     }
@@ -220,6 +261,13 @@
         .pages-head {
             display: flex;
             margin-bottom: 17px;
+
+            button {
+                width: 86px;
+                &:not(:first-child) {
+                    margin-left: 10px;
+                }
+            }
 
             .extra {
                 flex: none;
@@ -246,8 +294,8 @@
                 .page-item {
                     position: relative;
                     flex: none;
-                    width: 312px;
-                    height: 240px;
+                    width: 304px;
+                    height: 234px;
                     margin: 0 14px 30px 0;
                     padding: 6px;
                     background: #fff;
@@ -291,8 +339,8 @@
                     .item-bd {
                         flex: none;
                         position: relative;
-                        width: 300px;
-                        height: 166px;
+                        width: 292px;
+                        height: 158px;
                         background: #fff;
                         border-radius: 4px 4px 0px 0px;
                     }

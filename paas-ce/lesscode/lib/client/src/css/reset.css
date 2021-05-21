@@ -30,8 +30,20 @@ li {
     list-style: none;
 }
 
+dl,
+dt,
+dd,
+p {
+    margin: 0;
+    padding: 0;
+}
+
 a {
     text-decoration: none;
+}
+
+button {
+    outline: none;
 }
 
 table {

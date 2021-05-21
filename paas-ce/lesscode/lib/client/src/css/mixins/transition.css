@@ -1,0 +1,3 @@
+.collapse-transition {
+    transition: .2s height ease-in-out, .2s padding-top ease-in-out, .2s padding-bottom ease-in-out
+}

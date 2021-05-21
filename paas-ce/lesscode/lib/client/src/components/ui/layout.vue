@@ -1,5 +1,5 @@
 <template>
-    <div ref="layout" class="all-component-page-layout" :class="{ toggle: isToggleLeft }" :style="styles">
+    <div ref="layout" class="all-component-page-layout" :class="{ toggle: isToggleLeft }">
         <div class="layout-left" ref="layoutLeft" :style="leftStyles">
             <div class="wraper">
                 <slot name="left" />
@@ -16,7 +16,6 @@
 </template>
 <script>
     import _ from 'lodash'
-    import { getOffset } from '@/common/util'
 
     export default {
         name: '',
@@ -28,18 +27,12 @@
         },
         data () {
             return {
-                offsetTop: 0,
                 isToggleLeft: false,
                 isResize: false,
                 width: this.initWidth
             }
         },
         computed: {
-            styles () {
-                return {
-                    height: `calc(100vh - ${this.offsetTop}px)`
-                }
-            },
             leftStyles () {
                 return {
                     width: `${this.width}px`
@@ -56,9 +49,6 @@
             this.memoWidth = 0
         },
         mounted () {
-            setTimeout(() => {
-                this.init()
-            })
             document.body.addEventListener('mousemove', this.handleMouseMove)
             document.body.addEventListener('mouseup', this.handleMouseUp)
             this.$once('hook:beforeDestroy', () => {
@@ -67,10 +57,6 @@
             })
         },
         methods: {
-            init () {
-                const { top } = getOffset(this.$refs.layout)
-                this.offsetTop = top
-            },
             handleToggle () {
                 this.isToggleLeft = !this.isToggleLeft
                 this.$emit('resize', 0)
@@ -108,7 +94,7 @@
     .all-component-page-layout{
         position: relative;
         display: flex;
-        z-index: 1;
+        z-index: 0;
         &.toggle{
             .layout-left{
                 width: 0 !important;
@@ -146,6 +132,26 @@
                 &:hover {
                     background: #3A84FF;
                 }
+            }
+        }
+        .divide{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            z-index: 9;
+            width: 1px;
+            background: #DCDEE5;
+            cursor: col-resize;
+            &:hover{
+                background: #3A84FF;
+            }
+            &:after{
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -5px;
+                bottom: 0;
+                width: 10px;
             }
         }
         .divide{

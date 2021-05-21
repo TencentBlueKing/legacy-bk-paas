@@ -17,6 +17,7 @@ const ora = require('ora')
 const fse = require('fs-extra')
 
 const clientConf = require('./conf')
+const { pathToNodeModules } = require('./util')
 
 const manifestExist = fse.pathExistsSync(resolve(__dirname, '..', 'static', 'lib-manifest.json'))
 const bundleExist = fse.pathExistsSync(resolve(__dirname, '..', 'static', 'lib.bundle.js'))
@@ -26,10 +27,10 @@ const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development
 if (!(manifestExist & bundleExist)) {
     // 需要打包到一起的 js 文件
     const vendors = [
-        resolve(__dirname, '../../../node_modules', 'vue'),
-        resolve(__dirname, '../../../node_modules', 'vuex'),
-        resolve(__dirname, '../../../node_modules', 'vue-router'),
-        resolve(__dirname, '../../../node_modules', 'axios')
+        resolve(__dirname, pathToNodeModules, 'vue'),
+        resolve(__dirname, pathToNodeModules, 'vuex'),
+        resolve(__dirname, pathToNodeModules, 'vue-router'),
+        resolve(__dirname, pathToNodeModules, 'axios')
     ]
 
     const clientDLLConf = {

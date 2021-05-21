@@ -14,10 +14,17 @@ import http from '@/api'
 export default {
     namespaced: true,
     state: {
+        curNameMap: {},
+        interactiveComponents: ['bk-dialog']
     },
     mutations: {
+        setCurNameMap (state, nameMap) {
+            state.curNameMap = Object.assign({}, nameMap)
+        }
     },
     getters: {
+        curNameMap: state => state.curNameMap,
+        interactiveComponents: state => state.interactiveComponents
     },
     actions: {
         list (state, params = {}) {
@@ -32,20 +39,38 @@ export default {
                 return data
             })
         },
-        detail (state, params) {
+        detail (state, params = {}) {
             return http.get('/component/detail', { params }).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        create (state, params) {
+        versionDetail (state, params = {}) {
+            return http.get('/component/version-detail', { params }).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        create (state, params = {}) {
             return http.post('/component/create', params).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        update (state, params) {
+        update (state, params = {}) {
             return http.post('/component/update', params).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        off (state, params = {}) {
+            return http.post('/component/off', params).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        online (state, params) {
+            return http.post('/component/online', params).then(response => {
                 const data = response.data || ''
                 return data
             })
@@ -56,9 +81,14 @@ export default {
                 return data
             })
         },
-
-        categoryList (state) {
-            return http.get('/componentCategory/list').then(response => {
+        categoryCount (state, params) {
+            return http.get('/component/category-count', { params }).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        categoryList (state, params = {}) {
+            return http.get('/componentCategory/list', { params }).then(response => {
                 const data = response.data || ''
                 return data
             })
@@ -76,9 +106,55 @@ export default {
                 return data
             })
         },
-
-        categoryDelete (stae, params) {
+        categorySort (state, params) {
+            return http.post('/componentCategory/sort', params).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        categoryDelete (state, params) {
             return http.delete('/componentCategory/delete', { params }).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+
+        componentNameMap (context) {
+            return http.get('/component/name-map').then(response => {
+                const data = response.data || {}
+                context.commit('setCurNameMap', data)
+                return data
+            })
+        },
+
+        updatePageComp (state, params) {
+            return http.put('/component/page-using-version', params).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+
+        favoriteList ({ commit }, params = {}) {
+            return http.get('/componentFavourite/list', { params }).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        favoriteAdd ({ commit }, { data, config }) {
+            return http.post('/componentFavourite/add', data, config).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        favoriteDelete ({ commit }, { data, config }) {
+            return http.post('/componentFavourite/delete', data, config).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+
+        scope ({ commit }, { data, config }) {
+            return http.post('/component/scope', data, config).then(response => {
                 const data = response.data || ''
                 return data
             })

@@ -9,7 +9,10 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import PageModel from '../model/page'
+import projectModel from '../model/project'
 const Router = require('koa-router')
+
 const {
     createPage,
     getPageList,
@@ -17,11 +20,39 @@ const {
     copyPage,
     deletePage,
     checkName,
-    pageDetail
+    pageDetail,
+    verify,
+    verifyPreview
 } = require('../controller/page')
 
 const router = new Router({
-    prefix: '/api/Page'
+    prefix: '/api/page'
+})
+
+// 访问控制
+router.use(['/getList', '/update', '/copy', '/delete', '/detail'], async (ctx, next) => {
+    if (ctx.request.path.endsWith('/getList')) {
+        const project = await projectModel.findUserProjectById(ctx.session.userInfo.id, ctx.request.query.projectId)
+        if (!project) {
+            ctx.throw(403)
+        }
+    } else {
+        let pageId = ['POST', 'PUT'].includes(ctx.request.method)
+            ? (ctx.request.body.id || ctx.request.body.pageId)
+            : (ctx.request.query.id || ctx.request.query.pageId)
+
+        pageId = pageId || (ctx.request.body.pageData || {}).id
+        if (pageId) {
+            const result = await PageModel.findUserPageById(ctx.session.userInfo.id, pageId)
+            if (!result) {
+                ctx.throw(403)
+            }
+        } else {
+            ctx.throw(400)
+        }
+    }
+
+    await next()
 })
 
 router.post('/create', createPage)
@@ -31,5 +62,7 @@ router.post('/copy', copyPage)
 router.delete('/delete', deletePage)
 router.post('/checkName', checkName)
 router.get('/detail', pageDetail)
+router.post('/verify', verify)
+router.post('/verifyPreview', verifyPreview)
 
 module.exports = router

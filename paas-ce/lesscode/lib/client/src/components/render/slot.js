@@ -9,6 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { unescapeHtml } from '@/common/util'
+
 export default {
     name: 'render-slot',
     functional: true,
@@ -25,7 +27,7 @@ export default {
     render (h, ctx) {
         const { name, slotData } = ctx.props
         if (name === 'text') {
-            return ctx._v(slotData)
+            return ctx._v(unescapeHtml(slotData))
         }
         if (name === 'bk-radio') {
             return h(name, {
@@ -38,6 +40,7 @@ export default {
         if (name === 'bk-checkbox') {
             return h(name, {
                 props: slotData,
+                class: slotData.checked ? 'is-checked' : '',
                 style: {
                     marginRight: '20px'
                 }
@@ -47,6 +50,12 @@ export default {
             return h('bk-collapse-item', {
                 props: slotData
             }, [slotData.name])
+        }
+
+        if (name === 'bk-breadcrumb-item') {
+            return h('bk-breadcrumb-item', {
+                props: slotData
+            }, [slotData.label])
         }
 
         return h(name, {

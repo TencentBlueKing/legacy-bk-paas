@@ -9,6 +9,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { messageSuccess } from '@/common/bkmagic'
+import domToImage from './dom-to-image'
+
 /***
  * 遍历targetData
  * parentCallBack 是遍历到grid时候的回调
@@ -18,12 +21,22 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
     if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
     const renderProps = grid.renderProps || {}
     const slots = renderProps.slots || {}
-    const columns = slots.val || []
+    let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
+    let isLayoutSupportDialog = false
+    if (grid.name === 'dialog') { // 暂时为兼容dialog做特殊处理，后续添加新的交互式组件，注意修改此处条件
+        const slot = grid.renderProps.slots.val
+        columns = typeof slot === 'string' ? [] : slot.renderProps.slots.val
+        isLayoutSupportDialog = typeof slot !== 'string'
+    }
+
     columns.forEach((column, columnIndex) => {
         const children = column.children || []
         children.forEach((component, index) => {
-            if (component.type === 'render-grid') {
+            if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
                 walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
+            } else if (component.renderProps.slots && component.renderProps.slots.name === 'layout') {
+                childCallBack(component, children, index, grid, columnIndex)
+                walkGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
             } else {
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
             }
@@ -188,15 +201,6 @@ export function getStringLen (str) {
     }
     return len
 }
-
-/**
- * 转义特殊字符
- *
- * @param {string} str 待转义字符串
- *
- * @return {string} 结果
- */
-export const escape = str => String(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1')
 
 /**
  * 对象转为 url query 字符串
@@ -440,14 +444,16 @@ export function splitValueAndUnit (type, string) {
     if (!string) {
         return ''
     }
-    const reg = /(\d*)(\D*)/
+
+    // 支持小数和负数
+    const reg = /^(-?\d+(\.\d+)?)(\D*)$/
     const match = string.match(reg)
     if (!match) {
         return ''
     }
     const resultMap = {
         'value': Number(match[1]),
-        'unit': match[2]
+        'unit': match[3]
     }
     return resultMap[type]
 }
@@ -472,7 +478,7 @@ export const findComponentParentRow = (target, componentId) => {
         if (!curNode.renderProps.slots) {
             continue
         }
-        if (curNode.renderProps.slots.type === 'column') {
+        if (curNode.renderProps.slots.type === 'column' || curNode.renderProps.slots.type === 'free-layout-item') {
             if (curNode.renderProps.slots.val.length > 0) {
                 for (let j = 0; j < curNode.renderProps.slots.val.length; j++) {
                     const curColumn = curNode.renderProps.slots.val[j]
@@ -613,4 +619,274 @@ export const getOffset = target => {
         par = par.offsetParent
     }
     return { left: totalLeft, top: totalTop }
+}
+
+/**
+ * 精确加法
+ */
+export function accAdd (arg1, arg2) {
+    let r1 = 0
+    let r2 = 0
+    try {
+        r1 = arg1.toString().split('.')[1].length
+    } catch (e) {
+        r1 = 0
+    }
+    try {
+        r2 = arg2.toString().split('.')[1].length
+    } catch (e) {
+        r2 = 0
+    }
+    const c = Math.abs(r1 - r2)
+    const m = Math.pow(10, Math.max(r1, r2))
+    if (c > 0) {
+        const cm = Math.pow(10, c)
+        if (r1 > r2) {
+            arg1 = Number(arg1.toString().replace('.', ''))
+            arg2 = Number(arg2.toString().replace('.', '')) * cm
+        } else {
+            arg1 = Number(arg1.toString().replace('.', '')) * cm
+            arg2 = Number(arg2.toString().replace('.', ''))
+        }
+    } else {
+        arg1 = Number(arg1.toString().replace('.', ''))
+        arg2 = Number(arg2.toString().replace('.', ''))
+    }
+    return (arg1 + arg2) / m
+}
+
+/**
+ * 精确减法
+ */
+export function accSub (arg1, arg2) {
+    let r1 = 0
+    let r2 = 0
+    try {
+        r1 = arg1.toString().split('.')[1].length
+    } catch (e) {
+        r1 = 0
+    }
+    try {
+        r2 = arg2.toString().split('.')[1].length
+    } catch (e) {
+        r2 = 0
+    }
+    const m = Math.pow(10, Math.max(r1, r2))
+    const n = (r1 >= r2) ? r1 : r2
+    return ((arg1 * m - arg2 * m) / m).toFixed(n)
+}
+
+export const execCopy = (value, message = '复制成功') => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    textarea.value = value
+    textarea.select()
+    if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        messageSuccess(message)
+    }
+    document.body.removeChild(textarea)
+}
+
+/**
+ * 循环嵌套对象转Str
+ * @param {*} obj 需要转换的对象
+ */
+export const circleJSON = obj => {
+    let cache = []
+    const str = JSON.stringify(obj, (key, value) => {
+        if (typeof value === 'object' && value !== null) {
+            if (cache.indexOf(value) !== -1) {
+                return
+            }
+            cache.push(value)
+        }
+        return value
+    }, 4)
+    cache = null
+    return str
+}
+
+/** 树结构深度优先遍历（非递归方法） */
+export const deepSearchStack = (tree, key) => {
+    let stack = []
+    const result = []
+    stack = stack.concat(tree)
+    while (stack.length > 0) {
+        const node = stack.pop()
+        result.push(node[key])
+        if (node.children) {
+            stack = stack.concat(node.children.reverse())
+        }
+    }
+    return result
+}
+
+/**
+ * 反转义 html 特殊字符
+ *
+ * @param {string} html 要反转义的字符串
+ *
+ * @return {string} 结果
+ */
+export const unescapeHtml = html => {
+    const el = document.createElement('div')
+    return html.replace(/\&[#0-9a-z]+;/gi, function (enc) {
+        el.innerHTML = enc
+        return el.innerText
+    })
+}
+
+/**
+ * 更新 canvas context
+ *
+ * @param {Object} ctx canvas context
+ * @param {number} width canvas width
+ * @param {number} height canvas height
+ */
+export const updateCanvasContext = function (ctx, width, height) {
+    const canvas = ctx.canvas
+    canvas.width = width
+    canvas.height = height
+    canvas.style.width = width + 'px'
+    canvas.style.height = height + 'px'
+    ctx.imageSmoothingEnabled = true
+    ctx.webkitImageSmoothingEnabled = true
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+}
+
+/**
+ * html to xml
+ *
+ * @param {string} html html
+ *
+ * @return {string} xml
+ */
+export const html2Xml = html => {
+    const doc = document.implementation.createHTMLDocument('')
+    doc.write(html)
+
+    // You must manually set the xmlns if you intend to immediately serialize
+    // the HTML document to a string as opposed to appending it to a
+    // <foreignObject> in the DOM
+    doc.documentElement.setAttribute('xmlns', doc.documentElement.namespaceURI)
+
+    // Get well-formed markup
+    html = (new XMLSerializer()).serializeToString(doc.body)
+    return html
+}
+
+/**
+ * node 节点转为图片（截图）
+ *
+ * @param {Object} domNode 要截图的 node 节点
+ * @param {Function} cb 生成截图后的回调，图片加载失败时，会设置一张默认的图片
+ */
+export const dom2Img = (domNode, cb) => {
+    domToImage.toPng(domNode).then(dataUrl => {
+        cb(dataUrl)
+    }).catch(err => {
+        console.warn('dom to image error: ', err)
+        cb(null)
+    })
+
+    // const canvas = document.createElement('canvas')
+    // const ctx = canvas.getContext('2d')
+    // updateCanvasContext(ctx, domNode.offsetWidth, domNode.offsetHeight)
+
+    // const PIXEL_RATIO = (() => {
+    //     const ctx = document.createElement('canvas').getContext('2d')
+    //     const dpr = window.devicePixelRatio || 1
+    //     const bsr = (
+    //         ctx.webkitBackingStorePixelRatio
+    //             || ctx.mozBackingStorePixelRatio
+    //             || ctx.msBackingStorePixelRatio
+    //             || ctx.oBackingStorePixelRatio
+    //             || ctx.backingStorePixelRatio
+    //             || 1
+    //     )
+    //     const ratio = dpr / bsr
+    //     return ratio
+    // })()
+
+    // const PIXEL_RATIO = 1
+
+    // const width = ctx.canvas.width
+    // const height = ctx.canvas.height
+
+    // xml 没有样式，这里把当前页面的样式全部拉过来
+    // const pageCssList = []
+    // const styleNodeList = document.getElementsByTagName('style')
+    // const styleMap = {}
+    // Array.from(styleNodeList).forEach(s => {
+    //     if (!styleMap[s.innerText]) {
+    //         styleMap[s.innerText] = 1
+    //         pageCssList.push(s.innerText)
+    //     }
+    // })
+
+    // const data = 'data:image/svg+xml;charset=utf-8,'
+    //     + '<svg xmlns="http://www.w3.org/2000/svg" width="1233" height="819">'
+    //     + '<foreignObject x="0" y="0" width="100%" height="100%">'
+    //     + '<style type="text/css">'
+    //     + pageCssList.join(' ')
+    //     + '</style>'
+    //     + html2Xml(domNode.innerHTML)
+    //     + '</foreignObject>'
+    //     + '</svg>'
+
+    // const img = new Image()
+    // img.addEventListener('load', () => {
+    //     cb(img)
+    // })
+    // img.addEventListener('error', (err) => {
+    //     console.warn('dom to image error: ', err)
+    //     cb(null)
+    // })
+    // // 有如下符号时，图片会加载失败
+    // img.src = data.replace(/\:checked/g, 'checked')
+    //     .replace(/"/g, "'")
+    //     .replace(/%/g, '%25')
+    //     .replace(/#/g, '%23')
+    //     .replace(/{/g, '%7B')
+    //     .replace(/}/g, '%7D')
+    //     .replace(/</g, '%3C')
+    //     .replace(/>/g, '%3E')
+}
+
+/**
+ * 根据父节点是否是交互式组件，计算context的偏移
+ * @param {*} node HTMLNode
+ * @returns {x: 0, y:0}
+ */
+export const getContextOffset = node => {
+    let isInteractiveParent = false
+    let curNode = node
+    while (curNode.parentNode && curNode.parentNode.className !== 'target-drag-area') {
+        if (curNode.className === 'interactive-component') {
+            isInteractiveParent = true
+            break
+        }
+        curNode = curNode.parentNode
+    }
+
+    return isInteractiveParent ? {
+        x: -parseInt(curNode.style.left),
+        y: -parseInt(curNode.style.top)
+    }
+        : {
+            x: 0,
+            y: 0
+        }
+}
+
+export const isJsKeyWord = (val) => {
+    const jsKeyWords = [
+        'await', 'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default', 'delete',
+        'do', 'else', 'enum', 'export', 'extends', 'false', 'finally', 'for', 'function', 'if', 'implements',
+        'import', 'in', 'instanceof', 'interface', 'let', 'new', 'null', 'package', 'private', 'protected',
+        'public', 'return', 'super', 'switch', 'static', 'this', 'throw', 'try', 'true', 'typeof', 'var', 'void',
+        'while', 'with', 'yield', 'array', 'boolean', 'number', 'string', 'object', 'symbol', 'undefined'
+    ]
+    return jsKeyWords.includes((val || '').toLowerCase())
 }

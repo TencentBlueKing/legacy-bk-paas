@@ -11,14 +11,12 @@
 
 <template>
     <section v-if="emptyPage" class="preview-page">
-        <router-view />
+        <router-view :name="topView" />
     </section>
-    <section v-else>
-        <div id="app" :class="systemCls" v-bkloading="{ isLoading: mainContentLoading, opacity: 1 }">
+    <section v-else-if="authed">
+        <div id="app" :class="systemCls">
             <app-header></app-header>
-            <transition name="fade">
-                <router-view v-show="!mainContentLoading" />
-            </transition>
+            <router-view :name="topView" v-show="!mainContentLoading" />
         </div>
     </section>
 </template>
@@ -40,6 +38,13 @@
             ...mapGetters(['mainContentLoading']),
             emptyPage () {
                 return this.$route.name === 'preview'
+            },
+            authed () {
+                return this.$route.meta.authed
+            },
+            topView () {
+                const topRoute = this.$route.matched[0]
+                return (topRoute && topRoute.meta.view) || 'default'
             }
         },
 
@@ -71,11 +76,6 @@
         height: 100%;
         font-size: 14px;
         color: #63656e;
-    }
-
-    .preview-page {
-        height: 99vh;
-        overflow: auto;
     }
 
     .mac {

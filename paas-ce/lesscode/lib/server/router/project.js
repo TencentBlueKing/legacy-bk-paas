@@ -9,7 +9,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import projectModel from '../model/project'
 const Router = require('koa-router')
+
 const {
     createProject,
     queryProject,
@@ -17,11 +19,24 @@ const {
     deleteProject,
     favorite,
     checkname,
-    projectDetail
+    projectDetail,
+    verify,
+    my
 } = require('../controller/project')
 
 const router = new Router({
     prefix: '/api/project'
+})
+
+router.use(['/update', '/delete', '/favorite', '/delete', '/detail'], async (ctx, next) => {
+    const id = ['POST', 'PUT', 'DELETE'].includes(ctx.request.method)
+        ? (ctx.request.body.id || ctx.request.body.projectId)
+        : (ctx.request.query.id || ctx.request.query.projectId)
+    const project = await projectModel.findUserProjectById(ctx.session.userInfo.id, id)
+    if (!project) {
+        ctx.throw(403)
+    }
+    await next()
 })
 
 router.post('/create', createProject)
@@ -31,5 +46,7 @@ router.delete('/delete', deleteProject)
 router.post('/favorite', favorite)
 router.post('/checkname', checkname)
 router.get('/detail', projectDetail)
+router.post('/verify', verify)
+router.get('/my', my)
 
 module.exports = router

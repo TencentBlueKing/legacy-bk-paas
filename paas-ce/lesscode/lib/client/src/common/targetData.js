@@ -17,6 +17,29 @@ class TargetData {
         return this
     }
 
+    setCurInteractiveVisible (id, init = false) {
+        const targetData = store.getters['drag/targetData'] || []
+        let targetNode
+        targetData.forEach(item => {
+            if (item.componentId === id) {
+                item.interactiveShow = init || !item.interactiveShow
+                targetNode = item
+            } else {
+                item.interactiveShow = false
+            }
+            this.update(item)
+        })
+        return targetNode
+    }
+
+    hideAllInteractiveComponents () {
+        const targetData = store.getters['drag/targetData'] || []
+        targetData.forEach(item => {
+            item.interactiveShow = false
+            this.update(item)
+        })
+    }
+
     find (id) {
         if (typeof id !== 'undefined') {
             const targetData = store.getters['drag/targetData'] || []
@@ -26,6 +49,8 @@ class TargetData {
                 }
                 walkGrid(targetData, grid, callBack, callBack, index)
             })
+        } else {
+            this.targetData = store.getters['drag/targetData'] || []
         }
         return this
     }
@@ -98,11 +123,26 @@ class TargetData {
         return this
     }
 
+    moveFreeLayoutComponent () {
+        const copyNode = store.getters['drag/copyData'] || {}
+        function minPx (px) {
+            return px.replace(/(.+)px/, (str, num) => {
+                num -= 10
+                if (num < 0) num += 20
+                return num + 'px'
+            })
+        }
+        const renderStyles = copyNode.renderStyles
+        renderStyles.top = minPx(renderStyles.top || '10px')
+        renderStyles.left = minPx(renderStyles.left || '10px')
+    }
+
     appendChild (node, shouldChangeId) {
+        if (this.isInFreeLayout(this.targetData)) this.moveFreeLayoutComponent()
         node = this.cloneNode(node, shouldChangeId)
-        if (Array.isArray(this.targetData) && node.type === 'render-grid') {
+        if (Array.isArray(this.targetData) && this.isLayout(node)) {
             this.targetData.push(node)
-        } else if (this.targetData.type === 'render-grid') {
+        } else if (this.isLayout(this.targetData) && !this.isLayout(node)) {
             this.targetData.renderKey = uuid()
             const renderProps = this.targetData.renderProps || {}
             const slots = renderProps.slots || {}
@@ -119,14 +159,28 @@ class TargetData {
             targetData.forEach((grid, index) => {
                 const callBack = (data, parent, index, parentGrid) => {
                     if (data.componentId === this.targetData.componentId) {
-                        parentGrid.renderKey = uuid()
-                        parent.splice(index + 1, 0, node)
+                        if (parentGrid) parentGrid.renderKey = uuid()
+                        if (this.isInFreeLayout(this.targetData)) parent.push(node)
+                        else parent.splice(index + 1, 0, node)
                     }
                 }
                 walkGrid(targetData, grid, callBack, callBack, index)
             })
         }
         return this.find(node.componentId)
+    }
+
+    isInFreeLayout (node) {
+        let isInFreeLayout = node.type === 'free-layout'
+        if (!isInFreeLayout) {
+            const parent = findComponentParentGrid(store.getters['drag/targetData'], node.componentId) || {}
+            isInFreeLayout = parent.type === 'free-layout'
+        }
+        return isInFreeLayout
+    }
+
+    isLayout (node) {
+        return ['render-grid', 'free-layout'].includes(node.type)
     }
 
     appendChildByIndex (node, parentId, columnIndex, childrenIndex, shouldChangeId) {
@@ -205,8 +259,11 @@ class TargetData {
             node.forEach((grid, index) => {
                 walkGrid(node, grid, callBack, callBack, index)
             })
-        } else if (node.type === 'render-grid') {
+        } else if (this.isLayout(node)) {
             walkGrid({}, node, callBack, callBack, 0)
+        } else if (node.renderProps && node.renderProps.slots && node.renderProps.slots.name === 'layout') {
+            callBack(node)
+            walkGrid({}, node.renderProps.slots.val, callBack, callBack, 0)
         } else {
             callBack(node)
         }

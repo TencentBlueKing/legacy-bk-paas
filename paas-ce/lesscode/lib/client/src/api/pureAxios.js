@@ -183,7 +183,7 @@ function initConfig (method, url, userConfig) {
         // 当路由变更时取消请求
         cancelWhenRouteChange: true,
         // 取消上次请求
-        cancelPrevious: true
+        cancelPrevious: false
     }
     return Object.assign(defaultConfig, userConfig)
 }

@@ -23,6 +23,14 @@ module.exports = () => {
                     code: 1000,
                     message: error.message
                 }
+            } else if (error instanceof global.BusinessError) {
+                ctx.status = 200
+                ctx.body = {
+                    code: error.code || 499,
+                    businessError: true,
+                    message: error.message || '服务器出现业务错误',
+                    data: error.data
+                }
             } else {
                 throw Error(error.message)
             }

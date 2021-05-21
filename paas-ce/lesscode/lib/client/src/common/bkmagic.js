@@ -21,12 +21,13 @@ const Message = Vue.prototype.$bkMessage
 
 let messageInstance = null
 
-export const messageError = (message, delay = 3000) => {
+export const messageError = (message, delay = 3000, ellipsisLine = 1) => {
     messageInstance && messageInstance.close()
     messageInstance = Message({
         message,
         delay,
-        theme: 'error'
+        theme: 'error',
+        ellipsisLine
     })
 }
 

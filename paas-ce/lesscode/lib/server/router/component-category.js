@@ -8,13 +8,12 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-// const { saveAsFile, formatCode, deleteTmpFile } = require('../controller/vue-code')
 const Router = require('koa-router')
 const {
     list,
     create,
     update,
+    sort,
     categoryDelete
 } = require('../controller/component-category')
 
@@ -25,6 +24,7 @@ const router = new Router({
 router.get('/list', list)
 router.post('/create', create)
 router.post('/update', update)
+router.post('/sort', sort)
 router.delete('/delete', categoryDelete)
 
 module.exports = router

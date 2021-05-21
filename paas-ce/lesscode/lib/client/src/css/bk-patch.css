@@ -11,8 +11,11 @@
 
 /* bk-magic-vue 样式 hack */
 
-button.bk-button {
+/* button.bk-button {
     vertical-align: baseline;
+} */
+.bk-exception-img {
+    width: 100%;
 }
 
 .function-option {
@@ -33,4 +36,8 @@ button.bk-button {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+}
+
+.bk-message.auto-width .bk-message-content{
+    max-width: none;
 }
