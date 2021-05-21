@@ -9,7 +9,7 @@
     </div>
 
     % if esb_api_by_level:
-        % for level, api_list in esb_api_by_level.iteritems():
+        % for level, api_list in esb_api_by_level.items():
             <table data-sortable="" class="table" data-sortable-initialized="true">
                 <tbody>
                     <tr style="background-color: #f2f2f2;">
