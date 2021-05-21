@@ -1,7 +1,7 @@
 Release Log
 ===============================
 # 2.12.14
-    - esb: rename env MENU_ITEM_BUFFET_HIDDEN to BK_ESB_MENU_ITEM_BUFFET_HIDDEN
+    - paas: rename env MENU_ITEM_BUFFET_HIDDEN to BK_ESB_MENU_ITEM_BUFFET_HIDDEN
 
 # 2.12.13
     - add: Compatible with PaaS3.0
