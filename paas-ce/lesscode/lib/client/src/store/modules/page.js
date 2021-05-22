@@ -49,6 +49,12 @@ export default {
                 return data
             })
         },
+        getLiteList ({ commit }, { projectId, config = {} }) {
+            return http.get(`/page/getList?lite=1&projectId=${projectId}`, config).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
         update ({ commit }, { data = {} }) {
             return http.put('/page/update', data).then(response => {
                 const data = response.data || ''

@@ -137,6 +137,7 @@
                     if (dialogMask) {
                         if (this.pagePopMaskObserve === null) {
                             this.setPopMaskObserve(new MutationObserver((mutation) => {
+                                console.log('监听dialog中')
                                 /** 判断mask的Zindex，来判断是否是对话框关闭动作 */
                                 const reg = /^z-index:\s?(\d{4})/
                                 const oldValue = mutation[0] && mutation[0].oldValue
@@ -197,15 +198,18 @@
 
             activeNode (node) {
                 const topParent = this.findTopParent(node)
-                if (topParent && topParent.data.type === 'bk-dialog') {
-                    console.log('diloag parent', topParent)
+                if (topParent && this.interactiveComponents.includes(topParent.data.type)) {
                     !this.getNodeVisableStatus(topParent) && this.setComponentVisible(topParent.data.id)
                 } else if (!this.interactiveComponents.includes(node.data.type)
                     && this.interactiveComponents.includes(this.curSelectedComponentData.type)) {
-                    console.log('hide')
                     this.$td().hideAllInteractiveComponents()
                 }
 
+                this.$nextTick(() => {
+                    this.setActiveHighLight(node)
+                })
+            },
+            setActiveHighLight (node) {
                 removeClassWithNodeClass('.bk-layout-grid-row', 'selected')
                 removeClassWithNodeClass('.bk-lesscode-free-layout', 'selected')
                 removeClassWithNodeClass('.component-wrapper', 'selected')

@@ -13,13 +13,18 @@ import { POST_PAGE_CREATE, PUT_PAGE_UPDATE } from '../conf/operate-log'
 
 export const getPageList = async (ctx) => {
     try {
-        const { projectId } = ctx.query
+        const { projectId, lite } = ctx.query
         const res = await PageModel.getProjectPages(projectId)
+
+        let list = res
+        if (lite) {
+            list = list.map(({ id, pageCode, pageName }) => ({ id, pageCode, pageName }))
+        }
 
         ctx.send({
             code: 0,
             message: 'success',
-            data: res
+            data: list
         })
     } catch (err) {
         ctx.throwError({

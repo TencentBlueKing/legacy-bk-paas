@@ -65,6 +65,7 @@ import chartsPie from './charts-pie'
 import freeLayout from './free-layout'
 
 import dialog from './dialog'
+import sideslider from './sideslider'
 
 // 这个对象里组件的顺序与页面左侧待选组件区的顺序一致，从左至右，从上至下
 // 是为了要保证 Array.from(new Set(bkComponents.map(item => item.group))) 得到的结果是
@@ -121,7 +122,8 @@ const bkComponents = Object.seal([
     chartsPie,
     dialog,
     freeLayout,
-    divider
+    divider,
+    sideslider
 ])
 
 export default bkComponents

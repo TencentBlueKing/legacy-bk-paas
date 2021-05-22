@@ -86,7 +86,8 @@
                     formData: {
                         pageName: '',
                         pageCode: '',
-                        pageRoute: ''
+                        pageRoute: '',
+                        layoutId: null
                     },
                     formRules: {
                         pageName: [
@@ -172,6 +173,11 @@
                     this.actionName = val === 'create' ? '新建' : (this.action === 'rename' ? '重命名' : '复制')
                 },
                 immediate: true
+            },
+            'dialog.formData.layoutId' (layoutId) {
+                if (this.action === 'copy' && layoutId) {
+                    this.selectedLayout = this.layoutList.find(item => item.id === layoutId)
+                }
             }
         },
         created () {

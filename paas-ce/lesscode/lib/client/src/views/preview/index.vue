@@ -46,7 +46,7 @@
 
             handleUrl (res) {
                 const data = res.data || {}
-                const iframePath = data.name === '404' ? '/404' : (data.fullPath || '/')
+                const iframePath = data.name === '404' ? `/404?p=${data.query.p || ''}` : (data.fullPath || '/')
                 const url = `/preview/project/${this.$route.params.projectId}${iframePath}`
                 if (data.type !== 'preview') return
                 history.replaceState({ url: url, title: document.title }, document.title, url)

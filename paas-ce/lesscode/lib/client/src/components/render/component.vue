@@ -52,7 +52,7 @@
                     <section v-html="renderDataSlot.val"></section>
                 </template>
                 <template v-else-if="renderDataSlotName === 'layout'">
-                    <div :class="getComponentWrapperClass(renderDataSlot.val.type)">
+                    <div :class="getComponentWrapperClass(renderDataSlot.val.type)" :slot="getSlotName(renderDataSlot.val.slotName)">
                         <component :is="renderDataSlot.val.type" :key="`${componentData.renderKey}-layout`" :component-data="renderDataSlot.val">
                         </component>
                     </div>
@@ -104,12 +104,15 @@
 
 <script>
     import _ from 'lodash'
+    import Vue from 'vue'
     import { mapGetters, mapMutations } from 'vuex'
     import { bus } from '@/common/bus'
     import { uuid, getNodeWithClass, removeClassWithNodeClass, getStyle, findComponent, findComponentParentGrid, getContextOffset } from '@/common/util'
     import RenderSlot from './slot'
     import ComponentWrapper from './component-wrapper'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+
+    window.__innerCustomRegisterComponent__ = null
 
     const components = {
         ComponentWrapper,
@@ -133,6 +136,13 @@
         },
         data () {
             // 局部注册自定义组件
+            if (!window.__innerCustomRegisterComponent__) {
+                window.__innerCustomRegisterComponent__ = {}
+                window.customCompontensPlugin.forEach(callback => {
+                    const [config, componentSource] = callback(Vue)
+                    window.__innerCustomRegisterComponent__[config.type] = componentSource
+                })
+            }
             for (const name in window.__innerCustomRegisterComponent__) {
                 if (!this.$options.components[name]) {
                     this.$options.components[name] = window.__innerCustomRegisterComponent__[name]
@@ -191,6 +201,14 @@
                 handler (val, old) {
                     this.renderData.isCustomComponent = !!this.curNameMap[this.renderData.type]
                     if (val) {
+                        if (this.interactiveComponents.includes(this.renderData.type)) { // 交互式组件，将父级内容撑开
+                            return {
+                                display: 'block',
+                                height: '100%',
+                                margin: 0,
+                                zIndex: 200
+                            }
+                        }
                         if (this.renderData.type !== 'render-grid' && this.renderData.type !== 'free-layout') {
                             // this.componentWrapperNode = this.$refs[`${val}-wrapper`]
                             const domNode = this.$refs[val].$el || this.$refs[val] // 原生html不会有$el元素
@@ -215,11 +233,7 @@
                             if (ret) {
                                 this.wrapperNodeStyle = Object.assign({}, this.wrapperNodeStyle, {
                                     display: ret
-                                }, this.interactiveComponents.includes(this.renderData.type) ? { // 交互式组件，将wrapper的高度自动撑开与父级同高
-                                    height: '100%',
-                                    margin: 0,
-                                    zIndex: 200
-                                } : {})
+                                })
                             }
                         }
                     }
@@ -273,6 +287,10 @@
                 'setTargetData',
                 'pushTargetHistory'
             ]),
+
+            getSlotName (slotName) {
+                return slotName || 'default'
+            },
 
             getComponentWrapperClass (type) {
                 return type === 'render-grid' ? 'bk-layout-grid-row-wrapper' : 'bk-layout-free-wrapper'
@@ -439,4 +457,16 @@
 </script>
 <style lang="postcss">
     @import "./component.css";
+    .wrapperCls {
+        .bk-dialog-wrapper > .bk-dialog {
+            pointer-events: none;
+            .bk-dialog-body {
+                pointer-events: auto;
+            }
+        }
+        .bk-sideslider-wrapper > .bk-sideslider-content {
+            padding: 10px;
+        }
+    }
+
 </style>

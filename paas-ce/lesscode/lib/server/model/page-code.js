@@ -19,7 +19,7 @@ const httpConf = require('../conf/http')
 let npmConf
 try {
     npmConf = require('../conf/npm')
-} catch(_) {
+} catch (_) {
     npmConf = {}
 }
 
@@ -322,6 +322,9 @@ class PageCode {
             .bk-layout-component-${this.uniqueKey} {
                 margin: 5px;
                 vertical-align: middle;
+            }
+            .bk-sideslider {
+                margin: 0;
             }
             /* 设置 .bk-form-control 组件宽度为 auto */
             .bk-form-control {
@@ -1058,8 +1061,17 @@ class PageCode {
         compId = `${camelCase(compId, { transform: camelCaseTransformMerge })}Slot`
         if (slot.name === 'layout') {
             const codeArr = []
+            // card, dialog, sideslider 组件的 slots 配置中 val 没有 componentId
+            // 会导致在 getDirectives 方法中 componentId.replace 报错
+            if (!slot.val.componentId) {
+                slot.val.componentId = `${slot.val.name}-${uuid()}`
+            }
             codeArr.push(slot.val)
-            slotStr = this.generateCode(codeArr)
+            const slotName = slot.val.slotName || 'default'
+            slotStr = `
+            <template slot="${slotName}">
+                ${this.generateCode(codeArr)}
+            </template>`
         } else if (slot.payload && slot.payload.variableData && slot.payload.variableData.val) {
             const variableData = slot.payload.variableData
             const disPlayVal = this.handleUsedVariable(variableData.valType, variableData.val, compId)
@@ -1229,16 +1241,24 @@ class PageCode {
                 methods += `
                     goToPage (item) {
                         this.setNav(item.id)
-                        const matched = this.$route.matched || []
-                        const conRoute = matched[1] || {}
+                        const originQuery = item.query || ''
+                        const queryStr = originQuery[0] === '?' ? originQuery.slice(1) : originQuery
+                        const queryArr = queryStr.split('&').filter(v => v)
+                        const query = queryArr.reduce((res, item) => {
+                            const [key, value = ''] = item.split('=')
+                            res[key] = value
+                            return res
+                        }, { id: item.id })
                         if (item.pageCode && item.pageCode === this.$route.name) {
-                            this.$router.push({ path: this.$route.path, query: { id: item.id } })
+                            this.$router.push({ path: this.$route.path, query })
+                        } else if (item.fullPath) {
+                            this.$router.push({ path: item.fullPath, query })
                         } else if (item.pageCode) {
-                            this.$router.push({ name: item.pageCode, query: { id: item.id } })
+                            this.$router.push({ name: item.pageCode, query })
                         } else if (item.link) {
                             window.open(item.link, '_blank')
                         } else {
-                            this.$router.push({ path: conRoute.path + '/' + String(+new Date()), query: { id: item.id } })
+                            this.$router.push({ name: '404' })
                         }
                     },
                 `

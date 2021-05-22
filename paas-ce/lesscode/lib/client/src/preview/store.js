@@ -39,13 +39,14 @@ function getVariableModule (storeData) {
     }
 }
 
-function getStore (variable) {
+function getStore (variable, globalData) {
     return new Vuex.Store({
         modules: {
             variable
         },
         state: {
-            user: {}
+            user: {},
+            ...globalData
         },
         getters: {
             user: state => state.user
@@ -83,8 +84,8 @@ function getStore (variable) {
     })
 }
 
-module.exports = (storeData) => {
+module.exports = (storeData, globalData) => {
     const variableModule = getVariableModule(storeData)
-    const store = getStore(variableModule)
+    const store = getStore(variableModule, globalData)
     return store
 }

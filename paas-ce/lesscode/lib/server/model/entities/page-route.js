@@ -20,6 +20,9 @@ export default class extends Base {
     @Column({ type: 'int', comment: 'route 表主键' })
     pageId
 
+    @Column({ type: 'int', comment: '跳转 route' })
+    redirect
+
     @Column({ type: 'int', comment: 'layout_inst 表主键' })
     layoutId
 

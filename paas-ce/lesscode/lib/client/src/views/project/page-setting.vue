@@ -10,7 +10,8 @@
 -->
 
 <template>
-    <div class="page-setting" v-bkloading="{ isLoading: pageLoading, opacity: 1 }">
+    <div :class="['page-setting', { function: type === 'pageFunction' }]"
+        v-bkloading="{ isLoading: pageLoading, opacity: 1 }">
         <section v-for="setting in settingGroup" :key="setting.title">
             <div class="title" v-show="!pageLoading">{{ setting.title }}</div>
             <div class="setting-list" v-show="!pageLoading">
@@ -19,9 +20,10 @@
                     <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
                         <template v-if="field !== editField.field">
                             <div class="field-content">
-                                <template v-if="field.id === 'pageRoute'">
-                                    <div>{{layoutPath}}<span>{{pageRoute.path}}</span></div>
-                                </template>
+                                <div class="route" v-if="field.id === 'pageRoute'">
+                                    <div v-if="pageRoute.id">{{layoutPath}}<span>{{pageRoute.path}}</span></div>
+                                    <div v-else class="unset">未设置</div>
+                                </div>
                                 <span v-else class="field-display-value">{{getFieldDisplayValue(field) || '--'}}</span>
                                 <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
                             </div>
@@ -183,7 +185,7 @@
                             type: 'option',
                             props: {
                                 id: route.id,
-                                name: route.path,
+                                name: route.path || '/',
                                 pageId: route.pageId,
                                 disabled: route.pageId !== -1
                             }
@@ -225,6 +227,7 @@
                             name: '页面路由',
                             type: 'select',
                             editable: true,
+                            placeholder: '未设置',
                             props: {
                                 clearable: false
                             },
@@ -284,8 +287,6 @@
                         theme: 'primary',
                         confirmFn: async () => {
                             await this.handleConfirmSave()
-                            // 导航模版切换后需要获取当前模版的导航数据，并更新更新本地curTemplateData
-                            await this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id })
                         }
                     })
                     return
@@ -300,6 +301,8 @@
                     if (field.id === 'pageRoute' || field.id === 'layoutId') {
                         await this.savePageRoute(field, value)
                         this.fetchData()
+                        // 导航模版切换后需要获取当前模版的导航数据，并更新更新本地curTemplateData
+                        await this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id })
                     } else {
                         const pageData = await this.saveField(field, value)
 
@@ -406,7 +409,7 @@
             },
             getFieldValue (field) {
                 if (field.id === 'pageRoute') {
-                    return this.pageRoute.id
+                    return this.pageRoute.id || ''
                 } else if (field.id === 'layoutId') {
                     return this.pageRoute.layoutId
                 }
@@ -528,6 +531,12 @@
                     .field-content {
                         display: flex;
                         font-size: 12px;
+
+                        .route {
+                            .unset {
+                                color: #FF9C01;
+                            }
+                        }
                     }
                     .field-display-value {
                         word-break: break-all;
@@ -574,7 +583,7 @@
 
         .field-form {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             .form-component {
                 width: 100%;
             }
@@ -592,6 +601,12 @@
                     line-height: 26px;
                     margin-top: -2px;
                 }
+            }
+        }
+
+        &.function {
+            .field-form {
+                align-items: flex-start;
             }
         }
     }

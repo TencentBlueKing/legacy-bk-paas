@@ -48,6 +48,7 @@ function auth (projectId) {
 }
 
 function errorHandle (err) {
+    console.error(err)
     let message = ''
     switch (err.status) {
         case 403:
@@ -75,7 +76,7 @@ function errorHandle (err) {
         + `<div class="bk-exception bk-exception-center" style="${divStyle}">`
         + `<img src="${Img403}"><h2 class="exception-text" style="${h2Style}">${message}</h2>`
         + '</div>'
-    const parentNode = document.querySelector('#app')
+    const parentNode = document.querySelector('#preview-app')
     parentNode.innerHTML = content
 }
 
