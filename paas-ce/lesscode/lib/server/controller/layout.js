@@ -171,6 +171,27 @@ const Layout = {
         }
     },
 
+    async setRoutePath (ctx) {
+        const { id, projectId, routePath } = ctx.request.body
+        try {
+            const existRoutePath = await getRepository(LayoutInst).findOne({ projectId, routePath })
+            if (existRoutePath) {
+                throw Error('该模板路由已存在')
+            }
+
+            await getRepository(LayoutInst).update(id, { routePath })
+
+            ctx.send({
+                code: 0,
+                message: 'success'
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
+
     async checkName (ctx) {
         const { showName, routePath, layoutCode, projectId } = ctx.request.body
         try {

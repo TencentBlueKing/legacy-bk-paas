@@ -106,7 +106,7 @@ export default {
             const { name = '', type = '', props = {}, directives = [], isComplexComponent = false } = component
             const id = component.name + '-' + uid
             const renderDirectives = directives
-            const renderProps = Object.assign({}, type === 'bk-dialog' ? {
+            const renderProps = Object.assign({}, ['bk-dialog', 'bk-sideslider'].includes(type) ? {
                 transfer: {
                     type: Boolean,
                     val: false

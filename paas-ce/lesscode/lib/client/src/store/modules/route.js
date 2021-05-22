@@ -24,14 +24,20 @@ export default {
     getters: {
     },
     actions: {
-        query ({ commit }, { config }) {
-            return http.get('/route/query', config).then(response => {
+        query ({ commit }, { projectId, config }) {
+            return http.get(`/route/query/${projectId}`, config).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
         getProjectRouteGroup ({ commit }, { projectId, config }) {
             return http.get(`/route/project/${projectId}`, config).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        getProjectRouteTree ({ commit }, { projectId, config }) {
+            return http.get(`/route/project/${projectId}/tree`, config).then(response => {
                 const data = response.data || ''
                 return data
             })
@@ -61,10 +67,22 @@ export default {
                 return data
             })
         },
-        layoutPageList ({ commit }, { pageId, config }) {
-            return http.get(`/route/layout/page/${pageId}`, config).then(response => {
+        getProjectPageRoute ({ commit }, { projectId, config }) {
+            return http.get(`/route/project/${projectId}/page`, config).then(response => {
                 const data = response.data || []
                 commit('setLayoutPageList', data)
+            })
+        },
+        bind ({ commit }, { data, config }) {
+            return http.post('/route/bind', data, config).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        remove ({ commit }, routeId) {
+            return http.delete(`/route/remove?id=${routeId}`).then(response => {
+                const data = response.data || ''
+                return data
             })
         }
     }

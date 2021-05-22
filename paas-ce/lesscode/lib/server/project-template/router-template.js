@@ -14,24 +14,29 @@ ${importStr}
 
 const routes = [
     {
-        path: window.PROJECT_CONFIG.SITE_URL,
+        path: '/',
         name: 'appMain',
         component: BkMainEntry,
-        alias: '',
+        ${defaultRedirect},
         children: [
             ${routerStr}
         ]
     },
     // 404
     {
-        path: '*',
+        path: '/404',
         name: '404',
         component: BkNotFound
+    },
+    {
+        path: '*',
+        redirect: { name: '404' }
     }
 ]
 
 const router = new VueRouter({
     mode: 'history',
+    base: window.PROJECT_CONFIG.SITE_URL,
     routes: routes
 })
 

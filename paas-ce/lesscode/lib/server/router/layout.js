@@ -19,7 +19,8 @@ const {
     update,
     deleteLayout,
     setDefault,
-    getPageLayout
+    getPageLayout,
+    setRoutePath
 } = require('../controller/layout')
 
 const router = new Router({
@@ -35,5 +36,6 @@ router.post('/checkName', checkName)
 router.post('/update', update)
 router.delete('/delete', deleteLayout)
 router.post('/default', setDefault)
+router.put('/routePath', setRoutePath)
 
 module.exports = router
