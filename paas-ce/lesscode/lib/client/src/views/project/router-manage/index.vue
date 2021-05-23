@@ -3,35 +3,65 @@
         <div :class="['info-flexible', $style['inner']]" v-show="!pageLoading">
             <div :class="$style['caption']">
                 <div :class="$style['col']">路由配置</div>
-                <div :class="$style['col']">绑定的页面</div>
+                <div :class="$style['col']">绑定页面跳转路由</div>
             </div>
-            <dl :class="$style['content']" v-if="Object.keys(routeGroup).length">
+            <dl :class="$style['content']" v-if="routeGroup.length">
                 <div :class="$style['route-group']"
-                    v-for="(group, groupIndex) in Object.keys(routeGroup)"
-                    :key="groupIndex">
+                    v-for="group in routeGroup"
+                    :key="group.layoutId">
                     <dt :class="$style['group-title']">
-                        <i :class="['bk-drag-icon bk-drag-angle-up-fill', { 'bk-drag-angle-right-fill': foldeds[group] }, $style['arrow']]"
-                            @click="handleToggle(group)">
+                        <i v-show="group.children.length"
+                            :class="['bk-drag-icon bk-drag-angle-up-fill', { 'bk-drag-angle-right-fill': foldeds[group.layoutId] }, $style['arrow']]"
+                            @click="handleToggle(group.layoutId)">
                         </i>
                         <div :class="$style['node-row']">
-                            <div :class="$style['path']">
-                                <div :class="$style['path-name']">{{group}}</div>
-                                <div :class="$style['opts']">
-                                    <i :class="['bk-icon icon-plus', $style['icon']]" v-bk-tooltips="'添加子路由'" @click="handleAddSubRoute(group)"></i>
-                                    <!-- <i :class="['bk-icon icon-edit2 ml10', $style['icon']]" @click="handleEditLayoutPath(group)"></i> -->
+                            <div :class="[
+                                $style['path'],
+                                { [$style['editing']]: layoutEditState.group === group.layoutId }
+                            ]">
+                                <div :class="$style['path-name']" v-if="layoutEditState.group !== group.layoutId">{{group.layoutPath}}</div>
+                                <div v-else
+                                    :class="[
+                                        $style['edit-form'],
+                                        'edit-route-form', { 'has-error': layoutEditState.error }
+                                    ]">
+                                    <div :class="[$style['form-el'], { [$style['is-loading']]: loadingState.layout.includes(group.layoutId) }]">
+                                        <bk-input
+                                            :ref="`input-layout-${group.layoutId}`"
+                                            v-model.trim="layoutEditState.value"
+                                            :maxlength="60"
+                                            @enter="handleConfirmParentRoute"
+                                            @input="handleParentRouteInput"
+                                            placeholder="请输入路由名称，回车结束"
+                                        />
+                                        <i class="bk-icon icon-exclamation-circle-shape tips-icon"
+                                            v-bk-tooltips="editState.error === 1 ? '请检查路径正确性' : '需由数字、字母、下划线、中划线(-)、冒号(:)或反斜杠(/)组成'"></i>
+                                    </div>
+                                    <div :class="$style['buttons']">
+                                        <bk-button text size="small" theme="primary"
+                                            :disabled="parentPathInputDisabled"
+                                            @click="handleConfirmParentRoute">确定</bk-button>
+                                        <span :class="$style['divider']">|</span>
+                                        <bk-button text size="small" theme="primary" @click="handleParentRouteCancel">取消</bk-button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div :class="$style['bind']">
-                                <div :class="$style['bind-name']"></div>
+                                <div :class="[$style['opts'], { [$style['hide']]: editState.route !== null || removeLoading }]">
+                                    <i :class="['bk-icon icon-edit2 ml10', $style['icon']]" @click="handleEditLayoutPath(group)"></i>
+                                    <i :class="['bk-icon icon-plus', $style['icon']]"
+                                        v-show="editState.type !== 'new'"
+                                        v-bk-tooltips="'添加子路由'"
+                                        @click="handleAddSubRoute(group)"></i>
+                                </div>
                             </div>
                         </div>
                     </dt>
-                    <dd :class="$style['group-content']" v-show="!foldeds[group]">
-                        <div :class="$style['route-item']" v-for="(route, routeIndex) in routeGroup[group]" :key="routeIndex">
-                            <div :class="$style['node-row']">
+                    <dd :class="$style['group-content']" v-show="!foldeds[group.layoutId]">
+                        <div :class="$style['route-item']" v-for="route in group.children" :key="route.id">
+                            <div :class="[$style['node-row'], { [$style['active']]: activeState.routeId === route.id }]">
                                 <div :class="[
                                     $style['path'],
-                                    { [$style['editing']]: editState.route === route }]">
+                                    { [$style['editing']]: editState.route === route }
+                                ]">
                                     <div :class="$style['path-name']">
                                         <span v-if="editState.route !== route" :title="route.path">{{route.path | routeShow}}</span>
                                         <div
@@ -40,7 +70,7 @@
                                                 'edit-route-form', { 'has-error': editState.error }
                                             ]"
                                             v-else>
-                                            <div :class="[$style['form-el'], { [$style['is-loading']]: loadingState.route.includes(`${route.layoutPath}-${route.path}`) }]">
+                                            <div :class="[$style['form-el'], { [$style['is-loading']]: loadingState.route.includes(route.id) }]">
                                                 <bk-input
                                                     :ref="`input-${editState.route.id}`"
                                                     v-model.trim="editState.value"
@@ -61,13 +91,31 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div :class="$style['opts']">
+                                    <div :class="[$style['opts'], { [$style['hide']]: editState.route !== null || removeLoading }]">
                                         <i :class="['bk-icon icon-edit2', $style['icon']]" @click="handleEditRoute(route)"></i>
-                                        <!-- <i :class="['bk-icon icon-close ml10', $style['icon']]"></i> -->
+                                        <bk-popconfirm trigger="click" width="320"
+                                            confirm-text="删除"
+                                            @confirm="handleConfirmDelRoute(route)"
+                                            :on-hide="handleHideDelPopover">
+                                            <div slot="content">
+                                                <div :class="$style['del-tips']">
+                                                    <i :class="['bk-icon icon-info-circle-shape pr5', $style['content-icon']]"></i>
+                                                    <div :class="$style['content-text']">删除路由后，绑定到此路由的页面则无法访问，指向此路由的跳转路由也将失效</div>
+                                                </div>
+                                            </div>
+                                            <i :class="['bk-icon icon-close ml10', $style['icon']]" @click="handleShowDelPopover(route)"></i>
+                                        </bk-popconfirm>
                                     </div>
                                 </div>
-                                <div :class="$style['bind']">
-                                    <div :class="$style['bind-name']">{{route.pageName || '--'}}</div>
+                                <div :class="[$style['bind'], { [$style['disabled']]: editState.route !== null || removeLoading }]">
+                                    <div :class="$style['bind-name']" @click="handleEditBinding(route)" v-if="bindState.route !== route">
+                                        {{getBindDisplayValue(route)}}
+                                    </div>
+                                    <bind-route-form v-else
+                                        :selector-props="bindRouteSelectorProps"
+                                        :project-id="projectId"
+                                        @success="handleBindSuccess"
+                                        @cancel="handleBindCancel" />
                                 </div>
                             </div>
                         </div>
@@ -85,8 +133,12 @@
 
 <script>
     import { compile } from 'path-to-regexp'
+    import BindRouteForm from './children/bind-route-form'
 
     export default {
+        components: {
+            [BindRouteForm.name]: BindRouteForm
+        },
         filters: {
             routeShow (value) {
                 if (value === '') {
@@ -99,6 +151,7 @@
             return {
                 pageLoading: true,
                 routeGroup: [],
+                layoutList: [],
                 foldeds: {},
                 editState: {
                     type: '',
@@ -108,83 +161,150 @@
                 },
                 loadingState: {
                     layout: [],
-                    route: []
+                    route: [],
+                    remove: []
+                },
+                activeState: {
+                    routeId: null
+                },
+                layoutEditState: {
+                    value: null,
+                    group: null,
+                    error: false
+                },
+                bindState: {
+                    route: null
+                },
+                bindRouteSelectorProps: {
+                    active: {},
+                    routeGroup: [],
+                    pageList: []
                 }
             }
         },
         computed: {
             projectId () {
-                return this.$route.params.projectId
+                return Number(this.$route.params.projectId)
             },
             pathInputDisabled () {
                 const { value, route, error } = this.editState
-                const activeRoute = this.routeGroup[route.layoutPath].find(item => item.id === route.id)
-                const fullPath = `${route.layoutPath}-${route.path}`
-                const disabled = activeRoute.path === value || error || this.loadingState.route.includes(fullPath)
+                const disabled = route.path === value || error || this.loadingState.route.includes(route.id)
                 return Boolean(disabled)
+            },
+            parentPathInputDisabled () {
+                const { value, group, error } = this.layoutEditState
+                const activeGroup = this.routeGroup.find(item => item.layoutId === group)
+                const disabled = activeGroup.layoutPath === value || error || this.loadingState.layout.includes(group)
+                return Boolean(disabled)
+            },
+            routeFlatList () {
+                const list = this.routeGroup.map(({ children }) => children)
+                    .reduce((pre, cur) => pre.concat(cur), [])
+                    .map(({ id, layoutPath, path }) => ({
+                        id,
+                        fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                    }))
+                return list
+            },
+            removeLoading () {
+                return this.loadingState.remove.length > 0
             }
         },
         created () {
-            this.getRouteList()
+            this.fetchData()
         },
         methods: {
+            fetchData () {
+                this.getRouteList()
+                this.getPageList()
+            },
             async getRouteList () {
                 this.pageLoading = true
                 try {
                     const params = { projectId: this.projectId }
-                    const routeGroup = await this.$store.dispatch('route/getProjectRouteGroup', params)
+                    const [routeGroup, layoutList] = await Promise.all([
+                        this.$store.dispatch('route/getProjectRouteTree', params),
+                        this.$store.dispatch('layout/getList', params)
+                    ])
+                    this.layoutList = layoutList.map(({ id: layoutId, routePath: layoutPath }) => ({ layoutId, layoutPath }))
+
+                    // 补全所有布局模板父路由，便于父路由下没有路由时能快速的创建
+                    this.layoutList.forEach(({ layoutId, layoutPath }) => {
+                        const index = routeGroup.findIndex(item => item.layoutId === layoutId)
+                        if (index === -1) {
+                            routeGroup.push({
+                                children: [],
+                                layoutId,
+                                layoutPath
+                            })
+                        }
+                    })
+                    routeGroup.sort((g1, g2) => g1.layoutId - g2.layoutId)
                     this.routeGroup = routeGroup
+
+                    this.bindRouteSelectorProps.routeGroup = routeGroup
                 } catch (e) {
                     console.error(e)
                 } finally {
                     this.pageLoading = false
                 }
             },
-            handleEditLayoutPath () {
-                console.log('handleEditLayoutPath')
+            async getPageList () {
+                const list = await this.$store.dispatch('page/getLiteList', { projectId: this.projectId, config: { fromCache: true } })
+                this.bindRouteSelectorProps.pageList = list.map(({ id, pageName: name }) => ({ id, name }))
+            },
+            handleEditLayoutPath (group) {
+                this.unsetEditState()
+                this.unsetBindState()
+
+                this.layoutEditState.value = group.layoutPath
+                this.layoutEditState.group = group.layoutId
+
+                this.foucsInput(`input-layout-${group.layoutId}`)
             },
             handleAddSubRoute (group) {
-                const groupFirstRoute = this.routeGroup[group] ? this.routeGroup[group][0] : {}
+                this.unsetBindState()
+
                 const newRoute = {
                     id: Date.now(),
                     path: '',
-                    layoutId: groupFirstRoute.layoutId,
-                    layoutPath: group
+                    layoutId: group.layoutId,
+                    layoutPath: group.layoutPath
                 }
                 this.editState.type = 'new'
                 this.editState.value = newRoute.path
                 this.editState.route = newRoute
-                this.routeGroup[group].push(newRoute)
 
-                this.$nextTick(() => {
-                    const component = this.$refs[`input-${newRoute.id}`]
-                    component[0] && component[0].focus && component[0].focus()
-                })
+                const activeGroup = this.routeGroup.find(item => item.layoutId === group.layoutId)
+                activeGroup.children.push(newRoute)
+
+                this.foucsInput(`input-${newRoute.id}`)
             },
             handleEditRoute (route) {
+                this.unsetParentEditState()
+                this.unsetBindState()
+
                 this.editState.type = ''
                 this.editState.value = this.$options.filters.routeShow(route.path)
                 this.editState.route = route
 
-                this.$nextTick(() => {
-                    const component = this.$refs[`input-${route.id}`]
-                    component[0] && component[0].focus && component[0].focus()
-                })
+                this.foucsInput(`input-${route.id}`)
             },
             async handleConfirmSubRoute () {
                 const { route, type } = this.editState
-                const fullPath = `${route.layoutPath}-${route.path}`
-                const activeRoute = this.routeGroup[route.layoutPath].find(item => item.id === route.id)
+                const group = this.routeGroup.find(item => item.layoutId === route.layoutId)
+                const activeRoute = group.children.find(item => item.id === route.id)
 
                 if (this.pathInputDisabled) {
                     return
                 }
 
-                this.loadingState.route.push(fullPath)
+                const loadingRouteId = route.id
+                this.loadingState.route.push(loadingRouteId)
                 try {
                     if (type === 'new') {
                         const routeCreated = await this.createRoute()
-                        Object.assign(activeRoute, routeCreated)
+                        Object.assign(activeRoute, routeCreated, { pageId: -1, redirect: null })
                     } else {
                         const routeSaved = await this.saveRoute()
                         activeRoute.path = routeSaved.path
@@ -194,41 +314,102 @@
                 } catch (e) {
                     console.error(e)
                 } finally {
-                    this.loadingState.route = this.loadingState.route.filter(exist => exist !== fullPath)
+                    this.loadingState.route = this.loadingState.route.filter(exist => exist !== loadingRouteId)
                 }
+            },
+            async handleConfirmParentRoute () {
+                const { group, value } = this.layoutEditState
+                const activeGroup = this.routeGroup.find(item => item.layoutId === group)
+
+                if (this.parentPathInputDisabled) {
+                    return
+                }
+
+                const data = {
+                    id: activeGroup.layoutId,
+                    projectId: this.projectId,
+                    routePath: '/' + value.replace(/^\/+|\/+$/g, '')
+                }
+                this.loadingState.layout.push(group)
+                try {
+                    await this.$store.dispatch('layout/setRoutePath', data)
+                    activeGroup.layoutPath = data.routePath
+                    activeGroup.children.forEach(route => (route.layoutPath = data.routePath))
+                    this.unsetParentEditState()
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    this.loadingState.layout = this.loadingState.layout.filter(exist => exist !== group)
+                }
+            },
+            handleParentRouteInput (value) {
+                this.layoutEditState.error = this.checkRoutePath(value)
+            },
+            handleParentRouteCancel () {
+                if (!this.layoutEditState.group) {
+                    return
+                }
+
+                const group = this.layoutEditState.group
+
+                if (this.loadingState.layout.includes(group)) {
+                    return
+                }
+
+                this.unsetParentEditState()
+            },
+            async handleConfirmDelRoute (route) {
+                const { id: routeId, layoutId } = route
+                this.loadingState.remove.push(routeId)
+                try {
+                    await this.$store.dispatch('route/remove', routeId)
+                    const group = this.routeGroup.find(item => item.layoutId === layoutId)
+                    const routeIndex = group.children.findIndex(item => item.id === routeId)
+                    group.children.splice(routeIndex, 1)
+                    // 重置跳转路由
+                    this.routeGroup.forEach(group => {
+                        group.children.forEach(route => {
+                            if (route.redirect === routeId) {
+                                route.redirect = null
+                            }
+                        })
+                    })
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    this.loadingState.remove = this.loadingState.remove.filter(exist => exist !== routeId)
+                }
+            },
+            handleShowDelPopover (route) {
+                this.unsetEditState()
+                this.unsetParentEditState()
+                this.unsetBindState()
+                this.activeState.routeId = route.id
+            },
+            handleHideDelPopover () {
+                this.activeState.routeId = null
             },
             handleSubRouteCancel () {
                 if (!this.editState.route) {
                     return
                 }
 
-                const { id, path, layoutPath } = this.editState.route
-                const routeGroup = this.routeGroup[layoutPath]
-                const fullPath = `${layoutPath}-${path}`
+                const { id, layoutId } = this.editState.route
 
-                if (this.loadingState.route.includes(fullPath)) {
+                if (this.loadingState.route.includes(id)) {
                     return
                 }
 
                 if (this.editState.type === 'new') {
-                    const index = routeGroup.findIndex(item => item.id === id)
-                    routeGroup.splice(index, 1)
+                    const activeGroup = this.routeGroup.find(item => item.layoutId === layoutId)
+                    const index = activeGroup.children.findIndex(item => item.id === id)
+                    activeGroup.children.splice(index, 1)
                 }
 
                 this.unsetEditState()
             },
             handleSubRouteInput (value) {
-                try {
-                    compile(value)
-                    this.editState.error = false
-                    if (!/^[\w-_:\/?]+$/.test(value)) {
-                        this.editState.error = true
-                    } else if (/\/{2,}/.test(value)) {
-                        this.editState.error = 1
-                    }
-                } catch (e) {
-                    this.editState.error = 1
-                }
+                this.editState.error = this.checkRoutePath(value)
             },
             async saveRoute () {
                 const { value, route } = this.editState
@@ -258,10 +439,30 @@
                 })
                 return res
             },
+            handleEditBinding (route) {
+                if (this.editState.route) {
+                    return
+                }
+                this.unsetParentEditState()
+
+                this.bindState.route = route
+                this.activeState.routeId = route.id
+                this.bindRouteSelectorProps.active = route
+            },
             unsetEditState () {
+                this.editState.type = ''
                 this.editState.value = null
                 this.editState.route = null
                 this.editState.error = false
+            },
+            unsetParentEditState () {
+                this.layoutEditState.value = null
+                this.layoutEditState.group = null
+                this.layoutEditState.error = false
+            },
+            unsetBindState () {
+                this.bindState.route = null
+                this.activeState.routeId = null
             },
             handleCreatePage () {
                 this.$router.push({
@@ -271,8 +472,55 @@
                     }
                 })
             },
+            handleBindSuccess ({ routeId, pageId, redirect, name }) {
+                for (const { children } of this.routeGroup) {
+                    const targetRoute = children.find(route => route.id === routeId)
+                    if (targetRoute) {
+                        const changedRoute = { pageId, redirect }
+                        changedRoute.pageName = pageId !== -1 ? name : null
+                        Object.assign(targetRoute, changedRoute)
+                        break
+                    }
+                }
+                this.unsetBindState()
+            },
+            handleBindCancel () {
+                this.unsetBindState()
+            },
             handleToggle (group) {
                 this.$set(this.foldeds, group, !this.foldeds[group])
+            },
+            getBindDisplayValue (route) {
+                const { pageId, pageName, redirect } = route
+                // 依据vue-router跳转路由优先
+                if (redirect) {
+                    const targetRoute = this.routeFlatList.find(item => item.id === redirect) || {}
+                    return targetRoute.fullPath || '--'
+                }
+                if (pageId !== -1) {
+                    return pageName
+                }
+                return '未绑定'
+            },
+            checkRoutePath (value) {
+                let error = false
+                try {
+                    compile(value)
+                    if (!/^[\w-_:\/?]+$/.test(value)) {
+                        error = true
+                    } else if (/\/{2,}/.test(value)) {
+                        error = 1
+                    }
+                } catch (e) {
+                    error = 1
+                }
+                return error
+            },
+            foucsInput (id) {
+                this.$nextTick(() => {
+                    const component = this.$refs[id]
+                    component[0] && component[0].focus && component[0].focus()
+                })
             }
         }
     }
@@ -349,7 +597,8 @@
                 background: #979BA5;
                 border-radius: 50%;
             }
-            &:hover {
+            &:hover,
+            &.active {
                 background: #E1ECFF;
                 color: #3A84FF;
 
@@ -362,9 +611,10 @@
 
             .path {
                 display: flex;
-                flex: 1;
+                flex: none;
                 position: relative;
-                width: 50%;
+                width: calc(50% - 36px);
+                justify-content: space-between;
 
                 .path-name {
                     flex: 1;
@@ -376,8 +626,7 @@
 
                 .opts {
                     visibility: hidden;
-                    margin-left: 12px;
-                    margin-right: 54px;
+                    margin-right: 12px;
                     align-items: center;
 
                     .icon {
@@ -397,22 +646,28 @@
                         line-height: 24px;
                         text-align: center;
                     }
+
+                    &.hide {
+                        visibility: hidden;
+                    }
                 }
 
                 &.editing {
                     .opts {
                         visibility: hidden;
                     }
-
                 }
             }
             .bind {
-                flex: 1;
-                width: 50%;
-                margin-left: -36px;
+                display: flex;
+                flex: none;
+                align-items: center;
+                width: calc(50% + 36px - 12px);
+                margin-left: 12px;
 
                 .bind-name {
-                    /* white-space: nowrap;
+                    width: 100%;
+                    white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     margin-right: 14px;
@@ -420,12 +675,16 @@
                     height: 26px;
                     padding-left: 4px;
                     line-height: 26px;
+                }
 
-                    &:hover {
-                        color: #63656E;
-                        background: #DCDEE5;
-                        cursor: pointer;
-                    } */
+                &:not(.disabled) {
+                    .bind-name {
+                        &:hover {
+                            color: #63656E;
+                            background: #DCDEE5;
+                            cursor: pointer;
+                        }
+                    }
                 }
             }
         }
@@ -435,9 +694,10 @@
 
             .node-row {
                 .path {
-                    .opts {
-                        margin-right: 72px;
-                    }
+                    width: calc(50% - 36px - 18px);
+                }
+                .bind {
+                    width: calc(50% + 36px + 6px);
                 }
             }
         }
@@ -459,6 +719,7 @@
             display: flex;
             align-items: center;
             height: 100%;
+            flex: 1;
 
             .form-el {
                 &.is-loading {
@@ -505,6 +766,22 @@
 
         .empty-text {
             display: flex;
+        }
+    }
+
+    .del-tips {
+        font-size: 14px;
+        line-height: 24px;
+        color: #63656e;
+        padding-bottom: 10px;
+        .content-icon {
+            color: #ea3636;
+            position: absolute;
+            top: 20px;
+        }
+        .content-text {
+            display: inline-block;
+            margin-left: 20px;
         }
     }
 

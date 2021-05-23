@@ -12,6 +12,9 @@ import httpVueLoader from '@/common/http-vue-loader'
 import { uuid } from '@/common/util'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
+
+import BkNotFound from './children/404.vue'
+
 Vue.use(VueRouter)
 
 const uniqStr = uuid()
@@ -22,31 +25,7 @@ function registerComponent (code) {
     return httpVueLoader(code)
 }
 
-const BkNotFound = registerComponent(`
-    <template>
-        <bk-exception class="exception-wrap-item" type="404">
-            <span>页面不存在</span>
-        </bk-exception>
-    </template>
-
-    <script>
-        export default {
-            data () {
-                return {}
-            }
-        }
-    </script>
-
-    <style scoped>
-        .exception-wrap-item {
-            margin: 150px auto 0 !important;
-            height: 420px;
-            padding-top: 22px;
-        }
-    </style>
-`)
-
-function generateApp (defaultPushData) {
+function generateApp () {
     return registerComponent(`
         <template>
             <div id="app">
@@ -55,10 +34,7 @@ function generateApp (defaultPushData) {
         </template>
         <script>
             export default {
-                name: 'app',
-                created () {
-                    if ('${defaultPushData}') this.$router.replace(${JSON.stringify(defaultPushData)})
-                }
+                name: 'app'
             }
         </script>
         <style>
@@ -126,39 +102,40 @@ const Home = registerComponent(`
     </script>
 `)
 
-// 初始化路由地址
-let defaultPushData = ''
-window.addEventListener('message', (res) => {
-    const data = res.data || {}
-    if (data.type !== 'initRouter') return
-    const fullPath = data.fullPath || ''
-    const query = data.query || {}
-    const pageCode = query.pageCode || ''
-    const pushObj = {}
-    if (pageCode) {
-        pushObj.name = pageCode
-    } else if (fullPath) {
-        pushObj.path = fullPath
-    }
-    if (router.push) {
-        router.push(pushObj)
-    } else {
-        defaultPushData = pushObj
-    }
-})
-
 // 生成路由
-module.exports = (dataMap) => {
+module.exports = (routeGroup, projectPageRouteList) => {
     const routes = []
-    for (const key in dataMap) {
-        const layout = dataMap[key]
+    for (const key in routeGroup) {
+        const layout = routeGroup[key]
         // 父路由
         const parentCom = registerComponent(layout.content)
         // 子路由
         const routeList = layout.children
         const children = routeList.map((route) => {
-            const childCom = registerComponent(route.content)
-            return { path: route.path.replace(/^\//, ''), name: route.pageCode, component: childCom }
+            const routeConifg = {
+                path: route.path.replace(/^\//, '')
+            }
+
+            // 与vue-router保持一致，优先使用redirect
+            if (route.redirectRoute) {
+                const { layoutPath, path } = route.redirectRoute
+                // 导航菜单会通过name跳转所以仍然需要name，未绑定页面的路由使用跳转路径作为name
+                const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                routeConifg.name = route.pageCode || fullPath.replace(/[\/\-\:]/g, '')
+                routeConifg.redirect = {
+                    path: fullPath
+                }
+            } else if (route.pageId !== -1) {
+                const childCom = registerComponent(route.content)
+                routeConifg.name = route.pageCode
+                routeConifg.component = childCom
+            } else {
+                routeConifg.redirect = {
+                    path: '/404'
+                }
+            }
+
+            return routeConifg
         })
         // 404
         if (layout.path !== '/') {
@@ -171,19 +148,28 @@ module.exports = (dataMap) => {
             children
         })
     }
+    const noRoutePages = projectPageRouteList.filter(route => !route.id).map(route => {
+        return {
+            path: `${route.pageCode}404`,
+            name: route.pageCode,
+            redirect: { name: '404' }
+        }
+    })
     router = new VueRouter({
         mode: 'history',
-        routes: [{
-            path: '/',
-            name: 'previewHome',
-            component: Home,
-            children: routes
-        },
-        {
-            path: '*',
-            name: '404',
-            component: BkNotFound
-        }]
+        routes: [
+            {
+                path: '/',
+                name: 'previewHome',
+                component: Home,
+                children: [...routes, ...noRoutePages]
+            },
+            {
+                path: '/404',
+                name: '404',
+                component: BkNotFound
+            }
+        ]
     })
     router.beforeEach(async (to, from, next) => {
         if (to.fullPath === '/preview.html') return
@@ -194,10 +180,11 @@ module.exports = (dataMap) => {
         const data = {
             type: 'preview',
             name: route.name,
-            fullPath: route.fullPath
+            fullPath: route.fullPath,
+            query: route.query
         }
         window.parent.postMessage(data, '\*')
     })
-    const App = generateApp(defaultPushData)
+    const App = generateApp()
     return { router, App }
 }

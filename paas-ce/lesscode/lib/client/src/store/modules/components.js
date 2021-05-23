@@ -15,7 +15,7 @@ export default {
     namespaced: true,
     state: {
         curNameMap: {},
-        interactiveComponents: ['bk-dialog']
+        interactiveComponents: ['bk-dialog', 'bk-sideslider']
     },
     mutations: {
         setCurNameMap (state, nameMap) {

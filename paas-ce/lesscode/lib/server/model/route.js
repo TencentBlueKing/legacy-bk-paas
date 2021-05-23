@@ -13,40 +13,46 @@ import Route from './entities/route'
 import PageRoute from './entities/page-route'
 import Page from './entities/page'
 import LayoutInst from './entities/layout-inst'
-import ProjectPage from './entities/project-page'
 import Layout from './entities/layout'
 
 export default {
-    queryProjectRoute (projectId) {
-        return getRepository(Route)
-            .createQueryBuilder('route')
-            .leftJoinAndSelect(PageRoute, 'pr', 'route.id = pr.routeId')
-            .leftJoinAndSelect(Page, 'p', 'p.id = pr.pageId')
+    queryProjectPageRoute (projectId) {
+        return getRepository(Page)
+            .createQueryBuilder('p')
+            .leftJoinAndSelect(PageRoute, 'pr', 'p.id = pr.pageId')
+            .leftJoinAndSelect(Route, 'route', 'route.id = pr.routeId')
+            .leftJoinAndSelect(LayoutInst, 'layoutinst', 'layoutinst.id = pr.layoutId')
             .where('pr.projectId = :projectId', { projectId })
-            .andWhere('route.deleteFlag = 0')
             .andWhere('p.deleteFlag = 0')
-            .select(['route.id as id', 'route.parentId as parentId', 'route.path as path', 'route.order as routeOrder', 'p.pageCode as pageCode', 'p.content as content'])
-            .orderBy({
-                'route.parentId': 'ASC',
-                'route.id': 'ASC'
-            })
+            .select([
+                'route.id as id',
+                'route.path as path',
+                'p.id as pageId',
+                'p.pageCode as pageCode',
+                'p.pageName as pageName',
+                'layoutinst.id as layoutId',
+                'layoutinst.routePath as layoutPath'
+            ])
             .getRawMany()
     },
+
+    // 查询页面的路由，未设置路由的页面同样会返回layout信息
     queryPageRoute (pageId) {
-        return getRepository(Route)
-            .createQueryBuilder('route')
-            .leftJoinAndSelect(PageRoute, 'pr', 'route.id = pr.routeId')
+        return getRepository(Page)
+            .createQueryBuilder('page')
+            .leftJoinAndSelect(PageRoute, 'pr', 'page.id = pr.pageId')
+            .leftJoinAndSelect(Route, 'route', 'route.id = pr.routeId')
             .leftJoinAndSelect(LayoutInst, 'layoutinst', 'pr.layoutId = layoutinst.id')
             .select([
                 'route.id as id',
-                'route.parentId as parentId',
                 'route.path as path',
                 'layoutinst.routePath as layoutPath',
                 'layoutinst.id as layoutId'
             ])
-            .where('pr.pageId = :pageId', { pageId })
+            .where('page.id = :pageId', { pageId })
             .getRawOne()
     },
+
     savePageRoute (pageRoute) {
         return getRepository(Route).save(pageRoute)
     },
@@ -69,6 +75,7 @@ export default {
                 'page.deleteFlag as pageDeleteFlag',
                 'page.lifeCycle as lifeCycle',
                 'pr.pageId as pageId',
+                'pr.redirect as redirect',
                 'layoutinst.id as layoutId',
                 'layoutinst.routePath as layoutPath',
                 'layoutinst.layoutCode as layoutCode',
@@ -81,34 +88,26 @@ export default {
             .getRawMany()
     },
 
-    // 获取指定页面同项目下的页面与路由信息
-    findLayoutPageRoute (pageId) {
-        return getRepository(PageRoute)
-            .createQueryBuilder('pageRoute')
-            .leftJoinAndSelect(Page, 'page', 'page.id = pageRoute.pageId')
-            .leftJoinAndSelect(Route, 'route', 'route.id = pageRoute.routeId')
-            .leftJoinAndSelect(LayoutInst, 'layoutinst', 'layoutinst.id = pageRoute.layoutId')
+    queryProjectRouteTree (projectId) {
+        return getRepository(LayoutInst)
+            .createQueryBuilder('layoutinst')
+            .leftJoinAndSelect(PageRoute, 'pr', 'layoutinst.id = pr.layoutId AND (pr.deleteFlag IS NULL OR pr.deleteFlag = 0)')
+            .leftJoinAndSelect(Page, 'page', 'page.id = pr.pageId')
+            .leftJoinAndSelect(Route, 'route', 'route.id = pr.routeId')
             .select([
-                'pageRoute.pageId as pageId',
-                'page.pageCode as pageCode',
-                'page.pageName as pageName',
-                'route.path as routePath',
+                'layoutinst.id as layoutId',
                 'layoutinst.routePath as layoutPath',
-                'layoutinst.layoutCode as layoutCode'
+                'pr.pageId as pageId',
+                'pr.redirect as redirect',
+                'route.id as id',
+                'route.path as path',
+                'page.pageCode as pageCode',
+                'page.pageName as pageName'
             ])
-            .where(qb => {
-                const subQuery = qb
-                    .subQuery()
-                    .select('projectPage.projectId')
-                    .from(ProjectPage, 'projectPage')
-                    .where('projectPage.pageId = :pageId')
-                    .getQuery()
-                return 'pageRoute.projectId = ' + subQuery
-            })
-            .setParameter('pageId', pageId)
-            .andWhere('pageId != -1')
-            .andWhere('page.deleteFlag = 0')
-            .orderBy('pageId', 'DESC')
+            .where('layoutinst.projectId = :projectId', { projectId })
+            .andWhere('layoutinst.deleteFlag = 0')
+            .andWhere('pr.routeId != -1') // 过虑已删除的路由（与页面解除绑定）
+            .orderBy('layoutinst.id')
             .getRawMany()
     },
 

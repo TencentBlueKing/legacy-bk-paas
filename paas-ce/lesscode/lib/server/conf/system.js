@@ -12,5 +12,5 @@
 // 系统配置
 module.exports = {
     invalidProjectIds: ['bk', 'el', 'a', 't'],
-    invalidPageIds: ['bkindex', 'BkNotFound', 'BkMainEntry']
+    invalidPageIds: ['bkindex', 'BkNotFound', 'BkMainEntry', '404']
 }

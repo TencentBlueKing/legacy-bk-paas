@@ -11,25 +11,30 @@
 
 const Router = require('koa-router')
 const {
-    queryRoute,
+    queryProjectPageRoute,
     getPageRoute,
     savePageRoute,
     getProjectRoute,
     createProjectRoute,
     updatePageRoute,
-    getLayoutPageList
+    getProjectRouteTree,
+    bindPageRoute,
+    removeRoute
 } = require('../controller/route')
 
 const router = new Router({
     prefix: '/api/route'
 })
 
-router.get('/query', queryRoute)
+router.get('/query/:projectId', queryProjectPageRoute)
+router.get('/project/:projectId/page', queryProjectPageRoute)
 router.get('/project/:id', getProjectRoute)
+router.get('/project/:id/tree', getProjectRouteTree)
 router.get('/page/:id', getPageRoute)
 router.put('/page/:id?', savePageRoute)
 router.post('/project/:id', createProjectRoute)
 router.post('/page-route/:id', updatePageRoute)
-router.get('/layout/page/:id', getLayoutPageList)
+router.post('/bind', bindPageRoute)
+router.delete('/remove', removeRoute)
 
 module.exports = router

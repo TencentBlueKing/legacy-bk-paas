@@ -21,17 +21,13 @@ const httpConf = require('../conf/http')
 let npmConf
 try {
     npmConf = require('../conf/npm')
-} catch(_) {
+} catch (_) {
     npmConf = {}
 }
 
 const fs = require('fs')
 const path = require('path')
 const fse = require('fs-extra')
-const request = require('request')
-const shell = require('shelljs')
-
-const { logger } = require('../logger')
 
 const DIR_PATH = '.'
 
@@ -41,10 +37,22 @@ const projectCode = {
 
     async previewCode (projectId) {
         // 生成路由相关的数据
-        const routeList = await routeModel.findProjectRoute(projectId)
+        const [routeList, pageRouteList] = await Promise.all([
+            routeModel.findProjectRoute(projectId),
+            routeModel.queryProjectPageRoute(projectId)
+        ])
+
         const routeGroup = {}
-        routeList.forEach((route) => {
-            if (route.pageId === -1 || route.pageDeleteFlag !== 0) return
+        for (const route of routeList) {
+            // 允许pageId === -1，表示未绑定页面但绑定了路由，两者都未绑定则过虑
+            if (route.pageId === -1 && !route.redirect) {
+                continue
+            }
+
+            if (route.redirect) {
+                const { pageCode, path, layoutPath } = routeList.find(item => item.id === route.redirect) || {}
+                route.redirectRoute = { pageCode, path, layoutPath }
+            }
 
             const layoutId = route.layoutId
             const curRoute = routeGroup[layoutId]
@@ -59,7 +67,7 @@ const projectCode = {
                     name: route.layoutCode || 'emptyView'
                 }
             }
-        })
+        }
 
         // 获取生成view文件所需的数据
         const allCustomMap = await ComponentModel.getNameMap()
@@ -72,10 +80,12 @@ const projectCode = {
         }
         const layoutIns = Object.values(routeGroup)
         for (const layout of layoutIns) {
-            const routeList = layout.children
+            // 父路由（布局）内容
             const pageDetail = await PageCodeModel.getPageData([], 'preview', pageData.allCustomMap, pageData.funcGroups, {}, projectId, '', layout.content, true, false, layout.layoutType, [])
             layout.content = pageDetail.code
 
+            // 子路由（页面）内容，先排除未绑定页面的路由
+            const routeList = layout.children.filter(route => route.pageId !== -1)
             await Promise.all(routeList.map(async route => {
                 // 生成views部分
                 const variableData = [
@@ -83,11 +93,11 @@ const projectCode = {
                     ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && variable.pageCode === route.pageCode))
                 ]
                 const pageDetail = await PageCodeModel.getPageData(
-                    JSON.parse(route.content),
+                    JSON.parse(route.content || '[]'),
                     'preview',
                     pageData.allCustomMap,
                     pageData.funcGroups,
-                    route.lifeCycle,
+                    route.lifeCycle || {},
                     projectId,
                     route.pageId,
                     '',
@@ -114,7 +124,7 @@ const projectCode = {
             storeData.push({ variableCode, defaultValue, defaultValueType })
         })
 
-        return { routeGroup, storeData }
+        return { routeGroup, storeData, pageRouteList }
     },
 
     async generateCode (projectId, pathName) {
@@ -124,7 +134,12 @@ const projectCode = {
         return new Promise(async (resolve, reject) => {
             try {
                 fse.copySync(sourcePath, targetPath)
-                const routeList = await routeModel.findProjectRoute(projectId)
+
+                const [routeList, pageRouteList] = await Promise.all([
+                    routeModel.findProjectRoute(projectId),
+                    routeModel.queryProjectPageRoute(projectId)
+                ])
+
                 const routeGroup = {}
                 const routeMap = {}
 
@@ -134,7 +149,7 @@ const projectCode = {
 
                     // 每个 route 是一个页面，只有要一个页面使用了 element，那么其他页面就不用检测是否使用了
                     if (!isUseElement) {
-                        const targetData = JSON.parse(route.content || '[]') || []
+                        const targetData = JSON.parse(route.content || '[]')
                         targetData.forEach((container, index) => {
                             const callBack = item => {
                                 if (item.name.startsWith('el-')) {
@@ -145,8 +160,17 @@ const projectCode = {
                         })
                     }
                 })
-                routeList.forEach((route) => {
-                    if (route.pageId === -1 || route.pageDeleteFlag !== 0) return
+
+                for (const route of routeList) {
+                    // 允许pageId === -1，表示未绑定页面但绑定了路由，两者都未绑定则过虑
+                    if (route.pageId === -1 && !route.redirect) {
+                        continue
+                    }
+
+                    if (route.redirect) {
+                        const { pageCode, path, layoutPath } = routeList.find(item => item.id === route.redirect) || {}
+                        route.redirectRoute = { pageCode, path, layoutPath }
+                    }
 
                     const layoutId = route.layoutId
                     const curRoute = routeGroup[layoutId]
@@ -161,9 +185,11 @@ const projectCode = {
                             name: route.layoutCode || 'emptyView'
                         }
                     }
-                })
+                }
+
                 let routerImport = ''
                 let routerStr = ''
+                let defaultRouteRedirect = 'redirect: { name: \'404\' }'
 
                 // 获取生成view文件所需的数据
                 const allCustomMap = await ComponentModel.getNameMap()
@@ -181,17 +207,38 @@ const projectCode = {
                     const routeList = layout.children
                     const layoutName = layout.name.replace(/-(\w)/g, (a, b) => b.toUpperCase()) + uniqStr
                     routerImport += `const ${layoutName} = () => import(/* webpackChunkName: '${layout.name}' */'@/views/${layout.name}/bkindex')\n`
-                    let childRoute = routeList.map((route) => (`{ path: '${route.path}', name: '${route.pageCode}', component: ${route.pageCode} }`)).join(',')
+
+                    // 预览路由优化使用path跳转（防止因name不存在自动跳到首页），生成代码使用name跳转，因导航菜单中已经使用name跳转
+                    const childRoute = routeList.map((route) => {
+                        if (route.redirectRoute) {
+                            const { layoutPath, path } = route.redirectRoute
+                            const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                            const routeName = route.pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${route.id}`
+                            const routeComponent = route.pageCode ? ` component: ${route.pageCode},` : ''
+                            return `{ path: '${route.path}', name: '${routeName}',${routeComponent} redirect: { path: '${fullPath}' } }`
+                        } else if (route.pageId !== -1) {
+                            return `{ path: '${route.path}', name: '${route.pageCode}', component: ${route.pageCode} }`
+                        } else {
+                            return `{ path: '${route.path}', redirect: { name: '404' } }`
+                        }
+                    })
+                    if (layout.path !== '/') childRoute.push(`{ path: '*', component: BkNotFound }`)
+
                     const currentFilePath = path.join(targetPath, `lib/client/src/views/${layout.name}/bkindex.vue`)
                     await this.writeViewCode(currentFilePath, { targetData: [] }, '', pathName, projectId, {}, '', layout.content, true, layout.layoutType, [])
-                    if (layout.path !== '/') childRoute += `,{ path: '*', component: BkNotFound }`
+
                     routerStr += `{
-                        path: '${layout.path}',
+                        path: '${layout.path.replace(/^\//, '')}',
                         name: '${layout.name + uniqStr}',
                         component: ${layoutName},
-                        children: [${childRoute}]
+                        children: [
+                            ${childRoute.join(',\n')}
+                        ]
                     },\n`
-                    await Promise.all(routeList.map(async route => {
+
+                    // 绑定了路由的页面才需要生成内容
+                    const usePageRouteList = layout.children.filter(route => route.pageId !== -1)
+                    await Promise.all(usePageRouteList.map(async route => {
                         // 生成router部分
                         routerImport += `const ${route.pageCode} = () => import(/* webpackChunkName: '${route.pageCode}' */'@/views/${layout.name}/${route.pageCode}.vue')\n`
                         // 生成views部分
@@ -233,15 +280,47 @@ const projectCode = {
                     const npmrcContent = `${npmConf.scopename}:registry=${npmConf.registry}`
                     fs.writeFileSync(path.join(targetPath, '.npmrc'), npmrcContent, 'utf8')
                 }
-                
+
                 // 生成router
+                pageRouteList.forEach(route => {
+                    // 未绑定路由的页面跳转到404
+                    if (!route.id) {
+                        routerStr += `{
+                            path: '${route.pageCode}404',
+                            name: '${route.pageCode}',
+                            redirect: { name: '404' }
+                        },\n`
+                    }
+                })
                 if (routerStr.endsWith(',\n')) {
                     routerStr = routerStr.substr(0, routerStr.length - 2)
                 }
+
+                // 寻找默认首页
+                const availableRoutList = routeList.filter(item => !(item.pageId === -1 && !item.redirect))
+                    .map(({ id, layoutPath, path, pageCode, redirectRoute }) => ({ id, layoutPath, path, pageCode, redirectRoute }))
+                let defaultHomeRoute = availableRoutList.find(({ layoutPath, path }) => layoutPath === '/' && path === '')
+                if (!defaultHomeRoute) {
+                    defaultHomeRoute = pageRouteList.find(item => item.layoutPath === '/' && item.id)
+                }
+                const defaultRoute = defaultHomeRoute || availableRoutList[0]
+                if (defaultRoute) {
+                    const { id, layoutPath, path, pageCode, redirectRoute } = defaultRoute
+                    let fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                    if (redirectRoute) {
+                        fullPath = `${redirectRoute.layoutPath}${redirectRoute.layoutPath.endsWith('/') ? '' : '/'}${redirectRoute.path}`
+                    }
+                    // 跳转路由可能没有pageCode，使用跳转路径作为name，同时跳转路径可能会重复加上路由id防止
+                    const redirectRouteName = pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${id}`
+                    defaultRouteRedirect = `redirect: { name: '${redirectRouteName}' }`
+                }
+
                 const routeSourcePath = path.join(STATIC_URL, 'router-template.js')
                 const routeTargetPath = path.join(targetPath, 'lib/client/src/router/index.js')
                 await this.generateFileByReplace(routeSourcePath, routeTargetPath, (content) => {
-                    return content.replace(/\$\{importStr\}/, routerImport).replace(/\$\{routerStr\}/, routerStr)
+                    return content.replace(/\$\{importStr\}/, routerImport)
+                        .replace(/\$\{routerStr\}/, routerStr)
+                        .replace(/\$\{defaultRedirect\}/, defaultRouteRedirect)
                 })
 
                 // 生成store

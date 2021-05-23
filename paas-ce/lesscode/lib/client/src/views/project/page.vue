@@ -35,6 +35,16 @@
                         <div class="item-ft">
                             <div class="col">
                                 <h3 class="name" :title="page.pageName">{{page.pageName}}</h3>
+                                <div class="route">
+                                    <svg class="label" width="22" height="14" viewBox="0 0 22 14">
+                                        <rect x="0" width="22" height="14" rx="2" fill="#F0F1F5" />
+                                        <text font-family="'PingFang SC','Microsoft Yahei'" fill="#979ba5" style="text-anchor: middle" font-size="8" x="11" y="10">路由</text>
+                                    </svg>
+                                    <div class="path">
+                                        <span class="fullpath" :title="routeMap[page.id].fullPath" v-if="routeMap[page.id].id">{{routeMap[page.id].fullPath}}</span>
+                                        <span class="unset" v-else>未配置</span>
+                                    </div>
+                                </div>
                                 <div class="stat">{{ page.updateUser || page.createUser }} {{ getRelativeTime(page.updateTime) }}更新</div>
                             </div>
                             <div class="col">
@@ -45,6 +55,7 @@
                                     <ul class="bk-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(page.id)">
                                         <li><a href="javascript:;" @click="handleDownloadSource(page.content, page.id, page.lifeCycle)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="handleRename(page)">重命名</a></li>
+                                        <li><a href="javascript:;" @click="handleEditRoute(page)">修改路由</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(page)">复制</a></li>
                                         <li><a href="javascript:;" @click="handleDelete(page)" :class="{ 'g-no-permission': userPerm.roleId === 2 }" v-bk-tooltips="{ content: '无删除权限', placements: ['right'], disabled: userPerm.roleId === 1 }">删除</a></li>
                                     </ul>
@@ -62,6 +73,7 @@
             </div>
             <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :refresh-list="getPageList"></page-dialog>
             <download-dialog ref="downloadDialog"></download-dialog>
+            <edit-route-dialog ref="editRouteDialog" :route-group="routeGroup" :current-route="currentRoute" @success="getPageList" />
         </main>
     </section>
 </template>
@@ -71,6 +83,7 @@
     import preivewErrImg from '@/images/preview-error.png'
     import pageDialog from '@/components/project/page-dialog'
     import downloadDialog from '@/views/system/components/download-dialog'
+    import editRouteDialog from '@/components/project/edit-route-dialog'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
@@ -80,15 +93,19 @@
     export default {
         components: {
             pageDialog,
-            downloadDialog
+            downloadDialog,
+            editRouteDialog
         },
         data () {
             return {
                 action: '',
                 currentName: '',
+                currentRoute: {},
                 keyword: '',
                 renderList: [],
                 pageList: [],
+                pageRouteList: [],
+                routeGroup: [],
                 isLoading: true
             }
         },
@@ -103,6 +120,18 @@
             },
             userPerm () {
                 return this.$store.getters['member/userPerm'] || { roleId: 2 }
+            },
+            routeMap () {
+                const routeMap = {}
+                this.pageRouteList.forEach(({ id, pageId, layoutId, layoutPath, path }) => {
+                    routeMap[pageId] = {
+                        id,
+                        pageId,
+                        layoutId,
+                        fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                    }
+                })
+                return routeMap
             }
         },
         watch: {
@@ -119,7 +148,16 @@
             async getPageList () {
                 this.isLoading = true
                 try {
-                    this.pageList = await this.$store.dispatch('page/getList', { projectId: this.projectId })
+                    const [pageList, pageRouteList, routeGroup] = await Promise.all([
+                        this.$store.dispatch('page/getList', { projectId: this.projectId }),
+                        this.$store.dispatch('route/query', { projectId: this.projectId }),
+                        this.$store.dispatch('route/getProjectRouteTree', { projectId: this.projectId })
+                    ])
+
+                    this.pageList = pageList
+                    this.pageRouteList = pageRouteList
+                    this.routeGroup = routeGroup
+
                     if (this.keyword) {
                         this.renderList = this.pageList.filter(item => item.pageName.indexOf(this.keyword) !== -1)
                     } else {
@@ -137,6 +175,7 @@
                 this.$refs.pageDialog.dialog.formData.pageName = ''
                 this.$refs.pageDialog.dialog.formData.pageCode = ''
                 this.$refs.pageDialog.dialog.formData.pageRoute = ''
+                this.$refs.pageDialog.dialog.formData.layoutId = null
                 this.$refs.pageDialog.dialog.visible = true
             },
             handlePreviewProject () {
@@ -144,10 +183,12 @@
             },
             async handleCopy (page) {
                 this.action = 'copy'
+                const layoutId = this.routeMap[page.id].layoutId
                 this.$refs.pageDialog.dialog.formData.id = page.id
                 this.$refs.pageDialog.dialog.formData.pageName = `${page.pageName}-copy`
                 this.$refs.pageDialog.dialog.formData.pageCode = ''
                 this.$refs.pageDialog.dialog.formData.pageRoute = ''
+                this.$refs.pageDialog.dialog.formData.layoutId = layoutId
                 this.$refs.pageDialog.dialog.visible = true
             },
             async handleDownloadSource (targetData, pageId, lifeCycle) {
@@ -184,7 +225,13 @@
                 this.$refs.pageDialog.dialog.formData.pageCode = page.pageCode
                 this.$refs.pageDialog.dialog.formData.pageRoute = page.pageRoute
                 this.$refs.pageDialog.dialog.formData.id = page.id
+                this.$refs.pageDialog.dialog.formData.layoutId = null
                 this.$refs.pageDialog.dialog.visible = true
+            },
+            handleEditRoute (page) {
+                this.$refs.editRouteDialog.dialog.visible = true
+                this.$refs.editRouteDialog.dialog.pageId = page.id
+                this.currentRoute = this.routeMap[page.id]
             },
             handleDelete (page) {
                 if (this.userPerm.roleId === 2) return
@@ -295,7 +342,7 @@
                     position: relative;
                     flex: none;
                     width: 304px;
-                    height: 234px;
+                    height: 258px;
                     margin: 0 14px 30px 0;
                     padding: 6px;
                     background: #fff;
@@ -449,7 +496,29 @@
                     .stat {
                         font-size: 12px;
                         color: #979BA5;
-                        padding: 4px 0;
+                        margin: 4px 0;
+                    }
+                    .route {
+                        display: flex;
+                        align-items: center;
+                        margin: 9px 0;
+                        .label {
+                            margin-top: 1px;
+                            margin-left: -2px;
+                        }
+                        .path {
+                            width: 212px;
+                            font-size: 12px;
+                            color: #63656E;
+                            margin-left: 5px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+
+                            .unset {
+                                color: #FF9C01;
+                            }
+                        }
                     }
                 }
             }

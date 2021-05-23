@@ -10,8 +10,9 @@
  */
 import { getRepository, getConnection } from 'typeorm'
 import routeModel from '../model/route'
+import Route from '../model/entities/route'
 import PageRoute from '../model/entities/page-route'
-import { list2tree, flattenListPath } from '../util'
+import { flattenListPath } from '../util'
 
 async function hasRoute ({ path, id }, projectId) {
     const routeList = await routeModel.findProjectRoute(projectId)
@@ -32,12 +33,11 @@ function formatRoutePath (path) {
 }
 
 module.exports = {
-    async queryRoute (ctx) {
+    // 查询项目下页面的路由，基于页面查询可包含无路由的页面layout信息
+    async queryProjectPageRoute (ctx) {
         try {
-            const { projectId } = ctx.query
-            let routeList = await routeModel.queryProjectRoute(projectId)
-
-            routeList = list2tree(routeList)
+            const { projectId } = ctx.params
+            const routeList = await routeModel.queryProjectPageRoute(projectId)
 
             ctx.send({
                 code: 0,
@@ -114,6 +114,38 @@ module.exports = {
         }
     },
 
+    // 获取项目路由树（不包含通过删除页面或删除路由解除关联的路由及无子路由的父路由）
+    async getProjectRouteTree (ctx) {
+        try {
+            const { id: projectId } = ctx.params
+            const routeList = await routeModel.queryProjectRouteTree(projectId)
+            const routeTree = []
+            routeList.forEach(route => {
+                const { layoutId, layoutPath } = route
+                const parentNode = routeTree.find(item => item.layoutPath === layoutPath)
+                if (!parentNode) {
+                    routeTree.push({
+                        layoutId,
+                        layoutPath,
+                        children: route.id ? [route] : []
+                    })
+                } else {
+                    parentNode.children.push(route)
+                }
+            })
+
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data: routeTree
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
+
     async createProjectRoute (ctx) {
         try {
             const { id: projectId } = ctx.params
@@ -133,7 +165,10 @@ module.exports = {
             ctx.send({
                 code: 0,
                 message: 'success',
-                data: result
+                data: {
+                    id: result.id,
+                    path: result.path
+                }
             })
         } catch (err) {
             ctx.throwError({
@@ -169,6 +204,10 @@ module.exports = {
                         id: curPageRouteData.id,
                         pageId: -1
                     })
+
+                    // 页面有了新的路由关联，清除删除路由未删除的关联记录删除
+                    const oldPageRouteRows = await getRepository(PageRoute).find({ routeId: -1, pageId })
+                    await transactionalEntityManager.remove(oldPageRouteRows)
                 }
             })
 
@@ -183,14 +222,101 @@ module.exports = {
         }
     },
 
-    async getLayoutPageList (ctx) {
+    async bindPageRoute (ctx) {
         try {
-            const { id: pageId } = ctx.params
-            const result = await routeModel.findLayoutPageRoute(pageId)
+            const { routeId, pageId, redirect, remove } = ctx.request.body
+            const pageRouteRepo = getRepository(PageRoute)
+            const pageRouteRow = await pageRouteRepo.findOne({ routeId })
+
+            const result = await getConnection().transaction(async transactionalEntityManager => {
+                const currentBindPageId = pageRouteRow.pageId
+                let result = null
+
+                // 绑定页面
+                if (pageId) {
+                    result = await transactionalEntityManager.save(PageRoute, {
+                        id: pageRouteRow.id,
+                        pageId,
+                        redirect: null
+                    })
+
+                    // page绑定了新的route，可以安全的将之前删除路由未删除的关联记录删除
+                    const oldPageRouteRows = await pageRouteRepo.find({ routeId: -1, pageId })
+                    await transactionalEntityManager.remove(oldPageRouteRows)
+                }
+
+                // 绑定跳转路由
+                if (redirect) {
+                    // 环状检查，客户端已处理，此处暂不处理
+                    result = await transactionalEntityManager.save(PageRoute, {
+                        id: pageRouteRow.id,
+                        redirect,
+                        pageId: -1
+                    })
+                }
+
+                // 解绑当前页面与路由的绑定，变更为另一个页面或路由时，需要将原页面的pr复制以保留与模板的关联（变相解绑）
+                if (currentBindPageId !== -1) {
+                    const copyPageRouteRow = pageRouteRepo.create({ ...pageRouteRow, id: undefined, routeId: -1 })
+                    await transactionalEntityManager.save(PageRoute, copyPageRouteRow)
+                }
+
+                // 不绑定（解除绑定，实际上暂时不允许页面与路由解绑因为会丢失模板关联）
+                if (remove) {
+                    result = await transactionalEntityManager.save(PageRoute, {
+                        id: pageRouteRow.id,
+                        redirect: null,
+                        pageId: -1
+                    })
+                }
+
+                return result
+            })
+
             ctx.send({
                 code: 0,
                 message: 'success',
-                data: result
+                data: {
+                    routeId,
+                    pageId: result.pageId,
+                    redirect: result.redirect
+                }
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
+
+    async removeRoute (ctx) {
+        try {
+            const routeId = Number(ctx.query.id)
+
+            await getConnection().transaction(async transactionalEntityManager => {
+                // 删除路由记录
+                const routeRow = await getRepository(Route).findOneOrFail(routeId)
+                await transactionalEntityManager.remove(routeRow)
+
+                // 解绑页面与路由关联或删除关联记录
+                const pageRouteRow = await getRepository(PageRoute).findOne({ routeId })
+                if (pageRouteRow.pageId !== -1) {
+                    // 如果已经绑定页面，不能删除数据因需要保留页面与模板关联
+                    await transactionalEntityManager.save(PageRoute, { ...pageRouteRow, routeId: -1 })
+                } else {
+                    await transactionalEntityManager.remove(pageRouteRow)
+                }
+
+                // 重置关联的跳转路由
+                const redirectRouteList = await getRepository(PageRoute).find({ redirect: routeId })
+                const newRedirectRouteList = redirectRouteList.map(route => ({ ...route, redirect: null }))
+                await transactionalEntityManager.save(PageRoute, newRedirectRouteList)
+            })
+
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data: routeId
             })
         } catch (err) {
             ctx.throwError({

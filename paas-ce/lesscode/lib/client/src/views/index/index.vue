@@ -262,7 +262,7 @@
 
 <script>
     import Vue from 'vue'
-    import { mapGetters, mapMutations, mapActions } from 'vuex'
+    import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
     // import html2canvas from 'html2canvas'
     import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON, dom2Img } from '@/common/util'
@@ -458,6 +458,7 @@
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('components', ['interactiveComponents']),
             ...mapGetters('variable', ['variableList']),
+            ...mapState('route', ['layoutPageList']),
             copyIconStyle () {
                 return {
                     position: 'absolute',
@@ -626,6 +627,7 @@
             window.test1 = this.test1
         },
         mounted () {
+            this.loadCustomIcon()
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
@@ -706,10 +708,13 @@
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
                         this.$store.dispatch('page/getList', { projectId: this.projectId }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
-                        this.$store.dispatch('route/layoutPageList', { pageId: this.pageId }),
+                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, config: { fromCache: true } }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
-                        this.getAllGroupFuncs(this.projectId)
+                        this.getAllGroupFuncs(this.projectId),
+                        this.$store.dispatch('iconManage/list', {
+                            belongProjectId: this.$route.params.projectId
+                        })
                     ])
                     await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
                     this.$store.commit('page/setPageDetail', pageDetail || {})
@@ -730,23 +735,14 @@
                 }
                 // 包含所有的自定组件
                 this.wholeComponentList = []
-                window.__innerCustomRegisterComponent__ = {}
                 const script = document.createElement('script')
                 script.src = `/${parseInt(this.$route.params.projectId)}/${parseInt(this.$route.params.pageId)}/component/register.js`
                 script.onload = () => {
                     const customComponentList = window.customCompontensPlugin.map(callback => {
-                        const [
-                            config,
-                            componentSource,
-                            baseInfo
-                        ] = callback(Vue)
-                        window.__innerCustomRegisterComponent__[config.type] = componentSource
-                        return {
-                            ...config,
-                            group: baseInfo.category,
-                            meta: { ...baseInfo }
-                        }
+                        const compData = callback(Vue)
+                        return { ...compData[0], group: compData[2].category, meta: compData[2] }
                     })
+
                     const publicList = []
                     const otherList = []
                     for (const comp of customComponentList) {
@@ -770,6 +766,17 @@
                 document.body.appendChild(script)
                 this.$once('hook:beforeDestroy', () => {
                     document.body.removeChild(script)
+                })
+            },
+
+            loadCustomIcon () {
+                const link = document.createElement('link')
+                link.rel = 'stylesheet'
+                link.type = 'text/css'
+                link.href = `/project/${parseInt(this.$route.params.projectId)}/custom-icon/style.css`
+                document.head.appendChild(link)
+                this.$once('hook:beforeDestroy', () => {
+                    document.head.removeChild(link)
                 })
             },
 
@@ -1490,7 +1497,9 @@
                     this.$refs.pageDialog.dialog.formData.id = undefined
                     this.$refs.pageDialog.dialog.formData.pageName = ''
                 } else {
+                    const layoutId = (this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId)) || {}).layoutId
                     this.$refs.pageDialog.dialog.formData.id = this.pageId
+                    this.$refs.pageDialog.dialog.formData.layoutId = layoutId
                     this.$refs.pageDialog.dialog.formData.pageName = `${this.pageDetail.pageName}-copy`
                 }
 

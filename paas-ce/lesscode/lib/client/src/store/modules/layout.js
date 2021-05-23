@@ -78,6 +78,9 @@ export default {
                 const data = response.data || ''
                 return data
             })
+        },
+        setRoutePath ({ commit }, data) {
+            return http.put('/layout/routePath', data).then(({ data }) => data)
         }
     }
 }

@@ -30,6 +30,9 @@
                     return 'div'
                 }
                 return componentMap[this.layout]
+            },
+            projectId () {
+                return this.$route.params.projectId
             }
         },
         watch: {
@@ -41,8 +44,6 @@
                         layoutContent = {}
                     } = pageLayout
 
-                    console.log('layout watch == ', pageLayout)
-
                     this.layout = layoutType
                     this.setCurTemplateData({
                         showName,
@@ -53,8 +54,6 @@
             }
         },
         created () {
-            this.pageId = this.$route.params.pageId
-
             this.fetchPageList()
         },
         mounted () {
@@ -63,8 +62,8 @@
         methods: {
             ...mapMutations('drag', ['setCurTemplateData']),
             fetchPageList () {
-                this.$store.dispatch('route/layoutPageList', {
-                    pageId: this.pageId
+                this.$store.dispatch('route/getProjectPageRoute', {
+                    projectId: this.projectId
                 })
             }
         }

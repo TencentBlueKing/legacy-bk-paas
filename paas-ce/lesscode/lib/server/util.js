@@ -12,6 +12,7 @@
 const os = require('os')
 const eslintConfig = require('./conf/eslint-config')
 const { ESLint } = require('eslint')
+const interactiveComponents = ['bk-dialog', 'bk-sideslider']
 
 /**
  * 获取本机的真实 ip
@@ -207,7 +208,7 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
     const slots = renderProps.slots || {}
     let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
     let isLayoutSupportDialog = false
-    if (grid.name === 'dialog') { // 暂时为兼容dialog做特殊处理，后续添加新的交互式组件，注意修改此处条件
+    if (interactiveComponents.includes(grid.type)) { // 交互式组件特殊处理
         const slot = ((grid.renderProps || {}).slots || {}).val || []
         columns = typeof slot === 'string' ? [] : slot.renderProps.slots.val
         isLayoutSupportDialog = typeof slot !== 'string'
