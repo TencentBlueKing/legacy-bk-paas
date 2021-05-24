@@ -88,7 +88,7 @@
             init () {
                 const currentTopMenu = _.find(this.topMenuList, _ => _.id === this.menuActive)
                 this.localTopMenu = currentTopMenu
-                this.localSideMenu = [...currentTopMenu.children] || []
+                this.localSideMenu = [...currentTopMenu.children || []]
                 this.hasSideMenu = this.localSideMenu.length > 0
             },
             triggerChange () {
