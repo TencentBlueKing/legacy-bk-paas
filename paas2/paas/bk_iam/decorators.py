@@ -18,6 +18,7 @@ except ImportError:
     from django.utils.functional import wraps  # Python 2.4 fallback.
 
 from django.utils.decorators import available_attrs
+from django.utils.encoding import force_text
 
 from bk_iam.utils import FailJsonResponse
 from common.bk_iam import Permission
@@ -33,7 +34,8 @@ def basic_auth_required(view_func):
             response["WWW-Authenticate"] = 'Basic realm="%s"' % "Basci Auth Protected"
             return response
 
-        username, password = base64.b64decode(auth[1]).split(":")
+        # username, password = base64.b64decode(auth[1]).split(":")
+        username, password = force_text(base64.b64decode(auth[1])).split(":")
 
         if username != "bk_iam" or password != Permission().get_token():
             response = FailJsonResponse(401, "UNAUTHORIZED")
