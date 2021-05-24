@@ -10,13 +10,13 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import str
 import copy
 import markdown
 from markdown.extensions.headerid import HeaderIdExtension
 from django.views.generic import View
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
+from django.utils.encoding import force_text
 
 from common.decorators import has_apigateway_manage_permission_for_classfunc
 from esb.configs.default import menu_items
@@ -47,7 +47,7 @@ class Page(View):
     @has_apigateway_manage_permission_for_classfunc
     def get(self, request, name):
         with open(mdfile_by_name(name)) as fp:
-            md_content = str(fp.read(), "utf-8")
+            md_content = force_text(fp.read())
 
             html_part = markdown.markdown(
                 md_content,
