@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.3
+    - update: bugfix esb management for python3/upgrade
+
 # 2.13.2
     - update: bugfix for python3/upgrade gevent to 1.15.0
 
