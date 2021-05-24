@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.15
+    - esb: update configuration components BKDATA
+
 # 2.12.14
     - paas: rename env MENU_ITEM_BUFFET_HIDDEN to BK_ESB_MENU_ITEM_BUFFET_HIDDEN
 
