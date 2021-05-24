@@ -59,7 +59,6 @@ const downloadFile = (targetFile, dest) => {
         url: urlPrefix + targetFile,
         headers: headers
     }
-    console.log(options, 345)
 
     return new Promise((resolve, reject) => {
         request.get(options, function (err, res, body) {
