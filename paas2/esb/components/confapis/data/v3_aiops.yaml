@@ -888,3 +888,12 @@
   dest_path: /v3/aiops/visualizations/
   dest_http_method: POST
   is_hidden: true
+
+- path: /data/v3/aiops/action/{action_name}/
+  name: v3_aiops_get_aiops_action_info
+  label: action的节点配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/action/{action_name}/
+  dest_http_method: GET
+  is_hidden: true
