@@ -627,7 +627,6 @@
             window.test1 = this.test1
         },
         mounted () {
-            this.loadCustomIcon()
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
@@ -711,10 +710,7 @@
                         this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, config: { fromCache: true } }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
-                        this.getAllGroupFuncs(this.projectId),
-                        this.$store.dispatch('iconManage/list', {
-                            belongProjectId: this.$route.params.projectId
-                        })
+                        this.getAllGroupFuncs(this.projectId)
                     ])
                     await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
                     this.$store.commit('page/setPageDetail', pageDetail || {})
@@ -766,17 +762,6 @@
                 document.body.appendChild(script)
                 this.$once('hook:beforeDestroy', () => {
                     document.body.removeChild(script)
-                })
-            },
-
-            loadCustomIcon () {
-                const link = document.createElement('link')
-                link.rel = 'stylesheet'
-                link.type = 'text/css'
-                link.href = `/project/${parseInt(this.$route.params.projectId)}/custom-icon/style.css`
-                document.head.appendChild(link)
-                this.$once('hook:beforeDestroy', () => {
-                    document.head.removeChild(link)
                 })
             },
 

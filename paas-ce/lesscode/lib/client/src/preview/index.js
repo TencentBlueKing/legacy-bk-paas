@@ -95,16 +95,6 @@ auth(projectId).then(() => {
                     this.$router.replace({ path: '/404', query: { p: pageCode } })
                 }
             },
-            mounted () {
-                const link = document.createElement('link')
-                link.rel = 'stylesheet'
-                link.type = 'text/css'
-                link.href = `/project/${parseInt(projectId)}/custom-icon/style.css`
-                document.head.appendChild(link)
-                this.$once('hook:beforeDestroy', () => {
-                    document.head.removeChild(link)
-                })
-            },
             methods: {
                 getProjectDefaultHome () {
                     const { projectRouteList, projectPageRouteList } = this.$store.state
