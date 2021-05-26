@@ -549,7 +549,13 @@ function newUtil () {
     }
 
     function escapeXhtml (string) {
-        return string.replace(/\:checked/g, 'checked')
+        // encodeURIComponent
+        return string
+            // @click => click, @blur => blur ...
+            .replace(/@(\w+)/g, (match, p1) => p1)
+            // :checked => checked
+            .replace(/:(\w+)/g, (match, p1) => p1)
+            // .replace(/\:checked/g, 'checked')
             .replace(/\n/g, '%0A')
             .replace(/"/g, "'")
             .replace(/%/g, '%25')
