@@ -121,7 +121,7 @@ class SendWeixin(Component, SetupConfMixin):
         def decode_message(self, message, is_message_base64):
             if is_message_base64:
                 try:
-                    message = base64.b64decode(message)
+                    message = force_text(base64.b64decode(message))
                 except Exception:
                     pass
             return message
