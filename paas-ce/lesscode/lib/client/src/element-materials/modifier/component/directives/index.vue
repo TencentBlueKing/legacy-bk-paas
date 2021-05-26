@@ -108,7 +108,8 @@
                 const materialConfig = _.cloneDeep(this.materialConfig || [])
                 const renderDirectives = []
                 const allDirectivs = [...materialConfig, ...this.commonDirectives]
-                if (!['bk-dialog'].includes(this.componentType)) allDirectivs.push(...this.optionCommonDirectives)
+                // 目前bk-dialog与bk-sidesslider不支持v-if和v-show
+                if (!['bk-dialog', 'bk-sideslider'].includes(this.componentType)) allDirectivs.push(...this.optionCommonDirectives)
 
                 allDirectivs.forEach((directive) => {
                     const lastDirective = lastDirectives.find((dirVal) => ((dirVal.type + dirVal.prop) === (directive.type + directive.prop))) || {}
