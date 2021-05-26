@@ -30,8 +30,9 @@ export default {
             type: 'boolean',
             tips: '是否显示组件',
             val: true,
-            staticValue: true,
-            modifiers: ['sync']
+            staticValue: true, // 静态值，表示只是代码和UI改变，画布内的值不变
+            modifiers: ['sync'],
+            disableVariableType: ['expression'] // 不兼容的类型
         },
         'title': {
             type: 'string',
