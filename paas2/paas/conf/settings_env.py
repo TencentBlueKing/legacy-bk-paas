@@ -79,6 +79,8 @@ BK_PAAS3_URL = env.str("BK_PAAS3_URL", "")
 BK_APIGW_URL = env.str("BK_APIGW_URL", "")
 # API 网关文档中心地址
 BK_APIGW_DOC_URL = env.str("BK_APIGW_DOC_URL", "")
+# 是否隐藏菜单项：ESB 管理中的自助接入
+BK_ESB_MENU_ITEM_BUFFET_HIDDEN = env.bool("BK_ESB_MENU_ITEM_BUFFET_HIDDEN", False)
 
 # third-party hosts
 # host for cc
