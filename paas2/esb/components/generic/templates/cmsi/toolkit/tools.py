@@ -16,6 +16,8 @@ import os
 import base64
 from collections import OrderedDict, defaultdict
 
+from django.utils.encoding import force_text
+
 from common.errors import CommonAPIError
 
 default_nation_code = "86"
@@ -159,7 +161,7 @@ def get_user_contact_with_username(username_list=None, contact_way="phone"):
 
 def get_base64_icon(path):
     with open(os.path.join(ICON_DIR, path), "rb") as f:
-        return base64.b64encode(f.read())
+        return force_text(base64.b64encode(f.read()))
 
 
 def _get_users(usernames):

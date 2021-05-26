@@ -20,6 +20,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import COMMASPACE
 
+from django.utils.encoding import force_text
+
 from common.base_utils import smart_str
 from common.bkerrors import bk_error_codes
 from common.log import logger
@@ -32,7 +34,7 @@ class SMTPClient(object):
         self.smtp_host = smtp_host
         self.smtp_port = smtp_port
         self.smtp_user = smtp_user
-        self.smtp_pwd = smart_str(smtp_pwd)
+        self.smtp_pwd = force_text(smtp_pwd)
         self.smtp_usessl = smtp_usessl
         self.smtp_usetls = smtp_usetls
         self.smtp_timeout = smtp_timeout
@@ -91,7 +93,7 @@ class SMTPClient(object):
             # rfc2047: encoded-word = "=?" charset "?" encoding "?" encoded-text "?="
             # encoding b for base64
             filename = smart_str(f_info.get("filename", ""))
-            _filename = "=?utf-8?b?" + base64.b64encode(filename) + "?="
+            _filename = "=?utf-8?b?" + force_text(base64.b64encode(filename)) + "?="
             _content = f_info.get("content", "")
             _type = f_info.get("type") or _filename.split(".")[-1] or "attachment"
             _disposition = f_info.get("disposition", "")

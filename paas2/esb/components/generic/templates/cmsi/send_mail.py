@@ -14,6 +14,7 @@ import json
 import base64
 
 from django import forms
+from django.utils.encoding import force_text
 
 from components.component import Component, SetupConfMixin
 from common.forms import BaseComponentForm, ListField, DefaultBooleanField, TypeCheckField
@@ -117,7 +118,7 @@ class SendMail(Component, SetupConfMixin):
                 data["cc__username"] = None
             if data["is_content_base64"]:
                 try:
-                    data["content"] = base64.b64decode(data["content"])
+                    data["content"] = force_text(base64.b64decode(data["content"]))
                 except Exception:
                     pass
             if data["attachments"]:
@@ -135,7 +136,7 @@ class SendMail(Component, SetupConfMixin):
         content_id = forms.CharField(label="content_id", required=False)
 
         def clean(self):
-            self.cleaned_data["content"] = base64.b64decode(self.cleaned_data["content"])
+            self.cleaned_data["content"] = force_text(base64.b64decode(self.cleaned_data["content"]))
             return self.cleaned_data
 
     def handle(self):

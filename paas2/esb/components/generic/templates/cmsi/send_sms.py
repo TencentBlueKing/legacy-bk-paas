@@ -14,6 +14,7 @@ import json
 import base64
 
 from django import forms
+from django.utils.encoding import force_text
 
 from components.component import Component, SetupConfMixin
 from common.forms import BaseComponentForm, ListField, DefaultBooleanField
@@ -83,7 +84,7 @@ class SendSms(Component, SetupConfMixin):
         def decode_content(self, content, is_content_base64):
             if is_content_base64:
                 try:
-                    content = base64.b64decode(content)
+                    content = force_text(base64.b64decode(content))
                 except Exception:
                     pass
             return content
