@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.16
+    - esb: update esb bk_log apis
+
 # 2.12.15
     - esb: update configuration components BKDATA
 
