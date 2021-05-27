@@ -53,7 +53,7 @@
                                             <template v-if="field.id === 'pageRoute'">
                                                 <div class="bk-option-content-default" :title="childSlot.props.name">
                                                     <div class="bk-option-name">
-                                                        {{childSlot.props.name}}<span class="bound" v-if="childSlot.props.pageId !== -1">（已绑定）</span>
+                                                        {{childSlot.props.name}}<span class="bound" v-if="childSlot.props.disabled">（已绑定）</span>
                                                     </div>
                                                 </div>
                                             </template>
@@ -187,7 +187,7 @@
                                 id: route.id,
                                 name: route.path || '/',
                                 pageId: route.pageId,
-                                disabled: route.pageId !== -1
+                                disabled: route.pageId !== -1 || Boolean(route.redirect)
                             }
                         }
                     })
