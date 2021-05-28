@@ -198,11 +198,9 @@ export default {
             }
 
             // 当有交互式组件打开时，禁用蒙层下方的画布拖拽和交互
-            const dragableSourceGroup = isInteractiveCompActive()
-                ? { name: 'interactiveInnerComp' }
-                : Object.assign({}, this.draggableSourceGroup, {
-                    name: groupName
-                })
+            const dragableSourceGroup = Object.assign({}, this.draggableSourceGroup, {
+                name: isInteractiveCompActive() ? 'interactiveInnerComp' : groupName
+            })
 
             this.setDraggableSourceGroup(dragableSourceGroup)
         },
