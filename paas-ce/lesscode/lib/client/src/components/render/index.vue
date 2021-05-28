@@ -39,6 +39,11 @@
             FreeLayout,
             ComponentModule
         },
+        provide () {
+            return {
+                layoutOffset: this.interactiveLayout
+            }
+        },
         props: {
             componentData: {
                 type: Object,

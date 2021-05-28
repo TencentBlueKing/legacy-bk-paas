@@ -66,6 +66,9 @@ export default class DragLine {
         }, options)
         this.setContainer(this.options.container || '')
 
+        // 交互式组件使用了transform属性，对定位有影响。因此在定位时，需要加上偏移
+        this.offset = this.options.offset || { top: 0, left: 0 }
+
         this.docBody = document.body
 
         this.hasNavLayout = !document.querySelector('.lesscode-layout-empty')
@@ -215,10 +218,10 @@ export default class DragLine {
                             ? this.docBody.scrollLeft + this.contentNode.scrollLeft + this.mainContentNode.scrollLeft
                             : this.docBody.scrollLeft + this.mainContentNode.scrollLeft
 
-                        dragNode.style[key] = `${condition.dragValue - (this.containerLeft - offsetLeft) - 1}px`
+                        dragNode.style[key] = `${condition.dragValue - (this.containerLeft - offsetLeft + parseInt(this.offset.left)) - 1}px`
                         condition.lineNode.setTranslateX(condition.lineValue)
                     } else {
-                        dragNode.style[key] = `${condition.dragValue - (this.containerTop - this.contentNode.scrollTop) - 1}px`
+                        dragNode.style[key] = `${condition.dragValue - (this.containerTop - this.contentNode.scrollTop + parseInt(this.offset.top)) - 1}px`
                         condition.lineNode.setTranslateY(condition.lineValue)
                     }
                     // condition.lineNode.style[key] = `${condition.lineValue}px`

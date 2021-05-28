@@ -21,6 +21,7 @@
         <component-menu class="free-layout-context-menu"
             :target="contextMenuTarget"
             :show="contextMenuVisible"
+            :offset="getComputedMunuOffset"
             @update:show="show => contextMenuVisible = show">
             <a href="javascript:;" @click="handleContextmenuDelete">删除自由布局</a>
             <a href="javascript:;" @click="handleContextmenuClearFreeLayout">清空自由布局</a>
@@ -72,6 +73,7 @@
     // eslint-disable-next-line no-unused-vars
     import Drag from '@/common/drag'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import offsetMixin from './offsetMixin'
 
     export default {
         name: 'free-layout',
@@ -80,6 +82,7 @@
             renderComponent,
             ComponentMenu
         },
+        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
@@ -133,7 +136,7 @@
             this.contextMenuTarget = this.renderData.type === 'free-layout'
                 ? this.$refs[`${this.renderData.componentId}`]
                 : null
-            this.dragLine = new DragLine({ container: this.$el })
+            this.dragLine = new DragLine({ container: this.$el, offset: this.layoutOffset })
         },
         methods: {
             ...mapMutations('drag', [
@@ -325,7 +328,7 @@
              */
             componentMounted (data) {
                 if (!this.dragLine) {
-                    this.dragLine = new DragLine({ container: this.$el })
+                    this.dragLine = new DragLine({ container: this.$el, offset: this.layoutOffset })
                 }
 
                 const renderData = data.renderData

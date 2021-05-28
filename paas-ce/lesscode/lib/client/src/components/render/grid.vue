@@ -22,6 +22,7 @@
             <component-menu class="grid-context-menu"
                 :target="contextMenuTarget"
                 :show="contextMenuVisible"
+                :offset="getComputedMunuOffset"
                 @update:show="show => contextMenuVisible = show">
                 <a href="javascript:;" @click="handleContextmenuDelete">删除栅格布局</a>
                 <a href="javascript:;" @click="handleContextmenuClearGrid">清空栅格布局</a>
@@ -89,6 +90,7 @@
     import renderComponent from './component'
     import freeLayout from './free-layout'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import offsetMixin from './offsetMixin'
 
     export default {
         name: 'render-grid',
@@ -100,6 +102,7 @@
             freeLayout,
             ComponentMenu
         },
+        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
