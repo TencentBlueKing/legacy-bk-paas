@@ -24,7 +24,7 @@
                     </div>
                 </bk-select>
                 <p class="mt5 mb0 f12" slot="tip">
-                    修改一级路由的同时会变更页面模板，已绑定页面的路由不能再次选择
+                    修改一级路由的同时会变更页面模板，已绑定页面或跳转的路由不能再次选择
                 </p>
             </bk-form-item>
         </bk-form>
@@ -76,7 +76,7 @@
                         name: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`,
                         pageId,
                         redirect,
-                        disabled: pageId !== -1
+                        disabled: pageId !== -1 || Boolean(redirect)
                     }))
                 routeList.sort((p1, p2) => p1.disabled - p2.disabled)
                 return routeList
