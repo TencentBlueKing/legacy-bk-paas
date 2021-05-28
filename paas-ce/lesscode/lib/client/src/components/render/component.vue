@@ -111,6 +111,8 @@
     import RenderSlot from './slot'
     import ComponentWrapper from './component-wrapper'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import WidgetForm from '@/components/widget/form'
+    import WidgetFormItem from '@/components/widget/form-item'
 
     window.__innerCustomRegisterComponent__ = null
 
@@ -118,6 +120,8 @@
         ComponentWrapper,
         ComponentMenu,
         RenderSlot,
+        WidgetForm,
+        WidgetFormItem,
         renderGrid: () => import('./grid'),
         renderRow: () => import('./row'),
         renderCol: () => import('./col'),

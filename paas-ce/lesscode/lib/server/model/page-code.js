@@ -482,24 +482,6 @@ class PageCode {
                 }
             `
         }
-        if (this.pageType === 'preview') {
-            head += `.preview-tip {
-                position: fixed;
-                top: 7px;
-                right: -29px;
-                transform: rotate(45deg);
-                font-size: 12px;
-                line-height: 13px;
-                padding: 6px 0;
-                width: 110px;
-                text-align: center;
-                background: rgba(239, 184, 61, 0.8);
-                color: #000000;
-                box-shadow: 1px 2px 8px 2px rgba(0, 0 ,0 , 0.1);
-                z-index: 100;
-            }
-        `
-        }
         const end = '</style>\n'
 
         return head + this.cssStr + end
@@ -509,7 +491,6 @@ class PageCode {
         let pageCode = this.isGenerateNav ? '<router-view class="page-container"></router-view>' : `\n<section class="bk-layout-custom-component-wrapper container-${this.uniqueKey}">\n${this.generateCode(this.targetData)}\n</section>\n`
         if (this.isEmpty) pageCode = `<bk-exception class="exception-wrap-item" type="404"></bk-exception>`
         let source = pageCode
-        if (this.pageType === 'preview') pageCode += '\n<div class="preview-tip">未发布<br>请勿分享</div>\n'
         if (this.hasLayOut) source = this.getLayout(pageCode)
         // bk-layout-custom-component-wrapper 打包自定义组件时添加此类作为最上层父类，避免自定义组件的类污染画布页面的东西
         // 预览时最顶层容器也要加上此类，让自定义组件的样式生效
@@ -797,10 +778,6 @@ class PageCode {
                 code += `
                     ${itemClass ? `\n<div class="bk-free-layout-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-free-layout-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
                         ${item.renderProps.slots && item.renderProps.slots.val && item.renderProps.slots.val.map(slotData => {
-                            // return `<div class="bk-free-layout-item-${this.uniqueKey}">
-                            //             ${slotData.children.length ? `${this.generateCode(slotData.children)}` : ''}
-                            //         </div>`
-
                             return `<div class="bk-free-layout-item-inner-${this.uniqueKey}">
                                         <div style="height: ${item.renderStyles.height || '500px'}">
                                             ${slotData.children.length ? `${this.generateCode(slotData.children)}` : ''}
@@ -810,6 +787,17 @@ class PageCode {
                     </div>
                 `
                 /* eslint-enable no-unused-vars, indent */
+            } else if (item.type === 'widget-form') {
+                const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
+                const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
+                code += `
+                    <div ${itemClass}>
+                        <bk-form ${vueDirective} ${propDirective} ${itemProps}>
+                            ${this.generateCode(item.renderProps.slots.val)}
+                        </bk-form>
+                    </div>
+                 `
+                console.log(code, 'form')
             } else {
                 code += this.generateComponment(item, vueDirective, propDirective)
             }
@@ -898,34 +886,6 @@ class PageCode {
                     this.dataTemplate(compId, JSON.stringify(checkedValue))
                     propsStr += `v-model="${compId}"`
                 }
-                // console.error('type', type)
-                // console.error()
-                // console.error('compId', compId)
-                // console.error()
-                // console.error('props', props)
-                // console.error()
-                // console.error('dirProps', dirProps)
-                // console.error()
-                // if (type === 'bk-checkbox-group') {
-                //     const checkedValue = props['slots'].val.filter(c => c.checked === true).map(c => c.value)
-                //     const len = dirProps.length
-                //     if (len) {
-                //         for (let i = 0; i < len; i++) {
-                //             const dirProp = dirProps[i]
-                //             if (dirProp.type === 'v-model') {
-                //                 const v = dirProp.val.trim()
-                //                 if (v) {
-                //                     this.dataTemplate(v, JSON.stringify(checkedValue))
-                //                     propsStr += `v-model="${v}"`
-                //                     break
-                //                 }
-                //             }
-                //         }
-                //     } else {
-                //         this.dataTemplate(compId, JSON.stringify(checkedValue))
-                //         propsStr += `v-model="${compId}"`
-                //     }
-                // }
             }
         }
         return propsStr
@@ -1072,6 +1032,8 @@ class PageCode {
             <template slot="${slotName}">
                 ${this.generateCode(codeArr)}
             </template>`
+        } else if (slot.type === 'form-item-content') {
+            slotStr = this.generateCode(slot.val)
         } else if (slot.payload && slot.payload.variableData && slot.payload.variableData.val) {
             const variableData = slot.payload.variableData
             const disPlayVal = this.handleUsedVariable(variableData.valType, variableData.val, compId)

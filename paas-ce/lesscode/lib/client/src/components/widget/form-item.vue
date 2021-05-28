@@ -10,12 +10,17 @@
 -->
 
 <template>
-    <bk-form-item label="表单项">
-        <render-component :component-data="componentData" />
-    </bk-form-item>
+    <div class="widget-form-item" @click="handleSelect">
+        <bk-form-item
+            :label="componentData.renderProps.label.val"
+            :required="componentData.renderProps.required.val">
+            <template v-for="(item) in componentData.renderProps.slots.val">
+                <render-component :component-data="item" :key="item.componentId" />
+            </template>
+        </bk-form-item>
+    </div>
 </template>
 <script>
-
     export default {
         name: 'widget-form-item',
         components: {
@@ -26,9 +31,22 @@
                 type: Object,
                 default: () => ({})
             }
+        },
+        methods: {
+            handleSelect () {
+                console.log('selefa')
+            }
         }
     }
 </script>
 <style lang='postcss'>
-
+    .widget-form-item{
+        margin-bottom: 20px;
+        &:hover{
+            outline: 1px solid red;
+        }
+        .component-wrapper{
+            margin: 0;
+        }
+    }
 </style>

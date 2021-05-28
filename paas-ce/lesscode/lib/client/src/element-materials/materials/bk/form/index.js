@@ -14,14 +14,31 @@ export default {
     type: 'widget-form',
     displayName: '表单挂件',
     icon: 'bk-drag-form',
-    group: '表单',
-    order: 2,
+    group: '布局',
+    order: 5,
     styles: ['size', 'margin', 'font', 'backgroundColor'],
+    directives: [
+        {
+            type: 'v-bind',
+            prop: 'model',
+            val: '',
+            defaultVal: {}
+        }
+    ],
     props: {
         'form-type': {
             type: 'string',
             options: ['horizontal', 'vertical', 'inline'],
             val: 'horizontal'
+        },
+        'label-width': {
+            type: 'number',
+            val: 150
+        },
+        slots: {
+            name: 'layout',
+            type: 'form-item',
+            val: []
         }
     }
 }

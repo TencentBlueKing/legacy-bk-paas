@@ -42,7 +42,7 @@
                     <div
                         v-if="isShowPageQuery"
                         class="query-remove"
-                        v-bk-tooltips.top-start="'不使用路由参数'"
+                        v-bk-tooltips.top-start="'删除路由参数'"
                         @click="handleRemovePageQuery">
                         <i class="bk-icon icon-minus-circle" />
                     </div>

@@ -86,6 +86,7 @@
     import TypeFreeLayoutItem from './strategy/free-layout-item.vue'
     import TypeSlotWrapper from './strategy/slot-wrapper'
     import TypeIcon from './strategy/icon'
+    import TypeFormItem from './strategy/form-item'
     import TypeColor from './strategy/color'
 
     import { transformTipsWidth } from '@/common/util'
@@ -166,6 +167,7 @@
                     'free-layout-item': TypeFreeLayoutItem,
                     'bread-crumb': TypeSlotWrapper,
                     'icon': TypeIcon,
+                    'form-item': TypeFormItem,
                     'color': TypeColor,
                     'step': TypeSlotWrapper,
                     'function': TypeFunction
@@ -196,6 +198,7 @@
                     'free-layout-item': 'free-layout-item',
                     'bread-crumb': 'bread-crumb',
                     'icon': 'icon',
+                    'form-item': 'form-item',
                     'color': 'color',
                     'step': 'step',
                     'function': 'function'
