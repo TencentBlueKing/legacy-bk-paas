@@ -1,6 +1,6 @@
 import { mapGetters, mapMutations } from 'vuex'
 import cloneDeep from 'lodash.clonedeep'
-import { uuid } from '@/common/util'
+import { uuid, isInteractiveCompActive } from '@/common/util'
 import { bus } from '@/common/bus'
 
 export default {
@@ -196,9 +196,15 @@ export default {
             } else {
                 groupName = 'component'
             }
-            this.setDraggableSourceGroup(Object.assign({}, this.draggableSourceGroup, {
-                name: groupName
-            }))
+
+            // 当有交互式组件打开时，禁用蒙层下方的画布拖拽和交互
+            const dragableSourceGroup = isInteractiveCompActive()
+                ? { name: 'interactiveInnerComp' }
+                : Object.assign({}, this.draggableSourceGroup, {
+                    name: groupName
+                })
+
+            this.setDraggableSourceGroup(dragableSourceGroup)
         },
 
         /**

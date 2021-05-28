@@ -12,11 +12,11 @@
 <template>
     <div :class="wrapperClass">
         <template v-if="componentData.type === 'render-grid'">
-            <render-grid :key="componentData.renderKey" :component-data="componentData">
+            <render-grid :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="[]">
             </render-grid>
         </template>
         <template v-else-if="componentData.type === 'free-layout'">
-            <free-layout :key="componentData.renderKey" :component-data="componentData">
+            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="[]">
             </free-layout>
         </template>
         <template v-else>

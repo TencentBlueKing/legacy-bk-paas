@@ -34,7 +34,7 @@
                     class="drag-area target-in-column"
                     :sort="true"
                     :list="column.children"
-                    :group="{ name: groupType, pull: true, put: ['render-grid', 'free-layout', 'component'] }"
+                    :group="{ name: groupType, pull: true, put: ['render-grid', 'free-layout', 'component', ...extraDragCls] }"
                     ghost-class="in-column-ghost"
                     chosen-class="in-column-chosen"
                     drag-class="in-column-drag"
@@ -107,6 +107,10 @@
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            extraDragCls: {
+                type: Array,
+                default: () => ['interactiveInnerComp']
             }
         },
         data () {

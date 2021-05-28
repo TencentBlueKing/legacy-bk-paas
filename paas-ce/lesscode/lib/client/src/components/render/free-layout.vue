@@ -28,7 +28,7 @@
         </component-menu>
         <div class="free-layout-item-inner">
             <vue-draggable :style="{ height: renderData.renderStyles.height || '500px' }"
-                :group="{ pull: true, put: ['component'] }"
+                :group="{ pull: true, put: ['component', ...extraDragCls] }"
                 ghost-class="in-free-layout-item-ghost"
                 :force-fallback="false"
                 :list="renderDataSlot.val[0].children">
@@ -87,6 +87,11 @@
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            // vueDrabable所用的需要额外添加的groupName
+            extraDragCls: {
+                type: Array,
+                default: () => ['interactiveInnerComp']
             }
         },
         data () {
