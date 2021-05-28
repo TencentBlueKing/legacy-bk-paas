@@ -11,7 +11,7 @@
                 @change="selectValType"
                 v-if="show"
             >
-                <bk-option v-for="(val, key) in varTypes"
+                <bk-option v-for="(val, key) in avaliableVariableTypes"
                     :key="key"
                     :id="key"
                     :name="val">
@@ -91,6 +91,10 @@
             availableTypes: {
                 type: Array,
                 default: () => ([])
+            },
+            disableVariableType: {
+                type: Array,
+                default: () => ([])
             }
         },
 
@@ -138,6 +142,16 @@
         computed: {
             ...mapGetters('variable', ['variableList']),
 
+            avaliableVariableTypes () {
+                const retObj = {}
+                Object.keys(this.varTypes).forEach(key => {
+                    if (!this.disableVariableType.includes(key)) {
+                        retObj[key] = this.varTypes[key]
+                    }
+                })
+
+                return retObj
+            },
             filterVariableList () {
                 const variableList = JSON.parse(JSON.stringify(this.variableList || []))
                 return variableList.filter((variable) => {

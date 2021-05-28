@@ -15,6 +15,7 @@
             :value="defaultVariable.val"
             :val-type="defaultVariable.valType"
             :available-types="formCom.map(x => x.valueType)"
+            :disable-variable-type="disableVariableType"
             @change="changeVariable">
             <template v-slot:title>
                 <div class="prop-name" v-if="describe.type !== 'free-layout-item' && !namedStrategy">
@@ -133,6 +134,9 @@
             }
         },
         computed: {
+            disableVariableType () {
+                return this.describe.disableVariableType ? this.describe.disableVariableType : []
+            },
             computedTips () {
                 const tip = transformTipsWidth(this.describe.tips)
                 const disabled = name === 'slots' || !tip
