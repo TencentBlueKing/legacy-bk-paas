@@ -58,7 +58,7 @@
                 const result = []
                 for (let i = 0; i < this.componentData.renderProps.slots.val.length; i++) {
                     const currentSlot = this.componentData.renderProps.slots.val[i]
-                    if (currentSlot.type === 'form-item') {
+                    if (currentSlot.type === 'bk-form-item') {
                         result.push(currentSlot)
                     }
                 }

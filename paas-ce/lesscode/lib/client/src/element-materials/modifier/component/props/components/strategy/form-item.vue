@@ -141,9 +141,9 @@
 
     const createTargetDataFormItemNode = ({ type, label, property, required }) => {
         return {
-            name: 'form-item',
-            type: 'form-item',
-            componentId: `form-item-${uuid()}`,
+            name: 'bk-form-item',
+            type: 'bk-form-item',
+            componentId: `bk-form-item-${uuid()}`,
             renderKey: uuid(),
             renderStyle: {},
             renderProps: {
@@ -218,7 +218,7 @@
             const slotList = cloneDeep(this.defaultValue)
             slotList.forEach(_ => {
                 const componentDataa = cloneDeep(_)
-                if (_.type === 'form-item') {
+                if (_.type === 'bk-form-item') {
                     this.formItemList.push(componentDataa)
                 } else if (_.type === 'bk-button') {
                     this.formActionList.push(componentDataa)
@@ -227,9 +227,6 @@
             if (slotList.length < 1) {
                 this.formActionList = [
                     createTargetDataNode('button', {
-                        style: {
-                            width: '120px'
-                        },
                         prop: {
                             theme: 'primary',
                             slots: '提交'
@@ -322,9 +319,10 @@
                         }
                         const inputNode = createTargetDataNode(this.formItemData.type, {
                             style,
-                            directive: {
-                                'v-model': `${this.curSelectedComponentData.componentId}.${this.formItemData.property}`
-                            }
+                            directive: {}
+                            // directive: {
+                            //     'v-model': `${this.curSelectedComponentData.componentId}.${this.formItemData.property}`
+                            // }
                         })
                         targetDataAppendChild(formItemNode, inputNode)
                         this.formItemList.push(formItemNode)
