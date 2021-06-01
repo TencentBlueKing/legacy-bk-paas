@@ -111,6 +111,7 @@
     import RenderSlot from './slot'
     import ComponentWrapper from './component-wrapper'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import offsetMixin from './offsetMixin'
 
     window.__innerCustomRegisterComponent__ = null
 
@@ -127,12 +128,12 @@
     export default {
         name: 'render-component',
         components,
+        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
                 required: true
-            },
-            interactiveLayout: Object
+            }
         },
         data () {
             // 局部注册自定义组件
@@ -171,10 +172,6 @@
         computed: {
             ...mapGetters('drag', ['targetData']),
             ...mapGetters('components', ['curNameMap', 'interactiveComponents']),
-            getComputedMunuOffset () {
-                if (this.interactiveLayout) return { x: -parseInt(this.interactiveLayout.left), y: -parseInt(this.interactiveLayout.top) }
-                return this.contextOffset
-            },
             isMultSlot () {
                 return this.renderDataSlot && Array.isArray(this.renderDataSlot.val)
             },

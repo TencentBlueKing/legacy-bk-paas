@@ -22,6 +22,7 @@
             <component-menu class="grid-context-menu"
                 :target="contextMenuTarget"
                 :show="contextMenuVisible"
+                :offset="getComputedMunuOffset"
                 @update:show="show => contextMenuVisible = show">
                 <a href="javascript:;" @click="handleContextmenuDelete">删除栅格布局</a>
                 <a href="javascript:;" @click="handleContextmenuClearGrid">清空栅格布局</a>
@@ -33,7 +34,7 @@
                     class="drag-area target-in-column"
                     :sort="true"
                     :list="column.children"
-                    :group="{ name: groupType, pull: true, put: ['render-grid', 'free-layout', 'component'] }"
+                    :group="{ name: groupType, pull: true, put: ['render-grid', 'free-layout', 'component', ...extraDragCls] }"
                     ghost-class="in-column-ghost"
                     chosen-class="in-column-chosen"
                     drag-class="in-column-drag"
@@ -89,6 +90,7 @@
     import renderComponent from './component'
     import freeLayout from './free-layout'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import offsetMixin from './offsetMixin'
 
     export default {
         name: 'render-grid',
@@ -100,10 +102,15 @@
             freeLayout,
             ComponentMenu
         },
+        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            extraDragCls: {
+                type: Array,
+                default: () => ['interactiveInnerComp']
             }
         },
         data () {

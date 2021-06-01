@@ -892,3 +892,9 @@ export const isJsKeyWord = (val) => {
     ]
     return jsKeyWords.includes((val || '').toLowerCase())
 }
+
+export const isInteractiveCompActive = () => {
+    const components = document.querySelectorAll('.interactive-component')
+    const target = Array.from(components).find(el => el.style.display !== 'none')
+    return target !== undefined
+}
