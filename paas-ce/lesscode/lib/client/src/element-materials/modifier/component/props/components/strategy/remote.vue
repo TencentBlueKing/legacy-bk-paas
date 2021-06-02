@@ -11,9 +11,9 @@
 
 <template>
     <section>
-        <div class="remote-title">{{name === 'remoteOptions' ? '动态配置' : '远程函数'}}</div>
+        <div class="remote-title">{{title || (name === 'remoteOptions' ? '动态配置' : '远程函数')}}</div>
         <select-func v-model="remoteData" @change="saveChange"></select-func>
-        <bk-button @click="getApiData" theme="primary" class="remote-button">获取数据</bk-button>
+        <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
     </section>
 </template>
 
@@ -44,6 +44,12 @@
             remoteValidate: {
                 type: Function,
                 default: () => {}
+            },
+            title: {
+                type: String
+            },
+            tips: {
+                type: String
             }
         },
         data () {
@@ -258,8 +264,8 @@
 <style lang="postcss">
     .remote-title {
         margin-top: 10px;
-        line-height: 32px;
-        font-size: 14px;
+        line-height: 24px;
+        font-size: 12px;
         &:first-child {
             margin-top: 0;
         }

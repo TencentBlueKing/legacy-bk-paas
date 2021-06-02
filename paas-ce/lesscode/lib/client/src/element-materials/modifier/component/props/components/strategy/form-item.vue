@@ -12,6 +12,16 @@
 <template>
     <div>
         <div class="form-item-title">表单项配置</div>
+
+        <remote
+            name="initFormData"
+            title="初始表单数据（初始化数据将会覆盖已有数据）"
+            :default-value="{}"
+            :remote-validate="validateObject"
+            :change="getInitData"
+        >
+        </remote>
+
         <div class="form-item-list">
             <div
                 v-for="(item, index) in formItemList"
@@ -85,6 +95,7 @@
     import cloneDeep from 'lodash.clonedeep'
     import { uuid } from '@/common/util'
     import componentList from '@/element-materials/materials'
+    import remote from './remote'
 
     const createTargetDataNode = (componentType, payload) => {
         const component = componentList.bk.find(_ => _.name === componentType)
@@ -178,6 +189,9 @@
 
     export default {
         name: '',
+        components: {
+            remote
+        },
         inheritAttrs: false,
         props: {
             defaultValue: {
@@ -195,6 +209,7 @@
                 formItemList: [],
                 formActionList: [],
                 isShowOperation: false,
+                editIndex: -1,
                 formItemData: generateFormData()
             }
         },
@@ -285,6 +300,7 @@
              * @param {Number} index 表单项索引
             */
             handleShowOperation (index = -1) {
+                this.editIndex = index
                 if (index > -1) {
                     const {
                         renderProps: formItemRenderProps
@@ -310,32 +326,72 @@
             handleSave () {
                 this.$refs.operation.validate()
                     .then(() => {
-                        const formItemNode = createTargetDataFormItemNode(this.formItemData)
-                        let style = {}
-                        if (['input', 'select', 'date-picker', 'time-picker'].includes(this.formItemData.type)) {
-                            style = {
-                                'width': '300px'
-                            }
-                        }
-                        const inputNode = createTargetDataNode(this.formItemData.type, {
-                            style,
-                            directive: {}
-                            // directive: {
-                            //     'v-model': `${this.curSelectedComponentData.componentId}.${this.formItemData.property}`
-                            // }
-                        })
-                        targetDataAppendChild(formItemNode, inputNode)
-                        this.formItemList.push(formItemNode)
+                        this.createTargetDataFromItem(this.formItemData)
                         this.handleCancel()
                         this.triggerChange()
                     })
+            },
+            createTargetDataFromItem (formItemData) {
+                const formItemNode = createTargetDataFormItemNode(formItemData)
+                let style = {}
+                if (['input', 'select', 'date-picker', 'time-picker'].includes(formItemData.type)) {
+                    style = {
+                        'width': '300px'
+                    }
+                }
+                const inputNode = createTargetDataNode(formItemData.type, {
+                    style,
+                    directive: {
+                        'v-model': `${this.curSelectedComponentData.componentId}.${formItemData.property}`
+                    }
+                })
+                if (this.editIndex > -1 && this.formItemList[this.editIndex]) {
+                    this.formItemList.splice(this.editIndex, 1, formItemNode)
+                } else {
+                    this.formItemList.push(formItemNode)
+                }
+                targetDataAppendChild(formItemNode, inputNode, this.editIndex)
             },
             /**
              * @desc 关闭表单项标记框
             */
             handleCancel () {
+                this.editIndex = -1
                 this.isShowOperation = false
                 this.formItemData = generateFormData()
+            },
+            validateObject (res) {
+                let msg = ''
+                if (Object.prototype.toString.call(res) !== '[object Object]') {
+                    msg = '请确保函数返回值为object类型'
+                }
+                return msg
+            },
+            getFormTypeFromValue (val) {
+                let type = 'input'
+                if (typeof val === 'boolean') {
+                    type = 'switcher'
+                } else if (Array.isArray(val)) {
+                    type = 'select'
+                }
+                return type
+            },
+            getInitData (name, data) {
+                if (Object.keys(data).length > 0) {
+                    this.formItemList = []
+                    Object.keys(data).forEach((key) => {
+                        const type = this.getFormTypeFromValue(data[key])
+                        const formItemData = {
+                            type: type,
+                            label: key,
+                            property: key,
+                            required: false,
+                            validate: []
+                        }
+                        this.createTargetDataFromItem(formItemData)
+                    })
+                    this.triggerChange()
+                }
             }
         }
     }
