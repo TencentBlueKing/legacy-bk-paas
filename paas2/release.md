@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.12.17
+    - esb: update esb cc confapis
+    - esb: esb management display component frequency configuration
+
 # 2.12.16
     - esb: update esb bk_log apis
 
