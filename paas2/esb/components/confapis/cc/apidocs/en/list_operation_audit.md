@@ -32,6 +32,16 @@
 | user | string | No | Operator |
 | resource_name | string | No | Resource name |
 | category | string | No | type of query |
+| fuzzy_query    | bool         | No       | use fuzzy query or not when searching with resource name, **fuzzy query has low efficiency and poor performance**.This field only works on the resource_name,it will be ignored when use 'condition.condition' to search |
+| condition | array | No | condition query's condition, with user and resource_name cannot be provided at the same time |
+
+##### condition.condition
+
+| Field    | Type         | Required | Description                                                  |
+| -------- | ------------ | -------- | ------------------------------------------------------------ |
+| field    | string       | Yes      | fields of query, only can be "user" and "resource_name"      |
+| operator | string       | Yes      | operator，in means "belong to"，not_in means "does not belong to", resource_name can use contains to fuzzy query |
+| value    | string/array | Yes      | value of query，in and not_in need array type, contains need string type |
 
 ### Request Parameters Example
 
@@ -50,6 +60,42 @@
         },
         "user":"admin",
         "resource_name":"1.1.1.1",
+        "category":"host",
+        "fuzzy_query": false
+    },
+    "page":{
+        "start":0,
+        "limit":10,
+        "sort":"-operation_time"
+    }
+}
+```
+
+```json
+{
+    "condition":{
+        "bk_biz_id":2,
+        "resource_type":"host",
+        "action":[
+            "create",
+            "delete"
+        ],
+        "operation_time":{
+            "start":"2020-09-23 00:00:00",
+            "end":"2020-11-01 23:59:59"
+        },
+      	"condition":[
+          {
+            "field":"user",
+            "operatior":"in",
+            "value":["admin"]
+          },
+          {
+            "field":"resource_name",
+            "operatior":"in",
+            "value":["1.1.1.1"]
+          }
+        ],
         "category":"host"
     },
     "page":{
@@ -112,3 +158,4 @@
 |-----------|-----------|--------------|
 | count | int | Number of records |
 | info | array | Operation audit record information |
+
