@@ -93,7 +93,7 @@
 		"bk_issystem": false,
 		"bk_isapi": false,
 		"bk_property_type": "singlechar",
-		"option": {"min":"1","max":"2"},
+		"option": "",
 		"description": "test",
 		"creator": "user",
 		"create_time": "2020-03-25 17:12:08",

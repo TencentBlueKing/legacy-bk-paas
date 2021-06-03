@@ -70,7 +70,7 @@
         ]
     },
     "condition": {
-        "host": [
+        "user": [
             {
                 "field": "operator",
                 "operator": "$regex",

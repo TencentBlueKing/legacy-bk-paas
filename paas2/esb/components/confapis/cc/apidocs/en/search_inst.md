@@ -71,7 +71,7 @@ search instance by the associated instance
         ]
     },
     "condition": {
-        "host": [
+        "user": [
             {
                 "field": "operator",
                 "operator": "$regex",
