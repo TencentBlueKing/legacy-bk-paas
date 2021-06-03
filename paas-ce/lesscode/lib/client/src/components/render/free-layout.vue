@@ -21,13 +21,14 @@
         <component-menu class="free-layout-context-menu"
             :target="contextMenuTarget"
             :show="contextMenuVisible"
+            :offset="getComputedMunuOffset"
             @update:show="show => contextMenuVisible = show">
             <a href="javascript:;" @click="handleContextmenuDelete">删除自由布局</a>
             <a href="javascript:;" @click="handleContextmenuClearFreeLayout">清空自由布局</a>
         </component-menu>
         <div class="free-layout-item-inner">
             <vue-draggable :style="{ height: renderData.renderStyles.height || '500px' }"
-                :group="{ pull: true, put: ['component'] }"
+                :group="{ pull: true, put: ['component', ...extraDragCls] }"
                 ghost-class="in-free-layout-item-ghost"
                 :force-fallback="false"
                 :list="renderDataSlot.val[0].children">
@@ -72,6 +73,7 @@
     // eslint-disable-next-line no-unused-vars
     import Drag from '@/common/drag'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import offsetMixin from './offsetMixin'
 
     export default {
         name: 'free-layout',
@@ -80,10 +82,16 @@
             renderComponent,
             ComponentMenu
         },
+        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            // vueDrabable所用的需要额外添加的groupName
+            extraDragCls: {
+                type: Array,
+                default: () => ['interactiveInnerComp']
             }
         },
         data () {
@@ -133,7 +141,7 @@
             this.contextMenuTarget = this.renderData.type === 'free-layout'
                 ? this.$refs[`${this.renderData.componentId}`]
                 : null
-            this.dragLine = new DragLine({ container: this.$el })
+            this.dragLine = new DragLine({ container: this.$el, offset: this.layoutOffset })
         },
         methods: {
             ...mapMutations('drag', [
@@ -325,7 +333,7 @@
              */
             componentMounted (data) {
                 if (!this.dragLine) {
-                    this.dragLine = new DragLine({ container: this.$el })
+                    this.dragLine = new DragLine({ container: this.$el, offset: this.layoutOffset })
                 }
 
                 const renderData = data.renderData
