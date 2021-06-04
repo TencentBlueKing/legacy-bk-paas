@@ -129,6 +129,13 @@ class ESBChannel(models.Model):
         except Exception:
             return {}
 
+    @property
+    def comp_conf_dict(self):
+        try:
+            return dict(json.loads(self.comp_conf))
+        except Exception:
+            return {}
+
 
 class FunctionController(models.Model):
     """功能开关控制器"""

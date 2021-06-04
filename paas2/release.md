@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.12.18
+    - esb: add get_weixin_config
+    - paas: use get_weixin_config to fetch weixin config 
+
 # 2.12.17
     - esb: update esb cc confapis
     - esb: esb management display component frequency configuration
