@@ -8,6 +8,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import { getTokenByUserName } from '../model/token'
+
 function strToJson (str) {
     // eslint-disable-next-line no-new-func
     const json = (new Function('return ' + str))()
@@ -17,19 +19,44 @@ function strToJson (str) {
 const Data = {
     async getApiData (ctx) {
         try {
+            const axiosParam = []
             const body = ctx.request.body || {}
             const url = body.url
+            axiosParam.push(url)
             const type = body.type || 'get'
-            let apiData = body.apiData
-            if (apiData) apiData = strToJson(apiData)
+            const projectId = body.projectId
+            const methodsWithData = ['post', 'put', 'patch']
+            if (methodsWithData.includes(type)) {
+                let apiData = body.apiData
+                if (typeof apiData === 'string') apiData = strToJson(apiData || '{}')
+                axiosParam.push(apiData)
+            }
+            // 携带 cookie
             ctx.http.defaults.withCredentials = true
             if (ctx.cookies.request.headers.cookie) ctx.http.defaults.headers.Cookie = ctx.cookies.request.headers.cookie
-            const re = await ctx.http[type](url, apiData)
+            // 判断是否携带 token
+            const withToken = body.withToken || 0
+            const options = {}
+            if (withToken) {
+                const bkTikcet = ctx.cookies.get('bk_ticket')
+                const tokenList = await getTokenByUserName(projectId) || []
+                const firstToken = tokenList[0] || {}
+                const token = {
+                    access_token: firstToken.token || '',
+                    bk_ticket: bkTikcet
+                }
+                options.headers = {
+                    'X-BKAPI-AUTHORIZATION': JSON.stringify(token)
+                }
+            }
+            axiosParam.push(options)
+            const re = await ctx.http[type](...axiosParam)
             ctx.send(re.data)
         } catch (err) {
-            console.error(err)
+            let message = err.message
+            if (message.match(/Parameters error \[reason=\"参数 app_code 为空，请进行检查\"\]/)) message = 'Parameters error [reason="参数 app_code 为空，请进行检查"]，请在该项目下凭证管理页面绑定蓝鲸应用信息并获取用户认证凭证'
             ctx.throwError({
-                message: err.message
+                message
             })
         }
     },

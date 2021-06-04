@@ -17,28 +17,33 @@ module.exports = {
     build: {
         env: {
             'process.env': {
-                'NODE_ENV': JSON.stringify(NODE_ENV)
+                'NODE_ENV': JSON.stringify(NODE_ENV),
+                'V3_ENV': JSON.stringify(process.env.BKPAAS_ENVIRONMENT || 'prod')
             },
             NODE_ENV: JSON.stringify(NODE_ENV),
             APP_CODE: JSON.stringify(APP_CODE),
-            // AJAX_URL_PREFIX: NODE_ENV === 'local' ? JSON.stringify('/api') : JSON.stringify(`/${APP_CODE}/api`)
             AJAX_URL_PREFIX: JSON.stringify('/api'),
             ENV: JSON.stringify(ENV)
+
         },
         assetsPublicPath: '{{STATIC_URL}}',
-        staticUrl: '/static'
+        staticUrl: '/static',
+        BKPAAS_ENVIRONMENT: 'stag'
     },
     dev: {
         env: {
             'process.env': {
-                'NODE_ENV': JSON.stringify(NODE_ENV)
+                'NODE_ENV': JSON.stringify(NODE_ENV),
+                'V3_ENV': JSON.stringify('dev')
             },
             NODE_ENV: JSON.stringify(NODE_ENV),
             APP_CODE: JSON.stringify(APP_CODE),
             AJAX_URL_PREFIX: JSON.stringify('/api'),
             ENV: JSON.stringify(ENV)
+
         },
         assetsPublicPath: '/',
-        staticUrl: '/static'
+        staticUrl: '/static',
+        BKPAAS_ENVIRONMENT: 'stag'
     }
 }

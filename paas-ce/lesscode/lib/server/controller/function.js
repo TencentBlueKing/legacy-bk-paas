@@ -8,30 +8,18 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, getFuncRelatePageList } from '../model/function'
+import { allGroupFuncDetail, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, getFuncRelatePageList } from '../model/function'
+import { getTokenByUserName, setToken, updateToken } from '../model/token'
+import OperationLogger from '../service/operation-logger'
+const dayjs = require('dayjs')
+const { checkFuncEslint } = require('../util')
 
 module.exports = {
     async getAllGroupFunc (ctx) {
         try {
             const query = ctx.request.query || {}
             const projectId = query.projectId
-            const groupList = await getGroupList(projectId, '')
-            const groupIds = groupList.map(x => x.id)
-            let allFuncList = []
-            if (groupIds.length) allFuncList = await getFuncList(groupIds, '')
-            const funcIds = allFuncList.map(x => x.id)
-            let pageList = []
-            if (funcIds.length) pageList = await getFuncRelatePageList(funcIds)
-            groupList.forEach((group) => {
-                const functionList = allFuncList.filter((func) => (func.funcGroupId === group.id))
-                group.functionList = functionList.map((func) => {
-                    const pages = pageList.filter(x => x.funcId === func.id)
-                    func.pages = pages
-                    func.funcParams = (func.funcParams || '').split(',').filter(x => x !== '')
-                    func.remoteParams = (func.remoteParams || '').split(',').filter(x => x !== '')
-                    return func
-                })
-            })
+            const groupList = await allGroupFuncDetail(projectId)
             ctx.send({
                 code: 0,
                 message: 'success',
@@ -63,15 +51,22 @@ module.exports = {
     },
 
     async addFuncGroup (ctx) {
+        const operationLogger = new OperationLogger(ctx)
         try {
             const postData = ctx.request.body
             const data = await addFuncGroup(postData)
+            operationLogger.success({
+                operateTarget: `分类名称：${postData.inputStr}`
+            })
             ctx.send({
                 code: 0,
                 message: 'success',
                 data
             })
         } catch (err) {
+            operationLogger.error(err, {
+                operateTarget: `分类名称：${ctx.request.body.inputStr}`
+            })
             ctx.throwError({
                 message: err.message
             })
@@ -79,15 +74,27 @@ module.exports = {
     },
 
     async editFuncGroups (ctx) {
+        const operationLogger = new OperationLogger(ctx)
+        const postData = ctx.request.body
+        const group = postData[0]
+        const projectId = group.projectId
+        let operateTarget = ''
+        if (group) {
+            operateTarget = `分类名称：${group.groupName}`
+        }
+
         try {
-            const postData = ctx.request.body
             const data = await editFuncGroups(postData)
+
+            operationLogger.success({ projectId, operateTarget })
+
             ctx.send({
                 code: 0,
                 message: 'success',
                 data
             })
         } catch (err) {
+            operationLogger.error(err, { projectId, operateTarget })
             ctx.throwError({
                 message: err.message
             })
@@ -95,15 +102,24 @@ module.exports = {
     },
 
     async deleteFuncGroup (ctx) {
+        const operationLogger = new OperationLogger(ctx)
         try {
             const query = ctx.request.query || {}
             const data = await deleteFuncGroup(query)
+            operationLogger.success({
+                projectId: query.projectId,
+                operateTarget: `分类名称：${query.name}`
+            })
             ctx.send({
                 code: 0,
                 message: 'success',
                 data
             })
         } catch (err) {
+            operationLogger.error(err, {
+                projectId: ctx.request.query.projectId,
+                operateTarget: `分类名称：${ctx.request.query.name}`
+            })
             ctx.throwError({
                 message: err.message
             })
@@ -111,20 +127,30 @@ module.exports = {
     },
 
     async addFunction (ctx) {
+        const operationLogger = new OperationLogger(ctx)
         try {
-            const postData = ctx.request.body
-            const data = await addFunction(postData)
+            const { func, varWhere } = ctx.request.body
+            // 使用eslint做检查
+            const errMessage = await checkFuncEslint(func)
+            if (errMessage) {
+                throw new global.BusinessError(errMessage)
+            }
+            const data = await addFunction(func, varWhere)
             data.funcParams = data.funcParams.split(',').filter(x => x !== '')
             data.remoteParams = data.remoteParams.split(',').filter(x => x !== '')
+            operationLogger.success({
+                operateTarget: `函数名称：${func.funcName}`
+            })
             ctx.send({
                 code: 0,
                 message: 'success',
                 data
             })
         } catch (err) {
-            ctx.throwError({
-                message: err.message
+            operationLogger.error(err, {
+                operateTarget: `函数名称：${ctx.request.body.funcName}`
             })
+            ctx.throwError(err)
         }
     },
 
@@ -156,12 +182,21 @@ module.exports = {
     },
 
     async editFunction (ctx) {
+        const operationLogger = new OperationLogger(ctx)
         try {
-            const postData = ctx.request.body
-            const data = await editFunction([postData])
+            const { func, varWhere } = ctx.request.body
+            // 使用eslint做检查
+            const errMessage = await checkFuncEslint(func)
+            if (errMessage) {
+                throw new global.BusinessError(errMessage)
+            }
+            const data = await editFunction([func], varWhere)
             data.forEach((func) => {
                 func.funcParams = func.funcParams.split(',').filter(x => x !== '')
                 func.remoteParams = func.remoteParams.split(',').filter(x => x !== '')
+            })
+            operationLogger.success({
+                operateTarget: `函数名称：${func.funcName}`
             })
             ctx.send({
                 code: 0,
@@ -169,26 +204,44 @@ module.exports = {
                 data
             })
         } catch (err) {
+            operationLogger.error(err, {
+                operateTarget: `函数名称：${ctx.request.body.funcName}`
+            })
+            ctx.throwError(err)
+        }
+    },
+
+    async deleteFunction (ctx) {
+        const operationLogger = new OperationLogger(ctx)
+        try {
+            const query = ctx.request.query || {}
+            const id = query.id
+            const data = await deleteFunction(id)
+            operationLogger.success({
+                projectId: query.projectId,
+                operateTarget: `函数名称：${query.funcName}`
+            })
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data
+            })
+        } catch (err) {
+            operationLogger.error(err, {
+                projectId: ctx.request.query.projectId,
+                operateTarget: `函数名称：${ctx.request.query.funcName}`
+            })
             ctx.throwError({
                 message: err.message
             })
         }
     },
 
-    async deleteFunction (ctx) {
-        try {
-            const query = ctx.request.query || {}
-            const id = query.id
-            const data = await deleteFunction(id)
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data
-            })
-        } catch (err) {
-            ctx.throwError({
-                message: err.message
-            })
-        }
+    async generateToken (ctx) {
+        
+    },
+
+    async getTokenList (ctx) {
+    
     }
 }

@@ -2,11 +2,15 @@
     "restartable": "rs",
     "ignore": [
         ".git",
-        "node_modules/**/node_modules"
+        "node_modules/**/node_modules",
+        "lib/server/temp",
+        "lib/server/upload",
+        "lib/server/npmTemp",
+        "lib/server/project-template"
     ],
     "verbose": false,
     "execMap": {
-        "js": "node lib/server/app.browser.js"
+        "js": "node --inspect lib/server/app.browser.js"
     },
     "events": {
     },

@@ -48,7 +48,7 @@
             computedStyle () {
                 const widthStr = this.width ? `width: ${this.width}px;` : ''
                 const heightStr = `height:${this.height}px;`
-                return widthStr + heightStr
+                return widthStr + heightStr + 'display: inline-block;'
             }
         }
     }

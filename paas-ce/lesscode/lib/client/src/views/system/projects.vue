@@ -27,19 +27,18 @@
             <div class="page-body-inner" v-show="!pageLoading">
                 <div class="project-list" v-show="projectList.length">
                     <div :class="['project-item', { favorite: project.favorite }]" v-for="project in projectList" :key="project.id">
-                        <div class="item-bd" @click="toPage(project.id)">
+                        <div class="item-bd">
                             <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
                                 <div class="preview">
-                                    <img :src="pageMap[project.id][0].previewImg || projectPreivewImg" alt="项目缩略预览">
+                                    <img :src="getPreviewImg(pageMap[project.id][0].previewImg)" alt="项目缩略预览">
                                 </div>
                             </template>
                             <div class="empty" v-else>
                                 暂无页面
                             </div>
-                            <div class="desc">
-                                <p class="desc-text">
-                                    {{project.projectDesc}}
-                                </p>
+                            <div class="operate-btns">
+                                <bk-button class="edit-btn" theme="primary" @click="toPage(project.id)">进入项目</bk-button>
+                                <bk-button class="preview-btn" @click="preview(project.id)">预览</bk-button>
                             </div>
                         </div>
                         <div class="item-ft">
@@ -53,20 +52,22 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list" slot="dropdown-content">
-                                        <!-- <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li> -->
+                                        <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="toPage(project.id)">页面管理</a></li>
                                         <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
+                                        <li><a href="javascript:;" @click="toRelease(project.id)">部署</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
                                         <!-- <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li> -->
                                     </ul>
                                 </bk-dropdown-menu>
                             </div>
                         </div>
-                        <span
-                            class="favorite-btn"
-                            v-bk-tooltips.top="{ content: project.favorite ? '取消收藏' : '添加收藏' }"
-                            @click.stop="handleClickFavorite(project)">
-                            <i :class="['bk-drag-icon', `bk-drag-favorite${project.favorite ? '' : '-o' }`]"></i>
+                        <span class="favorite-btn">
+                            <i class="bk-icon icon-info-circle" v-bk-tooltips.top="{ content: project.projectDesc }"></i>
+                            <i :class="['bk-drag-icon', `bk-drag-favorite${project.favorite ? '' : '-o' }`]"
+                                v-bk-tooltips.top="{ content: project.favorite ? '取消收藏' : '添加收藏' }"
+                                @click.stop="handleClickFavorite(project)"
+                            ></i>
                         </span>
                     </div>
                 </div>
@@ -88,29 +89,35 @@
             render-directive="if"
             theme="primary"
             :title="isCopy ? '复制项目' : '创建项目'"
-            width="600"
+            width="750"
+            :position="{ top: 100 }"
             :mask-close="false"
             :auto-close="false"
             header-position="left"
+            ext-cls="project-create-dialog"
             @value-change="handleCreateDialogToggle">
-            <bk-form ref="createForm" :label-width="90" :rules="dialog.create.formRules" :model="dialog.create.formData">
-                <bk-form-item label="项目名称" required property="projectName">
-                    <bk-input maxlength="60" v-model="dialog.create.formData.projectName"
+            <bk-form ref="createForm" :label-width="86" :rules="dialog.create.formRules" :model="dialog.create.formData">
+                <bk-form-item label="项目名称" required property="projectName" error-display-type="normal">
+                    <bk-input maxlength="60" v-model.trim="dialog.create.formData.projectName"
                         placeholder="请输入项目名称，60个字符以内">
                     </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目ID" required property="projectCode">
-                    <bk-input maxlength="255" v-model="dialog.create.formData.projectCode"
-                        placeholder="请输入，由字母、数字、中划线或下划线组成">
+                <bk-form-item label="项目ID" required property="projectCode" error-display-type="normal">
+                    <bk-input maxlength="60" v-model.trim="dialog.create.formData.projectCode"
+                        placeholder="只能由小写字母组成，该ID将作为自定义组件前缀，创建后不可更改">
                     </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目简介" required property="projectDesc">
+                <bk-form-item label="项目简介" required property="projectDesc" error-display-type="normal">
                     <bk-input
-                        v-model="dialog.create.formData.projectDesc"
+                        v-model.trim="dialog.create.formData.projectDesc"
                         :type="'textarea'"
                         :rows="3"
                         :maxlength="100">
                     </bk-input>
+                </bk-form-item>
+                <bk-form-item label="布局模板" style="margin-top: 10px" v-if="!isCopy" error-display-type="normal">
+                    <span class="layout-desc">可多选，作为创建项目页面时可供选择的布局模版，便于项目中统一修改与配置</span>
+                    <layout-thumb-list :list="defaultLayoutList" @change-checked="handleLayoutChecked" @set-default="handleLayoutDefault" />
                 </bk-form-item>
             </bk-form>
             <div class="dialog-footer" slot="footer">
@@ -131,7 +138,7 @@
             header-position="left"
             @after-leave="handleRenameDialogAfterLeave">
             <bk-form ref="renameForm" class="rename-form" :label-width="90" :rules="dialog.rename.formRules" :model="dialog.rename.formData">
-                <bk-form-item label="项目名称" required property="projectName">
+                <bk-form-item label="项目名称" required property="projectName" error-display-type="normal">
                     <bk-input ref="projectRenameInput"
                         maxlength="60"
                         v-model="dialog.rename.formData.projectName"
@@ -161,7 +168,7 @@
             @value-change="handleDeleteDialogToggle">
             <bk-form ref="deleteForm" class="delete-form" :label-width="0" :rules="dialog.delete.formRules" :model="dialog.delete.formData">
                 <p class="confirm-name">请输入<em title="复制名称">“{{activatedProject.projectName}}”</em>确认</p>
-                <bk-form-item property="projectName">
+                <bk-form-item property="projectName" error-display-type="normal">
                     <bk-input
                         maxlength="60"
                         v-model="dialog.delete.formData.projectName"
@@ -177,12 +184,15 @@
                 <bk-button @click="handleDeleteCancel" :disabled="dialog.delete.loading">取消</bk-button>
             </div>
         </bk-dialog>
+        <download-dialog ref="downloadDialog"></download-dialog>
     </main>
 </template>
 
 <script>
-    import projectPreivewImg from '@/images/page-demo.png'
+    import preivewErrImg from '@/images/preview-error.png'
     import dayjs from 'dayjs'
+    import LayoutThumbList from '@/components/project/layout-thumb-list'
+    import DownloadDialog from './components/download-dialog'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
     dayjs.extend(relativeTime)
@@ -200,19 +210,20 @@
             vnodes: {
                 functional: true,
                 render: (h, ctx) => ctx.props.vnode
-            }
+            },
+            LayoutThumbList,
+            DownloadDialog
         },
         data () {
             return {
                 keyword: this.$route.query.q || '',
                 projectList: [],
                 pageMap: {},
-                projectPreivewImg,
                 filterLinks: [
                     { name: '全部项目', value: '' },
                     { name: '我创建的', value: 'my' },
-                    { name: '我收藏的', value: 'favorite' },
-                    { name: '我的共享', value: 'share' }
+                    { name: '我收藏的', value: 'favorite' }
+                    // { name: '我的共享', value: 'share' }
                 ],
                 dialog: {
                     create: {
@@ -234,8 +245,8 @@
                                     trigger: 'blur'
                                 },
                                 {
-                                    regex: /^[\w-]+$/,
-                                    message: '需由字母、数字、中划线或下划线组成',
+                                    regex: /^[a-z]+$/,
+                                    message: '只能由小写字母组成',
                                     trigger: 'blur'
                                 }
                             ],
@@ -289,7 +300,9 @@
                     }
                 },
                 activatedProject: {},
-                pageLoading: true
+                pageLoading: true,
+                projectCodeOldValue: '',
+                defaultLayoutList: []
             }
         },
         computed: {
@@ -312,8 +325,23 @@
         },
         created () {
             this.getProjectList()
+            this.getDefaultLayout()
         },
         methods: {
+            async getDefaultLayout () {
+                try {
+                    const layoutList = await this.$store.dispatch('layout/getPlatformList')
+                    layoutList.forEach(item => {
+                        const isEmptyType = item.type === 'empty'
+                        item.isDefault = isEmptyType
+                        item.checked = isEmptyType
+                        item.disabled = isEmptyType
+                    })
+                    this.defaultLayoutList = layoutList
+                } catch (e) {
+                    console.error(e)
+                }
+            },
             async getProjectList () {
                 this.pageLoading = true
                 try {
@@ -339,6 +367,17 @@
                 try {
                     await this.$refs.createForm.validate()
                     const data = this.dialog.create.formData
+                    const layouts = this.defaultLayoutList.filter(layout => layout.checked).map(layout => {
+                        return {
+                            layoutId: layout.id,
+                            routePath: layout.defaultPath,
+                            isDefault: layout.isDefault,
+                            showName: layout.defaultName,
+                            layoutCode: layout.defaultCode,
+                            content: layout.defaultContent
+                        }
+                    })
+                    data.layouts = layouts
 
                     this.dialog.create.loading = true
                     const projectId = await this.$store.dispatch('project/create', { data })
@@ -436,6 +475,17 @@
                 }
                 return true
             },
+            handleLayoutChecked (layout) {
+                layout.checked = !layout.checked
+                if (!layout.checked && layout.isDefault) {
+                    layout.isDefault = 0
+                    this.defaultLayoutList.filter(item => item.checked)[0].isDefault = 1
+                }
+            },
+            handleLayoutDefault (layout) {
+                this.defaultLayoutList.forEach(item => (item.isDefault = 0))
+                layout.isDefault = 1
+            },
             handleCreateCancel () {
                 this.dialog.create.visible = false
             },
@@ -465,7 +515,11 @@
                 defaultCreateFormData.projectName = `${project.projectName}-copy`
                 this.dialog.create.visible = true
             },
-            async handleDownloadSource () {
+            handleDownloadSource (project) {
+                this.hideDropdownMenu(project)
+                this.$refs.downloadDialog.isShow = true
+                this.$refs.downloadDialog.projectId = project.id
+                this.$refs.downloadDialog.projectName = project.projectName
             },
             async handleRename (project) {
                 this.activatedProject = project
@@ -510,6 +564,23 @@
                         projectId
                     }
                 })
+            },
+            toRelease (projectId) {
+                this.$router.push({
+                    name: 'release',
+                    params: {
+                        projectId
+                    }
+                })
+            },
+            getPreviewImg (previewImg) {
+                if (previewImg && previewImg.length > 20) {
+                    return previewImg
+                }
+                return preivewErrImg
+            },
+            preview (id) {
+                window.open(`/preview/project/${id}/`, '_blank')
             }
         }
     }
@@ -548,8 +619,8 @@
         .project-item {
             position: relative;
             flex: none;
-            width: 312px;
-            height: 242px;
+            width: 304px;
+            height: 234px;
             margin: 0 14px 40px 0;
             padding: 6px;
             background: #fff;
@@ -581,7 +652,16 @@
                         background: rgba(0, 0, 0, 0.4);
                     }
                 }
-
+                .operate-btns {
+                    opacity: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                }
                 .empty {
                     &::before {
                         content: '';
@@ -607,6 +687,11 @@
                 top: 16px;
                 opacity: 0;
                 transition: all .3s ease;
+                .icon-info-circle {
+                    color: #fff;
+                    font-size: 16px;
+                    margin-right: 4px;
+                }
 
                 .bk-drag-icon {
                     font-size: 18px;
@@ -637,8 +722,8 @@
             .item-bd {
                 flex: none;
                 position: relative;
-                width: 300px;
-                height: 166px;
+                width: 292px;
+                height: 158px;
                 background: #fff;
                 border-radius: 4px 4px 0px 0px;
                 overflow: hidden;
@@ -670,24 +755,16 @@
                     background: rgba(0, 0, 0, 0.2);
                 }
             }
-            .desc {
+            .operate-btns {
                 display: none;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                padding: 28px 26px 28px 21px;
-
-                .desc-text {
-                    font-size: 12px;
-                    color: #fff;
-                    margin: 0;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 5;
-                    -webkit-box-orient: vertical;
+                .edit-btn {
+                    width: 86px;
+                    margin-left: 59px;
+                }
+                .preview-btn {
+                    width: 86px;
+                    margin-left: 10px;
+                    margin-rihgt: 59px;
                 }
             }
             .empty {
@@ -753,11 +830,100 @@
         }
     }
 
+    .project-create-dialog {
+        .layout-desc {
+            font-size: 12px;
+            color: #979BA5;
+        }
+        .layout-list {
+            display: flex;
+            margin-left: 10px;
+            .list-item {
+                position: relative;
+                width: 158px;
+                height: 120px;
+                background: #ffffff;
+                border-radius: 2px;
+                &:hover {
+                    .default-setting {
+                        display: block;
+                    }
+                }
+                .default-span {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    border-radius: 2px;
+                    font-size: 12px;
+                    padding: 0 5px;
+                }
+                .default-checked {
+                    cursor: default;
+                    color: #fff;
+                    background: #FFB848;
+                }
+                .default-setting {
+                    display: none;
+                    background: #e1ecff;
+                    color: #3a84ff;
+                    cursor: pointer;
+                }
+                .checked-icon-div {
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    width: 34px;
+                    height: 32px;
+                    background: linear-gradient(135deg,transparent 50%,#3a84ff 50%);
+                    border-radius: 0px 2px 0px;
+                    text-align: right;
+                    .checked-icon {
+                        display: block;
+                        color: #fff;
+                        font-size: 20px;
+                        margin: 12px 0 0 12px;
+                    }
+                }
+            }
+            .layout-empty-item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #979ba5;
+                font-size: 12px;
+                border: 1px solid #c4c6cc;
+                cursor: default;
+            }
+            .layout-item {
+                cursor: pointer;
+                border: 1px solid #dcdee5;
+                margin-left: 12px;
+                .layout-img {
+                    margin: 6px 6px 0;
+                    img {
+                        width: 146px;
+                        height: 88px;
+                    }
+                }
+                .layout-info {
+                    text-align: center;
+                    font-size: 12px;
+                    color: #63656e;
+                }
+            }
+        }
+    }
+
     @media screen and (max-width: 1280px) {
         .project-list {
             .project-item {
-                width: 310px;
-                height: 240px;
+                width: 304px;
+                height: 234px;
+
+                .item-bd {
+                    width: 292px;
+                    height: 158px;
+                }
             }
         }
     }

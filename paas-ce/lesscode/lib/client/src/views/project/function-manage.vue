@@ -1,6 +1,6 @@
 <template>
-    <article>
-        <layout>
+    <article class="function-manage-home">
+        <layout class="function-manage-main">
             <section slot="left" class="function-left">
                 <h3 class="list-head">
                     <bk-input class="head-input" placeholder="请输入" :clearable="true" right-icon="bk-icon icon-search" v-model="searchGroupStr"></bk-input>
@@ -47,9 +47,12 @@
                             </div>
                             <span :class="['item-tool', 'hover-show', { 'click-show': group.showChange }]" @click="openChange(group)"><i class="bk-icon icon-edit2"></i></span>
                         </bk-popconfirm>
-                        <bk-popover :disabled="group.functionList.length <= 0" content="该分类下有函数，不能删除" class="item-tool-box del-box">
+                        <bk-popover content="无删除权限" class="item-tool-box del-box" v-if="userPerm.roleId === 2">
+                            <i :class="['bk-icon', 'icon-close', 'hover-show', 'disable', { 'click-show': group.showChange }]"></i>
+                        </bk-popover>
+                        <bk-popover :disabled="group.functionList.length <= 0" content="该分类下有函数，不能删除" class="item-tool-box del-box" v-else>
                             <i :class="['bk-icon', 'icon-close', 'hover-show', 'disable', { 'click-show': group.showChange }]" v-if="+group.functionList.length"></i>
-                            <span :class="['item-tool', 'hover-show', { 'click-show': group.showChange }]" @click="deleteItem(group.id, `删除分类（${group.groupName}）`, true)" v-else><i class="bk-icon icon-close"></i></span>
+                            <span :class="['item-tool', 'hover-show', { 'click-show': group.showChange }]" @click="deleteItem(group.id, group.groupName, true)" v-else><i class="bk-icon icon-close"></i></span>
                         </bk-popover>
                         <span class="item-num" @mousedown.self="curGroupId = group.id">{{ (group.functionList || []).length }}</span>
                     </li>
@@ -78,29 +81,35 @@
                             <span>{{ props.row.funcName || '--' }}</span>
                         </template>
                     </bk-table-column>
+                    <bk-table-column label="函数标识" prop="funcCode" show-overflow-tooltip>
+                        <template slot-scope="props">
+                            <span>{{ props.row.funcCode || '--' }}</span>
+                        </template>
+                    </bk-table-column>
                     <bk-table-column label="所属分类" prop="funcGroupId" :formatter="groupFormatter" show-overflow-tooltip></bk-table-column>
                     <bk-table-column label="简介" prop="funcSummary" show-overflow-tooltip>
                         <template slot-scope="props">
                             <span>{{ props.row.funcSummary || '--' }}</span>
                         </template>
                     </bk-table-column>
-                    <bk-table-column label="更新人" prop="updateUser">
-                        <template slot-scope="props">
-                            <label-list :list="[props.row.updateUser].filter(x => x)"></label-list>
-                        </template>
-                    </bk-table-column>
+                    <bk-table-column label="更新人" prop="updateUser"></bk-table-column>
                     <bk-table-column label="更新时间" prop="updateTime" :formatter="timeFormatter" show-overflow-tooltip sortable></bk-table-column>
-                    <bk-table-column label="引用界面">
+                    <bk-table-column label="引用界面" show-overflow-tooltip>
                         <template slot-scope="props">
-                            <label-list :list="(props.row.pages || []).map(x => x.pageName)"></label-list>
+                            <span>{{ (props.row.pages || []).map(x => x.pageName).join(',') || '--' }}</span>
                         </template>
                     </bk-table-column>
                     <bk-table-column label="操作" width="180">
                         <template slot-scope="props">
                             <span class="table-bth" @click="editFunction(props.row)">编辑</span>
                             <span class="table-bth" @click="copyRow(props.row)">复制</span>
-                            <span class="table-bth" @click="deleteItem(props.row.id, `删除函数【${props.row.funcName}】`, false)" v-if="(props.row.pages || []).length <= 0">删除</span>
-                            <span class="table-bth disable" v-bk-tooltips="{ content: '该函数被页面引用，请修改后再删除', placements: ['top'] }" v-else>删除</span>
+                            <span class="table-bth disable" v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }" v-if="userPerm.roleId === 2">删除</span>
+                            <template v-else>
+                                <span class="table-bth" @click="deleteItem(props.row.id, props.row.funcName, false)" v-if="(props.row.pages || []).length <= 0 && !props.row.useFlag && !props.row.useInVar">删除</span>
+                                <span class="table-bth disable" v-bk-tooltips="{ content: '该函数被页面引用，请修改后再删除', placements: ['top'] }" v-if="(props.row.pages || []).length > 0">删除</span>
+                                <span class="table-bth disable" v-bk-tooltips="{ content: '该函数被函数引用，请修改后再删除', placements: ['top'] }" v-else-if="props.row.useFlag">删除</span>
+                                <span class="table-bth disable" v-bk-tooltips="{ content: '该函数被计算变量引用，请修改后再删除', placements: ['top'] }" v-else-if="props.row.useInVar">删除</span>
+                            </template>
                         </template>
                     </bk-table-column>
                 </bk-table>
@@ -125,7 +134,7 @@
             :mask-close="false"
             :auto-close="false"
         >
-            <p class="delete-content">{{ delObj.name }}</p>
+            <p class="delete-content">{{ delObj.nameTips }}</p>
             <div class="dialog-footer" slot="footer">
                 <bk-button
                     theme="danger"
@@ -141,13 +150,11 @@
     import { mapActions, mapGetters } from 'vuex'
     import dayjs from 'dayjs'
     import layout from '@/components/ui/layout'
-    import funcForm from '@/components/methods/funcForm'
-    import labelList from '@/components/methods/label-list.vue'
+    import funcForm from '@/components/methods/func-form'
 
     export default {
         components: {
             layout,
-            labelList,
             funcForm
         },
 
@@ -180,7 +187,10 @@
 
         computed: {
             ...mapGetters('functions', ['funcGroups']),
-
+            ...mapGetters('member', ['userPerm']),
+            projectId () {
+                return parseInt(this.$route.params.projectId)
+            },
             groupList: {
                 get () {
                     const searchReg = new RegExp(this.searchGroupStr, 'i')
@@ -213,7 +223,7 @@
         },
 
         created () {
-            this.getGroupList()
+            this.initData()
         },
 
         methods: {
@@ -226,6 +236,7 @@
                 'editGroups',
                 'addGroup'
             ]),
+            ...mapActions('variable', ['getAllVariable']),
 
             handleAddGroup () {
                 this.groupNameStr = ''
@@ -257,8 +268,14 @@
                 const functionList = this.curGroup.functionList
                 let repeatFun = functionList.find(x => x.funcName === funcName)
                 while (repeatFun) {
-                    funcName = `${funcName}_copy`
+                    funcName = `${funcName}Copy`
                     repeatFun = functionList.find(x => x.funcName === funcName)
+                }
+                let funcCode = row.funcCode
+                let repeatFunCode = functionList.find(x => x.funcCode === funcCode)
+                while (repeatFunCode) {
+                    funcCode = `${funcCode}Copy`
+                    repeatFunCode = functionList.find(x => x.funcCode === funcCode)
                 }
                 Object.assign(this.funcObj.form, row, {
                     id: undefined,
@@ -266,6 +283,7 @@
                     updateUser: '',
                     createUser: '',
                     updateTime: '',
+                    funcCode,
                     createTime: date
                 })
             },
@@ -274,14 +292,23 @@
                 this.$refs.func.validate().then((postData) => {
                     if (!postData) return
                     this.funcObj.loading = true
-                    const add = () => this.addFunc({ groupId: this.curGroupId, func: postData })
-                    const edit = () => this.editFunc({ groupId: this.curGroupId, func: postData })
+                    const h = this.$createElement
+                    if (!postData.projectId) {
+                        postData.projectId = this.projectId
+                    }
+                    const varWhere = { projectId: this.projectId, effectiveRange: 0 }
+                    const add = () => this.addFunc({ groupId: this.curGroupId, func: postData, h, varWhere })
+                    const edit = () => this.editFunc({ groupId: this.curGroupId, func: postData, h, varWhere })
 
                     const curMethod = this.funcObj.isEdit ? edit : add
-                    curMethod().then(() => {
-                        this.curGroupId = postData.funcGroupId
-                        this.closeAddFunction()
-                        this.$bkMessage({ theme: 'success', message: `${this.funcObj.title}成功` })
+                    curMethod().then((res) => {
+                        if (!res) return
+                        const projectId = this.$route.params.projectId
+                        return this.getAllGroupFuncs(projectId).then(() => {
+                            this.curGroupId = postData.funcGroupId
+                            this.closeAddFunction()
+                            this.$bkMessage({ theme: 'success', message: `${this.funcObj.title}成功` })
+                        })
                     }).catch(err => this.$bkMessage({ theme: 'error', message: err.message || err })).finally(() => {
                         this.funcObj.loading = false
                     })
@@ -291,6 +318,7 @@
             closeAddFunction () {
                 const defaultForm = {
                     funcName: '',
+                    funcCode: '',
                     funcGroupId: undefined,
                     funcType: 0,
                     funcParams: [],
@@ -305,10 +333,10 @@
                 Object.assign(this.funcObj.form, defaultForm)
             },
 
-            getGroupList () {
+            initData () {
                 this.isLoadingGroup = true
                 const projectId = this.$route.params.projectId
-                this.getAllGroupFuncs(projectId).then(() => {
+                Promise.all([this.getAllGroupFuncs(projectId), this.getAllVariable({ projectId, effectiveRange: 0 })]).then(() => {
                     const firstGroup = this.funcGroups[0] || {}
                     this.curGroupId = firstGroup.id
                 }).finally(() => {
@@ -320,6 +348,7 @@
                 this.delObj.show = true
                 this.delObj.id = id
                 this.delObj.name = name
+                this.delObj.nameTips = isDeleteGroup ? `删除分类（${name}）` : `删除函数【${name}】`
                 this.delObj.isDeleteGroup = isDeleteGroup
             },
 
@@ -335,7 +364,7 @@
             requestDelete () {
                 this.delObj.loading = true
                 const projectId = this.$route.params.projectId
-                const postData = { id: this.delObj.id, projectId }
+                const postData = { id: this.delObj.id, name: this.delObj.name, projectId }
 
                 const deleteFuncGroup = () => this.deleteGroup(postData).then(() => {
                     if (this.delObj.id === this.curGroupId) {
@@ -343,7 +372,12 @@
                         this.curGroupId = firstGroup.id
                     }
                 })
-                const deleteFunc = () => this.deleteFunc({ groupId: this.curGroupId, funcId: this.delObj.id })
+                const deleteFunc = () => this.deleteFunc({
+                    groupId: this.curGroupId,
+                    funcId: this.delObj.id,
+                    projectId,
+                    funcName: this.delObj.name
+                })
 
                 const curMethod = this.delObj.isDeleteGroup ? deleteFuncGroup : deleteFunc
                 curMethod().then(() => {
@@ -357,7 +391,7 @@
             changeGroupName (group, groupName) {
                 this.checkGroupName(groupName).then(() => {
                     this.isAddLoading = true
-                    const postData = [Object.assign({}, group, { groupName })]
+                    const postData = [Object.assign({}, group, { groupName, projectId: this.projectId })]
                     this.editGroups(postData).then(() => {
                         this.clickEmptyArea()
                         this.$bkMessage({ theme: 'success', message: '修改成功' })
@@ -432,6 +466,10 @@
         }
     }
 
+    .function-manage-main {
+        height: calc(100vh - 116px);
+    }
+
     .function-main {
         width: 100%;
         height: 100%;
@@ -452,6 +490,12 @@
             /deep/ .bk-table-body-wrapper {
                 height: calc(100% - 43px);
                 overflow-y: auto;
+            }
+            th.is-leaf {
+                border: none;
+            }
+            &:before {
+                height: 0;
             }
             .max-tabel-prop {
                 display: block;
@@ -479,7 +523,7 @@
         align-items: center;
         max-width: 100%;
         padding: 0 20px 0 14px;
-        cursor: grab;
+        cursor: pointer;
         color: #63656e;
         position: relative;
         /deep/ &.sortable-ghost {

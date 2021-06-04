@@ -18,122 +18,148 @@
                     <span class="seperate-line">|</span>
                     <span class="bk-drag-icon template-logo" title="返回项目列表" @click="leavePage('projects')">
                         <svg aria-hidden="true" width="16" height="16">
-                            <use xlink:href="#bk-drag-template-logo"></use>
+                            <use xlink:href="#bk-drag-logo"></use>
                         </svg>
                     </span>
                     <span class="seperate-line">|</span>
-                    <span class="name-content" :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
-                        {{ pageDetail.pageName }}【{{ projectDetail.projectName }}】
-                        <!-- <span :title="pageDetail.pageName" class="page-name-span">{{ pageDetail.pageName }}</span>
-                        【<span :title="projectDetail.projectName" class="project-name-span">{{ projectDetail.projectName }}</span>】 -->
-                    </span>
+                    <div id="editPageSwitchPage" class="select-page-box">
+                        <bk-select ext-cls="select-page" ext-popover-cls="select-page-dropdown"
+                            ref="pageSelect"
+                            v-model="pageDetail.id"
+                            :clearable="false"
+                            :searchable="true"
+                            @selected="changeProjectPage">
+                            <div slot="trigger">
+                                <div class="name-content" :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
+                                    {{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span>
+                                </div>
+                                <i class="bk-select-angle bk-icon icon-angle-down"></i>
+                            </div>
+                            <bk-option v-for="option in pageList"
+                                :key="option.id"
+                                :id="option.id"
+                                :name="option.pageName">
+                                <span>{{option.pageName}}</span>
+                                <i class="bk-drag-icon bk-drag-copy"
+                                    :style="copyIconStyle"
+                                    @click.stop="handlePageAction('copy')"
+                                    title="复制页面"></i>
+                            </bk-option>
+                            <div slot="extension" class="extension" @click="handlePageAction('create')">
+                                <i class="bk-icon icon-plus-circle"></i> 新建页面
+                            </div>
+                        </bk-select>
+                    </div>
                 </div>
             </div>
             <div class="function-and-tool">
-                <ul class="function-tabs">
-                    <li class="tab-item" @click="handleToolAction('edit')" :class="actionSelected === 'edit' ? 'active' : ''">编辑</li>
-                    <li class="tab-item" @click="handleToolAction('vueCode')" :class="actionSelected === 'vueCode' ? 'active' : ''">查看源码</li>
-                </ul>
-                <div class="tool-actions">
-                    <!-- <div class="action-item" v-bk-tooltips="{ content: '撤销', placements: ['bottom'] }">
-                        <i class="bk-drag-icon bk-drag-undo"></i>
-                    </div> -->
-                    <div class="action-item" :class="actionSelected === 'save' ? 'active' : ''"
-                        v-bk-tooltips="{ content: '保存', placements: ['bottom'] }"
-                        @click="handleSave">
-                        <i class="bk-drag-icon bk-drag-save"></i>
-                    </div>
-                    <div class="action-item" :class="actionSelected === 'preview' ? 'active' : ''"
-                        v-bk-tooltips="{ content: '预览', placements: ['bottom'] }"
-                        @click="handlePreview">
-                        <i class="bk-drag-icon bk-drag-play"></i>
-                    </div>
-                    <div class="action-item" :class="actionSelected === 'del' ? 'active' : ''"
-                        v-bk-tooltips="{ content: '清空', placements: ['bottom'] }"
-                        @click="handleClearAll">
-                        <i class="bk-drag-icon bk-drag-delete"></i>
-                    </div>
-                    <div class="action-item" @click="showFunManage" v-bk-tooltips="{ content: '函数管理', placements: ['bottom'] }">
-                        <i class="bk-drag-icon bk-drag-diff"></i>
-                    </div>
-                    <div class="action-item quick-operation"
-                        :class="showQuickOperation === true ? 'active' : ''"
-                        @click="toggleShowQuickOperation(true)"
-                        v-bk-tooltips="{ content: '快捷键说明', placements: ['bottom'] }"
-                        v-bk-clickoutside="toggleShowQuickOperation"
-                    >
-                        <i class="bk-drag-icon bk-drag-keyboard"></i>
-                        <section class="operation-main" v-if="showQuickOperation === true">
-                            <h5 class="operation-title"><span class="title-main">快捷键说明</span><i class="bk-icon icon-close" @click.stop="toggleShowQuickOperation(false)"></i></h5>
-                            <ul class="operation-list">
-                                <li v-for="(operation, index) in quickOperationList" :key="index" class="operation-item">
-                                    <span class="operation-keys">
-                                        <span v-for="(key, keyIndex) in operation.keys" :key="key">
-                                            <span class="operation-key">{{ key }}</span><span v-if="keyIndex !== operation.keys.length - 1" class="operation-plus">+</span>
-                                        </span>
-                                    </span>
-                                    <span class="operation-name">{{ operation.name }}</span>
-                                </li>
-                            </ul>
-                        </section>
-                    </div>
+                <div id="toolActionBox" class="function-wrapper tool-actions">
+                    <ul class="function-and-tool-list" v-for="(group, index) in toolsGroupList"
+                        :key="index">
+                        <li class="tool-item" v-for="(item, innerIndex) in group"
+                            :key="innerIndex"
+                            :class="{ active: isToolItemActive(item) }"
+                            @click="item.func">
+                            <template v-if="item.text === '快捷键'">
+                                <div class="quick-operation" v-bk-clickoutside="toggleShowQuickOperation">
+                                    <div class="tool-item" @click="toggleShowQuickOperation(true)">
+                                        <i class="bk-drag-icon bk-drag-keyboard"></i>
+                                        <span>快捷键</span>
+                                    </div>
+                                    <section class="operation-main" v-if="showQuickOperation === true">
+                                        <h5 class="operation-title"><span class="title-main">快捷键说明</span><i class="bk-icon icon-close" @click.stop="toggleShowQuickOperation(false)"></i></h5>
+                                        <ul class="operation-list">
+                                            <li v-for="(operation, shortcutIndex) in quickOperationList" :key="shortcutIndex" class="operation-item">
+                                                <span class="operation-keys">
+                                                    <span v-for="(key, keyIndex) in operation.keys" :key="key">
+                                                        <span class="operation-key">{{ key }}</span><span v-if="keyIndex !== operation.keys.length - 1" class="operation-plus">+</span>
+                                                    </span>
+                                                </span>
+                                                <span class="operation-name">{{ operation.name }}</span>
+                                            </li>
+                                        </ul>
+                                    </section>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <i :class="item.icon"></i>
+                                <span>{{item.text}}</span>
+                            </template>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <extra-links></extra-links>
+            <extra-links>
+                <div slot="before" @click="handleStartGuide">画布操作指引</div>
+            </extra-links>
         </div>
         <div class="main-container">
-            <aside class="main-left-sidebar" :class="{ 'is-collapse': collapseSide.left }">
-                <div class="sidebar-panel">
+            <aside id="editPageLeftSideBar" class="main-left-sidebar" :class="{ 'is-collapse': collapseSide.left }">
+                <div class="main-left-side-nav">
+                    <ul class="nav-tabs">
+                        <li :class="['nav-item', { active: item.name === activeSideNav }]"
+                            v-for="(item, index) in leftNavTabList"
+                            :key="index"
+                            v-bk-tooltips="item.label"
+                            :data-name="item.name"
+                            @click="activeSideNav = item.name">
+                            <i :class="['bk-drag-icon', item.icon]"></i>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sidebar-panel" v-if="activeSideNav === 'nav-tab-component'">
                     <div class="sidebar-hd">
                         <ul class="category-tabs">
-                            <li class="tab-item active">组件</li>
-                            <!-- <li class="tab-item">图标</li> -->
-                            <!-- <li class="tab-item">层级结构</li> -->
+                            <li
+                                v-for="(tab, index) in componentTabs.list"
+                                :class="['tab-item', { active: tab.active }]"
+                                :key="index"
+                                @click.stop.prevent="handleToggleCompTab(index)">
+                                <!-- {{tab.label}}
+                                <i v-if="tab.name === 'base'" v-bk-tooltips="tab.tips" class="bk-drag-icon bk-drag-vesion-fill"></i> -->
+                                <template v-if="tab.name === 'base'">
+                                    <bk-dropdown-menu class="toggle-component" v-if="tab.name === 'base'" trigger="click"
+                                        @show="isShowToggleComponentLib = true" @hide="isShowToggleComponentLib = false" ref="dropdownMenuComp">
+                                        <div class="dropdown-trigger-text" slot="dropdown-trigger">
+                                            <span class="tab-item-label" v-if="curComponentLib === 'bk'" title="蓝鲸Vue组件库">蓝鲸Vue组件库</span>
+                                            <span class="tab-item-label" v-else-if="curComponentLib === 'element'" title="element">element-ui</span>
+                                            <i class="bk-drag-icon toggle-icon" :class="isShowToggleComponentLib ? 'bk-drag-angle-down-fill' : 'bk-drag-angle-up-fill'"></i>
+                                        </div>
+                                        <ul class="bk-dropdown-list" slot="dropdown-content">
+                                            <li :class="curComponentLib === 'bk' ? 'selected' : ''">
+                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('bk')">
+                                                    蓝鲸Vue组件库
+                                                    <i v-bk-tooltips="{ content: tab.tips, placements: ['bottom-end'] }" class="bk-drag-icon bk-drag-vesion-fill"></i>
+                                                </a>
+                                            </li>
+                                            <li :class="curComponentLib === 'element' ? 'selected' : ''">
+                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('element')">element-ui</a>
+                                            </li>
+                                        </ul>
+                                    </bk-dropdown-menu>
+                                </template>
+                                <template v-else>
+                                    <span class="tab-item-label">{{tab.label}}</span>
+                                </template>
+                            </li>
                         </ul>
                         <div class="search-bar">
-                            <component-search :result.sync="componentSearchResult" />
+                            <component-search :key="componentTabsCurrentRefresh" :source="componentConfigList" :result.sync="componentSearchResult" />
                         </div>
                     </div>
                     <div class="sidebar-bd">
-                        <template v-for="(group, groupIndex) in componentGroupList">
-                            <div
-                                v-show="isShowComponentGroup(group)"
-                                :key="groupIndex"
-                                :class="getComponentGroupClass(group)">
-                                <div class="group-title" @click="componentGroupFolded[group] = !componentGroupFolded[group]">
-                                    <i class="bk-drag-icon bk-drag-arrow-down"></i>
-                                    {{group}}
-                                </div>
-                                <div class="group-content">
-                                    <vue-draggable
-                                        class="source-drag-area component-list"
-                                        :list="componentGroups[group]"
-                                        :sort="false"
-                                        :group="draggableSourceGroup"
-                                        :force-fallback="false"
-                                        ghost-class="source-ghost"
-                                        chosen-class="source-chosen"
-                                        drag-class="source-drag"
-                                        :clone="cloneFunc"
-                                        @start="sourceAreaStartHandler"
-                                        @choose="onChoose($event, group)"
-                                        @end="sourceAreaEndHandler"
-                                    >
-                                        <template v-for="(component, componentIndex) in componentGroups[group]">
-                                            <!-- @mouseenter="handleComponentMouseenter($event, component)" -->
-                                            <div class="component-item" :class="placeholderElemDisplay" :key="componentIndex"
-                                                v-show="!componentSearchResult || component.displayName === componentSearchResult.displayName">
-                                                <div class="component-icon">
-                                                    <i class="bk-drag-icon" :class="component.icon"></i>
-                                                </div>
-                                                <div class="component-name" v-if="component.displayName">{{component.displayName}}</div>
-                                            </div>
-                                        </template>
-                                    </vue-draggable>
-                                </div>
-                            </div>
-                        </template>
+                        <component
+                            :key="componentTabsCurrentRefresh"
+                            :is="componentTabs.current.component"
+                            :search-result="componentSearchResult"
+                            :draging-component.sync="curDragingComponent"
+                            @setCurSelectedComponent="setTreeSelected"
+                            v-bind="componentTabs.current.props">
+                        </component>
                     </div>
+                </div>
+                <div class="sidebar-panel" v-show="activeSideNav === 'nav-tab-tree'">
+                    <component-tree :target-data="targetData" ref="componentTree"></component-tree>
                 </div>
                 <i
                     class="bk-drag-icon bk-drag-angle-left collapse-icon"
@@ -143,45 +169,71 @@
             </aside>
 
             <!-- 这里用 v-show，切换源码或者预览时，如果时 v-if，那么 grid.vue 里的 renderDataSlot 会重置，这个值并没有存在 store 中 -->
-            <div class="main-content" v-bkloading="{ isLoading: contentLoading, opacity: 1 }"
+            <div class="main-content" v-bkloading="{ isLoading: contentLoading || isCustomComponentLoading, opacity: 1 }"
                 :class="mainContentClass"
                 @click="dragWrapperClickHandler"
                 v-show="actionSelected === 'edit'">
-                <vue-draggable
-                    v-show="!contentLoading"
-                    :key="refreshDragAreaKey"
-                    class="target-drag-area"
-                    :list="targetData"
-                    :sort="true"
-                    :group="draggableTargetGroup"
-                    ghost-class="target-ghost"
-                    chosen-class="target-chosen"
-                    drag-class="target-drag"
-                    @choose="onGridChoose(arguments)"
-                    @change="log"
-                    @end="targetAreaEndHandler"
-                >
-                    <render-grid v-for="item in targetData" :key="item.renderKey" :component-data="item">
-                    </render-grid>
-                </vue-draggable>
+                <layout v-if="!contentLoading"
+                    @layout-mounted="onLayoutMounted">
+                    <template v-if="!isCustomComponentLoading">
+                        <vue-draggable
+                            v-show="!contentLoading"
+                            :key="refreshDragAreaKey"
+                            class="target-drag-area"
+                            :list="targetData"
+                            :sort="true"
+                            :group="draggableTargetGroup"
+                            ghost-class="target-ghost"
+                            chosen-class="target-chosen"
+                            drag-class="target-drag"
+                            filter=".interactive-component"
+                            @choose="onCanvasChoose(arguments)"
+                            @change="log"
+                            @end="targetAreaEndHandler"
+                        >
+                            <render-index v-for="item in targetData" :key="item.renderKey" :component-data="item">
+                            </render-index>
+                        </vue-draggable>
+                    </template>
+                </layout>
+                <div class="not-visible-mask" v-if="showNotVisibleMask" :style="{ height: canvasHeight + 'px' }">
+                    <span class="not-visible-text">
+                        {{`该组件(${curSelectedComponentData.componentId})处于隐藏状态，请先打开`}}
+                    </span>
+                </div>
             </div>
-            <div class="main-content" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
-                <vue-code class="code-area" :key="refreshVueCodeKey" :target-data="targetData"></vue-code>
+            <div class="main-content border-none" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
+                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
+            </div>
+            <div class="main-content" v-if="['pageFunction', 'setting'].includes(actionSelected)">
+                <page-setting :project="projectDetail" :type="actionSelected"></page-setting>
+            </div>
+            <div class="main-content border-none" v-if="actionSelected === 'jsonSource'">
+                <page-json :target-data="targetData"></page-json>
+            </div>
+            <div class="main-content" v-if="actionSelected === 'pageVariable'">
+                <page-variable />
             </div>
 
             <aside class="main-right-sidebar" :class="{ 'is-collapse': collapseSide.right }">
                 <div class="selected-component-info" v-if="curSelectedComponentData.componentId && !collapseSide.right">
-                    <div class="component-id">{{curSelectedComponentData.componentId}}</div>
+                    <div class="component-id overflow" v-bk-overflow-tips>{{curSelectedComponentData.componentId}}</div>
                     <div class="action-wrapper">
-                        <bk-button title="primary" size="small" @click="showDeleteElement" id="del-component-right-sidebar">删除</bk-button>
+                        <i class="bk-drag-icon bk-drag-shanchu mr5"
+                            id="del-component-right-sidebar"
+                            @click="showDeleteElement"
+                            v-bk-tooltips="'删除'"></i>
+                        <i class="bk-drag-icon"
+                            v-show="isInteractiveComponent"
+                            :class="interactiveIconClass"
+                            @click="setComponentVisible"
+                            v-bk-tooltips="interactiveBtnText"></i>
                     </div>
                 </div>
                 <material-modifier />
-                <i
-                    class="bk-drag-icon bk-drag-angle-left collapse-icon"
+                <i class="bk-drag-icon bk-drag-angle-left collapse-icon"
                     v-bk-tooltips.right="{ content: '查看组件配置', disabled: !collapseSide.right }"
-                    @click="handleCollapseSide('right')">
-                </i>
+                    @click="handleCollapseSide('right')" />
             </aside>
         </div>
 
@@ -198,58 +250,149 @@
             @after-leave="afterLeaveDelComponent">
             <div>
                 <p>确认删除{{delComponentConf.item.name}}组件【{{delComponentConf.item.componentId}}】？</p>
-                <p class="del-grid-tip" v-if="delComponentConf.item.type === 'render-grid'">删除grid元素会连带删除grid中所有子元素</p>
+                <p class="del-tip" v-if="delComponentConf.item.type === 'render-grid'">删除grid元素会连带删除grid中所有子元素</p>
+                <p class="del-tip" v-else-if="delComponentConf.isCustomOffline">已下架的自定义组件删除后将不能再被使用</p>
             </div>
         </bk-dialog>
+        <page-dialog ref="pageDialog" :action="action"></page-dialog>
+        <novice-guide ref="guide" :data="guideStep" />
+        <variable-form />
     </main>
 </template>
 
 <script>
-    import { mapGetters, mapMutations, mapActions } from 'vuex'
+    import Vue from 'vue'
+    import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
-
-    import componentList from '@/element-materials/materials'
-    import { uuid, removeClassWithNodeClass, getNodeWithClass } from '@/common/util'
-    import RenderGrid from '@/components/render/grid'
+    // import html2canvas from 'html2canvas'
+    import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON, dom2Img } from '@/common/util'
+    import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
+    import RenderIndex from '@/components/render/index'
+    import FreeLayout from '@/components/render/free-layout'
     import MaterialModifier from '@/element-materials/modifier'
     import VueCode from '@/components/vue-code'
     import Methods from '@/components/methods'
-    import codeMixin from '@/components/vue-code/code-mixin'
-    import ComponentSearch from './component-search'
-    import ExtraLinks from '@/components/ui/extra-links'
-    import html2canvas from 'html2canvas'
+    import Layout from '@/components/widget/layout'
+    import NoviceGuide from '@/components/novice-guide'
+    import VariableForm from '@/components/variable/variable-form'
+    import allComponentConf from '@/element-materials/materials'
+    import iconComponentList from '@/element-materials/materials/icon-list.js'
 
-    import customComponents from '@/custom'
+    import ComponentSearch from './children/component-search'
+    import ComponentCustomPanel from './children/component-panel-custom'
+    import ComponentBasePanel from './children/component-panel-base'
+    import ExtraLinks from '@/components/ui/extra-links'
+    import PageDialog from '@/components/project/page-dialog'
+    import PageSetting from '@/views/project/page-setting'
+    import PageJson from '@/views/project/page-json'
+    import pageVariable from '@/views/project/page-variable'
+
+    import ComponentTree from './children/component-tree'
+    import { bus } from '@/common/bus'
+    import preivewErrImg from '@/images/preview-error.png'
 
     export default {
         components: {
-            RenderGrid,
+            RenderIndex,
+            FreeLayout,
             MaterialModifier,
             VueCode,
             Methods,
+            Layout,
+            NoviceGuide,
+            VariableForm,
             ComponentSearch,
+            [ComponentCustomPanel.name]: ComponentCustomPanel,
+            [ComponentBasePanel.name]: ComponentBasePanel,
             ExtraLinks,
-
-            ...customComponents
+            PageSetting,
+            PageDialog,
+            ComponentTree,
+            PageJson,
+            pageVariable
         },
-        mixins: [codeMixin],
         data () {
-            const componentGroupFolded = {}
-            const componentGroupList = ['栅格布局', '基础', '表单', '导航', '数据', '反馈', '图表', '自定义组件']
-            componentGroupList.forEach(group => {
-                componentGroupFolded[group] = false
-            })
+            const baseComponentList = []
+            baseComponentList.splice(0, 0, ...allComponentConf['bk'])
 
             return {
-                pageDetail: {},
+                leftNavTabList: [
+                    {
+                        icon: 'bk-drag-custom-comp-default',
+                        name: 'nav-tab-component',
+                        label: {
+                            content: '组件库',
+                            placement: 'right',
+                            interactive: false
+                        }
+                    }, {
+                        icon: 'bk-drag-level-down',
+                        name: 'nav-tab-tree',
+                        label: {
+                            content: '页面组件树',
+                            placement: 'right',
+                            interactive: false
+                        }
+                    }
+                ],
+                canvasHeight: 0,
+                resizeObserve: null,
+                activeSideNav: 'nav-tab-component',
+                componentTabsCurrentRefresh: +new Date(),
+                curComponentLib: 'bk',
+                baseComponentList,
+                componentTabs: {
+                    list: [
+                        { name: 'base', label: '基础组件', active: true, tips: '当前组件库版本为“latest”，<a target="_blank" href="https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/changelog" style="cursor: pointer;color: #3a84ff">查看更新日志</a>' },
+                        { name: 'custom', label: '自定义组件', active: false },
+                        { name: 'icon', label: '图标', active: false }
+                    ],
+                    current: {
+                        component: ComponentBasePanel.name,
+                        props: {
+                            componentList: baseComponentList,
+                            // componentGroupList: ['布局', '基础', '表单', '导航', '数据', '反馈', '图表'],
+                            componentGroupList: allComponentConf['bkComponentGroupList'],
+                            type: 'base',
+                            loading: true
+                        }
+                    }
+                },
+                panelMap: {
+                    base: {
+                        component: ComponentBasePanel.name,
+                        props: {
+                            componentList: baseComponentList,
+                            // componentGroupList: ['布局', '基础', '表单', '导航', '数据', '反馈', '图表'],
+                            componentGroupList: allComponentConf['bkComponentGroupList'],
+                            type: 'base'
+                        }
+                    },
+                    custom: {
+                        component: ComponentCustomPanel.name,
+                        props: {
+                            componentList: [],
+                            componentGroupList: [],
+                            type: 'custom',
+                            loading: true
+                        }
+                    },
+                    icon: {
+                        component: ComponentBasePanel.name,
+                        props: {
+                            componentList: iconComponentList,
+                            componentGroupList: ['小图标', '填充图标', '线性图标'],
+                            type: 'icon'
+                        }
+                    }
+                },
+                wholeComponentList: [],
+                customComponentList: [],
                 projectDetail: {},
-                componentList: componentList,
-                componentGroupList,
                 collapseSide: {
                     left: false,
                     right: false
                 },
-                componentGroupFolded,
                 actionSelected: 'edit',
                 curDragingComponent: null,
                 isShowFun: false,
@@ -258,9 +401,9 @@
                 delComponentConf: {
                     visiable: false,
                     headerPosition: 'left',
-                    item: {}
+                    item: {},
+                    isCustomOffline: false
                 },
-                placeholderElemDisplay: '',
                 hasCtrl: false,
                 startDragPosition: {},
                 showQuickOperation: false,
@@ -269,11 +412,33 @@
                     { keys: ['Ctrl / Cmd', 'V'], name: '粘贴' },
                     { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
                     { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
-                    { keys: ['Delete / Backspace'], name: '快速删除' }
+                    { keys: ['Ctrl / Cmd', 'S'], name: '保存' },
+                    { keys: ['Delete / Backspace'], name: '删除' }
                 ],
                 isInDragArea: false,
-                refreshVueCodeKey: +new Date(),
-                contentLoading: true
+                contentLoading: true,
+                isCustomComponentLoading: true,
+                isSaving: false,
+                isShowToggleComponentLib: false,
+                withNav: true,
+                action: 'create',
+                toolsGroupList: [
+                    [
+                        { icon: 'bk-drag-icon bk-drag-huabu', key: 'edit', text: '画布', func: () => this.handleToolAction('edit') },
+                        { icon: 'bk-drag-icon bk-drag-yuanma', key: 'vueCode', text: '源码', func: () => this.handleToolAction('vueCode') },
+                        { icon: 'bk-drag-icon bk-drag-json', key: 'jsonSource', text: 'Json', func: () => this.handleToolAction('jsonSource') },
+                        { icon: 'bk-drag-icon bk-drag-yemianhanshu', key: 'pageFunction', text: '页面函数', func: () => this.handleToolAction('pageFunction') },
+                        { icon: 'bk-drag-icon bk-drag-variable-manage', key: 'pageVariable', text: '页面变量', func: () => this.handleToolAction('pageVariable') },
+                        { icon: 'bk-drag-icon bk-drag-set', key: 'setting', text: '页面设置', func: () => this.handleToolAction('setting') }
+                    ],
+                    [
+                        { icon: 'bk-drag-icon bk-drag-save', text: '保存', func: this.handleSave },
+                        { icon: 'bk-drag-icon bk-drag-play', text: '预览', func: this.handlePreview },
+                        { icon: 'bk-drag-icon bk-drag-delete', text: '清空', func: this.handleClearAll },
+                        { icon: 'bk-drag-icon bk-drag-hanshuku', text: '函数库', func: this.showFunManage },
+                        { icon: 'bk-drag-icon bk-drag-keyboard', text: '快捷键', func: () => this.toggleShowQuickOperation(true) }
+                    ]
+                ]
             }
         },
         computed: {
@@ -282,14 +447,38 @@
                 'draggableSourceGroup',
                 'draggableTargetGroup',
                 'curSelectedComponentData',
-                'pageData',
+                'curTemplateData',
                 'copyData'
             ]),
-
+            ...mapGetters('page', [
+                'pageDetail',
+                'pageList'
+            ]),
+            ...mapGetters('functions', ['funcGroups']),
+            ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('components', ['interactiveComponents']),
+            ...mapGetters('variable', ['variableList']),
+            ...mapState('route', ['layoutPageList']),
+            copyIconStyle () {
+                return {
+                    position: 'absolute',
+                    right: '10px',
+                    top: '50%',
+                    transform: 'translateY(-50%)'
+                }
+            },
             projectId () {
                 return this.$route.params.projectId || ''
             },
-
+            isInteractiveComponent () {
+                return this.interactiveComponents.includes(this.curSelectedComponentData.type)
+            },
+            interactiveBtnText () {
+                return this.curSelectedComponentData.interactiveShow ? '隐藏' : '显示'
+            },
+            interactiveIconClass () {
+                return this.curSelectedComponentData.interactiveShow ? 'bk-drag-visible-eye' : 'bk-drag-invisible-eye'
+            },
             pageId () {
                 return this.$route.params.pageId || ''
             },
@@ -311,31 +500,77 @@
                 }
             },
 
-            componentGroups () {
-                const componentGroups = {}
+            componentConfigList () {
+                return this.componentTabs.current.props.componentList
+            },
+            showNotVisibleMask () {
+                return this.curSelectedComponentData
+                    && this.curSelectedComponentData.interactiveShow === false
+                    && this.interactiveComponents.includes(this.curSelectedComponentData.type)
+            }
+        },
+        watch: {
+            curComponentLib (v) {
+                this.componentTabs.current.props.componentList = this.baseComponentList
+                this.componentTabs.current.props.componentGroupList = allComponentConf[`${v}ComponentGroupList`]
 
-                // 分组
-                componentList.forEach(component => {
-                    const groupName = component.group
-                    const componentGroup = componentGroups[groupName]
-                    if (componentGroup) {
-                        componentGroup.push(component)
-                    } else {
-                        componentGroups[groupName] = [component]
-                    }
-                })
-
-                // 组内排序
-                Object.values(componentGroups).forEach(list => {
-                    list.sort((a, b) => a.order - b.order)
-                })
-
-                return componentGroups
+                this.panelMap.base.props.componentList = this.baseComponentList
+                this.panelMap.base.props.componentGroupList = allComponentConf[`${v}ComponentGroupList`]
             }
         },
         async created () {
-            this.pageDetail = await this.$store.dispatch('page/detail', { pageId: this.pageId }) || {}
-            this.contentLoading = false
+            this.guideStep = [
+                {
+                    title: '组件库和图标',
+                    content: '从基础组件、自定义业务组件、图标库中拖拽组件或图标到画布区域进行页面编排组装',
+                    target: '#editPageLeftSideBar'
+                },
+                {
+                    title: '组件树',
+                    content: '以全局组件树的形式，快速切换查看页面的所有组件',
+                    target: '#editPageLeftSideBar',
+                    entry: () => {
+                        document.body.querySelector('[data-name="nav-tab-tree"]').click()
+                    },
+                    leave: () => {
+                        document.body.querySelector('[data-name="nav-tab-component"]').click()
+                    }
+                },
+                {
+                    title: '画布编辑区',
+                    content: '可在画布自由拖动组件、图标等进行页面布局',
+                    target: '.main-content'
+                },
+                {
+                    title: '组件配置',
+                    content: '在画布中选中对应组件，可在这里进行组件样式、属性、事件及指令的配置',
+                    target: '.main-right-sidebar',
+                    entry: () => {
+                        const $dragAreaEle = document.body.querySelector('.target-drag-area')
+                        const $gridEle = $dragAreaEle.querySelector('.drag-area')
+                        if ($gridEle) {
+                            $gridEle.click()
+                            return
+                        }
+                        const $freeLayoutEle = $dragAreaEle.querySelector('.bk-lesscode-free-layout')
+                        if ($freeLayoutEle) {
+                            $freeLayoutEle.click()
+                        }
+                    }
+                },
+                {
+                    title: '页面操作',
+                    content: '可以查看并下载完整源码、对页面生命周期，路由，函数等进行配置，以及对内容进行保存，预览，清空等操作',
+                    target: '#toolActionBox'
+                },
+                {
+                    title: '切换页面',
+                    content: '点击页面名称可以快速切换页面，新建页面，以及复制已有的页面',
+                    target: '#editPageSwitchPage'
+                }
+            ]
+            await this.fetchData()
+
             const mockCurSelectComponentData = {
                 componentId: 'grid-' + uuid(),
                 renderKey: uuid(),
@@ -357,42 +592,44 @@
                     }
                 },
                 renderStyles: {},
-                renderEvents: {}
+                renderEvents: {},
+                renderDirectives: []
             }
-
             this.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
-            // this.setCurSelectedComponentData(this.curDragingComponent)
 
             // 设置初始targetData
             let initData = []
             try {
-                initData = this.pageDetail.content ? JSON.parse(this.pageDetail.content) : [this.curDragingComponent]
+                const content = this.pageDetail.content
+                initData = content && content !== 'null' ? JSON.parse(content) : [this.curDragingComponent]
                 this.refreshDragAreaKey = +new Date()
             } catch (err) {
                 initData = [this.curDragingComponent]
-                this.$bkMesseage({
+                this.$bkMessage({
                     theme: 'error',
-                    message: 'targetData格式错误'
+                    message: 'targetData格式错误',
+                    limit: 1
                 })
             }
             this.setTargetData(initData)
 
-            this.projectDetail = await this.$store.dispatch('project/detail', { projectId: this.projectId }) || {}
+            // 注册自定义组件
+            this.registerCustomComponent()
+
+            // 清空选中的组件数据
+            this.setCurSelectedComponentData({})
+
+            // 设置权限相关的信息
+            this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
 
             // for test
             window.test = this.test
             window.test1 = this.test1
         },
         mounted () {
-            const projectId = this.$route.params.projectId || 1
-            this.getAllGroupFuncs(projectId).catch((err) => {
-                this.$bkMessage({ theme: 'error', message: err.message || err })
-            })
-
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
-
             window.addEventListener('beforeunload', this.beforeunloadConfirm)
         },
         beforeDestroy () {
@@ -400,17 +637,23 @@
             window.removeEventListener('keyup', this.judgeCtrl)
             window.removeEventListener('click', this.toggleQuickOperation, true)
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
+            this.resizeObserve.disconnect()
         },
-        beforeDestroy () {
-            window.removeEventListener('keydown', this.quickOperation)
-            window.removeEventListener('keyup', this.judgeCtrl)
-            window.removeEventListener('click', this.toggleQuickOperation, true)
+        beforeRouteLeave (to, from, next) {
+            this.$bkInfo({
+                title: '确认离开?',
+                subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                confirmFn: async () => {
+                    next()
+                }
+            })
         },
         methods: {
             ...mapMutations('drag', [
                 'setTargetData',
-                'setDraggableSourceGroup',
+                'setDraggableTargetGroup',
                 'setCurSelectedComponentData',
+
                 'setCopyData',
                 'pushTargetHistory',
                 'backTargetHistory',
@@ -420,6 +663,117 @@
             ...mapActions('functions', [
                 'getAllGroupFuncs'
             ]),
+            ...mapActions('variable', ['getAllVariable']),
+            onLayoutMounted () {
+                const canvas = document.getElementsByClassName('lesscode-editor-layout')[0]
+                this.canvasHeight = canvas.offsetHeight
+                this.resizeObserve = new ResizeObserver(entries => {
+                    for (const entry of entries) {
+                        this.canvasHeight = entry.target.offsetHeight
+                    }
+                })
+                this.resizeObserve.observe(canvas)
+            },
+            isToolItemActive (item) {
+                if (item.text === '快捷键') {
+                    return this.showQuickOperation === true
+                }
+                return item.key === this.actionSelected
+            },
+
+            setTreeSelected (id) {
+                this.$refs.tree.setTreeSelected(id)
+            },
+            setComponentVisible () {
+                const id = this.curSelectedComponentData.componentId
+                id && this.$refs.componentTree.setComponentVisible(id)
+            },
+
+            toggleComponentLib (idx) {
+                this.$refs.dropdownMenuComp[0].hide()
+                if (this.curComponentLib === idx) {
+                    return
+                }
+                this.curComponentLib = idx
+                this.baseComponentList.splice(0, this.baseComponentList.length, ...allComponentConf[idx])
+                this.componentTabsCurrentRefresh = +new Date()
+                this.componentSearchResult = null
+            },
+
+            async fetchData () {
+                try {
+                    this.contentLoading = true
+                    const [pageDetail, pageList, projectDetail] = await Promise.all([
+                        this.$store.dispatch('page/detail', { pageId: this.pageId }),
+                        this.$store.dispatch('page/getList', { projectId: this.projectId }),
+                        this.$store.dispatch('project/detail', { projectId: this.projectId }),
+                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, config: { fromCache: true } }),
+                        this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
+                        this.$store.dispatch('components/componentNameMap'),
+                        this.getAllGroupFuncs(this.projectId)
+                    ])
+                    await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
+                    this.$store.commit('page/setPageDetail', pageDetail || {})
+                    this.$store.commit('page/setPageList', pageList || [])
+                    this.$store.commit('project/setCurrentProject', projectDetail || {})
+                    this.projectDetail = projectDetail || {}
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    this.contentLoading = false
+                }
+            },
+
+            registerCustomComponent () {
+                const ExtraGroup = {
+                    Favourite: '我的收藏',
+                    Public: '其他项目公开的组件'
+                }
+                // 包含所有的自定组件
+                this.wholeComponentList = []
+                window.__innerCustomRegisterComponent__ = {}
+                const script = document.createElement('script')
+                script.src = `/${parseInt(this.$route.params.projectId)}/${parseInt(this.$route.params.pageId)}/component/register.js`
+                script.onload = () => {
+                    const customComponentList = window.customCompontensPlugin.map(callback => {
+                        const [
+                            config,
+                            componentSource,
+                            baseInfo
+                        ] = callback(Vue)
+                        window.__innerCustomRegisterComponent__[config.type] = componentSource
+                        return {
+                            ...config,
+                            group: baseInfo.category,
+                            meta: { ...baseInfo }
+                        }
+                    })
+
+                    const publicList = []
+                    const otherList = []
+                    for (const comp of customComponentList) {
+                        this.wholeComponentList.push(comp)
+                        if (comp.meta.offline) {
+                            continue
+                        }
+                        if (comp.meta.isPublic) {
+                            publicList.push({ ...comp, group: ExtraGroup.Public })
+                        } else {
+                            otherList.push(comp)
+                        }
+                    }
+                    this.customComponentList = [...otherList, ...publicList]
+                    this.isCustomComponentLoading = false
+                    if (this.componentTabs.current.props.type === 'custom') {
+                        this.componentTabs.current.props.componentList = this.customComponentList
+                        this.componentTabs.current.props.loading = this.isCustomComponentLoading
+                    }
+                }
+                document.body.appendChild(script)
+                this.$once('hook:beforeDestroy', () => {
+                    document.body.removeChild(script)
+                })
+            },
 
             /**
              * 检测是否能删除组件
@@ -427,18 +781,28 @@
              * @return {boolean} 是否可以删除
              */
             checkIsDelComponent () {
-                const { type, componentId } = this.curSelectedComponentData
-                if (type === 'render-grid'
+                let msg = ''
+                const { type, componentId, slotContainer } = this.curSelectedComponentData
+                if (slotContainer === true) {
+                    msg = 'slot容器不能刪除'
+                } else if (type === 'render-grid'
                     && this.targetData.length === 1 && componentId === this.targetData[0].componentId
                 ) {
+                    msg = '画布中至少要有一个栅格布局'
+                }
+                if (msg) {
                     this.$bkMessage({
                         theme: 'warning',
                         limit: 1,
-                        message: '画布中至少要有一个栅格布局'
+                        message: msg
                     })
                     return false
                 }
                 return true
+            },
+
+            handleStartGuide () {
+                this.$refs.guide.start()
             },
 
             toggleQuickOperation (event) {
@@ -453,6 +817,8 @@
             judgeCtrl (event) {
                 switch (event.keyCode) {
                     case 91:
+                    case 224:
+                    case 93:
                     case 17:
                         this.hasCtrl = false
                         break
@@ -460,33 +826,62 @@
             },
 
             quickOperation (event) {
-                if (!this.isInDragArea) return
+                const vm = this
+                const funcChainMap = {
+                    stopped: false,
+                    isInDragArea: function () {
+                        if (!vm.isInDragArea) this.stopped = true
+                        return this
+                    },
+                    hasCtrl: function () {
+                        if (!vm.hasCtrl) this.stopped = true
+                        return this
+                    },
+                    preventDefault: function () {
+                        if (!this.stopped) event.preventDefault()
+                        return this
+                    },
+                    isDelComponentConfirm: function () {
+                        if (!vm.delComponentConf.visiable) this.stopped = true
+                        return this
+                    },
+                    exec: function (callBack) {
+                        if (!this.stopped) callBack()
+                        return this
+                    }
+                }
+
                 switch (event.keyCode) {
                     case 91:
+                    case 224:
+                    case 93:
                     case 17:
                         this.hasCtrl = true
                         break
                     case 67:
-                        this.putComponentData()
+                        funcChainMap.isInDragArea().exec(this.putComponentData)
+                        break
+                    case 83:
+                        funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)
                         break
                     case 86:
-                        this.copyComponent()
+                        funcChainMap.isInDragArea().exec(this.copyComponent)
                         break
                     case 88:
-                        this.cutComponent()
+                        funcChainMap.isInDragArea().exec(this.cutComponent)
                         break
                     case 90:
-                        if (this.hasCtrl) this.backTargetHistory()
+                        funcChainMap.isInDragArea().hasCtrl().exec(this.backTargetHistory)
                         break
                     case 89:
-                        if (this.hasCtrl) {
-                            event.preventDefault()
-                            this.forwardTargetHistory()
-                        }
+                        funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.forwardTargetHistory)
                         break
                     case 8:
                     case 46:
-                        this.deleteComponent()
+                        funcChainMap.isInDragArea().exec(this.deleteComponent)
+                        break
+                    case 13:
+                        funcChainMap.isDelComponentConfirm().exec(this.confirmDelComponent)
                         break
                 }
             },
@@ -554,6 +949,24 @@
                 this.collapseSide[side] = !this.collapseSide[side]
             },
 
+            handleToggleCompTab (index) {
+                const currentTab = this.componentTabs.list[index]
+                this.componentTabs.list.forEach(item => (item.active = false))
+                currentTab.active = true
+
+                const key = currentTab.name
+                this.componentTabs.current.component = this.panelMap[key].component
+                this.componentTabs.current.props = this.panelMap[key].props
+                if (key === 'custom') {
+                    this.componentTabs.current.props.componentList = this.customComponentList
+                    this.componentTabs.current.props.loading = this.isCustomComponentLoading
+                }
+
+                if (key !== 'base') {
+                    this.componentSearchResult = null
+                }
+            },
+
             /**
              * 左侧组件列表 hover 事件
              *
@@ -590,128 +1003,37 @@
              * @param {Object} e 事件对象
              */
             dragWrapperClickHandler (e) {
-                removeClassWithNodeClass('.bk-layout-grid-row', 'selected')
-                removeClassWithNodeClass('.component-wrapper', 'selected')
-
                 this.setCurSelectedComponentData({})
+
+                removeClassWithNodeClass('.bk-layout-grid-row', 'selected')
+                removeClassWithNodeClass('.bk-lesscode-free-layout', 'selected')
+                removeClassWithNodeClass('.component-wrapper', 'selected')
+                removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
+
+                bus.$emit('selected-tree', '')
             },
 
             /**
-             * 左侧组件列表区域拖拽 choose 回调函数
-             * 事件触发顺序 onChoose cloneFunc onStart moveFunc(n) onEnd
-             *
-             * @param {Object} e 事件对象
-             * @param {string} group group 标识
-             */
-            onChoose (e, group) {
-                const uid = uuid()
-                const component = cloneDeep(this.componentGroups[group][e.oldIndex])
-                const { name = '', type = '', props = {} } = component
-                const id = component.name + '-' + uid
-
-                const renderProps = {}
-                Object.keys(props).forEach(k => {
-                    if (props[k].hasOwnProperty('val') && props[k].val !== '') {
-                        renderProps[k] = props[k]
-                    }
-                })
-
-                const defaultStyles = {}
-                const styles = component.styles || []
-                const componentDefaultStyles = component.defaultStyles || {}
-                styles.forEach(st => {
-                    if (st === 'size') {
-                        if (componentDefaultStyles.hasOwnProperty('height')) {
-                            defaultStyles['height'] = component.defaultStyles['height']
-                        }
-                        if (componentDefaultStyles.hasOwnProperty('width')) {
-                            defaultStyles['width'] = component.defaultStyles['width']
-                        }
-                    } else {
-                        if (componentDefaultStyles.hasOwnProperty(st)) {
-                            defaultStyles[st] = component.defaultStyles[st]
-                        }
-                    }
-                })
-                if (defaultStyles.hasOwnProperty('display')) {
-                    this.placeholderElemDisplay = defaultStyles['display']
-                } else {
-                    this.placeholderElemDisplay = 'block'
-                }
-
-                this.curDragingComponent = {
-                    componentId: id,
-                    tabPanelActive: 'props', // 默认tab选中的面板
-                    renderKey: uuid(),
-                    name,
-                    type,
-                    renderProps: renderProps,
-                    renderStyles: { ...defaultStyles },
-                    renderEvents: {}
-                }
-            },
-
-            /**
-             * vue-draggable clone 回调函数
-             *
-             * @param {Object} original 当前拖拽的对象（左侧组件列表中的组件）
-             */
-            cloneFunc (original) {
-                this.setDraggableSourceGroup(Object.assign({}, this.draggableSourceGroup, {
-                    name: original.type === 'render-grid' ? 'render-grid' : 'component'
-                }))
-                console.log('from clone', this.curDragingComponent)
-                // debugger
-                // // 这里需要换 id，否则同样的组件拖到右边后，id 是一样的，右边同样的组件之间就没法拖动
-                // // return Object.assign({}, original, { componentId: uuid() })
-                return this.curDragingComponent
-            },
-
-            sourceAreaStartHandler (e) {
-                console.log('sourceAreaStartHandler', e)
-                console.log(this.curDragingComponent)
-            },
-
-            /**
-             * 左侧组件列表区域拖拽 end 回调函数
-             * 当把左侧组件列表区的组件拖入到右侧拖拽区中时会触发（拖拽到右侧拖拽区以及拖拽到右侧拖拽区的组件中两种情况均会触发）
+             * 选中画布中的元素时触发，在画布中的只有 render-grid 和 free-layout 元素
+             * 选中 render-grid 和 free-layout 内部的元素不会触发
              *
              * @param {Object} e 事件对象
              */
-            sourceAreaEndHandler (e) {
-                this.placeholderElemDisplay = ''
-                console.warn('sourceAreaEndHandler', this.curDragingComponent)
-                console.warn('left to right end, targetData: ', this.targetData)
-            },
-
-            /**
-             * 判断是否显示组件组
-             *
-             * @param {String} group 组名
-             */
-            isShowComponentGroup (group) {
-                return !this.componentSearchResult || group === this.componentSearchResult.group
-            },
-
-            /**
-             * 获取组件组的class
-             *
-             * @param {String} group 组名
-             */
-            getComponentGroupClass (group) {
-                return [
-                    'component-group',
-                    {
-                        'folded': this.componentGroupFolded[group],
-                        'search-show': this.componentSearchResult && group === this.componentSearchResult.group
-                    }
-                ]
-            },
-
-            onGridChoose (e) {
+            onCanvasChoose (e) {
                 const evt = e[0]
                 const curChooseComponent = this.targetData[evt.oldIndex]
                 this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
+
+                let name = ''
+                if (curChooseComponent.type === 'render-grid') {
+                    name = 'render-grid'
+                } else if (curChooseComponent.type === 'free-layout') {
+                    name = 'free-layout'
+                }
+
+                this.setDraggableTargetGroup(Object.assign({}, this.draggableTargetGroup, {
+                    name
+                }))
             },
 
             log (evt, column) {
@@ -720,7 +1042,6 @@
                 const moveEle = evt.moved
                 const element = (addEle || removedEle || moveEle).element
                 const pos = this.$td().getNodePosition(element.componentId)
-
                 const pushData = {
                     parentId: pos.parent && pos.parent.componentId,
                     component: element,
@@ -764,13 +1085,23 @@
                 // console.error('onEnd11111', e)
             },
 
-            handleToolAction (v) {
+            async handleToolAction (action) {
+                this.actionSelected = action
                 // 点击源码的时候，需要让右侧属性面板消失
                 // 如果停留在源码页面时属性面板不消失，这个时候修改属性会生效，预览的时候就会生效，但是源码并不会随着属性的变化而重新生成
-                if (v === 'vueCode') {
+                if (['setting', 'vueCode'].includes(action)) {
+                    const processTargetResult = this.processTargetData()
+                    if (processTargetResult.errMessage) {
+                        this.$bkMessage({
+                            theme: 'error',
+                            message: processTargetResult.errMessage,
+                            limit: 1,
+                            ellipsisLine: 0
+                        })
+                        return
+                    }
                     this.dragWrapperClickHandler()
                 }
-                this.actionSelected = v
             },
 
             /**
@@ -780,6 +1111,7 @@
                 const me = this
                 me.$bkInfo({
                     title: '确定清空所有组件元素？',
+                    subTitle: '包含的已下架自定义组件将不能再被使用',
                     confirmFn () {
                         const mockCurSelectComponentData = {
                             componentId: 'grid-' + uuid(),
@@ -802,7 +1134,8 @@
                                 }
                             },
                             renderStyles: {},
-                            renderEvents: {}
+                            renderEvents: {},
+                            renderDirectives: []
                         }
                         const pushData = {
                             oldTargetData: me.targetData,
@@ -813,8 +1146,6 @@
                         me.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
                         me.setCurSelectedComponentData(me.curDragingComponent)
                         me.setTargetData([me.curDragingComponent])
-
-                        me.refreshVueCodeKey = +new Date()
                     }
                 })
             },
@@ -828,6 +1159,9 @@
                 }
                 this.delComponentConf.visiable = true
                 this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
+                const { type } = this.curSelectedComponentData
+                const customComp = this.customComponentList.find(item => item.type === type)
+                this.delComponentConf.isCustomOffline = customComp && customComp.meta.offline
             },
 
             /**
@@ -848,9 +1182,11 @@
                         if (item.children) {
                             del(item.children, cid)
                         } else if (
-                            item.renderProps.slots && item.renderProps.slots.type === 'column'
+                            item.renderProps.slots && (item.renderProps.slots.type === 'column' || item.renderProps.slots.type === 'free-layout-item')
                         ) {
                             del(item.renderProps.slots.val, cid)
+                        } else if (item.renderProps.slots && item.renderProps.slots.name === 'layout') {
+                            del([item.renderProps.slots.val], cid)
                         }
                     }
                     return ''
@@ -868,6 +1204,7 @@
                 this.refreshDragAreaKey = +new Date()
                 this.setCurSelectedComponentData({})
                 this.pushTargetHistory(pushData)
+                this.delComponentConf.visiable = false
             },
 
             /**
@@ -884,74 +1221,298 @@
                 this.delComponentConf.item = Object.assign({}, {})
             },
 
-            async handlePreview () {
-                let errTips = ''
-                try {
-                    localStorage.removeItem('layout-target-data')
-                    localStorage.setItem('layout-target-data', JSON.stringify(this.targetData))
-                    const routerUrl = this.$router.resolve({
-                        name: 'preview'
+            handlePreview () {
+                this.handleSave(() => {
+                    let errTips = ''
+                    try {
+                        localStorage.removeItem('layout-target-data')
+                        localStorage.setItem('layout-target-data', circleJSON(this.targetData))
+                        const routerUrl = `/preview/project/${this.projectId}/?pageCode=${this.pageDetail.pageCode}`
+                        window.open(routerUrl, '_blank')
+                    } catch (err) {
+                        errTips = err.message || err || '预览异常'
+                    }
+                    errTips && this.$bkMessage({
+                        theme: 'error',
+                        message: errTips,
+                        limit: 1
                     })
-                    window.open(routerUrl.href, '_blank')
-                } catch (err) {
-                    errTips = err.message || err || '预览异常'
-                }
-                errTips && this.$bkMessage({
-                    theme: 'error',
-                    message: errTips
-                })
+                }, 'preview')
             },
 
-            handleSave () {
+            async handleSave (callBack, from) {
+                if (this.isSaving) {
+                    return
+                }
+
+                const processTargetDataResult = this.processTargetData()
+                if (processTargetDataResult.errMessage) {
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: processTargetDataResult.errMessage,
+                        ellipsisLine: 0
+                    })
+                    return
+                }
+                this.isSaving = true
+
+                const { curFuncIds, draggedCustomComponentList, usedVariableMap } = processTargetDataResult
+
                 try {
-                    html2canvas(document.querySelector('.main-content')).then((canvas) => {
-                        const imgData = canvas.toDataURL('image/png')
-                        const res = this.$store.dispatch('page/update', {
+                    const customCompData = draggedCustomComponentList.map(item => ({
+                        compId: item.meta.id,
+                        versionId: item.meta.versionId
+                    }))
+                    const functionData = [...new Set(curFuncIds.filter(item => item))]
+                    const res = await this.$store.dispatch('page/update', {
+                        data: {
+                            from,
+                            projectId: this.projectId,
+                            pageCode: this.pageDetail.pageCode,
+                            pageData: {
+                                id: parseInt(this.$route.params.pageId),
+                                content: circleJSON(this.targetData || [])
+                            },
+                            customCompData,
+                            functionData,
+                            templateData: this.processTemplateData(),
+                            usedVariableMap
+                        }
+                    })
+                    this.savePreviewImg()
+                    const projectId = this.$route.params.projectId || 1
+                    this.getAllGroupFuncs(projectId)
+                    res && this.$bkMessage({
+                        theme: 'success',
+                        message: '保存成功',
+                        limit: 1
+                    })
+                    if (typeof callBack === 'function') callBack()
+                } catch (err) {
+                    console.log(err)
+                } finally {
+                    this.isSaving = false
+                }
+            },
+
+            /**
+             * 遍历一次 targetData
+             * 1. 找出使用的函数 id
+             * 2. 校验 targetData
+             * 3. more
+             */
+            processTargetData () {
+                // 记录已使用的变量
+                const usedVariableMap = {}
+                function addUsedVariable (id, dir) {
+                    const { modifiers, prop, type, val, valType } = dir
+                    function generateUseInfo (variableId) {
+                        const useInfo = { type, componentId: id, prop, modifiers }
+                        const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
+                        useInfos.push(useInfo)
+                    }
+                    if (val !== '' && valType === 'variable') {
+                        const variable = this.variableList.find((variable) => (variable.variableCode === val))
+                        if (!variable) {
+                            errMessage = `组件【${id}】使用的变量【${val}】不存在，请修改后再试`
+                        } else {
+                            generateUseInfo(variable.id)
+                        }
+                    }
+                    if (val !== '' && valType === 'expression') {
+                        this.variableList.forEach(({ variableCode, id }) => {
+                            if (val.includes(variableCode)) generateUseInfo(id)
+                        })
+                    }
+                }
+                const typeMap = {
+                    array: '[object Array]',
+                    string: '[object String]',
+                    boolean: '[object Boolean]',
+                    number: '[object Number]',
+                    float: '[object Number]'
+                }
+                let errMessage = ''
+                const draggedCustomComponentList = []
+
+                const callBack = (component) => {
+                    const customComp = this.wholeComponentList.find(item => item.type === component.type)
+                    const dragged = draggedCustomComponentList.findIndex(item => item.type === component.type) !== -1
+                    if (customComp && !dragged) {
+                        draggedCustomComponentList.push(customComp)
+                    }
+
+                    const renderProps = component.renderProps || {}
+                    Object.keys(renderProps).forEach((key) => {
+                        const { type, val, payload = {} } = renderProps[key] || {}
+
+                        const corValType = typeMap[type]
+                        if (corValType && corValType !== Object.prototype.toString.apply(val)) {
+                            errMessage = `组件【${component.componentId}】的属性【${key}】，类型和值不匹配，请修改后再试`
+                        }
+                        if (type === 'remote' && key !== 'remoteOptions') {
+                            const hasMethod = payload && payload.methodCode
+                            if (!hasMethod) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为 remote 但未选择远程函数，请修改后再试`
+                        }
+                        if (payload.variableData && payload.variableData.val) {
+                            const { val, valType } = payload.variableData
+                            const dir = { prop: 'slots', type: 'v-bind', val, valType }
+                            addUsedVariable.call(this, component.componentId, dir)
+                        }
+                    })
+
+                    const renderDirectives = component.renderDirectives || []
+                    renderDirectives.forEach((dir) => {
+                        addUsedVariable.call(this, component.componentId, dir)
+                    })
+                }
+                this.targetData.forEach((grid, index) => walkGrid(this.targetData, grid, callBack, callBack, index))
+
+                // 检查函数内容
+                const [usedFunctionMap, message] = getCurUsedFuncs()
+                if (message) errMessage = message
+                const curFuncIds = Object.keys(usedFunctionMap)
+                curFuncIds.forEach((key) => {
+                    const { funcName, funcBody } = usedFunctionMap[key];
+                    (funcBody || '').replace(/lesscode\[\'\$\{prop:([\S]+)\}\'\]/g, (all, dirKey) => {
+                        if (dirKey) {
+                            const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
+                            if (!curDir) {
+                                errMessage = `页面中使用了函数【${funcName}】，该函数使用的变量【${dirKey}】不存在，请修改后再试`
+                            }
+                        }
+                    })
+                })
+
+                return {
+                    curFuncIds,
+                    errMessage,
+                    draggedCustomComponentList,
+                    usedVariableMap
+                }
+            },
+
+            /**
+             * 遍历一次 templateData
+             * 校验 templateData
+             */
+            processTemplateData () {
+                const {
+                    layoutType,
+                    logo,
+                    siteName,
+                    menuList = [],
+                    topMenuList = [],
+                    renderProps = {}
+                } = this.curTemplateData
+
+                if (layoutType === 'empty') {
+                    return {}
+                } else {
+                    return {
+                        logo,
+                        siteName,
+                        menuList,
+                        topMenuList,
+                        renderProps
+                    }
+                }
+            },
+
+            savePreviewImg () {
+                if (this.actionSelected === 'edit') {
+                    dom2Img(document.querySelector('.lesscode-editor-layout'), imgData => {
+                        // this.$store.dispatch('page/update', {
+                        //     data: {
+                        //         projectId: this.projectId,
+                        //         pageData: {
+                        //             id: parseInt(this.$route.params.pageId),
+                        //             previewImg: img ? img.src : preivewErrImg
+                        //         }
+                        //     }
+                        // })
+                        this.$store.dispatch('page/update', {
                             data: {
+                                projectId: this.projectId,
+                                pageCode: this.pageDetail.pageCode,
                                 pageData: {
                                     id: parseInt(this.$route.params.pageId),
-                                    content: JSON.stringify(this.targetData),
-                                    sourceCode: this.getCode(),
-                                    previewImg: this.actionSelected !== 'vueCode' ? imgData : undefined
+                                    previewImg: imgData || preivewErrImg
                                 }
                             }
                         })
-                        res && this.$bkMessage({
-                            theme: 'success',
-                            message: '保存成功'
-                        })
                     })
-                } catch (err) {
-                    console.log(err)
+                    // html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
+                    //     const imgData = canvas.toDataURL('image/png')
+                    //     this.$store.dispatch('page/update', {
+                    //         data: {
+                    //             projectId: this.projectId,
+                    //             pageData: {
+                    //                 id: parseInt(this.$route.params.pageId),
+                    //                 previewImg: imgData
+                    //             }
+                    //         }
+                    //     })
+                    // })
                 }
             },
 
             leavePage (routeName) {
-                this.$bkInfo({
+                this.$router.push({
+                    name: routeName,
+                    params: {
+                        projectId: this.projectId,
+                        pageId: this.pageId
+                    }
+                })
+            },
+
+            changeProjectPage (pageId) {
+                const me = this
+                if (pageId === me.pageId) {
+                    return
+                }
+                me.$bkInfo({
                     title: '确认离开?',
                     subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
                     confirmFn: async () => {
-                        this.$router.push({
-                            name: routeName,
+                        me.$router.push({
                             params: {
-                                projectId: this.projectId,
-                                pageId: this.pageId
+                                projectId: me.projectId,
+                                pageId
                             }
                         })
                     }
                 })
             },
 
+            handlePageAction (action = 'create') {
+                this.action = action
+                if (action === 'create') {
+                    this.$refs.pageDialog.dialog.formData.id = undefined
+                    this.$refs.pageDialog.dialog.formData.pageName = ''
+                } else {
+                    const layoutId = (this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId)) || {}).layoutId
+                    this.$refs.pageDialog.dialog.formData.id = this.pageId
+                    this.$refs.pageDialog.dialog.formData.layoutId = layoutId
+                    this.$refs.pageDialog.dialog.formData.pageName = `${this.pageDetail.pageName}-copy`
+                }
+
+                this.$refs.pageDialog.dialog.formData.pageCode = ''
+                this.$refs.pageDialog.dialog.formData.pageRoute = ''
+                this.$refs.pageDialog.dialog.visible = true
+                this.$refs.pageSelect.close()
+            },
+
             test () {
                 console.warn(JSON.stringify(this.targetData))
                 console.warn(this.targetData)
-                console.warn('pageData', this.pageData)
             },
             test1 (data) {
                 if (data) {
                     this.setTargetData(data)
                 } else {
-                    this.setTargetData([{ 'componentId': 'grid8B6FFD74', 'renderKey': 'grid8B6FFD74', 'name': 'grid', 'type': 'render-grid', 'renderProps': { 'margin-horizontal': { 'type': 'number', 'val': 0 }, 'margin-vertical': { 'type': 'number', 'val': 0 }, 'slots': { 'type': 'column', 'val': [{ 'span': 1, 'children': [{ 'componentId': 'input8B753E61', 'renderKey': 'input8B753E61', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {} }, { 'componentId': 'input482301F3', 'renderKey': 'input482301F3', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {} }, { 'componentId': 'inputB0159B6D', 'renderKey': 'inputB0159B6D', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {} }], 'width': '50%' }, { 'span': 1, 'children': [{ 'componentId': 'transfer01163C24', 'renderKey': 'transfer01163C24', 'name': 'transfer', 'type': 'bk-transfer', 'renderProps': { 'display-key': { 'type': 'string', 'val': 'name' }, 'setting-key': { 'type': 'string', 'val': 'id' }, 'sortable': { 'type': 'boolean', 'val': false } }, 'renderStyles': {}, 'renderEvents': {} }], 'width': '50%' }] } }, 'renderStyles': {}, 'renderEvents': {} }])
+                    this.setTargetData([{ 'componentId': 'grid8B6FFD74', 'renderKey': 'grid8B6FFD74', 'name': 'grid', 'type': 'render-grid', 'renderProps': { 'margin-horizontal': { 'type': 'number', 'val': 0 }, 'margin-vertical': { 'type': 'number', 'val': 0 }, 'slots': { 'type': 'column', 'val': [{ 'span': 1, 'children': [{ 'componentId': 'input8B753E61', 'renderKey': 'input8B753E61', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }, { 'componentId': 'input482301F3', 'renderKey': 'input482301F3', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }, { 'componentId': 'inputB0159B6D', 'renderKey': 'inputB0159B6D', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }], 'width': '50%' }, { 'span': 1, 'children': [{ 'componentId': 'transfer01163C24', 'renderKey': 'transfer01163C24', 'name': 'transfer', 'type': 'bk-transfer', 'renderProps': { 'display-key': { 'type': 'string', 'val': 'name' }, 'setting-key': { 'type': 'string', 'val': 'id' }, 'sortable': { 'type': 'boolean', 'val': false } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }], 'width': '50%' }] } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }])
                 }
             }
         }

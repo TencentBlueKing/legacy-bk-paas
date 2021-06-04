@@ -10,11 +10,14 @@
  */
 require('reflect-metadata')
 require('@babel/register')
+// 注入自定义全局对象
+require('./custom-global')
 
 const http = require('http')
 const { resolve } = require('path')
 const Koa = require('koa')
-const bodyparser = require('koa-bodyparser')
+// const bodyparser = require('koa-bodyparser')
+const koaBody = require('koa-body')
 const json = require('koa-json')
 const session = require('koa-session')
 const koaStatic = require('koa-static')
@@ -25,10 +28,10 @@ const { historyApiFallback } = require('koa2-connect-history-api-fallback')
 const webpack = require('webpack')
 const koaWebpack = require('koa-webpack')
 const convert = require('koa-convert')
+const shell = require('shelljs')
 
-const { accessLogger, applicationLogger, devLogger } = require('./logger')
+const { logger } = require('./logger')
 const { getIP } = require('./util')
-const webpackDevConf = require('../../lib/client/build/webpack.dev.conf')
 const { routes, allowedMethods } = require('./router')
 
 const authMiddleware = require('./middleware/auth')
@@ -36,12 +39,17 @@ const httpMiddleware = require('./middleware/http')
 const errorMiddleware = require('./middleware/error')
 const jsonSendMiddleware = require('./middleware/json-send')
 const { requestContextMiddleware } = require('./middleware/request-context')
+const permMiddleware = require('./middleware/perm')
+const operationLoggerMiddleware = require('./middleware/operation-logger')
+// const helmet = require("koa-helmet")
 
 const { CODE } = require('./util')
 const httpConf = require('./conf/http')
 
 const { createConnection } = require('typeorm')
 const dataBaseConf = require('./conf/data-base')
+
+const componentController = require('./controller/component')
 
 const SESSION_CONFIG = {
     // cookie key
@@ -98,33 +106,52 @@ async function startServer () {
             ctx.app.emit('error', err, ctx)
         }
     })
-
-    const logger = IS_DEV ? devLogger : applicationLogger
-    // logger.trace('trace:', +new Date())
-    // logger.debug('debug:', +new Date())
-    // logger.info('info:', +new Date())
-    // logger.warn('warn:', +new Date())
-    // logger.error('error:', +new Date())
-    // logger.fatal('fatal:', +new Date())
-    // logger.mark('mark:', +new Date())
-    app.use(async (ctx, next) => {
-        ctx.logger = logger
-        accessLogger()
-        await next()
-    })
     app.on('error', (err, ctx) => {
-        console.error(err)
+        logger.error('app error:')
+        logger.error(err.message || '')
+        // {"errno":"ECONNRESET","code":"ECONNRESET","syscall":"read","headerSent":true}
         logger.error(err)
     })
 
-    app.use(bodyparser())
+    app.use(errorMiddleware())
+
+    // 自定义组件注册
+    app.use(async (ctx, next) => {
+        if (/component\/register\.js/.test(ctx.url)) {
+            // 编辑页面注册自定义组件
+            await componentController.register(ctx)
+        } else if (/component\/preview-register\.js/.test(ctx.url)) {
+            // 预览页面注册自定义组件
+            await componentController.previewRegister(ctx)
+        } else {
+            await next()
+        }
+    })
+
+    app.use(koaBody(
+        {
+            multipart: true,
+            formidable: {
+                maxFileSize: 1000 * 1024 * 1024 // 设置上传文件大小最大限制，默认10M
+            },
+            formLimit: '10mb',
+            jsonLimit: '10mb',
+            textLimit: '10mb'
+        }
+    ))
     app.use(json())
 
     app.use(errorMiddleware())
     app.use(httpMiddleware())
     app.use(jsonSendMiddleware())
-    app.use(authMiddleware())
+    app.use(authMiddleware().unless({ path: [/^\/api\/open\//] }))
     app.use(requestContextMiddleware())
+    app.use(permMiddleware())
+    app.use(operationLoggerMiddleware())
+    // csp
+    // app.use(helmet({
+    //     referrerPolicy: { policy: "origin" }
+    // }))
 
     app.use(koaMount(
         '/static', koaStatic(resolve(__dirname, '..', IS_DEV ? 'client/static' : 'client/dist/static')))
@@ -156,6 +183,7 @@ async function startServer () {
     }))
 
     if (IS_DEV) {
+        const webpackDevConf = require('../../lib/client/build/webpack.dev.conf')
         const compiler = webpack(webpackDevConf)
         app.use(await koaWebpack({
             compiler: compiler,
@@ -193,10 +221,10 @@ async function startServer () {
 
         switch (error.code) {
             case 'EACCES':
-                console.error(bind + ' requires elevated privileges')
+                logger.error(bind + ' requires elevated privileges')
                 process.exit(1)
             case 'EADDRINUSE':
-                console.error(bind + ' is already in use')
+                logger.error(bind + ' is already in use')
                 process.exit(1)
             default:
                 throw error
@@ -209,6 +237,30 @@ async function startServer () {
             'Listening at http://localhost:' + addr.port + ' or http://' + getIP() + ':' + addr.port + '\n'
         ))
     })
+
+    // 进程级捕获 ECONNRESET 异常
+    process.on('uncaughtException', function (err) {
+        logger.error('uncaughtException:')
+        logger.error(err.stack)
+        logger.error('not exit...')
+    })
 }
 
-createConnection(dataBaseConf).then(startServer).catch((err) => console.error(err))
+// 自动执行db导入和变更操作,相应配置文件位于lib/server/conf/db-migrate.json
+function execSql (connection, callBack) {
+    try {
+        const databaseEnv = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
+        const prefixPath = '.'
+        const migrateUp = `node node_modules/db-migrate/bin/db-migrate up --config ${prefixPath}/lib/server/conf/db-migrate.json --migrations-dir ${prefixPath}/lib/server/model/migrations -e ${databaseEnv}`
+        shell.exec(migrateUp)
+
+        callBack()
+        return
+    } catch (err) {
+        logger.error(err.message || err)
+    }
+}
+
+createConnection(dataBaseConf).then((connection) => {
+    return execSql(connection, startServer)
+}).catch((err) => logger.error(err.message || err))

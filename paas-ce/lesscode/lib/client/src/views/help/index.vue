@@ -17,10 +17,10 @@
                     <div class="page-title">
                         <span class="bk-drag-icon app-logo" @click="jump('projects')">
                             <svg aria-hidden="true" width="22" height="22">
-                                <use xlink:href="#bk-drag-template-logo"></use>
+                                <use xlink:href="#bk-drag-logo"></use>
                             </svg>
                         </span>
-                        <div class="page-name">
+                        <div class="app-name">
                             可视化开发帮助文档
                         </div>
                     </div>
@@ -30,9 +30,15 @@
                         <div class="nav-item">
                             <div class="nav-title no-groupid"></div>
                             <div class="nav-content" :class="$route.name === 'intro' ? 'nav-active' : ''" @click="jump('intro')">介绍</div>
-                            <!-- <div class="nav-content" :class="$route.name === 'start' ? 'nav-active' : ''" @click="jump('start')">快速上手</div> -->
+                            <div class="nav-content" :class="$route.name === 'start' ? 'nav-active' : ''" @click="jump('start')">快速上手</div>
                             <div class="nav-content" :class="$route.name === 'grid' ? 'nav-active' : ''" @click="jump('grid')">栅格布局</div>
-                            <!-- <div class="nav-content" :class="$route.name === 'custom' ? 'nav-active' : ''" @click="jump('custom')">自定义组件</div> -->
+                            <div class="nav-content" :class="$route.name === 'freeLayout' ? 'nav-active' : ''" @click="jump('freeLayout')">自由布局</div>
+                            <div class="nav-content" :class="$route.name === 'layout-guide' ? 'nav-active' : ''" @click="jump('layout-guide')">布局模板使用指引</div>
+                            <div class="nav-content" :class="$route.name === 'custom' ? 'nav-active' : ''" @click="jump('custom')">自定义组件开发指引</div>
+                            <div class="nav-content" :class="$route.name === 'method' ? 'nav-active' : ''" @click="jump('method')">函数使用指引</div>
+                            <div class="nav-content" :class="$route.name === 'variable' ? 'nav-active' : ''" @click="jump('variable')">变量使用指引</div>
+                            <div class="nav-content" :class="$route.name === 'develop' ? 'nav-active' : ''" @click="jump('develop')">二次开发指引</div>
+                            <div class="nav-content" :class="$route.name === 'table-search' ? 'nav-active' : ''" @click="jump('table-search')">表格查询实战案例</div>
                             <div class="nav-content" :class="$route.name === 'changelog' ? 'nav-active' : ''" @click="jump('changelog')">更新日志</div>
                         </div>
                     </div>
@@ -48,12 +54,7 @@
 <script>
     import { getActualTop } from '@/common/util'
 
-    import customComponents from '@/custom'
-
     export default {
-        components: {
-            ...customComponents
-        },
         watch: {
             '$route' (to, from) {
                 this.adjustAnchor()

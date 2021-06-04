@@ -21,7 +21,7 @@ exports.getIP = () => {
     const defultAddress = '127.0.0.1'
     let ip = defultAddress
 
-    /* eslint-disable fecs-use-for-of, no-loop-func */
+    /* eslint-disable no-loop-func */
     for (const dev in ifaces) {
         if (ifaces.hasOwnProperty(dev)) {
             /* jshint loopfunc: true */
@@ -32,7 +32,7 @@ exports.getIP = () => {
             })
         }
     }
-    /* eslint-enable fecs-use-for-of, no-loop-func */
+    /* eslint-enable no-loop-func */
     return ip
 }
 
@@ -43,3 +43,8 @@ exports.convert = str => {
     )
     return str
 }
+
+/**
+ * 相对于 node_modules 的路径。内外版本 node_modules 安装的路径是不一样的
+ */
+exports.pathToNodeModules = '../../../node_modules'

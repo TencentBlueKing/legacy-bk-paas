@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="/static/images/favicon.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/x-icon" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui,maximum-scale=1,minimum-scale=1">
+        <title> index </title>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="/static/lib.bundle.js"></script>
+        <script>
+            window.PROJECT_CONFIG = (function () {
+                var SITE_URL = '/'
+                var BK_STATIC_URL = ''
+                var REMOTE_STATIC_URL = ''
+
+                return {
+                    SITE_URL: SITE_URL,
+                    BK_STATIC_URL: BK_STATIC_URL,
+                    REMOTE_STATIC_URL: REMOTE_STATIC_URL
+                }
+            })()
+            var BKPAAS_ENVIRONMENT = 'stag'
+        </script>
+    </body>
+</html>

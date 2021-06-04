@@ -2,7 +2,9 @@
     <section v-bkloading="{ isLoading: isLoading }" style="height: 100%">
         <main class="pages pages-content" v-show="!isLoading">
             <div class="pages-head">
-                <bk-button theme="primary" @click="handleCreate">新建</bk-button>
+                <bk-button theme="primary" @click="handleCreate">新建页面</bk-button>
+                <bk-button @click="handlePreviewProject">预览项目</bk-button>
+                <bk-button @click="handleDownLoadProject">源码下载</bk-button>
                 <div class="extra">
                     <bk-input
                         :style="{ width: '400px' }"
@@ -20,7 +22,7 @@
                     <div class="page-item" v-for="(page, index) in renderList" :key="index">
                         <div class="item-bd">
                             <div class="preview" @click="handleEditPage(page.id)">
-                                <img v-if="page.previewImg" :src="page.previewImg" alt="页面缩略预览">
+                                <img v-if="page.previewImg" :src="getPreviewImg(page.previewImg)" alt="页面缩略预览">
                                 <div class="empty-preview-img" v-else>页面为空</div>
                                 <div class="mask">
                                     <div class="operate-btns">
@@ -33,6 +35,16 @@
                         <div class="item-ft">
                             <div class="col">
                                 <h3 class="name" :title="page.pageName">{{page.pageName}}</h3>
+                                <div class="route">
+                                    <svg class="label" width="22" height="14" viewBox="0 0 22 14">
+                                        <rect x="0" width="22" height="14" rx="2" fill="#F0F1F5" />
+                                        <text font-family="'PingFang SC','Microsoft Yahei'" fill="#979ba5" style="text-anchor: middle" font-size="8" x="11" y="10">路由</text>
+                                    </svg>
+                                    <div class="path">
+                                        <span class="fullpath" :title="routeMap[page.id].fullPath" v-if="routeMap[page.id].id">{{routeMap[page.id].fullPath}}</span>
+                                        <span class="unset" v-else>未配置</span>
+                                    </div>
+                                </div>
                                 <div class="stat">{{ page.updateUser || page.createUser }} {{ getRelativeTime(page.updateTime) }}更新</div>
                             </div>
                             <div class="col">
@@ -41,10 +53,11 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(page.id)">
-                                        <li><a href="javascript:;" @click="handleDownloadSource(page.sourceCode)">下载源码</a></li>
+                                        <li><a href="javascript:;" @click="handleDownloadSource(page.content, page.id, page.lifeCycle)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="handleRename(page)">重命名</a></li>
+                                        <li><a href="javascript:;" @click="handleEditRoute(page)">修改路由</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(page)">复制</a></li>
-                                        <li><a href="javascript:;" @click="handleDelete(page)">删除</a></li>
+                                        <li><a href="javascript:;" @click="handleDelete(page)" :class="{ 'g-no-permission': userPerm.roleId === 2 }" v-bk-tooltips="{ content: '无删除权限', placements: ['right'], disabled: userPerm.roleId === 1 }">删除</a></li>
                                     </ul>
                                 </bk-dropdown-menu>
                             </div>
@@ -58,14 +71,19 @@
                     </bk-exception>
                 </div>
             </div>
-            <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :reflash-list="getPageList"></page-dialog>
+            <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :refresh-list="getPageList"></page-dialog>
+            <download-dialog ref="downloadDialog"></download-dialog>
+            <edit-route-dialog ref="editRouteDialog" :route-group="routeGroup" :current-route="currentRoute" @success="getPageList" />
         </main>
     </section>
 </template>
 
 <script>
-    import pagePreivewImg from '@/images/page-demo.png'
+    import { mapGetters } from 'vuex'
+    import preivewErrImg from '@/images/preview-error.png'
     import pageDialog from '@/components/project/page-dialog'
+    import downloadDialog from '@/views/system/components/download-dialog'
+    import editRouteDialog from '@/components/project/edit-route-dialog'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
@@ -74,22 +92,46 @@
 
     export default {
         components: {
-            pageDialog
+            pageDialog,
+            downloadDialog,
+            editRouteDialog
         },
         data () {
             return {
                 action: '',
                 currentName: '',
+                currentRoute: {},
                 keyword: '',
                 renderList: [],
                 pageList: [],
-                pagePreivewImg,
+                pageRouteList: [],
+                routeGroup: [],
                 isLoading: true
             }
         },
         computed: {
+            ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('project', ['currentProject']),
             projectId () {
                 return this.$route.params.projectId
+            },
+            pageId () {
+                return this.$route.params.pageId || ''
+            },
+            userPerm () {
+                return this.$store.getters['member/userPerm'] || { roleId: 2 }
+            },
+            routeMap () {
+                const routeMap = {}
+                this.pageRouteList.forEach(({ id, pageId, layoutId, layoutPath, path }) => {
+                    routeMap[pageId] = {
+                        id,
+                        pageId,
+                        layoutId,
+                        fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                    }
+                })
+                return routeMap
             }
         },
         watch: {
@@ -106,7 +148,16 @@
             async getPageList () {
                 this.isLoading = true
                 try {
-                    this.pageList = await this.$store.dispatch('page/getList', { projectId: this.projectId })
+                    const [pageList, pageRouteList, routeGroup] = await Promise.all([
+                        this.$store.dispatch('page/getList', { projectId: this.projectId }),
+                        this.$store.dispatch('route/query', { projectId: this.projectId }),
+                        this.$store.dispatch('route/getProjectRouteTree', { projectId: this.projectId })
+                    ])
+
+                    this.pageList = pageList
+                    this.pageRouteList = pageRouteList
+                    this.routeGroup = routeGroup
+
                     if (this.keyword) {
                         this.renderList = this.pageList.filter(item => item.pageName.indexOf(this.keyword) !== -1)
                     } else {
@@ -122,28 +173,44 @@
                 this.action = 'create'
                 this.$refs.pageDialog.dialog.formData.id = undefined
                 this.$refs.pageDialog.dialog.formData.pageName = ''
+                this.$refs.pageDialog.dialog.formData.pageCode = ''
+                this.$refs.pageDialog.dialog.formData.pageRoute = ''
+                this.$refs.pageDialog.dialog.formData.layoutId = null
                 this.$refs.pageDialog.dialog.visible = true
+            },
+            handlePreviewProject () {
+                window.open(`/preview/project/${this.projectId}/`, '_blank')
             },
             async handleCopy (page) {
                 this.action = 'copy'
+                const layoutId = this.routeMap[page.id].layoutId
                 this.$refs.pageDialog.dialog.formData.id = page.id
                 this.$refs.pageDialog.dialog.formData.pageName = `${page.pageName}-copy`
+                this.$refs.pageDialog.dialog.formData.pageCode = ''
+                this.$refs.pageDialog.dialog.formData.pageRoute = ''
+                this.$refs.pageDialog.dialog.formData.layoutId = layoutId
                 this.$refs.pageDialog.dialog.visible = true
             },
-            async handleDownloadSource (code) {
-                if (!code) {
+            async handleDownloadSource (targetData, pageId, lifeCycle) {
+                if (!targetData) {
                     this.$bkMessage({
                         theme: 'error',
                         message: '该页面为空页面，无源码生成'
                     })
                     return
                 }
-                this.$store.dispatch('vueCode/formatCode', {
-                    code
+                console.log('页面列表的下载')
+                this.$store.dispatch('vueCode/getPageCode', {
+                    targetData: JSON.parse(targetData),
+                    projectId: this.projectId,
+                    lifeCycle,
+                    pageId,
+                    layoutContent: this.pageLayout.layoutContent,
+                    from: 'download_page'
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
                     const blob = new Blob([res])
-                    downlondEl.download = 'magicbox-vue-layout.vue'
+                    downlondEl.download = `bklesscode-${pageId}.vue`
                     downlondEl.href = URL.createObjectURL(blob)
                     downlondEl.style.display = 'none'
                     document.body.appendChild(downlondEl)
@@ -155,10 +222,20 @@
                 this.action = 'rename'
                 this.currentName = page.pageName
                 this.$refs.pageDialog.dialog.formData.pageName = page.pageName
+                this.$refs.pageDialog.dialog.formData.pageCode = page.pageCode
+                this.$refs.pageDialog.dialog.formData.pageRoute = page.pageRoute
                 this.$refs.pageDialog.dialog.formData.id = page.id
+                this.$refs.pageDialog.dialog.formData.layoutId = null
                 this.$refs.pageDialog.dialog.visible = true
             },
+            handleEditRoute (page) {
+                this.$refs.editRouteDialog.dialog.visible = true
+                this.$refs.editRouteDialog.dialog.pageId = page.id
+                this.currentRoute = this.routeMap[page.id]
+            },
             handleDelete (page) {
+                if (this.userPerm.roleId === 2) return
+
                 this.$bkInfo({
                     title: '确认删除?',
                     subTitle: `确认删除  “页面${page.pageName}”?`,
@@ -189,7 +266,12 @@
                     })
                     return
                 }
-                window.open(`/project/${this.projectId}/page/${page.id}/preview?type=fromList`, '_blank')
+                window.open(`/preview/project/${this.projectId}/?pageCode=${page.pageCode}`, '_blank')
+            },
+            handleDownLoadProject () {
+                this.$refs.downloadDialog.isShow = true
+                this.$refs.downloadDialog.projectId = this.projectId
+                this.$refs.downloadDialog.projectName = this.currentProject.projectName
             },
             handleSearch (clear = false) {
                 if (clear) {
@@ -204,6 +286,12 @@
             },
             getRelativeTime (time) {
                 return dayjs(time).fromNow() || ''
+            },
+            getPreviewImg (previewImg) {
+                if (previewImg && previewImg.length > 30) {
+                    return previewImg
+                }
+                return preivewErrImg
             }
         }
     }
@@ -220,6 +308,13 @@
         .pages-head {
             display: flex;
             margin-bottom: 17px;
+
+            button {
+                width: 86px;
+                &:not(:first-child) {
+                    margin-left: 10px;
+                }
+            }
 
             .extra {
                 flex: none;
@@ -246,8 +341,8 @@
                 .page-item {
                     position: relative;
                     flex: none;
-                    width: 312px;
-                    height: 240px;
+                    width: 304px;
+                    height: 258px;
                     margin: 0 14px 30px 0;
                     padding: 6px;
                     background: #fff;
@@ -291,8 +386,8 @@
                     .item-bd {
                         flex: none;
                         position: relative;
-                        width: 300px;
-                        height: 166px;
+                        width: 292px;
+                        height: 158px;
                         background: #fff;
                         border-radius: 4px 4px 0px 0px;
                     }
@@ -401,7 +496,29 @@
                     .stat {
                         font-size: 12px;
                         color: #979BA5;
-                        padding: 4px 0;
+                        margin: 4px 0;
+                    }
+                    .route {
+                        display: flex;
+                        align-items: center;
+                        margin: 9px 0;
+                        .label {
+                            margin-top: 1px;
+                            margin-left: -2px;
+                        }
+                        .path {
+                            width: 212px;
+                            font-size: 12px;
+                            color: #63656E;
+                            margin-left: 5px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+
+                            .unset {
+                                color: #FF9C01;
+                            }
+                        }
                     }
                 }
             }

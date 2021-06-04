@@ -3,9 +3,9 @@
         <aside class="aside">
             <div class="side-hd">
                 <div class="brand">
-                    <span class="bk-drag-icon app-logo">
+                    <span class="bk-drag-icon app-logo" @click="$router.push('projects')">
                         <svg aria-hidden="true" width="22" height="22">
-                            <use xlink:href="#bk-drag-template-logo"></use>
+                            <use xlink:href="#bk-drag-logo"></use>
                         </svg>
                     </span>
                     <h2 class="app-name">可视化开发平台</h2>
@@ -16,9 +16,6 @@
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="projects">
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
                     </router-link>
-                    <!-- <router-link tag="div" class="nav-item" :to="{ name: 'componentManage', query: { filter: '' } }">
-                        <i class="bk-drag-icon bk-drag-project-list"></i>自定义组件库
-                    </router-link> -->
                     <router-link tag="div" class="nav-item" :to="'account'">
                         <i class="bk-drag-icon bk-drag-member"></i>账号管理
                     </router-link>
@@ -38,6 +35,17 @@
             <router-view :key="$route.path"></router-view>
         </div>
         <footer class="footer">
+            <a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDgwMjAwMV80NDMwOTZfODAwODAyMDAxXzJf"
+                target="_blank"
+                class="magic-feedback"
+                title="QQ交谈">
+                <img src="../../images/qq.png" />
+                <span>QQ交谈</span>
+            </a>
+            <!-- <a href="wxwork://message/?username=BK-MagicBox" class="magic-feedback" title="蓝鲸MagicBox助手">
+                <img src="../../images/wx-work.png" />
+                <span>蓝鲸MagicBox助手</span>
+            </a> -->
             Copyright &copy; 2012-{{currentYear}} Tencent BlueKing. All Rights Reserved. 腾讯蓝鲸 版权所有
         </footer>
     </main>
@@ -52,7 +60,8 @@
         data () {
             return {
                 currentYear: new Date().getUTCFullYear(),
-                asideFolded: false
+                asideFolded: false,
+                region: 'tencent'
             }
         }
     }
@@ -91,16 +100,17 @@
         .brand {
             display: flex;
             align-items: center;
-            margin-left: 22px;
+            margin-left: 20px;
             .app-logo {
                 font-size: 0;
+                cursor: pointer;
             }
             .app-name {
                 font-size: 16px;
                 font-weight: normal;
                 color: #313238;
                 margin: 0;
-                padding-left: 12px;
+                padding-left: 18px;
                 white-space: nowrap;
             }
         }
@@ -184,6 +194,18 @@
             text-align: center;
             padding-left: var(--aside-width);
             transition: padding .2s cubic-bezier(0.4, 0, 0.2, 1);
+
+            .magic-feedback {
+                color: #63656E;
+                border-right: 1px solid #ddd;
+                margin-right: 6px;
+                padding-right: 10px;
+                img {
+                    width: 17px;
+                    vertical-align: middle;
+                    margin-top: -2px;
+                }
+            }
         }
 
         .nav-list {
@@ -200,7 +222,7 @@
 
                 .bk-drag-icon {
                     font-size: 16px;
-                    margin-right: 16px;
+                    margin-right: 22px;
                 }
                 &:hover {
                     background: #F6F6F9;

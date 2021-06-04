@@ -19,6 +19,7 @@ const { slugify } = require('transliteration')
 
 const { strip } = require('./strip-tags')
 const markdownItReplace = require('./markdown-it-replace')
+const markdownItHighlightjs = require('./md-highlight')
 
 const convert = str => {
     str = str.replace(/(&#x)(\w{4});/gi, () => String.fromCharCode(
@@ -69,6 +70,7 @@ module.exports = {
             }
         }],
         // [markdownItReplaceLink],
+        [markdownItHighlightjs],
         [markdownItAttrs],
         [markdownItAnchor, {
             level: 3,
