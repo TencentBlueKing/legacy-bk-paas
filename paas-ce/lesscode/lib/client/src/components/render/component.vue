@@ -104,7 +104,6 @@
 
 <script>
     import _ from 'lodash'
-    import Vue from 'vue'
     import { mapGetters, mapMutations } from 'vuex'
     import { bus } from '@/common/bus'
     import { uuid, getNodeWithClass, removeClassWithNodeClass, getStyle, findComponent, findComponentParentGrid, getContextOffset } from '@/common/util'
@@ -112,8 +111,6 @@
     import ComponentWrapper from './component-wrapper'
     import ComponentMenu from '@/components/widget/context-menu.vue'
     import offsetMixin from './offsetMixin'
-
-    window.__innerCustomRegisterComponent__ = null
 
     const components = {
         ComponentWrapper,
@@ -137,13 +134,6 @@
         },
         data () {
             // 局部注册自定义组件
-            if (!window.__innerCustomRegisterComponent__) {
-                window.__innerCustomRegisterComponent__ = {}
-                window.customCompontensPlugin.forEach(callback => {
-                    const [config, componentSource] = callback(Vue)
-                    window.__innerCustomRegisterComponent__[config.type] = componentSource
-                })
-            }
             for (const name in window.__innerCustomRegisterComponent__) {
                 if (!this.$options.components[name]) {
                     this.$options.components[name] = window.__innerCustomRegisterComponent__[name]
