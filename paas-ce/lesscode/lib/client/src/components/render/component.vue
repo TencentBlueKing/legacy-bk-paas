@@ -104,7 +104,6 @@
 
 <script>
     import _ from 'lodash'
-    import Vue from 'vue'
     import { mapGetters, mapMutations } from 'vuex'
     import { bus } from '@/common/bus'
     import { uuid, getNodeWithClass, removeClassWithNodeClass, getStyle, findComponent, findComponentParentGrid, getContextOffset } from '@/common/util'
@@ -113,8 +112,7 @@
     import ComponentMenu from '@/components/widget/context-menu.vue'
     import WidgetForm from '@/components/widget/form'
     import WidgetFormItem from '@/components/widget/form-item'
-
-    window.__innerCustomRegisterComponent__ = null
+    import offsetMixin from './offsetMixin'
 
     const components = {
         ComponentWrapper,
@@ -131,28 +129,20 @@
     export default {
         name: 'render-component',
         components,
+        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
                 required: true
-            },
-            interactiveLayout: Object
+            }
         },
         data () {
             // 局部注册自定义组件
-            if (!window.__innerCustomRegisterComponent__) {
-                window.__innerCustomRegisterComponent__ = {}
-                window.customCompontensPlugin.forEach(callback => {
-                    const [config, componentSource] = callback(Vue)
-                    window.__innerCustomRegisterComponent__[config.type] = componentSource
-                })
-            }
             for (const name in window.__innerCustomRegisterComponent__) {
                 if (!this.$options.components[name]) {
                     this.$options.components[name] = window.__innerCustomRegisterComponent__[name]
                 }
             }
-
             return {
                 renderData: {},
                 renderDataSlotName: '',
@@ -175,10 +165,6 @@
         computed: {
             ...mapGetters('drag', ['targetData']),
             ...mapGetters('components', ['curNameMap', 'interactiveComponents']),
-            getComputedMunuOffset () {
-                if (this.interactiveLayout) return { x: -parseInt(this.interactiveLayout.left), y: -parseInt(this.interactiveLayout.top) }
-                return this.contextOffset
-            },
             isMultSlot () {
                 return this.renderDataSlot && Array.isArray(this.renderDataSlot.val)
             },

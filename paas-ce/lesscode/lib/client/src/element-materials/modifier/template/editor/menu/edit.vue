@@ -30,7 +30,7 @@
                         v-if="isShowPageQuery"
                         :value="baseInfo.query"
                         style="margin-top: 10px"
-                        placeholder="name=张三&age=18"
+                        placeholder="name=zhangsan&age=18"
                         @change="handlePageQueryChange" />
                     <bk-button
                         v-else
