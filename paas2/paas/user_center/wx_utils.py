@@ -23,7 +23,7 @@ def get_wx_config():
     """
     获取微信相关配置
     """
-    client = get_client_by_user("")
+    client = get_client_by_user("admin")
     result = client.esb.get_weixin_config()
     if not result.get("result", False):
         logger.error("Get weixin config from esb fail, result=%s", result)
