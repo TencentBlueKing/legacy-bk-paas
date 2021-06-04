@@ -16,6 +16,8 @@ import random
 import time
 import hashlib
 
+from django.utils.encoding import force_bytes
+
 from . import configs
 
 
@@ -30,8 +32,8 @@ class QCloudVoiceClient(object):
         return int(time.time())
 
     def generate_sig(self, qcloud_app_key, mobile, random_int, now):
-        fmt = "appkey={}&random={}&time={}&mobile={}"
-        return hashlib.sha256(fmt.format(qcloud_app_key, random_int, now, mobile)).hexdigest()
+        text = "appkey={}&random={}&time={}&mobile={}".format(qcloud_app_key, random_int, now, mobile)
+        return hashlib.sha256(force_bytes(text)).hexdigest()
 
     def post(self, path, data):
         return self.http_client.post(configs.host, path, data=json.dumps(data))
