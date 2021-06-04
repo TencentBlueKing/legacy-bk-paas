@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const { saveAsFile, formatCode, deleteTmpFile } = require('../controller/vue-code')
+const { saveAsFile, formatCode, getPageCode } = require('../controller/vue-code')
 const Router = require('koa-router')
 
 const router = new Router({
@@ -18,6 +18,6 @@ const router = new Router({
 
 router.post('/saveAsFile', saveAsFile)
 router.post('/formatCode', formatCode)
-router.post('/deleteTmpFile', deleteTmpFile)
+router.post('/getPageCode', getPageCode)
 
 module.exports = router

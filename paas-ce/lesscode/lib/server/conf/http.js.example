@@ -10,21 +10,29 @@
  */
 
 module.exports = process.env.NODE_ENV === 'production'
+    // 线上环境配置（npm run build时使用）
     ? {
         port: 5000,
         protocol: 'http',
-        // 企业版/社区版 base url
+
+        // 企业版/社区版 base url, 如http://bking.com/
         hostUrl: '',
+        // 登录跳转url，正常情况值下为hostUrl + '/login/'
+        loginUrl: '',
         // 应用 ID
         appCode: '',
         // 应用 TOKEN
         appSecret: ''
     }
+    // 本地调试配置（npm run dev时使用）
     : {
         port: 5000,
         protocol: 'http',
-        // 企业版/社区版 base url
+
+        // 企业版/社区版 base url, 如http://bking.com/
         hostUrl: '',
+        // 登录跳转url，正常情况值下为hostUrl + '/login/'
+        loginUrl: '',
         // 应用 ID
         appCode: '',
         // 应用 TOKEN

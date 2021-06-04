@@ -21,7 +21,13 @@ const instance = axios.create({
     // baseURL: httpConf.protocol + '://localhost:' + httpConf.port
 })
 
-instance.interceptors.response.use(response => response, error => Promise.reject(error))
+instance.interceptors.response.use(response => response, (error) => {
+    let businessError = error
+    if (error.response && error.response.data && error.response.data.message) {
+        businessError = new Error(error.response.data.message)
+    }
+    return Promise.reject(businessError)
+})
 
 module.exports = () => {
     return async function (ctx, next) {

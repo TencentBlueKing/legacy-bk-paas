@@ -15,6 +15,10 @@ import FuncGroup from './entities/func-group'
 import ProjectFuncGroup from './entities/project-func-group'
 import PageFunc from './entities/page-func'
 import Page from './entities/page'
+import FuncFunc from './entities/func-func'
+import FuncVariable from './entities/func-variable'
+import Variable from './entities/variable'
+import VariableFunc from './entities/variable-func'
 
 const func = {
     addFuncGroup (data) {
@@ -39,6 +43,41 @@ const func = {
                 return group
             })
         })
+    },
+
+    async allGroupFuncDetail (projectId) {
+        const groupList = await func.getGroupList(projectId, '')
+        const groupIds = groupList.map(x => x.id)
+        let allFuncList = []
+        if (groupIds.length) allFuncList = await func.getFuncList(groupIds, '')
+        const funcIds = allFuncList.map(x => x.id)
+        let pageList = []
+        if (funcIds.length) pageList = await func.getFuncRelatePageList(funcIds)
+        const funcCodes = allFuncList.map(x => x.funcCode)
+        let relateFuncs = []
+        let relateVars = []
+        if (funcCodes.length) {
+            [relateFuncs, relateVars] = await Promise.all([
+                getRepository(FuncFunc).find({ funcCode: In(funcCodes), deleteFlag: 0, projectId }),
+                getRepository(VariableFunc).find({ funcCode: In(funcCodes), deleteFlag: 0, projectId })
+            ]) || []
+        }
+
+        groupList.forEach((group) => {
+            const functionList = allFuncList.filter((func) => (func.funcGroupId === group.id))
+            group.functionList = functionList.map((func) => {
+                const pages = pageList.filter(x => x.funcId === func.id)
+                const useFlag = relateFuncs.findIndex(x => x.funcCode === func.funcCode) > -1
+                const useInVar = relateVars.findIndex(x => x.funcCode === func.funcCode) > -1
+                func.pages = pages
+                func.funcParams = (func.funcParams || '').split(',').filter(x => x !== '')
+                func.remoteParams = (func.remoteParams || '').split(',').filter(x => x !== '')
+                func.useFlag = useFlag
+                func.useInVar = useInVar
+                return func
+            })
+        })
+        return groupList || []
     },
 
     getGroupList (projectId, groupName) {
@@ -96,36 +135,120 @@ const func = {
             .leftJoin(PageFunc, 'PageFunc', 'page.id = PageFunc.pageId AND PageFunc.deleteFlag = 0')
             .where('PageFunc.funcId IN (:...funcIds)', { funcIds })
             .andWhere('page.deleteFlag = :deleteFlag', { deleteFlag: 0 })
-            .select('page.*, PageFunc.funcId AS funcId')
+            .select('page.id AS id, page.pageName AS pageName, PageFunc.funcId AS funcId')
             .getRawMany()
     },
 
-    addFunction (funcData) {
+    async addFunction (funcData, varWhere) {
         const funcRepository = getRepository(Func)
         funcData.funcParams = (funcData.funcParams || []).join(',')
         funcData.remoteParams = (funcData.remoteParams || []).join(',')
         const newFunc = funcRepository.create(funcData)
-        return funcRepository.save(newFunc)
+        const res = await funcRepository.save(newFunc)
+        await func.handleFuncRelation(res, varWhere)
+        return res
     },
 
     async deleteFunction (id) {
         const funcRepository = getRepository(Func)
         const deleteFunc = await funcRepository.findOne({ where: { id } })
         deleteFunc.deleteFlag = 1
+        await func.deleteFuncVariable(deleteFunc)
         return funcRepository.save(deleteFunc)
     },
 
-    async editFunction (funcList) {
+    async editFunction (funcList, varWhere) {
         const funcRepository = getRepository(Func)
         const oldFuncList = await funcRepository.find({ id: In(funcList.map(x => x.id)) })
-        oldFuncList.forEach(func => {
-            const newFunc = funcList.find(x => x.id === func.id)
+        for (const funcObj of oldFuncList) {
+            const newFunc = funcList.find(x => x.id === funcObj.id)
             newFunc.funcParams = (newFunc.funcParams || []).join(',')
             newFunc.remoteParams = (newFunc.remoteParams || []).join(',')
-            Object.assign(func, newFunc)
-        })
+            Object.assign(funcObj, newFunc)
+            await func.handleFuncRelation(funcObj, varWhere)
+        }
         const res = await funcRepository.save(oldFuncList)
         return res
+    },
+
+    async deleteFuncVariable (func) {
+        const curProject = await getRepository(FuncGroup).createQueryBuilder('func_group')
+            .leftJoin(ProjectFuncGroup, 't', 't.funcGroupId = func_group.id AND t.deleteFlag = 0')
+            .leftJoin(Func, 'func', 'func.funcGroupId = func_group.id AND func.deleteFlag = 0 ')
+            .where('func.id = :id', { id: func.id })
+            .select('t.projectId AS projectId')
+            .getRawOne()
+        const funcVariableRepository = getRepository(FuncVariable)
+        const exitsUsedVariables = await funcVariableRepository.find({ where: { projectId: curProject.projectId, funcCode: func.funcCode } }) || []
+        await funcVariableRepository.remove(exitsUsedVariables)
+    },
+
+    async handleFuncRelation (func, varWhere) {
+        const { projectId, pageCode, effectiveRange } = varWhere
+        const variableWhere = [{ projectId, deleteFlag: 0 }]
+        if (effectiveRange !== undefined) {
+            variableWhere[0].effectiveRange = effectiveRange
+        }
+        if (pageCode) {
+            variableWhere.push({ projectId, effectiveRange: 1, pageCode, deleteFlag: 0 })
+        }
+        const funcRelateRepository = getRepository(FuncFunc)
+        const allFuncRelates = await funcRelateRepository.find({ parentFuncCode: func.funcCode, projectId })
+        allFuncRelates.forEach((func) => (func.deleteFlag = 1))
+        const newFuncRelates = [...allFuncRelates]
+        // 当前用到的变量列表
+        const funcVariableRepository = getRepository(FuncVariable)
+        const variableRepository = getRepository(Variable)
+        const [exitsUsedVariables, allVariables] = await Promise.all([
+            funcVariableRepository.find({ where: { projectId, funcCode: func.funcCode } }),
+            variableRepository.find({ where: variableWhere })
+        ])
+        const newUsedVariables = []
+        function handleRelation (dirKey, funcCode) {
+            if (funcCode) {
+                const curRelate = allFuncRelates.find((func) => (func.funcCode === funcCode))
+                if (curRelate) {
+                    curRelate.deleteFlag = 0
+                } else {
+                    const newFunc = funcRelateRepository.create({
+                        parentFuncCode: func.funcCode,
+                        projectId,
+                        funcCode,
+                        deleteFlag: 0
+                    })
+                    newFuncRelates.push(newFunc)
+                }
+            }
+            if (dirKey) {
+                const curVariable = allVariables.find((variable) => (variable.variableCode === dirKey))
+                if (!curVariable) return
+                const exitsUsedVariable = exitsUsedVariables.find((variable) => (variable.variableId === curVariable.id))
+                const isRepeatUse = newUsedVariables.find((variable) => (variable.variableId === curVariable.id))
+                if (isRepeatUse) return
+                if (exitsUsedVariable) {
+                    newUsedVariables.push(exitsUsedVariable)
+                } else {
+                    newUsedVariables.push(funcVariableRepository.create({
+                        projectId,
+                        variableId: curVariable.id,
+                        funcCode: func.funcCode
+                    }))
+                }
+            }
+        }
+        (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
+            handleRelation(dirKey, funcCode)
+        })
+        if (func.funcType === 1) {
+            (func.funcApiUrl || '').replace(/\{\{([^\}]+)\}\}/g, (all, variableCode) => {
+                handleRelation(variableCode)
+            });
+            (func.funcApiData || '').replace(/\{\{([^\}]+)\}\}/g, (all, variableCode) => {
+                handleRelation(variableCode)
+            })
+        }
+        const removeUsedVariables = exitsUsedVariables.filter((variable) => (!newUsedVariables.find(x => x.variableId === variable.variableId)))
+        await Promise.all([funcRelateRepository.save(newFuncRelates), funcVariableRepository.save(newUsedVariables), funcVariableRepository.remove(removeUsedVariables)])
     }
 }
 

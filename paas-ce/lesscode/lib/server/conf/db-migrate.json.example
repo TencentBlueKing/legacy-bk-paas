@@ -1,0 +1,20 @@
+{
+    "dev": {
+      "host": "localhost",
+      "port": 3306,
+      "user": "",
+      "password" : "",
+      "database": "",
+      "driver": "mysql",
+      "multipleStatements": true
+    },
+    "prod": {
+      "host": "",
+      "port": 3306,
+      "user": "",
+      "password" : "",
+      "database": "",
+      "driver": "mysql",
+      "multipleStatements": true
+    }
+}

@@ -53,6 +53,10 @@ const dealCSS = compilation => {
             continue
         }
 
+        if (fileName.indexOf('static/init-code') > -1) {
+            continue
+        }
+
         const asset = compilation.assets[fileName]
         const minifyCSSFileContent = asset.source().replace(
             /\{\{STATIC_URL\}\}/g,

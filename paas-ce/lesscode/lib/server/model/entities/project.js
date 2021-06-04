@@ -35,6 +35,20 @@ export default class extends Base {
     @Column({
         type: 'varchar',
         nullable: true,
+        comment: '绑定蓝鲸应用'
+    })
+    appCode
+
+    @Column({
+        type: 'varchar',
+        nullable: true,
+        comment: '绑定应用模块'
+    })
+    moduleCode
+
+    @Column({
+        type: 'varchar',
+        nullable: true,
         comment: '创建人，默认当前用户'
     })
     createUser

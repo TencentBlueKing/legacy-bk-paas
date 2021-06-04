@@ -10,151 +10,83 @@
 -->
 
 <template>
-    <section id="code-content" class="vue-code" v-bkloading="{ isLoading: isLoading, color: '#23241f' }">
-        <template v-if="showOperation">
-            <i title="复制代码" class="bk-drag-icon bk-drag-copy" @click="codeCopy($event)"></i>
-            <i title="下载vue源码" class="bk-drag-icon bk-drag-download" @click="downloadFile"></i>
-            <i title="全屏" class="bk-drag-icon bk-drag-full-screen" @click="screenfull"></i>
-        </template>
-        <div class="code-panel" style="white-space: pre;" v-show="!isLoading">
-            <code>{{ formatCode }}</code>
-        </div>
+    <section class="vue-code" v-bkloading="{ isLoading: isLoading, color: '#313238' }">
+        <code-viewer ref="codeView" v-show="!isLoading" :code="formatCode" :filename="filename" @change-with-nav="getFormatCode" :with-nav="withNav" />
     </section>
 </template>
 
 <script>
-    import screenfull from 'screenfull'
-    import hljs from 'highlight.js'
-    // import 'highlight.js/styles/tomorrow.css'
-    import 'highlight.js/styles/monokai-sublime.css'
-    import codeMixin from './code-mixin'
-
-    hljs.highlightCode = function () {
-        const blocks = document.querySelectorAll('code')
-        blocks.forEach((block) => {
-            hljs.highlightBlock(block)
-        })
-    }
-
+    import { circleJSON } from '@/common/util.js'
+    import CodeViewer from '@/components/code-viewer'
     export default {
         name: 'vue-code',
-        mixins: [codeMixin],
+        components: {
+            CodeViewer
+        },
         props: {
             targetData: {
                 type: Array,
                 default: () => ([])
+            },
+            lifeCycle: {
+                type: Object,
+                default: () => ({})
+            },
+            withNav: {
+                type: Boolean
             }
         },
         data () {
             return {
                 pageType: 'vueCode',
                 formatCode: '',
-                showOperation: true,
                 isLoading: true
             }
         },
-        created () {
-            this.isLoading = true
-            this.code = this.getCode()
-            this.getFormatCode()
+        computed: {
+            projectId () {
+                return this.$route.params.projectId || ''
+            },
+            pageId () {
+                return this.$route.params.pageId || ''
+            },
+            filename () {
+                return `bklesscode-${this.pageId}.vue`
+            }
         },
         mounted () {
-            if (screenfull.isEnabled) {
-                screenfull.on('change', () => {
-                    this.showOperation = !screenfull.isFullscreen
-                })
-            }
-            hljs.initHighlightingOnLoad()
-        },
-        destroyed () {
-            screenfull.off('change', () => {})
+            this.getFormatCode(this.withNav)
         },
         methods: {
-            getFormatCode () {
-                this.$store.dispatch('vueCode/formatCode', {
-                    code: this.code
-                }).then((res) => {
+            getFormatCode (withNav) {
+                this.isLoading = true
+                console.log('查看源码 getFormatCode')
+                const { pageType, projectId, lifeCycle, pageId } = this
+                const state = this.$store.state || {}
+                const drag = state.drag || {}
+                const layoutContent = drag.curTemplateData
+                const targetData = JSON.parse(circleJSON(this.targetData))
+                this.$emit('update:withNav', withNav)
+                this.$store.dispatch('vueCode/getPageCode', {
+                    targetData,
+                    pageType,
+                    projectId,
+                    lifeCycle,
+                    pageId,
+                    layoutContent,
+                    withNav
+                }).then(res => {
                     this.formatCode = res
-                    this.$nextTick(() => {
-                        hljs.highlightCode()
-                    })
                 }).finally(() => {
                     this.isLoading = false
                 })
-            },
-            downloadFile () {
-                const downlondEl = document.createElement('a')
-                const blob = new Blob([this.formatCode])
-                downlondEl.download = 'magicbox-vue-layout.vue'
-                downlondEl.href = URL.createObjectURL(blob)
-                downlondEl.style.display = 'none'
-                document.body.appendChild(downlondEl)
-                downlondEl.click()
-                document.body.removeChild(downlondEl)
-            },
-            screenfull () {
-                const el = document.getElementById('code-content')
-                if (!screenfull.isEnabled) {
-                    this.$bkMessage({
-                        message: '浏览器不支持全屏',
-                        theme: 'error'
-                    })
-                    return false
-                }
-                screenfull.request(el)
-            },
-
-            /**
-             * 复制代码
-             *
-             * @param {Object} e 事件对象
-             */
-            codeCopy (e) {
-                const code = e.target.parentNode.querySelector('code').innerText
-                const el = document.createElement('textarea')
-                el.value = code
-                el.setAttribute('readonly', '')
-                el.style.position = 'absolute'
-                el.style.left = '-9999px'
-                document.body.appendChild(el)
-                const selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false
-                el.select()
-                document.execCommand('copy')
-                document.body.removeChild(el)
-                if (selected) {
-                    document.getSelection().removeAllRanges()
-                    document.getSelection().addRange(selected)
-                }
-                this.$bkMessage({ theme: 'primary', message: '代码复制成功', delay: 2000, dismissable: false })
             }
         }
     }
 </script>
-<style lang="postcss">
-    @import "@/css/mixins/scroller";
 
+<style lang="postcss">
     .vue-code {
-        overflow: auto;
-        background-color: #23241f;
-        @mixin scroller;
-        .bk-drag-icon {
-            position: absolute;
-            top: 10px;
-            font-size: 22px;
-            color: #fff;
-            cursor: pointer;
-        }
-        .bk-drag-copy {
-            right: 65px;
-        }
-        .bk-drag-download {
-            right: 35px;
-        }
-        .bk-drag-full-screen {
-            right: 5px;
-        }
-    }
-    .code-panel {
         .hljs-attr {
             color: #a6e22e;
         }

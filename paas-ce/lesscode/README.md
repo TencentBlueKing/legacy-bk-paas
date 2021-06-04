@@ -7,6 +7,7 @@
 - 可视化拖拽布局：集成蓝鲸MagicBox Vue通用组件，支持在线画布拖拽组件进行页面布局编辑、在线预览、查看及下载源码
 - 在线函数库管理：支持在线灵活编写管理事件函数及远程接口返回数据清洗函数
 - 在线组件配置：支持组件样式、属性、事件在线配置
+- 布局模板：提供多种导航布局模板
 - 支持自定义组件开发：提供自定义组件开发规范及示例，开放自定义组件开发能力，满足业务场景组件集成需求
 - 二次开发能力：生成的Vue源码文件支持无缝集成到蓝鲸前端开发框架([BKUI-CLI](https://bk.tencent.com/docs/document/5.1/19/583))进行二次开发
 
@@ -24,6 +25,7 @@
 │   │       ......
 │   │   ├── index-dev.html  # 本地开发使用的 html
 │   │   ├── index.html      # 生产环境使用的 html
+│   │   ├── preview.html    # 预览模块使用的 html
 │   │   ├── require-monaco.html # 辅助引入 monaco 编辑器的 html
 │   │   ├── src/            # 前端源码目录
 │   │   │   ├── App.vue     # App 组件
@@ -36,14 +38,11 @@
 │   │   │       ......
 │   │   │   ├── css/        # 前端 css 目录
 │   │   │       ......
-│   │   │   ├── custom/     # 自定义组件的存放目录
-│   │   │   │   ├── index.js    # 自定义组件的入口文件，如增加自定义组件，需要在此文件中注册
-│   │   │   │       ......
 │   │   │   ├── element-materials/  # 基础组件的配置以及修改配置和页面渲染的逻辑
 │   │   │   │       ......
 │   │   │   ├── images/     # 前端使用的图片存放目录
 │   │   │       .....
-│   │   │   ├── mixins/     # 前端使用的 mixins
+│   │   │   ├── preview/    # 前端预览模块 目录
 │   │   │       ......
 │   │   │   ├── router/     # 前端 router 目录
 │   │   │       ......
@@ -65,12 +64,17 @@
 │       │   ......
 │       ├── model/          # 后端实体目录
 │       │   ......
+│       ├── project-template/  # 后端生成项目源码模板
+│       │   ......
 │       ├── router/         # 后端路由目录
 │       │   ......
 │       ├── service/        # 后端服务目录
 │       │   ......
+│       ├── utils/          # 后端utils 目录
+│       │   ......
 ├── nodemon.json            # nodemon 配置文件
 ├── package.json            # 项目描述文件
+├── forever.json            # forever 配置文件
 ```
 
 ## 技术栈
@@ -82,9 +86,15 @@
 
 ## 依赖说明
 
+#### 环境依赖
 项目主要的依赖是目前常用的比较新的模块，webpack@4，babel@7，vue@2，koa@2 等。**运行的 nodejs 要求为 >= 8.9.0**。
 
 > 安装 Node.js 参见[官方文档](https://nodejs.org/)。安装完成后，注意设置 node 到 PATH 中
+
+#### 服务依赖
+- 蓝鲸社区版登录（必须）：可视化平台的登录服务对接的是蓝鲸社区版登录，请事先搭建蓝鲸社区版环境
+- 蓝鲸制品库服务（非必须）： 若需要使用到平台的自定义组件功能开发模块，请事先搭建 [蓝鲸制品库服务](https://github.com/Tencent/bk-ci/tree/master/src/backend/storage/core)
+- npm镜像仓库（非必须）：若需要使用到平台的自定义组件功能开发模块，请事先搭建npm镜像仓库
 
 ## 分支说明
 可视化开发平台使用 lesscode-develop, lesscode-master 两个分支进行迭代。其中 lesscode-master 为稳定版分支，每次 release 都会基于这个分支；lesscode-develop 为日常开发的分支，给可视化开发平台贡献代码统一向主库 [bk-PaaS](https://github.com/Tencent/bk-PaaS) 的  [lesscode-develop](https://github.com/Tencent/bk-PaaS/tree/lesscode-develop) 分支提 pr。
@@ -93,7 +103,7 @@
 - [本地开发部署](./docs/install/dev_install.md)
 - [生产环境部署](./docs/install/prod_install.md)
 - [数据库说明](./docs/install/database.md)
+- [配置文件说明](./docs/install/conf.md)
 
 ## 开发文档
-- [自定义组件开发文档](./docs/develop/dev_com.md)
-- [自定义组件管理文档](./docs/develop/release_com.md)
+- [自定义组件开发和管理文档](./lib/client/src/views/help/docs/custom.md)

@@ -18,11 +18,14 @@ export default {
     },
     mutations: {
         setCurrentProject (state, project) {
-            state.currentProject = Object.assign({}, project)
+            state.currentProject = Object.freeze(project)
+        },
+        updateCurrentProject (state, project) {
+            state.currentProject = Object.freeze({ ...state.currentProject, ...project })
         }
     },
     getters: {
-        getCurrentProject: state => state.currentProject
+        currentProject: state => state.currentProject
     },
     actions: {
         create ({ commit }, { data, config }) {
@@ -33,6 +36,12 @@ export default {
         },
         query ({ commit }, { config }) {
             return http.get('/project/query', config).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        my ({ commit }, { config }) {
+            return http.get('/project/my', config).then(response => {
                 const data = response.data || ''
                 return data
             })
@@ -64,6 +73,11 @@ export default {
             return http.get(`/project/detail?projectId=${projectId}`).then(response => {
                 const data = response.data || ''
                 return data
+            })
+        },
+        verify ({ commit }, { data, config }) {
+            return http.post('/project/verify', data, config).then(response => {
+                return response
             })
         }
     }

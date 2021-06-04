@@ -17,6 +17,7 @@ const friendlyFormatter = require('eslint-friendly-formatter')
 // const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 const clientConf = require('./conf')
 const mdLoaderOption = require('./md-loader-option')
+const { pathToNodeModules } = require('./util')
 
 const IS_DEV = process.env.NODE_ENV === 'development'
 
@@ -36,10 +37,10 @@ module.exports = {
     resolve: {
         // 指定以下目录寻找第三方模块，避免 webpack 往父级目录递归搜索，
         // 默认值为 ['node_modules']，会依次查找./node_modules、../node_modules、../../node_modules
-        modules: [resolve(__dirname, '..', 'src'), resolve(__dirname, '../../../node_modules')],
+        modules: [resolve(__dirname, '..', 'src'), resolve(__dirname, pathToNodeModules)],
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            vue$: resolve(__dirname, '../../../node_modules', 'vue/dist/vue.esm.js'),
+            vue$: resolve(__dirname, pathToNodeModules, 'vue/dist/vue.esm.js'),
             '@': resolve(__dirname, '..', 'src')
         }
     },
@@ -49,7 +50,7 @@ module.exports = {
             {
                 test: /\.(js|vue)$/,
                 // loader: 'eslint-loader',
-                loader: resolve(__dirname, '../../../node_modules', 'eslint-loader'),
+                loader: resolve(__dirname, pathToNodeModules, 'eslint-loader'),
                 enforce: 'pre',
                 include: [
                     resolve(__dirname, '..', 'src')
@@ -62,7 +63,7 @@ module.exports = {
             {
                 test: /\.vue$/,
                 use: {
-                    loader: resolve(__dirname, '../../../node_modules', 'vue-loader'),
+                    loader: resolve(__dirname, pathToNodeModules, 'vue-loader'),
                     options: {
                         transformAssetUrls: {
                             video: 'src',
@@ -71,7 +72,7 @@ module.exports = {
                             image: 'xlink:href'
                         },
                         include: [
-                            resolve(__dirname, '../../../node_modules', 'vue-echarts')
+                            resolve(__dirname, pathToNodeModules, 'vue-echarts')
                         ]
                     }
                 }
@@ -80,10 +81,10 @@ module.exports = {
                 test: /\.md$/,
                 use: [
                     {
-                        loader: resolve(__dirname, '../../../node_modules', 'vue-loader')
+                        loader: resolve(__dirname, pathToNodeModules, 'vue-loader')
                     },
                     {
-                        loader: resolve(__dirname, '../../../node_modules', 'vue-markdown-loader/lib/markdown-compiler'),
+                        loader: resolve(__dirname, pathToNodeModules, 'vue-markdown-loader/lib/markdown-compiler'),
                         options: mdLoaderOption
                     }
                 ]
@@ -91,19 +92,19 @@ module.exports = {
             {
                 test: /\.js$/,
                 use: {
-                    loader: resolve(__dirname, '../../../node_modules', 'babel-loader'),
+                    loader: resolve(__dirname, pathToNodeModules, 'babel-loader'),
                     options: {
                         include: [
                             resolve(__dirname, '..', 'src'),
-                            resolve(__dirname, '../../../node_modules', 'bk-magic-vue'),
-                            resolve(__dirname, '../../../node_modules', 'monaco-editor'),
-                            resolve(__dirname, '../../../node_modules', 'vue-echarts')
-                            // resolve(__dirname, '../../../node_modules', 'resize-detector')
+                            resolve(__dirname, pathToNodeModules, 'bk-magic-vue'),
+                            resolve(__dirname, pathToNodeModules, 'monaco-editor'),
+                            resolve(__dirname, pathToNodeModules, 'vue-echarts')
+                            // resolve(__dirname, pathToNodeModules, 'resize-detector')
                         ],
                         cacheDirectory: resolve(__dirname, '..', '.webpack_cache'),
                         presets: [
                             [
-                                resolve(__dirname, '../../../node_modules', '@babel/preset-env'),
+                                resolve(__dirname, pathToNodeModules, '@babel/preset-env'),
                                 {
                                     modules: 'commonjs',
                                     targets: {
@@ -116,22 +117,22 @@ module.exports = {
                         ],
                         // plugins: [require('@babel/plugin-transform-object-rest-spread')],
                         plugins: [
-                            resolve(__dirname, '../../../node_modules', '@babel/plugin-syntax-dynamic-import'),
-                            resolve(__dirname, '../../../node_modules', '@babel/plugin-transform-runtime'),
-                            resolve(__dirname, '../../../node_modules', '@babel/plugin-transform-object-assign'),
-                            resolve(__dirname, '../../../node_modules', '@babel/plugin-transform-async-to-generator'),
-                            resolve(__dirname, '../../../node_modules', '@babel/plugin-transform-modules-commonjs'),
+                            resolve(__dirname, pathToNodeModules, '@babel/plugin-syntax-dynamic-import'),
+                            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-runtime'),
+                            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-object-assign'),
+                            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-async-to-generator'),
+                            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-modules-commonjs'),
                             [
-                                resolve(__dirname, '../../../node_modules', '@babel/plugin-proposal-decorators'),
+                                resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-decorators'),
                                 { legacy: true }
                             ],
-                            resolve(__dirname, '../../../node_modules', '@babel/plugin-proposal-function-sent'),
-                            resolve(__dirname, '../../../node_modules', '@babel/plugin-proposal-export-namespace-from'),
-                            resolve(__dirname, '../../../node_modules', '@babel/plugin-proposal-numeric-separator'),
-                            resolve(__dirname, '../../../node_modules', '@babel/plugin-proposal-throw-expressions'),
-                            resolve(__dirname, '../../../node_modules', 'babel-plugin-add-module-exports'),
+                            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-function-sent'),
+                            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-export-namespace-from'),
+                            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-numeric-separator'),
+                            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-throw-expressions'),
+                            resolve(__dirname, pathToNodeModules, 'babel-plugin-add-module-exports'),
                             [
-                                resolve(__dirname, '../../../node_modules', 'babel-plugin-import-bk-magic-vue'),
+                                resolve(__dirname, pathToNodeModules, 'babel-plugin-import-bk-magic-vue'),
                                 { baseLibName: 'bk-magic-vue' }
                             ]
                         ],
@@ -144,7 +145,7 @@ module.exports = {
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                loader: resolve(__dirname, '../../../node_modules', 'url-loader'),
+                loader: resolve(__dirname, pathToNodeModules, 'url-loader'),
                 options: {
                     limit: true,
                     name: posix.join('static', 'images/[name].[hash:7].[ext]')
@@ -153,7 +154,7 @@ module.exports = {
             {
                 test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
                 use: {
-                    loader: resolve(__dirname, '../../../node_modules', 'url-loader'),
+                    loader: resolve(__dirname, pathToNodeModules, 'url-loader'),
                     options: {
                         limit: 10000,
                         name: posix.join('static', 'media/[name].[hash:7].[ext]')
@@ -163,7 +164,7 @@ module.exports = {
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 use: {
-                    loader: resolve(__dirname, '../../../node_modules', 'url-loader'),
+                    loader: resolve(__dirname, pathToNodeModules, 'url-loader'),
                     options: {
                         limit: 10000,
                         name: posix.join('static', 'fonts/[name].[hash:7].[ext]')

@@ -88,7 +88,7 @@
                         if (item.children) {
                             return findGrid(item.children, componentId)
                         } else if (
-                            item.renderProps.slots && item.renderProps.slots.type === 'column'
+                            item.renderProps.slots && (item.renderProps.slots.type === 'column' || item.renderProps.slots.type === 'free-layout-item')
                         ) {
                             return findGrid(item.renderProps.slots.val, componentId)
                         }

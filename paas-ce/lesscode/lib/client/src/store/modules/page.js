@@ -14,10 +14,27 @@ import http from '@/api'
 export default {
     namespaced: true,
     state: {
+        pageList: [],
+        pageDetail: {}
     },
     mutations: {
+        setPageDetail (state, page) {
+            state.pageDetail = page
+        },
+        setPageList (state, pageList) {
+            state.pageList = pageList
+        },
+        updatePageDetail (state, page) {
+            state.pageDetail = { ...state.pageDetail, ...page }
+        },
+        updatePageList (state, page) {
+            const index = state.pageList.findIndex(item => item.id === page.id)
+            state.pageList[index] = { ...state.pageList[index], ...page }
+        }
     },
     getters: {
+        pageDetail: state => state.pageDetail,
+        pageList: state => state.pageList
     },
     actions: {
         create ({ commit }, { data = {} }) {
@@ -28,6 +45,12 @@ export default {
         },
         getList ({ commit }, { projectId }) {
             return http.get(`/page/getList?projectId=${projectId}`).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        getLiteList ({ commit }, { projectId, config = {} }) {
+            return http.get(`/page/getList?lite=1&projectId=${projectId}`, config).then(response => {
                 const data = response.data || ''
                 return data
             })
@@ -59,6 +82,16 @@ export default {
             return http.get(`/page/detail?pageId=${pageId}`).then(response => {
                 const data = response.data || ''
                 return data
+            })
+        },
+        verify ({ commit }, { data, config }) {
+            return http.post('/page/verify', data, config).then(response => {
+                return response
+            })
+        },
+        verifyPreview ({ commit }, { data }) {
+            return http.post('/page/verifyPreview', data).then(response => {
+                return response
             })
         }
     }

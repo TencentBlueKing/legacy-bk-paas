@@ -18,7 +18,15 @@ import project from './modules/project'
 import components from './modules/components'
 import page from './modules/page'
 import functions from './modules/functions'
+import variable from './modules/variable'
+import route from './modules/route'
+import projectCode from './modules/project-code'
+import release from './modules/release'
+import layout from './modules/layout'
+import member from './modules/member'
+import logs from './modules/logs'
 import http from '@/api'
+import router from '../router'
 import { unifyObjectStyle, json2Query } from '@/common/util'
 
 Vue.use(Vuex)
@@ -31,21 +39,34 @@ const store = new Vuex.Store({
         project,
         components,
         page,
-        functions
+        functions,
+        variable,
+        route,
+        projectCode,
+        release,
+        layout,
+        member,
+        logs
     },
     // 公共 store
     state: {
         mainContentLoading: false,
+        // 页面级dialog的popManager监测器，用于适配交互式组件
+        pagePopMaskObserve: null,
         // 系统当前登录用户
         user: {}
     },
     // 公共 getters
     getters: {
+        pagePopMaskObserve: state => state.pagePopMaskObserve,
         mainContentLoading: state => state.mainContentLoading,
         user: state => state.user
     },
     // 公共 mutations
     mutations: {
+        setPopMaskObserve (state, observe) {
+            state.pagePopMaskObserve = observe
+        },
         /**
          * 设置内容区的 loading 是否显示
          *
@@ -92,7 +113,14 @@ const store = new Vuex.Store({
         },
 
         getApiData ({ state }, data) {
-            return http.post('/data/getApiData', data, { globalError: false }).then(response => {
+            const curRouter = router.currentRoute || {}
+            const params = curRouter.params || {}
+            const projectId = params.projectId || ''
+            const postData = {
+                projectId,
+                ...data
+            }
+            return http.post('/data/getApiData', postData, { globalError: false }).then(response => {
                 return response
             })
         },

@@ -4,5 +4,11 @@ import Base from './base'
 @Entity({ name: 'comp_category', comment: '组件分类表' })
 export default class extends Base {
     @Column({ type: 'varchar' })
-    category
+    name
+
+    @Column({ type: 'int' })
+    belongProjectId
+
+    @Column({ type: 'int' })
+    order
 }

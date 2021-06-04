@@ -10,46 +10,57 @@
 -->
 
 <template>
-    <div :ref="`${renderData.componentId}-wrapper`" class="bk-layout-grid-row-wrapper">
+    <div :data-component-id="`grid-${renderData.componentId}`" :ref="`${renderData.componentId}-wrapper`">
+        <!-- <free-layout v-if="renderData.type === 'free-layout'"></free-layout> -->
         <render-row v-bind="bindProps"
-            :style="renderData.renderStyles"
+            :style="Object.assign({}, renderData.renderStyles, (renderData.renderStyles && renderData.renderStyles.customStyle) || {})"
             :ref="renderData.componentId"
             @click.native.stop="rowClickHandler(renderData, $event)"
-            @contextmenu.native="rowClickHandler(renderData, $event)"
+            @contextmenu.stop="rowClickHandler(renderData, $event)"
             @mouseover.native.stop="rowMouseoverHandler(renderData)"
             @mouseout.native.stop="rowMouseoutHandler(renderData)">
-            <context-menu class="grid-context-menu"
+            <component-menu class="grid-context-menu"
                 :target="contextMenuTarget"
                 :show="contextMenuVisible"
+                :offset="getComputedMunuOffset"
                 @update:show="show => contextMenuVisible = show">
-                <a href="javascript:;" @click="handleContextmenuDelete">删除</a>
-                <a href="javascript:;" @click="handleContextmenuClearGrid">清空</a>
-            </context-menu>
+                <a href="javascript:;" @click="handleContextmenuDelete">删除栅格布局</a>
+                <a href="javascript:;" @click="handleContextmenuClearGrid">清空栅格布局</a>
+            </component-menu>
             <render-col v-bind="column" :key="columnIndex" v-for="(column, columnIndex) in renderDataSlot.val"
                 :class="columnIndex === renderDataSlot.val.length - 1 ? 'last' : ''">
                 <vue-draggable
+                    :component-data="column"
                     class="drag-area target-in-column"
                     :sort="true"
                     :list="column.children"
-                    :group="{ name: groupType, pull: true, put: ['render-grid', 'component'] }"
+                    :group="{ name: groupType, pull: true, put: ['render-grid', 'free-layout', 'component', ...extraDragCls] }"
                     ghost-class="in-column-ghost"
                     chosen-class="in-column-chosen"
                     drag-class="in-column-drag"
                     :data-component-id="renderData.componentId"
                     :data-column-index="columnIndex"
+                    :move="onMove"
                     @change="log(arguments, column)"
                     @choose="onChoose(arguments, column)"
-                    @end="onEnd"
-                >
+                    @start="onStart"
+                    @end="onEnd">
                     <render-component
                         v-for="itemInColumn in column.children"
                         :key="itemInColumn.renderKey"
                         :component-data="itemInColumn" />
                 </vue-draggable>
             </render-col>
-            <div class="add-column" @click="handleAddColumn">+</div>
-            <div class="add-clone" @click="handleAddClone">+</div>
+            <div class="add-column" @click="handleAddColumn">
+                <!-- <i class="bk-icon bk-drag-icon bk-drag-add-line"></i> -->
+                <img src="../../images/svg/add-line.svg" />
+            </div>
+            <div class="add-clone" @click="handleAddClone">
+                <!-- <i class="bk-icon bk-drag-icon bk-drag-add-line"></i> -->
+                <img src="../../images/svg/add-line.svg" />
+            </div>
         </render-row>
+
         <bk-dialog v-model="clearGridConf.visiable"
             class="del-component-dialog"
             theme="primary"
@@ -77,18 +88,29 @@
     import renderRow from './row'
     import renderCol from './col'
     import renderComponent from './component'
+    import freeLayout from './free-layout'
+    import ComponentMenu from '@/components/widget/context-menu.vue'
+    import offsetMixin from './offsetMixin'
 
     export default {
         name: 'render-grid',
         components: {
             renderRow,
             renderCol,
-            renderComponent
+            renderComponent,
+            // eslint-disable-next-line vue/no-unused-components
+            freeLayout,
+            ComponentMenu
         },
+        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            extraDragCls: {
+                type: Array,
+                default: () => ['interactiveInnerComp']
             }
         },
         data () {
@@ -111,11 +133,6 @@
                 'targetData',
                 'curSelectedComponentData'
             ])
-        },
-        watch: {
-            renderDataSlot () {
-                this.setColWidth()
-            }
         },
         created () {
             this.renderData = this.componentData
@@ -145,7 +162,8 @@
             ...mapMutations('drag', [
                 'setCurSelectedComponentData',
                 'setTargetData',
-                'pushTargetHistory'
+                'pushTargetHistory',
+                'setFreeLayoutItemPlaceholderPointerEvents'
             ]),
 
             /**
@@ -231,12 +249,13 @@
                         modifier: data.modifier
                     }
                     this.pushTargetHistory(pushData)
-                    // const { renderStyles = {}, renderProps = {} } = data.modifier
-                    const { renderStyles = {}, renderProps = {}, tabPanelActive = 'props' } = data.modifier
+                    const { renderStyles = {}, renderProps = {}, tabPanelActive = 'props', renderDirectives = [] } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
+                    this.renderData.renderDirectives = renderDirectives
                     this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
+                    this.setColWidth()
                 }
             },
 
@@ -279,7 +298,22 @@
                 const evt = e[0]
                 const curChooseComponent = column.children[evt.oldIndex]
                 this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
-                this.groupType = curChooseComponent.type === 'render-grid' ? 'render-grid' : 'component'
+                // this.groupType = curChooseComponent.type === 'render-grid' ? 'render-grid' : 'component'
+
+                let groupType = ''
+                if (curChooseComponent.type === 'render-grid') {
+                    groupType = 'render-grid'
+                } else if (curChooseComponent.type === 'free-layout') {
+                    groupType = 'free-layout'
+                } else {
+                    groupType = 'component'
+                }
+                this.groupType = groupType
+            },
+
+            onMove (evt, originalEvent) {
+                // console.error(evt)
+                // console.error(originalEvent)
             },
 
             /**
@@ -290,12 +324,16 @@
              */
             rowClickHandler (renderData, e) {
                 removeClassWithNodeClass('.bk-layout-grid-row', 'selected')
+                removeClassWithNodeClass('.bk-lesscode-free-layout', 'selected')
                 removeClassWithNodeClass('.component-wrapper', 'selected')
+                removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
 
                 const curRowNode = getNodeWithClass(e.target, 'bk-layout-grid-row')
                 curRowNode.classList.add('selected')
 
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
+
+                bus.$emit('selected-tree', this.renderData.componentId)
             },
 
             /**
@@ -324,9 +362,16 @@
                 e.stopPropagation()
             },
 
-            onEnd (e) {
+            onStart (e) {
+                this.setFreeLayoutItemPlaceholderPointerEvents('all')
                 // console.error('onEnd2222', e)
             },
+
+            onEnd (e) {
+                this.setFreeLayoutItemPlaceholderPointerEvents('none')
+                // console.error('onEnd2222', e)
+            },
+
             handleAddColumn () {
                 if (this.renderData.renderProps.slots.val.length === 12) {
                     this.messageWarn('最多支持12栅格')
@@ -351,7 +396,8 @@
                     type: this.componentData.type,
                     renderProps,
                     renderStyles: {},
-                    renderEvents: {}
+                    renderEvents: {},
+                    renderDirectives: []
                 })
             }
         }

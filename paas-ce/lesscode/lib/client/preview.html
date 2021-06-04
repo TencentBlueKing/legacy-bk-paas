@@ -1,0 +1,108 @@
+<!--
+  Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+  Copyright (C) 2017-2019 THL A29 Limited, a Tencent company. All rights reserved.
+  Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://opensource.org/licenses/MIT
+  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+  specific language governing permissions and limitations under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="<%= htmlWebpackPlugin.options.staticUrl %>/images/favicon.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="<%= htmlWebpackPlugin.options.staticUrl %>/images/favicon.png" type="image/x-icon" />
+        <meta charset="utf-8">
+        <title>蓝鲸智云MagicBox|可视化开发</title>
+        <style>
+            #preview-app .bk-loading {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                margin: auto;
+                background-color: rgba(255, 255, 255, 0.9);
+                z-index: 10;
+            }
+            #preview-app .bk-loading-wrapper {
+                text-align: center;
+                line-height: 1;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%,-50%);
+            }
+            #preview-app .bk-loading .bk-loading1 {
+                position: relative;
+                width: 75px;
+                height: 14px;
+                margin: auto;
+                display: inline-block;
+            }
+            #preview-app .point {
+                position: absolute;
+                top: 0;
+                width: 14px;
+                height: 14px;
+                animation-name: scale-animate;
+                animation-duration: .8s;
+                animation-iteration-count: infinite;
+                animation-direction: normal;;
+                transform: scale(.6);
+                border-radius: 19px;
+            }
+            #preview-app .point1 {
+                background-color: #fd6154;
+                left: 0;
+                animation-delay: .1s;
+            }
+            #preview-app .point2 {
+                background-color: #ffb726;
+                left: 20px;
+                animation-delay: .25s;
+            }
+            #preview-app .point3 {
+                background-color: #4cd084;
+                left: 40px;
+                animation-delay: .4s;
+            }
+            #preview-app .point4 {
+                background-color: #57a3f1;
+                left: 60px;
+                animation-delay: .55s;
+            }
+            @keyframes scale-animate {
+                0% {
+                    transform: scale(1);
+                }
+
+                100% {
+                    transform: scale(.6);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="preview-app">
+            <div class="bk-loading">
+                <div class="bk-loading-wrapper">
+                    <div class="bk-loading1 bk-colorful bk-size-large">
+                        <div class="point point1"></div>
+                        <div class="point point2"></div>
+                        <div class="point point3"></div>
+                        <div class="point point4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var BKPAAS_ENVIRONMENT = '<%= htmlWebpackPlugin.options.BKPAAS_ENVIRONMENT %>'
+        </script>
+        <script src="<%= htmlWebpackPlugin.options.staticUrl %>/lib.bundle.js"></script>
+    </body>
+</html>

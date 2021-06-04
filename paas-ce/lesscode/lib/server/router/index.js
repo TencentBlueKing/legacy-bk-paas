@@ -12,20 +12,43 @@
 const KoaRouter = require('koa-router')
 const pageRouter = new KoaRouter()
 
+const openAPIRouterConfig = require('./open-api.config')
+
 const IS_DEV = process.env.NODE_ENV === 'development'
-const pageTemplateName = IS_DEV ? 'index-dev' : 'index'
+// 不同场景渲染不同html
+function getRenderTemplateName (ctx) {
+    let pageTemplateName = IS_DEV ? 'index-dev' : 'index'
+    if (ctx.path.includes('preview.html')) pageTemplateName = 'preview'
+    return pageTemplateName
+}
 const renderParams = { STATIC_URL: '' }
-// 把所有前端的页面路由都指向 index，为了方便前端 vue router 使用 browserHistory
+
 pageRouter.get('*', async (ctx, next) => {
+    // 必要的 openapi 404 判定，暂不支持路径参数
+    const { method, path } = ctx
+    const { prefix, routes } = openAPIRouterConfig
+
+    if (path.startsWith(prefix)) {
+        const openAPIRoutes = Object.values(routes).map(route => `${route[0]}-${prefix}${route[1]}`.toUpperCase())
+        const currentRoute = `${method}-${path}`.toUpperCase()
+        if (!openAPIRoutes.includes(currentRoute)) {
+            ctx.throw(404)
+        }
+    }
+
+    await next()
+}, async (ctx, next) => {
+    const pageTemplateName = getRenderTemplateName(ctx)
     ctx.body = await ctx.render(pageTemplateName, renderParams)
     await next()
 })
+
 const routes = [pageRouter.routes()]
 const allowedMethods = [pageRouter.allowedMethods()]
 
 const fs = require('fs')
 const path = require('path')
-const files = fs.readdirSync(path.resolve(__dirname, './')).filter(name => name !== 'index.js')
+const files = fs.readdirSync(path.resolve(__dirname, './')).filter(name => name !== 'index.js' && !name.endsWith('.config.js'))
 files.forEach((name) => {
     const router = require(`./${name}`)
     routes.push(router.routes())

@@ -8,13 +8,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 import projectModel from '../model/project'
+import { invalidProjectIds } from '../conf/system'
+import { pages } from '../conf/demo-page-code'
+import { createDemoPage, createDefaultPage } from './page'
+import LayoutModel from '../model/layout'
 const { CODE } = require('../util')
 
 module.exports = {
     async createProject (ctx) {
-        const projectData = ctx.request.body
+        const { layouts: layoutData, ...projectData } = ctx.request.body
         const userInfo = ctx.session.userInfo
         projectData.createUser = userInfo.username
         const userProjectRoleData = {
@@ -31,6 +34,10 @@ module.exports = {
 
             const { projectName, projectCode } = projectData
 
+            if (invalidProjectIds.includes(projectCode)) {
+                ctx.throw(200, '项目ID不能为内置关键字', { code: CODE.BIZ.PROJECT_ID_INVALID })
+            }
+
             // 检查名称和英文ID的唯一性
             const [foundNameProject, foundCodeProject] = await Promise.all([
                 projectModel.findOneProjectByNameAndUserId(projectName, userInfo.id),
@@ -38,14 +45,19 @@ module.exports = {
             ])
 
             if (foundNameProject && foundNameProject.length) {
-                ctx.throw(200, '项目名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
+                ctx.throw(400, '项目名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
             }
 
             if (foundCodeProject && foundCodeProject.length) {
-                ctx.throw(200, '项目ID已经存在', { code: CODE.BIZ.PROJECT_ID_EXISTED })
+                ctx.throw(400, '项目ID已经存在', { code: CODE.BIZ.PROJECT_ID_EXISTED })
             }
 
-            const { projectId } = await projectModel.createProject(projectData, userProjectRoleData)
+            const { projectId } = await projectModel.createProject(projectData, userProjectRoleData, layoutData)
+
+            // 创建默认home页面，复制时不创建
+            if (!projectData.copyFrom) {
+                await createDefaultPage(projectId)
+            }
 
             res.data = projectId
 
@@ -130,16 +142,6 @@ module.exports = {
             }
             project['favorite'] = favoritetList.find(item => item.id === projectId) ? 1 : 0
         })
-        // projectList.sort((a, b) => {
-        //     if (!a.pageUpdateTime && !b.pageUpdateTime) {
-        //         return 0
-        //     } else if (!a.pageUpdateTime && b.pageUpdateTime) {
-        //         return 1
-        //     } else if (a.pageUpdateTime && !b.pageUpdateTime) {
-        //         return -1
-        //     }
-        //     return new Date(b.pageUpdateTime) - new Date(a.pageUpdateTime)
-        // })
 
         ctx.send({
             code: 0,
@@ -235,6 +237,85 @@ module.exports = {
             ctx.throwError({
                 message: err.message
             })
+        }
+    },
+
+    async verify (ctx) {
+        try {
+            const id = ctx.request.body.id
+            const userInfo = ctx.session.userInfo
+            const project = await projectModel.findUserProjectById(userInfo.id, id)
+            ctx.send({
+                code: 0,
+                message: 'OK',
+                data: project && project.id
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
+
+    // 用户所拥有的项目，包含通过添加成员共享的项目，用于项目下拉与列表选择
+    async my (ctx) {
+        try {
+            const userInfo = ctx.session.userInfo
+            const query = {
+                condition: [],
+                params: {},
+                select: ['project.id', 'project.projectCode', 'project.projectName']
+            }
+            query.condition.push('user_project_role.userId = :userId')
+            query.params.userId = userInfo.id
+            query.condition = query.condition.join(' AND ')
+            const projectList = await projectModel.queryAllProject(query)
+
+            ctx.send({
+                code: 0,
+                message: 'OK',
+                data: projectList
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
+
+    async createDemoProject (data) {
+        const { userInfo, projectData } = data
+        projectData.createUser = userInfo.username
+        const userProjectRoleData = {
+            userId: userInfo.id,
+            roleId: 1
+        }
+
+        try {
+            const layoutData = await LayoutModel.getDefaultList()
+            const layoutList = layoutData.reduce((pre, cur) => {
+                pre.push({
+                    layoutId: cur.id,
+                    content: cur.defaultContent,
+                    routePath: cur.defaultPath,
+                    showName: cur.defaultName,
+                    layoutCode: cur.defaultCode,
+                    isDefault: cur.type === 'top-bottom'
+                })
+                return pre
+            }, [])
+
+            const { projectId } = await projectModel.createProject(projectData, userProjectRoleData, layoutList)
+            return Promise.all(pages.map(page => createDemoPage({
+                projectId: projectId,
+                pageData: page.pageConfig,
+                pageContent: {
+                    content: page.content,
+                    previewImg: page.preview
+                }
+            })))
+        } catch (e) {
+            console.error(e)
         }
     }
 }

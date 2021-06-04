@@ -1,0 +1,20 @@
+.navigation-bar {
+    width: 100%;
+    height: 100%;
+}
+.navigation-bar-container {
+    width: 100%;
+    max-width: 100%;
+}
+.bk-navigation {
+    min-width: 1360px;
+}
+.bk-navigation-wrapper .navigation-container {
+    max-width: 100% !important;
+}
+.navigation-header .tippy-popper .tippy-tooltip.navigation-message-theme {
+    padding: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
