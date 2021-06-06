@@ -31,9 +31,7 @@
 <script>
     import screenfull from 'screenfull'
     import hljs from 'highlight.js'
-    // import 'highlight.js/styles/tomorrow.css'
     import 'highlight.js/styles/monokai-sublime.css'
-    import { mapMutations } from 'vuex'
 
     export default {
         props: {
@@ -83,9 +81,6 @@
             screenfull.off('change', this.screenfullChange)
         },
         methods: {
-            ...mapMutations('drag', [
-                'setTargetData'
-            ]),
             switchWithNav () {
                 this.$emit('change-with-nav', !this.withNav)
             },
