@@ -13,9 +13,10 @@
     <div :class="[$style['code-viewer'], { [$style['fullscreen']]: isFullscreen }]">
         <div :class="$style['toolbar']">
             <div :class="$style['buttons']">
-                <i v-bk-tooltips="{ boundary: 'window', content: '复制代码' }" :class="['bk-drag-icon', 'bk-drag-copy', $style['icon']]" @click="handleCodeCopy"></i>
-                <i v-bk-tooltips="{ boundary: 'window', content: '下载源码' }" :class="['bk-drag-icon', 'bk-drag-download', $style['icon']]" @click="handleDownloadFile"></i>
-                <i v-bk-tooltips="{ boundary: 'window', content: withNav ? '包含导航源码' : '不包含导航源码' }" :class="['bk-drag-icon', 'bk-drag-switcher', $style['icon'], { [$style['without-nav']]: !withNav }]" @click="switchWithNav"></i>
+                <i v-bk-tooltips="{ boundary: 'window', content: `复制${typeName}` }" :class="['bk-drag-icon', 'bk-drag-copy', $style['icon']]" @click="handleCodeCopy"></i>
+                <i v-bk-tooltips="{ boundary: 'window', content: `下载${typeName}` }" :class="['bk-drag-icon', 'bk-drag-download', $style['icon']]" @click="handleDownloadFile"></i>
+                <i v-if="pageType === 'json'" v-bk-tooltips="{ boundary: 'window', content: '导入json' }" :class="['bk-drag-icon', 'bk-drag-upload', $style['icon']]" @click="showEditData"></i>
+                <i v-if="pageType === 'code'" v-bk-tooltips="{ boundary: 'window', content: withNav ? '包含导航源码' : '不包含导航源码' }" :class="['bk-drag-icon', 'bk-drag-switcher', $style['icon'], { [$style['without-nav']]: !withNav }]" @click="switchWithNav"></i>
                 <i v-bk-tooltips="{ boundary: 'window', content: '全屏' }" :class="['bk-drag-icon', 'bk-drag-full-screen', $style['icon']]" @click="handleScreenfull"></i>
             </div>
         </div>
@@ -32,6 +33,7 @@
     import hljs from 'highlight.js'
     // import 'highlight.js/styles/tomorrow.css'
     import 'highlight.js/styles/monokai-sublime.css'
+    import { mapMutations } from 'vuex'
 
     export default {
         props: {
@@ -45,11 +47,20 @@
             },
             withNav: {
                 type: Boolean
+            },
+            pageType: {
+                type: String,
+                default: 'code'
             }
         },
         data () {
             return {
                 isFullscreen: false
+            }
+        },
+        computed: {
+            typeName () {
+                return this.pageType === 'json' ? 'json' : '源码'
             }
         },
         watch: {
@@ -72,8 +83,14 @@
             screenfull.off('change', this.screenfullChange)
         },
         methods: {
+            ...mapMutations('drag', [
+                'setTargetData'
+            ]),
             switchWithNav () {
                 this.$emit('change-with-nav', !this.withNav)
+            },
+            showEditData () {
+                this.$emit('show-edit-data')
             },
             highlightCode () {
                 this.$nextTick(() => {
@@ -121,7 +138,7 @@
                     document.getSelection().removeAllRanges()
                     document.getSelection().addRange(selected)
                 }
-                this.$bkMessage({ theme: 'primary', message: '代码复制成功', delay: 2000, dismissable: false })
+                this.$bkMessage({ theme: 'primary', message: '复制成功', delay: 2000, dismissable: false })
             }
         }
     }
