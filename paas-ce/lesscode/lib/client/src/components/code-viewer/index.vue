@@ -188,6 +188,7 @@
 
         .content {
             height: calc(100% - var(--toolbar-height));
+            min-height: 400px;
             overflow: auto;
             @mixin scroller #63656E;
 

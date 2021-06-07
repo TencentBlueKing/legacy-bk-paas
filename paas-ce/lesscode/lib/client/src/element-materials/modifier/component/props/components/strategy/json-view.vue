@@ -11,14 +11,15 @@
 
 <template>
     <section>
-        <bk-input
-            disabled
-            style="width: 100%"
-            type="textarea"
-            v-if="showInput"
-            :rows="5"
-            :value="initJsonStr" />
-        <div class="option-add" @click="showEdit">编辑数据</div>
+        <section v-if="showInput">
+            <bk-input
+                disabled
+                style="width: 100%"
+                type="textarea"
+                :rows="5"
+                :value="initJsonStr" />
+            <div class="option-add" @click="showEdit">编辑数据</div>
+        </section>
 
         <bk-dialog
             v-model="isShow"
