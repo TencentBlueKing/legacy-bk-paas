@@ -29,10 +29,10 @@
             render-directive="if"
             width="900"
             ext-cls="json-setting-dialog">
-            <div class="dialog-title" v-if="dialogTitle">
+            <div class="dialog-title" v-if="!showInput">
                 <bk-upload
                     :theme="'button'"
-                    :tip="`可导入json文件或输入json数据,${dialogTitle}`"
+                    :tip="`可导入json文件或输入json数据`"
                     with-credentials
                     :multiple="false"
                     :url="uploadUrl"
@@ -40,7 +40,7 @@
                     @on-success="handleUploadSuccess"
                 ></bk-upload>
             </div>
-            <main class="main-container">
+            <main class="main-container" :style="{ 'height': showInput ? '450px' : '350px' }">
                 <div class="init-json">
                     <textarea class="json-input" placeholder="请输入json格式的数据" v-model="initJsonStr"></textarea>
                 </div>
@@ -81,9 +81,6 @@
             type: {
                 type: String,
                 required: true
-            },
-            dialogTitle: {
-                type: String
             }
         },
 
@@ -121,11 +118,28 @@
                 try {
                     if (this.initJsonStr && typeof JSON.parse(this.initJsonStr) === 'object') {
                         this.localValue = JSON.parse(this.initJsonStr)
-                        this.change(this.name, JSON.parse(this.initJsonStr), this.type)
-                        this.isShow = false
+                        if (!this.showInput) {
+                            if (!Array.isArray(JSON.parse(this.initJsonStr)) || JSON.parse(this.initJsonStr).length === 0) {
+                                this.$bkMessage({
+                                    theme: 'error',
+                                    message: '画布的Json需要为Array且不能为空'
+                                })
+                                return
+                            }
+                            this.$bkInfo({
+                                title: '',
+                                subTitle: 'Json会覆盖现有画布内容区域数据，请谨慎操作',
+                                confirmFn: () => {
+                                    this.change(this.name, JSON.parse(this.initJsonStr), this.type)
+                                    this.isShow = false
+                                }
+                            })
+                        } else {
+                            this.change(this.name, JSON.parse(this.initJsonStr), this.type)
+                            this.isShow = false
+                        }
                     }
                 } catch (err) {
-                    console.log(err)
                     this.$bkMessage({
                         theme: 'error',
                         message: '请输入正确的json格式数据'
@@ -160,7 +174,6 @@
         }
         .main-container {
             width: 98%;
-            height: 450px;
             display:flex;
             overflow: hidden;
             margin: 0 auto;
