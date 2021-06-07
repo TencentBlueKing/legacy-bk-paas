@@ -156,7 +156,6 @@
         .dialog-title {
             margin-left: 10px;
             font-size: 12px;
-            color: #ff5656;
         }
         .main-container {
             width: 98%;
