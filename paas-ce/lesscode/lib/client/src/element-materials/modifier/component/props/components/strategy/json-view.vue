@@ -15,6 +15,7 @@
             disabled
             style="width: 100%"
             type="textarea"
+            v-if="showInput"
             :rows="5"
             :value="initJsonStr" />
         <div class="option-add" @click="showEdit">编辑数据</div>
@@ -22,10 +23,12 @@
         <bk-dialog
             v-model="isShow"
             :confirm-fn="confirm"
+            :position="{ top: 100 }"
             @cancel="cancel"
             render-directive="if"
             width="900"
             ext-cls="json-setting-dialog">
+            <p class="dialog-title" v-if="dialogTitle">{{ dialogTitle }}</p>
             <main class="main-container">
                 <div class="init-json">
                     <textarea class="json-input" placeholder="请输入json格式的数据" v-model="initJsonStr"></textarea>
@@ -48,6 +51,10 @@
     Vue.use(JsonViewer)
     export default {
         props: {
+            showInput: {
+                type: Boolean,
+                default: true
+            },
             defaultValue: {
                 type: [Object, Array, String],
                 required: true
@@ -63,6 +70,9 @@
             type: {
                 type: String,
                 required: true
+            },
+            dialogTitle: {
+                type: String
             }
         },
 
@@ -111,6 +121,7 @@
                         this.isShow = false
                     }
                 } catch (err) {
+                    console.log(err)
                     this.$bkMessage({
                         theme: 'error',
                         message: '请输入正确的json格式数据'
@@ -135,6 +146,11 @@
             .bk-dialog-content {
                 top: calc(50vh - 324px)!important;
             }
+        }
+        .dialog-title {
+            margin: 0 0 5px 10px;
+            font-size: 12px;
+            color: #ff5656;
         }
         .main-container {
             width: 98%;
