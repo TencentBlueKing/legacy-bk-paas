@@ -28,7 +28,17 @@
             render-directive="if"
             width="900"
             ext-cls="json-setting-dialog">
-            <p class="dialog-title" v-if="dialogTitle">{{ dialogTitle }}</p>
+            <div class="dialog-title" v-if="dialogTitle">
+                <bk-upload
+                    :theme="'button'"
+                    :tip="`可导入json文件或输入json数据,${dialogTitle}`"
+                    with-credentials
+                    :multiple="false"
+                    :url="uploadUrl"
+                    accept=".json"
+                    @on-success="handleUploadSuccess"
+                ></bk-upload>
+            </div>
             <main class="main-container">
                 <div class="init-json">
                     <textarea class="json-input" placeholder="请输入json格式的数据" v-model="initJsonStr"></textarea>
@@ -93,18 +103,11 @@
                     }
                 }
                 return {}
+            },
+            uploadUrl () {
+                return `${AJAX_URL_PREFIX}/page/importJson`
             }
         },
-        // watch: {
-        //     isShow: {
-        //         handler (val) {
-        //             if (!val) {
-        //                 this.initJsonStr = JSON.stringify(this.defaultValue, null, 4)
-        //             }
-        //         },
-        //         immediate: true
-        //     }
-        // },
         created () {
             this.localValue = this.defaultValue
             this.initJsonStr = circleJSON(this.defaultValue, null, 4)
@@ -130,6 +133,9 @@
             },
             cancel () {
                 this.initJsonStr = circleJSON(this.localValue, null, 4)
+            },
+            handleUploadSuccess (res) {
+                this.initJsonStr = res.responseData.data
             }
         }
     }
@@ -148,13 +154,12 @@
             }
         }
         .dialog-title {
-            margin: 0 0 5px 10px;
+            margin-left: 10px;
             font-size: 12px;
-            color: #ff5656;
         }
         .main-container {
             width: 98%;
-            height: 500px;
+            height: 450px;
             display:flex;
             overflow: hidden;
             margin: 0 auto;

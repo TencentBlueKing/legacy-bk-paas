@@ -25,7 +25,7 @@
         data () {
             return {
                 code: '',
-                dialogTitle: '导入的json将会覆盖当前已有页面内容'
+                dialogTitle: 'json数据将会覆盖当前已有页面内容'
             }
         },
         computed: {
