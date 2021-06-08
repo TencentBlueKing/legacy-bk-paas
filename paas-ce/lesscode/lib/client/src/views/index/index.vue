@@ -713,7 +713,7 @@
                         this.getAllGroupFuncs(this.projectId)
                     ])
                     await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
-                    this.$store.commit('page/setPageDetail', pageDetail || {})
+                    this.setPageDetail(pageDetail)
                     this.$store.commit('page/setPageList', pageList || [])
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
                     this.projectDetail = projectDetail || {}
@@ -722,6 +722,64 @@
                 } finally {
                     this.contentLoading = false
                 }
+            },
+
+            /**
+             * 在初始化和切换tab的时候更新画布数据
+             * 将targetdata与其他业务结合
+             */
+            setPageDetail (pageDetail) {
+                const getVariableVal = (data) => {
+                    function getVariableValue ({ valueType, defaultValueType, defaultValue }) {
+                        let value
+                        if (defaultValueType === 0) {
+                            value = defaultValue.all
+                        }
+                        if (defaultValueType === 1) {
+                            value = defaultValue.stag
+                        }
+                        if ([3, 4].includes(valueType)) value = JSON.parse(value)
+                        if (valueType === 6) value = undefined
+                        return value
+                    }
+
+                    const { val, valType } = data
+                    let variableVal
+
+                    if (valType === 'variable' && val !== '') {
+                        const curVariable = this.variableList.find((variable) => (variable.variableCode === val)) || {}
+                        variableVal = getVariableValue(curVariable)
+                    }
+
+                    return variableVal
+                }
+
+                const callBack = (component) => {
+                    const renderDirectives = component.renderDirectives || []
+                    const renderProps = component.renderProps || {}
+                    // update prop val
+                    Object.keys(renderProps).forEach((key) => {
+                        const renderProp = renderProps[key] || {}
+                        const { payload = {} } = renderProp
+                        const variableData = payload.variableData || {}
+
+                        const data = variableData.val
+                            ? variableData
+                            : renderDirectives.find((dir) => ((dir.type + dir.prop) === (`v-bind${key}`) && ![undefined, ''].includes(dir.val)))
+                        if (data) {
+                            const varVal = getVariableVal(data)
+                            if (varVal !== undefined) {
+                                renderProp.val = varVal
+                            }
+                        }
+                    })
+                }
+
+                const copyPageDetail = JSON.parse(JSON.stringify(pageDetail))
+                const targetData = JSON.parse(copyPageDetail.content || '{}')
+                targetData.forEach((grid, index) => walkGrid(targetData, grid, callBack, callBack, index))
+                copyPageDetail.content = JSON.stringify(targetData)
+                this.$store.commit('page/setPageDetail', copyPageDetail || {})
             },
 
             registerCustomComponent () {
@@ -1076,7 +1134,6 @@
             },
 
             async handleToolAction (action) {
-                this.actionSelected = action
                 // 点击源码的时候，需要让右侧属性面板消失
                 // 如果停留在源码页面时属性面板不消失，这个时候修改属性会生效，预览的时候就会生效，但是源码并不会随着属性的变化而重新生成
                 if (['setting', 'vueCode'].includes(action)) {
@@ -1092,6 +1149,14 @@
                     }
                     this.dragWrapperClickHandler()
                 }
+                // 切换回编辑区，对画布数据进行更新
+                if (action === 'edit' && this.actionSelected !== 'edit') {
+                    this.setPageDetail(this.pageDetail)
+                    const targetData = JSON.parse(this.pageDetail.content || '{}')
+                    this.setTargetData(targetData)
+                    this.refreshDragAreaKey = +new Date()
+                }
+                this.actionSelected = action
             },
 
             /**

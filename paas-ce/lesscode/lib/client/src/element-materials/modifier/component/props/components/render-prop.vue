@@ -338,8 +338,9 @@
             },
             updateDirectives (variableData) {
                 const renderDirectives = JSON.parse(JSON.stringify(this.lastDirectives || []))
-                const curDirective = (renderDirectives || []).find((item) => (item.type + item.prop) === ('v-bind' + this.name)) || {}
-                if (curDirective.val === undefined) {
+                const index = renderDirectives.findIndex((item) => (item.type + item.prop) === ('v-bind' + this.name))
+                const curDirective = renderDirectives[index] || {}
+                if (index <= -1) {
                     renderDirectives.push(curDirective)
                 }
                 const data = { type: 'v-bind', prop: this.name, val: variableData.val, valType: variableData.valType, modifiers: this.describe.modifiers }
