@@ -1156,10 +1156,10 @@ class PageCode {
             const [curFunc] = this.getMethodByCode(funcCode)
             if (curFunc.id) {
                 this.usingFuncCodes.push(funcCode)
-                return `this.${curFunc.funcName}`
             } else {
                 this.codeErrMessage = `函数【${funcCode}】不存在，函数执行可能存在异常，请修改后再试`
             }
+            return `this.${curFunc.funcName}`
         }
         if (dirKey) {
             const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
@@ -1168,10 +1168,10 @@ class PageCode {
                 if (!hasUsed) {
                     this.usingVariables.push(curDir)
                 }
-                return `this.${dirKey}`
             } else {
                 this.codeErrMessage = `指令【${dirKey}】不存在，函数执行可能存在异常，请修改后再试`
             }
+            return `this.${dirKey}`
         }
     }
 
@@ -1508,8 +1508,6 @@ class PageCode {
 module.exports = {
     async getPageData (targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList) {
         const pageCode = new PageCode(targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList)
-        const methodStrList = pageCode.methodStrList || []
-        const codeErrMessage = pageCode.codeErrMessage || ''
         let code = ''
         if (pageType === 'vueCode') {
             // 格式化，报错是抛出异常
@@ -1523,8 +1521,8 @@ module.exports = {
         }
         return {
             code,
-            methodStrList,
-            codeErrMessage
+            methodStrList: pageCode.methodStrList || [],
+            codeErrMessage: pageCode.codeErrMessage || ''
         }
     }
 }

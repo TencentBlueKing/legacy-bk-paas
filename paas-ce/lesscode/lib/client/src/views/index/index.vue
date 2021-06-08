@@ -713,7 +713,12 @@
                         this.getAllGroupFuncs(this.projectId)
                     ])
                     await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
-                    this.setPageDetail(pageDetail)
+                    // update targetdata
+                    const targetData = JSON.parse(pageDetail.content || '{}')
+                    this.updateTargetData(targetData)
+                    pageDetail.content = JSON.stringify(targetData)
+
+                    this.$store.commit('page/setPageDetail', pageDetail || {})
                     this.$store.commit('page/setPageList', pageList || [])
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
                     this.projectDetail = projectDetail || {}
@@ -728,7 +733,7 @@
              * 在初始化和切换tab的时候更新画布数据
              * 将targetdata与其他业务结合
              */
-            setPageDetail (pageDetail) {
+            updateTargetData (targetData) {
                 const getVariableVal = (data) => {
                     function getVariableValue ({ valueType, defaultValueType, defaultValue }) {
                         let value
@@ -775,11 +780,7 @@
                     })
                 }
 
-                const copyPageDetail = JSON.parse(JSON.stringify(pageDetail))
-                const targetData = JSON.parse(copyPageDetail.content || '{}')
                 targetData.forEach((grid, index) => walkGrid(targetData, grid, callBack, callBack, index))
-                copyPageDetail.content = JSON.stringify(targetData)
-                this.$store.commit('page/setPageDetail', copyPageDetail || {})
             },
 
             registerCustomComponent () {
@@ -1151,9 +1152,9 @@
                 }
                 // 切换回编辑区，对画布数据进行更新
                 if (action === 'edit' && this.actionSelected !== 'edit') {
-                    this.setPageDetail(this.pageDetail)
-                    const targetData = JSON.parse(this.pageDetail.content || '{}')
-                    this.setTargetData(targetData)
+                    const targetData = JSON.parse(JSON.stringify(this.targetData))
+                    this.updateTargetData(targetData)
+                    this.targetData = targetData
                     this.refreshDragAreaKey = +new Date()
                 }
                 this.actionSelected = action

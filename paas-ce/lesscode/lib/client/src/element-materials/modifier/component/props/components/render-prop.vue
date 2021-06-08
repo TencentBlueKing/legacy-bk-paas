@@ -39,7 +39,7 @@
                 </div>
             </template>
             <template v-else>
-                <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;">
+                <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;" @change="changePropType">
                     <bk-radio-button
                         v-for="item in formCom"
                         :key="item.typeName"
@@ -323,6 +323,10 @@
             },
             batchUpdate (renderData) {
                 this.$emit('batch-update', renderData)
+            },
+            changePropType (type) {
+                const value = this.describe.val || this.defaultValue
+                this.handleUpdate(this.name, value, type)
             },
             changeVariable (variableData) {
                 const value = variableData.defaultVal === undefined ? this.describe.val : variableData.defaultVal
