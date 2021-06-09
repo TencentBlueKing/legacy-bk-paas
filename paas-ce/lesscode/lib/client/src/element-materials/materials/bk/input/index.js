@@ -9,8 +9,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { formatLink } from '@/common/util'
-
 export default {
     name: 'input',
     type: 'bk-input',
@@ -104,16 +102,10 @@ export default {
             tips: 'html 原生属性 name'
         },
         'left-icon': {
-            type: 'icon',
-            tips: {
-                html: '左边显示的 icon，' + formatLink({ content: '查看支持的 icon' })
-            }
+            type: 'icon'
         },
         'right-icon': {
-            type: 'icon',
-            tips: {
-                html: '右边显示的 icon，' + formatLink({ content: '查看支持的 icon' })
-            }
+            type: 'icon'
         },
         precision: {
             type: 'number',
