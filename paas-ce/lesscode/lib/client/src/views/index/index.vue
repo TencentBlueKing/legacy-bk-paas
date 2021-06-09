@@ -714,9 +714,12 @@
                     ])
                     await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
                     // update targetdata
-                    const targetData = JSON.parse(pageDetail.content || '{}')
-                    this.updateTargetData(targetData)
-                    pageDetail.content = JSON.stringify(targetData)
+                    const content = pageDetail.content
+                    if (content) {
+                        const targetData = JSON.parse(content)
+                        this.updateTargetData(targetData)
+                        pageDetail.content = JSON.stringify(targetData)
+                    }
 
                     this.$store.commit('page/setPageDetail', pageDetail || {})
                     this.$store.commit('page/setPageList', pageList || [])
@@ -1162,7 +1165,7 @@
                 }
                 // 切换回编辑区，对画布数据进行更新
                 if (action === 'edit' && this.actionSelected !== 'edit') {
-                    const targetData = JSON.parse(JSON.stringify(this.targetData))
+                    const targetData = JSON.parse(JSON.stringify(this.targetData || []))
                     this.updateTargetData(targetData)
                     this.targetData = targetData
                     this.refreshDragAreaKey = +new Date()
