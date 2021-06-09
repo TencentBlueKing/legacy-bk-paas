@@ -39,7 +39,7 @@
                 </div>
             </template>
             <template v-else>
-                <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;">
+                <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;" @change="changePropType">
                     <bk-radio-button
                         v-for="item in formCom"
                         :key="item.typeName"
@@ -327,6 +327,10 @@
             batchUpdate (renderData) {
                 this.$emit('batch-update', renderData)
             },
+            changePropType (type) {
+                const value = this.describe.val || this.defaultValue
+                this.handleUpdate(this.name, value, type)
+            },
             changeVariable (variableData) {
                 const value = variableData.defaultVal === undefined ? this.describe.val : variableData.defaultVal
                 const com = this.formCom.find((com) => (variableData.valueType === com.typeName)) || {}
@@ -341,8 +345,9 @@
             },
             updateDirectives (variableData) {
                 const renderDirectives = JSON.parse(JSON.stringify(this.lastDirectives || []))
-                const curDirective = (renderDirectives || []).find((item) => (item.type + item.prop) === ('v-bind' + this.name)) || {}
-                if (curDirective.val === undefined) {
+                const index = renderDirectives.findIndex((item) => (item.type + item.prop) === ('v-bind' + this.name))
+                const curDirective = renderDirectives[index] || {}
+                if (index <= -1) {
                     renderDirectives.push(curDirective)
                 }
                 const data = { type: 'v-bind', prop: this.name, val: variableData.val, valType: variableData.valType, modifiers: this.describe.modifiers }

@@ -152,6 +152,7 @@
 
                 return retObj
             },
+
             filterVariableList () {
                 const variableList = JSON.parse(JSON.stringify(this.variableList || []))
                 return variableList.filter((variable) => {
