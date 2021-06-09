@@ -793,12 +793,22 @@
                 }
                 // 包含所有的自定组件
                 this.wholeComponentList = []
+                window.__innerCustomRegisterComponent__ = {}
                 const script = document.createElement('script')
                 script.src = `/${parseInt(this.$route.params.projectId)}/${parseInt(this.$route.params.pageId)}/component/register.js`
                 script.onload = () => {
                     const customComponentList = window.customCompontensPlugin.map(callback => {
-                        const compData = callback(Vue)
-                        return { ...compData[0], group: compData[2].category, meta: compData[2] }
+                        const [
+                            config,
+                            componentSource,
+                            baseInfo
+                        ] = callback(Vue)
+                        window.__innerCustomRegisterComponent__[config.type] = componentSource
+                        return {
+                            ...config,
+                            group: baseInfo.category,
+                            meta: { ...baseInfo }
+                        }
                     })
 
                     const publicList = []

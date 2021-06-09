@@ -1,13 +1,20 @@
 <template>
-    <code-viewer :code="code" :filename="`bklesscode-${pageId}.json`" />
+    <section>
+        <code-viewer :code="code" :filename="`bklesscode-${pageId}.json`" @show-edit-data="showEditData" page-type="json" />
+        <json-view ref="editDialog" :show-input="false" :default-value="[]" :change="setImportData" name="targetData" type="json" :dialog-title="dialogTitle"></json-view>
+    </section>
 </template>
 
 <script>
     import CodeViewer from '@/components/code-viewer'
+    import JsonView from '@/element-materials/modifier/component/props/components/strategy/json-view.vue'
     import { circleJSON } from '@/common/util.js'
+    import { mapMutations } from 'vuex'
+
     export default {
         components: {
-            CodeViewer
+            CodeViewer,
+            JsonView
         },
         props: {
             targetData: {
@@ -17,7 +24,8 @@
         },
         data () {
             return {
-                code: ''
+                code: '',
+                dialogTitle: 'json数据将会覆盖当前已有页面内容'
             }
         },
         computed: {
@@ -36,6 +44,19 @@
                     }
                 },
                 immediate: true
+            }
+        },
+        methods: {
+            ...mapMutations('drag', [
+                'setTargetData'
+            ]),
+            showEditData () {
+                this.$refs.editDialog && this.$refs.editDialog.showEdit()
+            },
+            setImportData (name, data) {
+                if (data && Array.isArray(data)) {
+                    this.setTargetData(data)
+                }
             }
         }
     }
