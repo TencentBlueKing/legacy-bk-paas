@@ -22,6 +22,7 @@ const {
     checkName,
     pageDetail,
     verify,
+    importJson,
     verifyPreview
 } = require('../controller/page')
 
@@ -63,6 +64,7 @@ router.delete('/delete', deletePage)
 router.post('/checkName', checkName)
 router.get('/detail', pageDetail)
 router.post('/verify', verify)
+router.post('/importJson', importJson)
 router.post('/verifyPreview', verifyPreview)
 
 module.exports = router

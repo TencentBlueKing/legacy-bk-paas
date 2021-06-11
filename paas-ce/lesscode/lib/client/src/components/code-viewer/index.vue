@@ -12,6 +12,7 @@
 <template>
     <div :class="[$style['code-viewer'], { [$style['fullscreen']]: isFullscreen }]">
         <div :class="$style['toolbar']">
+            <p><span v-if="pageType === 'json'">仅包含页面内容区域Json数据</span></p>
             <div :class="$style['buttons']">
                 <i v-bk-tooltips="{ boundary: 'window', content: `复制${typeName}` }" :class="['bk-drag-icon', 'bk-drag-copy', $style['icon']]" @click="handleCodeCopy"></i>
                 <i v-bk-tooltips="{ boundary: 'window', content: `下载${typeName}` }" :class="['bk-drag-icon', 'bk-drag-download', $style['icon']]" @click="handleDownloadFile"></i>
@@ -158,9 +159,9 @@
         .toolbar {
             display: flex;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: space-between;
             height: var(--toolbar-height);
-            padding: 0 22px;
+            padding: 0 22px 0 10px;
             background: #4B4D55;
 
             .buttons {
@@ -187,6 +188,7 @@
 
         .content {
             height: calc(100% - var(--toolbar-height));
+            min-height: 400px;
             overflow: auto;
             @mixin scroller #63656E;
 

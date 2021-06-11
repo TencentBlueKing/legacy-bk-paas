@@ -154,8 +154,9 @@
 
             triggleUpdate (directive) {
                 const renderDirectives = JSON.parse(JSON.stringify(this.lastDirectives))
-                const changedDirective = renderDirectives.find((dirVal) => ((dirVal.type + dirVal.prop) === (directive.type + directive.prop))) || {}
-                if (changedDirective.val === undefined) {
+                const index = renderDirectives.findIndex((dirVal) => ((dirVal.type + dirVal.prop) === (directive.type + directive.prop)))
+                const changedDirective = renderDirectives[index] || {}
+                if (index <= -1) {
                     renderDirectives.push(changedDirective)
                 }
                 Object.assign(changedDirective, directive)

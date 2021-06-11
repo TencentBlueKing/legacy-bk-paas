@@ -11,6 +11,8 @@ import { getConnection, getRepository } from 'typeorm'
 import OperationLogger from '../service/operation-logger'
 import { POST_PAGE_CREATE, PUT_PAGE_UPDATE } from '../conf/operate-log'
 
+const fs = require('fs')
+
 export const getPageList = async (ctx) => {
     try {
         const { projectId, lite } = ctx.query
@@ -63,10 +65,7 @@ export const createDemoPage = async (data) => {
 
         /** 创建demo页的具体内容 */
         const createPageContent = Object.assign(pageContent, { id: id })
-        console.log(pageContent, createPageContent, 'content')
-        const editPage = getRepository(Page).create(createPageContent)
-        console.log(editPage)
-
+        const editPage = getRepository(Page).create(createPageContent)       
         await getConnection().transaction(async transactionalEntityManager => {
             const page = await transactionalEntityManager.save(editPage)
 
@@ -419,6 +418,24 @@ export const verify = async (ctx) => {
     } catch (err) {
         ctx.throwError({
             message: err.message
+        })
+    }
+}
+
+// 导入json文件并返回内容
+export const importJson = async (ctx) => {
+    try {
+        const file = ctx.request.files || {}
+        const uploadFile = file.upload_file || {}
+        const data = fs.readFileSync(uploadFile.path, 'utf8')
+        ctx.send({
+            code: 0,
+            message: 'OK',
+            data
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: `上传失败：${err.message}`
         })
     }
 }
