@@ -8,7 +8,7 @@ npm i -g @blueking/lesscode-cli
 
 ### 自定义组件工程文件结构
 
-[下载 demo 示例包](/static/demo.zip)
+[下载 demo 示例包](/static/bk-lesscode-component-demo.zip)
 
 ```bash
 |-- ROOT/               # 自定义组件根目录
