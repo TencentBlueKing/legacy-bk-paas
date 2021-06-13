@@ -13,10 +13,12 @@ const { resolve } = require('path')
 const log4js = require('koa-log4')
 const jsonLayout = require('log4js-json-layout')
 const dayjs = require('dayjs')
-const IS_DEV = process.env.NODE_ENV === 'development'
-const logCatalog = IS_DEV ? '../../v3logs' : '/app/v3logs'
 const utc = require('dayjs/plugin/utc') // dependent on utc plugin
 const timezone = require('dayjs/plugin/timezone')
+
+const logPath = require('./conf/logger-path')
+
+const IS_DEV = process.env.NODE_ENV === 'development'
 
 // 使用时区插件，设置时间为上海时区
 dayjs.extend(utc)
@@ -37,7 +39,7 @@ log4js.configure({
                 include: ['asctime', 'levelname', 'message', 'url', 'method']
             },
             pattern: '-yyyy-MM-dd.log',
-            filename: resolve(__dirname, logCatalog, 'web-access-json.log')
+            filename: resolve(__dirname, logPath, 'web-access-json.log')
         },
         application: {
             type: 'dateFile',
@@ -52,7 +54,7 @@ log4js.configure({
                 include: ['asctime', 'levelname', 'message']
             },
             pattern: '-yyyy-MM-dd.log',
-            filename: resolve(__dirname, logCatalog, `web-application-json.log`)
+            filename: resolve(__dirname, logPath, `web-application-json.log`)
         },
         out: {
             type: 'console'
