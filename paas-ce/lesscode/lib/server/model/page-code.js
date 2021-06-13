@@ -1392,7 +1392,10 @@ class PageCode {
         if (this.pageType !== 'preview' && this.usingCustomArr && this.usingCustomArr.length) {
             let customStr = ''
             // dev 和 t 环境，npm 包名字前面加了 test- 前缀，生成的变量名字应该去掉 test 前缀
-            const forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
+            let forkUsingCustomArr = this.usingCustomArr
+            if (process.env.BKPAAS_ENVIRONMENT !== 'prod') {
+                forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
+            }
             for (const i in this.usingCustomArr) {
                 customStr += `${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })},\n`
             }
@@ -1462,7 +1465,10 @@ class PageCode {
         }
         if (this.pageType !== 'preview' && this.usingCustomArr && this.usingCustomArr.length) {
             // dev 和 t 环境，npm 包名字前面加了 test- 前缀，生成的变量名字应该去掉 test 前缀
-            const forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
+            let forkUsingCustomArr = this.usingCustomArr
+            if (process.env.BKPAAS_ENVIRONMENT !== 'prod') {
+                forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
+            }
             for (const i in this.usingCustomArr) {
                 importStr += `const ${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })} = require('${npmConf.scopename}/${this.usingCustomArr[i]}')\n`
             }
