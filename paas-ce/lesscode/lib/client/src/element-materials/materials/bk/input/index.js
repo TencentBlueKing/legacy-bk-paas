@@ -54,7 +54,7 @@ export default {
     props: {
         value: {
             type: 'string',
-            val: 'hello world'
+            val: ''
         },
         type: {
             type: 'string',
