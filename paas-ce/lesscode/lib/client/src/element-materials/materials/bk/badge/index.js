@@ -9,8 +9,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { formatLink } from '@/common/util'
-
 export default {
     name: 'badge',
     type: 'bk-badge',
@@ -41,10 +39,7 @@ export default {
         },
         icon: {
             type: 'icon',
-            val: '',
-            tips: {
-                html: '组件显示图标；当设置 icon 时，将忽略设置的 val 值，' + formatLink({ content: '查看支持的 icon' })
-            }
+            val: ''
         },
         max: {
             type: 'number',
