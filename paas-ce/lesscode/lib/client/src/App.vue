@@ -18,6 +18,9 @@
             <app-header></app-header>
             <router-view :name="topView" v-show="!mainContentLoading" />
         </div>
+        <bk-fixed-navbar v-if="!isCanvas"
+            :position="position"
+            :nav-items="navItems"></bk-fixed-navbar>
     </section>
 </template>
 <script>
@@ -30,7 +33,27 @@
 
         data () {
             return {
-                systemCls: 'mac'
+                systemCls: 'mac',
+                position: 'middle',
+                navItems: [
+                    {
+                        icon: 'bk-drag-icon bk-drag-document',
+                        text: '文档',
+                        action: () => {
+                            const routerUrl = this.$router.resolve({
+                                name: this.routeName
+                            })
+                            window.open(routerUrl.href, '_blank')
+                        }
+                    },
+                    {
+                        icon: 'bk-drag-icon bk-drag-comment-fill',
+                        text: '反馈',
+                        action: () => {
+                            window.open('https://github.com/Tencent/bk-PaaS/labels/lesscode')
+                        }
+                    }
+                ]
             }
         },
 
@@ -45,6 +68,9 @@
             topView () {
                 const topRoute = this.$route.matched[0]
                 return (topRoute && topRoute.meta.view) || 'default'
+            },
+            isCanvas () {
+                return this.$route.name === 'new'
             }
         },
 
@@ -81,6 +107,10 @@
     .mac {
         /* font-family: PingFang SC, Microsoft Yahei, Helvetica, Aria; */
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
+    }
+
+    .bk-fixed-navbar-wrapper {
+        z-index: 9999;
     }
 
     .win {
