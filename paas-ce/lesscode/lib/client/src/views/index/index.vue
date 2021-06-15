@@ -89,7 +89,7 @@
                     </ul>
                 </div>
             </div>
-            <extra-links>
+            <extra-links show-help-box>
                 <div slot="before" @click="handleStartGuide">画布操作指引</div>
             </extra-links>
         </div>
