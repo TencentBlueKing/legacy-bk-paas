@@ -41,7 +41,7 @@
                         text: '文档',
                         action: () => {
                             const routerUrl = this.$router.resolve({
-                                name: this.routeName
+                                path: '/help'
                             })
                             window.open(routerUrl.href, '_blank')
                         }
