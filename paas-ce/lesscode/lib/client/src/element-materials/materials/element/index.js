@@ -17,6 +17,12 @@ import freeLayout from '../bk/free-layout'
 
 import button from './button'
 import link from './link'
+import input from './input'
+import select from './select'
+import switcher from './switcher'
+import slider from './slider'
+import rate from './rate'
+import timePicker from './time-picker'
 
 const elementComponents = Object.seal([
     grid1,
@@ -25,7 +31,13 @@ const elementComponents = Object.seal([
     grid4,
     freeLayout,
     button,
-    link
+    link,
+    input,
+    select,
+    switcher,
+    slider,
+    rate,
+    timePicker
 ])
 
 export default elementComponents
