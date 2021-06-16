@@ -1,6 +1,6 @@
 ### 功能描述
 
-模型实例关系查询 (v3.10.1+)
+通用模型实例关系查询 (v3.10.1+)
 
 ### 请求参数
 
@@ -8,22 +8,23 @@
 
 #### 接口参数
 
-|    字段    |  类型  | 必选 | 描述                                                                                  |
-|------------|--------|------|---------------------------------------------------------------------------------------|
-| bk_obj_id  | string |  是  | 模型ID                                                                                |
-| conditions | object |  是  | 组合查询条件,  组合支持AND和OR两种方式，可以嵌套，最多嵌套3层, 每层OR条件最大支持20个 |
-| fields     | array  |  是  | 指定需要返回的字段, 不具备的字段将被忽略                                              |
-| page       | object |  是  | 分页设置                                                                              |
+|    字段    |  类型   | 必选 | 描述                                                                                                            |
+|------------|---------|------|-----------------------------------------------------------------------------------------------------------------|
+| bk_biz_id  | integer |  否  | 业务ID, 针对主线模型查询时需要提供                                                                              |
+| bk_obj_id  | string  |  是  | 模型ID                                                                                                          |
+| conditions | object  |  否  | 组合查询条件,  组合支持AND和OR两种方式，可以嵌套，最多嵌套3层, 每层OR条件最大支持20个, 不指定该参数表示匹配全部(即conditions为null) |
+| fields     | array   |  否  | 指定需要返回的字段, 不具备的字段将被忽略, 不指定则返回全部字段（返回全部字段会对性能产生影响，建议按需返回）    |
+| page       | object  |  是  | 分页设置                                                                                                        |
 
 #### conditions
 
-|   字段   |  类型  | 必选 |  描述                                                                                                    |
-|----------|--------|------|----------------------------------------------------------------------------------------------------------|
-| field    | string |  是  | 条件字段                                                                                                 |
-| operator | string |  是  | 操作符, 可选值 equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between |
-| value    |   -    |  否  | 条件字段期望的值, 不同的operator对应不同的value格式, 数组类型值最大支持500个元素                         |
+|   字段   |  类型  | 必选 |  描述                                                                                                     |
+|----------|--------|------|-----------------------------------------------------------------------------------------------------------|
+| field    | string |  是  | 条件字段, 可选值 id, bk_inst_id, bk_obj_id, bk_asst_inst_id, bk_asst_obj_id, bk_obj_asst_id, bk_asst_id   |
+| operator | string |  是  | 操作符, 可选值 equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between等|
+| value    |   -    |  否  | 条件字段期望的值, 不同的operator对应不同的value格式, 数组类型值最大支持500个元素                          |
 
-组装规则可参考: https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md
+组装规则详细可参考: https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md
 
 #### page
 
@@ -45,22 +46,22 @@
         "condition": "AND",
         "rules": [
             {
-                "field": "bk_inst_name",
-                "operator": "begins_with",
-                "value": "switch"
+                "field": "bk_obj_asst_id",
+                "operator": "equal",
+                "value": "bk_switch_connect_host"
             },
             {
                 "condition": "OR",
                 "rules": [
                     {
                          "field": "bk_inst_id",
-                         "operator": "not_in",
+                         "operator": "in",
                          "value": [2,4,6]
                     },
                     {
-                        "field": "bk_obj_name",
+                        "field": "bk_asst_id",
                         "operator": "equal",
-                        "value": "switch"
+                        "value": 3
                     }
                 ]
             }
@@ -90,11 +91,11 @@
     "data": {
         "info": [
             {
-                "bk_inst_id": 1,
-                "bk_asst_inst_id": 1,
-                "bk_asst_obj_id": "middleware",
+                "bk_inst_id": 2,
+                "bk_asst_inst_id": 8,
+                "bk_asst_obj_id": "host",
                 "bk_asst_id": "connect",
-                "bk_obj_asst_id": "bk_switch_connect_middleware"
+                "bk_obj_asst_id": "bk_switch_connect_host"
             }
         ]
     }
