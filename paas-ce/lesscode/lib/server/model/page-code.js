@@ -46,7 +46,9 @@ class PageCode {
         'bk-checkbox-group': 'bk-checkbox',
         'bk-radio-group': 'bk-radio',
         'bk-tab': 'bk-tab-panel',
-        'bk-breadcrumb': 'bk-breadcrumb-item'
+        'bk-breadcrumb': 'bk-breadcrumb-item',
+        'search-table': 'bk-table-column',
+        'folding-table': 'bk-table-column'
     }
     slotContentArray = [
         'bk-checkbox',
@@ -1118,6 +1120,9 @@ class PageCode {
                         }
                     })
                 }
+            }
+            if (type === 'search-table' || type === 'folding-table') {
+                slotStr = `<template slot="table-column">${slotStr}</template>`
             }
         }
         return slotStr
