@@ -160,6 +160,7 @@
 
 <style lang="postcss">
     @import "@/css/mixins/ellipsis";
+    @import "@/css/mixins/scroller";
 
     .select-project-dropdown .bk-select-search-input {
         padding: 0 10px 0 30px;
@@ -248,6 +249,7 @@
         .main-container {
             height: calc(100% - var(--breadcrumb-height));
             overflow: auto;
+            @mixin scroller;
 
             .exception-page {
                 height: 100%;
