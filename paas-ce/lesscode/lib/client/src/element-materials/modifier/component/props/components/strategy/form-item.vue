@@ -362,6 +362,7 @@
             createTargetDataFromItem (formItemData) {
                 const formItemNode = createTargetDataFormItemNode(formItemData)
                 const defaultVal = this.getDefaultValFromType(formItemData.type)
+                console.log(formItemData.type, defaultVal, 234)
                 const modelItem = { key: formItemData.property, value: defaultVal }
                 let style = {}
                 if (['input', 'select', 'date-picker', 'time-picker'].includes(formItemData.type)) {
@@ -413,7 +414,8 @@
                     'switcher': false,
                     'checkbox-group': []
                 }
-                return typeValMap[type] || ''
+            
+                return typeValMap[type] !== undefined ? typeValMap[type] : ''
             },
             getInitData (name, data) {
                 if (Object.keys(data).length > 0) {
