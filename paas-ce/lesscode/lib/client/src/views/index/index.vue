@@ -89,8 +89,9 @@
                     </ul>
                 </div>
             </div>
-            <extra-links show-help-box>
-                <div slot="before" @click="handleStartGuide">画布操作指引</div>
+            <extra-links show-help-box
+                :help-click="handleStartGuide"
+                :help-tooltips="{ content: '画布操作指引', placements: ['bottom'] }">
             </extra-links>
         </div>
         <div class="main-container">
