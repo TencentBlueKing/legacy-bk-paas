@@ -109,6 +109,10 @@
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
     }
 
+    .bk-fixed-navbar-wrapper {
+        z-index: 9999;
+    }
+
     .win {
         /* font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria; */
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
