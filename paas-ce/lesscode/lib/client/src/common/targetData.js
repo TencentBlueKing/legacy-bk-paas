@@ -261,9 +261,15 @@ class TargetData {
             })
         } else if (this.isLayout(node)) {
             walkGrid({}, node, callBack, callBack, 0)
-        } else if (node.renderProps && node.renderProps.slots && node.renderProps.slots.name === 'layout') {
+        } else if (node.renderProps && node.renderProps.slots) {
             callBack(node)
-            walkGrid({}, node.renderProps.slots.val, callBack, callBack, 0)
+            if (Array.isArray(node.renderProps.slots.val)) {
+                node.renderProps.slots.val.forEach((item, index) => {
+                    walkGrid({}, item, callBack, callBack, index)
+                })
+            } else if (node.renderProps.slots.name === 'layout') {
+                walkGrid({}, node.renderProps.slots.val, callBack, callBack, 0)
+            }
         } else {
             callBack(node)
         }

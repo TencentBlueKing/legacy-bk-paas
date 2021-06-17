@@ -18,13 +18,13 @@ export default {
     order: 1,
     styles: ['margin'],
     events: [{ name: 'change' }],
-    // directives: [
-    //     {
-    //         type: 'v-model',
-    //         val: '',
-    //         defaultVal: ''
-    //     }
-    // ],
+    directives: [
+        {
+            type: 'v-model',
+            val: '',
+            valType: 'variable'
+        }
+    ],
     props: {
         slots: {
             name: 'bk-checkbox',

@@ -10,25 +10,21 @@
 -->
 
 <template>
-    <bk-form>
-        <vue-draggable
-            class="drag-area"
-            style="min-height: 80px;"
-            :sort="true"
-            :list="renderSlots.val"
-            :group="{ name: 'widget-form', pull: true, put: ['component'] }"
-            :ghost-class="'ghost1'">
-            <widget-form-item
-                v-for="(formItem, index) in renderSlots.val"
-                :key="index"
-                :component-data="formItem" />
-        </vue-draggable>
-        <p>请拖入表单项</p>
-    </bk-form>
+    <div class="widget-form">
+        <div v-if="componentData.renderProps.slots.val < 1" class="normal">
+            请在右侧配置表单项
+        </div>
+        <template v-else>
+            <bk-form v-bind="renderProps">
+                <widget-form-item
+                    v-for="(formItemData, index) in formItemList"
+                    :key="index"
+                    :component-data="formItemData" />
+            </bk-form>
+        </template>
+    </div>
 </template>
 <script>
-    import cloneDeep from 'lodash.clonedeep'
-    import { mapGetters, mapMutations } from 'vuex'
     import WidgetFormItem from './form-item'
 
     export default {
@@ -36,75 +32,45 @@
         components: {
             WidgetFormItem
         },
+        inheritAttrs: false,
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
             }
         },
-        data () {
-            return {
-                renderSlots: {
-                    val: []
-                }
-            }
-        },
         computed: {
-            ...mapGetters('drag', [
-                'targetData'
-            ])
+            renderProps () {
+                const props = {}
+                for (const key in this.componentData.renderProps) {
+                    props[key] = this.componentData.renderProps[key].val
+                }
+                return props
+            },
+            formItemList () {
+                const result = []
+                for (let i = 0; i < this.componentData.renderProps.slots.val.length; i++) {
+                    const currentSlot = this.componentData.renderProps.slots.val[i]
+                    if (currentSlot.type === 'bk-form-item') {
+                        result.push(currentSlot)
+                    }
+                }
+                return result
+            }
         },
         created () {
-            this.renderData = {
-                name: this.componentData.name,
-                type: this.componentData.type,
-                componentId: this.componentData.componentId,
-                props: {
-                    slots: {
-                        type: 'form-item',
-                        val: []
-                    }
-                }
-            }
-
-            this.init()
-            this.renderSlots = this.renderData.props.slots
-        },
-        methods: {
-            ...mapMutations('drag', [
-                'setCurSelectedComponentData',
-                'setTargetData'
-            ]),
-            init () {
-                const targetData = cloneDeep(this.targetData)
-                function findGrid (list, componentId) {
-                    const len = list.length
-                    for (let i = 0; i < len; i++) {
-                        const item = list[i]
-                        if (item.componentId === componentId) {
-                            return item
-                        }
-
-                        if (item.children) {
-                            return findGrid(item.children, componentId)
-                        } else if (
-                            item.renderProps.slots && (item.renderProps.slots.type === 'column' || item.renderProps.slots.type === 'free-layout-item')
-                        ) {
-                            return findGrid(item.renderProps.slots.val, componentId)
-                        }
-                    }
-                    return ''
-                }
-                const currentNode = findGrid(targetData, this.renderData.componentId)
-                if (!currentNode) {
-                    return
-                }
-                currentNode.renderProps = this.renderData.props
-                this.setTargetData(targetData)
-            }
+            console.log('from form watch   =  ', this.componentData)
         }
     }
 </script>
 <style lang='postcss'>
-
+    .widget-form{
+        .normal{
+            height: 80px;
+            line-height: 80px;
+            font-size: 18px;
+            color: #ccc;
+            text-align: center;
+        }
+    }
 </style>
