@@ -11,22 +11,36 @@
 
 <template>
     <section>
-        <bk-input
-            disabled
-            style="width: 100%"
-            type="textarea"
-            :rows="5"
-            :value="initJsonStr" />
-        <div class="option-add" @click="showEdit">编辑数据</div>
+        <section v-if="showInput">
+            <bk-input
+                disabled
+                style="width: 100%"
+                type="textarea"
+                :rows="5"
+                :value="initJsonStr" />
+            <div class="option-add" @click="showEdit">编辑数据</div>
+        </section>
 
         <bk-dialog
             v-model="isShow"
             :confirm-fn="confirm"
+            :position="{ top: 100 }"
             @cancel="cancel"
             render-directive="if"
             width="900"
             ext-cls="json-setting-dialog">
-            <main class="main-container">
+            <div class="dialog-title" v-if="!showInput">
+                <bk-upload
+                    :theme="'button'"
+                    :tip="`可导入json文件或输入json数据`"
+                    with-credentials
+                    :multiple="false"
+                    :url="uploadUrl"
+                    accept=".json"
+                    @on-success="handleUploadSuccess"
+                ></bk-upload>
+            </div>
+            <main class="main-container" :style="{ 'height': showInput ? '450px' : '350px' }">
                 <div class="init-json">
                     <textarea class="json-input" placeholder="请输入json格式的数据" v-model="initJsonStr"></textarea>
                 </div>
@@ -48,6 +62,10 @@
     Vue.use(JsonViewer)
     export default {
         props: {
+            showInput: {
+                type: Boolean,
+                default: true
+            },
             defaultValue: {
                 type: [Object, Array, String],
                 required: true
@@ -83,18 +101,11 @@
                     }
                 }
                 return {}
+            },
+            uploadUrl () {
+                return `${AJAX_URL_PREFIX}/page/importJson`
             }
         },
-        // watch: {
-        //     isShow: {
-        //         handler (val) {
-        //             if (!val) {
-        //                 this.initJsonStr = JSON.stringify(this.defaultValue, null, 4)
-        //             }
-        //         },
-        //         immediate: true
-        //     }
-        // },
         created () {
             this.localValue = this.defaultValue
             this.initJsonStr = circleJSON(this.defaultValue, null, 4)
@@ -107,8 +118,26 @@
                 try {
                     if (this.initJsonStr && typeof JSON.parse(this.initJsonStr) === 'object') {
                         this.localValue = JSON.parse(this.initJsonStr)
-                        this.change(this.name, JSON.parse(this.initJsonStr), this.type)
-                        this.isShow = false
+                        if (!this.showInput) {
+                            if (!Array.isArray(JSON.parse(this.initJsonStr)) || JSON.parse(this.initJsonStr).length === 0) {
+                                this.$bkMessage({
+                                    theme: 'error',
+                                    message: '画布的Json需要为Array且不能为空'
+                                })
+                                return
+                            }
+                            this.$bkInfo({
+                                title: '',
+                                subTitle: 'Json会覆盖现有画布内容区域数据，请谨慎操作',
+                                confirmFn: () => {
+                                    this.change(this.name, JSON.parse(this.initJsonStr), this.type)
+                                    this.isShow = false
+                                }
+                            })
+                        } else {
+                            this.change(this.name, JSON.parse(this.initJsonStr), this.type)
+                            this.isShow = false
+                        }
                     }
                 } catch (err) {
                     this.$bkMessage({
@@ -119,6 +148,9 @@
             },
             cancel () {
                 this.initJsonStr = circleJSON(this.localValue, null, 4)
+            },
+            handleUploadSuccess (res) {
+                this.initJsonStr = res.responseData.data
             }
         }
     }
@@ -136,9 +168,12 @@
                 top: calc(50vh - 324px)!important;
             }
         }
+        .dialog-title {
+            margin-left: 10px;
+            font-size: 12px;
+        }
         .main-container {
             width: 98%;
-            height: 500px;
             display:flex;
             overflow: hidden;
             margin: 0 auto;

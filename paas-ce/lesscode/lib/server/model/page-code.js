@@ -1156,10 +1156,10 @@ class PageCode {
             const [curFunc] = this.getMethodByCode(funcCode)
             if (curFunc.id) {
                 this.usingFuncCodes.push(funcCode)
-                return `this.${curFunc.funcName}`
             } else {
                 this.codeErrMessage = `函数【${funcCode}】不存在，函数执行可能存在异常，请修改后再试`
             }
+            return `this.${curFunc.funcName}`
         }
         if (dirKey) {
             const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
@@ -1168,10 +1168,10 @@ class PageCode {
                 if (!hasUsed) {
                     this.usingVariables.push(curDir)
                 }
-                return `this.${dirKey}`
             } else {
                 this.codeErrMessage = `指令【${dirKey}】不存在，函数执行可能存在异常，请修改后再试`
             }
+            return `this.${dirKey}`
         }
     }
 
@@ -1392,7 +1392,10 @@ class PageCode {
         if (this.pageType !== 'preview' && this.usingCustomArr && this.usingCustomArr.length) {
             let customStr = ''
             // dev 和 t 环境，npm 包名字前面加了 test- 前缀，生成的变量名字应该去掉 test 前缀
-            const forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
+            let forkUsingCustomArr = this.usingCustomArr
+            if (process.env.BKPAAS_ENVIRONMENT !== 'prod') {
+                forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
+            }
             for (const i in this.usingCustomArr) {
                 customStr += `${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })},\n`
             }
@@ -1462,7 +1465,10 @@ class PageCode {
         }
         if (this.pageType !== 'preview' && this.usingCustomArr && this.usingCustomArr.length) {
             // dev 和 t 环境，npm 包名字前面加了 test- 前缀，生成的变量名字应该去掉 test 前缀
-            const forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
+            let forkUsingCustomArr = this.usingCustomArr
+            if (process.env.BKPAAS_ENVIRONMENT !== 'prod') {
+                forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
+            }
             for (const i in this.usingCustomArr) {
                 importStr += `const ${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })} = require('${npmConf.scopename}/${this.usingCustomArr[i]}')\n`
             }
@@ -1508,8 +1514,6 @@ class PageCode {
 module.exports = {
     async getPageData (targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList) {
         const pageCode = new PageCode(targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList)
-        const methodStrList = pageCode.methodStrList || []
-        const codeErrMessage = pageCode.codeErrMessage || ''
         let code = ''
         if (pageType === 'vueCode') {
             // 格式化，报错是抛出异常
@@ -1523,8 +1527,8 @@ module.exports = {
         }
         return {
             code,
-            methodStrList,
-            codeErrMessage
+            methodStrList: pageCode.methodStrList || [],
+            codeErrMessage: pageCode.codeErrMessage || ''
         }
     }
 }

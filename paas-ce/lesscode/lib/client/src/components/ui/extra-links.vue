@@ -1,14 +1,8 @@
 <template>
     <div class="extra-links">
-        <bk-popover placement="bottom-end" theme="light extra-links" :arrow="false">
-            <div class="help-box">
-                <i class="dropdown-trigger-btn bk-icon icon-question-circle-shape" />
-            </div>
-            <div class="extra-links-popover-panel" slot="content">
-                <slot name="before" />
-                <div @click="goStart">帮助文档</div>
-            </div>
-        </bk-popover>
+        <div class="help-box" @click="helpClick" v-bk-tooltips="helpTooltips">
+            <i class="dropdown-trigger-btn bk-icon icon-question-circle-shape" />
+        </div>
         <div class="github-link" @click="goGithub" v-bk-tooltips="{ content: 'Github', placements: ['bottom'] }">
             <i class="bk-drag-icon bk-drag-github-logo"></i>
         </div>
@@ -17,6 +11,23 @@
 
 <script>
     export default {
+        props: {
+            showHelpBox: {
+                type: Boolean,
+                default: false
+            },
+            helpClick: {
+                type: Function,
+                default: () => {}
+            },
+            helpTooltips: {
+                type: Object,
+                default: () => ({
+                    content: '帮助',
+                    placements: ['bottom']
+                })
+            }
+        },
         data () {
             return {
                 routeName: 'start'
@@ -41,13 +52,6 @@
         methods: {
             goGithub () {
                 window.open('https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md')
-            },
-
-            goStart () {
-                const routerUrl = this.$router.resolve({
-                    name: this.routeName
-                })
-                window.open(routerUrl.href, '_blank')
             }
         }
     }
