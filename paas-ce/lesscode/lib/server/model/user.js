@@ -18,7 +18,7 @@ import RolePerm from './entities/role-perm'
 
 module.exports = {
     findOneByBk (bkUserName) {
-        return getRepository(User).findOne({ bk: bkUserName })
+        return getRepository(User).findOne({ username: bkUserName })
     },
 
     // 创建用户

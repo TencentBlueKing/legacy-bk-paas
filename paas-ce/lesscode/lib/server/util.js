@@ -45,6 +45,20 @@ exports.trim = str => {
     return (str || '').replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
 }
 
+
+/**
+ * 根据对象的某个属性值去重
+ *
+ * @param {String} arr 待去重的数组
+ * @param {String} key 去重依据的key值
+ *
+ * @return {String} 去重后的数组
+ */
+exports.unique  = (arr,key) => {
+    const res = new Map()
+    return arr.filter(item => !res.has(item[key]) && res.set(item[key], 1))
+}
+
 /**
  * 错误码
  */

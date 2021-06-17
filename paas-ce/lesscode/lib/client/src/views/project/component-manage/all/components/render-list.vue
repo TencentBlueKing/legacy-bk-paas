@@ -2,7 +2,7 @@
     <div class="render-list">
         <div class="header">
             <bk-button theme="primary" @click="handleShowOperation">新建</bk-button>
-            <a class="download-demo" href="/static/demo.zip">下载 demo 示例包</a>
+            <a class="download-demo" href="/static/bk-lesscode-component-demo.zip">下载 demo 示例包</a>
         </div>
         <div class="component-list-content" v-bkloading="{ isLoading }">
             <bk-table
