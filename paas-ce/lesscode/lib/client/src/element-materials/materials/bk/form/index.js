@@ -12,10 +12,10 @@
 export default {
     name: 'form',
     type: 'widget-form',
-    displayName: '表单挂件',
+    displayName: '表单容器',
     icon: 'bk-drag-form',
-    group: '布局',
-    order: 5,
+    group: '表单',
+    order: 0,
     styles: ['size', 'margin', 'font', 'backgroundColor'],
     directives: [
         {
@@ -26,6 +26,14 @@ export default {
         }
     ],
     props: {
+        model: {
+            type: 'hidden',
+            val: {}
+        },
+        rules: {
+            type: 'hidden',
+            val: {}
+        },
         'form-type': {
             type: 'string',
             options: ['horizontal', 'vertical', 'inline'],

@@ -11,7 +11,9 @@
 
 <template>
     <section>
-        <div class="remote-title">{{title || (name === 'remoteOptions' ? '动态配置' : '远程函数')}}</div>
+        <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
+            <span :class="{ 'under-line': tips }">{{title || (name === 'remoteOptions' ? '动态配置' : '远程函数')}}</span>
+        </div>
         <select-func v-model="remoteData" @change="saveChange"></select-func>
         <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
     </section>
@@ -263,12 +265,17 @@
 
 <style lang="postcss">
     .remote-title {
-        margin-top: 10px;
+        margin: 10px 0;
         line-height: 24px;
         font-size: 12px;
         &:first-child {
             margin-top: 0;
         }
+    }
+    .under-line {
+        line-height: 24px;
+        border-bottom: 1px dashed #979ba5;
+        cursor: pointer;
     }
     .remote-button {
         margin: 10px 0;

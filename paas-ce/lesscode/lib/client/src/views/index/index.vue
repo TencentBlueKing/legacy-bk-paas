@@ -1250,6 +1250,8 @@
                         }
                         if (item.children) {
                             del(item.children, cid)
+                        } else if (item.renderProps.slots && item.renderProps.slots.type === 'form-item') {
+                            // form表单内的元素不允许通过画布删除
                         } else if (
                             item.renderProps.slots && (item.renderProps.slots.type === 'column' || item.renderProps.slots.type === 'free-layout-item')
                         ) {
@@ -1261,6 +1263,7 @@
                     return ''
                 }
                 const pos = this.$td().getNodePosition(componentId)
+                if (pos === undefined) return
                 const pushData = {
                     parentId: pos.parent && pos.parent.componentId,
                     component: this.delComponentConf.item,

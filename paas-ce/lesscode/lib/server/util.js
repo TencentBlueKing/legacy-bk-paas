@@ -226,6 +226,11 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
             }
         })
+
+        // form-item, 没有column.children
+        if (!column.children && column.componentId) {
+            childCallBack(column, columns, columnIndex, grid, index)
+        }
     })
 }
 

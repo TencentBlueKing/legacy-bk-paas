@@ -20,12 +20,6 @@
                     v-for="(formItemData, index) in formItemList"
                     :key="index"
                     :component-data="formItemData" />
-                <bk-form-item label="">
-                    <render-component
-                        v-for="(formItemData, index) in actionList"
-                        :key="index"
-                        :component-data="formItemData" />
-                </bk-form-item>
             </bk-form>
         </template>
     </div>
@@ -36,8 +30,7 @@
     export default {
         name: '',
         components: {
-            WidgetFormItem,
-            renderComponent: () => import('../render/component')
+            WidgetFormItem
         },
         inheritAttrs: false,
         props: {
@@ -59,16 +52,6 @@
                 for (let i = 0; i < this.componentData.renderProps.slots.val.length; i++) {
                     const currentSlot = this.componentData.renderProps.slots.val[i]
                     if (currentSlot.type === 'bk-form-item') {
-                        result.push(currentSlot)
-                    }
-                }
-                return result
-            },
-            actionList  () {
-                const result = []
-                for (let i = 0; i < this.componentData.renderProps.slots.val.length; i++) {
-                    const currentSlot = this.componentData.renderProps.slots.val[i]
-                    if (currentSlot.type === 'bk-button') {
                         result.push(currentSlot)
                     }
                 }

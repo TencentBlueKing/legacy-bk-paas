@@ -12,6 +12,7 @@
 <template>
     <div :class="classes">
         <variable-select :show="!namedStrategy && !remoteStrategy"
+            v-if="describe.type !== 'hidden'"
             :value="defaultVariable.val"
             :val-type="defaultVariable.valType"
             :available-types="formCom.map(x => x.valueType)"

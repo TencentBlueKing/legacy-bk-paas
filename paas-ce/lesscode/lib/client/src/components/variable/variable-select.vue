@@ -5,6 +5,7 @@
             <bk-select class="select-val-type"
                 :value="valType"
                 :clearable="false"
+                :disabled="disabledChange"
                 style="width: 68px;"
                 behavior="simplicity"
                 ext-popover-cls="select-popover-variable"
@@ -19,58 +20,64 @@
             </bk-select>
         </section>
 
-        <slot v-if="computedValType === 'value'" class="item-content"></slot>
+        <section v-if="disabledChange" class="select-variable-value">
+            <span>{{ value }}</span>
+        </section>
 
-        <template v-if="computedValType === 'variable'">
-            <section :class="{ 'select-variable-value': true, 'is-focus': isShowVariable }" v-bk-tooltips="htmlConfig" ref="tooltipsHtml">
-                <span v-if="value">{{ value }}</span>
-                <span v-else class="select-variable-placeholder">请选择变量</span>
-                <i :class="['bk-icon icon-close-circle-shape', { 'has-val': value }]" @click.stop="clearVariable"></i>
-                <i :class="['bk-icon icon-angle-down', { 'icon-flip': isShowVariable, 'has-val': value }]"></i>
-            </section>
-            <section class="variable-list">
-                <bk-input placeholder="请输入变量名称进行搜索" behavior="simplicity" class="variable-input" left-icon="bk-icon icon-search" v-model="variableName"></bk-input>
-                <bk-table :data="filterVariableList"
-                    :outer-border="false"
-                    :header-border="false"
-                    :header-cell-style="{ background: '#f0f1f5' }"
-                    :row-class-name="getRowClassName"
-                    class="variable-table"
-                    @row-click="chooseVariable"
-                    @row-mouse-enter="handleRowMouseEnter"
-                >
-                    <bk-table-column label="" prop="variableName" show-overflow-tooltip width="35">
-                        <template slot-scope="props">
-                            <bk-radio :value="props.row.variableCode === value" :disabled="props.row.disabled"></bk-radio>
-                        </template>
-                    </bk-table-column>
-                    <bk-table-column label="变量名称" prop="variableName" show-overflow-tooltip width="120"></bk-table-column>
-                    <bk-table-column label="变量标识" prop="variableCode" show-overflow-tooltip width="120"></bk-table-column>
-                    <bk-table-column label="初始类型" show-overflow-tooltip width="120">
-                        <template slot-scope="props">
-                            <span>{{ getValueType(props.row) }}</span>
-                        </template>
-                    </bk-table-column>
-                    <bk-table-column label="默认值" width="220">
-                        <template slot-scope="props">
-                            <span v-for="(val, key) in getDisplayDefaultValue(props.row)" :key="key" class="default-value" v-bk-overflow-tips>{{ `【${nameMap[key]}】${val}` }}</span>
-                        </template>
-                    </bk-table-column>
-                </bk-table>
-                <footer class="variable-footer">
-                    <bk-button :text="true" title="primary" @click="showVariableForm">
-                        <i class="bk-drag-icon bk-drag-add-line"></i>
-                        新建变量
-                    </bk-button>
-                    <bk-button :text="true" title="primary" @click="goToVariableManage">
-                        <i class="bk-drag-icon bk-drag-jump-link"></i>
-                        管理项目级公共变量
-                    </bk-button>
-                </footer>
-            </section>
-        </template>
+        <section v-else style="width: 100%">
+            <slot v-if="computedValType === 'value'" class="item-content"></slot>
 
-        <bk-input v-if="computedValType === 'expression'" class="item-content" :value="value" @change="inputExpression" clearable placeholder="请输入表达式，如：curTab === 'Tab-1'"></bk-input>
+            <template v-if="computedValType === 'variable'">
+                <section :class="{ 'select-variable-value': true, 'is-focus': isShowVariable }" v-bk-tooltips="htmlConfig" ref="tooltipsHtml">
+                    <span v-if="value">{{ value }}</span>
+                    <span v-else class="select-variable-placeholder">请选择变量</span>
+                    <i :class="['bk-icon icon-close-circle-shape', { 'has-val': value }]" @click.stop="clearVariable"></i>
+                    <i :class="['bk-icon icon-angle-down', { 'icon-flip': isShowVariable, 'has-val': value }]"></i>
+                </section>
+                <section class="variable-list">
+                    <bk-input placeholder="请输入变量名称进行搜索" behavior="simplicity" class="variable-input" left-icon="bk-icon icon-search" v-model="variableName"></bk-input>
+                    <bk-table :data="filterVariableList"
+                        :outer-border="false"
+                        :header-border="false"
+                        :header-cell-style="{ background: '#f0f1f5' }"
+                        :row-class-name="getRowClassName"
+                        class="variable-table"
+                        @row-click="chooseVariable"
+                        @row-mouse-enter="handleRowMouseEnter"
+                    >
+                        <bk-table-column label="" prop="variableName" show-overflow-tooltip width="35">
+                            <template slot-scope="props">
+                                <bk-radio :value="props.row.variableCode === value" :disabled="props.row.disabled"></bk-radio>
+                            </template>
+                        </bk-table-column>
+                        <bk-table-column label="变量名称" prop="variableName" show-overflow-tooltip width="120"></bk-table-column>
+                        <bk-table-column label="变量标识" prop="variableCode" show-overflow-tooltip width="120"></bk-table-column>
+                        <bk-table-column label="初始类型" show-overflow-tooltip width="120">
+                            <template slot-scope="props">
+                                <span>{{ getValueType(props.row) }}</span>
+                            </template>
+                        </bk-table-column>
+                        <bk-table-column label="默认值" width="220">
+                            <template slot-scope="props">
+                                <span v-for="(val, key) in getDisplayDefaultValue(props.row)" :key="key" class="default-value" v-bk-overflow-tips>{{ `【${nameMap[key]}】${val}` }}</span>
+                            </template>
+                        </bk-table-column>
+                    </bk-table>
+                    <footer class="variable-footer">
+                        <bk-button :text="true" title="primary" @click="showVariableForm">
+                            <i class="bk-drag-icon bk-drag-add-line"></i>
+                            新建变量
+                        </bk-button>
+                        <bk-button :text="true" title="primary" @click="goToVariableManage">
+                            <i class="bk-drag-icon bk-drag-jump-link"></i>
+                            管理项目级公共变量
+                        </bk-button>
+                    </footer>
+                </section>
+            </template>
+
+            <bk-input v-if="computedValType === 'expression'" class="item-content" :value="value" @change="inputExpression" :disabled="disabledChange" clearable placeholder="请输入表达式，如：curTab === 'Tab-1'"></bk-input>
+        </section>
     </section>
 </template>
 
@@ -87,6 +94,10 @@
             valType: {
                 type: String,
                 default: 'value'
+            },
+            disabledChange: {
+                type: Boolean,
+                default: false
             },
             availableTypes: {
                 type: Array,

@@ -16,6 +16,7 @@
         <remote
             name="initFormData"
             title="初始表单数据（初始化数据将会覆盖已有数据）"
+            :tips="functionTips"
             :default-value="{}"
             :remote-validate="validateObject"
             :change="getInitData"
@@ -28,14 +29,17 @@
                 :key="index"
                 class="form-item"
                 @click="handleShowOperation(index)">
-                <span>{{ item.renderProps.label.val }}</span>
-                <span class="property">({{ item.renderProps.property.val }})</span>
+                <section>
+                    <span>{{ item.renderProps.label.val }}</span>
+                    <span class="property">({{ item.renderProps.property.val }})</span>
+                </section>
+                <span class="form-item-delete" @click.stop="handleDelete(index)"><i class="bk-icon icon-close"></i></span>
             </div>
         </div>
         <div class="table-column-add" @click="handleShowOperation(-1)">
-            <i class="bk-icon icon-plus-circle"></i>继续添加
+            <i class="bk-icon icon-plus-circle"></i>继续添加表单项
         </div>
-        <div class="form-item-title" style="margin-top: 20px;">表单操作配置</div>
+        <!-- <div class="form-item-title" style="margin-top: 20px;">表单操作配置</div>
         <div>
             <template v-for="actionButton in formActionList">
                 <bk-button
@@ -49,7 +53,7 @@
             <div class="action-create">
                 <i class="bk-icon" />
             </div>
-        </div>
+        </div> -->
         <bk-dialog
             v-model="isShowOperation"
             title="表单项设置">
@@ -79,9 +83,9 @@
                         <bk-radio :value="false">否</bk-radio>
                     </bk-radio-group>
                 </bk-form-item>
-                <bk-form-item label="验证规则" error-display-type="normal">
+                <!-- <bk-form-item label="验证规则" error-display-type="normal">
                     <bk-input v-model="formItemData.validate" />
-                </bk-form-item>
+                </bk-form-item> -->
             </bk-form>
             <template slot="footer">
                 <bk-button theme="primary" class="mr10" @click="handleSave">保存</bk-button>
@@ -96,6 +100,7 @@
     import { uuid } from '@/common/util'
     import componentList from '@/element-materials/materials'
     import remote from './remote'
+    import { camelCase, camelCaseTransformMerge } from 'change-case'
 
     const createTargetDataNode = (componentType, payload) => {
         const component = componentList.bk.find(_ => _.name === componentType)
@@ -139,6 +144,7 @@
             renderKey: uuid(),
             name,
             type,
+            inFormItem: true,
             renderProps,
             renderStyles,
             renderEvents: {},
@@ -150,14 +156,15 @@
         parentNode.renderProps.slots.val.push(targetNode)
     }
 
-    const createTargetDataFormItemNode = ({ type, label, property, required }) => {
+    const createTargetDataFormItemNode = ({ type, label, property, required }, isActionFormItem = false) => {
         return {
             name: 'bk-form-item',
             type: 'bk-form-item',
             componentId: `bk-form-item-${uuid()}`,
+            actionItem: isActionFormItem,
             renderKey: uuid(),
             renderStyle: {},
-            renderProps: {
+            renderProps: !isActionFormItem ? {
                 label: {
                     type: 'string',
                     val: label
@@ -175,6 +182,12 @@
                     name: 'form-item-content',
                     val: []
                 }
+            } : {
+                slots: {
+                    type: 'form-item-content',
+                    name: 'form-item-content',
+                    val: []
+                }
             }
         }
     }
@@ -183,8 +196,8 @@
         type: 'input',
         label: '',
         property: '',
-        required: false
-        // validate: ''
+        required: false,
+        validate: []
     })
 
     export default {
@@ -206,8 +219,16 @@
         },
         data () {
             return {
+                functionTips: `请返回一个对象，对象每一项的key值将作为表单项的字段名称，value值将作为表单项类型的判断依据，eg：
+                {
+                    string: '',
+                    boolean: false,
+                    array: [1, 2, 3]
+                }`,
                 formItemList: [],
                 formActionList: [],
+                formModelList: [],
+                formModelMap: {},
                 isShowOperation: false,
                 editIndex: -1,
                 formItemData: generateFormData()
@@ -223,36 +244,44 @@
                 'date-picker',
                 'time-picker',
                 'switcher',
-                'rate',
                 'radio-group',
                 'checkbox-group'
             ]
 
             this.formItemList = []
             this.formActionList = []
+            this.formModelList = this.getModelFromTargetData()
             const slotList = cloneDeep(this.defaultValue)
             slotList.forEach(_ => {
                 const componentDataa = cloneDeep(_)
-                if (_.type === 'bk-form-item') {
+                if (_.type === 'bk-form-item' && _.actionItem !== true) {
                     this.formItemList.push(componentDataa)
-                } else if (_.type === 'bk-button') {
+                } else if (_.type === 'bk-form-item' && _.actionItem === true) {
                     this.formActionList.push(componentDataa)
                 }
             })
             if (slotList.length < 1) {
-                this.formActionList = [
-                    createTargetDataNode('button', {
-                        prop: {
-                            theme: 'primary',
-                            slots: '提交'
-                        }
-                    }),
-                    createTargetDataNode('button', {
-                        prop: {
-                            slots: '取消'
-                        }
-                    })
-                ]
+                const actionFormItem = createTargetDataFormItemNode({}, true)
+                const submitNode = createTargetDataNode('button', {
+                    prop: {
+                        theme: 'primary',
+                        slots: '提交'
+                    },
+                    style: {
+                        margin: '5px'
+                    }
+                })
+                const cancelNode = createTargetDataNode('button', {
+                    prop: {
+                        slots: '取消'
+                    },
+                    style: {
+                        margin: '5px'
+                    }
+                })
+                targetDataAppendChild(actionFormItem, submitNode)
+                targetDataAppendChild(actionFormItem, cancelNode)
+                this.formActionList.push(actionFormItem)
             }
             this.rules = {
                 label: [
@@ -283,16 +312,15 @@
             triggerChange () {
                 console.log('from item change ===================\n\n', this.formItemList)
                 this.change('slots', [...this.formItemList, ...this.formActionList], this.type)
+                this.change('model', this.getFormModelMap(), 'hidden')
             },
             /**
              * @desc 删除表达项
              * @param {Number} index 表单项索引
             */
             handleDelete (index) {
-                if (this.formItemList.length === 1) {
-                    return
-                }
                 this.formItemList.splice(index, 1)
+                this.formModelList.splice(index, 1)
                 this.triggerChange()
             },
             /**
@@ -333,6 +361,8 @@
             },
             createTargetDataFromItem (formItemData) {
                 const formItemNode = createTargetDataFormItemNode(formItemData)
+                const defaultVal = this.getDefaultValFromType(formItemData.type)
+                const modelItem = { key: formItemData.property, value: defaultVal }
                 let style = {}
                 if (['input', 'select', 'date-picker', 'time-picker'].includes(formItemData.type)) {
                     style = {
@@ -342,15 +372,17 @@
                 const inputNode = createTargetDataNode(formItemData.type, {
                     style,
                     directive: {
-                        'v-model': `${this.curSelectedComponentData.componentId}.${formItemData.property}`
+                        'v-model': `${camelCase(this.curSelectedComponentData.componentId, { transform: camelCaseTransformMerge })}model.${formItemData.property}`
                     }
                 })
                 if (this.editIndex > -1 && this.formItemList[this.editIndex]) {
                     this.formItemList.splice(this.editIndex, 1, formItemNode)
+                    this.formModelList.splice(this.editIndex, 1, modelItem)
                 } else {
                     this.formItemList.push(formItemNode)
+                    this.formModelList.push(modelItem)
                 }
-                targetDataAppendChild(formItemNode, inputNode, this.editIndex)
+                targetDataAppendChild(formItemNode, inputNode)
             },
             /**
              * @desc 关闭表单项标记框
@@ -372,13 +404,21 @@
                 if (typeof val === 'boolean') {
                     type = 'switcher'
                 } else if (Array.isArray(val)) {
-                    type = 'select'
+                    type = 'checkbox-group'
                 }
                 return type
+            },
+            getDefaultValFromType (type) {
+                const typeValMap = {
+                    'switcher': false,
+                    'checkbox-group': []
+                }
+                return typeValMap[type] || ''
             },
             getInitData (name, data) {
                 if (Object.keys(data).length > 0) {
                     this.formItemList = []
+                    this.formModelList = []
                     Object.keys(data).forEach((key) => {
                         const type = this.getFormTypeFromValue(data[key])
                         const formItemData = {
@@ -391,6 +431,25 @@
                         this.createTargetDataFromItem(formItemData)
                     })
                     this.triggerChange()
+                }
+            },
+            getFormModelMap () {
+                const modelMap = {}
+                this.formModelList.forEach(function (obj) {
+                    Object.assign(modelMap, { [obj.key]: obj.value })
+                })
+                return modelMap
+            },
+            getModelFromTargetData () {
+                try {
+                    const modelMap = this.curSelectedComponentData.renderProps.model.val || {}
+                    const modelList = []
+                    for (const i in modelMap) {
+                        modelList.push({ key: i, value: modelMap[i] })
+                    }
+                    return modelList
+                } catch (err) {
+                    return []
                 }
             }
         }
@@ -409,6 +468,7 @@
         .form-item{
             display: flex;
             align-items: center;
+            justify-content: space-between;
             height: 32px;
             cursor: pointer;
             .property{

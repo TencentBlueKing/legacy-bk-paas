@@ -10,10 +10,10 @@
 -->
 
 <template>
-    <div class="widget-form-item" @click="handleSelect">
+    <div class="widget-form-item" @click="handleSelect" :data-component-id="`component-${componentData.componentId}`">
         <bk-form-item
-            :label="componentData.renderProps.label.val"
-            :required="componentData.renderProps.required.val">
+            :label="componentData.renderProps.label && componentData.renderProps.label.val"
+            :required="componentData.renderProps.required && componentData.renderProps.required.val">
             <template v-for="(item) in componentData.renderProps.slots.val">
                 <render-component :component-data="item" :key="item.componentId" />
             </template>
@@ -39,14 +39,17 @@
         }
     }
 </script>
-<style lang='postcss'>
-    .widget-form-item{
-        margin-bottom: 20px;
-        &:hover{
-            outline: 1px solid red;
-        }
+<style lang='postcss' scoped>
+    .widget-form-item {
+        margin: 10px;
         .component-wrapper{
             margin: 0;
         }
+        .bk-form-content .component-wrapper {
+            position: relative;
+        }
+    }
+    .wrapper-cls-selected {
+        border: 1px solid #3a84ff !important;
     }
 </style>

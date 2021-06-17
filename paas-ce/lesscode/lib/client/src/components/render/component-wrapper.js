@@ -40,8 +40,6 @@ export default {
         const renderStyles = Object.assign({}, renderData.renderStyles)
         if (componentData.type !== 'img') delete renderStyles.width
 
-        console.dir(context)
-
         return h(renderData.type, {
             key: params['component-type'] === 'bk-sideslider' ? 'bk-slider' : refreshKey, // sideSlider 固定key，防止属性修改动画刷新
             props: params,
