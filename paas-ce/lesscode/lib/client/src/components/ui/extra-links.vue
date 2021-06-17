@@ -1,13 +1,8 @@
 <template>
     <div class="extra-links">
-        <bk-popover v-if="showHelpBox" placement="bottom-end" theme="light extra-links" :arrow="false">
-            <div class="help-box">
-                <i class="dropdown-trigger-btn bk-icon icon-question-circle-shape" />
-            </div>
-            <div class="extra-links-popover-panel" slot="content">
-                <slot name="before" />
-            </div>
-        </bk-popover>
+        <div class="help-box" @click="helpClick" v-bk-tooltips="helpTooltips">
+            <i class="dropdown-trigger-btn bk-icon icon-question-circle-shape" />
+        </div>
         <div class="github-link" @click="goGithub" v-bk-tooltips="{ content: 'Github', placements: ['bottom'] }">
             <i class="bk-drag-icon bk-drag-github-logo"></i>
         </div>
@@ -20,6 +15,17 @@
             showHelpBox: {
                 type: Boolean,
                 default: false
+            },
+            helpClick: {
+                type: Function,
+                default: () => {}
+            },
+            helpTooltips: {
+                type: Object,
+                default: () => ({
+                    content: '帮助',
+                    placements: ['bottom']
+                })
             }
         },
         data () {
