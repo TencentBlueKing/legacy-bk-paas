@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.19
+    - esb: update esb cc confapis
+
 # 2.12.18
     - esb: add get_weixin_config
     - paas: use get_weixin_config to fetch weixin config 

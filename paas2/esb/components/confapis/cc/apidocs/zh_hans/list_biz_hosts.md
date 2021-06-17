@@ -89,8 +89,8 @@
         "rules": [
             {
                 "field": "bk_host_innerip",
-                "operator": "begins_with",
-                "value": "192.168"
+                "operator": "equal",
+                "value": "127.0.0.1"
             },
             {
                 "condition": "OR",

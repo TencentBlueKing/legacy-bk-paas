@@ -1,6 +1,6 @@
 ### 功能描述
 
-模型实例数量查询 (v3.10.1+)
+通用模型实例数量查询 (v3.10.1+)
 
 ### 请求参数
 
@@ -8,20 +8,20 @@
 
 #### 接口参数
 
-|    字段    |  类型  | 必选 | 描述                                                                                  |
-|------------|--------|------|---------------------------------------------------------------------------------------|
-| bk_obj_id  | string |  是  | 模型ID                                                                                |
-| conditions | object |  是  | 组合查询条件,  组合支持AND和OR两种方式，可以嵌套，最多嵌套3层, 每层OR条件最大支持20个 |
+|    字段    |  类型  | 必选 | 描述                                                                                                            |
+|------------|--------|------|-----------------------------------------------------------------------------------------------------------------|
+| bk_obj_id  | string |  是  | 模型ID                                                                                                          |
+| conditions | object |  否  | 组合查询条件,  组合支持AND和OR两种方式，可以嵌套，最多嵌套3层, 每层OR条件最大支持20个, 不指定该参数表示匹配全部(即conditions为null) |
 
 #### conditions
 
-|   字段   |  类型  | 必选 |  描述                                                                                                    |
-|----------|--------|------|----------------------------------------------------------------------------------------------------------|
-| field    | string |  是  | 条件字段                                                                                                 |
-| operator | string |  是  | 操作符, 可选值 equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between |
-| value    |   -    |  否  | 条件字段期望的值, 不同的operator对应不同的value格式, 数组类型值最大支持500个元素                         |
+|   字段   |  类型  | 必选 |  描述                                                                                                     |
+|----------|--------|------|-----------------------------------------------------------------------------------------------------------|
+| field    | string |  是  | 条件字段                                                                                                  |
+| operator | string |  是  | 操作符, 可选值 equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between等|
+| value    |   -    |  否  | 条件字段期望的值, 不同的operator对应不同的value格式, 数组类型值最大支持500个元素                          |
 
-组装规则可参考: https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md
+组装规则详细可参考: https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md
 
 ### 请求参数示例
 
@@ -36,7 +36,7 @@
         "rules": [
             {
                 "field": "bk_inst_name",
-                "operator": "begins_with",
+                "operator": "equal",
                 "value": "switch"
             },
             {
@@ -48,9 +48,9 @@
                          "value": [2,4,6]
                     },
                     {
-                        "field": "bk_obj_name",
+                        "field": "bk_inst_id",
                         "operator": "equal",
-                        "value": "switch"
+                        "value": 3
                     }
                 ]
             }

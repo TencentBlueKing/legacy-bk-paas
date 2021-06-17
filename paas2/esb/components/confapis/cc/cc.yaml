@@ -816,6 +816,7 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/identifier/host/search
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/cc/host_install_bk/
   name: host_install_bk
@@ -1141,4 +1142,14 @@
   api_type: operate
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/count/instance_associations/object/{bk_obj_id}
+  dest_http_method: POST
+
+- path: /v2/cc/find_brief_biz_topo_node_relation/
+  name: find_brief_biz_topo_node_relation
+  label: 查询业务主线实例拓扑源与目标节点的关系信息
+  label_en: search the brief relations of the source object instance with the destination object instance.
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/find/topo/biz/brief_node_relation
   dest_http_method: POST

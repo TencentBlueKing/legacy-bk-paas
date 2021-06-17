@@ -1,6 +1,6 @@
 ### Functional description
 
-search object instances (v3.10.1+)
+search inner object instances (v3.10.1+)
 
 ### Request Parameters
 
@@ -8,22 +8,23 @@ search object instances (v3.10.1+)
 
 #### Interface Parameters
 
-|  Field     |  Type  | Required | Description                                                                                  |
-|------------|--------|----------|----------------------------------------------------------------------------------------------|
-| bk_obj_id  | string |  Yes     | object id                                                                                    |
-| conditions | object |  Yes     | conditions, support AND/OR types，max conditions deep 3, max OR conditions rules count is 20 |
-| fields     | array  |  Yes     | fields of object                                                                             |
-| page       | object |  Yes     | query page settings                                                                          |
+|  Field     |  Type  | Required | Description                                                                                                            |
+|------------|--------|----------|------------------------------------------------------------------------------------------------------------------------|
+| bk_obj_id  | string |  Yes     | object id                                                                                                              |
+| conditions | object |  No      | conditions, support AND/OR types，max conditions deep 3, max OR conditions rules 
+count is 20, empty means matching all(as is conditions is null value) |
+| fields     | array  |  No      | fields of object, empty means all fields                                                                               |
+| page       | object |  Yes     | query page settings                                                                                                    |
 
 #### conditions
 
-|  Field   |  Type  | Required | Description                                                                                                           |
-|----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------|
-| field    | string |  Yes     | condition field                                                                                                       |
-| operator | string |  Yes     | condition operator, support equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between |
-| value    |   -    |  No      | condition value, max slice(array) elements count is 500                                                               |
+|  Field   |  Type  | Required | Description                                                                                                                |
+|----------|--------|----------|----------------------------------------------------------------------------------------------------------------------------|
+| field    | string |  Yes     | condition field                                                                                                            |
+| operator | string |  Yes     | condition operator, support like equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between |
+| value    |   -    |  No      | condition value, max slice(array) elements count is 500                                                                    |
 
-condition rules: https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md
+condition rules detail: https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md
 
 #### page
 
@@ -46,7 +47,7 @@ condition rules: https://github.com/Tencent/bk-cmdb/blob/master/src/common/query
         "rules": [
             {
                 "field": "bk_inst_name",
-                "operator": "begins_with",
+                "operator": "equal",
                 "value": "switch"
             },
             {
@@ -58,9 +59,9 @@ condition rules: https://github.com/Tencent/bk-cmdb/blob/master/src/common/query
                          "value": [2,4,6]
                     },
                     {
-                        "field": "bk_obj_name",
+                        "field": "bk_inst_id",
                         "operator": "equal",
-                        "value": "switch"
+                        "value": 3
                     }
                 ]
             }
