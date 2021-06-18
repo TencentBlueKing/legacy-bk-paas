@@ -413,7 +413,7 @@
                     'switcher': false,
                     'checkbox-group': []
                 }
-                return typeValMap[type] || ''
+                return typeValMap[type] !== undefined ? typeValMap[type] : ''
             },
             getInitData (name, data) {
                 if (Object.keys(data).length > 0) {
