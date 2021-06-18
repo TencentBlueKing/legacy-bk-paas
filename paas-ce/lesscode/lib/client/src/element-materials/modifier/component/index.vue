@@ -213,7 +213,6 @@
 
                 modifier.tabPanelActive = this.tabPanelActive
                 this.modifier = modifier
-                console.log('from modifier', modifier)
                 bus.$emit('on-update-props', {
                     componentId: this.curSelectedComponentData.componentId,
                     modifier

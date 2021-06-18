@@ -89,8 +89,9 @@
                     </ul>
                 </div>
             </div>
-            <extra-links show-help-box>
-                <div slot="before" @click="handleStartGuide">画布操作指引</div>
+            <extra-links show-help-box
+                :help-click="handleStartGuide"
+                :help-tooltips="{ content: '画布操作指引', placements: ['bottom'] }">
             </extra-links>
         </div>
         <div class="main-container">
@@ -1250,6 +1251,8 @@
                         }
                         if (item.children) {
                             del(item.children, cid)
+                        } else if (item.renderProps.slots && item.renderProps.slots.type === 'form-item') {
+                            // form表单内的元素不允许通过画布删除
                         } else if (
                             item.renderProps.slots && (item.renderProps.slots.type === 'column' || item.renderProps.slots.type === 'free-layout-item')
                         ) {
@@ -1261,6 +1264,7 @@
                     return ''
                 }
                 const pos = this.$td().getNodePosition(componentId)
+                if (pos === undefined) return
                 const pushData = {
                     parentId: pos.parent && pos.parent.componentId,
                     component: this.delComponentConf.item,

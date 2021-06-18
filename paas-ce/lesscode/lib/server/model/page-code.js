@@ -154,22 +154,25 @@ class PageCode {
     }
 
     generateComponment (item, vueDirective, propDirective) {
-        item = Object.assign({}, item, { componentId: camelCase(item.componentId.replace(/-/g, ''), { transform: camelCaseTransformMerge }) })
+        item = Object.assign({}, item, { componentId: camelCase(item.componentId, { transform: camelCaseTransformMerge }) })
+        const inFreeLayout = item.renderProps.inFreeLayout && item.renderProps.inFreeLayout.val
+        let css = ''
+        if (inFreeLayout) {
+            css += 'position: absolute;'
+            if (item.renderStyles.top) {
+                css += ` top: ${item.renderStyles.top};`
+            }
+            if (item.renderStyles.left) {
+                css += ` left: ${item.renderStyles.left};`
+            }
+        }
         if (item.name.startsWith('chart-')) {
             this.generateCharts(item)
             const widthStr = item.renderProps.width && item.renderProps.width.val ? `width: ${item.renderProps.width.val}px;` : ''
             const heightStr = `height:${item.renderProps.height.val || 0}px;`
 
             let componentCode = ''
-            if (item.renderProps.inFreeLayout && item.renderProps.inFreeLayout.val) {
-                let css = 'position: absolute;'
-                if (item.renderStyles.top) {
-                    css += ` top: ${item.renderStyles.top};`
-                }
-                if (item.renderStyles.left) {
-                    css += ` left: ${item.renderStyles.left};`
-                }
-
+            if (inFreeLayout) {
                 componentCode = `
                     <div style="${css}" ${vueDirective}>
                         <div style="${widthStr}${heightStr}">
@@ -183,6 +186,18 @@ class PageCode {
                     </div>`
             }
             return componentCode
+        } else if(item.type === 'widget-form') {
+            let componentCode = ''
+            const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
+                const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
+                componentCode = `
+                    <div ${itemClass} style="${css}">
+                        <bk-form ${vueDirective} ${propDirective} ${itemProps}>
+                            ${this.generateCode(item.renderProps.slots.val)}
+                        </bk-form>
+                    </div>
+                 `
+                return componentCode
         } else {
             // 使用了 element 组件库
             if (item.name.startsWith('el-')) {
@@ -200,17 +215,9 @@ class PageCode {
             const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
             const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
             const itemEvents = this.getItemEvents(item.renderEvents)
-            const inFreeLayout = item.renderProps.inFreeLayout && item.renderProps.inFreeLayout.val
-
+            
             let componentCode = ''
             if (inFreeLayout) {
-                let css = 'position: absolute;'
-                if (item.renderStyles.top) {
-                    css += ` top: ${item.renderStyles.top};`
-                }
-                if (item.renderStyles.left) {
-                    css += ` left: ${item.renderStyles.left};`
-                }
                 if (item.renderStyles.width) {
                     css += ` width: ${item.renderStyles.width};`
                 }
@@ -299,9 +306,6 @@ class PageCode {
                 position: relative;
                 z-index: 10;
             }
-            .bk-free-layout-${this.uniqueKey} .bk-layout-component-${this.uniqueKey} {
-                margin: 0;
-            }
             .bk-free-layout-item-inner-${this.uniqueKey} {
                 height: 100%;
                 position: relative;
@@ -324,6 +328,9 @@ class PageCode {
             .bk-layout-component-${this.uniqueKey} {
                 margin: 5px;
                 vertical-align: middle;
+            }
+            .bk-form-item {
+                margin: 10px;
             }
             .bk-sideslider {
                 margin: 0;
@@ -484,24 +491,6 @@ class PageCode {
                 }
             `
         }
-        if (this.pageType === 'preview') {
-            head += `.preview-tip {
-                position: fixed;
-                top: 7px;
-                right: -29px;
-                transform: rotate(45deg);
-                font-size: 12px;
-                line-height: 13px;
-                padding: 6px 0;
-                width: 110px;
-                text-align: center;
-                background: rgba(239, 184, 61, 0.8);
-                color: #000000;
-                box-shadow: 1px 2px 8px 2px rgba(0, 0 ,0 , 0.1);
-                z-index: 100;
-            }
-        `
-        }
         const end = '</style>\n'
 
         return head + this.cssStr + end
@@ -511,7 +500,6 @@ class PageCode {
         let pageCode = this.isGenerateNav ? '<router-view class="page-container"></router-view>' : `\n<section class="bk-layout-custom-component-wrapper container-${this.uniqueKey}">\n${this.generateCode(this.targetData)}\n</section>\n`
         if (this.isEmpty) pageCode = `<bk-exception class="exception-wrap-item" type="404"></bk-exception>`
         let source = pageCode
-        if (this.pageType === 'preview') pageCode += '\n<div class="preview-tip">未发布<br>请勿分享</div>\n'
         if (this.hasLayOut) source = this.getLayout(pageCode)
         // bk-layout-custom-component-wrapper 打包自定义组件时添加此类作为最上层父类，避免自定义组件的类污染画布页面的东西
         // 预览时最顶层容器也要加上此类，让自定义组件的样式生效
@@ -799,10 +787,6 @@ class PageCode {
                 code += `
                     ${itemClass ? `\n<div class="bk-free-layout-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-free-layout-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
                         ${item.renderProps.slots && item.renderProps.slots.val && item.renderProps.slots.val.map(slotData => {
-                            // return `<div class="bk-free-layout-item-${this.uniqueKey}">
-                            //             ${slotData.children.length ? `${this.generateCode(slotData.children)}` : ''}
-                            //         </div>`
-
                             return `<div class="bk-free-layout-item-inner-${this.uniqueKey}">
                                         <div style="height: ${item.renderStyles.height || '500px'}">
                                             ${slotData.children.length ? `${this.generateCode(slotData.children)}` : ''}
@@ -895,39 +879,12 @@ class PageCode {
                     }
                 }
             } else {
-                if (type === 'bk-checkbox-group') {
+                const hasVModel = dirProps.filter(item => item.type === 'v-model').length
+                if (type === 'bk-checkbox-group' && !hasVModel) {
                     const checkedValue = props['slots'].val.filter(c => c.checked === true).map(c => c.value)
                     this.dataTemplate(compId, JSON.stringify(checkedValue))
                     propsStr += `v-model="${compId}"`
                 }
-                // console.error('type', type)
-                // console.error()
-                // console.error('compId', compId)
-                // console.error()
-                // console.error('props', props)
-                // console.error()
-                // console.error('dirProps', dirProps)
-                // console.error()
-                // if (type === 'bk-checkbox-group') {
-                //     const checkedValue = props['slots'].val.filter(c => c.checked === true).map(c => c.value)
-                //     const len = dirProps.length
-                //     if (len) {
-                //         for (let i = 0; i < len; i++) {
-                //             const dirProp = dirProps[i]
-                //             if (dirProp.type === 'v-model') {
-                //                 const v = dirProp.val.trim()
-                //                 if (v) {
-                //                     this.dataTemplate(v, JSON.stringify(checkedValue))
-                //                     propsStr += `v-model="${v}"`
-                //                     break
-                //                 }
-                //             }
-                //         }
-                //     } else {
-                //         this.dataTemplate(compId, JSON.stringify(checkedValue))
-                //         propsStr += `v-model="${compId}"`
-                //     }
-                // }
             }
         }
         return propsStr
@@ -1001,7 +958,8 @@ class PageCode {
             case 'variable':
                 const variable = this.variableList.find(x => x.variableCode === val)
                 const hasUsed = this.usingVariables.find(x => x.variableCode === val)
-                if (!variable) {
+                // form表单内的v-model绑定值忽略这个判断
+                if (!variable && !(val.startsWith('form') && val.indexOf('.') > 0)) {
                     this.codeErrMessage = `组件【${componentId}】使用了不存在的变量【${val}】，请修改后重试`
                 }
                 if (!hasUsed && variable) {
@@ -1074,6 +1032,8 @@ class PageCode {
             <template slot="${slotName}">
                 ${this.generateCode(codeArr)}
             </template>`
+        } else if (slot.type === 'form-item-content') {
+            slotStr = this.generateCode(slot.val)
         } else if (slot.payload && slot.payload.variableData && slot.payload.variableData.val) {
             const variableData = slot.payload.variableData
             const disPlayVal = this.handleUsedVariable(variableData.valType, variableData.val, compId)

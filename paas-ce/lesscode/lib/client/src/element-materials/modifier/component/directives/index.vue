@@ -23,6 +23,7 @@
                     <variable-select :value="directive.val"
                         :val-type="directive.valType"
                         :available-types="directive.propTypes"
+                        :disabled-change="curSelectedComponentData.inFormItem && directive.type === 'v-model'"
                         @change="(data) => changeVariable(directive, data)"
                     >
                         <template v-slot:title>

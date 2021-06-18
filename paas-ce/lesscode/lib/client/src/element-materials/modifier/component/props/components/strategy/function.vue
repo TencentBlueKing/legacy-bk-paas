@@ -67,8 +67,8 @@
 <style lang="postcss">
     .remote-title {
         margin-top: 10px;
-        line-height: 32px;
-        font-size: 14px;
+        line-height: 24px;
+        font-size: 12px;
         &:first-child {
             margin-top: 0;
         }
