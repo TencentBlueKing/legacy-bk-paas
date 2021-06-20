@@ -127,3 +127,5 @@ BK_LOG_HOST = env.str("BK_LOG_URL", "")
 
 # nodeman
 NODEMAN_HOST = env.str("BK_NODEMAN_URL", "")
+
+BK_SSM_API_URL = env.str("BK_SSM_API_URL", "")

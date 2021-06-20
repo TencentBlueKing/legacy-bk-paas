@@ -85,9 +85,8 @@ ENV/
 templates_module/
 run/
 uwsgi.ini
-tests/
 MakefileSyncConfapisEE
 MakefileSyncConfapisCE
 
 # for dev
-.env
+.envrc

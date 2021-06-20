@@ -10,7 +10,9 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from common.base_utils import get_first_not_empty_value
 from common.base_validators import BaseValidator, ValidationError
+from esb.bkapp.validators import AccessTokenValidator
 from esb.bkcore.models import UserAuthToken
 from esb.utils.func_ctrl import FunctionControllerClient
 
@@ -51,18 +53,24 @@ class UserAuthValidator(BaseUserAuthValidator):
     """
 
     def validate(self, request):
-        kwargs = request.g.kwargs
         app_code = request.g.app_code
 
-        if kwargs.get("bk_access_token"):
-            self.validate_access_token(request, app_code, kwargs["bk_access_token"])
+        if request.g.authorization.get("access_token"):
+            validator = AccessTokenValidator()
+            validator.validate(request)
+
+            self.sync_current_username(request, validator.get_bk_username(), verified=True)
             return
 
-        if kwargs.get("bk_token"):
-            self.validate_bk_token(request, kwargs["bk_token"])
+        if request.g.kwargs.get("bk_access_token"):
+            self.validate_access_token(request, app_code, request.g.kwargs["bk_access_token"])
             return
 
-        username = kwargs.get("bk_username") or kwargs.get("username")
+        if request.g.authorization.get("bk_token"):
+            self.validate_bk_token(request, request.g.authorization["bk_token"])
+            return
+
+        username = get_first_not_empty_value(request.g.authorization, keys=["bk_username", "username"])
         if username and FunctionControllerClient.is_skip_user_auth(app_code):
             self.sync_current_username(request, username, verified=False)
             return
@@ -78,9 +86,7 @@ class UserAuthWithBKTokenValidator(BaseUserAuthValidator):
     """
 
     def validate(self, request):
-        kwargs = request.g.kwargs
-
-        bk_token = kwargs.get("bk_token") or request.COOKIES.get("bk_token")
+        bk_token = request.g.authorization.get("bk_token") or request.COOKIES.get("bk_token")
         if bk_token:
             self.validate_bk_token(request, bk_token)
             return
