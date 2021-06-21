@@ -30,6 +30,7 @@ import datePicker from './date-picker'
 import upload from './upload'
 import colorPicker from './color-picker'
 import transfer from './transfer'
+import table from './table'
 
 const elementComponents = Object.seal([
     grid1,
@@ -51,7 +52,8 @@ const elementComponents = Object.seal([
     datePicker,
     upload,
     colorPicker,
-    transfer
+    transfer,
+    table
 ])
 
 export default elementComponents

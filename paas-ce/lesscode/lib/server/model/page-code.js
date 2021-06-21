@@ -51,7 +51,8 @@ class PageCode {
         'folding-table': 'bk-table-column',
         'el-select': 'el-option',
         'el-radio-group': 'el-radio',
-        'el-checkbox-group': 'el-checkbox'
+        'el-checkbox-group': 'el-checkbox',
+        'el-table': 'el-table-column'
     }
     slotContentArray = [
         'bk-checkbox',
@@ -1049,6 +1050,7 @@ class PageCode {
         } else if (typeof slot.val === 'string') {
             slotStr = slot.val
         } else if (typeof slot === 'object') {
+            console.log(slot)
             let slotType = this.slotTagMap[type] ? this.slotTagMap[type] : ''
             if (type === 'bk-radio-group' && slot.name === 'bk-radio-button') {
                 slotType = slot.name
@@ -1065,12 +1067,13 @@ class PageCode {
                     </${slotType}>`
                 } else {
                     slot.val && slot.val.map(item => {
-                        if (slotType === 'bk-table-column' && item.type === 'customCol') {
-                            slotStr += `<bk-table-column label="${item.label}" width="${item.width}">
-                                <template slot-scope="props">
+                        if ((slotType === 'bk-table-column' || slotType === 'el-table-column') && item.type === 'customCol') {
+                            const scopeName = slotType === 'bk-table-column' ? 'props' : 'scope'
+                            slotStr += `<${slotType} label="${item.label}" width="${item.width}">
+                                <template slot-scope="${scopeName}">
                                     ${item.templateCol}
                                 </template>
-                            </bk-table-column>`
+                            </${slotType}>`
                             item.methodCode && (this.usingFuncCodes = this.usingFuncCodes.concat(item.methodCode))
                         } else {
                             const content = this.slotContentArray.includes(slotType) ? item.label : ''
@@ -1096,7 +1099,7 @@ class PageCode {
         for (const i in props) {
             if (i !== 'slots') {
                 const propsValue = typeof props[i] === 'object' ? JSON.stringify(props[i]).replace(/\"/g, '\'') : props[i]
-                const propsKey = (attrs && attrs.find(item => item.value === i).key) ? attrs.find(item => item.value === i).key : i
+                const propsKey = (attrs.find(item => item.value === i)) ? attrs.find(item => item.value === i).key : i
                 propsStr += `${typeof props[i] === 'string' ? '' : ':'}${propsKey}="${propsValue}" `
             }
         }
