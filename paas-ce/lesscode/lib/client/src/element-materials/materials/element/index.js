@@ -35,6 +35,8 @@ import tagInput from './tag-input'
 import progress from './progress'
 import tree from './tree'
 import pagination from './pagination'
+import badge from './badge'
+import alert from './alert'
 
 const elementComponents = Object.seal([
     grid1,
@@ -61,7 +63,9 @@ const elementComponents = Object.seal([
     tagInput,
     progress,
     tree,
-    pagination
+    pagination,
+    badge,
+    alert
 ])
 
 export default elementComponents
