@@ -1,6 +1,6 @@
 <template>
     <div class="extra-links">
-        <div class="help-box" @click="helpClick" v-bk-tooltips="helpTooltips">
+        <div v-if="showHelpBox" class="help-box" @click="helpClick" v-bk-tooltips="helpTooltips">
             <i class="dropdown-trigger-btn bk-icon icon-question-circle-shape" />
         </div>
         <div class="github-link" @click="goGithub" v-bk-tooltips="{ content: 'Github', placements: ['bottom'] }">
