@@ -13,7 +13,37 @@ import pytest
 
 from common.base_utils import FancyDict
 from common.base_validators import ValidationError
-from esb.bkauth.validators import UserAuthValidator, UserAuthWithBKTokenValidator
+from esb.bkauth.validators import UserAuthValidator, UserAuthWithBKTokenValidator, BaseUserAuthValidator
+
+
+class TestBaseUserAuthValidator:
+    def test_validate_bk_token(self, fake_request, mocker):
+        mocker.patch(
+            "esb.bkauth.validators.BaseUserAuthValidator._verify_bk_token",
+            return_value="admin"
+        )
+        fake_request.g = FancyDict({"app_code": "fake-app-code"})
+        validator = BaseUserAuthValidator()
+        validator.validate_bk_token(fake_request, "fake-token")
+        assert fake_request.g.current_user_username == "admin"
+        assert fake_request.g.current_user_verified is True
+
+    def test_verify_bk_token(self, fake_request, mocker):
+        validator = BaseUserAuthValidator()
+
+        mocker.patch(
+            "components.bk.apis.bk_login.is_login.IsLogin.invoke",
+            return_value={"result": False}
+        )
+        with pytest.raises(ValidationError):
+            validator._verify_bk_token("fake-bk-token", "fake-app-code")
+
+        mocker.patch(
+            "components.bk.apis.bk_login.is_login.IsLogin.invoke",
+            return_value={"result": True, "data": {"username": "admin"}}
+        )
+        result = validator._verify_bk_token("fake-bk-token", "fake-app-code")
+        assert result == "admin"
 
 
 class TestUserAuthValidator:

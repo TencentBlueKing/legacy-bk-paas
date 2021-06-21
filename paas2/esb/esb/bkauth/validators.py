@@ -10,6 +10,9 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from cachetools import cached, TTLCache
+from django.conf import settings
+
 from common.base_utils import get_first_not_empty_value
 from common.base_validators import BaseValidator, ValidationError
 from esb.bkapp.validators import AccessTokenValidator
@@ -19,12 +22,8 @@ from esb.utils.func_ctrl import FunctionControllerClient
 
 class BaseUserAuthValidator(BaseValidator):
     def validate_bk_token(self, request, bk_token):
-        from components.bk.apis.bk_login.is_login import IsLogin
-
-        check_result = IsLogin().invoke(kwargs={"bk_token": bk_token}, request_id=request.g.request_id)
-        if not check_result["result"]:
-            raise ValidationError("User authentication failed, please check if the bk_token is valid")
-        self.sync_current_username(request, check_result.get("data", {}).get("username", ""), verified=True)
+        username = self._verify_bk_token(bk_token, request.g.app_code)
+        self.sync_current_username(request, username, verified=True)
 
     def validate_access_token(self, request, app_code, access_token):
         if not app_code:
@@ -45,6 +44,20 @@ class BaseUserAuthValidator(BaseValidator):
     def sync_current_username(self, request, username, verified=False):
         request.g.current_user_username = username
         request.g.current_user_verified = verified
+
+    @staticmethod
+    @cached(cache=TTLCache(
+        maxsize=settings.BK_TOKEN_CACHE_MAXSIZE,
+        ttl=settings.BK_TOKEN_CACHE_TTL_SECONDS,
+    ))
+    def _verify_bk_token(bk_token, app_code):
+        from components.bk.apis.bk_login.is_login import IsLogin
+
+        check_result = IsLogin().invoke(kwargs={"bk_token": bk_token}, app_code=app_code)
+        if not check_result["result"]:
+            raise ValidationError("User authentication failed, please check if the bk_token is valid")
+
+        return check_result.get("data", {}).get("username", "")
 
 
 class UserAuthValidator(BaseUserAuthValidator):

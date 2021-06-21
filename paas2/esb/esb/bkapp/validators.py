@@ -15,8 +15,9 @@ import hmac
 import base64
 import hashlib
 
+from django.conf import settings
+
 from cachetools import cached, TTLCache
-from common.constants import CACHE_MAXSIZE, CacheTimeLevel
 from common.base_utils import get_first_not_empty_value
 from common.base_validators import BaseValidator, ValidationError
 from common.errors import error_codes
@@ -98,11 +99,15 @@ class AccessTokenValidator(BaseValidator):
         return self.validated_data["bk_username"]
 
     @staticmethod
-    @cached(cache=TTLCache(maxsize=CACHE_MAXSIZE, ttl=CacheTimeLevel.CACHE_TIME_SHORT.value))
+    @cached(cache=TTLCache(
+        maxsize=settings.BK_SSM_ACCESS_TOKEN_CACHE_MAXSIZE,
+        ttl=settings.BK_SSM_ACCESS_TOKEN_CACHE_TTL_SECONDS,
+    ))
     def _verify_access_token(access_token):
         from components.bk.apisv2.bk_ssm.verify_access_token import VerifyAccessToken
 
         result = VerifyAccessToken().invoke(kwargs={"access_token": access_token})
+
         if not result["result"]:
             raise ValidationError("verify access_token failed, please check if the access_token is valid")
 
