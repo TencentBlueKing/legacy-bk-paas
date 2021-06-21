@@ -34,6 +34,7 @@ import table from './table'
 import tagInput from './tag-input'
 import progress from './progress'
 import tree from './tree'
+import pagination from './pagination'
 
 const elementComponents = Object.seal([
     grid1,
@@ -59,7 +60,8 @@ const elementComponents = Object.seal([
     table,
     tagInput,
     progress,
-    tree
+    tree,
+    pagination
 ])
 
 export default elementComponents
