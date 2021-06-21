@@ -214,6 +214,7 @@
                 removeClassWithNodeClass('.bk-lesscode-free-layout', 'selected')
                 removeClassWithNodeClass('.component-wrapper', 'selected')
                 removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
+                removeClassWithNodeClass('.widget-form-item', 'wrapper-cls-selected')
 
                 const wrapperList = Array.from(document.getElementsByClassName('wrapperCls'))
                     .concat(Array.from(document.getElementsByClassName('bk-layout-grid-row-wrapper'))
@@ -236,7 +237,7 @@
 
                 const curRowTargetNode = node.id.includes('grid') ? curRowNode.getElementsByClassName('bk-layout-grid-row')[0] : curRowNode
 
-                const selectClassName = curRowTargetNode && curRowTargetNode.className === 'wrapperCls' ? 'wrapper-cls-selected' : 'selected'
+                const selectClassName = curRowTargetNode && (curRowTargetNode.className === 'wrapperCls' || curRowTargetNode.className === 'widget-form-item') ? 'wrapper-cls-selected' : 'selected'
                 curRowTargetNode.classList.add(selectClassName)
 
                 const anchorNode = this.setAnchorPoint(curRowTargetNode)
@@ -298,31 +299,26 @@
                 return null
             },
             getNodeChildren (nodeSlot, parentId) {
-                if (nodeSlot.type === 'column' || nodeSlot.type === 'free-layout-item' || nodeSlot.name === 'layout') {
-                    if (nodeSlot.name === 'layout') {
-                        const node = nodeSlot.val || {}
-                        return [
-                            {
-                                id: node['componentId'],
-                                name: node['componentId'],
-                                icon: this.getItemIcon(node),
-                                parent_id: parentId,
-                                children: node.renderProps.slots ? this.getNodeChildren(node.renderProps.slots) : []
-                            }
-                        ]
-                    } else {
-                        return nodeSlot.val.map(val => {
-                            return val.children.map(node => {
-                                return {
-                                    id: node['componentId'],
-                                    name: node['componentId'],
-                                    icon: this.getItemIcon(node),
-                                    parent_id: parentId,
-                                    children: node.renderProps.slots ? this.getNodeChildren(node.renderProps.slots) : []
-                                }
-                            })
-                        }).flat()
-                    }
+                if (nodeSlot.name === 'layout' || nodeSlot.name === 'form-item-content') {
+                    const node = Object.prototype.toString.call(nodeSlot.val) === '[object Array]' ? nodeSlot.val : [nodeSlot.val]
+                    return node.map(item => ({
+                        id: item['componentId'],
+                        name: item['componentId'],
+                        icon: this.getItemIcon(item),
+                        parent_id: parentId,
+                        children: item.renderProps.slots ? this.getNodeChildren(item.renderProps.slots) : []
+                    }))
+                }
+                if (nodeSlot.type === 'column' || nodeSlot.type === 'free-layout-item') {
+                    return nodeSlot.val.map(val =>
+                        val.children.map(node => ({
+                            id: node['componentId'],
+                            name: node['componentId'],
+                            icon: this.getItemIcon(node),
+                            parent_id: parentId,
+                            children: node.renderProps.slots ? this.getNodeChildren(node.renderProps.slots) : []
+                        }))
+                    ).flat()
                 }
                 return []
             }

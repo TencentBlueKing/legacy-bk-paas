@@ -123,7 +123,7 @@
 }
 
 .wrapper-cls-selected {
-    .bk-card {
+    .bk-card, .bk-form {
         border: 1px solid #3a84ff !important;
     }
 }

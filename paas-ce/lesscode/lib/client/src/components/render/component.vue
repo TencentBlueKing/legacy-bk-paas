@@ -110,12 +110,16 @@
     import RenderSlot from './slot'
     import ComponentWrapper from './component-wrapper'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import WidgetForm from '@/components/widget/form'
+    import WidgetFormItem from '@/components/widget/form-item'
     import offsetMixin from './offsetMixin'
 
     const components = {
         ComponentWrapper,
         ComponentMenu,
         RenderSlot,
+        WidgetForm,
+        WidgetFormItem,
         renderGrid: () => import('./grid'),
         renderRow: () => import('./row'),
         renderCol: () => import('./col'),
@@ -139,7 +143,6 @@
                     this.$options.components[name] = window.__innerCustomRegisterComponent__[name]
                 }
             }
-
             return {
                 renderData: {},
                 renderDataSlotName: '',
