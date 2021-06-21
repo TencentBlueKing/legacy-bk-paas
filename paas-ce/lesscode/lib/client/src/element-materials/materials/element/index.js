@@ -31,6 +31,7 @@ import upload from './upload'
 import colorPicker from './color-picker'
 import transfer from './transfer'
 import table from './table'
+import tagInput from './tag-input'
 
 const elementComponents = Object.seal([
     grid1,
@@ -53,7 +54,8 @@ const elementComponents = Object.seal([
     upload,
     colorPicker,
     transfer,
-    table
+    table,
+    tagInput
 ])
 
 export default elementComponents

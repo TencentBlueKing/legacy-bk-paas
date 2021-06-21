@@ -1050,7 +1050,6 @@ class PageCode {
         } else if (typeof slot.val === 'string') {
             slotStr = slot.val
         } else if (typeof slot === 'object') {
-            console.log(slot)
             let slotType = this.slotTagMap[type] ? this.slotTagMap[type] : ''
             if (type === 'bk-radio-group' && slot.name === 'bk-radio-button') {
                 slotType = slot.name
