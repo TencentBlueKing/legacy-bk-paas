@@ -1380,7 +1380,7 @@
                 function addUsedVariable (id, dir) {
                     const { modifiers, prop, type, val, valType } = dir
                     function generateUseInfo (variableId) {
-                        const useInfo = { type, componentId: id, prop, modifiers }
+                        const useInfo = { type, componentId: id, prop, modifiers, val }
                         const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
                         useInfos.push(useInfo)
                     }
@@ -1446,13 +1446,21 @@
                 if (message) errMessage = message
                 const curFuncIds = Object.keys(usedFunctionMap)
                 curFuncIds.forEach((key) => {
-                    const { funcName, funcBody } = usedFunctionMap[key];
+                    const { funcName, funcBody, funcCode } = usedFunctionMap[key];
                     (funcBody || '').replace(/lesscode\[\'\$\{prop:([\S]+)\}\'\]/g, (all, dirKey) => {
                         if (dirKey) {
                             const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
                             if (!curDir) {
                                 errMessage = `页面中使用了函数【${funcName}】，该函数使用的变量【${dirKey}】不存在，请修改后再试`
                             }
+                        }
+                    })
+                    // 使用到的函数名和变量名不能重复
+                    Object.keys(usedVariableMap).forEach((id) => {
+                        const useInfos = usedVariableMap[id]
+                        const variableCode = (useInfos[0] || {}).val
+                        if (variableCode === funcCode) {
+                            errMessage = `页面中使用了函数【${funcCode}】，与使用的变量【${variableCode}】的标识存在冲突，请修改后再试`
                         }
                     })
                 })
