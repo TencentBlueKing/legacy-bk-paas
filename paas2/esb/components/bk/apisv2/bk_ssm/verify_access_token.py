@@ -35,9 +35,14 @@ class VerifyAccessToken(Component):
             host=configs.host,
             path="/api/v1/auth/access-tokens/verify",
             data=json.dumps(self.form_data),
-            headers=configs.headers,
+            headers=self._prepare_headers(),
         )
 
         result["result"] = result["code"] == 0
 
         self.response.payload = result
+
+    def _prepare_headers(self):
+        headers = {"Content-Type": "application/json"}
+        headers.update(configs.headers)
+        return headers
