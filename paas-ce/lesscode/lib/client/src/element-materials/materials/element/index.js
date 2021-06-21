@@ -23,6 +23,13 @@ import switcher from './switcher'
 import slider from './slider'
 import rate from './rate'
 import timePicker from './time-picker'
+import radioGroup from './radio-group'
+import checkboxGroup from './checkbox-group'
+import cascade from './cascade'
+import datePicker from './date-picker'
+import upload from './upload'
+import colorPicker from './color-picker'
+import transfer from './transfer'
 
 const elementComponents = Object.seal([
     grid1,
@@ -37,7 +44,14 @@ const elementComponents = Object.seal([
     switcher,
     slider,
     rate,
-    timePicker
+    timePicker,
+    radioGroup,
+    checkboxGroup,
+    cascade,
+    datePicker,
+    upload,
+    colorPicker,
+    transfer
 ])
 
 export default elementComponents

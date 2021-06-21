@@ -48,7 +48,10 @@ class PageCode {
         'bk-tab': 'bk-tab-panel',
         'bk-breadcrumb': 'bk-breadcrumb-item',
         'search-table': 'bk-table-column',
-        'folding-table': 'bk-table-column'
+        'folding-table': 'bk-table-column',
+        'el-select': 'el-option',
+        'el-radio-group': 'el-radio',
+        'el-checkbox-group': 'el-checkbox'
     }
     slotContentArray = [
         'bk-checkbox',
@@ -186,18 +189,18 @@ class PageCode {
                     </div>`
             }
             return componentCode
-        } else if(item.type === 'widget-form') {
+        } else if (item.type === 'widget-form') {
             let componentCode = ''
             const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
-                const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
-                componentCode = `
+            const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
+            componentCode = `
                     <div ${itemClass} style="${css}">
                         <bk-form ${vueDirective} ${propDirective} ${itemProps}>
                             ${this.generateCode(item.renderProps.slots.val)}
                         </bk-form>
                     </div>
                  `
-                return componentCode
+            return componentCode
         } else {
             // 使用了 element 组件库
             if (item.name.startsWith('el-')) {
@@ -215,7 +218,7 @@ class PageCode {
             const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
             const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
             const itemEvents = this.getItemEvents(item.renderEvents)
-            
+
             let componentCode = ''
             if (inFreeLayout) {
                 if (item.renderStyles.width) {
@@ -1071,7 +1074,7 @@ class PageCode {
                             item.methodCode && (this.usingFuncCodes = this.usingFuncCodes.concat(item.methodCode))
                         } else {
                             const content = this.slotContentArray.includes(slotType) ? item.label : ''
-                            const itemProps = this.getSlotPropsStr(item)
+                            const itemProps = this.getSlotPropsStr(item, slot.attrs)
                             slotStr += ''
                                 + `<${slotType} ${itemProps}>`
                                 + content
@@ -1088,12 +1091,13 @@ class PageCode {
         return slotStr
     }
 
-    getSlotPropsStr (props) {
+    getSlotPropsStr (props, attrs) {
         let propsStr = ''
         for (const i in props) {
             if (i !== 'slots') {
                 const propsValue = typeof props[i] === 'object' ? JSON.stringify(props[i]).replace(/\"/g, '\'') : props[i]
-                propsStr += `${typeof props[i] === 'string' ? '' : ':'}${i}="${propsValue}" `
+                const propsKey = (attrs && attrs.find(item => item.value === i).key) ? attrs.find(item => item.value === i).key : i
+                propsStr += `${typeof props[i] === 'string' ? '' : ':'}${propsKey}="${propsValue}" `
             }
         }
         return propsStr
