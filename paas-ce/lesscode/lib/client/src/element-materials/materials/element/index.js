@@ -33,6 +33,7 @@ import transfer from './transfer'
 import table from './table'
 import tagInput from './tag-input'
 import progress from './progress'
+import tree from './tree'
 
 const elementComponents = Object.seal([
     grid1,
@@ -57,7 +58,8 @@ const elementComponents = Object.seal([
     transfer,
     table,
     tagInput,
-    progress
+    progress,
+    tree
 ])
 
 export default elementComponents
