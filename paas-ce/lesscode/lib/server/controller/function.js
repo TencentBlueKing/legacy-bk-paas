@@ -126,6 +126,35 @@ module.exports = {
         }
     },
 
+    async bulkAddFunction (ctx) {
+        const operationLogger = new OperationLogger(ctx)
+        try {
+            const { funcList, varWhere } = ctx.request.body
+            // 使用eslint做检查
+            let errMessage = ''
+            const checkFunc = async (func) => {
+                errMessage = await checkFuncEslint(func)
+            }
+            await Promise.all(funcList.map(func => checkFunc(func)))
+            if (errMessage) {
+                throw new global.BusinessError(errMessage)
+            }
+            await addFunction(funcList, varWhere)
+            operationLogger.success({
+                operateTarget: '批量添加函数'
+            })
+            ctx.send({
+                code: 0,
+                message: 'success'
+            })
+        } catch (err) {
+            operationLogger.error(err, {
+                operateTarget: '批量添加函数'
+            })
+            ctx.throwError(err)
+        }
+    },
+
     async addFunction (ctx) {
         const operationLogger = new OperationLogger(ctx)
         try {
@@ -135,7 +164,7 @@ module.exports = {
             if (errMessage) {
                 throw new global.BusinessError(errMessage)
             }
-            const data = await addFunction(func, varWhere)
+            const [data] = await addFunction([func], varWhere)
             data.funcParams = data.funcParams.split(',').filter(x => x !== '')
             data.remoteParams = data.remoteParams.split(',').filter(x => x !== '')
             operationLogger.success({

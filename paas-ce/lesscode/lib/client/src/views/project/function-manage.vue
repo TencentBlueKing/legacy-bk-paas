@@ -65,7 +65,12 @@
 
             <section class="function-main">
                 <h3 class="function-head">
-                    <bk-button theme="primary" @click="addFunction">新建</bk-button>
+                    <section>
+                        <bk-button theme="primary" @click="addFunction">新建</bk-button>
+                        <bk-button @click="importFunction" class="ml5" :loading="isUploading">导入</bk-button>
+                        <bk-button @click="exportFunction" class="ml5" :disabled="selectionData.length <= 0">导出</bk-button>
+                    </section>
+
                     <bk-input class="head-input" placeholder="请输入" :clearable="true" right-icon="bk-icon icon-search" v-model="searchFunStr"></bk-input>
                 </h3>
 
@@ -75,7 +80,9 @@
                     :header-cell-style="{ background: '#f0f1f5' }"
                     v-bkloading="{ isLoading: isLoadingFunc }"
                     class="function-table"
+                    @selection-change="selectionChange"
                 >
+                    <bk-table-column type="selection" width="60"></bk-table-column>
                     <bk-table-column label="函数名称" prop="funcName" show-overflow-tooltip>
                         <template slot-scope="props">
                             <span>{{ props.row.funcName || '--' }}</span>
@@ -148,6 +155,7 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex'
+    import { downloadFile, uploadFile } from '@/common/util'
     import dayjs from 'dayjs'
     import layout from '@/components/ui/layout'
     import funcForm from '@/components/methods/func-form'
@@ -181,7 +189,9 @@
                     loading: false,
                     title: '',
                     form: {}
-                }
+                },
+                selectionData: [],
+                isUploading: false
             }
         },
 
@@ -230,6 +240,7 @@
             ...mapActions('functions', [
                 'getAllGroupFuncs',
                 'addFunc',
+                'bulkAddFunc',
                 'editFunc',
                 'deleteGroup',
                 'deleteFunc',
@@ -453,6 +464,99 @@
             groupFormatter (obj, con, val) {
                 const curGroup = this.funcGroups.find(x => x.id === val) || {}
                 return curGroup.groupName
+            },
+
+            selectionChange (selection) {
+                this.selectionData = selection
+            },
+
+            exportFunction () {
+                function getExportFunc (func) {
+                    const exportProps = [
+                        'funcName',
+                        'funcCode',
+                        'funcParams',
+                        'funcBody',
+                        'funcSummary',
+                        'funcType',
+                        'funcMethod',
+                        'withToken',
+                        'funcApiData',
+                        'funcApiUrl',
+                        'remoteParams'
+                    ]
+                    return exportProps.reduce((res, prop) => {
+                        res[prop] = func[prop]
+                        return res
+                    }, {})
+                }
+
+                const funcs = (this.selectionData || []).reduce((funcs, func) => {
+                    funcs[func.funcCode] = getExportFunc(func)
+                    return funcs
+                }, {})
+                const source = JSON.stringify(funcs, null, 2)
+                downloadFile(source, 'lesscode-func.json')
+            },
+
+            importFunction () {
+                const funcList = []
+                const ignoreFunList = []
+                const getImportFunc = (file) => {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader()
+                        reader.onload = () => {
+                            const funJson = JSON.parse(reader.result)
+                            for (const key in funJson) {
+                                const isRepeatFunc = [...this.curFuncList, ...funcList].find((func) => (func.funcCode === key))
+                                const func = {
+                                    funcGroupId: this.curGroupId,
+                                    ...funJson[key]
+                                }
+                                if (isRepeatFunc) {
+                                    ignoreFunList.push(func)
+                                } else {
+                                    funcList.push(func)
+                                }
+                            }
+                            resolve()
+                        }
+                        reader.onerror = reject
+                        reader.readAsText(file)
+                    })
+                }
+                uploadFile((files) => {
+                    this.isUploading = true
+                    Promise.all(Array.from(files).map(file => getImportFunc(file))).then(() => {
+                        return this.bulkAddFuncFromApi(funcList).then((res) => {
+                            if (!res) return
+                            if (ignoreFunList.length) {
+                                this.$bkMessage({ theme: 'primary', message: `【${ignoreFunList.map(x => x.funcName).join(',')}】由于重复标识取消导入`, ellipsisLine: 3 })
+                            }
+                            if (funcList.length) {
+                                this.$bkMessage({ theme: 'success', message: `【${funcList.map(x => x.funcName).join(',')}】导入成功`, ellipsisLine: 3 })
+                            }
+                            if (ignoreFunList.length <= 0 && funcList.length <= 0) {
+                                this.$bkMessage({ theme: 'primary', message: 'JSON文件为空，暂无导入数据' })
+                            }
+                        })
+                    }).catch((err) => {
+                        this.$bkMessage({ theme: 'error', message: err.message || err })
+                    }).finally(() => {
+                        this.isUploading = false
+                    })
+                })
+            },
+
+            bulkAddFuncFromApi (funcList) {
+                const varWhere = { projectId: this.projectId, effectiveRange: 0 }
+                const h = this.$createElement
+                const postData = { groupId: this.curGroupId, funcList, h, varWhere }
+                return this.bulkAddFunc(postData).then((res) => {
+                    if (!res) return
+                    const projectId = this.$route.params.projectId
+                    return this.getAllGroupFuncs(projectId)
+                })
             }
         }
     }
