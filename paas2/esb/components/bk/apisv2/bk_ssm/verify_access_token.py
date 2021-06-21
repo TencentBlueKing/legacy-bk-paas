@@ -9,6 +9,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import json
 
 from django import forms
 
@@ -30,10 +31,10 @@ class VerifyAccessToken(Component):
         access_token = forms.CharField(label="access token", required=True)
 
     def handle(self):
-        result = self.http_client.post(
+        result = self.outgoing.http_client.post(
             host=configs.host,
             path="/api/v1/auth/access-tokens/verify",
-            data=self.form_data,
+            data=json.dumps(self.form_data),
             headers=configs.headers,
         )
 
