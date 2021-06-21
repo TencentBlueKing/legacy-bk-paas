@@ -257,8 +257,8 @@ class TestApiChannel:
             ),
         ]
     )
-    def test_before_handle_request(self, request_factory, mocker, app_code, authorization, expected):
-        request = request_factory.get("")
+    def test_before_handle_request(self, fake_request, mocker, app_code, authorization, expected):
+        request = fake_request
         request.g = FancyDict({
             "app_code": app_code,
             "authorization": authorization,

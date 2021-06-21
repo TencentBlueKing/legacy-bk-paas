@@ -32,7 +32,7 @@ class AppAuthValidator(BaseValidator):
         super(AppAuthValidator, self).__init__(*args, **kwargs)
 
     def validate(self, request):
-        if request.g.authorization.get('access_token'):
+        if request.g.authorization.get("access_token"):
             validator = AccessTokenValidator()
             validator.validate(request)
 
@@ -73,7 +73,7 @@ class AppAuthValidator(BaseValidator):
 class AccessTokenValidator(BaseValidator):
 
     def validate(self, request):
-        bk_app_code, bk_username = self._verify_access_token(request.g.authorization['access_token'])
+        bk_app_code, bk_username = self._verify_access_token(request.g.authorization["access_token"])
 
         self._validated_data = {
             "bk_app_code": bk_app_code,

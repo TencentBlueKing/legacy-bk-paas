@@ -23,5 +23,5 @@ headers = {
 }
 
 host = SmartHost(
-    host_prod=settings.BK_SSM_API_URL,
+    host_prod=getattr(settings, "BK_SSM_API_URL", "")
 )

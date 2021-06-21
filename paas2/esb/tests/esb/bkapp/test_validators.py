@@ -17,10 +17,9 @@ from esb.bkapp.validators import AccessTokenValidator, AppAuthValidator, AppSecr
 
 
 class TestAppAuthValidator:
-    def test_validate_with_access_token(self, request_factory, mocker):
+    def test_validate_with_access_token(self, fake_request, mocker):
         validator = AppAuthValidator(verified_type="app_secret")
-
-        request = request_factory.get("")
+        request = fake_request
 
         # use AppSecretValidator
         request.g = FancyDict(authorization={})
@@ -40,10 +39,10 @@ class TestAppAuthValidator:
         with pytest.raises(ValidationError):
             validator.validate(request)
 
-    def test_validate_with_signature_or_app_secret(self, request_factory, mocker):
+    def test_validate_with_signature_or_app_secret(self, fake_request, mocker):
         validator = AppAuthValidator(verified_type="app_secret")
+        request = fake_request
 
-        request = request_factory.get("")
         # has param bk_app_secret, use AppSecretValidator
         mocked_validate = mocker.patch(
             "esb.bkapp.validators.AppSecretValidator.validate",
@@ -149,12 +148,12 @@ class TestAppSecretValidator:
             ),
         ]
     )
-    def test_validate(self, mocker, request_factory, authorization, expected):
+    def test_validate(self, mocker, fake_request, authorization, expected):
         mocker.patch(
             "esb.bkapp.validators.AppSecureInfo.get_by_app_code",
             return_value={"secure_key_list": ["valid-secret1", "valid-secret2"]}
         )
-        request = request_factory.get("")
+        request = fake_request
         request.g = FancyDict(app_code="app-test", authorization=authorization)
         validator = AppSecretValidator()
 

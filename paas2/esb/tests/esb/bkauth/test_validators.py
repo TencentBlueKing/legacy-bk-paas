@@ -17,10 +17,10 @@ from esb.bkauth.validators import UserAuthValidator, UserAuthWithBKTokenValidato
 
 
 class TestUserAuthValidator:
-    def test_validate_with_access_token(self, request_factory, mocker):
+    def test_validate_with_access_token(self, fake_request, mocker):
         validator = UserAuthValidator()
+        request = fake_request
 
-        request = request_factory.get("")
         request.g = FancyDict({
             "kwargs": {},
             "app_code": "app-test",
@@ -58,8 +58,9 @@ class TestUserAuthValidator:
         with pytest.raises(ValidationError):
             validator.validate(request)
 
-    def test_validate_with_bk_token(self, request_factory, mocker):
-        request = request_factory.get("")
+    def test_validate_with_bk_token(self, fake_request, mocker):
+        request = fake_request
+
         request.g = FancyDict({
             "kwargs": {},
             "app_code": "app-test",
@@ -89,8 +90,8 @@ class TestUserAuthValidator:
             ),
         ]
     )
-    def test_validate_with_username(self, request_factory, mocker, authorization, expected):
-        request = request_factory.get("")
+    def test_validate_with_username(self, fake_request, mocker, authorization, expected):
+        request = fake_request
         request.g = FancyDict({
             "kwargs": {},
             "app_code": "app-test",
@@ -110,8 +111,8 @@ class TestUserAuthValidator:
 
 
 class TestUserAuthWithBKTokenValidator:
-    def test_validate(self, request_factory, mocker):
-        request = request_factory.get("")
+    def test_validate(self, fake_request, mocker):
+        request = fake_request
         request.g = FancyDict({
             "authorization": {
                 "bk_token": "fake-bk-token",

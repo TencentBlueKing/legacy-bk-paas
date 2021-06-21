@@ -32,11 +32,11 @@ class VerifyAccessToken(Component):
     def handle(self):
         result = self.http_client.post(
             host=configs.host,
-            path='/api/v1/auth/access-tokens/verify',
+            path="/api/v1/auth/access-tokens/verify",
             data=self.form_data,
             headers=configs.headers,
         )
 
-        result['result'] = result['code'] == 0
+        result["result"] = result["code"] == 0
 
         self.response.payload = result
