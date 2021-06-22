@@ -76,7 +76,7 @@ class BaseComponent(object):
     def current_user(self, value):
         self._current_user = value
 
-    def invoke(self, kwargs={}, use_test_env=False, request_id=None, is_dummy=False, app_code="", timeout=None):
+    def invoke(self, kwargs={}, use_test_env=False, request_id="", is_dummy=False, app_code="", timeout=None):
         """
         调用一个组件，需要注意的是，当这个组件实例被一个wsgi_request初始化过以后，
         是不需要传入后面这些额外的参数的。
