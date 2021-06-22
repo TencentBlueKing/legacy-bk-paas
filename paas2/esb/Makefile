@@ -13,10 +13,13 @@ i18n_cp:
 	cp locale/locale_api/en/LC_MESSAGES/django.* ../paas/locale/locale_api/en/LC_MESSAGES/
 
 poetry.lock: pyproject.toml
-	poetry lock
+	poetry lock --no-update
 
-requirements.txt: poetry.lock
-	poetry export -f requirements.txt --without-hashes -o requirements.txt
+requirements_dev.txt: poetry.lock
+	poetry export -f requirements.txt --without-hashes --dev | grep -v "index-url" > requirements_dev.txt
+
+requirements.txt: poetry.lock requirements_dev.txt
+	poetry export -f requirements.txt --without-hashes | grep -v "index-url" > requirements.txt
 
 VERSION: pyproject.toml
 	poetry version | awk '{print $$2}' > VERSION

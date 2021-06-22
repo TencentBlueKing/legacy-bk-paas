@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.20
+    - esb: support bk-api-authorization
+
 # 2.12.19
     - esb: update esb cc confapis
 

@@ -6,6 +6,11 @@ category = "dev"
 optional = false
 python-versions = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "appnope"
 version = "0.1.0"
@@ -13,6 +18,11 @@ description = "Disable App Nap on OS X 10.9"
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "arrow"
@@ -25,6 +35,11 @@ python-versions = "*"
 [package.dependencies]
 python-dateutil = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "aspy.yaml"
 version = "1.3.0"
@@ -36,6 +51,11 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 [package.dependencies]
 pyyaml = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "atomicwrites"
 version = "1.4.0"
@@ -43,6 +63,11 @@ description = "Atomic file writes."
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "attrs"
@@ -53,10 +78,15 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.extras]
-azure-pipelines = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "pytest-azurepipelines"]
-dev = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "sphinx", "pre-commit"]
 docs = ["sphinx", "zope.interface"]
 tests = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface"]
+azure-pipelines = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "pytest-azurepipelines"]
+dev = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "sphinx", "pre-commit"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "backports.functools-lru-cache"
@@ -68,7 +98,12 @@ python-versions = ">=2.6"
 
 [package.extras]
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
-testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-black-multipy", "pytest-cov"]
+testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-black-multipy", "pytest-cov"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "backports.shutil-get-terminal-size"
@@ -78,6 +113,11 @@ category = "dev"
 optional = false
 python-versions = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "cachetools"
 version = "3.1.1"
@@ -86,6 +126,11 @@ category = "main"
 optional = false
 python-versions = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "certifi"
 version = "2020.6.20"
@@ -93,6 +138,11 @@ description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "cfgv"
@@ -105,6 +155,11 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 [package.dependencies]
 six = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "chardet"
 version = "3.0.4"
@@ -112,6 +167,11 @@ description = "Universal encoding detector for Python 2 and 3"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "colorama"
@@ -121,13 +181,23 @@ category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "concurrentloghandler"
 version = "0.9.1"
-description = "Concurrent logging handler (drop-in replacement for RotatingFileHandler) Python 2.6+"
+description = "Concurrent logging handler (drop-in replacement for RotatingFileHandler)"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "configparser"
@@ -139,7 +209,12 @@ python-versions = ">=2.6"
 
 [package.extras]
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
-testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2)", "pytest-flake8", "pytest-black-multipy"]
+testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2)", "pytest-flake8", "pytest-black-multipy"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "contextlib2"
@@ -149,6 +224,11 @@ category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "decorator"
 version = "4.4.2"
@@ -157,6 +237,11 @@ category = "dev"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "distlib"
 version = "0.3.1"
@@ -164,6 +249,11 @@ description = "Distribution utilities"
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "django"
@@ -176,6 +266,11 @@ python-versions = "*"
 [package.extras]
 bcrypt = ["bcrypt"]
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "django-environ"
 version = "0.4.5"
@@ -183,6 +278,11 @@ description = "Django-environ allows you to utilize 12factor inspired environmen
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "enum34"
@@ -192,6 +292,11 @@ category = "main"
 optional = false
 python-versions = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "filelock"
 version = "3.0.12"
@@ -199,6 +304,11 @@ description = "A platform independent file lock."
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "flake8"
@@ -209,14 +319,19 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
 
 [package.dependencies]
-configparser = {version = "*", markers = "python_version < \"3.2\""}
+pyflakes = ">=2.2.0,<2.3.0"
 enum34 = {version = "*", markers = "python_version < \"3.4\""}
-functools32 = {version = "*", markers = "python_version < \"3.2\""}
+typing = {version = "*", markers = "python_version < \"3.5\""}
 importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 mccabe = ">=0.6.0,<0.7.0"
 pycodestyle = ">=2.6.0a1,<2.7.0"
-pyflakes = ">=2.2.0,<2.3.0"
-typing = {version = "*", markers = "python_version < \"3.5\""}
+functools32 = {version = "*", markers = "python_version < \"3.2\""}
+configparser = {version = "*", markers = "python_version < \"3.2\""}
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "funcsigs"
@@ -226,6 +341,11 @@ category = "main"
 optional = false
 python-versions = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "functools32"
 version = "3.2.3-2"
@@ -233,6 +353,11 @@ description = "Backport of the functools module from Python 3.2.3 for use on 2.7
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "futures"
@@ -242,16 +367,26 @@ category = "dev"
 optional = false
 python-versions = ">=2.6, <3"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "gevent"
 version = "1.1.2"
-description = "Coroutine-based network library (python 2.6 - 3.5)"
+description = "Coroutine-based network library"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
 greenlet = ">=0.4.9"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "greenlet"
@@ -260,6 +395,11 @@ description = "Lightweight in-process concurrent programming"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "gunicorn"
@@ -270,9 +410,14 @@ optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 
 [package.extras]
-eventlet = ["eventlet (>=0.9.7)"]
-gevent = ["gevent (>=0.13)"]
 tornado = ["tornado (>=0.2)"]
+gevent = ["gevent (>=0.13)"]
+eventlet = ["eventlet (>=0.9.7)"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "identify"
@@ -285,6 +430,11 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
 [package.extras]
 license = ["editdistance"]
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "idna"
 version = "2.8"
@@ -292,6 +442,11 @@ description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "importlib-metadata"
@@ -302,14 +457,19 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [package.dependencies]
-configparser = {version = ">=3.5", markers = "python_version < \"3\""}
 contextlib2 = {version = "*", markers = "python_version < \"3\""}
 pathlib2 = {version = "*", markers = "python_version < \"3\""}
 zipp = ">=0.5"
+configparser = {version = ">=3.5", markers = "python_version < \"3\""}
 
 [package.extras]
 docs = ["sphinx", "rst.linker"]
 testing = ["packaging", "pep517", "importlib-resources (>=1.3)"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "importlib-resources"
@@ -320,14 +480,19 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [package.dependencies]
+singledispatch = {version = "*", markers = "python_version < \"3.4\""}
 contextlib2 = {version = "*", markers = "python_version < \"3\""}
 pathlib2 = {version = "*", markers = "python_version < \"3\""}
-singledispatch = {version = "*", markers = "python_version < \"3.4\""}
-typing = {version = "*", markers = "python_version < \"3.5\""}
 zipp = {version = ">=0.4", markers = "python_version < \"3.8\""}
+typing = {version = "*", markers = "python_version < \"3.5\""}
 
 [package.extras]
 docs = ["sphinx", "rst.linker", "jaraco.packaging"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "ipdb"
@@ -340,6 +505,11 @@ python-versions = ">=2.7"
 [package.dependencies]
 ipython = {version = ">=5.1.0,<6.0.0", markers = "python_version == \"2.7\""}
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "ipython"
 version = "5.10.0"
@@ -350,28 +520,33 @@ python-versions = "*"
 
 [package.dependencies]
 appnope = {version = "*", markers = "sys_platform == \"darwin\""}
-"backports.shutil-get-terminal-size" = {version = "*", markers = "python_version == \"2.7\""}
-colorama = {version = "*", markers = "sys_platform == \"win32\""}
-decorator = "*"
+win-unicode-console = {version = ">=0.5", markers = "sys_platform == \"win32\" and python_version < \"3.6\""}
 pathlib2 = {version = "*", markers = "python_version == \"2.7\" or python_version == \"3.3\""}
+"backports.shutil-get-terminal-size" = {version = "*", markers = "python_version == \"2.7\""}
+traitlets = ">=4.2"
+simplegeneric = ">0.8"
+pygments = "<2.6"
+colorama = {version = "*", markers = "sys_platform == \"win32\""}
+prompt-toolkit = ">=1.0.4,<2.0.0"
 pexpect = {version = "*", markers = "sys_platform != \"win32\""}
 pickleshare = "*"
-prompt-toolkit = ">=1.0.4,<2.0.0"
-pygments = "<2.6"
-simplegeneric = ">0.8"
-traitlets = ">=4.2"
-win-unicode-console = {version = ">=0.5", markers = "sys_platform == \"win32\" and python_version < \"3.6\""}
+decorator = "*"
 
 [package.extras]
-all = ["nbformat", "ipykernel", "pygments (<2.6)", "testpath", "notebook", "nbconvert", "ipyparallel", "qtconsole", "Sphinx (>=1.3)", "requests", "nose (>=0.10.1)", "ipywidgets"]
-doc = ["Sphinx (>=1.3)"]
 kernel = ["ipykernel"]
-nbconvert = ["nbconvert"]
+all = ["Sphinx (>=1.3)", "ipykernel", "ipyparallel", "ipywidgets", "nbconvert", "nbformat", "nose (>=0.10.1)", "notebook", "pygments (<2.6)", "qtconsole", "requests", "testpath"]
 nbformat = ["nbformat"]
-notebook = ["notebook", "ipywidgets"]
-parallel = ["ipyparallel"]
+doc = ["Sphinx (>=1.3)"]
+notebook = ["ipywidgets", "notebook"]
+nbconvert = ["nbconvert"]
 qtconsole = ["qtconsole"]
-test = ["nose (>=0.10.1)", "requests", "testpath", "pygments (<2.6)", "nbformat", "ipykernel", "mock", "numpy"]
+test = ["ipykernel", "mock", "nbformat", "nose (>=0.10.1)", "numpy", "pygments (<2.6)", "requests", "testpath"]
+parallel = ["ipyparallel"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "ipython-genutils"
@@ -380,6 +555,11 @@ description = "Vestigial utilities from IPython"
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "isort"
@@ -394,10 +574,15 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 futures = {version = "*", markers = "python_version < \"3.2\""}
 
 [package.extras]
-pipfile = ["pipreqs", "requirementslib"]
 pyproject = ["toml"]
+pipfile = ["pipreqs", "requirementslib"]
 requirements = ["pipreqs", "pip-api"]
 xdg_home = ["appdirs (>=1.4.0)"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "jinja2"
@@ -413,6 +598,11 @@ MarkupSafe = "*"
 [package.extras]
 i18n = ["Babel (>=0.8)"]
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "markdown"
 version = "2.6.6"
@@ -420,6 +610,11 @@ description = "Python implementation of Markdown."
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "markupsafe"
@@ -429,6 +624,11 @@ category = "main"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "mccabe"
 version = "0.6.1"
@@ -436,6 +636,11 @@ description = "McCabe checker, plugin for flake8"
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "mock"
@@ -446,13 +651,18 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
-funcsigs = {version = ">=1", markers = "python_version < \"3.3\""}
 six = "*"
+funcsigs = {version = ">=1", markers = "python_version < \"3.3\""}
 
 [package.extras]
-build = ["twine", "wheel", "blurb"]
-docs = ["sphinx"]
 test = ["pytest", "pytest-cov"]
+docs = ["sphinx"]
+build = ["twine", "wheel", "blurb"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "more-itertools"
@@ -465,6 +675,11 @@ python-versions = "*"
 [package.dependencies]
 six = ">=1.0.0,<2.0.0"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "nodeenv"
 version = "1.4.0"
@@ -472,6 +687,11 @@ description = "Node.js virtual environment builder"
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "packaging"
@@ -485,6 +705,11 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 pyparsing = ">=2.0.2"
 six = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "pathlib2"
 version = "2.3.5"
@@ -494,8 +719,13 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-scandir = {version = "*", markers = "python_version < \"3.5\""}
 six = "*"
+scandir = {version = "*", markers = "python_version < \"3.5\""}
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "pexpect"
@@ -508,6 +738,11 @@ python-versions = "*"
 [package.dependencies]
 ptyprocess = ">=0.5"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "pickleshare"
 version = "0.7.5"
@@ -518,6 +753,11 @@ python-versions = "*"
 
 [package.dependencies]
 pathlib2 = {version = "*", markers = "python_version in \"2.6 2.7 3.2 3.3\""}
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "pluggy"
@@ -533,6 +773,11 @@ importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
 [package.extras]
 dev = ["pre-commit", "tox"]
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "pre-commit"
 version = "1.21.0"
@@ -542,17 +787,22 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [package.dependencies]
-"aspy.yaml" = "*"
-cfgv = ">=2.0.0"
-futures = {version = "*", markers = "python_version < \"3.2\""}
-identify = ">=1.0.0"
-importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
-importlib-resources = {version = "*", markers = "python_version < \"3.7\""}
-nodeenv = ">=0.11.1"
+virtualenv = ">=15.2"
 pyyaml = "*"
 six = "*"
+importlib-resources = {version = "*", markers = "python_version < \"3.7\""}
+"aspy.yaml" = "*"
+futures = {version = "*", markers = "python_version < \"3.2\""}
+cfgv = ">=2.0.0"
+nodeenv = ">=0.11.1"
+importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
+identify = ">=1.0.0"
 toml = "*"
-virtualenv = ">=15.2"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "prompt-toolkit"
@@ -566,6 +816,11 @@ python-versions = "*"
 six = ">=1.9.0"
 wcwidth = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "ptyprocess"
 version = "0.6.0"
@@ -573,6 +828,11 @@ description = "Run a subprocess in a pseudo terminal"
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "py"
@@ -582,6 +842,11 @@ category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "pyasn1"
 version = "0.4.8"
@@ -589,6 +854,11 @@ description = "ASN.1 types and codecs"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "pycodestyle"
@@ -598,6 +868,11 @@ category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "pycparser"
 version = "2.20"
@@ -605,6 +880,11 @@ description = "C parser in Python"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "pycrypto"
@@ -614,6 +894,11 @@ category = "main"
 optional = false
 python-versions = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "pyflakes"
 version = "2.2.0"
@@ -622,6 +907,11 @@ category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "pygments"
 version = "2.1.3"
@@ -629,6 +919,11 @@ description = "Pygments is a syntax highlighting package written in Python."
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "pyjwt"
@@ -639,9 +934,14 @@ optional = false
 python-versions = "*"
 
 [package.extras]
+test = ["pytest (==2.7.3)", "pytest-cov", "pytest-runner"]
 crypto = ["cryptography"]
 flake8 = ["flake8", "flake8-import-order", "pep8-naming"]
-test = ["pytest (2.7.3)", "pytest-cov", "pytest-runner"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "pymysql"
@@ -651,6 +951,11 @@ category = "main"
 optional = false
 python-versions = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "pyparsing"
 version = "2.4.7"
@@ -658,6 +963,11 @@ description = "Python parsing module"
 category = "main"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "pytest"
@@ -668,24 +978,29 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
 
 [package.dependencies]
-atomicwrites = ">=1.0"
-attrs = ">=17.4.0"
-colorama = {version = "*", markers = "sys_platform == \"win32\" and python_version != \"3.4\""}
-funcsigs = {version = ">=1.0", markers = "python_version < \"3.0\""}
-importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
 more-itertools = [
     {version = ">=4.0.0,<6.0.0", markers = "python_version <= \"2.7\""},
     {version = ">=4.0.0", markers = "python_version > \"2.7\""},
 ]
+six = ">=1.10.0"
+funcsigs = {version = ">=1.0", markers = "python_version < \"3.0\""}
+py = ">=1.5.0"
+wcwidth = "*"
 packaging = "*"
+importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
+colorama = {version = "*", markers = "sys_platform == \"win32\" and python_version != \"3.4\""}
+attrs = ">=17.4.0"
 pathlib2 = {version = ">=2.2.0", markers = "python_version < \"3.6\""}
 pluggy = ">=0.12,<1.0"
-py = ">=1.5.0"
-six = ">=1.10.0"
-wcwidth = "*"
+atomicwrites = ">=1.0"
 
 [package.extras]
 testing = ["argcomplete", "hypothesis (>=3.56)", "nose", "requests", "mock"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "pytest-django"
@@ -696,12 +1011,37 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
-pathlib2 = {version = "*", markers = "python_version < \"3.4\""}
 pytest = ">=3.6"
+pathlib2 = {version = "*", markers = "python_version < \"3.4\""}
 
 [package.extras]
 docs = ["sphinx", "sphinx-rtd-theme"]
 testing = ["django", "django-configurations (>=2.0)", "six"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
+[[package]]
+name = "pytest-mock"
+version = "2.0.0"
+description = "Thin-wrapper around the mock package for easier use with py.test"
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[package.dependencies]
+pytest = ">=2.7"
+mock = {version = "*", markers = "python_version < \"3.0\""}
+
+[package.extras]
+dev = ["pre-commit", "tox"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "python-dateutil"
@@ -714,6 +1054,11 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 [package.dependencies]
 six = ">=1.5"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "pytz"
 version = "2016.6.1"
@@ -721,6 +1066,11 @@ description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "pyyaml"
@@ -730,6 +1080,11 @@ category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "redis"
 version = "2.10.5"
@@ -737,6 +1092,11 @@ description = "Python client for Redis key-value store"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "requests"
@@ -747,14 +1107,19 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
+idna = ">=2.5,<2.9"
 certifi = ">=2017.4.17"
 chardet = ">=3.0.2,<3.1.0"
-idna = ">=2.5,<2.9"
 urllib3 = ">=1.21.1,<1.25"
 
 [package.extras]
 security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)"]
-socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7)", "win-inet-pton"]
+socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "scandir"
@@ -764,6 +1129,11 @@ category = "main"
 optional = false
 python-versions = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "simplegeneric"
 version = "0.8.1"
@@ -771,6 +1141,11 @@ description = "Simple generic functions (similar to Python's own len(), pickle.d
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "singledispatch"
@@ -783,6 +1158,11 @@ python-versions = "*"
 [package.dependencies]
 six = "*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "six"
 version = "1.15.0"
@@ -791,6 +1171,11 @@ category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "sqlalchemy"
 version = "1.0.12"
@@ -798,6 +1183,11 @@ description = "Database Abstraction Library"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "thrift"
@@ -816,6 +1206,11 @@ ssl = ["ipaddress", "backports.ssl_match_hostname (>=3.5)"]
 all = ["ipaddress", "backports.ssl_match_hostname (>=3.5)", "tornado (>=4.0)", "twisted"]
 twisted = ["twisted"]
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "toml"
 version = "0.10.1"
@@ -823,6 +1218,11 @@ description = "Python Library for Tom's Obvious, Minimal Language"
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "traitlets"
@@ -833,13 +1233,18 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-decorator = "*"
 enum34 = {version = "*", markers = "python_version == \"2.7\""}
-ipython-genutils = "*"
 six = "*"
+ipython-genutils = "*"
+decorator = "*"
 
 [package.extras]
 test = ["pytest", "mock"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "typing"
@@ -848,6 +1253,11 @@ description = "Type Hints for Python"
 category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "urllib3"
@@ -859,7 +1269,12 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 
 [package.extras]
 secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "ipaddress"]
-socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
+socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "uwsgi"
@@ -868,6 +1283,11 @@ description = "The uWSGI server"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "virtualenv"
@@ -878,17 +1298,22 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
 
 [package.dependencies]
-appdirs = ">=1.4.3,<2"
 distlib = ">=0.3.1,<1"
 filelock = ">=3.0.0,<4"
-importlib-metadata = {version = ">=0.12,<2", markers = "python_version < \"3.8\""}
-importlib-resources = {version = ">=1.0", markers = "python_version < \"3.7\""}
 pathlib2 = {version = ">=2.3.3,<3", markers = "python_version < \"3.4\" and sys_platform != \"win32\""}
+importlib-resources = {version = ">=1.0", markers = "python_version < \"3.7\""}
 six = ">=1.9.0,<2"
+importlib-metadata = {version = ">=0.12,<2", markers = "python_version < \"3.8\""}
+appdirs = ">=1.4.3,<2"
 
 [package.extras]
 docs = ["proselint (>=0.10.2)", "sphinx (>=3)", "sphinx-argparse (>=0.2.5)", "sphinx-rtd-theme (>=0.4.3)", "towncrier (>=19.9.0rc1)"]
 testing = ["coverage (>=5)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", "pytest (>=4)", "pytest-env (>=0.6.2)", "pytest-freezegun (>=0.4.1)", "pytest-mock (>=2)", "pytest-randomly (>=1)", "pytest-timeout (>=1)", "pytest-xdist (>=1.31.0)", "packaging (>=20.0)", "xonsh (>=0.9.16)"]
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "wcwidth"
@@ -901,6 +1326,11 @@ python-versions = "*"
 [package.dependencies]
 "backports.functools-lru-cache" = {version = ">=1.2.1", markers = "python_version < \"3.2\""}
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [[package]]
 name = "win-unicode-console"
 version = "0.5"
@@ -908,6 +1338,11 @@ description = "Enable Unicode input and display when running Python from Windows
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
 
 [[package]]
 name = "zipp"
@@ -924,10 +1359,15 @@ contextlib2 = {version = "*", markers = "python_version < \"3.4\""}
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "unittest2", "jaraco.itertools", "func-timeout"]
 
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^2.7"
-content-hash = "d7ea73e88615ad3355ff6cce7a522c95e5f3fbbefc8701a77f8b46813f9c819b"
+content-hash = "66eb050cfd759a205a8b8fbbde82e7bf764d5b473e686c9404ffcaed9e835aeb"
 
 [metadata.files]
 appdirs = [
@@ -982,9 +1422,6 @@ colorama = [
     {file = "colorama-0.4.3.tar.gz", hash = "sha256:e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1"},
 ]
 concurrentloghandler = [
-    {file = "ConcurrentLogHandler-0.9.1-py2.6.egg", hash = "sha256:5d199eecc23751ab1f705826660f733c1090f62789f3e3c44296e706fc75b547"},
-    {file = "ConcurrentLogHandler-0.9.1-py2.7.egg", hash = "sha256:aa608aa0ce32d86d2061dec91cd58a2a367f97110851529d2aa6ebf96d9dcd4d"},
-    {file = "ConcurrentLogHandler-0.9.1-py3.2.egg", hash = "sha256:4ccae08b7f9b3257de35f847e2de8629c00c2075f8ce66db8ed06d7657e2eeae"},
     {file = "ConcurrentLogHandler-0.9.1.tar.gz", hash = "sha256:8225a590fd4194c413fa26675bde5f6b80ad79e4182d5876ba3e264f77755918"},
 ]
 configparser = [
@@ -1057,13 +1494,6 @@ gevent = [
     {file = "gevent-1.1.2-cp35-cp35m-win_amd64.whl", hash = "sha256:58bdc8d1ca56e3dab833c2e2098a9afa98d0ff0f738c63e896138289c2a08b5e"},
     {file = "gevent-1.1.2-pp253-pypy_41-macosx_10_11_x86_64.whl", hash = "sha256:3963faca1c5e175fdcfeec3ee7116f3d8082be2f94e096871e9b08da10fa4c25"},
     {file = "gevent-1.1.2.tar.gz", hash = "sha256:cb15cf73d69a2eeefed330858f09634e2c50bf46da9f9e7635730fcfb872c02c"},
-    {file = "gevent-1.1.2.win-amd64-py2.7.exe", hash = "sha256:911ebb03dee09e841d0f7ee367b1b8380f8918b3e30c3a822bc41599ae74d2a3"},
-    {file = "gevent-1.1.2.win-amd64-py3.3.exe", hash = "sha256:f403a6b18b3cdb6de4c0140711de690071783433cd0f325c9e46c585497e580c"},
-    {file = "gevent-1.1.2.win-amd64-py3.4.exe", hash = "sha256:3c43de92658eb4723572cd7e543340943e96bf4666f92a819d36f93653c39d15"},
-    {file = "gevent-1.1.2.win-amd64-py3.5.exe", hash = "sha256:2feb3fddc0240373bfc0176d7625cb667132beef18009bf7101216baafd136e9"},
-    {file = "gevent-1.1.2.win32-py2.7.exe", hash = "sha256:2f578b4469cbd2c5a59f353dacb81f8435b54afe4ec706c6155900aff39e8a12"},
-    {file = "gevent-1.1.2.win32-py3.4.exe", hash = "sha256:7d8e8ff35decff1c70fd55959e74e5067505862828d875250a840d8031bf48c2"},
-    {file = "gevent-1.1.2.win32-py3.5.exe", hash = "sha256:192439e55f6f99215ba98f95c53cf990b8380858d195d8c84ad60eb55ef4161b"},
 ]
 greenlet = [
     {file = "greenlet-0.4.16-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:80cb0380838bf4e48da6adedb0c7cd060c187bb4a75f67a5aa9ec33689b84872"},
@@ -1147,20 +1577,39 @@ markupsafe = [
     {file = "MarkupSafe-1.1.1-cp35-cp35m-win32.whl", hash = "sha256:6dd73240d2af64df90aa7c4e7481e23825ea70af4b4922f8ede5b9e35f78a3b1"},
     {file = "MarkupSafe-1.1.1-cp35-cp35m-win_amd64.whl", hash = "sha256:9add70b36c5666a2ed02b43b335fe19002ee5235efd4b8a89bfcf9005bebac0d"},
     {file = "MarkupSafe-1.1.1-cp36-cp36m-macosx_10_6_intel.whl", hash = "sha256:24982cc2533820871eba85ba648cd53d8623687ff11cbb805be4ff7b4c971aff"},
+    {file = "MarkupSafe-1.1.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:d53bc011414228441014aa71dbec320c66468c1030aae3a6e29778a3382d96e5"},
     {file = "MarkupSafe-1.1.1-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:00bc623926325b26bb9605ae9eae8a215691f33cae5df11ca5424f06f2d1f473"},
     {file = "MarkupSafe-1.1.1-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:717ba8fe3ae9cc0006d7c451f0bb265ee07739daf76355d06366154ee68d221e"},
+    {file = "MarkupSafe-1.1.1-cp36-cp36m-manylinux2010_i686.whl", hash = "sha256:3b8a6499709d29c2e2399569d96719a1b21dcd94410a586a18526b143ec8470f"},
+    {file = "MarkupSafe-1.1.1-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:84dee80c15f1b560d55bcfe6d47b27d070b4681c699c572af2e3c7cc90a3b8e0"},
+    {file = "MarkupSafe-1.1.1-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:b1dba4527182c95a0db8b6060cc98ac49b9e2f5e64320e2b56e47cb2831978c7"},
     {file = "MarkupSafe-1.1.1-cp36-cp36m-win32.whl", hash = "sha256:535f6fc4d397c1563d08b88e485c3496cf5784e927af890fb3c3aac7f933ec66"},
     {file = "MarkupSafe-1.1.1-cp36-cp36m-win_amd64.whl", hash = "sha256:b1282f8c00509d99fef04d8ba936b156d419be841854fe901d8ae224c59f0be5"},
     {file = "MarkupSafe-1.1.1-cp37-cp37m-macosx_10_6_intel.whl", hash = "sha256:8defac2f2ccd6805ebf65f5eeb132adcf2ab57aa11fdf4c0dd5169a004710e7d"},
+    {file = "MarkupSafe-1.1.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:bf5aa3cbcfdf57fa2ee9cd1822c862ef23037f5c832ad09cfea57fa846dec193"},
     {file = "MarkupSafe-1.1.1-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:46c99d2de99945ec5cb54f23c8cd5689f6d7177305ebff350a58ce5f8de1669e"},
     {file = "MarkupSafe-1.1.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:ba59edeaa2fc6114428f1637ffff42da1e311e29382d81b339c1817d37ec93c6"},
+    {file = "MarkupSafe-1.1.1-cp37-cp37m-manylinux2010_i686.whl", hash = "sha256:6fffc775d90dcc9aed1b89219549b329a9250d918fd0b8fa8d93d154918422e1"},
+    {file = "MarkupSafe-1.1.1-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:a6a744282b7718a2a62d2ed9d993cad6f5f585605ad352c11de459f4108df0a1"},
+    {file = "MarkupSafe-1.1.1-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:195d7d2c4fbb0ee8139a6cf67194f3973a6b3042d742ebe0a9ed36d8b6f0c07f"},
     {file = "MarkupSafe-1.1.1-cp37-cp37m-win32.whl", hash = "sha256:b00c1de48212e4cc9603895652c5c410df699856a2853135b3967591e4beebc2"},
     {file = "MarkupSafe-1.1.1-cp37-cp37m-win_amd64.whl", hash = "sha256:9bf40443012702a1d2070043cb6291650a0841ece432556f784f004937f0f32c"},
     {file = "MarkupSafe-1.1.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:6788b695d50a51edb699cb55e35487e430fa21f1ed838122d722e0ff0ac5ba15"},
     {file = "MarkupSafe-1.1.1-cp38-cp38-manylinux1_i686.whl", hash = "sha256:cdb132fc825c38e1aeec2c8aa9338310d29d337bebbd7baa06889d09a60a1fa2"},
     {file = "MarkupSafe-1.1.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:13d3144e1e340870b25e7b10b98d779608c02016d5184cfb9927a9f10c689f42"},
+    {file = "MarkupSafe-1.1.1-cp38-cp38-manylinux2010_i686.whl", hash = "sha256:acf08ac40292838b3cbbb06cfe9b2cb9ec78fce8baca31ddb87aaac2e2dc3bc2"},
+    {file = "MarkupSafe-1.1.1-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:d9be0ba6c527163cbed5e0857c451fcd092ce83947944d6c14bc95441203f032"},
+    {file = "MarkupSafe-1.1.1-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:caabedc8323f1e93231b52fc32bdcde6db817623d33e100708d9a68e1f53b26b"},
     {file = "MarkupSafe-1.1.1-cp38-cp38-win32.whl", hash = "sha256:596510de112c685489095da617b5bcbbac7dd6384aeebeda4df6025d0256a81b"},
     {file = "MarkupSafe-1.1.1-cp38-cp38-win_amd64.whl", hash = "sha256:e8313f01ba26fbbe36c7be1966a7b7424942f670f38e666995b88d012765b9be"},
+    {file = "MarkupSafe-1.1.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:d73a845f227b0bfe8a7455ee623525ee656a9e2e749e4742706d80a6065d5e2c"},
+    {file = "MarkupSafe-1.1.1-cp39-cp39-manylinux1_i686.whl", hash = "sha256:98bae9582248d6cf62321dcb52aaf5d9adf0bad3b40582925ef7c7f0ed85fceb"},
+    {file = "MarkupSafe-1.1.1-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:2beec1e0de6924ea551859edb9e7679da6e4870d32cb766240ce17e0a0ba2014"},
+    {file = "MarkupSafe-1.1.1-cp39-cp39-manylinux2010_i686.whl", hash = "sha256:7fed13866cf14bba33e7176717346713881f56d9d2bcebab207f7a036f41b850"},
+    {file = "MarkupSafe-1.1.1-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:6f1e273a344928347c1290119b493a1f0303c52f5a5eae5f16d74f48c15d4a85"},
+    {file = "MarkupSafe-1.1.1-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:feb7b34d6325451ef96bc0e36e1a6c0c1c64bc1fbec4b854f4529e51887b1621"},
+    {file = "MarkupSafe-1.1.1-cp39-cp39-win32.whl", hash = "sha256:22c178a091fc6630d0d045bdb5992d2dfe14e3259760e713c490da5323866c39"},
+    {file = "MarkupSafe-1.1.1-cp39-cp39-win_amd64.whl", hash = "sha256:b7d644ddb4dbd407d31ffb699f1d140bc35478da613b441c582aeb7c43838dd8"},
     {file = "MarkupSafe-1.1.1.tar.gz", hash = "sha256:29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b"},
 ]
 mccabe = [
@@ -1218,18 +1667,7 @@ py = [
     {file = "py-1.9.0.tar.gz", hash = "sha256:9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342"},
 ]
 pyasn1 = [
-    {file = "pyasn1-0.4.8-py2.4.egg", hash = "sha256:fec3e9d8e36808a28efb59b489e4528c10ad0f480e57dcc32b4de5c9d8c9fdf3"},
-    {file = "pyasn1-0.4.8-py2.5.egg", hash = "sha256:0458773cfe65b153891ac249bcf1b5f8f320b7c2ce462151f8fa74de8934becf"},
-    {file = "pyasn1-0.4.8-py2.6.egg", hash = "sha256:5c9414dcfede6e441f7e8f81b43b34e834731003427e5b09e4e00e3172a10f00"},
-    {file = "pyasn1-0.4.8-py2.7.egg", hash = "sha256:6e7545f1a61025a4e58bb336952c5061697da694db1cae97b116e9c46abcf7c8"},
     {file = "pyasn1-0.4.8-py2.py3-none-any.whl", hash = "sha256:39c7e2ec30515947ff4e87fb6f456dfc6e84857d34be479c9d4a4ba4bf46aa5d"},
-    {file = "pyasn1-0.4.8-py3.1.egg", hash = "sha256:78fa6da68ed2727915c4767bb386ab32cdba863caa7dbe473eaae45f9959da86"},
-    {file = "pyasn1-0.4.8-py3.2.egg", hash = "sha256:08c3c53b75eaa48d71cf8c710312316392ed40899cb34710d092e96745a358b7"},
-    {file = "pyasn1-0.4.8-py3.3.egg", hash = "sha256:03840c999ba71680a131cfaee6fab142e1ed9bbd9c693e285cc6aca0d555e576"},
-    {file = "pyasn1-0.4.8-py3.4.egg", hash = "sha256:7ab8a544af125fb704feadb008c99a88805126fb525280b2270bb25cc1d78a12"},
-    {file = "pyasn1-0.4.8-py3.5.egg", hash = "sha256:e89bf84b5437b532b0803ba5c9a5e054d21fec423a89952a74f87fa2c9b7bce2"},
-    {file = "pyasn1-0.4.8-py3.6.egg", hash = "sha256:014c0e9976956a08139dc0712ae195324a75e142284d5f87f1a87ee1b068a359"},
-    {file = "pyasn1-0.4.8-py3.7.egg", hash = "sha256:99fcc3c8d804d1bc6d9a099921e39d827026409a58f2a720dcdb89374ea0c776"},
     {file = "pyasn1-0.4.8.tar.gz", hash = "sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba"},
 ]
 pycodestyle = [
@@ -1271,21 +1709,16 @@ pytest-django = [
     {file = "pytest-django-3.9.0.tar.gz", hash = "sha256:664e5f42242e5e182519388f01b9f25d824a9feb7cd17d8f863c8d776f38baf9"},
     {file = "pytest_django-3.9.0-py2.py3-none-any.whl", hash = "sha256:64f99d565dd9497af412fcab2989fe40982c1282d4118ff422b407f3f7275ca5"},
 ]
+pytest-mock = [
+    {file = "pytest-mock-2.0.0.tar.gz", hash = "sha256:b35eb281e93aafed138db25c8772b95d3756108b601947f89af503f8c629413f"},
+    {file = "pytest_mock-2.0.0-py2.py3-none-any.whl", hash = "sha256:cb67402d87d5f53c579263d37971a164743dc33c159dfb4fb4a86f37c5552307"},
+]
 python-dateutil = [
     {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},
     {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},
 ]
 pytz = [
-    {file = "pytz-2016.6.1-py2.4.egg", hash = "sha256:97baa64915ef83b98d202ee2d4dbcc891b924b83410e69078523215fa2c72d0a"},
-    {file = "pytz-2016.6.1-py2.5.egg", hash = "sha256:3495f56248eac90e59a1e742d13e2ce647eea46aadf453d0fa22b7eb3d665670"},
-    {file = "pytz-2016.6.1-py2.6.egg", hash = "sha256:5cf3ed40944662a351b2cca0c5bb0c003e0a1b2c4d808e45fad73abf80f44b48"},
-    {file = "pytz-2016.6.1-py2.7.egg", hash = "sha256:dec0bedfa2a91289e2505e4f771dbcb6a3930b6664e6a6ac010cd73f555900ba"},
     {file = "pytz-2016.6.1-py2.py3-none-any.whl", hash = "sha256:7833bf559800232d3965b70e69642ebdadc76f7988f8d0a1440e072193ecd949"},
-    {file = "pytz-2016.6.1-py3.1.egg", hash = "sha256:2f5fa04d1804ff0cd52ca3274ba9e74c775b4b70a18f25fcc537c903dfd5cc18"},
-    {file = "pytz-2016.6.1-py3.2.egg", hash = "sha256:a44a3486a6657046879406dfd9ef0565b1211ffcf4779bddbe39c72496df1688"},
-    {file = "pytz-2016.6.1-py3.3.egg", hash = "sha256:2298d266b831852d0a7ef7e17c57c09a0320d187b3f1c85e58903fb6088d268d"},
-    {file = "pytz-2016.6.1-py3.4.egg", hash = "sha256:060cf9f8770765a7d0be9e0b3e512ab54bc346a15daa50d6c9dd59347a396d3a"},
-    {file = "pytz-2016.6.1-py3.5.egg", hash = "sha256:1cc1fdda22d183ed6e6c9f65ecbba8e12a9208cfadd384d2d429e18dc0250a0f"},
     {file = "pytz-2016.6.1.tar.bz2", hash = "sha256:b5aff44126cf828537581e534cc94299b223b945a2bb3b5434d37bf8c7f3a10c"},
     {file = "pytz-2016.6.1.tar.gz", hash = "sha256:6f57732f0f8849817e9853eb9d50d85d1ebb1404f702dbc44ee627c642a486ca"},
     {file = "pytz-2016.6.1.zip", hash = "sha256:51ad716f6081f2126deb436349924e069dfcd0cbd9e0cabdacb0b3a72a3b82e7"},
