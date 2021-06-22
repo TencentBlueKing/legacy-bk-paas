@@ -233,6 +233,17 @@
   dest_http_method: POST
   is_hidden: True
 
+- path: /v2/bk_log/databus_collectors/list_collectors_by_host/
+  name: list_collectors_by_host
+  label: 日志平台-根据IP获取采集项列表
+  label_en: bk_log list collector by host
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/list_collectors_by_host/
+  dest_http_method: GET
+  is_hidden: True
+
 - path: /v2/bk_log/databus_storage/
   name: list_databus_storage
   label: 日志平台-存储列表
