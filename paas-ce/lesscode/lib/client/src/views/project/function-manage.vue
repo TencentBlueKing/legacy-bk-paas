@@ -506,20 +506,24 @@
                     return new Promise((resolve, reject) => {
                         const reader = new FileReader()
                         reader.onload = () => {
-                            const funJson = JSON.parse(reader.result)
-                            for (const key in funJson) {
-                                const isRepeatFunc = [...this.curFuncList, ...funcList].find((func) => (func.funcCode === key))
-                                const func = {
-                                    funcGroupId: this.curGroupId,
-                                    ...funJson[key]
+                            try {
+                                const funJson = JSON.parse(reader.result)
+                                for (const key in funJson) {
+                                    const isRepeatFunc = [...this.curFuncList, ...funcList].find((func) => (func.funcCode === key))
+                                    const func = {
+                                        funcGroupId: this.curGroupId,
+                                        ...funJson[key]
+                                    }
+                                    if (isRepeatFunc) {
+                                        ignoreFunList.push(func)
+                                    } else {
+                                        funcList.push(func)
+                                    }
                                 }
-                                if (isRepeatFunc) {
-                                    ignoreFunList.push(func)
-                                } else {
-                                    funcList.push(func)
-                                }
+                                resolve()
+                            } catch (error) {
+                                reject(error)
                             }
-                            resolve()
                         }
                         reader.onerror = reject
                         reader.readAsText(file)
