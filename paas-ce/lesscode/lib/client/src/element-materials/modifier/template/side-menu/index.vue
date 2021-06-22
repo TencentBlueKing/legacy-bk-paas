@@ -14,10 +14,10 @@
                         v-for="(menu, index) in localMenuList"
                         :key="`${menu.id}`"
                         :data="menu"
+                        show-icon
                         :last-one="localMenuList.length === 1"
                         @on-delete="handleRemove(index)"
                         @on-change="value => handleChange(value, index)" />
-
                 </transition-group>
             </vue-draggable>
         </div>
