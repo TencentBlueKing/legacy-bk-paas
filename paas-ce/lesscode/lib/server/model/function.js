@@ -139,13 +139,15 @@ const func = {
             .getRawMany()
     },
 
-    async addFunction (funcData, varWhere) {
+    async addFunction (funcList, varWhere) {
         const funcRepository = getRepository(Func)
-        funcData.funcParams = (funcData.funcParams || []).join(',')
-        funcData.remoteParams = (funcData.remoteParams || []).join(',')
-        const newFunc = funcRepository.create(funcData)
-        const res = await funcRepository.save(newFunc)
-        await func.handleFuncRelation(res, varWhere)
+        funcList.forEach((funcData) => {
+            funcData.funcParams = (funcData.funcParams || []).join(',')
+            funcData.remoteParams = (funcData.remoteParams || []).join(',')
+        })
+        const newFuncs = funcRepository.create(funcList)
+        const res = await funcRepository.save(newFuncs)
+        await Promise.all(res.map((fun) => func.handleFuncRelation(fun, varWhere)))
         return res
     },
 
