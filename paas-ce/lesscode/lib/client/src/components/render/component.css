@@ -25,6 +25,7 @@
     [component-type="bk-popconfirm"],
     [component-type="bk-badge"],
     [component-type="bk-card"],
+    [component-type="el-card"],
     [component-type="bk-divider"],
     [component-type="span"] {
         font-size: 14px;

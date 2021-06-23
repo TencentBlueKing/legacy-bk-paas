@@ -19,8 +19,7 @@ export default {
     events: [{ name: 'error', tips: '图片类头像加载失败的回调， 返回 false 会关闭组件默认的 fallback 行为，回调参数 (e: Event)' }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {
-        display: 'inline-block',
-        width: '60px'
+        display: 'inline-block'
     },
     props: {
         icon: {
