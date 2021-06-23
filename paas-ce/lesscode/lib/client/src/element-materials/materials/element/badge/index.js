@@ -21,16 +21,16 @@ export default {
         display: 'inline-block'
     },
     props: {
+        value: {
+            type: ['string', 'number'],
+            val: '1',
+            tips: '显示值'
+        },
         type: {
             type: 'string',
             options: ['primary', 'info', 'warning', 'danger', 'success'],
             val: 'primary',
             tips: '类型'
-        },
-        value: {
-            type: ['string', 'number'],
-            val: '1',
-            tips: '显示值'
         },
         max: {
             type: 'number',

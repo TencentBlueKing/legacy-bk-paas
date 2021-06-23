@@ -24,18 +24,18 @@ import slider from './slider'
 import rate from './rate'
 import timePicker from './time-picker'
 import radioGroup from './radio-group'
-import checkboxGroup from './checkbox-group'
+// import checkboxGroup from './checkbox-group'
 import cascade from './cascade'
 import datePicker from './date-picker'
-import upload from './upload'
+// import upload from './upload'
 import colorPicker from './color-picker'
-import transfer from './transfer'
+// import transfer from './transfer'
 import table from './table'
 import tagInput from './tag-input'
 import progress from './progress'
 import tree from './tree'
 import pagination from './pagination'
-import badge from './badge'
+// import badge from './badge'
 import alert from './alert'
 
 const elementComponents = Object.seal([
@@ -53,18 +53,18 @@ const elementComponents = Object.seal([
     rate,
     timePicker,
     radioGroup,
-    checkboxGroup,
+    // checkboxGroup,
     cascade,
     datePicker,
-    upload,
+    // upload,
     colorPicker,
-    transfer,
+    // transfer,
     table,
     tagInput,
     progress,
     tree,
     pagination,
-    badge,
+    // badge,
     alert
 ])
 

@@ -33,6 +33,10 @@ export default {
         }
     ],
     props: {
+        value: {
+            type: 'string',
+            val: ''
+        },
         readonly: {
             type: 'boolean',
             val: false

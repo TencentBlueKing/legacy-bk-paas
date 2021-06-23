@@ -34,7 +34,7 @@ export default {
         },
         description: {
             type: 'string',
-            val: '辅助性文字',
+            val: '',
             tips: '辅助性文字。也可通过默认 slot 传入'
         },
         center: {

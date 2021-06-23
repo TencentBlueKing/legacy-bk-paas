@@ -36,6 +36,10 @@ export default {
         }
     ],
     props: {
+        value: {
+            type: ['string', 'number', 'boolean'],
+            val: ''
+        },
         multiple: {
             type: 'boolean',
             val: false,

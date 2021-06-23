@@ -9,8 +9,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { formatLink } from '@/common/util'
-
 export default {
     name: 'el-input',
     type: 'el-input',
@@ -19,29 +17,15 @@ export default {
     group: 'Form',
     order: 1,
     events: [{
-        name: 'change', tips: '文本框内容变化时调用，回调参数（value, event）'
+        name: 'change', tips: '仅在输入框失去焦点或用户按下回车时触发，回调参数(value: string | number)'
     }, {
-        name: 'input', tips: '文本框内容变化时调用，回调参数（value, event）'
+        name: 'input', tips: '在 Input 值改变时触发，回调参数(value: string | number)'
     }, {
-        name: 'focus', tips: '文本框获取焦点时调用，回调参数（value, event）'
+        name: 'focus', tips: '在 Input 获得焦点时触发，回调参数(event: Event)'
     }, {
-        name: 'blur', tips: '文本框失去焦点时调用，回调参数（value, event）'
+        name: 'blur', tips: '在 Input 失去焦点时触发，回调参数(event: Event)'
     }, {
-        name: 'keypress', tips: '文本框输入按下键盘时调用，回调参数（value, event）'
-    }, {
-        name: 'keydown', tips: '文本框输入按下键盘时调用，回调参数（value, event）'
-    }, {
-        name: 'keyup', tips: '文本框输入按下键盘按键松开时调用，回调参数（value, event）'
-    }, {
-        name: 'enter', tips: '文本框获取焦点时，按下回车时调用，回调参数（value, event）'
-    }, {
-        name: 'paste', tips: '文本框粘贴内容时调用，回调参数（value, event）'
-    }, {
-        name: 'clear', tips: '点击文本框的清除图标时调用，回调参数（value, event）'
-    }, {
-        name: 'left-icon-click', tips: '点击配置的左图标时调用，回调参数（value, event）'
-    }, {
-        name: 'right-icon-click', tips: '点击配置的右图标时调用，回调参数（value, event）'
+        name: 'clear', tips: '在点击由 clearable 属性生成的清空按钮时触发'
     }],
     styles: ['size', 'margin', 'display'],
     directives: [
@@ -54,20 +38,19 @@ export default {
         }
     ],
     props: {
+        value: {
+            type: ['string', 'number'],
+            val: ''
+        },
         type: {
             type: 'string',
             options: ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'],
             val: 'text',
             tips: '输入框样式'
         },
-        'font-size': {
-            type: 'string',
-            options: ['normal', 'medium', 'large'],
-            val: 'normal',
-            tips: '设置输入框内容字体大小：normal--12px；medium--14px；large--16px'
-        },
         placeholder: {
             type: 'string',
+            val: '',
             tips: '输入框占位文本'
         },
         disabled: {
@@ -82,10 +65,15 @@ export default {
             type: 'boolean',
             val: true
         },
-        'show-controls': {
+        'show-word-limit': {
             type: 'boolean',
-            val: true,
-            tips: 'type 为number 时，是否显示右侧控制箭头'
+            val: false,
+            tips: '是否显示输入字数统计，只在 type = "text" 或 type = "textarea" 时有效'
+        },
+        size: {
+            type: 'string',
+            options: ['medium', 'small', 'mini'],
+            tips: '输入框尺寸，只在 type!="textarea" 时有效'
         },
         maxlength: {
             type: 'number',
@@ -100,25 +88,10 @@ export default {
             tips: 'html 原生属性 name'
         },
         'prefix-icon': {
-            type: 'icon',
-            tips: {
-                html: '左边显示的 icon，' + formatLink({ content: '查看支持的 icon' })
-            }
+            type: 'icon'
         },
         'suffix-icon': {
-            type: 'icon',
-            tips: {
-                html: '右边显示的 icon，' + formatLink({ content: '查看支持的 icon' })
-            }
-        },
-        precision: {
-            type: 'number',
-            options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-            tips: '保留小数位'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
+            type: 'icon'
         }
     }
 }

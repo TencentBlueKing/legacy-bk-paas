@@ -27,6 +27,10 @@ export default {
         }
     ],
     props: {
+        value: {
+            type: 'number',
+            val: 30
+        },
         'min': {
             type: 'number',
             val: 0

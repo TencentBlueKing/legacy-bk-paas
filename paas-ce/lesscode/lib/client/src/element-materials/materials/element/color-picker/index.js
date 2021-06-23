@@ -28,12 +28,17 @@ export default {
     directives: [
         {
             type: 'v-model',
+            prop: 'value',
             propTypes: ['string'],
             val: '',
             valType: 'variable'
         }
     ],
     props: {
+        value: {
+            type: 'string',
+            val: '#3A84FF'
+        },
         size: {
             type: 'string',
             val: '',

@@ -30,12 +30,20 @@ export default {
     directives: [
         {
             type: 'v-model',
-            propTypes: ['string'],
+            prop: 'value',
+            propTypes: ['string', 'array'],
             val: '',
             valType: 'variable'
         }
     ],
     props: {
+        value: {
+            type: ['string', 'array'],
+            regExp: /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/,
+            // 正则校验错误时的提示文本，默认值为"格式错误，请重新输入"
+            regErrorText: '请输入正确的日期格式，如"2020-01-01"',
+            tips: '日期，如"2020-01-01"'
+        },
         placeholder: {
             type: 'string',
             tips: '占位文案'

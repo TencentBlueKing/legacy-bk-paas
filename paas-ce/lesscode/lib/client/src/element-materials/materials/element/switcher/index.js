@@ -33,6 +33,10 @@ export default {
         }
     ],
     props: {
+        value: {
+            type: 'boolean',
+            val: false
+        },
         disabled: {
             type: 'boolean',
             val: false

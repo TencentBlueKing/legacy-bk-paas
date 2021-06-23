@@ -124,7 +124,8 @@ class PageCode {
         // 用户输入的不符合规范的json，按照字符串处理
         try {
             type = new Fn(`return typeof ${val}`)()
-        } catch (error) {}
+        } catch (error) {
+        }
         return type
     }
 
@@ -780,7 +781,7 @@ class PageCode {
                 code += `
                     ${itemClass ? `\n<div class="bk-layout-row-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-layout-row-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
                         ${item.renderProps.slots && item.renderProps.slots.val && item.renderProps.slots.val.map(col => {
-                            return `<div class="bk-layout-col-${this.uniqueKey}" style="width: ${col.width || ''}">
+                    return `<div class="bk-layout-col-${this.uniqueKey}" style="width: ${col.width || ''}">
                                         ${col.children.length ? `${this.generateCode(col.children)}` : ''}
                                     </div>`
                 }).join('\n')}
@@ -791,7 +792,7 @@ class PageCode {
                 code += `
                     ${itemClass ? `\n<div class="bk-free-layout-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-free-layout-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
                         ${item.renderProps.slots && item.renderProps.slots.val && item.renderProps.slots.val.map(slotData => {
-                            return `<div class="bk-free-layout-item-inner-${this.uniqueKey}">
+                    return `<div class="bk-free-layout-item-inner-${this.uniqueKey}">
                                         <div style="height: ${item.renderStyles.height || '500px'}">
                                             ${slotData.children.length ? `${this.generateCode(slotData.children)}` : ''}
                                         </div>
@@ -821,11 +822,13 @@ class PageCode {
     getPropsStr (type, props, compId, dirProps) {
         let propsStr = ''
         const preCompId = camelCase(compId, { transform: camelCaseTransformMerge })
+        let elementComId = ''
         for (const i in props) {
             if (dirProps.find((directive) => (directive.prop === i)) && props[i].type !== 'remote') continue
 
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
+                if (i === 'value') elementComId = compId
                 const { 'v-bind': vBind, 'v-model': vModel, val, type, modifiers = [] } = props[i]
 
                 const propVar = vBind || vModel || compId
@@ -888,6 +891,25 @@ class PageCode {
                     const checkedValue = props['slots'].val.filter(c => c.checked === true).map(c => c.value)
                     this.dataTemplate(compId, JSON.stringify(checkedValue))
                     propsStr += `v-model="${compId}"`
+                }
+            }
+        }
+        // element组件添加vmodel
+        if (type.startsWith('el-')) {
+            const hasVModel = dirProps.filter(item => item.type === 'v-model').length
+            if (!hasVModel && elementComId !== '') {
+                const valueType = props['value'].type
+                if (valueType === 'array' || valueType === 'object') {
+                    propsStr += `v-model="${elementComId}"`
+                } else {
+                    let vModelValue = props['value'].val
+                    if (valueType !== 'string') {
+                        vModelValue = vModelValue.toString()
+                    } else {
+                        vModelValue = `'${vModelValue}'`
+                    }
+                    this.dataTemplate(elementComId, vModelValue)
+                    propsStr += `v-model="${elementComId}"`
                 }
             }
         }
@@ -1166,7 +1188,13 @@ class PageCode {
     }
 
     getComplateFuncByCode (methodCode) {
-        const [returnMethod] = this.getMethodByCode(methodCode) || { id: '', funcName: 'emptyFunc', previewStr: '', vueCodeStr: '', funcBody: '' }
+        const [returnMethod] = this.getMethodByCode(methodCode) || {
+            id: '',
+            funcName: 'emptyFunc',
+            previewStr: '',
+            vueCodeStr: '',
+            funcBody: ''
+        }
         const paramsStr = (returnMethod.funcParams || []).join(', ')
         const addFuncStr = (funcBody = '') => {
             funcBody = this.processFuncBody(funcBody)

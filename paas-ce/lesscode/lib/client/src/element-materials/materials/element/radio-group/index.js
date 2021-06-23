@@ -23,6 +23,7 @@ export default {
     directives: [
         {
             type: 'v-model',
+            prop: 'value',
             propTypes: ['string', 'number', 'boolean'],
             val: '',
             valType: 'variable'
@@ -48,6 +49,10 @@ export default {
                 { 'key': 'label', 'value': 'label' },
                 { 'key': 'key', 'value': 'label' }
             ]
+        },
+        value: {
+            type: ['string', 'number', 'boolean'],
+            val: ''
         },
         disabled: {
             type: 'boolean',

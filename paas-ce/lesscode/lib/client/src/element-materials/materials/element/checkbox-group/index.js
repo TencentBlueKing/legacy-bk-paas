@@ -21,6 +21,8 @@ export default {
     directives: [
         {
             type: 'v-model',
+            prop: 'value',
+            propTypes: ['array'],
             val: '',
             valType: 'variable'
         }
@@ -45,6 +47,10 @@ export default {
                 { 'key': 'label', 'value': 'label' },
                 { 'key': 'key', 'value': 'value' }
             ]
+        },
+        value: {
+            type: 'array',
+            val: ['选项一', '选项二']
         }
     }
 }

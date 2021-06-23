@@ -33,6 +33,8 @@ export default {
     directives: [
         {
             type: 'v-model',
+            prop: 'value',
+            propTypes: ['array'],
             val: '',
             valType: 'variable'
         },
@@ -45,6 +47,10 @@ export default {
         }
     ],
     props: {
+        value: {
+            type: 'array',
+            val: []
+        },
         options: {
             type: ['array', 'remote'],
             remoteValidate (data) {

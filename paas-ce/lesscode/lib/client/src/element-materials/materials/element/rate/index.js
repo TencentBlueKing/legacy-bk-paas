@@ -30,6 +30,10 @@ export default {
         }
     ],
     props: {
+        value: {
+            type: 'number',
+            val: 4
+        },
         max: {
             type: 'number',
             val: 5,
