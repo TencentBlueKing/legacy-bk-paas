@@ -899,18 +899,11 @@ class PageCode {
             const hasVModel = dirProps.filter(item => item.type === 'v-model').length
             if (!hasVModel && elementComId !== '') {
                 const valueType = props['value'].type
-                if (valueType === 'array' || valueType === 'object') {
-                    propsStr += `v-model="${elementComId}"`
-                } else {
-                    let vModelValue = props['value'].val
-                    if (valueType !== 'string') {
-                        vModelValue = vModelValue.toString()
-                    } else {
-                        vModelValue = `'${vModelValue}'`
-                    }
+                if (valueType !== 'array' && valueType !== 'object') {
+                    const vModelValue = valueType === 'string' ? `'${props['value'].val}'` : props['value'].val.toString()
                     this.dataTemplate(elementComId, vModelValue)
-                    propsStr += `v-model="${elementComId}"`
                 }
+                propsStr += `v-model="${elementComId}"`
             }
         }
         return propsStr
