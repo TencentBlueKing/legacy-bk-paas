@@ -35,7 +35,7 @@ import tagInput from './tag-input'
 import progress from './progress'
 import tree from './tree'
 import pagination from './pagination'
-// import badge from './badge'
+import badge from './badge'
 import alert from './alert'
 import inputNumber from './input-number'
 import avatar from './avatar'
@@ -66,7 +66,7 @@ const elementComponents = Object.seal([
     progress,
     tree,
     pagination,
-    // badge,
+    badge,
     alert,
     inputNumber,
     avatar

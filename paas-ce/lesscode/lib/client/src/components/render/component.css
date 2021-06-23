@@ -19,6 +19,7 @@
     &[base-component] {
         font-size: 0;
     }
+    [component-type="el-badge"],
     [component-type="bk-popover"],
     [component-type="bk-animate-number"],
     [component-type="bk-popconfirm"],
