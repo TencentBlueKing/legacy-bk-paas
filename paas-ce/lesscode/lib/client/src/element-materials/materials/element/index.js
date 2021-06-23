@@ -37,6 +37,7 @@ import tree from './tree'
 import pagination from './pagination'
 // import badge from './badge'
 import alert from './alert'
+import inputNumber from './input-number'
 
 const elementComponents = Object.seal([
     grid1,
@@ -65,7 +66,8 @@ const elementComponents = Object.seal([
     tree,
     pagination,
     // badge,
-    alert
+    alert,
+    inputNumber
 ])
 
 export default elementComponents
