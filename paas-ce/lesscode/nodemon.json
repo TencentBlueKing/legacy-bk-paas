@@ -10,7 +10,7 @@
     ],
     "verbose": false,
     "execMap": {
-        "js": "node --inspect lib/server/app.browser.js"
+        "js": "node lib/server/app.browser.js"
     },
     "events": {
     },

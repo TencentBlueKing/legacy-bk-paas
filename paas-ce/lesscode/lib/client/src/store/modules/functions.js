@@ -31,6 +31,20 @@ export default {
             })
         },
 
+        bulkAddFunc ({ state }, { groupId, funcList, h, varWhere }) {
+            return http.post(`${perfix}/bulkAddFunction`, { funcList, varWhere }).then((res = {}) => {
+                if (res.code === 499) {
+                    const message = h('pre', { style: { margin: 0 } }, [res.message])
+                    bkMessage({ theme: 'error', message, ellipsisLine: 0, extCls: 'auto-width' })
+                    return
+                }
+                const newFuncs = res.data || []
+                const curGroup = state.funcGroups.find((group) => (group.id === groupId)) || {}
+                curGroup.functionList.unshift(...newFuncs)
+                return newFuncs
+            })
+        },
+
         addFunc ({ state }, { groupId, func, h, varWhere }) {
             return http.post(`${perfix}/addFunction`, { func, varWhere }).then((res = {}) => {
                 if (res.code === 499) {
