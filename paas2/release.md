@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.21
+    - esb: cc transfer_host_to_resourcemodule add parameter bk_module_id
+
 # 2.12.20
     - esb: support bk-api-authorization
 
