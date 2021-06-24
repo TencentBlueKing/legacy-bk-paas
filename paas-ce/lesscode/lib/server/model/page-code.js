@@ -46,7 +46,9 @@ class PageCode {
         'bk-checkbox-group': 'bk-checkbox',
         'bk-radio-group': 'bk-radio',
         'bk-tab': 'bk-tab-panel',
-        'bk-breadcrumb': 'bk-breadcrumb-item'
+        'bk-breadcrumb': 'bk-breadcrumb-item',
+        'search-table': 'bk-table-column',
+        'folding-table': 'bk-table-column'
     }
     slotContentArray = [
         'bk-checkbox',
@@ -184,18 +186,18 @@ class PageCode {
                     </div>`
             }
             return componentCode
-        } else if(item.type === 'widget-form') {
+        } else if (item.type === 'widget-form') {
             let componentCode = ''
-            const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
-                const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
-                componentCode = `
+            const { itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
+            const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
+            componentCode = `
                     <div ${itemClass} style="${css}">
                         <bk-form ${vueDirective} ${propDirective} ${itemProps}>
                             ${this.generateCode(item.renderProps.slots.val)}
                         </bk-form>
                     </div>
                  `
-                return componentCode
+            return componentCode
         } else {
             // 使用了 element 组件库
             if (item.name.startsWith('el-')) {
@@ -213,7 +215,7 @@ class PageCode {
             const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
             const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
             const itemEvents = this.getItemEvents(item.renderEvents)
-            
+
             let componentCode = ''
             if (inFreeLayout) {
                 if (item.renderStyles.width) {
@@ -1078,6 +1080,9 @@ class PageCode {
                         }
                     })
                 }
+            }
+            if (type === 'search-table' || type === 'folding-table') {
+                slotStr = `<template slot="table-column">${slotStr}</template>`
             }
         }
         return slotStr
