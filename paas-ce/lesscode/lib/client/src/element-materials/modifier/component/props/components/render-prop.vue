@@ -40,7 +40,7 @@
                 </div>
             </template>
             <template v-else>
-                <bk-radio-group v-model="mutlTypeSelected" style="margin-bottom: 10px;" @change="changePropType">
+                <bk-radio-group :value="mutlTypeSelected" style="margin-bottom: 10px;" @change="changePropType">
                     <bk-radio-button
                         v-for="item in formCom"
                         :key="item.typeName"
@@ -131,7 +131,8 @@
         },
         data () {
             return {
-                mutlTypeSelected: ''
+                mutlTypeSelected: '',
+                mutlTypeVal: {}
             }
         },
         computed: {
@@ -234,28 +235,11 @@
                 }, [])
             },
             defaultValue () {
-                const lastValue = this.lastValue.val
-
-                // lastValue 为 '' 时也是合法的，因为有可能是用户特意清除文本框内容
-                if (lastValue !== undefined && lastValue !== null) {
-                    return lastValue
-                }
-
-                // const defaultValList = this.describe.defaultValList
-                // if (Array.isArray(defaultValList)) {
-                //     const index = this.formCom.findIndex(item => item.typeName === this.mutlTypeSelected)
-                //     if (defaultValList[index]) {
-                //         return defaultValList[index]
-                //     }
-                // }
-
-                if (this.describe.hasOwnProperty('val')) {
-                    return this.describe.val
-                }
-                return ''
+                const typeVal = this.mutlTypeVal[this.mutlTypeSelected] || {}
+                return typeVal.val || ''
             },
             defaultPayload () {
-                return this.lastValue.payload || {}
+                return this.mutlTypeVal[this.mutlTypeSelected].payload || this.lastValue.payload || {}
             },
             defaultVariable () {
                 let data
@@ -295,6 +279,7 @@
             } else {
                 this.mutlTypeSelected = this.describe.type
             }
+            this.mutlTypeVal[this.mutlTypeSelected] = JSON.parse(JSON.stringify(this.describe))
             if (!this.lastValue || !this.lastValue.type) {
                 return
             }
@@ -303,13 +288,15 @@
             } else {
                 this.mutlTypeSelected = this.lastValue.type
             }
+            this.mutlTypeVal[this.mutlTypeSelected] = JSON.parse(JSON.stringify(this.lastValue))
         },
         methods: {
             handleUpdate (name, value, type, payload = {}) {
                 try {
+                    const val = getRealValue(type, value)
                     const args = {
                         type,
-                        val: getRealValue(type, value),
+                        val,
                         payload,
                         attrs: this.describe.attrs || []
                     }
@@ -318,6 +305,12 @@
                         args.name = this.describe.name
                     }
                     this.$emit('on-change', name, args)
+                    this.mutlTypeVal[type] = {
+                        val,
+                        payload: {
+                            ...payload
+                        }
+                    }
                 } catch {
                     this.$bkMessage({
                         theme: 'error',
@@ -329,8 +322,22 @@
                 this.$emit('batch-update', renderData)
             },
             changePropType (type) {
-                const value = this.describe.val || this.defaultValue
-                this.handleUpdate(this.name, value, type)
+                if (!this.mutlTypeVal.hasOwnProperty(type)) {
+                    const typeDefaultValueMap = {
+                        'string': '',
+                        'array': [],
+                        'object': {},
+                        'boolean': false,
+                        'number': 0,
+                        'json': {},
+                        'remote': this.mutlTypeVal[this.mutlTypeSelected].val
+                    }
+                    this.mutlTypeVal[type] = {
+                        val: typeDefaultValueMap[type]
+                    }
+                }
+                this.mutlTypeSelected = type
+                this.handleUpdate(this.name, this.defaultValue, type, this.defaultPayload)
             },
             changeVariable (variableData) {
                 const value = variableData.defaultVal === undefined ? this.describe.val : variableData.defaultVal
