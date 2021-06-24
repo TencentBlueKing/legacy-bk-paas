@@ -265,8 +265,8 @@
     import Vue from 'vue'
     import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
-    // import html2canvas from 'html2canvas'
-    import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON, dom2Img } from '@/common/util'
+    import html2canvas from 'html2canvas'
+    import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON } from '@/common/util'
     import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
     import RenderIndex from '@/components/render/index'
     import FreeLayout from '@/components/render/free-layout'
@@ -290,7 +290,7 @@
 
     import ComponentTree from './children/component-tree'
     import { bus } from '@/common/bus'
-    import preivewErrImg from '@/images/preview-error.png'
+    import previewErrorImg from '@/images/preview-error.png'
 
     export default {
         components: {
@@ -1502,39 +1502,30 @@
 
             savePreviewImg () {
                 if (this.actionSelected === 'edit') {
-                    dom2Img(document.querySelector('.lesscode-editor-layout'), imgData => {
-                        // this.$store.dispatch('page/update', {
-                        //     data: {
-                        //         projectId: this.projectId,
-                        //         pageData: {
-                        //             id: parseInt(this.$route.params.pageId),
-                        //             previewImg: img ? img.src : preivewErrImg
-                        //         }
-                        //     }
-                        // })
-                        this.$store.dispatch('page/update', {
-                            data: {
-                                projectId: this.projectId,
-                                pageCode: this.pageDetail.pageCode,
-                                pageData: {
-                                    id: parseInt(this.$route.params.pageId),
-                                    previewImg: imgData || preivewErrImg
-                                }
-                            }
-                        })
-                    })
-                    // html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
-                    //     const imgData = canvas.toDataURL('image/png')
+                    // dom2Img(document.querySelector('.lesscode-editor-layout'), imgData => {
                     //     this.$store.dispatch('page/update', {
                     //         data: {
                     //             projectId: this.projectId,
+                    //             pageCode: this.pageDetail.pageCode,
                     //             pageData: {
                     //                 id: parseInt(this.$route.params.pageId),
-                    //                 previewImg: imgData
+                    //                 previewImg: imgData || previewErrorImg
                     //             }
                     //         }
                     //     })
                     // })
+                    html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
+                        const imgData = canvas.toDataURL('image/png')
+                        this.$store.dispatch('page/update', {
+                            data: {
+                                projectId: this.projectId,
+                                pageData: {
+                                    id: parseInt(this.$route.params.pageId),
+                                    previewImg: imgData || previewErrorImg
+                                }
+                            }
+                        })
+                    })
                 }
             },
 
