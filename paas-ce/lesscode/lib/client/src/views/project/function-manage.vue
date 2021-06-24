@@ -67,7 +67,7 @@
                 <h3 class="function-head">
                     <section>
                         <bk-button theme="primary" @click="addFunction">新建</bk-button>
-                        <bk-button @click="importFunction" class="ml5" :loading="isUploading">导入</bk-button>
+                        <bk-button @click="showImport = true" class="ml5" :loading="isUploading">导入</bk-button>
                         <bk-button @click="exportFunction" class="ml5" :disabled="selectionData.length <= 0">导出</bk-button>
                     </section>
 
@@ -150,6 +150,22 @@
                 <bk-button @click="delObj.show = false" :disabled="delObj.loading">取消</bk-button>
             </div>
         </bk-dialog>
+
+        <bk-dialog v-model="showImport"
+            :loading="isUploading"
+            :mask-close="false"
+            :auto-close="false"
+            width="800"
+            @confirm="handleImport"
+            @after-leave="importFuncJson = '[]'"
+        >
+            <section class="mb10">
+                <bk-button @click="importFunction" class="mr10" theme="primary" v-bk-tooltips="{ content: '只可导入Json文件格式，且文件内容需要是Json格式的数组' }">导入</bk-button>
+                <bk-button @click="exportDemoFunction">示例</bk-button>
+            </section>
+
+            <edit-object :value.sync="importFuncJson" :height="400" />
+        </bk-dialog>
     </article>
 </template>
 
@@ -159,11 +175,13 @@
     import dayjs from 'dayjs'
     import layout from '@/components/ui/layout'
     import funcForm from '@/components/methods/func-form'
+    import editObject from '@/components/edit-object'
 
     export default {
         components: {
             layout,
-            funcForm
+            funcForm,
+            editObject
         },
 
         data () {
@@ -191,7 +209,9 @@
                     form: {}
                 },
                 selectionData: [],
-                isUploading: false
+                isUploading: false,
+                showImport: false,
+                importFuncJson: '[]'
             }
         },
 
@@ -492,64 +512,83 @@
                 }
 
                 const funcs = (this.selectionData || []).reduce((funcs, func) => {
-                    funcs[func.funcCode] = getExportFunc(func)
+                    funcs.push(getExportFunc(func))
                     return funcs
-                }, {})
+                }, [])
                 const source = JSON.stringify(funcs, null, 2)
-                downloadFile(source, 'lesscode-func.json')
+                downloadFile(source, `lesscode-${this.projectId}-func.json`)
+            },
+
+            exportDemoFunction () {
+                const demoExportFunc = [{
+                    'funcName': 'getApiData',
+                    'funcCode': 'getApiData',
+                    'funcParams': [],
+                    'funcBody': 'const data = res.data || []\r\nreturn data\r\n',
+                    'funcSummary': '远程函数，获取数据',
+                    'funcType': 1,
+                    'funcMethod': 'get',
+                    'withToken': 0,
+                    'funcApiData': null,
+                    'funcApiUrl': `${location.origin}/api/data/getMockData`,
+                    'remoteParams': [
+                        'res'
+                    ]
+                }]
+                const source = JSON.stringify(demoExportFunc, null, 2)
+                downloadFile(source, `lesscode-export-demo-func.json`)
             },
 
             importFunction () {
-                const funcList = []
-                const ignoreFunList = []
-                const getImportFunc = (file) => {
-                    return new Promise((resolve, reject) => {
-                        const reader = new FileReader()
-                        reader.onload = () => {
-                            try {
-                                const funJson = JSON.parse(reader.result)
-                                for (const key in funJson) {
-                                    const isRepeatFunc = [...this.curFuncList, ...funcList].find((func) => (func.funcCode === key))
-                                    const func = {
-                                        funcGroupId: this.curGroupId,
-                                        ...funJson[key]
-                                    }
-                                    if (isRepeatFunc) {
-                                        ignoreFunList.push(func)
-                                    } else {
-                                        funcList.push(func)
-                                    }
-                                }
-                                resolve()
-                            } catch (error) {
-                                reject(error)
-                            }
-                        }
-                        reader.onerror = reject
-                        reader.readAsText(file)
-                    })
-                }
-                uploadFile((files) => {
-                    this.isUploading = true
-                    Promise.all(Array.from(files).map(file => getImportFunc(file))).then(() => {
-                        return this.bulkAddFuncFromApi(funcList).then((res) => {
-                            if (!res) return
-                            if (ignoreFunList.length) {
-                                this.$bkMessage({ theme: 'primary', message: `【${ignoreFunList.map(x => x.funcName).join(',')}】由于重复标识取消导入`, ellipsisLine: 3 })
-                            }
-                            if (funcList.length) {
-                                this.$bkMessage({ theme: 'success', message: `【${funcList.map(x => x.funcName).join(',')}】导入成功`, ellipsisLine: 3 })
-                            }
-                            if (ignoreFunList.length <= 0 && funcList.length <= 0) {
-                                this.$bkMessage({ theme: 'primary', message: 'JSON文件为空，暂无导入数据' })
-                            }
+                uploadFile().then((fileList) => {
+                    try {
+                        const funcList = []
+                        fileList.forEach((file) => {
+                            funcList.push(...JSON.parse(file))
                         })
-                    }).catch((err) => {
-                        this.$bkMessage({ theme: 'error', message: err.message || err })
+                        this.importFuncJson = JSON.stringify(funcList, null, 2)
+                    } catch (err) {
+                        this.$bkMessage({ theme: 'error', message: '文件内容需要是Json格式的数组' })
+                    }
+                })
+            },
+
+            handleImport () {
+                try {
+                    const funcList = []
+                    const ignoreFunList = []
+                    const funList = JSON.parse(this.importFuncJson) || []
+                    if (funList.length <= 0) {
+                        throw new Error('JSON文件为空，暂无导入数据')
+                    }
+                    funList.forEach((item) => {
+                        const isRepeatFunc = [...this.curFuncList, ...funcList].find((func) => (func.funcCode === item.funcCode))
+                        const func = {
+                            funcGroupId: this.curGroupId,
+                            ...item
+                        }
+                        if (isRepeatFunc) {
+                            ignoreFunList.push(func)
+                        } else {
+                            funcList.push(func)
+                        }
+                    })
+                    this.isUploading = true
+                    this.bulkAddFuncFromApi(funcList).then((res) => {
+                        if (!res) return
+                        if (ignoreFunList.length) {
+                            this.$bkMessage({ theme: 'primary', message: `【${ignoreFunList.map(x => x.funcName).join(',')}】由于重复标识取消导入`, ellipsisLine: 3 })
+                        }
+                        if (funcList.length) {
+                            this.$bkMessage({ theme: 'success', message: `【${funcList.map(x => x.funcName).join(',')}】导入成功`, ellipsisLine: 3 })
+                        }
+                        this.showImport = false
                     }).finally(() => {
                         this.isUploading = false
                     })
-                })
+                } catch (err) {
+                    this.$bkMessage({ theme: 'error', message: err.message || err })
+                }
             },
 
             bulkAddFuncFromApi (funcList) {
