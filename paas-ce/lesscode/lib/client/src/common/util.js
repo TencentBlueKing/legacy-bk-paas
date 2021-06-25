@@ -84,21 +84,40 @@ export function downloadFile (source, filename = 'lesscode.txt') {
  * @param {*} accept 文件类型
  * @param {*} multiple 是否多选
  */
-export function uploadFile (cb, accept = '.json', multiple = 'multiple') {
-    const uploadEl = document.createElement('input')
-    uploadEl.style.display = 'none'
-    uploadEl.type = 'file'
-    uploadEl.multiple = multiple
-    uploadEl.accept = accept
-    uploadEl.onchange = (event) => {
-        const files = event.target.files || []
-        if (files.length) {
-            cb(files)
+export function uploadFile (accept = '.json', multiple = 'multiple') {
+    return new Promise((resolve, reject) => {
+        const getUploadData = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader()
+                reader.onload = () => {
+                    try {
+                        resolve(reader.result)
+                    } catch (error) {
+                        reject(error)
+                    }
+                }
+                reader.onerror = reject
+                reader.readAsText(file)
+            })
         }
-    }
-    document.body.appendChild(uploadEl)
-    uploadEl.click()
-    document.body.removeChild(uploadEl)
+
+        const uploadEl = document.createElement('input')
+        uploadEl.style.display = 'none'
+        uploadEl.type = 'file'
+        uploadEl.multiple = multiple
+        uploadEl.accept = accept
+        uploadEl.onchange = (event) => {
+            const files = event.target.files || []
+            Promise.all(Array.from(files).map(file => getUploadData(file))).then((res) => {
+                resolve(res)
+            }).catch((err) => {
+                reject(err)
+            })
+        }
+        document.body.appendChild(uploadEl)
+        uploadEl.click()
+        document.body.removeChild(uploadEl)
+    })
 }
 
 /**
