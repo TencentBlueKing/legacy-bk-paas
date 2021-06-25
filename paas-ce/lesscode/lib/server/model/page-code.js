@@ -1113,7 +1113,7 @@ class PageCode {
         for (const i in props) {
             if (i !== 'slots') {
                 const propsValue = typeof props[i] === 'object' ? JSON.stringify(props[i]).replace(/\"/g, '\'') : props[i]
-                const propsKey = (attrs.find(item => item.value === i)) ? attrs.find(item => item.value === i).key : i
+                const propsKey = (attrs && attrs.find(item => item.value === i)) ? attrs.find(item => item.value === i).key : i
                 propsStr += `${typeof props[i] === 'string' ? '' : ':'}${propsKey}="${propsValue}" `
             }
         }
