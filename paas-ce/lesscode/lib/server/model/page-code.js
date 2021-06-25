@@ -48,11 +48,7 @@ class PageCode {
         'bk-tab': 'bk-tab-panel',
         'bk-breadcrumb': 'bk-breadcrumb-item',
         'search-table': 'bk-table-column',
-        'folding-table': 'bk-table-column',
-        'el-select': 'el-option',
-        'el-radio-group': 'el-radio',
-        'el-checkbox-group': 'el-checkbox',
-        'el-table': 'el-table-column'
+        'folding-table': 'bk-table-column'
     }
     slotContentArray = [
         'bk-checkbox',
@@ -193,7 +189,7 @@ class PageCode {
             return componentCode
         } else if (item.type === 'widget-form') {
             let componentCode = ''
-            const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
+            const { itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
             const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives)
             componentCode = `
                     <div ${itemClass} style="${css}">
