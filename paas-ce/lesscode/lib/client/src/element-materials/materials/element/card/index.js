@@ -14,7 +14,7 @@ export default {
     type: 'el-card',
     displayName: '卡片',
     icon: 'bk-drag-card',
-    group: 'Other',
+    group: 'Others',
     order: 1,
     styles: ['size', 'margin', 'display'],
     renderStyles: {

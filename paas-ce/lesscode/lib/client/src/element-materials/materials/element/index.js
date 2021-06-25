@@ -39,8 +39,9 @@ import badge from './badge'
 import alert from './alert'
 import inputNumber from './input-number'
 import avatar from './avatar'
-import image from './image'
+import tooltip from './tooltip'
 import card from './card'
+import image from './image'
 
 const elementComponents = Object.seal([
     grid1,
@@ -72,8 +73,9 @@ const elementComponents = Object.seal([
     alert,
     inputNumber,
     avatar,
-    image,
-    card
+    tooltip,
+    card,
+    image
 ])
 
 export default elementComponents

@@ -48,7 +48,11 @@ class PageCode {
         'bk-tab': 'bk-tab-panel',
         'bk-breadcrumb': 'bk-breadcrumb-item',
         'search-table': 'bk-table-column',
-        'folding-table': 'bk-table-column'
+        'folding-table': 'bk-table-column',
+        'el-select': 'el-option',
+        'el-radio-group': 'el-radio',
+        'el-checkbox-group': 'el-checkbox',
+        'el-table': 'el-table-column'
     }
     slotContentArray = [
         'bk-checkbox',

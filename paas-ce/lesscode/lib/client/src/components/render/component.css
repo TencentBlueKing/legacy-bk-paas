@@ -19,11 +19,12 @@
     &[base-component] {
         font-size: 0;
     }
-    [component-type="el-badge"],
+    [component-type="el-tooltip"],
     [component-type="bk-popover"],
     [component-type="bk-animate-number"],
     [component-type="bk-popconfirm"],
     [component-type="bk-badge"],
+    [component-type="el-badge"],
     [component-type="bk-card"],
     [component-type="el-card"],
     [component-type="bk-divider"],
