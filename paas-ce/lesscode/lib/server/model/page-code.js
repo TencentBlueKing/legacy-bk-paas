@@ -52,7 +52,8 @@ class PageCode {
         'el-select': 'el-option',
         'el-radio-group': 'el-radio',
         'el-checkbox-group': 'el-checkbox',
-        'el-table': 'el-table-column'
+        'el-table': 'el-table-column',
+        'el-tabs': 'el-tab-pane'
     }
     slotContentArray = [
         'bk-checkbox',

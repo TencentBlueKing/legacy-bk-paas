@@ -15,30 +15,42 @@ import grid3 from '../bk/grid/column3'
 import grid4 from '../bk/grid/column4'
 import freeLayout from '../bk/free-layout'
 
+// Basic
 import button from './button'
 import link from './link'
-import input from './input'
-import select from './select'
-import switcher from './switcher'
-import slider from './slider'
-import rate from './rate'
-import timePicker from './time-picker'
+
+// Form
 import radioGroup from './radio-group'
 // import checkboxGroup from './checkbox-group'
+import input from './input'
+import inputNumber from './input-number'
+import select from './select'
 import cascade from './cascade'
+import switcher from './switcher'
+import slider from './slider'
+import timePicker from './time-picker'
 import datePicker from './date-picker'
 // import upload from './upload'
+import rate from './rate'
 import colorPicker from './color-picker'
 // import transfer from './transfer'
+
+// Data
 import table from './table'
 import tagInput from './tag-input'
 import progress from './progress'
 import tree from './tree'
 import pagination from './pagination'
 import badge from './badge'
-import alert from './alert'
-import inputNumber from './input-number'
 import avatar from './avatar'
+
+// Notice
+import alert from './alert'
+
+// Navigation
+import tab from './tab'
+
+// Others
 import tooltip from './tooltip'
 import card from './card'
 import image from './image'
@@ -51,17 +63,18 @@ const elementComponents = Object.seal([
     freeLayout,
     button,
     link,
-    input,
-    select,
-    switcher,
-    slider,
-    rate,
-    timePicker,
     radioGroup,
     // checkboxGroup,
+    input,
+    inputNumber,
+    select,
     cascade,
+    switcher,
+    slider,
+    timePicker,
     datePicker,
     // upload,
+    rate,
     colorPicker,
     // transfer,
     table,
@@ -70,9 +83,9 @@ const elementComponents = Object.seal([
     tree,
     pagination,
     badge,
-    alert,
-    inputNumber,
     avatar,
+    alert,
+    tab,
     tooltip,
     card,
     image
