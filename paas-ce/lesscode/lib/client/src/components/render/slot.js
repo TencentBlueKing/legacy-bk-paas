@@ -52,8 +52,8 @@ export default {
             }, [slotData.name])
         }
 
-        if (name === 'bk-breadcrumb-item') {
-            return h('bk-breadcrumb-item', {
+        if (name === 'bk-breadcrumb-item' || name === 'el-breadcrumb-item') {
+            return h(name, {
                 props: slotData
             }, [slotData.label])
         }

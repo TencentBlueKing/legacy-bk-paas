@@ -53,12 +53,14 @@ class PageCode {
         'el-radio-group': 'el-radio',
         'el-checkbox-group': 'el-checkbox',
         'el-table': 'el-table-column',
-        'el-tabs': 'el-tab-pane'
+        'el-tabs': 'el-tab-pane',
+        'el-breadcrumb': 'el-breadcrumb-item'
     }
     slotContentArray = [
         'bk-checkbox',
         'bk-radio',
-        'bk-breadcrumb-item'
+        'bk-breadcrumb-item',
+        'el-breadcrumb-item'
     ]
     chartTypeArr = []
     usingCustomArr = []
