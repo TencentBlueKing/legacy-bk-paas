@@ -72,7 +72,7 @@ if [ -d $APP_CODE ]; then
 fi
 echo "------get app_code for $APP_CODE------"
 if [ "$VCS_TYPE" = "git" ]; then
-    git clone $VCS_PATH $APP_CODE
+    git clone $VCS_PATH $APP_CODE --depth=1
 else
     svn checkout $VCS_PATH $APP_CODE --non-interactive --no-auth-cache --username=$VCS_USERNAME --password=$VCS_PASSWORD 1> /dev/null
 fi
