@@ -31,7 +31,7 @@ import switcher from './switcher'
 import slider from './slider'
 import timePicker from './time-picker'
 import datePicker from './date-picker'
-// import upload from './upload'
+import upload from './upload'
 import rate from './rate'
 import colorPicker from './color-picker'
 // import transfer from './transfer'
@@ -75,7 +75,7 @@ const elementComponents = Object.seal([
     slider,
     timePicker,
     datePicker,
-    // upload,
+    upload,
     rate,
     colorPicker,
     // transfer,

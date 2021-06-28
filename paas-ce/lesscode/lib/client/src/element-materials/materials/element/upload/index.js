@@ -86,6 +86,11 @@ export default {
             type: 'boolean',
             val: false,
             tips: '是否启用拖拽上传'
+        },
+        slots: {
+            name: 'template',
+            type: 'html',
+            val: '<el-button>点击上传</el-button>'
         }
     }
 }
