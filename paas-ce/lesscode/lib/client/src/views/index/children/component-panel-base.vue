@@ -79,8 +79,6 @@
         computed: {
         },
         created () {
-            console.log(this.componentGroupList)
-            console.log(this.type)
         },
         methods: {
         }
