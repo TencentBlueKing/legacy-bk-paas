@@ -22,7 +22,7 @@ import link from './link'
 
 // Form
 import radioGroup from './radio-group'
-// import checkboxGroup from './checkbox-group'
+import checkboxGroup from './checkbox-group'
 import input from './input'
 import inputNumber from './input-number'
 import select from './select'
@@ -66,7 +66,7 @@ const elementComponents = Object.seal([
     button,
     link,
     radioGroup,
-    // checkboxGroup,
+    checkboxGroup,
     input,
     inputNumber,
     select,
