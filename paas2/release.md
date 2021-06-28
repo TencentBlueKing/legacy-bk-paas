@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.21
+    - bugfix: bkdialog js/css missing while do bind weixin
+
 # 2.12.20
     - esb: support bk-api-authorization
 
