@@ -55,7 +55,8 @@ class PageCode {
         'bk-radio',
         'bk-breadcrumb-item'
     ]
-    chartTypeArr = []
+    chartTypeArr = [] // echarts 相关，要引入echarts依赖
+    useBkCharts = false // 是否使用bkcharts标志位
     usingCustomArr = []
     usingFuncCodes = []
     usingVariables = []
@@ -170,18 +171,19 @@ class PageCode {
             this.generateCharts(item)
             const widthStr = item.renderProps.width && item.renderProps.width.val ? `width: ${item.renderProps.width.val}px;` : ''
             const heightStr = `height:${item.renderProps.height.val || 0}px;`
+            const displayStr = item.renderStyles.display ? `display: ${item.renderStyles.display};vertical-align: middle;` : ''
 
             let componentCode = ''
             if (inFreeLayout) {
                 componentCode = `
                     <div style="${css}" ${vueDirective}>
-                        <div style="${widthStr}${heightStr}">
+                        <div style="${widthStr}${heightStr}${displayStr}">
                             <chart :options="${item.componentId}" ${propDirective} autoresize></chart>
                         </div>
                     </div>`
             } else {
                 componentCode = `
-                    <div style="${widthStr}${heightStr}" ${vueDirective}>
+                    <div style="${widthStr}${heightStr}${displayStr}" ${vueDirective}>
                         <chart :options="${item.componentId}" ${propDirective} autoresize></chart>
                     </div>`
             }
@@ -202,6 +204,10 @@ class PageCode {
             // 使用了 element 组件库
             if (item.name.startsWith('el-')) {
                 this.isUseElementComponentLib = true
+            }
+            // 使用了bkcharts
+            if (item.name.startsWith('bk-charts')) {
+                this.useBkCharts = true
             }
             // item.componentId = item.componentId.replace('_', '')
             // 记录是否为自定义组件
@@ -1354,6 +1360,9 @@ class PageCode {
         if (this.chartTypeArr && this.chartTypeArr.length) {
             componentStr += 'chart: ECharts,\n'
         }
+        if (this.useBkCharts) {
+            componentStr += 'bkCharts: bkCharts'
+        }
         if (this.pageType !== 'preview' && this.usingCustomArr && this.usingCustomArr.length) {
             let customStr = ''
             // dev 和 t 环境，npm 包名字前面加了 test- 前缀，生成的变量名字应该去掉 test 前缀
@@ -1401,6 +1410,15 @@ class PageCode {
                  */
 
                 `
+        }
+
+        if (this.useBkCharts) {
+            importStr += `
+                /**
+                 * 请先安装 bk-charts 相关依赖: npm install @blueking/bkcharts
+                 */
+            `
+            importStr += `const bkCharts = require('@/components/bkCharts.vue')\n`
         }
 
         if (this.chartTypeArr && this.chartTypeArr.length) {

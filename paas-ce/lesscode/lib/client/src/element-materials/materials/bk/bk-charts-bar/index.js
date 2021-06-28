@@ -10,8 +10,8 @@
  */
 
 export default {
-    name: 'chart-bar',
-    type: 'chart',
+    name: 'bk-charts-bar',
+    type: 'bk-charts',
     displayName: '柱状图',
     icon: 'bk-drag-histogram',
     group: '图表',
@@ -35,33 +35,53 @@ export default {
         options: {
             type: 'json',
             val: {
-                title: {
-                    text: '柱状图demo',
-                    x: 'center'
+                'type': 'bar',
+                'data': {
+                    'labels': [
+                        'January',
+                        'February',
+                        'March',
+                        'April',
+                        'May',
+                        'June',
+                        'July',
+                        'August',
+                        'September',
+                        'October',
+                        'November',
+                        'December'
+                    ],
+                    'datasets': [
+                        {
+                            'backgroundColor': 'rgba(51,157,255,1)',
+                            'borderColor': 'rgba(51,157,255,1)',
+                            'borderSkipped': 'bottom',
+                            'borderWidth': 1,
+                            'clip': '',
+                            'data': [65, 90, 10, 15, 69, 80, 300, 55, 88, 66, 22, 11],
+                            'label': 'bk-charts-bar'
+                        }
+                    ]
                 },
-                tooltip: {},
-                legend: {
-                    data: ['issue数量'],
-                    left: 'left'
-                },
-                xAxis: {
-                    data: ['一', '二', '三', '四', '五']
-                },
-                yAxis: {},
-                series: [{
-                    name: 'issue数量',
-                    type: 'bar',
-                    data: [3, 5, 8, 3, 5]
-                }]
+                'options': {
+                    'flexWithContainer': true,
+                    'legend': { 'position': 'top' },
+                    'title': { 'display': true, 'text': '基础柱状图' },
+                    'scales': {
+                        'yAxes': {
+                            'scaleLabel': { 'display': true, 'labelString': 'Precipitation in mm' }
+                        },
+                        'xAxes': { 'scaleLabel': { 'display': true, 'labelString': 'Month of the Year' } }
+                    }
+                }
             },
-            tips: '图表配置，配置项同echarts'
+            tips: '图表配置，配置项详见bkcharts'
         },
         remoteOptions: {
             type: 'remote',
             tips: '动态图表配置，可通过函数动态返回图表配置属性，函数返回值会覆盖上述opions里面的同名属性，\n\neg：若函数返回值为{series: [...]}，则最终的图表的渲染会使用函数返回的series数据，其它配置仍为options中的静态配置，由此可达到动态设置图表数据的效果',
             val: '',
             remoteValidate (data) {
-                console.log(data, 'valid')
                 if (typeof data !== 'object') return '返回值需要是object'
             }
         }

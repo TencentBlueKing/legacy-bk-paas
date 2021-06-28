@@ -17,7 +17,10 @@ export default {
     group: '图表',
     order: 1,
     events: [],
-    styles: [],
+    styles: ['display'],
+    renderStyles: {
+        display: 'inline-block'
+    },
     props: {
         width: {
             type: 'number',
