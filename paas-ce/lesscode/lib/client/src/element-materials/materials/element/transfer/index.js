@@ -93,17 +93,6 @@ export default {
             val: [],
             tips: '自定义按钮文案'
         },
-        'render-content': {
-            type: 'function',
-            tips: '自定义数据项渲染函数',
-            val: function (h, option) {
-            }
-        },
-        props: {
-            type: 'object',
-            val: {},
-            tips: '数据源的字段别名'
-        },
         'left-default-checked': {
             type: 'array',
             val: [],

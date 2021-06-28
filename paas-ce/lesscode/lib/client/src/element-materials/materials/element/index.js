@@ -34,7 +34,7 @@ import datePicker from './date-picker'
 import upload from './upload'
 import rate from './rate'
 import colorPicker from './color-picker'
-// import transfer from './transfer'
+import transfer from './transfer'
 
 // Data
 import table from './table'
@@ -78,7 +78,7 @@ const elementComponents = Object.seal([
     upload,
     rate,
     colorPicker,
-    // transfer,
+    transfer,
     table,
     tagInput,
     progress,
