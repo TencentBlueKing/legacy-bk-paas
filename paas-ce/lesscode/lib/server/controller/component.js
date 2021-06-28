@@ -522,6 +522,13 @@ export const compDelete = async (ctx) => {
         if (id < 1) {
             throw new Error('组件不存在')
         }
+        // 权限
+        const record = await ComponentModel.getOne({
+            id
+        })
+        const userInfo = ctx.session.userInfo || {}
+        ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+        if (!ctx.hasPerm) return
 
         await ComponentModel.remove(id)
         ctx.send({
