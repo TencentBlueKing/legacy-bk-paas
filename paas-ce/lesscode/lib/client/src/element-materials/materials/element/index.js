@@ -8,6 +8,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import iconList from './icon-list'
 
 import grid1 from '../bk/grid/column1'
 import grid2 from '../bk/grid/column2'
@@ -90,7 +91,8 @@ const elementComponents = Object.seal([
     breadcrumb,
     tooltip,
     card,
-    image
+    image,
+    ...iconList
 ])
 
 export default elementComponents

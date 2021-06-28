@@ -35,7 +35,7 @@
                         @start="sourceAreaStartHandler"
                         @choose="onChoose($event, group)"
                         @end="sourceAreaEndHandler">
-                        <template v-if="type === 'base'">
+                        <template v-if="type === 'base' && group !== '图标集合'">
                             <!-- @mouseenter="handleComponentMouseenter($event, component)" -->
                             <div v-for="(component, componentIndex) in componentGroups[group]" class="component-item" @dragstart="dragstartHandler" :class="placeholderElemDisplay" :key="componentIndex"
                                 v-show="!searchResult || component.displayName === searchResult.displayName"
@@ -49,7 +49,8 @@
                         <template v-else>
                             <div class="icon-item" v-for="(component, componentIndex) in componentGroups[group]" @dragstart="dragstartHandler" :key="componentIndex"
                                 v-show="!searchResult || component.name === searchResult.name">
-                                <bk-icon :type="component.icon"></bk-icon>
+                                <bk-icon v-if="type === 'icon'" :type="component.icon"></bk-icon>
+                                <i v-else :class="component.icon"></i>
                             </div>
                         </template>
                     </vue-draggable>
@@ -78,6 +79,8 @@
         computed: {
         },
         created () {
+            console.log(this.componentGroupList)
+            console.log(this.type)
         },
         methods: {
         }
