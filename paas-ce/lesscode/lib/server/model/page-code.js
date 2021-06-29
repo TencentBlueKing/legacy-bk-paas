@@ -54,7 +54,8 @@ class PageCode {
         'el-checkbox-group': 'el-checkbox',
         'el-table': 'el-table-column',
         'el-tabs': 'el-tab-pane',
-        'el-breadcrumb': 'el-breadcrumb-item'
+        'el-breadcrumb': 'el-breadcrumb-item',
+        'el-steps': 'el-step'
     }
     slotContentArray = [
         'bk-checkbox',

@@ -51,6 +51,7 @@ import alert from './alert'
 // Navigation
 import tab from './tab'
 import breadcrumb from './bread-crumb'
+import steps from './steps'
 
 // Others
 import tooltip from './tooltip'
@@ -89,6 +90,7 @@ const elementComponents = Object.seal([
     alert,
     tab,
     breadcrumb,
+    steps,
     tooltip,
     card,
     image,

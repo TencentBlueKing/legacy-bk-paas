@@ -129,6 +129,28 @@
                 description: ''
             })
         },
+        'el-step': {
+            template: [
+                {
+                    name: 'title',
+                    key: 'title',
+                    type: 'input'
+                }, {
+                    name: 'icon',
+                    key: 'icon',
+                    type: 'input'
+                }, {
+                    name: '步骤描述',
+                    key: 'description',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                title: `步骤${index}`,
+                icon: '',
+                description: ''
+            })
+        },
         'option': {
             template: [
                 {

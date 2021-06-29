@@ -176,7 +176,8 @@
                     'form-item': TypeFormItem,
                     'color': TypeColor,
                     'step': TypeSlotWrapper,
-                    'function': TypeFunction
+                    'function': TypeFunction,
+                    'el-step': TypeSlotWrapper
                 }
 
                 let realType = config.type
@@ -207,7 +208,8 @@
                     'form-item': 'form-item',
                     'color': 'color',
                     'step': 'step',
-                    'function': 'function'
+                    'function': 'function',
+                    'el-step': 'el-step'
                 }
                 const valueMap = {
                     'text': 'string',
