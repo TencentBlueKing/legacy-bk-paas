@@ -68,6 +68,18 @@
                 checked: false
             })
         },
+        'el-radio': {
+            template: [
+                {
+                    name: 'label',
+                    key: 'label',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                label: `单选项${index}`
+            })
+        },
         'checkbox': {
             template: [
                 {
@@ -88,6 +100,18 @@
                 label: `选项${index}`,
                 value: `选项${index}`,
                 checked: false
+            })
+        },
+        'el-checkbox': {
+            template: [
+                {
+                    name: 'label',
+                    key: 'label',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                label: `选项${index}`
             })
         },
         'bread-crumb': {

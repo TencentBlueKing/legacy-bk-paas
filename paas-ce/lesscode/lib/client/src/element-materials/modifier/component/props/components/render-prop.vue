@@ -179,7 +179,9 @@
                     'function': TypeFunction,
                     'el-step': TypeSlotWrapper,
                     'timeline': TypeSlotWrapper,
-                    'carousel': TypeSlotWrapper
+                    'carousel': TypeSlotWrapper,
+                    'el-radio': TypeSlotWrapper,
+                    'el-checkbox': TypeSlotWrapper
                 }
 
                 let realType = config.type
@@ -213,7 +215,9 @@
                     'function': 'function',
                     'el-step': 'el-step',
                     'timeline': 'timeline',
-                    'carousel': 'carousel'
+                    'carousel': 'carousel',
+                    'el-radio': 'el-radio',
+                    'el-checkbox': 'el-checkbox'
                 }
                 const valueMap = {
                     'text': 'string',

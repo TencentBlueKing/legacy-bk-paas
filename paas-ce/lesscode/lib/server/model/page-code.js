@@ -65,7 +65,6 @@ class PageCode {
         'bk-breadcrumb-item',
         'el-breadcrumb-item',
         'el-timeline-item'
-        // 'el-carousel-item'
     ]
     chartTypeArr = []
     usingCustomArr = []

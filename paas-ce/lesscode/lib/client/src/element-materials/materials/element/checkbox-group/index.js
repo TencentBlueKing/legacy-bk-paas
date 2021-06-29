@@ -30,12 +30,12 @@ export default {
     props: {
         slots: {
             name: 'el-checkbox',
-            type: ['checkbox', 'remote'],
-            // remoteValidate (data) {
-            //     if (!Array.isArray(data)) return '返回值需要是数组'
-            //     const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('value')))
-            //     if (errData) return '返回值每个元素需要含有label和value字段'
-            // },
+            type: ['el-checkbox', 'remote'],
+            remoteValidate (data) {
+                if (!Array.isArray(data)) return '返回值需要是数组'
+                const errData = data.find((item) => (!item.hasOwnProperty('label')))
+                if (errData) return '返回值每个元素需要含有label字段'
+            },
             val: [
                 { label: '选项一' },
                 { label: '选项二' },

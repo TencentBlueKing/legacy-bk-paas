@@ -32,11 +32,11 @@ export default {
     props: {
         slots: {
             name: 'el-radio',
-            type: ['radio', 'remote'],
+            type: ['el-radio', 'remote'],
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
-                const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('value')))
-                if (errData) return '返回值每个元素需要含有label和value字段'
+                const errData = data.find((item) => (!item.hasOwnProperty('label')))
+                if (errData) return '返回值每个元素需要含有label字段'
             },
             val: [
                 { label: '单选一' },
