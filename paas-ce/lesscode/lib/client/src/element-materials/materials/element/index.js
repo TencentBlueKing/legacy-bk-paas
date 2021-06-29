@@ -56,6 +56,7 @@ import steps from './steps'
 // Others
 import tooltip from './tooltip'
 import card from './card'
+import timeline from './timeline'
 import image from './image'
 
 const elementComponents = Object.seal([
@@ -93,6 +94,7 @@ const elementComponents = Object.seal([
     steps,
     tooltip,
     card,
+    timeline,
     image,
     ...iconList
 ])

@@ -184,6 +184,29 @@
                 label: `Tab-${index}`,
                 'name': `Tab-${index}`
             })
+        },
+        'timeline': {
+            template: [
+                {
+                    name: '内容',
+                    key: 'label',
+                    type: 'input'
+                }, {
+                    name: '时间戳',
+                    key: 'timestamp',
+                    type: 'input'
+                },
+                {
+                    name: 'color',
+                    key: 'color',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                label: `Timeline-${index}`,
+                timestamp: '2021-06-29',
+                color: ''
+            })
         }
     }
     export default {

@@ -52,7 +52,7 @@ export default {
             }, [slotData.name])
         }
 
-        if (name === 'bk-breadcrumb-item' || name === 'el-breadcrumb-item') {
+        if (name === 'bk-breadcrumb-item' || name === 'el-breadcrumb-item' || name === 'el-timeline-item') {
             return h(name, {
                 props: slotData
             }, [slotData.label])

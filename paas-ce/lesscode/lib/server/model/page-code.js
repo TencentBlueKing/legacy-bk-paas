@@ -55,13 +55,15 @@ class PageCode {
         'el-table': 'el-table-column',
         'el-tabs': 'el-tab-pane',
         'el-breadcrumb': 'el-breadcrumb-item',
-        'el-steps': 'el-step'
+        'el-steps': 'el-step',
+        'el-timeline': 'el-timeline-item'
     }
     slotContentArray = [
         'bk-checkbox',
         'bk-radio',
         'bk-breadcrumb-item',
-        'el-breadcrumb-item'
+        'el-breadcrumb-item',
+        'el-timeline-item'
     ]
     chartTypeArr = []
     usingCustomArr = []
