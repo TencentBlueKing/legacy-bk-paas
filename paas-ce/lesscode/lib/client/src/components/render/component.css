@@ -19,6 +19,7 @@
     &[base-component] {
         font-size: 0;
     }
+    [component-type="el-carousel"],
     [component-type="el-upload"],
     [component-type="el-tooltip"],
     [component-type="bk-popover"],

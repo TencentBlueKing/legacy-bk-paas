@@ -56,7 +56,8 @@ class PageCode {
         'el-tabs': 'el-tab-pane',
         'el-breadcrumb': 'el-breadcrumb-item',
         'el-steps': 'el-step',
-        'el-timeline': 'el-timeline-item'
+        'el-timeline': 'el-timeline-item',
+        'el-carousel': 'el-carousel-item'
     }
     slotContentArray = [
         'bk-checkbox',
@@ -64,6 +65,7 @@ class PageCode {
         'bk-breadcrumb-item',
         'el-breadcrumb-item',
         'el-timeline-item'
+        // 'el-carousel-item'
     ]
     chartTypeArr = []
     usingCustomArr = []
@@ -1079,7 +1081,8 @@ class PageCode {
                 if (slot.type === 'remote') {
                     this.dataTemplate(compId, JSON.stringify([]))
                     this.remoteMethodsTemplate(compId, slot.payload || {})
-                    const content = this.slotContentArray.includes(slotType) ? '{{item.label}}' : ''
+                    let content = this.slotContentArray.includes(slotType) ? '{{item.label}}' : ''
+                    content = slotType === 'el-carousel-item' ? '{{item.content}}' : content
                     const attrStr = (slot.attrs && slot.attrs.map((item, index) => `:${item.key}="item.${item.value}"`).join('\n')) || ''
 
                     slotStr += `<${slotType} v-for="item in ${compId}" ${attrStr}>
@@ -1096,8 +1099,9 @@ class PageCode {
                             </${slotType}>`
                             item.methodCode && (this.usingFuncCodes = this.usingFuncCodes.concat(item.methodCode))
                         } else {
-                            const content = this.slotContentArray.includes(slotType) ? item.label : ''
-                            const itemProps = this.getSlotPropsStr(item, slot.attrs)
+                            let content = this.slotContentArray.includes(slotType) ? item.label : ''
+                            content = slotType === 'el-carousel-item' ? item.content : content
+                            const itemProps = this.getSlotPropsStr(item, slot.attrs, slotType)
                             slotStr += ''
                                 + `<${slotType} ${itemProps}>`
                                 + content
@@ -1114,9 +1118,12 @@ class PageCode {
         return slotStr
     }
 
-    getSlotPropsStr (props, attrs) {
+    getSlotPropsStr (props, attrs, slotType) {
         let propsStr = ''
         for (const i in props) {
+            if (slotType === 'el-carousel-item' && i === 'content') {
+                continue
+            }
             if (i !== 'slots') {
                 const propsValue = typeof props[i] === 'object' ? JSON.stringify(props[i]).replace(/\"/g, '\'') : props[i]
                 const propsKey = (attrs && attrs.find(item => item.value === i)) ? attrs.find(item => item.value === i).key : i

@@ -58,6 +58,15 @@ export default {
             }, [slotData.label])
         }
 
+        if (name === 'el-carousel-item') {
+            return h('el-carousel-item', {
+                props: slotData,
+                domProps: {
+                    innerHTML: slotData.content
+                }
+            })
+        }
+
         return h(name, {
             props: slotData
         })

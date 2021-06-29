@@ -207,6 +207,28 @@
                 timestamp: '2021-06-29',
                 color: ''
             })
+        },
+        'carousel': {
+            template: [
+                {
+                    name: '文本label',
+                    key: 'label',
+                    type: 'input'
+                }, {
+                    name: '名字name',
+                    key: 'name',
+                    type: 'input'
+                }, {
+                    name: '内容content',
+                    key: 'content',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                label: `carousel-${index}`,
+                'name': `carousel-${index}`,
+                content: `<h3>carousel-${index}</h3>`
+            })
         }
     }
     export default {
