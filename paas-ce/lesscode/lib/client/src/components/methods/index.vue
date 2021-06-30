@@ -52,7 +52,7 @@
                                     <div slot="content">
                                         <ul class="more-list">
                                             <li class="list-item" @click="changeGroupName(group)">重命名</li>
-                                            <li class="disable list-item" v-if="userPerm.roleId === 2" v-bk-tooltips="{ content: '无删除权限', placements: ['bottom'] }">删除</li>
+                                            <li class="disable list-item" v-if="userPerm.roleId === 2 && user.username !== group.createUser" v-bk-tooltips="{ content: '无删除权限', placements: ['bottom'] }">删除</li>
                                             <template v-else>
                                                 <li class="disable list-item" v-if="group.functionList.length" v-bk-tooltips="{ content: '该分类下有函数，不能删除', placements: ['bottom'] }">删除</li>
                                                 <li class="list-item" @click.stop="deleteItem(group.id, group.groupName, true)" v-else>删除</li>
@@ -71,7 +71,7 @@
                                         <i class="bk-drag-icon bk-drag-copy item-tool hover-show"
                                             @click.stop="handleCopyFunc(group, func)"
                                         ></i>
-                                        <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-if="userPerm.roleId === 2" @click.stop v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }"></i>
+                                        <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-if="userPerm.roleId === 2 && user.username !== func.createUser" @click.stop v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }"></i>
                                         <template v-else>
                                             <i class="bk-drag-icon bk-drag-close-line item-tool hover-show"
                                                 @click.stop="deleteItem(func.id, func.funcName, false)"
@@ -177,6 +177,7 @@
         },
 
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('member', ['userPerm']),
             ...mapGetters('page', ['pageDetail']),

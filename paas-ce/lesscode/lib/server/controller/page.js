@@ -65,7 +65,7 @@ export const createDemoPage = async (data) => {
 
         /** 创建demo页的具体内容 */
         const createPageContent = Object.assign(pageContent, { id: id })
-        const editPage = getRepository(Page).create(createPageContent)       
+        const editPage = getRepository(Page).create(createPageContent)
         await getConnection().transaction(async transactionalEntityManager => {
             const page = await transactionalEntityManager.save(editPage)
 
@@ -315,6 +315,12 @@ export const deletePage = async (ctx) => {
             id: parseInt(pageId),
             deleteFlag: 1
         }
+
+        // 权限
+        const record = await getRepository(Page).findOne(pageData.id)
+        const userInfo = ctx.session.userInfo || {}
+        ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+        if (!ctx.hasPerm) return
 
         const result = await getConnection().transaction(async transactionalEntityManager => {
             const delPage = getRepository(Page).create(pageData)

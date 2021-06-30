@@ -170,6 +170,12 @@ module.exports = {
     async deleteProject (ctx) {
         try {
             const { id } = ctx.request.body
+            // 权限
+            const record = await projectModel.findProjectDetail({ id })
+            const userInfo = ctx.session.userInfo || {}
+            ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+            if (!ctx.hasPerm) return
+
             const fields = { deleteFlag: 1 }
             const { affected } = await projectModel.updateProject(id, fields)
             ctx.send({
