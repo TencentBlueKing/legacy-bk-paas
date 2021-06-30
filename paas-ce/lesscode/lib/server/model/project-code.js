@@ -152,7 +152,7 @@ const projectCode = {
                         const targetData = JSON.parse(route.content || '[]')
                         targetData.forEach((container, index) => {
                             const callBack = item => {
-                                if (item.name.startsWith('el-')) {
+                                if (item.name && item.name.startsWith('el-')) {
                                     isUseElement = true
                                 }
                             }
