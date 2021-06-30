@@ -290,6 +290,7 @@
 
     import ComponentTree from './children/component-tree'
     import { bus } from '@/common/bus'
+    import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
 
     export default {
@@ -719,7 +720,7 @@
                     if (content) {
                         const targetData = JSON.parse(content)
                         this.updateTargetData(targetData)
-                        pageDetail.content = JSON.stringify(targetData)
+                        pageDetail.content = safeStringify(targetData)
                     }
 
                     this.$store.commit('page/setPageDetail', pageDetail || {})
@@ -1166,7 +1167,7 @@
                 }
                 // 切换回编辑区，对画布数据进行更新
                 if (action === 'edit' && this.actionSelected !== 'edit') {
-                    const targetData = JSON.parse(JSON.stringify(this.targetData || []))
+                    const targetData = JSON.parse(safeStringify(this.targetData || []))
                     this.updateTargetData(targetData)
                     this.targetData = targetData
                     this.refreshDragAreaKey = +new Date()
@@ -1577,7 +1578,7 @@
             },
 
             test () {
-                console.warn(JSON.stringify(this.targetData))
+                console.warn(safeStringify(this.targetData))
                 console.warn(this.targetData)
             },
             test1 (data) {
