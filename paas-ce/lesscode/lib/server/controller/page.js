@@ -5,6 +5,7 @@ import PageFunc from '../model/entities/page-func'
 import PageRoute from '../model/entities/page-route'
 import LayoutInst from '../model/entities/layout-inst'
 import PageVariable from '../model/entities/page-variable'
+import ProjectPage from '../model/entities/project-page'
 import { hasRoute, formatRoutePath } from './route'
 import { invalidPageIds } from '../conf/system'
 import { getConnection, getRepository } from 'typeorm'
@@ -339,6 +340,16 @@ export const deletePage = async (ctx) => {
                 }
             })
             await transactionalEntityManager.save(PageRoute, savePageRouteList)
+
+            // 删除页面与项目关联记录
+            const projectPageList = await getRepository(ProjectPage).find({ where: { pageId } })
+            const saveProjectPageList = projectPageList.map(item => {
+                return {
+                    ...item,
+                    deleteFlag: 1
+                }
+            })
+            await transactionalEntityManager.save(ProjectPage, saveProjectPageList)
 
             return id
         })
