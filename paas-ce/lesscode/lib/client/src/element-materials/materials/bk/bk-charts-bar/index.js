@@ -14,7 +14,7 @@ export default {
     type: 'bk-charts',
     displayName: '柱状图',
     icon: 'bk-drag-histogram',
-    group: '图表',
+    group: 'BKCharts',
     order: 1,
     events: [],
     styles: ['display'],
