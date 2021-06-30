@@ -468,6 +468,7 @@ export default {
                 'page.updateTime as updateTime',
                 'page.updateUser as updateUser',
                 'page.previewImg as previewImg',
+                'page.deleteFlag as deleteFlag',
                 'project_page.projectId as projectId'
             ])
             .where(condition, params)

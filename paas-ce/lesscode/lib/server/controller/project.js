@@ -139,6 +139,15 @@ module.exports = {
             const projectId = project.id
             if (pageMap[projectId]) {
                 project['pageUpdateTime'] = pageMap[projectId][0].updateTime
+
+                // 找到第一个有效页面的缩略图作为项目的缩略图，如果第一个有效页面缩略图为空，那么项目缩略图就为空
+                const len = pageMap[projectId].length
+                for (let i = 0; i < len; i++) {
+                    if (String(pageMap[projectId][i].deleteFlag) !== '1') {
+                        project['previewImg'] = pageMap[projectId][i].previewImg
+                        break
+                    }
+                }
             }
             project['favorite'] = favoritetList.find(item => item.id === projectId) ? 1 : 0
         })
