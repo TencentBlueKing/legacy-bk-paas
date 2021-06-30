@@ -199,6 +199,13 @@ export const categoryDelete = async (ctx) => {
         if (!id) {
             throw new Error('id不能为空')
         }
+        // 权限
+        const componentCategory = await ComponentCategoryModel.getOne({
+            id
+        })
+        const userInfo = ctx.session.userInfo || {}
+        ctx.hasPerm = (componentCategory.createUser === userInfo.username) || ctx.hasPerm
+        if (!ctx.hasPerm) return
 
         const record = await ComponentModel.getOne({
             categoryId: id,

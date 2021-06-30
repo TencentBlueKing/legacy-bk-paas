@@ -57,7 +57,7 @@
                                         <li><a href="javascript:;" @click="handleRename(page)">重命名</a></li>
                                         <li><a href="javascript:;" @click="handleEditRoute(page)">修改路由</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(page)">复制</a></li>
-                                        <li><a href="javascript:;" @click="handleDelete(page)" :class="{ 'g-no-permission': userPerm.roleId === 2 }" v-bk-tooltips="{ content: '无删除权限', placements: ['right'], disabled: userPerm.roleId === 1 }">删除</a></li>
+                                        <li><a href="javascript:;" @click="handleDelete(page)" :class="{ 'g-no-permission': !getDeletePerm(page) }" v-bk-tooltips="{ content: '无删除权限', disabled: getDeletePerm(page) }">删除</a></li>
                                     </ul>
                                 </bk-dropdown-menu>
                             </div>
@@ -110,6 +110,7 @@
             }
         },
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('project', ['currentProject']),
             projectId () {
@@ -234,7 +235,7 @@
                 this.currentRoute = this.routeMap[page.id]
             },
             handleDelete (page) {
-                if (this.userPerm.roleId === 2) return
+                if (!this.getDeletePerm(page)) return
 
                 this.$bkInfo({
                     title: '确认删除?',
@@ -247,6 +248,9 @@
                         this.getPageList()
                     }
                 })
+            },
+            getDeletePerm (page) {
+                return this.userPerm.roleId === 1 || this.user.username === page.createUser
             },
             handleEditPage (id) {
                 this.$router.push({

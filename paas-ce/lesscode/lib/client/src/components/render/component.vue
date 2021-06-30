@@ -40,6 +40,12 @@
                                 <section v-html="item.templateCol"></section>
                             </template>
                         </bk-table-column>
+                        <el-table-column v-else-if="renderDataSlotName === 'el-table-column' && item.type === 'customCol'" :label="item.label" :width="item.width" :key="item.templateCol + Math.random() * 1000">
+                            <!-- eslint-disable-next-line -->
+                            <template slot-scope="scope">
+                                <section v-html="item.templateCol"></section>
+                            </template>
+                        </el-table-column>
                         <render-slot
                             v-else
                             :key="index"
