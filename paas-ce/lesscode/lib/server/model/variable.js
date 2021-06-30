@@ -71,5 +71,10 @@ module.exports = {
         deleteVariable.deleteFlag = 1
         // eslint-disable-next-line no-return-await
         return await variableRepository.save(deleteVariable)
+    },
+
+    async findById (id) {
+        const res = await getRepository(Variable).findOne(id)
+        return res
     }
 }

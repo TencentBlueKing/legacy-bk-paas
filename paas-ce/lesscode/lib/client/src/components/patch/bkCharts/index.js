@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
- * Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2017-2019 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
@@ -9,15 +9,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import Vue from 'vue'
-import bkMagicVue from 'bk-magic-vue'
-import bkText from '@/components/patch/text'
-import bkImage from '@/components/patch/image'
-import chart from '@/components/patch/chart'
-import bkCharts from '@/components/patch/bkCharts'
-
-Vue.use(bkText)
-Vue.use(bkImage)
-Vue.use(chart)
-Vue.use(bkMagicVue)
-Vue.use(bkCharts)
+import chart from './bkCharts.vue'
+import setInstaller from '@/common/component-installer.js'
+  
+setInstaller(chart)
+  
+export default chart

@@ -8,10 +8,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { allGroupFuncDetail, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, getFuncRelatePageList } from '../model/function'
-import { getTokenByUserName, setToken, updateToken } from '../model/token'
+import { allGroupFuncDetail, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, getFuncRelatePageList, getFuncGroupById, getFuncById } from '../model/function'
 import OperationLogger from '../service/operation-logger'
-const dayjs = require('dayjs')
 const { checkFuncEslint } = require('../util')
 
 module.exports = {
@@ -105,6 +103,12 @@ module.exports = {
         const operationLogger = new OperationLogger(ctx)
         try {
             const query = ctx.request.query || {}
+            // 权限
+            const record = await getFuncGroupById(query.id)
+            const userInfo = ctx.session.userInfo || {}
+            ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+            if (!ctx.hasPerm) return
+
             const data = await deleteFuncGroup(query)
             operationLogger.success({
                 projectId: query.projectId,
@@ -245,6 +249,13 @@ module.exports = {
         try {
             const query = ctx.request.query || {}
             const id = query.id
+
+            // 权限
+            const record = await getFuncById(id)
+            const userInfo = ctx.session.userInfo || {}
+            ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+            if (!ctx.hasPerm) return
+
             const data = await deleteFunction(id)
             operationLogger.success({
                 projectId: query.projectId,

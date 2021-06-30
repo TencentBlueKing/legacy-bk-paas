@@ -10,10 +10,10 @@
  */
 
 export default {
-    name: 'chart-bar',
-    type: 'chart',
-    displayName: '柱状图',
-    icon: 'bk-drag-histogram',
+    name: 'bk-charts-line',
+    type: 'bk-charts',
+    displayName: '折线图',
+    icon: 'bk-drag-line-chart',
     group: '图表',
     order: 1,
     events: [],
@@ -35,26 +35,30 @@ export default {
         options: {
             type: 'json',
             val: {
-                title: {
-                    text: '柱状图demo',
-                    x: 'center'
+                type: 'line',
+                data: {
+                    labels: [
+                        'January',
+                        'February',
+                        'March',
+                        'April',
+                        'May',
+                        'June',
+                        'July'
+                    ],
+                    datasets: [{
+                        label: 'My First Dataset',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
                 },
-                tooltip: {},
-                legend: {
-                    data: ['issue数量'],
-                    left: 'left'
-                },
-                xAxis: {
-                    data: ['一', '二', '三', '四', '五']
-                },
-                yAxis: {},
-                series: [{
-                    name: 'issue数量',
-                    type: 'bar',
-                    data: [3, 5, 8, 3, 5]
-                }]
+                options: {
+                    flexWithContainer: true
+                }
             },
-            tips: '图表配置，配置项同echarts'
+            tips: '图表配置，配置项详见bkcharts'
         },
         remoteOptions: {
             type: 'remote',

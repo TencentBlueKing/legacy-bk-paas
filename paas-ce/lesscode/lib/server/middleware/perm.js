@@ -13,8 +13,6 @@ const permMap = require('../conf/perm')
 module.exports = () => {
     return async function (ctx, next) {
         const request = ctx.request || {}
-        // const header = request.header || request.headers || {}
-        // const referer = header.referer || ''
         const apiPath = request.path
         const apiMethod = request.method
         const apiKey = `${apiMethod}-${apiPath}`
@@ -24,15 +22,15 @@ module.exports = () => {
         if (needPermCodes.length > 0 && permsInfo) {
             const exitPermCodes = permsInfo.permCodes || []
             const hasPerm = needPermCodes.every((code) => exitPermCodes.includes(code))
-            if (!hasPerm) {
-                ctx.status = 200
-                ctx.body = {
-                    code: 403,
-                    message: curPerm.message || '暂无执行该操作权限，请联系项目管理员开通权限后重试'
-                }
-                return
-            }
+            ctx.hasPerm = hasPerm
         }
         await next()
+        if (ctx.hasPerm === false) {
+            ctx.status = 200
+            ctx.body = {
+                code: 403,
+                message: curPerm.message || '暂无执行该操作权限，请联系项目管理员开通权限后重试'
+            }
+        }
     }
 }

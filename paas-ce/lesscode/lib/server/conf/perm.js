@@ -41,8 +41,8 @@ module.exports = {
     },
     'PUT-/api/user/editMember': {
         permCodes: ['edit_member']
+    },
+    'DELETE-/api/variable/deleteVariable': {
+        permCodes: ['delete_variable']
     }
-    // 'DELETE-/api/variable/deleteVariable': {
-    //     permCodes: ['delete_variable']
-    // }
 }

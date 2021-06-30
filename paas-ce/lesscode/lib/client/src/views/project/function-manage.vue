@@ -47,7 +47,7 @@
                             </div>
                             <span :class="['item-tool', 'hover-show', { 'click-show': group.showChange }]" @click="openChange(group)"><i class="bk-icon icon-edit2"></i></span>
                         </bk-popconfirm>
-                        <bk-popover content="无删除权限" class="item-tool-box del-box" v-if="userPerm.roleId === 2">
+                        <bk-popover content="无删除权限" class="item-tool-box del-box" v-if="userPerm.roleId === 2 && user.username !== group.createUser">
                             <i :class="['bk-icon', 'icon-close', 'hover-show', 'disable', { 'click-show': group.showChange }]"></i>
                         </bk-popover>
                         <bk-popover :disabled="group.functionList.length <= 0" content="该分类下有函数，不能删除" class="item-tool-box del-box" v-else>
@@ -110,7 +110,7 @@
                         <template slot-scope="props">
                             <span class="table-bth" @click="editFunction(props.row)">编辑</span>
                             <span class="table-bth" @click="copyRow(props.row)">复制</span>
-                            <span class="table-bth disable" v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }" v-if="userPerm.roleId === 2">删除</span>
+                            <span class="table-bth disable" v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }" v-if="userPerm.roleId === 2 && user.username !== props.row.createUser">删除</span>
                             <template v-else>
                                 <span class="table-bth" @click="deleteItem(props.row.id, props.row.funcName, false)" v-if="(props.row.pages || []).length <= 0 && !props.row.useFlag && !props.row.useInVar">删除</span>
                                 <span class="table-bth disable" v-bk-tooltips="{ content: '该函数被页面引用，请修改后再删除', placements: ['top'] }" v-if="(props.row.pages || []).length > 0">删除</span>
@@ -216,6 +216,7 @@
         },
 
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('member', ['userPerm']),
             projectId () {
