@@ -14,7 +14,7 @@ export default {
     type: 'el-select',
     displayName: '下拉选框',
     icon: 'bk-drag-select',
-    group: 'Form',
+    group: '表单',
     order: 1,
     events: [{
         name: 'selected', tips: '选择列表时调用，多选时，回调参数均为数组（value, option(s)）'

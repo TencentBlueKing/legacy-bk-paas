@@ -14,7 +14,7 @@ export default {
     type: 'el-progress',
     displayName: '进度条',
     icon: 'bk-drag-progress',
-    group: 'Data',
+    group: '数据',
     order: 1,
     styles: ['size', 'margin'],
     props: {

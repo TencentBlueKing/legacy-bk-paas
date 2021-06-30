@@ -14,7 +14,7 @@ export default {
     type: 'el-rate',
     displayName: '评分',
     icon: 'bk-drag-rate',
-    group: 'Form',
+    group: '表单',
     order: 1,
     events: [{
         name: 'change', tips: '分值改变时触发，回调参数为改变后的分值'

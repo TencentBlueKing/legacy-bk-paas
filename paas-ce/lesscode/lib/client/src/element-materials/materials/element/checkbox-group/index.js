@@ -14,7 +14,7 @@ export default {
     type: 'el-checkbox-group',
     displayName: '多选框',
     icon: 'bk-drag-checkbox',
-    group: 'Form',
+    group: '表单',
     order: 1,
     styles: ['margin'],
     events: [{ name: 'change' }],

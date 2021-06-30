@@ -14,7 +14,7 @@ export default {
     type: 'el-date-picker',
     displayName: '日期选择',
     icon: 'bk-drag-date',
-    group: 'Form',
+    group: '表单',
     order: 1,
     events: [{
         name: 'change', tips: '用户确认选定的值时触发，回调参数 组件绑定值。格式与绑定值一致，可受 value-format 控制'

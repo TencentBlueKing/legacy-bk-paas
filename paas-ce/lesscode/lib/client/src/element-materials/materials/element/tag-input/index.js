@@ -14,7 +14,7 @@ export default {
     type: 'el-tag',
     displayName: '标签',
     icon: 'bk-drag-tag',
-    group: 'Data',
+    group: '数据',
     order: 1,
     events: [{
         name: 'click', tips: '点击 Tag 时触发的事件'

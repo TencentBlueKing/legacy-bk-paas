@@ -14,7 +14,7 @@ export default {
     type: 'el-tooltip',
     displayName: '文字提示',
     icon: 'bk-drag-popconfrim',
-    group: 'Others',
+    group: '其他',
     order: 1,
     styles: ['margin', 'display'],
     renderStyles: {

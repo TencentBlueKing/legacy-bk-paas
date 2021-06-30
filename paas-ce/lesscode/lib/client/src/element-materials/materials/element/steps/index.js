@@ -14,7 +14,7 @@ export default {
     type: 'el-steps',
     displayName: '步骤',
     icon: 'bk-drag-step',
-    group: 'Navigation',
+    group: '导航',
     order: 1,
     styles: ['size', 'margin', 'display'],
     props: {

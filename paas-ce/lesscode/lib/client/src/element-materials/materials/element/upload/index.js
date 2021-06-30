@@ -14,7 +14,7 @@ export default {
     type: 'el-upload',
     displayName: '文件上传',
     icon: 'bk-drag-upload',
-    group: 'Form',
+    group: '表单',
     order: 1,
     styles: ['size', 'margin'],
     props: {

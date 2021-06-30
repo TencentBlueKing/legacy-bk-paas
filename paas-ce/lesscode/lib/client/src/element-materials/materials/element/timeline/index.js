@@ -14,7 +14,7 @@ export default {
     type: 'el-timeline',
     displayName: '时间轴',
     icon: 'bk-drag-timeline',
-    group: 'Others',
+    group: '其他',
     order: 1,
     styles: ['size', 'margin', 'display'],
     props: {

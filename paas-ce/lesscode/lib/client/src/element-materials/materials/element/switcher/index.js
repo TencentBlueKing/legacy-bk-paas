@@ -14,7 +14,7 @@ export default {
     type: 'el-switch',
     displayName: '开关',
     icon: 'bk-drag-switcher',
-    group: 'Form',
+    group: '表单',
     order: 1,
     events: [{
         name: 'change', tips: 'switch 状态发生变化时的回调函数，回调参数为新的状态值'

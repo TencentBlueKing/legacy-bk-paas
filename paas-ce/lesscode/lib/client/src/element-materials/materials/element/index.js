@@ -36,7 +36,7 @@ import rate from './rate'
 import colorPicker from './color-picker'
 import transfer from './transfer'
 
-// Data
+// 数据
 import table from './table'
 import tagInput from './tag-input'
 import progress from './progress'
@@ -45,15 +45,15 @@ import pagination from './pagination'
 import badge from './badge'
 import avatar from './avatar'
 
-// Notice
+// 反馈
 import alert from './alert'
 
-// Navigation
+// 导航
 import tab from './tab'
 import breadcrumb from './bread-crumb'
 import steps from './steps'
 
-// Others
+// 其他
 import tooltip from './tooltip'
 import card from './card'
 import carousel from './carousel'
