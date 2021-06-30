@@ -184,6 +184,7 @@ module.exports = {
             .leftJoinAndSelect(UserProjectRole, 'rr', 'rp.projectId = rr.projectId')
             .select(['rp.projectId as projectId', 'rr.roleId as roleId'])
             .where(where.condition.join(' AND '), where.params)
+            .andWhere('rp.deleteFlag = 0')
             .getRawOne()
     },
 
