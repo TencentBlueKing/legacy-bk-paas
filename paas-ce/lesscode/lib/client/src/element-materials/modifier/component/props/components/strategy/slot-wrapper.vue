@@ -68,6 +68,18 @@
                 checked: false
             })
         },
+        'el-radio': {
+            template: [
+                {
+                    name: 'label',
+                    key: 'label',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                label: `单选项${index}`
+            })
+        },
         'checkbox': {
             template: [
                 {
@@ -88,6 +100,18 @@
                 label: `选项${index}`,
                 value: `选项${index}`,
                 checked: false
+            })
+        },
+        'el-checkbox': {
+            template: [
+                {
+                    name: 'label',
+                    key: 'label',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                label: `选项${index}`
             })
         },
         'bread-crumb': {
@@ -129,6 +153,28 @@
                 description: ''
             })
         },
+        'el-step': {
+            template: [
+                {
+                    name: 'title',
+                    key: 'title',
+                    type: 'input'
+                }, {
+                    name: 'icon',
+                    key: 'icon',
+                    type: 'input'
+                }, {
+                    name: '步骤描述',
+                    key: 'description',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                title: `步骤${index}`,
+                icon: '',
+                description: ''
+            })
+        },
         'option': {
             template: [
                 {
@@ -161,6 +207,51 @@
             generateFunc: index => ({
                 label: `Tab-${index}`,
                 'name': `Tab-${index}`
+            })
+        },
+        'timeline': {
+            template: [
+                {
+                    name: '内容',
+                    key: 'label',
+                    type: 'input'
+                }, {
+                    name: '时间戳',
+                    key: 'timestamp',
+                    type: 'input'
+                },
+                {
+                    name: 'color',
+                    key: 'color',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                label: `Timeline-${index}`,
+                timestamp: '2021-06-29',
+                color: ''
+            })
+        },
+        'carousel': {
+            template: [
+                {
+                    name: '文本label',
+                    key: 'label',
+                    type: 'input'
+                }, {
+                    name: '名字name',
+                    key: 'name',
+                    type: 'input'
+                }, {
+                    name: '内容content',
+                    key: 'content',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                label: `carousel-${index}`,
+                'name': `carousel-${index}`,
+                content: `<h3>carousel-${index}</h3>`
             })
         }
     }

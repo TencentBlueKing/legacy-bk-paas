@@ -48,12 +48,23 @@ class PageCode {
         'bk-tab': 'bk-tab-panel',
         'bk-breadcrumb': 'bk-breadcrumb-item',
         'search-table': 'bk-table-column',
-        'folding-table': 'bk-table-column'
+        'folding-table': 'bk-table-column',
+        'el-select': 'el-option',
+        'el-radio-group': 'el-radio',
+        'el-checkbox-group': 'el-checkbox',
+        'el-table': 'el-table-column',
+        'el-tabs': 'el-tab-pane',
+        'el-breadcrumb': 'el-breadcrumb-item',
+        'el-steps': 'el-step',
+        'el-timeline': 'el-timeline-item',
+        'el-carousel': 'el-carousel-item'
     }
     slotContentArray = [
         'bk-checkbox',
         'bk-radio',
-        'bk-breadcrumb-item'
+        'bk-breadcrumb-item',
+        'el-breadcrumb-item',
+        'el-timeline-item'
     ]
     chartTypeArr = [] // echarts 相关，要引入echarts依赖
     useBkCharts = false // 是否使用bkcharts标志位
@@ -121,7 +132,8 @@ class PageCode {
         // 用户输入的不符合规范的json，按照字符串处理
         try {
             type = new Fn(`return typeof ${val}`)()
-        } catch (error) {}
+        } catch (error) {
+        }
         return type
     }
 
@@ -782,7 +794,7 @@ class PageCode {
                 code += `
                     ${itemClass ? `\n<div class="bk-layout-row-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-layout-row-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
                         ${item.renderProps.slots && item.renderProps.slots.val && item.renderProps.slots.val.map(col => {
-                            return `<div class="bk-layout-col-${this.uniqueKey}" style="width: ${col.width || ''}">
+                    return `<div class="bk-layout-col-${this.uniqueKey}" style="width: ${col.width || ''}">
                                         ${col.children.length ? `${this.generateCode(col.children)}` : ''}
                                     </div>`
                 }).join('\n')}
@@ -793,7 +805,7 @@ class PageCode {
                 code += `
                     ${itemClass ? `\n<div class="bk-free-layout-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-free-layout-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
                         ${item.renderProps.slots && item.renderProps.slots.val && item.renderProps.slots.val.map(slotData => {
-                            return `<div class="bk-free-layout-item-inner-${this.uniqueKey}">
+                    return `<div class="bk-free-layout-item-inner-${this.uniqueKey}">
                                         <div style="height: ${item.renderStyles.height || '500px'}">
                                             ${slotData.children.length ? `${this.generateCode(slotData.children)}` : ''}
                                         </div>
@@ -823,11 +835,13 @@ class PageCode {
     getPropsStr (type, props, compId, dirProps) {
         let propsStr = ''
         const preCompId = camelCase(compId, { transform: camelCaseTransformMerge })
+        let elementComId = ''
         for (const i in props) {
             if (dirProps.find((directive) => (directive.prop === i)) && props[i].type !== 'remote') continue
 
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
+                if (i === 'value') elementComId = compId
                 const { 'v-bind': vBind, 'v-model': vModel, val, type, modifiers = [] } = props[i]
 
                 const propVar = vBind || vModel || compId
@@ -891,6 +905,18 @@ class PageCode {
                     this.dataTemplate(compId, JSON.stringify(checkedValue))
                     propsStr += `v-model="${compId}"`
                 }
+            }
+        }
+        // element组件添加vmodel
+        if (type.startsWith('el-')) {
+            const hasVModel = dirProps.filter(item => item.type === 'v-model').length
+            if (!hasVModel && elementComId !== '') {
+                const valueType = props['value'].type
+                if (valueType !== 'array' && valueType !== 'object') {
+                    const vModelValue = valueType === 'string' ? `'${props['value'].val}'` : props['value'].val.toString()
+                    this.dataTemplate(elementComId, vModelValue)
+                }
+                propsStr += `v-model="${elementComId}"`
             }
         }
         return propsStr
@@ -1060,7 +1086,8 @@ class PageCode {
                 if (slot.type === 'remote') {
                     this.dataTemplate(compId, JSON.stringify([]))
                     this.remoteMethodsTemplate(compId, slot.payload || {})
-                    const content = this.slotContentArray.includes(slotType) ? '{{item.label}}' : ''
+                    let content = this.slotContentArray.includes(slotType) ? '{{item.label}}' : ''
+                    content = slotType === 'el-carousel-item' ? '{{item.content}}' : content
                     const attrStr = (slot.attrs && slot.attrs.map((item, index) => `:${item.key}="item.${item.value}"`).join('\n')) || ''
 
                     slotStr += `<${slotType} v-for="item in ${compId}" ${attrStr}>
@@ -1068,16 +1095,18 @@ class PageCode {
                     </${slotType}>`
                 } else {
                     slot.val && slot.val.map(item => {
-                        if (slotType === 'bk-table-column' && item.type === 'customCol') {
-                            slotStr += `<bk-table-column label="${item.label}" width="${item.width}">
-                                <template slot-scope="props">
+                        if ((slotType === 'bk-table-column' || slotType === 'el-table-column') && item.type === 'customCol') {
+                            const scopeName = slotType === 'bk-table-column' ? 'props' : 'scope'
+                            slotStr += `<${slotType} label="${item.label}" width="${item.width}">
+                                <template slot-scope="${scopeName}">
                                     ${item.templateCol}
                                 </template>
-                            </bk-table-column>`
+                            </${slotType}>`
                             item.methodCode && (this.usingFuncCodes = this.usingFuncCodes.concat(item.methodCode))
                         } else {
-                            const content = this.slotContentArray.includes(slotType) ? item.label : ''
-                            const itemProps = this.getSlotPropsStr(item)
+                            let content = this.slotContentArray.includes(slotType) ? item.label : ''
+                            content = slotType === 'el-carousel-item' ? item.content : content
+                            const itemProps = this.getSlotPropsStr(item, slot.attrs, slotType)
                             slotStr += ''
                                 + `<${slotType} ${itemProps}>`
                                 + content
@@ -1094,12 +1123,16 @@ class PageCode {
         return slotStr
     }
 
-    getSlotPropsStr (props) {
+    getSlotPropsStr (props, attrs, slotType) {
         let propsStr = ''
         for (const i in props) {
+            if (slotType === 'el-carousel-item' && i === 'content') {
+                continue
+            }
             if (i !== 'slots') {
                 const propsValue = typeof props[i] === 'object' ? JSON.stringify(props[i]).replace(/\"/g, '\'') : props[i]
-                propsStr += `${typeof props[i] === 'string' ? '' : ':'}${i}="${propsValue}" `
+                const propsKey = (attrs && attrs.find(item => item.value === i)) ? attrs.find(item => item.value === i).key : i
+                propsStr += `${typeof props[i] === 'string' ? '' : ':'}${propsKey}="${propsValue}" `
             }
         }
         return propsStr
@@ -1166,7 +1199,13 @@ class PageCode {
     }
 
     getComplateFuncByCode (methodCode) {
-        const [returnMethod] = this.getMethodByCode(methodCode) || { id: '', funcName: 'emptyFunc', previewStr: '', vueCodeStr: '', funcBody: '' }
+        const [returnMethod] = this.getMethodByCode(methodCode) || {
+            id: '',
+            funcName: 'emptyFunc',
+            previewStr: '',
+            vueCodeStr: '',
+            funcBody: ''
+        }
         const paramsStr = (returnMethod.funcParams || []).join(', ')
         const addFuncStr = (funcBody = '') => {
             funcBody = this.processFuncBody(funcBody)
