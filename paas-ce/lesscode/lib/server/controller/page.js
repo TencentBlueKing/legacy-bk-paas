@@ -395,8 +395,8 @@ export const pageDetail = async (ctx) => {
     try {
         const { pageId } = ctx.request.query
         const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
-        const detail = await getRepository(Page).findOne(queryParams)
-        detail.lifeCycle = JSON.parse(detail.lifeCycle)
+        const detail = await getRepository(Page).findOne(queryParams) || {}
+        if (detail.lifeCycle) detail.lifeCycle = JSON.parse(detail.lifeCycle)
         ctx.send({
             code: 0,
             message: 'OK',
