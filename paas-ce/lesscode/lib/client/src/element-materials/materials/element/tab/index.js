@@ -14,7 +14,7 @@ export default {
     type: 'el-tabs',
     displayName: '选项卡',
     icon: 'bk-drag-tab',
-    group: 'Navigation',
+    group: '导航',
     order: 1,
     events: [{
         name: 'tab-click', tips: 'tab 被选中时触发，回调参数 被选中的标签 tab 实例'

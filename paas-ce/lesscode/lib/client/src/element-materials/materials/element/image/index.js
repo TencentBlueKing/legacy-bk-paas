@@ -14,7 +14,7 @@ export default {
     type: 'el-image',
     displayName: '图片',
     icon: 'bk-drag-image',
-    group: 'Others',
+    group: '其他',
     order: 1,
     events: [{ name: 'load', tips: '图片加载成功触发, 回调参数 (e: Event)' },
         { name: 'error', tips: '图片加载失败触发, 回调参数 (e: Event)' }],

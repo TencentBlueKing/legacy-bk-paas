@@ -14,7 +14,7 @@ export default {
     type: 'el-radio-group',
     displayName: '单选框',
     icon: 'bk-drag-radio',
-    group: 'Form',
+    group: '表单',
     order: 1,
     events: [{
         name: 'change', tips: '绑定值变化时触发的事件，回调参数为选中的 Radio label 值'

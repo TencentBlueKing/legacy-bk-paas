@@ -14,7 +14,7 @@ export default {
     type: 'el-breadcrumb',
     displayName: '面包屑',
     icon: 'bk-drag-breadcrumb',
-    group: 'Navigation',
+    group: '导航',
     order: 4,
     styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
     props: {

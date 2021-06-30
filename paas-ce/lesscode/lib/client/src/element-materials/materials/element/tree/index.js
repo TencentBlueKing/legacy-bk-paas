@@ -14,7 +14,7 @@ export default {
     type: 'el-tree',
     displayName: '树',
     icon: 'bk-drag-tree',
-    group: 'Data',
+    group: '数据',
     order: 1,
     events: [{
         name: 'node-click', tips: '节点点击触发，回调参数为传递给 data 属性的数组中该节点所对应的对象、节点对应的 Node、节点组件本身。'

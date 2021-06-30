@@ -14,7 +14,7 @@ export default {
     type: 'el-color-picker',
     displayName: '颜色选择',
     icon: 'bk-drag-colorpick',
-    group: 'Form',
+    group: '表单',
     order: 1,
     styles: ['margin', 'padding', 'display'],
     renderStyles: {

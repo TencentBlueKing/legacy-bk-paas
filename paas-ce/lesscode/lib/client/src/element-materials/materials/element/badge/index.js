@@ -14,7 +14,7 @@ export default {
     type: 'el-badge',
     displayName: '标记',
     icon: 'bk-drag-badge',
-    group: 'Data',
+    group: '数据',
     order: 1,
     styles: ['size', 'margin', 'display', 'font', 'backgroundColor'],
     renderStyles: {

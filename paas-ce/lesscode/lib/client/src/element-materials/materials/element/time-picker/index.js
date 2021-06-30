@@ -14,7 +14,7 @@ export default {
     type: 'el-time-picker',
     displayName: '时间选择',
     icon: 'bk-drag-time-2',
-    group: 'Form',
+    group: '表单',
     order: 1,
     events: [{
         name: 'change', tips: '时间改变事件，回调参数为当前选择的时间'
