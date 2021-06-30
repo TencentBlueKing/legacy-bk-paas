@@ -1096,9 +1096,9 @@ class PageCode {
                 } else {
                     slot.val && slot.val.map(item => {
                         if ((slotType === 'bk-table-column' || slotType === 'el-table-column') && item.type === 'customCol') {
-                            const scopeName = slotType === 'bk-table-column' ? 'props' : 'scope'
+                            // const scopeName = slotType === 'bk-table-column' ? 'props' : 'scope'
                             slotStr += `<${slotType} label="${item.label}" width="${item.width}">
-                                <template slot-scope="${scopeName}">
+                                <template slot-scope="props">
                                     ${item.templateCol}
                                 </template>
                             </${slotType}>`
