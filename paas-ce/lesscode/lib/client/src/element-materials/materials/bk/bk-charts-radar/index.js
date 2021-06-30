@@ -10,11 +10,11 @@
  */
 
 export default {
-    name: 'chart-bar',
-    type: 'chart',
-    displayName: '柱状图',
-    icon: 'bk-drag-histogram',
-    group: 'ECharts',
+    name: 'bk-charts-radar',
+    type: 'bk-charts',
+    displayName: '雷达图',
+    icon: 'bk-drag-radar-chart',
+    group: 'BKCharts',
     order: 1,
     events: [],
     styles: ['display'],
@@ -35,26 +35,35 @@ export default {
         options: {
             type: 'json',
             val: {
-                title: {
-                    text: '柱状图demo',
-                    x: 'center'
+                'type': 'radar',
+                'data': {
+                    'labels': [
+                        ['Eating', 'Dinner'],
+                        ['Drinking', 'Water'],
+                        'Sleeping',
+                        ['Designing', 'Graphics'],
+                        'Coding',
+                        'Cycling',
+                        'Running'
+                    ],
+                    'datasets': [
+                        {
+                            'borderWidth': 1,
+                            'backgroundColor': 'rgba(255,111,114,1)',
+                            'borderColor': 'rgba(255,111,114,1)',
+                            'fill': false,
+                            'data': [80, -86, 34, 8, 60, -14, -4],
+                            'label': 'First dataset'
+                        }
+                    ]
                 },
-                tooltip: {},
-                legend: {
-                    data: ['issue数量'],
-                    left: 'left'
-                },
-                xAxis: {
-                    data: ['一', '二', '三', '四', '五']
-                },
-                yAxis: {},
-                series: [{
-                    name: 'issue数量',
-                    type: 'bar',
-                    data: [3, 5, 8, 3, 5]
-                }]
+                'options': {
+                    'flexWithContainer': true,
+                    'aspectRatio': 1.5,
+                    'title': { 'display': true, 'text': 'Title' }
+                }
             },
-            tips: '图表配置，配置项同echarts'
+            tips: '图表配置，配置项详见bkcharts'
         },
         remoteOptions: {
             type: 'remote',

@@ -10,10 +10,10 @@
  */
 
 export default {
-    name: 'bk-charts-pie',
+    name: 'bk-charts-bubble',
     type: 'bk-charts',
-    displayName: '饼图',
-    icon: 'bk-drag-pie-chart',
+    displayName: '气泡图',
+    icon: 'bk-drag-bk-bubble-chart',
     group: 'BKCharts',
     order: 1,
     events: [],
@@ -35,38 +35,46 @@ export default {
         options: {
             type: 'json',
             val: {
-                'type': 'pie',
+                'type': 'bubble',
                 'data': {
-                    'labels': ['Running', 'Swimming', 'Eating', 'Cycling', 'Jumping'],
                     'datasets': [
                         {
-                            'backgroundColor': [
-                                'rgba(51,157,255,1)',
-                                'rgba(59,206,149,1)',
-                                'rgba(255,156,74,1)',
-                                'rgba(255,111,114,1)',
-                                'rgba(248,211,15,1)'
-                            ],
-                            'borderAlign': 'center',
-                            'borderColor': '#fff',
-                            'borderWidth': 2,
-                            'clip': 1.5,
-                            'data': [20, 10, 30, 50],
-                            'hoverBackgroundColor': 'rgba(0, 0, 0, 0.1)',
-                            'hoverBorderColor': 'rgba(0, 0, 0, 0.1)',
-                            'hoverBorderWidth': 1,
-                            'weight': 1,
-                            'label': 'label'
+                            'label': 'Bubble point 1',
+                            'hoverBackgroundColor': 'rgba(255,111,114,0.5)',
+                            'hoverBorderColor': 'rgba(255,111,114,1)',
+                            'backgroundColor': 'rgba(255,111,114,0.5)',
+                            'borderColor': 'rgba(255,111,114,1)',
+                            'borderWidth': 1,
+                            'data': [
+                                { 'x': -58, 'y': -37, 'r': 7 },
+                                { 'x': -80, 'y': -5, 'r': 1.8 },
+                                { 'x': -3, 'y': 20, 'r': 7 },
+                                { 'x': 58, 'y': -77, 'r': 6 },
+                                { 'x': -16, 'y': -13, 'r': 2.8 },
+                                { 'x': -23, 'y': 30, 'r': 1 }
+                            ]
+                        },
+                        {
+                            'label': 'Bubble point 2',
+                            'hoverBackgroundColor': 'rgba(51,157,255,0.5)',
+                            'hoverBorderColor': 'rgba(51,157,255,1)',
+                            'backgroundColor': 'rgba(51,157,255,0.5)',
+                            'borderColor': 'rgba(51,157,255,1)',
+                            'borderWidth': 1,
+                            'data': [
+                                { 'x': 55, 'y': -23, 'r': 10 },
+                                { 'x': 88, 'y': 33, 'r': 5 },
+                                { 'x': 22, 'y': -35, 'r': 14 },
+                                { 'x': 79, 'y': 59, 'r': 11 },
+                                { 'x': 40, 'y': -91, 'r': 7 },
+                                { 'x': 10, 'y': 33, 'r': 11.5 }
+                            ]
                         }
                     ]
                 },
-                options: {
+                'options': {
                     'flexWithContainer': true,
-                    'aspectRatio': 1.5,
-                    'title': 'Title',
-                    'cutoutPercentage': 0,
-                    'rotation': -1.5707963267948966,
-                    'animation': { 'animateRotate': true, 'animateScale': false }
+                    'title': { 'display': true, 'text': '气泡图', 'tooltips': { 'mode': 'point' } }
                 }
             },
             tips: '图表配置，配置项详见bkcharts'
