@@ -10,10 +10,10 @@
  */
 
 export default {
-    name: 'chart-bar',
-    type: 'chart',
-    displayName: '柱状图',
-    icon: 'bk-drag-histogram',
+    name: 'bk-charts-pie',
+    type: 'bk-charts',
+    displayName: '饼图',
+    icon: 'bk-drag-pie-chart',
     group: '图表',
     order: 1,
     events: [],
@@ -35,26 +35,41 @@ export default {
         options: {
             type: 'json',
             val: {
-                title: {
-                    text: '柱状图demo',
-                    x: 'center'
+                'type': 'pie',
+                'data': {
+                    'labels': ['Running', 'Swimming', 'Eating', 'Cycling', 'Jumping'],
+                    'datasets': [
+                        {
+                            'backgroundColor': [
+                                'rgba(51,157,255,1)',
+                                'rgba(59,206,149,1)',
+                                'rgba(255,156,74,1)',
+                                'rgba(255,111,114,1)',
+                                'rgba(248,211,15,1)'
+                            ],
+                            'borderAlign': 'center',
+                            'borderColor': '#fff',
+                            'borderWidth': 2,
+                            'clip': 1.5,
+                            'data': [20, 10, 30, 50],
+                            'hoverBackgroundColor': 'rgba(0, 0, 0, 0.1)',
+                            'hoverBorderColor': 'rgba(0, 0, 0, 0.1)',
+                            'hoverBorderWidth': 1,
+                            'weight': 1,
+                            'label': 'label'
+                        }
+                    ]
                 },
-                tooltip: {},
-                legend: {
-                    data: ['issue数量'],
-                    left: 'left'
-                },
-                xAxis: {
-                    data: ['一', '二', '三', '四', '五']
-                },
-                yAxis: {},
-                series: [{
-                    name: 'issue数量',
-                    type: 'bar',
-                    data: [3, 5, 8, 3, 5]
-                }]
+                options: {
+                    'flexWithContainer': true,
+                    'aspectRatio': 1.5,
+                    'title': 'Title',
+                    'cutoutPercentage': 0,
+                    'rotation': -1.5707963267948966,
+                    'animation': { 'animateRotate': true, 'animateScale': false }
+                }
             },
-            tips: '图表配置，配置项同echarts'
+            tips: '图表配置，配置项详见bkcharts'
         },
         remoteOptions: {
             type: 'remote',
