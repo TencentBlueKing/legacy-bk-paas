@@ -14,7 +14,7 @@ export default {
     type: 'el-avatar',
     displayName: '头像',
     icon: 'bk-drag-image',
-    group: 'Data',
+    group: '数据',
     order: 1,
     events: [{ name: 'error', tips: '图片类头像加载失败的回调， 返回 false 会关闭组件默认的 fallback 行为，回调参数 (e: Event)' }],
     styles: ['size', 'margin', 'display'],

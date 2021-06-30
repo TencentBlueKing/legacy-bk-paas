@@ -14,7 +14,7 @@ export default {
     type: 'el-carousel',
     displayName: '走马灯',
     icon: 'bk-drag-swiper',
-    group: 'Others',
+    group: '其他',
     order: 1,
     events: [{
         name: 'index-change', tips: '图片索引改变时触发该事件，回调参数为当前图片的索引'

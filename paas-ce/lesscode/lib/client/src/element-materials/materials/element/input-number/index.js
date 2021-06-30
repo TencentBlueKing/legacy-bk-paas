@@ -14,7 +14,7 @@ export default {
     type: 'el-input-number',
     displayName: '计数器',
     icon: 'bk-drag-input',
-    group: 'Form',
+    group: '表单',
     order: 1,
     events: [{
         name: 'change', tips: '绑定值被改变时触发，回调参数currentValue, oldValue'

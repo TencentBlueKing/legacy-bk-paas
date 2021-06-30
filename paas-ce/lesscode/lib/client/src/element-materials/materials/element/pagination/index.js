@@ -14,7 +14,7 @@ export default {
     type: 'el-pagination',
     displayName: '分页',
     icon: 'bk-drag-pagination',
-    group: 'Data',
+    group: '数据',
     order: 1,
     events: [{
         name: 'size-change', tips: 'pageSize 改变时会触发，回调参数：每页条数'

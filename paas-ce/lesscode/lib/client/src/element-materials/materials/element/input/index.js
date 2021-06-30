@@ -14,7 +14,7 @@ export default {
     type: 'el-input',
     displayName: '输入框',
     icon: 'bk-drag-input',
-    group: 'Form',
+    group: '表单',
     order: 1,
     events: [{
         name: 'change', tips: '仅在输入框失去焦点或用户按下回车时触发，回调参数(value: string | number)'

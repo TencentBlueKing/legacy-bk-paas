@@ -14,7 +14,7 @@ export default {
     type: 'el-table',
     displayName: '表格',
     icon: 'bk-drag-table',
-    group: 'Data',
+    group: '数据',
     order: 1,
     events: [{
         name: 'select', tips: '当用户手动勾选数据行的 Checkbox 时触发的事件，回调参数（selection, row）'

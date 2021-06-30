@@ -14,7 +14,7 @@ export default {
     type: 'el-slider',
     displayName: '滑块',
     icon: 'bk-drag-slider',
-    group: 'Form',
+    group: '表单',
     order: 1,
     styles: ['margin', 'display'],
     directives: [

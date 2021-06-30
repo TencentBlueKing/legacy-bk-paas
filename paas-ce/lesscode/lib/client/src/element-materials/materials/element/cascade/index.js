@@ -14,7 +14,7 @@ export default {
     type: 'el-cascader',
     displayName: '级联选框',
     icon: 'bk-drag-cascade-jilianxuankuang',
-    group: 'Form',
+    group: '表单',
     order: 1,
     styles: ['size', 'margin', 'display'],
     events: [{

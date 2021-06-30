@@ -134,7 +134,10 @@
                                                 </a>
                                             </li>
                                             <li :class="curComponentLib === 'element' ? 'selected' : ''">
-                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('element')">element-ui</a>
+                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('element')">
+                                                    element-ui
+                                                    <i v-bk-tooltips="{ content: elementUiTips, placements: ['bottom-end'] }" class="bk-drag-icon bk-drag-vesion-fill"></i>
+                                                </a>
                                             </li>
                                         </ul>
                                     </bk-dropdown-menu>
@@ -343,6 +346,7 @@
                 componentTabsCurrentRefresh: +new Date(),
                 curComponentLib: 'bk',
                 baseComponentList,
+                elementUiTips: '当前组件库版本为“2.15.1”，<a target="_blank" href="https://github.com/ElemeFE/element/releases" style="cursor: pointer;color: #3a84ff">查看更新日志</a>',
                 componentTabs: {
                     list: [
                         { name: 'base', label: '基础组件', active: true, tips: '当前组件库版本为“latest”，<a target="_blank" href="https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/changelog" style="cursor: pointer;color: #3a84ff">查看更新日志</a>' },

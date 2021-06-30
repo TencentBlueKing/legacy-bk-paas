@@ -15,7 +15,7 @@ export default {
     // bk-drag-custom-comp-default
     icon: 'bk-drag-link1',
     displayName: '文字链接',
-    group: 'Base',
+    group: '基础',
     events: [{ name: 'click' }],
     styles: ['size', 'padding', 'margin', 'display'],
     renderStyles: {

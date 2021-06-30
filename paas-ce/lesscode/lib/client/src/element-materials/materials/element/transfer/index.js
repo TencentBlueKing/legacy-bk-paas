@@ -14,7 +14,7 @@ export default {
     type: 'el-transfer',
     displayName: '穿梭框',
     icon: 'bk-drag-transfer',
-    group: 'Form',
+    group: '表单',
     order: 1,
     events: [{
         name: 'change',

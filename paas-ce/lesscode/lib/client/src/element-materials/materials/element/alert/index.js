@@ -14,7 +14,7 @@ export default {
     type: 'el-alert',
     displayName: '警告',
     icon: 'bk-drag-alert-line',
-    group: 'Notice',
+    group: '反馈',
     order: 1,
     styles: ['size', 'margin', 'padding', 'display'],
     events: [{
