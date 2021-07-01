@@ -290,7 +290,7 @@
             } else {
                 this.mutlTypeSelected = this.describe.type
             }
-            this.mutlTypeVal[this.mutlTypeSelected] = JSON.parse(safeStringify(this.describe))
+            this.$set(this.mutlTypeVal, this.mutlTypeSelected, JSON.parse(safeStringify(this.describe)))
             if (!this.lastValue || !this.lastValue.type) {
                 return
             }
@@ -299,7 +299,7 @@
             } else {
                 this.mutlTypeSelected = this.lastValue.type
             }
-            this.mutlTypeVal[this.mutlTypeSelected] = JSON.parse(safeStringify(this.lastValue))
+            this.$set(this.mutlTypeVal, this.mutlTypeSelected, JSON.parse(safeStringify(this.lastValue)))
         },
         methods: {
             handleUpdate (name, value, type, payload = {}) {
