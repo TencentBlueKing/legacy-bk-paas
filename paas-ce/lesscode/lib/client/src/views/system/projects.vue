@@ -56,7 +56,6 @@
                                         <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="toPage(project.id)">页面管理</a></li>
                                         <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
-                                        <li><a href="javascript:;" @click="toRelease(project.id)">部署</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
                                         <!-- <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li> -->
                                     </ul>
@@ -561,14 +560,6 @@
             toPage (projectId) {
                 this.$router.push({
                     name: 'pageList',
-                    params: {
-                        projectId
-                    }
-                })
-            },
-            toRelease (projectId) {
-                this.$router.push({
-                    name: 'release',
                     params: {
                         projectId
                     }
