@@ -2,6 +2,21 @@
 
 <div class="changelog-wrapper">
 
+### v0.2.3
+###### 2021.07.01
+
+* **[add]**:
+    - 画布: 新增 [@blueking/bkcharts](https://www.npmjs.com/package/@blueking/bkcharts)
+    - 画布: Element 基础组件库组件丰富
+    - 项目管理: 支持函数的导入导出
+    - 项目管理: 删除权限增加是否为数据的创造者的判断逻辑
+    - 其他: 复合组件更新
+* **[fix]**:
+    - 画布: 属性面板多类型属性值切换类型 tab 时，保留编辑的值
+    - 其他: 其他体验 bug 修复以及优化
+
+---
+
 ### v0.2.2
 ###### 2021.06.18
 
