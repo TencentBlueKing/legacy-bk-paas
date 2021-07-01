@@ -214,7 +214,6 @@
                 removeClassWithNodeClass('.bk-lesscode-free-layout', 'selected')
                 removeClassWithNodeClass('.component-wrapper', 'selected')
                 removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
-                removeClassWithNodeClass('.widget-form-item', 'wrapper-cls-selected')
 
                 const wrapperList = Array.from(document.getElementsByClassName('wrapperCls'))
                     .concat(Array.from(document.getElementsByClassName('bk-layout-grid-row-wrapper'))
@@ -237,7 +236,7 @@
 
                 const curRowTargetNode = node.id.includes('grid') ? curRowNode.getElementsByClassName('bk-layout-grid-row')[0] : curRowNode
 
-                const selectClassName = curRowTargetNode && (curRowTargetNode.className === 'wrapperCls' || curRowTargetNode.className === 'widget-form-item') ? 'wrapper-cls-selected' : 'selected'
+                const selectClassName = curRowTargetNode && curRowTargetNode.className === 'wrapperCls' ? 'wrapper-cls-selected' : 'selected'
                 curRowTargetNode.classList.add(selectClassName)
 
                 const anchorNode = this.setAnchorPoint(curRowTargetNode)
