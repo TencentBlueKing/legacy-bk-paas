@@ -17,8 +17,8 @@
  */
 function BusinessError (message, code, data) {
     this.name = 'BusinessError'
-    this.message = message || 'Business Error'
-    this.code = code
+    this.message = message || '服务器出现业务错误'
+    this.code = code || 499
     this.data = data
     this.stack = (new Error()).stack
 }
