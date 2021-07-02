@@ -12,26 +12,64 @@
 import axios from 'axios'
 import cookie from 'cookie'
 
+import RequestError from './request-error'
 import CachedPromise from './cached-promise'
 import RequestQueue from './request-queue'
 import { bus } from '../common/bus'
 import { messageError } from '@/common/bkmagic'
 
-// axios 实例
-const axiosInstance = axios.create({
-    xsrfCookieName: 'bkiam_csrftoken',
-    xsrfHeaderName: 'X-CSRFToken',
-    withCredentials: true,
-    baseURL: `${AJAX_URL_PREFIX}`
-})
-
-/**
- * response interceptor
- */
-axiosInstance.interceptors.response.use(
-    response => response.data,
-    error => Promise.reject(error)
+// 解析错误
+axios.interceptors.response.use(
+    // 后端 API 响应成功（http status 200）
+    response => {
+        const { data } = response
+        switch (data.code) {
+            // 接口请求成功
+            case 0:
+            case 499:
+                return data
+            // 后端业务处理报错
+            default:
+                const { code, message = '系统错误' } = response.data
+                throw new RequestError(code, message, response)
+        }
+    },
+    // 解析 http status code (非 200)
+    error => {
+        const { response } = error
+        if (response) {
+            // 默认提示 http 状态码错误标记
+            let message = response.statusText
+            // 兼容后端响应时通过body返回错误信息
+            if (response.data && response.data.message) {
+                message = response.data.message
+            }
+            return Promise.reject(new RequestError(response.status || -1, message, response))
+        }
+        return Promise.reject(new RequestError(-1, `${AJAX_URL_PREFIX} 无法访问`))
+    }
 )
+// 处理错误
+axios.interceptors.response.use(undefined, error => {
+    const {
+        code,
+        message,
+        response
+    } = error
+    switch (code) {
+        // 用户登录状态失效
+        case 401:
+            bus.$emit('redirect-login', response.data.data || {})
+    }
+    // 全局捕获错误给出提示
+    if (response) {
+        const { config } = response
+        if (config.globalError) {
+            messageError(message)
+        }
+    }
+    return Promise.reject(error)
+})
 
 const http = {
     queue: new RequestQueue(),
@@ -47,137 +85,6 @@ const methodsWithoutData = ['delete', 'get', 'head', 'options']
 const methodsWithData = ['post', 'put', 'patch']
 const allMethods = [...methodsWithoutData, ...methodsWithData]
 
-// 在自定义对象 http 上添加各请求方法
-allMethods.forEach(method => {
-    Object.defineProperty(http, method, {
-        get () {
-            return getRequest(method)
-        }
-        // get: () => getRequest(method)
-    })
-})
-
-/**
- * 获取 http 不同请求方式对应的函数
- *
- * @param {string} http method 与 axios 实例中的 method 保持一致
- *
- * @return {Function} 实际调用的请求函数
- */
-function getRequest (method) {
-    if (methodsWithData.includes(method)) {
-        return (url, data, config) => getPromise(method, url, data, config)
-    }
-    return (url, config) => getPromise(method, url, null, config)
-}
-
-/**
- * 实际发起 http 请求的函数，根据配置调用缓存的 promise 或者发起新的请求
- *
- * @param {method} http method 与 axios 实例中的 method 保持一致
- * @param {string} 请求地址
- * @param {Object} 需要传递的数据, 仅 post/put/patch 三种请求方式可用
- * @param {Object} 用户配置，包含 axios 的配置与本系统自定义配置
- *
- * @return {Promise} 本次http请求的Promise
- */
-async function getPromise (method, url, data, userConfig = {}) {
-    const config = initConfig(method, url, userConfig)
-    let promise
-    if (config.cancelPrevious) {
-        await http.cancel(config.requestId)
-    }
-
-    if (config.clearCache) {
-        http.cache.delete(config.requestId)
-    } else {
-        promise = http.cache.get(config.requestId)
-    }
-
-    if (config.fromCache && promise) {
-        return promise
-    }
-
-    // eslint-disable-next-line no-async-promise-executor
-    promise = new Promise(async (resolve, reject) => {
-        const axiosRequest = methodsWithData.includes(method)
-            ? axiosInstance[method](url, data, config)
-            : axiosInstance[method](url, config)
-
-        try {
-            const response = await axiosRequest
-            Object.assign(config, response.config || {})
-            handleResponse({ config, response, resolve, reject })
-        } catch (error) {
-            Object.assign(config, error.config)
-            reject(error)
-        }
-    }).catch(error => {
-        return handleReject(error, config)
-    }).finally(() => {
-        // console.log('finally', config)
-    })
-
-    // 添加请求队列
-    http.queue.set(config)
-    // 添加请求缓存
-    http.cache.set(config.requestId, promise)
-
-    return promise
-}
-
-/**
- * 处理 http 请求成功结果
- *
- * @param {Object} 请求配置
- * @param {Object} cgi 原始返回数据
- * @param {Function} promise 完成函数
- * @param {Function} promise 拒绝函数
- */
-function handleResponse ({ config, response, resolve, reject }) {
-    if (response.code !== 0 && config.globalError && !response.businessError) {
-        reject({ message: response.message })
-    } else {
-        resolve(config.originalResponse ? response : response.data, config)
-    }
-    http.queue.delete(config.requestId)
-}
-
-/**
- * 处理 http 请求失败结果
- *
- * @param {Object} Error 对象
- * @param {config} 请求配置
- *
- * @return {Promise} promise 对象
- */
-function handleReject (error, config) {
-    if (axios.isCancel(error)) {
-        return Promise.reject(error)
-    }
-
-    http.queue.delete(config.requestId)
-    if (config.globalError && error.response) {
-        const { status, data } = error.response
-        const nextError = { message: error.message, response: error.response }
-        if (status === 401) {
-            bus.$emit('redirect-login', nextError.response.data.data || {})
-        } else if (data && data.message) {
-            nextError.message = data.message
-            messageError(nextError.message)
-        } else if (status === 500) {
-            nextError.message = '服务器内部出错'
-            messageError(nextError.message)
-        }
-        console.error(nextError.message)
-        return Promise.reject(nextError)
-    }
-    const errMessage = (error.response && error.response.data && error.response.data.message) || error.message
-    messageError(errMessage)
-    console.error(errMessage)
-    return Promise.reject(new Error(errMessage))
-}
-
 /**
  * 初始化本系统 http 请求的各项配置
  *
@@ -187,9 +94,14 @@ function handleReject (error, config) {
  *
  * @return {Promise} 本次 http 请求的 Promise
  */
-function initConfig (method, url, userConfig) {
-    const defaultConfig = {
-        ...getCancelToken(),
+function initConfig (method, url) {
+    let cancelExcutor
+    const cancelToken = new axios.CancelToken(excutor => {
+        cancelExcutor = excutor
+    })
+    return {
+        cancelToken,
+        cancelExcutor,
         // http 请求默认 id
         requestId: method + '_' + url,
         // 是否全局捕获异常
@@ -205,24 +117,53 @@ function initConfig (method, url, userConfig) {
         // 取消上次请求
         cancelPrevious: false
     }
-    return Object.assign(defaultConfig, userConfig)
 }
 
-/**
- * 生成 http 请求的 cancelToken，用于取消尚未完成的请求
- *
- * @return {Object} {cancelToken: axios 实例使用的 cancelToken, cancelExcutor: 取消http请求的可执行函数}
- */
-function getCancelToken () {
-    let cancelExcutor
-    const cancelToken = new axios.CancelToken(excutor => {
-        cancelExcutor = excutor
+// 在自定义对象 http 上添加各请求方法
+allMethods.forEach(method => {
+    Object.defineProperty(http, method, {
+        get () {
+            return (url, payload, config = {}) => {
+                const axiosConfig = {
+                    baseURL: `${AJAX_URL_PREFIX}`,
+                    url,
+                    method,
+                    xsrfCookieName: 'bkiam_csrftoken',
+                    xsrfHeaderName: 'X-CSRFToken',
+                    withCredentials: true,
+                    ...initConfig()
+                }
+                if (methodsWithData.includes(method)) {
+                    Object.assign(axiosConfig, { data: payload }, config)
+                } else {
+                    Object.assign(axiosConfig, { ...payload }, config)
+                }
+                let promise
+                if (axiosConfig.cancelPrevious) {
+                    http.cancel(axiosConfig.requestId)
+                }
+
+                if (axiosConfig.clearCache) {
+                    http.cache.delete(axiosConfig.requestId)
+                } else {
+                    promise = http.cache.get(axiosConfig.requestId)
+                }
+
+                if (axiosConfig.fromCache && promise) {
+                    return promise
+                }
+                promise = axios(axiosConfig)
+
+                // 添加请求队列
+                http.queue.set(axiosConfig)
+                // 添加请求缓存
+                http.cache.set(axiosConfig.requestId, promise)
+
+                return promise
+            }
+        }
     })
-    return {
-        cancelToken,
-        cancelExcutor
-    }
-}
+})
 
 export default http
 
@@ -230,7 +171,7 @@ export default http
 export function injectCSRFTokenToHeaders () {
     const CSRFToken = cookie.parse(document.cookie).bkiam_csrftoken
     if (CSRFToken !== undefined) {
-        axiosInstance.defaults.headers.common['X-CSRFToken'] = CSRFToken
+        axios.defaults.headers.common['X-CSRFToken'] = CSRFToken
     } else {
         console.warn('Can not find bkiam_csrftoken in document.cookie')
     }
