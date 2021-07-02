@@ -17,22 +17,19 @@ module.exports = () => {
          */
         ctx.throwError = function (error) {
             // 业务异常，status为200，其它为应用异常
-            if (error.status === 200) {
-                ctx.status = 200
+            ctx.status = 200
+            if (error instanceof global.BusinessError) {
                 ctx.body = {
-                    code: 1000,
-                    message: error.message
-                }
-            } else if (error instanceof global.BusinessError) {
-                ctx.status = 200
-                ctx.body = {
-                    code: error.code || 499,
-                    businessError: true,
-                    message: error.message || '服务器出现业务错误',
+                    code: error.code,
+                    message: error.message,
                     data: error.data
                 }
             } else {
-                throw Error(error.message)
+                ctx.body = {
+                    code: -1,
+                    message: error.message || '服务器出现业务错误',
+                    data: null
+                }
             }
         }
 
