@@ -21,6 +21,19 @@ const Message = Vue.prototype.$bkMessage
 
 let messageInstance = null
 
+export const messageHtmlError = (errMessage, delay = 3000, ellipsisLine = 0) => {
+    messageInstance && messageInstance.close()
+    const h = global.mainComponent.$createElement
+    const message = h('pre', { style: { margin: 0 } }, [errMessage])
+    messageInstance = Message({
+        message,
+        delay,
+        theme: 'error',
+        ellipsisLine,
+        extCls: 'auto-width'
+    })
+}
+
 export const messageError = (message, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
     messageInstance = Message({
@@ -59,6 +72,7 @@ export const messageWarn = (message, delay = 3000) => {
     })
 }
 
+Vue.prototype.messageHtmlError = messageHtmlError
 Vue.prototype.messageError = messageError
 Vue.prototype.messageSuccess = messageSuccess
 Vue.prototype.messageInfo = messageInfo

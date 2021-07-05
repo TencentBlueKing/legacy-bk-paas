@@ -10,9 +10,25 @@
  */
 import { allGroupFuncDetail, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, getFuncRelatePageList, getFuncGroupById, getFuncById } from '../model/function'
 import OperationLogger from '../service/operation-logger'
-const { checkFuncEslint } = require('../util')
+const { checkFuncEslint, verifyAndFixFunc } = require('../util')
 
 module.exports = {
+    async fixFunByEslint (ctx) {
+        try {
+            const func = ctx.request.body
+            const res = await verifyAndFixFunc(func)
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data: res
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
+
     async getAllGroupFunc (ctx) {
         try {
             const query = ctx.request.query || {}
@@ -275,13 +291,5 @@ module.exports = {
                 message: err.message
             })
         }
-    },
-
-    async generateToken (ctx) {
-        
-    },
-
-    async getTokenList (ctx) {
-    
     }
 }

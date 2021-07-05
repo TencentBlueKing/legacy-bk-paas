@@ -324,13 +324,12 @@
                 this.$refs.func.validate().then((postData) => {
                     if (!postData) return
                     this.funcObj.loading = true
-                    const h = this.$createElement
                     if (!postData.projectId) {
                         postData.projectId = this.projectId
                     }
                     const varWhere = { projectId: this.projectId, effectiveRange: 0 }
-                    const add = () => this.addFunc({ groupId: this.curGroupId, func: postData, h, varWhere })
-                    const edit = () => this.editFunc({ groupId: this.curGroupId, func: postData, h, varWhere })
+                    const add = () => this.addFunc({ groupId: this.curGroupId, func: postData, varWhere })
+                    const edit = () => this.editFunc({ groupId: this.curGroupId, func: postData, varWhere })
 
                     const curMethod = this.funcObj.isEdit ? edit : add
                     curMethod().then((res) => {
@@ -594,8 +593,7 @@
 
             bulkAddFuncFromApi (funcList) {
                 const varWhere = { projectId: this.projectId, effectiveRange: 0 }
-                const h = this.$createElement
-                const postData = { groupId: this.curGroupId, funcList, h, varWhere }
+                const postData = { groupId: this.curGroupId, funcList, varWhere }
                 return this.bulkAddFunc(postData).then((res) => {
                     if (!res) return
                     const projectId = this.$route.params.projectId
