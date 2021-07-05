@@ -26,7 +26,10 @@ const routes = [
     {
         path: '/404',
         name: '404',
-        component: BkNotFound
+        component: BkNotFound,
+        meta: {
+            pageName: '404'
+        }
     },
     {
         path: '*',
@@ -84,6 +87,9 @@ router.afterEach(async (to, from) => {
     if (!preloading && !canceling && !pageMethodExecuting) {
         store.commit('setMainContentLoading', false)
     }
+
+    const meta = to.meta
+    document.title = meta.pageName || 'index'
 })
 
 export default router
