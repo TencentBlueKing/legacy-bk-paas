@@ -45,7 +45,6 @@ exports.trim = str => {
     return (str || '').replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
 }
 
-
 /**
  * 根据对象的某个属性值去重
  *
@@ -54,7 +53,7 @@ exports.trim = str => {
  *
  * @return {String} 去重后的数组
  */
-exports.unique  = (arr,key) => {
+exports.unique = (arr, key) => {
     const res = new Map()
     return arr.filter(item => !res.has(item[key]) && res.set(item[key], 1))
 }
