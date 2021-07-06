@@ -62,12 +62,12 @@ export default {
             tips: 'switch 关闭时的值'
         },
         'active-color': {
-            type: 'string',
+            type: 'color',
             val: '#409EFF',
             tips: 'switch 打开时的背景色'
         },
         'inactive-color': {
-            type: 'string',
+            type: 'color',
             val: '#C0CCDA',
             tips: 'switch 关闭时的背景色'
         }
