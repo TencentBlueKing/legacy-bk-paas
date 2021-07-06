@@ -365,7 +365,7 @@ export function ansiparse (str) {
 }
 
 function getEslintOption (func, customOptions = {}) {
-    const globals = {};
+    const globals = { lesscode: true };
     [...(func.funcParams || []), ...(func.remoteParams || [])].forEach((key) => {
         globals[key] = true
     })
@@ -383,10 +383,7 @@ function getEslintOption (func, customOptions = {}) {
 export async function checkFuncEslint (func) {
     const options = getEslintOption(func)
     const eslint = new ESLint(options)
-    const code = (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
-        const key = funcCode || dirKey
-        return `this['${key}']`
-    })
+    const code = func.funcBody || ''
     const results = await eslint.lintText(code || '')
     const formatter = await eslint.loadFormatter('stylish')
     const formateRes = formatter.format(results)
@@ -399,10 +396,7 @@ export async function checkFuncEslint (func) {
 export async function verifyAndFixFunc (func) {
     const options = getEslintOption(func, { fix: true })
     const eslint = new ESLint(options)
-    const code = (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
-        const key = funcCode || dirKey
-        return `this['${key}']`
-    })
+    const code = func.funcBody || ''
     // fix code
     const results = await eslint.lintText(code || '')
     await ESLint.outputFixes(results)
