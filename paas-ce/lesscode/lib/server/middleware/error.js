@@ -12,38 +12,50 @@
 module.exports = () => {
     return async function (ctx, next) {
         /**
-         * 抛出异常函数
-         * @param  {Object} error 异常
+         * 通用异常
+         * @param  {String | BusinessError | Object} error 异常
          */
         ctx.throwError = function (error) {
-            // 业务异常，status为200，其它为应用异常
-            ctx.status = 200
-            if (error instanceof global.BusinessError) {
-                ctx.body = {
-                    code: error.code,
-                    message: error.message,
-                    data: error.data
-                }
+            if (typeof error === 'string') {
+                throw new global.BusinessError(error)
+            } else if (error instanceof global.BusinessError) {
+                throw error
             } else {
-                ctx.body = {
-                    code: -1,
-                    message: error.message || '服务器出现业务错误',
-                    data: null
-                }
+                const {
+                    status = 200,
+                    message,
+                    code
+                } = error
+                throw new global.BusinessError(message, code, status)
             }
+        }
+        /**
+         * 特定异常 BusinessError
+         * @param  {String} error 异常
+         */
+        ctx.throwBusinessError = function (message) {
+            throw new global.BusinessError(message, 499)
         }
 
         try {
             await next()
-        } catch (err) {
-            ctx.status = err.status || 500
+        } catch (error) {
+            const {
+                status = 500,
+                code,
+                message,
+                data
+            } = error
+            
+            ctx.status = status
             ctx.body = {
-                code: err.code || 5000,
-                data: err.data || null,
-                message: err.message || '服务器出错'
+                code,
+                message,
+                data
             }
+            
             // 调用日志记录下来
-            ctx.app.emit('error', err, ctx)
+            ctx.app.emit('error', error, ctx)
         }
     }
 }

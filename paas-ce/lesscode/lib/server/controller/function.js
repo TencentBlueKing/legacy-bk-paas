@@ -141,7 +141,8 @@ module.exports = {
             }
             await Promise.all(funcList.map(func => checkFunc(func)))
             if (errMessage) {
-                throw new global.BusinessError(errMessage)
+                ctx.throwBusinessError(errMessage)
+                // throw new global.BusinessError(errMessage)
             }
             await addFunction(funcList, varWhere)
             operationLogger.success({
@@ -166,7 +167,8 @@ module.exports = {
             // 使用eslint做检查
             const errMessage = await checkFuncEslint(func)
             if (errMessage) {
-                throw new global.BusinessError(errMessage)
+                // throw new global.BusinessError(errMessage)
+                ctx.throwBusinessError(errMessage)
             }
             const [data] = await addFunction([func], varWhere)
             data.funcParams = data.funcParams.split(',').filter(x => x !== '')
@@ -221,7 +223,8 @@ module.exports = {
             // 使用eslint做检查
             const errMessage = await checkFuncEslint(func)
             if (errMessage) {
-                throw new global.BusinessError(errMessage)
+                // throw new global.BusinessError(errMessage)
+                ctx.throwBusinessError(errMessage)
             }
             const data = await editFunction([func], varWhere)
             data.forEach((func) => {
