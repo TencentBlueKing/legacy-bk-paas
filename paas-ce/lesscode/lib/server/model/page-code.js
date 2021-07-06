@@ -943,7 +943,6 @@ class PageCode {
                 hasStyle = true
             }
         }
-
         // 有设置class的话，将样式写至<style>
         if (hasStyle) {
             let tmpStr = ''
@@ -955,7 +954,9 @@ class PageCode {
                     tmpStr += `${paramCase(i)}: ${styles[i]};\n`
                 }
             }
-            this.cssStr += `\n.${className} {\n${tmpStr}}`
+            
+            this.cssStr += compId.startsWith('elIcon') ? `\n.${compId}` : `\n.${className}`
+            this.cssStr += ` {\n${tmpStr}}`
         }
 
         // const itemStyles = `${(!hasStyle || className) ? '' : `:style='${JSON.stringify(styles)}'`}`
