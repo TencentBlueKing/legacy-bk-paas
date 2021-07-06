@@ -26,7 +26,7 @@ module.exports = () => {
             const hostUrl = httpConf.hostUrl.replace(/\/$/, '')
             const loginRedirectUrl = `${httpConf.loginUrl}?app_id=${httpConf.appCode}`
             if (!bkToken) {
-                // 非 ajax 异步请求，页面跳转到登录
+            // 非 ajax 异步请求，页面跳转到登录
                 if (!isAjaxReq(ctx.request)) {
                     ctx.status = 302
                     ctx.redirect(`${loginRedirectUrl}&c_url=${encodeURIComponent(ctx.href)}`)
@@ -40,7 +40,6 @@ module.exports = () => {
                         }
                     })
                 }
-                return
             } else {
                 const params = querystring.stringify({
                     bk_app_code: httpConf.appCode,
@@ -95,25 +94,12 @@ module.exports = () => {
 
                 await next()
             }
-        } catch (err) {
-            const status = err.status
-            const message = err.message || '服务器内部出错'
-
-            // 程序出错异常
-            if (CODE.HTTP.indexOf(status)) {
-                ctx.status = err.status || 500
-                ctx.body = {
-                    code: err.status,
-                    message: message
-                }
-            } else {
-                const code = err.code || CODE.BIZ.NOT_DEFINED
-                ctx.body = {
-                    code: code,
-                    message: message
-                }
-            }
-            ctx.app.emit('error', err, ctx)
+        } catch (error) {
+            ctx.throwError({
+                status: error.status || CODE.BIZ.NOT_DEFINED,
+                code: error.code,
+                message: error.message
+            })
         }
     }
 

@@ -19,7 +19,8 @@ export default {
     events: [{ name: 'click' }],
     styles: ['size', 'margin', 'padding', 'display', 'textAlign'],
     renderStyles: {
-        display: 'inline-block'
+        display: 'inline-block',
+        textAlign: 'center'
     },
     props: {
         theme: {

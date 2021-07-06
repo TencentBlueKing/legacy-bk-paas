@@ -67,7 +67,8 @@ const variable = {
                 }
                 const errMessage = await checkFuncEslint(func)
                 if (errMessage) {
-                    throw new global.BusinessError(errMessage)
+                    // throw new global.BusinessError(errMessage)
+                    ctx.throwBusinessError(errMessage)
                 }
             }
             const data = await addVariable(body)
