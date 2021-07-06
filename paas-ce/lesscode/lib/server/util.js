@@ -364,7 +364,7 @@ export function ansiparse (str) {
     return result
 }
 
-export async function checkFuncEslint (func) {
+function getEslintOption (func, customOptions = {}) {
     const globals = {};
     [...(func.funcParams || []), ...(func.remoteParams || [])].forEach((key) => {
         globals[key] = true
@@ -374,8 +374,14 @@ export async function checkFuncEslint (func) {
         overrideConfig: {
             ...eslintConfig,
             globals
-        }
+        },
+        ...customOptions
     }
+    return options
+}
+
+export async function checkFuncEslint (func) {
+    const options = getEslintOption(func)
     const eslint = new ESLint(options)
     const code = (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
         const key = funcCode || dirKey
@@ -388,4 +394,28 @@ export async function checkFuncEslint (func) {
     let mes = ''
     if (errStrArr.length) mes = `eslint检查不通过：\n${errStrArr.map((err) => (err.message)).join('')}`
     return mes
+}
+
+export async function verifyAndFixFunc (func) {
+    const options = getEslintOption(func, { fix: true })
+    const eslint = new ESLint(options)
+    const code = (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
+        const key = funcCode || dirKey
+        return `this['${key}']`
+    })
+    // fix code
+    const results = await eslint.lintText(code || '')
+    await ESLint.outputFixes(results)
+    // get message
+    const formatter = await eslint.loadFormatter('stylish')
+    const formateRes = formatter.format(results)
+    const errStrArr = ansiparse(formateRes)
+    let message = ''
+    if (errStrArr.length) message = `自动修复Eslint失败，请手动修复下面的问题后重试：\n${errStrArr.map((err) => (err.message)).join('')}`
+
+    const fixResult = {
+        code: results[0].output || '',
+        message
+    }
+    return fixResult
 }
