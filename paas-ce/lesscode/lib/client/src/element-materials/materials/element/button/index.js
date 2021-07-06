@@ -15,7 +15,7 @@ export default {
     // bk-drag-custom-comp-default
     icon: 'bk-drag-button',
     displayName: '按钮',
-    group: 'Base',
+    group: '基础',
     events: [{ name: 'click' }],
     styles: ['size', 'padding', 'margin', 'display'],
     renderStyles: {

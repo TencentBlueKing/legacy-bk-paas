@@ -134,7 +134,10 @@
                                                 </a>
                                             </li>
                                             <li :class="curComponentLib === 'element' ? 'selected' : ''">
-                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('element')">element-ui</a>
+                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('element')">
+                                                    element-ui
+                                                    <i v-bk-tooltips="{ content: elementUiTips, placements: ['bottom-end'] }" class="bk-drag-icon bk-drag-vesion-fill"></i>
+                                                </a>
                                             </li>
                                         </ul>
                                     </bk-dropdown-menu>
@@ -265,8 +268,8 @@
     import Vue from 'vue'
     import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
-    // import html2canvas from 'html2canvas'
-    import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON, dom2Img } from '@/common/util'
+    import html2canvas from 'html2canvas'
+    import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON } from '@/common/util'
     import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
     import RenderIndex from '@/components/render/index'
     import FreeLayout from '@/components/render/free-layout'
@@ -290,7 +293,8 @@
 
     import ComponentTree from './children/component-tree'
     import { bus } from '@/common/bus'
-    import preivewErrImg from '@/images/preview-error.png'
+    import safeStringify from '@/common/json-safe-stringify'
+    import previewErrorImg from '@/images/preview-error.png'
 
     export default {
         components: {
@@ -342,6 +346,7 @@
                 componentTabsCurrentRefresh: +new Date(),
                 curComponentLib: 'bk',
                 baseComponentList,
+                elementUiTips: '当前组件库版本为“2.15.1”，<a target="_blank" href="https://github.com/ElemeFE/element/releases" style="cursor: pointer;color: #3a84ff">查看更新日志</a>',
                 componentTabs: {
                     list: [
                         { name: 'base', label: '基础组件', active: true, tips: '当前组件库版本为“latest”，<a target="_blank" href="https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/changelog" style="cursor: pointer;color: #3a84ff">查看更新日志</a>' },
@@ -719,7 +724,7 @@
                     if (content) {
                         const targetData = JSON.parse(content)
                         this.updateTargetData(targetData)
-                        pageDetail.content = JSON.stringify(targetData)
+                        pageDetail.content = safeStringify(targetData)
                     }
 
                     this.$store.commit('page/setPageDetail', pageDetail || {})
@@ -1166,7 +1171,7 @@
                 }
                 // 切换回编辑区，对画布数据进行更新
                 if (action === 'edit' && this.actionSelected !== 'edit') {
-                    const targetData = JSON.parse(JSON.stringify(this.targetData || []))
+                    const targetData = JSON.parse(safeStringify(this.targetData || []))
                     this.updateTargetData(targetData)
                     this.targetData = targetData
                     this.refreshDragAreaKey = +new Date()
@@ -1251,6 +1256,8 @@
                         }
                         if (item.children) {
                             del(item.children, cid)
+                        } else if (item.renderProps.slots && item.renderProps.slots.type === 'form-item') {
+                            // form表单内的元素不允许通过画布删除
                         } else if (
                             item.renderProps.slots && (item.renderProps.slots.type === 'column' || item.renderProps.slots.type === 'free-layout-item')
                         ) {
@@ -1262,6 +1269,7 @@
                     return ''
                 }
                 const pos = this.$td().getNodePosition(componentId)
+                if (pos === undefined) return
                 const pushData = {
                     parentId: pos.parent && pos.parent.componentId,
                     component: this.delComponentConf.item,
@@ -1377,7 +1385,7 @@
                 function addUsedVariable (id, dir) {
                     const { modifiers, prop, type, val, valType } = dir
                     function generateUseInfo (variableId) {
-                        const useInfo = { type, componentId: id, prop, modifiers }
+                        const useInfo = { type, componentId: id, prop, modifiers, val }
                         const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
                         useInfos.push(useInfo)
                     }
@@ -1443,13 +1451,21 @@
                 if (message) errMessage = message
                 const curFuncIds = Object.keys(usedFunctionMap)
                 curFuncIds.forEach((key) => {
-                    const { funcName, funcBody } = usedFunctionMap[key];
+                    const { funcName, funcBody, funcCode } = usedFunctionMap[key];
                     (funcBody || '').replace(/lesscode\[\'\$\{prop:([\S]+)\}\'\]/g, (all, dirKey) => {
                         if (dirKey) {
                             const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
                             if (!curDir) {
                                 errMessage = `页面中使用了函数【${funcName}】，该函数使用的变量【${dirKey}】不存在，请修改后再试`
                             }
+                        }
+                    })
+                    // 使用到的函数名和变量名不能重复
+                    Object.keys(usedVariableMap).forEach((id) => {
+                        const useInfos = usedVariableMap[id]
+                        const variableCode = (useInfos[0] || {}).val
+                        if (variableCode === funcCode) {
+                            errMessage = `页面中使用了函数【${funcCode}】，与使用的变量【${variableCode}】的标识存在冲突，请修改后再试`
                         }
                     })
                 })
@@ -1491,39 +1507,30 @@
 
             savePreviewImg () {
                 if (this.actionSelected === 'edit') {
-                    dom2Img(document.querySelector('.lesscode-editor-layout'), imgData => {
-                        // this.$store.dispatch('page/update', {
-                        //     data: {
-                        //         projectId: this.projectId,
-                        //         pageData: {
-                        //             id: parseInt(this.$route.params.pageId),
-                        //             previewImg: img ? img.src : preivewErrImg
-                        //         }
-                        //     }
-                        // })
-                        this.$store.dispatch('page/update', {
-                            data: {
-                                projectId: this.projectId,
-                                pageCode: this.pageDetail.pageCode,
-                                pageData: {
-                                    id: parseInt(this.$route.params.pageId),
-                                    previewImg: imgData || preivewErrImg
-                                }
-                            }
-                        })
-                    })
-                    // html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
-                    //     const imgData = canvas.toDataURL('image/png')
+                    // dom2Img(document.querySelector('.lesscode-editor-layout'), imgData => {
                     //     this.$store.dispatch('page/update', {
                     //         data: {
                     //             projectId: this.projectId,
+                    //             pageCode: this.pageDetail.pageCode,
                     //             pageData: {
                     //                 id: parseInt(this.$route.params.pageId),
-                    //                 previewImg: imgData
+                    //                 previewImg: imgData || previewErrorImg
                     //             }
                     //         }
                     //     })
                     // })
+                    html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
+                        const imgData = canvas.toDataURL('image/png')
+                        this.$store.dispatch('page/update', {
+                            data: {
+                                projectId: this.projectId,
+                                pageData: {
+                                    id: parseInt(this.$route.params.pageId),
+                                    previewImg: imgData || previewErrorImg
+                                }
+                            }
+                        })
+                    })
                 }
             },
 
@@ -1575,7 +1582,7 @@
             },
 
             test () {
-                console.warn(JSON.stringify(this.targetData))
+                console.warn(safeStringify(this.targetData))
                 console.warn(this.targetData)
             },
             test1 (data) {

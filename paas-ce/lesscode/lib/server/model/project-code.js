@@ -152,7 +152,7 @@ const projectCode = {
                         const targetData = JSON.parse(route.content || '[]')
                         targetData.forEach((container, index) => {
                             const callBack = item => {
-                                if (item.name.startsWith('el-')) {
+                                if (item.name && item.name.startsWith('el-')) {
                                     isUseElement = true
                                 }
                             }
@@ -395,7 +395,9 @@ const projectCode = {
         const mixinsList = Object.keys(methodMap).map((id) => (methodMap[id]))
         methodsStr += `${mixinsList.join(',')}\n}\n}`
         const [errMessage, formatedMethodStr] = await VueCodeModel.formatJsByEslint(methodsStr) || ''
-        if (errMessage && !pathName) throw new global.BusinessError(errMessage)
+        if (errMessage && !pathName) {
+            throw new global.BusinessError(errMessage, 499)
+        }
         fs.writeFileSync(methodsMixinPath, formatedMethodStr, 'utf8')
     },
 

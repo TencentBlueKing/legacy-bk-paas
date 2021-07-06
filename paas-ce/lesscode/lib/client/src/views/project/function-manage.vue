@@ -47,7 +47,7 @@
                             </div>
                             <span :class="['item-tool', 'hover-show', { 'click-show': group.showChange }]" @click="openChange(group)"><i class="bk-icon icon-edit2"></i></span>
                         </bk-popconfirm>
-                        <bk-popover content="无删除权限" class="item-tool-box del-box" v-if="userPerm.roleId === 2">
+                        <bk-popover content="无删除权限" class="item-tool-box del-box" v-if="userPerm.roleId === 2 && user.username !== group.createUser">
                             <i :class="['bk-icon', 'icon-close', 'hover-show', 'disable', { 'click-show': group.showChange }]"></i>
                         </bk-popover>
                         <bk-popover :disabled="group.functionList.length <= 0" content="该分类下有函数，不能删除" class="item-tool-box del-box" v-else>
@@ -65,7 +65,12 @@
 
             <section class="function-main">
                 <h3 class="function-head">
-                    <bk-button theme="primary" @click="addFunction">新建</bk-button>
+                    <section>
+                        <bk-button theme="primary" @click="addFunction">新建</bk-button>
+                        <bk-button @click="showImport = true" class="ml5" :loading="isUploading">导入</bk-button>
+                        <bk-button @click="exportFunction" class="ml5" :disabled="selectionData.length <= 0">导出</bk-button>
+                    </section>
+
                     <bk-input class="head-input" placeholder="请输入" :clearable="true" right-icon="bk-icon icon-search" v-model="searchFunStr"></bk-input>
                 </h3>
 
@@ -75,7 +80,9 @@
                     :header-cell-style="{ background: '#f0f1f5' }"
                     v-bkloading="{ isLoading: isLoadingFunc }"
                     class="function-table"
+                    @selection-change="selectionChange"
                 >
+                    <bk-table-column type="selection" width="60"></bk-table-column>
                     <bk-table-column label="函数名称" prop="funcName" show-overflow-tooltip>
                         <template slot-scope="props">
                             <span>{{ props.row.funcName || '--' }}</span>
@@ -103,7 +110,7 @@
                         <template slot-scope="props">
                             <span class="table-bth" @click="editFunction(props.row)">编辑</span>
                             <span class="table-bth" @click="copyRow(props.row)">复制</span>
-                            <span class="table-bth disable" v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }" v-if="userPerm.roleId === 2">删除</span>
+                            <span class="table-bth disable" v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }" v-if="userPerm.roleId === 2 && user.username !== props.row.createUser">删除</span>
                             <template v-else>
                                 <span class="table-bth" @click="deleteItem(props.row.id, props.row.funcName, false)" v-if="(props.row.pages || []).length <= 0 && !props.row.useFlag && !props.row.useInVar">删除</span>
                                 <span class="table-bth disable" v-bk-tooltips="{ content: '该函数被页面引用，请修改后再删除', placements: ['top'] }" v-if="(props.row.pages || []).length > 0">删除</span>
@@ -143,19 +150,38 @@
                 <bk-button @click="delObj.show = false" :disabled="delObj.loading">取消</bk-button>
             </div>
         </bk-dialog>
+
+        <bk-dialog v-model="showImport"
+            :loading="isUploading"
+            :mask-close="false"
+            :auto-close="false"
+            width="800"
+            @confirm="handleImport"
+            @after-leave="importFuncJson = '[]'"
+        >
+            <section class="mb10">
+                <bk-button @click="importFunction" class="mr10" theme="primary" v-bk-tooltips="{ content: '只可导入Json文件格式，且文件内容需要是Json格式的数组' }">导入</bk-button>
+                <bk-button @click="exportDemoFunction">示例</bk-button>
+            </section>
+
+            <edit-object :value.sync="importFuncJson" :height="400" />
+        </bk-dialog>
     </article>
 </template>
 
 <script>
     import { mapActions, mapGetters } from 'vuex'
+    import { downloadFile, uploadFile } from '@/common/util'
     import dayjs from 'dayjs'
     import layout from '@/components/ui/layout'
     import funcForm from '@/components/methods/func-form'
+    import editObject from '@/components/edit-object'
 
     export default {
         components: {
             layout,
-            funcForm
+            funcForm,
+            editObject
         },
 
         data () {
@@ -181,11 +207,16 @@
                     loading: false,
                     title: '',
                     form: {}
-                }
+                },
+                selectionData: [],
+                isUploading: false,
+                showImport: false,
+                importFuncJson: '[]'
             }
         },
 
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('member', ['userPerm']),
             projectId () {
@@ -230,6 +261,7 @@
             ...mapActions('functions', [
                 'getAllGroupFuncs',
                 'addFunc',
+                'bulkAddFunc',
                 'editFunc',
                 'deleteGroup',
                 'deleteFunc',
@@ -453,6 +485,122 @@
             groupFormatter (obj, con, val) {
                 const curGroup = this.funcGroups.find(x => x.id === val) || {}
                 return curGroup.groupName
+            },
+
+            selectionChange (selection) {
+                this.selectionData = selection
+            },
+
+            exportFunction () {
+                function getExportFunc (func) {
+                    const exportProps = [
+                        'funcName',
+                        'funcCode',
+                        'funcParams',
+                        'funcBody',
+                        'funcSummary',
+                        'funcType',
+                        'funcMethod',
+                        'withToken',
+                        'funcApiData',
+                        'funcApiUrl',
+                        'remoteParams'
+                    ]
+                    return exportProps.reduce((res, prop) => {
+                        res[prop] = func[prop]
+                        return res
+                    }, {})
+                }
+
+                const funcs = (this.selectionData || []).reduce((funcs, func) => {
+                    funcs.push(getExportFunc(func))
+                    return funcs
+                }, [])
+                const source = JSON.stringify(funcs, null, 2)
+                downloadFile(source, `lesscode-${this.projectId}-func.json`)
+            },
+
+            exportDemoFunction () {
+                const demoExportFunc = [{
+                    'funcName': 'getApiData',
+                    'funcCode': 'getApiData',
+                    'funcParams': [],
+                    'funcBody': 'const data = res.data || []\r\nreturn data\r\n',
+                    'funcSummary': '远程函数，获取数据',
+                    'funcType': 1,
+                    'funcMethod': 'get',
+                    'withToken': 0,
+                    'funcApiData': null,
+                    'funcApiUrl': `${location.origin}/api/data/getMockData`,
+                    'remoteParams': [
+                        'res'
+                    ]
+                }]
+                const source = JSON.stringify(demoExportFunc, null, 2)
+                downloadFile(source, `lesscode-export-demo-func.json`)
+            },
+
+            importFunction () {
+                uploadFile().then((fileList) => {
+                    try {
+                        const funcList = []
+                        fileList.forEach((file) => {
+                            funcList.push(...JSON.parse(file))
+                        })
+                        this.importFuncJson = JSON.stringify(funcList, null, 2)
+                    } catch (err) {
+                        this.$bkMessage({ theme: 'error', message: '文件内容需要是Json格式的数组' })
+                    }
+                })
+            },
+
+            handleImport () {
+                try {
+                    const funcList = []
+                    const ignoreFunList = []
+                    const funList = JSON.parse(this.importFuncJson) || []
+                    if (funList.length <= 0) {
+                        throw new Error('JSON文件为空，暂无导入数据')
+                    }
+                    funList.forEach((item) => {
+                        const isRepeatFunc = [...this.curFuncList, ...funcList].find((func) => (func.funcCode === item.funcCode))
+                        const func = {
+                            funcGroupId: this.curGroupId,
+                            ...item
+                        }
+                        if (isRepeatFunc) {
+                            ignoreFunList.push(func)
+                        } else {
+                            funcList.push(func)
+                        }
+                    })
+                    this.isUploading = true
+                    this.bulkAddFuncFromApi(funcList).then((res) => {
+                        if (!res) return
+                        if (ignoreFunList.length) {
+                            this.$bkMessage({ theme: 'primary', message: `【${ignoreFunList.map(x => x.funcName).join(',')}】由于重复标识取消导入`, ellipsisLine: 3 })
+                        }
+                        if (funcList.length) {
+                            this.$bkMessage({ theme: 'success', message: `【${funcList.map(x => x.funcName).join(',')}】导入成功`, ellipsisLine: 3 })
+                        }
+                        this.showImport = false
+                    }).finally(() => {
+                        this.isUploading = false
+                    })
+                } catch (err) {
+                    this.$bkMessage({ theme: 'error', message: err.message || err })
+                }
+            },
+
+            bulkAddFuncFromApi (funcList) {
+                const varWhere = { projectId: this.projectId, effectiveRange: 0 }
+                const h = this.$createElement
+                const postData = { groupId: this.curGroupId, funcList, h, varWhere }
+                return this.bulkAddFunc(postData).then((res) => {
+                    if (!res) return
+                    const projectId = this.$route.params.projectId
+                    return this.getAllGroupFuncs(projectId)
+                })
             }
         }
     }

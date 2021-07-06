@@ -5,6 +5,7 @@ import PageFunc from '../model/entities/page-func'
 import PageRoute from '../model/entities/page-route'
 import LayoutInst from '../model/entities/layout-inst'
 import PageVariable from '../model/entities/page-variable'
+import ProjectPage from '../model/entities/project-page'
 import { hasRoute, formatRoutePath } from './route'
 import { invalidPageIds } from '../conf/system'
 import { getConnection, getRepository } from 'typeorm'
@@ -65,7 +66,7 @@ export const createDemoPage = async (data) => {
 
         /** 创建demo页的具体内容 */
         const createPageContent = Object.assign(pageContent, { id: id })
-        const editPage = getRepository(Page).create(createPageContent)       
+        const editPage = getRepository(Page).create(createPageContent)
         await getConnection().transaction(async transactionalEntityManager => {
             const page = await transactionalEntityManager.save(editPage)
 
@@ -316,6 +317,12 @@ export const deletePage = async (ctx) => {
             deleteFlag: 1
         }
 
+        // 权限
+        const record = await getRepository(Page).findOne(pageData.id)
+        const userInfo = ctx.session.userInfo || {}
+        ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+        if (!ctx.hasPerm) return
+
         const result = await getConnection().transaction(async transactionalEntityManager => {
             const delPage = getRepository(Page).create(pageData)
             const { id } = await transactionalEntityManager.save(delPage)
@@ -333,6 +340,16 @@ export const deletePage = async (ctx) => {
                 }
             })
             await transactionalEntityManager.save(PageRoute, savePageRouteList)
+
+            // 删除页面与项目关联记录
+            const projectPageList = await getRepository(ProjectPage).find({ where: { pageId } })
+            const saveProjectPageList = projectPageList.map(item => {
+                return {
+                    ...item,
+                    deleteFlag: 1
+                }
+            })
+            await transactionalEntityManager.save(ProjectPage, saveProjectPageList)
 
             return id
         })
@@ -389,8 +406,8 @@ export const pageDetail = async (ctx) => {
     try {
         const { pageId } = ctx.request.query
         const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
-        const detail = await getRepository(Page).findOne(queryParams)
-        detail.lifeCycle = JSON.parse(detail.lifeCycle)
+        const detail = await getRepository(Page).findOne(queryParams) || {}
+        if (detail.lifeCycle) detail.lifeCycle = JSON.parse(detail.lifeCycle)
         ctx.send({
             code: 0,
             message: 'OK',

@@ -40,6 +40,12 @@
                                 <section v-html="item.templateCol"></section>
                             </template>
                         </bk-table-column>
+                        <el-table-column v-else-if="renderDataSlotName === 'el-table-column' && item.type === 'customCol'" :label="item.label" :width="item.width" :key="item.templateCol + Math.random() * 1000">
+                            <!-- eslint-disable-next-line -->
+                            <template slot-scope="scope">
+                                <section v-html="item.templateCol"></section>
+                            </template>
+                        </el-table-column>
                         <render-slot
                             v-else
                             :key="index"
@@ -110,12 +116,16 @@
     import RenderSlot from './slot'
     import ComponentWrapper from './component-wrapper'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import WidgetForm from '@/components/widget/form'
+    import WidgetFormItem from '@/components/widget/form-item'
     import offsetMixin from './offsetMixin'
 
     const components = {
         ComponentWrapper,
         ComponentMenu,
         RenderSlot,
+        WidgetForm,
+        WidgetFormItem,
         renderGrid: () => import('./grid'),
         renderRow: () => import('./row'),
         renderCol: () => import('./col'),
@@ -139,7 +149,6 @@
                     this.$options.components[name] = window.__innerCustomRegisterComponent__[name]
                 }
             }
-
             return {
                 renderData: {},
                 renderDataSlotName: '',

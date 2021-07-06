@@ -12,16 +12,41 @@
 export default {
     name: 'form',
     type: 'widget-form',
-    displayName: '表单挂件',
+    displayName: '表单容器',
     icon: 'bk-drag-form',
     group: '表单',
-    order: 2,
+    order: 0,
     styles: ['size', 'margin', 'font', 'backgroundColor'],
+    directives: [
+        {
+            type: 'v-bind',
+            prop: 'model',
+            val: '',
+            defaultVal: {}
+        }
+    ],
     props: {
+        model: {
+            type: 'hidden',
+            val: {}
+        },
+        rules: {
+            type: 'hidden',
+            val: {}
+        },
         'form-type': {
             type: 'string',
             options: ['horizontal', 'vertical', 'inline'],
             val: 'horizontal'
+        },
+        'label-width': {
+            type: 'number',
+            val: 150
+        },
+        slots: {
+            name: 'layout',
+            type: 'form-item',
+            val: []
         }
     }
 }
