@@ -61,8 +61,15 @@ import divider from './divider'
 import chartsLine from './charts-line'
 import chartsBar from './charts-bar'
 import chartsPie from './charts-pie'
+import bkChartsLine from './bk-charts-line'
+import bkChartsBar from './bk-charts-bar'
+import bkChartsPie from './bk-charts-pie'
+import bkChartsRadar from './bk-charts-radar'
+import bkChartsBubble from './bk-charts-bubble'
+import bkChartsScatter from './bk-charts-scatter'
 
 import freeLayout from './free-layout'
+import form from './form'
 
 import dialog from './dialog'
 import sideslider from './sideslider'
@@ -122,8 +129,15 @@ const bkComponents = Object.seal([
     chartsPie,
     dialog,
     freeLayout,
+    form,
     divider,
-    sideslider
+    sideslider,
+    bkChartsLine,
+    bkChartsBar,
+    bkChartsPie,
+    bkChartsRadar,
+    bkChartsBubble,
+    bkChartsScatter
 ])
 
 export default bkComponents

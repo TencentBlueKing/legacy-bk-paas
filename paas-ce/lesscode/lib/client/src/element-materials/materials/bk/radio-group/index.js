@@ -20,6 +20,13 @@ export default {
         name: 'change', tips: '单选组选中的值改变时触发此回调函数，回调参数为当前单选组选中值'
     }],
     styles: ['margin'],
+    directives: [
+        {
+            type: 'v-model',
+            val: '',
+            valType: 'variable'
+        }
+    ],
     props: {
         slots: {
             name: 'bk-radio',

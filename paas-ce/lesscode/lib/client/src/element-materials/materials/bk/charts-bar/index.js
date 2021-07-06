@@ -14,10 +14,13 @@ export default {
     type: 'chart',
     displayName: '柱状图',
     icon: 'bk-drag-histogram',
-    group: '图表',
+    group: 'ECharts',
     order: 1,
     events: [],
-    styles: [],
+    styles: ['display'],
+    renderStyles: {
+        display: 'inline-block'
+    },
     props: {
         width: {
             type: 'number',

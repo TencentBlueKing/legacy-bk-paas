@@ -82,6 +82,7 @@
     "@babel/register": "^7.6.2",
     "@babel/runtime": "~7.6.3",
     "@blueking/bkui-vue-complex": "latest",
+    "@blueking/bkcharts": "^2.0.11-alpha.5",
     "acorn": "~7.2.0",
     "ansi_up": "^4.0.4",
     "app-root-path": "~3.0.0",

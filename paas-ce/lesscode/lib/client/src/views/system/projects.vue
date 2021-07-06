@@ -30,7 +30,8 @@
                         <div class="item-bd">
                             <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
                                 <div class="preview">
-                                    <img :src="getPreviewImg(pageMap[project.id][0].previewImg)" alt="项目缩略预览">
+                                    <img v-if="project.previewImg" :src="getPreviewImg(project.previewImg)" alt="项目缩略预览">
+                                    <div class="empty-preview-img" v-else>页面为空</div>
                                 </div>
                             </template>
                             <div class="empty" v-else>
@@ -55,7 +56,6 @@
                                         <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="toPage(project.id)">页面管理</a></li>
                                         <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
-                                        <li><a href="javascript:;" @click="toRelease(project.id)">部署</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
                                         <!-- <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li> -->
                                     </ul>
@@ -565,14 +565,6 @@
                     }
                 })
             },
-            toRelease (projectId) {
-                this.$router.push({
-                    name: 'release',
-                    params: {
-                        projectId
-                    }
-                })
-            },
             getPreviewImg (previewImg) {
                 if (previewImg && previewImg.length > 20) {
                     return previewImg
@@ -754,6 +746,17 @@
                     height: 100%;
                     background: rgba(0, 0, 0, 0.2);
                 }
+            }
+            .empty-preview-img {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                font-weight: 700;
+                color: #C4C6CC;
+                height: 100%;
+                background: #f0f1f5;
+                border-radius: 4px 4px 0px 0px;
             }
             .operate-btns {
                 display: none;

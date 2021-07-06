@@ -43,7 +43,7 @@ const permMiddleware = require('./middleware/perm')
 const operationLoggerMiddleware = require('./middleware/operation-logger')
 // const helmet = require("koa-helmet")
 
-const { CODE } = require('./util')
+// const { CODE } = require('./util')
 const httpConf = require('./conf/http')
 
 const { createConnection } = require('typeorm')
@@ -78,34 +78,9 @@ async function startServer () {
     // session 加密密钥
     app.keys = ['lesscode login secret']
 
+    app.use(errorMiddleware())
     app.use(session(SESSION_CONFIG, app))
 
-    // 统一处理，
-    // @see https://github.com/koajs/koa/wiki/Error-Handling
-    app.use(async (ctx, next) => {
-        try {
-            await next()
-        } catch (err) {
-            const status = err.status
-            const message = err.message || '服务器内部出错'
-
-            // 程序出错异常
-            if (CODE.HTTP.indexOf(status)) {
-                ctx.status = err.status || 500
-                ctx.body = {
-                    code: err.status,
-                    message: message
-                }
-            } else {
-                const code = err.code || CODE.BIZ.NOT_DEFINED
-                ctx.body = {
-                    code: code,
-                    message: message
-                }
-            }
-            ctx.app.emit('error', err, ctx)
-        }
-    })
     app.on('error', (err, ctx) => {
         logger.error('app error:')
         logger.error(err.message || '')
@@ -140,8 +115,7 @@ async function startServer () {
         }
     ))
     app.use(json())
-
-    app.use(errorMiddleware())
+    
     app.use(httpMiddleware())
     app.use(jsonSendMiddleware())
     app.use(authMiddleware().unless({ path: [/^\/api\/open\//] }))

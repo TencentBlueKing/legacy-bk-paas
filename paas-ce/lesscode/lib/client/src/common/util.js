@@ -43,6 +43,11 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
             }
         })
+
+        // form-item, 没有column.children
+        if (!column.children && column.componentId) {
+            childCallBack(column, columns, columnIndex, grid, index)
+        }
     })
 }
 
@@ -55,6 +60,64 @@ export function findComponentParentGrid (targetData, id) {
         walkGrid(targetData, grid, callBack, callBack, index)
     })
     return componentParentGrid
+}
+
+/**
+ * 前端下载文件
+ * @param {*} source 文件内容
+ * @param {*} filename 文件名
+ */
+export function downloadFile (source, filename = 'lesscode.txt') {
+    const downloadEl = document.createElement('a')
+    const blob = new Blob([source])
+    downloadEl.download = filename
+    downloadEl.href = URL.createObjectURL(blob)
+    downloadEl.style.display = 'none'
+    document.body.appendChild(downloadEl)
+    downloadEl.click()
+    document.body.removeChild(downloadEl)
+}
+
+/**
+ * 前端上传文件
+ * @param {*} cb 上传成功后的回调函数
+ * @param {*} accept 文件类型
+ * @param {*} multiple 是否多选
+ */
+export function uploadFile (accept = '.json', multiple = 'multiple') {
+    return new Promise((resolve, reject) => {
+        const getUploadData = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader()
+                reader.onload = () => {
+                    try {
+                        resolve(reader.result)
+                    } catch (error) {
+                        reject(error)
+                    }
+                }
+                reader.onerror = reject
+                reader.readAsText(file)
+            })
+        }
+
+        const uploadEl = document.createElement('input')
+        uploadEl.style.display = 'none'
+        uploadEl.type = 'file'
+        uploadEl.multiple = multiple
+        uploadEl.accept = accept
+        uploadEl.onchange = (event) => {
+            const files = event.target.files || []
+            Promise.all(Array.from(files).map(file => getUploadData(file))).then((res) => {
+                resolve(res)
+            }).catch((err) => {
+                reject(err)
+            })
+        }
+        document.body.appendChild(uploadEl)
+        uploadEl.click()
+        document.body.removeChild(uploadEl)
+    })
 }
 
 /**

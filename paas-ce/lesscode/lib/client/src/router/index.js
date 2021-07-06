@@ -49,6 +49,7 @@ const Changelog = () => import(/* webpackChunkName: 'changelog' */'@/views/chang
 const TableSearch = () => import(/* webpackChunkName: 'case-table-search' */'@/views/help/docs/case-table-search.md')
 const Method = () => import(/* webpackChunkName: 'method' */'@/views/help/docs/method.md')
 const Variable = () => import(/* webpackChunkName: 'variable' */'@/views/help/docs/variable.md')
+const Directive = () => import(/* webpackChunkName: 'directive' */'@/views/help/docs/directive.md')
 const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
 
 const routes = [
@@ -67,6 +68,7 @@ const routes = [
             { path: 'case-table-search', name: 'table-search', component: TableSearch },
             { path: 'method', name: 'method', component: Method },
             { path: 'variable', name: 'variable', component: Variable },
+            { path: 'directive', name: 'directive', component: Directive },
             { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc }
         ]
     },

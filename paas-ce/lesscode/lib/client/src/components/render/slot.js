@@ -52,10 +52,19 @@ export default {
             }, [slotData.name])
         }
 
-        if (name === 'bk-breadcrumb-item') {
-            return h('bk-breadcrumb-item', {
+        if (name === 'bk-breadcrumb-item' || name === 'el-breadcrumb-item' || name === 'el-timeline-item') {
+            return h(name, {
                 props: slotData
             }, [slotData.label])
+        }
+
+        if (name === 'el-carousel-item') {
+            return h('el-carousel-item', {
+                props: slotData,
+                domProps: {
+                    innerHTML: slotData.content
+                }
+            })
         }
 
         return h(name, {

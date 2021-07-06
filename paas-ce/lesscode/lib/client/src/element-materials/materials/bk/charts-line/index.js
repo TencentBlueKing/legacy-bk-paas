@@ -14,10 +14,13 @@ export default {
     type: 'chart',
     displayName: '折线图',
     icon: 'bk-drag-line-chart',
-    group: '图表',
+    group: 'ECharts',
     order: 1,
     events: [],
-    styles: [],
+    styles: ['display'],
+    renderStyles: {
+        display: 'inline-block'
+    },
     props: {
         width: {
             type: 'number',
