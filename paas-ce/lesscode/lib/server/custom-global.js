@@ -15,11 +15,12 @@
  * @param {*} code // 错误码，非必填，默认 499
  * @param {*} data // 错误数据，非必填
  */
-function BusinessError (message, code, data) {
+function BusinessError (message = '服务器错误', code = -1, status = 200) {
     this.name = 'BusinessError'
-    this.message = message || 'Business Error'
+    this.status = status
+    this.message = message
     this.code = code
-    this.data = data
+    this.data = null
     this.stack = (new Error()).stack
 }
 BusinessError.prototype = Object.create(Error.prototype)

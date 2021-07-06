@@ -10,11 +10,11 @@
  */
 
 export default {
-    name: 'chart-bar',
-    type: 'chart',
-    displayName: '柱状图',
-    icon: 'bk-drag-histogram',
-    group: 'ECharts',
+    name: 'bk-charts-scatter',
+    type: 'bk-charts',
+    displayName: '散点图',
+    icon: 'bk-drag-bk-scatter-chart',
+    group: 'BKCharts',
     order: 1,
     events: [],
     styles: ['display'],
@@ -35,26 +35,38 @@ export default {
         options: {
             type: 'json',
             val: {
-                title: {
-                    text: '柱状图demo',
-                    x: 'center'
+                'type': 'scatter',
+                'data': {
+                    'datasets': [
+                        {
+                            'label': 'Scatter Dataset',
+                            'borderColor': 'rgba(255,111,114,1)',
+                            'backgroundColor': 'rgba(255,111,114,1)',
+                            'pointRadius': 3,
+                            'data': [
+                                { 'x': 39.8, 'y': -8.607 },
+                                { 'x': 50.1, 'y': -10.38 },
+                                { 'x': 100, 'y': -16.07 },
+                                { 'x': 126, 'y': -18.03 },
+                                { 'x': 158, 'y': -20 },
+                                { 'x': 200, 'y': -21.99 },
+                                { 'x': 251, 'y': -23.98 },
+                                { 'x': 316, 'y': -25.97 },
+                                { 'x': 398, 'y': -27.97 },
+                                { 'x': 501, 'y': -29.96 },
+                                { 'x': 631, 'y': -31.96 },
+                                { 'x': 794, 'y': -33.96 }
+                            ]
+                        }
+                    ]
                 },
-                tooltip: {},
-                legend: {
-                    data: ['issue数量'],
-                    left: 'left'
-                },
-                xAxis: {
-                    data: ['一', '二', '三', '四', '五']
-                },
-                yAxis: {},
-                series: [{
-                    name: 'issue数量',
-                    type: 'bar',
-                    data: [3, 5, 8, 3, 5]
-                }]
+                'options': {
+                    'flexWithContainer': true,
+                    'scales': { 'xAxes': { 'type': 'linear', 'position': 'bottom' } }
+
+                }
             },
-            tips: '图表配置，配置项同echarts'
+            tips: '图表配置，配置项详见bkcharts'
         },
         remoteOptions: {
             type: 'remote',

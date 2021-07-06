@@ -14,7 +14,7 @@ export default {
     type: 'chart',
     displayName: '饼状图',
     icon: 'bk-drag-pie-chart',
-    group: '图表',
+    group: 'ECharts',
     order: 1,
     events: [],
     styles: ['display'],

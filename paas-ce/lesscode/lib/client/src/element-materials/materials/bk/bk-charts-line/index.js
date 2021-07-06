@@ -14,7 +14,7 @@ export default {
     type: 'bk-charts',
     displayName: '折线图',
     icon: 'bk-drag-line-chart',
-    group: '图表',
+    group: 'BKCharts',
     order: 1,
     events: [],
     styles: ['display'],

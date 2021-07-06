@@ -92,11 +92,12 @@
     import TypeColor from './strategy/color'
 
     import { transformTipsWidth } from '@/common/util'
+    import safeStringify from '@/common/json-safe-stringify'
 
     const getRealValue = (type, target) => {
         if (type === 'object') {
             const FunctionCon = Function
-            return (new FunctionCon(`return ${JSON.stringify(target)}`))()
+            return (new FunctionCon(`return ${safeStringify(target)}`))()
         }
         return target
     }
@@ -289,7 +290,7 @@
             } else {
                 this.mutlTypeSelected = this.describe.type
             }
-            this.mutlTypeVal[this.mutlTypeSelected] = JSON.parse(JSON.stringify(this.describe))
+            this.$set(this.mutlTypeVal, this.mutlTypeSelected, JSON.parse(safeStringify(this.describe)))
             if (!this.lastValue || !this.lastValue.type) {
                 return
             }
@@ -298,7 +299,7 @@
             } else {
                 this.mutlTypeSelected = this.lastValue.type
             }
-            this.mutlTypeVal[this.mutlTypeSelected] = JSON.parse(JSON.stringify(this.lastValue))
+            this.$set(this.mutlTypeVal, this.mutlTypeSelected, JSON.parse(safeStringify(this.lastValue)))
         },
         methods: {
             handleUpdate (name, value, type, payload = {}) {
@@ -362,7 +363,7 @@
                 this.handleUpdate(this.name, value, type, payload)
             },
             updateDirectives (variableData) {
-                const renderDirectives = JSON.parse(JSON.stringify(this.lastDirectives || []))
+                const renderDirectives = JSON.parse(safeStringify(this.lastDirectives || []))
                 const index = renderDirectives.findIndex((item) => (item.type + item.prop) === ('v-bind' + this.name))
                 const curDirective = renderDirectives[index] || {}
                 if (index <= -1) {
