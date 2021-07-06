@@ -389,7 +389,7 @@ export async function checkFuncEslint (func) {
     const formateRes = formatter.format(results)
     const errStrArr = ansiparse(formateRes)
     let mes = ''
-    if (errStrArr.length) mes = `eslint检查不通过：\n${errStrArr.map((err) => (err.message)).join('')}`
+    if (errStrArr.length) mes = `eslint检查不通过，可点击自动修复图标进行自动修复：\n${errStrArr.map((err) => (err.message)).join('')}`
     return mes
 }
 
