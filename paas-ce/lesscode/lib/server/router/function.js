@@ -21,8 +21,7 @@ const {
     getFuncList,
     editFunction,
     deleteFunction,
-    generateToken,
-    getTokenList
+    fixFunByEslint
 } = require('../controller/function')
 
 const router = new Router({
@@ -39,7 +38,6 @@ router.get('/getFuncList', getFuncList)
 router.put('/editFunction', editFunction)
 router.delete('/deleteFunction', deleteFunction)
 router.get('/getAllGroupFunc', getAllGroupFunc)
-router.get('/generateToken', generateToken)
-router.get('/getTokenList', getTokenList)
+router.post('/fixFunByEslint', fixFunByEslint)
 
 module.exports = router

@@ -78,6 +78,9 @@ router.afterEach(async (to, from) => {
     if (!preloading && !canceling && !pageMethodExecuting) {
         store.commit('setMainContentLoading', false)
     }
+
+    const meta = to.meta || {}
+    document.title = meta.pageName || 'index'
 })
 
 export default router
