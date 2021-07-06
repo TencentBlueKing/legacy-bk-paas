@@ -79,7 +79,7 @@ router.afterEach(async (to, from) => {
         store.commit('setMainContentLoading', false)
     }
 
-    const meta = to.meta
+    const meta = to.meta || {}
     document.title = meta.pageName || 'index'
 })
 

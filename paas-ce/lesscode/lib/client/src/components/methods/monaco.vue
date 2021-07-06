@@ -195,7 +195,6 @@
             },
 
             resize () {
-                console.log()
                 this.editor.layout()
             }
         }
