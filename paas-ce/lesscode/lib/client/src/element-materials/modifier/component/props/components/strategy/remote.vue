@@ -14,7 +14,7 @@
         <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
             <span :class="{ 'under-line': tips }">{{title || (name === 'remoteOptions' ? '动态配置' : '远程函数')}}</span>
         </div>
-        <select-func v-model="remoteData" @change="saveChange"></select-func>
+        <select-func v-model="remoteData" @change="changeFunc"></select-func>
         <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
     </section>
 </template>
@@ -74,6 +74,11 @@
             this.saveChange()
         },
         methods: {
+            changeFunc () {
+                this.saveChange()
+                this.getApiData()
+            },
+
             saveChange () {
                 this.change(this.name, this.defaultValue, this.type, JSON.parse(JSON.stringify(this.remoteData)))
             },
@@ -84,9 +89,6 @@
                     if (curVar) {
                         const { defaultValue, defaultValueType, valueType } = curVar
                         let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
-                        if ([3, 4].includes(valueType) && typeof value === 'string') {
-                            value = JSON.parse(value)
-                        }
                         if (valueType === 6) value = ''
                         return value
                     } else {
@@ -110,13 +112,13 @@
                 const funcParams = (returnMethod.funcParams || []).join(', ')
                 if (returnMethod.funcType === 1) {
                     const remoteParams = (returnMethod.remoteParams || []).join(', ')
-                    const data = {
-                        url: this.processVarInFunParams(returnMethod.funcApiUrl, returnMethod.funcName),
-                        type: returnMethod.funcMethod,
-                        apiData: this.processVarInFunParams(returnMethod.funcApiData, returnMethod.funcName),
-                        withToken: returnMethod.withToken
-                    }
-                    returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { return this.$store.dispatch('getApiData', ${JSON.stringify(data)}).then((${remoteParams}) => { ${returnMethod.funcBody} }) };`
+                    const data = `{
+                        url: '${this.processVarInFunParams(returnMethod.funcApiUrl, returnMethod.funcName)}',
+                        type: '${returnMethod.funcMethod}',
+                        apiData: ${this.processVarInFunParams(returnMethod.funcApiData, returnMethod.funcName) || "''"},
+                        withToken: ${returnMethod.withToken}
+                    }`
+                    returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { return this.$store.dispatch('getApiData', ${data}).then((${remoteParams}) => { ${returnMethod.funcBody} }) };`
                 } else {
                     returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { ${returnMethod.funcBody} };`
                 }
@@ -245,9 +247,10 @@
                 try {
                     const sandBox = this.createSandBox()
                     const res = await sandBox.exec(methodStr, this.remoteData.params)
-                    const message = this.remoteValidate(res)
+                    let message = this.remoteValidate(res)
                     if (message) {
-                        this.$bkMessage({ theme: 'error', message })
+                        message = '数据源设置成功，以下问题可能会导致组件表现异常，请检查：' + message
+                        this.$bkMessage({ theme: 'warning', message })
                     } else {
                         this.change(this.name, res, this.type, JSON.parse(JSON.stringify(this.remoteData)))
                         if (this.name === 'remoteOptions') {
