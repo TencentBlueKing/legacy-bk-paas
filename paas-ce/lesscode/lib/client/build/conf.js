@@ -24,7 +24,6 @@ module.exports = {
             APP_CODE: JSON.stringify(APP_CODE),
             AJAX_URL_PREFIX: JSON.stringify('/api'),
             ENV: JSON.stringify(ENV)
-
         },
         assetsPublicPath: '{{STATIC_URL}}',
         staticUrl: '/static',

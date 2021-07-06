@@ -41,9 +41,9 @@
                         <bk-button theme="primary" class="mr10" @click="handleDone">确定</bk-button>
                         <bk-button @click="handleCancelStop">取消</bk-button>
                     </div>
-                    <div class="cancal-btn" @click="handleCancelStop">
+                    <!-- <div class="cancal-btn" @click="handleCancelStop">
                         <i class="bk-icon icon-close" />
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -393,8 +393,10 @@
             transform: translate(-50%, -50%);
             .wraper{
                 width: 500px;
-                height: 390px;
-                padding-top: 45px;
+                /* height: 390px; */
+                /* padding-top: 45px; */
+                height: 370px;
+                padding-top: 25px;
                 text-align: center;
                 border-radius: 2px;
                 background: #fff;
