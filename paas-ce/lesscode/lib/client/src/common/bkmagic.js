@@ -10,7 +10,6 @@
  */
 
 import Vue from 'vue'
-
 // 全量引入
 import './fully-import'
 
@@ -23,8 +22,15 @@ let messageInstance = null
 
 export const messageHtmlError = (errMessage, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
-    const h = global.mainComponent.$createElement
-    const message = h('pre', { style: { margin: 0 } }, [errMessage])
+    const messageComponent = Vue.compile(errMessage)
+    const globalComponent = global.mainComponent
+    const { $options, $createElement } = globalComponent
+    const _staticRenderFns = $options.staticRenderFns
+
+    $options.staticRenderFns = messageComponent.staticRenderFns
+    const message = messageComponent.render.call(globalComponent, $createElement)
+    $options.staticRenderFns = _staticRenderFns
+
     messageInstance = Message({
         message,
         delay,

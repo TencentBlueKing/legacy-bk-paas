@@ -90,6 +90,7 @@
                         const { defaultValue, defaultValueType, valueType } = curVar
                         let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
                         if (valueType === 6) value = ''
+                        if (valueType === 0) value = `'${value}'`
                         return value
                     } else {
                         throw new Error(`函数【${funcName}】里引用的变量【${variableCode}】不存在，请检查`)

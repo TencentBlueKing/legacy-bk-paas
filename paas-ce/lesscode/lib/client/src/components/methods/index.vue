@@ -649,6 +649,7 @@
         overflow: hidden;
         .func-form {
             height: calc(100% - 50px);
+            overflow: hidden;
         }
         .main-footer {
             padding: 9px 20px;
