@@ -17,7 +17,15 @@ import string
 import time
 import uuid
 
-from common.base_utils import FancyDict, get_client_ip, get_request_params, str_bool, get_first_not_empty_value
+from django.http import HttpResponse
+
+from common.base_utils import (
+    FancyDict,
+    get_client_ip,
+    get_request_params,
+    str_bool,
+    get_first_not_empty_value,
+)
 from common.base_validators import ValidationError
 from common.bkerrors import bk_error_codes
 from common.constants import COMPONENT_STATUSES
@@ -32,7 +40,6 @@ from common.errors import (
     error_codes,
 )
 from common.log import logger
-from django.http import HttpResponse
 from esb.bkcore.models import ESBChannel
 from esb.component import CompRequest
 from esb.response import format_resp_dict
@@ -234,7 +241,7 @@ class BaseChannel(object):
 
             # jsonp request
             jsonp_callback = request.g.kwargs.get("callback")
-            if jsonp_callback and getattr(self.comp, "is_support_jsonp", False):
+            if self._is_valid_jsonp_callback(jsonp_callback) and getattr(self.comp, "is_support_jsonp", False):
                 return HttpResponse(
                     "%s(%s)" % (jsonp_callback, json.dumps(response)),
                     content_type="application/x-javascript; charset=utf-8",
@@ -258,6 +265,12 @@ class BaseChannel(object):
         it may modify self.response object
         """
         pass
+
+    def _is_valid_jsonp_callback(self, jsonp_callback):
+        if not jsonp_callback:
+            return False
+
+        return bool(re.match(r'^[0-9a-zA-Z_]+$', jsonp_callback))
 
 
 class ApiChannel(BaseChannel):
