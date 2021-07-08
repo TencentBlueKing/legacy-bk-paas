@@ -230,6 +230,20 @@ class TestBaseChannel:
     def test_capitalize_header(self, header, expected):
         assert expected == BaseChannel.capitalize_header(header)
 
+    @pytest.mark.parametrize(
+        "callback, expected",
+        [
+            (None, False),
+            ("", False),
+            ("test_<>", False),
+            ("#test_01", False),
+            ("test 01", False),
+            ("test_01", True),
+        ]
+    )
+    def test_is_valid_jsonp_callback(self, callback, expected):
+        assert expected == self.channel._is_valid_jsonp_callback(callback)
+
 
 class TestApiChannel:
     @pytest.mark.parametrize(
