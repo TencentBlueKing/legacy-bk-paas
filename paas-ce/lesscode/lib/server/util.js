@@ -380,6 +380,12 @@ function getEslintOption (func, customOptions = {}) {
     return options
 }
 
+function getErrorHtmlMessage (errStrArr) {
+    return errStrArr.map((err) => {
+        return (err.message || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    }).join('')
+}
+
 export async function checkFuncEslint (func) {
     const options = getEslintOption(func)
     const eslint = new ESLint(options)
@@ -389,7 +395,7 @@ export async function checkFuncEslint (func) {
     const formateRes = formatter.format(results)
     const errStrArr = ansiparse(formateRes)
     let mes = ''
-    if (errStrArr.length) mes = `eslint检查不通过：\n${errStrArr.map((err) => (err.message)).join('')}`
+    if (errStrArr.length) mes = `<pre style="margin:0">eslint检查不通过，可点击 <i class="bk-drag-icon bk-drag-fix"></i> 进行自动修复：\n${getErrorHtmlMessage(errStrArr)}</pre>`
     return mes
 }
 
@@ -405,7 +411,7 @@ export async function verifyAndFixFunc (func) {
     const formateRes = formatter.format(results)
     const errStrArr = ansiparse(formateRes)
     let message = ''
-    if (errStrArr.length) message = `自动修复Eslint失败，请手动修复下面的问题后重试：\n${errStrArr.map((err) => (err.message)).join('')}`
+    if (errStrArr.length) message = `<pre style="margin:0">自动修复Eslint失败，请手动修复下面的问题后重试：\n${getErrorHtmlMessage(errStrArr)}</pre>`
 
     const fixResult = {
         code: results[0].output || '',

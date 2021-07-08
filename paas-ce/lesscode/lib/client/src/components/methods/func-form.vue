@@ -346,9 +346,10 @@
         .add-main-form{
             float: left;
             width: 350px;
+            height: 100%;
             overflow-y: auto;
             margin: 7px 0;
-            padding: 0 20px;
+            padding: 0 20px 20px;
             &::-webkit-scrollbar {
                 width: 6px;
                 height: 5px;
