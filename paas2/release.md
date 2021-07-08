@@ -1,8 +1,8 @@
 Release Log
 ===============================
 # 2.12.22
-    - bugfix: esb fs_list_users xss bug
-    - update: esb fs_list_users, add staff_status field
+    - bugfix: fix esb fs_list_users xss
+    - update: esb add staff_status field for fs_list_users
 
 # 2.12.21
     - bugfix: bkdialog js/css missing while do bind weixin
