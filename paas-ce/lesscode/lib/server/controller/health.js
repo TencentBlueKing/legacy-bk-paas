@@ -12,7 +12,6 @@
 
  const Health = {
      async check (ctx) {
-         const bkTicket = ctx.cookies.get('bk_ticket')
          try {
             const bkRepoRes = await healthModel.checkBkRepo()
             const dbRes = await healthModel.checkDb()
