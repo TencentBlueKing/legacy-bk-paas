@@ -125,6 +125,13 @@ const store = new Vuex.Store({
             })
         },
 
+        getHealthData ({ state }) {
+            return http.get('/health/check').then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
+
         // x-table
         remove (context, params, config) {
             return http.delete(`/test/remove?${json2Query(params)}`, {}, config).then(res => {

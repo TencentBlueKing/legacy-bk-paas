@@ -38,6 +38,8 @@ const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
 
+const HealthPage = () => import(/* webpackChunkName: 'none' */'@/views/system/health')
+
 const MainHelpEntry = () => import(/* webpackChunkName: 'index' */'@/views/help')
 const Custom = () => import(/* webpackChunkName: 'custom' */'@/views/help/docs/custom.md')
 const Grid = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/grid.md')
@@ -71,6 +73,10 @@ const routes = [
             { path: 'directive', name: 'directive', component: Directive },
             { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc }
         ]
+    },
+    {
+        path: '/checkHealth',
+        component: HealthPage
     },
     {
         path: '/',
