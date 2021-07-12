@@ -60,10 +60,10 @@ const variable = {
     async addVariable (ctx) {
         try {
             const body = ctx.request.body || {}
-            const variableType = body.variableType
-            if (variableType === 1) {
+            const { valueType, defaultValue } = body
+            if (valueType === 6) {
                 const func = {
-                    funcBody: (body.defaultValue || {}).all || ''
+                    funcBody: (defaultValue || {}).all || ''
                 }
                 const errMessage = await checkFuncEslint(func)
                 if (errMessage) {
@@ -86,10 +86,10 @@ const variable = {
     async editVariable (ctx) {
         try {
             const body = ctx.request.body || {}
-            const variableType = body.variableType
-            if (variableType === 1) {
+            const { valueType, defaultValue } = body
+            if (valueType === 6) {
                 const func = {
-                    funcBody: (body.defaultValue || {}).all || ''
+                    funcBody: (defaultValue || {}).all || ''
                 }
                 const errMessage = await checkFuncEslint(func)
                 if (errMessage) {

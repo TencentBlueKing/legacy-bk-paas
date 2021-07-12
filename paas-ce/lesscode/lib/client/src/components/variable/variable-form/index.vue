@@ -232,8 +232,7 @@
                         }
                         return this.getAllVariable(params)
                     }).catch((err) => {
-                        const message = this.$createElement('pre', { style: { margin: 0 } }, [err.message])
-                        this.$bkMessage({ theme: 'error', message, ellipsisLine: 0, extCls: 'auto-width' })
+                        this.messageHtmlError(err.message)
                     }).finally(() => {
                         this.isSaving = false
                     })

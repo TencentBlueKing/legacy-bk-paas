@@ -17,9 +17,10 @@ export default {
     displayName: '文字链接',
     group: '基础',
     events: [{ name: 'click' }],
-    styles: ['size', 'padding', 'margin', 'display'],
+    styles: ['size', 'padding', 'margin', 'display', 'text-align'],
     renderStyles: {
-        display: 'inline-flex'
+        display: 'inline-block',
+        textAlign: 'center'
     },
     props: {
         type: {
