@@ -591,15 +591,17 @@
                     'margin-vertical': {
                         type: 'number',
                         val: 0
-                    },
-                    slots: {
-                        type: 'column',
-                        val: [{ span: 1, children: [], width: '100%' }]
                     }
                 },
                 renderStyles: {},
                 renderEvents: {},
-                renderDirectives: []
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'column',
+                        val: [{ span: 1, children: [], width: '100%' }]
+                    }
+                }
             }
             this.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
 

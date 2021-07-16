@@ -12,6 +12,7 @@
 import { messageSuccess } from '@/common/bkmagic'
 import domToImage from './dom-to-image'
 import store from '@/store'
+import Vue from 'vue'
 
 /***
  * 遍历targetData
@@ -21,8 +22,8 @@ import store from '@/store'
 export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
     if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
     const interactiveComponents = store.getters['components/interactiveComponents']
-    const renderProps = grid.renderProps || {}
-    const slots = renderProps.slots || {}
+    const renderSlots = grid.renderSlots || {}
+    const slots = renderSlots.default || {}
     let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
     let isLayoutSupportDialog = false
     if (interactiveComponents.includes(grid.type)) { // 交互式组件特殊处理
@@ -60,6 +61,22 @@ export function findComponentParentGrid (targetData, id) {
         walkGrid(targetData, grid, callBack, callBack, index)
     })
     return componentParentGrid
+}
+
+/**
+ * 将html转换为Vnode
+ * @param {*} html html字符串
+ */
+export function transformHtmlToVnode (html) {
+    const htmlComponent = Vue.compile(html)
+    const globalComponent = global.mainComponent
+    const { $options, $createElement } = globalComponent
+    const _staticRenderFns = $options.staticRenderFns
+
+    $options.staticRenderFns = htmlComponent.staticRenderFns
+    const htmlVnode = htmlComponent.render.call(globalComponent, $createElement)
+    $options.staticRenderFns = _staticRenderFns
+    return htmlVnode
 }
 
 /**

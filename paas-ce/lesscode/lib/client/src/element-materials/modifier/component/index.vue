@@ -24,6 +24,7 @@
                         :last-props="modifier.renderProps"
                         :last-events="modifier.renderEvents"
                         :last-directives="modifier.renderDirectives"
+                        :last-slots="modifier.renderSlots"
                         :component-id="curSelectedComponentData.componentId"
                         :component-type="curSelectedComponentData.type"
                         :key="curSelectedComponentData.renderKey"
@@ -46,6 +47,7 @@
     import ModifierProps from './props'
     import ModifierEvents from './events'
     import ModifierDirectives from './directives'
+    import ModifierSlots from './slots'
     import cloneDeep from 'lodash.clonedeep'
 
     const baseComponentList = allComponentConf['bk'].concat(allComponentConf['element'] || [])
@@ -86,6 +88,9 @@
         if (data.renderDirectives) {
             result.renderDirectives = [...data.renderDirectives]
         }
+        if (data.renderSlots) {
+            result.renderSlots = { ...data.renderSlots }
+        }
         return result
     }
 
@@ -104,7 +109,8 @@
                     { name: 'styles', label: '样式', count: 40 },
                     { name: 'props', label: '属性', count: 30 },
                     { name: 'events', label: '事件', count: 20 },
-                    { name: 'directives', label: '指令', count: 10 }
+                    { name: 'directives', label: '指令', count: 10 },
+                    { name: 'slots', label: '插槽', count: 0 }
                 ],
                 tabPanelActive: 'props',
                 currentTabPanelType: 'unborder-card',
@@ -124,12 +130,12 @@
                 // 从配置表中根据name，找到对应name组件的配置
                 let { name } = this.curSelectedComponentData
                 if (!name) {
-                    return { styles: [], props: {}, events: [], directives: [] }
+                    return { styles: [], props: {}, events: [], directives: [], slots: {} }
                 }
                 if (name === 'radio-group' && this.curSelectedComponentData.renderProps && this.curSelectedComponentData.renderProps.slots && this.curSelectedComponentData.renderProps.slots.name === 'bk-radio-button') {
                     name = 'radio-button-group'
                 }
-                let realMaterialConfig = { styles: [], props: {}, events: [], directives: [] }
+                let realMaterialConfig = { styles: [], props: {}, events: [], directives: [], slots: {} }
                 const defaultMaterialConfig = materialConfig.find(_ => _.name === name)
                 if (defaultMaterialConfig) {
                     // 系统内置组件
@@ -145,7 +151,7 @@
                         realMaterialConfig = custom
                     }
                 }
-                const { styles = [], events = [], directives = [] } = realMaterialConfig
+                const { styles = [], events = [], directives = [], slots = {} } = realMaterialConfig
 
                 /** 对Props进行处理，当Props的display属性为false时，不在配置面板中显示 */
                 const originProps = realMaterialConfig.props || {}
@@ -160,7 +166,8 @@
                     styles,
                     props,
                     events,
-                    directives
+                    directives,
+                    slots
                 }
             },
             modifierCom () {
@@ -169,7 +176,8 @@
                     styles: ModifierStyles,
                     props: ModifierProps,
                     events: ModifierEvents,
-                    directives: ModifierDirectives
+                    directives: ModifierDirectives,
+                    slots: ModifierSlots
                 }
                 return comMap[this.tabPanelActive]
             },
@@ -191,12 +199,13 @@
                     // this.tabPanelActive = 'props'
                     this.tabPanelActive = cData.tabPanelActive || 'props'
                     // 选中某个组件，获取获取该组件的renderStyles，renderProps，renderEvents作为本次操作的默认值
-                    const { renderStyles = {}, renderProps = {}, renderEvents = {}, renderDirectives = [] } = cData
+                    const { renderStyles = {}, renderProps = {}, renderEvents = {}, renderDirectives = [], renderSlots = {} } = cData
                     this.modifier = Object.freeze({
                         renderStyles,
                         renderProps,
                         renderEvents,
-                        renderDirectives
+                        renderDirectives,
+                        renderSlots
                     })
                 },
                 immediate: true,
@@ -237,9 +246,10 @@
                         height: 100%;
                         padding: 0 20px;
                         .bk-tab-label-item {
-                            width: 25%;
+                            width: 20%;
                             line-height: 46px;
                             min-width: auto;
+                            padding: 0 2px;
                             &.active::after {
                                 left: 16%;
                                 width: 68%;
@@ -259,7 +269,8 @@
                 position: relative;
                 .no-style,
                 .no-prop,
-                .no-event {
+                .no-event,
+                .no-slot {
                     position: absolute;
                     top: 50%;
                     left: 50%;

@@ -103,9 +103,31 @@ export default {
         onChoose (e, group) {
             const uid = uuid()
             const component = cloneDeep(this.componentGroups[group][e.oldIndex])
-            const { name = '', type = '', props = {}, directives = [], isComplexComponent = false } = component
+            const { name = '', type = '', props = {}, directives = [], slots = {}, isComplexComponent = false } = component
             const id = component.name + '-' + uid
             const renderDirectives = directives
+
+            // build renderSlots
+            function transformSlot (slots) {
+                const renderSlots = slots
+                Object.keys(renderSlots).forEach((key) => {
+                    const renderSlot = renderSlots[key]
+                    Object.keys(renderSlot).forEach((key) => {
+                        const val = renderSlot[key]
+                        if (['type', 'name'].includes(key)) {
+                            renderSlot[key] = val[0]
+                        }
+                        if (key === 'slots') {
+                            renderSlot.renderSlots = transformSlot(val)
+                            delete renderSlot.slots
+                        }
+                        delete renderSlot.tips
+                    })
+                })
+                return renderSlots
+            }
+            const renderSlots = transformSlot(slots)
+
             const renderProps = Object.assign({}, ['bk-dialog', 'bk-sideslider'].includes(type) ? {
                 transfer: {
                     type: Boolean,
@@ -182,7 +204,8 @@ export default {
                 renderEvents: {},
                 interactiveShow: component.interactiveShow || false,
                 isComplexComponent: isComplexComponent,
-                renderDirectives
+                renderDirectives,
+                renderSlots
             }
             this.$emit('update:dragingComponent', this.curDragingComponent)
 

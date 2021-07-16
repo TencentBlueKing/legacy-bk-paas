@@ -12,6 +12,7 @@
 import Vue from 'vue'
 // 全量引入
 import './fully-import'
+import { transformHtmlToVnode } from './util'
 
 // 按需引入
 // import './demand-import'
@@ -22,15 +23,7 @@ let messageInstance = null
 
 export const messageHtmlError = (errMessage, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
-    const messageComponent = Vue.compile(errMessage)
-    const globalComponent = global.mainComponent
-    const { $options, $createElement } = globalComponent
-    const _staticRenderFns = $options.staticRenderFns
-
-    $options.staticRenderFns = messageComponent.staticRenderFns
-    const message = messageComponent.render.call(globalComponent, $createElement)
-    $options.staticRenderFns = _staticRenderFns
-
+    const message = transformHtmlToVnode(errMessage)
     messageInstance = Message({
         message,
         delay,

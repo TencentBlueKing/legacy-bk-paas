@@ -9,7 +9,13 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { unescapeHtml } from '@/common/util'
+import { transformHtmlToVnode } from '@/common/util'
+import slotRenderConfig from '@/common/slot-render-config'
+
+function getVal (val) {
+    if (typeof val === 'object') val = JSON.stringify(val).replace(/"/g, '\'')
+    return val
+}
 
 export default {
     name: 'render-slot',
@@ -25,50 +31,18 @@ export default {
         }
     },
     render (h, ctx) {
-        const { name, slotData } = ctx.props
-        if (name === 'text') {
-            return ctx._v(unescapeHtml(slotData))
-        }
-        if (name === 'bk-radio') {
-            return h(name, {
-                props: slotData,
-                style: {
-                    marginRight: '20px'
-                }
-            })
-        }
-        if (name === 'bk-checkbox') {
-            return h(name, {
-                props: slotData,
-                class: slotData.checked ? 'is-checked' : '',
-                style: {
-                    marginRight: '20px'
-                }
-            }, [slotData.label])
-        }
-        if (name === 'bk-collapse-item') {
-            return h('bk-collapse-item', {
-                props: slotData
-            }, [slotData.name])
-        }
+        const { slotData } = ctx.props
+        const { name } = slotData
+        const render = slotRenderConfig[name]
+        const slotRenderParams = []
+        let curSlot = slotData
+        do {
+            const valStr = getVal(curSlot.val)
+            slotRenderParams.push(valStr)
+            curSlot = curSlot.renderSlots
+        } while (curSlot && Object.keys(curSlot).length > 0)
 
-        if (name === 'bk-breadcrumb-item' || name === 'el-breadcrumb-item' || name === 'el-timeline-item') {
-            return h(name, {
-                props: slotData
-            }, [slotData.label])
-        }
-
-        if (name === 'el-carousel-item') {
-            return h('el-carousel-item', {
-                props: slotData,
-                domProps: {
-                    innerHTML: slotData.content
-                }
-            })
-        }
-
-        return h(name, {
-            props: slotData
-        })
+        const html = `<section>${render(...slotRenderParams)}</section>`
+        return transformHtmlToVnode(html)
     }
 }

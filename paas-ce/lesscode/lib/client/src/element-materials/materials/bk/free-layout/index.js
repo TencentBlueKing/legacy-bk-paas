@@ -22,8 +22,10 @@ export default {
         height: '500px'
     },
     props: {
-        slots: {
-            type: 'free-layout-item',
+    },
+    slots: {
+        default: {
+            type: ['free-layout-item'],
             // val: []
             // 为了兼容各处的逻辑，保持和 grid 同样的结构
             val: [

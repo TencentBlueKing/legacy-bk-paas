@@ -18,8 +18,10 @@ export default Extends({
     icon: 'bk-drag-grid-3',
     order: 3,
     props: {
-        slots: {
-            type: 'column',
+    },
+    slots: {
+        default: {
+            type: ['column'],
             val: [
                 { span: 1, children: [] },
                 { span: 1, children: [] },

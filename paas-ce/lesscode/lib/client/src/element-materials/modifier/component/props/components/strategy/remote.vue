@@ -15,7 +15,7 @@
             <span :class="{ 'under-line': tips }">{{title || (name === 'remoteOptions' ? '动态配置' : '远程函数')}}</span>
         </div>
         <select-func v-model="remoteData" @change="changeFunc"></select-func>
-        <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
+        <bk-button @click="getApiData" theme="primary" ext-cls="mt10" size="small">获取数据</bk-button>
     </section>
 </template>
 
@@ -269,12 +269,8 @@
 
 <style lang="postcss">
     .remote-title {
-        margin: 10px 0;
-        line-height: 24px;
-        font-size: 12px;
-        &:first-child {
-            margin-top: 0;
-        }
+        line-height: 32px;
+        font-size: 14px;
     }
     .under-line {
         line-height: 24px;

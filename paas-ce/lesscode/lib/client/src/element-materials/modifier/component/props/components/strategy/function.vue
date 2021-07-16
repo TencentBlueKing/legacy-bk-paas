@@ -63,17 +63,3 @@
         }
     }
 </script>
-
-<style lang="postcss">
-    .remote-title {
-        margin-top: 10px;
-        line-height: 24px;
-        font-size: 12px;
-        &:first-child {
-            margin-top: 0;
-        }
-    }
-    .remote-button {
-        margin: 10px 0;
-    }
-</style>
