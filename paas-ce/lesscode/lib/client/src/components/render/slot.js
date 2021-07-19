@@ -12,11 +12,6 @@
 import { transformHtmlToVnode } from '@/common/util'
 import slotRenderConfig from '@/common/slot-render-config'
 
-function getVal (val) {
-    if (typeof val === 'object') val = JSON.stringify(val).replace(/"/g, '\'')
-    return val
-}
-
 export default {
     name: 'render-slot',
     functional: true,
@@ -37,8 +32,7 @@ export default {
         const slotRenderParams = []
         let curSlot = slotData
         do {
-            const valStr = getVal(curSlot.val)
-            slotRenderParams.push(valStr)
+            slotRenderParams.push(curSlot.val)
             curSlot = curSlot.renderSlots
         } while (curSlot && Object.keys(curSlot).length > 0)
 

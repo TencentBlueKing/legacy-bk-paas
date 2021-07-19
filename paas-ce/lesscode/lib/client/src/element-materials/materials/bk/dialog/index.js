@@ -35,6 +35,33 @@ export default {
             valType: 'variable'
         }
     ],
+    slots: {
+        default: {
+            type: ['render-grid'],
+            val: {
+                name: 'grid',
+                type: 'render-grid',
+                slotName: '',
+                slotContainer: true,
+                renderProps: {},
+                renderStyles: {},
+                renderEvents: {},
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'column',
+                        val: [
+                            {
+                                children: [],
+                                span: 1,
+                                width: '100%'
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
     props: {
         'value': {
             type: 'boolean',
@@ -43,32 +70,6 @@ export default {
         'title': {
             type: 'string',
             val: '这是标题'
-        },
-        slots: {
-            name: 'layout',
-            type: 'hidden',
-            val: {
-                name: 'grid',
-                type: 'render-grid',
-                slotName: '',
-                slotContainer: true,
-                renderProps: {
-                    slots: {
-                        type: 'column',
-                        val:
-                            [
-                                {
-                                    children: [],
-                                    span: 1,
-                                    width: '100%'
-                                }
-                            ]
-                    }
-                },
-                renderStyles: {},
-                renderEvents: {},
-                renderDirectives: []
-            }
         },
         'theme': {
             type: 'string',

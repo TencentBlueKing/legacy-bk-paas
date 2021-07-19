@@ -1258,14 +1258,14 @@
                         }
                         if (item.children) {
                             del(item.children, cid)
-                        } else if (item.renderProps.slots && item.renderProps.slots.type === 'form-item') {
+                        } else if (item.renderSlots.default && item.renderSlots.default.type === 'form-item') {
                             // form表单内的元素不允许通过画布删除
                         } else if (
-                            item.renderProps.slots && (item.renderProps.slots.type === 'column' || item.renderProps.slots.type === 'free-layout-item')
+                            item.renderSlots.default && (item.renderSlots.default.type === 'column' || item.renderSlots.default.type === 'free-layout-item')
                         ) {
-                            del(item.renderProps.slots.val, cid)
-                        } else if (item.renderProps.slots && item.renderProps.slots.name === 'layout') {
-                            del([item.renderProps.slots.val], cid)
+                            del(item.renderSlots.default.val, cid)
+                        } else if (item.renderSlots.default && item.renderSlots.default.type === 'layout') {
+                            del([item.renderSlots.default.val], cid)
                         }
                     }
                     return ''

@@ -31,10 +31,11 @@
             :refresh-key="renderDataSlotRefreshKey"
             :component-data="componentData"
             :ref="renderData.componentId">
-            <render-slot v-for="(slotName, index) in Object.keys(renderDataSlot)"
+            <component v-for="(slotName, index) in Object.keys(renderDataSlot)"
                 :key="index"
-                :slot-data="renderDataSlot[slotName]"
                 :slot="slotName"
+                :is="getSlotComponentName(renderDataSlot[slotName])"
+                v-bind="getSlotProps(renderDataSlot[slotName])"
             />
         </component-wrapper>
     </div>
@@ -214,8 +215,38 @@
                 'pushTargetHistory'
             ]),
 
-            getSlotName (slotName) {
-                return slotName || 'default'
+            getSlotComponentName (slot) {
+                const { type } = slot
+                let componentName
+                switch (type) {
+                    case 'render-grid':
+                    case 'render-row':
+                    case 'render-col':
+                    case 'free-layout':
+                        componentName = type
+                        break
+                    default:
+                        componentName = 'render-slot'
+                        break
+                }
+                return componentName
+            },
+
+            getSlotProps (slot) {
+                const { type, val } = slot
+                const props = {}
+                switch (type) {
+                    case 'render-grid':
+                    case 'render-row':
+                    case 'render-col':
+                    case 'free-layout':
+                        props.componentData = val
+                        break
+                    default:
+                        props.slotData = slot
+                        break
+                }
+                return props
             },
 
             getComponentWrapperClass (type) {
