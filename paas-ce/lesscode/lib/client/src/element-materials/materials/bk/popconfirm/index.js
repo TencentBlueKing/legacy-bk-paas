@@ -72,11 +72,18 @@ export default {
         'ext-popover-cls': {
             type: 'string',
             tips: '配置 pop 弹层主内容区域自定义样式类名，传入的类会被加在 pop 弹层主内容区域的 DOM .bk-popconfirm-content 上'
+        }
+    },
+    slots: {
+        default: {
+            name: ['html'],
+            type: ['html'],
+            val: '<bk-button>删除</bk-button>'
         },
-        slots: {
-            name: 'template',
-            type: 'html',
-            val: '<i class="bk-icon icon-info-circle-shape"></i>'
+        content: {
+            name: ['html'],
+            type: ['html'],
+            val: '<div>自定义内容</div>'
         }
     }
 }

@@ -21,6 +21,28 @@ export default {
             checked: false
         })
     },
+    'bk-radio-button': {
+        template: [
+            {
+                name: 'label',
+                key: 'label',
+                type: 'input'
+            }, {
+                name: 'value',
+                key: 'value',
+                type: 'input'
+            }, {
+                name: '是否禁用',
+                key: 'disabled',
+                type: 'checkbox'
+            }
+        ],
+        generateFunc: index => ({
+            label: `选项${index}`,
+            value: `选项${index}`,
+            checked: false
+        })
+    },
     'el-radio': {
         template: [
             {
@@ -67,7 +89,7 @@ export default {
             label: `选项${index}`
         })
     },
-    'bk-bread-crumb': {
+    'bk-breadcrumb-item': {
         template: [
             {
                 name: 'label',

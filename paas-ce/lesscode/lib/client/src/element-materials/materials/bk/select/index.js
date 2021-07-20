@@ -117,10 +117,13 @@ export default {
             type: 'number',
             val: 2500,
             tips: '弹出层的 z-index'
-        },
-        slots: {
-            name: 'bk-option',
-            type: ['option', 'remote'],
+        }
+    },
+    slots: {
+        default: {
+            name: ['bk-option'],
+            type: ['list', 'remote'],
+            tips: '默认插槽，填写的数据需要是数组且每个元素需包含id和name字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('id') || !item.hasOwnProperty('name')))
@@ -133,13 +136,6 @@ export default {
                 { id: 'option4', name: '跳舞' },
                 { id: 'option5', name: '健身' },
                 { id: 'option6', name: '骑车' }
-            ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-option 里的 :id, :name, :key
-            // <bk-option v-for="item in select19a32a0eSlot" :id="item.id" :name="item.name" :key="item.id"></bk-option>
-            attrs: [
-                { 'key': 'id', 'value': 'id' },
-                { 'key': 'name', 'value': 'name' },
-                { 'key': 'key', 'value': 'id' }
             ]
         }
     }
