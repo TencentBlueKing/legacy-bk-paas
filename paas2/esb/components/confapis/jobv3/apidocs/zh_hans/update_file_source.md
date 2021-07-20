@@ -24,7 +24,7 @@
 
 | 字段             |  类型      | 必选   |  描述       |
 |-----------------|------------|--------|------------|
-| base_url        |  string    | 是     | 对接的制品库实例根地址，例如：https://dev.bkrepo.woa.com |
+| base_url        |  string    | 是     | 对接的制品库实例根地址，例如：https://bkrepo.com |
 
 ### 请求参数示例
 
@@ -38,7 +38,7 @@
   "alias": "标准运维制品库文件源",
   "type": "BLUEKING_ARTIFACTORY",
   "access_params": {
-    "base_url": "https://dev.bkrepo.woa.com"
+    "base_url": "https://bkrepo.com"
   },
   "credential_id": "06644309e10e4068b3c7b32799668210",
   "file_prefix": ""
