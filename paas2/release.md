@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.23
+    - update: esb update jobv3/bk_log confapis
+
 # 2.12.22
     - bugfix: fix esb fs_list_users xss
     - update: esb add staff_status field for fs_list_users

@@ -148,7 +148,8 @@
     "message": "success",
     "data": {
         "job_instance_name": "API Quick Distribution File1521101427176",
-        "job_instance_id": 10000
+        "job_instance_id": 10000,
+		"step_instance_id": 10001
     }
 }
 ```
