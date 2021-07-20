@@ -223,6 +223,7 @@
                     case 'render-row':
                     case 'render-col':
                     case 'free-layout':
+                    case 'form-item':
                         componentName = type
                         break
                     default:

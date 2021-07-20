@@ -842,7 +842,7 @@ class PageCode {
         const hasProps = props && typeof props === 'object' && Object.keys(props).length > 0
         const dirProps = (directives || []).filter((directive) => (directive.val !== '' && directive.prop !== ''))
         let itemProps = ''
-        if (hasProps) {
+        if (hasProps || slots) {
             itemProps = this.getPropsStr(type, props, compId, dirProps, slots)
         }
         return itemProps
@@ -914,18 +914,24 @@ class PageCode {
                         propsStr += `${typeof val === 'string' ? '' : ':'}${propName}="${v}" `
                     }
                 }
-            } else {
-                const hasVModel = dirProps.filter(item => item.type === 'v-model').length
-                if (type === 'bk-checkbox-group' && !hasVModel) {
-                    const checkedValue = slots.default.val.filter(c => c.checked === true).map(c => c.value)
-                    this.dataTemplate(compId, JSON.stringify(checkedValue))
-                    propsStr += `v-model="${compId}"`
-                }
             }
+            // } else {
+            //     const hasVModel = dirProps.filter(item => item.type === 'v-model').length
+            //     if (type === 'bk-checkbox-group' && !hasVModel) {
+            //         const checkedValue = slots.default.val.filter(c => c.checked === true).map(c => c.value)
+            //         this.dataTemplate(compId, JSON.stringify(checkedValue))
+            //         propsStr += `v-model="${compId}"`
+            //     }
+            // }
+        }
+        const hasVModel = dirProps.filter(item => item.type === 'v-model').length
+        if (type === 'bk-checkbox-group' && !hasVModel) {
+            const checkedValue = slots.default.val.filter(c => c.checked === true).map(c => c.value)
+            this.dataTemplate(compId, JSON.stringify(checkedValue))
+            propsStr += `v-model="${compId}"`
         }
         // element组件添加vmodel
         if (type.startsWith('el-')) {
-            const hasVModel = dirProps.filter(item => item.type === 'v-model').length
             if (!hasVModel && elementComId !== '') {
                 const valueType = props['value'].type
                 if (valueType !== 'array' && valueType !== 'object') {

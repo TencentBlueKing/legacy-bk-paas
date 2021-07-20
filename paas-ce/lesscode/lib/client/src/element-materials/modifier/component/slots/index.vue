@@ -6,7 +6,9 @@
             :slot-name="slotName"
             :slot-val="renderSlots[slotName]"
             :slot-config="slotConfig"
+            :render-props="renderProps"
             @change="change"
+            @batchUpdate="batchUpdate"
             class="modifier-slot"
         ></renderSlot>
         <span v-if="Object.keys(materialConfig).length <= 0 && Object.keys(curSelectedComponentData).length" class="no-slot">该组件暂无插槽</span>
@@ -24,12 +26,14 @@
 
         props: {
             materialConfig: Object,
-            lastSlots: Object
+            lastSlots: Object,
+            lastProps: Object
         },
 
         data () {
             return {
                 renderSlots: {},
+                renderProps: {},
                 mutlTypeValue: {
                     name: '',
                     type: ''
@@ -43,6 +47,7 @@
 
         created () {
             this.renderSlots = this.lastSlots
+            this.renderProps = this.lastProps
         },
 
         methods: {
@@ -51,6 +56,10 @@
                 const renderData = {
                     renderSlots: this.renderSlots
                 }
+                this.batchUpdate(renderData)
+            },
+
+            batchUpdate (renderData) {
                 this.$emit('on-change', renderData)
             }
         }

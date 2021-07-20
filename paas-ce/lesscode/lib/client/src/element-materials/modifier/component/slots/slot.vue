@@ -33,7 +33,9 @@
             :is="computedSlotType"
             :slot-val="copySlotVal"
             :slot-config="slotConfig"
+            :render-props="renderProps"
             :change="change"
+            @batchUpdate="batchUpdate"
         ></component>
     </variable-select>
 </template>
@@ -47,12 +49,14 @@
     import slotColumn from './components/column'
     import slotFree from './components/free-layout-item'
     import slotRemote from './components/remote'
+    import slotFormItem from './components/form-item'
 
     const comMap = {
         list: slotList,
         column: slotColumn,
         'free-layout-item': slotFree,
-        remote: slotRemote
+        remote: slotRemote,
+        'form-item': slotFormItem
     }
 
     export default {
@@ -74,6 +78,9 @@
                 type: Object
             },
             slotConfig: {
+                type: Object
+            },
+            renderProps: {
                 type: Object
             }
         },
@@ -146,6 +153,10 @@
 
             change (slotVal) {
                 this.$emit('change', this.slotName, slotVal)
+            },
+
+            batchUpdate () {
+                this.$emit('batchUpdate', ...arguments)
             }
         }
     }
