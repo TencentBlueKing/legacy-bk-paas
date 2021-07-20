@@ -27,14 +27,17 @@ export default {
             type: 'string',
             val: '',
             tips: '图表分隔符class'
-        },
-        slots: {
-            name: 'bk-breadcrumb-item',
-            type: ['bread-crumb', 'remote'],
+        }
+    },
+    slots: {
+        default: {
+            name: ['bk-breadcrumb-item'],
+            type: ['list', 'remote'],
+            tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和to字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
-                const errData = data.find((item) => (!item.hasOwnProperty('id') || !item.hasOwnProperty('name')))
-                if (errData) return '返回值每个元素需要含有id和name字段'
+                const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('to')))
+                if (errData) return '返回值每个元素需要含有label和to字段'
             },
             val: [
                 { label: '首页', to: '/' },

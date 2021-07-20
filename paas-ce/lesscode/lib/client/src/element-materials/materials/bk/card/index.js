@@ -57,33 +57,28 @@ export default {
             type: 'boolean',
             val: true,
             tips: '是否显示边框'
-        },
-        // slots: {
-        //     name: 'template',
-        //     type: 'html',
-        //     val: '<p>卡片内容 1</p>\n<p>卡片内容 2</p>\n<p>卡片内容 3</p>'
-        // },
-        slots: {
-            name: 'layout',
-            type: 'hidden',
+        }
+    },
+    slots: {
+        default: {
+            type: ['free-layout'],
             val: {
-                name: 'free-layout',
+                name: 'grid',
                 type: 'free-layout',
+                slotName: '',
                 slotContainer: true,
-                renderProps: {
-                    slots: {
-                        type: 'free-layout-item',
-                        val:
-                            [
-                                {
-                                    children: []
-                                }
-                            ]
-                    }
-                },
+                renderProps: {},
                 renderStyles: { 'height': '200px', 'pointer-events': 'auto' },
                 renderEvents: {},
-                renderDirectives: []
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: ['free-layout-item'],
+                        val: [
+                            { children: [] }
+                        ]
+                    }
+                }
             }
         }
     }

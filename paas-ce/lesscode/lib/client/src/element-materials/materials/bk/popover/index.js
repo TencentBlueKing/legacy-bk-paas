@@ -53,11 +53,18 @@ export default {
         'ext-cls': {
             type: 'string',
             tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM .tippy-popper 上'
+        }
+    },
+    slots: {
+        default: {
+            name: ['html'],
+            type: ['html'],
+            val: '<bk-button>多行</bk-button>'
         },
-        slots: {
-            name: 'template',
-            type: 'html',
-            val: '<div class="bk-text-primary f14">当鼠标经过这段文字时，会显示一个气泡框</div>'
+        content: {
+            name: ['html'],
+            type: ['html'],
+            val: '<div class="bk-text-primary pt10 pb5 pl10 pr10">显示多行信息</div>'
         }
     }
 }

@@ -34,10 +34,13 @@ export default {
             type: 'string',
             val: 'qq',
             tips: '当前选中的value值'
-        },
-        slots: {
-            name: 'bk-radio-button',
-            type: ['radio-button', 'remote'],
+        }
+    },
+    slots: {
+        default: {
+            name: ['bk-radio-button'],
+            type: ['list', 'remote'],
+            tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和value字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('value')))
@@ -47,14 +50,6 @@ export default {
                 { label: 'QQ', value: 'qq', disabled: false },
                 { label: '微信', value: 'wx', disabled: false },
                 { label: '微博', value: 'weibo', disabled: true }
-            ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-checkbox 里的 :label, :value, :checked, :key
-            // <bk-checkbox v-for="item in checkboxgroupc57d9bc6Slot" :label="item.label" :value="item.value" :checked="item.checked" :key="item.value">{{ item.label }}</bk-checkbox>
-            attrs: [
-                { 'key': 'label', 'value': 'label' },
-                { 'key': 'value', 'value': 'value' },
-                { 'key': 'disabled', 'value': 'disabled' },
-                { 'key': 'key', 'value': 'value' }
             ]
         }
     }

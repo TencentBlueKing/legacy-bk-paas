@@ -62,17 +62,18 @@ export default {
         'ext-cls': {
             type: 'string',
             tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
-        },
-        slots: {
-            name: 'layout',
-            type: 'hidden',
+        }
+    },
+    slots: {
+        content: {
+            type: ['render-grid'],
             val: {
                 name: 'grid',
                 type: 'render-grid',
-                slotName: 'content',
+                slotName: '',
                 slotContainer: true,
-                renderProps: {
-                    slots: {
+                renderSlots: {
+                    default: {
                         type: 'column',
                         val:
                           [
@@ -84,6 +85,7 @@ export default {
                           ]
                     }
                 },
+                renderProps: {},
                 renderStyles: {},
                 renderEvents: {},
                 renderDirectives: []

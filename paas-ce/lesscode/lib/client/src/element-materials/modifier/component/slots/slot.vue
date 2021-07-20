@@ -50,13 +50,19 @@
     import slotFree from './components/free-layout-item'
     import slotRemote from './components/remote'
     import slotFormItem from './components/form-item'
+    import slotTable from './components/table'
+    import slotHtml from './components/slot-html'
+    import slotText from './components/text'
 
     const comMap = {
         list: slotList,
         column: slotColumn,
         'free-layout-item': slotFree,
         remote: slotRemote,
-        'form-item': slotFormItem
+        'form-item': slotFormItem,
+        table: slotTable,
+        html: slotHtml,
+        text: slotText
     }
 
     export default {
