@@ -11,6 +11,17 @@
   dest_http_method: POST
   is_hidden: True
 
+- path: /v2/bk_log/esquery_monitor/
+  name: esquery_monitor
+  label: 日志平台索引集查询接口
+  label_en: bk_log index-set search api for bkmonitor
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/esquery/search/
+  dest_http_method: POST
+  is_hidden: True
+
 - path: /v2/bk_log/esquery_dsl/
   name: esquery_dsl
   label: ES-DSL查询接口
