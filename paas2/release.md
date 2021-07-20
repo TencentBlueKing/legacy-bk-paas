@@ -2,6 +2,7 @@ Release Log
 ===============================
 # 2.12.23
     - update: esb update jobv3/bk_log confapis
+    - update: esb cc transfer_host_to_resourcemodule add parameter bk_module_id
 
 # 2.12.22
     - bugfix: fix esb fs_list_users xss
