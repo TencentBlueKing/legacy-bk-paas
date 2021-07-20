@@ -32,7 +32,8 @@ export default {
         const slotRenderParams = []
         let curSlot = slotData
         do {
-            slotRenderParams.push(curSlot.val)
+            const param = { val: curSlot.val, type: 'value' }
+            slotRenderParams.push(param)
             curSlot = curSlot.renderSlots
         } while (curSlot && Object.keys(curSlot).length > 0)
 

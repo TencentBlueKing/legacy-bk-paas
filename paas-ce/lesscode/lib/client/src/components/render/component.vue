@@ -12,7 +12,7 @@
 <template>
     <div :data-component-id="`component-${renderData.componentId}`"
         :base-component="renderData.type !== 'render-grid' && renderData.type !== 'free-layout' && !renderData.isCustomComponent && !renderData.isComplexComponent"
-        :class="['wrapperCls', wrapperCls, (renderDataSlotName !== 'free-layout-item' ? 'component-wrapper' : '')]"
+        :class="['wrapperCls', wrapperCls, (!renderLayout ? 'component-wrapper' : '')]"
         :ref="`${renderData.componentId}-wrapper`" :style="Object.assign({}, wrapperNodeStyle, { top: renderData.renderStyles.top, left: renderData.renderStyles.left, width: renderData.renderStyles.width }, componentData.type === 'bk-swiper' ? { height: renderData.renderStyles.height } : {})"
         @mousedown.stop="componentWrapperMousedownHandler(renderData, $event)"
         @mouseenter.stop="componentWrapperMouseenterHandler(renderData, $event)"
@@ -65,6 +65,14 @@
         freeLayout: () => import('./free-layout')
     }
 
+    const layoutCompomnents = [
+        'render-grid',
+        'render-row',
+        'render-col',
+        'free-layout',
+        'form-item'
+    ]
+
     export default {
         name: 'render-component',
         components,
@@ -84,7 +92,7 @@
             }
             return {
                 renderData: {},
-                renderDataSlotName: '',
+                renderLayout: false,
                 renderDataSlot: {},
                 renderDataSlotRefreshKey: Date.now(),
                 bindProps: {},
@@ -182,7 +190,7 @@
             }
 
             if (this.renderData.renderSlots.default) {
-                this.renderDataSlotName = this.renderData.renderSlots.default.type
+                this.renderLayout = layoutCompomnents.includes(this.renderData.renderSlots.default.type)
             }
 
             this.updateBindProps()
@@ -217,36 +225,13 @@
 
             getSlotComponentName (slot) {
                 const { type } = slot
-                let componentName
-                switch (type) {
-                    case 'render-grid':
-                    case 'render-row':
-                    case 'render-col':
-                    case 'free-layout':
-                    case 'form-item':
-                        componentName = type
-                        break
-                    default:
-                        componentName = 'render-slot'
-                        break
-                }
+                const componentName = layoutCompomnents.includes(type) ? type : 'render-slot'
                 return componentName
             },
 
             getSlotProps (slot) {
                 const { type, val } = slot
-                const props = {}
-                switch (type) {
-                    case 'render-grid':
-                    case 'render-row':
-                    case 'render-col':
-                    case 'free-layout':
-                        props.componentData = val
-                        break
-                    default:
-                        props.slotData = slot
-                        break
-                }
+                const props = layoutCompomnents.includes(type) ? { componentData: val } : { slotData: slot }
                 return props
             },
 
@@ -374,7 +359,7 @@
                 removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
 
                 const curComponentNode = getNodeWithClass(e.target, 'wrapperCls')
-                const className = this.renderDataSlotName === 'free-layout-item' ? 'wrapper-cls-selected' : 'selected'
+                const className = this.renderLayout ? 'wrapper-cls-selected' : 'selected'
                 curComponentNode.classList.add(className)
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
@@ -391,7 +376,7 @@
                 if (renderData.type === 'render-grid' || renderData.type === 'free-layout') {
                     return
                 }
-                const className = this.renderDataSlotName === 'free-layout-item' ? 'wrapper-cls-hover' : 'component-wrapper-hover'
+                const className = this.renderLayout ? 'wrapper-cls-hover' : 'component-wrapper-hover'
                 const target = e.target
                 target.classList.add(className)
 
@@ -411,7 +396,7 @@
                 if (renderData.type === 'render-grid' || renderData.type === 'free-layout') {
                     return
                 }
-                const className = this.renderDataSlotName === 'free-layout-item' ? 'wrapper-cls-hover' : 'component-wrapper-hover'
+                const className = this.renderLayout ? 'wrapper-cls-hover' : 'component-wrapper-hover'
                 const target = e.target
                 target.classList.remove(className)
             }

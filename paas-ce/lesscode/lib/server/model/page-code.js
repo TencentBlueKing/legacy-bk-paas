@@ -32,8 +32,11 @@ function transformToString (val) {
         case 'object':
             res = safeStringify(val)
             break
+        case 'string':
+            res = `'${val}'`
+            break
         default:
-            res = `${val}`
+            res = val
             break
     }
     return res
@@ -1072,11 +1075,12 @@ class PageCode {
         }
 
         let slotStr = ''
-        compId = `${compId}Slot`.replace('-', '')
+        compId = `${compId}`.replace('-', '')
         compId = `${camelCase(compId, { transform: camelCaseTransformMerge })}Slot`
         const slotKeys = Object.keys(slots)
         slotKeys.forEach((key) => {
             const slot = slots[key]
+            compId = compId + key
 
             if (['render-grid', 'render-row', 'render-col', 'free-layout'].includes(slot.type)) {
                 const codeArr = []
@@ -1107,6 +1111,7 @@ class PageCode {
                     const { variableData = {}, methodData = {} } = slot.payload || {}
                     const type = Object.prototype.toString.call(slot.val)
                     let disPlayVal = defaultValMap[type] || ''
+                    const param = { val: disPlayVal, type: 'variable' }
 
                     if (variableData.val) {
                         disPlayVal = this.handleUsedVariable(variableData.valType, variableData.val, compId)
@@ -1115,10 +1120,16 @@ class PageCode {
                         this.remoteMethodsTemplate(compId, slot.payload || {})
                         disPlayVal = compId
                     } else {
-                        this.dataTemplate(compId, transformToString(slot.val))
-                        disPlayVal = compId
+                        if (typeof slot.val === 'object') {
+                            this.dataTemplate(compId, transformToString(slot.val))
+                            disPlayVal = compId
+                        } else {
+                            disPlayVal = slot.val
+                            param.type = 'value'
+                        }
                     }
-                    slotRenderParams.push(disPlayVal)
+                    param.val = disPlayVal
+                    slotRenderParams.push(param)
                     curSlot = curSlot.renderSlots
                 } while (curSlot && Object.keys(curSlot).length > 0)
                 slotStr += render(...slotRenderParams)

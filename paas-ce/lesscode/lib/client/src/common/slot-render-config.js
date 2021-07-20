@@ -4,7 +4,7 @@ function getVal (val) {
 }
 
 const renderMap = {
-    'bk-checkbox' (val) {
+    'bk-checkbox' ({ val }) {
         const displayVal = getVal(val)
         return `
             <bk-checkbox
@@ -17,7 +17,7 @@ const renderMap = {
             >{{item.label}}</bk-checkbox>
         `
     },
-    'bk-radio' (val) {
+    'bk-radio' ({ val }) {
         const displayVal = getVal(val)
         return `
             <bk-radio
@@ -29,7 +29,7 @@ const renderMap = {
             >{{item.label}}</bk-radio>
         `
     },
-    'bk-radio-button' (val) {
+    'bk-radio-button' ({ val }) {
         const displayVal = getVal(val)
         return `
             <bk-radio-button
@@ -40,7 +40,7 @@ const renderMap = {
             >{{item.label}}</bk-radio-button>
         `
     },
-    'bk-option' (val) {
+    'bk-option' ({ val }) {
         const displayVal = getVal(val)
         return `
             <bk-option
@@ -51,7 +51,7 @@ const renderMap = {
             ></bk-option>
         `
     },
-    'bk-tab-panel' (val) {
+    'bk-tab-panel' ({ val }) {
         const displayVal = getVal(val)
         return `
             <bk-tab-panel
@@ -61,7 +61,7 @@ const renderMap = {
             ></bk-tab-panel>
         `
     },
-    'bk-breadcrumb-item' (val) {
+    'bk-breadcrumb-item' ({ val }) {
         const displayVal = getVal(val)
         return `
             <bk-breadcrumb-item
@@ -71,7 +71,7 @@ const renderMap = {
             >{{item.label}}</bk-breadcrumb-item>
         `
     },
-    'bk-table-column' (val) {
+    'bk-table-column' ({ val }) {
         const displayVal = getVal(val)
         return `
             <template v-for="(item, index) in ${displayVal}">
@@ -98,15 +98,29 @@ const renderMap = {
             </template>
         `
     },
-    'html' (val) {
-        return `
-            ${val}
-        `
+    'html' ({ val, type }) {
+        let res = ''
+        switch (type) {
+            case 'value':
+                res = val
+                break
+            case 'variable':
+                res = `<div v-html="${val}"></div>`
+                break
+        }
+        return res
     },
-    'paragraph' (val) {
-        return `
-            ${val}
-        `
+    'text' ({ val, type }) {
+        let res = ''
+        switch (type) {
+            case 'value':
+                res = val
+                break
+            case 'variable':
+                res = `{{${val}}}`
+                break
+        }
+        return res
     }
 }
 

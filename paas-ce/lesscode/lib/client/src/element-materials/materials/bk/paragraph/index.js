@@ -43,7 +43,7 @@ export default {
     },
     slots: {
         default: {
-            name: ['paragraph'],
+            name: ['text'],
             type: ['text'],
             regExp: /\S/,
             val: '默认段落文字',

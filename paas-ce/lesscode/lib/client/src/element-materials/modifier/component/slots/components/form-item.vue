@@ -113,7 +113,8 @@
         const {
             style: initStyle,
             prop: initProp,
-            directive: initDirective
+            directive: initDirective,
+            slot: initSlots
         } = payload
         // 初始化  prop
         const renderProps = {}
@@ -138,6 +139,8 @@
                 curDirective.val = initDirective[directiveType]
             }
         }
+        // 初始化 slot
+        const renderSlots = initSlots || {}
 
         return {
             componentId: `${name}-${uuid()}`,
@@ -149,7 +152,7 @@
             renderStyles,
             renderEvents: {},
             renderDirectives,
-            renderSlots: {}
+            renderSlots
         }
     }
 
@@ -269,19 +272,31 @@
                 const actionFormItem = createTargetDataFormItemNode({}, true)
                 const submitNode = createTargetDataNode('button', {
                     prop: {
-                        theme: 'primary',
-                        slots: '提交'
+                        theme: 'primary'
                     },
                     style: {
                         margin: '5px'
+                    },
+                    slot: {
+                        default: {
+                            name: 'html',
+                            type: 'text',
+                            val: '提交'
+                        }
                     }
                 })
                 const cancelNode = createTargetDataNode('button', {
                     prop: {
-                        slots: '取消'
                     },
                     style: {
                         margin: '5px'
+                    },
+                    slot: {
+                        default: {
+                            name: 'html',
+                            type: 'text',
+                            val: '取消'
+                        }
                     }
                 })
                 targetDataAppendChild(actionFormItem, submitNode)
@@ -324,7 +339,7 @@
                     ...this.renderProps,
                     model
                 }
-                this.$emit('batchUpdate', renderProps)
+                this.$emit('batchUpdate', { renderProps })
 
                 const slot = {
                     ...this.slotVal,

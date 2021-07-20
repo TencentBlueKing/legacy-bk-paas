@@ -54,7 +54,7 @@ export default {
     },
     slots: {
         default: {
-            name: ['html'],
+            name: ['text'],
             type: ['text'],
             val: '基础按钮'
         }
