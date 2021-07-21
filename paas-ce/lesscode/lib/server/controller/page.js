@@ -586,3 +586,30 @@ export const occupyPage = async ctx => {
         })
     }
 }
+
+export const relasePage = async ctx => {
+    try {
+        const { pageId, activeUser } = ctx.request.body
+        const repository = getRepository(Page)
+        const currentPage = await repository.findOne(pageId) || {}
+        
+        if (activeUser === currentPage.activeUser) {
+            currentPage.activeUser = null
+            repository.save(currentPage)
+            ctx.send({
+                code: 0,
+                message: '解锁成功'
+            })
+            console.log(currentPage.activeUser, 'release', activeUser, userInfo.username)
+        } else {
+            ctx.send({
+                code: -1,
+                message: '锁定用户与当前用户不一致，无法解锁'
+            })
+        }
+    } catch (error) {
+        throw ctx.Erro({
+            message: error
+        })
+    }
+}

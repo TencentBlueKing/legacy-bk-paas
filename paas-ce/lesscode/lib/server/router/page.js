@@ -26,7 +26,8 @@ const {
     verifyPreview,
     pageLockStatus,
     updatePageActive,
-    occupyPage
+    occupyPage,
+    relasePage
 } = require('../controller/page')
 
 const router = new Router({
@@ -72,5 +73,6 @@ router.post('/verifyPreview', verifyPreview)
 router.get('/pageLockStatus', pageLockStatus)
 router.post('/updatePageActive', updatePageActive)
 router.post('/occupyPage', occupyPage)
+router.post('/releasePage', relasePage)
 
 module.exports = router

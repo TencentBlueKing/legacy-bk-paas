@@ -531,7 +531,7 @@
             targetData: {
                 deep: true,
                 handler () {
-                    this.lockStatsuPolling('taked')
+                    this.lockStatsuPolling('lock')
                 }
             }
         },
@@ -648,13 +648,16 @@
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
             window.addEventListener('beforeunload', this.beforeunloadConfirm)
+            window.addEventListener('unload', this.relasePage)
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)
             window.removeEventListener('keyup', this.judgeCtrl)
             window.removeEventListener('click', this.toggleQuickOperation, true)
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
+            window.removeEventListener('unload', this.relasePage)
             this.resizeObserve.disconnect()
+            this.relasePage()
         },
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
@@ -691,8 +694,14 @@
                 })
                 this.resizeObserve.observe(canvas)
             },
+            relasePage () {
+                const data = new FormData()
+                data.append('activeUser', this.user.username)
+                data.append('pageId', this.pageId)
+                navigator.sendBeacon('/api/page/releasePage', data)
+            },
             async lockStatsuPolling (type) {
-                const interval = 1 * 60 * 1000 // 节流，状态检查最多每分钟一次
+                const interval = 20 * 1000 // 节流，状态检查每20s一次
                 if (this.lockCheckTimer === null) {
                     await this.checkLockStatus(type)
                     this.lockCheckTimer = setTimeout(() => {
@@ -1466,7 +1475,7 @@
             },
 
             async handleSave (callBack, from) {
-                const isLock = await this.checkLockStatus('taked')
+                const isLock = await this.checkLockStatus('lock')
                 if (isLock) return // 如果被锁，不可保存
 
                 if (this.isSaving) {
