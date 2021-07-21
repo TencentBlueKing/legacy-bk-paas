@@ -38,7 +38,7 @@ export default {
     props: {
         value: {
             type: ['string', 'number', 'boolean'],
-            val: 'option1'
+            val: ''
         },
         multiple: {
             type: 'boolean',
