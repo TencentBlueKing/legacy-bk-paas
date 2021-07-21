@@ -27,10 +27,12 @@ export default {
             type: 'string',
             val: '',
             tips: '图表分隔符class'
-        },
-        slots: {
-            name: 'el-breadcrumb-item',
-            type: ['bread-crumb', 'remote'],
+        }
+    },
+    slots: {
+        default: {
+            name: ['el-breadcrumb-item'],
+            type: ['list', 'remote'],
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('id') || !item.hasOwnProperty('name')))

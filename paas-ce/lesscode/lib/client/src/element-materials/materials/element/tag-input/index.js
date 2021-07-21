@@ -60,10 +60,12 @@ export default {
             options: ['dark ', 'light', 'plain'],
             val: 'light',
             tips: '主题'
-        },
-        slots: {
-            name: 'text',
-            type: 'text',
+        }
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['text'],
             val: '文字标记'
         }
     }

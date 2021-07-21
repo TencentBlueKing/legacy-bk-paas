@@ -38,28 +38,28 @@ export default {
             val: 'always',
             options: ['always', 'hover', 'never'],
             tips: '设置阴影显示时机'
-        },
-        slots: {
-            name: 'layout',
-            type: 'hidden',
+        }
+    },
+    slots: {
+        default: {
+            type: ['free-layout'],
             val: {
-                name: 'free-layout',
+                name: 'grid',
                 type: 'free-layout',
+                slotName: '',
                 slotContainer: true,
-                renderProps: {
-                    slots: {
-                        type: 'free-layout-item',
-                        val:
-                            [
-                                {
-                                    children: []
-                                }
-                            ]
-                    }
-                },
+                renderProps: {},
                 renderStyles: { 'height': '200px', 'pointer-events': 'auto' },
                 renderEvents: {},
-                renderDirectives: []
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: ['free-layout-item'],
+                        val: [
+                            { children: [] }
+                        ]
+                    }
+                }
             }
         }
     }
