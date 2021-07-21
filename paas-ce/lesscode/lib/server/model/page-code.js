@@ -913,7 +913,8 @@ class PageCode {
             if (!hasVModel && elementComId !== '') {
                 const valueType = props['value'].type
                 if (valueType !== 'array' && valueType !== 'object') {
-                    const vModelValue = valueType === 'string' ? `'${props['value'].val}'` : props['value'].val.toString()
+                    let vModelValue = props['value'].val.toString()
+                    if (valueType === 'string' || valueType === 'color') vModelValue = `'${props['value'].val}'`
                     this.dataTemplate(elementComId, vModelValue)
                 }
                 propsStr += `v-model="${elementComId}"`
