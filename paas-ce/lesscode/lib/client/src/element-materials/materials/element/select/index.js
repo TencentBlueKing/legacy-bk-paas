@@ -38,7 +38,7 @@ export default {
     props: {
         value: {
             type: ['string', 'number', 'boolean'],
-            val: ''
+            val: 'option1'
         },
         multiple: {
             type: 'boolean',
@@ -76,20 +76,6 @@ export default {
             val: false,
             tips: '是否可搜索'
         },
-        // 'filter-method': {
-        //     type: 'remote',
-        //     tips: '自定义搜索方法'
-        //
-        // },
-        // remote: {
-        //     type: 'boolean',
-        //     val: false,
-        //     tips: '是否为远程搜索'
-        // },
-        // 'remote-method': {
-        //     type: 'remote',
-        //     tips: '远程搜索方法'
-        // },
         'collapse-tags': {
             type: 'boolean',
             val: false,
