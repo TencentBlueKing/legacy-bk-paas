@@ -86,10 +86,12 @@ export default {
             options: ['horizontal', 'vertical'],
             val: 'horizontal',
             tips: '走马灯展示的方向'
-        },
-        slots: {
-            name: 'el-carousel-item',
-            type: ['carousel', 'remote'],
+        }
+    },
+    slots: {
+        default: {
+            name: ['el-carousel-item'],
+            type: ['list', 'remote'],
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('name')))
@@ -98,13 +100,6 @@ export default {
             val: [
                 { label: '走马灯1', name: '走马灯1', content: '<img src="https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/example/static/images/firstswiper.jpg" />' },
                 { label: '走马灯2', name: '走马灯2', content: '<img src="https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/example/static/images/secondswiper.jpg" />' }
-            ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-checkbox 里的 :label, :value, :checked, :key
-            // <bk-checkbox v-for="item in checkboxgroupc57d9bc6Slot" :label="item.label" :value="item.value" :checked="item.checked" :key="item.value">{{ item.label }}</bk-checkbox>
-            attrs: [
-                { 'key': 'label', 'value': 'label' },
-                { 'key': 'name', 'value': 'name' },
-                { 'key': 'key', 'value': 'name' }
             ]
         }
     }

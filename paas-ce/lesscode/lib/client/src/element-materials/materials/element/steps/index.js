@@ -18,28 +18,6 @@ export default {
     order: 1,
     styles: ['size', 'margin', 'display'],
     props: {
-        slots: {
-            name: 'el-step',
-            type: ['el-step', 'remote'],
-            remoteValidate (data) {
-                if (!Array.isArray(data)) return '返回值需要是数组'
-                const errData = data.find((item) => (!item.hasOwnProperty('title')))
-                if (errData) return '返回值每个元素需要含有title字段'
-            },
-            val: [
-                { title: '步骤 1', icon: 'el-icon-edit', description: '' },
-                { title: '步骤 2', icon: 'el-icon-upload', description: '' },
-                { title: '步骤 3', icon: 'el-icon-picture', description: '' }
-            ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-checkbox 里的 :label, :value, :checked, :key
-            // <bk-checkbox v-for="item in checkboxgroupc57d9bc6Slot" :label="item.label" :value="item.value" :checked="item.checked" :key="item.value">{{ item.label }}</bk-checkbox>
-            attrs: [
-                { 'key': 'title', 'value': 'title' },
-                { 'key': 'icon', 'value': 'icon' },
-                { 'key': 'description', 'value': 'description' },
-                { 'key': 'key', 'value': 'title' }
-            ]
-        },
         space: {
             type: ['number', 'string'],
             tips: '每个 step 的间距，不填写将自适应间距。支持百分比'
@@ -76,6 +54,22 @@ export default {
             type: 'boolean',
             val: false,
             tips: '是否应用简洁风格'
+        }
+    },
+    slots: {
+        default: {
+            name: ['el-step'],
+            type: ['list', 'remote'],
+            remoteValidate (data) {
+                if (!Array.isArray(data)) return '返回值需要是数组'
+                const errData = data.find((item) => (!item.hasOwnProperty('title')))
+                if (errData) return '返回值每个元素需要含有title字段'
+            },
+            val: [
+                { title: '步骤 1', icon: 'el-icon-edit', description: '' },
+                { title: '步骤 2', icon: 'el-icon-upload', description: '' },
+                { title: '步骤 3', icon: 'el-icon-picture', description: '' }
+            ]
         }
     }
 }

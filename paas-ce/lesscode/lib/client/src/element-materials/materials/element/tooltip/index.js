@@ -89,11 +89,13 @@ export default {
             type: 'number',
             val: 0,
             tips: 'Tooltip 出现后自动隐藏延时，单位毫秒，为 0 则不会自动隐藏'
-        },
-        slots: {
-            name: 'template',
-            type: 'html',
-            val: '<i class="bk-icon icon-info-circle-shape"></i>'
+        }
+    },
+    slots: {
+        default: {
+            name: ['html'],
+            type: ['html'],
+            val: '<bk-button>文字提示</bk-button>'
         }
     }
 }

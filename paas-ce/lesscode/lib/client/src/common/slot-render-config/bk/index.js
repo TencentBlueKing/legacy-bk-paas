@@ -3,7 +3,7 @@ function getVal (val) {
     return val
 }
 
-const renderMap = {
+const bkRenderMap = {
     'bk-checkbox' ({ val }) {
         const displayVal = getVal(val)
         return `
@@ -97,31 +97,7 @@ const renderMap = {
                 ></bk-table-column>
             </template>
         `
-    },
-    'html' ({ val, type }) {
-        let res = ''
-        switch (type) {
-            case 'value':
-                res = val
-                break
-            case 'variable':
-                res = `<div v-html="${val}"></div>`
-                break
-        }
-        return res
-    },
-    'text' ({ val, type }) {
-        let res = ''
-        switch (type) {
-            case 'value':
-                res = val
-                break
-            case 'variable':
-                res = `{{${val}}}`
-                break
-        }
-        return res
     }
 }
 
-export default renderMap
+export default bkRenderMap

@@ -76,20 +76,6 @@ export default {
             val: false,
             tips: '是否可搜索'
         },
-        // 'filter-method': {
-        //     type: 'remote',
-        //     tips: '自定义搜索方法'
-        //
-        // },
-        // remote: {
-        //     type: 'boolean',
-        //     val: false,
-        //     tips: '是否为远程搜索'
-        // },
-        // 'remote-method': {
-        //     type: 'remote',
-        //     tips: '远程搜索方法'
-        // },
         'collapse-tags': {
             type: 'boolean',
             val: false,
@@ -109,10 +95,12 @@ export default {
             type: 'boolean',
             val: true,
             tips: '对于不可搜索的 Select，是否在输入框获得焦点后自动弹出选项菜单'
-        },
-        slots: {
-            name: 'el-option',
-            type: ['option', 'remote'],
+        }
+    },
+    slots: {
+        default: {
+            name: ['el-option'],
+            type: ['list', 'remote'],
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('id') || !item.hasOwnProperty('name')))
@@ -125,13 +113,6 @@ export default {
                 { id: 'option4', name: '跳舞' },
                 { id: 'option5', name: '健身' },
                 { id: 'option6', name: '骑车' }
-            ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-option 里的 :id, :name, :key
-            // <bk-option v-for="item in select19a32a0eSlot" :id="item.id" :name="item.name" :key="item.id"></bk-option>
-            attrs: [
-                { 'key': 'value', 'value': 'id' },
-                { 'key': 'label', 'value': 'name' },
-                { 'key': 'key', 'value': 'id' }
             ]
         }
     }
