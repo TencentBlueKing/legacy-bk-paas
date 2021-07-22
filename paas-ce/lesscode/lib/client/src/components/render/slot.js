@@ -10,7 +10,7 @@
  */
 
 import { transformHtmlToVnode } from '@/common/util'
-import slotRenderConfig from '@/common/slot-render-config'
+import slotRenderConfig from '@/element-materials/modifier/component/slots/render-config'
 
 export default {
     name: 'render-slot',

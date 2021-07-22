@@ -25,6 +25,7 @@ export default {
     },
     slots: {
         default: {
+            display: 'hidden',
             type: ['free-layout-item'],
             // val: []
             // 为了兼容各处的逻辑，保持和 grid 同样的结构

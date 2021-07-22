@@ -13,7 +13,7 @@ import { paramCase, camelCase, camelCaseTransformMerge } from 'change-case'
 import { uuid } from '../util'
 import VueCodeModel from './vue-code'
 import { RequestContext } from '../middleware/request-context'
-import slotRenderConfig from '../../client/src/common/slot-render-config'
+import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
 import safeStringify from '../../client/src/common/json-safe-stringify'
 
 const httpConf = require('../conf/http')
@@ -1133,7 +1133,7 @@ class PageCode {
                 } while (curSlot && Object.keys(curSlot).length > 0)
                 slotStr += render(...slotRenderParams)
             }
-            if (!isDefaultSlot) slotStr += `\n</template>`
+            if (!isDefaultSlot) slotStr += `\n</template>\n`
         })
         return slotStr
 

@@ -1,7 +1,7 @@
 <template>
     <article>
         <renderSlot
-            v-for="(slotConfig, slotName) in materialConfig"
+            v-for="(slotConfig, slotName) in computedSlots"
             :key="slotName"
             :slot-name="slotName"
             :slot-val="renderSlots[slotName]"
@@ -11,7 +11,7 @@
             @batchUpdate="batchUpdate"
             class="modifier-slot"
         ></renderSlot>
-        <span v-if="Object.keys(materialConfig).length <= 0 && Object.keys(curSelectedComponentData).length" class="no-slot">该组件暂无插槽</span>
+        <span v-if="Object.keys(computedSlots).length <= 0 && Object.keys(curSelectedComponentData).length" class="no-slot">该组件暂无插槽</span>
     </article>
 </template>
 
@@ -42,7 +42,19 @@
         },
 
         computed: {
-            ...mapGetters('drag', ['curSelectedComponentData'])
+            ...mapGetters('drag', ['curSelectedComponentData']),
+
+            computedSlots () {
+                const keys = Object.keys(this.materialConfig)
+                const res = keys.reduce((acc, cur) => {
+                    const config = this.materialConfig[cur]
+                    if (config.display !== 'hidden') {
+                        acc[cur] = config
+                    }
+                    return acc
+                }, {})
+                return res
+            }
         },
 
         created () {

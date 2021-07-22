@@ -46,6 +46,7 @@ export default {
     },
     slots: {
         default: {
+            name: ['layout'],
             type: ['form-item'],
             val: []
         }

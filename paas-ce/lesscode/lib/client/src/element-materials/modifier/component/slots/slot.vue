@@ -47,7 +47,6 @@
 
     import slotList from './components/list'
     import slotColumn from './components/column'
-    import slotFree from './components/free-layout-item'
     import slotRemote from './components/remote'
     import slotFormItem from './components/form-item'
     import slotTable from './components/table'
@@ -58,13 +57,12 @@
     const comMap = {
         list: slotList,
         column: slotColumn,
-        'free-layout-item': slotFree,
         remote: slotRemote,
-        'form-item': slotFormItem,
-        table: slotTable,
         html: slotHtml,
         text: slotText,
-        textarea: slotTextArea
+        textarea: slotTextArea,
+        'form-item': slotFormItem,
+        'table-column': slotTable
     }
 
     export default {

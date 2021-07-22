@@ -45,10 +45,6 @@
                 type: Object,
                 default: () => ({})
             },
-            // describe: {
-            //     type: Object,
-            //     required: true
-            // },
             change: {
                 type: Function,
                 required: true

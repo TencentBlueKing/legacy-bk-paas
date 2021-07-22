@@ -37,7 +37,9 @@ export default {
     ],
     slots: {
         default: {
+            name: ['layout'],
             type: ['render-grid'],
+            display: 'hidden',
             val: {
                 name: 'grid',
                 type: 'render-grid',

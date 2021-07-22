@@ -154,7 +154,7 @@ export default {
     slots: {
         default: {
             name: ['bk-table-column'],
-            type: ['table', 'remote'],
+            type: ['table-column', 'remote'],
             val: [
                 { label: '第一列', prop: 'prop1', sortable: false, type: '' },
                 { label: '第二列', prop: 'prop2', sortable: false, type: '' },
