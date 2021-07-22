@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-09-22 15:15+0800\n"
+"POT-Creation-Date: 2021-07-22 14:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_Hans\n"
@@ -17,759 +17,766 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.6.0\n"
+"Generated-By: Babel 2.9.1\n"
 
-#: account/admin.py:20
+#: account/admin.py:31
 msgid "Personal info"
 msgstr ""
 
-#: account/admin.py:21
+#: account/admin.py:32
 msgid "Contact info"
 msgstr ""
 
-#: account/admin.py:22
+#: account/admin.py:33
 msgid "Permissions"
 msgstr ""
 
-#: account/admin.py:23
+#: account/admin.py:34
 msgid "Important dates"
 msgstr ""
 
-#: account/decorators.py:51
+#: account/decorators.py:62
 msgid "请求头缺少参数:HTTP_X_APP_ID / HTTP_X_APP_TOKEN"
 msgstr ""
 
-#: account/decorators.py:67
+#: account/decorators.py:78
 msgid "参数不匹配:HTTP_X_APP_ID / HTTP_X_APP_TOKEN"
 msgstr ""
 
-#: account/decorators.py:74
+#: account/decorators.py:85
 msgid "参数不合法:HTTP_X_APP_ID"
 msgstr ""
 
-#: account/models.py:50 esb/bkcore/models.py:202
-#: templates/account/profile.html:13 templates/engine/third_servers.html:18
+#: account/models.py:74 esb/bkcore/models.py:245
+#: templates/engine/third_servers.html:18
 msgid "用户名"
 msgstr ""
 
-#: account/models.py:51 templates/account/profile.html:19
-#: templates/account/profile_modify.html:3
+#: account/models.py:75
 msgid "中文名"
 msgstr ""
 
-#: account/models.py:52
+#: account/models.py:76
 msgid "公司"
 msgstr ""
 
-#: account/models.py:53
+#: account/models.py:77
 msgid "QQ号"
 msgstr ""
 
-#: account/models.py:54
+#: account/models.py:78
 msgid "手机号"
 msgstr ""
 
-#: account/models.py:55 templates/app_monitor/alarm_configure.part:196
+#: account/models.py:79 templates/app_monitor/alarm_configure.part:196
 msgid "邮箱"
 msgstr ""
 
-#: account/models.py:57
+#: account/models.py:81
 msgid "普通管理员"
 msgstr ""
 
-#: account/models.py:57
+#: account/models.py:81
 msgid "普通管理员可以登录到admin"
 msgstr ""
 
-#: account/models.py:58
+#: account/models.py:82
 msgid "date joined"
 msgstr ""
 
-#: account/models.py:60
+#: account/models.py:84
 msgid "用户角色"
 msgstr ""
 
-#: account/models.py:60
+#: account/models.py:84
 msgid "用户角色表示字符串"
 msgstr ""
 
-#: account/models.py:68
+#: account/models.py:92
 msgid "user"
 msgstr ""
 
-#: account/models.py:69
+#: account/models.py:93
 msgid "users"
 msgstr ""
 
-#: account/models.py:134 analysis/models.py:15 analysis/models.py:38
-#: analysis/models.py:60 common/constants.py:98 desktop/models.py:52
-#: desktop/models.py:105
+#: account/models.py:158 analysis/models.py:27 analysis/models.py:50
+#: analysis/models.py:72 common/constants.py:111 desktop/models.py:64
+#: desktop/models.py:117
 msgid "用户"
 msgstr ""
 
-#: account/models.py:135
+#: account/models.py:159
 msgid "登录时间"
 msgstr ""
 
-#: account/models.py:136
+#: account/models.py:160
 msgid "登录浏览器"
 msgstr ""
 
-#: account/models.py:137
+#: account/models.py:161
 msgid "用户登录ip"
 msgstr ""
 
-#: account/models.py:138
+#: account/models.py:162
 msgid "登录HOST"
 msgstr ""
 
-#: account/models.py:147 account/models.py:148
+#: account/models.py:171 account/models.py:172
 msgid "用户登录日志"
 msgstr ""
 
-#: account/models.py:156 account/models.py:164 account/models.py:165
+#: account/models.py:180 account/models.py:188 account/models.py:189
 msgid "登录票据"
 msgstr ""
 
-#: account/models.py:158
+#: account/models.py:182
 msgid "票据是否已经执行过退出登录操作"
 msgstr ""
 
-#: analysis/models.py:16 analysis/models.py:37 common/bk_iam.py:49
-#: desktop/models.py:95 desktop/models.py:106 release/models.py:130
+#: analysis/models.py:28 analysis/models.py:49 common/bk_iam.py:61
+#: desktop/models.py:107 desktop/models.py:118 release/models.py:139
 msgid "应用"
 msgstr ""
 
-#: analysis/models.py:17 desktop/models.py:107
+#: analysis/models.py:29 desktop/models.py:119
 msgid "添加时间"
 msgstr ""
 
-#: analysis/models.py:17
+#: analysis/models.py:29
 msgid "使用时间"
 msgstr ""
 
-#: analysis/models.py:18 analysis/models.py:41 analysis/models.py:64
+#: analysis/models.py:30 analysis/models.py:53 analysis/models.py:76
 msgid "访问域名"
 msgstr ""
 
-#: analysis/models.py:19 analysis/models.py:42 analysis/models.py:65
+#: analysis/models.py:31 analysis/models.py:54 analysis/models.py:77
 msgid "来源IP"
 msgstr ""
 
-#: analysis/models.py:28 analysis/models.py:29
+#: analysis/models.py:40 analysis/models.py:41
 msgid "App访问记录数据"
 msgstr ""
 
-#: analysis/models.py:39
+#: analysis/models.py:51
 msgid "点击量"
 msgstr ""
 
-#: analysis/models.py:39
+#: analysis/models.py:51
 msgid "应用页面点击量"
 msgstr ""
 
-#: analysis/models.py:40 analysis/models.py:63
+#: analysis/models.py:52 analysis/models.py:75
 msgid "添加日期"
 msgstr ""
 
-#: analysis/models.py:40 analysis/models.py:63
+#: analysis/models.py:52 analysis/models.py:75
 msgid "记录日期"
 msgstr ""
 
-#: analysis/models.py:49 analysis/models.py:50
+#: analysis/models.py:61 analysis/models.py:62
 msgid "app页面点击量活跃度统计"
 msgstr ""
 
-#: analysis/models.py:59 app/models.py:76 esb/bkcore/models.py:319
-#: saas/models.py:32
+#: analysis/models.py:71 app/models.py:87 esb/bkcore/models.py:371
+#: saas/models.py:43
 msgid "应用编码"
 msgstr ""
 
-#: analysis/models.py:61
+#: analysis/models.py:73
 msgid "统计类型"
 msgstr ""
 
-#: analysis/models.py:62
+#: analysis/models.py:74
 msgid "在线时长（秒）"
 msgstr ""
 
-#: analysis/models.py:62
+#: analysis/models.py:74
 msgid "在线时长，以秒为单位"
 msgstr ""
 
-#: analysis/models.py:72 analysis/models.py:73
+#: analysis/models.py:84 analysis/models.py:85
 msgid "app在线时长统计"
 msgstr ""
 
-#: api/decorators.py:47 api/decorators.py:65
+#: api/decorators.py:58 api/decorators.py:76
 msgid "API网关鉴权失败"
 msgstr ""
 
-#: api/models.py:11
+#: api/models.py:23
 msgid "轻应用相关接口"
 msgstr ""
 
-#: api/models.py:13
+#: api/models.py:25
 msgid "接口类别"
 msgstr ""
 
-#: api/models.py:14
+#: api/models.py:26
 msgid "可调用接口的应用编码"
 msgstr ""
 
-#: api/models.py:24 api/models.py:25
+#: api/models.py:36 api/models.py:37
 msgid "PaaS提供的接口白名单"
 msgstr ""
 
-#: api/signature.py:34
+#: api/signature.py:50
 msgid "Nonce不存在"
 msgstr ""
 
-#: api/signature.py:38
+#: api/signature.py:54
 msgid "Nonce非法"
 msgstr ""
 
-#: api/signature.py:41
+#: api/signature.py:57
 msgid "Nonce非法, 必须是正整数"
 msgstr ""
 
-#: api/signature.py:44
+#: api/signature.py:60
 msgid "Nonce非法, 开头不能有0字符"
 msgstr ""
 
-#: api/signature.py:54
+#: api/signature.py:70
 msgid "Timestamp不存在"
 msgstr ""
 
-#: api/signature.py:58
+#: api/signature.py:74
 msgid "Timestamp非法, 非时间戳格式"
 msgstr ""
 
-#: api/signature.py:61
+#: api/signature.py:77
 msgid "Timestamp非法, 时间戳错误"
 msgstr ""
 
-#: api/signature.py:64
+#: api/signature.py:80
 msgid "Timestamp非法, 时间戳已过期"
 msgstr ""
 
-#: api/signature.py:67
+#: api/signature.py:83
 msgid "Timestamp非法, 开头不能有0字符"
 msgstr ""
 
-#: api/signature.py:74
+#: api/signature.py:90
 msgid "Signature不存在"
 msgstr ""
 
-#: api/signature.py:81 app_maker/signature.py:17
+#: api/signature.py:97 app_maker/signature.py:28
 msgid "app_code不存在"
 msgstr ""
 
-#: api/signature.py:85 app_maker/signature.py:24
+#: api/signature.py:101 app_maker/signature.py:35
 #, python-format
 msgid "app[%s]不存在"
 msgstr ""
 
-#: api/signature.py:133
+#: api/signature.py:149
 msgid "只支持GET, POST"
 msgstr ""
 
-#: api/signature.py:137
+#: api/signature.py:153
 msgid "Signature非法"
 msgstr ""
 
-#: app/constants.py:18 app/constants.py:30 app/constants.py:36
+#: app/constants.py:29 app/constants.py:41 app/constants.py:47
 #: templates/release/home.html:22 templates/release/home.html:48
 msgid "已下架"
 msgstr ""
 
-#: app/constants.py:19 app/constants.py:31 app/constants.py:32
-#: app/constants.py:34
+#: app/constants.py:30 app/constants.py:42 app/constants.py:43
+#: app/constants.py:45
 msgid "开发中"
 msgstr ""
 
-#: app/constants.py:20
+#: app/constants.py:31
 msgid "测试中"
 msgstr ""
 
-#: app/constants.py:21 app/constants.py:33 app/constants.py:35
+#: app/constants.py:32 app/constants.py:44 app/constants.py:46
 msgid "已上线"
 msgstr ""
 
-#: app/constants.py:22 release/constants.py:27
+#: app/constants.py:33 release/constants.py:38
 msgid "正在提测"
 msgstr ""
 
-#: app/constants.py:23 release/constants.py:28
+#: app/constants.py:34 release/constants.py:39
 msgid "正在上线"
 msgstr ""
 
-#: app/constants.py:24 release/constants.py:29
+#: app/constants.py:35 release/constants.py:40
 msgid "正在下架"
 msgstr ""
 
-#: app/constants.py:79
+#: app/constants.py:90
 msgid "运维工具"
 msgstr ""
 
-#: app/constants.py:80 templates/base_app.html:76 templates/base_saas.html:78
-#: templates/guide/services.html:40
+#: app/constants.py:91 templates/base_app.html:79 templates/base_saas.html:82
+#: templates/guide/services.html:42
 msgid "监控告警"
 msgstr ""
 
-#: app/constants.py:81
+#: app/constants.py:92
 msgid "配置管理"
 msgstr ""
 
-#: app/constants.py:82
+#: app/constants.py:93
 msgid "开发工具"
 msgstr ""
 
-#: app/constants.py:83
+#: app/constants.py:94
 msgid "企业IT"
 msgstr ""
 
-#: app/constants.py:84
+#: app/constants.py:95
 msgid "办公应用"
 msgstr ""
 
-#: app/constants.py:85
+#: app/constants.py:96
 msgid "其它"
 msgstr ""
 
-#: app/constants.py:90 app/utils.py:236
+#: app/constants.py:101 app/utils.py:268
 msgid "桌面"
 msgstr ""
 
-#: app/constants.py:90 app/utils.py:236
+#: app/constants.py:101 app/utils.py:268
 msgid "新标签页"
 msgstr ""
 
-#: app/initializer.py:83
+#: app/initializer.py:96
 msgid "初始化应用代码异常，请求联系管理员处理！"
 msgstr ""
 
-#: app/models.py:39 esb/bkcore/models.py:392
+#: app/models.py:50 esb/bkcore/models.py:450
 msgid "分类名称"
 msgstr ""
 
-#: app/models.py:40
+#: app/models.py:51
 msgid "分类英文ID"
 msgstr ""
 
-#: app/models.py:41 templates/app_log/home.html:101
+#: app/models.py:52 templates/app_log/home.html:101
 msgid "排序"
 msgstr ""
 
-#: app/models.py:41
+#: app/models.py:52
 msgid "降序排序，即 9 在 0 之前"
 msgstr ""
 
-#: app/models.py:66 app/models.py:67
+#: app/models.py:77 app/models.py:78
 msgid "应用分类信息"
 msgstr ""
 
-#: app/models.py:75 saas/models.py:33 templates/app/create_detail.part:22
-#: templates/app/info.html:72 templates/app/list_table.part:5
+#: app/models.py:86 saas/models.py:44 templates/app/create_detail.part:22
+#: templates/app/info.html:102 templates/app/list_table.part:5
 #: templates/base_app.html:37 templates/base_saas.html:38
-#: templates/base_tpapp.html:25 templates/saas/info.html:45
+#: templates/base_tpapp.html:25 templates/saas/info.html:75
 #: templates/saas/list_table.part:5 templates/tpapp/create.html:41
 #: templates/tpapp/info.html:49 templates/tpapp/list_table.part:6
 msgid "应用名称"
 msgstr ""
 
-#: app/models.py:76 esb/bkcore/models.py:319 saas/models.py:32
+#: app/models.py:87 esb/bkcore/models.py:371 saas/models.py:43
 msgid "此处请用英文字母"
 msgstr ""
 
-#: app/models.py:77 esb/bkcore/models.py:321
-#: templates/app/create_detail.part:32 templates/app/info.html:42
-#: templates/saas/info.html:26 templates/tpapp/create.html:51
+#: app/models.py:88 esb/bkcore/models.py:373
+#: templates/app/create_detail.part:32 templates/app/info.html:72
+#: templates/saas/info.html:56 templates/tpapp/create.html:51
 #: templates/tpapp/info.html:20
 msgid "应用简介"
 msgstr ""
 
-#: app/models.py:79
+#: app/models.py:90
 msgid "英文应用名称"
 msgstr ""
 
-#: app/models.py:80
+#: app/models.py:91
 msgid "英文应用简介"
 msgstr ""
 
-#: app/models.py:82 templates/app/info.html:81 templates/app/list_table.part:7
-#: templates/saas/info.html:60 templates/saas/list_table.part:6
+#: app/models.py:93 templates/app/info.html:111 templates/app/list_table.part:7
+#: templates/saas/info.html:90 templates/saas/list_table.part:6
 #: templates/tpapp/info.html:64 templates/tpapp/list_table.part:7
 msgid "创建者"
 msgstr ""
 
-#: app/models.py:84 esb/apps/status/models.py:15 esb/bkcore/models.py:101
-#: esb/bkcore/models.py:189 esb/bkcore/models.py:206 esb/bkcore/models.py:322
-#: esb/bkcore/models.py:349 esb/bkcore/models.py:350 esb/bkcore/models.py:394
-#: esb/bkcore/models.py:426 saas/models.py:51 templates/tpapp/info.html:67
+#: app/models.py:95 esb/bkcore/models.py:113 esb/bkcore/models.py:229
+#: esb/bkcore/models.py:249 esb/bkcore/models.py:374 esb/bkcore/models.py:404
+#: esb/bkcore/models.py:405 esb/bkcore/models.py:452 esb/bkcore/models.py:487
+#: saas/models.py:62 templates/tpapp/info.html:67
 msgid "创建时间"
 msgstr ""
 
-#: app/models.py:86
+#: app/models.py:97
 msgid "应用开发状态"
 msgstr ""
 
-#: app/models.py:86 app/models.py:355
+#: app/models.py:97 app/models.py:391
 msgid "app的开发状态"
 msgstr ""
 
-#: app/models.py:87 desktop/constants.py:14 templates/app/create_detail.part:42
-#: templates/app/info.html:104 templates/saas/info.html:51
+#: app/models.py:98 desktop/constants.py:25 templates/app/create_detail.part:42
+#: templates/app/info.html:134 templates/saas/info.html:81
 #: templates/tpapp/create.html:61 templates/tpapp/info.html:81
 msgid "应用分类"
 msgstr ""
 
-#: app/models.py:88
+#: app/models.py:99
 msgid "是否已经提测"
 msgstr ""
 
-#: app/models.py:88
+#: app/models.py:99
 msgid "app在测试环境下架或者开发中状态，修改该字段为False。"
 msgstr ""
 
-#: app/models.py:89
+#: app/models.py:100
 msgid "是否已经上线"
 msgstr ""
 
-#: app/models.py:89
+#: app/models.py:100
 msgid "app正式环境未下架，该字段为True。"
 msgstr ""
 
-#: app/models.py:92
+#: app/models.py:103
 msgid "应用首次提测时间"
 msgstr ""
 
-#: app/models.py:92
+#: app/models.py:103
 msgid "记录应用首次提测时间"
 msgstr ""
 
-#: app/models.py:95
+#: app/models.py:106
 msgid "应用首次上线时间"
 msgstr ""
 
-#: app/models.py:95
+#: app/models.py:106
 msgid "记录应用首次上线时间"
 msgstr ""
 
-#: app/models.py:99 common/constants.py:70
+#: app/models.py:110 common/constants.py:83
 msgid "开发者"
 msgstr ""
 
-#: app/models.py:103 templates/app/list_table.part:6
-#: templates/saas/info.html:54
+#: app/models.py:114 templates/app/list_table.part:6
+#: templates/saas/info.html:84
 msgid "语言"
 msgstr ""
 
-#: app/models.py:107
+#: app/models.py:118
 msgid "app是否使用celery"
 msgstr ""
 
-#: app/models.py:107 app/models.py:108
+#: app/models.py:118 app/models.py:119
 msgid "选项: true(是)，false(否)"
 msgstr ""
 
-#: app/models.py:108
+#: app/models.py:119
 msgid "app是否使用定时任务"
 msgstr ""
 
-#: app/models.py:114
+#: app/models.py:126
 msgid "是否为SaaS服务"
 msgstr ""
 
-#: app/models.py:114
+#: app/models.py:126
 msgid "SaaS服务，即通过直接上传包部署"
 msgstr ""
 
-#: app/models.py:121
+#: app/models.py:133
 msgid "app页面宽度"
 msgstr ""
 
-#: app/models.py:121
+#: app/models.py:133
 msgid "应用页面宽度，必须为整数，单位为px"
 msgstr ""
 
-#: app/models.py:122
+#: app/models.py:134
 msgid "app页面高度"
 msgstr ""
 
-#: app/models.py:122
+#: app/models.py:134
 msgid "应用页面高度，必须为整数，单位为px"
 msgstr ""
 
-#: app/models.py:123
+#: app/models.py:135
 msgid "是否默认窗口最大化"
 msgstr ""
 
-#: app/models.py:124
+#: app/models.py:136
 msgid "窗口是否详情等按钮"
 msgstr ""
 
-#: app/models.py:124 app/models.py:128
+#: app/models.py:136 app/models.py:140
 msgid "选项: true(有)，false(无)"
 msgstr ""
 
-#: app/models.py:125
+#: app/models.py:137
 msgid "是否能对窗口进行拉伸"
 msgstr ""
 
-#: app/models.py:125
+#: app/models.py:137
 msgid "选项：true(可以拉伸)，false(不可以拉伸)"
 msgstr ""
 
-#: app/models.py:126
+#: app/models.py:138
 msgid "使用人数"
 msgstr ""
 
-#: app/models.py:126
+#: app/models.py:138
 msgid "添加了该应用的人数，note：用户卸载应用后，要相应的减1"
 msgstr ""
 
-#: app/models.py:127
+#: app/models.py:139
 msgid "是否为默认应用"
 msgstr ""
 
-#: app/models.py:127
+#: app/models.py:139
 msgid "默认应用将在用户首次进入工作台时自动到用户桌面"
 msgstr ""
 
-#: app/models.py:128
+#: app/models.py:140
 msgid "是否在桌面展示"
 msgstr ""
 
-#: app/models.py:129
+#: app/models.py:141
 msgid "应用打开方式"
 msgstr ""
 
-#: app/models.py:132
+#: app/models.py:144
 msgid "是否为第三方应用"
 msgstr ""
 
-#: app/models.py:132
+#: app/models.py:144
 msgid "第三方应用，即外部应用，不走自动部署"
 msgstr ""
 
-#: app/models.py:134
+#: app/models.py:146
 msgid "第三方应用URL"
 msgstr ""
 
-#: app/models.py:134
+#: app/models.py:146
 msgid "当且仅当应用类型为第三方应用时必填"
 msgstr ""
 
-#: app/models.py:138
+#: app/models.py:150
 msgid "是否为系统间应用"
 msgstr ""
 
-#: app/models.py:138
+#: app/models.py:150
 msgid "为了获取esb鉴权(esb加白)而生成securt_key的给其他系统调用esb使用 而生成的应用"
 msgstr ""
 
-#: app/models.py:141
+#: app/models.py:153
 msgid "是否为平台级应用"
 msgstr ""
 
-#: app/models.py:141
+#: app/models.py:153
 msgid "平台应用（配置平台、作业平台等）"
 msgstr ""
 
-#: app/models.py:143
+#: app/models.py:155
 msgid "是否为轻应用"
 msgstr ""
 
-#: app/models.py:143
+#: app/models.py:155
 msgid "标准运维创建的应用"
 msgstr ""
 
-#: app/models.py:147
+#: app/models.py:159
 msgid "可见范围标签"
 msgstr ""
 
-#: app/models.py:343 app/models.py:344
+#: app/models.py:163
+msgid "是否 Paas3.0 上创建的应用"
+msgstr ""
+
+#: app/models.py:165
+msgid "是否已经迁移到 Paas3.0"
+msgstr ""
+
+#: app/models.py:379 app/models.py:380
 msgid "应用基本信息"
 msgstr ""
 
-#: app/models.py:352 release/models.py:23 storage/models.py:10
+#: app/models.py:388 release/models.py:32
 msgid "对应的appcode"
 msgstr ""
 
-#: app/models.py:355
+#: app/models.py:391
 msgid "版本控制类型"
 msgstr ""
 
-#: app/models.py:356
+#: app/models.py:392
 msgid "版本库URL"
 msgstr ""
 
-#: app/models.py:357
+#: app/models.py:393
 msgid "版本库用户名"
 msgstr ""
 
-#: app/models.py:358
+#: app/models.py:394
 msgid "版本库密码"
 msgstr ""
 
-#: app/models.py:359
+#: app/models.py:395
 msgid "版本库检出分支或Tag"
 msgstr ""
 
-#: app/models.py:363
+#: app/models.py:399
 msgid "数据库类型"
 msgstr ""
 
-#: app/models.py:365
+#: app/models.py:401
 msgid "数据库HOST"
 msgstr ""
 
-#: app/models.py:366
+#: app/models.py:402
 msgid "数据库PORT"
 msgstr ""
 
-#: app/models.py:367
+#: app/models.py:403
 msgid "数据库名称"
 msgstr ""
 
-#: app/models.py:368
+#: app/models.py:404
 msgid "数据库用户名"
 msgstr ""
 
-#: app/models.py:369
+#: app/models.py:405
 msgid "数据库密码"
 msgstr ""
 
-#: app/models.py:395 app/models.py:396
+#: app/models.py:431 app/models.py:432
 msgid "应用安全相关信息"
 msgstr ""
 
-#: app/utils.py:92
+#: app/utils.py:101
 msgid "编辑失败"
 msgstr ""
 
-#: app/utils.py:103
+#: app/utils.py:112
 msgid "宽度和高度必须为正整数"
 msgstr ""
 
-#: app/utils.py:105
+#: app/utils.py:114
 msgid "打开方式选择配置不正确"
 msgstr ""
 
-#: app/utils.py:117
+#: app/utils.py:126
 msgid "应用简介不能为空"
 msgstr ""
 
-#: app/utils.py:131
+#: app/utils.py:140
 msgid "代码URL,用户名,密码不能为空"
 msgstr ""
 
-#: app/utils.py:151
+#: app/utils.py:160
 msgid "数据库信息不能为空"
 msgstr ""
 
-#: app/utils.py:154
+#: app/utils.py:163
 msgid "数据库端口必须为整数"
 msgstr ""
 
-#: app/validators.py:24 app_maker/validators.py:44
+#: app/validators.py:33 app_maker/validators.py:57
 msgid "应用ID不能为空"
 msgstr ""
 
-#: app/validators.py:29 app_maker/validators.py:49
+#: app/validators.py:38 app_maker/validators.py:62
 msgid "应用ID长度不能少于3个字符"
 msgstr ""
 
-#: app/validators.py:32 app_maker/validators.py:52
+#: app/validators.py:41 app_maker/validators.py:65
 msgid "应用ID长度不能超过16个字符"
 msgstr ""
 
-#: app/validators.py:40 app_maker/validators.py:60
+#: app/validators.py:49 app_maker/validators.py:73
 #, python-format
 msgid "应用 ID[%s]已存在"
 msgstr ""
 
-#: app/validators.py:42 app/validators.py:53 app/validators.py:72
-#: app/validators.py:94 app/validators.py:100 app_maker/validators.py:62
+#: app/validators.py:51 app/validators.py:62 app/validators.py:81
+#: app/validators.py:103 app/validators.py:109 app_maker/validators.py:75
 msgid "校验通过"
 msgstr ""
 
-#: app/validators.py:51
+#: app/validators.py:60
 msgid "请填写正确的系统URL，支持http和https"
 msgstr ""
 
-#: app/validators.py:61
+#: app/validators.py:70
 msgid "应用名称不能为空"
 msgstr ""
 
-#: app/validators.py:64
+#: app/validators.py:73
 msgid "应用名称长度不能超过20个字符"
 msgstr ""
 
-#: app/validators.py:71
+#: app/validators.py:80
 #, python-format
 msgid "应用名称[%s]已存在"
 msgstr ""
 
-#: app/validators.py:82 app/validators.py:84
+#: app/validators.py:91 app/validators.py:93
 #, python-format
 msgid "代码仓库[%s]不合法"
 msgstr ""
 
-#: app/validators.py:88 app/validators.py:92
+#: app/validators.py:97 app/validators.py:101
 msgid "请填写正确的仓库地址"
 msgstr ""
 
-#: app/validators.py:102
+#: app/validators.py:111
 #, python-format
 msgid "应用分类[%s]不存在"
 msgstr ""
 
-#: app/views.py:126 saas/utils.py:612
+#: app/views.py:134 saas/utils.py:620
 #, python-format
 msgid "%s 应用[%s]注册失败, 失败信息:%s. 可能原因:App Engine 未正常启动"
 msgstr ""
 
-#: app/views.py:175
+#: app/views.py:183
 msgid "初始化应用代码出错，请联系平台管理查询日志排查"
 msgstr ""
 
-#: app/views.py:180 tpapp/views.py:141
+#: app/views.py:188 tpapp/views.py:153
 msgid "保存应用基本信息出错"
 msgstr ""
 
-#: app/views.py:194
+#: app/views.py:202
 msgid "参数异常"
 msgstr ""
 
-#: app/views.py:211
+#: app/views.py:219
 msgid "编辑成功"
 msgstr ""
 
-#: app/views.py:232 saas/views.py:439
+#: app/views.py:240 saas/views.py:449
 msgid "更换logo失败, logo必须为png格式"
 msgstr ""
 
-#: app/views.py:268 saas/views.py:72 tpapp/views.py:47
+#: app/views.py:276 saas/views.py:80 tpapp/views.py:59
 msgid "请求参数异常"
 msgstr ""
 
-#: app/views.py:311
+#: app/views.py:319
 #, python-format
 msgid "应用[ID:%s]不存在"
 msgstr ""
 
-#: app/views.py:428
+#: app/views.py:438
 #, python-format
 msgid "应用[ID:%s]的源码信息不存在"
 msgstr ""
 
-#: app_env/constants.py:8
+#: app_env/constants.py:19
 msgid "所有环境"
 msgstr ""
 
-#: app_env/constants.py:9 engine/api.py:66 engine/constants.py:21
+#: app_env/constants.py:20 engine/api.py:74 engine/constants.py:32
 #: templates/app_env/home.html:79 templates/base_app.html:46
 #: templates/base_saas.html:47 templates/release/home.html:17
 #: templates/release/outline_form.part:9 templates/release/outline_form.part:11
@@ -778,7 +785,7 @@ msgstr ""
 msgid "测试环境"
 msgstr ""
 
-#: app_env/constants.py:10 engine/api.py:67 engine/constants.py:21
+#: app_env/constants.py:21 engine/api.py:75 engine/constants.py:32
 #: templates/app_env/home.html:79 templates/base_app.html:47
 #: templates/base_saas.html:48 templates/release/home.html:43
 #: templates/release/outline_form.part:17
@@ -788,1007 +795,847 @@ msgstr ""
 msgid "正式环境"
 msgstr ""
 
-#: app_env/validators.py:15
+#: app_env/validators.py:27
 msgid "ID 不能为空"
 msgstr ""
 
-#: app_env/validators.py:18
+#: app_env/validators.py:30
 msgid "错误的ID值"
 msgstr ""
 
-#: app_env/validators.py:25
+#: app_env/validators.py:37
 msgid "变量名不能为空!"
 msgstr ""
 
-#: app_env/validators.py:28
+#: app_env/validators.py:40
 msgid "请输入合法的变量名, 只允许字母数字下划线!"
 msgstr ""
 
-#: app_env/validators.py:35
+#: app_env/validators.py:47
 msgid "变量值不能为空!"
 msgstr ""
 
-#: app_env/validators.py:37
+#: app_env/validators.py:49
 msgid "变量值不能超过1000个字符!"
 msgstr ""
 
-#: app_env/validators.py:40
+#: app_env/validators.py:52
 msgid "变量值不能包含引号!"
 msgstr ""
 
-#: app_env/views.py:81
+#: app_env/views.py:92
 msgid "变量名已经存在, 请勿重复添加!"
 msgstr ""
 
-#: app_env/views.py:90
+#: app_env/views.py:101
 msgid "保存app环境变量失败"
 msgstr ""
 
-#: app_env/views.py:95
+#: app_env/views.py:106
 msgid "同名变量已经存在! 无法对当前变量进行更新"
 msgstr ""
 
-#: app_env/views.py:105
+#: app_env/views.py:116
 msgid "保存变量成功"
 msgstr ""
 
-#: app_env/views.py:124
+#: app_env/views.py:135
 msgid "删除app环境变量失败"
 msgstr ""
 
-#: app_env/views.py:126 engine/views.py:96 engine/views.py:290
+#: app_env/views.py:137 engine/views.py:105 engine/views.py:299
 msgid "删除成功"
 msgstr ""
 
-#: app_esb_auth/constants.py:5 esb/apps/manager/channel/forms.py:20
-#: esb/bkcore/models.py:85
+#: app_esb_auth/constants.py:16 esb/apps/manager/channel/forms.py:33
+#: esb/bkcore/models.py:97
 msgid "无限制"
 msgstr ""
 
-#: app_esb_auth/constants.py:6 esb/apps/manager/channel/forms.py:21
-#: esb/bkcore/models.py:86
+#: app_esb_auth/constants.py:17 esb/apps/manager/channel/forms.py:34
+#: esb/bkcore/models.py:98
 msgid "普通权限"
 msgstr ""
 
-#: app_esb_auth/constants.py:7 esb/bkcore/models.py:87
+#: app_esb_auth/constants.py:18 esb/bkcore/models.py:99
 msgid "敏感权限"
 msgstr ""
 
-#: app_esb_auth/constants.py:8 esb/bkcore/models.py:88
+#: app_esb_auth/constants.py:19 esb/bkcore/models.py:100
 msgid "特殊权限"
 msgstr ""
 
-#: app_esb_auth/views.py:99
+#: app_esb_auth/views.py:110
 msgid "您已申请过该组件API"
 msgstr ""
 
-#: app_esb_auth/views.py:117
+#: app_esb_auth/views.py:128
 msgid "无效的API列表参数"
 msgstr ""
 
-#: app_log/client.py:270 app_log/client.py:331 common/constants.py:34
-#: templates/app_log/home.html:64
-msgid "测试"
-msgstr ""
-
-#: app_log/client.py:270 app_log/client.py:331 common/constants.py:35
-#: templates/app_log/home.html:65
-msgid "正式"
-msgstr ""
-
-#: app_log/client.py:363
-msgid "初始化日志查询es配置失败, 请确认配置文件中配置了ELASTICSEARCH_URLS."
-msgstr ""
-
-#: app_log/client.py:403
-#, python-format
-msgid "构建app【%s】日志查询条件出错:%s"
-msgstr ""
-
-#: app_log/client.py:411
-msgid "查询失败, 配置文件中ELASTICSEARCH_URLS配置错误(找不到对应服务)或者没有找到对应索引"
-msgstr ""
-
-#: app_log/client.py:440
-#, python-format
-msgid "从elastic中查询app【%s】日志出错:%s"
-msgstr ""
-
-#: app_log/constants.py:8 app_monitor/constants.py:6
-#: templates/app_monitor/alarm_record.part:8
-msgid "普通"
-msgstr ""
-
-#: app_log/constants.py:9 templates/app_log/home.html:73
-msgid "组件调用"
-msgstr ""
-
-#: app_log/utils.py:106 app_log/utils.py:145 app_log/utils.py:147
-#: templates/app_log/home.html:61 templates/app_log/log_table_java.part:4
-#: templates/app_log/log_table_python.part:4
-msgid "环境"
-msgstr ""
-
-#: app_log/utils.py:106 app_log/utils.py:145 app_log/utils.py:147
-#: templates/app_log/home.html:67 templates/app_log/log_table_java.part:4
-#: templates/app_log/log_table_python.part:5
-msgid "类型"
-msgstr ""
-
-#: app_log/utils.py:106 app_log/utils.py:145 app_log/utils.py:147
-#: templates/app_log/home.html:84 templates/app_log/log_table_java.part:5
-#: templates/app_log/log_table_python.part:6
-#: templates/app_monitor/alarm_record_table.part:21
-msgid "日志级别"
-msgstr ""
-
-#: app_log/utils.py:108 app_log/utils.py:110 app_log/utils.py:112
-#: app_log/utils.py:145 app_log/utils.py:147
-#: templates/app_analysis/index.html:70 templates/app_log/home.html:41
-#: templates/app_log/log_table_java.part:7
-#: templates/app_log/log_table_python.part:8
-#: templates/app_log/log_table_python.part:12
-#: templates/app_log/log_table_python.part:16
-#: templates/app_log/log_table_python.part:20
-#: templates/app_monitor/alarm_record_table.part:22
-msgid "时间"
-msgstr ""
-
-#: app_log/utils.py:108 app_log/utils.py:110
-#: templates/app_log/log_table_python.part:9
-msgid "响应时间ms"
-msgstr ""
-
-#: app_log/utils.py:110 app_log/utils.py:112 app_log/utils.py:147
-#: templates/app_log/log_table_java.part:8
-#: templates/app_log/log_table_java.part:98
-#: templates/app_log/log_table_java.part:115
-#: templates/app_log/log_table_python.part:127
-#: templates/app_log/log_table_python.part:136
-#: templates/app_log/log_table_python.part:157
-#: templates/app_log/log_table_python.part:174
-msgid "日志信息"
-msgstr ""
-
-#: app_maker/constants.py:8
+#: app_maker/constants.py:19
 msgid "轻应用ID只允许小写英文字母,下划线或数字,并且以字母开头"
 msgstr ""
 
-#: app_maker/signature.py:20
+#: app_maker/signature.py:31
 #, python-format
 msgid "app[%s]不在白名单内，不可调用app_maker相关接口"
 msgstr ""
 
-#: app_maker/utils.py:29
+#: app_maker/utils.py:43
 #, python-format
 msgid "应用ID(%s)长度大于13，无法创建轻应用"
 msgstr ""
 
-#: app_maker/utils.py:42
+#: app_maker/utils.py:56
 msgid "应用ID创建重复，请重试"
 msgstr ""
 
-#: app_maker/validators.py:26
+#: app_maker/validators.py:39
 msgid "APP链接不能为空"
 msgstr ""
 
-#: app_maker/validators.py:33 app_maker/validators.py:36
+#: app_maker/validators.py:46 app_maker/validators.py:49
 msgid "APP链接不合法，链接不在当前域名下"
 msgstr ""
 
-#: app_maker/views.py:114 app_maker/views.py:249 app_maker/views.py:366
-#: app_maker/views.py:431
+#: app_maker/views.py:125 app_maker/views.py:260 app_maker/views.py:377
+#: app_maker/views.py:442
 msgid "请在正式环境上操作该接口"
 msgstr ""
 
-#: app_maker/views.py:196 app_maker/views_v2.py:102
+#: app_maker/views.py:207 app_maker/views_v2.py:113
 msgid "app maker创建失败,请联系平台开发者"
 msgstr ""
 
-#: app_maker/views.py:259 app_maker/views.py:378 app_maker/views_v2.py:129
-#: app_maker/views_v2.py:191
+#: app_maker/views.py:270 app_maker/views.py:389 app_maker/views_v2.py:140
+#: app_maker/views_v2.py:202
 #, python-format
 msgid "应用[%s]不存在"
 msgstr ""
 
-#: app_maker/views.py:283 app_maker/views.py:386 app_maker/views.py:449
+#: app_maker/views.py:294 app_maker/views.py:397 app_maker/views.py:460
 msgid "您不是该maker app的开发者，没有操作该maker app的权限"
 msgstr ""
 
-#: app_maker/views.py:331
+#: app_maker/views.py:342
 msgid "app maker 修改成功"
 msgstr ""
 
-#: app_maker/views.py:336
+#: app_maker/views.py:347
 msgid "app maker修改出错,请联系平台开发者"
 msgstr ""
 
-#: app_maker/views.py:391
+#: app_maker/views.py:402
 msgid "app maker logo修改成功"
 msgstr ""
 
-#: app_maker/views.py:441 app_maker/views_v2.py:230
+#: app_maker/views.py:452 app_maker/views_v2.py:241
 #, python-format
 msgid "应用[%s]s不存在"
 msgstr ""
 
-#: app_maker/views.py:456
+#: app_maker/views.py:467
 msgid "app maker 下架成功"
 msgstr ""
 
-#: app_maker/views_v2.py:64
+#: app_maker/views_v2.py:75
 msgid "应用 ID 不合法"
 msgstr ""
 
-#: app_maker/views_v2.py:133 app_maker/views_v2.py:196
-#: app_maker/views_v2.py:235
+#: app_maker/views_v2.py:144 app_maker/views_v2.py:207
+#: app_maker/views_v2.py:246
 msgid "您不是该 app 的开发者，没有操作该 app 的权限"
 msgstr ""
 
-#: app_maker/views_v2.py:171
+#: app_maker/views_v2.py:182
 msgid "app修改出错,请联系平台开发者"
 msgstr ""
 
-#: app_maker/views_v2.py:173
+#: app_maker/views_v2.py:184
 msgid "app 修改成功"
 msgstr ""
 
-#: app_maker/views_v2.py:201
+#: app_maker/views_v2.py:212
 msgid "logo 不允许为空"
 msgstr ""
 
-#: app_maker/views_v2.py:210
+#: app_maker/views_v2.py:221
 msgid "logo 数据格式不合法"
 msgstr ""
 
-#: app_maker/views_v2.py:213
+#: app_maker/views_v2.py:224
 msgid "app logo修改成功"
 msgstr ""
 
-#: app_maker/views_v2.py:243
+#: app_maker/views_v2.py:254
 msgid "app 下架成功"
 msgstr ""
 
-#: app_monitor/constants.py:6 templates/app_monitor/alarm_record.part:9
-msgid "组件"
-msgstr ""
-
-#: app_monitor/constants.py:9
-msgid "启用告警"
-msgstr ""
-
-#: app_monitor/constants.py:10
-msgid "停用告警"
-msgstr ""
-
-#: app_monitor/constants.py:11
-msgid "修改配置--告警接收"
-msgstr ""
-
-#: app_monitor/constants.py:12
-msgid "修改配置--普通告警"
-msgstr ""
-
-#: app_monitor/constants.py:13
-msgid "修改配置--HTTP告警"
-msgstr ""
-
-#: app_monitor/constants.py:14
-msgid "修改配置--组件告警"
-msgstr ""
-
-#: app_monitor/constants.py:15
-msgid "修改配置--Celery告警"
-msgstr ""
-
-#: app_monitor/models.py:65
-msgid "app告警总开关"
-msgstr ""
-
-#: app_monitor/models.py:67 templates/app_monitor/home.html:38
-msgid "告警配置"
-msgstr ""
-
-#: app_monitor/models.py:76 app_monitor/models.py:77
-msgid "App告警配置"
-msgstr ""
-
-#: app_monitor/models.py:86
-msgid "app告警类型"
-msgstr ""
-
-#: app_monitor/models.py:87
-msgid "告警时间"
-msgstr ""
-
-#: app_monitor/models.py:88
-msgid "告警内容"
-msgstr ""
-
-#: app_monitor/models.py:89
-msgid "告警原因"
-msgstr ""
-
-#: app_monitor/models.py:90
-msgid "告警接收人员"
-msgstr ""
-
-#: app_monitor/models.py:91
-msgid "是否发出告警"
-msgstr ""
-
-#: app_monitor/models.py:92
-msgid "告警id"
-msgstr ""
-
-#: app_monitor/models.py:93
-msgid "附加字段"
-msgstr ""
-
-#: app_monitor/models.py:95
-msgid "告警内容hash"
-msgstr ""
-
-#: app_monitor/models.py:123 app_monitor/models.py:124
-msgid "App日志告警记录"
-msgstr ""
-
-#: audit/models.py:14 templates/app_analysis/index.html:74
+#: audit/models.py:24
 msgid "查询"
 msgstr ""
 
-#: audit/models.py:15
+#: audit/models.py:25
 msgid "创建"
 msgstr ""
 
-#: audit/models.py:16 templates/app/info.html:310
+#: audit/models.py:26 templates/app/info.html:302
 #: templates/app/list_table.part:54 templates/app_env/home.html:66
 #: templates/engine/servers.html:69 templates/engine/third_servers.html:64
-#: templates/saas/info.html:238 templates/saas/list_table.part:48
+#: templates/saas/info.html:229 templates/saas/list_table.part:48
 #: templates/tpapp/info.html:163 templates/tpapp/list_table.part:52
 msgid "删除"
 msgstr ""
 
-#: audit/models.py:17
+#: audit/models.py:27
 msgid "修改"
 msgstr ""
 
-#: audit/models.py:37 audit/models.py:38
+#: audit/models.py:47 audit/models.py:48
 msgid "操作审计日志"
-msgstr ""
-
-#: bk_app/utils.py:48
-#, python-format
-msgid "初始化应用[%s]出错，保存应用版本信息出错"
 msgstr ""
 
 #: bk_app/utils.py:60
 #, python-format
+msgid "初始化应用[%s]出错，保存应用版本信息出错"
+msgstr ""
+
+#: bk_app/utils.py:72
+#, python-format
 msgid "初始化应用[%s]出错"
 msgstr ""
 
-#: bk_app/utils.py:66
+#: bk_app/utils.py:78
 #, python-format
 msgid "初始化应用[%s]成功"
 msgstr ""
 
-#: bksuite/constants.py:18
+#: bksuite/constants.py:29
 msgid "数据基础模块"
 msgstr ""
 
-#: bksuite/constants.py:19
+#: bksuite/constants.py:30
 msgid "数据平台官网"
 msgstr ""
 
-#: bksuite/constants.py:20
+#: bksuite/constants.py:31
 msgid "数据集成服务"
 msgstr ""
 
-#: bksuite/constants.py:21
+#: bksuite/constants.py:32
 msgid "数据开发服务"
 msgstr ""
 
-#: bksuite/constants.py:22
+#: bksuite/constants.py:33
 msgid "蓝鲸企业版"
 msgstr ""
 
-#: bksuite/constants.py:23 common/constants.py:78 home/constants.py:10
+#: bksuite/constants.py:34 common/constants.py:91 home/constants.py:26
 msgid "配置平台"
 msgstr ""
 
-#: bksuite/constants.py:24
+#: bksuite/constants.py:35
 msgid "故障自愈"
 msgstr ""
 
-#: bksuite/constants.py:25
+#: bksuite/constants.py:36
 msgid "管控平台"
 msgstr ""
 
-#: bksuite/constants.py:26 common/constants.py:77 home/constants.py:17
+#: bksuite/constants.py:37 common/constants.py:90 home/constants.py:34
 msgid "作业平台"
 msgstr ""
 
-#: bksuite/constants.py:27
+#: bksuite/constants.py:38
 msgid "全局认证服务"
 msgstr ""
 
-#: bksuite/constants.py:28
+#: bksuite/constants.py:39
 msgid "PaaS平台"
 msgstr ""
 
-#: bksuite/constants.py:29
+#: bksuite/constants.py:40
 msgid "PaaS 平台"
 msgstr ""
 
-#: bksuite/constants.py:30
+#: bksuite/constants.py:41
 msgid "paas_agent"
 msgstr ""
 
-#: common/bk_iam.py:37
+#: common/bk_iam.py:49
 msgid "访问开发者中心"
 msgstr ""
 
-#: common/bk_iam.py:38
+#: common/bk_iam.py:50
 msgid "开发SaaS应用及外链应用"
 msgstr ""
 
-#: common/bk_iam.py:39
+#: common/bk_iam.py:51
 msgid "管理S-mart应用"
 msgstr ""
 
-#: common/bk_iam.py:40
+#: common/bk_iam.py:52
 msgid "系统维护"
 msgstr ""
 
-#: common/bk_iam.py:41
+#: common/bk_iam.py:53
 msgid "API网关维护"
 msgstr ""
 
-#: common/constants.py:23
+#: common/constants.py:36
 msgid "只允许输入小写英文字母,连字符或数字,并且以字母开头"
 msgstr ""
 
-#: common/constants.py:36 templates/app_log/home.html:63
+#: common/constants.py:47 templates/app_log/home.html:64
+msgid "测试"
+msgstr ""
+
+#: common/constants.py:48 templates/app_log/home.html:65
+msgid "正式"
+msgstr ""
+
+#: common/constants.py:49 templates/app_log/home.html:63
 #: templates/app_log/home.html:86 templates/app_monitor/alarm_record.part:7
 msgid "全部"
 msgstr ""
 
-#: common/constants.py:59
+#: common/constants.py:72
 msgid "申请中"
 msgstr ""
 
-#: common/constants.py:60
+#: common/constants.py:73
 msgid "审批通过"
 msgstr ""
 
-#: common/constants.py:61
+#: common/constants.py:74
 msgid "驳回"
 msgstr ""
 
-#: common/constants.py:68
+#: common/constants.py:81
 msgid "普通用户"
 msgstr ""
 
-#: common/constants.py:69
+#: common/constants.py:82
 msgid "超级管理员"
 msgstr ""
 
-#: common/constants.py:71
+#: common/constants.py:84
 msgid "职能化用户"
 msgstr ""
 
-#: common/constants.py:82 esb/configs/default.py:60
+#: common/constants.py:95 esb/configs/default.py:69
 msgid "蓝鲸配置平台是一款面向应用的CMDB，在ITIL体系里，CMDB是构建其它流程的基石，而在蓝鲸智云体系里，配置平台就扮演着基石的角色，为应用提供了各种运维场景的配置数据服务。"
 msgstr ""
 
-#: common/constants.py:85
+#: common/constants.py:98
 msgid "作业平台是为运维量身定制的脚本自动化操作平台，实现各种复杂运维场景的一键式、自动化操作。包含：批量脚本执行、文件分发、文件拉取、定时任务。流程化执行一系列脚本，各个步骤可自动或人工执行。"
 msgstr ""
 
-#: common/constants.py:90
+#: common/constants.py:103
 msgid "蓝鲸智云"
 msgstr ""
 
-#: common/constants.py:93
+#: common/constants.py:106
 msgid "管理 "
 msgstr ""
 
-#: common/constants.py:94
+#: common/constants.py:107
 msgid "蓝鲸智云后台管理"
 msgstr ""
 
-#: common/constants.py:95
+#: common/constants.py:108
 msgid "蓝鲸智云平台"
 msgstr ""
 
-#: common/constants.py:96
+#: common/constants.py:109
 msgid "修改密码"
 msgstr ""
 
-#: common/constants.py:97
+#: common/constants.py:110
 msgid "您暂时不能访问该站点的后台管理，这是以下原因造成的："
 msgstr ""
 
-#: common/constants.py:99
+#: common/constants.py:112
 msgid "未激活！"
 msgstr ""
 
-#: common/constants.py:100
+#: common/constants.py:113
 msgid "没有管理员权限，请联系管理员！"
 msgstr ""
 
-#: common/constants.py:101
+#: common/constants.py:114
 msgid "未登录蓝鲸智云平台(401页)"
 msgstr ""
 
-#: common/constants.py:102
+#: common/constants.py:115
 msgid "您需要登录蓝鲸智云"
 msgstr ""
 
-#: common/constants.py:103
+#: common/constants.py:116
 msgid "立即登录"
 msgstr ""
 
-#: common/constants.py:104
+#: common/constants.py:117
 msgid "您没有访问权限(403页)"
 msgstr ""
 
-#: common/constants.py:105
+#: common/constants.py:118
 msgid "您没有访问权限，请联系系统管理员添加"
 msgstr ""
 
-#: common/constants.py:106
+#: common/constants.py:119
 msgid "页面找不到（404页）"
 msgstr ""
 
-#: common/constants.py:107
+#: common/constants.py:120
 msgid "页面找不到了"
 msgstr ""
 
-#: common/constants.py:108
+#: common/constants.py:121
 msgid "系统异常(500页)"
 msgstr ""
 
-#: common/constants.py:109
+#: common/constants.py:122
 msgid "系统出现异常"
 msgstr ""
 
-#: common/constants.py:110
+#: common/constants.py:123
 msgid "努力恢复中，请稍后再试......"
 msgstr ""
 
-#: common/constants.py:111
+#: common/constants.py:124
 msgid "CSRF验证失败"
 msgstr ""
 
-#: common/constants.py:112
+#: common/constants.py:125
 msgid "您看到此消息是由于该站点在提交表单时需要一个CSRF cookie。此项是出于安全考虑，以确保您的浏览器没有被第三方劫持。"
 msgstr ""
 
-#: common/constants.py:113
+#: common/constants.py:126
 msgid "如果您已经设置浏览器禁用cookies，请重新启用，至少针对这个站点，全部HTTPS请求，或者同源请求（same-origin）启用cookies。"
 msgstr ""
 
-#: common/constants.py:114
+#: common/constants.py:127
 msgid "重新登录"
 msgstr ""
 
-#: common/decorators.py:171 esb/common/decorators.py:22
+#: common/decorators.py:182 esb/common/decorators.py:33
 msgid "您没有访问权限，请联系系统管理员添加！"
 msgstr ""
 
-#: conf/default.py:211
+#: conf/default.py:224
 msgid "English"
 msgstr ""
 
-#: conf/default.py:212
+#: conf/default.py:225
 msgid "简体中文"
 msgstr ""
 
-#: desktop/constants.py:13
+#: desktop/constants.py:24
 msgid "应用创建者"
 msgstr ""
 
-#: desktop/models.py:15
+#: desktop/models.py:27
 msgid "壁纸名称"
 msgstr ""
 
-#: desktop/models.py:16
+#: desktop/models.py:28
 msgid "壁纸编号"
 msgstr ""
 
-#: desktop/models.py:16
+#: desktop/models.py:28
 msgid "非0值，则必须保证唯一"
 msgstr ""
 
-#: desktop/models.py:17
+#: desktop/models.py:29
 msgid "壁纸宽度"
 msgstr ""
 
-#: desktop/models.py:18
+#: desktop/models.py:30
 msgid "壁纸高度"
 msgstr ""
 
-#: desktop/models.py:19
+#: desktop/models.py:31
 msgid "是否为默认壁纸"
 msgstr ""
 
-#: desktop/models.py:26 desktop/models.py:27
+#: desktop/models.py:38 desktop/models.py:39
 msgid "壁纸管理"
 msgstr ""
 
-#: desktop/models.py:35
+#: desktop/models.py:47
 msgid "横排列"
 msgstr ""
 
-#: desktop/models.py:35
+#: desktop/models.py:47
 msgid "竖排列"
 msgstr ""
 
-#: desktop/models.py:36
+#: desktop/models.py:48
 msgid "上边"
 msgstr ""
 
-#: desktop/models.py:36
+#: desktop/models.py:48
 msgid "左边"
 msgstr ""
 
-#: desktop/models.py:36
+#: desktop/models.py:48
 msgid "右边"
 msgstr ""
 
-#: desktop/models.py:38
+#: desktop/models.py:50
 msgid "Chrome皮肤"
 msgstr ""
 
-#: desktop/models.py:39
+#: desktop/models.py:51
 msgid "默认"
 msgstr ""
 
-#: desktop/models.py:40
+#: desktop/models.py:52
 msgid "Ext皮肤"
 msgstr ""
 
-#: desktop/models.py:41
+#: desktop/models.py:53
 msgid "Mac皮肤"
 msgstr ""
 
-#: desktop/models.py:42
+#: desktop/models.py:54
 msgid "QQ皮肤"
 msgstr ""
 
-#: desktop/models.py:45
+#: desktop/models.py:57
 msgid "填充"
 msgstr ""
 
-#: desktop/models.py:46
+#: desktop/models.py:58
 msgid "适应"
 msgstr ""
 
-#: desktop/models.py:47
+#: desktop/models.py:59
 msgid "平铺"
 msgstr ""
 
-#: desktop/models.py:48
+#: desktop/models.py:60
 msgid "拉伸"
 msgstr ""
 
-#: desktop/models.py:49
+#: desktop/models.py:61
 msgid "居中"
 msgstr ""
 
-#: desktop/models.py:53
+#: desktop/models.py:65
 msgid "APP图标排列方式"
 msgstr ""
 
-#: desktop/models.py:54
+#: desktop/models.py:66
 msgid "应用码头位置"
 msgstr ""
 
-#: desktop/models.py:55
+#: desktop/models.py:67
 msgid "窗口皮肤"
 msgstr ""
 
-#: desktop/models.py:56
+#: desktop/models.py:68
 msgid "壁纸ID"
 msgstr ""
 
-#: desktop/models.py:58
+#: desktop/models.py:70
 msgid "壁纸显示方式"
 msgstr ""
 
-#: desktop/models.py:61
+#: desktop/models.py:73
 msgid "[应用码头]应用id"
 msgstr ""
 
-#: desktop/models.py:61 desktop/models.py:64 desktop/models.py:67
-#: desktop/models.py:70 desktop/models.py:73 desktop/models.py:76
+#: desktop/models.py:73 desktop/models.py:76 desktop/models.py:79
+#: desktop/models.py:82 desktop/models.py:85 desktop/models.py:88
 msgid "用“,”相连"
 msgstr ""
 
-#: desktop/models.py:64
+#: desktop/models.py:76
 msgid "[桌面1]应用id"
 msgstr ""
 
-#: desktop/models.py:67
+#: desktop/models.py:79
 msgid "[桌面2]应用id"
 msgstr ""
 
-#: desktop/models.py:70
+#: desktop/models.py:82
 msgid "[桌面3]应用id"
 msgstr ""
 
-#: desktop/models.py:73
+#: desktop/models.py:85
 msgid "[桌面4]应用id"
 msgstr ""
 
-#: desktop/models.py:76
+#: desktop/models.py:88
 msgid "[桌面5]应用id"
 msgstr ""
 
-#: desktop/models.py:79
+#: desktop/models.py:91
 msgid "应用市场左侧导航类别"
 msgstr ""
 
-#: desktop/models.py:86 desktop/models.py:87
+#: desktop/models.py:98 desktop/models.py:99
 msgid "用户桌面设置"
 msgstr ""
 
-#: desktop/models.py:95
+#: desktop/models.py:107
 msgid "文件夹"
 msgstr ""
 
-#: desktop/models.py:97
+#: desktop/models.py:109
 msgid "应用码头"
 msgstr ""
 
-#: desktop/models.py:98
+#: desktop/models.py:110
 msgid "桌面1"
 msgstr ""
 
-#: desktop/models.py:99
+#: desktop/models.py:111
 msgid "桌面2"
 msgstr ""
 
-#: desktop/models.py:100
+#: desktop/models.py:112
 msgid "桌面3"
 msgstr ""
 
-#: desktop/models.py:101
+#: desktop/models.py:113
 msgid "桌面4"
 msgstr ""
 
-#: desktop/models.py:102
+#: desktop/models.py:114
 msgid "桌面5"
 msgstr ""
 
-#: desktop/models.py:106
+#: desktop/models.py:118
 msgid "文件夹则此字段为空"
 msgstr ""
 
-#: desktop/models.py:109
+#: desktop/models.py:121
 msgid "桌面应用类型"
 msgstr ""
 
-#: desktop/models.py:111
+#: desktop/models.py:123
 msgid "文件夹名"
 msgstr ""
 
-#: desktop/models.py:111
+#: desktop/models.py:123
 msgid "如果desk_app_type为0,则该字段不用填写;反之,则必填"
 msgstr ""
 
-#: desktop/models.py:113
+#: desktop/models.py:125
 msgid "APP所在的文件夹"
 msgstr ""
 
-#: desktop/models.py:115
+#: desktop/models.py:127
 msgid "用户APP所在位置"
 msgstr ""
 
-#: desktop/models.py:124 desktop/models.py:125
+#: desktop/models.py:136 desktop/models.py:137
 msgid "用户桌面应用"
 msgstr ""
 
-#: engine/constants.py:10 saas/utils.py:363 templates/engine/servers.html:48
+#: engine/constants.py:21 saas/utils.py:370 templates/engine/servers.html:48
 msgid "测试服务器"
 msgstr ""
 
-#: engine/constants.py:11 saas/utils.py:363 templates/engine/servers.html:49
+#: engine/constants.py:22 saas/utils.py:370 templates/engine/servers.html:49
 msgid "正式服务器"
 msgstr ""
 
-#: engine/constants.py:16
+#: engine/constants.py:27
 msgid "RabbitMQ服务"
 msgstr ""
 
-#: engine/deploy.py:112
+#: engine/deploy.py:129
 #, python-format
 msgid ""
 "%s 测试部署事件提交失败！请确认 1.appengine服务正常[/v1/healthz/] 2.安装并注册了对应的agent服务器 "
 "3.第三方服务等正常 [%s]"
 msgstr ""
 
-#: engine/deploy.py:128 engine/deploy.py:152
+#: engine/deploy.py:145 engine/deploy.py:169
 #, python-format
 msgid "测试部署事件提交失败, %s"
 msgstr ""
 
-#: engine/deploy.py:181
+#: engine/deploy.py:198
 #, python-format
 msgid ""
 "%s 正式部署事件提交失败！请确认 1.appengine服务正常[/v1/healthz/] 2.安装并注册了对应的agent服务器 "
 "3.第三方服务等正常 [%s]"
 msgstr ""
 
-#: engine/deploy.py:196 engine/deploy.py:225
+#: engine/deploy.py:213 engine/deploy.py:242
 #, python-format
 msgid "上线部署事件提交失败, %s"
 msgstr ""
 
-#: engine/deploy.py:306 saas/utils.py:364 templates/app_env/home.html:78
+#: engine/deploy.py:323 saas/utils.py:371 templates/app_env/home.html:78
 #: templates/release/home.html:109
 msgid "测试部署"
 msgstr ""
 
-#: engine/deploy.py:306 saas/utils.py:364 templates/app_env/home.html:78
+#: engine/deploy.py:323 saas/utils.py:371 templates/app_env/home.html:78
 #: templates/release/home.html:113 templates/release/home.html:115
 #: templates/release/home.html:117 templates/release/home.html:119
 msgid "正式部署"
 msgstr ""
 
-#: engine/deploy.py:342
+#: engine/deploy.py:359
 #, python-format
 msgid ""
 "%s %s事件提交失败！请确认 1.appengine服务正常[/v1/healthz/] 2.安装并注册了对应的agent服务器 "
 "3.第三方服务等正常 [%s]"
 msgstr ""
 
-#: engine/deploy.py:360 engine/deploy.py:388
+#: engine/deploy.py:377 engine/deploy.py:405
 #, python-format
 msgid "Saas App %s事件提交失败, %s"
 msgstr ""
 
-#: engine/models.py:89 esb/bkcore/models.py:253
+#: engine/models.py:98 esb/bkcore/models.py:299
 msgid "名称"
 msgstr ""
 
-#: engine/models.py:90
+#: engine/models.py:99
 msgid "服务ID"
 msgstr ""
 
-#: engine/models.py:92
+#: engine/models.py:101
 msgid "IP地址"
 msgstr ""
 
-#: engine/models.py:93 templates/engine/servers.html:19
+#: engine/models.py:102 templates/engine/servers.html:19
 msgid "Agent端口"
 msgstr ""
 
-#: engine/models.py:94
+#: engine/models.py:103
 msgid "App端口"
 msgstr ""
 
-#: engine/models.py:96 engine/models.py:116
+#: engine/models.py:104 engine/models.py:123
 msgid "分类"
 msgstr ""
 
-#: engine/models.py:98 engine/models.py:119 esb/apps/manager/system/forms.py:42
-#: esb/bkcore/models.py:31
+#: engine/models.py:105 engine/models.py:126
+#: esb/apps/manager/system/forms.py:55 esb/bkcore/models.py:40
 msgid "备注"
 msgstr ""
 
-#: engine/models.py:99 engine/models.py:120 templates/engine/servers.html:22
+#: engine/models.py:106 engine/models.py:127 templates/engine/servers.html:22
 #: templates/engine/third_servers.html:21
 msgid "启用"
 msgstr ""
 
-#: engine/models.py:101
+#: engine/models.py:108
 msgid "MAC地址"
 msgstr ""
 
-#: engine/models.py:109 engine/models.py:110 engine/models.py:118
-#: templates/base_center.html:62 templates/engine/servers.html:6
+#: engine/models.py:116 engine/models.py:117 engine/models.py:125
+#: templates/base_center.html:65 templates/engine/servers.html:6
 msgid "服务器信息"
 msgstr ""
 
-#: engine/models.py:163 engine/models.py:164
+#: engine/models.py:170 engine/models.py:171
 msgid "第三方服务器信息"
 msgstr ""
 
-#: engine/validators.py:22 engine/validators.py:25
+#: engine/validators.py:33 engine/validators.py:36
 msgid "服务器IP格式不正确"
 msgstr ""
 
-#: engine/validators.py:28
+#: engine/validators.py:39
 msgid "Agent端口不能为空"
 msgstr ""
 
-#: engine/validators.py:33
+#: engine/validators.py:44
 msgid "Agent端口必须为正数"
 msgstr ""
 
-#: engine/validators.py:36
+#: engine/validators.py:47
 msgid "App服务端口不能为空"
 msgstr ""
 
-#: engine/validators.py:41
+#: engine/validators.py:52
 msgid "App服务端口必须为正数"
 msgstr ""
 
-#: engine/validators.py:44
+#: engine/validators.py:55
 msgid "服务器类别不能为空"
 msgstr ""
 
-#: engine/validators.py:61
+#: engine/validators.py:72
 msgid "服务器地址列表不能为空(IP或域名)"
 msgstr ""
 
-#: engine/validators.py:65
+#: engine/validators.py:76
 #, python-format
 msgid "服务器地址格式不正确, 必须为合法IP或域名[%s]"
 msgstr ""
 
-#: engine/validators.py:68
+#: engine/validators.py:79
 msgid "端口不能为空"
 msgstr ""
 
-#: engine/validators.py:73
+#: engine/validators.py:84
 msgid "端口必须为正数"
 msgstr ""
 
-#: engine/validators.py:76
+#: engine/validators.py:87
 msgid "用户名不能为空"
 msgstr ""
 
-#: engine/validators.py:79
+#: engine/validators.py:90
 msgid "密码不能为空"
 msgstr ""
 
-#: engine/validators.py:82
+#: engine/validators.py:93
 msgid "服务器类型不能为空"
 msgstr ""
 
-#: engine/views.py:54
+#: engine/views.py:63
 msgid "IP为[{ip}], 端口为 [{port}] 的服务器已经存在"
 msgstr ""
 
-#: engine/views.py:63 engine/views.py:73 engine/views.py:262
-#: engine/views.py:272
+#: engine/views.py:72 engine/views.py:82 engine/views.py:271
+#: engine/views.py:281
 msgid "保存成功"
 msgstr ""
 
-#: engine/views.py:72 engine/views.py:271
+#: engine/views.py:81 engine/views.py:280
 msgid "保存出错"
 msgstr ""
 
-#: engine/views.py:83
+#: engine/views.py:92
 msgid "请选择要删除的服务器"
 msgstr ""
 
-#: engine/views.py:94
+#: engine/views.py:103
 msgid "删除服务器失败"
 msgstr ""
 
-#: engine/views.py:109 engine/views.py:171 engine/views.py:348
+#: engine/views.py:118 engine/views.py:180 engine/views.py:357
 msgid "服务器信息不存在,请重新添加"
 msgstr ""
 
-#: engine/views.py:112 engine/views.py:158 engine/views.py:193
+#: engine/views.py:121 engine/views.py:167 engine/views.py:202
 msgid "服务器已激活"
-msgstr ""
-
-#: engine/views.py:129
-#, python-format
-msgid "%s 检测Agent信息时出错,可能原因:App Engine 未正常启动或App Engine接口异常"
 msgstr ""
 
 #: engine/views.py:138
 #, python-format
+msgid "%s 检测Agent信息时出错,可能原因:App Engine 未正常启动或App Engine接口异常"
+msgstr ""
+
+#: engine/views.py:147
+#, python-format
 msgid "%s 服务器上未安装Agent, 请安装Agent后重试"
 msgstr ""
 
-#: engine/views.py:144
+#: engine/views.py:153
 #, python-format
 msgid ""
 "PaasAgent激活失败[%s], 可能原因:<br><br>1) 对应机器上未安装PaaSAgent, "
@@ -1796,12 +1643,12 @@ msgid ""
 "${BK_HOME}/logs/paas_agent/agent.log"
 msgstr ""
 
-#: engine/views.py:178
+#: engine/views.py:187
 #, python-format
 msgid "%s 刷新Agent信息时出错,可能原因:App Engine 未正常启动或App Engine接口异常"
 msgstr ""
 
-#: engine/views.py:186
+#: engine/views.py:195
 #, python-format
 msgid ""
 "%s 检测到服务器状态异常,可能原因:<br><br>1) 对应机器上未安装PaasAgent, "
@@ -1809,754 +1656,733 @@ msgid ""
 "${BK_HOME}/logs/paas_agent/agent.log"
 msgstr ""
 
-#: engine/views.py:245
+#: engine/views.py:254
 msgid "地址为[{ip}], 端口为 [{port}] 的服务器已经存在"
 msgstr ""
 
-#: engine/views.py:282
+#: engine/views.py:291
 msgid "请选择要删除的服务"
 msgstr ""
 
-#: engine/views.py:288
+#: engine/views.py:297
 msgid "删除服务失败"
 msgstr ""
 
-#: engine/views.py:303
+#: engine/views.py:312
 msgid "服务信息不存在,请重新添加"
 msgstr ""
 
-#: engine/views.py:306 engine/views.py:334 engine/views.py:361
+#: engine/views.py:315 engine/views.py:343 engine/views.py:370
 msgid "服务已激活"
 msgstr ""
 
-#: engine/views.py:314
+#: engine/views.py:323
 #, python-format
 msgid "已经有一个 %s 服务集群被激活<br><br>不能再激活其他 %s 服务集群"
 msgstr ""
 
-#: engine/views.py:321
+#: engine/views.py:330
 #, python-format
 msgid "%s 检测服务信息时出错,可能原因:App Engine 未正常启动或App Engine接口异常"
 msgstr ""
 
-#: engine/views.py:354
+#: engine/views.py:363
 #, python-format
 msgid "%s 刷新服务信息时出错,可能原因:App Engine 未正常启动或App Engine接口异常"
 msgstr ""
 
-#: engine/views.py:361
+#: engine/views.py:370
 msgid "检测到服务状态异常"
 msgstr ""
 
-#: esb/apps/api_docs/api_views.py:79 esb/apps/api_docs/views.py:114
+#: esb/apps/api_docs/api_views.py:90 esb/apps/api_docs/views.py:125
 msgid "暂无系统简介"
 msgstr ""
 
-#: esb/apps/api_docs/api_views.py:103
+#: esb/apps/api_docs/api_views.py:114
 msgid "满足需求"
 msgstr ""
 
-#: esb/apps/api_docs/views.py:18 esb/apps/manager/system/forms.py:16
-#: esb/apps/status/models.py:11 esb/bkcore/models.py:21
+#: esb/apps/api_docs/views.py:29 esb/apps/manager/system/forms.py:29
+#: esb/bkcore/models.py:30
 msgid "系统名称"
 msgstr ""
 
-#: esb/apps/guide/views.py:18
+#: esb/apps/guide/views.py:30
 msgid "API网关介绍"
 msgstr ""
 
-#: esb/apps/guide/views.py:19
+#: esb/apps/guide/views.py:31
 msgid "组件编码"
 msgstr ""
 
-#: esb/apps/guide/views.py:20
+#: esb/apps/guide/views.py:32
 msgid "自助接入"
 msgstr ""
 
-#: esb/apps/guide/views.py:21
+#: esb/apps/guide/views.py:33
 msgid "API调用说明"
 msgstr ""
 
-#: esb/apps/guide/views.py:22
+#: esb/apps/guide/views.py:34
 msgid "自定义配置管理"
 msgstr ""
 
-#: esb/apps/guide/views.py:23
+#: esb/apps/guide/views.py:35
 msgid "CMSI消息组件"
 msgstr ""
 
-#: esb/apps/guide/views.py:29
+#: esb/apps/guide/views.py:41
 msgid "微信消息组件"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:30
-#: esb/apps/manager/channel/forms.py:16 esb/bkcore/models.py:81
-#: esb/bkcore/models.py:249
+#: esb/apps/manager/buffet_comp/forms.py:42
+#: esb/apps/manager/channel/forms.py:29 esb/bkcore/models.py:93
+#: esb/bkcore/models.py:295
 msgid "执行API"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:31
-#: esb/apps/manager/channel/forms.py:17 esb/bkcore/models.py:82
-#: esb/bkcore/models.py:250
+#: esb/apps/manager/buffet_comp/forms.py:43
+#: esb/apps/manager/channel/forms.py:30 esb/bkcore/models.py:94
+#: esb/bkcore/models.py:296
 msgid "查询API"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:34
+#: esb/apps/manager/buffet_comp/forms.py:46
 msgid "API名称"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:36
-#: esb/apps/manager/channel/forms.py:25 esb/bkcore/models.py:94
+#: esb/apps/manager/buffet_comp/forms.py:48
+#: esb/apps/manager/channel/forms.py:38 esb/bkcore/models.py:106
 msgid "所属系统"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:43 esb/bkcore/models.py:256
+#: esb/apps/manager/buffet_comp/forms.py:55 esb/bkcore/models.py:302
 msgid "目标接口地址"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:46
+#: esb/apps/manager/buffet_comp/forms.py:58
 msgid "可使用 http://domain.com/users/{username}/ 形式的路径变量"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:49
+#: esb/apps/manager/buffet_comp/forms.py:61
 msgid "目标接口请求类型"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:54 esb/bkcore/models.py:258
+#: esb/apps/manager/buffet_comp/forms.py:66 esb/bkcore/models.py:304
 msgid "编码POST参数方式"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:57
+#: esb/apps/manager/buffet_comp/forms.py:69
 msgid "默认使用 json 编码请求参数，选择 form 后使用 form-urlencoded 编码"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:59 esb/bkcore/models.py:259
+#: esb/apps/manager/buffet_comp/forms.py:71 esb/bkcore/models.py:305
 msgid "额外请求头信息"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:60 esb/bkcore/models.py:260
+#: esb/apps/manager/buffet_comp/forms.py:72 esb/bkcore/models.py:306
 msgid "额外请求参数"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:63 esb/bkcore/models.py:262
+#: esb/apps/manager/buffet_comp/forms.py:75 esb/bkcore/models.py:308
 msgid "注册到的API路径"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:65
+#: esb/apps/manager/buffet_comp/forms.py:77
 msgid ""
 "以斜杠开头，只能包含斜杠、大小写字母、数字、下划线，如：\"/host/get_host_list/\"，可额外包含路径变量，如 "
 "\"/users/{username}/\"；注册到的请求类型+注册到的API路径，在自助接入中需全局唯一"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:71
+#: esb/apps/manager/buffet_comp/forms.py:83
 msgid "输入的路径不符合要求"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:74 esb/bkcore/models.py:263
+#: esb/apps/manager/buffet_comp/forms.py:86 esb/bkcore/models.py:309
 msgid "注册到的请求类型"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:77
+#: esb/apps/manager/buffet_comp/forms.py:89
 msgid "对请求参数应用mapping"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:80
+#: esb/apps/manager/buffet_comp/forms.py:92
 msgid "对返回结果应用mapping"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:83
-#: esb/apps/manager/channel/forms.py:51 esb/bkcore/models.py:102
-#: esb/bkcore/models.py:278
+#: esb/apps/manager/buffet_comp/forms.py:95
+#: esb/apps/manager/channel/forms.py:64 esb/bkcore/models.py:114
+#: esb/bkcore/models.py:324
 msgid "超时时长"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:85
-#: esb/apps/manager/channel/forms.py:53 esb/apps/manager/system/forms.py:26
-#: esb/apps/manager/system/forms.py:35
+#: esb/apps/manager/buffet_comp/forms.py:97
+#: esb/apps/manager/channel/forms.py:66 esb/apps/manager/system/forms.py:39
+#: esb/apps/manager/system/forms.py:48
 msgid "输入格式不正确"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:89
-#: esb/apps/manager/channel/forms.py:57 esb/bkcore/models.py:102
-#: esb/bkcore/models.py:278
+#: esb/apps/manager/buffet_comp/forms.py:101
+#: esb/apps/manager/channel/forms.py:70 esb/bkcore/models.py:114
+#: esb/bkcore/models.py:324
 msgid "单位秒，未设置时以所属系统超时时长为准"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:93
-#: esb/apps/manager/channel/forms.py:61 esb/bkcore/models.py:103
-#: esb/bkcore/models.py:279
+#: esb/apps/manager/buffet_comp/forms.py:105
+#: esb/apps/manager/channel/forms.py:74 esb/bkcore/models.py:115
+#: esb/bkcore/models.py:325
 msgid "API类型"
 msgstr ""
 
-#: esb/apps/manager/buffet_comp/forms.py:107
-#: esb/apps/manager/buffet_comp/forms.py:126
+#: esb/apps/manager/buffet_comp/forms.py:119
+#: esb/apps/manager/buffet_comp/forms.py:138
 #, python-format
 msgid "路径 %s 已经被占用了，请修改"
 msgstr ""
 
-#: esb/apps/manager/channel/forms.py:31 esb/bkcore/models.py:92
+#: esb/apps/manager/channel/forms.py:44 esb/bkcore/models.py:104
 msgid "通道路径"
 msgstr ""
 
-#: esb/apps/manager/channel/forms.py:35
+#: esb/apps/manager/channel/forms.py:48
 msgid "通道路径，以斜杠开头，只能包含斜杠、字母、数字、下划线(_)、连接符(-)，一般设置为\"/system_name/component_name/\"，例如\"/host/get_host_list/\"；通道路径需唯一"
 msgstr ""
 
-#: esb/apps/manager/channel/forms.py:38
+#: esb/apps/manager/channel/forms.py:51
 msgid "输入的通道路径不符合要求"
 msgstr ""
 
-#: esb/apps/manager/channel/forms.py:41 esb/bkcore/models.py:96
+#: esb/apps/manager/channel/forms.py:54 esb/bkcore/models.py:108
 msgid "对应组件代号"
 msgstr ""
 
-#: esb/apps/manager/channel/forms.py:45
+#: esb/apps/manager/channel/forms.py:58
 msgid ""
 "组件代号，只能包含小写字母、数字、下划线或点号，由三部分组成：\"前缀(generic).系统名小写.组件类名小写\"，例如 "
 "\"generic.host.get_host_list\""
 msgstr ""
 
-#: esb/apps/manager/channel/forms.py:48 esb/apps/manager/channel/forms.py:111
+#: esb/apps/manager/channel/forms.py:61 esb/apps/manager/channel/forms.py:124
 msgid "输入的组件代号不符合要求"
 msgstr ""
 
-#: esb/apps/manager/channel/forms.py:67 esb/bkcore/models.py:105
+#: esb/apps/manager/channel/forms.py:80 esb/bkcore/models.py:117
 msgid "权限级别"
 msgstr ""
 
-#: esb/apps/manager/channel/forms.py:71
+#: esb/apps/manager/channel/forms.py:84
 msgid "无权限，应用不需申请API权限；普通权限，应用需在开发者中心申请API权限，审批通过后访问"
 msgstr ""
 
-#: esb/apps/manager/channel/forms.py:97 esb/apps/manager/channel/forms.py:143
+#: esb/apps/manager/channel/forms.py:110 esb/apps/manager/channel/forms.py:156
 msgid "通道路径已存在"
 msgstr ""
 
-#: esb/apps/manager/channel/views.py:194
+#: esb/apps/manager/channel/views.py:206
 msgid "企业微信"
 msgstr ""
 
-#: esb/apps/manager/channel/views.py:195
+#: esb/apps/manager/channel/views.py:207
 msgid "微信公众号"
 msgstr ""
 
-#: esb/apps/manager/system/forms.py:20
+#: esb/apps/manager/system/forms.py:33
 msgid "输入的系统名称不符合要求"
 msgstr ""
 
-#: esb/apps/manager/system/forms.py:21
+#: esb/apps/manager/system/forms.py:34
 msgid "系统唯一标识，由英文字母、下划线(_)或数字组成，并且以字母开头"
 msgstr ""
 
-#: esb/apps/manager/system/forms.py:24 esb/bkcore/models.py:32
+#: esb/apps/manager/system/forms.py:37 esb/bkcore/models.py:41
 msgid "执行类超时时长"
 msgstr ""
 
-#: esb/apps/manager/system/forms.py:29 esb/apps/manager/system/forms.py:38
-#: esb/bkcore/models.py:32 esb/bkcore/models.py:33
+#: esb/apps/manager/system/forms.py:42 esb/apps/manager/system/forms.py:51
+#: esb/bkcore/models.py:41 esb/bkcore/models.py:42
 msgid "单位秒，未设置时超时时长为30秒"
 msgstr ""
 
-#: esb/apps/manager/system/forms.py:33 esb/bkcore/models.py:33
+#: esb/apps/manager/system/forms.py:46 esb/bkcore/models.py:42
 msgid "查询类超时时长"
 msgstr ""
 
-#: esb/apps/manager/system/forms.py:78
+#: esb/apps/manager/system/forms.py:91
 msgid "默认系统名称，不能使用"
 msgstr ""
 
-#: esb/apps/manager/system/forms.py:80 esb/apps/manager/system/forms.py:88
+#: esb/apps/manager/system/forms.py:93 esb/apps/manager/system/forms.py:101
 msgid "系统名称已存在"
 msgstr ""
 
-#: esb/apps/manager/system/forms.py:92
+#: esb/apps/manager/system/forms.py:105
 msgid "默认系统名称，不能修改"
 msgstr ""
 
-#: esb/apps/manager/system/forms.py:94
+#: esb/apps/manager/system/forms.py:107
 msgid "系统下存在通道，不能修改"
 msgstr ""
 
-#: esb/apps/status/models.py:12
-msgid "事件类型"
-msgstr ""
-
-#: esb/apps/status/models.py:13
-msgid "事件内容"
-msgstr ""
-
-#: esb/apps/status/models.py:14
-msgid "事件时间戳"
-msgstr ""
-
-#: esb/apps/status/utils.py:56
-msgid "请求出现错误，请联系系统负责人处理"
-msgstr ""
-
-#: esb/apps/status/utils.py:58
-msgid "您没有权限!"
-msgstr ""
-
-#: esb/bkcore/constants.py:10
+#: esb/bkcore/constants.py:21
 msgid "是否跳过用户身份验证"
 msgstr ""
 
-#: esb/bkcore/constants.py:16
+#: esb/bkcore/constants.py:27
 msgid "默认分类"
 msgstr ""
 
-#: esb/bkcore/models.py:22
+#: esb/bkcore/models.py:31
 msgid "系统标签"
 msgstr ""
 
-#: esb/bkcore/models.py:22
+#: esb/bkcore/models.py:31
 msgid "系统简要说明"
 msgstr ""
 
-#: esb/bkcore/models.py:23
+#: esb/bkcore/models.py:32
 msgid "组件开发负责人"
 msgstr ""
 
-#: esb/bkcore/models.py:25
+#: esb/bkcore/models.py:34
 msgid "系统接口负责人"
 msgstr ""
 
-#: esb/bkcore/models.py:25
+#: esb/bkcore/models.py:34
 msgid "记录系统接口负责人，以便进行消息通知或直接联系，长度为128字符以内"
 msgstr ""
 
-#: esb/bkcore/models.py:28 templates/tpapp/create.html:75
+#: esb/bkcore/models.py:37 templates/tpapp/create.html:75
 #: templates/tpapp/info.html:72 templates/tpapp/release/online.html:9
 msgid "系统链接"
 msgstr ""
 
-#: esb/bkcore/models.py:28
+#: esb/bkcore/models.py:37
 msgid "标准的HTTP链接，多个以分号分隔"
 msgstr ""
 
-#: esb/bkcore/models.py:30
+#: esb/bkcore/models.py:39
 msgid "系统所属组织"
 msgstr ""
 
-#: esb/bkcore/models.py:34
+#: esb/bkcore/models.py:43
 msgid "文档分类ID"
 msgstr ""
 
-#: esb/bkcore/models.py:91
+#: esb/bkcore/models.py:103
 msgid "通道名称"
 msgstr ""
 
-#: esb/bkcore/models.py:91
+#: esb/bkcore/models.py:103
 msgid "通道名称，长度限制为64字符，例如\"查询服务器列表\""
 msgstr ""
 
-#: esb/bkcore/models.py:92
+#: esb/bkcore/models.py:104
 msgid "通道请求路径，例如\"/host/get_host_list/\""
 msgstr ""
 
-#: esb/bkcore/models.py:93
+#: esb/bkcore/models.py:105
 msgid "请求类型"
 msgstr ""
 
-#: esb/bkcore/models.py:96
+#: esb/bkcore/models.py:108
 msgid "对应的组件代号，该组件必须注册到API网关中，例如 \"generic.host.get_host_list\""
 msgstr ""
 
-#: esb/bkcore/models.py:98
+#: esb/bkcore/models.py:110
 msgid "组件英文名"
 msgstr ""
 
-#: esb/bkcore/models.py:99
+#: esb/bkcore/models.py:111
 msgid "是否开启"
 msgstr ""
 
-#: esb/bkcore/models.py:100
+#: esb/bkcore/models.py:112
 msgid "最后更新时间"
 msgstr ""
 
-#: esb/bkcore/models.py:104
+#: esb/bkcore/models.py:116
 msgid "组件配置"
 msgstr ""
 
-#: esb/bkcore/models.py:106
+#: esb/bkcore/models.py:118
 msgid "是否隐藏"
 msgstr ""
 
-#: esb/bkcore/models.py:106
+#: esb/bkcore/models.py:118
 msgid "是否显示文档，及是否在权限申请中展示"
 msgstr ""
 
-#: esb/bkcore/models.py:107
+#: esb/bkcore/models.py:119
 msgid "是否校验访问频率"
 msgstr ""
 
-#: esb/bkcore/models.py:109
+#: esb/bkcore/models.py:121
 msgid "请求频率配置"
 msgstr ""
 
-#: esb/bkcore/models.py:112
+#: esb/bkcore/models.py:124
 msgid ""
 "限制访问频率，允许多种规则，例如{\"app_ratelimit\": {\"__default\": {\"token\":1000, "
 "\"minute\": 1}, \"gcloud\": {\"token\":1000, \"minute\": 1}}}"
 msgstr ""
 
-#: esb/bkcore/models.py:182
+#: esb/bkcore/models.py:222
 msgid "功能code"
 msgstr ""
 
-#: esb/bkcore/models.py:183
+#: esb/bkcore/models.py:223
 msgid "功能名称"
 msgstr ""
 
-#: esb/bkcore/models.py:184
+#: esb/bkcore/models.py:224
 msgid "是否开启该功能"
 msgstr ""
 
-#: esb/bkcore/models.py:184
+#: esb/bkcore/models.py:224
 msgid "控制功能是否对外开放，若选择，则该功能将对外开放"
 msgstr ""
 
-#: esb/bkcore/models.py:186
+#: esb/bkcore/models.py:226
 msgid "功能测试白名单"
 msgstr ""
 
-#: esb/bkcore/models.py:186
+#: esb/bkcore/models.py:226
 msgid "支持两种格式数据，以逗号、分号分隔的字符串，及JSON格式字符串"
 msgstr ""
 
-#: esb/bkcore/models.py:188
+#: esb/bkcore/models.py:228
 msgid "功能描述"
 msgstr ""
 
-#: esb/bkcore/models.py:201
+#: esb/bkcore/models.py:244
 msgid "蓝鲸智云应用编码"
 msgstr ""
 
-#: esb/bkcore/models.py:203
+#: esb/bkcore/models.py:246
 msgid "token内容"
 msgstr ""
 
-#: esb/bkcore/models.py:204
+#: esb/bkcore/models.py:247
 msgid "token过期时间"
 msgstr ""
 
-#: esb/bkcore/models.py:205 esb/bkcore/models.py:445
+#: esb/bkcore/models.py:248 esb/bkcore/models.py:509
 msgid "最后访问时间"
 msgstr ""
 
-#: esb/bkcore/models.py:254
+#: esb/bkcore/models.py:300
 msgid "系统"
 msgstr ""
 
-#: esb/bkcore/models.py:257
+#: esb/bkcore/models.py:303
 msgid "HTTP请求类型"
 msgstr ""
 
-#: esb/bkcore/models.py:268 templates/app/list_table.part:8
-#: templates/saas/info.html:63 templates/saas/list_table.part:8
+#: esb/bkcore/models.py:314 templates/app/list_table.part:8
+#: templates/saas/info.html:93 templates/saas/list_table.part:8
 #: templates/tpapp/info.html:56 templates/tpapp/list_table.part:8
 msgid "状态"
 msgstr ""
 
-#: esb/bkcore/models.py:271
+#: esb/bkcore/models.py:317
 msgid "输入Mappings"
 msgstr ""
 
-#: esb/bkcore/models.py:271 esb/bkcore/models.py:274
+#: esb/bkcore/models.py:317 esb/bkcore/models.py:320
 msgid "JSON格式数据"
 msgstr ""
 
-#: esb/bkcore/models.py:274
+#: esb/bkcore/models.py:320
 msgid "输出Mappings"
 msgstr ""
 
-#: esb/bkcore/models.py:320
+#: esb/bkcore/models.py:372
 msgid "应用Token"
 msgstr ""
 
-#: esb/bkcore/models.py:345
+#: esb/bkcore/models.py:400
 msgid "组件ID"
 msgstr ""
 
-#: esb/bkcore/models.py:345
+#: esb/bkcore/models.py:400
 msgid "对应 ESBChannel 中的组件ID"
 msgstr ""
 
-#: esb/bkcore/models.py:346
+#: esb/bkcore/models.py:401
 msgid "组件文档（MD格式）"
 msgstr ""
 
-#: esb/bkcore/models.py:347
+#: esb/bkcore/models.py:402
 msgid "组件文档（HTML格式）"
 msgstr ""
 
-#: esb/bkcore/models.py:367 esb/bkcore/models.py:368
+#: esb/bkcore/models.py:425 esb/bkcore/models.py:426
 #: templates/app_esb_auth/home.html:32 templates/app_esb_auth/home.html:33
-#: templates/base_center.html:91
+#: templates/base_center.html:94
 msgid "API文档"
 msgstr ""
 
-#: esb/bkcore/models.py:393
+#: esb/bkcore/models.py:451
 msgid "优先级"
 msgstr ""
 
-#: esb/bkcore/models.py:393
+#: esb/bkcore/models.py:451
 msgid "展示时，数字小的展示在前面"
 msgstr ""
 
-#: esb/bkcore/models.py:400 esb/bkcore/models.py:401
+#: esb/bkcore/models.py:461 esb/bkcore/models.py:462
 msgid "系统文档分类"
 msgstr ""
 
-#: esb/bkcore/models.py:423
+#: esb/bkcore/models.py:484
 msgid "蓝鲸应用编码"
 msgstr ""
 
-#: esb/bkcore/models.py:424
+#: esb/bkcore/models.py:485
 msgid "API ID"
 msgstr ""
 
-#: esb/bkcore/models.py:425
+#: esb/bkcore/models.py:486
 msgid "APP访问API过期时间"
 msgstr ""
 
-#: esb/bkcore/models.py:427
+#: esb/bkcore/models.py:488
 msgid "APP最后访问时间"
 msgstr ""
 
-#: esb/bkcore/models.py:433 esb/bkcore/models.py:434
+#: esb/bkcore/models.py:497 esb/bkcore/models.py:498
 msgid "APP API权限"
 msgstr ""
 
-#: esb/bkcore/models.py:442
+#: esb/bkcore/models.py:506
 msgid "微信APPID"
 msgstr ""
 
-#: esb/bkcore/models.py:443
+#: esb/bkcore/models.py:507
 msgid "凭证"
 msgstr ""
 
-#: esb/bkcore/models.py:444
+#: esb/bkcore/models.py:508
 msgid "凭证过期时间"
 msgstr ""
 
-#: esb/bkcore/models.py:449 esb/bkcore/models.py:450
+#: esb/bkcore/models.py:513 esb/bkcore/models.py:514
 msgid "微信公众号AccessToken"
 msgstr ""
 
-#: esb/common/exceptions.py:16
+#: esb/common/exceptions.py:27
 #, python-format
 msgid "请求Elasticsearch超时（read timeout=%s），请稍后重试"
 msgstr ""
 
-#: esb/common/exceptions.py:22
+#: esb/common/exceptions.py:33
 msgid "系统未配置Elasticsearch地址，请联系系统负责人处理"
 msgstr ""
 
-#: esb/common/exceptions.py:28
+#: esb/common/exceptions.py:39
 msgid "连接Elasticsearch出现错误，请检查配置的Elasticsearch服务是否正常"
 msgstr ""
 
-#: esb/common/exceptions.py:34
+#: esb/common/exceptions.py:45
 msgid "查询Elasticsearch出现错误，请联系系统负责人处理"
 msgstr ""
 
-#: esb/common/exceptions.py:40
+#: esb/common/exceptions.py:51
 #, python-format
 msgid "查询Elasticsearch出现错误，请检查 index [%s] 是否存在"
 msgstr ""
 
-#: esb/configs/default.py:6
+#: esb/configs/default.py:18
 msgctxt "menu"
 msgid "简介"
 msgstr ""
 
-#: esb/configs/default.py:9
+#: esb/configs/default.py:21
 msgctxt "menu"
 msgid "系统管理"
 msgstr ""
 
-#: esb/configs/default.py:14
+#: esb/configs/default.py:26
 msgctxt "menu"
 msgid "通道管理"
 msgstr ""
 
-#: esb/configs/default.py:19
+#: esb/configs/default.py:31
 msgctxt "menu"
 msgid "自助接入"
 msgstr ""
 
-#: esb/configs/default.py:24
+#: esb/configs/default.py:40
 msgctxt "menu"
 msgid "运行数据"
 msgstr ""
 
-#: esb/configs/default.py:29
-msgctxt "menu"
-msgid "使用指南"
-msgstr ""
-
-#: esb/configs/default.py:34
+#: esb/configs/default.py:49
 msgctxt "menu"
 msgid "API文档"
 msgstr ""
 
-#: esb/configs/default.py:49
+#: esb/configs/default.py:58
 msgid "蓝鲸统一登录"
 msgstr ""
 
-#: esb/configs/default.py:50
+#: esb/configs/default.py:59
 msgid "蓝鲸统一登录，管理用户登录验证，及用户信息"
 msgstr ""
 
-#: esb/configs/default.py:54 esb/configs/default.py:55
+#: esb/configs/default.py:63 esb/configs/default.py:64
 msgid "蓝鲸开发者中心"
 msgstr ""
 
-#: esb/configs/default.py:59
+#: esb/configs/default.py:68
 msgid "蓝鲸配置平台"
 msgstr ""
 
-#: esb/configs/default.py:64 esb/configs/default.py:65
+#: esb/configs/default.py:73 esb/configs/default.py:74
 msgid "蓝鲸管控平台"
 msgstr ""
 
-#: esb/configs/default.py:69
-msgid "蓝鲸作业平台"
+#: esb/configs/default.py:78
+msgid "蓝鲸作业平台(不推荐)"
 msgstr ""
 
-#: esb/configs/default.py:70
+#: esb/configs/default.py:79 esb/configs/default.py:86
 msgid "作业平台（Job）是一套基于蓝鲸智云管控平台Agent管道之上的基础操作平台，具备大并发处理能力；除了支持脚本执行、文件拉取/分发、定时任务等一系列可实现的基础运维场景以外，还运用流程化的理念很好的将零碎的单个任务组装成一个作业流程；而每个任务都可做为一个原子节点，提供给其它系统和平台调度，实现调度自动化。"
 msgstr ""
 
-#: esb/configs/default.py:76
+#: esb/configs/default.py:85
+msgid "蓝鲸作业平台V3"
+msgstr ""
+
+#: esb/configs/default.py:92
 msgid "蓝鲸消息管理"
 msgstr ""
 
-#: esb/configs/default.py:77
+#: esb/configs/default.py:93
 msgid "蓝鲸消息管理，用于支持向用户发送多种类型的消息，包括邮件、短信、语音通知等"
 msgstr ""
 
-#: esb/configs/default.py:81 esb/configs/default.py:82
+#: esb/configs/default.py:97 esb/configs/default.py:98
 msgid "标准运维"
 msgstr ""
 
-#: esb/configs/default.py:86 esb/configs/default.py:87
+#: esb/configs/default.py:102 esb/configs/default.py:103
 msgid "监控平台"
 msgstr ""
 
-#: esb/configs/default.py:91 esb/configs/default.py:92
+#: esb/configs/default.py:107 esb/configs/default.py:108
 msgid "监控平台V3"
 msgstr ""
 
-#: esb/configs/default.py:96 esb/configs/default.py:97
+#: esb/configs/default.py:112 esb/configs/default.py:113
 msgid "用户管理"
 msgstr ""
 
-#: esb/configs/default.py:101 esb/configs/default.py:102
-#: templates/base_center.html:88
+#: esb/configs/default.py:117 esb/configs/default.py:118
+#: templates/base_center.html:91
 msgid "API网关"
 msgstr ""
 
-#: esb/configs/default.py:106 esb/configs/default.py:107
+#: esb/configs/default.py:122 esb/configs/default.py:123
 msgid "流程服务"
 msgstr ""
 
-#: esb/configs/default.py:111 esb/configs/default.py:112
+#: esb/configs/default.py:127 esb/configs/default.py:128
 msgid "日志平台"
 msgstr ""
 
-#: esb/configs/default.py:116 esb/configs/default.py:117
+#: esb/configs/default.py:132 esb/configs/default.py:133
 msgid "权限中心"
 msgstr ""
 
-#: esb/configs/default.py:121 esb/configs/default.py:122
+#: esb/configs/default.py:137 esb/configs/default.py:138
 msgid "文档中心"
 msgstr ""
 
-#: esb/configs/default.py:126 esb/configs/default.py:127
+#: esb/configs/default.py:142 esb/configs/default.py:143
 msgid "数据平台"
 msgstr ""
 
-#: esb/configs/default.py:135
+#: esb/configs/default.py:147 esb/configs/default.py:148
+msgid "蓝鲸基础服务配置平台"
+msgstr ""
+
+#: esb/configs/default.py:156
 msgctxt "doccategory"
 msgid "默认分类"
 msgstr ""
 
-#: esb/configs/default.py:139
+#: esb/configs/default.py:160
 msgctxt "doccategory"
 msgid "基础用户服务"
 msgstr ""
 
-#: esb/configs/default.py:143
+#: esb/configs/default.py:164
 msgctxt "doccategory"
 msgid "配置管理"
 msgstr ""
 
-#: esb/configs/default.py:147
+#: esb/configs/default.py:168
 msgctxt "doccategory"
 msgid "主机管控"
 msgstr ""
 
-#: esb/configs/default.py:151
+#: esb/configs/default.py:172
 msgctxt "doccategory"
 msgid "管理工具"
 msgstr ""
 
-#: healthz/views.py:75
+#: healthz/views.py:91
 #, python-format
 msgid "配置文件不正确, 缺失对应配置: %s"
 msgstr ""
 
-#: healthz/views.py:87
+#: healthz/views.py:103
 #, python-format
 msgid "数据库连接存在问题: %s"
 msgstr ""
 
-#: healthz/views.py:109
+#: healthz/views.py:137
 #, python-format
 msgid "第三方依赖连接超时: name=%s, host=%s,  error=%s"
 msgstr ""
 
-#: healthz/views.py:130
+#: healthz/views.py:158
 #, python-format
 msgid "%s Redis连接存在问题: %s; 将导致监控告警不可用"
 msgstr ""
 
-#: healthz/views.py:145
+#: healthz/views.py:173
 #, python-format
 msgid "WARNING: %s 当前没有可用的[测试服务器], 无法进行提测操作, 请到[蓝鲸智云-开发者中心-服务器信息]注册并激活服务器"
 msgstr ""
 
-#: healthz/views.py:153
+#: healthz/views.py:181
 #, python-format
 msgid "WARNING: %s 当前没有可用的[正式服务器], 无法进行上线操作, 请到[蓝鲸智云-开发者中心-服务器信息]注册并激活服务器"
 msgstr ""
 
-#: healthz/views.py:172
+#: healthz/views.py:200
 #, python-format
 msgid "WARNING: %s 未注册并激活rabbitmq, 部署应用将无法启用celery及周期任务"
 msgstr ""
 
-#: healthz/views.py:187
+#: healthz/views.py:215
 #, python-format
 msgid "%s Bksuite数据库连接存在问题 %s; 不影响使用, 但[蓝鲸智云 - 开发者中心 - 版本信息]无法正常展示"
 msgstr ""
 
-#: home/views.py:26
-msgid "排序成功"
-msgstr ""
-
-#: release/constants.py:24
+#: release/constants.py:35
 msgid "提测"
 msgstr ""
 
-#: release/constants.py:25
+#: release/constants.py:36
 msgid "上线"
 msgstr ""
 
-#: release/constants.py:26 templates/base_app.html:67
-#: templates/base_saas.html:69 templates/base_tpapp.html:52
+#: release/constants.py:37 templates/base_app.html:69
+#: templates/base_saas.html:72 templates/base_tpapp.html:52
 #: templates/release/home.html:126 templates/release/home.html:130
 #: templates/release/outline_form.part:33 templates/saas/list_table.part:51
 #: templates/saas/release/offline_env.part:38
@@ -2564,598 +2390,604 @@ msgstr ""
 msgid "下架"
 msgstr ""
 
-#: release/constants.py:30
+#: release/constants.py:41
 msgid "基本信息注册"
 msgstr ""
 
-#: release/constants.py:31
+#: release/constants.py:42
 msgid "数据库创建"
 msgstr ""
 
-#: release/constants.py:32
+#: release/constants.py:43
 msgid "SVN代码初始化"
 msgstr ""
 
-#: release/constants.py:33
+#: release/constants.py:44
 msgid "数据库授权"
 msgstr ""
 
-#: release/constants.py:34
+#: release/constants.py:45
 msgid "初始化APP代码"
 msgstr ""
 
-#: release/constants.py:35 release/constants.py:70
+#: release/constants.py:46 release/constants.py:81
 msgid "删除APP"
 msgstr ""
 
-#: release/constants.py:69
+#: release/constants.py:80
 msgid "APP创建"
 msgstr ""
 
-#: release/constants.py:71
+#: release/constants.py:82
 msgid "APP提测"
 msgstr ""
 
-#: release/constants.py:72
+#: release/constants.py:83
 msgid "APP上线"
 msgstr ""
 
-#: release/constants.py:73
+#: release/constants.py:84
 msgid "APP下架"
 msgstr ""
 
-#: release/constants.py:94
+#: release/constants.py:105
 msgid "激活码错误, 请确认激活码申请时app_code填写正确, 可重新申请然后在[应用管理-基本信息]中编辑更新"
 msgstr ""
 
-#: release/constants.py:95
+#: release/constants.py:106
 msgid "app_code和激活码不匹配! 请确认激活码申请时app_code填写正确, 可重新申请然后在[应用管理-基本信息]中编辑更新"
 msgstr ""
 
-#: release/constants.py:96
+#: release/constants.py:107
 msgid ""
 "部署环境对应机器的mac地址与激活码不匹配! 请确认激活码申请时所有agent机器的mac地址填写正确, "
 "可重新申请然后在[应用管理-基本信息]中编辑更新"
 msgstr ""
 
-#: release/constants.py:97
+#: release/constants.py:108
 msgid ""
 "PaaS Agent 服务器 ID 或者 TOKEN 不正确! 请确认[开发者中心-服务器信息]中注册的Agent服务器 ID 及 "
 "TOKEN与实际Agent部署配置一致"
 msgstr ""
 
-#: release/constants.py:98
+#: release/constants.py:109
 msgid "PaaS Agent License 有效性过期"
 msgstr ""
 
-#: release/constants.py:99
+#: release/constants.py:110
 msgid "PaaS Agent License mac地址有误"
 msgstr ""
 
-#: release/constants.py:100
+#: release/constants.py:111
 msgid "PaaS Agent License 解析失败"
 msgstr ""
 
-#: release/constants.py:101
+#: release/constants.py:112
 msgid "PaaS Agent License 证书文件不存在"
 msgstr ""
 
-#: release/constants.py:102
+#: release/constants.py:113
 msgid "分配服务器失败"
 msgstr ""
 
-#: release/constants.py:103
+#: release/constants.py:114
 msgid "分发任务到PaaSAgent失败"
 msgstr ""
 
-#: release/constants.py:104
+#: release/constants.py:115
 msgid "第三方服务 RabbitMQ 申请资源失败, 请确认[开发者中心-第三方服务]中注册的 RabbitMQ 可用"
 msgstr ""
 
-#: release/models.py:25
+#: release/models.py:34
 msgid "操作标识"
 msgstr ""
 
-#: release/models.py:25
+#: release/models.py:34
 msgid "0为提测操作，1为上线操作"
 msgstr ""
 
-#: release/models.py:27 release/models.py:180
+#: release/models.py:36 release/models.py:189
 #: templates/release/record_list.part:6
 #: templates/tpapp/release/record_list.part:6
 msgid "操作人"
 msgstr ""
 
-#: release/models.py:27
+#: release/models.py:36
 msgid "进行上线或提测操作的人"
 msgstr ""
 
-#: release/models.py:30
+#: release/models.py:39
 msgid "操作前app的状态"
 msgstr ""
 
-#: release/models.py:33 release/models.py:183
+#: release/models.py:42 release/models.py:192
 #: templates/release/record_list.part:8
 #: templates/tpapp/release/record_list.part:8
 msgid "操作时间"
 msgstr ""
 
-#: release/models.py:34
+#: release/models.py:43
 msgid "操作是否成功"
 msgstr ""
 
-#: release/models.py:34
+#: release/models.py:43
 msgid "提测或上线操作是否成功"
 msgstr ""
 
-#: release/models.py:35
+#: release/models.py:44
 msgid "显示新标志"
 msgstr ""
 
-#: release/models.py:35
+#: release/models.py:44
 msgid "是否在logo上添加更新提示"
 msgstr ""
 
-#: release/models.py:36 templates/release/online_form.part:55
+#: release/models.py:45 templates/release/online_form.part:55
 msgid "显示新特性"
 msgstr ""
 
-#: release/models.py:36
+#: release/models.py:45
 msgid "是否在新应用应用打开时显示该版本更新特性"
 msgstr ""
 
-#: release/models.py:37 templates/release/version.html:10
+#: release/models.py:46 templates/release/version.html:10
 msgid "版本号"
 msgstr ""
 
-#: release/models.py:37
+#: release/models.py:46
 msgid "需要显示的版本号信息"
 msgstr ""
 
-#: release/models.py:38
+#: release/models.py:47
 msgid "操作返回信息"
 msgstr ""
 
-#: release/models.py:38
+#: release/models.py:47
 msgid "执行提测或上线操作后脚本的返回信息"
 msgstr ""
 
-#: release/models.py:41
+#: release/models.py:50
 msgid "额外执行结果数据"
 msgstr ""
 
-#: release/models.py:41
+#: release/models.py:50
 msgid "json串存储"
 msgstr ""
 
-#: release/models.py:63
+#: release/models.py:72
 msgid "没有返回信息！"
 msgstr ""
 
-#: release/models.py:90
+#: release/models.py:99
 #, python-format
 msgid "选择下架环境：%s"
 msgstr ""
 
-#: release/models.py:121 release/models.py:122
+#: release/models.py:130 release/models.py:131
 msgid "应用部署操作信息"
 msgstr ""
 
-#: release/models.py:131
+#: release/models.py:140
 msgid "app版本号"
 msgstr ""
 
-#: release/models.py:131
+#: release/models.py:140
 msgid "格式：x.x.x，只允许包含数字"
 msgstr ""
 
-#: release/models.py:132
+#: release/models.py:141
 msgid "拉取的代码地址"
 msgstr ""
 
-#: release/models.py:133
+#: release/models.py:142
 msgid "版本发布者"
 msgstr ""
 
-#: release/models.py:134
+#: release/models.py:143
 msgid "发布时间"
 msgstr ""
 
-#: release/models.py:135
+#: release/models.py:144
 msgid "版本描述"
 msgstr ""
 
-#: release/models.py:152 release/models.py:153
+#: release/models.py:161 release/models.py:162
 msgid "应用发布版本信息"
 msgstr ""
 
-#: release/models.py:179
+#: release/models.py:188
 msgid "操作的app"
 msgstr ""
 
-#: release/models.py:181
+#: release/models.py:190
 msgid "操作前数据"
 msgstr ""
 
-#: release/models.py:182
+#: release/models.py:191
 msgid "操作后数据"
 msgstr ""
 
-#: release/models.py:184 templates/release/record_list.part:5
+#: release/models.py:193 templates/release/record_list.part:5
 #: templates/tpapp/release/record_list.part:5
 msgid "操作类型"
 msgstr ""
 
-#: release/models.py:185
+#: release/models.py:194
 msgid "其他说明"
 msgstr ""
 
-#: release/models.py:194 release/models.py:195
+#: release/models.py:203 release/models.py:204
 msgid "用户操作流水日志"
 msgstr ""
 
-#: release/utils.py:44 release/utils.py:194
+#: release/utils.py:52 release/utils.py:202
 #: templates/release/record_list.part:21
 #: templates/tpapp/release/record_list.part:19
 msgid "成功"
 msgstr ""
 
-#: release/utils.py:44 release/utils.py:194
+#: release/utils.py:52 release/utils.py:202
 #: templates/release/record_list.part:23
 #: templates/tpapp/release/record_list.part:21
 msgid "失败"
 msgstr ""
 
-#: release/utils.py:156
+#: release/utils.py:164
 msgid "查询事件状态失败"
 msgstr ""
 
-#: release/utils.py:185
+#: release/utils.py:193
 #, python-format
 msgid "事件超时(%ss), 设置为失败"
 msgstr ""
 
-#: release/utils.py:194
+#: release/utils.py:202
 #, python-format
 msgid ""
 "操作%s! \n"
 "%s"
 msgstr ""
 
-#: release/views.py:162
+#: release/views.py:170
 msgid ""
 "当前没有可用的[测试服务器], 无法进行提测操作. 请到<a href='/engine/servers/'> "
 "[蓝鲸智云-开发者中心-服务器信息] </a> 注册并激活服务器"
 msgstr ""
 
-#: release/views.py:173
+#: release/views.py:181
 #, python-format
 msgid "应用当前状态为：%s，不能进行提测操作！"
 msgstr ""
 
-#: release/views.py:233
+#: release/views.py:241
 msgid "测试部署事件提交成功！"
 msgstr ""
 
-#: release/views.py:261 release/views.py:330
+#: release/views.py:269 release/views.py:338
 msgid "参数错误！"
 msgstr ""
 
-#: release/views.py:273
+#: release/views.py:281
 msgid ""
 "当前没有可用的[正式服务器], 无法进行提测操作. 请到<a href='/engine/servers/'> "
 "[蓝鲸智云-开发者中心-服务器信息] </a> 注册并激活服务器"
 msgstr ""
 
-#: release/views.py:290
+#: release/views.py:298
 #, python-format
 msgid "应用当前状态：%s，APP需要重新测试部署后，才可以进行正式部署操作！"
 msgstr ""
 
-#: release/views.py:304
+#: release/views.py:312
 msgid "正式部署事件提交成功！"
 msgstr ""
 
-#: release/views.py:345
+#: release/views.py:353
 #, python-format
 msgid "应用当前状态为：%s，不能进行下架操作！"
 msgstr ""
 
-#: release/views.py:348
+#: release/views.py:356
 msgid "应用测试环境已经下架！"
 msgstr ""
 
-#: release/views.py:351
+#: release/views.py:359
 msgid "应用正式环境已经下架！"
 msgstr ""
 
-#: release/views.py:361
+#: release/views.py:369
 msgid "下架事件提交成功！"
 msgstr ""
 
-#: release/views.py:364
+#: release/views.py:372
 msgid "下架事件提交失败！"
 msgstr ""
 
-#: release/views.py:394
+#: release/views.py:402
 msgid "应用已经部署过，不能删除！"
 msgstr ""
 
-#: release/views.py:405
+#: release/views.py:413
 msgid "删除成功！"
 msgstr ""
 
-#: release/views.py:422
+#: release/views.py:430
 msgid "删除失败！"
 msgstr ""
 
-#: release/views.py:494
+#: release/views.py:502
 #, python-format
 msgid "check_unfinished_task, 事件超时(%ss), 设置为失败"
 msgstr ""
 
-#: release/views.py:528
+#: release/views.py:536
 msgid "get_last_release_record 查询错误！"
 msgstr ""
 
-#: saas/deploy.py:31 saas/deploy.py:63
+#: saas/deploy.py:39 saas/deploy.py:71
 #, python-format
 msgid "解析参数出错:%s"
 msgstr ""
 
-#: saas/deploy.py:35
+#: saas/deploy.py:43
 msgid "缺少参数:app_code"
 msgstr ""
 
-#: saas/deploy.py:40
+#: saas/deploy.py:48
 #, python-format
 msgid "应用[%s]数据信息未初始化"
 msgstr ""
 
-#: saas/models.py:145 saas/utils.py:319 saas/views.py:179 saas/views.py:180
-#: saas/views.py:190 saas/views.py:197 templates/release/home.html:24
+#: saas/models.py:156 saas/utils.py:326 saas/views.py:189 saas/views.py:190
+#: saas/views.py:200 saas/views.py:207 templates/release/home.html:24
 #: templates/release/home.html:50
 msgid "未部署"
 msgstr ""
 
-#: saas/models.py:200 saas/models.py:201
+#: saas/models.py:211 saas/models.py:212
 msgid "SaaS 应用"
 msgstr ""
 
-#: saas/models.py:211 templates/bksuite/home.html:14
+#: saas/models.py:222 templates/bksuite/home.html:14
 #: templates/saas/list_table.part:7 templates/saas/release/version_list.part:4
 msgid "版本"
 msgstr ""
 
-#: saas/models.py:213
+#: saas/models.py:224
 msgid "包配置"
 msgstr ""
 
-#: saas/models.py:220
+#: saas/models.py:231
 msgid "更新时间"
 msgstr ""
 
-#: saas/models.py:296 saas/models.py:297
+#: saas/models.py:307 saas/models.py:308
 msgid "SaaS 应用版本"
 msgstr ""
 
-#: saas/models.py:305 templates/saas/release/version_list.part:5
+#: saas/models.py:316 templates/saas/release/version_list.part:5
 msgid "文件名"
 msgstr ""
 
-#: saas/models.py:306 templates/saas/info.html:223
+#: saas/models.py:317 templates/saas/info.html:214
 #: templates/saas/release/version_list.part:6
 msgid "文件大小"
 msgstr ""
 
-#: saas/models.py:311 templates/app_log/log_table_python.part:162
+#: saas/models.py:322 templates/app_log/log_table_python.part:162
 msgid "文件"
 msgstr ""
 
-#: saas/models.py:314 templates/saas/release/version_list.part:7
+#: saas/models.py:325 templates/saas/release/version_list.part:7
 msgid "上传时间"
 msgstr ""
 
-#: saas/models.py:338 saas/models.py:339
+#: saas/models.py:349 saas/models.py:350
 msgid "SaaS上传安装包"
 msgstr ""
 
-#: saas/utils.py:80
+#: saas/utils.py:88
 msgid "去部署"
 msgstr ""
 
-#: saas/utils.py:116
+#: saas/utils.py:124
 #, python-format
 msgid "检测到您当前的社区版版本号为V%s，“%s”应用部署要求版本为V%s及以上，请先升级。如有疑问，可咨询在线客服。"
 msgstr ""
 
-#: saas/utils.py:254 saas/validators.py:103
+#: saas/utils.py:261 saas/validators.py:110
 #, python-format
 msgid "%s 文件格式错误, 无法正常打开, 请确认后重新上传"
 msgstr ""
 
-#: saas/utils.py:266
+#: saas/utils.py:273
 #, python-format
 msgid "%s 包中缺少配置文件LOGO文件: %s"
 msgstr ""
 
-#: saas/utils.py:295 saas/validators.py:122
+#: saas/utils.py:302 saas/validators.py:127
 #, python-format
 msgid "%s 解压获取 app.yml 失败"
 msgstr ""
 
-#: saas/utils.py:302 saas/validators.py:149
+#: saas/utils.py:309 saas/validators.py:154
 msgid "处理成功"
 msgstr ""
 
-#: saas/utils.py:319 saas/views.py:190 saas/views.py:197
+#: saas/utils.py:326 saas/views.py:200 saas/views.py:207
 msgid "已发布"
 msgstr ""
 
-#: saas/utils.py:365
+#: saas/utils.py:372
 msgid " [蓝鲸智云-开发者中心-服务器信息] "
 msgstr ""
 
-#: saas/utils.py:365
+#: saas/utils.py:372
 msgid "<a href='/engine/servers/'> [蓝鲸智云-开发者中心-服务器信息] </a>"
 msgstr ""
 
-#: saas/utils.py:374
+#: saas/utils.py:381
 #, python-format
 msgid "当前没有可用的[%s], 无法进行应用部署操作. 请到%s注册并激活服务器"
 msgstr ""
 
-#: saas/utils.py:381
+#: saas/utils.py:388
 msgid "对应版本不存在, 无法进行部署"
 msgstr ""
 
-#: saas/utils.py:429
+#: saas/utils.py:436
 #, python-format
 msgid "SaaS App应用当前状态：%s，不能进行部署操作！"
 msgstr ""
 
-#: saas/utils.py:455
+#: saas/utils.py:462
 #, python-format
 msgid "SaaS App%s事件提交成功！"
 msgstr ""
 
-#: saas/utils.py:468
+#: saas/utils.py:475
 #, python-format
 msgid "应用(code:%s)配置信息解析异常"
 msgstr ""
 
-#: saas/utils.py:627
+#: saas/utils.py:635
 #, python-format
 msgid "SaaS 应用ID[%s]与已有 PaaS 应用ID冲突"
 msgstr ""
 
-#: saas/utils.py:639
+#: saas/utils.py:647
 #, python-format
 msgid "SaaS 应用名称[%s]与已有应用名称冲突"
 msgstr ""
 
-#: saas/utils.py:757
+#: saas/utils.py:769
 msgid "创建应用db失败，请手动创建db后，点击 <a href='{}'>这里</a> 修改配置信息后重新部署"
 msgstr ""
 
-#: saas/utils.py:806
+#: saas/utils.py:818
 msgid "应用删除失败！"
 msgstr ""
 
-#: saas/utils.py:820
+#: saas/utils.py:832
 #, python-format
 msgid "删除 SaaSApp 相关数据失败, app_code=%s"
 msgstr ""
 
-#: saas/utils.py:829
+#: saas/utils.py:841
 msgid "应用删除成功"
 msgstr ""
 
-#: saas/validators.py:19
+#: saas/validators.py:26
 msgid "上传文件失败!"
 msgstr ""
 
-#: saas/validators.py:22
+#: saas/validators.py:29
 msgid "错误的文件! SaaS应用为.tar.gz格式"
 msgstr ""
 
-#: saas/validators.py:72
+#: saas/validators.py:79
 #, python-format
 msgid "上传包应用: %s. 应用已存在, 非新应用无法从此入口部署. 请从S-mart应用列表找到该应用, 进入部署页面部署"
 msgstr ""
 
-#: saas/validators.py:83
+#: saas/validators.py:90
 #, python-format
 msgid "当前应用: %s, 上传包应用: %s. 不是同一个应用, 无法部署. 请作为新应用上传部署或找到应用%s的部署页面上传部署"
 msgstr ""
 
-#: saas/validators.py:112
+#: saas/validators.py:117
 #, python-format
 msgid "%s 包中缺少配置文件 app.yml"
 msgstr ""
 
-#: saas/validators.py:138
+#: saas/validators.py:143
 #, python-format
 msgid "无法正确加载%s包中的yml文件"
 msgstr ""
 
-#: saas/views.py:174
+#: saas/views.py:184
 msgid "未知"
 msgstr ""
 
-#: saas/views.py:294
+#: saas/views.py:304
 msgid "保存SaaS包信息失败"
 msgstr ""
 
-#: saas/views.py:301
+#: saas/views.py:311
 msgid "上传成功"
 msgstr ""
 
-#: storage/models.py:13
-msgid "是否成功申请storage"
-msgstr ""
-
-#: storage/models.py:22 storage/models.py:23
-msgid "应用对象存储信息"
-msgstr ""
-
-#: templates/base.html:12
+#: templates/base.html:14
 msgid "开发者中心|蓝鲸智云企业版"
 msgstr ""
 
-#: templates/base.html:13
+#: templates/base.html:15
 msgid "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸企业版,企业版,作业平台,集成平台,配置平台,管控平台"
 msgstr ""
 
-#: templates/base.html:14
+#: templates/base.html:16
 msgid "蓝鲸智云软件企业版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。"
 msgstr ""
 
-#: templates/base.html:49 templates/base.html:123
+#: templates/base.html:18
+msgid "开发者中心|蓝鲸智云社区版"
+msgstr ""
+
+#: templates/base.html:19 templates/home/index.html:13
+msgid "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台"
+msgstr ""
+
+#: templates/base.html:20 templates/home/index.html:14
+msgid "蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。"
+msgstr ""
+
+#: templates/base.html:62 templates/base.html:143
+#: templates/base_profile.html:16
 msgid "蓝鲸智云桌面"
 msgstr ""
 
-#: templates/base.html:50
+#: templates/base.html:63 templates/base_profile.html:17
 msgid "img/logo/logo_develper_01.png"
 msgstr ""
 
-#: templates/base.html:52
+#: templates/base.html:65
 msgid "蓝鲸智云开发者中心"
 msgstr ""
 
-#: templates/base.html:53
+#: templates/base.html:66
 msgid "img/logo/logo_develper_02.png"
 msgstr ""
 
-#: templates/base.html:69
+#: templates/base.html:89 templates/base_profile.html:43
+#: templates/home/index.html:112
 msgid "注销"
 msgstr ""
 
-#: templates/base.html:101
+#: templates/base.html:121
 msgid "返回顶部"
 msgstr ""
 
-#: templates/base.html:104
+#: templates/base.html:124
 msgid "返回底部"
 msgstr ""
 
-#: templates/base.html:120
+#: templates/base.html:140 templates/home/index.html:233
 msgid "QQ咨询(800802001)"
 msgstr ""
 
-#: templates/base.html:121
+#: templates/base.html:141 templates/home/index.html:234
 msgid "蓝鲸论坛"
 msgstr ""
 
-#: templates/base.html:122
+#: templates/base.html:142 templates/home/index.html:235
 msgid "蓝鲸官网"
 msgstr ""
 
-#: templates/base.html:126
+#: templates/base.html:146 templates/home/index.html:240
 msgid "蓝鲸智云 版权所有"
 msgstr ""
 
-#: templates/base.html:135
+#: templates/base.html:155
 msgid "建议LOGO大小为100px*100px"
 msgstr ""
 
@@ -3163,8 +2995,8 @@ msgstr ""
 msgid "返回我的应用"
 msgstr ""
 
-#: templates/app/create_detail.part:8 templates/app/info.html:33
-#: templates/app/info.html:69 templates/base_app.html:41
+#: templates/app/create_detail.part:8 templates/app/info.html:63
+#: templates/app/info.html:99 templates/base_app.html:41
 #: templates/base_saas.html:42 templates/base_tpapp.html:29
 #: templates/tpapp/create.html:27 templates/tpapp/info.html:46
 msgid "应用 ID"
@@ -3188,9 +3020,9 @@ msgstr ""
 msgid "应用管理"
 msgstr ""
 
-#: templates/app/info.html:58 templates/base_app.html:57
+#: templates/app/info.html:88 templates/base_app.html:57
 #: templates/base_saas.html:58 templates/base_tpapp.html:44
-#: templates/saas/info.html:39 templates/tpapp/info.html:36
+#: templates/saas/info.html:69 templates/tpapp/info.html:36
 msgid "基本信息"
 msgstr ""
 
@@ -3198,42 +3030,42 @@ msgstr ""
 msgid "环境变量"
 msgstr ""
 
-#: templates/base_app.html:59 templates/base_saas.html:60
+#: templates/base_app.html:60 templates/base_saas.html:62
 #: templates/storage/home.html:14
 msgid "对象存储服务"
 msgstr ""
 
-#: templates/base_app.html:64 templates/base_saas.html:65
+#: templates/base_app.html:66 templates/base_saas.html:68
 #: templates/base_tpapp.html:49
 msgid "应用部署"
 msgstr ""
 
-#: templates/app/info.html:4 templates/base_app.html:66
-#: templates/base_saas.html:68 templates/base_tpapp.html:51
+#: templates/app/info.html:4 templates/base_app.html:68
+#: templates/base_saas.html:71 templates/base_tpapp.html:51
 msgid "发布部署"
 msgstr ""
 
-#: templates/base_app.html:68 templates/base_saas.html:70
+#: templates/base_app.html:70 templates/base_saas.html:73
 #: templates/base_tpapp.html:53
 msgid "发布历史"
 msgstr ""
 
-#: templates/base_app.html:73 templates/base_saas.html:75
+#: templates/base_app.html:76 templates/base_saas.html:79
 #: templates/base_tpapp.html:58
 msgid "服务"
 msgstr ""
 
-#: templates/app_log/home.html:25 templates/base_app.html:75
-#: templates/base_saas.html:77 templates/guide/services.html:94
+#: templates/app_log/home.html:25 templates/base_app.html:78
+#: templates/base_saas.html:81 templates/guide/services.html:98
 msgid "日志查询"
 msgstr ""
 
-#: templates/base_app.html:77 templates/base_saas.html:79
+#: templates/base_app.html:80 templates/base_saas.html:83
 #: templates/base_tpapp.html:60
 msgid "API权限"
 msgstr ""
 
-#: templates/base_app.html:78 templates/base_saas.html:80
+#: templates/base_app.html:81 templates/base_saas.html:84
 msgid "数据统计"
 msgstr ""
 
@@ -3257,31 +3089,43 @@ msgstr ""
 msgid "S-mart应用"
 msgstr ""
 
-#: templates/base_center.html:56 templates/tpapp/list.html:9
+#: templates/base_center.html:58 templates/tpapp/list.html:9
 msgid "外链应用"
 msgstr ""
 
-#: templates/base_center.html:67
+#: templates/base_center.html:70
 msgid "第三方服务"
 msgstr ""
 
-#: templates/base_center.html:75 templates/guide/newbie.html:12
+#: templates/base_center.html:78 templates/guide/newbie.html:12
 msgid "新手指南"
 msgstr ""
 
-#: templates/base_center.html:81
+#: templates/base_center.html:84
 msgid "资源下载"
 msgstr ""
 
-#: templates/base_center.html:102 templates/bksuite/home.html:6
+#: templates/base_center.html:105 templates/bksuite/home.html:6
 msgid "版本信息"
+msgstr ""
+
+#: templates/base_profile.html:19
+msgid "蓝鲸智云个人中心"
+msgstr ""
+
+#: templates/base_profile.html:20
+msgid "img/logo/logo_developer_03.png"
+msgstr ""
+
+#: templates/base_profile.html:65 templates/home/index.html:64
+msgid "个人信息"
 msgstr ""
 
 #: templates/base_saas.html:34
 msgid "返回S-mart应用"
 msgstr ""
 
-#: templates/base_saas.html:67
+#: templates/base_saas.html:70
 msgid "上传版本"
 msgstr ""
 
@@ -3289,62 +3133,10 @@ msgstr ""
 msgid "返回外链应用"
 msgstr ""
 
-#: templates/app/info.html:248 templates/base_tpapp.html:34
-#: templates/saas/info.html:196 templates/saas/info.html:200
+#: templates/app/info.html:240 templates/base_tpapp.html:34
+#: templates/saas/info.html:187 templates/saas/info.html:191
 #: templates/tpapp/info.html:149
 msgid "访问地址"
-msgstr ""
-
-#: templates/account/profile.html:8
-msgid "个人信息"
-msgstr ""
-
-#: templates/account/profile.html:25 templates/account/profile_modify.html:13
-msgid "联系电话"
-msgstr ""
-
-#: templates/account/profile.html:31 templates/account/profile_modify.html:18
-msgid "常用邮箱"
-msgstr ""
-
-#: templates/account/profile.html:44
-msgid "新密码"
-msgstr ""
-
-#: templates/account/profile.html:49 templates/account/profile.html:55
-#: templates/account/profile_modify.html:5
-#: templates/account/profile_modify.html:10
-#: templates/account/profile_modify.html:15
-#: templates/account/profile_modify.html:20
-msgid "必填"
-msgstr ""
-
-#: templates/account/profile.html:50
-msgid "仅包含数字、字母或!@#$%^*()_-+=，长度在4-20个字符"
-msgstr ""
-
-#: templates/account/profile.html:53
-msgid "确认密码"
-msgstr ""
-
-#: templates/account/profile_modify.html:27 templates/app_env/home.html:63
-#: templates/app_monitor/alarm_configure.part:252
-#: templates/app_monitor/alarm_configure.part:304
-#: templates/app_monitor/alarm_configure.part:342
-#: templates/app_monitor/alarm_configure.part:456
-#: templates/app_monitor/alarm_configure.part:510
-#: templates/engine/servers.html:62 templates/engine/third_servers.html:59
-msgid "保存"
-msgstr ""
-
-#: templates/account/profile_modify.html:28 templates/app/info.html:44
-#: templates/app/info.html:60 templates/app/info.html:203
-#: templates/app/info.html:265 templates/app_env/home.html:64
-#: templates/engine/servers.html:63 templates/engine/third_servers.html:60
-#: templates/error/403.html:159 templates/saas/info.html:151
-#: templates/tpapp/info.html:22 templates/tpapp/info.html:38
-#: templates/tpapp/info.html:106
-msgid "取消"
 msgstr ""
 
 #: templates/app/create.html:8 templates/tpapp/create.html:8
@@ -3393,7 +3185,7 @@ msgstr ""
 msgid "通过Git方式获取应用代码"
 msgstr ""
 
-#: templates/app/create_detail.part:83 templates/app/info.html:278
+#: templates/app/create_detail.part:83 templates/app/info.html:270
 msgid "仓库地址"
 msgstr ""
 
@@ -3405,136 +3197,145 @@ msgstr ""
 msgid "账号"
 msgstr ""
 
-#: templates/app/create_detail.part:101 templates/app/info.html:292
+#: templates/app/create_detail.part:101 templates/app/info.html:284
 #: templates/engine/third_servers.html:19
 msgid "密码"
 msgstr ""
 
-#: templates/app/create_detail.part:115 templates/app/info.html:85
-#: templates/app/info.html:87
+#: templates/app/create_detail.part:115 templates/app/info.html:115
+#: templates/app/info.html:117
 msgid "开发语言"
 msgstr ""
 
-#: templates/app/create_detail.part:123
+#: templates/app/create_detail.part:130
 msgid "推荐基于蓝鲸智云应用开发框架开发; 并按照"
 msgstr ""
 
-#: templates/app/create_detail.part:123
+#: templates/app/create_detail.part:130
 msgid "提示 "
 msgstr ""
 
-#: templates/app/create_detail.part:123
+#: templates/app/create_detail.part:130
 msgid "修改配置"
 msgstr ""
 
-#: templates/app/create_detail.part:135 templates/app/list.html:10
+#: templates/app/create_detail.part:142 templates/app/list.html:10
 #: templates/guide/newbie.html:24 templates/guide/newbie.html:63
 #: templates/guide/services.html:16 templates/tpapp/create.html:92
 msgid "创建应用"
 msgstr ""
 
-#: templates/app/info.html:17
+#: templates/app/info.html:47
 msgid "应用初始框架代码"
 msgstr ""
 
-#: templates/app/info.html:21
+#: templates/app/info.html:51
 msgid "下载链接"
 msgstr ""
 
-#: templates/app/info.html:22
+#: templates/app/info.html:52
 msgid "点击下载"
 msgstr ""
 
-#: templates/app/info.html:22
+#: templates/app/info.html:52
 msgid "链接12小时内有效，请及时下载"
 msgstr ""
 
-#: templates/app/info.html:29 templates/saas/info.html:11
+#: templates/app/info.html:59 templates/saas/info.html:41
 #: templates/tpapp/info.html:6
 msgid "注册信息"
 msgstr ""
 
-#: templates/app/info.html:36 templates/tpapp/info.html:13
+#: templates/app/info.html:66 templates/tpapp/info.html:13
 msgid "应用 TOKEN"
 msgstr ""
 
-#: templates/app/info.html:45 templates/app/info.html:61
-#: templates/app/info.html:204 templates/app/info.html:266
+#: templates/app/info.html:74 templates/app/info.html:90
+#: templates/app/info.html:194 templates/app/info.html:257
+#: templates/app_env/home.html:64 templates/engine/servers.html:63
+#: templates/engine/third_servers.html:60 templates/error/403.html:159
+#: templates/saas/info.html:141 templates/tpapp/info.html:22
+#: templates/tpapp/info.html:38 templates/tpapp/info.html:106
+msgid "取消"
+msgstr ""
+
+#: templates/app/info.html:75 templates/app/info.html:91
+#: templates/app/info.html:195 templates/app/info.html:258
 #: templates/app_env/home.html:65 templates/engine/servers.html:67
-#: templates/engine/third_servers.html:62 templates/saas/info.html:152
+#: templates/engine/third_servers.html:62 templates/saas/info.html:142
 #: templates/tpapp/info.html:23 templates/tpapp/info.html:39
 #: templates/tpapp/info.html:107
 msgid "编辑"
 msgstr ""
 
-#: templates/app/info.html:94
+#: templates/app/info.html:124
 msgid "首次提测"
 msgstr ""
 
-#: templates/app/info.html:97 templates/tpapp/info.html:59
+#: templates/app/info.html:127 templates/tpapp/info.html:59
 msgid "首次上线"
 msgstr ""
 
-#: templates/app/info.html:127 templates/saas/info.html:70
+#: templates/app/info.html:159 templates/saas/info.html:102
 msgid "可见范围"
 msgstr ""
 
-#: templates/app/info.html:133 templates/saas/info.html:76
+#: templates/app/info.html:165 templates/saas/info.html:108
 msgid "选择组织/人员"
 msgstr ""
 
-#: templates/app/info.html:201 templates/saas/info.html:149
+#: templates/app/info.html:192 templates/saas/info.html:139
 #: templates/tpapp/info.html:104
 msgid "桌面信息"
 msgstr ""
 
-#: templates/app/info.html:210 templates/saas/info.html:158
+#: templates/app/info.html:201 templates/saas/info.html:148
 #: templates/tpapp/info.html:113
 msgid "窗口宽度"
 msgstr ""
 
-#: templates/app/info.html:215 templates/saas/info.html:163
+#: templates/app/info.html:206 templates/saas/info.html:153
 #: templates/tpapp/info.html:118
 msgid "窗口高度"
 msgstr ""
 
-#: templates/app/info.html:224 templates/saas/info.html:172
+#: templates/app/info.html:215 templates/saas/info.html:162
 #: templates/tpapp/info.html:127
 msgid "打开方式"
 msgstr ""
 
-#: templates/app/info.html:252 templates/app/list_table.part:63
+#: templates/app/info.html:244 templates/app/list_table.part:65
 #: templates/saas/list_table.part:54
 msgid "测试地址"
 msgstr ""
 
-#: templates/app/info.html:257 templates/app/list_table.part:69
+#: templates/app/info.html:249 templates/app/list_table.part:71
 #: templates/saas/list_table.part:57
 msgid "正式地址"
 msgstr ""
 
-#: templates/app/info.html:263
+#: templates/app/info.html:255
 msgid "源代码管理信息"
 msgstr ""
 
-#: templates/app/info.html:273
+#: templates/app/info.html:265
 msgid "仓库类型"
 msgstr ""
 
-#: templates/app/info.html:286
+#: templates/app/info.html:278
 msgid "帐号"
 msgstr ""
 
-#: templates/app/info.html:306 templates/saas/info.html:234
+#: templates/app/info.html:298 templates/saas/info.html:225
 #: templates/tpapp/info.html:159
 msgid "删除应用"
 msgstr ""
 
-#: templates/app/info.html:310
+#: templates/app/info.html:302
 msgid "应用的开发者能删除该应用，请在删除前与其他同事提前沟通，确定"
 msgstr ""
 
-#: templates/app/info.html:312 templates/tpapp/info.html:165
+#: templates/app/info.html:304 templates/tpapp/info.html:165
 msgid "只有开发中的应用才能删除，提测和上线过的应用不能删除！"
 msgstr ""
 
@@ -3568,8 +3369,8 @@ msgstr ""
 msgid "个应用"
 msgstr ""
 
-#: templates/app/list_table.part:4 templates/saas/info.html:15
-#: templates/saas/info.html:42 templates/saas/list_table.part:4
+#: templates/app/list_table.part:4 templates/saas/info.html:45
+#: templates/saas/info.html:72 templates/saas/list_table.part:4
 #: templates/tpapp/info.html:10 templates/tpapp/list_table.part:5
 msgid "应用ID"
 msgstr ""
@@ -3591,15 +3392,15 @@ msgstr ""
 msgid "部署"
 msgstr ""
 
-#: templates/app/list_table.part:57
+#: templates/app/list_table.part:58
 msgid "日志"
 msgstr ""
 
-#: templates/app/list_table.part:58
+#: templates/app/list_table.part:59
 msgid "告警"
 msgstr ""
 
-#: templates/app/list_table.part:77 templates/saas/list_table.part:65
+#: templates/app/list_table.part:79 templates/saas/list_table.part:65
 #: templates/tpapp/list_table.part:67
 msgid "您还没有相关应用信息"
 msgstr ""
@@ -3636,38 +3437,6 @@ msgstr ""
 msgid "支持应用下架"
 msgstr ""
 
-#: templates/app_analysis/index.html:17
-msgid "访问量"
-msgstr ""
-
-#: templates/app_analysis/index.html:22
-msgid "该应用未正式部署或者已经下架，请先正式部署后再查询!"
-msgstr ""
-
-#: templates/app_analysis/index.html:26
-msgid "今日关键指标"
-msgstr ""
-
-#: templates/app_analysis/index.html:38
-msgid "今日总点击量"
-msgstr ""
-
-#: templates/app_analysis/index.html:40
-msgid "今日总在线时长"
-msgstr ""
-
-#: templates/app_analysis/index.html:42
-msgid "今日访问量"
-msgstr ""
-
-#: templates/app_analysis/index.html:55
-msgid "今日用户量"
-msgstr ""
-
-#: templates/app_analysis/index.html:72
-msgid "显示方式"
-msgstr ""
-
 #: templates/app_env/home.html:17
 msgid "添加变量"
 msgstr ""
@@ -3689,6 +3458,16 @@ msgstr ""
 msgid "说明"
 msgstr ""
 
+#: templates/app_env/home.html:63
+#: templates/app_monitor/alarm_configure.part:252
+#: templates/app_monitor/alarm_configure.part:304
+#: templates/app_monitor/alarm_configure.part:342
+#: templates/app_monitor/alarm_configure.part:456
+#: templates/app_monitor/alarm_configure.part:510
+#: templates/engine/servers.html:62 templates/engine/third_servers.html:59
+msgid "保存"
+msgstr ""
+
 #: templates/app_env/home.html:71
 msgid "未设置环境变量"
 msgstr ""
@@ -3704,7 +3483,7 @@ msgid "您可以设置应用运行时的环境变量，在进行"
 msgstr ""
 
 #: templates/app_env/home.html:78 templates/app_env/home.html:79
-#: templates/engine/third_servers.html:81 templates/guide/newbie.html:189
+#: templates/engine/third_servers.html:81
 msgid "和"
 msgstr ""
 
@@ -3816,6 +3595,15 @@ msgstr ""
 msgid "日志查询功能暂未开放"
 msgstr ""
 
+#: templates/app_log/home.html:41 templates/app_log/log_table_java.part:7
+#: templates/app_log/log_table_python.part:8
+#: templates/app_log/log_table_python.part:12
+#: templates/app_log/log_table_python.part:16
+#: templates/app_log/log_table_python.part:20
+#: templates/app_monitor/alarm_record_table.part:22
+msgid "时间"
+msgstr ""
+
 #: templates/app_log/home.html:45 templates/app_monitor/alarm_record.part:21
 msgid "最近1小时"
 msgstr ""
@@ -3852,6 +3640,16 @@ msgstr ""
 msgid "选择日期..."
 msgstr ""
 
+#: templates/app_log/home.html:61 templates/app_log/log_table_java.part:4
+#: templates/app_log/log_table_python.part:4
+msgid "环境"
+msgstr ""
+
+#: templates/app_log/home.html:67 templates/app_log/log_table_java.part:4
+#: templates/app_log/log_table_python.part:5
+msgid "类型"
+msgstr ""
+
 #: templates/app_log/home.html:71 templates/app_log/home.html:78
 msgid "应用日志"
 msgstr ""
@@ -3860,12 +3658,22 @@ msgstr ""
 msgid "访问日志"
 msgstr ""
 
+#: templates/app_log/home.html:73
+msgid "组件调用"
+msgstr ""
+
 #: templates/app_log/home.html:74
 msgid "Celery日志"
 msgstr ""
 
 #: templates/app_log/home.html:80
 msgid "框架日志"
+msgstr ""
+
+#: templates/app_log/home.html:84 templates/app_log/log_table_java.part:5
+#: templates/app_log/log_table_python.part:6
+#: templates/app_monitor/alarm_record_table.part:21
+msgid "日志级别"
 msgstr ""
 
 #: templates/app_log/home.html:95
@@ -3904,6 +3712,16 @@ msgstr ""
 msgid "跳转"
 msgstr ""
 
+#: templates/app_log/log_table_java.part:8
+#: templates/app_log/log_table_java.part:98
+#: templates/app_log/log_table_java.part:115
+#: templates/app_log/log_table_python.part:127
+#: templates/app_log/log_table_python.part:136
+#: templates/app_log/log_table_python.part:157
+#: templates/app_log/log_table_python.part:174
+msgid "日志信息"
+msgstr ""
+
 #: templates/app_log/log_table_java.part:41
 #: templates/app_log/log_table_python.part:55
 #: templates/app_monitor/alarm_record_table.part:31
@@ -3921,6 +3739,10 @@ msgstr ""
 #: templates/app_log/log_table_python.part:188
 #: templates/app_monitor/alarm_record_table.part:62
 msgid "没有数据"
+msgstr ""
+
+#: templates/app_log/log_table_python.part:9
+msgid "响应时间ms"
 msgstr ""
 
 #: templates/app_log/log_table_python.part:13
@@ -4121,6 +3943,14 @@ msgstr ""
 msgid "类型:"
 msgstr ""
 
+#: templates/app_monitor/alarm_record.part:8
+msgid "普通"
+msgstr ""
+
+#: templates/app_monitor/alarm_record.part:9
+msgid "组件"
+msgstr ""
+
 #: templates/app_monitor/alarm_record.part:14
 msgid "关键字:"
 msgstr ""
@@ -4162,6 +3992,10 @@ msgstr ""
 #: templates/app_monitor/alarm_record_table.part:115
 #: templates/app_monitor/alarm_record_table.part:117
 msgid "下一页"
+msgstr ""
+
+#: templates/app_monitor/home.html:38
+msgid "告警配置"
 msgstr ""
 
 #: templates/app_monitor/home.html:39
@@ -4394,11 +4228,11 @@ msgstr ""
 msgid "配置修改"
 msgstr ""
 
-#: templates/guide/newbie.html:36 templates/guide/newbie.html:220
+#: templates/guide/newbie.html:36 templates/guide/newbie.html:223
 msgid "开发项目"
 msgstr ""
 
-#: templates/guide/newbie.html:42 templates/guide/newbie.html:272
+#: templates/guide/newbie.html:42 templates/guide/newbie.html:280
 msgid "部署项目"
 msgstr ""
 
@@ -4447,7 +4281,6 @@ msgid "config/__init__.py 文件: `APP_CODE`(应用ID) 和 `SECRET_KEY`(应用TO
 msgstr ""
 
 #: templates/guide/newbie.html:82 templates/guide/newbie.html:112
-#: templates/guide/newbie.html:162
 msgid "（蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中可以查看到这两个值的信息）;"
 msgstr ""
 
@@ -4468,17 +4301,14 @@ msgid "config/prod.py 文件：DATABASES（请创建正式环境数据库，并�
 msgstr ""
 
 #: templates/guide/newbie.html:90 templates/guide/newbie.html:119
-#: templates/guide/newbie.html:204
 msgid "注意："
 msgstr ""
 
 #: templates/guide/newbie.html:90 templates/guide/newbie.html:119
-#: templates/guide/newbie.html:204
 msgid "测试环境 和 正式环境 的数据库需要对 AppServer 授权"
 msgstr ""
 
 #: templates/guide/newbie.html:95 templates/guide/newbie.html:124
-#: templates/guide/newbie.html:209
 msgid "添加并激活 AppServer"
 msgstr ""
 
@@ -4506,7 +4336,7 @@ msgstr ""
 msgid "点击下载Python开发框架(1.0.0)代码"
 msgstr ""
 
-#: templates/guide/newbie.html:109 templates/guide/newbie.html:157
+#: templates/guide/newbie.html:109
 msgid "将框架代码放到自己的代码仓库中，并按以下提示修改："
 msgstr ""
 
@@ -4572,203 +4402,111 @@ msgstr ""
 msgid "请确认 uwsgi.py 文件在根目录下，也就是跟 manage.py 同级目录下。"
 msgstr ""
 
-#: templates/guide/newbie.html:157
-msgid "点击下载应用开发框架代码 "
-msgstr ""
-
-#: templates/guide/newbie.html:159
-msgid "配置文件修改"
-msgstr ""
-
-#: templates/guide/newbie.html:164
-msgid "蓝鲸智云开发者中心的域名："
-msgstr ""
-
-#: templates/guide/newbie.html:166
-msgid "（本地开发环境自行配置Hosts调试，主域名为与paas开发环境一样，子域名可以自行设置）;"
-msgstr ""
-
-#: templates/guide/newbie.html:168
-msgid "（本地开发服务访问端口，默认8080，可以修改为指定的端口）;"
-msgstr ""
-
-#: templates/guide/newbie.html:170
-msgid "（先创建好本地数据库(create database)，并修改相应信息）;"
-msgstr ""
-
-#: templates/guide/newbie.html:174
-msgid "（填写你的应用ID，与上面的的app.id一样,否则会影响打包部署）;"
-msgstr ""
-
-#: templates/guide/newbie.html:177
-msgid "这个文件为日志框架的入口配置文件，可以里面修改springProfile不同环境的配置日志级别"
-msgstr ""
-
-#: templates/guide/newbie.html:180
-msgid "这个文件是用于将本项目做成一个蓝鲸smart应用，需要按该文档上描述的正确填写，否则会导致Smart应用失败。"
-msgstr ""
-
-#: templates/guide/newbie.html:182
-msgid "应用logo"
-msgstr ""
-
-#: templates/guide/newbie.html:183
-msgid "将应用logo以当前应用的app_code命名成为 app_code.png，放package目录下，见bkjava.png这个默认的logo"
-msgstr ""
-
-#: templates/guide/newbie.html:186
-msgid "需要加入开发者的私有仓库，并配置到IDEA中的maven作为配置文件，保证能下载到Maven依赖"
-msgstr ""
-
-#: templates/guide/newbie.html:190
-msgid "（先创建好测试环境数据(create database)，并修改相应信息）;"
-msgstr ""
-
-#: templates/guide/newbie.html:194
-msgid "（先创建好生产环境数据(create database)，并修改相应信息）。"
-msgstr ""
-
-#: templates/guide/newbie.html:196
-msgid "本地运行开发框架"
-msgstr ""
-
-#: templates/guide/newbie.html:197
-msgid "在IDE开发工具中 可以直接启动 BKWebApplication类。"
-msgstr ""
-
-#: templates/guide/newbie.html:198
-msgid "或者通过本地命令行执行 mvn spring-boot:run 启动。（需要本地安装maven）"
-msgstr ""
-
-#: templates/guide/newbie.html:199
-msgid "Maven下载地址"
-msgstr ""
-
-#: templates/guide/newbie.html:201
-msgid "Java开发框架其他说明"
-msgstr ""
-
-#: templates/guide/newbie.html:202
-msgid "具体见工程里面的README.md 说明文档"
-msgstr ""
-
-#: templates/guide/newbie.html:222
+#: templates/guide/newbie.html:225
 msgid "Python（Django）版："
 msgstr ""
 
-#: templates/guide/newbie.html:225
+#: templates/guide/newbie.html:228
 msgid "Django 数据库操作"
 msgstr ""
 
-#: templates/guide/newbie.html:228
+#: templates/guide/newbie.html:231
 msgid "蓝鲸智云应用使用Django自带的Migration来管理数据库。Migration是Django自带的同步models和数据库的数据迁移工具，Migration能够检测对models的更改并同步到数据库。"
 msgstr ""
 
-#: templates/guide/newbie.html:229
+#: templates/guide/newbie.html:232
 msgid "Migration的使用"
 msgstr ""
 
-#: templates/guide/newbie.html:229
+#: templates/guide/newbie.html:232
 msgid "查看详细使用"
 msgstr ""
 
-#: templates/guide/newbie.html:229
+#: templates/guide/newbie.html:232
 msgid "方法如下:"
 msgstr ""
 
-#: templates/guide/newbie.html:232
+#: templates/guide/newbie.html:235
 msgid "执行 manage.py migrate;"
 msgstr ""
 
-#: templates/guide/newbie.html:233
+#: templates/guide/newbie.html:236
 msgid ""
 "执行 manage.py startapp "
 "yourappname、添加yourappname到config/default.py文件\"INSTALLED_APPS\"中;"
 msgstr ""
 
-#: templates/guide/newbie.html:234 templates/guide/newbie.html:243
+#: templates/guide/newbie.html:237 templates/guide/newbie.html:246
 msgid "在Django的models.py中建立数据库模型后，执行manage.py makemigrations yourappname;"
 msgstr ""
 
-#: templates/guide/newbie.html:235
+#: templates/guide/newbie.html:238
 msgid "执行manage.py migrate yourappname。"
 msgstr ""
 
-#: templates/guide/newbie.html:237 templates/guide/newbie.html:248
+#: templates/guide/newbie.html:240 templates/guide/newbie.html:251
 msgid "注意： 必须按上面的步骤顺序执行，在执行第（1）步时最好不要加入自己的app，除非您保证自己的app已经有migration的initial文件。"
 msgstr ""
 
-#: templates/guide/newbie.html:241
+#: templates/guide/newbie.html:244
 msgid ""
 "执行 manage.py "
 "migrate（作用是在数据库中创建Django自带的表，包括Django_migrations的表，用来存放数据库的变更历史）;"
 msgstr ""
 
-#: templates/guide/newbie.html:242
+#: templates/guide/newbie.html:245
 msgid ""
 "执行 manage.py startapp "
 "yourappname、添加yourappname到config/settings_custom.py文件\"INSTALLED_APPS\"中;"
 msgstr ""
 
-#: templates/guide/newbie.html:244
+#: templates/guide/newbie.html:247
 msgid "步骤（3）执行成功后再执行manage.py migrate yourappname ，这时候数据库中已经建立了您定义的表;"
 msgstr ""
 
-#: templates/guide/newbie.html:245
+#: templates/guide/newbie.html:248
 msgid "在工程中新增app，只需再次执行2—4的步骤即可; "
 msgstr ""
 
-#: templates/guide/newbie.html:246
+#: templates/guide/newbie.html:249
 msgid ""
 "更改models.py的内容，只需执行manage.py makemigrations yourappname和 manage.py "
 "migrate yourappname即可。"
 msgstr ""
 
-#: templates/guide/newbie.html:253
+#: templates/guide/newbie.html:256
 msgid "本地启动项目"
 msgstr ""
 
-#: templates/guide/newbie.html:256
+#: templates/guide/newbie.html:259
 msgid "本地配置host：127.0.0.1 dev.xxx.xxx（注意：必须与PaaS平台主站在同一个一级域名）;"
 msgstr ""
 
-#: templates/guide/newbie.html:257
+#: templates/guide/newbie.html:260
 msgid "执行python manage.py runserver 127.0.0.1:8000 启动项目;"
 msgstr ""
 
-#: templates/guide/newbie.html:258
+#: templates/guide/newbie.html:261
 msgid "访问http://dev.xxx.xxx:8000/ 即可进行本地开发调试。"
 msgstr ""
 
-#: templates/guide/newbie.html:265
-msgid "请下载并参考"
-msgstr ""
-
-#: templates/guide/newbie.html:265
-msgid "Java版开发框架"
-msgstr ""
-
-#: templates/guide/newbie.html:265
-msgid "中README.md文件。"
-msgstr ""
-
-#: templates/guide/newbie.html:275
+#: templates/guide/newbie.html:283
 msgid "操作入口：“我的应用 -> 点击应用ID -> 应用部署” "
 msgstr ""
 
-#: templates/guide/newbie.html:277
+#: templates/guide/newbie.html:285
 msgid "测试部署：将应用代码在测试环境上进行部署，部署成功后就可以在测试环境中使用您的应用。"
 msgstr ""
 
-#: templates/guide/newbie.html:278
+#: templates/guide/newbie.html:286
 msgid "正式部署：将应用代码在正式环境上进行部署，部署成功后就可以在正式环境中使用您的应用。"
 msgstr ""
 
-#: templates/guide/newbie.html:279
+#: templates/guide/newbie.html:287
 msgid "下架操作：系统将应用代码从您选择的环境上撤销部署，届时用户将无法访问该应用，但是该应用的数据库依然保留。"
 msgstr ""
 
-#: templates/guide/services.html:22 templates/guide/services.html:70
+#: templates/guide/services.html:22 templates/guide/services.html:74
 msgid "自动部署"
 msgstr ""
 
@@ -4776,72 +4514,128 @@ msgstr ""
 msgid "安全"
 msgstr ""
 
-#: templates/guide/services.html:34
+#: templates/guide/services.html:36
 msgid "日志服务"
 msgstr ""
 
-#: templates/guide/services.html:49
+#: templates/guide/services.html:53
 msgid "快速创建"
 msgstr ""
 
-#: templates/guide/services.html:50
+#: templates/guide/services.html:54
 msgid "蓝鲸智云提供应用全自助创建服务。"
 msgstr ""
 
-#: templates/guide/services.html:51
+#: templates/guide/services.html:55
 msgid "另外，除了快速创建应用以外，应用基本信息管理也是全自助模式开放。"
 msgstr ""
 
-#: templates/guide/services.html:58
+#: templates/guide/services.html:62
 msgid "角色管理"
 msgstr ""
 
-#: templates/guide/services.html:59
+#: templates/guide/services.html:63
 msgid "蓝鲸智云应用维护者角色分为创建者、负责人；其中，系统超级管理员拥有所有应用的管理权限。"
 msgstr ""
 
-#: templates/guide/services.html:71
+#: templates/guide/services.html:75
 msgid "蓝鲸智云提供在线一键自动部署蓝鲸智云应用服务。"
 msgstr ""
 
-#: templates/guide/services.html:80
+#: templates/guide/services.html:84
 msgid "web安全方案"
 msgstr ""
 
-#: templates/guide/services.html:81
+#: templates/guide/services.html:85
 msgid "蓝鲸智云应用开发框架集成了常见web安全防护方案，包括SQL注入、跨站、挂马，为蓝鲸智云应用安全保驾护航。"
 msgstr ""
 
-#: templates/guide/services.html:90
+#: templates/guide/services.html:94
 msgid "日志统一收集"
 msgstr ""
 
-#: templates/guide/services.html:91
+#: templates/guide/services.html:95
 msgid "蓝鲸规范了蓝鲸应用的日志格式，并对uWSGI、Nginx、Celery等系统日志进行统一收集，另外也对蓝鲸应用自定义普通日志进行统一收集。"
 msgstr ""
 
-#: templates/guide/services.html:95
+#: templates/guide/services.html:99
 msgid "基于收集到的蓝鲸应用日志，蓝鲸提供了便捷的日志查询服务，方便开发者进行问题定位。"
 msgstr ""
 
-#: templates/guide/services.html:106
+#: templates/guide/services.html:110
 msgid "监控服务"
 msgstr ""
 
-#: templates/guide/services.html:107
+#: templates/guide/services.html:111
 msgid "蓝鲸针对蓝鲸应用进行了进程级别的监控，做到服务发现和自动恢复。"
 msgstr ""
 
-#: templates/guide/services.html:108
+#: templates/guide/services.html:112
 msgid "另外，对蓝鲸应用的日志也进行了实时监控。"
 msgstr ""
 
-#: templates/guide/services.html:113
+#: templates/guide/services.html:117
 msgid "告警服务"
 msgstr ""
 
-#: templates/guide/services.html:114
+#: templates/guide/services.html:118
 msgid "除系统默认的告警配置外（如负载），蓝鲸也支持开发者针对日志进行自定义告警配置，触发告警条件，即发送告警给告警接收人。"
+msgstr ""
+
+#: templates/home/index.html:12
+msgid "工作台|蓝鲸智云社区版"
+msgstr ""
+
+#: templates/home/index.html:38 templates/home/index.html:133
+msgid "应用列表"
+msgstr ""
+
+#: templates/home/index.html:43
+msgid "开发者中心"
+msgstr ""
+
+#: templates/home/index.html:82
+msgid "解绑微信"
+msgstr ""
+
+#: templates/home/index.html:88 templates/home/index.html:93
+msgid "绑定微信"
+msgstr ""
+
+#: templates/home/index.html:127
+msgid "欢迎来到蓝鲸社区版工作台！"
+msgstr ""
+
+#: templates/home/index.html:174
+msgid "帮助指引"
+msgstr ""
+
+#: templates/home/index.html:183
+msgid "快速入门"
+msgstr ""
+
+#: templates/home/index.html:193
+msgid "帮助文档"
+msgstr ""
+
+#: templates/home/index.html:200
+msgid "常用链接"
+msgstr ""
+
+#: templates/home/index.html:203
+msgid "蓝鲸S-mart"
+msgstr ""
+
+#: templates/home/index.html:206
+msgid "视频教程"
+msgstr ""
+
+#: templates/home/index.html:220
+msgid "服务协议"
+msgstr ""
+
+#: templates/home/index.html:237
+msgid "关注我们"
 msgstr ""
 
 #: templates/release/base_history.html:12
@@ -4942,7 +4736,7 @@ msgid "应用未进行测试部署，请测试部署后，再执行正式部署�
 msgstr ""
 
 #: templates/release/online_form.part:20 templates/release/test_form.part:6
-#: templates/saas/info.html:214 templates/saas/release/offline_env.part:25
+#: templates/saas/info.html:205 templates/saas/release/offline_env.part:25
 #: templates/saas/release/online_env.part:24
 msgid "部署版本"
 msgstr ""
@@ -5136,23 +4930,23 @@ msgstr ""
 msgid "暂无bug信息"
 msgstr ""
 
-#: templates/saas/info.html:18
+#: templates/saas/info.html:48
 msgid "应用TOKEN"
 msgstr ""
 
-#: templates/saas/info.html:211
+#: templates/saas/info.html:202
 msgid "当前版本信息"
 msgstr ""
 
-#: templates/saas/info.html:217
+#: templates/saas/info.html:208
 msgid "部署文件"
 msgstr ""
 
-#: templates/saas/info.html:238
+#: templates/saas/info.html:229
 msgid "请在删除前与其他同事提前沟通，确定"
 msgstr ""
 
-#: templates/saas/info.html:240
+#: templates/saas/info.html:231
 msgid "只有未部署的应用才能删除，已部署过的应用不能删除！"
 msgstr ""
 
@@ -5421,170 +5215,66 @@ msgstr ""
 msgid "部署过程仅仅改变了应用的状态，不对原系统造成任何影响"
 msgstr ""
 
-#: tpapp/views.py:241
+#: tpapp/views.py:253
 msgid "蓝鲸内置的平台应用，不可下架!"
 msgstr ""
 
-#: tpapp/views.py:276
+#: tpapp/views.py:288
 msgid "数据库操作失败，请查询PaaS日志信息!"
 msgstr ""
 
-#~ msgid "负责人不能为空"
-#~ msgstr ""
+#: user_center/decorators.py:31
+msgid "系统管理员未启用微信通知组件"
+msgstr ""
 
-#~ msgid "非应用创建者，不能删除！"
-#~ msgstr ""
+#: user_center/decorators.py:33
+msgid "您已绑定微信，无需再绑定"
+msgstr ""
 
-#~ msgid "Python 开发框架"
-#~ msgstr ""
+#: user_center/wx_core.py:178
+msgid "验证失败：signature参数不能为空"
+msgstr ""
 
-#~ msgid "您没有开发权限(403页)"
-#~ msgstr ""
+#: user_center/wx_core.py:180
+msgid "验证失败：timestamp参数不能为空"
+msgstr ""
 
-#~ msgid "您没有开发权限，请到“桌面”->“个人中心”申请权限，并联系系统管理员审批！"
-#~ msgstr ""
+#: user_center/wx_core.py:182
+msgid "验证失败：nonce参数不能为空"
+msgstr ""
 
-#~ msgid "点击申请"
-#~ msgstr ""
+#: user_center/wx_core.py:186
+msgid "验证失败：signature错误"
+msgstr ""
 
-#~ msgid "负责人可以管理、部署该应用"
-#~ msgstr ""
+#: user_center/wx_core.py:235
+msgid "绑定成功"
+msgstr ""
 
-#~ msgid "非创建人不允许删除应用，如需删除请联系创建人。"
-#~ msgstr ""
+#: user_center/wx_utils.py:95
+msgid "不存在该微信二维码的扫描用户"
+msgstr ""
 
-#~ msgid "只有创建人能删除该应用，请在删除前与其他同事提前沟通，确定"
-#~ msgstr ""
+#: user_center/wx_views.py:61
+msgid "后台获取公众号二维码失败，请联系系统管理员检查微信配置"
+msgstr ""
 
-#~ msgid "工作台|蓝鲸智云企业版"
-#~ msgstr ""
+#: user_center/wx_views.py:65 user_center/wx_views.py:116
+msgid "创建记录失败，请联系系统管理员处理"
+msgstr ""
 
-#~ msgid "应用面板"
-#~ msgstr ""
+#: user_center/wx_views.py:100
+msgid "API请求异常，请联系管理员处理"
+msgstr ""
 
-#~ msgid "完成"
-#~ msgstr ""
+#: user_center/wx_views.py:131
+msgid "您没有权限，请联系系统管理员"
+msgstr ""
 
-#~ msgid "加载更多"
-#~ msgstr ""
+#: user_center/wx_views.py:136
+msgid "绑定失败，请联系系统管理员"
+msgstr ""
 
-#~ msgid "常用链接"
-#~ msgstr ""
-
-#~ msgid "视频教程"
-#~ msgstr ""
-
-#~ msgid "社区论坛"
-#~ msgstr ""
-
-#~ msgid "在线客服"
-#~ msgstr ""
-
-#~ msgid "进入官网"
-#~ msgstr ""
-
-#~ msgid "进入论坛"
-#~ msgstr ""
-
-#~ msgid "服务协议"
-#~ msgstr ""
-
-#~ msgid "关注我们"
-#~ msgstr ""
-
-#~ msgid "全局"
-#~ msgstr ""
-
-#~ msgid "开发者中心"
-#~ msgstr ""
-
-#~ msgid "PaaS系统维护"
-#~ msgstr ""
-
-#~ msgid "管理"
-#~ msgstr ""
-
-#~ msgid "维护"
-#~ msgstr ""
-
-#~ msgid "开发"
-#~ msgstr ""
-
-#~ msgid "IAM资源所有者"
-#~ msgstr ""
-
-#~ msgid "蓝鲸监控"
-#~ msgstr ""
-
-#~ msgid "蓝鲸监控V3"
-#~ msgstr ""
-
-#~ msgid "服务流程管理"
-#~ msgstr ""
-
-#~ msgid "日志检索"
-#~ msgstr ""
-
-#~ msgid "注意: 监控告警可用依赖于 1. 需确保已经API网关 服务中已经接入邮件服务 2. 需部署日志采集及监控告警服务"
-#~ msgstr ""
-
-#~ msgid "负责人"
-#~ msgstr ""
-
-#~ msgid "下架后，访问地址失效，应用入口从\"桌面\"上消失"
-#~ msgstr ""
-
-#~ msgid "选择人员"
-#~ msgstr ""
-
-#~ msgid "是否显示"
-#~ msgstr ""
-
-#~ msgid "下载图标"
-#~ msgstr ""
-
-#~ msgid "填写外网地址"
-#~ msgstr ""
-
-#~ msgid "文档URL"
-#~ msgstr ""
-
-#~ msgid "下载URL"
-#~ msgstr ""
-
-#~ msgid "Eclipse（含PyDev）"
-#~ msgstr ""
-
-#~ msgid "Python资源包"
-#~ msgstr ""
-
-#~ msgid "开发框架"
-#~ msgstr ""
-
-#~ msgid "Python3 开发框架"
-#~ msgstr ""
-
-#~ msgid "统一开发环境"
-#~ msgstr ""
-
-#~ msgid "API网关组件开发模板"
-#~ msgstr ""
-
-#~ msgid "微信小程序模板"
-#~ msgstr ""
-
-#~ msgid "微信公众号H5模板"
-#~ msgstr ""
-
-#~ msgid "大小"
-#~ msgstr ""
-
-#~ msgid "下载"
-#~ msgstr ""
-
-#~ msgid "查看文档"
-#~ msgstr ""
-
-#~ msgid "无可用资源"
-#~ msgstr ""
-
+#: user_center/wx_views.py:142
+msgid "绑定出错，请联系系统管理员"
+msgstr ""
