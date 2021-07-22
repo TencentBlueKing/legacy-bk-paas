@@ -254,7 +254,7 @@ export default {
             tips: '可选项数据源'
         },
         props: {
-            type: 'object',
+            type: 'el-props',
             val: {
                 multiple: false,
                 expandTrigger: 'click',

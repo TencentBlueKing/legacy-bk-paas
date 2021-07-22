@@ -103,7 +103,7 @@ module.exports = () => {
             }
         } catch (error) {
             ctx.throwError({
-                status: error.status || CODE.BIZ.NOT_DEFINED,
+                status: error.status || 401,
                 code: error.code,
                 message: error.message
             })

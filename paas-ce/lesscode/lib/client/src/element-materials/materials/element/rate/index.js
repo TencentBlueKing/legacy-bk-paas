@@ -64,7 +64,7 @@ export default {
             tips: 'icon 的颜色。若传入数组，共有 3 个元素，为 3 个分段所对应的颜色；若传入对象，可自定义分段，键名为分段的界限值，键值为对应的颜色'
         },
         'void-color': {
-            type: 'string',
+            type: 'color',
             val: '#C6D1DE',
             tips: '未选中 icon 的颜色'
         },
@@ -79,7 +79,7 @@ export default {
             tips: '是否显示当前分数，show-score 和 show-text 不能同时为真'
         },
         'text-color': {
-            type: 'string',
+            type: 'color',
             val: '#1F2D3D',
             tips: '辅助文字的颜色'
         },
