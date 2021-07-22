@@ -51,10 +51,6 @@
                 type: Object,
                 default: () => ({})
             },
-            // describe: {
-            //     type: Object,
-            //     required: true
-            // },
             change: {
                 type: Function,
                 required: true
@@ -82,31 +78,31 @@
         methods: {
             handleChange (e) {
                 const val = this.renderValue
-                // const { regExp } = this.describe
-                // if (regExp) {
-                //     if (regExp.test(val)) {
-                //         const slot = {
-                //             ...this.slotVal,
-                //             val: val.replace(
-                //                 new RegExp('(<)([^>]+)(>)', 'gi'),
-                //                 (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`
-                //             )
-                //         }
-                //         this.change(slot)
-                //         this.isError = false
-                //     } else {
-                //         this.isError = true
-                //     }
-                // } else {
-                //     const slot = {
-                //         ...this.slotVal,
-                //         val: val.replace(
-                //             new RegExp('(<)([^>]+)(>)', 'gi'),
-                //             (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`
-                //         )
-                //     }
-                //     this.change(slot)
-                // }
+                const { regExp } = this.slotConfig
+                if (regExp) {
+                    if (regExp.test(val)) {
+                        const slot = {
+                            ...this.slotVal,
+                            val: val.replace(
+                                new RegExp('(<)([^>]+)(>)', 'gi'),
+                                (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`
+                            )
+                        }
+                        this.change(slot)
+                        this.isError = false
+                    } else {
+                        this.isError = true
+                    }
+                } else {
+                    const slot = {
+                        ...this.slotVal,
+                        val: val.replace(
+                            new RegExp('(<)([^>]+)(>)', 'gi'),
+                            (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`
+                        )
+                    }
+                    this.change(slot)
+                }
                 const slot = {
                     ...this.slotVal,
                     val: val.replace(
