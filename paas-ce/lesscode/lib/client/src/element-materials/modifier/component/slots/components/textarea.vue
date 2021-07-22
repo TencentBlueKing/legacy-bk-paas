@@ -20,9 +20,10 @@
 <template>
     <div>
         <div class="text-action">
-            <input
-                type="text"
-                class="bk-form-input"
+            <textarea
+                rows="5"
+                style="height: auto; word-break: break-all;"
+                class="bk-form-textarea"
                 :class="isError && 'king-input-modifier-style-error'"
                 v-model="renderValue"
                 @input="handleChange" />

@@ -38,6 +38,6 @@ export default {
         } while (curSlot && Object.keys(curSlot).length > 0)
 
         const html = `<section>${render(...slotRenderParams)}</section>`
-        return transformHtmlToVnode(html)
+        return transformHtmlToVnode(html).children
     }
 }

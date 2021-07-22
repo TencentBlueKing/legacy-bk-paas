@@ -44,7 +44,7 @@ export default {
     slots: {
         default: {
             name: ['text'],
-            type: ['text'],
+            type: ['textarea'],
             regExp: /\S/,
             val: '默认段落文字',
             // val: '<script>alert(1)</script>',

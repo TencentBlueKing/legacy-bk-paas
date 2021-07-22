@@ -16,7 +16,7 @@
         </div>
     </div>
 </template>
-<style lang='postcss'>
+<style lang='postcss' scoped>
     .text-title {
         height: 32px;
         font-size: 14px;

@@ -1080,8 +1080,10 @@ class PageCode {
         const slotKeys = Object.keys(slots)
         slotKeys.forEach((key) => {
             const slot = slots[key]
+            const isDefaultSlot = key === 'default'
             compId = compId + key
-
+            slotStr += '\n'
+            if (!isDefaultSlot) slotStr += `<template slot="${key}">\n`
             if (['render-grid', 'render-row', 'render-col', 'free-layout'].includes(slot.type)) {
                 const codeArr = []
                 // card, dialog, sideslider 组件的 slots 配置中 val 没有 componentId
@@ -1090,10 +1092,7 @@ class PageCode {
                     slot.val.componentId = `${slot.val.name}-${uuid()}`
                 }
                 codeArr.push(slot.val)
-                slotStr += `
-                <template slot="${key}">
-                    ${this.generateCode(codeArr)}
-                </template>`
+                slotStr += this.generateCode(codeArr)
             } else if (slot.type === 'form-item-content') {
                 slotStr += this.generateCode(slot.val)
             } else {
@@ -1134,6 +1133,7 @@ class PageCode {
                 } while (curSlot && Object.keys(curSlot).length > 0)
                 slotStr += render(...slotRenderParams)
             }
+            if (!isDefaultSlot) slotStr += `\n</template>`
         })
         return slotStr
 

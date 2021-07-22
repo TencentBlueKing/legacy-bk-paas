@@ -200,7 +200,7 @@
         }
     }
 </script>
-<style lang='postcss'>
+<style lang='postcss' scoped>
     .table-column-title {
         height: 28px;
         font-size: 12px;

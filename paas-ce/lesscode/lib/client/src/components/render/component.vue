@@ -46,7 +46,7 @@
     import { mapGetters, mapMutations } from 'vuex'
     import { bus } from '@/common/bus'
     import { uuid, getNodeWithClass, removeClassWithNodeClass, getStyle, findComponent, findComponentParentGrid, getContextOffset } from '@/common/util'
-    import RenderSlot from './slot'
+    import renderSlot from './slot'
     import ComponentWrapper from './component-wrapper'
     import ComponentMenu from '@/components/widget/context-menu.vue'
     import WidgetForm from '@/components/widget/form'
@@ -56,9 +56,9 @@
     const components = {
         ComponentWrapper,
         ComponentMenu,
-        RenderSlot,
         WidgetForm,
         WidgetFormItem,
+        renderSlot,
         renderGrid: () => import('./grid'),
         renderRow: () => import('./row'),
         renderCol: () => import('./col'),

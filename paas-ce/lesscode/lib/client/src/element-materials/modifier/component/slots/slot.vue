@@ -53,6 +53,7 @@
     import slotTable from './components/table'
     import slotHtml from './components/slot-html'
     import slotText from './components/text'
+    import slotTextArea from './components/textarea'
 
     const comMap = {
         list: slotList,
@@ -62,7 +63,8 @@
         'form-item': slotFormItem,
         table: slotTable,
         html: slotHtml,
-        text: slotText
+        text: slotText,
+        textarea: slotTextArea
     }
 
     export default {
