@@ -1386,7 +1386,11 @@
                     const { modifiers, prop, type, val, valType } = dir
                     function generateUseInfo (variableId) {
                         const useInfo = { type, componentId: id, prop, modifiers, val }
-                        const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
+                        // const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
+                        if (!usedVariableMap[variableId]) {
+                            usedVariableMap[variableId] = []
+                        }
+                        const useInfos = usedVariableMap[variableId]
                         useInfos.push(useInfo)
                     }
                     if (val !== '' && valType === 'variable') {
