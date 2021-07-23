@@ -34,7 +34,7 @@ export const updateSlot = async (ctx) => {
                     res = { content: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
                     break
                 case 'dialog':
-                    res = { default: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slot } } } }
+                    res = { default: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
                     break
                 case 'form':
                     res = {
@@ -46,7 +46,9 @@ export const updateSlot = async (ctx) => {
                                     default: {
                                         ...(item.renderProps || {}).slots,
                                         val: (((item.renderProps || {}).slots || {}).val || []).map((x) => {
-                                            x.renderSlots = {}
+                                            const renderSlots = {}
+                                            if (x.renderProps.slots) renderSlots.default = { ...x.renderProps.slots }
+                                            x.renderSlots = renderSlots
                                             return x
                                         })
                                     }
