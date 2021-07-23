@@ -19,6 +19,7 @@ import { logger } from '../logger'
 
 /**
  * 对现有的 slot 数据更新
+ * 只能执行一次
  * @param {*} ctx
  */
 export const updateSlot = async (ctx) => {
@@ -30,12 +31,15 @@ export const updateSlot = async (ctx) => {
                 case 'el-card':
                 case 'card':
                     res = { default: { name: 'layout', type: 'free-layout', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
+                    delete (value || {}).renderProps.slots
                     break
                 case 'sideslider':
                     res = { content: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
+                    delete (value || {}).renderProps.slots
                     break
                 case 'dialog':
                     res = { default: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
+                    delete (value || {}).renderProps.slots
                     break
                 case 'form':
                     res = {
@@ -48,12 +52,16 @@ export const updateSlot = async (ctx) => {
                                         ...(item.renderProps || {}).slots,
                                         val: (((item.renderProps || {}).slots || {}).val || []).map((x) => {
                                             const renderSlots = {}
-                                            if (x.renderProps.slots) renderSlots.default = { ...x.renderProps.slots }
+                                            if (x.renderProps.slots) {
+                                                renderSlots.default = { ...x.renderProps.slots }
+                                                delete x.renderProps.slots
+                                            }
                                             x.renderSlots = renderSlots
                                             return x
                                         })
                                     }
                                 }
+                                delete (item.renderProps || {}).slots
                                 return item
                             })
                         }
@@ -107,8 +115,6 @@ export const updateSlot = async (ctx) => {
                 case 'tab':
                     res = { default: { ...(slots || {}), type: 'list' } }
                     break
-                case '':
-                    break
                 default:
                     res = { default: (slots || {}) }
                     break
@@ -134,6 +140,7 @@ export const updateSlot = async (ctx) => {
                         const slots = renderProps['slots']
                         if (slots) {
                             data.renderSlots = transformSlot(slots, data.name, renderProps)
+                            delete renderProps['slots']
                         }
                     }
                     transformOldGrid(targetData, grid, callBack, callBack, index)
@@ -149,7 +156,7 @@ export const updateSlot = async (ctx) => {
             message: 'slot 数据更新成功'
         })
     } catch (error) {
-        logger.warn('warn variable')
+        logger.warn('warn slot')
         logger.warn(error)
         ctx.send({
             code: -1,

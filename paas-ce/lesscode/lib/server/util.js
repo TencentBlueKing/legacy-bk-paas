@@ -216,14 +216,13 @@ export function uuid (len = 8, radix = 16) {
 }
 
 export function transformOldGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
-    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
     const renderProps = grid.renderProps || {}
     const slots = renderProps.slots || {}
     let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
     let isLayoutSupportDialog = false
     if (interactiveComponents.includes(grid.type)) { // 交互式组件特殊处理
         const slot = ((grid.renderProps || {}).slots || {}).val || []
-        columns = typeof slot === 'string' ? [] : slot.renderProps.slots.val
+        columns = typeof slot === 'string' ? [] : (((slot.renderProps || {}).slots || {}).val || [])
         isLayoutSupportDialog = typeof slot !== 'string'
     }
 
@@ -233,8 +232,8 @@ export function transformOldGrid (children, grid, childCallBack, parentCallBack,
             if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
                 walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
             } else if ((component.renderProps || {}).slots && ((component.renderProps || {}).slots || {}).name === 'layout') {
-                childCallBack(component, children, index, grid, columnIndex)
                 walkGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
+                childCallBack(component, children, index, grid, columnIndex)
             } else {
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
             }
@@ -245,6 +244,7 @@ export function transformOldGrid (children, grid, childCallBack, parentCallBack,
             childCallBack(column, columns, columnIndex, grid, index)
         }
     })
+    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
 }
 
 export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
