@@ -9,6 +9,7 @@ const bkRenderMap = {
         return `
             <bk-checkbox
                 v-for="(item, index) in ${displayVal}"
+                :key="index"
                 :label="item.label"
                 :value="item.value"
                 :checked="item.checked"
@@ -22,6 +23,7 @@ const bkRenderMap = {
         return `
             <bk-radio
                 v-for="(item, index) in ${displayVal}"
+                :key="index"
                 :label="item.label"
                 :value="item.value"
                 :checked="item.checked"
@@ -34,6 +36,7 @@ const bkRenderMap = {
         return `
             <bk-radio-button
                 v-for="(item, index) in ${displayVal}"
+                :key="index"
                 :label="item.label"
                 :value="item.value"
                 :disabled="item.disabled"
@@ -44,7 +47,7 @@ const bkRenderMap = {
         const displayVal = getVal(val)
         return `
             <bk-option
-                v-for="(item, index) in ${displayVal}"
+                v-for="item in ${displayVal}"
                 :key="item.id"
                 :id="item.id"
                 :name="item.name"
@@ -82,8 +85,9 @@ const bkRenderMap = {
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"
+                    :key="index"
                 >
-                    <template slot-scope="props">
+                    <template>
                         <section v-html="item.templateCol"></section>
                     </template>
                 </bk-table-column>
@@ -94,6 +98,7 @@ const bkRenderMap = {
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"
+                    :key="index"
                 ></bk-table-column>
             </template>
         `
