@@ -562,13 +562,13 @@ export const findComponentParentRow = (target, componentId) => {
         if (curNode.componentId === componentId) {
             return target
         }
-        if (!curNode.renderProps.slots) {
+        if (!curNode.renderSlots.default) {
             continue
         }
-        if (curNode.renderProps.slots.type === 'column' || curNode.renderProps.slots.type === 'free-layout-item') {
-            if (curNode.renderProps.slots.val.length > 0) {
-                for (let j = 0; j < curNode.renderProps.slots.val.length; j++) {
-                    const curColumn = curNode.renderProps.slots.val[j]
+        if (curNode.renderSlots.default.type === 'column' || curNode.renderSlots.default.type === 'free-layout-item') {
+            if (curNode.renderSlots.default.val.length > 0) {
+                for (let j = 0; j < curNode.renderSlots.default.val.length; j++) {
+                    const curColumn = curNode.renderSlots.default.val[j]
                     const column = findComponentParentRow(curColumn.children, componentId)
                     if (column.length > 0) {
                         return column

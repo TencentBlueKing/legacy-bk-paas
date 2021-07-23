@@ -132,7 +132,7 @@
                 if (!name) {
                     return { styles: [], props: {}, events: [], directives: [], slots: {} }
                 }
-                if (name === 'radio-group' && this.curSelectedComponentData.renderProps && this.curSelectedComponentData.renderProps.slots && this.curSelectedComponentData.renderProps.slots.name === 'bk-radio-button') {
+                if (name === 'radio-group' && this.curSelectedComponentData.renderSlots && this.curSelectedComponentData.renderSlots.default && this.curSelectedComponentData.renderSlots.default.name === 'bk-radio-button') {
                     name = 'radio-button-group'
                 }
                 let realMaterialConfig = { styles: [], props: {}, events: [], directives: [], slots: {} }

@@ -30,8 +30,7 @@ export const updateSlot = async (ctx) => {
             switch (name) {
                 case 'el-card':
                 case 'card':
-                    res = { default: { name: 'layout', type: 'free-layout', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
-                    delete (value || {}).renderProps.slots
+                    res = { default: { name: 'layout', type: 'free-layout', display: 'hidden', val: { ...(value || {}) } } }
                     break
                 case 'sideslider':
                     res = { content: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
