@@ -8,7 +8,7 @@ const elementRenderMap = {
         const displayVal = getVal(val)
         return `
             <el-radio
-                v-for="(item, index) in ${displayVal}"
+                v-for="item in ${displayVal}"
                 :key="item.value"
                 :label="item.value"
             >{{item.label}}</el-radio>
@@ -18,7 +18,7 @@ const elementRenderMap = {
         const displayVal = getVal(val)
         return `
             <el-checkbox
-                v-for="(item, index) in ${displayVal}"
+                v-for="item in ${displayVal}"
                 :key="item.value"
                 :label="item.value"
             >{{item.label}}</el-checkbox>
@@ -28,7 +28,7 @@ const elementRenderMap = {
         const displayVal = getVal(val)
         return `
             <el-option
-                v-for="(item, index) in ${displayVal}"
+                v-for="item in ${displayVal}"
                 :key="item.id"
                 :value="item.id"
                 :label="item.name"
@@ -46,8 +46,9 @@ const elementRenderMap = {
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"
+                    :key="index"
                 >
-                    <template slot-scope="props">
+                    <template>
                         <section v-html="item.templateCol"></section>
                     </template>
                 </el-table-column>
@@ -58,6 +59,7 @@ const elementRenderMap = {
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"
+                    :key="index"
                 ></el-table-column>
             </template>
         `
@@ -66,7 +68,7 @@ const elementRenderMap = {
         const displayVal = getVal(val)
         return `
             <el-tab-pane
-                v-for="(item, index) in ${displayVal}"
+                v-for="item in ${displayVal}"
                 :key="item.name"
                 :label="item.label"
                 :name="item.name"
