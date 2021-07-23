@@ -28,7 +28,7 @@ export default {
     render (h, ctx) {
         const { slotData } = ctx.props
         const { name } = slotData
-        const render = slotRenderConfig[name]
+        const render = slotRenderConfig[name] || (() => {})
         const slotRenderParams = []
         let curSlot = slotData
         do {
