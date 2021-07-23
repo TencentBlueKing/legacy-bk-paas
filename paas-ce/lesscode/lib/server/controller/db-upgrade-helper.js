@@ -27,6 +27,7 @@ export const updateSlot = async (ctx) => {
             const value = slots.val
             let res = {}
             switch (name) {
+                case 'el-card':
                 case 'card':
                     res = { default: { name: 'layout', type: 'free-layout', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
                     break
@@ -68,9 +69,23 @@ export const updateSlot = async (ctx) => {
                         content: { name: 'html', type: 'html', val: (props.title || {}).val || '' }
                     }
                     break
+                case 'el-tooltip':
+                case 'el-upload':
+                    res = {
+                        default: { name: 'html', type: 'html', val: (value || ''), payload: (slots.payload || {}) }
+                    }
+                    break
                 case 'paragraph':
                     res = { default: { ...(slots || {}), type: 'textarea' } }
                     break
+                case 'el-checkbox-group':
+                case 'el-radio-group':
+                case 'el-select':
+                case 'el-tabs':
+                case 'el-steps':
+                case 'el-bread-crumb':
+                case 'el-carousel':
+                case 'el-timeline':
                 case 'checkbox-group':
                 case 'bread-crumb':
                 case 'radio-group':
