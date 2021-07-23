@@ -80,6 +80,17 @@ export const updateSlot = async (ctx) => {
                     break
                 case 'el-checkbox-group':
                 case 'el-radio-group':
+                    res = {
+                        default: {
+                            ...(slots || {}),
+                            type: 'list',
+                            val: slots.val.map((x) => {
+                                x.value = x.label
+                                return x
+                            })
+                        }
+                    }
+                    break
                 case 'el-select':
                 case 'el-tabs':
                 case 'el-steps':
