@@ -114,6 +114,10 @@ export const updateSlot = async (ctx) => {
                 case 'tab':
                     res = { default: { ...(slots || {}), type: 'list' } }
                     break
+                case 'folding-table':
+                case 'search-table':
+                    res = { column: (slots || {}) }
+                    break
                 default:
                     res = { default: (slots || {}) }
                     break
