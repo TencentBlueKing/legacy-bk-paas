@@ -95,7 +95,8 @@ export default {
         default: {
             name: ['html'],
             type: ['html'],
-            val: '<bk-button>文字提示</bk-button>'
+            tips: '变量值需包含html标签。',
+            val: '<span>文字提示</span>'
         }
     }
 }

@@ -99,7 +99,8 @@
 
         computed: {
             computedSlotTip () {
-                const tips = transformTipsWidth(this.slotConfig.tips)
+                const transformTips = transformTipsWidth(this.slotConfig.tips)
+                const tips = typeof transformTips === 'string' ? { content: transformTips } : transformTips
                 const disabled = !this.slotConfig.tips
                 return {
                     ...(tips || {}),
