@@ -32,18 +32,13 @@ export default {
     props: {
         value: {
             type: ['string', 'number', 'boolean'],
-            val: ''
+            val: '单选一'
         },
         disabled: {
             type: 'boolean',
             val: false,
             'v-bind': '',
             tips: '是否禁用状态'
-        },
-        fill: {
-            type: 'string',
-            val: '#409EFF',
-            tips: '按钮形式的 Radio 激活时的填充色和边框色'
         }
     },
     slots: {

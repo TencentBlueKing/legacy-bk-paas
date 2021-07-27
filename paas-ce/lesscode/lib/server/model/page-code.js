@@ -938,7 +938,8 @@ class PageCode {
             if (!hasVModel && elementComId !== '') {
                 const valueType = props['value'].type
                 if (valueType !== 'array' && valueType !== 'object') {
-                    const vModelValue = valueType === 'string' ? `'${props['value'].val}'` : props['value'].val.toString()
+                    let vModelValue = props['value'].val.toString()
+                    if (valueType === 'string' || valueType === 'color') vModelValue = `'${props['value'].val}'`
                     this.dataTemplate(elementComId, vModelValue)
                 }
                 propsStr += `v-model="${elementComId}"`
@@ -968,7 +969,6 @@ class PageCode {
                 hasStyle = true
             }
         }
-
         // 有设置class的话，将样式写至<style>
         if (hasStyle) {
             let tmpStr = ''
@@ -980,7 +980,9 @@ class PageCode {
                     tmpStr += `${paramCase(i)}: ${styles[i]};\n`
                 }
             }
-            this.cssStr += `\n.${className} {\n${tmpStr}}`
+            
+            this.cssStr += compId.startsWith('elIcon') ? `\n.${compId}` : `\n.${className}`
+            this.cssStr += ` {\n${tmpStr}}`
         }
 
         // const itemStyles = `${(!hasStyle || className) ? '' : `:style='${JSON.stringify(styles)}'`}`
