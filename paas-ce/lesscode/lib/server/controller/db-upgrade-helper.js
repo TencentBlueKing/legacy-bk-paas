@@ -134,12 +134,14 @@ export const updateSlot = async (ctx) => {
                 const targetData = (typeof page.content) === 'string' ? JSON.parse(page.content) : page.content;
                 (targetData || []).forEach((grid, index) => {
                     const callBack = (data) => {
-                        data.renderSlots = {}
                         const renderProps = data.renderProps || {}
                         const slots = renderProps['slots']
                         if (slots) {
                             data.renderSlots = transformSlot(slots, data.name, renderProps)
                             delete renderProps['slots']
+                        }
+                        if (!data.renderSlots) {
+                            data.renderSlots = {}
                         }
                     }
                     transformOldGrid(targetData, grid, callBack, callBack, index)

@@ -37,7 +37,7 @@ export default {
             curSlot = curSlot.renderSlots
         } while (curSlot && Object.keys(curSlot).length > 0)
 
-        const html = `<section>${render(...slotRenderParams)}</section>`
+        const html = `<render-slot>${render(...slotRenderParams)}</render-slot>`
         return transformHtmlToVnode(html).children
     }
 }

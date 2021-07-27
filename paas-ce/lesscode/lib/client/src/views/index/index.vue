@@ -1387,9 +1387,9 @@
                 // 记录已使用的变量
                 const usedVariableMap = {}
                 function addUsedVariable (id, dir) {
-                    const { modifiers, prop, type, val, valType } = dir
+                    const { modifiers, prop, type, val, valType, slot } = dir
                     function generateUseInfo (variableId) {
-                        const useInfo = { type, componentId: id, prop, modifiers, val }
+                        const useInfo = { type, componentId: id, prop, modifiers, val, slot }
                         const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
                         useInfos.push(useInfo)
                     }
@@ -1436,10 +1436,21 @@
                             const hasMethod = payload && payload.methodCode
                             if (!hasMethod) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为 remote 但未选择远程函数，请修改后再试`
                         }
+                    })
+
+                    const renderSlots = component.renderSlots || {}
+                    Object.keys(renderSlots).forEach((key) => {
+                        const { type, payload = {} } = renderSlots[key] || {}
+
                         if (payload.variableData && payload.variableData.val) {
                             const { val, valType } = payload.variableData
-                            const dir = { prop: 'slots', type: 'v-bind', val, valType }
+                            const dir = { slot: key, type: 'slots', val, valType }
                             addUsedVariable.call(this, component.componentId, dir)
+                        }
+
+                        if (type === 'remote') {
+                            const hasMethod = payload.methodData && payload.methodData.methodCode
+                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${key}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
                         }
                     })
 
