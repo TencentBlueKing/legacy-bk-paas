@@ -2,6 +2,7 @@
     <remote
         :payload="methodPayload"
         :default-value="copySlotVal.val"
+        :remote-validate="slotConfig.remoteValidate"
         :change="remoteChange"
     ></remote>
 </template>

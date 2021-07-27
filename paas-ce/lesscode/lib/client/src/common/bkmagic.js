@@ -43,31 +43,34 @@ export const messageError = (message, delay = 3000, ellipsisLine = 0) => {
     })
 }
 
-export const messageSuccess = (message, delay = 3000) => {
+export const messageSuccess = (message, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
     messageInstance = Message({
         message,
         delay,
-        theme: 'success'
+        theme: 'success',
+        ellipsisLine
     })
 }
 
-export const messageInfo = (message, delay = 3000) => {
+export const messageInfo = (message, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
     messageInstance = Message({
         message,
         delay,
-        theme: 'primary'
+        theme: 'primary',
+        ellipsisLine
     })
 }
 
-export const messageWarn = (message, delay = 3000) => {
+export const messageWarn = (message, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
     messageInstance = Message({
         message,
         delay,
         theme: 'warning',
-        hasCloseIcon: true
+        hasCloseIcon: true,
+        ellipsisLine
     })
 }
 

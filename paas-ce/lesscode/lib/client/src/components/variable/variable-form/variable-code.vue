@@ -33,7 +33,11 @@
                 this.fixFunByEslint(postData).then((res = {}) => {
                     const { code, message } = res.data || {}
                     if (code) this.change(key, code)
-                    if (message) this.messageHtmlError(message)
+                    if (message) {
+                        this.messageHtmlError(message)
+                    } else {
+                        this.messageSuccess('函数修复成功')
+                    }
                 }).catch((err) => {
                     this.messageError(err.message || err)
                 })
