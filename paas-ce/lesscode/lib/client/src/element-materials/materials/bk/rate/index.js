@@ -20,6 +20,15 @@ export default {
         name: 'score', tips: '评分的时候触发该回调事件，回调参数为选中的分数'
     }],
     styles: ['margin', 'display'],
+    directives: [
+        {
+            type: 'v-bind',
+            prop: 'rate',
+            propTypes: ['number'],
+            val: '',
+            valType: 'variable'
+        }
+    ],
     props: {
         rate: {
             type: 'number',

@@ -30,6 +30,13 @@ export default {
     styles: ['size', 'margin', 'display'],
     directives: [
         {
+            type: 'v-model',
+            prop: 'value',
+            propTypes: ['array'],
+            val: '',
+            valType: 'variable'
+        },
+        {
             type: 'v-bind',
             prop: 'list',
             propTypes: ['array'],
