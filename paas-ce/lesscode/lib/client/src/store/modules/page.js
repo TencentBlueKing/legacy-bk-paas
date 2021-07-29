@@ -84,6 +84,22 @@ export default {
                 return data
             })
         },
+        pageLockStatus ({ commit }, { pageId }) {
+            return http.get(`/page/pageLockStatus?pageId=${pageId}`).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        updatePageLock ({ commit }, { data = {} }) {
+            return http.post('/page/updatePageActive', data).then(response => {
+                return response.data || ''
+            })
+        },
+        occupyPage ({ commit }, { data = {} }) {
+            return http.post('/page/occupyPage', data).then(response => {
+                return response.data || ''
+            })
+        },
         verify ({ commit }, { data, config }) {
             return http.post('/page/verify', data, config).then(response => {
                 return response

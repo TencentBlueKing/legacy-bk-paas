@@ -23,7 +23,11 @@ const {
     pageDetail,
     verify,
     importJson,
-    verifyPreview
+    verifyPreview,
+    pageLockStatus,
+    updatePageActive,
+    occupyPage,
+    relasePage
 } = require('../controller/page')
 
 const router = new Router({
@@ -66,5 +70,9 @@ router.get('/detail', pageDetail)
 router.post('/verify', verify)
 router.post('/importJson', importJson)
 router.post('/verifyPreview', verifyPreview)
+router.get('/pageLockStatus', pageLockStatus)
+router.post('/updatePageActive', updatePageActive)
+router.post('/occupyPage', occupyPage)
+router.post('/releasePage', relasePage)
 
 module.exports = router
