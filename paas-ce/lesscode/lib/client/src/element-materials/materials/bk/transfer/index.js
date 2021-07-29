@@ -24,6 +24,13 @@ export default {
     directives: [
         {
             type: 'v-bind',
+            prop: 'target-list',
+            propTypes: ['array'],
+            val: '',
+            valType: 'variable'
+        },
+        {
+            type: 'v-bind',
             prop: 'source-list',
             propTypes: ['array'],
             val: '',
