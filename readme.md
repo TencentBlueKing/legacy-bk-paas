@@ -75,8 +75,7 @@
 - [BK-PaaS](https://github.com/Tencent/bk-PaaS)：蓝鲸PaaS平台是一个开放式的开发平台，让开发者可以方便快捷地创建、开发、部署和管理SaaS应用。
 - [BK-SOPS](https://github.com/Tencent/bk-sops)：标准运维（SOPS）是通过可视化的图形界面进行任务流程编排和执行的系统，是蓝鲸体系中一款轻量级的调度编排类SaaS产品。
 - [BK-CMDB](https://github.com/Tencent/bk-cmdb)：蓝鲸配置平台是一个面向资产及应用的企业级配置管理平台。
-- [TencentBlueKing/iam-python-sdk](https://github.com/TencentBlueKing/iam-python-sdk) / [TencentBlueKing/iam-go-sdk](https://github.com/TencentBlueKing/iam-go-sdk)：蓝鲸权限中心SDK
-
+- [BK-JOB](https://github.com/Tencent/bk-job)：蓝鲸作业平台(Job)是一套运维脚本管理系统，具备海量任务并发处理能力。
 
 ## Contributing
 
