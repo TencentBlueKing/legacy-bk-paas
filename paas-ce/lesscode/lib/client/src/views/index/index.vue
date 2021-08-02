@@ -658,6 +658,7 @@
             window.removeEventListener('unload', this.relasePage)
             this.resizeObserve.disconnect()
             this.relasePage()
+            this.lockNotify && this.lockNotify.close()
         },
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
@@ -767,9 +768,9 @@
                                 'line-height': '26px'
                             }
                         }, [
-                            '当前页面正在被',
+                            '当前画布正在被',
                             this.userText(user),
-                            '编辑，您暂无编辑权限，如需操作请联系其退出，如仅需查看页面最新状态，请直接',
+                            '编辑，您暂无编辑权限，如需操作请联系其退出编辑，如仅需查看页面最新状态，请直接',
                             this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
 
                         ])
@@ -1338,7 +1339,10 @@
             /**
              * 清空页面已拖拽的元素
              */
-            handleClearAll () {
+            async handleClearAll () {
+                const isLock = await this.checkLockStatus('lock')
+                if (isLock) return // 如果被锁，不可清空
+
                 const me = this
                 me.$bkInfo({
                     title: '确定清空所有组件元素？',
