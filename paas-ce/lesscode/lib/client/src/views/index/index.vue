@@ -715,7 +715,7 @@
                 try {
                     const status = await this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId })
                     if (status.isLock) {
-                        if (this.lockNotify !== null) return
+                        if (this.lockNotify !== null) return true// 当前有弹窗，代表无权限
                         const messageType = `${type}-${status.accessible ? 'valiad' : 'invaliad'}`
                         this.lockNotify = this.$bkNotify({
                             title: '暂无编辑权限',
