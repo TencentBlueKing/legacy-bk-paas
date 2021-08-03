@@ -169,6 +169,15 @@ export const updatePage = async (ctx) => {
     try {
         const { pageData, customCompData, projectId, pageCode, functionData, templateData, usedVariableMap } = ctx.request.body
         const editPage = getRepository(Page).create(pageData)
+        const userInfo = ctx.session.userInfo || {}
+
+        const lockStatus = await getPageLockStatus(ctx, pageData)
+        if (lockStatus.isLock && lockStatus.activeUser !== userInfo.username) {
+            return ctx.send({
+                code: -1,
+                message: '当前画布无编辑权，无法保存'
+            })
+        }
 
         const result = await getConnection().transaction(async transactionalEntityManager => {
             const page = await transactionalEntityManager.save(editPage)
@@ -480,8 +489,8 @@ export const verifyPreview = async (ctx) => {
     }
 }
 
-const getPageLockStatus = async ctx => {
-    const { pageId } = ctx.request.query || ctx.request.body
+const getPageLockStatus = async (ctx, pageData) => {
+    const pageId = ctx.request.query.pageId || ctx.request.body.pageId || pageData.id
     const pageResp = await getRepository(Page).findOne(pageId) || {}
     const { activeUser, activeTime } = pageResp
 
@@ -489,7 +498,7 @@ const getPageLockStatus = async ctx => {
         isLock: false,
         activeUser: activeUser,
         accessible: false,
-        pageId: pageId || ctx.request.body.pageId
+        pageId: pageId
         
     }
 
@@ -600,7 +609,6 @@ export const relasePage = async ctx => {
                 code: 0,
                 message: '解锁成功'
             })
-            console.log(currentPage.activeUser, 'release', activeUser, userInfo.username)
         } else {
             ctx.send({
                 code: -1,

@@ -26,14 +26,16 @@ export default {
             prop: 'rate',
             propTypes: ['number'],
             val: '',
-            valType: 'variable'
+            valType: 'variable',
+            modifiers: ['sync']
         }
     ],
     props: {
         rate: {
             type: 'number',
             val: 0,
-            tips: '显示的分数'
+            tips: '显示的分数',
+            modifiers: ['sync']
         },
         width: {
             type: 'number',
