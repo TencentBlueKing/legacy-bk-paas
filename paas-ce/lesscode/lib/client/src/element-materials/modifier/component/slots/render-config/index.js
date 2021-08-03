@@ -1,6 +1,12 @@
 import bkRenderMap from './bk'
 import elementRenderMap from './element'
 
+const html2Escape = html => {
+    return html.replace(/[<>&"]/g, (c) => {
+        return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]
+    })
+}
+
 const baseRenderMap = {
     'html' ({ val, type }) {
         let res = ''
@@ -18,7 +24,7 @@ const baseRenderMap = {
         let res = ''
         switch (type) {
             case 'value':
-                res = val
+                res = html2Escape(val)
                 break
             case 'variable':
                 res = `{{${val}}}`
