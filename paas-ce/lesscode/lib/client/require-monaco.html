@@ -14,46 +14,46 @@
     html-loader 用来 load require-monaco.html，html-webpack-plugin 用来给 index.html 传递一些参数
 -->
 <script>
-    /**
+/**
      * 简单的 loadScript
      *
      * @param {string} url js 地址
      * @param {Function} callback 回调函数
      */
-    function loadScript (url, callback) {
-        const script = document.createElement('script')
-        script.async = true
-        script.src = url
+function loadScript (url, callback) {
+    const script = document.createElement('script')
+    script.async = true
+    script.src = url
 
-        script.onerror = () => {
-            callback(new Error('Failed to load: ' + url))
-        }
-
-        script.onload = () => {
-            callback()
-        }
-
-        document.getElementsByTagName('head')[0].appendChild(script)
+    script.onerror = () => {
+        callback(new Error('Failed to load: ' + url))
     }
 
-    const urlPrefix = window.location.origin + STATIC_URL
+    script.onload = () => {
+        callback()
+    }
 
-    loadScript(urlPrefix + '/monaco-editor/min/vs/loader.js', function () {
-        require.config({
-            paths: {
-                'vs': urlPrefix + '/monaco-editor/min/vs/'
-            }
-        })
-        window.MonacoEnvironment = {
-            getWorkerUrl: function (workerId, label) {
-                return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
-                    self.MonacoEnvironment = {
-                        baseUrl: '${urlPrefix}/monaco-editor/min/'
-                    }
-                    importScripts('${urlPrefix}/monaco-editor/min/vs/base/worker/workerMain.js')`
-                )}`
-            }
+    document.getElementsByTagName('head')[0].appendChild(script)
+}
+
+const urlPrefix = window.location.origin + STATIC_URL
+
+loadScript(urlPrefix + '/monaco-editor/min/vs/loader.js', function () {
+    require.config({
+        paths: {
+            'vs': urlPrefix + '/monaco-editor/min/vs/'
         }
-        require(['vs/editor/editor.main'], function () {})
     })
+    window.MonacoEnvironment = {
+        getWorkerUrl: function (workerId, label) {
+            return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+                        self.MonacoEnvironment = {
+                            baseUrl: '${urlPrefix}/monaco-editor/min//'
+                        }
+                        importScripts('${urlPrefix}/monaco-editor/min/vs/base/worker/workerMain.js')`
+            )}`
+        }
+    }
+    require(['vs/editor/editor.main'], function () {})
+})
 </script>

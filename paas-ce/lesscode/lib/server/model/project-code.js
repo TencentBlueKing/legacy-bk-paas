@@ -210,19 +210,20 @@ const projectCode = {
 
                     // 预览路由优化使用path跳转（防止因name不存在自动跳到首页），生成代码使用name跳转，因导航菜单中已经使用name跳转
                     const childRoute = routeList.map((route) => {
+                        const meta = `meta: { pageName: '${route.pageName}' }`
                         if (route.redirectRoute) {
                             const { layoutPath, path } = route.redirectRoute
                             const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
                             const routeName = route.pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${route.id}`
                             const routeComponent = route.pageCode ? ` component: ${route.pageCode},` : ''
-                            return `{ path: '${route.path}', name: '${routeName}',${routeComponent} redirect: { path: '${fullPath}' } }`
+                            return `{ path: '${route.path}', name: '${routeName}',${routeComponent} redirect: { path: '${fullPath}' }, ${meta} }`
                         } else if (route.pageId !== -1) {
-                            return `{ path: '${route.path}', name: '${route.pageCode}', component: ${route.pageCode} }`
+                            return `{ path: '${route.path}', name: '${route.pageCode}', component: ${route.pageCode}, ${meta} }`
                         } else {
                             return `{ path: '${route.path}', redirect: { name: '404' } }`
                         }
                     })
-                    if (layout.path !== '/') childRoute.push(`{ path: '*', component: BkNotFound }`)
+                    if (layout.path !== '/') childRoute.push(`{ path: '*', component: BkNotFound, meta: { pageName: '404' } }`)
 
                     const currentFilePath = path.join(targetPath, `lib/client/src/views/${layout.name}/bkindex.vue`)
                     await this.writeViewCode(currentFilePath, { targetData: [] }, '', pathName, projectId, {}, '', layout.content, true, layout.layoutType, [])

@@ -36,7 +36,7 @@ export default {
     ],
     props: {
         value: {
-            type: 'string',
+            type: 'color',
             val: '#3A84FF'
         },
         size: {

@@ -90,6 +90,7 @@
     import TypeIcon from './strategy/icon'
     import TypeFormItem from './strategy/form-item'
     import TypeColor from './strategy/color'
+    import TypleElProps from './strategy/el-props'
 
     import { transformTipsWidth } from '@/common/util'
     import safeStringify from '@/common/json-safe-stringify'
@@ -182,7 +183,8 @@
                     'timeline': TypeSlotWrapper,
                     'carousel': TypeSlotWrapper,
                     'el-radio': TypeSlotWrapper,
-                    'el-checkbox': TypeSlotWrapper
+                    'el-checkbox': TypeSlotWrapper,
+                    'el-props': TypleElProps
                 }
 
                 let realType = config.type
@@ -218,7 +220,8 @@
                     'timeline': 'timeline',
                     'carousel': 'carousel',
                     'el-radio': 'el-radio',
-                    'el-checkbox': 'el-checkbox'
+                    'el-checkbox': 'el-checkbox',
+                    'el-props': 'el-props'
                 }
                 const valueMap = {
                     'text': 'string',

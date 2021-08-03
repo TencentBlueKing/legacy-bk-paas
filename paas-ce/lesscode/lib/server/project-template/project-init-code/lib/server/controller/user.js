@@ -2,7 +2,6 @@ const axios = require('axios')
 const querystring = require('querystring')
 const https = require('https')
 
-
 const user = {
     async getUser (ctx) {
         try {

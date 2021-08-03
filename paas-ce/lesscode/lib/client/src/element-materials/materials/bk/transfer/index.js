@@ -24,6 +24,16 @@ export default {
     directives: [
         {
             type: 'v-bind',
+            prop: 'target-list',
+            propTypes: ['array'],
+            val: '',
+            valType: 'variable',
+            tips () {
+                return '已选择数据，数据格式[\'shenzhen\', \'guangzhou\']'
+            }
+        },
+        {
+            type: 'v-bind',
             prop: 'source-list',
             propTypes: ['array'],
             val: '',
@@ -76,7 +86,7 @@ export default {
         'target-list': {
             type: 'array',
             val: [],
-            tips: '已选择的数据'
+            tips: '已选择数据，数据格式[\'shenzhen\', \'guangzhou\']'
         },
         searchable: {
             type: 'boolean',
