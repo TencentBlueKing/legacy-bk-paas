@@ -1011,3 +1011,58 @@
   dest_http_method: POST
   suggest_method: POST
   is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: package_status_operation
+  label: 插件包状态类操作
+  label_en: null
+  dest_path: /backend/api/plugin/package_status_operation/
+  path: /v2/nodeman/backend/api/plugin/package_status_operation/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: metric_list
+  label: 自监控指标检查
+  label_en: null
+  dest_path: /backend/api/healthz/
+  path: /v2/nodeman/backend/api/healthz/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: query_host_subscriptions
+  label: 获取主机订阅列表
+  label_en: null
+  dest_path: /backend/api/subscription/query_host_subscriptions/
+  path: /v2/nodeman/backend/api/subscription/query_host_subscriptions/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: list_cloud_area
+  label: 云区域列表
+  label_en: null
+  dest_path: /api/cloud/
+  path: /v2/nodeman/api/cloud/list_cloud_area/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: create_cloud_area
+  label: 创建云区域
+  label_en: null
+  dest_path: /api/cloud/
+  path: /v2/nodeman/api/cloud/create_cloud_area/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true

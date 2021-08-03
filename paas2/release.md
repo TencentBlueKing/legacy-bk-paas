@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.24
+    - update: esb update bk_log/bk_nodeman confapis
+
 # 2.12.23
     - update: esb update jobv3/bk_log confapis
     - update: esb cc transfer_host_to_resourcemodule add parameter bk_module_id
