@@ -298,3 +298,14 @@
   dest_path: /api/v1/databus/storage/
   dest_http_method: PUT
   is_hidden: True
+
+- path: /v2/bk_log/databus_storage/connectivity_detect/
+  name: databus_storage_connectivity_detect
+  label: 日志平台-连通性测试
+  label_en: bk_log es connectivity detect
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/storage/connectivity_detect/
+  dest_http_method: POST
+  is_hidden: True
