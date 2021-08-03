@@ -321,6 +321,8 @@
             baseComponentList.splice(0, 0, ...allComponentConf['bk'])
 
             return {
+                lockNotify: null,
+                lockCheckTimer: null,
                 leftNavTabList: [
                     {
                         icon: 'bk-drag-custom-comp-default',
@@ -448,6 +450,7 @@
             }
         },
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters(['mainContentLoading']),
             ...mapGetters('drag', [
                 'draggableSourceGroup',
@@ -499,9 +502,11 @@
 
             targetData: {
                 get () {
+                    console.warn('get Target')
                     return this.$store.state.drag.targetData
                 },
                 set (value) {
+                    console.warn('set Target')
                     this.setTargetData(value)
                 }
             },
@@ -522,6 +527,12 @@
 
                 this.panelMap.base.props.componentList = this.baseComponentList
                 this.panelMap.base.props.componentGroupList = allComponentConf[`${v}ComponentGroupList`]
+            },
+            targetData: {
+                deep: true,
+                handler () {
+                    this.lockStatsuPolling('lock')
+                }
             }
         },
         async created () {
@@ -637,13 +648,17 @@
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
             window.addEventListener('beforeunload', this.beforeunloadConfirm)
+            window.addEventListener('unload', this.relasePage)
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)
             window.removeEventListener('keyup', this.judgeCtrl)
             window.removeEventListener('click', this.toggleQuickOperation, true)
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
+            window.removeEventListener('unload', this.relasePage)
             this.resizeObserve.disconnect()
+            this.relasePage()
+            this.lockNotify && this.lockNotify.close()
         },
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
@@ -680,6 +695,144 @@
                 })
                 this.resizeObserve.observe(canvas)
             },
+            relasePage () {
+                const data = new FormData()
+                data.append('activeUser', this.user.username)
+                data.append('pageId', this.pageId)
+                navigator.sendBeacon('/api/page/releasePage', data)
+            },
+            async lockStatsuPolling (type) {
+                const interval = 20 * 1000 // 节流，状态检查每20s一次
+                if (this.lockCheckTimer === null) {
+                    await this.checkLockStatus(type)
+                    this.lockCheckTimer = setTimeout(() => {
+                        clearTimeout(this.lockCheckTimer)
+                        this.lockCheckTimer = null
+                    }, interval)
+                }
+            },
+            async checkLockStatus (type) {
+                try {
+                    const status = await this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId })
+                    if (status.isLock) {
+                        if (this.lockNotify !== null) return true// 当前有弹窗，代表无权限
+                        const messageType = `${type}-${status.accessible ? 'valiad' : 'invaliad'}`
+                        this.lockNotify = this.$bkNotify({
+                            title: '暂无编辑权限',
+                            theme: 'warning',
+                            delay: 0,
+                            onClose: () => {
+                                this.lockNotify = null
+                            },
+                            message: this.getLockMessage(messageType, status.activeUser)
+                        })
+                        return true
+                    } else { // 未加锁，更新当前画布的加锁者为当前用户
+                        this.$store.dispatch('page/updatePageLock', { data: {
+                            pageId: this.pageId
+                        } })
+                        return false
+                    }
+                } catch (error) {
+                    throw Error({
+                        message: error
+                    })
+                }
+            },
+            userText (text) {
+                const h = this.$createElement
+                return h('span', {
+                    style: {
+                        color: '#EA3636'
+                    }
+                }, [text])
+            },
+            hpyerTextGenerator (text, handler) {
+                const h = this.$createElement
+                return h('span', {
+                    style: {
+                        cursor: 'pointer',
+                        color: '#3a84ff'
+                    },
+                    on: {
+                        click: handler
+                    }
+                }, [text])
+            },
+            getLockMessage (type, user) {
+                const h = this.$createElement
+                switch (type) {
+                    case 'lock-invaliad':
+                        return h('p', {
+                            style: {
+                                'line-height': '26px'
+                            }
+                        }, [
+                            '当前画布正在被',
+                            this.userText(user),
+                            '编辑，您暂无编辑权限，如需操作请联系其退出编辑，如仅需查看页面最新状态，请直接',
+                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
+
+                        ])
+                    case 'lock-valiad':
+                        return h('p', {
+                            style: {
+                                'line-height': '26px'
+                            }
+                        }, [
+                            '当前页面正在被',
+                            this.userText(user),
+                            '编辑，如需获取操作，可点击',
+                            this.hpyerTextGenerator('获取权限', this.occupyPage.bind(this)),
+                            '，如仅需查看页面最新状态，请直接',
+                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
+                        ])
+                    case 'taked-invaliad':
+                        return h('p', {
+                            style: {
+                                'line-height': '26px'
+                            }
+                        }, [
+                            '由于您长时间未操作，页面编辑权已被释放；当前页面正在被',
+                            this.userText(user),
+                            '编辑，如仍需操作请联系其退出，如仅需查看页面最新状态，请直接',
+                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
+                        ])
+                    case 'taked-valiad':
+                        return h('p', {
+                            style: {
+                                'line-height': '26px'
+                            }
+                        }, [
+                            '由于您长时间未操作，页面编辑权已被释放；当前页面正在被',
+                            this.userText(user),
+                            '编辑，如需获取操作，可点击',
+                            this.hpyerTextGenerator('获取权限', this.occupyPage.bind(this)),
+                            '获取权限，如仅需查看页面最新状态，请直接',
+                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
+                        ])
+                }
+            },
+            async occupyPage () {
+                try {
+                    const resp = await this.$store.dispatch('page/occupyPage', {
+                        data: {
+                            pageId: this.pageId
+                        }
+                    })
+                    if (resp.activeUser === this.user.username) {
+                        this.lockNotify && this.lockNotify.close()
+                        this.$bkMessage({
+                            message: '抢占成功',
+                            theme: 'success'
+                        })
+                    }
+                } catch (error) {
+                    throw Error({
+                        message: error
+                    })
+                }
+            },
             isToolItemActive (item) {
                 if (item.text === '快捷键') {
                     return this.showQuickOperation === true
@@ -713,11 +866,15 @@
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
                         this.$store.dispatch('page/getList', { projectId: this.projectId }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
+                        this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
                         this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, config: { fromCache: true } }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
                         this.getAllGroupFuncs(this.projectId)
                     ])
+
+                    await this.lockStatsuPolling('lock') // 处理加锁逻辑
+
                     await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
                     // update targetdata
                     const content = pageDetail.content
@@ -1182,7 +1339,10 @@
             /**
              * 清空页面已拖拽的元素
              */
-            handleClearAll () {
+            async handleClearAll () {
+                const isLock = await this.checkLockStatus('lock')
+                if (isLock) return // 如果被锁，不可清空
+
                 const me = this
                 me.$bkInfo({
                     title: '确定清空所有组件元素？',
@@ -1319,6 +1479,9 @@
             },
 
             async handleSave (callBack, from) {
+                const isLock = await this.checkLockStatus('lock')
+                if (isLock) return // 如果被锁，不可保存
+
                 if (this.isSaving) {
                     return
                 }
@@ -1386,7 +1549,11 @@
                     const { modifiers, prop, type, val, valType } = dir
                     function generateUseInfo (variableId) {
                         const useInfo = { type, componentId: id, prop, modifiers, val }
-                        const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
+                        // const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
+                        if (!usedVariableMap[variableId]) {
+                            usedVariableMap[variableId] = []
+                        }
+                        const useInfos = usedVariableMap[variableId]
                         useInfos.push(useInfo)
                     }
                     if (val !== '' && valType === 'variable') {

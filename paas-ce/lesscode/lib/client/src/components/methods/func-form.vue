@@ -55,26 +55,37 @@
                     </bk-select>
                 </bk-form-item>
                 <bk-form-item label="Api Data" :rules="[objRule]" property="funcApiData" :key="`${form.id}funcApiData`" error-display-type="normal" :desc="{ width: 350, content: 'HTTP 请求（例如 POST）的请求体数据包。如果是GET请求，请在 Api Url 中填写请求头参数' }">
-                    <bk-input v-model="form.funcApiData" type="textarea" :rows="3" :maxlength="100" :placeholder="`请输入请求体数据包，例如：{ name: {{name}}, age: 17 }`"></bk-input>
+                    <bk-input v-model="form.funcApiData" type="textarea" :rows="3" :maxlength="500" :placeholder="`请输入请求体数据包，例如：{ name: {{name}}, age: 17 }`"></bk-input>
                 </bk-form-item>
             </template>
             <bk-form-item label="函数简介" property="funcSummary" :key="`${form.id}funcSummary`">
                 <bk-input v-model="form.funcSummary" type="textarea" :rows="3" :maxlength="100"></bk-input>
             </bk-form-item>
         </bk-form>
-        <monaco :value.sync="form.funcBody" :func-type="form.funcType" :height="monacoHeight" :width="monacoWidth" :full-screen="size !== 'small'" class="monaco" ref="monaco"></monaco>
+        <monaco-func :value.sync="form.funcBody"
+            :func-type="form.funcType"
+            :height="monacoHeight"
+            :width="monacoWidth"
+            :func.sync="form"
+            class="monaco"
+            ref="monaco"
+        >
+            <template v-slot:tools>
+                <slot name="tools"></slot>
+            </template>
+        </monaco-func>
     </section>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
-    import monaco from './monaco'
+    import monacoFunc from './monaco-func.vue'
     import dayjs from 'dayjs'
     import { isJsKeyWord } from '@/common/util'
 
     export default {
         components: {
-            monaco
+            monacoFunc
         },
 
         props: {
@@ -281,11 +292,10 @@
                 })
             },
 
-            resize (width) {
+            resizeMonaco (width) {
                 const parent = document.querySelector('.method-layout')
                 const parentWidth = parent.offsetWidth
-                this.monacoWidth = 333 / 1033 * (parentWidth - width)
-                this.$nextTick(this.$refs.monaco.resize)
+                this.monacoWidth = parentWidth - width - 350
             },
 
             changeTemType (id) {
@@ -328,22 +338,18 @@
         }
         .monaco {
             margin-top: 20px;
-            padding-top: 30px;
-            background-color: #1e1e1e;
         }
     }
 
     .small {
-        display: flex;
-        flex-direction: row;
         padding: 0;
         .add-main-form{
-            flex: 333;
-            max-height: 100%;
-            min-width: 180px;
+            float: left;
+            width: 350px;
+            height: 100%;
             overflow-y: auto;
             margin: 7px 0;
-            padding: 0 20px;
+            padding: 0 20px 20px;
             &::-webkit-scrollbar {
                 width: 6px;
                 height: 5px;
@@ -356,8 +362,8 @@
         }
         .monaco {
             margin: 0;
-            flex: 700;
             height: 100%;
+            margin-left: 350px;
         }
     }
 </style>

@@ -10,7 +10,6 @@
  */
 
 import Vue from 'vue'
-
 // 全量引入
 import './fully-import'
 
@@ -20,6 +19,26 @@ import './fully-import'
 const Message = Vue.prototype.$bkMessage
 
 let messageInstance = null
+
+export const messageHtmlError = (errMessage, delay = 3000, ellipsisLine = 0) => {
+    messageInstance && messageInstance.close()
+    const messageComponent = Vue.compile(errMessage)
+    const globalComponent = global.mainComponent
+    const { $options, $createElement } = globalComponent
+    const _staticRenderFns = $options.staticRenderFns
+
+    $options.staticRenderFns = messageComponent.staticRenderFns
+    const message = messageComponent.render.call(globalComponent, $createElement)
+    $options.staticRenderFns = _staticRenderFns
+
+    messageInstance = Message({
+        message,
+        delay,
+        theme: 'error',
+        ellipsisLine,
+        extCls: 'auto-width'
+    })
+}
 
 export const messageError = (message, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
@@ -59,6 +78,7 @@ export const messageWarn = (message, delay = 3000) => {
     })
 }
 
+Vue.prototype.messageHtmlError = messageHtmlError
 Vue.prototype.messageError = messageError
 Vue.prototype.messageSuccess = messageSuccess
 Vue.prototype.messageInfo = messageInfo

@@ -18,6 +18,10 @@ const { CODE, isAjaxReq } = require('../util')
 const { findUserByBk, addUser } = require('../controller/user')
 const { setRequestContext } = require('./request-context')
 const { createDemoProject } = require('../controller/project')
+const authWhiteList = [
+    '/static/monaco-editor/min/vs/base/worker/workerMain.js',
+    '/static/monaco-editor/min//vs/language/typescript/tsWorker.js'
+]
 
 module.exports = () => {
     const authMiddleware = async function (ctx, next) {
@@ -25,7 +29,10 @@ module.exports = () => {
             const bkToken = ctx.cookies.get('bk_token')
             const hostUrl = httpConf.hostUrl.replace(/\/$/, '')
             const loginRedirectUrl = `${httpConf.loginUrl}?app_id=${httpConf.appCode}`
-            if (!bkToken) {
+            const isInWhiteList = authWhiteList.includes(ctx.originalUrl)
+            if (isInWhiteList) {
+                await next()
+            } else if (!bkToken) {
             // 非 ajax 异步请求，页面跳转到登录
                 if (!isAjaxReq(ctx.request)) {
                     ctx.status = 302
@@ -96,7 +103,7 @@ module.exports = () => {
             }
         } catch (error) {
             ctx.throwError({
-                status: error.status || CODE.BIZ.NOT_DEFINED,
+                status: error.status || 401,
                 code: error.code,
                 message: error.message
             })

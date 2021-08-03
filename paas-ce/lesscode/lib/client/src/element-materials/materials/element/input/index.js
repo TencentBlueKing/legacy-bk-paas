@@ -28,6 +28,9 @@ export default {
         name: 'clear', tips: '在点击由 clearable 属性生成的清空按钮时触发'
     }],
     styles: ['size', 'margin', 'display'],
+    renderStyles: {
+        width: '200px'
+    },
     directives: [
         {
             type: 'v-model',

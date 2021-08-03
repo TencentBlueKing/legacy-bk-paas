@@ -169,6 +169,15 @@ export const updatePage = async (ctx) => {
     try {
         const { pageData, customCompData, projectId, pageCode, functionData, templateData, usedVariableMap } = ctx.request.body
         const editPage = getRepository(Page).create(pageData)
+        const userInfo = ctx.session.userInfo || {}
+
+        const lockStatus = await getPageLockStatus(ctx, pageData)
+        if (lockStatus.isLock && lockStatus.activeUser !== userInfo.username) {
+            return ctx.send({
+                code: -1,
+                message: '当前画布无编辑权，无法保存'
+            })
+        }
 
         const result = await getConnection().transaction(async transactionalEntityManager => {
             const page = await transactionalEntityManager.save(editPage)
@@ -476,6 +485,139 @@ export const verifyPreview = async (ctx) => {
     } catch (err) {
         ctx.throwError({
             message: err.message
+        })
+    }
+}
+
+const getPageLockStatus = async (ctx, pageData) => {
+    const pageId = ctx.request.query.pageId || ctx.request.body.pageId || pageData.id
+    const pageResp = await getRepository(Page).findOne(pageId) || {}
+    const { activeUser, activeTime } = pageResp
+
+    const pageLockStatus = {
+        isLock: false,
+        activeUser: activeUser,
+        accessible: false,
+        pageId: pageId
+        
+    }
+
+    const userInfo = ctx.session.userInfo || {}
+
+    if (activeUser !== null && userInfo.username !== activeUser) {
+        const invalidTime = 30 * 60 * 1000
+        const accessedTime = 10 * 60 * 1000
+        Object.assign(pageLockStatus, {
+            isLock: !(new Date().getTime() - new Date(activeTime).getTime() > invalidTime),
+            activeUser: activeUser,
+            accessible: new Date().getTime() - new Date(activeTime).getTime() > accessedTime
+        })
+    }
+
+    return pageLockStatus
+}
+
+const updagePageActiveInfo = async (pageId, username) => {
+    const repository = getRepository(Page)
+    const currentPage = await repository.findOne(pageId) || {}
+
+    currentPage.activeUser = username
+    currentPage.activeTime = new Date()
+    repository.save(currentPage)
+
+    return currentPage
+}
+
+// 获取当前页面状态，是否空闲、可抢占等
+export const pageLockStatus = async ctx => {
+    try {
+        const pageLockStatus = await getPageLockStatus(ctx)
+        
+        ctx.send({
+            code: 0,
+            message: 'OK',
+            data: pageLockStatus
+        })
+    } catch (error) {
+        ctx.throwError({
+            message: error
+        })
+    }
+}
+
+// 更新当前活跃用户和及活跃时间
+export const updatePageActive = async ctx => {
+    try {
+        const pageId = ctx.request.body.pageId
+        const userInfo = ctx.session.userInfo || {}
+        const currentPage = await updagePageActiveInfo(pageId, userInfo.username)
+    
+        ctx.send({
+            code: 0,
+            message: 'OK',
+            data: {
+                activeUser: currentPage.activeUser,
+                activeTime: currentPage.activeTime
+            }
+        })
+    } catch (error) {
+        ctx.throwError({
+            message: error
+        })
+    }
+}
+
+// 抢占画布所有权
+export const occupyPage = async ctx => {
+    try {
+        const curPageStatus = await getPageLockStatus(ctx)
+        const userInfo = ctx.session.userInfo || {}
+        const { accessible, pageId } = curPageStatus
+        if (!accessible) {
+            ctx.send({
+                code: -1,
+                message: '没有抢占权限'
+            })
+        }
+
+        const currentPage = await updagePageActiveInfo(pageId, userInfo.username)
+        ctx.send({
+            code: 0,
+            message: 'ok',
+            data: {
+                activeUser: currentPage.activeUser,
+                activeTime: currentPage.activeTime
+            }
+        })
+    } catch (error) {
+        ctx.throwError({
+            message: error
+        })
+    }
+}
+
+export const relasePage = async ctx => {
+    try {
+        const { pageId, activeUser } = ctx.request.body
+        const repository = getRepository(Page)
+        const currentPage = await repository.findOne(pageId) || {}
+        
+        if (activeUser === currentPage.activeUser) {
+            currentPage.activeUser = null
+            repository.save(currentPage)
+            ctx.send({
+                code: 0,
+                message: '解锁成功'
+            })
+        } else {
+            ctx.send({
+                code: -1,
+                message: '锁定用户与当前用户不一致，无法解锁'
+            })
+        }
+    } catch (error) {
+        throw ctx.Erro({
+            message: error
         })
     }
 }

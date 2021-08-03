@@ -60,4 +60,17 @@ export default class extends Base {
         comment: '更新人，默认当前用户'
     })
     updateUser
+
+    @Column({
+        type: 'varchar',
+        nullable: true,
+        comment: '最后活跃用户'
+    })
+    activeUser
+
+    @Column({
+        type: 'datetime',
+        comment: '最后活跃时间'
+    })
+    activeTime
 }

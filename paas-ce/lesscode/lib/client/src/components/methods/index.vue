@@ -89,7 +89,14 @@
                 </section>
 
                 <main class="func-main">
-                    <func-form class="func-form" size="small" :func-data="curFunc" ref="func" @formChange="formChanged = true"></func-form>
+                    <func-form class="func-form"
+                        size="small"
+                        ref="func"
+                        :func-data="curFunc"
+                        @formChange="formChanged = true"
+                    >
+                        <i class="bk-drag-icon bk-drag-close-line icon-style" @click="closeFunction" slot="tools"></i>
+                    </func-form>
 
                     <footer class="main-footer">
                         <bk-button theme="primary" @click="saveFunc" :loading="isSaving" :disabled="!formChanged">保存</bk-button>
@@ -115,18 +122,6 @@
                         <bk-button @click="delObj.show = false" :disabled="delObj.loading">取消</bk-button>
                     </div>
                 </bk-dialog>
-
-                <section class="icon-style">
-                    <span v-if="!isFull">
-                        <i class="bk-icon icon-info-circle" v-bk-tooltips="methodTip()"></i>
-                        <i class="bk-drag-icon bk-drag-code-full-screen" @click="openFullScreen"></i>
-                        <i class="bk-drag-icon bk-drag-close-line" @click="closeFunction"></i>
-                    </span>
-                    <span v-else @click="exitFullScreen" class="un-full-screen" style="right: 20px;">
-                        <i class="bk-drag-icon bk-drag-un-full-screen"></i>
-                        <span>退出全屏</span>
-                    </span>
-                </section>
             </layout>
         </article>
     </transition>
@@ -221,10 +216,8 @@
             show (val) {
                 if (val) {
                     this.initData()
-                    window.addEventListener('resize', this.handleFullScreen)
                 } else {
                     this.templateFunc = {}
-                    window.removeEventListener('resize', this.handleFullScreen)
                 }
             }
         },
@@ -240,20 +233,6 @@
                 'addGroup'
             ]),
             ...mapActions('variable', ['getAllVariable']),
-
-            methodTip () {
-                const commentMap = {
-                    0: ` 1. 空白函数，函数内容完全由用户编写\r\n 2. 这里编辑管理的函数，用于画布页面的属性配置和事件绑定\r\n 3. 用于属性时：函数需要返回值，该返回值将会赋值给属性\r\n 4. 用于事件时：函数将在事件触发时执行\r\n 5. 可以使用 lesscode.变量标识，必须通过编辑器自动补全功能选择对应变量，来获取或者修改变量值\r\n 6. 可以使用 lesscode.方法名，必须通过编辑器自动补全功能选择对应函数，来调用项目中的函数\r\n 7. 用于属性时示例如下：\r\n    return Promise.all([\r\n        this.$http.get(\'${location.origin}/api/data/getMockData\'),\r\n        this.$http.post(\'${location.origin}/api/data/postMockData\', { value: 2 })\r\n    ]).then(([getDataRes, postDataRes]) => {\r\n        return [...getDataRes.data, ...postDataRes.data]\r\n    })\r\n`,
-                    1: ` 1. 远程函数，系统将会根据参数组成 Ajax 请求，由用户在这里编写 Ajax 回调函数\r\n 2. 这里编辑管理的函数，用于画布页面的属性配置和事件绑定\r\n 3. 用于属性时：函数需要返回值，该返回值将会赋值给属性\r\n 4. 用于事件时：事件触发时候，系统将发起 Ajax 请求，然后执行用户编写的回调函数\r\n 5. 可以使用 lesscode.变量标识，必须通过编辑器自动补全功能选择对应变量，来获取或者修改变量值\r\n 6. 可以使用 lesscode.方法名，必须通过编辑器自动补全功能选择对应函数，来调用项目中的函数\r\n 7. 示例如下：return res.data`
-                }
-                const funcForm = this.$refs.func || {}
-                const curEditFunc = funcForm.form || {}
-                return {
-                    placement: 'left-start',
-                    theme: 'light',
-                    content: `<pre class="component-method-tip">${commentMap[+curEditFunc.funcType] || ''}</pre>`
-                }
-            },
 
             initData () {
                 this.isLoadingGroup = true
@@ -476,10 +455,9 @@
                         postData.projectId = this.projectId
                     }
                     this.isSaving = true
-                    const h = this.$createElement
                     const varWhere = { projectId: this.$route.params.projectId, pageCode: this.pageDetail.pageCode, effectiveRange: 0 }
                     const editFunc = () => {
-                        return this.editFunc({ groupId: this.curGroup.id, func: postData, h, varWhere }).then((res) => {
+                        return this.editFunc({ groupId: this.curGroup.id, func: postData, varWhere }).then((res) => {
                             if (!res) return
                             const projectId = this.$route.params.projectId
                             return this.getAllGroupFuncs(projectId).then(() => {
@@ -492,7 +470,7 @@
                     }
                     const addFunc = () => {
                         const groupId = this.templateFunc.groupId
-                        return this.addFunc({ groupId, func: postData, h, varWhere }).then((res) => {
+                        return this.addFunc({ groupId, func: postData, varWhere }).then((res) => {
                             if (!res) return
                             if (!this.openGroupIds.includes(groupId)) this.openGroupIds.push(groupId)
                             this.chooseId = res.id
@@ -603,40 +581,7 @@
             },
 
             resizeLayOut (width) {
-                this.$refs.func.resize(width)
-            },
-
-            exitFullScreen () {
-                const exitMethod = document.exitFullscreen // W3C
-                if (exitMethod) {
-                    exitMethod.call(document)
-                }
-            },
-
-            openFullScreen () {
-                const element = this.$refs.methodMain.$el
-                const fullScreenMethod = element.requestFullScreen // W3C
-                    || element.webkitRequestFullScreen // FireFox
-                    || element.webkitExitFullscreen // Chrome等
-                    || element.msRequestFullscreen // IE11
-                if (fullScreenMethod) {
-                    fullScreenMethod.call(element)
-                } else {
-                    this.$bkMessage({
-                        showClose: true,
-                        message: '此浏览器不支持全屏操作，请使用chrome浏览器',
-                        type: 'warning'
-                    })
-                }
-            },
-
-            handleFullScreen () {
-                this.isFull = document.fullscreenElement
-                this.$nextTick(() => {
-                    const leftEle = document.querySelector('.func-left')
-                    const width = leftEle.offsetWidth
-                    if (this.$refs.func) this.$refs.func.resize(width)
-                })
+                this.$refs.func.resizeMonaco(width)
             }
         }
     }
@@ -653,11 +598,10 @@
         z-index: 2000;
         .function-main {
             position: absolute;
-            width: 67.7%;
-            height: 61.5% !important;
-            min-height: 61.5%;
-            top: 19.8%;
-            left: 16.1%;
+            width: 86%;
+            height: 74%;
+            top: 13%;
+            left: 7%;
             border-radius: 2px;
             box-shadow: 0px 4px 12px 0px rgba(0,0,0,0.2);
         }
@@ -705,6 +649,7 @@
         overflow: hidden;
         .func-form {
             height: calc(100% - 50px);
+            overflow: hidden;
         }
         .main-footer {
             padding: 9px 20px;
@@ -917,33 +862,6 @@
                 &:first-child {
                     margin-right: 10px;
                 }
-            }
-        }
-    }
-    .icon-style {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        z-index: 1;
-        color: #C4C6CC;
-        cursor: pointer;
-        .bk-drag-icon {
-            width: 16px;
-            height: 16px;
-            color: #979ba5;
-            display: inline-block;
-        }
-        .un-full-screen {
-            width: 108px;
-            height: 36px;
-            line-height: 36px;
-            text-align: center;
-            opacity: 0.7;
-            background: #000000;
-            border-radius: 2px;
-            padding: 3px 6px;
-            &:hover {
-                opacity: 0.9;
             }
         }
     }
