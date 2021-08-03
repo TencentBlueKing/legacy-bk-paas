@@ -12,6 +12,7 @@
 import { messageSuccess } from '@/common/bkmagic'
 import domToImage from './dom-to-image'
 import store from '@/store'
+import Vue from 'vue'
 
 /***
  * 遍历targetData
@@ -21,24 +22,29 @@ import store from '@/store'
 export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
     if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
     const interactiveComponents = store.getters['components/interactiveComponents']
-    const renderProps = grid.renderProps || {}
-    const slots = renderProps.slots || {}
+    const renderSlots = grid.renderSlots || {}
+    const slots = renderSlots.default || {}
     let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
     let isLayoutSupportDialog = false
     if (interactiveComponents.includes(grid.type)) { // 交互式组件特殊处理
-        const slot = grid.renderProps.slots.val
-        columns = typeof slot === 'string' ? [] : slot.renderProps.slots.val
+        const slot = grid.type === 'bk-sideslider' ? (((grid.renderSlots || {}).content || {}).val || {}) : (((grid.renderSlots || {}).default || {}).val || {})
+        columns = typeof slot === 'string' ? [] : (((slot.renderSlots || {}).default || {}).val || [])
         isLayoutSupportDialog = typeof slot !== 'string'
     }
 
     columns.forEach((column, columnIndex) => {
         const children = column.children || []
         children.forEach((component, index) => {
+            const renderSlots = component.renderSlots || {}
+            const slotKeys = Object.keys(renderSlots)
             if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
                 walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
-            } else if (component.renderProps.slots && component.renderProps.slots.name === 'layout') {
-                childCallBack(component, children, index, grid, columnIndex)
-                walkGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
+            } else if (slotKeys.some(key => renderSlots[key].name === 'layout')) {
+                slotKeys.forEach((key) => {
+                    const slot = renderSlots[key]
+                    childCallBack(component, children, index, grid, columnIndex)
+                    walkGrid([], slot.val, childCallBack, parentCallBack, index, columnIndex)
+                })
             } else {
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
             }
@@ -60,6 +66,22 @@ export function findComponentParentGrid (targetData, id) {
         walkGrid(targetData, grid, callBack, callBack, index)
     })
     return componentParentGrid
+}
+
+/**
+ * 将html转换为Vnode
+ * @param {*} html html字符串
+ */
+export function transformHtmlToVnode (html) {
+    const htmlComponent = Vue.compile(html)
+    const globalComponent = global.mainComponent
+    const { $options, $createElement } = globalComponent
+    const _staticRenderFns = $options.staticRenderFns
+
+    $options.staticRenderFns = htmlComponent.staticRenderFns
+    const htmlVnode = htmlComponent.render.call(globalComponent, $createElement)
+    $options.staticRenderFns = _staticRenderFns
+    return htmlVnode
 }
 
 /**
@@ -540,13 +562,13 @@ export const findComponentParentRow = (target, componentId) => {
         if (curNode.componentId === componentId) {
             return target
         }
-        if (!curNode.renderProps.slots) {
+        if (!curNode.renderSlots.default) {
             continue
         }
-        if (curNode.renderProps.slots.type === 'column' || curNode.renderProps.slots.type === 'free-layout-item') {
-            if (curNode.renderProps.slots.val.length > 0) {
-                for (let j = 0; j < curNode.renderProps.slots.val.length; j++) {
-                    const curColumn = curNode.renderProps.slots.val[j]
+        if (curNode.renderSlots.default.type === 'column' || curNode.renderSlots.default.type === 'free-layout-item') {
+            if (curNode.renderSlots.default.val.length > 0) {
+                for (let j = 0; j < curNode.renderSlots.default.val.length; j++) {
+                    const curColumn = curNode.renderSlots.default.val[j]
                     const column = findComponentParentRow(curColumn.children, componentId)
                     if (column.length > 0) {
                         return column

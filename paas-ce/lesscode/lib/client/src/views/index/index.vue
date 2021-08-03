@@ -602,15 +602,17 @@
                     'margin-vertical': {
                         type: 'number',
                         val: 0
-                    },
-                    slots: {
-                        type: 'column',
-                        val: [{ span: 1, children: [], width: '100%' }]
                     }
                 },
                 renderStyles: {},
                 renderEvents: {},
-                renderDirectives: []
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'column',
+                        val: [{ span: 1, children: [], width: '100%' }]
+                    }
+                }
             }
             this.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
 
@@ -1362,15 +1364,17 @@
                                 'margin-vertical': {
                                     type: 'number',
                                     val: 0
-                                },
-                                slots: {
-                                    type: 'column',
-                                    val: [{ 'span': 1, 'children': [], 'width': '100%' }]
                                 }
                             },
                             renderStyles: {},
                             renderEvents: {},
-                            renderDirectives: []
+                            renderDirectives: [],
+                            renderSlots: {
+                                default: {
+                                    type: 'column',
+                                    val: [{ 'span': 1, 'children': [], 'width': '100%' }]
+                                }
+                            }
                         }
                         const pushData = {
                             oldTargetData: me.targetData,
@@ -1416,14 +1420,14 @@
                         }
                         if (item.children) {
                             del(item.children, cid)
-                        } else if (item.renderProps.slots && item.renderProps.slots.type === 'form-item') {
+                        } else if (item.renderSlots.default && item.renderSlots.default.type === 'form-item') {
                             // form表单内的元素不允许通过画布删除
                         } else if (
-                            item.renderProps.slots && (item.renderProps.slots.type === 'column' || item.renderProps.slots.type === 'free-layout-item')
+                            item.renderSlots.default && (item.renderSlots.default.type === 'column' || item.renderSlots.default.type === 'free-layout-item')
                         ) {
-                            del(item.renderProps.slots.val, cid)
-                        } else if (item.renderProps.slots && item.renderProps.slots.name === 'layout') {
-                            del([item.renderProps.slots.val], cid)
+                            del(item.renderSlots.default.val, cid)
+                        } else if (item.renderSlots.default && item.renderSlots.default.type === 'layout') {
+                            del([item.renderSlots.default.val], cid)
                         }
                     }
                     return ''
@@ -1546,14 +1550,10 @@
                 // 记录已使用的变量
                 const usedVariableMap = {}
                 function addUsedVariable (id, dir) {
-                    const { modifiers, prop, type, val, valType } = dir
+                    const { modifiers, prop, type, val, valType, slot } = dir
                     function generateUseInfo (variableId) {
-                        const useInfo = { type, componentId: id, prop, modifiers, val }
-                        // const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
-                        if (!usedVariableMap[variableId]) {
-                            usedVariableMap[variableId] = []
-                        }
-                        const useInfos = usedVariableMap[variableId]
+                        const useInfo = { type, componentId: id, prop, modifiers, val, slot }
+                        const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
                         useInfos.push(useInfo)
                     }
                     if (val !== '' && valType === 'variable') {
@@ -1599,10 +1599,21 @@
                             const hasMethod = payload && payload.methodCode
                             if (!hasMethod) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为 remote 但未选择远程函数，请修改后再试`
                         }
+                    })
+
+                    const renderSlots = component.renderSlots || {}
+                    Object.keys(renderSlots).forEach((key) => {
+                        const { type, payload = {} } = renderSlots[key] || {}
+
                         if (payload.variableData && payload.variableData.val) {
                             const { val, valType } = payload.variableData
-                            const dir = { prop: 'slots', type: 'v-bind', val, valType }
+                            const dir = { slot: key, type: 'slots', val, valType }
                             addUsedVariable.call(this, component.componentId, dir)
+                        }
+
+                        if (type === 'remote') {
+                            const hasMethod = payload.methodData && payload.methodData.methodCode
+                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${key}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
                         }
                     })
 

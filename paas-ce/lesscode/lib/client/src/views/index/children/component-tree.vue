@@ -85,7 +85,7 @@
                         name: item['componentId'],
                         icon: this.getItemIcon(item),
                         type: item.type,
-                        children: item.renderProps.slots ? this.getNodeChildren(item.renderProps.slots, item['componentId']) : []
+                        children: item.renderSlots.default ? this.getNodeChildren(item.renderSlots.default, item['componentId']) : []
                     }
                 })
             },
@@ -305,7 +305,7 @@
                         name: item['componentId'],
                         icon: this.getItemIcon(item),
                         parent_id: parentId,
-                        children: item.renderProps.slots ? this.getNodeChildren(item.renderProps.slots) : []
+                        children: item.renderSlots.default ? this.getNodeChildren(item.renderSlots.default) : []
                     }))
                 }
                 if (nodeSlot.type === 'column' || nodeSlot.type === 'free-layout-item') {
@@ -315,7 +315,7 @@
                             name: node['componentId'],
                             icon: this.getItemIcon(node),
                             parent_id: parentId,
-                            children: node.renderProps.slots ? this.getNodeChildren(node.renderProps.slots) : []
+                            children: node.renderSlots.default ? this.getNodeChildren(node.renderSlots.default) : []
                         }))
                     ).flat()
                 }
