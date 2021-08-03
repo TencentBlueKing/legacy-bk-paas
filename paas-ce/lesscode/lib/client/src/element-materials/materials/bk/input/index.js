@@ -48,7 +48,10 @@ export default {
             prop: 'value',
             propTypes: ['string'],
             val: '',
-            valType: 'variable'
+            valType: 'variable',
+            tips (val) {
+                return val.valType
+            }
         }
     ],
     props: {

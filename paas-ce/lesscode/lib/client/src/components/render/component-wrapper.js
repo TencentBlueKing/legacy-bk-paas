@@ -42,8 +42,6 @@ export default {
         const widthChangeableCompoennts = ['img', 'p', 'span', 'bk-link', 'el-link']
         if (!widthChangeableCompoennts.includes(componentData.type)) delete renderStyles.width
 
-        console.log('renderStyle', renderStyles)
-
         return h(renderData.type, {
             key: params['component-type'] === 'bk-sideslider' ? 'bk-slider' : refreshKey, // sideSlider 固定key，防止属性修改动画刷新
             props: params,

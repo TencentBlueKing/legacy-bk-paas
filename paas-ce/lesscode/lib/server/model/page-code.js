@@ -836,6 +836,7 @@ class PageCode {
         let propsStr = ''
         const preCompId = camelCase(compId, { transform: camelCaseTransformMerge })
         let elementComId = ''
+        const componentType = type
         for (const i in props) {
             if (dirProps.find((directive) => (directive.prop === i)) && props[i].type !== 'remote') continue
 
@@ -863,7 +864,11 @@ class PageCode {
                 }
 
                 if (type === 'array' || typeof val === 'object') {
-                    this.dataTemplate(propVar, JSON.stringify(val))
+                    if (componentType === 'widget-form' && i === 'rules') {
+                        this.handleFormRules(propVar, val)
+                    } else {
+                        this.dataTemplate(propVar, JSON.stringify(val))
+                    }
                     propsStr += curPropStr
                     continue
                 }
@@ -921,6 +926,53 @@ class PageCode {
             }
         }
         return propsStr
+    }
+
+    // 生成formRules部分
+    handleFormRules (propVar, val) {
+        const notStringType = ['required', 'validator', 'regex']
+        const reg=/,$/gi;
+        let jsonStr = '{'
+        try {
+            if (typeof val === 'object' && Object.keys(val).length > 0) {
+                for (const i in val) {
+                    jsonStr += `${i}: [`
+                    if (val[i] && val[i].length) {
+                        const funcItems = val[i].filter(item => item.validator)
+                        
+                        funcItems.map(item => {
+                            const [method] = this.getMethodByCode({ methodCode: item.validator })
+                            if (method.funcCode) {
+                                this.usingFuncCodes.push(method.funcCode)
+                            }
+                            item.validator = `this.${item.validator}`
+                        })
+                        val[i].map(rule => {
+                            jsonStr += '{'
+                                for (const j in rule) {
+                                    if (notStringType.indexOf(j) === -1) {
+                                        jsonStr += `${j}: '${rule[j]}',`
+                                    } else {
+                                        jsonStr += `${j}: ${rule[j]},`
+                                    }
+                                    
+                                }
+                            jsonStr += '},'
+                        })
+                        jsonStr = jsonStr.replace(reg,"");
+                    }
+                    jsonStr += `],`
+                }
+                jsonStr = jsonStr.replace(reg,"");
+                jsonStr += '}'
+            } else {
+                jsonStr = '{}'
+            }
+        } catch (err) {
+            console.log(err, 'ruleError')
+            jsonStr = '{}'
+        }
+        this.dataTemplate(propVar, jsonStr)
     }
 
     getItemStyles (compId, styles, props) {

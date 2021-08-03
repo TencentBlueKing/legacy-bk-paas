@@ -11,87 +11,53 @@
 
 <template>
     <div>
-        <div class="form-item-title">表单项配置</div>
+        <div class="form-slot-title" v-bk-tooltips="{ content: functionTips, width: 290 }">
+            <span class=" under-line">初始化表单数据（初始化数据将会覆盖已有数据）</span>
+        </div>
 
         <remote
             name="initFormData"
-            title="初始表单数据（初始化数据将会覆盖已有数据）"
-            :tips="functionTips"
+            title=""
+            :auto-get-data="false"
             :default-value="{}"
             :remote-validate="validateObject"
             :change="getInitData"
         >
         </remote>
 
+        <div class="form-slot-title" style="margin-top: 20px;">表单内容配置</div>
+
         <div class="form-item-list">
-            <div
-                v-for="(item, index) in formItemList"
-                :key="index"
-                class="form-item"
-                @click="handleShowOperation(index)">
-                <section>
-                    <span>{{ item.renderProps.label.val }}</span>
-                    <span class="property">({{ item.renderProps.property.val }})</span>
-                </section>
-                <span class="form-item-delete" @click.stop="handleDelete(index)"><i class="bk-icon icon-close"></i></span>
-            </div>
+            <vue-draggable
+                ghost-class="block-item-ghost"
+                :list="formItemList"
+                @change="orderChange"
+                handle=".option-col-drag"
+            >
+                <transition-group type="transition" :name="'flip-list'">
+                    <div
+                        v-for="(item, index) in formItemList"
+                        :key="index"
+                        class="form-item"
+                    >
+                        <section class="item-name">
+                            <span>{{ item.renderProps.label.val }}</span>
+                            <span class="property">({{ item.renderProps.property.val }})</span>
+                        </section>
+                        <section class="operate-btns">
+                            <span class="form-item-edit" @click.stop="handleShowOperation(index)"><i class="bk-drag-icon bk-drag-edit"></i></span>
+                            <span class="form-item-drag option-col-drag"><i class="bk-drag-icon bk-drag-drag-small1"></i></span>
+                            <span class="form-item-delete" @click.stop="handleDelete(index)"><i class="bk-icon icon-close"></i></span>
+                        </section>
+                    </div>
+                </transition-group>
+            </vue-draggable>
         </div>
         <div class="table-column-add" @click="handleShowOperation(-1)">
-            <i class="bk-icon icon-plus-circle"></i>继续添加表单项
+            继续添加表单项
         </div>
-        <!-- <div class="form-item-title" style="margin-top: 20px;">表单操作配置</div>
-        <div>
-            <template v-for="actionButton in formActionList">
-                <bk-button
-                    :theme="actionButton.renderProps.theme.val"
-                    :key="actionButton.componentId"
-                    class="mr10"
-                    size="small">
-                    {{ actionButton.renderProps.slots.val }}
-                </bk-button>
-            </template>
-            <div class="action-create">
-                <i class="bk-icon" />
-            </div>
-        </div> -->
-        <bk-dialog
-            v-model="isShowOperation"
-            title="表单项设置">
-            <bk-form
-                ref="operation"
-                :model="formItemData"
-                :rules="rules"
-                :label-width="80">
-                <bk-form-item label="表单类型" error-display-type="normal">
-                    <bk-select v-model="formItemData.type">
-                        <bk-option
-                            v-for="itemName in formItemTypeList"
-                            :id="itemName"
-                            :name="itemName"
-                            :key="itemName" />
-                    </bk-select>
-                </bk-form-item>
-                <bk-form-item label="显示名称" required property="label" error-display-type="normal">
-                    <bk-input v-model="formItemData.label" />
-                </bk-form-item>
-                <bk-form-item label="字段名称" required property="property" error-display-type="normal">
-                    <bk-input v-model="formItemData.property" />
-                </bk-form-item>
-                <bk-form-item label="是否必填" error-display-type="normal">
-                    <bk-radio-group v-model="formItemData.required">
-                        <bk-radio :value="true" class="mr10">是</bk-radio>
-                        <bk-radio :value="false">否</bk-radio>
-                    </bk-radio-group>
-                </bk-form-item>
-                <!-- <bk-form-item label="验证规则" error-display-type="normal">
-                    <bk-input v-model="formItemData.validate" />
-                </bk-form-item> -->
-            </bk-form>
-            <template slot="footer">
-                <bk-button theme="primary" class="mr10" @click="handleSave">保存</bk-button>
-                <bk-button @click="handleCancel">取消</bk-button>
-            </template>
-        </bk-dialog>
+
+        <form-item-edit :is-show="isShowOperation" :default-value="formItemData" :default-rule="getFormRule(formItemData.property)" :submit="handleSave" :close="handleCancel"></form-item-edit>
     </div>
 </template>
 <script>
@@ -100,6 +66,7 @@
     import { uuid } from '@/common/util'
     import componentList from '@/element-materials/materials'
     import remote from './remote'
+    import formItemEdit from './form-item-edit'
     import { camelCase, camelCaseTransformMerge } from 'change-case'
 
     const createTargetDataNode = (componentType, payload) => {
@@ -177,6 +144,10 @@
                     type: Boolean,
                     val: required
                 },
+                'error-display-type': {
+                    type: 'string',
+                    val: 'normal'
+                },
                 slots: {
                     type: 'form-item-content',
                     name: 'form-item-content',
@@ -203,7 +174,8 @@
     export default {
         name: '',
         components: {
-            remote
+            remote,
+            formItemEdit
         },
         inheritAttrs: false,
         props: {
@@ -228,7 +200,7 @@
                 formItemList: [],
                 formActionList: [],
                 formModelList: [],
-                formModelMap: {},
+                formRuleList: [],
                 isShowOperation: false,
                 editIndex: -1,
                 formItemData: generateFormData()
@@ -238,19 +210,10 @@
             ...mapGetters('drag', ['curSelectedComponentData'])
         },
         created () {
-            this.formItemTypeList = [
-                'input',
-                'select',
-                'date-picker',
-                'time-picker',
-                'switcher',
-                'radio-group',
-                'checkbox-group'
-            ]
-
             this.formItemList = []
             this.formActionList = []
-            this.formModelList = this.getModelFromTargetData()
+            // this.formModelList = this.getModelFromTargetData()
+            this.initModelAndRule()
             const slotList = cloneDeep(this.defaultValue)
             slotList.forEach(_ => {
                 const componentDataa = cloneDeep(_)
@@ -283,36 +246,33 @@
                 targetDataAppendChild(actionFormItem, cancelNode)
                 this.formActionList.push(actionFormItem)
             }
-            this.rules = {
-                label: [
-                    {
-                        required: true,
-                        message: '显示名称必填',
-                        trigger: 'blur'
-                    }
-                ],
-                property: [
-                    {
-                        required: true,
-                        message: '字段名称名称必填',
-                        trigger: 'blur'
-                    },
-                    {
-                        validator: value => /^[a-zA-Z_][0-9a-zA-Z_-]{0,29}$/.test(value),
-                        message: '字段名称：以英文字符、下划线开头；只允许英文字符、数字、下划线、和 -',
-                        trigger: 'blur'
-                    }
-                ]
-            }
         },
         methods: {
             /**
              * 更新属性值
             */
             triggerChange () {
-                console.log('from item change ===================\n\n', this.formItemList)
                 this.change('slots', [...this.formItemList, ...this.formActionList], this.type)
                 this.change('model', this.getFormModelMap(), 'hidden')
+                this.change('rules', this.getFormRuleMap(), 'hidden')
+            },
+            orderChange () {
+                const modelList = []
+                const ruleList = []
+                
+                this.formItemList.forEach((item) => {
+                    const property = item.renderProps.property.val
+                    if (property) {
+                        const modelItem = this.formModelList.find(model => model.key === property)
+                        const ruleItem = this.formRuleList.find(rule => rule.key === property)
+                        modelList.push(modelItem)
+                        ruleList.push(ruleItem)
+                    }
+                })
+                this.formModelList = modelList
+                this.formRuleList = ruleList
+
+                this.triggerChange()
             },
             /**
              * @desc 删除表达项
@@ -321,6 +281,7 @@
             handleDelete (index) {
                 this.formItemList.splice(index, 1)
                 this.formModelList.splice(index, 1)
+                this.formRuleList.splice(index, 1)
                 this.triggerChange()
             },
             /**
@@ -351,18 +312,20 @@
             /**
              * @desc 提交表单项
             */
-            handleSave () {
-                this.$refs.operation.validate()
-                    .then(() => {
-                        this.createTargetDataFromItem(this.formItemData)
-                        this.handleCancel()
-                        this.triggerChange()
-                    })
+            handleSave (itemData) {
+                const hasRequired = ((itemData.validate || []).filter(item => item.required === true).length > 0)
+                // 将校验规则里的required同步到form-item层级
+                this.formItemData = Object.assign({}, itemData, { required: hasRequired })
+                this.createTargetDataFromItem(this.formItemData)
+                this.handleCancel()
+                this.triggerChange()
             },
+            
             createTargetDataFromItem (formItemData) {
                 const formItemNode = createTargetDataFormItemNode(formItemData)
                 const defaultVal = this.getDefaultValFromType(formItemData.type)
                 const modelItem = { key: formItemData.property, value: defaultVal }
+                const ruleItem = { key: formItemData.property, value: formItemData.validate || [] }
                 let style = {}
                 if (['input', 'select', 'date-picker', 'time-picker'].includes(formItemData.type)) {
                     style = {
@@ -378,9 +341,11 @@
                 if (this.editIndex > -1 && this.formItemList[this.editIndex]) {
                     this.formItemList.splice(this.editIndex, 1, formItemNode)
                     this.formModelList.splice(this.editIndex, 1, modelItem)
+                    this.formRuleList.splice(this.editIndex, 1, ruleItem)
                 } else {
                     this.formItemList.push(formItemNode)
                     this.formModelList.push(modelItem)
+                    this.formRuleList.splice(this.editIndex, 1, ruleItem)
                 }
                 targetDataAppendChild(formItemNode, inputNode)
             },
@@ -419,6 +384,7 @@
                 if (Object.keys(data).length > 0) {
                     this.formItemList = []
                     this.formModelList = []
+                    this.formRuleList = []
                     Object.keys(data).forEach((key) => {
                         const type = this.getFormTypeFromValue(data[key])
                         const formItemData = {
@@ -440,23 +406,41 @@
                 })
                 return modelMap
             },
-            getModelFromTargetData () {
+            getFormRuleMap () {
+                const ruleMap = {}
+                this.formRuleList.forEach(function (obj) {
+                    if (obj.value && obj.value.length) {
+                        Object.assign(ruleMap, { [obj.key]: obj.value })
+                    }
+                })
+                return ruleMap
+            },
+            getFormRule (property) {
+                const rule = this.formRuleList.find(item => item.key === property)
+                return (rule && rule.value) || []
+            },
+            initModelAndRule () {
                 try {
                     const modelMap = this.curSelectedComponentData.renderProps.model.val || {}
+                    const ruleMap = this.curSelectedComponentData.renderProps.rules.val || {}
                     const modelList = []
+                    const ruleList = []
                     for (const i in modelMap) {
                         modelList.push({ key: i, value: modelMap[i] })
+                        ruleList.push({ key: i, value: ruleMap[i] || [] })
                     }
-                    return modelList
+                    this.formModelList = modelList
+                    this.formRuleList = ruleList
                 } catch (err) {
-                    return []
+                    this.formModelList = []
+                    this.formRuleList = []
                 }
             }
         }
     }
 </script>
 <style lang='postcss'>
-    .form-item-title {
+    .form-slot-title {
         height: 28px;
         font-size: 12px;
         font-weight: bold;
@@ -469,11 +453,27 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 32px;
-            cursor: pointer;
-            .property{
-                font-style: italic;
-                color: #ccc;
+            height: 36px;
+            opacity: 1;
+            background: #f0f1f5;
+            border-radius: 2px;
+            box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+            padding: 0 10px;
+            margin-bottom: 6px;
+            cursor: default;
+            .item-name {
+                font-size: 12px;
+                .property{
+                    font-style: italic;
+                    color: #ccc;
+                }
+            }
+            .operate-btns {
+                cursor: pointer;
+                font-size: 16px;
+                .option-col-drag {
+                    cursor: move;
+                }
             }
         }
     }

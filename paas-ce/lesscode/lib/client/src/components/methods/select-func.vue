@@ -34,7 +34,7 @@
             <bk-input :value="panel.value" @change="val => handleSpanChange(index, val, 'value')" />
             <i class="bk-icon icon-minus-circle" @click="handleDelete(index)"></i>
         </div>
-        <div class="panel-add" @click="handleAdd"><i class="bk-icon icon-plus-circle"></i>添加函数执行参数</div>
+        <div class="panel-add" @click="handleAdd" v-if="showAddParams"><i class="bk-icon icon-plus-circle"></i>添加函数执行参数</div>
         <methods :show.sync="showMethod" :select-func-code="renderFunc.methodCode"></methods>
     </section>
 </template>
@@ -54,7 +54,11 @@
         },
 
         props: {
-            value: [String, Object]
+            value: [String, Object],
+            showAddParams: {
+                type: Boolean,
+                default: true
+            }
         },
 
         data () {
@@ -136,9 +140,9 @@
         /deep/ .bk-select {
             background: #fff;
         }
-        &:hover{
+        /* &:hover{
             box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
-        }
+        } */
     }
     .bk-drag-function-fill {
         margin-right: 8px;

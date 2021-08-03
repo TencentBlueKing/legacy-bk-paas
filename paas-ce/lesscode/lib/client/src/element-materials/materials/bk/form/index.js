@@ -34,6 +34,11 @@ export default {
             type: 'hidden',
             val: {}
         },
+        ref: {
+            type: 'string',
+            val: 'form',
+            tips: '表单的ref标识，如当值为form时，this.$refs.form可选中当前表单，可用来表单校验等，当页面内含有多个表单时请保证ref唯一'
+        },
         'form-type': {
             type: 'string',
             options: ['horizontal', 'vertical', 'inline'],
