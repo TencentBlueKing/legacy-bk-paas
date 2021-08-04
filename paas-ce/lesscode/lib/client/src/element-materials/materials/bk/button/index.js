@@ -62,6 +62,7 @@ export default {
         default: {
             name: ['text'],
             type: ['text'],
+            displayName: '文本配置',
             val: '基础按钮'
         }
     }

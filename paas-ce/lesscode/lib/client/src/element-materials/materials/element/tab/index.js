@@ -78,6 +78,7 @@ export default {
         default: {
             name: ['el-tab-pane'],
             type: ['list', 'remote'],
+            displayName: 'tab-panel可选项配置',
             tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和name字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'

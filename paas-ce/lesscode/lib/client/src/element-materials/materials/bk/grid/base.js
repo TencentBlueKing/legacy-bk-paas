@@ -37,6 +37,7 @@ export default {
         default: {
             type: ['column'],
             tips: '每一列栅格宽度占比为该列配置值占总列配置值的百分比，建议总列配置值为 12 或 24',
+            displayName: '列配置',
             val: [
                 { span: 1, children: [] },
                 { span: 1, children: [] }

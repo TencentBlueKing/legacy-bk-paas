@@ -11,7 +11,6 @@
 
 <template>
     <div>
-        <div class="slot-title">{{slotVal.name}} 可选项配置：</div>
         <div class="slot-card-wrapper">
             <vue-draggable
                 class="group-list"

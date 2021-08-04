@@ -60,6 +60,8 @@ export default {
         default: {
             name: ['el-step'],
             type: ['list', 'remote'],
+            displayName: 'el-step可选项配置',
+            tips: '值需要是数组，且每个元素需要含有title字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('title')))

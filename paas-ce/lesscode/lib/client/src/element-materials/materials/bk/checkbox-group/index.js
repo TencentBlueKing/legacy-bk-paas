@@ -31,6 +31,7 @@ export default {
         default: {
             name: ['bk-checkbox'],
             type: ['list', 'remote'],
+            displayName: 'bk-checkbox 可选项配置',
             tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和value字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'

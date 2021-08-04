@@ -45,6 +45,7 @@ export default {
         default: {
             name: ['text'],
             type: ['textarea'],
+            displayName: '文本配置',
             regExp: /\S/,
             val: '默认段落文字',
             // val: '<script>alert(1)</script>',
