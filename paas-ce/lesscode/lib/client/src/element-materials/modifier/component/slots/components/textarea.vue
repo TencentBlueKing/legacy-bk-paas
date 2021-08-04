@@ -27,7 +27,7 @@
                 :class="isError && 'king-input-modifier-style-error'"
                 v-model="renderValue"
                 @input="handleChange" />
-            <p class="modifier-input-error-text" v-if="isError">{{describe.regErrorText || '格式错误，请重新输入'}}</p>
+            <p class="modifier-input-error-text" v-if="isError">{{slotConfig.regErrorText || '格式错误，请重新输入'}}</p>
         </div>
     </div>
 </template>
@@ -67,37 +67,23 @@
         methods: {
             handleChange (e) {
                 const val = this.renderValue
-                // const { regExp } = this.describe
-                // if (regExp) {
-                //     if (regExp.test(val)) {
-                //         const slot = {
-                //             ...this.slotVal,
-                //             val: val.replace(
-                //                 new RegExp('(<)([^>]+)(>)', 'gi'),
-                //                 (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`
-                //             )
-                //         }
-                //         this.change(slot)
-                //         this.isError = false
-                //     } else {
-                //         this.isError = true
-                //     }
-                // } else {
-                //     const slot = {
-                //         ...this.slotVal,
-                //         val: val.replace(
-                //             new RegExp('(<)([^>]+)(>)', 'gi'),
-                //             (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`
-                //         )
-                //     }
-                //     this.change(slot)
-                // }
+                const { regExp } = this.slotConfig
+
+                if (regExp) {
+                    if (regExp.test(val)) {
+                        const slot = {
+                            ...this.slotVal,
+                            val
+                        }
+                        this.change(slot)
+                        this.isError = false
+                    } else {
+                        this.isError = true
+                    }
+                }
                 const slot = {
                     ...this.slotVal,
-                    val: val.replace(
-                        new RegExp('(<)([^>]+)(>)', 'gi'),
-                        (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`
-                    )
+                    val
                 }
                 this.change(slot)
             }
