@@ -1426,8 +1426,15 @@
                             item.renderSlots.default && (item.renderSlots.default.type === 'column' || item.renderSlots.default.type === 'free-layout-item')
                         ) {
                             del(item.renderSlots.default.val, cid)
-                        } else if (item.renderSlots.default && item.renderSlots.default.type === 'layout') {
-                            del([item.renderSlots.default.val], cid)
+                        } else {
+                            const renderSlots = item.renderSlots || {}
+                            const slotKeys = Object.keys(renderSlots)
+                            slotKeys.forEach((key) => {
+                                const renderSlot = renderSlots[key]
+                                if (renderSlot && renderSlot.name === 'layout') {
+                                    del([renderSlot.val], cid)
+                                }
+                            })
                         }
                     }
                     return ''

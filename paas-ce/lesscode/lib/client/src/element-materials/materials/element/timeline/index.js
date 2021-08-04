@@ -23,6 +23,8 @@ export default {
         default: {
             name: ['el-timeline-item'],
             type: ['list', 'remote'],
+            displayName: 'timeline可选项配置',
+            tips: '默认插槽，值需要是数组，且每个元素需要含有label和timestamp字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('timestamp')))

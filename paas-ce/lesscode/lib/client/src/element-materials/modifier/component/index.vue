@@ -47,7 +47,6 @@
     import ModifierProps from './props'
     import ModifierEvents from './events'
     import ModifierDirectives from './directives'
-    import ModifierSlots from './slots'
     import cloneDeep from 'lodash.clonedeep'
 
     const baseComponentList = allComponentConf['bk'].concat(allComponentConf['element'] || [])
@@ -109,8 +108,7 @@
                     { name: 'styles', label: '样式', count: 40 },
                     { name: 'props', label: '属性', count: 30 },
                     { name: 'events', label: '事件', count: 20 },
-                    { name: 'directives', label: '指令', count: 10 },
-                    { name: 'slots', label: '插槽', count: 0 }
+                    { name: 'directives', label: '指令', count: 10 }
                 ],
                 tabPanelActive: 'props',
                 currentTabPanelType: 'unborder-card',
@@ -164,10 +162,9 @@
 
                 return {
                     styles,
-                    props,
+                    props: { props, slots },
                     events,
-                    directives,
-                    slots
+                    directives
                 }
             },
             modifierCom () {
@@ -176,8 +173,7 @@
                     styles: ModifierStyles,
                     props: ModifierProps,
                     events: ModifierEvents,
-                    directives: ModifierDirectives,
-                    slots: ModifierSlots
+                    directives: ModifierDirectives
                 }
                 return comMap[this.tabPanelActive]
             },
@@ -246,7 +242,7 @@
                         height: 100%;
                         padding: 0 20px;
                         .bk-tab-label-item {
-                            width: 20%;
+                            width: 25%;
                             line-height: 46px;
                             min-width: auto;
                             padding: 0 2px;

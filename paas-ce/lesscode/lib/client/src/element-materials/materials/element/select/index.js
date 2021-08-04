@@ -101,6 +101,8 @@ export default {
         default: {
             name: ['el-option'],
             type: ['list', 'remote'],
+            displayName: 'option可选项配置',
+            tips: '值需要是数组，且每个元素需要含有id和name字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('id') || !item.hasOwnProperty('name')))

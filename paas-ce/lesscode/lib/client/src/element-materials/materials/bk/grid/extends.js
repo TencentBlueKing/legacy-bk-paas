@@ -33,6 +33,7 @@ export default function (children) {
         slots: {
             default: {
                 type: ['column'],
+                displayName: '列配置',
                 tips: '每一列栅格宽度占比为该列配置值占总列配置值的百分比，建议总列配置值为 12 或 24',
                 val: [
                     { span: 1, children: [] },

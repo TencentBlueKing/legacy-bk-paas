@@ -11,9 +11,6 @@
 
 <template>
     <div>
-        <div class="slot-title">
-            列配置:
-        </div>
         <div class="column-list">
             <div class="column-item" v-for="(item, index) in columns" :key="index">
                 <span class="column-item-text">第 {{index + 1}} 列：</span>

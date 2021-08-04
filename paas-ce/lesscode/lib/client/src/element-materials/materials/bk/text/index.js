@@ -33,6 +33,7 @@ export default {
         default: {
             name: ['text'],
             type: ['text'],
+            displayName: '文本配置',
             val: '默认文字',
             regExp: /\S/,
             regErrorText: '文本配置不能为空'

@@ -11,8 +11,6 @@
 
 <template>
     <div>
-        <div class="form-item-title">表单项配置</div>
-
         <remote
             name="initFormData"
             title="初始表单数据（初始化数据将会覆盖已有数据）"
