@@ -87,7 +87,7 @@
     "@babel/register": "~7.6.2",
     "@babel/runtime": "~7.6.3",
     "@blueking/bkcharts": "^2.0.11-alpha.5",
-    "@blueking/bkui-vue-complex": "0.0.5",
+    "@blueking/bkui-vue-complex": "0.0.6",
     "@blueking/magicbox-header": "~1.1.30",
     "@icon-cool/bk-icon-vue-drag-vis": "^0.2.6",
     "acorn": "~7.2.0",
