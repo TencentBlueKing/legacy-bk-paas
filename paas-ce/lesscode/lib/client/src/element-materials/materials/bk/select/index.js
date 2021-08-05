@@ -123,6 +123,7 @@ export default {
         default: {
             name: ['bk-option'],
             type: ['list', 'remote'],
+            displayName: '可选项配置',
             tips: '默认插槽，填写的数据需要是数组且每个元素需包含id和name字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'

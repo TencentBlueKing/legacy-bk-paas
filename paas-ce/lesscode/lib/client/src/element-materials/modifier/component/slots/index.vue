@@ -1,5 +1,5 @@
 <template>
-    <article>
+    <article class="modifier-slot" v-if="Object.keys(computedSlots).length">
         <renderSlot
             v-for="(slotConfig, slotName) in computedSlots"
             :key="slotName"
@@ -9,14 +9,11 @@
             :render-props="renderProps"
             @change="change"
             @batchUpdate="batchUpdate"
-            class="modifier-slot"
         ></renderSlot>
-        <span v-if="Object.keys(computedSlots).length <= 0 && Object.keys(curSelectedComponentData).length" class="no-slot">该组件暂无插槽</span>
     </article>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
     import renderSlot from './slot.vue'
 
     export default {
@@ -33,17 +30,11 @@
         data () {
             return {
                 renderSlots: {},
-                renderProps: {},
-                mutlTypeValue: {
-                    name: '',
-                    type: ''
-                }
+                renderProps: {}
             }
         },
 
         computed: {
-            ...mapGetters('drag', ['curSelectedComponentData']),
-
             computedSlots () {
                 const keys = Object.keys(this.materialConfig)
                 const res = keys.reduce((acc, cur) => {
@@ -72,7 +63,7 @@
             },
 
             batchUpdate (renderData) {
-                this.$emit('on-change', renderData)
+                this.$emit('change', renderData)
             }
         }
     }
@@ -80,6 +71,8 @@
 
 <style lang="postcss" scoped>
     .modifier-slot {
-        padding: 0 10px;
+        margin: 0 10px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ccc;
     }
 </style>

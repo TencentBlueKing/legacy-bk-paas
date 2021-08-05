@@ -11,7 +11,6 @@
 
 <template>
     <div>
-        <div class="table-column-title">表头配置</div>
         <div class="table-column-item">
             <vue-draggable
                 class="group-list"

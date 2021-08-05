@@ -237,7 +237,7 @@
             },
             defaultValue () {
                 const typeVal = this.mutlTypeVal[this.mutlTypeSelected] || {}
-                return typeVal.val || ''
+                return typeVal.hasOwnProperty('val') ? typeVal.val : ''
             },
             defaultPayload () {
                 return this.mutlTypeVal[this.mutlTypeSelected].payload || this.lastValue.payload || {}

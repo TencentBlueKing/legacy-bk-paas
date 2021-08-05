@@ -114,6 +114,10 @@ export const updateSlot = async (ctx) => {
                 case 'tab':
                     res = { default: { ...(slots || {}), type: 'list' } }
                     break
+                case 'el-table':
+                case 'bk-table':
+                    res = { default: { ...(slots || {}), type: 'table-list' } }
+                    break
                 case 'folding-table':
                 case 'search-table':
                     res = { column: (slots || {}) }
@@ -124,7 +128,7 @@ export const updateSlot = async (ctx) => {
             }
             return res
         }
-
+        const errorPageIds = []
         const projectRepository = getRepository(Project)
         const projectPageRepository = getRepository(ProjectPage)
         const pageRepository = getRepository(Page)
@@ -135,30 +139,36 @@ export const updateSlot = async (ctx) => {
             const pageIds = projectPages.map((projectPage) => (projectPage.pageId))
             const pages = pageIds.length > 0 ? await pageRepository.find({ where: { id: In(pageIds) } }) : []
             for (const page of pages) {
-                const targetData = (typeof page.content) === 'string' ? JSON.parse(page.content) : page.content;
-                (targetData || []).forEach((grid, index) => {
-                    const callBack = (data) => {
-                        const renderProps = data.renderProps || {}
-                        const slots = renderProps['slots']
-                        if (slots) {
-                            data.renderSlots = transformSlot(slots, data.name, renderProps)
-                            delete renderProps['slots']
+                try {
+                    const targetData = (typeof page.content) === 'string' ? JSON.parse(page.content) : page.content;
+                    (targetData || []).forEach((grid, index) => {
+                        const callBack = (data) => {
+                            const renderProps = data.renderProps || {}
+                            const slots = renderProps['slots']
+                            if (slots) {
+                                data.renderSlots = transformSlot(slots, data.name, renderProps)
+                                delete renderProps['slots']
+                            }
+                            if (!data.renderSlots) {
+                                data.renderSlots = {}
+                            }
                         }
-                        if (!data.renderSlots) {
-                            data.renderSlots = {}
-                        }
-                    }
-                    transformOldGrid(targetData, grid, callBack, callBack, index)
-                })
-                page.content = JSON.stringify(targetData || [])
-                page.updateBySystem = true
-                await pageRepository.update({ id: page.id }, page)
+                        transformOldGrid(targetData, grid, callBack, callBack, index)
+                    })
+                    page.content = JSON.stringify(targetData || [])
+                    page.updateBySystem = true
+                    await pageRepository.update({ id: page.id }, page)
+                } catch (error) {
+                    console.error(error)
+                    errorPageIds.push(page.id)
+                }
             }
         }
-
+        
+        const errorMessage = errorPageIds.length ? `出现错误的pageId：${errorPageIds.join(', ')}` : ''
         ctx.send({
             code: 0,
-            message: 'slot 数据更新成功'
+            message: `slot 数据更新完成. ${errorMessage}`
         })
     } catch (error) {
         logger.warn('warn slot')

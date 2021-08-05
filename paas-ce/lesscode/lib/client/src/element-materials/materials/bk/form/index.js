@@ -53,6 +53,7 @@ export default {
         default: {
             name: ['layout'],
             type: ['form-item'],
+            displayName: '表单项配置',
             val: []
         }
     }

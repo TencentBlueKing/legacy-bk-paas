@@ -78,11 +78,15 @@ export default {
         default: {
             name: ['html'],
             type: ['html'],
+            displayName: '组件配置',
+            tips: '组件默认插槽，可以编写html，用于组件自身展示',
             val: '<bk-button>删除</bk-button>'
         },
         content: {
             name: ['html'],
             type: ['html'],
+            displayName: '弹层配置',
+            tips: '组件 content 插槽，可以编写html，用于弹层内容',
             val: '<div>自定义内容</div>'
         }
     }

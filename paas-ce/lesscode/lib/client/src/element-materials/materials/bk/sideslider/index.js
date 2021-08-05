@@ -28,7 +28,7 @@ export default {
     props: {
         'is-show': {
             type: 'boolean',
-            tips: '是否显示组件',
+            tips: '是否显示组件，请在右侧选择变量并绑定Boolean类型变量以正常使用（值类型的常量，无法控制其打开或关闭)',
             val: true,
             staticValue: true, // 静态值，表示只是代码和UI改变，画布内的值不变
             modifiers: ['sync'],

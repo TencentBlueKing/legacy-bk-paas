@@ -66,6 +66,7 @@ export default {
         default: {
             name: ['html'],
             type: ['text'],
+            displayName: '文本配置',
             val: '文字标记'
         }
     }

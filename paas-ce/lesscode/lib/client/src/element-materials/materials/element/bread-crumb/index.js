@@ -33,6 +33,7 @@ export default {
         default: {
             name: ['el-breadcrumb-item'],
             type: ['list', 'remote'],
+            displayName: 'bread-crumb可选项配置',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('id') || !item.hasOwnProperty('name')))

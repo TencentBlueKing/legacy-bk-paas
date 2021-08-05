@@ -10,7 +10,8 @@
                 <span
                     :class="['slot-name', { 'slot-tips': slotConfig.tips }]"
                     v-bk-tooltips="computedSlotTip"
-                >{{ slotName }}</span>
+                >{{ slotConfig.displayName }}<span v-if="slotConfig.type && slotConfig.type.length <= 1">({{ computedSlotVal.type | capFirstLetter }})</span>
+                </span>
                 <template v-if="slotConfig.name && slotConfig.name.length > 1">
                     <span class="slot-label">组件标签</span>
                     <bk-radio-group :value="computedSlotVal.name" @change="changeSlot('name', ...arguments)" class="mb10">
@@ -62,7 +63,7 @@
         text: slotText,
         textarea: slotTextArea,
         'form-item': slotFormItem,
-        'table-column': slotTable
+        'table-list': slotTable
     }
 
     export default {

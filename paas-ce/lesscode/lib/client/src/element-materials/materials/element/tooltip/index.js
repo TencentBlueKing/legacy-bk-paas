@@ -95,6 +95,7 @@ export default {
         default: {
             name: ['html'],
             type: ['html'],
+            displayName: '组件配置',
             tips: '变量值需包含html标签。',
             val: '<span>文字提示</span>'
         }
