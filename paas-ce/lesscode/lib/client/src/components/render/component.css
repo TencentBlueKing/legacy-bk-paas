@@ -122,13 +122,14 @@
 }
 
 .wrapper-cls-hover {
-    .bk-card {
+    .bk-card, .empty-widget-form {
         border: 1px dashed #3a84ff !important;
     }
+    
 }
 
 .wrapper-cls-selected {
-    .bk-card, .bk-form {
+    .bk-card, .bk-form, .empty-widget-form {
         border: 1px solid #3a84ff !important;
     }
 }

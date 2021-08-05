@@ -42,8 +42,6 @@ export default {
         const widthChangeableCompoennts = ['img', 'p', 'span', 'bk-link', 'el-link']
         if (!widthChangeableCompoennts.includes(componentData.type)) delete renderStyles.width
 
-        console.log('renderStyle', renderStyles)
-
         const scopedSlots = context.children.reduce((acc, cur) => {
             const slotKey = cur.data && cur.data.slot
             if (slotKey) {

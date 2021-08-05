@@ -11,7 +11,7 @@
 
 <template>
     <div class="widget-form">
-        <div v-if="componentData.renderSlots.default.val < 1" class="normal">
+        <div v-if="componentData.renderSlots.default.val < 1" class="normal empty-widget-form">
             请在右侧配置表单项
         </div>
         <template v-else>

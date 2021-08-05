@@ -12,10 +12,12 @@
 <template>
     <section>
         <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
-            <span :class="{ 'under-line': tips }">{{title || (name === 'remoteOptions' ? '动态配置' : '远程函数')}}</span>
+            <span :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
         </div>
-        <select-func v-model="remoteData" @change="changeFunc"></select-func>
-        <bk-button @click="getApiData" theme="primary" ext-cls="mt10 mb10" size="small">获取数据</bk-button>
+        <div class="remote-content">
+            <select-func v-model="remoteData" @change="changeFunc"></select-func>
+            <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
+        </div>
     </section>
 </template>
 
@@ -47,6 +49,10 @@
                 type: Function,
                 default: () => {}
             },
+            autoGetData: {
+                type: Boolean,
+                default: true
+            },
             title: {
                 type: String
             },
@@ -76,7 +82,9 @@
         methods: {
             changeFunc () {
                 this.saveChange()
-                this.getApiData()
+                if (this.autoGetData) {
+                    this.getApiData()
+                }
             },
 
             saveChange () {
@@ -251,7 +259,7 @@
                     let message = this.remoteValidate(res)
                     if (message) {
                         message = '数据源设置成功，以下问题可能会导致组件表现异常，请检查：' + message
-                        this.messageWarn(message)
+                        this.$bkMessage({ theme: 'warning', message })
                     } else {
                         this.change(this.name, res, this.type, JSON.parse(JSON.stringify(this.remoteData)))
                         if (this.name === 'remoteOptions') {
@@ -269,15 +277,21 @@
 
 <style lang="postcss">
     .remote-title {
-        line-height: 32px;
-        font-size: 14px;
+        margin: 10px 0;
+        line-height: 24px;
+        font-size: 12px;
+        &:first-child {
+            margin-top: 0;
+        }
     }
     .under-line {
         line-height: 24px;
         border-bottom: 1px dashed #979ba5;
-        cursor: pointer;
     }
-    .remote-button {
-        margin: 10px 0;
+    .remote-content {
+        background: #f0f1f5;
+        .remote-button {
+            margin: 0 0 10px 6px;
+        }
     }
 </style>
