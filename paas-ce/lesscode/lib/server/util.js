@@ -230,9 +230,9 @@ export function transformOldGrid (children, grid, childCallBack, parentCallBack,
         const children = column.children || []
         children.forEach((component, index) => {
             if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
-                walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
+                transformOldGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
             } else if ((component.renderProps || {}).slots && ((component.renderProps || {}).slots || {}).name === 'layout') {
-                walkGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
+                transformOldGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
                 childCallBack(component, children, index, grid, columnIndex)
             } else {
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)

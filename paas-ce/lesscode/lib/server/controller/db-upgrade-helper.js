@@ -30,7 +30,11 @@ export const updateSlot = async (ctx) => {
             switch (name) {
                 case 'el-card':
                 case 'card':
-                    res = { default: { name: 'layout', type: 'free-layout', display: 'hidden', val: { ...(value || {}) } } }
+                    if (typeof value === 'string') {
+                        res = { default: { name: 'html', type: 'html', displayName: '卡片内容区', val: value } }
+                    } else {
+                        res = { default: { name: 'layout', type: 'free-layout', display: 'hidden', val: { ...(value || {}) } } }
+                    }
                     break
                 case 'sideslider':
                     res = { content: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
@@ -115,12 +119,12 @@ export const updateSlot = async (ctx) => {
                     res = { default: { ...(slots || {}), type: 'list' } }
                     break
                 case 'el-table':
-                case 'bk-table':
+                case 'table':
                     res = { default: { ...(slots || {}), type: 'table-list' } }
                     break
                 case 'folding-table':
                 case 'search-table':
-                    res = { column: (slots || {}) }
+                    res = { column: { ...(slots || {}), type: 'table-list' } }
                     break
                 default:
                     res = { default: (slots || {}) }

@@ -43,8 +43,9 @@ export default {
     slots: {
         default: {
             type: ['free-layout'],
+            display: 'hidden',
             val: {
-                name: 'grid',
+                name: 'free-layout',
                 type: 'free-layout',
                 slotName: '',
                 slotContainer: true,
@@ -54,7 +55,7 @@ export default {
                 renderDirectives: [],
                 renderSlots: {
                     default: {
-                        type: ['free-layout-item'],
+                        type: 'free-layout-item',
                         val: [
                             { children: [] }
                         ]
