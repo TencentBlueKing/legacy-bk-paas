@@ -125,10 +125,8 @@
                 this.renderData.componentId = this.componentData.name + '-' + uuid()
             }
 
-            if (this.renderData.renderProps.slots) {
-                this.renderDataSlotName = this.renderData.renderProps.slots.name
-            }
             this.updateBindProps()
+            this.updateBindSlots()
 
             bus.$on('on-update-props', this.updatePropsHandler)
             bus.$on('on-update-free-layout-props', this.updateFreeLayoutPropsHandler)
@@ -159,9 +157,13 @@
                 this.bindProps = bindProps
 
                 // debugger
-                if (this.renderData.renderProps.slots) {
-                    this.renderDataSlot = this.renderData.renderProps.slots
-                }
+                // if (this.renderData.renderProps.slots) {
+                //     this.renderDataSlot = this.renderData.renderProps.slots
+                // }
+            },
+
+            updateBindSlots () {
+                this.renderDataSlot = this.renderData.renderSlots.default
             },
 
             /**
@@ -182,13 +184,16 @@
                         renderStyles = this.renderData.renderStyles,
                         renderProps = this.renderData.renderProps,
                         tabPanelActive = 'props',
-                        renderDirectives = this.renderData.renderDirectives
+                        renderDirectives = this.renderData.renderDirectives,
+                        renderSlots = this.renderData.renderSlots
                     } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
                     this.renderData.renderDirectives = renderDirectives
+                    this.renderData.renderSlots = renderSlots
                     this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
+                    this.updateBindSlots()
                 }
             },
 
@@ -231,7 +236,7 @@
              */
             confirmClearFreeLayout () {
                 const renderData = Object.assign({}, this.renderData)
-                renderData.renderProps.slots.val.forEach(v => {
+                renderData.renderSlots.default.val.forEach(v => {
                     v.children = []
                 })
                 this.renderData = Object.assign({}, renderData)
@@ -358,7 +363,8 @@
                             {},
                             renderData.renderStyles,
                             { top: renderData.renderStyles.top || '0px', left: renderData.renderStyles.left || '0px' }
-                        )
+                        ),
+                        renderSlots: renderData.renderSlots
                     }
                 })
             },
@@ -423,7 +429,8 @@
                                 {},
                                 renderData.renderStyles,
                                 offset
-                            )
+                            ),
+                            renderSlots: renderData.renderSlots
                         }
                     })
                 })

@@ -39,10 +39,12 @@ export default {
             type: 'string',
             val: '',
             tips: '文字描述，hover 时会浮现提示内容'
-        },
-        slots: {
-            name: 'text',
-            type: 'paragraph',
+        }
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['textarea'],
             regExp: /\S/,
             val: '默认段落文字',
             // val: '<script>alert(1)</script>',

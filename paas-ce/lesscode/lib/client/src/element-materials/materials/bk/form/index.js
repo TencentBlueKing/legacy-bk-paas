@@ -47,10 +47,12 @@ export default {
         'label-width': {
             type: 'number',
             val: 150
-        },
-        slots: {
-            name: 'layout',
-            type: 'form-item',
+        }
+    },
+    slots: {
+        default: {
+            name: ['layout'],
+            type: ['form-item'],
             val: []
         }
     }

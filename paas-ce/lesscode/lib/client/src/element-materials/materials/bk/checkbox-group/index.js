@@ -26,9 +26,12 @@ export default {
         }
     ],
     props: {
-        slots: {
-            name: 'bk-checkbox',
-            type: ['checkbox', 'remote'],
+    },
+    slots: {
+        default: {
+            name: ['bk-checkbox'],
+            type: ['list', 'remote'],
+            tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和value字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('value')))
@@ -39,14 +42,7 @@ export default {
                 { label: '选项二', value: 2, checked: false },
                 { label: '选项三', value: 3, checked: false }
             ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-checkbox 里的 :label, :value, :checked, :key
-            // <bk-checkbox v-for="item in checkboxgroupc57d9bc6Slot" :label="item.label" :value="item.value" :checked="item.checked" :key="item.value">{{ item.label }}</bk-checkbox>
-            attrs: [
-                { 'key': 'label', 'value': 'label' },
-                { 'key': 'value', 'value': 'value' },
-                { 'key': 'checked', 'value': 'checked' },
-                { 'key': 'key', 'value': 'value' }
-            ]
+            payload: {}
         }
     }
 }

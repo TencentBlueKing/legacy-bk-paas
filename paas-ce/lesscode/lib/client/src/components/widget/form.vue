@@ -11,7 +11,7 @@
 
 <template>
     <div class="widget-form">
-        <div v-if="componentData.renderProps.slots.val < 1" class="normal empty-widget-form">
+        <div v-if="componentData.renderSlots.default.val < 1" class="normal empty-widget-form">
             请在右侧配置表单项
         </div>
         <template v-else>
@@ -49,8 +49,8 @@
             },
             formItemList () {
                 const result = []
-                for (let i = 0; i < this.componentData.renderProps.slots.val.length; i++) {
-                    const currentSlot = this.componentData.renderProps.slots.val[i]
+                for (let i = 0; i < this.componentData.renderSlots.default.val.length; i++) {
+                    const currentSlot = this.componentData.renderSlots.default.val[i]
                     if (currentSlot.type === 'bk-form-item') {
                         result.push(currentSlot)
                     }

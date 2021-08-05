@@ -27,10 +27,12 @@ export default {
             type: 'string',
             val: '',
             tips: '文字描述，hover 时会浮现提示内容'
-        },
-        slots: {
-            name: 'text',
-            type: 'text',
+        }
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['text'],
             val: '默认文字',
             regExp: /\S/,
             regErrorText: '文本配置不能为空'

@@ -27,13 +27,16 @@ export default {
         'margin-vertical': {
             type: 'number',
             val: 0
-        },
+        }
         // flex: {
         //     type: 'boolean',
         //     val: false
         // },
-        slots: {
-            type: 'column',
+    },
+    slots: {
+        default: {
+            type: ['column'],
+            tips: '每一列栅格宽度占比为该列配置值占总列配置值的百分比，建议总列配置值为 12 或 24',
             val: [
                 { span: 1, children: [] },
                 { span: 1, children: [] }

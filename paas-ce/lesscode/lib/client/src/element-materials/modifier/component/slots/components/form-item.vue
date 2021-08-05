@@ -12,7 +12,7 @@
 <template>
     <div>
         <div class="form-slot-title" v-bk-tooltips="{ content: functionTips, width: 290 }">
-            <span class=" under-line">初始化表单数据（初始化数据将会覆盖已有数据）</span>
+            <span class="under-line">初始化表单数据（初始化数据将会覆盖已有数据）</span>
         </div>
 
         <remote
@@ -37,10 +37,10 @@
                 <transition-group type="transition" :name="'flip-list'">
                     <div
                         v-for="(item, index) in formItemList"
-                        :key="index"
+                        :key="`item${index}`"
                         class="form-item"
                     >
-                        <section class="item-name">
+                        <section class="item-name" :title="`${item.renderProps.label.val}(${item.renderProps.property.val})`">
                             <span>{{ item.renderProps.label.val }}</span>
                             <span class="property">({{ item.renderProps.property.val }})</span>
                         </section>
@@ -65,7 +65,7 @@
     import cloneDeep from 'lodash.clonedeep'
     import { uuid } from '@/common/util'
     import componentList from '@/element-materials/materials'
-    import remote from './remote'
+    import remote from '@/element-materials/modifier/component/props/components/strategy/remote'
     import formItemEdit from './form-item-edit'
     import { camelCase, camelCaseTransformMerge } from 'change-case'
 
@@ -75,12 +75,14 @@
             name = '',
             type = '',
             props = {},
-            directives = []
+            directives = [],
+            slots = {}
         } = component
         const {
             style: initStyle,
             prop: initProp,
-            directive: initDirective
+            directive: initDirective,
+            slot: initSlots
         } = payload
         // 初始化  prop
         const renderProps = {}
@@ -105,6 +107,8 @@
                 curDirective.val = initDirective[directiveType]
             }
         }
+        // 初始化 slot
+        const renderSlots = initSlots || slots
 
         return {
             componentId: `${name}-${uuid()}`,
@@ -115,12 +119,13 @@
             renderProps,
             renderStyles,
             renderEvents: {},
-            renderDirectives
+            renderDirectives,
+            renderSlots
         }
     }
 
     const targetDataAppendChild = (parentNode, targetNode) => {
-        parentNode.renderProps.slots.val.push(targetNode)
+        parentNode.renderSlots.default.val.push(targetNode)
     }
 
     const createTargetDataFormItemNode = ({ type, label, property, required }, isActionFormItem = false) => {
@@ -147,14 +152,10 @@
                 'error-display-type': {
                     type: 'string',
                     val: 'normal'
-                },
-                slots: {
-                    type: 'form-item-content',
-                    name: 'form-item-content',
-                    val: []
                 }
-            } : {
-                slots: {
+            } : {},
+            renderSlots: {
+                default: {
                     type: 'form-item-content',
                     name: 'form-item-content',
                     val: []
@@ -179,15 +180,21 @@
         },
         inheritAttrs: false,
         props: {
-            defaultValue: {
-                type: Array,
+            slotVal: {
+                type: Object,
                 required: true
+            },
+            slotConfig: {
+                type: Object,
+                default: () => ({})
+            },
+            renderProps: {
+                type: Object
             },
             change: {
                 type: Function,
                 default: () => {}
-            },
-            type: String
+            }
         },
         data () {
             return {
@@ -212,9 +219,9 @@
         created () {
             this.formItemList = []
             this.formActionList = []
-            // this.formModelList = this.getModelFromTargetData()
             this.initModelAndRule()
-            const slotList = cloneDeep(this.defaultValue)
+            const slotVal = this.slotVal.val
+            const slotList = cloneDeep(slotVal)
             slotList.forEach(_ => {
                 const componentDataa = cloneDeep(_)
                 if (_.type === 'bk-form-item' && _.actionItem !== true) {
@@ -227,19 +234,30 @@
                 const actionFormItem = createTargetDataFormItemNode({}, true)
                 const submitNode = createTargetDataNode('button', {
                     prop: {
-                        theme: 'primary',
-                        slots: '提交'
+                        theme: 'primary'
                     },
                     style: {
                         margin: '5px'
+                    },
+                    slot: {
+                        default: {
+                            name: 'html',
+                            type: 'text',
+                            val: '提交'
+                        }
                     }
                 })
                 const cancelNode = createTargetDataNode('button', {
-                    prop: {
-                        slots: '取消'
-                    },
+                    prop: {},
                     style: {
                         margin: '5px'
+                    },
+                    slot: {
+                        default: {
+                            name: 'html',
+                            type: 'text',
+                            val: '取消'
+                        }
                     }
                 })
                 targetDataAppendChild(actionFormItem, submitNode)
@@ -253,8 +271,27 @@
             */
             triggerChange () {
                 this.change('slots', [...this.formItemList, ...this.formActionList], this.type)
-                this.change('model', this.getFormModelMap(), 'hidden')
-                this.change('rules', this.getFormRuleMap(), 'hidden')
+                
+                const model = {
+                    type: 'hidden',
+                    val: this.getFormModelMap()
+                }
+                const rules = {
+                    type: 'hidden',
+                    val: this.getFormRuleMap()
+                }
+                const renderProps = {
+                    ...this.renderProps,
+                    model,
+                    rules
+                }
+                this.$emit('batchUpdate', { renderProps })
+ 
+                const slot = {
+                    ...this.slotVal,
+                    val: JSON.parse(JSON.stringify([...this.formItemList, ...this.formActionList]))
+                }
+                this.change(slot)
             },
             orderChange () {
                 const modelList = []
@@ -292,19 +329,19 @@
                 this.editIndex = index
                 if (index > -1) {
                     const {
-                        renderProps: formItemRenderProps
+                        renderProps: formItemRenderProps,
+                        renderSlots: formItemRenderSlots
                     } = this.formItemList[index]
                     const {
                         label,
                         property,
-                        required,
-                        slots
+                        required
                     } = formItemRenderProps
                     this.formItemData = {
                         label: label.val,
                         property: property.val,
                         required: required.val,
-                        type: slots.val[0].name
+                        type: formItemRenderSlots.default.val[0].name
                     }
                 }
                 this.isShowOperation = true
@@ -345,7 +382,7 @@
                 } else {
                     this.formItemList.push(formItemNode)
                     this.formModelList.push(modelItem)
-                    this.formRuleList.splice(this.editIndex, 1, ruleItem)
+                    this.formRuleList.push(ruleItem)
                 }
                 targetDataAppendChild(formItemNode, inputNode)
             },
@@ -462,7 +499,11 @@
             margin-bottom: 6px;
             cursor: default;
             .item-name {
+                width: 195px;
                 font-size: 12px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
                 .property{
                     font-style: italic;
                     color: #ccc;

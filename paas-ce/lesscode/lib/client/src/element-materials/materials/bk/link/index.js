@@ -54,10 +54,12 @@ export default {
             val: 'left',
             options: ['left', 'right'],
             tips: '图标位置'
-        },
-        slots: {
-            name: 'text',
-            type: 'text',
+        }
+    },
+    slots: {
+        default: {
+            name: ['html'],
+            type: ['text'],
             val: '文字链接'
         }
     }

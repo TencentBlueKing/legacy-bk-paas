@@ -46,16 +46,18 @@ export default {
             val: '',
             'v-bind': '',
             tips: '原生 href 属性'
-        },
+        }
         // element 的图标，先去掉
         // icon: {
         //     type: 'string',
         //     val: '',
         //     tips: '图标类名'
         // },
-        slots: {
-            name: 'text',
-            type: 'text',
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['text'],
             val: '文字链接'
         }
     }

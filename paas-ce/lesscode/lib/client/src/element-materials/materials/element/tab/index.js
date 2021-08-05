@@ -72,10 +72,18 @@ export default {
             type: 'boolean',
             val: false,
             tips: '标签的宽度是否自撑开'
-        },
-        slots: {
-            name: 'el-tab-pane',
-            type: 'tab-panel',
+        }
+    },
+    slots: {
+        default: {
+            name: ['el-tab-pane'],
+            type: ['list', 'remote'],
+            tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和name字段',
+            remoteValidate (data) {
+                if (!Array.isArray(data)) return '返回值需要是数组'
+                const errData = data.find((item) => (!item.hasOwnProperty('name') || !item.hasOwnProperty('label')))
+                if (errData) return '返回值每个元素需要含有label和name字段'
+            },
             val: [
                 { name: 'Tab-1', label: 'Tab-1' },
                 { name: 'Tab-2', label: 'Tab-2' },

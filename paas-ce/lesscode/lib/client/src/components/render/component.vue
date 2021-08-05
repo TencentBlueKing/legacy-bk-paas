@@ -12,7 +12,7 @@
 <template>
     <div :data-component-id="`component-${renderData.componentId}`"
         :base-component="renderData.type !== 'render-grid' && renderData.type !== 'free-layout' && !renderData.isCustomComponent && !renderData.isComplexComponent"
-        :class="['wrapperCls', wrapperCls, (renderDataSlotName !== 'layout' ? 'component-wrapper' : '')]"
+        :class="['wrapperCls', wrapperCls, (!renderLayout ? 'component-wrapper' : '')]"
         :ref="`${renderData.componentId}-wrapper`" :style="Object.assign({}, wrapperNodeStyle, { top: renderData.renderStyles.top, left: renderData.renderStyles.left, width: renderData.renderStyles.width }, componentData.type === 'bk-swiper' ? { height: renderData.renderStyles.height } : {})"
         @mousedown.stop="componentWrapperMousedownHandler(renderData, $event)"
         @mouseenter.stop="componentWrapperMouseenterHandler(renderData, $event)"
@@ -31,80 +31,13 @@
             :refresh-key="renderDataSlotRefreshKey"
             :component-data="componentData"
             :ref="renderData.componentId">
-            <template v-if="renderDataSlot">
-                <template v-if="isMultSlot">
-                    <template v-for="(item, index) in renderDataSlot.val">
-                        <bk-table-column :label="item.label" v-if="renderDataSlotName === 'bk-table-column' && item.type === 'customCol'" :width="item.width" :key="item.templateCol + Math.random() * 1000">
-                            <!-- eslint-disable-next-line -->
-                            <template slot-scope="props">
-                                <section v-html="item.templateCol"></section>
-                            </template>
-                        </bk-table-column>
-                        <el-table-column v-else-if="renderDataSlotName === 'el-table-column' && item.type === 'customCol'" :label="item.label" :width="item.width" :key="item.templateCol + Math.random() * 1000">
-                            <!-- eslint-disable-next-line -->
-                            <template slot-scope="scope">
-                                <section v-html="item.templateCol"></section>
-                            </template>
-                        </el-table-column>
-                        <render-slot
-                            v-else
-                            :key="index"
-                            :name="renderDataSlotName"
-                            :slot-data="item"
-                        />
-                    </template>
-                </template>
-                <template v-else-if="renderDataSlotName === 'template'">
-                    <section v-html="renderDataSlot.val"></section>
-                </template>
-                <template v-else-if="renderDataSlotName === 'layout'">
-                    <div :class="getComponentWrapperClass(renderDataSlot.val.type)" :slot="getSlotName(renderDataSlot.val.slotName)">
-                        <component :is="renderDataSlot.val.type" :key="`${componentData.renderKey}-layout`" :component-data="renderDataSlot.val">
-                        </component>
-                    </div>
-                </template>
-                <template v-else>
-                    <render-slot :name="renderDataSlotName" :slot-data="renderDataSlot.val" />
-                </template>
-            </template>
+            <component v-for="(slotName, index) in Object.keys(renderDataSlot)"
+                :key="index"
+                :slot="slotName"
+                :is="getSlotComponentName(renderDataSlot[slotName])"
+                v-bind="getSlotProps(renderDataSlot[slotName])"
+            />
         </component-wrapper>
-        <!-- <component :is="renderData.type"
-            v-bind="bindProps"
-            :key="renderDataSlotRefreshKey"
-            v-model="interactiveComponents.includes(renderData.type) ? renderData.interactiveShow : ''"
-            :transfer="false"
-            :component-type="componentData.type"
-            :component-data="componentData"
-            :style="Object.assign({}, renderData.renderStyles, (renderData.renderStyles && renderData.renderStyles.customStyle) || {}, { top: 0, left: 0 })"
-            :ref="renderData.componentId">
-            <template v-if="renderDataSlot">
-                <template v-if="isMultSlot">
-                    <template v-for="(item, index) in renderDataSlot.val">
-                        <bk-table-column :label="item.label" v-if="renderDataSlotName === 'bk-table-column' && item.type === 'customCol'" :key="item.templateCol + Math.random() * 1000">
-                            <template slot-scope="props">
-                                <section v-html="item.templateCol"></section>
-                            </template>
-                        </bk-table-column>
-                        <render-slot
-                            v-else
-                            :key="index"
-                            :name="renderDataSlotName"
-                            :slot-data="item"
-                        />
-                    </template>
-                </template>
-                <template v-else-if="renderDataSlotName === 'template'">
-                    <section v-html="renderDataSlot.val"></section>
-                </template>
-                <template v-else-if="renderDataSlotName === 'layout'">
-                    <component :is="renderDataSlot.val.type" :key="`${componentData.renderKey}-layout`" :component-data="renderDataSlot.val">
-                    </component>
-                </template>
-                <template v-else>
-                    <render-slot :name="renderDataSlotName" :slot-data="renderDataSlot.val" />
-                </template>
-            </template>
-        </component> -->
     </div>
 </template>
 
@@ -113,7 +46,7 @@
     import { mapGetters, mapMutations } from 'vuex'
     import { bus } from '@/common/bus'
     import { uuid, getNodeWithClass, removeClassWithNodeClass, getStyle, findComponent, findComponentParentGrid, getContextOffset } from '@/common/util'
-    import RenderSlot from './slot'
+    import renderSlot from './slot'
     import ComponentWrapper from './component-wrapper'
     import ComponentMenu from '@/components/widget/context-menu.vue'
     import WidgetForm from '@/components/widget/form'
@@ -123,14 +56,22 @@
     const components = {
         ComponentWrapper,
         ComponentMenu,
-        RenderSlot,
         WidgetForm,
         WidgetFormItem,
+        renderSlot,
         renderGrid: () => import('./grid'),
         renderRow: () => import('./row'),
         renderCol: () => import('./col'),
         freeLayout: () => import('./free-layout')
     }
+
+    const layoutCompomnents = [
+        'render-grid',
+        'render-row',
+        'render-col',
+        'free-layout',
+        'form-item'
+    ]
 
     export default {
         name: 'render-component',
@@ -151,8 +92,8 @@
             }
             return {
                 renderData: {},
-                renderDataSlotName: '',
-                renderDataSlot: null,
+                renderLayout: false,
+                renderDataSlot: {},
                 renderDataSlotRefreshKey: Date.now(),
                 bindProps: {},
                 // componentWrapperNode: null,
@@ -171,9 +112,6 @@
         computed: {
             ...mapGetters('drag', ['targetData']),
             ...mapGetters('components', ['curNameMap', 'interactiveComponents']),
-            isMultSlot () {
-                return this.renderDataSlot && Array.isArray(this.renderDataSlot.val)
-            },
             wrapperCls () {
                 const renderDataType = this.renderData.type
                 let ret = ''
@@ -251,11 +189,12 @@
                 this.renderData.componentId = this.componentData.name + '-' + uuid()
             }
 
-            if (this.renderData.renderProps.slots) {
-                this.renderDataSlotName = this.renderData.renderProps.slots.name
+            if (this.renderData.renderSlots.default) {
+                this.renderLayout = layoutCompomnents.includes(this.renderData.renderSlots.default.type)
             }
 
             this.updateBindProps()
+            this.updateBindSlots()
             // this.pushComponentToTree()
             bus.$on('on-update-props', this.updatePropsHandler)
             this.$once('hook:beforeDestroy', () => {
@@ -284,8 +223,16 @@
                 'pushTargetHistory'
             ]),
 
-            getSlotName (slotName) {
-                return slotName || 'default'
+            getSlotComponentName (slot) {
+                const { type } = slot
+                const componentName = layoutCompomnents.includes(type) ? type : 'render-slot'
+                return componentName
+            },
+
+            getSlotProps (slot) {
+                const { type, val } = slot
+                const props = layoutCompomnents.includes(type) ? { componentData: val } : { slotData: slot }
+                return props
             },
 
             getComponentWrapperClass (type) {
@@ -310,12 +257,15 @@
                     bindProps[renderPropsKey] = renderProps[renderPropsKey].val
                 })
                 this.bindProps = bindProps
+            },
 
-                if (this.renderData.renderProps.slots) {
-                    this.renderDataSlot = this.renderData.renderProps.slots
+            updateBindSlots () {
+                if (Object.keys(this.renderData.renderSlots || {}).length) {
+                    this.renderDataSlot = this.renderData.renderSlots
                     this.renderDataSlotRefreshKey = Date.now()
                 }
             },
+
             pushComponentToTree () {
                 const targetData = _.cloneDeep(this.targetData)
                 const selfNode = findComponent(targetData, this.renderData.componentId)
@@ -338,13 +288,15 @@
                     }
                     this.pushTargetHistory(pushData)
                     // const { renderStyles = {}, renderProps = {}, renderEvents = {} } = data.modifier
-                    const { renderStyles = {}, renderProps = {}, renderEvents = {}, renderDirectives = [], tabPanelActive = 'props' } = data.modifier
+                    const { renderStyles = {}, renderProps = {}, renderEvents = {}, renderDirectives = [], renderSlots = {}, tabPanelActive = 'props' } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
                     this.renderData.renderEvents = renderEvents
                     this.renderData.renderDirectives = renderDirectives
+                    this.renderData.renderSlots = renderSlots
                     this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
+                    this.updateBindSlots()
 
                     // 把组件的 display 样式更改同步到 .component-wrapper 元素上
                     if (renderStyles.display) {
@@ -407,7 +359,7 @@
                 removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
 
                 const curComponentNode = getNodeWithClass(e.target, 'wrapperCls')
-                const className = this.renderDataSlotName === 'layout' ? 'wrapper-cls-selected' : 'selected'
+                const className = this.renderLayout ? 'wrapper-cls-selected' : 'selected'
                 curComponentNode.classList.add(className)
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
@@ -424,7 +376,7 @@
                 if (renderData.type === 'render-grid' || renderData.type === 'free-layout') {
                     return
                 }
-                const className = this.renderDataSlotName === 'layout' ? 'wrapper-cls-hover' : 'component-wrapper-hover'
+                const className = this.renderLayout ? 'wrapper-cls-hover' : 'component-wrapper-hover'
                 const target = e.target
                 target.classList.add(className)
 
@@ -444,7 +396,7 @@
                 if (renderData.type === 'render-grid' || renderData.type === 'free-layout') {
                     return
                 }
-                const className = this.renderDataSlotName === 'layout' ? 'wrapper-cls-hover' : 'component-wrapper-hover'
+                const className = this.renderLayout ? 'wrapper-cls-hover' : 'component-wrapper-hover'
                 const target = e.target
                 target.classList.remove(className)
             }
