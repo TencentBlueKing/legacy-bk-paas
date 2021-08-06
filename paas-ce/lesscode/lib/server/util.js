@@ -230,9 +230,9 @@ export function transformOldGrid (children, grid, childCallBack, parentCallBack,
         const children = column.children || []
         children.forEach((component, index) => {
             if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
-                walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
+                transformOldGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
             } else if ((component.renderProps || {}).slots && ((component.renderProps || {}).slots || {}).name === 'layout') {
-                walkGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
+                transformOldGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
                 childCallBack(component, children, index, grid, columnIndex)
             } else {
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
@@ -248,7 +248,6 @@ export function transformOldGrid (children, grid, childCallBack, parentCallBack,
 }
 
 export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
-    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
     const renderSlots = grid.renderSlots || {}
     const slots = renderSlots.default || {}
     let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
@@ -269,8 +268,8 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
             } else if (slotKeys.some(key => renderSlots[key].name === 'layout')) {
                 slotKeys.forEach((key) => {
                     const slot = renderSlots[key]
-                    childCallBack(component, children, index, grid, columnIndex)
                     walkGrid([], slot.val, childCallBack, parentCallBack, index, columnIndex)
+                    childCallBack(component, children, index, grid, columnIndex)
                 })
             } else {
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
@@ -282,6 +281,8 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
             childCallBack(column, columns, columnIndex, grid, index)
         }
     })
+
+    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
 }
 
 export function ansiparse (str) {
