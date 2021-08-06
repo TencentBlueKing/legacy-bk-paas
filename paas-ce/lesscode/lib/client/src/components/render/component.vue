@@ -31,15 +31,13 @@
             :refresh-key="renderDataSlotRefreshKey"
             :component-data="componentData"
             :ref="renderData.componentId">
-            <div v-for="(slotName, index) in Object.keys(renderDataSlot)"
+            <component v-for="(slotName, index) in Object.keys(renderDataSlot)"
                 :slot="slotName"
                 :key="index"
-                :class="getComponentWrapperClass(slotName)">
-                <component
-                    :is="getSlotComponentName(renderDataSlot[slotName])"
-                    v-bind="getSlotProps(renderDataSlot[slotName])"
-                />
-            </div>
+                :extra-drag-cls="['interactiveInnerComp']"
+                :is="getSlotComponentName(renderDataSlot[slotName])"
+                v-bind="getSlotProps(renderDataSlot[slotName])"
+            />
         </component-wrapper>
     </div>
 </template>
@@ -62,19 +60,8 @@
         WidgetForm,
         WidgetFormItem,
         renderSlot,
-        renderGrid: () => import('./grid'),
-        renderRow: () => import('./row'),
-        renderCol: () => import('./col'),
-        freeLayout: () => import('./free-layout')
+        renderLayout: () => import('./index')
     }
-
-    const layoutCompomnents = [
-        'render-grid',
-        'render-row',
-        'render-col',
-        'free-layout',
-        'form-item'
-    ]
 
     export default {
         name: 'render-component',
@@ -192,9 +179,12 @@
                 this.renderData.componentId = this.componentData.name + '-' + uuid()
             }
 
-            if (this.renderData.renderSlots.default) {
-                this.renderLayout = layoutCompomnents.includes(this.renderData.renderSlots.default.type)
-            }
+            Object.values(this.renderData.renderSlots).some(item => {
+                if (item.name === 'layout') {
+                    this.renderLayout = true
+                    return item
+                }
+            })
 
             this.updateBindProps()
             this.updateBindSlots()
@@ -227,19 +217,15 @@
             ]),
 
             getSlotComponentName (slot) {
-                const { type } = slot
-                const componentName = layoutCompomnents.includes(type) ? type : 'render-slot'
+                const { name } = slot
+                const componentName = name === 'layout' ? 'render-layout' : 'render-slot'
                 return componentName
             },
 
             getSlotProps (slot) {
-                const { type, val } = slot
-                const props = layoutCompomnents.includes(type) ? { componentData: val } : { slotData: slot }
+                const { name, val } = slot
+                const props = name === 'layout' ? { componentData: val } : { slotData: slot }
                 return props
-            },
-
-            getComponentWrapperClass (type) {
-                return type === 'render-grid' ? 'bk-layout-grid-row-wrapper' : 'bk-layout-free-wrapper'
             },
             /**
              * 右键删除 component

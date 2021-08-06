@@ -22,115 +22,6 @@ import { logger } from '../logger'
  */
 export const fixCardData = async (ctx) => {
     try {
-        const transformSlot = (slots, name, props) => {
-            const value = slots.val
-            let res = {}
-            switch (name) {
-                case 'el-card':
-                case 'card':
-                    if (typeof value === 'string') {
-                        res = { default: { name: 'html', type: 'html', displayName: '卡片内容区', val: value } }
-                    } else {
-                        res = { default: { name: 'layout', type: 'free-layout', display: 'hidden', val: { ...(value || {}) } } }
-                    }
-                    break
-                case 'sideslider':
-                    res = { content: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
-                    delete (value || {}).renderProps.slots
-                    break
-                case 'dialog':
-                    res = { default: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
-                    delete (value || {}).renderProps.slots
-                    break
-                case 'form':
-                    res = {
-                        default: {
-                            name: 'layout',
-                            type: 'form-item',
-                            val: (value || []).map(item => {
-                                item.renderSlots = {
-                                    default: {
-                                        ...(item.renderProps || {}).slots,
-                                        val: (((item.renderProps || {}).slots || {}).val || []).map((x) => {
-                                            const renderSlots = {}
-                                            if (x.renderProps.slots) {
-                                                renderSlots.default = { ...x.renderProps.slots }
-                                                delete x.renderProps.slots
-                                            }
-                                            x.renderSlots = renderSlots
-                                            return x
-                                        })
-                                    }
-                                }
-                                delete (item.renderProps || {}).slots
-                                return item
-                            })
-                        }
-                    }
-                    break
-                case 'popover':
-                    res = {
-                        default: { name: 'html', type: 'html', val: (value || ''), payload: (slots.payload || {}) },
-                        content: { name: 'html', type: 'html', val: (props.content || {}).val || '' }
-                    }
-                    break
-                case 'popconfirm':
-                    res = {
-                        default: { name: 'html', type: 'html', val: (value || ''), payload: (slots.payload || {}) },
-                        content: { name: 'html', type: 'html', val: (props.title || {}).val || '' }
-                    }
-                    break
-                case 'el-tooltip':
-                case 'el-upload':
-                    res = {
-                        default: { name: 'html', type: 'html', val: (value || ''), payload: (slots.payload || {}) }
-                    }
-                    break
-                case 'paragraph':
-                    res = { default: { ...(slots || {}), type: 'textarea' } }
-                    break
-                case 'el-checkbox-group':
-                case 'el-radio-group':
-                    res = {
-                        default: {
-                            ...(slots || {}),
-                            type: 'list',
-                            val: slots.val.map((x) => {
-                                x.value = x.label
-                                return x
-                            })
-                        }
-                    }
-                    break
-                case 'el-select':
-                case 'el-tabs':
-                case 'el-steps':
-                case 'el-bread-crumb':
-                case 'el-carousel':
-                case 'el-timeline':
-                case 'checkbox-group':
-                case 'bread-crumb':
-                case 'radio-group':
-                case 'radio-button-group':
-                case 'select':
-                case 'tab':
-                    res = { default: { ...(slots || {}), type: 'list' } }
-                    break
-                case 'el-table':
-                case 'table':
-                    res = { default: { ...(slots || {}), type: 'table-list' } }
-                    break
-                case 'folding-table':
-                case 'search-table':
-                    res = { column: { ...(slots || {}), type: 'table-list' } }
-                    break
-                default:
-                    res = { default: (slots || {}) }
-                    break
-            }
-            return res
-        }
-
         const errorPageIds = []
         const projectRepository = getRepository(Project)
         const projectPageRepository = getRepository(ProjectPage)
@@ -148,43 +39,18 @@ export const fixCardData = async (ctx) => {
                         const callBack = (data) => {
                             const type = data.type
                             switch (type) {
-                                // case 'bk-card':
-                                // case 'el-card':
-                                //     const renderSlots = data.renderSlots.default || {}
-                                //     const slotVal = renderSlots.val || {}
-                                //     const slotValRenderProps = slotVal.renderProps || {}
-                                //     const slotValSlots = slotValRenderProps.slots
-                                //     if (slotValSlots) {
-                                //         const cardSlotVal = slotValSlots.val
-                                //         if (typeof cardSlotVal === 'string') {
-                                //             slotVal.renderSlots = { default: { name: 'html', type: 'html', displayName: '卡片内容区', val: cardSlotVal } }
-                                //         } else if (cardSlotVal) {
-                                //             slotVal.renderSlots = { default: { ...slotValSlots } }
-                                //         }
-                                //     }
-                                //     break
-                                case 'bk-table':
-                                case 'el-table':
-                                    if (data.renderSlots.default.type === 'table-column') {
-                                        data.renderSlots.default.type = 'table-list'
+                                case 'bk-card':
+                                case 'el-card':
+                                    const renderSlots = data.renderSlots.default || {}
+                                    const renderSlotsVal = renderSlots.val || {}
+                                    if (!renderSlotsVal.name) {
+                                        data.renderSlots.default = {
+                                            name: 'html',
+                                            type: 'html',
+                                            val: '<p>卡片内容1</p><p>卡片内容2</p><p>卡片内容3</p>'
+                                        }
                                     }
                                     break
-                                case 'search-table':
-                                case 'folding-table':
-                                    if (data.renderSlots.column.type === 'table-column') {
-                                        data.renderSlots.column.type = 'table-list'
-                                    }
-                                    break
-                            }
-
-                            const renderProps = data.renderProps || {}
-                            const slots = renderProps['slots']
-                            if (slots) {
-                                data.renderSlots = transformSlot(slots, data.name, renderProps)
-                                delete renderProps['slots']
-                            }
-                            if (!data.renderSlots) {
-                                data.renderSlots = {}
                             }
                         }
                         walkGrid(targetData, grid, callBack, callBack, index)
