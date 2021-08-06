@@ -60,7 +60,9 @@
         WidgetForm,
         WidgetFormItem,
         renderSlot,
-        renderLayout: () => import('./index')
+        renderLayout: () => import('./index'),
+        renderGrid: () => import('./grid'),
+        freeLayout: () => import('./free-layout')
     }
 
     export default {
