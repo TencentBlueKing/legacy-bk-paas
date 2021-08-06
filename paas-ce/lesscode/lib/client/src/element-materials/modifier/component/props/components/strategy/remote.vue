@@ -259,7 +259,7 @@
                     let message = this.remoteValidate(res)
                     if (message) {
                         message = '数据源设置成功，以下问题可能会导致组件表现异常，请检查：' + message
-                        this.messageWarn(message)
+                        this.$bkMessage({ theme: 'warning', message })
                     } else {
                         this.change(this.name, res, this.type, JSON.parse(JSON.stringify(this.remoteData)))
                         if (this.name === 'remoteOptions') {
