@@ -130,6 +130,7 @@ export const fixCardData = async (ctx) => {
             }
             return res
         }
+
         const errorPageIds = []
         const projectRepository = getRepository(Project)
         const projectPageRepository = getRepository(ProjectPage)
@@ -145,6 +146,37 @@ export const fixCardData = async (ctx) => {
                     const targetData = (typeof page.content) === 'string' ? JSON.parse(page.content) : page.content;
                     (targetData || []).forEach((grid, index) => {
                         const callBack = (data) => {
+                            const type = data.type
+                            switch (type) {
+                                // case 'bk-card':
+                                // case 'el-card':
+                                //     const renderSlots = data.renderSlots.default || {}
+                                //     const slotVal = renderSlots.val || {}
+                                //     const slotValRenderProps = slotVal.renderProps || {}
+                                //     const slotValSlots = slotValRenderProps.slots
+                                //     if (slotValSlots) {
+                                //         const cardSlotVal = slotValSlots.val
+                                //         if (typeof cardSlotVal === 'string') {
+                                //             slotVal.renderSlots = { default: { name: 'html', type: 'html', displayName: '卡片内容区', val: cardSlotVal } }
+                                //         } else if (cardSlotVal) {
+                                //             slotVal.renderSlots = { default: { ...slotValSlots } }
+                                //         }
+                                //     }
+                                //     break
+                                case 'bk-table':
+                                case 'el-table':
+                                    if (data.renderSlots.default.type === 'table-column') {
+                                        data.renderSlots.default.type = 'table-list'
+                                    }
+                                    break
+                                case 'search-table':
+                                case 'folding-table':
+                                    if (data.renderSlots.column.type === 'table-column') {
+                                        data.renderSlots.column.type = 'table-list'
+                                    }
+                                    break
+                            }
+
                             const renderProps = data.renderProps || {}
                             const slots = renderProps['slots']
                             if (slots) {
@@ -155,7 +187,7 @@ export const fixCardData = async (ctx) => {
                                 data.renderSlots = {}
                             }
                         }
-                        transformOldGrid(targetData, grid, callBack, callBack, index)
+                        walkGrid(targetData, grid, callBack, callBack, index)
                     })
                     page.content = JSON.stringify(targetData || [])
                     page.updateBySystem = true
@@ -170,7 +202,7 @@ export const fixCardData = async (ctx) => {
         const errorMessage = errorPageIds.length ? `出现错误的pageId：${errorPageIds.join(', ')}` : ''
         ctx.send({
             code: 0,
-            message: `slot 数据更新完成. ${errorMessage}`
+            message: `card 数据更新完成. ${errorMessage}`
         })
     } catch (error) {
         logger.warn('warn slot')
