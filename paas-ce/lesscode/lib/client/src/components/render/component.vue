@@ -31,12 +31,15 @@
             :refresh-key="renderDataSlotRefreshKey"
             :component-data="componentData"
             :ref="renderData.componentId">
-            <component v-for="(slotName, index) in Object.keys(renderDataSlot)"
-                :key="index"
+            <div v-for="(slotName, index) in Object.keys(renderDataSlot)"
                 :slot="slotName"
-                :is="getSlotComponentName(renderDataSlot[slotName])"
-                v-bind="getSlotProps(renderDataSlot[slotName])"
-            />
+                :key="index"
+                :class="getComponentWrapperClass(slotName)">
+                <component
+                    :is="getSlotComponentName(renderDataSlot[slotName])"
+                    v-bind="getSlotProps(renderDataSlot[slotName])"
+                />
+            </div>
         </component-wrapper>
     </div>
 </template>
