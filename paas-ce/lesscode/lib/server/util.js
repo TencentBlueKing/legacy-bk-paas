@@ -248,7 +248,6 @@ export function transformOldGrid (children, grid, childCallBack, parentCallBack,
 }
 
 export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
-    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
     const renderSlots = grid.renderSlots || {}
     const slots = renderSlots.default || {}
     let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
@@ -269,8 +268,8 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
             } else if (slotKeys.some(key => renderSlots[key].name === 'layout')) {
                 slotKeys.forEach((key) => {
                     const slot = renderSlots[key]
-                    childCallBack(component, children, index, grid, columnIndex)
                     walkGrid([], slot.val, childCallBack, parentCallBack, index, columnIndex)
+                    childCallBack(component, children, index, grid, columnIndex)
                 })
             } else {
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
@@ -282,6 +281,8 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
             childCallBack(column, columns, columnIndex, grid, index)
         }
     })
+
+    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
 }
 
 export function ansiparse (str) {
