@@ -108,7 +108,14 @@
             }
         }
         // 初始化 slot
-        const renderSlots = initSlots || slots
+        const defaultSlots = slots.default ? {
+            default: {
+                name: slots.default.name[0] || name,
+                type: slots.default.type[0] || type,
+                val: slots.default.val
+            }
+        } : {}
+        const renderSlots = initSlots || defaultSlots
 
         return {
             componentId: `${name}-${uuid()}`,
