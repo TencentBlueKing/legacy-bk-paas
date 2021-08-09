@@ -19,7 +19,8 @@
             @contextmenu.stop="rowClickHandler(renderData, $event)"
             @mouseover.native.stop="rowMouseoverHandler(renderData)"
             @mouseout.native.stop="rowMouseoutHandler(renderData)">
-            <component-menu class="grid-context-menu"
+            <component-menu
+                class="grid-context-menu"
                 :target="contextMenuTarget"
                 :show="contextMenuVisible"
                 :offset="getComputedMunuOffset"
