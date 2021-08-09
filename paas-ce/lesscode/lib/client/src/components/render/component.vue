@@ -38,6 +38,7 @@
             :ref="renderData.componentId">
             <component
                 v-for="(slotName, index) in Object.keys(renderDataSlot)"
+                is-child
                 :is="getSlotComponentName(renderDataSlot[slotName])"
                 :slot="slotName"
                 :key="index"
