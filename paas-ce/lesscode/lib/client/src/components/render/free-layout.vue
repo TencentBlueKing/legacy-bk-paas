@@ -73,7 +73,7 @@
     // eslint-disable-next-line no-unused-vars
     import Drag from '@/common/drag'
     import ComponentMenu from '@/components/widget/context-menu.vue'
-    import offsetMixin from './offsetMixin'
+    import offsetMixin from './offset-mixin'
 
     export default {
         name: 'free-layout',
