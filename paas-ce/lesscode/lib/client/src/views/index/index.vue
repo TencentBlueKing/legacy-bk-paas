@@ -223,7 +223,9 @@
                 <div class="selected-component-info" v-if="curSelectedComponentData.componentId && !collapseSide.right">
                     <div class="component-id overflow" v-bk-overflow-tips>{{curSelectedComponentData.componentId}}</div>
                     <div class="action-wrapper">
-                        <i class="bk-drag-icon bk-drag-shanchu mr5"
+                        <i
+                            v-if="!curSelectedComponentData.inFormItem"
+                            class="bk-drag-icon bk-drag-shanchu mr5"
                             id="del-component-right-sidebar"
                             @click="showDeleteElement"
                             v-bk-tooltips="'删除'"></i>
