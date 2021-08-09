@@ -91,7 +91,7 @@
     import renderComponent from './component'
     import freeLayout from './free-layout'
     import ComponentMenu from '@/components/widget/context-menu.vue'
-    import offsetMixin from './offsetMixin'
+    import offsetMixin from './offset-mixin'
 
     export default {
         name: 'render-grid',

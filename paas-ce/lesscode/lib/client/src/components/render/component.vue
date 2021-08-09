@@ -38,6 +38,7 @@
             :ref="renderData.componentId">
             <component
                 v-for="(slotName, index) in Object.keys(renderDataSlot)"
+                is-child
                 :is="getSlotComponentName(renderDataSlot[slotName])"
                 :slot="slotName"
                 :key="index"
@@ -63,7 +64,7 @@
     import WidgetFormItem from '@/components/widget/form-item'
     import renderSlot from './slot'
     import ComponentWrapper from './component-wrapper'
-    import offsetMixin from './offsetMixin'
+    import offsetMixin from './offset-mixin'
 
     const BLOCK_ELEMS = [
         'div',
@@ -171,7 +172,7 @@
                     width,
                     height
                 } = this.renderData.renderStyles
-                
+
                 const styles = {
                     top: top,
                     left: left,
