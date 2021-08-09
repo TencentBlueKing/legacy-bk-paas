@@ -122,7 +122,7 @@
 }
 
 .wrapper-cls-hover {
-    .bk-card, .empty-widget-form {
+    .bk-card, .empty-widget-form, .bk-form {
         border: 1px dashed #3a84ff !important;
     }
     
