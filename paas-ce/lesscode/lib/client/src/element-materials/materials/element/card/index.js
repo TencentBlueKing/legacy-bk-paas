@@ -42,6 +42,7 @@ export default {
     },
     slots: {
         default: {
+            name: ['layout'],
             type: ['free-layout'],
             display: 'hidden',
             val: {
