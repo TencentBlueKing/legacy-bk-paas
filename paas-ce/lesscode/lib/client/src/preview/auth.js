@@ -47,7 +47,7 @@ function auth (projectId) {
     })
 }
 
-function errorHandle (err) {
+function errorHandle (err = {}) {
     console.error(err)
     let message = ''
     switch (err.status) {
@@ -58,7 +58,9 @@ function errorHandle (err) {
             }
             break
         default:
-            message = err.message || '无法连接到后端服务，请稍候再试。'
+            const response = err.response || {}
+            const data = response.data || {}
+            message = data.message || err.message || '无法连接到后端服务，请稍候再试。'
             break
     }
 
