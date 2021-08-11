@@ -26,6 +26,7 @@
             width="800"
             :title="'数据示例'"
             header-position="left"
+            :mask-close="false"
             :show-footer="false"
             ext-cls="remote-example-dialog">
             <div class="remote-example-viewer" ref="remoteViewer"></div>
@@ -80,7 +81,8 @@
                 },
                 propDirMap: {},
                 usedMethodMap: {},
-                isShow: false
+                isShow: false,
+                editor: {}
             }
         },
         computed: {
@@ -292,39 +294,27 @@
                 })
             },
             initMonaco () {
-                // const options = Object.assign({
-                //     // value: this.defaultValue,
-                //     theme: 'vs-dark',
-                //     language: 'javascript',
-                //     fontSize: 14,
-                //     fontFamily: 'Consolas',
-                //     cursorBlinking: 'solid',
-                //     automaticLayout: true,
-                //     minimap: {
-                //         enabled: false // 关闭小地图
-                //     }
-                // }, this.options)
-                //
-                // const el = this.$refs.test
-                // console.log(monaco)
-                // console.log(options)
-                // console.log(monaco)
-                this.editor = monaco.editor.create(this.$refs.remoteViewer, {
-                    theme: 'vs-dark',
-                    automaticLayout: true
+                monaco.editor.defineTheme('remote-viewer', {
+                    base: 'vs-dark',
+                    inherit: true,
+                    rules: [{ background: '#242424' }],
+                    colors: {
+                        'editor.background': '#242424'
+                    }
                 })
-                // this.editor = monaco.editor.create(el, options)
-                // this.editor.onDidChangeModelContent(event => {
-                //     const value = this.editor.getValue()
-                //     if (this.value !== value) {
-                //         this.$emit('update:value', value)
-                //     }
-                // })
-                //
-                // this.$nextTick(() => {
-                //     this.editor.setValue(this.value)
-                //     this.editor.getAction('editor.action.formatDocument').run()
-                // })
+                const value = JSON.stringify(this.defaultValue, null, '\t')
+                this.editor = monaco.editor.create(this.$refs.remoteViewer, {
+                    value: value,
+                    theme: 'remote-viewer',
+                    readOnly: true,
+                    fontSize: 14,
+                    fontFamily: 'Consolas',
+                    cursorBlinking: 'solid',
+                    automaticLayout: true,
+                    minimap: {
+                        enabled: false // 关闭小地图
+                    }
+                })
             }
         }
     }
