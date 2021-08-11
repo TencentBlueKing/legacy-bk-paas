@@ -40,11 +40,18 @@
             ComponentModule
         },
         provide () {
-            return {
-                layoutOffset: this.interactiveLayout
-            }
+            /** slot下的子元素，不需要provide offset */
+            return this.isChild
+                ? {}
+                : {
+                    layoutOffset: this.interactiveLayout
+                }
         },
         props: {
+            isChild: {
+                type: Boolean,
+                default: false
+            },
             componentData: {
                 type: Object,
                 default: () => ({})

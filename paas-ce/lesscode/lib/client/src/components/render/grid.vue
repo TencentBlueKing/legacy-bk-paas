@@ -19,7 +19,8 @@
             @contextmenu.stop="rowClickHandler(renderData, $event)"
             @mouseover.native.stop="rowMouseoverHandler(renderData)"
             @mouseout.native.stop="rowMouseoutHandler(renderData)">
-            <component-menu class="grid-context-menu"
+            <component-menu
+                class="grid-context-menu"
                 :target="contextMenuTarget"
                 :show="contextMenuVisible"
                 :offset="getComputedMunuOffset"
@@ -90,7 +91,7 @@
     import renderComponent from './component'
     import freeLayout from './free-layout'
     import ComponentMenu from '@/components/widget/context-menu.vue'
-    import offsetMixin from './offsetMixin'
+    import offsetMixin from './offset-mixin'
 
     export default {
         name: 'render-grid',

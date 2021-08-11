@@ -53,17 +53,23 @@ export default {
             }
             return acc
         }, {})
-
-        return h(renderData.type, {
-            key: params['component-type'] === 'bk-sideslider' ? 'bk-slider' : refreshKey, // sideSlider 固定key，防止属性修改动画刷新
-            props: params,
-            attrs: params,
-            on: {
-                ...dynamicEvent
+        
+        return h('span',
+            {
+                style: { 'font-size': 'initial' }
             },
-            scopedSlots,
-            style: Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }),
-            ref: renderData.componentId
-        }, context.children)
+            [
+                h(renderData.type, {
+                    key: params['component-type'] === 'bk-sideslider' ? 'bk-slider' : refreshKey, // sideSlider 固定key，防止属性修改动画刷新
+                    props: params,
+                    attrs: params,
+                    on: {
+                        ...dynamicEvent
+                    },
+                    scopedSlots,
+                    style: Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }),
+                    ref: renderData.componentId
+                }, context.children)
+            ])
     }
 }
