@@ -128,23 +128,24 @@ function createDependencyProposals (range) {
     const formVals = []
     const findForm = (data) => {
         if (data.type === 'widget-form') {
-            formVals.push(data.componentId)
+            const prefix = camelCase(data.componentId, { transform: camelCaseTransformMerge })
+            const modelPrefix = `${prefix}model`
+            formVals.push(modelPrefix)
+            formVals.push(`${prefix}rules`)
+            const formSlots = (data.renderSlots && data.renderSlots.default && data.renderSlots.default.val) || []
+            formSlots.map(item => {
+                const prop = item.renderProps.property && item.renderProps.property.val
+                prop && formVals.push(`${modelPrefix}.${prop}`)
+            })
         }
     }
     targetData.forEach((grid, index) => walkGrid(targetData, grid, findForm, findForm, index))
-    formVals.forEach(componentId => {
+    formVals.forEach(item => {
         suggestions.push({
-            label: `lesscode.${camelCase(componentId, { transform: camelCaseTransformMerge })}model`,
+            label: `lesscode.${item}`,
             kind: monaco.languages.CompletionItemKind.Property,
-            documentation: `form表单${componentId}对应的model属性值`,
-            insertText: `this.${camelCase(componentId, { transform: camelCaseTransformMerge })}model`,
-            range
-        })
-        suggestions.push({
-            label: `lesscode.${camelCase(componentId, { transform: camelCaseTransformMerge })}rules`,
-            kind: monaco.languages.CompletionItemKind.Property,
-            documentation: `form表单${componentId}对应的rules属性值`,
-            insertText: `this.${camelCase(componentId, { transform: camelCaseTransformMerge })}rules`,
+            documentation: '',
+            insertText: `this.${item}`,
             range
         })
     })
