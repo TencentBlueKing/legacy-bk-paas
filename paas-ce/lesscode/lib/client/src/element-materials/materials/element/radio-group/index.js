@@ -32,7 +32,7 @@ export default {
     props: {
         value: {
             type: ['string', 'number', 'boolean'],
-            val: '单选一'
+            val: '1'
         },
         disabled: {
             type: 'boolean',
@@ -53,9 +53,9 @@ export default {
                 if (errData) return '返回值每个元素需要含有label和value字段'
             },
             val: [
-                { label: '单选一', value: 1 },
-                { label: '单选二', value: 2 },
-                { label: '单选三', value: 3 }
+                { label: '单选一', value: '1' },
+                { label: '单选二', value: '2' },
+                { label: '单选三', value: '3' }
             ]
         }
     }

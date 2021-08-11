@@ -75,13 +75,13 @@ export default {
             tips: '显示的数据'
         },
         height: {
-            type: ['string', 'number'],
-            val: '100%',
+            type: ['number', 'string'],
+            val: 176,
             tips: 'Table 的高度，默认为自动高度。如果 height 为 Number 类型，单位 px；如果 height 为 String 类型，则这个高度会设置为 Table 的 style.height 的值，Table 的高度会受控于外部样式。'
         },
         'max-height': {
-            type: ['string', 'number'],
-            val: '176px'
+            type: ['number', 'string'],
+            val: 176
         },
         stripe: {
             type: 'boolean',
