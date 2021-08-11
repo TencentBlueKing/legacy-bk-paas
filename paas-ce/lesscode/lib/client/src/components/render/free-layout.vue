@@ -31,6 +31,7 @@
                 :group="{ pull: true, put: ['component', ...extraDragCls] }"
                 ghost-class="in-free-layout-item-ghost"
                 :force-fallback="false"
+                @add="handleAdd"
                 :list="renderDataSlot.val[0].children">
                 <div class="free-layout-item-placeholder" :style="{ height: renderData.renderStyles.height || '500px', pointerEvents: freeLayoutItemPlaceholderPointerEvents }"></div>
                 <render-component
@@ -125,6 +126,11 @@
                 this.renderData.componentId = this.componentData.name + '-' + uuid()
             }
 
+            this.mountedPosition = {
+                top: 0,
+                left: 0
+            }
+
             this.updateBindProps()
             this.updateBindSlots()
 
@@ -147,7 +153,25 @@
                 'setTargetData',
                 'pushTargetHistory'
             ]),
-
+            handleAdd (event) {
+                const {
+                    target: $targetEl,
+                    originalEvent
+                } = event
+                const {
+                    left,
+                    top
+                } = $targetEl.getBoundingClientRect()
+                const {
+                    pageX,
+                    pageY
+                } = originalEvent
+                
+                this.mountedPosition = {
+                    top: `${pageY - top - 10}px`,
+                    left: `${pageX - left - 10}px`
+                }
+            },
             updateBindProps () {
                 const { renderProps } = this.renderData
                 const bindProps = {}
@@ -344,29 +368,35 @@
                 const renderData = data.renderData
                 this.setStyle4Component(renderData)
                 this.doDrag(data.elem, renderData)
+                // setTimeout 保证 add 事件已经处理完毕
+                setTimeout(() => {
+                    // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件
+                    bus.$emit('on-update-props', {
+                        componentId: renderData.componentId,
+                        modifier: {
+                            tabPanelActive: renderData.tabPanelActive,
+                            renderEvents: renderData.renderEvents,
+                            renderDirectives: renderData.renderDirectives,
+                            renderProps: Object.assign(
+                                {},
+                                renderData.renderProps,
+                                { inFreeLayout: { val: true } }
+                            ),
+                            renderStyles: Object.assign(
+                                {},
+                                renderData.renderStyles,
+                                {
+                                    top: renderData.renderStyles.top || this.mountedPosition.top,
+                                    left: renderData.renderStyles.left || this.mountedPosition.left
+                                }
+                                
+                            ),
+                            renderSlots: renderData.renderSlots
+                        }
+                    })
+                })
 
                 // console.error('componentMounted', renderData)
-
-                // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件
-                bus.$emit('on-update-props', {
-                    componentId: renderData.componentId,
-                    modifier: {
-                        tabPanelActive: renderData.tabPanelActive,
-                        renderEvents: renderData.renderEvents,
-                        renderDirectives: renderData.renderDirectives,
-                        renderProps: Object.assign(
-                            {},
-                            renderData.renderProps,
-                            { inFreeLayout: { val: true } }
-                        ),
-                        renderStyles: Object.assign(
-                            {},
-                            renderData.renderStyles,
-                            { top: renderData.renderStyles.top || '0px', left: renderData.renderStyles.left || '0px' }
-                        ),
-                        renderSlots: renderData.renderSlots
-                    }
-                })
             },
 
             /**
