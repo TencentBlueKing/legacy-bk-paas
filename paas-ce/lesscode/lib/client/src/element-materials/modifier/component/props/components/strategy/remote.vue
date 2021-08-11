@@ -13,11 +13,23 @@
     <section>
         <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
             <span :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
+            <span class="remote-example" @click="handleShowExample">数据示例</span>
         </div>
         <div class="remote-content">
             <select-func v-model="remoteData" @change="changeFunc"></select-func>
             <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
         </div>
+        <bk-dialog
+            v-model="isShow"
+            :position="{ top: 100 }"
+            render-directive="if"
+            width="800"
+            :title="'数据示例'"
+            header-position="left"
+            :show-footer="false"
+            ext-cls="remote-example-dialog">
+            <div class="remote-example-viewer" ref="remoteViewer"></div>
+        </bk-dialog>
     </section>
 </template>
 
@@ -67,7 +79,8 @@
                     params: []
                 },
                 propDirMap: {},
-                usedMethodMap: {}
+                usedMethodMap: {},
+                isShow: false
             }
         },
         computed: {
@@ -270,6 +283,48 @@
                 } catch (error) {
                     this.$bkMessage({ theme: 'error', message: error.message || error || '获取数据失败，请检查函数是否正确', limit: 1 })
                 }
+            },
+            
+            handleShowExample () {
+                this.isShow = true
+                this.$nextTick(() => {
+                    this.initMonaco()
+                })
+            },
+            initMonaco () {
+                // const options = Object.assign({
+                //     // value: this.defaultValue,
+                //     theme: 'vs-dark',
+                //     language: 'javascript',
+                //     fontSize: 14,
+                //     fontFamily: 'Consolas',
+                //     cursorBlinking: 'solid',
+                //     automaticLayout: true,
+                //     minimap: {
+                //         enabled: false // 关闭小地图
+                //     }
+                // }, this.options)
+                //
+                // const el = this.$refs.test
+                // console.log(monaco)
+                // console.log(options)
+                // console.log(monaco)
+                this.editor = monaco.editor.create(this.$refs.remoteViewer, {
+                    theme: 'vs-dark',
+                    automaticLayout: true
+                })
+                // this.editor = monaco.editor.create(el, options)
+                // this.editor.onDidChangeModelContent(event => {
+                //     const value = this.editor.getValue()
+                //     if (this.value !== value) {
+                //         this.$emit('update:value', value)
+                //     }
+                // })
+                //
+                // this.$nextTick(() => {
+                //     this.editor.setValue(this.value)
+                //     this.editor.getAction('editor.action.formatDocument').run()
+                // })
             }
         }
     }
@@ -277,6 +332,8 @@
 
 <style lang="postcss">
     .remote-title {
+        display: flex;
+        justify-content: space-between;
         margin: 10px 0;
         line-height: 24px;
         font-size: 12px;
@@ -287,6 +344,14 @@
     .under-line {
         line-height: 24px;
         border-bottom: 1px dashed #979ba5;
+    }
+    .remote-example{
+        color: #3a84ff;
+        cursor: pointer;
+    }
+
+    .remote-example-viewer{
+        height: 403px;
     }
     .remote-content {
         background: #f0f1f5;
