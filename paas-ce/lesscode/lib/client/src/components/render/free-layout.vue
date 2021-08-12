@@ -448,6 +448,7 @@
             },
 
             doDrag (dragNode, renderData) {
+                dragNode = getNodeWithClass(dragNode, 'wrapperCls')
                 // 自由布局里面拖动自由布局时会有异常体验问题
                 if (dragNode.className !== undefined && dragNode.className.indexOf('wrapperCls') < 0) {
                     return
