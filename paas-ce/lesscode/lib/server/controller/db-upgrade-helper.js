@@ -18,70 +18,6 @@ import FuncVariable from '../model/entities/func-variable'
 import { logger } from '../logger'
 
 /**
- * 修复card组件
- */
-export const fixCardData = async (ctx) => {
-    try {
-        const errorPageIds = []
-        const projectRepository = getRepository(Project)
-        const projectPageRepository = getRepository(ProjectPage)
-        const pageRepository = getRepository(Page)
-        const allProject = await projectRepository.find({ where: { deleteFlag: 0 } })
-        for (const project of allProject) {
-            const projectId = project.id
-            const projectPages = await projectPageRepository.find({ where: { projectId, deleteFlag: 0 } }) || []
-            const pageIds = projectPages.map((projectPage) => (projectPage.pageId))
-            const pages = pageIds.length > 0 ? await pageRepository.find({ where: { id: In(pageIds) } }) : []
-            for (const page of pages) {
-                try {
-                    const targetData = (typeof page.content) === 'string' ? JSON.parse(page.content) : page.content;
-                    (targetData || []).forEach((grid, index) => {
-                        const callBack = (data) => {
-                            const type = data.type
-                            switch (type) {
-                                case 'bk-card':
-                                case 'el-card':
-                                    const renderSlots = data.renderSlots.default || {}
-                                    const renderSlotsVal = renderSlots.val || {}
-                                    if (!renderSlotsVal.name) {
-                                        data.renderSlots.default = {
-                                            name: 'html',
-                                            type: 'html',
-                                            val: '<p>卡片内容1</p><p>卡片内容2</p><p>卡片内容3</p>'
-                                        }
-                                    }
-                                    break
-                            }
-                        }
-                        walkGrid(targetData, grid, callBack, callBack, index)
-                    })
-                    page.content = JSON.stringify(targetData || [])
-                    page.updateBySystem = true
-                    await pageRepository.update({ id: page.id }, page)
-                } catch (error) {
-                    console.error(error)
-                    errorPageIds.push(page.id)
-                }
-            }
-        }
-        
-        const errorMessage = errorPageIds.length ? `出现错误的pageId：${errorPageIds.join(', ')}` : ''
-        ctx.send({
-            code: 0,
-            message: `card 数据更新完成. ${errorMessage}`
-        })
-    } catch (error) {
-        logger.warn('warn slot')
-        logger.warn(error)
-        ctx.send({
-            code: -1,
-            message: error.message,
-            data: null
-        })
-    }
-}
-
-/**
  * 对现有的 slot 数据更新
  * 只能执行一次
  * @param {*} ctx
@@ -196,6 +132,49 @@ export const updateSlot = async (ctx) => {
             }
             return res
         }
+        const getDefaultTargetData = (targetData) => {
+            if (targetData && Array.isArray(targetData) && targetData.length > 0) {
+                return targetData
+            } else {
+                return [
+                    {
+                        'componentId': `grid-${uuid()}`,
+                        'tabPanelActive': 'props',
+                        'renderKey': 'fa8eba35',
+                        'name': 'grid',
+                        'type': 'render-grid',
+                        'renderProps': {
+                            'margin-horizontal': {
+                                'type': 'number',
+                                'val': 0
+                            },
+                            'margin-vertical': {
+                                'type': 'number',
+                                'val': 0
+                            }
+                        },
+                        'renderStyles': {},
+                        'renderEvents': {},
+                        'interactiveShow': false,
+                        'isComplexComponent': false,
+                        'renderDirectives': [],
+                        'renderSlots': {
+                            'default': {
+                                'type': 'column',
+                                'displayName': '列配置',
+                                'val': [
+                                    {
+                                        'span': 1,
+                                        'children': [],
+                                        'width': '100%'
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        }
         const errorPageIds = []
         const projectRepository = getRepository(Project)
         const projectPageRepository = getRepository(ProjectPage)
@@ -223,7 +202,7 @@ export const updateSlot = async (ctx) => {
                         }
                         transformOldGrid(targetData, grid, callBack, callBack, index)
                     })
-                    page.content = JSON.stringify(targetData || [])
+                    page.content = JSON.stringify(getDefaultTargetData(targetData))
                     page.updateBySystem = true
                     await pageRepository.update({ id: page.id }, page)
                 } catch (error) {
@@ -232,7 +211,7 @@ export const updateSlot = async (ctx) => {
                 }
             }
         }
-        
+
         const errorMessage = errorPageIds.length ? `出现错误的pageId：${errorPageIds.join(', ')}` : ''
         ctx.send({
             code: 0,
