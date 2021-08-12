@@ -336,7 +336,9 @@
             updateBindSlots () {
                 if (Object.keys(this.renderData.renderSlots || {}).length) {
                     this.renderDataSlot = this.renderData.renderSlots
-                    this.renderDataSlotRefreshKey = Date.now()
+                    if (!this.isLayoutTypeComponent) {
+                        this.renderDataSlotRefreshKey = Date.now()
+                    }
                 }
             },
 
