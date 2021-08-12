@@ -241,7 +241,7 @@
             })
 
             this.updateBindProps()
-            this.updateBindSlots()
+            // this.updateBindSlots()
             
             bus.$on('on-update-props', this.updatePropsHandler)
             this.$once('hook:beforeDestroy', () => {
@@ -337,6 +337,7 @@
                 if (Object.keys(this.renderData.renderSlots || {}).length) {
                     this.renderDataSlot = this.renderData.renderSlots
                     if (!this.isLayoutTypeComponent) {
+                        console.log('from component slot == ', this.renderData.componentId)
                         this.renderDataSlotRefreshKey = Date.now()
                     }
                 }

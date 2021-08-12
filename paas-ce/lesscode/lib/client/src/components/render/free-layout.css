@@ -139,7 +139,17 @@ $baseZIndexInFreeLayout: 10;
     }
 
     .in-free-layout-item-ghost {
-        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        background: #fd9c9c;
+        & > * {
+            display: none;
+        }
+        /* display: none; */
         /* opacity: .5;
         &.component-item {
             &:after {
