@@ -19,7 +19,8 @@
             @contextmenu.stop="rowClickHandler(renderData, $event)"
             @mouseover.native.stop="rowMouseoverHandler(renderData)"
             @mouseout.native.stop="rowMouseoutHandler(renderData)">
-            <component-menu class="grid-context-menu"
+            <component-menu
+                class="grid-context-menu"
                 :target="contextMenuTarget"
                 :show="contextMenuVisible"
                 :offset="getComputedMunuOffset"
@@ -90,7 +91,7 @@
     import renderComponent from './component'
     import freeLayout from './free-layout'
     import ComponentMenu from '@/components/widget/context-menu.vue'
-    import offsetMixin from './offsetMixin'
+    import offsetMixin from './offset-mixin'
 
     export default {
         name: 'render-grid',
@@ -146,6 +147,7 @@
                 this.renderDataSlotName = this.renderData.renderProps.slots.name
             }
             this.updateBindProps()
+            this.updateBindSlots()
             this.setColWidth()
 
             bus.$on('on-update-props', this.updatePropsHandler)
@@ -189,7 +191,7 @@
              */
             confirmClearGrid () {
                 const renderData = Object.assign({}, this.renderData)
-                renderData.renderProps.slots.val.forEach(v => {
+                renderData.renderSlots.default.val.forEach(v => {
                     v.children = []
                 })
                 this.renderData = Object.assign({}, renderData)
@@ -231,8 +233,14 @@
                 })
                 this.bindProps = bindProps
                 // debugger
-                if (this.renderData.renderProps.slots) {
-                    this.renderDataSlot = this.renderData.renderProps.slots
+                // if (this.renderData.renderProps.slots) {
+                //     this.renderDataSlot = this.renderData.renderProps.slots
+                // }
+            },
+
+            updateBindSlots () {
+                if (this.renderData.renderSlots) {
+                    this.renderDataSlot = this.renderData.renderSlots.default
                 }
             },
 
@@ -249,12 +257,14 @@
                         modifier: data.modifier
                     }
                     this.pushTargetHistory(pushData)
-                    const { renderStyles = {}, renderProps = {}, tabPanelActive = 'props', renderDirectives = [] } = data.modifier
+                    const { renderStyles = {}, renderProps = {}, tabPanelActive = 'props', renderDirectives = [], renderSlots = {} } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
                     this.renderData.renderDirectives = renderDirectives
+                    this.renderData.renderSlots = renderSlots
                     this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
+                    this.updateBindSlots()
                     this.setColWidth()
                 }
             },
@@ -373,11 +383,11 @@
             },
 
             handleAddColumn () {
-                if (this.renderData.renderProps.slots.val.length === 12) {
+                if (this.renderData.renderSlots.default.val.length === 12) {
                     this.messageWarn('最多支持12栅格')
                     return
                 }
-                this.renderData.renderProps.slots.val.push({ span: 1, children: [] })
+                this.renderData.renderSlots.default.val.push({ span: 1, children: [] })
                 this.updateBindProps()
                 this.setColWidth()
             },
@@ -386,7 +396,8 @@
                 const selfIndex = _.findIndex(parentRow, _ => _.componentId === this.renderData.componentId)
                 console.log('fome clone grid', selfIndex)
                 const renderProps = _.cloneDeep(this.componentData.renderProps)
-                renderProps.slots.val = this.renderData.renderProps.slots.val.map(() => ({ span: 1, children: [] }))
+                const renderSlots = _.cloneDeep(this.componentData.renderSlots)
+                renderSlots.default.val = this.renderData.renderSlots.default.val.map(() => ({ span: 1, children: [] }))
 
                 parentRow.splice(selfIndex + 1, 0, {
                     componentId: this.componentData.name + '-' + uuid(),
@@ -397,7 +408,8 @@
                     renderProps,
                     renderStyles: {},
                     renderEvents: {},
-                    renderDirectives: []
+                    renderDirectives: [],
+                    renderSlots
                 })
             }
         }

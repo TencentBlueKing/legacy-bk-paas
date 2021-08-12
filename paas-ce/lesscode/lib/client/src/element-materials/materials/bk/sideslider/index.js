@@ -28,7 +28,7 @@ export default {
     props: {
         'is-show': {
             type: 'boolean',
-            tips: '是否显示组件',
+            tips: '是否显示组件，请在右侧选择变量并绑定Boolean类型变量以正常使用（值类型的常量，无法控制其打开或关闭)',
             val: true,
             staticValue: true, // 静态值，表示只是代码和UI改变，画布内的值不变
             modifiers: ['sync'],
@@ -62,17 +62,20 @@ export default {
         'ext-cls': {
             type: 'string',
             tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
-        },
-        slots: {
-            name: 'layout',
-            type: 'hidden',
+        }
+    },
+    slots: {
+        content: {
+            name: ['layout'],
+            type: ['render-grid'],
+            display: 'hidden',
             val: {
                 name: 'grid',
                 type: 'render-grid',
-                slotName: 'content',
+                slotName: '',
                 slotContainer: true,
-                renderProps: {
-                    slots: {
+                renderSlots: {
+                    default: {
                         type: 'column',
                         val:
                           [
@@ -84,6 +87,7 @@ export default {
                           ]
                     }
                 },
+                renderProps: {},
                 renderStyles: {},
                 renderEvents: {},
                 renderDirectives: []

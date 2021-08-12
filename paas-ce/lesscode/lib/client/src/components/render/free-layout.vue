@@ -31,6 +31,7 @@
                 :group="{ pull: true, put: ['component', ...extraDragCls] }"
                 ghost-class="in-free-layout-item-ghost"
                 :force-fallback="false"
+                @add="handleAdd"
                 :list="renderDataSlot.val[0].children">
                 <div class="free-layout-item-placeholder" :style="{ height: renderData.renderStyles.height || '500px', pointerEvents: freeLayoutItemPlaceholderPointerEvents }"></div>
                 <render-component
@@ -73,7 +74,7 @@
     // eslint-disable-next-line no-unused-vars
     import Drag from '@/common/drag'
     import ComponentMenu from '@/components/widget/context-menu.vue'
-    import offsetMixin from './offsetMixin'
+    import offsetMixin from './offset-mixin'
 
     export default {
         name: 'free-layout',
@@ -125,10 +126,13 @@
                 this.renderData.componentId = this.componentData.name + '-' + uuid()
             }
 
-            if (this.renderData.renderProps.slots) {
-                this.renderDataSlotName = this.renderData.renderProps.slots.name
+            this.mountedPosition = {
+                top: 0,
+                left: 0
             }
+
             this.updateBindProps()
+            this.updateBindSlots()
 
             bus.$on('on-update-props', this.updatePropsHandler)
             bus.$on('on-update-free-layout-props', this.updateFreeLayoutPropsHandler)
@@ -149,7 +153,25 @@
                 'setTargetData',
                 'pushTargetHistory'
             ]),
-
+            handleAdd (event) {
+                const {
+                    target: $targetEl,
+                    originalEvent
+                } = event
+                const {
+                    left,
+                    top
+                } = $targetEl.getBoundingClientRect()
+                const {
+                    pageX,
+                    pageY
+                } = originalEvent
+                
+                this.mountedPosition = {
+                    top: `${pageY - top - 10}px`,
+                    left: `${pageX - left - 10}px`
+                }
+            },
             updateBindProps () {
                 const { renderProps } = this.renderData
                 const bindProps = {}
@@ -159,9 +181,13 @@
                 this.bindProps = bindProps
 
                 // debugger
-                if (this.renderData.renderProps.slots) {
-                    this.renderDataSlot = this.renderData.renderProps.slots
-                }
+                // if (this.renderData.renderProps.slots) {
+                //     this.renderDataSlot = this.renderData.renderProps.slots
+                // }
+            },
+
+            updateBindSlots () {
+                this.renderDataSlot = this.renderData.renderSlots.default
             },
 
             /**
@@ -182,13 +208,16 @@
                         renderStyles = this.renderData.renderStyles,
                         renderProps = this.renderData.renderProps,
                         tabPanelActive = 'props',
-                        renderDirectives = this.renderData.renderDirectives
+                        renderDirectives = this.renderData.renderDirectives,
+                        renderSlots = this.renderData.renderSlots
                     } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
                     this.renderData.renderDirectives = renderDirectives
+                    this.renderData.renderSlots = renderSlots
                     this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
+                    this.updateBindSlots()
                 }
             },
 
@@ -231,7 +260,7 @@
              */
             confirmClearFreeLayout () {
                 const renderData = Object.assign({}, this.renderData)
-                renderData.renderProps.slots.val.forEach(v => {
+                renderData.renderSlots.default.val.forEach(v => {
                     v.children = []
                 })
                 this.renderData = Object.assign({}, renderData)
@@ -339,28 +368,35 @@
                 const renderData = data.renderData
                 this.setStyle4Component(renderData)
                 this.doDrag(data.elem, renderData)
+                // setTimeout 保证 add 事件已经处理完毕
+                setTimeout(() => {
+                    // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件
+                    bus.$emit('on-update-props', {
+                        componentId: renderData.componentId,
+                        modifier: {
+                            tabPanelActive: renderData.tabPanelActive,
+                            renderEvents: renderData.renderEvents,
+                            renderDirectives: renderData.renderDirectives,
+                            renderProps: Object.assign(
+                                {},
+                                renderData.renderProps,
+                                { inFreeLayout: { val: true } }
+                            ),
+                            renderStyles: Object.assign(
+                                {},
+                                renderData.renderStyles,
+                                {
+                                    top: renderData.renderStyles.top || this.mountedPosition.top,
+                                    left: renderData.renderStyles.left || this.mountedPosition.left
+                                }
+                                
+                            ),
+                            renderSlots: renderData.renderSlots
+                        }
+                    })
+                })
 
                 // console.error('componentMounted', renderData)
-
-                // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件
-                bus.$emit('on-update-props', {
-                    componentId: renderData.componentId,
-                    modifier: {
-                        tabPanelActive: renderData.tabPanelActive,
-                        renderEvents: renderData.renderEvents,
-                        renderDirectives: renderData.renderDirectives,
-                        renderProps: Object.assign(
-                            {},
-                            renderData.renderProps,
-                            { inFreeLayout: { val: true } }
-                        ),
-                        renderStyles: Object.assign(
-                            {},
-                            renderData.renderStyles,
-                            { top: renderData.renderStyles.top || '0px', left: renderData.renderStyles.left || '0px' }
-                        )
-                    }
-                })
             },
 
             /**
@@ -423,7 +459,8 @@
                                 {},
                                 renderData.renderStyles,
                                 offset
-                            )
+                            ),
+                            renderSlots: renderData.renderSlots
                         }
                     })
                 })

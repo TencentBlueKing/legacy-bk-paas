@@ -18,8 +18,11 @@ export default Extends({
     icon: 'bk-drag-grid-1',
     order: 1,
     props: {
-        slots: {
-            type: 'column',
+    },
+    slots: {
+        default: {
+            type: ['column'],
+            displayName: '列配置',
             val: [
                 { span: 1, children: [] }
             ]

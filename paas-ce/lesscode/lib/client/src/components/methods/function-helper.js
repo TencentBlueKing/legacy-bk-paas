@@ -52,6 +52,17 @@ function getCurUsedFuncs () {
             }
         })
 
+        const renderSlots = component.renderSlots || {}
+        Object.keys(renderSlots).forEach((key) => {
+            const { type, payload = {} } = renderSlots[key] || {}
+
+            if (type === 'remote') {
+                if (payload && payload.methodData && payload.methodData.methodCode) {
+                    findUsedFuncsByCode(payload.methodData.methodCode)
+                }
+            }
+        })
+
         const renderEvents = component.renderEvents || {}
         Object.keys(renderEvents).forEach((event) => {
             const code = renderEvents[event]

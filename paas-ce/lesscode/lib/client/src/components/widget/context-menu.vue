@@ -83,19 +83,15 @@
 
             // 右键事件事件处理
             contextMenuHandler (e) {
+                e.preventDefault()
+
                 this.x = e.clientX + this.offset.x
                 this.y = e.clientY + this.offset.y
-                this.layout()
-                this.$emit('update:show', true)
-                e.preventDefault()
-            },
-
-            // 布局
-            layout () {
                 this.style = {
                     left: this.x + 'px',
                     top: this.y + 'px'
                 }
+                this.$emit('update:show', true)
             }
         }
     }

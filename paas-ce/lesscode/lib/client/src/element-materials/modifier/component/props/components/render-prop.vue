@@ -88,7 +88,6 @@
     import TypeFreeLayoutItem from './strategy/free-layout-item.vue'
     import TypeSlotWrapper from './strategy/slot-wrapper'
     import TypeIcon from './strategy/icon'
-    import TypeFormItem from './strategy/form-item'
     import TypeColor from './strategy/color'
     import TypleElProps from './strategy/el-props'
 
@@ -175,7 +174,6 @@
                     'free-layout-item': TypeFreeLayoutItem,
                     'bread-crumb': TypeSlotWrapper,
                     'icon': TypeIcon,
-                    'form-item': TypeFormItem,
                     'color': TypeColor,
                     'step': TypeSlotWrapper,
                     'function': TypeFunction,
@@ -250,7 +248,7 @@
             },
             defaultValue () {
                 const typeVal = this.mutlTypeVal[this.mutlTypeSelected] || {}
-                return typeVal.val || ''
+                return typeVal.hasOwnProperty('val') ? typeVal.val : ''
             },
             defaultPayload () {
                 return this.mutlTypeVal[this.mutlTypeSelected].payload || this.lastValue.payload || {}

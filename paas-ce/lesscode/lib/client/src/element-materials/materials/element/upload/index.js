@@ -86,10 +86,14 @@ export default {
             type: 'boolean',
             val: false,
             tips: '是否启用拖拽上传'
-        },
-        slots: {
-            name: 'template',
-            type: 'html',
+        }
+    },
+    slots: {
+        default: {
+            name: ['html'],
+            type: ['html'],
+            displayName: '组件配置',
+            tips: '默认插槽，值用来控制组件本身的展示',
             val: '<el-button>点击上传</el-button>'
         }
     }

@@ -300,7 +300,7 @@
         width: 100%;
         .item-title {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             font-size: 14px;
             color: #63656E;

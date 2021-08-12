@@ -85,7 +85,7 @@
                         name: item['componentId'],
                         icon: this.getItemIcon(item),
                         type: item.type,
-                        children: item.renderProps.slots ? this.getNodeChildren(item.renderProps.slots, item['componentId']) : []
+                        children: this.getSlotChildren(item, item['componentId'])
                     }
                 })
             },
@@ -297,6 +297,18 @@
                 }
                 return null
             },
+
+            getSlotChildren (node, parentId) {
+                const renderSlots = node.renderSlots || {}
+                const slotKeys = Object.keys(renderSlots) || []
+                const children = []
+                slotKeys.forEach((key) => {
+                    const renderSlot = renderSlots[key]
+                    children.push(...this.getNodeChildren(renderSlot, parentId))
+                })
+                return children
+            },
+
             getNodeChildren (nodeSlot, parentId) {
                 if (nodeSlot.name === 'layout' || nodeSlot.name === 'form-item-content') {
                     const node = Object.prototype.toString.call(nodeSlot.val) === '[object Array]' ? nodeSlot.val : [nodeSlot.val]
@@ -305,7 +317,7 @@
                         name: item['componentId'],
                         icon: this.getItemIcon(item),
                         parent_id: parentId,
-                        children: item.renderProps.slots ? this.getNodeChildren(item.renderProps.slots) : []
+                        children: this.getSlotChildren(item)
                     }))
                 }
                 if (nodeSlot.type === 'column' || nodeSlot.type === 'free-layout-item') {
@@ -315,7 +327,7 @@
                             name: node['componentId'],
                             icon: this.getItemIcon(node),
                             parent_id: parentId,
-                            children: node.renderProps.slots ? this.getNodeChildren(node.renderProps.slots) : []
+                            children: this.getSlotChildren(node)
                         }))
                     ).flat()
                 }

@@ -62,15 +62,6 @@ export default {
         }
     ],
     props: {
-        slots: {
-            name: 'el-table-column',
-            type: 'table-column',
-            val: [
-                { label: '第一列', prop: 'prop1', sortable: false, type: '' },
-                { label: '第二列', prop: 'prop2', sortable: false, type: '' },
-                { label: '第三列', prop: 'prop3', sortable: false, type: '' }
-            ]
-        },
         data: {
             type: ['array', 'remote'],
             remoteValidate (data) {
@@ -85,10 +76,12 @@ export default {
         },
         height: {
             type: ['string', 'number'],
+            val: '176px',
             tips: 'Table 的高度，默认为自动高度。如果 height 为 Number 类型，单位 px；如果 height 为 String 类型，则这个高度会设置为 Table 的 style.height 的值，Table 的高度会受控于外部样式。'
         },
         'max-height': {
-            type: ['string', 'number']
+            type: ['string', 'number'],
+            val: '176px'
         },
         stripe: {
             type: 'boolean',
@@ -139,6 +132,18 @@ export default {
             type: 'boolean',
             val: false,
             tips: '是否高亮当前行'
+        }
+    },
+    slots: {
+        default: {
+            name: ['el-table-column'],
+            type: ['table-list', 'remote'],
+            displayName: '表头配置',
+            val: [
+                { label: '第一列', prop: 'prop1', sortable: false, type: '' },
+                { label: '第二列', prop: 'prop2', sortable: false, type: '' },
+                { label: '第三列', prop: 'prop3', sortable: false, type: '' }
+            ]
         }
     }
 }
