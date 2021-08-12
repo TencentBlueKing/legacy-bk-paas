@@ -250,7 +250,6 @@ class TargetData {
     }
 
     cloneNode (node, shouldChangeId) {
-        console.log(node, 23)
         node = cloneDeep(node)
         const callBack = (data) => {
             if (shouldChangeId) data.componentId = data.componentId.replace(/.{8}$/, uuid())
