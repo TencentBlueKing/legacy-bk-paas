@@ -241,7 +241,7 @@
             })
 
             this.updateBindProps()
-            // this.updateBindSlots()
+            this.updateBindSlots()
             
             bus.$on('on-update-props', this.updatePropsHandler)
             this.$once('hook:beforeDestroy', () => {
