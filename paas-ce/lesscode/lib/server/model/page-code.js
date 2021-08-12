@@ -187,7 +187,7 @@ class PageCode {
 
     generateComponment (item, vueDirective, propDirective) {
         item = Object.assign({}, item, { componentId: camelCase(item.componentId, { transform: camelCaseTransformMerge }) })
-        const inFreeLayout = item.renderProps.inFreeLayout && item.renderProps.inFreeLayout.val
+        const inFreeLayout = item.renderProps && item.renderProps.inFreeLayout && item.renderProps.inFreeLayout.val
         let css = ''
         if (inFreeLayout) {
             css += 'position: absolute;'
@@ -956,7 +956,7 @@ class PageCode {
     // 生成formRules部分
     handleFormRules (propVar, val) {
         const notStringType = ['required', 'validator', 'regex']
-        const reg=/,$/gi;
+        const reg = /,$/gi
         let jsonStr = '{'
         try {
             if (typeof val === 'object' && Object.keys(val).length > 0) {
@@ -974,21 +974,20 @@ class PageCode {
                         })
                         val[i].map(rule => {
                             jsonStr += '{'
-                                for (const j in rule) {
-                                    if (notStringType.indexOf(j) === -1) {
-                                        jsonStr += `${j}: '${rule[j]}',`
-                                    } else {
-                                        jsonStr += `${j}: ${rule[j]},`
-                                    }
-                                    
+                            for (const j in rule) {
+                                if (notStringType.indexOf(j) === -1) {
+                                    jsonStr += `${j}: '${rule[j]}',`
+                                } else {
+                                    jsonStr += `${j}: ${rule[j]},`
                                 }
+                            }
                             jsonStr += '},'
                         })
-                        jsonStr = jsonStr.replace(reg,"");
+                        jsonStr = jsonStr.replace(reg, '')
                     }
                     jsonStr += `],`
                 }
-                jsonStr = jsonStr.replace(reg,"");
+                jsonStr = jsonStr.replace(reg, '')
                 jsonStr += '}'
             } else {
                 jsonStr = '{}'
@@ -1150,7 +1149,7 @@ class PageCode {
             } else if (slot.type === 'form-item-content') {
                 slotStr += this.generateCode(slot.val)
             } else {
-                const render = slotRenderConfig[slot.name]
+                const render = slotRenderConfig[slot.name] || (() => {})
                 const slotRenderParams = []
                 let curSlot = slot
                 do {
