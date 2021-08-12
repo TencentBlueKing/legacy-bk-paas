@@ -72,7 +72,7 @@
         },
 
         filters: {
-            capFirstLetter (val) {
+            capFirstLetter (val = '') {
                 return `${val.substring(0, 1).toUpperCase()}${val.substring(1).toLowerCase()}`
             }
         },
@@ -82,13 +82,16 @@
                 type: String
             },
             slotVal: {
-                type: Object
+                type: Object,
+                default: () => ({})
             },
             slotConfig: {
-                type: Object
+                type: Object,
+                default: () => ({})
             },
             renderProps: {
-                type: Object
+                type: Object,
+                default: () => ({})
             }
         },
 
