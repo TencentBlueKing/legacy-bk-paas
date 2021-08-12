@@ -23,8 +23,7 @@ const {
     updateDeledPageRel,
     delPageRouteDirtyRow,
     updateLayoutInstLayoutCode,
-    updateSlot,
-    fixCardData
+    updateSlot
 } = require('../controller/db-upgrade-helper')
 
 const router = new Router({
@@ -45,6 +44,5 @@ router.get('/20210426_update_variable_manage', updateVariableManage)
 router.get('/20210421_update_dialog_data_prod', updateDialogDataProd)
 router.get('/20210421_update_dialog_data_dev', updateDialogDev)
 router.get('/20210722_update_slot', updateSlot)
-router.get('/20210806_fix_card', fixCardData)
 
 module.exports = router
