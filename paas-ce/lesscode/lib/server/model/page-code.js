@@ -941,10 +941,10 @@ class PageCode {
         // element组件添加vmodel
         if (type.startsWith('el-')) {
             if (!hasVModel && elementComId !== '') {
-                const valueType = props['value'].type
+                const valueType = typeof props['value'].val
                 if (valueType !== 'array' && valueType !== 'object') {
                     let vModelValue = props['value'].val.toString()
-                    if (valueType === 'string' || valueType === 'color') vModelValue = `'${props['value'].val}'`
+                    if (valueType === 'string') vModelValue = `'${props['value'].val}'`
                     this.dataTemplate(elementComId, vModelValue)
                 }
                 propsStr += `v-model="${elementComId}"`
@@ -956,7 +956,7 @@ class PageCode {
     // 生成formRules部分
     handleFormRules (propVar, val) {
         const notStringType = ['required', 'validator', 'regex']
-        const reg=/,$/gi;
+        const reg = /,$/gi
         let jsonStr = '{'
         try {
             if (typeof val === 'object' && Object.keys(val).length > 0) {
@@ -974,21 +974,20 @@ class PageCode {
                         })
                         val[i].map(rule => {
                             jsonStr += '{'
-                                for (const j in rule) {
-                                    if (notStringType.indexOf(j) === -1) {
-                                        jsonStr += `${j}: '${rule[j]}',`
-                                    } else {
-                                        jsonStr += `${j}: ${rule[j]},`
-                                    }
-                                    
+                            for (const j in rule) {
+                                if (notStringType.indexOf(j) === -1) {
+                                    jsonStr += `${j}: '${rule[j]}',`
+                                } else {
+                                    jsonStr += `${j}: ${rule[j]},`
                                 }
+                            }
                             jsonStr += '},'
                         })
-                        jsonStr = jsonStr.replace(reg,"");
+                        jsonStr = jsonStr.replace(reg, '')
                     }
                     jsonStr += `],`
                 }
-                jsonStr = jsonStr.replace(reg,"");
+                jsonStr = jsonStr.replace(reg, '')
                 jsonStr += '}'
             } else {
                 jsonStr = '{}'
