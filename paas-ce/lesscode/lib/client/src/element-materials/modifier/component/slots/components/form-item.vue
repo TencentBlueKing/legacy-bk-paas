@@ -226,7 +226,6 @@
         created () {
             this.formItemList = []
             this.formActionList = []
-            this.initModelAndRule()
             const slotVal = this.slotVal.val
             const slotList = cloneDeep(slotVal)
             slotList.forEach(_ => {
@@ -237,6 +236,7 @@
                     this.formActionList.push(componentDataa)
                 }
             })
+            this.iniModelAndRuleFromSlot()
             if (slotList.length < 1) {
                 const actionFormItem = createTargetDataFormItemNode({}, true)
                 const submitNode = createTargetDataNode('button', {
@@ -293,7 +293,6 @@
                     rules
                 }
                 this.$emit('batchUpdate', { renderProps })
- 
                 const slot = {
                     ...this.slotVal,
                     val: JSON.parse(JSON.stringify([...this.formItemList, ...this.formActionList]))
@@ -303,7 +302,9 @@
             orderChange () {
                 const modelList = []
                 const ruleList = []
-                
+                if (this.formItemList.length !== this.formModelList.length) {
+                    this.iniModelAndRuleFromSlot()
+                }
                 this.formItemList.forEach((item) => {
                     const property = item.renderProps.property.val
                     if (property) {
@@ -463,21 +464,26 @@
                 const rule = this.formRuleList.find(item => item.key === property)
                 return (rule && rule.value) || []
             },
-            initModelAndRule () {
-                try {
-                    const modelMap = this.curSelectedComponentData.renderProps.model.val || {}
-                    const ruleMap = this.curSelectedComponentData.renderProps.rules.val || {}
-                    const modelList = []
-                    const ruleList = []
-                    for (const i in modelMap) {
-                        modelList.push({ key: i, value: modelMap[i] })
-                        ruleList.push({ key: i, value: ruleMap[i] || [] })
+            iniModelAndRuleFromSlot () {
+                const modelMap = this.curSelectedComponentData.renderProps.model.val || {}
+                const ruleMap = this.curSelectedComponentData.renderProps.rules.val || {}
+                const modelList = []
+                const ruleList = []
+                this.formItemList.forEach(formItem => {
+                    const key = formItem.renderProps.property.val
+                    let value = ''
+                    try {
+                        value = this.getDefaultValFromType(formItem.renderSlots.default.val[0].name)
+                    } catch (error) {
+                        value = ''
                     }
-                    this.formModelList = modelList
-                    this.formRuleList = ruleList
-                } catch (err) {
-                    this.formModelList = []
-                    this.formRuleList = []
+                    modelList.push({ key, value })
+                    ruleList.push({ key, value: ruleMap[key] || [] })
+                })
+                this.formModelList = modelList
+                this.formRuleList = ruleList
+                if (this.formItemList.length !== Object.keys(modelMap).length) {
+                    this.triggerChange()
                 }
             }
         }
