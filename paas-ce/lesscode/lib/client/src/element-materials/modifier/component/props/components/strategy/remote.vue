@@ -12,7 +12,8 @@
 <template>
     <section>
         <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
-            <span :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
+            <span v-if="name === 'initFormData'" class="form-title under-line">表单数据<span class="form-tip">（更新将会覆盖已有数据）</span></span>
+            <span v-else :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
             <span class="remote-example" @click="handleShowExample">数据示例</span>
         </div>
         <div class="remote-content">
@@ -293,6 +294,18 @@
                     this.initMonaco()
                 })
             },
+            getDefaultData () {
+                let defaultData
+                switch (this.name) {
+                    case 'initFormData':
+                        defaultData = { string: '', boolean: false, array: [1, 2, 3] }
+                        break
+                    default:
+                        defaultData = JSON.parse(JSON.stringify(this.defaultValue))
+                        break
+                }
+                return JSON.stringify(defaultData, null, '\t')
+            },
             initMonaco () {
                 monaco.editor.defineTheme('remote-viewer', {
                     base: 'vs-dark',
@@ -302,7 +315,8 @@
                         'editor.background': '#242424'
                     }
                 })
-                const value = JSON.stringify(this.defaultValue, null, '\t')
+                
+                const value = this.getDefaultData()
                 this.editor = monaco.editor.create(this.$refs.remoteViewer, {
                     value: value,
                     theme: 'remote-viewer',
@@ -338,6 +352,16 @@
     .remote-example{
         color: #3a84ff;
         cursor: pointer;
+    }
+    .form-title {
+        font-weight: bold;
+        color: #63656E;
+        height:22px;
+
+        .form-tip{
+            font-weight: normal;
+            color: #979ba5;
+        }
     }
 
     .remote-example-viewer{
