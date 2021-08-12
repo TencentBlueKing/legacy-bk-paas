@@ -250,6 +250,7 @@ class TargetData {
     }
 
     cloneNode (node, shouldChangeId) {
+        console.log(node, 23)
         node = cloneDeep(node)
         const callBack = (data) => {
             if (shouldChangeId) data.componentId = data.componentId.replace(/.{8}$/, uuid())
@@ -264,9 +265,11 @@ class TargetData {
         } else if (node.renderSlots && node.renderSlots.default) {
             callBack(node)
             if (Array.isArray(node.renderSlots.default.val)) {
-                node.renderSlots.default.val.forEach((item, index) => {
-                    walkGrid({}, item, callBack, callBack, index)
-                })
+                if (node.renderSlots.default.val.length && node.renderSlots.default.val[0] && node.renderSlots.default.val[0].componentId) {
+                    node.renderSlots.default.val.forEach((item, index) => {
+                        walkGrid({}, item, callBack, callBack, index)
+                    })
+                }
             } else if (node.renderSlots.default.name === 'layout') {
                 walkGrid({}, node.renderSlots.default.val, callBack, callBack, 0)
             }
