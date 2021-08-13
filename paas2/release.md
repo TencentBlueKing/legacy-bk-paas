@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.25
+    - update: esb udpate cc confapis to cc 3.9
+
 # 2.12.24
     - update: esb update bk_log/bk_nodeman confapis
 

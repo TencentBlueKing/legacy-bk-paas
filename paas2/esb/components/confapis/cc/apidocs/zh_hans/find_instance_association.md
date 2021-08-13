@@ -10,8 +10,22 @@
 
 | 字段                 |  类型      | 是否必填	   |  描述          |
 |----------------------|------------|--------|-----------------------------|
+| metadata           | object     | Yes    | meta data             |
 | condition | string map     | Yes   | 查询条件 |
-| bk_obj_id           | string     | YES     | 源模型id(v3.10+)|
+
+
+metadata params
+
+| 字段                 |  类型      | 是否必填	   |  描述         |
+|---------------------|------------|--------|-----------------------------|
+| label           | string map     | Yes     | 标签信息 |
+
+
+label params
+
+| 字段                 |  类型      | 是否必填	   |  描述         |
+|---------------------|------------|--------|-----------------------------|
+| bk_biz_id           | string      | Yes     | 业务ID |
 
 
 condition params
@@ -20,6 +34,7 @@ condition params
 |---------------------|------------|--------|-----------------------------|
 | bk_obj_asst_id           | string     | Yes     | 模型关联关系的唯一id|
 | bk_asst_id           | string     | NO     | 关联类型的唯一id|
+| bk_obj_id           | string     | NO     | 源模型id|
 | bk_asst_obj_id           | string     | NO     | 目标模型id|
 
 
@@ -30,9 +45,14 @@ condition params
     "condition": {
         "bk_obj_asst_id": "bk_switch_belong_bk_host",
         "bk_asst_id": "",
+        "bk_object_id": "",
         "bk_asst_obj_id": ""
     },
-    "bk_object_id": "xxx"
+    "metadata":{
+        "label":{
+            "bk_biz_id":"3"
+        }
+    }
 }
 ```
 

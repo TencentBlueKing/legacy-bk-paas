@@ -39,6 +39,16 @@
   dest_path: /api/v3/findmany/module/bk_biz_id/{bk_biz_id}
   dest_http_method: POST
 
+- path: /v2/cc/find_host_snapshot_batch/
+  name: find_host_snapshot_batch
+  label: 批量查询主机快照
+  label_en: find host snapshot in batch
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/snapshot/batch
+  dest_http_method: POST
+
 - path: /v2/cc/create_inst/
   name: create_inst
   label: 创建实例
@@ -265,6 +275,46 @@
   dest_path: /api/v3/update/objectattr/biz/{bk_biz_id}/id/{id}
   dest_http_method: PUT
 
+- path: /v2/cc/subscribe_event/
+  name: subscribe_event
+  label: 订阅事件
+  label_en: subscribe event
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/event/subscribe/{bk_supplier_account}/0
+  dest_http_method: POST
+
+- path: /v2/cc/unsubcribe_event/
+  name: unsubcribe_event
+  label: 退订事件
+  label_en: event unsubscribe
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/event/subscribe/{bk_supplier_account}/0/{subscription_id}
+  dest_http_method: DELETE
+
+- path: /v2/cc/update_event_subscribe/
+  name: update_event_subscribe
+  label: 修改订阅
+  label_en: update the event subscription
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/event/subscribe/{bk_supplier_account}/0/{subscription_id}
+  dest_http_method: PUT
+
+- path: /v2/cc/search_subscription/
+  name: search_subscription
+  label: 查询订阅
+  label_en: search event subscription
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/event/subscribe/search/{bk_supplier_account}/0
+  dest_http_method: POST
+
 - path: /v2/cc/list_biz_hosts/
   name: list_biz_hosts
   label: 查询业务下的主机
@@ -432,7 +482,7 @@
   suggest_method: POST
   api_type: query
   comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/delete/instassociation/{bk_obj_id}/{id}
+  dest_path: /api/v3/delete/instassociation/{id}
   dest_http_method: DELETE
 
 - path: /v2/cc/find_host_topo_relation/
@@ -773,7 +823,7 @@
   suggest_method: POST
   api_type: query
   comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/find/proc/service_instance/difference
+  dest_path: /api/v3/findmany/proc/service_template/sync_status/biz/{bk_biz_id}
   dest_http_method: POST
   is_hidden: true
 
@@ -816,7 +866,6 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/identifier/host/search
   dest_http_method: POST
-  is_hidden: true
 
 - path: /v2/cc/host_install_bk/
   name: host_install_bk
@@ -1103,53 +1152,3 @@
   dest_path: /api/v3/findmany/hosts/detail_topo
   dest_http_method: POST
   is_hidden: true
-
-- path: /v2/cc/search_object_instances/
-  name: search_object_instances
-  label: 查询模型实例
-  label_en: search object instances
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/search/instances/object/{bk_obj_id}
-  dest_http_method: POST
-
-- path: /v2/cc/count_object_instances/
-  name: count_object_instances
-  label: 查询模型实例数量
-  label_en: count object instances num
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/count/instances/object/{bk_obj_id}
-  dest_http_method: POST
-
-- path: /v2/cc/search_instance_associations/
-  name: search_instance_associations
-  label: 查询模型实例关系
-  label_en: search instance associations
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/search/instance_associations/object/{bk_obj_id}
-  dest_http_method: POST
-
-- path: /v2/cc/count_instance_associations/
-  name: count_instance_associations
-  label: 查询模型实例关系数量
-  label_en: count instance associations num
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/count/instance_associations/object/{bk_obj_id}
-  dest_http_method: POST
-
-- path: /v2/cc/find_brief_biz_topo_node_relation/
-  name: find_brief_biz_topo_node_relation
-  label: 查询业务主线实例拓扑源与目标节点的关系信息
-  label_en: search the brief relations of the source object instance with the destination object instance.
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/find/topo/biz/brief_node_relation
-  dest_http_method: POST

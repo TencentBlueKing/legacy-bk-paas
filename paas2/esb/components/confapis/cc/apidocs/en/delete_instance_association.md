@@ -10,14 +10,12 @@ delete association between object's instance.
 | Field                 |  Type      | Required	   |  Description          |
 |----------------------|------------|--------|-----------------------------|
 | id           | int64     | Yes    | the instance association's unique id             |
-| bk_obj_id    | string    | Yes    | the instance association's source or destination object id(v3.10+) |
 
 ### Request Parameters Example
 
 ``` json
 {
-    "id": 1,
-    "bk_obj_id": "abc"
+    "id": 1
 }
 ```
 
