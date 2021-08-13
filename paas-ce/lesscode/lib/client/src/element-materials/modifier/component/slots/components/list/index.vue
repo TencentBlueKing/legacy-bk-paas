@@ -130,6 +130,9 @@
                 box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
                 .option-col-operate {
                     display: block;
+                    .option-col-drag {
+                        padding-left: 0;
+                    }
                 }
             }
             .card-item{
