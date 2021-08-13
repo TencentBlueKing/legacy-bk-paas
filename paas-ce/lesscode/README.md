@@ -93,8 +93,7 @@
 
 #### 服务依赖
 - 蓝鲸社区版登录（必须）：可视化平台的登录服务对接的是蓝鲸社区版登录，请事先搭建蓝鲸社区版环境
-- 蓝鲸制品库服务（非必须）： 若需要使用到平台的自定义组件功能开发模块，请事先搭建 [蓝鲸制品库服务](https://github.com/Tencent/bk-ci/tree/master/src/backend/storage/core)
-- npm镜像仓库（非必须）：若需要使用到平台的自定义组件功能开发模块，请事先搭建npm镜像仓库
+- 蓝鲸制品库服务（非必须）： 若需要使用到平台的自定义组件功能开发模块，请事先搭建 [蓝鲸制品库服务](https://github.com/Tencent/bk-ci/tree/master/src/backend/storage/core)， **搭建时并开启npm-registry**
 
 ## 分支说明
 可视化开发平台使用 lesscode-develop, lesscode-master 两个分支进行迭代。其中 lesscode-master 为稳定版分支，每次 release 都会基于这个分支；lesscode-develop 为日常开发的分支，给可视化开发平台贡献代码统一向主库 [bk-PaaS](https://github.com/Tencent/bk-PaaS) 的  [lesscode-develop](https://github.com/Tencent/bk-PaaS/tree/lesscode-develop) 分支提 pr。
