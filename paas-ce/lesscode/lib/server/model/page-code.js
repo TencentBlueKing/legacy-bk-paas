@@ -187,7 +187,7 @@ class PageCode {
 
     generateComponment (item, vueDirective, propDirective) {
         item = Object.assign({}, item, { componentId: camelCase(item.componentId, { transform: camelCaseTransformMerge }) })
-        const inFreeLayout = item.renderProps.inFreeLayout && item.renderProps.inFreeLayout.val
+        const inFreeLayout = item.renderProps && item.renderProps.inFreeLayout && item.renderProps.inFreeLayout.val
         let css = ''
         if (inFreeLayout) {
             css += 'position: absolute;'
@@ -1149,7 +1149,7 @@ class PageCode {
             } else if (slot.type === 'form-item-content') {
                 slotStr += this.generateCode(slot.val)
             } else {
-                const render = slotRenderConfig[slot.name]
+                const render = slotRenderConfig[slot.name] || (() => {})
                 const slotRenderParams = []
                 let curSlot = slot
                 do {
