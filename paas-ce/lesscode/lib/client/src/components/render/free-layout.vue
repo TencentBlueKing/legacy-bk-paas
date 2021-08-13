@@ -155,21 +155,17 @@
             ]),
             handleAdd (event) {
                 const {
-                    target: $targetEl,
                     originalEvent
                 } = event
-                const {
-                    left,
-                    top
-                } = $targetEl.getBoundingClientRect()
+                
                 const {
                     pageX,
                     pageY
                 } = originalEvent
                 
                 this.mountedPosition = {
-                    top: `${pageY - top - 10}px`,
-                    left: `${pageX - left - 10}px`
+                    top: pageY,
+                    left: pageX
                 }
             },
             updateBindProps () {
@@ -370,6 +366,52 @@
                 this.doDrag(data.elem, renderData)
                 // setTimeout 保证 add 事件已经处理完毕
                 setTimeout(() => {
+                    if (!this.$refs[this.renderData.componentId]) {
+                        return
+                    }
+                    const {
+                        width: componentWidth,
+                        height: componentHeight
+                    } = document.querySelector(`[data-component-id="component-${renderData.componentId}"]`).getBoundingClientRect()
+                    const {
+                        top: containerTop,
+                        right: containerRight,
+                        bottom: containerBottom,
+                        left: containerLeft
+                    } = this.$refs[this.renderData.componentId].getBoundingClientRect()
+                    
+                    const {
+                        top: originalTop,
+                        left: originalLeft
+                    } = this.mountedPosition
+                    let top = 0
+                    let left = 0
+                    // 组件默认不能超过容器范围
+                    // top 位置计算
+                    if (renderData.renderStyles.top) {
+                        top = parseInt(renderData.renderStyles.top)
+                    } else {
+                        if (originalTop + componentHeight > containerBottom) {
+                            top = containerBottom - containerTop - componentHeight
+                        } else {
+                            top = originalTop - containerTop
+                        }
+                    }
+                    // left 位置计算
+                    if (renderData.renderStyles.left) {
+                        left = parseInt(renderData.renderStyles.left)
+                    } else {
+                        if (originalLeft + componentWidth > containerRight) {
+                            left = containerRight - containerLeft - componentWidth
+                        } else {
+                            left = originalLeft - containerLeft
+                        }
+                    }
+                    const stylePosition = {
+                        top: `${Math.max(top, 0)}px`,
+                        left: `${Math.max(left, 0)}px`
+                    }
+                    
                     // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件
                     bus.$emit('on-update-props', {
                         componentId: renderData.componentId,
@@ -385,18 +427,12 @@
                             renderStyles: Object.assign(
                                 {},
                                 renderData.renderStyles,
-                                {
-                                    top: renderData.renderStyles.top || this.mountedPosition.top,
-                                    left: renderData.renderStyles.left || this.mountedPosition.left
-                                }
-                                
+                                stylePosition
                             ),
                             renderSlots: renderData.renderSlots
                         }
                     })
                 })
-
-                // console.error('componentMounted', renderData)
             },
 
             /**
@@ -412,6 +448,7 @@
             },
 
             doDrag (dragNode, renderData) {
+                dragNode = getNodeWithClass(dragNode, 'wrapperCls')
                 // 自由布局里面拖动自由布局时会有异常体验问题
                 if (dragNode.className !== undefined && dragNode.className.indexOf('wrapperCls') < 0) {
                     return

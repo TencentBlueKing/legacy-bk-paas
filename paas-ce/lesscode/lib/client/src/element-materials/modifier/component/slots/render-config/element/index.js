@@ -1,5 +1,5 @@
 function getVal (val) {
-    if (typeof val === 'object') val = JSON.stringify(val).replace(/"/g, '\'')
+    if (typeof val === 'object') val = JSON.stringify(val).replace(/'/g, "\\'").replace(/"/g, '\'')
     return val
 }
 
