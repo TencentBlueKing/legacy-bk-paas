@@ -11,7 +11,7 @@ get host base info
 | Field      |  Type      | Required   |  Description      |
 |-----------|------------|--------|------------|
 | bk_supplier_account | string     | No     | supplier account code |
-| bk_host_id     |  int       | Yes     | Host ID(as is bk_host_id) |
+| bk_host_id     |  int       | Yes     | Host ID |
 
 ### Request Parameters Example
 

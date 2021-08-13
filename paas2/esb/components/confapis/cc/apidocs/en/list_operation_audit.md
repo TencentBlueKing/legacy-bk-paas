@@ -32,7 +32,7 @@
 | user | string | No | Operator |
 | resource_name | string | No | Resource name |
 | category | string | No | type of query |
-| fuzzy_query    | bool         | No       | use fuzzy query or not when searching with resource name, **fuzzy query has low efficiency and poor performance**.This field only works on the resource_name,it will be ignored when use 'condition.condition' to search |
+| fuzzy_query    | bool         | No       | use fuzzy query or not when searching with resource name, **fuzzy query has low efficiency and poor performance** |
 | condition | array | No | condition query's condition, with user and resource_name cannot be provided at the same time |
 
 ##### condition.condition
@@ -40,8 +40,8 @@
 | Field    | Type         | Required | Description                                                  |
 | -------- | ------------ | -------- | ------------------------------------------------------------ |
 | field    | string       | Yes      | fields of query, only can be "user" and "resource_name"      |
-| operator | string       | Yes      | operator，in means "belong to"，not_in means "does not belong to", resource_name can use contains to fuzzy query |
-| value    | string/array | Yes      | value of query，in and not_in need array type, contains need string type |
+| operator | string       | Yes      | operator，$in means "belong to"，$nin means "does not belong  to"，$regex means "contain"，$regex only can be used by resource_name |
+| value    | string/array | Yes      | value of query，$in and $nin need array type，$regex need string type |
 
 ### Request Parameters Example
 
@@ -87,13 +87,13 @@
       	"condition":[
           {
             "field":"user",
-            "operator":"in",
-            "value":["admin"]
+            "operatior":"$in",
+            "value":"admin"
           },
           {
             "field":"resource_name",
-            "operator":"in",
-            "value":["1.1.1.1"]
+            "operatior":"$in",
+            "value":"1.1.1.1"
           }
         ],
         "category":"host"
@@ -158,4 +158,3 @@
 |-----------|-----------|--------------|
 | count | int | Number of records |
 | info | array | Operation audit record information |
-
