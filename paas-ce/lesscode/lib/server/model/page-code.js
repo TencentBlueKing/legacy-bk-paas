@@ -252,11 +252,15 @@ class PageCode {
             const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives, item.renderSlots)
             const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
             const itemEvents = this.getItemEvents(item.renderEvents)
-
             let componentCode = ''
             if (inFreeLayout) {
                 if (item.renderStyles.width) {
                     css += ` width: ${item.renderStyles.width};`
+                } else {
+                    // 自由布局中的表格，如果不设置宽度，那么宽度会一直增大，表格组件本身的缺陷
+                    if (item.type === 'bk-table' || item.type === 'el-table') {
+                        css += ` width: 240px;`
+                    }
                 }
 
                 if (this.selfClosingTags.includes(item.type)) {
@@ -964,7 +968,7 @@ class PageCode {
                     jsonStr += `${i}: [`
                     if (val[i] && val[i].length) {
                         const funcItems = val[i].filter(item => item.validator)
-                        
+
                         funcItems.map(item => {
                             const [method] = this.getMethodByCode({ methodCode: item.validator })
                             if (method.funcCode) {
@@ -1031,7 +1035,7 @@ class PageCode {
                     tmpStr += `${paramCase(i)}: ${styles[i]};\n`
                 }
             }
-            
+
             this.cssStr += compId.startsWith('elIcon') ? `\n.${compId}` : `\n.${className}`
             this.cssStr += ` {\n${tmpStr}}`
         }
