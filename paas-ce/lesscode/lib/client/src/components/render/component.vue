@@ -10,34 +10,40 @@
 -->
 
 <template>
-    <div :data-component-id="`component-${renderData.componentId}`"
-        :base-component="renderData.type !== 'render-grid' && renderData.type !== 'free-layout' && !renderData.isCustomComponent && !renderData.isComplexComponent"
-        :class="['wrapperCls', wrapperCls, (!renderLayout ? 'component-wrapper' : '')]"
-        :ref="`${renderData.componentId}-wrapper`" :style="Object.assign({}, wrapperNodeStyle, { top: renderData.renderStyles.top, left: renderData.renderStyles.left, width: renderData.renderStyles.width }, componentData.type === 'bk-swiper' ? { height: renderData.renderStyles.height } : {})"
+    <div
+        class="wrapperCls"
+        :ref="`${renderData.componentId}-wrapper`"
+        :data-component-id="`component-${renderData.componentId}`"
+        :base-component="isBaseComponent"
+        :class="wrapperClasses"
+        :style="wrapperStyles"
         @mousedown.stop="componentWrapperMousedownHandler(renderData, $event)"
         @mouseenter.stop="componentWrapperMouseenterHandler(renderData, $event)"
         @mouseleave.stop="componentWrapperMouseleaveHandler(renderData, $event)"
         @click.stop="componentWrapperClickHandler(renderData, $event)"
         @contextmenu.stop="componentWrapperClickHandler(renderData, $event)">
-        <component-menu class="component-context-menu"
+        <component-menu
+            class="component-context-menu"
             :target="contextMenuTarget"
             :show="contextMenuVisible"
             :offset="getComputedMunuOffset"
             @update:show="show => contextMenuVisible = show">
             <a href="javascript:;" @click="handleContextmenuDelete">删除组件</a>
         </component-menu>
-        <component-wrapper :render-data="renderData"
+        <component-wrapper
+            :render-data="renderData"
             :bind-props="bindProps"
             :refresh-key="renderDataSlotRefreshKey"
             :component-data="componentData"
             :ref="renderData.componentId">
-            <component v-for="(slotName, index) in Object.keys(renderDataSlot)"
+            <component
+                v-for="(slotName, index) in Object.keys(renderDataSlot)"
+                is-child
+                :is="getSlotComponentName(renderDataSlot[slotName])"
                 :slot="slotName"
                 :key="index"
                 :extra-drag-cls="['interactiveInnerComp']"
-                :is="getSlotComponentName(renderDataSlot[slotName])"
-                v-bind="getSlotProps(renderDataSlot[slotName])"
-            />
+                v-bind="getSlotProps(renderDataSlot[slotName])" />
         </component-wrapper>
     </div>
 </template>
@@ -46,28 +52,65 @@
     import _ from 'lodash'
     import { mapGetters, mapMutations } from 'vuex'
     import { bus } from '@/common/bus'
-    import { uuid, getNodeWithClass, removeClassWithNodeClass, getStyle, findComponent, findComponentParentGrid, getContextOffset } from '@/common/util'
-    import renderSlot from './slot'
-    import ComponentWrapper from './component-wrapper'
-    import ComponentMenu from '@/components/widget/context-menu.vue'
+    import {
+        uuid,
+        getNodeWithClass,
+        removeClassWithNodeClass,
+        getStyle,
+        findComponentParentGrid
+    } from '@/common/util'
+    import ComponentMenu from '@/components/widget/context-menu'
     import WidgetForm from '@/components/widget/form'
     import WidgetFormItem from '@/components/widget/form-item'
-    import offsetMixin from './offsetMixin'
+    import renderSlot from './slot'
+    import ComponentWrapper from './component-wrapper'
+    import offsetMixin from './offset-mixin'
 
-    const components = {
-        ComponentWrapper,
-        ComponentMenu,
-        WidgetForm,
-        WidgetFormItem,
-        renderSlot,
-        renderLayout: () => import('./index'),
-        renderGrid: () => import('./grid'),
-        freeLayout: () => import('./free-layout')
-    }
+    const BLOCK_ELEMS = [
+        'div',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'p',
+        'ul',
+        'ol',
+        'dl',
+        'table',
+        'form'
+    ]
+
+    const INLINE_ELEMS = [
+        'span',
+        'a',
+        'strong',
+        'b',
+        'em',
+        'i',
+        'big',
+        'small',
+        'label',
+        'img',
+        'input',
+        'select',
+        'textarea',
+        'svg'
+    ]
 
     export default {
         name: 'render-component',
-        components,
+        components: {
+            ComponentWrapper,
+            ComponentMenu,
+            WidgetForm,
+            WidgetFormItem,
+            renderSlot,
+            renderLayout: () => import('./index'),
+            renderGrid: () => import('./grid'),
+            freeLayout: () => import('./free-layout')
+        },
         mixins: [offsetMixin],
         props: {
             componentData: {
@@ -84,132 +127,137 @@
             }
             return {
                 renderData: {},
-                renderLayout: false,
+                isLayoutNameSlot: false,
                 renderDataSlot: {},
                 renderDataSlotRefreshKey: Date.now(),
+                componentStyleDisplayValue: '',
                 bindProps: {},
-                // componentWrapperNode: null,
-                wrapperNodeStyle: {},
-                BLOCK_ELEMS: [
-                    'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'dl', 'table', 'form'
-                ],
-                INLINE_ELEMS: [
-                    'span', 'a', 'strong', 'b', 'em', 'i', 'big', 'small', 'label', 'img', 'input', 'select', 'textarea'
-                ],
                 contextMenuVisible: false,
-                contextMenuTarget: null,
-                contextOffset: { x: 0, y: 0 }
+                contextMenuTarget: null
             }
         },
         computed: {
             ...mapGetters('drag', ['targetData']),
             ...mapGetters('components', ['curNameMap', 'interactiveComponents']),
-            wrapperCls () {
-                const renderDataType = this.renderData.type
-                let ret = ''
+            /**
+             * @desc 组件渲染 root 的 class
+             * @returns { String }
+             */
+            wrapperClasses () {
+                const { type } = this.componentData
+                const stack = []
                 // 打包自定义组件时添加此类作为最上层父类，避免自定义组件的类污染画布页面的东西
-                if (this.curNameMap[renderDataType]) {
-                    ret += 'bk-layout-custom-component-wrapper'
+                if (this.curNameMap[type]) {
+                    stack.push('bk-layout-custom-component-wrapper')
                 }
+                // slot name 不是 layout
+                if (!this.isLayoutNameSlot) {
+                    stack.push('component-wrapper')
+                }
+                if (type === 'render-grid') {
+                    stack.push('grid')
+                } else if (type === 'free-layout') {
+                    stack.push('free-layout')
+                }
+                return stack.join(' ')
+            },
+            /**
+             * @desc 组件渲染 root 的 style
+             * @returns { Object }
+             */
+            wrapperStyles () {
+                const {
+                    top,
+                    left,
+                    width,
+                    height
+                } = this.renderData.renderStyles
 
-                let suffix = ''
-                if (renderDataType === 'render-grid') {
-                    suffix = ' grid'
+                const styles = {
+                    top: top,
+                    left: left,
+                    display: this.componentStyleDisplayValue,
+                    width: width
                 }
-                if (renderDataType === 'free-layout') {
-                    suffix = ' free-layout'
+                // bk-swiper 设置默认高度
+                if (this.componentData.type === 'bk-swiper') {
+                    styles.height = height
                 }
-                return `${ret}${suffix}`
+                return styles
+            },
+            /**
+             * @desc 判断基础组件
+             * @returns { Boolean }
+             *
+             * 不包含一下类型组件
+             *  - render-grid
+             *  - free-layout
+             *  - 自定义组件
+             *  - 复合组件
+             */
+            isBaseComponent () {
+                if (this.isLayoutTypeComponent) {
+                    return false
+                }
+                if (this.renderData.isCustomComponent) {
+                    return false
+                }
+                if (this.renderData.isComplexComponent) {
+                    return false
+                }
+                return true
+            },
+            /**
+             * @desc 当前处理的组件是 Layout 类型（render-grid，free-layout）
+             * @returns { Boolean }
+             */
+            isLayoutTypeComponent () {
+                return [
+                    'render-grid',
+                    'free-layout'
+                ].includes(this.componentData.type)
             }
         },
         watch: {
             'renderData.componentId': {
-                handler (val, old) {
+                handler () {
                     this.renderData.isCustomComponent = !!this.curNameMap[this.renderData.type]
-                    if (val) {
-                        if (this.interactiveComponents.includes(this.renderData.type)) { // 交互式组件，将父级内容撑开
-                            return {
-                                display: 'block',
-                                height: '100%',
-                                margin: 0,
-                                zIndex: 200
-                            }
-                        }
-                        if (this.renderData.type !== 'render-grid' && this.renderData.type !== 'free-layout') {
-                            // this.componentWrapperNode = this.$refs[`${val}-wrapper`]
-                            const domNode = this.$refs[val].$el || this.$refs[val] // 原生html不会有$el元素
-                            const componentDisplay = getStyle(domNode, 'display')
-                            let ret = ''
-                            if (componentDisplay) {
-                                if (componentDisplay === 'block') {
-                                    ret = 'block'
-                                } else if (componentDisplay === 'inline-block' || componentDisplay === 'inline') {
-                                    ret = 'inline-block'
-                                } else if (componentDisplay === 'inline-flex') {
-                                    ret = 'inline-flex'
-                                }
-                            } else {
-                                const tagName = domNode.tagName.toLocaleLowerCase()
-                                if (this.BLOCK_ELEMS.indexOf(tagName) > -1) {
-                                    ret = 'block'
-                                } else if (this.INLINE_ELEMS.indexOf(tagName) > -1) {
-                                    ret = 'inline-block'
-                                }
-                            }
-                            if (ret) {
-                                this.wrapperNodeStyle = Object.assign({}, this.wrapperNodeStyle, {
-                                    display: ret
-                                })
-                            }
-                        }
-                    }
                 },
                 immediate: true
-            },
-            componentData (v) {
-                this.renderData = v
             }
         },
         created () {
-            // console.log('from componnennt ===', this)
-            // 这里切断引用的话会导致预览出现问题
-            // this.renderData = Object.assign({}, this.componentData)
-
             this.renderData = this.componentData
             // 直接 json 回溯的话，json 配置中不会有 componentId
             if (!this.componentData.componentId) {
                 this.renderData.componentId = this.componentData.name + '-' + uuid()
             }
-
-            Object.values(this.renderData.renderSlots).some(item => {
+            // 判断 slot 是否是 layout
+            // eq: card, sideslider
+            Object.values(this.renderData.renderSlots).forEach(item => {
                 if (item.name === 'layout') {
-                    this.renderLayout = true
-                    return item
+                    this.isLayoutNameSlot = true
                 }
             })
 
             this.updateBindProps()
             this.updateBindSlots()
-            // this.pushComponentToTree()
+            
             bus.$on('on-update-props', this.updatePropsHandler)
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('on-update-props', this.updatePropsHandler)
             })
         },
         mounted () {
-            // this.componentWrapperNode = document.querySelector('.drag-wrapper')
-            this.contextMenuTarget = (this.renderData.type !== 'render-grid' && this.renderData.type !== 'free-layout')
-                ? this.$refs[`${this.renderData.componentId}-wrapper`]
-                : null
-
-            if (this.renderData.type !== 'render-grid' && this.renderData.type !== 'free-layout') {
+            // 非 layout 类型的组件
+            if (!this.isLayoutTypeComponent) {
+                this.contextMenuTarget = this.$refs[`${this.renderData.componentId}-wrapper`]
                 this.$emit('component-mounted', {
                     renderData: this.renderData,
                     elem: this.$el
                 })
+                this.initComponentStyleDispaly()
             }
-
-            this.contextOffset = getContextOffset(this.$el)
         },
         methods: {
             ...mapMutations('drag', [
@@ -217,11 +265,46 @@
                 'setTargetData',
                 'pushTargetHistory'
             ]),
+            /**
+             * @desc 判断渲染组件的 display 的值
+             */
+            initComponentStyleDispaly () {
+                let result = ''
+                if (this.$refs[this.renderData.componentId]) {
+                    const domNode = this.$refs[this.renderData.componentId].$el
+                        || this.$refs[this.renderData.componentId] // 原生html不会有$el元素
+                    const componentDisplay = getStyle(domNode, 'display')
+                    
+                    if (componentDisplay) {
+                        if (componentDisplay === 'block') {
+                            result = 'block'
+                        } else if (componentDisplay === 'inline-block' || componentDisplay === 'inline') {
+                            result = 'inline-block'
+                        } else if (componentDisplay === 'inline-flex') {
+                            result = 'inline-flex'
+                        }
+                    } else {
+                        const tagName = domNode.tagName.toLocaleLowerCase()
+                        if (BLOCK_ELEMS.indexOf(tagName) > -1) {
+                            result = 'block'
+                        } else if (INLINE_ELEMS.indexOf(tagName) > -1) {
+                            result = 'inline-block'
+                        }
+                    }
+                } else {
+                    // 兼容异步组件 bk-custom-icon，初始无法获取 ref
+                    if (['bk-custom-icon'].includes(this.renderData.type)) {
+                        result = 'inline-block'
+                    }
+                }
+                if (result) {
+                    this.componentStyleDisplayValue = result
+                }
+            },
 
             getSlotComponentName (slot) {
                 const { name } = slot
-                const componentName = name === 'layout' ? 'render-layout' : 'render-slot'
-                return componentName
+                return name === 'layout' ? 'render-layout' : 'render-slot'
             },
 
             getSlotProps (slot) {
@@ -253,15 +336,10 @@
             updateBindSlots () {
                 if (Object.keys(this.renderData.renderSlots || {}).length) {
                     this.renderDataSlot = this.renderData.renderSlots
-                    this.renderDataSlotRefreshKey = Date.now()
+                    if (!this.isLayoutTypeComponent) {
+                        this.renderDataSlotRefreshKey = Date.now()
+                    }
                 }
-            },
-
-            pushComponentToTree () {
-                const targetData = _.cloneDeep(this.targetData)
-                const selfNode = findComponent(targetData, this.renderData.componentId)
-                selfNode.renderProps = this.renderData.renderProps
-                this.setTargetData(targetData)
             },
 
             /**
@@ -271,29 +349,35 @@
              */
             updatePropsHandler (data) {
                 if (data.componentId === this.renderData.componentId) {
-                    // debugger
                     const pushData = {
                         type: 'update',
                         component: _.cloneDeep(this.renderData),
                         modifier: data.modifier
                     }
                     this.pushTargetHistory(pushData)
-                    // const { renderStyles = {}, renderProps = {}, renderEvents = {} } = data.modifier
-                    const { renderStyles = {}, renderProps = {}, renderEvents = {}, renderDirectives = [], renderSlots = {}, tabPanelActive = 'props' } = data.modifier
+
+                    const {
+                        renderStyles = {},
+                        renderProps = {},
+                        renderEvents = {},
+                        renderDirectives = [],
+                        renderSlots = {},
+                        tabPanelActive = 'props'
+                    } = data.modifier
+
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
                     this.renderData.renderEvents = renderEvents
                     this.renderData.renderDirectives = renderDirectives
                     this.renderData.renderSlots = renderSlots
                     this.renderData.tabPanelActive = tabPanelActive
+
                     this.updateBindProps()
                     this.updateBindSlots()
 
                     // 把组件的 display 样式更改同步到 .component-wrapper 元素上
                     if (renderStyles.display) {
-                        this.wrapperNodeStyle = Object.assign({}, this.wrapperNodeStyle, {
-                            display: renderStyles.display
-                        })
+                        this.componentStyleDisplayValue = renderStyles.display
                     }
 
                     // 更新属性时，检测元素的 top + height 是否超过了容器的高度，如果超过了，那么就改变容器的高度
@@ -338,7 +422,7 @@
              * @param {Object} e 事件对象
              */
             componentWrapperClickHandler (renderData, e) {
-                if (renderData.type === 'render-grid' || renderData.type === 'free-layout') {
+                if (this.isLayoutTypeComponent) {
                     return
                 }
 
@@ -350,7 +434,7 @@
                 removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
 
                 const curComponentNode = getNodeWithClass(e.target, 'wrapperCls')
-                const className = this.renderLayout ? 'wrapper-cls-selected' : 'selected'
+                const className = this.isLayoutNameSlot ? 'wrapper-cls-selected' : 'selected'
                 curComponentNode.classList.add(className)
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
@@ -364,10 +448,10 @@
              * @param {Object} e 事件对象
              */
             componentWrapperMouseenterHandler (renderData, e) {
-                if (renderData.type === 'render-grid' || renderData.type === 'free-layout') {
+                if (this.isLayoutTypeComponent) {
                     return
                 }
-                const className = this.renderLayout ? 'wrapper-cls-hover' : 'component-wrapper-hover'
+                const className = this.isLayoutNameSlot ? 'wrapper-cls-hover' : 'component-wrapper-hover'
                 const target = e.target
                 target.classList.add(className)
 
@@ -384,10 +468,10 @@
              * @param {Object} e 事件对象
              */
             componentWrapperMouseleaveHandler (renderData, e) {
-                if (renderData.type === 'render-grid' || renderData.type === 'free-layout') {
+                if (this.isLayoutTypeComponent) {
                     return
                 }
-                const className = this.renderLayout ? 'wrapper-cls-hover' : 'component-wrapper-hover'
+                const className = this.isLayoutNameSlot ? 'wrapper-cls-hover' : 'component-wrapper-hover'
                 const target = e.target
                 target.classList.remove(className)
             }

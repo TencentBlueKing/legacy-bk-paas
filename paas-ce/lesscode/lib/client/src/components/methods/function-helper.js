@@ -72,7 +72,7 @@ function getCurUsedFuncs () {
     targetData.forEach((grid, index) => walkGrid(targetData, grid, callBack, callBack, index))
 
     // 生命周期的函数
-    Object.keys(pageDetail.lifeCycle).forEach((key) => {
+    Object.keys(pageDetail.lifeCycle || {}).forEach((key) => {
         const code = pageDetail.lifeCycle[key]
         if (code) findUsedFuncsByCode(code)
     })

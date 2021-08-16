@@ -76,7 +76,7 @@ export default {
         },
         height: {
             type: ['string', 'number'],
-            val: '100%',
+            val: '176px',
             tips: 'Table 的高度，默认为自动高度。如果 height 为 Number 类型，单位 px；如果 height 为 String 类型，则这个高度会设置为 Table 的 style.height 的值，Table 的高度会受控于外部样式。'
         },
         'max-height': {

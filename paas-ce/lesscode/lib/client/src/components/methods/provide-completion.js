@@ -10,6 +10,7 @@
  */
 
 import store from '@/store'
+import { camelCase, camelCaseTransformMerge } from 'change-case'
 import { walkGrid } from '@/common/util'
 
 if (window.monaco) registerCompletion()
@@ -121,6 +122,31 @@ function createDependencyProposals (range) {
                 insertText: `lesscode['\${func:${func.funcCode}}'](${(func.funcParams || []).join(', ')})`,
                 range
             })
+        })
+    })
+    // 添加form表单变量提示
+    const formVals = []
+    const findForm = (data) => {
+        if (data.type === 'widget-form') {
+            const prefix = camelCase(data.componentId, { transform: camelCaseTransformMerge })
+            const modelPrefix = `${prefix}model`
+            formVals.push(modelPrefix)
+            formVals.push(`${prefix}rules`)
+            const formSlots = (data.renderSlots && data.renderSlots.default && data.renderSlots.default.val) || []
+            formSlots.map(item => {
+                const prop = item.renderProps.property && item.renderProps.property.val
+                prop && formVals.push(`${modelPrefix}.${prop}`)
+            })
+        }
+    }
+    targetData.forEach((grid, index) => walkGrid(targetData, grid, findForm, findForm, index))
+    formVals.forEach(item => {
+        suggestions.push({
+            label: `lesscode.${item}`,
+            kind: monaco.languages.CompletionItemKind.Property,
+            documentation: '',
+            insertText: `this.${item}`,
+            range
         })
     })
     return suggestions
