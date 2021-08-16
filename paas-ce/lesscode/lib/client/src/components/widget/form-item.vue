@@ -14,7 +14,7 @@
         <bk-form-item
             :label="componentData.renderProps.label && componentData.renderProps.label.val"
             :required="componentData.renderProps.required && componentData.renderProps.required.val">
-            <template v-for="(item) in componentData.renderProps.slots.val">
+            <template v-for="(item) in componentData.renderSlots.default.val">
                 <render-component :component-data="item" :key="item.componentId" />
             </template>
         </bk-form-item>

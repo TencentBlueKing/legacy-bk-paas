@@ -52,6 +52,17 @@ function getCurUsedFuncs () {
             }
         })
 
+        const renderSlots = component.renderSlots || {}
+        Object.keys(renderSlots).forEach((key) => {
+            const { type, payload = {} } = renderSlots[key] || {}
+
+            if (type === 'remote') {
+                if (payload && payload.methodData && payload.methodData.methodCode) {
+                    findUsedFuncsByCode(payload.methodData.methodCode)
+                }
+            }
+        })
+
         const renderEvents = component.renderEvents || {}
         Object.keys(renderEvents).forEach((event) => {
             const code = renderEvents[event]
@@ -61,7 +72,7 @@ function getCurUsedFuncs () {
     targetData.forEach((grid, index) => walkGrid(targetData, grid, callBack, callBack, index))
 
     // 生命周期的函数
-    Object.keys(pageDetail.lifeCycle).forEach((key) => {
+    Object.keys(pageDetail.lifeCycle || {}).forEach((key) => {
         const code = pageDetail.lifeCycle[key]
         if (code) findUsedFuncsByCode(code)
     })

@@ -46,10 +46,13 @@ export default {
             type: 'boolean',
             val: false,
             tips: '隐藏 badge'
-        },
-        slots: {
-            name: 'text',
-            type: 'text',
+        }
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['text'],
+            displayName: '文本配置',
             val: '文字标记'
         }
     }

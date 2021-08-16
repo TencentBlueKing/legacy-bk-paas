@@ -42,24 +42,34 @@ export default {
         const widthChangeableCompoennts = ['img', 'p', 'span', 'bk-link', 'el-link']
         if (!widthChangeableCompoennts.includes(componentData.type)) delete renderStyles.width
 
-        console.log('renderStyle', renderStyles)
-
-        return h(renderData.type, {
-            key: params['component-type'] === 'bk-sideslider' ? 'bk-slider' : refreshKey, // sideSlider 固定key，防止属性修改动画刷新
-            props: params,
-            attrs: params,
-            on: {
-                ...dynamicEvent
-            },
-            scopedSlots: context.children.reduce((acc, cur) => {
-                const slotKey = cur.data && cur.data.slot
-                if (slotKey) {
-                    acc[slotKey] = () => cur
+        const scopedSlots = context.children.reduce((acc, cur) => {
+            const slotKey = cur.data && cur.data.slot
+            if (slotKey) {
+                if (!acc[slotKey]) {
+                    acc[slotKey] = () => acc[slotKey].slots
+                    acc[slotKey].slots = []
                 }
-                return acc
-            }, {}),
-            style: Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }),
-            ref: renderData.componentId
-        }, context.children)
+                acc[slotKey].slots.push(cur)
+            }
+            return acc
+        }, {})
+        
+        return h('span',
+            {
+                style: { 'font-size': 'initial' }
+            },
+            [
+                h(renderData.type, {
+                    key: params['component-type'] === 'bk-sideslider' ? 'bk-slider' : refreshKey, // sideSlider 固定key，防止属性修改动画刷新
+                    props: params,
+                    attrs: params,
+                    on: {
+                        ...dynamicEvent
+                    },
+                    scopedSlots,
+                    style: Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }),
+                    ref: renderData.componentId
+                }, context.children)
+            ])
     }
 }

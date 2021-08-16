@@ -30,35 +30,33 @@ export default {
         }
     ],
     props: {
-        slots: {
-            name: 'el-radio',
-            type: ['el-radio', 'remote'],
-            remoteValidate (data) {
-                if (!Array.isArray(data)) return '返回值需要是数组'
-                const errData = data.find((item) => (!item.hasOwnProperty('label')))
-                if (errData) return '返回值每个元素需要含有label字段'
-            },
-            val: [
-                { label: '单选一' },
-                { label: '单选二' },
-                { label: '单选三' }
-            ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-checkbox 里的 :label, :value, :checked, :key
-            // <bk-checkbox v-for="item in checkboxgroupc57d9bc6Slot" :label="item.label" :value="item.value" :checked="item.checked" :key="item.value">{{ item.label }}</bk-checkbox>
-            attrs: [
-                { 'key': 'label', 'value': 'label' },
-                { 'key': 'key', 'value': 'label' }
-            ]
-        },
         value: {
             type: ['string', 'number', 'boolean'],
-            val: '单选一'
+            val: '1'
         },
         disabled: {
             type: 'boolean',
             val: false,
             'v-bind': '',
             tips: '是否禁用状态'
+        }
+    },
+    slots: {
+        default: {
+            name: ['el-radio'],
+            type: ['list', 'remote'],
+            displayName: 'el-radio可选项配置',
+            tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和value字段',
+            remoteValidate (data) {
+                if (!Array.isArray(data)) return '返回值需要是数组'
+                const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('value')))
+                if (errData) return '返回值每个元素需要含有label和value字段'
+            },
+            val: [
+                { label: '单选一', value: '1' },
+                { label: '单选二', value: '2' },
+                { label: '单选三', value: '3' }
+            ]
         }
     }
 }

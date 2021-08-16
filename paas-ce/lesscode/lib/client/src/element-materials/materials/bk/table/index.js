@@ -70,15 +70,6 @@ export default {
         }
     ],
     props: {
-        slots: {
-            name: 'bk-table-column',
-            type: 'table-column',
-            val: [
-                { label: '第一列', prop: 'prop1', sortable: false, type: '' },
-                { label: '第二列', prop: 'prop2', sortable: false, type: '' },
-                { label: '第三列', prop: 'prop3', sortable: false, type: '' }
-            ]
-        },
         data: {
             type: ['array', 'remote'],
             remoteValidate (data) {
@@ -158,6 +149,18 @@ export default {
             type: 'boolean',
             val: true,
             tips: '是否显示分页条中共计XX条的信息'
+        }
+    },
+    slots: {
+        default: {
+            name: ['bk-table-column'],
+            type: ['table-list', 'remote'],
+            displayName: '表头配置',
+            val: [
+                { label: '第一列', prop: 'prop1', sortable: false, type: '' },
+                { label: '第二列', prop: 'prop2', sortable: false, type: '' },
+                { label: '第三列', prop: 'prop3', sortable: false, type: '' }
+            ]
         }
     }
 }

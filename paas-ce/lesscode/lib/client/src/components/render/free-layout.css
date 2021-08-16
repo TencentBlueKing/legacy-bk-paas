@@ -139,7 +139,18 @@ $baseZIndexInFreeLayout: 10;
     }
 
     .in-free-layout-item-ghost {
-        opacity: .5;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        background: #F3F8FF;
+        & > * {
+            display: none;
+        }
+        /* display: none; */
+        /* opacity: .5;
         &.component-item {
             &:after {
                 content: "放在这里";
@@ -173,6 +184,6 @@ $baseZIndexInFreeLayout: 10;
             & > * {
                 display: none;
             }
-        }
+        } */
     }
 }

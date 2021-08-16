@@ -38,10 +38,13 @@ export default {
             type: 'color',
             val: '#dde4eb',
             tips: '分割线颜色'
-        },
-        slots: {
-            name: 'text',
-            type: 'text',
+        }
+    },
+    slots: {
+        default: {
+            name: ['html'],
+            type: ['text'],
+            displayName: '文本配置',
             val: '文字链接'
         }
     }

@@ -18,9 +18,13 @@ export default {
     order: 1,
     styles: ['size', 'margin', 'display'],
     props: {
-        slots: {
-            name: 'el-timeline-item',
-            type: ['timeline', 'remote'],
+    },
+    slots: {
+        default: {
+            name: ['el-timeline-item'],
+            type: ['list', 'remote'],
+            displayName: 'timeline可选项配置',
+            tips: '默认插槽，值需要是数组，且每个元素需要含有label和timestamp字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('timestamp')))
@@ -30,20 +34,7 @@ export default {
                 { label: '活动按期开始', timestamp: '2018-04-15', color: '#0bbd87' },
                 { label: '通过审核', timestamp: '2018-04-13', color: '' },
                 { label: '创建成功', timestamp: '2018-04-11', color: '' }
-            ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-checkbox 里的 :label, :value, :checked, :key
-            // <bk-checkbox v-for="item in checkboxgroupc57d9bc6Slot" :label="item.label" :value="item.value" :checked="item.checked" :key="item.value">{{ item.label }}</bk-checkbox>
-            attrs: [
-                { 'key': 'label', 'value': 'label' },
-                { 'key': 'timestamp', 'value': 'timestamp' },
-                { 'key': 'color', 'value': 'color' },
-                { 'key': 'key', 'value': 'timestamp' }
             ]
-        },
-        reverse: {
-            type: 'boolean',
-            val: false,
-            tips: '指定节点排序方向，默认为正序'
         }
     }
 }

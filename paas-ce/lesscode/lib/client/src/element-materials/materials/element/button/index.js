@@ -78,10 +78,13 @@ export default {
             val: '',
             options: ['button', 'submit', 'reset'],
             tips: '原生 type 属性'
-        },
-        slots: {
-            name: 'text',
-            type: 'text',
+        }
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['text'],
+            displayName: '文本配置',
             val: '默认按钮'
         }
     }

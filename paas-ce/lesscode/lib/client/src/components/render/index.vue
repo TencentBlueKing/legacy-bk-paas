@@ -12,11 +12,11 @@
 <template>
     <div :class="wrapperClass">
         <template v-if="componentData.type === 'render-grid'">
-            <render-grid :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="[]">
+            <render-grid :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls">
             </render-grid>
         </template>
         <template v-else-if="componentData.type === 'free-layout'">
-            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="[]">
+            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls">
             </free-layout>
         </template>
         <template v-else>
@@ -40,14 +40,25 @@
             ComponentModule
         },
         provide () {
-            return {
-                layoutOffset: this.interactiveLayout
-            }
+            /** slot下的子元素，不需要provide offset */
+            return this.isChild
+                ? {}
+                : {
+                    layoutOffset: this.interactiveLayout
+                }
         },
         props: {
+            isChild: {
+                type: Boolean,
+                default: false
+            },
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            extraDragCls: {
+                type: Array,
+                deault: () => ([])
             }
         },
         data () {

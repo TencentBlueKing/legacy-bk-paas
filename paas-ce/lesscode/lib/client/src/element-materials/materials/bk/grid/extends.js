@@ -28,9 +28,13 @@ export default function (children) {
             'margin-vertical': {
                 type: 'number',
                 val: 0
-            },
-            slots: {
-                type: 'column',
+            }
+        },
+        slots: {
+            default: {
+                type: ['column'],
+                displayName: '列配置',
+                tips: '每一列栅格宽度占比为该列配置值占总列配置值的百分比，建议总列配置值为 12 或 24',
                 val: [
                     { span: 1, children: [] },
                     { span: 1, children: [] }
@@ -39,8 +43,10 @@ export default function (children) {
         }
     }
     const props = Object.assign({}, base.props, children.props)
+    const slots = { default: Object.assign({}, base.slots.default, children.slots.default) }
 
     const newObject = Object.assign({}, base, children)
+    newObject.slots = slots
     newObject.props = props
 
     return newObject
