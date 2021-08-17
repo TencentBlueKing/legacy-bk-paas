@@ -22,7 +22,7 @@ if [ "$YUM_LIST" != "" ]; then
     yum clean all
     rpm --rebuilddb
     http_proxy=$BK_PROXY https_proxy=$BK_PROXY yum install -y yum-plugin-ovl
-    http_proxy=$BK_PROCY https_proxy=$BK_PROXY yum install -y $YUM_LIST
+    http_proxy=$BK_PROXY https_proxy=$BK_PROXY yum install -y $YUM_LIST
     [ $? -eq 0 ] || { echo "---- FAILURE: Yum $YUM_LIST ------"; exit 1; }
     echo "------ SUCCESS: Yum Install ------"
 fi
