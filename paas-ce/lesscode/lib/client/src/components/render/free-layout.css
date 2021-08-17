@@ -132,7 +132,7 @@ $baseZIndexInFreeLayout: 10;
             padding: 2px;
             font-size: 14px;
             &:hover {
-                background-color: #ff9c01;
+                background-color: #ea3636;
                 color: #fff;
             }
         }
