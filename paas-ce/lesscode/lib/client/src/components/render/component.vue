@@ -23,7 +23,7 @@
         @click.stop="componentWrapperClickHandler(renderData, $event)"
         @contextmenu.stop="componentWrapperClickHandler(renderData, $event)">
         <component-menu
-            class="component-context-menu"
+            class="component-context-menu context-menu"
             :target="contextMenuTarget"
             :show="contextMenuVisible"
             :offset="getComputedMunuOffset"
@@ -438,7 +438,7 @@
                 curComponentNode.classList.add(className)
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
-                this.contextMenuVisible = false
+                this.$clearMenu()
             },
 
             /**

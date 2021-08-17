@@ -83,6 +83,8 @@
 
             // 右键事件事件处理
             contextMenuHandler (e) {
+                this.$clearMenu()
+                
                 e.preventDefault()
 
                 this.x = e.clientX + this.offset.x
@@ -91,7 +93,9 @@
                     left: this.x + 'px',
                     top: this.y + 'px'
                 }
-                this.$emit('update:show', true)
+                this.$nextTick(() => {
+                    this.$emit('update:show', true)
+                })
             }
         }
     }
