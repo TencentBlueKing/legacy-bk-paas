@@ -145,7 +145,7 @@ $baseZIndexInFreeLayout: 10;
         bottom: 0;
         left: 0;
         z-index: -1;
-        background: #F3F8FF;
+        background: #E9F1FD;
         & > * {
             display: none;
         }
