@@ -134,6 +134,7 @@ CSRF_FAILURE_VIEW = "bkauth.views.csrf_failure"
 ##################
 # 蓝鲸登录方式：bk_login，自定义登录方式：custom_login
 LOGIN_TYPE = "bk_login"
+WECOM_LOGIN= True
 CUSTOM_LOGIN_VIEW = ""
 CUSTOM_AUTHENTICATION_BACKEND = ""
 try:
@@ -176,6 +177,13 @@ AUTHENTICATION_BACKENDS_DICT = {
     "bk_login": ["backends.bk.BkUserBackend"],
     "custom_login": [CUSTOM_AUTHENTICATION_BACKEND],
 }
+
+if WECOM_LOGIN:
+    AUTHENTICATION_BACKENDS_DICT = {
+        "bk_login": ["backends.bk.BkUserBackend"],
+        "custom_login": ["backends.bk.BkUserBackend", CUSTOM_AUTHENTICATION_BACKEND],
+    }
+
 AUTHENTICATION_BACKENDS = AUTHENTICATION_BACKENDS_DICT.get(LOGIN_TYPE, ["bkaccount.backends.BkRemoteUserBackend"])
 
 WSGI_APPLICATION = "wsgi.application"

@@ -1,0 +1,163 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="icon" type="image/x-icon" href="{{STATIC_URL}}favicon.ico">
+        <link href="{{STATIC_URL}}css_ce/bk.{{CSS_SUFFIX}}" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}assets/bk-icon-2.0/iconfont.css" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}css_ce/login.{{CSS_SUFFIX}}?v={{STATIC_VERSION}}" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}css_ce/custom_login.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="http://rescdn.qqmail.com/node/ww/wwopenmng/js/sso/wwLogin-1.0.0.js"></script>
+        <script src="{{STATIC_URL}}js_ce/custom_login.js"></script>
+        <title>登录|蓝鲸智云</title>
+
+        {% if is_plain %}
+          <style>
+              .login-from {
+                left: 50% !important;
+                top: 50% !important;
+                margin: 0 !important;
+                transform: translate(-50%, -50%);
+                border-radius: 0 !important;
+              }
+              .logo-title {
+                border-radius: 0 !important;
+              }
+              .protocol-btn {
+                display: none !important;
+              }
+              .footer {
+                display: none !important;
+              }
+              .page-content {
+                background: #e3eefa !important;
+              }
+          </style>
+        {% endif %}
+    </head>
+    <body>
+        <div class="page-content">
+            <div class="login-from" style="height: 471px;">
+                <div class="logo-title">
+                    <img src="{{STATIC_URL}}img/logo_ce/bk_login.png" height="32" width="311" alt="">
+                </div>
+                <div class="from-detail" style="height: 350px;">
+                    <form action="{{ app_path }}" method="post" id="login-form" style="height: 350px" onsubmit="return refresh_token()">{% csrf_token %}
+                        <div class="login-tab">
+                            <ul>
+                                <li class="login-tab-item">
+                                    {% if bk_active %}
+                                    <div class="login-tab-label"><span class="login-tab-text"><a onclick="switchLogin(event, 0)">企业微信登录</a></span></div>
+                                    {% else %}
+                                    <div class="login-tab-label label-active"><span class="login-tab-text text-active"><a onclick="switchLogin(event, 0)">企业微信登录</a></span></div>
+                                    {% endif %}
+                                </li>
+                                <li class="login-tab-item">
+                                    {% if bk_active %}
+                                    <div class="login-tab-label label-active"><span class="login-tab-text text-active"><a onclick="switchLogin(event, 1)">蓝鲸账号密码登录</a></span></div>
+                                    {% else %}
+                                    <div class="login-tab-label"><span class="login-tab-text"><a onclick="switchLogin(event, 1)">蓝鲸账号密码登录</a></span></div>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                        <div  id="qr_login"  style="{% if bk_active %} display:none {% else %} display:block {% endif %}">
+                            <div id="qr-login-error-tip" style="{% if bk_active %} display:none {% else %} display:block {% endif %}">
+                                {% if qr_error_message %}
+                                <i class="bk-icon icon-exclamation-circle-shape"></i><span>{{ qr_error_message }}</span>
+                                {% endif %}
+                            </div>
+                            <div id="wx_login">
+
+                            </div>
+                        </div>
+                        
+                        <div id="normal_login" style="{% if bk_active %} display:block {% else %} display:none {% endif %}">
+                            <div id="login-error-tip" style="{% if bk_active %} display:block {% else %} display:none {% endif %}">
+                                {% if error_message %}
+                                <i class="bk-icon icon-exclamation-circle-shape"></i><span>{{ error_message }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="form-login">
+                                <div class="user group-control">
+                                    <i class="bk-icon icon-user"></i>
+                                    <input id="user" type="text" name="username" placeholder="请输入用户名" >
+                                </div>
+                                <div class="pwd group-control">
+                                    <i class="bk-icon icon-password"></i>
+                                    <input class="password" id="password" type="password" name="password" value="" placeholder="请输入用户密码">
+                                </div>
+                                <div>
+                                    <input type="hidden" name="next" value="{{ next }}" />
+                                    <input type="hidden" name="app_id" value="{{app_id }}">
+                                </div>
+                                <div class="btn-content clearfix">
+                                    <button class="login-btn">登录</button>
+                                    <span class="protocol-btn">查看用户协议</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <footer class="footer">
+                <p>
+                    <a id="contact_us" class="link">QQ咨询(800802001)</a>
+                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸论坛</a>
+                    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸官网</a>
+                    | <a href="/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸智云工作台</a>
+                    |<a class="follow-us" href="###">关注我们
+                    <span class="qr-box">
+                        <span class="qr">
+                            <img src="{{STATIC_URL}}img/logo_ce/qr.png">
+                            <span class="qr-caret"></span>
+                        </span>
+                    </span>
+                    </a>
+                </p>
+                <p>Copyright © 2012-{{NOW.year}} Tencent BlueKing. All Rights Reserved.</p>
+                <p>蓝鲸智云 版权所有</p>
+            </footer>
+        </div>
+        <!-- 查看用户协议 -->
+        {% include "account/agreement.part" %}
+        <!-- 浏览器验证 -->
+        <div class="error-message-content is-chrome">
+            <span>您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果</span><i class="bk-icon icon-close-circle-shape" id="close-chrome"></i>
+        </div>
+    </body>
+    <!-- js 国际化 -->
+    <!--
+    <script type="text/javascript" src="{{SITE_URL}}jsi18n/i18n/"></script>
+    -->
+    <script src="{{STATIC_URL}}assets/jquery-1.10.2.min.js"></script>
+    <script src="{{STATIC_URL}}js_ce/login.{{JS_SUFFIX}}?v={{STATIC_VERSION}}"></script>
+    
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var c_url = urlParams.get("c_url")
+        var app_id = urlParams.get("app_id")
+        var redirect_uri = window.location.origin + window.location.pathname
+        if (c_url) {
+            redirect_uri = redirect_uri + "?c_url=" + c_url
+            if (app_id) {
+                redirect_uri = redirect_uri + "&app_id=" + app_id
+            }
+        } else {
+            if (app_id) {
+                redirect_uri = redirect_uri + "?app_id=" + app_id
+            }
+        }
+        
+        window.WwLogin({
+                "id" : "wx_login",  //显示二维码的容器id
+                "appid" : "{{ wx_appid }}",
+                "agentid" : "{{ agent_id }}",  //企业微信的cropID，在 企业微信管理端->我的企业 中查看
+                "redirect_uri" : redirect_uri,   //重定向地址，需要进行UrlEncode
+                "state" : "{{ state }}",   //用于保持请求和回调的状态，授权请求后原样带回给企业。该参数可用于防止csrf攻击（跨站请求伪造攻击），建议企业带上该参数
+                "href": "data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDE3MHB4O30NCi5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9DQouaW1wb3dlckJveCAuaW5mbyB7d2lkdGg6IDIwMHB4O30NCi5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZSAgIWltcG9ydGFudH0NCi5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9DQouaW1wb3dlckJveCAuc3RhdHVzX3N1Y2Mge2NvbG9yOiAjNjdDQTJFfQ==",    //css样式base64 encode，企业可根据实际需求覆盖默认样式
+
+        });
+    </script>
+</html>
