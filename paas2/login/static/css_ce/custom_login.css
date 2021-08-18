@@ -1,0 +1,75 @@
+.login-tab {
+    height: 50px;
+    width: 400px;
+    padding: 1px 0 0 0;
+    border-bottom: 1px solid #D7DAE1;
+}
+
+.login-tab ul {
+    list-style: none;
+    height: 50px;
+}
+
+.login-tab li {
+    float: left;
+}
+
+.login-tab-item {
+    height: 50px;
+    width: 200px;
+    padding: 0 18px 0 18px;
+}
+
+.login-tab-label {
+    /* border-bottom: 2px solid #4A85FB; */
+    border-bottom: 2px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+
+.label-active {
+    border-bottom: 2px solid #4A85FB;
+}
+
+.login-tab-text {
+    /* color: #4A85FB; */
+    font-size: 14px;
+}
+
+.text-active {
+    color: #4A85FB;
+}
+
+.login-tab a:hover {
+    color: #4A85FB;
+}
+
+#login-error-tip {
+    position: absolute;
+    color: #ff5656;
+    top: 70px;
+    left: 55px;
+    font-size: 12px;
+}
+
+#qr-login-error-tip {
+    position: absolute;
+    color: #ff5656;
+    top: 70px;
+    left: 115px;
+    font-size: 12px;
+}
+
+#login-error-tip i {
+    margin-right: 10px;
+}
+
+#qr-login-error-tip i {
+    margin-right: 10px;
+}
+
+#wx_login {
+    padding: 30px 50px;
+}
+
