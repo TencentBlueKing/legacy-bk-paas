@@ -23,14 +23,14 @@ CORP_SECRET = ''
 CACHE_KEY_NAME = 'ACCESS_TOKEN'
 
 # 二维码跳转链接
-QR_REDIRECT_LINK = 'https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid={}&agentid={}&redirect_uri={}&state={}'
+# QR_REDIRECT_LINK = 'https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid={}&agentid={}&redirect_uri={}&state={}'
 
 
 # 获取access_token链接
-ACCESS_TOKEN_URL= 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={}&corpsecret={}'
+ACCESS_TOKEN_URL= 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={corpid}&corpsecret={secret}'
 
 # 获取访问用户身份
-WX_USER_INFO_URL = 'https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token={}&code={}'
+WX_USER_INFO_URL = 'https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token={access_token}&code={code}'
 
 # 获取用户详细身份信息
 # WX_USER_URL = 'https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token={}&userid={}'

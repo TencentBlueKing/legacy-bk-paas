@@ -12,7 +12,6 @@ specific language governing permissions and limitations under the License.
 
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ObjectDoesNotExist
 
 from common.log import logger
 from common import usermgr
@@ -30,7 +29,7 @@ class QrcodeBackend(ModelBackend):
             access_token = get_wx_access_token()
             if not access_token:
                 return None
-            # 通过access_token 获取用户信息
+            # 通过access_token 获取用户信息, 企业微信用户userid字段映射为用户管理的username字段
             userinfo = get_wx_user_info(access_token, code)
             if not userinfo:
                 logger.debug("QrcodeBackend get_wx_user_info fail")
@@ -42,11 +41,7 @@ class QrcodeBackend(ModelBackend):
             if ok:
                 # 获取User类
                 UserModel = get_user_model()
-
-                try:
-                    user = UserModel.objects.get(username=username)
-                except ObjectDoesNotExist:
-                    user = UserModel.objects.create_user(username=username)
+                user, _ = UserModel.objects.get_or_create(username=username)
                 return user
             else:
                 logger.debug('get_user failed, %s'%message)
