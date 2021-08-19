@@ -196,6 +196,7 @@ const func = {
     },
 
     async handleFuncRelation (func, varWhere) {
+        if (!varWhere) return
         const { projectId, pageCode, effectiveRange } = varWhere
         const variableWhere = [{ projectId, deleteFlag: 0 }]
         if (effectiveRange !== undefined) {
@@ -211,7 +212,7 @@ const func = {
         // 当前用到的变量列表
         const funcVariableRepository = getRepository(FuncVariable)
         const variableRepository = getRepository(Variable)
-        const [exitsUsedVariables, allVariables] = await Promise.all([
+        const [exitsUsedVariables = [], allVariables = []] = await Promise.all([
             funcVariableRepository.find({ where: { projectId, funcCode: func.funcCode } }),
             variableRepository.find({ where: variableWhere })
         ])

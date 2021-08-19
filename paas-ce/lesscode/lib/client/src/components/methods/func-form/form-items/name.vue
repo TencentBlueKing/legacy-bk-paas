@@ -1,0 +1,61 @@
+<template>
+    <bk-form :label-width="84" :model="copyForm" ref="funcForm" :form-type="formType">
+        <bk-form-item
+            label="函数名称"
+            :required="true"
+            :rules="[requireRule('函数名称'), nameRepeatRule, groupNameRule]"
+            property="funcName"
+            error-display-type="normal">
+            <bk-input v-model="copyForm.funcName" @input="(val) => updateValue('funcName', val)"></bk-input>
+        </bk-form-item>
+    </bk-form>
+</template>
+
+<script>
+    import mixins from './form-item-mixins'
+    import { mapGetters } from 'vuex'
+
+    export default {
+        mixins: [mixins],
+
+        props: {
+            functionList: {
+                type: Array,
+                default: () => ([])
+            }
+        },
+
+        data () {
+            return {
+                nameRepeatRule: {
+                    validator: (val) => {
+                        return !this.computedFunctionList.find((func) => (func.funcName === val && func.id !== this.copyForm.id))
+                    },
+                    message: `函数名称在当前项目下重复，请修改后重试`,
+                    trigger: 'blur'
+                },
+                groupNameRule: {
+                    validator: val => /^[A-Za-z_][A-Za-z0-9]*[A-Za-z_0-9]?$/.test(val),
+                    message: '由大小写英文字母、数字组成，开头和结尾可以是大小写英文字母、下划线、数字，且必须符合驼峰命名规范',
+                    trigger: 'blur'
+                }
+            }
+        },
+
+        computed: {
+            ...mapGetters('functions', ['funcGroups']),
+
+            computedFunctionList () {
+                if (this.functionList.length) {
+                    return this.functionList
+                } else {
+                    return this.funcGroups.reduce((acc, cur) => {
+                        const functionList = cur.functionList || []
+                        acc.push(...functionList)
+                        return acc
+                    }, [])
+                }
+            }
+        }
+    }
+</script>

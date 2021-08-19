@@ -2,7 +2,7 @@
     <monaco v-bind="$props" class="monaco-func" @change="change">
         <template v-slot:tools>
             <i class="bk-icon icon-info-circle icon-style" v-bk-tooltips="methodTip()"></i>
-            <i class="bk-drag-icon bk-drag-fix icon-style" @click="fixMethod" v-bk-tooltips="{ content: '自动修复 Eslint', theme: 'light', placements: ['top'] }"></i>
+            <i class="bk-drag-icon bk-drag-fix icon-style" @click="fixMethod" v-bk-tooltips="fixMethodTips"></i>
             <slot name="tools"></slot>
         </template>
     </monaco>
@@ -26,12 +26,20 @@
                 type: [String, Number],
                 default: 320
             },
-            funcType: {
-                type: Number
-            },
             options: Object,
             func: {
                 type: Object
+            }
+        },
+        data () {
+            return {
+                fixMethodTips: {
+                    content: '自动修复 Eslint',
+                    theme: 'light',
+                    placements: ['top'],
+                    appendTo: 'parent',
+                    boundary: 'window'
+                }
             }
         },
         methods: {
@@ -45,7 +53,7 @@
                 return {
                     placement: 'top-start',
                     theme: 'light',
-                    content: `<pre class="component-method-tip">${commentMap[+this.funcType]}</pre>`,
+                    content: `<pre class="component-method-tip">${commentMap[+this.func.funcType]}</pre>`,
                     appendTo: 'parent',
                     boundary: 'window'
                 }

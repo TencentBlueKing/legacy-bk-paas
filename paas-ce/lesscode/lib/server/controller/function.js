@@ -9,6 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 import { allGroupFuncDetail, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, getFuncRelatePageList, getFuncGroupById, getFuncById } from '../model/function'
+import projectFuncMarket from '../model/project-func-market'
 import OperationLogger from '../service/operation-logger'
 const { checkFuncEslint, verifyAndFixFunc } = require('../util')
 
@@ -276,6 +277,8 @@ module.exports = {
             if (!ctx.hasPerm) return
 
             const data = await deleteFunction(id)
+            await projectFuncMarket.delete(id)
+
             operationLogger.success({
                 projectId: query.projectId,
                 operateTarget: `函数名称：${query.funcName}`

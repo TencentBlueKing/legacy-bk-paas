@@ -10,13 +10,22 @@
  */
 
 const Router = require('koa-router')
-const { getUserPerm, isPlatformAdmin } = require('../controller/perm')
-
+const {
+    getFuncList,
+    addFunc,
+    updateFunc,
+    deleteFunc,
+    addFuncToProject
+} = require('../controller/function-market')
+ 
 const router = new Router({
-    prefix: '/api/perm'
+    prefix: '/api/function-market'
 })
 
-router.get('/userPerm', getUserPerm)
-router.get('/isPlatformAdmin', isPlatformAdmin)
+router.get('/getFuncList', getFuncList)
+router.post('/addFunc', addFunc)
+router.put('/updateFunc', updateFunc)
+router.delete('/deleteFunc', deleteFunc)
+router.post('/addFuncToProject', addFuncToProject)
 
 module.exports = router

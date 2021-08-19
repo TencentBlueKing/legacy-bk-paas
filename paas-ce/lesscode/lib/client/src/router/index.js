@@ -21,6 +21,8 @@ Vue.use(VueRouter)
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
+const functionMarket = () => import(/* webpackChunkName: 'functionMarket' */'@/views/system/function-market')
+
 const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/project/component-manage')
 const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/project/function-manage')
 const MemberManage = () => import(/* webpackChunkName: 'index' */'@/views/project/member-manage')
@@ -89,6 +91,14 @@ const routes = [
                 component: Projects,
                 meta: {
                     title: '项目列表'
+                }
+            },
+            {
+                path: 'function-market',
+                name: 'functionMarket',
+                component: functionMarket,
+                meta: {
+                    title: '函数市场'
                 }
             },
             {
