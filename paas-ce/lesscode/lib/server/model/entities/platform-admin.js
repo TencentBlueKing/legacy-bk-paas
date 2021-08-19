@@ -9,14 +9,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const Router = require('koa-router')
-const { getUserPerm, isPlatformAdmin } = require('../controller/perm')
+import { Entity, Column } from 'typeorm'
+import Base from './base'
 
-const router = new Router({
-    prefix: '/api/perm'
-})
-
-router.get('/userPerm', getUserPerm)
-router.get('/isPlatformAdmin', isPlatformAdmin)
-
-module.exports = router
+@Entity({ name: 'platform_admin', comment: '平台管理员' })
+export default class extends Base {
+    @Column({ type: 'varchar', length: 255 })
+    username
+}

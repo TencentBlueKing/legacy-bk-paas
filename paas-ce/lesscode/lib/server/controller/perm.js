@@ -8,7 +8,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { getUserPerms } from '../model/perm'
+import { getUserPerms, isPlatformAdmin } from '../model/perm'
 
 const Perm = {
     async getUserPerm (ctx) {
@@ -21,6 +21,25 @@ const Perm = {
                 code: 0,
                 message: 'success',
                 data
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
+
+    async isPlatformAdmin (ctx) {
+        try {
+            const query = ctx.request.query || {}
+            const session = ctx.session || {}
+            const userInfo = session.userInfo || {}
+            const username = query.username || userInfo.username
+            const data = await isPlatformAdmin(username) || []
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data: data.length > 0
             })
         } catch (err) {
             ctx.throwError({

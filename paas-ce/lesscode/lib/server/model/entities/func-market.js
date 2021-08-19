@@ -11,18 +11,46 @@
 
 import { Entity, Column } from 'typeorm'
 import Base from './base'
-
-@Entity({ name: 'r_project_func_group', comment: '项目/函数关联表' })
+ 
+@Entity({ name: 'func_market', comment: '函数市场表' })
 export default class extends Base {
-    @Column({
-        type: 'int',
-        comment: 'project 表主键'
-    })
-    projectId
+    // 函数名字
+    @Column({ type: 'varchar', length: 255 })
+    funcName
 
-    @Column({
-        type: 'int',
-        comment: 'function 表主键'
-    })
-    funcGroupId
+    // 函数参数
+    @Column({ type: 'tinytext' })
+    funcParams
+
+    // 回调函数参数
+    @Column({ type: 'tinytext' })
+    remoteParams
+
+    // 函数内容
+    @Column({ type: 'mediumtext' })
+    funcBody
+
+    // 函数简介
+    @Column({ type: 'tinytext' })
+    funcSummary
+
+    // 函数模板类型
+    @Column({ type: 'varchar', length: 255 })
+    funcType
+
+    // 远程函数方法
+    @Column({ type: 'varchar', length: 255 })
+    funcMethod
+
+    // 远程函数是否携带 Token
+    @Column({ type: 'int' })
+    withToken
+
+    // 远程函数数据体
+    @Column({ type: 'text' })
+    funcApiData
+
+    // 远程函数url
+    @Column({ type: 'varchar', length: 255 })
+    funcApiUrl
 }

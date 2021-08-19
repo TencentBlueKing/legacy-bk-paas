@@ -9,14 +9,26 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const Router = require('koa-router')
-const { getUserPerm, isPlatformAdmin } = require('../controller/perm')
+import { Entity, Column } from 'typeorm'
+import Base from './base'
 
-const router = new Router({
-    prefix: '/api/perm'
-})
+@Entity({ name: 'r_project_func_market', comment: '项目/函数市场关联表' })
+export default class extends Base {
+    @Column({
+        type: 'int',
+        comment: '函数市场表主键'
+    })
+    funcMarketId
 
-router.get('/userPerm', getUserPerm)
-router.get('/isPlatformAdmin', isPlatformAdmin)
+    @Column({
+        type: 'int',
+        comment: '项目表主键'
+    })
+    projectId
 
-module.exports = router
+    @Column({
+        type: 'int',
+        comment: '函数表主键'
+    })
+    projectFuncId
+}
