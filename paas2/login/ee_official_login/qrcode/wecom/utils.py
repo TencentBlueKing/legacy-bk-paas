@@ -10,11 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-import urllib
-import random
-
 import requests
-from django.conf import settings as bk_settings
 from django.core.cache import cache
 
 from common.log import logger
@@ -27,14 +23,12 @@ def get_wx_access_token():
     access_token = cache.get(wx_settings.CACHE_KEY_NAME, '')
     if access_token:
         return access_token
-    token_url = wx_settings.ACCESS_TOKEN_URL.format(wx_settings.CORP_ID, wx_settings.CORP_SECRET)
+    token_url = wx_settings.ACCESS_TOKEN_URL.format(corpid=wx_settings.CORP_ID, secret=wx_settings.CORP_SECRET)
     resp = requests.get(token_url)
     if resp.status_code != 200:
         # 记录错误日志
         content = resp.content[:100] if resp.content else ''
-        error_msg = ("http enterprise request error! type: %s, url: %s, "
-                     "response_status_code: %s, response_content: %s")
-        logger.error(error_msg % ('GET', token_url, resp.status_code, content))
+        logger.error("http enterprise request error! type: %s, url: %s, response_status_code: %s, response_content: %s", 'GET', token_url, resp.status_code, content)
         return None
     try:
         data = resp.json()
@@ -54,18 +48,18 @@ def get_wx_user_info(access_token, code):
     """
     获取企业微信访问用户身份
     """
-    info_url = wx_settings.WX_USER_INFO_URL.format(access_token, code)
+    info_url = wx_settings.WX_USER_INFO_URL.format(access_token=access_token, code=code)
 
     info_resp = requests.get(info_url)
     if info_resp.status_code != 200:
         # 记录错误日志
         content = info_resp.content[:100] if info_resp.content else ''
-        error_msg = ("http enterprise request error! type: %s, url: %s, "
-                     "response_status_code: %s, response_content: %s")
-        logger.error(error_msg % ('GET', info_url, info_resp.status_code, content))
+        logger.error("http enterprise request error! type: %s, url: %s, response_status_code: %s, response_content: %s", 'GET', info_url, info_resp.status_code, content)
         return None
     try:
         info_data = info_resp.json()
+
+        # 将企业微信的UserId字段映射为蓝鲸用户管理的username
         user_id = info_data.get('UserId', '')
         data = {
             "username": user_id

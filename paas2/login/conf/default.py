@@ -178,12 +178,6 @@ AUTHENTICATION_BACKENDS_DICT = {
     "custom_login": [CUSTOM_AUTHENTICATION_BACKEND],
 }
 
-if WECOM_LOGIN:
-    AUTHENTICATION_BACKENDS_DICT = {
-        "bk_login": ["backends.bk.BkUserBackend"],
-        "custom_login": ["backends.bk.BkUserBackend", CUSTOM_AUTHENTICATION_BACKEND],
-    }
-
 AUTHENTICATION_BACKENDS = AUTHENTICATION_BACKENDS_DICT.get(LOGIN_TYPE, ["bkaccount.backends.BkRemoteUserBackend"])
 
 WSGI_APPLICATION = "wsgi.application"
