@@ -124,7 +124,7 @@
         </layout>
 
         <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" @hidden="closeAddFunction">
-            <func-form :func-data="funcObj.form" class="add-function" ref="func" slot="content"></func-form>
+            <func-form :func-data="funcObj.form" ref="func" slot="content"></func-form>
             <section slot="footer" class="add-footer">
                 <bk-button theme="primary" @click="submitFunc" :loading="funcObj.loading">提交</bk-button>
                 <bk-button @click="closeAddFunction">取消</bk-button>
@@ -174,7 +174,7 @@
     import { downloadFile, uploadFile } from '@/common/util'
     import dayjs from 'dayjs'
     import layout from '@/components/ui/layout'
-    import funcForm from '@/components/methods/func-form'
+    import funcForm from '@/components/methods/func-form/index'
     import editObject from '@/components/edit-object'
 
     export default {
@@ -322,7 +322,6 @@
 
             submitFunc () {
                 this.$refs.func.validate().then((postData) => {
-                    if (!postData) return
                     this.funcObj.loading = true
                     if (!postData.projectId) {
                         postData.projectId = this.projectId
@@ -343,6 +342,8 @@
                     }).catch(err => this.$bkMessage({ theme: 'error', message: err.message || err })).finally(() => {
                         this.funcObj.loading = false
                     })
+                }).catch((validator) => {
+                    this.$bkMessage({ message: validator.content || validator, theme: 'error' })
                 })
             },
 

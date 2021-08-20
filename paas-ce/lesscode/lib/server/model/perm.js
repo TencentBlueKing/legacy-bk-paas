@@ -16,6 +16,7 @@ import Role from './entities/role'
 import RolePerm from './entities/role-perm'
 import User from './entities/user'
 import UserProjectRole from './entities/user-project-role'
+import PlatformAdmin from './entities/platform-admin'
 
 module.exports = {
     getUserPerms (projectId, username) {
@@ -41,5 +42,10 @@ module.exports = {
             .andWhere('perm.permCode = :permCode', { permCode })
             .getRawMany()
         return res.length > 0
+    },
+
+    isPlatformAdmin (username) {
+        const platformAdminRepository = getRepository(PlatformAdmin)
+        return platformAdminRepository.find({ username, deleteFlag: 0 })
     }
 }

@@ -27,6 +27,10 @@
                 type: [String, Number],
                 default: 320
             },
+            readOnly: {
+                type: Boolean,
+                default: false
+            },
             options: Object
         },
 
@@ -104,6 +108,7 @@
                     cursorBlinking: 'solid',
                     fixedOverflowWidgets: true,
                     automaticLayout: true,
+                    readOnly: this.readOnly,
                     minimap: {
                         enabled: false // 关闭小地图
                     }

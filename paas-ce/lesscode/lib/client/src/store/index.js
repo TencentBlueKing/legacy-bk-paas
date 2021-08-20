@@ -25,6 +25,8 @@ import release from './modules/release'
 import layout from './modules/layout'
 import member from './modules/member'
 import logs from './modules/logs'
+import functionMarket from './modules/function-market'
+import perm from './modules/perm'
 import http from '@/api'
 import router from '../router'
 import { unifyObjectStyle, json2Query } from '@/common/util'
@@ -46,7 +48,9 @@ const store = new Vuex.Store({
         release,
         layout,
         member,
-        logs
+        logs,
+        functionMarket,
+        perm
     },
     // 公共 store
     state: {
