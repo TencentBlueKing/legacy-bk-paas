@@ -261,15 +261,13 @@
             chooseFunction (func) {
                 if (this.chooseId === func.id) return
                 const confirmFn = () => {
-                    this.saveFunc().finally(() => {
-                        cancelFn()
-                    })
+                    this.saveFunc(cancelFn)
                 }
                 const cancelFn = () => {
                     this.chooseId = func.id
                     this.templateFunc = {}
                 }
-                if (this.$refs.func.formChanged || !this.chooseId) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '确认切换',
                         subTitle: '不保存则会丢失当前数据',
@@ -288,7 +286,7 @@
                 const confirmFn = () => {
                     this.$emit('update:show', false)
                 }
-                if (this.$refs.func.formChanged || !this.chooseId) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '请确认是否关闭',
                         subTitle: '存在未保存的函数，关闭后不会保存更改',
@@ -370,9 +368,7 @@
                 }
 
                 const confirmFn = () => {
-                    this.saveFunc().finally(() => {
-                        copyFunc()
-                    })
+                    this.saveFunc(copyFunc)
                 }
 
                 if (this.$refs.func.formChanged) {
@@ -422,9 +418,7 @@
                 }
 
                 const confirmFn = () => {
-                    this.saveFunc().finally(() => {
-                        addFunc()
-                    })
+                    this.saveFunc(addFunc)
                 }
 
                 if (this.$refs.func.formChanged) {
@@ -442,8 +436,8 @@
                 }
             },
 
-            saveFunc () {
-                return this.$refs.func.validate().then((postData) => {
+            saveFunc (callBack) {
+                this.$refs.func.validate().then((postData) => {
                     if (!postData) return
                     if (!postData.projectId) {
                         postData.projectId = this.projectId
@@ -474,6 +468,7 @@
                     const method = postData.id ? editFunc : addFunc
                     return method().then(() => {
                         this.getAllVariable(varWhere)
+                        if (typeof callBack === 'function') callBack()
                     }).catch((err) => {
                         this.$bkMessage({ theme: 'error', message: err.message || err })
                     }).finally(() => {

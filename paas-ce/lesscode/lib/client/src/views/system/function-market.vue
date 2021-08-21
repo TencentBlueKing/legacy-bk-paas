@@ -1,7 +1,9 @@
 <template>
     <article class="function-market-home">
-        <bk-button class="mr5" theme="primary" @click="showMarketFunc.isShow = true" v-if="isAdmin">新增函数</bk-button>
-        <bk-input class="fun-search" right-icon="bk-icon icon-search" v-model="searchStr" clearable></bk-input>
+        <section class="function-market-title">
+            <bk-button class="mr5" theme="primary" @click="showMarketFunc.isShow = true" v-if="isAdmin">新建函数</bk-button>
+            <bk-input class="fun-search" right-icon="bk-icon icon-search" v-model="searchStr" clearable placeholder="函数关键字"></bk-input>
+        </section>
 
         <section class="card-list" v-bkloading="{ isLoading }">
             <bk-card
@@ -27,18 +29,24 @@
                     <bk-button text class="foot-btn" @click="handleShowAddFuncFromMarket(card)">添加至项目</bk-button>
                     <template v-if="isAdmin">
                         <bk-divider direction="vertical"></bk-divider>
-                        <bk-button text class="foot-btn" @click="handleShowAddFunc(card)">编辑</bk-button>
+                        <bk-button text class="foot-btn" @click="handleShowEditFunc(card)">编辑</bk-button>
                     </template>
                 </div>
             </bk-card>
-            <bk-exception class="exception-wrap-item mt50" type="empty" v-if="cardList.length <= 0"></bk-exception>
+            <bk-exception class="exception-wrap-item" scene="part" type="empty" v-if="cardList.length <= 0">
+                暂无函数，
+                <bk-button :text="true" @click="showMarketFunc.isShow = true">
+                    立即创建
+                </bk-button>
+            </bk-exception>
         </section>
 
         <bk-sideslider
             :is-show.sync="showMarketFunc.isShow"
             :quick-close="true"
             :width="796"
-            :title="showMarketFunc.func.id ? '编辑函数' : '新增函数'"
+            :title="showMarketFunc.func.id ? '编辑函数' : '新建函数'"
+            :before-close="confirmClose"
             @hidden="clearMarketSideData">
             <func-market slot="content" ref="func" :func-data="showMarketFunc.func" :function-list="cardList"></func-market>
             <section slot="footer" class="add-footer">
@@ -52,6 +60,7 @@
             :is-show.sync="showAddFuncFromMarket.isShow"
             :quick-close="true"
             :width="796"
+            :before-close="confirmClose"
             @hidden="clearMarketSideData">
             <add-func slot="content" ref="marketFunc" :func-data="showAddFuncFromMarket.func"></add-func>
             <section slot="footer" class="add-footer">
@@ -62,6 +71,7 @@
 
         <section v-if="showSource.isShow" class="source-function">
             <monaco :read-only="true" height="500" width="800" :value="showSource.code" class="source-code">
+                <span slot="title" class="func-title">函数【{{ showSource.title }}】源码</span>
                 <i class="bk-drag-icon bk-drag-close-line icon-style" slot="tools" @click="showSource.isShow = false"></i>
             </monaco>
         </section>
@@ -88,7 +98,8 @@
                 isLoading: false,
                 showSource: {
                     isShow: false,
-                    code: ''
+                    code: '',
+                    title: ''
                 },
                 showMarketFunc: {
                     isShow: false,
@@ -195,7 +206,7 @@
                 this.showAddFuncFromMarket.func = func
             },
 
-            handleShowAddFunc (func) {
+            handleShowEditFunc (func) {
                 this.showMarketFunc.isShow = true
                 this.showMarketFunc.func = func
             },
@@ -216,6 +227,19 @@
             handleShowSource (card) {
                 this.showSource.isShow = true
                 this.showSource.code = card.funcBody
+                this.showSource.title = card.funcName
+            },
+
+            confirmClose () {
+                if ((this.$refs.func && this.$refs.func.formChanged) || (this.$refs.marketFunc && this.$refs.marketFunc.formChanged)) {
+                    this.$bkInfo({
+                        title: '请确认是否关闭',
+                        subTitle: '存在未保存的函数，关闭后不会保存更改',
+                        confirmFn: this.clearMarketSideData
+                    })
+                } else {
+                    this.clearMarketSideData()
+                }
             }
         }
     }
@@ -225,13 +249,22 @@
     .function-market-home {
         padding: 16px 8px 16px 24px;
     }
+    .function-market-title {
+        display: flex;
+        justify-content: space-between;
+    }
     .fun-search {
         width: 400px;
     }
-    .card-list::after {
-        content: '';
-        clear: both;
-        display: table;
+    .card-list {
+        .exception-wrap-item {
+            margin-top: calc(50vh - 180px);
+        }
+        &::after {
+            content: '';
+            clear: both;
+            display: table;
+        }
     }
     .function-card {
         margin: 16px 16px 0 0;
@@ -241,8 +274,12 @@
         box-shadow: 0px 2px 2px 0px rgb(0 0 0 / 11%);
         &:hover {
             box-shadow: 1px 2px 8px 2px rgb(0 0 0 / 11%);
+            /deep/ .bk-tooltip {
+                display: block;
+            }
         }
         /deep/ .bk-tooltip {
+            display: none;
             position: absolute;
             font-size: 20px;
             right: 6px;
@@ -293,6 +330,11 @@
             position: absolute;
             left: calc(50% - 400px);
             top: calc(50% - 280px);
+        }
+        .func-title {
+            font-size: 14px;
+            color: #C4C6CC;
+            padding-left: 25px;
         }
     }
     .add-footer {

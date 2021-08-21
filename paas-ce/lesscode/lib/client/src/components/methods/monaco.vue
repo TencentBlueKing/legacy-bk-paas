@@ -1,9 +1,14 @@
 <template>
     <section>
         <section class="monaco-head">
-            <i v-if="!isFull" class="bk-drag-icon bk-drag-code-full-screen icon-style" @click="openFullScreen"></i>
-            <i v-else class="bk-drag-icon bk-drag-un-full-screen icon-style" @click="exitFullScreen"></i>
-            <slot name="tools"></slot>
+            <span class="monaco-title">
+                <slot name="title"></slot>
+            </span>
+            <span class="monaco-tools">
+                <i v-if="!isFull" class="bk-drag-icon bk-drag-code-full-screen icon-style" @click="openFullScreen"></i>
+                <i v-else class="bk-drag-icon bk-drag-un-full-screen icon-style" @click="exitFullScreen"></i>
+                <slot name="tools"></slot>
+            </span>
         </section>
         <section class="monaco-editor"
             :style="{
@@ -212,8 +217,15 @@
         height: 30px;
         background-color: #1e1e1e;
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
+        .monaco-title {
+            flex: 1;
+        }
+        .monaco-tools {
+            display: flex;
+            align-items: center;
+        }
     }
     .icon-style {
         width: 16px;

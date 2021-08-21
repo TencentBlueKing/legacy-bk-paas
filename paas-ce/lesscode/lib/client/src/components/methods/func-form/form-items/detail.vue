@@ -85,6 +85,7 @@
                 v-model="copyForm.funcSummary"
                 :rows="3"
                 :maxlength="100"
+                placeholder="请输入函数简介"
                 @input="(val) => updateValue('funcSummary', val)"
             ></bk-input>
         </bk-form-item>
