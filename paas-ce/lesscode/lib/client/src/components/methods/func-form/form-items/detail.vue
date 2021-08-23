@@ -73,6 +73,13 @@
     export default {
         mixins: [mixins],
 
+        props: {
+            requireSummary: {
+                type: Boolean,
+                default: false
+            }
+        },
+
         data () {
             return {
                 monacoHeight: 200,

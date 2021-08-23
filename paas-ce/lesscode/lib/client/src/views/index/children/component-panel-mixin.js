@@ -220,9 +220,12 @@ export default {
                 groupName = 'component'
             }
 
-            // 当有交互式组件打开时，禁用蒙层下方的画布拖拽和交互
+            /**
+             * 当交互式组件激活时，仅允许拖拽到交互式组件的slots中，且交互式组件内部不允许嵌套交互式组件
+             * 当有交互式组件打开时，禁用蒙层下方的画布拖拽和交互
+             */
             const dragableSourceGroup = Object.assign({}, this.draggableSourceGroup, {
-                name: isInteractiveCompActive() ? 'interactiveInnerComp' : groupName
+                name: isInteractiveCompActive() && groupName !== 'interactive' ? 'interactiveInnerComp' : groupName
             })
 
             this.setDraggableSourceGroup(dragableSourceGroup)

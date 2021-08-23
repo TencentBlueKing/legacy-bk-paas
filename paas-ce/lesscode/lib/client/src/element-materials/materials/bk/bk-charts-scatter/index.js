@@ -71,7 +71,38 @@ export default {
         remoteOptions: {
             type: 'remote',
             tips: '动态图表配置，可通过函数动态返回图表配置属性，函数返回值会覆盖上述opions里面的同名属性，\n\neg：若函数返回值为{series: [...]}，则最终的图表的渲染会使用函数返回的series数据，其它配置仍为options中的静态配置，由此可达到动态设置图表数据的效果',
-            val: '',
+            val: {
+                'type': 'scatter',
+                'data': {
+                    'datasets': [
+                        {
+                            'label': 'Scatter Dataset',
+                            'borderColor': 'rgba(255,111,114,1)',
+                            'backgroundColor': 'rgba(255,111,114,1)',
+                            'pointRadius': 3,
+                            'data': [
+                                { 'x': 39.8, 'y': -8.607 },
+                                { 'x': 50.1, 'y': -10.38 },
+                                { 'x': 100, 'y': -16.07 },
+                                { 'x': 126, 'y': -18.03 },
+                                { 'x': 158, 'y': -20 },
+                                { 'x': 200, 'y': -21.99 },
+                                { 'x': 251, 'y': -23.98 },
+                                { 'x': 316, 'y': -25.97 },
+                                { 'x': 398, 'y': -27.97 },
+                                { 'x': 501, 'y': -29.96 },
+                                { 'x': 631, 'y': -31.96 },
+                                { 'x': 794, 'y': -33.96 }
+                            ]
+                        }
+                    ]
+                },
+                'options': {
+                    'flexWithContainer': true,
+                    'scales': { 'xAxes': { 'type': 'linear', 'position': 'bottom' } }
+
+                }
+            },
             remoteValidate (data) {
                 console.log(data, 'valid')
                 if (typeof data !== 'object') return '返回值需要是object'

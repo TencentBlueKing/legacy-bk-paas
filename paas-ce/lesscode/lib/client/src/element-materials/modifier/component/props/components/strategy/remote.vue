@@ -12,12 +12,26 @@
 <template>
     <section>
         <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
-            <span :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
+            <span v-if="name === 'initFormData'" class="form-title under-line">表单数据<span class="form-tip">（更新将会覆盖已有数据）</span></span>
+            <span v-else :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
+            <span class="remote-example" @click="handleShowExample">数据示例</span>
         </div>
         <div class="remote-content">
             <select-func v-model="remoteData" @change="changeFunc"></select-func>
             <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
         </div>
+        <bk-dialog
+            v-model="isShow"
+            :position="{ top: 100 }"
+            render-directive="if"
+            width="800"
+            :title="'数据示例'"
+            header-position="left"
+            :mask-close="false"
+            :show-footer="false"
+            ext-cls="remote-example-dialog">
+            <div class="remote-example-viewer" ref="remoteViewer"></div>
+        </bk-dialog>
     </section>
 </template>
 
@@ -67,7 +81,9 @@
                     params: []
                 },
                 propDirMap: {},
-                usedMethodMap: {}
+                usedMethodMap: {},
+                isShow: false,
+                editor: {}
             }
         },
         computed: {
@@ -270,6 +286,60 @@
                 } catch (error) {
                     this.$bkMessage({ theme: 'error', message: error.message || error || '获取数据失败，请检查函数是否正确', limit: 1 })
                 }
+            },
+            
+            handleShowExample () {
+                this.isShow = true
+                this.$nextTick(() => {
+                    this.initMonaco()
+                })
+            },
+            getDefaultData () {
+                let defaultData
+                switch (this.name) {
+                    case 'initFormData':
+                        defaultData = { string: '', boolean: false, array: [1, 2, 3] }
+                        break
+                    default:
+                        let dataString
+                        try {
+                            dataString = JSON.stringify(this.defaultValue)
+                        } catch (e) {
+                            dataString = JSON.stringify(this.defaultValue, function (key, value) {
+                                if (key === 'parent') {
+                                    return
+                                }
+                                return value
+                            })
+                        }
+                        defaultData = JSON.parse(dataString)
+                        break
+                }
+                return JSON.stringify(defaultData, null, '\t')
+            },
+            initMonaco () {
+                monaco.editor.defineTheme('remote-viewer', {
+                    base: 'vs-dark',
+                    inherit: true,
+                    rules: [{ background: '#242424' }],
+                    colors: {
+                        'editor.background': '#242424'
+                    }
+                })
+                
+                const value = this.getDefaultData()
+                this.editor = monaco.editor.create(this.$refs.remoteViewer, {
+                    value: value,
+                    theme: 'remote-viewer',
+                    readOnly: true,
+                    fontSize: 14,
+                    fontFamily: 'Consolas',
+                    cursorBlinking: 'solid',
+                    automaticLayout: true,
+                    minimap: {
+                        enabled: false // 关闭小地图
+                    }
+                })
             }
         }
     }
@@ -277,6 +347,8 @@
 
 <style lang="postcss">
     .remote-title {
+        display: flex;
+        justify-content: space-between;
         margin: 10px 0;
         line-height: 24px;
         font-size: 12px;
@@ -287,6 +359,24 @@
     .under-line {
         line-height: 24px;
         border-bottom: 1px dashed #979ba5;
+    }
+    .remote-example{
+        color: #3a84ff;
+        cursor: pointer;
+    }
+    .form-title {
+        font-weight: bold;
+        color: #63656E;
+        height:22px;
+
+        .form-tip{
+            font-weight: normal;
+            color: #979ba5;
+        }
+    }
+
+    .remote-example-viewer{
+        height: 403px;
     }
     .remote-content {
         background: #f0f1f5;
