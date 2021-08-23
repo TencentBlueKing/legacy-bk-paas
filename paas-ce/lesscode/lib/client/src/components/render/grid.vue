@@ -20,7 +20,7 @@
             @mouseover.native.stop="rowMouseoverHandler(renderData)"
             @mouseout.native.stop="rowMouseoutHandler(renderData)">
             <component-menu
-                class="grid-context-menu"
+                class="grid-context-menu context-menu"
                 :target="contextMenuTarget"
                 :show="contextMenuVisible"
                 :offset="getComputedMunuOffset"
@@ -340,6 +340,8 @@
 
                 const curRowNode = getNodeWithClass(e.target, 'bk-layout-grid-row')
                 curRowNode.classList.add('selected')
+
+                this.$clearMenu()
 
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
 
