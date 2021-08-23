@@ -301,7 +301,18 @@
                         defaultData = { string: '', boolean: false, array: [1, 2, 3] }
                         break
                     default:
-                        defaultData = JSON.parse(JSON.stringify(this.defaultValue))
+                        let dataString
+                        try {
+                            dataString = JSON.stringify(this.defaultValue)
+                        } catch (e) {
+                            dataString = JSON.stringify(this.defaultValue, function (key, value) {
+                                if (key === 'parent') {
+                                    return
+                                }
+                                return value
+                            })
+                        }
+                        defaultData = JSON.parse(dataString)
                         break
                 }
                 return JSON.stringify(defaultData, null, '\t')
