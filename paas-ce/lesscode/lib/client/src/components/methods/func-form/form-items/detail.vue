@@ -79,7 +79,12 @@
                 ></bk-input>
             </bk-form-item>
         </template>
-        <bk-form-item label="函数简介" property="funcSummary">
+        <bk-form-item
+            label="函数简介"
+            property="funcSummary"
+            error-display-type="normal"
+            :rules="[summaryRule]"
+        >
             <bk-input
                 type="textarea"
                 v-model="copyForm.funcSummary"
@@ -97,6 +102,13 @@
 
     export default {
         mixins: [mixins],
+
+        props: {
+            requireSummary: {
+                type: Boolean,
+                default: false
+            }
+        },
 
         data () {
             return {
@@ -135,6 +147,11 @@
                         }
                     },
                     message: 'apiData需要是json格式的数据',
+                    trigger: 'blur'
+                },
+                summaryRule: {
+                    validator: (val) => (!this.requireSummary || !['', undefined, null].includes(val)),
+                    message: '函数简介必填',
                     trigger: 'blur'
                 }
             }

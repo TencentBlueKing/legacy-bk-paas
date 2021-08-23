@@ -1,7 +1,7 @@
 <template>
     <section class="func-form-home">
         <form-name :form.sync="form" ref="name" :function-list="functionList"></form-name>
-        <form-detail :form.sync="form" ref="detail"></form-detail>
+        <form-detail :form.sync="form" :require-summary="true" ref="detail"></form-detail>
         <form-monaco :value.sync="form.funcBody" :func="form" class="mt20" :height="458"></form-monaco>
     </section>
 </template>
