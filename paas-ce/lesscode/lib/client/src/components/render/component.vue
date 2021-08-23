@@ -42,7 +42,6 @@
                 :is="getSlotComponentName(renderDataSlot[slotName])"
                 :slot="slotName"
                 :key="index"
-                :extra-drag-cls="['interactiveInnerComp']"
                 v-bind="getSlotProps(renderDataSlot[slotName])" />
         </component-wrapper>
     </div>
