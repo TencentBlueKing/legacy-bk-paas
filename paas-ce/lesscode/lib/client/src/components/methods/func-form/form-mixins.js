@@ -13,6 +13,7 @@ const defaultForm = {
     funcGroupId: '',
     funcType: 0,
     funcParams: [],
+    remoteParams: [],
     withToken: 0,
     funcApiUrl: '',
     funcMethod: 'get',
@@ -51,7 +52,7 @@ export default {
                     if (b !== undefined && b !== null) return b
                 })
                 Object.assign(this.form, defaultForm, copyForm)
-                this.formChanged = false
+                this.formChanged = !this.form.id
                 this.clearError()
             },
             immediate: true,
@@ -63,7 +64,7 @@ export default {
         validate () {
             const refComponents = this.$refs || {}
             const componentKeys = Object.keys(refComponents)
-            return Promise.all(componentKeys.map((key) => this.$refs[key].validate())).then(() => {
+            return Promise.all(componentKeys.map((key) => this.$refs[key] && this.$refs[key].validate())).then(() => {
                 this.formChanged = false
                 return this.form
             })

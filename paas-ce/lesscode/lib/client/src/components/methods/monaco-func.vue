@@ -29,7 +29,8 @@
             options: Object,
             func: {
                 type: Object
-            }
+            },
+            title: String
         },
         data () {
             return {

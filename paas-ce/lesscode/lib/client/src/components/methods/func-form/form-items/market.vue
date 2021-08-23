@@ -1,18 +1,24 @@
 <template>
-    <bk-form :label-width="84" ref="funcForm" :form-type="formType" class="func-form-bottom">
-        <bk-form-item label="函数市场" desc="使用函数市场快速编辑函数。注意：选择后会覆盖当前函数的值">
-            <bk-select @toggle="getMarketFuncs" @selected="changeMarketFunc" :loading="isLoading">
-                <bk-option v-for="option in marketFuncs"
-                    :key="option.id"
-                    :id="option.id"
-                    :name="option.funcName">
-                </bk-option>
-            </bk-select>
-        </bk-form-item>
-    </bk-form>
+    <section>
+        <bk-form :label-width="130" ref="funcForm" :form-type="formType" class="func-market-home">
+            <bk-form-item label="从函数市场导入">
+                <bk-select @toggle="getMarketFuncs" @selected="changeMarketFunc" :loading="isLoading">
+                    <bk-option v-for="option in marketFuncs"
+                        :key="option.id"
+                        :id="option.id"
+                        :name="option.funcName">
+                        <div v-bk-tooltips="transformTipsWidth(option.funcSummary, 400)">{{ option.funcName }}</div>
+                    </bk-option>
+                </bk-select>
+                <i class="bk-icon icon-info">可使用函数市场模板快速创建，注意：选择后会覆盖当前函数的数据</i>
+            </bk-form-item>
+        </bk-form>
+        <h5 class="func-title">函数信息</h5>
+    </section>
 </template>
 
 <script>
+    import { transformTipsWidth } from '@/common/util'
     import mixins from './form-item-mixins'
     import { mapActions } from 'vuex'
 
@@ -27,6 +33,8 @@
         },
 
         methods: {
+            transformTipsWidth,
+
             ...mapActions('functionMarket', ['getAllFuncFromMarket']),
 
             getMarketFuncs (isExpand) {
@@ -54,5 +62,26 @@
 </script>
 
 <style lang="postcss" scoped>
-    
+    .func-market-home {
+        background: #f0f1f5;
+        border-radius: 2px;
+        padding: 16px;
+        /deep/ .bk-select {
+            background: #fff;
+        }
+    }
+    .func-title {
+        font-weight: 700;
+        font-size: 14px;
+    }
+    .icon-info {
+        display: block;
+        text-align: left;
+        line-height: 16px;
+        margin-top: 8px;
+        font-size: 12px;
+        &:before {
+            margin-right: 4px;
+        }
+    }
 </style>

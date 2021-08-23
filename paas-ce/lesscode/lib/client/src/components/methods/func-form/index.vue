@@ -23,8 +23,9 @@
         /deep/ .func-form-item {
             margin-top: 20px;
         }
-        /deep/ .func-form-bottom {
-            margin-bottom: 20px;
+        /deep/ .func-title {
+            margin: 19px 0 17px;
+            padding-left: 4px;
         }
     }
 </style>

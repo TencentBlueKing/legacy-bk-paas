@@ -49,9 +49,11 @@
             },
 
             changeMarketFunc (id) {
-                this.updateValue('funcGroupId', '')
                 this.updateValue('projectId', id)
-                this.getAllGroupFuncs(id).catch((err) => {
+                this.getAllGroupFuncs(id).then((res = []) => {
+                    const firstGroup = res[0] || {}
+                    this.updateValue('funcGroupId', firstGroup.id)
+                }).catch((err) => {
                     this.messageError(err.message || err)
                 })
             }
