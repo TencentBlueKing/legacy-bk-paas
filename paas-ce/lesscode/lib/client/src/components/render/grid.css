@@ -77,6 +77,10 @@ $baseZIndexInGrid: 10;
         }
     }
 
+    &.selected > .save-as-template {
+        display: block;
+    }
+
     .bk-layout-grid-col {
         border: 1px dashed #ccc;
 

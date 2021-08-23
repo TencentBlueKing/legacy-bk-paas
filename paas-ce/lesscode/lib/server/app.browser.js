@@ -34,6 +34,8 @@ const { logger } = require('./logger')
 const { getIP } = require('./util')
 const { routes, allowedMethods } = require('./router')
 
+const { executeApi } = require('./controller/db-migration-helper')
+
 const authMiddleware = require('./middleware/auth')
 const httpMiddleware = require('./middleware/http')
 const errorMiddleware = require('./middleware/error')
@@ -227,7 +229,9 @@ function execSql (connection, callBack) {
         const prefixPath = '.'
         const migrateUp = `node node_modules/db-migrate/bin/db-migrate up --config ${prefixPath}/lib/server/conf/db-migrate.json --migrations-dir ${prefixPath}/lib/server/model/migrations -e ${databaseEnv}`
         shell.exec(migrateUp)
-
+        
+        // 自动执行接口刷数据
+        executeApi()
         callBack()
         return
     } catch (err) {

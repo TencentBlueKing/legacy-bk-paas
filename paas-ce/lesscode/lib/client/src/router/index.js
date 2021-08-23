@@ -23,6 +23,7 @@ const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
 const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/project/component-manage')
 const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/project/function-manage')
+const TemplateManage = () => import(/* webpackChunkName: 'index' */'@/views/project/template-manage')
 const MemberManage = () => import(/* webpackChunkName: 'index' */'@/views/project/member-manage')
 const VariableManage = () => import(/* webpackChunkName: 'index' */'@/views/project/variable-manage')
 
@@ -132,6 +133,14 @@ const routes = [
                 component: FunctionManage,
                 meta: {
                     title: '函数库'
+                }
+            },
+            {
+                path: 'template-manage',
+                name: 'templateManage',
+                component: TemplateManage,
+                meta: {
+                    title: '模板库'
                 }
             },
             {

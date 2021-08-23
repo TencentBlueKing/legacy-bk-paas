@@ -44,7 +44,7 @@
                 <bk-input
                     v-model="newCategory"
                     :native-attributes="{ autofocus: 'autofocus' }"
-                    placeholder="请输入组件分类，多个分类“/”分隔，回车结束"
+                    placeholder="请输入模板分类，多个分类“/”分隔，回车结束"
                     @keyup="handleSubmitCategory" />
             </div>
         </div>
@@ -65,7 +65,6 @@
 
     export default {
         name: '',
-
         data () {
             return {
                 isLoading: true,
@@ -103,11 +102,11 @@
             async fetchData () {
                 this.isLoading = true
                 try {
-                    const categoryList = this.$store.dispatch('components/categoryList', {
-                        belongProjectId: parseInt(this.$route.params.projectId)
+                    const categoryList = this.$store.dispatch('pageTemplate/categoryList', {
+                        projectId: parseInt(this.$route.params.projectId)
                     })
-                    const categoryCount = this.$store.dispatch('components/categoryCount', {
-                        belongProjectId: parseInt(this.$route.params.projectId)
+                    const categoryCount = this.$store.dispatch('pageTemplate/categoryCount', {
+                        projectId: parseInt(this.$route.params.projectId)
                     })
                     const [list, count] = await Promise.all([categoryList, categoryCount])
 
@@ -150,7 +149,7 @@
                 this.renderList = Object.freeze(result)
             },
             handleSort: _.throttle(function (event) {
-                this.$store.dispatch('components/categorySort', {
+                this.$store.dispatch('pageTemplate/categorySort', {
                     list: this.renderList.map(_ => ({
                         id: _.id
                     })),
@@ -197,19 +196,19 @@
                 }
                 try {
                     if (this.editCategory.id) {
-                        await this.$store.dispatch('components/categoryUpdate', {
+                        await this.$store.dispatch('pageTemplate/categoryUpdate', {
                             id: this.editCategory.id,
                             name: this.newCategory,
                             belongProjectId: parseInt(this.$route.params.projectId)
                         })
-                        this.messageSuccess('编辑组件分类成功')
+                        this.messageSuccess('编辑模板分类成功')
                     } else {
-                        await this.$store.dispatch('components/categoryCreate', {
+                        await this.$store.dispatch('pageTemplate/categoryCreate', {
                             name: this.newCategory,
                             belongProjectId: parseInt(this.$route.params.projectId)
                         })
                         this.searchValue = ''
-                        this.messageSuccess('添加组件分类成功')
+                        this.messageSuccess('添加模板分类成功')
                     }
 
                     this.handleHideCreate()
@@ -224,17 +223,17 @@
             async handleDelete (category) {
                 console.log(category, '======category')
                 if (this.list.length === 1) {
-                    this.messageError('组件分类不能为空')
+                    this.messageError('模板分类不能为空')
                     return
                 }
                 try {
-                    await this.$store.dispatch('components/categoryDelete', {
+                    await this.$store.dispatch('pageTemplate/categoryDelete', {
                         name: category.name,
                         belongProjectId: parseInt(this.$route.params.projectId),
                         id: category.id
                     })
                     this.fetchData()
-                    this.messageSuccess('删除组件分类成功')
+                    this.messageSuccess('删除模板分类成功')
                 } catch {}
             }
         }

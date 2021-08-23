@@ -47,6 +47,19 @@ export default class extends Base {
     moduleCode
 
     @Column({
+        type: 'int',
+        default: '0',
+        comment: '是否官方项目模板，1为是'
+    })
+    isOffcial
+
+    @Column({
+        type: 'varchar',
+        comment: '模板分类'
+    })
+    offcialType
+
+    @Column({
         type: 'varchar',
         nullable: true,
         comment: '创建人，默认当前用户'

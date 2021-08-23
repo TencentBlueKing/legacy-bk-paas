@@ -20,6 +20,7 @@ import page from './modules/page'
 import functions from './modules/functions'
 import variable from './modules/variable'
 import route from './modules/route'
+import pageTemplate from './modules/page-template'
 import projectCode from './modules/project-code'
 import release from './modules/release'
 import layout from './modules/layout'
@@ -42,6 +43,7 @@ const store = new Vuex.Store({
         functions,
         variable,
         route,
+        pageTemplate,
         projectCode,
         release,
         layout,
