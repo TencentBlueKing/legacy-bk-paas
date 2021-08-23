@@ -132,7 +132,7 @@ $baseZIndexInFreeLayout: 10;
             padding: 2px;
             font-size: 14px;
             &:hover {
-                background-color: #ff9c01;
+                background-color: #ea3636;
                 color: #fff;
             }
         }
@@ -145,7 +145,7 @@ $baseZIndexInFreeLayout: 10;
         bottom: 0;
         left: 0;
         z-index: -1;
-        background: #F3F8FF;
+        background: #E9F1FD;
         & > * {
             display: none;
         }

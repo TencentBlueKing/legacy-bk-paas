@@ -6,7 +6,12 @@
             :rules="[requireRule('函数标识'), codeRepeatRule, codeRule, keyWordRule]"
             property="funcCode"
             error-display-type="normal">
-            <bk-input v-model="copyForm.funcCode" @input="(val) => updateValue('funcCode', val)" :disabled="disabled"></bk-input>
+            <bk-input
+                v-model="copyForm.funcCode"
+                @input="(val) => updateValue('funcCode', val)"
+                :disabled="disabled"
+                placeholder="由大小写英文字母、下划线、数字组成"
+            ></bk-input>
         </bk-form-item>
     </bk-form>
 </template>

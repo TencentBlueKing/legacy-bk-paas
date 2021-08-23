@@ -28,7 +28,7 @@ export default {
         updateValue (key, value) {
             const copyVaule = JSON.parse(JSON.stringify(this.form))
             copyVaule[key] = value
-            this.$emit('update:formChanged', true)
+            this.$parent.formChanged = true
             this.$emit('update:form', copyVaule)
         },
 

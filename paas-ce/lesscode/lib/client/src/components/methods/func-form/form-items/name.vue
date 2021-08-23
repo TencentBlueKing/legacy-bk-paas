@@ -6,7 +6,12 @@
             :rules="[requireRule('函数名称'), nameRepeatRule, groupNameRule]"
             property="funcName"
             error-display-type="normal">
-            <bk-input v-model="copyForm.funcName" @input="(val) => updateValue('funcName', val)"></bk-input>
+            <bk-input
+                v-model="copyForm.funcName"
+                @input="(val) => updateValue('funcName', val)"
+                placeholder="由大小写英文字母、数字组成，开头和结尾还可以是下划线，且必须符合驼峰命名规范"
+            >
+            </bk-input>
         </bk-form-item>
     </bk-form>
 </template>

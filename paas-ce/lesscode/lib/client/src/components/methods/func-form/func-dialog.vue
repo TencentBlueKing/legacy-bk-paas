@@ -4,32 +4,27 @@
             <form-market
                 v-if="!form.id"
                 :form.sync="form"
-                :form-changed.sync="formChanged"
                 ref="market"
                 form-type="vertical">
             </form-market>
             <form-name
                 :form.sync="form"
-                :form-changed.sync="formChanged"
                 ref="name"
                 form-type="vertical">
             </form-name>
             <form-code
                 :form.sync="form"
-                :form-changed.sync="formChanged"
                 :disabled="!!form.id"
                 ref="code"
                 form-type="vertical">
             </form-code>
             <form-category
                 :form.sync="form"
-                :form-changed.sync="formChanged"
                 ref="category"
                 form-type="vertical"
             ></form-category>
             <form-detail
                 :form.sync="form"
-                :form-changed.sync="formChanged"
                 ref="detail"
                 form-type="vertical">
             </form-detail>
@@ -61,8 +56,11 @@
         /deep/ .func-form-item {
             margin-top: 8px;
         }
-        /deep/ .func-form-bottom {
-            margin-bottom: 8px;
+        /deep/ .func-market-home {
+            padding: 8px 12px 16px;
+        }
+        /deep/ .func-title {
+            margin: 16px 0 8px;
         }
         &::-webkit-scrollbar {
             width: 6px;

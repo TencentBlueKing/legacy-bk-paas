@@ -80,7 +80,47 @@ export default {
         remoteOptions: {
             type: 'remote',
             tips: '动态图表配置，可通过函数动态返回图表配置属性，函数返回值会覆盖上述opions里面的同名属性，\n\neg：若函数返回值为{series: [...]}，则最终的图表的渲染会使用函数返回的series数据，其它配置仍为options中的静态配置，由此可达到动态设置图表数据的效果',
-            val: '',
+            val: {
+                'type': 'bar',
+                'data': {
+                    'labels': [
+                        'January',
+                        'February',
+                        'March',
+                        'April',
+                        'May',
+                        'June',
+                        'July',
+                        'August',
+                        'September',
+                        'October',
+                        'November',
+                        'December'
+                    ],
+                    'datasets': [
+                        {
+                            'backgroundColor': 'rgba(51,157,255,1)',
+                            'borderColor': 'rgba(51,157,255,1)',
+                            'borderSkipped': 'bottom',
+                            'borderWidth': 1,
+                            'clip': '',
+                            'data': [65, 90, 10, 15, 69, 80, 300, 55, 88, 66, 22, 11],
+                            'label': 'bk-charts-bar'
+                        }
+                    ]
+                },
+                'options': {
+                    'flexWithContainer': true,
+                    'legend': { 'position': 'top' },
+                    'title': { 'display': true, 'text': '基础柱状图' },
+                    'scales': {
+                        'yAxes': {
+                            'scaleLabel': { 'display': true, 'labelString': 'Precipitation in mm' }
+                        },
+                        'xAxes': { 'scaleLabel': { 'display': true, 'labelString': 'Month of the Year' } }
+                    }
+                }
+            },
             remoteValidate (data) {
                 if (typeof data !== 'object') return '返回值需要是object'
             }
