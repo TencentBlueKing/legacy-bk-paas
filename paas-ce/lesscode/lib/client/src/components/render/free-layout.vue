@@ -18,7 +18,7 @@
         @contextmenu.stop="freeLayoutClickHandler(renderData, $event)"
         @mouseover.stop="freeLayoutMouseHandler(renderData, 'enter')"
         @mouseout.stop="freeLayoutMouseHandler(renderData, 'leave')">
-        <component-menu class="free-layout-context-menu"
+        <component-menu class="free-layout-context-menu context-menu"
             :target="contextMenuTarget"
             :show="contextMenuVisible"
             :offset="getComputedMunuOffset"
@@ -307,7 +307,7 @@
                 const curRowNode = getNodeWithClass(e.target, 'bk-lesscode-free-layout')
                 curRowNode.classList.add('selected')
 
-                this.contextMenuVisible = false
+                this.$clearMenu()
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
             },
@@ -394,7 +394,7 @@
                         if (originalTop + componentHeight > containerBottom) {
                             top = containerBottom - containerTop - componentHeight
                         } else {
-                            top = originalTop - containerTop
+                            top = originalTop - containerTop - 15
                         }
                     }
                     // left 位置计算
@@ -404,12 +404,12 @@
                         if (originalLeft + componentWidth > containerRight) {
                             left = containerRight - containerLeft - componentWidth
                         } else {
-                            left = originalLeft - containerLeft
+                            left = originalLeft - containerLeft - 15
                         }
                     }
                     const stylePosition = {
-                        top: `${Math.max(top, 0)}px`,
-                        left: `${Math.max(left, 0)}px`
+                        top: `${Math.max(top, 10)}px`,
+                        left: `${Math.max(left, 10)}px`
                     }
                     
                     // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件

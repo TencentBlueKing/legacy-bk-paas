@@ -384,12 +384,12 @@ $headerHeight: 64px;
 
         /* in-column-drag-area, Class name for the drop placeholder */
         /* 从左侧往中间拖拽区拖拽时生效 */
+        .target-ghost,
         .in-column-ghost {
-            opacity: .5;
             &.component-item {
                 &:after {
                     content: "放在这里";
-                    background-color: #fd9c9c;
+                    background-color: #C2D7F9;
                     position: absolute;
                     left: 0;
                     text-align: center;
