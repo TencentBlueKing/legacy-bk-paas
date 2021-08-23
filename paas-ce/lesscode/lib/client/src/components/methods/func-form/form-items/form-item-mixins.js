@@ -42,16 +42,20 @@ export default {
 
         validate () {
             return new Promise((resolve, reject) => {
-                this.$refs.funcForm.validate().then(() => {
+                if (!this.$refs.funcForm) {
                     resolve()
-                }, (validator) => {
-                    reject(validator)
-                })
+                } else {
+                    this.$refs.funcForm.validate().then(() => {
+                        resolve()
+                    }, (validator) => {
+                        reject(validator)
+                    })
+                }
             })
         },
 
         clearError () {
-            this.$refs.funcForm.clearError()
+            this.$refs.funcForm && this.$refs.funcForm.clearError()
         }
     }
 }

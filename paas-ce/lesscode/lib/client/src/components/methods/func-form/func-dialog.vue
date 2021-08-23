@@ -28,8 +28,18 @@
                 ref="detail"
                 form-type="vertical">
             </form-detail>
+            <form-api-data
+                :form.sync="form"
+                ref="apiData"
+                form-type="vertical">
+            </form-api-data>
+            <form-summary
+                :form.sync="form"
+                ref="summary"
+                form-type="vertical">
+            </form-summary>
         </section>
-        <form-monaco :value.sync="form.funcBody" :func="form" height="100%" class="monaco">
+        <form-monaco :form.sync="form" height="100%" class="monaco" ref="monaco">
             <template v-slot:tools>
                 <slot name="tools"></slot>
             </template>

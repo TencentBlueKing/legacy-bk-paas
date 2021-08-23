@@ -63,37 +63,7 @@
                     </bk-option>
                 </bk-select>
             </bk-form-item>
-            <bk-form-item
-                label="Api Data"
-                property="funcApiData"
-                error-display-type="normal"
-                :rules="[objRule]"
-                :desc="{ width: 350, content: 'HTTP 请求（例如 POST）的请求体数据包。如果是GET请求，请在 Api Url 中填写请求头参数' }">
-                <bk-input
-                    type="textarea"
-                    v-model="copyForm.funcApiData"
-                    :rows="3"
-                    :maxlength="500"
-                    :placeholder="`请输入请求体数据包，例如：{ name: {{name}}, age: 17 }`"
-                    @input="(val) => updateValue('funcApiData', val)"
-                ></bk-input>
-            </bk-form-item>
         </template>
-        <bk-form-item
-            label="函数简介"
-            property="funcSummary"
-            error-display-type="normal"
-            :rules="[summaryRule]"
-        >
-            <bk-input
-                type="textarea"
-                v-model="copyForm.funcSummary"
-                :rows="3"
-                :maxlength="100"
-                placeholder="请输入函数简介"
-                @input="(val) => updateValue('funcSummary', val)"
-            ></bk-input>
-        </bk-form-item>
     </bk-form>
 </template>
 
@@ -102,13 +72,6 @@
 
     export default {
         mixins: [mixins],
-
-        props: {
-            requireSummary: {
-                type: Boolean,
-                default: false
-            }
-        },
 
         data () {
             return {
@@ -132,26 +95,6 @@
                 nameRule: {
                     validator: (val) => (val.length <= 0 || val.every(x => /^[A-Za-z_0-9]+$/.test(x))),
                     message: '由大小写英文字母、下划线、数字组成',
-                    trigger: 'blur'
-                },
-                objRule: {
-                    validator: (val) => {
-                        try {
-                            const Fn = Function
-                            const replaceVal = val.replace(/\{\{([^\}]+)\}\}/g, (all, code) => `this.${code}`)
-                            const relVal = new Fn(`return ${replaceVal}`)()
-                            const type = Object.prototype.toString.call(relVal)
-                            return type === '[object Object]' || val === '' || this.form.funcType === 0
-                        } catch (error) {
-                            return false
-                        }
-                    },
-                    message: 'apiData需要是json格式的数据',
-                    trigger: 'blur'
-                },
-                summaryRule: {
-                    validator: (val) => (!this.requireSummary || !['', undefined, null].includes(val)),
-                    message: '函数简介必填',
                     trigger: 'blur'
                 }
             }

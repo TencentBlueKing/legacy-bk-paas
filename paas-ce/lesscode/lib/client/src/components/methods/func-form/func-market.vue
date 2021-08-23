@@ -1,8 +1,10 @@
 <template>
     <section class="func-form-home">
         <form-name :form.sync="form" ref="name" :function-list="functionList"></form-name>
-        <form-detail :form.sync="form" :require-summary="true" ref="detail"></form-detail>
-        <form-monaco :value.sync="form.funcBody" :func="form" class="mt20" :height="458"></form-monaco>
+        <form-detail :form.sync="form" ref="detail"></form-detail>
+        <form-api-data :form.sync="form" ref="apiData"></form-api-data>
+        <form-summary :form.sync="form" :require-summary="true" ref="summary"></form-summary>
+        <form-monaco :form.sync="form" class="mt20" ref="monaco"></form-monaco>
     </section>
 </template>
 

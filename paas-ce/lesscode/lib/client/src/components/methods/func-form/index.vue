@@ -5,7 +5,9 @@
         <form-code :form.sync="form" ref="code" :disabled="!!form.id"></form-code>
         <form-category :form.sync="form" ref="category"></form-category>
         <form-detail :form.sync="form" ref="detail"></form-detail>
-        <form-monaco :value.sync="form.funcBody" :func="form" class="mt20" :height="458"></form-monaco>
+        <form-api-data :form.sync="form" ref="apiData"></form-api-data>
+        <form-summary :form.sync="form" ref="summary"></form-summary>
+        <form-monaco :form.sync="form" class="mt20" ref="monaco"></form-monaco>
     </section>
 </template>
 

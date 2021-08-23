@@ -1173,7 +1173,7 @@ class PageCode {
                         disPlayVal = this.handleUsedVariable(variableData.valType, variableData.val, compId)
                     } else if (methodData.methodCode) {
                         this.dataTemplate(compId, transformToString(disPlayVal))
-                        this.remoteMethodsTemplate(compId, slot.payload || {})
+                        this.remoteMethodsTemplate(compId, methodData || {})
                         disPlayVal = compId
                     } else {
                         if (typeof slot.val === 'object') {
