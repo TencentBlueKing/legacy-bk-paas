@@ -3,8 +3,10 @@ import formName from './form-items/name.vue'
 import formCode from './form-items/code.vue'
 import formCategory from './form-items/category.vue'
 import formDetail from './form-items/detail.vue'
-import formMonaco from '../monaco-func.vue'
+import formMonaco from './form-items/monaco.vue'
 import formProject from './form-items/project.vue'
+import formApiData from './form-items/api-data.vue'
+import formSummary from './form-items/summary.vue'
 
 const defaultForm = {
     projectId: '',
@@ -31,7 +33,9 @@ export default {
         formCategory,
         formDetail,
         formMonaco,
-        formProject
+        formProject,
+        formApiData,
+        formSummary
     },
 
     props: {
@@ -73,7 +77,7 @@ export default {
         clearError () {
             const refComponents = this.$refs || {}
             const componentKeys = Object.keys(refComponents)
-            componentKeys.map((key) => this.$refs[key] && this.$refs[key].clearError())
+            componentKeys.forEach((key) => this.$refs[key] && this.$refs[key].clearError())
         }
     }
 }
