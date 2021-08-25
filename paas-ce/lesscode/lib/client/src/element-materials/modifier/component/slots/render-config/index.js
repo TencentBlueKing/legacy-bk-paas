@@ -15,7 +15,7 @@ const baseRenderMap = {
                 res = val
                 break
             case 'variable':
-                res = `<div v-html="${val}"></div>`
+                res = `<render-html :html="${val}" ></render-html>`
                 break
         }
         return res

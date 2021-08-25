@@ -48,8 +48,8 @@ const elementRenderMap = {
                     :width="item.width"
                     :key="index"
                 >
-                    <template>
-                        <section v-html="item.templateCol"></section>
+                    <template slot-scope="props">
+                        <render-html :html="item.templateCol" :props="props"></render-html>
                     </template>
                 </el-table-column>
                 <el-table-column

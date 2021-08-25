@@ -27,6 +27,7 @@ import Img403 from '@/images/403.png'
 import Exception from '@/components/exception'
 import { bus } from '@/common/bus'
 import header from '@/components/header.vue'
+import renderHtml from '@/components/render/html.vue'
 
 import '@icon-cool/bk-icon-vue-drag-vis'
 import '@icon-cool/bk-icon-vue-drag-vis/src/index'
@@ -48,6 +49,7 @@ Vue.use(mavonEditor)
 Vue.component('VueDraggable', VueDraggable)
 Vue.component('app-exception', Exception)
 Vue.component('app-header', header)
+Vue.component('render-html', renderHtml)
 
 auth.requestCurrentUser().then(user => {
     injectCSRFTokenToHeaders()
