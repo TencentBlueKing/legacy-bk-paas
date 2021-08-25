@@ -1,7 +1,15 @@
 <template>
     <main class="projects page-content">
         <div class="page-head">
-            <bk-button theme="primary" @click="handleCreate">新建</bk-button>
+            <bk-dropdown-menu trigger="click" :align="'center'" :ext-cls="'create-dropdown'">
+                <div class="dropdown-trigger-btn" slot="dropdown-trigger">
+                    <bk-button theme="primary" icon-right="icon-angle-down">新建</bk-button>
+                </div>
+                <ul class="bk-dropdown-list" slot="dropdown-content">
+                    <li><a href="javascript:;" @click="handleCreate">空白项目</a></li>
+                    <li><a href="javascript:;" @click="handleTempCreate">从模板新建</a></li>
+                </ul>
+            </bk-dropdown-menu>
             <ul class="filter-links">
                 <li
                     v-for="(link, index) in filterLinks"
@@ -184,6 +192,9 @@
                 <bk-button @click="handleDeleteCancel" :disabled="dialog.delete.loading">取消</bk-button>
             </div>
         </bk-dialog>
+
+        <template-dialog ref="templateDialog"></template-dialog>
+
         <download-dialog ref="downloadDialog"></download-dialog>
     </main>
 </template>
@@ -193,6 +204,7 @@
     import dayjs from 'dayjs'
     import LayoutThumbList from '@/components/project/layout-thumb-list'
     import DownloadDialog from './components/download-dialog'
+    import TemplateDialog from './components/template-dialog'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
     dayjs.extend(relativeTime)
@@ -212,10 +224,12 @@
                 render: (h, ctx) => ctx.props.vnode
             },
             LayoutThumbList,
-            DownloadDialog
+            DownloadDialog,
+            TemplateDialog
         },
         data () {
             return {
+                isDropdownShow: false,
                 keyword: this.$route.query.q || '',
                 projectList: [],
                 pageMap: {},
@@ -573,6 +587,10 @@
             },
             preview (id) {
                 window.open(`/preview/project/${id}/`, '_blank')
+            },
+            // 从模板创建
+            handleTempCreate () {
+                this.$refs.templateDialog.isShow = true
             }
         }
     }
@@ -580,6 +598,12 @@
 
 <style lang="postcss" scoped>
     @import "@/css/mixins/ellipsis";
+
+    .create-dropdown{
+        /deep/ .bk-dropdown-content{
+            margin-top: 10px;
+        }
+    }
 
     .filter-links {
         display: flex;
