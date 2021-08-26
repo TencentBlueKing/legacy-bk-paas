@@ -2,13 +2,14 @@
     <section>
         <template v-for="(item, index) in list">
             <span :key="index" class="variable-txt">{{item.txt}}：</span>
-            <bk-upload :key="item.key"
+            <bk-upload
+                :key="item.key"
                 :files="getFiles(item.key)"
-                theme="picture"
                 :multiple="false"
-                with-credentials
                 :handle-res-code="handleRes"
+                :limit="1"
                 url="/api/variable/uploadImage"
+                with-credentials
                 @on-success="change(item.key, ...arguments)"
             ></bk-upload>
         </template>

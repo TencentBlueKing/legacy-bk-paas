@@ -272,7 +272,7 @@
     import cloneDeep from 'lodash.clonedeep'
     import html2canvas from 'html2canvas'
     import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON } from '@/common/util'
-    import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
+    import { getCurUsedFuncs, replaceFuncKeyword } from '@/components/methods/function-helper.js'
     import RenderIndex from '@/components/render/index'
     import FreeLayout from '@/components/render/free-layout'
     import MaterialModifier from '@/element-materials/modifier'
@@ -1638,8 +1638,8 @@
                 if (message) errMessage = message
                 const curFuncIds = Object.keys(usedFunctionMap)
                 curFuncIds.forEach((key) => {
-                    const { funcName, funcBody, funcCode } = usedFunctionMap[key];
-                    (funcBody || '').replace(/lesscode\[\'\$\{prop:([\S]+)\}\'\]/g, (all, dirKey) => {
+                    const { funcName, funcBody, funcCode } = usedFunctionMap[key]
+                    replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
                         if (dirKey) {
                             const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
                             if (!curDir) {
