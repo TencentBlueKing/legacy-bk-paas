@@ -77,7 +77,7 @@ module.exports = {
 
         if (q) {
             query.condition.push('(project.projectName LIKE :q OR project.projectDesc LIKE :q)')
-            query.params.q = `%${q}%`
+            query.params = { q: `%${q}%` }
         }
 
         if (isOfficial) {
@@ -95,7 +95,6 @@ module.exports = {
                 query.condition.push('project.createUser = :user')
                 query.params.user = userInfo.username
                 query.condition = query.condition.join(' AND ')
-                console.log(query)
                 projectList = await projectModel.queryMyCreateProject(query)
                 break
             case 'favorite':
@@ -114,7 +113,6 @@ module.exports = {
                 query.condition.push('user_project_role.userId = :userId')
                 query.params.userId = userInfo.id
                 query.condition = query.condition.join(' AND ')
-                console.log(query)
                 projectList = await projectModel.queryAllProject(query)
                 break
         }
