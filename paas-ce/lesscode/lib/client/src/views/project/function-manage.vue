@@ -176,6 +176,7 @@
     import layout from '@/components/ui/layout'
     import funcForm from '@/components/methods/func-form/index'
     import editObject from '@/components/edit-object'
+    import functionHelper from '@/components/methods/function-helper'
 
     export default {
         components: {
@@ -348,20 +349,8 @@
             },
 
             closeAddFunction () {
-                const defaultForm = {
-                    funcName: '',
-                    funcCode: '',
-                    funcGroupId: undefined,
-                    funcType: 0,
-                    funcParams: [],
-                    funcApiUrl: '',
-                    funcMethod: 'get',
-                    funcApiData: '',
-                    funcSummary: '',
-                    id: undefined
-                }
                 this.funcObj.show = false
-                Object.assign(this.funcObj.form, defaultForm)
+                Object.assign(this.funcObj.form, functionHelper.getDefaultFunc())
             },
 
             initData () {
