@@ -9,7 +9,8 @@
             :auto-close="false"
             header-position="left"
             ext-cls="create-template-dialog"
-            :close-icon="false">
+            :close-icon="false"
+            @value-change="handleDialogToggle">
             <div slot="header">
                 <span>从模板新建项目</span>
             </div>
@@ -19,33 +20,43 @@
                     :placeholder="'请输入模板名称'"
                     :right-icon="'bk-icon icon-search'"
                     :ext-cls="'search-input'"
-                    v-model="searchFilter">
+                    v-model="searchFilter"
+                    @enter="handleSearchEnter"
+                    @clear="handleSearchClear">
                 </bk-input>
                 <ul class="filter-links">
                     <li
-                        v-for="(link, index) in filterLinks"
-                        :key="index"
-                        :class="['link-item', { 'active': filter === link.value }]"
-                        @click="handleClickFilter(link.value)">
+                        v-for="link in filterLinks"
+                        :key="link.id"
+                        :class="['link-item', { 'active': filter === link.id }]"
+                        @click="handleClickFilter(link.id)">
                         {{link.name}}
                     </li>
                 </ul>
-                <div class="template-container">
-                    <div class="template-list">
-                        <li v-for="template in templateList" :key="template.id"
-                            :class="['list-item', { checked: template.checked }]"
-                            @click="handleClickItem(template)">
-                            <div class="checkbox">
-                                <i class="bk-icon icon-check-1 checked-icon"></i>
-                            </div>
-                            <div class="layout-img">
-                            <!--                            <img :src="getPreviewImg(layout)" />-->
-                            </div>
-                            <div class="layout-name">
-                                <span class="template-name" :title="template.name">{{ template.name }}</span>
-                                <span class="template-preview">预览</span>
-                            </div>
-                        </li>
+                <div class="template-container" v-bkloading="{ isLoading: pageLoading, opacity: 1 }">
+                    <div class="template-container-wrapper" v-show="!pageLoading">
+                        <div class="template-list" v-show="!pageLoading">
+                            <li v-for="template in list" :key="template.id"
+                                :class="['list-item', { checked: template.checked }]"
+                                @click="handleClickItem(template)">
+                                <div class="checkbox">
+                                    <i class="bk-icon icon-check-1 checked-icon"></i>
+                                </div>
+                                <div class="layout-img">
+                                    <img v-if="template.previewImg" :src="getPreviewImg(template.previewImg)" alt="模板缩略预览">
+                                    <div class="empty-preview-img" v-else>页面为空</div>
+                                </div>
+                                <div class="layout-name">
+                                    <span class="template-name" :title="template.projectName">{{ template.projectName }}</span>
+                                    <span class="template-preview" @click.stop.prevent="handlePreview(template.id)">预览</span>
+                                </div>
+                            </li>
+                        </div>
+                        <div class="empty" v-show="!list.length">
+                            <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
+                                <div>暂无项目</div>
+                            </bk-exception>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,6 +99,8 @@
 </template>
 
 <script>
+    import preivewErrImg from '@/images/preview-error.png'
+
     const defaultFormData = {
         templateName: '',
         projectName: '',
@@ -95,11 +108,24 @@
         projectDesc: '',
         copyFrom: null
     }
-    const defaultTemplate = {
-        name: '',
-        id: -1,
-        checked: false
-    }
+    const projectTemplateType = [
+        {
+            id: '',
+            name: '全部'
+        },
+        {
+            id: 'OFFCIAL_WEBSITE',
+            name: '企业官网'
+        },
+        {
+            id: 'ADMIN_BACKEND',
+            name: '管理后台'
+        },
+        {
+            id: 'OPERATION_PRODUCT',
+            name: '运维产品'
+        }
+    ]
     
     export default {
         name: 'template-dialog',
@@ -112,7 +138,8 @@
                     templateName: [
                         {
                             required: true,
-                            message: '必填项'
+                            message: '必选项',
+                            trigger: 'click'
                         }
                     ],
                     projectName: [
@@ -142,43 +169,119 @@
                         }
                     ]
                 },
-                filterLinks: [
-                    { name: '全部', value: '' },
-                    { name: '企业官网', value: 'my' },
-                    { name: '管理后台', value: 'favorite' },
-                    { name: '运维产品', value: 'share' }
-                ],
+                filterLinks: [...projectTemplateType],
                 filter: '',
                 searchFilter: '',
-                templateList: [
-                    { name: '蓝鲸配置平台1', id: 1, checked: false },
-                    { name: '蓝鲸配置平台2', id: 2, checked: false },
-                    { name: '蓝鲸配置平台3', id: 3, checked: false },
-                    { name: '蓝鲸配置平台4', id: 4, checked: false },
-                    { name: '蓝鲸配置平台5', id: 5, checked: false },
-                    { name: '蓝鲸配置平台6', id: 6, checked: false },
-                    { name: '蓝鲸配置平台7', id: 7, checked: false }
-                ],
-                selectTemplate: { ...defaultTemplate }
+                templateList: [],
+                list: [],
+                pageLoading: false
+            }
+        },
+        watch: {
+            searchFilter (val) {
+                if (!val) {
+                    this.handleSearchClear()
+                }
             }
         },
         methods: {
+            async getTemplateList () {
+                this.pageLoading = true
+                try {
+                    const params = { isOfficial: 1, officialType: this.filter }
+                    const { projectList } = await this.$store.dispatch('project/query', { config: { params } })
+                    this.templateList = projectList.map(function (item) {
+                        item['checked'] = false
+                        return item
+                    })
+                    this.handleSearchEnter()
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    this.pageLoading = false
+                }
+            },
+            async handleCreateConfirm () {
+                try {
+                    await this.$refs.templateForm.validate()
+                    const data = this.formData
+
+                    this.loading = true
+                    const projectId = await this.$store.dispatch('project/create', { data })
+
+                    this.messageSuccess('项目创建成功')
+                    this.isShow = false
+
+                    setTimeout(() => {
+                        this.$emit('to-page', projectId)
+                    }, 300)
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    this.loading = false
+                }
+            },
+            getPreviewImg (previewImg) {
+                if (previewImg && previewImg.length > 20) {
+                    return previewImg
+                }
+                return preivewErrImg
+            },
             handleClickFilter (link) {
                 this.filter = link
+                this.getTemplateList()
             },
             handleClickItem (template) {
                 template.checked = !template.checked
-                this.selectTemplate.checked = false
+                this.list.map(function (item) {
+                    if (item.id !== template.id && item.checked) {
+                        item.checked = false
+                    }
+                    return item
+                })
                 if (!template.checked) {
-                    this.selectTemplate = { ...defaultTemplate }
+                    this.formData.templateName = ''
+                    this.formData.copyFrom = null
                 } else {
-                    this.selectTemplate = template
+                    this.formData.templateName = template.projectName
+                    this.formData.copyFrom = template.id
                 }
-                this.formData.templateName = this.selectTemplate.name
             },
-            handleCreateConfirm () {},
+            handlePreview (id) {
+                this.$emit('preview', id)
+            },
+            handleSearchClear () {
+                this.list.splice(0, this.list.length, ...this.templateList)
+            },
+            handleSearchEnter () {
+                const checked = this.templateList.find(item => item.checked)
+                if (checked) checked.checked = false
+                this.list.splice(0, this.list.length, ...this.templateList.filter(item => {
+                    return item.projectName.toUpperCase().includes(this.searchFilter.toUpperCase())
+                }))
+                this.handleReSelect()
+            },
+            handleReSelect () {
+                if (this.formData.copyFrom) {
+                    const template = this.list.find(item => item.id === this.formData.copyFrom)
+                    if (template) {
+                        template.checked = true
+                    } else {
+                        this.formData.templateName = ''
+                        this.formData.copyFrom = null
+                    }
+                }
+            },
             handleDialogCancel () {
                 this.isShow = false
+            },
+            handleDialogToggle () {
+                if (this.isShow) {
+                    this.filter = ''
+                    this.searchFilter = ''
+                    this.formData = { ...defaultFormData }
+                    this.getTemplateList()
+                }
             }
         }
     }
@@ -218,8 +321,17 @@
                     width: 100%;
                     height: calc(100% - 72px);
                     margin-top: 14px;
-                    overflow-y: auto;
-                    @mixin scroller;
+
+                    .template-container-wrapper{
+                        width: 100%;
+                        height: 100%;
+                        overflow-y: auto;
+                        @mixin scroller;
+
+                        .empty{
+                            margin-top: 100px;
+                        }
+                    }
                 }
 
                 .template-list{
@@ -283,11 +395,32 @@
                         .layout-img {
                             width: 100%;
                             height: 128px;
-                            background-color: rgba(128, 128, 128, 0.29);
+
+                            &::before {
+                                content: "";
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 128px;
+                                background: rgba(0, 0, 0, 0.4);
+                            }
 
                             img {
                                 width: 100%;
                                 height: 100%;
+                            }
+
+                            .empty-preview-img {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 14px;
+                                font-weight: 700;
+                                color: #C4C6CC;
+                                height: 100%;
+                                background: #f0f1f5;
+                                border-radius: 4px 4px 0px 0px;
                             }
                         }
                         .layout-name {

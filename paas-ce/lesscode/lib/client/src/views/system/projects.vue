@@ -193,7 +193,7 @@
             </div>
         </bk-dialog>
 
-        <template-dialog ref="templateDialog"></template-dialog>
+        <template-dialog ref="templateDialog" @preview="preview" @to-page="toPage"></template-dialog>
 
         <download-dialog ref="downloadDialog"></download-dialog>
     </main>
@@ -229,7 +229,6 @@
         },
         data () {
             return {
-                isDropdownShow: false,
                 keyword: this.$route.query.q || '',
                 projectList: [],
                 pageMap: {},
