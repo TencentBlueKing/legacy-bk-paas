@@ -1,5 +1,5 @@
 <template>
-    <bk-form :label-width="84" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-item" v-if="copyForm.funcType === 1">
+    <bk-form :label-width="110" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-item" v-if="copyForm.funcType === 1">
         <bk-form-item
             label="Api Data"
             property="funcApiData"
@@ -11,9 +11,10 @@
                 v-model="copyForm.funcApiData"
                 :rows="3"
                 :maxlength="500"
+                :disabled="disabled"
                 :placeholder="`请输入请求体数据包，例如：{ name: {{name}}, age: 17 }`"
-                @input="(val) => updateValue('funcApiData', val)"
-            ></bk-input>
+                @input="(val) => updateValue('funcApiData', val)">
+            </bk-input>
         </bk-form-item>
     </bk-form>
 </template>

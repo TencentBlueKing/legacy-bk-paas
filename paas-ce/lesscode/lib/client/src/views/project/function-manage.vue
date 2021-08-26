@@ -358,7 +358,6 @@
                     funcMethod: 'get',
                     funcApiData: '',
                     funcSummary: '',
-                    funcBody: '',
                     id: undefined
                 }
                 this.funcObj.show = false

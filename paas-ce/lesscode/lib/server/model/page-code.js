@@ -10,7 +10,7 @@
  */
 import { paramCase, camelCase, camelCaseTransformMerge } from 'change-case'
 
-import { uuid } from '../util'
+import { uuid, replaceFuncKeyword } from '../util'
 import VueCodeModel from './vue-code'
 import { RequestContext } from '../middleware/request-context'
 import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
@@ -1332,10 +1332,10 @@ class PageCode {
     }
 
     processFuncBody (code) {
-        return (code || '').replace(new RegExp('(<)([^>]+)(>)', 'gi'), (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`)
-            .replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
-                return this.handleVarInFunc(dirKey, funcCode) || all
-            })
+        const encodeCode = (code || '').replace(new RegExp('(<)([^>]+)(>)', 'gi'), (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`)
+        return replaceFuncKeyword(encodeCode, (all, first, second, dirKey, funcStr, funcCode) => {
+            return this.handleVarInFunc(dirKey, funcCode) || all
+        })
     }
 
     processFuncParams (str) {

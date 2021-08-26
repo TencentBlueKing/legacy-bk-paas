@@ -5,7 +5,6 @@
             @input="inputVal(input.key, ...arguments)"
             :type="inputType"
             :value="value[input.key]"
-            class="variable-input"
             clearable
         >
             <template slot="prepend"><span class="input-txt">{{input.txt}}</span></template>
@@ -39,10 +38,6 @@
 </script>
 
 <style lang="postcss" scoped>
-    .variable-input {
-        margin-top: 20px;
-    }
-
     .input-txt {
         display: inline-block;
         background: #fff;

@@ -13,6 +13,25 @@ const os = require('os')
 const eslintConfig = require('./conf/eslint-config')
 const { ESLint } = require('eslint')
 const interactiveComponents = ['bk-dialog', 'bk-sideslider']
+const acorn = require('acorn')
+
+// 替换函数中的变量和函数
+exports.replaceFuncKeyword = (funcBody = '', callBack) => {
+    const commentsPositions = []
+    acorn.parse(funcBody, {
+        onComment (isBlock, text, start, end) {
+            commentsPositions.push({
+                start,
+                end
+            })
+        },
+        allowReturnOutsideFunction: true
+    })
+    return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
+        const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
+        return isInComments ? all : callBack(all, first, second, dirKey, funcStr, funcCode)
+    })
+}
 
 /**
  * 获取本机的真实 ip

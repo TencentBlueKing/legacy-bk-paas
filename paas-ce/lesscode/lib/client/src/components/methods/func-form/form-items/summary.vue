@@ -1,5 +1,5 @@
 <template>
-    <bk-form :label-width="84" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-item">
+    <bk-form :label-width="110" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-item">
         <bk-form-item
             label="函数简介"
             property="funcSummary"
@@ -8,12 +8,13 @@
         >
             <bk-input
                 type="textarea"
-                v-model="copyForm.funcSummary"
+                placeholder="请输入函数简介"
                 :rows="3"
                 :maxlength="100"
-                placeholder="请输入函数简介"
-                @input="(val) => updateValue('funcSummary', val)"
-            ></bk-input>
+                :disabled="disabled"
+                v-model="copyForm.funcSummary"
+                @input="(val) => updateValue('funcSummary', val)">
+            </bk-input>
         </bk-form-item>
     </bk-form>
 </template>

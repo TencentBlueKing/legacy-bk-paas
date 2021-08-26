@@ -10,6 +10,7 @@
  */
 import store from '@/store'
 import { walkGrid } from '@/common/util'
+const acorn = require('acorn')
 
 function getCurUsedFuncs () {
     const funcGroups = store.getters['functions/funcGroups']
@@ -23,14 +24,13 @@ function getCurUsedFuncs () {
         if ([undefined, ''].includes(code)) return
         let hasFound = false
         funcGroups.forEach((group) => {
-            const funReg = /lesscode\[\'\$\{func:([\S]+)\}\'\]/g
             const functionList = group.functionList || []
             const curFunc = functionList.find((x) => (x.funcCode === code))
             if (curFunc) {
                 hasFound = true
                 if (!usedFuncMap[curFunc.id]) {
-                    usedFuncMap[curFunc.id] = curFunc;
-                    (curFunc.funcBody || '').replace(funReg, (allStr, funcCode) => {
+                    usedFuncMap[curFunc.id] = curFunc
+                    replaceFuncKeyword(curFunc.funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
                         if (funcCode) findUsedFuncsByCode(funcCode)
                     })
                 }
@@ -80,6 +80,25 @@ function getCurUsedFuncs () {
     return [usedFuncMap, errMessage]
 }
 
-export {
-    getCurUsedFuncs
+// 替换函数中的变量和函数
+function replaceFuncKeyword (funcBody = '', callBack) {
+    const commentsPositions = []
+    acorn.parse(funcBody, {
+        onComment (isBlock, text, start, end) {
+            commentsPositions.push({
+                start,
+                end
+            })
+        },
+        allowReturnOutsideFunction: true
+    })
+    return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
+        const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
+        return isInComments ? all : callBack(all, first, second, dirKey, funcStr, funcCode)
+    })
+}
+
+export default {
+    getCurUsedFuncs,
+    replaceFuncKeyword
 }

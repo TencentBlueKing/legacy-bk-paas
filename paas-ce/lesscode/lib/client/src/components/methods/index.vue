@@ -446,7 +446,10 @@
                     const varWhere = { projectId: this.$route.params.projectId, pageCode: this.pageDetail.pageCode, effectiveRange: 0 }
                     const editFunc = () => {
                         return this.editFunc({ groupId: this.curGroup.id, func: postData, varWhere }).then((res) => {
-                            if (!res) return
+                            if (!res) {
+                                this.$refs.func.formChanged = true
+                                return
+                            }
                             const projectId = this.$route.params.projectId
                             return this.getAllGroupFuncs(projectId).then(() => {
                                 if (!this.openGroupIds.includes(res.funcGroupId)) this.openGroupIds.push(res.funcGroupId)
@@ -458,7 +461,10 @@
                     const addFunc = () => {
                         const groupId = this.templateFunc.groupId
                         return this.addFunc({ groupId, func: postData, varWhere }).then((res) => {
-                            if (!res) return
+                            if (!res) {
+                                this.$refs.func.formChanged = true
+                                return
+                            }
                             if (!this.openGroupIds.includes(groupId)) this.openGroupIds.push(groupId)
                             this.chooseId = res.id
                             this.templateFunc = {}
@@ -470,6 +476,7 @@
                         this.getAllVariable(varWhere)
                         if (typeof callBack === 'function') callBack()
                     }).catch((err) => {
+                        this.$refs.func.formChanged = true
                         this.$bkMessage({ theme: 'error', message: err.message || err })
                     }).finally(() => {
                         this.isSaving = false
