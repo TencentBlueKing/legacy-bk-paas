@@ -99,10 +99,7 @@
             },
 
             fixMethod () {
-                const postData = {
-                    funcBody: this.multVal[this.copyForm.funcType]
-                }
-                this.fixFunByEslint(postData).then((res = {}) => {
+                this.fixFunByEslint(this.copyForm).then((res = {}) => {
                     const { code, message } = res.data || {}
                     if (code) {
                         this.change(code)
