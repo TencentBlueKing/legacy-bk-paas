@@ -188,7 +188,7 @@
             async getTemplateList () {
                 this.pageLoading = true
                 try {
-                    const params = { isOfficial: 1, officialType: this.filter }
+                    const params = { filter: 'official', officialType: this.filter }
                     const { projectList } = await this.$store.dispatch('project/query', { config: { params } })
                     this.templateList = projectList.map(function (item) {
                         item['checked'] = false

@@ -69,7 +69,7 @@ module.exports = {
 
     async queryProject (ctx) {
         const userInfo = ctx.session.userInfo
-        const { filter = '', q, officialType, isOfficial } = ctx.request.query
+        const { filter = '', q, officialType } = ctx.request.query
         const query = {
             condition: [],
             params: {}
@@ -78,15 +78,6 @@ module.exports = {
         if (q) {
             query.condition.push('(project.projectName LIKE :q OR project.projectDesc LIKE :q)')
             query.params = { q: `%${q}%` }
-        }
-
-        if (isOfficial) {
-            query.condition.push('(project.isOffcial = :isOfficial)')
-            query.params.isOfficial = isOfficial
-            if (officialType !== '') {
-                query.condition.push('(project.offcialType = :officialType)')
-                query.params.officialType = officialType
-            }
         }
 
         let projectList = []
@@ -108,6 +99,13 @@ module.exports = {
                 query.params.userId = userInfo.id
                 query.condition = query.condition.join(' AND ')
                 projectList = await projectModel.queryShareWithProject(query)
+                break
+            case 'official':
+                const params = { where: { isOffcial: 1 }, order: { id: 'DESC' } }
+                if (officialType !== '') {
+                    params.where.offcialType = officialType
+                }
+                projectList = await projectModel.findProjects(params)
                 break
             default:
                 query.condition.push('user_project_role.userId = :userId')
