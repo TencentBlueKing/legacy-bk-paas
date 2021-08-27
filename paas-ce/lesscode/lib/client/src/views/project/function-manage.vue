@@ -123,7 +123,7 @@
             </section>
         </layout>
 
-        <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" @hidden="closeAddFunction">
+        <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" :before-close="closeAddFunction">
             <func-form :func-data="funcObj.form" ref="func" slot="content"></func-form>
             <section slot="footer" class="add-footer">
                 <bk-button theme="primary" @click="submitFunc" :loading="funcObj.loading">提交</bk-button>
@@ -349,8 +349,19 @@
             },
 
             closeAddFunction () {
-                this.funcObj.show = false
-                Object.assign(this.funcObj.form, functionHelper.getDefaultFunc())
+                const confirmFn = () => {
+                    this.funcObj.show = false
+                    Object.assign(this.funcObj.form, functionHelper.getDefaultFunc())
+                }
+                if (this.$refs.func.formChanged) {
+                    this.$bkInfo({
+                        title: '请确认是否关闭',
+                        subTitle: '存在未保存的函数，关闭后不会保存更改',
+                        confirmFn
+                    })
+                } else {
+                    confirmFn()
+                }
             },
 
             initData () {

@@ -44,9 +44,8 @@ export default {
                     if (b !== undefined && b !== null) return b
                 })
                 Object.assign(this.form, defaultForm, copyForm)
-                this.formChanged = !this.form.id
+                this.formChanged = false
                 this.clearError()
-                console.log('from funcData change switch-fun-form')
                 bus.$emit('switch-fun-form', this.form)
             },
             immediate: true,
