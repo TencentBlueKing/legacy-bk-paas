@@ -17,15 +17,15 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '仅在输入框失去焦点或用户按下回车时触发，回调参数(value: string | number)'
+        name: 'change', tips: '仅在输入框失去焦点或用户按下回车时调用该事件函数，事件回调参数 (value: String | Number)'
     }, {
-        name: 'input', tips: '在 Input 值改变时触发，回调参数(value: string | number)'
+        name: 'input', tips: '在 Input 值改变时调用该事件函数，事件回调参数(value: String | Number)'
     }, {
-        name: 'focus', tips: '在 Input 获得焦点时触发，回调参数(event: Event)'
+        name: 'focus', tips: '在 Input 获得焦点时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'blur', tips: '在 Input 失去焦点时触发，回调参数(event: Event)'
+        name: 'blur', tips: '在 Input 失去焦点时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'clear', tips: '在点击由 clearable 属性生成的清空按钮时触发'
+        name: 'clear', tips: '在点击由 clearable 属性生成的清空按钮时调用该事件函数, 无回调参数'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {

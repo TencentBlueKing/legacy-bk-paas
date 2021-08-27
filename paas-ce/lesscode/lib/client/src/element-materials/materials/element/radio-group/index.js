@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '绑定值变化时触发的事件，回调参数为选中的 Radio label 值'
+        name: 'change', tips: '绑定值变化时调用该事件函数，事件回调参数 (value: String|Number|Boolean)'
     }],
     styles: ['margin'],
     directives: [

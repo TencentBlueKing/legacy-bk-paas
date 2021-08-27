@@ -17,11 +17,11 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '绑定值被改变时触发，回调参数currentValue, oldValue'
+        name: 'change', tips: '绑定值被改变时调用该事件函数，事件回调参数 (currentValue: Number, oldValue: Number)'
     }, {
-        name: 'focus', tips: '在组件 Input 获得焦点时触发，回调参数(event: Event)'
+        name: 'focus', tips: '在组件 Input 获得焦点时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'blur', tips: '在组件 Input 失去焦点时触发，回调参数(event: Event)'
+        name: 'blur', tips: '在组件 Input 失去焦点时调用该事件函数，事件回调参数 (event: Event)'
     }],
     styles: ['size', 'margin', 'display'],
     directives: [

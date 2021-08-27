@@ -17,39 +17,33 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'select', tips: '当用户手动勾选数据行的 Checkbox 时触发的事件，回调参数（selection, row）'
+        name: 'select', tips: '当用户手动勾选数据行的 Checkbox 时调用该事件函数，事件回调参数 (selection: Array, row: Object)'
     }, {
-        name: 'select-all', tips: '当用户手动勾选全选 Checkbox 时触发的事件，回调参数（selection）'
+        name: 'select-all', tips: '当用户手动勾选全选 Checkbox 时调用该事件函数，事件回调参数 (selection: Array)'
     }, {
-        name: 'selection-change', tips: '当选择项发生变化时会触发该事件，回调参数（selection）'
+        name: 'selection-change', tips: '当选择项发生变化时调用该事件函数，事件回调参数 (selection: Array)'
     }, {
-        name: 'cell-mouse-enter', tips: '当单元格 hover 进入时会触发该事件，回调参数（row, column, cell, event）'
+        name: 'cell-mouse-enter', tips: '当单元格 hover 进入时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
     }, {
-        name: 'cell-mouse-leave', tips: '当单元格 hover 退出时会触发该事件，回调参数（row, column, cell, event）'
+        name: 'cell-mouse-leave', tips: '当单元格 hover 退出时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
     }, {
-        name: 'cell-click', tips: '当某个单元格被点击时会触发该事件，回调参数（row, column, cell, event）'
+        name: 'cell-click', tips: '当某个单元格被点击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
     }, {
-        name: 'cell-dblclick', tips: '当某个单元格被双击击时会触发该事件，回调参数（row, column, cell, event）'
+        name: 'cell-dblclick', tips: '当某个单元格被双击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
     }, {
-        name: 'row-click', tips: '当某一行被点击时会触发该事件，回调参数（row, event, column）'
+        name: 'row-click', tips: '当某一行被点击时调用该事件函数，事件回调参数 (row: Object, column: Object, event: Event)'
     }, {
-        name: 'row-contextmenu', tips: '当某一行被鼠标右键点击时会触发该事件，回调参数（row, event）'
+        name: 'row-contextmenu', tips: '当某一行被鼠标右键点击时调用该事件函数，事件回调参数 (row: Object, column: Object, event: Event)'
     }, {
-        name: 'row-dblclick', tips: '当某一行被双击时会触发该事件，回调参数（row, event）'
+        name: 'row-dblclick', tips: '当某一行被双击时调用该事件函数，事件回调参数 (row: Object, column: Object, event: Event)'
     }, {
-        name: 'header-click', tips: '当某一列的表头被点击时会触发该事件，回调参数（column, event）'
+        name: 'header-click', tips: '当某一列的表头被点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
     }, {
-        name: 'header-contextmenu', tips: '当某一列的表头被鼠标右键点击时触发该事件，回调参数（column, event）'
+        name: 'header-contextmenu', tips: '当某一列的表头被鼠标右键点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
     }, {
-        name: 'sort-change', tips: '当表格的排序条件发生变化的时候会触发该事件，回调参数（{ column, prop, order }）'
+        name: 'sort-change', tips: '当表格的排序条件发生变化时调用该事件函数，事件回调参数 ({ column, prop, order }: Object)'
     }, {
-        name: 'filter-change', tips: '当表格的筛选条件发生变化的时候会触发该事件，回调参数 filters 是一个对象，对象的 key 是 column 的 columnKey，对应的 value 为用户选择的筛选条件的数组。'
-    }, {
-        name: 'current-change', tips: '当表格的当前行发生变化的时候会触发该事件，如果要高亮当前行，请打开表格的 highlight-current-row 属性，回调参数（currentRow, oldCurrentRow）'
-    }, {
-        name: 'header-dragend', tips: '当拖动表头改变了列的宽度的时候会触发该事件，回调参数（newWidth, oldWidth, column, event）'
-    }, {
-        name: 'expand-change', tips: '当用户对某一行展开或者关闭的时候会触发该事件，回调参数（row, expandedRows）'
+        name: 'header-dragend', tips: '当拖动表头改变了列的宽度时调用该事件函数，事件回调参数 (newWidth: Number, oldWidth: Number, column: Object, event: Event)'
     }],
     styles: ['size', 'margin', 'display'],
     directives: [
