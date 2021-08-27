@@ -59,3 +59,8 @@ CREATE TABLE `platform_admin`  (
 -- Records of platform_admin
 -- ----------------------------
 INSERT INTO `platform_admin` VALUES (1, 'admin', '2021-08-19 21:25:37', '2021-08-19 21:25:37', 'admin', 'admin', 0);
+
+-- ----------------------------
+-- Records of func_market
+-- ----------------------------
+INSERT INTO `func_market` VALUES (1,'validateForm','','// 这里的 dynamicForm 需要替换成表单容器组件 ref 属性的值\r\nreturn this.$refs[\'dynamicForm\'].validate().then(validator => {\r\n    // 进行业务处理\r\n    alert(\'验证成功！\')\r\n}, validator => {\r\n    // 显示第一个出错位置\r\n    alert(validator.content)\r\n})\r\n',0,'get','','','','如果需要对页面中的表单容器进行校验，可以使用本函数。注意：函数中的 dynamicForm 需要替换成表单容器组件 ref 属性的值，页面中每个 form 的 ref 值需要唯一。',0,'2021-08-23 14:50:06','2021-08-27 02:31:06','admin','admin',0);

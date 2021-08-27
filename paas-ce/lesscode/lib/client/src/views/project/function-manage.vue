@@ -123,7 +123,7 @@
             </section>
         </layout>
 
-        <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" @hidden="closeAddFunction">
+        <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" :before-close="closeAddFunction">
             <func-form :func-data="funcObj.form" ref="func" slot="content"></func-form>
             <section slot="footer" class="add-footer">
                 <bk-button theme="primary" @click="submitFunc" :loading="funcObj.loading">提交</bk-button>
@@ -176,6 +176,7 @@
     import layout from '@/components/ui/layout'
     import funcForm from '@/components/methods/func-form/index'
     import editObject from '@/components/edit-object'
+    import functionHelper from '@/components/methods/function-helper'
 
     export default {
         components: {
@@ -348,21 +349,19 @@
             },
 
             closeAddFunction () {
-                const defaultForm = {
-                    funcName: '',
-                    funcCode: '',
-                    funcGroupId: undefined,
-                    funcType: 0,
-                    funcParams: [],
-                    funcApiUrl: '',
-                    funcMethod: 'get',
-                    funcApiData: '',
-                    funcSummary: '',
-                    funcBody: '',
-                    id: undefined
+                const confirmFn = () => {
+                    this.funcObj.show = false
+                    Object.assign(this.funcObj.form, functionHelper.getDefaultFunc())
                 }
-                this.funcObj.show = false
-                Object.assign(this.funcObj.form, defaultForm)
+                if (this.$refs.func.formChanged) {
+                    this.$bkInfo({
+                        title: '请确认是否关闭',
+                        subTitle: '存在未保存的函数，关闭后不会保存更改',
+                        confirmFn
+                    })
+                } else {
+                    confirmFn()
+                }
             },
 
             initData () {

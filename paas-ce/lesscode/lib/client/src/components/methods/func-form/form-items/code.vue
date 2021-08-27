@@ -1,5 +1,5 @@
 <template>
-    <bk-form :label-width="84" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-item">
+    <bk-form :label-width="110" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-item">
         <bk-form-item
             label="函数标识"
             :required="true"
@@ -10,8 +10,8 @@
                 v-model="copyForm.funcCode"
                 @input="(val) => updateValue('funcCode', val)"
                 :disabled="disabled"
-                placeholder="由大小写英文字母、下划线、数字组成"
-            ></bk-input>
+                placeholder="由大小写英文字母、下划线、数字组成">
+            </bk-input>
         </bk-form-item>
     </bk-form>
 </template>

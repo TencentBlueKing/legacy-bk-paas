@@ -26,6 +26,9 @@ export default {
 
     methods: {
         updateValue (key, value) {
+            if (this.form[key] === value) {
+                return
+            }
             const copyVaule = JSON.parse(JSON.stringify(this.form))
             copyVaule[key] = value
             this.$parent.formChanged = true

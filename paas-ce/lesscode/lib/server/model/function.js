@@ -10,6 +10,7 @@
  */
 
 import { getRepository, getConnection, In, Like } from 'typeorm'
+import { replaceFuncKeyword } from '../util'
 import Func from './entities/func'
 import FuncGroup from './entities/func-group'
 import ProjectFuncGroup from './entities/project-func-group'
@@ -249,7 +250,7 @@ const func = {
                 }
             }
         }
-        (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
+        replaceFuncKeyword(func.funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
             handleRelation(dirKey, funcCode)
         })
         if (func.funcType === 1) {

@@ -1,3 +1,6 @@
+import { bus } from '@/common/bus'
+import functionHelper from '@/components/methods/function-helper'
+
 import formMarket from './form-items/market.vue'
 import formName from './form-items/name.vue'
 import formCode from './form-items/code.vue'
@@ -8,22 +11,7 @@ import formProject from './form-items/project.vue'
 import formApiData from './form-items/api-data.vue'
 import formSummary from './form-items/summary.vue'
 
-const defaultForm = {
-    projectId: '',
-    funcName: '',
-    funcCode: '',
-    funcGroupId: '',
-    funcType: 0,
-    funcParams: [],
-    remoteParams: [],
-    withToken: 0,
-    funcApiUrl: '',
-    funcMethod: 'get',
-    funcApiData: '',
-    funcSummary: '',
-    funcBody: '',
-    id: undefined
-}
+const defaultForm = functionHelper.getDefaultFunc({ projectId: '' })
 
 export default {
     components: {
@@ -56,8 +44,9 @@ export default {
                     if (b !== undefined && b !== null) return b
                 })
                 Object.assign(this.form, defaultForm, copyForm)
-                this.formChanged = !this.form.id
+                this.formChanged = false
                 this.clearError()
+                bus.$emit('switch-fun-form', this.form)
             },
             immediate: true,
             deep: true

@@ -1,45 +1,40 @@
 <template>
-    <bk-form :label-width="84" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-item">
+    <bk-form :label-width="110" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-item">
         <bk-form-item label="函数类型" property="funcType">
-            <span v-for="temp in tempList"
-                :key="temp.id"
-                @click="changeTemType(temp.id)"
-                :class="['func-temp', { select: copyForm.funcType === temp.id }]"
-            >{{ temp.name }}
-                <i class="bk-icon icon-info" v-if="temp.info" v-bk-tooltips="{ content: `<pre class='component-method-tip'>${temp.info}</pre>` }"></i>
-            </span>
+            <bk-radio-group
+                v-model="copyForm.funcType"
+                @change="(val) => updateValue('funcType', val)"
+            >
+                <bk-radio-button
+                    v-for="temp in tempList"
+                    :value="temp.id"
+                    :key="temp.id"
+                    :disabled="disabled && copyForm.funcType !== temp.id"
+                    class="func-temp"
+                >
+                    {{ temp.name }}
+                    <i
+                        class="bk-icon icon-info ml5"
+                        v-if="temp.info"
+                        v-bk-tooltips="{ content: `<pre class='component-method-tip'>${temp.info}</pre>` }"
+                    ></i>
+                </bk-radio-button>
+            </bk-radio-group>
         </bk-form-item>
         <bk-form-item
-            label="参数"
+            label="函数调用参数"
+            ref="funcParams"
             property="funcParams"
             error-display-type="normal"
             :rules="[nameRule]"
-            :desc="{ width: 350, content: '调用该函数传入的参数列表，如果函数用于组件事件，则这里是组件事件回调的参数，组件事件回调参数具体可见组件文档。输入后按回车添加参数' }">
-            <bk-tag-input
-                placeholder="请输入参数名称，由大小写英文字母、下划线、数字组成"
+            :desc="{ width: 350, content: '调用该函数传入的参数列表，如果函数用于组件事件，则这里是组件事件回调的参数，组件事件回调参数具体可见组件文档。' }">
+            <dynamic-tag
+                :disabled="disabled"
                 v-model="copyForm.funcParams"
-                :list="[]"
-                :allow-create="true"
-                :has-delete-icon="true"
-                @change="(val) => updateValue('funcParams', val)">
-            </bk-tag-input>
+                @change="(val) => tagChange('funcParams', val)">
+            </dynamic-tag>
         </bk-form-item>
         <template v-if="copyForm.funcType === 1">
-            <bk-form-item
-                label="远程参数"
-                property="remoteParams"
-                error-display-type="normal"
-                desc="接口回调函数的参数列表，输入后按回车添加参数"
-                :rules="[nameRule]">
-                <bk-tag-input
-                    placeholder="请输入参数名称，由大小写英文字母、下划线、数字组成"
-                    v-model="copyForm.remoteParams"
-                    :list="[]"
-                    :allow-create="true"
-                    :has-delete-icon="true"
-                    @change="(val) => updateValue('remoteParams', val)">
-                </bk-tag-input>
-            </bk-form-item>
             <bk-form-item
                 label="Api Url"
                 property="funcApiUrl"
@@ -47,7 +42,24 @@
                 :required="true"
                 :rules="[requireRule('Api Url')]"
                 :desc="`请输入接口 URL，例如：{{domain}}/api/data/getMockData`">
-                <bk-input v-model="copyForm.funcApiUrl" @input="(val) => updateValue('funcApiUrl', val)"></bk-input>
+                <bk-input
+                    v-model="copyForm.funcApiUrl"
+                    @input="(val) => updateValue('funcApiUrl', val)"
+                    :disabled="disabled">
+                </bk-input>
+            </bk-form-item>
+            <bk-form-item
+                label="Api 返回数据"
+                ref="remoteParams"
+                property="remoteParams"
+                error-display-type="normal"
+                desc="该参数用于接收Api返回数据，在函数中直接可使用该参数获取Api返回数据"
+                :rules="[nameRule]">
+                <dynamic-tag
+                    :disabled="disabled"
+                    v-model="copyForm.remoteParams"
+                    @change="(val) => tagChange('remoteParams', val)">
+                </dynamic-tag>
             </bk-form-item>
             <bk-form-item
                 label="Method"
@@ -55,7 +67,12 @@
                 error-display-type="normal"
                 :required="true"
                 :rules="[requireRule('Method')]">
-                <bk-select v-model="copyForm.funcMethod" @selected="(val) => updateValue('funcMethod', val)" :clearable="false" :popover-options="{ appendTo: 'parent' }">
+                <bk-select
+                    v-model="copyForm.funcMethod"
+                    @selected="(val) => updateValue('funcMethod', val)"
+                    :clearable="false"
+                    :popover-options="{ appendTo: 'parent' }"
+                    :disabled="disabled">
                     <bk-option v-for="option in methodList"
                         :key="option.id"
                         :id="option.id"
@@ -69,8 +86,13 @@
 
 <script>
     import mixins from './form-item-mixins'
+    import dynamicTag from '@/components/dynamic-tag.vue'
 
     export default {
+        components: {
+            dynamicTag
+        },
+
         mixins: [mixins],
 
         props: {
@@ -108,38 +130,25 @@
         },
 
         methods: {
-            changeTemType (id) {
-                this.copyForm.funcType = id
-                this.updateValue('funcType', id)
+            tagChange (key, val) {
+                this.updateValue(key, val)
+                this.$nextTick(() => {
+                    this.$refs[key] && this.$refs[key].validate()
+                })
             }
         }
     }
 </script>
 
 <style lang="postcss" scoped>
-    .func-temp {
-        display: inline-block;
+    .func-form-item .func-temp {
         width: 140px;
         max-width: calc(50% - 5px);
-        height: 30px;
-        line-height: 30px;
-        text-align: center;
-        background: #ffffff;
-        border: 1px solid #c4c6cc;
-        border-radius: 2px 0px 0px 2px;
-        color: #63656e;
-        box-sizing: content-box;
-        cursor: pointer;
-        &:first-child {
-            border-right: none;
+        /deep/ .bk-radio-button-text {
+            width: 140px;
         }
-        &:last-child {
-            border-left: none;
-        }
-        &.select {
-            background: #e1ecff;
-            border: 1px solid #3a84ff;
-            color: #3a84ff;
+        /deep/ .bk-radio-button-input:disabled+.bk-radio-button-text {
+            border-left: 1px solid #dcdee5;
         }
     }
 </style>
