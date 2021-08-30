@@ -69,7 +69,9 @@ export default {
         },
         layout: {
             type: 'string',
-            val: 'prev, pager, next, jumper, ->, total',
+            val: 'prev,pager,next,jumper,->,total',
+            regExp: /^(sizes|prev|pager|next|jumper|->|total|slot)(,(sizes|prev|pager|next|jumper|->|total|slot))*$/,
+            regErrorText: '请用逗号分隔:sizes, prev, pager, next, jumper, ->, total, slot',
             tips: '组件布局，子组件名用逗号分隔:sizes, prev, pager, next, jumper, ->, total, slot'
         },
         'prev-text': {
