@@ -50,19 +50,24 @@ export default {
                 return data
             })
         },
+        delete ({ commit }, { templateId }) {
+            return http.delete(`/pageTemplate/delete?templateId=${templateId}`).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
         categoryCount (state, { projectId }) {
             return http.get(`/pageTemplate/categoryCount?projectId=${projectId}`).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-        categoryList (state, { projectId }) {
-            return http.get(`/pageTemplateCategory/list?projectId=${projectId}`).then(response => {
+        categoryList (state, params = {}) {
+            return http.get(`/pageTemplateCategory/list`, { params }).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
-
         categoryCreate (state, params) {
             return http.post('/pageTemplateCategory/create', params).then(response => {
                 const data = response.data || ''

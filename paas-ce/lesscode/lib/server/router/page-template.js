@@ -13,9 +13,9 @@ const Router = require('koa-router')
 const {
     list,
     listByCategory,
-    detail,
     create,
     update,
+    deleteTemplate,
     categoryCount
 } = require('../controller/page-template')
 
@@ -25,9 +25,9 @@ const router = new Router({
 
 router.get('/list', list)
 router.get('/listByCategory', listByCategory)
-router.get('/detail', detail)
 router.post('/create', create)
 router.post('/update', update)
+router.delete('/delete', deleteTemplate)
 router.get('/categoryCount', categoryCount)
 
 module.exports = router

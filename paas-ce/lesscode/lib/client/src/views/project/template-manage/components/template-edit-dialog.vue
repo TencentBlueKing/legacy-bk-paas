@@ -3,7 +3,7 @@
         <bk-dialog v-model="isShow"
             render-directive="if"
             theme="primary"
-            title="存为模板"
+            title="编辑模板"
             width="600"
             :mask-close="false"
             :auto-close="false"
@@ -27,42 +27,55 @@
                         </bk-option>
                     </bk-select>
                 </bk-form-item>
+                <section v-if="isSuperAdmin" style="margin-top: 20px;">
+                    <bk-form-item label="设置为公开模板" required property="isOffcial" error-display-type="normal">
+                        <bk-radio-group v-model="dialog.formData.isOffcial">
+                            <bk-radio :value="1" style="margin-right: 20px;">是</bk-radio>
+                            <bk-radio :value="0">否</bk-radio>
+                        </bk-radio-group>
+                    </bk-form-item>
+                    <bk-form-item label="公开模板分类" required property="offcialType" error-display-type="normal">
+                        <bk-select
+                            :clearable="false"
+                            v-model="dialog.formData.offcialType"
+                        >
+                            <bk-option v-for="item in offcialTypeList" :id="item.id" :name="item.name" :key="item.id">
+                            </bk-option>
+                        </bk-select>
+                    </bk-form-item>
+                </section>
             </bk-form>
             <div class="dialog-footer" slot="footer">
                 <bk-button
                     theme="primary"
                     :loading="dialog.loading"
                     @click="handleDialogConfirm">确定</bk-button>
-                <bk-button @click="toggleIsShow(false)" :disabled="dialog.loading">取消</bk-button>
+                <bk-button :disabled="dialog.loading" @click="() => isShow = false">取消</bk-button>
             </div>
         </bk-dialog>
     </section>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-    import html2canvas from 'html2canvas'
+    // import { mapGetters } from 'vuex'
+    import { PAGE_TEMPLATE_TYPE } from '@/common/constant'
 
     export default {
         name: 'template-dialog',
-        props: {
-            isShow: {
-                type: Boolean,
-                required: true
-            },
-            toggleIsShow: {
-                type: Function,
-                required: true
-            }
-        },
         data () {
             return {
+                isSuperAdmin: true,
+                isShow: false,
                 categoryList: [],
+                offcialTypeList: PAGE_TEMPLATE_TYPE,
+                templateId: '',
                 dialog: {
                     loading: false,
                     formData: {
                         templateName: '',
-                        categoryId: ''
+                        categoryId: '',
+                        isOffcial: 0,
+                        offcialType: ''
                     },
                     formRules: {
                         templateName: [
@@ -89,9 +102,6 @@
             }
         },
         computed: {
-            ...mapGetters('drag', [
-                'curSelectedComponentData'
-            ]),
             projectId () {
                 return this.$route.params.projectId
             }
@@ -106,7 +116,6 @@
             }
         },
         created () {
-            console.log('save-as-template-dialog')
             this.getTemplateCategory()
         },
         methods: {
@@ -121,39 +130,15 @@
                 await this.$refs.pageTemplateFrom.validate()
                 try {
                     this.dialog.loading = true
-                    html2canvas(document.querySelector(`div[data-component-id="${this.curSelectedComponentData.name}-${this.curSelectedComponentData.componentId}"]`)).then(async (canvas) => {
-                        try {
-                            const imgData = canvas.toDataURL('image/png')
-                            const data = {
-                                projectId: this.projectId,
-                                params: {
-                                    templateName: this.dialog.formData.templateName,
-                                    categoryId: this.dialog.formData.categoryId,
-                                    belongProjectId: this.projectId,
-                                    content: JSON.stringify(this.curSelectedComponentData),
-                                    previewImg: imgData
-                                }
-                            }
-                            
-                            const res = await this.$store.dispatch('pageTemplate/create', data)
-                            console.log(res, 235)
-                            if (res) {
-                                this.dialog.loading = false
-                                this.$bkMessage({
-                                    theme: 'success',
-                                    message: `另存为模板成功`
-                                })
-                                this.toggleIsShow(false)
-                            }
-                        } catch (err) {
-                            this.$bkMessage({
-                                theme: 'error',
-                                message: err.message || err
-                            })
-                        } finally {
-                            this.dialog.loading = false
+                    const data = {
+                        id: this.templateId,
+                        params: {
+                            templateName: this.dialog.formData.templateName,
+                            categoryId: this.dialog.formData.categoryId
                         }
-                    })
+                    }
+                    const res = await this.$store.dispatch('pageTemplate/update', data)
+                    console.log(res, 235)
                 } catch (err) {
                     this.dialog.loading = false
                     this.$bkMessage({
@@ -168,7 +153,7 @@
 
 <style lang="postcss">
     .template-operate-dialog {
-        z-index: 2000 !important;
+        /* z-index: 2000 !important; */
         .bk-dialog-body {
             padding: 10px 15px 25px;
         }

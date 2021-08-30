@@ -16,7 +16,6 @@ export const listByCategory = async (ctx) => {
         
         const templates = await PageTemplateModel.all(params)
 
-        console.log(params, categorys, 'controller')
         const list = categorys.map(category => {
             const templateList = templates.filter(item => item.categoryId === category.id) || []
             return {
@@ -39,7 +38,7 @@ export const listByCategory = async (ctx) => {
 
 export const list = async (ctx) => {
     try {
-        const { projectId, categoryId } = ctx.query
+        const { projectId, categoryId, type } = ctx.query
 
         const params = {}
         if (projectId) {
@@ -47,6 +46,9 @@ export const list = async (ctx) => {
         }
         if (categoryId) {
             params.categoryId = categoryId
+        }
+        if (type === 'OFFCIAL') {
+            params.isOffcial = 1
         }
         const res = await PageTemplateModel.all(params)
         ctx.send({
@@ -79,111 +81,38 @@ export const create = async (ctx) => {
 
 // 编辑页面
 export const update = async (ctx) => {
-    try {
-        const { pageData, customCompData, projectId, pageCode, functionData, templateData, usedVariableMap } = ctx.request.body
-        const editPage = getRepository(Page).create(pageData)
-        const userInfo = ctx.session.userInfo || {}
+     try {
+        // const { id, params } = ctx.request.body
+        const { id, name, belongProjectId } = ctx.request.body
 
-        const lockStatus = await getPageLockStatus(ctx, pageData)
-        if (lockStatus.isLock && lockStatus.activeUser !== userInfo.username) {
-            return ctx.send({
-                code: -1,
-                message: '当前画布无编辑权，无法保存'
-            })
-        }
-
-        const result = await getConnection().transaction(async transactionalEntityManager => {
-            const page = await transactionalEntityManager.save(editPage)
-            const pageId = pageData.id
-            // 页面与自定义组件关联更新
-            if (customCompData) {
-                const pageCompList = await getRepository(PageComp).find({ where: { pageId } })
-
-                // 待添加的
-                const addCompList = customCompData.filter(customComp => {
-                    return pageCompList.findIndex(pageComp => {
-                        return pageComp.compId === customComp.compId && pageComp.versionId === customComp.versionId
-                    }) === -1
-                })
-                const addCompValues = getRepository(PageComp).create(addCompList.map(item => ({
-                    ...item,
-                    pageId,
-                    projectId,
-                    createTime: new Date()
-                })))
-                await transactionalEntityManager.save(addCompValues)
-
-                // 待删除的
-                const delCompList = pageCompList.filter(pageComp => {
-                    return customCompData.findIndex(customComp => {
-                        return pageComp.compId === customComp.compId && pageComp.versionId === customComp.versionId
-                    }) === -1
-                })
-                await transactionalEntityManager.remove(delCompList)
-            }
-
-            // 页面与函数关联更新
-            if (functionData) {
-                const pageFuncList = await getRepository(PageFunc).find({ where: { pageId } })
-
-                // 待添加的
-                const addFuncList = functionData.filter(funcId => {
-                    return pageFuncList.findIndex(pageFunc => pageFunc.funcId === funcId) === -1
-                })
-                const addFuncValues = getRepository(PageFunc).create(addFuncList.map(funcId => ({
-                    funcId,
-                    pageId,
-                    projectId,
-                    createTime: new Date()
-                })))
-                await transactionalEntityManager.save(addFuncValues)
-
-                // 待删除的
-                const delFuncList = pageFuncList.filter(pageFunc => {
-                    return functionData.findIndex(funcId => pageFunc.funcId === funcId) === -1
-                })
-                await transactionalEntityManager.remove(delFuncList)
-            }
-
-            if (templateData) {
-                const { layoutId } = await getRepository(PageRoute).findOne({ pageId })
-                const layoutInst = await getRepository(LayoutInst).findOne(layoutId)
-                layoutInst.content = JSON.stringify(templateData)
-                await transactionalEntityManager.save(layoutInst)
-            }
-
-            // 页面与变量关联更新
-            if (usedVariableMap) {
-                const variableIds = Object.keys(usedVariableMap || {})
-                const exitsUsedVariables = await getRepository(PageVariable).find({ where: { projectId, pageCode } }) || []
-                // 新增部分
-                const addUsedVariables = variableIds.filter((id) => exitsUsedVariables.findIndex(x => x.id === id) < 0)
-                const addUsedVariableValues = getRepository(PageVariable).create(addUsedVariables.map(variableId => ({
-                    projectId,
-                    variableId,
-                    pageCode,
-                    useInfo: JSON.stringify(usedVariableMap[variableId])
-                })))
-                // 修改部分
-                const updateUsedVariables = exitsUsedVariables.filter((variable) => usedVariableMap[variable.id])
-                updateUsedVariables.forEach((variable) => (variable.useInfo = JSON.stringify(usedVariableMap[variable.id])))
-                addUsedVariableValues.push(...updateUsedVariables)
-                // 删除部分
-                const deleteUsedVariables = exitsUsedVariables.filter(variable => !usedVariableMap[variable.id])
-
-                await Promise.all([transactionalEntityManager.save(addUsedVariableValues), transactionalEntityManager.remove(deleteUsedVariables)])
-            }
-
-            // 处理lifeCycle
-            page.lifeCycle = typeof page.lifeCycle === 'string' ? JSON.parse(page.lifeCycle) : page.lifeCycle
-
-            return page
+        // 分类已存在
+        const record = await TemplateCategoryModel.getOne({
+            name,
+            belongProjectId
         })
+        if (record) {
+            throw new Error(`分类已存在`)
+        }
+         const res = PageTemplateModel.updateById(id, params)
+         ctx.send({
+            code: 0,
+            message: 'success',
+            data: res
+        })
+     } catch (err) {
+        ctx.throwError({
+            message: err.message || err
+        })
+     }
+}
 
+export const deleteTemplate = async (ctx) => {
+    try {
+        const res = PageTemplateModel.remove(ctx.query.templateId)
         ctx.send({
             code: 0,
             message: 'success',
-            data: result
+            data: res && res.id
         })
     } catch (err) {
         ctx.throw(err)
@@ -219,67 +148,6 @@ export const copyPage = async (ctx) => {
             code: 0,
             message: 'success',
             data: id
-        })
-    } catch (err) {
-        ctx.throwError({
-            message: err.message
-        })
-    }
-}
-
-export const detail = async (ctx) => {
-}
-
-// 删除页面
-export const deletePage = async (ctx) => {
-    try {
-        const { pageId } = ctx.query
-        const pageData = {
-            id: parseInt(pageId),
-            deleteFlag: 1
-        }
-
-        // 权限
-        const record = await getRepository(Page).findOne(pageData.id)
-        const userInfo = ctx.session.userInfo || {}
-        ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
-        if (!ctx.hasPerm) return
-
-        const result = await getConnection().transaction(async transactionalEntityManager => {
-            const delPage = getRepository(Page).create(pageData)
-            const { id } = await transactionalEntityManager.save(delPage)
-
-            // 删除页面与组件关联记录
-            const pageCompList = await getRepository(PageComp).find({ where: { pageId } })
-            await transactionalEntityManager.remove(pageCompList)
-
-            // 删除页面与路由关联记录
-            const pageRouteList = await getRepository(PageRoute).find({ where: { pageId } })
-            const savePageRouteList = pageRouteList.map(item => {
-                return {
-                    ...item,
-                    deleteFlag: 1
-                }
-            })
-            await transactionalEntityManager.save(PageRoute, savePageRouteList)
-
-            // 删除页面与项目关联记录
-            const projectPageList = await getRepository(ProjectPage).find({ where: { pageId } })
-            const saveProjectPageList = projectPageList.map(item => {
-                return {
-                    ...item,
-                    deleteFlag: 1
-                }
-            })
-            await transactionalEntityManager.save(ProjectPage, saveProjectPageList)
-
-            return id
-        })
-
-        ctx.send({
-            code: 0,
-            message: 'success',
-            data: result
         })
     } catch (err) {
         ctx.throwError({

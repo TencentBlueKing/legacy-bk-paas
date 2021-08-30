@@ -34,6 +34,6 @@
 
 <style lang="postcss" scoped>
     .template-manage {
-        height: calc(100vh - 160px);
+        height: calc(100vh - 120px);
     }
 </style>

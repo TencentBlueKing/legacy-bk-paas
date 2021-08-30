@@ -30,7 +30,7 @@
                             <div class="btn edit-btn" @click.stop="handleEdit(item, $event)" role="operation">
                                 <i class="bk-icon icon-edit2" style="font-size: 20px;" />
                             </div>
-                            <div class="btn" @click="handleDelete(item)">
+                            <div class="btn" @click.stop="handleDelete(item)">
                                 <i class="bk-drag-icon bk-drag-close-small" />
                             </div>
                         </div>
@@ -232,8 +232,8 @@
                         belongProjectId: parseInt(this.$route.params.projectId),
                         id: category.id
                     })
-                    this.fetchData()
                     this.messageSuccess('删除模板分类成功')
+                    this.fetchData()
                 } catch {}
             }
         }
@@ -243,7 +243,7 @@
     .class-list{
         position: relative;
         z-index: 1;
-        height: calc(100vh - 160px);
+        height: calc(100vh - 120px);
         .header{
             display: flex;
             padding: 16px 18px;

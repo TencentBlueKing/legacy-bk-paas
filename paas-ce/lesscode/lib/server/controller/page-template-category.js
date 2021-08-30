@@ -3,17 +3,22 @@ import _ from 'lodash'
 import TemplateCategory from '../model/entities/page-template-category'
 import * as TemplateCategoryModel from '../model/page-template-category'
 import * as pageTemplateModel from '../model/page-template'
+import { PAGE_TEMPLATE_TYPE } from '../utils/constant'
 import OperationLogger from '../service/operation-logger'
 
 // 所有组件分类
 export const list = async (ctx) => {
     try {
-        const { projectId } = ctx.query
-        const params = {}
+        const { projectId, type } = ctx.query
+        let res = []
         if (projectId) {
+            const params = {}
             params.belongProjectId = projectId
+            res = await TemplateCategoryModel.all(params)
+        } else if (type === 'OFFCIAL') {
+            res = PAGE_TEMPLATE_TYPE
         }
-        const res = await TemplateCategoryModel.all(params)
+        
         ctx.send({
             code: 0,
             message: 'success',
@@ -106,14 +111,11 @@ export const update = async (ctx) => {
 
         const { id, name, belongProjectId } = ctx.request.body
 
-        console.log(TemplateCategoryModel, 1234)
-
         // 分类已存在
         const record = await TemplateCategoryModel.getOne({
             name,
             belongProjectId
         })
-        console.log(record, 254112)
         if (record) {
             throw new Error(`分类已存在`)
         }
@@ -206,7 +208,7 @@ export const categoryDelete = async (ctx) => {
         })
 
         if (record) {
-            throw new Error('该分类下有组件信息，不能删除')
+            throw new Error('该分类下有模板信息，不能删除')
         }
 
         await TemplateCategoryModel.removeById(id)

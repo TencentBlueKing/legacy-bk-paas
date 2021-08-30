@@ -23,7 +23,7 @@
                                 <div class="mask">
                                     <div class="operate-btns">
                                         <bk-button class="edit-btn" theme="primary" @click.stop="handlePreview(template)">预览</bk-button>
-                                        <bk-button class="preview-btn" @click="handleDownloadSource(template.content, template.id, template.lifeCycle)">下载源码</bk-button>
+                                        <bk-button class="preview-btn" @click="handleDownloadSource(template.content, template.id)">下载源码</bk-button>
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                     </bk-exception>
                 </div>
             </div>
-            <!-- <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :refresh-list="getTemplateList"></page-dialog> -->
+            <template-edit-dialog ref="templateEditDialog" :current-name="currentName" :refresh-list="getTemplateList"></template-edit-dialog>
         </main>
     </section>
 </template>
@@ -62,12 +62,12 @@
 <script>
     import { mapGetters } from 'vuex'
     import preivewErrImg from '@/images/preview-error.png'
-    // import pageDialog from '@/components/project/page-dialog'
+    import templateEditDialog from './template-edit-dialog'
 
     export default {
-        // components: {
-        //     pageDialog
-        // },
+        components: {
+            templateEditDialog
+        },
         props: {
             categoryId: {
                 type: Number,
@@ -129,26 +129,18 @@
                     this.isLoading = false
                 }
             },
-            async handleDownloadSource (targetData, pageId, lifeCycle) {
-                if (!targetData) {
-                    this.$bkMessage({
-                        theme: 'error',
-                        message: '该页面为空页面，无源码生成'
-                    })
-                    return
-                }
-                console.log('页面列表的下载')
+            async handleDownloadSource (content, templateId) {
+                const targetData = []
+                targetData.push(JSON.parse(content))
+                console.log('页面模板下载')
                 this.$store.dispatch('vueCode/getPageCode', {
-                    targetData: JSON.parse(targetData),
+                    targetData,
                     projectId: this.projectId,
-                    lifeCycle,
-                    pageId,
-                    layoutContent: this.pageLayout.layoutContent,
                     from: 'download_page'
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
                     const blob = new Blob([res])
-                    downlondEl.download = `bklesscode-${pageId}.vue`
+                    downlondEl.download = `bklesscode-template-${templateId}.vue`
                     downlondEl.href = URL.createObjectURL(blob)
                     downlondEl.style.display = 'none'
                     document.body.appendChild(downlondEl)
@@ -157,25 +149,25 @@
                 })
             },
             async handleEdit (template) {
-                this.action = 'rename'
-                this.currentName = template.templateName
-                this.$refs.pageDialog.dialog.formData.templateName = template.templateName
-                this.$refs.pageDialog.dialog.formData.pageCode = template.pageCode
-                this.$refs.pageDialog.dialog.formData.pageRoute = template.pageRoute
-                this.$refs.pageDialog.dialog.formData.id = template.id
-                this.$refs.pageDialog.dialog.formData.layoutId = null
-                this.$refs.pageDialog.dialog.visible = true
+                this.$refs.templateEditDialog.isShow = true
+                this.$refs.templateEditDialog.templateId = template.id
+                this.$refs.templateEditDialog.dialog.formData = {
+                    categoryId: template.categoryId,
+                    templateName: template.templateName,
+                    isOffcial: template.isOffcial,
+                    offcailType: template.offcailType
+                }
             },
             handleDelete (template) {
                 if (!this.getDeletePerm(template)) return
 
                 this.$bkInfo({
                     title: '确认删除?',
-                    subTitle: `确认删除  “页面${template.templateName}”?`,
+                    subTitle: `确认删除模板  “${template.templateName}”?`,
                     theme: 'danger',
                     confirmFn: async () => {
-                        await this.$store.dispatch('page/delete', {
-                            pageId: template.id
+                        await this.$store.dispatch('pageTemplate/delete', {
+                            templateId: template.id
                         })
                         this.getTemplateList()
                     }
@@ -257,7 +249,7 @@
                 .template-item {
                     position: relative;
                     flex: none;
-                    width: 290px;
+                    width: 286px;
                     height: 226px;
                     margin: 0 14px 30px 0;
                     padding: 6px;
@@ -302,7 +294,7 @@
                     .item-bd {
                         flex: none;
                         position: relative;
-                        width: 286px;
+                        width: 274px;
                         height: 158px;
                         background: #fff;
                         border-radius: 4px 4px 0px 0px;
@@ -348,7 +340,7 @@
                                 display: none;
                                 .edit-btn {
                                     width: 86px;
-                                    margin-left: 59px;
+                                    margin-left: 46px;
                                 }
                                 .preview-btn {
                                     width: 86px;

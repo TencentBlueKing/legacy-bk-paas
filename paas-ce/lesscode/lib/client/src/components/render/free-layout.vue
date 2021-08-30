@@ -26,6 +26,12 @@
             <a href="javascript:;" @click="handleContextmenuDelete">删除自由布局</a>
             <a href="javascript:;" @click="handleContextmenuClearFreeLayout">清空自由布局</a>
         </component-menu>
+
+        <div class="save-as-template" @click.stop="toggleShowTemplateDialog(true)">
+            <i class="bk-drag-icon bk-drag-template-fill"></i>
+            存为模板
+        </div>
+
         <div class="free-layout-item-inner">
             <vue-draggable :style="{ height: renderData.renderStyles.height || '500px' }"
                 :group="{ pull: true, put: ['component', ...extraDragCls] }"
@@ -44,6 +50,8 @@
                 </render-component>
             </vue-draggable>
         </div>
+
+        <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
 
         <bk-dialog v-model="clearFreeLayoutConf.visiable"
             class="del-component-dialog"
@@ -73,6 +81,7 @@
     import DragLine from '@/common/drag-line'
     // eslint-disable-next-line no-unused-vars
     import Drag from '@/common/drag'
+    import saveTemplateDialog from './save-template-dialog'
     import ComponentMenu from '@/components/widget/context-menu.vue'
     import offsetMixin from './offset-mixin'
 
@@ -81,7 +90,8 @@
         components: {
             // eslint-disable-next-line vue/no-unused-components
             renderComponent,
-            ComponentMenu
+            ComponentMenu,
+            saveTemplateDialog
         },
         mixins: [offsetMixin],
         props: {
@@ -107,7 +117,8 @@
                 clearFreeLayoutConf: {
                     visiable: false,
                     headerPosition: 'left'
-                }
+                },
+                showTemplateDialog: false
             }
         },
         computed: {
@@ -501,6 +512,9 @@
                         }
                     })
                 })
+            },
+            toggleShowTemplateDialog (isShow) {
+                this.showTemplateDialog = isShow
             }
         }
     }

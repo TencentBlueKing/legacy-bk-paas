@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <section>
+    <section style="height:100%">
         <div class="sidebar-hd">
             <ul class="category-tabs">
                 <li
@@ -23,17 +23,19 @@
                     </template>
                 </li>
             </ul>
+            <div class="search-bar">
+                <component-search :key="templateTabsCurrentRefresh" :source="renderTemplateList" :result.sync="searchResult" search-type="template" />
+            </div>
         </div>
         <div class="sidebar-bd">
-            <!-- <div class="search-bar">
-                <component-search :key="templateTabsCurrentRefresh" :source="componentConfigList" :result.sync="componentSearchResult" />
-            </div> -->
             <div class="component-panel-base">
                 <template v-for="(group, groupIndex) in renderGroupTemplateList">
                     <div
                         :key="groupIndex"
-                        class="component-group">
-                        <div class="group-title" :title="group.categoryName">
+                        :class="getComponentGroupClass(group.id, groupIndex)"
+                        v-show="!searchResult || (searchResult && (group.id === searchResult.categoryId || group.id === searchResult.offcialType))"
+                    >
+                        <div class="group-title" :title="group.categoryName" @click="handleCompGroupFold(group.id)">
                             <i class="bk-drag-icon bk-drag-arrow-down"></i>
                             {{group.categoryName}}
                         </div>
@@ -48,12 +50,23 @@
                                 :group="draggableSourceGroup"
                                 :force-fallback="false"
                                 :clone="cloneFunc"
+                                filter=".uninstall"
                                 @choose="onChoose($event, group.list)"
                                 @end="sourceAreaEndHandler">
                                 <template>
-                                    <div v-for="(template, templateIndex) in group.list" class="template-item" :class="placeholderElemDisplay" :key="templateIndex">
-                                        <div class="item-img"><img :src="template.previewImg" /></div>
-                                        <div class="item-name" :title="template.templateName">{{ template.templateName }}</div>
+                                    <div v-for="(template, templateIndex) in group.list" class="template-item" :class="{ 'uninstall': type === 'market' && !template.hasInstall }" :key="templateIndex"
+                                        v-show="!searchResult || template.id === searchResult.id">
+                                        <div class="item-img">
+                                            <img :src="template.previewImg" />
+                                            <div class="mask" v-if="type === 'market' && !template.hasInstall">
+                                                <bk-button class="apply-btn" theme="primary" size="small" @click.stop="handlePreview(page)">应用</bk-button>
+                                            </div>
+                                        </div>
+
+                                        <div class="item-info" :title="template.templateName">
+                                            <span class="item-name">{{ template.templateName }}</span>
+                                            <span class="preview">预览</span>
+                                        </div>
                                     </div>
                                 </template>
                             </vue-draggable>
@@ -68,11 +81,14 @@
 <script>
     // import componentPanelMixin from './component-panel-mixin'
     import { mapGetters, mapMutations } from 'vuex'
-    // import targetDataUtil from '@/common/targetData.js'
+    import componentSearch from './component-search.vue'
 
     export default {
         name: 'template-panel',
         // mixins: [componentPanelMixin],
+        components: {
+            componentSearch
+        },
         props: {
             dragingComponent: {
                 type: Object,
@@ -83,6 +99,8 @@
             return {
                 curDragingComponent: this.dragingComponent,
                 type: 'project',
+                projectTemplateList: [],
+                marketTemplateList: [],
                 projectTemplateGroupList: [],
                 marketTemplateGroupList: [],
                 templateTabs: {
@@ -91,7 +109,9 @@
                         { name: 'market', label: '模板市场', active: false }
                     ]
                 },
-                placeholderElemDisplay: ''
+                templateTabsCurrentRefresh: +new Date(),
+                searchResult: null,
+                templateGroupFolded: {}
             }
         },
         computed: {
@@ -104,6 +124,9 @@
             },
             renderGroupTemplateList () {
                 return this.type === 'project' ? this.projectTemplateGroupList : this.marketTemplateGroupList
+            },
+            renderTemplateList () {
+                return this.type === 'project' ? this.projectTemplateList : this.marketTemplateList
             }
         },
         created () {
@@ -116,11 +139,28 @@
                 'setCurSelectedComponentData'
             ]),
             async init () {
-                this.projectTemplateGroupList = await this.$store.dispatch('pageTemplate/listByCategory', {
-                    projectId: this.projectId
-                })
-                this.marketTemplateGroupList = []
-                console.log(this.renderGroupTemplateList, 2341)
+                const [projectTemplateGroups, projectTemplateList, marketTemplateGroups, tmpMarketTemplateList] = await Promise.all([
+                    this.$store.dispatch('pageTemplate/categoryList', { projectId: this.projectId }),
+                    this.$store.dispatch('pageTemplate/list', { projectId: this.projectId }),
+                    this.$store.dispatch('pageTemplate/categoryList', { type: 'OFFCIAL' }),
+                    this.$store.dispatch('pageTemplate/list', { type: 'OFFCIAL' })
+                ])
+                const marketTemplateList = tmpMarketTemplateList.map(item => ({
+                    ...item,
+                    hasInstall: projectTemplateList.filter(template => template.parentId === item.id).length > 0
+                }))
+                this.projectTemplateGroupList = projectTemplateGroups.map(item => ({
+                    id: item.id,
+                    categoryName: item.name,
+                    list: projectTemplateList.filter(template => template.categoryId === item.id)
+                }))
+                this.marketTemplateGroupList = marketTemplateGroups.map(item => ({
+                    id: item.id,
+                    categoryName: item.name,
+                    list: marketTemplateList.filter(template => template.offcialType === item.id)
+                }))
+                this.projectTemplateList = projectTemplateList
+                this.marketTemplateList = marketTemplateList
             },
             handleToggleTab (tab) {
                 this.type = tab.name || 'project'
@@ -130,7 +170,6 @@
                 const node = JSON.parse(contentStr)
                 this.curDragingComponent = this.$td().cloneNode(node, true)
                 
-                this.placeholderElemDisplay = 'block'
                 this.$emit('update:dragingComponent', this.curDragingComponent)
  
                 const dragableSourceGroup = Object.assign({}, this.draggableSourceGroup, {
@@ -148,17 +187,31 @@
             },
 
             sourceAreaEndHandler (e) {
-                this.placeholderElemDisplay = ''
                 this.setFreeLayoutItemPlaceholderPointerEvents('none')
                 console.warn('sourceAreaEndHandler', this.curDragingComponent)
                 console.warn('left to right end, targetData: ', this.targetData)
                 console.warn('左侧面板拖动 grid 和 component 到画布中 end', e)
+            },
+
+            getComponentGroupClass (groupId, groupIndex) {
+                return [
+                    'component-group',
+                    {
+                        'first': groupIndex === 0,
+                        'folded': this.templateGroupFolded[groupId],
+                        'search-show': this.searchResult && (groupId === this.searchResult.categoryId || groupId === this.searchResult.offcialType)
+                    }
+                ]
+            },
+
+            handleCompGroupFold (groupId) {
+                this.$set(this.templateGroupFolded, groupId, !this.templateGroupFolded[groupId])
             }
         }
     }
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
     .category-tabs .tab-item {
         flex: 1;
         text-align: center;
@@ -178,19 +231,60 @@
 
         &:hover {
             border: 1px solid #3a84ff;
+            .item-img {
+                .mask {
+                    display: flex;
+                }
+            }
+            .item-info {
+                .item-name {
+                    width: 90px;
+                }
+                .preview {
+                    display: block;
+                }
+            }
         }
-        .item-img img {
+        .item-img {
+            position: relative;
             width: 100%;
             height: 81px;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+            .mask {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.1);
+                align-items: center;
+                .apply-btn {
+                    display: block;
+                    margin-left: 32px;
+                }
+            }
         }
-        .item-name {
+        .item-info {
+            display: flex;
+            justify-content: space-between;
             padding: 4px 8px;
-            color: #63656e;
             font-size: 12px;
-            width: 120px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            .item-name {
+                color: #63656e;
+                width: 120px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            .preview {
+                display: none;
+                color: #3a84ff;
+                cursor: pointer;
+            }
         }
     }
 </style>

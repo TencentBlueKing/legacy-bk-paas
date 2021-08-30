@@ -108,18 +108,18 @@ class PageCode {
     constructor (targetData = [], pageType = 'vueCode', allCustomMap = {}, funcGroups = [], lifeCycle = '', projectId, pageId, layoutContent, isGenerateNav = false, isEmpty = false, layoutType, variableList) {
         this.targetData = targetData || []
         this.pageType = pageType
-        this.allCustomMap = allCustomMap
-        this.funcGroups = funcGroups
+        this.allCustomMap = allCustomMap || {}
+        this.funcGroups = funcGroups || []
         this.uniqueKey = uuid()
-        this.lifeCycle = lifeCycle
+        this.lifeCycle = lifeCycle || {}
         this.projectId = projectId
         this.pageId = pageId
-        this.layoutContent = layoutContent
+        this.layoutContent = layoutContent || {}
         this.hasLayOut = layoutContent && ((layoutContent.menuList && layoutContent.menuList.length) || (layoutContent.topMenuList && layoutContent.topMenuList.length))
         this.isGenerateNav = isGenerateNav
         this.isEmpty = isEmpty
         this.layoutType = layoutType
-        this.variableList = variableList
+        this.variableList = variableList || []
     }
 
     getCode () {

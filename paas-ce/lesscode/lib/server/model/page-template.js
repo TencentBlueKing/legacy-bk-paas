@@ -46,7 +46,7 @@ export const updateById = async function (id, params = {}) {
         id
     })
     if (!PageTemplate) {
-        throw new Error('组件不存在')
+        throw new Error('模板不存在')
     }
     Object.keys(params).forEach(field => {
         PageTemplate[field] = params[field]
@@ -57,14 +57,15 @@ export const updateById = async function (id, params = {}) {
 
 export const remove = async function (id) {
     try {
-        const PageTemplate = await getOne({
+        const template = await getOne({
             id
         })
-        if (!PageTemplate) {
-            throw new Error('组件不存在')
+        console.log()
+        if (!template) {
+            throw new Error('模板不存在')
         }
-        PageTemplate.deleteFlag = 1
-        const res = await getRepository(PageTemplate).save(PageTemplate)
+        template.deleteFlag = 1
+        const res = await getRepository(PageTemplate).save(template)
         return res
     } catch (error) {
         throw error

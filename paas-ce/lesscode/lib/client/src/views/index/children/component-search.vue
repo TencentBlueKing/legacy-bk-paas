@@ -42,7 +42,7 @@
                 <div class="search-dropdown-list" v-else>
                     <ul ref="searchListContainer" :style="{ 'max-height': `${contentMaxHeight}px` }" class="outside-ul">
                         <li class="search-dropdown-list-item">
-                            <span class="text">没有找到组件</span>
+                            <span class="text">没有找到{{ searchType === 'template' ? '模板' : '组件' }}</span>
                         </li>
                     </ul>
                 </div>
@@ -84,6 +84,10 @@
             result: {
                 type: Object,
                 default: () => ({})
+            },
+            searchType: {
+                type: String,
+                default: 'component'
             }
         },
         data () {
@@ -105,16 +109,30 @@
         },
         computed: {
             componentList () {
-                const componentList = this.source.map(({ name, displayName, group, groupType }) => {
-                    return {
-                        name,
-                        displayName,
-                        group,
-                        groupType,
-                        // searchName: `${name} ${displayName}`
-                        searchName: groupType === 'custom' ? `${name} ${displayName}` : `${pascalCase(name)} ${displayName}`
-                    }
-                })
+                let componentList = []
+                if (this.searchType === 'template') {
+                    componentList = this.source.map(item => {
+                        return {
+                            id: item.id,
+                            name: item.templateName,
+                            categoryId: item.categoryId,
+                            offcialType: item.offcialType,
+                            searchName: item.templateName
+                        }
+                    })
+                } else {
+                    componentList = this.source.map(({ name, displayName, group, groupType }) => {
+                        return {
+                            name,
+                            displayName,
+                            group,
+                            groupType,
+                            // searchName: `${name} ${displayName}`
+                            searchName: groupType === 'custom' ? `${name} ${displayName}` : `${pascalCase(name)} ${displayName}`
+                        }
+                    })
+                }
+                
                 return componentList
             }
         },
@@ -142,7 +160,6 @@
                 this.keyword = data.searchName
 
                 this.$emit('update:result', data)
-
                 this.hideSearchResult()
             },
             handleKeydown (value, e) {
