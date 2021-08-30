@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     styles: ['margin'],
-    events: [{ name: 'change', tips: '选项发生变化时调用该事件函数，参数为(newValue: string | number | boolean, oldValue: string | number | boolean)' }],
+    events: [{ name: 'change', tips: '选项发生变化时调用该事件函数，参数为(newValue: String | Number | Boolean, oldValue: String | Number | Boolean)' }],
     directives: [
         {
             type: 'v-model',
