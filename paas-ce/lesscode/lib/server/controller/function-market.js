@@ -30,6 +30,36 @@ module.exports = {
         }
     },
 
+    async bulkAddFuncs (ctx) {
+        const operationLogger = new OperationLogger(ctx)
+        try {
+            const marketFuncList = ctx.request.body
+            // 使用eslint做检查
+            let errMessage
+            const checkFunc = async (func) => {
+                errMessage = await checkFuncEslint(func)
+            }
+            await Promise.all(marketFuncList.map(func => checkFunc(func)))
+            if (errMessage) {
+                ctx.throwBusinessError(errMessage)
+            }
+            const data = await funcMarket.bulkAdd(marketFuncList)
+            operationLogger.success({
+                operateTarget: '批量添加市场函数'
+            })
+            ctx.send({
+                code: 0,
+                data,
+                message: 'success'
+            })
+        } catch (err) {
+            operationLogger.error(err, {
+                operateTarget: '批量添加市场函数'
+            })
+            ctx.throwError(err)
+        }
+    },
+
     async addFunc (ctx) {
         const operationLogger = new OperationLogger(ctx)
         try {

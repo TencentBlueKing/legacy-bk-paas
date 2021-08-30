@@ -18,7 +18,7 @@ export default {
     order: 1,
     styles: ['size', 'margin', 'padding', 'display'],
     events: [{
-        name: 'close', tips: '关闭警告时调用，参数为时间对象event'
+        name: 'close', tips: '关闭警告时调用该事件函数，事件回调参数 (event: Event)'
     }],
     props: {
         type: {

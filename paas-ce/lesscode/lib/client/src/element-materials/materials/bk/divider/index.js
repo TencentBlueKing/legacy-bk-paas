@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-custom-comp-default',
     group: '基础',
     order: 1,
-    events: [{ name: 'click' }],
+    events: [],
     styles: ['size', 'margin', 'padding'],
     renderStyles: {
         display: 'block'

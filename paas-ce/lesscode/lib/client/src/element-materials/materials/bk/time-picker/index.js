@@ -17,9 +17,9 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '时间改变事件，回调参数为当前选择的时间'
+        name: 'change', tips: '时间改变时调用该事件函数，事件回调参数 (time: Date | String | Array)'
     }, {
-        name: 'open-change', tips: '面板弹出或收起事件，参数为面板展开收起的状态，回调参数为新的状态'
+        name: 'open-change', tips: '面板弹出或收起时调用该事件函数，事件回调参数 (state: Boolean)'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {
