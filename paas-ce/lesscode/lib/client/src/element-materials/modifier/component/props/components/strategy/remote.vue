@@ -12,8 +12,7 @@
 <template>
     <section>
         <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
-            <span v-if="name === 'initFormData'" class="form-title under-line">表单数据<span class="form-tip">（更新将会覆盖已有数据）</span></span>
-            <span v-else :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
+            <span :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
             <span class="remote-example" @click="handleShowExample">数据示例</span>
         </div>
         <div class="remote-content">
