@@ -389,7 +389,7 @@ $headerHeight: 64px;
             &.component-item {
                 &:after {
                     content: "放在这里";
-                    background-color: #F3F8FF;
+                    background-color: #C2D7F9;
                     position: absolute;
                     left: 0;
                     text-align: center;

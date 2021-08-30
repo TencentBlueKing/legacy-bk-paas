@@ -13,10 +13,12 @@
 import '@/common/bkui-vue-complex'
 import '@/common/bkmagic'
 import '@/common/element'
+// 注入全局组件
+import renderHtml from '@/components/render/html'
 
-// 注入自定义组件
 module.exports = (Vue, projectId) => {
     return new Promise((resolve, reject) => {
+        // 注入自定义组件
         window.previewCustomCompontensPlugin = []
         window.registerPreview = function (callback) {
             window.previewCustomCompontensPlugin.push(callback)
@@ -34,5 +36,8 @@ module.exports = (Vue, projectId) => {
             reject(err.message || err || '获取自定义组件失败')
         }
         document.body.appendChild(script)
+
+        // 注入全局组件
+        Vue.component('renderHtml', renderHtml)
     })
 }

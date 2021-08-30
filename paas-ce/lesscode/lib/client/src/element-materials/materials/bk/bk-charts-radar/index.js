@@ -68,7 +68,35 @@ export default {
         remoteOptions: {
             type: 'remote',
             tips: '动态图表配置，可通过函数动态返回图表配置属性，函数返回值会覆盖上述opions里面的同名属性，\n\neg：若函数返回值为{series: [...]}，则最终的图表的渲染会使用函数返回的series数据，其它配置仍为options中的静态配置，由此可达到动态设置图表数据的效果',
-            val: '',
+            val: {
+                'type': 'radar',
+                'data': {
+                    'labels': [
+                        ['Eating', 'Dinner'],
+                        ['Drinking', 'Water'],
+                        'Sleeping',
+                        ['Designing', 'Graphics'],
+                        'Coding',
+                        'Cycling',
+                        'Running'
+                    ],
+                    'datasets': [
+                        {
+                            'borderWidth': 1,
+                            'backgroundColor': 'rgba(255,111,114,1)',
+                            'borderColor': 'rgba(255,111,114,1)',
+                            'fill': false,
+                            'data': [80, -86, 34, 8, 60, -14, -4],
+                            'label': 'First dataset'
+                        }
+                    ]
+                },
+                'options': {
+                    'flexWithContainer': true,
+                    'aspectRatio': 1.5,
+                    'title': { 'display': true, 'text': 'Title' }
+                }
+            },
             remoteValidate (data) {
                 console.log(data, 'valid')
                 if (typeof data !== 'object') return '返回值需要是object'

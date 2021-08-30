@@ -123,8 +123,8 @@
             </section>
         </layout>
 
-        <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" @hidden="closeAddFunction">
-            <func-form :func-data="funcObj.form" class="add-function" ref="func" slot="content"></func-form>
+        <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" :before-close="closeAddFunction">
+            <func-form :func-data="funcObj.form" ref="func" slot="content"></func-form>
             <section slot="footer" class="add-footer">
                 <bk-button theme="primary" @click="submitFunc" :loading="funcObj.loading">提交</bk-button>
                 <bk-button @click="closeAddFunction">取消</bk-button>
@@ -174,8 +174,9 @@
     import { downloadFile, uploadFile } from '@/common/util'
     import dayjs from 'dayjs'
     import layout from '@/components/ui/layout'
-    import funcForm from '@/components/methods/func-form'
+    import funcForm from '@/components/methods/func-form/index'
     import editObject from '@/components/edit-object'
+    import functionHelper from '@/components/methods/function-helper'
 
     export default {
         components: {
@@ -322,7 +323,6 @@
 
             submitFunc () {
                 this.$refs.func.validate().then((postData) => {
-                    if (!postData) return
                     this.funcObj.loading = true
                     if (!postData.projectId) {
                         postData.projectId = this.projectId
@@ -343,25 +343,25 @@
                     }).catch(err => this.$bkMessage({ theme: 'error', message: err.message || err })).finally(() => {
                         this.funcObj.loading = false
                     })
+                }).catch((validator) => {
+                    this.$bkMessage({ message: validator.content || validator, theme: 'error' })
                 })
             },
 
             closeAddFunction () {
-                const defaultForm = {
-                    funcName: '',
-                    funcCode: '',
-                    funcGroupId: undefined,
-                    funcType: 0,
-                    funcParams: [],
-                    funcApiUrl: '',
-                    funcMethod: 'get',
-                    funcApiData: '',
-                    funcSummary: '',
-                    funcBody: '',
-                    id: undefined
+                const confirmFn = () => {
+                    this.funcObj.show = false
+                    Object.assign(this.funcObj.form, functionHelper.getDefaultFunc())
                 }
-                this.funcObj.show = false
-                Object.assign(this.funcObj.form, defaultForm)
+                if (this.$refs.func.formChanged) {
+                    this.$bkInfo({
+                        title: '请确认是否关闭',
+                        subTitle: '存在未保存的函数，关闭后不会保存更改',
+                        confirmFn
+                    })
+                } else {
+                    confirmFn()
+                }
             },
 
             initData () {

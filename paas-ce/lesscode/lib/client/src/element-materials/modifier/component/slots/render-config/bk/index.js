@@ -81,14 +81,14 @@ const bkRenderMap = {
                 <bk-table-column
                     v-if="item.type === 'customCol'"
                     :label="item.label"
-                    :prop="item.prop" 
+                    :prop="item.prop"
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"
                     :key="index"
                 >
-                    <template>
-                        <section v-html="item.templateCol"></section>
+                    <template slot-scope="props">
+                        <render-html :html="item.templateCol" :props="props"></render-html>
                     </template>
                 </bk-table-column>
                 <bk-table-column

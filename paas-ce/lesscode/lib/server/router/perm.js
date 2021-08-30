@@ -10,12 +10,13 @@
  */
 
 const Router = require('koa-router')
-const { getUserPerm } = require('../controller/perm')
+const { getUserPerm, isPlatformAdmin } = require('../controller/perm')
 
 const router = new Router({
     prefix: '/api/perm'
 })
 
 router.get('/userPerm', getUserPerm)
+router.get('/isPlatformAdmin', isPlatformAdmin)
 
 module.exports = router

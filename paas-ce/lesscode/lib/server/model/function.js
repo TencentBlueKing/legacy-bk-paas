@@ -10,6 +10,7 @@
  */
 
 import { getRepository, getConnection, In, Like } from 'typeorm'
+import { replaceFuncKeyword } from '../util'
 import Func from './entities/func'
 import FuncGroup from './entities/func-group'
 import ProjectFuncGroup from './entities/project-func-group'
@@ -196,6 +197,7 @@ const func = {
     },
 
     async handleFuncRelation (func, varWhere) {
+        if (!varWhere) return
         const { projectId, pageCode, effectiveRange } = varWhere
         const variableWhere = [{ projectId, deleteFlag: 0 }]
         if (effectiveRange !== undefined) {
@@ -211,7 +213,7 @@ const func = {
         // 当前用到的变量列表
         const funcVariableRepository = getRepository(FuncVariable)
         const variableRepository = getRepository(Variable)
-        const [exitsUsedVariables, allVariables] = await Promise.all([
+        const [exitsUsedVariables = [], allVariables = []] = await Promise.all([
             funcVariableRepository.find({ where: { projectId, funcCode: func.funcCode } }),
             variableRepository.find({ where: variableWhere })
         ])
@@ -248,7 +250,7 @@ const func = {
                 }
             }
         }
-        (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
+        replaceFuncKeyword(func.funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
             handleRelation(dirKey, funcCode)
         })
         if (func.funcType === 1) {

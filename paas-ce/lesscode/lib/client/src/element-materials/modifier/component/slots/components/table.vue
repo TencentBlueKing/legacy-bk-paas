@@ -121,7 +121,7 @@
     const generateCustomColumn = (index) => ({
         type: 'customCol',
         label: `选项${index}`,
-        templateCol: `<a style="color:#3A84FF;cursor:pointer" @click="editCallBack(props.row)">编辑</a>`,
+        templateCol: `<span><a style="color:#3A84FF;cursor:pointer" @click="editCallBack(props.row)">编辑</a> <a style="color:red;">获取行数据{{props.row.prop1}}</a></span>`,
         methodCode: [],
         sortable: false
     })
