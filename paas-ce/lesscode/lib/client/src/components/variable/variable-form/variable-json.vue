@@ -102,7 +102,6 @@
 <style lang="postcss" scoped>
     .variable-txt {
         display: inline-block;
-        margin-top: 10px;
         font-size: 12px;
     }
     .variable-code {

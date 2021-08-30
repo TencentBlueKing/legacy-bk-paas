@@ -82,7 +82,49 @@ export default {
         remoteOptions: {
             type: 'remote',
             tips: '动态图表配置，可通过函数动态返回图表配置属性，函数返回值会覆盖上述opions里面的同名属性，\n\neg：若函数返回值为{series: [...]}，则最终的图表的渲染会使用函数返回的series数据，其它配置仍为options中的静态配置，由此可达到动态设置图表数据的效果',
-            val: '',
+            val: {
+                'type': 'bubble',
+                'data': {
+                    'datasets': [
+                        {
+                            'label': 'Bubble point 1',
+                            'hoverBackgroundColor': 'rgba(255,111,114,0.5)',
+                            'hoverBorderColor': 'rgba(255,111,114,1)',
+                            'backgroundColor': 'rgba(255,111,114,0.5)',
+                            'borderColor': 'rgba(255,111,114,1)',
+                            'borderWidth': 1,
+                            'data': [
+                                { 'x': -58, 'y': -37, 'r': 7 },
+                                { 'x': -80, 'y': -5, 'r': 1.8 },
+                                { 'x': -3, 'y': 20, 'r': 7 },
+                                { 'x': 58, 'y': -77, 'r': 6 },
+                                { 'x': -16, 'y': -13, 'r': 2.8 },
+                                { 'x': -23, 'y': 30, 'r': 1 }
+                            ]
+                        },
+                        {
+                            'label': 'Bubble point 2',
+                            'hoverBackgroundColor': 'rgba(51,157,255,0.5)',
+                            'hoverBorderColor': 'rgba(51,157,255,1)',
+                            'backgroundColor': 'rgba(51,157,255,0.5)',
+                            'borderColor': 'rgba(51,157,255,1)',
+                            'borderWidth': 1,
+                            'data': [
+                                { 'x': 55, 'y': -23, 'r': 10 },
+                                { 'x': 88, 'y': 33, 'r': 5 },
+                                { 'x': 22, 'y': -35, 'r': 14 },
+                                { 'x': 79, 'y': 59, 'r': 11 },
+                                { 'x': 40, 'y': -91, 'r': 7 },
+                                { 'x': 10, 'y': 33, 'r': 11.5 }
+                            ]
+                        }
+                    ]
+                },
+                'options': {
+                    'flexWithContainer': true,
+                    'title': { 'display': true, 'text': '气泡图', 'tooltips': { 'mode': 'point' } }
+                }
+            },
             remoteValidate (data) {
                 console.log(data, 'valid')
                 if (typeof data !== 'object') return '返回值需要是object'

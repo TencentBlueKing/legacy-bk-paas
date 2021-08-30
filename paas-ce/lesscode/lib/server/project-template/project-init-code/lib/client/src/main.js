@@ -15,12 +15,14 @@ import Exception from '@/components/exception'
 import { bus } from '@/common/bus'
 import '@/common/bkmagic'
 import '@/common/bkui-vue-complex'
+import renderHtml from '@/components/html'
 ${importElementLib}
 import pureAxios from '@/api/pureAxios.js'
 // 用户调用接口使用，无业务逻辑，直接返回数据
 Vue.prototype.$http = pureAxios
 
 Vue.component('app-exception', Exception)
+Vue.component('render-html', renderHtml)
 
 auth.requestCurrentUser().then(user => {
     injectCSRFTokenToHeaders()

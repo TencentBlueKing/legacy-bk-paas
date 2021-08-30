@@ -10,6 +10,7 @@
  */
 
 import { getRepository } from 'typeorm'
+import { replaceFuncKeyword } from '../util'
 import VariableFunc from './entities/variable-func'
 import VariableVariable from './entities/variable-variable'
 import Variable from './entities/variable'
@@ -27,7 +28,7 @@ module.exports = {
         const newUsedVarFunc = []
         const newUsedVarVar = []
         const funcBody = data.variableType === 1 && data.deleteFlag !== 1 ? (JSON.parse(data.defaultValue || '{}').all || '') : ''
-        funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
+        replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
             if (funcCode) {
                 const curUsedVarFunc = usedVarFuncs.find((func) => (func.funcCode === funcCode))
                 if (curUsedVarFunc) {

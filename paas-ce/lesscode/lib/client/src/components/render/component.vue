@@ -23,7 +23,7 @@
         @click.stop="componentWrapperClickHandler(renderData, $event)"
         @contextmenu.stop="componentWrapperClickHandler(renderData, $event)">
         <component-menu
-            class="component-context-menu"
+            class="component-context-menu context-menu"
             :target="contextMenuTarget"
             :show="contextMenuVisible"
             :offset="getComputedMunuOffset"
@@ -42,7 +42,6 @@
                 :is="getSlotComponentName(renderDataSlot[slotName])"
                 :slot="slotName"
                 :key="index"
-                :extra-drag-cls="['interactiveInnerComp']"
                 v-bind="getSlotProps(renderDataSlot[slotName])" />
         </component-wrapper>
     </div>
@@ -438,7 +437,7 @@
                 curComponentNode.classList.add(className)
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
-                this.contextMenuVisible = false
+                this.$clearMenu()
             },
 
             /**
