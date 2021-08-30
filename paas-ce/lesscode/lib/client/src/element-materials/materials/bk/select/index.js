@@ -17,13 +17,15 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'selected', tips: '选择列表时调用，多选时，回调参数均为数组（value, option(s)）'
+        name: 'selected', tips: '选择列表时调用该事件函数，多选时，回调参数均为数组(value: string | number | array, option: object | array)'
     }, {
-        name: 'toggle', tips: '切换下拉折叠状态时调用，回调参数（Boolean）'
+        name: 'toggle', tips: '切换下拉折叠状态时调用该事件函数，回调参数(status: boolean)'
     }, {
-        name: 'change', tips: '选项发生变化时调用，回调参数（newValue, oldValue）'
+        name: 'change', tips: '选项发生变化时调用该事件函数，回调参数(newValue: string | number | array, oldValue: string | number | array)'
     }, {
-        name: 'clear', tips: '清空已选项时调用，回调参数（oldValue）'
+        name: 'clear', tips: '清空已选项时调用该事件函数，回调参数(oldValue: string | number | array)'
+    }, {
+        name: 'tab-remove', tips: '删除tab时调用该事件函数，回调参数(options: array)'
     }],
     styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
     directives: [

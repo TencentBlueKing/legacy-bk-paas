@@ -17,13 +17,13 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'select-change', tips: '选中的节点发生变化时触发，参数为TreeNode'
+        name: 'select-change', tips: '选中的节点发生变化时调用该事件函数，事件回调参数 (treeNode: Object)'
     }, {
-        name: 'check-change', tips: '复选节点发生变化时触发 参数为(id/[id], checked)'
+        name: 'check-change', tips: '复选节点发生变化时调用该事件函数，事件回调参数 (id: String | Number | Array, checked: Boolean)'
     }, {
-        name: 'expand-change', tips: '展开/折叠节点时触发，回调参数为TreeNode'
+        name: 'expand-change', tips: '展开/折叠节点时调用该事件函数，事件回调参数 (treeNode: Object)'
     }, {
-        name: 'disable-change', tips: '节点拖拽结束触发，回调参数（dragNode / targetNode）'
+        name: 'disable-change', tips: '节点拖拽结束时调用该事件函数，事件回调参数 (treeNode: Object | Array)'
     }],
     styles: ['size', 'margin'],
     directives: [

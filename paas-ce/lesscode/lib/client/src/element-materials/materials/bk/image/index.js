@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-image',
     group: '基础',
     order: 1,
-    events: [{ name: 'click' }],
+    events: [{ name: 'click', tips: '点击组件时调用该事件函数，事件回调参数 (event: Event)' }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {
         display: 'inline-block',

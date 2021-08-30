@@ -18,9 +18,9 @@ export default {
     order: 5,
     interactiveShow: false,
     events: [
-        { name: 'show', tips: '显示组件后的回调函数' },
-        { name: 'hidden', tips: '关闭组件后的回调函数' },
-        { name: 'animation-end', tips: '关闭组件后动画结束的回调函数' }
+        { name: 'show', tips: '显示组件后调用该事件函数，暂无事件回调参数' },
+        { name: 'hidden', tips: '关闭组件后调用该事件函数，暂无事件回调参数' },
+        { name: 'animation-end', tips: '关闭组件后动画结束时调用该事件函数，暂无事件回调参数' }
     ],
     renderStyles: {
         display: 'inline-block'
