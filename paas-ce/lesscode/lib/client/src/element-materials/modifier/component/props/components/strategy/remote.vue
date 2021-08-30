@@ -12,8 +12,7 @@
 <template>
     <section>
         <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
-            <span v-if="name === 'initFormData'" class="form-title under-line">表单数据<span class="form-tip">（更新将会覆盖已有数据）</span></span>
-            <span v-else :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
+            <span :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
             <span class="remote-example" @click="handleShowExample">数据示例</span>
         </div>
         <div class="remote-content">
@@ -38,8 +37,8 @@
 <script>
     import { mapGetters } from 'vuex'
     import selectFunc from '@/components/methods/select-func'
-    import { walkGrid } from '@/common/util.js'
     import { bus } from '@/common/bus'
+    import functionHelper from '@/components/methods/function-helper'
 
     export default {
         components: {
@@ -80,7 +79,6 @@
                     methodCode: '',
                     params: []
                 },
-                propDirMap: {},
                 usedMethodMap: {},
                 isShow: false,
                 editor: {}
@@ -107,15 +105,19 @@
                 this.change(this.name, this.defaultValue, this.type, JSON.parse(JSON.stringify(this.remoteData)))
             },
 
+            getVariableVal (variable) {
+                const { defaultValue, defaultValueType, valueType } = variable
+                let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
+                if (valueType === 6) value = ''
+                if (valueType === 0) value = `'${value}'`
+                return value
+            },
+
             processVarInFunParams (str, funcName) {
                 return (str || '').replace(/\{\{([^\}]+)\}\}/g, (all, variableCode) => {
                     const curVar = this.variableList.find((variable) => (variable.variableCode === variableCode))
                     if (curVar) {
-                        const { defaultValue, defaultValueType, valueType } = curVar
-                        let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
-                        if (valueType === 6) value = ''
-                        if (valueType === 0) value = `'${value}'`
-                        return value
+                        return this.getVariableVal(curVar)
                     } else {
                         throw new Error(`函数【${funcName}】里引用的变量【${variableCode}】不存在，请检查`)
                     }
@@ -165,7 +167,7 @@
             },
 
             processFuncBody (funcName, funcBody) {
-                return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
+                return functionHelper.replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
                     if (funcCode) {
                         const curFunc = this.usedMethodMap[funcCode] || this.getMethodByCode(funcCode)
                         if (curFunc.id) {
@@ -175,9 +177,9 @@
                         }
                     }
                     if (dirKey) {
-                        const curDir = this.propDirMap[dirKey]
-                        if (curDir) return `this.${dirKey}`
-                        else throw new Error(`函数【${funcName}】里引用的指令【${dirKey}】不存在，请检查`)
+                        const curVar = this.variableList.find((variable) => (variable.variableCode === dirKey))
+                        if (curVar) return this.getVariableVal(curVar)
+                        else throw new Error(`函数【${funcName}】里引用的变量【${dirKey}】不存在，请检查`)
                     }
                 })
             },
@@ -254,15 +256,6 @@
 
                 let methodStr
                 try {
-                    // 记录当前页面哪些属性用到了指令
-                    const callBack = (component) => {
-                        const renderDirectives = component.renderDirectives || []
-                        renderDirectives.forEach((dir) => {
-                            const val = dir.val
-                            if (val !== '') this.propDirMap[val] = true
-                        })
-                    }
-                    this.targetData.forEach((grid, index) => walkGrid(this.targetData, grid, callBack, callBack, index))
                     methodStr = this.generateMethod(this.remoteData.methodCode)
                 } catch (error) {
                     this.$bkMessage({ theme: 'error', message: error.message || error || '函数格式有误，请修改后再试', limit: 1 })

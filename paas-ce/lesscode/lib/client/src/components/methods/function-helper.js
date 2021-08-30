@@ -10,6 +10,7 @@
  */
 import store from '@/store'
 import { walkGrid } from '@/common/util'
+const acorn = require('acorn')
 
 function getCurUsedFuncs () {
     const funcGroups = store.getters['functions/funcGroups']
@@ -23,14 +24,13 @@ function getCurUsedFuncs () {
         if ([undefined, ''].includes(code)) return
         let hasFound = false
         funcGroups.forEach((group) => {
-            const funReg = /lesscode\[\'\$\{func:([\S]+)\}\'\]/g
             const functionList = group.functionList || []
             const curFunc = functionList.find((x) => (x.funcCode === code))
             if (curFunc) {
                 hasFound = true
                 if (!usedFuncMap[curFunc.id]) {
-                    usedFuncMap[curFunc.id] = curFunc;
-                    (curFunc.funcBody || '').replace(funReg, (allStr, funcCode) => {
+                    usedFuncMap[curFunc.id] = curFunc
+                    replaceFuncKeyword(curFunc.funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
                         if (funcCode) findUsedFuncsByCode(funcCode)
                     })
                 }
@@ -80,6 +80,59 @@ function getCurUsedFuncs () {
     return [usedFuncMap, errMessage]
 }
 
-export {
-    getCurUsedFuncs
+// 替换函数中的变量和函数
+function replaceFuncKeyword (funcBody = '', callBack) {
+    const commentsPositions = []
+    acorn.parse(funcBody, {
+        onComment (isBlock, text, start, end) {
+            commentsPositions.push({
+                start,
+                end
+            })
+        },
+        allowReturnOutsideFunction: true
+    })
+    return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
+        const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
+        return isInComments ? all : callBack(all, first, second, dirKey, funcStr, funcCode)
+    })
+}
+
+function getDefaultFunc (options = {}) {
+    return {
+        funcName: '',
+        funcCode: '',
+        funcGroupId: '',
+        funcType: 0,
+        funcParams: [],
+        remoteParams: [],
+        withToken: 0,
+        funcApiUrl: '',
+        funcMethod: 'get',
+        funcApiData: '',
+        funcSummary: '',
+        funcBody: '/**\r\n'
+        + '* 1. 空白函数，函数内容完全由用户编写\r\n'
+        + '* 2. 这里编辑管理的函数，用于画布页面的属性配置和事件绑定\r\n'
+        + '* 3. 用于属性时：函数需要返回值，该返回值将会赋值给属性\r\n'
+        + '* 4. 用于事件时：函数将在事件触发时执行\r\n'
+        + '* 5. 可以使用 lesscode.变量标识，必须通过编辑器自动补全功能选择对应变量，来获取或者修改变量值\r\n'
+        + '* 6. 可以使用 lesscode.方法名，必须通过编辑器自动补全功能选择对应函数，来调用项目中的函数\r\n'
+        + '* 7. 用于属性时示例如下：\r\n'
+        + '* return Promise.all([\r\n'
+        + `*     this.$http.get('${location.origin}/api/data/getMockData'),\r\n`
+        + `*     this.$http.post('${location.origin}/api/data/postMockData', { value: 2 })\r\n`
+        + '* ]).then(([getDataRes, postDataRes]) => {\r\n'
+        + '*     return [...getDataRes.data, ...postDataRes.data]\r\n'
+        + '* })\r\n'
+        + '*/\r\n',
+        id: undefined,
+        ...options
+    }
+}
+
+export default {
+    getCurUsedFuncs,
+    replaceFuncKeyword,
+    getDefaultFunc
 }

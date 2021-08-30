@@ -13,7 +13,8 @@
     <div>
         <remote
             name="initFormData"
-            title=""
+            title="表单数据（更新将会覆盖已有数据）"
+            tips="绑定函数后，需要手动获取初始表单数据"
             :auto-get-data="false"
             :default-value="{}"
             :remote-validate="validateObject"

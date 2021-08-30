@@ -1,16 +1,16 @@
 <template>
-    <bk-form :label-width="84" :model="copyForm" ref="funcForm" :form-type="formType">
+    <bk-form :label-width="110" :model="copyForm" ref="funcForm" :form-type="formType">
         <bk-form-item
             label="函数名称"
-            :required="true"
-            :rules="[requireRule('函数名称'), nameRepeatRule, groupNameRule]"
             property="funcName"
-            error-display-type="normal">
+            error-display-type="normal"
+            :required="true"
+            :rules="[requireRule('函数名称'), nameRepeatRule, groupNameRule]">
             <bk-input
                 v-model="copyForm.funcName"
                 @input="(val) => updateValue('funcName', val)"
-                placeholder="由大小写英文字母、数字组成，开头和结尾还可以是下划线，且必须符合驼峰命名规范"
-            >
+                :disabled="disabled"
+                placeholder="由大小写英文字母、数字组成，开头和结尾还可以是下划线，且必须符合驼峰命名规范">
             </bk-input>
         </bk-form-item>
     </bk-form>

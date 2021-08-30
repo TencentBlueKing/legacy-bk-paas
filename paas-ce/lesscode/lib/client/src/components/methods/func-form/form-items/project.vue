@@ -1,12 +1,17 @@
 <template>
-    <bk-form :label-width="84" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-bottom">
+    <bk-form :label-width="110" :model="copyForm" ref="funcForm" :form-type="formType" class="func-form-bottom">
         <bk-form-item
             :rules="[requireRule('项目')]"
             label="项目"
             property="projectId"
             error-display-type="normal"
             required>
-            <bk-select @toggle="getProjectList" @selected="changeMarketFunc" :clearable="false" :loading="isLoading">
+            <bk-select
+                @toggle="getProjectList"
+                @selected="changeMarketFunc"
+                :clearable="false"
+                :loading="isLoading"
+                :disabled="disabled">
                 <bk-option v-for="option in projectList"
                     :key="option.id"
                     :id="option.id"

@@ -11,25 +11,25 @@
                 :key="index"
                 :show-foot="true"
                 :show-head="false"
-                class="function-card">
+                class="function-card"
+                @click.native="handleShowSource(card)">
                 <h3 class="card-title">{{ card.funcName }}</h3>
                 <p class="card-body" v-bk-overflow-tips>{{ card.funcSummary }}</p>
                 <bk-popconfirm
                     v-if="isAdmin"
                     content="确定删除该函数？"
                     width="280"
-                    trigger="click"
                     @confirm="handleDeleteFunc(card)">
                     <i class="bk-icon icon-close delete-card"></i>
                 </bk-popconfirm>
 
                 <div slot="footer" class="foot-main">
-                    <bk-button text class="foot-btn" @click="handleShowSource(card)">查看源码</bk-button>
+                    <bk-button text class="foot-btn" @click.stop="handleShowSource(card)">查看源码</bk-button>
                     <bk-divider direction="vertical"></bk-divider>
-                    <bk-button text class="foot-btn" @click="handleShowAddFuncFromMarket(card)">添加至项目</bk-button>
+                    <bk-button text class="foot-btn" @click.stop="handleShowAddFuncFromMarket(card)">添加至项目</bk-button>
                     <template v-if="isAdmin">
                         <bk-divider direction="vertical"></bk-divider>
-                        <bk-button text class="foot-btn" @click="handleShowEditFunc(card)">编辑</bk-button>
+                        <bk-button text class="foot-btn" @click.stop="handleShowEditFunc(card)">编辑</bk-button>
                     </template>
                 </div>
             </bk-card>
@@ -70,23 +70,22 @@
         </bk-sideslider>
 
         <section v-if="showSource.isShow" class="source-function">
-            <monaco :read-only="true" height="500" width="800" :value="showSource.code" class="source-code">
-                <span slot="title" class="func-title">函数【{{ showSource.title }}】源码</span>
+            <source-market :func-data="showSource.func" class="source-code">
                 <i class="bk-drag-icon bk-drag-close-line icon-style" slot="tools" @click="showSource.isShow = false"></i>
-            </monaco>
+            </source-market>
         </section>
     </article>
 </template>
 
 <script>
     import { mapActions } from 'vuex'
-    import monaco from '@/components/methods/monaco'
+    import sourceMarket from '@/components/methods/func-form/source-market'
     import funcMarket from '@/components/methods/func-form/func-market'
     import addFunc from '@/components/methods/func-form/add-func'
 
     export default {
         components: {
-            monaco,
+            sourceMarket,
             funcMarket,
             addFunc
         },
@@ -98,7 +97,7 @@
                 isLoading: false,
                 showSource: {
                     isShow: false,
-                    code: '',
+                    func: {},
                     title: ''
                 },
                 showMarketFunc: {
@@ -226,8 +225,7 @@
 
             handleShowSource (card) {
                 this.showSource.isShow = true
-                this.showSource.code = card.funcBody
-                this.showSource.title = card.funcName
+                this.showSource.func = card
             },
 
             confirmClose () {
@@ -311,6 +309,7 @@
             .foot-btn {
                 flex: 1;
                 height: auto;
+                font-size: 12px;
             }
             /deep/ .bk-divider {
                 margin: 0 !important;
@@ -328,13 +327,11 @@
         z-index: 500;
         .source-code {
             position: absolute;
-            left: calc(50% - 400px);
-            top: calc(50% - 280px);
-        }
-        .func-title {
-            font-size: 14px;
-            color: #C4C6CC;
-            padding-left: 25px;
+            background: #fff;
+            width: 80%;
+            height: 74%;
+            top: 13%;
+            left: 10%;
         }
     }
     .add-footer {

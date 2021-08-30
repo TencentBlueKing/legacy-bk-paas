@@ -16,7 +16,9 @@
             <div class="title" v-show="!pageLoading">{{ setting.title }}</div>
             <div class="setting-list" v-show="!pageLoading">
                 <div class="setting-item" v-for="(field, index) in setting.settingFields" :key="index">
-                    <div class="field-label">{{field.name}}：</div>
+                    <div class="field-label">
+                        <span v-bk-tooltips="{ content: field.desc, disabled: !field.desc }" class="field-display-name">{{field.name}}</span>：
+                    </div>
                     <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
                         <template v-if="field !== editField.field">
                             <div class="field-content">
@@ -90,6 +92,18 @@
     import bkSelectFunc from '@/components/methods/select-func'
     import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
 
+    const lifeCycleDescMap = {
+        created: '在页面创建完成后被立即调用，这个时候页面还未渲染，可以做获取远程数据的操作',
+        beforeMount: '在页面挂载开始之前被调用',
+        mounted: '页面被挂载后调用，这个时候页面已经渲染完成，可以做 DOM 操作',
+        beforeUpdate: '在数据更新后，页面实时更新前调用，这里适合在更新之前访问现有的 DOM',
+        updated: '在数据更新后，页面实时更新后调用',
+        activated: '被 keep-alive 缓存的组件激活时调用',
+        deactivated: '被 keep-alive 缓存的组件停用时调用',
+        beforeDestroy: '页面关闭之前调用，页面中的数据仍然完全可用，可以做离开页面前的操作',
+        destroyed: '页面关闭后调用，该钩子被调用后，页面中的数据不可用'
+    }
+
     export default {
         components: {
             bkSelectFunc
@@ -141,7 +155,8 @@
                         id: lifeCycleKey,
                         name: lifeCycleKey,
                         type: 'selectFunc',
-                        editable: true
+                        editable: true,
+                        desc: lifeCycleDescMap[lifeCycleKey]
                     }
                 })
 
@@ -607,6 +622,10 @@
         &.function {
             .field-form {
                 align-items: flex-start;
+            }
+            .field-display-name {
+                cursor: pointer;
+                border-bottom: 1px dashed #999;
             }
         }
     }
