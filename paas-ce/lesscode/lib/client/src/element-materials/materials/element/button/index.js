@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-button',
     displayName: '按钮',
     group: '基础',
-    events: [{ name: 'click' }],
+    events: [{ name: 'click', tips: '点击时调用该事件函数，事件回调参数 (e: Event)' }],
     styles: ['size', 'padding', 'margin', 'display'],
     renderStyles: {
         display: 'inline-block'

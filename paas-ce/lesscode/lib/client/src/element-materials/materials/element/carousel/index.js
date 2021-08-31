@@ -17,7 +17,7 @@ export default {
     group: '其他',
     order: 1,
     events: [{
-        name: 'index-change', tips: '图片索引改变时触发该事件，回调参数为当前图片的索引'
+        name: 'change', tips: '幻灯片切换时触发时调用该事件函数，事件回调参数 (currentIndex: Number、preIndex: Number)'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {

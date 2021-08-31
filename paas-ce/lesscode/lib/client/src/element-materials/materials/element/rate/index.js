@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '分值改变时触发，回调参数为改变后的分值'
+        name: 'change', tips: '分值改变时调用该事件函数，事件回调参数 (value: Number)'
     }],
     styles: ['margin', 'display'],
     directives: [
