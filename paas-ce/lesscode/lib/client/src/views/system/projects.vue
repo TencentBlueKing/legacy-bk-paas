@@ -362,6 +362,7 @@
                     const { projectList, pageMap } = await this.$store.dispatch('project/query', { config: { params } })
                     this.projectList = projectList
                     this.pageMap = pageMap
+                    console.log(this.pageMap)
                 } catch (e) {
                     console.error(e)
                 } finally {
