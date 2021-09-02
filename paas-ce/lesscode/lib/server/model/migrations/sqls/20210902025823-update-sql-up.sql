@@ -1,3 +1,4 @@
+/* Replace with your SQL commands */
 ALTER TABLE `page`
 MODIFY COLUMN `pageName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '页面名称' AFTER `id`;
 
