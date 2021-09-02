@@ -10,24 +10,23 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from common.decorators import has_apigateway_manage_permission_for_classfunc
+from esb.apps.mixins import TemplateRenderMixin
 from esb.bkcore.models import ESBBuffetComponent, ESBBuffetMapping
-from .forms import ESBBuffetComponentForm, EditESBBuffetComponentForm, ESBBuffetMappingForm, EditESBBuffetMappingForm
-from esb.configs.default import menu_items
 from esb.common.django_utils import i18n_form
+from .forms import ESBBuffetComponentForm, EditESBBuffetComponentForm, ESBBuffetMappingForm, EditESBBuffetMappingForm
 from ..system.forms import ComponentSystemForm
 
 menu_active_item = "buffet_manager"
 DEFAULT_HOST = "http://paas.bking.com"
 
 
-class ApplyBuffetCompView(View):
+class ApplyBuffetCompView(View, TemplateRenderMixin):
     """Apply for a new buffet component"""
 
     @has_apigateway_manage_permission_for_classfunc
@@ -36,13 +35,12 @@ class ApplyBuffetCompView(View):
         system_form = ComponentSystemForm()
         form = i18n_form(form)
         system_form = i18n_form(system_form)
-        return render(
+        return self.render(
             request,
             "manager/buffet_comp/apply.html",
             {
                 "form": form,
                 "system_form": system_form,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
@@ -58,19 +56,18 @@ class ApplyBuffetCompView(View):
         system_form = ComponentSystemForm()
         form = i18n_form(form)
         system_form = i18n_form(system_form)
-        return render(
+        return self.render(
             request,
             "manager/buffet_comp/apply.html",
             {
                 "form": form,
                 "system_form": system_form,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
 
 
-class BuffetCompsView(View):
+class BuffetCompsView(View, TemplateRenderMixin):
     """Check and approve all BuffetComps"""
 
     @has_apigateway_manage_permission_for_classfunc
@@ -89,19 +86,18 @@ class BuffetCompsView(View):
         if not host.startswith(schema_prefix):
             host = "%s://%s" % (schema, host)
 
-        return render(
+        return self.render(
             request,
             "manager/buffet_comp/list.html",
             {
                 "items": items,
                 "host": "%s/api/c/self-service-api" % host,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
 
 
-class EditBuffetCompView(View):
+class EditBuffetCompView(View, TemplateRenderMixin):
     """Edit a BuffetComponent"""
 
     @has_apigateway_manage_permission_for_classfunc
@@ -113,14 +109,13 @@ class EditBuffetCompView(View):
         system_form = ComponentSystemForm()
         form = i18n_form(form)
         system_form = i18n_form(system_form)
-        return render(
+        return self.render(
             request,
             "manager/buffet_comp/edit.html",
             {
                 "item": item,
                 "form": form,
                 "system_form": system_form,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
@@ -139,19 +134,18 @@ class EditBuffetCompView(View):
         system_form = ComponentSystemForm()
         form = i18n_form(form)
         system_form = i18n_form(system_form)
-        return render(
+        return self.render(
             request,
             "manager/buffet_comp/edit.html",
             {
                 "form": form,
                 "system_form": system_form,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
 
 
-class BuffetMappingsView(View):
+class BuffetMappingsView(View, TemplateRenderMixin):
     """Check All Mappings"""
 
     @has_apigateway_manage_permission_for_classfunc
@@ -159,14 +153,13 @@ class BuffetMappingsView(View):
         form = ESBBuffetMappingForm()
         form_edit = EditESBBuffetMappingForm()
         items = ESBBuffetMapping.objects.all().order_by("created_time")
-        return render(
+        return self.render(
             request,
             "manager/buffet_comp/mapping/list.html",
             {
                 "items": items,
                 "form": form,
                 "form_edit": form_edit,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )

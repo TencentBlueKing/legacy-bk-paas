@@ -13,7 +13,6 @@ specific language governing permissions and limitations under the License.
 from builtins import str
 import json
 
-from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic import View
@@ -21,9 +20,9 @@ from django.http import Http404
 from django.utils.translation import ugettext as _
 
 from common.decorators import has_apigateway_manage_permission_for_classfunc
+from esb.apps.mixins import TemplateRenderMixin
 from esb.bkcore.models import ESBChannel, ComponentSystem
 from esb.common.django_utils import i18n_form, get_cur_language
-from esb.configs.default import menu_items
 from .forms import ESBChannelForm, EditESBChannelForm
 from ..system.forms import ComponentSystemForm
 from ..utils import md2html
@@ -31,7 +30,7 @@ from ..utils import md2html
 menu_active_item = "channel_manager"
 
 
-class ChannelListView(View):
+class ChannelListView(View, TemplateRenderMixin):
     """Channel list page"""
 
     @has_apigateway_manage_permission_for_classfunc
@@ -50,20 +49,19 @@ class ChannelListView(View):
         )
 
         cur_language = get_cur_language()
-        return render(
+        return self.render(
             request,
             "manager/channel/list.html",
             {
                 "channel_exists": channel_exists,
                 "systems": systems,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
                 "channel_term_html": md2html("%s/channel" % cur_language),
             },
         )
 
 
-class AddChannelView(View):
+class AddChannelView(View, TemplateRenderMixin):
     """Add channel view"""
 
     @has_apigateway_manage_permission_for_classfunc
@@ -72,13 +70,12 @@ class AddChannelView(View):
         system_form = ComponentSystemForm()
         form = i18n_form(form)
         system_form = i18n_form(system_form)
-        return render(
+        return self.render(
             request,
             "manager/channel/add.html",
             {
                 "form": form,
                 "system_form": system_form,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
@@ -92,19 +89,18 @@ class AddChannelView(View):
         system_form = ComponentSystemForm()
         form = i18n_form(form)
         system_form = i18n_form(system_form)
-        return render(
+        return self.render(
             request,
             "manager/channel/add.html",
             {
                 "form": form,
                 "system_form": system_form,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )
 
 
-class EditChannelView(View):
+class EditChannelView(View, TemplateRenderMixin):
     """Edit channel view"""
 
     @has_apigateway_manage_permission_for_classfunc
@@ -144,13 +140,12 @@ class EditChannelView(View):
             form.fields["path"].widget.attrs["readonly"] = True
             form.fields["component_codename"].widget.attrs["readonly"] = True
 
-        return render(
+        return self.render(
             request,
             "manager/channel/edit.html",
             {
                 "form": form,
                 "system_form": system_form,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
                 "comp_conf_val": _comp_conf_val,
                 "rate_limit_required": channel.rate_limit_required,
@@ -181,13 +176,12 @@ class EditChannelView(View):
         system_form = ComponentSystemForm()
         form = i18n_form(form)
         system_form = i18n_form(system_form)
-        return render(
+        return self.render(
             request,
             "manager/channel/edit.html",
             {
                 "form": form,
                 "system_form": system_form,
-                "menu_items": menu_items,
                 "menu_active_item": menu_active_item,
             },
         )

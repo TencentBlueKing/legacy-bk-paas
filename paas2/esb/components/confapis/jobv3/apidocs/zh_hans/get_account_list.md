@@ -22,10 +22,10 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_biz_id": 2,
     "category": 1,
     "start": 0,
-    "length": 100
+    "length": 1
 }
 ```
 
@@ -33,31 +33,36 @@
 
 ```json
 {
-    "result": true,
-    "code": 0,
-    "message": "success",
+  "code": 0,
+  "message": null,
+  "result": true,
+  "data": {
+    "start": 0,
+    "total": 12,
     "data": [
-        {
-            "id": 2,
-            "bk_biz_id": 1,
-            "account": "Administrator",
-            "alias": "Administrator",
-            "category":1,
-            "type":2,
-            "db_system_account_id":null,
-            "os": "Windows",
-            "creator": "system",
-            "create_time": 1591327232821,
-            "last_modify_user": "system",
-            "last_modify_time": 1591327232821
-        }
-    ]
+      {
+        "id": 70,
+        "account": "aaa",
+        "alias": "aaa",
+        "category": 1,
+        "type": 1,
+        "os": "Linux",
+        "creator": "admin",
+        "bk_biz_id": 2,
+        "create_time": 1614659536108,
+        "last_modify_user": "admin",
+        "last_modify_time": 1614659536116
+      }
+    ],
+    "length": 1
+  },
+  "request_id": "4e7acb216087eb96"
 }
 ```
 
 ### 返回结果参数说明
 
-#### data
+#### data.data
 
 | 字段      | 类型      | 描述      |
 |-----------|-----------|-----------|

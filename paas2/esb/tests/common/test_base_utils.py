@@ -226,4 +226,43 @@ def test_datetime_format(value, expected):
 )
 def test_get_md5(value, expected):
     result = base_utils.get_md5(value)
+
+
+@pytest.mark.parametrize(
+    "data, keys, default, expected",
+    [
+        (
+            {"a": "b"},
+            ["a"],
+            None,
+            "b",
+        ),
+        (
+            {"a": "b", "c": "d"},
+            ["a", "c"],
+            None,
+            "b",
+        ),
+        (
+            {"a": "b", "c": "d"},
+            ["not-exist", "c"],
+            None,
+            "d",
+        ),
+        (
+            {"a": "", "c": "d"},
+            ["a", "c"],
+            None,
+            "d",
+        ),
+        (
+            {},
+            ["a", "c"],
+            "",
+            "",
+        ),
+    ]
+)
+def test_get_first_not_empty_value(data, keys, default, expected):
+    result = base_utils.get_first_not_empty_value(data, keys, default)
     assert result == expected

@@ -101,7 +101,8 @@
     "message": "success",
     "data": {
         "job_instance_name": "API Quick execution script1521100521303",
-        "job_instance_id": 10000
+        "job_instance_id": 10000,
+		"step_instance_id": 10001
     }
 }
 ```
