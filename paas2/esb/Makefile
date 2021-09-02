@@ -16,10 +16,10 @@ poetry.lock: pyproject.toml
 	poetry lock --no-update
 
 requirements_dev.txt: poetry.lock
-	poetry export -f requirements.txt --without-hashes --dev -o requirements_dev.txt
+	poetry export -f requirements.txt --without-hashes --dev | grep -v "index-url" > requirements_dev.txt
 
 requirements.txt: poetry.lock requirements_dev.txt
-	poetry export -f requirements.txt --without-hashes -o requirements.txt
+	poetry export -f requirements.txt --without-hashes | grep -v "index-url" > requirements.txt
 
 VERSION: pyproject.toml
 	poetry version | awk '{print $$2}' > VERSION

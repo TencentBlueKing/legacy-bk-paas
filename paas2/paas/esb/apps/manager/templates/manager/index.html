@@ -79,6 +79,7 @@
                     </li>
                 </ul>
             </div>
+            {% if not APIGATEWAY_ENABLED %}
             <div style="margin-top: 30px;">
                 <span style="font-weight: bold;">{% trans "在线自助接入流程" %}
                     <a href="{% url 'guide.page' name='buffet_component' %}" title="{% trans '跳转到自助接入介绍' %}" target="_blank">
@@ -109,6 +110,7 @@
                     </li>
                 </ul>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

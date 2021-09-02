@@ -39,6 +39,7 @@ class FsListUsers(Component, SetupConfMixin):
                         "domain",
                         "category_id",
                         "logo",
+                        "staff_status",
                     ]
                 ),
             }

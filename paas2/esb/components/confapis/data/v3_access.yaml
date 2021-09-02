@@ -156,7 +156,7 @@
   label: 删除部署计划
   method: DELETE
   comp_codename: generic.data.datav3_component
-  dest_path: /v3/access/deploy_plan/
+  dest_path: /v3/access/deploy_plan/{raw_data_id}/
   dest_http_method: DELETE
   is_hidden: true
 

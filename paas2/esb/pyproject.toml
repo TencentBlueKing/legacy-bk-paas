@@ -49,6 +49,11 @@ pre-commit = "*"
 ipdb = "*"
 tox = "^3.23.0"
 
+[[tool.poetry.source]]
+name = "tencent"
+url = "https://mirrors.cloud.tencent.com/pypi/simple"
+default = true
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"

@@ -15,6 +15,7 @@
 | bk_obj_id           | string     | 是     | 模型ID                      |
 | page                | object     | 是     | 分页参数                    |
 | condition           | object     | 否     | 具有关联关系的模型实例查询条件                    |
+| time_condition      | object     | 否     | 按时间查询模型实例的查询条件 |
 | fields              | map     | 否     | 指定查询模型实例返回的字段,key为模型ID，value为该查询模型要返回的模型属性字段|
 
 #### page
@@ -32,6 +33,21 @@
 | field     |string      |是      | 取值为模型的字段名                                               |
 | operator  |string      |是      | 取值为：$regex $eq $ne                                           |
 | value     |string      |是      | field配置的模型字段名所对应的值                                  |          
+
+#### time_condition
+
+| 字段   | 类型   | 必选 |  描述              |
+|-------|--------|-----|--------------------|
+| oper  | string | 是  | 操作符，目前只支持and |
+| rules | array  | 是  | 时间查询条件         |
+
+#### rules
+
+| 字段   | 类型   | 必选 | 描述                             |
+|-------|--------|-----|----------------------------------|
+| field | string | 是  | 取值为模型的字段名                  |
+| start | string | 是  | 起始时间，格式为yyyy-MM-dd hh:mm:ss |
+| end   | string | 是  | 结束时间，格式为yyyy-MM-dd hh:mm:ss |          
 
 
 ### 请求参数示例
@@ -54,11 +70,21 @@
         ]
     },
     "condition": {
-        "host": [
+        "user": [
             {
                 "field": "operator",
                 "operator": "$regex",
                 "value": "admin"
+            }
+        ]
+    },
+    "time_condition": {
+        "oper": "and",
+        "rules": [
+            {
+                "field": "create_time",
+                "start": "2021-05-13 01:00:00",
+                "end": "2021-05-14 01:00:00"
             }
         ]
     }

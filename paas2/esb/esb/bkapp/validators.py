@@ -16,7 +16,10 @@ import base64
 import hashlib
 
 from django.utils.encoding import force_bytes
+from django.conf import settings
+from cachetools import cached, TTLCache
 
+from common.base_utils import get_first_not_empty_value
 from common.base_validators import BaseValidator, ValidationError
 from common.errors import error_codes
 from esb.exdb.bkpaas import AppSecureInfo
@@ -31,6 +34,13 @@ class AppAuthValidator(BaseValidator):
         super(AppAuthValidator, self).__init__(*args, **kwargs)
 
     def validate(self, request):
+        if request.g.authorization.get("access_token"):
+            validator = AccessTokenValidator()
+            validator.validate(request)
+
+            self._set_request_current_app(request, validator.get_bk_app_code())
+            return
+
         if self.verified_type == "app_secret":
             validator = AppSecretValidator()
             validator.validate(request)
@@ -43,7 +53,7 @@ class AppAuthValidator(BaseValidator):
 
         elif self.verified_type == "signature_or_app_secret":
             signature = request.GET.get("bk_signature") or request.GET.get("signature")
-            app_secret = request.g.kwargs.get("bk_app_secret") or request.g.kwargs.get("app_secret")
+            app_secret = get_first_not_empty_value(request.g.authorization, keys=["bk_app_secret", "app_secret"])
             if signature:
                 validator = SignatureValidator()
                 validator.validate(request)
@@ -58,6 +68,55 @@ class AppAuthValidator(BaseValidator):
         else:
             raise ValidationError("Please choose a valid APP verification method")
 
+    def _set_request_current_app(self, request, bk_app_code):
+        request.g.app_code = bk_app_code
+
+
+class AccessTokenValidator(BaseValidator):
+
+    def validate(self, request):
+        bk_app_code, bk_username = self._verify_access_token(request.g.authorization["access_token"])
+
+        self._validated_data = {
+            "bk_app_code": bk_app_code,
+            "bk_username": bk_username,
+        }
+
+    @property
+    def validated_data(self):
+        if not hasattr(self, "_validated_data"):
+            raise ValidationError("You must call `.validate()` before accessing validated_data")
+
+        return self._validated_data
+
+    def get_bk_app_code(self):
+        return self.validated_data["bk_app_code"]
+
+    def get_bk_username(self):
+        # ESB 要求用户不能为空，因此，access_token 必须为用户类型
+        if not self.validated_data["bk_username"]:
+            raise ValidationError("the access_token is the application type and cannot indicate the user")
+
+        return self.validated_data["bk_username"]
+
+    @staticmethod
+    @cached(cache=TTLCache(
+        maxsize=settings.BK_SSM_ACCESS_TOKEN_CACHE_MAXSIZE,
+        ttl=settings.BK_SSM_ACCESS_TOKEN_CACHE_TTL_SECONDS,
+    ))
+    def _verify_access_token(access_token):
+        from components.bk.apisv2.bk_ssm.verify_access_token import VerifyAccessToken
+
+        result = VerifyAccessToken().invoke(kwargs={"access_token": access_token})
+
+        if not result["result"]:
+            raise ValidationError("verify access_token failed, please check if the access_token is valid")
+
+        bk_app_code = result["data"].get("bk_app_code")
+        bk_username = result["data"].get("identity", {}).get("username", "")
+
+        return bk_app_code, bk_username
+
 
 class AppSecretValidator(BaseValidator):
     """
@@ -68,9 +127,8 @@ class AppSecretValidator(BaseValidator):
         super(AppSecretValidator, self).__init__(*args, **kwargs)
 
     def validate(self, request):
-        kwargs = request.g.kwargs
         app_code = request.g.app_code
-        app_secret = kwargs.get("bk_app_secret") or kwargs.get("app_secret")
+        app_secret = get_first_not_empty_value(request.g.authorization, keys=["bk_app_secret", "app_secret"])
 
         if not app_code:
             raise ValidationError("APP Code [bk_app_code] cannot be empty")

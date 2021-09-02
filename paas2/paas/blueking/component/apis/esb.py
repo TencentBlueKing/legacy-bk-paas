@@ -38,6 +38,12 @@ class CollectionsEsb(object):
             path="/api/c/compapi/esb/add_app_component_perm/",
             description="Add component permission for app",
         )
+        self.get_weixin_config = ComponentAPI(
+            client=self.client,
+            method="GET",
+            path="/api/c/compapi/esb/get_weixin_config/",
+            description="Get wechat config",
+        )
         self.get_weixin_access_token = ComponentAPI(
             client=self.client,
             method="GET",

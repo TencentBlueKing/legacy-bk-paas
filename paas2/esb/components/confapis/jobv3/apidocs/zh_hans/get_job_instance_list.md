@@ -22,7 +22,7 @@
 | status            | int    | 否   | 任务状态。1 -  等待执行，2 - 正在执行，3 - 执行成功，4 - 执行失败，7 - 等待确认，10 - 强制终止中，11 - 强制终止成功，13 - 确认终止 |
 | ip                | string | 否   | 执行目标服务器IP, 精准匹配                                   |
 | start             | int    | 否   | 默认0表示从第1条记录开始返回                                 |
-| length            | int    | 否   | 返回记录数量，不传此参数默认返回 20 条                       |
+| length            | int    | 否   | 单次返回最大记录数，最大1000，不传默认为20                   |
 
 ### 请求参数示例
 
@@ -48,30 +48,30 @@
 
 ```json
 {
-    "result":true,
-    "code":0,
-    "message":"success",
-    "data":{
-        "data":[
+    "result": true, 
+    "code": 0, 
+    "message": "success", 
+    "data": {
+        "data": [
             {
-                "bk_biz_id": 1,
-                "id": 100,
-                "job_template_id": 1,
-                "job_plan_id": 1,
-                "name": "test",
-                "operator": "admin",
-                "create_time":1546272000000,
-                "start_time": 1546272000000,
-                "end_time":1546272001000,
-                "total_time": 1000,
-                "launch_mode": 1,
-                "task_status": 3,
+                "bk_biz_id": 1, 
+                "id": 100, 
+                "job_template_id": 1, 
+                "job_plan_id": 1, 
+                "name": "test", 
+                "operator": "admin", 
+                "create_time": 1546272000000, 
+                "start_time": 1546272000000, 
+                "end_time": 1546272001000, 
+                "total_time": 1000, 
+                "launch_mode": 1, 
+                "task_status": 3, 
                 "task_type": 0
             }
-        ],
-        "start":0,
-        "length":20,
-        "total":1
+        ], 
+        "start": 0, 
+        "length": 20, 
+        "total": 1
     }
 }
 ```

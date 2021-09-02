@@ -34,12 +34,12 @@
   dest_http_method: GET
   is_hidden: true
 
-- path: /data/v3/dataflow/flow/flows/link_rules_info/
-  name: v3_dataflow_flow_flows_link_rules_info_get
+- path: /data/v3/dataflow/flow/node_link_rules_v2/
+  name: v3_dataflow_flow_node_link_rules_v2_get
   label: 查询节点连线规则配置
   method: GET
   comp_codename: generic.data.datav3_component
-  dest_path: /v3/dataflow/flow/flows/link_rules_info/
+  dest_path: /v3/dataflow/flow/node_link_rules_v2/
   dest_http_method: GET
   is_hidden: true
 
@@ -565,12 +565,12 @@
   dest_http_method: GET
   is_hidden: true
 
-- path: /data/v3/dataflow/flow/node_type_config/
-  name: v3_dataflow_flow_node_type_config_get
+- path: /data/v3/dataflow/flow/node_type_config_v2/
+  name: v3_dataflow_flow_node_type_configV2_get
   label: 查询节点配置信息
   method: GET
   comp_codename: generic.data.datav3_component
-  dest_path: /v3/dataflow/flow/node_type_config/
+  dest_path: /v3/dataflow/flow/node_type_config_v2/
   dest_http_method: GET
   is_hidden: true
 
@@ -598,15 +598,6 @@
   method: GET
   comp_codename: generic.data.datav3_component
   dest_path: /v3/dataflow/flow/list_function_doc/
-  dest_http_method: GET
-  is_hidden: true
-
-- path: /data/v3/dataflow/flow/node_link_rules/
-  name: v3_dataflow_flow_node_link_rules_get
-  label: 获取节点连线规则
-  method: GET
-  comp_codename: generic.data.datav3_component
-  dest_path: /v3/dataflow/flow/node_link_rules/
   dest_http_method: GET
   is_hidden: true
 
@@ -653,4 +644,58 @@
   comp_codename: generic.data.datav3_component
   dest_path: /v3/dataflow/flow/udfs/{function_name}/
   dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/log/get_yarn_log_length/
+  name: v3_dataflow_flow_log_get_yarn_log_length_get
+  label: 获取计算任务的日志文件长度
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/log/get_yarn_log_length/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/log/get_common_log/
+  name: v3_dataflow_flow_log_get_common_log_get
+  label: 获取flow中的某个计算任务的运行日志数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/log/get_common_log/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/log/get_flow_job_submit_history/
+  name: v3_dataflow_flow_log_get_flow_job_submit_history_get
+  label: 获取flow中job的任务提交历史
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/log/get_flow_job_submit_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/log/get_flow_job_submit_log_file_size/
+  name: v3_dataflow_flow_log_get_flow_job_submit_log_file_size_get
+  label: 获取flow中job的任务提交日志文件大小
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/log/get_flow_job_submit_log_file_size/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/log/get_flow_job_submit_log/
+  name: v3_dataflow_flow_log_get_flow_job_submit_log_get
+  label: 获取flow中job的任务提交日志
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/log/get_flow_job_submit_log/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/dataflow/flow/log/get_flow_job_app_id/
+  name: v3_dataflow_flow_log_get_flow_job_app_id_get
+  label: 获取flow中的job对应的yarn app id
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/log/get_flow_job_app_id/
+  dest_http_method: GET
   is_hidden: true

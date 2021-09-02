@@ -26,6 +26,9 @@ from common.errors import error_codes
 from common.log import logger
 
 
+EMPTY_VALUES = (None, "", [], (), {})
+
+
 class CustomJSONEncoder(json.JSONEncoder):
     """
     JSONEncoder subclass that knows how to encode date/time and decimal types.
@@ -278,3 +281,14 @@ def html_escape(html, is_json=False):
         html = html.replace('"', "&quot;")
         html = html.replace("'", "&#39;")
     return html
+
+
+def get_first_not_empty_value(data, keys, default=None):
+    """
+    获取 keys 中第一个数据非空的字段数据
+    """
+    for key in keys:
+        if data.get(key) not in EMPTY_VALUES:
+            return data[key]
+
+    return default

@@ -71,8 +71,8 @@
         "rules": [
         {
             "field": "bk_host_outerip",
-            "operator": "begins_with",
-            "value": "127.0"
+            "operator": "equal",
+            "value": "127.0.0.1"
         }, {
             "condition": "OR",
             "rules": [{

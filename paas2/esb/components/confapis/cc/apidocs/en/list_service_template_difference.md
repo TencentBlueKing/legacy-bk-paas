@@ -13,159 +13,76 @@ list difference between the service template and service instances (v3.9.19)
 | Field      | Type      | Required | Description                                                  |
 | ---------- | --------- | -------- | ------------------------------------------------------------ |
 | bk_biz_id  | int64       | Yes      | Business ID                                                  |
-|bk_module_id|int64 array|Yes|module id array|
+|bk_module_ids|int64 array|No|Module ID arrary, the max length is 20|
+|service_template_ids|int64 array|No|Service template ID arrary, the max length is 20|
+|is_partial|bool|Yes|If true, take service_template_ids as request variables and return service template status. Otherwise, take bk_module_ids as request variables and return module status |
 
 ### Request Parameters Example
 
-```json
+- Example 1
+``` json
 {
-    "bk_module_ids": [
-        60,
-        61
+    "bk_biz_id": 3,
+    "service_template_ids": [
+        1,
+        2
     ],
-    "bk_biz_id": 3
+    "is_partial": true
+}
+```
+- Example 2
+```
+{
+    "bk_biz_id": 3,
+    "bk_module_ids": [
+        11,
+        12
+    ],
+    "is_partial": false
 }
 ```
 
 ### Return Result Example
-
-```json
+- Example 1
+``` json
 {
     "result": true,
-    "bk_error_code": 0,
-    "bk_error_msg": "success",
+    "code": 0,
+    "message": "success",
     "permission": null,
-    "data": [
-        {
-            "bk_module_id": 61,
-            "unchanged": [],
-            "changed": [
-                {
-                    "process_template_id": 48,
-                    "process_template_name": "pr1",
-                    "service_instance_count": 3,
-                    "service_instances": [
-                        {
-                            "service_instance": {
-                                "id": 3,
-                                "name": "192.168.15.13_pr1"
-                            },
-                            "process": null,
-                            "changed_attributes": [
-                                {
-                                    "id": 55,
-                                    "property_id": "description",
-                                    "property_name": "remark",
-                                    "property_value": "",
-                                    "template_property_value": {
-                                        "value": "aaa",
-                                        "as_default_value": true
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "service_instance": {
-                                "id": 5,
-                                "name": "192.168.15.12_pr1"
-                            },
-                            "process": null,
-                            "changed_attributes": [
-                                {
-                                    "id": 55,
-                                    "property_id": "description",
-                                    "property_name": "remark",
-                                    "property_value": "",
-                                    "template_property_value": {
-                                        "value": "aaa",
-                                        "as_default_value": true
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "service_instance": {
-                                "id": 4,
-                                "name": "192.168.15.11_pr1"
-                            },
-                            "process": null,
-                            "changed_attributes": [
-                                {
-                                    "id": 55,
-                                    "property_id": "description",
-                                    "property_name": "remark",
-                                    "property_value": "",
-                                    "template_property_value": {
-                                        "value": "aaa",
-                                        "as_default_value": true
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "added": [],
-            "removed": [],
-            "changed_attributes": [],
-            "has_difference": true
-        },
-        {
-            "bk_module_id": 60,
-            "unchanged": [],
-            "changed": [
-                {
-                    "process_template_id": 48,
-                    "process_template_name": "pr1",
-                    "service_instance_count": 2,
-                    "service_instances": [
-                        {
-                            "service_instance": {
-                                "id": 1,
-                                "name": "192.168.15.10_pr1"
-                            },
-                            "process": null,
-                            "changed_attributes": [
-                                {
-                                    "id": 55,
-                                    "property_id": "description",
-                                    "property_name": "remark",
-                                    "property_value": "",
-                                    "template_property_value": {
-                                        "value": "aaa",
-                                        "as_default_value": true
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "service_instance": {
-                                "id": 2,
-                                "name": "192.168.15.1_pr1"
-                            },
-                            "process": null,
-                            "changed_attributes": [
-                                {
-                                    "id": 55,
-                                    "property_id": "description",
-                                    "property_name": "remark",
-                                    "property_value": "",
-                                    "template_property_value": {
-                                        "value": "aaa",
-                                        "as_default_value": true
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "added": [],
-            "removed": [],
-            "changed_attributes": [],
-            "has_difference": true
-        }
-    ]
+    "data": {
+        "service_templates": [
+            {
+                "service_template_id": 1,
+                "need_sync": true
+            },
+            {
+                "service_template_id": 2,
+                "need_sync": false
+            }
+        ]
+    }
+}
+```
+- Example 2
+```
+{
+    "result": true,
+    "code": 0,
+    "message": "success",
+    "permission": null,
+    "data": {
+        "modules": [
+            {
+                "bk_module_id": 11,
+                "need_sync": false
+            },
+            {
+                "bk_module_id": 12,
+                "need_sync": true
+            }
+        ]
+    }
 }
 ```
 
@@ -175,10 +92,20 @@ list difference between the service template and service instances (v3.9.19)
 
 | Field | Type  | Description       |
 | ----- | ----- | ----------------- |
-|bk_module_id|int|module ID|
-|unchanged|object array|unchanged processes info|
-|changed|object array|changed processes info|
-|added|object array|added processes info|
-|removed|object array|removed processes info|
-|changed_attributes|object array|the changed attributes between service template and module instance|
-|has_difference|bool|whether the processes under module has any difference with service template|
+|service_templates|object array|Sevice template info array|
+|modules|object array|Module info array|
+
+#### service_templates
+
+| Field | Type  | Description       |
+| ----- | ----- | ----------------- |
+|service_template_id|int|Service template ID|
+|need_sync|bool|Whether the service instances associated with the service template has any difference with the service template|
+
+#### modules
+
+| Field | Type  | Description       |
+| ----- | ----- | ----------------- |
+|bk_module_id|int|Module ID|
+|need_sync|bool|Whether the service instances under the module has any difference with service template|
+

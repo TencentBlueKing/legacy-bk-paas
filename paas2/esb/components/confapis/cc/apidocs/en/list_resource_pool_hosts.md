@@ -70,8 +70,8 @@ reference: <https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuild
         "rules": [
         {
             "field": "bk_host_outerip",
-            "operator": "begins_with",
-            "value": "127.0"
+            "operator": "equal",
+            "value": "127.0.0.1"
         }, {
             "condition": "OR",
             "rules": [{

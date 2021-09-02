@@ -13,16 +13,17 @@ specific language governing permissions and limitations under the License.
 
 import json
 
-import pytest
-
 import mock
+import pytest
+from django.test import TestCase
+
 from common import errors
+from common.base_utils import FancyDict
 from common.base_validators import ValidationError
 from common.constants import COMPONENT_STATUSES
 from common.errors import error_codes
-from django.test import TestCase
 from esb.bkcore.models import ESBChannel
-from esb.channel.base import BaseChannel, ChannelManager
+from esb.channel.base import BaseChannel, ChannelManager, RequestHandler, ApiChannel
 
 
 class TestChannelManager(TestCase):
@@ -133,10 +134,10 @@ class TestChannelManager(TestCase):
         self.assertIsNone(path_vars)
 
 
-class TestBaseChannel(object):
+class TestBaseChannel:
     @pytest.fixture(autouse=True)
     def setup_fixtures(self):
-        self.request = mock.MagicMock(META={"REMOTE_ADDR": "127.0.0.1"})
+        self.request = mock.MagicMock(META={"REMOTE_ADDR": "127.0.0.1"}, body="")
         self.comp_class = mock.MagicMock()
         self.comp = self.comp_class.return_value
         self.path = "/"
@@ -157,6 +158,7 @@ class TestBaseChannel(object):
             "api_type",
             "headers",
             "channel_conf",
+            "authorization",
         ]:
             assert hasattr(self.request.g, attr), attr
 
@@ -220,10 +222,158 @@ class TestBaseChannel(object):
         assert result["code"] == error_codes.COMMON_ERROR.code.code
 
     @pytest.mark.parametrize(
-        'header, expected',
+        "header, expected",
         [
-            ('X_BK_TOKEN', 'X-Bk-Token'),
+            ("X_BK_TOKEN", "X-Bk-Token"),
         ]
     )
     def test_capitalize_header(self, header, expected):
         assert expected == BaseChannel.capitalize_header(header)
+
+    @pytest.mark.parametrize(
+        "callback, expected",
+        [
+            (None, False),
+            ("", False),
+            ("test_<>", False),
+            ("#test_01", False),
+            ("test 01", False),
+            ("test_01", True),
+        ]
+    )
+    def test_is_valid_jsonp_callback(self, callback, expected):
+        assert expected == self.channel._is_valid_jsonp_callback(callback)
+
+
+class TestApiChannel:
+    @pytest.mark.parametrize(
+        "app_code, authorization, expected",
+        [
+            (
+                "",
+                {"bk_app_code": "app1"},
+                "app1"
+            ),
+            (
+                "",
+                {"app_code": "app2"},
+                "app2"
+            ),
+            (
+                "exist-app",
+                {"bk_app_code": "app1"},
+                "exist-app"
+            ),
+            (
+                "",
+                {},
+                ""
+            ),
+        ]
+    )
+    def test_before_handle_request(self, fake_request, mocker, app_code, authorization, expected):
+        request = fake_request
+        request.g = FancyDict({
+            "app_code": app_code,
+            "authorization": authorization,
+        })
+
+        channel = ApiChannel(mock.MagicMock, "")
+        channel.request = request
+
+        channel.before_handle_request()
+        assert request.g.app_code == expected
+
+
+class TestRequestHandler:
+
+    @pytest.mark.parametrize(
+        "headers, params, expected",
+        [
+            ({}, {}, {}),
+            (
+                {"HTTP_X_BKAPI_AUTHORIZATION": json.dumps({"a": "b"})},
+                {},
+                {"a": "b"},
+            ),
+            (
+                {},
+                {"bk_app_code": "a", "bk_app_secret": "b", "c": "d"},
+                {"bk_app_code": "a", "bk_app_secret": "b"},
+            ),
+            (
+                {"HTTP_X_BKAPI_AUTHORIZATION": json.dumps({"a": "b"})},
+                {"bk_app_code": "a", "bk_app_secret": "b", "c": "d"},
+                {"a": "b"},
+            ),
+        ]
+    )
+    def test_get_request_authorization(self, request_factory, headers, params, expected):
+        request = request_factory.get("", data=params, **headers)
+        authorization = RequestHandler(request).get_request_authorization()
+        assert authorization == expected
+
+    @pytest.mark.parametrize(
+        "headers, expected",
+        [
+            ({}, None),
+            (
+                {"HTTP_X_BKAPI_AUTHORIZATION": json.dumps({"a": "b"})},
+                {"a": "b"},
+            )
+        ]
+    )
+    def test_get_authorization_from_header(self, request_factory, headers, expected):
+        request = request_factory.get("", **headers)
+        authorization = RequestHandler(request)._get_authorization_from_header()
+        assert authorization == expected
+
+    def test_get_authorization_from_header_error(self, request_factory):
+        request = request_factory.get("", HTTP_X_BKAPI_AUTHORIZATION="test")
+        with pytest.raises(Exception):
+            RequestHandler(request)._get_authorization_from_header()
+
+    @pytest.mark.parametrize(
+        "params, expected",
+        [
+            (
+                {
+                    "bk_app_code": "app1",
+                    "bk_app_secret": "secret1",
+                    "app_code": "app2",
+                    "app_secret": "app3",
+                    "bk_token": "token",
+                    "bk_username": "admin1",
+                    "username": "admin2",
+                },
+                {
+                    "bk_app_code": "app1",
+                    "bk_app_secret": "secret1",
+                    "app_code": "app2",
+                    "app_secret": "app3",
+                    "bk_token": "token",
+                    "bk_username": "admin1",
+                    "username": "admin2",
+                },
+            ),
+            (
+                {"a": "b"},
+                {},
+            ),
+            (
+                {
+                    "bk_app_code": "app",
+                    "bk_app_secret": "secret",
+                    "a": "b",
+                },
+                {
+                    "bk_app_code": "app",
+                    "bk_app_secret": "secret",
+                },
+            ),
+        ]
+    )
+    def test_get_authorization_from_params(self, request_factory, params, expected):
+        request = request_factory.get("", data=params)
+        authorization = RequestHandler(request)._get_authorization_from_params()
+        assert authorization == expected

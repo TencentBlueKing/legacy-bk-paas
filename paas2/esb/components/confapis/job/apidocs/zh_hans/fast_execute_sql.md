@@ -13,7 +13,7 @@
 | bk_biz_id      |  long       | 是     | 业务ID |
 | script_id      |  long       | 否     | SQL脚本ID |
 | script_content |  string    | 否     | 脚本内容Base64，如果同时传了script_id和script_content，则script_id优先 |
-| script_timeout |  int       | 否     | 脚本超时时间，秒。默认1000，取值范围60-86400 |
+| script_timeout |  int       | 否     | 脚本超时时间，秒。默认7200，取值范围60-86400 |
 | db_account_id  |  long       | 是     | SQL执行的db帐号ID，必填, 从帐号管理-DB帐号处获得。 |
 | custom_query_id  |  array    | 否     | *deprecated*，请使用target_server.dynamic_group_id_list替代。配置平台上的自定义分组ID |
 | ip_list          |  array    | 否     | *deprecated*，请使用 target_server.iplist替代。静态IP列表 |

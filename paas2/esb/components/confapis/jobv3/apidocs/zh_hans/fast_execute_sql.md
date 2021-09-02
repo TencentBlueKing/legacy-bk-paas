@@ -93,7 +93,8 @@
     "message": "success",
     "data": {
         "job_instance_name": "API Quick SQL Execution1524454292038",
-        "job_instance_id": 10000
+        "job_instance_id": 10000,
+		"step_instance_id": 10001
     }
 }
 ```
