@@ -110,6 +110,9 @@
                 let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
                 if (valueType === 6) value = ''
                 if (valueType === 0) value = `'${value}'`
+
+                // 对象类型，加上 ()，让直接 . 引用属性不会报错
+                if (valueType === 4) value = `(${value})`
                 return value
             },
 
@@ -280,7 +283,7 @@
                     this.$bkMessage({ theme: 'error', message: error.message || error || '获取数据失败，请检查函数是否正确', limit: 1 })
                 }
             },
-            
+
             handleShowExample () {
                 this.isShow = true
                 this.$nextTick(() => {
@@ -319,7 +322,7 @@
                         'editor.background': '#242424'
                     }
                 })
-                
+
                 const value = this.getDefaultData()
                 this.editor = monaco.editor.create(this.$refs.remoteViewer, {
                     value: value,
