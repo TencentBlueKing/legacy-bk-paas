@@ -17,13 +17,13 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'size-change', tips: 'pageSize 改变时会触发，回调参数：每页条数'
+        name: 'size-change', tips: 'pageSize 改变时调用该事件函数，事件回调参数 (pageSize: Number)'
     }, {
-        name: 'current-change', tips: 'currentPage 改变时会触发，回调参数：当前页'
+        name: 'current-change', tips: 'currentPage 改变时调用该事件函数，事件回调参数 (currentPage: Number)'
     }, {
-        name: 'prev-click', tips: '用户点击上一页按钮改变当前页后触发，回调参数：当前页'
+        name: 'prev-click', tips: '用户点击上一页按钮改变当前页时调用该事件函数，事件回调参数 (currentPage: Number)'
     }, {
-        name: 'next-click', tips: '用户点击下一页按钮改变当前页后触发，回调参数：当前页'
+        name: 'next-click', tips: '用户点击下一页按钮改变当前页时调用该事件函数，事件回调参数 (currentPage: Number)'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {
@@ -69,7 +69,9 @@ export default {
         },
         layout: {
             type: 'string',
-            val: 'prev, pager, next, jumper, ->, total',
+            val: 'prev,pager,next,jumper,->,total',
+            regExp: /^(sizes|prev|pager|next|jumper|->|total|slot)(,(sizes|prev|pager|next|jumper|->|total|slot))*$/,
+            regErrorText: '请用逗号分隔:sizes, prev, pager, next, jumper, ->, total, slot',
             tips: '组件布局，子组件名用逗号分隔:sizes, prev, pager, next, jumper, ->, total, slot'
         },
         'prev-text': {

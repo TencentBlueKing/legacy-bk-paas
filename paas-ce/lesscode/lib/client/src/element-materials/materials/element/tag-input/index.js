@@ -17,9 +17,9 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'click', tips: '点击 Tag 时触发的事件'
+        name: 'click', tips: '点击 Tag 时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'close', tips: '关闭 Tag 时触发的事件'
+        name: 'close', tips: '关闭 Tag 时调用该事件函数，事件回调参数 (event: Event)'
     }],
     styles: ['size', 'margin', 'display'],
     props: {

@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 import store from '@/store'
-import { walkGrid } from '@/common/util'
+import { walkGrid, downloadFile } from '@/common/util'
 const acorn = require('acorn')
 
 function getCurUsedFuncs () {
@@ -131,8 +131,38 @@ function getDefaultFunc (options = {}) {
     }
 }
 
+function exportFunction (funcList = [], name = 'lesscode-func.json') {
+    function getExportFunc (func) {
+        const exportProps = [
+            'funcName',
+            'funcCode',
+            'funcParams',
+            'funcBody',
+            'funcSummary',
+            'funcType',
+            'funcMethod',
+            'withToken',
+            'funcApiData',
+            'funcApiUrl',
+            'remoteParams'
+        ]
+        return exportProps.reduce((res, prop) => {
+            res[prop] = func[prop]
+            return res
+        }, {})
+    }
+
+    const funcs = funcList.reduce((funcs, func) => {
+        funcs.push(getExportFunc(func))
+        return funcs
+    }, [])
+    const source = JSON.stringify(funcs, null, 2)
+    downloadFile(source, name)
+}
+
 export default {
     getCurUsedFuncs,
     replaceFuncKeyword,
-    getDefaultFunc
+    getDefaultFunc,
+    exportFunction
 }

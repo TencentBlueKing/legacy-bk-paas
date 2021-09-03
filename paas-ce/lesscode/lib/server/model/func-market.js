@@ -28,6 +28,13 @@ const funcMarket = {
         return funcList
     },
 
+    bulkAdd (funcList) {
+        funcList.forEach((func) => transformFunc(func))
+        const funcMarketRepository = getRepository(FuncMarket)
+        const newFuncList = funcMarketRepository.create(funcList)
+        return funcMarketRepository.save(newFuncList)
+    },
+
     add (func) {
         transformFunc(func)
         const funcMarketRepository = getRepository(FuncMarket)

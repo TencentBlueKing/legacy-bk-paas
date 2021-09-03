@@ -17,15 +17,15 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '数据发生变化时回调函数，回调参数（tags）'
+        name: 'change', tips: '数据发生变化时调用该事件函数，事件回调参数 (tags: Array)'
     }, {
-        name: 'select', tips: '选择数据后的回调函数，回调参数'
+        name: 'select', tips: '选择数据后调用该事件函数，暂无事件回调参数'
     }, {
-        name: 'remove', tips: '删除数据后的回调函数，回调参数'
+        name: 'remove', tips: '删除数据后调用该事件函数，暂无事件回调参数'
     }, {
-        name: 'removeAll', tips: '一键清空数据后的回调函数，回调参数'
+        name: 'removeAll', tips: '一键清空数据后调用该事件函数，暂无事件回调参数'
     }, {
-        name: 'blur', tips: '输入状态时失焦点的回调函数，回调参数（input, tags）'
+        name: 'blur', tips: '输入状态时失焦时调用该事件函数，事件回调参数 (inputStr: String, tags: Array)'
     }],
     styles: ['size', 'margin', 'display'],
     directives: [

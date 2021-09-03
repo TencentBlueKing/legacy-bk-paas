@@ -18,11 +18,13 @@ export default {
     order: 1,
     styles: ['size', 'margin', 'display'],
     events: [{
-        name: 'toggle', tips: '切换下拉折叠状态时调用，参数为Boolean'
+        name: 'toggle', tips: '切换下拉折叠状态时调用该事件函数，参数为(isOpen: Boolean)'
     }, {
-        name: 'change', tips: '切换下拉折叠状态时调用，参数为(newValue, oldValue, selectList)'
+        name: 'change', tips: '选项发生变化时调用该事件函数，参数为(newValue: String | Number, oldValue: String | Number, selectList: Array)'
     }, {
-        name: 'clear', tips: '切换下拉折叠状态时调用，参数为oldValue'
+        name: 'clear', tips: '清空选项时调用该事件函数，参数为(oldValue: String | Number)'
+    }, {
+        name: 'search', tips: '搜索输入时调用该事件函数，参数为(search: String, event: Event)'
     }],
     directives: [
         {

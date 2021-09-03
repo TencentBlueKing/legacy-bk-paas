@@ -17,13 +17,11 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'node-click', tips: '节点点击触发，回调参数为传递给 data 属性的数组中该节点所对应的对象、节点对应的 Node、节点组件本身。'
+        name: 'node-click', tips: '节点被点击时调用该事件函数，事件回调参数 (nodeValue: Object、node: Object、component: Object)'
     }, {
-        name: 'check', tips: '当复选框被点击的时候触发，回调参数为传递给 data 属性的数组中该节点所对应的对象、树目前的选中状态对象，包含 checkedNodes、checkedKeys、halfCheckedNodes、halfCheckedKeys 四个属性'
+        name: 'check', tips: '当复选框被点击时调用该事件函数，事件回调参数 (checkValue: Object, checkNode: Object)'
     }, {
-        name: 'node-expand', tips: '节点被展开时触发的事件，回调参数为操作节点'
-    }, {
-        name: 'on-drag-node', tips: '节点拖拽结束触发，回调参数传递给 data 属性的数组中该节点所对应的对象、节点对应的 Node、节点组件本身'
+        name: 'node-expand', tips: '节点被展开时调用该事件函数，事件回调参数 (nodeValue: Object、node: Object、component: Object)'
     }],
     styles: ['size', 'margin'],
     directives: [
