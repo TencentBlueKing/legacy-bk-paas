@@ -387,7 +387,7 @@
                     const projectId = await this.$store.dispatch('project/create', { data })
 
                     this.messageSuccess('项目创建成功')
-                    this.isShow = false
+                    this.dialog.project.visible = false
 
                     setTimeout(() => {
                         this.toPage(projectId)
