@@ -57,3 +57,21 @@
 :::
 
 <img src="../../../images/help/variable-method.png" alt="grid" width="1200" class="help-img" /><br>
+
+### 函数中操作变量
+---
+:::info
+在函数中，可以使用`lesscode.{{变量标识}}`来获取或者修改变量的值，下面举例说明：
+:::
+
+<img src="../../../images/help/variable-in-method1.png" alt="grid" width="1200" class="help-img" /><br>
+#### 如上图所示：页面中添加一个输入框组件和一个基础按钮组件，并给输入框组件的`v-model`指令绑定一个变量
+
+<img src="../../../images/help/variable-in-method2.png" alt="grid" width="1200" class="help-img" /><br>
+#### 如上图所示：新增一个函数，函数里面可以通过 `lesscode.`关键字唤起快捷输入，根据提示可以找到想修改的变量，选择对应的变量后，就可以对变量进行操作了
+
+<img src="../../../images/help/variable-in-method3.png" alt="grid" width="1200" class="help-img" /><br>
+#### 如上图所示：函数编写的时候，我们先弹出输入框的值，然后修改输入框的值为`Hello Lesscode`
+
+<img src="../../../images/help/variable-in-method4.png" alt="grid" width="1200" class="help-img" /><br>
+#### 如上图所示：最后在基础按钮组件的`click`事件中，绑定刚刚写的函数。然后可以在预览中进行查看效果了

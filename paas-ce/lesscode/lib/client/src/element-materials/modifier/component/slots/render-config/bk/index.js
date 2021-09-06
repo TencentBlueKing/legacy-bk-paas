@@ -88,7 +88,12 @@ const bkRenderMap = {
                     :key="index"
                 >
                     <template slot-scope="props">
-                        <render-html :html="item.templateCol" :props="props"></render-html>
+                        <render-html
+                            :html="item.templateCol"
+                            :render-options="item"
+                            :props="props"
+                            :parent-id="_uid"
+                        ></render-html>
                     </template>
                 </bk-table-column>
                 <bk-table-column
