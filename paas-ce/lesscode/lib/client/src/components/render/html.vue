@@ -7,9 +7,16 @@
                 type: String,
                 default: ''
             },
+            renderOptions: {
+                type: Object,
+                default: () => ({})
+            },
             props: {
                 type: Object,
                 default: () => ({})
+            },
+            parentId: {
+                type: Number
             }
         },
 
@@ -20,13 +27,18 @@
         },
 
         watch: {
-            html () {
-                this.updateRender()
+            html: {
+                handler () {
+                    this.updateRender()
+                },
+                immediate: true
+            },
+            'renderOptions.methodCode': {
+                handler () {
+                    this.updateMethods()
+                },
+                immediate: true
             }
-        },
-
-        created () {
-            this.updateRender()
         },
 
         methods: {
@@ -37,6 +49,18 @@
                 for (const staticRenderFunction of compiled.staticRenderFns) {
                     this.$options.staticRenderFns.push(staticRenderFunction)
                 }
+            },
+
+            updateMethods () {
+                (this.renderOptions.methodCode || []).forEach((method) => {
+                    let parent = this.$parent
+                    while (parent && parent._uid !== this.parentId) {
+                        parent = parent.$parent
+                    }
+                    if (parent) {
+                        this[method] = parent[method]
+                    }
+                })
             }
         },
 

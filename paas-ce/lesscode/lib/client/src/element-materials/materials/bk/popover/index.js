@@ -60,14 +60,14 @@ export default {
             name: ['html'],
             type: ['html'],
             displayName: '组件配置',
-            tips: '组件默认插槽，可以编写html，用于组件自身展示',
+            tips: '组件默认插槽，请编写html，用于组件自身展示',
             val: '<bk-button>多行</bk-button>'
         },
         content: {
             name: ['html'],
             type: ['html'],
             displayName: '弹层配置',
-            tips: '组件 content 插槽，可以编写html，用于组件弹层展示',
+            tips: '组件 content 插槽，请编写html，用于组件弹层展示',
             val: '<div class="bk-text-primary pt10 pb5 pl10 pr10">显示多行信息</div>'
         }
     }
