@@ -74,7 +74,7 @@
                 const { id, ...rest } = this.marketFuncs.find((func) => (func.id === funcId)) || {}
                 const copyVaule = JSON.parse(JSON.stringify(this.form))
                 Object.assign(copyVaule, rest)
-                this.$emit('update:formChanged', true)
+                this.$parent.formChanged = true
                 this.$emit('update:form', copyVaule)
                 bus.$emit('switch-fun-form', copyVaule)
             }

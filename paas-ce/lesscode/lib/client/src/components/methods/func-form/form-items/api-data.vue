@@ -28,7 +28,7 @@
         data () {
             return {
                 objRule: {
-                    validator: (val) => {
+                    validator: (val = '') => {
                         try {
                             const Fn = Function
                             const replaceVal = val.replace(/\{\{([^\}]+)\}\}/g, (all, code) => `this.${code}`)
