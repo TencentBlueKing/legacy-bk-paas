@@ -55,6 +55,7 @@ const Method = () => import(/* webpackChunkName: 'method' */'@/views/help/docs/m
 const Variable = () => import(/* webpackChunkName: 'variable' */'@/views/help/docs/variable.md')
 const Directive = () => import(/* webpackChunkName: 'directive' */'@/views/help/docs/directive.md')
 const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
+const Interactive = () => import(/* webpackChunkName: 'interactive' */'@/views/help/docs/interactive.md')
 
 const routes = [
     {
@@ -73,7 +74,8 @@ const routes = [
             { path: 'method', name: 'method', component: Method },
             { path: 'variable', name: 'variable', component: Variable },
             { path: 'directive', name: 'directive', component: Directive },
-            { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc }
+            { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc },
+            { path: 'interactive', name: 'interactive', component: Interactive }
         ]
     },
     {

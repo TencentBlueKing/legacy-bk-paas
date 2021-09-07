@@ -378,7 +378,7 @@ export default {
     findOneProjectByNameAndUserId (projectName, userId) {
         return getRepository(Project).createQueryBuilder('project')
             .leftJoinAndSelect(UserProjectRole, 't', 't.projectId = project.id')
-            .where('project.projectName = :projectName AND t.deleteFlag = 0', { projectName })
+            .where('BINARY project.projectName = :projectName AND t.deleteFlag = 0', { projectName })
             .andWhere('t.userId = :userId', { userId })
             .getMany()
     },
