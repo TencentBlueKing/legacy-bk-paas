@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <section style="height:100%">
+    <section style="height:100%" v-bkloading="{ isLoading }">
         <div class="sidebar-hd">
             <ul class="category-tabs">
                 <li
@@ -59,13 +59,13 @@
                                         <div class="item-img">
                                             <img :src="template.previewImg" />
                                             <div class="mask" v-if="type === 'market' && !template.hasInstall">
-                                                <bk-button class="apply-btn" theme="primary" size="small" @click.stop="handlePreview(page)">应用</bk-button>
+                                                <bk-button class="apply-btn" theme="primary" size="small" @click.stop="handleApply(template)">应用</bk-button>
                                             </div>
                                         </div>
 
                                         <div class="item-info" :title="template.templateName">
                                             <span class="item-name">{{ template.templateName }}</span>
-                                            <span class="preview">预览</span>
+                                            <span class="preview" @click="handlePreview(template.id)">预览</span>
                                         </div>
                                     </div>
                                 </template>
@@ -75,19 +75,22 @@
                 </template>
             </div>
         </div>
+        <template-edit-dialog ref="templateApplyDialog" action-type="apply" :refresh-list="initTemplates"></template-edit-dialog>
     </section>
 </template>
 
 <script>
-    // import componentPanelMixin from './component-panel-mixin'
     import { mapGetters, mapMutations } from 'vuex'
     import componentSearch from './component-search.vue'
+    import templateEditDialog from '@/views/project/template-manage/components/template-edit-dialog'
+    import { PAGE_TEMPLATE_TYPE } from '@/common/constant'
+    import { bus } from '@/common/bus'
 
     export default {
         name: 'template-panel',
-        // mixins: [componentPanelMixin],
         components: {
-            componentSearch
+            componentSearch,
+            templateEditDialog
         },
         props: {
             dragingComponent: {
@@ -97,8 +100,10 @@
         },
         data () {
             return {
+                isLoading: false,
                 curDragingComponent: this.dragingComponent,
                 type: 'project',
+                marketTemplateGroups: PAGE_TEMPLATE_TYPE,
                 projectTemplateList: [],
                 marketTemplateList: [],
                 projectTemplateGroupList: [],
@@ -130,7 +135,8 @@
             }
         },
         created () {
-            this.init()
+            this.initTemplates()
+            bus.$on('update-template-list', this.initTemplates)
         },
         methods: {
             ...mapMutations('drag', [
@@ -138,29 +144,38 @@
                 'setFreeLayoutItemPlaceholderPointerEvents',
                 'setCurSelectedComponentData'
             ]),
-            async init () {
-                const [projectTemplateGroups, projectTemplateList, marketTemplateGroups, tmpMarketTemplateList] = await Promise.all([
-                    this.$store.dispatch('pageTemplate/categoryList', { projectId: this.projectId }),
-                    this.$store.dispatch('pageTemplate/list', { projectId: this.projectId }),
-                    this.$store.dispatch('pageTemplate/categoryList', { type: 'OFFCIAL' }),
-                    this.$store.dispatch('pageTemplate/list', { type: 'OFFCIAL' })
-                ])
-                const marketTemplateList = tmpMarketTemplateList.map(item => ({
-                    ...item,
-                    hasInstall: projectTemplateList.filter(template => template.parentId === item.id).length > 0
-                }))
-                this.projectTemplateGroupList = projectTemplateGroups.map(item => ({
-                    id: item.id,
-                    categoryName: item.name,
-                    list: projectTemplateList.filter(template => template.categoryId === item.id)
-                }))
-                this.marketTemplateGroupList = marketTemplateGroups.map(item => ({
-                    id: item.id,
-                    categoryName: item.name,
-                    list: marketTemplateList.filter(template => template.offcialType === item.id)
-                }))
-                this.projectTemplateList = projectTemplateList
-                this.marketTemplateList = marketTemplateList
+            async initTemplates () {
+                try {
+                    this.isLoading = true
+                    const [projectTemplateGroups, projectTemplateList, tmpMarketTemplateList] = await Promise.all([
+                        this.$store.dispatch('pageTemplate/categoryList', { projectId: this.projectId }),
+                        this.$store.dispatch('pageTemplate/list', { projectId: this.projectId }),
+                        this.$store.dispatch('pageTemplate/list', { type: 'OFFCIAL' })
+                    ])
+                    const marketTemplateList = tmpMarketTemplateList.map(item => ({
+                        ...item,
+                        hasInstall: projectTemplateList.filter(template => template.parentId === item.id).length > 0
+                    }))
+                    this.projectTemplateGroupList = projectTemplateGroups.map(item => ({
+                        id: item.id,
+                        categoryName: item.name,
+                        list: projectTemplateList.filter(template => template.categoryId === item.id)
+                    }))
+                    this.marketTemplateGroupList = this.marketTemplateGroups.map(item => ({
+                        id: item.id,
+                        categoryName: item.name,
+                        list: marketTemplateList.filter(template => template.offcialType === item.id)
+                    }))
+                    this.projectTemplateList = projectTemplateList
+                    this.marketTemplateList = marketTemplateList
+                } catch (err) {
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: err.message || err
+                    })
+                } finally {
+                    this.isLoading = false
+                }
             },
             handleToggleTab (tab) {
                 this.type = tab.name || 'project'
@@ -183,14 +198,10 @@
             },
             sourceAreaStartHandler (e) {
                 this.setFreeLayoutItemPlaceholderPointerEvents('all')
-                console.log('sourceAreaStartHandler', e, this.curDragingComponent)
             },
 
             sourceAreaEndHandler (e) {
                 this.setFreeLayoutItemPlaceholderPointerEvents('none')
-                console.warn('sourceAreaEndHandler', this.curDragingComponent)
-                console.warn('left to right end, targetData: ', this.targetData)
-                console.warn('左侧面板拖动 grid 和 component 到画布中 end', e)
             },
 
             getComponentGroupClass (groupId, groupIndex) {
@@ -206,6 +217,21 @@
 
             handleCompGroupFold (groupId) {
                 this.$set(this.templateGroupFolded, groupId, !this.templateGroupFolded[groupId])
+            },
+
+            handlePreview (templateId) {
+                window.open(`/preview-template/project/${this.projectId}/${templateId}`, '_blank')
+            },
+
+            handleApply (template) {
+                this.$refs.templateApplyDialog.isShow = true
+                this.$refs.templateApplyDialog.templateId = template.id
+                this.$refs.templateApplyDialog.fromTemplate = template
+                this.$refs.templateApplyDialog.dialog.formData = {
+                    categoryId: '',
+                    belongProjectId: this.projectId,
+                    templateName: template.templateName
+                }
             }
         }
     }

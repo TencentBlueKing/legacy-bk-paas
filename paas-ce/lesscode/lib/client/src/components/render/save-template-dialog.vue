@@ -42,6 +42,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import html2canvas from 'html2canvas'
+    import { bus } from '@/common/bus'
 
     export default {
         name: 'template-dialog',
@@ -92,6 +93,9 @@
             ...mapGetters('drag', [
                 'curSelectedComponentData'
             ]),
+            ...mapGetters('page', [
+                'pageDetail'
+            ]),
             projectId () {
                 return this.$route.params.projectId
             }
@@ -106,7 +110,6 @@
             }
         },
         created () {
-            console.log('save-as-template-dialog')
             this.getTemplateCategory()
         },
         methods: {
@@ -130,13 +133,13 @@
                                     templateName: this.dialog.formData.templateName,
                                     categoryId: this.dialog.formData.categoryId,
                                     belongProjectId: this.projectId,
+                                    fromPageCode: this.pageDetail && this.pageDetail.pageCode,
                                     content: JSON.stringify(this.curSelectedComponentData),
                                     previewImg: imgData
                                 }
                             }
                             
                             const res = await this.$store.dispatch('pageTemplate/create', data)
-                            console.log(res, 235)
                             if (res) {
                                 this.dialog.loading = false
                                 this.$bkMessage({
@@ -144,6 +147,7 @@
                                     message: `另存为模板成功`
                                 })
                                 this.toggleIsShow(false)
+                                bus.$emit('update-template-list')
                             }
                         } catch (err) {
                             this.$bkMessage({

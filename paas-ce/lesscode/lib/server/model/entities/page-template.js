@@ -16,6 +16,12 @@ export default class extends Base {
     templateCode
 
     @Column({
+        type: 'varchar',
+        comment: '来源pageCode'
+    })
+    fromPageCode
+
+    @Column({
         type: 'mediumtext',
         comment: '模板的 targetData（JSON 串）'
     })

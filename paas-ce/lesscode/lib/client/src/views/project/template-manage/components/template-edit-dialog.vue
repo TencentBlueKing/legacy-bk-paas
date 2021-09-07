@@ -3,14 +3,14 @@
         <bk-dialog v-model="isShow"
             render-directive="if"
             theme="primary"
-            title="编辑模板"
+            :title="dialogTitle"
             width="600"
             :mask-close="false"
             :auto-close="false"
             header-position="left"
-            ext-cls="template-operate-dialog"
+            ext-cls="template-edit-dialog"
         >
-            <bk-form ref="pageTemplateFrom" class="dialog-form" :label-width="86" :rules="dialog.formRules" :model="dialog.formData">
+            <bk-form ref="pageTemplateFrom" class="dialog-form" :label-width="120" :rules="dialog.formRules" :model="dialog.formData">
                 <bk-form-item label="模板名称" required property="templateName" error-display-type="normal">
                     <bk-input ref="nameInput"
                         maxlength="60"
@@ -27,8 +27,8 @@
                         </bk-option>
                     </bk-select>
                 </bk-form-item>
-                <section v-if="isSuperAdmin" style="margin-top: 20px;">
-                    <bk-form-item label="设置为公开模板" required property="isOffcial" error-display-type="normal">
+                <section v-if="platformAdmin && actionType === 'update'" style="margin-top: 20px;">
+                    <bk-form-item label="设为公开模板" required property="isOffcial" error-display-type="normal">
                         <bk-radio-group v-model="dialog.formData.isOffcial">
                             <bk-radio :value="1" style="margin-right: 20px;">是</bk-radio>
                             <bk-radio :value="0">否</bk-radio>
@@ -57,18 +57,28 @@
 </template>
 
 <script>
-    // import { mapGetters } from 'vuex'
     import { PAGE_TEMPLATE_TYPE } from '@/common/constant'
+    import { mapGetters, mapActions } from 'vuex'
+    import { getVarList, getFuncList } from '@/common/process-targetdata'
 
     export default {
         name: 'template-dialog',
+        props: {
+            actionType: {
+                type: String,
+                default: 'update'
+            },
+            refreshList: {
+                type: Function
+            }
+        },
         data () {
             return {
-                isSuperAdmin: true,
                 isShow: false,
                 categoryList: [],
                 offcialTypeList: PAGE_TEMPLATE_TYPE,
                 templateId: '',
+                fromTemplate: {},
                 dialog: {
                     loading: false,
                     formData: {
@@ -102,8 +112,12 @@
             }
         },
         computed: {
+            ...mapGetters('perm', ['platformAdmin']),
             projectId () {
                 return this.$route.params.projectId
+            },
+            dialogTitle () {
+                return this.actionType === 'apply' ? '应用模板' : '编辑模板'
             }
         },
         watch: {
@@ -119,6 +133,11 @@
             this.getTemplateCategory()
         },
         methods: {
+            ...mapActions('functions', [
+                'getAllGroupFuncs'
+            ]),
+            ...mapActions('variable', ['getAllVariable']),
+
             async getTemplateCategory () {
                 try {
                     this.categoryList = await this.$store.dispatch('pageTemplate/categoryList', { projectId: this.projectId })
@@ -130,21 +149,56 @@
                 await this.$refs.pageTemplateFrom.validate()
                 try {
                     this.dialog.loading = true
-                    const data = {
-                        id: this.templateId,
-                        params: {
-                            templateName: this.dialog.formData.templateName,
-                            categoryId: this.dialog.formData.categoryId
+                    const params = {
+                        templateName: this.dialog.formData.templateName,
+                        categoryId: this.dialog.formData.categoryId,
+                        belongProjectId: this.projectId,
+                        fromPageCode: this.fromTemplate.fromPageCode
+                    }
+                    if (this.actionType !== 'apply' && this.platformAdmin) {
+                        if (this.dialog.formData.isOffcial && !this.dialog.formData.offcialType) {
+                            this.$bkMessage({
+                                theme: 'error',
+                                message: '公开模板分类不能为空'
+                            })
+                            return
+                        } else {
+                            Object.assign(params, { isOffcial: this.dialog.formData.isOffcial, offcialType: this.dialog.formData.offcialType })
                         }
                     }
-                    const res = await this.$store.dispatch('pageTemplate/update', data)
-                    console.log(res, 235)
+                    const data = {
+                        id: this.templateId,
+                        params
+                    }
+                    if (this.actionType === 'apply') {
+                        // 将模板中用到的函数和变量都获取出来
+                        const [variableList, funcGroups] = await Promise.all([
+                            this.getAllVariable({ projectId: this.fromTemplate.belongProjectId, pageCode: this.fromTemplate.fromPageCode, effectiveRange: 0 }, false),
+                            this.getAllGroupFuncs(this.fromTemplate.belongProjectId, false)
+                        ])
+                        const targetData = []
+                        targetData.push(JSON.parse(this.fromTemplate.content || {}))
+                        const valList = getVarList(targetData, variableList)
+                        const funcList = getFuncList(targetData, funcGroups)
+                        Object.assign(data, { valList, funcList })
+                    }
+                    
+                    const res = await this.$store.dispatch(`pageTemplate/${this.actionType}`, data)
+                    if (res) {
+                        this.$bkMessage({
+                            theme: 'success',
+                            message: `${this.dialogTitle}成功`
+                        })
+                        this.refreshList()
+                        this.isShow = false
+                    }
                 } catch (err) {
-                    this.dialog.loading = false
                     this.$bkMessage({
                         theme: 'error',
                         message: err.message || err
                     })
+                } finally {
+                    this.dialog.loading = false
                 }
             }
         }
@@ -152,8 +206,8 @@
 </script>
 
 <style lang="postcss">
-    .template-operate-dialog {
-        /* z-index: 2000 !important; */
+    .template-edit-dialog {
+        /* z-index: 2008 !important; */
         .bk-dialog-body {
             padding: 10px 15px 25px;
         }

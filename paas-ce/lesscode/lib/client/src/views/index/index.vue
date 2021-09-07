@@ -1669,7 +1669,6 @@
                         }
                     })
                 })
-
                 return {
                     curFuncIds,
                     errMessage,

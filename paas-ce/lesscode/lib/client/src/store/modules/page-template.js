@@ -44,6 +44,12 @@ export default {
                 return data
             })
         },
+        apply (state, params = {}) {
+            return http.post(`pageTemplate/apply`, params).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
         update (state, params = {}) {
             return http.post('/pageTemplate/update', params).then(response => {
                 const data = response.data || ''

@@ -15,6 +15,8 @@ const {
     listByCategory,
     create,
     update,
+    apply,
+    detail,
     deleteTemplate,
     categoryCount
 } = require('../controller/page-template')
@@ -27,6 +29,8 @@ router.get('/list', list)
 router.get('/listByCategory', listByCategory)
 router.post('/create', create)
 router.post('/update', update)
+router.post('/apply', apply)
+router.get('/detail', detail)
 router.delete('/delete', deleteTemplate)
 router.get('/categoryCount', categoryCount)
 

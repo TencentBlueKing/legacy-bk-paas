@@ -39,6 +39,7 @@ const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/lay
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
+const PreviewTemplate = () => import(/* webpackChunkName: 'previewTemplate' */'@/views/preview/preview-template')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
 
 const HealthPage = () => import(/* webpackChunkName: 'none' */'@/views/system/health')
@@ -223,6 +224,14 @@ const routes = [
         path: '/preview/project/:projectId/*',
         name: 'preview',
         component: Preview
+    },
+    {
+        path: '/preview-template/project/:projectId/:templateId',
+        name: 'previewTemplate',
+        component: PreviewTemplate,
+        meta: {
+            title: '模板预览'
+        }
     },
     {
         path: '*',

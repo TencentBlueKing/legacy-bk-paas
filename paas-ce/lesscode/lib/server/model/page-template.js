@@ -31,6 +31,7 @@ export const findById = async function (id) {
     const res = await getRepository(PageTemplate).findOne(id)
     return res
 }
+
 export const getOne = async function (params = {}) {
     const res = await getRepository(PageTemplate).find({
         where: params
@@ -42,16 +43,16 @@ export const getOne = async function (params = {}) {
 }
 
 export const updateById = async function (id, params = {}) {
-    const PageTemplate = await getOne({
+    const template = await getOne({
         id
     })
-    if (!PageTemplate) {
+    if (!template) {
         throw new Error('模板不存在')
     }
     Object.keys(params).forEach(field => {
-        PageTemplate[field] = params[field]
+        template[field] = params[field]
     })
-    const res = await getRepository(PageTemplate).save(PageTemplate)
+    const res = await getRepository(PageTemplate).save(template)
     return res
 }
 
@@ -60,7 +61,6 @@ export const remove = async function (id) {
         const template = await getOne({
             id
         })
-        console.log()
         if (!template) {
             throw new Error('模板不存在')
         }

@@ -54,7 +54,7 @@
                     </bk-exception>
                 </div>
             </div>
-            <template-edit-dialog ref="templateEditDialog" :current-name="currentName" :refresh-list="getTemplateList"></template-edit-dialog>
+            <template-edit-dialog ref="templateEditDialog" :refresh-list="getTemplateList"></template-edit-dialog>
         </main>
     </section>
 </template>
@@ -132,7 +132,6 @@
             async handleDownloadSource (content, templateId) {
                 const targetData = []
                 targetData.push(JSON.parse(content))
-                console.log('页面模板下载')
                 this.$store.dispatch('vueCode/getPageCode', {
                     targetData,
                     projectId: this.projectId,
@@ -151,11 +150,12 @@
             async handleEdit (template) {
                 this.$refs.templateEditDialog.isShow = true
                 this.$refs.templateEditDialog.templateId = template.id
+                this.$refs.templateEditDialog.fromTemplate = template
                 this.$refs.templateEditDialog.dialog.formData = {
                     categoryId: template.categoryId,
                     templateName: template.templateName,
                     isOffcial: template.isOffcial,
-                    offcailType: template.offcailType
+                    offcialType: template.offcialType
                 }
             },
             handleDelete (template) {
@@ -194,7 +194,7 @@
                     })
                     return
                 }
-                window.open(`/preview/project/${this.projectId}/?pageCode=${template.pageCode}`, '_blank')
+                window.open(`/preview-template/project/${this.projectId}/${template.id}`, '_blank')
             },
             handleSearch (clear = false) {
                 if (clear) {

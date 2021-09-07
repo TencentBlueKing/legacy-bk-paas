@@ -14,15 +14,21 @@ const perfix = '/perm'
 export default {
     namespaced: true,
     state: {
-        funcGroups: []
+        funcGroups: [],
+        platformAdmin: false
     },
     mutations: {
+        setIsPlatformAdmin (state, isAdmin) {
+            state.platformAdmin = isAdmin
+        }
     },
     getters: {
+        platformAdmin: state => state.platformAdmin
     },
     actions: {
-        isPlatformAdmin ({ state }) {
+        isPlatformAdmin ({ state, commit }) {
             return http.get(`${perfix}/isPlatformAdmin`).then((res = {}) => {
+                commit('setIsPlatformAdmin', res.data || false)
                 return res.data
             })
         }

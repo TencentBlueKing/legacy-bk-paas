@@ -8,6 +8,7 @@ CREATE TABLE `page_template` (
   `offcialType` varchar(50) COMMENT '官方模板类型',
   `categoryId` int(11) NOT NULL DEFAULT '0' COMMENT '分类id',
   `belongProjectId` int(11) COMMENT '所属项目',
+  `fromPageCode` varchar(50) COMMENT '来源pageCode',
   `parentId` int(11) COMMENT '父级id',
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
