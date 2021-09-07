@@ -22,6 +22,7 @@ const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system'
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
 const functionMarket = () => import(/* webpackChunkName: 'functionMarket' */'@/views/system/function-market')
+const templateMarket = () => import(/* webpackChunkName: 'templateMarket' */'@/views/system/template-market')
 
 const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/project/component-manage')
 const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/project/function-manage')
@@ -101,6 +102,14 @@ const routes = [
                 component: functionMarket,
                 meta: {
                     title: '函数市场'
+                }
+            },
+            {
+                path: 'template-market',
+                name: 'templateMarket',
+                component: templateMarket,
+                meta: {
+                    title: '模板市场'
                 }
             },
             {
