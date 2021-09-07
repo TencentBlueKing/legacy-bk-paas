@@ -17,15 +17,15 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'on-click', tips: '节点点击触发，回调参数为当前点击节点 node'
+        name: 'on-click', tips: '节点点击时调用该事件函数，事件回调参数 (node: Object)'
     }, {
-        name: 'on-check', tips: '多选时，多选框 chang 触发（单选时不生效），回调参数为当前选择节点 node'
+        name: 'on-check', tips: '多选框 chang 时调用该事件函数（单选时不生效），事件回调参数 (node: Object)'
     }, {
-        name: 'on-expanded', tips: '节点展开/收起触发，回调参数为操作节点'
+        name: 'on-expanded', tips: '节点展开/收起时调用该事件函数，事件回调参数 (node: Object, expanded: Boolean)'
     }, {
-        name: 'on-drag-node', tips: '节点拖拽结束触发，回调参数（dragNode / targetNode）'
+        name: 'on-drag-node', tips: '节点拖拽结束时调用该事件函数，事件回调参数 (dragNode: Object, targetNode: Object)'
     }, {
-        name: 'async-load-nodes', tips: '异步加载节点数据，回调参数为当前加载节点 node'
+        name: 'async-load-nodes', tips: '异步加载节点数据时调用该事件函数，事件回调参数 (node: Object)'
     }],
     styles: ['size', 'margin'],
     directives: [

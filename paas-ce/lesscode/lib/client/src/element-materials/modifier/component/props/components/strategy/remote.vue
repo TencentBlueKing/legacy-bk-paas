@@ -12,8 +12,7 @@
 <template>
     <section>
         <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
-            <span v-if="name === 'initFormData'" class="form-title under-line">表单数据<span class="form-tip">（更新将会覆盖已有数据）</span></span>
-            <span v-else :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
+            <span :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
             <span class="remote-example" @click="handleShowExample">数据示例</span>
         </div>
         <div class="remote-content">
@@ -111,6 +110,9 @@
                 let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
                 if (valueType === 6) value = ''
                 if (valueType === 0) value = `'${value}'`
+
+                // 对象类型，加上 ()，让直接 . 引用属性不会报错
+                if (valueType === 4) value = `(${value})`
                 return value
             },
 
@@ -281,7 +283,7 @@
                     this.$bkMessage({ theme: 'error', message: error.message || error || '获取数据失败，请检查函数是否正确', limit: 1 })
                 }
             },
-            
+
             handleShowExample () {
                 this.isShow = true
                 this.$nextTick(() => {
@@ -320,7 +322,7 @@
                         'editor.background': '#242424'
                     }
                 })
-                
+
                 const value = this.getDefaultData()
                 this.editor = monaco.editor.create(this.$refs.remoteViewer, {
                     value: value,

@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '时间改变事件，回调参数为当前选择的时间'
+        name: 'change', tips: '用户确认选定的值时调用该事件函数，事件回调参数 (value: String)'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {

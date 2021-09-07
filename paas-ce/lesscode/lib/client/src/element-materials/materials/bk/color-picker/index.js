@@ -21,7 +21,7 @@ export default {
         display: 'inline-flex'
     },
     events: [{
-        name: 'change', tips: '当前选择的RGB颜色值变化时调用'
+        name: 'change', tips: '当前选择的RGB颜色值变化时调用该事件函数，事件回调参数 (value: String)'
     }],
     directives: [
         {

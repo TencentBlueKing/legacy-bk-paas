@@ -1194,6 +1194,12 @@ class PageCode {
                             param.type = 'value'
                         }
                     }
+                    // table slot 可能会用到fun，需要特殊处理一下。其他情况也可以在slot value 里面加上 methodCode 字段来处理
+                    if (Array.isArray(slot.val)) {
+                        (slot.val || []).forEach((item) => {
+                            item.methodCode && (this.usingFuncCodes = this.usingFuncCodes.concat(item.methodCode))
+                        })
+                    }
                     param.val = disPlayVal
                     slotRenderParams.push(param)
                     curSlot = curSlot.renderSlots

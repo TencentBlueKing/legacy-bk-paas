@@ -17,11 +17,11 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '用户确认选定的值时触发，回调参数 组件绑定值。格式与绑定值一致，可受 value-format 控制'
+        name: 'change', tips: '用户确认选定的值时调用该事件函数，事件回调参数 (value: Date|Array)'
     }, {
-        name: 'blur', tips: '当 input 失去焦点时触发，组件实例'
+        name: 'blur', tips: '当 input 失去焦点时调用该事件函数，事件回调参数 (component: Object)'
     }, {
-        name: 'focus', tips: '当 input 获得焦点时触发，回调参数为组件实例'
+        name: 'focus', tips: '当 input 获得焦点时调用该事件函数，事件回调参数 (component: Object)'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {
