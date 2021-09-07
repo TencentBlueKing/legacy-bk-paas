@@ -64,6 +64,7 @@ const getDefaultFunc = function (host) {
             funcType: 1,
             funcMethod: 'get',
             funcApiUrl: `${host}/api/data/getMockData`,
+            funcApiData: '{ \"page\": 1, \"pageSize\": 20 }',
             funcCode: 'getApiData'
         }
     ]

@@ -23,9 +23,17 @@ const Data = {
             const { url, projectId, type = 'get', withToken = 0, apiData } = ctx.request.body || {}
             axiosParam.push(url)
             const methodsWithData = ['post', 'put', 'patch']
+            const httpData = typeof apiData === 'string' ? strToJson(apiData || '{}') : apiData
             if (methodsWithData.includes(type)) {
-                const bodyData = typeof apiData === 'string' ? strToJson(apiData || '{}') : apiData
-                axiosParam.push(bodyData)
+                axiosParam.push(httpData)
+            } else {
+                const urlObj = new URL(url)
+                const keys = Object.keys(httpData)
+                keys.forEach((key) => {
+                    urlObj.searchParams.delete(key)
+                    urlObj.searchParams.append(key, httpData[key])
+                })
+                axiosParam[0] = urlObj.href
             }
             // 携带 cookie
             ctx.http.defaults.withCredentials = true
