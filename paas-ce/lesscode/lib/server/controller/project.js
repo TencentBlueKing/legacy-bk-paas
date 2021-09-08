@@ -69,7 +69,7 @@ module.exports = {
 
     async queryProject (ctx) {
         const userInfo = ctx.session.userInfo
-        const { filter = '', q } = ctx.request.query
+        const { filter = '', q, officialType } = ctx.request.query
         const query = {
             condition: [],
             params: {}
@@ -99,6 +99,13 @@ module.exports = {
                 query.params.userId = userInfo.id
                 query.condition = query.condition.join(' AND ')
                 projectList = await projectModel.queryShareWithProject(query)
+                break
+            case 'official':
+                const params = { where: { isOffcial: 1 }, order: { id: 'DESC' } }
+                if (officialType !== '') {
+                    params.where.offcialType = officialType
+                }
+                projectList = await projectModel.findProjects(params)
                 break
             default:
                 query.condition.push('user_project_role.userId = :userId')
@@ -253,6 +260,24 @@ module.exports = {
                 message: err.message
             })
         }
+    },
+
+    async getTemplateIds (ctx) {
+        try {
+            const params = { where: { isOffcial: 1 }, order: { id: 'DESC' } }
+            const projectList = await projectModel.findProjects(params)
+            const data = projectList.map(item => item.id)
+            ctx.send({
+                code: 0,
+                message: 'OK',
+                data
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+        
     },
 
     async verify (ctx) {

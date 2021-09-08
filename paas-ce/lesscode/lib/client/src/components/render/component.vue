@@ -382,7 +382,7 @@
                     // 更新属性时，检测元素的 top + height 是否超过了容器的高度，如果超过了，那么就改变容器的高度
                     this.$nextTick(() => {
                         const parent = findComponentParentGrid(this.targetData, this.renderData.componentId)
-                        if (!parent) return // 交互是组件没有parent，无需修改父容器
+                        if (!parent || !parent.renderStyles) return // 交互是组件没有parent，无需修改父容器
 
                         const top = parseInt(this.$el.style.top, 10)
                         const nodeHeight = parseInt(this.$el.getBoundingClientRect().height, 10)

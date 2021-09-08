@@ -162,6 +162,9 @@
                         </component>
                     </div>
                 </div>
+                <div class="sidebar-panel" v-show="activeSideNav === 'nav-tab-template'">
+                    <template-panel :target-data="targetData" :draging-component.sync="curDragingComponent"></template-panel>
+                </div>
                 <div class="sidebar-panel" v-show="activeSideNav === 'nav-tab-tree'">
                     <component-tree :target-data="targetData" ref="componentTree"></component-tree>
                 </div>
@@ -294,6 +297,7 @@
     import pageVariable from '@/views/project/page-variable'
 
     import ComponentTree from './children/component-tree'
+    import TemplatePanel from './children/template-panel.vue'
     import { bus } from '@/common/bus'
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
@@ -315,6 +319,7 @@
             PageSetting,
             PageDialog,
             ComponentTree,
+            TemplatePanel,
             PageJson,
             pageVariable
         },
@@ -331,6 +336,14 @@
                         name: 'nav-tab-component',
                         label: {
                             content: '组件库',
+                            placement: 'right',
+                            interactive: false
+                        }
+                    }, {
+                        icon: 'bk-drag-template-fill',
+                        name: 'nav-tab-template',
+                        label: {
+                            content: '模板',
                             placement: 'right',
                             interactive: false
                         }
@@ -871,7 +884,7 @@
                         this.$store.dispatch('page/getList', { projectId: this.projectId }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
                         this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
-                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, config: { fromCache: true } }),
+                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
                         this.getAllGroupFuncs(this.projectId)
@@ -1565,7 +1578,7 @@
                         const useInfos = (usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId]))
                         useInfos.push(useInfo)
                     }
-                    if (val !== '' && valType === 'variable') {
+                    if (val !== '' && !(val.startsWith('form') && val.indexOf('.') > 0) && valType === 'variable') {
                         const variable = this.variableList.find((variable) => (variable.variableCode === val))
                         if (!variable) {
                             errMessage = `组件【${id}】使用的变量【${val}】不存在，请修改后再试`
@@ -1656,7 +1669,6 @@
                         }
                     })
                 })
-
                 return {
                     curFuncIds,
                     errMessage,

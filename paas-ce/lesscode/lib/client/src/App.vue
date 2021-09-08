@@ -60,7 +60,7 @@
         computed: {
             ...mapGetters(['mainContentLoading']),
             emptyPage () {
-                return this.$route.name === 'preview'
+                return this.$route.name === 'preview' || this.$route.name === 'previewTemplate'
             },
             authed () {
                 return this.$route.meta.authed
@@ -75,6 +75,7 @@
         },
 
         mounted () {
+            this.$store.dispatch('perm/isPlatformAdmin')
             const platform = window.navigator.platform.toLowerCase()
             if (platform.indexOf('win') === 0) {
                 this.systemCls = 'win'
