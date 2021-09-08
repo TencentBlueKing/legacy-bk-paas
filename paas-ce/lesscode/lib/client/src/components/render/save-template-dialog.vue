@@ -117,6 +117,7 @@
             async getTemplateCategory () {
                 try {
                     this.categoryList = await this.$store.dispatch('pageTemplate/categoryList', { projectId: this.projectId })
+                    this.dialog.formData.categoryId = (this.categoryList[0] && this.categoryList[0].id) || ''
                 } catch (e) {
                     this.categoryList = []
                 }
