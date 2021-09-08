@@ -262,6 +262,24 @@ module.exports = {
         }
     },
 
+    async getTemplateIds (ctx) {
+        try {
+            const params = { where: { isOffcial: 1 }, order: { id: 'DESC' } }
+            const projectList = await projectModel.findProjects(params)
+            const data = projectList.map(item => item.id)
+            ctx.send({
+                code: 0,
+                message: 'OK',
+                data
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+        
+    },
+
     async verify (ctx) {
         try {
             const id = ctx.request.body.id

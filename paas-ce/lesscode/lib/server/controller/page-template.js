@@ -102,61 +102,63 @@ export const detail = async (ctx) => {
 // 应用模板
 export const apply = async (ctx) => {
     try {
-        const { id, params: { templateName, categoryId, belongProjectId }, valList = [], funcList = [] } = ctx.request.body
+        const { id, templateInfo, valList = [], funcList = [] } = ctx.request.body
         const preTemplate = await PageTemplateModel.findById(id) || {}
 
-        const { content, previewImg, fromPageCode } = preTemplate
-        const newTemplate = {
-            content,
-            previewImg,
-            isOffcial: 0,
-            offcialType: '',
-            categoryId,
-            templateName,
-            parentId: id,
-            belongProjectId,
-            fromPageCode
-        }
-        
-        const { varIds, funcIds, defaultFuncGroupId } = await getRealVarAndFunc({ projectId: belongProjectId, valList, funcList })
-        console.log(varIds, funcIds, defaultFuncGroupId, 'list')
-        const result = await getConnection().transaction(async transactionalEntityManager => {
-            const createTemplate = getRepository(PageTemplate).create(newTemplate)
-            const res = await transactionalEntityManager.save(createTemplate)
-            const saveQueue = []
-            if (varIds.length) {
-                await Promise.all(varIds.map(async valId => {
-                    const val = await getRepository(Variable).findOne(valId)
-                    const { id, createTime, createUser, updateTime, updateUser, ...other} = val
-                    const newVal = Object.assign(other, {
-                        projectId: belongProjectId,
-                        pageCode: '',
-                        effectiveRange: 0
-                    })
-                    const createVal = getRepository(Variable).create(newVal)
-                    saveQueue.push(transactionalEntityManager.save(createVal))
-                }))
+        const { content, previewImg, fromPageCode, templateName } = preTemplate
+
+        await Promise.all(templateInfo.map(async fromTemplate => {
+            const { categoryId, belongProjectId } = fromTemplate
+            const newTemplate = {
+                content,
+                previewImg,
+                isOffcial: 0,
+                offcialType: '',
+                categoryId,
+                templateName: fromTemplate.templateName || templateName,
+                parentId: id,
+                belongProjectId,
+                fromPageCode
             }
-            if (funcIds.length) {
-                await Promise.all(funcIds.map(async funcId => {
-                    const func = await getRepository(Func).findOne(funcId)
-                    const { id, createTime, createUser, updateTime, updateUser, ...other} = func
-                    const newFunc = Object.assign(other, { 
-                        funcGroupId: defaultFuncGroupId
-                    })
-                    const createFunc = getRepository(Func).create(newFunc)
-                    saveQueue.push(transactionalEntityManager.save(createFunc))
-                    
-                }))
-            }
-            saveQueue.length && await Promise.all(saveQueue) 
-            return res
-        })
+            
+            const { varIds, funcIds, defaultFuncGroupId } = await getRealVarAndFunc({ projectId: belongProjectId, valList, funcList })
+            await getConnection().transaction(async transactionalEntityManager => {
+                const createTemplate = getRepository(PageTemplate).create(newTemplate)
+                const res = await transactionalEntityManager.save(createTemplate)
+                const saveQueue = []
+                if (varIds.length) {
+                    await Promise.all(varIds.map(async valId => {
+                        const val = await getRepository(Variable).findOne(valId)
+                        const { id, createTime, createUser, updateTime, updateUser, ...other} = val
+                        const newVal = Object.assign(other, {
+                            projectId: belongProjectId,
+                            pageCode: '',
+                            effectiveRange: 0
+                        })
+                        const createVal = getRepository(Variable).create(newVal)
+                        saveQueue.push(transactionalEntityManager.save(createVal))
+                    }))
+                }
+                if (funcIds.length) {
+                    await Promise.all(funcIds.map(async funcId => {
+                        const func = await getRepository(Func).findOne(funcId)
+                        const { id, createTime, createUser, updateTime, updateUser, ...other} = func
+                        const newFunc = Object.assign(other, { 
+                            funcGroupId: defaultFuncGroupId
+                        })
+                        const createFunc = getRepository(Func).create(newFunc)
+                        saveQueue.push(transactionalEntityManager.save(createFunc))
+                        
+                    }))
+                }
+                saveQueue.length && await Promise.all(saveQueue)
+            })
+        }))
         
         ctx.send({
             code: 0,
-            message: 'success',
-            data: result
+            message: `success`,
+            data: `模板添加至项目成功`
         })
     } catch (err) {
         ctx.throwError({

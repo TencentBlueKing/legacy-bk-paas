@@ -75,6 +75,7 @@
 
 <style lang="postcss">
     @import "@/css/mixins/ellipsis";
+    @import "@/css/mixins/scroller";
 
     .layout {
         --side-hd-height: 52px;
@@ -138,6 +139,7 @@
                 line-height: var(--side-hd-height);
             }
             .side-bd {
+                @mixin scroller;
                 height: calc(100% - var(--side-hd-height) - var(--side-ft-height));
                 overflow-y: auto;
             }
@@ -185,6 +187,7 @@
         }
 
         .main-container {
+            @mixin scroller;
             height: calc(100% - var(--footer-height) - var(--breadcrumb-height));
             overflow: auto;
         }

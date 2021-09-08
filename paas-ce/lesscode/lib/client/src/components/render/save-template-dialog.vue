@@ -2,11 +2,12 @@
     <section>
         <bk-dialog v-model="isShow"
             render-directive="if"
-            theme="primary"
             title="存为模板"
             width="600"
+            :show-mask="true"
             :mask-close="false"
             :auto-close="false"
+            :draggable="false"
             header-position="left"
             ext-cls="template-operate-dialog"
         >
@@ -172,6 +173,7 @@
 
 <style lang="postcss">
     .template-operate-dialog {
+        background: rgba(0, 0, 0, 0.6);
         z-index: 2000 !important;
         .bk-dialog-body {
             padding: 10px 15px 25px;

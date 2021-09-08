@@ -40,6 +40,8 @@ const projectSelectFields = [
     'project.projectName',
     'project.projectDesc',
     'project.status',
+    'project.isOffcial',
+    'project.offcialType',
     'project.createTime',
     'project.createUser',
     'project.deleteFlag'
@@ -171,7 +173,7 @@ export default {
 
                     const copyTemplates = await getRepository(PageTemplate)
                         .createQueryBuilder('pageTemplate')
-                        .where('pageTemplate.categoryId IN (:...categortIds)', { categoryIds: categoryIdList })
+                        .where('pageTemplate.categoryId IN (:...categoryIds)', { categoryIds: categoryIdList })
                         .andWhere('pageTemplate.isOffcial = 0')
                         .getMany()
                     

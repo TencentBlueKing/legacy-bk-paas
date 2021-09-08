@@ -168,7 +168,7 @@
                     }
                     const data = {
                         id: this.templateId,
-                        params
+                        templateInfo: [{ templateName: this.dialog.formData.templateName, belongProjectId: this.projectId, categoryId: this.dialog.formData.categoryId }]
                     }
                     if (this.actionType === 'apply') {
                         // 将模板中用到的函数和变量都获取出来

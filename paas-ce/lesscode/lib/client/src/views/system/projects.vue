@@ -65,7 +65,7 @@
                                         <li><a href="javascript:;" @click="toPage(project.id)">页面管理</a></li>
                                         <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
-                                        <!-- <li><a href="javascript:;" @click="handleDelete(project)">删除</a></li> -->
+                                        <li v-if="platformAdmin"><a href="javascript:;" @click="handleSetTemplate(project)">设为模板</a></li>
                                     </ul>
                                 </bk-dropdown-menu>
                             </div>
@@ -77,6 +77,7 @@
                                 @click.stop="handleClickFavorite(project)"
                             ></i>
                         </span>
+                        <span v-if="project.isOffcial" class="default-tag">项目模板</span>
                     </div>
                 </div>
                 <div class="empty" v-show="!projectList.length">
@@ -196,17 +197,22 @@
         <template-dialog ref="templateDialog" @preview="preview" @to-page="toPage"></template-dialog>
 
         <download-dialog ref="downloadDialog"></download-dialog>
+
+        <set-template-dialog ref="setTemplateDialog" :refresh-list="getProjectList"></set-template-dialog>
     </main>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import preivewErrImg from '@/images/preview-error.png'
     import dayjs from 'dayjs'
     import LayoutThumbList from '@/components/project/layout-thumb-list'
     import DownloadDialog from './components/download-dialog'
     import TemplateDialog from './components/template-dialog'
+    import SetTemplateDialog from './components/set-template-dialog.vue'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
+
     dayjs.extend(relativeTime)
     dayjs.locale('zh-cn')
 
@@ -225,7 +231,8 @@
             },
             LayoutThumbList,
             DownloadDialog,
-            TemplateDialog
+            TemplateDialog,
+            SetTemplateDialog
         },
         data () {
             return {
@@ -319,6 +326,7 @@
             }
         },
         computed: {
+            ...mapGetters('perm', ['platformAdmin']),
             filter () {
                 return this.$route.query.filter || ''
             },
@@ -534,6 +542,15 @@
                 this.$refs.downloadDialog.projectId = project.id
                 this.$refs.downloadDialog.projectName = project.projectName
             },
+            handleSetTemplate (project) {
+                this.hideDropdownMenu(project)
+                this.$refs.setTemplateDialog.isShow = true
+                this.$refs.setTemplateDialog.projectId = project.id
+                this.$refs.setTemplateDialog.formData = {
+                    isOffcial: project.isOffcial,
+                    offcialType: project.offcialType
+                }
+            },
             async handleRename (project) {
                 this.activatedProject = project
                 this.hideDropdownMenu(project)
@@ -662,6 +679,9 @@
                 .favorite-btn {
                     opacity: 1;
                 }
+                .default-tag {
+                    display: none;
+                }
                 .preview {
                     &::before {
                         background: rgba(0, 0, 0, 0.4);
@@ -694,6 +714,20 @@
                 .favorite-btn {
                     opacity: 1;
                 }
+            }
+
+            .default-tag {
+                position: absolute;
+                right: 6px;
+                top: 6px;
+                height: 22px;
+                line-height: 22px;
+                text-align: center;
+                border-radius: 2px;
+                font-size: 12px;
+                color: #fff;
+                padding: 0 6px;
+                background: #699DF4;
             }
 
             .favorite-btn {

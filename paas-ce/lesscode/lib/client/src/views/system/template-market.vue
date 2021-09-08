@@ -38,8 +38,8 @@
                                     </template>
                                     <div class="operate-btns">
                                         <bk-button style="margin-left: 22px;width: 76px" theme="primary" @click="handleApply(project)">应用</bk-button>
-                                        <bk-button style="margin-left: 10px;width: 76px">预览</bk-button>
-                                        <bk-button style="margin-left: 10px;width: 76px">下载源码</bk-button>
+                                        <bk-button style="margin-left: 10px;width: 76px" @click="handlePreviewProject(project.id)">预览</bk-button>
+                                        <bk-button style="margin-left: 10px;width: 76px" @click="handleDownloadProject(project)">下载源码</bk-button>
                                     </div>
                                 </div>
                                 <div class="item-ft">
@@ -96,8 +96,8 @@
                                     </template>
                                     <div class="operate-btns">
                                         <bk-button style="margin-left: 17px;width: 86px" theme="primary" @click="handleAddToProject(page)">添加至项目</bk-button>
-                                        <bk-button style="margin-left: 10px;width: 76px">预览</bk-button>
-                                        <bk-button style="margin-left: 10px;width: 76px">下载源码</bk-button>
+                                        <bk-button style="margin-left: 10px;width: 76px" @click="handlePreviewTemplate(page)">预览</bk-button>
+                                        <bk-button style="margin-left: 10px;width: 76px" @click="handleDownloadTemplate(page)">下载源码</bk-button>
                                     </div>
                                 </div>
                                 <div class="item-ft">
@@ -110,13 +110,16 @@
                         </div>
                         <div class="empty" v-show="!template.page.list.length">
                             <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
-                                <div>暂无项目模板</div>
+                                <div>暂无页面模板</div>
                             </bk-exception>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <download-dialog ref="downloadDialog"></download-dialog>
+
         <bk-dialog v-model="dialog.project.visible"
             render-directive="if"
             theme="primary"
@@ -169,7 +172,7 @@
             header-position="left"
             ext-cls="page-create-dialog"
             @value-change="handlePageDialogToggle">
-            <div class="selected-project">已选模板：{{dialog.page.templateName}}，添加至项目后，可以在画布中拖拽使用</div>
+            <div class="selected-project">已选模板：{{dialog.page.curPage.templateName}}，添加至项目后，可以在画布中拖拽使用</div>
             <bk-form :label-width="86">
                 <bk-form-item label="项目" required :ext-cls="'selected-template-project'">
                     <bk-select searchable
@@ -191,12 +194,13 @@
             </bk-form>
             <template v-if="dialog.page.selectedList.length">
                 <div style="margin: 20px 0">请指定添加至对应项目的模板分类：</div>
-                <div style="min-height: 140px" v-bkloading="{ isLoading: formLoading, opacity: 1 }">
-                    <bk-form ref="pageForm" :label-width="120" v-show="!formLoading">
+                <div style="min-height: 140px">
+                    <bk-form ref="pageForm" :label-width="120">
                         <bk-form-item v-for="item in dialog.page.selectedList"
                             :key="item.id"
                             :label="item.projectName" required>
                             <bk-select searchable
+                                :clearable="false"
                                 v-model="item.selectedCategory">
                                 <bk-option v-for="option in item.categoryList"
                                     :key="option.id"
@@ -211,6 +215,7 @@
             <div class="dialog-footer" slot="footer">
                 <bk-button
                     theme="primary"
+                    @click="handlePageConfirm"
                     :loading="dialog.page.loading">确定</bk-button>
                 <bk-button @click="handlePageCancel" :disabled="dialog.page.loading">取消</bk-button>
             </div>
@@ -220,43 +225,13 @@
 
 <script>
     import preivewErrImg from '@/images/preview-error.png'
+    import DownloadDialog from './components/download-dialog'
+    import { PROJECT_TEMPLATE_TYPE, PAGE_TEMPLATE_TYPE } from '@/common/constant'
+    import { mapActions } from 'vuex'
+    import { getVarList, getFuncList } from '@/common/process-targetdata'
 
-    const PROJECT_TEMPLATE_TYPE = [
-        {
-            id: '',
-            name: '全部'
-        },
-        {
-            id: 'OFFCIAL_WEBSITE',
-            name: '企业官网'
-        },
-        {
-            id: 'ADMIN_BACKEND',
-            name: '管理后台'
-        },
-        {
-            id: 'OPERATION_PRODUCT',
-            name: '运维产品'
-        }
-    ]
-    const PAGE_TEMPLATE_TYPE = [
-        {
-            id: '',
-            name: '全部'
-        },
-        {
-            id: 'FORM',
-            name: '表单'
-        },
-        {
-            id: 'CHART',
-            name: '图表'
-        },
-        {
-            id: 'INFO',
-            name: '信息'
-        }
-    ]
+    const PROJECT_TYPE_LIST = [{ id: '', name: '全部' }].concat(PROJECT_TEMPLATE_TYPE)
+    const PAGE_TYPE_LIST = [{ id: '', name: '全部' }].concat(PAGE_TEMPLATE_TYPE)
     const defaultCreateFormData = {
         projectName: '',
         projectCode: '',
@@ -266,20 +241,23 @@
 
     export default {
         name: 'template-market',
+        components: {
+            DownloadDialog
+        },
         data () {
             return {
                 template: {
                     project: {
                         list: [],
                         filter: '',
-                        links: [...PROJECT_TEMPLATE_TYPE],
+                        links: [...PROJECT_TYPE_LIST],
                         keyword: ''
                     },
                     page: {
                         list: [],
                         filter: '',
                         keyword: '',
-                        links: [...PAGE_TEMPLATE_TYPE]
+                        links: [...PAGE_TYPE_LIST]
                     }
                 },
                 projectList: [],
@@ -323,7 +301,7 @@
                         visible: false,
                         loading: false,
                         selectLoading: false,
-                        templateName: '',
+                        curPage: {},
                         projectList: [],
                         selectedList: [],
                         formData: {
@@ -360,6 +338,10 @@
             this.getTemplateList()
         },
         methods: {
+            ...mapActions('functions', [
+                'getAllGroupFuncs'
+            ]),
+            ...mapActions('variable', ['getAllVariable']),
             async getTemplateList () {
                 this.pageLoading = true
                 try {
@@ -481,7 +463,7 @@
                 this.dialog.project.visible = true
             },
             handleAddToProject (page) {
-                this.dialog.page.templateName = page.templateName
+                this.dialog.page.curPage = page
                 this.dialog.page.visible = true
             },
             handleProjectDialogToggle () {
@@ -499,15 +481,62 @@
             handlePageCancel () {
                 this.dialog.page.visible = false
             },
+            async handlePageConfirm () {
+                this.dialog.page.loading = true
+                if (!this.dialog.page.selectedList.length) {
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: '未选择项目'
+                    })
+                    return
+                }
+                try {
+                    const fromTemplate = this.dialog.page.curPage
+                    const templateInfo = this.dialog.page.selectedList.map(item => ({
+                        belongProjectId: item.id,
+                        categoryId: item.selectedCategory
+                    }))
+                    const data = {
+                        id: fromTemplate.id,
+                        templateInfo
+                    }
+                    const [variableList, funcGroups] = await Promise.all([
+                        this.getAllVariable({ projectId: fromTemplate.belongProjectId, pageCode: fromTemplate.fromPageCode, effectiveRange: 0 }, false),
+                        this.getAllGroupFuncs(fromTemplate.belongProjectId, false)
+                    ])
+                    const targetData = []
+                    targetData.push(JSON.parse(fromTemplate.content || {}))
+                    const valList = getVarList(targetData, variableList)
+                    const funcList = getFuncList(targetData, funcGroups)
+                    Object.assign(data, { valList, funcList })
+                    console.log(data, 'submit data')
+                    const res = await this.$store.dispatch(`pageTemplate/apply`, data)
+                    if (res) {
+                        this.$bkMessage({
+                            theme: 'success',
+                            message: res
+                        })
+                        this.dialog.page.isShow = false
+                    }
+                } catch (err) {
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: err.message || err
+                    })
+                } finally {
+                    this.dialog.page.loading = false
+                }
+            },
             handleSelectClear () {
                 this.dialog.page.selectedList = []
                 this.dialog.page.formData.project = []
             },
-            handleSelectChange (newValue, oldValue) {
+            async handleSelectChange (newValue, oldValue) {
+                console.log(newValue, oldValue, 143)
                 if (newValue.length > oldValue.length) {
-                    const selected = this.dialog.page.projectList.find(project => project.id === newValue[newValue.length - 1])
-                    selected.selectedCategory = ''
-                    this.getTemplateCategory(selected)
+                    const selectedProject = this.dialog.page.projectList.find(project => project.id === newValue[newValue.length - 1])
+                    const selected = { id: selectedProject.id, projectName: selectedProject.projectName, selectedCategory: '' }
+                    await this.getTemplateCategory(selected)
                     this.dialog.page.selectedList.push(selected)
                 } else {
                     const that = this
@@ -524,6 +553,35 @@
                     params: {
                         projectId
                     }
+                })
+            },
+            handlePreviewProject (id) {
+                window.open(`/preview/project/${id}/`, '_blank')
+            },
+            handlePreviewTemplate (template) {
+                window.open(`/preview-template/project/${template.belongProjectId}/${template.id}`, '_blank')
+            },
+            handleDownloadProject (project) {
+                this.$refs.downloadDialog.isShow = true
+                this.$refs.downloadDialog.projectId = project.id
+                this.$refs.downloadDialog.projectName = project.projectName
+            },
+            handleDownloadTemplate (template) {
+                const targetData = []
+                targetData.push(JSON.parse(template.content))
+                this.$store.dispatch('vueCode/getPageCode', {
+                    targetData,
+                    projectId: template.belongProjectId,
+                    from: 'download_page'
+                }).then((res) => {
+                    const downlondEl = document.createElement('a')
+                    const blob = new Blob([res])
+                    downlondEl.download = `bklesscode-template-${template.id}.vue`
+                    downlondEl.href = URL.createObjectURL(blob)
+                    downlondEl.style.display = 'none'
+                    document.body.appendChild(downlondEl)
+                    downlondEl.click()
+                    document.body.removeChild(downlondEl)
                 })
             }
         }
@@ -560,7 +618,7 @@
     }
 
     .project-list{
-        margin-top: 30px;
+        margin-top: 10px;
     }
     .page-list{
         margin-bottom: 10px;
@@ -745,7 +803,7 @@
             padding-right: 30px;
         }
         /deep/ & .bk-dialog-body{
-            height: 335px;
+            height: 360px;
             overflow-y: auto;
             @mixin scroller;
         }

@@ -29,50 +29,60 @@
         </div>
         <div class="sidebar-bd">
             <div class="component-panel-base">
-                <template v-for="(group, groupIndex) in renderGroupTemplateList">
-                    <div
-                        :key="groupIndex"
-                        :class="getComponentGroupClass(group.id, groupIndex)"
-                        v-show="!searchResult || (searchResult && (group.id === searchResult.categoryId || group.id === searchResult.offcialType))"
-                    >
-                        <div class="group-title" :title="group.categoryName" @click="handleCompGroupFold(group.id)">
-                            <i class="bk-drag-icon bk-drag-arrow-down"></i>
-                            {{group.categoryName}}
-                        </div>
-                        <div class="group-content">
-                            <vue-draggable
-                                class="source-drag-area component-list template-list"
-                                ghost-class="source-ghost"
-                                chosen-class="source-chosen"
-                                drag-class="source-drag"
-                                :list="group.list"
-                                :sort="false"
-                                :group="draggableSourceGroup"
-                                :force-fallback="false"
-                                :clone="cloneFunc"
-                                filter=".uninstall"
-                                @choose="onChoose($event, group.list)"
-                                @end="sourceAreaEndHandler">
-                                <template>
-                                    <div v-for="(template, templateIndex) in group.list" class="template-item" :class="{ 'uninstall': type === 'market' && !template.hasInstall }" :key="templateIndex"
-                                        v-show="!searchResult || template.id === searchResult.id">
-                                        <div class="item-img">
-                                            <img :src="template.previewImg" />
-                                            <div class="mask" v-if="type === 'market' && !template.hasInstall">
-                                                <bk-button class="apply-btn" theme="primary" size="small" @click.stop="handleApply(template)">应用</bk-button>
+                <section v-if="renderTemplateList.length">
+                    <template v-for="(group, groupIndex) in renderGroupTemplateList">
+                        <div
+                            :key="groupIndex"
+                            :class="getComponentGroupClass(group.id, groupIndex)"
+                            v-show="!searchResult || (searchResult && (group.id === searchResult.categoryId || group.id === searchResult.offcialType))"
+                        >
+                            <div class="group-title" :title="group.categoryName" @click="handleCompGroupFold(group.id)">
+                                <i class="bk-drag-icon bk-drag-arrow-down"></i>
+                                {{group.categoryName}}
+                            </div>
+                            <div class="group-content">
+                                <vue-draggable
+                                    class="source-drag-area component-list template-list"
+                                    ghost-class="source-ghost"
+                                    chosen-class="source-chosen"
+                                    drag-class="source-drag"
+                                    :list="group.list"
+                                    :sort="false"
+                                    :group="draggableSourceGroup"
+                                    :force-fallback="false"
+                                    :clone="cloneFunc"
+                                    filter=".uninstall"
+                                    @choose="onChoose($event, group.list)"
+                                    @end="sourceAreaEndHandler">
+                                    <template>
+                                        <div v-for="(template, templateIndex) in group.list" class="template-item" :class="{ 'uninstall': type === 'market' && !template.hasInstall }" :key="templateIndex"
+                                            v-show="!searchResult || template.id === searchResult.id">
+                                            <div class="item-img">
+                                                <img :src="template.previewImg" />
+                                                <div class="mask" v-if="type === 'market' && !template.hasInstall">
+                                                    <bk-button class="apply-btn" theme="primary" size="small" @click.stop="handleApply(template)">应用</bk-button>
+                                                </div>
+                                            </div>
+
+                                            <div class="item-info" :title="template.templateName">
+                                                <span class="item-name">{{ template.templateName }}</span>
+                                                <span class="preview" @click="handlePreview(template.id)">预览</span>
                                             </div>
                                         </div>
-
-                                        <div class="item-info" :title="template.templateName">
-                                            <span class="item-name">{{ template.templateName }}</span>
-                                            <span class="preview" @click="handlePreview(template.id)">预览</span>
-                                        </div>
-                                    </div>
-                                </template>
-                            </vue-draggable>
+                                    </template>
+                                </vue-draggable>
+                            </div>
                         </div>
-                    </div>
-                </template>
+                    </template>
+                </section>
+                <section v-else>
+                    <bk-exception
+                        class="group-empty"
+                        type="empty"
+                        scene="part">
+                        <span>暂无模板</span>
+                    </bk-exception>
+                </section>
             </div>
         </div>
         <template-edit-dialog ref="templateApplyDialog" action-type="apply" :refresh-list="initTemplates"></template-edit-dialog>
@@ -178,6 +188,7 @@
                 }
             },
             handleToggleTab (tab) {
+                this.templateTabsCurrentRefresh = +new Date()
                 this.type = tab.name || 'project'
             },
             onChoose (e, list) {

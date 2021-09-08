@@ -141,6 +141,12 @@
                 if (!value) {
                     this.keyword = ''
                 }
+            },
+            source: {
+                handler () {
+                    this.handleInput()
+                },
+                immediate: true
             }
         },
         methods: {
