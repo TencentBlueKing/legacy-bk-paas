@@ -498,6 +498,7 @@
                     }))
                     const data = {
                         id: fromTemplate.id,
+                        fromProjectId: fromTemplate.belongProjectId,
                         templateInfo
                     }
                     const [variableList, funcGroups] = await Promise.all([
@@ -506,7 +507,9 @@
                     ])
                     const targetData = []
                     targetData.push(JSON.parse(fromTemplate.content || {}))
+                    // 解析出模板targetData绑定的变量
                     const valList = getVarList(targetData, variableList)
+                    // 解析出模板targetData绑定的函数
                     const funcList = getFuncList(targetData, funcGroups)
                     Object.assign(data, { valList, funcList })
                     console.log(data, 'submit data')
@@ -516,7 +519,7 @@
                             theme: 'success',
                             message: res
                         })
-                        this.dialog.page.isShow = false
+                        this.dialog.page.visible = false
                     }
                 } catch (err) {
                     this.$bkMessage({

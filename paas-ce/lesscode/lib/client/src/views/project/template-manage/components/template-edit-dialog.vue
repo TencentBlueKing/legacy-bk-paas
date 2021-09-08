@@ -123,6 +123,9 @@
         watch: {
             isShow (val) {
                 if (val) {
+                    if (this.actionType === 'apply') {
+                        this.dialog.formData.categoryId = (this.categoryList[0] && this.categoryList[0].id) || ''
+                    }
                     setTimeout(() => {
                         this.$refs.nameInput && this.$refs.nameInput.$el.querySelector('input').focus()
                     }, 50)
@@ -168,6 +171,7 @@
                     }
                     const data = {
                         id: this.templateId,
+                        fromProjectId: this.fromTemplate.belongProjectId,
                         templateInfo: [{ templateName: this.dialog.formData.templateName, belongProjectId: this.projectId, categoryId: this.dialog.formData.categoryId }]
                     }
                     if (this.actionType === 'apply') {

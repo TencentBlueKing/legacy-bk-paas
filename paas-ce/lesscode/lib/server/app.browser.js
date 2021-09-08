@@ -223,7 +223,7 @@ async function startServer () {
 }
 
 // 自动执行db导入和变更操作,相应配置文件位于lib/server/conf/db-migrate.json
-function execSql (connection, callBack) {
+async function execSql (connection, callBack) {
     try {
         const databaseEnv = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
         const prefixPath = '.'
@@ -231,7 +231,7 @@ function execSql (connection, callBack) {
         shell.exec(migrateUp)
         
         // 自动执行接口刷数据
-        executeApi()
+        await executeApi()
         callBack()
         return
     } catch (err) {

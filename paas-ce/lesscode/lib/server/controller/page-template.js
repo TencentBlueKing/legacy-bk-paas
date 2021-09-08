@@ -8,6 +8,7 @@ import Func from '../model/entities/func'
 import Variable from '../model/entities/variable'
 import FuncModel from '../model/function'
 import VariableModel from '../model/variable'
+import FuncVariable from '../model/entities/func-variable'
 
 export const listByCategory = async (ctx) => {
     try {
@@ -102,7 +103,7 @@ export const detail = async (ctx) => {
 // 应用模板
 export const apply = async (ctx) => {
     try {
-        const { id, templateInfo, valList = [], funcList = [] } = ctx.request.body
+        const { id, fromProjectId, templateInfo, valList = [], funcList = [] } = ctx.request.body
         const preTemplate = await PageTemplateModel.findById(id) || {}
 
         const { content, previewImg, fromPageCode, templateName } = preTemplate
@@ -121,7 +122,8 @@ export const apply = async (ctx) => {
                 fromPageCode
             }
             
-            const { varIds, funcIds, defaultFuncGroupId } = await getRealVarAndFunc({ projectId: belongProjectId, valList, funcList })
+            const { varIds, funcIds, defaultFuncGroupId } = await getRealVarAndFunc({ projectId: belongProjectId, fromProjectId, valList, funcList })
+            console.log(belongProjectId, varIds, funcIds, defaultFuncGroupId, 'ids')
             await getConnection().transaction(async transactionalEntityManager => {
                 const createTemplate = getRepository(PageTemplate).create(newTemplate)
                 const res = await transactionalEntityManager.save(createTemplate)
@@ -167,27 +169,42 @@ export const apply = async (ctx) => {
     }
 }
 
-const getRealVarAndFunc = async ({ projectId, valList, funcList }) => {
-    const varIds = []
+const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }) => {
+    let varIds = []
     const funcIds = []
+    const funcCodes = []
     const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
     const projectFuncGroupList = await FuncModel.allGroupFuncDetail(projectId)
     const projectFuncList = []
     projectFuncGroupList.map(item => {
         projectFuncList.splice(0, 0, ...item.functionList)
     })
-    const defaultFuncGroupId = projectFuncGroupList[0].id
+    const defaultFuncGroupId = projectFuncGroupList[0] && projectFuncGroupList[0].id
     funcList.map(func => {
         if (projectFuncList.filter(item => item.funcCode === func.funcCode).length === 0) {
             funcIds.push(func.id)
-            // 查找r_func_variable
+            funcCodes.push(func.funcCode)
         }
     })
+    // 找出函数中使用的变量
+    const funcVarList = await getRepository(FuncVariable).find({
+        where: {
+            projectId: fromProjectId,
+            deleteFlag: 0,
+            funcCode: In(funcCodes)
+        }
+    })
+    // 直接绑定的变量和函数使用到的变量放在变量列表
+    funcVarList.map(item => {
+        valList.push({ id: item.variableId.toString() })
+    })
     valList.map(val => {
-        if (projectValList.filter(item => item.variableCode === val.variableCode).length === 0) {
+        if (projectValList.filter(item => item.id === val.id).length === 0) {
             varIds.push(val.id)
         }
     })
+    // 变量id去重
+    varIds = Array.from(new Set(varIds))
     return { varIds, funcIds, defaultFuncGroupId }
 }
 
