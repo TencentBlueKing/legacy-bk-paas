@@ -195,7 +195,9 @@ class SaaSApp(models.Model):
             logo_name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
             self._del_exist_file(logo_name)
             # 指定图片名称
-            self.logo.name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
+            # self.logo.name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
+            # 2021-09-08 bugfix lightapp logo change fail
+            self.logo.name = str(self.code) + logo_ext
         # save操作
         super(SaaSApp, self).save(*args, **kwargs)
 
