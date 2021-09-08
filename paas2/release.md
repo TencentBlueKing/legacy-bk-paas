@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.8
+    - bugfix: smart package size calcuate error in py3
+
 # 2.13.7
     - bugfix: app logo fail after upgrade django version
 
