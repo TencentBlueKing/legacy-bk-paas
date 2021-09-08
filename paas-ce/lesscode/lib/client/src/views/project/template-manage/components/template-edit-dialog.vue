@@ -172,6 +172,7 @@
                     const data = {
                         id: this.templateId,
                         fromProjectId: this.fromTemplate.belongProjectId,
+                        params,
                         templateInfo: [{ templateName: this.dialog.formData.templateName, belongProjectId: this.projectId, categoryId: this.dialog.formData.categoryId }]
                     }
                     if (this.actionType === 'apply') {
@@ -186,7 +187,7 @@
                         const funcList = getFuncList(targetData, funcGroups)
                         Object.assign(data, { valList, funcList })
                     }
-                    
+                    console.log(data, 361)
                     const res = await this.$store.dispatch(`pageTemplate/${this.actionType}`, data)
                     if (res) {
                         this.$bkMessage({
