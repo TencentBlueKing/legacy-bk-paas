@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.7
+    - bugfix: app logo fail after upgrade django version
+
 # 2.13.6
     - update: sync esb from develop branch
 

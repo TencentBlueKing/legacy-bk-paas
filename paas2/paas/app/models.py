@@ -199,12 +199,15 @@ class App(models.Model):
             logo_name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
         else:
             logo_name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
+
         # 判断图片路径与旧图路径名称是否相同
         if cmp(logo_name, self.logo.name):
             logo_name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
             self._del_exist_file(logo_name)
             # 指定图片名称
-            self.logo.name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
+            # self.logo.name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
+            # 2021-09-08 bugfix lightapp logo change fail
+            self.logo.name = str(self.code) + logo_ext
         # save操作
         super(App, self).save(*args, **kwargs)
 
