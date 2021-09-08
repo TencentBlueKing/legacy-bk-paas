@@ -187,7 +187,6 @@
                         const funcList = getFuncList(targetData, funcGroups)
                         Object.assign(data, { valList, funcList })
                     }
-                    console.log(data, 361)
                     const res = await this.$store.dispatch(`pageTemplate/${this.actionType}`, data)
                     if (res) {
                         this.$bkMessage({
