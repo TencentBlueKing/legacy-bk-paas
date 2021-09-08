@@ -12,57 +12,50 @@ list service templates
 |----------------------|------------|--------|-----------------------|
 | bk_supplier_account  | string     |Yes     | Supplier Account ID       |
 | service_category_id         | int  | No   | Service Category ID |
+| search         | string  | No   | search service templates by name，default is empty string |
+| is_exact       | bool  | No   | whether exact match, used with search param, default is false (v3.9.19)|
 
 
 ### Request Parameters Example
 
-```python
+```json
 {
-  "bk_biz_id": 1,
-  "service_category_id": 1,
-  "page": {
-    "start": 0,
-    "limit": 10,
-    "sort": "-name"
-  }
+    "bk_biz_id": 1,
+    "service_category_id": 1,
+    "search": "test2",
+    "is_exact": true,
+    "page": {
+        "start": 0,
+        "limit": 10,
+        "sort": "-name"
+    }
 }
 ```
 
 ### Return Result Example
 
-```python
+```json
 {
-  "result": true,
-  "code": 0,
-  "message": "success",
-  "permission": null,
-  "data": {
-    "count": 2,
-    "info": [
-      {
-	"bk_biz_id": 1,
-        "id": 51,
-        "name": "test3",
-        "service_category_id": 1,
-        "creator": "admin",
-        "modifier": "admin",
-        "create_time": "2019-09-18T20:31:34.627+08:00",
-        "last_time": "2019-09-18T20:31:34.627+08:00",
-        "bk_supplier_account": "0"
-      },
-      {
-	"bk_biz_id": 1,
-        "id": 50,
-        "name": "test2",
-        "service_category_id": 1,
-        "creator": "admin",
-        "modifier": "admin",
-        "create_time": "2019-09-18T20:31:29.607+08:00",
-        "last_time": "2019-09-18T20:31:29.607+08:00",
-        "bk_supplier_account": "0"
-      }
-    ]
-  }
+    "result": true,
+    "code": 0,
+    "message": "success",
+    "permission": null,
+    "data": {
+        "count": 1,
+        "info": [
+            {
+                "bk_biz_id": 1,
+                "id": 50,
+                "name": "test2",
+                "service_category_id": 1,
+                "creator": "admin",
+                "modifier": "admin",
+                "create_time": "2019-09-18T20:31:29.607+08:00",
+                "last_time": "2019-09-18T20:31:29.607+08:00",
+                "bk_supplier_account": "0"
+            }
+        ]
+    }
 }
 ```
 

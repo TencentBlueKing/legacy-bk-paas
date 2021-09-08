@@ -16,6 +16,8 @@ import random
 import time
 import hashlib
 
+from django.utils.encoding import force_bytes
+
 from . import configs
 
 
@@ -31,7 +33,7 @@ class QCloudSmsClient(object):
 
     def calculate_sig(self, app_key, rnd, cur_time, mobiles):
         text = "appkey=%s&random=%s&time=%s&mobile=%s" % (app_key, rnd, cur_time, ",".join(mobiles))
-        return hashlib.sha256(text).hexdigest()
+        return hashlib.sha256(force_bytes(text)).hexdigest()
 
     def post(self, path, data):
         result = self.http_client.post(configs.host, path, data=json.dumps(data))

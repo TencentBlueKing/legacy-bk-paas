@@ -43,6 +43,6 @@ create app instance process attribute
 {
     "result": true,
     "code": 0,
-    "message": "OK",
+    "message": "OK"
 }
 ```

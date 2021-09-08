@@ -95,3 +95,4 @@ conf/settings_production.py
 # .jshintrc
 # gulpfile.js
 # package.json
+.envrc

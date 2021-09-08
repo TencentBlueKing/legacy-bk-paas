@@ -24,7 +24,7 @@
 
 ### 请求参数示例
 
-```python
+```json
 {
   "bk_biz_id": 1,
   "name": "test1",
@@ -37,14 +37,21 @@
           "process_template_id": 1,
           "process_info": {
             "bk_supplier_account": "0",
-            "bind_ip": "1",
+            "bind_info": [
+              {
+                  "enable": false,
+                  "ip": "127.0.0.1",
+                  "port": "80",
+                  "protocol": "1",
+                  "template_row_id": 1234
+              }
+            ],
             "description": "",
             "start_cmd": "",
             "restart_cmd": "",
             "pid_file": "",
             "auto_start": false,
             "timeout": 30,
-            "protocol": "1",
             "auto_time_gap": 60,
             "reload_cmd": "",
             "bk_func_name": "java",

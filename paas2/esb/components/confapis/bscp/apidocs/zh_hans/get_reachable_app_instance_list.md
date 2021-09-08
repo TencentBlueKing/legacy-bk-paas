@@ -12,8 +12,34 @@
 |-------------|-----------|--------|----------|
 | biz_id      |  string   | 是     | 业务ID   |
 | app_id      |  string   | 是     | 应用ID   |
-| labels      |  map      | 否     | 节点标签KV集合, 例如"version:1.0" |
+| labels_or   |  array    | 否     | 逻辑或KV列表 |
+| labels_and  |  array    | 否     | 逻辑与KV列表 |
 | page        |  object   | 是     | 分页设置 |
+
+#### labels_or[n]
+
+| 字段   |  类型   | 必选   |  描述      |
+|--------|---------|--------|------------|
+| labels |  map    | 是     | 任意一KV满足则命中匹配，Key为目标节点标签名称；Value为目标匹配的值，格式为"OP|Value", 例如"version:eq|1.0"表示匹配版本为1.0。OP支持的操作符：eq/ne/gt/lt/ge/le(遵循Bash Shell语义) |
+
+#### labels_and[n]
+
+| 字段   |  类型   | 必选   |  描述      |
+|--------|---------|--------|------------|
+| labels |  map    | 是     | 全部KV满足才命中匹配， Key为目标节点标签名称；Value为目标匹配的值，格式为"OP|Value", 例如"version:eq|1.0"表示匹配版本为1.0。OP支持的操作符：eq/ne/gt/lt/ge/le(遵循Bash Shell语义) |
+
+```json
+
+	KV labels format: "KEY": "OP|VALUE"
+
+	OP(Bash Shell Operators):
+			1.=: empty or eq
+			2.!=: ne
+			3.>: gt
+			4.<: lt
+			5.>=: ge
+			6.<=: le
+```
 
 #### page
 
@@ -32,9 +58,24 @@
     "bk_token": "xxx",
     "biz_id": "xxx",
     "app_id": "A-0b67a798-e9c1-11e9-8c23-525400f99278",
-    "labels": {
-        "version":"1.0"
-    },
+    "labels_or":[
+        {
+            "labels": {
+               "k1": "v1",
+               "k2": "gt|v2",
+               "k3": "le|v3"
+             }
+        }
+    ],
+    "labels_and":[
+        {
+            "labels": {
+                "k1": "ne|v1",
+                "k2": "lt|v2",
+                "k3": "ge|v3"
+             }
+        }
+    ],
     "page": {
         "start": 0,
         "limit": 100

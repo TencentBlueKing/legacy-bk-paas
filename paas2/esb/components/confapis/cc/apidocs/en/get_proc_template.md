@@ -26,72 +26,120 @@ get single process template info, process_template_id in url path
 
 ### Return Result Example
 
-```python
+```json
 {
   "result": true,
   "code": 0,
   "message": "success",
   "permission": null,
   "data": {
-    "count": 1,
-    "info": [
-      {
-	"bk_biz_id": 1,
-        "id": 49,
-        "name": "10.27.0.9_p1_81",
-        "service_template_id": 50,
-        "bk_host_id": 11,
-        "bk_host_innerip": "10.27.0.9",
-        "bk_module_id": 56,
-        "creator": "admin",
-        "modifier": "admin",
-        "create_time": "2019-07-22T09:54:50.906+08:00",
-        "last_time": "2019-07-22T09:54:50.906+08:00",
-        "bk_supplier_account": "0",
-        "service_category_id": 22,
-        "process_instances": [
-          {
-            "process": {
-	      "bk_biz_id": 1,
-              "proc_num": 0,
-              "stop_cmd": "",
-              "restart_cmd": "",
-              "face_stop_cmd": "",
-              "bk_process_id": 43,
-              "bk_func_name": "p1",
-              "work_path": "",
-              "bind_ip": "0.0.0.0",
-              "priority": 0,
-              "reload_cmd": "",
-              "bk_process_name": "p1",
-              "port": "81",
-              "pid_file": "",
-              "auto_start": false,
-              "auto_time_gap": 0,
-              "last_time": "2019-07-22T09:54:50.927+08:00",
-              "create_time": "2019-07-22T09:54:50.927+08:00",
-              "bk_biz_id": 3,
-              "start_cmd": "",
-              "bk_func_id": "",
-              "user": "",
-              "timeout": 0,
-              "protocol": "1",
-              "description": "",
-              "bk_supplier_account": "0",
-              "bk_start_param_regex": ""
-            },
-            "relation": {
-	      "bk_biz_id": 1,
-              "bk_process_id": 43,
-              "service_instance_id": 49,
-              "process_template_id": 48,
-              "bk_host_id": 11,
-              "bk_supplier_account": "0"
+    "id": 50,
+    "bk_process_name": "p1",
+    "bk_biz_id": 1,
+    "service_template_id": 51,
+    "property": {
+      "proc_num": {
+        "value": 300,
+        "as_default_value": false
+      },
+      "stop_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "restart_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "face_stop_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bk_func_name": {
+        "value": "p1",
+        "as_default_value": true
+      },
+      "work_path": {
+        "value": "",
+        "as_default_value": false
+      },
+      "priority": {
+        "value": null,
+        "as_default_value": false
+      },
+      "reload_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bk_process_name": {
+        "value": "p1",
+        "as_default_value": true
+      },
+      "pid_file": {
+        "value": "",
+        "as_default_value": false
+      },
+      "auto_start": {
+        "value": false,
+        "as_default_value": false
+      },
+      "auto_time_gap": {
+        "value": null,
+        "as_default_value": false
+      },
+      "start_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bk_func_id": {
+        "value": null,
+        "as_default_value": false
+      },
+      "user": {
+        "value": "root100",
+        "as_default_value": false
+      },
+      "timeout": {
+        "value": null,
+        "as_default_value": false
+      },
+      "description": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bk_start_param_regex": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bind_info": {
+        "value": [
+            {
+                "enable": {
+                    "value": false,
+                    "as_default_value": true
+                },
+                "ip": {
+                    "value": "1",
+                    "as_default_value": true
+                },
+                "port": {
+                    "value": "100",
+                    "as_default_value": true
+                },
+                "protocol": {
+                    "value": "1",
+                    "as_default_value": true
+                },
+                "row_id": 1
             }
-          }
-        ]
+        ],
+        "as_default_value": true
       }
-    ]
+    },
+    "creator": "admin",
+    "modifier": "admin",
+    "create_time": "2019-06-19T15:24:04.763+08:00",
+    "last_time": "2019-06-21T16:25:03.962512+08:00",
+    "bk_supplier_account": "0"
   }
 }
 

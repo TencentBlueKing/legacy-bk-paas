@@ -26,7 +26,10 @@ def wrap_error_code(code):
 
 
 class BaseException(Exception):
-    pass
+
+    def __init__(self, message=""):
+        self.message = message
+        super(BaseException, self).__init__(self.message)
 
 
 class RequestThirdPartyException(BaseException):
@@ -43,7 +46,7 @@ class RequestThirdPartyException(BaseException):
         return (
             u"Component request third-party system [%s] interface [%s] error: %s, "
             "please try again later or contact component developer to handle this"
-            % (self.system_name, self.interface_name, self.raw_exc.message)
+            % (self.system_name, self.interface_name, self.raw_exc)
         )
 
     def get_message(self):
@@ -53,7 +56,7 @@ class RequestThirdPartyException(BaseException):
         return (
             u"Component request third-party system [%s] interface [%s] error: %s, "
             "please try again later or contact component developer to handle this"
-            % (self.system_name, self.interface_name, self.raw_exc.message)
+            % (self.system_name, self.interface_name, self.raw_exc)
         )
 
 

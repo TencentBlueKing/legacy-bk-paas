@@ -19,6 +19,7 @@ import hashlib
 import hmac
 
 from django.utils.translation import ugettext as _
+from django.utils.encoding import force_bytes
 
 from app.models import App
 from common.log import logger
@@ -110,7 +111,7 @@ class Sign(object):
         """
         params = "&".join(["%s=%s" % (i, params[i]) for i in sorted(params)])
         message = "%s%s%s?%s" % (method, host, url, params)
-        digest_make = hmac.new(str(secret_key), str(message), hashlib.sha1).digest()
+        digest_make = hmac.new(force_bytes(secret_key), force_bytes(message), hashlib.sha1).digest()
         _signature = base64.b64encode(digest_make)
         return _signature
 
@@ -148,6 +149,6 @@ class Sign(object):
             raise ValueError(_(u"只支持GET, POST"))
 
         _signature = self.compute_signature(self.method, self.host, self.url, params, secret_key)
-        if _signature != self.signature:
+        if force_bytes(_signature) != force_bytes(self.signature):
             raise ValueError(_(u"Signature非法"))
         return True

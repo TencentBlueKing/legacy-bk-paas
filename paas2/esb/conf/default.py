@@ -136,9 +136,9 @@ AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 # logging
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = os.path.dirname(os.path.dirname(PROJECT_PATH))
-LOG_DIR = env.str("PAAS_LOGGING_DIR") or os.path.join(PARENT_DIR, "logs/open_paas")
+LOG_DIR = env.str("PAAS_LOGGING_DIR", "") or os.path.join(PARENT_DIR, "logs/open_paas")
 if not os.path.exists(LOG_DIR):
-    os.mkdir(LOG_DIR)
+    os.makedirs(LOG_DIR)
 
 # 100M, total 1G
 LOG_MAX_BYTES = 104857600

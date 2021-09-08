@@ -12,8 +12,7 @@ specific language governing permissions and limitations under the License.
 
 import json
 
-# from django.utils.encoding import force_unicode
-from django.utils.encoding import force_text as force_unicode
+from django.utils.encoding import force_text
 from django.http import HttpResponse
 from django.shortcuts import _get_queryset
 from django.utils import translation
@@ -47,7 +46,7 @@ def get_error_prompt(form):
     content = []
     fields = list(form.fields.keys())
     for k, v in sorted(list(form.errors.items()), key=lambda x: fields.index(x[0]) if x[0] in fields else -1):
-        _msg = force_unicode(v[0])
+        _msg = force_text(v[0])
         b_field = form[k] if k in form.fields else None
         # Get the default error messages
         messages = {}
@@ -59,7 +58,7 @@ def get_error_prompt(form):
             content.append(u"%s [%s] %s" % (b_field.label, b_field.name, _msg))
         else:
             content.append(u"%s" % _msg)
-    return force_unicode(content[0])
+    return force_text(content[0])
 
 
 def i18n_form(form):

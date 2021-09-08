@@ -79,6 +79,9 @@ class ComponentSystem(models.Model):
     def __unicode__(self):
         return self.get_display_name()
 
+    def __str__(self):
+        return self.get_display_name()
+
 
 class ESBChannel(models.Model):
     """Channel for ESB
@@ -130,6 +133,9 @@ class ESBChannel(models.Model):
         unique_together = ("path", "method")
 
     def __unicode__(self):
+        return self.name
+
+    def __str__(self):
         return self.name
 
     @property
@@ -228,6 +234,9 @@ class FunctionController(models.Model):
     def __unicode__(self):
         return self.func_code
 
+    def __str__(self):
+        return self.func_code
+
 
 class UserAuthToken(models.Model):
     """AuthToken"""
@@ -240,6 +249,9 @@ class UserAuthToken(models.Model):
     created_time = models.DateTimeField(_(u"创建时间"), auto_now_add=True)
 
     def __unicode__(self):
+        return self.auth_token
+
+    def __str__(self):
         return self.auth_token
 
     class Meta(object):
@@ -315,6 +327,9 @@ class ESBBuffetComponent(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
     class Meta(object):
         db_table = "esb_buffet_component"
 
@@ -340,6 +355,9 @@ class ESBBuffetMapping(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
     class Meta(object):
         db_table = "esb_buffet_component_mapping"
 
@@ -356,6 +374,9 @@ class AppAccount(models.Model):
     created_time = models.DateTimeField(_(u"创建时间"), auto_now_add=True)
 
     def __unicode__(self):
+        return self.app_code
+
+    def __str__(self):
         return self.app_code
 
     class Meta(object):
@@ -384,6 +405,9 @@ class ComponentAPIDoc(ModelWithBoard):
     updated_time = models.DateTimeField(_(u"创建时间"), auto_now=True)
 
     def __unicode__(self):
+        return "%s" % self.component_id
+
+    def __str__(self):
         return "%s" % self.component_id
 
     @property
@@ -430,6 +454,9 @@ class SystemDocCategory(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
     class Meta(object):
         verbose_name = _(u"系统文档分类")
         verbose_name_plural = _(u"系统文档分类")
@@ -463,6 +490,9 @@ class AppComponentPerm(models.Model):
     def __unicode__(self):
         return "<app_code: %s, component_id: %s>" % (self.app_code, self.component_id)
 
+    def __str__(self):
+        return "<app_code: %s, component_id: %s>" % (self.app_code, self.component_id)
+
     class Meta(object):
         verbose_name = _(u"APP API权限")
         verbose_name_plural = _(u"APP API权限")
@@ -484,6 +514,9 @@ class WxmpAccessToken(models.Model):
         verbose_name_plural = _(u"微信公众号AccessToken")
 
     def __unicode__(self):
+        return self.wx_app_id
+
+    def __str__(self):
         return self.wx_app_id
 
     def touch(self):

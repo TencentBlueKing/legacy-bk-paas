@@ -154,7 +154,7 @@ STATIC_URL = SITE_URL + "static/"
 
 STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"),)
 
-STATIC_VERSION = "0.2.0"
+STATIC_VERSION = "0.2.1"
 
 PLATFORM_VERSION = "2.0.0"
 
@@ -312,7 +312,12 @@ APP_PROD_URL = SimpleLazyObject(
 ##################
 HOST_CC = ""
 HOST_JOB = ""
-
+# PaaS3.0 的访问地址
+BK_PAAS3_URL = ""
+# API 网关访问地址
+BK_APIGW_URL = ""
+# API 网关文档中心地址
+BK_APIGW_DOC_URL = ""
 
 ##################
 # ESB 信息 #

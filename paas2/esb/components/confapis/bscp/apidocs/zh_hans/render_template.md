@@ -13,7 +13,8 @@
 | biz_id       |  string    | 是     | 业务ID     |
 | template_id  |  string    | 是     | 模板ID     |
 | version_id   |  string    | 是     | 版本ID     |
-| variables    |  string    | 是     | 渲染变量JSON字符串 |
+| variables    |  string    | 否     | 可选，渲染变量JSON字符串 |
+| var_group_id |  string    | 否     | 可选, 内置变量分组ID |
 
 ### 请求参数示例
 

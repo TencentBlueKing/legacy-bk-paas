@@ -21,7 +21,7 @@
 * 支持主机与主机关系数据变化的事件watch能力。
 
 
-* 采用短长链的设计，当用户通过游标进行事件watch时，如果没有事件，则会保持会话连接，在25s内有事件变更则直接直接将事件推回。避免用户不断请求，同时保证用户能及时的拿到变更的数据。
+* 采用短长链的设计，当用户通过游标进行事件watch时，如果没有事件，则会保持会话连接，在20s内有事件变更则直接直接将事件推回。避免用户不断请求，同时保证用户能及时的拿到变更的数据。
 
 
 * 支持批量事件watch能力，提升系统吞吐能力。
@@ -42,7 +42,7 @@
 | bk_fields           | array string   | 看情况 | 返回的事件中需要返回的字段列表，目前监听主机资源该字段为必填字段，不能置空，主机关系可以置空。置空则默认为返回所有字段。 |
 | bk_start_from       | Int64          | 否     | 监听事件的起始时间，该值为unix time的秒数，即为从UTC1970年1月1日0时0分0秒起至你要watch的时间点的总秒数。 |
 | bk_cursor           | string         | 否     | 监听事件的游标，代表了要开始或者继续watch(监听)的事件地址，系统会返回这个游标的下一个、或一批事件。 |
-| bk_resource         | string         | 是     | 要监听的资源类型，枚举值为：host, host_relation, biz, set, module, set_template。其中host代表主机详情事件，host_relation代表主机的关系事件，biz代表业务详情事件，set代表集群详情事件，module代表模块详情事件，set_template代表集群模板详情事件。 |
+| bk_resource         | string         | 是     | 要监听的资源类型，枚举值为：host, host_relation, biz, set, module, process。其中host代表主机详情事件，host_relation代表主机的关系事件，biz代表业务详情事件，set代表集群详情事件，module代表模块详情事件，process代表进程详情事件。 |
 | bk_supplier_account | string         | 是     | 开发商账号                                                   |
 
 

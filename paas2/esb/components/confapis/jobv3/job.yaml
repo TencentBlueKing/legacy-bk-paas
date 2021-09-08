@@ -309,4 +309,46 @@
   dest_http_method: POST
   is_hidden: True
 
+- path: /v2/jobv3/create_credential/
+  name: create_credential
+  label: 新建凭据
+  label_en: Create credential
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/create_credential/
+  dest_http_method: POST
+  is_hidden: True
 
+- path: /v2/jobv3/update_credential/
+  name: update_credential
+  label: 更新凭据
+  label_en: Update credential
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/update_credential/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/jobv3/create_file_source/
+  name: create_file_source
+  label: 新建文件源
+  label_en: Create file source
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-file-gateway/create_file_source/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/jobv3/update_file_source/
+  name: update_file_source
+  label: 更新文件源
+  label_en: Update file source
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-file-gateway/update_file_source/
+  dest_http_method: POST
+  is_hidden: True

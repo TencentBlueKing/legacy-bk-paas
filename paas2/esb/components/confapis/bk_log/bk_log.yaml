@@ -2,8 +2,19 @@
 
 - path: /v2/bk_log/esquery_search/
   name: esquery_search
-  label: 日志系统索引集查询接口
+  label: 日志平台索引集查询接口
   label_en: bk_log index-set search api
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/esquery/search/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/esquery_monitor/
+  name: esquery_monitor
+  label: 日志平台索引集查询接口
+  label_en: bk_log index-set search api for bkmonitor
   method: POST
   api_type: query
   comp_codename: generic.v2.bk_log.bk_log_component
@@ -68,9 +79,20 @@
   dest_http_method: GET
   is_hidden: True
 
+- path: /v2/bk_log/esquery_es_route/
+  name: esquery_es_route
+  label: ES-获取集群信息
+  label_en: ES-ROUTE api
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/esquery/es_route/
+  dest_http_method: GET
+  is_hidden: True
+
 - path: /v2/bk_log/search_index_set/
   name: search_index_set
-  label: 日志系统-索引集列表
+  label: 日志平台-索引集列表
   label_en: bk_log index-set list api
   method: GET
   api_type: query
@@ -81,7 +103,7 @@
 
 - path: /v2/bk_log/search_index_set/{index_set_id}/fields/
   name: index_set_fields
-  label: 日志系统-索引集字段
+  label: 日志平台-索引集字段
   label_en: bk_log index-set fields
   method: GET
   api_type: query
@@ -92,7 +114,7 @@
 
 - path: /v2/bk_log/search_index_set/operators/
   name: search_operators
-  label: 日志系统-检索条件
+  label: 日志平台-检索条件
   label_en: bk_log search operators
   method: GET
   api_type: query
@@ -101,9 +123,31 @@
   dest_http_method: GET
   is_hidden: True
 
+- path: /v2/bk_log/search_index_set/{index_set_id}/context/
+  name: search_context
+  label: 日志平台-检索-上下文
+  label_en: bk_log search context
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/{index_set_id}/context/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/search_index_set/{index_set_id}/tailf/
+  name: search_tailf
+  label: 日志平台-检索-实时日志
+  label_en: bk_log search tail
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/{index_set_id}/tailf/
+  dest_http_method: POST
+  is_hidden: True
+
 - path: /v2/bk_log/create_index_set/
   name: create_index_set
-  label: 日志系统-创建索引集
+  label: 日志平台-创建索引集
   label_en: bk_log create index-set
   method: POST
   api_type: query
@@ -114,7 +158,7 @@
 
 - path: /v2/bk_log/update_index_set/
   name: update_index_set
-  label: 日志系统-更新索引集
+  label: 日志平台-更新索引集
   label_en: bk_log update index-set
   method: PUT
   api_type: query
@@ -125,11 +169,143 @@
 
 - path: /v2/bk_log/replace_index_set/
   name: replace_index_set
-  label: 日志系统-创建或更新索引集
+  label: 日志平台-创建或更新索引集
   label_en: bk_log update or create index-set
   method: POST
   api_type: query
   comp_codename: generic.v2.bk_log.bk_log_component
   dest_path: /api/v1/search/index_set/replace/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/tail/
+  name: databus_collector_tail
+  label: 日志平台-获取kafka采样
+  label_en: bk_log get kafka tail
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/tail/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/
+  name: create_databus_collectors
+  label: 日志平台-创建采集项
+  label_en: bk_log create collector
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/
+  name: update_databus_collectors
+  label: 日志平台-更新采集项
+  label_en: bk_log update collector
+  method: PUT
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/
+  dest_http_method: PUT
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/
+  name: list_databus_collectors
+  label: 日志平台-采集项列表
+  label_en: bk_log list collector
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/
+  name: retrieve_databus_collector
+  label: 日志平台-获取采集项详情
+  label_en: bk_log get collector info
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/update_or_create_clean_config/
+  name: databus_collectors_replace_clean_config
+  label: 日志平台-清洗入库
+  label_en: bk_log collector clean config
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/update_or_create_clean_config/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/list_collectors_by_host/
+  name: list_collectors_by_host
+  label: 日志平台-根据IP获取采集项列表
+  label_en: bk_log list collector by host
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/list_collectors_by_host/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_storage/
+  name: list_databus_storage
+  label: 日志平台-存储列表
+  label_en: bk_log list databus storage
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/storage/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_storage/{cluster_id}/
+  name: get_databus_storage
+  label: 日志平台-存储详情
+  label_en: bk_log get databus storage
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/storage/{cluster_id}/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_storage/
+  name: create_databus_storage
+  label: 日志平台-创建存储
+  label_en: bk_log create databus storage
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/storage/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus_storage/
+  name: update_databus_storage
+  label: 日志平台-更新存储
+  label_en: bk_log update databus storage
+  method: PUT
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/storage/
+  dest_http_method: PUT
+  is_hidden: True
+
+- path: /v2/bk_log/databus_storage/connectivity_detect/
+  name: databus_storage_connectivity_detect
+  label: 日志平台-连通性测试
+  label_en: bk_log es connectivity detect
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/storage/connectivity_detect/
   dest_http_method: POST
   is_hidden: True

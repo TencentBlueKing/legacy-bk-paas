@@ -10,11 +10,12 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import str
 import json
 import base64
 import hmac
 import hashlib
+
+from django.utils.encoding import force_bytes
 
 
 def get_signature(method, path, app_secret, params=None, data=None):
@@ -27,5 +28,5 @@ def get_signature(method, path, app_secret, params=None, data=None):
         kwargs["data"] = data
     kwargs = "&".join(["%s=%s" % (k, v) for k, v in sorted(iter(list(kwargs.items())), key=lambda x: x[0])])
     orignal = "%s%s?%s" % (method, path, kwargs)
-    signature = base64.b64encode(hmac.new(str(app_secret), orignal, hashlib.sha1).digest())
+    signature = base64.b64encode(hmac.new(force_bytes(app_secret), force_bytes(orignal), hashlib.sha1).digest())
     return signature

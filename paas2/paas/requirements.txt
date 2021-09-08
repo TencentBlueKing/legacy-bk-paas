@@ -10,7 +10,7 @@ pymysql==0.6.7
 redis==2.10.5
 PyYAML==5.1
 Pillow==6.2.2
-gevent==1.1.2
+gevent==1.5.0
 pytz==2016.6.1
 python-dateutil==2.8.1
 boto==2.43.0
@@ -19,7 +19,7 @@ ConcurrentLogHandler==0.9.1
 
 # for esb
 jinja2==2.11.3
-django-bootstrap-form==3.2.1
+django-bootstrap-form==3.4
 Markdown==2.6.6
 pygments==2.1.3
 

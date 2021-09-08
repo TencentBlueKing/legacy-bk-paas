@@ -13,7 +13,7 @@
 |-----------|------------|--------|------------| 
 | lookup_field | 字符串 | 否 | 查找字段, 默认值为 'id' |
 | page | 整数 | 否 | 页码 |
-| no_page | 布尔 | 否 | 是否返回全部结果，默认为否 |
+| ~~no_page~~ | 布尔 | 否 | 即将下架，请不要使用，并尽快迁移 |
 | page_size | 整数 | 否 | 每页结果数量 |
 | fields | 字符串 | 否 | 返回值字段, 例如"username,id" |
 | exact_lookups | 字符串 | 否 | 精确查找内容列表, 例如"jack,pony" |
@@ -24,8 +24,7 @@
 
 ``` json
 {
-  "fields": "name,id",
-  "no_page": true
+  "fields": "name,id"
 }
 ```
 

@@ -18,7 +18,7 @@ batch create process templates
 
 ### Request Parameters Example
 
-```python
+```json
 {
   "bk_biz_id": 1,
   "service_template_id": 1,
@@ -32,9 +32,28 @@ batch create process templates
           "auto_time_gap": {
             "as_default_value": false
           },
-          "bind_ip": {
+          "bind_info": {
             "as_default_value": true,
-            "value": "1"
+            "value": [
+              {
+                "ip": {
+                  "value": "2",
+                  "as_default_value": true
+                },
+                "port": {
+                  "value": "1",
+                  "as_default_value": false
+                },
+                "protocol": {
+                  "value": "2",
+                  "as_default_value": false
+                },
+                "enable": {
+                  "value": false,
+                  "as_default_value": false
+                }
+              }
+            ]
           },
           "bk_biz_id": {
             "as_default_value": true,
@@ -80,10 +99,6 @@ batch create process templates
             "as_default_value": true,
             "value": ""
           },
-          "port": {
-            "as_default_value": true,
-            "value": "8000,8001,8003,8004"
-          },
           "priority": {
             "as_default_value": true,
             "value": 1
@@ -91,10 +106,6 @@ batch create process templates
           "proc_num": {
             "as_default_value": true,
             "value": 1
-          },
-          "protocol": {
-            "as_default_value": true,
-            "value": "1"
           },
           "reload_cmd": {
             "as_default_value": true,

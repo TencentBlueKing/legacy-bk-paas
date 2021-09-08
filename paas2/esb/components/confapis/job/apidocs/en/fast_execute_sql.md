@@ -13,7 +13,7 @@ Fast execute SQL
 | bk_biz_id      |  int       | Yes     | Business ID |
 | script_id      |  int       | No     | SQL Script ID |
 | script_content |  string    | No     | Script content with base64. If both pass script_id and script_content priority is script_id |
-| script_timeout |  int       | No     | Timeout in seconds, 1000 default, the range 60-86400 |
+| script_timeout |  int       | No     | Timeout in seconds, 7200 default, the range 60-86400 |
 | db_account_id  |  int       | Yes     | Database Account Id in [Account Management-&gt;DB Account] Features. required |
 | custom_query_id|  array     | No     | Dynamic grouping id on the configuration platforms. Select one of ip_list and custom_query_id, or coexist, ip data will be merged |
 | ip_list        |  array     | No     | IP Object Array. See ip_list Description. Select one of ip_list and custom_query_id, or coexist, ip data will be merged |

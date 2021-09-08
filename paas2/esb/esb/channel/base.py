@@ -13,12 +13,19 @@ specific language governing permissions and limitations under the License.
 import copy
 import json
 import re
-import string
 import time
 import uuid
 from builtins import object, str
 
-from common.base_utils import FancyDict, get_client_ip, get_request_params, str_bool
+from django.http import HttpResponse
+
+from common.base_utils import (
+    FancyDict,
+    get_client_ip,
+    get_request_params,
+    str_bool,
+    get_first_not_empty_value,
+)
 from common.base_validators import ValidationError
 from common.bkerrors import bk_error_codes
 from common.constants import COMPONENT_STATUSES
@@ -33,7 +40,6 @@ from common.errors import (
     error_codes,
 )
 from common.log import logger
-from django.http import HttpResponse
 from esb.bkcore.models import ESBChannel
 from esb.component import CompRequest
 from esb.response import format_resp_dict
@@ -103,7 +109,7 @@ class BaseChannel(object):
         """
         create request_id
         """
-        return uuid.uuid4().get_hex()
+        return uuid.uuid4().hex
 
     def validate_request(self, request):
         """
@@ -139,6 +145,9 @@ class BaseChannel(object):
         request.g.headers = self.get_headers(request)
         request.g.channel_conf = self.channel_conf
 
+        request_handler = RequestHandler(request)
+        request.g.authorization = request_handler.get_request_authorization()
+
         # To be override
         request.g.kwargs = FancyDict()
 
@@ -164,7 +173,7 @@ class BaseChannel(object):
     @staticmethod
     def capitalize_header(header):
         """capitalize django header"""
-        return "-".join(string.capitalize(s) for s in header.split("_"))
+        return "-".join(s.capitalize() for s in header.split("_"))
 
     def handle_request(self, request):
         """
@@ -231,7 +240,7 @@ class BaseChannel(object):
 
             # jsonp request
             jsonp_callback = request.g.kwargs.get("callback")
-            if jsonp_callback and getattr(self.comp, "is_support_jsonp", False):
+            if self._is_valid_jsonp_callback(jsonp_callback) and getattr(self.comp, "is_support_jsonp", False):
                 return HttpResponse(
                     "%s(%s)" % (jsonp_callback, json.dumps(response)),
                     content_type="application/x-javascript; charset=utf-8",
@@ -256,6 +265,12 @@ class BaseChannel(object):
         """
         pass
 
+    def _is_valid_jsonp_callback(self, jsonp_callback):
+        if not jsonp_callback:
+            return False
+
+        return bool(re.match(r'^[0-9a-zA-Z_]+$', jsonp_callback))
+
 
 class ApiChannel(BaseChannel):
     """
@@ -271,12 +286,60 @@ class ApiChannel(BaseChannel):
         self.request.g.request_type = "app"
 
         if not self.request.g.get("app_code"):
-            self.request.g.app_code = self.request.g.kwargs.get("bk_app_code") or self.request.g.kwargs.get(
-                "app_code", ""
-            )  # noqa
+            self.request.g.app_code = get_first_not_empty_value(
+                self.request.g.authorization,
+                keys=["bk_app_code", "app_code"],
+                default="",
+            )
 
     def after_handle_request(self):
         pass
+
+
+class RequestHandler(object):
+
+    X_BKAPI_AUTHORIZATION_HEADER = "HTTP_X_BKAPI_AUTHORIZATION"
+    AUTHORIZATION_KEYS = [
+        "bk_app_code",
+        "bk_app_secret",
+        "app_code",
+        "app_secret",
+        "bk_token",
+        "bk_username",
+        "username",
+    ]
+
+    def __init__(self, request):
+        self.request = request
+
+    def get_request_authorization(self):
+        authorization = self._get_authorization_from_header()
+        if authorization is None:
+            authorization = self._get_authorization_from_params()
+
+        return authorization
+
+    def _get_authorization_from_header(self):
+        """从请求头信息中获取验证信息"""
+        authorization = self.request.META.get(self.X_BKAPI_AUTHORIZATION_HEADER)
+        if authorization is None:
+            return None
+
+        try:
+            return json.loads(authorization)
+        except Exception:
+            raise error_codes.ARGUMENT_ERROR.format_prompt(
+                "request header X-Bkapi-Authorization is not a valid JSON format string",
+            )
+
+    def _get_authorization_from_params(self):
+        """从请求参数中获取验证信息"""
+        request_params = get_request_params(self.request)
+        return {
+            key: request_params[key]
+            for key in self.AUTHORIZATION_KEYS
+            if key in request_params
+        }
 
 
 class ChannelManager(object):

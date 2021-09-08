@@ -43,6 +43,6 @@
 {
     "result": true,
     "code": 0,
-    "message": "OK",
+    "message": "OK"
 }
 ```

@@ -15,14 +15,16 @@ delete cloud area
 
 ### Request Parameters Example
 
-``` python
-
+``` json
+{
+    "bk_cloud_id": 5
+}
 ```
 
 ### Return Result Example
 
 
-```python
+```json
 
 {
     "result": true,

@@ -33,6 +33,10 @@ class TransferHostToResourcemodule(Component):
     class Form(BaseComponentForm):
         bk_biz_id = forms.IntegerField(label="business id", required=True)
         bk_host_id = TypeCheckField(label="host id", promise_type=list, required=True)
+        bk_module_id = forms.IntegerField(label="module id", required=False)
+
+        def clean(self):
+            return self.get_cleaned_data_when_exist()
 
     def handle(self):
         client = tools.CCClient(self)

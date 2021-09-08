@@ -22,6 +22,7 @@ from base64 import urlsafe_b64encode, urlsafe_b64decode
 from Crypto.Cipher import AES
 
 from django.conf import settings
+from django.utils.encoding import force_bytes, force_text
 
 """
 登录态加密方法.
@@ -52,14 +53,16 @@ def decrypt(ciphertext, key="", base64=True):
     """
     if not key:
         key = settings.SECRET_KEY
+    key = force_bytes(key)
 
     if base64:
-        ciphertext = urlsafe_b64decode(str(ciphertext + "=" * (4 - len(ciphertext) % 4)))
+        # ciphertext = urlsafe_b64decode(str(ciphertext + "=" * (4 - len(ciphertext) % 4)))
+        ciphertext = urlsafe_b64decode(ciphertext + "=" * (4 - len(ciphertext) % 4))
 
     data = ciphertext
     key = hashlib.md5(key).digest()
     cipher = AES.new(key, AES.MODE_ECB)
-    return unpad(cipher.decrypt(data))
+    return unpad(force_text(cipher.decrypt(data)))
 
 
 def encrypt(plaintext, key="", base64=True):
@@ -69,13 +72,15 @@ def encrypt(plaintext, key="", base64=True):
     if not key:
         key = settings.SECRET_KEY
 
+    key = force_bytes(key)
     key = hashlib.md5(key).digest()
     cipher = AES.new(key, AES.MODE_ECB)
     ciphertext = cipher.encrypt(pad(plaintext))
 
     # 将密文base64加密
     if base64:
-        ciphertext = urlsafe_b64encode(str(ciphertext)).rstrip("=")
+        # ciphertext = urlsafe_b64encode(str(ciphertext)).rstrip(b"=")
+        ciphertext = urlsafe_b64encode(ciphertext).rstrip(b"=")
 
     return ciphertext
 

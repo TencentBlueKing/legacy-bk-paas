@@ -385,16 +385,6 @@
   dest_path: /api/v3/hosts/property/batch
   dest_http_method: PUT
 
-- path: /v2/cc/get_operation_log/
-  name: get_operation_log
-  label: 获取操作日志
-  label_en: get operation log
-  suggest_method: POST
-  api_type: query
-  comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/audit/search
-  dest_http_method: POST
-
 - path: /v2/cc/get_mainline_object_topo/
   name: get_mainline_object_topo
   label: 查询主线模型的业务拓扑
@@ -826,6 +816,17 @@
   dest_http_method: POST
   is_hidden: true
 
+- path: /v2/cc/list_service_template_difference/
+  name: list_service_template_difference
+  label: 列出服务模版和服务实例之间的差异
+  label_en: list service template difference
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/proc/service_template/sync_status/biz/{bk_biz_id}
+  dest_http_method: POST
+  is_hidden: true
+
 - path: /v2/cc/list_process_detail_by_ids/
   name: list_process_detail_by_ids
   label: 查询某业务下进程ID对应的进程详情
@@ -1119,4 +1120,35 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/cache/find/cache/topo/brief/biz/{bk_biz_id}
   dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/cc/transfer_host_to_recyclemodule/
+  name: transfer_host_to_recyclemodule
+  label: 上交主机到业务的待回收模块
+  label_en: transfer host to recycle module
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/modules/recycle
+  dest_http_method: POST
+
+- path: /v2/cc/find_host_relations_with_topo/
+  name: find_host_relations_with_topo
+  label: 根据业务拓扑中的实例节点查询其下的主机关系信息
+  label_en: find host relations with topology instance node
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/hosts/relation/with_topo
+  dest_http_method: POST
+
+- path: /v2/cc/list_host_detail_topology/
+  name: list_host_detail_topology
+  label: 根据主机条件信息查询主机详情及其所属的拓扑信息
+  label_en: list host's detail info and its topology it belongs to
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/hosts/detail_topo
+  dest_http_method: POST
   is_hidden: true

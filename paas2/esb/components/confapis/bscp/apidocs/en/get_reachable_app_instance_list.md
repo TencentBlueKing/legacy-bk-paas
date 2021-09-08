@@ -12,8 +12,34 @@ query reachable app instance list
 |-------------|-----------|----------|-------------|
 | biz_id      |  string   | Y        | business id   |
 | app_id      |  string   | Y        | application id |
-| labels      |  map      | N        | KV labels of instance, e.g."version:1.0" |
+| labels_or   |  array    | N        | labels OR list  |
+| labels_and  |  array    | N        | labels AND list  |
 | page        |  object   | Y        | query page settings |
+
+#### labels_or[n]
+
+| Field  | Type    | Required | Description |
+|--------|---------|----------|-------------|
+| labels |  map    | Y        | labels OR   |
+
+#### labels_and[m]
+
+| Field  | Type    | Required | Description |
+|--------|---------|----------|-------------|
+| labels |  map    | Y        | labels AND  |
+
+```json
+
+	KV labels format: "KEY": "OP|VALUE"
+
+	OP(Bash Shell Operators):
+			1.=: empty or eq
+			2.!=: ne
+			3.>: gt
+			4.<: lt
+			5.>=: ge
+			6.<=: le
+```
 
 #### page
 
@@ -32,9 +58,24 @@ query reachable app instance list
     "bk_token": "xxx",
     "biz_id": "xxx",
     "app_id": "A-0b67a798-e9c1-11e9-8c23-525400f99278",
-    "labels": {
-        "version":"1.0"
-    },
+    "labels_or":[
+        {
+            "labels": {
+               "k1": "v1",
+               "k2": "gt|v2",
+               "k3": "le|v3"
+             }
+        }
+    ],
+    "labels_and":[
+        {
+            "labels": {
+                "k1": "ne|v1",
+                "k2": "lt|v2",
+                "k3": "ge|v3"
+             }
+        }
+    ],
     "page": {
         "start": 0,
         "limit": 100

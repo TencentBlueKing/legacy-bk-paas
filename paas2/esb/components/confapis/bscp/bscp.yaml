@@ -408,6 +408,16 @@
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/procattr
   dest_http_method: POST
 
+- path: /v2/bscp/create_procattr_batch/
+  name: create_procattr_batch
+  label: 批量创建主机应用归属信息
+  label_en: create app process attribute in batch mode
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/batch/biz/{biz_id}/app/{app_id}/procattr
+  dest_http_method: POST
+
 - path: /v2/bscp/update_procattr/
   name: update_procattr
   label: 更新主机应用绑定信息
@@ -606,4 +616,94 @@
   api_type: operate
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/version/{version_id}
+  dest_http_method: DELETE
+
+- path: /v2/bscp/create_variable_group/
+  name: create_variable_group
+  label: 创建变量分组
+  label_en: create variable group
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/var_group
+  dest_http_method: POST
+
+- path: /v2/bscp/get_variable_group/
+  name: get_variable_group
+  label: 查询指定变量分组信息
+  label_en: query target variable group info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/var_group
+  dest_http_method: GET
+
+- path: /v2/bscp/get_variable_group_list/
+  name: get_variable_group_list
+  label: 查询变量分组列表
+  label_en: query variable group list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/list/biz/{biz_id}/var_group
+  dest_http_method: POST
+
+- path: /v2/bscp/delete_variable_group/
+  name: delete_variable_group
+  label: 删除变量分组
+  label_en: delete variable group
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/var_group/{var_group_id}
+  dest_http_method: DELETE
+
+- path: /v2/bscp/create_variable/
+  name: create_variable
+  label: 创建变量
+  label_en: create variable
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/variable
+  dest_http_method: POST
+
+- path: /v2/bscp/update_variable/
+  name: update_variable
+  label: 更新变量信息
+  label_en: update variable
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/variable/{var_id}
+  dest_http_method: PUT
+
+- path: /v2/bscp/get_variable/
+  name: get_variable
+  label: 查询指定变量信息
+  label_en: query target variable info
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/variable
+  dest_http_method: GET
+
+- path: /v2/bscp/get_variable_list/
+  name: get_variable_list
+  label: 查询变量列表
+  label_en: query variable list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/list/biz/{biz_id}/variable
+  dest_http_method: POST
+
+- path: /v2/bscp/delete_variable/
+  name: delete_variable
+  label: 删除变量
+  label_en: delete variable
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/template/biz/{biz_id}/variable/{var_id}
   dest_http_method: DELETE
