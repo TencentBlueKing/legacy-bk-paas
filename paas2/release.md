@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.7
+    - bugfix: app logo fail after upgrade django version
+
 # 2.13.0
     - add: support python2/3 both
 
