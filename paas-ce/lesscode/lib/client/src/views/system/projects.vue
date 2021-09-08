@@ -487,8 +487,7 @@
             },
             async checkProjectName (name) {
                 const res = await this.$store.dispatch('project/checkname', {
-                    data: { name },
-                    config: { globalError: false }
+                    data: { name }
                 })
                 if (res.code !== 0) {
                     this.messageError(res.message)

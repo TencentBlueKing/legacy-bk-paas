@@ -68,6 +68,7 @@ const getDefaultFunc = function (host) {
             funcType: 1,
             funcMethod: 'get',
             funcApiUrl: `${host}/api/data/getMockData`,
+            funcApiData: '{ \"page\": 1, \"pageSize\": 20 }',
             funcCode: 'getApiData'
         }
     ]
@@ -423,7 +424,7 @@ export default {
     findOneProjectByNameAndUserId (projectName, userId) {
         return getRepository(Project).createQueryBuilder('project')
             .leftJoinAndSelect(UserProjectRole, 't', 't.projectId = project.id')
-            .where('project.projectName = :projectName AND t.deleteFlag = 0', { projectName })
+            .where('BINARY project.projectName = :projectName AND t.deleteFlag = 0', { projectName })
             .andWhere('t.userId = :userId', { userId })
             .getMany()
     },
