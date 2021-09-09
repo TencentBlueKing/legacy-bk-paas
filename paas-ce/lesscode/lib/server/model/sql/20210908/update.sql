@@ -21,13 +21,13 @@ CREATE TABLE `page_template` (
 CREATE TABLE `page_template_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `belongProjectId` int(11) NOT NULL COMMENT '所属项目',
+  `belongProjectId` int(11) DEFAULT '0' COMMENT '所属项目',
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
   `createUser` varchar(255) DEFAULT NULL COMMENT '创建人，默认当前用户',
   `updateUser` varchar(255) DEFAULT NULL COMMENT '更新人，默认当前用户',
   `deleteFlag` int(11) DEFAULT '0' COMMENT '是否删除，1代表已删除',
-  `order` int(11) NOT NULL COMMENT '排序索引',
+  `order` int(11) DEFAULT '0' COMMENT '排序索引',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模板分类表';
 
