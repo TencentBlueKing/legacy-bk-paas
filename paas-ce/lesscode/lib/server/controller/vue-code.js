@@ -88,7 +88,6 @@ const VueCode = {
             }
             const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
             const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, curPage.layoutType, variableList)
-
             // 此接口被多方调用，目前仅收集下载页面源码
             if (from === 'download_page') {
                 operationLogger.success()
@@ -101,10 +100,6 @@ const VueCode = {
                 codeErrMessage
             })
         } catch (err) {
-            console.log('controller error')
-            // ctx.throwError({
-            //     message: err.message
-            // })
             if (ctx.request.body.from === 'download_page') {
                 operationLogger.error(err)
             }

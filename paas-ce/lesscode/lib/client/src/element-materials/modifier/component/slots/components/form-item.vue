@@ -139,7 +139,7 @@
             componentId: `bk-form-item-${uuid()}`,
             actionItem: isActionFormItem,
             renderKey: uuid(),
-            renderStyle: {},
+            renderStyles: {},
             renderProps: !isActionFormItem ? {
                 label: {
                     type: 'string',

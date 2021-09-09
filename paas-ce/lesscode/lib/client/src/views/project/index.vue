@@ -66,6 +66,11 @@
                         toPath: 'function-manage'
                     },
                     {
+                        title: '模板库',
+                        icon: 'template-fill',
+                        toPath: 'template-manage'
+                    },
+                    {
                         title: '变量管理',
                         icon: 'variable-manage',
                         toPath: 'variable-manage'

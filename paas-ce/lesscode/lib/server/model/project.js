@@ -14,6 +14,8 @@ import Page from './entities/page'
 import PageFunc from './entities/page-func'
 import Comp from './entities/comp'
 import CompCategory from './entities/comp-category'
+import PageTemplate from './entities/page-template'
+import TemplateCategory from './entities/page-template-category'
 import UserProjectRole from './entities/user-project-role'
 import CompShare from './entities/comp-share'
 import PageComp from './entities/page-comp'
@@ -38,6 +40,8 @@ const projectSelectFields = [
     'project.projectName',
     'project.projectDesc',
     'project.status',
+    'project.isOffcial',
+    'project.offcialType',
     'project.createTime',
     'project.createUser',
     'project.deleteFlag'
@@ -64,6 +68,7 @@ const getDefaultFunc = function (host) {
             funcType: 1,
             funcMethod: 'get',
             funcApiUrl: `${host}/api/data/getMockData`,
+            funcApiData: '{ \"page\": 1, \"pageSize\": 20 }',
             funcCode: 'getApiData'
         }
     ]
@@ -102,7 +107,7 @@ export default {
             // 复制项目
             if (projectData.copyFrom) {
                 // copy项目中的组件/函数/页面/布局/变量
-                const [projectCompCopyValues, projectFuncGroupCopyValues, projectPageCopyValues, projectLayoutValues, variableList] = await Promise.all([
+                const [projectCompCopyValues, projectFuncGroupCopyValues, projectPageCopyValues, projectLayoutValues, variableList, templateCategoryValues] = await Promise.all([
                     getRepository(Comp)
                         .createQueryBuilder('comp')
                         .where('comp.belongProjectId = :projectId', { projectId: projectData.copyFrom })
@@ -122,7 +127,11 @@ export default {
                     getRepository(Variable)
                         .createQueryBuilder('variable')
                         .where('variable.projectId = :projectId', { projectId: projectData.copyFrom })
-                        .getMany()
+                        .getMany(),
+                    getRepository(TemplateCategory)
+                        .createQueryBuilder('pageTemplateCategory')
+                        .where('pageTemplateCategory.belongProjectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany(),
                 ])
 
                 if (projectCompCopyValues.length) {
@@ -147,6 +156,35 @@ export default {
                         return others
                     }))
                     await transactionalEntityManager.save(saveTargetCompShares)
+                }
+
+                // 模板分类和模板数据记录
+                if (templateCategoryValues.length) {
+                    const categoryIdMap = {}
+                    const categoryIdList = templateCategoryValues.map(item => item.id)
+                    const saveTemplateCategory = getRepository(TemplateCategory).create(templateCategoryValues.map(item => {
+                        const { id, createTime, updateTime, createUser, ...others } = item
+                        others.belongProjectId = projectId
+                        return others
+                    }))
+                    const newTemplateCategory = await transactionalEntityManager.save(saveTemplateCategory)
+                    categoryIdList.forEach((id, index) => {
+                        categoryIdMap[id] = newTemplateCategory[index].id
+                    })
+
+                    const copyTemplates = await getRepository(PageTemplate)
+                        .createQueryBuilder('pageTemplate')
+                        .where('pageTemplate.categoryId IN (:...categoryIds)', { categoryIds: categoryIdList })
+                        .andWhere('pageTemplate.isOffcial = 0')
+                        .getMany()
+                    
+                    const saveCopyTemplates = getRepository(PageTemplate).create(copyTemplates.map(item => {
+                        const { id, createTime, updateTime, createUser, ...others } = item
+                        others.categoryId = categoryIdMap[others.categoryId]
+                        others.belongProjectId = projectId
+                        return others
+                    }))
+                    await transactionalEntityManager.save(saveCopyTemplates)
                 }
 
                 const funcIdMap = {}
@@ -356,6 +394,14 @@ export default {
                 const projectFuncGroup = getRepository(ProjectFuncGroup).create({ projectId, funcGroupId })
                 await transactionalEntityManager.save(projectFuncGroup)
 
+                // 创建默认模板分类
+                const templateCategory = getRepository(TemplateCategory).create({
+                    name: '默认分类',
+                    belongProjectId: projectId,
+                    order: -0
+                })
+                await transactionalEntityManager.save(templateCategory)
+
                 // 添加布局模板到项目
                 const saveLayoutInstList = getRepository(LayoutInst).create(layoutData.map((item, index) => {
                     return {
@@ -378,7 +424,7 @@ export default {
     findOneProjectByNameAndUserId (projectName, userId) {
         return getRepository(Project).createQueryBuilder('project')
             .leftJoinAndSelect(UserProjectRole, 't', 't.projectId = project.id')
-            .where('project.projectName = :projectName AND t.deleteFlag = 0', { projectName })
+            .where('BINARY project.projectName = :projectName AND t.deleteFlag = 0', { projectName })
             .andWhere('t.userId = :userId', { userId })
             .getMany()
     },
