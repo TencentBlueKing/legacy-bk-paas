@@ -83,6 +83,7 @@ function getCurUsedFuncs () {
 // 替换函数中的变量和函数
 function replaceFuncKeyword (funcBody = '', callBack) {
     const commentsPositions = []
+    const semiIndexs = []
     acorn.parse(funcBody, {
         onComment (isBlock, text, start, end) {
             commentsPositions.push({
@@ -90,9 +91,20 @@ function replaceFuncKeyword (funcBody = '', callBack) {
                 end
             })
         },
+        onInsertedSemicolon (lastTokEnd, lastTokEndLoc) {
+            semiIndexs.push(lastTokEnd)
+        },
         allowReturnOutsideFunction: true
     })
-    return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
+
+    const ret = funcBody.split('').map((c, i) => {
+        if (semiIndexs.indexOf(i) > -1) {
+            return ';'
+        }
+        return c
+    }).join('')
+
+    return ret.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
         const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
         return isInComments ? all : callBack(all, first, second, dirKey, funcStr, funcCode)
     })
