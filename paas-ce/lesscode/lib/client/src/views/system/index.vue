@@ -13,15 +13,27 @@
             </div>
             <div class="side-bd">
                 <nav class="nav-list">
-                    <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="projects">
+                    <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="/projects">
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
                     </router-link>
-                    <router-link tag="div" class="nav-item" to="function-market">
+                    <router-link tag="div" class="nav-item" to="/function-market">
                         <i class="bk-drag-icon bk-drag-function-fill"></i>函数市场
                     </router-link>
-                    <router-link tag="div" class="nav-item" :to="'account'">
+                    <router-link tag="div" class="nav-item" to="/account">
                         <i class="bk-drag-icon bk-drag-member"></i>账号管理
                     </router-link>
+                    <div :class="['nav-item-parent', { folded: navFolded.op }]" v-if="isPlatformAdmin">
+                        <div class="nav-item" @click="$set(navFolded, 'op', !navFolded.op)">
+                            <i class="bk-icon icon-monitors-cog"></i>运营数据
+                            <i class="bk-drag-icon bk-drag-arrow-down"></i>
+                        </div>
+                        <div class="sub-nav">
+                            <router-link tag="div" class="sub-nav-item" to="/op/stats/user">用户数据</router-link>
+                            <router-link tag="div" class="sub-nav-item" to="/op/stats/project">项目数据</router-link>
+                            <router-link tag="div" class="sub-nav-item" to="/op/stats/func">函数数据</router-link>
+                            <router-link tag="div" class="sub-nav-item" to="/op/stats/comp">自定义组件数据</router-link>
+                        </div>
+                    </div>
                 </nav>
             </div>
             <div class="side-ft">
@@ -55,6 +67,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import ExtraLinks from '@/components/ui/extra-links'
     export default {
         components: {
@@ -64,8 +77,15 @@
             return {
                 currentYear: new Date().getUTCFullYear(),
                 asideFolded: false,
-                region: 'tencent'
+                region: 'tencent',
+                navFolded: {}
             }
+        },
+        computed: {
+            ...mapGetters(['isPlatformAdmin'])
+        },
+        async created () {
+            await this.$store.dispatch('isPlatformAdmin')
         }
     }
 </script>
@@ -223,6 +243,7 @@
                 white-space: nowrap;
                 cursor: pointer;
 
+                .bk-icon,
                 .bk-drag-icon {
                     font-size: 16px;
                     margin-right: 22px;
@@ -233,6 +254,57 @@
                 &.router-link-active {
                     background: #E1ECFF;
                     color: #3A84FF;
+                }
+
+                .bk-drag-arrow-down {
+                    color: #63656e;
+                    font-size: 24px;
+                    transform: rotate(0);
+                    margin-left: auto;
+                    margin-right: 0;
+                    transition: all .1s linear;
+                }
+            }
+
+            .nav-item-parent {
+                &.folded {
+                    .sub-nav {
+                        height: 0;
+                    }
+                    .bk-drag-arrow-down {
+                        transform: rotate(-90deg);
+                    }
+                }
+                .sub-nav {
+                    height: 168px;
+                    overflow: hidden;
+                    background: #fafbfd;
+                    transition: height .175s ease-in-out;
+                }
+                .sub-nav-item {
+                    display: flex;
+                    align-items: center;
+                    font-size: 14px;
+                    height: 42px;
+                    line-height: 42px;
+                    padding: 0 12px 0 22px;
+                    cursor: pointer;
+
+                    &::before {
+                        width: 16px;
+                        font-size: 12px;
+                        text-align: center;
+                        margin-right: 22px;
+                        content: "•";
+                    }
+
+                    &:hover {
+                        background: #F6F6F9;
+                    }
+                    &.router-link-active {
+                        background: #E1ECFF;
+                        color: #3A84FF;
+                    }
                 }
             }
         }

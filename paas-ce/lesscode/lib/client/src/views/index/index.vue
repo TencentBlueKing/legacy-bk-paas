@@ -871,7 +871,7 @@
                         this.$store.dispatch('page/getList', { projectId: this.projectId }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
                         this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
-                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, config: { fromCache: true } }),
+                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
                         this.getAllGroupFuncs(this.projectId)

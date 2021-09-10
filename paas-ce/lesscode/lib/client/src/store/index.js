@@ -58,13 +58,16 @@ const store = new Vuex.Store({
         // 页面级dialog的popManager监测器，用于适配交互式组件
         pagePopMaskObserve: null,
         // 系统当前登录用户
-        user: {}
+        user: {},
+        // 是否平台管理员
+        isPlatformAdmin: false
     },
     // 公共 getters
     getters: {
         pagePopMaskObserve: state => state.pagePopMaskObserve,
         mainContentLoading: state => state.mainContentLoading,
-        user: state => state.user
+        user: state => state.user,
+        isPlatformAdmin: state => state.isPlatformAdmin
     },
     // 公共 mutations
     mutations: {
@@ -89,6 +92,10 @@ const store = new Vuex.Store({
          */
         updateUser (state, user) {
             state.user = Object.assign({}, user)
+        },
+
+        sePlatformAdmin (state, isAdmin) {
+            state.isPlatformAdmin = isAdmin
         }
     },
     actions: {
@@ -133,6 +140,14 @@ const store = new Vuex.Store({
             return http.get('/health/check').then(response => {
                 const data = response.data || []
                 return data
+            })
+        },
+
+        isPlatformAdmin ({ commit }) {
+            return http.get('/perm/isPlatformAdmin', { globalError: false }).then(response => {
+                const isPlatformAdmin = response.data
+                commit('sePlatformAdmin', isPlatformAdmin)
+                return isPlatformAdmin
             })
         },
 
