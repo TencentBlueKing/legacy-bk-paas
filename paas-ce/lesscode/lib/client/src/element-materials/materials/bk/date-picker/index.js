@@ -17,15 +17,15 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '日期改变事件，参数为当前选择的日期以及当前日历组件的类型，回调参数（date, type）'
+        name: 'change', tips: '日期改变时调用该事件函数，事件回调参数 (date: Date | String | Array, type: String)'
     }, {
-        name: 'clear', tips: '日历面板点击清空事件，无参数'
+        name: 'clear', tips: '日历面板点击清空时调用该事件函数，暂无事件回调参数'
     }, {
-        name: 'open-change', tips: '日历面板弹出或收起事件，回调参数为日历面板展开收起的状态'
+        name: 'open-change', tips: '日历面板弹出或收起时调用该事件函数，事件回调参数 (state: Boolean)'
     }, {
-        name: 'pick-success', tips: '日历面板选择日期后，点击确定选择成功的事件，无参数'
+        name: 'pick-success', tips: '日历面板选择日期后，点击确定选择成功时调用该事件函数，暂无事件回调参数'
     }, {
-        name: 'shortcut-change', tips: '快捷项改变事件，回调参数（value, index）'
+        name: 'shortcut-change', tips: '快捷项改变时调用该事件函数，事件回调参数 (value: Object, index: Number)'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {

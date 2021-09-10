@@ -29,6 +29,16 @@ export default {
             })
         },
 
+        bulkAddFuncs (_, funcList) {
+            return http.post(`${perfix}/bulkAddFuncs`, funcList).then((res = {}) => {
+                if (res.code === 499) {
+                    messageHtmlError(res.message)
+                    return
+                }
+                return res.data
+            })
+        },
+
         addMarketFunc (_, func) {
             return http.post(`${perfix}/addFunc`, func).then((res = {}) => {
                 if (res.code === 499) {

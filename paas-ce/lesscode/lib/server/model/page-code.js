@@ -108,18 +108,18 @@ class PageCode {
     constructor (targetData = [], pageType = 'vueCode', allCustomMap = {}, funcGroups = [], lifeCycle = '', projectId, pageId, layoutContent, isGenerateNav = false, isEmpty = false, layoutType, variableList) {
         this.targetData = targetData || []
         this.pageType = pageType
-        this.allCustomMap = allCustomMap
-        this.funcGroups = funcGroups
+        this.allCustomMap = allCustomMap || {}
+        this.funcGroups = funcGroups || []
         this.uniqueKey = uuid()
-        this.lifeCycle = lifeCycle
+        this.lifeCycle = lifeCycle || {}
         this.projectId = projectId
         this.pageId = pageId
-        this.layoutContent = layoutContent
+        this.layoutContent = layoutContent || {}
         this.hasLayOut = layoutContent && ((layoutContent.menuList && layoutContent.menuList.length) || (layoutContent.topMenuList && layoutContent.topMenuList.length))
         this.isGenerateNav = isGenerateNav
         this.isEmpty = isEmpty
         this.layoutType = layoutType
-        this.variableList = variableList
+        this.variableList = variableList || []
     }
 
     getCode () {
@@ -1193,6 +1193,12 @@ class PageCode {
                             disPlayVal = slot.val
                             param.type = 'value'
                         }
+                    }
+                    // table slot 可能会用到fun，需要特殊处理一下。其他情况也可以在slot value 里面加上 methodCode 字段来处理
+                    if (Array.isArray(slot.val)) {
+                        (slot.val || []).forEach((item) => {
+                            item.methodCode && (this.usingFuncCodes = this.usingFuncCodes.concat(item.methodCode))
+                        })
                     }
                     param.val = disPlayVal
                     slotRenderParams.push(param)

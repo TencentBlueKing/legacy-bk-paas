@@ -17,9 +17,9 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'hover', tips: '广播给父组件 mouseover 事件'
+        name: 'hover', tips: '鼠标 hover 时调用该事件函数，暂无回调参数'
     }, {
-        name: 'leave', tips: '广播给父组件 mouseleave 事件'
+        name: 'leave', tips: '鼠标 leave 时调用该事件函数，暂无回调参数'
     }],
     styles: ['size', 'margin', 'display', 'font', 'backgroundColor'],
     renderStyles: {

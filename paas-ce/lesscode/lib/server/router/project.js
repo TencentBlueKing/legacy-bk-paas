@@ -17,6 +17,7 @@ const {
     queryProject,
     updateProject,
     deleteProject,
+    getTemplateIds,
     favorite,
     checkname,
     projectDetail,
@@ -48,5 +49,6 @@ router.post('/checkname', checkname)
 router.get('/detail', projectDetail)
 router.post('/verify', verify)
 router.get('/my', my)
+router.get('/getTemplateIds', getTemplateIds)
 
 module.exports = router

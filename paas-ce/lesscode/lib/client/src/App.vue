@@ -60,7 +60,7 @@
         computed: {
             ...mapGetters(['mainContentLoading']),
             emptyPage () {
-                return this.$route.name === 'preview'
+                return this.$route.name === 'preview' || this.$route.name === 'previewTemplate'
             },
             authed () {
                 return this.$route.meta.authed

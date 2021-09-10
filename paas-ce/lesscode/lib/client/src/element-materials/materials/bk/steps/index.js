@@ -18,7 +18,7 @@ export default {
     order: 1,
     events: [{
         name: 'step-changed',
-        tips: '当前步骤变化时的回调，回调参数为变化后的步骤 index'
+        tips: '当前步骤变化时调用该事件函数，事件回调参数 (step: Number)'
     }],
     styles: ['size', 'margin', 'display'],
     props: {

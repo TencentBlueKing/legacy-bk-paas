@@ -20,6 +20,7 @@ import page from './modules/page'
 import functions from './modules/functions'
 import variable from './modules/variable'
 import route from './modules/route'
+import pageTemplate from './modules/page-template'
 import projectCode from './modules/project-code'
 import release from './modules/release'
 import layout from './modules/layout'
@@ -44,6 +45,7 @@ const store = new Vuex.Store({
         functions,
         variable,
         route,
+        pageTemplate,
         projectCode,
         release,
         layout,
@@ -94,7 +96,7 @@ const store = new Vuex.Store({
             state.user = Object.assign({}, user)
         },
 
-        sePlatformAdmin (state, isAdmin) {
+        setPlatformAdmin (state, isAdmin) {
             state.isPlatformAdmin = isAdmin
         }
     },
@@ -146,7 +148,7 @@ const store = new Vuex.Store({
         isPlatformAdmin ({ commit }) {
             return http.get('/perm/isPlatformAdmin', { globalError: false }).then(response => {
                 const isPlatformAdmin = response.data
-                commit('sePlatformAdmin', isPlatformAdmin)
+                commit('setPlatformAdmin', isPlatformAdmin)
                 return isPlatformAdmin
             })
         },

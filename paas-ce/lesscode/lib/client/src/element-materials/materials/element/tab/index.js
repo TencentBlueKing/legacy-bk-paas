@@ -17,13 +17,13 @@ export default {
     group: '导航',
     order: 1,
     events: [{
-        name: 'tab-click', tips: 'tab 被选中时触发，回调参数 被选中的标签 tab 实例'
+        name: 'tab-click', tips: 'tab 被选中时调用该事件函数，事件回调参数 (tab: Object)'
     }, {
-        name: 'tab-remove', tips: '被选中的标签 tab 实例，回调参数 被删除的标签的 name'
+        name: 'tab-remove', tips: '点击 tab 移除按钮时调用该事件函数，事件回调参数 (name: String)'
     }, {
-        name: 'edit', tips: '点击 tabs 的新增按钮或 tab 被关闭后触发，回调参数(targetName, action)'
+        name: 'tab-add', tips: '点击 tabs 的新增按钮时调用该事件函数，无回调参数'
     }, {
-        name: 'tab-add', tips: '点击 tabs 的新增按钮后触发'
+        name: 'edit', tips: '点击 tabs 的新增按钮或 tab 被关闭时调用该事件函数，事件回调参数 (targetName: String, action: String)'
     }],
     styles: ['size', 'margin', 'display'],
     directives: [

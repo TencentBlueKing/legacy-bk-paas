@@ -22,7 +22,7 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'index-change', tips: '图片索引改变时触发该事件，回调参数为当前图片的索引'
+        name: 'index-change', tips: '图片索引改变时调用该事件函数，事件回调参数 (index: Number)'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {

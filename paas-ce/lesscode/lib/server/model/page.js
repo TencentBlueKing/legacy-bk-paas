@@ -39,7 +39,7 @@ module.exports = {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
             .where('t.projectId = :projectId', { projectId })
-            .andWhere('page.pageName = :pageName', { pageName })
+            .andWhere('BINARY page.pageName = :pageName', { pageName })
             .andWhere('page.deleteFlag = 0')
             .getMany()
     },

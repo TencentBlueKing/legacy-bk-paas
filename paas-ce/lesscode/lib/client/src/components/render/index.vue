@@ -120,4 +120,16 @@
             z-index: 0 !important;
         }
     }
+    .save-as-template {
+        display: none;
+        z-index: 1001;
+        position: absolute;
+        height: 20px;
+        font-size: 12px;
+        color: #fff;
+        background: #1964e1;
+        border-radius: 2px;
+        padding: 2px 5px;
+        cursor: pointer;
+    }
 </style>

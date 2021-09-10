@@ -39,6 +39,13 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
             const slotKeys = Object.keys(renderSlots)
             if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
                 walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
+            } else if (Array.isArray(renderSlots.default && renderSlots.default.val)) {
+                childCallBack(component, children, index, grid, columnIndex)
+                if (renderSlots.default.val.length && renderSlots.default.val[0] && renderSlots.default.val[0].componentId) {
+                    renderSlots.default.val.forEach((item, slotIndex) => {
+                        walkGrid({}, item, childCallBack, childCallBack, slotIndex)
+                    })
+                }
             } else if (slotKeys.some(key => renderSlots[key].name === 'layout')) {
                 slotKeys.forEach((key) => {
                     const slot = renderSlots[key]

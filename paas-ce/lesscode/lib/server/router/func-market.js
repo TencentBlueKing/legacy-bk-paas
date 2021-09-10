@@ -12,6 +12,7 @@
 const Router = require('koa-router')
 const {
     getFuncList,
+    bulkAddFuncs,
     addFunc,
     updateFunc,
     deleteFunc,
@@ -27,5 +28,6 @@ router.post('/addFunc', addFunc)
 router.put('/updateFunc', updateFunc)
 router.delete('/deleteFunc', deleteFunc)
 router.post('/addFuncToProject', addFuncToProject)
+router.post('/bulkAddFuncs', bulkAddFuncs)
 
 module.exports = router

@@ -18,9 +18,9 @@ export default {
     order: 1,
     styles: ['margin', 'display'],
     events: [{
-        name: 'confirm', tips: '点击确定按钮触发的事件'
+        name: 'confirm', tips: '点击确定按钮时调用该事件函数，暂无事件回调参数'
     }, {
-        name: 'cancel', tips: '点击取消按钮触发的事件'
+        name: 'cancel', tips: '点击取消按钮时调用该事件函数，暂无事件回调参数'
     }],
     props: {
         title: {

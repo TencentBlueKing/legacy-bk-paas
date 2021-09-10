@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '单选组选中的值改变时触发此回调函数，回调参数为当前单选组选中值'
+        name: 'change', tips: '单选组选中的值改变时调用该事件函数，事件回调参数 (value: String | Number | Boolean)'
     }],
     styles: ['margin'],
     directives: [

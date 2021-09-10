@@ -22,9 +22,11 @@ const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system'
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
 const functionMarket = () => import(/* webpackChunkName: 'functionMarket' */'@/views/system/function-market')
+const templateMarket = () => import(/* webpackChunkName: 'templateMarket' */'@/views/system/template-market')
 
 const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/project/component-manage')
 const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/project/function-manage')
+const TemplateManage = () => import(/* webpackChunkName: 'index' */'@/views/project/template-manage')
 const MemberManage = () => import(/* webpackChunkName: 'index' */'@/views/project/member-manage')
 const VariableManage = () => import(/* webpackChunkName: 'index' */'@/views/project/variable-manage')
 
@@ -38,6 +40,7 @@ const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/lay
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
+const PreviewTemplate = () => import(/* webpackChunkName: 'previewTemplate' */'@/views/preview/preview-template')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
 
 const HealthPage = () => import(/* webpackChunkName: 'none' */'@/views/system/health')
@@ -55,6 +58,7 @@ const Method = () => import(/* webpackChunkName: 'method' */'@/views/help/docs/m
 const Variable = () => import(/* webpackChunkName: 'variable' */'@/views/help/docs/variable.md')
 const Directive = () => import(/* webpackChunkName: 'directive' */'@/views/help/docs/directive.md')
 const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
+const Interactive = () => import(/* webpackChunkName: 'interactive' */'@/views/help/docs/interactive.md')
 
 // 运营统计
 const OperationEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/operation/index.vue')
@@ -80,7 +84,8 @@ const routes = [
             { path: 'method', name: 'method', component: Method },
             { path: 'variable', name: 'variable', component: Variable },
             { path: 'directive', name: 'directive', component: Directive },
-            { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc }
+            { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc },
+            { path: 'interactive', name: 'interactive', component: Interactive }
         ]
     },
     {
@@ -109,6 +114,14 @@ const routes = [
                 component: functionMarket,
                 meta: {
                     title: '函数市场'
+                }
+            },
+            {
+                path: 'template-market',
+                name: 'templateMarket',
+                component: templateMarket,
+                meta: {
+                    title: '模板市场'
                 }
             },
             {
@@ -195,6 +208,14 @@ const routes = [
                 }
             },
             {
+                path: 'template-manage',
+                name: 'templateManage',
+                component: TemplateManage,
+                meta: {
+                    title: '模板库'
+                }
+            },
+            {
                 path: 'variable-manage',
                 name: 'variableManage',
                 component: VariableManage,
@@ -264,6 +285,14 @@ const routes = [
         path: '/preview/project/:projectId/*',
         name: 'preview',
         component: Preview
+    },
+    {
+        path: '/preview-template/project/:projectId/:templateId',
+        name: 'previewTemplate',
+        component: PreviewTemplate,
+        meta: {
+            title: '模板预览'
+        }
     },
     {
         path: '*',

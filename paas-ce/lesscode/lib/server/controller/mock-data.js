@@ -20,22 +20,25 @@ const Data = {
     async getApiData (ctx) {
         try {
             const axiosParam = []
-            const body = ctx.request.body || {}
-            const url = body.url
+            const { url, projectId, type = 'get', withToken = 0, apiData } = ctx.request.body || {}
             axiosParam.push(url)
-            const type = body.type || 'get'
-            const projectId = body.projectId
             const methodsWithData = ['post', 'put', 'patch']
+            const httpData = typeof apiData === 'string' ? strToJson(apiData || '{}') : apiData
             if (methodsWithData.includes(type)) {
-                let apiData = body.apiData
-                if (typeof apiData === 'string') apiData = strToJson(apiData || '{}')
-                axiosParam.push(apiData)
+                axiosParam.push(httpData)
+            } else {
+                const urlObj = new URL(url)
+                const keys = Object.keys(httpData)
+                keys.forEach((key) => {
+                    urlObj.searchParams.delete(key)
+                    urlObj.searchParams.append(key, httpData[key])
+                })
+                axiosParam[0] = urlObj.href
             }
             // 携带 cookie
             ctx.http.defaults.withCredentials = true
             if (ctx.cookies.request.headers.cookie) ctx.http.defaults.headers.Cookie = ctx.cookies.request.headers.cookie
             // 判断是否携带 token
-            const withToken = body.withToken || 0
             const options = {}
             if (withToken) {
                 const bkTikcet = ctx.cookies.get('bk_ticket')
@@ -62,9 +65,11 @@ const Data = {
     },
 
     async getMockData (ctx) {
-        const count = 20
+        const { page = 1, pageSize = 20 } = ctx.request.query || {}
+        const start = (page - 1) * pageSize
+        const end = page * pageSize
         const data = []
-        for (let i = 0; i < count; i++) {
+        for (let i = start; i < end; i++) {
             data.push({
                 id: i,
                 projectId: `id-${i}`,

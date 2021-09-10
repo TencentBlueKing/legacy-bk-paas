@@ -18,13 +18,13 @@ export default {
     order: 1,
     events: [{
         name: 'change',
-        tips: '右侧列表元素变化时触发，回调参数为当前值、数据移动的方向（\'left\' / \'right\'）、发生移动的数据 key 数组'
+        tips: '右侧列表元素变化时调用该事件函数，事件回调参数 (value: Array、direction: String、 moveKey: Array)'
     }, {
         name: 'left-check-change',
-        tips: '左侧列表元素被用户选中 / 取消选中时触发，回调参数为当前被选中的元素的 key 数组、选中状态发生变化的元素的 key 数组'
+        tips: '左侧列表元素被用户选中 / 取消选中时调用该事件函数，事件回调参数 (selectedKey: Array、 changeKey: Array)'
     }, {
         name: 'right-check-change',
-        tips: '右侧列表元素被用户选中 / 取消选中时触发，回调参数为当前被选中的元素的 key 数组、选中状态发生变化的元素的 key 数组'
+        tips: '右侧列表元素被用户选中 / 取消选中时调用该事件函数，事件回调参数 (selectedKey: Array、 changeKey: Array)'
     }],
     styles: ['size', 'margin'],
     directives: [

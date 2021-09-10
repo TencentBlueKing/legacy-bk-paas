@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 import store from '@/store'
-import { walkGrid } from '@/common/util'
+import { walkGrid, downloadFile } from '@/common/util'
 const acorn = require('acorn')
 
 function getCurUsedFuncs () {
@@ -83,6 +83,7 @@ function getCurUsedFuncs () {
 // 替换函数中的变量和函数
 function replaceFuncKeyword (funcBody = '', callBack) {
     const commentsPositions = []
+    const semiIndexs = []
     acorn.parse(funcBody, {
         onComment (isBlock, text, start, end) {
             commentsPositions.push({
@@ -90,9 +91,20 @@ function replaceFuncKeyword (funcBody = '', callBack) {
                 end
             })
         },
+        onInsertedSemicolon (lastTokEnd, lastTokEndLoc) {
+            semiIndexs.push(lastTokEnd)
+        },
         allowReturnOutsideFunction: true
     })
-    return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
+
+    const ret = funcBody.split('').map((c, i) => {
+        if (semiIndexs.indexOf(i) > -1) {
+            return ';'
+        }
+        return c
+    }).join('')
+
+    return ret.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
         const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
         return isInComments ? all : callBack(all, first, second, dirKey, funcStr, funcCode)
     })
@@ -131,8 +143,38 @@ function getDefaultFunc (options = {}) {
     }
 }
 
+function exportFunction (funcList = [], name = 'lesscode-func.json') {
+    function getExportFunc (func) {
+        const exportProps = [
+            'funcName',
+            'funcCode',
+            'funcParams',
+            'funcBody',
+            'funcSummary',
+            'funcType',
+            'funcMethod',
+            'withToken',
+            'funcApiData',
+            'funcApiUrl',
+            'remoteParams'
+        ]
+        return exportProps.reduce((res, prop) => {
+            res[prop] = func[prop]
+            return res
+        }, {})
+    }
+
+    const funcs = funcList.reduce((funcs, func) => {
+        funcs.push(getExportFunc(func))
+        return funcs
+    }, [])
+    const source = JSON.stringify(funcs, null, 2)
+    downloadFile(source, name)
+}
+
 export default {
     getCurUsedFuncs,
     replaceFuncKeyword,
-    getDefaultFunc
+    getDefaultFunc,
+    exportFunction
 }

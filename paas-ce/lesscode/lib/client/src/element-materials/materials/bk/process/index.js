@@ -18,7 +18,7 @@ export default {
     order: 1,
     styles: ['size', 'margin'],
     events: [{
-        name: 'process-changed', tips: '当前步骤变化时的回调'
+        name: 'process-changed', tips: '当前步骤变化时调用该事件函数，事件回调参数 (curProcess: Number, data: Object)'
     }],
     directives: [
         {

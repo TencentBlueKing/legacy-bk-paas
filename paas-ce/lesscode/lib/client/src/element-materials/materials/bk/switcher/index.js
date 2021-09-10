@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '状态发生变化时回调函数，回调参数为新的状态值（Boolean）'
+        name: 'change', tips: '状态发生变化时调用该事件函数，事件回调参数 (status: Boolean)'
     }],
     styles: ['margin', 'display', 'backgroundColor'],
     renderStyles: {
