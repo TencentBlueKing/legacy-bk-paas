@@ -27,7 +27,7 @@
                         </bk-option>
                     </bk-select>
                 </bk-form-item>
-                <section v-if="platformAdmin && actionType === 'update'" style="margin-top: 20px;">
+                <section v-if="isPlatformAdmin && actionType === 'update'" style="margin-top: 20px;">
                     <bk-form-item label="设为公开模板" required property="isOffcial" error-display-type="normal">
                         <bk-radio-group v-model="dialog.formData.isOffcial">
                             <bk-radio :value="1" style="margin-right: 20px;">是</bk-radio>
@@ -112,7 +112,7 @@
             }
         },
         computed: {
-            ...mapGetters('perm', ['platformAdmin']),
+            ...mapGetters(['isPlatformAdmin']),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -158,7 +158,7 @@
                         belongProjectId: this.projectId,
                         fromPageCode: this.fromTemplate.fromPageCode
                     }
-                    if (this.actionType !== 'apply' && this.platformAdmin) {
+                    if (this.actionType !== 'apply' && this.isPlatformAdmin) {
                         if (this.dialog.formData.isOffcial && !this.dialog.formData.offcialType) {
                             this.$bkMessage({
                                 theme: 'error',

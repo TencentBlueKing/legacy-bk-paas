@@ -83,7 +83,7 @@ export const getMember = async ctx => {
         const projectId = query.projectId
         const name = query.name
         let data = await UserModel.getMember(projectId, name)
-        data = unique(data,'username') || []
+        data = unique(data, 'username') || []
         ctx.send({
             code: 0,
             message: 'success',
