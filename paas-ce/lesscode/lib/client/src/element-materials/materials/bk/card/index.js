@@ -82,6 +82,52 @@ export default {
                     }
                 }
             }
+        },
+        header: {
+            name: ['layout'],
+            type: ['free-layout'],
+            display: 'hidden',
+            val: {
+                name: 'free-layout',
+                type: 'free-layout',
+                slotName: '',
+                slotContainer: true,
+                renderProps: {},
+                renderStyles: { 'height': '50px', 'pointer-events': 'auto' },
+                renderEvents: {},
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'free-layout-item',
+                        val: [
+                            { children: [] }
+                        ]
+                    }
+                }
+            }
+        },
+        footer: {
+            name: ['layout'],
+            type: ['free-layout'],
+            display: 'hidden',
+            val: {
+                name: 'free-layout',
+                type: 'free-layout',
+                slotName: '',
+                slotContainer: true,
+                renderProps: {},
+                renderStyles: { 'height': '50px', 'pointer-events': 'auto' },
+                renderEvents: {},
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'free-layout-item',
+                        val: [
+                            { children: [] }
+                        ]
+                    }
+                }
+            }
         }
     }
 }
