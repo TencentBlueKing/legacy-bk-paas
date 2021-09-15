@@ -249,6 +249,15 @@ class PageCode {
                     this.usingCustomArr.push(type)
                 }
             }
+
+            // icon 组件，样式中设置字体大小不生效，是因为 bk-icon 组件通过 size 属性来设置 font-size，默认值为 inherit
+            if (item.type === 'bk-icon') {
+                item.renderProps['size'] = {
+                    type: 'string',
+                    val: item.renderStyles.fontSize
+                }
+            }
+
             const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives, item.renderSlots)
             const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
             const itemEvents = this.getItemEvents(item.renderEvents)

@@ -159,9 +159,9 @@
                 line-height: var(--side-hd-height);
             }
             .side-bd {
-                @mixin scroller;
                 height: calc(100% - var(--side-hd-height) - var(--side-ft-height));
                 overflow-y: auto;
+                @mixin scroller;
             }
             .side-ft {
                 position: absolute;
