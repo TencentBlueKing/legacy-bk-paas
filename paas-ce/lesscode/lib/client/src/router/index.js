@@ -60,6 +60,13 @@ const Directive = () => import(/* webpackChunkName: 'directive' */'@/views/help/
 const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
 const Interactive = () => import(/* webpackChunkName: 'interactive' */'@/views/help/docs/interactive.md')
 
+// 运营统计
+const OperationEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/operation/index.vue')
+const OperationStatsUser = () => import(/* webpackChunkName: 'operation-stats-user' */'@/views/system/operation/stats/user/index.vue')
+const OperationStatsProject = () => import(/* webpackChunkName: 'operation-stats-project' */'@/views/system/operation/stats/project/index.vue')
+const OperationStatsFunc = () => import(/* webpackChunkName: 'operation-stats-func' */'@/views/system/operation/stats/func/index.vue')
+const OperationStatsComp = () => import(/* webpackChunkName: 'operation-stats-comp' */'@/views/system/operation/stats/comp/index.vue')
+
 const routes = [
     {
         path: '/help',
@@ -87,7 +94,10 @@ const routes = [
     },
     {
         path: '/',
-        component: SystemEntry,
+        components: {
+            default: SystemEntry,
+            permission: require('@/views/status/403').default
+        },
         redirect: { name: 'projects' },
         children: [
             {
@@ -121,6 +131,46 @@ const routes = [
                 meta: {
                     title: '账号管理'
                 }
+            },
+            {
+                name: 'op-entry',
+                path: '/op',
+                component: OperationEntry,
+                redirect: { name: 'op-stats-user' },
+                children: [
+                    {
+                        path: 'stats/user',
+                        name: 'op-stats-user',
+                        component: OperationStatsUser,
+                        meta: {
+                            title: '用户数据'
+                        }
+                    },
+                    {
+                        path: 'stats/project',
+                        name: 'op-stats-project',
+                        component: OperationStatsProject,
+                        meta: {
+                            title: '项目数据'
+                        }
+                    },
+                    {
+                        path: 'stats/func',
+                        name: 'op-stats-func',
+                        component: OperationStatsFunc,
+                        meta: {
+                            title: '函数数据'
+                        }
+                    },
+                    {
+                        path: 'stats/comp',
+                        name: 'op-stats-comp',
+                        component: OperationStatsComp,
+                        meta: {
+                            title: '自定义组件数据'
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -280,6 +330,11 @@ const checkViewAuth = async (to) => {
     if (topRoute.name === 'page-entry') {
         const res = await store.dispatch('page/verify', { data: { id: to.params.pageId, projectId: to.params.projectId } })
         hasPermission = res.data
+    }
+
+    if (to.matched[1] && to.matched[1].name === 'op-entry') {
+        const isAdmin = await store.dispatch('isPlatformAdmin')
+        hasPermission = isAdmin
     }
 
     // if (to.name === 'preview') {

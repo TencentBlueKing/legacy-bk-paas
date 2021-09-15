@@ -75,7 +75,6 @@
         },
 
         mounted () {
-            this.$store.dispatch('perm/isPlatformAdmin')
             const platform = window.navigator.platform.toLowerCase()
             if (platform.indexOf('win') === 0) {
                 this.systemCls = 'win'

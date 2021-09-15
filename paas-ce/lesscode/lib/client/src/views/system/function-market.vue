@@ -1,7 +1,7 @@
 <template>
     <article class="function-market-home">
         <section class="function-market-title">
-            <section v-if="isAdmin">
+            <section v-if="isPlatformAdmin">
                 <bk-button
                     class="mr5"
                     theme="primary"
@@ -30,7 +30,7 @@
                 <h3 class="card-title">{{ card.funcName }}</h3>
                 <p class="card-body" v-bk-overflow-tips>{{ card.funcSummary }}</p>
                 <bk-popconfirm
-                    v-if="isAdmin"
+                    v-if="isPlatformAdmin"
                     content="确定删除该函数？"
                     width="280"
                     @confirm="handleDeleteFunc(card)">
@@ -41,7 +41,7 @@
                     <bk-button text class="foot-btn" @click.stop="handleShowSource(card)">查看源码</bk-button>
                     <bk-divider direction="vertical"></bk-divider>
                     <bk-button text class="foot-btn" @click.stop="handleShowAddFuncFromMarket(card)">添加至项目</bk-button>
-                    <template v-if="isAdmin">
+                    <template v-if="isPlatformAdmin">
                         <bk-divider direction="vertical"></bk-divider>
                         <bk-button text class="foot-btn" @click.stop="handleShowEditFunc(card)">编辑</bk-button>
                     </template>
@@ -89,7 +89,7 @@
                     class="bk-drag-icon bk-drag-export icon-style"
                     slot="tools"
                     @click="exportMarketSingleFunc(showSource.func)"
-                    v-if="isAdmin"
+                    v-if="isPlatformAdmin"
                 ></i>
                 <i
                     class="bk-drag-icon bk-drag-close-line icon-style"
@@ -110,7 +110,7 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
     import sourceMarket from '@/components/methods/func-form/source-market'
     import funcMarket from '@/components/methods/func-form/func-market'
     import addFunc from '@/components/methods/func-form/add-func'
@@ -145,7 +145,6 @@
                     loading: false,
                     func: {}
                 },
-                isAdmin: false,
                 importData: {
                     show: false,
                     loading: false
@@ -154,6 +153,7 @@
         },
 
         computed: {
+            ...mapGetters(['isPlatformAdmin']),
             computedCardList () {
                 return this.cardList.filter(card => (card.funcName || '').includes(this.searchStr))
             }
@@ -172,13 +172,9 @@
                 'addFuncToProject',
                 'deleteMarketFunc'
             ]),
-            ...mapActions('perm', ['isPlatformAdmin']),
 
             initData () {
                 this.getCardList()
-                this.isPlatformAdmin().then((res) => {
-                    this.isAdmin = res
-                })
             },
 
             getCardList () {
