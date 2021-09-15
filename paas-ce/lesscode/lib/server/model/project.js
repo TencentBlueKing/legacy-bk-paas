@@ -131,7 +131,7 @@ export default {
                     getRepository(TemplateCategory)
                         .createQueryBuilder('pageTemplateCategory')
                         .where('pageTemplateCategory.belongProjectId = :projectId', { projectId: projectData.copyFrom })
-                        .getMany(),
+                        .getMany()
                 ])
 
                 if (projectCompCopyValues.length) {
@@ -177,7 +177,7 @@ export default {
                         .where('pageTemplate.categoryId IN (:...categoryIds)', { categoryIds: categoryIdList })
                         .andWhere('pageTemplate.isOffcial = 0')
                         .getMany()
-                    
+
                     const saveCopyTemplates = getRepository(PageTemplate).create(copyTemplates.map(item => {
                         const { id, createTime, updateTime, createUser, ...others } = item
                         others.categoryId = categoryIdMap[others.categoryId]

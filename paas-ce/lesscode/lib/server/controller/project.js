@@ -277,7 +277,6 @@ module.exports = {
                 message: err.message
             })
         }
-        
     },
 
     async verify (ctx) {
