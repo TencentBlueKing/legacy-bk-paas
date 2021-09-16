@@ -20,11 +20,11 @@
             <export-button name="user" dim="time" :list="exportList" :fields="exportFields" />
         </div>
         <div class="chart-list">
-            <div class="chart-item">
-                <div class="chart-title">用户数</div>
-                <div class="chart-container" v-bkloading="{ isLoading: fetching.base }">
-                    <canvas id="chart"></canvas>
-                    <bk-exception v-if="!fetching.base && !chart.base.data.length"
+            <div class="chart-item" v-for="chartItem in chartList" :key="chartItem.id">
+                <div class="chart-title">{{chartItem.title}}</div>
+                <div class="chart-container" v-bkloading="{ isLoading: fetching[chartItem.id] }">
+                    <canvas :id="`chart${chartItem.name}`"></canvas>
+                    <bk-exception v-if="!fetching[chartItem.id] && !chart[chartItem.id].data.length"
                         class="chart-empty" type="empty" scene="part">
                     </bk-exception>
                 </div>
@@ -49,6 +49,7 @@
             return {
                 chart: {
                     base: {
+                        title: '按时间新增用户量',
                         inst: null,
                         data: []
                     }
@@ -77,12 +78,11 @@
                 return params
             },
             exportList () {
-                return [
-                    {
-                        title: '用户数',
-                        data: this.chart.base.data
-                    }
-                ]
+                const charts = this.chartList.map(item => ({
+                    title: item.title,
+                    data: this.chart[item.id].data
+                }))
+                return charts
             }
         },
         created () {
@@ -116,7 +116,7 @@
                     return
                 }
 
-                const context = document.getElementById('chart')
+                const context = document.getElementById('chartBase')
                 const dataCounts = chartData.map(item => item.count)
                 const labels = chartData.map(item => item.time)
 

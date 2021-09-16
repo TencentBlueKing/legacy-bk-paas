@@ -21,6 +21,7 @@ const {
     getProjectCountByTime,
     getProjectTotalCount,
 
+    getProjectPageTotalCount,
     getPageTotalCount,
 
     getFuncBaseList,
@@ -51,6 +52,7 @@ router.post('/stats/project/base', getProjectBaseList)
 router.post('/stats/project/pageCount', getProjectPageCount)
 router.post('/stats/project/timeline/base', getProjectCountByTime)
 router.post('/stats/project/projectTotal', getProjectTotalCount)
+router.post('/stats/project/page/pageTotal', getProjectPageTotalCount)
 router.post('/stats/page/pageTotal', getPageTotalCount)
 
 router.post('/stats/func/base', getFuncBaseList)
