@@ -107,7 +107,15 @@ export default {
             // 复制项目
             if (projectData.copyFrom) {
                 // copy项目中的组件/函数/页面/布局/变量
-                const [projectCompCopyValues, projectFuncGroupCopyValues, projectPageCopyValues, projectLayoutValues, variableList, templateCategoryValues] = await Promise.all([
+                const [
+                    projectCompCopyValues,
+                    projectFuncGroupCopyValues,
+                    projectPageCopyValues,
+                    projectRouteCopyValues,
+                    projectLayoutValues,
+                    variableList,
+                    templateCategoryValues
+                ] = await Promise.all([
                     getRepository(Comp)
                         .createQueryBuilder('comp')
                         .where('comp.belongProjectId = :projectId', { projectId: projectData.copyFrom })
@@ -119,6 +127,10 @@ export default {
                     getRepository(ProjectPage)
                         .createQueryBuilder('projectPage')
                         .where('projectPage.projectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany(),
+                    getRepository(PageRoute)
+                        .createQueryBuilder('pageRoute')
+                        .where('pageRoute.projectId = :projectId', { projectId: projectData.copyFrom })
                         .getMany(),
                     getRepository(LayoutInst)
                         .createQueryBuilder('layoutInst')
@@ -248,6 +260,7 @@ export default {
                     })
                 }
 
+                const pageIdMap = {}
                 if (projectPageCopyValues.length) {
                     const pageIdList = projectPageCopyValues.map(item => item.pageId)
                     const copyPages = await getRepository(Page)
@@ -274,7 +287,6 @@ export default {
                     await transactionalEntityManager.save(projectPageValues)
 
                     // 建立新老页面id的映射
-                    const pageIdMap = {}
                     pageIdList.forEach((id, index) => {
                         pageIdMap[id] = newPageList[index].id
                     })
@@ -290,35 +302,6 @@ export default {
                         await transactionalEntityManager.save(saveCopyPageFuncs)
                     }
 
-                    // 页面路由信息，目前未绑定页面的路由在当前逻辑下不会被复制
-                    const copyPageRoutes = await getRepository(PageRoute)
-                        .createQueryBuilder('pageRoute')
-                        .where('pageRoute.pageId IN (:...pageIds)', { pageIds: pageIdList })
-                        .getMany()
-
-                    if (copyPageRoutes && copyPageRoutes.length) {
-                        const routeIdList = copyPageRoutes.map(item => item.routeId)
-                        const copyRoutes = await getRepository(Route)
-                            .createQueryBuilder('route')
-                            .where('route.id IN (:...ids)', { ids: routeIdList })
-                            .getMany()
-
-                        const saveCopyRoutes = getRepository(Route).create(copyRoutes.map(item => {
-                            const { id, createTime, updateTime, ...others } = item
-                            return others
-                        }))
-                        const newRouteList = await transactionalEntityManager.save(saveCopyRoutes)
-                        const saveCopyPageRoutes = getRepository(PageRoute).create(copyPageRoutes.map((item, index) => {
-                            const { id, createTime, updateTime, ...others } = item
-                            others.routeId = newRouteList[index].id
-                            others.pageId = pageIdMap[others.pageId]
-                            others.layoutId = layoutIdMap[others.layoutId]
-                            others.projectId = projectId
-                            return others
-                        }))
-                        await transactionalEntityManager.save(saveCopyPageRoutes)
-                    }
-
                     // 新建页面组件关联记录
                     const copyPageComps = await getRepository(PageComp)
                         .createQueryBuilder('pageComp')
@@ -331,6 +314,37 @@ export default {
                         return others
                     }))
                     await transactionalEntityManager.save(saveCopyPageComps)
+                }
+
+                // 项目路由记录
+                if (projectRouteCopyValues.length) {
+                    const routeIdList = projectRouteCopyValues.map(item => item.routeId).filter(routeId => routeId !== -1)
+                    const copyRoutes = await getRepository(Route)
+                        .createQueryBuilder('route')
+                        .where('route.id IN (:...ids)', { ids: routeIdList })
+                        .getMany()
+
+                    const saveCopyRoutes = getRepository(Route).create(copyRoutes.map(item => {
+                        const { id, createTime, updateTime, ...others } = item
+                        return others
+                    }))
+                    const newRouteList = await transactionalEntityManager.save(saveCopyRoutes)
+                    const routeIdMap = {}
+                    routeIdList.forEach((id, index) => {
+                        routeIdMap[id] = newRouteList[index].id
+                    })
+
+                    const saveCopyProjectRoutes = getRepository(PageRoute).create(projectRouteCopyValues.map((item, index) => {
+                        const { id, createTime, updateTime, ...others } = item
+                        // 未绑定路由或页面或删除的路由值为-1
+                        others.routeId = others.routeId !== -1 ? routeIdMap[others.routeId] : -1
+                        others.pageId = others.pageId !== -1 ? pageIdMap[others.pageId] : -1
+                        others.redirect = others.redirect ? routeIdMap[others.redirect] : null
+                        others.layoutId = layoutIdMap[others.layoutId]
+                        others.projectId = projectId
+                        return others
+                    }))
+                    await transactionalEntityManager.save(saveCopyProjectRoutes)
                 }
 
                 if (variableList.length) {
