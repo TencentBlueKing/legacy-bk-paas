@@ -26,13 +26,19 @@
                 :pagination="pagination"
                 @page-change="handlePageChange"
                 @page-limit-change="handlePageLimitChange">
-                <bk-table-column label="函数名" prop="funcName" width="360"></bk-table-column>
-                <bk-table-column label="所属项目" prop="projectName" width="300"></bk-table-column>
-                <bk-table-column label="使用页面数">
+                <bk-table-column
+                    v-for="column in columns"
+                    :key="column.id"
+                    :label="column.name"
+                    :prop="column.id"
+                    :width="column.width"
+                    :sortable="column.sortable">
                     <template slot-scope="{ row }">
-                        <loading :loading="fetching.pageUsedCount">
-                            <span>{{row.pageUsedCount | formatCount}}</span>
+                        <loading v-if="column.dynamic" :loading="fetching[column.id]">
+                            <span v-if="column.type === 'number'">{{row[column.id] | formatCount}}</span>
+                            <span v-else>{{row[column.id]}}</span>
                         </loading>
+                        <template v-else>{{row[column.id]}}</template>
                     </template>
                 </bk-table-column>
             </bk-table>
@@ -45,13 +51,14 @@
     import Loading from '@/components/ui/loading.vue'
     import ExportButton from '../export-button.vue'
     import sharedMixin from '../shared-mixin.js'
+    import tableListMixin from '../table-list-mixin.js'
 
     export default {
         components: {
             Loading,
             ExportButton
         },
-        mixins: [sharedMixin],
+        mixins: [sharedMixin, tableListMixin],
         data () {
             return {
                 list: [],
@@ -60,10 +67,10 @@
                     count: 0,
                     limit: 10
                 },
-                exportFields: [
-                    { id: 'funcName', name: '函数名' },
-                    { id: 'projectName', name: '所属项目' },
-                    { id: 'pageUsedCount', name: '使用页面数' }
+                columns: [
+                    { id: 'funcName', name: '函数名', width: '360' },
+                    { id: 'projectName', name: '所属项目', width: '360' },
+                    { id: 'pageUsedCount', name: '使用页面数', dynamic: true, type: 'number' }
                 ],
                 filters: {
                     keyword: '',
@@ -87,6 +94,7 @@
             }
         },
         created () {
+            this.setFetching()
             this.fetchData()
         },
         methods: {
@@ -99,18 +107,21 @@
                     const { data: [list, total] } = await http.post('/operation/stats/func/base', this.params)
                     this.list = list.map((item) => ({
                         ...item,
-                        pageUsedCount: 0
+                        ...this.getDynamicValues()
                     }))
                     this.pagination.count = total
 
                     if (this.list && this.list.length) {
-                        this.getFuncPageUsedCount()
+                        this.getMoreData()
                     }
                 } catch (e) {
                     console.error(e)
                 } finally {
                     this.fetching.base = false
                 }
+            },
+            getMoreData () {
+                this.getFuncPageUsedCount()
             },
             async getFuncPageUsedCount () {
                 const funcIds = this.list.map(item => item.id)

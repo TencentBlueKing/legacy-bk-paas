@@ -25,20 +25,21 @@
                 :data="list"
                 :pagination="pagination"
                 @page-change="handlePageChange"
-                @page-limit-change="handlePageLimitChange">
-                <bk-table-column label="用户名" prop="username" width="360"></bk-table-column>
-                <bk-table-column label="项目数">
+                @page-limit-change="handlePageLimitChange"
+                @sort-change="handleSortChange">
+                <bk-table-column
+                    v-for="column in columns"
+                    :key="column.id"
+                    :label="column.name"
+                    :prop="column.id"
+                    :width="column.width"
+                    :sortable="column.sortable">
                     <template slot-scope="{ row }">
-                        <loading :loading="fetching.projectCount">
-                            <span>{{row.projectCount | formatCount}}</span>
+                        <loading v-if="column.dynamic" :loading="fetching[column.id]">
+                            <span v-if="column.type === 'number'">{{row[column.id] | formatCount}}</span>
+                            <span v-else>{{row[column.id]}}</span>
                         </loading>
-                    </template>
-                </bk-table-column>
-                <bk-table-column label="页面数">
-                    <template slot-scope="{ row }">
-                        <loading :loading="fetching.pageCount">
-                            <span>{{row.pageCount | formatCount}}</span>
-                        </loading>
+                        <template v-else>{{row[column.id]}}</template>
                     </template>
                 </bk-table-column>
             </bk-table>
@@ -51,13 +52,14 @@
     import Loading from '@/components/ui/loading.vue'
     import ExportButton from '../export-button.vue'
     import sharedMixin from '../shared-mixin.js'
+    import tableListMixin from '../table-list-mixin.js'
 
     export default {
         components: {
             Loading,
             ExportButton
         },
-        mixins: [sharedMixin],
+        mixins: [sharedMixin, tableListMixin],
         data () {
             return {
                 list: [],
@@ -66,20 +68,18 @@
                     count: 0,
                     limit: 10
                 },
-                exportFields: [
-                    { id: 'username', name: '用户名' },
-                    { id: 'projectCount', name: '项目数' },
-                    { id: 'pageCount', name: '页面数' }
+                orderBy: undefined,
+                columns: [
+                    { id: 'username', name: '用户名', width: '360' },
+                    { id: 'projectCount', name: '项目数', sortable: 'custom', dynamic: true, type: 'number' },
+                    { id: 'pageCount', name: '页面数', sortable: 'custom', dynamic: true, type: 'number' }
                 ],
                 filters: {
                     keyword: '',
                     dateRange: []
                 },
                 fetching: {
-                    base: false,
-                    projectCount: false,
-                    pageCount: false,
-                    releaseStagCount: false
+                    base: false
                 }
             }
         },
@@ -89,12 +89,14 @@
                     user: this.filters.keyword,
                     time: this.timeParam, // mixin
                     pageSize: this.pagination.limit,
-                    pageNum: this.pagination.current
+                    pageNum: this.pagination.current,
+                    orderBy: this.orderBy
                 }
                 return params
             }
         },
         created () {
+            this.setFetching()
             this.fetchData()
         },
         methods: {
@@ -107,20 +109,22 @@
                     const { data: [list, total] } = await http.post('/operation/stats/user/base', this.params)
                     this.list = list.map((item) => ({
                         ...item,
-                        projectCount: 0,
-                        pageCount: 0
+                        ...this.getDynamicValues()
                     }))
                     this.pagination.count = total
 
                     if (this.list && this.list.length) {
-                        this.getUserProjectCount()
-                        this.getUserPageCount()
+                        this.getMoreData()
                     }
                 } catch (e) {
                     console.error(e)
                 } finally {
                     this.fetching.base = false
                 }
+            },
+            getMoreData () {
+                this.getUserProjectCount()
+                this.getUserPageCount()
             },
             async getUserProjectCount () {
                 const users = this.list.map(item => item.username)

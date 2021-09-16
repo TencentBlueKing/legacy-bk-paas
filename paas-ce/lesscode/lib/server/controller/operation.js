@@ -32,7 +32,7 @@ export const getUserBaseList = async (ctx) => {
     const params = ctx.request.body || {}
     const manager = getManager()
 
-    const where = []
+    const where = ['`user`.deleteFlag  = 0']
     const escaped = []
     if (params.time) {
         const [timeStart, timeEnd] = params.time
@@ -48,16 +48,27 @@ export const getUserBaseList = async (ctx) => {
     const pageSize = isNaN(Number(params.pageSize)) ? 10 : Math.min(params.pageSize, 100)
     const pageCurrent = isNaN(Number(params.pageNum)) ? 1 : Math.max(params.pageNum, 1)
 
-    let rowSql = `select * from user`
-    let countSql = `select count(*) as total from user`
+    let rowSql = `select username from user WHERE ${where.join(' AND ')} ORDER BY id DESC`
+    const countSql = `select count(*) as total from user WHERE ${where.join(' AND ')}`
 
-    if (where.length) {
-        const whereCond = ` WHERE ${where.join(' AND ')}`
-        rowSql += whereCond
-        countSql += whereCond
+    // 按项目数、页面数排序则需要联表查询
+    if (params.orderBy) {
+        const isDesc = params.orderBy.startsWith('-')
+        const order = isDesc ? 'DESC' : 'ASC'
+        const column = params.orderBy.slice(isDesc ? 1 : 0)
+        const table = ({ projectCount: 'project', pageCount: 'page' })[column]
+        rowSql = `
+        SELECT
+            count( ${table}.id ) AS count,
+            user.username
+        FROM
+            user
+            LEFT JOIN ${table} ON user.username = ${table}.createUser and ${table}.deleteFlag = 0
+        WHERE ${where.join(' AND ')}
+        GROUP BY user.username
+        ORDER BY count ${order}`
     }
 
-    rowSql += ` ORDER BY id DESC`
     rowSql += ` LIMIT ${pageSize * (pageCurrent - 1)}, ${pageSize}`
 
     try {
@@ -85,7 +96,10 @@ export const getUserProjectCountList = async (ctx) => {
     const manager = getManager()
     try {
         const result = await manager.query(
-            `select count(*) as count, user.username from project left join user on user.username = project.createUser WHERE username in (?) GROUP BY project.createUser`,
+            `select count(*) as count, user.username
+            from project left join user on user.username = project.createUser
+            WHERE username in (?) AND project.deleteFlag = 0
+            GROUP BY project.createUser`,
             [params.users || []]
         )
         ctx.send({
@@ -108,7 +122,10 @@ export const getUserPageCountList = async (ctx) => {
     const manager = getManager()
     try {
         const result = await manager.query(
-            `select count(*) as count, user.username from page left join user on user.username = page.createUser WHERE username in (?) GROUP BY page.createUser`,
+            `select count(*) as count, user.username
+            from page left join user on user.username = page.createUser
+            WHERE username in (?) AND page.deleteFlag = 0
+            GROUP BY page.createUser`,
             [params.users || []]
         )
         ctx.send({
@@ -170,7 +187,7 @@ export const getProjectBaseList = async (ctx) => {
     const manager = getManager()
 
     // 默认去除demo项目
-    const where = [`projectCode != 'demo'`, `deleteFlag = 0`]
+    const where = [`project.projectCode != 'demo'`, `project.deleteFlag = 0`]
 
     const escaped = []
     if (params.time) {
@@ -187,16 +204,34 @@ export const getProjectBaseList = async (ctx) => {
     const pageSize = isNaN(Number(params.pageSize)) ? 10 : Math.min(params.pageSize, 100)
     const pageCurrent = isNaN(Number(params.pageNum)) ? 1 : Math.max(params.pageNum, 1)
 
-    let rowSql = `select id, projectCode, projectName from project`
-    let countSql = `select count(*) as total from project`
+    let rowSql = `select id, projectCode, projectName from project WHERE ${where.join(' AND ')} ORDER BY id DESC`
+    const countSql = `select count(*) as total from project WHERE ${where.join(' AND ')}`
 
-    if (where.length) {
-        const whereCond = ` WHERE ${where.join(' AND ')}`
-        rowSql += whereCond
-        countSql += whereCond
+    // 启用排序查询
+    if (params.orderBy) {
+        const isDesc = params.orderBy.startsWith('-')
+        const order = isDesc ? 'DESC' : 'ASC'
+        const column = params.orderBy.slice(isDesc ? 1 : 0)
+
+        const sortSqls = {
+            pageCount: `
+                SELECT
+                    project.id,
+                    projectCode,
+                    projectName,
+                    count( r_project_page.pageId ) AS count
+                FROM
+                    project
+                    LEFT JOIN r_project_page ON r_project_page.projectId = project.id
+                    AND r_project_page.deleteFlag = 0
+                WHERE ${where.join(' AND ')}
+                GROUP BY project.id
+                ORDER BY count ${order}`
+        }
+
+        rowSql = sortSqls[column]
     }
 
-    rowSql += ` ORDER BY id DESC`
     rowSql += ` LIMIT ${pageSize * (pageCurrent - 1)}, ${pageSize}`
 
     try {
@@ -325,6 +360,40 @@ export const getPageTotalCount = async (ctx) => {
     try {
         const result = await manager.query(
             `select count(*) as total from page where pageCode != 'demo' AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0`,
+            [new Date(Number(params.time[0])), new Date(Number(params.time[1]))]
+        )
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data: result
+        })
+    } catch (err) {
+        ctx.throw({
+            message: err.message
+        })
+    }
+}
+
+/**
+ * 获取时间范围内项目下的页面总数
+ */
+export const getProjectPageTotalCount = async (ctx) => {
+    const params = ctx.request.body || {}
+    const manager = getManager()
+
+    if (!params.time || !Array.isArray(params.time)) {
+        ctx.throw(400, '无效的时间参数')
+    }
+
+    try {
+        const result = await manager.query(
+            `
+            SELECT count(*) as total from (
+                select pageId from r_project_page where projectId in (
+                    select project.id from project where projectCode != 'demo' AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0
+                ) AND deleteFlag = 0
+            ) as t
+            `,
             [new Date(Number(params.time[0])), new Date(Number(params.time[1]))]
         )
         ctx.send({
@@ -503,7 +572,7 @@ export const getFuncTotalCount = async (ctx) => {
 
 /**
  * 获取被页面使用的函数总数
- * 未限制在指定函数范围内
+ * 限制在指定函数范围内
  */
 export const getFuncPageUsedTotalCount = async (ctx) => {
     const params = ctx.request.body || {}
@@ -525,7 +594,9 @@ export const getFuncPageUsedTotalCount = async (ctx) => {
                     r_page_func
                     LEFT JOIN func ON func.id = r_page_func.funcId
                 WHERE
-                    func.funcName NOT IN ( 'getApiData', 'getMockData' ) AND (r_page_func.createTime >= ? AND r_page_func.createTime <= ?) AND func.deleteFlag = 0
+                    func.id IN (
+                        SELECT func.id from func where funcName NOT IN ('getApiData', 'getMockData') AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0
+                    )
                 GROUP BY funcId
                 ) AS t
             `,
@@ -750,7 +821,7 @@ export const getCompTotalCount = async (ctx) => {
 
     try {
         const result = await manager.query(
-            `select count(*) as total from comp where (createTime >= ? AND createTime <= ?) AND deleteFlag = 0`,
+            `SELECT count(*) as total from comp where (createTime >= ? AND createTime <= ?) AND deleteFlag = 0`,
             [new Date(Number(params.time[0])), new Date(Number(params.time[1]))]
         )
         ctx.send({
@@ -767,7 +838,7 @@ export const getCompTotalCount = async (ctx) => {
 
 /**
  * 获取被项目使用的组件总数
- * 未限制在指定组件范围内
+ * 限制在指定组件范围内
  */
 export const getCompProjectUsedTotalCount = async (ctx) => {
     const params = ctx.request.body || {}
@@ -783,7 +854,16 @@ export const getCompProjectUsedTotalCount = async (ctx) => {
             SELECT
                 count(*) AS total
             FROM
-                ( SELECT compId FROM r_page_comp WHERE (r_page_comp.createTime >= ? AND r_page_comp.createTime <= ?) AND r_page_comp.deleteFlag = 0 GROUP BY compId ) AS t
+                (
+                SELECT
+                    compId
+                FROM
+                    r_page_comp
+                WHERE
+                    compId IN ( SELECT comp.id FROM comp WHERE ( createTime >= ? AND createTime <= ?) AND deleteFlag = 0 )
+                GROUP BY
+                    compId
+                ) AS t
             `,
             [new Date(Number(params.time[0])), new Date(Number(params.time[1]))]
         )
