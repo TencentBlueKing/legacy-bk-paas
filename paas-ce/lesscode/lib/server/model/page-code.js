@@ -835,10 +835,12 @@ class PageCode {
             if (item.type === 'render-grid') {
                 /* eslint-disable no-unused-vars, indent */
                 const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
+                const gutterVal = item.renderProps.gutter ? item.renderProps.gutter.val : 0
+                const paddingStyleStr = `padding-right: ${gutterVal / 2}px;padding-left: ${gutterVal / 2}px;`
                 code += `
                     ${itemClass ? `\n<div class="bk-layout-row-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-layout-row-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
                         ${item.renderSlots && item.renderSlots.default && item.renderSlots.default.val && item.renderSlots.default.val.map(col => {
-                    return `<div class="bk-layout-col-${this.uniqueKey}" style="width: ${col.width || ''}">
+                    return `<div class="bk-layout-col-${this.uniqueKey}" style="width: ${col.width || ''};${paddingStyleStr}">
                                         ${col.children.length ? `${this.generateCode(col.children)}` : ''}
                                     </div>`
                 }).join('\n')}
