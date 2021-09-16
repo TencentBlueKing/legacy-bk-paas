@@ -200,7 +200,9 @@ class PageCode {
         }
         if (item.name.startsWith('chart-')) {
             this.generateCharts(item)
-            const widthStr = item.renderProps.width && item.renderProps.width.val ? `width: ${item.renderProps.width.val}px;` : ''
+            const width = item.renderProps.width && item.renderProps.width.val
+            const widthVal = width ? (typeof width === 'number' ? `${width}px` : width) : '100%'
+            const widthStr = `width:${widthVal};`
             const heightStr = `height:${item.renderProps.height.val || 0}px;`
             const displayStr = item.renderStyles.display ? `display: ${item.renderStyles.display};vertical-align: middle;` : ''
 
