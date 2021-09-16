@@ -46,9 +46,14 @@
         },
         computed: {
             computedStyle () {
-                const widthStr = this.width ? `width: ${this.width}px;` : ''
+                let widthVal = this.width ? (typeof this.width === 'number' ? `${this.width}px` : this.width) : '100%'
+                // 画布渲染时将百分比置为100%
+                this.$route.name === 'new' && widthVal.endsWith('%') && (widthVal = '100%')
+                const widthStr = `width:${widthVal};`
+                
                 const heightStr = `height:${this.height}px;`
-                return widthStr + heightStr + 'display: inline-block;'
+                
+                return widthStr + heightStr
             }
         }
     }

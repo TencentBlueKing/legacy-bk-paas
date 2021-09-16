@@ -538,6 +538,9 @@ export function splitValueAndUnit (type, string) {
     if (!string) {
         return ''
     }
+    if (typeof string !== 'string') {
+        string = string.toString()
+    }
 
     // 支持小数和负数
     const reg = /^(-?\d+(\.\d+)?)(\D*)$/

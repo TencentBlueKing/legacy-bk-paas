@@ -182,6 +182,11 @@
                 if (this.componentData.type === 'bk-swiper') {
                     styles.height = height
                 }
+                // charts类的宽度同步设置
+                if (this.componentData.componentId.startsWith('chart-') || this.componentData.componentId.startsWith('bk-charts-')) {
+                    const width = this.componentData.renderProps.width && this.componentData.renderProps.width.val
+                    width && (styles.width = width)
+                }
                 return styles
             },
             /**
