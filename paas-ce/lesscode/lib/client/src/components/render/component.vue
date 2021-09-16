@@ -182,6 +182,11 @@
                 if (this.componentData.type === 'bk-swiper') {
                     styles.height = height
                 }
+                // charts类的宽度同步设置
+                if (this.componentData.componentId.startsWith('chart-') || this.componentData.componentId.startsWith('bk-charts-')) {
+                    const width = this.componentData.renderProps.width && this.componentData.renderProps.width.val
+                    width && (styles.width = width)
+                }
                 return styles
             },
             /**
@@ -241,7 +246,7 @@
 
             this.updateBindProps()
             this.updateBindSlots()
-            
+
             bus.$on('on-update-props', this.updatePropsHandler)
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('on-update-props', this.updatePropsHandler)
@@ -273,7 +278,7 @@
                     const domNode = this.$refs[this.renderData.componentId].$el
                         || this.$refs[this.renderData.componentId] // 原生html不会有$el元素
                     const componentDisplay = getStyle(domNode, 'display')
-                    
+
                     if (componentDisplay) {
                         if (componentDisplay === 'block') {
                             result = 'block'
@@ -330,6 +335,12 @@
                     bindProps[renderPropsKey] = renderProps[renderPropsKey].val
                 })
                 this.bindProps = bindProps
+
+                // bk-swiper 组件的宽度由属性而不是样式决定，且组件本身的 dom 中会根据对应的属性配置生成 style
+                // 这里强制刷新，让组件重新渲染
+                if (this.renderData.type === 'bk-swiper') {
+                    this.renderDataSlotRefreshKey = Date.now()
+                }
             },
 
             updateBindSlots () {

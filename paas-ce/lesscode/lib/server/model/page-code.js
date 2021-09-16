@@ -200,7 +200,9 @@ class PageCode {
         }
         if (item.name.startsWith('chart-')) {
             this.generateCharts(item)
-            const widthStr = item.renderProps.width && item.renderProps.width.val ? `width: ${item.renderProps.width.val}px;` : ''
+            const width = item.renderProps.width && item.renderProps.width.val
+            const widthVal = width ? (typeof width === 'number' ? `${width}px` : width) : '100%'
+            const widthStr = `width:${widthVal};`
             const heightStr = `height:${item.renderProps.height.val || 0}px;`
             const displayStr = item.renderStyles.display ? `display: ${item.renderStyles.display};vertical-align: middle;` : ''
 
@@ -249,6 +251,15 @@ class PageCode {
                     this.usingCustomArr.push(type)
                 }
             }
+
+            // icon 组件，样式中设置字体大小不生效，是因为 bk-icon 组件通过 size 属性来设置 font-size，默认值为 inherit
+            if (item.type === 'bk-icon') {
+                item.renderProps['size'] = {
+                    type: 'string',
+                    val: item.renderStyles.fontSize
+                }
+            }
+
             const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives, item.renderSlots)
             const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
             const itemEvents = this.getItemEvents(item.renderEvents)
@@ -824,10 +835,12 @@ class PageCode {
             if (item.type === 'render-grid') {
                 /* eslint-disable no-unused-vars, indent */
                 const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
+                const gutterVal = item.renderProps.gutter ? item.renderProps.gutter.val : 0
+                const paddingStyleStr = `padding-right: ${gutterVal / 2}px;padding-left: ${gutterVal / 2}px;`
                 code += `
                     ${itemClass ? `\n<div class="bk-layout-row-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-layout-row-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
                         ${item.renderSlots && item.renderSlots.default && item.renderSlots.default.val && item.renderSlots.default.val.map(col => {
-                    return `<div class="bk-layout-col-${this.uniqueKey}" style="width: ${col.width || ''}">
+                    return `<div class="bk-layout-col-${this.uniqueKey}" style="width: ${col.width || ''};${paddingStyleStr}">
                                         ${col.children.length ? `${this.generateCode(col.children)}` : ''}
                                     </div>`
                 }).join('\n')}

@@ -23,8 +23,8 @@ export default {
     },
     props: {
         width: {
-            type: 'number',
-            val: 400,
+            type: 'size',
+            val: '400px',
             tips: '图表宽度，单位为px，为空则默认为100%'
         },
         height: {
