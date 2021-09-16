@@ -25,8 +25,8 @@ export default {
             } : {}
 
         /** 设置了静态的变量，即使值改变，但不在画布中绑定和渲染 */
-        const rederPropsObj = renderData.renderProps
-        for (const [key, value] of Object.entries(rederPropsObj)) {
+        const renderPropsObj = renderData.renderProps
+        for (const [key, value] of Object.entries(renderPropsObj)) {
             if (Object.prototype.hasOwnProperty.call(value, 'staticValue')) {
                 bindProps[key] = value.staticValue
             }
@@ -53,7 +53,7 @@ export default {
             }
             return acc
         }, {})
-        
+
         return h('span',
             {
                 style: { 'font-size': 'initial' }
