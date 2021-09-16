@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <div class="bk-chart-container" :style="{ height: `${height}px`, width: `${width}px` }">
+    <div class="bk-chart-container" :style="{ height: `${height}px`, width: computedWidth }">
         <canvas class="bk-chart" ref="chart"></canvas>
     </div>
 </template>
@@ -38,6 +38,10 @@
                 ctx: null,
                 chart: null
             }
+        },
+        computedWidth () {
+            const widthVal = this.width ? (typeof this.width === 'number' ? `${this.width}px` : this.width) : '100%'
+            return widthVal
         },
         watch: {
             options: {

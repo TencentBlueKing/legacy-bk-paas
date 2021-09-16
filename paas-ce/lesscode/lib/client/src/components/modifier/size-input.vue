@@ -14,6 +14,7 @@
         :ext-cls="isError ? 'king-input-modifier-style-error' : ''"
         :precision="0"
         :value="value"
+        :min="min"
         @change="handleChange">
         <template slot="append">
             <slot></slot>
@@ -32,6 +33,10 @@
             value: {
                 type: [String, Number],
                 required: true
+            },
+            min: {
+                type: [String, Number],
+                default: 1
             }
         },
         data () {
