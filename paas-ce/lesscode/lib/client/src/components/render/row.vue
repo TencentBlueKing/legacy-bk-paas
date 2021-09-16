@@ -29,10 +29,10 @@
         },
         props: {
             // 栅格间距，单位 px，左右平分
-            // gutter: {
-            //     type: Number,
-            //     default: 20
-            // },
+            gutter: {
+                type: Number,
+                default: 0
+            },
             // 栅格容器的左右外边距
             marginHorizontal: {
                 type: Number,
