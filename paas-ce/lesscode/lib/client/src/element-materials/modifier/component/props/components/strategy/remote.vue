@@ -109,7 +109,7 @@
                 const { defaultValue, defaultValueType, valueType } = variable
                 let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
                 if (valueType === 6) value = ''
-                if (valueType === 0) value = `'${value}'`
+                if ([0, 5].includes(valueType)) value = `'${value}'`
 
                 // 对象类型，加上 ()，让直接 . 引用属性不会报错
                 if (valueType === 4) value = `(${value})`
