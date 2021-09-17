@@ -10,7 +10,7 @@ const { spawn, exec } = require('child_process')
 let config
 try {
     config = require('../../conf/npm')
-} catch(_) {
+} catch (_) {
     config = {}
 }
 

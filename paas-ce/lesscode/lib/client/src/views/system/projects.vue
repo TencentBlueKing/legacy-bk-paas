@@ -65,7 +65,7 @@
                                         <li><a href="javascript:;" @click="toPage(project.id)">页面管理</a></li>
                                         <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(project)">复制</a></li>
-                                        <li v-if="platformAdmin"><a href="javascript:;" @click="handleSetTemplate(project)">设为模板</a></li>
+                                        <li v-if="isPlatformAdmin"><a href="javascript:;" @click="handleSetTemplate(project)">设为模板</a></li>
                                     </ul>
                                 </bk-dropdown-menu>
                             </div>
@@ -326,7 +326,7 @@
             }
         },
         computed: {
-            ...mapGetters('perm', ['platformAdmin']),
+            ...mapGetters(['isPlatformAdmin']),
             filter () {
                 return this.$route.query.filter || ''
             },

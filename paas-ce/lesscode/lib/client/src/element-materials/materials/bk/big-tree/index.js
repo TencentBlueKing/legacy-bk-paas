@@ -87,6 +87,11 @@ export default {
             val: false,
             tips: '是否显示节点复选框'
         },
+        'selectable': {
+            type: 'boolean',
+            val: true,
+            tips: '节点是否可以选中'
+        },
         'show-link-line': {
             type: 'boolean',
             val: false,

@@ -10,7 +10,15 @@
  */
 
 const Router = require('koa-router')
-const { getUserInfo, getAllUser, addMembers, getMember, editMember, deleteMember, setCurUserPermInfo } = require('../controller/user')
+const {
+    getUserInfo,
+    getAllUser,
+    addMembers,
+    getMember,
+    editMember,
+    deleteMember,
+    setCurUserPermInfo
+} = require('../controller/user')
 
 const router = new Router({
     prefix: '/api/user'

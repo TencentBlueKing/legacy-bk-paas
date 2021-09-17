@@ -66,11 +66,10 @@ const Data = {
 
     async getMockData (ctx) {
         const { page = 1, pageSize = 20 } = ctx.request.query || {}
-        const start = (page - 1) * pageSize
-        const end = page * pageSize
-        const data = []
-        for (let i = start; i < end; i++) {
-            data.push({
+        const count = 200
+        const list = []
+        for (let i = 0; i < count; i++) {
+            list.push({
                 id: i,
                 projectId: `id-${i}`,
                 projectCode: `code-${i}`,
@@ -78,10 +77,14 @@ const Data = {
                 name: `名称-${i}`
             })
         }
+        const start = (page - 1) * pageSize
+        const end = page * pageSize
+        const data = list.slice(start, end)
         try {
             ctx.send({
                 code: 0,
                 message: 'success',
+                count,
                 data
             })
         } catch (err) {
