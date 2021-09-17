@@ -226,6 +226,11 @@
                 <div class="selected-component-info" v-if="curSelectedComponentData.componentId && !collapseSide.right">
                     <div class="component-id overflow" v-bk-overflow-tips>{{curSelectedComponentData.componentId}}</div>
                     <div class="action-wrapper">
+                        <i class="bk-drag-icon"
+                            v-if="infoLinkDict[curSelectedComponentData.type] || infoLinkDict[curSelectedComponentData.name]"
+                            :class="interactiveIconClass"
+                            @click="jumpInfoLink(curSelectedComponentData)"
+                            v-bk-tooltips="'组件文档'"></i>
                         <i
                             v-if="!curSelectedComponentData.inFormItem"
                             class="bk-drag-icon bk-drag-shanchu mr5"
@@ -301,6 +306,7 @@
     import { bus } from '@/common/bus'
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
+    import { infoLink } from '@/element-materials/materials/index'
 
     export default {
         components: {
@@ -461,7 +467,8 @@
                         { icon: 'bk-drag-icon bk-drag-hanshuku', text: '函数库', func: this.showFunManage },
                         { icon: 'bk-drag-icon bk-drag-keyboard', text: '快捷键', func: () => this.toggleShowQuickOperation(true) }
                     ]
-                ]
+                ],
+                infoLinkDict: {}
             }
         },
         computed: {
@@ -655,6 +662,9 @@
 
             // 设置权限相关的信息
             this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
+
+            // 组件文档链接
+            this.infoLinkDict = Object.assign({}, infoLink)
 
             // for test
             window.test = this.test
@@ -1416,6 +1426,13 @@
                 const { type } = this.curSelectedComponentData
                 const customComp = this.customComponentList.find(item => item.type === type)
                 this.delComponentConf.isCustomOffline = customComp && customComp.meta.offline
+            },
+            /**
+             * 跳转选中的元素文档链接
+             */
+            jumpInfoLink (item) {
+                const type = (item.type === 'chart' || item.type === 'bk-charts') ? item.name : item.type
+                window.open(this.infoLinkDict[type], '_blank')
             },
 
             /**
