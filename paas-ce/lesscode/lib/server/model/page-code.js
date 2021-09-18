@@ -1005,14 +1005,13 @@ class PageCode {
                                 if (notStringType.indexOf(j) === -1) {
                                     jsonStr += `${j}: '${rule[j]}',`
                                 } else {
-                                    jsonStr += `${j}: ${rule[j]},`
-                                    // if ((j === 'regex' || j === 'validator') && !rule[j]) {
-                                    //     // 为空则忽略
-                                    // } else if (j === 'regex' && (!rule[j].startsWith('/') || !rule[j].endsWith('/'))) {
-                                    //     // 为空则忽略
-                                    // } else {
-                                    //     jsonStr += `${j}: ${rule[j]},`
-                                    // }
+                                    if ((j === 'regex' || j === 'validator') && !rule[j]) {
+                                        // 为空则忽略
+                                    } else if (j === 'regex' && (!rule[j].startsWith('/') || !rule[j].endsWith('/'))) {
+                                        // 为空则忽略
+                                    } else {
+                                        jsonStr += `${j}: ${rule[j]},`
+                                    }
                                 }
                             }
                             jsonStr += '},'

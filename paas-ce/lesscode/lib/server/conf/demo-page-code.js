@@ -301,6 +301,10 @@ const blankTemplate = [
                                 'name': 'chart-line',
                                 'type': 'chart',
                                 'renderProps': {
+                                    'width': {
+                                        'type': 'size',
+                                        'val': '400px',
+                                    },
                                     'height': {
                                         'type': 'number',
                                         'val': 300,
