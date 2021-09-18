@@ -226,11 +226,6 @@
                 <div class="selected-component-info" v-if="curSelectedComponentData.componentId && !collapseSide.right">
                     <div class="component-id overflow" v-bk-overflow-tips>{{curSelectedComponentData.componentId}}</div>
                     <div class="action-wrapper">
-                        <i class="bk-drag-icon"
-                            v-if="infoLinkDict[curSelectedComponentData.type] || infoLinkDict[curSelectedComponentData.name]"
-                            :class="interactiveIconClass"
-                            @click="jumpInfoLink(curSelectedComponentData)"
-                            v-bk-tooltips="'组件文档'"></i>
                         <i
                             v-if="!curSelectedComponentData.inFormItem"
                             class="bk-drag-icon bk-drag-shanchu mr5"
@@ -248,6 +243,12 @@
                 <i class="bk-drag-icon bk-drag-angle-left collapse-icon"
                     v-bk-tooltips.right="{ content: '查看组件配置', disabled: !collapseSide.right }"
                     @click="handleCollapseSide('right')" />
+                <div class="prop-doc"
+                    v-if="infoLinkDict[curSelectedComponentData.type] || infoLinkDict[curSelectedComponentData.name]"
+                    @click="jumpInfoLink(curSelectedComponentData)">
+                    <i class="bk-drag-icon bk-drag-jump-link"></i>
+                    <span>查看详细属性文档</span>
+                </div>
             </aside>
         </div>
 
