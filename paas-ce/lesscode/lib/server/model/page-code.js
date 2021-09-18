@@ -127,8 +127,8 @@ class PageCode {
     }
 
     handleVariable () {
-        this.projectVariables = this.usingVariables.filter((variable) => (this.pageType !== 'vueCode' && variable.effectiveRange === 0))
-        const pageVariables = this.usingVariables.filter((variable) => (this.pageType === 'vueCode' || variable.effectiveRange === 1))
+        this.projectVariables = this.usingVariables.filter((variable) => (!['vueCode', 'previewSingle'].includes(this.pageType) && variable.effectiveRange === 0))
+        const pageVariables = this.usingVariables.filter((variable) => (['vueCode', 'previewSingle'].includes(this.pageType) || variable.effectiveRange === 1))
         this.pageDataVariables = pageVariables.filter((variable) => (variable.variableType !== 1))
         this.pageComputedVariables = pageVariables.filter((variable) => (variable.variableType === 1))
         this.pageDataVariables.forEach((variable) => {
@@ -575,7 +575,7 @@ class PageCode {
         if (!hasLeftMenu && !hasTopMenu) return navContent
 
         this.dataTemplate('curNav', '{}')
-        if (['preview'].includes(this.pageType)) {
+        if (['preview', 'previewSingle'].includes(this.pageType)) {
             const user = JSON.stringify(RequestContext.getCurrentUser())
             this.dataTemplate('user', user)
         }
@@ -1005,7 +1005,13 @@ class PageCode {
                                 if (notStringType.indexOf(j) === -1) {
                                     jsonStr += `${j}: '${rule[j]}',`
                                 } else {
-                                    jsonStr += `${j}: ${rule[j]},`
+                                    if ((j === 'regex' || j === 'validator') && !rule[j]) {
+                                        // 为空则忽略
+                                    } else if (j === 'regex' && (!rule[j].startsWith('/') || !rule[j].endsWith('/'))) {
+                                        // 为空则忽略
+                                    } else {
+                                        jsonStr += `${j}: ${rule[j]},`
+                                    }
                                 }
                             }
                             jsonStr += '},'
@@ -1312,6 +1318,7 @@ class PageCode {
     getData () {
         let data = ''
         if (this.dataStr || this.pageDataVariables.length) {
+            this.dataStr.endsWith(',\n') && this.dataStr.substr(0, this.dataStr.length - 2)
             data += `data () {
                 ${this.pageDataVariables.length ? `function getInitVariableValue (defaultValue, defaultValueType) {
                     let val = defaultValue.all
@@ -1413,7 +1420,7 @@ class PageCode {
             }
         }
 
-        if (this.hasLayOut || this.remoteDataStr || (this.usingFuncCodes.length && ['vueCode', 'preview'].includes(this.pageType))) {
+        if (this.hasLayOut || this.remoteDataStr || (this.usingFuncCodes.length && ['vueCode', 'preview', 'previewSingle'].includes(this.pageType))) {
             methods += `methods: {`
 
             // 布局相关的方法
@@ -1523,7 +1530,7 @@ class PageCode {
             }
 
             // 预览和查看源码，函数写在页面里面
-            if (['vueCode', 'preview'].includes(this.pageType)) methods += this.methodStrList.map((func) => (func.funcStr)).join(',')
+            if (['vueCode', 'preview', 'previewSingle'].includes(this.pageType)) methods += this.methodStrList.map((func) => (func.funcStr)).join(',')
 
             methods += '},'
         }
@@ -1565,7 +1572,7 @@ class PageCode {
     }
 
     getComponents () {
-        if (this.pageType === 'preview') return
+        if (['preview', 'previewSingle'].includes(this.pageType)) return
         let componentStr = ''
         if (this.chartTypeArr && this.chartTypeArr.length) {
             componentStr += 'chart: ECharts,\n'
@@ -1573,7 +1580,7 @@ class PageCode {
         if (this.useBkCharts) {
             componentStr += 'bkCharts: bkCharts'
         }
-        if (this.pageType !== 'preview' && this.usingCustomArr && this.usingCustomArr.length) {
+        if (!['preview', 'previewSingle'].includes(this.pageType) && this.usingCustomArr && this.usingCustomArr.length) {
             let customStr = ''
             // dev 和 t 环境，npm 包名字前面加了 test- 前缀，生成的变量名字应该去掉 test 前缀
             let forkUsingCustomArr = this.usingCustomArr
@@ -1656,7 +1663,7 @@ class PageCode {
             importStr += `import { mapGetters } from 'vuex'\n`
             importStr += `import auth from '@/common/auth'\n`
         }
-        if (this.pageType !== 'preview' && this.usingCustomArr && this.usingCustomArr.length) {
+        if (!['preview', 'previewSingle'].includes(this.pageType) && this.usingCustomArr && this.usingCustomArr.length) {
             // dev 和 t 环境，npm 包名字前面加了 test- 前缀，生成的变量名字应该去掉 test 前缀
             let forkUsingCustomArr = this.usingCustomArr
             if (process.env.BKPAAS_ENVIRONMENT !== 'prod') {
@@ -1711,7 +1718,7 @@ module.exports = {
         if (pageType === 'vueCode') {
             // 格式化，报错是抛出异常
             code = await VueCodeModel.formatPageCode(pageCode.getCode())
-        } else if (pageType === 'preview') {
+        } else if (['preview', 'previewSingle'].includes(this.pageType)) {
             // 不需格式化
             code = pageCode.getCode()
         } else {

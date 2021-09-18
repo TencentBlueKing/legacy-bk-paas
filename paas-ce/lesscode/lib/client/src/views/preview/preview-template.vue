@@ -101,22 +101,31 @@
                     })
                 }
 
-                console.log('预览 loadFile')
-                const { targetData, projectId } = this
-                
-                let code = await this.$store.dispatch('vueCode/getPageCode', {
-                    targetData,
-                    projectId: projectId,
-                    pageType: 'preview'
-                })
-                
-                code = code.replace('export default', 'module.exports =').replace('components: { chart: ECharts },', '')
-                const res = httpVueLoader(code)
-                setTimeout(() => {
-                    Vue.component('preview-page', res)
-                    this.comp = 'preview-page'
-                    this.isLoading = false
-                }, 300)
+                try {
+                    console.log('预览 loadFile')
+                    const { targetData, projectId } = this
+                    
+                    let code = await this.$store.dispatch('vueCode/getPageCode', {
+                        targetData,
+                        projectId: projectId,
+                        pageType: 'previewSingle',
+                        fromPageCode: this.detail.fromPageCode
+                    })
+                    
+                    code = code.replace('export default', 'module.exports =').replace('components: { chart: ECharts },', '')
+                    console.log(code)
+                    const res = httpVueLoader(code)
+                    setTimeout(() => {
+                        Vue.component('preview-page', res)
+                        this.comp = 'preview-page'
+                        this.isLoading = false
+                    }, 300)
+                } catch (err) {
+                    this.$bkMesseage({
+                        theme: 'error',
+                        message: err.message || err
+                    })
+                }
             },
             resizeHandler () {
                 this.minHeight = window.innerHeight
