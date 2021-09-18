@@ -3,6 +3,7 @@
         :value="computedSlotVariable.val"
         :val-type="computedSlotVariable.valType"
         :available-types="computedAvailableTypes"
+        :remote-config="remoteConfig"
         @change="changeVariable"
     >
         <template v-slot:title>
@@ -142,6 +143,14 @@
 
             computedSlotVal () {
                 return this.mutlTypeVal[this.computedCombinType]
+            },
+            
+            remoteConfig () {
+                if (this.slotConfig.type.includes('remote') || this.slotConfig.type.includes('form-item')) {
+                    const name = this.slotConfig.type.includes('form-item') ? 'initFormData' : ''
+                    return { show: true, name: name, value: this.computedSlotVal.val }
+                }
+                return { show: false, value: '' }
             }
         },
 
