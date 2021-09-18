@@ -71,14 +71,28 @@ function getFuncList (targetData = [], funcGroups = []) {
 
     const callBack = (component) => {
         const renderProps = component.renderProps || {}
+        const isForm = component.type === 'widget-form'
         Object.keys(renderProps).forEach((key) => {
-            const { type, payload } = renderProps[key] || {}
+            const { type, payload, val } = renderProps[key] || {}
 
             if (type === 'remote' || (Array.isArray(type) && type.includes('remote'))) {
                 if (payload && payload.methodCode) {
                     const code = payload.methodCode
                     findUsedFuncsByCode(code)
                 }
+            }
+
+            // form表单简要绑定函数
+            if (isForm && key === 'rules') {
+                Object.keys(val).forEach((ruleKey) => {
+                    if (val[ruleKey] && val[ruleKey].length) {
+                        val[ruleKey].map(item => {
+                            if (item.type === 'validator' && item.validator) {
+                                findUsedFuncsByCode(item.validator)
+                            }
+                        })
+                    }
+                })
             }
         })
 

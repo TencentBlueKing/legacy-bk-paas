@@ -74,6 +74,10 @@
             }
         },
 
+        async created () {
+            await this.$store.dispatch('isPlatformAdmin')
+        },
+
         mounted () {
             const platform = window.navigator.platform.toLowerCase()
             if (platform.indexOf('win') === 0) {

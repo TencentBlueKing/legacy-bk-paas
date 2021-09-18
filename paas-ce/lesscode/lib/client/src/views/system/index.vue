@@ -86,9 +86,6 @@
         },
         computed: {
             ...mapGetters(['isPlatformAdmin'])
-        },
-        async created () {
-            await this.$store.dispatch('isPlatformAdmin')
         }
     }
 </script>

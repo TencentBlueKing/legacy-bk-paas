@@ -63,14 +63,15 @@ const VueCode = {
                 targetData = [],
                 isEmpty = false,
                 from,
-                withNav
+                withNav,
+                fromPageCode = ''
             } = ctx.request.body
 
             const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([getNameMap(), allGroupFuncDetail(projectId), routeModel.findProjectRoute(projectId), variableModel.getAll({ projectId })])
             const curPage = routeList.find((route) => (route.pageId === +pageId)) || {}
             const variableList = [
                 ...allVarableList.filter(variable => variable.effectiveRange === 0),
-                ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && variable.pageCode === curPage.pageCode))
+                ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && (variable.pageCode === curPage.pageCode || variable.pageCode === fromPageCode)))
             ]
             let curLayoutCon = {}
             if (withNav) {
