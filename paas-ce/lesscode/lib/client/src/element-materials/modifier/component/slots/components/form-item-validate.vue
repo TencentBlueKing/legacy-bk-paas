@@ -147,12 +147,12 @@
             },
             handleChange (value, key, index) {
                 if (key === 'validator') {
-                    value = (value && value.methodCode) || value
+                    value = (value && value.methodCode) || value || ''
                 }
                 this.dataList[index][key] = value
                 if (key === 'type') {
                     const newItem = itemList.find(item => item.type === value)
-                    this.dataList.splice(index, 1, newItem)
+                    this.dataList.splice(index, 1, Object.assign({}, newItem))
                 }
                 this.trigger()
             },
