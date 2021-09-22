@@ -33,7 +33,8 @@
                     :label="column.name"
                     :prop="column.id"
                     :width="column.width"
-                    :sortable="column.sortable">
+                    :sortable="column.sortable"
+                    :show-overflow-tooltip="column.tooltip">
                     <template slot-scope="{ row }">
                         <loading v-if="column.dynamic" :loading="fetching[column.id]">
                             <span v-if="column.type === 'number'">{{row[column.id] | formatCount}}</span>
