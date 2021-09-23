@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <bk-sideslider :is-show="isShow" :title="title" :width="696" @shown="initValue" :before-close="beforeClose" ext-cls="form-item-edit">
+    <bk-sideslider :is-show="isShow" :title="title" :width="696" @shown="initValue" :before-close="beforeClose" :quick-clos="true" ext-cls="form-item-edit">
         <section slot="content" class="item-container">
             <div class="form-item-title">基本信息</div>
             <bk-form
@@ -74,6 +74,7 @@
         },
         data () {
             return {
+                changeCount: 0,
                 formItemData: {},
                 title: '表单项配置',
                 formItemTypeList: [
@@ -108,6 +109,14 @@
                 }
             }
         },
+        watch: {
+            formItemData: {
+                handler () {
+                    this.changeCount++
+                },
+                deep: true
+            }
+        },
         methods: {
             initValue () {
                 this.formItemData = Object.assign({}, this.defaultValue)
@@ -126,13 +135,17 @@
                 Object.assign(this.formItemData, { [name]: value })
             },
             beforeClose () {
-                this.$bkInfo({
-                    subTitle: '弹窗关闭后未保存的数据将会丢失，请确认关闭',
-                    okText: '确认',
-                    cancelText: '取消',
-                    closeIcon: false,
-                    confirmFn: this.close
-                })
+                if (this.changeCount < 2) {
+                    this.close()
+                } else {
+                    this.$bkInfo({
+                        subTitle: '弹窗关闭后未保存的数据将会丢失，请确认关闭',
+                        okText: '确认',
+                        cancelText: '取消',
+                        closeIcon: false,
+                        confirmFn: this.close
+                    })
+                }
             }
         }
     }

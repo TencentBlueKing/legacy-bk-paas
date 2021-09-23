@@ -2,14 +2,11 @@
     <section>
         <bk-dialog v-model="isShow"
             render-directive="if"
-            theme="primary"
             width="1080"
+            ext-cls="page-from-template-dialog"
             :position="{ top: 100 }"
             :mask-close="false"
             :auto-close="false"
-            header-position="left"
-            ext-cls="page-from-template-dialog"
-            :close-icon="false"
             @value-change="handleDialogToggle">
             <div slot="header">
                 <span>从模板新建页面</span>
@@ -21,8 +18,8 @@
                     :right-icon="'bk-icon icon-search'"
                     :ext-cls="'search-input'"
                     v-model="searchFilter"
-                    @enter="handleSearchEnter"
-                    @clear="handleSearchClear">
+                    @enter="changeList"
+                    @clear="changeList">
                 </bk-input>
                 <ul class="filter-links">
                     <li
@@ -39,17 +36,22 @@
                             <li v-for="template in list" :key="template.id"
                                 :class="['list-item', { checked: template.checked }]"
                                 @click="handleClickItem(template)">
-                                <div class="checkbox">
-                                    <i class="bk-icon icon-check-1 checked-icon"></i>
-                                </div>
-                                <div class="layout-img">
-                                    <img v-if="template.previewImg" :src="getPreviewImg(template.previewImg)" alt="模板缩略预览">
-                                    <div class="empty-preview-img" v-else>页面为空</div>
-                                </div>
+                                <section>
+                                    <div class="checkbox">
+                                        <i class="bk-icon icon-check-1 checked-icon"></i>
+                                    </div>
+                                    <div class="layout-img">
+                                        <img :src="getPreviewImg(template.previewImg)" alt="模板缩略预览">
+                                        <div v-if="template.isOffcial && template.hasInstall === false" class="mask">
+                                            <bk-button class="apply-btn" theme="primary" @click.stop="handleApply(template)">应用</bk-button>
+                                        </div>
+                                    </div>
+                                </section>
                                 <div class="layout-name">
-                                    <span class="template-name" :title="template.projectName">{{ template.templateName }}</span>
-                                    <span class="template-preview" @click.stop.prevent="handlePreview(template.id)">预览</span>
+                                    <span class="template-name" :title="template.templateName">{{ template.templateName }}</span>
+                                    <span class="template-preview" @click.stop.prevent="handlePreview(template)">预览</span>
                                 </div>
+                                <span v-if="template.isOffcial" class="default-share-tag">共享</span>
                             </li>
                         </div>
                         <div class="empty" v-show="!list.length">
@@ -61,9 +63,9 @@
                 </div>
             </div>
             <div class="layout-right">
-                <bk-form ref="templateForm" :label-width="86" :rules="formRules" :model="formData" :form-type="'vertical'">
-                    <bk-form-item label="模板名称" required property="templateName" error-display-type="normal">
-                        <bk-input maxlength="60" readonly v-model.trim="formData.templateName"
+                <bk-form ref="templateForm" :label-width="150" :rules="formRules" :model="formData" :form-type="'vertical'">
+                    <bk-form-item label="当前已选模板" property="templateName" error-display-type="normal">
+                        <bk-input readonly v-model.trim="formData.templateName"
                             placeholder="模板名称">
                         </bk-input>
                     </bk-form-item>
@@ -102,6 +104,7 @@
                 <bk-button @click="handleDialogCancel" :disabled="loading">取消</bk-button>
             </div>
         </bk-dialog>
+        <template-edit-dialog ref="templateApplyDialog" action-type="apply" :refresh-list="initData"></template-edit-dialog>
     </section>
 </template>
 
@@ -110,11 +113,13 @@
     import { PAGE_TEMPLATE_TYPE } from '@/common/constant'
     import { compile } from 'path-to-regexp'
     import LayoutThumbList from '@/components/project/layout-thumb-list'
+    import templateEditDialog from '@/views/project/template-manage/components/template-edit-dialog'
     
     export default {
         name: 'page-from-template-dialog',
         components: {
-            LayoutThumbList
+            LayoutThumbList,
+            templateEditDialog
         },
         data () {
             return {
@@ -175,7 +180,8 @@
                 list: [],
                 pageLoading: false,
                 layoutList: [],
-                selectedLayout: {}
+                selectedLayout: {},
+                selectApplyTemplate: {}
             }
         },
         computed: {
@@ -193,7 +199,7 @@
         watch: {
             searchFilter (val) {
                 if (!val) {
-                    this.handleSearchClear()
+                    this.changeList()
                 }
             }
         },
@@ -201,26 +207,25 @@
             async initData () {
                 try {
                     this.pageLoading = true
+                    this.filterLinks = [{ id: '', name: '全部' }]
                     const [projectTemplateGroups, projectTemplateList, tmpMarketTemplateList, layoutList] = await Promise.all([
                         this.$store.dispatch('pageTemplate/categoryList', { projectId: this.projectId }),
                         this.$store.dispatch('pageTemplate/list', { projectId: this.projectId }),
                         this.$store.dispatch('pageTemplate/list', { type: 'OFFCIAL' }),
                         this.$store.dispatch('layout/getList', { projectId: this.projectId })
                     ])
-                    this.templateList = projectTemplateList.splice(0, projectTemplateList.length)
+                    this.templateList = projectTemplateList
                     const marketTemplateList = tmpMarketTemplateList.map(item => ({
                         ...item,
                         hasInstall: projectTemplateList.filter(template => template.parentId === item.id).length > 0
                     }))
-                    console.log(marketTemplateList, 'marketList')
                     marketTemplateList.map(item => {
-                        if (this.templateList.filter(template => (item.id === template.id || item.id === template.parentId)).length === 0) {
+                        if (this.templateList.filter(template => (item.id === template.id)).length === 0) {
                             this.templateList.push(item)
                         }
                     })
                     this.filterLinks = this.filterLinks.concat(projectTemplateGroups.map(item => ({ id: item.id, name: item.name }))).concat(PAGE_TEMPLATE_TYPE)
-                    console.log(this.templateList, 'templatelist', this.filterLinks)
-                    this.handleClickFilter('')
+                    this.changeList()
 
                     layoutList.forEach(item => {
                         item.checked = item.isDefault === 1
@@ -241,18 +246,54 @@
             },
             async handleCreateConfirm () {
                 try {
-                    await this.$refs.templateForm.validate()
-                    const data = this.formData
-
                     this.loading = true
-                    const projectId = await this.$store.dispatch('project/create', { data })
+                    await this.$refs.templateForm.validate()
+                    const template = this.templateList.find(item => item.id === this.formData.copyFrom)
+                    if (!template) {
+                        this.$bkMessage({
+                            theme: 'error',
+                            message: '未选中模板'
+                        })
+                    }
+                    const formData = {
+                        pageName: this.formData.pageName,
+                        pageCode: this.formData.pageCode
+                    }
+                    const nameExist = await this.$store.dispatch('page/checkName', {
+                        data: {
+                            ...formData,
+                            projectId: this.projectId,
+                            from: 'create'
+                        }
+                    })
+                    if (nameExist) return
+                    const content = []
+                    content.push(JSON.parse(template.content))
+                    const payload = {
+                        data: {
+                            pageData: Object.assign({}, this.formData, { previewImg: template.previewImg, content: JSON.stringify(content) }),
+                            projectId: this.projectId
+                        }
+                    }
 
-                    this.messageSuccess('项目创建成功')
-                    this.isShow = false
-
-                    setTimeout(() => {
-                        this.$emit('to-page', projectId)
-                    }, 300)
+                    const { id, routePath } = this.layoutList.find(layout => layout.checked)
+                    payload.data.layout = { id, routePath }
+            
+                    const res = await this.$store.dispatch('page/create', payload)
+                    if (res) {
+                        this.$bkMessage({
+                            theme: 'success',
+                            message: `新建页面成功`
+                        })
+                        // this.isShow = false
+                        this.$router.push({
+                            name: 'new',
+                            params: {
+                                projectId: this.projectId,
+                                pageId: res
+                            }
+                        })
+                    }
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -265,23 +306,23 @@
                 }
                 return preivewErrImg
             },
-            // changeList () {
-            //     if (this.filter) {
-            //         this.list = this.templateList.filter(item => item.offcialType === this.filter || item.categoryId === parseInt(this.filter))
-            //     } else {
-            //         this.list = this.templateList
-            //     }
-            //     if (this.)
-            // },
+            changeList () {
+                this.filterList = this.templateList
+                if (this.filter) {
+                    this.filterList = this.filterList.filter(item => item.offcialType === this.filter || item.categoryId === parseInt(this.filter))
+                }
+                if (this.searchFilter) {
+                    this.filterList = this.filterList.filter(item => item.templateName.toUpperCase().includes(this.searchFilter.toUpperCase()))
+                }
+                this.list = this.filterList
+                this.handleReSelect()
+            },
             handleClickFilter (link) {
                 this.filter = link
-                if (link) {
-                    this.list = this.templateList.filter(item => item.offcialType === link || item.categoryId === parseInt(link))
-                } else {
-                    this.list = this.templateList
-                }
+                this.changeList()
             },
             handleClickItem (template) {
+                if (template.isOffcial && template.hasInstall === false) return
                 template.checked = !template.checked
                 this.list.map(function (item) {
                     if (item.id !== template.id && item.checked) {
@@ -293,22 +334,13 @@
                     this.formData.templateName = ''
                     this.formData.copyFrom = null
                 } else {
-                    this.formData.templateName = template.projectName
+                    this.formData.templateName = template.templateName
                     this.formData.copyFrom = template.id
                 }
             },
-            handleSearchClear () {
-                this.list.splice(0, this.list.length, ...this.templateList)
-            },
-            handleSearchEnter () {
+            handleReSelect () {
                 const checked = this.templateList.find(item => item.checked)
                 if (checked) checked.checked = false
-                this.list.splice(0, this.list.length, ...this.templateList.filter(item => {
-                    return item.templateName.toUpperCase().includes(this.searchFilter.toUpperCase())
-                }))
-                this.handleReSelect()
-            },
-            handleReSelect () {
                 if (this.formData.copyFrom) {
                     const template = this.list.find(item => item.id === this.formData.copyFrom)
                     if (template) {
@@ -333,7 +365,6 @@
                         pageName: '',
                         pageCode: '',
                         pageRoute: '',
-                        layoutId: null,
                         copyFrom: null
                     }
                     this.initData()
@@ -354,6 +385,26 @@
                 setTimeout(() => {
                     this.isShow = false
                 }, 160)
+            },
+            handlePreview (template) {
+                if (!template.content) {
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: '该页面为空页面，请先编辑页面'
+                    })
+                    return
+                }
+                window.open(`/preview-template/project/${template.belongProjectId}/${template.id}`, '_blank')
+            },
+            handleApply (template) {
+                this.$refs.templateApplyDialog.isShow = true
+                this.$refs.templateApplyDialog.templateId = template.id
+                this.$refs.templateApplyDialog.fromTemplate = template
+                this.$refs.templateApplyDialog.dialog.formData = {
+                    categoryId: '',
+                    belongProjectId: this.projectId,
+                    templateName: template.templateName
+                }
             }
         }
     }
@@ -431,7 +482,10 @@
 
                         &:hover {
                             border-color: #3a84ff;
-                            .layout-name .template-preview{
+                            .layout-name .template-preview {
+                                display: block;
+                            }
+                            .layout-img .mask .apply-btn {
                                 display: block;
                             }
                         }
@@ -465,6 +519,7 @@
                         }
 
                         .layout-img {
+                            position: relative;
                             width: 100%;
                             height: 128px;
 
@@ -481,6 +536,21 @@
                             img {
                                 width: 100%;
                                 height: 100%;
+                            }
+
+                            .mask {
+                                display: flex;
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: rgba(0, 0, 0, 0.1);
+                                align-items: center;
+                                .apply-btn {
+                                    display: none;
+                                    margin-left: 68px;
+                                }
                             }
 
                             .empty-preview-img {
@@ -512,6 +582,20 @@
                                 display: none;
                                 color: #3A84FF;
                             }
+                        }
+
+                        .default-share-tag {
+                            position: absolute;
+                            right: 6px;
+                            top: 6px;
+                            height: 22px;
+                            line-height: 22px;
+                            text-align: center;
+                            border-radius: 2px;
+                            font-size: 12px;
+                            color: #fff;
+                            padding: 0 6px;
+                            background: #699DF4;
                         }
                     }
                 }

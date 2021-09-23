@@ -25,5 +25,9 @@ export const PAGE_TEMPLATE_TYPE = [
     {
         id: 'INFO',
         name: '信息'
+    },
+    {
+        id: 'LAYOUT',
+        name: '布局'
     }
 ]

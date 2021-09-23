@@ -195,7 +195,7 @@
             <template v-if="dialog.page.selectedList.length">
                 <div style="margin: 20px 0">请指定添加至对应项目的模板分类：</div>
                 <div style="min-height: 140px">
-                    <bk-form ref="pageForm" :label-width="120">
+                    <bk-form ref="pageForm" :label-width="180">
                         <bk-form-item v-for="item in dialog.page.selectedList"
                             :key="item.id"
                             :label="item.projectName" required>

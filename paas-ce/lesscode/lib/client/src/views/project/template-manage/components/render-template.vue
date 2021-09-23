@@ -45,6 +45,7 @@
                                 </bk-dropdown-menu>
                             </div>
                         </div>
+                        <span v-if="template.isOffcial" class="default-tag">公开模板</span>
                     </div>
                 </div>
                 <div class="empty" v-show="(!templateList.length || !renderList.length) && !isLoading">
@@ -189,8 +190,7 @@
                 if (!template.content) {
                     this.$bkMessage({
                         theme: 'error',
-                        message: '该页面为空页面，请先编辑页面',
-                        limit: 1
+                        message: '该页面为空页面，请先编辑页面'
                     })
                     return
                 }
@@ -306,6 +306,20 @@
                         margin: 16px 10px 0 10px;
                     }
 
+                    .default-tag {
+                        position: absolute;
+                        right: 6px;
+                        top: 6px;
+                        height: 22px;
+                        line-height: 22px;
+                        text-align: center;
+                        border-radius: 2px;
+                        font-size: 12px;
+                        color: #fff;
+                        padding: 0 6px;
+                        background: #699DF4;
+                    }
+
                     .preview {
                         position: relative;
                         height: 100%;
@@ -396,7 +410,7 @@
                         font-size: 12px;
                         font-weight: 700;
                         color: #63656E;
-                        width: 240px;
+                        width: 230px;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
