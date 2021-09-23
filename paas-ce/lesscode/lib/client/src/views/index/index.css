@@ -435,6 +435,12 @@ $headerHeight: 64px;
             background-color: #ffe8c3;
         } */
     }
+    .prop-doc {
+        margin: 10px 0 0 10px;
+        color: #3a84ff;
+        cursor: pointer;
+        display: inline-block;
+    }
 }
 
 .main-top {

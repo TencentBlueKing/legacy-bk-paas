@@ -244,6 +244,12 @@
                 <i class="bk-drag-icon bk-drag-angle-left collapse-icon"
                     v-bk-tooltips.right="{ content: '查看组件配置', disabled: !collapseSide.right }"
                     @click="handleCollapseSide('right')" />
+                <div class="prop-doc"
+                    v-if="infoLinkDict[curSelectedComponentData.type] || infoLinkDict[curSelectedComponentData.name]"
+                    @click="jumpInfoLink(curSelectedComponentData)">
+                    <i class="bk-drag-icon bk-drag-jump-link"></i>
+                    <span>查看详细属性文档</span>
+                </div>
             </aside>
         </div>
 
@@ -304,6 +310,7 @@
     import { bus } from '@/common/bus'
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
+    import { infoLink } from '@/element-materials/materials/index'
 
     export default {
         components: {
@@ -467,7 +474,8 @@
                         { icon: 'bk-drag-icon bk-drag-hanshuku', text: '函数库', func: this.showFunManage },
                         { icon: 'bk-drag-icon bk-drag-keyboard', text: '快捷键', func: () => this.toggleShowQuickOperation(true) }
                     ]
-                ]
+                ],
+                infoLinkDict: {}
             }
         },
         computed: {
@@ -661,6 +669,9 @@
 
             // 设置权限相关的信息
             this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
+
+            // 组件文档链接
+            this.infoLinkDict = Object.assign({}, infoLink)
 
             // for test
             window.test = this.test
@@ -1430,6 +1441,13 @@
                 const { type } = this.curSelectedComponentData
                 const customComp = this.customComponentList.find(item => item.type === type)
                 this.delComponentConf.isCustomOffline = customComp && customComp.meta.offline
+            },
+            /**
+             * 跳转选中的元素文档链接
+             */
+            jumpInfoLink (item) {
+                const type = (item.type === 'chart' || item.type === 'bk-charts') ? item.name : item.type
+                window.open(this.infoLinkDict[type], '_blank')
             },
 
             /**
