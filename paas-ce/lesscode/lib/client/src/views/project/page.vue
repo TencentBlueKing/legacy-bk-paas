@@ -2,7 +2,15 @@
     <section v-bkloading="{ isLoading: isLoading }" style="height: 100%">
         <main class="pages pages-content" v-show="!isLoading">
             <div class="pages-head">
-                <bk-button theme="primary" @click="handleCreate">新建页面</bk-button>
+                <bk-dropdown-menu trigger="click" :align="'center'" :ext-cls="'create-dropdown'">
+                    <div class="dropdown-trigger-btn" slot="dropdown-trigger">
+                        <bk-button theme="primary" icon-right="icon-angle-down">新建</bk-button>
+                    </div>
+                    <ul class="bk-dropdown-list" slot="dropdown-content">
+                        <li><a href="javascript:;" @click="handleCreate">空白页面</a></li>
+                        <li><a href="javascript:;" @click="handleTempCreate">从模板新建</a></li>
+                    </ul>
+                </bk-dropdown-menu>
                 <bk-button @click="handlePreviewProject">预览项目</bk-button>
                 <bk-button @click="handleDownLoadProject">源码下载</bk-button>
                 <div class="extra">
@@ -74,6 +82,7 @@
             <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :refresh-list="getPageList"></page-dialog>
             <download-dialog ref="downloadDialog"></download-dialog>
             <edit-route-dialog ref="editRouteDialog" :route-group="routeGroup" :current-route="currentRoute" @success="getPageList" />
+            <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
         </main>
     </section>
 </template>
@@ -84,6 +93,7 @@
     import pageDialog from '@/components/project/page-dialog'
     import downloadDialog from '@/views/system/components/download-dialog'
     import editRouteDialog from '@/components/project/edit-route-dialog'
+    import pageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
@@ -94,7 +104,8 @@
         components: {
             pageDialog,
             downloadDialog,
-            editRouteDialog
+            editRouteDialog,
+            pageFromTemplateDialog
         },
         data () {
             return {
@@ -296,6 +307,10 @@
                     return previewImg
                 }
                 return preivewErrImg
+            },
+            // 从模板创建
+            handleTempCreate () {
+                this.$refs.pageFromTemplateDialog.isShow = true
             }
         }
     }

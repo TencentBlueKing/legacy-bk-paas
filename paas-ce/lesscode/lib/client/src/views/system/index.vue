@@ -213,6 +213,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+            font-size: 12px;
             background: #fff;
             height: var(--footer-height);
             line-height: var(--footer-height);

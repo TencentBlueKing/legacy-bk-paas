@@ -59,6 +59,7 @@
                         <li class="tool-item" v-for="(item, innerIndex) in group"
                             :key="innerIndex"
                             :class="{ active: isToolItemActive(item) }"
+                            v-bk-tooltips="{ placement: 'bottom', content: item.tips, disabled: !item.tips }"
                             @click="item.func">
                             <template v-if="item.text === '快捷键'">
                                 <div class="quick-operation" v-bk-clickoutside="toggleShowQuickOperation">
@@ -272,6 +273,7 @@
         <page-dialog ref="pageDialog" :action="action"></page-dialog>
         <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
+        <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :is-whole-page="true" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
     </main>
 </template>
 
@@ -298,6 +300,7 @@
     import ComponentBasePanel from './children/component-panel-base'
     import ExtraLinks from '@/components/ui/extra-links'
     import PageDialog from '@/components/project/page-dialog'
+    import SaveTemplateDialog from '@/components/render/save-template-dialog'
     import PageSetting from '@/views/project/page-setting'
     import PageJson from '@/views/project/page-json'
     import pageVariable from '@/views/project/page-variable'
@@ -325,6 +328,7 @@
             ExtraLinks,
             PageSetting,
             PageDialog,
+            SaveTemplateDialog,
             ComponentTree,
             TemplatePanel,
             PageJson,
@@ -350,7 +354,7 @@
                         icon: 'bk-drag-template-fill',
                         name: 'nav-tab-template',
                         label: {
-                            content: '模板',
+                            content: '模板库',
                             placement: 'right',
                             interactive: false
                         }
@@ -426,6 +430,7 @@
                 actionSelected: 'edit',
                 curDragingComponent: null,
                 isShowFun: false,
+                showTemplateDialog: false,
                 componentSearchResult: null,
                 refreshDragAreaKey: +new Date(),
                 delComponentConf: {
@@ -464,6 +469,7 @@
                     [
                         { icon: 'bk-drag-icon bk-drag-save', text: '保存', func: this.handleSave },
                         { icon: 'bk-drag-icon bk-drag-play', text: '预览', func: this.handlePreview },
+                        { icon: 'bk-drag-icon bk-drag-template-fill', text: '存为模板', func: this.toggleShowTemplateDialog, tips: '将画布内容区域（不包含导航部分）存为模板' },
                         { icon: 'bk-drag-icon bk-drag-delete', text: '清空', func: this.handleClearAll },
                         { icon: 'bk-drag-icon bk-drag-hanshuku', text: '函数库', func: this.showFunManage },
                         { icon: 'bk-drag-icon bk-drag-keyboard', text: '快捷键', func: () => this.toggleShowQuickOperation(true) }
@@ -1058,6 +1064,14 @@
                 this.$refs.guide.start()
             },
 
+            toggleShowTemplateDialog (isShow) {
+                if (typeof isShow === 'boolean') {
+                    this.showTemplateDialog = isShow
+                } else {
+                    this.showTemplateDialog = !this.showTemplateDialog
+                }
+            },
+
             toggleQuickOperation (event) {
                 const mainNode = getNodeWithClass(event.target, 'target-drag-area')
                 this.isInDragArea = mainNode && mainNode.classList.contains('target-drag-area')
@@ -1066,7 +1080,7 @@
             toggleShowQuickOperation (val) {
                 this.showQuickOperation = val
             },
-
+            
             judgeCtrl (event) {
                 switch (event.keyCode) {
                     case 91:

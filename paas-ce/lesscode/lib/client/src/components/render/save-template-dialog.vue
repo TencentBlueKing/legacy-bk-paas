@@ -43,7 +43,35 @@
 <script>
     import { mapGetters } from 'vuex'
     import html2canvas from 'html2canvas'
+    import { uuid } from '@/common/util'
     import { bus } from '@/common/bus'
+
+    const initGridData = {
+        componentId: 'grid-' + uuid(),
+        renderKey: uuid(),
+        name: 'grid',
+        type: 'render-grid',
+        tabPanelActive: 'props',
+        renderProps: {
+            'margin-horizontal': {
+                type: 'number',
+                val: 0
+            },
+            'margin-vertical': {
+                type: 'number',
+                val: 0
+            }
+        },
+        renderStyles: {},
+        renderEvents: {},
+        renderDirectives: [],
+        renderSlots: {
+            default: {
+                type: 'column',
+                val: [{ span: 1, children: [], width: '100%' }]
+            }
+        }
+    }
 
     export default {
         name: 'template-dialog',
@@ -51,6 +79,10 @@
             isShow: {
                 type: Boolean,
                 required: true
+            },
+            isWholePage: {
+                type: Boolean,
+                default: false
             },
             toggleIsShow: {
                 type: Function,
@@ -92,6 +124,7 @@
         },
         computed: {
             ...mapGetters('drag', [
+                'targetData',
                 'curSelectedComponentData'
             ]),
             ...mapGetters('page', [
@@ -126,9 +159,22 @@
                 await this.$refs.pageTemplateFrom.validate()
                 try {
                     this.dialog.loading = true
-                    html2canvas(document.querySelector(`div[data-component-id="${this.curSelectedComponentData.name}-${this.curSelectedComponentData.componentId}"]`)).then(async (canvas) => {
+                    const className = this.isWholePage ? '.container-content' : `div[data-component-id="${this.curSelectedComponentData.name}-${this.curSelectedComponentData.componentId}"]`
+                    html2canvas(document.querySelector(className)).then(async (canvas) => {
                         try {
                             const imgData = canvas.toDataURL('image/png')
+                            let content = {}
+                            if (this.isWholePage) {
+                                if (this.targetData.length === 1) {
+                                    content = this.targetData[0]
+                                } else if (this.targetData.length > 1) {
+                                    content = Object.assign({}, initGridData)
+                                    content.renderSlots.default.val[0].children = this.targetData
+                                }
+                            } else {
+                                content = this.curSelectedComponentData
+                            }
+                            
                             const data = {
                                 projectId: this.projectId,
                                 params: {
@@ -136,7 +182,7 @@
                                     categoryId: this.dialog.formData.categoryId,
                                     belongProjectId: this.projectId,
                                     fromPageCode: this.pageDetail && this.pageDetail.pageCode,
-                                    content: JSON.stringify(this.curSelectedComponentData),
+                                    content: JSON.stringify(content),
                                     previewImg: imgData
                                 }
                             }

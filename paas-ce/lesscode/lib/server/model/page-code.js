@@ -1718,7 +1718,7 @@ module.exports = {
         if (pageType === 'vueCode') {
             // 格式化，报错是抛出异常
             code = await VueCodeModel.formatPageCode(pageCode.getCode())
-        } else if (['preview', 'previewSingle'].includes(this.pageType)) {
+        } else if (['preview', 'previewSingle'].includes(pageType)) {
             // 不需格式化
             code = pageCode.getCode()
         } else {
