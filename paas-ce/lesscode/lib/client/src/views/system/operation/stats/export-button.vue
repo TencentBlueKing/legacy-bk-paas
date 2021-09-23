@@ -12,6 +12,10 @@
                 type: String,
                 default: ''
             },
+            sheetName: {
+                type: String,
+                default: ''
+            },
             dim: {
                 type: String,
                 default: 'table'
@@ -33,7 +37,7 @@
                     func: '按函数',
                     comp: '按自定义组件'
                 }
-                return nameMap[this.name] || 'Sheet1'
+                return this.sheetName || nameMap[this.name] || 'Sheet1'
             }
         },
         methods: {
