@@ -21,7 +21,7 @@
             <div class="side-bd" :class="{ 'no-click': pageLoading }">
                 <nav class="nav-list">
                     <router-link tag="div" class="nav-item" v-for="item in navList" :key="item.title" :to="item.toPath">
-                        <i :class="`bk-drag-icon bk-drag-${item.icon}`"></i>{{ item.title }}
+                        <i :class="`bk-drag-icon bk-drag-${item.icon}`"></i>{{ item.title }} <i v-if="item.redPoint" class="red-point"></i>
                     </router-link>
                 </nav>
             </div>
@@ -68,7 +68,8 @@
                     {
                         title: '模板库',
                         icon: 'template-fill',
-                        toPath: 'template-manage'
+                        toPath: 'template-manage',
+                        redPoint: true
                     },
                     {
                         title: '变量管理',
@@ -111,14 +112,6 @@
                 return this.$route.meta.title
             }
         },
-        // watch: {
-        //     '$route': {
-        //         handler (to, from) {
-        //             console.error(to)
-        //         },
-        //         immediate: true
-        //     }
-        // },
         beforeRouteUpdate (to, from, next) {
             this.projectId = parseInt(to.params.projectId)
             this.setCurrentProject()

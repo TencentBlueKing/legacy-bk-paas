@@ -45,7 +45,7 @@
                                 <div class="item-ft">
                                     <div class="col">
                                         <h3 class="name" :title="project.projectName">{{project.projectName}}</h3>
-                                        <div class="stat">{{project.createUser}}</div>
+                                        <div class="stat">{{project.createUser ? `由 ${project.createUser} 上传` : ''}}</div>
                                     </div>
                                 </div>
                                 <span class="favorite-btn">
@@ -103,7 +103,7 @@
                                 <div class="item-ft">
                                     <div class="col">
                                         <h3 class="name" :title="page.templateName">{{page.templateName}}</h3>
-                                        <div class="stat">{{page.createUser}}</div>
+                                        <div class="stat">{{page.createUser ? `由 ${page.createUser} 上传` : ''}}</div>
                                     </div>
                                 </div>
                             </div>
