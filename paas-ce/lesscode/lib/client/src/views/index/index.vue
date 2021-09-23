@@ -105,7 +105,9 @@
                             v-bk-tooltips="item.label"
                             :data-name="item.name"
                             @click="activeSideNav = item.name">
-                            <i :class="['bk-drag-icon', item.icon]"></i>
+                            <i :class="['bk-drag-icon', item.icon]">
+                                <i v-if="item.redPoint" class="red-point"></i>
+                            </i>
                         </li>
                     </ul>
                 </div>
@@ -353,6 +355,7 @@
                     }, {
                         icon: 'bk-drag-template-fill',
                         name: 'nav-tab-template',
+                        redPoint: true,
                         label: {
                             content: '模板库',
                             placement: 'right',
