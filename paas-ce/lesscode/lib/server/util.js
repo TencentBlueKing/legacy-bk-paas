@@ -15,6 +15,23 @@ const { ESLint } = require('eslint')
 const interactiveComponents = ['bk-dialog', 'bk-sideslider']
 const acorn = require('acorn')
 
+exports.splitSql = (sqlString) => {
+    const sqlArr = []
+    let strCharNum = 0
+    let lastCharIndex = 0
+    for (let charIndex in sqlString) {
+        charIndex = +charIndex
+        const sqlChar = sqlString[charIndex]
+        if (sqlChar === ';' && sqlString.slice(charIndex + 1, charIndex + 8) !== 'base64,' && (strCharNum & 1) === 0) {
+            const currentStr = sqlString.slice(lastCharIndex, charIndex + 1)
+            sqlArr.push(currentStr)
+            lastCharIndex = charIndex + 1
+        }
+        if (/'|"|`/.test(sqlChar)) strCharNum++
+    }
+    return sqlArr
+}
+
 // 替换函数中的变量和函数
 exports.replaceFuncKeyword = (funcBody = '', callBack) => {
     const commentsPositions = []

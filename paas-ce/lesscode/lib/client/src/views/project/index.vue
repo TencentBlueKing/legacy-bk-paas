@@ -76,6 +76,11 @@
                         toPath: 'variable-manage'
                     },
                     {
+                        title: '数据源管理',
+                        icon: 'variable-manage',
+                        toPath: 'data-manage'
+                    },
+                    {
                         title: '布局模板实例',
                         icon: 'template-fill-2',
                         toPath: 'layout'

@@ -50,6 +50,7 @@ const httpConf = require('./conf/http')
 
 const { createConnection } = require('typeorm')
 const dataBaseConf = require('./conf/data-base')
+const { OrmLog } = require('./logger')
 
 const componentController = require('./controller/component')
 
@@ -239,6 +240,26 @@ async function execSql (connection, callBack) {
     }
 }
 
-createConnection(dataBaseConf).then((connection) => {
+const config = process.env.NODE_ENV === 'production' ? dataBaseConf.prod : dataBaseConf.dev
+const ormConfig = {
+    type: config.dialect,
+    host: config.host,
+    port: config.port,
+    username: config.username,
+    password: config.password,
+    database: config.database,
+    entities: [resolve(__dirname, '.', 'model/entities/!(base){.js,.ts}')],
+    // 打印日志的类型
+    logger: new OrmLog(config.logging),
+    // 自动同步数据库表结构，有删除数据风险，推荐关闭
+    synchronize: false,
+    // 会自动执行更新SQL，推荐手动执行脚本，关闭该选项
+    migrationsRun: false,
+    extra: {
+        connectionLimit: 5
+    }
+}
+
+createConnection(ormConfig).then((connection) => {
     return execSql(connection, startServer)
 }).catch((err) => logger.error(err.message || err))

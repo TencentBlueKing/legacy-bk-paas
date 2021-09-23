@@ -29,6 +29,7 @@ const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/proj
 const TemplateManage = () => import(/* webpackChunkName: 'index' */'@/views/project/template-manage')
 const MemberManage = () => import(/* webpackChunkName: 'index' */'@/views/project/member-manage')
 const VariableManage = () => import(/* webpackChunkName: 'index' */'@/views/project/variable-manage')
+const DataManage = () => import(/* webpackChunkName: 'index' */'@/views/project/data-manage')
 
 const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
@@ -221,6 +222,14 @@ const routes = [
                 component: VariableManage,
                 meta: {
                     title: '变量管理'
+                }
+            },
+            {
+                path: 'data-manage',
+                name: 'dataManage',
+                component: DataManage,
+                meta: {
+                    title: '数据源管理'
                 }
             },
             {

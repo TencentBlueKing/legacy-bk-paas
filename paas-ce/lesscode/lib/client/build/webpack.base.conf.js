@@ -23,6 +23,58 @@ const IS_DEV = process.env.NODE_ENV === 'development'
 
 const config = IS_DEV ? clientConf.dev : clientConf.build
 
+const babelLoader = {
+    loader: resolve(__dirname, pathToNodeModules, 'babel-loader'),
+    options: {
+        include: [
+            resolve(__dirname, '..', 'src'),
+            resolve(__dirname, pathToNodeModules, 'bk-magic-vue'),
+            resolve(__dirname, pathToNodeModules, 'monaco-editor'),
+            resolve(__dirname, pathToNodeModules, 'vue-echarts')
+            // resolve(__dirname, pathToNodeModules, 'resize-detector')
+        ],
+        cacheDirectory: resolve(__dirname, '..', '.webpack_cache'),
+        presets: [
+            [
+                resolve(__dirname, pathToNodeModules, '@babel/preset-env'),
+                {
+                    modules: 'commonjs',
+                    targets: {
+                        browsers: ['> 1%', 'last 2 versions', 'not ie <= 8'],
+                        node: 'current'
+                    },
+                    debug: false
+                }
+            ]
+        ],
+        // plugins: [require('@babel/plugin-transform-object-rest-spread')],
+        plugins: [
+            resolve(__dirname, pathToNodeModules, '@babel/plugin-syntax-dynamic-import'),
+            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-runtime'),
+            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-object-assign'),
+            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-async-to-generator'),
+            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-modules-commonjs'),
+            [
+                resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-decorators'),
+                { legacy: true }
+            ],
+            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-function-sent'),
+            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-export-namespace-from'),
+            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-numeric-separator'),
+            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-throw-expressions'),
+            resolve(__dirname, pathToNodeModules, 'babel-plugin-add-module-exports'),
+            [
+                resolve(__dirname, pathToNodeModules, 'babel-plugin-import-bk-magic-vue'),
+                { baseLibName: 'bk-magic-vue' }
+            ]
+        ],
+        // 确保 JS 的转译应用到 node_modules 的 Vue 单文件组件
+        exclude: file => (
+            /node_modules/.test(file) && !/\.vue\.js/.test(file) && !(/monaco-editor/.test(file))
+        )
+    }
+}
+
 module.exports = {
     watchOptions: {
         ignored: /node_modules/
@@ -38,7 +90,7 @@ module.exports = {
         // 指定以下目录寻找第三方模块，避免 webpack 往父级目录递归搜索，
         // 默认值为 ['node_modules']，会依次查找./node_modules、../node_modules、../../node_modules
         modules: [resolve(__dirname, '..', 'src'), resolve(__dirname, pathToNodeModules)],
-        extensions: ['.js', '.vue', '.json'],
+        extensions: ['.js', '.ts', '.vue', '.json'],
         alias: {
             vue$: resolve(__dirname, pathToNodeModules, 'vue/dist/vue.esm.js'),
             '@': resolve(__dirname, '..', 'src')
@@ -90,58 +142,23 @@ module.exports = {
                 ]
             },
             {
-                test: /\.js$/,
-                use: {
-                    loader: resolve(__dirname, pathToNodeModules, 'babel-loader'),
-                    options: {
-                        include: [
-                            resolve(__dirname, '..', 'src'),
-                            resolve(__dirname, pathToNodeModules, 'bk-magic-vue'),
-                            resolve(__dirname, pathToNodeModules, 'monaco-editor'),
-                            resolve(__dirname, pathToNodeModules, 'vue-echarts')
-                            // resolve(__dirname, pathToNodeModules, 'resize-detector')
-                        ],
-                        cacheDirectory: resolve(__dirname, '..', '.webpack_cache'),
-                        presets: [
-                            [
-                                resolve(__dirname, pathToNodeModules, '@babel/preset-env'),
-                                {
-                                    modules: 'commonjs',
-                                    targets: {
-                                        browsers: ['> 1%', 'last 2 versions', 'not ie <= 8'],
-                                        node: 'current'
-                                    },
-                                    debug: false
-                                }
-                            ]
-                        ],
-                        // plugins: [require('@babel/plugin-transform-object-rest-spread')],
-                        plugins: [
-                            resolve(__dirname, pathToNodeModules, '@babel/plugin-syntax-dynamic-import'),
-                            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-runtime'),
-                            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-object-assign'),
-                            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-async-to-generator'),
-                            resolve(__dirname, pathToNodeModules, '@babel/plugin-transform-modules-commonjs'),
-                            [
-                                resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-decorators'),
-                                { legacy: true }
-                            ],
-                            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-function-sent'),
-                            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-export-namespace-from'),
-                            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-numeric-separator'),
-                            resolve(__dirname, pathToNodeModules, '@babel/plugin-proposal-throw-expressions'),
-                            resolve(__dirname, pathToNodeModules, 'babel-plugin-add-module-exports'),
-                            [
-                                resolve(__dirname, pathToNodeModules, 'babel-plugin-import-bk-magic-vue'),
-                                { baseLibName: 'bk-magic-vue' }
-                            ]
-                        ],
-                        // 确保 JS 的转译应用到 node_modules 的 Vue 单文件组件
-                        exclude: file => (
-                            /node_modules/.test(file) && !/\.vue\.js/.test(file) && !(/monaco-editor/.test(file))
-                        )
+                test: /\.tsx?$/,
+                use: [
+                    babelLoader,
+                    {
+                        loader: resolve(__dirname, pathToNodeModules, 'ts-loader'),
+                        options: {
+                            transpileOnly: true,
+                            appendTsSuffixTo: [/\.vue$/],
+                            happyPackMode: false
+                        }
                     }
-                }
+                ],
+                exclude: /node_modules/
+            },
+            {
+                test: /\.js$/,
+                use: babelLoader
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

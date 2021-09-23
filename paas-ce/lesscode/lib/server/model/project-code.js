@@ -13,6 +13,8 @@ import routeModel from './route'
 import PageCodeModel from './page-code'
 import FuncModel from './function'
 import VariableModel from './variable'
+import DataTable from './data-table'
+import DataTableModifyRecord from './data-table-modify-record'
 import * as PageCompModel from './page-comp'
 import * as ComponentModel from './component'
 import { uuid, walkGrid } from '../util'
@@ -36,10 +38,19 @@ const STATIC_URL = `${DIR_PATH}/lib/server/project-template/`
 const projectCode = {
 
     async previewCode (projectId) {
-        // 生成路由相关的数据
-        const [routeList, pageRouteList] = await Promise.all([
+        // 获取预览相关的数据
+        const [
+            routeList,
+            pageRouteList,
+            allCustomMap,
+            funcGroups = [],
+            allVarableList = []
+        ] = await Promise.all([
             routeModel.findProjectRoute(projectId),
-            routeModel.queryProjectPageRoute(projectId)
+            routeModel.queryProjectPageRoute(projectId),
+            ComponentModel.getNameMap(),
+            FuncModel.allGroupFuncDetail(projectId),
+            VariableModel.getAll({ projectId })
         ])
 
         const routeGroup = {}
@@ -69,10 +80,6 @@ const projectCode = {
             }
         }
 
-        // 获取生成view文件所需的数据
-        const allCustomMap = await ComponentModel.getNameMap()
-        const funcGroups = await FuncModel.allGroupFuncDetail(projectId) || []
-        const allVarableList = await VariableModel.getAll({ projectId }) || []
         const projectVariables = allVarableList.filter(variable => variable.effectiveRange === 0)
         const pageData = {
             allCustomMap,
@@ -135,9 +142,22 @@ const projectCode = {
             try {
                 fse.copySync(sourcePath, targetPath)
 
-                const [routeList, pageRouteList] = await Promise.all([
+                const [
+                    routeList,
+                    pageRouteList,
+                    allCustomMap,
+                    funcGroups = [],
+                    allVarableList = [],
+                    dataTables = [],
+                    dataTableModifyRecords
+                ] = await Promise.all([
                     routeModel.findProjectRoute(projectId),
-                    routeModel.queryProjectPageRoute(projectId)
+                    routeModel.queryProjectPageRoute(projectId),
+                    ComponentModel.getNameMap(),
+                    FuncModel.allGroupFuncDetail(projectId),
+                    VariableModel.getAll({ projectId }),
+                    DataTable.getList(projectId),
+                    DataTableModifyRecord.getListByTime({ projectId })
                 ])
 
                 const routeGroup = {}
@@ -192,9 +212,6 @@ const projectCode = {
                 let defaultRouteRedirect = 'redirect: { name: \'404\' }'
 
                 // 获取生成view文件所需的数据
-                const allCustomMap = await ComponentModel.getNameMap()
-                const funcGroups = await FuncModel.allGroupFuncDetail(projectId) || []
-                const allVarableList = await VariableModel.getAll({ projectId }) || []
                 const projectVariables = allVarableList.filter(variable => variable.effectiveRange === 0)
                 const pageData = {
                     allCustomMap,
@@ -360,6 +377,7 @@ const projectCode = {
                     fs.unlinkSync(path.join(targetPath, 'lib/client/src/common/element.js'))
                 }
 
+                await this.generateDataSource(dataTables, targetPath)
                 resolve('success')
             } catch (err) {
                 reject(err.message || err)
@@ -367,7 +385,87 @@ const projectCode = {
         })
     },
 
-    async generateFileByReplace (sourcePath, targetPath, replaceCallBack) {
+    async generateDataSource (dataTables = [], dataTableModifyRecords = [], targetPath) {
+        const hasDataTable = dataTables.length > 0
+
+        // replace app.browser.js
+        const appPath = path.join(targetPath, 'lib/server/app.browser.js')
+        await this.generateFileByReplace(appPath, appPath, (content) => {
+            const dbImport = hasDataTable ? `const { createConnection } = require('typeorm')\r\nconst dataBaseConf = require('./conf/data-base')\r\n` : ''
+            const startStr = hasDataTable ? `createConnection(dataBaseConf).then((connection) => {\r\n    return startServer()\r\n}).catch((err) => logger.error(err.message || err))\r\n` : 'startServer()'
+            return content.replace(/\$\{dbImport\}/, dbImport).replace(/\$\{startStr\}/, startStr)
+        })
+
+        if (hasDataTable) {
+            // generate data-base-config
+            await this.generateFileByReplace(
+                path.join(STATIC_URL, 'data-base-template.js'),
+                path.join(targetPath, 'lib/server/conf/data-base.js')
+            )
+
+            // generate model & entity
+            fs.mkdirSync(path.join(targetPath, 'lib/server/model'))
+            fs.mkdirSync(path.join(targetPath, 'lib/server/model/entities'))
+            await this.generateFileByReplace(
+                path.join(STATIC_URL, 'base-entity-template.js'),
+                path.join(targetPath, 'lib/server/model/entities/base.js')
+            )
+            for (const dataTable of dataTables) {
+                const { tableName, fields } = dataTable
+                const tableFields = fields.reduce((acc, cur) => {
+                    acc += `\r\n    @Column({ type: ${cur.type} })\r\n    ${cur.name}`
+                    return acc
+                }, '')
+                await this.generateFileByReplace(
+                    path.join(STATIC_URL, 'entity-template.js'),
+                    path.join(targetPath, `lib/server/model/entities/${tableName}.js`),
+                    content => content.replace(/\$\{tableName\}/, tableName).replace(/\$\{tableFields\}/, tableFields)
+                )
+            }
+
+            // generate service
+            fs.mkdirSync(path.join(targetPath, 'lib/server/service'))
+            await this.generateFileByReplace(
+                path.join(STATIC_URL, 'data-service-template.js'),
+                path.join(targetPath, `lib/server/service/data-service.js`)
+            )
+
+            // generate control
+            await this.generateFileByReplace(
+                path.join(STATIC_URL, 'data-controller-template.js'),
+                path.join(targetPath, 'lib/server/controller/data.js')
+            )
+
+            // generate router
+            await this.generateFileByReplace(
+                path.join(STATIC_URL, 'data-router-template.js'),
+                path.join(targetPath, 'lib/server/router/data.js')
+            )
+        }
+
+        if (dataTableModifyRecords.length) {
+            // generate migrations
+            fs.mkdirSync(path.join(targetPath, 'lib/server/model/migrations'))
+            fs.mkdirSync(path.join(targetPath, 'lib/server/model/migrations/sql'))
+            for (const record of dataTableModifyRecords) {
+                const { sql, createTime } = record
+                const migrationName = `Lesscode${createTime}`
+                const fileName = `${createTime}-lesscode`
+                fs.writeFileSync(
+                    path.join(targetPath, `lib/server/model/migrations/sql/${fileName}.sql`),
+                    sql,
+                    'utf8'
+                )
+                await this.generateFileByReplace(
+                    path.join(STATIC_URL, 'data-migration-template.js'),
+                    path.join(targetPath, `lib/server/model/migrations/${fileName}.js`),
+                    content => content.replace(/\$\{migrationName\}/, migrationName).replace(/\$\{fileName\}/, fileName)
+                )
+            }
+        }
+    },
+
+    async generateFileByReplace (sourcePath, targetPath, replaceCallBack = str => str) {
         const fileConent = fs.readFileSync(sourcePath, 'utf8')
         const newFileContent = replaceCallBack(fileConent)
         const [message, fileStr] = await VueCodeModel.formatJsByEslint(newFileContent)

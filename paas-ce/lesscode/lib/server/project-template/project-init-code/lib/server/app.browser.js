@@ -1,9 +1,11 @@
+require('reflect-metadata')
 require('@babel/register')
 const http = require('http')
 const { resolve } = require('path')
 const Koa = require('koa')
 const bodyparser = require('koa-bodyparser')
 const json = require('koa-json')
+const session = require('koa-session')
 const koaStatic = require('koa-static')
 const views = require('co-views')
 const koaMount = require('koa-mount')
@@ -22,8 +24,28 @@ const { routes, allowedMethods } = require('./router')
 const httpMiddleware = require('./middleware/http')
 const errorMiddleware = require('./middleware/error')
 const jsonSendMiddleware = require('./middleware/json-send')
+const { requestContextMiddleware } = require('./middleware/request-context')
 
+${dbImport}
 const { CODE } = require('./util')
+
+const SESSION_CONFIG = {
+    // cookie key
+    key: 'lesscode-session',
+    // cookie 的过期时间，毫秒
+    maxAge: 86400000,
+    // 自动提交到响应头
+    autoCommit: true,
+    // 是否允许重写
+    overwrite: true,
+    httpOnly: true,
+    // 是否签名
+    signed: true,
+    // 每次响应时是否刷新 session 的有效期
+    rolling: false,
+    // 在 session 快过期时是否刷新 session 的有效期
+    renew: false
+}
 
 async function startServer () {
     const IS_DEV = process.env.NODE_ENV === 'development'
@@ -62,10 +84,12 @@ async function startServer () {
     })
 
     app.use(errorMiddleware())
+    app.keys = ['lesscode login secret']
+    app.use(session(SESSION_CONFIG, app))
     app.use(bodyparser())
     app.use(json())
+    app.use(requestContextMiddleware())
 
-    app.use(errorMiddleware())
     app.use(httpMiddleware())
     app.use(jsonSendMiddleware())
 
@@ -154,4 +178,4 @@ async function startServer () {
     })
 }
 
-startServer()
+${startStr}
