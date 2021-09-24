@@ -925,6 +925,9 @@ $headerHeight: 64px;
     }
     .extension {
         cursor: pointer;
+        .page-row:hover {
+            color: #3A84FF;
+        }
     }
 }
 

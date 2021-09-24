@@ -45,8 +45,9 @@
                                     @click.stop="handlePageAction('copy')"
                                     title="复制页面"></i>
                             </bk-option>
-                            <div slot="extension" class="extension" @click="handlePageAction('create')">
-                                <i class="bk-icon icon-plus-circle"></i> 新建页面
+                            <div slot="extension" class="extension">
+                                <div class="page-row" @click="handlePageAction('create')"><i class="bk-icon icon-plus-circle"></i> 新建空白页面</div>
+                                <div class="page-row" @click="handlePageFromTemplate"><i class="bk-icon icon-plus-circle"></i> 从模板新建页面</div>
                             </div>
                         </bk-select>
                     </div>
@@ -276,6 +277,7 @@
         <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
         <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :is-whole-page="true" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
+        <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
     </main>
 </template>
 
@@ -303,6 +305,7 @@
     import ExtraLinks from '@/components/ui/extra-links'
     import PageDialog from '@/components/project/page-dialog'
     import SaveTemplateDialog from '@/components/render/save-template-dialog'
+    import PageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
     import PageSetting from '@/views/project/page-setting'
     import PageJson from '@/views/project/page-json'
     import pageVariable from '@/views/project/page-variable'
@@ -331,6 +334,7 @@
             PageSetting,
             PageDialog,
             SaveTemplateDialog,
+            PageFromTemplateDialog,
             ComponentTree,
             TemplatePanel,
             PageJson,
@@ -1795,6 +1799,11 @@
                         })
                     }
                 })
+            },
+
+            // 从模板创建
+            handlePageFromTemplate () {
+                this.$refs.pageFromTemplateDialog.isShow = true
             },
 
             handlePageAction (action = 'create') {
