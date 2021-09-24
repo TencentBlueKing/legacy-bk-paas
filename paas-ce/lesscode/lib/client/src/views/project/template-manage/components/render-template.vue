@@ -2,7 +2,7 @@
     <section v-bkloading="{ isLoading: isLoading }" style="height: 100%">
         <main class="templates templates-content" v-show="!isLoading">
             <div class="templates-head">
-                <div class="help-tips">请从页面画布中选择页面局部或将整个页面存为模板</div>
+                <!-- <div class="help-tips">请从页面画布中选择页面局部或将整个页面存为模板</div> -->
                 <div class="extra">
                     <bk-input
                         :style="{ width: '400px' }"
