@@ -17,7 +17,7 @@
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
                     </router-link>
                     <router-link tag="div" class="nav-item" to="/template-market">
-                        <i class="bk-drag-icon bk-drag-template-fill"></i>模板市场
+                        <i class="bk-drag-icon bk-drag-template-fill"></i>模板市场<i class="red-point"></i>
                     </router-link>
                     <router-link tag="div" class="nav-item" to="/function-market">
                         <i class="bk-drag-icon bk-drag-function-fill"></i>函数市场
