@@ -7,6 +7,8 @@
             :show-mask="true"
             :mask-close="false"
             :auto-close="false"
+            :close-icon="false"
+            :esc-icon="false"
             :draggable="false"
             header-position="left"
             ext-cls="template-operate-dialog"
@@ -130,6 +132,7 @@
             ...mapGetters('page', [
                 'pageDetail'
             ]),
+            ...mapGetters('layout', ['pageLayout']),
             projectId () {
                 return this.$route.params.projectId
             }
@@ -159,7 +162,8 @@
                 await this.$refs.pageTemplateFrom.validate()
                 try {
                     this.dialog.loading = true
-                    const className = this.isWholePage ? '.container-content' : `div[data-component-id="${this.curSelectedComponentData.name}-${this.curSelectedComponentData.componentId}"]`
+                    
+                    const className = this.isWholePage ? (this.pageLayout && this.pageLayout.layoutType !== 'empty' ? '.container-content' : '.main-content') : `div[data-component-id="${this.curSelectedComponentData.name}-${this.curSelectedComponentData.componentId}"]`
                     html2canvas(document.querySelector(className)).then(async (canvas) => {
                         try {
                             const imgData = canvas.toDataURL('image/png')
