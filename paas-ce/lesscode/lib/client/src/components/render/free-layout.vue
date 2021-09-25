@@ -168,12 +168,12 @@
                 const {
                     originalEvent
                 } = event
-                
+
                 const {
                     pageX,
                     pageY
                 } = originalEvent
-                
+
                 this.mountedPosition = {
                     top: pageY,
                     left: pageX
@@ -249,8 +249,7 @@
              */
             handleContextmenuDelete () {
                 setTimeout(() => {
-                    const delBtn = document.querySelector('#del-component-right-sidebar')
-                    delBtn && delBtn.click()
+                    bus.$emit('on-delete-component')
                 }, 0)
                 this.contextMenuVisible = false
             },
@@ -390,7 +389,7 @@
                         bottom: containerBottom,
                         left: containerLeft
                     } = this.$refs[this.renderData.componentId].getBoundingClientRect()
-                    
+
                     const {
                         top: originalTop,
                         left: originalLeft
@@ -422,7 +421,7 @@
                         top: `${Math.max(top, 10)}px`,
                         left: `${Math.max(left, 10)}px`
                     }
-                    
+
                     // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件
                     bus.$emit('on-update-props', {
                         componentId: renderData.componentId,
