@@ -53,6 +53,11 @@ export default {
             val: true,
             tips: '是否显示附加功能（调整每页显示条数）'
         },
+        'show-total-count': {
+            type: 'boolean',
+            val: false,
+            tips: '是否显示分页条中共计XX条的信息'
+        },
         location: {
             type: 'string',
             options: ['left', 'right'],
