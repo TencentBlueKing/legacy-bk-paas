@@ -143,7 +143,13 @@ export default {
                 limitList: [10, 20, 50, 100],
                 showLimit: false
             },
-            tips: '设置分页信息'
+            tips: ''
+                + '设置分页信息<br>'
+                + 'count: 总数据量<br>'
+                + 'current: 当前页码，正整数<br>'
+                + 'limit: 每页显示条数(须存在于 limitList 中) <br>'
+                + 'limitList: 每页显示条数可选项列表<br>'
+                + 'showLimit: 是否显示每页显示条数控件<br>'
         },
         'showPaginationInfo': {
             type: 'boolean',
