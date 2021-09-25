@@ -690,6 +690,11 @@
             window.addEventListener('click', this.toggleQuickOperation, true)
             window.addEventListener('beforeunload', this.beforeunloadConfirm)
             window.addEventListener('unload', this.relasePage)
+
+            bus.$on('on-delete-component', this.showDeleteElement)
+            this.$once('hook:beforeDestroy', () => {
+                bus.$off('on-delete-component', this.showDeleteElement)
+            })
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)
@@ -1087,7 +1092,7 @@
             toggleShowQuickOperation (val) {
                 this.showQuickOperation = val
             },
-            
+
             judgeCtrl (event) {
                 switch (event.keyCode) {
                     case 91:
@@ -1152,7 +1157,7 @@
                         break
                     case 8:
                     case 46:
-                        funcChainMap.isInDragArea().exec(this.deleteComponent)
+                        funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
                         break
                     case 13:
                         funcChainMap.isDelComponentConfirm().exec(this.confirmDelComponent)
@@ -1177,11 +1182,6 @@
                 this.setCopyData(copyData)
                 this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
                 this.confirmDelComponent()
-            },
-
-            deleteComponent () {
-                const delBtn = document.querySelector('#del-component-right-sidebar')
-                delBtn && delBtn.click()
             },
 
             putComponentData () {
