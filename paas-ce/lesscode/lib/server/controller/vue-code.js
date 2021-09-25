@@ -93,7 +93,6 @@ const VueCode = {
             if (from === 'download_page') {
                 operationLogger.success()
             }
-
             ctx.send({
                 code: 0,
                 message: 'success',

@@ -60,7 +60,7 @@
                                     <span slot="dropdown-trigger" class="more-menu-trigger">
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
-                                    <ul class="bk-dropdown-list" slot="dropdown-content">
+                                    <ul class="bk-dropdown-list card-operation-list" slot="dropdown-content">
                                         <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="toPage(project.id)">页面管理</a></li>
                                         <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
@@ -765,6 +765,10 @@
                         background: #F0F1F5;
                     }
                 }
+            }
+
+            .card-operation-list {
+                max-height: 250px;
             }
 
             .item-bd {

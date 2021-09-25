@@ -41,7 +41,6 @@
         },
         computed: {
             computedWidth () {
-                console.log(4667, this.$route)
                 let widthVal = this.width ? (typeof this.width === 'number' ? `${this.width}px` : this.width) : '100%'
                 // 画布渲染时将百分比置为100%
                 this.$route.name === 'new' && widthVal.endsWith('%') && (widthVal = '100%')

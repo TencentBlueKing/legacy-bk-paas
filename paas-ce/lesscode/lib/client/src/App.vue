@@ -121,4 +121,13 @@
         /* font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria; */
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
     }
+
+    .red-point {
+        display:block;
+        margin-left: 3px;
+        background:#f00;
+        border-radius:50%;
+        width:6px;
+        height:6px;
+    }
 </style>

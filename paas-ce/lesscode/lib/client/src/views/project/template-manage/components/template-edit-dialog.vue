@@ -117,7 +117,10 @@
                 return this.$route.params.projectId
             },
             dialogTitle () {
-                return this.actionType === 'apply' ? '应用模板' : '编辑模板'
+                return this.actionType === 'apply' ? `添加模板【${this.fromTemplate.templateName}】到本项目，请重命名模板` : '编辑模板'
+            },
+            actoinName () {
+                return this.actionType === 'apply' ? `添加模板` : '编辑模板'
             }
         },
         watch: {
@@ -191,7 +194,7 @@
                     if (res) {
                         this.$bkMessage({
                             theme: 'success',
-                            message: `${this.dialogTitle}成功`
+                            message: `${this.actionName}成功`
                         })
                         this.refreshList()
                         this.isShow = false

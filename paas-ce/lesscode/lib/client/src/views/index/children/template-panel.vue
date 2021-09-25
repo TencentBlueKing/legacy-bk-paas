@@ -269,8 +269,8 @@
         &:hover {
             border: 1px solid #3a84ff;
             .item-img {
-                .mask {
-                    display: flex;
+                .mask .apply-btn {
+                    display: block;
                 }
             }
             .item-info {
@@ -291,7 +291,7 @@
                 height: 100%;
             }
             .mask {
-                display: none;
+                display: flex;
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -300,7 +300,7 @@
                 background: rgba(0, 0, 0, 0.1);
                 align-items: center;
                 .apply-btn {
-                    display: block;
+                    display: none;
                     margin-left: 32px;
                 }
             }

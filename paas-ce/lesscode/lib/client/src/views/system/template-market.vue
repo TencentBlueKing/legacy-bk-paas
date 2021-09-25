@@ -45,7 +45,7 @@
                                 <div class="item-ft">
                                     <div class="col">
                                         <h3 class="name" :title="project.projectName">{{project.projectName}}</h3>
-                                        <div class="stat">{{project.createUser}}</div>
+                                        <div class="stat">{{project.createUser ? `由 ${project.createUser} 上传` : ''}}</div>
                                     </div>
                                 </div>
                                 <span class="favorite-btn">
@@ -103,7 +103,7 @@
                                 <div class="item-ft">
                                     <div class="col">
                                         <h3 class="name" :title="page.templateName">{{page.templateName}}</h3>
-                                        <div class="stat">{{page.createUser}}</div>
+                                        <div class="stat">{{page.createUser ? `由 ${page.createUser} 上传` : ''}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -195,7 +195,7 @@
             <template v-if="dialog.page.selectedList.length">
                 <div style="margin: 20px 0">请指定添加至对应项目的模板分类：</div>
                 <div style="min-height: 140px">
-                    <bk-form ref="pageForm" :label-width="120">
+                    <bk-form ref="pageForm" :label-width="180">
                         <bk-form-item v-for="item in dialog.page.selectedList"
                             :key="item.id"
                             :label="item.projectName" required>
