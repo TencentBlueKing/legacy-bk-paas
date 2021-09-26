@@ -448,6 +448,7 @@ $headerHeight: 64px;
         color: #3a84ff;
         cursor: pointer;
         display: inline-block;
+        font-size: 12px;
     }
 }
 
