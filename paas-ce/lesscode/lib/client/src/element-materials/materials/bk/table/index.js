@@ -151,7 +151,7 @@ export default {
                 + 'limitList: 每页显示条数可选项列表<br>'
                 + 'showLimit: 是否显示每页显示条数控件<br>'
         },
-        'showPaginationInfo': {
+        'show-pagination-info': {
             type: 'boolean',
             val: true,
             tips: '是否显示分页条中共计XX条的信息'
