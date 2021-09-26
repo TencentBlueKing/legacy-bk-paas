@@ -33,7 +33,7 @@ urlpatterns = [
     url(r"^plain/$", auth_views.LoginView.as_view(is_plain=True)),
     url(r"^logout/$", auth_views.LogoutView.as_view()),
     # oauth2
-    url(r"^oauth/", decorator_include(login_exempt, "bk_oauth2.urls", namespace="oauth2_provider")),
+    # url(r"^oauth/", decorator_include(login_exempt, "bk_oauth2.urls", namespace="oauth2_provider")),
     # ========================= the apis =========================
     # TODO: 所有get_all_user/get_batch_user api应该直接调用usermgr的esb接口或者后台接口, 不应该走login
     # please use api get_all_user/get_batch_user via esb, should not from login

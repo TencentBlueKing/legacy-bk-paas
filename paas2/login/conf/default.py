@@ -59,8 +59,8 @@ INSTALLED_APPS = (
     "bk_i18n",
     # oauth2 login
     "app",
-    "oauth2_provider",
-    "bk_oauth2",
+    # "oauth2_provider",
+    # "bk_oauth2",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -185,16 +185,16 @@ WSGI_APPLICATION = "wsgi.application"
 #  OAUTH2  #
 ############
 # reference: https://django-oauth-toolkit.readthedocs.io/en/latest/settings.html
-OAUTH2_PROVIDER = {
-    "SCOPES": {
-        "get_user_profile": "获取用户信息",
-    },
-    "APPLICATION_MODEL": "bk_oauth2.Application",
-    # 1 day
-    "ACCESS_TOKEN_EXPIRE_SECONDS": 86400,
-    # 10 mins
-    "AUTHORIZATION_CODE_EXPIRE_SECONDS": 600,
-}
+# OAUTH2_PROVIDER = {
+#     "SCOPES": {
+#         "get_user_profile": "获取用户信息",
+#     },
+#     "APPLICATION_MODEL": "bk_oauth2.Application",
+#     # 1 day
+#     "ACCESS_TOKEN_EXPIRE_SECONDS": 86400,
+#     # 10 mins
+#     "AUTHORIZATION_CODE_EXPIRE_SECONDS": 600,
+# }
 
 
 # Database

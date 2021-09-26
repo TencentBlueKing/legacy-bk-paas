@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.13.9
+    - bugfix: python3 install migration fail
+    - breaking changes: remve oauth2 from login
+
 # 2.13.8
     - bugfix: smart package size calcuate error in py3
 
