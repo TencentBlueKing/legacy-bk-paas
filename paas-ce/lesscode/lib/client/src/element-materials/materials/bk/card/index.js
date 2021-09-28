@@ -22,11 +22,6 @@ export default {
         display: 'inline-block'
     },
     props: {
-        title: {
-            type: 'string',
-            val: '卡片标题',
-            tips: '卡片标题'
-        },
         'is-collapse': {
             type: 'boolean',
             val: false,
