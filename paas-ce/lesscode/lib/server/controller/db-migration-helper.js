@@ -72,6 +72,7 @@ async function updateCardSlot () {
                 /** renderSlots如果没有header，证明是旧数据，应该格式化其结构 */
                     if (component.type === 'bk-card' && component.renderSlots.header === undefined) {
                         const originValue = component.renderProps.title.val
+                        component.renderProps['disable-header-style'] = { 'type': 'hidden', 'val': true, 'payload': {}, 'attrs': [] }
                         component.renderSlots = {
                             'default': {
                                 'name': 'layout',
@@ -120,7 +121,7 @@ async function updateCardSlot () {
                                     'slotName': '',
                                     'slotContainer': true,
                                     'renderProps': {
-
+                                        'no-response': true
                                     },
                                     'renderStyles': {
                                         'height': '50px',

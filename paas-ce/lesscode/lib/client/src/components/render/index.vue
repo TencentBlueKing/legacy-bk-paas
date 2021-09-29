@@ -16,7 +16,7 @@
             </render-grid>
         </template>
         <template v-else-if="componentData.type === 'free-layout'">
-            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls">
+            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls" v-bind="componentData.renderProps">
             </free-layout>
         </template>
         <template v-else>

@@ -52,6 +52,10 @@ export default {
             type: 'boolean',
             val: true,
             tips: '是否显示边框'
+        },
+        'disable-header-style': {
+            type: 'hidden',
+            val: true
         }
     },
     slots: {
@@ -87,7 +91,9 @@ export default {
                 type: 'free-layout',
                 slotName: '',
                 slotContainer: true,
-                renderProps: {},
+                renderProps: {
+                    'no-response': true
+                },
                 renderStyles: { 'height': '50px', 'pointer-events': 'auto' },
                 renderEvents: {},
                 renderDirectives: [],

@@ -64,12 +64,6 @@
     }
 }
 
-.wrapperCls {
-    .bk-card .bk-card-head {
-        line-height: unset;
-    }
-}
-
 .component-context-menu {
     position: fixed;
     background: #fff;
