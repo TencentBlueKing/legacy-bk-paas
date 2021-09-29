@@ -103,6 +103,11 @@
             extraDragCls: {
                 type: Array,
                 default: () => ['interactiveInnerComp']
+            },
+            // 是否根据子元素自动撑开
+            noResponse: {
+                type: Boolean,
+                default: false
             }
         },
         data () {
@@ -375,7 +380,7 @@
                 this.setStyle4Component(renderData)
                 this.doDrag(data.elem, renderData)
                 // setTimeout 保证 add 事件已经处理完毕
-                setTimeout(() => {
+                !this.noResponse && setTimeout(() => {
                     if (!this.$refs[this.renderData.componentId]) {
                         return
                     }
