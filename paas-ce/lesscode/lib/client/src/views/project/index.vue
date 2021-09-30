@@ -26,7 +26,7 @@
                 </nav>
             </div>
         </aside>
-        <div class="breadcrumbs">
+        <div class="breadcrumbs" v-if="currentPage">
             <h3 class="current">{{ currentPage }}</h3>
             <extra-links></extra-links>
         </div>
@@ -77,8 +77,8 @@
                     },
                     {
                         title: '数据源管理',
-                        icon: 'variable-manage',
-                        toPath: 'data-manage'
+                        icon: 'data-source-manage',
+                        toPath: 'data-source-manage'
                     },
                     {
                         title: '布局模板实例',

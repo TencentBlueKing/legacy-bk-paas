@@ -5,9 +5,6 @@
                 <bk-button theme="primary" @click="handleCreate">新建页面</bk-button>
                 <bk-button @click="handlePreviewProject">预览项目</bk-button>
                 <bk-button @click="handleDownLoadProject">源码下载</bk-button>
-                <bk-button @click="enable">enable</bk-button>
-                <bk-button @click="test">modify table</bk-button>
-                <bk-button @click="serverless">serverless</bk-button>
                 <div class="extra">
                     <bk-input
                         :style="{ width: '400px' }"
@@ -149,30 +146,6 @@
             await this.getPageList()
         },
         methods: {
-            serverless () {
-                this.$http.get(`/serverless/projectId/${this.projectId}/funcCode/serverlessfunc?xxx=2`)
-            },
-
-            enable () {
-                this.$http.post('/data-source/enable', { projectId: this.projectId, projectCode: this.currentProject.projectCode })
-            },
-
-            test () {
-                this.$http.put('/data-source/modifyPreviewDb', { projectId: this.projectId, sql: `DROP TABLE IF EXISTS role;
-                    CREATE TABLE role  (
-                    id int(11) NOT NULL AUTO_INCREMENT,
-                    roleCode varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色 ID',
-                    roleName varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色名称',
-                    createTime datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
-                    updateTime datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
-                    createUser varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人，默认当前用户',
-                    updateUser varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人，默认当前用户',
-                    deleteFlag int(11) NULL DEFAULT 0 COMMENT '是否删除，1代表已删除',
-                    PRIMARY KEY (id) USING BTREE,
-                    INDEX role_id(roleCode) USING BTREE
-                    ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;` })
-            },
-
             async getPageList () {
                 this.isLoading = true
                 try {

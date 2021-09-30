@@ -9,16 +9,5 @@
  * specific language governing permissions and limitations under the License.
  */
 
-// 用于 serverless web function 在预览环境使用
-const Router = require('koa-router')
-const {
-    serverlessWebApi
-} = require('../controller/serverless-web')
-
-const router = new Router({
-    prefix: '/api/serverless'
-})
-
-router.all('/projectId/:projectId/funcCode/:funcCode', serverlessWebApi)
-
-module.exports = router
+export * from './controller'
+export * from './authorization'

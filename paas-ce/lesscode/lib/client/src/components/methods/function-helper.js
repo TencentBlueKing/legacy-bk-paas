@@ -10,6 +10,7 @@
  */
 import store from '@/store'
 import { walkGrid, downloadFile } from '@/common/util'
+import { FUNCTION_TYPE, getFunctionTips } from 'shared'
 const acorn = require('acorn')
 
 function getCurUsedFuncs () {
@@ -94,7 +95,8 @@ function replaceFuncKeyword (funcBody = '', callBack) {
         onInsertedSemicolon (lastTokEnd, lastTokEndLoc) {
             semiIndexs.push(lastTokEnd)
         },
-        allowReturnOutsideFunction: true
+        allowReturnOutsideFunction: true,
+        allowAwaitOutsideFunction: true
     })
 
     const ret = funcBody.split('').map((c, i) => {
@@ -111,11 +113,12 @@ function replaceFuncKeyword (funcBody = '', callBack) {
 }
 
 function getDefaultFunc (options = {}) {
+    const funcTips = getFunctionTips(location.origin)
     return {
         funcName: '',
         funcCode: '',
         funcGroupId: '',
-        funcType: 0,
+        funcType: FUNCTION_TYPE.EMPTY,
         funcParams: [],
         remoteParams: [],
         withToken: 0,
@@ -123,21 +126,7 @@ function getDefaultFunc (options = {}) {
         funcMethod: 'get',
         funcApiData: '',
         funcSummary: '',
-        funcBody: '/**\r\n'
-        + '* 1. 空白函数，函数内容完全由用户编写\r\n'
-        + '* 2. 这里编辑管理的函数，用于画布页面的属性配置和事件绑定\r\n'
-        + '* 3. 用于属性时：函数需要返回值，该返回值将会赋值给属性\r\n'
-        + '* 4. 用于事件时：函数将在事件触发时执行\r\n'
-        + '* 5. 可以使用 lesscode.变量标识，必须通过编辑器自动补全功能选择对应变量，来获取或者修改变量值\r\n'
-        + '* 6. 可以使用 lesscode.方法名，必须通过编辑器自动补全功能选择对应函数，来调用项目中的函数\r\n'
-        + '* 7. 用于属性时示例如下：\r\n'
-        + '* return Promise.all([\r\n'
-        + `*     this.$http.get('${location.origin}/api/data/getMockData'),\r\n`
-        + `*     this.$http.post('${location.origin}/api/data/postMockData', { value: 2 })\r\n`
-        + '* ]).then(([getDataRes, postDataRes]) => {\r\n'
-        + '*     return [...getDataRes.data, ...postDataRes.data]\r\n'
-        + '* })\r\n'
-        + '*/\r\n',
+        funcBody: funcTips[FUNCTION_TYPE.EMPTY],
         id: undefined,
         ...options
     }

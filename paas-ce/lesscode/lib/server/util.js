@@ -9,11 +9,13 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { getFunctionTips } from '../shared'
 const os = require('os')
 const eslintConfig = require('./conf/eslint-config')
 const { ESLint } = require('eslint')
 const interactiveComponents = ['bk-dialog', 'bk-sideslider']
 const acorn = require('acorn')
+const { RequestContext } = require('./middleware/request-context')
 
 exports.splitSql = (sqlString) => {
     const sqlArr = []
@@ -34,6 +36,14 @@ exports.splitSql = (sqlString) => {
 
 // 替换函数中的变量和函数
 exports.replaceFuncKeyword = (funcBody = '', callBack) => {
+    // remove comment
+    const ctx = RequestContext.getCurrentCtx()
+    const functionTips = getFunctionTips(ctx.origin)
+    Object.values(functionTips).forEach((tip) => {
+        funcBody = funcBody.replace(tip, '')
+    })
+
+    // parse keyword
     const commentsPositions = []
     acorn.parse(funcBody, {
         onComment (isBlock, text, start, end) {
@@ -42,7 +52,8 @@ exports.replaceFuncKeyword = (funcBody = '', callBack) => {
                 end
             })
         },
-        allowReturnOutsideFunction: true
+        allowReturnOutsideFunction: true,
+        allowAwaitOutsideFunction: true
     })
     return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
         const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)

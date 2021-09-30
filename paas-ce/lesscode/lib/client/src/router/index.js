@@ -29,7 +29,6 @@ const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/proj
 const TemplateManage = () => import(/* webpackChunkName: 'index' */'@/views/project/template-manage')
 const MemberManage = () => import(/* webpackChunkName: 'index' */'@/views/project/member-manage')
 const VariableManage = () => import(/* webpackChunkName: 'index' */'@/views/project/variable-manage')
-const DataManage = () => import(/* webpackChunkName: 'index' */'@/views/project/data-manage')
 
 const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
@@ -60,6 +59,15 @@ const Variable = () => import(/* webpackChunkName: 'variable' */'@/views/help/do
 const Directive = () => import(/* webpackChunkName: 'directive' */'@/views/help/docs/directive.md')
 const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
 const Interactive = () => import(/* webpackChunkName: 'interactive' */'@/views/help/docs/interactive.md')
+
+// 数据源管理
+const DataSourceHome = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/index.vue')
+const DataSourceTableList = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/table-list/index.vue')
+const DataSourceCreateTable = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/create-table.vue')
+const DataSourceEditTable = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/edit-table.vue')
+const DataSourceUpdateRecord = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/update-record.vue')
+const DataSourceDataManage = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/data-manage/index.vue')
+const DataSourceDeployTableRecord = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/deploy-table-record.vue')
 
 // 运营统计
 const OperationEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/operation/index.vue')
@@ -225,12 +233,41 @@ const routes = [
                 }
             },
             {
-                path: 'data-manage',
-                name: 'dataManage',
-                component: DataManage,
-                meta: {
-                    title: '数据源管理'
-                }
+                path: 'data-source-manage',
+                name: 'dataSourceManage',
+                component: DataSourceHome,
+                children: [
+                    {
+                        path: '',
+                        name: 'tableList',
+                        component: DataSourceTableList
+                    },
+                    {
+                        path: 'create-table',
+                        name: 'createTable',
+                        component: DataSourceCreateTable
+                    },
+                    {
+                        path: 'edit-table',
+                        name: 'editTable',
+                        component: DataSourceEditTable
+                    },
+                    {
+                        path: 'update-table-record',
+                        name: 'updateTableRecord',
+                        component: DataSourceUpdateRecord
+                    },
+                    {
+                        path: 'data-manage',
+                        name: 'dataManage',
+                        component: DataSourceDataManage
+                    },
+                    {
+                        path: 'deploy-table-record',
+                        name: 'deployTableRecord',
+                        component: DataSourceDeployTableRecord
+                    }
+                ]
             },
             {
                 path: 'layout',

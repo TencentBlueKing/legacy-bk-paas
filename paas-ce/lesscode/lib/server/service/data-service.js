@@ -91,7 +91,7 @@ export function getDataService (name = 'default', customEntityMap) {
         async bulkDelete (tableName, ids) {
             const repository = getRepositoryByName(tableName)
             const deleteDataList = await repository.findOne({ where: { id: In(ids) } })
-            deleteDataList.forEach(deleteData => deleteData.deleteFlag = 1)
+            deleteDataList.forEach(deleteData => (deleteData.deleteFlag = 1))
             return repository.save(deleteDataList)
         }
     }

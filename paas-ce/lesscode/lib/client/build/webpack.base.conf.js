@@ -13,8 +13,9 @@ const { resolve, posix } = require('path')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
-const friendlyFormatter = require('eslint-friendly-formatter')
+// const friendlyFormatter = require('eslint-friendly-formatter')
 // const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin')
 const clientConf = require('./conf')
 const mdLoaderOption = require('./md-loader-option')
 const { pathToNodeModules } = require('./util')
@@ -90,28 +91,29 @@ module.exports = {
         // 指定以下目录寻找第三方模块，避免 webpack 往父级目录递归搜索，
         // 默认值为 ['node_modules']，会依次查找./node_modules、../node_modules、../../node_modules
         modules: [resolve(__dirname, '..', 'src'), resolve(__dirname, pathToNodeModules)],
-        extensions: ['.js', '.ts', '.vue', '.json'],
+        extensions: ['.js', '.ts', '.tsx', '.vue', '.json'],
         alias: {
             vue$: resolve(__dirname, pathToNodeModules, 'vue/dist/vue.esm.js'),
-            '@': resolve(__dirname, '..', 'src')
+            '@': resolve(__dirname, '..', 'src'),
+            'shared': resolve(__dirname, '..', '..', 'shared')
         }
     },
 
     module: {
         rules: [
-            {
-                test: /\.(js|vue)$/,
-                // loader: 'eslint-loader',
-                loader: resolve(__dirname, pathToNodeModules, 'eslint-loader'),
-                enforce: 'pre',
-                include: [
-                    resolve(__dirname, '..', 'src')
-                ],
-                exclude: /node_modules/,
-                options: {
-                    formatter: friendlyFormatter
-                }
-            },
+            // {
+            //     test: /\.(js|vue)$/,
+            //     // loader: 'eslint-loader',
+            //     loader: resolve(__dirname, pathToNodeModules, 'eslint-loader'),
+            //     enforce: 'pre',
+            //     include: [
+            //         resolve(__dirname, '..', 'src')
+            //     ],
+            //     exclude: /node_modules/,
+            //     options: {
+            //         formatter: friendlyFormatter
+            //     }
+            // },
             {
                 test: /\.vue$/,
                 use: {
@@ -202,6 +204,11 @@ module.exports = {
                 to: resolve(__dirname, '..', 'dist/static/images'),
                 toType: 'dir'
             }
-        ])
+        ]),
+        new ESLintPlugin({
+            context: resolve(__dirname, '..', 'src'),
+            extensions: ['js', 'ts', 'vue', 'jsx', 'tsx'],
+            lintDirtyModulesOnly: true
+        })
     ]
 }

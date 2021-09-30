@@ -11,35 +11,34 @@
 
 import { getPreviewDataService } from '../service/preview-service'
 import func from '../model/function'
+import { Controller, All, Ctx } from '../decorator'
 
 // 用于 serverless web function 在预览环境使用
-export const serverlessWebApi = async (ctx) => {
-    let dataService
-    try {
-        const { projectId, funcCode } = ctx.params || {}
-        dataService = await getPreviewDataService(projectId)
+@Controller('/api/serverless')
+export default class ServerlessController {
+    @All('/projectId/:projectId/funcCode/:funcCode')
+    async serverlessWebApi (@Ctx() ctx) {
+        let dataService
+        try {
+            const { projectId, funcCode } = ctx.params || {}
+            dataService = await getPreviewDataService(projectId)
 
-        const funcGroupList = await func.allGroupFuncDetail(projectId)
-        const curFunc = funcGroupList.reduce((acc, group) => {
-            const funcList = group.functionList || []
-            const func = funcList.find((func) => (func.funcCode === funcCode))
-            if (func) acc = func
-            return acc
-        }, {})
-        const funcBody = curFunc.funcBody || ''
+            const funcGroupList = await func.allGroupFuncDetail(projectId)
+            const curFunc = funcGroupList.reduce((acc, group) => {
+                const funcList = group.functionList || []
+                const func = funcList.find((func) => (func.funcCode === funcCode))
+                if (func) acc = func
+                return acc
+            }, {})
+            const funcBody = curFunc.funcBody || ''
 
-        const Fn = Function
-        const asyncFunction = new Fn('return Object.getPrototypeOf(async function(){}).constructor')()
-        const data = await asyncFunction('ctx', 'dataService', funcBody)(ctx, dataService)
-
-        ctx.send({
-            code: 0,
-            message: 'success',
-            data
-        })
-    } catch (error) {
-        ctx.throwError(error)
-    } finally {
-        if (dataService) await dataService.close()
+            const Fn = Function
+            const asyncFunction = new Fn('return Object.getPrototypeOf(async function(){}).constructor')()
+            return await asyncFunction('ctx', 'dataService', funcBody)(ctx, dataService)
+        } catch (error) {
+            throw error
+        } finally {
+            if (dataService) await dataService.close()
+        }
     }
 }

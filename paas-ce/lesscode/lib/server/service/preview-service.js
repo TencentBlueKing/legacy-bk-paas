@@ -23,7 +23,6 @@ export const getPreviewDbConfig = async (projectId) => {
     const previewDb = await dataService.findOne('preview-db', { projectId })
     const config = process.env.NODE_ENV === 'production' ? dataBaseConf.preview : dataBaseConf.dev
     const dbConfig = {
-        dialect: config.dialect,
         host: config.host,
         port: config.port,
         user: config.username,
@@ -119,7 +118,7 @@ export const getPreviewDataService = async (projectId) => {
 
     const ormConfig = {
         name: projectId,
-        type: config.dialect,
+        type: 'mysql',
         host: config.host,
         port: config.port,
         username: config.user,

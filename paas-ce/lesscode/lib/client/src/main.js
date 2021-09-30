@@ -12,6 +12,7 @@
 import Vue from 'vue'
 import VueDraggable from 'vuedraggable'
 import mavonEditor from 'mavon-editor'
+import VueCompositionAPI from '@vue/composition-api'
 import 'mavon-editor/dist/css/index.css'
 import '@/common/bkui-vue-complex'
 import '@/common/bkmagic'
@@ -45,6 +46,7 @@ Vue.prototype.$clearMenu = () => {
 }
 
 Vue.use(mavonEditor)
+Vue.use(VueCompositionAPI)
 
 Vue.component('VueDraggable', VueDraggable)
 Vue.component('app-exception', Exception)

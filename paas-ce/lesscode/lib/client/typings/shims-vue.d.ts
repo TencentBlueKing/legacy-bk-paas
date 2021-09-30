@@ -8,26 +8,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import Vue from 'vue'
+import VueRouter, { Route } from 'vue-router'
 
-const Router = require('koa-router')
-const {
-    enable,
-    modifyPreviewDb,
-    getTableList,
-    addTable,
-    updateTable,
-    getSqlRecord
-} = require('../controller/data-source')
+declare module '*.vue' {
+    export default Vue
+}
 
-const router = new Router({
-    prefix: '/api/data-source'
-})
-
-router.post('/enable', enable)
-router.put('/modifyPreviewDb', modifyPreviewDb)
-router.get('/getTableList', getTableList)
-router.post('/addTable', addTable)
-router.put('/updateTable', updateTable)
-router.get('/getSqlRecord', getSqlRecord)
-
-module.exports = router
+declare module 'vue/types/vue' {
+    interface Vue {
+        $router: VueRouter;
+        $route: Route;
+        $bkMessage: Function
+    }
+}

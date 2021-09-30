@@ -6,7 +6,7 @@
         "isolatedModules": false,
         "experimentalDecorators": true,
         "esModuleInterop": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "noImplicitThis": true,
         "strictNullChecks": false,
         "removeComments": true,
@@ -15,11 +15,10 @@
         "allowJs": true,
         "resolveJsonModule": true,
         "jsx": "preserve",
-        "baseUrl": "./",
-        "outDir": "./lib/client/dist",
+        "outDir": "dist",
         "paths": {
             "@/*": [
-                "lib/client/src/*"
+                "./lib/client/src/*"
             ]
         },
         "lib": [
@@ -29,9 +28,12 @@
             "scripthost"
         ]
     },
-    "exclude": [
-        "node_modules",
-        "dist"
+    "include": [
+        "./lib/client/src/**/*.js",
+        "./lib/client/src/**/*.ts",
+        "./lib/client/src/**/*.tsx",
+        "./lib/client/src/**/*.vue",
+        "./lib/client/typings/*"
     ],
     "compileOnSave": false
 }
