@@ -125,7 +125,7 @@
                     </bk-input>
                 </bk-form-item>
                 <bk-form-item label="布局模板" style="margin-top: 10px" v-if="!isCopy" error-display-type="normal">
-                    <span class="layout-desc">可多选，作为创建项目页面时可供选择的布局模版，便于项目中统一修改与配置</span>
+                    <span class="layout-desc">可多选，作为创建项目页面时可供选择的布局模板，便于项目中统一修改与配置</span>
                     <layout-thumb-list :list="defaultLayoutList" @change-checked="handleLayoutChecked" @set-default="handleLayoutDefault" />
                 </bk-form-item>
             </bk-form>

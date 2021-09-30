@@ -22,11 +22,6 @@ export default {
         display: 'inline-block'
     },
     props: {
-        title: {
-            type: 'string',
-            val: '卡片标题',
-            tips: '卡片标题'
-        },
         'is-collapse': {
             type: 'boolean',
             val: false,
@@ -57,6 +52,10 @@ export default {
             type: 'boolean',
             val: true,
             tips: '是否显示边框'
+        },
+        'disable-header-style': {
+            type: 'hidden',
+            val: true
         }
     },
     slots: {
@@ -71,6 +70,54 @@ export default {
                 slotContainer: true,
                 renderProps: {},
                 renderStyles: { 'height': '200px', 'pointer-events': 'auto' },
+                renderEvents: {},
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'free-layout-item',
+                        val: [
+                            { children: [] }
+                        ]
+                    }
+                }
+            }
+        },
+        header: {
+            name: ['layout'],
+            type: ['free-layout'],
+            display: 'hidden',
+            val: {
+                name: 'free-layout',
+                type: 'free-layout',
+                slotName: '',
+                slotContainer: true,
+                renderProps: {
+                    'no-response': true
+                },
+                renderStyles: { 'height': '50px', 'pointer-events': 'auto' },
+                renderEvents: {},
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'free-layout-item',
+                        val: [
+                            { children: [] }
+                        ]
+                    }
+                }
+            }
+        },
+        footer: {
+            name: ['layout'],
+            type: ['free-layout'],
+            display: 'hidden',
+            val: {
+                name: 'free-layout',
+                type: 'free-layout',
+                slotName: '',
+                slotContainer: true,
+                renderProps: {},
+                renderStyles: { 'height': '50px', 'pointer-events': 'auto' },
                 renderEvents: {},
                 renderDirectives: [],
                 renderSlots: {
