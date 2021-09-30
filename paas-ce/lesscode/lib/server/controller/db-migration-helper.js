@@ -15,6 +15,7 @@ export const executeApi = async () => {
         if (!apiRecords.find(item => item.name === api)) {
             const result = await eval(`${api}('${api}')`)
             if (result && result.code === 0) {
+                await getRepository(ApiMigraion).save([{ name: api }])
                 console.log(result.message)
             }
         }
@@ -42,7 +43,6 @@ async function setDefaultPageTemplateCategory (apiName) {
                 }
             })
             await transactionalEntityManager.save(PageTemplateCategory, PageTemplateCategoryList)
-            await transactionalEntityManager.save(ApiMigraion, [{ name: apiName }])
         })
         return {
             code: 0,
@@ -61,7 +61,12 @@ async function updateCardSlot () {
         const pageRepository = getRepository(Page)
         const allPageData = await pageRepository.find()
         allPageData.forEach(page => {
-            let targetData = (typeof page.content) === 'string' ? JSON.parse(page.content) : page.content
+            let targetData = []
+            try {
+                targetData = (typeof page.content) === 'string' ? JSON.parse(page.content) : page.content
+            } catch (err) {
+                targetData = []
+            }
             if (!targetData || targetData === 'null') {
                 logger.warn('targetData does not exist or is \'null\'')
                 targetData = []
