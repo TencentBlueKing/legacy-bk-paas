@@ -184,10 +184,10 @@
                 :class="mainContentClass"
                 @click="dragWrapperClickHandler"
                 v-show="actionSelected === 'edit'">
-                <layout v-if="!contentLoading"
-                    @layout-mounted="onLayoutMounted">
+                <layout v-if="!contentLoading" @layout-mounted="onLayoutMounted">
                     <template v-if="!isCustomComponentLoading">
-                        <vue-draggable
+                        <lesscode-canvas id="lesscode-canvas" hour="numeric" minute="numeric" second="numeric"></lesscode-canvas>
+                        <!-- <vue-draggable
                             v-show="!contentLoading"
                             :key="refreshDragAreaKey"
                             class="target-drag-area"
@@ -200,11 +200,10 @@
                             filter=".interactive-component"
                             @choose="onCanvasChoose(arguments)"
                             @change="log"
-                            @end="targetAreaEndHandler"
-                        >
+                            @end="targetAreaEndHandler">
                             <render-index v-for="item in targetData" :key="item.renderKey" :component-data="item">
                             </render-index>
-                        </vue-draggable>
+                        </vue-draggable> -->
                     </template>
                 </layout>
                 <div class="not-visible-mask" v-if="showNotVisibleMask" :style="{ height: canvasHeight + 'px' }">
@@ -695,6 +694,11 @@
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('on-delete-component', this.showDeleteElement)
             })
+
+            setInterval(
+                () => document.getElementById('lesscode-canvas').setAttribute('datetime', new Date()),
+                1000
+            )
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)

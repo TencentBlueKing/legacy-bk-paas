@@ -35,6 +35,9 @@ import targetData from '@/common/targetData.js'
 // monaco 注入帮助文档
 import '../src/components/methods/provide-completion'
 import pureAxios from '@/api/pureAxios.js'
+
+import './lesscode-canvas'
+
 // 用户调用接口使用，无业务逻辑，直接返回数据
 Vue.prototype.$http = pureAxios
 Vue.prototype.$td = targetData

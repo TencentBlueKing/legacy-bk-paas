@@ -13,7 +13,11 @@
     "dev": "better-npm-run dev",
     "stop": "cross-env FOREVER_ROOT=./ forever stop lesscode",
     "list": "cross-env FOREVER_ROOT=./ forever list",
-    "logs": "cross-env FOREVER_ROOT=./ forever logs"
+    "logs": "cross-env FOREVER_ROOT=./ forever logs",
+    "bootstrap": "npm-run-all --serial install:*",
+    "install:child-vue3": "cd lib/client/src/vue3 && npm i",
+    "start-child:vue3": "cd lib/client/src/vue3 && npm start",
+    "main-vue2": "nodemon --config nodemon.json"
   },
   "betterScripts": {
     "dll": {
@@ -28,7 +32,8 @@
       }
     },
     "dev": {
-      "command": "npm run dll && nodemon --config nodemon.json",
+      "command.bak": "npm run dll && nodemon --config nodemon.json",
+      "command": "npm run dll && npm-run-all --parallel main-vue2 start-child:*",
       "env": {
         "NODE_ENV": "development",
         "APP_CODE": ""
@@ -181,6 +186,7 @@
     "node-xlsx": "^0.17.1",
     "nodemon": "~1.19.3",
     "npm": "6.14.15",
+    "npm-run-all": "~4.1.5",
     "optimize-css-assets-webpack-plugin": "~5.0.3",
     "ora": "~4.0.2",
     "path-to-regexp": "^6.1.0",
