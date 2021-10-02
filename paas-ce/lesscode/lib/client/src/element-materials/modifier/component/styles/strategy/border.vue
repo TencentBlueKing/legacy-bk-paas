@@ -208,12 +208,10 @@
         },
         methods: {
             changeSeparateBorderRadius (key, val) {
+                const newVal = val === '' ? '' : val + 'px'
+                this.change(key, newVal)
                 if (!this.isAllBorder) {
-                    const newVal = val === '' ? '' : val + 'px'
-                    this.change(key, newVal)
                     this.isDifferent = computeIsDifferent([this.borderTopLeftRadius, this.borderTopRightRadius, this.borderBottomRightRadius, this.borderBottomLeftRadius])
-                } else {
-                    this.change(key, '')
                 }
             },
             handleBorderStyleChange (pattern, val) {
