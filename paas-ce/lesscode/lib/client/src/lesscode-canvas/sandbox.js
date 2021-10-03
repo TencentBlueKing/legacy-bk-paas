@@ -1,14 +1,11 @@
 
 import bindFunctionToRawWidow from './bind-function'
 import { EventCenterForMicroApp } from './data'
-import { getEffectivePath, defer, unique } from './util'
+import { getEffectivePath, defer, unique, setCurrentAppName, removeDomScope, rawWindow, rawDocument } from './util'
 
 // 记录addEventListener、removeEventListener原生方法
 const rawWindowAddEventListener = window.addEventListener
 const rawWindowRemoveEventListener = window.removeEventListener
-/* eslint-disable no-new-func */
-export const rawWindow = new Function('return window')()
-export const rawDocument = new Function('return document')()
 export const version = '__VERSION__'
 
 const unscopables = {
@@ -34,24 +31,6 @@ const staticEscapeProperties = [
 const escapeSetterKeyList = [
     'location'
 ]
-
-/**
- * Record the currently running app.name
- */
-let currentMicroAppName = null
-export function setCurrentAppName (appName) {
-    currentMicroAppName = appName
-}
-
-// get the currently running app.name
-export function getCurrentAppName () {
-    return currentMicroAppName
-}
-
-// Clear appName
-export function removeDomScope () {
-    setCurrentAppName(null)
-}
 
 /**
  * 重写全局事件的监听和解绑

@@ -1,9 +1,12 @@
 import App, { instanceMap } from './app'
+import { patchElementPrototypeMethods } from './patch'
 
 class LesscodeCanvas extends HTMLElement {
     // eslint-disable-next-line no-useless-constructor
     constructor () {
         super()
+
+        patchElementPrototypeMethods()
     }
 
     static get observedAttributes () {

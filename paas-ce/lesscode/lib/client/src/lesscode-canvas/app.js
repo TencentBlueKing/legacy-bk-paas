@@ -1,10 +1,12 @@
 import loadHtml from './source'
 import Sandbox from './sandbox'
+import { execScripts } from './scripts'
 
 export const instanceMap = new Map()
 
 export default class App {
     constructor ({ name, entry, route, container }) {
+        this.scopecss = true
         this.name = name
         this.entry = entry
         this.container = container
@@ -48,20 +50,20 @@ export default class App {
 
         this.sandbox.start(this.route)
 
-        console.error(this.source.scripts)
-
         // 执行js
         this.source.scripts.forEach(info => {
             // eslint-disable-next-line no-eval
             // (0, eval)(this.sandbox.bindScope(info.code))
-            try {
-                const code = this.sandbox.bindScope(info.code)
-                console.warn(code)
-                // eslint-disable-next-line no-new-func
-                Function(code)()
-            } catch (e) {
-                console.error('[lesscode-canvas from runScript]', e)
-            }
+
+            execScripts(this.source.scripts, this)
+
+            // try {
+            //     const code = this.sandbox.bindScope(info.code)
+            //     // eslint-disable-next-line no-new-func
+            //     Function(code)()
+            // } catch (e) {
+            //     console.error('[lesscode-canvas from runScript]', e)
+            // }
         })
 
         // 标记应用为已渲染

@@ -1,9 +1,40 @@
 /**
+ * Record the currently running app.name
+ */
+let currentMicroAppName = null
+export function setCurrentAppName (appName) {
+    currentMicroAppName = appName
+}
+
+// get the currently running app.name
+export function getCurrentAppName () {
+    return currentMicroAppName
+}
+
+// Clear appName
+export function removeDomScope () {
+    setCurrentAppName(null)
+}
+
+/* eslint-disable no-new-func */
+export const rawWindow = new Function('return window')()
+export const rawDocument = new Function('return document')()
+
+/**
  * Add address protocol
  * @param url address
  */
 export function addProtocol (url) {
     return url.startsWith('//') ? `${location.protocol}${url}` : url
+}
+
+/**
+ * Create pure elements
+ */
+export function pureCreateElement (tagName, options) {
+    const element = rawDocument.createElement(tagName, options)
+    if (element.__MICRO_APP_NAME__) delete element.__MICRO_APP_NAME__
+    return element
 }
 
 /**
@@ -51,4 +82,15 @@ export function unique (array) {
     return array.filter(function (item) {
         return item in this ? false : (this[item] = true)
     }, Object.create(null))
+}
+
+// Check whether the browser supports module script
+export function isSupportModuleScript () {
+    const s = document.createElement('script')
+    return 'noModule' in s
+}
+
+// Create a random symbol string
+export function createNonceStr () {
+    return Math.random().toString(36).substr(2, 15)
 }

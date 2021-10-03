@@ -1,6 +1,8 @@
 import request from './request'
-import { completionPath } from './util'
+import { completionPath, isSupportModuleScript, createNonceStr } from './util'
 import scopedCSS from './scopedcss'
+
+const supportModuleScript = isSupportModuleScript()
 
 const REG_HEAD = new RegExp(/(?<=<head[\s\S]*>)([\s\S]+)(?=<\/head>)/g)
 const REG_BODY = new RegExp(/(?<=<body[\s\S]*>)([\s\S]+)(?=<\/body>)/g)
@@ -11,12 +13,12 @@ export default function loadHtml (app) {
         const head = res.match(REG_HEAD)
         const body = res.match(REG_BODY)
         if (head && body) {
-            html = (head[0] + body[0])
+            html = `<div id="lesscode-canvas-header">${head[0]}</div><div id="lesscode-canvas-body">${body[0]}</div>`
         }
         const elem = document.createElement('div')
         elem.innerHTML = html
 
-        parseDom(app, elem)
+        parseDom(app, elem, elem.querySelector('#lesscode-canvas-header'))
 
         await Promise.all([
             fetchLinksFromHtml(app, elem),
@@ -29,45 +31,112 @@ export default function loadHtml (app) {
     })
 }
 
-function parseDom (app, elem) {
+function parseDom (app, elem, microAppHead) {
     const children = Array.from(elem.children)
 
     children.length && children.forEach(child => {
-        parseDom(app, child)
+        parseDom(app, child, microAppHead)
     })
 
     for (const dom of children) {
-        console.error(dom, dom instanceof HTMLLinkElement, dom instanceof HTMLScriptElement, dom instanceof HTMLStyleElement)
+        // console.error(dom, dom instanceof HTMLLinkElement, dom instanceof HTMLScriptElement, dom instanceof HTMLStyleElement)
         if (dom instanceof HTMLLinkElement) {
-            // 提取css地址
-            const href = dom.getAttribute('href')
-            if (dom.getAttribute('rel') === 'stylesheet' && href) {
-                // 计入source缓存中
-                app.source.links.set(completionPath(href, app.entry), {
-                    code: '' // 代码内容
-                })
+            if (dom.hasAttribute('exclude')) {
+                elem.replaceChild(document.createComment('link element with exclude attribute ignored by micro-app'), dom)
+            } else if (app.scopecss) {
+                // extractLinkFromHtml(dom, elem, app, microAppHead)
+                const rel = dom.getAttribute('rel')
+                let href = dom.getAttribute('href')
+                let replaceComment = null
+                if (rel === 'stylesheet' && href) {
+                    href = completionPath(href, app.entry)
+                    replaceComment = document.createComment(`the link with href=${href} move to micro-app-head as style element`)
+                    const placeholderComment = document.createComment(`placeholder for link with href=${href}`)
+                    // all style elements insert into microAppHead
+                    microAppHead.appendChild(placeholderComment)
+                    app.source.links.set(href, {
+                        code: '',
+                        placeholder: placeholderComment,
+                        isGlobal: dom.hasAttribute('global')
+                    })
+                } else if (href) {
+                    // preload prefetch modulepreload icon ....
+                    dom.setAttribute('href', completionPath(href, app.entry))
+                }
+                if (replaceComment) {
+                    elem.replaceChild(replaceComment, dom)
+                }
+            } else if (dom.hasAttribute('href')) {
+                dom.setAttribute('href', completionPath(dom.getAttribute('href'), app.entry))
+            }
+        } else if (dom instanceof HTMLStyleElement) {
+            if (dom.hasAttribute('exclude')) {
+                elem.replaceChild(document.createComment('style element with exclude attribute ignored by micro-app'), dom)
+            } else if (app.scopecss) {
+                microAppHead.appendChild(scopedCSS(dom, app.name))
+            }
+        } else if (dom instanceof HTMLScriptElement) {
+            // extractScriptElement(dom, elem, app)
+            let replaceComment = null
+            let src = dom.getAttribute('src')
+            if (dom.hasAttribute('exclude')) {
+                replaceComment = document.createComment('script element with exclude attribute ignored by micro-app')
+            } else if (dom.type && !['text/javascript', 'text/ecmascript', 'application/javascript', 'application/ecmascript', 'module'].includes(dom.type)) {
+                return null
+            } else if ((supportModuleScript && dom.noModule) || (!supportModuleScript && dom.type === 'module')) {
+                replaceComment = document.createComment(`${dom.noModule ? 'noModule' : 'module'} script ignored by micro-app`)
+            } else if (src) { // remote script
+                src = completionPath(src, app.entry)
+                const info = {
+                    code: '',
+                    isExternal: true,
+                    isDynamic: false,
+                    async: dom.hasAttribute('async'),
+                    defer: dom.defer || dom.type === 'module',
+                    module: dom.type === 'module',
+                    isGlobal: dom.hasAttribute('global')
+                }
+                app.source.scripts.set(src, info)
+                replaceComment = document.createComment(`script with src='${src}' extract by micro-app`)
+            } else if (dom.textContent) { // inline script
+                const nonceStr = createNonceStr()
+                const info = {
+                    code: dom.textContent,
+                    isExternal: false,
+                    isDynamic: false,
+                    async: false,
+                    defer: dom.type === 'module',
+                    module: dom.type === 'module'
+                }
+                app.source.scripts.set(nonceStr, info)
+                replaceComment = document.createComment('inline script extract by micro-app')
+            } else {
+                replaceComment = document.createComment('script ignored by micro-app')
             }
 
-            // elem.removeChild(dom)
-        } else if (dom instanceof HTMLScriptElement) {
-            // 并提取js地址
-            const src = dom.getAttribute('src')
-            if (src) { // 远程script
-                app.source.scripts.set(completionPath(src, app.entry), {
-                    code: '', // 代码内容
-                    isExternal: true // 是否远程script
-                })
-            } else if (dom.textContent) { // 内联script
-                const nonceStr = Math.random().toString(36).substr(2, 15)
-                app.source.scripts.set(nonceStr, {
-                    code: dom.textContent, // 代码内容
-                    isExternal: false // 是否远程script
-                })
+            elem.replaceChild(replaceComment, dom)
+
+            // // 并提取js地址
+            // const src = dom.getAttribute('src')
+            // if (src) { // 远程script
+            //     app.source.scripts.set(completionPath(src, app.entry), {
+            //         code: '', // 代码内容
+            //         isExternal: true // 是否远程script
+            //     })
+            // } else if (dom.textContent) { // 内联script
+            //     const nonceStr = Math.random().toString(36).substr(2, 15)
+            //     app.source.scripts.set(nonceStr, {
+            //         code: dom.textContent, // 代码内容
+            //         isExternal: false // 是否远程script
+            //     })
+            // }
+            // elem.replaceChild(document.createComment(`script with src='${src}' extract by lesscode-canvas`), dom)
+        } else if (dom instanceof HTMLMetaElement || dom instanceof HTMLTitleElement) {
+            elem.removeChild(dom)
+        } else {
+            if (/^(img|iframe)$/i.test(dom.tagName) && dom.hasAttribute('src')) {
+                dom.setAttribute('src', completionPath(dom.getAttribute('src'), app.entry))
             }
-            elem.replaceChild(document.createComment(`script with src='${src}' extract by lesscode-canvas`), dom)
-        } else if (dom instanceof HTMLStyleElement) {
-            // 进行样式隔离
-            scopedCSS(dom, app.name)
         }
     }
 }
