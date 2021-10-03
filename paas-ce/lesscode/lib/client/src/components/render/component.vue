@@ -180,9 +180,9 @@
                     width
                 }
 
-                // margin属性需要加到遮罩上
+                // margin属性需要加到组件外层、render-grid不用加，render-grid的margin加在了render-row上面
                 const marginStypes = ['marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'margin']
-                marginStypes.forEach(function (item) {
+                this.componentData.type !== 'render-grid' && marginStypes.forEach(function (item) {
                     if (componentStyles[item]) {
                         styles[item] = componentStyles[item]
                     }
