@@ -535,12 +535,21 @@
                 this.dialog.page.formData.project = []
             },
             async handleSelectChange (newValue, oldValue) {
-                console.log(newValue, oldValue, 143)
                 if (newValue.length > oldValue.length) {
                     const selectedProject = this.dialog.page.projectList.find(project => project.id === newValue[newValue.length - 1])
                     const selected = { id: selectedProject.id, projectName: selectedProject.projectName, selectedCategory: '' }
-                    await this.getTemplateCategory(selected)
-                    this.dialog.page.selectedList.push(selected)
+                    // check是否已被添加到被选中的项目
+                    const hasApply = await this.$store.dispatch('pageTemplate/checkIsExist', { belongProjectId: selectedProject.id, parentId: this.dialog.page.curPage.id })
+                    if (hasApply === true) {
+                        this.dialog.page.formData.project.pop()
+                        this.$bkMessage({
+                            theme: 'warning',
+                            message: '模板已被该项目应用,无需重复添加'
+                        })
+                    } else {
+                        await this.getTemplateCategory(selected)
+                        this.dialog.page.selectedList.push(selected)
+                    }
                 } else {
                     const that = this
                     oldValue.forEach(function (item, index) {

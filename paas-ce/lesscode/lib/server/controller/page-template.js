@@ -1,7 +1,6 @@
 import { getConnection, getRepository, In } from 'typeorm'
 import _ from 'lodash'
 import PageTemplate from '../model/entities/page-template'
-import TemplateCategory from '../model/entities/page-template-category'
 import * as TemplateCategoryModel from '../model/page-template-category'
 import * as PageTemplateModel from '../model/page-template'
 import Func from '../model/entities/func'
@@ -72,6 +71,17 @@ export const create = async (ctx) => {
     try {
         const { params } = ctx.request.body
 
+        // 模板名称已存在
+        const record = await PageTemplateModel.getOne({
+            templateName: params.templateName,
+            belongProjectId: params.belongProjectId,
+            deleteFlag: 0
+        })
+        if (record) {
+            ctx.throwError({
+                message: '模板名称已存在'
+            })
+        }
         const createTemplate = getRepository(PageTemplate).create(params)
         const res = await getRepository(PageTemplate).save(createTemplate)
         ctx.send({
@@ -92,6 +102,31 @@ export const detail = async (ctx) => {
             code: 0,
             message: 'success',
             data: template
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message || err
+        })
+    }
+}
+
+// check符合条件的pageTemplate是否已存在
+export const checkIsExist = async (ctx) => {
+    try {
+        const params = ctx.request.body
+        let isExist = false
+        
+        const record = await PageTemplateModel.getOne({
+            ...params,
+            deleteFlag: 0
+        })
+        if (record) {
+            isExist = true
+        }
+        ctx.send({
+            code: 0,
+            message: `success`,
+            data: isExist
         })
     } catch (err) {
         ctx.throwError({
@@ -208,18 +243,21 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
     return { varIds, funcIds, defaultFuncGroupId }
 }
 
-// 编辑页面
+// 编辑模板
 export const update = async (ctx) => {
      try {
         const { id, params } = ctx.request.body
 
-        // 分类已存在
+        // 模板名称已存在
         const record = await PageTemplateModel.getOne({
             templateName: params.templateName,
-            belongProjectId: params.belongProjectId
+            belongProjectId: params.belongProjectId,
+            deleteFlag: 0
         })
         if (record && record.id !== id) {
-            throw new Error(`分类已存在`)
+            ctx.throwError({
+                message: '模板名称重复'
+            })
         }
         const res = await PageTemplateModel.updateById(id, params)
         ctx.send({
@@ -244,43 +282,6 @@ export const deleteTemplate = async (ctx) => {
         })
     } catch (err) {
         ctx.throw(err)
-    }
-}
-
-// 复制页面
-export const copyPage = async (ctx) => {
-    try {
-        const { projectId, pageData } = ctx.request.body
-        const projectPageData = {
-            projectId
-        }
-
-        const { id: postId, pageName: postName, pageCode, pageRoute } = pageData
-        const prePage = await getRepository(Page).findOne(postId)
-        const newPageRoute = formatRoutePath(pageRoute)
-        const newPageData = Object.assign(prePage, { pageName: postName, pageCode, pageRoute: newPageRoute, id: undefined })
-
-        // 页面使用的layout
-        const { layoutId } = await getRepository(PageRoute).findOne({ pageId: pageData.id })
-        const layoutInst = await getRepository(LayoutInst).findOne(layoutId)
-        const fullPath = `${layoutInst.routePath}/${newPageData.pageRoute}`
-
-        if (await hasRoute({ path: fullPath }, projectId)) {
-            throw Error('该页面路由已存在')
-        }
-
-        newPageData.layoutId = layoutInst.id
-
-        const { id } = await PageModel.createPage(newPageData, projectPageData, pageData.id)
-        ctx.send({
-            code: 0,
-            message: 'success',
-            data: id
-        })
-    } catch (err) {
-        ctx.throwError({
-            message: err.message
-        })
     }
 }
 
