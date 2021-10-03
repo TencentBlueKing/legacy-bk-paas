@@ -46,12 +46,12 @@ export default {
         window.microApp && window.microApp.dispatch({type: '子应用发送的数据'})
     }
 
-    window.microApp && window.microApp.addDataListener(handleDataChange)
-    window.microApp && window.microApp.addGlobalDataListener(handleGlobalDataChange)
+    // window.microApp && window.microApp.addDataListener(handleDataChange)
+    // window.microApp && window.microApp.addGlobalDataListener(handleGlobalDataChange)
 
     onBeforeUnmount(() => {
-        window.microApp && window.microApp.removeDataListener(handleDataChange)
-        window.microApp && window.microApp.removeDataListener(handleGlobalDataChange)
+        // window.microApp && window.microApp.removeDataListener(handleDataChange)
+        // window.microApp && window.microApp.removeDataListener(handleGlobalDataChange)
     });
 
     return {

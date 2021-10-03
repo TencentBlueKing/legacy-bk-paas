@@ -36,7 +36,8 @@ import targetData from '@/common/targetData.js'
 import '../src/components/methods/provide-completion'
 import pureAxios from '@/api/pureAxios.js'
 
-import './lesscode-canvas'
+import lesscodeCanvas from '@/lesscode-canvas'
+lesscodeCanvas.start()
 
 // 用户调用接口使用，无业务逻辑，直接返回数据
 Vue.prototype.$http = pureAxios

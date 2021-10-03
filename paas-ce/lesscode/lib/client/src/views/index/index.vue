@@ -186,7 +186,10 @@
                 v-show="actionSelected === 'edit'">
                 <layout v-if="!contentLoading" @layout-mounted="onLayoutMounted">
                     <template v-if="!isCustomComponentLoading">
-                        <lesscode-canvas id="lesscode-canvas" hour="numeric" minute="numeric" second="numeric"></lesscode-canvas>
+                        <lesscode-canvas id="lesscode-canvas" name="vue3"
+                            entry="http://dev.open.oa.com:5001/micro-app/vue3/"
+                            :route="$route.path">
+                        </lesscode-canvas>
                         <!-- <vue-draggable
                             v-show="!contentLoading"
                             :key="refreshDragAreaKey"
@@ -694,11 +697,6 @@
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('on-delete-component', this.showDeleteElement)
             })
-
-            setInterval(
-                () => document.getElementById('lesscode-canvas').setAttribute('datetime', new Date()),
-                1000
-            )
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)
