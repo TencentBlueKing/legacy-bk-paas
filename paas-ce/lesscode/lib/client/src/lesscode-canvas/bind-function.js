@@ -22,13 +22,9 @@ function isConstructor (value) {
 
     const valueStr = value.toString()
 
-    const result = (
-        value.prototype
-    && value.prototype.constructor === value
-    && Object.getOwnPropertyNames(value.prototype).length > 1
-    )
-    || /^function\s+[A-Z]/.test(valueStr)
-    || /^class\s+/.test(valueStr)
+    const result = (value.prototype && value.prototype.constructor === value && Object.getOwnPropertyNames(value.prototype).length > 1)
+        || /^function\s+[A-Z]/.test(valueStr)
+        || /^class\s+/.test(valueStr)
 
     constructorMap.set(value, result)
 
