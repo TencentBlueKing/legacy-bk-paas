@@ -287,8 +287,9 @@
             width: 100%;
             height: 81px;
             img {
-                width: 100%;
+                max-width: 100%;
                 height: 100%;
+                object-fit: contain;
             }
             .mask {
                 display: flex;
