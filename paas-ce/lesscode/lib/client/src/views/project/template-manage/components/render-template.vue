@@ -333,6 +333,8 @@
                         border-radius: 4px 4px 0px 0px;
                         img {
                             max-width: 100%;
+                            height: 100%;
+                            object-fit: contain;
                         }
 
                         .empty-preview-img {

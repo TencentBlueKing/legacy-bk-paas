@@ -90,7 +90,7 @@
                                 <div class="item-bd">
                                     <template>
                                         <div class="preview">
-                                            <img v-if="page.previewImg" :src="getPreviewImg(page.previewImg)" alt="项目缩略预览">
+                                            <img class="page-img" v-if="page.previewImg" :src="getPreviewImg(page.previewImg)" alt="项目缩略预览">
                                             <div class="empty-preview-img" v-else>页面为空</div>
                                         </div>
                                     </template>
@@ -717,6 +717,10 @@
                 border-radius: 4px 4px 0px 0px;
                 img {
                     max-width: 100%;
+                }
+                .page-img {
+                    height: 100%;
+                    object-fit: contain;
                 }
 
                 &::before {
