@@ -11,4 +11,4 @@
 
 const IS_DEV = process.env.NODE_ENV === 'development'
 
-module.exports = IS_DEV ? '../../v3logs' : './app/v3logs'
+module.exports = IS_DEV ? '../../v3logs' : '/app/v3logs'
