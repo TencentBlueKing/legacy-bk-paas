@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-form',
     group: '表单',
     order: 0,
-    styles: ['size', 'margin', 'font', 'backgroundColor'],
+    styles: ['size', 'margin', 'padding', 'font', 'border', 'backgroundColor'],
     directives: [
         {
             type: 'v-bind',
