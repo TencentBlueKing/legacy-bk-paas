@@ -412,11 +412,8 @@ function getMappingNode (node) {
  */
 function commonElementHander (parent, newChild, passiveChild, rawMethod) {
     if (newChild && newChild.__MICRO_APP_NAME__) {
-        console.error(111)
         const app = instanceMap.get(newChild.__MICRO_APP_NAME__)
         if (app && app.container) {
-            console.error(222)
-            // return rawMethod.call(app.container, newChild, passiveChild)
             return invokePrototypeMethod(
                 app,
                 rawMethod,
@@ -425,21 +422,17 @@ function commonElementHander (parent, newChild, passiveChild, rawMethod) {
                 passiveChild && getMappingNode(passiveChild)
             )
         } else if (rawMethod === rawAppend || rawMethod === rawPrepend) {
-            console.error(333)
             return rawMethod.call(parent, newChild)
         }
         return rawMethod.call(parent, newChild, passiveChild)
     } else if (rawMethod === rawAppend || rawMethod === rawPrepend) {
-        console.error(444)
         const appName = getCurrentAppName()
         if (!(newChild instanceof Node) && appName) {
             const app = instanceMap.get(appName)
             if (app && app.container) {
                 if (parent === document.head) {
-                    console.error(555)
                     return rawMethod.call(app.container.querySelector('#lesscode-canvas-header'), newChild)
                 } else if (parent === document.body) {
-                    console.error(666)
                     return rawMethod.call(app.container.querySelector('#lesscode-canvas-body'), newChild)
                 }
             }

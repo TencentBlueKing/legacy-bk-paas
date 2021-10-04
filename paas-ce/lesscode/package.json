@@ -6,9 +6,9 @@
   "scripts": {
     "clean": "rimraf lib/client/dist",
     "clean-dll": "rimraf lib/client/static/lib*",
-    "build": "better-npm-run build",
-    "local": "better-npm-run local",
-    "online": "better-npm-run online",
+    "build1": "better-npm-run build",
+    "local1": "better-npm-run local",
+    "online1": "better-npm-run online",
     "dll": "better-npm-run dll",
     "dev": "better-npm-run dev",
     "stop": "cross-env FOREVER_ROOT=./ forever stop lesscode",
@@ -17,7 +17,16 @@
     "bootstrap": "npm-run-all --serial install:*",
     "install:child-vue3": "cd lib/client/src/vue3 && npm i",
     "start-child:vue3": "cd lib/client/src/vue3 && npm start",
-    "main-vue2": "nodemon --config nodemon.json"
+    "main-vue2": "nodemon --config nodemon.json",
+    "build:child-vue3": "cd lib/client/src/vue3 && npm run build",
+    "build:main": "npm run clean && npm run dll && node lib/client/build/build.js",
+    "build": "cross-env NODE_ENV=production BKPAAS_ENVIRONMENT=prod npm-run-all --parallel build:main build:child-vue3",
+    "online:main": "cross-env NODE_ENV=production BKPAAS_ENVIRONMENT=prod FOREVER_ROOT=./ forever --minUptime 1000 --spinSleepTime 2000 start forever.json",
+    "online:child-vue3": "cross-env NODE_ENV=production node lib/server/sub-server.js",
+    "online": "npm-run-all build --parallel online:main online:child-vue3",
+    "local:main": "cross-env NODE_ENV=local node lib/server/app.browser.js",
+    "local:child-vue3": "cross-env NODE_ENV=production node lib/server/sub-server.js",
+    "local": "npm-run-all build --parallel local:main local:child-vue3"
   },
   "betterScripts": {
     "dll": {

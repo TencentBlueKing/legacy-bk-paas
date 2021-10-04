@@ -6,10 +6,10 @@
     <br />
     <button class="bk-button">tesddt</button>
     <router-link to="/page2">
-      <el-button type="primary" plain>跳转element-plus</el-button>
+      <el-button type="primary" plain>show element-plus</el-button>
     </router-link>
     <el-button type="primary" plain @click="handleClick">show globalStr</el-button>
-    <el-button type="primary" plain @click="send">向基座发数据</el-button>
+    <el-button type="primary" plain @click="send">向 parent 发数据</el-button>
   </div>
 </template>
 
