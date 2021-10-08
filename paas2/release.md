@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.26
+    - update: esb update monitor_v3/jobv3/itsm/iam/cc confapis
+
 # 2.12.25
     - update: esb udpate cc confapis to cc 3.9
 
