@@ -1,0 +1,34 @@
+---
+
+- path: /v2/iam/admin/groups/
+  name: admin_api_list_group
+  label: 查询(全局)用户组列表
+  label_en: admin api list group
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/admin/groups/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/iam/admin/groups/{group_id}/members/
+  name: admin_api_list_group_member
+  label: 查询用户组的成员列表
+  label_en: admin api list group member
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/admin/groups/{group_id}/members/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/iam/admin/subjects/{subject_type}/{subject_id}/groups/
+  name: admin_api_list_group_of_subject_join
+  label: 查询Subject加入的用户组列表
+  label_en: admin api list group of subject join
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/admin/subjects/{subject_type}/{subject_id}/groups/
+  dest_http_method: GET
+  is_hidden: true

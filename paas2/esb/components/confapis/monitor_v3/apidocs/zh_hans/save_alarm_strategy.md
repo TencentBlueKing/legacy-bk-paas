@@ -11,11 +11,11 @@
 | 字段        | 类型   | 必选 | 描述             |
 | :---------- | ------ | ---- | ---------------- |
 | action_list | list   | 是   | 动作列表(Action) |
-| target      | list   | 是   | 监控目标         |
 | bk_biz_id   | int    | 是   | 业务ID           |
 | item_list   | list   | 是   | 监控项(Item)     |
 | name        | string | 是   | 策略名称         |
 | scenario    | string | 是   | 监控对象         |
+| is_enabled    | string | 否   | 是否开启，默认开启|
 
 #### NoticeAction
 
@@ -62,6 +62,7 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
 | no_data_config.is_enabled | bool   | 是   | 是否开启无数据告警          |
 | no_data_config.continous  | int    | 否   | 无数据告警检测周期数        |
 | data_type_label           | string | 是   | 数据类型                    |
+| target      | list   | 是   | 监控目标         |
 
 #### RtQueryConfig
 
@@ -169,12 +170,12 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
       "data_source_label":"bk_monitor",
       "algorithm_list":[
         {
-          "algorithm_config":[
+          "algorithm_config":[[
             {
               "threshold":0.1,
               "method":"gte"
             }
-          ],
+          ]],
           "level":1,
           "trigger_config":{
             "count":1,
@@ -192,23 +193,22 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
         "continuous":5
       },
       "data_type_label":"time_series",
-      "name":"\u7a7a\u95f2\u7387"
-    }
-  ],
-  "target":[
-    [
-      {
-        "field":"ip",
-        "method":"eq",
-        "value":[
+      "name":"\u7a7a\u95f2\u7387",
+      "target":[
+        [
           {
-            "ip":"127.0.0.1",
-            "bk_cloud_id":0,
-            "bk_supplier_id":0
-          },
+            "field":"bk_target_ip",
+            "method":"eq",
+            "value":[
+              {
+                "ip":"127.0.0.1",
+                "bk_cloud_id":0
+              }
+            ]
+          }
         ]
-      }
-    ]
+      ]
+    }
   ],
   "scenario":"os",
   "action_list":[
