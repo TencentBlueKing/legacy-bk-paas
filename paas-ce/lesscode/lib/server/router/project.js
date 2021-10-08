@@ -22,7 +22,8 @@ const {
     checkname,
     projectDetail,
     verify,
-    my
+    my,
+    getPreviewImg
 } = require('../controller/project')
 
 const router = new Router({
@@ -42,6 +43,7 @@ router.use(['/update', '/delete', '/favorite', '/delete', '/detail'], async (ctx
 
 router.post('/create', createProject)
 router.get('/query', queryProject)
+router.get('/previewimg', getPreviewImg)
 router.put('/update', updateProject)
 router.delete('/delete', deleteProject)
 router.post('/favorite', favorite)
