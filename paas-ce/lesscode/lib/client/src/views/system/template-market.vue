@@ -32,8 +32,7 @@
                                 <div class="item-bd">
                                     <template>
                                         <div class="preview">
-                                            <img v-if="project.previewImg" :src="getPreviewImg(project.previewImg)" alt="项目缩略预览">
-                                            <div class="empty-preview-img" v-else>页面为空</div>
+                                            <page-preview-thumb alt="项目缩略预览" :project-id="project.id" />
                                         </div>
                                     </template>
                                     <div class="operate-btns">
@@ -226,6 +225,7 @@
 <script>
     import preivewErrImg from '@/images/preview-error.png'
     import DownloadDialog from './components/download-dialog'
+    import PagePreviewThumb from '@/components/project/page-preview-thumb.vue'
     import { PROJECT_TEMPLATE_TYPE, PAGE_TEMPLATE_TYPE } from '@/common/constant'
     import { mapActions } from 'vuex'
     import { getVarList, getFuncList } from '@/common/process-targetdata'
@@ -242,7 +242,8 @@
     export default {
         name: 'template-market',
         components: {
-            DownloadDialog
+            DownloadDialog,
+            PagePreviewThumb
         },
         data () {
             return {
@@ -624,7 +625,7 @@
             }
         }
     }
-    
+
     .empty{
         height: 300px;
     }
