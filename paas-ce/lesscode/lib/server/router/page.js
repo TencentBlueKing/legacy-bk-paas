@@ -27,7 +27,8 @@ const {
     pageLockStatus,
     updatePageActive,
     occupyPage,
-    relasePage
+    relasePage,
+    getPreviewImg
 } = require('../controller/page')
 
 const router = new Router({
@@ -74,5 +75,6 @@ router.get('/pageLockStatus', pageLockStatus)
 router.post('/updatePageActive', updatePageActive)
 router.post('/occupyPage', occupyPage)
 router.post('/releasePage', relasePage)
+router.get('/previewimg', getPreviewImg)
 
 module.exports = router

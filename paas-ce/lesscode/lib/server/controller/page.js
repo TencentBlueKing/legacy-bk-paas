@@ -499,7 +499,6 @@ const getPageLockStatus = async (ctx, pageData) => {
         activeUser: activeUser,
         accessible: false,
         pageId: pageId
-        
     }
 
     const userInfo = ctx.session.userInfo || {}
@@ -532,7 +531,7 @@ const updagePageActiveInfo = async (pageId, username) => {
 export const pageLockStatus = async ctx => {
     try {
         const pageLockStatus = await getPageLockStatus(ctx)
-        
+
         ctx.send({
             code: 0,
             message: 'OK',
@@ -551,7 +550,7 @@ export const updatePageActive = async ctx => {
         const pageId = ctx.request.body.pageId
         const userInfo = ctx.session.userInfo || {}
         const currentPage = await updagePageActiveInfo(pageId, userInfo.username)
-    
+
         ctx.send({
             code: 0,
             message: 'OK',
@@ -601,7 +600,7 @@ export const relasePage = async ctx => {
         const { pageId, activeUser } = ctx.request.body
         const repository = getRepository(Page)
         const currentPage = await repository.findOne(pageId) || {}
-        
+
         if (activeUser === currentPage.activeUser) {
             currentPage.activeUser = null
             repository.save(currentPage)
@@ -620,4 +619,21 @@ export const relasePage = async ctx => {
             message: error
         })
     }
+}
+
+export const getPreviewImg = async (ctx) => {
+    const { id } = ctx.request.query
+    let { previewImg } = await PageModel.findPagePreviewImg(id) || {}
+
+    const dataUriPrefix = 'data:image/png;base64,'
+
+    if (!previewImg || !previewImg.startsWith(dataUriPrefix)) {
+        // 返回 1×1 px 透明png，用于在前台标记为空区别于加载失败
+        previewImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+    }
+
+    const imgBase64 = previewImg.replace(dataUriPrefix, '')
+    const buf = Buffer.from(imgBase64, 'base64')
+    ctx.type = 'image/png'
+    ctx.body = buf
 }
