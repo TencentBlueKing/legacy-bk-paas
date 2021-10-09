@@ -4,7 +4,7 @@
   name: mgmt_api_create_grade_manager
   label: 创建分级管理员
   label_en: mgmt api create grade manager
-  suggest_method: POST
+  method: POST
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/grade_managers/
@@ -15,7 +15,7 @@
   name: mgmt_api_list_grade_manager_member
   label: 查询分级管理员成员列表
   label_en: mgmt api list grade manager member
-  suggest_method: GET
+  method: GET
   api_type: query
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/grade_managers/{grade_manager_id}/members/
@@ -26,7 +26,7 @@
   name: mgmt_api_add_grade_manager_member
   label: 添加分级管理员成员
   label_en: mgmt api add grade manager member
-  suggest_method: POST
+  method: POST
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/grade_managers/{grade_manager_id}/members/
@@ -37,7 +37,7 @@
   name: mgmt_api_delete_grade_manager_member
   label: 删除分级管理员成员
   label_en: mgmt api delete grade manager member
-  suggest_method: DELETE
+  method: DELETE
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/grade_managers/{grade_manager_id}/members/
@@ -48,7 +48,7 @@
   name: mgmt_api_list_grade_manager_groups
   label: 查询用户组列表
   label_en: mgmt api list grade manager groups
-  suggest_method: GET
+  method: GET
   api_type: query
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/grade_managers/{grade_manager_id}/groups/
@@ -59,7 +59,7 @@
   name: mgmt_api_create_group
   label: 创建用户组
   label_en: mgmt api create group
-  suggest_method: POST
+  method: POST
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/grade_managers/{grade_manager_id}/groups/
@@ -70,7 +70,7 @@
   name: mgmt_api_update_group_base_info
   label: 更新用户组名称和描述
   label_en: mgmt api update group base info
-  suggest_method: PUT
+  method: PUT
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/
@@ -81,7 +81,7 @@
   name: mgmt_api_delete_group
   label: 删除用户组
   label_en: mgmt api delete group
-  suggest_method: DELETE
+  method: DELETE
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/
@@ -92,7 +92,7 @@
   name: mgmt_api_list_group_member
   label: 查询用户组成员列表
   label_en: mgmt api list group member
-  suggest_method: GET
+  method: GET
   api_type: query
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/members/
@@ -103,7 +103,7 @@
   name: mgmt_api_add_group_member
   label: 添加用户组成员
   label_en: mgmt api add group member
-  suggest_method: POST
+  method: POST
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/members/
@@ -114,7 +114,7 @@
   name: mgmt_api_delete_group_member
   label: 删除用户组成员
   label_en: mgmt api delete group member
-  suggest_method: DELETE
+  method: DELETE
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/members/
@@ -125,7 +125,7 @@
   name: mgmt_api_grant_group_policy
   label: 用户组授权
   label_en: mgmt api grant group policy
-  suggest_method: POST
+  method: POST
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/policies/
@@ -136,7 +136,7 @@
   name: mgmt_api_list_user_grade_manager
   label: 查询用户的分级管理员列表
   label_en: mgmt api list user grade manager
-  suggest_method: GET
+  method: GET
   api_type: query
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/users/grade_managers/
@@ -147,7 +147,7 @@
   name: mgmt_api_list_user_join_group
   label: 查询用户在某个分级管理员下的加入的用户组列表
   label_en: mgmt api list user join group
-  suggest_method: GET
+  method: GET
   api_type: query
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/users/grade_managers/{grade_manager_id}/groups/
@@ -158,7 +158,7 @@
   name: mgmt_api_create_group_application
   label: 创建用户组申请单据
   label_en: mgmt api create group application
-  suggest_method: POST
+  method: POST
   api_type: operate
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/applications/
