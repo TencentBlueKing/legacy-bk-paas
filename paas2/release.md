@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.10
+    - update: esb update monitor_v3/jobv3/itsm/iam/cc confapis
+
 # 2.13.9
     - bugfix: python3 install migration fail
     - breaking changes: remve oauth2 from login
@@ -30,6 +33,9 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.26
+    - update: esb update monitor_v3/jobv3/itsm/iam/cc confapis
 
 # 2.12.25
     - update: esb udpate cc confapis to cc 3.9

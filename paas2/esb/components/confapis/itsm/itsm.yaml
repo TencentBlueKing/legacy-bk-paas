@@ -140,3 +140,13 @@
   comp_codename: generic.v2.itsm.itsm_component
   dest_path: /o/bk_itsm/openapi/service/get_service_roles/
   dest_http_method: GET
+
+- path: /v2/itsm/get_workflow_detail/
+  name: get_workflow_detail
+  label: 服务流程详情
+  label_en: get workflow detail
+  suggest_method: GET
+  api_type: query
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /openapi/workflow/get_workflow_detail/
+  dest_http_method: GET
