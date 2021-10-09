@@ -433,7 +433,7 @@ host_set_template
         11
       ],
       "notice_template": {
-        "anomaly_template": "{{content.level}}\n{{content.begin_time}}\n{{content.time}}\n{{content.duration}}\n{{content.target_type}}\n{{content.data_source}}\n{{content.content}}\n{{content.current_value}}\n{{content.biz}}\n{{content.target}}\n{{content.dimension}}\n{{content.detail}}\n{{content.related_info}}",
+        "anomaly_template": "",
         "recovery_template": ""
       }
     }
