@@ -15,7 +15,9 @@
 | data_id     | int | 是   | 数据源ID |
 | operator | string | 是 | 操作者 |
 | source_label | string | 是 | 数据来源标签，例如：数据平台(bk_data)，监控采集器(bk_monitor_collector) |
-| type_label | string | 是 | 数据类型标签，例如：时序数据(time_series)，事件数据(event)，日志数据(log) | 
+| type_label | string | 是 | 数据类型标签，例如：时序数据(time_series)，事件数据(event)，日志数据(log) |
+| option | string | 否 | 数据源配置选项内容，格式为{`option_name`: `option_value`} | 
+| is_enable | bool | 否 | 数据源是否启用 | 
 
 **注意**： 上述的`source_tag`及`data_type`都应该通过`metadata_get_label`接口获取，不应该自行创建 
 
