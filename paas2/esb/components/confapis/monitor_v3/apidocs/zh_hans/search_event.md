@@ -14,6 +14,8 @@
 | time_range | string | 否   | 事件结束的时间范围，格式为：2020-02-26 00:00:00 -- 2020-02-28 23:59:59 |
 | days       | int    | 否   | 查询最近几天内的时间，这个参数存在，time_range则失效         |
 | conditions | list   | 否   | 查询条件                                                     |
+| page       | int | 否 | 第几页，不传则不分页 |
+| page_size | int | 否 | 每页数量，默认100 |
 
 > 需要注意的是，当前未恢复的事件不受时间条件的约束，也就是无论选择什么时间范围，当前的未恢复的事件都会被查出来，除非使用conditions进行事件状态过滤。
 
@@ -86,7 +88,9 @@ conditions用于按事件相关的其他字段过滤事件，由key,value组成�
         "bk_monitor|time_series"
       ]
     }
-  ]
+  ],
+  "page": 1,
+  "page_size": 100
 }
 ```
 

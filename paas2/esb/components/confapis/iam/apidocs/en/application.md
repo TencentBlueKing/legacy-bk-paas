@@ -10,7 +10,7 @@ application for access system
 
 | Field      |  Type      | Required   |  Description      |
 |-----------|------------|--------|------------|
-| system |  string  | Yes   | system id |
+| system_id |  string  | Yes   | system id |
 | actions |  array   | Yes   | permission actions |
 
 #### actions
@@ -24,7 +24,7 @@ application for access system
 
 | Field      |  Type      | Required   |  Description      |
 |-----------|------------|--------|------------|
-| system |  string  | Yes   | resource type system id                            |
+| system_id |  string  | Yes   | resource type system id                            |
 | type | string | Yes | resource type id        |
 | instances | array[array] | Yes | resource instance |
 | attributes | array | No | attribute |
@@ -56,13 +56,13 @@ application for access system
 
 ```python
 {
-  "system": "bk_job",
+  "system_id": "bk_job",
   "actions": [
     {
       "id": "execute_job",
       "related_resource_types": [
         {
-          "system": "bk_job",
+          "system_id": "bk_job",
           "type": "job",
           "instances": [
             [
@@ -75,7 +75,7 @@ application for access system
           ]
         },
         {
-          "system": "bk_cmdb",
+          "system_id": "bk_cmdb",
           "type": "host",
           "instances": [
             [

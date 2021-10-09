@@ -17,6 +17,7 @@
 | notice_way      | dict   | 是   | 各个级别的通知方式       |
 | id              | int    | 否   | 告警组ID，如果没有则创建 |
 | notice_receiver | list   | 是   | 通知对象列表             |
+| wxwork_group | dict | 否 | 企业微信机器人 |
 
 #### notice_receiver - 通知对象列表
 
@@ -61,7 +62,12 @@
   },
   "webhook_url": "https://www.qq.com",
   "message": "测试通知",
-  "id": 1
+  "id": 1,
+  "wxwork_group": {
+    "1": "群会话ID",
+    "2": "群会话ID",
+    "3": "群会话ID"
+  }
 }
 ```
 

@@ -858,17 +858,6 @@
   suggest_method: GET
   is_hidden: true
 
-- api_type: operate
-  comp_codename: generic.v2.nodeman.nodeman_component
-  name: subscription_update
-  label: 更新订阅
-  label_en: null
-  dest_path: /backend/api/subscription/update/
-  path: /v2/nodeman/backend/api/subscription/update/
-  dest_http_method: POST
-  suggest_method: POST
-  is_hidden: true
-
 - api_type: query
   comp_codename: generic.v2.nodeman.nodeman_component
   name: subscription_update

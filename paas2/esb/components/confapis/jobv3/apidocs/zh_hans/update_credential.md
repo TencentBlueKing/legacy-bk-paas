@@ -8,17 +8,17 @@
 
 #### 接口参数
 
-| 字段             |  类型      | 必选   |  描述       |
-|-----------------|------------|--------|------------|
-| bk_biz_id       |  long      | 是     | 业务 ID     |
-| id              |  string    | 是     | 凭据 ID     |
-| name            |  string    | 否     | 凭据名称     |
-| type            |  string    | 否     | 凭据类型，取值可为ACCESS_KEY_SECRET_KEY,PASSWORD,USERNAME_PASSWORD,SECRET_KEY |
-| description     |  string    | 否     | 凭据描述 |
-| access_key      |  string    | 否     | 凭据类型为ACCESS_KEY_SECRET_KEY时填写 |
-| secret_key      |  string    | 否     | 凭据类型为ACCESS_KEY_SECRET_KEY/SECRET_KEY时填写 |
-| username        |  string    | 否     | 凭据类型为USERNAME_PASSWORD时填写 |
-| password        |  string    | 否     | 凭据类型为USERNAME_PASSWORD/PASSWORD时填写 |
+| 字段                        |  类型      | 必选   |  描述       |
+|----------------------------|------------|--------|------------|
+| bk_biz_id                  |  long      | 是     | 业务 ID     |
+| id                         |  string    | 是     | 凭据 ID     |
+| name                       |  string    | 否     | 凭据名称     |
+| type                       |  string    | 否     | 凭据类型，取值可为ACCESS_KEY_SECRET_KEY,PASSWORD,USERNAME_PASSWORD,SECRET_KEY |
+| description                |  string    | 否     | 凭据描述 |
+| credential_access_key      |  string    | 否     | 凭据类型为ACCESS_KEY_SECRET_KEY时填写 |
+| credential_secret_key      |  string    | 否     | 凭据类型为ACCESS_KEY_SECRET_KEY/SECRET_KEY时填写 |
+| credential_username        |  string    | 否     | 凭据类型为USERNAME_PASSWORD时填写 |
+| credential_password        |  string    | 否     | 凭据类型为USERNAME_PASSWORD/PASSWORD时填写 |
 
 
 ### 请求参数示例
@@ -33,8 +33,8 @@
   "name": "testCredential",
   "type": "USERNAME_PASSWORD",
   "description": "This is a new credential",
-  "username": "admin",
-  "password": "newPassword"
+  "credential_username": "admin",
+  "credential_password": "newPassword"
 }
 ```
 
