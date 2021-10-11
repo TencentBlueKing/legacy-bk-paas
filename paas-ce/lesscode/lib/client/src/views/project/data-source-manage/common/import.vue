@@ -1,56 +1,82 @@
 <template>
     <section>
-        <bk-button @click="showExport">导入</bk-button>
+        <bk-button @click="showImport">导入</bk-button>
 
         <bk-dialog
             theme="primary"
             header-position="left"
             width="640"
-            v-model="isShowExport"
+            v-model="isShowImport"
             :title="title">
-            <bk-button @click="importFile">导入</bk-button>
+            <bk-upload
+                with-credentials
+                :limit="1"
+                :multiple="false"
+                :url="uploadUrl"
+                accept=".sql,.cvs"
+                @on-success="importFile"
+            ></bk-upload>
 
+            <span class="import-tip">
+                支持 CSV，SQL 文件格式，
+                <bk-link theme="primary">
+                    <i class="bk-drag-icon bk-drag-download"></i>CSV 模板
+                </bk-link>
+                <bk-divider direction="vertical" class="tip-divider"></bk-divider>
+                <bk-link theme="primary">
+                    <i class="bk-drag-icon bk-drag-download"></i>SQL 模板
+                </bk-link>
+            </span>
         </bk-dialog>
     </section>
 </template>
 
 <script lang="ts">
-    import { defineComponent } from '@vue/composition-api'
-    import { uploadFile } from '@/common/util.js'
+    import { defineComponent, ref } from '@vue/composition-api'
 
     export default defineComponent({
         props: {
             title: String
         },
 
-        data () {
-            return {
-                isShowExport: false
+        setup () {
+            const uploadUrl = `${AJAX_URL_PREFIX}/page/importJson`
+            const isShowImport = ref<boolean>(false)
+
+            const showImport = () => {
+                isShowImport.value = true
             }
-        },
 
-        methods: {
-            showExport () {
-                this.isShowExport = true
-            },
+            const importFile = (res) => {
+                const importContent = res.responseData.data
+                console.log(importContent)
+            }
 
-            importFile () {
-                uploadFile().then((fileList) => {
-                    try {
-                        const funcList = []
-                        fileList.forEach((file) => {
-                            funcList.push(...JSON.parse(file))
-                        })
-                        this.importFuncJson = JSON.stringify(funcList, null, 2)
-                    } catch (err) {
-                        this.$bkMessage({ theme: 'error', message: '文件内容需要是Json格式的数组' })
-                    }
-                })
+            return {
+                uploadUrl,
+                isShowImport,
+                showImport,
+                importFile
             }
         }
     })
 </script>
 
 <style lang="postcss" scoped>
-
+    .import-tip, ::v-deep .bk-link-text {
+        font-size: 12px;
+        line-height: 16px;
+    }
+    .import-tip {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 26px;
+    }
+    .bk-drag-download {
+        font-size: 14px;
+        margin-right: 4px;
+    }
+    .tip-divider {
+        margin: 0 4px !important;
+    }
 </style>

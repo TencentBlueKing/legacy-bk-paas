@@ -12,9 +12,9 @@
             <section class="export-home">
                 <h3 class="export-title">请选择导出格式</h3>
                 <p class="export-items">
-                    <span @click="downLoad('cvs')" class="export-item">
-                        <i class="bk-drag-icon bk-drag-cvs"></i>
-                        CVS 文件
+                    <span @click="downLoad('csv')" class="export-item">
+                        <i class="bk-drag-icon bk-drag-csv"></i>
+                        CSV 文件
                     </span>
                     <span @click="downLoad('sql')" class="export-item">
                         <i class="bk-drag-icon bk-drag-sql"></i>

@@ -35,9 +35,9 @@ export default class DataSourceController {
             // 创建用户并授权对应的库
             await pool.query(`CREATE USER '${dbInfo.userName}'@'%' IDENTIFIED BY '${dbInfo.passWord}';`)
             await pool.query(`GRANT ALL ON ${dbInfo.dbName}.* TO '${dbInfo.userName}'@'%';`)
-            await pool.query(`FLUSH PRIVILEGES;`)
+            await pool.query('FLUSH PRIVILEGES;')
         })
-    
+
         // 写入数据库
         return dataService.add('preview-db', dbInfo)
     }
@@ -53,10 +53,20 @@ export default class DataSourceController {
 
     // 获取项目下的所有表结构
     @Get('/getTableList')
-    async getTableList (
-        @QueryParams({ name: 'projectId', require: true }) projectId
+    getTableList (
+        @QueryParams({ name: 'projectId', require: true }) projectId,
+        @QueryParams({ name: 'pageSize', default: 10 }) pageSize,
+        @QueryParams({ name: 'page', default: 1 }) page
     ) {
-        return dataService.get('data-table', { projectId })
+        const queryParams = {
+            projectId,
+            order: {
+                updateTime: 'DESC'
+            },
+            skip: (page - 1) * pageSize,
+            take: pageSize
+        }
+        return dataService.get('data-table', queryParams)
     }
 
     // 新增表结构
@@ -95,7 +105,7 @@ export default class DataSourceController {
 
     // 获取sql变更历史
     @Get('/getSqlRecord')
-    async getSqlRecord (
+    getSqlRecord (
         @QueryParams({ name: 'projectId', require: true }) projectId
     ) {
         return dataTableModifyRecord.getListByTime({ projectId })

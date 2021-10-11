@@ -146,11 +146,6 @@ module.exports = {
          */
         '@typescript-eslint/no-parameter-properties': 'off',
         /**
-         * 禁止使用 require
-         * @reason 统一使用 import 来引入模块，特殊情况使用单行注释允许 require 引入
-         */
-        '@typescript-eslint/no-require-imports': 'error',
-        /**
          * 禁止将 this 赋值给其他变量，除非是解构赋值
          */
         '@typescript-eslint/no-this-alias': [
