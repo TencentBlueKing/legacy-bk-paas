@@ -14,6 +14,11 @@ from django.conf import settings
 from django.utils.translation import pgettext, ugettext
 
 
+BK_APIGW_URL = getattr(settings, "BK_APIGW_URL", "")
+APIGATEWAY_ENABLED = bool(BK_APIGW_URL)
+BK_ESB_MENU_ITEM_BUFFET_HIDDEN = getattr(settings, "BK_ESB_MENU_ITEM_BUFFET_HIDDEN", False)
+
+
 menu_items = [
     {"name": "manager_index", "label": pgettext("menu", u"简介"), "path": "manager.index"},
     {
@@ -26,12 +31,16 @@ menu_items = [
         "label": pgettext("menu", u"通道管理"),
         "path": "manager.channel.list",
     },
-    {
-        "name": "buffet_manager",
-        "label": pgettext("menu", u"自助接入"),
-        "path": "manager.buffet_comp.list",
-    },
 ]
+
+if not BK_ESB_MENU_ITEM_BUFFET_HIDDEN:
+    menu_items += [
+        {
+            "name": "buffet_manager",
+            "label": pgettext("menu", u"自助接入"),
+            "path": "manager.buffet_comp.list",
+        },
+    ]
 
 if settings.EDITION == "ee":
     menu_items += [
@@ -46,7 +55,7 @@ if settings.EDITION == "ee":
 menu_items += [
     {
         "name": "api_docs",
-        "label": pgettext("menu", u"API文档"),
+        "label": pgettext("menu", u"组件API文档" if APIGATEWAY_ENABLED else u"API文档"),
         "path": "esb_api_docs",
     },
 ]

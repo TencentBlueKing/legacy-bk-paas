@@ -125,12 +125,12 @@
                     "data_source_label": "bk_monitor",
                     "algorithm_list": [
                         {
-                            "algorithm_config": [
+                            "algorithm_config": [[
                                 {
                                     "threshold": 0.1,
                                     "method": "gte"
                                 }
-                            ],
+                            ]],
                             "update_time": "2019-11-22 14:50:23+0800",
                             "trigger_config": {
                                 "count": 1,

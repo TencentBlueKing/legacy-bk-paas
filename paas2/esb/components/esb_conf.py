@@ -586,6 +586,13 @@ config = {
                             "is_hidden": True,
                         },
                     ),
+                    (
+                        "/esb/get_weixin_config/",
+                        {
+                            "comp_codename": "generic.esb.get_weixin_config",
+                            "is_hidden": True,
+                        },
+                    ),
                     # weixin
                     ("/weixin/get_token/", {"comp_codename": "generic.weixin.get_token", "is_hidden": True}),
                 ),

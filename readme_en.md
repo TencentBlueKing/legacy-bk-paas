@@ -28,7 +28,7 @@ The BlueKing PaaS Community Edition contains:
 
 ## Features
 
-- Developer Center: Provide self-service, automated services to support fast, low-cost, 
+- Developer Center: Provide self-service, automated services to support fast, low-cost,
 free-operation of SaaS applications
 - Unified Login Service: user and role management, support docking enterprise internal login system（[document](http://docs.bk.tencent.com/develop_center/enterprise_login/)）
 - Framework: a SaaS application framework to make the development more efficient
@@ -67,13 +67,13 @@ free-operation of SaaS applications
 
 ## BlueKing Community
 
-- [BK-CI](https://github.com/Tencent/bk-ci)：a continuous integration and continuous delivery system that can easily present your R & D process to you.
-- [BK-BCS](https://github.com/Tencent/bk-bcs)：a basic container service platform which provides orchestration and management for micro-service business.
-- [BK-BCS-SaaS](https://github.com/Tencent/bk-bcs-saas)：a SaaS provides users with highly scalable, flexible and easy-to-use container products and services.
-- [BK-PaaS](https://github.com/Tencent/bk-PaaS)：an development platform that allows developers to create, develop, deploy and manage SaaS applications easily and quickly.
-- [BK-SOPS](https://github.com/Tencent/bk-sops)：an lightweight scheduling SaaS  for task flow scheduling and execution through a visual graphical interface. 
-- [BK-CMDB](https://github.com/Tencent/bk-cmdb)：an enterprise-level configuration management platform for assets and applications.
-- [TencentBlueKing/iam-python-sdk](https://github.com/TencentBlueKing/iam-python-sdk) / [TencentBlueKing/iam-go-sdk](https://github.com/TencentBlueKing/iam-go-sdk): the python and go SDK of blueking IAM
+- [BK-CI](https://github.com/Tencent/bk-ci): a continuous integration and continuous delivery system that can easily present your R & D process to you.
+- [BK-BCS](https://github.com/Tencent/bk-bcs): a basic container service platform which provides orchestration and management for micro-service business.
+- [BK-BCS-SaaS](https://github.com/Tencent/bk-bcs-saas): a SaaS provides users with highly scalable, flexible and easy-to-use container products and services.
+- [BK-PaaS](https://github.com/Tencent/bk-PaaS): an development platform that allows developers to create, develop, deploy and manage SaaS applications easily and quickly.
+- [BK-SOPS](https://github.com/Tencent/bk-sops): an lightweight scheduling SaaS  for task flow scheduling and execution through a visual graphical interface.
+- [BK-CMDB](https://github.com/Tencent/bk-cmdb): an enterprise-level configuration management platform for assets and applications.
+- [BK-JOB](https://github.com/Tencent/bk-job): BlueKing JOB is a set of operation and maintenance script management platform with the ability to handle a large number of tasks concurrently.
 
 ## Contributing
 

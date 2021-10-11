@@ -823,7 +823,7 @@
   suggest_method: POST
   api_type: query
   comp_codename: generic.v2.cc.cc_component
-  dest_path: /api/v3/find/proc/service_instance/difference
+  dest_path: /api/v3/findmany/proc/service_template/sync_status/biz/{bk_biz_id}
   dest_http_method: POST
   is_hidden: true
 
@@ -866,6 +866,7 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/identifier/host/search
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/cc/host_install_bk/
   name: host_install_bk

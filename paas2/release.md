@@ -1,5 +1,21 @@
 Release Log
 ===============================
+# 2.13.10
+    - update: esb update monitor_v3/jobv3/itsm/iam/cc confapis
+
+# 2.13.9
+    - bugfix: python3 install migration fail
+    - breaking changes: remve oauth2 from login
+
+# 2.13.8
+    - bugfix: smart package size calcuate error in py3
+
+# 2.13.7
+    - bugfix: app logo fail after upgrade django version
+
+# 2.13.6
+    - update: sync esb from develop branch
+
 # 2.13.5
     - update: fix esb cmsi apis for python3/upgrade
 
@@ -17,6 +33,59 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.26
+    - update: esb update monitor_v3/jobv3/itsm/iam/cc confapis
+
+# 2.12.25
+    - update: esb udpate cc confapis to cc 3.9
+
+# 2.12.24
+    - update: esb update bk_log/bk_nodeman confapis
+
+# 2.12.23
+    - update: esb update jobv3/bk_log confapis
+    - update: esb cc transfer_host_to_resourcemodule add parameter bk_module_id
+
+# 2.12.22
+    - bugfix: fix esb fs_list_users xss
+    - update: esb add staff_status field for fs_list_users
+
+# 2.12.21
+    - bugfix: bkdialog js/css missing while do bind weixin
+
+# 2.12.20
+    - esb: support bk-api-authorization
+
+# 2.12.19
+    - esb: update esb cc confapis
+
+# 2.12.18
+    - esb: add get_weixin_config
+    - paas: use get_weixin_config to fetch weixin config 
+
+# 2.12.17
+    - esb: update esb cc confapis
+    - esb: esb management display component frequency configuration
+
+# 2.12.16
+    - esb: update esb bk_log apis
+
+# 2.12.15
+    - esb: update configuration components BKDATA
+
+# 2.12.14
+    - paas: rename env MENU_ITEM_BUFFET_HIDDEN to BK_ESB_MENU_ITEM_BUFFET_HIDDEN
+
+# 2.12.13
+    - add: Compatible with PaaS3.0
+    - change: the max_length of the app logo field is changed to 500
+
+# 2.12.12
+    - esb: Compatible with PaaS3.0
+    - esb: update configuration components CC, JOBV3, BKDATA, NODEMAN
+    - esb: BKDATA add anew module:aiops
+    - esb: supports returning SOPS's own error code
 
 # 2.12.11
     - bugfix: paas app_log missing page div while pagination

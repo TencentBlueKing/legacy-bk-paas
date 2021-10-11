@@ -10,13 +10,15 @@ Delete the association between instances according to the ID of the instance ass
 
 | Field      | Type   | Required | Description         |
 | :--------- | :----- | :------- | :----------------- |
-| id   | int | Yes   | ID of the instance relationship, up to 500|
+| id   | int | Yes   | the instance id of this relatioin（not the object's instance identity id）, up to 500|
+| bk_obj_id | string | Yes | The unique name of the model association source model |
 
 ### Request Parameters Example
 
 ```json
 {
-	"id":[1,2]
+    "id":[1,2],
+    "bk_obj_id": "abc"
 }
 ```
 

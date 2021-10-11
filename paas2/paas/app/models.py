@@ -125,7 +125,7 @@ class App(models.Model):
     # 是否作为SaaS服务，即通过直接上传包部署
     is_saas = models.BooleanField(_l(u"是否为SaaS服务"), default=False, help_text=_l(u"SaaS服务，即通过直接上传包部署"))
     # 应用图标
-    logo = models.ImageField(upload_to=APP_LOGO_IMG_RELATED, blank=True, null=True)
+    logo = models.ImageField(upload_to=APP_LOGO_IMG_RELATED, blank=True, null=True, max_length=500)
 
     # NOTE: 不要再加新的字段了, 新需求考虑额外一对一的表是否能解决问题
     # NOTE: 桌面相关的应该提取独立表的
@@ -199,12 +199,15 @@ class App(models.Model):
             logo_name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
         else:
             logo_name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
+
         # 判断图片路径与旧图路径名称是否相同
         if cmp(logo_name, self.logo.name):
             logo_name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
             self._del_exist_file(logo_name)
             # 指定图片名称
-            self.logo.name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
+            # self.logo.name = APP_LOGO_IMG_RELATED + "/" + str(self.code) + logo_ext
+            # 2021-09-08 bugfix lightapp logo change fail
+            self.logo.name = str(self.code) + logo_ext
         # save操作
         super(App, self).save(*args, **kwargs)
 

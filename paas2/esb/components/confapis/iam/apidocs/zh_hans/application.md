@@ -10,7 +10,7 @@
 
 | 字段      |  类型      | 必选   |  描述      |
 |-----------|------------|--------|------------|
-| system |  字符串  | 是   | 系统id |
+| system_id |  字符串  | 是   | 系统id |
 | actions |  数组   | 是   | 申请权限的操作 |
 
 #### actions
@@ -24,7 +24,7 @@
 
 | 字段      |  类型      | 必选   |  描述      |
 |-----------|------------|--------|------------|
-| system |  字符串  | 是   | 资源类型的系统id |
+| system_id |  字符串  | 是   | 资源类型的系统id |
 | type | 字符串 | 是 | 资源类型 |
 | instances | 数组[数组] | 否 | 资源实例 |
 | attributes | 数组 | 否 | 属性 |
@@ -56,13 +56,13 @@
 
 ```python
 {
-  "system": "bk_job",  # 权限的系统
+  "system_id": "bk_job",  # 权限的系统
   "actions": [
     {
       "id": "execute_job",  # 操作id
       "related_resource_types": [  # 关联的资源类型, 无关联资源类型的操作, 可以为空
         {
-          "system": "bk_job",  # 资源类型所属的系统id
+          "system_id": "bk_job",  # 资源类型所属的系统id
           "type": "job",  # 资源类型
           "instances": [  # 申请权限的资源实例
             [  # 带层级的实例表示
@@ -75,7 +75,7 @@
           ]
         },
         {
-          "system": "bk_cmdb",  # 资源类型所属的系统id
+          "system_id": "bk_cmdb",  # 资源类型所属的系统id
           "type": "host",  # 操作依赖的另外一个资源类型
           "instances": [
             [

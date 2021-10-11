@@ -55,7 +55,7 @@ create object attribute
 	"ispre": false,
 	"isreadonly": false,
 	"isrequired": false,
-	"option": {"min":"1","max":"2"},
+	"option": "",
 	"unit": "1",
 	"placeholder": "test",
 	"bk_property_group": "default",

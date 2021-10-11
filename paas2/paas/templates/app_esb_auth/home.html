@@ -29,7 +29,13 @@
 			        % endfor
 			    </select>
 			    <!-- select2 静态 end -->
-          <a href="${SITE_URL}esb/api_docs/system/" target="_blank" title="${_(u'API文档')}" style="font-size: 14px;margin-left: 560px;">
+		<%
+		if BK_APIGW_DOC_URL:
+		    api_doc_url=BK_APIGW_DOC_URL
+		else:
+		    api_doc_url=SITE_URL + "esb/api_docs/system/"
+		%>
+          <a href="${api_doc_url}" target="_blank" title="${_(u'API文档')}" style="font-size: 14px;margin-left: 560px;">
           <i class="fa fa-book mr5" aria-hidden="false"></i>${_(u'API文档')}
 				</a>
 			</div>
