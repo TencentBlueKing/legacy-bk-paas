@@ -32,8 +32,7 @@
                                 <div class="item-bd">
                                     <template>
                                         <div class="preview">
-                                            <img v-if="project.previewImg" :src="getPreviewImg(project.previewImg)" alt="项目缩略预览">
-                                            <div class="empty-preview-img" v-else>页面为空</div>
+                                            <page-preview-thumb alt="项目缩略预览" :project-id="project.id" />
                                         </div>
                                     </template>
                                     <div class="operate-btns">
@@ -90,7 +89,7 @@
                                 <div class="item-bd">
                                     <template>
                                         <div class="preview">
-                                            <img v-if="page.previewImg" :src="getPreviewImg(page.previewImg)" alt="项目缩略预览">
+                                            <img class="page-img" v-if="page.previewImg" :src="getPreviewImg(page.previewImg)" alt="项目缩略预览">
                                             <div class="empty-preview-img" v-else>页面为空</div>
                                         </div>
                                     </template>
@@ -226,6 +225,7 @@
 <script>
     import preivewErrImg from '@/images/preview-error.png'
     import DownloadDialog from './components/download-dialog'
+    import PagePreviewThumb from '@/components/project/page-preview-thumb.vue'
     import { PROJECT_TEMPLATE_TYPE, PAGE_TEMPLATE_TYPE } from '@/common/constant'
     import { mapActions } from 'vuex'
     import { getVarList, getFuncList } from '@/common/process-targetdata'
@@ -242,7 +242,8 @@
     export default {
         name: 'template-market',
         components: {
-            DownloadDialog
+            DownloadDialog,
+            PagePreviewThumb
         },
         data () {
             return {
@@ -535,12 +536,21 @@
                 this.dialog.page.formData.project = []
             },
             async handleSelectChange (newValue, oldValue) {
-                console.log(newValue, oldValue, 143)
                 if (newValue.length > oldValue.length) {
                     const selectedProject = this.dialog.page.projectList.find(project => project.id === newValue[newValue.length - 1])
                     const selected = { id: selectedProject.id, projectName: selectedProject.projectName, selectedCategory: '' }
-                    await this.getTemplateCategory(selected)
-                    this.dialog.page.selectedList.push(selected)
+                    // check是否已被添加到被选中的项目
+                    const hasApply = await this.$store.dispatch('pageTemplate/checkIsExist', { belongProjectId: selectedProject.id, parentId: this.dialog.page.curPage.id })
+                    if (hasApply === true) {
+                        this.dialog.page.formData.project.pop()
+                        this.$bkMessage({
+                            theme: 'warning',
+                            message: '模板已被该项目应用,无需重复添加'
+                        })
+                    } else {
+                        await this.getTemplateCategory(selected)
+                        this.dialog.page.selectedList.push(selected)
+                    }
                 } else {
                     const that = this
                     oldValue.forEach(function (item, index) {
@@ -615,7 +625,7 @@
             }
         }
     }
-    
+
     .empty{
         height: 300px;
     }
@@ -717,6 +727,10 @@
                 border-radius: 4px 4px 0px 0px;
                 img {
                     max-width: 100%;
+                }
+                .page-img {
+                    height: 100%;
+                    object-fit: contain;
                 }
 
                 &::before {

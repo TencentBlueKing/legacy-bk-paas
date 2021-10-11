@@ -165,19 +165,28 @@
              * @returns { Object }
              */
             wrapperStyles () {
+                const componentStyles = Object.assign({}, this.renderData.renderStyles, this.renderData.renderStyles.customStyle || {})
                 const {
                     top,
                     left,
                     width,
                     height
-                } = this.renderData.renderStyles
+                } = componentStyles
 
                 const styles = {
-                    top: top,
-                    left: left,
+                    top,
+                    left,
                     display: this.componentStyleDisplayValue,
-                    width: width
+                    width
                 }
+
+                // margin属性需要加到组件外层、render-grid不用加，render-grid的margin加在了render-row上面
+                const marginStypes = ['marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'margin']
+                this.componentData.type !== 'render-grid' && marginStypes.forEach(function (item) {
+                    if (componentStyles[item]) {
+                        styles[item] = componentStyles[item]
+                    }
+                })
                 // bk-swiper 设置默认高度
                 if (this.componentData.type === 'bk-swiper') {
                     styles.height = height

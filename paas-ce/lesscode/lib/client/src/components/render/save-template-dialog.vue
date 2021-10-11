@@ -133,6 +133,7 @@
                 'pageDetail'
             ]),
             ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('components', ['interactiveComponents']),
             projectId () {
                 return this.$route.params.projectId
             }
@@ -173,7 +174,8 @@
                                     content = this.targetData[0]
                                 } else if (this.targetData.length > 1) {
                                     content = Object.assign({}, initGridData)
-                                    content.renderSlots.default.val[0].children = this.targetData
+                                    const children = this.targetData.filter(component => !this.interactiveComponents.includes(component.type))
+                                    content.renderSlots.default.val[0].children = children
                                 }
                             } else {
                                 content = this.curSelectedComponentData

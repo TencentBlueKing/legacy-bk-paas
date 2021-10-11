@@ -136,7 +136,7 @@
             async getProjectList () {
                 try {
                     this.pageLoading = true
-                    const { projectList } = await this.$store.dispatch('project/query', { config: {} })
+                    const projectList = await this.$store.dispatch('project/my', { config: {} })
                     this.projectList = projectList
                 } catch (e) {
                     console.error(e)

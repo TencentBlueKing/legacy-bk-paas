@@ -1045,7 +1045,7 @@ class PageCode {
                         delete styles[key]
                     }
                     // 合并样式面板和自定义class样式
-                    if (key === 'customStyle' && styles[key] && Object.keys(styles[key]).length) {
+                    if (key === 'customStyle' && styles[key]) {
                         Object.assign(styles, styles[key])
                         delete styles[key]
                     }

@@ -272,8 +272,8 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
     let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
     let isLayoutSupportDialog = false
     if (interactiveComponents.includes(grid.type)) { // 交互式组件特殊处理
-        const slot = grid.type === 'bk-sideslider' ? grid.renderSlots.content.val : grid.renderSlots.default.val
-        columns = typeof slot === 'string' ? [] : slot.renderSlots.default.val
+        const slot = grid.type === 'bk-sideslider' ? (((grid.renderSlots || {}).content || {}).val || {}) : (((grid.renderSlots || {}).default || {}).val || {})
+        columns = typeof slot === 'string' ? [] : (((slot.renderSlots || {}).default || {}).val || [])
         isLayoutSupportDialog = typeof slot !== 'string'
     }
 
