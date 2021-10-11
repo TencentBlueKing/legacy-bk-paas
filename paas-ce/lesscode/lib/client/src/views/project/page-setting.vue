@@ -15,12 +15,25 @@
         <section v-for="setting in settingGroup" :key="setting.title">
             <div class="title" v-show="!pageLoading">{{ setting.title }}</div>
             <div class="setting-list" v-show="!pageLoading">
-                <div class="setting-item" v-for="(field, index) in setting.settingFields" :key="index">
+                <div class="setting-item" v-for="(field, index) in setting.settingFields" :key="index"
+                    :style="{
+                        'margin-top': field.type === 'color-picker' && index !== 0 ? '25px' : 0
+                    }">
                     <div class="field-label">
                         <span v-bk-tooltips="{ content: field.desc, disabled: !field.desc }" class="field-display-name">{{field.name}}</span>：
                     </div>
                     <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
-                        <template v-if="field !== editField.field">
+                        <template v-if="field.type === 'color-picker' || field.type === 'min-width'">
+                            <component
+                                class="style-setting"
+                                :is="field.id"
+                                :key="field.id"
+                                :type="field.type"
+                                :component-id="'pageStyleSetting'"
+                                :value="page.styleSetting"
+                                :change="saveStyle" />
+                        </template>
+                        <template v-else-if="field !== editField.field">
                             <div class="field-content">
                                 <div class="route" v-if="field.id === 'pageRoute'">
                                     <div v-if="pageRoute.id">{{layoutPath}}<span>{{pageRoute.path}}</span></div>
@@ -91,6 +104,11 @@
     import { mapGetters, mapMutations } from 'vuex'
     import bkSelectFunc from '@/components/methods/select-func'
     import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
+    import StyleBackgroundColor from '@/element-materials/modifier/component/styles/strategy/background-color'
+    import StyleSize from '@/element-materials/modifier/component/styles/strategy/size'
+    import StylePadding from '@/element-materials/modifier/component/styles/strategy/padding'
+    import StyleMargin from '@/element-materials/modifier/component/styles/strategy/margin'
+    import StyleCustom from '@/element-materials/modifier/component/styles/strategy/custom-style'
 
     const lifeCycleDescMap = {
         created: '在页面创建完成后被立即调用，这个时候页面还未渲染，可以做获取远程数据的操作',
@@ -106,7 +124,12 @@
 
     export default {
         components: {
-            bkSelectFunc
+            bkSelectFunc,
+            StyleCustom,
+            size: StyleSize,
+            padding: StylePadding,
+            margin: StyleMargin,
+            backgroundColor: StyleBackgroundColor
         },
         props: {
             project: {
@@ -250,10 +273,57 @@
                         }
                     ]
                 }
+                const styleSettings = [
+                    {
+                        title: '尺寸',
+                        settingFields: [
+                            {
+                                id: 'size',
+                                name: '最小宽度',
+                                type: 'min-width'
+                            }
+                        ]
+                    },
+                    {
+                        title: '边距',
+                        settingFields: [
+                            {
+                                id: 'margin',
+                                name: '外边距',
+                                type: 'color-picker'
+                            },
+                            {
+                                id: 'padding',
+                                name: '内边距',
+                                type: 'color-picker'
+                            }
+                        ]
+                    },
+                    {
+                        title: '背景',
+                        settingFields: [
+                            {
+                                id: 'backgroundColor',
+                                name: '背景色',
+                                type: 'color-picker'
+                            }
+                        ]
+                    },
+                    {
+                        title: '自定义样式',
+                        settingFields: [
+                            {
+                                id: 'StyleCustom',
+                                name: '自定义样式',
+                                type: 'color-picker'
+                            }
+                        ]
+                    }
+                ]
 
                 return this.type === 'pageFunction'
                     ? [lifeCycleSettings]
-                    : [baseSettings, pageSettings]
+                    : [baseSettings, pageSettings].concat(styleSettings)
             }
         },
         created () {
@@ -343,6 +413,7 @@
                         }
                     })
                 }
+                console.log(field)
                 let fieldData = { [field.id]: value }
                 if (field.id in this.page.lifeCycle) {
                     fieldData = {
@@ -361,6 +432,8 @@
                     ...fieldData
                 }
                 pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
+                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
+                console.log(pageData)
                 const res = await this.$store.dispatch('page/update', {
                     data: {
                         pageData,
@@ -370,6 +443,15 @@
                     }
                 })
                 return res
+            },
+            async saveStyle (key, value) {
+                console.log(key)
+                console.log(value)
+                if (value) {
+                    this.page.styleSetting[key] = value
+                } else {
+                    this.page.styleSetting[key] = ''
+                }
             },
             async savePageRoute (field, value) {
                 const data = {
@@ -512,8 +594,42 @@
 
 <style lang="postcss" scoped>
     .page-setting {
-        padding: 5px 40px 30px;
-        height: 100%;
+        padding: 5px 40px 0;
+        margin-bottom: 20px;
+
+        /deep/ .style-setting {
+            margin-left: 0;
+            padding: 0 0;
+            .style-title{
+                display: none;
+              }
+            .style-item{
+                margin-top: 0;
+              }
+            .item-label{
+                display: none;
+              }
+            .margin-style-col-container :nth-child(1){
+                margin-top: 0;
+              }
+            .modifier-style {
+                margin-left: 0;
+                padding: 0 0;
+              }
+            .item-content div {
+                text-align: left !important;
+              }
+            .common-input-slot-text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 32px;
+                height: 100%;
+                font-size: 14px;
+                line-height: 20px;
+                background: #fafbfd;
+            }
+        }
 
         .title {
             font-size: 14px;

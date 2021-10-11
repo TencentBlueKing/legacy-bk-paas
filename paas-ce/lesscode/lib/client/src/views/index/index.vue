@@ -918,6 +918,7 @@
                         this.$store.dispatch('components/componentNameMap'),
                         this.getAllGroupFuncs(this.projectId)
                     ])
+                    console.log(pageDetail)
 
                     await this.lockStatsuPolling('lock') // 处理加锁逻辑
 
