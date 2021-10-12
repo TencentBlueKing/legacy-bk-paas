@@ -965,6 +965,12 @@ class PageCode {
             this.dataTemplate(compId, JSON.stringify(checkedValue))
             propsStr += `v-model="${compId}"`
         }
+        if (type === 'bk-radio-group' && !hasVModel) {
+            const checkedItem = slots.default.val.find(c => c.checked === true)
+            const checkedValue = (checkedItem && checkedItem.value) || ''
+            this.dataTemplate(compId, `'${checkedValue}'`)
+            propsStr += `v-model="${compId}"`
+        }
         // element组件添加vmodel
         if (type.startsWith('el-')) {
             if (!hasVModel && elementComId !== '') {
@@ -1223,6 +1229,7 @@ class PageCode {
                     slotRenderParams.push(param)
                     curSlot = curSlot.renderSlots
                 } while (curSlot && Object.keys(curSlot).length > 0)
+                console.log(slotRenderParams, 'slotparams', render(...slotRenderParams))
                 slotStr += render(...slotRenderParams)
             }
             if (!isDefaultSlot) slotStr += `\n</template>\n`
