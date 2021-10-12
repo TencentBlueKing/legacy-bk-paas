@@ -1229,7 +1229,6 @@ class PageCode {
                     slotRenderParams.push(param)
                     curSlot = curSlot.renderSlots
                 } while (curSlot && Object.keys(curSlot).length > 0)
-                console.log(slotRenderParams, 'slotparams', render(...slotRenderParams))
                 slotStr += render(...slotRenderParams)
             }
             if (!isDefaultSlot) slotStr += `\n</template>\n`
