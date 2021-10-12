@@ -13,8 +13,8 @@
     <style-layout title="尺寸">
         <template v-if="type === 'min-width'">
             <style-item name="最小宽度">
-                <size-input v-model="minWidthValue" @change="handleInputChange('width', $event)">
-                    <append-select v-model="minWidthUnit" @change="handleSelectChange('width', $event)"></append-select>
+                <size-input v-model="minWidthValue" @change="handleInputChange('minWidth', $event)">
+                    <append-select v-model="minWidthUnit" @change="handleSelectChange('minWidth', $event)"></append-select>
                 </size-input>
             </style-item>
         </template>

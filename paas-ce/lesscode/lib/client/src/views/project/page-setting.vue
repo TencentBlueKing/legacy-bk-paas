@@ -31,7 +31,7 @@
                                 :type="field.type"
                                 :component-id="'pageStyleSetting'"
                                 :value="page.styleSetting"
-                                :change="saveStyle" />
+                                :change="changeStyle" />
                         </template>
                         <template v-else-if="field !== editField.field">
                             <div class="field-content">
@@ -152,7 +152,8 @@
                 },
                 loadingState: [],
                 errors: {},
-                pageLoading: true
+                pageLoading: true,
+                savingTimer: null
             }
         },
         computed: {
@@ -337,7 +338,7 @@
                     const [pageRoute, layoutList, routeGroup] = await Promise.all([
                         this.$store.dispatch('route/find', { pageId: this.page.id }),
                         this.$store.dispatch('layout/getList', { projectId: this.projectId }),
-                        this.$store.dispatch('route/getProjectRouteGroup', { projectId: this.projectId })
+                        this.$store.dispatch('route/getProjectRouteGroup', { projelctId: this.projectId })
                     ])
                     layoutList.forEach(item => {
                         item.defaultName = item.showName || item.defaultName
@@ -413,7 +414,6 @@
                         }
                     })
                 }
-                console.log(field)
                 let fieldData = { [field.id]: value }
                 if (field.id in this.page.lifeCycle) {
                     fieldData = {
@@ -433,7 +433,6 @@
                 }
                 pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
                 pageData.styleSetting = JSON.stringify(pageData.styleSetting)
-                console.log(pageData)
                 const res = await this.$store.dispatch('page/update', {
                     data: {
                         pageData,
@@ -444,14 +443,33 @@
                 })
                 return res
             },
-            async saveStyle (key, value) {
-                console.log(key)
-                console.log(value)
+            async changeStyle (key, value) {
                 if (value) {
                     this.page.styleSetting[key] = value
                 } else {
                     this.page.styleSetting[key] = ''
                 }
+                if (this.savingTimer) {
+                    clearTimeout(this.savingTimer)
+                }
+                this.savingTimer = await setTimeout(() => {
+                    this.saveStyle()
+                }, 500)
+            },
+            async saveStyle () {
+                const pageData = {
+                    ...this.page
+                }
+                pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
+                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
+                const res = await this.$store.dispatch('page/update', {
+                    data: {
+                        pageData,
+                        projectId: this.project.id,
+                        from: 'setting'
+                    }
+                })
+                return res
             },
             async savePageRoute (field, value) {
                 const data = {

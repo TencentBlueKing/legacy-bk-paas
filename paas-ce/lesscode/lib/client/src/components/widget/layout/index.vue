@@ -1,5 +1,5 @@
 <template>
-    <component class="lesscode-editor-layout" :is="layoutCom">
+    <component ref="layoutDom" class="lesscode-editor-layout" :is="layoutCom">
         <slot />
     </component>
 </template>
@@ -20,11 +20,15 @@
     export default {
         data () {
             return {
-                layout: 'left-right'
+                layout: 'left-right',
+                defaultStyle: {}
             }
         },
         computed: {
             ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('page', {
+                page: 'pageDetail'
+            }),
             layoutCom () {
                 if (!componentMap[this.layout]) {
                     return 'div'
@@ -33,6 +37,17 @@
             },
             projectId () {
                 return this.$route.params.projectId
+            },
+            pageStyle () {
+                let style = {}
+                for (const i in this.page.styleSetting) {
+                    if (i === 'customStyle') {
+                        style = { ...style, ...this.page.styleSetting[i] }
+                    } else if (this.page.styleSetting[i] !== '') {
+                        style[i] = this.page.styleSetting[i]
+                    }
+                }
+                return style
             }
         },
         watch: {
@@ -48,6 +63,28 @@
                     this.setCurTemplateData({
                         showName,
                         ...layoutContent
+                    })
+                },
+                immediate: true
+            },
+            pageStyle: {
+                handler (style) {
+                    this.$nextTick(() => {
+                        let domStyle
+                        let extraStyle = {}
+                        if (!componentMap[this.layout] || this.layout === 'empty') {
+                            domStyle = document.querySelector('.lesscode-editor-layout').style
+                        } else {
+                            domStyle = document.querySelector('.lesscode-editor-layout .container-content').style
+                            extraStyle = {
+                                maxHeight: 'calc(100vh - 52px)'
+                            }
+                        }
+                        // 恢复默认样式
+                        for (const i in domStyle) {
+                            domStyle.setProperty(i, '')
+                        }
+                        Object.assign(domStyle, extraStyle, style)
                     })
                 },
                 immediate: true
