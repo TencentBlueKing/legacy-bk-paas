@@ -64,7 +64,8 @@ const VueCode = {
                 isEmpty = false,
                 from,
                 withNav,
-                fromPageCode = ''
+                fromPageCode = '',
+                styleSetting
             } = ctx.request.body
 
             const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([getNameMap(), allGroupFuncDetail(projectId), routeModel.findProjectRoute(projectId), variableModel.getAll({ projectId })])
@@ -88,7 +89,7 @@ const VueCode = {
                 })
             }
             const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
-            const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, curPage.layoutType, variableList)
+            const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, curPage.layoutType, variableList, styleSetting)
             // 此接口被多方调用，目前仅收集下载页面源码
             if (from === 'download_page') {
                 operationLogger.success()

@@ -81,7 +81,7 @@ const projectCode = {
         const layoutIns = Object.values(routeGroup)
         for (const layout of layoutIns) {
             // 父路由（布局）内容
-            const pageDetail = await PageCodeModel.getPageData([], 'preview', pageData.allCustomMap, pageData.funcGroups, {}, projectId, '', layout.content, true, false, layout.layoutType, [])
+            const pageDetail = await PageCodeModel.getPageData([], 'preview', pageData.allCustomMap, pageData.funcGroups, {}, projectId, '', layout.content, true, false, layout.layoutType, [], {})
             layout.content = pageDetail.code
 
             // 子路由（页面）内容，先排除未绑定页面的路由
@@ -104,7 +104,8 @@ const projectCode = {
                     false,
                     false,
                     route.layoutType,
-                    variableData
+                    variableData,
+                    route.styleSetting || {}
                 )
                 // 生成代码校验
                 if (pageDetail.codeErrMessage) {
@@ -433,12 +434,12 @@ const projectCode = {
         })
     },
 
-    writeViewCode (currentFilePath, pageData, pageCode, pathName, projectId, lifeCycle, pageId, layoutContent, isGenerateNav, layoutType, variableData) {
+    writeViewCode (currentFilePath, pageData, pageCode, pathName, projectId, lifeCycle, pageId, layoutContent, isGenerateNav, layoutType, variableData, styleSetting) {
         return new Promise(async (resolve, reject) => {
             fse.ensureFile(currentFilePath).then(async () => {
                 let code = ''
                 let methodStrList = []
-                const pageDetail = await PageCodeModel.getPageData(pageData.targetData, 'projectCode', pageData.allCustomMap, pageData.funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, false, layoutType, variableData)
+                const pageDetail = await PageCodeModel.getPageData(pageData.targetData, 'projectCode', pageData.allCustomMap, pageData.funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, false, layoutType, variableData, styleSetting)
                 code = pageDetail.code
                 methodStrList = pageDetail.methodStrList
                 // 生成代码校验
