@@ -16,8 +16,7 @@
             <bk-button class="table-list-btn">数据管理</bk-button>
             <bk-button class="table-list-btn">数据源部署记录</bk-button>
         </section>
-        <FieldTable :data="data" :column="column" :is-show-index="false"
-            :is-show-check="true" />
+        <FieldTable :data="data" :column="column" :is-show-check="true" />
         <!-- <bk-table
             v-bkloading="{ isLoading: listStates.isTableLoading }"
             :data="listStates.list"
