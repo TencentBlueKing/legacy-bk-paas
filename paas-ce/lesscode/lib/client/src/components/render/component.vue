@@ -456,7 +456,7 @@
                 curComponentNode.classList.add(className)
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
-                this.$clearMenu()
+                bus.$emit('hideContextMenu') // 隐藏右键菜单()
             },
 
             /**
