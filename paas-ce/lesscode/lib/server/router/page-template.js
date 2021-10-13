@@ -17,6 +17,7 @@ const {
     update,
     apply,
     detail,
+    checkIsExist,
     deleteTemplate,
     categoryCount
 } = require('../controller/page-template')
@@ -31,6 +32,7 @@ router.post('/create', create)
 router.post('/update', update)
 router.post('/apply', apply)
 router.get('/detail', detail)
+router.post('/checkIsExist', checkIsExist)
 router.delete('/delete', deleteTemplate)
 router.get('/categoryCount', categoryCount)
 

@@ -469,13 +469,13 @@ export default {
         return getRepository(Project).find(queryParams)
     },
 
-    queryAllProject ({ condition = '', params = {} }) {
+    queryAllProject ({ condition = '', params = {}, select }) {
         const currentUser = RequestContext.getCurrentUser() || {}
         const userId = currentUser.id
         return getRepository(Project)
             .createQueryBuilder('project')
             .innerJoinAndSelect('r_user_project_role', 'user_project_role', 'user_project_role.projectId = project.id')
-            .select(projectSelectFields)
+            .select(select || projectSelectFields)
             .where('project.deleteFlag != 1 AND user_project_role.deleteFlag != 1 AND user_project_role.userId = :userId', { userId })
             .andWhere(condition, params)
             .orderBy('project.id', 'DESC')
@@ -495,7 +495,7 @@ export default {
             .getMany()
     },
 
-    queryMyFavoriteProject ({ condition = '', params = {} }) {
+    queryMyFavoriteProject ({ condition = '', params = {}, select }) {
         const currentUser = RequestContext.getCurrentUser() || {}
         const userId = currentUser.id
         return getRepository(Project)
@@ -504,7 +504,7 @@ export default {
             .innerJoinAndSelect('r_favourite', 'favourite', 'favourite.projectId = project.id')
             .where('project.deleteFlag != 1 AND user_project_role.deleteFlag != 1 AND user_project_role.userId = :userId', { userId })
             .andWhere(condition, params)
-            .select(projectSelectFields)
+            .select(select || projectSelectFields)
             .orderBy('project.id', 'DESC')
             .getMany()
     },
@@ -527,13 +527,24 @@ export default {
             .select(['page.pageName as pageName',
                 'page.updateTime as updateTime',
                 'page.updateUser as updateUser',
-                'page.previewImg as previewImg',
-                'page.deleteFlag as deleteFlag',
                 'project_page.projectId as projectId'
             ])
             .where(condition, params)
+            .andWhere('page.deleteFlag != 1')
             .orderBy('page.updateTime', 'DESC')
             .getRawMany()
+    },
+
+    findProjectPreviewImg (projectId) {
+        return getRepository(Page)
+            .createQueryBuilder('page')
+            .leftJoin('r_project_page', 'project_page', 'project_page.pageId = page.id')
+            .select('previewImg')
+            .where('project_page.projectId = :projectId', { projectId })
+            .andWhere('page.deleteFlag != 1')
+            .orderBy('page.updateTime', 'DESC')
+            .limit(1)
+            .getRawOne()
     },
 
     updateProject (id, fields = {}) {

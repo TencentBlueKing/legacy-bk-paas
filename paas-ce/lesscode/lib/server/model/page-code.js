@@ -985,6 +985,12 @@ class PageCode {
             this.dataTemplate(compId, JSON.stringify(checkedValue))
             propsStr += `v-model="${compId}"`
         }
+        if (type === 'bk-radio-group' && !hasVModel) {
+            const checkedItem = slots.default.val.find(c => c.checked === true)
+            const checkedValue = (checkedItem && checkedItem.value) || ''
+            this.dataTemplate(compId, `'${checkedValue}'`)
+            propsStr += `v-model="${compId}"`
+        }
         // element组件添加vmodel
         if (type.startsWith('el-')) {
             if (!hasVModel && elementComId !== '') {
@@ -1065,7 +1071,7 @@ class PageCode {
                         delete styles[key]
                     }
                     // 合并样式面板和自定义class样式
-                    if (key === 'customStyle' && styles[key] && Object.keys(styles[key]).length) {
+                    if (key === 'customStyle' && styles[key]) {
                         Object.assign(styles, styles[key])
                         delete styles[key]
                     }

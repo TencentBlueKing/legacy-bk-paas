@@ -103,6 +103,11 @@
             extraDragCls: {
                 type: Array,
                 default: () => ['interactiveInnerComp']
+            },
+            // 是否根据子元素自动撑开
+            noResponse: {
+                type: Boolean,
+                default: false
             }
         },
         data () {
@@ -317,7 +322,7 @@
                 const curRowNode = getNodeWithClass(e.target, 'bk-lesscode-free-layout')
                 curRowNode.classList.add('selected')
 
-                this.$clearMenu()
+                bus.$emit('hideContextMenu') // 隐藏右键菜单()
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
             },
@@ -375,7 +380,7 @@
                 this.setStyle4Component(renderData)
                 this.doDrag(data.elem, renderData)
                 // setTimeout 保证 add 事件已经处理完毕
-                setTimeout(() => {
+                !this.noResponse && setTimeout(() => {
                     if (!this.$refs[this.renderData.componentId]) {
                         return
                     }

@@ -28,6 +28,14 @@ module.exports = {
     getProjectPages (projectId) {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
+            .select([
+                'page.id',
+                'page.pageName',
+                'page.pageCode',
+                'page.updateUser',
+                'page.createUser',
+                'page.updateTime'
+            ])
             .where('t.projectId = :projectId', { projectId })
             .andWhere('page.deleteFlag = 0')
             .orderBy('page.id', 'DESC')
@@ -190,5 +198,12 @@ module.exports = {
 
     checkIsPageCreator (createUser, id) {
         return getRepository(Page).find({ id, createUser })
+    },
+
+    findPagePreviewImg (id) {
+        return getRepository(Page).findOne({
+            where: { id },
+            select: ['previewImg']
+        })
     }
 }

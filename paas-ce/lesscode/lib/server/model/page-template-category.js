@@ -30,7 +30,6 @@ export const getOne = async function (params = {}) {
     const res = await getRepository(PageTemplateCategory).find({
         where: params
     })
-    console.log(res, 'res')
     if (res && res.length > 0) {
         return res[0]
     }

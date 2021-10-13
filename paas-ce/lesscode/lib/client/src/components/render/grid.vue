@@ -340,7 +340,7 @@
                 const curRowNode = getNodeWithClass(e.target, 'bk-layout-grid-row')
                 curRowNode.classList.add('selected')
 
-                this.$clearMenu()
+                bus.$emit('hideContextMenu') // 隐藏右键菜单()
 
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
 
