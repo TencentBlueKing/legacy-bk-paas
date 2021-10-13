@@ -104,7 +104,7 @@
             },
             handleRemove () {
                 if (this.lastOne) {
-                    this.messageError('模版导航不能为空')
+                    this.messageError('模板导航不能为空')
                     return
                 }
                 this.$emit('on-delete')

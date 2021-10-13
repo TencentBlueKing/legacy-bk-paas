@@ -69,7 +69,7 @@ module.exports = {
 
     async queryProject (ctx) {
         const userInfo = ctx.session.userInfo
-        const { filter = '', q } = ctx.request.query
+        const { filter = '', q, officialType } = ctx.request.query
         const query = {
             condition: [],
             params: {}
@@ -100,6 +100,13 @@ module.exports = {
                 query.condition = query.condition.join(' AND ')
                 projectList = await projectModel.queryShareWithProject(query)
                 break
+            case 'official':
+                const params = { where: { isOffcial: 1 }, order: { id: 'DESC' } }
+                if (officialType !== '') {
+                    params.where.offcialType = officialType
+                }
+                projectList = await projectModel.findProjects(params)
+                break
             default:
                 query.condition.push('user_project_role.userId = :userId')
                 query.params.userId = userInfo.id
@@ -121,34 +128,21 @@ module.exports = {
         // 获取已收藏的项目
         const favoritetList = await projectModel.queryMyFavoriteProject({
             condition: 'favourite.userId = :userId',
-            params: { userId: userInfo.id }
+            params: { userId: userInfo.id },
+            select: ['project.id']
         })
 
-        // 按projectId分组
+        // 按projectId分组，只取最新的一条
         const pageMap = {}
         pageList.forEach((page) => {
-            if (pageMap[page.projectId]) {
-                pageMap[page.projectId].push(page)
-            } else {
+            if (!pageMap[page.projectId]) {
                 pageMap[page.projectId] = [page]
             }
         })
 
-        // 按页面更新时间和创建时间倒序
+        // 设置项目收藏状态
         projectList.forEach(project => {
             const projectId = project.id
-            if (pageMap[projectId]) {
-                project['pageUpdateTime'] = pageMap[projectId][0].updateTime
-
-                // 找到第一个有效页面的缩略图作为项目的缩略图，如果第一个有效页面缩略图为空，那么项目缩略图就为空
-                const len = pageMap[projectId].length
-                for (let i = 0; i < len; i++) {
-                    if (String(pageMap[projectId][i].deleteFlag) !== '1') {
-                        project['previewImg'] = pageMap[projectId][i].previewImg
-                        break
-                    }
-                }
-            }
             project['favorite'] = favoritetList.find(item => item.id === projectId) ? 1 : 0
         })
 
@@ -255,6 +249,23 @@ module.exports = {
         }
     },
 
+    async getTemplateIds (ctx) {
+        try {
+            const params = { where: { isOffcial: 1 }, order: { id: 'DESC' } }
+            const projectList = await projectModel.findProjects(params)
+            const data = projectList.map(item => item.id)
+            ctx.send({
+                code: 0,
+                message: 'OK',
+                data
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
+
     async verify (ctx) {
         try {
             const id = ctx.request.body.id
@@ -332,5 +343,22 @@ module.exports = {
         } catch (e) {
             console.error(e)
         }
+    },
+
+    async getPreviewImg (ctx) {
+        const { id } = ctx.request.query
+        let { previewImg } = await projectModel.findProjectPreviewImg(id) || {}
+
+        const dataUriPrefix = 'data:image/png;base64,'
+
+        if (!previewImg || !previewImg.startsWith(dataUriPrefix)) {
+            // 返回 1×1 px 透明png，用于在前台标记为空区别于加载失败
+            previewImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+        }
+
+        const imgBase64 = previewImg.replace(dataUriPrefix, '')
+        const buf = Buffer.from(imgBase64, 'base64')
+        ctx.type = 'image/png'
+        ctx.body = buf
     }
 }

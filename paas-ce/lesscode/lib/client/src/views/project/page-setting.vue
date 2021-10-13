@@ -316,7 +316,7 @@
                     if (field.id === 'pageRoute' || field.id === 'layoutId') {
                         await this.savePageRoute(field, value)
                         this.fetchData()
-                        // 导航模版切换后需要获取当前模版的导航数据，并更新更新本地curTemplateData
+                        // 导航模板切换后需要获取当前模板的导航数据，并更新更新本地curTemplateData
                         await this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id })
                     } else {
                         const pageData = await this.saveField(field, value)

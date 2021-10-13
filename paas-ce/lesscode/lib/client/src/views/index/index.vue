@@ -45,8 +45,9 @@
                                     @click.stop="handlePageAction('copy')"
                                     title="复制页面"></i>
                             </bk-option>
-                            <div slot="extension" class="extension" @click="handlePageAction('create')">
-                                <i class="bk-icon icon-plus-circle"></i> 新建页面
+                            <div slot="extension" class="extension">
+                                <div class="page-row" @click="handlePageAction('create')"><i class="bk-icon icon-plus-circle"></i> 新建空白页面</div>
+                                <div class="page-row" @click="handlePageFromTemplate"><i class="bk-icon icon-plus-circle"></i> 从模板新建页面</div>
                             </div>
                         </bk-select>
                     </div>
@@ -59,6 +60,7 @@
                         <li class="tool-item" v-for="(item, innerIndex) in group"
                             :key="innerIndex"
                             :class="{ active: isToolItemActive(item) }"
+                            v-bk-tooltips="{ placement: 'bottom', content: item.tips, disabled: !item.tips }"
                             @click="item.func">
                             <template v-if="item.text === '快捷键'">
                                 <div class="quick-operation" v-bk-clickoutside="toggleShowQuickOperation">
@@ -104,7 +106,9 @@
                             v-bk-tooltips="item.label"
                             :data-name="item.name"
                             @click="activeSideNav = item.name">
-                            <i :class="['bk-drag-icon', item.icon]"></i>
+                            <i :class="['bk-drag-icon', item.icon]">
+                                <i v-if="item.redPoint" class="red-point"></i>
+                            </i>
                         </li>
                     </ul>
                 </div>
@@ -161,6 +165,9 @@
                             v-bind="componentTabs.current.props">
                         </component>
                     </div>
+                </div>
+                <div class="sidebar-panel" v-show="activeSideNav === 'nav-tab-template'">
+                    <template-panel :target-data="targetData" :draging-component.sync="curDragingComponent"></template-panel>
                 </div>
                 <div class="sidebar-panel" v-show="activeSideNav === 'nav-tab-tree'">
                     <component-tree :target-data="targetData" ref="componentTree"></component-tree>
@@ -240,6 +247,12 @@
                 <i class="bk-drag-icon bk-drag-angle-left collapse-icon"
                     v-bk-tooltips.right="{ content: '查看组件配置', disabled: !collapseSide.right }"
                     @click="handleCollapseSide('right')" />
+                <div class="prop-doc"
+                    v-if="infoLinkDict[curSelectedComponentData.type] || infoLinkDict[curSelectedComponentData.name]"
+                    @click="jumpInfoLink(curSelectedComponentData)">
+                    <i class="bk-drag-icon bk-drag-jump-link"></i>
+                    <span>查看详细属性文档</span>
+                </div>
             </aside>
         </div>
 
@@ -263,6 +276,8 @@
         <page-dialog ref="pageDialog" :action="action"></page-dialog>
         <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
+        <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :is-whole-page="true" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
+        <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
     </main>
 </template>
 
@@ -289,14 +304,18 @@
     import ComponentBasePanel from './children/component-panel-base'
     import ExtraLinks from '@/components/ui/extra-links'
     import PageDialog from '@/components/project/page-dialog'
+    import SaveTemplateDialog from '@/components/render/save-template-dialog'
+    import PageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
     import PageSetting from '@/views/project/page-setting'
     import PageJson from '@/views/project/page-json'
     import pageVariable from '@/views/project/page-variable'
 
     import ComponentTree from './children/component-tree'
+    import TemplatePanel from './children/template-panel.vue'
     import { bus } from '@/common/bus'
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
+    import { infoLink } from '@/element-materials/materials/index'
 
     export default {
         components: {
@@ -314,7 +333,10 @@
             ExtraLinks,
             PageSetting,
             PageDialog,
+            SaveTemplateDialog,
+            PageFromTemplateDialog,
             ComponentTree,
+            TemplatePanel,
             PageJson,
             pageVariable
         },
@@ -331,6 +353,15 @@
                         name: 'nav-tab-component',
                         label: {
                             content: '组件库',
+                            placement: 'right',
+                            interactive: false
+                        }
+                    }, {
+                        icon: 'bk-drag-template-fill',
+                        name: 'nav-tab-template',
+                        redPoint: true,
+                        label: {
+                            content: '模板库',
                             placement: 'right',
                             interactive: false
                         }
@@ -406,6 +437,7 @@
                 actionSelected: 'edit',
                 curDragingComponent: null,
                 isShowFun: false,
+                showTemplateDialog: false,
                 componentSearchResult: null,
                 refreshDragAreaKey: +new Date(),
                 delComponentConf: {
@@ -444,11 +476,13 @@
                     [
                         { icon: 'bk-drag-icon bk-drag-save', text: '保存', func: this.handleSave },
                         { icon: 'bk-drag-icon bk-drag-play', text: '预览', func: this.handlePreview },
+                        { icon: 'bk-drag-icon bk-drag-template-fill', text: '存为模板', func: this.toggleShowTemplateDialog, tips: '将画布内容区域（不包含导航部分）存为模板' },
                         { icon: 'bk-drag-icon bk-drag-delete', text: '清空', func: this.handleClearAll },
                         { icon: 'bk-drag-icon bk-drag-hanshuku', text: '函数库', func: this.showFunManage },
                         { icon: 'bk-drag-icon bk-drag-keyboard', text: '快捷键', func: () => this.toggleShowQuickOperation(true) }
                     ]
-                ]
+                ],
+                infoLinkDict: {}
             }
         },
         computed: {
@@ -643,6 +677,9 @@
             // 设置权限相关的信息
             this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
 
+            // 组件文档链接
+            this.infoLinkDict = Object.assign({}, infoLink)
+
             // for test
             window.test = this.test
             window.test1 = this.test1
@@ -653,6 +690,11 @@
             window.addEventListener('click', this.toggleQuickOperation, true)
             window.addEventListener('beforeunload', this.beforeunloadConfirm)
             window.addEventListener('unload', this.relasePage)
+
+            bus.$on('on-delete-component', this.showDeleteElement)
+            this.$once('hook:beforeDestroy', () => {
+                bus.$off('on-delete-component', this.showDeleteElement)
+            })
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)
@@ -871,7 +913,7 @@
                         this.$store.dispatch('page/getList', { projectId: this.projectId }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
                         this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
-                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, config: { fromCache: true } }),
+                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
                         this.getAllGroupFuncs(this.projectId)
@@ -1034,6 +1076,14 @@
                 this.$refs.guide.start()
             },
 
+            toggleShowTemplateDialog (isShow) {
+                if (typeof isShow === 'boolean') {
+                    this.showTemplateDialog = isShow
+                } else {
+                    this.showTemplateDialog = !this.showTemplateDialog
+                }
+            },
+
             toggleQuickOperation (event) {
                 const mainNode = getNodeWithClass(event.target, 'target-drag-area')
                 this.isInDragArea = mainNode && mainNode.classList.contains('target-drag-area')
@@ -1107,7 +1157,7 @@
                         break
                     case 8:
                     case 46:
-                        funcChainMap.isInDragArea().exec(this.deleteComponent)
+                        funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
                         break
                     case 13:
                         funcChainMap.isDelComponentConfirm().exec(this.confirmDelComponent)
@@ -1132,11 +1182,6 @@
                 this.setCopyData(copyData)
                 this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
                 this.confirmDelComponent()
-            },
-
-            deleteComponent () {
-                const delBtn = document.querySelector('#del-component-right-sidebar')
-                delBtn && delBtn.click()
             },
 
             putComponentData () {
@@ -1404,6 +1449,13 @@
                 const customComp = this.customComponentList.find(item => item.type === type)
                 this.delComponentConf.isCustomOffline = customComp && customComp.meta.offline
             },
+            /**
+             * 跳转选中的元素文档链接
+             */
+            jumpInfoLink (item) {
+                const type = (item.type === 'chart' || item.type === 'bk-charts') ? item.name : item.type
+                window.open(this.infoLinkDict[type], '_blank')
+            },
 
             /**
              * 确认删除选中的元素
@@ -1565,7 +1617,7 @@
                         const useInfos = (usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId]))
                         useInfos.push(useInfo)
                     }
-                    if (val !== '' && valType === 'variable') {
+                    if (val !== '' && !(val.startsWith('form') && val.indexOf('.') > 0) && valType === 'variable') {
                         const variable = this.variableList.find((variable) => (variable.variableCode === val))
                         if (!variable) {
                             errMessage = `组件【${id}】使用的变量【${val}】不存在，请修改后再试`
@@ -1656,7 +1708,6 @@
                         }
                     })
                 })
-
                 return {
                     curFuncIds,
                     errMessage,
@@ -1748,6 +1799,11 @@
                         })
                     }
                 })
+            },
+
+            // 从模板创建
+            handlePageFromTemplate () {
+                this.$refs.pageFromTemplateDialog.isShow = true
             },
 
             handlePageAction (action = 'create') {

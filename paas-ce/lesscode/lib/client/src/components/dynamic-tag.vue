@@ -46,7 +46,16 @@
             return {
                 isAddTag: false,
                 userInput: '',
-                defaultTags: [...this.value]
+                defaultTags: []
+            }
+        },
+
+        watch: {
+            value: {
+                handler () {
+                    this.defaultTags = [...this.value]
+                },
+                immediate: true
             }
         },
 

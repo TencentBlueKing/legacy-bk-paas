@@ -94,6 +94,9 @@ $baseZIndexInFreeLayout: 10;
             visibility: visible !important;
         }
     }
+    &.selected > .save-as-template {
+        display: block;
+    }
     .free-layout-item-inner {
         height: 100%;
         position: relative;

@@ -16,7 +16,7 @@
             </render-grid>
         </template>
         <template v-else-if="componentData.type === 'free-layout'">
-            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls">
+            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls" v-bind="componentData.renderProps">
             </free-layout>
         </template>
         <template v-else>
@@ -118,6 +118,21 @@
         transform: translate(0, 0);
         /deep/.bk-dialog-wrapper {
             z-index: 0 !important;
+        }
+    }
+    .save-as-template {
+        display: none;
+        z-index: 1001;
+        position: absolute;
+        height: 20px;
+        font-size: 12px;
+        color: #fff;
+        background: #3a84ff;
+        border-radius: 2px;
+        padding: 2px 5px;
+        cursor: pointer;
+        &:hover {
+            background: #1964E1;
         }
     }
 </style>

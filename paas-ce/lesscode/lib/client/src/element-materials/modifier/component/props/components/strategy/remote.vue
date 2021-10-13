@@ -19,18 +19,7 @@
             <select-func v-model="remoteData" @change="changeFunc"></select-func>
             <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
         </div>
-        <bk-dialog
-            v-model="isShow"
-            :position="{ top: 100 }"
-            render-directive="if"
-            width="800"
-            :title="'数据示例'"
-            header-position="left"
-            :mask-close="false"
-            :show-footer="false"
-            ext-cls="remote-example-dialog">
-            <div class="remote-example-viewer" ref="remoteViewer"></div>
-        </bk-dialog>
+        <remote-example ref="example" :data="exampleData"></remote-example>
     </section>
 </template>
 
@@ -39,10 +28,12 @@
     import selectFunc from '@/components/methods/select-func'
     import { bus } from '@/common/bus'
     import functionHelper from '@/components/methods/function-helper'
+    import remoteExample from './remote-example'
 
     export default {
         components: {
-            selectFunc
+            selectFunc,
+            remoteExample
         },
         props: {
             name: String,
@@ -56,11 +47,13 @@
             },
             change: {
                 type: Function,
-                default: () => {}
+                default: () => {
+                }
             },
             remoteValidate: {
                 type: Function,
-                default: () => {}
+                default: () => {
+                }
             },
             autoGetData: {
                 type: Boolean,
@@ -79,15 +72,16 @@
                     methodCode: '',
                     params: []
                 },
-                usedMethodMap: {},
-                isShow: false,
-                editor: {}
+                usedMethodMap: {}
             }
         },
         computed: {
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('drag', ['targetData']),
-            ...mapGetters('variable', ['variableList'])
+            ...mapGetters('variable', ['variableList']),
+            exampleData () {
+                return { name: this.name, value: this.defaultValue }
+            }
         },
         created () {
             this.remoteData = Object.assign({}, this.remoteData, this.payload)
@@ -109,7 +103,7 @@
                 const { defaultValue, defaultValueType, valueType } = variable
                 let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
                 if (valueType === 6) value = ''
-                if (valueType === 0) value = `'${value}'`
+                if ([0, 5].includes(valueType)) value = `'${value}'`
 
                 // 对象类型，加上 ()，让直接 . 引用属性不会报错
                 if (valueType === 4) value = `(${value})`
@@ -285,58 +279,9 @@
             },
 
             handleShowExample () {
-                this.isShow = true
-                this.$nextTick(() => {
-                    this.initMonaco()
-                })
-            },
-            getDefaultData () {
-                let defaultData
-                switch (this.name) {
-                    case 'initFormData':
-                        defaultData = { string: '', boolean: false, array: [1, 2, 3] }
-                        break
-                    default:
-                        let dataString
-                        try {
-                            dataString = JSON.stringify(this.defaultValue)
-                        } catch (e) {
-                            dataString = JSON.stringify(this.defaultValue, function (key, value) {
-                                if (key === 'parent') {
-                                    return
-                                }
-                                return value
-                            })
-                        }
-                        defaultData = JSON.parse(dataString)
-                        break
-                }
-                return JSON.stringify(defaultData, null, '\t')
-            },
-            initMonaco () {
-                monaco.editor.defineTheme('remote-viewer', {
-                    base: 'vs-dark',
-                    inherit: true,
-                    rules: [{ background: '#242424' }],
-                    colors: {
-                        'editor.background': '#242424'
-                    }
-                })
-
-                const value = this.getDefaultData()
-                this.editor = monaco.editor.create(this.$refs.remoteViewer, {
-                    value: value,
-                    theme: 'remote-viewer',
-                    readOnly: true,
-                    fontSize: 14,
-                    fontFamily: 'Consolas',
-                    cursorBlinking: 'solid',
-                    automaticLayout: true,
-                    minimap: {
-                        enabled: false // 关闭小地图
-                    }
-                })
+                this.$refs.example.isShow = true
             }
+
         }
     }
 </script>
@@ -348,36 +293,33 @@
         margin: 10px 0;
         line-height: 24px;
         font-size: 12px;
-        &:first-child {
-            margin-top: 0;
-        }
+
+    &
+    :first-child {
+        margin-top: 0;
+    }
+
     }
     .under-line {
         line-height: 24px;
         border-bottom: 1px dashed #979ba5;
     }
-    .remote-example{
+
+    .remote-example {
         color: #3a84ff;
         cursor: pointer;
+        font-size: 12px
     }
+
     .form-title {
         font-weight: bold;
         color: #63656E;
-        height:22px;
+        height: 22px;
 
-        .form-tip{
-            font-weight: normal;
-            color: #979ba5;
-        }
+    .form-tip {
+        font-weight: normal;
+        color: #979ba5;
     }
 
-    .remote-example-viewer{
-        height: 403px;
-    }
-    .remote-content {
-        background: #f0f1f5;
-        .remote-button {
-            margin: 0 0 10px 6px;
-        }
     }
 </style>

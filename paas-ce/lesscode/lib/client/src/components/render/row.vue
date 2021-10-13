@@ -11,19 +11,28 @@
 
 <template>
     <div class="bk-layout-grid-row" :style="style">
+        <div class="save-as-template" @click.stop="toggleShowTemplateDialog(true)">
+            <i class="bk-drag-icon bk-drag-template-fill"></i>
+            存为模板
+        </div>
         <slot />
+        <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
     </div>
 </template>
 
 <script>
+    import saveTemplateDialog from './save-template-dialog'
     export default {
         name: 'render-row',
+        components: {
+            saveTemplateDialog
+        },
         props: {
             // 栅格间距，单位 px，左右平分
-            // gutter: {
-            //     type: Number,
-            //     default: 20
-            // },
+            gutter: {
+                type: Number,
+                default: 0
+            },
             // 栅格容器的左右外边距
             marginHorizontal: {
                 type: Number,
@@ -45,7 +54,8 @@
             return {
                 renderCols: 0,
                 renderGutter: this.gutter,
-                renderFlex: this.flex
+                renderFlex: this.flex,
+                showTemplateDialog: false
             }
         },
         computed: {
@@ -76,6 +86,11 @@
                     this.renderGutter = newVal
                 },
                 immediate: true
+            }
+        },
+        methods: {
+            toggleShowTemplateDialog (isShow) {
+                this.showTemplateDialog = isShow
             }
         }
     }

@@ -17,10 +17,11 @@ export default function (children) {
         group: '布局',
         styles: ['size', 'margin', 'padding', 'backgroundColor'],
         props: {
-            // gutter: {
-            //     type: 'number',
-            //     val: 1
-            // },
+            gutter: {
+                type: 'number',
+                val: 0,
+                tips: '每列栅格之间的间距'
+            },
             'margin-horizontal': {
                 type: 'number',
                 val: 0

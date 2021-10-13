@@ -41,14 +41,28 @@ function getCurUsedFuncs () {
 
     const callBack = (component) => {
         const renderProps = component.renderProps || {}
+        const isForm = component.type === 'widget-form'
         Object.keys(renderProps).forEach((key) => {
-            const { type, payload } = renderProps[key] || {}
+            const { type, payload, val } = renderProps[key] || {}
 
             if (type === 'remote' || (Array.isArray(type) && type.includes('remote'))) {
                 if (payload && payload.methodCode) {
                     const code = payload.methodCode
                     findUsedFuncsByCode(code)
                 }
+            }
+
+            // form表单简要绑定函数
+            if (isForm && key === 'rules') {
+                Object.keys(val).forEach((ruleKey) => {
+                    if (val[ruleKey] && val[ruleKey].length) {
+                        val[ruleKey].map(item => {
+                            if (item.type === 'validator' && item.validator) {
+                                findUsedFuncsByCode(item.validator)
+                            }
+                        })
+                    }
+                })
             }
         })
 
@@ -83,6 +97,7 @@ function getCurUsedFuncs () {
 // 替换函数中的变量和函数
 function replaceFuncKeyword (funcBody = '', callBack) {
     const commentsPositions = []
+    const semiIndexs = []
     acorn.parse(funcBody, {
         onComment (isBlock, text, start, end) {
             commentsPositions.push({
@@ -90,9 +105,20 @@ function replaceFuncKeyword (funcBody = '', callBack) {
                 end
             })
         },
+        onInsertedSemicolon (lastTokEnd, lastTokEndLoc) {
+            semiIndexs.push(lastTokEnd)
+        },
         allowReturnOutsideFunction: true
     })
-    return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
+
+    const ret = funcBody.split('').map((c, i) => {
+        if (semiIndexs.indexOf(i) > -1) {
+            return ';'
+        }
+        return c
+    }).join('')
+
+    return ret.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
         const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
         return isInComments ? all : callBack(all, first, second, dirKey, funcStr, funcCode)
     })
