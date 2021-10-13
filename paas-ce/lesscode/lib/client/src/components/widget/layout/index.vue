@@ -1,5 +1,5 @@
 <template>
-    <component ref="layoutDom" class="lesscode-editor-layout" :is="layoutCom">
+    <component class="lesscode-editor-layout" :is="layoutCom">
         <slot />
     </component>
 </template>

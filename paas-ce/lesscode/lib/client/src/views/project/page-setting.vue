@@ -23,7 +23,7 @@
                         <span v-bk-tooltips="{ content: field.desc, disabled: !field.desc }" class="field-display-name">{{field.name}}</span>：
                     </div>
                     <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
-                        <template v-if="field.type === 'color-picker' || field.type === 'min-width'">
+                        <template v-if="field.type === 'style-setting' || field.type === 'min-width'">
                             <component
                                 class="style-setting"
                                 :is="field.id"
@@ -291,12 +291,12 @@
                             {
                                 id: 'margin',
                                 name: '外边距',
-                                type: 'color-picker'
+                                type: 'style-setting'
                             },
                             {
                                 id: 'padding',
                                 name: '内边距',
-                                type: 'color-picker'
+                                type: 'style-setting'
                             }
                         ]
                     },
@@ -306,7 +306,7 @@
                             {
                                 id: 'backgroundColor',
                                 name: '背景色',
-                                type: 'color-picker'
+                                type: 'style-setting'
                             }
                         ]
                     },
@@ -316,7 +316,7 @@
                             {
                                 id: 'StyleCustom',
                                 name: '自定义样式',
-                                type: 'color-picker'
+                                type: 'style-setting'
                             }
                         ]
                     }
@@ -338,7 +338,7 @@
                     const [pageRoute, layoutList, routeGroup] = await Promise.all([
                         this.$store.dispatch('route/find', { pageId: this.page.id }),
                         this.$store.dispatch('layout/getList', { projectId: this.projectId }),
-                        this.$store.dispatch('route/getProjectRouteGroup', { projelctId: this.projectId })
+                        this.$store.dispatch('route/getProjectRouteGroup', { projectId: this.projectId })
                     ])
                     layoutList.forEach(item => {
                         item.defaultName = item.showName || item.defaultName
