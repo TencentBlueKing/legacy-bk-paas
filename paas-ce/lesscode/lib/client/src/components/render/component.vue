@@ -335,9 +335,9 @@
                 })
                 this.bindProps = bindProps
 
-                // bk-swiper 组件的宽度由属性而不是样式决定，且组件本身的 dom 中会根据对应的属性配置生成 style
+                // bk-swiper 组件的宽度由属性而不是样式决定，且组件本身的 dom 中会根据对应的属性配置生成 style （bk-search-select、bk-progress 同理）
                 // 这里强制刷新，让组件重新渲染
-                if (this.renderData.type === 'bk-swiper') {
+                if (this.renderData.type === 'bk-swiper' || this.renderData.type === 'bk-search-select' || this.renderData.type === 'bk-progress') {
                     this.renderDataSlotRefreshKey = Date.now()
                 }
             },
