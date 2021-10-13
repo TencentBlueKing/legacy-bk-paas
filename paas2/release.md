@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.12.27
+    - update: esb update data/jobv3/sops confapis
+    - update: esb add data module RESOURCECENTERAPI
+
 # 2.12.26
     - update: esb update monitor_v3/jobv3/itsm/iam/cc confapis
 
