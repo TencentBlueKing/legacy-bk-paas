@@ -288,16 +288,6 @@
   is_hidden: true
 
 
-- path: /data/v3/meta/basic/entity/complex_search/
-  name: v3_meta_basic_entity_complex_search_post
-  label: 原生后端查询语言搜索
-  method: POST
-  comp_codename: generic.data.datav3_component
-  dest_path: /v3/meta/basic/entity/complex_search/
-  dest_http_method: POST
-  is_hidden: true
-
-
 - path: /data/v3/meta/tdw/tables/{table_id}/
   name: v3_meta_tdw_tables__table_id__get
   label: 获取单个TDW表实例的信息
