@@ -699,3 +699,12 @@
   dest_path: /v3/dataflow/flow/log/get_flow_job_app_id/
   dest_http_method: GET
   is_hidden: true
+
+- path: /data/v3/dataflow/flow/flows/{fid}/list_rt_by_flowid/
+  name: v3_dataflow_flow_flows__fid__list_rt_by_flowid_get
+  label: 获取flow中对应的离线/实时任务列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/list_rt_by_flowid/
+  dest_http_method: GET
+  is_hidden: true
