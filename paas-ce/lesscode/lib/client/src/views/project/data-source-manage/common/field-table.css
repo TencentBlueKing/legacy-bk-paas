@@ -1,0 +1,48 @@
+.field-table {
+    width: 100%;
+    tr.bk-table-row.hover-row {
+      > td {
+        background-color: #fff;
+        .field-table-input {
+          .bk-form-input {
+            border: none;
+            background: #f5f7fa;
+          }
+        }
+        .field-table-select {
+          background: #f5f7fa;
+          .icon-angle-down {
+            display: block;
+          }
+        }
+      }
+    }
+    .field-table-icon {
+        color: #c4c6cc;
+        cursor: pointer;
+        margin-left: 5px;
+        font-size: 16px;
+    }
+    .field-table-input {
+      .bk-form-input {
+        border: none;
+        &:focus {
+          background: #f5f7fa;
+        }
+      }
+    }
+    .field-table-select {
+        border: none;
+        .icon-angle-down {
+            display: none;
+        }
+    }
+    .field-icon {
+        color: #c4c6cc;
+        font-size: 16px;
+        cursor: pointer;
+        &:first-child {
+            margin-right: 10px;
+        }
+    }
+  }
