@@ -19,7 +19,7 @@ export default {
     events: [{
         name: 'change', tips: '状态发生变化时调用该事件函数，事件回调参数 (status: Boolean)'
     }],
-    styles: ['margin', 'display', 'backgroundColor'],
+    styles: ['margin', 'display', 'backgroundColor', 'border'],
     renderStyles: {
         display: 'inline-block'
     },

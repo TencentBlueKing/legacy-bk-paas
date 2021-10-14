@@ -21,7 +21,7 @@ export default {
     }, {
         name: 'leave', tips: '鼠标 leave 时调用该事件函数，暂无回调参数'
     }],
-    styles: ['size', 'margin', 'display', 'font', 'backgroundColor'],
+    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
     renderStyles: {
         display: 'inline-block'
     },
