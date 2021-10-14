@@ -39,9 +39,9 @@ export default {
                 if (errData) return '返回值每个元素需要含有label和value字段'
             },
             val: [
-                { label: '选项一', value: 1, checked: false },
-                { label: '选项二', value: 2, checked: false },
-                { label: '选项三', value: 3, checked: false }
+                { label: '选项一', value: '1', checked: false },
+                { label: '选项二', value: '2', checked: false },
+                { label: '选项三', value: '3', checked: false }
             ],
             payload: {}
         }

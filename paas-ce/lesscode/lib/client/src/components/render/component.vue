@@ -165,19 +165,28 @@
              * @returns { Object }
              */
             wrapperStyles () {
+                const componentStyles = Object.assign({}, this.renderData.renderStyles, this.renderData.renderStyles.customStyle || {})
                 const {
                     top,
                     left,
                     width,
                     height
-                } = this.renderData.renderStyles
+                } = componentStyles
 
                 const styles = {
-                    top: top,
-                    left: left,
+                    top,
+                    left,
                     display: this.componentStyleDisplayValue,
-                    width: width
+                    width
                 }
+
+                // margin属性需要加到组件外层、render-grid不用加，render-grid的margin加在了render-row上面
+                const marginStypes = ['marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'margin']
+                this.componentData.type !== 'render-grid' && marginStypes.forEach(function (item) {
+                    if (componentStyles[item]) {
+                        styles[item] = componentStyles[item]
+                    }
+                })
                 // bk-swiper 设置默认高度
                 if (this.componentData.type === 'bk-swiper') {
                     styles.height = height
@@ -335,9 +344,9 @@
                 })
                 this.bindProps = bindProps
 
-                // bk-swiper 组件的宽度由属性而不是样式决定，且组件本身的 dom 中会根据对应的属性配置生成 style
+                // bk-swiper 组件的宽度由属性而不是样式决定，且组件本身的 dom 中会根据对应的属性配置生成 style （bk-search-select、bk-progress 同理）
                 // 这里强制刷新，让组件重新渲染
-                if (this.renderData.type === 'bk-swiper') {
+                if (this.renderData.type === 'bk-swiper' || this.renderData.type === 'bk-search-select' || this.renderData.type === 'bk-progress') {
                     this.renderDataSlotRefreshKey = Date.now()
                 }
             },
@@ -447,7 +456,7 @@
                 curComponentNode.classList.add(className)
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
-                this.$clearMenu()
+                bus.$emit('hideContextMenu') // 隐藏右键菜单()
             },
 
             /**
