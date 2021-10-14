@@ -123,11 +123,6 @@
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
     }
 
-    .preview-page {
-        height: calc(100% - 50px);
-        overflow: auto;
-    }
-
     .red-point {
         display:block;
         margin-left: 3px;
