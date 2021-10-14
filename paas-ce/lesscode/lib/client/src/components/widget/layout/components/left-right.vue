@@ -70,7 +70,9 @@
                     </bk-navigation-menu>
                 </div>
             </template>
-            <slot />
+            <div class="nav-container">
+                <slot />
+            </div>
         </bk-navigation>
     </div>
 </template>

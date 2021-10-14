@@ -71,20 +71,17 @@
                 handler (style) {
                     this.$nextTick(() => {
                         let domStyle
-                        let extraStyle = {}
                         if (!componentMap[this.layout] || this.layout === 'empty') {
                             domStyle = document.querySelector('.lesscode-editor-layout').style
                         } else {
-                            domStyle = document.querySelector('.lesscode-editor-layout .container-content').style
-                            extraStyle = {
-                                maxHeight: 'calc(100vh - 52px)'
-                            }
+                            console.log(document.querySelector('.lesscode-editor-layout .nav-container').style)
+                            domStyle = document.querySelector('.lesscode-editor-layout .nav-container').style
                         }
                         // 恢复默认样式
                         for (const i in domStyle) {
                             domStyle.setProperty(i, '')
                         }
-                        Object.assign(domStyle, extraStyle, style)
+                        Object.assign(domStyle, style)
                     })
                 },
                 immediate: true

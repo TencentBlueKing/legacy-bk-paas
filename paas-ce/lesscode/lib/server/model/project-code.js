@@ -227,7 +227,7 @@ const projectCode = {
                     if (layout.path !== '/') childRoute.push(`{ path: '*', component: BkNotFound, meta: { pageName: '404' } }`)
 
                     const currentFilePath = path.join(targetPath, `lib/client/src/views/${layout.name}/bkindex.vue`)
-                    await this.writeViewCode(currentFilePath, { targetData: [] }, '', pathName, projectId, {}, '', layout.content, true, layout.layoutType, [])
+                    await this.writeViewCode(currentFilePath, { targetData: [] }, '', pathName, projectId, {}, '', layout.content, true, layout.layoutType, [], {})
 
                     routerStr += `{
                         path: '${layout.path.replace(/^\//, '')}',
@@ -261,7 +261,8 @@ const projectCode = {
                             '',
                             false,
                             route.layoutType,
-                            variableData
+                            variableData,
+                            route.styleSetting
                         ) || []
 
                         usedMethodList = [...usedMethodList, ...methodStrList]

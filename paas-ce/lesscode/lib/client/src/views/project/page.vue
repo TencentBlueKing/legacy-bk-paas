@@ -61,7 +61,7 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(page.id)">
-                                        <li><a href="javascript:;" @click="handleDownloadSource(page.content, page.id, page.lifeCycle)">下载源码</a></li>
+                                        <li><a href="javascript:;" @click="handleDownloadSource(page.content, page.id, page.lifeCycle, page.styleSetting)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="handleRename(page)">重命名</a></li>
                                         <li><a href="javascript:;" @click="handleEditRoute(page)">修改路由</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(page)">复制</a></li>
@@ -204,7 +204,7 @@
                 this.$refs.pageDialog.dialog.formData.layoutId = layoutId
                 this.$refs.pageDialog.dialog.visible = true
             },
-            async handleDownloadSource (targetData, pageId, lifeCycle) {
+            async handleDownloadSource (targetData, pageId, lifeCycle, styleSetting) {
                 if (!targetData) {
                     this.$bkMessage({
                         theme: 'error',
@@ -218,6 +218,7 @@
                     projectId: this.projectId,
                     lifeCycle,
                     pageId,
+                    styleSetting,
                     layoutContent: this.pageLayout.layoutContent,
                     from: 'download_page'
                 }).then((res) => {

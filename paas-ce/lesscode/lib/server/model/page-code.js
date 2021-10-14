@@ -562,7 +562,7 @@ class PageCode {
                     align-items: center;
                     cursor: pointer;
                 }
-                .bk-navigation-wrapper .navigation-container .container-content {
+                .navigation-container .container-content {
                     ${pageStyle}
                 }
             `
