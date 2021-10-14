@@ -74,7 +74,6 @@
                         if (!componentMap[this.layout] || this.layout === 'empty') {
                             domStyle = document.querySelector('.lesscode-editor-layout').style
                         } else {
-                            console.log(document.querySelector('.lesscode-editor-layout .nav-container').style)
                             domStyle = document.querySelector('.lesscode-editor-layout .nav-container').style
                         }
                         // 恢复默认样式

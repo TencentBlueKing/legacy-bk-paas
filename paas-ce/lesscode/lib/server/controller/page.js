@@ -20,7 +20,6 @@ export const getPageList = async (ctx) => {
         const res = await PageModel.getProjectPages(projectId)
 
         let list = res
-        console.log(list)
         if (lite) {
             list = list.map(({ id, pageCode, pageName }) => ({ id, pageCode, pageName }))
         }

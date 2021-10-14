@@ -12,91 +12,93 @@
 <template>
     <div :class="['page-setting', { function: type === 'pageFunction' }]"
         v-bkloading="{ isLoading: pageLoading, opacity: 1 }">
-        <section v-for="setting in settingGroup" :key="setting.title">
-            <div class="title" v-show="!pageLoading">{{ setting.title }}</div>
-            <div class="setting-list" v-show="!pageLoading">
-                <div class="setting-item" v-for="(field, index) in setting.settingFields" :key="index"
-                    :style="{
-                        'margin-top': field.type === 'color-picker' && index !== 0 ? '25px' : 0
-                    }">
-                    <div class="field-label">
-                        <span v-bk-tooltips="{ content: field.desc, disabled: !field.desc }" class="field-display-name">{{field.name}}</span>：
-                    </div>
-                    <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
-                        <template v-if="field.type === 'style-setting' || field.type === 'min-width'">
-                            <component
-                                class="style-setting"
-                                :is="field.id"
-                                :key="field.id"
-                                :type="field.type"
-                                :component-id="'pageStyleSetting'"
-                                :value="page.styleSetting"
-                                :change="changeStyle" />
-                        </template>
-                        <template v-else-if="field !== editField.field">
-                            <div class="field-content">
-                                <div class="route" v-if="field.id === 'pageRoute'">
-                                    <div v-if="pageRoute.id">{{layoutPath}}<span>{{pageRoute.path}}</span></div>
-                                    <div v-else class="unset">未设置</div>
-                                </div>
-                                <span v-else class="field-display-value">{{getFieldDisplayValue(field) || '--'}}</span>
-                                <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
-                            </div>
-                        </template>
-                        <template v-else-if="!loadingState.includes(field)">
-                            <div class="field-form">
+        <div class="page-setting-wrapper">
+            <section v-for="setting in settingGroup" :key="setting.title">
+                <div class="title" v-show="!pageLoading">{{ setting.title }}</div>
+                <div class="setting-list" v-show="!pageLoading">
+                    <div class="setting-item" v-for="(field, index) in setting.settingFields" :key="index"
+                        :style="{
+                            'margin-top': field.type === 'style-setting' && index !== 0 ? '25px' : 0
+                        }">
+                        <div class="field-label">
+                            <span v-bk-tooltips="{ content: field.desc, disabled: !field.desc }" class="field-display-name">{{field.name}}</span>：
+                        </div>
+                        <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
+                            <template v-if="field.type === 'style-setting' || field.type === 'min-width'">
                                 <component
-                                    :is="`bk-${field.type}`"
-                                    :class="[`form-component ${field.type}`, { error: (errors[field.id] || []).length }]"
-                                    :placeholder="getPlaceholder(field)"
-                                    v-model.trim="editField.value"
-                                    v-on="getEvents(field)"
-                                    v-bind="field.props"
-                                    :ref="`component-${field.id}`">
-                                    <slot-component
-                                        v-for="child in field.children"
-                                        :key="child.id"
-                                        :is="`bk-${child.type}`"
-                                        v-bind="child.props"
-                                    >
-                                        <slot-component-child
-                                            v-for="childSlot in child.children"
-                                            :key="childSlot.id"
-                                            :is="`bk-${childSlot.type}`"
-                                            v-bind="childSlot.props"
-                                        >
-                                            <template v-if="field.id === 'pageRoute'">
-                                                <div class="bk-option-content-default" :title="childSlot.props.name">
-                                                    <div class="bk-option-name">
-                                                        {{childSlot.props.name}}<span class="bound" v-if="childSlot.props.disabled">（已绑定）</span>
-                                                    </div>
-                                                </div>
-                                            </template>
-                                        </slot-component-child>
-                                    </slot-component>
-                                    <div slot="extension" style="cursor: pointer;" @click="goToPage('layout', true)" v-if="field.id === 'layoutId'">
-                                        <i class="bk-drag-icon bk-drag-jump-link"></i> 新建模板实例
+                                    class="style-setting"
+                                    :is="field.id"
+                                    :key="field.id"
+                                    :type="field.type"
+                                    :component-id="'pageStyleSetting'"
+                                    :value="page.styleSetting"
+                                    :change="changeStyle" />
+                            </template>
+                            <template v-else-if="field !== editField.field">
+                                <div class="field-content">
+                                    <div class="route" v-if="field.id === 'pageRoute'">
+                                        <div v-if="pageRoute.id">{{layoutPath}}<span>{{pageRoute.path}}</span></div>
+                                        <div v-else class="unset">未设置</div>
                                     </div>
-                                    <div slot="extension" style="cursor: pointer;" @click="goToPage('routes', true)" v-if="field.id === 'pageRoute'">
-                                        <i class="bk-drag-icon bk-drag-jump-link"></i> 新建路由
-                                    </div>
-                                </component>
-                                <div class="buttons">
-                                    <bk-button text size="small" theme="primary"
-                                        :disabled="disabled"
-                                        @click="handleConfirm">确定</bk-button>
-                                    <span class="divider">|</span>
-                                    <bk-button text size="small" theme="primary" @click="handleCancel">取消</bk-button>
+                                    <span v-else class="field-display-value">{{getFieldDisplayValue(field) || '--'}}</span>
+                                    <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
                                 </div>
-                            </div>
-                            <span class="form-error" v-if="(errors[field.id] || []).length">
-                                {{errors[field.id][0].message}}
-                            </span>
-                        </template>
+                            </template>
+                            <template v-else-if="!loadingState.includes(field)">
+                                <div class="field-form">
+                                    <component
+                                        :is="`bk-${field.type}`"
+                                        :class="[`form-component ${field.type}`, { error: (errors[field.id] || []).length }]"
+                                        :placeholder="getPlaceholder(field)"
+                                        v-model.trim="editField.value"
+                                        v-on="getEvents(field)"
+                                        v-bind="field.props"
+                                        :ref="`component-${field.id}`">
+                                        <slot-component
+                                            v-for="child in field.children"
+                                            :key="child.id"
+                                            :is="`bk-${child.type}`"
+                                            v-bind="child.props"
+                                        >
+                                            <slot-component-child
+                                                v-for="childSlot in child.children"
+                                                :key="childSlot.id"
+                                                :is="`bk-${childSlot.type}`"
+                                                v-bind="childSlot.props"
+                                            >
+                                                <template v-if="field.id === 'pageRoute'">
+                                                    <div class="bk-option-content-default" :title="childSlot.props.name">
+                                                        <div class="bk-option-name">
+                                                            {{childSlot.props.name}}<span class="bound" v-if="childSlot.props.disabled">（已绑定）</span>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </slot-component-child>
+                                        </slot-component>
+                                        <div slot="extension" style="cursor: pointer;" @click="goToPage('layout', true)" v-if="field.id === 'layoutId'">
+                                            <i class="bk-drag-icon bk-drag-jump-link"></i> 新建模板实例
+                                        </div>
+                                        <div slot="extension" style="cursor: pointer;" @click="goToPage('routes', true)" v-if="field.id === 'pageRoute'">
+                                            <i class="bk-drag-icon bk-drag-jump-link"></i> 新建路由
+                                        </div>
+                                    </component>
+                                    <div class="buttons">
+                                        <bk-button text size="small" theme="primary"
+                                            :disabled="disabled"
+                                            @click="handleConfirm">确定</bk-button>
+                                        <span class="divider">|</span>
+                                        <bk-button text size="small" theme="primary" @click="handleCancel">取消</bk-button>
+                                    </div>
+                                </div>
+                                <span class="form-error" v-if="(errors[field.id] || []).length">
+                                    {{errors[field.id][0].message}}
+                                </span>
+                            </template>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
 </template>
 
@@ -611,9 +613,17 @@
 </script>
 
 <style lang="postcss" scoped>
+    @import "@/css/mixins/scroller";
+
     .page-setting {
-        padding: 5px 40px 0;
-        margin-bottom: 20px;
+        height: 100%;
+        overflow: auto;
+        @mixin scroller;
+        
+        .page-setting-wrapper {
+            padding: 5px 40px 0;
+            margin-bottom: 20px;
+        }
 
         /deep/ .style-setting {
             margin-left: 0;
