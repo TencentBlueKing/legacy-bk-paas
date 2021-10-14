@@ -13,10 +13,14 @@ export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
     apiArr.forEach(async api => {
         if (!apiRecords.find(item => item.name === api)) {
+            const res = await getRepository(ApiMigraion).save([{ name: api }])
+            const id = res[0] && res[0].id
             const result = await eval(`${api}('${api}')`)
             if (result && result.code === 0) {
-                await getRepository(ApiMigraion).save([{ name: api }])
                 console.log(result.message)
+            } else {
+                const deleteRes = await getRepository(ApiMigraion).delete({ id })
+                console.log(deleteRes, 'delete')
             }
         }
     })
@@ -27,33 +31,37 @@ export const executeApi = async () => {
  */
 async function setDefaultPageTemplateCategory (apiName) {
     const projectRepo = getRepository(Project)
-    try {
-        await getConnection().transaction(async transactionalEntityManager => {
-            const projectList = await projectRepo.find()
-
-            const PageTemplateCategoryList = projectList.map(project => {
-                const { id, createTime, updateTime, createUser, updateUser } = project
-                return {
-                    name: '默认分类',
-                    belongProjectId: id,
-                    createTime,
-                    updateTime,
-                    createUser,
-                    updateUser
-                }
-            })
-            await transactionalEntityManager.save(PageTemplateCategory, PageTemplateCategoryList)
-        })
-        return {
-            code: 0,
-            message: `${apiName}: Insert success`
-        }
-    } catch (err) {
-        return {
-            code: -1,
-            message: `${apiName}: ${err.message || err}`
-        }
+    return {
+        code: -1,
+        message: `${apiName}:`
     }
+    // try {
+    //     await getConnection().transaction(async transactionalEntityManager => {
+    //         const projectList = await projectRepo.find()
+
+    //         const PageTemplateCategoryList = projectList.map(project => {
+    //             const { id, createTime, updateTime, createUser, updateUser } = project
+    //             return {
+    //                 name: '默认分类',
+    //                 belongProjectId: id,
+    //                 createTime,
+    //                 updateTime,
+    //                 createUser,
+    //                 updateUser
+    //             }
+    //         })
+    //         await transactionalEntityManager.save(PageTemplateCategory, PageTemplateCategoryList)
+    //     })
+    //     return {
+    //         code: 0,
+    //         message: `${apiName}: Insert success`
+    //     }
+    // } catch (err) {
+    //     return {
+    //         code: -1,
+    //         message: `${apiName}: ${err.message || err}`
+    //     }
+    // }
 }
 
 async function updateCardSlot () {
