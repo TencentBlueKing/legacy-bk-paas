@@ -13,10 +13,14 @@ export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
     apiArr.forEach(async api => {
         if (!apiRecords.find(item => item.name === api)) {
+            const res = await getRepository(ApiMigraion).save([{ name: api }])
+            const id = res[0] && res[0].id
             const result = await eval(`${api}('${api}')`)
             if (result && result.code === 0) {
-                await getRepository(ApiMigraion).save([{ name: api }])
                 console.log(result.message)
+            } else {
+                const deleteRes = await getRepository(ApiMigraion).delete({ id })
+                console.log(deleteRes, 'delete')
             }
         }
     })
