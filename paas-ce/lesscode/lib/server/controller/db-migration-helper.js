@@ -31,37 +31,33 @@ export const executeApi = async () => {
  */
 async function setDefaultPageTemplateCategory (apiName) {
     const projectRepo = getRepository(Project)
-    return {
-        code: -1,
-        message: `${apiName}:`
-    }
-    // try {
-    //     await getConnection().transaction(async transactionalEntityManager => {
-    //         const projectList = await projectRepo.find()
+    try {
+        await getConnection().transaction(async transactionalEntityManager => {
+            const projectList = await projectRepo.find()
 
-    //         const PageTemplateCategoryList = projectList.map(project => {
-    //             const { id, createTime, updateTime, createUser, updateUser } = project
-    //             return {
-    //                 name: '默认分类',
-    //                 belongProjectId: id,
-    //                 createTime,
-    //                 updateTime,
-    //                 createUser,
-    //                 updateUser
-    //             }
-    //         })
-    //         await transactionalEntityManager.save(PageTemplateCategory, PageTemplateCategoryList)
-    //     })
-    //     return {
-    //         code: 0,
-    //         message: `${apiName}: Insert success`
-    //     }
-    // } catch (err) {
-    //     return {
-    //         code: -1,
-    //         message: `${apiName}: ${err.message || err}`
-    //     }
-    // }
+            const PageTemplateCategoryList = projectList.map(project => {
+                const { id, createTime, updateTime, createUser, updateUser } = project
+                return {
+                    name: '默认分类',
+                    belongProjectId: id,
+                    createTime,
+                    updateTime,
+                    createUser,
+                    updateUser
+                }
+            })
+            await transactionalEntityManager.save(PageTemplateCategory, PageTemplateCategoryList)
+        })
+        return {
+            code: 0,
+            message: `${apiName}: Insert success`
+        }
+    } catch (err) {
+        return {
+            code: -1,
+            message: `${apiName}: ${err.message || err}`
+        }
+    }
 }
 
 async function updateCardSlot () {
