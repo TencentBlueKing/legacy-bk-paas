@@ -32,6 +32,7 @@ module.exports = {
                 'page.id',
                 'page.pageName',
                 'page.pageCode',
+                'page.content',
                 'page.updateUser',
                 'page.createUser',
                 'page.updateTime'

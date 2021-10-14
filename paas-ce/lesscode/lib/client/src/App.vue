@@ -104,6 +104,7 @@
     #app {
         width: 100%;
         height: 100%;
+        overflow-y: hidden;
         font-size: 14px;
         color: #63656e;
     }
@@ -120,6 +121,11 @@
     .win {
         /* font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria; */
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
+    }
+
+    .preview-page {
+        height: calc(100% - 50px);
+        overflow: auto;
     }
 
     .red-point {
