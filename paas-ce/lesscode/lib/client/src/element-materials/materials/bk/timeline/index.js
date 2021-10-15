@@ -18,9 +18,9 @@ export default {
     order: 1,
     events: [{
         name: 'select',
-        tips: '点击标题触发，回调参数为相应点击项的数据data'
+        tips: '点击标题时调用该事件函数，事件回调参数 (data: Object)'
     }],
-    styles: ['margin'],
+    styles: ['size', 'margin', 'padding'],
     directives: [
         {
             type: 'v-bind',

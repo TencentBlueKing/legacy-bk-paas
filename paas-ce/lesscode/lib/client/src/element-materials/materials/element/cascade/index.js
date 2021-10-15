@@ -18,17 +18,17 @@ export default {
     order: 1,
     styles: ['size', 'margin', 'display'],
     events: [{
-        name: 'expand-change', tips: '当展开节点发生变化时触发，参数为各父级选项值组成的数组'
+        name: 'expand-change', tips: '当展开节点发生变化时调用该事件函数，事件回调参数 (valueList: Array)'
     }, {
-        name: 'change', tips: '当选中节点变化时触发，参数为选中节点的值'
+        name: 'change', tips: '当选中节点变时调用该事件函数，事件回调参数 (value: Array)'
     }, {
-        name: 'blur', tips: '当失去焦点时触发，参数为(event: Event)'
+        name: 'blur', tips: '当失去焦点时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'focus', tips: '当获得焦点时触发，参数为(event: Event)'
+        name: 'focus', tips: '当获得焦点时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'visible-change', tips: '下拉框出现/隐藏时触发，参数为出现则为 true，隐藏则为 false'
+        name: 'visible-change', tips: '下拉框出现/隐藏时调用该事件函数，事件回调参数 (value: Boolean)'
     }, {
-        name: 'remove-tag', tips: '在多选模式下，移除Tag时触发，参数为移除的Tag对应的节点的值'
+        name: 'remove-tag', tips: '在多选模式下，移除Tag时调用该事件函数，事件回调参数 (value: Array)'
     }],
     directives: [
         {

@@ -1,7 +1,21 @@
 <template>
     <article class="function-market-home">
         <section class="function-market-title">
-            <bk-button class="mr5" theme="primary" @click="showMarketFunc.isShow = true" v-if="isAdmin">新建函数</bk-button>
+            <section v-if="isPlatformAdmin">
+                <bk-button
+                    class="mr5"
+                    theme="primary"
+                    @click="showMarketFunc.isShow = true"
+                >新建函数</bk-button>
+                <bk-button
+                    class="mr5"
+                    @click="importData.show = true"
+                >导入</bk-button>
+                <bk-button
+                    class="mr5"
+                    @click="exportMarketFuncs"
+                >导出</bk-button>
+            </section>
             <bk-input class="fun-search" right-icon="bk-icon icon-search" v-model="searchStr" clearable placeholder="函数关键字"></bk-input>
         </section>
 
@@ -16,7 +30,7 @@
                 <h3 class="card-title">{{ card.funcName }}</h3>
                 <p class="card-body" v-bk-overflow-tips>{{ card.funcSummary }}</p>
                 <bk-popconfirm
-                    v-if="isAdmin"
+                    v-if="isPlatformAdmin"
                     content="确定删除该函数？"
                     width="280"
                     @confirm="handleDeleteFunc(card)">
@@ -27,7 +41,7 @@
                     <bk-button text class="foot-btn" @click.stop="handleShowSource(card)">查看源码</bk-button>
                     <bk-divider direction="vertical"></bk-divider>
                     <bk-button text class="foot-btn" @click.stop="handleShowAddFuncFromMarket(card)">添加至项目</bk-button>
-                    <template v-if="isAdmin">
+                    <template v-if="isPlatformAdmin">
                         <bk-divider direction="vertical"></bk-divider>
                         <bk-button text class="foot-btn" @click.stop="handleShowEditFunc(card)">编辑</bk-button>
                     </template>
@@ -71,23 +85,44 @@
 
         <section v-if="showSource.isShow" class="source-function">
             <source-market :func-data="showSource.func" class="source-code">
-                <i class="bk-drag-icon bk-drag-close-line icon-style" slot="tools" @click="showSource.isShow = false"></i>
+                <i
+                    class="bk-drag-icon bk-drag-export icon-style"
+                    slot="tools"
+                    @click="exportMarketSingleFunc(showSource.func)"
+                    v-if="isPlatformAdmin"
+                ></i>
+                <i
+                    class="bk-drag-icon bk-drag-close-line icon-style"
+                    slot="tools"
+                    @click="showSource.isShow = false"
+                ></i>
             </source-market>
         </section>
+
+        <import-functions
+            :show.sync="importData.show"
+            :loading="importData.loading"
+            @import="handleImport"
+        >
+            <bk-button @click="exportDemoFunction">示例</bk-button>
+        </import-functions>
     </article>
 </template>
 
 <script>
-    import { mapActions } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
     import sourceMarket from '@/components/methods/func-form/source-market'
     import funcMarket from '@/components/methods/func-form/func-market'
     import addFunc from '@/components/methods/func-form/add-func'
+    import importFunctions from '@/components/methods/import-functions'
+    import functionHelper from '@/components/methods/function-helper'
 
     export default {
         components: {
             sourceMarket,
             funcMarket,
-            addFunc
+            addFunc,
+            importFunctions
         },
 
         data () {
@@ -110,13 +145,17 @@
                     loading: false,
                     func: {}
                 },
-                isAdmin: false
+                importData: {
+                    show: false,
+                    loading: false
+                }
             }
         },
 
         computed: {
+            ...mapGetters(['isPlatformAdmin']),
             computedCardList () {
-                return this.cardList.filter(card => card.funcName.includes(this.searchStr))
+                return this.cardList.filter(card => (card.funcName || '').includes(this.searchStr))
             }
         },
 
@@ -127,18 +166,15 @@
         methods: {
             ...mapActions('functionMarket', [
                 'getAllFuncFromMarket',
+                'bulkAddFuncs',
                 'addMarketFunc',
                 'updateMarketFunc',
                 'addFuncToProject',
                 'deleteMarketFunc'
             ]),
-            ...mapActions('perm', ['isPlatformAdmin']),
 
             initData () {
                 this.getCardList()
-                this.isPlatformAdmin().then((res) => {
-                    this.isAdmin = res
-                })
             },
 
             getCardList () {
@@ -238,6 +274,66 @@
                 } else {
                     this.clearMarketSideData()
                 }
+            },
+
+            handleImport (funList) {
+                try {
+                    const funcList = []
+                    const ignoreFunList = []
+                    if (funList.length <= 0) {
+                        throw new Error('JSON文件为空，暂无导入数据')
+                    }
+                    funList.forEach((item) => {
+                        const isRepeatFunc = [...this.cardList, ...funcList].find((func) => (func.funcName === item.funcName))
+                        if (isRepeatFunc) {
+                            ignoreFunList.push(item)
+                        } else {
+                            funcList.push(item)
+                        }
+                    })
+                    this.importData.loading = true
+                    this.bulkAddFuncs(funcList).then((res) => {
+                        if (!res) return
+                        if (ignoreFunList.length) {
+                            this.$bkMessage({ theme: 'primary', message: `【${ignoreFunList.map(x => x.funcName).join(',')}】由于重复名称取消导入`, ellipsisLine: 3 })
+                        }
+                        if (funcList.length) {
+                            this.$bkMessage({ theme: 'success', message: `【${funcList.map(x => x.funcName).join(',')}】导入成功`, ellipsisLine: 3 })
+                        }
+                        this.importData.show = false
+                        this.getCardList()
+                    }).finally(() => {
+                        this.importData.loading = false
+                    })
+                } catch (err) {
+                    this.$bkMessage({ theme: 'error', message: err.message || err })
+                }
+            },
+
+            exportDemoFunction () {
+                const demoExportFunc = [{
+                    'funcName': 'getApiData',
+                    'funcParams': [],
+                    'funcBody': 'const data = res.data || []\r\nreturn data\r\n',
+                    'funcSummary': '远程函数，获取数据',
+                    'funcType': 1,
+                    'funcMethod': 'get',
+                    'withToken': 0,
+                    'funcApiData': null,
+                    'funcApiUrl': `${location.origin}/api/data/getMockData`,
+                    'remoteParams': [
+                        'res'
+                    ]
+                }]
+                functionHelper.exportFunction(demoExportFunc, 'lesscode-export-demo-market-func.json')
+            },
+
+            exportMarketFuncs () {
+                functionHelper.exportFunction(this.cardList, 'lesscode-market-func.json')
+            },
+
+            exportMarketSingleFunc (func) {
+                functionHelper.exportFunction([func], `${func.funcName}.json`)
             }
         }
     }

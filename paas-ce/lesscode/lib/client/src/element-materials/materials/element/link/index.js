@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-link1',
     displayName: '文字链接',
     group: '基础',
-    events: [{ name: 'click' }],
+    events: [{ name: 'click', tips: '文字链接点击时调用该事件函数，事件回调参数 (event: Event)' }],
     styles: ['size', 'padding', 'margin', 'display', 'text-align'],
     renderStyles: {
         display: 'inline-block',

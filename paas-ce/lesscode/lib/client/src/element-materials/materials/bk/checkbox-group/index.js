@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     styles: ['margin'],
-    events: [{ name: 'change' }],
+    events: [{ name: 'change', tips: '选项发生变化时调用该事件函数，参数为(newValue: String | Number | Boolean, oldValue: String | Number | Boolean)' }],
     directives: [
         {
             type: 'v-model',
@@ -39,9 +39,9 @@ export default {
                 if (errData) return '返回值每个元素需要含有label和value字段'
             },
             val: [
-                { label: '选项一', value: 1, checked: false },
-                { label: '选项二', value: 2, checked: false },
-                { label: '选项三', value: 3, checked: false }
+                { label: '选项一', value: '1', checked: false },
+                { label: '选项二', value: '2', checked: false },
+                { label: '选项三', value: '3', checked: false }
             ],
             payload: {}
         }

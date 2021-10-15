@@ -122,7 +122,7 @@
             filterUserList: {
                 get () {
                     const memberNameList = this.memberList.map(member => member.username)
-                    return this.userList.filter(user => !memberNameList.includes(user.name))
+                    return this.userList.filter(user => !memberNameList.includes(user.name)).sort((a, b) => (a.name || '').localeCompare(b.name))
                 },
                 set (list) {
                     this.userList = list

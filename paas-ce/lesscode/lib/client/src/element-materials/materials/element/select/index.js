@@ -17,13 +17,17 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'selected', tips: '选择列表时调用，多选时，回调参数均为数组（value, option(s)）'
+        name: 'change', tips: '选中值发生变化时调用该事件函数，事件回调参数 (value: Array)'
     }, {
-        name: 'visible-change', tips: '下拉框出现/隐藏时触发，回调参数（出现则为 true，隐藏则为 false）'
+        name: 'visible-change', tips: '下拉框出现/隐藏时调用该事件函数，事件回调参数 (value: Boolean)'
     }, {
-        name: 'change', tips: '选中值发生变化时触发，回调参数（目前的选中值）'
+        name: 'remove-tag', tips: '多选模式下移除tag时调用该事件函数，事件回调参数 (value: String|Number|Boolean)'
     }, {
-        name: 'clear', tips: '可清空的单选模式下用户点击清空按钮时触发'
+        name: 'clear', tips: '可清空的单选模式下用户点击清空按钮时调用该事件函数，无回调参数'
+    }, {
+        name: 'blur', tips: '当 input 失去焦点时调用该事件函数，事件回调参数 (event: Event)'
+    }, {
+        name: 'focus', tips: '当 input 获得焦点时调用该事件函数，事件回调参数 (event: Event)'
     }],
     styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
     directives: [

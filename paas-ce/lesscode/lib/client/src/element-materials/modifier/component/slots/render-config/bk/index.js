@@ -4,21 +4,19 @@ function getVal (val) {
 }
 
 const bkRenderMap = {
-    'bk-checkbox' ({ val }) {
+    'bk-checkbox' ({ val, from }) {
         const displayVal = getVal(val)
         return `
             <bk-checkbox
                 v-for="(item, index) in ${displayVal}"
                 :key="index"
-                :label="item.label"
                 :value="item.value"
-                :checked="item.checked"
-                :class= "item.checked ? 'is-checked' : ''"
+                ${from !== 'canvas' ? '' : ':class="item.checked ? \'is-checked\' : \'\'"'}
                 style="margin-right: 20px"
             >{{item.label}}</bk-checkbox>
         `
     },
-    'bk-radio' ({ val }) {
+    'bk-radio' ({ val, from }) {
         const displayVal = getVal(val)
         return `
             <bk-radio
@@ -26,7 +24,7 @@ const bkRenderMap = {
                 :key="index"
                 :label="item.label"
                 :value="item.value"
-                :checked="item.checked"
+                ${from !== 'canvas' ? '' : ':checked="item.checked"'}
                 style="margin-right: 20px"
             >{{item.label}}</bk-radio>
         `
@@ -88,7 +86,12 @@ const bkRenderMap = {
                     :key="index"
                 >
                     <template slot-scope="props">
-                        <render-html :html="item.templateCol" :props="props"></render-html>
+                        <render-html
+                            :html="item.templateCol"
+                            :render-options="item"
+                            :props="props"
+                            :parent-id="_uid"
+                        ></render-html>
                     </template>
                 </bk-table-column>
                 <bk-table-column

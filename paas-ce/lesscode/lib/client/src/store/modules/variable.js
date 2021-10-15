@@ -53,10 +53,10 @@ export default {
             })
         },
 
-        getAllVariable ({ commit }, params) {
+        getAllVariable ({ commit }, params, isCommit = true) {
             return http.get(`${variablePerfix}/getAllVariable`, { params }).then(response => {
                 const data = response.data || []
-                commit('setVariableList', data)
+                isCommit && commit('setVariableList', data)
                 return data
             })
         },

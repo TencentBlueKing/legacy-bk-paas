@@ -77,14 +77,22 @@
             </template>
 
             <bk-input v-if="computedValType === 'expression'" class="item-content" :value="value" @change="inputExpression" :disabled="disabledChange" clearable placeholder="请输入表达式，如：curTab === 'Tab-1'"></bk-input>
+            <span v-if="remoteConfig.show && computedValType === 'variable'"
+                class="remote-example"
+                @click="handleShowExample">数据示例</span>
+            <remote-example ref="example" :data="remoteConfig"></remote-example>
         </section>
     </section>
 </template>
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
+    import remoteExample from '@/element-materials/modifier/component/props/components/strategy/remote-example'
 
     export default {
+        components: {
+            remoteExample
+        },
         props: {
             show: {
                 type: Boolean,
@@ -106,6 +114,14 @@
             disableVariableType: {
                 type: Array,
                 default: () => ([])
+            },
+            remoteConfig: {
+                type: Object,
+                default: () => ({
+                    show: false,
+                    value: '',
+                    name: ''
+                })
             }
         },
 
@@ -178,6 +194,7 @@
             computedValType () {
                 return this.show ? this.valType : 'value'
             }
+
         },
 
         methods: {
@@ -286,6 +303,9 @@
             goToVariableManage () {
                 const projectId = this.$route.params.projectId
                 window.open(`/project/${projectId}/variable-manage`, '_blank')
+            },
+            handleShowExample () {
+                this.$refs.example.isShow = true
             }
         }
     }

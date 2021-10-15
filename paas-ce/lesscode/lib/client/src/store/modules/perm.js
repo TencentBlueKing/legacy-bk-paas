@@ -8,23 +8,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import http from '@/api'
-const perfix = '/perm'
-  
+
 export default {
     namespaced: true,
     state: {
-        funcGroups: []
     },
     mutations: {
     },
     getters: {
     },
     actions: {
-        isPlatformAdmin ({ state }) {
-            return http.get(`${perfix}/isPlatformAdmin`).then((res = {}) => {
-                return res.data
-            })
-        }
     }
 }

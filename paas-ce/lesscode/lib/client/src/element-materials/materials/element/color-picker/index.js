@@ -21,9 +21,9 @@ export default {
         display: 'inline-flex'
     },
     events: [{
-        name: 'change', tips: '当绑定值变化时触发, 回调参数：当前值'
+        name: 'change', tips: '当绑定值变化时调用该事件函数，事件回调参数 (value: String)'
     }, {
-        name: 'active-change', tips: '面板中当前显示的颜色发生改变时触发, 回调参数：当前显示的颜色值'
+        name: 'active-change', tips: '面板中当前显示的颜色发生改变时调用该事件函数，事件回调参数 (value: String)'
     }],
     directives: [
         {

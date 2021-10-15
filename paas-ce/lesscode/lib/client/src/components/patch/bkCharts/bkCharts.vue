@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <div class="bk-chart-container" :style="{ height: `${height}px`, width: `${width}px` }">
+    <div class="bk-chart-container" :style="{ height: `${height}px`, width: computedWidth }">
         <canvas class="bk-chart" ref="chart"></canvas>
     </div>
 </template>
@@ -37,6 +37,14 @@
             return {
                 ctx: null,
                 chart: null
+            }
+        },
+        computed: {
+            computedWidth () {
+                let widthVal = this.width ? (typeof this.width === 'number' ? `${this.width}px` : this.width) : '100%'
+                // 画布渲染时将百分比置为100%
+                this.$route.name === 'new' && widthVal.endsWith('%') && (widthVal = '100%')
+                return widthVal
             }
         },
         watch: {

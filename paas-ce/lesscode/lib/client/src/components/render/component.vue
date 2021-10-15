@@ -165,22 +165,36 @@
              * @returns { Object }
              */
             wrapperStyles () {
+                const componentStyles = Object.assign({}, this.renderData.renderStyles, this.renderData.renderStyles.customStyle || {})
                 const {
                     top,
                     left,
                     width,
                     height
-                } = this.renderData.renderStyles
+                } = componentStyles
 
                 const styles = {
-                    top: top,
-                    left: left,
+                    top,
+                    left,
                     display: this.componentStyleDisplayValue,
-                    width: width
+                    width
                 }
+
+                // margin属性需要加到组件外层、render-grid不用加，render-grid的margin加在了render-row上面
+                const marginStypes = ['marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'margin']
+                this.componentData.type !== 'render-grid' && marginStypes.forEach(function (item) {
+                    if (componentStyles[item]) {
+                        styles[item] = componentStyles[item]
+                    }
+                })
                 // bk-swiper 设置默认高度
                 if (this.componentData.type === 'bk-swiper') {
                     styles.height = height
+                }
+                // charts类的宽度同步设置
+                if (this.componentData.componentId.startsWith('chart-') || this.componentData.componentId.startsWith('bk-charts-')) {
+                    const width = this.componentData.renderProps.width && this.componentData.renderProps.width.val
+                    width && (styles.width = width)
                 }
                 return styles
             },
@@ -241,7 +255,7 @@
 
             this.updateBindProps()
             this.updateBindSlots()
-            
+
             bus.$on('on-update-props', this.updatePropsHandler)
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('on-update-props', this.updatePropsHandler)
@@ -273,7 +287,7 @@
                     const domNode = this.$refs[this.renderData.componentId].$el
                         || this.$refs[this.renderData.componentId] // 原生html不会有$el元素
                     const componentDisplay = getStyle(domNode, 'display')
-                    
+
                     if (componentDisplay) {
                         if (componentDisplay === 'block') {
                             result = 'block'
@@ -316,8 +330,7 @@
              */
             handleContextmenuDelete () {
                 setTimeout(() => {
-                    const delBtn = document.querySelector('#del-component-right-sidebar')
-                    delBtn && delBtn.click()
+                    bus.$emit('on-delete-component')
                 }, 0)
                 this.contextMenuVisible = false
             },
@@ -330,6 +343,12 @@
                     bindProps[renderPropsKey] = renderProps[renderPropsKey].val
                 })
                 this.bindProps = bindProps
+
+                // bk-swiper 组件的宽度由属性而不是样式决定，且组件本身的 dom 中会根据对应的属性配置生成 style （bk-search-select、bk-progress 同理）
+                // 这里强制刷新，让组件重新渲染
+                if (this.renderData.type === 'bk-swiper' || this.renderData.type === 'bk-search-select' || this.renderData.type === 'bk-progress') {
+                    this.renderDataSlotRefreshKey = Date.now()
+                }
             },
 
             updateBindSlots () {
@@ -382,7 +401,7 @@
                     // 更新属性时，检测元素的 top + height 是否超过了容器的高度，如果超过了，那么就改变容器的高度
                     this.$nextTick(() => {
                         const parent = findComponentParentGrid(this.targetData, this.renderData.componentId)
-                        if (!parent) return // 交互是组件没有parent，无需修改父容器
+                        if (!parent || !parent.renderStyles) return // 交互是组件没有parent，无需修改父容器
 
                         const top = parseInt(this.$el.style.top, 10)
                         const nodeHeight = parseInt(this.$el.getBoundingClientRect().height, 10)
@@ -437,7 +456,7 @@
                 curComponentNode.classList.add(className)
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
-                this.$clearMenu()
+                bus.$emit('hideContextMenu') // 隐藏右键菜单()
             },
 
             /**

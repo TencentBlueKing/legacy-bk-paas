@@ -14,7 +14,7 @@ const axios = require('axios')
 const querystring = require('querystring')
 const unless = require('koa-unless')
 const httpConf = require('../conf/http')
-const { CODE, isAjaxReq } = require('../util')
+const { isAjaxReq } = require('../util')
 const { findUserByBk, addUser } = require('../controller/user')
 const { setRequestContext } = require('./request-context')
 const { createDemoProject } = require('../controller/project')
@@ -61,7 +61,9 @@ module.exports = () => {
                         'Content-Type': 'application/json'
                     },
                     responseType: 'json',
-                    httpsAgent: new https.Agent({ rejectUnauthorized: false })
+                    httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+                    // 不设置 proxy false 的话，会导致 rejectUnauthorized: false 的设置（忽略 ssl 证书）生效
+                    proxy: false
                 })
 
                 const { code, data } = response.data

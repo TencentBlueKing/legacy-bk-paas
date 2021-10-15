@@ -42,14 +42,19 @@ const elementRenderMap = {
                 <el-table-column
                     v-if="item.type === 'customCol'"
                     :label="item.label"
-                    :prop="item.prop" 
+                    :prop="item.prop"
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"
                     :key="index"
                 >
                     <template slot-scope="props">
-                        <render-html :html="item.templateCol" :props="props"></render-html>
+                        <render-html
+                            :html="item.templateCol"
+                            :render-options="item"
+                            :props="props"
+                            :parent-id="_uid"
+                        ></render-html>
                     </template>
                 </el-table-column>
                 <el-table-column

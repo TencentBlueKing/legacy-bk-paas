@@ -60,7 +60,7 @@
         computed: {
             ...mapGetters(['mainContentLoading']),
             emptyPage () {
-                return this.$route.name === 'preview'
+                return this.$route.name === 'preview' || this.$route.name === 'previewTemplate'
             },
             authed () {
                 return this.$route.meta.authed
@@ -72,6 +72,10 @@
             isCanvas () {
                 return this.$route.name === 'new'
             }
+        },
+
+        async created () {
+            await this.$store.dispatch('isPlatformAdmin')
         },
 
         mounted () {
@@ -100,6 +104,7 @@
     #app {
         width: 100%;
         height: 100%;
+        overflow-y: hidden;
         font-size: 14px;
         color: #63656e;
     }
@@ -116,5 +121,14 @@
     .win {
         /* font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria; */
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
+    }
+
+    .red-point {
+        display:block;
+        margin-left: 3px;
+        background:#f00;
+        border-radius:50%;
+        width:6px;
+        height:6px;
     }
 </style>

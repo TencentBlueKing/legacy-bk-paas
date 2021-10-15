@@ -1,7 +1,7 @@
 import store from '@/store'
 import { uuid, walkGrid, findComponentParentGrid } from '@/common/util'
+import { camelCase, camelCaseTransformMerge } from 'change-case'
 import cloneDeep from 'lodash.clonedeep'
-
 class TargetData {
     constructor () {
         this.targetData = store.getters['drag/targetData']
@@ -249,11 +249,30 @@ class TargetData {
         return this
     }
 
+    changeFormItemVmodel (data, oldId) {
+        const oldVModelName = `${camelCase(oldId, { transform: camelCaseTransformMerge })}model.`
+        const newVModelName = `${camelCase(data.componentId, { transform: camelCaseTransformMerge })}model.`
+        data.renderSlots.default.val.forEach(formItem => {
+            const item = formItem.renderSlots.default.val[0]
+            item.renderDirectives.forEach(directive => {
+                if (directive.type === 'v-model') {
+                    directive.val = directive.val.replace(oldVModelName, newVModelName)
+                }
+            })
+        })
+    }
+
     cloneNode (node, shouldChangeId) {
         node = cloneDeep(node)
         const callBack = (data) => {
-            if (shouldChangeId) data.componentId = data.componentId.replace(/.{8}$/, uuid())
+            const oldId = data.componentId
+            
+            if (shouldChangeId) data.componentId = (data.componentId && data.componentId.replace(/.{8}$/, uuid()))
             data.renderKey = uuid()
+
+            if (data.type === 'widget-form') {
+                this.changeFormItemVmodel(data, oldId)
+            }
         }
         if (Array.isArray(node)) {
             node.forEach((grid, index) => {
