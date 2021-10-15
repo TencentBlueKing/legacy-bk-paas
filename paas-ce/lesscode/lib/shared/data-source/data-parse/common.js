@@ -10,33 +10,10 @@
  */
 
 /**
- * sql cvs json 解析主流程
- * 用于将多个解析结果串联起来
+ * 对比导入前后的数据，得到导入后影响的数据
+ * @param {*} originDatas 导入前的数据
+ * @param {*} finalDatas 导入后的数据
  */
-export class {
-    /**
-     * 传入原始数据json
-     * @param {*} json 原始数据json
-     */
-    constructor (json) {
-        this.json = json
-    }
+export const diff = (originDatas, finalDatas) => {
 
-    /**
-     * 导入
-     * @param {*} parser 具体执行导入分析的实例
-     * @returns 返回实例，方便链式调用
-     */
-    import (parser) {
-        return parser.import(this)
-    }
-
-    /**
-     * 导出
-     * @param {*} parser 具体执行导出的实例
-     * @returns 返回导出结果
-     */
-    export (parser) {
-        return parser.export(this)
-    }
 }

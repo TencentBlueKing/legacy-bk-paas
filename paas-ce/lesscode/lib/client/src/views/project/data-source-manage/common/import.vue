@@ -13,7 +13,7 @@
                 :limit="1"
                 :multiple="false"
                 :url="uploadUrl"
-                accept=".sql,.cvs"
+                accept=".sql,.csv"
                 @on-success="importFile"
             ></bk-upload>
 

@@ -57,6 +57,8 @@
     import dayjs from 'dayjs'
     import importTable from '../../../common/import.vue'
     import exportTable from '../../../common/export.vue'
+    // const { Parser } = require('node-sql-parser')
+    // const parser = new Parser()
 
     interface IPagination {
         current: number,
@@ -115,7 +117,12 @@
             }
 
             const goToDataDesign = () => {
-
+                // console.log(parser)
+                // console.log(parser.astify(`
+                //     CREATE TABLE comp  (
+                //         updateTime datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
+                //     );
+                // `))
             }
 
             const goToDataManage = () => {

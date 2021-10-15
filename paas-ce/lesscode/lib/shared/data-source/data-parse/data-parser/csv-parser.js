@@ -9,33 +9,33 @@
  * specific language governing permissions and limitations under the License.
  */
 
-function filterSql () {
+function filterCsv () {
 
 }
 
-function transformSql2Json () {
+function transformCsv2Json () {
 
 }
 
-function transformJson2Sql () {
+function transformJson2Csv () {
 
 }
 
 /**
- * sql 操作
+ * csv 操作
  */
-export class {
-    constructor (sql) {
-        this.sql = sql
+export class CsvParser {
+    constructor (csv) {
+        this.csv = csv
     }
 
     import (that = {}) {
-        const sql = filterSql(this.sql)
-        that.json = transformSql2Json(sql)
-        return sql
+        const csv = filterCsv(this.csv)
+        that.json = transformCsv2Json(csv)
+        return csv
     }
 
     export (that) {
-        return transformJson2Sql(that.json)
+        return transformJson2Csv(that.json)
     }
 }

@@ -13,6 +13,7 @@ import DBEngineService from './db-engine-service'
 import dataService, { getDataService } from './data-service'
 import { EntitySchema, createConnection, EventSubscriber } from 'typeorm'
 import { RequestContext } from '../middleware/request-context'
+import { previewBaseColumns } from '../../shared/data-source/constant'
 const dataBaseConf = require('../conf/data-base')
 
 /**
@@ -45,37 +46,6 @@ export const getPreviewDbConfig = async (projectId) => {
 export const getPreviewDbEngine = async (projectId) => {
     const dbConfig = await getPreviewDbConfig(projectId)
     return new DBEngineService(dbConfig)
-}
-
-/**
- * 预览环境，公共 orm columns
- */
-export const previewBaseColumns = {
-    id: {
-        type: 'int',
-        primary: true,
-        generated: true
-    },
-    createTime: {
-        type: 'datetime',
-        createDate: true
-    },
-    createUser: {
-        type: 'varchar',
-        length: 255
-    },
-    updateTime: {
-        type: 'datetime',
-        updateDate: true
-    },
-    updateUser: {
-        type: 'varchar',
-        length: 255
-    },
-    deleteFlag: {
-        type: 'int',
-        default: 0
-    }
 }
 
 @EventSubscriber()

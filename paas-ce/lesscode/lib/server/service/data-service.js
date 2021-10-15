@@ -46,31 +46,31 @@ export function getDataService (name = 'default', customEntityMap) {
             const repository = getRepositoryByName(tableName)
             return repository.find({ deleteFlag: 0, ...query }) || []
         },
-    
+
         findOne (tableName, query = {}) {
             const repository = getRepositoryByName(tableName)
             return repository.findOne({ deleteFlag: 0, ...query }) || {}
         },
-    
+
         add (tableName, data) {
             const repository = getRepositoryByName(tableName)
             const newData = repository.create(data)
             return repository.save(newData)
         },
-    
+
         bulkAdd (tableName, dataList) {
             const repository = getRepositoryByName(tableName)
             const newDataList = repository.create(dataList)
             return repository.save(newDataList)
         },
-    
+
         async update (tableName, data) {
             const repository = getRepositoryByName(tableName)
             const editData = await repository.findOne({ where: { id: data.id } })
             Object.assign(editData, data)
             return repository.save(editData)
         },
-    
+
         async bulkUpdate (tableName, dataList) {
             const repository = getRepositoryByName(tableName)
             const editDataList = await repository.findOne({ where: { id: In(dataList.map(data => data.id)) } })
@@ -80,14 +80,14 @@ export function getDataService (name = 'default', customEntityMap) {
             })
             return repository.save(editDataList)
         },
-    
+
         async delete (tableName, id) {
             const repository = getRepositoryByName(tableName)
             const deleteData = await repository.findOne({ where: { id } })
             deleteData.deleteFlag = 1
             return repository.save(deleteData)
         },
-    
+
         async bulkDelete (tableName, ids) {
             const repository = getRepositoryByName(tableName)
             const deleteDataList = await repository.findOne({ where: { id: In(ids) } })

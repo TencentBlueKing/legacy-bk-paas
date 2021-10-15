@@ -9,33 +9,37 @@
  * specific language governing permissions and limitations under the License.
  */
 
-function filterCsv () {
-
-}
-
-function transformCsv2Json () {
-
-}
-
-function transformJson2Csv () {
-
-}
-
 /**
- * csv 操作
+ * 数据解析
+ * sql csv json 解析主流程
+ * 存在 csv -> sql sql -> csv 等转换情况
+ * 用于将多个解析结果串联起来
  */
-export class {
-    constructor (csv) {
-        this.csv = csv
+export class DataParse {
+    /**
+     * 传入原始数据,用于比对导入前后的变化
+     * @param {*} dataList 原始数据
+     */
+    constructor (dataList) {
+        this.originDatas = dataList
+        this.finalDatas = dataList
     }
 
-    import (that = {}) {
-        const csv = filterCsv(this.csv)
-        that.json = transformCsv2Json(csv)
-        return csv
+    /**
+     * 导入
+     * @param {*} parser 具体执行导入分析的实例
+     * @returns 返回实例，方便链式调用
+     */
+    import (parser) {
+        return parser.import(this)
     }
 
-    export (that) {
-        return transformJson2Csv(that.json)
+    /**
+     * 导出
+     * @param {*} parser 具体执行导出的实例
+     * @returns 返回导出结果
+     */
+    export (parser) {
+        return parser.export(this)
     }
 }
