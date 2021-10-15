@@ -22,7 +22,7 @@
         >
         </remote>
 
-        <div class="form-slot-title" style="margin-top: 20px;">表单内容配置</div>
+        <div class="form-slot-title" style="margin: 20px 0 10px;">表单内容配置</div>
 
         <div class="form-item-list">
             <vue-draggable
@@ -139,7 +139,7 @@
             componentId: `bk-form-item-${uuid()}`,
             actionItem: isActionFormItem,
             renderKey: uuid(),
-            renderStyle: {},
+            renderStyles: {},
             renderProps: !isActionFormItem ? {
                 label: {
                     type: 'string',
@@ -352,6 +352,7 @@
                 const hasRequired = ((itemData.validate || []).filter(item => item.required === true).length > 0)
                 // 将校验规则里的required同步到form-item层级
                 this.formItemData = Object.assign({}, itemData, { required: hasRequired })
+                // formItem编辑后，里面的表单项组件也默认值重新生成了，这里应该做个判断，如果是类型没变，里面的targetData不用变
                 this.createTargetDataFromItem(this.formItemData)
                 this.handleCancel()
                 this.triggerChange()
@@ -492,10 +493,12 @@
             opacity: 1;
             background: #f0f1f5;
             border-radius: 2px;
-            box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
             padding: 0 10px;
             margin-bottom: 6px;
             cursor: default;
+            &:hover {
+                box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+            }
             .item-name {
                 width: 195px;
                 font-size: 12px;

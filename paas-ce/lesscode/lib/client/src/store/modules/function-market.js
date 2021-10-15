@@ -12,7 +12,7 @@
 import { messageHtmlError } from '../../common/bkmagic'
 import http from '@/api'
 const perfix = '/function-market'
- 
+
 export default {
     namespaced: true,
     state: {
@@ -26,6 +26,16 @@ export default {
         getAllFuncFromMarket ({ state }) {
             return http.get(`${perfix}/getFuncList`).then((res = {}) => {
                 return res.data || []
+            })
+        },
+
+        bulkAddFuncs (_, funcList) {
+            return http.post(`${perfix}/bulkAddFuncs`, funcList).then((res = {}) => {
+                if (res.code === 499) {
+                    messageHtmlError(res.message)
+                    return
+                }
+                return res.data
             })
         },
 

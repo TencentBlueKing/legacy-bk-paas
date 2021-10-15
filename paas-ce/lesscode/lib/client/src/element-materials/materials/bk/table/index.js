@@ -17,47 +17,47 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'select', tips: '当用户手动勾选数据行的 Checkbox 时触发的事件，回调参数（selection, row）'
+        name: 'select', tips: '当用户手动勾选数据行的 Checkbox 时调用该事件函数，事件回调参数 (selection: Array, row: Object)'
     }, {
-        name: 'select-all', tips: '当用户手动勾选全选 Checkbox 时触发的事件，回调参数（selection）'
+        name: 'select-all', tips: '当用户手动勾选全选 Checkbox 时调用该事件函数，事件回调参数 (selection: Array)'
     }, {
-        name: 'selection-change', tips: '当选择项发生变化时会触发该事件，回调参数（selection）'
+        name: 'selection-change', tips: '当选择项发生变化时调用该事件函数，事件回调参数 (selection: Array)'
     }, {
-        name: 'cell-mouse-enter', tips: '当单元格 hover 进入时会触发该事件，回调参数（row, column, cell, event）'
+        name: 'cell-mouse-enter', tips: '当单元格 hover 进入时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
     }, {
-        name: 'cell-mouse-leave', tips: '当单元格 hover 退出时会触发该事件，回调参数（row, column, cell, event）'
+        name: 'cell-mouse-leave', tips: '当单元格 hover 退出时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
     }, {
-        name: 'row-mouse-enter', tips: '当表格行 hover 进入时会触发该事件，回调参数（index, row, event）'
+        name: 'row-mouse-enter', tips: '当表格行 hover 进入时调用该事件函数，事件回调参数 (index: Number, row: Object, event: Event)'
     }, {
-        name: 'row-mouse-leave', tips: '当表格行 hover 退出时会触发该事件，回调参数（index, row, event）'
+        name: 'row-mouse-leave', tips: '当表格行 hover 退出时调用该事件函数，事件回调参数 (index: Number, row: Object, event: Event)'
     }, {
-        name: 'cell-click', tips: '当某个单元格被点击时会触发该事件，回调参数（row, column, cell, event）'
+        name: 'cell-click', tips: '当某个单元格被点击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
     }, {
-        name: 'cell-dblclick', tips: '当某个单元格被双击击时会触发该事件，回调参数（row, column, cell, event）'
+        name: 'cell-dblclick', tips: '当某个单元格被双击击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
     }, {
-        name: 'row-click', tips: '当某一行被点击时会触发该事件，回调参数（row, event, column）'
+        name: 'row-click', tips: '当某一行被点击时调用该事件函数，事件回调参数 (row: Object, event: Event, column: Object)'
     }, {
-        name: 'row-contextmenu', tips: '当某一行被鼠标右键点击时会触发该事件，回调参数（row, event）'
+        name: 'row-contextmenu', tips: '当某一行被鼠标右键点击时调用该事件函数，事件回调参数 (row: Object, event: Event)'
     }, {
-        name: 'row-dblclick', tips: '当某一行被双击时会触发该事件，回调参数（row, event）'
+        name: 'row-dblclick', tips: '当某一行被双击时调用该事件函数，事件回调参数 (row: Object, event: Event)'
     }, {
-        name: 'header-click', tips: '当某一列的表头被点击时会触发该事件，回调参数（column, event）'
+        name: 'header-click', tips: '当某一列的表头被点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
     }, {
-        name: 'header-contextmenu', tips: '当某一列的表头被鼠标右键点击时触发该事件，回调参数（column, event）'
+        name: 'header-contextmenu', tips: '当某一列的表头被鼠标右键点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
     }, {
-        name: 'sort-change', tips: '当表格的排序条件发生变化的时候会触发该事件，回调参数（{ column, prop, order }）'
+        name: 'sort-change', tips: '当表格的排序条件发生变化时调用该事件函数，事件回调参数 (data: { column, prop, order })'
     }, {
-        name: 'filter-change', tips: '当表格的筛选条件发生变化的时候会触发该事件，回调参数 filters 是一个对象，对象的 key 是 column 的 columnKey，对应的 value 为用户选择的筛选条件的数组。'
+        name: 'filter-change', tips: '当表格的筛选条件发生变化时调用该事件函数，事件回调参数 (filters: { key, value })。参数对象的 key 是 column 的 columnKey，对应的 value 为用户选择的筛选条件的数组。'
     }, {
-        name: 'current-change', tips: '当表格的当前行发生变化的时候会触发该事件，如果要高亮当前行，请打开表格的 highlight-current-row 属性，回调参数（currentRow, oldCurrentRow）'
+        name: 'current-change', tips: '当表格的当前行发生变化时调用该事件函数，如果要高亮当前行，请打开表格的 highlight-current-row 属性，事件回调参数 (currentRow: Object, oldCurrentRow: Object)'
     }, {
-        name: 'header-dragend', tips: '当拖动表头改变了列的宽度的时候会触发该事件，回调参数（newWidth, oldWidth, column, event）'
+        name: 'header-dragend', tips: '当拖动表头改变了列的宽度时调用该事件函数，事件回调参数 (newWidth: Number, oldWidth: Number, column: Object, event: Event)'
     }, {
-        name: 'expand-change', tips: '当用户对某一行展开或者关闭的时候会触发该事件，回调参数（row, expandedRows）'
+        name: 'expand-change', tips: '当用户对某一行展开或者关闭时调用该事件函数，事件回调参数 (row: Object, expandedRows: Array)'
     }, {
-        name: 'page-change', tips: '当用户切换表格分页时会触发的事件，回调参数（newPage）'
+        name: 'page-change', tips: '当用户切换表格分页时调用该事件函数，事件回调参数 (newPage: Number)'
     }, {
-        name: 'page-limit-change', tips: '当用户切换表格每页显示条数时会出发的事件，回调参数（limit）'
+        name: 'page-limit-change', tips: '当用户切换表格每页显示条数时调用该事件函数，事件回调参数 (limit: Number)'
     }],
     styles: ['size', 'margin', 'display'],
     directives: [
@@ -143,9 +143,15 @@ export default {
                 limitList: [10, 20, 50, 100],
                 showLimit: false
             },
-            tips: '设置分页信息'
+            tips: ''
+                + '设置分页信息<br>'
+                + 'count: 总数据量<br>'
+                + 'current: 当前页码，正整数<br>'
+                + 'limit: 每页显示条数(须存在于 limitList 中) <br>'
+                + 'limitList: 每页显示条数可选项列表<br>'
+                + 'showLimit: 是否显示每页显示条数控件<br>'
         },
-        'showPaginationInfo': {
+        'show-pagination-info': {
             type: 'boolean',
             val: true,
             tips: '是否显示分页条中共计XX条的信息'

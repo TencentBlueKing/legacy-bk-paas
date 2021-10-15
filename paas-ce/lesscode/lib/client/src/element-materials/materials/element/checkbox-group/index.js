@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     styles: ['margin'],
-    events: [{ name: 'change' }],
+    events: [{ name: 'change', tips: '当绑定值变化时调用该事件函数，事件回调参数 (value: Array)' }],
     directives: [
         {
             type: 'v-model',

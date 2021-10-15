@@ -17,9 +17,9 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'change', tips: '当前页码变化时的回调，回调参数：变化后的页码'
+        name: 'change', tips: '当前页码变化时调用该事件函数，事件回调参数 (current: Number)'
     }, {
-        name: 'limit-change', tips: '当前分页尺寸变化时的回调，回调参数：变化后的分页尺寸(即每页显示的条数)'
+        name: 'limit-change', tips: '当前分页尺寸变化时调用该事件函数，事件回调参数 (limit: Number)'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {
@@ -52,6 +52,11 @@ export default {
             type: 'boolean',
             val: true,
             tips: '是否显示附加功能（调整每页显示条数）'
+        },
+        'show-total-count': {
+            type: 'boolean',
+            val: false,
+            tips: '是否显示分页条中共计XX条的信息'
         },
         location: {
             type: 'string',

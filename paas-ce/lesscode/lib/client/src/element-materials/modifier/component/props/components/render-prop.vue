@@ -70,6 +70,7 @@
 </template>
 <script>
     import variableSelect from '@/components/variable/variable-select'
+    import TypeSize from './strategy/size'
     import TypeRemote from './strategy/remote'
     import TypeFunction from './strategy/function'
     import TypeBoolean from './strategy/boolean'
@@ -155,6 +156,7 @@
                 const comMap = {
                     'areatext': TypeTextarea,
                     'boolean': TypeBoolean,
+                    'size': TypeSize,
                     'column': TypeColumn,
                     'number': TypeNumber,
                     'float': TypeFloat,
@@ -191,6 +193,7 @@
                     'array': 'json',
                     'boolean': 'boolean',
                     'column': 'column',
+                    'size': 'size',
                     'number': 'number',
                     'float': 'float',
                     'object': 'json',

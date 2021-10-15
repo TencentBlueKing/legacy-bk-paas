@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-collapse',
     group: '数据',
     order: 1,
-    events: [{ name: 'item-click' }],
+    events: [{ name: 'item-click', tips: '点击时调用该事件函数，事件回调参数 (names: Array)' }],
     styles: ['size', 'margin', 'color', 'backgroundColor'],
     props: {
         'active-name': {

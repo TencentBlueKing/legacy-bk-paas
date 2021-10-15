@@ -250,7 +250,7 @@
                 }
             },
             async getPageList () {
-                const list = await this.$store.dispatch('page/getLiteList', { projectId: this.projectId, config: { fromCache: true } })
+                const list = await this.$store.dispatch('page/getLiteList', { projectId: this.projectId })
                 this.bindRouteSelectorProps.pageList = list.map(({ id, pageName: name }) => ({ id, name }))
             },
             handleEditLayoutPath (group) {

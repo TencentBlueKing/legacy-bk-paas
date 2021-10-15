@@ -41,7 +41,7 @@
     import StyleLayout from '../layout/index'
     import StyleItem from '../layout/item'
     import Monaco from './monaco'
-    import { camelCase } from 'change-case'
+    import { paramCase, camelCase } from 'change-case'
 
     export default {
         components: {
@@ -74,7 +74,7 @@
                 let mapStr = ''
                 const className = camelCase(this.componentId.replace(/-/g, ''))
                 for (const i in this.initMap) {
-                    mapStr += `\t${i}: ${this.initMap[i]};\n`
+                    mapStr += `\t${paramCase(i)}: ${this.initMap[i]};\n`
                 }
                 if (!mapStr) {
                     mapStr = '\n'
@@ -114,7 +114,7 @@
                         if (item) {
                             const itemArr = item.split(':')
                             if (itemArr.length === 2 && itemArr[0].trim() && itemArr[1].trim()) {
-                                Object.assign(customMap, { [itemArr[0].trim()]: itemArr[1].trim() })
+                                Object.assign(customMap, { [camelCase(itemArr[0].trim())]: itemArr[1].trim() })
                             }
                         }
                     })

@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'score', tips: '评分的时候触发该回调事件，回调参数为选中的分数'
+        name: 'score', tips: '评分的时候调用该事件函数，事件回调参数 (rate: Number)'
     }],
     styles: ['margin', 'display'],
     directives: [

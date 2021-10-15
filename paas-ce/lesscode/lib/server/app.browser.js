@@ -34,6 +34,8 @@ const { logger } = require('./logger')
 const { getIP } = require('./util')
 const { routes, allowedMethods } = require('./router')
 
+const { executeApi } = require('./controller/db-migration-helper')
+
 const authMiddleware = require('./middleware/auth')
 const httpMiddleware = require('./middleware/http')
 const errorMiddleware = require('./middleware/error')
@@ -221,13 +223,15 @@ async function startServer () {
 }
 
 // 自动执行db导入和变更操作,相应配置文件位于lib/server/conf/db-migrate.json
-function execSql (connection, callBack) {
+async function execSql (connection, callBack) {
     try {
         const databaseEnv = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
         const prefixPath = '.'
         const migrateUp = `node node_modules/db-migrate/bin/db-migrate up --config ${prefixPath}/lib/server/conf/db-migrate.json --migrations-dir ${prefixPath}/lib/server/model/migrations -e ${databaseEnv}`
         shell.exec(migrateUp)
-
+        
+        // 自动执行接口刷数据
+        await executeApi()
         callBack()
         return
     } catch (err) {

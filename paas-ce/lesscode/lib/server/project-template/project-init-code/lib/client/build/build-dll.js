@@ -54,7 +54,7 @@ if (!(manifestExist & bundleExist)) {
                 },
                 extractComments: false,
                 cache: true,
-                parallel: true,
+                parallel: 2,
                 sourceMap: true
             }),
 

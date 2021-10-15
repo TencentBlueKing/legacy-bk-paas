@@ -7,6 +7,9 @@
         :width="796"
         :title="dialogTitle">
         <div slot="content" class="operation-content">
+            <div class="component-guide">
+                <a href="/help/custom" target="_blank">组件开发指引</a>
+            </div>
             <bk-form ref="form" :label-width="90" :model="formData" :rules="rules">
                 <bk-form-item label="组件包" required error-display-type="normal">
                     <bk-upload
@@ -248,6 +251,15 @@
     .component-operation-sideslider{
         .operation-content{
             padding: 25px 30px;
+            .component-guide{
+                padding-bottom: 10px;
+                margin-top: -15px;
+                font-size: 12px;
+                text-align: right;
+                a{
+                    color: #3a84ff;
+                }
+            }
             .markdown-body{
                 max-height: 300px;
                 box-shadow: none !important;

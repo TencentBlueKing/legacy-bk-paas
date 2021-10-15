@@ -151,38 +151,29 @@
             </div>
         </bk-dialog>
 
-        <bk-dialog v-model="showImport"
+        <import-functions
+            :show.sync="showImport"
             :loading="isUploading"
-            :mask-close="false"
-            :auto-close="false"
-            width="800"
-            @confirm="handleImport"
-            @after-leave="importFuncJson = '[]'"
+            @import="handleImport"
         >
-            <section class="mb10">
-                <bk-button @click="importFunction" class="mr10" theme="primary" v-bk-tooltips="{ content: '只可导入Json文件格式，且文件内容需要是Json格式的数组' }">导入</bk-button>
-                <bk-button @click="exportDemoFunction">示例</bk-button>
-            </section>
-
-            <edit-object :value.sync="importFuncJson" :height="400" />
-        </bk-dialog>
+            <bk-button @click="exportDemoFunction">示例</bk-button>
+        </import-functions>
     </article>
 </template>
 
 <script>
     import { mapActions, mapGetters } from 'vuex'
-    import { downloadFile, uploadFile } from '@/common/util'
     import dayjs from 'dayjs'
     import layout from '@/components/ui/layout'
     import funcForm from '@/components/methods/func-form/index'
-    import editObject from '@/components/edit-object'
+    import importFunctions from '@/components/methods/import-functions'
     import functionHelper from '@/components/methods/function-helper'
 
     export default {
         components: {
             layout,
             funcForm,
-            editObject
+            importFunctions
         },
 
         data () {
@@ -211,8 +202,7 @@
                 },
                 selectionData: [],
                 isUploading: false,
-                showImport: false,
-                importFuncJson: '[]'
+                showImport: false
             }
         },
 
@@ -491,32 +481,7 @@
             },
 
             exportFunction () {
-                function getExportFunc (func) {
-                    const exportProps = [
-                        'funcName',
-                        'funcCode',
-                        'funcParams',
-                        'funcBody',
-                        'funcSummary',
-                        'funcType',
-                        'funcMethod',
-                        'withToken',
-                        'funcApiData',
-                        'funcApiUrl',
-                        'remoteParams'
-                    ]
-                    return exportProps.reduce((res, prop) => {
-                        res[prop] = func[prop]
-                        return res
-                    }, {})
-                }
-
-                const funcs = (this.selectionData || []).reduce((funcs, func) => {
-                    funcs.push(getExportFunc(func))
-                    return funcs
-                }, [])
-                const source = JSON.stringify(funcs, null, 2)
-                downloadFile(source, `lesscode-${this.projectId}-func.json`)
+                functionHelper.exportFunction(this.selectionData, `lesscode-${this.projectId}-func.json`)
             },
 
             exportDemoFunction () {
@@ -535,29 +500,13 @@
                         'res'
                     ]
                 }]
-                const source = JSON.stringify(demoExportFunc, null, 2)
-                downloadFile(source, `lesscode-export-demo-func.json`)
+                functionHelper.exportFunction(demoExportFunc, 'lesscode-export-demo-func.json')
             },
 
-            importFunction () {
-                uploadFile().then((fileList) => {
-                    try {
-                        const funcList = []
-                        fileList.forEach((file) => {
-                            funcList.push(...JSON.parse(file))
-                        })
-                        this.importFuncJson = JSON.stringify(funcList, null, 2)
-                    } catch (err) {
-                        this.$bkMessage({ theme: 'error', message: '文件内容需要是Json格式的数组' })
-                    }
-                })
-            },
-
-            handleImport () {
+            handleImport (funList) {
                 try {
                     const funcList = []
                     const ignoreFunList = []
-                    const funList = JSON.parse(this.importFuncJson) || []
                     if (funList.length <= 0) {
                         throw new Error('JSON文件为空，暂无导入数据')
                     }

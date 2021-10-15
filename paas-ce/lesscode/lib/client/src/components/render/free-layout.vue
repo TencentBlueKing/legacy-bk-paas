@@ -26,6 +26,12 @@
             <a href="javascript:;" @click="handleContextmenuDelete">删除自由布局</a>
             <a href="javascript:;" @click="handleContextmenuClearFreeLayout">清空自由布局</a>
         </component-menu>
+
+        <div class="save-as-template" @click.stop="toggleShowTemplateDialog(true)">
+            <i class="bk-drag-icon bk-drag-template-fill"></i>
+            存为模板
+        </div>
+
         <div class="free-layout-item-inner">
             <vue-draggable :style="{ height: renderData.renderStyles.height || '500px' }"
                 :group="{ pull: true, put: ['component', ...extraDragCls] }"
@@ -44,6 +50,8 @@
                 </render-component>
             </vue-draggable>
         </div>
+
+        <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
 
         <bk-dialog v-model="clearFreeLayoutConf.visiable"
             class="del-component-dialog"
@@ -73,6 +81,7 @@
     import DragLine from '@/common/drag-line'
     // eslint-disable-next-line no-unused-vars
     import Drag from '@/common/drag'
+    import saveTemplateDialog from './save-template-dialog'
     import ComponentMenu from '@/components/widget/context-menu.vue'
     import offsetMixin from './offset-mixin'
 
@@ -81,7 +90,8 @@
         components: {
             // eslint-disable-next-line vue/no-unused-components
             renderComponent,
-            ComponentMenu
+            ComponentMenu,
+            saveTemplateDialog
         },
         mixins: [offsetMixin],
         props: {
@@ -93,6 +103,11 @@
             extraDragCls: {
                 type: Array,
                 default: () => ['interactiveInnerComp']
+            },
+            // 是否根据子元素自动撑开
+            noResponse: {
+                type: Boolean,
+                default: false
             }
         },
         data () {
@@ -107,7 +122,8 @@
                 clearFreeLayoutConf: {
                     visiable: false,
                     headerPosition: 'left'
-                }
+                },
+                showTemplateDialog: false
             }
         },
         computed: {
@@ -157,12 +173,12 @@
                 const {
                     originalEvent
                 } = event
-                
+
                 const {
                     pageX,
                     pageY
                 } = originalEvent
-                
+
                 this.mountedPosition = {
                     top: pageY,
                     left: pageX
@@ -238,8 +254,7 @@
              */
             handleContextmenuDelete () {
                 setTimeout(() => {
-                    const delBtn = document.querySelector('#del-component-right-sidebar')
-                    delBtn && delBtn.click()
+                    bus.$emit('on-delete-component')
                 }, 0)
                 this.contextMenuVisible = false
             },
@@ -307,7 +322,7 @@
                 const curRowNode = getNodeWithClass(e.target, 'bk-lesscode-free-layout')
                 curRowNode.classList.add('selected')
 
-                this.$clearMenu()
+                bus.$emit('hideContextMenu') // 隐藏右键菜单()
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
             },
@@ -365,7 +380,7 @@
                 this.setStyle4Component(renderData)
                 this.doDrag(data.elem, renderData)
                 // setTimeout 保证 add 事件已经处理完毕
-                setTimeout(() => {
+                !this.noResponse && setTimeout(() => {
                     if (!this.$refs[this.renderData.componentId]) {
                         return
                     }
@@ -379,7 +394,7 @@
                         bottom: containerBottom,
                         left: containerLeft
                     } = this.$refs[this.renderData.componentId].getBoundingClientRect()
-                    
+
                     const {
                         top: originalTop,
                         left: originalLeft
@@ -411,7 +426,7 @@
                         top: `${Math.max(top, 10)}px`,
                         left: `${Math.max(left, 10)}px`
                     }
-                    
+
                     // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件
                     bus.$emit('on-update-props', {
                         componentId: renderData.componentId,
@@ -501,6 +516,9 @@
                         }
                     })
                 })
+            },
+            toggleShowTemplateDialog (isShow) {
+                this.showTemplateDialog = isShow
             }
         }
     }
