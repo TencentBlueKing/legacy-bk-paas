@@ -11,13 +11,10 @@
 
 <template>
     <div>
-        <div class="form-slot-title" v-bk-tooltips="{ content: functionTips, width: 290 }">
-            <span class="under-line">初始化表单数据（初始化数据将会覆盖已有数据）</span>
-        </div>
-
         <remote
             name="initFormData"
-            title=""
+            title="表单数据（更新将会覆盖已有数据）"
+            tips="绑定函数后，需要手动获取初始表单数据"
             :auto-get-data="false"
             :default-value="{}"
             :remote-validate="validateObject"
@@ -205,12 +202,6 @@
         },
         data () {
             return {
-                functionTips: `请返回一个对象，对象每一项的key值将作为表单项的字段名称，value值将作为表单项类型的判断依据，eg：
-                {
-                    string: '',
-                    boolean: false,
-                    array: [1, 2, 3]
-                }`,
                 formItemList: [],
                 formActionList: [],
                 formModelList: [],
@@ -490,12 +481,6 @@
     }
 </script>
 <style lang='postcss'>
-    .form-slot-title {
-        height: 28px;
-        font-size: 12px;
-        font-weight: bold;
-        color: #63656E;
-    }
     .form-item-list {
         display: flex;
         flex-direction: column;

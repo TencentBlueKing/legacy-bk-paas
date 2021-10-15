@@ -18,7 +18,7 @@
         @contextmenu.stop="freeLayoutClickHandler(renderData, $event)"
         @mouseover.stop="freeLayoutMouseHandler(renderData, 'enter')"
         @mouseout.stop="freeLayoutMouseHandler(renderData, 'leave')">
-        <component-menu class="free-layout-context-menu"
+        <component-menu class="free-layout-context-menu context-menu"
             :target="contextMenuTarget"
             :show="contextMenuVisible"
             :offset="getComputedMunuOffset"
@@ -307,7 +307,7 @@
                 const curRowNode = getNodeWithClass(e.target, 'bk-lesscode-free-layout')
                 curRowNode.classList.add('selected')
 
-                this.contextMenuVisible = false
+                this.$clearMenu()
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
             },

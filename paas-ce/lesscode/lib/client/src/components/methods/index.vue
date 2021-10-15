@@ -1,7 +1,7 @@
 <template>
     <transition name="fade">
         <article class="function-home" v-if="show">
-            <layout class="function-main method-layout" @resize="resizeLayOut" :init-width="initWidth <= 240 ? 240 : initWidth" ref="methodMain" v-bkloading="{ isLoading: isLoadingGroup }">
+            <layout class="function-main method-layout" :init-width="initWidth <= 240 ? 240 : initWidth" ref="methodMain" v-bkloading="{ isLoading: isLoadingGroup }">
                 <section slot="left" class="func-left">
                     <h3 class="left-title">
                         <span>函数库</span>
@@ -89,17 +89,16 @@
                 </section>
 
                 <main class="func-main">
-                    <func-form class="func-form"
+                    <func-dialog class="func-form"
                         size="small"
                         ref="func"
                         :func-data="curFunc"
-                        @formChange="formChanged = true"
                     >
                         <i class="bk-drag-icon bk-drag-close-line icon-style" @click="closeFunction" slot="tools"></i>
-                    </func-form>
+                    </func-dialog>
 
                     <footer class="main-footer">
-                        <bk-button theme="primary" @click="saveFunc" :loading="isSaving" :disabled="!formChanged">保存</bk-button>
+                        <bk-button theme="primary" @click="saveFunc" :loading="isSaving" :disabled="!($refs.func || {}).formChanged">保存</bk-button>
                     </footer>
                 </main>
 
@@ -130,12 +129,12 @@
 <script>
     import { mapActions, mapGetters } from 'vuex'
     import layout from '@/components/ui/layout'
-    import funcForm from '@/components/methods/func-form'
+    import funcDialog from '@/components/methods/func-form/func-dialog'
 
     export default {
         components: {
             layout,
-            funcForm
+            funcDialog
         },
 
         props: {
@@ -156,7 +155,6 @@
                 isSaving: false,
                 tempName: '',
                 isFull: false,
-                formChanged: false,
                 loadingGroupIds: [],
                 openGroupIds: [],
                 changeGroupIds: [],
@@ -263,16 +261,13 @@
             chooseFunction (func) {
                 if (this.chooseId === func.id) return
                 const confirmFn = () => {
-                    this.saveFunc().finally(() => {
-                        cancelFn()
-                    })
+                    this.saveFunc(cancelFn)
                 }
                 const cancelFn = () => {
                     this.chooseId = func.id
-                    this.formChanged = false
                     this.templateFunc = {}
                 }
-                if (this.formChanged) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '确认切换',
                         subTitle: '不保存则会丢失当前数据',
@@ -290,9 +285,8 @@
             closeFunction () {
                 const confirmFn = () => {
                     this.$emit('update:show', false)
-                    this.formChanged = false
                 }
-                if (this.formChanged) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '请确认是否关闭',
                         subTitle: '存在未保存的函数，关闭后不会保存更改',
@@ -371,16 +365,13 @@
                         func: rest
                     }
                     this.chooseId = undefined
-                    this.formChanged = true
                 }
 
                 const confirmFn = () => {
-                    this.saveFunc().finally(() => {
-                        copyFunc()
-                    })
+                    this.saveFunc(copyFunc)
                 }
 
-                if (this.formChanged) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '确认复制',
                         subTitle: '不保存则会丢失当前数据',
@@ -424,16 +415,13 @@
                         func: untitledFunc
                     }
                     this.chooseId = undefined
-                    this.formChanged = true
                 }
 
                 const confirmFn = () => {
-                    this.saveFunc().finally(() => {
-                        addFunc()
-                    })
+                    this.saveFunc(addFunc)
                 }
 
-                if (this.formChanged) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '确认复制',
                         subTitle: '不保存则会丢失当前数据',
@@ -448,8 +436,8 @@
                 }
             },
 
-            saveFunc () {
-                return this.$refs.func.validate().then((postData) => {
+            saveFunc (callBack) {
+                this.$refs.func.validate().then((postData) => {
                     if (!postData) return
                     if (!postData.projectId) {
                         postData.projectId = this.projectId
@@ -458,12 +446,14 @@
                     const varWhere = { projectId: this.$route.params.projectId, pageCode: this.pageDetail.pageCode, effectiveRange: 0 }
                     const editFunc = () => {
                         return this.editFunc({ groupId: this.curGroup.id, func: postData, varWhere }).then((res) => {
-                            if (!res) return
+                            if (!res) {
+                                this.$refs.func.formChanged = true
+                                return
+                            }
                             const projectId = this.$route.params.projectId
                             return this.getAllGroupFuncs(projectId).then(() => {
                                 if (!this.openGroupIds.includes(res.funcGroupId)) this.openGroupIds.push(res.funcGroupId)
                                 this.chooseId = res.id
-                                this.formChanged = false
                                 this.$bkMessage({ theme: 'success', message: '修改函数成功' })
                             })
                         })
@@ -471,10 +461,12 @@
                     const addFunc = () => {
                         const groupId = this.templateFunc.groupId
                         return this.addFunc({ groupId, func: postData, varWhere }).then((res) => {
-                            if (!res) return
+                            if (!res) {
+                                this.$refs.func.formChanged = true
+                                return
+                            }
                             if (!this.openGroupIds.includes(groupId)) this.openGroupIds.push(groupId)
                             this.chooseId = res.id
-                            this.formChanged = false
                             this.templateFunc = {}
                             this.$bkMessage({ theme: 'success', message: '添加函数成功' })
                         })
@@ -482,11 +474,15 @@
                     const method = postData.id ? editFunc : addFunc
                     return method().then(() => {
                         this.getAllVariable(varWhere)
+                        if (typeof callBack === 'function') callBack()
                     }).catch((err) => {
+                        this.$refs.func.formChanged = true
                         this.$bkMessage({ theme: 'error', message: err.message || err })
                     }).finally(() => {
                         this.isSaving = false
                     })
+                }).catch((validator) => {
+                    this.$bkMessage({ message: validator.content || validator, theme: 'error' })
                 })
             },
 
@@ -510,7 +506,6 @@
                     const funcList = curGroup.functionList || []
                     return this.deleteFunc({ groupId: curGroup.id, funcId: this.delObj.id, projectId, funcName: this.delObj.name }).then(() => {
                         if (this.delObj.id === this.chooseId) {
-                            this.formChanged = false
                             const firstGroup = this.groupList[0]
                             const curFuncList = funcList.length ? funcList : firstGroup.functionList
                             const firstFunc = curFuncList[0]
@@ -578,10 +573,6 @@
                     else if (this.groupList.find(x => nameList.includes(x.groupName))) reject(new Error('分类名重复，请修改后重试'))
                     else resolve()
                 })
-            },
-
-            resizeLayOut (width) {
-                this.$refs.func.resizeMonaco(width)
             }
         }
     }
