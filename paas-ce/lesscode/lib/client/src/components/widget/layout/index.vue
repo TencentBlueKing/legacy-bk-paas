@@ -9,6 +9,7 @@
     import LayoutLeftRight from './components/left-right'
     import LayoutComplex from './components/complex'
     import LayoutTopBottom from './components/top-bottom'
+    import { paramCase } from 'change-case'
 
     const componentMap = {
         'empty': LayoutEmpty,
@@ -39,12 +40,14 @@
                 return this.$route.params.projectId
             },
             pageStyle () {
-                let style = {}
+                let style = ''
                 for (const i in this.page.styleSetting) {
                     if (i === 'customStyle') {
-                        style = { ...style, ...this.page.styleSetting[i] }
+                        for (const key in this.page.styleSetting[i]) {
+                            style += `${paramCase(key)}: ${this.page.styleSetting[i][key]};`
+                        }
                     } else if (this.page.styleSetting[i] !== '') {
-                        style[i] = this.page.styleSetting[i]
+                        style += `${paramCase(i)}: ${this.page.styleSetting[i]};`
                     }
                 }
                 return style
@@ -77,10 +80,8 @@
                             domStyle = document.querySelector('.lesscode-editor-layout .nav-container').style
                         }
                         // 恢复默认样式
-                        for (const i in domStyle) {
-                            domStyle.setProperty(i, '')
-                        }
-                        Object.assign(domStyle, style)
+                        domStyle.cssText = ''
+                        domStyle.cssText = style
                     })
                 },
                 immediate: true
