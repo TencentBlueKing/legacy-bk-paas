@@ -29,7 +29,7 @@ export default {
     }, {
         name: 'on-delete', tips: '文件上传成功后，点击删除文件时调用该事件函数，事件回调参数 (file: Object, fileList: Array)'
     }],
-    styles: ['size', 'margin', 'padding'],
+    styles: ['size', 'margin', 'padding', 'border'],
     props: {
         accept: {
             type: 'string',
