@@ -16,8 +16,8 @@
             <bk-button class="table-list-btn">数据管理</bk-button>
             <bk-button class="table-list-btn">数据源部署记录</bk-button>
         </section>
-
-        <bk-table
+        <field-table :data="data" :column="column" :is-show-check="true" />
+        <!-- <bk-table
             v-bkloading="{ isLoading: listStates.isTableLoading }"
             :data="listStates.list"
             :pagination="listStates.pagination"
@@ -45,7 +45,7 @@
                     <bk-button class="mr10" theme="primary" text @click="deleteTable(props.row)">删除</bk-button>
                 </template>
             </bk-table-column>
-        </bk-table>
+        </bk-table> -->
     </section>
 </template>
 
@@ -57,6 +57,8 @@
     import dayjs from 'dayjs'
     import importTable from '../../../common/import.vue'
     import exportTable from '../../../common/export.vue'
+    import fieldTable from '../../../common/field-table/field-table'
+
     // const { Parser } = require('node-sql-parser')
     // const parser = new Parser()
 
@@ -75,10 +77,71 @@
     export default defineComponent({
         components: {
             importTable,
-            exportTable
+            exportTable,
+            fieldTable
         },
 
         setup () {
+            const column = [
+                {
+                    name: '字段名',
+                    type: 'input',
+                    prop: 'fieldAlias'
+                },
+                {
+                    name: '字段类型',
+                    type: 'select',
+                    prop: 'fieldType',
+                    optionsList: [{
+                        id: 'timestamp',
+                        name: 'timestamp'
+                    }, {
+                        id: 'string',
+                        name: 'string'
+                    }, {
+                        id: 'int',
+                        name: 'int'
+                    }]
+                },
+                {
+                    name: '字段映射',
+                    type: 'input',
+                    prop: 'mapping'
+                },
+                {
+                    name: '索引',
+                    type: 'checkbox',
+                    prop: 'active'
+                },
+                {
+                    name: '可空',
+                    type: 'checkbox',
+                    prop: 'active'
+                }
+            ]
+            const data = [
+                {
+                    fieldType: 'timestamp',
+                    fieldAlias: '时间戳',
+                    fieldName: 'timestamp',
+                    mapping: '测试样本集 / timestamp（时间戳）',
+                    active: true
+                },
+                {
+                    fieldType: 'string',
+                    fieldAlias: '字符串',
+                    fieldName: 'string',
+                    mapping: '测试样本集 / timestamp（时间戳）',
+                    active: false
+                },
+                {
+                    fieldType: 'int',
+                    fieldAlias: '数字',
+                    fieldName: 'int',
+                    mapping: '测试样本集 / timestamp（时间戳）',
+                    active: true
+                }
+            ]
             const listStates = reactive<IListStates>({
                 pagination: { current: 1, count: 0, limit: 10 },
                 list: [],
@@ -142,7 +205,9 @@
                 timeFormatter,
                 goToDataDesign,
                 goToDataManage,
-                deleteTable
+                deleteTable,
+                data,
+                column
             }
         }
     })
