@@ -21,8 +21,7 @@
     export default {
         data () {
             return {
-                layout: 'left-right',
-                defaultStyle: {}
+                layout: 'left-right'
             }
         },
         computed: {
