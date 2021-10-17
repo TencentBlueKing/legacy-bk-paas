@@ -43,8 +43,7 @@
                                     <i class="bk-icon icon-check-1 checked-icon"></i>
                                 </div>
                                 <div class="layout-img">
-                                    <img v-if="template.previewImg" :src="getPreviewImg(template.previewImg)" alt="模板缩略预览">
-                                    <div class="empty-preview-img" v-else>页面为空</div>
+                                    <page-preview-thumb alt="模板缩略预览" :project-id="template.id" />
                                 </div>
                                 <div class="layout-name">
                                     <span class="template-name" :title="template.projectName">{{ template.projectName }}</span>
@@ -99,7 +98,7 @@
 </template>
 
 <script>
-    import preivewErrImg from '@/images/preview-error.png'
+    import PagePreviewThumb from '@/components/project/page-preview-thumb.vue'
     import { PROJECT_TEMPLATE_TYPE } from '@/common/constant'
 
     const defaultFormData = {
@@ -110,9 +109,12 @@
         copyFrom: null
     }
     const projectTemplateType = [{ id: '', name: '全部' }].concat(PROJECT_TEMPLATE_TYPE)
-    
+
     export default {
         name: 'template-dialog',
+        components: {
+            PagePreviewThumb
+        },
         data () {
             return {
                 isShow: false,
@@ -204,12 +206,6 @@
                 } finally {
                     this.loading = false
                 }
-            },
-            getPreviewImg (previewImg) {
-                if (previewImg && previewImg.length > 20) {
-                    return previewImg
-                }
-                return preivewErrImg
             },
             handleClickFilter (link) {
                 this.filter = link
@@ -414,12 +410,12 @@
                             justify-content: space-between;
                             height: 32px;
                             width: 100%;
-                            
+
                             .template-name{
                                 color: #63656e;
                                 @mixin ellipsis 80%, block;
                             }
-                            
+
                             .template-preview {
                                 display: none;
                                 color: #3A84FF;

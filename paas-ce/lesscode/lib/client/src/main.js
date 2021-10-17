@@ -42,11 +42,6 @@ lesscodeCanvas.start()
 // 用户调用接口使用，无业务逻辑，直接返回数据
 Vue.prototype.$http = pureAxios
 Vue.prototype.$td = targetData
-Vue.prototype.$clearMenu = () => {
-    document.querySelectorAll('.context-menu').forEach(node => {
-        node.style.display = 'none'
-    })
-}
 
 Vue.use(mavonEditor)
 

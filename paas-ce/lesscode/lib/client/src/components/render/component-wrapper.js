@@ -37,7 +37,7 @@ export default {
             'component-data': componentData
         }, dynamicProps)
 
-        const renderStyles = Object.assign({}, renderData.renderStyles)
+        const renderStyles = Object.assign({}, renderData.renderStyles, renderData.renderStyles.customStyle || {})
 
         const widthChangeableCompoennts = ['img', 'p', 'span', 'bk-link', 'el-link']
         if (!widthChangeableCompoennts.includes(componentData.type)) delete renderStyles.width
@@ -53,7 +53,9 @@ export default {
             }
             return acc
         }, {})
-
+        // 画布margin属性加在上一层、不直接加在组件上
+        const marginStyle = { margin: 0, marginLeft: 0, marginRight: 0, marginTop: 0, marginBottom: 0 }
+        
         return h('span',
             {
                 style: { 'font-size': 'initial' }
@@ -67,7 +69,7 @@ export default {
                         ...dynamicEvent
                     },
                     scopedSlots,
-                    style: Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }),
+                    style: Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }, marginStyle),
                     ref: renderData.componentId
                 }, context.children)
             ])
