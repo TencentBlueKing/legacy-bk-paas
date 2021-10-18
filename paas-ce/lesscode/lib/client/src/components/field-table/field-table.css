@@ -1,5 +1,10 @@
 .field-table {
     width: 100%;
+    .asterisk {
+      margin-left: 5px;
+      color: #ea3636;
+      font-size: 14px;
+    }
     tr.bk-table-row.hover-row {
       > td {
         background-color: #fff;

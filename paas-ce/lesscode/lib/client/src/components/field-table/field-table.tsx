@@ -11,69 +11,80 @@ export default defineComponent({
         column: Array,
         isShowCheck: Boolean
     },
-    setup (props, { emit }) {
+    setup(props, { emit }) {
+        const renderHeader = (h, { column, $index }, item) => {
+            return (
+                <span>
+                    {column.label}
+                    {item.isRequire ? <label class="asterisk">*</label> : ''}
+                </span>
+            )
+        }
         /** checkbox */
         const renderCheckbox = (item: object) => {
-            const scopedSlots = {
+            return {
                 default: (props) => {
                     const defaultSlot = (
-                        <bk-checkbox value={props.row[item.prop]} />
+                        <bk-checkbox
+                            value={props.row[item.prop]}
+                            disabled={props.row?.readOnly}
+                        />
                     )
                     return defaultSlot
                 }
             }
-            return <bk-table-column label={item.name} {...{ scopedSlots }} />
         }
         /** input */
         const renderInput = (item: object) => {
-            const scopedSlots = {
+            const change = (value) => {
+                emit('update:data', value)
+            }
+            return {
                 default: (props) => {
                     const defaultSlot = (
                         <bk-input
                             placeholder={item.placeholder || '请输入'}
                             class="field-table-input"
                             value={props.row[item.prop]}
+                            disabled={props.row?.readOnly}
+                            onchange={change}
                         />
                     )
                     return defaultSlot
                 }
             }
-            return <bk-table-column label={item.name} {...{ scopedSlots }} />
         }
         /** select */
         const renderSelect = (item: object) => {
-            const scopedSlots = {
+            return {
                 default: (props) => {
+                    const options = item.optionsList.map((option) => (
+                        <bk-option
+                            key={option.id}
+                            id={option.id}
+                            name={option.name}
+                        />
+                    ))
                     const defaultSlot = (
                         <bk-select
                             class="field-table-select"
                             clearable={false}
                             value={props.row[item.prop]}
+                            disabled={props.row?.readOnly}
                         >
-                            {item.optionsList
-                                ? item.optionsList.map((option) => (
-                                    <bk-option
-                                        key={option.id}
-                                        id={option.id}
-                                        name={option.name}
-                                    />
-                                ))
-                                : ''}
+                            {item?.optionsList ? options : ''}
                         </bk-select>
                     )
                     return defaultSlot
                 }
             }
-            return <bk-table-column label={item.name} {...{ scopedSlots }} />
         }
         /** 操作列 */
         const renderOperate = () => {
             const handleAdd = (props) => {
-                console.log(props, 'add')
                 emit('add', props.row, props.$index)
             }
             const handleDelete = (props) => {
-                console.log(props, 'delete')
                 emit('delete', props.row, props.$index)
             }
             const scopedSlots = {
@@ -97,24 +108,30 @@ export default defineComponent({
                     return defaultSlot
                 }
             }
-            return <bk-table-column label="操作" {...{ scopedSlots }} />
+            return (
+                <bk-table-column
+                    label="操作"
+                    width="100"
+                    {...{ scopedSlots }}
+                />
+            )
         }
         /** 自定义 */
         const renderCustomize = (item: object) => {
-            const scopedSlots = {
+            return {
                 default: (props) => item.renderFn.apply(this, [props])
             }
-            return <bk-table-column label={item.name} {...{ scopedSlots }} />
         }
         return {
             renderCheckbox,
             renderInput,
             renderSelect,
             renderCustomize,
-            renderOperate
+            renderOperate,
+            renderHeader
         }
     },
-    render (): VNode {
+    render(): VNode {
         const typeList = {
             custom: 'renderCustomize',
             input: 'renderInput',
@@ -126,7 +143,19 @@ export default defineComponent({
             <div class="field-table">
                 <bk-table data={this.data} outer-border={false}>
                     {this.isShowCheck ? renderSelection : ''}
-                    {this.column.map((item) => this[typeList[item.type]](item))}
+                    {this.column.map((item) => (
+                        <bk-table-column
+                            isRequire={item.isRequire}
+                            label={item.name}
+                            width={item.width || 'auto'}
+                            renderHeader={(h, { column, $index }) =>
+                                this.renderHeader(h, { column, $index }, item)
+                            }
+                            {...{
+                                scopedSlots: this[typeList[item.type]](item)
+                            }}
+                        />
+                    ))}
                     {this.renderOperate()}
                 </bk-table>
             </div>

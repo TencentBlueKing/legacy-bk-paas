@@ -14,15 +14,17 @@ import { VNode } from 'vue'
 import fieldTable from '@/components/field-table/field-table'
 
 export interface IFieldSelectOption {
-    id: string,
+    id: string
     name: string
 }
 
 export interface ITableField {
-    name: string,
-    type: string,
-    prop: string,
+    name: string
+    type: string
+    prop: string
     optionsList?: IFieldSelectOption[]
+    width?: string
+    isRequire?: boolean
 }
 
 export interface ITableStatus {
@@ -33,37 +35,45 @@ const tableFields: ITableField[] = [
     {
         name: '字段名称',
         type: 'input',
-        prop: 'name'
+        prop: 'name',
+        isRequire: true
     },
     {
         name: '字段类型',
         type: 'select',
         prop: 'type',
-        optionsList: [{
-            id: 'varchar',
-            name: 'varchar'
-        }, {
-            id: 'int',
-            name: 'int'
-        }, {
-            id: 'datetime',
-            name: 'datetime'
-        }]
+        optionsList: [
+            {
+                id: 'varchar',
+                name: 'varchar'
+            },
+            {
+                id: 'int',
+                name: 'int'
+            },
+            {
+                id: 'datetime',
+                name: 'datetime'
+            }
+        ]
     },
     {
         name: '主键',
         type: 'checkbox',
-        prop: 'primary'
+        prop: 'primary',
+        width: '100px'
     },
     {
         name: '索引',
         type: 'checkbox',
-        prop: 'active'
+        prop: 'active',
+        width: '100px'
     },
     {
         name: '可空',
         type: 'checkbox',
-        prop: 'active'
+        prop: 'active',
+        width: '100px'
     },
     {
         name: '默认值',
@@ -86,7 +96,7 @@ export default defineComponent({
         data: Array
     },
 
-    setup (props: ITableStatus) {
+    setup(props: ITableStatus) {
         const tableList = toRef(props, 'data')
 
         const addField = (row, index) => {
@@ -107,7 +117,7 @@ export default defineComponent({
         }
     },
 
-    render (): VNode {
+    render(): VNode {
         return (
             <field-table
                 data={this.tableList}
@@ -115,8 +125,7 @@ export default defineComponent({
                 is-show-check
                 onAdd={this.addField}
                 onDelete={this.deleteField}
-            >
-            </field-table>
+            ></field-table>
         )
     }
 })
