@@ -10,9 +10,9 @@
  */
 
 /**
- * 预览环境，公共 orm columns
+ * 数据源，公共 orm columns
  */
-export const previewBaseColumns = {
+export const baseColumns = {
     id: {
         type: 'int',
         primary: true,

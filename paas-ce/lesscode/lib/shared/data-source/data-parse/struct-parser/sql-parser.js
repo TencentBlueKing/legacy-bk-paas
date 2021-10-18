@@ -45,10 +45,10 @@ function createTable (data) {
             + '`deleteFlag` int(11) NULL DEFAULT 0 COMMENT \'是否删除，1代表已删除\',\n'
             + '`createTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT \'创建时间\',\n'
             + '`updateTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT \'最新更新时间\',\n'
-            + '`createUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT \'创建人，默认当前用户\',\n'
-            + '`updateUser` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT \'更新人，默认当前用户\',\n'
+            + '`createUser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT \'创建人，默认当前用户\',\n'
+            + '`updateUser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT \'更新人，默认当前用户\',\n'
             + 'PRIMARY KEY (`id`) USING BTREE\n'
-        + `) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = \'${data.comment}\' ROW_FORMAT = Dynamic;\n`
+        + `) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = \'${data.comment}\' ROW_FORMAT = Dynamic;\n`
     )
 }
 

@@ -8,7 +8,7 @@
         ></bk-alert>
 
         <section class="table-list-btns">
-            <bk-button theme="primary" class="table-list-btn">新建表</bk-button>
+            <bk-button theme="primary" class="table-list-btn" @click="goToDataDesign">新建表</bk-button>
             <bk-button class="table-list-btn">批量删除</bk-button>
             <import-table title="导入表" class="table-list-btn"></import-table>
             <export-table title="导出表" class="table-list-btn"></export-table>
@@ -16,11 +16,11 @@
             <bk-button class="table-list-btn">数据管理</bk-button>
             <bk-button class="table-list-btn">数据源部署记录</bk-button>
         </section>
-        <field-table :data="data" :column="column" :is-show-check="true" />
-        <!-- <bk-table
-            v-bkloading="{ isLoading: listStates.isTableLoading }"
-            :data="listStates.list"
-            :pagination="listStates.pagination"
+
+        <bk-table
+            v-bkloading="{ isLoading: listStatus.isTableLoading }"
+            :data="listStatus.list"
+            :pagination="listStatus.pagination"
             :outer-border="false"
             :header-border="false"
             :header-cell-style="{ background: '#f0f1f5' }"
@@ -45,7 +45,7 @@
                     <bk-button class="mr10" theme="primary" text @click="deleteTable(props.row)">删除</bk-button>
                 </template>
             </bk-table-column>
-        </bk-table> -->
+        </bk-table>
     </section>
 </template>
 
@@ -57,10 +57,15 @@
     import dayjs from 'dayjs'
     import importTable from '../../../common/import.vue'
     import exportTable from '../../../common/export.vue'
-    import fieldTable from '../../../common/field-table/field-table'
 
     // const { Parser } = require('node-sql-parser')
     // const parser = new Parser()
+    // console.log(parser)
+    // console.log(parser.astify(`
+    //     CREATE TABLE comp  (
+    //         updateTime datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
+    //     );
+    // `))
 
     interface IPagination {
         current: number,
@@ -68,7 +73,7 @@
         limit: number
     }
 
-    interface IListStates {
+    interface IListStatus {
         pagination: IPagination
         list: any[],
         isTableLoading: boolean
@@ -77,101 +82,40 @@
     export default defineComponent({
         components: {
             importTable,
-            exportTable,
-            fieldTable
+            exportTable
         },
 
         setup () {
-            const column = [
-                {
-                    name: '字段名',
-                    type: 'input',
-                    prop: 'fieldAlias'
-                },
-                {
-                    name: '字段类型',
-                    type: 'select',
-                    prop: 'fieldType',
-                    optionsList: [{
-                        id: 'timestamp',
-                        name: 'timestamp'
-                    }, {
-                        id: 'string',
-                        name: 'string'
-                    }, {
-                        id: 'int',
-                        name: 'int'
-                    }]
-                },
-                {
-                    name: '字段映射',
-                    type: 'input',
-                    prop: 'mapping'
-                },
-                {
-                    name: '索引',
-                    type: 'checkbox',
-                    prop: 'active'
-                },
-                {
-                    name: '可空',
-                    type: 'checkbox',
-                    prop: 'active'
-                }
-            ]
-            const data = [
-                {
-                    fieldType: 'timestamp',
-                    fieldAlias: '时间戳',
-                    fieldName: 'timestamp',
-                    mapping: '测试样本集 / timestamp（时间戳）',
-                    active: true
-                },
-                {
-                    fieldType: 'string',
-                    fieldAlias: '字符串',
-                    fieldName: 'string',
-                    mapping: '测试样本集 / timestamp（时间戳）',
-                    active: false
-                },
-                {
-                    fieldType: 'int',
-                    fieldAlias: '数字',
-                    fieldName: 'int',
-                    mapping: '测试样本集 / timestamp（时间戳）',
-                    active: true
-                }
-            ]
-            const listStates = reactive<IListStates>({
+            const listStatus = reactive<IListStatus>({
                 pagination: { current: 1, count: 0, limit: 10 },
                 list: [],
                 isTableLoading: false
             })
 
             const handlePageChange = (newPage) => {
-                listStates.pagination.current = newPage
+                listStatus.pagination.current = newPage
                 getTableList()
             }
 
             const handlePageLimitChange = (limit) => {
-                listStates.pagination.limit = limit
+                listStatus.pagination.limit = limit
                 getTableList()
             }
 
             const getTableList = () => {
-                listStates.isTableLoading = true
+                listStatus.isTableLoading = true
                 const params = {
                     projectId: router?.currentRoute?.params?.projectId,
-                    pageSize: listStates.pagination.limit,
-                    page: listStates.pagination.current
+                    pageSize: listStatus.pagination.limit,
+                    page: listStatus.pagination.current
                 }
                 store.dispatch('dataSource/list', params).then((list) => {
-                    listStates.list = list
-                    listStates.pagination.count = list.length
+                    listStatus.list = list
+                    listStatus.pagination.count = list.length
                 }).catch((err) => {
                     messageError(err.message || err)
                 }).finally(() => {
-                    listStates.isTableLoading = false
+                    listStatus.isTableLoading = false
                 })
             }
 
@@ -179,13 +123,19 @@
                 return val ? dayjs(val).format('YYYY-MM-DD HH:mm:ss') : '--'
             }
 
-            const goToDataDesign = () => {
-                // console.log(parser)
-                // console.log(parser.astify(`
-                //     CREATE TABLE comp  (
-                //         updateTime datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
-                //     );
-                // `))
+            const goToDataDesign = (row) => {
+                if (row.id) {
+                    router.push({
+                        name: 'editTable',
+                        query: {
+                            id: row.id
+                        }
+                    })
+                } else {
+                    router.push({
+                        name: 'createTable'
+                    })
+                }
             }
 
             const goToDataManage = () => {
@@ -199,15 +149,13 @@
             onBeforeMount(getTableList)
 
             return {
-                listStates,
+                listStatus,
                 handlePageChange,
                 handlePageLimitChange,
                 timeFormatter,
                 goToDataDesign,
                 goToDataManage,
-                deleteTable,
-                data,
-                column
+                deleteTable
             }
         }
     })

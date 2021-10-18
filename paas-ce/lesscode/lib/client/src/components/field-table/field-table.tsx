@@ -11,7 +11,7 @@ export default defineComponent({
         column: Array,
         isShowCheck: Boolean
     },
-    setup(props, { emit }) {
+    setup (props, { emit }) {
         /** checkbox */
         const renderCheckbox = (item: object) => {
             const scopedSlots = {
@@ -70,11 +70,11 @@ export default defineComponent({
         const renderOperate = () => {
             const handleAdd = (props) => {
                 console.log(props, 'add')
-                emit('add', props)
+                emit('add', props.row, props.$index)
             }
             const handleDelete = (props) => {
                 console.log(props, 'delete')
-                emit('delete', props)
+                emit('delete', props.row, props.$index)
             }
             const scopedSlots = {
                 default: (props) => {
@@ -83,13 +83,13 @@ export default defineComponent({
                             <i
                                 class="bk-icon icon-plus-circle-shape field-icon"
                                 onClick={() => {
-                                    handleAdd(props.row)
+                                    handleAdd(props)
                                 }}
                             />
                             <i
                                 class="bk-icon icon-minus-circle-shape field-icon"
                                 onClick={() => {
-                                    handleDelete(props.row)
+                                    handleDelete(props)
                                 }}
                             />
                         </span>
@@ -114,7 +114,7 @@ export default defineComponent({
             renderOperate
         }
     },
-    render(): VNode {
+    render (): VNode {
         const typeList = {
             custom: 'renderCustomize',
             input: 'renderInput',

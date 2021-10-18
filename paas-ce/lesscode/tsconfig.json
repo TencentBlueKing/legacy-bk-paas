@@ -19,6 +19,9 @@
         "paths": {
             "@/*": [
                 "./lib/client/src/*"
+            ],
+            "shared/*": [
+                "./lib/shared/*"
             ]
         },
         "lib": [

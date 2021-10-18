@@ -236,6 +236,7 @@ const routes = [
                 path: 'data-source-manage',
                 name: 'dataSourceManage',
                 component: DataSourceHome,
+                redirect: { name: 'tableList' },
                 children: [
                     {
                         path: '',
@@ -313,7 +314,7 @@ const routes = [
     },
     {
         name: 'page-entry',
-        path: `/project/:projectId/page/:pageId`,
+        path: '/project/:projectId/page/:pageId',
         components: {
             default: MainEntry,
             permission: require('@/views/status/non-exist-project').default
