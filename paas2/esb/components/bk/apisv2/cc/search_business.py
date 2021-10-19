@@ -34,12 +34,13 @@ class SearchBusiness(Component):
         bk_supplier_account = forms.CharField(label="bk supplier account", required=False)
         fields = TypeCheckField(label="fields", promise_type=list, required=False)
         condition = TypeCheckField(label="condition", promise_type=dict, required=False)
+        biz_property_filter = TypeCheckField(label="biz_property_filter", promise_type=dict, required=False)
         page = TypeCheckField(label="page", promise_type=dict, required=False)
 
         def clean(self):
             data = self.get_cleaned_data_when_exist(keys=["bk_supplier_account"])
             data.setdefault("bk_supplier_account", configs.DEFAULT_BK_SUPPLIER_ACCOUNT)
-            data["data"] = self.get_cleaned_data_when_exist(keys=["fields", "condition", "page"])
+            data["data"] = self.get_cleaned_data_when_exist(keys=["fields", "condition", "page", "biz_property_filter"])
             return data
 
     def handle(self):
