@@ -119,5 +119,8 @@ class User(models.AbstractBaseUser, models.AnonymousUser):
     def is_anonymous(self):
         return not (self.is_authenticated)
 
+    def save(self, *args, **kwargs):
+        pass
+
     class Meta(object):
         app_label = "bkauth"
