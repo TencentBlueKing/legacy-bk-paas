@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.12
+    - bugfix: bkauth_user table missing will 500 after upgrade to django 1.11.29
+
 # 2.13.11
     - update: esb update data/jobv3/sops confapis
     - update: esb add data module RESOURCECENTERAPI
