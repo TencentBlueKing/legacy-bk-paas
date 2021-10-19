@@ -31,4 +31,10 @@ export default class extends Base {
         comment: '字段json'
     })
     columns
+
+    @Column({
+        type: 'varchar',
+        comment: '备注'
+    })
+    comment
 }

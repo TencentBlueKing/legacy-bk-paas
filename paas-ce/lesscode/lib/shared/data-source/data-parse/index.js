@@ -18,11 +18,11 @@
 export class DataParse {
     /**
      * 传入原始数据,用于比对导入前后的变化
-     * @param {*} dataList 原始数据
+     * @param {*} dataList 原始数据,表格列表
      */
-    constructor (dataList) {
-        this.originDatas = dataList
-        this.finalDatas = dataList
+    constructor (dataList = []) {
+        this.originDatas = JSON.parse(JSON.stringify(dataList))
+        this.finalDatas = JSON.parse(JSON.stringify(dataList))
     }
 
     /**

@@ -58,12 +58,12 @@ const tableFields: ITableField[] = [
     {
         name: '索引',
         type: 'checkbox',
-        prop: 'active'
+        prop: 'index'
     },
     {
         name: '可空',
         type: 'checkbox',
-        prop: 'active'
+        prop: 'nullable'
     },
     {
         name: '默认值',
@@ -73,7 +73,7 @@ const tableFields: ITableField[] = [
     {
         name: '备注',
         type: 'input',
-        prop: 'summary'
+        prop: 'comment'
     }
 ]
 
@@ -83,7 +83,11 @@ export default defineComponent({
     },
 
     props: {
-        data: Array
+        data: Array,
+        isEdit: {
+            type: Boolean,
+            default: true
+        }
     },
 
     setup (props: ITableStatus) {
@@ -112,7 +116,6 @@ export default defineComponent({
             <field-table
                 data={this.tableList}
                 column={this.tableFields}
-                is-show-check
                 onAdd={this.addField}
                 onDelete={this.deleteField}
             >

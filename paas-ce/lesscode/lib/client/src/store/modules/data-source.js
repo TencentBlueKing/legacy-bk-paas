@@ -23,7 +23,18 @@ export default {
     actions: {
         list (state, params = {}) {
             return http.get(`${perfix}/getTableList`, { params }).then(response => {
-                const data = response.data || ''
+                const data = response.data || []
+                return data
+            })
+        },
+        add (_, postData) {
+            return http.post(`${perfix}/addTable`, postData).then(response => {
+                return response.data
+            })
+        },
+        findOne (_, id) {
+            return http.get(`${perfix}/getTableDetail`, { params: { id } }).then(response => {
+                const data = response.data || []
                 return data
             })
         }

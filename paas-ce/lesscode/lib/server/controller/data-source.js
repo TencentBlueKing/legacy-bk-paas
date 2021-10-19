@@ -53,7 +53,7 @@ export default class DataSourceController {
 
     // 获取项目下的所有表结构
     @Get('/getTableList')
-    getTableList (
+    async getTableList (
         @QueryParams({ name: 'projectId', require: true }) projectId,
         @QueryParams({ name: 'pageSize', default: 10 }) pageSize,
         @QueryParams({ name: 'page', default: 1 }) page
@@ -66,7 +66,23 @@ export default class DataSourceController {
             skip: (page - 1) * pageSize,
             take: pageSize
         }
-        return dataService.get('data-table', queryParams)
+        const datas = await dataService.get('data-table', queryParams)
+        const tableList = datas.map((data) => {
+            data.columns = JSON.parse(data.columns)
+            return data
+        })
+        return tableList
+    }
+
+    // 获取表详情
+    @Get('/getTableDetail')
+    async getTableDetail (
+        @QueryParams({ name: 'id' }) id
+    ) {
+        const queryParams = { id }
+        const data = await dataService.findOne('data-table', queryParams)
+        data.columns = JSON.parse(data.columns)
+        return data
     }
 
     // 新增表结构
@@ -75,8 +91,13 @@ export default class DataSourceController {
         @BodyParams({ name: 'dataTable', require: true }) dataTable,
         @BodyParams({ name: 'record', require: true }) record
     ) {
+        dataTable.columns = JSON.stringify(dataTable.columns)
         const data = await dataService.add('data-table', dataTable)
-        await dataService.add('data-table-modify-record', record)
+        const tableModifyRecord = {
+            ...record,
+            tableId: data.id
+        }
+        await dataService.add('data-table-modify-record', tableModifyRecord)
         return data
     }
 

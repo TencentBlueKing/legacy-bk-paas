@@ -126,7 +126,7 @@
             const goToDataDesign = (row) => {
                 if (row.id) {
                     router.push({
-                        name: 'editTable',
+                        name: 'showTable',
                         query: {
                             id: row.id
                         }

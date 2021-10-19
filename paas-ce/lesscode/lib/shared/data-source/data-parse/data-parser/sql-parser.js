@@ -24,7 +24,7 @@ function transformJson2Sql () {
 /**
  * sql 操作
  */
-export class SqlParser {
+export class DataSqlParser {
     constructor (sql) {
         this.sql = sql
     }
