@@ -100,7 +100,7 @@ export default defineComponent({
         }
     },
 
-    setup(props: ITableStatus) {
+    setup (props: ITableStatus, { emit }) {
         const tableList = toRef(props, 'data')
 
         const addField = (row, index) => {
@@ -113,21 +113,28 @@ export default defineComponent({
             console.log(tableList.value)
         }
 
+        const changeData = (value, index, row, data) => {
+            tableList.value.splice(index, 1, row)
+            emit('update:data', tableList.value)
+        }
+
         return {
             tableList,
             tableFields,
             addField,
-            deleteField
+            deleteField,
+            changeData
         }
     },
 
-    render(): VNode {
+    render (): VNode {
         return (
             <field-table
                 data={this.tableList}
                 column={this.tableFields}
                 onAdd={this.addField}
                 onDelete={this.deleteField}
+                onChange={this.changeData}
             ></field-table>
         )
     }

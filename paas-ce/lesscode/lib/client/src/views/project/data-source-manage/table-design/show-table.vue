@@ -19,7 +19,15 @@
 
             <section class="table-section">
                 <h5 class="section-title">字段配置</h5>
-                <field-table :data.sync="tableStatus.data"></field-table>
+                <bk-table :outer-border="false" :data="tableStatus.data">
+                    <bk-table-column label="字段名称" prop="name"></bk-table-column>
+                    <bk-table-column label="字段类型" prop="type"></bk-table-column>
+                    <bk-table-column label="主键" prop="primary" :formatter="boolFormatter"></bk-table-column>
+                    <bk-table-column label="索引" prop="index" :formatter="boolFormatter"></bk-table-column>
+                    <bk-table-column label="可空" prop="nullable" :formatter="boolFormatter"></bk-table-column>
+                    <bk-table-column label="默认值" prop="default"></bk-table-column>
+                    <bk-table-column label="备注" prop="comment"></bk-table-column>
+                </bk-table>
             </section>
         </main>
     </article>
@@ -38,7 +46,6 @@
         messageError
     } from '@/common/bkmagic'
     import renderHeader from '../common/header'
-    import fieldTable from '../common/field-table'
     import exportTable from '../common/export.vue'
     import infoTable from '../common/info-table.vue'
     import router from '@/router'
@@ -47,7 +54,6 @@
     export default defineComponent({
         components: {
             renderHeader,
-            fieldTable,
             exportTable,
             infoTable
         },
@@ -62,6 +68,13 @@
 
             const goEdit = () => {
                 router.push({ name: 'editTable', query: { id } })
+            }
+
+            const boolFormatter = (row, column, cellValue, index) => {
+                const valMap = {
+                    true: '是'
+                }
+                return valMap[cellValue] || '否'
             }
 
             const getDetail = () => {
@@ -82,7 +95,8 @@
             return {
                 tableStatus,
                 goBack,
-                goEdit
+                goEdit,
+                boolFormatter
             }
         }
     })

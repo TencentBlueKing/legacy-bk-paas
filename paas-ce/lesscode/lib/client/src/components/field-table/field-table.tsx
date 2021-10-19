@@ -11,7 +11,7 @@ export default defineComponent({
         column: Array,
         isShowCheck: Boolean
     },
-    setup(props, { emit }) {
+    setup (props, { emit }) {
         const renderHeader = (h, { column, $index }, item) => {
             return (
                 <span>
@@ -131,7 +131,7 @@ export default defineComponent({
             renderHeader
         }
     },
-    render(): VNode {
+    render (): VNode {
         const typeList = {
             custom: 'renderCustomize',
             input: 'renderInput',
