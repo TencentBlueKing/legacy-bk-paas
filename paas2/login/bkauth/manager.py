@@ -28,6 +28,6 @@ class BkUserManager(BaseUserManager):
         now = timezone.now()
         user = self.model(username=username, last_login=now)
         user.set_password(password)
-        user.save(using=self._db)
+        # user.save(using=self._db)
 
         return user
