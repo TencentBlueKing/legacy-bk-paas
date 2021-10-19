@@ -261,8 +261,9 @@ export const updatePage = async (ctx) => {
                 await Promise.all([transactionalEntityManager.save(addUsedVariableValues), transactionalEntityManager.remove(deleteUsedVariables)])
             }
 
-            // 处理lifeCycle
+            // 处理lifeCycle、styleSetting
             page.lifeCycle = typeof page.lifeCycle === 'string' ? JSON.parse(page.lifeCycle) : page.lifeCycle
+            page.styleSetting = typeof page.styleSetting === 'string' ? JSON.parse(page.styleSetting) : page.styleSetting
 
             return page
         })
@@ -417,6 +418,24 @@ export const pageDetail = async (ctx) => {
         const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
         const detail = await getRepository(Page).findOne(queryParams) || {}
         if (detail.lifeCycle) detail.lifeCycle = JSON.parse(detail.lifeCycle)
+        if (detail.styleSetting) {
+            detail.styleSetting = JSON.parse(detail.styleSetting)
+        } else {
+            // migration调整
+            detail.styleSetting = {
+                minWidth: '',
+                marginTop: '',
+                marginBottom: '',
+                marginLeft: '',
+                marginRight: '',
+                paddingTop: '',
+                paddingBottom: '',
+                paddingLeft: '',
+                paddingRight: '',
+                backgroundColor: '',
+                customStyle: {}
+            }
+        }
         ctx.send({
             code: 0,
             message: 'OK',

@@ -97,6 +97,7 @@ class PageCode {
     codeErrMessage = '' // 记录函数里的错误信息
     selfClosingTags = ['img', 'input', 'link', 'hr', 'br']
     lifeCycle = {} // 页面的生命周期
+    styleSetting = {} // 页面样式设置
     projectId = ''
     pageId = ''
     layoutContent = ''
@@ -105,7 +106,7 @@ class PageCode {
     layoutType = ''
     isUseElementComponentLib = false
 
-    constructor (targetData = [], pageType = 'vueCode', allCustomMap = {}, funcGroups = [], lifeCycle = '', projectId, pageId, layoutContent, isGenerateNav = false, isEmpty = false, layoutType, variableList) {
+    constructor (targetData = [], pageType = 'vueCode', allCustomMap = {}, funcGroups = [], lifeCycle = '', projectId, pageId, layoutContent, isGenerateNav = false, isEmpty = false, layoutType, variableList, styleSetting = '') {
         this.targetData = targetData || []
         this.pageType = pageType
         this.allCustomMap = allCustomMap || {}
@@ -120,6 +121,7 @@ class PageCode {
         this.isEmpty = isEmpty
         this.layoutType = layoutType
         this.variableList = variableList || []
+        this.styleSetting = styleSetting || {}
     }
 
     getCode () {
@@ -341,9 +343,26 @@ class PageCode {
     }
 
     generateCss () {
+        // 页面级样式设置
+        const styleSetting = typeof this.styleSetting === 'string' ? JSON.parse(this.styleSetting) : this.styleSetting
+        let pageStyle = ''
+        const navStyle = ''
+        for (const i in styleSetting) {
+            if (i === 'customStyle') {
+                for (const key in styleSetting[i]) {
+                    pageStyle += `${key}: ${styleSetting[i][key]};\n`
+                }
+            } else if (styleSetting[i] !== '') {
+                pageStyle += `${paramCase(i)}: ${styleSetting[i]};\n`
+            } else if (i.startsWith('margin') && this.layoutType !== 'empty') {
+                pageStyle += `${paramCase(i)}: 0;\n`
+            }
+        }
+
         let head = `<style lang="css" scoped>
             .container-${this.uniqueKey} {
                 margin: ${this.hasLayOut ? '0' : '10'}px;
+                ${pageStyle}
             }
             .bk-layout-row-${this.uniqueKey} {
                 display: flex;
@@ -545,14 +564,15 @@ class PageCode {
                     align-items: center;
                     cursor: pointer;
                 }
+               
             `
         }
-        if (this.isGenerateNav) {
-            head += `.bk-layout-custom-component-wrapper .page-container {
-                    margin: 0px
-                }
-            `
-        }
+        // if (this.isGenerateNav) {
+        //     head += `.bk-layout-custom-component-wrapper .page-container {
+        //             margin: 0px
+        //         }
+        //     `
+        // }
         const end = '</style>\n'
 
         return head + this.cssStr + end
@@ -1718,8 +1738,8 @@ class PageCode {
 }
 
 module.exports = {
-    async getPageData (targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList) {
-        const pageCode = new PageCode(targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList)
+    async getPageData (targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList, styleSetting) {
+        const pageCode = new PageCode(targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList, styleSetting)
         let code = ''
         if (pageType === 'vueCode') {
             // 格式化，报错是抛出异常

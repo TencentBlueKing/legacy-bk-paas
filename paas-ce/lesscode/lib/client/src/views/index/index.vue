@@ -214,7 +214,7 @@
                 </div>
             </div>
             <div class="main-content border-none" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
-                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
+                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :style-setting="pageDetail.styleSetting" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
             </div>
             <div class="main-content" v-if="['pageFunction', 'setting'].includes(actionSelected)">
                 <page-setting :project="projectDetail" :type="actionSelected"></page-setting>
