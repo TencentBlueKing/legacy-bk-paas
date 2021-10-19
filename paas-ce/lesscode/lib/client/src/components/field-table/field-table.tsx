@@ -22,12 +22,19 @@ export default defineComponent({
         }
         /** checkbox */
         const renderCheckbox = (item: object) => {
+            const change = (value, row, item, index) => {
+                emit('checkboxChange', value, row, item, index)
+            }
             return {
                 default: (props) => {
+                    const { row, $index } = props
                     const defaultSlot = (
                         <bk-checkbox
-                            value={props.row[item.prop]}
-                            disabled={props.row?.readOnly}
+                            value={row[item.prop]}
+                            disabled={row?.isEdit}
+                            onchange={(value) =>
+                                change(value, row, item, $index)
+                            }
                         />
                     )
                     return defaultSlot
@@ -36,18 +43,21 @@ export default defineComponent({
         }
         /** input */
         const renderInput = (item: object) => {
-            const change = (value) => {
-                emit('update:data', value)
+            const change = (value, row, item, index) => {
+                emit('inputChange', value, row, item, index)
             }
             return {
                 default: (props) => {
+                    const { row, $index } = props
                     const defaultSlot = (
                         <bk-input
                             placeholder={item.placeholder || '请输入'}
                             class="field-table-input"
-                            value={props.row[item.prop]}
-                            disabled={props.row?.readOnly}
-                            onchange={change}
+                            value={row[item.prop]}
+                            disabled={row?.isEdit}
+                            onchange={(value) =>
+                                change(value, row, item, $index)
+                            }
                         />
                     )
                     return defaultSlot
@@ -56,6 +66,9 @@ export default defineComponent({
         }
         /** select */
         const renderSelect = (item: object) => {
+            const change = (value, row, item, index) => {
+                emit('selectChange', value, row, item, index)
+            }
             return {
                 default: (props) => {
                     const options = item.optionsList.map((option) => (
@@ -65,12 +78,16 @@ export default defineComponent({
                             name={option.name}
                         />
                     ))
+                    const { row, $index } = props
                     const defaultSlot = (
                         <bk-select
                             class="field-table-select"
                             clearable={false}
-                            value={props.row[item.prop]}
-                            disabled={props.row?.readOnly}
+                            value={row[item.prop]}
+                            disabled={row?.isEdit}
+                            onchange={(value) =>
+                                change(value, row, item, $index)
+                            }
                         >
                             {item?.optionsList ? options : ''}
                         </bk-select>
