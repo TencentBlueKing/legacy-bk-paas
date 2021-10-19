@@ -663,3 +663,12 @@
   dest_path: /v3/datamanage/lifecycle/data_change/data_trace/
   dest_http_method: GET
   is_hidden: true
+
+- path: /data/v3/datamanage/lifecycle/data_traces/
+  name: v3_datamanage_lifecycle_data_traces_get
+  label: 数据足迹v2
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datamanage/lifecycle/data_traces/
+  dest_http_method: GET
+  is_hidden: true

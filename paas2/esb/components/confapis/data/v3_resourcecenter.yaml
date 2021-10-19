@@ -1,0 +1,531 @@
+- path: /data/v3/resourcecenter/group_capacity_applys/
+  name: v3_resourcecenter_group_capacity_applys_get
+  label: 全部资源扩缩容申请
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/group_capacity_applys/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/group_capacity_applys/{apply_id}/approve_result/
+  name: v3_resourcecenter_group_capacity_applys__apply_id__approve_result_post
+  label: 更新资源扩缩容申请结果
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/group_capacity_applys/{apply_id}/approve_result/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/group_capacity_applys/
+  name: v3_resourcecenter_group_capacity_applys_post
+  label: 创建资源扩缩容申请
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/group_capacity_applys/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/group_capacity_applys/{apply_id}/
+  name: v3_resourcecenter_group_capacity_applys__apply_id__delete
+  label: 删除资源扩缩容申请
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/group_capacity_applys/{apply_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/group_capacity_applys/{apply_id}/
+  name: v3_resourcecenter_group_capacity_applys__apply_id__put
+  label: 更新资源扩缩容申请
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/group_capacity_applys/{apply_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/group_capacity_apply/{apply_id}/
+  name: v3_resourcecenter_group_capacity_apply__apply_id__get
+  label: 查看资源扩缩容申请
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/group_capacity_apply/{apply_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/clusters/
+  name: v3_resourcecenter_clusters_post
+  label: 创建集群
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/clusters/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/clusters/{cluster_id}/
+  name: v3_resourcecenter_clusters__cluster_id__delete
+  label: 删除集群
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/clusters/{cluster_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/clusters/list_id/
+  name: v3_resourcecenter_clusters_list_id_get
+  label: 全部集群
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/clusters/list_id/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/clusters/
+  name: v3_resourcecenter_clusters_get
+  label: 全部集群
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/clusters/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/clusters/sync_processing_capacity/
+  name: v3_resourcecenter_clusters_sync_processing_capacity_get
+  label: 同步计算容量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/clusters/sync_processing_capacity/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/clusters/sync_storage_capacity/
+  name: v3_resourcecenter_clusters_sync_storage_capacity_get
+  label: 同步存储容量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/clusters/sync_storage_capacity/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/clusters/{cluster_id}/
+  name: v3_resourcecenter_clusters__cluster_id__put
+  label: 更新集群
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/clusters/{cluster_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/clusters/{cluster_id}/
+  name: v3_resourcecenter_clusters__cluster_id__get
+  label: 查看集群
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/clusters/{cluster_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/all_list/
+  name: v3_resourcecenter_resource_groups_all_list_get
+  label: 全部资源组（含指标）
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/all_list/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/
+  name: v3_resourcecenter_resource_groups_get
+  label: 全部资源组（不含指标）
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/{resource_group_id}/approve_result/
+  name: v3_resourcecenter_resource_groups__resource_group_id__approve_result_post
+  label: 更新审核结果
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/{resource_group_id}/approve_result/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/{resource_group_id}/auth_list/
+  name: v3_resourcecenter_resource_groups__resource_group_id__auth_list_get
+  label: 查看资源组授权主体
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/{resource_group_id}/auth_list/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/
+  name: v3_resourcecenter_resource_groups_post
+  label: 创建资源组
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/default/
+  name: v3_resourcecenter_resource_groups_default_get
+  label: 默认资源组
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/default/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/{resource_group_id}/
+  name: v3_resourcecenter_resource_groups__resource_group_id__delete
+  label: 删除资源组
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/{resource_group_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/{resource_group_id}/metrics/
+  name: v3_resourcecenter_resource_groups__resource_group_id__metrics_get
+  label: 资源组总体指标
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/{resource_group_id}/metrics/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/my_list/
+  name: v3_resourcecenter_resource_groups_my_list_get
+  label: 我管理的资源组
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/my_list/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/{resource_group_id}/
+  name: v3_resourcecenter_resource_groups__resource_group_id__patch
+  label: 部分更新资源组
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/{resource_group_id}/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/{resource_group_id}/update_biz_id/
+  name: v3_resourcecenter_resource_groups__resource_group_id__update_biz_id_put
+  label: 更新资源组业务ID
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/{resource_group_id}/update_biz_id/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/{resource_group_id}/
+  name: v3_resourcecenter_resource_groups__resource_group_id__put
+  label: 更新资源组
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/{resource_group_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_groups/{resource_group_id}/
+  name: v3_resourcecenter_resource_groups__resource_group_id__get
+  label: 查看资源组
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_groups/{resource_group_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_geog_area_cluster_group/{resource_group_id}/
+  name: v3_resourcecenter_resource_geog_area_cluster_group__resource_group_id__put
+  label: 更新资源组区域集群组
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_geog_area_cluster_group/{resource_group_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_geog_area_cluster_group/
+  name: v3_resourcecenter_resource_geog_area_cluster_group_post
+  label: 创建资源组区域集群组
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_geog_area_cluster_group/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_geog_area_cluster_group/
+  name: v3_resourcecenter_resource_geog_area_cluster_group_get
+  label: 全部资源组区域集群组
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_geog_area_cluster_group/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_geog_area_cluster_group/{resource_group_id}/
+  name: v3_resourcecenter_resource_geog_area_cluster_group__resource_group_id__get
+  label: 查看资源组区域集群组
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_geog_area_cluster_group/{resource_group_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/service_configs/
+  name: v3_resourcecenter_service_configs_post
+  label: 创建资源服务类型配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/service_configs/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/service_configs/
+  name: v3_resourcecenter_service_configs_get
+  label: 全部资源服务类型配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/service_configs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/service_configs/sync_storage_cluster_type/
+  name: v3_resourcecenter_service_configs_sync_storage_cluster_type_get
+  label: 同步存储集群类型
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/service_configs/sync_storage_cluster_type/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/service_configs/{service_type}/
+  name: v3_resourcecenter_service_configs__service_type__put
+  label: 更新资源服务类型配置
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/service_configs/{service_type}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/service_configs/{service_type}/
+  name: v3_resourcecenter_service_configs__service_type__get
+  label: 查看资源服务类型配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/service_configs/{service_type}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_units/
+  name: v3_resourcecenter_resource_units_post
+  label: 创建资源套餐单元配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_units/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_units/
+  name: v3_resourcecenter_resource_units_get
+  label: 全部资源套餐单元配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_units/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_units/{resource_unit_id}/
+  name: v3_resourcecenter_resource_units__resource_unit_id__put
+  label: 更新资源套餐单元配置
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_units/{resource_unit_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_units/{resource_unit_id}/
+  name: v3_resourcecenter_resource_units__resource_unit_id__get
+  label: 查看资源套餐单元配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_units/{resource_unit_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/cluster_register/create_cluster/
+  name: v3_resourcecenter_cluster_register_create_cluster_post
+  label: 集群注册到资源系统
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/cluster_register/create_cluster/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/cluster_register/update_capacity/
+  name: v3_resourcecenter_cluster_register_update_capacity_put
+  label: 更新集群在资源系统容量
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/cluster_register/update_capacity/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/cluster_register/get_cluster/
+  name: v3_resourcecenter_cluster_register_get_cluster_get
+  label: 查看集群在资源系统信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/cluster_register/get_cluster/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/databus_metrics/{resource_group_id}/query_cluster/
+  name: v3_resourcecenter_databus_metrics__resource_group_id__query_cluster_get
+  label: 查询集群列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/databus_metrics/{resource_group_id}/query_cluster/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/job_metrics/collect/
+  name: v3_resourcecenter_job_metrics_collect_get
+  label: 任务资源指标采集
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/job_metrics/collect/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/processing_metrics/{resource_group_id}/app_history/
+  name: v3_resourcecenter_processing_metrics__resource_group_id__app_history_get
+  label: app指标
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/processing_metrics/{resource_group_id}/app_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/processing_metrics/collect/
+  name: v3_resourcecenter_processing_metrics_collect_get
+  label: 计算指标采集
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/processing_metrics/collect/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/processing_metrics/{resource_group_id}/cpu_history/
+  name: v3_resourcecenter_processing_metrics__resource_group_id__cpu_history_get
+  label: CPU指标
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/processing_metrics/{resource_group_id}/cpu_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/processing_metrics/{resource_group_id}/memory_history/
+  name: v3_resourcecenter_processing_metrics__resource_group_id__memory_history_get
+  label: 内存指标
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/processing_metrics/{resource_group_id}/memory_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/processing_metrics/{resource_group_id}/query_cluster/
+  name: v3_resourcecenter_processing_metrics__resource_group_id__query_cluster_get
+  label: 查询集群列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/processing_metrics/{resource_group_id}/query_cluster/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/processing_metrics/{resource_group_id}/query_service_type/
+  name: v3_resourcecenter_processing_metrics__resource_group_id__query_service_type_get
+  label: 查询服务列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/processing_metrics/{resource_group_id}/query_service_type/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/processing_metrics/{resource_group_id}/summary/
+  name: v3_resourcecenter_processing_metrics__resource_group_id__summary_get
+  label: 计算服务容量摘要
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/processing_metrics/{resource_group_id}/summary/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/project_auth/{project_id}/add_resource_group/
+  name: v3_resourcecenter_project_auth__project_id__add_resource_group_post
+  label: 项目申请资源组
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/project_auth/{project_id}/add_resource_group/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/project_auth/{project_id}/resource_groups/
+  name: v3_resourcecenter_project_auth__project_id__resource_groups_get
+  label: 查询项目的资源组授权
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/project_auth/{project_id}/resource_groups/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/storage_metrics/collect/
+  name: v3_resourcecenter_storage_metrics_collect_get
+  label: 存储指标采集
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/storage_metrics/collect/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/storage_metrics/{resource_group_id}/disk_history/
+  name: v3_resourcecenter_storage_metrics__resource_group_id__disk_history_get
+  label: 存储容量指标
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/storage_metrics/{resource_group_id}/disk_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/storage_metrics/{resource_group_id}/query_cluster/
+  name: v3_resourcecenter_storage_metrics__resource_group_id__query_cluster_get
+  label: 查询集群列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/storage_metrics/{resource_group_id}/query_cluster/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/storage_metrics/{resource_group_id}/query_service_type/
+  name: v3_resourcecenter_storage_metrics__resource_group_id__query_service_type_get
+  label: 查询服务列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/storage_metrics/{resource_group_id}/query_service_type/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/storage_metrics/{resource_group_id}/summary/
+  name: v3_resourcecenter_storage_metrics__resource_group_id__summary_get
+  label: 存储服务容量摘要
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/storage_metrics/{resource_group_id}/summary/
+  dest_http_method: GET
+  is_hidden: true
+

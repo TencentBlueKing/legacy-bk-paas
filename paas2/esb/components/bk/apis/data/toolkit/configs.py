@@ -47,4 +47,5 @@ v3_dest_host_map = {
     "queryengine": getattr(settings, "DATAV3_QUERYENGINEAPI_HOST", ""),
     "datalab": getattr(settings, "DATAV3_DATALABAPI_HOST", ""),
     "aiops": getattr(settings, "DATAV3_AIOPSAPI_HOST", ""),
+    "resourcecenter": getattr(settings, "DATAV3_RESOURCECENTERAPI_HOST", ""),
 }
