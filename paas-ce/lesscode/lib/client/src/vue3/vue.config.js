@@ -1,6 +1,7 @@
 module.exports = {
-  publicPath: '/micro-app/vue3/',
-  outputDir: 'vue3',
+  // publicPath: '/micro-app/vue3/',
+  publicPath: '/canvasvue3/',
+  outputDir: 'dist',
   productionSourceMap: false,
   devServer: {
     hot: true,

@@ -39,6 +39,8 @@ import pureAxios from '@/api/pureAxios.js'
 import lesscodeCanvas from '@/lesscode-canvas'
 lesscodeCanvas.start()
 
+window.globalStr = 'parent'
+
 // 用户调用接口使用，无业务逻辑，直接返回数据
 Vue.prototype.$http = pureAxios
 Vue.prototype.$td = targetData

@@ -8,6 +8,7 @@ const REG_HEAD = new RegExp(/(?<=<head[\s\S]*>)([\s\S]+)(?=<\/head>)/g)
 const REG_BODY = new RegExp(/(?<=<body[\s\S]*>)([\s\S]+)(?=<\/body>)/g)
 
 export default function loadHtml (app) {
+    console.error('loadHtml')
     request(app.entry).then(async res => {
         let html = ''
         const head = res.match(REG_HEAD)
@@ -32,6 +33,7 @@ export default function loadHtml (app) {
 }
 
 function parseDom (app, elem, microAppHead) {
+    console.error('parseDom')
     const children = Array.from(elem.children)
 
     children.length && children.forEach(child => {
@@ -41,9 +43,10 @@ function parseDom (app, elem, microAppHead) {
     for (const dom of children) {
         // console.error(dom, dom instanceof HTMLLinkElement, dom instanceof HTMLScriptElement, dom instanceof HTMLStyleElement)
         if (dom instanceof HTMLLinkElement) {
+            console.error(dom)
             if (dom.hasAttribute('exclude')) {
                 elem.replaceChild(document.createComment('link element with exclude attribute ignored by micro-app'), dom)
-            } else if (app.scopecss) {
+            } else {
                 // extractLinkFromHtml(dom, elem, app, microAppHead)
                 const rel = dom.getAttribute('rel')
                 let href = dom.getAttribute('href')
@@ -66,13 +69,11 @@ function parseDom (app, elem, microAppHead) {
                 if (replaceComment) {
                     elem.replaceChild(replaceComment, dom)
                 }
-            } else if (dom.hasAttribute('href')) {
-                dom.setAttribute('href', completionPath(dom.getAttribute('href'), app.entry))
             }
         } else if (dom instanceof HTMLStyleElement) {
             if (dom.hasAttribute('exclude')) {
                 elem.replaceChild(document.createComment('style element with exclude attribute ignored by micro-app'), dom)
-            } else if (app.scopecss) {
+            } else {
                 microAppHead.appendChild(scopedCSS(dom, app.name))
             }
         } else if (dom instanceof HTMLScriptElement) {

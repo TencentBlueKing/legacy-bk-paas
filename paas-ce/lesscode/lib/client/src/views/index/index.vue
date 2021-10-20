@@ -186,8 +186,13 @@
                 v-show="actionSelected === 'edit'">
                 <layout v-if="!contentLoading" @layout-mounted="onLayoutMounted">
                     <template v-if="!isCustomComponentLoading">
-                        <lesscode-canvas id="lesscode-canvas" name="vue3"
-                            entry="http://dev.open.oa.com:5001/micro-app/vue3/"
+                        <!-- <div id="lesscode-canvas">
+                            www
+                        </div> -->
+                        <lesscode-canvas id="lesscode-canvas"
+                            name="vue3"
+                            host="http://dev.open.oa.com:5001"
+                            path="canvasvue3"
                             :route="$route.path">
                         </lesscode-canvas>
                         <!-- <vue-draggable

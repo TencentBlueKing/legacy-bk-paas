@@ -28,6 +28,7 @@ const webpackConfig = merge(baseConf, {
         // 必须是数组，适配 webpack-hot-client
         main: [resolve(__dirname, '..', 'src/main.js')],
         preview: [resolve(__dirname, '..', 'src/preview/index.js')]
+        // canvasvue3: [resolve(__dirname, '..', 'src/vue3/src/main.js')]
     },
 
     // output: {
@@ -158,6 +159,15 @@ const webpackConfig = merge(baseConf, {
             staticUrl: clientConf.dev.staticUrl,
             BKPAAS_ENVIRONMENT: clientConf.dev.BKPAAS_ENVIRONMENT
         }),
+
+        // new HtmlWebpackPlugin({
+        //     filename: 'index.html',
+        //     template: resolve(__dirname, '..', 'src/vue3/public/index.html'),
+        //     inject: true,
+        //     chunks: ['canvasvue3'],
+        //     staticUrl: clientConf.dev.staticUrl,
+        //     BKPAAS_ENVIRONMENT: clientConf.dev.BKPAAS_ENVIRONMENT
+        // }),
 
         new FriendlyErrorsPlugin()
     ]

@@ -45,6 +45,7 @@
     "dev": {
       "command.bak": "npm run dll && nodemon --config nodemon.json",
       "command": "npm run dll && npm-run-all --parallel main dev:*",
+      "command1": "npm run dll && npm-run-all --parallel main",
       "env": {
         "NODE_ENV": "development",
         "APP_CODE": ""
@@ -110,7 +111,7 @@
     "acorn": "~7.2.0",
     "ansi_up": "^4.0.4",
     "app-root-path": "~3.0.0",
-    "async-validator": "~4.0.3",
+    "async-validator": "~1.8.1",
     "aws-sdk": "^2.736.0",
     "axios": "0.21.4",
     "babel-eslint": "~10.0.3",
@@ -246,9 +247,7 @@
     "webpack": "~4.41.0",
     "webpack-dev-middleware": "~3.7.2",
     "webpack-hot-client": "~4.1.2",
-    "webpack-merge": "~4.2.2",
-    "tslib": "^2.0.3",
-    "async-validator": "~1.8.1"
+    "webpack-merge": "~4.2.2"
   },
   "engines": {
     "node": ">= 14.17.6",
