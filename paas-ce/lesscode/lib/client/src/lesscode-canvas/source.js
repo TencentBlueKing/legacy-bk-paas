@@ -33,7 +33,6 @@ export default function loadHtml (app) {
 }
 
 function parseDom (app, elem, microAppHead) {
-    console.error('parseDom')
     const children = Array.from(elem.children)
 
     children.length && children.forEach(child => {
@@ -43,7 +42,6 @@ function parseDom (app, elem, microAppHead) {
     for (const dom of children) {
         // console.error(dom, dom instanceof HTMLLinkElement, dom instanceof HTMLScriptElement, dom instanceof HTMLStyleElement)
         if (dom instanceof HTMLLinkElement) {
-            console.error(dom)
             if (dom.hasAttribute('exclude')) {
                 elem.replaceChild(document.createComment('link element with exclude attribute ignored by micro-app'), dom)
             } else {
