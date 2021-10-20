@@ -346,7 +346,6 @@ class PageCode {
         // 页面级样式设置
         const styleSetting = typeof this.styleSetting === 'string' ? JSON.parse(this.styleSetting) : this.styleSetting
         let pageStyle = ''
-        const navStyle = ''
         for (const i in styleSetting) {
             if (i === 'customStyle') {
                 for (const key in styleSetting[i]) {
@@ -354,15 +353,12 @@ class PageCode {
                 }
             } else if (styleSetting[i] !== '') {
                 pageStyle += `${paramCase(i)}: ${styleSetting[i]};\n`
-            } else if (i.startsWith('margin') && this.layoutType !== 'empty') {
-                pageStyle += `${paramCase(i)}: 0;\n`
             }
         }
 
-        let head = `<style lang="css" scoped>
-            .container-${this.uniqueKey} {
-                margin: ${this.hasLayOut ? '0' : '10'}px;
-                ${pageStyle}
+        let head = this.hasLayOut || this.layoutType === 'empty' ? `<style lang="css" scoped>` : `<style type="text/css">`
+        head += `.container-${this.uniqueKey} {
+                ${this.layoutType === 'empty' ? pageStyle : ''}
             }
             .bk-layout-row-${this.uniqueKey} {
                 display: flex;
@@ -566,6 +562,11 @@ class PageCode {
                 }
                
             `
+        }
+        if (!this.isEmpty && this.layoutType !== 'empty') {
+            head += `.bk-navigation-wrapper .navigation-container .container-content{
+                ${pageStyle}
+            }`
         }
         // if (this.isGenerateNav) {
         //     head += `.bk-layout-custom-component-wrapper .page-container {
