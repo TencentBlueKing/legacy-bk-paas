@@ -109,17 +109,10 @@
                 }
             }
         },
-        watch: {
-            formItemData: {
-                handler () {
-                    this.changeCount++
-                },
-                deep: true
-            }
-        },
         methods: {
             initValue () {
-                this.formItemData = Object.assign({}, this.defaultValue)
+                this.formItemData = Object.assign({}, this.defaultValue, { validate: this.defaultRule })
+                this.changeCount = 0
             },
             handleSave () {
                 this.$refs.operation.validate()
@@ -135,7 +128,8 @@
                 Object.assign(this.formItemData, { [name]: value })
             },
             beforeClose () {
-                if (this.changeCount < 2) {
+                if (this.changeCount < 1) {
+                    this.changeCount = 0
                     this.close()
                 } else {
                     this.$bkInfo({
