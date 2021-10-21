@@ -7,8 +7,56 @@ const supportModuleScript = isSupportModuleScript()
 const REG_HEAD = new RegExp(/(?<=<head[\s\S]*>)([\s\S]+)(?=<\/head>)/g)
 const REG_BODY = new RegExp(/(?<=<body[\s\S]*>)([\s\S]+)(?=<\/body>)/g)
 
+/* <!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/static/canvasvue3/favicon.ico" />
+    <title>child-vue3</title>
+    <link href="/static/canvasvue3/css/page2.b65fec4a.css" rel="prefetch" />
+    <link href="/static/canvasvue3/js/page2.9aab80eb.js" rel="prefetch" />
+    <link href="/static/canvasvue3/css/app.2af9b076.css" rel="preload" as="style" />
+    <link href="/static/canvasvue3/css/chunk-vendors.dcef0991.css" rel="preload" as="style" />
+    <link href="/static/canvasvue3/js/app.08c04980.js" rel="preload" as="script" />
+    <link href="/static/canvasvue3/js/chunk-vendors.36b7958e.js" rel="preload" as="script" />
+    <link href="/static/canvasvue3/css/chunk-vendors.dcef0991.css" rel="stylesheet" />
+    <link href="/static/canvasvue3/css/app.2af9b076.css" rel="stylesheet" />
+    </head>
+    <body>
+    <div id="vue3-app"></div>
+    <script src="/static/canvasvue3/js/chunk-vendors.36b7958e.js"></script>
+    <script src="/static/canvasvue3/js/app.08c04980.js"></script>
+    </body>
+</html> */
+
 export default function loadHtml (app) {
+    console.error('loadHtml', app.entry)
     request(app.entry).then(async res => {
+        res = ''
+            + `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+            <meta charset="utf-8" />
+            <link rel="icon" href="/static/dist-vue3/favicon.ico" />
+            <title>child-vue3</title>
+            <link href="/static/dist-vue3/css/page2.b65fec4a.css" rel="prefetch" />
+            <link href="/static/dist-vue3/js/page2.9aab80eb.js" rel="prefetch" />
+            <link href="/static/dist-vue3/css/app.2af9b076.css" rel="preload" as="style" />
+            <link href="/static/dist-vue3/css/chunk-vendors.dcef0991.css" rel="preload" as="style" />
+            <link href="/static/dist-vue3/js/app.882d3b28.js" rel="preload" as="script" />
+            <link href="/static/dist-vue3/js/chunk-vendors.262767ae.js" rel="preload" as="script" />
+            <link href="/static/dist-vue3/css/chunk-vendors.dcef0991.css" rel="stylesheet" />
+            <link href="/static/dist-vue3/css/app.2af9b076.css" rel="stylesheet" />
+            </head>
+            <body>
+            <div id="vue3-app"></div>
+            <script src="/static/dist-vue3/js/chunk-vendors.262767ae.js"></script>
+            <script src="/static/dist-vue3/js/app.882d3b28.js"></script>
+            </body>
+            </html>
+            `
+        // debugger
         let html = ''
         const head = res.match(REG_HEAD)
         const body = res.match(REG_BODY)
@@ -17,6 +65,8 @@ export default function loadHtml (app) {
         }
         const elem = document.createElement('div')
         elem.innerHTML = html
+        console.error(elem)
+        console.warn(html)
 
         parseDom(app, elem, elem.querySelector('#lesscode-canvas-header'))
 
@@ -43,7 +93,7 @@ function parseDom (app, elem, microAppHead) {
         if (dom instanceof HTMLLinkElement) {
             if (dom.hasAttribute('exclude')) {
                 elem.replaceChild(document.createComment('link element with exclude attribute ignored by micro-app'), dom)
-            } else if (app.scopecss) {
+            } else {
                 // extractLinkFromHtml(dom, elem, app, microAppHead)
                 const rel = dom.getAttribute('rel')
                 let href = dom.getAttribute('href')
@@ -66,13 +116,11 @@ function parseDom (app, elem, microAppHead) {
                 if (replaceComment) {
                     elem.replaceChild(replaceComment, dom)
                 }
-            } else if (dom.hasAttribute('href')) {
-                dom.setAttribute('href', completionPath(dom.getAttribute('href'), app.entry))
             }
         } else if (dom instanceof HTMLStyleElement) {
             if (dom.hasAttribute('exclude')) {
                 elem.replaceChild(document.createComment('style element with exclude attribute ignored by micro-app'), dom)
-            } else if (app.scopecss) {
+            } else {
                 microAppHead.appendChild(scopedCSS(dom, app.name))
             }
         } else if (dom instanceof HTMLScriptElement) {

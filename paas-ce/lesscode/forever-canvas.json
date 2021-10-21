@@ -1,0 +1,11 @@
+{
+    "uid": "lesscode-canvas",
+    "append": true,
+    "script": "lib/server/sub-server.js",
+    "sourceDir": "./",
+    "workingDir": "./",
+    "minUptime": 1000,
+    "logFile": "./logs/forever-canvas.log",
+    "outFile": "./logs/out-canvas.log",
+    "errFile": "./logs/err-canvas.log"
+}

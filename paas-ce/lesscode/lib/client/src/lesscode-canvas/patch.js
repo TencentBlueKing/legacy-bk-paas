@@ -285,17 +285,13 @@ function handleNewNode (parent, child, app) {
             const replaceComment = document.createComment('style element with exclude attribute ignored by micro-app')
             dynamicElementInMicroAppMap.set(child, replaceComment)
             return replaceComment
-        } else if (app.scopecss) {
-            return scopedCSS(child, app.name)
         }
-        return child
+        return scopedCSS(child, app.name)
     } else if (child instanceof HTMLLinkElement) {
         if (child.hasAttribute('exclude')) {
             const linkReplaceComment = document.createComment('link element with exclude attribute ignored by micro-app')
             dynamicElementInMicroAppMap.set(child, linkReplaceComment)
             return linkReplaceComment
-        } else if (!app.scopecss) {
-            return child
         }
 
         const { url, info } = extractLinkFromHtml(
@@ -313,10 +309,6 @@ function handleNewNode (parent, child, app) {
             dynamicElementInMicroAppMap.set(child, replaceStyle)
             return replaceStyle
         }
-        //  else if (replaceComment) {
-        //   dynamicElementInMicroAppMap.set(child, replaceComment)
-        //   return replaceComment
-        // }
         return child
     } else if (child instanceof HTMLScriptElement) {
         const { replaceComment, url, info } = extractScriptElement(
@@ -451,7 +443,7 @@ export function patchElementPrototypeMethods () {
 
     // Rewrite setAttribute
     Element.prototype.setAttribute = function setAttribute (key, value) {
-        if (/^micro-app(-\S+)?/i.test(this.tagName) && key === 'data') {
+        if (/^lesscode-canvas(-\S+)?/i.test(this.tagName) && key === 'data') {
             if (toString.call(value) === '[object Object]') {
                 const cloneValue = {}
                 Object.getOwnPropertyNames(value).forEach((propertyKey) => {
@@ -465,12 +457,9 @@ export function patchElementPrototypeMethods () {
                 console.warn('property data must be an object')
             }
         } else if (
-            (
-                (key === 'src' && /^(img|iframe|script)$/i.test(this.tagName))
-        || (key === 'href' && /^link$/i.test(this.tagName))
-            )
-      && this.__MICRO_APP_NAME__
-      && instanceMap.has(this.__MICRO_APP_NAME__)
+            ((key === 'src' && /^(img|iframe|script)$/i.test(this.tagName)) || (key === 'href' && /^link$/i.test(this.tagName)))
+                && this.__MICRO_APP_NAME__
+                && instanceMap.has(this.__MICRO_APP_NAME__)
         ) {
             const app = instanceMap.get(this.__MICRO_APP_NAME__)
             rawSetAttribute.call(this, key, completionPath(value, app.url))

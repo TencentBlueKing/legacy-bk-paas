@@ -6,27 +6,24 @@ export const instanceMap = new Map()
 
 export default class App {
     constructor ({ name, entry, route, container }) {
-        this.scopecss = true
         this.name = name
         this.entry = entry
         this.container = container
         this.route = route || ''
-        this.status = 'loading'
+
+        // 存放应用的静态资源
+        this.source = {
+            links: new Map(), // link元素对应的静态资源
+            scripts: new Map() // script元素对应的静态资源
+        }
+
         loadHtml(this)
         this.sandbox = new Sandbox(name, entry)
     }
 
-    // created/loading/mounted/unmount
-    status = 'created'
-
-    // 存放应用的静态资源
-    source = {
-        links: new Map(), // link元素对应的静态资源
-        scripts: new Map() // script元素对应的静态资源
-    }
-
     // 资源加载完时执行
     onLoad (elem) {
+        console.error(this.source)
         if (this.status !== 'unmount') {
             // 记录DOM结构用于后续操作
             this.source.html = elem

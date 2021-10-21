@@ -45,6 +45,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import html2canvas from 'html2canvas'
+    import safeStringify from '@/common/json-safe-stringify'
     import { uuid } from '@/common/util'
     import { bus } from '@/common/bus'
 
@@ -188,7 +189,7 @@
                                     categoryId: this.dialog.formData.categoryId,
                                     belongProjectId: this.projectId,
                                     fromPageCode: this.pageDetail && this.pageDetail.pageCode,
-                                    content: JSON.stringify(content),
+                                    content: safeStringify(content),
                                     previewImg: imgData
                                 }
                             }

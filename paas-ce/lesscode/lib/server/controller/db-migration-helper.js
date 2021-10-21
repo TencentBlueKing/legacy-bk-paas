@@ -4,19 +4,23 @@ import Project from '../model/entities/project'
 import { logger } from '../logger'
 import Page from '../model/entities/page'
 import PageTemplateCategory from '../model/entities/page-template-category'
-import { walkGrid } from '../util'
+import { walkGrid, uuid } from '../util'
 
 // 将函数名称写到这个数组里，函数会自动执行，返回成功则后续不会再执行
-const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot']
+const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots']
 
 export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
     apiArr.forEach(async api => {
         if (!apiRecords.find(item => item.name === api)) {
+            const res = await getRepository(ApiMigraion).save([{ name: api }])
+            const id = res[0] && res[0].id
             const result = await eval(`${api}('${api}')`)
             if (result && result.code === 0) {
-                await getRepository(ApiMigraion).save([{ name: api }])
                 console.log(result.message)
+            } else {
+                const deleteRes = await getRepository(ApiMigraion).delete({ id })
+                console.log(deleteRes, 'delete')
             }
         }
     })
@@ -254,6 +258,58 @@ async function updateCardSlot () {
             message: 'card存量数据更新成功'
         }
     } catch (error) {
+        return {
+            code: -1,
+            message: error.message || error,
+            data: null
+        }
+    }
+}
+
+async function fixCardsSlots () {
+    try {
+        const pageRepository = getRepository(Page)
+        const allPageData = await pageRepository.find()
+        allPageData.forEach(page => {
+            let targetData = []
+            try {
+                targetData = (typeof page.content) === 'string' ? JSON.parse(page.content) : page.content
+            } catch (err) {
+                targetData = []
+            }
+            if (!targetData || targetData === 'null') {
+                logger.warn('targetData does not exist or is \'null\'')
+                targetData = []
+            }
+
+            (targetData || []).forEach((grid, index) => {
+                const callBack = (component) => {
+                /** 对card的componentId做唯一处理 */
+                    if (component.type === 'bk-card') {
+                        const slots = component.renderSlots
+                        const headerSlot = slots.header.val.renderSlots.default.val[0].children[0]
+                        slots.default.val.componentId = `free-layout-${uuid()}`
+                        slots.header.val.componentId = `free-layout-${uuid()}`
+                        slots.footer.val.componentId = `free-layout-${uuid()}`
+                        if (headerSlot) {
+                            headerSlot.componentId = `text-${uuid()}`
+                            headerSlot.renderStyles.textAlign = 'left'
+                        }
+                    }
+                }
+                walkGrid(targetData, grid, callBack, callBack, index)
+            })
+            page.content = JSON.stringify(targetData)
+            page.updateBySystem = true
+        })
+
+        await pageRepository.save(allPageData)
+        return {
+            code: 0,
+            message: 'card修复成功'
+        }
+    } catch (error) {
+        console.log(error)
         return {
             code: -1,
             message: error.message || error,

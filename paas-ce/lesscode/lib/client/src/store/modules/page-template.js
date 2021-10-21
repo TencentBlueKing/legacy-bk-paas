@@ -38,6 +38,12 @@ export default {
                 return data
             })
         },
+        checkIsExist (state, params = {}) {
+            return http.post(`/pageTemplate/checkIsExist`, params).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
         create (state, params) {
             return http.post(`/pageTemplate/create`, params).then(response => {
                 const data = response.data || ''

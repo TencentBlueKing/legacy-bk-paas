@@ -44,7 +44,7 @@ export default function scopedCSS (styleElement, appName) {
     //     observer.observe(styleElement, { childList: true })
     // }
     const app = instanceMap.get(appName)
-    if (app && app.scopecss) {
+    if (app) {
         const prefix = `lesscode-canvas[name=${appName}]`
         if (!templateStyle) {
             templateStyle = pureCreateElement('style')
