@@ -4,7 +4,7 @@ import Home from './pages/page1.vue';
 console.log('window.__MICRO_APP_BASE_ROUTE__', window.__MICRO_APP_BASE_ROUTE__)
 
 const routes = createRouter({
-  history: createWebHistory(window.__MICRO_APP_BASE_ROUTE__ || '/canvasvue3/'),
+  history: createWebHistory(window.__MICRO_APP_BASE_ROUTE__ || '/static/canvasvue3/'),
   routes: [
     {
       path: '/',
