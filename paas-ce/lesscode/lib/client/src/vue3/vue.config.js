@@ -1,7 +1,8 @@
 module.exports = {
-  // publicPath: '/micro-app/vue3/',
-  publicPath: '/canvasvue3/',
-  outputDir: 'dist',
+  // dev 时的 path 路径，以及 build 时 html 中引入静态资源的 path
+  publicPath: '/static/dist-vue3/',
+  // build 产物的目录
+  outputDir: 'dist-vue3',
   productionSourceMap: false,
   devServer: {
     hot: true,

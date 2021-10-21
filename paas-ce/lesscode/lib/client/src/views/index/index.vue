@@ -191,8 +191,8 @@
                         </div> -->
                         <lesscode-canvas id="lesscode-canvas"
                             name="vue3"
-                            host="http://dev.open.oa.com:5000"
-                            path="static/canvasvue3"
+                            host=""
+                            path="static/dist-vue3"
                             :route="$route.path">
                         </lesscode-canvas>
                         <!-- <vue-draggable

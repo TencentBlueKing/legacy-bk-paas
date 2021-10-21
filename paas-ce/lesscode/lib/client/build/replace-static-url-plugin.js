@@ -58,7 +58,8 @@ const dealCSS = compilation => {
         }
 
         const asset = compilation.assets[fileName]
-        const minifyCSSFileContent = asset.source().replace(
+
+        const minifyCSSFileContent = asset.source().toString().replace(
             /\{\{STATIC_URL\}\}/g,
             () => '../../'
         )

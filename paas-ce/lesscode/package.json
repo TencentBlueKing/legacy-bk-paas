@@ -24,10 +24,12 @@
     "online:main": "cross-env NODE_ENV=production BKPAAS_ENVIRONMENT=prod FOREVER_ROOT=./ forever --minUptime 1000 --spinSleepTime 2000 start forever.json",
     "online:canvas-vue3.tmp": "cross-env NODE_ENV=production node ./lib/server/sub-server.js",
     "online:canvas-vue3": "cross-env NODE_ENV=production FOREVER_ROOT=./ forever --minUptime 1000 --spinSleepTime 2000 start forever-canvas.json",
-    "online": "npm-run-all build --parallel online:main online:canvas-vue3",
+    "online2": "npm-run-all build --parallel online:main online:canvas-vue3",
+    "online": "npm-run-all build --parallel online:main",
     "local:main": "cross-env NODE_ENV=local node ./lib/server/app.browser.js",
     "local:canvas-vue3": "cross-env NODE_ENV=production node ./lib/server/sub-server.js",
-    "local": "npm-run-all build --parallel local:main local:canvas-vue3",
+    "local2": "npm-run-all build --parallel local:main local:canvas-vue3",
+    "local": "npm-run-all build --parallel local:main",
     "postinstall": "npm-run-all install:canvas-vue3"
   },
   "betterScripts": {
@@ -44,8 +46,8 @@
     },
     "dev": {
       "command.bak": "npm run dll && nodemon --config nodemon.json",
-      "command": "npm run dll && npm-run-all --parallel main dev:*",
-      "command1": "npm run dll && npm-run-all --parallel main",
+      "command1": "npm run dll && npm-run-all --parallel main dev:*",
+      "command": "npm run dll && npm-run-all --parallel main",
       "env": {
         "NODE_ENV": "development",
         "APP_CODE": ""
@@ -244,7 +246,7 @@
     "vue-template-compiler": "~2.6.10",
     "vuedraggable": "~2.23.2",
     "vuex": "~3.1.1",
-    "webpack": "~4.41.0",
+    "webpack": "~4.46.0",
     "webpack-dev-middleware": "~3.7.2",
     "webpack-hot-client": "~4.1.2",
     "webpack-merge": "~4.2.2"

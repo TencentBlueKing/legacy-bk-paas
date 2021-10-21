@@ -6,6 +6,9 @@ class LesscodeCanvas extends HTMLElement {
     constructor () {
         super()
 
+        const location = window.location
+        this.host = location.protocol + '//' + location.host
+
         patchElementPrototypeMethods()
     }
 
@@ -16,7 +19,7 @@ class LesscodeCanvas extends HTMLElement {
     // 在 custom element 增加、删除或者修改某个属性时被调用。
     attributeChangedCallback (attrName, oldValue, newValue) {
         // console.warn(`attrName: ${attrName} --- oldValue: ${oldValue} --- newValue: ${newValue}`)
-        if (!this[attrName] && newValue) {
+        if (newValue) {
             this[attrName] = newValue
         }
         // if (attrName === 'name' && !this.name && newValue) {
@@ -32,7 +35,7 @@ class LesscodeCanvas extends HTMLElement {
     connectedCallback () {
         // console.log('connectedCallbackconnectedCallbackconnectedCallback')
         this.entry = this.host.replace(/\/$/, '') + '/' + this.path.replace(/^\//, '')
-        // console.warn(this.name, this.host, this.path, this.route, this.entry)
+        console.warn(this.name, this.host, this.path, this.route, this.entry)
         const app = new App({
             name: this.name,
             entry: this.entry,
