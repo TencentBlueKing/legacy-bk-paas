@@ -44,7 +44,7 @@ export default function loadHtml (app) {
             <link href="/static/dist-vue3/js/page2.9aab80eb.js" rel="prefetch" />
             <link href="/static/dist-vue3/css/app.2af9b076.css" rel="preload" as="style" />
             <link href="/static/dist-vue3/css/chunk-vendors.dcef0991.css" rel="preload" as="style" />
-            <link href="/static/dist-vue3/js/app.882d3b28.js" rel="preload" as="script" />
+            <link href="/static/dist-vue3/js/app.41f34e11.js" rel="preload" as="script" />
             <link href="/static/dist-vue3/js/chunk-vendors.262767ae.js" rel="preload" as="script" />
             <link href="/static/dist-vue3/css/chunk-vendors.dcef0991.css" rel="stylesheet" />
             <link href="/static/dist-vue3/css/app.2af9b076.css" rel="stylesheet" />
@@ -52,7 +52,7 @@ export default function loadHtml (app) {
             <body>
             <div id="vue3-app"></div>
             <script src="/static/dist-vue3/js/chunk-vendors.262767ae.js"></script>
-            <script src="/static/dist-vue3/js/app.882d3b28.js"></script>
+            <script src="/static/dist-vue3/js/app.41f34e11.js"></script>
             </body>
             </html>
             `
