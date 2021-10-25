@@ -10,12 +10,15 @@
 -->
 
 <template>
-    <div class="widget-form-item" @click="handleSelect" :data-component-id="`component-${componentData.componentId}`">
+    <div
+        class="widget-form-item"
+        @click="handleSelect"
+        :data-component-id="`component-${componentData.componentId}`">
         <bk-form-item
             :label="componentData.renderProps.label && componentData.renderProps.label.val"
             :required="componentData.renderProps.required && componentData.renderProps.required.val">
             <template v-for="(item) in componentData.renderSlots.default.val">
-                <render-component :component-data="item" :key="item.componentId" />
+                <resolve-component :component-data="item" :key="item.componentId" />
             </template>
         </bk-form-item>
     </div>
@@ -24,7 +27,7 @@
     export default {
         name: 'widget-form-item',
         components: {
-            renderComponent: () => import('../render/component')
+            ResolveComponent: () => import('../resolve-component')
         },
         props: {
             componentData: {

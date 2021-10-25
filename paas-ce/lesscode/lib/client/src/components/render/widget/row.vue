@@ -10,23 +10,14 @@
 -->
 
 <template>
-    <div class="bk-layout-grid-row" :style="style">
-        <div class="save-as-template" @click.stop="toggleShowTemplateDialog(true)">
-            <i class="bk-drag-icon bk-drag-template-fill"></i>
-            存为模板
-        </div>
+    <div :class="$style['row']" :style="style">
         <slot />
-        <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
     </div>
 </template>
 
 <script>
-    import saveTemplateDialog from './save-template-dialog'
     export default {
         name: 'render-row',
-        components: {
-            saveTemplateDialog
-        },
         props: {
             // 栅格间距，单位 px，左右平分
             gutter: {
@@ -60,18 +51,19 @@
         },
         computed: {
             style () {
-                // const { renderGutter, marginHorizontal, marginVertical } = this
-                const { marginHorizontal, marginVertical } = this
-                const o = this.renderFlex ? { display: ['-webkit-box', '-ms-flexbox', 'flex'] } : {}
-                return {
-                    'padding-right': `${marginHorizontal}px`,
-                    'padding-left': `${marginHorizontal}px`,
-                    'padding-top': `${marginVertical}px`,
-                    'padding-bottom': `${marginVertical}px`,
-                    ...o
-                    // 'margin-right': `-${renderGutter / 2}px`,
-                    // 'margin-left': `-${renderGutter / 2}px`
-                }
+                // // const { renderGutter, marginHorizontal, marginVertical } = this
+                // const { marginHorizontal, marginVertical } = this
+                // const o = this.renderFlex ? { display: ['-webkit-box', '-ms-flexbox', 'flex'] } : {}
+                // return {
+                //     'padding-right': `${marginHorizontal}px`,
+                //     'padding-left': `${marginHorizontal}px`,
+                //     'padding-top': `${marginVertical}px`,
+                //     'padding-bottom': `${marginVertical}px`,
+                //     ...o
+                //     // 'margin-right': `-${renderGutter / 2}px`,
+                //     // 'margin-left': `-${renderGutter / 2}px`
+                // }
+                return {}
             }
         },
         watch: {
@@ -87,11 +79,14 @@
                 },
                 immediate: true
             }
-        },
-        methods: {
-            toggleShowTemplateDialog (isShow) {
-                this.showTemplateDialog = isShow
-            }
         }
     }
 </script>
+
+<style lang="postcss" module>
+    @import "@/css/mixins/clearfix";
+    .row{
+        @mixin clearfix;
+        display: flex !important;
+    }
+</style>

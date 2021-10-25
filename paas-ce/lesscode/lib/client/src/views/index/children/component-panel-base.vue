@@ -37,7 +37,13 @@
                         @end="sourceAreaEndHandler">
                         <template v-if="type === 'base' && group !== '图标集合'">
                             <!-- @mouseenter="handleComponentMouseenter($event, component)" -->
-                            <div v-for="(component, componentIndex) in componentGroups[group]" class="component-item" @dragstart="dragstartHandler" :class="placeholderElemDisplay" :key="componentIndex"
+                            <div
+                                v-for="(component, componentIndex) in componentGroups[group]"
+                                class="component-item"
+                                @dragstart="dragstartHandler"
+                                :class="placeholderElemDisplay"
+                                :key="componentIndex"
+                                :role="component.displayName"
                                 v-show="!searchResult || component.displayName === searchResult.displayName"
                                 v-bk-tooltips="{ content: component.displayName, disabled: !(component.displayName && component.displayName.length > 8) }">
                                 <div class="component-icon">

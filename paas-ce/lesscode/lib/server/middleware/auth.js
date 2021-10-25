@@ -65,6 +65,7 @@ module.exports = () => {
                 })
 
                 const { code, data } = response.data
+
                 if (code !== 0) {
                     ctx.status = 302
                     ctx.redirect(`${loginRedirectUrl}&c_url=${encodeURIComponent(ctx.href)}`)

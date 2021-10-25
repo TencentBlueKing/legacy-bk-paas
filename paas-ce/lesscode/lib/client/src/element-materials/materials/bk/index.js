@@ -13,6 +13,7 @@ import grid1 from './grid/column1'
 import grid2 from './grid/column2'
 import grid3 from './grid/column3'
 import grid4 from './grid/column4'
+import column from './column'
 
 import input from './input'
 import button from './button'
@@ -85,6 +86,7 @@ const bkComponents = Object.seal([
     grid2,
     grid3,
     grid4,
+    column,
     paragraph,
     button,
     text,

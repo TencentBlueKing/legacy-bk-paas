@@ -10,38 +10,25 @@
  */
 
 export default {
-    name: 'grid',
-    type: 'render-grid',
+    name: 'column',
+    type: 'render-column',
     order: 1,
     group: '布局',
-    styles: ['size', 'margin', 'padding'],
+    styles: ['padding'],
+    renderStyles: {
+        'minHeight': '80px',
+        'paddingTop': '10px',
+        'paddingRight': '10px',
+        'paddingBottom': '10px',
+        'paddingLeft': '10px'
+    },
     props: {
-        // gutter: {
-        //     type: 'number',
-        //     val: 1
-        // },
-        'margin-horizontal': {
+        'span': {
             type: 'number',
-            val: 0
-        },
-        'margin-vertical': {
-            type: 'number',
-            val: 0
+            val: 1
         }
-        // flex: {
-        //     type: 'boolean',
-        //     val: false
-        // },
     },
     slots: {
-        default: {
-            type: ['column'],
-            tips: '每一列栅格宽度占比为该列配置值占总列配置值的百分比，建议总列配置值为 12 或 24',
-            displayName: '列配置',
-            val: [
-                { span: 1, children: [] },
-                { span: 1, children: [] }
-            ]
-        }
+        default: []
     }
 }

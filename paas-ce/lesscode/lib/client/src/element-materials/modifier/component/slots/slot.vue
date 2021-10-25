@@ -10,8 +10,9 @@
             <section class="slot-title-wrapper">
                 <span
                     :class="['slot-name', { 'slot-tips': slotConfig.tips }]"
-                    v-bk-tooltips="computedSlotTip"
-                >{{ slotConfig.displayName }}<span v-if="slotConfig.type && slotConfig.type.length <= 1">({{ computedSlotVal.type | capFirstLetter }})</span>
+                    v-bk-tooltips="computedSlotTip">
+                    {{ slotConfig.displayName }}
+                    <span v-if="slotConfig.type && slotConfig.type.length <= 1">({{ computedSlotVal.type | capFirstLetter }})</span>
                 </span>
                 <template v-if="slotConfig.name && slotConfig.name.length > 1">
                     <span class="slot-label">组件标签</span>
@@ -25,8 +26,14 @@
         </template>
         <template v-if="slotConfig.type && slotConfig.type.length > 1">
             <span class="slot-label">数据类型</span>
-            <bk-radio-group :value="computedSlotVal.type" @change="changeSlot('type', ...arguments)" class="mb10">
-                <bk-radio-button :value="type" v-for="type in slotConfig.type" :key="type">
+            <bk-radio-group
+                :value="computedSlotVal.type"
+                @change="changeSlot('type', ...arguments)"
+                class="mb10">
+                <bk-radio-button
+                    :value="type"
+                    v-for="type in slotConfig.type"
+                    :key="type">
                     {{ type | capFirstLetter }}
                 </bk-radio-button>
             </bk-radio-group>

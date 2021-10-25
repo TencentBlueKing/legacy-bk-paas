@@ -11,7 +11,11 @@
 
 <template>
     <div class="material-modifier">
-        <bk-tab :active.sync="tabPanelActive" :type="currentTabPanelType" ext-cls="king-tab" @tab-change="handleModifier">
+        <bk-tab
+            :active.sync="tabPanelActive"
+            :type="currentTabPanelType"
+            ext-cls="king-tab"
+            @tab-change="handleModifier">
             <bk-tab-panel
                 v-for="(tabPanel, panelIndex) in tabPanels"
                 v-bind="tabPanel"
@@ -19,6 +23,7 @@
                 <div class="material-modifier-container">
                     <component
                         :is="modifierCom"
+                        :key="renderKey"
                         :material-config="materialComConfig"
                         :last-styles="modifier.renderStyles"
                         :last-props="modifier.renderProps"
@@ -27,12 +32,11 @@
                         :last-slots="modifier.renderSlots"
                         :component-id="curSelectedComponentData.componentId"
                         :component-type="curSelectedComponentData.type"
-                        :key="curSelectedComponentData.renderKey"
                         @on-change="handleModifier" />
                 </div>
             </bk-tab-panel>
         </bk-tab>
-        <div class="empty" v-if="!Object.keys(curSelectedComponentData).length">
+        <div v-if="!renderKey" class="empty">
             <span>请选择组件</span>
         </div>
     </div>
@@ -48,6 +52,7 @@
     import ModifierEvents from './events'
     import ModifierDirectives from './directives'
     import cloneDeep from 'lodash.clonedeep'
+    import LC from '@/element-materials/core'
 
     const baseComponentList = allComponentConf['bk'].concat(allComponentConf['element'] || [])
 
@@ -117,7 +122,8 @@
                     renderProps: {},
                     renderEvents: {},
                     renderDirectives: []
-                }
+                },
+                renderKey: Date.now()
             }
         },
         computed: {
@@ -208,7 +214,24 @@
                 deep: true
             }
         },
-
+        created () {
+            const activeCallback = (componentNode) => {
+                console.log('from modifier == ', componentNode)
+                this.tabPanelActive = componentNode.tabPanelActive
+                this.renderKey = componentNode.renderKey
+            }
+            const activeClearCallback = () => {
+                this.tabPanelActive = 'props'
+                this.renderKey = ''
+            }
+            
+            LC.addEventListener('active', activeCallback)
+            LC.addEventListener('activeClear', activeClearCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('active', activeCallback)
+                LC.removeEventListener('activeClear', activeClearCallback)
+            })
+        },
         methods: {
             handleModifier (payload) {
                 const modifier = dataClean({

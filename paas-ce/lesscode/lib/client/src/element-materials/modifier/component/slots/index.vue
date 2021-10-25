@@ -1,5 +1,7 @@
 <template>
-    <article class="modifier-slot" v-if="Object.keys(computedSlots).length">
+    <article
+        v-if="Object.keys(computedSlots).length"
+        class="modifier-slot">
         <renderSlot
             v-for="(slotConfig, slotName) in computedSlots"
             :key="slotName"
@@ -36,15 +38,17 @@
 
         computed: {
             computedSlots () {
-                const keys = Object.keys(this.materialConfig)
-                const res = keys.reduce((acc, cur) => {
-                    const config = this.materialConfig[cur]
-                    if (config.display !== 'hidden') {
-                        acc[cur] = config
-                    }
-                    return acc
-                }, {})
-                return res
+                // const keys = Object.keys(this.materialConfig)
+                // const res = keys.reduce((acc, cur) => {
+                //     const config = this.materialConfig[cur]
+                //     if (config.display !== 'hidden') {
+                //         acc[cur] = config
+                //     }
+                //     return acc
+                // }, {})
+                // console.log('from computedSlots --------------: ', res)
+                // return res
+                return {}
             }
         },
 

@@ -1,7 +1,8 @@
 import { mapGetters, mapMutations } from 'vuex'
 import cloneDeep from 'lodash.clonedeep'
-import { uuid, isInteractiveCompActive } from '@/common/util'
+import { isInteractiveCompActive } from '@/common/util'
 import { bus } from '@/common/bus'
+import LC from '@/element-materials/core'
 
 export default {
     props: {
@@ -30,7 +31,10 @@ export default {
             'draggableSourceGroup',
             'targetData'
         ]),
-        ...mapGetters('components', ['interactiveComponents']),
+        ...mapGetters('components', [
+            'interactiveComponents',
+            'curNameMap'
+        ]),
         componentGroups () {
             const componentGroups = {}
             // 分组
@@ -101,111 +105,36 @@ export default {
          * @param {string} group group 标识
          */
         onChoose (e, group) {
-            const uid = uuid()
-            const component = cloneDeep(this.componentGroups[group][e.oldIndex])
-            const { name = '', type = '', props = {}, directives = [], slots = {}, isComplexComponent = false } = component
-            const id = component.name + '-' + uid
-            const renderDirectives = directives
+            console.log('from on panel choose ', e, group)
+            const {
+                type,
+                name
+            } = cloneDeep(this.componentGroups[group][e.oldIndex])
 
-            // build renderSlots
-            function transformSlot (slots) {
-                const renderSlots = slots
-                Object.keys(renderSlots).forEach((key) => {
-                    const renderSlot = renderSlots[key]
-                    Object.keys(renderSlot).forEach((key) => {
-                        const val = renderSlot[key]
-                        if (['type', 'name'].includes(key)) {
-                            renderSlot[key] = val[0]
-                        }
-                        if (key === 'slots') {
-                            renderSlot.renderSlots = transformSlot(val)
-                            delete renderSlot.slots
-                        }
-                        delete renderSlot.tips
-                    })
-                })
-                return renderSlots
+            const node = LC.createNode(type)
+
+            if (type === 'render-grid') {
+                if (name === 'grid2') {
+                    node.appendChild(LC.createNode('render-column'))
+                } else if (name === 'grid3') {
+                    node.appendChild(LC.createNode('render-column'))
+                    node.appendChild(LC.createNode('render-column'))
+                } else if (name === 'grid4') {
+                    node.appendChild(LC.createNode('render-column'))
+                    node.appendChild(LC.createNode('render-column'))
+                    node.appendChild(LC.createNode('render-column'))
+                }
             }
-            const renderSlots = transformSlot(slots)
-
-            const renderProps = Object.assign({}, ['bk-dialog', 'bk-sideslider'].includes(type) ? {
-                transfer: {
-                    type: Boolean,
-                    val: false
-                }
-            } : {})
-
-            Object.keys(props).forEach(k => {
-                if (props[k].hasOwnProperty('val') && props[k].val !== '') {
-                    renderProps[k] = props[k]
-                }
-            })
-
-            const renderStyles = {}
-            const styles = component.styles || []
-            console.log(styles, 'styles')
-            const componentDefaultStyles = component.renderStyles || {}
-            styles.forEach(st => {
-                if (st === 'size') {
-                    if (componentDefaultStyles.hasOwnProperty('height')) {
-                        renderStyles['height'] = component.renderStyles['height']
-                    }
-                    if (componentDefaultStyles.hasOwnProperty('width')) {
-                        renderStyles['width'] = component.renderStyles['width']
-                    }
-                } else if (st === 'font') {
-                    if (componentDefaultStyles.hasOwnProperty('fontSize')) {
-                        renderStyles['fontSize'] = component.renderStyles['fontSize']
-                    }
-                    if (componentDefaultStyles.hasOwnProperty('fontFamily')) {
-                        renderStyles['fontFamily'] = component.renderStyles['fontFamily']
-                    }
-                    if (componentDefaultStyles.hasOwnProperty('fontWeight')) {
-                        renderStyles['fontWeight'] = component.renderStyles['fontWeight']
-                    }
-                    if (componentDefaultStyles.hasOwnProperty('fontStyle')) {
-                        renderStyles['fontStyle'] = component.renderStyles['fontStyle']
-                    }
-                    if (componentDefaultStyles.hasOwnProperty('fontVariant')) {
-                        renderStyles['fontVariant'] = component.renderStyles['fontVariant']
-                    }
-                    if (componentDefaultStyles.hasOwnProperty('fontVariant')) {
-                        renderStyles['fontVariant'] = component.renderStyles['fontVariant']
-                    }
-                    if (componentDefaultStyles.hasOwnProperty('whiteSpace')) {
-                        renderStyles['whiteSpace'] = component.renderStyles['whiteSpace']
-                    }
-                    if (componentDefaultStyles.hasOwnProperty('wordBreak')) {
-                        renderStyles['wordBreak'] = component.renderStyles['wordBreak']
-                    }
-                    // if (componentDefaultStyles.hasOwnProperty('lineHeight')) {
-                    //     renderStyles['lineHeight'] = component.renderStyles['lineHeight']
-                    // }
-                } else {
-                    if (componentDefaultStyles.hasOwnProperty(st)) {
-                        renderStyles[st] = component.renderStyles[st]
-                    }
-                }
-            })
-            if (renderStyles.hasOwnProperty('display')) {
-                this.placeholderElemDisplay = renderStyles['display']
+            // todo 判断组件是否是自定义组件
+            if (this.curNameMap[node.type]) {
+                node.setProperty('isCustomComponent', true)
+            }
+            
+            this.curDragingComponent = node
+            if (node.style.display) {
+                this.placeholderElemDisplay = node.style.display
             } else {
                 this.placeholderElemDisplay = 'block'
-            }
-
-            this.curDragingComponent = {
-                componentId: id,
-                tabPanelActive: 'props', // 默认tab选中的面板
-                renderKey: uuid(),
-                name,
-                type,
-                renderProps: renderProps,
-                renderStyles: { ...renderStyles },
-                renderEvents: {},
-                interactiveShow: component.interactiveShow || false,
-                isComplexComponent: isComplexComponent,
-                renderDirectives,
-                renderSlots
             }
             this.$emit('update:dragingComponent', this.curDragingComponent)
 
@@ -237,30 +166,6 @@ export default {
          * @param {Object} original 当前拖拽的对象（左侧组件列表中的组件）
          */
         cloneFunc (original) {
-            // this.setDraggableSourceGroup(Object.assign({}, this.draggableSourceGroup, {
-            //     name: original.type === 'render-grid' ? 'render-grid' : 'component'
-            // }))
-            // console.log('from clonexxx', this.curDragingComponent)
-
-            // let name = ''
-            // if (original.type === 'render-grid') {
-            //     name = 'render-grid'
-            // } else if (original.type === 'free-layout') {
-            //     name = 'free-layout'
-            // } else {
-            //     name = 'component'
-            // }
-            // this.setDraggableSourceGroup(Object.assign({}, this.draggableSourceGroup, {
-            //     name
-            // }))
-
-            // console.error(name)
-            // console.warn(JSON.stringify(this.draggableSourceGroup, null, 2))
-            // console.error(JSON.stringify(this.draggableTargetGroup, null, 2))
-
-            // debugger
-            // // 这里需要换 id，否则同样的组件拖到右边后，id 是一样的，右边同样的组件之间就没法拖动
-            // // return Object.assign({}, original, { componentId: uuid() })
             return this.curDragingComponent
         },
 

@@ -31,7 +31,7 @@
             </template>
         </template>
         <div class="no-prop" v-else>
-            <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无属性</span>
+            <span>该组件暂无属性</span>
         </div>
     </div>
 </template>
@@ -41,6 +41,7 @@
     import RenderProp from './components/render-prop'
     import RenderSlots from '../slots'
     import { bus } from '@/common/bus'
+    import LC from '@/element-materials/core'
 
     export default {
         name: 'modifier-prop',
@@ -49,21 +50,28 @@
             RenderSlots
         },
         props: {
-            materialConfig: {
-                type: Object,
-                required: true
-            },
-            lastProps: {
-                type: Object,
-                default: () => ({})
-            },
+            // materialConfig: {
+            //     type: Object,
+            //     required: true
+            // },
+            // lastProps: {
+            //     type: Object,
+            //     default: () => ({})
+            // },
             lastDirectives: {
                 type: Array,
                 default: () => ([])
-            },
-            lastSlots: {
-                type: Object,
-                default: () => ({})
+            }
+            // lastSlots: {
+            //     type: Object,
+            //     default: () => ({})
+            // }
+        },
+        data () {
+            return {
+                materialConfig: {},
+                lastProps: {},
+                lastSlots: {}
             }
         },
         computed: {
@@ -83,6 +91,18 @@
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('update-chart-options', this.updateChartOptions)
             })
+            this.currentComponentNode = LC.getActiveNode()
+            console.log('from modify props = ', this.currentComponentNode)
+            if (this.currentComponentNode) {
+                const {
+                    material,
+                    prop,
+                    slot
+                } = this.currentComponentNode
+                this.materialConfig = Object.freeze(material)
+                this.lastProps = prop
+                this.lastSlots = slot
+            }
         },
         methods: {
             // 针对chart类型，将动态返回的remoteOptions与options合并
@@ -110,7 +130,8 @@
                 this.batchUpdate(renderProps)
             },
             batchUpdate (renderData) {
-                this.$emit('on-change', renderData)
+                this.currentComponentNode.setRenderProps(renderData.renderProps)
+                // this.$emit('on-change', renderData)
             }
         }
     }

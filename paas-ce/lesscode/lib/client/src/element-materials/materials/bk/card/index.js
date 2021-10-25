@@ -60,27 +60,34 @@ export default {
         }
     },
     slots: {
+        header: {
+            name: ['layout'],
+            type: ['free-layout'],
+            renderStyles: {
+                'height': '50px',
+                'pointer-events': 'auto'
+            },
+            children: [
+                {
+                    name: ['text'],
+                    type: ['span']
+                }
+            ]
+        },
         default: {
             name: ['layout'],
             type: ['free-layout'],
-            display: 'hidden',
-            val: {
-                name: 'free-layout',
-                type: 'free-layout',
-                slotName: '',
-                slotContainer: true,
-                renderProps: {},
-                renderStyles: { 'height': '200px', 'pointer-events': 'auto' },
-                renderEvents: {},
-                renderDirectives: [],
-                renderSlots: {
-                    default: {
-                        type: 'free-layout-item',
-                        val: [
-                            { children: [] }
-                        ]
-                    }
-                }
+            renderStyles: {
+                'height': '200px',
+                'pointer-events': 'auto'
+            }
+        },
+        footer: {
+            name: ['layout'],
+            type: ['free-layout'],
+            renderStyles: {
+                'height': '50px',
+                'pointer-events': 'auto'
             }
         }
     }

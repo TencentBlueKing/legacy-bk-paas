@@ -21,11 +21,8 @@ export default Extends({
     },
     slots: {
         default: {
-            type: ['column'],
-            displayName: '列配置',
-            val: [
-                { span: 1, children: [] }
-            ]
+            name: ['layout'],
+            type: ['render-column']
         }
     }
 })

@@ -16,17 +16,21 @@ export default {
     name: 'render-slot',
     functional: true,
     props: {
-        name: {
-            type: String,
-            default: ''
-        },
+        key: [Number, String],
         slotData: {
             type: [Number, String, Boolean, Object, Array],
             default: ''
         }
     },
     render (h, ctx) {
-        const { slotData } = ctx.props
+        const { key, slotData } = ctx.props
+        
+        // if (slotData.name === 'layout') {
+        //     return (
+        //         <render-layout key={key} componentData={slotData} />
+        //     )
+        // }
+        
         const { name } = slotData
         const render = slotRenderConfig[name] || (() => {})
         const slotRenderParams = []
@@ -37,7 +41,7 @@ export default {
             curSlot = curSlot.renderSlots
         } while (curSlot && Object.keys(curSlot).length > 0)
 
-        const html = `<render-slot>${render(...slotRenderParams)}</render-slot>`
+        const html = `<render-slot key='${key}'>${render(...slotRenderParams)}</render-slot>`
         return transformHtmlToVnode(html).children
     }
 }

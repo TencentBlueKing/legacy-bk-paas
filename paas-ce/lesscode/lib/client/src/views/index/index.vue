@@ -152,7 +152,10 @@
                             </li>
                         </ul>
                         <div class="search-bar">
-                            <component-search :key="componentTabsCurrentRefresh" :source="componentConfigList" :result.sync="componentSearchResult" />
+                            <component-search
+                                :key="componentTabsCurrentRefresh"
+                                :source="componentConfigList"
+                                :result.sync="componentSearchResult" />
                         </div>
                     </div>
                     <div class="sidebar-bd">
@@ -180,38 +183,13 @@
             </aside>
 
             <!-- 这里用 v-show，切换源码或者预览时，如果时 v-if，那么 grid.vue 里的 renderDataSlot 会重置，这个值并没有存在 store 中 -->
-            <div class="main-content" v-bkloading="{ isLoading: contentLoading || isCustomComponentLoading, opacity: 1 }"
+            <div
+                v-show="actionSelected === 'edit'"
+                class="main-content"
+                v-bkloading="{ isLoading: contentLoading || isCustomComponentLoading, opacity: 1 }"
                 :class="mainContentClass"
-                @click="dragWrapperClickHandler"
-                v-show="actionSelected === 'edit'">
-                <layout v-if="!contentLoading"
-                    @layout-mounted="onLayoutMounted">
-                    <template v-if="!isCustomComponentLoading">
-                        <vue-draggable
-                            v-show="!contentLoading"
-                            :key="refreshDragAreaKey"
-                            class="target-drag-area"
-                            :list="targetData"
-                            :sort="true"
-                            :group="draggableTargetGroup"
-                            ghost-class="target-ghost"
-                            chosen-class="target-chosen"
-                            drag-class="target-drag"
-                            filter=".interactive-component"
-                            @choose="onCanvasChoose(arguments)"
-                            @change="log"
-                            @end="targetAreaEndHandler"
-                        >
-                            <render-index v-for="item in targetData" :key="item.renderKey" :component-data="item">
-                            </render-index>
-                        </vue-draggable>
-                    </template>
-                </layout>
-                <div class="not-visible-mask" v-if="showNotVisibleMask" :style="{ height: canvasHeight + 'px' }">
-                    <span class="not-visible-text">
-                        {{`该组件(${curSelectedComponentData.componentId})处于隐藏状态，请先打开`}}
-                    </span>
-                </div>
+                @click="dragWrapperClickHandler">
+                <render-index v-if="targetData.length > 0" />
             </div>
             <div class="main-content border-none" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
                 <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
@@ -289,11 +267,10 @@
     import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON } from '@/common/util'
     import { getCurUsedFuncs, replaceFuncKeyword } from '@/components/methods/function-helper.js'
     import RenderIndex from '@/components/render/index'
-    import FreeLayout from '@/components/render/free-layout'
     import MaterialModifier from '@/element-materials/modifier'
     import VueCode from '@/components/vue-code'
     import Methods from '@/components/methods'
-    import Layout from '@/components/widget/layout'
+    // import Layout from '@/components/widget/layout'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
     import allComponentConf from '@/element-materials/materials'
@@ -316,15 +293,16 @@
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
     import { infoLink } from '@/element-materials/materials/index'
+    import LC from '@/element-materials/core'
+
+    const gridNode = LC.createNode('render-grid')
 
     export default {
         components: {
             RenderIndex,
-            FreeLayout,
             MaterialModifier,
             VueCode,
             Methods,
-            Layout,
             NoviceGuide,
             VariableForm,
             ComponentSearch,
@@ -624,42 +602,17 @@
             ]
             await this.fetchData()
 
-            const mockCurSelectComponentData = {
-                componentId: 'grid-' + uuid(),
-                renderKey: uuid(),
-                name: 'grid',
-                type: 'render-grid',
-                tabPanelActive: 'props',
-                renderProps: {
-                    'margin-horizontal': {
-                        type: 'number',
-                        val: 0
-                    },
-                    'margin-vertical': {
-                        type: 'number',
-                        val: 0
-                    }
-                },
-                renderStyles: {},
-                renderEvents: {},
-                renderDirectives: [],
-                renderSlots: {
-                    default: {
-                        type: 'column',
-                        val: [{ span: 1, children: [], width: '100%' }]
-                    }
-                }
-            }
-            this.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
+            this.curDragingComponent = null
 
             // 设置初始targetData
-            let initData = []
+            let initData = [gridNode]
             try {
                 const content = this.pageDetail.content
-                initData = content && content !== 'null' ? JSON.parse(content) : [this.curDragingComponent]
+                if (content && content !== 'null') {
+                    initData = JSON.parse(content)
+                }
                 this.refreshDragAreaKey = +new Date()
             } catch (err) {
-                initData = [this.curDragingComponent]
                 this.$bkMessage({
                     theme: 'error',
                     message: 'targetData格式错误',
@@ -667,6 +620,8 @@
                 })
             }
             this.setTargetData(initData)
+
+            // console.log('from init print = :', tagetColumn.componentId, M.getNodeById(tagetColumn.componentId))
 
             // 注册自定义组件
             this.registerCustomComponent()
@@ -688,7 +643,7 @@
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
-            window.addEventListener('beforeunload', this.beforeunloadConfirm)
+            // window.addEventListener('beforeunload', this.beforeunloadConfirm)
             window.addEventListener('unload', this.relasePage)
 
             bus.$on('on-delete-component', this.showDeleteElement)
@@ -1341,18 +1296,6 @@
                     pushData.targetChildrenIndex = moveEle.newIndex
                 }
                 this.pushTargetHistory(pushData)
-                // console.warn('evt', evt)
-                // const data = evt.moved
-                // if (data) {
-                //     const targetData = []
-                //     targetData.splice(0, 0, ...this.targetData)
-                //     // targetData.splice(data.newIndex, 1 , targetData[data.oldIndex])
-                //     // 将 data.newIndex 位置上的元素替换为 data.oldIndex 位置的元素，同时返回 [targetData[data.newIndex]]
-                //     // 返回的是数组，所以在代码中加入了扩展运算符 ... 将数组转为参数序列。
-                //     // 再利用同样的方式将 data.oldIndex 位置上的元素替换为被删除的原数组的 targetData[data.newIndex] 的值。完成交换。
-                //     targetData.splice(data.oldIndex, 1, ...targetData.splice(data.newIndex, 1, targetData[data.oldIndex]))
-                //     this.targetData.splice(0, this.targetData.length, ...targetData)
-                // }
             },
 
             targetAreaEndHandler (e) {

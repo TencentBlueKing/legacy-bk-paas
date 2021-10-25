@@ -10,110 +10,135 @@
 -->
 
 <template>
-    <div :class="wrapperClass">
-        <template v-if="componentData.type === 'render-grid'">
-            <render-grid :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls">
-            </render-grid>
-        </template>
-        <template v-else-if="componentData.type === 'free-layout'">
-            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls">
-            </free-layout>
-        </template>
-        <template v-else>
-            <div class="interactive-component" :style="interactiveLayout" v-show="componentData.interactiveShow">
-                <ComponentModule :key="componentData.renderKey" :component-data="componentData" :interactive-layout="interactiveLayout"></ComponentModule>
-            </div>
-        </template>
-    </div>
+    <layout @layout-mounted="onLayoutMounted">
+        <div>
+            <draggable
+                class="target-drag-area"
+                :component-data="componentData"
+                :list="componentData.slot.default"
+                :sort="true"
+                :group="{
+                    put: [
+                        'render-grid',
+                        'free-layout',
+                        'interactive'
+                    ]
+                }"
+                filter=".interactive-component"
+                @choose="onCanvasChoose(arguments)">
+                <template v-for="componentNode in componentData.slot.default">
+                    <!-- root 的子组件只会是布局组件和交互式组件 -->
+                    <!-- 布局组件 -->
+                    <resolve-component
+                        v-if="!componentNode.isInteractiveComponent"
+                        :key="componentNode.renderKey"
+                        :component-data="componentNode" />
+                    <!-- 交互式组件 -->
+                    <resolve-interactive-component
+                        v-else
+                        :key="componentNode.renderKey"
+                        :component-data="componentNode" />
+                </template>
+            </draggable>
+        </div>
+        <div
+            v-if="showNotVisibleMask"
+            class="not-visible-mask"
+            :style="{ height: canvasHeight + 'px' }">
+            <span class="not-visible-text">
+                {{`该组件()处于隐藏状态，请先打开`}}
+            </span>
+        </div>
+    </layout>
 </template>
 
 <script>
-    import RenderGrid from '@/components/render/grid'
-    import FreeLayout from '@/components/render/free-layout'
-    import ComponentModule from '@/components/render/component'
+    import LC from '@/element-materials/core'
+    import Draggable from './components/draggable'
+    import Layout from './widget/layout'
+    import ResolveInteractiveComponent from './resolve-interactive-component'
 
     export default {
-        name: 'render-index',
+        name: 'render',
         components: {
-            RenderGrid,
-            FreeLayout,
-            ComponentModule
-        },
-        provide () {
-            /** slot下的子元素，不需要provide offset */
-            return this.isChild
-                ? {}
-                : {
-                    layoutOffset: this.interactiveLayout
-                }
-        },
-        props: {
-            isChild: {
-                type: Boolean,
-                default: false
-            },
-            componentData: {
-                type: Object,
-                default: () => ({})
-            },
-            extraDragCls: {
-                type: Array,
-                deault: () => ([])
-            }
+            Draggable,
+            Layout,
+            ResolveComponent: () => import('./resolve-component'),
+            ResolveInteractiveComponent
         },
         data () {
             return {
-                interactiveLayout: {
-                    height: 0,
-                    width: 0,
-                    left: 0,
-                    top: 0,
-                    position: 'fixed',
-                    zIndex: 101,
-                    backgroundColor: 'rgba(0,0,0,0.5)'
-                },
-                canvas: null,
-                resizeObserver: null
+                componentData: null,
+                showNotVisibleMask: false,
+                canvasHeight: 100
             }
         },
-        computed: {
-            wrapperClass () {
-                if (this.componentData.type === 'render-grid') {
-                    return 'bk-layout-grid-row-wrapper'
-                }
-                if (this.componentData.type === 'free-layout') {
-                    return 'bk-layout-free-wrapper'
-                }
-                return ''
-            }
-        },
-        watch: {
-        },
+        
         created () {
+            console.log('from ====================== render index', this)
+            this.componentData = Object.freeze(LC.getRoot())
+            const updateCallback = (node, eventName) => {
+                if (node.componentId === this.componentData.componentId) {
+                    console.log('from taget updat == ', node, eventName)
+                    this.$forceUpdate()
+                }
+            }
+            LC.addEventListener('update', updateCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', updateCallback)
+            })
+        },
+        updated () {
+            console.log('**************** render update **************', this.componentData.componentId)
         },
         mounted () {
-            if (this.componentData.type !== 'render-grid' && this.componentData.type !== 'free-layout') {
-                this.canvas = document.getElementsByClassName('main-content')[0]
-                this.resizeObserver = new ResizeObserver(this.resizeInteractiveWrapper)
-                this.resizeObserver.observe(this.canvas)
+            const resetCallback = () => {
+                LC.clearMenu()
             }
-        },
-        beforeDestroy () {
-            this.resizeObserver && this.resizeObserver.unobserve(this.canvas)
+            document.body.addEventListener('click', resetCallback)
+            this.$once('hook:beforeDestroy', () => {
+                document.body.removeEventListener('click', resetCallback)
+            })
         },
         methods: {
-            resizeInteractiveWrapper () {
-                const { height, width, left, top } = this.canvas.getBoundingClientRect()
-                this.interactiveLayout.height = height + 'px'
-                this.interactiveLayout.width = width + 'px'
-                this.interactiveLayout.left = left + 'px'
-                this.interactiveLayout.top = top + 'px'
+            onLayoutMounted () {
+                const canvas = document.getElementsByClassName('lesscode-editor-layout')[0]
+                this.canvasHeight = canvas.offsetHeight
+                this.resizeObserve = new ResizeObserver(entries => {
+                    for (const entry of entries) {
+                        this.canvasHeight = entry.target.offsetHeight
+                    }
+                })
+                this.resizeObserve.observe(canvas)
+            },
+
+            /**
+             * 选中画布中的元素时触发，在画布中的只有 render-grid 和 free-layout 元素
+             * 选中 render-grid 和 free-layout 内部的元素不会触发
+             *
+             * @param {Object} e 事件对象
+             */
+            onCanvasChoose (e) {
+                // console.log('from on chaoose', this.componentData)
+                // const evt = e[0]
+                // const curChooseComponent = this.targetData[evt.oldIndex]
+                // this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
+
+                // let name = ''
+                // if (curChooseComponent.type === 'render-grid') {
+                //     name = 'render-grid'
+                // } else if (curChooseComponent.type === 'free-layout') {
+                //     name = 'free-layout'
+                // }
+
+                // this.setDraggableTargetGroup(Object.assign({}, this.draggableTargetGroup, {
+                //     name
+                // }))
             }
         }
     }
 </script>
 <style lang="postcss">
-    @import "./free-layout.css";
     .interactive-component {
         transform: translate(0, 0);
         /deep/.bk-dialog-wrapper {
@@ -121,9 +146,10 @@
         }
     }
     .save-as-template {
-        display: none;
         z-index: 1001;
         position: absolute;
+        top: 0;
+        left: 0;
         height: 20px;
         font-size: 12px;
         color: #fff;

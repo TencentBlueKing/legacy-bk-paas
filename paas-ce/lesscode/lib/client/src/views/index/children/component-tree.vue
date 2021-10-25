@@ -39,8 +39,7 @@
 
 <script>
     import _ from 'lodash'
-
-    import Tree from '@/components/widget/tree/tree.vue'
+    import Tree from './tree/tree.vue'
     import allComponentConf from '@/element-materials/materials'
     import { deepSearchStack, removeClassWithNodeClass } from '@/common/util.js'
     import { mapMutations, mapGetters } from 'vuex'

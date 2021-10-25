@@ -35,35 +35,6 @@ export default {
             valType: 'variable'
         }
     ],
-    slots: {
-        default: {
-            name: ['layout'],
-            type: ['render-grid'],
-            display: 'hidden',
-            val: {
-                name: 'grid',
-                type: 'render-grid',
-                slotName: '',
-                slotContainer: true,
-                renderProps: {},
-                renderStyles: {},
-                renderEvents: {},
-                renderDirectives: [],
-                renderSlots: {
-                    default: {
-                        type: 'column',
-                        val: [
-                            {
-                                children: [],
-                                span: 1,
-                                width: '100%'
-                            }
-                        ]
-                    }
-                }
-            }
-        }
-    },
     props: {
         'value': {
             type: 'boolean',
@@ -129,6 +100,19 @@ export default {
         'ext-cls': {
             type: 'string',
             tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
+        }
+    },
+    slots: {
+        default: {
+            name: ['layout'],
+            type: ['render-grid'],
+            display: 'hidden',
+            children: [
+                {
+                    name: ['layout'],
+                    type: ['render-column']
+                }
+            ]
         }
     }
 }
