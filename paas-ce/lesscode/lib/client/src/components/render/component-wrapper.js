@@ -58,7 +58,7 @@ export default {
         
         return h('span',
             {
-                style: { 'font-size': 'initial' }
+                style: { 'font-size': 'initial', width: params['component-type'] === 'bk-color-picker' ? 'inherit' : '' }
             },
             [
                 h(renderData.type, {
