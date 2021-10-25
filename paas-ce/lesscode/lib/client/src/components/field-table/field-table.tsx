@@ -11,7 +11,7 @@ export default defineComponent({
         column: Array,
         isShowCheck: Boolean
     },
-    setup(props, { emit }) {
+    setup (props, { emit }) {
         const renderHeader = (h, { column, $index }, item) => {
             return (
                 <span>
@@ -23,7 +23,7 @@ export default defineComponent({
         /** checkbox */
         const renderCheckbox = (item: object) => {
             const change = (value, row, item, index) => {
-                emit('checkboxChange', value, row, item, index)
+                emit('change', value, row, item, index)
             }
             return {
                 default: (props) => {
@@ -44,7 +44,7 @@ export default defineComponent({
         /** input */
         const renderInput = (item: object) => {
             const change = (value, row, item, index) => {
-                emit('inputChange', value, row, item, index)
+                emit('change', value, row, item, index)
             }
             return {
                 default: (props) => {
@@ -54,6 +54,7 @@ export default defineComponent({
                             placeholder={item.placeholder || '请输入'}
                             class="field-table-input"
                             value={row[item.prop]}
+                            type={row[`${item.prop}InputType`] || 'text'}
                             disabled={row?.isEdit}
                             onchange={(value) =>
                                 change(value, row, item, $index)
@@ -67,7 +68,7 @@ export default defineComponent({
         /** select */
         const renderSelect = (item: object) => {
             const change = (value, row, item, index) => {
-                emit('selectChange', value, row, item, index)
+                emit('change', value, row, item, index)
             }
             return {
                 default: (props) => {
@@ -148,7 +149,7 @@ export default defineComponent({
             renderHeader
         }
     },
-    render(): VNode {
+    render (): VNode {
         const typeList = {
             custom: 'renderCustomize',
             input: 'renderInput',

@@ -44,7 +44,8 @@ const projectSelectFields = [
     'project.offcialType',
     'project.createTime',
     'project.createUser',
-    'project.deleteFlag'
+    'project.deleteFlag',
+    'project.isEnableDataSource'
 ]
 
 const defaultGroup = {
@@ -131,7 +132,7 @@ export default {
                     getRepository(TemplateCategory)
                         .createQueryBuilder('pageTemplateCategory')
                         .where('pageTemplateCategory.belongProjectId = :projectId', { projectId: projectData.copyFrom })
-                        .getMany(),
+                        .getMany()
                 ])
 
                 if (projectCompCopyValues.length) {

@@ -10,6 +10,11 @@
  */
 
 import { diff } from '../common'
+import {
+    TABLE_MODIFY_TYPE,
+    FIELD_MODIFY_TYPE,
+    INDEX_MODIFY_TYPE
+} from '../../constant'
 
 /**
  * 对导入的sql过滤
@@ -29,26 +34,101 @@ function transformSql2Json () {
 }
 
 /**
+ * 获取字段的sql信息
+ * @param {*} column 当前行
+ * @returns 字段信息的 sql 字符串
+ */
+function getTableColumnSql (column) {
+    // 获取字段类型
+    const getType = (column) => {
+        const typeMap = {
+            int: 'int(11)',
+            varchar: 'varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci',
+            datetime: 'datetime(0)'
+        }
+        return typeMap[column.type]
+    }
+    // 非空
+    const getNullable = (column) => {
+        return column.nullable ? 'NULL' : 'NOT NULL'
+    }
+    // 自增
+    const getGenerated = (column) => {
+        return column.generated ? 'AUTO_INCREMENT' : ''
+    }
+    // 默认值
+    const getDefault = (column) => {
+        if (column.createDate) return 'DEFAULT CURRENT_TIMESTAMP(0)'
+
+        if (column.updateDate) return 'DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0)'
+
+        if (Reflect.has(column, 'default')) {
+            const defaultVal = column.default
+            return typeof defaultVal === 'string' ? `DEFAULT '${defaultVal}'` : `DEFAULT ${defaultVal}`
+        }
+    }
+    // 注释
+    const getComment = (column) => {
+        return column.comment ? `COMMENT '${column.comment}'` : ''
+    }
+    const sqlArray = [
+        column.name,
+        getType(column),
+        getNullable(column),
+        getGenerated(column),
+        getDefault(column),
+        getComment(column)
+    ]
+    return sqlArray.filter(v => v).join(' ')
+}
+
+/**
+ * 生成主键相关 sql
+ * @param {*} columns 所有的字段
+ * @returns 主键相关 sql
+ */
+function getPrimaryKey (data) {
+    if (data.primary) {
+        return `PRIMARY KEY (${data.name}) USING BTREE`
+    }
+}
+
+/**
+ * 生成索引相关 sql
+ * @param {*} columns 所有的字段
+ * @returns 索引相关 sql
+ */
+function getIndex ({ type, data }) {
+    if (type === INDEX_MODIFY_TYPE.DROP) {
+        return `INDEX ${data.name}`
+    }
+    if (type === INDEX_MODIFY_TYPE.ADD) {
+        return `INDEX ${data.name}(${data.name}) USING BTREE`
+    }
+}
+
+/**
  * 生成创建表的sql
  * @param {*} data
  * @returns sql字符串
  */
-function createTable (data) {
+function createTable (data, index) {
+    const { tableName, comment = '', columns } = data
+    const fields = ([
+        ...columns.map(getTableColumnSql),
+        ...columns.map(getPrimaryKey),
+        ...index.map(getIndex)
+    ]).filter(v => v).map(x => `    ${x}`)
+
     return (
         '-- ----------------------------\n'
-        + `-- Table structure for ${data.tableName}\n`
+        + `-- TABLE STRUCTURE FOR ${tableName}\n`
         + '-- ----------------------------\n'
-        + `DROP TABLE IF EXISTS ${data.tableName};\n`
-        + `CREATE TABLE ${data.tableName}  (\n`
-            + '`id` int(11) NOT NULL AUTO_INCREMENT,\n'
-            // + columns.
-            + '`deleteFlag` int(11) NULL DEFAULT 0 COMMENT \'是否删除，1代表已删除\',\n'
-            + '`createTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT \'创建时间\',\n'
-            + '`updateTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT \'最新更新时间\',\n'
-            + '`createUser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT \'创建人，默认当前用户\',\n'
-            + '`updateUser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT \'更新人，默认当前用户\',\n'
-            + 'PRIMARY KEY (`id`) USING BTREE\n'
-        + `) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = \'${data.comment}\' ROW_FORMAT = Dynamic;\n`
+        + `DROP TABLE IF EXISTS ${tableName};\n`
+        + `CREATE TABLE ${tableName}  (\n`
+        + fields.join(',\n')
+        + '\n'
+        + `) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = \'${comment}\' ROW_FORMAT = Dynamic;\n`
     )
 }
 
@@ -57,12 +137,30 @@ function createTable (data) {
  * @param {*} data
  * @returns sql字符串
  */
-function modifyTable (data) {
+function modifyTable (data, index = []) {
+    const { tableName, columns = [] } = data
+    const sqlArr = []
+
+    columns.forEach(({ type, data }) => {
+        const columnDetailSql = getTableColumnSql(data)
+        if (type === FIELD_MODIFY_TYPE.DROP_COLUMN) {
+            sqlArr.push(`${type} ${data.name}`)
+        } else {
+            sqlArr.push(`${type} ${columnDetailSql}`)
+        }
+    })
+    index.forEach((data) => {
+        const indexDetailSql = getIndex(data)
+        sqlArr.push(`${data.type} ${indexDetailSql}`)
+    })
+
     return (
         '-- ----------------------------\n'
-        + `-- Modify Table ${data.tableName}\n`
+        + `-- MODIFY TABLE ${tableName}\n`
         + '-- ----------------------------\n'
-        + `ALTER TABLE ${data.tableName}\n`
+        + `ALTER TABLE ${tableName}\n`
+        + sqlArr.join(',\n')
+        + ';'
     )
 }
 
@@ -76,7 +174,36 @@ function dropTable (data) {
         '-- ----------------------------\n'
         + `-- DROP TABLE ${data.tableName}\n`
         + '-- ----------------------------\n'
-        + `DROP TABLE IF EXISTS ${data.tableName};`
+        + `DROP TABLE IF EXISTS ${data.tableName};\n`
+    )
+}
+
+/**
+ * 生成修改表名的sql
+ * @param {*} data 修改后的数据
+ * @param {*} originData 原始数据
+ * @returns
+ */
+function renameTable (data, originData) {
+    return (
+        '-- ----------------------------\n'
+        + `-- RENAME TABLE ${originData.tableName}\n`
+        + '-- ----------------------------\n'
+        + `ALTER TABLE ${originData.tableName} RENAME TO ${data.tableName};\n`
+    )
+}
+
+/**
+ * 生成修改注释的sql
+ * @param {*} data 修改后的数据
+ * @returns 修改注释的sql
+ */
+function comment (data) {
+    return (
+        '-- ----------------------------\n'
+        + `-- MODIFY COMMENT ${data.tableName}\n`
+        + '-- ----------------------------\n'
+        + `ALTER TABLE ${data.tableName} COMMENT = '${data.comment}';\n`
     )
 }
 
@@ -89,29 +216,35 @@ function transformJson2Sql ({ originDatas, finalDatas }) {
     const diffResults = diff(originDatas, finalDatas)
     const sqlArray = []
 
-    diffResults.forEach((result) => {
+    diffResults.forEach(({ type, data, originData, index }) => {
         let sql
-        switch (result.type) {
-            case 'create':
-                sql = createTable(result)
+        switch (type) {
+            case TABLE_MODIFY_TYPE.CREATE:
+                sql = createTable(data, index)
                 break
-            case 'modify':
-                sql = modifyTable(result)
+            case TABLE_MODIFY_TYPE.MODIFY:
+                sql = modifyTable(data, index)
                 break
-            case 'drop':
-                sql = dropTable(result)
+            case TABLE_MODIFY_TYPE.DROP:
+                sql = dropTable(data)
+                break
+            case TABLE_MODIFY_TYPE.RENAME:
+                sql = renameTable(data, originData)
+                break
+            case TABLE_MODIFY_TYPE.COMMENT:
+                sql = comment(data)
                 break
         }
-        sqlArray.join(sql)
+        sqlArray.push(sql)
     })
 
-    return sqlArray.join('')
+    return sqlArray.join('\n')
 }
 
 /**
  * sql 操作
  */
-export class SqlParser {
+export class StructSqlParser {
     constructor (sql) {
         this.sql = sql
     }
@@ -119,7 +252,7 @@ export class SqlParser {
     import (that = {}) {
         const sql = filterSql(this.sql)
         that.finalDatas = transformSql2Json(sql)
-        return sql
+        return that
     }
 
     export (that) {

@@ -15,3 +15,4 @@
  * 不能写node或者浏览器环境下专有语法
  */
 export * from './function'
+export * from './data-source'

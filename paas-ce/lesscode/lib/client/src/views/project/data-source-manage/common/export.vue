@@ -1,6 +1,6 @@
 <template>
     <section>
-        <bk-button @click="showExport">导出</bk-button>
+        <bk-button @click="showExport" :size="size">导出</bk-button>
 
         <bk-dialog
             theme="primary"
@@ -32,7 +32,11 @@
 
     export default defineComponent({
         props: {
-            title: String
+            title: String,
+            size: {
+                type: String,
+                default: 'normal'
+            }
         },
 
         setup () {

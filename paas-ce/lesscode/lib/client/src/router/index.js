@@ -65,6 +65,7 @@ const DataSourceHome = () => import(/* webpackChunkName: 'DataSource' */'@/views
 const DataSourceTableList = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/table-list/index.vue')
 const DataSourceCreateTable = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/create-table.vue')
 const DataSourceEditTable = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/edit-table.vue')
+const DataSourceShowTable = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/show-table.vue')
 const DataSourceUpdateRecord = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/update-record.vue')
 const DataSourceDataManage = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/data-manage/index.vue')
 const DataSourceDeployTableRecord = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/deploy-table-record.vue')
@@ -252,6 +253,11 @@ const routes = [
                         path: 'edit-table',
                         name: 'editTable',
                         component: DataSourceEditTable
+                    },
+                    {
+                        path: 'show-table',
+                        name: 'showTable',
+                        component: DataSourceShowTable
                     },
                     {
                         path: 'update-table-record',

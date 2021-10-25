@@ -10,73 +10,176 @@
         <main class="table-main">
             <section class="table-section">
                 <h5 class="section-title">基础信息</h5>
-                <bk-form :model="tableStatus.basicInfo" :label-width="82">
-                    <bk-form-item label="表名" :required="true" property="tableName">
-                        <bk-input v-model="tableStatus.basicInfo.tableName" class="section-item"></bk-input>
-                    </bk-form-item>
-                    <bk-form-item label="存储引擎">
-                        <bk-input v-model="tableStatus.basicInfo.engine" disabled class="section-item"></bk-input>
-                    </bk-form-item>
-                    <bk-form-item label="字符集">
-                        <bk-input v-model="tableStatus.basicInfo.character" disabled class="section-item"></bk-input>
-                    </bk-form-item>
-                    <bk-form-item label="备注" property="summary">
-                        <bk-input v-model="tableStatus.basicInfo.summary" class="section-item"></bk-input>
-                    </bk-form-item>
-                </bk-form>
+                <info-table ref="basicFormRef" :basic-info="tableStatus.basicInfo" @change="changeEdit(true)"></info-table>
             </section>
 
             <section class="table-section">
                 <h5 class="section-title">字段配置</h5>
-                <field-table :data="tableStatus.data"></field-table>
+                <field-table ref="fieldTableRef" :data.sync="tableStatus.data" @change="changeEdit(true)"></field-table>
             </section>
 
-            <bk-button theme="primary" class="mr5">提交</bk-button>
-            <bk-button @click="goBack">取消</bk-button>
+            <bk-button theme="primary" class="mr5" @click="submit" :loading="isLoading">提交</bk-button>
+            <bk-button @click="goBack" :disabled="isLoading">取消</bk-button>
         </main>
+
+        <confirm-dialog
+            :is-show.sync="showConfirmDialog"
+            :sql="sql"
+            :is-loading="isLoading"
+            @confirm="confirmSubmit"
+        ></confirm-dialog>
     </article>
 </template>
 
 <script lang="ts">
     import {
-        defineComponent,
-        reactive
+        defineComponent
     } from '@vue/composition-api'
     import {
-        IBasicInfo,
-        ITableField,
-        tableBasicInfo,
-        transformFieldObject2FieldArray
+        useTableStatus,
+        transformFieldObject2FieldArray,
+        transformFieldArray2FieldObject
     } from './composables/table-info'
-    import { baseColumns } from 'shared/data-source/constant'
+    import {
+        BASE_COLUMNS,
+        DataParse,
+        StructJsonParser,
+        StructSqlParser
+    } from 'shared/data-source'
+    import {
+        messageSuccess,
+        messageError
+    } from '@/common/bkmagic'
+    import {
+        bkInfoBox
+    } from 'bk-magic-vue'
     import renderHeader from '../common/header'
     import fieldTable from '../common/field-table'
+    import infoTable from '../common/info-table.vue'
+    import confirmDialog from '../common/confirm-dialog.vue'
     import router from '@/router'
-
-    interface ITableStatus {
-        basicInfo: IBasicInfo,
-        data: ITableField[]
-    }
+    import store from '@/store'
 
     export default defineComponent({
         components: {
             renderHeader,
-            fieldTable
+            fieldTable,
+            infoTable,
+            confirmDialog
+        },
+
+        beforeRouteLeave (to, from, next) {
+            const confirmFn = () => next()
+            const cancelFn = () => next(false)
+            if (this.hasEdit) {
+                bkInfoBox({
+                    title: '确认离开当前页面？',
+                    subTitle: '当前页面内容未保存，离开修改的内容将会丢失',
+                    confirmFn,
+                    cancelFn
+                })
+            } else {
+                confirmFn()
+            }
         },
 
         setup () {
-            const tableStatus = reactive<ITableStatus>({
-                basicInfo: tableBasicInfo,
-                data: transformFieldObject2FieldArray(baseColumns)
+            const projectId = router?.currentRoute?.params?.projectId
+            const {
+                tableStatus,
+                sql,
+                isLoading,
+                hasEdit,
+                showConfirmDialog,
+                basicFormRef,
+                fieldTableRef
+            } = useTableStatus({
+                data: transformFieldObject2FieldArray(BASE_COLUMNS)
             })
 
             const goBack = () => {
                 router.push({ name: 'tableList' })
             }
 
+            const changeEdit = (val) => {
+                hasEdit.value = val
+            }
+
+            const submit = () => {
+                Promise.all([
+                    basicFormRef.value.validate(),
+                    fieldTableRef.value.validate()
+                ]).then(([basicInfo, tableList]) => {
+                    // 基于用户创建的表格生成 sql
+                    const table = {
+                        ...basicInfo,
+                        columns: tableList
+                    }
+                    const dataParse = new DataParse()
+                    const structJsonParser = new StructJsonParser([table])
+                    const structSqlParser = new StructSqlParser()
+                    // 写入数据
+                    sql.value = dataParse.import(structJsonParser).export(structSqlParser)
+                    Object.assign(tableStatus.basicInfo, basicInfo)
+                    tableStatus.data = tableList
+                    showConfirmDialog.value = true
+                }).catch((error) => {
+                    messageError(error.message || error)
+                })
+            }
+
+            const confirmSubmit = () => {
+                const dataTable = {
+                    ...tableStatus.basicInfo,
+                    projectId,
+                    columns: transformFieldArray2FieldObject(tableStatus.data)
+                }
+                const record = {
+                    projectId,
+                    sql: sql.value
+                }
+                const postData = {
+                    dataTable,
+                    record
+                }
+                isLoading.value = true
+                return enableDataSource().then(() => {
+                    return store.dispatch('dataSource/modifyOnlineDb', record).then(() => {
+                        return store.dispatch('dataSource/add', postData).then(() => {
+                            messageSuccess('新增表成功')
+                            changeEdit(false)
+                            goBack()
+                        })
+                    })
+                }).catch((error) => {
+                    messageError(error.message || error)
+                }).finally(() => {
+                    isLoading.value = false
+                })
+            }
+
+            const enableDataSource = () => {
+                const projectInfo = store.getters['project/currentProject'] || {}
+                const isEnableDataSource = projectInfo.isEnableDataSource
+                if (isEnableDataSource) {
+                    return Promise.resolve()
+                } else {
+                    return store.dispatch('dataSource/enable', projectId)
+                }
+            }
+
             return {
+                hasEdit,
+                sql,
+                isLoading,
+                showConfirmDialog,
+                basicFormRef,
+                fieldTableRef,
                 tableStatus,
-                goBack
+                changeEdit,
+                goBack,
+                submit,
+                confirmSubmit
             }
         }
     })
@@ -108,9 +211,6 @@
             line-height: 19px;
             font-size: 14px;
             margin: 0 0 12px;
-        }
-        .section-item {
-            width: 483px;
         }
     }
 </style>

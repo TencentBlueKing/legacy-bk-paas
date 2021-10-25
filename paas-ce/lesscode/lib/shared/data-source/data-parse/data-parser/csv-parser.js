@@ -24,7 +24,7 @@ function transformJson2Csv () {
 /**
  * csv 操作
  */
-export class CsvParser {
+export class DataCsvParser {
     constructor (csv) {
         this.csv = csv
     }

@@ -8,11 +8,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import {
+    reactive,
+    ref
+} from '@vue/composition-api'
+
 export interface IBasicInfo {
     tableName: string,
     engine: string,
     character: string,
-    summary: string
+    comment: string
 }
 
 export interface ITableField {
@@ -23,18 +28,43 @@ export interface ITableField {
     createDate?: boolean,
     updateDate?: boolean,
     default?: string | number,
-    summary?: boolean,
+    comment?: string
 }
 
 export interface ITableFiledObject {
     [prop: string]: ITableField
 }
 
-export const tableBasicInfo: IBasicInfo = {
-    tableName: '',
-    engine: 'InnoDB',
-    character: 'utf8mb4',
-    summary: ''
+export interface ITableStatus {
+    basicInfo: IBasicInfo,
+    data: ITableField[]
+}
+
+/**
+ * 获取默认的 table 数据
+ * @param status 传入初始化数据
+ * @returns 返回表状态数据
+ */
+export function useTableStatus (status = {}) {
+    const finalStatus = Object.assign({
+        basicInfo: {
+            tableName: '',
+            engine: 'InnoDB',
+            character: 'utf8mb4',
+            comment: ''
+        },
+        data: []
+    }, status)
+    return {
+        tableStatus: reactive<ITableStatus>(finalStatus),
+        sql: ref(''),
+        isLoading: ref(false),
+        isSaving: ref(false),
+        hasEdit: ref(false),
+        showConfirmDialog: ref(false),
+        basicFormRef: ref(null),
+        fieldTableRef: ref(null)
+    }
 }
 
 /**

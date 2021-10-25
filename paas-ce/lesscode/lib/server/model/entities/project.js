@@ -54,6 +54,13 @@ export default class extends Base {
     isOffcial
 
     @Column({
+        type: 'int',
+        default: '0',
+        comment: '是否开启数据源，1代表已开启'
+    })
+    isEnableDataSource
+
+    @Column({
         type: 'varchar',
         comment: '模板分类'
     })

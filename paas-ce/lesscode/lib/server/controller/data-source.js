@@ -9,9 +9,22 @@
  * specific language governing permissions and limitations under the License.
  */
 import dataService from '../service/data-service'
-import { getPreviewDbEngine } from '../service/preview-service'
 import dataTableModifyRecord from '../model/data-table-modify-record'
-import { Controller, Get, Post, Put, BodyParams, QueryParams, DeleteAuthorization } from '../decorator'
+import OnlineDBService from '../service/online-db-service'
+import DBEngineService from '../service/db-engine-service'
+import {
+    getPreviewDbEngine,
+    getPreviewDbConfig
+} from '../service/preview-db-service'
+import {
+    Controller,
+    Get,
+    Post,
+    Put,
+    BodyParams,
+    QueryParams,
+    DeleteAuthorization
+} from '../decorator'
 const util = require('../util')
 
 @Controller('/api/data-source')
@@ -19,10 +32,13 @@ export default class DataSourceController {
     // 开启数据源，需要同步创建项目下的数据库和用户
     @Post('/enable')
     async enable (@BodyParams() body) {
-        const { projectId, projectCode } = body
+        const { projectId } = body
+        const projectInfo = await dataService.findOne('project', { id: projectId })
+        projectInfo.isEnableDataSource = 1
+
         const dbInfo = {
             projectId,
-            dbName: projectCode,
+            dbName: projectInfo.projectCode,
             userName: util.uuid(),
             passWord: util.uuid()
         }
@@ -39,34 +55,65 @@ export default class DataSourceController {
         })
 
         // 写入数据库
-        return dataService.add('preview-db', dbInfo)
-    }
-
-    // 修改预览环境数据库，包含表结构和表数据修改
-    @Put('/modifyPreviewDb')
-    async modifyPreviewDb (@BodyParams() body) {
-        const { projectId, sql } = body
-        const previewDbEngine = await getPreviewDbEngine(projectId)
-        await previewDbEngine.execMultSql(sql)
-        return true
+        return Promise.all([
+            dataService.update('project', projectInfo),
+            dataService.add('preview-db', dbInfo)
+        ])
     }
 
     // 获取项目下的所有表结构
     @Get('/getTableList')
-    getTableList (
+    async getTableList (
         @QueryParams({ name: 'projectId', require: true }) projectId,
         @QueryParams({ name: 'pageSize', default: 10 }) pageSize,
         @QueryParams({ name: 'page', default: 1 }) page
     ) {
         const queryParams = {
-            projectId,
-            order: {
-                updateTime: 'DESC'
-            },
-            skip: (page - 1) * pageSize,
-            take: pageSize
+            projectId
         }
-        return dataService.get('data-table', queryParams)
+        const datas = await dataService.get('data-table', queryParams)
+        const sortData = datas.sort((a, b) => (b.updateTime - a.updateTime))
+        const startIndex = (page - 1) * pageSize
+        const endIndex = page * pageSize
+        const filterData = sortData.slice(startIndex, endIndex)
+        const list = filterData.map((data) => {
+            data.columns = JSON.parse(data.columns)
+            return data
+        })
+        return {
+            list,
+            count: datas.length
+        }
+    }
+
+    // 获取表详情
+    @Get('/getTableDetail')
+    async getTableDetail (
+        @QueryParams({ name: 'id' }) id
+    ) {
+        const queryParams = { id }
+        const data = await dataService.findOne('data-table', queryParams)
+        data.columns = JSON.parse(data.columns)
+        return data
+    }
+
+    // 获取表详情
+    @Post('/tableRecordList')
+    tableRecordList (
+        @BodyParams({ name: 'id' }) id,
+        @BodyParams({ name: 'createUser' }) createUser,
+        @BodyParams({ name: 'timeRange', default: [] }) timeRange
+    ) {
+        timeRange = timeRange.filter(v => v)
+        const queryParams = {
+            startTime: timeRange[0],
+            endTime: timeRange[1],
+            createUser,
+            query: {
+                tableId: id
+            }
+        }
+        return dataTableModifyRecord.getListByTime(queryParams)
     }
 
     // 新增表结构
@@ -75,8 +122,13 @@ export default class DataSourceController {
         @BodyParams({ name: 'dataTable', require: true }) dataTable,
         @BodyParams({ name: 'record', require: true }) record
     ) {
+        dataTable.columns = JSON.stringify(dataTable.columns)
         const data = await dataService.add('data-table', dataTable)
-        await dataService.add('data-table-modify-record', record)
+        const tableModifyRecord = {
+            ...record,
+            tableId: data.id
+        }
+        await dataService.add('data-table-modify-record', tableModifyRecord)
         return data
     }
 
@@ -86,6 +138,7 @@ export default class DataSourceController {
         @BodyParams({ name: 'dataTable', require: true }) dataTable,
         @BodyParams({ name: 'record', require: true }) record
     ) {
+        dataTable.columns = JSON.stringify(dataTable.columns)
         const data = await dataService.update('data-table', dataTable)
         await dataService.add('data-table-modify-record', record)
         return data
@@ -95,19 +148,60 @@ export default class DataSourceController {
     @DeleteAuthorization({ perm: 'delete_variable', tableName: 'data-table', getId: ctx => ctx.request.body.id })
     @Put('/deleteTable')
     async deleteTable (
-        @BodyParams({ name: 'id', require: true }) id,
-        @BodyParams({ name: 'record', require: true }) record
+        @BodyParams({ name: 'ids', require: true }) ids,
+        @BodyParams({ name: 'records', require: true }) records
     ) {
-        const data = await dataService.delete('data-table', id)
-        await dataService.add('data-table-modify-record', record)
+        const data = await dataService.bulkSoftDelete('data-table', ids)
+        await dataService.add('data-table-modify-record', records)
         return data
     }
 
-    // 获取sql变更历史
-    @Get('/getSqlRecord')
-    getSqlRecord (
+    // 修改线上环境数据库，包含表结构和表数据修改
+    @Put('/modifyOnlineDb')
+    async modifyOnlineDb (
+        @BodyParams({ name: 'environment', default: 'preview' }) environment,
+        @BodyParams({ name: 'projectId', require: true }) projectId,
+        @BodyParams({ name: 'sql', require: true }) sql
+    ) {
+        const dbConfigMap = {
+            preview: getPreviewDbConfig
+        }
+        const previewDbConfig = await dbConfigMap[environment](projectId)
+        const dbEngine = new DBEngineService(previewDbConfig)
+        return dbEngine.execMultSql(sql)
+    }
+
+    // 获取线上表列表
+    @Get('/getOnlineTableList')
+    async getOnlineTableList (
+        @QueryParams({ name: 'environment', require: true }) environment,
         @QueryParams({ name: 'projectId', require: true }) projectId
     ) {
-        return dataTableModifyRecord.getListByTime({ projectId })
+        const dbConfigMap = {
+            preview: getPreviewDbConfig
+        }
+        const previewDbConfig = await dbConfigMap[environment](projectId)
+        const dbEngine = new DBEngineService(previewDbConfig)
+        const onlineDBService = new OnlineDBService(dbEngine)
+        const onlineTables = await onlineDBService.showTables()
+        return onlineDBService.describeTables(onlineTables)
+    }
+
+    // 获取线上表数据
+    @Get('/getOnlineTableDatas')
+    async getOnlineTableDatas (
+        @QueryParams({ name: 'environment', require: true }) environment,
+        @QueryParams({ name: 'projectId', require: true }) projectId,
+        @QueryParams({ name: 'tableName', require: true }) tableName,
+        @QueryParams({ name: 'page', require: true }) page,
+        @QueryParams({ name: 'pageSize', require: true }) pageSize
+    ) {
+        const dbConfigMap = {
+            preview: getPreviewDbConfig
+        }
+        const previewDbConfig = await dbConfigMap[environment](projectId)
+        const dbEngine = new DBEngineService(previewDbConfig)
+        const onlineDBService = new OnlineDBService(dbEngine)
+        return onlineDBService.getTableData(tableName, page, pageSize)
     }
 }

@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
- * Copyright (C) 2017-2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
@@ -9,33 +9,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-function filterCsv () {
-
-}
-
-function transformCsv2Json () {
-
-}
-
-function transformJson2Csv () {
-
-}
-
-/**
- * csv 操作
- */
-export class StructCsvParser {
-    constructor (csv) {
-        this.csv = csv
-    }
-
-    import (that = {}) {
-        const csv = filterCsv(this.csv)
-        that.json = transformCsv2Json(csv)
-        return csv
-    }
-
-    export (that) {
-        return transformJson2Csv(that.json)
-    }
-}
+export * from './constant'
+export { DataParse } from './data-parse/index'
+export { DataCsvParser } from './data-parse/data-parser/csv-parser'
+export { DataSqlParser } from './data-parse/data-parser/sql-parser'
+export { DataJsonParser } from './data-parse/data-parser/json-parser'
+export { StructCsvParser } from './data-parse/struct-parser/csv-parser'
+export { StructSqlParser } from './data-parse/struct-parser/sql-parser'
+export { StructJsonParser } from './data-parse/struct-parser/json-parser'

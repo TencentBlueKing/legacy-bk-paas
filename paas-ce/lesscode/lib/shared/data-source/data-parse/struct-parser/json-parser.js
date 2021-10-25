@@ -9,33 +9,32 @@
  * specific language governing permissions and limitations under the License.
  */
 
-function filterCsv () {
-
-}
-
-function transformCsv2Json () {
-
-}
-
-function transformJson2Csv () {
-
-}
-
 /**
- * csv 操作
+ * json 操作
  */
-export class StructCsvParser {
-    constructor (csv) {
-        this.csv = csv
+export class StructJsonParser {
+    constructor (datas) {
+        this.datas = datas || []
+    }
+
+    set (that = {}) {
+        that.finalDatas = this.datas
+        return that
     }
 
     import (that = {}) {
-        const csv = filterCsv(this.csv)
-        that.json = transformCsv2Json(csv)
-        return csv
+        this.datas.forEach((data) => {
+            const sameData = that.finalDatas.find((finalData) => (finalData.id === data.id))
+            if (sameData) {
+                Object.assign(sameData, data)
+            } else {
+                that.finalDatas.push(data)
+            }
+        })
+        return that
     }
 
     export (that) {
-        return transformJson2Csv(that.json)
+        return that.finalDatas
     }
 }

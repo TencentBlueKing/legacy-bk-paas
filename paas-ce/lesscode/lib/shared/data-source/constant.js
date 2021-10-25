@@ -12,30 +12,92 @@
 /**
  * 数据源，公共 orm columns
  */
-export const baseColumns = {
+export const BASE_COLUMNS = {
     id: {
         type: 'int',
         primary: true,
-        generated: true
+        generated: true,
+        index: true,
+        nullable: false,
+        comment: '自增唯一主键。系统保留字段，不可修改'
     },
     createTime: {
         type: 'datetime',
-        createDate: true
+        createDate: true,
+        nullable: true,
+        comment: '系统会默认写入数据创建时间。系统保留字段，不推荐修改'
     },
     createUser: {
         type: 'varchar',
-        length: 255
+        length: 255,
+        nullable: true,
+        comment: '系统会默认写入数据创建人。系统保留字段，不推荐修改'
     },
     updateTime: {
         type: 'datetime',
-        updateDate: true
+        updateDate: true,
+        nullable: true,
+        comment: '系统会默认写入数据更新时间。系统保留字段，不推荐修改'
     },
     updateUser: {
         type: 'varchar',
-        length: 255
-    },
-    deleteFlag: {
-        type: 'int',
-        default: 0
+        length: 255,
+        nullable: true,
+        comment: '系统会默认写入数据更新人。系统保留字段，不推荐修改'
     }
+}
+
+/**
+ * 数据源使用的 ORM KEYS
+ */
+export const ORM_KEYS = [
+    'type',
+    'name',
+    'primary',
+    'index',
+    'nullable',
+    'default',
+    'comment',
+    'createDate',
+    'updateDate',
+    'length',
+    'columnId'
+]
+
+/**
+ * 数据的修改类型
+ */
+export const DATA_MODIFY_TYPE = {
+    INSERT: 'insert',
+    UPDATE: 'update',
+    DELETE: 'delete'
+}
+
+/**
+ * 索引的修改类型
+ */
+export const INDEX_MODIFY_TYPE = {
+    DROP: 'DROP',
+    ADD: 'ADD'
+}
+
+/**
+ * 字段的修改类型
+ */
+export const FIELD_MODIFY_TYPE = {
+    CHANGE_COLUMN: (name) => `CHANGE COLUMN ${name}`,
+    MODIFY_COLUMN: 'MODIFY COLUMN',
+    ADD_COLUMN: 'ADD COLUMN',
+    DROP_COLUMN: 'DROP COLUMN'
+}
+
+/**
+ * 表的修改类型
+ */
+export const TABLE_MODIFY_TYPE = {
+    CREATE: 'create',
+    MODIFY: 'modify',
+    DROP: 'drop',
+    RENAME: 'rename',
+    COMMENT: 'comment'
 }
