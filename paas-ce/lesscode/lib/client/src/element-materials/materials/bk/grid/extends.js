@@ -15,7 +15,7 @@ export default function (children) {
         type: 'render-grid',
         displayName: 'grid',
         group: '布局',
-        styles: ['size', 'margin', 'padding', 'backgroundColor'],
+        styles: ['size', 'minWidth', 'margin', 'padding', 'backgroundColor', 'border'],
         props: {
             gutter: {
                 type: 'number',

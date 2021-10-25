@@ -17,7 +17,7 @@ export default {
     group: '基础',
     order: 1,
     events: [{ name: 'click', tips: '文字链接点击时调用该事件函数，事件回调参数 (event: Event)' }],
-    styles: ['size', 'margin', 'padding', 'display', 'font', 'textAlign'],
+    styles: ['size', 'margin', 'padding', 'display', 'font', 'textAlign', 'border', 'backgroundColor'],
     renderStyles: {
         display: 'inline-block',
         textAlign: 'center'

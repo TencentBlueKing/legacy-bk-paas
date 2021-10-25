@@ -42,6 +42,7 @@
     import StyleColor from './strategy/color'
     import StyleTextAlign from './strategy/text-align'
     import StyleDisplay from './strategy/display'
+    import StyleMinWidth from './strategy/min-width'
 
     const components = {
         StyleLayout,
@@ -55,7 +56,8 @@
         backgroundColor: StyleBackgroundColor,
         color: StyleColor,
         textAlign: StyleTextAlign,
-        display: StyleDisplay
+        display: StyleDisplay,
+        minWidth: StyleMinWidth
     }
 
     export default {
