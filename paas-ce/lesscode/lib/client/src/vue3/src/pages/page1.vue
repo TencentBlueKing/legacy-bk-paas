@@ -5,11 +5,11 @@
     <div class='msg-title'>{{microDataStr}}</div>
     <br />
     <button class="bk-button">我污染了 .bk-button</button>
-    <!-- <router-link to="/page2">
+    <router-link to="/page2">
       <el-button type="primary" plain>show element-plus</el-button>
-    </router-link> -->
-    <!-- <el-button type="primary" plain @click="handleClick">show globalStr</el-button> -->
-    <!-- <el-button type="primary" plain @click="send">向 parent 发数据</el-button> -->
+    </router-link>
+    <el-button type="primary" plain @click="handleClick">show globalStr</el-button>
+    <el-button type="primary" plain @click="send">向 parent 发数据sddasasdas</el-button>
   </div>
 </template>
 

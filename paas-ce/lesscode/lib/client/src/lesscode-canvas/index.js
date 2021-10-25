@@ -35,7 +35,7 @@ class LesscodeCanvas extends HTMLElement {
     connectedCallback () {
         // console.log('connectedCallbackconnectedCallbackconnectedCallback')
         this.entry = this.host.replace(/\/$/, '') + '/' + this.path.replace(/^\//, '')
-        console.warn(this.name, this.host, this.path, this.route, this.entry)
+        console.log(this.name, this.host, this.path, this.route, this.entry)
         const app = new App({
             name: this.name,
             entry: this.entry,
