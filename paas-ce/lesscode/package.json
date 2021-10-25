@@ -46,8 +46,8 @@
     },
     "dev": {
       "command.bak": "npm run dll && nodemon --config nodemon.json",
-      "command1": "npm run dll && npm-run-all --parallel main dev:*",
-      "command": "npm run dll && npm-run-all --parallel main",
+      "command": "npm run dll && npm-run-all --parallel main dev:*",
+      "command1": "npm run dll && npm-run-all --parallel main",
       "env": {
         "NODE_ENV": "development",
         "APP_CODE": ""

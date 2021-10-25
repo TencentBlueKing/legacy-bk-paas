@@ -282,6 +282,11 @@ const routes = [
         ]
     },
     {
+        name: 'lesscodeCanvasEntry',
+        path: '/project/:projectId/page/:pageId/*',
+        component: Index
+    },
+    {
         path: '/preview/project/:projectId/*',
         name: 'preview',
         component: Preview

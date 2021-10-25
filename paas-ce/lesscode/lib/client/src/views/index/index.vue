@@ -189,11 +189,12 @@
                         <!-- <div id="lesscode-canvas">
                             www
                         </div> -->
+                        lesscodeCanvasHost--{{lesscodeCanvasHost}}
                         <lesscode-canvas id="lesscode-canvas"
                             name="vue3"
-                            host=""
+                            :host="lesscodeCanvasHost"
                             path="static/dist-vue3"
-                            :route="$route.path">
+                            :route="$route.name === 'lesscodeCanvasEntry' ? $route.fullPath.replace($route.params.pathMatch, '') : $route.path">
                         </lesscode-canvas>
                         <!-- <vue-draggable
                             v-show="!contentLoading"
@@ -489,7 +490,8 @@
                         { icon: 'bk-drag-icon bk-drag-keyboard', text: '快捷键', func: () => this.toggleShowQuickOperation(true) }
                     ]
                 ],
-                infoLinkDict: {}
+                infoLinkDict: {},
+                lesscodeCanvasHost: 'http://dev.open.oa.com:5001/'
             }
         },
         computed: {
@@ -579,6 +581,10 @@
             }
         },
         async created () {
+            if (NODE_ENV !== 'development') {
+                this.lesscodeCanvasHost = ''
+            }
+
             this.guideStep = [
                 {
                     title: '组件库和图标',
