@@ -1,12 +1,12 @@
 <template>
-    <article v-bkloading="{ isLoading: tableStatus.isLoading }">
+    <article v-bkloading="{ isLoading }">
         <render-header>
             <span class="table-header">
                 <i class="bk-drag-icon bk-drag-arrow-back" @click="goBack"></i>
                 查看表【{{tableStatus.basicInfo.tableName}}】
                 <bk-divider direction="vertical"></bk-divider>
                 <export-table title="导出表" class="mr10 ml5" size="small"></export-table>
-                <bk-button size="small" class="mr10">变更记录</bk-button>
+                <bk-button size="small" class="mr10" @click="goRecord">变更记录</bk-button>
                 <bk-button size="small" @click="goEdit">编辑</bk-button>
             </span>
         </render-header>
@@ -14,19 +14,19 @@
         <main class="table-main">
             <section class="table-section">
                 <h5 class="section-title">基础信息</h5>
-                <info-table ref="basicForm" :basic-info="tableStatus.basicInfo" :is-edit="false"></info-table>
+                <info-table :basic-info="tableStatus.basicInfo" :is-edit="false"></info-table>
             </section>
 
             <section class="table-section">
                 <h5 class="section-title">字段配置</h5>
                 <bk-table :outer-border="false" :data="tableStatus.data">
-                    <bk-table-column label="字段名称" prop="name"></bk-table-column>
+                    <bk-table-column label="字段名称" prop="name" show-overflow-tooltip></bk-table-column>
                     <bk-table-column label="字段类型" prop="type"></bk-table-column>
                     <bk-table-column label="主键" prop="primary" :formatter="boolFormatter"></bk-table-column>
                     <bk-table-column label="索引" prop="index" :formatter="boolFormatter"></bk-table-column>
                     <bk-table-column label="可空" prop="nullable" :formatter="boolFormatter"></bk-table-column>
-                    <bk-table-column label="默认值" prop="default"></bk-table-column>
-                    <bk-table-column label="备注" prop="comment"></bk-table-column>
+                    <bk-table-column label="默认值" prop="default" show-overflow-tooltip></bk-table-column>
+                    <bk-table-column label="备注" prop="comment" show-overflow-tooltip></bk-table-column>
                 </bk-table>
             </section>
         </main>
@@ -59,11 +59,18 @@
         },
 
         setup () {
-            const tableStatus = useTableStatus()
+            const {
+                tableStatus,
+                isLoading
+            } = useTableStatus()
             const id = router?.currentRoute?.query?.id
 
             const goBack = () => {
                 router.push({ name: 'tableList' })
+            }
+
+            const goRecord = () => {
+                router.push({ name: 'updateTableRecord', query: { id } })
             }
 
             const goEdit = () => {
@@ -78,7 +85,7 @@
             }
 
             const getDetail = () => {
-                tableStatus.isLoading = true
+                isLoading.value = true
                 store.dispatch('dataSource/findOne', id).then((data) => {
                     tableStatus.basicInfo.tableName = data.tableName
                     tableStatus.basicInfo.comment = data.comment
@@ -86,7 +93,7 @@
                 }).catch((error) => {
                     messageError(error.message || error)
                 }).finally(() => {
-                    tableStatus.isLoading = false
+                    isLoading.value = false
                 })
             }
 
@@ -94,7 +101,9 @@
 
             return {
                 tableStatus,
+                isLoading,
                 goBack,
+                goRecord,
                 goEdit,
                 boolFormatter
             }

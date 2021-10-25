@@ -9,7 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 import {
-    reactive
+    reactive,
+    ref
 } from '@vue/composition-api'
 
 export interface IBasicInfo {
@@ -27,7 +28,7 @@ export interface ITableField {
     createDate?: boolean,
     updateDate?: boolean,
     default?: string | number,
-    comment?: boolean,
+    comment?: string
 }
 
 export interface ITableFiledObject {
@@ -36,9 +37,7 @@ export interface ITableFiledObject {
 
 export interface ITableStatus {
     basicInfo: IBasicInfo,
-    data: ITableField[],
-    isLoading: boolean,
-    isSaving: boolean
+    data: ITableField[]
 }
 
 /**
@@ -46,7 +45,7 @@ export interface ITableStatus {
  * @param status 传入初始化数据
  * @returns 返回表状态数据
  */
-export function useTableStatus (status = {}): ITableStatus {
+export function useTableStatus (status = {}) {
     const finalStatus = Object.assign({
         basicInfo: {
             tableName: '',
@@ -54,11 +53,18 @@ export function useTableStatus (status = {}): ITableStatus {
             character: 'utf8mb4',
             comment: ''
         },
-        data: [],
-        isLoading: false,
-        isSaving: false
+        data: []
     }, status)
-    return reactive<ITableStatus>(finalStatus)
+    return {
+        tableStatus: reactive<ITableStatus>(finalStatus),
+        sql: ref(''),
+        isLoading: ref(false),
+        isSaving: ref(false),
+        hasEdit: ref(false),
+        showConfirmDialog: ref(false),
+        basicFormRef: ref(null),
+        fieldTableRef: ref(null)
+    }
 }
 
 /**

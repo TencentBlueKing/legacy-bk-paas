@@ -13,7 +13,7 @@ import DBEngineService from './db-engine-service'
 import dataService, { getDataService } from './data-service'
 import { EntitySchema, createConnection, EventSubscriber } from 'typeorm'
 import { RequestContext } from '../middleware/request-context'
-import { baseColumns } from '../../shared/data-source/constant'
+import { BASE_COLUMNS } from '../../shared/data-source/constant'
 const dataBaseConf = require('../conf/data-base')
 
 /**
@@ -77,7 +77,7 @@ export const getPreviewDataService = async (projectId) => {
         const entity = new EntitySchema({
             name: cur.tableName,
             columns: {
-                ...baseColumns,
+                ...BASE_COLUMNS,
                 ...JSON.parse(cur.columns || '{}')
             }
         })

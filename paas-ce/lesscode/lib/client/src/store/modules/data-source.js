@@ -21,6 +21,12 @@ export default {
     getters: {
     },
     actions: {
+        enable (_, projectId) {
+            return http.post(`${perfix}/enable`, { projectId }).then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
         list (state, params = {}) {
             return http.get(`${perfix}/getTableList`, { params }).then(response => {
                 const data = response.data || []
@@ -32,8 +38,42 @@ export default {
                 return response.data
             })
         },
+        delete (_, deleteData) {
+            return http.put(`${perfix}/deleteTable`, deleteData).then(response => {
+                return response.data
+            })
+        },
+        edit (_, postData) {
+            return http.put(`${perfix}/updateTable`, postData).then(response => {
+                return response.data
+            })
+        },
         findOne (_, id) {
             return http.get(`${perfix}/getTableDetail`, { params: { id } }).then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
+        modifyOnlineDb (_, data) {
+            return http.put(`${perfix}/modifyOnlineDb`, data).then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
+        tableRecordList (_, params) {
+            return http.post(`${perfix}/tableRecordList`, params).then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
+        getOnlineTableList (_, params) {
+            return http.get(`${perfix}/getOnlineTableList`, { params }).then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
+        getOnlineTableDatas (_, params) {
+            return http.get(`${perfix}/getOnlineTableDatas`, { params }).then(response => {
                 const data = response.data || []
                 return data
             })

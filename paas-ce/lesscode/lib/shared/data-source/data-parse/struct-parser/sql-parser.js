@@ -10,6 +10,11 @@
  */
 
 import { diff } from '../common'
+import {
+    TABLE_MODIFY_TYPE,
+    FIELD_MODIFY_TYPE,
+    INDEX_MODIFY_TYPE
+} from '../../constant'
 
 /**
  * 对导入的sql过滤
@@ -31,42 +36,46 @@ function transformSql2Json () {
 /**
  * 获取字段的sql信息
  * @param {*} column 当前行
- * @param {*} lastColumn 上一行，用于生成 AFTER
  * @returns 字段信息的 sql 字符串
  */
-function getTableColumnSql (column, lastColumn) {
-    const typeMap = {
-        int: 'int(11)',
-        varchar: 'varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci',
-        datetime: 'datetime(0)'
+function getTableColumnSql (column) {
+    // 获取字段类型
+    const getType = (column) => {
+        const typeMap = {
+            int: 'int(11)',
+            varchar: 'varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci',
+            datetime: 'datetime(0)'
+        }
+        return typeMap[column.type]
     }
+    // 非空
     const getNullable = (column) => {
         return column.nullable ? 'NULL' : 'NOT NULL'
     }
-    const generatedMap = {
-        true: 'AUTO_INCREMENT',
-        false: ''
+    // 自增
+    const getGenerated = (column) => {
+        return column.generated ? 'AUTO_INCREMENT' : ''
     }
+    // 默认值
     const getDefault = (column) => {
-        let defaultStr
-        if (column.createDate) defaultStr = 'DEFAULT CURRENT_TIMESTAMP(0)'
+        if (column.createDate) return 'DEFAULT CURRENT_TIMESTAMP(0)'
 
-        if (column.updateDate) defaultStr = 'DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0)'
+        if (column.updateDate) return 'DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0)'
 
         if (Reflect.has(column, 'default')) {
             const defaultVal = column.default
-            defaultStr = typeof defaultVal === 'string' ? `DEFAULT '${defaultVal}'` : `DEFAULT ${defaultVal}`
+            return typeof defaultVal === 'string' ? `DEFAULT '${defaultVal}'` : `DEFAULT ${defaultVal}`
         }
-        return defaultStr
     }
+    // 注释
     const getComment = (column) => {
         return column.comment ? `COMMENT '${column.comment}'` : ''
     }
     const sqlArray = [
         column.name,
-        typeMap[column.type],
+        getType(column),
         getNullable(column),
-        generatedMap[column.generated],
+        getGenerated(column),
         getDefault(column),
         getComment(column)
     ]
@@ -78,13 +87,10 @@ function getTableColumnSql (column, lastColumn) {
  * @param {*} columns 所有的字段
  * @returns 主键相关 sql
  */
-function getPrimaryKey (columns) {
-    let primaryKeyStr = ''
-    const primaryColumns = columns.filter(column => column.primary).map(x => x.name)
-    if (primaryColumns.length) {
-        primaryKeyStr = `PRIMARY KEY (${primaryColumns.join(',')}) USING BTREE`
+function getPrimaryKey (data) {
+    if (data.primary) {
+        return `PRIMARY KEY (${data.name}) USING BTREE`
     }
-    return primaryKeyStr
 }
 
 /**
@@ -92,11 +98,13 @@ function getPrimaryKey (columns) {
  * @param {*} columns 所有的字段
  * @returns 索引相关 sql
  */
-function getIndex (columns) {
-    const indexColumns = columns.filter(column => column.index)
-    return indexColumns.map((indexColumn) => {
-        return `INDEX ${indexColumn.name}(${indexColumn.name}) USING BTREE`
-    })
+function getIndex ({ type, data }) {
+    if (type === INDEX_MODIFY_TYPE.DROP) {
+        return `INDEX ${data.name}`
+    }
+    if (type === INDEX_MODIFY_TYPE.ADD) {
+        return `INDEX ${data.name}(${data.name}) USING BTREE`
+    }
 }
 
 /**
@@ -104,16 +112,17 @@ function getIndex (columns) {
  * @param {*} data
  * @returns sql字符串
  */
-function createTable (data) {
+function createTable (data, index) {
     const { tableName, comment = '', columns } = data
     const fields = ([
         ...columns.map(getTableColumnSql),
-        getPrimaryKey(columns),
-        ...getIndex(columns)
-    ]).map(x => `    ${x}`)
+        ...columns.map(getPrimaryKey),
+        ...index.map(getIndex)
+    ]).filter(v => v).map(x => `    ${x}`)
+
     return (
         '-- ----------------------------\n'
-        + `-- Table structure for ${tableName}\n`
+        + `-- TABLE STRUCTURE FOR ${tableName}\n`
         + '-- ----------------------------\n'
         + `DROP TABLE IF EXISTS ${tableName};\n`
         + `CREATE TABLE ${tableName}  (\n`
@@ -128,12 +137,30 @@ function createTable (data) {
  * @param {*} data
  * @returns sql字符串
  */
-function modifyTable (data) {
+function modifyTable (data, index = []) {
+    const { tableName, columns = [] } = data
+    const sqlArr = []
+
+    columns.forEach(({ type, data }) => {
+        const columnDetailSql = getTableColumnSql(data)
+        if (type === FIELD_MODIFY_TYPE.DROP_COLUMN) {
+            sqlArr.push(`${type} ${data.name}`)
+        } else {
+            sqlArr.push(`${type} ${columnDetailSql}`)
+        }
+    })
+    index.forEach((data) => {
+        const indexDetailSql = getIndex(data)
+        sqlArr.push(`${data.type} ${indexDetailSql}`)
+    })
+
     return (
         '-- ----------------------------\n'
-        + `-- Modify Table ${data.tableName}\n`
+        + `-- MODIFY TABLE ${tableName}\n`
         + '-- ----------------------------\n'
-        + `ALTER TABLE ${data.tableName}\n`
+        + `ALTER TABLE ${tableName}\n`
+        + sqlArr.join(',\n')
+        + ';'
     )
 }
 
@@ -152,6 +179,35 @@ function dropTable (data) {
 }
 
 /**
+ * 生成修改表名的sql
+ * @param {*} data 修改后的数据
+ * @param {*} originData 原始数据
+ * @returns
+ */
+function renameTable (data, originData) {
+    return (
+        '-- ----------------------------\n'
+        + `-- RENAME TABLE ${originData.tableName}\n`
+        + '-- ----------------------------\n'
+        + `ALTER TABLE ${originData.tableName} RENAME TO ${data.tableName};\n`
+    )
+}
+
+/**
+ * 生成修改注释的sql
+ * @param {*} data 修改后的数据
+ * @returns 修改注释的sql
+ */
+function comment (data) {
+    return (
+        '-- ----------------------------\n'
+        + `-- MODIFY COMMENT ${data.tableName}\n`
+        + '-- ----------------------------\n'
+        + `ALTER TABLE ${data.tableName} COMMENT = '${data.comment}';\n`
+    )
+}
+
+/**
  * 通过对比，算出变化需要执行的sql
  * @param { originDatas, finalDatas } 导入前后的数据
  * @returns sql字符串
@@ -160,23 +216,29 @@ function transformJson2Sql ({ originDatas, finalDatas }) {
     const diffResults = diff(originDatas, finalDatas)
     const sqlArray = []
 
-    diffResults.forEach(({ type, data }) => {
+    diffResults.forEach(({ type, data, originData, index }) => {
         let sql
         switch (type) {
-            case 'create':
-                sql = createTable(data)
+            case TABLE_MODIFY_TYPE.CREATE:
+                sql = createTable(data, index)
                 break
-            case 'modify':
-                sql = modifyTable(data)
+            case TABLE_MODIFY_TYPE.MODIFY:
+                sql = modifyTable(data, index)
                 break
-            case 'drop':
+            case TABLE_MODIFY_TYPE.DROP:
                 sql = dropTable(data)
+                break
+            case TABLE_MODIFY_TYPE.RENAME:
+                sql = renameTable(data, originData)
+                break
+            case TABLE_MODIFY_TYPE.COMMENT:
+                sql = comment(data)
                 break
         }
         sqlArray.push(sql)
     })
 
-    return sqlArray.join('')
+    return sqlArray.join('\n')
 }
 
 /**
@@ -190,7 +252,7 @@ export class StructSqlParser {
     import (that = {}) {
         const sql = filterSql(this.sql)
         that.finalDatas = transformSql2Json(sql)
-        return sql
+        return that
     }
 
     export (that) {

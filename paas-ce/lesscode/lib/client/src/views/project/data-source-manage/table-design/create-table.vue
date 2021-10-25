@@ -10,24 +10,30 @@
         <main class="table-main">
             <section class="table-section">
                 <h5 class="section-title">基础信息</h5>
-                <info-table ref="basicForm" :basic-info="tableStatus.basicInfo"></info-table>
+                <info-table ref="basicFormRef" :basic-info="tableStatus.basicInfo" @change="changeEdit(true)"></info-table>
             </section>
 
             <section class="table-section">
                 <h5 class="section-title">字段配置</h5>
-                <field-table :data.sync="tableStatus.data"></field-table>
+                <field-table ref="fieldTableRef" :data.sync="tableStatus.data" @change="changeEdit(true)"></field-table>
             </section>
 
-            <bk-button theme="primary" class="mr5" @click="submit" :loading="tableStatus.isLoading">提交</bk-button>
-            <bk-button @click="goBack" :disabled="tableStatus.isLoading">取消</bk-button>
+            <bk-button theme="primary" class="mr5" @click="submit" :loading="isLoading">提交</bk-button>
+            <bk-button @click="goBack" :disabled="isLoading">取消</bk-button>
         </main>
+
+        <confirm-dialog
+            :is-show.sync="showConfirmDialog"
+            :sql="sql"
+            :is-loading="isLoading"
+            @confirm="confirmSubmit"
+        ></confirm-dialog>
     </article>
 </template>
 
 <script lang="ts">
     import {
-        defineComponent,
-        ref
+        defineComponent
     } from '@vue/composition-api'
     import {
         useTableStatus,
@@ -35,7 +41,7 @@
         transformFieldArray2FieldObject
     } from './composables/table-info'
     import {
-        baseColumns,
+        BASE_COLUMNS,
         DataParse,
         StructJsonParser,
         StructSqlParser
@@ -44,9 +50,13 @@
         messageSuccess,
         messageError
     } from '@/common/bkmagic'
+    import {
+        bkInfoBox
+    } from 'bk-magic-vue'
     import renderHeader from '../common/header'
     import fieldTable from '../common/field-table'
     import infoTable from '../common/info-table.vue'
+    import confirmDialog from '../common/confirm-dialog.vue'
     import router from '@/router'
     import store from '@/store'
 
@@ -54,62 +64,122 @@
         components: {
             renderHeader,
             fieldTable,
-            infoTable
+            infoTable,
+            confirmDialog
+        },
+
+        beforeRouteLeave (to, from, next) {
+            const confirmFn = () => next()
+            const cancelFn = () => next(false)
+            if (this.hasEdit) {
+                bkInfoBox({
+                    title: '确认离开当前页面？',
+                    subTitle: '当前页面内容未保存，离开修改的内容将会丢失',
+                    confirmFn,
+                    cancelFn
+                })
+            } else {
+                confirmFn()
+            }
         },
 
         setup () {
-            const basicForm = ref(null)
-            const tableStatus = useTableStatus({
-                data: transformFieldObject2FieldArray(baseColumns)
+            const projectId = router?.currentRoute?.params?.projectId
+            const {
+                tableStatus,
+                sql,
+                isLoading,
+                hasEdit,
+                showConfirmDialog,
+                basicFormRef,
+                fieldTableRef
+            } = useTableStatus({
+                data: transformFieldObject2FieldArray(BASE_COLUMNS)
             })
 
             const goBack = () => {
                 router.push({ name: 'tableList' })
             }
 
+            const changeEdit = (val) => {
+                hasEdit.value = val
+            }
+
             const submit = () => {
-                basicForm.value.validate().then((basicInfo) => {
-                    const projectId = router?.currentRoute?.params?.projectId
-                    const dataTable = {
-                        tableName: basicInfo.tableName,
-                        comment: basicInfo.comment,
-                        projectId,
-                        columns: transformFieldArray2FieldObject(tableStatus.data)
-                    }
+                Promise.all([
+                    basicFormRef.value.validate(),
+                    fieldTableRef.value.validate()
+                ]).then(([basicInfo, tableList]) => {
                     // 基于用户创建的表格生成 sql
                     const table = {
-                        tableName: basicInfo.tableName,
-                        columns: tableStatus.data
+                        ...basicInfo,
+                        columns: tableList
                     }
                     const dataParse = new DataParse()
                     const structJsonParser = new StructJsonParser([table])
                     const structSqlParser = new StructSqlParser()
-                    const sql = dataParse.import(structJsonParser).export(structSqlParser)
-                    const record = {
-                        projectId,
-                        sql
-                    }
-                    const postData = {
-                        dataTable,
-                        record
-                    }
-                    tableStatus.isLoading = true
-                    return store.dispatch('dataSource/add', postData).then(() => {
-                        messageSuccess('新增表成功')
-                        goBack()
+                    // 写入数据
+                    sql.value = dataParse.import(structJsonParser).export(structSqlParser)
+                    Object.assign(tableStatus.basicInfo, basicInfo)
+                    tableStatus.data = tableList
+                    showConfirmDialog.value = true
+                }).catch((error) => {
+                    messageError(error.message || error)
+                })
+            }
+
+            const confirmSubmit = () => {
+                const dataTable = {
+                    ...tableStatus.basicInfo,
+                    projectId,
+                    columns: transformFieldArray2FieldObject(tableStatus.data)
+                }
+                const record = {
+                    projectId,
+                    sql: sql.value
+                }
+                const postData = {
+                    dataTable,
+                    record
+                }
+                isLoading.value = true
+                return enableDataSource().then(() => {
+                    return store.dispatch('dataSource/modifyOnlineDb', record).then(() => {
+                        return store.dispatch('dataSource/add', postData).then(() => {
+                            messageSuccess('新增表成功')
+                            changeEdit(false)
+                            goBack()
+                        })
                     })
                 }).catch((error) => {
                     messageError(error.message || error)
                 }).finally(() => {
-                    tableStatus.isLoading = false
+                    isLoading.value = false
                 })
             }
 
+            const enableDataSource = () => {
+                const projectInfo = store.getters['project/currentProject'] || {}
+                const isEnableDataSource = projectInfo.isEnableDataSource
+                if (isEnableDataSource) {
+                    return Promise.resolve()
+                } else {
+                    return store.dispatch('dataSource/enable', projectId)
+                }
+            }
+
             return {
-                basicForm,
+                hasEdit,
+                sql,
+                isLoading,
+                showConfirmDialog,
+                basicFormRef,
+                fieldTableRef,
                 tableStatus,
+                changeEdit,
                 goBack,
-                submit
+                submit,
+                confirmSubmit
             }
         }
     })

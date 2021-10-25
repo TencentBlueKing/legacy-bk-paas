@@ -9,9 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { defineComponent, toRef } from '@vue/composition-api'
+import {
+    defineComponent,
+    watch,
+    reactive,
+    toRef
+} from '@vue/composition-api'
 import { VNode } from 'vue'
 import fieldTable from '@/components/field-table/field-table'
+import { uuid } from '@/common/util'
+import { ORM_KEYS } from 'shared/data-source/constant'
 
 export interface IFieldSelectOption {
     id: string
@@ -24,68 +31,65 @@ export interface ITableField {
     prop: string
     optionsList?: IFieldSelectOption[]
     width?: string
-    isRequire?: boolean
+    isRequire?: boolean,
+    inputType?: string,
+    isEdit?: boolean
 }
 
 export interface ITableStatus {
     data: object[]
 }
 
-const tableFields: ITableField[] = [
-    {
-        name: '字段名称',
-        type: 'input',
-        prop: 'name',
-        isRequire: true
-    },
-    {
-        name: '字段类型',
-        type: 'select',
-        prop: 'type',
-        optionsList: [
-            {
-                id: 'varchar',
-                name: 'varchar'
-            },
-            {
-                id: 'int',
-                name: 'int'
-            },
-            {
-                id: 'datetime',
-                name: 'datetime'
-            }
-        ]
-    },
-    {
-        name: '主键',
-        type: 'checkbox',
-        prop: 'primary',
-        width: '100px'
-    },
-    {
-        name: '索引',
-        type: 'checkbox',
-        prop: 'index',
-        width: '100px'
-    },
-    {
-        name: '可空',
-        type: 'checkbox',
-        prop: 'nullable',
-        width: '100px'
-    },
-    {
-        name: '默认值',
-        type: 'input',
-        prop: 'default'
-    },
-    {
-        name: '备注',
-        type: 'input',
-        prop: 'comment'
+function getDefaultRow () {
+    return {
+        type: 'varchar',
+        name: '',
+        primary: false,
+        index: false,
+        nullable: false,
+        default: '',
+        comment: '',
+        defaultInputType: 'text'
     }
-]
+}
+
+/**
+ * orm 数据转为表格数据
+ * @param item orm 数据
+ * @returns 表格数据
+ */
+function normalizeTableItem (item) {
+    const defaultRow = getDefaultRow()
+    const normalizedItem = Object.assign({}, defaultRow, item)
+    if (['int', 'datetime'].includes(normalizedItem.type)) {
+        normalizedItem.defaultInputType = 'number'
+        normalizedItem.default = 0
+    } else {
+        normalizedItem.defaultInputType = 'text'
+        normalizedItem.default = ''
+    }
+    if (normalizedItem.name === 'id') {
+        normalizedItem.isEdit = true
+    }
+    if (!Reflect.has(normalizedItem, 'columnId')) {
+        normalizedItem.columnId = uuid(8)
+    }
+    return normalizedItem
+}
+
+/**
+ * 表格数据转为orm 数据
+ * @param item 表格数据
+ * @returns orm 数据
+ */
+function normalizeOrmItem (item) {
+    return ORM_KEYS.reduce((acc, cur) => {
+        if (Reflect.has(item, cur)) {
+            acc[cur] = item[cur]
+        }
+        return acc
+    }, {})
+}
 
 export default defineComponent({
     components: {
@@ -101,21 +105,93 @@ export default defineComponent({
     },
 
     setup (props: ITableStatus, { emit }) {
-        const tableList = toRef(props, 'data')
+        const tableFields: ITableField[] = [
+            {
+                name: '字段名称',
+                type: 'input',
+                prop: 'name',
+                isRequire: true
+            },
+            {
+                name: '字段类型',
+                type: 'select',
+                prop: 'type',
+                optionsList: [
+                    {
+                        id: 'varchar',
+                        name: 'varchar'
+                    },
+                    {
+                        id: 'int',
+                        name: 'int'
+                    },
+                    {
+                        id: 'datetime',
+                        name: 'datetime'
+                    }
+                ]
+            },
+            {
+                name: '索引',
+                type: 'checkbox',
+                prop: 'index',
+                width: '100px'
+            },
+            {
+                name: '可空',
+                type: 'checkbox',
+                prop: 'nullable',
+                width: '100px'
+            },
+            {
+                name: '默认值',
+                type: 'input',
+                prop: 'default'
+            },
+            {
+                name: '备注',
+                type: 'input',
+                prop: 'comment'
+            }
+        ]
+        const tableList = reactive([])
+
+        watch(
+            toRef(props, 'data'),
+            (val) => {
+                tableList.splice(0, tableList.length, ...val.map(normalizeTableItem))
+            },
+            {
+                immediate: true
+            }
+        )
 
         const addField = (row, index) => {
-            tableList.value.splice(index + 1, 0, {})
-            console.log(tableList.value)
+            const defaultRow = getDefaultRow()
+            tableList.splice(index + 1, 0, defaultRow)
         }
 
         const deleteField = (row, index) => {
-            tableList.value.splice(index, 1)
-            console.log(tableList.value)
+            tableList.splice(index, 1)
         }
 
-        const changeData = (value, index, row, data) => {
-            tableList.value.splice(index, 1, row)
-            emit('update:data', tableList.value)
+        const changeData = (value, row, column, index) => {
+            // 设置值
+            const currentRow = tableList[index]
+            currentRow[column.prop] = value
+
+            // 修改当前行状态
+            const normalizedItem = normalizeTableItem(currentRow)
+            Object.assign(currentRow, normalizedItem)
+
+            // 触发 change 事件
+            emit('change')
+        }
+
+        const validate = () => {
+            return new Promise((resolve, reject) => {
+                resolve(tableList.map(normalizeOrmItem))
+            })
         }
 
         return {
@@ -123,7 +199,8 @@ export default defineComponent({
             tableFields,
             addField,
             deleteField,
-            changeData
+            changeData,
+            validate
         }
     },
 

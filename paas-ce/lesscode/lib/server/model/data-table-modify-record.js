@@ -9,16 +9,17 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { getRepository, Between } from 'typeorm'
+import { getRepository, Between, Like } from 'typeorm'
 import DataTableModifyRecord from './entities/data-table-modify-record'
 
 const dataTableModifyRecord = {
-    getListByTime ({ projectId, startTime = 0, endTime = new Date() }) {
+    getListByTime ({ startTime = 0, endTime = new Date(), createUser = '', query = {} }) {
         const dTModifyRecordRepository = getRepository(DataTableModifyRecord)
         return dTModifyRecordRepository.find({
             deleteFlag: 0,
             createTime: Between(startTime, endTime),
-            projectId
+            createUser: Like(`%${createUser}%`),
+            ...query
         }) || []
     }
 }

@@ -26,7 +26,16 @@ export class DataParse {
     }
 
     /**
-     * 导入
+     * 覆盖的方式设置 finalDatas
+     * @param {*} parser 具体执行设置的实例
+     * @returns 返回实例，方便链式调用
+     */
+    set (parser) {
+        return parser.set(this)
+    }
+
+    /**
+     * 导入，叠加的方式
      * @param {*} parser 具体执行导入分析的实例
      * @returns 返回实例，方便链式调用
      */

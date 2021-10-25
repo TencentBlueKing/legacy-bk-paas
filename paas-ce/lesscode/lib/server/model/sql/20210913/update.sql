@@ -53,3 +53,6 @@ CREATE TABLE `preview_db`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `projectId`(`projectId`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+ALTER TABLE `project` 
+ADD COLUMN `isEnableDataSource` int(11) NULL DEFAULT 0 COMMENT '是否开启数据源，1代表已开启' AFTER `isOffcial`;

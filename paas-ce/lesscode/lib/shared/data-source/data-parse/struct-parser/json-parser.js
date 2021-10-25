@@ -17,9 +17,14 @@ export class StructJsonParser {
         this.datas = datas || []
     }
 
+    set (that = {}) {
+        that.finalDatas = this.datas
+        return that
+    }
+
     import (that = {}) {
         this.datas.forEach((data) => {
-            const sameData = that.finalDatas.find((finalData) => (finalData.tableName === data.tableName))
+            const sameData = that.finalDatas.find((finalData) => (finalData.id === data.id))
             if (sameData) {
                 Object.assign(sameData, data)
             } else {

@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { getPreviewDataService } from '../service/preview-service'
+import { getPreviewDataService } from '../service/preview-db-service'
 import func from '../model/function'
 import { Controller, All, Ctx } from '../decorator'
 

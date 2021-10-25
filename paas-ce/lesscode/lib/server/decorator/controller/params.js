@@ -29,7 +29,7 @@ const setParamMetaData = (target, metadata) => {
  * @param {*} options 校验格式 { name: string, type?: string, require?: boolean, validate?: Function }
  */
 const validateParam = (data, options = {}) => {
-    const { name, type, require, validate } = options
+    const { name, type, require, validate, default: defaultVal } = options
     const value = name ? data[name] : data
     const valueType = typeof value
 
@@ -45,7 +45,7 @@ const validateParam = (data, options = {}) => {
         throw new global.BusinessError(`Param ${name} is invalid: ${validate(value)}`, 400, 400)
     }
 
-    return value
+    return value !== undefined ? value : defaultVal
 }
 
 /**

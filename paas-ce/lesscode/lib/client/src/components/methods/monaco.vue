@@ -36,7 +36,10 @@
                 type: Boolean,
                 default: false
             },
-            options: Object
+            options: {
+                type: Object,
+                default: () => ({})
+            }
         },
 
         data () {

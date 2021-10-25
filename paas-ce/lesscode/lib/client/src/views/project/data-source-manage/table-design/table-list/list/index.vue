@@ -9,11 +9,11 @@
 
         <section class="table-list-btns">
             <bk-button theme="primary" class="table-list-btn" @click="goToDataDesign">新建表</bk-button>
-            <bk-button class="table-list-btn">批量删除</bk-button>
+            <bk-button class="table-list-btn" @click="bulkDelete" :disabled="listStatus.selectRows.length <= 0">批量删除</bk-button>
             <import-table title="导入表" class="table-list-btn"></import-table>
             <export-table title="导出表" class="table-list-btn"></export-table>
             <bk-divider direction="vertical" class="table-list-divider"></bk-divider>
-            <bk-button class="table-list-btn">数据管理</bk-button>
+            <bk-button class="table-list-btn" @click="goToDataManage">数据管理</bk-button>
             <bk-button class="table-list-btn">数据源部署记录</bk-button>
         </section>
 
@@ -25,7 +25,8 @@
             :header-border="false"
             :header-cell-style="{ background: '#f0f1f5' }"
             @page-change="handlePageChange"
-            @page-limit-change="handlePageLimitChange">
+            @page-limit-change="handlePageLimitChange"
+            @selection-change="selectionChange">
             <bk-table-column type="selection" width="60"></bk-table-column>
             <bk-table-column label="表名" prop="tableName" show-overflow-tooltip>
                 <template slot-scope="props">
@@ -42,10 +43,17 @@
                 <template slot-scope="props">
                     <bk-button class="mr10" theme="primary" text @click="goToDataDesign(props.row)">表结构设计</bk-button>
                     <bk-button class="mr10" theme="primary" text @click="goToDataManage(props.row)">数据管理</bk-button>
-                    <bk-button class="mr10" theme="primary" text @click="deleteTable(props.row)">删除</bk-button>
+                    <bk-button class="mr10" theme="primary" text @click="deleteTable([props.row])">删除</bk-button>
                 </template>
             </bk-table-column>
         </bk-table>
+
+        <confirm-dialog
+            :is-show.sync="listStatus.showConfirmDialog"
+            :sql="listStatus.sql"
+            :is-loading="listStatus.isSaving"
+            @confirm="confirmDelete"
+        ></confirm-dialog>
     </section>
 </template>
 
@@ -57,6 +65,12 @@
     import dayjs from 'dayjs'
     import importTable from '../../../common/import.vue'
     import exportTable from '../../../common/export.vue'
+    import confirmDialog from '../../../common/confirm-dialog.vue'
+    import {
+        DataParse,
+        StructJsonParser,
+        StructSqlParser
+    } from 'shared/data-source'
 
     // const { Parser } = require('node-sql-parser')
     // const parser = new Parser()
@@ -76,21 +90,37 @@
     interface IListStatus {
         pagination: IPagination
         list: any[],
-        isTableLoading: boolean
+        isTableLoading: boolean,
+        isSaving: boolean,
+        showConfirmDialog: boolean,
+        sql: string,
+        deleteData: object,
+        selectRows: any[]
     }
 
     export default defineComponent({
         components: {
             importTable,
-            exportTable
+            exportTable,
+            confirmDialog
         },
 
         setup () {
+            const projectId = router?.currentRoute?.params?.projectId
             const listStatus = reactive<IListStatus>({
                 pagination: { current: 1, count: 0, limit: 10 },
                 list: [],
-                isTableLoading: false
+                isTableLoading: false,
+                isSaving: false,
+                showConfirmDialog: false,
+                sql: '',
+                deleteData: {},
+                selectRows: []
             })
+
+            const selectionChange = (selections) => {
+                listStatus.selectRows = selections
+            }
 
             const handlePageChange = (newPage) => {
                 listStatus.pagination.current = newPage
@@ -105,13 +135,13 @@
             const getTableList = () => {
                 listStatus.isTableLoading = true
                 const params = {
-                    projectId: router?.currentRoute?.params?.projectId,
+                    projectId,
                     pageSize: listStatus.pagination.limit,
                     page: listStatus.pagination.current
                 }
-                store.dispatch('dataSource/list', params).then((list) => {
-                    listStatus.list = list
-                    listStatus.pagination.count = list.length
+                return store.dispatch('dataSource/list', params).then((res) => {
+                    listStatus.list = res.list
+                    listStatus.pagination.count = res.count
                 }).catch((err) => {
                     messageError(err.message || err)
                 }).finally(() => {
@@ -138,12 +168,59 @@
                 }
             }
 
-            const goToDataManage = () => {
-
+            const goToDataManage = (row) => {
+                router.push({
+                    name: 'dataManage',
+                    query: {
+                        tableName: row?.tableName
+                    }
+                })
             }
 
-            const deleteTable = () => {
+            const bulkDelete = () => {
+                deleteTable(listStatus.selectRows)
+            }
 
+            const deleteTable = (rows) => {
+                const ids = []
+                const records = []
+                rows.forEach((row) => {
+                    const table = {
+                        tableName: row.tableName
+                    }
+                    const dataParse = new DataParse([table])
+                    const structJsonParser = new StructJsonParser()
+                    const structSqlParser = new StructSqlParser()
+                    const record = {
+                        projectId,
+                        sql: dataParse.set(structJsonParser).export(structSqlParser),
+                        tableId: row.id
+                    }
+                    records.push(record)
+                    ids.push(row.id)
+                })
+
+                listStatus.sql = records.map(x => x.sql).join('\n')
+                listStatus.showConfirmDialog = true
+                listStatus.deleteData = { ids, records }
+            }
+
+            const confirmDelete = () => {
+                listStatus.isSaving = true
+                const execPerviewSql = {
+                    projectId,
+                    sql: listStatus.sql
+                }
+                return store.dispatch('dataSource/modifyOnlineDb', execPerviewSql).then(() => {
+                    return store.dispatch('dataSource/delete', listStatus.deleteData).then(() => {
+                        listStatus.showConfirmDialog = false
+                        getTableList()
+                    })
+                }).catch((err) => {
+                    messageError(err.message || err)
+                }).finally(() => {
+                    listStatus.isSaving = false
+                })
             }
 
             onBeforeMount(getTableList)
@@ -152,10 +229,13 @@
                 listStatus,
                 handlePageChange,
                 handlePageLimitChange,
+                selectionChange,
                 timeFormatter,
                 goToDataDesign,
                 goToDataManage,
-                deleteTable
+                bulkDelete,
+                deleteTable,
+                confirmDelete
             }
         }
     })

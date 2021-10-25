@@ -42,28 +42,58 @@ export function getDataService (name = 'default', customEntityMap) {
     }
 
     return {
+        /**
+         * 获取数据列表
+         * @param {*} tableName 表模型的文件名
+         * @param {*} query 查询参数
+         * @returns 数据列表
+         */
         get (tableName, query = {}) {
             const repository = getRepositoryByName(tableName)
             return repository.find({ deleteFlag: 0, ...query }) || []
         },
 
+        /**
+         * 获取数据详情
+         * @param {*} tableName 表模型的文件名
+         * @param {*} query 查询参数
+         * @returns 获取数据详情结果
+         */
         findOne (tableName, query = {}) {
             const repository = getRepositoryByName(tableName)
             return repository.findOne({ deleteFlag: 0, ...query }) || {}
         },
 
+        /**
+         * 添加
+         * @param {*} tableName 表模型的文件名
+         * @param {*} data 新增数据
+         * @returns 新增结果
+         */
         add (tableName, data) {
             const repository = getRepositoryByName(tableName)
             const newData = repository.create(data)
             return repository.save(newData)
         },
 
+        /**
+         * 批量添加
+         * @param {*} tableName 表模型的文件名
+         * @param {*} dataList 新增数据列表
+         * @returns 新增结果
+         */
         bulkAdd (tableName, dataList) {
             const repository = getRepositoryByName(tableName)
             const newDataList = repository.create(dataList)
             return repository.save(newDataList)
         },
 
+        /**
+         * 更新
+         * @param {*} tableName 表模型的文件名
+         * @param {*} data 更新数据
+         * @returns 更新结果
+         */
         async update (tableName, data) {
             const repository = getRepositoryByName(tableName)
             const editData = await repository.findOne({ where: { id: data.id } })
@@ -71,9 +101,16 @@ export function getDataService (name = 'default', customEntityMap) {
             return repository.save(editData)
         },
 
+        /**
+         * 批量更新
+         * @param {*} tableName 表模型的文件名
+         * @param {*} dataList 更新数据列表
+         * @returns 更新结果
+         */
         async bulkUpdate (tableName, dataList) {
             const repository = getRepositoryByName(tableName)
-            const editDataList = await repository.findOne({ where: { id: In(dataList.map(data => data.id)) } })
+            const ids = dataList.map(data => data.id)
+            const editDataList = await repository.find({ where: { id: In(ids) } })
             editDataList.forEach((editData) => {
                 const newData = dataList.find(data => data.id === editData.id)
                 Object.assign(editData, newData)
@@ -81,16 +118,50 @@ export function getDataService (name = 'default', customEntityMap) {
             return repository.save(editDataList)
         },
 
+        /**
+         * 硬删除
+         * @param {*} tableName 表模型的文件名
+         * @param {*} id 删除的 id
+         * @returns 删除结果
+         */
         async delete (tableName, id) {
+            const repository = getRepositoryByName(tableName)
+            return repository.delete(id)
+        },
+
+        /**
+         * 批量硬删除
+         * @param {*} tableName 表模型的文件名
+         * @param {*} ids 删除的 ids
+         * @returns 删除结果
+         */
+        async bulkDelete (tableName, ids) {
+            const repository = getRepositoryByName(tableName)
+            return repository.delete(ids)
+        },
+
+        /**
+         * 软删除
+         * @param {*} tableName 表模型的文件名
+         * @param {*} id 删除的 id
+         * @returns 删除结果
+         */
+        async softDelete (tableName, id) {
             const repository = getRepositoryByName(tableName)
             const deleteData = await repository.findOne({ where: { id } })
             deleteData.deleteFlag = 1
             return repository.save(deleteData)
         },
 
-        async bulkDelete (tableName, ids) {
+        /**
+         * 批量软删除
+         * @param {*} tableName 表模型的文件名
+         * @param {*} ids 删除的 ids
+         * @returns 删除结果
+         */
+        async bulkSoftDelete (tableName, ids) {
             const repository = getRepositoryByName(tableName)
-            const deleteDataList = await repository.findOne({ where: { id: In(ids) } })
+            const deleteDataList = await repository.find({ where: { id: In(ids) } })
             deleteDataList.forEach(deleteData => (deleteData.deleteFlag = 1))
             return repository.save(deleteDataList)
         }

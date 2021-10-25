@@ -9,7 +9,12 @@
             :rules="rules[field.property]"
             error-display-type="normal"
         >
-            <bk-input v-model="form[field.property]" :disabled="field.disabled" class="section-item"></bk-input>
+            <bk-input
+                v-model="form[field.property]"
+                :disabled="field.disabled"
+                class="section-item"
+                @change="change"
+            ></bk-input>
         </bk-form-item>
     </bk-form>
     <ul v-else class="info-table">
@@ -61,7 +66,7 @@
             }
         },
 
-        setup (props) {
+        setup (props, { emit }) {
             const basicForm = ref(null)
             const form = reactive({ tableName: '', comment: '' })
 
@@ -86,12 +91,17 @@
                 })
             }
 
+            const change = () => {
+                emit('change')
+            }
+
             return {
                 basicForm,
                 validate,
                 form,
                 formFields,
-                rules
+                rules,
+                change
             }
         }
     })

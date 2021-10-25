@@ -14,19 +14,33 @@
  */
 export class DataJsonParser {
     constructor (datas) {
-        this.datas = datas || []
+        this.datas = JSON.parse(JSON.stringify(datas || []))
     }
 
     import (that = {}) {
         this.datas.forEach((data) => {
-            const isRepeat = that.finalDatas.findIndex((finalData) => {
-                return JSON.stringify(data) === JSON.stringify(finalData)
-            }) >= 0
-            if (!isRepeat) {
+            const sameTable = that.finalDatas.find((finalData) => (finalData.tableName === data.tableName))
+            if (sameTable) {
+                const importDataList = data.list || []
+                const originDataList = sameTable.list || []
+                importDataList.forEach((importData) => {
+                    const originData = originDataList.find(x => x.id === importData.id)
+                    if (originData) {
+                        Object.assign(originData, importData)
+                    } else {
+                        originDataList.push(importData)
+                    }
+                })
+            } else {
                 that.finalDatas.push(data)
             }
         })
-        return that.finalDatas
+        return that
+    }
+
+    set (that = {}) {
+        that.finalDatas = this.datas
+        return that
     }
 
     export (that) {
