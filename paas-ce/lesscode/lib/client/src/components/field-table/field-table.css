@@ -5,7 +5,7 @@
       color: #ea3636;
       font-size: 14px;
     }
-    .red {
+    .error {
       border: 1px solid red;
     }
     tr.bk-table-row.hover-row {

@@ -9,12 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import {
-    defineComponent,
-    watch,
-    reactive,
-    toRef
-} from '@vue/composition-api'
+import { defineComponent, watch, reactive, toRef } from '@vue/composition-api'
 import { VNode } from 'vue'
 import fieldTable from '@/components/field-table/field-table'
 import { uuid } from '@/common/util'
@@ -31,8 +26,8 @@ export interface ITableField {
     prop: string
     optionsList?: IFieldSelectOption[]
     width?: string
-    isRequire?: boolean,
-    inputType?: string,
+    isRequire?: boolean
+    inputType?: string
     isEdit?: boolean
 }
 
@@ -40,7 +35,7 @@ export interface ITableStatus {
     data: object[]
 }
 
-function getDefaultRow () {
+function getDefaultRow() {
     return {
         type: 'varchar',
         name: '',
@@ -58,7 +53,7 @@ function getDefaultRow () {
  * @param item orm 数据
  * @returns 表格数据
  */
-function normalizeTableItem (item) {
+function normalizeTableItem(item) {
     const defaultRow = getDefaultRow()
     const normalizedItem = Object.assign({}, defaultRow, item)
     if (['int', 'datetime'].includes(normalizedItem.type)) {
@@ -82,7 +77,7 @@ function normalizeTableItem (item) {
  * @param item 表格数据
  * @returns orm 数据
  */
-function normalizeOrmItem (item) {
+function normalizeOrmItem(item) {
     return ORM_KEYS.reduce((acc, cur) => {
         if (Reflect.has(item, cur)) {
             acc[cur] = item[cur]
@@ -104,7 +99,7 @@ export default defineComponent({
         }
     },
 
-    setup (props: ITableStatus, { emit }) {
+    setup(props: ITableStatus, { emit }) {
         const tableFields: ITableField[] = [
             {
                 name: '字段名称',
@@ -159,7 +154,11 @@ export default defineComponent({
         watch(
             toRef(props, 'data'),
             (val) => {
-                tableList.splice(0, tableList.length, ...val.map(normalizeTableItem))
+                tableList.splice(
+                    0,
+                    tableList.length,
+                    ...val.map(normalizeTableItem)
+                )
             },
             {
                 immediate: true
@@ -204,7 +203,7 @@ export default defineComponent({
         }
     },
 
-    render (): VNode {
+    render(): VNode {
         return (
             <field-table
                 data={this.tableList}

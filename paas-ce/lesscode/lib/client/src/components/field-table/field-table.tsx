@@ -1,5 +1,5 @@
-import { defineComponent } from '@vue/composition-api'
-import { VNode } from 'vue'
+import { defineComponent, reactive } from '@vue/composition-api'
+import Vue, { VNode } from 'vue'
 
 import './field-table.css'
 
@@ -12,6 +12,7 @@ export default defineComponent({
         isShowCheck: Boolean
     },
     setup (props, { emit }) {
+        const tableList = reactive([])
         const renderHeader = (h, { column, $index }, item) => {
             return (
                 <span>
@@ -45,14 +46,16 @@ export default defineComponent({
         const renderInput = (item: object) => {
             const change = (value, row, item, index) => {
                 emit('change', value, row, item, index)
+                verification()
             }
             return {
                 default: (props) => {
                     const { row, $index } = props
                     const defaultSlot = (
                         <bk-input
+                            key={item.prop}
                             placeholder={item.placeholder || '请输入'}
-                            class="field-table-input"
+                            class={`field-table-input ${item.isRequire && row.isErr ? 'error' : ''}`}
                             value={row[item.prop]}
                             type={row[`${item.prop}InputType`] || 'text'}
                             disabled={row?.isEdit}
@@ -69,6 +72,7 @@ export default defineComponent({
         const renderSelect = (item: object) => {
             const change = (value, row, item, index) => {
                 emit('change', value, row, item, index)
+                verification()
             }
             return {
                 default: (props) => {
@@ -82,7 +86,7 @@ export default defineComponent({
                     const { row, $index } = props
                     const defaultSlot = (
                         <bk-select
-                            class="field-table-select"
+                            class={`field-table-select ${item.isRequire && row.isErr ? 'error' : ''}`}
                             clearable={false}
                             value={row[item.prop]}
                             disabled={row?.isEdit}
@@ -100,23 +104,36 @@ export default defineComponent({
         /** 操作列 */
         const renderOperate = () => {
             const handleAdd = (props) => {
-                emit('add', props.row, props.$index)
+                const { row, $index } = props
+                if (row.isEdit) {
+                    return
+                }
+                emit('add', row, $index)
             }
             const handleDelete = (props) => {
-                emit('delete', props.row, props.$index)
+                const { row, $index } = props
+                if (row.isEdit) {
+                    return
+                }
+                emit('delete', row, $index)
             }
             const scopedSlots = {
                 default: (props) => {
+                    const { row } = props
                     const defaultSlot = (
                         <span>
                             <i
-                                class="bk-icon icon-plus-circle-shape field-icon"
+                                class={`bk-icon icon-plus-circle-shape field-icon ${
+                                    row?.isEdit ? 'icon-disabled' : ''
+                                }`}
                                 onClick={() => {
                                     handleAdd(props)
                                 }}
                             />
                             <i
-                                class="bk-icon icon-minus-circle-shape field-icon"
+                                class={`bk-icon icon-minus-circle-shape field-icon ${
+                                    row?.isEdit ? 'icon-disabled' : ''
+                                }`}
                                 onClick={() => {
                                     handleDelete(props)
                                 }}
@@ -140,13 +157,50 @@ export default defineComponent({
                 default: (props) => item.renderFn.apply(this, [props])
             }
         }
+        const verification = () => {
+            const list = props.column.filter(item => !!item.isRequire)
+            const listReg = props.column.filter(item => !!item.reg)
+            props.data.map(item => Object.assign(item, {
+                isErr: handleIsRequire(list, item),
+                isReg: handleIsReg(listReg, item)
+            }))
+            console.log(props.data, 'props.data')
+            return props.data.findIndex(item => item.isErr || item.isReg) === -1
+        }
+        /** 校验是否必填 */
+        const handleIsRequire = (list, item) => {
+            const length = list.length
+            if (length === 1) {
+                return !item[list[0].prop]
+            } else {
+                let status = false
+                for (let i = 0; i < length - 1; i++) {
+                    status = !item[list[i].prop] || !item[list[i + 1].prop]
+                }
+                return status
+            }
+        }
+        const handleIsReg = (list, item) => {
+            const length = list.length
+            if (length === 1) {
+                return !list[0].reg.test(item[list[0].prop])
+            } else {
+                let status = false
+                for (let i = 0; i < length - 1; i++) {
+                    status = !list[i].reg.test(item[list[i].prop]) || !list[i].reg.test(item[list[i + 1].prop])
+                }
+                return status
+            }
+        }
         return {
             renderCheckbox,
             renderInput,
             renderSelect,
             renderCustomize,
             renderOperate,
-            renderHeader
+            renderHeader,
+            verification,
+            tableList
         }
     },
     render (): VNode {
