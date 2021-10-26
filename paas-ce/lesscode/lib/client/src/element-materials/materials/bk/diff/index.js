@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-diff',
     group: '数据',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    styles: ['size', 'margin', 'padding', 'display'],
     renderStyles: {
         display: 'block'
     },
