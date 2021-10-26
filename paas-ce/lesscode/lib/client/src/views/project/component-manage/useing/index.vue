@@ -95,7 +95,7 @@
     </div>
 </template>
 <script>
-    import VersionLog from '../version-log'
+    import VersionLog from '@/components/version-log'
 
     export default {
         name: '',

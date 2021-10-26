@@ -52,7 +52,8 @@ module.exports = {
             const query = ctx.request.query || {}
             const projectId = query.projectId
             const groupName = query.searchGroupStr
-            const data = await getGroupList(projectId, groupName)
+            const versionId = ''
+            const data = await getGroupList(projectId, versionId, groupName)
             ctx.send({
                 code: 0,
                 message: 'success',

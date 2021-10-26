@@ -115,6 +115,8 @@ exports.CODE = {
         PROJECT_ID_EXISTED: 4043,
         // 项目ID非法
         PROJECT_ID_INVALID: 4044,
+        // 项目版本已经存在
+        PROJECT_VERSION_EXISTED: 4045,
         // 未定义的业务逻辑错误
         NOT_DEFINED: 9999
     }

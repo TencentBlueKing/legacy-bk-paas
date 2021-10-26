@@ -8,27 +8,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+// eslint-disable-next-line no-unused-vars
+import { getConnection, getRepository } from 'typeorm'
+import ProjectVersion from './entities/project-version'
 
-import { Entity, Column } from 'typeorm'
-import Base from './base'
+export default {
+    findById (id) {
+        return getRepository(ProjectVersion).findOne(id)
+    },
 
-@Entity({ name: 'r_func_func', comment: '函数与函数关联表' })
-export default class extends Base {
-    // 父函数
-    @Column({ type: 'int' })
-    parentFuncCode
-
-    // 父函数所属的项目 Id
-    @Column({ type: 'int' })
-    projectId
-
-    // 父函数中使用的函数
-    @Column({ type: 'int' })
-    funcCode
-
-    @Column({
-        type: 'int',
-        comment: 'project_version 表主键'
-    })
-    versionId
+    getOne (params = {}) {
+        return getRepository(ProjectVersion).findOne({ where: params })
+    }
 }

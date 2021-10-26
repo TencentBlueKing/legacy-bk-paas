@@ -27,7 +27,13 @@
             </div>
         </aside>
         <div class="breadcrumbs">
-            <h3 class="current">{{ currentPage }}</h3>
+            <div class="page-top">
+                <h3 class="current">{{ currentPage }}</h3>
+                <div class="version-selector" v-if="showProjectVersionSelector">
+                    当前版本：
+                    <project-version-selector :popover-width="200" v-model="projectVersionId" />
+                </div>
+            </div>
             <extra-links></extra-links>
         </div>
         <!-- 使用v-if因子组件依赖获取的项目信息 -->
@@ -39,14 +45,17 @@
 
 <script>
     import ExtraLinks from '@/components/ui/extra-links'
+    import ProjectVersionSelector from '@/components/project-version-selector.vue'
     export default {
         components: {
-            ExtraLinks
+            ExtraLinks,
+            ProjectVersionSelector
         },
         data () {
             return {
                 pageLoading: false,
                 projectId: '',
+                projectVersionId: '',
                 navList: [
                     {
                         title: '页面列表',
@@ -87,6 +96,11 @@
                         toPath: 'routes'
                     },
                     {
+                        title: '版本管理',
+                        icon: 'router',
+                        toPath: 'versions'
+                    },
+                    {
                         title: '成员管理',
                         icon: 'user-group',
                         toPath: 'member-manage'
@@ -110,6 +124,9 @@
         computed: {
             currentPage () {
                 return this.$route.meta.title
+            },
+            showProjectVersionSelector () {
+                return ['pageList', 'functionManage'].includes(this.$route.name)
             }
         },
         beforeRouteUpdate (to, from, next) {
@@ -237,10 +254,45 @@
             background: #fff;
             box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.1);
             padding-left: 24px;
-            .current {
-                color: #000;
-                font-size: 16px;
-                font-weight: normal;
+
+            .page-top {
+                display: flex;
+                align-items: center;
+
+                .current {
+                    color: #000;
+                    font-size: 16px;
+                    font-weight: normal;
+                }
+
+                .version-selector {
+                    margin-left: 25px;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    font-size: 12px;
+
+                    &::before {
+                        content: '|';
+                        position: absolute;
+                        left: -13px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        color: #C4C6CC;
+                    }
+
+                    .project-version-selector {
+                        width: 90px;
+                        border: none;
+                        .bk-select-name,
+                        .bk-select-angle {
+                            color: #3A84FF;
+                        }
+                        &.is-focus {
+                            box-shadow: none;
+                        }
+                    }
+                }
             }
         }
 

@@ -23,12 +23,15 @@ import FuncVariable from './entities/func-variable'
 import VariableFunc from './entities/variable-func'
 import VariableVariable from './entities/variable-variable'
 
+const whereVersion = (versionId, alias = 't') => Number(versionId) ? `${alias}.versionId = ${versionId}` : `${alias}.versionId IS NULL`
+
 module.exports = {
     // 获取项目下可见的页面列表
-    getProjectPages (projectId) {
+    getProjectPages (projectId, versionId) {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
             .where('t.projectId = :projectId', { projectId })
+            .andWhere(whereVersion(versionId))
             .andWhere('page.deleteFlag = 0')
             .orderBy('page.id', 'DESC')
             .getMany()

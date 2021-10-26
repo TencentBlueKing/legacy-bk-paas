@@ -21,6 +21,8 @@ import FuncVariable from './entities/func-variable'
 import Variable from './entities/variable'
 import VariableFunc from './entities/variable-func'
 
+const whereVersion = (versionId, alias = 't') => Number(versionId) ? `${alias}.versionId = ${versionId}` : `${alias}.versionId IS NULL`
+
 const func = {
     getFuncById (id) {
         const funcRepository = getRepository(Func)
@@ -35,10 +37,11 @@ const func = {
     addFuncGroup (data) {
         return getConnection().transaction(async transactionalEntityManager => {
             const projectId = data.projectId
+            const versionId = data.versionId
             const inputStr = data.inputStr
             const groupNames = inputStr.split('/')
             const funcGroupRepository = getRepository(FuncGroup)
-            const allgroup = await func.getGroupList(projectId, '') || []
+            const allgroup = await func.getGroupList(projectId, versionId, '') || []
             const lastGroup = allgroup[allgroup.length - 1] || {}
             let order = lastGroup.order || 0
             const funcGroupEntities = groupNames.map((groupName) => {
@@ -56,8 +59,8 @@ const func = {
         })
     },
 
-    async allGroupFuncDetail (projectId) {
-        const groupList = await func.getGroupList(projectId, '')
+    async allGroupFuncDetail (projectId, versionId) {
+        const groupList = await func.getGroupList(projectId, versionId, '')
         const groupIds = groupList.map(x => x.id)
         let allFuncList = []
         if (groupIds.length) allFuncList = await func.getFuncList(groupIds, '')
@@ -91,11 +94,12 @@ const func = {
         return groupList || []
     },
 
-    getGroupList (projectId, groupName) {
+    getGroupList (projectId, versionId, groupName) {
         return getRepository(FuncGroup).createQueryBuilder('func_group')
             .leftJoin(ProjectFuncGroup, 't', 't.funcGroupId = func_group.id AND t.deleteFlag = 0')
             .leftJoin(Func, 'func', 'func.funcGroupId = func_group.id AND func.deleteFlag = 0 ')
             .where('t.projectId = :projectId AND func_group.deleteFlag = :deleteFlag AND func_group.groupName like :groupName', { projectId, deleteFlag: 0, groupName: `%${groupName}%` })
+            .andWhere(whereVersion(versionId))
             .select('func_group.groupName AS groupName, func_group.id AS id, func_group.createUser AS createUser, COUNT(func.id) AS funNum')
             .addSelect('func_group.order', 'order')
             .groupBy('func_group.id')

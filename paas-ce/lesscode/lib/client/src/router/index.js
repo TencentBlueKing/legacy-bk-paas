@@ -36,6 +36,7 @@ const RouterManage = () => import(/* webpackChunkName: 'route' */'@/views/projec
 const Basic = () => import(/* webpackChunkName: 'basic' */'@/views/project/basic')
 const Logs = () => import(/* webpackChunkName: 'basic' */'@/views/project/logs')
 const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/layout')
+const VersionManage = () => import(/* webpackChunkName: 'version' */'@/views/project/version-manage')
 
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
@@ -237,6 +238,14 @@ const routes = [
                 component: RouterManage,
                 meta: {
                     title: '路由配置'
+                }
+            },
+            {
+                path: 'versions',
+                name: 'versions',
+                component: VersionManage,
+                meta: {
+                    title: '版本管理'
                 }
             },
             {
