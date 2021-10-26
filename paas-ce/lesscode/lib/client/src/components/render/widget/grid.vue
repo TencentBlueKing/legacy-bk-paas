@@ -62,39 +62,15 @@
             componentData: {
                 type: Object,
                 default: () => ({})
-            },
-            extraDragCls: {
-                type: Array,
-                default: () => ['interactiveInnerComp']
             }
         },
         data () {
             return {
-                groupType: 'component',
-                startDragPosition: {},
-                clearGridConf: {
-                    visiable: false,
-                    headerPosition: 'left'
-                }
+                groupType: 'component'
             }
         },
         created () {
-            /**
-             * @desc gird 编辑更新
-             * @param { Node } node 更新的节点
-             * @param { String } eventName 事件名
-             */
-            const updateCallback = (node, eventName) => {
-                if (node.componentId === this.componentData.componentId) {
-                    console.log('from gird updat == ', node, eventName)
-                    this.$forceUpdate()
-                }
-            }
-            
-            LC.addEventListener('update', updateCallback)
-            this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('update', updateCallback)
-            })
+
         },
         updated () {
             console.log('**************** grid update **************', this.componentData.componentId)
@@ -121,8 +97,7 @@
                 this.componentData.children.forEach(() => {
                     gridNode.appendChild(LC.createNode('render-column'))
                 })
-                const parentNode = this.componentData.parentNode
-                parentNode.appendChild(gridNode)
+                this.componentData.parentNode.appendChild(gridNode)
             }
         }
     }

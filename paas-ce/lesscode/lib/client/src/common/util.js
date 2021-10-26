@@ -349,7 +349,6 @@ export function getStyle (elem, prop) {
     }
 
     // 先获取是否有内联样式
-    console.log('from get style ==== ', elem)
     let value = elem.style[camelize(prop)]
 
     if (!value) {

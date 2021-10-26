@@ -21,10 +21,9 @@
                 height: componentData.style.height
             }"
             :group="{
-                pull: true,
+                pull: false,
                 put: [
-                    'component',
-                    ...extraDragCls
+                    'component'
                 ]
             }"
             :ghost-class="$style['drag-component-ghost']"
@@ -42,7 +41,7 @@
                 :key="slotData.renderKey"
                 :component-data="slotData"
                 style="position: absolute;"
-                attach-free
+                attach-to-freelayout
                 @component-mounted="handleComponentMounted(slotData)"
                 @component-mousedown="event => handleComponentMousedown(slotData, event)"
                 @component-update="handleComponentUpdate" />
@@ -56,7 +55,7 @@
     </div>
 </template>
 <script>
-    import LC from '@/element-materials/core'
+    // import LC from '@/element-materials/core'
     import { mapGetters } from 'vuex'
     import DragLine from '@/common/drag-line'
     import Drag from '@/common/drag'
@@ -75,16 +74,6 @@
             componentData: {
                 type: Object,
                 default: () => ({})
-            },
-            // vueDrabable所用的需要额外添加的groupName
-            extraDragCls: {
-                type: Array,
-                default: () => ['interactiveInnerComp']
-            }
-        },
-        data () {
-            return {
-                groupType: 'component'
             }
         },
         computed: {
@@ -100,16 +89,6 @@
                 top: 0,
                 left: 0
             }
-            const updateCallback = (node) => {
-                if (node.componentId === this.componentData.componentId) {
-                    this.$forceUpdate()
-                }
-            }
-
-            LC.addEventListener('update', updateCallback)
-            this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('update', updateCallback)
-            })
         },
         mounted () {
             this.dragLine = new DragLine({
@@ -125,11 +104,6 @@
             doDrag (childNode) {
                 const dragEle = this.$refs[childNode.componentId][0].$el
                 
-                // 自由布局里面拖动自由布局时会有异常体验问题
-                // if (dragEle.className !== undefined
-                //     && dragEle.className.indexOf('wrapperCls') < 0) {
-                //     return
-                // }
                 this.drag = new Drag(dragEle, {
                     container: dragEle.parentNode
                 })
@@ -235,7 +209,6 @@
             handleComponentMousedown (childNode, event) {
                 event.stopPropagation()
                 event.preventDefault()
-                console.log('from handleComponentMousedown', childNode, event)
                 this.doDrag(childNode)
             },
             /**
@@ -253,10 +226,10 @@
         width: 100%;
         border: 1px dashed #ccc;
         /* 设置slider、card在自由布局中的pointer-events属性 */
-        /* .bk-slider,
-        .bk-card {
+        :global(.bk-slider),
+        :global(.bk-card) {
             pointer-events: none;
-        } */
+        }
     }
     .drag-placeholder {
         position: absolute;

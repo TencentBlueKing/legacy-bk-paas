@@ -75,6 +75,7 @@ export default class Node {
      */
     get layoutType () {
         return [
+            'root',
             'render-grid',
             'render-column',
             'free-layout'
@@ -185,6 +186,7 @@ export default class Node {
         const setKeyList = [
             'tabPanelActive',
             'renderKey',
+            'isInteractiveComponent',
             'interactiveShow',
             'isCustomComponent',
             'isComplexComponent'

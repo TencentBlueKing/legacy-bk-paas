@@ -1,7 +1,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 import cloneDeep from 'lodash.clonedeep'
 import { isInteractiveCompActive } from '@/common/util'
-import { bus } from '@/common/bus'
+// import { bus } from '@/common/bus'
 import LC from '@/element-materials/core'
 
 export default {
@@ -60,6 +60,9 @@ export default {
     },
     deactivated () {
     },
+    created () {
+        this.newNode = null
+    },
     methods: {
         ...mapMutations('drag', [
             'setDraggableSourceGroup',
@@ -105,7 +108,6 @@ export default {
          * @param {string} group group 标识
          */
         onChoose (e, group) {
-            console.log('from on panel choose ', e, group)
             const {
                 type,
                 name
@@ -125,18 +127,20 @@ export default {
                     node.appendChild(LC.createNode('render-column'))
                 }
             }
-            // todo 判断组件是否是自定义组件
+            // 自定义组件
             if (this.curNameMap[node.type]) {
                 node.setProperty('isCustomComponent', true)
             }
-            
-            this.curDragingComponent = node
-            if (node.style.display) {
-                this.placeholderElemDisplay = node.style.display
-            } else {
-                this.placeholderElemDisplay = 'block'
+            // 交互式组件
+            if (LC.isInteractiveType(node.type)) {
+                node.setProperty('isInteractiveComponent', true)
             }
-            this.$emit('update:dragingComponent', this.curDragingComponent)
+            this.placeholderElemDisplay = node.style.display ? node.style.display : 'block'
+
+            this.newNode = node
+
+            // this.curDragingComponent = node
+            // this.$emit('update:dragingComponent', this.curDragingComponent)
 
             let groupName = ''
             if (type === 'render-grid') {
@@ -166,7 +170,8 @@ export default {
          * @param {Object} original 当前拖拽的对象（左侧组件列表中的组件）
          */
         cloneFunc (original) {
-            return this.curDragingComponent
+            return this.newNode
+            // return this.curDragingComponent
         },
 
         sourceAreaStartHandler (e) {
@@ -191,18 +196,18 @@ export default {
          */
         sourceAreaEndHandler (e) {
             // 如果是交互式组件，设置当前拖拽的新组建为可见，其他组件设置为不可见
-            if (this.interactiveComponents.includes(this.curDragingComponent.type)) {
-                const id = this.curDragingComponent.componentId
-                const targetNode = this.$td().setCurInteractiveVisible(id, true)
-                this.setCurSelectedComponentData(cloneDeep(targetNode))
-                bus.$emit('selected-tree', id)
-            }
+            // if (this.interactiveComponents.includes(this.curDragingComponent.type)) {
+            //     const id = this.curDragingComponent.componentId
+            //     const targetNode = this.$td().setCurInteractiveVisible(id, true)
+            //     this.setCurSelectedComponentData(cloneDeep(targetNode))
+            //     bus.$emit('selected-tree', id)
+            // }
 
-            this.placeholderElemDisplay = ''
-            this.setFreeLayoutItemPlaceholderPointerEvents('none')
-            console.warn('sourceAreaEndHandler', this.curDragingComponent)
-            console.warn('left to right end, targetData: ', this.targetData)
-            console.warn('左侧面板拖动 grid 和 component 到画布中 end', e)
+            // this.placeholderElemDisplay = ''
+            // this.setFreeLayoutItemPlaceholderPointerEvents('none')
+            // console.warn('sourceAreaEndHandler', this.curDragingComponent)
+            // console.warn('left to right end, targetData: ', this.targetData)
+            // console.warn('左侧面板拖动 grid 和 component 到画布中 end', e)
         }
     }
 }

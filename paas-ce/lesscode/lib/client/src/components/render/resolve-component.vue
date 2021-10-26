@@ -81,13 +81,14 @@
     export default {
         name: 'resolve-component',
         components: {
-            RenderComponent,
             /* eslint-disable vue/no-unused-components */
             WidgetForm,
             WidgetFormItem,
-            RenderSlot,
             RenderGrid: () => import('./widget/grid'),
-            FreeLayout: () => import('./widget/free-layout')
+            FreeLayout: () => import('./widget/free-layout'),
+            ResolveComponent: () => import('./resolve-component'),
+            RenderComponent,
+            RenderSlot
         },
         mixins: [offsetMixin],
         inheritAttrs: false,
@@ -96,7 +97,7 @@
                 type: Object,
                 required: true
             },
-            attachFree: {
+            attachToFreelayout: {
                 type: Boolean,
                 default: false
             }
@@ -115,12 +116,12 @@
             }
         },
         created () {
-            const updateCallback = (node) => {
+            const updateCallback = _.debounce((node) => {
                 if (node.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
-            }
+            }, 60)
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
             }, 100)
@@ -136,7 +137,7 @@
             console.log('**************** component update **************', this.componentData.componentId)
         },
         mounted () {
-            this.setDefaultStyleAttachFree()
+            this.setDefaultStyleWidthAttachToFreelayout()
             this.initComponentStyleDispaly()
             this.$emit('component-mounted')
         },
@@ -178,8 +179,8 @@
             /**
              * @desc 当组件在 freelayout 布局中时需要设置一些默认样式
              */
-            setDefaultStyleAttachFree () {
-                if (!this.attachFree) {
+            setDefaultStyleWidthAttachToFreelayout () {
+                if (!this.attachToFreelayout) {
                     return
                 }
                 const defaultStyle = {

@@ -1,8 +1,9 @@
 <template>
     <div
         v-show="componentData.interactiveShow"
-        class="interactive-component"
-        :style="interactiveLayout">
+        :class="$style['interactive']"
+        :style="interactiveLayout"
+        role="interactive-root">
         <resolve-component
             :key="componentData.renderKey"
             :component-data="componentData"
@@ -13,14 +14,15 @@
     import ResolveComponent from './resolve-component'
 
     export default {
-        name: '',
+        name: 'resolve-interactive-component',
         components: {
             ResolveComponent
         },
         provide () {
             /** slot下的子元素，不需要provide offset */
             return {
-                layoutOffset: this.interactiveLayout
+                layoutOffset: this.interactiveLayout,
+                attachToInteractiveComponent: true
             }
         },
         props: {
@@ -62,5 +64,12 @@
         }
     }
 </script>
-<style lang="postcss">
+<style lang="postcss" module>
+    .interactive {
+        transform: translate(0, 0);
+        
+    }
+    :global(.bk-dialog-wrapper) {
+        z-index: 0 !important;
+    }
 </style>

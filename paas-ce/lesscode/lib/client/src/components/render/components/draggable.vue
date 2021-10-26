@@ -2,12 +2,14 @@
     <vue-draggable
         ref="draggable"
         :class="$style['drag-area']"
+        :chosen-class="$style['chosen']"
+        :ghost-class="ghostClass || $style['ghost']"
+        filter="[role='interactive-root']"
         @add="handleAdd"
         @change="handleChange"
         @choose="handleChoose"
         @start="handleStart"
         @end="handleEnd"
-        :ghost-class="ghostClass || $style['ghost']"
         v-bind="$attrs"
         v-on="$listeners">
         <slot />
@@ -17,7 +19,7 @@
     import LC from '@/element-materials/core'
 
     export default {
-        name: '',
+        name: 'render-draggable',
         inheritAttrs: false,
         props: {
             componentData: {
@@ -26,10 +28,12 @@
             },
             ghostClass: String
         },
+        inject: ['isInteractiveComponentShow'],
         mounted () {
             setTimeout(() => {
                 this.$refs.draggable.computeIndexes()
             }, 500)
+            console.log('from darggable mounted = == ', this)
         },
         methods: {
             handleAdd (event) {
@@ -71,6 +75,13 @@
         z-index: 10;
         height: 100%;
     }
+    .chosen{
+        opacity: .5;
+        background-color: #ffdddd;
+        &:after{
+            content: none !important;
+        }
+    }
     .ghost{
         &:after {
             content: "放在这里";
@@ -86,7 +97,7 @@
             line-height: 32px;
             
         }
-        &.inline-block {
+        &:global(.inline-block) {
             display: inline-block;
             &:after {
                 width: 60px;
@@ -94,7 +105,7 @@
                 position: relative;
             }
         }
-        &.block {
+        &:global(.block) {
             display: block;
             &:after {
                 top: 0;

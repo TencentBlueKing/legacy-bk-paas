@@ -11,36 +11,32 @@
 
 <template>
     <layout @layout-mounted="onLayoutMounted">
-        <div>
-            <draggable
-                class="target-drag-area"
-                :component-data="componentData"
-                :list="componentData.slot.default"
-                :sort="true"
-                :group="{
-                    put: [
-                        'render-grid',
-                        'free-layout',
-                        'interactive'
-                    ]
-                }"
-                filter=".interactive-component"
-                @choose="onCanvasChoose(arguments)">
-                <template v-for="componentNode in componentData.slot.default">
-                    <!-- root 的子组件只会是布局组件和交互式组件 -->
-                    <!-- 布局组件 -->
-                    <resolve-component
-                        v-if="!componentNode.isInteractiveComponent"
-                        :key="componentNode.renderKey"
-                        :component-data="componentNode" />
-                    <!-- 交互式组件 -->
-                    <resolve-interactive-component
-                        v-else
-                        :key="componentNode.renderKey"
-                        :component-data="componentNode" />
-                </template>
-            </draggable>
-        </div>
+        <draggable
+            class="target-drag-area"
+            :component-data="componentData"
+            :list="componentData.slot.default"
+            :sort="true"
+            :group="{
+                put: [
+                    'render-grid',
+                    'free-layout',
+                    'interactive'
+                ]
+            }">
+            <template v-for="componentNode in componentData.slot.default">
+                <!-- root 的子组件只会是布局组件和交互式组件 -->
+                <!-- 布局组件 -->
+                <resolve-component
+                    v-if="!componentNode.isInteractiveComponent"
+                    :key="componentNode.renderKey"
+                    :component-data="componentNode" />
+                <!-- 交互式组件 -->
+                <resolve-interactive-component
+                    v-else
+                    :key="componentNode.renderKey"
+                    :component-data="componentNode" />
+            </template>
+        </draggable>
         <div
             v-if="showNotVisibleMask"
             class="not-visible-mask"
@@ -51,7 +47,6 @@
         </div>
     </layout>
 </template>
-
 <script>
     import LC from '@/element-materials/core'
     import Draggable from './components/draggable'
@@ -66,6 +61,11 @@
             ResolveComponent: () => import('./resolve-component'),
             ResolveInteractiveComponent
         },
+        provide () {
+            return {
+                isInteractiveComponentShow: true
+            }
+        },
         data () {
             return {
                 componentData: null,
@@ -75,11 +75,10 @@
         },
         
         created () {
-            console.log('from ====================== render index', this)
             this.componentData = Object.freeze(LC.getRoot())
             const updateCallback = (node, eventName) => {
+                console.log('from target updateCallback == ', node, eventName)
                 if (node.componentId === this.componentData.componentId) {
-                    console.log('from taget updat == ', node, eventName)
                     this.$forceUpdate()
                 }
             }
@@ -111,40 +110,13 @@
                 })
                 this.resizeObserve.observe(canvas)
             },
-
-            /**
-             * 选中画布中的元素时触发，在画布中的只有 render-grid 和 free-layout 元素
-             * 选中 render-grid 和 free-layout 内部的元素不会触发
-             *
-             * @param {Object} e 事件对象
-             */
-            onCanvasChoose (e) {
-                // console.log('from on chaoose', this.componentData)
-                // const evt = e[0]
-                // const curChooseComponent = this.targetData[evt.oldIndex]
-                // this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
-
-                // let name = ''
-                // if (curChooseComponent.type === 'render-grid') {
-                //     name = 'render-grid'
-                // } else if (curChooseComponent.type === 'free-layout') {
-                //     name = 'free-layout'
-                // }
-
-                // this.setDraggableTargetGroup(Object.assign({}, this.draggableTargetGroup, {
-                //     name
-                // }))
+            puthandler (data, data1) {
+                console.log(data, data1)
             }
         }
     }
 </script>
 <style lang="postcss">
-    .interactive-component {
-        transform: translate(0, 0);
-        /deep/.bk-dialog-wrapper {
-            z-index: 0 !important;
-        }
-    }
     .save-as-template {
         z-index: 1001;
         position: absolute;

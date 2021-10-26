@@ -23,8 +23,7 @@
                 put: [
                     'render-grid',
                     'free-layout',
-                    'component',
-                    ...extraDragCls
+                    'component'
                 ]
             }">
             <resolve-component
@@ -36,7 +35,6 @@
 </template>
 
 <script>
-    import LC from '@/element-materials/core'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
 
@@ -50,10 +48,6 @@
             componentData: {
                 type: Object,
                 default: () => ({})
-            },
-            extraDragCls: {
-                type: Array,
-                default: () => ['interactiveInnerComp']
             }
         },
         inject: ['renderGrid'],
@@ -64,16 +58,6 @@
         },
         
         created () {
-            const updateCallback = (node, eventName) => {
-                if (node.componentId === this.componentData.componentId) {
-                    console.log('from columb updat == ', node, eventName)
-                    this.$forceUpdate()
-                }
-            }
-            LC.addEventListener('update', updateCallback)
-            this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('update', updateCallback)
-            })
             this.calcStyle()
         },
         updated () {

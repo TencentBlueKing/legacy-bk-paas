@@ -41,7 +41,7 @@ export default {
             result[slotName] = () => slotList.map(slot => {
                 // 如果是组件渲染组件
                 if (LC.isNode(slot)) {
-                    return h(slot.type, {
+                    return h('ResolveComponent', {
                         props: {
                             componentData: slot
                         },

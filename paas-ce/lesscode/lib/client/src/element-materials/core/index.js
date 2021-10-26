@@ -4,6 +4,7 @@ import getNodeById from './get-node-by-id'
 import getNodesByType from './get-nodes-by-type'
 import createNode from './create-node'
 import isNode from './is-node'
+import isInteractiveType from './is-interactive-type'
 
 import cloneNode from './extends/clone-node'
 import appendChild from './extends/append-child'
@@ -38,6 +39,7 @@ core.getActiveNode = getActiveNode
 core.getNodeById = getNodeById
 core.getNodesByType = getNodesByType
 core.isNode = isNode
+core.isInteractiveType = isInteractiveType
 core.createNode = createNode
 core.cloneNode = cloneNode
 core.appendChild = appendChild
