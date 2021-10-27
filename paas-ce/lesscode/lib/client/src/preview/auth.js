@@ -22,10 +22,12 @@ function getUser () {
     })
 }
 
-function checkProjectPermission (id) {
+function checkProjectPermission (id, templateIds) {
     return new Promise((resolve, reject) => {
         if ([undefined, ''].includes(id)) {
             reject(new Error('暂无项目ID，请在 Lesscode 上重新打开预览'))
+        } else if (templateIds.includes(parseInt(id))) {
+            resolve()
         } else {
             return pureAxios.post('/project/verify', { id }).then((res) => {
                 if (res.data) {
@@ -38,8 +40,9 @@ function checkProjectPermission (id) {
     })
 }
 
-function auth (projectId) {
-    return Promise.all([getUser(), checkProjectPermission(projectId)]).then(([user]) => {
+async function auth (projectId) {
+    const templateIds = await pureAxios.get('/project/getTemplateIds').then((res) => res.data) || []
+    return Promise.all([getUser(), checkProjectPermission(projectId, templateIds)]).then(([user]) => {
         injectCSRFTokenToHeaders()
         if (!user.isAuthenticated) {
             auth.redirectToLogin()
@@ -47,7 +50,7 @@ function auth (projectId) {
     })
 }
 
-function errorHandle (err) {
+function errorHandle (err = {}) {
     console.error(err)
     let message = ''
     switch (err.status) {
@@ -58,7 +61,9 @@ function errorHandle (err) {
             }
             break
         default:
-            message = err.message || '无法连接到后端服务，请稍候再试。'
+            const response = err.response || {}
+            const data = response.data || {}
+            message = data.message || err.message || '无法连接到后端服务，请稍候再试。'
             break
     }
 

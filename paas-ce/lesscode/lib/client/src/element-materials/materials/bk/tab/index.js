@@ -17,11 +17,11 @@ export default {
     group: '导航',
     order: 1,
     events: [{
-        name: 'tab-change', tips: '选项卡切换时调用，回调参数（name）'
+        name: 'tab-change', tips: '选项卡切换时调用该事件函数，事件回调参数 (name: String)'
     }, {
-        name: 'close-panel', tips: '关闭选项卡时调用，回调参数（index, panel）'
+        name: 'close-panel', tips: '关闭选项卡时调用该事件函数，事件回调参数 (index: Number, panel: Object)'
     }, {
-        name: 'add-panel', tips: '新增选项卡时调用'
+        name: 'add-panel', tips: '新增选项卡时调用该事件函数，暂无事件回调参数'
     }],
     styles: ['size', 'margin', 'display'],
     props: {
@@ -70,10 +70,19 @@ export default {
         'ext-cls': {
             type: 'string',
             val: ''
-        },
-        slots: {
-            name: 'bk-tab-panel',
-            type: 'tab-panel',
+        }
+    },
+    slots: {
+        default: {
+            name: ['bk-tab-panel'],
+            type: ['list', 'remote'],
+            displayName: 'tab-panel可选项配置',
+            tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和name字段',
+            remoteValidate (data) {
+                if (!Array.isArray(data)) return '返回值需要是数组'
+                const errData = data.find((item) => (!item.hasOwnProperty('name') || !item.hasOwnProperty('label')))
+                if (errData) return '返回值每个元素需要含有label和name字段'
+            },
             val: [
                 { name: 'Tab-1', label: 'Tab-1' },
                 { name: 'Tab-2', label: 'Tab-2' },

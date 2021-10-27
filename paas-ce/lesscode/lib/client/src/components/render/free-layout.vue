@@ -18,18 +18,26 @@
         @contextmenu.stop="freeLayoutClickHandler(renderData, $event)"
         @mouseover.stop="freeLayoutMouseHandler(renderData, 'enter')"
         @mouseout.stop="freeLayoutMouseHandler(renderData, 'leave')">
-        <component-menu class="free-layout-context-menu"
+        <component-menu class="free-layout-context-menu context-menu"
             :target="contextMenuTarget"
             :show="contextMenuVisible"
+            :offset="getComputedMunuOffset"
             @update:show="show => contextMenuVisible = show">
             <a href="javascript:;" @click="handleContextmenuDelete">删除自由布局</a>
             <a href="javascript:;" @click="handleContextmenuClearFreeLayout">清空自由布局</a>
         </component-menu>
+
+        <div class="save-as-template" @click.stop="toggleShowTemplateDialog(true)">
+            <i class="bk-drag-icon bk-drag-template-fill"></i>
+            存为模板
+        </div>
+
         <div class="free-layout-item-inner">
             <vue-draggable :style="{ height: renderData.renderStyles.height || '500px' }"
-                :group="{ pull: true, put: ['component'] }"
+                :group="{ pull: true, put: ['component', ...extraDragCls] }"
                 ghost-class="in-free-layout-item-ghost"
                 :force-fallback="false"
+                @add="handleAdd"
                 :list="renderDataSlot.val[0].children">
                 <div class="free-layout-item-placeholder" :style="{ height: renderData.renderStyles.height || '500px', pointerEvents: freeLayoutItemPlaceholderPointerEvents }"></div>
                 <render-component
@@ -42,6 +50,8 @@
                 </render-component>
             </vue-draggable>
         </div>
+
+        <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
 
         <bk-dialog v-model="clearFreeLayoutConf.visiable"
             class="del-component-dialog"
@@ -71,19 +81,33 @@
     import DragLine from '@/common/drag-line'
     // eslint-disable-next-line no-unused-vars
     import Drag from '@/common/drag'
+    import saveTemplateDialog from './save-template-dialog'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import offsetMixin from './offset-mixin'
 
     export default {
         name: 'free-layout',
         components: {
             // eslint-disable-next-line vue/no-unused-components
             renderComponent,
-            ComponentMenu
+            ComponentMenu,
+            saveTemplateDialog
         },
+        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            // vueDrabable所用的需要额外添加的groupName
+            extraDragCls: {
+                type: Array,
+                default: () => ['interactiveInnerComp']
+            },
+            // 是否根据子元素自动撑开
+            noResponse: {
+                type: Boolean,
+                default: false
             }
         },
         data () {
@@ -98,7 +122,8 @@
                 clearFreeLayoutConf: {
                     visiable: false,
                     headerPosition: 'left'
-                }
+                },
+                showTemplateDialog: false
             }
         },
         computed: {
@@ -117,10 +142,13 @@
                 this.renderData.componentId = this.componentData.name + '-' + uuid()
             }
 
-            if (this.renderData.renderProps.slots) {
-                this.renderDataSlotName = this.renderData.renderProps.slots.name
+            this.mountedPosition = {
+                top: 0,
+                left: 0
             }
+
             this.updateBindProps()
+            this.updateBindSlots()
 
             bus.$on('on-update-props', this.updatePropsHandler)
             bus.$on('on-update-free-layout-props', this.updateFreeLayoutPropsHandler)
@@ -133,7 +161,7 @@
             this.contextMenuTarget = this.renderData.type === 'free-layout'
                 ? this.$refs[`${this.renderData.componentId}`]
                 : null
-            this.dragLine = new DragLine({ container: this.$el })
+            this.dragLine = new DragLine({ container: this.$el, offset: this.layoutOffset })
         },
         methods: {
             ...mapMutations('drag', [
@@ -141,7 +169,21 @@
                 'setTargetData',
                 'pushTargetHistory'
             ]),
+            handleAdd (event) {
+                const {
+                    originalEvent
+                } = event
 
+                const {
+                    pageX,
+                    pageY
+                } = originalEvent
+
+                this.mountedPosition = {
+                    top: pageY,
+                    left: pageX
+                }
+            },
             updateBindProps () {
                 const { renderProps } = this.renderData
                 const bindProps = {}
@@ -151,9 +193,13 @@
                 this.bindProps = bindProps
 
                 // debugger
-                if (this.renderData.renderProps.slots) {
-                    this.renderDataSlot = this.renderData.renderProps.slots
-                }
+                // if (this.renderData.renderProps.slots) {
+                //     this.renderDataSlot = this.renderData.renderProps.slots
+                // }
+            },
+
+            updateBindSlots () {
+                this.renderDataSlot = this.renderData.renderSlots.default
             },
 
             /**
@@ -174,13 +220,16 @@
                         renderStyles = this.renderData.renderStyles,
                         renderProps = this.renderData.renderProps,
                         tabPanelActive = 'props',
-                        renderDirectives = this.renderData.renderDirectives
+                        renderDirectives = this.renderData.renderDirectives,
+                        renderSlots = this.renderData.renderSlots
                     } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
                     this.renderData.renderDirectives = renderDirectives
+                    this.renderData.renderSlots = renderSlots
                     this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
+                    this.updateBindSlots()
                 }
             },
 
@@ -205,8 +254,7 @@
              */
             handleContextmenuDelete () {
                 setTimeout(() => {
-                    const delBtn = document.querySelector('#del-component-right-sidebar')
-                    delBtn && delBtn.click()
+                    bus.$emit('on-delete-component')
                 }, 0)
                 this.contextMenuVisible = false
             },
@@ -223,7 +271,7 @@
              */
             confirmClearFreeLayout () {
                 const renderData = Object.assign({}, this.renderData)
-                renderData.renderProps.slots.val.forEach(v => {
+                renderData.renderSlots.default.val.forEach(v => {
                     v.children = []
                 })
                 this.renderData = Object.assign({}, renderData)
@@ -274,7 +322,7 @@
                 const curRowNode = getNodeWithClass(e.target, 'bk-lesscode-free-layout')
                 curRowNode.classList.add('selected')
 
-                this.contextMenuVisible = false
+                bus.$emit('hideContextMenu') // 隐藏右键菜单()
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
                 bus.$emit('selected-tree', this.renderData.componentId)
             },
@@ -325,33 +373,80 @@
              */
             componentMounted (data) {
                 if (!this.dragLine) {
-                    this.dragLine = new DragLine({ container: this.$el })
+                    this.dragLine = new DragLine({ container: this.$el, offset: this.layoutOffset })
                 }
 
                 const renderData = data.renderData
                 this.setStyle4Component(renderData)
                 this.doDrag(data.elem, renderData)
-
-                // console.error('componentMounted', renderData)
-
-                // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件
-                bus.$emit('on-update-props', {
-                    componentId: renderData.componentId,
-                    modifier: {
-                        tabPanelActive: renderData.tabPanelActive,
-                        renderEvents: renderData.renderEvents,
-                        renderDirectives: renderData.renderDirectives,
-                        renderProps: Object.assign(
-                            {},
-                            renderData.renderProps,
-                            { inFreeLayout: { val: true } }
-                        ),
-                        renderStyles: Object.assign(
-                            {},
-                            renderData.renderStyles,
-                            { top: renderData.renderStyles.top || '0px', left: renderData.renderStyles.left || '0px' }
-                        )
+                // setTimeout 保证 add 事件已经处理完毕
+                !this.noResponse && setTimeout(() => {
+                    if (!this.$refs[this.renderData.componentId]) {
+                        return
                     }
+                    const {
+                        width: componentWidth,
+                        height: componentHeight
+                    } = document.querySelector(`[data-component-id="component-${renderData.componentId}"]`).getBoundingClientRect()
+                    const {
+                        top: containerTop,
+                        right: containerRight,
+                        bottom: containerBottom,
+                        left: containerLeft
+                    } = this.$refs[this.renderData.componentId].getBoundingClientRect()
+
+                    const {
+                        top: originalTop,
+                        left: originalLeft
+                    } = this.mountedPosition
+                    let top = 0
+                    let left = 0
+                    // 组件默认不能超过容器范围
+                    // top 位置计算
+                    if (renderData.renderStyles.top) {
+                        top = parseInt(renderData.renderStyles.top)
+                    } else {
+                        if (originalTop + componentHeight > containerBottom) {
+                            top = containerBottom - containerTop - componentHeight
+                        } else {
+                            top = originalTop - containerTop - 15
+                        }
+                    }
+                    // left 位置计算
+                    if (renderData.renderStyles.left) {
+                        left = parseInt(renderData.renderStyles.left)
+                    } else {
+                        if (originalLeft + componentWidth > containerRight) {
+                            left = containerRight - containerLeft - componentWidth
+                        } else {
+                            left = originalLeft - containerLeft - 15
+                        }
+                    }
+                    const stylePosition = {
+                        top: `${Math.max(top, 10)}px`,
+                        left: `${Math.max(left, 10)}px`
+                    }
+
+                    // 需要 emit 一次，因为刚拖入到自由布局中的组件还没有拖动，不会触发 end 事件
+                    bus.$emit('on-update-props', {
+                        componentId: renderData.componentId,
+                        modifier: {
+                            tabPanelActive: renderData.tabPanelActive,
+                            renderEvents: renderData.renderEvents,
+                            renderDirectives: renderData.renderDirectives,
+                            renderProps: Object.assign(
+                                {},
+                                renderData.renderProps,
+                                { inFreeLayout: { val: true } }
+                            ),
+                            renderStyles: Object.assign(
+                                {},
+                                renderData.renderStyles,
+                                stylePosition
+                            ),
+                            renderSlots: renderData.renderSlots
+                        }
+                    })
                 })
             },
 
@@ -368,6 +463,7 @@
             },
 
             doDrag (dragNode, renderData) {
+                dragNode = getNodeWithClass(dragNode, 'wrapperCls')
                 // 自由布局里面拖动自由布局时会有异常体验问题
                 if (dragNode.className !== undefined && dragNode.className.indexOf('wrapperCls') < 0) {
                     return
@@ -415,10 +511,14 @@
                                 {},
                                 renderData.renderStyles,
                                 offset
-                            )
+                            ),
+                            renderSlots: renderData.renderSlots
                         }
                     })
                 })
+            },
+            toggleShowTemplateDialog (isShow) {
+                this.showTemplateDialog = isShow
             }
         }
     }

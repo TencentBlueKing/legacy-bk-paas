@@ -8,9 +8,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { bkMessage } from 'bk-magic-vue'
+import { messageHtmlError } from '../../common/bkmagic'
 import http from '@/api'
-import router from '../../router'
 const perfix = '/function'
 
 export default {
@@ -24,18 +23,30 @@ export default {
         funcGroups: state => state.funcGroups
     },
     actions: {
-        getAllGroupFuncs ({ state }, projectId) {
+        getAllGroupFuncs ({ state }, projectId, isCommit = true) {
             return http.get(`${perfix}/getAllGroupFunc`, { params: { projectId } }).then((res = {}) => {
-                state.funcGroups = res.data || []
+                isCommit && (state.funcGroups = res.data || [])
                 return res.data || []
             })
         },
 
-        addFunc ({ state }, { groupId, func, h, varWhere }) {
+        bulkAddFunc ({ state }, { groupId, funcList, varWhere }) {
+            return http.post(`${perfix}/bulkAddFunction`, { funcList, varWhere }).then((res = {}) => {
+                if (res.code === 499) {
+                    messageHtmlError(res.message)
+                    return
+                }
+                const newFuncs = res.data || []
+                const curGroup = state.funcGroups.find((group) => (group.id === groupId)) || {}
+                curGroup.functionList.unshift(...newFuncs)
+                return newFuncs
+            })
+        },
+
+        addFunc ({ state }, { groupId, func, varWhere }) {
             return http.post(`${perfix}/addFunction`, { func, varWhere }).then((res = {}) => {
                 if (res.code === 499) {
-                    const message = h('pre', { style: { margin: 0 } }, [res.message])
-                    bkMessage({ theme: 'error', message, ellipsisLine: 0, extCls: 'auto-width' })
+                    messageHtmlError(res.message)
                     return
                 }
                 const newFunc = res.data || {}
@@ -54,11 +65,10 @@ export default {
             })
         },
 
-        editFunc ({ state }, { groupId, func, h, varWhere }) {
+        editFunc ({ state }, { func, varWhere }) {
             return http.put(`${perfix}/editFunction`, { func, varWhere }).then((res) => {
                 if (res.code === 499) {
-                    const message = h('pre', { style: { margin: 0 } }, [res.message])
-                    bkMessage({ theme: 'error', message, ellipsisLine: 0, extCls: 'auto-width' })
+                    messageHtmlError(res.message)
                     return
                 }
                 const data = res.data || []
@@ -92,15 +102,8 @@ export default {
             return http.put(`${perfix}/editFuncGroups`, groups)
         },
 
-        generateToken ({ state }, { appCode, id }) {
-            return http.get(`${perfix}/generateToken`, { params: { appCode, id } })
-        },
-
-        getTokenList () {
-            const curRouter = router.currentRoute || {}
-            const params = curRouter.params || {}
-            const projectId = params.projectId || ''
-            return http.get(`${perfix}/getTokenList?projectId=${projectId}`)
+        fixFunByEslint (_, func) {
+            return http.post(`${perfix}/fixFunByEslint`, func)
         }
     }
 }

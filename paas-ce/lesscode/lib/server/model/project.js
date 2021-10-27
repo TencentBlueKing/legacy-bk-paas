@@ -14,6 +14,8 @@ import Page from './entities/page'
 import PageFunc from './entities/page-func'
 import Comp from './entities/comp'
 import CompCategory from './entities/comp-category'
+import PageTemplate from './entities/page-template'
+import TemplateCategory from './entities/page-template-category'
 import UserProjectRole from './entities/user-project-role'
 import CompShare from './entities/comp-share'
 import PageComp from './entities/page-comp'
@@ -38,6 +40,8 @@ const projectSelectFields = [
     'project.projectName',
     'project.projectDesc',
     'project.status',
+    'project.isOffcial',
+    'project.offcialType',
     'project.createTime',
     'project.createUser',
     'project.deleteFlag'
@@ -64,6 +68,7 @@ const getDefaultFunc = function (host) {
             funcType: 1,
             funcMethod: 'get',
             funcApiUrl: `${host}/api/data/getMockData`,
+            funcApiData: '{ \"page\": 1, \"pageSize\": 20 }',
             funcCode: 'getApiData'
         }
     ]
@@ -102,7 +107,15 @@ export default {
             // 复制项目
             if (projectData.copyFrom) {
                 // copy项目中的组件/函数/页面/布局/变量
-                const [projectCompCopyValues, projectFuncGroupCopyValues, projectPageCopyValues, projectLayoutValues, variableList] = await Promise.all([
+                const [
+                    projectCompCopyValues,
+                    projectFuncGroupCopyValues,
+                    projectPageCopyValues,
+                    projectRouteCopyValues,
+                    projectLayoutValues,
+                    variableList,
+                    templateCategoryValues
+                ] = await Promise.all([
                     getRepository(Comp)
                         .createQueryBuilder('comp')
                         .where('comp.belongProjectId = :projectId', { projectId: projectData.copyFrom })
@@ -115,6 +128,10 @@ export default {
                         .createQueryBuilder('projectPage')
                         .where('projectPage.projectId = :projectId', { projectId: projectData.copyFrom })
                         .getMany(),
+                    getRepository(PageRoute)
+                        .createQueryBuilder('pageRoute')
+                        .where('pageRoute.projectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany(),
                     getRepository(LayoutInst)
                         .createQueryBuilder('layoutInst')
                         .where('layoutInst.projectId = :projectId', { projectId: projectData.copyFrom })
@@ -122,6 +139,10 @@ export default {
                     getRepository(Variable)
                         .createQueryBuilder('variable')
                         .where('variable.projectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany(),
+                    getRepository(TemplateCategory)
+                        .createQueryBuilder('pageTemplateCategory')
+                        .where('pageTemplateCategory.belongProjectId = :projectId', { projectId: projectData.copyFrom })
                         .getMany()
                 ])
 
@@ -147,6 +168,35 @@ export default {
                         return others
                     }))
                     await transactionalEntityManager.save(saveTargetCompShares)
+                }
+
+                // 模板分类和模板数据记录
+                if (templateCategoryValues.length) {
+                    const categoryIdMap = {}
+                    const categoryIdList = templateCategoryValues.map(item => item.id)
+                    const saveTemplateCategory = getRepository(TemplateCategory).create(templateCategoryValues.map(item => {
+                        const { id, createTime, updateTime, createUser, ...others } = item
+                        others.belongProjectId = projectId
+                        return others
+                    }))
+                    const newTemplateCategory = await transactionalEntityManager.save(saveTemplateCategory)
+                    categoryIdList.forEach((id, index) => {
+                        categoryIdMap[id] = newTemplateCategory[index].id
+                    })
+
+                    const copyTemplates = await getRepository(PageTemplate)
+                        .createQueryBuilder('pageTemplate')
+                        .where('pageTemplate.categoryId IN (:...categoryIds)', { categoryIds: categoryIdList })
+                        .andWhere('pageTemplate.isOffcial = 0')
+                        .getMany()
+
+                    const saveCopyTemplates = getRepository(PageTemplate).create(copyTemplates.map(item => {
+                        const { id, createTime, updateTime, createUser, ...others } = item
+                        others.categoryId = categoryIdMap[others.categoryId]
+                        others.belongProjectId = projectId
+                        return others
+                    }))
+                    await transactionalEntityManager.save(saveCopyTemplates)
                 }
 
                 const funcIdMap = {}
@@ -210,6 +260,7 @@ export default {
                     })
                 }
 
+                const pageIdMap = {}
                 if (projectPageCopyValues.length) {
                     const pageIdList = projectPageCopyValues.map(item => item.pageId)
                     const copyPages = await getRepository(Page)
@@ -236,7 +287,6 @@ export default {
                     await transactionalEntityManager.save(projectPageValues)
 
                     // 建立新老页面id的映射
-                    const pageIdMap = {}
                     pageIdList.forEach((id, index) => {
                         pageIdMap[id] = newPageList[index].id
                     })
@@ -252,35 +302,6 @@ export default {
                         await transactionalEntityManager.save(saveCopyPageFuncs)
                     }
 
-                    // 页面路由信息，目前未绑定页面的路由在当前逻辑下不会被复制
-                    const copyPageRoutes = await getRepository(PageRoute)
-                        .createQueryBuilder('pageRoute')
-                        .where('pageRoute.pageId IN (:...pageIds)', { pageIds: pageIdList })
-                        .getMany()
-
-                    if (copyPageRoutes && copyPageRoutes.length) {
-                        const routeIdList = copyPageRoutes.map(item => item.routeId)
-                        const copyRoutes = await getRepository(Route)
-                            .createQueryBuilder('route')
-                            .where('route.id IN (:...ids)', { ids: routeIdList })
-                            .getMany()
-
-                        const saveCopyRoutes = getRepository(Route).create(copyRoutes.map(item => {
-                            const { id, createTime, updateTime, ...others } = item
-                            return others
-                        }))
-                        const newRouteList = await transactionalEntityManager.save(saveCopyRoutes)
-                        const saveCopyPageRoutes = getRepository(PageRoute).create(copyPageRoutes.map((item, index) => {
-                            const { id, createTime, updateTime, ...others } = item
-                            others.routeId = newRouteList[index].id
-                            others.pageId = pageIdMap[others.pageId]
-                            others.layoutId = layoutIdMap[others.layoutId]
-                            others.projectId = projectId
-                            return others
-                        }))
-                        await transactionalEntityManager.save(saveCopyPageRoutes)
-                    }
-
                     // 新建页面组件关联记录
                     const copyPageComps = await getRepository(PageComp)
                         .createQueryBuilder('pageComp')
@@ -293,6 +314,37 @@ export default {
                         return others
                     }))
                     await transactionalEntityManager.save(saveCopyPageComps)
+                }
+
+                // 项目路由记录
+                if (projectRouteCopyValues.length) {
+                    const routeIdList = projectRouteCopyValues.map(item => item.routeId).filter(routeId => routeId !== -1)
+                    const copyRoutes = await getRepository(Route)
+                        .createQueryBuilder('route')
+                        .where('route.id IN (:...ids)', { ids: routeIdList })
+                        .getMany()
+
+                    const saveCopyRoutes = getRepository(Route).create(copyRoutes.map(item => {
+                        const { id, createTime, updateTime, ...others } = item
+                        return others
+                    }))
+                    const newRouteList = await transactionalEntityManager.save(saveCopyRoutes)
+                    const routeIdMap = {}
+                    routeIdList.forEach((id, index) => {
+                        routeIdMap[id] = newRouteList[index].id
+                    })
+
+                    const saveCopyProjectRoutes = getRepository(PageRoute).create(projectRouteCopyValues.map((item, index) => {
+                        const { id, createTime, updateTime, ...others } = item
+                        // 未绑定路由或页面或删除的路由值为-1
+                        others.routeId = others.routeId !== -1 ? routeIdMap[others.routeId] : -1
+                        others.pageId = others.pageId !== -1 ? pageIdMap[others.pageId] : -1
+                        others.redirect = others.redirect ? routeIdMap[others.redirect] : null
+                        others.layoutId = layoutIdMap[others.layoutId]
+                        others.projectId = projectId
+                        return others
+                    }))
+                    await transactionalEntityManager.save(saveCopyProjectRoutes)
                 }
 
                 if (variableList.length) {
@@ -356,6 +408,14 @@ export default {
                 const projectFuncGroup = getRepository(ProjectFuncGroup).create({ projectId, funcGroupId })
                 await transactionalEntityManager.save(projectFuncGroup)
 
+                // 创建默认模板分类
+                const templateCategory = getRepository(TemplateCategory).create({
+                    name: '默认分类',
+                    belongProjectId: projectId,
+                    order: -0
+                })
+                await transactionalEntityManager.save(templateCategory)
+
                 // 添加布局模板到项目
                 const saveLayoutInstList = getRepository(LayoutInst).create(layoutData.map((item, index) => {
                     return {
@@ -378,7 +438,7 @@ export default {
     findOneProjectByNameAndUserId (projectName, userId) {
         return getRepository(Project).createQueryBuilder('project')
             .leftJoinAndSelect(UserProjectRole, 't', 't.projectId = project.id')
-            .where('project.projectName = :projectName AND t.deleteFlag = 0', { projectName })
+            .where('BINARY project.projectName = :projectName AND t.deleteFlag = 0', { projectName })
             .andWhere('t.userId = :userId', { userId })
             .getMany()
     },
@@ -409,13 +469,13 @@ export default {
         return getRepository(Project).find(queryParams)
     },
 
-    queryAllProject ({ condition = '', params = {} }) {
+    queryAllProject ({ condition = '', params = {}, select }) {
         const currentUser = RequestContext.getCurrentUser() || {}
         const userId = currentUser.id
         return getRepository(Project)
             .createQueryBuilder('project')
             .innerJoinAndSelect('r_user_project_role', 'user_project_role', 'user_project_role.projectId = project.id')
-            .select(projectSelectFields)
+            .select(select || projectSelectFields)
             .where('project.deleteFlag != 1 AND user_project_role.deleteFlag != 1 AND user_project_role.userId = :userId', { userId })
             .andWhere(condition, params)
             .orderBy('project.id', 'DESC')
@@ -435,7 +495,7 @@ export default {
             .getMany()
     },
 
-    queryMyFavoriteProject ({ condition = '', params = {} }) {
+    queryMyFavoriteProject ({ condition = '', params = {}, select }) {
         const currentUser = RequestContext.getCurrentUser() || {}
         const userId = currentUser.id
         return getRepository(Project)
@@ -444,7 +504,7 @@ export default {
             .innerJoinAndSelect('r_favourite', 'favourite', 'favourite.projectId = project.id')
             .where('project.deleteFlag != 1 AND user_project_role.deleteFlag != 1 AND user_project_role.userId = :userId', { userId })
             .andWhere(condition, params)
-            .select(projectSelectFields)
+            .select(select || projectSelectFields)
             .orderBy('project.id', 'DESC')
             .getMany()
     },
@@ -467,12 +527,24 @@ export default {
             .select(['page.pageName as pageName',
                 'page.updateTime as updateTime',
                 'page.updateUser as updateUser',
-                'page.previewImg as previewImg',
                 'project_page.projectId as projectId'
             ])
             .where(condition, params)
+            .andWhere('page.deleteFlag != 1')
             .orderBy('page.updateTime', 'DESC')
             .getRawMany()
+    },
+
+    findProjectPreviewImg (projectId) {
+        return getRepository(Page)
+            .createQueryBuilder('page')
+            .leftJoin('r_project_page', 'project_page', 'project_page.pageId = page.id')
+            .select('previewImg')
+            .where('project_page.projectId = :projectId', { projectId })
+            .andWhere('page.deleteFlag != 1')
+            .orderBy('page.updateTime', 'DESC')
+            .limit(1)
+            .getRawOne()
     },
 
     updateProject (id, fields = {}) {

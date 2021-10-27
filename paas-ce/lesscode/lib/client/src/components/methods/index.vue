@@ -1,7 +1,7 @@
 <template>
     <transition name="fade">
         <article class="function-home" v-if="show">
-            <layout class="function-main method-layout" @resize="resizeLayOut" :init-width="initWidth <= 240 ? 240 : initWidth" ref="methodMain" v-bkloading="{ isLoading: isLoadingGroup }">
+            <layout class="function-main method-layout" :init-width="initWidth <= 240 ? 240 : initWidth" ref="methodMain" v-bkloading="{ isLoading: isLoadingGroup }">
                 <section slot="left" class="func-left">
                     <h3 class="left-title">
                         <span>函数库</span>
@@ -52,7 +52,7 @@
                                     <div slot="content">
                                         <ul class="more-list">
                                             <li class="list-item" @click="changeGroupName(group)">重命名</li>
-                                            <li class="disable list-item" v-if="userPerm.roleId === 2" v-bk-tooltips="{ content: '无删除权限', placements: ['bottom'] }">删除</li>
+                                            <li class="disable list-item" v-if="userPerm.roleId === 2 && user.username !== group.createUser" v-bk-tooltips="{ content: '无删除权限', placements: ['bottom'] }">删除</li>
                                             <template v-else>
                                                 <li class="disable list-item" v-if="group.functionList.length" v-bk-tooltips="{ content: '该分类下有函数，不能删除', placements: ['bottom'] }">删除</li>
                                                 <li class="list-item" @click.stop="deleteItem(group.id, group.groupName, true)" v-else>删除</li>
@@ -71,7 +71,7 @@
                                         <i class="bk-drag-icon bk-drag-copy item-tool hover-show"
                                             @click.stop="handleCopyFunc(group, func)"
                                         ></i>
-                                        <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-if="userPerm.roleId === 2" @click.stop v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }"></i>
+                                        <i class="bk-drag-icon bk-drag-close-line hover-show disable" v-if="userPerm.roleId === 2 && user.username !== func.createUser" @click.stop v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }"></i>
                                         <template v-else>
                                             <i class="bk-drag-icon bk-drag-close-line item-tool hover-show"
                                                 @click.stop="deleteItem(func.id, func.funcName, false)"
@@ -89,10 +89,16 @@
                 </section>
 
                 <main class="func-main">
-                    <func-form class="func-form" size="small" :func-data="curFunc" ref="func" @formChange="formChanged = true"></func-form>
+                    <func-dialog class="func-form"
+                        size="small"
+                        ref="func"
+                        :func-data="curFunc"
+                    >
+                        <i class="bk-drag-icon bk-drag-close-line icon-style" @click="closeFunction" slot="tools"></i>
+                    </func-dialog>
 
                     <footer class="main-footer">
-                        <bk-button theme="primary" @click="saveFunc" :loading="isSaving" :disabled="!formChanged">保存</bk-button>
+                        <bk-button theme="primary" @click="saveFunc" :loading="isSaving" :disabled="!($refs.func || {}).formChanged">保存</bk-button>
                     </footer>
                 </main>
 
@@ -115,18 +121,6 @@
                         <bk-button @click="delObj.show = false" :disabled="delObj.loading">取消</bk-button>
                     </div>
                 </bk-dialog>
-
-                <section class="icon-style">
-                    <span v-if="!isFull">
-                        <i class="bk-icon icon-info-circle" v-bk-tooltips="methodTip()"></i>
-                        <i class="bk-drag-icon bk-drag-code-full-screen" @click="openFullScreen"></i>
-                        <i class="bk-drag-icon bk-drag-close-line" @click="closeFunction"></i>
-                    </span>
-                    <span v-else @click="exitFullScreen" class="un-full-screen" style="right: 20px;">
-                        <i class="bk-drag-icon bk-drag-un-full-screen"></i>
-                        <span>退出全屏</span>
-                    </span>
-                </section>
             </layout>
         </article>
     </transition>
@@ -135,12 +129,12 @@
 <script>
     import { mapActions, mapGetters } from 'vuex'
     import layout from '@/components/ui/layout'
-    import funcForm from '@/components/methods/func-form'
+    import funcDialog from '@/components/methods/func-form/func-dialog'
 
     export default {
         components: {
             layout,
-            funcForm
+            funcDialog
         },
 
         props: {
@@ -161,7 +155,6 @@
                 isSaving: false,
                 tempName: '',
                 isFull: false,
-                formChanged: false,
                 loadingGroupIds: [],
                 openGroupIds: [],
                 changeGroupIds: [],
@@ -177,6 +170,7 @@
         },
 
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('member', ['userPerm']),
             ...mapGetters('page', ['pageDetail']),
@@ -220,10 +214,8 @@
             show (val) {
                 if (val) {
                     this.initData()
-                    window.addEventListener('resize', this.handleFullScreen)
                 } else {
                     this.templateFunc = {}
-                    window.removeEventListener('resize', this.handleFullScreen)
                 }
             }
         },
@@ -239,20 +231,6 @@
                 'addGroup'
             ]),
             ...mapActions('variable', ['getAllVariable']),
-
-            methodTip () {
-                const commentMap = {
-                    0: ` 1. 空白函数，函数内容完全由用户编写\r\n 2. 这里编辑管理的函数，用于画布页面的属性配置和事件绑定\r\n 3. 用于属性时：函数需要返回值，该返回值将会赋值给属性\r\n 4. 用于事件时：函数将在事件触发时执行\r\n 5. 可以使用 lesscode.变量标识，必须通过编辑器自动补全功能选择对应变量，来获取或者修改变量值\r\n 6. 可以使用 lesscode.方法名，必须通过编辑器自动补全功能选择对应函数，来调用项目中的函数\r\n 7. 用于属性时示例如下：\r\n    return Promise.all([\r\n        this.$http.get(\'${location.origin}/api/data/getMockData\'),\r\n        this.$http.post(\'${location.origin}/api/data/postMockData\', { value: 2 })\r\n    ]).then(([getDataRes, postDataRes]) => {\r\n        return [...getDataRes.data, ...postDataRes.data]\r\n    })\r\n`,
-                    1: ` 1. 远程函数，系统将会根据参数组成 Ajax 请求，由用户在这里编写 Ajax 回调函数\r\n 2. 这里编辑管理的函数，用于画布页面的属性配置和事件绑定\r\n 3. 用于属性时：函数需要返回值，该返回值将会赋值给属性\r\n 4. 用于事件时：事件触发时候，系统将发起 Ajax 请求，然后执行用户编写的回调函数\r\n 5. 可以使用 lesscode.变量标识，必须通过编辑器自动补全功能选择对应变量，来获取或者修改变量值\r\n 6. 可以使用 lesscode.方法名，必须通过编辑器自动补全功能选择对应函数，来调用项目中的函数\r\n 7. 示例如下：return res.data`
-                }
-                const funcForm = this.$refs.func || {}
-                const curEditFunc = funcForm.form || {}
-                return {
-                    placement: 'left-start',
-                    theme: 'light',
-                    content: `<pre class="component-method-tip">${commentMap[+curEditFunc.funcType] || ''}</pre>`
-                }
-            },
 
             initData () {
                 this.isLoadingGroup = true
@@ -283,16 +261,13 @@
             chooseFunction (func) {
                 if (this.chooseId === func.id) return
                 const confirmFn = () => {
-                    this.saveFunc().finally(() => {
-                        cancelFn()
-                    })
+                    this.saveFunc(cancelFn)
                 }
                 const cancelFn = () => {
                     this.chooseId = func.id
-                    this.formChanged = false
                     this.templateFunc = {}
                 }
-                if (this.formChanged) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '确认切换',
                         subTitle: '不保存则会丢失当前数据',
@@ -310,9 +285,8 @@
             closeFunction () {
                 const confirmFn = () => {
                     this.$emit('update:show', false)
-                    this.formChanged = false
                 }
-                if (this.formChanged) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '请确认是否关闭',
                         subTitle: '存在未保存的函数，关闭后不会保存更改',
@@ -391,16 +365,13 @@
                         func: rest
                     }
                     this.chooseId = undefined
-                    this.formChanged = true
                 }
 
                 const confirmFn = () => {
-                    this.saveFunc().finally(() => {
-                        copyFunc()
-                    })
+                    this.saveFunc(copyFunc)
                 }
 
-                if (this.formChanged) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '确认复制',
                         subTitle: '不保存则会丢失当前数据',
@@ -444,16 +415,13 @@
                         func: untitledFunc
                     }
                     this.chooseId = undefined
-                    this.formChanged = true
                 }
 
                 const confirmFn = () => {
-                    this.saveFunc().finally(() => {
-                        addFunc()
-                    })
+                    this.saveFunc(addFunc)
                 }
 
-                if (this.formChanged) {
+                if (this.$refs.func.formChanged) {
                     this.$bkInfo({
                         title: '确认复制',
                         subTitle: '不保存则会丢失当前数据',
@@ -468,34 +436,37 @@
                 }
             },
 
-            saveFunc () {
-                return this.$refs.func.validate().then((postData) => {
+            saveFunc (callBack) {
+                this.$refs.func.validate().then((postData) => {
                     if (!postData) return
                     if (!postData.projectId) {
                         postData.projectId = this.projectId
                     }
                     this.isSaving = true
-                    const h = this.$createElement
                     const varWhere = { projectId: this.$route.params.projectId, pageCode: this.pageDetail.pageCode, effectiveRange: 0 }
                     const editFunc = () => {
-                        return this.editFunc({ groupId: this.curGroup.id, func: postData, h, varWhere }).then((res) => {
-                            if (!res) return
+                        return this.editFunc({ groupId: this.curGroup.id, func: postData, varWhere }).then((res) => {
+                            if (!res) {
+                                this.$refs.func.formChanged = true
+                                return
+                            }
                             const projectId = this.$route.params.projectId
                             return this.getAllGroupFuncs(projectId).then(() => {
                                 if (!this.openGroupIds.includes(res.funcGroupId)) this.openGroupIds.push(res.funcGroupId)
                                 this.chooseId = res.id
-                                this.formChanged = false
                                 this.$bkMessage({ theme: 'success', message: '修改函数成功' })
                             })
                         })
                     }
                     const addFunc = () => {
                         const groupId = this.templateFunc.groupId
-                        return this.addFunc({ groupId, func: postData, h, varWhere }).then((res) => {
-                            if (!res) return
+                        return this.addFunc({ groupId, func: postData, varWhere }).then((res) => {
+                            if (!res) {
+                                this.$refs.func.formChanged = true
+                                return
+                            }
                             if (!this.openGroupIds.includes(groupId)) this.openGroupIds.push(groupId)
                             this.chooseId = res.id
-                            this.formChanged = false
                             this.templateFunc = {}
                             this.$bkMessage({ theme: 'success', message: '添加函数成功' })
                         })
@@ -503,11 +474,15 @@
                     const method = postData.id ? editFunc : addFunc
                     return method().then(() => {
                         this.getAllVariable(varWhere)
+                        if (typeof callBack === 'function') callBack()
                     }).catch((err) => {
+                        this.$refs.func.formChanged = true
                         this.$bkMessage({ theme: 'error', message: err.message || err })
                     }).finally(() => {
                         this.isSaving = false
                     })
+                }).catch((validator) => {
+                    this.$bkMessage({ message: validator.content || validator, theme: 'error' })
                 })
             },
 
@@ -531,7 +506,6 @@
                     const funcList = curGroup.functionList || []
                     return this.deleteFunc({ groupId: curGroup.id, funcId: this.delObj.id, projectId, funcName: this.delObj.name }).then(() => {
                         if (this.delObj.id === this.chooseId) {
-                            this.formChanged = false
                             const firstGroup = this.groupList[0]
                             const curFuncList = funcList.length ? funcList : firstGroup.functionList
                             const firstFunc = curFuncList[0]
@@ -599,43 +573,6 @@
                     else if (this.groupList.find(x => nameList.includes(x.groupName))) reject(new Error('分类名重复，请修改后重试'))
                     else resolve()
                 })
-            },
-
-            resizeLayOut (width) {
-                this.$refs.func.resize(width)
-            },
-
-            exitFullScreen () {
-                const exitMethod = document.exitFullscreen // W3C
-                if (exitMethod) {
-                    exitMethod.call(document)
-                }
-            },
-
-            openFullScreen () {
-                const element = this.$refs.methodMain.$el
-                const fullScreenMethod = element.requestFullScreen // W3C
-                    || element.webkitRequestFullScreen // FireFox
-                    || element.webkitExitFullscreen // Chrome等
-                    || element.msRequestFullscreen // IE11
-                if (fullScreenMethod) {
-                    fullScreenMethod.call(element)
-                } else {
-                    this.$bkMessage({
-                        showClose: true,
-                        message: '此浏览器不支持全屏操作，请使用chrome浏览器',
-                        type: 'warning'
-                    })
-                }
-            },
-
-            handleFullScreen () {
-                this.isFull = document.fullscreenElement
-                this.$nextTick(() => {
-                    const leftEle = document.querySelector('.func-left')
-                    const width = leftEle.offsetWidth
-                    if (this.$refs.func) this.$refs.func.resize(width)
-                })
             }
         }
     }
@@ -652,11 +589,10 @@
         z-index: 2000;
         .function-main {
             position: absolute;
-            width: 67.7%;
-            height: 61.5% !important;
-            min-height: 61.5%;
-            top: 19.8%;
-            left: 16.1%;
+            width: 86%;
+            height: 74%;
+            top: 13%;
+            left: 7%;
             border-radius: 2px;
             box-shadow: 0px 4px 12px 0px rgba(0,0,0,0.2);
         }
@@ -704,6 +640,7 @@
         overflow: hidden;
         .func-form {
             height: calc(100% - 50px);
+            overflow: hidden;
         }
         .main-footer {
             padding: 9px 20px;
@@ -916,33 +853,6 @@
                 &:first-child {
                     margin-right: 10px;
                 }
-            }
-        }
-    }
-    .icon-style {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        z-index: 1;
-        color: #C4C6CC;
-        cursor: pointer;
-        .bk-drag-icon {
-            width: 16px;
-            height: 16px;
-            color: #979ba5;
-            display: inline-block;
-        }
-        .un-full-screen {
-            width: 108px;
-            height: 36px;
-            line-height: 36px;
-            text-align: center;
-            opacity: 0.7;
-            background: #000000;
-            border-radius: 2px;
-            padding: 3px 6px;
-            &:hover {
-                opacity: 0.9;
             }
         }
     }

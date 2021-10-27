@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { getAll, addVariable, editVariable, deleteVariable } from '../model/variable.js'
+import { getAll, addVariable, editVariable, deleteVariable, findById } from '../model/variable.js'
 import { updateVariableRelation } from '../model/variable-relation'
 import fileService from '../utils/file-service/index'
 import { checkFuncEslint } from '../util'
@@ -60,14 +60,15 @@ const variable = {
     async addVariable (ctx) {
         try {
             const body = ctx.request.body || {}
-            const variableType = body.variableType
-            if (variableType === 1) {
+            const { valueType, defaultValue } = body
+            if (valueType === 6) {
                 const func = {
-                    funcBody: (body.defaultValue || {}).all || ''
+                    funcBody: (defaultValue || {}).all || ''
                 }
                 const errMessage = await checkFuncEslint(func)
                 if (errMessage) {
-                    throw new global.BusinessError(errMessage)
+                    // throw new global.BusinessError(errMessage)
+                    ctx.throwBusinessError(errMessage)
                 }
             }
             const data = await addVariable(body)
@@ -85,10 +86,10 @@ const variable = {
     async editVariable (ctx) {
         try {
             const body = ctx.request.body || {}
-            const variableType = body.variableType
-            if (variableType === 1) {
+            const { valueType, defaultValue } = body
+            if (valueType === 6) {
                 const func = {
-                    funcBody: (body.defaultValue || {}).all || ''
+                    funcBody: (defaultValue || {}).all || ''
                 }
                 const errMessage = await checkFuncEslint(func)
                 if (errMessage) {
@@ -110,6 +111,12 @@ const variable = {
     async deleteVariable (ctx) {
         try {
             const query = ctx.request.query || {}
+            // 权限
+            const record = await findById(query.id)
+            const userInfo = ctx.session.userInfo || {}
+            ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+            if (!ctx.hasPerm) return
+
             const data = await deleteVariable(query.id)
             await updateVariableRelation(data)
             ctx.send({

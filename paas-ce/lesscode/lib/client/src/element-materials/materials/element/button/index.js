@@ -15,8 +15,8 @@ export default {
     // bk-drag-custom-comp-default
     icon: 'bk-drag-button',
     displayName: '按钮',
-    group: 'Base',
-    events: [{ name: 'click' }],
+    group: '基础',
+    events: [{ name: 'click', tips: '点击时调用该事件函数，事件回调参数 (e: Event)' }],
     styles: ['size', 'padding', 'margin', 'display'],
     renderStyles: {
         display: 'inline-block'
@@ -78,10 +78,13 @@ export default {
             val: '',
             options: ['button', 'submit', 'reset'],
             tips: '原生 type 属性'
-        },
-        slots: {
-            name: 'text',
-            type: 'text',
+        }
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['text'],
+            displayName: '文本配置',
             val: '默认按钮'
         }
     }

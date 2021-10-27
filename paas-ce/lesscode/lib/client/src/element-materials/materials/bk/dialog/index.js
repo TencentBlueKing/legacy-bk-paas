@@ -18,10 +18,10 @@ export default {
     order: 1,
     interactiveShow: true,
     events: [
-        { name: 'confirm', tips: '点击确定按钮触发的事件' },
-        { name: 'cancel', tips: '点击取消按钮触发的事件，主动调用关闭才会触发，通过改变双向绑定的值关闭弹框时不会触发' },
-        { name: 'value-change', tips: '弹框显示状态变化的回调函数' },
-        { name: 'after-leave', tips: '弹框消失的动画结束后触发的回调函数' }
+        { name: 'confirm', tips: '点击确定按钮时调用该事件函数，暂无事件回调参数' },
+        { name: 'cancel', tips: '点击取消按钮时调用该事件函数，主动调用关闭才会触发，通过改变双向绑定的值关闭弹框时不会触发，暂无事件回调参数' },
+        { name: 'value-change', tips: '弹框显示状态变化时调用该事件函数，暂无事件回调参数' },
+        { name: 'after-leave', tips: '弹框消失的动画结束后调用该事件函数，暂无事件回调参数' }
     ],
     renderStyles: {
         display: 'inline-block'
@@ -35,6 +35,35 @@ export default {
             valType: 'variable'
         }
     ],
+    slots: {
+        default: {
+            name: ['layout'],
+            type: ['render-grid'],
+            display: 'hidden',
+            val: {
+                name: 'grid',
+                type: 'render-grid',
+                slotName: '',
+                slotContainer: true,
+                renderProps: {},
+                renderStyles: {},
+                renderEvents: {},
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'column',
+                        val: [
+                            {
+                                children: [],
+                                span: 1,
+                                width: '100%'
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
     props: {
         'value': {
             type: 'boolean',
@@ -43,32 +72,6 @@ export default {
         'title': {
             type: 'string',
             val: '这是标题'
-        },
-        slots: {
-            name: 'layout',
-            type: 'hidden',
-            val: {
-                name: 'grid',
-                type: 'render-grid',
-                slotName: '',
-                slotContainer: true,
-                renderProps: {
-                    slots: {
-                        type: 'column',
-                        val:
-                            [
-                                {
-                                    children: [],
-                                    span: 1,
-                                    width: '100%'
-                                }
-                            ]
-                    }
-                },
-                renderStyles: {},
-                renderEvents: {},
-                renderDirectives: []
-            }
         },
         'theme': {
             type: 'string',

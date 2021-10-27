@@ -33,10 +33,12 @@
                             <div class="nav-content" :class="$route.name === 'start' ? 'nav-active' : ''" @click="jump('start')">快速上手</div>
                             <div class="nav-content" :class="$route.name === 'grid' ? 'nav-active' : ''" @click="jump('grid')">栅格布局</div>
                             <div class="nav-content" :class="$route.name === 'freeLayout' ? 'nav-active' : ''" @click="jump('freeLayout')">自由布局</div>
+                            <div class="nav-content" :class="$route.name === 'interactive' ? 'nav-active' : ''" @click="jump('interactive')">交互式组件</div>
                             <div class="nav-content" :class="$route.name === 'layout-guide' ? 'nav-active' : ''" @click="jump('layout-guide')">布局模板使用指引</div>
                             <div class="nav-content" :class="$route.name === 'custom' ? 'nav-active' : ''" @click="jump('custom')">自定义组件开发指引</div>
                             <div class="nav-content" :class="$route.name === 'method' ? 'nav-active' : ''" @click="jump('method')">函数使用指引</div>
                             <div class="nav-content" :class="$route.name === 'variable' ? 'nav-active' : ''" @click="jump('variable')">变量使用指引</div>
+                            <div class="nav-content" :class="$route.name === 'directive' ? 'nav-active' : ''" @click="jump('directive')">指令使用指引</div>
                             <div class="nav-content" :class="$route.name === 'develop' ? 'nav-active' : ''" @click="jump('develop')">二次开发指引</div>
                             <div class="nav-content" :class="$route.name === 'table-search' ? 'nav-active' : ''" @click="jump('table-search')">表格查询实战案例</div>
                             <div class="nav-content" :class="$route.name === 'changelog' ? 'nav-active' : ''" @click="jump('changelog')">更新日志</div>

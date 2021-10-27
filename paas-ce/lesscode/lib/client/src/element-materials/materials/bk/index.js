@@ -61,11 +61,21 @@ import divider from './divider'
 import chartsLine from './charts-line'
 import chartsBar from './charts-bar'
 import chartsPie from './charts-pie'
+import bkChartsLine from './bk-charts-line'
+import bkChartsBar from './bk-charts-bar'
+import bkChartsPie from './bk-charts-pie'
+import bkChartsRadar from './bk-charts-radar'
+import bkChartsBubble from './bk-charts-bubble'
+import bkChartsScatter from './bk-charts-scatter'
 
 import freeLayout from './free-layout'
+import form from './form'
 
 import dialog from './dialog'
 import sideslider from './sideslider'
+
+// 组件文档地址
+import infoLink from './info-link'
 
 // 这个对象里组件的顺序与页面左侧待选组件区的顺序一致，从左至右，从上至下
 // 是为了要保证 Array.from(new Set(bkComponents.map(item => item.group))) 得到的结果是
@@ -122,10 +132,19 @@ const bkComponents = Object.seal([
     chartsPie,
     dialog,
     freeLayout,
+    form,
     divider,
-    sideslider
+    sideslider,
+    bkChartsLine,
+    bkChartsBar,
+    bkChartsPie,
+    bkChartsRadar,
+    bkChartsBubble,
+    bkChartsScatter
 ])
 
 export default bkComponents
 
 export const bkComponentGroupList = Array.from(new Set(bkComponents.map(item => item.group)))
+
+export const bkLink = infoLink

@@ -11,8 +11,14 @@
 
 <template>
     <div>
-        <template v-if="Object.keys(materialConfig).length">
-            <template v-for="(item, key) in materialConfig">
+        <template v-if="hasMaterialConfig">
+            <render-slots
+                :material-config="materialConfig.slots"
+                :last-slots="lastSlots"
+                :last-props="lastProps"
+                @change="batchUpdate">
+            </render-slots>
+            <template v-for="(item, key) in materialConfig.props">
                 <render-prop
                     v-if="!(key === 'slots' && item.type === 'hidden')"
                     :describe="item"
@@ -33,12 +39,14 @@
     import { mapGetters } from 'vuex'
 
     import RenderProp from './components/render-prop'
+    import RenderSlots from '../slots'
     import { bus } from '@/common/bus'
 
     export default {
         name: 'modifier-prop',
         components: {
-            RenderProp
+            RenderProp,
+            RenderSlots
         },
         props: {
             materialConfig: {
@@ -52,10 +60,22 @@
             lastDirectives: {
                 type: Array,
                 default: () => ([])
+            },
+            lastSlots: {
+                type: Object,
+                default: () => ({})
             }
         },
         computed: {
-            ...mapGetters('drag', ['curSelectedComponentData'])
+            ...mapGetters('drag', ['curSelectedComponentData']),
+
+            hasMaterialConfig () {
+                const propConfig = this.materialConfig.props || {}
+                const slotConfig = this.materialConfig.slots || {}
+                const configs = { ...propConfig, ...slotConfig }
+                const keys = Object.keys(configs).filter(key => configs[key].display !== 'hidden')
+                return keys.length
+            }
         },
         created () {
             this.renderProps = this.lastProps

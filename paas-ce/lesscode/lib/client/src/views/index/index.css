@@ -210,6 +210,14 @@ $headerHeight: 64px;
                     background-color: #e1ecff;
                     color: #3a84ff;
                 }
+                .bk-drag-icon {
+                    position: relative;
+                    .red-point {
+                        position: absolute;
+                        left: 12px;
+                        top: 4px;
+                    }
+                }
             }
         }
         .main-content {
@@ -384,12 +392,12 @@ $headerHeight: 64px;
 
         /* in-column-drag-area, Class name for the drop placeholder */
         /* 从左侧往中间拖拽区拖拽时生效 */
+        .target-ghost,
         .in-column-ghost {
-            opacity: .5;
             &.component-item {
                 &:after {
                     content: "放在这里";
-                    background-color: #fd9c9c;
+                    background-color: #C2D7F9;
                     position: absolute;
                     left: 0;
                     text-align: center;
@@ -434,6 +442,13 @@ $headerHeight: 64px;
             opacity: .5;
             background-color: #ffe8c3;
         } */
+    }
+    .prop-doc {
+        margin: 14px 0 0 10px;
+        color: #3a84ff;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 12px;
     }
 }
 
@@ -911,6 +926,9 @@ $headerHeight: 64px;
     }
     .extension {
         cursor: pointer;
+        .page-row:hover {
+            color: #3A84FF;
+        }
     }
 }
 

@@ -44,7 +44,7 @@
                 <bk-input
                     v-model="newCategory"
                     :native-attributes="{ autofocus: 'autofocus' }"
-                    placeholder="请输入函数分类，多个分类“/”分隔，回车结束"
+                    placeholder="请输入组件分类，多个分类“/”分隔，回车结束"
                     @keyup="handleSubmitCategory" />
             </div>
         </div>

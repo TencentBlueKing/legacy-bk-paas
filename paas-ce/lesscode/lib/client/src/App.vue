@@ -18,6 +18,9 @@
             <app-header></app-header>
             <router-view :name="topView" v-show="!mainContentLoading" />
         </div>
+        <bk-fixed-navbar v-if="!isCanvas"
+            :position="position"
+            :nav-items="navItems"></bk-fixed-navbar>
     </section>
 </template>
 <script>
@@ -30,14 +33,34 @@
 
         data () {
             return {
-                systemCls: 'mac'
+                systemCls: 'mac',
+                position: 'middle',
+                navItems: [
+                    {
+                        icon: 'bk-drag-icon bk-drag-document',
+                        text: '文档',
+                        action: () => {
+                            const routerUrl = this.$router.resolve({
+                                path: '/help'
+                            })
+                            window.open(routerUrl.href, '_blank')
+                        }
+                    },
+                    {
+                        icon: 'bk-drag-icon bk-drag-comment-fill',
+                        text: '反馈',
+                        action: () => {
+                            window.open('https://github.com/Tencent/bk-PaaS/labels/lesscode')
+                        }
+                    }
+                ]
             }
         },
 
         computed: {
             ...mapGetters(['mainContentLoading']),
             emptyPage () {
-                return this.$route.name === 'preview'
+                return this.$route.name === 'preview' || this.$route.name === 'previewTemplate'
             },
             authed () {
                 return this.$route.meta.authed
@@ -45,7 +68,14 @@
             topView () {
                 const topRoute = this.$route.matched[0]
                 return (topRoute && topRoute.meta.view) || 'default'
+            },
+            isCanvas () {
+                return this.$route.name === 'new'
             }
+        },
+
+        async created () {
+            await this.$store.dispatch('isPlatformAdmin')
         },
 
         mounted () {
@@ -74,6 +104,7 @@
     #app {
         width: 100%;
         height: 100%;
+        overflow-y: hidden;
         font-size: 14px;
         color: #63656e;
     }
@@ -83,8 +114,21 @@
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
     }
 
+    .bk-fixed-navbar-wrapper {
+        z-index: 9999;
+    }
+
     .win {
         /* font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria; */
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
+    }
+
+    .red-point {
+        display:block;
+        margin-left: 3px;
+        background:#f00;
+        border-radius:50%;
+        width:6px;
+        height:6px;
     }
 </style>

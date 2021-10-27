@@ -21,8 +21,12 @@ Vue.use(VueRouter)
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
+const functionMarket = () => import(/* webpackChunkName: 'functionMarket' */'@/views/system/function-market')
+const templateMarket = () => import(/* webpackChunkName: 'templateMarket' */'@/views/system/template-market')
+
 const ComponentManage = () => import(/* webpackChunkName: 'index' */'@/views/project/component-manage')
 const FunctionManage = () => import(/* webpackChunkName: 'index' */'@/views/project/function-manage')
+const TemplateManage = () => import(/* webpackChunkName: 'index' */'@/views/project/template-manage')
 const MemberManage = () => import(/* webpackChunkName: 'index' */'@/views/project/member-manage')
 const VariableManage = () => import(/* webpackChunkName: 'index' */'@/views/project/variable-manage')
 
@@ -36,7 +40,10 @@ const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/lay
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
+const PreviewTemplate = () => import(/* webpackChunkName: 'previewTemplate' */'@/views/preview/preview-template')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
+
+const HealthPage = () => import(/* webpackChunkName: 'none' */'@/views/system/health')
 
 const MainHelpEntry = () => import(/* webpackChunkName: 'index' */'@/views/help')
 const Custom = () => import(/* webpackChunkName: 'custom' */'@/views/help/docs/custom.md')
@@ -49,7 +56,16 @@ const Changelog = () => import(/* webpackChunkName: 'changelog' */'@/views/chang
 const TableSearch = () => import(/* webpackChunkName: 'case-table-search' */'@/views/help/docs/case-table-search.md')
 const Method = () => import(/* webpackChunkName: 'method' */'@/views/help/docs/method.md')
 const Variable = () => import(/* webpackChunkName: 'variable' */'@/views/help/docs/variable.md')
+const Directive = () => import(/* webpackChunkName: 'directive' */'@/views/help/docs/directive.md')
 const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
+const Interactive = () => import(/* webpackChunkName: 'interactive' */'@/views/help/docs/interactive.md')
+
+// 运营统计
+const OperationEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/operation/index.vue')
+const OperationStatsUser = () => import(/* webpackChunkName: 'operation-stats-user' */'@/views/system/operation/stats/user/index.vue')
+const OperationStatsProject = () => import(/* webpackChunkName: 'operation-stats-project' */'@/views/system/operation/stats/project/index.vue')
+const OperationStatsFunc = () => import(/* webpackChunkName: 'operation-stats-func' */'@/views/system/operation/stats/func/index.vue')
+const OperationStatsComp = () => import(/* webpackChunkName: 'operation-stats-comp' */'@/views/system/operation/stats/comp/index.vue')
 
 const routes = [
     {
@@ -67,12 +83,21 @@ const routes = [
             { path: 'case-table-search', name: 'table-search', component: TableSearch },
             { path: 'method', name: 'method', component: Method },
             { path: 'variable', name: 'variable', component: Variable },
-            { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc }
+            { path: 'directive', name: 'directive', component: Directive },
+            { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc },
+            { path: 'interactive', name: 'interactive', component: Interactive }
         ]
     },
     {
+        path: '/checkHealth',
+        component: HealthPage
+    },
+    {
         path: '/',
-        component: SystemEntry,
+        components: {
+            default: SystemEntry,
+            permission: require('@/views/status/403').default
+        },
         redirect: { name: 'projects' },
         children: [
             {
@@ -84,12 +109,68 @@ const routes = [
                 }
             },
             {
+                path: 'function-market',
+                name: 'functionMarket',
+                component: functionMarket,
+                meta: {
+                    title: '函数市场'
+                }
+            },
+            {
+                path: 'template-market',
+                name: 'templateMarket',
+                component: templateMarket,
+                meta: {
+                    title: '模板市场'
+                }
+            },
+            {
                 path: 'account',
                 name: 'account',
                 component: Account,
                 meta: {
                     title: '账号管理'
                 }
+            },
+            {
+                name: 'op-entry',
+                path: '/op',
+                component: OperationEntry,
+                redirect: { name: 'op-stats-user' },
+                children: [
+                    {
+                        path: 'stats/user',
+                        name: 'op-stats-user',
+                        component: OperationStatsUser,
+                        meta: {
+                            title: '用户数据'
+                        }
+                    },
+                    {
+                        path: 'stats/project',
+                        name: 'op-stats-project',
+                        component: OperationStatsProject,
+                        meta: {
+                            title: '项目数据'
+                        }
+                    },
+                    {
+                        path: 'stats/func',
+                        name: 'op-stats-func',
+                        component: OperationStatsFunc,
+                        meta: {
+                            title: '函数数据'
+                        }
+                    },
+                    {
+                        path: 'stats/comp',
+                        name: 'op-stats-comp',
+                        component: OperationStatsComp,
+                        meta: {
+                            title: '自定义组件数据'
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -124,6 +205,14 @@ const routes = [
                 component: FunctionManage,
                 meta: {
                     title: '函数库'
+                }
+            },
+            {
+                path: 'template-manage',
+                name: 'templateManage',
+                component: TemplateManage,
+                meta: {
+                    title: '模板库'
                 }
             },
             {
@@ -198,6 +287,14 @@ const routes = [
         component: Preview
     },
     {
+        path: '/preview-template/project/:projectId/:templateId',
+        name: 'previewTemplate',
+        component: PreviewTemplate,
+        meta: {
+            title: '模板预览'
+        }
+    },
+    {
         path: '*',
         name: '404',
         component: NotFound
@@ -233,6 +330,11 @@ const checkViewAuth = async (to) => {
     if (topRoute.name === 'page-entry') {
         const res = await store.dispatch('page/verify', { data: { id: to.params.pageId, projectId: to.params.projectId } })
         hasPermission = res.data
+    }
+
+    if (to.matched[1] && to.matched[1].name === 'op-entry') {
+        const isAdmin = await store.dispatch('isPlatformAdmin')
+        hasPermission = isAdmin
     }
 
     // if (to.name === 'preview') {

@@ -21,7 +21,7 @@
             <div class="side-bd" :class="{ 'no-click': pageLoading }">
                 <nav class="nav-list">
                     <router-link tag="div" class="nav-item" v-for="item in navList" :key="item.title" :to="item.toPath">
-                        <i :class="`bk-drag-icon bk-drag-${item.icon}`"></i>{{ item.title }}
+                        <i :class="`bk-drag-icon bk-drag-${item.icon}`"></i>{{ item.title }} <i v-if="item.redPoint" class="red-point"></i>
                     </router-link>
                 </nav>
             </div>
@@ -66,6 +66,12 @@
                         toPath: 'function-manage'
                     },
                     {
+                        title: '模板库',
+                        icon: 'template-fill',
+                        toPath: 'template-manage',
+                        redPoint: true
+                    },
+                    {
                         title: '变量管理',
                         icon: 'variable-manage',
                         toPath: 'variable-manage'
@@ -106,14 +112,6 @@
                 return this.$route.meta.title
             }
         },
-        // watch: {
-        //     '$route': {
-        //         handler (to, from) {
-        //             console.error(to)
-        //         },
-        //         immediate: true
-        //     }
-        // },
         beforeRouteUpdate (to, from, next) {
             this.projectId = parseInt(to.params.projectId)
             this.setCurrentProject()
@@ -138,7 +136,7 @@
             async getProjectList () {
                 try {
                     this.pageLoading = true
-                    const { projectList } = await this.$store.dispatch('project/query', { config: {} })
+                    const projectList = await this.$store.dispatch('project/my', { config: {} })
                     this.projectList = projectList
                 } catch (e) {
                     console.error(e)
@@ -160,6 +158,7 @@
 
 <style lang="postcss">
     @import "@/css/mixins/ellipsis";
+    @import "@/css/mixins/scroller";
 
     .select-project-dropdown .bk-select-search-input {
         padding: 0 10px 0 30px;
@@ -248,6 +247,7 @@
         .main-container {
             height: calc(100% - var(--breadcrumb-height));
             overflow: auto;
+            @mixin scroller;
 
             .exception-page {
                 height: 100%;

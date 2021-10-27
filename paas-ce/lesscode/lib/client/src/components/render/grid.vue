@@ -19,9 +19,11 @@
             @contextmenu.stop="rowClickHandler(renderData, $event)"
             @mouseover.native.stop="rowMouseoverHandler(renderData)"
             @mouseout.native.stop="rowMouseoutHandler(renderData)">
-            <component-menu class="grid-context-menu"
+            <component-menu
+                class="grid-context-menu context-menu"
                 :target="contextMenuTarget"
                 :show="contextMenuVisible"
+                :offset="getComputedMunuOffset"
                 @update:show="show => contextMenuVisible = show">
                 <a href="javascript:;" @click="handleContextmenuDelete">删除栅格布局</a>
                 <a href="javascript:;" @click="handleContextmenuClearGrid">清空栅格布局</a>
@@ -33,7 +35,7 @@
                     class="drag-area target-in-column"
                     :sort="true"
                     :list="column.children"
-                    :group="{ name: groupType, pull: true, put: ['render-grid', 'free-layout', 'component'] }"
+                    :group="{ name: groupType, pull: true, put: ['render-grid', 'free-layout', 'component', ...extraDragCls] }"
                     ghost-class="in-column-ghost"
                     chosen-class="in-column-chosen"
                     drag-class="in-column-drag"
@@ -89,6 +91,7 @@
     import renderComponent from './component'
     import freeLayout from './free-layout'
     import ComponentMenu from '@/components/widget/context-menu.vue'
+    import offsetMixin from './offset-mixin'
 
     export default {
         name: 'render-grid',
@@ -100,10 +103,15 @@
             freeLayout,
             ComponentMenu
         },
+        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            extraDragCls: {
+                type: Array,
+                default: () => ['interactiveInnerComp']
             }
         },
         data () {
@@ -139,6 +147,7 @@
                 this.renderDataSlotName = this.renderData.renderProps.slots.name
             }
             this.updateBindProps()
+            this.updateBindSlots()
             this.setColWidth()
 
             bus.$on('on-update-props', this.updatePropsHandler)
@@ -164,8 +173,7 @@
              */
             handleContextmenuDelete () {
                 setTimeout(() => {
-                    const delBtn = document.querySelector('#del-component-right-sidebar')
-                    delBtn && delBtn.click()
+                    bus.$emit('on-delete-component')
                 }, 0)
                 this.contextMenuVisible = false
             },
@@ -182,7 +190,7 @@
              */
             confirmClearGrid () {
                 const renderData = Object.assign({}, this.renderData)
-                renderData.renderProps.slots.val.forEach(v => {
+                renderData.renderSlots.default.val.forEach(v => {
                     v.children = []
                 })
                 this.renderData = Object.assign({}, renderData)
@@ -224,8 +232,14 @@
                 })
                 this.bindProps = bindProps
                 // debugger
-                if (this.renderData.renderProps.slots) {
-                    this.renderDataSlot = this.renderData.renderProps.slots
+                // if (this.renderData.renderProps.slots) {
+                //     this.renderDataSlot = this.renderData.renderProps.slots
+                // }
+            },
+
+            updateBindSlots () {
+                if (this.renderData.renderSlots) {
+                    this.renderDataSlot = this.renderData.renderSlots.default
                 }
             },
 
@@ -242,12 +256,14 @@
                         modifier: data.modifier
                     }
                     this.pushTargetHistory(pushData)
-                    const { renderStyles = {}, renderProps = {}, tabPanelActive = 'props', renderDirectives = [] } = data.modifier
+                    const { renderStyles = {}, renderProps = {}, tabPanelActive = 'props', renderDirectives = [], renderSlots = {} } = data.modifier
                     this.renderData.renderStyles = renderStyles
                     this.renderData.renderProps = renderProps
                     this.renderData.renderDirectives = renderDirectives
+                    this.renderData.renderSlots = renderSlots
                     this.renderData.tabPanelActive = tabPanelActive
                     this.updateBindProps()
+                    this.updateBindSlots()
                     this.setColWidth()
                 }
             },
@@ -324,6 +340,8 @@
                 const curRowNode = getNodeWithClass(e.target, 'bk-layout-grid-row')
                 curRowNode.classList.add('selected')
 
+                bus.$emit('hideContextMenu') // 隐藏右键菜单()
+
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
 
                 bus.$emit('selected-tree', this.renderData.componentId)
@@ -366,11 +384,11 @@
             },
 
             handleAddColumn () {
-                if (this.renderData.renderProps.slots.val.length === 12) {
+                if (this.renderData.renderSlots.default.val.length === 12) {
                     this.messageWarn('最多支持12栅格')
                     return
                 }
-                this.renderData.renderProps.slots.val.push({ span: 1, children: [] })
+                this.renderData.renderSlots.default.val.push({ span: 1, children: [] })
                 this.updateBindProps()
                 this.setColWidth()
             },
@@ -379,7 +397,8 @@
                 const selfIndex = _.findIndex(parentRow, _ => _.componentId === this.renderData.componentId)
                 console.log('fome clone grid', selfIndex)
                 const renderProps = _.cloneDeep(this.componentData.renderProps)
-                renderProps.slots.val = this.renderData.renderProps.slots.val.map(() => ({ span: 1, children: [] }))
+                const renderSlots = _.cloneDeep(this.componentData.renderSlots)
+                renderSlots.default.val = this.renderData.renderSlots.default.val.map(() => ({ span: 1, children: [] }))
 
                 parentRow.splice(selfIndex + 1, 0, {
                     componentId: this.componentData.name + '-' + uuid(),
@@ -390,7 +409,8 @@
                     renderProps,
                     renderStyles: {},
                     renderEvents: {},
-                    renderDirectives: []
+                    renderDirectives: [],
+                    renderSlots
                 })
             }
         }

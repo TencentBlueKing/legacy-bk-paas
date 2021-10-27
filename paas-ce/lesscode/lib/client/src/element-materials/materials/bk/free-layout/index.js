@@ -17,13 +17,16 @@ export default {
     group: '布局',
     icon: 'bk-drag-freedrag',
     order: 5,
-    styles: ['size', 'backgroundColor'],
+    styles: ['size', 'minWidth', 'margin', 'padding', 'backgroundColor', 'border'],
     renderStyles: {
         height: '500px'
     },
     props: {
-        slots: {
-            type: 'free-layout-item',
+    },
+    slots: {
+        default: {
+            display: 'hidden',
+            type: ['free-layout-item'],
             // val: []
             // 为了兼容各处的逻辑，保持和 grid 同样的结构
             val: [

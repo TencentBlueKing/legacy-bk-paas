@@ -1,4 +1,4 @@
-import { walkGrid, uuid } from '../util'
+import { walkGrid, uuid, transformOldGrid } from '../util'
 import { getConnection, getRepository, In } from 'typeorm'
 import Page from '../model/entities/page'
 import Route from '../model/entities/route'
@@ -16,6 +16,217 @@ import Variable from '../model/entities/variable'
 import PageVariable from '../model/entities/page-variable'
 import FuncVariable from '../model/entities/func-variable'
 import { logger } from '../logger'
+
+/**
+ * 对现有的 slot 数据更新
+ * 只能执行一次
+ * @param {*} ctx
+ */
+export const updateSlot = async (ctx) => {
+    try {
+        const transformSlot = (slots, name, props) => {
+            const value = slots.val
+            let res = {}
+            switch (name) {
+                case 'el-card':
+                case 'card':
+                    if (typeof value === 'string') {
+                        res = { default: { name: 'html', type: 'html', displayName: '卡片内容区', val: value } }
+                    } else {
+                        res = { default: { name: 'layout', type: 'free-layout', display: 'hidden', val: { ...(value || {}) } } }
+                    }
+                    break
+                case 'sideslider':
+                    res = { content: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
+                    delete (value || {}).renderProps.slots
+                    break
+                case 'dialog':
+                    res = { default: { name: 'layout', type: 'render-grid', display: 'hidden', val: { ...(value || {}), renderSlots: { default: (value || {}).renderProps.slots } } } }
+                    delete (value || {}).renderProps.slots
+                    break
+                case 'form':
+                    res = {
+                        default: {
+                            name: 'layout',
+                            type: 'form-item',
+                            val: (value || []).map(item => {
+                                item.renderSlots = {
+                                    default: {
+                                        ...(item.renderProps || {}).slots,
+                                        val: (((item.renderProps || {}).slots || {}).val || []).map((x) => {
+                                            const renderSlots = {}
+                                            if (x.renderProps.slots) {
+                                                renderSlots.default = { ...x.renderProps.slots }
+                                                delete x.renderProps.slots
+                                            }
+                                            x.renderSlots = renderSlots
+                                            return x
+                                        })
+                                    }
+                                }
+                                delete (item.renderProps || {}).slots
+                                return item
+                            })
+                        }
+                    }
+                    break
+                case 'popover':
+                    res = {
+                        default: { name: 'html', type: 'html', val: (value || ''), payload: (slots.payload || {}) },
+                        content: { name: 'html', type: 'html', val: (props.content || {}).val || '' }
+                    }
+                    break
+                case 'popconfirm':
+                    res = {
+                        default: { name: 'html', type: 'html', val: (value || ''), payload: (slots.payload || {}) },
+                        content: { name: 'html', type: 'html', val: (props.title || {}).val || '' }
+                    }
+                    break
+                case 'el-tooltip':
+                case 'el-upload':
+                    res = {
+                        default: { name: 'html', type: 'html', val: (value || ''), payload: (slots.payload || {}) }
+                    }
+                    break
+                case 'paragraph':
+                    res = { default: { ...(slots || {}), type: 'textarea' } }
+                    break
+                case 'el-checkbox-group':
+                case 'el-radio-group':
+                    res = {
+                        default: {
+                            ...(slots || {}),
+                            type: 'list',
+                            val: slots.val.map((x) => {
+                                x.value = x.label
+                                return x
+                            })
+                        }
+                    }
+                    break
+                case 'el-select':
+                case 'el-tabs':
+                case 'el-steps':
+                case 'el-bread-crumb':
+                case 'el-carousel':
+                case 'el-timeline':
+                case 'checkbox-group':
+                case 'bread-crumb':
+                case 'radio-group':
+                case 'radio-button-group':
+                case 'select':
+                case 'tab':
+                    res = { default: { ...(slots || {}), type: 'list' } }
+                    break
+                case 'el-table':
+                case 'table':
+                    res = { default: { ...(slots || {}), type: 'table-list' } }
+                    break
+                case 'folding-table':
+                case 'search-table':
+                    res = { column: { ...(slots || {}), type: 'table-list' } }
+                    break
+                default:
+                    res = { default: (slots || {}) }
+                    break
+            }
+            return res
+        }
+        const getDefaultTargetData = (targetData) => {
+            if (targetData && Array.isArray(targetData) && targetData.length > 0) {
+                return targetData
+            } else {
+                return [
+                    {
+                        'componentId': `grid-${uuid()}`,
+                        'tabPanelActive': 'props',
+                        'renderKey': 'fa8eba35',
+                        'name': 'grid',
+                        'type': 'render-grid',
+                        'renderProps': {
+                            'margin-horizontal': {
+                                'type': 'number',
+                                'val': 0
+                            },
+                            'margin-vertical': {
+                                'type': 'number',
+                                'val': 0
+                            }
+                        },
+                        'renderStyles': {},
+                        'renderEvents': {},
+                        'interactiveShow': false,
+                        'isComplexComponent': false,
+                        'renderDirectives': [],
+                        'renderSlots': {
+                            'default': {
+                                'type': 'column',
+                                'displayName': '列配置',
+                                'val': [
+                                    {
+                                        'span': 1,
+                                        'children': [],
+                                        'width': '100%'
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+        const errorPageIds = []
+        const projectRepository = getRepository(Project)
+        const projectPageRepository = getRepository(ProjectPage)
+        const pageRepository = getRepository(Page)
+        const allProject = await projectRepository.find({ where: { deleteFlag: 0 } })
+        for (const project of allProject) {
+            const projectId = project.id
+            const projectPages = await projectPageRepository.find({ where: { projectId, deleteFlag: 0 } }) || []
+            const pageIds = projectPages.map((projectPage) => (projectPage.pageId))
+            const pages = pageIds.length > 0 ? await pageRepository.find({ where: { id: In(pageIds) } }) : []
+            for (const page of pages) {
+                try {
+                    const targetData = (typeof page.content) === 'string' ? JSON.parse(page.content) : page.content;
+                    (targetData || []).forEach((grid, index) => {
+                        const callBack = (data) => {
+                            const renderProps = data.renderProps || {}
+                            const slots = renderProps['slots']
+                            if (slots) {
+                                data.renderSlots = transformSlot(slots, data.name, renderProps)
+                                delete renderProps['slots']
+                            }
+                            if (!data.renderSlots) {
+                                data.renderSlots = {}
+                            }
+                        }
+                        transformOldGrid(targetData, grid, callBack, callBack, index)
+                    })
+                    page.content = JSON.stringify(getDefaultTargetData(targetData))
+                    page.updateBySystem = true
+                    await pageRepository.update({ id: page.id }, page)
+                } catch (error) {
+                    console.error(error)
+                    errorPageIds.push(page.id)
+                }
+            }
+        }
+
+        const errorMessage = errorPageIds.length ? `出现错误的pageId：${errorPageIds.join(', ')}` : ''
+        ctx.send({
+            code: 0,
+            message: `slot 数据更新完成. ${errorMessage}`
+        })
+    } catch (error) {
+        logger.warn('warn slot')
+        logger.warn(error)
+        ctx.send({
+            code: -1,
+            message: error.message,
+            data: null
+        })
+    }
+}
 
 /**
  * dialog存量数据更新(dev和t环境，对于已刷脏数据的更新componentId)

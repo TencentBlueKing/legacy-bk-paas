@@ -22,7 +22,13 @@ const {
     checkName,
     pageDetail,
     verify,
-    verifyPreview
+    importJson,
+    verifyPreview,
+    pageLockStatus,
+    updatePageActive,
+    occupyPage,
+    relasePage,
+    getPreviewImg
 } = require('../controller/page')
 
 const router = new Router({
@@ -63,6 +69,12 @@ router.delete('/delete', deletePage)
 router.post('/checkName', checkName)
 router.get('/detail', pageDetail)
 router.post('/verify', verify)
+router.post('/importJson', importJson)
 router.post('/verifyPreview', verifyPreview)
+router.get('/pageLockStatus', pageLockStatus)
+router.post('/updatePageActive', updatePageActive)
+router.post('/occupyPage', occupyPage)
+router.post('/releasePage', relasePage)
+router.get('/previewimg', getPreviewImg)
 
 module.exports = router

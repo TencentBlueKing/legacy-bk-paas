@@ -47,7 +47,7 @@
                             </div>
                             <span :class="['item-tool', 'hover-show', { 'click-show': group.showChange }]" @click="openChange(group)"><i class="bk-icon icon-edit2"></i></span>
                         </bk-popconfirm>
-                        <bk-popover content="无删除权限" class="item-tool-box del-box" v-if="userPerm.roleId === 2">
+                        <bk-popover content="无删除权限" class="item-tool-box del-box" v-if="userPerm.roleId === 2 && user.username !== group.createUser">
                             <i :class="['bk-icon', 'icon-close', 'hover-show', 'disable', { 'click-show': group.showChange }]"></i>
                         </bk-popover>
                         <bk-popover :disabled="group.functionList.length <= 0" content="该分类下有函数，不能删除" class="item-tool-box del-box" v-else>
@@ -65,7 +65,12 @@
 
             <section class="function-main">
                 <h3 class="function-head">
-                    <bk-button theme="primary" @click="addFunction">新建</bk-button>
+                    <section>
+                        <bk-button theme="primary" @click="addFunction">新建</bk-button>
+                        <bk-button @click="showImport = true" class="ml5" :loading="isUploading">导入</bk-button>
+                        <bk-button @click="exportFunction" class="ml5" :disabled="selectionData.length <= 0">导出</bk-button>
+                    </section>
+
                     <bk-input class="head-input" placeholder="请输入" :clearable="true" right-icon="bk-icon icon-search" v-model="searchFunStr"></bk-input>
                 </h3>
 
@@ -75,7 +80,9 @@
                     :header-cell-style="{ background: '#f0f1f5' }"
                     v-bkloading="{ isLoading: isLoadingFunc }"
                     class="function-table"
+                    @selection-change="selectionChange"
                 >
+                    <bk-table-column type="selection" width="60"></bk-table-column>
                     <bk-table-column label="函数名称" prop="funcName" show-overflow-tooltip>
                         <template slot-scope="props">
                             <span>{{ props.row.funcName || '--' }}</span>
@@ -103,7 +110,7 @@
                         <template slot-scope="props">
                             <span class="table-bth" @click="editFunction(props.row)">编辑</span>
                             <span class="table-bth" @click="copyRow(props.row)">复制</span>
-                            <span class="table-bth disable" v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }" v-if="userPerm.roleId === 2">删除</span>
+                            <span class="table-bth disable" v-bk-tooltips="{ content: '无删除权限', placements: ['top'] }" v-if="userPerm.roleId === 2 && user.username !== props.row.createUser">删除</span>
                             <template v-else>
                                 <span class="table-bth" @click="deleteItem(props.row.id, props.row.funcName, false)" v-if="(props.row.pages || []).length <= 0 && !props.row.useFlag && !props.row.useInVar">删除</span>
                                 <span class="table-bth disable" v-bk-tooltips="{ content: '该函数被页面引用，请修改后再删除', placements: ['top'] }" v-if="(props.row.pages || []).length > 0">删除</span>
@@ -116,8 +123,8 @@
             </section>
         </layout>
 
-        <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" @hidden="closeAddFunction">
-            <func-form :func-data="funcObj.form" class="add-function" ref="func" slot="content"></func-form>
+        <bk-sideslider :is-show.sync="funcObj.show" :quick-close="true" :title="funcObj.title" :width="796" :before-close="closeAddFunction">
+            <func-form :func-data="funcObj.form" ref="func" slot="content"></func-form>
             <section slot="footer" class="add-footer">
                 <bk-button theme="primary" @click="submitFunc" :loading="funcObj.loading">提交</bk-button>
                 <bk-button @click="closeAddFunction">取消</bk-button>
@@ -143,6 +150,14 @@
                 <bk-button @click="delObj.show = false" :disabled="delObj.loading">取消</bk-button>
             </div>
         </bk-dialog>
+
+        <import-functions
+            :show.sync="showImport"
+            :loading="isUploading"
+            @import="handleImport"
+        >
+            <bk-button @click="exportDemoFunction">示例</bk-button>
+        </import-functions>
     </article>
 </template>
 
@@ -150,12 +165,15 @@
     import { mapActions, mapGetters } from 'vuex'
     import dayjs from 'dayjs'
     import layout from '@/components/ui/layout'
-    import funcForm from '@/components/methods/func-form'
+    import funcForm from '@/components/methods/func-form/index'
+    import importFunctions from '@/components/methods/import-functions'
+    import functionHelper from '@/components/methods/function-helper'
 
     export default {
         components: {
             layout,
-            funcForm
+            funcForm,
+            importFunctions
         },
 
         data () {
@@ -181,11 +199,15 @@
                     loading: false,
                     title: '',
                     form: {}
-                }
+                },
+                selectionData: [],
+                isUploading: false,
+                showImport: false
             }
         },
 
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('member', ['userPerm']),
             projectId () {
@@ -230,6 +252,7 @@
             ...mapActions('functions', [
                 'getAllGroupFuncs',
                 'addFunc',
+                'bulkAddFunc',
                 'editFunc',
                 'deleteGroup',
                 'deleteFunc',
@@ -290,15 +313,13 @@
 
             submitFunc () {
                 this.$refs.func.validate().then((postData) => {
-                    if (!postData) return
                     this.funcObj.loading = true
-                    const h = this.$createElement
                     if (!postData.projectId) {
                         postData.projectId = this.projectId
                     }
                     const varWhere = { projectId: this.projectId, effectiveRange: 0 }
-                    const add = () => this.addFunc({ groupId: this.curGroupId, func: postData, h, varWhere })
-                    const edit = () => this.editFunc({ groupId: this.curGroupId, func: postData, h, varWhere })
+                    const add = () => this.addFunc({ groupId: this.curGroupId, func: postData, varWhere })
+                    const edit = () => this.editFunc({ groupId: this.curGroupId, func: postData, varWhere })
 
                     const curMethod = this.funcObj.isEdit ? edit : add
                     curMethod().then((res) => {
@@ -312,25 +333,25 @@
                     }).catch(err => this.$bkMessage({ theme: 'error', message: err.message || err })).finally(() => {
                         this.funcObj.loading = false
                     })
+                }).catch((validator) => {
+                    this.$bkMessage({ message: validator.content || validator, theme: 'error' })
                 })
             },
 
             closeAddFunction () {
-                const defaultForm = {
-                    funcName: '',
-                    funcCode: '',
-                    funcGroupId: undefined,
-                    funcType: 0,
-                    funcParams: [],
-                    funcApiUrl: '',
-                    funcMethod: 'get',
-                    funcApiData: '',
-                    funcSummary: '',
-                    funcBody: '',
-                    id: undefined
+                const confirmFn = () => {
+                    this.funcObj.show = false
+                    Object.assign(this.funcObj.form, functionHelper.getDefaultFunc())
                 }
-                this.funcObj.show = false
-                Object.assign(this.funcObj.form, defaultForm)
+                if (this.$refs.func.formChanged) {
+                    this.$bkInfo({
+                        title: '请确认是否关闭',
+                        subTitle: '存在未保存的函数，关闭后不会保存更改',
+                        confirmFn
+                    })
+                } else {
+                    confirmFn()
+                }
             },
 
             initData () {
@@ -453,6 +474,80 @@
             groupFormatter (obj, con, val) {
                 const curGroup = this.funcGroups.find(x => x.id === val) || {}
                 return curGroup.groupName
+            },
+
+            selectionChange (selection) {
+                this.selectionData = selection
+            },
+
+            exportFunction () {
+                functionHelper.exportFunction(this.selectionData, `lesscode-${this.projectId}-func.json`)
+            },
+
+            exportDemoFunction () {
+                const demoExportFunc = [{
+                    'funcName': 'getApiData',
+                    'funcCode': 'getApiData',
+                    'funcParams': [],
+                    'funcBody': 'const data = res.data || []\r\nreturn data\r\n',
+                    'funcSummary': '远程函数，获取数据',
+                    'funcType': 1,
+                    'funcMethod': 'get',
+                    'withToken': 0,
+                    'funcApiData': null,
+                    'funcApiUrl': `${location.origin}/api/data/getMockData`,
+                    'remoteParams': [
+                        'res'
+                    ]
+                }]
+                functionHelper.exportFunction(demoExportFunc, 'lesscode-export-demo-func.json')
+            },
+
+            handleImport (funList) {
+                try {
+                    const funcList = []
+                    const ignoreFunList = []
+                    if (funList.length <= 0) {
+                        throw new Error('JSON文件为空，暂无导入数据')
+                    }
+                    funList.forEach((item) => {
+                        const isRepeatFunc = [...this.curFuncList, ...funcList].find((func) => (func.funcCode === item.funcCode))
+                        const func = {
+                            funcGroupId: this.curGroupId,
+                            ...item
+                        }
+                        if (isRepeatFunc) {
+                            ignoreFunList.push(func)
+                        } else {
+                            funcList.push(func)
+                        }
+                    })
+                    this.isUploading = true
+                    this.bulkAddFuncFromApi(funcList).then((res) => {
+                        if (!res) return
+                        if (ignoreFunList.length) {
+                            this.$bkMessage({ theme: 'primary', message: `【${ignoreFunList.map(x => x.funcName).join(',')}】由于重复标识取消导入`, ellipsisLine: 3 })
+                        }
+                        if (funcList.length) {
+                            this.$bkMessage({ theme: 'success', message: `【${funcList.map(x => x.funcName).join(',')}】导入成功`, ellipsisLine: 3 })
+                        }
+                        this.showImport = false
+                    }).finally(() => {
+                        this.isUploading = false
+                    })
+                } catch (err) {
+                    this.$bkMessage({ theme: 'error', message: err.message || err })
+                }
+            },
+
+            bulkAddFuncFromApi (funcList) {
+                const varWhere = { projectId: this.projectId, effectiveRange: 0 }
+                const postData = { groupId: this.curGroupId, funcList, varWhere }
+                return this.bulkAddFunc(postData).then((res) => {
+                    if (!res) return
+                    const projectId = this.$route.params.projectId
+                    return this.getAllGroupFuncs(projectId)
+                })
             }
         }
     }

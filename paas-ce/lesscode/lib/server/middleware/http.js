@@ -9,15 +9,15 @@
  * specific language governing permissions and limitations under the License.
  */
 
-const httpConf = require('../conf/http')
+// const httpConf = require('../conf/http')
 const axios = require('axios')
-const { getIP } = require('../util')
+// const { getIP } = require('../util')
 
-const host = process.env.NODE_ENV === 'production' ? getIP() : 'localhost'
+// const host = process.env.NODE_ENV === 'production' ? getIP() : 'localhost'
 
 const instance = axios.create({
-    withCredentials: true,
-    baseURL: httpConf.protocol + '://' + host + ':' + httpConf.port
+    withCredentials: true
+    // baseURL: httpConf.protocol + '://' + host + ':' + httpConf.port
     // baseURL: httpConf.protocol + '://localhost:' + httpConf.port
 })
 

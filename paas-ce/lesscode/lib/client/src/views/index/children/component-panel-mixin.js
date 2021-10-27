@@ -1,6 +1,6 @@
 import { mapGetters, mapMutations } from 'vuex'
 import cloneDeep from 'lodash.clonedeep'
-import { uuid } from '@/common/util'
+import { uuid, isInteractiveCompActive } from '@/common/util'
 import { bus } from '@/common/bus'
 
 export default {
@@ -103,9 +103,31 @@ export default {
         onChoose (e, group) {
             const uid = uuid()
             const component = cloneDeep(this.componentGroups[group][e.oldIndex])
-            const { name = '', type = '', props = {}, directives = [], isComplexComponent = false } = component
+            const { name = '', type = '', props = {}, directives = [], slots = {}, isComplexComponent = false } = component
             const id = component.name + '-' + uid
             const renderDirectives = directives
+
+            // build renderSlots
+            function transformSlot (slots) {
+                const renderSlots = slots
+                Object.keys(renderSlots).forEach((key) => {
+                    const renderSlot = renderSlots[key]
+                    Object.keys(renderSlot).forEach((key) => {
+                        const val = renderSlot[key]
+                        if (['type', 'name'].includes(key)) {
+                            renderSlot[key] = val[0]
+                        }
+                        if (key === 'slots') {
+                            renderSlot.renderSlots = transformSlot(val)
+                            delete renderSlot.slots
+                        }
+                        delete renderSlot.tips
+                    })
+                })
+                return renderSlots
+            }
+            const renderSlots = transformSlot(slots)
+
             const renderProps = Object.assign({}, ['bk-dialog', 'bk-sideslider'].includes(type) ? {
                 transfer: {
                     type: Boolean,
@@ -182,7 +204,8 @@ export default {
                 renderEvents: {},
                 interactiveShow: component.interactiveShow || false,
                 isComplexComponent: isComplexComponent,
-                renderDirectives
+                renderDirectives,
+                renderSlots
             }
             this.$emit('update:dragingComponent', this.curDragingComponent)
 
@@ -196,9 +219,16 @@ export default {
             } else {
                 groupName = 'component'
             }
-            this.setDraggableSourceGroup(Object.assign({}, this.draggableSourceGroup, {
-                name: groupName
-            }))
+
+            /**
+             * 当交互式组件激活时，仅允许拖拽到交互式组件的slots中，且交互式组件内部不允许嵌套交互式组件
+             * 当有交互式组件打开时，禁用蒙层下方的画布拖拽和交互
+             */
+            const dragableSourceGroup = Object.assign({}, this.draggableSourceGroup, {
+                name: isInteractiveCompActive() && groupName !== 'interactive' ? 'interactiveInnerComp' : groupName
+            })
+
+            this.setDraggableSourceGroup(dragableSourceGroup)
         },
 
         /**

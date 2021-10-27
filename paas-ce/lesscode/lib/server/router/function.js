@@ -10,7 +10,19 @@
  */
 
 const Router = require('koa-router')
-const { getAllGroupFunc, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, generateToken, getTokenList } = require('../controller/function')
+const {
+    getAllGroupFunc,
+    getGroupList,
+    addFuncGroup,
+    editFuncGroups,
+    deleteFuncGroup,
+    addFunction,
+    bulkAddFunction,
+    getFuncList,
+    editFunction,
+    deleteFunction,
+    fixFunByEslint
+} = require('../controller/function')
 
 const router = new Router({
     prefix: '/api/function'
@@ -21,11 +33,11 @@ router.post('/addFuncGroup', addFuncGroup)
 router.put('/editFuncGroups', editFuncGroups)
 router.delete('/deleteFuncGroup', deleteFuncGroup)
 router.post('/addFunction', addFunction)
+router.post('/bulkAddFunction', bulkAddFunction)
 router.get('/getFuncList', getFuncList)
 router.put('/editFunction', editFunction)
 router.delete('/deleteFunction', deleteFunction)
 router.get('/getAllGroupFunc', getAllGroupFunc)
-router.get('/generateToken', generateToken)
-router.get('/getTokenList', getTokenList)
+router.post('/fixFunByEslint', fixFunByEslint)
 
 module.exports = router

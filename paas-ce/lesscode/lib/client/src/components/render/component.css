@@ -19,17 +19,26 @@
     &[base-component] {
         font-size: 0;
     }
+    [component-type="el-carousel"],
+    [component-type="el-upload"],
+    [component-type="el-tooltip"],
     [component-type="bk-popover"],
     [component-type="bk-animate-number"],
     [component-type="bk-popconfirm"],
     [component-type="bk-badge"],
+    [component-type="el-badge"],
     [component-type="bk-card"],
+    [component-type="el-card"],
     [component-type="bk-divider"],
     [component-type="span"] {
         font-size: 14px;
     }
     [component-type="p"] {
         min-height: 102px;
+    }
+
+    [component-type="bk-color-picker"] {
+        width: inherit;
     }
 
     &.grid {
@@ -117,13 +126,14 @@
 }
 
 .wrapper-cls-hover {
-    .bk-card {
+    .bk-card, .empty-widget-form, .bk-form {
         border: 1px dashed #3a84ff !important;
     }
+    
 }
 
 .wrapper-cls-selected {
-    .bk-card {
+    .bk-card, .bk-form, .empty-widget-form {
         border: 1px solid #3a84ff !important;
     }
 }

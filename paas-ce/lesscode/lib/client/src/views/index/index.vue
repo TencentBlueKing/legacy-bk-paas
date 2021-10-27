@@ -45,8 +45,9 @@
                                     @click.stop="handlePageAction('copy')"
                                     title="复制页面"></i>
                             </bk-option>
-                            <div slot="extension" class="extension" @click="handlePageAction('create')">
-                                <i class="bk-icon icon-plus-circle"></i> 新建页面
+                            <div slot="extension" class="extension">
+                                <div class="page-row" @click="handlePageAction('create')"><i class="bk-icon icon-plus-circle"></i> 新建空白页面</div>
+                                <div class="page-row" @click="handlePageFromTemplate"><i class="bk-icon icon-plus-circle"></i> 从模板新建页面</div>
                             </div>
                         </bk-select>
                     </div>
@@ -59,6 +60,7 @@
                         <li class="tool-item" v-for="(item, innerIndex) in group"
                             :key="innerIndex"
                             :class="{ active: isToolItemActive(item) }"
+                            v-bk-tooltips="{ placement: 'bottom', content: item.tips, disabled: !item.tips }"
                             @click="item.func">
                             <template v-if="item.text === '快捷键'">
                                 <div class="quick-operation" v-bk-clickoutside="toggleShowQuickOperation">
@@ -89,8 +91,9 @@
                     </ul>
                 </div>
             </div>
-            <extra-links>
-                <div slot="before" @click="handleStartGuide">画布操作指引</div>
+            <extra-links show-help-box
+                :help-click="handleStartGuide"
+                :help-tooltips="{ content: '画布操作指引', placements: ['bottom'] }">
             </extra-links>
         </div>
         <div class="main-container">
@@ -103,7 +106,9 @@
                             v-bk-tooltips="item.label"
                             :data-name="item.name"
                             @click="activeSideNav = item.name">
-                            <i :class="['bk-drag-icon', item.icon]"></i>
+                            <i :class="['bk-drag-icon', item.icon]">
+                                <i v-if="item.redPoint" class="red-point"></i>
+                            </i>
                         </li>
                     </ul>
                 </div>
@@ -133,7 +138,10 @@
                                                 </a>
                                             </li>
                                             <li :class="curComponentLib === 'element' ? 'selected' : ''">
-                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('element')">element-ui</a>
+                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('element')">
+                                                    element-ui
+                                                    <i v-bk-tooltips="{ content: elementUiTips, placements: ['bottom-end'] }" class="bk-drag-icon bk-drag-vesion-fill"></i>
+                                                </a>
                                             </li>
                                         </ul>
                                     </bk-dropdown-menu>
@@ -157,6 +165,9 @@
                             v-bind="componentTabs.current.props">
                         </component>
                     </div>
+                </div>
+                <div class="sidebar-panel" v-show="activeSideNav === 'nav-tab-template'">
+                    <template-panel :target-data="targetData" :draging-component.sync="curDragingComponent"></template-panel>
                 </div>
                 <div class="sidebar-panel" v-show="activeSideNav === 'nav-tab-tree'">
                     <component-tree :target-data="targetData" ref="componentTree"></component-tree>
@@ -203,7 +214,7 @@
                 </div>
             </div>
             <div class="main-content border-none" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
-                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
+                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :style-setting="pageDetail.styleSetting" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
             </div>
             <div class="main-content" v-if="['pageFunction', 'setting'].includes(actionSelected)">
                 <page-setting :project="projectDetail" :type="actionSelected"></page-setting>
@@ -219,7 +230,9 @@
                 <div class="selected-component-info" v-if="curSelectedComponentData.componentId && !collapseSide.right">
                     <div class="component-id overflow" v-bk-overflow-tips>{{curSelectedComponentData.componentId}}</div>
                     <div class="action-wrapper">
-                        <i class="bk-drag-icon bk-drag-shanchu mr5"
+                        <i
+                            v-if="!curSelectedComponentData.inFormItem"
+                            class="bk-drag-icon bk-drag-shanchu mr5"
                             id="del-component-right-sidebar"
                             @click="showDeleteElement"
                             v-bk-tooltips="'删除'"></i>
@@ -234,6 +247,12 @@
                 <i class="bk-drag-icon bk-drag-angle-left collapse-icon"
                     v-bk-tooltips.right="{ content: '查看组件配置', disabled: !collapseSide.right }"
                     @click="handleCollapseSide('right')" />
+                <div class="prop-doc"
+                    v-if="infoLinkDict[curSelectedComponentData.type] || infoLinkDict[curSelectedComponentData.name]"
+                    @click="jumpInfoLink(curSelectedComponentData)">
+                    <i class="bk-drag-icon bk-drag-jump-link"></i>
+                    <span>查看详细属性文档</span>
+                </div>
             </aside>
         </div>
 
@@ -257,6 +276,8 @@
         <page-dialog ref="pageDialog" :action="action"></page-dialog>
         <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
+        <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :is-whole-page="true" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
+        <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
     </main>
 </template>
 
@@ -264,9 +285,9 @@
     import Vue from 'vue'
     import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
-    // import html2canvas from 'html2canvas'
-    import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON, dom2Img } from '@/common/util'
-    import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
+    import html2canvas from 'html2canvas'
+    import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON } from '@/common/util'
+    import { getCurUsedFuncs, replaceFuncKeyword } from '@/components/methods/function-helper.js'
     import RenderIndex from '@/components/render/index'
     import FreeLayout from '@/components/render/free-layout'
     import MaterialModifier from '@/element-materials/modifier'
@@ -283,13 +304,18 @@
     import ComponentBasePanel from './children/component-panel-base'
     import ExtraLinks from '@/components/ui/extra-links'
     import PageDialog from '@/components/project/page-dialog'
+    import SaveTemplateDialog from '@/components/render/save-template-dialog'
+    import PageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
     import PageSetting from '@/views/project/page-setting'
     import PageJson from '@/views/project/page-json'
     import pageVariable from '@/views/project/page-variable'
 
     import ComponentTree from './children/component-tree'
+    import TemplatePanel from './children/template-panel.vue'
     import { bus } from '@/common/bus'
-    import preivewErrImg from '@/images/preview-error.png'
+    import safeStringify from '@/common/json-safe-stringify'
+    import previewErrorImg from '@/images/preview-error.png'
+    import { infoLink } from '@/element-materials/materials/index'
 
     export default {
         components: {
@@ -307,7 +333,10 @@
             ExtraLinks,
             PageSetting,
             PageDialog,
+            SaveTemplateDialog,
+            PageFromTemplateDialog,
             ComponentTree,
+            TemplatePanel,
             PageJson,
             pageVariable
         },
@@ -316,12 +345,23 @@
             baseComponentList.splice(0, 0, ...allComponentConf['bk'])
 
             return {
+                lockNotify: null,
+                lockCheckTimer: null,
                 leftNavTabList: [
                     {
                         icon: 'bk-drag-custom-comp-default',
                         name: 'nav-tab-component',
                         label: {
                             content: '组件库',
+                            placement: 'right',
+                            interactive: false
+                        }
+                    }, {
+                        icon: 'bk-drag-template-fill',
+                        name: 'nav-tab-template',
+                        redPoint: true,
+                        label: {
+                            content: '模板库',
                             placement: 'right',
                             interactive: false
                         }
@@ -341,6 +381,7 @@
                 componentTabsCurrentRefresh: +new Date(),
                 curComponentLib: 'bk',
                 baseComponentList,
+                elementUiTips: '当前组件库版本为“2.15.1”，<a target="_blank" href="https://github.com/ElemeFE/element/releases" style="cursor: pointer;color: #3a84ff">查看更新日志</a>',
                 componentTabs: {
                     list: [
                         { name: 'base', label: '基础组件', active: true, tips: '当前组件库版本为“latest”，<a target="_blank" href="https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/changelog" style="cursor: pointer;color: #3a84ff">查看更新日志</a>' },
@@ -396,6 +437,7 @@
                 actionSelected: 'edit',
                 curDragingComponent: null,
                 isShowFun: false,
+                showTemplateDialog: false,
                 componentSearchResult: null,
                 refreshDragAreaKey: +new Date(),
                 delComponentConf: {
@@ -434,14 +476,17 @@
                     [
                         { icon: 'bk-drag-icon bk-drag-save', text: '保存', func: this.handleSave },
                         { icon: 'bk-drag-icon bk-drag-play', text: '预览', func: this.handlePreview },
+                        { icon: 'bk-drag-icon bk-drag-template-fill', text: '存为模板', func: this.toggleShowTemplateDialog, tips: '将画布内容区域（不包含导航部分）存为模板' },
                         { icon: 'bk-drag-icon bk-drag-delete', text: '清空', func: this.handleClearAll },
                         { icon: 'bk-drag-icon bk-drag-hanshuku', text: '函数库', func: this.showFunManage },
                         { icon: 'bk-drag-icon bk-drag-keyboard', text: '快捷键', func: () => this.toggleShowQuickOperation(true) }
                     ]
-                ]
+                ],
+                infoLinkDict: {}
             }
         },
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters(['mainContentLoading']),
             ...mapGetters('drag', [
                 'draggableSourceGroup',
@@ -493,9 +538,11 @@
 
             targetData: {
                 get () {
+                    console.warn('get Target')
                     return this.$store.state.drag.targetData
                 },
                 set (value) {
+                    console.warn('set Target')
                     this.setTargetData(value)
                 }
             },
@@ -516,6 +563,12 @@
 
                 this.panelMap.base.props.componentList = this.baseComponentList
                 this.panelMap.base.props.componentGroupList = allComponentConf[`${v}ComponentGroupList`]
+            },
+            targetData: {
+                deep: true,
+                handler () {
+                    this.lockStatsuPolling('lock')
+                }
             }
         },
         async created () {
@@ -585,15 +638,17 @@
                     'margin-vertical': {
                         type: 'number',
                         val: 0
-                    },
-                    slots: {
-                        type: 'column',
-                        val: [{ span: 1, children: [], width: '100%' }]
                     }
                 },
                 renderStyles: {},
                 renderEvents: {},
-                renderDirectives: []
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'column',
+                        val: [{ span: 1, children: [], width: '100%' }]
+                    }
+                }
             }
             this.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
 
@@ -622,6 +677,9 @@
             // 设置权限相关的信息
             this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
 
+            // 组件文档链接
+            this.infoLinkDict = Object.assign({}, infoLink)
+
             // for test
             window.test = this.test
             window.test1 = this.test1
@@ -631,13 +689,22 @@
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
             window.addEventListener('beforeunload', this.beforeunloadConfirm)
+            window.addEventListener('unload', this.relasePage)
+
+            bus.$on('on-delete-component', this.showDeleteElement)
+            this.$once('hook:beforeDestroy', () => {
+                bus.$off('on-delete-component', this.showDeleteElement)
+            })
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)
             window.removeEventListener('keyup', this.judgeCtrl)
             window.removeEventListener('click', this.toggleQuickOperation, true)
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
+            window.removeEventListener('unload', this.relasePage)
             this.resizeObserve.disconnect()
+            this.relasePage()
+            this.lockNotify && this.lockNotify.close()
         },
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
@@ -674,6 +741,144 @@
                 })
                 this.resizeObserve.observe(canvas)
             },
+            relasePage () {
+                const data = new FormData()
+                data.append('activeUser', this.user.username)
+                data.append('pageId', this.pageId)
+                navigator.sendBeacon('/api/page/releasePage', data)
+            },
+            async lockStatsuPolling (type) {
+                const interval = 20 * 1000 // 节流，状态检查每20s一次
+                if (this.lockCheckTimer === null) {
+                    await this.checkLockStatus(type)
+                    this.lockCheckTimer = setTimeout(() => {
+                        clearTimeout(this.lockCheckTimer)
+                        this.lockCheckTimer = null
+                    }, interval)
+                }
+            },
+            async checkLockStatus (type) {
+                try {
+                    const status = await this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId })
+                    if (status.isLock) {
+                        if (this.lockNotify !== null) return true// 当前有弹窗，代表无权限
+                        const messageType = `${type}-${status.accessible ? 'valiad' : 'invaliad'}`
+                        this.lockNotify = this.$bkNotify({
+                            title: '暂无编辑权限',
+                            theme: 'warning',
+                            delay: 0,
+                            onClose: () => {
+                                this.lockNotify = null
+                            },
+                            message: this.getLockMessage(messageType, status.activeUser)
+                        })
+                        return true
+                    } else { // 未加锁，更新当前画布的加锁者为当前用户
+                        this.$store.dispatch('page/updatePageLock', { data: {
+                            pageId: this.pageId
+                        } })
+                        return false
+                    }
+                } catch (error) {
+                    throw Error({
+                        message: error
+                    })
+                }
+            },
+            userText (text) {
+                const h = this.$createElement
+                return h('span', {
+                    style: {
+                        color: '#EA3636'
+                    }
+                }, [text])
+            },
+            hpyerTextGenerator (text, handler) {
+                const h = this.$createElement
+                return h('span', {
+                    style: {
+                        cursor: 'pointer',
+                        color: '#3a84ff'
+                    },
+                    on: {
+                        click: handler
+                    }
+                }, [text])
+            },
+            getLockMessage (type, user) {
+                const h = this.$createElement
+                switch (type) {
+                    case 'lock-invaliad':
+                        return h('p', {
+                            style: {
+                                'line-height': '26px'
+                            }
+                        }, [
+                            '当前画布正在被',
+                            this.userText(user),
+                            '编辑，您暂无编辑权限，如需操作请联系其退出编辑，如仅需查看页面最新状态，请直接',
+                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
+
+                        ])
+                    case 'lock-valiad':
+                        return h('p', {
+                            style: {
+                                'line-height': '26px'
+                            }
+                        }, [
+                            '当前页面正在被',
+                            this.userText(user),
+                            '编辑，如需获取操作，可点击',
+                            this.hpyerTextGenerator('获取权限', this.occupyPage.bind(this)),
+                            '，如仅需查看页面最新状态，请直接',
+                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
+                        ])
+                    case 'taked-invaliad':
+                        return h('p', {
+                            style: {
+                                'line-height': '26px'
+                            }
+                        }, [
+                            '由于您长时间未操作，页面编辑权已被释放；当前页面正在被',
+                            this.userText(user),
+                            '编辑，如仍需操作请联系其退出，如仅需查看页面最新状态，请直接',
+                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
+                        ])
+                    case 'taked-valiad':
+                        return h('p', {
+                            style: {
+                                'line-height': '26px'
+                            }
+                        }, [
+                            '由于您长时间未操作，页面编辑权已被释放；当前页面正在被',
+                            this.userText(user),
+                            '编辑，如需获取操作，可点击',
+                            this.hpyerTextGenerator('获取权限', this.occupyPage.bind(this)),
+                            '获取权限，如仅需查看页面最新状态，请直接',
+                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
+                        ])
+                }
+            },
+            async occupyPage () {
+                try {
+                    const resp = await this.$store.dispatch('page/occupyPage', {
+                        data: {
+                            pageId: this.pageId
+                        }
+                    })
+                    if (resp.activeUser === this.user.username) {
+                        this.lockNotify && this.lockNotify.close()
+                        this.$bkMessage({
+                            message: '抢占成功',
+                            theme: 'success'
+                        })
+                    }
+                } catch (error) {
+                    throw Error({
+                        message: error
+                    })
+                }
+            },
             isToolItemActive (item) {
                 if (item.text === '快捷键') {
                     return this.showQuickOperation === true
@@ -707,12 +912,24 @@
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
                         this.$store.dispatch('page/getList', { projectId: this.projectId }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
-                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, config: { fromCache: true } }),
+                        this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
+                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
                         this.getAllGroupFuncs(this.projectId)
                     ])
+
+                    await this.lockStatsuPolling('lock') // 处理加锁逻辑
+
                     await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
+                    // update targetdata
+                    const content = pageDetail.content
+                    if (content) {
+                        const targetData = JSON.parse(content)
+                        this.updateTargetData(targetData)
+                        pageDetail.content = safeStringify(targetData)
+                    }
+
                     this.$store.commit('page/setPageDetail', pageDetail || {})
                     this.$store.commit('page/setPageList', pageList || [])
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
@@ -724,6 +941,60 @@
                 }
             },
 
+            /**
+             * 在初始化和切换tab的时候更新画布数据
+             * 将targetdata与其他业务结合
+             */
+            updateTargetData (targetData) {
+                const getVariableVal = (data) => {
+                    function getVariableValue ({ valueType, defaultValueType, defaultValue }) {
+                        let value
+                        if (defaultValueType === 0) {
+                            value = defaultValue.all
+                        }
+                        if (defaultValueType === 1) {
+                            value = defaultValue.stag
+                        }
+                        if ([3, 4].includes(valueType)) value = JSON.parse(value)
+                        if (valueType === 6) value = undefined
+                        return value
+                    }
+
+                    const { val, valType } = data
+                    let variableVal
+
+                    if (valType === 'variable' && val !== '') {
+                        const curVariable = this.variableList.find((variable) => (variable.variableCode === val)) || {}
+                        variableVal = getVariableValue(curVariable)
+                    }
+
+                    return variableVal
+                }
+
+                const callBack = (component) => {
+                    const renderDirectives = component.renderDirectives || []
+                    const renderProps = component.renderProps || {}
+                    // update prop val
+                    Object.keys(renderProps).forEach((key) => {
+                        const renderProp = renderProps[key] || {}
+                        const { payload = {} } = renderProp
+                        const variableData = payload.variableData || {}
+
+                        const data = variableData.val
+                            ? variableData
+                            : renderDirectives.find((dir) => ((dir.type + dir.prop) === (`v-bind${key}`) && ![undefined, ''].includes(dir.val)))
+                        if (data) {
+                            const varVal = getVariableVal(data)
+                            if (varVal !== undefined) {
+                                renderProp.val = varVal
+                            }
+                        }
+                    })
+                }
+
+                targetData.forEach((grid, index) => walkGrid(targetData, grid, callBack, callBack, index))
+            },
+
             registerCustomComponent () {
                 const ExtraGroup = {
                     Favourite: '我的收藏',
@@ -731,12 +1002,22 @@
                 }
                 // 包含所有的自定组件
                 this.wholeComponentList = []
+                window.__innerCustomRegisterComponent__ = {}
                 const script = document.createElement('script')
                 script.src = `/${parseInt(this.$route.params.projectId)}/${parseInt(this.$route.params.pageId)}/component/register.js`
                 script.onload = () => {
                     const customComponentList = window.customCompontensPlugin.map(callback => {
-                        const compData = callback(Vue)
-                        return { ...compData[0], group: compData[2].category, meta: compData[2] }
+                        const [
+                            config,
+                            componentSource,
+                            baseInfo
+                        ] = callback(Vue)
+                        window.__innerCustomRegisterComponent__[config.type] = componentSource
+                        return {
+                            ...config,
+                            group: baseInfo.category,
+                            meta: { ...baseInfo }
+                        }
                     })
 
                     const publicList = []
@@ -793,6 +1074,14 @@
 
             handleStartGuide () {
                 this.$refs.guide.start()
+            },
+
+            toggleShowTemplateDialog (isShow) {
+                if (typeof isShow === 'boolean') {
+                    this.showTemplateDialog = isShow
+                } else {
+                    this.showTemplateDialog = !this.showTemplateDialog
+                }
             },
 
             toggleQuickOperation (event) {
@@ -868,7 +1157,7 @@
                         break
                     case 8:
                     case 46:
-                        funcChainMap.isInDragArea().exec(this.deleteComponent)
+                        funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
                         break
                     case 13:
                         funcChainMap.isDelComponentConfirm().exec(this.confirmDelComponent)
@@ -893,11 +1182,6 @@
                 this.setCopyData(copyData)
                 this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
                 this.confirmDelComponent()
-            },
-
-            deleteComponent () {
-                const delBtn = document.querySelector('#del-component-right-sidebar')
-                delBtn && delBtn.click()
             },
 
             putComponentData () {
@@ -1076,7 +1360,6 @@
             },
 
             async handleToolAction (action) {
-                this.actionSelected = action
                 // 点击源码的时候，需要让右侧属性面板消失
                 // 如果停留在源码页面时属性面板不消失，这个时候修改属性会生效，预览的时候就会生效，但是源码并不会随着属性的变化而重新生成
                 if (['setting', 'vueCode'].includes(action)) {
@@ -1092,12 +1375,23 @@
                     }
                     this.dragWrapperClickHandler()
                 }
+                // 切换回编辑区，对画布数据进行更新
+                if (action === 'edit' && this.actionSelected !== 'edit') {
+                    const targetData = JSON.parse(safeStringify(this.targetData || []))
+                    this.updateTargetData(targetData)
+                    this.targetData = targetData
+                    this.refreshDragAreaKey = +new Date()
+                }
+                this.actionSelected = action
             },
 
             /**
              * 清空页面已拖拽的元素
              */
-            handleClearAll () {
+            async handleClearAll () {
+                const isLock = await this.checkLockStatus('lock')
+                if (isLock) return // 如果被锁，不可清空
+
                 const me = this
                 me.$bkInfo({
                     title: '确定清空所有组件元素？',
@@ -1117,15 +1411,17 @@
                                 'margin-vertical': {
                                     type: 'number',
                                     val: 0
-                                },
-                                slots: {
-                                    type: 'column',
-                                    val: [{ 'span': 1, 'children': [], 'width': '100%' }]
                                 }
                             },
                             renderStyles: {},
                             renderEvents: {},
-                            renderDirectives: []
+                            renderDirectives: [],
+                            renderSlots: {
+                                default: {
+                                    type: 'column',
+                                    val: [{ 'span': 1, 'children': [], 'width': '100%' }]
+                                }
+                            }
                         }
                         const pushData = {
                             oldTargetData: me.targetData,
@@ -1153,6 +1449,13 @@
                 const customComp = this.customComponentList.find(item => item.type === type)
                 this.delComponentConf.isCustomOffline = customComp && customComp.meta.offline
             },
+            /**
+             * 跳转选中的元素文档链接
+             */
+            jumpInfoLink (item) {
+                const type = (item.type === 'chart' || item.type === 'bk-charts') ? item.name : item.type
+                window.open(this.infoLinkDict[type], '_blank')
+            },
 
             /**
              * 确认删除选中的元素
@@ -1171,17 +1474,27 @@
                         }
                         if (item.children) {
                             del(item.children, cid)
+                        } else if (item.renderSlots.default && item.renderSlots.default.type === 'form-item') {
+                            // form表单内的元素不允许通过画布删除
                         } else if (
-                            item.renderProps.slots && (item.renderProps.slots.type === 'column' || item.renderProps.slots.type === 'free-layout-item')
+                            item.renderSlots.default && (item.renderSlots.default.type === 'column' || item.renderSlots.default.type === 'free-layout-item')
                         ) {
-                            del(item.renderProps.slots.val, cid)
-                        } else if (item.renderProps.slots && item.renderProps.slots.name === 'layout') {
-                            del([item.renderProps.slots.val], cid)
+                            del(item.renderSlots.default.val, cid)
+                        } else {
+                            const renderSlots = item.renderSlots || {}
+                            const slotKeys = Object.keys(renderSlots)
+                            slotKeys.forEach((key) => {
+                                const renderSlot = renderSlots[key]
+                                if (renderSlot && renderSlot.name === 'layout') {
+                                    del([renderSlot.val], cid)
+                                }
+                            })
                         }
                     }
                     return ''
                 }
                 const pos = this.$td().getNodePosition(componentId)
+                if (pos === undefined) return
                 const pushData = {
                     parentId: pos.parent && pos.parent.componentId,
                     component: this.delComponentConf.item,
@@ -1231,6 +1544,9 @@
             },
 
             async handleSave (callBack, from) {
+                const isLock = await this.checkLockStatus('lock')
+                if (isLock) return // 如果被锁，不可保存
+
                 if (this.isSaving) {
                     return
                 }
@@ -1295,13 +1611,13 @@
                 // 记录已使用的变量
                 const usedVariableMap = {}
                 function addUsedVariable (id, dir) {
-                    const { modifiers, prop, type, val, valType } = dir
+                    const { modifiers, prop, type, val, valType, slot } = dir
                     function generateUseInfo (variableId) {
-                        const useInfo = { type, componentId: id, prop, modifiers }
-                        const useInfos = usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId])
+                        const useInfo = { type, componentId: id, prop, modifiers, val, slot }
+                        const useInfos = (usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId]))
                         useInfos.push(useInfo)
                     }
-                    if (val !== '' && valType === 'variable') {
+                    if (val !== '' && !(val.startsWith('form') && val.indexOf('.') > 0) && valType === 'variable') {
                         const variable = this.variableList.find((variable) => (variable.variableCode === val))
                         if (!variable) {
                             errMessage = `组件【${id}】使用的变量【${val}】不存在，请修改后再试`
@@ -1344,10 +1660,21 @@
                             const hasMethod = payload && payload.methodCode
                             if (!hasMethod) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为 remote 但未选择远程函数，请修改后再试`
                         }
+                    })
+
+                    const renderSlots = component.renderSlots || {}
+                    Object.keys(renderSlots).forEach((key) => {
+                        const { type, payload = {} } = renderSlots[key] || {}
+
                         if (payload.variableData && payload.variableData.val) {
                             const { val, valType } = payload.variableData
-                            const dir = { prop: 'slots', type: 'v-bind', val, valType }
+                            const dir = { slot: key, type: 'slots', val, valType }
                             addUsedVariable.call(this, component.componentId, dir)
+                        }
+
+                        if (type === 'remote') {
+                            const hasMethod = payload.methodData && payload.methodData.methodCode
+                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${key}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
                         }
                     })
 
@@ -1363,8 +1690,8 @@
                 if (message) errMessage = message
                 const curFuncIds = Object.keys(usedFunctionMap)
                 curFuncIds.forEach((key) => {
-                    const { funcName, funcBody } = usedFunctionMap[key];
-                    (funcBody || '').replace(/lesscode\[\'\$\{prop:([\S]+)\}\'\]/g, (all, dirKey) => {
+                    const { funcName, funcBody, funcCode } = usedFunctionMap[key]
+                    replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
                         if (dirKey) {
                             const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
                             if (!curDir) {
@@ -1372,8 +1699,15 @@
                             }
                         }
                     })
+                    // 使用到的函数名和变量名不能重复
+                    Object.keys(usedVariableMap).forEach((id) => {
+                        const useInfos = usedVariableMap[id]
+                        const variableCode = (useInfos[0] || {}).val
+                        if (variableCode === funcCode) {
+                            errMessage = `页面中使用了函数【${funcCode}】，与使用的变量【${variableCode}】的标识存在冲突，请修改后再试`
+                        }
+                    })
                 })
-
                 return {
                     curFuncIds,
                     errMessage,
@@ -1411,39 +1745,30 @@
 
             savePreviewImg () {
                 if (this.actionSelected === 'edit') {
-                    dom2Img(document.querySelector('.lesscode-editor-layout'), imgData => {
-                        // this.$store.dispatch('page/update', {
-                        //     data: {
-                        //         projectId: this.projectId,
-                        //         pageData: {
-                        //             id: parseInt(this.$route.params.pageId),
-                        //             previewImg: img ? img.src : preivewErrImg
-                        //         }
-                        //     }
-                        // })
-                        this.$store.dispatch('page/update', {
-                            data: {
-                                projectId: this.projectId,
-                                pageCode: this.pageDetail.pageCode,
-                                pageData: {
-                                    id: parseInt(this.$route.params.pageId),
-                                    previewImg: imgData || preivewErrImg
-                                }
-                            }
-                        })
-                    })
-                    // html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
-                    //     const imgData = canvas.toDataURL('image/png')
+                    // dom2Img(document.querySelector('.lesscode-editor-layout'), imgData => {
                     //     this.$store.dispatch('page/update', {
                     //         data: {
                     //             projectId: this.projectId,
+                    //             pageCode: this.pageDetail.pageCode,
                     //             pageData: {
                     //                 id: parseInt(this.$route.params.pageId),
-                    //                 previewImg: imgData
+                    //                 previewImg: imgData || previewErrorImg
                     //             }
                     //         }
                     //     })
                     // })
+                    html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
+                        const imgData = canvas.toDataURL('image/png')
+                        this.$store.dispatch('page/update', {
+                            data: {
+                                projectId: this.projectId,
+                                pageData: {
+                                    id: parseInt(this.$route.params.pageId),
+                                    previewImg: imgData || previewErrorImg
+                                }
+                            }
+                        })
+                    })
                 }
             },
 
@@ -1476,6 +1801,11 @@
                 })
             },
 
+            // 从模板创建
+            handlePageFromTemplate () {
+                this.$refs.pageFromTemplateDialog.isShow = true
+            },
+
             handlePageAction (action = 'create') {
                 this.action = action
                 if (action === 'create') {
@@ -1495,7 +1825,7 @@
             },
 
             test () {
-                console.warn(JSON.stringify(this.targetData))
+                console.warn(safeStringify(this.targetData))
                 console.warn(this.targetData)
             },
             test1 (data) {

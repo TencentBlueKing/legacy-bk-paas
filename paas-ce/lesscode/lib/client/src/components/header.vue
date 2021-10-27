@@ -80,7 +80,7 @@
                                     <a href="https://bk.tencent.com/docs/document/5.1/19/4125" target="_blank">前端规范</a>
                                 </dd>
                                 <dd>
-                                    <a :href="`${host}/${path}/index.html#design`">设计规范</a>
+                                    <a href="https://bkdesign.bk.tencent.com/" target="_blank">设计规范</a>
                                 </dd>
                                 <dd>
                                     <a :href="`${host}/${path}/index.html#css`">辅助样式</a>

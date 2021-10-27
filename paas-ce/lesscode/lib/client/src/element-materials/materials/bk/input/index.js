@@ -9,8 +9,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { formatLink } from '@/common/util'
-
 export default {
     name: 'input',
     type: 'bk-input',
@@ -19,31 +17,31 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '文本框内容变化时调用，回调参数（value, event）'
+        name: 'change', tips: '文本框内容变化时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'input', tips: '文本框内容变化时调用，回调参数（value, event）'
+        name: 'input', tips: '文本框输入时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'focus', tips: '文本框获取焦点时调用，回调参数（value, event）'
+        name: 'focus', tips: '文本框获取焦点时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'blur', tips: '文本框失去焦点时调用，回调参数（value, event）'
+        name: 'blur', tips: '文本框失去焦点时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'keypress', tips: '文本框输入按下键盘时调用，回调参数（value, event）'
+        name: 'keypress', tips: '文本框输入按下键盘时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'keydown', tips: '文本框输入按下键盘时调用，回调参数（value, event）'
+        name: 'keydown', tips: '文本框输入按下键盘时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'keyup', tips: '文本框输入按下键盘按键松开时调用，回调参数（value, event）'
+        name: 'keyup', tips: '文本框输入按下键盘按键松开时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'enter', tips: '文本框获取焦点时，按下回车时调用，回调参数（value, event）'
+        name: 'enter', tips: '文本框获取焦点时，按下回车时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'paste', tips: '文本框粘贴内容时调用，回调参数（value, event）'
+        name: 'paste', tips: '文本框粘贴内容时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'clear', tips: '点击文本框的清除图标时调用，回调参数（value, event）'
+        name: 'clear', tips: '点击文本框的清除图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'left-icon-click', tips: '点击配置的左图标时调用，回调参数（value, event）'
+        name: 'left-icon-click', tips: '点击配置的左图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }, {
-        name: 'right-icon-click', tips: '点击配置的右图标时调用，回调参数（value, event）'
+        name: 'right-icon-click', tips: '点击配置的右图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }],
-    styles: ['size', 'margin', 'display'],
+    styles: ['size', 'margin', 'padding', 'display', 'border'],
     directives: [
         {
             type: 'v-model',
@@ -56,7 +54,7 @@ export default {
     props: {
         value: {
             type: 'string',
-            val: 'hello world'
+            val: ''
         },
         type: {
             type: 'string',
@@ -104,16 +102,10 @@ export default {
             tips: 'html 原生属性 name'
         },
         'left-icon': {
-            type: 'icon',
-            tips: {
-                html: '左边显示的 icon，' + formatLink({ content: '查看支持的 icon' })
-            }
+            type: 'icon'
         },
         'right-icon': {
-            type: 'icon',
-            tips: {
-                html: '右边显示的 icon，' + formatLink({ content: '查看支持的 icon' })
-            }
+            type: 'icon'
         },
         precision: {
             type: 'number',

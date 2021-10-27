@@ -9,6 +9,7 @@
     import LayoutLeftRight from './components/left-right'
     import LayoutComplex from './components/complex'
     import LayoutTopBottom from './components/top-bottom'
+    import { paramCase } from 'change-case'
 
     const componentMap = {
         'empty': LayoutEmpty,
@@ -25,6 +26,9 @@
         },
         computed: {
             ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('page', {
+                page: 'pageDetail'
+            }),
             layoutCom () {
                 if (!componentMap[this.layout]) {
                     return 'div'
@@ -33,6 +37,19 @@
             },
             projectId () {
                 return this.$route.params.projectId
+            },
+            pageStyle () {
+                let style = ''
+                for (const i in this.page.styleSetting) {
+                    if (i === 'customStyle') {
+                        for (const key in this.page.styleSetting[i]) {
+                            style += `${paramCase(key)}: ${this.page.styleSetting[i][key]};`
+                        }
+                    } else if (this.page.styleSetting[i] !== '') {
+                        style += `${paramCase(i)}: ${this.page.styleSetting[i]};`
+                    }
+                }
+                return style
             }
         },
         watch: {
@@ -48,6 +65,22 @@
                     this.setCurTemplateData({
                         showName,
                         ...layoutContent
+                    })
+                },
+                immediate: true
+            },
+            pageStyle: {
+                handler (style) {
+                    this.$nextTick(() => {
+                        let domStyle
+                        if (!componentMap[this.layout] || this.layout === 'empty') {
+                            domStyle = document.querySelector('.lesscode-editor-layout').style
+                        } else {
+                            domStyle = document.querySelector('.lesscode-editor-layout .container-content').style
+                        }
+                        // 恢复默认样式
+                        domStyle.cssText = ''
+                        domStyle.cssText = style
                     })
                 },
                 immediate: true

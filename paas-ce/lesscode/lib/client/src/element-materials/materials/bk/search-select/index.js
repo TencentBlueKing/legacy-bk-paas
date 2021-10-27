@@ -17,29 +17,31 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'show-menu', tips: '父列表显示时触发的事件，回调参数（menuInstance）'
+        name: 'show-menu', tips: '父列表显示时调用该事件函数，事件回调参数 (menuInstance: Object)'
     }, {
-        name: 'input-change', tips: '当用户输入时触发的事件，回调参数（event）'
+        name: 'input-change', tips: '当用户输入时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'input-cut', tips: '当用户剪切内容时触发的事件，回调参数（event）'
+        name: 'input-cut', tips: '当用户剪切内容时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'input-click', tips: '当用户点击input时触发的事件，回调参数（event）'
+        name: 'input-click', tips: '当用户点击input时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'input-focus', tips: '当单元格获取焦点时触发该事件，回调参数（event）'
+        name: 'input-focus', tips: '当单元格获取焦点时调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'menu-select', tips: '当选择父列表项时触发该事件，回调参数（item, index）'
+        name: 'menu-select', tips: '当选择父列表项时调用该事件函数，事件回调参数 (item: Object, index: Number)'
     }, {
-        name: 'menu-child-select', tips: '当选择子列表项时触发该事件，回调参数（item, index）'
+        name: 'menu-child-select', tips: '当选择子列表项时调用该事件函数，事件回调参数 (item: Object, index: Number)'
     }, {
-        name: 'change', tips: '当输入内容发生变化时触发该事件，按下回车时调用，回调参数（list）'
+        name: 'change', tips: '当输入内容发生变化时调用该事件函数，按下回车时调用，事件回调参数 (list: Array)'
     }, {
-        name: 'key-delete', tips: '当用户键入delete删除时会触发该事件，回调参数（item）'
+        name: 'key-delete', tips: '当用户键入delete删除时会调用该事件函数，事件回调参数 (item: Object)'
     }, {
-        name: 'key-enter', tips: '当用户键入enter删除时会触发该事件，回调参数（event）'
+        name: 'key-enter', tips: '当用户键入enter删除时会调用该事件函数，事件回调参数 (event: Event)'
     }, {
-        name: 'child-checked', tips: '当用户选中子项时触发该事件，回调参数（item, index, next）'
+        name: 'child-checked', tips: '当用户选中子项时调用该事件函数，事件回调参数 (item: Object, index: Number, checked: Boolean)'
     }, {
-        name: 'clear', tips: '当用户点击清空时触发该事件，回调参数（event）'
+        name: 'clear', tips: '当用户点击清空时调用该事件函数，事件回调参数 (event: Event)'
+    }, {
+        name: 'search', tips: '当用户点击搜索图标时调用该事件函数，事件回调参数 (event: Event)'
     }],
     styles: ['size', 'margin', 'display'],
     renderStyles: {

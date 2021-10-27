@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-button',
     group: '基础',
     order: 1,
-    events: [{ name: 'click' }],
+    events: [{ name: 'click', tips: '点击组件时调用该事件函数，事件回调参数 (event: Event)' }],
     styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
     renderStyles: {
         display: 'inline-block'
@@ -47,13 +47,22 @@ export default {
             type: 'boolean',
             val: false
         },
+        icon: {
+            type: 'icon'
+        },
+        'icon-right': {
+            type: 'icon'
+        },
         'ext-cls': {
             type: 'string',
             tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
-        },
-        slots: {
-            name: 'text',
-            type: 'text',
+        }
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['text'],
+            displayName: '文本配置',
             val: '基础按钮'
         }
     }

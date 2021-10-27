@@ -11,21 +11,29 @@
 
 <template>
     <section>
-        <div class="remote-title">{{name === 'remoteOptions' ? '动态配置' : '远程函数'}}</div>
-        <select-func v-model="remoteData" @change="saveChange"></select-func>
-        <bk-button @click="getApiData" theme="primary" class="remote-button">获取数据</bk-button>
+        <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
+            <span :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
+            <span class="remote-example" @click="handleShowExample">数据示例</span>
+        </div>
+        <div class="remote-content">
+            <select-func v-model="remoteData" @change="changeFunc"></select-func>
+            <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
+        </div>
+        <remote-example ref="example" :data="exampleData"></remote-example>
     </section>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
     import selectFunc from '@/components/methods/select-func'
-    import { walkGrid } from '@/common/util.js'
     import { bus } from '@/common/bus'
+    import functionHelper from '@/components/methods/function-helper'
+    import remoteExample from './remote-example'
 
     export default {
         components: {
-            selectFunc
+            selectFunc,
+            remoteExample
         },
         props: {
             name: String,
@@ -39,11 +47,23 @@
             },
             change: {
                 type: Function,
-                default: () => {}
+                default: () => {
+                }
             },
             remoteValidate: {
                 type: Function,
-                default: () => {}
+                default: () => {
+                }
+            },
+            autoGetData: {
+                type: Boolean,
+                default: true
+            },
+            title: {
+                type: String
+            },
+            tips: {
+                type: String
             }
         },
         data () {
@@ -52,35 +72,49 @@
                     methodCode: '',
                     params: []
                 },
-                propDirMap: {},
                 usedMethodMap: {}
             }
         },
         computed: {
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('drag', ['targetData']),
-            ...mapGetters('variable', ['variableList'])
+            ...mapGetters('variable', ['variableList']),
+            exampleData () {
+                return { name: this.name, value: this.defaultValue }
+            }
         },
         created () {
             this.remoteData = Object.assign({}, this.remoteData, this.payload)
             this.saveChange()
         },
         methods: {
+            changeFunc () {
+                this.saveChange()
+                if (this.autoGetData) {
+                    this.getApiData()
+                }
+            },
+
             saveChange () {
                 this.change(this.name, this.defaultValue, this.type, JSON.parse(JSON.stringify(this.remoteData)))
+            },
+
+            getVariableVal (variable) {
+                const { defaultValue, defaultValueType, valueType } = variable
+                let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
+                if (valueType === 6) value = ''
+                if ([0, 5].includes(valueType)) value = `'${value}'`
+
+                // 对象类型，加上 ()，让直接 . 引用属性不会报错
+                if (valueType === 4) value = `(${value})`
+                return value
             },
 
             processVarInFunParams (str, funcName) {
                 return (str || '').replace(/\{\{([^\}]+)\}\}/g, (all, variableCode) => {
                     const curVar = this.variableList.find((variable) => (variable.variableCode === variableCode))
                     if (curVar) {
-                        const { defaultValue, defaultValueType, valueType } = curVar
-                        let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
-                        if ([3, 4].includes(valueType) && typeof value === 'string') {
-                            value = JSON.parse(value)
-                        }
-                        if (valueType === 6) value = ''
-                        return value
+                        return this.getVariableVal(curVar)
                     } else {
                         throw new Error(`函数【${funcName}】里引用的变量【${variableCode}】不存在，请检查`)
                     }
@@ -102,13 +136,13 @@
                 const funcParams = (returnMethod.funcParams || []).join(', ')
                 if (returnMethod.funcType === 1) {
                     const remoteParams = (returnMethod.remoteParams || []).join(', ')
-                    const data = {
-                        url: this.processVarInFunParams(returnMethod.funcApiUrl, returnMethod.funcName),
-                        type: returnMethod.funcMethod,
-                        apiData: this.processVarInFunParams(returnMethod.funcApiData, returnMethod.funcName),
-                        withToken: returnMethod.withToken
-                    }
-                    returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { return this.$store.dispatch('getApiData', ${JSON.stringify(data)}).then((${remoteParams}) => { ${returnMethod.funcBody} }) };`
+                    const data = `{
+                        url: '${this.processVarInFunParams(returnMethod.funcApiUrl, returnMethod.funcName)}',
+                        type: '${returnMethod.funcMethod}',
+                        apiData: ${this.processVarInFunParams(returnMethod.funcApiData, returnMethod.funcName) || "''"},
+                        withToken: ${returnMethod.withToken}
+                    }`
+                    returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { return this.$store.dispatch('getApiData', ${data}).then((${remoteParams}) => { ${returnMethod.funcBody} }) };`
                 } else {
                     returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { ${returnMethod.funcBody} };`
                 }
@@ -130,7 +164,7 @@
             },
 
             processFuncBody (funcName, funcBody) {
-                return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
+                return functionHelper.replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
                     if (funcCode) {
                         const curFunc = this.usedMethodMap[funcCode] || this.getMethodByCode(funcCode)
                         if (curFunc.id) {
@@ -140,9 +174,9 @@
                         }
                     }
                     if (dirKey) {
-                        const curDir = this.propDirMap[dirKey]
-                        if (curDir) return `this.${dirKey}`
-                        else throw new Error(`函数【${funcName}】里引用的指令【${dirKey}】不存在，请检查`)
+                        const curVar = this.variableList.find((variable) => (variable.variableCode === dirKey))
+                        if (curVar) return this.getVariableVal(curVar)
+                        else throw new Error(`函数【${funcName}】里引用的变量【${dirKey}】不存在，请检查`)
                     }
                 })
             },
@@ -219,15 +253,6 @@
 
                 let methodStr
                 try {
-                    // 记录当前页面哪些属性用到了指令
-                    const callBack = (component) => {
-                        const renderDirectives = component.renderDirectives || []
-                        renderDirectives.forEach((dir) => {
-                            const val = dir.val
-                            if (val !== '') this.propDirMap[val] = true
-                        })
-                    }
-                    this.targetData.forEach((grid, index) => walkGrid(this.targetData, grid, callBack, callBack, index))
                     methodStr = this.generateMethod(this.remoteData.methodCode)
                 } catch (error) {
                     this.$bkMessage({ theme: 'error', message: error.message || error || '函数格式有误，请修改后再试', limit: 1 })
@@ -237,9 +262,10 @@
                 try {
                     const sandBox = this.createSandBox()
                     const res = await sandBox.exec(methodStr, this.remoteData.params)
-                    const message = this.remoteValidate(res)
+                    let message = this.remoteValidate(res)
                     if (message) {
-                        this.$bkMessage({ theme: 'error', message })
+                        message = '数据源设置成功，以下问题可能会导致组件表现异常，请检查：' + message
+                        this.$bkMessage({ theme: 'warning', message })
                     } else {
                         this.change(this.name, res, this.type, JSON.parse(JSON.stringify(this.remoteData)))
                         if (this.name === 'remoteOptions') {
@@ -250,21 +276,54 @@
                 } catch (error) {
                     this.$bkMessage({ theme: 'error', message: error.message || error || '获取数据失败，请检查函数是否正确', limit: 1 })
                 }
+            },
+
+            handleShowExample () {
+                this.$refs.example.isShow = true
             }
+
         }
     }
 </script>
 
 <style lang="postcss">
     .remote-title {
-        margin-top: 10px;
-        line-height: 32px;
-        font-size: 14px;
-        &:first-child {
-            margin-top: 0;
-        }
-    }
-    .remote-button {
+        display: flex;
+        justify-content: space-between;
         margin: 10px 0;
+        line-height: 24px;
+        font-size: 12px;
+
+    &
+    :first-child {
+        margin-top: 0;
+    }
+
+    }
+    .under-line {
+        line-height: 24px;
+        border-bottom: 1px dashed #979ba5;
+    }
+
+    .remote-button {
+        margin-top: 10px;
+    }
+
+    .remote-example {
+        color: #3a84ff;
+        cursor: pointer;
+        font-size: 12px
+    }
+
+    .form-title {
+        font-weight: bold;
+        color: #63656E;
+        height: 22px;
+
+    .form-tip {
+        font-weight: normal;
+        color: #979ba5;
+    }
+
     }
 </style>

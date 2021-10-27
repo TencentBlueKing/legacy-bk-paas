@@ -40,6 +40,12 @@ export default class extends Base {
     lifeCycle
 
     @Column({
+        type: 'mediumtext',
+        comment: '页面样式配置'
+    })
+    styleSetting
+
+    @Column({
         type: 'int',
         nullable: false,
         default: '0',
@@ -60,4 +66,17 @@ export default class extends Base {
         comment: '更新人，默认当前用户'
     })
     updateUser
+
+    @Column({
+        type: 'varchar',
+        nullable: true,
+        comment: '最后活跃用户'
+    })
+    activeUser
+
+    @Column({
+        type: 'datetime',
+        comment: '最后活跃时间'
+    })
+    activeTime
 }

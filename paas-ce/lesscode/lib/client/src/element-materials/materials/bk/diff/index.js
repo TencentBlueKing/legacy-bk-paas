@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-diff',
     group: '数据',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    styles: ['size', 'margin', 'padding', 'display'],
     renderStyles: {
         display: 'block'
     },
@@ -60,6 +60,11 @@ export default {
             type: 'number',
             val: 5,
             tips: '不同地方间隔多少行不隐藏'
+        },
+        language: {
+            type: 'string',
+            options: ['javascript', 'python', 'java', 'c'],
+            val: 'javascript'
         },
         'ext-cls': {
             type: 'string',

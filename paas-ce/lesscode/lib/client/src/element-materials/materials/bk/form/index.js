@@ -12,16 +12,49 @@
 export default {
     name: 'form',
     type: 'widget-form',
-    displayName: '表单挂件',
+    displayName: '表单容器',
     icon: 'bk-drag-form',
     group: '表单',
-    order: 2,
-    styles: ['size', 'margin', 'font', 'backgroundColor'],
+    order: 0,
+    styles: ['size', 'margin', 'padding', 'font', 'border', 'backgroundColor'],
+    directives: [
+        {
+            type: 'v-bind',
+            prop: 'model',
+            val: '',
+            defaultVal: {}
+        }
+    ],
     props: {
+        model: {
+            type: 'hidden',
+            val: {}
+        },
+        rules: {
+            type: 'hidden',
+            val: {}
+        },
+        ref: {
+            type: 'string',
+            val: 'form',
+            tips: '表单的ref标识，如当值为form时，this.$refs.form可选中当前表单，可用来表单校验等，当页面内含有多个表单时请保证ref唯一'
+        },
         'form-type': {
             type: 'string',
             options: ['horizontal', 'vertical', 'inline'],
             val: 'horizontal'
+        },
+        'label-width': {
+            type: 'number',
+            val: 150
+        }
+    },
+    slots: {
+        default: {
+            name: ['layout'],
+            type: ['form-item'],
+            displayName: '表单项配置',
+            val: []
         }
     }
 }

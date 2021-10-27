@@ -14,8 +14,10 @@ import bkMagicVue from 'bk-magic-vue'
 import bkText from '@/components/patch/text'
 import bkImage from '@/components/patch/image'
 import chart from '@/components/patch/chart'
+import bkCharts from '@/components/patch/bkCharts'
 
 Vue.use(bkText)
 Vue.use(bkImage)
 Vue.use(chart)
 Vue.use(bkMagicVue)
+Vue.use(bkCharts)

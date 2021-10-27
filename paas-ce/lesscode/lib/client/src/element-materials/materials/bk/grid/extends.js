@@ -15,12 +15,13 @@ export default function (children) {
         type: 'render-grid',
         displayName: 'grid',
         group: '布局',
-        styles: ['size', 'margin', 'padding', 'backgroundColor'],
+        styles: ['size', 'minWidth', 'margin', 'padding', 'backgroundColor', 'border'],
         props: {
-            // gutter: {
-            //     type: 'number',
-            //     val: 1
-            // },
+            gutter: {
+                type: 'number',
+                val: 0,
+                tips: '每列栅格之间的间距'
+            },
             'margin-horizontal': {
                 type: 'number',
                 val: 0
@@ -28,9 +29,13 @@ export default function (children) {
             'margin-vertical': {
                 type: 'number',
                 val: 0
-            },
-            slots: {
-                type: 'column',
+            }
+        },
+        slots: {
+            default: {
+                type: ['column'],
+                displayName: '列配置',
+                tips: '每一列栅格宽度占比为该列配置值占总列配置值的百分比，建议总列配置值为 12 或 24',
                 val: [
                     { span: 1, children: [] },
                     { span: 1, children: [] }
@@ -39,8 +44,10 @@ export default function (children) {
         }
     }
     const props = Object.assign({}, base.props, children.props)
+    const slots = { default: Object.assign({}, base.slots.default, children.slots.default) }
 
     const newObject = Object.assign({}, base, children)
+    newObject.slots = slots
     newObject.props = props
 
     return newObject

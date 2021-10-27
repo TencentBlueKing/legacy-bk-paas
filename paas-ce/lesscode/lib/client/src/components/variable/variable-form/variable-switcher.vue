@@ -23,7 +23,6 @@
         background: #fafbfd;
         font-size: 12px;
         line-height: 40px;
-        margin-top: 16px;
         padding: 0 30px;
     }
 </style>

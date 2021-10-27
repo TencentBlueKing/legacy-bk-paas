@@ -9,9 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { unique } from '../util'
 import UserModel from '../model/user'
-// import User from '../model/entities/user'
-// import { getRepository } from 'typeorm'
 const httpConf = require('../conf/http')
 const axios = require('axios')
 const querystring = require('querystring')
@@ -26,43 +25,6 @@ export const addUser = async userData => {
     const res = await UserModel.addUser(userData)
     return res.id
 }
-
-// export const getUserByBk = async ctx => {
-//     try {
-//         const query = ctx.request.query || {}
-//         const bkUsername = query.bk_username
-//         const res = await findUserByBk(bkUsername)
-//         ctx.send({
-//             code: 0,
-//             message: 'success',
-//             data: res
-//         })
-//     } catch (err) {
-//         console.error(err)
-//         ctx.throwError({
-//             message: err.message
-//         })
-//     }
-// }
-
-// export const getUserByBk = async (ctx) => {
-//     try {
-//         const { projectId, pageData } = ctx.request.body
-//         const projectPageData = {
-//             projectId
-//         }
-//         const { id } = await PageModel.createPage(pageData, projectPageData)
-//         ctx.send({
-//             code: 0,
-//             message: 'success',
-//             data: id
-//         })
-//     } catch (err) {
-//         ctx.throwError({
-//             message: err.message
-//         })
-//     }
-// }
 
 export const getUserInfo = ctx => {
     try {
@@ -92,7 +54,7 @@ export const getAllUser = async ctx => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Cookie: ctx.cookies.request.headers.cookie
+                Cookie: ctx.cookies.request.headers.cookie || ''
             },
             responseType: 'json',
             httpsAgent: new https.Agent({ rejectUnauthorized: false })
@@ -120,7 +82,8 @@ export const getMember = async ctx => {
         const query = ctx.request.query || {}
         const projectId = query.projectId
         const name = query.name
-        const data = await UserModel.getMember(projectId, name)
+        let data = await UserModel.getMember(projectId, name)
+        data = unique(data, 'username') || []
         ctx.send({
             code: 0,
             message: 'success',

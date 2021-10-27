@@ -13,6 +13,25 @@ const os = require('os')
 const eslintConfig = require('./conf/eslint-config')
 const { ESLint } = require('eslint')
 const interactiveComponents = ['bk-dialog', 'bk-sideslider']
+const acorn = require('acorn')
+
+// 替换函数中的变量和函数
+exports.replaceFuncKeyword = (funcBody = '', callBack) => {
+    const commentsPositions = []
+    acorn.parse(funcBody, {
+        onComment (isBlock, text, start, end) {
+            commentsPositions.push({
+                start,
+                end
+            })
+        },
+        allowReturnOutsideFunction: true
+    })
+    return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
+        const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
+        return isInComments ? all : callBack(all, first, second, dirKey, funcStr, funcCode)
+    })
+}
 
 /**
  * 获取本机的真实 ip
@@ -43,6 +62,19 @@ exports.getIP = () => {
  */
 exports.trim = str => {
     return (str || '').replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
+}
+
+/**
+ * 根据对象的某个属性值去重
+ *
+ * @param {String} arr 待去重的数组
+ * @param {String} key 去重依据的key值
+ *
+ * @return {String} 去重后的数组
+ */
+exports.unique = (arr, key) => {
+    const res = new Map()
+    return arr.filter(item => !res.has(item[key]) && res.set(item[key], 1))
 }
 
 /**
@@ -202,15 +234,14 @@ export function uuid (len = 8, radix = 16) {
     return uuid.join('')
 }
 
-export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
-    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
+export function transformOldGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
     const renderProps = grid.renderProps || {}
     const slots = renderProps.slots || {}
     let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
     let isLayoutSupportDialog = false
     if (interactiveComponents.includes(grid.type)) { // 交互式组件特殊处理
         const slot = ((grid.renderProps || {}).slots || {}).val || []
-        columns = typeof slot === 'string' ? [] : slot.renderProps.slots.val
+        columns = typeof slot === 'string' ? [] : (((slot.renderProps || {}).slots || {}).val || [])
         isLayoutSupportDialog = typeof slot !== 'string'
     }
 
@@ -218,15 +249,59 @@ export function walkGrid (children, grid, childCallBack, parentCallBack, index, 
         const children = column.children || []
         children.forEach((component, index) => {
             if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
-                walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
+                transformOldGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
             } else if ((component.renderProps || {}).slots && ((component.renderProps || {}).slots || {}).name === 'layout') {
+                transformOldGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
                 childCallBack(component, children, index, grid, columnIndex)
-                walkGrid([], component.renderProps.slots.val, childCallBack, parentCallBack, index, columnIndex)
             } else {
                 if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
             }
         })
+
+        // form-item, 没有column.children
+        if (!column.children && column.componentId) {
+            childCallBack(column, columns, columnIndex, grid, index)
+        }
     })
+    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
+}
+
+export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
+    const renderSlots = grid.renderSlots || {}
+    const slots = renderSlots.default || {}
+    let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
+    let isLayoutSupportDialog = false
+    if (interactiveComponents.includes(grid.type)) { // 交互式组件特殊处理
+        const slot = grid.type === 'bk-sideslider' ? (((grid.renderSlots || {}).content || {}).val || {}) : (((grid.renderSlots || {}).default || {}).val || {})
+        columns = typeof slot === 'string' ? [] : (((slot.renderSlots || {}).default || {}).val || [])
+        isLayoutSupportDialog = typeof slot !== 'string'
+    }
+
+    columns.forEach((column, columnIndex) => {
+        const children = column.children || []
+        children.forEach((component, index) => {
+            const renderSlots = component.renderSlots || {}
+            const slotKeys = Object.keys(renderSlots)
+            if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
+                walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
+            } else if (slotKeys.some(key => renderSlots[key].name === 'layout')) {
+                slotKeys.forEach((key) => {
+                    const slot = renderSlots[key]
+                    walkGrid([], slot.val, childCallBack, parentCallBack, index, columnIndex)
+                    childCallBack(component, children, index, grid, columnIndex)
+                })
+            } else {
+                if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
+            }
+        })
+
+        // form-item, 没有column.children
+        if (!column.children && column.componentId) {
+            childCallBack(column, columns, columnIndex, grid, index)
+        }
+    })
+
+    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
 }
 
 export function ansiparse (str) {
@@ -346,8 +421,8 @@ export function ansiparse (str) {
     return result
 }
 
-export async function checkFuncEslint (func) {
-    const globals = {};
+function getEslintOption (func, customOptions = {}) {
+    const globals = { lesscode: true };
     [...(func.funcParams || []), ...(func.remoteParams || [])].forEach((key) => {
         globals[key] = true
     })
@@ -356,18 +431,48 @@ export async function checkFuncEslint (func) {
         overrideConfig: {
             ...eslintConfig,
             globals
-        }
+        },
+        ...customOptions
     }
+    return options
+}
+
+function getErrorHtmlMessage (errStrArr) {
+    return errStrArr.map((err) => {
+        return (err.message || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    }).join('')
+}
+
+export async function checkFuncEslint (func) {
+    const options = getEslintOption(func)
     const eslint = new ESLint(options)
-    const code = (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
-        const key = funcCode || dirKey
-        return `this['${key}']`
-    })
+    const code = func.funcBody || ''
     const results = await eslint.lintText(code || '')
     const formatter = await eslint.loadFormatter('stylish')
     const formateRes = formatter.format(results)
     const errStrArr = ansiparse(formateRes)
     let mes = ''
-    if (errStrArr.length) mes = `eslint检查不通过：\n${errStrArr.map((err) => (err.message)).join('')}`
+    if (errStrArr.length) mes = `<pre style="margin:0">eslint检查不通过，可点击 <i class="bk-drag-icon bk-drag-fix"></i> 进行自动修复：\n${getErrorHtmlMessage(errStrArr)}</pre>`
     return mes
+}
+
+export async function verifyAndFixFunc (func) {
+    const options = getEslintOption(func, { fix: true })
+    const eslint = new ESLint(options)
+    const code = func.funcBody || ''
+    // fix code
+    const results = await eslint.lintText(code || '')
+    await ESLint.outputFixes(results)
+    // get message
+    const formatter = await eslint.loadFormatter('stylish')
+    const formateRes = formatter.format(results)
+    const errStrArr = ansiparse(formateRes)
+    let message = ''
+    if (errStrArr.length) message = `<pre style="margin:0">自动修复Eslint失败，请手动修复下面的问题后重试：\n${getErrorHtmlMessage(errStrArr)}</pre>`
+
+    const fixResult = {
+        code: results[0].output || '',
+        message
+    }
+    return fixResult
 }

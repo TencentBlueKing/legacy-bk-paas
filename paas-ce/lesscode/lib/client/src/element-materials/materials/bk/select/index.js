@@ -17,13 +17,15 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'selected', tips: '选择列表时调用，多选时，回调参数均为数组（value, option(s)）'
+        name: 'selected', tips: '选择列表时调用该事件函数，多选时，回调参数均为数组(value: String | Number | Array, option: Object | Array)'
     }, {
-        name: 'toggle', tips: '切换下拉折叠状态时调用，回调参数（Boolean）'
+        name: 'toggle', tips: '切换下拉折叠状态时调用该事件函数，回调参数(status: Boolean)'
     }, {
-        name: 'change', tips: '选项发生变化时调用，回调参数（newValue, oldValue）'
+        name: 'change', tips: '选项发生变化时调用该事件函数，回调参数(newValue: String | Number | Array, oldValue: String | Number | Array)'
     }, {
-        name: 'clear', tips: '清空已选项时调用，回调参数（oldValue）'
+        name: 'clear', tips: '清空已选项时调用该事件函数，回调参数(oldValue: String | Number | Array)'
+    }, {
+        name: 'tab-remove', tips: '删除tab时调用该事件函数，回调参数(options: Array)'
     }],
     styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
     directives: [
@@ -117,10 +119,14 @@ export default {
             type: 'number',
             val: 2500,
             tips: '弹出层的 z-index'
-        },
-        slots: {
-            name: 'bk-option',
-            type: ['option', 'remote'],
+        }
+    },
+    slots: {
+        default: {
+            name: ['bk-option'],
+            type: ['list', 'remote'],
+            displayName: '可选项配置',
+            tips: '默认插槽，填写的数据需要是数组且每个元素需包含id和name字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('id') || !item.hasOwnProperty('name')))
@@ -133,13 +139,6 @@ export default {
                 { id: 'option4', name: '跳舞' },
                 { id: 'option5', name: '健身' },
                 { id: 'option6', name: '骑车' }
-            ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-option 里的 :id, :name, :key
-            // <bk-option v-for="item in select19a32a0eSlot" :id="item.id" :name="item.name" :key="item.id"></bk-option>
-            attrs: [
-                { 'key': 'id', 'value': 'id' },
-                { 'key': 'name', 'value': 'name' },
-                { 'key': 'key', 'value': 'id' }
             ]
         }
     }

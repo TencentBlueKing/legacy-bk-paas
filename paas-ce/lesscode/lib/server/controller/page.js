@@ -5,11 +5,14 @@ import PageFunc from '../model/entities/page-func'
 import PageRoute from '../model/entities/page-route'
 import LayoutInst from '../model/entities/layout-inst'
 import PageVariable from '../model/entities/page-variable'
+import ProjectPage from '../model/entities/project-page'
 import { hasRoute, formatRoutePath } from './route'
 import { invalidPageIds } from '../conf/system'
 import { getConnection, getRepository } from 'typeorm'
 import OperationLogger from '../service/operation-logger'
 import { POST_PAGE_CREATE, PUT_PAGE_UPDATE } from '../conf/operate-log'
+
+const fs = require('fs')
 
 export const getPageList = async (ctx) => {
     try {
@@ -63,10 +66,7 @@ export const createDemoPage = async (data) => {
 
         /** 创建demo页的具体内容 */
         const createPageContent = Object.assign(pageContent, { id: id })
-        console.log(pageContent, createPageContent, 'content')
         const editPage = getRepository(Page).create(createPageContent)
-        console.log(editPage)
-
         await getConnection().transaction(async transactionalEntityManager => {
             const page = await transactionalEntityManager.save(editPage)
 
@@ -169,6 +169,15 @@ export const updatePage = async (ctx) => {
     try {
         const { pageData, customCompData, projectId, pageCode, functionData, templateData, usedVariableMap } = ctx.request.body
         const editPage = getRepository(Page).create(pageData)
+        const userInfo = ctx.session.userInfo || {}
+
+        const lockStatus = await getPageLockStatus(ctx, pageData)
+        if (lockStatus.isLock && lockStatus.activeUser !== userInfo.username) {
+            return ctx.send({
+                code: -1,
+                message: '当前画布无编辑权，无法保存'
+            })
+        }
 
         const result = await getConnection().transaction(async transactionalEntityManager => {
             const page = await transactionalEntityManager.save(editPage)
@@ -252,8 +261,9 @@ export const updatePage = async (ctx) => {
                 await Promise.all([transactionalEntityManager.save(addUsedVariableValues), transactionalEntityManager.remove(deleteUsedVariables)])
             }
 
-            // 处理lifeCycle
+            // 处理lifeCycle、styleSetting
             page.lifeCycle = typeof page.lifeCycle === 'string' ? JSON.parse(page.lifeCycle) : page.lifeCycle
+            page.styleSetting = typeof page.styleSetting === 'string' ? JSON.parse(page.styleSetting) : page.styleSetting
 
             return page
         })
@@ -317,6 +327,12 @@ export const deletePage = async (ctx) => {
             deleteFlag: 1
         }
 
+        // 权限
+        const record = await getRepository(Page).findOne(pageData.id)
+        const userInfo = ctx.session.userInfo || {}
+        ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+        if (!ctx.hasPerm) return
+
         const result = await getConnection().transaction(async transactionalEntityManager => {
             const delPage = getRepository(Page).create(pageData)
             const { id } = await transactionalEntityManager.save(delPage)
@@ -334,6 +350,16 @@ export const deletePage = async (ctx) => {
                 }
             })
             await transactionalEntityManager.save(PageRoute, savePageRouteList)
+
+            // 删除页面与项目关联记录
+            const projectPageList = await getRepository(ProjectPage).find({ where: { pageId } })
+            const saveProjectPageList = projectPageList.map(item => {
+                return {
+                    ...item,
+                    deleteFlag: 1
+                }
+            })
+            await transactionalEntityManager.save(ProjectPage, saveProjectPageList)
 
             return id
         })
@@ -390,8 +416,26 @@ export const pageDetail = async (ctx) => {
     try {
         const { pageId } = ctx.request.query
         const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
-        const detail = await getRepository(Page).findOne(queryParams)
-        detail.lifeCycle = JSON.parse(detail.lifeCycle)
+        const detail = await getRepository(Page).findOne(queryParams) || {}
+        if (detail.lifeCycle) detail.lifeCycle = JSON.parse(detail.lifeCycle)
+        if (detail.styleSetting) {
+            detail.styleSetting = JSON.parse(detail.styleSetting)
+        } else {
+            // migration调整
+            detail.styleSetting = {
+                minWidth: '',
+                marginTop: '',
+                marginBottom: '',
+                marginLeft: '',
+                marginRight: '',
+                paddingTop: '',
+                paddingBottom: '',
+                paddingLeft: '',
+                paddingRight: '',
+                backgroundColor: '',
+                customStyle: {}
+            }
+        }
         ctx.send({
             code: 0,
             message: 'OK',
@@ -423,6 +467,24 @@ export const verify = async (ctx) => {
     }
 }
 
+// 导入json文件并返回内容
+export const importJson = async (ctx) => {
+    try {
+        const file = ctx.request.files || {}
+        const uploadFile = file.upload_file || {}
+        const data = fs.readFileSync(uploadFile.path, 'utf8')
+        ctx.send({
+            code: 0,
+            message: 'OK',
+            data
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: `上传失败：${err.message}`
+        })
+    }
+}
+
 // 访问验证
 export const verifyPreview = async (ctx) => {
     try {
@@ -444,4 +506,153 @@ export const verifyPreview = async (ctx) => {
             message: err.message
         })
     }
+}
+
+const getPageLockStatus = async (ctx, pageData) => {
+    const pageId = ctx.request.query.pageId || ctx.request.body.pageId || pageData.id
+    const pageResp = await getRepository(Page).findOne(pageId) || {}
+    const { activeUser, activeTime } = pageResp
+
+    const pageLockStatus = {
+        isLock: false,
+        activeUser: activeUser,
+        accessible: false,
+        pageId: pageId
+    }
+
+    const userInfo = ctx.session.userInfo || {}
+
+    if (activeUser !== null && userInfo.username !== activeUser) {
+        const invalidTime = 30 * 60 * 1000
+        const accessedTime = 10 * 60 * 1000
+        Object.assign(pageLockStatus, {
+            isLock: !(new Date().getTime() - new Date(activeTime).getTime() > invalidTime),
+            activeUser: activeUser,
+            accessible: new Date().getTime() - new Date(activeTime).getTime() > accessedTime
+        })
+    }
+
+    return pageLockStatus
+}
+
+const updagePageActiveInfo = async (pageId, username) => {
+    const repository = getRepository(Page)
+    const currentPage = await repository.findOne(pageId) || {}
+
+    currentPage.activeUser = username
+    currentPage.activeTime = new Date()
+    repository.save(currentPage)
+
+    return currentPage
+}
+
+// 获取当前页面状态，是否空闲、可抢占等
+export const pageLockStatus = async ctx => {
+    try {
+        const pageLockStatus = await getPageLockStatus(ctx)
+
+        ctx.send({
+            code: 0,
+            message: 'OK',
+            data: pageLockStatus
+        })
+    } catch (error) {
+        ctx.throwError({
+            message: error
+        })
+    }
+}
+
+// 更新当前活跃用户和及活跃时间
+export const updatePageActive = async ctx => {
+    try {
+        const pageId = ctx.request.body.pageId
+        const userInfo = ctx.session.userInfo || {}
+        const currentPage = await updagePageActiveInfo(pageId, userInfo.username)
+
+        ctx.send({
+            code: 0,
+            message: 'OK',
+            data: {
+                activeUser: currentPage.activeUser,
+                activeTime: currentPage.activeTime
+            }
+        })
+    } catch (error) {
+        ctx.throwError({
+            message: error
+        })
+    }
+}
+
+// 抢占画布所有权
+export const occupyPage = async ctx => {
+    try {
+        const curPageStatus = await getPageLockStatus(ctx)
+        const userInfo = ctx.session.userInfo || {}
+        const { accessible, pageId } = curPageStatus
+        if (!accessible) {
+            ctx.send({
+                code: -1,
+                message: '没有抢占权限'
+            })
+        }
+
+        const currentPage = await updagePageActiveInfo(pageId, userInfo.username)
+        ctx.send({
+            code: 0,
+            message: 'ok',
+            data: {
+                activeUser: currentPage.activeUser,
+                activeTime: currentPage.activeTime
+            }
+        })
+    } catch (error) {
+        ctx.throwError({
+            message: error
+        })
+    }
+}
+
+export const relasePage = async ctx => {
+    try {
+        const { pageId, activeUser } = ctx.request.body
+        const repository = getRepository(Page)
+        const currentPage = await repository.findOne(pageId) || {}
+
+        if (activeUser === currentPage.activeUser) {
+            currentPage.activeUser = null
+            repository.save(currentPage)
+            ctx.send({
+                code: 0,
+                message: '解锁成功'
+            })
+        } else {
+            ctx.send({
+                code: -1,
+                message: '锁定用户与当前用户不一致，无法解锁'
+            })
+        }
+    } catch (error) {
+        throw ctx.Erro({
+            message: error
+        })
+    }
+}
+
+export const getPreviewImg = async (ctx) => {
+    const { id } = ctx.request.query
+    let { previewImg } = await PageModel.findPagePreviewImg(id) || {}
+
+    const dataUriPrefix = 'data:image/png;base64,'
+
+    if (!previewImg || !previewImg.startsWith(dataUriPrefix)) {
+        // 返回 1×1 px 透明png，用于在前台标记为空区别于加载失败
+        previewImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+    }
+
+    const imgBase64 = previewImg.replace(dataUriPrefix, '')
+    const buf = Buffer.from(imgBase64, 'base64')
+    ctx.type = 'image/png'
+    ctx.body = buf
 }

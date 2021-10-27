@@ -18,10 +18,20 @@ export default {
     order: 1,
     events: [{
         name: 'change',
-        tips: '数据源改变触发，回调参数为（sourceList/targetList/targetValueList）'
+        tips: '数据源改变时调用该事件函数，事件回调参数 (sourceList: Array, targetList: Array, targetValueList: Array)'
     }],
     styles: ['size', 'margin'],
     directives: [
+        {
+            type: 'v-bind',
+            prop: 'target-list',
+            propTypes: ['array'],
+            val: '',
+            valType: 'variable',
+            tips () {
+                return '已选择数据，数据格式[\'shenzhen\', \'guangzhou\']'
+            }
+        },
         {
             type: 'v-bind',
             prop: 'source-list',
@@ -76,7 +86,7 @@ export default {
         'target-list': {
             type: 'array',
             val: [],
-            tips: '已选择的数据'
+            tips: '已选择数据，数据格式[\'shenzhen\', \'guangzhou\']'
         },
         searchable: {
             type: 'boolean',

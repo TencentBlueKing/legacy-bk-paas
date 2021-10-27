@@ -15,11 +15,12 @@ export default {
     // bk-drag-custom-comp-default
     icon: 'bk-drag-link1',
     displayName: '文字链接',
-    group: 'Base',
-    events: [{ name: 'click' }],
-    styles: ['size', 'padding', 'margin', 'display'],
+    group: '基础',
+    events: [{ name: 'click', tips: '文字链接点击时调用该事件函数，事件回调参数 (event: Event)' }],
+    styles: ['size', 'padding', 'margin', 'display', 'text-align'],
     renderStyles: {
-        display: 'inline-flex'
+        display: 'inline-block',
+        textAlign: 'center'
     },
     props: {
         type: {
@@ -45,16 +46,19 @@ export default {
             val: '',
             'v-bind': '',
             tips: '原生 href 属性'
-        },
+        }
         // element 的图标，先去掉
         // icon: {
         //     type: 'string',
         //     val: '',
         //     tips: '图标类名'
         // },
-        slots: {
-            name: 'text',
-            type: 'text',
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['text'],
+            displayName: '文本配置',
             val: '文字链接'
         }
     }

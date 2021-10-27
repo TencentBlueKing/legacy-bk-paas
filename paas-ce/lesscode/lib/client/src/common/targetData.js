@@ -1,7 +1,7 @@
 import store from '@/store'
 import { uuid, walkGrid, findComponentParentGrid } from '@/common/util'
+import { camelCase, camelCaseTransformMerge } from 'change-case'
 import cloneDeep from 'lodash.clonedeep'
-
 class TargetData {
     constructor () {
         this.targetData = store.getters['drag/targetData']
@@ -87,8 +87,8 @@ class TargetData {
             node = sourceGrid.splice(sourceChildrenIndex, 1)[0]
         } else {
             sourceGrid.renderKey = uuid()
-            const renderProps = sourceGrid.renderProps || {}
-            const slots = renderProps.slots || {}
+            const renderSlots = sourceGrid.renderSlots || {}
+            const slots = renderSlots.default || {}
             const columns = slots.val || []
             const column = columns[sourceColumnIndex]
             node = column.children.splice(sourceChildrenIndex, 1)[0]
@@ -100,8 +100,8 @@ class TargetData {
             targetGrid.splice(targetChildrenIndex, 0, node)
         } else {
             targetGrid.renderKey = uuid()
-            const renderProps = targetGrid.renderProps || {}
-            const slots = renderProps.slots || {}
+            const renderSlots = targetGrid.renderSlots || {}
+            const slots = renderSlots.default || {}
             const columns = slots.val || []
             const column = columns[targetColumnIndex]
             column.children.splice(targetChildrenIndex, 0, node)
@@ -144,8 +144,8 @@ class TargetData {
             this.targetData.push(node)
         } else if (this.isLayout(this.targetData) && !this.isLayout(node)) {
             this.targetData.renderKey = uuid()
-            const renderProps = this.targetData.renderProps || {}
-            const slots = renderProps.slots || {}
+            const renderSlots = this.targetData.renderSlots || {}
+            const slots = renderSlots.default || {}
             const columns = slots.val || []
             for (let index = 0; index < columns.length; index++) {
                 const nextColumn = columns[index + 1] || { children: [] }
@@ -190,8 +190,8 @@ class TargetData {
             parent.splice(childrenIndex, 0, node)
         } else {
             parent.renderKey = uuid()
-            const renderProps = parent.renderProps || {}
-            const slots = renderProps.slots || {}
+            const renderSlots = parent.renderSlots || {}
+            const slots = renderSlots.default || {}
             const columns = slots.val || []
             const column = columns[columnIndex]
             const children = column.children
@@ -249,11 +249,30 @@ class TargetData {
         return this
     }
 
+    changeFormItemVmodel (data, oldId) {
+        const oldVModelName = `${camelCase(oldId, { transform: camelCaseTransformMerge })}model.`
+        const newVModelName = `${camelCase(data.componentId, { transform: camelCaseTransformMerge })}model.`
+        data.renderSlots.default.val.forEach(formItem => {
+            const item = formItem.renderSlots.default.val[0]
+            item.renderDirectives.forEach(directive => {
+                if (directive.type === 'v-model') {
+                    directive.val = directive.val.replace(oldVModelName, newVModelName)
+                }
+            })
+        })
+    }
+
     cloneNode (node, shouldChangeId) {
         node = cloneDeep(node)
         const callBack = (data) => {
-            if (shouldChangeId) data.componentId = data.componentId.replace(/.{8}$/, uuid())
+            const oldId = data.componentId
+            
+            if (shouldChangeId) data.componentId = (data.componentId && data.componentId.replace(/.{8}$/, uuid()))
             data.renderKey = uuid()
+
+            if (data.type === 'widget-form') {
+                this.changeFormItemVmodel(data, oldId)
+            }
         }
         if (Array.isArray(node)) {
             node.forEach((grid, index) => {
@@ -261,9 +280,17 @@ class TargetData {
             })
         } else if (this.isLayout(node)) {
             walkGrid({}, node, callBack, callBack, 0)
-        } else if (node.renderProps && node.renderProps.slots && node.renderProps.slots.name === 'layout') {
+        } else if (node.renderSlots && node.renderSlots.default) {
             callBack(node)
-            walkGrid({}, node.renderProps.slots.val, callBack, callBack, 0)
+            if (Array.isArray(node.renderSlots.default.val)) {
+                if (node.renderSlots.default.val.length && node.renderSlots.default.val[0] && node.renderSlots.default.val[0].componentId) {
+                    node.renderSlots.default.val.forEach((item, index) => {
+                        walkGrid({}, item, callBack, callBack, index)
+                    })
+                }
+            } else if (node.renderSlots.default.name === 'layout') {
+                walkGrid({}, node.renderSlots.default.val, callBack, callBack, 0)
+            }
         } else {
             callBack(node)
         }

@@ -18,7 +18,7 @@ const user = {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    Cookie: ctx.cookies.request.headers.cookie
+                    Cookie: ctx.cookies.request.headers.cookie || ''
                 },
                 responseType: 'json',
                 httpsAgent: new https.Agent({ rejectUnauthorized: false })

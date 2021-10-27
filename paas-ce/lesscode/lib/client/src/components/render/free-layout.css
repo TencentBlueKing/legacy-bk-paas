@@ -94,6 +94,9 @@ $baseZIndexInFreeLayout: 10;
             visibility: visible !important;
         }
     }
+    &.selected > .save-as-template {
+        display: block;
+    }
     .free-layout-item-inner {
         height: 100%;
         position: relative;
@@ -132,14 +135,25 @@ $baseZIndexInFreeLayout: 10;
             padding: 2px;
             font-size: 14px;
             &:hover {
-                background-color: #ff9c01;
+                background-color: #ea3636;
                 color: #fff;
             }
         }
     }
 
     .in-free-layout-item-ghost {
-        opacity: .5;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        background: #E9F1FD;
+        & > * {
+            display: none;
+        }
+        /* display: none; */
+        /* opacity: .5;
         &.component-item {
             &:after {
                 content: "放在这里";
@@ -173,6 +187,6 @@ $baseZIndexInFreeLayout: 10;
             & > * {
                 display: none;
             }
-        }
+        } */
     }
 }

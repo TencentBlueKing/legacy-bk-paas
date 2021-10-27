@@ -10,6 +10,7 @@
  */
 
 import { getRepository, getConnection, In, Like } from 'typeorm'
+import { replaceFuncKeyword } from '../util'
 import Func from './entities/func'
 import FuncGroup from './entities/func-group'
 import ProjectFuncGroup from './entities/project-func-group'
@@ -21,6 +22,16 @@ import Variable from './entities/variable'
 import VariableFunc from './entities/variable-func'
 
 const func = {
+    getFuncById (id) {
+        const funcRepository = getRepository(Func)
+        return funcRepository.findOne(id)
+    },
+
+    getFuncGroupById (id) {
+        const funcGroupRepository = getRepository(FuncGroup)
+        return funcGroupRepository.findOne(id)
+    },
+
     addFuncGroup (data) {
         return getConnection().transaction(async transactionalEntityManager => {
             const projectId = data.projectId
@@ -85,7 +96,7 @@ const func = {
             .leftJoin(ProjectFuncGroup, 't', 't.funcGroupId = func_group.id AND t.deleteFlag = 0')
             .leftJoin(Func, 'func', 'func.funcGroupId = func_group.id AND func.deleteFlag = 0 ')
             .where('t.projectId = :projectId AND func_group.deleteFlag = :deleteFlag AND func_group.groupName like :groupName', { projectId, deleteFlag: 0, groupName: `%${groupName}%` })
-            .select('func_group.groupName AS groupName, func_group.id AS id, COUNT(func.id) AS funNum')
+            .select('func_group.groupName AS groupName, func_group.id AS id, func_group.createUser AS createUser, COUNT(func.id) AS funNum')
             .addSelect('func_group.order', 'order')
             .groupBy('func_group.id')
             .orderBy('func_group.order')
@@ -139,13 +150,15 @@ const func = {
             .getRawMany()
     },
 
-    async addFunction (funcData, varWhere) {
+    async addFunction (funcList, varWhere) {
         const funcRepository = getRepository(Func)
-        funcData.funcParams = (funcData.funcParams || []).join(',')
-        funcData.remoteParams = (funcData.remoteParams || []).join(',')
-        const newFunc = funcRepository.create(funcData)
-        const res = await funcRepository.save(newFunc)
-        await func.handleFuncRelation(res, varWhere)
+        funcList.forEach((funcData) => {
+            funcData.funcParams = (funcData.funcParams || []).join(',')
+            funcData.remoteParams = (funcData.remoteParams || []).join(',')
+        })
+        const newFuncs = funcRepository.create(funcList)
+        const res = await funcRepository.save(newFuncs)
+        await Promise.all(res.map((fun) => func.handleFuncRelation(fun, varWhere)))
         return res
     },
 
@@ -184,6 +197,7 @@ const func = {
     },
 
     async handleFuncRelation (func, varWhere) {
+        if (!varWhere) return
         const { projectId, pageCode, effectiveRange } = varWhere
         const variableWhere = [{ projectId, deleteFlag: 0 }]
         if (effectiveRange !== undefined) {
@@ -199,7 +213,7 @@ const func = {
         // 当前用到的变量列表
         const funcVariableRepository = getRepository(FuncVariable)
         const variableRepository = getRepository(Variable)
-        const [exitsUsedVariables, allVariables] = await Promise.all([
+        const [exitsUsedVariables = [], allVariables = []] = await Promise.all([
             funcVariableRepository.find({ where: { projectId, funcCode: func.funcCode } }),
             variableRepository.find({ where: variableWhere })
         ])
@@ -236,7 +250,7 @@ const func = {
                 }
             }
         }
-        (func.funcBody || '').replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode) => {
+        replaceFuncKeyword(func.funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
             handleRelation(dirKey, funcCode)
         })
         if (func.funcType === 1) {

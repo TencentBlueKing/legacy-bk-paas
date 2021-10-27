@@ -45,7 +45,14 @@
                 </template>
             </bk-table-column>
         </bk-table>
-        <slot><span class="variable-tip">提示：可以在组件属性和指令中使用该变量，在函数中可以使用【lesscode.变量标识】唤醒编辑器自动补全功能选择对应变量，来获取或者修改该变量的值</span></slot>
+        <slot>
+            <span class="variable-tip">
+                提示：
+                <br>1. 可以在组件属性和指令的配置面板中使用该变量
+                <br>2. 在函数插槽中可以使用【lesscode.变量标识】唤醒编辑器自动补全功能选择对应变量，来获取或者修改该变量的值
+                <br>3. 在远程函数中，参数 Api Url 和 Api Data 的值可用 <span v-pre>{{变量标识}}</span> 来获取变量值
+            </span>
+        </slot>
 
         <bk-dialog v-model="deleteObj.visible"
             render-directive="if"
@@ -228,6 +235,8 @@
                                     const modifiers = (detail.modifiers || []).join('.')
                                     const modifierStr = modifiers ? `，修饰符为${modifiers}` : ''
                                     tips.push(`页面【${pageCode}】内组件【${detail.componentId}】的【${detail.prop}】属性${modifierStr}`)
+                                } else if (detail.type === 'slots') {
+                                    tips.push(`页面【${pageCode}】内组件【${detail.componentId}】的【${detail.slot}】插槽`)
                                 } else {
                                     tips.push(`页面【${pageCode}】内组件【${detail.componentId}】的【${detail.type}】指令`)
                                 }

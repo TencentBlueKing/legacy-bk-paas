@@ -20,11 +20,14 @@ import page from './modules/page'
 import functions from './modules/functions'
 import variable from './modules/variable'
 import route from './modules/route'
+import pageTemplate from './modules/page-template'
 import projectCode from './modules/project-code'
 import release from './modules/release'
 import layout from './modules/layout'
 import member from './modules/member'
 import logs from './modules/logs'
+import functionMarket from './modules/function-market'
+import perm from './modules/perm'
 import http from '@/api'
 import router from '../router'
 import { unifyObjectStyle, json2Query } from '@/common/util'
@@ -42,11 +45,14 @@ const store = new Vuex.Store({
         functions,
         variable,
         route,
+        pageTemplate,
         projectCode,
         release,
         layout,
         member,
-        logs
+        logs,
+        functionMarket,
+        perm
     },
     // 公共 store
     state: {
@@ -54,13 +60,16 @@ const store = new Vuex.Store({
         // 页面级dialog的popManager监测器，用于适配交互式组件
         pagePopMaskObserve: null,
         // 系统当前登录用户
-        user: {}
+        user: {},
+        // 是否平台管理员
+        isPlatformAdmin: false
     },
     // 公共 getters
     getters: {
         pagePopMaskObserve: state => state.pagePopMaskObserve,
         mainContentLoading: state => state.mainContentLoading,
-        user: state => state.user
+        user: state => state.user,
+        isPlatformAdmin: state => state.isPlatformAdmin
     },
     // 公共 mutations
     mutations: {
@@ -85,6 +94,10 @@ const store = new Vuex.Store({
          */
         updateUser (state, user) {
             state.user = Object.assign({}, user)
+        },
+
+        setPlatformAdmin (state, isAdmin) {
+            state.isPlatformAdmin = isAdmin
         }
     },
     actions: {
@@ -122,6 +135,21 @@ const store = new Vuex.Store({
             }
             return http.post('/data/getApiData', postData, { globalError: false }).then(response => {
                 return response
+            })
+        },
+
+        getHealthData ({ state }) {
+            return http.get('/health/check').then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
+
+        isPlatformAdmin ({ commit }) {
+            return http.get('/perm/isPlatformAdmin', { globalError: false }).then(response => {
+                const isPlatformAdmin = response.data
+                commit('setPlatformAdmin', isPlatformAdmin)
+                return isPlatformAdmin
             })
         },
 

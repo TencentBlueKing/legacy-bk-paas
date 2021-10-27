@@ -10,9 +10,9 @@
  */
 
 import Vue from 'vue'
-
 // 全量引入
 import './fully-import'
+import { transformHtmlToVnode } from './util'
 
 // 按需引入
 // import './demand-import'
@@ -21,7 +21,19 @@ const Message = Vue.prototype.$bkMessage
 
 let messageInstance = null
 
-export const messageError = (message, delay = 3000, ellipsisLine = 1) => {
+export const messageHtmlError = (errMessage, delay = 3000, ellipsisLine = 0) => {
+    messageInstance && messageInstance.close()
+    const message = transformHtmlToVnode(errMessage)
+    messageInstance = Message({
+        message,
+        delay,
+        theme: 'error',
+        ellipsisLine,
+        extCls: 'auto-width'
+    })
+}
+
+export const messageError = (message, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
     messageInstance = Message({
         message,
@@ -31,34 +43,38 @@ export const messageError = (message, delay = 3000, ellipsisLine = 1) => {
     })
 }
 
-export const messageSuccess = (message, delay = 3000) => {
+export const messageSuccess = (message, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
     messageInstance = Message({
         message,
         delay,
-        theme: 'success'
+        theme: 'success',
+        ellipsisLine
     })
 }
 
-export const messageInfo = (message, delay = 3000) => {
+export const messageInfo = (message, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
     messageInstance = Message({
         message,
         delay,
-        theme: 'primary'
+        theme: 'primary',
+        ellipsisLine
     })
 }
 
-export const messageWarn = (message, delay = 3000) => {
+export const messageWarn = (message, delay = 3000, ellipsisLine = 0) => {
     messageInstance && messageInstance.close()
     messageInstance = Message({
         message,
         delay,
         theme: 'warning',
-        hasCloseIcon: true
+        hasCloseIcon: true,
+        ellipsisLine
     })
 }
 
+Vue.prototype.messageHtmlError = messageHtmlError
 Vue.prototype.messageError = messageError
 Vue.prototype.messageSuccess = messageSuccess
 Vue.prototype.messageInfo = messageInfo

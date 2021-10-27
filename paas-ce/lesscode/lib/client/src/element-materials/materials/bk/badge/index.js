@@ -9,8 +9,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { formatLink } from '@/common/util'
-
 export default {
     name: 'badge',
     type: 'bk-badge',
@@ -19,11 +17,11 @@ export default {
     group: '数据',
     order: 1,
     events: [{
-        name: 'hover', tips: '广播给父组件 mouseover 事件'
+        name: 'hover', tips: '鼠标 hover 时调用该事件函数，暂无回调参数'
     }, {
-        name: 'leave', tips: '广播给父组件 mouseleave 事件'
+        name: 'leave', tips: '鼠标 leave 时调用该事件函数，暂无回调参数'
     }],
-    styles: ['size', 'margin', 'display', 'font', 'backgroundColor'],
+    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
     renderStyles: {
         display: 'inline-block'
     },
@@ -41,10 +39,7 @@ export default {
         },
         icon: {
             type: 'icon',
-            val: '',
-            tips: {
-                html: '组件显示图标；当设置 icon 时，将忽略设置的 val 值，' + formatLink({ content: '查看支持的 icon' })
-            }
+            val: ''
         },
         max: {
             type: 'number',
@@ -65,10 +60,13 @@ export default {
         'ext-cls': {
             type: 'string',
             tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
-        },
-        slots: {
-            name: 'text',
-            type: 'text',
+        }
+    },
+    slots: {
+        default: {
+            name: ['html'],
+            type: ['text'],
+            displayName: '文本配置',
             val: '文字标记'
         }
     }

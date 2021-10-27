@@ -9,8 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
+const jsKeyWords = [
+    'await', 'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default', 'delete',
+    'do', 'else', 'enum', 'export', 'extends', 'false', 'finally', 'for', 'function', 'if', 'implements',
+    'import', 'in', 'instanceof', 'interface', 'let', 'new', 'null', 'package', 'private', 'protected',
+    'public', 'return', 'super', 'switch', 'static', 'this', 'throw', 'try', 'true', 'typeof', 'var', 'void',
+    'while', 'with', 'yield', 'array', 'boolean', 'number', 'string', 'object', 'symbol', 'undefined'
+]
+
 // 系统配置
 module.exports = {
     invalidProjectIds: ['bk', 'el', 'a', 't'],
-    invalidPageIds: ['bkindex', 'BkNotFound', 'BkMainEntry', '404']
+    invalidPageIds: ['bkindex', 'BkNotFound', 'BkMainEntry', '404', ...jsKeyWords]
 }

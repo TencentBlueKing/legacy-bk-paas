@@ -8,6 +8,7 @@
 </template>
 
 <script>
+    import { bus } from '@/common/bus'
     export default {
         name: 'context-menu',
         props: {
@@ -54,6 +55,9 @@
                     this.triggerShowFn = this.contextMenuHandler.bind(this)
                     this.target.addEventListener('contextmenu', this.triggerShowFn)
                     this.binded = true
+                    bus.$on('hideContextMenu', () => {
+                        this.$emit('update:show', false)
+                    })
                 })
             },
 
@@ -83,19 +87,21 @@
 
             // 右键事件事件处理
             contextMenuHandler (e) {
-                this.x = e.clientX + this.offset.x
-                this.y = e.clientY + this.offset.y
-                this.layout()
-                this.$emit('update:show', true)
+                this.$emit('update:show', false) // 先隐藏所有右键菜单
+                
                 e.preventDefault()
-            },
 
-            // 布局
-            layout () {
-                this.style = {
-                    left: this.x + 'px',
-                    top: this.y + 'px'
-                }
+                setTimeout(() => {
+                    this.x = e.clientX + this.offset.x
+                    this.y = e.clientY + this.offset.y
+                    this.style = {
+                        left: this.x + 'px',
+                        top: this.y + 'px'
+                    }
+                    this.$nextTick(() => {
+                        this.$emit('update:show', true)
+                    })
+                }, 50)
             }
         }
     }

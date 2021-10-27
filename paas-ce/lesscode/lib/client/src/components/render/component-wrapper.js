@@ -25,8 +25,8 @@ export default {
             } : {}
 
         /** 设置了静态的变量，即使值改变，但不在画布中绑定和渲染 */
-        const rederPropsObj = renderData.renderProps
-        for (const [key, value] of Object.entries(rederPropsObj)) {
+        const renderPropsObj = renderData.renderProps
+        for (const [key, value] of Object.entries(renderPropsObj)) {
             if (Object.prototype.hasOwnProperty.call(value, 'staticValue')) {
                 bindProps[key] = value.staticValue
             }
@@ -37,27 +37,41 @@ export default {
             'component-data': componentData
         }, dynamicProps)
 
-        const renderStyles = Object.assign({}, renderData.renderStyles)
-        if (componentData.type !== 'img') delete renderStyles.width
+        const renderStyles = Object.assign({}, renderData.renderStyles, renderData.renderStyles.customStyle || {})
 
-        console.dir(context)
+        const widthChangeableCompoennts = ['img', 'p', 'span', 'bk-link', 'el-link']
+        if (!widthChangeableCompoennts.includes(componentData.type)) delete renderStyles.width
 
-        return h(renderData.type, {
-            key: params['component-type'] === 'bk-sideslider' ? 'bk-slider' : refreshKey, // sideSlider 固定key，防止属性修改动画刷新
-            props: params,
-            attrs: params,
-            on: {
-                ...dynamicEvent
-            },
-            scopedSlots: context.children.reduce((acc, cur) => {
-                const slotKey = cur.data && cur.data.slot
-                if (slotKey) {
-                    acc[slotKey] = () => cur
+        const scopedSlots = context.children.reduce((acc, cur) => {
+            const slotKey = cur.data && cur.data.slot
+            if (slotKey) {
+                if (!acc[slotKey]) {
+                    acc[slotKey] = () => acc[slotKey].slots
+                    acc[slotKey].slots = []
                 }
-                return acc
-            }, {}),
-            style: Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }),
-            ref: renderData.componentId
-        }, context.children)
+                acc[slotKey].slots.push(cur)
+            }
+            return acc
+        }, {})
+        // 画布margin属性加在上一层、不直接加在组件上
+        const marginStyle = { margin: 0, marginLeft: 0, marginRight: 0, marginTop: 0, marginBottom: 0 }
+        
+        return h('span',
+            {
+                style: { 'font-size': 'initial', width: params['component-type'] === 'bk-color-picker' ? 'inherit' : '' }
+            },
+            [
+                h(renderData.type, {
+                    key: params['component-type'] === 'bk-sideslider' ? 'bk-slider' : refreshKey, // sideSlider 固定key，防止属性修改动画刷新
+                    props: params,
+                    attrs: params,
+                    on: {
+                        ...dynamicEvent
+                    },
+                    scopedSlots,
+                    style: renderData.type === 'render-grid' ? {} : Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }, marginStyle),
+                    ref: renderData.componentId
+                }, context.children)
+            ])
     }
 }

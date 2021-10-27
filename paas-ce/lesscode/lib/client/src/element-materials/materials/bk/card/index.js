@@ -22,11 +22,6 @@ export default {
         display: 'inline-block'
     },
     props: {
-        title: {
-            type: 'string',
-            val: '卡片标题',
-            tips: '卡片标题'
-        },
         'is-collapse': {
             type: 'boolean',
             val: false,
@@ -58,32 +53,81 @@ export default {
             val: true,
             tips: '是否显示边框'
         },
-        // slots: {
-        //     name: 'template',
-        //     type: 'html',
-        //     val: '<p>卡片内容 1</p>\n<p>卡片内容 2</p>\n<p>卡片内容 3</p>'
-        // },
-        slots: {
-            name: 'layout',
+        'disable-header-style': {
             type: 'hidden',
+            val: true
+        }
+    },
+    slots: {
+        default: {
+            name: ['layout'],
+            type: ['free-layout'],
+            display: 'hidden',
             val: {
                 name: 'free-layout',
                 type: 'free-layout',
+                slotName: '',
                 slotContainer: true,
-                renderProps: {
-                    slots: {
-                        type: 'free-layout-item',
-                        val:
-                            [
-                                {
-                                    children: []
-                                }
-                            ]
-                    }
-                },
+                renderProps: {},
                 renderStyles: { 'height': '200px', 'pointer-events': 'auto' },
                 renderEvents: {},
-                renderDirectives: []
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'free-layout-item',
+                        val: [
+                            { children: [] }
+                        ]
+                    }
+                }
+            }
+        },
+        header: {
+            name: ['layout'],
+            type: ['free-layout'],
+            display: 'hidden',
+            val: {
+                name: 'free-layout',
+                type: 'free-layout',
+                slotName: '',
+                slotContainer: true,
+                renderProps: {
+                    'no-response': true
+                },
+                renderStyles: { 'height': '50px', 'pointer-events': 'auto' },
+                renderEvents: {},
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'free-layout-item',
+                        val: [
+                            { children: [] }
+                        ]
+                    }
+                }
+            }
+        },
+        footer: {
+            name: ['layout'],
+            type: ['free-layout'],
+            display: 'hidden',
+            val: {
+                name: 'free-layout',
+                type: 'free-layout',
+                slotName: '',
+                slotContainer: true,
+                renderProps: {},
+                renderStyles: { 'height': '50px', 'pointer-events': 'auto' },
+                renderEvents: {},
+                renderDirectives: [],
+                renderSlots: {
+                    default: {
+                        type: 'free-layout-item',
+                        val: [
+                            { children: [] }
+                        ]
+                    }
+                }
             }
         }
     }

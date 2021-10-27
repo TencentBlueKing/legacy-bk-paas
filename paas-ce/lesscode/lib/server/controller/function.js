@@ -8,13 +8,28 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { allGroupFuncDetail, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, getFuncRelatePageList } from '../model/function'
-import { getTokenByUserName, setToken, updateToken } from '../model/token'
+import { allGroupFuncDetail, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, getFuncRelatePageList, getFuncGroupById, getFuncById } from '../model/function'
+import projectFuncMarket from '../model/project-func-market'
 import OperationLogger from '../service/operation-logger'
-const dayjs = require('dayjs')
-const { checkFuncEslint } = require('../util')
+const { checkFuncEslint, verifyAndFixFunc } = require('../util')
 
 module.exports = {
+    async fixFunByEslint (ctx) {
+        try {
+            const func = ctx.request.body
+            const res = await verifyAndFixFunc(func)
+            ctx.send({
+                code: 0,
+                message: 'success',
+                data: res
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message
+            })
+        }
+    },
+
     async getAllGroupFunc (ctx) {
         try {
             const query = ctx.request.query || {}
@@ -105,6 +120,12 @@ module.exports = {
         const operationLogger = new OperationLogger(ctx)
         try {
             const query = ctx.request.query || {}
+            // 权限
+            const record = await getFuncGroupById(query.id)
+            const userInfo = ctx.session.userInfo || {}
+            ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+            if (!ctx.hasPerm) return
+
             const data = await deleteFuncGroup(query)
             operationLogger.success({
                 projectId: query.projectId,
@@ -126,6 +147,36 @@ module.exports = {
         }
     },
 
+    async bulkAddFunction (ctx) {
+        const operationLogger = new OperationLogger(ctx)
+        try {
+            const { funcList, varWhere } = ctx.request.body
+            // 使用eslint做检查
+            let errMessage = ''
+            const checkFunc = async (func) => {
+                errMessage = await checkFuncEslint(func)
+            }
+            await Promise.all(funcList.map(func => checkFunc(func)))
+            if (errMessage) {
+                ctx.throwBusinessError(errMessage)
+                // throw new global.BusinessError(errMessage)
+            }
+            await addFunction(funcList, varWhere)
+            operationLogger.success({
+                operateTarget: '批量添加函数'
+            })
+            ctx.send({
+                code: 0,
+                message: 'success'
+            })
+        } catch (err) {
+            operationLogger.error(err, {
+                operateTarget: '批量添加函数'
+            })
+            ctx.throwError(err)
+        }
+    },
+
     async addFunction (ctx) {
         const operationLogger = new OperationLogger(ctx)
         try {
@@ -133,9 +184,10 @@ module.exports = {
             // 使用eslint做检查
             const errMessage = await checkFuncEslint(func)
             if (errMessage) {
-                throw new global.BusinessError(errMessage)
+                // throw new global.BusinessError(errMessage)
+                ctx.throwBusinessError(errMessage)
             }
-            const data = await addFunction(func, varWhere)
+            const [data] = await addFunction([func], varWhere)
             data.funcParams = data.funcParams.split(',').filter(x => x !== '')
             data.remoteParams = data.remoteParams.split(',').filter(x => x !== '')
             operationLogger.success({
@@ -188,7 +240,8 @@ module.exports = {
             // 使用eslint做检查
             const errMessage = await checkFuncEslint(func)
             if (errMessage) {
-                throw new global.BusinessError(errMessage)
+                // throw new global.BusinessError(errMessage)
+                ctx.throwBusinessError(errMessage)
             }
             const data = await editFunction([func], varWhere)
             data.forEach((func) => {
@@ -216,7 +269,16 @@ module.exports = {
         try {
             const query = ctx.request.query || {}
             const id = query.id
+
+            // 权限
+            const record = await getFuncById(id)
+            const userInfo = ctx.session.userInfo || {}
+            ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
+            if (!ctx.hasPerm) return
+
             const data = await deleteFunction(id)
+            await projectFuncMarket.delete(id)
+
             operationLogger.success({
                 projectId: query.projectId,
                 operateTarget: `函数名称：${query.funcName}`
@@ -235,13 +297,5 @@ module.exports = {
                 message: err.message
             })
         }
-    },
-
-    async generateToken (ctx) {
-        
-    },
-
-    async getTokenList (ctx) {
-    
     }
 }

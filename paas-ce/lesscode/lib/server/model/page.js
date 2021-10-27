@@ -28,6 +28,17 @@ module.exports = {
     getProjectPages (projectId) {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
+            .select([
+                'page.id',
+                'page.pageName',
+                'page.pageCode',
+                'page.content',
+                'page.lifeCycle',
+                'page.styleSetting',
+                'page.updateUser',
+                'page.createUser',
+                'page.updateTime'
+            ])
             .where('t.projectId = :projectId', { projectId })
             .andWhere('page.deleteFlag = 0')
             .orderBy('page.id', 'DESC')
@@ -39,7 +50,7 @@ module.exports = {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
             .where('t.projectId = :projectId', { projectId })
-            .andWhere('page.pageName = :pageName', { pageName })
+            .andWhere('BINARY page.pageName = :pageName', { pageName })
             .andWhere('page.deleteFlag = 0')
             .getMany()
     },
@@ -184,10 +195,18 @@ module.exports = {
             .leftJoinAndSelect(UserProjectRole, 'rr', 'rp.projectId = rr.projectId')
             .select(['rp.projectId as projectId', 'rr.roleId as roleId'])
             .where(where.condition.join(' AND '), where.params)
+            .andWhere('rp.deleteFlag = 0')
             .getRawOne()
     },
 
     checkIsPageCreator (createUser, id) {
         return getRepository(Page).find({ id, createUser })
+    },
+
+    findPagePreviewImg (id) {
+        return getRepository(Page).findOne({
+            where: { id },
+            select: ['previewImg']
+        })
     }
 }

@@ -9,7 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { unescapeHtml } from '@/common/util'
+import { transformHtmlToVnode } from '@/common/util'
+import slotRenderConfig from '@/element-materials/modifier/component/slots/render-config'
 
 export default {
     name: 'render-slot',
@@ -25,41 +26,18 @@ export default {
         }
     },
     render (h, ctx) {
-        const { name, slotData } = ctx.props
-        if (name === 'text') {
-            return ctx._v(unescapeHtml(slotData))
-        }
-        if (name === 'bk-radio') {
-            return h(name, {
-                props: slotData,
-                style: {
-                    marginRight: '20px'
-                }
-            })
-        }
-        if (name === 'bk-checkbox') {
-            return h(name, {
-                props: slotData,
-                class: slotData.checked ? 'is-checked' : '',
-                style: {
-                    marginRight: '20px'
-                }
-            }, [slotData.label])
-        }
-        if (name === 'bk-collapse-item') {
-            return h('bk-collapse-item', {
-                props: slotData
-            }, [slotData.name])
-        }
+        const { slotData } = ctx.props
+        const { name } = slotData
+        const render = slotRenderConfig[name] || (() => {})
+        const slotRenderParams = []
+        let curSlot = slotData
+        do {
+            const param = { val: curSlot.val, type: 'value', from: 'canvas' }
+            slotRenderParams.push(param)
+            curSlot = curSlot.renderSlots
+        } while (curSlot && Object.keys(curSlot).length > 0)
 
-        if (name === 'bk-breadcrumb-item') {
-            return h('bk-breadcrumb-item', {
-                props: slotData
-            }, [slotData.label])
-        }
-
-        return h(name, {
-            props: slotData
-        })
+        const html = `<render-slot>${render(...slotRenderParams)}</render-slot>`
+        return transformHtmlToVnode(html).children
     }
 }

@@ -24,6 +24,7 @@
                         :last-props="modifier.renderProps"
                         :last-events="modifier.renderEvents"
                         :last-directives="modifier.renderDirectives"
+                        :last-slots="modifier.renderSlots"
                         :component-id="curSelectedComponentData.componentId"
                         :component-type="curSelectedComponentData.type"
                         :key="curSelectedComponentData.renderKey"
@@ -86,6 +87,9 @@
         if (data.renderDirectives) {
             result.renderDirectives = [...data.renderDirectives]
         }
+        if (data.renderSlots) {
+            result.renderSlots = { ...data.renderSlots }
+        }
         return result
     }
 
@@ -124,12 +128,12 @@
                 // 从配置表中根据name，找到对应name组件的配置
                 let { name } = this.curSelectedComponentData
                 if (!name) {
-                    return { styles: [], props: {}, events: [], directives: [] }
+                    return { styles: [], props: {}, events: [], directives: [], slots: {} }
                 }
-                if (name === 'radio-group' && this.curSelectedComponentData.renderProps && this.curSelectedComponentData.renderProps.slots && this.curSelectedComponentData.renderProps.slots.name === 'bk-radio-button') {
+                if (name === 'radio-group' && this.curSelectedComponentData.renderSlots && this.curSelectedComponentData.renderSlots.default && this.curSelectedComponentData.renderSlots.default.name === 'bk-radio-button') {
                     name = 'radio-button-group'
                 }
-                let realMaterialConfig = { styles: [], props: {}, events: [], directives: [] }
+                let realMaterialConfig = { styles: [], props: {}, events: [], directives: [], slots: {} }
                 const defaultMaterialConfig = materialConfig.find(_ => _.name === name)
                 if (defaultMaterialConfig) {
                     // 系统内置组件
@@ -145,7 +149,7 @@
                         realMaterialConfig = custom
                     }
                 }
-                const { styles = [], events = [], directives = [] } = realMaterialConfig
+                const { styles = [], events = [], directives = [], slots = {} } = realMaterialConfig
 
                 /** 对Props进行处理，当Props的display属性为false时，不在配置面板中显示 */
                 const originProps = realMaterialConfig.props || {}
@@ -158,7 +162,7 @@
 
                 return {
                     styles,
-                    props,
+                    props: { props, slots },
                     events,
                     directives
                 }
@@ -191,12 +195,13 @@
                     // this.tabPanelActive = 'props'
                     this.tabPanelActive = cData.tabPanelActive || 'props'
                     // 选中某个组件，获取获取该组件的renderStyles，renderProps，renderEvents作为本次操作的默认值
-                    const { renderStyles = {}, renderProps = {}, renderEvents = {}, renderDirectives = [] } = cData
+                    const { renderStyles = {}, renderProps = {}, renderEvents = {}, renderDirectives = [], renderSlots = {} } = cData
                     this.modifier = Object.freeze({
                         renderStyles,
                         renderProps,
                         renderEvents,
-                        renderDirectives
+                        renderDirectives,
+                        renderSlots
                     })
                 },
                 immediate: true,
@@ -213,7 +218,6 @@
 
                 modifier.tabPanelActive = this.tabPanelActive
                 this.modifier = modifier
-                console.log('from modifier', modifier)
                 bus.$emit('on-update-props', {
                     componentId: this.curSelectedComponentData.componentId,
                     modifier
@@ -241,6 +245,7 @@
                             width: 25%;
                             line-height: 46px;
                             min-width: auto;
+                            padding: 0 2px;
                             &.active::after {
                                 left: 16%;
                                 width: 68%;
@@ -260,7 +265,8 @@
                 position: relative;
                 .no-style,
                 .no-prop,
-                .no-event {
+                .no-event,
+                .no-slot {
                     position: absolute;
                     top: 50%;
                     left: 50%;

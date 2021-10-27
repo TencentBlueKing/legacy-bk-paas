@@ -17,31 +17,35 @@ export default {
     group: '表单',
     order: 1,
     events: [{
-        name: 'change', tips: '单选组选中的值改变时触发此回调函数，回调参数为当前单选组选中值'
+        name: 'change', tips: '单选组选中的值改变时调用该事件函数，事件回调参数 (value: String | Number | Boolean)'
     }],
     styles: ['margin'],
+    directives: [
+        {
+            type: 'v-model',
+            val: '',
+            valType: 'variable'
+        }
+    ],
     props: {
-        slots: {
-            name: 'bk-radio',
-            type: ['radio', 'remote'],
+    },
+    slots: {
+        default: {
+            name: ['bk-radio'],
+            type: ['list', 'remote'],
+            displayName: 'radio可选项配置',
+            tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和value字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => (!item.hasOwnProperty('label') || !item.hasOwnProperty('value')))
                 if (errData) return '返回值每个元素需要含有label和value字段'
             },
             val: [
-                { label: '单选一', value: 1, checked: false },
-                { label: '单选二', value: 2, checked: false },
-                { label: '单选三', value: 3, checked: false }
+                { label: '单选一', value: '1', checked: false },
+                { label: '单选二', value: '2', checked: false },
+                { label: '单选三', value: '3', checked: false }
             ],
-            // 生成 slot 时，每个 slot 的属性值映射，例如 bk-checkbox 里的 :label, :value, :checked, :key
-            // <bk-checkbox v-for="item in checkboxgroupc57d9bc6Slot" :label="item.label" :value="item.value" :checked="item.checked" :key="item.value">{{ item.label }}</bk-checkbox>
-            attrs: [
-                { 'key': 'label', 'value': 'label' },
-                { 'key': 'value', 'value': 'value' },
-                { 'key': 'checked', 'value': 'checked' },
-                { 'key': 'key', 'value': 'value' }
-            ]
+            payload: {}
         }
     }
 }

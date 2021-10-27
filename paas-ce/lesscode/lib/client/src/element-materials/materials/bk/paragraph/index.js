@@ -16,14 +16,16 @@ export default {
     icon: 'bk-drag-text',
     group: '基础',
     order: 1,
-    styles: ['size', 'margin', 'display', 'font', 'backgroundColor', 'textAlign'],
+    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor', 'textAlign', 'color'],
     renderStyles: {
         display: 'inline-block',
         width: '281px',
         textAlign: 'left',
         fontSize: '14px',
-        whiteSpace: 'pre-wrap',
-        wordBreak: 'break-all'
+        // whiteSpace: 'pre-wrap',
+        wordBreak: 'break-all',
+        color: '#63656e',
+        height: '102px'
     },
     directives: [
         {
@@ -39,10 +41,13 @@ export default {
             type: 'string',
             val: '',
             tips: '文字描述，hover 时会浮现提示内容'
-        },
-        slots: {
-            name: 'text',
-            type: 'paragraph',
+        }
+    },
+    slots: {
+        default: {
+            name: ['text'],
+            type: ['textarea'],
+            displayName: '文本配置',
             regExp: /\S/,
             val: '默认段落文字',
             // val: '<script>alert(1)</script>',
