@@ -84,10 +84,7 @@
             }
         },
         mounted () {
-            this.dragLine = new DragLine({
-                container: this.$el,
-                offset: this.layoutOffset
-            })
+            
         },
         methods: {
             /**
@@ -95,11 +92,19 @@
              * @param { Node } childNode 子元素对应的节点数据
              */
             doDrag (childNode) {
+                if (!this.dragLine) {
+                    this.dragLine = new DragLine({
+                        container: this.$el,
+                        offset: this.layoutOffset
+                    })
+                }
                 const dragEle = this.$refs[childNode.componentId][0].$el
                 
                 this.drag = new Drag(dragEle, {
                     container: dragEle.parentNode
                 })
+
+                console.log('from freelayoutfreelayoutfreelayoutfreelayoutfreelayout', this.dragLine, childNode, dragEle.parentNode)
 
                 this.dragLine.setContainer(dragEle.parentNode)
 

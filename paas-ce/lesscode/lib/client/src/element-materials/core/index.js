@@ -1,3 +1,6 @@
+import Node from './Node'
+
+import parseData from './parseData'
 import getRoot from './get-root'
 import getActiveNode from './get-active-node'
 import getNodeById from './get-node-by-id'
@@ -21,6 +24,11 @@ import {
     clearMenu
 } from './menu'
 
+export const root = new Node({
+    name: 'targetData',
+    type: 'root'
+})
+
 function core (id) {
     if (!id) {
         return getRoot()
@@ -34,6 +42,7 @@ function core (id) {
     return node
 }
 
+core.parseData = parseData
 core.getRoot = getRoot
 core.getActiveNode = getActiveNode
 core.getNodeById = getNodeById

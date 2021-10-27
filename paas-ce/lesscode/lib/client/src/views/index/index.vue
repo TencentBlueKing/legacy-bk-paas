@@ -189,7 +189,7 @@
                 v-bkloading="{ isLoading: contentLoading || isCustomComponentLoading, opacity: 1 }"
                 :class="mainContentClass"
                 @click="dragWrapperClickHandler">
-                <render-index v-if="targetData.length > 0" />
+                <render-index />
             </div>
             <div class="main-content border-none" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
                 <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
@@ -294,8 +294,6 @@
     import previewErrorImg from '@/images/preview-error.png'
     import { infoLink } from '@/element-materials/materials/index'
     import LC from '@/element-materials/core'
-
-    const gridNode = LC.createNode('render-grid')
 
     export default {
         components: {
@@ -605,7 +603,7 @@
             this.curDragingComponent = null
 
             // 设置初始targetData
-            let initData = [gridNode]
+            let initData = []
             try {
                 const content = this.pageDetail.content
                 if (content && content !== 'null') {
@@ -619,7 +617,8 @@
                     limit: 1
                 })
             }
-            this.setTargetData(initData)
+            LC.parseData(initData)
+            // this.setTargetData(initData)
 
             // console.log('from init print = :', tagetColumn.componentId, M.getNodeById(tagetColumn.componentId))
 

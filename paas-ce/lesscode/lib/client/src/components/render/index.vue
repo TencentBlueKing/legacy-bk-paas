@@ -77,6 +77,7 @@
         
         created () {
             this.componentData = Object.freeze(LC.getRoot())
+            console.log('from render inint')
             const updateCallback = _.throttle((event) => {
                 console.log('from target updateCallback == ', event)
                 if (event.target.componentId === this.componentData.componentId) {
