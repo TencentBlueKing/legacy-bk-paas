@@ -46,16 +46,9 @@
                 @component-mousedown="event => handleComponentMousedown(slotData, event)"
                 @component-update="handleComponentUpdate" />
         </Draggable>
-        <div
-            v-if="componentData.isActived"
-            class="save-as-template">
-            <i class="bk-drag-icon bk-drag-template-fill"></i>
-            存为模板
-        </div>
     </div>
 </template>
 <script>
-    // import LC from '@/element-materials/core'
     import { mapGetters } from 'vuex'
     import DragLine from '@/common/drag-line'
     import Drag from '@/common/drag'

@@ -2,6 +2,7 @@ import { uuid } from '@/common/util'
 
 import active from './extends/active'
 import activeClear from './extends/active-clear'
+import toggleInteractive from './extends/toggle-interactive'
 import appendChild from './extends/append-child'
 import removeChild from './extends/remove-child'
 import rerender from './extends/rerender'
@@ -185,7 +186,6 @@ export default class Node {
     setProperty (key, value) {
         const setKeyList = [
             'tabPanelActive',
-            'renderKey',
             'isInteractiveComponent',
             'interactiveShow',
             'isCustomComponent',
@@ -224,8 +224,18 @@ export default class Node {
     @notify
     activeClear () {
         activeClear(this)
+        return this
     }
-
+    /**
+     * @desc 切换交互式组件的显示状态
+     * @returns { Node }
+     */
+    @readonly
+    @notify
+    toggleInteractive () {
+        toggleInteractive(this)
+        return this
+    }
     /**
      * @desc 重新渲染组件
      * @returns { Node }

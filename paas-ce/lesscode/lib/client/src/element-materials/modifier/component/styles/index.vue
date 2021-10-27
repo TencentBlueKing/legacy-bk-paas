@@ -11,9 +11,9 @@
 
 <template>
     <div>
-        <template v-if="materialConfig.length">
+        <template v-if="config.length">
             <p class="style-setting-tips">样式面板中设置的样式将覆盖组件自带的默认样式，请谨慎调整</p>
-            <template v-for="(com, index) in materialConfig">
+            <template v-for="(com, index) in config">
                 <component
                     :is="com"
                     :key="index"
@@ -21,14 +21,18 @@
                     :change="handleChange" />
             </template>
         </template>
-        <style-custom v-if="componentId && !componentId.startsWith('chart-')" :component-id="componentId" :value="lastStyles" :change="handleChange"></style-custom>
+        <style-custom
+            v-if="isShowCustom"
+            :component-id="componentId"
+            :value="lastStyles"
+            :change="handleChange" />
         <div v-else class="no-style">
-            <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无样式</span>
+            <span v-if="Object.keys(config).length">该组件暂无样式</span>
         </div>
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
+    import LC from '@/element-materials/core'
 
     import StyleLayout from './layout/index'
     import StyleItem from './layout/item'
@@ -61,35 +65,37 @@
     export default {
         name: 'modifier-style',
         components,
-        props: {
-            materialConfig: {
-                type: Array,
-                required: true
-            },
-            lastStyles: {
-                type: Object,
-                default: () => ({})
-            },
-            componentId: {
-                type: String
+        data () {
+            return {
+                componentId: '',
+                config: {}
             }
         },
         computed: {
-            ...mapGetters('drag', ['curSelectedComponentData'])
+            isShowCustom () {
+                return /$chart-/.test(this.componentId)
+            }
         },
         created () {
-            this.renderStyles = this.lastStyles
+            this.currentComponentNode = LC.getActiveNode()
+            if (this.currentComponentNode) {
+                const {
+                    componentId,
+                    material,
+                    renderStyles
+                } = this.currentComponentNode
+                this.componentId = componentId
+                this.config = Object.freeze(material.styles)
+                this.lastStyles = Object.assign({}, renderStyles)
+            }
         },
         methods: {
             handleChange (key, value) {
                 const renderStyles = {
-                    ...this.renderStyles,
+                    ...this.lastStyles,
                     [key]: value
                 }
-                this.renderStyles = renderStyles
-                this.$emit('on-change', {
-                    renderStyles
-                })
+                this.currentComponentNode.setRenderStyles(renderStyles)
             }
         }
     }

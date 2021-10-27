@@ -19,23 +19,22 @@
             <bk-tab-panel
                 v-for="(tabPanel, panelIndex) in tabPanels"
                 v-bind="tabPanel"
-                :key="panelIndex">
-                <div class="material-modifier-container">
-                    <component
-                        :is="modifierCom"
-                        :key="renderKey"
-                        :material-config="materialComConfig"
-                        :last-styles="modifier.renderStyles"
-                        :last-props="modifier.renderProps"
-                        :last-events="modifier.renderEvents"
-                        :last-directives="modifier.renderDirectives"
-                        :last-slots="modifier.renderSlots"
-                        :component-id="curSelectedComponentData.componentId"
-                        :component-type="curSelectedComponentData.type"
-                        @on-change="handleModifier" />
-                </div>
-            </bk-tab-panel>
+                :key="panelIndex" />
         </bk-tab>
+        <div class="material-modifier-container">
+            <component
+                :is="modifierCom"
+                :key="renderKey"
+                :material-config="materialComConfig"
+                :last-styles="modifier.renderStyles"
+                :last-props="modifier.renderProps"
+                :last-events="modifier.renderEvents"
+                :last-directives="modifier.renderDirectives"
+                :last-slots="modifier.renderSlots"
+                :component-id="curSelectedComponentData.componentId"
+                :component-type="curSelectedComponentData.type"
+                @on-change="handleModifier" />
+        </div>
         <div v-if="!renderKey" class="empty">
             <span>请选择组件</span>
         </div>
@@ -44,6 +43,7 @@
 <script>
     import Vue from 'vue'
     import { mapGetters } from 'vuex'
+    import _ from 'lodash'
     import allComponentConf from '@/element-materials/materials'
     import iconComponentList from '@/element-materials/materials/icon-list.js'
     import { bus } from '@/common/bus'
@@ -215,11 +215,10 @@
             }
         },
         created () {
-            const activeCallback = (componentNode) => {
-                console.log('from modifier == ', componentNode)
-                this.tabPanelActive = componentNode.tabPanelActive
-                this.renderKey = componentNode.renderKey
-            }
+            const activeCallback = _.debounce(({ target }) => {
+                this.tabPanelActive = target.tabPanelActive
+                this.renderKey = target.renderKey
+            }, 60)
             const activeClearCallback = () => {
                 this.tabPanelActive = 'props'
                 this.renderKey = ''

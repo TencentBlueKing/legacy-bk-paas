@@ -15,11 +15,11 @@
             class="target-drag-area"
             :component-data="componentData"
             :list="componentData.slot.default"
+            disabled
             :sort="true"
             :group="{
                 put: [
-                    'render-grid',
-                    'free-layout',
+                    'layout',
                     'interactive'
                 ]
             }">
@@ -48,6 +48,7 @@
     </layout>
 </template>
 <script>
+    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import Draggable from './components/draggable'
     import Layout from './widget/layout'
@@ -63,7 +64,7 @@
         },
         provide () {
             return {
-                isInteractiveComponentShow: true
+                attachToInteractiveComponent: false
             }
         },
         data () {
@@ -76,12 +77,12 @@
         
         created () {
             this.componentData = Object.freeze(LC.getRoot())
-            const updateCallback = (node, eventName) => {
-                console.log('from target updateCallback == ', node, eventName)
-                if (node.componentId === this.componentData.componentId) {
+            const updateCallback = _.throttle((event) => {
+                console.log('from target updateCallback == ', event)
+                if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
                 }
-            }
+            }, 100)
             LC.addEventListener('update', updateCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
@@ -109,9 +110,6 @@
                     }
                 })
                 this.resizeObserve.observe(canvas)
-            },
-            puthandler (data, data1) {
-                console.log(data, data1)
             }
         }
     }

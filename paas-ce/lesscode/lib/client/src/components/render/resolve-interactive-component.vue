@@ -3,7 +3,8 @@
         v-show="componentData.interactiveShow"
         :class="$style['interactive']"
         :style="interactiveLayout"
-        role="interactive-root">
+        role="interactive-root"
+        data-render-drag="disabled">
         <resolve-component
             :key="componentData.renderKey"
             :component-data="componentData"
@@ -45,10 +46,13 @@
             }
         },
         mounted () {
-            console.log('from interactive compnet =', this)
             this.canvas = document.getElementsByClassName('main-content')[0]
             this.resizeObserver = new ResizeObserver(this.resizeInteractiveWrapper)
             this.resizeObserver.observe(this.canvas)
+            setTimeout(() => {
+                this.componentData.toggleInteractive()
+                this.componentData.toggleInteractive()
+            }, 2000)
         },
         beforeDestroy () {
             this.resizeObserver && this.resizeObserver.unobserve(this.canvas)
@@ -68,8 +72,5 @@
     .interactive {
         transform: translate(0, 0);
         
-    }
-    :global(.bk-dialog-wrapper) {
-        z-index: 0 !important;
     }
 </style>

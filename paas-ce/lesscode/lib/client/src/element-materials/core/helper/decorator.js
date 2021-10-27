@@ -16,11 +16,21 @@ export function notify (target, name, descriptor) {
         if (!this.parentNode && this.type !== 'root') {
             return
         }
-        triggerEventListener('update', this, name)
+        const event = {
+            type: name,
+            target: this
+        }
+        triggerEventListener('update', event)
+        if (name === 'toggleInteractive') {
+            event.interactiveShow = this.interactiveShow
+            triggerEventListener('toggleInteractive', event)
+        }
         if (name === 'active' && isActived !== this.isActived) {
-            triggerEventListener('active', this, name)
+            event.active = this.active
+            triggerEventListener('active', event)
         }
         if (name === 'activeClear' && isActived !== this.isActived) {
+            event.active = this.active
             triggerEventListener('activeClear', this, name)
         }
     }

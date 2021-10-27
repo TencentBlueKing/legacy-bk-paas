@@ -1,14 +1,14 @@
 <template>
     <article
-        v-if="Object.keys(computedSlots).length"
+        v-if="Object.keys(renderConfig).length"
         class="modifier-slot">
         <renderSlot
-            v-for="(slotConfig, slotName) in computedSlots"
+            v-for="(slotConfig, slotName) in renderConfig"
             :key="slotName"
             :slot-name="slotName"
-            :slot-val="renderSlots[slotName]"
+            :slot-val="lastSlots[slotName]"
             :slot-config="slotConfig"
-            :render-props="renderProps"
+            :render-props="lastProps"
             @change="change"
             @batchUpdate="batchUpdate"
         ></renderSlot>
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+    import _ from 'lodash'
+    import LC from '@/element-materials/core'
     import renderSlot from './slot.vue'
 
     export default {
@@ -23,51 +25,46 @@
             renderSlot
         },
 
-        props: {
-            materialConfig: Object,
-            lastSlots: Object,
-            lastProps: Object
-        },
-
         data () {
             return {
-                renderSlots: {},
-                renderProps: {}
+                config: {}
             }
         },
 
         computed: {
-            computedSlots () {
-                // const keys = Object.keys(this.materialConfig)
-                // const res = keys.reduce((acc, cur) => {
-                //     const config = this.materialConfig[cur]
-                //     if (config.display !== 'hidden') {
-                //         acc[cur] = config
-                //     }
-                //     return acc
-                // }, {})
-                // console.log('from computedSlots --------------: ', res)
-                // return res
-                return {}
+            renderConfig () {
+                return Object.keys(this.config).reduce((result, slotName) => {
+                    const config = this.config[slotName]
+                    if (config.display !== 'hidden') {
+                        result[slotName] = config
+                    }
+                    return result
+                }, {})
             }
         },
 
         created () {
-            this.renderSlots = this.lastSlots
-            this.renderProps = this.lastProps
+            this.lastProps = {}
+            this.lastSlots = {}
+            this.currentComponentNode = LC.getActiveNode()
+            if (this.currentComponentNode) {
+                const {
+                    material,
+                    renderProps,
+                    renderSlots
+                } = this.currentComponentNode
+                this.config = Object.freeze(material.slots)
+                this.lastProps = Object.assign({}, renderProps)
+                this.lastSlots = Object.assign({}, renderSlots)
+            }
         },
 
         methods: {
-            change (name, slotVal) {
-                this.renderSlots[name] = slotVal
-                const renderData = {
-                    renderSlots: this.renderSlots
-                }
-                this.batchUpdate(renderData)
-            },
-
+            change: _.throttle(function (slotName, slotVal) {
+                this.currentComponentNode.setRenderSlots(slotVal, slotName)
+            }, 60),
             batchUpdate (renderData) {
-                this.$emit('change', renderData)
+                console.log('from slot batchUpdate', renderData)
             }
         }
     }

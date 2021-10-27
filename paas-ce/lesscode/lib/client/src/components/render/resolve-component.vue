@@ -28,12 +28,14 @@
         <render-component
             :ref="componentData.componentId"
             :component-data="componentData" />
+        <save-to-template v-if="componentData.layoutType && componentData.isActived" />
     </div>
 </template>
 <script>
     import _ from 'lodash'
     import { getStyle } from '@/common/util'
     import LC from '@/element-materials/core'
+    import SaveToTemplate from './components/save-to-template'
     import WidgetForm from './widget/form'
     import WidgetFormItem from './widget/form-item'
     import offsetMixin from './widget/offset-mixin'
@@ -81,6 +83,7 @@
     export default {
         name: 'resolve-component',
         components: {
+            SaveToTemplate,
             /* eslint-disable vue/no-unused-components */
             WidgetForm,
             WidgetFormItem,
@@ -110,14 +113,16 @@
                 }
             }
             return {
-                componentStyleDisplayValue: '',
-                isMouseenter: false,
                 isHover: false
             }
         },
         created () {
-            const updateCallback = _.debounce((node) => {
-                if (node.componentId === this.componentData.componentId) {
+            const updateCallback = _.debounce((event) => {
+                const {
+                    target
+                } = event
+                if (target.componentId === this.componentData.componentId) {
+                    console.log('from render resolve componet update', target)
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
@@ -146,7 +151,6 @@
              * @desc 判断渲染组件的 display 的值
              */
             initComponentStyleDispaly () {
-                console.log('from component int style display')
                 let result = ''
                 if (this.$refs[this.componentData.componentId]) {
                     const domNode = this.$refs[this.componentData.componentId].$el

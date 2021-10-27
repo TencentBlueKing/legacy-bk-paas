@@ -18,11 +18,10 @@
             :list="componentData.slot.default"
             :component-data="componentData"
             :group="{
-                name: groupType,
+                name: 'component',
                 pull: true,
                 put: [
-                    'render-grid',
-                    'free-layout',
+                    'layout',
                     'component'
                 ]
             }">
@@ -35,6 +34,7 @@
 </template>
 
 <script>
+    import LC from '@/element-materials/core'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
 
@@ -48,24 +48,36 @@
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            count: Number
+        },
+        inject: [
+            'renderGrid'
+        ],
+        watch: {
+            count: {
+                handler () {
+                    this.calcStyle()
+                },
+                immediate: true
             }
         },
-        inject: ['renderGrid'],
-        data () {
-            return {
-                groupType: 'component'
-            }
-        },
-        
         created () {
-            this.calcStyle()
-        },
-        updated () {
-            console.log('**************** col update **************', this.componentData.componentId)
+            const updateCallback = ({ target }) => {
+                if (target.componentId === this.componentData.componentId) {
+                    this.$forceUpdate()
+                }
+            }
+
+            LC.addEventListener('update', updateCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', updateCallback)
+            })
         },
         methods: {
             calcStyle () {
                 const siblingList = this.componentData.parentNode.children
+                
                 const gridSpanNums = siblingList.reduce((result, columnNode) => {
                     result += columnNode.prop.span
                     return result

@@ -80,7 +80,19 @@ export default {
                         top: 'initial',
                         right: 'initial',
                         bottom: 'initial',
-                        left: 'initial'
+                        left: 'initial',
+                        // 修正组件会影响位置的样式
+                        'padding': 'initial',
+                        'paddingTop': 'initial',
+                        'paddingRight': 'initial',
+                        'paddingBottom': 'initial',
+                        'paddingLeft': 'initial',
+                        'margin': 'initial',
+                        'marginTop': 'initial',
+                        'marginRight': 'initial',
+                        'marginBottom': 'initial',
+                        'marginLeft': 'initial',
+                        'transform': 'initial'
                     })
                 }, renderSlotMap.default && renderSlotMap.default())
             ])

@@ -18,25 +18,25 @@
                 v-for="(componentItem, columnIndex) in componentData.slot.default"
                 :component-data="componentItem"
                 :key="componentItem.componentId"
+                :count="componentData.slot.default.length"
                 :class="{
                     last: columnIndex === componentData.slot.default.length - 1
                 }" />
         </render-row>
         <template v-if="componentData.isActived">
-            <div :class="$style['add-column']" @click="handleAddColumn">
+            <div
+                :class="$style['add-column']"
+                @click="handleAddColumn"
+                data-render-drag="disabled">
                 <img src="../../../images/svg/add-line.svg" />
             </div>
-            <div :class="$style['add-clone']" @click="handleAddClone">
+            <div
+                :class="$style['add-clone']"
+                @click="handleAddClone"
+                data-render-drag="disabled">
                 <img src="../../../images/svg/add-line.svg" />
             </div>
         </template>
-        <div
-            v-if="componentData.isActived"
-            class="save-as-template"
-            @click.stop="handleSaveTemplate(true)">
-            <i class="bk-drag-icon bk-drag-template-fill"></i>
-            存为模板
-        </div>
     </div>
 </template>
 
@@ -76,9 +76,6 @@
             console.log('**************** grid update **************', this.componentData.componentId)
         },
         methods: {
-            handleSaveTemplate () {
-
-            },
             /**
              * @desc 添加栅格
              */

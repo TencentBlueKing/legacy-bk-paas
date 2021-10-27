@@ -139,14 +139,9 @@ export default {
 
             this.newNode = node
 
-            // this.curDragingComponent = node
-            // this.$emit('update:dragingComponent', this.curDragingComponent)
-
             let groupName = ''
-            if (type === 'render-grid') {
-                groupName = 'render-grid'
-            } else if (type === 'free-layout') {
-                groupName = 'free-layout'
+            if (['free-layout', 'render-grid'].includes(type)) {
+                groupName = 'layout'
             } else if (this.interactiveComponents.includes(type)) {
                 groupName = 'interactive'
             } else {

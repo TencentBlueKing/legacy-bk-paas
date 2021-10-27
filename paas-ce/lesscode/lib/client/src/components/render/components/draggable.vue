@@ -2,9 +2,10 @@
     <vue-draggable
         ref="draggable"
         :class="$style['drag-area']"
+        :group="dragGroup"
         :chosen-class="$style['chosen']"
         :ghost-class="ghostClass || $style['ghost']"
-        filter="[role='interactive-root']"
+        filter="[data-render-drag='disabled']"
         @add="handleAdd"
         @change="handleChange"
         @choose="handleChoose"
@@ -16,6 +17,7 @@
     </vue-draggable>
 </template>
 <script>
+    import _ from 'lodash'
     import LC from '@/element-materials/core'
 
     export default {
@@ -26,42 +28,97 @@
                 type: Object,
                 required: true
             },
-            ghostClass: String
+            ghostClass: String,
+            group: {
+                type: Object,
+                required: true
+            }
         },
-        inject: ['isInteractiveComponentShow'],
+        inject: ['attachToInteractiveComponent'],
+        data () {
+            return {
+                dragGroup: this.group
+            }
+        },
+        created () {
+            const dragableCheck = _.debounce((event) => {
+                // 交互式组件是显示状态
+                // 所有不属于交互式组件的drag area都不可拖动
+                if (event.interactiveShow
+                    && !this.attachToInteractiveComponent) {
+                    this.dragGroup = Object.freeze({
+                        pull: false,
+                        put: false
+                    })
+                } else {
+                    this.dragGroup = this.group
+                }
+            }, 60)
+            LC.addEventListener('toggleInteractive', dragableCheck)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('toggleInteractive', dragableCheck)
+            })
+        },
         mounted () {
             setTimeout(() => {
                 this.$refs.draggable.computeIndexes()
             }, 500)
-            console.log('from darggable mounted = == ', this)
         },
         methods: {
+            /**
+             * @desc 添加组件
+             * @param { Object } dragEvent
+             */
             handleAdd (event) {
                 console.log('============print drag add', event)
                 this.$emit('add', event)
             },
+            /**
+             * @desc 拖动更新
+             * @param { Object } dragEvent
+             */
             handleChange (event) {
                 if (event.added) {
-                    LC.triggerEventListener('update', this.componentData, 'appendChildren')
+                    LC.triggerEventListener('update', {
+                        target: this.componentData,
+                        type: 'appendChildren'
+                    })
                 } else if (event.removed) {
-                    LC.triggerEventListener('update', this.componentData, 'removeChildren')
+                    LC.triggerEventListener('update', {
+                        target: this.componentData,
+                        type: 'removeChildren'
+                    })
                 } else if (event.moved) {
-                    LC.triggerEventListener('update', this.componentData, 'moveChildren')
+                    LC.triggerEventListener('update', {
+                        target: this.componentData,
+                        type: 'moveChildren'
+                    })
                 }
-                console.log('prnt drang change == == ', event, this.$refs.draggable)
                 // fix: vue-draggable内部没有更新
                 this.$refs.draggable.computeIndexes()
                 
                 this.$emit('change', event)
             },
+            /**
+             * @desc 拖动选中
+             * @param { Object } dragEvent
+             */
             handleChoose (event) {
                 console.log('print drag choose', event)
                 this.$emit('choose', event)
             },
+            /**
+             * @desc 开始拖拽
+             * @param { Object } dragEvent
+             */
             handleStart (event) {
                 console.log('print drag start', event)
                 this.$emit('start', event)
             },
+            /**
+             * @desc 结束拖拽
+             * @param { Object } dragEvent
+             */
             handleEnd (event) {
                 console.log('print drag end', event)
                 this.$emit('end', event)
