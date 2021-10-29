@@ -1,7 +1,7 @@
 // import Node from './Node'
 import { uuid } from '@/common/util'
 import getRoot from './get-root'
-import { createNode } from './create-node'
+import create, { createNode } from './create-node'
 
 const createNodeFromData = (data) => {
     const newNode = createNode(data.type)
@@ -140,10 +140,10 @@ const tansform = (root, data) => {
 const checkVersion = (data) => {
     for (let i = 0; i < data.length; i++) {
         const rootLayout = data[i]
-        if (!rootLayout.renderSlots) {
-            return 'v1'
-        }
         if (rootLayout.type === 'render-grid') {
+            if (!rootLayout.renderSlots) {
+                return 'v0'
+            }
             return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
         } else if (rootLayout.type === 'bk-sideslider') {
             return rootLayout.renderSlots.content.hasOwnProperty('val') ? 'v1' : 'v2'
@@ -165,7 +165,11 @@ export default function (data) {
     }
     const root = getRoot()
     root.setRenderSlots([])
-    console.log('from append root append root append root append root', root)
+    console.log('print root =', root)
     root.renderSlots.default = []
-    traverse(root, versionData, 'default')
+    if (version === 'v0') {
+        root.appendChild(create('render-grid'))
+    } else {
+        traverse(root, versionData, 'default')
+    }
 }
