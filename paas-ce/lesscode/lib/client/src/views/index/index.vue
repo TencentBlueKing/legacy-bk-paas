@@ -189,7 +189,7 @@
                 v-bkloading="{ isLoading: contentLoading || isCustomComponentLoading, opacity: 1 }"
                 :class="mainContentClass"
                 @click="dragWrapperClickHandler">
-                <render-index />
+                <render-index :key="pageId" />
             </div>
             <div class="main-content border-none" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
                 <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
@@ -1486,61 +1486,62 @@
             },
 
             async handleSave (callBack, from) {
-                const isLock = await this.checkLockStatus('lock')
-                if (isLock) return // 如果被锁，不可保存
+                console.log('from save == ', LC.getRoot())
+                // const isLock = await this.checkLockStatus('lock')
+                // if (isLock) return // 如果被锁，不可保存
 
-                if (this.isSaving) {
-                    return
-                }
+                // if (this.isSaving) {
+                //     return
+                // }
 
-                const processTargetDataResult = this.processTargetData()
-                if (processTargetDataResult.errMessage) {
-                    this.$bkMessage({
-                        theme: 'error',
-                        message: processTargetDataResult.errMessage,
-                        ellipsisLine: 0
-                    })
-                    return
-                }
-                this.isSaving = true
+                // const processTargetDataResult = this.processTargetData()
+                // if (processTargetDataResult.errMessage) {
+                //     this.$bkMessage({
+                //         theme: 'error',
+                //         message: processTargetDataResult.errMessage,
+                //         ellipsisLine: 0
+                //     })
+                //     return
+                // }
+                // this.isSaving = true
 
-                const { curFuncIds, draggedCustomComponentList, usedVariableMap } = processTargetDataResult
+                // const { curFuncIds, draggedCustomComponentList, usedVariableMap } = processTargetDataResult
 
-                try {
-                    const customCompData = draggedCustomComponentList.map(item => ({
-                        compId: item.meta.id,
-                        versionId: item.meta.versionId
-                    }))
-                    const functionData = [...new Set(curFuncIds.filter(item => item))]
-                    const res = await this.$store.dispatch('page/update', {
-                        data: {
-                            from,
-                            projectId: this.projectId,
-                            pageCode: this.pageDetail.pageCode,
-                            pageData: {
-                                id: parseInt(this.$route.params.pageId),
-                                content: circleJSON(this.targetData || [])
-                            },
-                            customCompData,
-                            functionData,
-                            templateData: this.processTemplateData(),
-                            usedVariableMap
-                        }
-                    })
-                    this.savePreviewImg()
-                    const projectId = this.$route.params.projectId || 1
-                    this.getAllGroupFuncs(projectId)
-                    res && this.$bkMessage({
-                        theme: 'success',
-                        message: '保存成功',
-                        limit: 1
-                    })
-                    if (typeof callBack === 'function') callBack()
-                } catch (err) {
-                    console.log(err)
-                } finally {
-                    this.isSaving = false
-                }
+                // try {
+                //     const customCompData = draggedCustomComponentList.map(item => ({
+                //         compId: item.meta.id,
+                //         versionId: item.meta.versionId
+                //     }))
+                //     const functionData = [...new Set(curFuncIds.filter(item => item))]
+                //     const res = await this.$store.dispatch('page/update', {
+                //         data: {
+                //             from,
+                //             projectId: this.projectId,
+                //             pageCode: this.pageDetail.pageCode,
+                //             pageData: {
+                //                 id: parseInt(this.$route.params.pageId),
+                //                 content: circleJSON(this.targetData || [])
+                //             },
+                //             customCompData,
+                //             functionData,
+                //             templateData: this.processTemplateData(),
+                //             usedVariableMap
+                //         }
+                //     })
+                //     this.savePreviewImg()
+                //     const projectId = this.$route.params.projectId || 1
+                //     this.getAllGroupFuncs(projectId)
+                //     res && this.$bkMessage({
+                //         theme: 'success',
+                //         message: '保存成功',
+                //         limit: 1
+                //     })
+                //     if (typeof callBack === 'function') callBack()
+                // } catch (err) {
+                //     console.log(err)
+                // } finally {
+                //     this.isSaving = false
+                // }
             },
 
             /**

@@ -25,12 +25,6 @@ export default {
     render (h, ctx) {
         const { key, slotData } = ctx.props
         
-        // if (slotData.name === 'layout') {
-        //     return (
-        //         <render-layout key={key} componentData={slotData} />
-        //     )
-        // }
-        
         const { name } = slotData
         const render = slotRenderConfig[name] || (() => {})
         const slotRenderParams = []

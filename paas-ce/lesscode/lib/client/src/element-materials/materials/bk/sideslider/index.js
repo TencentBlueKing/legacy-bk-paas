@@ -69,29 +69,12 @@ export default {
             name: ['layout'],
             type: ['render-grid'],
             display: 'hidden',
-            val: {
-                name: 'grid',
-                type: 'render-grid',
-                slotName: '',
-                slotContainer: true,
-                renderSlots: {
-                    default: {
-                        type: 'column',
-                        val:
-                          [
-                              {
-                                  children: [],
-                                  span: 1,
-                                  width: '100%'
-                              }
-                          ]
-                    }
-                },
-                renderProps: {},
-                renderStyles: {},
-                renderEvents: {},
-                renderDirectives: []
-            }
+            children: [
+                {
+                    name: ['layout'],
+                    type: ['render-column']
+                }
+            ]
         }
     }
 }

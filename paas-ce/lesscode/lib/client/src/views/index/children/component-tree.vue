@@ -39,6 +39,7 @@
 
 <script>
     import _ from 'lodash'
+    import LC from '@/element-materials/core'
     import Tree from './tree/tree.vue'
     import allComponentConf from '@/element-materials/materials'
     import { deepSearchStack, removeClassWithNodeClass } from '@/common/util.js'
@@ -62,7 +63,8 @@
             return {
                 filter: '',
                 allExpanded: true,
-                treeWidth: 300
+                treeWidth: 300,
+                data: []
             }
         },
         computed: {
@@ -77,20 +79,16 @@
             tooltip () {
                 return this.allExpanded ? '收起所有' : '展开所有'
             },
-            data () {
-                return this.targetData.map(item => {
-                    return {
-                        id: item['componentId'],
-                        name: item['componentId'],
-                        icon: this.getItemIcon(item),
-                        type: item.type,
-                        children: this.getSlotChildren(item, item['componentId'])
-                    }
-                })
-            },
+            // data () {
+            //     return []
+            // },
             nodesNameList () {
                 return deepSearchStack(this.data, 'id')
             }
+        },
+        created () {
+            // console.log('tree = ', LC.getRoot())
+            this.data = Object.freeze(LC.getRoot().children)
         },
         mounted () {
             this.getItemIcon()

@@ -9,8 +9,11 @@ export default function (node, childNode, slotName) {
     // 布局类型的组件才支持
     // - 本身是布局组件（Grid、Column、Freelayout）
     // - 组件指定的 slot 是个布局组件
-    if (node.layoutType || node.layoutSlotType[slotName]) {
+    if (node.layoutType) {
         node.renderSlots[slotName].push(childNode)
+    } else if (node.layoutSlotType[slotName]) {
+        console.log('from append child = == = = = == = ', node)
+        node.slot[slotName].appendChild(node)
     }
     return true
 }

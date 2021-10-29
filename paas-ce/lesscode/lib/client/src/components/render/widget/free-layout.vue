@@ -83,9 +83,6 @@
                 left: 0
             }
         },
-        mounted () {
-            
-        },
         methods: {
             /**
              * @desc 拖动元素

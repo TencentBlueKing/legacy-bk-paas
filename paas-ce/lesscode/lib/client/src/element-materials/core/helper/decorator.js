@@ -26,11 +26,11 @@ export function notify (target, name, descriptor) {
             triggerEventListener('toggleInteractive', event)
         }
         if (name === 'active' && isActived !== this.isActived) {
-            event.active = this.active
+            event.isActived = this.isActived
             triggerEventListener('active', event)
         }
         if (name === 'activeClear' && isActived !== this.isActived) {
-            event.active = this.active
+            event.isActived = this.isActived
             triggerEventListener('activeClear', this, name)
         }
     }

@@ -1,6 +1,6 @@
 import Node from './Node'
 
-import parseData from './parseData'
+import parseData from './parse-data'
 import getRoot from './get-root'
 import getActiveNode from './get-active-node'
 import getNodeById from './get-node-by-id'

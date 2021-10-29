@@ -69,15 +69,13 @@
         },
         data () {
             return {
-                componentData: null,
                 showNotVisibleMask: false,
                 canvasHeight: 100
             }
         },
         
         created () {
-            this.componentData = Object.freeze(LC.getRoot())
-            console.log('from render inint')
+            this.componentData = LC.getRoot()
             const updateCallback = _.throttle((event) => {
                 console.log('from target updateCallback == ', event)
                 if (event.target.componentId === this.componentData.componentId) {
@@ -88,9 +86,6 @@
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
             })
-        },
-        updated () {
-            console.log('**************** render update **************', this.componentData.componentId)
         },
         mounted () {
             const resetCallback = () => {

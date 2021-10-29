@@ -64,17 +64,6 @@
                 default: () => ({})
             }
         },
-        data () {
-            return {
-                groupType: 'component'
-            }
-        },
-        created () {
-
-        },
-        updated () {
-            console.log('**************** grid update **************', this.componentData.componentId)
-        },
         methods: {
             /**
              * @desc 添加栅格

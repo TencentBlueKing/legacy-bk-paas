@@ -70,7 +70,7 @@
              * @param { Object } dragEvent
              */
             handleAdd (event) {
-                console.log('============print drag add', event)
+                // console.log('============print drag add', event)
                 this.$emit('add', event)
             },
             /**
@@ -104,7 +104,7 @@
              * @param { Object } dragEvent
              */
             handleChoose (event) {
-                console.log('print drag choose', event)
+                // console.log('print drag choose', event)
                 this.$emit('choose', event)
             },
             /**
@@ -112,7 +112,7 @@
              * @param { Object } dragEvent
              */
             handleStart (event) {
-                console.log('print drag start', event)
+                // console.log('print drag start', event)
                 this.$emit('start', event)
             },
             /**
@@ -120,7 +120,7 @@
              * @param { Object } dragEvent
              */
             handleEnd (event) {
-                console.log('print drag end', event)
+                // console.log('print drag end', event)
                 this.$emit('end', event)
             }
         }

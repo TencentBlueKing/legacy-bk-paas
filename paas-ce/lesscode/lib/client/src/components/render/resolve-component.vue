@@ -28,7 +28,10 @@
         <render-component
             :ref="componentData.componentId"
             :component-data="componentData" />
-        <save-to-template v-if="componentData.layoutType && componentData.isActived" />
+        <save-to-template
+            v-if="componentData.layoutType
+                && componentData.parentNode.layoutType
+                && componentData.isActived" />
     </div>
 </template>
 <script>
@@ -117,12 +120,11 @@
             }
         },
         created () {
-            const updateCallback = _.debounce((event) => {
+            const updateCallback = _.throttle((event) => {
                 const {
                     target
                 } = event
                 if (target.componentId === this.componentData.componentId) {
-                    console.log('from render resolve componet update', target)
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
