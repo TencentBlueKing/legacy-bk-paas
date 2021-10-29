@@ -37,6 +37,7 @@ import '../src/components/methods/provide-completion'
 import pureAxios from '@/api/pureAxios.js'
 
 import lesscodeCanvas from '@/lesscode-canvas'
+console.error('lesscodeCanvas', lesscodeCanvas)
 lesscodeCanvas.start()
 
 window.globalStr = 'parent'

@@ -1,7 +1,8 @@
 import App, { instanceMap } from './app'
 import { patchElementPrototypeMethods } from './patch'
+import { EventCenterForBaseApp } from './data'
 
-class LesscodeCanvas extends HTMLElement {
+class LesscodeCanvasNode extends HTMLElement {
     // eslint-disable-next-line no-useless-constructor
     constructor () {
         super()
@@ -66,10 +67,14 @@ class LesscodeCanvas extends HTMLElement {
     }
 }
 
-function start () {
-    window.customElements.define('lesscode-canvas', LesscodeCanvas)
+class LesscodeCanvas extends EventCenterForBaseApp {
+    constructor () {
+        super(...arguments)
+        this.tagName = 'lesscode-canvas'
+    }
+    start () {
+        window.customElements.define(this.tagName, LesscodeCanvasNode)
+    }
 }
 
-export default {
-    start
-}
+export default new LesscodeCanvas()
