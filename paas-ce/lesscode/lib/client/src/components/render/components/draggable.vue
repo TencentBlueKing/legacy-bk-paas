@@ -135,23 +135,22 @@
     .chosen{
         opacity: .5;
         background-color: #ffdddd;
-        &:after{
-            content: none !important;
-        }
     }
     .ghost{
+        &::before{
+            content: none !important;
+        }
         &:after {
             content: "放在这里";
-            background-color: #C2D7F9;
-            position: absolute;
-            left: 0;
-            min-height: 32px;
+            display: block;
+            height: 32px;
             height: 32px;
             padding: 0 5px;
             font-size: 12px;
             color: #fff;
             text-align: center;
             line-height: 32px;
+            background-color: #C2D7F9;
             
         }
         &:global(.inline-block) {

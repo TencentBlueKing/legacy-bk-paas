@@ -18,6 +18,7 @@
             disabled
             :sort="true"
             :group="{
+                pull: 'clone',
                 put: [
                     'layout',
                     'interactive'
