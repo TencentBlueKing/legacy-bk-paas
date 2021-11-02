@@ -49,7 +49,11 @@ function getDefaultRow () {
         nullable: false,
         default: '',
         comment: '',
-        defaultInputType: 'text'
+        defaultInputType: 'text',
+        generated: false,
+        createDate: false,
+        updateDate: false,
+        length: ''
     }
 }
 

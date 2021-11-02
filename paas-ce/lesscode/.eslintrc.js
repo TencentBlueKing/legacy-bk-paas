@@ -146,15 +146,6 @@ module.exports = {
          */
         '@typescript-eslint/no-parameter-properties': 'off',
         /**
-         * 禁止将 this 赋值给其他变量，除非是解构赋值
-         */
-        '@typescript-eslint/no-this-alias': [
-            'error',
-            {
-                allowDestructuring: true
-            }
-        ],
-        /**
          * 禁止无用的表达式
          */
         '@typescript-eslint/no-unused-expressions': [

@@ -1,6 +1,16 @@
 <template>
     <section>
-        <bk-button @click="showExport" :size="size">导出</bk-button>
+        <bk-button v-if="onlyExportAll" size="small" @click="showExport('select')">导出</bk-button>
+        <bk-dropdown-menu ref="dropdownRef" v-else>
+            <div class="dropdown-trigger-btn" slot="dropdown-trigger">
+                <span>导出</span>
+                <i :class="['bk-icon icon-angle-down']"></i>
+            </div>
+            <ul class="bk-dropdown-list" slot="dropdown-content">
+                <li><a href="javascript:;" :class="{ disabled: disablePartialSelection }" @click="showExport('select')">导出选中数据</a></li>
+                <li><a href="javascript:;" @click="showExport('all')">导出所有数据</a></li>
+            </ul>
+        </bk-dropdown-menu>
 
         <bk-dialog
             theme="primary"
@@ -28,30 +38,48 @@
 
 <script lang="ts">
     import { defineComponent, ref } from '@vue/composition-api'
-    import { downloadFile } from '@/common/util.js'
 
     export default defineComponent({
         props: {
-            title: String,
-            size: {
-                type: String,
-                default: 'normal'
+            title: {
+                type: String
+            },
+            disablePartialSelection: {
+                type: Boolean,
+                default: false
+            },
+            onlyExportAll: {
+                type: Boolean,
+                default: false
             }
         },
 
-        setup () {
+        setup (props, { emit }) {
             const isShowExport = ref<boolean>(false)
+            const isDropdownShow = ref<boolean>(false)
+            const downLoadType = ref('all')
+            const dropdownRef = ref(null)
 
-            const showExport = () => {
+            const dropdownHide = () => {
+                dropdownRef.value?.hide()
+            }
+
+            const showExport = (type) => {
+                if (type === 'select' && props.disablePartialSelection) return
+
                 isShowExport.value = true
+                downLoadType.value = type
+                dropdownHide()
             }
 
             const downLoad = (type) => {
-                downloadFile('ww')
+                emit('download', type, downLoadType.value)
             }
 
             return {
                 isShowExport,
+                isDropdownShow,
+                dropdownRef,
                 showExport,
                 downLoad
             }
@@ -97,6 +125,39 @@
         .bk-drag-icon {
             font-size: 32px;
             margin-bottom: 11px;
+        }
+    }
+    .dropdown-trigger-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #c4c6cc;
+        height: 32px;
+        border-radius: 2px;
+        padding: 0 5px 0 14px;
+        color: #63656E;
+        font-size: 14px;
+        background: #fff;
+    }
+    ::v-deep .bk-dropdown-content {
+        left: auto !important;
+        right: 0 !important;
+    }
+    .dropdown-trigger-btn.bk-icon {
+        font-size: 18px;
+    }
+    .dropdown-trigger-btn .bk-icon {
+        font-size: 22px;
+    }
+    .dropdown-trigger-btn:hover {
+        cursor: pointer;
+        border-color: #979ba5;
+    }
+    .bk-dropdown-list .disabled {
+        cursor: not-allowed;
+        color: #dcdee5;
+        &:hover {
+            color: #dcdee5;
         }
     }
 </style>

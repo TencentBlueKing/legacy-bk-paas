@@ -3,13 +3,13 @@
         <bk-alert type="warning" title="数据的增删会直接影响到线上环境，请谨慎操作"></bk-alert>
 
         <section class="render-data-header">
-            <bk-button theme="primary" class="mr5" @click="addData">新增</bk-button>
+            <bk-button theme="primary" class="mr10" @click="addData">新增</bk-button>
             <bk-button
-                class="mr5"
+                class="mr10"
                 :disabled="dataStatus.selectRows.length <= 0"
                 @click="bulkDelete"
             >批量删除</bk-button>
-            <bk-button>导出</bk-button>
+            <export-data title="导出数据" :disable-partial-selection="dataStatus.selectRows.length <= 0" @download="exportDatas"></export-data>
         </section>
 
         <bk-table
@@ -49,6 +49,7 @@
             <div slot="content">
                 <bk-form
                     class="edit-data-form"
+                    ref="formRef"
                     :model="formStatus.editForm"
                     :label-width="120"
                 >
@@ -57,11 +58,15 @@
                         :key="column.name"
                         :label="column.name"
                         :required="!column.nullable"
+                        :property="column.name"
+                        :rules="getColumnRule(column)"
+                        error-display-type="normal"
                     >
                         <bk-date-picker
                             v-if="column.type === 'datetime'"
                             type="datetime"
                             style="width:100%"
+                            :clearable="false"
                             :value="formStatus.editForm[column.name]"
                             @change="changeDateTime(column.name, ...arguments)"
                         ></bk-date-picker>
@@ -99,21 +104,26 @@
         onBeforeMount,
         watch,
         toRefs,
+        ref,
         PropType,
         reactive
     } from '@vue/composition-api'
-    import vue from 'vue'
-    import {
-        messageError
-    } from '@/common/bkmagic'
+    import Vue from 'vue'
+    import { messageError } from '@/common/bkmagic'
+    import { bkInfoBox } from 'bk-magic-vue'
     import router from '@/router'
     import store from '@/store'
     import dayjs from 'dayjs'
     import {
         DataParse,
         DataJsonParser,
-        DataSqlParser
+        DataSqlParser,
+        generateExportDatas
     } from 'shared/data-source'
+    import exportData from '../common/export.vue'
+    import {
+        downloadFile
+    } from '@/common/util.js'
 
     interface ITable {
         tableName: string,
@@ -139,7 +149,21 @@
         dataParse: IDataParse
     }
 
+    const getColumnRule = (column) => {
+        if (!column.nullable) {
+            return [{
+                required: true,
+                message: `${column.name} 是必填项`,
+                trigger: 'blur'
+            }]
+        }
+    }
+
     export default defineComponent({
+        components: {
+            exportData
+        },
+
         props: {
             environment: String,
             activeTable: Object as PropType<ITable>
@@ -148,6 +172,7 @@
         setup (props) {
             const projectId = router?.currentRoute?.params?.projectId
             const { environment, activeTable } = toRefs<IProps>(props)
+            const formRef = ref(null)
             const dataStatus = reactive({
                 dataList: [],
                 selectRows: [],
@@ -230,8 +255,12 @@
             const addData = () => {
                 formStatus.showEditData = true
                 formStatus.editTitle = '新增数据'
-                formStatus.editForm = {}
                 formStatus.dataParse = new DataParse()
+                const columns = activeTable.value.columns
+                columns.forEach((column) => {
+                    const value = column.type === 'datetime' ? timeFormatter(new Date()) : ''
+                    Vue.set(formStatus.editForm, column.name, value)
+                })
             }
 
             const editData = (row) => {
@@ -240,21 +269,27 @@
                 formStatus.editTitle = '编辑数据'
                 formStatus.dataParse = new DataParse(data)
                 Object.keys(row).forEach((key) => {
-                    vue.set(formStatus.editForm, key, row[key])
+                    Vue.set(formStatus.editForm, key, row[key])
                 })
             }
 
             const confirmSubmitData = () => {
-                const data = [{ tableName: activeTable.value.tableName, list: [formStatus.editForm] }]
-                const dataJsonParser = new DataJsonParser(data)
-                const dataSqlParser = new DataSqlParser()
-                const sql = formStatus.dataParse.set(dataJsonParser).export(dataSqlParser)
-                formStatus.isSaving = true
-                modifyOnlineDb(sql).then(() => {
-                    closeForm()
-                    return getDataList()
-                }).finally(() => {
-                    formStatus.isSaving = false
+                formRef.value.validate().then(() => {
+                    const data = [{ tableName: activeTable.value.tableName, list: [formStatus.editForm] }]
+                    const dataJsonParser = new DataJsonParser(data)
+                    const dataSqlParser = new DataSqlParser()
+                    const sql = formStatus.dataParse.set(dataJsonParser).export(dataSqlParser)
+                    formStatus.isSaving = true
+                    return modifyOnlineDb(sql).then(() => {
+                        closeForm()
+                        getDataList()
+                    }).catch((error) => {
+                        messageError(error.message || error)
+                    }).finally(() => {
+                        formStatus.isSaving = false
+                    })
+                }).catch((validator) => {
+                    messageError(validator.content || validator)
                 })
             }
 
@@ -268,20 +303,49 @@
                 const dataJsonParser = new DataJsonParser()
                 const dataSqlParser = new DataSqlParser()
                 const sql = dataParse.set(dataJsonParser).export(dataSqlParser)
-                dataStatus.isLoading = true
-                modifyOnlineDb(sql).then(() => {
-                    closeForm()
-                    return getDataList()
-                }).finally(() => {
-                    dataStatus.isLoading = false
+                bkInfoBox({
+                    title: '确认要删除？',
+                    subTitle: `将会直接删除线上环境 id 为【${list.map(x => x.id).join(',')}】的数据`,
+                    theme: 'danger',
+                    confirmLoading: true,
+                    confirmFn () {
+                        return modifyOnlineDb(sql).then(() => {
+                            closeForm()
+                            getDataList()
+                        }).catch((error) => {
+                            messageError(error.message || error)
+                        })
+                    }
                 })
             }
 
             const modifyOnlineDb = (sql) => {
                 const apiData = { environment: environment.value, projectId, sql }
-                return store.dispatch('dataSource/modifyOnlineDb', apiData).catch((error) => {
-                    messageError(error.message || error)
+                return store.dispatch('dataSource/modifyOnlineDb', apiData)
+            }
+
+            const exportAllDatas = (fileType) => {
+                window.open(`/api/data-source/exportDatas/projectId/${projectId}/fileType/${fileType}/tableName/${activeTable.value.tableName}`)
+            }
+
+            const exportSelectDatas = (fileType) => {
+                const datas = [{
+                    tableName: activeTable.value.tableName,
+                    list: dataStatus.selectRows
+                }]
+                const fileName = fileType === 'sql' ? `lesscode-data-${projectId}.sql` : ''
+                const files = generateExportDatas(datas, fileType, fileName)
+                files.forEach(({ name, content }) => {
+                    downloadFile(content, name)
                 })
+            }
+
+            const exportDatas = (fileType, downloadType) => {
+                if (downloadType === 'all') {
+                    exportAllDatas(fileType)
+                } else {
+                    exportSelectDatas(fileType)
+                }
             }
 
             watch(
@@ -295,8 +359,10 @@
             onBeforeMount(getDataList)
 
             return {
+                formRef,
                 dataStatus,
                 formStatus,
+                getColumnRule,
                 columnFormatter,
                 timeFormatter,
                 changeDateTime,
@@ -308,7 +374,8 @@
                 editData,
                 confirmSubmitData,
                 bulkDelete,
-                deleteData
+                deleteData,
+                exportDatas
             }
         }
     })
@@ -316,6 +383,8 @@
 
 <style lang="postcss" scoped>
     .render-data-header {
+        display: flex;
+        align-items: center;
         margin: 16px 0;
     }
     .edit-data-form {

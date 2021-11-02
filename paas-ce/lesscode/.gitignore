@@ -32,6 +32,7 @@ upload
 !lib/client/src/element-materials/**/upload
 temp
 npmTemp
+downloadTemp
 lib/server/conf/data-base.js
 lib/server/conf/http.js
 lib/server/conf/db-migrate.json

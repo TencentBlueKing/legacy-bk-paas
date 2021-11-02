@@ -17,8 +17,22 @@ function transformCsv2Json () {
 
 }
 
-function transformJson2Csv () {
-
+function transformJson2Csv (finalDatas) {
+    return finalDatas.map(({ tableName, list }) => {
+        const contentArr = []
+        // 生成表头
+        const columnHeader = Object.keys(list[0])
+        contentArr.push(columnHeader.join(','))
+        // 生成内容
+        list.forEach((data) => {
+            const dataValues = columnHeader.map((key) => {
+                return (Reflect.has(data, key) ? data[key] : '') + '\t'
+            })
+            contentArr.push(dataValues.join(','))
+        })
+        const content = '\uFEFF' + contentArr.join('\r\n')
+        return { tableName, content }
+    })
 }
 
 /**
@@ -31,11 +45,11 @@ export class DataCsvParser {
 
     import (that = {}) {
         const csv = filterCsv(this.csv)
-        that.json = transformCsv2Json(csv)
+        that.finalDatas = transformCsv2Json(csv)
         return csv
     }
 
     export (that) {
-        return transformJson2Csv(that.json)
+        return transformJson2Csv(that.finalDatas)
     }
 }

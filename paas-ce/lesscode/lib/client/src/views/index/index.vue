@@ -680,7 +680,7 @@
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
                 title: '确认离开?',
-                subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                subTitle: '您将离开画布编辑页面，请确认相应修改已保存',
                 confirmFn: async () => {
                     next()
                 }
@@ -890,9 +890,14 @@
                         this.getAllGroupFuncs(this.projectId)
                     ])
 
-                    await this.lockStatsuPolling('lock') // 处理加锁逻辑
-
-                    await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
+                    await Promise.all([
+                        // 处理加锁逻辑
+                        this.lockStatsuPolling('lock'),
+                        // 添加变量
+                        this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 }),
+                        // 添加表
+                        this.$store.dispatch('dataSource/list', { projectId: this.projectId })
+                    ])
                     // update targetdata
                     const content = pageDetail.content
                     if (content) {
@@ -1621,11 +1626,15 @@
                             const hasMethod = payload && payload.methodCode
                             if (!hasMethod) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为 remote 但未选择远程函数，请修改后再试`
                         }
+                        if (['data-source', 'table-data-source'].includes(type)) {
+                            const hasTableName = payload?.sourceData?.tableName
+                            if (!hasTableName) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为数据源但未选择表，请修改后再试`
+                        }
                     })
 
                     const renderSlots = component.renderSlots || {}
                     Object.keys(renderSlots).forEach((key) => {
-                        const { type, payload = {} } = renderSlots[key] || {}
+                        const { type, payload = {}, displayName } = renderSlots[key] || {}
 
                         if (payload.variableData && payload.variableData.val) {
                             const { val, valType } = payload.variableData
@@ -1635,7 +1644,12 @@
 
                         if (type === 'remote') {
                             const hasMethod = payload.methodData && payload.methodData.methodCode
-                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${key}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
+                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${displayName}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
+                        }
+
+                        if (['data-source'].includes(type)) {
+                            const hasTableName = payload?.sourceData?.tableName
+                            if (!hasTableName) errMessage = `组件【${component.componentId}】的【${displayName}】插槽，类型为数据源但未选择表，请修改后再试`
                         }
                     })
 
@@ -1750,7 +1764,7 @@
                 }
                 me.$bkInfo({
                     title: '确认离开?',
-                    subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                    subTitle: '您将离开画布编辑页面，请确认相应修改已保存',
                     confirmFn: async () => {
                         me.$router.push({
                             params: {

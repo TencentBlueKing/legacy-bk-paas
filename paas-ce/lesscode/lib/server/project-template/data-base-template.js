@@ -21,11 +21,11 @@ const config = process.env.NODE_ENV === 'production'
     // 本地开发环境数据库配置
     : {
         // 本地开发数据库名
-        database: 'vue_visualization_github',
+        database: '',
         // 本地开发数据库用户名
-        username: 'zhanxu',
+        username: '',
         // 本地开发数据库密码
-        password: 'zxtest',
+        password: '',
         // 本地开发host
         host: 'localhost',
         // 本地开发端口
@@ -47,8 +47,10 @@ module.exports = {
     logger: new OrmLog(config.logging),
     // 自动同步数据库表结构，有删除数据风险，推荐关闭
     synchronize: false,
-    // 会自动执行更新SQL，推荐手动执行脚本，关闭该选项
-    migrationsRun: false,
+    // 会自动执行更新SQL
+    migrationsRun: true,
+    migrationsTableName: 'lesscode_migrations_data',
+    migrations: [path.resolve(__dirname, '..', 'model/migrations/*.js')],
     extra: {
         connectionLimit: 5
     }

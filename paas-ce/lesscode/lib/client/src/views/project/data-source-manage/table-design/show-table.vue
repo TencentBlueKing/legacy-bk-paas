@@ -5,7 +5,7 @@
                 <i class="bk-drag-icon bk-drag-arrow-back" @click="goBack"></i>
                 查看表【{{tableStatus.basicInfo.tableName}}】
                 <bk-divider direction="vertical"></bk-divider>
-                <export-table title="导出表" class="mr10 ml5" size="small"></export-table>
+                <export-table title="导出表" class="mr10 ml5" :only-export-all="true" @download="exportTables"></export-table>
                 <bk-button size="small" class="mr10" @click="goRecord">变更记录</bk-button>
                 <bk-button size="small" @click="goEdit">编辑</bk-button>
             </span>
@@ -19,15 +19,7 @@
 
             <section class="table-section">
                 <h5 class="section-title">字段配置</h5>
-                <bk-table :outer-border="false" :data="tableStatus.data">
-                    <bk-table-column label="字段名称" prop="name" show-overflow-tooltip></bk-table-column>
-                    <bk-table-column label="字段类型" prop="type"></bk-table-column>
-                    <bk-table-column label="主键" prop="primary" :formatter="boolFormatter"></bk-table-column>
-                    <bk-table-column label="索引" prop="index" :formatter="boolFormatter"></bk-table-column>
-                    <bk-table-column label="可空" prop="nullable" :formatter="boolFormatter"></bk-table-column>
-                    <bk-table-column label="默认值" prop="default" show-overflow-tooltip></bk-table-column>
-                    <bk-table-column label="备注" prop="comment" show-overflow-tooltip></bk-table-column>
-                </bk-table>
+                <show-column-table :columns="tableStatus.data"></show-column-table>
             </section>
         </main>
     </article>
@@ -39,23 +31,31 @@
         onBeforeMount
     } from '@vue/composition-api'
     import {
-        useTableStatus,
-        transformFieldObject2FieldArray
+        useTableStatus
     } from './composables/table-info'
+    import {
+        generateExportStruct,
+        transformFieldObject2FieldArray
+    } from 'shared/data-source'
     import {
         messageError
     } from '@/common/bkmagic'
     import renderHeader from '../common/header'
     import exportTable from '../common/export.vue'
     import infoTable from '../common/info-table.vue'
+    import showColumnTable from '../common/show-column-table.vue'
     import router from '@/router'
     import store from '@/store'
+    import {
+        downloadFile
+    } from '@/common/util.js'
 
     export default defineComponent({
         components: {
             renderHeader,
             exportTable,
-            infoTable
+            infoTable,
+            showColumnTable
         },
 
         setup () {
@@ -77,13 +77,6 @@
                 router.push({ name: 'editTable', query: { id } })
             }
 
-            const boolFormatter = (row, column, cellValue, index) => {
-                const valMap = {
-                    true: '是'
-                }
-                return valMap[cellValue] || '否'
-            }
-
             const getDetail = () => {
                 isLoading.value = true
                 store.dispatch('dataSource/findOne', id).then((data) => {
@@ -97,6 +90,18 @@
                 })
             }
 
+            const exportTables = (fileType) => {
+                const tables = [{
+                    ...tableStatus.basicInfo,
+                    columns: tableStatus.data
+                }]
+                const fileName = fileType === 'sql' ? `lesscode-struct-${tableStatus.basicInfo.tableName}.sql` : ''
+                const files = generateExportStruct(tables, fileType, fileName)
+                files.forEach(({ name, content }) => {
+                    downloadFile(content, name)
+                })
+            }
+
             onBeforeMount(getDetail)
 
             return {
@@ -105,7 +110,7 @@
                 goBack,
                 goRecord,
                 goEdit,
-                boolFormatter
+                exportTables
             }
         }
     })

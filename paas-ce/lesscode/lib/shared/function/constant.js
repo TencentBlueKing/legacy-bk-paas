@@ -10,6 +10,21 @@
  */
 
 /**
+ * 函数方法枚举
+ */
+export const FUNCTION_METHOD = {
+    GET: 'get',
+    POST: 'post',
+    PUT: 'put',
+    DELETE: 'delete',
+    HEAD: 'head',
+    OPTIONS: 'options',
+    TRACE: 'trace',
+    CONNECT: 'connect',
+    PATCH: 'patch'
+}
+
+/**
  * 函数类型枚举
  */
 export const FUNCTION_TYPE = {

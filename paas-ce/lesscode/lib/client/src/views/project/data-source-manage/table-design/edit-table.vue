@@ -37,14 +37,14 @@
         onBeforeMount
     } from '@vue/composition-api'
     import {
-        useTableStatus,
-        transformFieldObject2FieldArray,
-        transformFieldArray2FieldObject
+        useTableStatus
     } from './composables/table-info'
     import {
         DataParse,
         StructJsonParser,
-        StructSqlParser
+        StructSqlParser,
+        transformFieldObject2FieldArray,
+        transformFieldArray2FieldObject
     } from 'shared/data-source'
     import {
         messageSuccess,

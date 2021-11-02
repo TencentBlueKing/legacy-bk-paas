@@ -10,12 +10,39 @@
  */
 
 import { getFunctionTips } from '../shared'
+import crypto from 'crypto'
 const os = require('os')
 const eslintConfig = require('./conf/eslint-config')
 const { ESLint } = require('eslint')
 const interactiveComponents = ['bk-dialog', 'bk-sideslider']
 const acorn = require('acorn')
 const { RequestContext } = require('./middleware/request-context')
+const algorithm = 'aes-256-ctr'
+const secretKey = 'lesscode_crypto_lesscode_crypto_'
+
+/**
+ * 加密
+ * @param {} text 原文
+ * @returns 加密后的字符串
+ */
+export const encrypt = (text) => {
+    const iv = crypto.randomBytes(16)
+    const cipher = crypto.createCipheriv(algorithm, secretKey, iv)
+    const encrypted = Buffer.concat([cipher.update(text), cipher.final()])
+    return iv.toString('hex') + '::lesscode::' + encrypted.toString('hex')
+}
+
+/**
+ * 解密
+ * @param {} hash 加密后的字符串
+ * @returns 原文
+ */
+export const decrypt = (hash = '') => {
+    const [iv, hashText] = hash.split('::lesscode::')
+    const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(iv, 'hex'))
+    const decrpyted = Buffer.concat([decipher.update(Buffer.from(hashText, 'hex')), decipher.final()])
+    return decrpyted.toString()
+}
 
 exports.splitSql = (sqlString) => {
     const sqlArr = []

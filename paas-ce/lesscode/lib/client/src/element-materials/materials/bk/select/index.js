@@ -124,7 +124,7 @@ export default {
     slots: {
         default: {
             name: ['bk-option'],
-            type: ['list', 'remote'],
+            type: ['list', 'remote', { label: '数据源', type: 'data-source' }],
             displayName: '可选项配置',
             tips: '默认插槽，填写的数据需要是数组且每个元素需包含id和name字段',
             remoteValidate (data) {

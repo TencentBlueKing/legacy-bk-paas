@@ -55,7 +55,7 @@ export const DeleteAuthorization = ({ perm, tableName, getId = ctx => ctx.reques
                     const exitPermCodes = userPermsInfo.permCodes || []
                     const noPermission = needPerms.some(perm => !exitPermCodes.includes(perm))
                     // 判断是不是该资源的创建者
-                    const record = await dataService.findOne(tableName, { id: getId(ctx) }) || {}
+                    const record = await dataService.findOne(tableName, { id: getId(ctx), deleteFlag: 0 }) || {}
                     const userInfo = ctx.session.userInfo
                     const notCreateUser = record.createUser !== userInfo.username
 

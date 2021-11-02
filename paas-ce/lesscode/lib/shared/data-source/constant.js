@@ -51,8 +51,8 @@ export const BASE_COLUMNS = {
  * 数据源使用的 ORM KEYS
  */
 export const ORM_KEYS = [
-    'type',
     'name',
+    'type',
     'primary',
     'index',
     'nullable',
@@ -61,7 +61,8 @@ export const ORM_KEYS = [
     'createDate',
     'updateDate',
     'length',
-    'columnId'
+    'columnId',
+    'generated'
 ]
 
 /**
@@ -101,3 +102,8 @@ export const TABLE_MODIFY_TYPE = {
     RENAME: 'rename',
     COMMENT: 'comment'
 }
+
+/**
+ * 部署使用的 migration 表名
+ */
+export const MIGRATION_TABLE_NAME = 'lesscode_migrations_data'

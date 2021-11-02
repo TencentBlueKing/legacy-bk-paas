@@ -11,17 +11,19 @@
 
 import DBEngineService from './db-engine-service'
 import dataService, { getDataService } from './data-service'
-import { EntitySchema, createConnection, EventSubscriber } from 'typeorm'
+import { EntitySchema, createConnection, getConnection, EventSubscriber } from 'typeorm'
 import { RequestContext } from '../middleware/request-context'
-import { BASE_COLUMNS } from '../../shared/data-source/constant'
+import {
+    decrypt
+} from '../util'
 const dataBaseConf = require('../conf/data-base')
 
 /**
  * 获取预览环境下的db配置
  * @param {*} projectId 项目id
  */
-export const getPreviewDbConfig = async (projectId) => {
-    const previewDb = await dataService.findOne('preview-db', { projectId })
+export const getPreviewDbConfig = async (projectId = null) => {
+    const previewDb = await dataService.findOne('preview-db', { projectId, deleteFlag: 0 })
     const config = process.env.NODE_ENV === 'production' ? dataBaseConf.preview : dataBaseConf.dev
     const dbConfig = {
         host: config.host,
@@ -31,8 +33,8 @@ export const getPreviewDbConfig = async (projectId) => {
     }
     if (previewDb) {
         Object.assign(dbConfig, {
-            user: previewDb.userName,
-            password: previewDb.passWord,
+            user: decrypt(previewDb.userName),
+            password: decrypt(previewDb.passWord),
             database: previewDb.dbName
         })
     }
@@ -69,7 +71,7 @@ class PreviewSubscriber {
  */
 export const getPreviewDataService = async (projectId) => {
     const [tables, config] = await Promise.all([
-        dataService.get('data-table', { projectId }),
+        dataService.get('data-table', { projectId, deleteFlag: 0 }),
         getPreviewDbConfig(projectId)
     ])
 
@@ -77,7 +79,6 @@ export const getPreviewDataService = async (projectId) => {
         const entity = new EntitySchema({
             name: cur.tableName,
             columns: {
-                ...BASE_COLUMNS,
                 ...JSON.parse(cur.columns || '{}')
             }
         })
@@ -103,7 +104,15 @@ export const getPreviewDataService = async (projectId) => {
         }
     }
     // typeorm 使用单例操作。一处连接，多处可以使用该连接。
-    const con = await createConnection(ormConfig)
+    let con
+    try {
+        con = getConnection(ormConfig.name)
+    } catch (error) {
+    } finally {
+        if (!con || !con.isConnected) {
+            con = await createConnection(ormConfig)
+        }
+    }
     const previewDataService = {
         ...getDataService(projectId, entityMap),
         close () {

@@ -8,6 +8,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import { MIGRATION_TABLE_NAME } from '../../shared/data-source'
 
 /**
  * 操作线上环境数据库服务
@@ -44,6 +45,8 @@ export default class OnlineService {
         const columnsList = await this.dbEngine.execSql(columnSql)
         const indexList = await this.dbEngine.execSql(indexSql)
         const tableList = columnsList.reduce((acc, cur) => {
+            if (cur.TABLE_NAME === MIGRATION_TABLE_NAME) return acc
+
             const {
                 TABLE_NAME,
                 TABLE_COMMENT,
@@ -92,10 +95,21 @@ export default class OnlineService {
         return tableList
     }
 
-    // 获取表数据
+    // 分页获取表数据
     async getTableData (tableName, page, pageSize) {
         const [list, foundRows = []] = await this.dbEngine.execMultSql(`
             SELECT SQL_CALC_FOUND_ROWS * FROM  ${tableName} ORDER BY id DESC LIMIT ${(page - 1) * pageSize},${pageSize};
+            SELECT FOUND_ROWS();
+        `)
+        const rows = foundRows[0] || {}
+        const count = Object.values(rows)[0] || 0
+        return { list, count }
+    }
+
+    // 获取表所有的数据
+    async getTableAllData (tableName) {
+        const [list, foundRows = []] = await this.dbEngine.execMultSql(`
+            SELECT SQL_CALC_FOUND_ROWS * FROM  ${tableName} ORDER BY id DESC;
             SELECT FOUND_ROWS();
         `)
         const rows = foundRows[0] || {}

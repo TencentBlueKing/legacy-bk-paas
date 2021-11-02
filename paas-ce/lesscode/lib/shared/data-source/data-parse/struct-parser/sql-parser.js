@@ -58,6 +58,8 @@ function getTableColumnSql (column) {
     }
     // 默认值
     const getDefault = (column) => {
+        if (column.generated) return ''
+
         if (column.createDate) return 'DEFAULT CURRENT_TIMESTAMP(0)'
 
         if (column.updateDate) return 'DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0)'

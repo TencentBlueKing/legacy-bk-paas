@@ -31,9 +31,9 @@ module.exports = {
         // 线上预览端口
         port: 3306,
         // 线上预览数据库用户名
-        username: 'zhanxu',
+        username: '',
         // 线上预览数据库密码
-        password: 'zxtest'
+        password: ''
     },
     dev: {
         // 本地开发数据库名

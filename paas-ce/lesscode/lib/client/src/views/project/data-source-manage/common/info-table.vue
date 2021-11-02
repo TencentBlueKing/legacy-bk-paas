@@ -32,6 +32,7 @@
 <script lang="ts">
     import {
         defineComponent,
+        toRef,
         ref,
         reactive,
         watch
@@ -71,7 +72,7 @@
             const form = reactive({ tableName: '', comment: '' })
 
             watch(
-                props.basicInfo,
+                toRef(props, 'basicInfo'),
                 (val) => {
                     Object.assign(form, val)
                 },

@@ -15,8 +15,12 @@ const perfix = 'data-source'
 export default {
     namespaced: true,
     state: {
+        tableList: []
     },
     mutations: {
+        setTableList (state, tableList) {
+            state.tableList = tableList
+        }
     },
     getters: {
     },
@@ -27,9 +31,10 @@ export default {
                 return data
             })
         },
-        list (state, params = {}) {
+        list ({ commit }, params = {}) {
             return http.get(`${perfix}/getTableList`, { params }).then(response => {
                 const data = response.data || []
+                commit('setTableList', data)
                 return data
             })
         },

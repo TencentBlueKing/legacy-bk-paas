@@ -13,11 +13,15 @@ import routeModel from './route'
 import PageCodeModel from './page-code'
 import FuncModel from './function'
 import VariableModel from './variable'
-import DataTable from './data-table'
 import DataTableModifyRecord from './data-table-modify-record'
 import * as PageCompModel from './page-comp'
 import * as ComponentModel from './component'
 import { uuid, walkGrid } from '../util'
+import dataService from '../service/data-service'
+import {
+    transformFieldObject2FieldArray,
+    BASE_COLUMNS
+} from '../../shared/data-source'
 const httpConf = require('../conf/http')
 // npm.js配置文件不存在时赋值空对象
 let npmConf
@@ -156,8 +160,8 @@ const projectCode = {
                     ComponentModel.getNameMap(),
                     FuncModel.allGroupFuncDetail(projectId),
                     VariableModel.getAll({ projectId }),
-                    DataTable.getList(projectId),
-                    DataTableModifyRecord.getListByTime({ projectId })
+                    dataService.get('data-table', { projectId, deleteFlag: 0 }),
+                    DataTableModifyRecord.getListByTime({ query: { projectId } })
                 ])
 
                 const routeGroup = {}
@@ -240,10 +244,10 @@ const projectCode = {
                             return `{ path: '${route.path}', redirect: { name: '404' } }`
                         }
                     })
-                    if (layout.path !== '/') childRoute.push(`{ path: '*', component: BkNotFound, meta: { pageName: '404' } }`)
+                    if (layout.path !== '/') childRoute.push('{ path: \'*\', component: BkNotFound, meta: { pageName: \'404\' } }')
 
                     const currentFilePath = path.join(targetPath, `lib/client/src/views/${layout.name}/bkindex.vue`)
-                    await this.writeViewCode(currentFilePath, { targetData: [] }, '', pathName, projectId, {}, '', layout.content, true, layout.layoutType, [])
+                    await this.writeViewCode(currentFilePath, { targetData: [] }, '', pathName, projectId, {}, '', layout.content, true, layout.layoutType, [], [])
 
                     routerStr += `{
                         path: '${layout.path.replace(/^\//, '')}',
@@ -290,7 +294,7 @@ const projectCode = {
                 }
 
                 // 生成函数mixin
-                const methodsMixinPath = path.join(targetPath, `lib/client/src/mixins/methods-mixin.js`)
+                const methodsMixinPath = path.join(targetPath, 'lib/client/src/mixins/methods-mixin.js')
                 if (usedMethodList.length) await this.writeMethodsMixin(methodsMixinPath, usedMethodList, pathName)
 
                 // 生成.npmrc文件内容
@@ -342,7 +346,7 @@ const projectCode = {
                 })
 
                 // 生成store
-                const storeStr = projectVariables.length ? [] : [`example: getInitVariableValue({all: 0, stag: 0, prod: 0}, 0)`]
+                const storeStr = projectVariables.length ? [] : ['example: getInitVariableValue({all: 0, stag: 0, prod: 0}, 0)']
                 projectVariables.forEach(({ variableCode, defaultValue, valueType, defaultValueType }) => {
                     if ([3, 4].includes(valueType)) {
                         // eslint-disable-next-line no-return-assign
@@ -361,7 +365,7 @@ const projectCode = {
                 if (isUseElement) {
                     fs.writeFileSync(
                         mainFilePath,
-                        mainFileContent.replace(/\$\{importElementLib\}/, `import '@/common/element'`),
+                        mainFileContent.replace(/\$\{importElementLib\}/, 'import \'@/common/element\''),
                         'utf8'
                     )
                     await this.writePackageJSON(
@@ -377,7 +381,7 @@ const projectCode = {
                     fs.unlinkSync(path.join(targetPath, 'lib/client/src/common/element.js'))
                 }
 
-                await this.generateDataSource(dataTables, targetPath)
+                await this.generateDataSource(dataTables, dataTableModifyRecords, targetPath)
                 resolve('success')
             } catch (err) {
                 reject(err.message || err)
@@ -391,8 +395,8 @@ const projectCode = {
         // replace app.browser.js
         const appPath = path.join(targetPath, 'lib/server/app.browser.js')
         await this.generateFileByReplace(appPath, appPath, (content) => {
-            const dbImport = hasDataTable ? `const { createConnection } = require('typeorm')\r\nconst dataBaseConf = require('./conf/data-base')\r\n` : ''
-            const startStr = hasDataTable ? `createConnection(dataBaseConf).then((connection) => {\r\n    return startServer()\r\n}).catch((err) => logger.error(err.message || err))\r\n` : 'startServer()'
+            const dbImport = hasDataTable ? 'const { createConnection } = require(\'typeorm\')\r\nconst dataBaseConf = require(\'./conf/data-base\')\r\n' : ''
+            const startStr = hasDataTable ? 'createConnection(dataBaseConf).then((connection) => {\r\n    return startServer()\r\n}).catch((err) => logger.error(err.message || err))\r\n' : 'startServer()'
             return content.replace(/\$\{dbImport\}/, dbImport).replace(/\$\{startStr\}/, startStr)
         })
 
@@ -404,16 +408,18 @@ const projectCode = {
             )
 
             // generate model & entity
-            fs.mkdirSync(path.join(targetPath, 'lib/server/model'))
-            fs.mkdirSync(path.join(targetPath, 'lib/server/model/entities'))
+            fse.ensureDirSync(path.join(targetPath, 'lib/server/model'))
+            fse.ensureDirSync(path.join(targetPath, 'lib/server/model/entities'))
             await this.generateFileByReplace(
                 path.join(STATIC_URL, 'base-entity-template.js'),
                 path.join(targetPath, 'lib/server/model/entities/base.js')
             )
             for (const dataTable of dataTables) {
-                const { tableName, fields } = dataTable
-                const tableFields = fields.reduce((acc, cur) => {
-                    acc += `\r\n    @Column({ type: ${cur.type} })\r\n    ${cur.name}`
+                const { tableName, columns = '{}' } = dataTable
+                const tableFields = transformFieldObject2FieldArray(JSON.parse(columns)).reduce((acc, cur) => {
+                    if (!BASE_COLUMNS.hasOwnProperty(cur.name)) {
+                        acc += `\r\n    @Column({ type: '${cur.type}' })\r\n    ${cur.name}\r\n`
+                    }
                     return acc
                 }, '')
                 await this.generateFileByReplace(
@@ -422,35 +428,16 @@ const projectCode = {
                     content => content.replace(/\$\{tableName\}/, tableName).replace(/\$\{tableFields\}/, tableFields)
                 )
             }
-
-            // generate service
-            fs.mkdirSync(path.join(targetPath, 'lib/server/service'))
-            await this.generateFileByReplace(
-                path.join(STATIC_URL, 'data-service-template.js'),
-                path.join(targetPath, `lib/server/service/data-service.js`)
-            )
-
-            // generate control
-            await this.generateFileByReplace(
-                path.join(STATIC_URL, 'data-controller-template.js'),
-                path.join(targetPath, 'lib/server/controller/data.js')
-            )
-
-            // generate router
-            await this.generateFileByReplace(
-                path.join(STATIC_URL, 'data-router-template.js'),
-                path.join(targetPath, 'lib/server/router/data.js')
-            )
         }
 
         if (dataTableModifyRecords.length) {
             // generate migrations
-            fs.mkdirSync(path.join(targetPath, 'lib/server/model/migrations'))
-            fs.mkdirSync(path.join(targetPath, 'lib/server/model/migrations/sql'))
+            fse.ensureDirSync(path.join(targetPath, 'lib/server/model/migrations'))
+            fse.ensureDirSync(path.join(targetPath, 'lib/server/model/migrations/sql'))
             for (const record of dataTableModifyRecords) {
                 const { sql, createTime } = record
-                const migrationName = `Lesscode${createTime}`
-                const fileName = `${createTime}-lesscode`
+                const migrationName = `Lesscode${+createTime}`
+                const fileName = `${+createTime}-lesscode`
                 fs.writeFileSync(
                     path.join(targetPath, `lib/server/model/migrations/sql/${fileName}.sql`),
                     sql,

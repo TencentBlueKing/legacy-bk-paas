@@ -71,7 +71,7 @@ export default {
     ],
     props: {
         data: {
-            type: ['array', 'remote'],
+            type: ['array', 'remote', { label: '数据源', type: 'table-data-source' }],
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
             },

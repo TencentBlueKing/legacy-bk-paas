@@ -106,7 +106,11 @@
                 activeEnvironment: 'preview',
                 isLoading: false,
                 tableName: '',
-                activeTable: {},
+                activeTable: {
+                    tableName: '',
+                    comment: '',
+                    columns: []
+                },
                 tableList: []
             })
 

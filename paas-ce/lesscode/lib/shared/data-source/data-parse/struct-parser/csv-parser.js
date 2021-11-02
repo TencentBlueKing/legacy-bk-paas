@@ -8,6 +8,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import { ORM_KEYS } from '../../constant'
 
 function filterCsv () {
 
@@ -17,8 +18,27 @@ function transformCsv2Json () {
 
 }
 
-function transformJson2Csv () {
-
+/**
+ * 把 json 导出为 csv 格式的内容
+ * @param {*} finalDatas table json
+ * @returns [{ tableName: 表名, content: 文件内容 }]
+ */
+function transformJson2Csv (finalDatas) {
+    return finalDatas.map(({ tableName, columns }) => {
+        const contentArr = []
+        // 生成表头
+        const columnHeader = ORM_KEYS.filter(x => x !== 'columnId')
+        contentArr.push(columnHeader.join(','))
+        // 生成字段值
+        columns.forEach((column) => {
+            const columnValue = columnHeader.map((key) => {
+                return (Reflect.has(column, key) ? column[key] : '') + '\t'
+            })
+            contentArr.push(columnValue.join(','))
+        })
+        const content = '\uFEFF' + contentArr.join('\r\n')
+        return { tableName, content }
+    })
 }
 
 /**
@@ -31,11 +51,11 @@ export class StructCsvParser {
 
     import (that = {}) {
         const csv = filterCsv(this.csv)
-        that.json = transformCsv2Json(csv)
+        that.finalDatas = transformCsv2Json(csv)
         return csv
     }
 
     export (that) {
-        return transformJson2Csv(that.json)
+        return transformJson2Csv(that.finalDatas)
     }
 }

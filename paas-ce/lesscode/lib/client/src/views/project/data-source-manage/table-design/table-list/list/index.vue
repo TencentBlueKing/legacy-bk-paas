@@ -10,8 +10,13 @@
         <section class="table-list-btns">
             <bk-button theme="primary" class="table-list-btn" @click="goToDataDesign">新建表</bk-button>
             <bk-button class="table-list-btn" @click="bulkDelete" :disabled="listStatus.selectRows.length <= 0">批量删除</bk-button>
-            <import-table title="导入表" class="table-list-btn"></import-table>
-            <export-table title="导出表" class="table-list-btn"></export-table>
+            <!-- <import-table title="导入表" class="table-list-btn"></import-table> -->
+            <export-table
+                title="导出表"
+                class="table-list-btn"
+                :disable-partial-selection="listStatus.selectRows.length <= 0"
+                @download="exportTables"
+            ></export-table>
             <bk-divider direction="vertical" class="table-list-divider"></bk-divider>
             <bk-button class="table-list-btn" @click="goToDataManage">数据管理</bk-button>
             <bk-button class="table-list-btn">数据源部署记录</bk-button>
@@ -63,23 +68,19 @@
     import { messageError } from '@/common/bkmagic'
     import { defineComponent, onBeforeMount, reactive } from '@vue/composition-api'
     import dayjs from 'dayjs'
-    import importTable from '../../../common/import.vue'
+    // import importTable from '../../../common/import.vue'
     import exportTable from '../../../common/export.vue'
     import confirmDialog from '../../../common/confirm-dialog.vue'
     import {
         DataParse,
         StructJsonParser,
-        StructSqlParser
+        StructSqlParser,
+        generateExportStruct,
+        transformFieldObject2FieldArray
     } from 'shared/data-source'
-
-    // const { Parser } = require('node-sql-parser')
-    // const parser = new Parser()
-    // console.log(parser)
-    // console.log(parser.astify(`
-    //     CREATE TABLE comp  (
-    //         updateTime datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
-    //     );
-    // `))
+    import {
+        downloadFile
+    } from '@/common/util.js'
 
     interface IPagination {
         current: number,
@@ -100,7 +101,6 @@
 
     export default defineComponent({
         components: {
-            importTable,
             exportTable,
             confirmDialog
         },
@@ -223,6 +223,32 @@
                 })
             }
 
+            const exportAllTables = (fileType) => {
+                window.open(`/api/data-source/exportStruct/projectId/${projectId}/fileType/${fileType}`)
+            }
+
+            const exportSelectTables = (fileType) => {
+                const tables = listStatus.selectRows.map((selectRow) => {
+                    return {
+                        ...selectRow,
+                        columns: transformFieldObject2FieldArray(selectRow.columns)
+                    }
+                })
+                const fileName = fileType === 'sql' ? `lesscode-struct-${projectId}.sql` : ''
+                const files = generateExportStruct(tables, fileType, fileName)
+                files.forEach(({ name, content }) => {
+                    downloadFile(content, name)
+                })
+            }
+
+            const exportTables = (fileType, downloadType) => {
+                if (downloadType === 'all') {
+                    exportAllTables(fileType)
+                } else {
+                    exportSelectTables(fileType)
+                }
+            }
+
             onBeforeMount(getTableList)
 
             return {
@@ -235,7 +261,8 @@
                 goToDataManage,
                 bulkDelete,
                 deleteTable,
-                confirmDelete
+                confirmDelete,
+                exportTables
             }
         }
     })

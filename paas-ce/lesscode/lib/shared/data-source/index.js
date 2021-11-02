@@ -10,6 +10,7 @@
  */
 
 export * from './constant'
+export * from './helper'
 export { DataParse } from './data-parse/index'
 export { DataCsvParser } from './data-parse/data-parser/csv-parser'
 export { DataSqlParser } from './data-parse/data-parser/sql-parser'

@@ -14,26 +14,37 @@ import OnlineDBService from '../service/online-db-service'
 import DBEngineService from '../service/db-engine-service'
 import {
     getPreviewDbEngine,
-    getPreviewDbConfig
+    getPreviewDbConfig,
+    getPreviewDataService
 } from '../service/preview-db-service'
 import {
     Controller,
     Get,
     Post,
     Put,
+    Delete,
+    PathParams,
     BodyParams,
     QueryParams,
-    DeleteAuthorization
+    DeleteAuthorization,
+    OutputJson,
+    OutputZip
 } from '../decorator'
+import {
+    generateExportDatas,
+    generateExportStruct,
+    transformFieldObject2FieldArray
+} from '../../shared/data-source'
 const util = require('../util')
 
 @Controller('/api/data-source')
 export default class DataSourceController {
     // 开启数据源，需要同步创建项目下的数据库和用户
+    @OutputJson()
     @Post('/enable')
     async enable (@BodyParams() body) {
         const { projectId } = body
-        const projectInfo = await dataService.findOne('project', { id: projectId })
+        const projectInfo = await dataService.findOne('project', { id: projectId, deleteFlag: 0 })
         projectInfo.isEnableDataSource = 1
 
         const dbInfo = {
@@ -54,6 +65,10 @@ export default class DataSourceController {
             await pool.query('FLUSH PRIVILEGES;')
         })
 
+        // 加密
+        dbInfo.userName = util.encrypt(dbInfo.userName)
+        dbInfo.passWord = util.encrypt(dbInfo.passWord)
+
         // 写入数据库
         return Promise.all([
             dataService.update('project', projectInfo),
@@ -62,42 +77,47 @@ export default class DataSourceController {
     }
 
     // 获取项目下的所有表结构
+    @OutputJson()
     @Get('/getTableList')
     async getTableList (
         @QueryParams({ name: 'projectId', require: true }) projectId,
-        @QueryParams({ name: 'pageSize', default: 10 }) pageSize,
-        @QueryParams({ name: 'page', default: 1 }) page
+        @QueryParams({ name: 'pageSize' }) pageSize,
+        @QueryParams({ name: 'page' }) page
     ) {
         const queryParams = {
-            projectId
+            tableFileName: 'data-table',
+            page,
+            pageSize,
+            query: {
+                projectId,
+                deleteFlag: 0
+            }
         }
-        const datas = await dataService.get('data-table', queryParams)
-        const sortData = datas.sort((a, b) => (b.updateTime - a.updateTime))
-        const startIndex = (page - 1) * pageSize
-        const endIndex = page * pageSize
-        const filterData = sortData.slice(startIndex, endIndex)
-        const list = filterData.map((data) => {
+        const result = page && pageSize
+            ? await dataService.getByPage(queryParams)
+            : await dataService.get(queryParams.tableFileName, queryParams.query)
+
+        ;(result.list || result).forEach((data) => {
             data.columns = JSON.parse(data.columns)
             return data
         })
-        return {
-            list,
-            count: datas.length
-        }
+        return result
     }
 
     // 获取表详情
+    @OutputJson()
     @Get('/getTableDetail')
     async getTableDetail (
         @QueryParams({ name: 'id' }) id
     ) {
-        const queryParams = { id }
+        const queryParams = { id, deleteFlag: 0 }
         const data = await dataService.findOne('data-table', queryParams)
         data.columns = JSON.parse(data.columns)
         return data
     }
 
     // 获取表详情
+    @OutputJson()
     @Post('/tableRecordList')
     tableRecordList (
         @BodyParams({ name: 'id' }) id,
@@ -117,6 +137,7 @@ export default class DataSourceController {
     }
 
     // 新增表结构
+    @OutputJson()
     @Post('/addTable')
     async addTable (
         @BodyParams({ name: 'dataTable', require: true }) dataTable,
@@ -133,6 +154,7 @@ export default class DataSourceController {
     }
 
     // 修改表结构
+    @OutputJson()
     @Put('/updateTable')
     async updateTable (
         @BodyParams({ name: 'dataTable', require: true }) dataTable,
@@ -145,6 +167,7 @@ export default class DataSourceController {
     }
 
     // 删除表结构
+    @OutputJson()
     @DeleteAuthorization({ perm: 'delete_variable', tableName: 'data-table', getId: ctx => ctx.request.body.id })
     @Put('/deleteTable')
     async deleteTable (
@@ -157,6 +180,7 @@ export default class DataSourceController {
     }
 
     // 修改线上环境数据库，包含表结构和表数据修改
+    @OutputJson()
     @Put('/modifyOnlineDb')
     async modifyOnlineDb (
         @BodyParams({ name: 'environment', default: 'preview' }) environment,
@@ -172,6 +196,7 @@ export default class DataSourceController {
     }
 
     // 获取线上表列表
+    @OutputJson()
     @Get('/getOnlineTableList')
     async getOnlineTableList (
         @QueryParams({ name: 'environment', require: true }) environment,
@@ -188,13 +213,14 @@ export default class DataSourceController {
     }
 
     // 获取线上表数据
+    @OutputJson()
     @Get('/getOnlineTableDatas')
     async getOnlineTableDatas (
         @QueryParams({ name: 'environment', require: true }) environment,
         @QueryParams({ name: 'projectId', require: true }) projectId,
         @QueryParams({ name: 'tableName', require: true }) tableName,
-        @QueryParams({ name: 'page', require: true }) page,
-        @QueryParams({ name: 'pageSize', require: true }) pageSize
+        @QueryParams({ name: 'page' }) page,
+        @QueryParams({ name: 'pageSize' }) pageSize
     ) {
         const dbConfigMap = {
             preview: getPreviewDbConfig
@@ -202,6 +228,146 @@ export default class DataSourceController {
         const previewDbConfig = await dbConfigMap[environment](projectId)
         const dbEngine = new DBEngineService(previewDbConfig)
         const onlineDBService = new OnlineDBService(dbEngine)
-        return onlineDBService.getTableData(tableName, page, pageSize)
+        const result = page && pageSize
+            ? await onlineDBService.getTableData(tableName, page, pageSize)
+            : await onlineDBService.getTableAllData(tableName)
+        return result
+    }
+
+    // 用户获取预览环境某张表下数据
+    @OutputJson()
+    @Get('/user/projectId/:projectId/tableName/:tableName')
+    async getPerviewTableData (
+        @PathParams({ name: 'tableName', require: true }) tableFileName,
+        @PathParams({ name: 'projectId', require: true }) projectId,
+        @QueryParams({ name: 'pageSize' }) pageSize,
+        @QueryParams({ name: 'page' }) page
+    ) {
+        let dataService
+        try {
+            dataService = await getPreviewDataService(projectId)
+            const queryParams = {
+                tableFileName,
+                page,
+                pageSize,
+                order: {
+                    id: 'DESC'
+                },
+                query: {},
+                countQuery: {}
+            }
+            const result = page && pageSize
+                ? await dataService.getByPage(queryParams)
+                : await dataService.get(tableFileName, {})
+            return result
+        } catch (error) {
+            return error
+        } finally {
+            await dataService.close()
+        }
+    }
+
+    // 用户在预览环境新增数据
+    @OutputJson()
+    @Post('/user/projectId/:projectId/tableName/:tableName')
+    async addPerviewTableData (
+        @PathParams({ name: 'tableName', require: true }) tableName,
+        @PathParams({ name: 'projectId', require: true }) projectId,
+        @BodyParams() data
+    ) {
+        let dataService
+        try {
+            dataService = await getPreviewDataService(projectId)
+            const result = await dataService.add(tableName, data)
+            return result
+        } catch (error) {
+            throw new global.BusinessError(error.message || error, -1, 500)
+        } finally {
+            await dataService.close()
+        }
+    }
+
+    // 用户在预览环境更新数据
+    @OutputJson()
+    @Put('/user/projectId/:projectId/tableName/:tableName')
+    async updatePerviewTableData (
+        @PathParams({ name: 'tableName', require: true }) tableName,
+        @PathParams({ name: 'projectId', require: true }) projectId,
+        @BodyParams() data
+    ) {
+        let dataService
+        try {
+            dataService = await getPreviewDataService(projectId)
+            const result = await dataService.update(tableName, data)
+            return result
+        } catch (error) {
+            throw new global.BusinessError(error.message || error, -1, 500)
+        } finally {
+            await dataService.close()
+        }
+    }
+
+    // 用户在预览环境删除数据
+    @OutputJson()
+    @Delete('/user/projectId/:projectId/tableName/:tableName')
+    async deletePerviewTableData (
+        @PathParams({ name: 'tableName', require: true }) tableName,
+        @PathParams({ name: 'projectId', require: true }) projectId,
+        @QueryParams({ name: 'id', require: true }) id
+    ) {
+        let dataService
+        try {
+            dataService = await getPreviewDataService(projectId)
+            const result = await dataService.delete(tableName, id)
+            return result
+        } catch (error) {
+            throw new global.BusinessError(error.message || error, -1, 500)
+        } finally {
+            await dataService.close()
+        }
+    }
+
+    // 导出项目下所有表结构
+    @OutputZip()
+    @Get('/exportStruct/projectId/:projectId/fileType/:fileType')
+    async exportStruct (
+        @PathParams({ name: 'projectId', require: true }) projectId,
+        @PathParams({ name: 'fileType', require: true }) fileType
+    ) {
+        const tableList = await dataService.get('data-table', { deleteFlag: 0, projectId })
+        const tables = tableList.map((table) => {
+            return {
+                ...table,
+                columns: transformFieldObject2FieldArray(JSON.parse(table.columns || '{}'))
+            }
+        })
+        const fileName = fileType === 'sql' ? `lesscode-struct-${projectId}.sql` : ''
+        const zipName = `lesscode-struct-${projectId}`
+        const fileList = generateExportStruct(tables, fileType, fileName)
+        return { fileList, zipName }
+    }
+
+    // 导出项目下所有表数据
+    @OutputZip()
+    @Get('/exportDatas/projectId/:projectId/fileType/:fileType/tableName/:tableName')
+    async exportDatas (
+        @PathParams({ name: 'projectId', require: true }) projectId,
+        @PathParams({ name: 'fileType', require: true }) fileType,
+        @PathParams({ name: 'tableName', require: true }) tableName
+    ) {
+        let dataService
+        try {
+            dataService = await getPreviewDataService(projectId)
+            const list = await dataService.get(tableName, {})
+            const datas = [{ tableName, list }]
+            const fileName = fileType === 'sql' ? `lesscode-data-${projectId}.sql` : ''
+            const zipName = `lesscode-data-${projectId}`
+            const fileList = generateExportDatas(datas, fileType, fileName)
+            return { fileList, zipName }
+        } catch (error) {
+            throw new global.BusinessError(error.message || error, -1, 500)
+        } finally {
+            await dataService.close()
+        }
     }
 }
