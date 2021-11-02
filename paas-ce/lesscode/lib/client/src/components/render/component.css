@@ -37,6 +37,10 @@
         min-height: 102px;
     }
 
+    [component-type="bk-color-picker"] {
+        width: inherit;
+    }
+
     &.grid {
         ~ .grid {
             margin-top: 10px;

@@ -63,14 +63,16 @@ const VueCode = {
                 targetData = [],
                 isEmpty = false,
                 from,
-                withNav
+                withNav,
+                fromPageCode = '',
+                styleSetting
             } = ctx.request.body
 
             const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([getNameMap(), allGroupFuncDetail(projectId), routeModel.findProjectRoute(projectId), variableModel.getAll({ projectId })])
             const curPage = routeList.find((route) => (route.pageId === +pageId)) || {}
             const variableList = [
                 ...allVarableList.filter(variable => variable.effectiveRange === 0),
-                ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && variable.pageCode === curPage.pageCode))
+                ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && (variable.pageCode === curPage.pageCode || variable.pageCode === fromPageCode)))
             ]
             let curLayoutCon = {}
             if (withNav) {
@@ -87,12 +89,11 @@ const VueCode = {
                 })
             }
             const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
-            const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, curPage.layoutType, variableList)
+            const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, curPage.layoutType, variableList, styleSetting)
             // 此接口被多方调用，目前仅收集下载页面源码
             if (from === 'download_page') {
                 operationLogger.success()
             }
-
             ctx.send({
                 code: 0,
                 message: 'success',

@@ -20,6 +20,7 @@
                 </li>
             </ul>
             <div class="extra">
+                <span class="total" v-show="projectList.length">共<em class="count">{{projectList.length}}</em>个项目</span>
                 <bk-input
                     style="width: 400px"
                     placeholder="请输入项目名称或描述"
@@ -38,8 +39,7 @@
                         <div class="item-bd">
                             <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
                                 <div class="preview">
-                                    <img v-if="project.previewImg" :src="getPreviewImg(project.previewImg)" alt="项目缩略预览">
-                                    <div class="empty-preview-img" v-else>页面为空</div>
+                                    <page-preview-thumb alt="项目缩略预览" :project-id="project.id" />
                                 </div>
                             </template>
                             <div class="empty" v-else>
@@ -60,7 +60,7 @@
                                     <span slot="dropdown-trigger" class="more-menu-trigger">
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
-                                    <ul class="bk-dropdown-list" slot="dropdown-content">
+                                    <ul class="bk-dropdown-list card-operation-list" slot="dropdown-content">
                                         <li><a href="javascript:;" @click="handleDownloadSource(project)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="toPage(project.id)">页面管理</a></li>
                                         <li><a href="javascript:;" @click="handleRename(project)">重命名</a></li>
@@ -125,7 +125,7 @@
                     </bk-input>
                 </bk-form-item>
                 <bk-form-item label="布局模板" style="margin-top: 10px" v-if="!isCopy" error-display-type="normal">
-                    <span class="layout-desc">可多选，作为创建项目页面时可供选择的布局模版，便于项目中统一修改与配置</span>
+                    <span class="layout-desc">可多选，作为创建项目页面时可供选择的布局模板，便于项目中统一修改与配置</span>
                     <layout-thumb-list :list="defaultLayoutList" @change-checked="handleLayoutChecked" @set-default="handleLayoutDefault" />
                 </bk-form-item>
             </bk-form>
@@ -204,9 +204,9 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import preivewErrImg from '@/images/preview-error.png'
     import dayjs from 'dayjs'
     import LayoutThumbList from '@/components/project/layout-thumb-list'
+    import PagePreviewThumb from '@/components/project/page-preview-thumb.vue'
     import DownloadDialog from './components/download-dialog'
     import TemplateDialog from './components/template-dialog'
     import SetTemplateDialog from './components/set-template-dialog.vue'
@@ -230,6 +230,7 @@
                 render: (h, ctx) => ctx.props.vnode
             },
             LayoutThumbList,
+            PagePreviewThumb,
             DownloadDialog,
             TemplateDialog,
             SetTemplateDialog
@@ -594,12 +595,6 @@
                     }
                 })
             },
-            getPreviewImg (previewImg) {
-                if (previewImg && previewImg.length > 20) {
-                    return previewImg
-                }
-                return preivewErrImg
-            },
             preview (id) {
                 window.open(`/preview/project/${id}/`, '_blank')
             },
@@ -617,6 +612,17 @@
     .create-dropdown{
         /deep/ .bk-dropdown-content{
             margin-top: 10px;
+        }
+    }
+
+    .page-head {
+        .total {
+            font-size: 12px;
+            margin-right: 8px;
+            .count {
+                font-style: normal;
+                margin: 0 .1em;
+            }
         }
     }
 
@@ -767,6 +773,10 @@
                 }
             }
 
+            .card-operation-list {
+                max-height: 250px;
+            }
+
             .item-bd {
                 flex: none;
                 position: relative;
@@ -802,17 +812,6 @@
                     height: 100%;
                     background: rgba(0, 0, 0, 0.2);
                 }
-            }
-            .empty-preview-img {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 14px;
-                font-weight: 700;
-                color: #C4C6CC;
-                height: 100%;
-                background: #f0f1f5;
-                border-radius: 4px 4px 0px 0px;
             }
             .operate-btns {
                 display: none;

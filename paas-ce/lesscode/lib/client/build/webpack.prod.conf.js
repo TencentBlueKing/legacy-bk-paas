@@ -48,7 +48,7 @@ module.exports = merge(baseConf, {
                 },
                 extractComments: false,
                 cache: true,
-                parallel: true,
+                parallel: 2,
                 sourceMap: true
             }),
             new OptimizeCSSPlugin({

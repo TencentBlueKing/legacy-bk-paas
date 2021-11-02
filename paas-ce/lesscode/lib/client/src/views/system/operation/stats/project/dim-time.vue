@@ -20,11 +20,11 @@
             <export-button name="project" dim="time" :list="exportList" :fields="exportFields" />
         </div>
         <div class="chart-list">
-            <div class="chart-item">
-                <div class="chart-title">按时间线项目个数</div>
-                <div class="chart-container" v-bkloading="{ isLoading: fetching.base }">
-                    <canvas id="chart"></canvas>
-                    <bk-exception v-if="!fetching.base && !chart.base.data.length"
+            <div class="chart-item" v-for="chartItem in chartList" :key="chartItem.id">
+                <div class="chart-title">{{chartItem.title}}</div>
+                <div class="chart-container" v-bkloading="{ isLoading: fetching[chartItem.id] }">
+                    <canvas :id="`chart${chartItem.name}`"></canvas>
+                    <bk-exception v-if="!fetching[chartItem.id] && !chart[chartItem.id].data.length"
                         class="chart-empty" type="empty" scene="part">
                     </bk-exception>
                 </div>
@@ -36,22 +36,19 @@
                 :outer-border="false"
                 :header-border="false"
                 :data="total">
-                <bk-table-column label="项目总数">
+                <bk-table-column
+                    v-for="column in totalColumns"
+                    :key="column.id"
+                    :label="column.name"
+                    :prop="column.id">
                     <template slot-scope="{ row }">
-                        <loading :loading="fetching.projectTotal">
-                            <span>{{row.project | formatCount}}</span>
-                        </loading>
-                    </template>
-                </bk-table-column>
-                <bk-table-column label="页面总数">
-                    <template slot-scope="{ row }">
-                        <loading :loading="fetching.pageTotal">
-                            <span>{{row.page | formatCount}}</span>
+                        <loading :loading="fetching.total[column.id]">
+                            <span>{{row[column.id] | formatCount}}</span>
                         </loading>
                     </template>
                 </bk-table-column>
                 <div class="append-tips" slot="append">
-                    <i>* 不包含Demo和已删除数据，总数为相互独立统计</i>
+                    <i>* 不包含Demo和已删除数据</i>
                 </div>
             </bk-table>
         </div>
@@ -76,6 +73,7 @@
             return {
                 chart: {
                     base: {
+                        title: '按时间新增项目个数',
                         inst: null,
                         data: []
                     }
@@ -92,12 +90,18 @@
                 dateShortcutSelectedIndex: 3,
                 fetching: {
                     base: false,
-                    projectTotal: false,
-                    pageTotal: false
+                    total: {
+                        project: false,
+                        page: false
+                    }
                 },
                 exportFields: [
                     { id: 'time', name: '时间' },
                     { id: 'count', name: '数量' }
+                ],
+                totalColumns: [
+                    { id: 'project', name: '项目总数' },
+                    { id: 'page', name: '页面总数' }
                 ]
             }
         },
@@ -110,18 +114,16 @@
                 return params
             },
             exportList () {
+                const charts = this.chartList.map(item => ({
+                    title: item.title,
+                    data: this.chart[item.id].data
+                }))
                 return [
-                    {
-                        title: '按时间线项目个数',
-                        data: this.chart.base.data
-                    },
+                    ...charts,
                     {
                         title: '汇总',
                         data: this.total,
-                        fields: [
-                            { id: 'project', name: '项目总数' },
-                            { id: 'page', name: '页面总数' }
-                        ]
+                        fields: this.totalColumns
                     }
                 ]
             }
@@ -163,7 +165,7 @@
                     return
                 }
 
-                const context = document.getElementById('chart')
+                const context = document.getElementById('chartBase')
                 const dataCounts = chartData.map(item => item.count)
                 const labels = chartData.map(item => item.time)
 
@@ -172,26 +174,26 @@
             },
             async getProjectTotalCount () {
                 const params = { time: this.filters.time }
-                this.fetching.projectTotal = true
+                this.fetching.total.project = true
                 try {
                     const { data = [] } = await http.post('/operation/stats/project/projectTotal', params)
                     this.total[0].project = data[0].total
                 } catch (e) {
                     console.error(e)
                 } finally {
-                    this.fetching.projectTotal = false
+                    this.fetching.total.project = false
                 }
             },
             async getPageTotalCount () {
                 const params = { time: this.filters.time }
-                this.fetching.pageTotal = true
+                this.fetching.total.page = true
                 try {
-                    const { data = [] } = await http.post('/operation/stats/page/pageTotal', params)
+                    const { data = [] } = await http.post('/operation/stats/project/page/pageTotal', params)
                     this.total[0].page = data[0].total
                 } catch (e) {
                     console.error(e)
                 } finally {
-                    this.fetching.pageTotal = false
+                    this.fetching.total.page = false
                 }
             }
         }

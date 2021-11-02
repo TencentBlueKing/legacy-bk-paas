@@ -16,7 +16,7 @@
             </render-grid>
         </template>
         <template v-else-if="componentData.type === 'free-layout'">
-            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls">
+            <free-layout :key="componentData.renderKey" :component-data="componentData" :extra-drag-cls="extraDragCls" v-bind="componentData.renderProps">
             </free-layout>
         </template>
         <template v-else>
@@ -127,9 +127,12 @@
         height: 20px;
         font-size: 12px;
         color: #fff;
-        background: #1964e1;
+        background: #3a84ff;
         border-radius: 2px;
         padding: 2px 5px;
         cursor: pointer;
+        &:hover {
+            background: #1964E1;
+        }
     }
 </style>

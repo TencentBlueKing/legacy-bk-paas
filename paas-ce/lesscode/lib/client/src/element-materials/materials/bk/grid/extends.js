@@ -15,12 +15,13 @@ export default function (children) {
         type: 'render-grid',
         displayName: 'grid',
         group: '布局',
-        styles: ['size', 'margin', 'padding', 'backgroundColor'],
+        styles: ['size', 'minWidth', 'margin', 'padding', 'backgroundColor', 'border'],
         props: {
-            // gutter: {
-            //     type: 'number',
-            //     val: 1
-            // },
+            gutter: {
+                type: 'number',
+                val: 0,
+                tips: '每列栅格之间的间距'
+            },
             'margin-horizontal': {
                 type: 'number',
                 val: 0

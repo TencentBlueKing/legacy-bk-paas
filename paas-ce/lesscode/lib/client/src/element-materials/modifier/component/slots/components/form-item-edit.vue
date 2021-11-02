@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <bk-sideslider :is-show="isShow" :title="title" :width="696" @shown="initValue" :before-close="beforeClose" ext-cls="form-item-edit">
+    <bk-sideslider :is-show="isShow" :title="title" :width="696" @shown="initValue" :before-close="beforeClose" :quick-clos="true" ext-cls="form-item-edit">
         <section slot="content" class="item-container">
             <div class="form-item-title">基本信息</div>
             <bk-form
@@ -37,7 +37,8 @@
                     <form-item-validate :default-value="defaultRule || []" :change="itemChange" name="validate"></form-item-validate>
                 </div>
                 <div>
-                    <bk-button ext-cls="mr5" theme="primary" title="提交" @click="handleSave">提交</bk-button>
+                    <bk-button ext-cls="mr5" theme="primary" title="提交" @click="handleSave(false)">提交</bk-button>
+                    <bk-button ext-cls="mr5" theme="primary" title="提交并继续新增" @click="handleSave(true)">提交并继续新增</bk-button>
                     <bk-button ext-cls="mr5" theme="default" title="取消" @click="beforeClose">取消</bk-button>
                 </div>
             </bk-form>
@@ -47,6 +48,15 @@
 
 <script>
     import formItemValidate from './form-item-validate'
+
+    const generateFormData = () => ({
+        type: 'input',
+        label: '',
+        property: '',
+        required: false,
+        validate: []
+    })
+    
     export default {
         components: {
             formItemValidate
@@ -74,6 +84,7 @@
         },
         data () {
             return {
+                changeCount: 0,
                 formItemData: {},
                 title: '表单项配置',
                 formItemTypeList: [
@@ -108,31 +119,49 @@
                 }
             }
         },
+        watch: {
+            formItemData: {
+                handler () {
+                    this.changeCount++
+                },
+                deep: true
+            }
+        },
         methods: {
             initValue () {
-                this.formItemData = Object.assign({}, this.defaultValue)
+                this.formItemData = Object.assign({}, this.defaultValue, { validate: this.defaultRule })
+                this.changeCount = 0
             },
-            handleSave () {
+            handleSave (toAdd = false) {
                 this.$refs.operation.validate()
                     .then(() => {
                         this.$bkMessage({
                             theme: 'success',
                             message: '修改成功'
                         })
-                        this.submit(this.formItemData)
+                        this.submit(this.formItemData, toAdd)
+                        if (toAdd) {
+                            this.changeCount = 0
+                            this.formItemData = generateFormData()
+                        }
                     })
             },
             itemChange (name, value) {
                 Object.assign(this.formItemData, { [name]: value })
             },
             beforeClose () {
-                this.$bkInfo({
-                    subTitle: '弹窗关闭后未保存的数据将会丢失，请确认关闭',
-                    okText: '确认',
-                    cancelText: '取消',
-                    closeIcon: false,
-                    confirmFn: this.close
-                })
+                if (this.changeCount <= 1) {
+                    this.changeCount = 0
+                    this.close()
+                } else {
+                    this.$bkInfo({
+                        subTitle: '弹窗关闭后未保存的数据将会丢失，请确认关闭',
+                        okText: '确认',
+                        cancelText: '取消',
+                        closeIcon: false,
+                        confirmFn: this.close
+                    })
+                }
             }
         }
     }

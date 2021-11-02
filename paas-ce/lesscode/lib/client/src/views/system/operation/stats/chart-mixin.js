@@ -1,8 +1,27 @@
 export default {
+    computed: {
+        chartList () {
+            const chartList = []
+            Object.keys(this.chart).forEach(key => {
+                const item = this.chart[key]
+                chartList.push({
+                    id: key,
+                    name: key.charAt(0).toUpperCase() + key.slice(1),
+                    title: item.title
+                })
+            })
+            return chartList
+        }
+    },
     methods: {
         getLineChartOptions (options) {
             const { labels, data } = options
             const maxNumber = Math.max(...data)
+
+            // 得出合适的刻度
+            const interval = this.getYAxisInterval(maxNumber)
+            const yMax = maxNumber + (interval - (maxNumber % interval))
+
             return {
                 type: 'line',
                 data: {
@@ -27,9 +46,9 @@ export default {
                     scales: {
                         yAxes: {
                             min: 0,
-                            max: Math.ceil(maxNumber / 0.8),
+                            max: yMax,
                             ticks: {
-                                stepSize: this.getYAxisInterval(maxNumber)
+                                stepSize: interval
                             }
                         },
                         xAxes: { scaleLabel: { display: true } }

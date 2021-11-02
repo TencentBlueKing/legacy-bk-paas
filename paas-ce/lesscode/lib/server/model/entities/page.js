@@ -40,6 +40,12 @@ export default class extends Base {
     lifeCycle
 
     @Column({
+        type: 'mediumtext',
+        comment: '页面样式配置'
+    })
+    styleSetting
+
+    @Column({
         type: 'int',
         nullable: false,
         default: '0',

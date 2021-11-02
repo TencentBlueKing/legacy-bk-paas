@@ -12,78 +12,93 @@
 <template>
     <div :class="['page-setting', { function: type === 'pageFunction' }]"
         v-bkloading="{ isLoading: pageLoading, opacity: 1 }">
-        <section v-for="setting in settingGroup" :key="setting.title">
-            <div class="title" v-show="!pageLoading">{{ setting.title }}</div>
-            <div class="setting-list" v-show="!pageLoading">
-                <div class="setting-item" v-for="(field, index) in setting.settingFields" :key="index">
-                    <div class="field-label">
-                        <span v-bk-tooltips="{ content: field.desc, disabled: !field.desc }" class="field-display-name">{{field.name}}</span>：
-                    </div>
-                    <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
-                        <template v-if="field !== editField.field">
-                            <div class="field-content">
-                                <div class="route" v-if="field.id === 'pageRoute'">
-                                    <div v-if="pageRoute.id">{{layoutPath}}<span>{{pageRoute.path}}</span></div>
-                                    <div v-else class="unset">未设置</div>
-                                </div>
-                                <span v-else class="field-display-value">{{getFieldDisplayValue(field) || '--'}}</span>
-                                <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
-                            </div>
-                        </template>
-                        <template v-else-if="!loadingState.includes(field)">
-                            <div class="field-form">
+        <div class="page-setting-wrapper">
+            <section v-for="setting in settingGroup" :key="setting.title">
+                <div class="title" v-show="!pageLoading">{{ setting.title }}</div>
+                <div class="setting-list" v-show="!pageLoading">
+                    <div class="setting-item" v-for="(field, index) in setting.settingFields" :key="index"
+                        :style="{
+                            'margin-top': field.type === 'style-setting' && index !== 0 ? '25px' : 0
+                        }">
+                        <div class="field-label">
+                            <span v-bk-tooltips="{ content: field.desc, disabled: !field.desc }" class="field-display-name">{{field.name}}</span>：
+                        </div>
+                        <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
+                            <template v-if="field.type === 'style-setting' || field.type === 'min-width'">
                                 <component
-                                    :is="`bk-${field.type}`"
-                                    :class="[`form-component ${field.type}`, { error: (errors[field.id] || []).length }]"
-                                    :placeholder="getPlaceholder(field)"
-                                    v-model.trim="editField.value"
-                                    v-on="getEvents(field)"
-                                    v-bind="field.props"
-                                    :ref="`component-${field.id}`">
-                                    <slot-component
-                                        v-for="child in field.children"
-                                        :key="child.id"
-                                        :is="`bk-${child.type}`"
-                                        v-bind="child.props"
-                                    >
-                                        <slot-component-child
-                                            v-for="childSlot in child.children"
-                                            :key="childSlot.id"
-                                            :is="`bk-${childSlot.type}`"
-                                            v-bind="childSlot.props"
-                                        >
-                                            <template v-if="field.id === 'pageRoute'">
-                                                <div class="bk-option-content-default" :title="childSlot.props.name">
-                                                    <div class="bk-option-name">
-                                                        {{childSlot.props.name}}<span class="bound" v-if="childSlot.props.disabled">（已绑定）</span>
-                                                    </div>
-                                                </div>
-                                            </template>
-                                        </slot-component-child>
-                                    </slot-component>
-                                    <div slot="extension" style="cursor: pointer;" @click="goToPage('layout', true)" v-if="field.id === 'layoutId'">
-                                        <i class="bk-drag-icon bk-drag-jump-link"></i> 新建模板实例
+                                    class="style-setting"
+                                    :is="field.id"
+                                    :key="field.id"
+                                    :type="field.type"
+                                    :component-id="'pageStyleSetting'"
+                                    :value="page.styleSetting"
+                                    :change="changeStyle" />
+                            </template>
+                            <template v-else-if="field !== editField.field">
+                                <div class="field-content">
+                                    <div class="route" v-if="field.id === 'pageRoute'">
+                                        <div v-if="pageRoute.id">{{layoutPath}}<span>{{pageRoute.path}}</span></div>
+                                        <div v-else class="unset">未设置</div>
                                     </div>
-                                    <div slot="extension" style="cursor: pointer;" @click="goToPage('routes', true)" v-if="field.id === 'pageRoute'">
-                                        <i class="bk-drag-icon bk-drag-jump-link"></i> 新建路由
-                                    </div>
-                                </component>
-                                <div class="buttons">
-                                    <bk-button text size="small" theme="primary"
-                                        :disabled="disabled"
-                                        @click="handleConfirm">确定</bk-button>
-                                    <span class="divider">|</span>
-                                    <bk-button text size="small" theme="primary" @click="handleCancel">取消</bk-button>
+                                    <span v-else class="field-display-value">{{getFieldDisplayValue(field) || '--'}}</span>
+                                    <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
                                 </div>
-                            </div>
-                            <span class="form-error" v-if="(errors[field.id] || []).length">
-                                {{errors[field.id][0].message}}
-                            </span>
-                        </template>
+                            </template>
+                            <template v-else-if="!loadingState.includes(field)">
+                                <div class="field-form">
+                                    <component
+                                        :is="`bk-${field.type}`"
+                                        :class="[`form-component ${field.type}`, { error: (errors[field.id] || []).length }]"
+                                        :placeholder="getPlaceholder(field)"
+                                        v-model.trim="editField.value"
+                                        v-on="getEvents(field)"
+                                        v-bind="field.props"
+                                        :ref="`component-${field.id}`">
+                                        <slot-component
+                                            v-for="child in field.children"
+                                            :key="child.id"
+                                            :is="`bk-${child.type}`"
+                                            v-bind="child.props"
+                                        >
+                                            <slot-component-child
+                                                v-for="childSlot in child.children"
+                                                :key="childSlot.id"
+                                                :is="`bk-${childSlot.type}`"
+                                                v-bind="childSlot.props"
+                                            >
+                                                <template v-if="field.id === 'pageRoute'">
+                                                    <div class="bk-option-content-default" :title="childSlot.props.name">
+                                                        <div class="bk-option-name">
+                                                            {{childSlot.props.name}}<span class="bound" v-if="childSlot.props.disabled">（已绑定）</span>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </slot-component-child>
+                                        </slot-component>
+                                        <div slot="extension" style="cursor: pointer;" @click="goToPage('layout', true)" v-if="field.id === 'layoutId'">
+                                            <i class="bk-drag-icon bk-drag-jump-link"></i> 新建模板实例
+                                        </div>
+                                        <div slot="extension" style="cursor: pointer;" @click="goToPage('routes', true)" v-if="field.id === 'pageRoute'">
+                                            <i class="bk-drag-icon bk-drag-jump-link"></i> 新建路由
+                                        </div>
+                                    </component>
+                                    <div class="buttons">
+                                        <bk-button text size="small" theme="primary"
+                                            :disabled="disabled"
+                                            @click="handleConfirm">确定</bk-button>
+                                        <span class="divider">|</span>
+                                        <bk-button text size="small" theme="primary" @click="handleCancel">取消</bk-button>
+                                    </div>
+                                </div>
+                                <span class="form-error" v-if="(errors[field.id] || []).length">
+                                    {{errors[field.id][0].message}}
+                                </span>
+                            </template>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
 </template>
 
@@ -91,6 +106,11 @@
     import { mapGetters, mapMutations } from 'vuex'
     import bkSelectFunc from '@/components/methods/select-func'
     import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
+    import StyleBackgroundColor from '@/element-materials/modifier/component/styles/strategy/background-color'
+    import StyleSize from '@/element-materials/modifier/component/styles/strategy/size'
+    import StylePadding from '@/element-materials/modifier/component/styles/strategy/padding'
+    import StyleMargin from '@/element-materials/modifier/component/styles/strategy/margin'
+    import StyleCustom from '@/element-materials/modifier/component/styles/strategy/custom-style'
 
     const lifeCycleDescMap = {
         created: '在页面创建完成后被立即调用，这个时候页面还未渲染，可以做获取远程数据的操作',
@@ -106,7 +126,12 @@
 
     export default {
         components: {
-            bkSelectFunc
+            bkSelectFunc,
+            StyleCustom,
+            size: StyleSize,
+            padding: StylePadding,
+            margin: StyleMargin,
+            backgroundColor: StyleBackgroundColor
         },
         props: {
             project: {
@@ -129,7 +154,8 @@
                 },
                 loadingState: [],
                 errors: {},
-                pageLoading: true
+                pageLoading: true,
+                savingTimer: null
             }
         },
         computed: {
@@ -250,10 +276,57 @@
                         }
                     ]
                 }
+                const styleSettings = [
+                    {
+                        title: '尺寸',
+                        settingFields: [
+                            {
+                                id: 'size',
+                                name: '最小宽度',
+                                type: 'min-width'
+                            }
+                        ]
+                    },
+                    {
+                        title: '边距',
+                        settingFields: [
+                            {
+                                id: 'margin',
+                                name: '外边距',
+                                type: 'style-setting'
+                            },
+                            {
+                                id: 'padding',
+                                name: '内边距',
+                                type: 'style-setting'
+                            }
+                        ]
+                    },
+                    {
+                        title: '背景',
+                        settingFields: [
+                            {
+                                id: 'backgroundColor',
+                                name: '背景色',
+                                type: 'style-setting'
+                            }
+                        ]
+                    },
+                    {
+                        title: '自定义样式',
+                        settingFields: [
+                            {
+                                id: 'StyleCustom',
+                                name: '自定义样式',
+                                type: 'style-setting'
+                            }
+                        ]
+                    }
+                ]
 
                 return this.type === 'pageFunction'
                     ? [lifeCycleSettings]
-                    : [baseSettings, pageSettings]
+                    : [baseSettings, pageSettings].concat(styleSettings)
             }
         },
         created () {
@@ -316,7 +389,7 @@
                     if (field.id === 'pageRoute' || field.id === 'layoutId') {
                         await this.savePageRoute(field, value)
                         this.fetchData()
-                        // 导航模版切换后需要获取当前模版的导航数据，并更新更新本地curTemplateData
+                        // 导航模板切换后需要获取当前模板的导航数据，并更新更新本地curTemplateData
                         await this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id })
                     } else {
                         const pageData = await this.saveField(field, value)
@@ -361,11 +434,40 @@
                     ...fieldData
                 }
                 pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
+                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
                 const res = await this.$store.dispatch('page/update', {
                     data: {
                         pageData,
                         projectId: this.project.id,
                         functionData: Object.keys(usedFuncMap),
+                        from: 'setting'
+                    }
+                })
+                return res
+            },
+            async changeStyle (key, value) {
+                if (value) {
+                    this.page.styleSetting[key] = value
+                } else {
+                    this.page.styleSetting[key] = ''
+                }
+                if (this.savingTimer) {
+                    clearTimeout(this.savingTimer)
+                }
+                this.savingTimer = await setTimeout(() => {
+                    this.saveStyle()
+                }, 500)
+            },
+            async saveStyle () {
+                const pageData = {
+                    ...this.page
+                }
+                pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
+                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
+                const res = await this.$store.dispatch('page/update', {
+                    data: {
+                        pageData,
+                        projectId: this.project.id,
                         from: 'setting'
                     }
                 })
@@ -511,9 +613,51 @@
 </script>
 
 <style lang="postcss" scoped>
+    @import "@/css/mixins/scroller";
+
     .page-setting {
-        padding: 5px 40px 30px;
         height: 100%;
+        overflow: auto;
+        @mixin scroller;
+        
+        .page-setting-wrapper {
+            padding: 5px 40px 0;
+            margin-bottom: 20px;
+        }
+
+        /deep/ .style-setting {
+            margin-left: 0;
+            padding: 0 0;
+            .style-title{
+                display: none;
+              }
+            .style-item{
+                margin-top: 0;
+              }
+            .item-label{
+                display: none;
+              }
+            .margin-style-col-container :nth-child(1){
+                margin-top: 0;
+              }
+            .modifier-style {
+                margin-left: 0;
+                padding: 0 0;
+              }
+            .item-content div {
+                text-align: left !important;
+              }
+            .common-input-slot-text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 32px;
+                height: 100%;
+                font-size: 14px;
+                line-height: 20px;
+                background: #fafbfd;
+            }
+        }
 
         .title {
             font-size: 14px;

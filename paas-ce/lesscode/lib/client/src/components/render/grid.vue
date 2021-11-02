@@ -173,8 +173,7 @@
              */
             handleContextmenuDelete () {
                 setTimeout(() => {
-                    const delBtn = document.querySelector('#del-component-right-sidebar')
-                    delBtn && delBtn.click()
+                    bus.$emit('on-delete-component')
                 }, 0)
                 this.contextMenuVisible = false
             },
@@ -341,7 +340,7 @@
                 const curRowNode = getNodeWithClass(e.target, 'bk-layout-grid-row')
                 curRowNode.classList.add('selected')
 
-                this.$clearMenu()
+                bus.$emit('hideContextMenu') // 隐藏右键菜单()
 
                 this.setCurSelectedComponentData(_.cloneDeep(this.renderData))
 

@@ -26,27 +26,20 @@
                 :pagination="pagination"
                 @page-change="handlePageChange"
                 @page-limit-change="handlePageLimitChange">
-                <bk-table-column label="自定义组件名" prop="fullName" width="360" show-overflow-tooltip></bk-table-column>
-                <bk-table-column label="自定义组件ID" prop="type" width="300" show-overflow-tooltip></bk-table-column>
-                <bk-table-column label="使用项目数">
+                <bk-table-column
+                    v-for="column in columns"
+                    :key="column.id"
+                    :label="column.name"
+                    :prop="column.id"
+                    :width="column.width"
+                    :sortable="column.sortable"
+                    :show-overflow-tooltip="column.tooltip">
                     <template slot-scope="{ row }">
-                        <loading :loading="fetching.projectUsedCount">
-                            <span>{{row.projectUsedCount | formatCount}}</span>
+                        <loading v-if="column.dynamic" :loading="fetching[column.id]">
+                            <span v-if="column.type === 'number'">{{row[column.id] | formatCount}}</span>
+                            <span v-else>{{row[column.id]}}</span>
                         </loading>
-                    </template>
-                </bk-table-column>
-                <bk-table-column label="使用页面数">
-                    <template slot-scope="{ row }">
-                        <loading :loading="fetching.pageUsedCount">
-                            <span>{{row.pageUsedCount | formatCount}}</span>
-                        </loading>
-                    </template>
-                </bk-table-column>
-                <bk-table-column label="版本数">
-                    <template slot-scope="{ row }">
-                        <loading :loading="fetching.versionCount">
-                            <span>{{row.versionCount | formatCount}}</span>
-                        </loading>
+                        <template v-else>{{row[column.id]}}</template>
                     </template>
                 </bk-table-column>
             </bk-table>
@@ -59,13 +52,14 @@
     import Loading from '@/components/ui/loading.vue'
     import ExportButton from '../export-button.vue'
     import sharedMixin from '../shared-mixin.js'
+    import tableListMixin from '../table-list-mixin.js'
 
     export default {
         components: {
             Loading,
             ExportButton
         },
-        mixins: [sharedMixin],
+        mixins: [sharedMixin, tableListMixin],
         data () {
             return {
                 list: [],
@@ -74,22 +68,19 @@
                     count: 0,
                     limit: 10
                 },
+                columns: [
+                    { id: 'fullName', name: '自定义组件名', width: '360', tooltip: true },
+                    { id: 'type', name: '自定义组件ID', width: '300', tooltip: true },
+                    { id: 'projectUsedCount', name: '使用项目数', dynamic: true, type: 'number' },
+                    { id: 'pageUsedCount', name: '使用页面数', dynamic: true, type: 'number' },
+                    { id: 'versionCount', name: '版本数', dynamic: true, type: 'number' }
+                ],
                 filters: {
                     keyword: '',
                     dateRange: []
                 },
-                exportFields: [
-                    { id: 'fullName', name: '自定义组件名' },
-                    { id: 'type', name: '自定义组件ID' },
-                    { id: 'projectUsedCount', name: '使用项目数' },
-                    { id: 'pageUsedCount', name: '使用页面数' },
-                    { id: 'versionCount', name: '版本数' }
-                ],
                 fetching: {
-                    base: false,
-                    projectUsedCount: false,
-                    pageUsedCount: false,
-                    versionCount: false
+                    base: false
                 }
             }
         },
@@ -105,6 +96,7 @@
             }
         },
         created () {
+            this.setFetching()
             this.fetchData()
         },
         methods: {
@@ -118,22 +110,23 @@
                     this.list = list.map((item) => ({
                         ...item,
                         fullName: `${item.displayName}(${item.name})`,
-                        projectUsedCount: 0,
-                        pageUsedCount: 0,
-                        versionCount: 0
+                        ...this.getDynamicValues()
                     }))
                     this.pagination.count = total
 
                     if (this.list && this.list.length) {
-                        this.getCompProjectUsedCount()
-                        this.getCompPageUsedCount()
-                        this.getCompVersionCount()
+                        this.getMoreData()
                     }
                 } catch (e) {
                     console.error(e)
                 } finally {
                     this.fetching.base = false
                 }
+            },
+            getMoreData () {
+                this.getCompProjectUsedCount()
+                this.getCompPageUsedCount()
+                this.getCompVersionCount()
             },
             async getCompProjectUsedCount () {
                 const compIds = this.list.map(item => item.id)

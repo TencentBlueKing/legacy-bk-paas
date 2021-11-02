@@ -2,6 +2,7 @@
     <section v-bkloading="{ isLoading: isLoading }" style="height: 100%">
         <main class="templates templates-content" v-show="!isLoading">
             <div class="templates-head">
+                <!-- <div class="help-tips">请从页面画布中选择页面局部或将整个页面存为模板</div> -->
                 <div class="extra">
                     <bk-input
                         :style="{ width: '400px' }"
@@ -45,6 +46,7 @@
                                 </bk-dropdown-menu>
                             </div>
                         </div>
+                        <span v-if="template.isOffcial" class="default-tag">公开模板</span>
                     </div>
                 </div>
                 <div class="empty" v-show="(!templateList.length || !renderList.length) && !isLoading">
@@ -189,8 +191,7 @@
                 if (!template.content) {
                     this.$bkMessage({
                         theme: 'error',
-                        message: '该页面为空页面，请先编辑页面',
-                        limit: 1
+                        message: '该页面为空页面，请先编辑页面'
                     })
                     return
                 }
@@ -227,7 +228,12 @@
 
         .templates-head {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 17px;
+            .help-tips {
+                color: #63656e;
+            }
         }
         .templates-body {
             display: flex;
@@ -306,6 +312,20 @@
                         margin: 16px 10px 0 10px;
                     }
 
+                    .default-tag {
+                        position: absolute;
+                        right: 6px;
+                        top: 6px;
+                        height: 22px;
+                        line-height: 22px;
+                        text-align: center;
+                        border-radius: 2px;
+                        font-size: 12px;
+                        color: #fff;
+                        padding: 0 6px;
+                        background: #699DF4;
+                    }
+
                     .preview {
                         position: relative;
                         height: 100%;
@@ -313,6 +333,8 @@
                         border-radius: 4px 4px 0px 0px;
                         img {
                             max-width: 100%;
+                            height: 100%;
+                            object-fit: contain;
                         }
 
                         .empty-preview-img {
@@ -396,7 +418,7 @@
                         font-size: 12px;
                         font-weight: 700;
                         color: #63656E;
-                        width: 240px;
+                        width: 230px;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;

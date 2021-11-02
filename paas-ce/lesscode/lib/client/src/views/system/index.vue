@@ -17,7 +17,7 @@
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
                     </router-link>
                     <router-link tag="div" class="nav-item" to="/template-market">
-                        <i class="bk-drag-icon bk-drag-template-fill"></i>模板市场
+                        <i class="bk-drag-icon bk-drag-template-fill"></i>模板市场<i class="red-point"></i>
                     </router-link>
                     <router-link tag="div" class="nav-item" to="/function-market">
                         <i class="bk-drag-icon bk-drag-function-fill"></i>函数市场
@@ -86,9 +86,6 @@
         },
         computed: {
             ...mapGetters(['isPlatformAdmin'])
-        },
-        async created () {
-            await this.$store.dispatch('isPlatformAdmin')
         }
     }
 </script>
@@ -159,9 +156,9 @@
                 line-height: var(--side-hd-height);
             }
             .side-bd {
-                @mixin scroller;
                 height: calc(100% - var(--side-hd-height) - var(--side-ft-height));
                 overflow-y: auto;
+                @mixin scroller;
             }
             .side-ft {
                 position: absolute;
@@ -216,6 +213,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+            font-size: 12px;
             background: #fff;
             height: var(--footer-height);
             line-height: var(--footer-height);

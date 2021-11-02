@@ -50,9 +50,11 @@
             }
 
             .chart-list {
+                padding-right: 60px;
+
                 .chart-item {
-                    width: 60%;
-                    height: 360px;
+                    width: 100%;
+                    height: 420px;
                     display: flex;
                     flex-direction: column;
                     margin: 16px 0;

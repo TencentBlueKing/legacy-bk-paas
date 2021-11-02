@@ -6,10 +6,6 @@ export const PROJECT_TEMPLATE_TYPE = [
     {
         id: 'ADMIN_BACKEND',
         name: '管理后台'
-    },
-    {
-        id: 'OPERATION_PRODUCT',
-        name: '运维产品'
     }
 ]
 
@@ -25,5 +21,9 @@ export const PAGE_TEMPLATE_TYPE = [
     {
         id: 'INFO',
         name: '信息'
+    },
+    {
+        id: 'LAYOUT',
+        name: '布局'
     }
 ]

@@ -20,11 +20,11 @@
             <export-button name="func" dim="time" :list="exportList" :fields="exportFields" />
         </div>
         <div class="chart-list">
-            <div class="chart-item">
-                <div class="chart-title">按时间线函数数量</div>
-                <div class="chart-container" v-bkloading="{ isLoading: fetching.base }">
-                    <canvas id="chart"></canvas>
-                    <bk-exception v-if="!fetching.base && !chart.base.data.length"
+            <div class="chart-item" v-for="chartItem in chartList" :key="chartItem.id">
+                <div class="chart-title">{{chartItem.title}}</div>
+                <div class="chart-container" v-bkloading="{ isLoading: fetching[chartItem.id] }">
+                    <canvas :id="`chart${chartItem.name}`"></canvas>
+                    <bk-exception v-if="!fetching[chartItem.id] && !chart[chartItem.id].data.length"
                         class="chart-empty" type="empty" scene="part">
                     </bk-exception>
                 </div>
@@ -36,22 +36,19 @@
                 :outer-border="false"
                 :header-border="false"
                 :data="total">
-                <bk-table-column label="函数总数">
+                <bk-table-column
+                    v-for="column in totalColumns"
+                    :key="column.id"
+                    :label="column.name"
+                    :prop="column.id">
                     <template slot-scope="{ row }">
-                        <loading :loading="fetching.funcTotal">
-                            <span>{{row.func | formatCount}}</span>
-                        </loading>
-                    </template>
-                </bk-table-column>
-                <bk-table-column label="被页面使用的函数总数">
-                    <template slot-scope="{ row }">
-                        <loading :loading="fetching.pageUsedTotal">
-                            <span>{{row.pageUsed | formatCount}}</span>
+                        <loading :loading="fetching.total[column.id]">
+                            <span>{{row[column.id] | formatCount}}</span>
                         </loading>
                     </template>
                 </bk-table-column>
                 <div class="append-tips" slot="append">
-                    <i>* 不包含内置和已删除数据，总数为相互独立统计，同一页面使用同一函数多次被记作1次</i>
+                    <i>* 不包含内置和已删除数据，同一页面使用同一函数多次被记作1次</i>
                 </div>
             </bk-table>
         </div>
@@ -76,6 +73,7 @@
             return {
                 chart: {
                     base: {
+                        title: '按时间新增函数量',
                         inst: null,
                         data: []
                     }
@@ -92,12 +90,18 @@
                 dateShortcutSelectedIndex: 3,
                 fetching: {
                     base: false,
-                    funcTotal: false,
-                    pageUsedTotal: false
+                    total: {
+                        func: false,
+                        pageUsed: false
+                    }
                 },
                 exportFields: [
                     { id: 'time', name: '时间' },
                     { id: 'count', name: '数量' }
+                ],
+                totalColumns: [
+                    { id: 'func', name: '函数总数' },
+                    { id: 'pageUsed', name: '被页面使用的函数总数' }
                 ]
             }
         },
@@ -110,18 +114,16 @@
                 return params
             },
             exportList () {
+                const charts = this.chartList.map(item => ({
+                    title: item.title,
+                    data: this.chart[item.id].data
+                }))
                 return [
-                    {
-                        title: '按时间线函数数量',
-                        data: this.chart.base.data
-                    },
+                    ...charts,
                     {
                         title: '汇总',
                         data: this.total,
-                        fields: [
-                            { id: 'func', name: '函数总数' },
-                            { id: 'pageUsed', name: '被页面使用的函数总数' }
-                        ]
+                        fields: this.totalColumns
                     }
                 ]
             }
@@ -163,7 +165,7 @@
                     return
                 }
 
-                const context = document.getElementById('chart')
+                const context = document.getElementById('chartBase')
                 const dataCounts = chartData.map(item => item.count)
                 const labels = chartData.map(item => item.time)
 
@@ -172,26 +174,26 @@
             },
             async getFuncTotalCount () {
                 const params = { time: this.filters.time }
-                this.fetching.funcTotal = true
+                this.fetching.total.func = true
                 try {
                     const { data = [] } = await http.post('/operation/stats/func/funcTotal', params)
                     this.total[0].func = data[0].total
                 } catch (e) {
                     console.error(e)
                 } finally {
-                    this.fetching.funcTotal = false
+                    this.fetching.total.func = false
                 }
             },
             async getFuncPageUsedTotalCount () {
                 const params = { time: this.filters.time }
-                this.fetching.pageUsedTotal = true
+                this.fetching.total.pageUsed = true
                 try {
                     const { data = [] } = await http.post('/operation/stats/func/pageUsedTotal', params)
                     this.total[0].pageUsed = data[0].total
                 } catch (e) {
                     console.error(e)
                 } finally {
-                    this.fetching.pageUsedTotal = false
+                    this.fetching.total.pageUsed = false
                 }
             }
         }

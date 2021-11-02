@@ -65,7 +65,9 @@
                     </template>
                 </bk-popover>
             </template>
-            <slot />
+            <div class="nav-container">
+                <slot />
+            </div>
         </bk-navigation>
     </div>
 </template>

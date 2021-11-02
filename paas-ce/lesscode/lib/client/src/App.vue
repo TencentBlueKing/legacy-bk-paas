@@ -74,6 +74,10 @@
             }
         },
 
+        async created () {
+            await this.$store.dispatch('isPlatformAdmin')
+        },
+
         mounted () {
             const platform = window.navigator.platform.toLowerCase()
             if (platform.indexOf('win') === 0) {
@@ -100,6 +104,7 @@
     #app {
         width: 100%;
         height: 100%;
+        overflow-y: hidden;
         font-size: 14px;
         color: #63656e;
     }
@@ -116,5 +121,14 @@
     .win {
         /* font-family: Microsoft Yahei, PingFang SC, Helvetica, Aria; */
         font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei, Helvetica Neue, Arial;
+    }
+
+    .red-point {
+        display:block;
+        margin-left: 3px;
+        background:#f00;
+        border-radius:50%;
+        width:6px;
+        height:6px;
     }
 </style>
