@@ -5,6 +5,9 @@
       color: #ea3636;
       font-size: 14px;
     }
+    .error {
+      border: 1px solid red;
+    }
     tr.bk-table-row.hover-row {
       > td {
         background-color: #fff;
@@ -36,6 +39,11 @@
         }
       }
     }
+    .config-input-error {
+      .bk-form-input {
+        border: 1px solid #ff5656;
+      }
+    }
     .field-table-select {
         border: none;
         .icon-angle-down {
@@ -49,5 +57,9 @@
         &:first-child {
             margin-right: 10px;
         }
+    }
+    .icon-disabled {
+        color: #dcdee5;
+        cursor: not-allowed;
     }
   }
