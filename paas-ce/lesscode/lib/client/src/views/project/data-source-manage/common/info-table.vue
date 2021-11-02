@@ -1,5 +1,5 @@
 <template>
-    <bk-form :model="form" :label-width="82" ref="basicForm" v-if="isEdit">
+    <bk-form :model="form" :label-width="82" ref="basicForm" v-if="isEdit" v-bkloading="{ isLoading }">
         <bk-form-item
             v-for="field in formFields"
             :key="field.property"
@@ -35,8 +35,12 @@
         toRef,
         ref,
         reactive,
-        watch
+        watch,
+        onBeforeMount
     } from '@vue/composition-api'
+    import { messageError } from '@/common/bkmagic'
+    import store from '@/store'
+    import router from '@/router'
 
     const formFields = [
         { label: '表名', required: true, property: 'tableName' },
@@ -44,16 +48,6 @@
         { label: '字符集', disabled: true, property: 'character' },
         { label: '备注', property: 'comment' }
     ]
-
-    const rules = {
-        tableName: [
-            {
-                required: true,
-                message: '表名是必填项',
-                trigger: 'blur'
-            }
-        ]
-    }
 
     export default defineComponent({
         props: {
@@ -68,8 +62,33 @@
         },
 
         setup (props, { emit }) {
+            const projectId = router?.currentRoute?.params?.projectId
+            const tableId = router?.currentRoute?.query?.id
+            let tableList = []
             const basicForm = ref(null)
             const form = reactive({ tableName: '', comment: '' })
+            const isLoading = ref(false)
+            // 校验规则
+            const rules = {
+                tableName: [
+                    {
+                        required: true,
+                        message: '表名是必填项',
+                        trigger: 'blur'
+                    }, {
+                        regex: /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/,
+                        message: '开头和结尾需是大小写字母，中间可以是大小写字母、连字符和下划线。长度最少为2个字符',
+                        trigger: 'blur'
+                    }, {
+                        validator (val) {
+                            console.log(tableList)
+                            return tableList.findIndex((table) => (table.tableName === val && +table.id !== +tableId)) <= -1
+                        },
+                        message: '表名不能重复',
+                        trigger: 'blur'
+                    }
+                ]
+            }
 
             watch(
                 toRef(props, 'basicInfo'),
@@ -96,11 +115,26 @@
                 emit('change')
             }
 
+            const getAllTable = () => {
+                const params = { projectId }
+                isLoading.value = true
+                store.dispatch('dataSource/list', params).then((res) => {
+                    tableList = res.list
+                }).catch((err) => {
+                    messageError(err.message || err)
+                }).finally(() => {
+                    isLoading.value = false
+                })
+            }
+
+            onBeforeMount(getAllTable)
+
             return {
                 basicForm,
                 validate,
                 form,
                 formFields,
+                isLoading,
                 rules,
                 change
             }

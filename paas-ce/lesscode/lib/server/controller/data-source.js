@@ -97,7 +97,7 @@ export default class DataSourceController {
             ? await dataService.getByPage(queryParams)
             : await dataService.get(queryParams.tableFileName, queryParams.query)
 
-        ;(result.list || result).forEach((data) => {
+        result.list.forEach((data) => {
             data.columns = JSON.parse(data.columns)
             return data
         })
@@ -358,7 +358,7 @@ export default class DataSourceController {
         let dataService
         try {
             dataService = await getPreviewDataService(projectId)
-            const list = await dataService.get(tableName, {})
+            const { list } = await dataService.get(tableName, {})
             const datas = [{ tableName, list }]
             const fileName = fileType === 'sql' ? `lesscode-data-${projectId}.sql` : ''
             const zipName = `lesscode-data-${projectId}`

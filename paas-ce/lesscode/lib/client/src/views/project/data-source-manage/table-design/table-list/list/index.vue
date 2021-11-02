@@ -19,7 +19,6 @@
             ></export-table>
             <bk-divider direction="vertical" class="table-list-divider"></bk-divider>
             <bk-button class="table-list-btn" @click="goToDataManage">数据管理</bk-button>
-            <bk-button class="table-list-btn">数据源部署记录</bk-button>
         </section>
 
         <bk-table

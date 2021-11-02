@@ -70,7 +70,7 @@ class PreviewSubscriber {
  * @param {*} projectId 项目id
  */
 export const getPreviewDataService = async (projectId) => {
-    const [tables, config] = await Promise.all([
+    const [{ list: tables }, config] = await Promise.all([
         dataService.get('data-table', { projectId, deleteFlag: 0 }),
         getPreviewDbConfig(projectId)
     ])

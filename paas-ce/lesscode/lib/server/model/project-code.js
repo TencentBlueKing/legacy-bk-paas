@@ -152,7 +152,7 @@ const projectCode = {
                     allCustomMap,
                     funcGroups = [],
                     allVarableList = [],
-                    dataTables = [],
+                    { list: dataTables = [] },
                     dataTableModifyRecords
                 ] = await Promise.all([
                     routeModel.findProjectRoute(projectId),

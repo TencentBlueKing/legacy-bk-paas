@@ -19,7 +19,7 @@ export default {
     },
     mutations: {
         setTableList (state, tableList) {
-            state.tableList = tableList
+            state.tableList = tableList || []
         }
     },
     getters: {
@@ -34,7 +34,7 @@ export default {
         list ({ commit }, params = {}) {
             return http.get(`${perfix}/getTableList`, { params }).then(response => {
                 const data = response.data || []
-                commit('setTableList', data)
+                commit('setTableList', data?.list)
                 return data
             })
         },

@@ -9,11 +9,17 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { defineComponent, watch, reactive, toRef } from '@vue/composition-api'
+import {
+    defineComponent,
+    watch,
+    reactive,
+    toRef,
+    ref
+} from '@vue/composition-api'
 import { VNode } from 'vue'
 import fieldTable from '@/components/field-table/field-table'
 import { uuid } from '@/common/util'
-import { ORM_KEYS } from 'shared/data-source/constant'
+import { ORM_KEYS, BASE_COLUMNS } from 'shared/data-source/constant'
 
 export interface IFieldSelectOption {
     id: string
@@ -28,14 +34,15 @@ export interface ITableField {
     width?: string
     isRequire?: boolean
     inputType?: string
-    isEdit?: boolean
+    isEdit?: boolean,
+    reg?: RegExp
 }
 
 export interface ITableStatus {
     data: object[]
 }
 
-function getDefaultRow() {
+function getDefaultRow () {
     return {
         type: 'varchar',
         name: '',
@@ -57,7 +64,7 @@ function getDefaultRow() {
  * @param item orm 数据
  * @returns 表格数据
  */
-function normalizeTableItem(item) {
+function normalizeTableItem (item) {
     const defaultRow = getDefaultRow()
     const normalizedItem = Object.assign({}, defaultRow, item)
     if (['int', 'datetime'].includes(normalizedItem.type)) {
@@ -67,7 +74,7 @@ function normalizeTableItem(item) {
         normalizedItem.defaultInputType = 'text'
         normalizedItem.default = ''
     }
-    if (normalizedItem.name === 'id') {
+    if (Reflect.has(BASE_COLUMNS, normalizedItem.name)) {
         normalizedItem.isEdit = true
     }
     if (!Reflect.has(normalizedItem, 'columnId')) {
@@ -81,7 +88,7 @@ function normalizeTableItem(item) {
  * @param item 表格数据
  * @returns orm 数据
  */
-function normalizeOrmItem(item) {
+function normalizeOrmItem (item) {
     return ORM_KEYS.reduce((acc, cur) => {
         if (Reflect.has(item, cur)) {
             acc[cur] = item[cur]
@@ -96,20 +103,17 @@ export default defineComponent({
     },
 
     props: {
-        data: Array,
-        isEdit: {
-            type: Boolean,
-            default: true
-        }
+        data: Array
     },
 
-    setup(props: ITableStatus, { emit }) {
+    setup (props: ITableStatus, { emit }) {
         const tableFields: ITableField[] = [
             {
                 name: '字段名称',
                 type: 'input',
                 prop: 'name',
-                isRequire: true
+                isRequire: true,
+                reg: /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/
             },
             {
                 name: '字段类型',
@@ -154,6 +158,7 @@ export default defineComponent({
             }
         ]
         const tableList = reactive([])
+        const tableRef = ref(null)
 
         watch(
             toRef(props, 'data'),
@@ -172,10 +177,12 @@ export default defineComponent({
         const addField = (row, index) => {
             const defaultRow = getDefaultRow()
             tableList.splice(index + 1, 0, defaultRow)
+            emit('change')
         }
 
         const deleteField = (row, index) => {
             tableList.splice(index, 1)
+            emit('change')
         }
 
         const changeData = (value, row, column, index) => {
@@ -193,13 +200,19 @@ export default defineComponent({
 
         const validate = () => {
             return new Promise((resolve, reject) => {
-                resolve(tableList.map(normalizeOrmItem))
+                const isValidate = tableRef.value.verification()
+                if (isValidate) {
+                    resolve(tableList.map(normalizeOrmItem))
+                } else {
+                    reject(new Error('字段配置校验不通过'))
+                }
             })
         }
 
         return {
             tableList,
             tableFields,
+            tableRef,
             addField,
             deleteField,
             changeData,
@@ -207,9 +220,10 @@ export default defineComponent({
         }
     },
 
-    render(): VNode {
+    render (): VNode {
         return (
             <field-table
+                ref="tableRef"
                 data={this.tableList}
                 column={this.tableFields}
                 onAdd={this.addField}

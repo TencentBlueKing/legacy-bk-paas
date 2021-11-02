@@ -164,7 +164,6 @@ export default defineComponent({
                 isErr: handleIsRequire(list, item),
                 isReg: handleIsReg(listReg, item)
             }))
-            console.log(props.data, 'props.data')
             return props.data.findIndex(item => item.isErr || item.isReg) === -1
         }
         /** 校验是否必填 */

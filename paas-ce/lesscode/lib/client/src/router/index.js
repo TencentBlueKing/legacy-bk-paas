@@ -68,7 +68,6 @@ const DataSourceEditTable = () => import(/* webpackChunkName: 'DataSource' */'@/
 const DataSourceShowTable = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/show-table.vue')
 const DataSourceUpdateRecord = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/update-record.vue')
 const DataSourceDataManage = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/data-manage/index.vue')
-const DataSourceDeployTableRecord = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/deploy-table-record.vue')
 
 // 运营统计
 const OperationEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/operation/index.vue')
@@ -268,11 +267,6 @@ const routes = [
                         path: 'data-manage',
                         name: 'dataManage',
                         component: DataSourceDataManage
-                    },
-                    {
-                        path: 'deploy-table-record',
-                        name: 'deployTableRecord',
-                        component: DataSourceDeployTableRecord
                     }
                 ]
             },

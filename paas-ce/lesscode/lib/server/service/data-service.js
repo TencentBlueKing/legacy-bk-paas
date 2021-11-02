@@ -46,11 +46,13 @@ export function getDataService (name = 'default', customEntityMap) {
          * 获取数据列表
          * @param {*} tableFileName 表模型的文件名
          * @param {*} query 查询参数
-         * @returns 数据列表
+         * @returns 数据列表 & 总数
          */
-        get (tableFileName, query = { deleteFlag: 0 }) {
+        async get (tableFileName, query = { deleteFlag: 0 }) {
             const repository = getRepositoryByName(tableFileName)
-            return repository.find(query) || []
+            const list = await repository.find(query) || []
+            const count = list.length
+            return { list, count }
         },
 
         /**
