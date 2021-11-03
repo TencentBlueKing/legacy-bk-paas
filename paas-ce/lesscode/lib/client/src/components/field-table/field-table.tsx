@@ -105,9 +105,6 @@ export default defineComponent({
         const renderOperate = () => {
             const handleAdd = (props) => {
                 const { row, $index } = props
-                if (row.isEdit) {
-                    return
-                }
                 emit('add', row, $index)
             }
             const handleDelete = (props) => {
@@ -123,9 +120,7 @@ export default defineComponent({
                     const defaultSlot = (
                         <span>
                             <i
-                                class={`bk-icon icon-plus-circle-shape field-icon ${
-                                    row?.isEdit ? 'icon-disabled' : ''
-                                }`}
+                                class={`bk-icon icon-plus-circle-shape field-icon`}
                                 onClick={() => {
                                     handleAdd(props)
                                 }}
