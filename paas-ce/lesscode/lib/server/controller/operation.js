@@ -9,14 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/quotes */
+
 import { getManager } from 'typeorm'
 
 const TIME_TYPES = ['YEAR', 'MONTH', 'DAY']
 const getDateFormatDes = (type) => {
     const descriptor = {
-        YEAR: '\'%Y\'',
-        MONTH: '\'%Y-%m\'',
-        DAY: '\'%Y-%m-%d\''
+        YEAR: "'%Y'",
+        MONTH: "'%Y-%m'",
+        DAY: "'%Y-%m-%d'"
     }
     return descriptor[type]
 }
@@ -187,7 +189,7 @@ export const getProjectBaseList = async (ctx) => {
     const manager = getManager()
 
     // 默认去除demo项目
-    const where = ['project.projectCode != \'demo\'', 'project.deleteFlag = 0']
+    const where = [`project.projectCode != 'demo'`, `project.deleteFlag = 0`]
 
     const escaped = []
     if (params.time) {
@@ -417,7 +419,7 @@ export const getFuncBaseList = async (ctx) => {
     const manager = getManager()
 
     // 去除默认函数
-    const where = ['funcName NOT IN ( \'getApiData\', \'getMockData\' )', 'func.deleteFlag = 0']
+    const where = [`funcName NOT IN ( 'getApiData', 'getMockData' )`, `func.deleteFlag = 0`]
 
     const escaped = []
     if (params.time) {
@@ -555,7 +557,7 @@ export const getFuncTotalCount = async (ctx) => {
 
     try {
         const result = await manager.query(
-            'select count(*) as total from func where funcName NOT IN (\'getApiData\', \'getMockData\') AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0',
+            `select count(*) as total from func where funcName NOT IN ('getApiData', 'getMockData') AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0`,
             [new Date(Number(params.time[0])), new Date(Number(params.time[1]))]
         )
         ctx.send({

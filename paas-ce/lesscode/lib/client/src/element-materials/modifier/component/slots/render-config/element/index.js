@@ -1,5 +1,6 @@
 function getVal (val) {
-    if (typeof val === 'object') val = JSON.stringify(val).replace(/'/g, '\\\'').replace(/"/g, '\'')
+    // eslint-disable-next-line @typescript-eslint/quotes
+    if (typeof val === 'object') val = JSON.stringify(val).replace(/'/g, "\\'").replace(/"/g, '\'')
     return val
 }
 
@@ -42,7 +43,7 @@ const elementRenderMap = {
                 <el-table-column
                     v-if="item.type === 'customCol'"
                     :label="item.label"
-                    :prop="item.prop" 
+                    :prop="item.prop"
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"

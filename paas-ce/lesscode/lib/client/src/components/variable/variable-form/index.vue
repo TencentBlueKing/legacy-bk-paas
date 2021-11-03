@@ -203,7 +203,8 @@
                         defaultItemValue = ''
                         break
                     case 6:
-                        defaultItemValue = 'return \'\'\r\n'
+                        // eslint-disable-next-line @typescript-eslint/quotes
+                        defaultItemValue = `return ''\r\n`
                         break
                 }
                 if (this.copyForm.valueType === 6) this.copyForm.defaultValueType = 0
