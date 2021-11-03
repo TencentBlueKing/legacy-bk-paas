@@ -52,6 +52,7 @@ module.exports = {
             .getMany()
     },
 
+    // eslint-disable-next-line @typescript-eslint/quotes
     getLatestInfo (projectId, env = `'prod', 'stag'`, isOffline = '0, 1') {
         return getRepository(ReleaseVersion).createQueryBuilder('release_version')
             .where('projectId = :projectId', { projectId })

@@ -120,7 +120,7 @@
                 return this.actionType === 'apply' ? `添加模板【${this.fromTemplate.templateName}】到本项目，请重命名模板` : '编辑模板'
             },
             actionName () {
-                return this.actionType === 'apply' ? `添加模板` : '编辑模板'
+                return this.actionType === 'apply' ? '添加模板' : '编辑模板'
             }
         },
         watch: {
