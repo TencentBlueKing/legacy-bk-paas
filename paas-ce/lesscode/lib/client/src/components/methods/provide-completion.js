@@ -53,7 +53,7 @@ function createDependencyProposals (range) {
                 let sugStr
                 switch (type) {
                     case 'v-model':
-                        sugStr = `v-model`
+                        sugStr = 'v-model'
                         break
                     default:
                         const modifierStr = (modifiers || []).map((modifier) => `.${modifier}`).join('')
@@ -94,7 +94,7 @@ function createDependencyProposals (range) {
         const sug = varSuggest.find(sug => sug.val === variable.variableCode) || {}
         const documentations = sug.documentation || {}
         let documentation = '该变量暂未在组件中使用'
-        if (Object.keys(documentations).length) documentation = `该变量使用于：\n`
+        if (Object.keys(documentations).length) documentation = '该变量使用于：\n'
         for (const key in documentations) {
             const sugs = documentations[key] || {}
             documentation += `${sugs.type}：${key} 的 `

@@ -118,7 +118,7 @@ async function startServer () {
         }
     ))
     app.use(json())
-    
+
     app.use(httpMiddleware())
     app.use(jsonSendMiddleware())
     app.use(authMiddleware().unless({ path: [/^\/api\/open\//] }))
@@ -230,7 +230,7 @@ async function execSql (connection, callBack) {
         const prefixPath = '.'
         const migrateUp = `node node_modules/db-migrate/bin/db-migrate up --config ${prefixPath}/lib/server/conf/db-migrate.json --migrations-dir ${prefixPath}/lib/server/model/migrations -e ${databaseEnv}`
         shell.exec(migrateUp)
-        
+
         // 自动执行接口刷数据
         await executeApi()
         callBack()

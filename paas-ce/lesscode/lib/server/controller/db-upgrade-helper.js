@@ -621,7 +621,7 @@ export const updateDirectives = async (ctx) => {
                     if (dirKey) {
                         const curDir = propsMap[dirKey]
                         if (curDir) {
-                            return "lesscode['${prop:" + curDir + "}']"
+                            return 'lesscode[\'${prop:' + curDir + '}\']'
                         } else {
                             return all
                         }

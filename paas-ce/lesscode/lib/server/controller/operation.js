@@ -14,9 +14,9 @@ import { getManager } from 'typeorm'
 const TIME_TYPES = ['YEAR', 'MONTH', 'DAY']
 const getDateFormatDes = (type) => {
     const descriptor = {
-        YEAR: "'%Y'",
-        MONTH: "'%Y-%m'",
-        DAY: "'%Y-%m-%d'"
+        YEAR: '\'%Y\'',
+        MONTH: '\'%Y-%m\'',
+        DAY: '\'%Y-%m-%d\''
     }
     return descriptor[type]
 }
@@ -36,12 +36,12 @@ export const getUserBaseList = async (ctx) => {
     const escaped = []
     if (params.time) {
         const [timeStart, timeEnd] = params.time
-        where.push(`(createTime >= ? AND createTime <= ?)`)
+        where.push('(createTime >= ? AND createTime <= ?)')
         escaped.push(new Date(Number(timeStart)), new Date(Number(timeEnd)))
     }
 
     if (params.user) {
-        where.push(`username LIKE ?`)
+        where.push('username LIKE ?')
         escaped.push(`%${params.user}%`)
     }
 
@@ -187,17 +187,17 @@ export const getProjectBaseList = async (ctx) => {
     const manager = getManager()
 
     // 默认去除demo项目
-    const where = [`project.projectCode != 'demo'`, `project.deleteFlag = 0`]
+    const where = ['project.projectCode != \'demo\'', 'project.deleteFlag = 0']
 
     const escaped = []
     if (params.time) {
         const [timeStart, timeEnd] = params.time
-        where.push(`(createTime >= ? AND createTime <= ?)`)
+        where.push('(createTime >= ? AND createTime <= ?)')
         escaped.push(new Date(Number(timeStart)), new Date(Number(timeEnd)))
     }
 
     if (params.q) {
-        where.push(`(projectName LIKE ? OR projectCode LIKE ?)`)
+        where.push('(projectName LIKE ? OR projectCode LIKE ?)')
         escaped.push(`%${params.q}%`, `%${params.q}%`)
     }
 
@@ -265,7 +265,7 @@ export const getProjectPageCount = async (ctx) => {
 
     try {
         const result = await manager.query(
-            `select count(*) as count, projectId from r_project_page where projectId in (?) and deleteFlag = 0 GROUP BY projectId`,
+            'select count(*) as count, projectId from r_project_page where projectId in (?) and deleteFlag = 0 GROUP BY projectId',
             [params.projectIds || []]
         )
         ctx.send({
@@ -331,7 +331,7 @@ export const getProjectTotalCount = async (ctx) => {
 
     try {
         const result = await manager.query(
-            `select count(*) as total from project where projectCode != 'demo' AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0`,
+            'select count(*) as total from project where projectCode != \'demo\' AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0',
             [new Date(Number(params.time[0])), new Date(Number(params.time[1]))]
         )
         ctx.send({
@@ -359,7 +359,7 @@ export const getPageTotalCount = async (ctx) => {
 
     try {
         const result = await manager.query(
-            `select count(*) as total from page where pageCode != 'demo' AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0`,
+            'select count(*) as total from page where pageCode != \'demo\' AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0',
             [new Date(Number(params.time[0])), new Date(Number(params.time[1]))]
         )
         ctx.send({
@@ -417,17 +417,17 @@ export const getFuncBaseList = async (ctx) => {
     const manager = getManager()
 
     // 去除默认函数
-    const where = [`funcName NOT IN ( 'getApiData', 'getMockData' )`, `func.deleteFlag = 0`]
+    const where = ['funcName NOT IN ( \'getApiData\', \'getMockData\' )', 'func.deleteFlag = 0']
 
     const escaped = []
     if (params.time) {
         const [timeStart, timeEnd] = params.time
-        where.push(`(func.createTime >= ? AND func.createTime <= ?)`)
+        where.push('(func.createTime >= ? AND func.createTime <= ?)')
         escaped.push(new Date(Number(timeStart)), new Date(Number(timeEnd)))
     }
 
     if (params.q) {
-        where.push(`(func.funcName LIKE ?)`)
+        where.push('(func.funcName LIKE ?)')
         escaped.push(`%${params.q}%`, `%${params.q}%`)
     }
 
@@ -446,7 +446,7 @@ export const getFuncBaseList = async (ctx) => {
             LEFT JOIN r_project_func_group ON r_project_func_group.funcGroupId = func.funcGroupId
             LEFT JOIN project ON r_project_func_group.projectId = project.id
     `
-    let countSql = `select count(*) as total from func`
+    let countSql = 'select count(*) as total from func'
 
     if (where.length) {
         const whereCond = ` WHERE ${where.join(' AND ')}`
@@ -454,7 +454,7 @@ export const getFuncBaseList = async (ctx) => {
         countSql += whereCond
     }
 
-    rowSql += ` ORDER BY id DESC`
+    rowSql += ' ORDER BY id DESC'
     rowSql += ` LIMIT ${pageSize * (pageCurrent - 1)}, ${pageSize}`
 
     try {
@@ -489,7 +489,7 @@ export const getFuncPageUsedCount = async (ctx) => {
     try {
         // r_page_func中一个页面一个函数只会存一条记录（使用多次也是一条记录）
         const result = await manager.query(
-            `select count(*) as count, funcId from r_page_func where funcId in (?) and deleteFlag = 0 GROUP BY funcId`,
+            'select count(*) as count, funcId from r_page_func where funcId in (?) and deleteFlag = 0 GROUP BY funcId',
             [params.funcIds || []]
         )
         ctx.send({
@@ -555,7 +555,7 @@ export const getFuncTotalCount = async (ctx) => {
 
     try {
         const result = await manager.query(
-            `select count(*) as total from func where funcName NOT IN ('getApiData', 'getMockData') AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0`,
+            'select count(*) as total from func where funcName NOT IN (\'getApiData\', \'getMockData\') AND (createTime >= ? AND createTime <= ?) AND deleteFlag = 0',
             [new Date(Number(params.time[0])), new Date(Number(params.time[1]))]
         )
         ctx.send({
@@ -622,25 +622,25 @@ export const getCompBaseList = async (ctx) => {
     const params = ctx.request.body || {}
     const manager = getManager()
 
-    const where = [`deleteFlag = 0`]
+    const where = ['deleteFlag = 0']
 
     const escaped = []
     if (params.time) {
         const [timeStart, timeEnd] = params.time
-        where.push(`(createTime >= ? AND createTime <= ?)`)
+        where.push('(createTime >= ? AND createTime <= ?)')
         escaped.push(new Date(Number(timeStart)), new Date(Number(timeEnd)))
     }
 
     if (params.q) {
-        where.push(`(name LIKE ? OR displayName LIKE ? OR type LIKE ?)`)
+        where.push('(name LIKE ? OR displayName LIKE ? OR type LIKE ?)')
         escaped.push(`%${params.q}%`, `%${params.q}%`, `%${params.q}%`)
     }
 
     const pageSize = isNaN(Number(params.pageSize)) ? 10 : Math.min(params.pageSize, 100)
     const pageCurrent = isNaN(Number(params.pageNum)) ? 1 : Math.max(params.pageNum, 1)
 
-    let rowSql = `select id, type, name, displayName, belongProjectId from comp`
-    let countSql = `select count(*) as total from comp`
+    let rowSql = 'select id, type, name, displayName, belongProjectId from comp'
+    let countSql = 'select count(*) as total from comp'
 
     if (where.length) {
         const whereCond = ` WHERE ${where.join(' AND ')}`
@@ -648,7 +648,7 @@ export const getCompBaseList = async (ctx) => {
         countSql += whereCond
     }
 
-    rowSql += ` ORDER BY id DESC`
+    rowSql += ' ORDER BY id DESC'
     rowSql += ` LIMIT ${pageSize * (pageCurrent - 1)}, ${pageSize}`
 
     try {
@@ -683,7 +683,7 @@ export const getCompProjectUsedCount = async (ctx) => {
     try {
         // 得到是组件被项目的使用记录
         const result = await manager.query(
-            `select compId, projectId from r_page_comp where compId in (?) and deleteFlag = 0 GROUP BY compId, projectId`,
+            'select compId, projectId from r_page_comp where compId in (?) and deleteFlag = 0 GROUP BY compId, projectId',
             [params.compIds || []]
         )
         // 再次处理同一项目只能计作一次
@@ -725,7 +725,7 @@ export const getCompPageUsedCount = async (ctx) => {
     try {
         // r_page_comp中一个页面一个组件一个版本只会存一条记录
         const result = await manager.query(
-            `select count(*) as count, compId from r_page_comp where compId in (?) and deleteFlag = 0 GROUP BY compId`,
+            'select count(*) as count, compId from r_page_comp where compId in (?) and deleteFlag = 0 GROUP BY compId',
             [params.compIds || []]
         )
         ctx.send({
@@ -755,7 +755,7 @@ export const getCompVersionCount = async (ctx) => {
     try {
         // version为组件版本记录表
         const result = await manager.query(
-            `select count(*) as count, componentId from version where componentId in (?) and deleteFlag = 0 GROUP BY componentId`,
+            'select count(*) as count, componentId from version where componentId in (?) and deleteFlag = 0 GROUP BY componentId',
             [params.compIds || []]
         )
         ctx.send({
@@ -821,7 +821,7 @@ export const getCompTotalCount = async (ctx) => {
 
     try {
         const result = await manager.query(
-            `SELECT count(*) as total from comp where (createTime >= ? AND createTime <= ?) AND deleteFlag = 0`,
+            'SELECT count(*) as total from comp where (createTime >= ? AND createTime <= ?) AND deleteFlag = 0',
             [new Date(Number(params.time[0])), new Date(Number(params.time[1]))]
         )
         ctx.send({

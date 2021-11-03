@@ -203,7 +203,7 @@
                         defaultItemValue = ''
                         break
                     case 6:
-                        defaultItemValue = `return ''\r\n`
+                        defaultItemValue = 'return \'\'\r\n'
                         break
                 }
                 if (this.copyForm.valueType === 6) this.copyForm.defaultValueType = 0
