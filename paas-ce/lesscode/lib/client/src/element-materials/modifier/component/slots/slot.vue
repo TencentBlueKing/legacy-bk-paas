@@ -26,8 +26,8 @@
         <template v-if="slotConfig.type && slotConfig.type.length > 1">
             <span class="slot-label">数据类型</span>
             <bk-radio-group :value="computedSlotVal.type" @change="changeSlot('type', ...arguments)" class="mb10">
-                <bk-radio-button :value="type" v-for="type in slotConfig.type" :key="type">
-                    {{ type | capFirstLetter }}
+                <bk-radio-button :value="type.slotType" v-for="type in computedSlotTypes" :key="type.slotType">
+                    {{ type.slotLabel | capFirstLetter }}
                 </bk-radio-button>
             </bk-radio-group>
         </template>
@@ -55,6 +55,7 @@
     import slotHtml from './components/slot-html'
     import slotText from './components/text'
     import slotTextArea from './components/textarea'
+    import slotDataSource from './components/data-source.vue'
 
     const comMap = {
         list: slotList,
@@ -64,7 +65,8 @@
         text: slotText,
         textarea: slotTextArea,
         'form-item': slotFormItem,
-        'table-list': slotTable
+        'table-list': slotTable,
+        'data-source': slotDataSource
     }
 
     export default {
@@ -111,6 +113,14 @@
                     ...(tips || {}),
                     disabled
                 }
+            },
+
+            computedSlotTypes () {
+                return this.slotConfig?.type?.map((item) => {
+                    const slotType = typeof item === 'string' ? item : item.type
+                    const slotLabel = typeof item === 'string' ? item : item.label
+                    return { slotType, slotLabel }
+                })
             },
 
             computedSlotType () {

@@ -134,6 +134,7 @@
 
             getMethodStr (returnMethod) {
                 const funcParams = (returnMethod.funcParams || []).join(', ')
+                const hasAwait = /await\s/.test(returnMethod.funcBody)
                 if (returnMethod.funcType === 1) {
                     const remoteParams = (returnMethod.remoteParams || []).join(', ')
                     const data = `{
@@ -142,9 +143,9 @@
                         apiData: ${this.processVarInFunParams(returnMethod.funcApiData, returnMethod.funcName) || "''"},
                         withToken: ${returnMethod.withToken}
                     }`
-                    returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { return this.$store.dispatch('getApiData', ${data}).then((${remoteParams}) => { ${returnMethod.funcBody} }) };`
+                    returnMethod.funcStr = `const ${returnMethod.funcName} = ${hasAwait ? 'async ' : ''}(${funcParams}) => { return this.$store.dispatch('getApiData', ${data}).then((${remoteParams}) => { ${returnMethod.funcBody} }) };`
                 } else {
-                    returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { ${returnMethod.funcBody} };`
+                    returnMethod.funcStr = `const ${returnMethod.funcName} = ${hasAwait ? 'async ' : ''}(${funcParams}) => { ${returnMethod.funcBody} };`
                 }
                 return returnMethod.funcStr
             },
@@ -265,7 +266,7 @@
                     let message = this.remoteValidate(res)
                     if (message) {
                         message = '数据源设置成功，以下问题可能会导致组件表现异常，请检查：' + message
-                        this.$bkMessage({ theme: 'warning', message })
+                        this.messageWarn(message)
                     } else {
                         this.change(this.name, res, this.type, JSON.parse(JSON.stringify(this.remoteData)))
                         if (this.name === 'remoteOptions') {

@@ -26,7 +26,7 @@
                 </nav>
             </div>
         </aside>
-        <div class="breadcrumbs">
+        <div class="breadcrumbs" v-if="currentPage">
             <h3 class="current">{{ currentPage }}</h3>
             <extra-links></extra-links>
         </div>
@@ -51,7 +51,9 @@
                     {
                         title: '页面列表',
                         icon: 'list-fill',
-                        toPath: 'pages'
+                        toPath: {
+                            name: 'pageList'
+                        }
                     },
                     {
                         title: '自定义组件库',
@@ -63,43 +65,66 @@
                     {
                         title: '函数库',
                         icon: 'function-fill',
-                        toPath: 'function-manage'
+                        toPath: {
+                            name: 'functionManage'
+                        }
                     },
                     {
                         title: '模板库',
                         icon: 'template-fill',
-                        toPath: 'template-manage',
+                        toPath: {
+                            name: 'templateManage'
+                        },
                         redPoint: true
                     },
                     {
                         title: '变量管理',
                         icon: 'variable-manage',
-                        toPath: 'variable-manage'
+                        toPath: {
+                            name: 'variableManage'
+                        }
+                    },
+                    {
+                        title: '数据源管理',
+                        icon: 'data-source-manage',
+                        toPath: {
+                            name: 'dataSourceManage'
+                        }
                     },
                     {
                         title: '布局模板实例',
                         icon: 'template-fill-2',
-                        toPath: 'layout'
+                        toPath: {
+                            name: 'layout'
+                        }
                     },
                     {
                         title: '路由配置',
                         icon: 'router',
-                        toPath: 'routes'
+                        toPath: {
+                            name: 'routes'
+                        }
                     },
                     {
                         title: '成员管理',
                         icon: 'user-group',
-                        toPath: 'member-manage'
+                        toPath: {
+                            name: 'memberManage'
+                        }
                     },
                     {
                         title: '基本信息',
                         icon: 'info-fill',
-                        toPath: 'basic'
+                        toPath: {
+                            name: 'basicInfo'
+                        }
                     },
                     {
                         title: '操作审计',
                         icon: 'audit',
-                        toPath: 'logs'
+                        toPath: {
+                            name: 'logs'
+                        }
                     }
                 ],
                 projectList: [],

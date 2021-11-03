@@ -11,7 +11,7 @@
 
 <template>
     <section class="select-func-home">
-        <bk-select ref="selectFuncComp" :value="renderFunc.methodCode" @clear="clear">
+        <bk-select ref="selectFuncComp" :value="renderFunc.methodCode" @clear="clear" searchable>
             <bk-option-group
                 v-for="(group, index) in funcGroups"
                 :name="group.groupName"

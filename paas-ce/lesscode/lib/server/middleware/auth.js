@@ -20,7 +20,8 @@ const { setRequestContext } = require('./request-context')
 const { createDemoProject } = require('../controller/project')
 const authWhiteList = [
     '/static/monaco-editor/min/vs/base/worker/workerMain.js',
-    '/static/monaco-editor/min//vs/language/typescript/tsWorker.js'
+    '/static/monaco-editor/min//vs/language/typescript/tsWorker.js',
+    '/static/monaco-editor/min//vs/language/json/jsonWorker.js'
 ]
 
 module.exports = () => {

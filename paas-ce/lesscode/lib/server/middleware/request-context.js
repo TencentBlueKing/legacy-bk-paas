@@ -14,10 +14,6 @@ import { getNamespace, createNamespace } from 'node-request-context'
 class RequestContext {
     static spaceName = 'lesscode'
 
-    constructor (ctx) {
-        this.ctx = ctx
-    }
-
     static currentRequestContext () {
         let res = ''
         const session = getNamespace(RequestContext.spaceName)
@@ -38,6 +34,10 @@ class RequestContext {
         const curRequestContext = RequestContext.currentRequestContext()
         if (curRequestContext) return curRequestContext.ctx
         return {}
+    }
+
+    constructor (ctx) {
+        this.ctx = ctx
     }
 }
 

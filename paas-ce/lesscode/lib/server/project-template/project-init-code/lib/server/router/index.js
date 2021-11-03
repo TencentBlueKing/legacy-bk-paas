@@ -19,11 +19,26 @@ const allowedMethods = [pageRouter.allowedMethods()]
 
 const fs = require('fs')
 const path = require('path')
-const files = fs.readdirSync(path.resolve(__dirname, './')).filter(name => name !== 'index.js')
-files.forEach((name) => {
-    const router = require(`./${name}`)
-    routes.push(router.routes())
-    allowedMethods.push(router.allowedMethods())
+
+// 加载装饰器模式下的路由
+const controllerFiles = fs.readdirSync(path.resolve(__dirname, '../controller'))
+controllerFiles.forEach((name) => {
+    const controller = require(`../controller/${name}`)
+    const controllerModule = controller.default || controller
+    const hasBasePath = Reflect.hasMetadata('basePath', controllerModule)
+    const hasRouter = Reflect.hasMetadata('routes', controllerModule.prototype || controllerModule)
+    if (hasBasePath && hasRouter) {
+        const basePath = Reflect.getMetadata('basePath', controllerModule)
+        const controllerRoutes = Reflect.getMetadata('routes', controllerModule.prototype || controllerModule)
+        const router = new KoaRouter({
+            prefix: basePath
+        })
+        controllerRoutes.forEach((route) => {
+            router[route.method](route.path, controllerModule.prototype[route.propertyKey])
+        })
+        routes.push(router.routes())
+        allowedMethods.push(router.allowedMethods())
+    }
 })
 
 exports.routes = routes

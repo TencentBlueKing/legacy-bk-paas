@@ -93,3 +93,76 @@ logTypes.forEach((type) => {
     }
 })
 exports.logger = logger
+
+/**
+ * 自定义orm日志
+ */
+class OrmLog {
+    constructor (logging) {
+        this.logging = logging
+    }
+    /**
+     * Allow curret log
+     */
+    allowLogType (type) {
+        const loggingType = typeof this.logging
+        let res = true
+        switch (loggingType) {
+            case 'string':
+                res = this.logging === 'all'
+                break
+            default:
+                res = this.logging.includes(type)
+                break
+        }
+        return res
+    }
+    /**
+     * Logs query
+     */
+    logQuery (query, parameters) {
+        const message = `query: ${query} -- parameters: ${parameters}`
+        if (this.allowLogType('info')) logger.info(message)
+    }
+    /**
+     * Logs query that is failed.
+     */
+    logQueryError (error, query, parameters) {
+        const message = `Error when query, error: ${error}, query: ${query} -- parameters: ${parameters}`
+        if (this.allowLogType('error')) logger.error(message)
+    }
+    /**
+     * Logs query that is slow.
+     */
+    logQuerySlow (time, query, parameters) {
+        const message = `logQuerySlow, time: ${time}, query: ${query} -- parameters: ${parameters}`
+        if (this.allowLogType('warn')) logger.warn(message)
+    }
+    /**
+     * Logs events from the schema build process.
+     */
+    logSchemaBuild (message) {
+        if (this.allowLogType('info')) logger.info(message)
+    }
+    /**
+     * Logs events from the migrations run process.
+     */
+    logMigration (message) {
+        if (this.allowLogType('info')) logger.info(message)
+    }
+    /**
+     * Perform logging using given logger, or by default to the console.
+     * Log has its own level and message.
+     */
+    log (level, message) {
+        const logMap = {
+            log: 'info',
+            info: 'info',
+            warn: 'warn',
+            error: 'error'
+        }
+        const logType = logMap[level] || 'info'
+        if (this.allowLogType(logType)) logger[logType](message)
+    }
+}
+exports.OrmLog = OrmLog
