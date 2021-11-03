@@ -10,7 +10,8 @@
  */
 
 const KoaRouter = require('koa-router')
-const pageRouter = new KoaRouter()
+const fs = require('fs')
+const path = require('path')
 
 const openAPIRouterConfig = require('./open-api.config')
 
@@ -23,6 +24,7 @@ function getRenderTemplateName (ctx) {
 }
 const renderParams = { STATIC_URL: '' }
 
+const pageRouter = new KoaRouter()
 pageRouter.get('*', async (ctx, next) => {
     // 必要的 openapi 404 判定，暂不支持路径参数
     const { method, path } = ctx
@@ -46,13 +48,32 @@ pageRouter.get('*', async (ctx, next) => {
 const routes = [pageRouter.routes()]
 const allowedMethods = [pageRouter.allowedMethods()]
 
-const fs = require('fs')
-const path = require('path')
 const files = fs.readdirSync(path.resolve(__dirname, './')).filter(name => name !== 'index.js' && !name.endsWith('.config.js'))
 files.forEach((name) => {
     const router = require(`./${name}`)
     routes.push(router.routes())
     allowedMethods.push(router.allowedMethods())
+})
+
+// 加载装饰器模式下的路由
+const controllerFiles = fs.readdirSync(path.resolve(__dirname, '../controller'))
+controllerFiles.forEach((name) => {
+    const controller = require(`../controller/${name}`)
+    const controllerModule = controller.default || controller
+    const hasBasePath = Reflect.hasMetadata('basePath', controllerModule)
+    const hasRouter = Reflect.hasMetadata('routes', controllerModule.prototype || controllerModule)
+    if (hasBasePath && hasRouter) {
+        const basePath = Reflect.getMetadata('basePath', controllerModule)
+        const controllerRoutes = Reflect.getMetadata('routes', controllerModule.prototype || controllerModule)
+        const router = new KoaRouter({
+            prefix: basePath
+        })
+        controllerRoutes.forEach((route) => {
+            router[route.method](route.path, controllerModule.prototype[route.propertyKey])
+        })
+        routes.push(router.routes())
+        allowedMethods.push(router.allowedMethods())
+    }
 })
 
 exports.routes = routes

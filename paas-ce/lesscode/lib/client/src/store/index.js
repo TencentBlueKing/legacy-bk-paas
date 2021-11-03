@@ -28,6 +28,7 @@ import member from './modules/member'
 import logs from './modules/logs'
 import functionMarket from './modules/function-market'
 import perm from './modules/perm'
+import dataSource from './modules/data-source'
 import http from '@/api'
 import router from '../router'
 import { unifyObjectStyle, json2Query } from '@/common/util'
@@ -52,7 +53,8 @@ const store = new Vuex.Store({
         member,
         logs,
         functionMarket,
-        perm
+        perm,
+        dataSource
     },
     // 公共 store
     state: {

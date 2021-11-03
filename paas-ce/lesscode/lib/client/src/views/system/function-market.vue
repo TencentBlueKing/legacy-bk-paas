@@ -84,7 +84,7 @@
         </bk-sideslider>
 
         <section v-if="showSource.isShow" class="source-function">
-            <source-market :func-data="showSource.func" class="source-code">
+            <source-func :func-data="showSource.func" class="source-code">
                 <i
                     class="bk-drag-icon bk-drag-export icon-style"
                     slot="tools"
@@ -96,7 +96,7 @@
                     slot="tools"
                     @click="showSource.isShow = false"
                 ></i>
-            </source-market>
+            </source-func>
         </section>
 
         <import-functions
@@ -111,7 +111,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
-    import sourceMarket from '@/components/methods/func-form/source-market'
+    import sourceFunc from '@/components/methods/func-form/source-func'
     import funcMarket from '@/components/methods/func-form/func-market'
     import addFunc from '@/components/methods/func-form/add-func'
     import importFunctions from '@/components/methods/import-functions'
@@ -119,7 +119,7 @@
 
     export default {
         components: {
-            sourceMarket,
+            sourceFunc,
             funcMarket,
             addFunc,
             importFunctions
