@@ -164,7 +164,9 @@
                 if (isEnableDataSource) {
                     return Promise.resolve()
                 } else {
-                    return store.dispatch('dataSource/enable', projectId)
+                    return store.dispatch('dataSource/enable', projectId).then(() => {
+                        projectInfo.isEnableDataSource = 1
+                    })
                 }
             }
 
