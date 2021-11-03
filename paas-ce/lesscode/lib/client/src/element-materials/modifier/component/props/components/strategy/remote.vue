@@ -305,6 +305,10 @@
         border-bottom: 1px dashed #979ba5;
     }
 
+    .remote-button {
+        margin-top: 10px;
+    }
+
     .remote-example {
         color: #3a84ff;
         cursor: pointer;
