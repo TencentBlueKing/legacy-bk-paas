@@ -290,7 +290,7 @@ module.exports = {
             const query = {
                 condition: [],
                 params: {},
-                select: ['project.id', 'project.projectCode', 'project.projectName']
+                select: ['project.id', 'project.projectCode', 'project.projectName', 'project.isEnableDataSource']
             }
             query.condition.push('user_project_role.userId = :userId')
             query.params.userId = userInfo.id
