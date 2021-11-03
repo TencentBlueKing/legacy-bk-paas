@@ -1,5 +1,6 @@
 function getVal (val) {
-    if (typeof val === 'object') val = JSON.stringify(val).replace(/'/g, '\\\'').replace(/"/g, '\'')
+    // eslint-disable-next-line @typescript-eslint/quotes
+    if (typeof val === 'object') val = JSON.stringify(val).replace(/'/g, "\\'").replace(/"/g, '\'')
     return val
 }
 

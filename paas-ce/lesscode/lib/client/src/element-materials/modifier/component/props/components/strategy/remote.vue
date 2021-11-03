@@ -137,6 +137,7 @@
                 const hasAwait = /await\s/.test(returnMethod.funcBody)
                 if (returnMethod.funcType === 1) {
                     const remoteParams = (returnMethod.remoteParams || []).join(', ')
+                    /* eslint-disable @typescript-eslint/quotes */
                     const data = `{
                         url: '${this.processVarInFunParams(returnMethod.funcApiUrl, returnMethod.funcName)}',
                         type: '${returnMethod.funcMethod}',

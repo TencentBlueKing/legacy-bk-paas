@@ -9,6 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/quotes */
+
 import { getManager } from 'typeorm'
 
 const TIME_TYPES = ['YEAR', 'MONTH', 'DAY']
