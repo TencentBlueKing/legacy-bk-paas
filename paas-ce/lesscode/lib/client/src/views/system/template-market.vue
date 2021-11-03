@@ -514,7 +514,7 @@
                     const funcList = getFuncList(targetData, funcGroups)
                     Object.assign(data, { valList, funcList })
                     console.log(data, 'submit data')
-                    const res = await this.$store.dispatch(`pageTemplate/apply`, data)
+                    const res = await this.$store.dispatch('pageTemplate/apply', data)
                     if (res) {
                         this.$bkMessage({
                             theme: 'success',

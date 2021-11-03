@@ -33,7 +33,7 @@
                             return functionList.some((func) => (func.funcCode === val && func.id !== this.form.id))
                         })
                     },
-                    message: `函数标识在当前项目下重复，请修改后重试`,
+                    message: '函数标识在当前项目下重复，请修改后重试',
                     trigger: 'blur'
                 },
                 codeRule: {
