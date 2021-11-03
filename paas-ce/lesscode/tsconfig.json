@@ -5,6 +5,7 @@
         "moduleResolution": "node",
         "isolatedModules": false,
         "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "esModuleInterop": true,
         "noImplicitAny": false,
         "noImplicitThis": true,
