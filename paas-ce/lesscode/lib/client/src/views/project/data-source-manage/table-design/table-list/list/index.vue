@@ -3,7 +3,7 @@
         <bk-alert
             class="table-list-tip"
             type="info"
-            title="数据表设计完成后，需部署后才能在预发布环境和生产环境生效，上次部署时间：2021-02-20 12:12:14"
+            title="数据表设计完成后，需部署后才能生效"
             closable
         ></bk-alert>
 
