@@ -20,6 +20,9 @@ interface IColumnItem {
     reg?: RegExp
     placeholder?: string
     tips?: string
+    renderFn?: Function
+    isErr?: boolean
+    isReg?: boolean
 }
 export default defineComponent({
     name: 'FieldTable',
@@ -178,13 +181,13 @@ export default defineComponent({
             }
         }
         const verification = () => {
-            const list = props.column.filter(item => !!item.isRequire)
-            const listReg = props.column.filter(item => !!item.reg)
+            const list = props.column.filter(item => !!(item as any).isRequire)
+            const listReg = props.column.filter(item => !!(item as any).reg)
             props.data.map(item => Object.assign(item, {
                 isErr: handleIsRequire(list, item),
                 isReg: handleIsReg(listReg, item)
             }))
-            return props.data.findIndex(item => item.isErr || item.isReg) === -1
+            return props.data.findIndex(item => (item as any).isErr || (item as any).isReg) === -1
         }
         /** 校验是否必填 */
         const handleIsRequire = (list, item) => {
@@ -243,7 +246,7 @@ export default defineComponent({
                                 this.renderHeader(h, { column, $index }, item)
                             }
                             {...{
-                                scopedSlots: this[typeList[item.type]](item)
+                                scopedSlots: (this as any)[typeList[item.type]](item)
                             }}
                         />
                     ))}
