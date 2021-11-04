@@ -283,7 +283,7 @@
                     if (res) {
                         this.$bkMessage({
                             theme: 'success',
-                            message: `新建页面成功`
+                            message: '新建页面成功'
                         })
                         // this.isShow = false
                         this.$router.push({

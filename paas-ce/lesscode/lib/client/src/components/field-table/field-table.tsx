@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/quotes */
 import { defineComponent, reactive } from '@vue/composition-api'
 import Vue, { VNode } from 'vue'
 

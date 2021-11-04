@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { getRepository, In } from 'typeorm'
+import { getRepository } from 'typeorm'
 import PageTemplate from './entities/page-template'
 
 export const all = async function (params = {}) {
@@ -84,4 +84,3 @@ export const count = async function () {
         .getRawMany()
     return res
 }
-
