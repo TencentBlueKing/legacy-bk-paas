@@ -1,8 +1,26 @@
+/* eslint-disable @typescript-eslint/quotes */
 import { defineComponent, reactive } from '@vue/composition-api'
 import Vue, { VNode } from 'vue'
 
 import './field-table.css'
 
+interface ISelectOption {
+    id: string
+    name: string
+}
+interface IColumnItem {
+    name: string
+    type: string
+    prop: string
+    optionsList?: ISelectOption[]
+    width?: string
+    isRequire?: boolean
+    inputType?: string
+    isEdit?: boolean
+    reg?: RegExp
+    placeholder?: string
+    tips?: string
+}
 export default defineComponent({
     name: 'FieldTable',
     components: {},
@@ -22,7 +40,7 @@ export default defineComponent({
             )
         }
         /** checkbox */
-        const renderCheckbox = (item: object) => {
+        const renderCheckbox = (item: IColumnItem) => {
             const change = (value, row, item, index) => {
                 emit('change', value, row, item, index)
             }
@@ -43,7 +61,7 @@ export default defineComponent({
             }
         }
         /** input */
-        const renderInput = (item: object) => {
+        const renderInput = (item: IColumnItem) => {
             const change = (value, row, item, index) => {
                 emit('change', value, row, item, index)
                 verification()
@@ -52,24 +70,31 @@ export default defineComponent({
                 default: (props) => {
                     const { row, $index } = props
                     const defaultSlot = (
-                        <bk-input
-                            key={item.prop}
-                            placeholder={item.placeholder || '请输入'}
-                            class={`field-table-input ${item.isRequire && row.isErr ? 'error' : ''}`}
-                            value={row[item.prop]}
-                            type={row[`${item.prop}InputType`] || 'text'}
-                            disabled={row?.isEdit}
-                            onchange={(value) =>
-                                change(value, row, item, $index)
+                        <div>
+                            <bk-input
+                                key={item.prop}
+                                placeholder={item.placeholder || '请输入'}
+                                class={`field-table-input ${item.isRequire && row.isErr ? 'error' : ''}`}
+                                value={row[item.prop]}
+                                type={row[`${item.prop}InputType`] || 'text'}
+                                disabled={row?.isEdit}
+                                onchange={(value) =>
+                                    change(value, row, item, $index)
+                                }
+                            />
+                            {
+                                (item.isRequire && row.isErr) || row.isReg
+                                    ? <i v-bk-tooltips={item.tips} class={['bk-icon icon-exclamation-circle row-icons']} />
+                                    : ''
                             }
-                        />
+                        </div>
                     )
                     return defaultSlot
                 }
             }
         }
         /** select */
-        const renderSelect = (item: object) => {
+        const renderSelect = (item: IColumnItem) => {
             const change = (value, row, item, index) => {
                 emit('change', value, row, item, index)
                 verification()
@@ -120,7 +145,7 @@ export default defineComponent({
                     const defaultSlot = (
                         <span>
                             <i
-                                class={`bk-icon icon-plus-circle-shape field-icon`}
+                                class={'bk-icon icon-plus-circle-shape field-icon'}
                                 onClick={() => {
                                     handleAdd(props)
                                 }}
@@ -147,7 +172,7 @@ export default defineComponent({
             )
         }
         /** 自定义 */
-        const renderCustomize = (item: object) => {
+        const renderCustomize = (item: IColumnItem) => {
             return {
                 default: (props) => item.renderFn.apply(this, [props])
             }
@@ -209,7 +234,7 @@ export default defineComponent({
             <div class="field-table">
                 <bk-table data={this.data} outer-border={false}>
                     {this.isShowCheck ? renderSelection : ''}
-                    {this.column.map((item) => (
+                    {this.column.map((item: IColumnItem) => (
                         <bk-table-column
                             isRequire={item.isRequire}
                             label={item.name}
