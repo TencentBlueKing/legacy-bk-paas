@@ -9,6 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 import dataService from '../../service/data-service'
+import projectModel from '../../model/project'
 
 /**
  * 权限校验
@@ -27,7 +28,7 @@ export const Authorization = (perm) => {
                     if (noPermission) throw new global.BusinessError('暂无执行该操作权限，请联系项目管理员开通权限后重试', 403, 403)
                 }
 
-                await originValue.apply(this, [ctx])
+                return await originValue.apply(this, [ctx])
             } catch (error) {
                 throw error
             }
@@ -62,7 +63,32 @@ export const DeleteAuthorization = ({ perm, tableName, getId = ctx => ctx.reques
                     if (noPermission && notCreateUser) throw new global.BusinessError('暂无执行该操作权限，请联系项目管理员开通权限后重试', 403, 403)
                 }
 
-                await originValue.apply(this, [ctx])
+                return await originValue.apply(this, [ctx])
+            } catch (error) {
+                throw error
+            }
+        }
+    }
+}
+
+/**
+ * 判断用户是否有该项目权限
+ * 权限通过情况：1. 拥有删除权限 2. 是该资源的创建者
+ * @param {*} options { getId: Function } 获取 projectId 的方法
+ */
+export const ProjectAuthorization = ({ getId = ctx => ctx.request.query.projectId }) => {
+    return (target, propertyKey, descriptor) => {
+        const originValue = descriptor.value
+        descriptor.value = async (ctx) => {
+            try {
+                const projectId = getId(ctx)
+                const userInfo = ctx.session.userInfo
+                const project = await projectModel.findUserProjectById(userInfo.id, projectId)
+                if (!project) {
+                    throw new global.BusinessError(`您没有项目[ID:${projectId}]的权限，请联系管理员授权后再试`, 403, 403)
+                } else {
+                    return await originValue.apply(this, [ctx])
+                }
             } catch (error) {
                 throw error
             }

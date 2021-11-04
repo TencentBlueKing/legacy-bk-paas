@@ -27,6 +27,7 @@ import {
     BodyParams,
     QueryParams,
     DeleteAuthorization,
+    ProjectAuthorization,
     OutputJson,
     OutputZip
 } from '../decorator'
@@ -181,6 +182,7 @@ export default class DataSourceController {
 
     // 修改线上环境数据库，包含表结构和表数据修改
     @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.request.body.projectId })
     @Put('/modifyOnlineDb')
     async modifyOnlineDb (
         @BodyParams({ name: 'environment', default: 'preview' }) environment,
@@ -236,6 +238,7 @@ export default class DataSourceController {
 
     // 用户获取预览环境某张表下数据
     @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.params.projectId })
     @Get('/user/projectId/:projectId/tableName/:tableName')
     async getPerviewTableData (
         @PathParams({ name: 'tableName', require: true }) tableFileName,
@@ -269,6 +272,7 @@ export default class DataSourceController {
 
     // 用户在预览环境新增数据
     @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.params.projectId })
     @Post('/user/projectId/:projectId/tableName/:tableName')
     async addPerviewTableData (
         @PathParams({ name: 'tableName', require: true }) tableName,
@@ -289,6 +293,7 @@ export default class DataSourceController {
 
     // 用户在预览环境更新数据
     @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.params.projectId })
     @Put('/user/projectId/:projectId/tableName/:tableName')
     async updatePerviewTableData (
         @PathParams({ name: 'tableName', require: true }) tableName,
@@ -309,6 +314,7 @@ export default class DataSourceController {
 
     // 用户在预览环境删除数据
     @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.params.projectId })
     @Delete('/user/projectId/:projectId/tableName/:tableName')
     async deletePerviewTableData (
         @PathParams({ name: 'tableName', require: true }) tableName,
@@ -329,6 +335,7 @@ export default class DataSourceController {
 
     // 导出项目下所有表结构
     @OutputZip()
+    @ProjectAuthorization({ getId: ctx => ctx.params.projectId })
     @Get('/exportStruct/projectId/:projectId/fileType/:fileType')
     async exportStruct (
         @PathParams({ name: 'projectId', require: true }) projectId,
@@ -349,6 +356,7 @@ export default class DataSourceController {
 
     // 导出项目下所有表数据
     @OutputZip()
+    @ProjectAuthorization({ getId: ctx => ctx.params.projectId })
     @Get('/exportDatas/projectId/:projectId/fileType/:fileType/tableName/:tableName')
     async exportDatas (
         @PathParams({ name: 'projectId', require: true }) projectId,
