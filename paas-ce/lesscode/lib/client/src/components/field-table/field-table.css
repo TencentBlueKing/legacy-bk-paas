@@ -5,6 +5,13 @@
       color: #ea3636;
       font-size: 14px;
     }
+    .row-icons {
+      font-size: 16px;
+      position: absolute;
+      right: 22px;
+      top: 13px;
+      color: #EA3636;
+    }
     .error {
       border: 1px solid red;
     }
@@ -32,6 +39,7 @@
         font-size: 16px;
     }
     .field-table-input {
+      position: relative;
       .bk-form-input {
         border: none;
         &:focus {
