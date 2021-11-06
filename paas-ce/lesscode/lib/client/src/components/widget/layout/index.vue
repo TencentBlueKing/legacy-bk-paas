@@ -24,6 +24,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             ...mapGetters('layout', ['pageLayout']),
             layoutCom () {
                 if (!componentMap[this.layout]) {
@@ -63,7 +64,8 @@
             ...mapMutations('drag', ['setCurTemplateData']),
             fetchPageList () {
                 this.$store.dispatch('route/getProjectPageRoute', {
-                    projectId: this.projectId
+                    projectId: this.projectId,
+                    versionId: this.versionId
                 })
             }
         }

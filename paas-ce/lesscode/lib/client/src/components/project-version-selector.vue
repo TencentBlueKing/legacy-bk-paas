@@ -1,5 +1,5 @@
 <template>
-    <bk-select class="project-version-selector"
+    <bk-select :class="['project-version-selector', { borderless: !bordered }]"
         v-model="selected"
         :searchable="searchable"
         :clearable="clearable"
@@ -13,6 +13,9 @@
             :id="option.id"
             :name="option.version">
         </bk-option>
+        <div slot="extension" @click="handleCreate" style="cursor: pointer;">
+            <i class="bk-icon icon-plus-circle"></i> 新建版本
+        </div>
     </bk-select>
 </template>
 
@@ -36,6 +39,10 @@
             autoSelect: {
                 type: Boolean,
                 default: true
+            },
+            bordered: {
+                type: Boolean,
+                default: true
             }
         },
         data () {
@@ -54,6 +61,9 @@
                 get () {
                     if (this.isEmpty(this.value)) {
                         return this.getDefaultValue()
+                    } else if (!this.multiple && !this.options.find(op => op.id === this.value)) {
+                        // 使用默认数据替换无效数据
+                        return this.getDefaultValue()
                     }
                     return this.value
                 },
@@ -64,8 +74,13 @@
                     }
                     const selectedOption = this.options.find(op => op.id === emitValue)
                     this.$emit('input', emitValue)
-                    this.$emit('selected', emitValue, selectedOption)
+                    this.$emit('change', emitValue, selectedOption)
                 }
+            }
+        },
+        watch: {
+            projectId () {
+                this.getOptions()
             }
         },
         created () {
@@ -79,6 +94,7 @@
                 try {
                     const options = await this.$store.dispatch('projectVersion/getOptionList', { projectId: this.projectId })
                     this.options = defaultOptions().concat(options || [])
+                    this.$store.commit('projectVersion/setVersionList', this.options)
                 } catch (e) {
                     console.error(e)
                     this.options = defaultOptions()
@@ -92,6 +108,11 @@
                     return defaultOption.id
                 }
                 return this.multiple ? [] : ''
+            },
+            handleCreate () {
+                this.$router.push({
+                    name: 'versions'
+                })
             }
         }
     }
@@ -100,5 +121,19 @@
 <style lang="postcss" scoped>
     .project-version-selector {
         width: 320px;
+
+        &.borderless {
+            width: 90px;
+            border: none;
+            ::v-deep {
+                .bk-select-name,
+                .bk-select-angle {
+                    color: #3A84FF;
+                }
+            }
+            &.is-focus {
+                box-shadow: none;
+            }
+        }
     }
 </style>

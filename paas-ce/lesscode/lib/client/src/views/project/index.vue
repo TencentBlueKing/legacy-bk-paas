@@ -29,27 +29,26 @@
         <div class="breadcrumbs">
             <div class="page-top">
                 <h3 class="current">{{ currentPage }}</h3>
-                <div class="version-selector" v-if="showProjectVersionSelector">
+                <div class="version-selector" v-if="isShowProjectVersionSelector">
                     当前版本：
-                    <project-version-selector :popover-width="200" v-model="projectVersionId" />
+                    <project-version-selector :bordered="false" :popover-width="200" v-model="projectVersionId" @change="handleChangeProjectVersion" />
                 </div>
             </div>
             <extra-links></extra-links>
         </div>
         <!-- 使用v-if因子组件依赖获取的项目信息 -->
         <div class="main-container" v-bkloading="{ isLoading: pageLoading }">
-            <router-view v-if="!pageLoading" :key="$route.path"></router-view>
+            <router-view v-if="!pageLoading" :key="routeKey"></router-view>
         </div>
     </main>
 </template>
 
 <script>
+    import { bus } from '@/common/bus'
     import ExtraLinks from '@/components/ui/extra-links'
-    import ProjectVersionSelector from '@/components/project-version-selector.vue'
     export default {
         components: {
-            ExtraLinks,
-            ProjectVersionSelector
+            ExtraLinks
         },
         data () {
             return {
@@ -97,7 +96,7 @@
                     },
                     {
                         title: '版本管理',
-                        icon: 'router',
+                        icon: 'version',
                         toPath: 'versions'
                     },
                     {
@@ -122,11 +121,16 @@
             }
         },
         computed: {
+            routeKey () {
+                const { id } = this.$store.getters['projectVersion/currentVersion']
+                return `${this.$route.path}_${id}`
+            },
             currentPage () {
                 return this.$route.meta.title
             },
-            showProjectVersionSelector () {
-                return ['pageList', 'functionManage'].includes(this.$route.name)
+            isShowProjectVersionSelector () {
+                const withSelectorRoutes = ['pageList', 'functionManage', 'variableManage', 'layout', 'routes']
+                return withSelectorRoutes.includes(this.$route.name)
             }
         },
         beforeRouteUpdate (to, from, next) {
@@ -135,6 +139,9 @@
             next()
         },
         async created () {
+            this.updateCurrentVersion(this.getInitialVersion())
+            bus.$on('update-project-version', this.updateCurrentVersion)
+
             this.projectId = parseInt(this.$route.params.projectId)
             await this.getProjectList()
             this.setCurrentProject()
@@ -149,6 +156,10 @@
                 const project = this.projectList.find(item => item.id === this.projectId)
                 this.$store.commit('project/setCurrentProject', project)
                 await this.$store.dispatch('member/setCurUserPermInfo', project)
+            },
+            updateCurrentVersion (version) {
+                this.projectVersionId = version.id
+                this.setCurrentVersion(version)
             },
             async getProjectList () {
                 try {
@@ -168,6 +179,15 @@
                         projectId: id
                     }
                 })
+            },
+            handleChangeProjectVersion (versionId, version) {
+                this.setCurrentVersion(version)
+            },
+            getInitialVersion () {
+                return this.$store.getters['projectVersion/initialVersion']()
+            },
+            setCurrentVersion (version) {
+                this.$store.commit('projectVersion/setCurrentVersion', version)
             }
         }
     }
@@ -283,14 +303,6 @@
 
                     .project-version-selector {
                         width: 90px;
-                        border: none;
-                        .bk-select-name,
-                        .bk-select-angle {
-                            color: #3A84FF;
-                        }
-                        &.is-focus {
-                            box-shadow: none;
-                        }
                     }
                 }
             }

@@ -45,6 +45,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import html2canvas from 'html2canvas'
+    import safeStringify from '@/common/json-safe-stringify'
     import { uuid } from '@/common/util'
     import { bus } from '@/common/bus'
 
@@ -125,6 +126,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             ...mapGetters('drag', [
                 'targetData',
                 'curSelectedComponentData'
@@ -163,7 +165,7 @@
                 await this.$refs.pageTemplateFrom.validate()
                 try {
                     this.dialog.loading = true
-                    
+
                     const className = this.isWholePage ? (this.pageLayout && this.pageLayout.layoutType !== 'empty' ? '.container-content' : '.main-content') : `div[data-component-id="${this.curSelectedComponentData.name}-${this.curSelectedComponentData.componentId}"]`
                     html2canvas(document.querySelector(className)).then(async (canvas) => {
                         try {
@@ -180,19 +182,19 @@
                             } else {
                                 content = this.curSelectedComponentData
                             }
-                            
+
                             const data = {
                                 projectId: this.projectId,
                                 params: {
                                     templateName: this.dialog.formData.templateName,
                                     categoryId: this.dialog.formData.categoryId,
                                     belongProjectId: this.projectId,
+                                    versionId: this.versionId,
                                     fromPageCode: this.pageDetail && this.pageDetail.pageCode,
-                                    content: JSON.stringify(content),
+                                    content: safeStringify(content),
                                     previewImg: imgData
                                 }
                             }
-                            
                             const res = await this.$store.dispatch('pageTemplate/create', data)
                             if (res) {
                                 this.dialog.loading = false

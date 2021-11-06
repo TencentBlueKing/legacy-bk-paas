@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
     import variableForm from '@/components/variable/variable-form/index.vue'
     import variableTable from '@/components/variable/variable-table.vue'
 
@@ -36,6 +36,7 @@
         },
 
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName' }),
             projectId () {
                 return this.$route.params.projectId
             }
@@ -43,7 +44,7 @@
 
         created () {
             this.getList()
-            this.getAllGroupFuncs(this.projectId).catch((err) => this.$bkMessage({ theme: 'error', message: err.message || err }))
+            this.getAllGroupFuncs({ projectId: this.projectId, versionId: this.versionId }).catch((err) => this.$bkMessage({ theme: 'error', message: err.message || err }))
         },
 
         methods: {
@@ -53,6 +54,7 @@
             getList () {
                 const params = {
                     projectId: this.projectId,
+                    versionId: this.versionId,
                     effectiveRange: 0
                 }
                 this.isLoading = true

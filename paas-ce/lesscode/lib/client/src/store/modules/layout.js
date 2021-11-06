@@ -31,14 +31,14 @@ export default {
                 return data
             })
         },
-        getList ({ state }, { projectId }) {
-            return http.get(`/layout/getList?projectId=${projectId}`).then(response => {
+        getList ({ state }, params) {
+            return http.get('/layout/getList', { params }).then(response => {
                 const data = response.data || []
                 return data
             })
         },
-        getFullList ({ state }, { projectId }) {
-            return http.get(`/layout/getFullList?projectId=${projectId}`).then(response => {
+        getFullList ({ state }, params) {
+            return http.get('/layout/getFullList', { params }).then(response => {
                 const data = response.data
                 return data
             })

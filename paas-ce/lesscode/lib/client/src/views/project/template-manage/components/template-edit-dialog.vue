@@ -113,6 +113,7 @@
         },
         computed: {
             ...mapGetters(['isPlatformAdmin']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -181,8 +182,13 @@
                     if (this.actionType === 'apply') {
                         // 将模板中用到的函数和变量都获取出来
                         const [variableList, funcGroups] = await Promise.all([
-                            this.getAllVariable({ projectId: this.fromTemplate.belongProjectId, pageCode: this.fromTemplate.fromPageCode, effectiveRange: 0 }, false),
-                            this.getAllGroupFuncs(this.fromTemplate.belongProjectId, false)
+                            this.getAllVariable({
+                                projectId: this.fromTemplate.belongProjectId,
+                                versionId: this.fromTemplate.versionId,
+                                pageCode: this.fromTemplate.fromPageCode,
+                                effectiveRange: 0
+                            }, false),
+                            this.getAllGroupFuncs({ projectId: this.fromTemplate.belongProjectId, versionId: this.fromTemplate.versionId }, false)
                         ])
                         const targetData = []
                         targetData.push(JSON.parse(this.fromTemplate.content || {}))

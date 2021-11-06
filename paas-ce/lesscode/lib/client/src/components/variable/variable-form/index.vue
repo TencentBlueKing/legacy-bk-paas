@@ -108,6 +108,7 @@
         computed: {
             ...mapGetters('variable', ['variableFormData', 'variableList']),
             ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
 
             isAdd () {
                 return this.copyForm.id === undefined
@@ -171,10 +172,11 @@
                     description: '',
                     effectiveRange: this.pageId ? 1 : 0,
                     projectId: this.projectId,
+                    versionId: this.versionId,
                     pageCode: this.pageDetail.pageCode
                 }
                 this.copyForm = Object.assign(defaultForm, JSON.parse(JSON.stringify(this.variableFormData.form)))
-                this.getAllProjectVariable(this.projectId).then((res) => {
+                this.getAllProjectVariable({ projectId: this.projectId, versionId: this.versionId }).then((res) => {
                     this.allProjectVariableList = res || []
                 }).catch((err) => {
                     this.$bkMessage({ message: err.message, theme: 'error' })
@@ -226,7 +228,7 @@
                     return confirmMethod(this.copyForm).then(() => {
                         this.$bkMessage({ theme: 'success', message: this.isAdd ? '新增变量成功' : '编辑变量成功' })
                         this.hidden()
-                        const params = { projectId: this.projectId, effectiveRange: 0 }
+                        const params = { projectId: this.projectId, versionId: this.versionId, effectiveRange: 0 }
                         if (this.pageId) {
                             params.pageCode = this.pageDetail.pageCode
                         }

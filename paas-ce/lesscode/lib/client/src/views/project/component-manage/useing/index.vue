@@ -1,7 +1,11 @@
 <template>
     <div :class="$style['component-manage-useing-page']">
         <div :class="$style['search']">
+            <div :class="$style['version-selector']">
+                项目版本：<project-version-selector :bordered="false" :popover-width="200" v-model="projectVersionId" />
+            </div>
             <bk-input
+                :class="$style['search-input']"
                 right-icon="bk-icon icon-search"
                 placeholder="请输入组件名称"
                 v-model.trim="keyword"
@@ -78,7 +82,7 @@
             :mask-close="false"
             :auto-close="false">
             <p class="tips-content">
-                将会把该项目里所有页面中使用到的【{{updateDialog.data.displayName}}】组件统一升级到【{{updateDialog.data.version}}】版本，请谨慎操作
+                将会把该项目“{{selectedProjectVersionName}}”版本里所有页面中使用到的【{{updateDialog.data.displayName}}】组件统一升级到【{{updateDialog.data.version}}】版本，请谨慎操作
             </p>
             <div class="dialog-footer" slot="footer">
                 <bk-button
@@ -95,6 +99,7 @@
     </div>
 </template>
 <script>
+    import { mapGetters } from 'vuex'
     import VersionLog from '@/components/version-log'
 
     export default {
@@ -104,7 +109,7 @@
         },
         data () {
             return {
-                isLoading: true,
+                isLoading: false,
                 data: [],
                 list: [],
                 keyword: '',
@@ -115,7 +120,22 @@
                     loading: false,
                     data: {}
                 },
-                verionDetail: {}
+                verionDetail: {},
+                selectedProjectVersionId: ''
+            }
+        },
+        computed: {
+            ...mapGetters('projectVersion', ['getVersionById']),
+            projectVersionId: {
+                get () {
+                    return this.getInitialVersion().id
+                },
+                set (id) {
+                    this.selectedProjectVersionId = id
+                }
+            },
+            selectedProjectVersionName () {
+                return this.getVersionById(this.selectedProjectVersionId).version
             }
         },
         watch: {
@@ -123,16 +143,17 @@
                 if (!val) {
                     this.handleSearch()
                 }
+            },
+            selectedProjectVersionId () {
+                this.fetchData()
             }
-        },
-        created () {
-            this.fetchData()
         },
         methods: {
             async fetchData () {
                 this.isLoading = true
                 this.data = await this.$store.dispatch('components/useing', {
-                    belongProjectId: parseInt(this.$route.params.projectId)
+                    belongProjectId: parseInt(this.$route.params.projectId),
+                    projectVersionId: this.selectedProjectVersionId || ''
                 })
                 this.list = this.data
                 this.isLoading = false
@@ -142,6 +163,7 @@
                 try {
                     await this.$store.dispatch('components/updatePageComp', {
                         projectId: parseInt(this.$route.params.projectId),
+                        projectVersionId: this.selectedProjectVersionId || '',
                         compId: this.updateDialog.data.id,
                         versionId: this.updateDialog.data.versionId,
                         displayName: this.updateDialog.data.displayName
@@ -172,6 +194,9 @@
                             || item.name.toLowerCase().indexOf(this.keyword.toLowerCase()) !== -1
                     })
                 }
+            },
+            getInitialVersion () {
+                return this.$store.getters['projectVersion/initialVersion']()
             }
         }
     }
@@ -180,9 +205,20 @@
     .component-manage-useing-page {
         padding: 14px 27px 22px 32px;
 
-        .search{
-            width: 400px;
+        .search {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 14px;
+
+            .version-selector {
+                display: flex;
+                align-items: center;
+            }
+
+            .search-input {
+                width: 400px;
+            }
         }
 
         .data-list {

@@ -20,8 +20,7 @@ import FuncFunc from './entities/func-func'
 import FuncVariable from './entities/func-variable'
 import Variable from './entities/variable'
 import VariableFunc from './entities/variable-func'
-
-const whereVersion = (versionId, alias = 't') => Number(versionId) ? `${alias}.versionId = ${versionId}` : `${alias}.versionId IS NULL`
+import { whereVersion, whereVersionLiteral } from './common'
 
 const func = {
     getFuncById (id) {
@@ -37,7 +36,7 @@ const func = {
     addFuncGroup (data) {
         return getConnection().transaction(async transactionalEntityManager => {
             const projectId = data.projectId
-            const versionId = data.versionId
+            const versionId = data.versionId || null
             const inputStr = data.inputStr
             const groupNames = inputStr.split('/')
             const funcGroupRepository = getRepository(FuncGroup)
@@ -50,7 +49,7 @@ const func = {
             })
             const groupList = await transactionalEntityManager.save(funcGroupEntities)
             const projectFuncGroupRepository = getRepository(ProjectFuncGroup)
-            const projectFuncGroupEntities = groupList.map(({ id }) => projectFuncGroupRepository.create({ funcGroupId: id, projectId }))
+            const projectFuncGroupEntities = groupList.map(({ id }) => projectFuncGroupRepository.create({ funcGroupId: id, projectId, versionId }))
             await transactionalEntityManager.save(projectFuncGroupEntities)
             return groupList.map((group) => {
                 group.functionList = []
@@ -202,8 +201,8 @@ const func = {
 
     async handleFuncRelation (func, varWhere) {
         if (!varWhere) return
-        const { projectId, pageCode, effectiveRange } = varWhere
-        const variableWhere = [{ projectId, deleteFlag: 0 }]
+        const { projectId, versionId = null, pageCode, effectiveRange } = varWhere
+        const variableWhere = [{ projectId, versionId: whereVersionLiteral(versionId), deleteFlag: 0 }]
         if (effectiveRange !== undefined) {
             variableWhere[0].effectiveRange = effectiveRange
         }
@@ -211,14 +210,14 @@ const func = {
             variableWhere.push({ projectId, effectiveRange: 1, pageCode, deleteFlag: 0 })
         }
         const funcRelateRepository = getRepository(FuncFunc)
-        const allFuncRelates = await funcRelateRepository.find({ parentFuncCode: func.funcCode, projectId })
+        const allFuncRelates = await funcRelateRepository.find({ parentFuncCode: func.funcCode, projectId, versionId: whereVersionLiteral(versionId) })
         allFuncRelates.forEach((func) => (func.deleteFlag = 1))
         const newFuncRelates = [...allFuncRelates]
         // 当前用到的变量列表
         const funcVariableRepository = getRepository(FuncVariable)
         const variableRepository = getRepository(Variable)
         const [exitsUsedVariables = [], allVariables = []] = await Promise.all([
-            funcVariableRepository.find({ where: { projectId, funcCode: func.funcCode } }),
+            funcVariableRepository.find({ where: { projectId, versionId: whereVersionLiteral(versionId), funcCode: func.funcCode } }),
             variableRepository.find({ where: variableWhere })
         ])
         const newUsedVariables = []
@@ -231,6 +230,7 @@ const func = {
                     const newFunc = funcRelateRepository.create({
                         parentFuncCode: func.funcCode,
                         projectId,
+                        versionId,
                         funcCode,
                         deleteFlag: 0
                     })
@@ -248,6 +248,7 @@ const func = {
                 } else {
                     newUsedVariables.push(funcVariableRepository.create({
                         projectId,
+                        versionId,
                         variableId: curVariable.id,
                         funcCode: func.funcCode
                     }))

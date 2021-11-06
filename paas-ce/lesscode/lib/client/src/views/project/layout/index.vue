@@ -49,6 +49,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import layoutDialog from './components/layout-dialog'
 
     export default {
@@ -65,6 +66,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             }
@@ -76,7 +78,7 @@
             async getLayoutList () {
                 this.isLoading = true
                 try {
-                    const { list, pageList } = await this.$store.dispatch('layout/getFullList', { projectId: this.projectId })
+                    const { list, pageList } = await this.$store.dispatch('layout/getFullList', { projectId: this.projectId, versionId: this.versionId })
                     list.forEach(layout => {
                         layout.showName = layout.showName || layout.defaultName
                     })
@@ -131,7 +133,8 @@
                 try {
                     const data = {
                         id: layout.id,
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        versionId: this.versionId
                     }
                     await this.$store.dispatch('layout/default', { data })
                     this.messageSuccess('设置成功')

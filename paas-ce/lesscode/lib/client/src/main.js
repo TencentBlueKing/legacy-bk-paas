@@ -28,6 +28,7 @@ import Exception from '@/components/exception'
 import { bus } from '@/common/bus'
 import header from '@/components/header.vue'
 import renderHtml from '@/components/render/html.vue'
+import ProjectVersionSelector from '@/components/project-version-selector.vue'
 
 import '@icon-cool/bk-icon-vue-drag-vis'
 import '@icon-cool/bk-icon-vue-drag-vis/src/index'
@@ -50,6 +51,7 @@ Vue.component('VueDraggable', VueDraggable)
 Vue.component('app-exception', Exception)
 Vue.component('app-header', header)
 Vue.component('render-html', renderHtml)
+Vue.component('project-version-selector', ProjectVersionSelector)
 
 auth.requestCurrentUser().then(user => {
     injectCSRFTokenToHeaders()

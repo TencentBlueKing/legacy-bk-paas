@@ -14,8 +14,8 @@ import Route from '../model/entities/route'
 import PageRoute from '../model/entities/page-route'
 import { flattenListPath } from '../util'
 
-async function hasRoute ({ path, id }, projectId) {
-    const routeList = await routeModel.findProjectRoute(projectId)
+async function hasRoute ({ path, id }, projectId, versionId) {
+    const routeList = await routeModel.findProjectRoute(projectId, versionId)
 
     let fullPath = path
     if (id) {
@@ -37,7 +37,8 @@ module.exports = {
     async queryProjectPageRoute (ctx) {
         try {
             const { projectId } = ctx.params
-            const routeList = await routeModel.queryProjectPageRoute(projectId)
+            const { versionId } = ctx.query
+            const routeList = await routeModel.queryProjectPageRoute(projectId, versionId)
 
             ctx.send({
                 code: 0,
@@ -69,10 +70,10 @@ module.exports = {
 
     async savePageRoute (ctx) {
         try {
-            const { projectId, pageRoute } = ctx.request.body
+            const { projectId, versionId, pageRoute } = ctx.request.body
 
             pageRoute.path = formatRoutePath(pageRoute.path)
-            if (await hasRoute({ path: pageRoute.path, id: pageRoute.id }, projectId)) {
+            if (await hasRoute({ path: pageRoute.path, id: pageRoute.id }, projectId, versionId)) {
                 throw Error('该页面路由已存在')
             }
 
@@ -118,7 +119,8 @@ module.exports = {
     async getProjectRouteTree (ctx) {
         try {
             const { id: projectId } = ctx.params
-            const routeList = await routeModel.queryProjectRouteTree(projectId)
+            const { versionId } = ctx.query
+            const routeList = await routeModel.queryProjectRouteTree(projectId, versionId)
             const routeTree = []
             routeList.forEach(route => {
                 const { layoutId, layoutPath } = route
@@ -149,15 +151,15 @@ module.exports = {
     async createProjectRoute (ctx) {
         try {
             const { id: projectId } = ctx.params
-            const { pageRoute } = ctx.request.body
+            const { pageRoute, versionId } = ctx.request.body
 
             pageRoute.path = formatRoutePath(pageRoute.path)
             const fullPath = `${pageRoute.layoutPath}/${pageRoute.path}`
-            if (await hasRoute({ path: fullPath }, projectId)) {
+            if (await hasRoute({ path: fullPath }, projectId, versionId)) {
                 throw Error('该页面路由已存在')
             }
 
-            const routeData = { path: pageRoute.path, layoutId: pageRoute.layoutId }
+            const routeData = { path: pageRoute.path, layoutId: pageRoute.layoutId, versionId }
             const result = await routeModel.createProjectRoute(projectId, {
                 routeData
             })
@@ -179,13 +181,13 @@ module.exports = {
 
     async updatePageRoute (ctx) {
         try {
-            const { projectId, pageId, pageRoute } = ctx.request.body
+            const { projectId, versionId, pageId, pageRoute } = ctx.request.body
 
             await getConnection().transaction(async transactionalEntityManager => {
                 const curPageRouteData = await getRepository(PageRoute).findOne({ pageId })
                 if (pageRoute.layoutId) {
                     const fullPath = `${pageRoute.layoutPath}/${pageRoute.path}`
-                    if (await hasRoute({ path: fullPath }, projectId)) {
+                    if (await hasRoute({ path: fullPath }, projectId, versionId)) {
                         throw Error('该布局模板下存在相同的路由')
                     }
                     await transactionalEntityManager.save(PageRoute, {

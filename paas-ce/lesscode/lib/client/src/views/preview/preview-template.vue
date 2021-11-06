@@ -64,11 +64,14 @@
             },
             templateId () {
                 return this.$route.params.templateId || ''
+            },
+            versionId () {
+                return this.$route.query.v || ''
             }
         },
         async created () {
             const script = document.createElement('script')
-            script.src = `/${parseInt(this.projectId)}/component/preview-register.js`
+            script.src = `/${parseInt(this.projectId)}/component/preview-register.js?v=${this.versionId}`
             script.onload = () => {
                 window.previewCustomCompontensPlugin.forEach(callback => {
                     const [config, source] = callback(Vue)
@@ -104,14 +107,15 @@
                 try {
                     console.log('预览 loadFile')
                     const { targetData, projectId } = this
-                    
+
                     let code = await this.$store.dispatch('vueCode/getPageCode', {
                         targetData,
                         projectId: projectId,
+                        versionId: this.detail.versionId,
                         pageType: 'previewSingle',
                         fromPageCode: this.detail.fromPageCode
                     })
-                    
+
                     code = code.replace('export default', 'module.exports =').replace('components: { chart: ECharts },', '')
                     console.log(code)
                     const res = httpVueLoader(code)

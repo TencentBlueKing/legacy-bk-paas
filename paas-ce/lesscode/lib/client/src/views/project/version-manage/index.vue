@@ -22,14 +22,11 @@
                 :header-cell-style="{ background: '#f0f1f5' }"
                 :data="displayList"
                 v-show="!loading.list">
-                <bk-table-column label="版本号" prop="version" min-width="150" show-overflow-tooltip></bk-table-column>
-                <bk-table-column label="版本日志" prop="versionLog" min-width="120">
+                <bk-table-column label="版本号" prop="version" min-width="150" show-overflow-tooltip>
                     <template slot-scope="{ row }">
-                        <div class="version-detail">
-                            <span class="version-log">
-                                {{row.versionLog}}
-                            </span>
-                            <bk-link theme="primary" @click="handleVersionDetail(row)">详情</bk-link>
+                        <div class="component-version" @click="handleVersionDetail(row)">
+                            <span>{{ row.version }}</span>
+                            <i class="bk-drag-icon bk-drag-info-fill" style="margin-left: 8px" />
                         </div>
                     </template>
                 </bk-table-column>
@@ -69,7 +66,7 @@
 </template>
 
 <script>
-    // import { mapState } from 'vuex'
+    import { bus } from '@/common/bus'
     import dayjs from 'dayjs'
     import VersionLog from '@/components/version-log'
     import FormSideslider from './children/form-sideslider.vue'
@@ -139,7 +136,11 @@
                 this.versionData = data
                 this.sideslider.show = true
             },
-            handleGoPageList () {
+            handleGoPageList (row) {
+                // 先设置当前版本为选择的版本
+                const { id, version } = row
+                bus.$emit('update-project-version', { id, version })
+
                 this.$router.push({
                     name: 'pageList',
                     params: {
@@ -174,6 +175,20 @@
     .bk-table-row {
         .bk-button-text + .bk-button-text {
             margin-left: 10px;
+        }
+    }
+    .component-version {
+        display: flex;
+        align-items: center;
+        height: 24px;
+        padding-left: 3px;
+        color: #3A84FF;
+        font-weight: bold;
+        background: #e1ecff;
+        border-radius: 2px;
+        cursor: pointer;
+        &:hover{
+            background: #A2C5FD;
         }
     }
     .version-detail {

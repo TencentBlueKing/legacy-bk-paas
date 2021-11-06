@@ -11,21 +11,42 @@
 
 import http from '@/api'
 
+const storageKey = 'project-version'
+
 export default {
     namespaced: true,
     state: {
+        versionList: [],
         currentVersion: {}
     },
     mutations: {
+        setVersionList (state, list) {
+            state.versionList = Object.freeze(list)
+        },
         setCurrentVersion (state, version) {
             state.currentVersion = Object.freeze(version)
-        },
-        updateCurrentVersion (state, version) {
-            state.currentVersion = Object.freeze({ ...state.currentVersion, ...version })
+            localStorage.setItem(storageKey, JSON.stringify(version))
         }
     },
     getters: {
-        currentVersion: state => state.currentVersion
+        versionList: state => state.versionList,
+        currentVersion: state => state.currentVersion,
+        initialVersion: (state) => () => {
+            const storageVersion = localStorage.getItem(storageKey)
+            let version = {}
+            if (storageVersion) {
+                try {
+                    const data = JSON.parse(storageVersion)
+                    version = data
+                } catch (e) {
+                    console.error(e)
+                }
+            }
+            return version
+        },
+        currentVersionId: state => state.currentVersion.id || null,
+        currentVersionName: state => state.currentVersion.version || null,
+        getVersionById: state => id => state.versionList.find(v => v.id === id) || {}
     },
     actions: {
         create ({ commit }, data) {

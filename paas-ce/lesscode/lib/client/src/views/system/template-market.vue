@@ -502,8 +502,13 @@
                         templateInfo
                     }
                     const [variableList, funcGroups] = await Promise.all([
-                        this.getAllVariable({ projectId: fromTemplate.belongProjectId, pageCode: fromTemplate.fromPageCode, effectiveRange: 0 }, false),
-                        this.getAllGroupFuncs(fromTemplate.belongProjectId, false)
+                        this.getAllVariable({
+                            projectId: fromTemplate.belongProjectId,
+                            versionId: fromTemplate.versionId,
+                            pageCode: fromTemplate.fromPageCode,
+                            effectiveRange: 0
+                        }, false),
+                        this.getAllGroupFuncs({ projectId: fromTemplate.belongProjectId }, false)
                     ])
                     const targetData = []
                     targetData.push(JSON.parse(fromTemplate.content || {}))
@@ -615,7 +620,7 @@
             }
         }
     }
-    
+
     .empty{
         height: 300px;
     }

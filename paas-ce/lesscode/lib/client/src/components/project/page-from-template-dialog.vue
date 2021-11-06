@@ -109,12 +109,13 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import preivewErrImg from '@/images/preview-error.png'
     import { PAGE_TEMPLATE_TYPE } from '@/common/constant'
     import { compile } from 'path-to-regexp'
     import LayoutThumbList from '@/components/project/layout-thumb-list'
     import templateEditDialog from '@/views/project/template-manage/components/template-edit-dialog'
-    
+
     export default {
         name: 'page-from-template-dialog',
         components: {
@@ -185,6 +186,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -212,7 +214,7 @@
                         this.$store.dispatch('pageTemplate/categoryList', { projectId: this.projectId }),
                         this.$store.dispatch('pageTemplate/list', { projectId: this.projectId }),
                         this.$store.dispatch('pageTemplate/list', { type: 'OFFCIAL' }),
-                        this.$store.dispatch('layout/getList', { projectId: this.projectId })
+                        this.$store.dispatch('layout/getList', { projectId: this.projectId, versionId: this.versionId })
                     ])
                     this.templateList = projectTemplateList
                     const marketTemplateList = tmpMarketTemplateList.map(item => ({
@@ -263,6 +265,7 @@
                         data: {
                             ...formData,
                             projectId: this.projectId,
+                            versionId: this.versionId,
                             from: 'create'
                         }
                     })
@@ -272,13 +275,14 @@
                     const payload = {
                         data: {
                             pageData: Object.assign({}, this.formData, { previewImg: template.previewImg, content: JSON.stringify(content) }),
-                            projectId: this.projectId
+                            projectId: this.projectId,
+                            versionId: this.versionId
                         }
                     }
 
                     const { id, routePath } = this.layoutList.find(layout => layout.checked)
                     payload.data.layout = { id, routePath }
-            
+
                     const res = await this.$store.dispatch('page/create', payload)
                     if (res) {
                         this.$bkMessage({
@@ -572,12 +576,12 @@
                             justify-content: space-between;
                             height: 32px;
                             width: 100%;
-                            
+
                             .template-name{
                                 color: #63656e;
                                 @mixin ellipsis 80%, block;
                             }
-                            
+
                             .template-preview {
                                 display: none;
                                 color: #3A84FF;

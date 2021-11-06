@@ -2,7 +2,7 @@
     <bk-sideslider
         transfer
         class="version-sideslider"
-        :is-show.sync="isShow"
+        :is-show.sync="show"
         :width="796"
         :title="isEdit ? '编辑版本' : '新建版本'">
         <div slot="content" class="form-content">
@@ -61,6 +61,14 @@
             },
             isEdit () {
                 return Boolean(this.data.id)
+            },
+            show: {
+                get () {
+                    return this.isShow
+                },
+                set (value) {
+                    this.$emit('update:isShow', value)
+                }
             }
         },
         watch: {
@@ -81,7 +89,7 @@
                     { required: true, message: '项目版本不能为空', trigger: 'blur' },
                     {
                         validator: value => {
-                            return /^[A-za-z0-9\-\.\_]{1,40}$/.test(value)
+                            return /^[\w-\.]{1,40}$/.test(value)
                         },
                         message: '仅支持英文、数字、下划线、中划线和英文句号',
                         trigger: 'blur'
