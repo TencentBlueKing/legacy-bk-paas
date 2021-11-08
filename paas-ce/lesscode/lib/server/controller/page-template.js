@@ -204,6 +204,69 @@ export const apply = async (ctx) => {
     }
 }
 
+export const importTemplate = async (ctx) => {
+    try {
+        const { belongProjectId, template = {}, vars = [], functions = [] } = ctx.request.body
+
+        // 校验模板名称是否重复        
+        const record = await PageTemplateModel.getOne({
+            templateName: template.templateName,
+            belongProjectId: template.belongProjectId,
+            deleteFlag: 0
+        })
+        record && ctx.throwError({
+            message: '模板名称重复，请修改模板名称'
+        })
+        
+        const { id, createTime, createUser, updateTime, updateUser, ...newTemplate } = template
+
+        // 过滤掉该项目中已存在的variableCode或functionCode
+        const { valList, funcList, defaultFuncGroupId } = await filterFuncAndVars({ projectId: belongProjectId, fromProjectId: 0, valList: vars, funcList: functions })
+        
+        await getConnection().transaction(async transactionalEntityManager => {
+            const createTemplate = getRepository(PageTemplate).create(newTemplate)
+            const res = await transactionalEntityManager.save(createTemplate)
+            const saveQueue = []
+            if (valList.length) {
+                await Promise.all(valList.map(async val => {
+                    const { id, createTime, createUser, updateTime, updateUser, userInfo, ...other} = val
+                    const newVal = Object.assign(other, {
+                        projectId: belongProjectId,
+                        pageCode: '',
+                        effectiveRange: 0,
+                        defaultValue: JSON.stringify(other.defaultValue)
+                    })
+                    const createVal = getRepository(Variable).create(newVal)
+                    saveQueue.push(transactionalEntityManager.save(createVal))
+                }))
+            }
+            if (funcList.length) {
+                await Promise.all(funcList.map(async func => {
+                    const { id, createTime, createUser, updateTime, updateUser, pages, ...other} = func
+                    const newFunc = Object.assign(other, { 
+                        funcGroupId: defaultFuncGroupId,
+                        remoteParams: (other.remoteParams || []).join(', '),
+                        funcParams: (other.funcParams || []).join(', ')
+                    })
+                    const createFunc = getRepository(Func).create(newFunc)
+                    saveQueue.push(transactionalEntityManager.save(createFunc))    
+                }))
+            }
+            saveQueue.length && await Promise.all(saveQueue)
+        })
+        
+        ctx.send({
+            code: 0,
+            message: `success`,
+            data: `模板导入成功`
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message || err
+        })
+    }
+}
+
 const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }) => {
     let varIds = []
     const funcIds = []
@@ -241,6 +304,20 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
     // 变量id去重
     varIds = Array.from(new Set(varIds))
     return { varIds, funcIds, defaultFuncGroupId }
+}
+
+const filterFuncAndVars = async ({ projectId, valList, funcList }) => {
+    const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
+    const projectFuncGroupList = await FuncModel.allGroupFuncDetail(projectId)
+    const projectFuncList = []
+    projectFuncGroupList.map(item => {
+        projectFuncList.splice(0, 0, ...item.functionList)
+    })
+    const defaultFuncGroupId = projectFuncGroupList[0] && projectFuncGroupList[0].id
+    funcList = funcList.filter(item => !projectFuncList.find(func => func.funcCode === item.funcCode))
+    valList = valList.filter(item => !projectValList.find(val => val.variableCode === item.variableCode))
+    
+    return { valList, funcList, defaultFuncGroupId }
 }
 
 // 编辑模板
