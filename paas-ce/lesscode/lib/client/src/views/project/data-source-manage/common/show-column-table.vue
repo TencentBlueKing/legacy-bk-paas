@@ -1,5 +1,11 @@
 <template>
-    <bk-table :outer-border="false" :data="columns">
+    <bk-table
+        class="g-hairless-table"
+        :header-border="false"
+        :header-cell-style="{ background: '#f0f1f5' }"
+        :outer-border="false"
+        :data="columns"
+    >
         <bk-table-column label="字段名称" prop="name" show-overflow-tooltip></bk-table-column>
         <bk-table-column label="字段类型" prop="type"></bk-table-column>
         <bk-table-column label="主键" prop="primary" :formatter="boolFormatter"></bk-table-column>

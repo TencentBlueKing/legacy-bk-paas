@@ -230,9 +230,20 @@ export default defineComponent({
             checkbox: 'renderCheckbox'
         }
         const renderSelection = <bk-table-column type="selection" width={40} />
+        const dynamicProps = {
+            class: 'g-hairless-table',
+            props: {
+                data: this.data,
+                outerBorder: false,
+                headerBorder: false,
+                headerCellStyle: {
+                    background: '#f0f1f5'
+                }
+            }
+        }
         return (
             <div class="field-table">
-                <bk-table data={this.data} outer-border={false}>
+                <bk-table { ...dynamicProps }>
                     {this.isShowCheck ? renderSelection : ''}
                     {this.column.map((item: IColumnItem) => (
                         <bk-table-column

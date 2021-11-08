@@ -19,9 +19,7 @@ const { findUserByBk, addUser } = require('../controller/user')
 const { setRequestContext } = require('./request-context')
 const { createDemoProject } = require('../controller/project')
 const authWhiteList = [
-    '/static/monaco-editor/min/vs/base/worker/workerMain.js',
-    '/static/monaco-editor/min//vs/language/typescript/tsWorker.js',
-    '/static/monaco-editor/min//vs/language/json/jsonWorker.js'
+    '/static/monaco-editor'
 ]
 
 module.exports = () => {
@@ -30,7 +28,7 @@ module.exports = () => {
             const bkToken = ctx.cookies.get('bk_token')
             const hostUrl = httpConf.hostUrl.replace(/\/$/, '')
             const loginRedirectUrl = `${httpConf.loginUrl}?app_id=${httpConf.appCode}`
-            const isInWhiteList = authWhiteList.includes(ctx.originalUrl)
+            const isInWhiteList = authWhiteList.some(authWhitePath => ctx.originalUrl.includes(authWhitePath))
             if (isInWhiteList) {
                 await next()
             } else if (!bkToken) {

@@ -5,9 +5,9 @@
                 <i class="bk-drag-icon bk-drag-arrow-back" @click="goBack"></i>
                 查看表【{{tableStatus.basicInfo.tableName}}】
                 <bk-divider direction="vertical"></bk-divider>
-                <export-table title="导出表" class="mr10 ml5" :only-export-all="true" @download="exportTables"></export-table>
-                <bk-button size="small" class="mr10" @click="goRecord">变更记录</bk-button>
-                <bk-button size="small" @click="goEdit">编辑</bk-button>
+                <bk-button size="small" class="mr10 ml5" @click="goEdit">编辑</bk-button>
+                <export-table title="导出表" class="mr10" :only-export-all="true" @download="exportTables"></export-table>
+                <bk-button size="small" @click="goRecord">变更记录</bk-button>
             </span>
         </render-header>
 
@@ -129,6 +129,8 @@
     }
     .table-main {
         padding: 20px 24px;
+        height: calc(100% - 52px);
+        overflow-y: auto;
     }
     .table-section {
         background: #ffffff;

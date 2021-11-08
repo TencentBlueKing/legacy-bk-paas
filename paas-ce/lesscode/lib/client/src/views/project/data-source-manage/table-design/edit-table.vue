@@ -216,6 +216,8 @@
     }
     .table-main {
         padding: 20px 24px;
+        height: calc(100% - 52px);
+        overflow-y: auto;
     }
     .table-section {
         background: #ffffff;

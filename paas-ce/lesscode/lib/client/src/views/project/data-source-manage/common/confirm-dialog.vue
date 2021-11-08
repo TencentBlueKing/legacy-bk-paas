@@ -2,12 +2,12 @@
     <bk-dialog
         theme="primary"
         width="1100"
-        title="确认提交"
+        :title="title"
         :value="isShow"
         :loading="isLoading"
         @confirm="confirm"
         @after-leave="cancel">
-        <h5 class="confirm-title">执行的 SQL 内容：（提交后将会在下次部署的时候执行该 SQL，且不可更改。请确认后再提交）</h5>
+        <h5 class="confirm-title">{{ tips }}</h5>
         <monaco
             read-only
             :height="500"
@@ -36,6 +36,14 @@
             isLoading: {
                 type: Boolean,
                 default: false
+            },
+            title: {
+                type: String,
+                default: '确认提交'
+            },
+            tips: {
+                type: String,
+                default: '执行的 SQL 内容：（提交后将会在下次部署的时候执行该 SQL，且不可更改。请确认后再提交）'
             }
         },
 

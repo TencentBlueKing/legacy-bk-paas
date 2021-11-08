@@ -1,8 +1,11 @@
 <template>
     <article>
         <bk-table
+            class="g-hairless-table"
             :outer-border="false"
             :data="apiList"
+            :header-border="false"
+            :header-cell-style="{ background: '#f0f1f5' }"
         >
             <bk-table-column
                 show-overflow-tooltip

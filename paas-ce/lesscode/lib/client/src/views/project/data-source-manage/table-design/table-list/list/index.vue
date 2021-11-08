@@ -18,11 +18,12 @@
                 @download="exportTables"
             ></export-table>
             <bk-divider direction="vertical" class="table-list-divider"></bk-divider>
-            <bk-button class="table-list-btn" @click="goToDataManage">数据管理</bk-button>
+            <bk-button class="table-list-btn" @click="goToDataManage" :disabled="listStatus.pagination.count <= 0">数据管理</bk-button>
         </section>
 
         <bk-table
-            v-bkloading="{ isLoading: listStatus.isTableLoading }"
+            v-bkloading="{ isloading: listStatus.isTableLoading }"
+            class="g-hairless-table"
             :data="listStatus.list"
             :pagination="listStatus.pagination"
             :outer-border="false"
@@ -32,14 +33,11 @@
             @page-limit-change="handlePageLimitChange"
             @selection-change="selectionChange">
             <bk-table-column type="selection" width="60"></bk-table-column>
-            <bk-table-column label="表名" prop="tableName" show-overflow-tooltip>
-                <template slot-scope="props">
-                    <bk-button class="mr10" theme="primary" text @click="goToDataDesign(props.row)">{{ props.row.tableName }}</bk-button>
-                </template>
-            </bk-table-column>
+            <bk-table-column label="表名" prop="tableName" show-overflow-tooltip></bk-table-column>
             <bk-table-column label="存储引擎" width="100">InnoDB</bk-table-column>
             <bk-table-column label="字符集" width="100">utf8mb4</bk-table-column>
             <bk-table-column label="备注" prop="summary" show-overflow-tooltip></bk-table-column>
+            <bk-table-column label="更新人" prop="updateUser" :formatter="timeFormatter" show-overflow-tooltip></bk-table-column>
             <bk-table-column label="更新时间" prop="updateTime" :formatter="timeFormatter" show-overflow-tooltip></bk-table-column>
             <bk-table-column label="正式环境部署时间" prop="updateTime" :formatter="timeFormatter" show-overflow-tooltip></bk-table-column>
             <bk-table-column label="预发布环境部署时间" prop="updateTime" :formatter="timeFormatter" show-overflow-tooltip></bk-table-column>

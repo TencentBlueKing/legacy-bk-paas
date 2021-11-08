@@ -39,6 +39,10 @@ function transformSql2Json () {
  * @returns 字段信息的 sql 字符串
  */
 function getTableColumnSql (column) {
+    // 获取字段名称
+    const getName = (column) => {
+        return `\`${column.name}\``
+    }
     // 获取字段类型
     const getType = (column) => {
         const typeMap = {
@@ -74,7 +78,7 @@ function getTableColumnSql (column) {
         return column.comment ? `COMMENT '${column.comment}'` : ''
     }
     const sqlArray = [
-        column.name,
+        getName(column),
         getType(column),
         getNullable(column),
         getGenerated(column),
@@ -126,8 +130,8 @@ function createTable (data, index) {
         '-- ----------------------------\n'
         + `-- TABLE STRUCTURE FOR ${tableName}\n`
         + '-- ----------------------------\n'
-        + `DROP TABLE IF EXISTS ${tableName};\n`
-        + `CREATE TABLE ${tableName}  (\n`
+        + `DROP TABLE IF EXISTS \`${tableName}\`;\n`
+        + `CREATE TABLE \`${tableName}\`  (\n`
         + fields.join(',\n')
         + '\n'
         + `) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = \'${comment}\' ROW_FORMAT = Dynamic;\n`
@@ -146,7 +150,7 @@ function modifyTable (data, index = []) {
     columns.forEach(({ type, data }) => {
         const columnDetailSql = getTableColumnSql(data)
         if (type === FIELD_MODIFY_TYPE.DROP_COLUMN) {
-            sqlArr.push(`${type} ${data.name}`)
+            sqlArr.push(`${type} \`${data.name}\``)
         } else {
             sqlArr.push(`${type} ${columnDetailSql}`)
         }
@@ -160,7 +164,7 @@ function modifyTable (data, index = []) {
         '-- ----------------------------\n'
         + `-- MODIFY TABLE ${tableName}\n`
         + '-- ----------------------------\n'
-        + `ALTER TABLE ${tableName}\n`
+        + `ALTER TABLE \`${tableName}\`\n`
         + sqlArr.join(',\n')
         + ';'
     )
@@ -176,7 +180,7 @@ function dropTable (data) {
         '-- ----------------------------\n'
         + `-- DROP TABLE ${data.tableName}\n`
         + '-- ----------------------------\n'
-        + `DROP TABLE IF EXISTS ${data.tableName};\n`
+        + `DROP TABLE IF EXISTS \`${data.tableName}\`;\n`
     )
 }
 
@@ -191,7 +195,7 @@ function renameTable (data, originData) {
         '-- ----------------------------\n'
         + `-- RENAME TABLE ${originData.tableName}\n`
         + '-- ----------------------------\n'
-        + `ALTER TABLE ${originData.tableName} RENAME TO ${data.tableName};\n`
+        + `ALTER TABLE \`${originData.tableName}\` RENAME TO \`${data.tableName}\`;\n`
     )
 }
 
@@ -205,7 +209,7 @@ function comment (data) {
         '-- ----------------------------\n'
         + `-- MODIFY COMMENT ${data.tableName}\n`
         + '-- ----------------------------\n'
-        + `ALTER TABLE ${data.tableName} COMMENT = '${data.comment}';\n`
+        + `ALTER TABLE \`${data.tableName}\` COMMENT = '${data.comment}';\n`
     )
 }
 

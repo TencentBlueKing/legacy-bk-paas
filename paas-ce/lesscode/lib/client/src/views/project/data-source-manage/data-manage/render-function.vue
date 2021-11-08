@@ -1,8 +1,11 @@
 <template>
     <article>
         <bk-table
+            class="g-hairless-table"
             :outer-border="false"
             :data="functionList"
+            :header-border="false"
+            :header-cell-style="{ background: '#f0f1f5' }"
         >
             <bk-table-column
                 label="函数名称"
@@ -25,6 +28,7 @@
             title="添加至项目"
             :is-show.sync="showAddFunc.isShow"
             :quick-close="false"
+            :transfer="true"
             :width="796">
             <func-form slot="content" ref="funcRef" :func-data="showAddFunc.func"></func-form>
             <section slot="footer" class="add-footer">

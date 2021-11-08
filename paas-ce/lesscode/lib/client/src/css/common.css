@@ -77,6 +77,12 @@
     }
 }
 
+.g-hairless-table {
+    &:before {
+        height: 0;
+    }
+}
+
 @media screen and (min-width: 1660px) {
     .page-content {
         .info-flexible {

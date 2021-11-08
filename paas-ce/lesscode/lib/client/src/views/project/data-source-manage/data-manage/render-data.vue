@@ -1,6 +1,6 @@
 <template>
     <article>
-        <bk-alert type="warning" title="数据的增删会直接影响到线上环境，请谨慎操作"></bk-alert>
+        <bk-alert type="warning" title="数据的增删改会直接影响到线上环境，请谨慎操作"></bk-alert>
 
         <section class="render-data-header">
             <bk-button theme="primary" class="mr10" @click="addData">新增</bk-button>
@@ -14,9 +14,12 @@
 
         <bk-table
             v-bkloading="{ isLoading: dataStatus.isLoading }"
+            class="g-hairless-table"
             :outer-border="false"
             :data="dataStatus.dataList"
             :pagination="dataStatus.pagination"
+            :header-border="false"
+            :header-cell-style="{ background: '#f0f1f5' }"
             @page-change="handlePageChange"
             @page-limit-change="handlePageLimitChange"
             @selection-change="selectionChange"
@@ -45,6 +48,7 @@
             :is-show.sync="formStatus.showEditData"
             :width="640"
             :title="formStatus.editTitle"
+            :transfer="true"
         >
             <div slot="content">
                 <bk-form
@@ -54,7 +58,7 @@
                     :label-width="120"
                 >
                     <bk-form-item
-                        v-for="column in activeTable.columns"
+                        v-for="column in activeTable.columns.filter(column => column.name !== 'id')"
                         :key="column.name"
                         :label="column.name"
                         :required="!column.nullable"
@@ -74,10 +78,12 @@
                             v-else-if="column.type === 'int'"
                             v-model="formStatus.editForm[column.name]"
                             type="number"
+                            placeholder="请输入数字"
                         ></bk-input>
                         <bk-input
                             v-else
                             v-model="formStatus.editForm[column.name]"
+                            placeholder="请输入字符串"
                         ></bk-input>
                     </bk-form-item>
                     <bk-form-item>
@@ -258,8 +264,10 @@
                 formStatus.dataParse = new DataParse()
                 const columns = activeTable.value.columns
                 columns.forEach((column) => {
-                    const value = column.type === 'datetime' ? timeFormatter(new Date()) : ''
-                    Vue.set(formStatus.editForm, column.name, value)
+                    const value = column.type === 'datetime' ? timeFormatter(new Date()) : column.default
+                    if (column.name !== 'id') {
+                        Vue.set(formStatus.editForm, column.name, value)
+                    }
                 })
             }
 
@@ -389,6 +397,6 @@
     }
     .edit-data-form {
         padding: 25px 40px 25px 10px;
-        height: calc(100vh - 60px);
+        min-height: calc(100vh - 60px);
     }
 </style>
