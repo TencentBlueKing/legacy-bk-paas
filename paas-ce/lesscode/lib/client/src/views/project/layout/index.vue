@@ -24,6 +24,7 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list more-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(layout.id)">
+                                        <li class="action-item" v-if="layout.type !== 'empty'"><a href="javascript:;" @click="handlePreview(layout)">预览</a></li>
                                         <li class="action-item"><a href="javascript:;" @click="handleUpdate(layout)">修改模板</a></li>
                                         <li v-bk-tooltips.bottom="{ content: '模板已被使用，不可删除', disabled: !layoutPageMap[layout.id] }"
                                             :class="['action-item', { disabled: layoutPageMap[layout.id] }]">
@@ -146,6 +147,9 @@
             getPreviewImg (layout) {
                 const previewImg = `layout/preview-${layout.type}.png`
                 return require(`@/images/${previewImg}`)
+            },
+            handlePreview (layout) {
+                window.open(`/preview-layout/project/${layout.projectId}/${layout.id}`, '_blank')
             }
         }
     }
