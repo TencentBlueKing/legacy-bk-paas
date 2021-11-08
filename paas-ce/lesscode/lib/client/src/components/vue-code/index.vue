@@ -69,8 +69,6 @@
                 const state = this.$store.state || {}
                 const drag = state.drag || {}
                 const layoutContent = drag.curTemplateData
-                console.log(withNav)
-                console.log(layoutContent)
                 const targetData = JSON.parse(circleJSON(this.targetData))
                 this.$emit('update:withNav', withNav)
                 this.$store.dispatch('vueCode/getPageCode', {

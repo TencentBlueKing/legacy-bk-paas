@@ -15,7 +15,7 @@
                 <div class="layout-name" :title="layout.defaultName">
                     {{ layout.defaultName }}
                 </div>
-                <div class="layout-preview" v-if="layout.type !== 'empty'" @click.prevent.stop="handlePreview(layout)">
+                <div class="layout-preview" @click.prevent.stop="handlePreview(layout)">
                     预览
                 </div>
             </div>
