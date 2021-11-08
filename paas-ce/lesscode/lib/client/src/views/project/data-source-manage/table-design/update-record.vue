@@ -11,7 +11,7 @@
             <bk-date-picker
                 class="mr10 filter-item"
                 placeholder="选择日期范围"
-                type="daterange"
+                type="datetimerange"
                 v-model="recordStatus.timeRange"
                 @change="getRecordList"
             ></bk-date-picker>
@@ -25,10 +25,12 @@
             ></bk-input>
 
             <bk-table
-                class="record-table"
+                class="record-table g-hairless-table"
                 v-bkloading="{ isLoading: recordStatus.isLoading }"
                 :outer-border="false"
                 :data="recordStatus.list"
+                :header-border="false"
+                :header-cell-style="{ background: '#f0f1f5' }"
             >
                 <bk-table-column label="变更时间" prop="createTime" show-overflow-tooltip :formatter="timeFormatter"></bk-table-column>
                 <bk-table-column label="执行人员" prop="createUser"></bk-table-column>
@@ -43,6 +45,8 @@
         <confirm-dialog
             :is-show.sync="recordStatus.showConfirmDialog"
             :sql="recordStatus.sql"
+            title="变更详情"
+            tips=""
         ></confirm-dialog>
     </article>
 </template>
@@ -84,7 +88,7 @@
             }
 
             const timeFormatter = (obj, con, val) => {
-                return val ? dayjs(val).format('YYYY-MM-DD HH:mm:ss') : '--'
+                return val ? dayjs(val).format('YYYY-MM-DD HH:mm:ss') : ''
             }
 
             const showSql = (sql) => {
@@ -96,7 +100,7 @@
                 recordStatus.isLoading = true
                 const filterData = {
                     id,
-                    timeRange: recordStatus.timeRange,
+                    timeRange: recordStatus.timeRange.map(x => timeFormatter(null, null, x)),
                     createUser: recordStatus.createUser
                 }
                 store.dispatch('dataSource/tableRecordList', filterData).then((data) => {

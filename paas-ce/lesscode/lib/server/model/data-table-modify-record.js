@@ -16,10 +16,15 @@ const dataTableModifyRecord = {
     getListByTime ({ startTime = 0, endTime = new Date(), createUser = '', query = {} }) {
         const dTModifyRecordRepository = getRepository(DataTableModifyRecord)
         return dTModifyRecordRepository.find({
-            deleteFlag: 0,
-            createTime: Between(startTime, endTime),
-            createUser: Like(`%${createUser}%`),
-            ...query
+            where: {
+                deleteFlag: 0,
+                createTime: Between(startTime, endTime),
+                createUser: Like(`%${createUser}%`),
+                ...query
+            },
+            order: {
+                createTime: 'DESC'
+            }
         }) || []
     }
 }

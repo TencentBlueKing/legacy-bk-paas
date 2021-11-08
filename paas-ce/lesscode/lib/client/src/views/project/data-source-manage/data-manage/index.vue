@@ -1,5 +1,5 @@
 <template>
-    <article>
+    <article v-bkloading="{ isLoading: pageStatus.isLoading }">
         <render-header>
             <span class="table-header">
                 <i class="bk-drag-icon bk-drag-arrow-back" @click="goBack"></i>
@@ -10,26 +10,25 @@
             <div
                 v-for="environment in environmentList"
                 :key="environment.key"
-                :class="{ active: pageStatus.activeEnvironment === environment.key, 'tab-item': true }"
-                @click="setEnvironment(environment.key)"
+                :class="{ active: pageStatus.activeEnvironment.key === environment.key, 'tab-item': true }"
+                @click="setEnvironment(environment)"
             >{{ environment.name }}</div>
         </div>
 
-        <main class="data-manage-main" v-bkloading="{ isLoading: pageStatus.isLoading }">
-            <aside class="table-list">
+        <layout class="data-manage-main" v-if="pageStatus.tableList.length">
+            <aside class="table-list" slot="left">
                 <bk-input
                     clearable
                     class="filter-table-name"
                     placeholder="请输入表名"
                     right-icon="bk-icon icon-search"
                     v-model="pageStatus.tableName"
-                    @change="getTableList"
                 ></bk-input>
 
-                <ul class="table-item-list">
+                <ul class="table-item-list" v-if="displayTableList.length">
                     <li
                         @click="setActiveTable(item)"
-                        v-for="item in pageStatus.tableList"
+                        v-for="item in displayTableList"
                         :key="item.tableName"
                         :class="{
                             active: item.tableName === pageStatus.activeTable.tableName,
@@ -40,25 +39,30 @@
                             <i class="bk-drag-icon bk-drag-data-table"></i>
                             {{ item.tableName }}
                         </span>
-                        <span class="table-item-num">{{ item.columns.length }}</span>
                     </li>
                 </ul>
+                <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part" v-else>
+                    <div>暂无搜索结果</div>
+                </bk-exception>
             </aside>
-
             <bk-tab class="data-main">
                 <bk-tab-panel
                     v-for="(panel, index) in panels"
                     v-bind="panel"
                     :key="index">
                     <component
-                        v-if="!pageStatus.isLoading"
                         :is="panel.name"
-                        :environment="pageStatus.activeEnvironment"
+                        :environment="pageStatus.activeEnvironment.key"
                         :active-table="pageStatus.activeTable"
                     ></component>
                 </bk-tab-panel>
             </bk-tab>
-        </main>
+        </layout>
+        <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part" v-else-if="!pageStatus.isLoading">
+            <div v-if="!pageStatus.tableList.length">
+                {{ pageStatus.activeEnvironment.name }}未查询到表，无法进行数据管理，请修改数据库后再试
+            </div>
+        </bk-exception>
     </article>
 </template>
 
@@ -66,7 +70,8 @@
     import {
         defineComponent,
         reactive,
-        onBeforeMount
+        computed,
+        watch
     } from '@vue/composition-api'
     import {
         messageError
@@ -78,6 +83,7 @@
     import renderStruct from './render-struct.vue'
     import renderFunction from './render-function.vue'
     import renderApi from './render-api.vue'
+    import layout from '@/components/ui/layout.vue'
 
     const environmentList = [
         { key: 'preview', name: '预览环境' }
@@ -96,14 +102,15 @@
             renderData,
             renderStruct,
             renderFunction,
-            renderApi
+            renderApi,
+            layout
         },
 
         setup () {
             const projectId = router?.currentRoute?.params?.projectId
             const tableName = router?.currentRoute?.query?.tableName
             const pageStatus = reactive({
-                activeEnvironment: 'preview',
+                activeEnvironment: { key: 'preview', name: '预览环境' },
                 isLoading: false,
                 tableName: '',
                 activeTable: {
@@ -129,7 +136,7 @@
             const getTableList = () => {
                 pageStatus.isLoading = true
                 const queryData = {
-                    environment: pageStatus.activeEnvironment,
+                    environment: pageStatus.activeEnvironment?.key,
                     projectId
                 }
                 store.dispatch('dataSource/getOnlineTableList', queryData).then((data) => {
@@ -143,16 +150,28 @@
                 })
             }
 
-            onBeforeMount(getTableList)
+            const displayTableList = computed(() => {
+                return pageStatus.tableList.filter((table) => {
+                    return table.tableName.includes(pageStatus.tableName)
+                })
+            })
+
+            watch(
+                pageStatus.activeEnvironment,
+                getTableList,
+                {
+                    immediate: true
+                }
+            )
 
             return {
                 environmentList,
                 panels,
                 pageStatus,
+                displayTableList,
                 goBack,
                 setEnvironment,
-                setActiveTable,
-                getTableList
+                setActiveTable
             }
         }
     })
@@ -170,10 +189,8 @@
         }
     }
     .data-manage-main {
-        display: flex;
-        height: calc(100% - 96px);
+        height: calc(100vh - 160px);
         .table-list {
-            width: 336px;
             padding: 14px 0;
             background: #fafbfd;
             height: 100%;
@@ -208,7 +225,6 @@
             .table-item-name {
                 line-height: 19px;
                 flex: 1;
-                max-width: 250px;
                 .bk-drag-data-table {
                     margin-right: 3px;
                     font-size: 16px;
@@ -224,7 +240,7 @@
             }
         }
         .data-main {
-            flex: 1;
+            height: 100%;
             ::v-deep .bk-tab-section {
                 padding: 16px 15px;
                 height: calc(100% - 50px);
@@ -232,5 +248,10 @@
                 background-color: #fff;
             }
         }
+    }
+    .exception-wrap-item {
+        position: absolute;
+        top: 40%;
+        transform: translateY(-50%);
     }
 </style>

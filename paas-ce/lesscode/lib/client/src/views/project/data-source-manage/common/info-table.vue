@@ -81,7 +81,6 @@
                         trigger: 'blur'
                     }, {
                         validator (val) {
-                            console.log(tableList)
                             return tableList.findIndex((table) => (table.tableName === val && +table.id !== +tableId)) <= -1
                         },
                         message: '表名不能重复',

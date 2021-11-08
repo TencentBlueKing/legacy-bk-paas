@@ -270,7 +270,7 @@
         }
 
         .main-container {
-            height: calc(100% - var(--breadcrumb-height));
+            height: 100%;
             overflow: auto;
             @mixin scroller;
 

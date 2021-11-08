@@ -188,11 +188,8 @@ export default defineComponent({
         const changeData = (value, row, column, index) => {
             // 设置值
             const currentRow = tableList[index]
-            currentRow[column.prop] = value
-
-            // 修改当前行状态
             const normalizedItem = normalizeTableItem(currentRow)
-            Object.assign(currentRow, normalizedItem)
+            Object.assign(currentRow, normalizedItem, { [column.prop]: value })
 
             // 触发 change 事件
             emit('change')
