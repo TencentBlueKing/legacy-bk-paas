@@ -1,4 +1,4 @@
-import { getConnection, getRepository, In } from 'typeorm'
+import { getConnection, getRepository } from 'typeorm'
 import ApiMigraion from '../model/entities/api-migration'
 import Project from '../model/entities/project'
 import { logger } from '../logger'
@@ -15,6 +15,7 @@ export const executeApi = async () => {
         if (!apiRecords.find(item => item.name === api)) {
             const res = await getRepository(ApiMigraion).save([{ name: api }])
             const id = res[0] && res[0].id
+            // eslint-disable-next-line no-eval
             const result = await eval(`${api}('${api}')`)
             if (result && result.code === 0) {
                 console.log(result.message)
@@ -29,6 +30,7 @@ export const executeApi = async () => {
 /**
  * 为老项目设置页面模板的默认类别
  */
+// eslint-disable-next-line no-unused-vars
 async function setDefaultPageTemplateCategory (apiName) {
     const projectRepo = getRepository(Project)
     try {
@@ -60,6 +62,7 @@ async function setDefaultPageTemplateCategory (apiName) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 async function updateCardSlot () {
     try {
         const pageRepository = getRepository(Page)
@@ -266,6 +269,7 @@ async function updateCardSlot () {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 async function fixCardsSlots () {
     try {
         const pageRepository = getRepository(Page)

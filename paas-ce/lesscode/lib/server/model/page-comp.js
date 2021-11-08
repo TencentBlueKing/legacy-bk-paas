@@ -19,7 +19,7 @@ import Version from './entities/version'
 let npmConf
 try {
     npmConf = require('../conf/npm')
-} catch(_) {
+} catch (_) {
     npmConf = {}
 }
 

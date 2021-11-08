@@ -356,7 +356,7 @@ class PageCode {
             }
         }
 
-        let head = this.hasLayOut || this.layoutType === 'empty' ? `<style lang="css" scoped>` : `<style type="text/css">`
+        let head = this.hasLayOut || this.layoutType === 'empty' ? '<style lang="css" scoped>' : '<style type="text/css">'
         head += `.container-${this.uniqueKey} {
                 ${this.layoutType === 'empty' ? pageStyle : ''}
             }
@@ -581,12 +581,12 @@ class PageCode {
 
     generateTemplate () {
         let pageCode = this.isGenerateNav ? '<router-view class="page-container"></router-view>' : `\n<section class="bk-layout-custom-component-wrapper container-${this.uniqueKey}">\n${this.generateCode(this.targetData)}\n</section>\n`
-        if (this.isEmpty) pageCode = `<bk-exception class="exception-wrap-item" type="404"></bk-exception>`
+        if (this.isEmpty) pageCode = '<bk-exception class="exception-wrap-item" type="404"></bk-exception>'
         let source = pageCode
         if (this.hasLayOut) source = this.getLayout(pageCode)
         // bk-layout-custom-component-wrapper 打包自定义组件时添加此类作为最上层父类，避免自定义组件的类污染画布页面的东西
         // 预览时最顶层容器也要加上此类，让自定义组件的样式生效
-        return `<template>\n` + source + '\n</template>'
+        return '<template>\n' + source + '\n</template>'
     }
 
     getLayout (navContent) {
@@ -785,7 +785,7 @@ class PageCode {
 
         const importContent = this.getImportContent()
         let scriptContent = `${this.getComponents() ? `${this.getComponents()},` : ''}
-                        ${this.pageType === 'projectCode' && (this.usingFuncCodes.length > 0 || exisLifyCycle.length > 0) ? `mixins: [methodsMixin],` : ''}
+                        ${this.pageType === 'projectCode' && (this.usingFuncCodes.length > 0 || exisLifyCycle.length > 0) ? 'mixins: [methodsMixin],' : ''}
                         ${this.getData() ? `${this.getData()},` : ''}
                         ${this.getComputed()}
                         ${this.getWatch()}
@@ -819,7 +819,7 @@ class PageCode {
         if ((['vueCode', 'projectCode'].includes(this.pageType) && this.hasLayOut) || this.projectVariables.length || this.pageComputedVariables.length) {
             computed += 'computed: {\n'
             if (['vueCode', 'projectCode'].includes(this.pageType) && this.hasLayOut) {
-                computed += `...mapGetters(['user']),\n`
+                computed += '...mapGetters([\'user\']),\n'
             }
             this.projectVariables.forEach((variable) => {
                 computed += `${variable.variableCode}: {
@@ -884,7 +884,7 @@ class PageCode {
             } else {
                 code += this.generateComponment(item, vueDirective, propDirective)
             }
-            if (templateDirective) code += `\n</template>`
+            if (templateDirective) code += '\n</template>'
         }
         return code
     }
@@ -905,7 +905,7 @@ class PageCode {
         let elementComId = ''
         const componentType = type
         for (const i in props) {
-            if (dirProps.find((directive) => (directive.prop === i)) && props[i].type !== 'remote') continue
+            if (dirProps.find((directive) => (directive.prop === i)) && !['remote', 'data-source', 'table-data-source'].includes(props[i].type)) continue
 
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
@@ -923,6 +923,17 @@ class PageCode {
                     const curDir = dirProps.find((directive) => (directive.prop === i))
                     const key = (curDir || {}).val || propVar
                     this.remoteMethodsTemplate(key, props[i].payload || {})
+                    if (!curDir) {
+                        this.dataTemplate(propVar, JSON.stringify([]))
+                        propsStr += curPropStr
+                    }
+                    continue
+                }
+
+                if (['data-source', 'table-data-source'].includes(type)) {
+                    const curDir = dirProps.find((directive) => (directive.prop === i))
+                    const key = (curDir || {}).val || propVar
+                    this.dataSourceTemplate(key, props[i].payload.sourceData || {})
                     if (!curDir) {
                         this.dataTemplate(propVar, JSON.stringify([]))
                         propsStr += curPropStr
@@ -1045,7 +1056,7 @@ class PageCode {
                         })
                         jsonStr = jsonStr.replace(reg, '')
                     }
-                    jsonStr += `],`
+                    jsonStr += '],'
                 }
                 jsonStr = jsonStr.replace(reg, '')
                 jsonStr += '}'
@@ -1220,7 +1231,7 @@ class PageCode {
                         '[object Boolean]': false,
                         '[object String]': ''
                     }
-                    const { variableData = {}, methodData = {} } = slot.payload || {}
+                    const { variableData = {}, methodData = {}, sourceData = {} } = slot.payload || {}
                     const type = Object.prototype.toString.call(slot.val)
                     let disPlayVal = defaultValMap[type] || ''
                     const param = { val: disPlayVal, type: 'variable' }
@@ -1230,6 +1241,10 @@ class PageCode {
                     } else if (methodData.methodCode) {
                         this.dataTemplate(compId, transformToString(disPlayVal))
                         this.remoteMethodsTemplate(compId, methodData || {})
+                        disPlayVal = compId
+                    } else if (sourceData.tableName) {
+                        this.dataTemplate(compId, transformToString(disPlayVal))
+                        this.dataSourceTemplate(compId, sourceData || {})
                         disPlayVal = compId
                     } else {
                         if (typeof slot.val === 'object') {
@@ -1252,7 +1267,7 @@ class PageCode {
                 } while (curSlot && Object.keys(curSlot).length > 0)
                 slotStr += render(...slotRenderParams)
             }
-            if (!isDefaultSlot) slotStr += `\n</template>\n`
+            if (!isDefaultSlot) slotStr += '\n</template>\n'
         })
         return slotStr
 
@@ -1448,7 +1463,7 @@ class PageCode {
         }
 
         if (this.hasLayOut || this.remoteDataStr || (this.usingFuncCodes.length && ['vueCode', 'preview', 'previewSingle'].includes(this.pageType))) {
-            methods += `methods: {`
+            methods += 'methods: {'
 
             // 布局相关的方法
             if (this.hasLayOut) {
@@ -1662,7 +1677,7 @@ class PageCode {
                  * 请先安装 bk-charts 相关依赖: npm install @blueking/bkcharts
                  */
             `
-            importStr += `const bkCharts = require('@/components/bkCharts.vue')\n`
+            importStr += 'const bkCharts = require(\'@/components/bkCharts.vue\')\n'
         }
 
         if (this.chartTypeArr && this.chartTypeArr.length) {
@@ -1687,8 +1702,8 @@ class PageCode {
                     */
                 `
             }
-            importStr += `import { mapGetters } from 'vuex'\n`
-            importStr += `import auth from '@/common/auth'\n`
+            importStr += 'import { mapGetters } from \'vuex\'\n'
+            importStr += 'import auth from \'@/common/auth\'\n'
         }
         if (!['preview', 'previewSingle'].includes(this.pageType) && this.usingCustomArr && this.usingCustomArr.length) {
             // dev 和 t 环境，npm 包名字前面加了 test- 前缀，生成的变量名字应该去掉 test 前缀
@@ -1704,7 +1719,7 @@ class PageCode {
         const lifeCycleValues = Object.values(lifeCycle)
         const exisLifyCycle = lifeCycleValues.filter(x => x)
         if (this.pageType === 'projectCode' && (this.usingFuncCodes.length > 0 || exisLifyCycle.length > 0)) {
-            importStr += `import methodsMixin from '@/mixins/methods-mixin'`
+            importStr += 'import methodsMixin from \'@/mixins/methods-mixin\''
         }
         return importStr
     }
@@ -1724,6 +1739,10 @@ class PageCode {
         }
         // 处理chartRemote
         if (method.funcCode) this.usingFuncCodes.push(method.funcCode)
+    }
+
+    dataSourceTemplate (key, sourceData) {
+        this.remoteDataStr += `const ${key}Source = await this.$http.get('/data-source/user/projectId/${this.projectId}/tableName/${sourceData.tableName}')\nthis.${key} = ${key}Source.data\n`
     }
 
     generateCharts (item) {

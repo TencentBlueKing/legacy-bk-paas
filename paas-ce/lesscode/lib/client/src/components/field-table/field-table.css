@@ -1,0 +1,73 @@
+.field-table {
+    width: 100%;
+    .asterisk {
+      margin-left: 5px;
+      color: #ea3636;
+      font-size: 14px;
+    }
+    .row-icons {
+      font-size: 16px;
+      position: absolute;
+      right: 22px;
+      top: 13px;
+      color: #EA3636;
+    }
+    .error {
+      border: 1px solid red;
+    }
+    tr.bk-table-row.hover-row {
+      > td {
+        background-color: #fff;
+        .field-table-input {
+          .bk-form-input {
+            border: none;
+            background: #f5f7fa;
+          }
+        }
+        .field-table-select {
+          background: #f5f7fa;
+          .icon-angle-down {
+            display: block;
+          }
+        }
+      }
+    }
+    .field-table-icon {
+        color: #c4c6cc;
+        cursor: pointer;
+        margin-left: 5px;
+        font-size: 16px;
+    }
+    .field-table-input {
+      position: relative;
+      .bk-form-input {
+        border: none;
+        &:focus {
+          background: #f5f7fa;
+        }
+      }
+    }
+    .config-input-error {
+      .bk-form-input {
+        border: 1px solid #ff5656;
+      }
+    }
+    .field-table-select {
+        border: none;
+        .icon-angle-down {
+            display: none;
+        }
+    }
+    .field-icon {
+        color: #c4c6cc;
+        font-size: 16px;
+        cursor: pointer;
+        &:first-child {
+            margin-right: 10px;
+        }
+    }
+    .icon-disabled {
+        color: #dcdee5;
+        cursor: not-allowed;
+    }
+  }

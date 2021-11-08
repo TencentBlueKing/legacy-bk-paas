@@ -1,5 +1,4 @@
 import { getConnection, getRepository, In } from 'typeorm'
-import _ from 'lodash'
 import PageTemplate from '../model/entities/page-template'
 import * as TemplateCategoryModel from '../model/page-template-category'
 import * as PageTemplateModel from '../model/page-template'
@@ -17,7 +16,7 @@ export const listByCategory = async (ctx) => {
             params.belongProjectId = projectId
         }
         const categorys = await TemplateCategoryModel.all(params)
-        
+
         const templates = await PageTemplateModel.all(params)
 
         const list = categorys.map(category => {
@@ -115,7 +114,7 @@ export const checkIsExist = async (ctx) => {
     try {
         const params = ctx.request.body
         let isExist = false
-        
+
         const record = await PageTemplateModel.getOne({
             ...params,
             deleteFlag: 0
@@ -125,7 +124,7 @@ export const checkIsExist = async (ctx) => {
         }
         ctx.send({
             code: 0,
-            message: `success`,
+            message: 'success',
             data: isExist
         })
     } catch (err) {
@@ -156,17 +155,17 @@ export const apply = async (ctx) => {
                 belongProjectId,
                 fromPageCode
             }
-            
+
             const { varIds, funcIds, defaultFuncGroupId } = await getRealVarAndFunc({ projectId: belongProjectId, fromProjectId, valList, funcList })
             console.log(belongProjectId, varIds, funcIds, defaultFuncGroupId, 'ids')
             await getConnection().transaction(async transactionalEntityManager => {
                 const createTemplate = getRepository(PageTemplate).create(newTemplate)
-                const res = await transactionalEntityManager.save(createTemplate)
+                await transactionalEntityManager.save(createTemplate)
                 const saveQueue = []
                 if (varIds.length) {
                     await Promise.all(varIds.map(async valId => {
                         const val = await getRepository(Variable).findOne(valId)
-                        const { id, createTime, createUser, updateTime, updateUser, ...other} = val
+                        const { id, createTime, createUser, updateTime, updateUser, ...other } = val
                         const newVal = Object.assign(other, {
                             projectId: belongProjectId,
                             pageCode: '',
@@ -179,23 +178,22 @@ export const apply = async (ctx) => {
                 if (funcIds.length) {
                     await Promise.all(funcIds.map(async funcId => {
                         const func = await getRepository(Func).findOne(funcId)
-                        const { id, createTime, createUser, updateTime, updateUser, ...other} = func
-                        const newFunc = Object.assign(other, { 
+                        const { id, createTime, createUser, updateTime, updateUser, ...other } = func
+                        const newFunc = Object.assign(other, {
                             funcGroupId: defaultFuncGroupId
                         })
                         const createFunc = getRepository(Func).create(newFunc)
                         saveQueue.push(transactionalEntityManager.save(createFunc))
-                        
                     }))
                 }
                 saveQueue.length && await Promise.all(saveQueue)
             })
         }))
-        
+
         ctx.send({
             code: 0,
-            message: `success`,
-            data: `模板添加至项目成功`
+            message: 'success',
+            data: '模板添加至项目成功'
         })
     } catch (err) {
         ctx.throwError({
@@ -322,7 +320,7 @@ const filterFuncAndVars = async ({ projectId, valList, funcList }) => {
 
 // 编辑模板
 export const update = async (ctx) => {
-     try {
+    try {
         const { id, params } = ctx.request.body
 
         // 模板名称已存在
@@ -342,11 +340,11 @@ export const update = async (ctx) => {
             message: 'success',
             data: res
         })
-     } catch (err) {
+    } catch (err) {
         ctx.throwError({
             message: err.message || err
         })
-     }
+    }
 }
 
 export const deleteTemplate = async (ctx) => {
@@ -393,6 +391,3 @@ export const categoryCount = async (ctx) => {
         })
     }
 }
-
-
-

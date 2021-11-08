@@ -108,14 +108,14 @@ createToken('XRANGEPLAIN', `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})`
                    + `(?:\\.(${src[t.XRANGEIDENTIFIER]})`
                    + `(?:${src[t.PRERELEASE]})?${
                        src[t.BUILD]}?`
-                   + `)?)?`)
+                   + ')?)?')
 
 createToken('XRANGEPLAINLOOSE', `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})`
                         + `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})`
                         + `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})`
                         + `(?:${src[t.PRERELEASELOOSE]})?${
                             src[t.BUILD]}?`
-                        + `)?)?`)
+                        + ')?)?')
 
 createToken('XRANGE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`)
 createToken('XRANGELOOSE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`)
@@ -126,7 +126,7 @@ createToken('COERCE', `${'(^|[^\\d])'
               + '(\\d{1,'}${MAX_SAFE_COMPONENT_LENGTH}})`
               + `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?`
               + `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?`
-              + `(?:$|[^\\d])`)
+              + '(?:$|[^\\d])')
 createToken('COERCERTL', src[t.COERCE], true)
 
 // Tilde ranges.
@@ -164,14 +164,14 @@ exports.comparatorTrimReplace = '$1$2$3'
 // checked against either the strict or loose comparator form
 // later.
 createToken('HYPHENRANGE', `^\\s*(${src[t.XRANGEPLAIN]})`
-                   + `\\s+-\\s+`
+                   + '\\s+-\\s+'
                    + `(${src[t.XRANGEPLAIN]})`
-                   + `\\s*$`)
+                   + '\\s*$')
 
 createToken('HYPHENRANGELOOSE', `^\\s*(${src[t.XRANGEPLAINLOOSE]})`
-                        + `\\s+-\\s+`
+                        + '\\s+-\\s+'
                         + `(${src[t.XRANGEPLAINLOOSE]})`
-                        + `\\s*$`)
+                        + '\\s*$')
 
 // Star ranges basically just allow anything at all.
 createToken('STAR', '(<|>)?=?\\s*\\*')

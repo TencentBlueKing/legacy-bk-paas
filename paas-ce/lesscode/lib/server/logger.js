@@ -54,7 +54,7 @@ log4js.configure({
                 include: ['asctime', 'levelname', 'message']
             },
             pattern: '-yyyy-MM-dd.log',
-            filename: resolve(__dirname, logPath, `web-application-json.log`)
+            filename: resolve(__dirname, logPath, 'web-application-json.log')
         },
         out: {
             type: 'console'

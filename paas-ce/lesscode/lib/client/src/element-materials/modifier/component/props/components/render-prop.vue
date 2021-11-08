@@ -29,13 +29,14 @@
                         <component
                             :is="renderCom.typeCom"
                             :describe="describe"
-                            :type="renderCom.typeName"
+                            :type="renderCom.propType"
                             :name="name"
                             :default-value="defaultValue"
                             :key="renderCom.typeName + index"
                             :payload="defaultPayload"
                             :remote-validate="describe.remoteValidate"
-                            :change="handleUpdate" />
+                            :change="handleUpdate"
+                            :batch-update="batchUpdate" />
                     </template>
                 </div>
             </template>
@@ -44,23 +45,24 @@
                     <bk-radio-button
                         v-for="item in formCom"
                         :key="item.typeName"
-                        :value="item.typeName">
+                        :value="item.propType">
                         {{ item.typeName | propTypeFormat }}
                     </bk-radio-button>
                 </bk-radio-group>
                 <div class="prop-action">
                     <template v-for="(renderCom, index) in formCom">
-                        <template v-if="mutlTypeSelected === renderCom.typeName">
+                        <template v-if="mutlTypeSelected === renderCom.propType">
                             <component
                                 :is="renderCom.typeCom"
                                 :describe="describe"
                                 :key="renderCom.typeName + index"
-                                :type="renderCom.typeName"
+                                :type="renderCom.propType"
                                 :name="name"
                                 :payload="defaultPayload"
                                 :default-value="defaultValue"
                                 :remote-validate="describe.remoteValidate"
-                                :change="handleUpdate" />
+                                :change="handleUpdate"
+                                :batch-update="batchUpdate" />
                         </template>
                     </template>
                 </div>
@@ -91,6 +93,8 @@
     import TypeIcon from './strategy/icon'
     import TypeColor from './strategy/color'
     import TypleElProps from './strategy/el-props'
+    import TypeDataSource from './strategy/data-source.vue'
+    import TypeTableDataSource from './strategy/table-data-source.vue'
 
     import { transformTipsWidth } from '@/common/util'
     import safeStringify from '@/common/json-safe-stringify'
@@ -184,7 +188,9 @@
                     'carousel': TypeSlotWrapper,
                     'el-radio': TypeSlotWrapper,
                     'el-checkbox': TypeSlotWrapper,
-                    'el-props': TypleElProps
+                    'el-props': TypleElProps,
+                    'data-source': TypeDataSource,
+                    'table-data-source': TypeTableDataSource
                 }
 
                 let realType = config.type
@@ -222,7 +228,9 @@
                     'carousel': 'carousel',
                     'el-radio': 'el-radio',
                     'el-checkbox': 'el-checkbox',
-                    'el-props': 'el-props'
+                    'el-props': 'el-props',
+                    'data-source': 'data-source',
+                    'table-data-source': 'table-data-source'
                 }
                 const valueMap = {
                     'text': 'string',
@@ -237,11 +245,14 @@
                     realType = [config.type]
                 }
 
-                return realType.reduce((res, propType) => {
+                return realType.reduce((res, cur) => {
+                    const propType = typeof cur === 'string' ? cur : cur.type
+                    const typeName = typeof cur === 'string' ? cur : cur.label
                     if (typeMap.hasOwnProperty(propType)) {
                         const renderType = Array.isArray(config.options) ? 'select' : typeMap[propType]
                         res.push({
-                            typeName: propType,
+                            typeName,
+                            propType,
                             typeCom: comMap[renderType],
                             valueType: valueMap[propType] || propType
                         })

@@ -11,8 +11,6 @@
 import LayoutModel from './layout'
 import { uploadFile } from '../utils/file-service'
 
-const request = require('request')
-
 const health = {
     async checkBkRepo () {
         return new Promise(async (resolve, reject) => {
@@ -40,7 +38,7 @@ const health = {
     async checkDb () {
         return new Promise(async (resolve, reject) => {
             try {
-                const list = await LayoutModel.getDefaultList()
+                await LayoutModel.getDefaultList()
                 resolve({
                     code: 200,
                     result: 'db调用正常',

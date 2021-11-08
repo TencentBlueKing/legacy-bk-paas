@@ -1,4 +1,5 @@
 const os = require('os')
+const fs = require('fs')
 
 /**
  * 获取本机的真实 ip
@@ -184,4 +185,25 @@ export function uuid (len = 8, radix = 16) {
     }
 
     return uuid.join('')
+}
+
+export async function execSql (queryRunner, path) {
+    const sqlBuffer = fs.readFileSync(path)
+    const sqlString = sqlBuffer.toString()
+    const sqlArr = []
+    let strCharNum = 0
+    let lastCharIndex = 0
+    for (let charIndex in sqlString) {
+        charIndex = +charIndex
+        const sqlChar = sqlString[charIndex]
+        if (sqlChar === ';' && sqlString.slice(charIndex + 1, charIndex + 8) !== 'base64,' && (strCharNum & 1) === 0) {
+            const currentStr = sqlString.slice(lastCharIndex, charIndex + 1)
+            sqlArr.push(currentStr)
+            lastCharIndex = charIndex + 1
+        }
+        if (/'|"|`/.test(sqlChar)) strCharNum++
+    }
+    for (const sqlStr of sqlArr) {
+        if (sqlStr) await queryRunner.query(sqlStr)
+    }
 }

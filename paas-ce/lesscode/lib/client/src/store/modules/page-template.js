@@ -39,19 +39,19 @@ export default {
             })
         },
         checkIsExist (state, params = {}) {
-            return http.post(`/pageTemplate/checkIsExist`, params).then(response => {
+            return http.post('/pageTemplate/checkIsExist', params).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
         create (state, params) {
-            return http.post(`/pageTemplate/create`, params).then(response => {
+            return http.post('/pageTemplate/create', params).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
         apply (state, params = {}) {
-            return http.post(`pageTemplate/apply`, params).then(response => {
+            return http.post('pageTemplate/apply', params).then(response => {
                 const data = response.data || ''
                 return data
             })
@@ -81,7 +81,7 @@ export default {
             })
         },
         categoryList (state, params = {}) {
-            return http.get(`/pageTemplateCategory/list`, { params }).then(response => {
+            return http.get('/pageTemplateCategory/list', { params }).then(response => {
                 const data = response.data || ''
                 return data
             })
