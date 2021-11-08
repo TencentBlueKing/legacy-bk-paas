@@ -56,6 +56,12 @@ export default {
                 return data
             })
         },
+        import (state, params = {}) {
+            return http.post('pageTemplate/import', params).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
         update (state, params = {}) {
             return http.post('/pageTemplate/update', params).then(response => {
                 const data = response.data || ''

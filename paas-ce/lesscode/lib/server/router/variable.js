@@ -10,13 +10,14 @@
  */
 
 const Router = require('koa-router')
-const { getAllVariable, addVariable, editVariable, deleteVariable, uploadImage } = require('../controller/variable')
+const { getAllVariable, getFunctionVariable, addVariable, editVariable, deleteVariable, uploadImage } = require('../controller/variable')
 
 const router = new Router({
     prefix: '/api/variable'
 })
 
 router.get('/getAllVariable', getAllVariable)
+router.post('/getFunctionVariable', getFunctionVariable)
 router.put('/addVariable', addVariable)
 router.post('/editVariable', editVariable)
 router.delete('/deleteVariable', deleteVariable)
