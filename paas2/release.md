@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.14
+    - update: esb udpate data confapis
+
 # 2.13.13
     - bugfix: smart logo save fail
 
