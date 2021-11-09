@@ -219,6 +219,7 @@
             },
 
             selectValType (key) {
+                console.log('from selectValType', this)
                 this.triggerUpdate((dir) => {
                     dir.val = ''
                     dir.valType = key
