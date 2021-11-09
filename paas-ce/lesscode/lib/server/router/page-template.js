@@ -16,6 +16,7 @@ const {
     create,
     update,
     apply,
+    importTemplate,
     detail,
     checkIsExist,
     deleteTemplate,
@@ -31,6 +32,7 @@ router.get('/listByCategory', listByCategory)
 router.post('/create', create)
 router.post('/update', update)
 router.post('/apply', apply)
+router.post('/import', importTemplate)
 router.get('/detail', detail)
 router.post('/checkIsExist', checkIsExist)
 router.delete('/delete', deleteTemplate)

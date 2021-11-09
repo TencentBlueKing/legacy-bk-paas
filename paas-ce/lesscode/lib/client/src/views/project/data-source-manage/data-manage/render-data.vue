@@ -48,6 +48,7 @@
             :is-show.sync="formStatus.showEditData"
             :width="640"
             :title="formStatus.editTitle"
+            :transfer="true"
         >
             <div slot="content">
                 <bk-form

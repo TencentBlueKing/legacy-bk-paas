@@ -28,6 +28,7 @@
             title="添加至项目"
             :is-show.sync="showAddFunc.isShow"
             :quick-close="false"
+            :transfer="true"
             :width="796">
             <func-form slot="content" ref="funcRef" :func-data="showAddFunc.func"></func-form>
             <section slot="footer" class="add-footer">

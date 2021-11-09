@@ -61,6 +61,13 @@ export default {
             })
         },
 
+        getFunctionVariable ({ commit }, params) {
+            return http.post(`${variablePerfix}/getFunctionVariable`, params).then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
+
         addVariable ({ commit }, data) {
             return http.put(`${variablePerfix}/addVariable`, data).then(response => {
                 if (response.code === 499) throw new Error(response.message)
