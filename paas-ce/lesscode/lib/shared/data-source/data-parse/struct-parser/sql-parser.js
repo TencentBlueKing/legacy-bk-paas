@@ -45,10 +45,14 @@ function getTableColumnSql (column) {
     }
     // 获取字段类型
     const getType = (column) => {
+        const length = column.length || 0
+        const scale = column.scale || 0
         const typeMap = {
-            int: 'int(11)',
-            varchar: 'varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci',
-            datetime: 'datetime(0)'
+            int: `int(${length})`,
+            varchar: `varchar(${length}) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`,
+            datetime: `datetime(${length})`,
+            text: 'text',
+            decimal: `decimal(${length}, ${scale})`
         }
         return typeMap[column.type]
     }
@@ -62,7 +66,7 @@ function getTableColumnSql (column) {
     }
     // 默认值
     const getDefault = (column) => {
-        if (column.generated) return ''
+        if (column.generated || column.type === 'text') return ''
 
         if (column.createDate) return 'DEFAULT CURRENT_TIMESTAMP(0)'
 
@@ -95,7 +99,7 @@ function getTableColumnSql (column) {
  */
 function getPrimaryKey (data) {
     if (data.primary) {
-        return `PRIMARY KEY (${data.name}) USING BTREE`
+        return `PRIMARY KEY (\`${data.name}\`) USING BTREE`
     }
 }
 
@@ -106,10 +110,10 @@ function getPrimaryKey (data) {
  */
 function getIndex ({ type, data }) {
     if (type === INDEX_MODIFY_TYPE.DROP) {
-        return `INDEX ${data.name}`
+        return `INDEX \`${data.name}\``
     }
     if (type === INDEX_MODIFY_TYPE.ADD) {
-        return `INDEX ${data.name}(${data.name}) USING BTREE`
+        return `INDEX \`${data.name}\`(\`${data.name}\`) USING BTREE`
     }
 }
 

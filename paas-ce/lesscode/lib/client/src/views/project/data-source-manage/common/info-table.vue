@@ -42,13 +42,6 @@
     import store from '@/store'
     import router from '@/router'
 
-    const formFields = [
-        { label: '表名', required: true, property: 'tableName' },
-        { label: '存储引擎', disabled: true, property: 'engine' },
-        { label: '字符集', disabled: true, property: 'character' },
-        { label: '备注', property: 'comment' }
-    ]
-
     export default defineComponent({
         props: {
             isEdit: {
@@ -62,12 +55,19 @@
         },
 
         setup (props, { emit }) {
-            const projectId = router?.currentRoute?.params?.projectId
-            const tableId = router?.currentRoute?.query?.id
+            const currentRoute = router?.currentRoute
+            const projectId = currentRoute?.params?.projectId
+            const tableId = currentRoute?.query?.id
             let tableList = []
             const basicForm = ref(null)
             const form = reactive({ tableName: '', comment: '' })
             const isLoading = ref(false)
+            const formFields = [
+                { label: '表名', required: true, disabled: currentRoute?.name !== 'createTable', property: 'tableName' },
+                { label: '存储引擎', disabled: true, property: 'engine' },
+                { label: '字符集', disabled: true, property: 'character' },
+                { label: '备注', property: 'comment' }
+            ]
             // 校验规则
             const rules = {
                 tableName: [

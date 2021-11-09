@@ -222,7 +222,7 @@
         right: 0;
         bottom: 0;
         background: rgba(0,0,0,0.6);
-        z-index: 500;
+        z-index: 3000;
         .source-code {
             position: absolute;
             background: #fff;

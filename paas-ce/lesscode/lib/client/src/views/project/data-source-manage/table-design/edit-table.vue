@@ -14,7 +14,17 @@
             </section>
 
             <section class="table-section">
-                <h5 class="section-title">字段配置</h5>
+                <h5 class="section-title">
+                    字段配置
+                    <i
+                        class="bk-icon icon-info"
+                        v-bk-tooltips="{
+                            content: `数据行 id，createTime，createUser，updateTime，updateUser 是系统内置字段，系统会自动进行赋值。
+                            数据列中，小数点只会在字段类型为 decimal 的时候生效`,
+                            width: '400'
+                        }"
+                    ></i>
+                </h5>
                 <field-table ref="fieldTableRef" :data="originTableStatus.data" @change="changeEdit(true)"></field-table>
             </section>
 

@@ -190,6 +190,7 @@
     }
     .data-manage-main {
         height: calc(100vh - 160px);
+        z-index: auto;
         .table-list {
             padding: 14px 0;
             background: #fafbfd;

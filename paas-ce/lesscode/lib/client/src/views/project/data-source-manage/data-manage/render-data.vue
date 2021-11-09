@@ -75,6 +75,13 @@
                             @change="changeDateTime(column.name, ...arguments)"
                         ></bk-date-picker>
                         <bk-input
+                            v-else-if="column.type === 'decimal'"
+                            v-model="formStatus.editForm[column.name]"
+                            :precision="column.scale"
+                            type="number"
+                            placeholder="请输入数字"
+                        ></bk-input>
+                        <bk-input
                             v-else-if="column.type === 'int'"
                             v-model="formStatus.editForm[column.name]"
                             type="number"

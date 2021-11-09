@@ -35,7 +35,8 @@ export interface ITableField {
     isRequire?: boolean
     inputType?: string
     isEdit?: boolean,
-    reg?: RegExp
+    reg?: RegExp,
+    tips?: string
 }
 
 export interface ITableStatus {
@@ -44,7 +45,7 @@ export interface ITableStatus {
 
 function getDefaultRow () {
     return {
-        type: 'varchar',
+        type: '',
         name: '',
         primary: false,
         index: false,
@@ -52,10 +53,13 @@ function getDefaultRow () {
         default: '',
         comment: '',
         defaultInputType: 'text',
+        lengthInputType: 'number',
+        scaleInputType: 'number',
         generated: false,
         createDate: false,
         updateDate: false,
-        length: ''
+        length: '',
+        scale: ''
     }
 }
 
@@ -67,16 +71,37 @@ function getDefaultRow () {
 function normalizeTableItem (item) {
     const defaultRow = getDefaultRow()
     const normalizedItem = Object.assign({}, defaultRow, item)
-    if (['int', 'datetime'].includes(normalizedItem.type)) {
+    // 设置默认值
+    if (['int', 'datetime', 'decimal'].includes(normalizedItem.type)) {
         normalizedItem.defaultInputType = 'number'
         normalizedItem.default = 0
     } else {
         normalizedItem.defaultInputType = 'text'
         normalizedItem.default = ''
     }
+    // 设置默认 length
+    if (normalizedItem.length === '') {
+        if (normalizedItem.type === 'int') {
+            normalizedItem.length = 11
+        }
+        if (normalizedItem.type === 'varchar') {
+            normalizedItem.length = 255
+        }
+        if (normalizedItem.type === 'decimal') {
+            normalizedItem.length = 20
+        }
+    }
+    // 设置默认 scale
+    if (normalizedItem.scale === '') {
+        if (normalizedItem.type === 'decimal') {
+            normalizedItem.scale = 5
+        }
+    }
+    // 默认列不可修改
     if (Reflect.has(BASE_COLUMNS, normalizedItem.name)) {
         normalizedItem.isEdit = true
     }
+    // 每一行加id，用于 diff
     if (!Reflect.has(normalizedItem, 'columnId')) {
         normalizedItem.columnId = uuid(8)
     }
@@ -113,7 +138,8 @@ export default defineComponent({
                 type: 'input',
                 prop: 'name',
                 isRequire: true,
-                reg: /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/
+                reg: /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/,
+                tips: '字段名称必填。开头和结尾需是大小写字母，中间可以是大小写字母、连字符和下划线。长度最少为2个字符'
             },
             {
                 name: '字段类型',
@@ -131,8 +157,26 @@ export default defineComponent({
                     {
                         id: 'datetime',
                         name: 'datetime'
+                    },
+                    {
+                        id: 'text',
+                        name: 'text'
+                    },
+                    {
+                        id: 'decimal',
+                        name: 'decimal'
                     }
                 ]
+            },
+            {
+                name: '长度',
+                type: 'input',
+                prop: 'length'
+            },
+            {
+                name: '小数点',
+                type: 'input',
+                prop: 'scale'
             },
             {
                 name: '索引',
@@ -188,8 +232,11 @@ export default defineComponent({
         const changeData = (value, row, column, index) => {
             // 设置值
             const currentRow = tableList[index]
+            Object.assign(currentRow, { [column.prop]: value })
+
+            // 标准化
             const normalizedItem = normalizeTableItem(currentRow)
-            Object.assign(currentRow, normalizedItem, { [column.prop]: value })
+            Object.assign(currentRow, normalizedItem)
 
             // 触发 change 事件
             emit('change')
