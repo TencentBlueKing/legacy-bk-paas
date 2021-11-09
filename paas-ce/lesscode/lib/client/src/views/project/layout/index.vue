@@ -149,7 +149,7 @@
                 return require(`@/images/${previewImg}`)
             },
             handlePreview (layout) {
-                window.open(`/preview-layout/project/${layout.projectId}/${layout.id}`, '_blank')
+                window.open(`/preview-template/project/${layout.projectId}/${layout.id}?type=nav-template`, '_blank')
             }
         }
     }
