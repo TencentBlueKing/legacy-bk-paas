@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.29
+    - update: esb update data confapis
+
 # 2.12.28
     - update: esb update data v3_storekit confapis
     - update: esb jobv3 add api generate_local_file_upload_url
