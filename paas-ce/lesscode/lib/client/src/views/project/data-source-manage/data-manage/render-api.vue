@@ -13,7 +13,7 @@
                 prop="url"
             >
                 <template slot-scope="props">
-                    {{ props.row.url }}
+                    <span class="api-url">{{ props.row.url }}</span>
                     <copy-icon :value="props.row.url"></copy-icon>
                 </template>
             </bk-table-column>
@@ -193,5 +193,13 @@
         font-size: 12px;
         margin-top: 12px;
         display: inline-block;
+    }
+    .api-url {
+        display: inline-block;
+        max-width: calc(100% - 30px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
     }
 </style>

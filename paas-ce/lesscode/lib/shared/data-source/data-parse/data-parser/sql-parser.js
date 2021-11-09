@@ -33,18 +33,18 @@ function transformJson2Sql (originDatas, finalDatas) {
         const tableKeys = Object.keys(data)
         const tableValues = Object.values(data)
         const updateValues = tableKeys.reduce((acc, cur) => {
-            acc.push(`${cur}='${data[cur]}'`)
+            acc.push(`\`${cur}\`='${data[cur]}'`)
             return acc
         }, [])
         switch (type) {
             case DATA_MODIFY_TYPE.INSERT:
-                sqlArr.push(`INSERT INTO ${tableName}(${tableKeys.join(',')}) VALUES('${tableValues.join('\',\'')}');`)
+                sqlArr.push(`INSERT INTO \`${tableName}\`(\`${tableKeys.join('\`,\`')}\`) VALUES('${tableValues.join('\',\'')}');`)
                 break
             case DATA_MODIFY_TYPE.UPDATE:
-                sqlArr.push(`UPDATE ${tableName} SET ${updateValues.join(',')} WHERE id = ${data.id};`)
+                sqlArr.push(`UPDATE \`${tableName}\` SET ${updateValues.join(',')} WHERE \`id\` = ${data.id};`)
                 break
             case DATA_MODIFY_TYPE.DELETE:
-                sqlArr.push(`DELETE FROM ${tableName} WHERE id = ${data.id};`)
+                sqlArr.push(`DELETE FROM \`${tableName}\` WHERE \`id\` = ${data.id};`)
                 break
         }
     })
