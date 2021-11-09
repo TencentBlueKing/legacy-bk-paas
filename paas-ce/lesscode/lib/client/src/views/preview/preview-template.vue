@@ -67,6 +67,9 @@
             },
             versionId () {
                 return this.$route.query.v || ''
+            },
+            type () {
+                return this.$route.query.type || ''
             }
         },
         async created () {
@@ -81,7 +84,16 @@
             }
             document.body.appendChild(script)
 
-            this.detail = await this.$store.dispatch('pageTemplate/detail', { id: this.templateId })
+            if (this.type === 'nav-template') {
+                try {
+                    const { list } = await this.$store.dispatch('layout/getFullList', { projectId: this.projectId, versionId: this.versionId })
+                    this.detail = list.filter(item => item.id === parseInt(this.templateId))[0]
+                } catch (e) {
+                    console.error(e)
+                }
+            } else {
+                this.detail = await this.$store.dispatch('pageTemplate/detail', { id: this.templateId })
+            }
 
             await this.loadFile()
         },
@@ -96,7 +108,9 @@
             async loadFile () {
                 this.isLoading = true
                 try {
-                    this.targetData.push(JSON.parse(this.detail.content || {}))
+                    if (this.type !== 'nav-template') {
+                        this.targetData.push(JSON.parse(this.detail.content || {}))
+                    }
                 } catch (err) {
                     this.$bkMesseage({
                         theme: 'error',
@@ -107,17 +121,29 @@
                 try {
                     console.log('预览 loadFile')
                     const { targetData, projectId } = this
-
-                    let code = await this.$store.dispatch('vueCode/getPageCode', {
-                        targetData,
-                        projectId: projectId,
-                        versionId: this.detail.versionId,
-                        pageType: 'previewSingle',
-                        fromPageCode: this.detail.fromPageCode
-                    })
+                    let code
+                    if (this.type === 'nav-template') {
+                        const layoutContent = JSON.parse(this.detail.content)
+                        code = await this.$store.dispatch('vueCode/getPageCode', {
+                            targetData: [],
+                            pageType: 'previewSingle',
+                            projectId: projectId,
+                            versionId: this.detail.versionId,
+                            layoutContent,
+                            withNav: true,
+                            layoutType: this.detail.type
+                        })
+                    } else {
+                        code = await this.$store.dispatch('vueCode/getPageCode', {
+                            targetData,
+                            projectId: projectId,
+                            versionId: this.detail.versionId,
+                            pageType: 'previewSingle',
+                            fromPageCode: this.detail.fromPageCode
+                        })
+                    }
 
                     code = code.replace('export default', 'module.exports =').replace('components: { chart: ECharts },', '')
-                    console.log(code)
                     const res = httpVueLoader(code)
                     setTimeout(() => {
                         Vue.component('preview-page', res)

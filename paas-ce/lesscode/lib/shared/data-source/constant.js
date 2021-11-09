@@ -62,7 +62,8 @@ export const ORM_KEYS = [
     'updateDate',
     'length',
     'columnId',
-    'generated'
+    'generated',
+    'scale'
 ]
 
 /**
