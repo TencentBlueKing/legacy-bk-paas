@@ -1237,8 +1237,6 @@
                 removeClassWithNodeClass('.bk-lesscode-free-layout', 'selected')
                 removeClassWithNodeClass('.component-wrapper', 'selected')
                 removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
-
-                bus.$emit('selected-tree', '')
             },
 
             /**
