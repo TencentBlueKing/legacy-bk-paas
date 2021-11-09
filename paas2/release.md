@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.13
+    - bugfix: smart logo save fail
+
 # 2.13.12
     - bugfix: bkauth_user table missing will 500 after upgrade to django 1.11.29
 
