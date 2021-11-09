@@ -200,7 +200,7 @@
                                 this.dialog.loading = false
                                 this.$bkMessage({
                                     theme: 'success',
-                                    message: `另存为模板成功`
+                                    message: '另存为模板成功'
                                 })
                                 this.toggleIsShow(false)
                                 bus.$emit('update-template-list')

@@ -109,6 +109,7 @@
     </div>
 </template>
 <script>
+    import Vue from 'vue'
     import { mapGetters } from 'vuex'
     import methods from '@/components/methods'
 
@@ -121,7 +122,7 @@
     const generateCustomColumn = (index) => ({
         type: 'customCol',
         label: `选项${index}`,
-        templateCol: `<span><a style="color:#3A84FF;cursor:pointer" @click="editCallBack(props.row)">编辑</a> <a style="color:red;">获取行数据{{props.row.prop1}}</a></span>`,
+        templateCol: '<span><a style="color:#3A84FF;cursor:pointer" @click="editCallBack(props.row)">编辑</a> <a style="color:red;">获取行数据{{props.row.prop1}}</a></span>',
         methodCode: [],
         sortable: false
     })
@@ -158,6 +159,14 @@
         },
         computed: {
             ...mapGetters('functions', ['funcGroups'])
+        },
+        watch: {
+            'slotVal.val': {
+                handler (val) {
+                    Vue.set(this, 'column', JSON.parse(JSON.stringify(val)))
+                },
+                deep: true
+            }
         },
         created () {
             this.column = JSON.parse(JSON.stringify(this.slotVal.val))

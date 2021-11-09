@@ -71,7 +71,7 @@ const generatorPackageJson = (params) => {
 export const npmPublish = async (params) => {
     try {
         if (!config || !config.registry || !config.username) {
-            throw new Error(`请先确保lib/server/conf/npm.js相关配置信息已正确填写`)
+            throw new Error('请先确保lib/server/conf/npm.js相关配置信息已正确填写')
         }
         const npmTempDir = path.resolve(__dirname, '../../npmTemp')
         // 生成npm临时目录

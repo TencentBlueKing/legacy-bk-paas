@@ -14,6 +14,7 @@
                 <bk-button @click="handlePreviewProject">预览项目</bk-button>
                 <bk-button @click="handleDownLoadProject">源码下载</bk-button>
                 <div class="extra">
+                    <span class="total" v-show="renderList.length">共<em class="count">{{renderList.length}}</em>个页面</span>
                     <bk-input
                         :style="{ width: '400px' }"
                         placeholder="请输入页面名称"
@@ -30,8 +31,7 @@
                     <div class="page-item" v-for="(page, index) in renderList" :key="index">
                         <div class="item-bd">
                             <div class="preview" @click="handleEditPage(page.id)">
-                                <img v-if="page.previewImg" :src="getPreviewImg(page.previewImg)" alt="页面缩略预览">
-                                <div class="empty-preview-img" v-else>页面为空</div>
+                                <page-preview-thumb alt="页面缩略预览" :page-id="page.id" />
                                 <div class="mask">
                                     <div class="operate-btns">
                                         <bk-button class="edit-btn" theme="primary">编辑</bk-button>
@@ -61,7 +61,7 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(page.id)">
-                                        <li><a href="javascript:;" @click="handleDownloadSource(page.content, page.id, page.lifeCycle)">下载源码</a></li>
+                                        <li><a href="javascript:;" @click="handleDownloadSource(page.content, page.id, page.lifeCycle, page.styleSetting)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="handleRename(page)">重命名</a></li>
                                         <li><a href="javascript:;" @click="handleEditRoute(page)">修改路由</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(page)">复制</a></li>
@@ -89,8 +89,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import preivewErrImg from '@/images/preview-error.png'
     import pageDialog from '@/components/project/page-dialog'
+    import pagePreviewThumb from '@/components/project/page-preview-thumb.vue'
     import downloadDialog from '@/views/system/components/download-dialog'
     import editRouteDialog from '@/components/project/edit-route-dialog'
     import pageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
@@ -103,6 +103,7 @@
     export default {
         components: {
             pageDialog,
+            pagePreviewThumb,
             downloadDialog,
             editRouteDialog,
             pageFromTemplateDialog
@@ -154,8 +155,8 @@
                 }
             }
         },
-        async created () {
-            await this.getPageList()
+        created () {
+            this.getPageList()
         },
         methods: {
             async getPageList () {
@@ -207,7 +208,7 @@
                 this.$refs.pageDialog.dialog.formData.layoutId = layoutId
                 this.$refs.pageDialog.dialog.visible = true
             },
-            async handleDownloadSource (targetData, pageId, lifeCycle) {
+            async handleDownloadSource (targetData, pageId, lifeCycle, styleSetting) {
                 if (!targetData) {
                     this.$bkMessage({
                         theme: 'error',
@@ -222,6 +223,7 @@
                     versionId: this.versionId,
                     lifeCycle,
                     pageId,
+                    styleSetting,
                     layoutContent: this.pageLayout.layoutContent,
                     from: 'download_page'
                 }).then((res) => {
@@ -311,12 +313,6 @@
             getRelativeTime (time) {
                 return dayjs(time).fromNow() || ''
             },
-            getPreviewImg (previewImg) {
-                if (previewImg && previewImg.length > 30) {
-                    return previewImg
-                }
-                return preivewErrImg
-            },
             // 从模板创建
             handleTempCreate () {
                 this.$refs.pageFromTemplateDialog.isShow = true
@@ -347,6 +343,15 @@
             .extra {
                 flex: none;
                 margin-left: auto;
+            }
+
+            .total {
+                font-size: 12px;
+                margin-right: 8px;
+                .count {
+                    font-style: normal;
+                    margin: 0 .1em;
+                }
             }
         }
         .pages-body {
@@ -433,18 +438,6 @@
                         border-radius: 4px 4px 0px 0px;
                         img {
                             max-width: 100%;
-                        }
-
-                        .empty-preview-img {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: 14px;
-                            font-weight: 700;
-                            color: #C4C6CC;
-                            height: 100%;
-                            background: #f0f1f5;
-                            border-radius: 4px 4px 0px 0px;
                         }
 
                         .mask {

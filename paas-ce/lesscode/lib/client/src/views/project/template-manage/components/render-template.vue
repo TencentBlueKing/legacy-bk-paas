@@ -2,7 +2,7 @@
     <section v-bkloading="{ isLoading: isLoading }" style="height: 100%">
         <main class="templates templates-content" v-show="!isLoading">
             <div class="templates-head">
-                <!-- <div class="help-tips">请从页面画布中选择页面局部或将整个页面存为模板</div> -->
+                <bk-button theme="primary" @click="handleImport">导入模板</bk-button>
                 <div class="extra">
                     <bk-input
                         :style="{ width: '400px' }"
@@ -41,6 +41,7 @@
                                     </span>
                                     <ul class="bk-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(template.id)">
                                         <li><a href="javascript:;" @click="handleEdit(template)">编辑</a></li>
+                                        <li><a href="javascript:;" @click="handleExport(template)">导出</a></li>
                                         <li><a href="javascript:;" @click="handleDelete(template)" :class="{ 'g-no-permission': !getDeletePerm(template) }" v-bk-tooltips="{ content: '无删除权限', disabled: getDeletePerm(template) }">删除</a></li>
                                     </ul>
                                 </bk-dropdown-menu>
@@ -57,6 +58,7 @@
                 </div>
             </div>
             <template-edit-dialog ref="templateEditDialog" :refresh-list="getTemplateList"></template-edit-dialog>
+            <template-import-dialog ref="templateImportDialog" :refresh-list="getTemplateList"></template-import-dialog>
         </main>
     </section>
 </template>
@@ -65,11 +67,15 @@
     import { mapGetters } from 'vuex'
     import preivewErrImg from '@/images/preview-error.png'
     import templateEditDialog from './template-edit-dialog'
+    import templateImportDialog from './template-import-dialog'
+    import templateMixin from './template-mixin'
 
     export default {
         components: {
-            templateEditDialog
+            templateEditDialog,
+            templateImportDialog
         },
+        mixins: [templateMixin],
         props: {
             categoryId: {
                 type: Number,
@@ -163,6 +169,13 @@
                     offcialType: template.offcialType
                 }
             },
+            async handleImport () {
+                this.$refs.templateImportDialog.isShow = true
+                this.$refs.templateImportDialog.dialog.formData = {
+                    categoryId: this.categoryId,
+                    templateName: ''
+                }
+            },
             handleDelete (template) {
                 if (!this.getDeletePerm(template)) return
 
@@ -208,6 +221,25 @@
                 } else {
                     this.renderList = this.templateList.filter(item => item.templateName.toLowerCase().indexOf(this.keyword.toLowerCase()) !== -1)
                 }
+            },
+            async handleExport (template) {
+                const templateJson = {
+                    template: {},
+                    functions: [],
+                    vars: []
+                }
+                const { varDetailList: vars = [], funcList: functions = [] } = await this.getVarAndFuncList(template)
+                Object.assign(templateJson, { functions, vars }, { template })
+                console.log(templateJson, template)
+                const jsonStr = JSON.stringify(templateJson)
+                const downlondEl = document.createElement('a')
+                const blob = new Blob([jsonStr])
+                downlondEl.download = `bklesscode-template-${template.id}.json`
+                downlondEl.href = URL.createObjectURL(blob)
+                downlondEl.style.display = 'none'
+                document.body.appendChild(downlondEl)
+                downlondEl.click()
+                document.body.removeChild(downlondEl)
             },
             hideDropdownMenu (pageId) {
                 this.$refs[`moreActionDropdown${pageId}`][0].hide()
@@ -337,6 +369,8 @@
                         border-radius: 4px 4px 0px 0px;
                         img {
                             max-width: 100%;
+                            height: 100%;
+                            object-fit: contain;
                         }
 
                         .empty-preview-img {

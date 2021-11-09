@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-slider',
     group: '表单',
     order: 1,
-    styles: ['margin', 'display'],
+    styles: ['size', 'margin', 'display'],
     directives: [
         {
             type: 'v-model',

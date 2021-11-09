@@ -36,7 +36,7 @@
                     validator: (val) => {
                         return !this.computedFunctionList.find((func) => (func.funcName === val && func.id !== this.copyForm.id))
                     },
-                    message: `函数名称在当前项目下重复，请修改后重试`,
+                    message: '函数名称在当前项目下重复，请修改后重试',
                     trigger: 'blur'
                 },
                 groupNameRule: {

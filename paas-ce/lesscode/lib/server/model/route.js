@@ -76,6 +76,7 @@ export default {
                 'page.content as content',
                 'page.deleteFlag as pageDeleteFlag',
                 'page.lifeCycle as lifeCycle',
+                'page.styleSetting as styleSetting',
                 'pr.pageId as pageId',
                 'pr.redirect as redirect',
                 'layoutinst.id as layoutId',

@@ -205,6 +205,7 @@
                         defaultItemValue = ''
                         break
                     case 6:
+                        // eslint-disable-next-line @typescript-eslint/quotes
                         defaultItemValue = `return ''\r\n`
                         break
                 }

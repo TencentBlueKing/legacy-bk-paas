@@ -287,7 +287,7 @@
                     if (res) {
                         this.$bkMessage({
                             theme: 'success',
-                            message: `新建页面成功`
+                            message: '新建页面成功'
                         })
                         // this.isShow = false
                         this.$router.push({
@@ -540,6 +540,7 @@
                             img {
                                 width: 100%;
                                 height: 100%;
+                                object-fit: contain;
                             }
 
                             .mask {

@@ -51,13 +51,13 @@ export default {
             })
         },
         create ({ commit }, { data, config }) {
-            return http.post(`/layout/create`, data, config).then(response => {
+            return http.post('/layout/create', data, config).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
         update ({ commit }, { data, config }) {
-            return http.post(`/layout/update`, data, config).then(response => {
+            return http.post('/layout/update', data, config).then(response => {
                 const data = response.data || ''
                 return data
             })

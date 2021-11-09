@@ -12,6 +12,7 @@
 import Vue from 'vue'
 import VueDraggable from 'vuedraggable'
 import mavonEditor from 'mavon-editor'
+import VueCompositionAPI from '@vue/composition-api'
 import 'mavon-editor/dist/css/index.css'
 import '@/common/bkui-vue-complex'
 import '@/common/bkmagic'
@@ -39,13 +40,9 @@ import pureAxios from '@/api/pureAxios.js'
 // 用户调用接口使用，无业务逻辑，直接返回数据
 Vue.prototype.$http = pureAxios
 Vue.prototype.$td = targetData
-Vue.prototype.$clearMenu = () => {
-    document.querySelectorAll('.context-menu').forEach(node => {
-        node.style.display = 'none'
-    })
-}
 
 Vue.use(mavonEditor)
+Vue.use(VueCompositionAPI)
 
 Vue.component('VueDraggable', VueDraggable)
 Vue.component('app-exception', Exception)

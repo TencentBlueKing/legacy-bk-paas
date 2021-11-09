@@ -117,6 +117,7 @@ function getFuncList (targetData = [], funcGroups = []) {
 
     const funcIds = Object.keys(usedFuncMap)
     return funcIds.map(id => ({
+        ...usedFuncMap[id],
         id,
         funcCode: usedFuncMap[id].funcCode
     }))

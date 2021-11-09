@@ -266,8 +266,9 @@ export const updatePage = async (ctx) => {
                 await Promise.all([transactionalEntityManager.save(addUsedVariableValues), transactionalEntityManager.remove(deleteUsedVariables)])
             }
 
-            // 处理lifeCycle
+            // 处理lifeCycle、styleSetting
             page.lifeCycle = typeof page.lifeCycle === 'string' ? JSON.parse(page.lifeCycle) : page.lifeCycle
+            page.styleSetting = typeof page.styleSetting === 'string' ? JSON.parse(page.styleSetting) : page.styleSetting
 
             return page
         })
@@ -423,6 +424,24 @@ export const pageDetail = async (ctx) => {
         const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
         const detail = await getRepository(Page).findOne(queryParams) || {}
         if (detail.lifeCycle) detail.lifeCycle = JSON.parse(detail.lifeCycle)
+        if (detail.styleSetting) {
+            detail.styleSetting = JSON.parse(detail.styleSetting)
+        } else {
+            // migration调整
+            detail.styleSetting = {
+                minWidth: '',
+                marginTop: '',
+                marginBottom: '',
+                marginLeft: '',
+                marginRight: '',
+                paddingTop: '',
+                paddingBottom: '',
+                paddingLeft: '',
+                paddingRight: '',
+                backgroundColor: '',
+                customStyle: {}
+            }
+        }
         ctx.send({
             code: 0,
             message: 'OK',
@@ -625,4 +644,21 @@ export const relasePage = async ctx => {
             message: error
         })
     }
+}
+
+export const getPreviewImg = async (ctx) => {
+    const { id } = ctx.request.query
+    let { previewImg } = await PageModel.findPagePreviewImg(id) || {}
+
+    const dataUriPrefix = 'data:image/png;base64,'
+
+    if (!previewImg || !previewImg.startsWith(dataUriPrefix)) {
+        // 返回 1×1 px 透明png，用于在前台标记为空区别于加载失败
+        previewImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+    }
+
+    const imgBase64 = previewImg.replace(dataUriPrefix, '')
+    const buf = Buffer.from(imgBase64, 'base64')
+    ctx.type = 'image/png'
+    ctx.body = buf
 }

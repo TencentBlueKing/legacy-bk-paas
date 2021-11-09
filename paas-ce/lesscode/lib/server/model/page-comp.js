@@ -20,7 +20,7 @@ import { whereVersion } from './common'
 let npmConf
 try {
     npmConf = require('../conf/npm')
-} catch(_) {
+} catch (_) {
     npmConf = {}
 }
 

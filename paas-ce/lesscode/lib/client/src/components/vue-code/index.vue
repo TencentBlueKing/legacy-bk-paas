@@ -33,6 +33,10 @@
                 type: Object,
                 default: () => ({})
             },
+            styleSetting: {
+                type: Object,
+                default: () => ({})
+            },
             withNav: {
                 type: Boolean
             }
@@ -63,7 +67,7 @@
             getFormatCode (withNav) {
                 this.isLoading = true
                 console.log('查看源码 getFormatCode')
-                const { pageType, projectId, versionId, lifeCycle, pageId } = this
+                const { pageType, projectId, versionId, lifeCycle, pageId, styleSetting } = this
                 const state = this.$store.state || {}
                 const drag = state.drag || {}
                 const layoutContent = drag.curTemplateData
@@ -77,6 +81,7 @@
                     lifeCycle,
                     pageId,
                     layoutContent,
+                    styleSetting,
                     withNav
                 }).then(res => {
                     this.formatCode = res

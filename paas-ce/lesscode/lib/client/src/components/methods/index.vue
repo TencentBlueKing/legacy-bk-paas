@@ -457,7 +457,7 @@
                                 return
                             }
                             const projectId = this.$route.params.projectId
-                            return this.getAllGroupFuncs({ projectId }).then(() => {
+                            return this.getAllGroupFuncs({ projectId, versionId: this.versionId }).then(() => {
                                 if (!this.openGroupIds.includes(res.funcGroupId)) this.openGroupIds.push(res.funcGroupId)
                                 this.chooseId = res.id
                                 this.$bkMessage({ theme: 'success', message: '修改函数成功' })

@@ -1,7 +1,5 @@
 import { getConnection, getRepository, In } from 'typeorm'
-import _ from 'lodash'
 import PageTemplate from '../model/entities/page-template'
-import TemplateCategory from '../model/entities/page-template-category'
 import * as TemplateCategoryModel from '../model/page-template-category'
 import * as PageTemplateModel from '../model/page-template'
 import Func from '../model/entities/func'
@@ -18,7 +16,7 @@ export const listByCategory = async (ctx) => {
             params.belongProjectId = projectId
         }
         const categorys = await TemplateCategoryModel.all(params)
-        
+
         const templates = await PageTemplateModel.all(params)
 
         const list = categorys.map(category => {
@@ -72,6 +70,17 @@ export const create = async (ctx) => {
     try {
         const { params } = ctx.request.body
 
+        // 模板名称已存在
+        const record = await PageTemplateModel.getOne({
+            templateName: params.templateName,
+            belongProjectId: params.belongProjectId,
+            deleteFlag: 0
+        })
+        if (record) {
+            ctx.throwError({
+                message: '模板名称已存在'
+            })
+        }
         const createTemplate = getRepository(PageTemplate).create(params)
         const res = await getRepository(PageTemplate).save(createTemplate)
         ctx.send({
@@ -92,6 +101,31 @@ export const detail = async (ctx) => {
             code: 0,
             message: 'success',
             data: template
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message || err
+        })
+    }
+}
+
+// check符合条件的pageTemplate是否已存在
+export const checkIsExist = async (ctx) => {
+    try {
+        const params = ctx.request.body
+        let isExist = false
+
+        const record = await PageTemplateModel.getOne({
+            ...params,
+            deleteFlag: 0
+        })
+        if (record) {
+            isExist = true
+        }
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data: isExist
         })
     } catch (err) {
         ctx.throwError({
@@ -121,17 +155,17 @@ export const apply = async (ctx) => {
                 belongProjectId,
                 fromPageCode
             }
-            
+
             const { varIds, funcIds, defaultFuncGroupId } = await getRealVarAndFunc({ projectId: belongProjectId, fromProjectId, valList, funcList })
             console.log(belongProjectId, varIds, funcIds, defaultFuncGroupId, 'ids')
             await getConnection().transaction(async transactionalEntityManager => {
                 const createTemplate = getRepository(PageTemplate).create(newTemplate)
-                const res = await transactionalEntityManager.save(createTemplate)
+                await transactionalEntityManager.save(createTemplate)
                 const saveQueue = []
                 if (varIds.length) {
                     await Promise.all(varIds.map(async valId => {
                         const val = await getRepository(Variable).findOne(valId)
-                        const { id, createTime, createUser, updateTime, updateUser, ...other} = val
+                        const { id, createTime, createUser, updateTime, updateUser, ...other } = val
                         const newVal = Object.assign(other, {
                             projectId: belongProjectId,
                             pageCode: '',
@@ -144,23 +178,85 @@ export const apply = async (ctx) => {
                 if (funcIds.length) {
                     await Promise.all(funcIds.map(async funcId => {
                         const func = await getRepository(Func).findOne(funcId)
-                        const { id, createTime, createUser, updateTime, updateUser, ...other} = func
-                        const newFunc = Object.assign(other, { 
+                        const { id, createTime, createUser, updateTime, updateUser, ...other } = func
+                        const newFunc = Object.assign(other, {
                             funcGroupId: defaultFuncGroupId
                         })
                         const createFunc = getRepository(Func).create(newFunc)
                         saveQueue.push(transactionalEntityManager.save(createFunc))
-                        
                     }))
                 }
                 saveQueue.length && await Promise.all(saveQueue)
             })
         }))
+
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data: '模板添加至项目成功'
+        })
+    } catch (err) {
+        ctx.throwError({
+            message: err.message || err
+        })
+    }
+}
+
+export const importTemplate = async (ctx) => {
+    try {
+        const { belongProjectId, template = {}, vars = [], functions = [] } = ctx.request.body
+
+        // 校验模板名称是否重复        
+        const record = await PageTemplateModel.getOne({
+            templateName: template.templateName,
+            belongProjectId: template.belongProjectId,
+            deleteFlag: 0
+        })
+        record && ctx.throwError({
+            message: '模板名称重复，请修改模板名称'
+        })
+        
+        const { id, createTime, createUser, updateTime, updateUser, ...newTemplate } = template
+
+        // 过滤掉该项目中已存在的variableCode或functionCode
+        const { valList, funcList, defaultFuncGroupId } = await filterFuncAndVars({ projectId: belongProjectId, fromProjectId: 0, valList: vars, funcList: functions })
+        
+        await getConnection().transaction(async transactionalEntityManager => {
+            const createTemplate = getRepository(PageTemplate).create(newTemplate)
+            const res = await transactionalEntityManager.save(createTemplate)
+            const saveQueue = []
+            if (valList.length) {
+                await Promise.all(valList.map(async val => {
+                    const { id, createTime, createUser, updateTime, updateUser, userInfo, ...other} = val
+                    const newVal = Object.assign(other, {
+                        projectId: belongProjectId,
+                        pageCode: '',
+                        effectiveRange: 0,
+                        defaultValue: JSON.stringify(other.defaultValue)
+                    })
+                    const createVal = getRepository(Variable).create(newVal)
+                    saveQueue.push(transactionalEntityManager.save(createVal))
+                }))
+            }
+            if (funcList.length) {
+                await Promise.all(funcList.map(async func => {
+                    const { id, createTime, createUser, updateTime, updateUser, pages, ...other} = func
+                    const newFunc = Object.assign(other, { 
+                        funcGroupId: defaultFuncGroupId,
+                        remoteParams: (other.remoteParams || []).join(', '),
+                        funcParams: (other.funcParams || []).join(', ')
+                    })
+                    const createFunc = getRepository(Func).create(newFunc)
+                    saveQueue.push(transactionalEntityManager.save(createFunc))    
+                }))
+            }
+            saveQueue.length && await Promise.all(saveQueue)
+        })
         
         ctx.send({
             code: 0,
             message: `success`,
-            data: `模板添加至项目成功`
+            data: `模板导入成功`
         })
     } catch (err) {
         ctx.throwError({
@@ -208,18 +304,35 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
     return { varIds, funcIds, defaultFuncGroupId }
 }
 
-// 编辑页面
+const filterFuncAndVars = async ({ projectId, valList, funcList }) => {
+    const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
+    const projectFuncGroupList = await FuncModel.allGroupFuncDetail(projectId)
+    const projectFuncList = []
+    projectFuncGroupList.map(item => {
+        projectFuncList.splice(0, 0, ...item.functionList)
+    })
+    const defaultFuncGroupId = projectFuncGroupList[0] && projectFuncGroupList[0].id
+    funcList = funcList.filter(item => !projectFuncList.find(func => func.funcCode === item.funcCode))
+    valList = valList.filter(item => !projectValList.find(val => val.variableCode === item.variableCode))
+    
+    return { valList, funcList, defaultFuncGroupId }
+}
+
+// 编辑模板
 export const update = async (ctx) => {
-     try {
+    try {
         const { id, params } = ctx.request.body
 
-        // 分类已存在
+        // 模板名称已存在
         const record = await PageTemplateModel.getOne({
             templateName: params.templateName,
-            belongProjectId: params.belongProjectId
+            belongProjectId: params.belongProjectId,
+            deleteFlag: 0
         })
         if (record && record.id !== id) {
-            throw new Error(`分类已存在`)
+            ctx.throwError({
+                message: '模板名称重复'
+            })
         }
         const res = await PageTemplateModel.updateById(id, params)
         ctx.send({
@@ -227,11 +340,11 @@ export const update = async (ctx) => {
             message: 'success',
             data: res
         })
-     } catch (err) {
+    } catch (err) {
         ctx.throwError({
             message: err.message || err
         })
-     }
+    }
 }
 
 export const deleteTemplate = async (ctx) => {
@@ -244,43 +357,6 @@ export const deleteTemplate = async (ctx) => {
         })
     } catch (err) {
         ctx.throw(err)
-    }
-}
-
-// 复制页面
-export const copyPage = async (ctx) => {
-    try {
-        const { projectId, pageData } = ctx.request.body
-        const projectPageData = {
-            projectId
-        }
-
-        const { id: postId, pageName: postName, pageCode, pageRoute } = pageData
-        const prePage = await getRepository(Page).findOne(postId)
-        const newPageRoute = formatRoutePath(pageRoute)
-        const newPageData = Object.assign(prePage, { pageName: postName, pageCode, pageRoute: newPageRoute, id: undefined })
-
-        // 页面使用的layout
-        const { layoutId } = await getRepository(PageRoute).findOne({ pageId: pageData.id })
-        const layoutInst = await getRepository(LayoutInst).findOne(layoutId)
-        const fullPath = `${layoutInst.routePath}/${newPageData.pageRoute}`
-
-        if (await hasRoute({ path: fullPath }, projectId)) {
-            throw Error('该页面路由已存在')
-        }
-
-        newPageData.layoutId = layoutInst.id
-
-        const { id } = await PageModel.createPage(newPageData, projectPageData, pageData.id)
-        ctx.send({
-            code: 0,
-            message: 'success',
-            data: id
-        })
-    } catch (err) {
-        ctx.throwError({
-            message: err.message
-        })
     }
 }
 
@@ -315,6 +391,3 @@ export const categoryCount = async (ctx) => {
         })
     }
 }
-
-
-

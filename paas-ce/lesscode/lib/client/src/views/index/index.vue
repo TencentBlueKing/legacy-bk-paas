@@ -215,7 +215,7 @@
                 </div>
             </div>
             <div class="main-content border-none" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
-                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
+                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :style-setting="pageDetail.styleSetting" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
             </div>
             <div class="main-content" v-if="['pageFunction', 'setting'].includes(actionSelected)">
                 <page-setting :project="projectDetail" :type="actionSelected"></page-setting>
@@ -624,6 +624,10 @@
                     target: '#editPageSwitchPage'
                 }
             ]
+
+            // 获取并设置当前版本信息
+            this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
+
             await this.fetchData()
 
             const mockCurSelectComponentData = {
@@ -711,7 +715,7 @@
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
                 title: '确认离开?',
-                subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                subTitle: '您将离开画布编辑页面，请确认相应修改已保存',
                 confirmFn: async () => {
                     next()
                 }
@@ -908,6 +912,7 @@
             },
 
             async fetchData () {
+                console.log('versionId:::', this.versionId)
                 try {
                     this.contentLoading = true
                     const [pageDetail, pageList, projectDetail] = await Promise.all([
@@ -921,9 +926,14 @@
                         this.getAllGroupFuncs({ projectId: this.projectId, versionId: this.versionId })
                     ])
 
-                    await this.lockStatsuPolling('lock') // 处理加锁逻辑
-
-                    await this.getAllVariable({ projectId: this.projectId, versionId: this.versionId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
+                    await Promise.all([
+                        // 处理加锁逻辑
+                        this.lockStatsuPolling('lock'),
+                        // 添加变量
+                        this.getAllVariable({ projectId: this.projectId, versionId: this.versionId, pageCode: pageDetail.pageCode, effectiveRange: 0 }),
+                        // 添加表
+                        this.$store.dispatch('dataSource/list', { projectId: this.projectId })
+                    ])
                     // update targetdata
                     const content = pageDetail.content
                     if (content) {
@@ -935,7 +945,6 @@
                     this.$store.commit('page/setPageDetail', pageDetail || {})
                     this.$store.commit('page/setPageList', pageList || [])
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
-                    this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
                     this.projectDetail = projectDetail || {}
                 } catch (e) {
                     console.error(e)
@@ -1664,11 +1673,15 @@
                             const hasMethod = payload && payload.methodCode
                             if (!hasMethod) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为 remote 但未选择远程函数，请修改后再试`
                         }
+                        if (['data-source', 'table-data-source'].includes(type)) {
+                            const hasTableName = payload?.sourceData?.tableName
+                            if (!hasTableName) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为数据源但未选择表，请修改后再试`
+                        }
                     })
 
                     const renderSlots = component.renderSlots || {}
                     Object.keys(renderSlots).forEach((key) => {
-                        const { type, payload = {} } = renderSlots[key] || {}
+                        const { type, payload = {}, displayName } = renderSlots[key] || {}
 
                         if (payload.variableData && payload.variableData.val) {
                             const { val, valType } = payload.variableData
@@ -1678,7 +1691,12 @@
 
                         if (type === 'remote') {
                             const hasMethod = payload.methodData && payload.methodData.methodCode
-                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${key}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
+                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${displayName}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
+                        }
+
+                        if (['data-source'].includes(type)) {
+                            const hasTableName = payload?.sourceData?.tableName
+                            if (!hasTableName) errMessage = `组件【${component.componentId}】的【${displayName}】插槽，类型为数据源但未选择表，请修改后再试`
                         }
                     })
 
@@ -1794,7 +1812,7 @@
                 }
                 me.$bkInfo({
                     title: '确认离开?',
-                    subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                    subTitle: '您将离开画布编辑页面，请确认相应修改已保存',
                     confirmFn: async () => {
                         me.$router.push({
                             params: {

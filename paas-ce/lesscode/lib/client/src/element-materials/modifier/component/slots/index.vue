@@ -48,6 +48,12 @@
             }
         },
 
+        watch: {
+            lastSlots () {
+                this.renderSlots = this.lastSlots
+            }
+        },
+
         created () {
             this.renderSlots = this.lastSlots
             this.renderProps = this.lastProps
