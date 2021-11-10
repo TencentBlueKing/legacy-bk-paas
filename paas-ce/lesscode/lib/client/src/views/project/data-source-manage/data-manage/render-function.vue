@@ -17,7 +17,7 @@
             ></bk-table-column>
             <bk-table-column label="操作" width="180">
                 <template slot-scope="props">
-                    <bk-button text @click="showCode(props.row)" class="mr5">查看源码</bk-button>
+                    <bk-button text @click="showCode(props.row)" class="mr10">查看源码</bk-button>
                     <bk-button text @click="addToProject(props.row)">添加至项目</bk-button>
                 </template>
             </bk-table-column>
