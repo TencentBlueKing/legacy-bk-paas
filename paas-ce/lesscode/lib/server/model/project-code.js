@@ -19,7 +19,6 @@ import * as ComponentModel from './component'
 import { uuid, walkGrid } from '../util'
 import dataService from '../service/data-service'
 import {
-    transformFieldObject2FieldArray,
     BASE_COLUMNS
 } from '../../shared/data-source'
 const httpConf = require('../conf/http')
@@ -417,9 +416,9 @@ const projectCode = {
                 path.join(targetPath, 'lib/server/model/entities/base.js')
             )
             for (const dataTable of dataTables) {
-                const { tableName, columns = '{}' } = dataTable
-                const tableFields = transformFieldObject2FieldArray(JSON.parse(columns)).reduce((acc, cur) => {
-                    if (!BASE_COLUMNS.hasOwnProperty(cur.name)) {
+                const { tableName, columns = '[]' } = dataTable
+                const tableFields = JSON.parse(columns).reduce((acc, cur) => {
+                    if (BASE_COLUMNS.every(item => item.name !== cur.name)) {
                         acc += `\r\n    @Column({ type: '${cur.type}' })\r\n    ${cur.name}\r\n`
                     }
                     return acc

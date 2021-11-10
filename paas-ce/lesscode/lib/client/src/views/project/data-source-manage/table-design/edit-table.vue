@@ -52,9 +52,7 @@
     import {
         DataParse,
         StructJsonParser,
-        StructSqlParser,
-        transformFieldObject2FieldArray,
-        transformFieldArray2FieldObject
+        StructSqlParser
     } from 'shared/data-source'
     import {
         messageSuccess,
@@ -155,7 +153,7 @@
                     comment: finalTableStatus.basicInfo.comment,
                     id,
                     projectId,
-                    columns: transformFieldArray2FieldObject(finalTableStatus.data)
+                    columns: finalTableStatus.data
                 }
                 const record = {
                     projectId,
@@ -185,7 +183,7 @@
                 store.dispatch('dataSource/findOne', id).then((data) => {
                     originTableStatus.basicInfo.tableName = data.tableName
                     originTableStatus.basicInfo.comment = data.comment
-                    originTableStatus.data = transformFieldObject2FieldArray(data.columns)
+                    originTableStatus.data = data.columns
                 }).catch((error) => {
                     messageError(error.message || error)
                 }).finally(() => {

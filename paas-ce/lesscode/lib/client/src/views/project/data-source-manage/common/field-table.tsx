@@ -98,7 +98,7 @@ function normalizeTableItem (item) {
         }
     }
     // 默认列不可修改
-    if (Reflect.has(BASE_COLUMNS, normalizedItem.name)) {
+    if (BASE_COLUMNS.some(item => item.name === normalizedItem.name)) {
         normalizedItem.isEdit = true
     }
     // 每一行加id，用于 diff

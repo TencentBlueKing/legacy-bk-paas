@@ -7,8 +7,8 @@
                 <i :class="['bk-icon icon-angle-down']"></i>
             </div>
             <ul class="bk-dropdown-list" slot="dropdown-content">
-                <li><a href="javascript:;" :class="{ disabled: disablePartialSelection }" @click="showExport('select')">导出选中数据</a></li>
-                <li><a href="javascript:;" @click="showExport('all')">导出所有数据</a></li>
+                <li><a href="javascript:;" :class="{ disabled: disablePartialSelection || disabled }" @click="showExport('select')">导出选中数据</a></li>
+                <li><a href="javascript:;" :class="{ disabled: disabled }" @click="showExport('all')">导出所有数据</a></li>
             </ul>
         </bk-dropdown-menu>
 
@@ -48,6 +48,10 @@
                 type: Boolean,
                 default: false
             },
+            disabled: {
+                type: Boolean,
+                default: false
+            },
             onlyExportAll: {
                 type: Boolean,
                 default: false
@@ -65,7 +69,7 @@
             }
 
             const showExport = (type) => {
-                if (type === 'select' && props.disablePartialSelection) return
+                if ((type === 'select' && props.disablePartialSelection) || props.disabled) return
 
                 isShowExport.value = true
                 downLoadType.value = type

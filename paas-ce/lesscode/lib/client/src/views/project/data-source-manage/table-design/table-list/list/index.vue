@@ -15,6 +15,7 @@
                 title="导出表"
                 class="table-list-btn"
                 :disable-partial-selection="listStatus.selectRows.length <= 0"
+                :disabled="listStatus.pagination.count <= 0"
                 @download="exportTables"
             ></export-table>
             <bk-divider direction="vertical" class="table-list-divider"></bk-divider>
@@ -70,8 +71,7 @@
         DataParse,
         StructJsonParser,
         StructSqlParser,
-        generateExportStruct,
-        transformFieldObject2FieldArray
+        generateExportStruct
     } from 'shared/data-source'
     import {
         downloadFile
@@ -223,14 +223,8 @@
             }
 
             const exportSelectTables = (fileType) => {
-                const tables = listStatus.selectRows.map((selectRow) => {
-                    return {
-                        ...selectRow,
-                        columns: transformFieldObject2FieldArray(selectRow.columns)
-                    }
-                })
                 const fileName = fileType === 'sql' ? `lesscode-struct-${projectId}.sql` : ''
-                const files = generateExportStruct(tables, fileType, fileName)
+                const files = generateExportStruct(listStatus.selectRows, fileType, fileName)
                 files.forEach(({ name, content }) => {
                     downloadFile(content, name)
                 })

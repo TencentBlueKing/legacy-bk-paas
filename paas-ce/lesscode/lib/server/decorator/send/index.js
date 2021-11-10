@@ -39,32 +39,35 @@ export const OutputZip = () => {
         const originValue = descriptor.value
         descriptor.value = async (ctx) => {
             const downloadTempPath = './lib/server/downloadTemp/'
+            // 当前下载文件夹总路径
             let curDownLoadDirPath
-            let curDownLoadZipDirPath
+            // 当前生成的文件路径
+            let curDownLoadFilesPath
             try {
                 const { fileList, zipName } = await originValue.apply(this, [ctx])
                 curDownLoadDirPath = path.join(downloadTempPath, zipName)
-                curDownLoadZipDirPath = path.join(downloadTempPath, zipName)
+                curDownLoadFilesPath = path.join(curDownLoadDirPath, zipName)
                 // 确保下载临时目录有
                 await fse.ensureDir(downloadTempPath)
                 await fse.ensureDir(curDownLoadDirPath)
-                await fse.ensureDir(curDownLoadZipDirPath)
-                // 生成 zip
-                const curDownLoadZipPath = path.join(curDownLoadZipDirPath, `${zipName}.zip`)
+                await fse.ensureDir(curDownLoadFilesPath)
+                // 生成 文件列表
                 fileList.forEach((file) => {
                     const name = file.name || zipName
-                    const filePath = path.join(curDownLoadDirPath, name)
+                    const filePath = path.join(curDownLoadFilesPath, name)
                     fse.writeFileSync(filePath, file.content, 'utf8')
                 })
-                await compressing.zip.compressDir(curDownLoadDirPath, curDownLoadZipPath)
+                // 生成 zip
+                const curDownLoadZipPath = path.join(curDownLoadDirPath, `${zipName}.zip`)
+                await compressing.zip.compressDir(curDownLoadFilesPath, curDownLoadZipPath)
                 // send
                 ctx.attachment(curDownLoadZipPath)
                 await send(ctx, curDownLoadZipPath)
             } catch (error) {
                 ctx.throwError(error)
             } finally {
+                if (curDownLoadFilesPath) fse.remove(curDownLoadFilesPath)
                 if (curDownLoadDirPath) fse.remove(curDownLoadDirPath)
-                if (curDownLoadZipDirPath) fse.remove(curDownLoadZipDirPath)
             }
         }
     }

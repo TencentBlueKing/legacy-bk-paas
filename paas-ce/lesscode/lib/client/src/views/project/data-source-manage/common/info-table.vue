@@ -62,8 +62,9 @@
             const basicForm = ref(null)
             const form = reactive({ tableName: '', comment: '' })
             const isLoading = ref(false)
+            const canEditTableName = currentRoute?.name === 'createTable'
             const formFields = [
-                { label: '表名', required: true, disabled: currentRoute?.name !== 'createTable', property: 'tableName' },
+                { label: '表名', required: true, disabled: !canEditTableName, property: 'tableName' },
                 { label: '存储引擎', disabled: true, property: 'engine' },
                 { label: '字符集', disabled: true, property: 'character' },
                 { label: '备注', property: 'comment' }
@@ -115,6 +116,8 @@
             }
 
             const getAllTable = () => {
+                if (!canEditTableName) return
+
                 const params = { projectId }
                 isLoading.value = true
                 store.dispatch('dataSource/list', params).then((res) => {

@@ -9,7 +9,12 @@
                 :disabled="dataStatus.selectRows.length <= 0"
                 @click="bulkDelete"
             >批量删除</bk-button>
-            <export-data title="导出数据" :disable-partial-selection="dataStatus.selectRows.length <= 0" @download="exportDatas"></export-data>
+            <export-data
+                title="导出数据"
+                :disable-partial-selection="dataStatus.selectRows.length <= 0"
+                :disabled="dataStatus.pagination.count <= 0"
+                @download="exportDatas"
+            ></export-data>
         </section>
 
         <bk-table
@@ -340,7 +345,7 @@
             }
 
             const exportAllDatas = (fileType) => {
-                window.open(`/api/data-source/exportDatas/projectId/${projectId}/fileType/${fileType}/tableName/${activeTable.value.tableName}`)
+                window.open(`/api/data-source/exportDatas/projectId/${projectId}/fileType/${fileType}/tableName/${activeTable.value.tableName}/environment/${environment.value}`)
             }
 
             const exportSelectDatas = (fileType) => {

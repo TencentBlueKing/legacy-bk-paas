@@ -34,8 +34,7 @@
         useTableStatus
     } from './composables/table-info'
     import {
-        generateExportStruct,
-        transformFieldObject2FieldArray
+        generateExportStruct
     } from 'shared/data-source'
     import {
         messageError
@@ -82,7 +81,7 @@
                 store.dispatch('dataSource/findOne', id).then((data) => {
                     tableStatus.basicInfo.tableName = data.tableName
                     tableStatus.basicInfo.comment = data.comment
-                    tableStatus.data = transformFieldObject2FieldArray(data.columns)
+                    tableStatus.data = data.columns
                 }).catch((error) => {
                     messageError(error.message || error)
                 }).finally(() => {

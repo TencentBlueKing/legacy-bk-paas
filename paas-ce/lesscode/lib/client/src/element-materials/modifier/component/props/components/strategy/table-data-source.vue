@@ -8,9 +8,6 @@
         ref,
         toRefs
     } from '@vue/composition-api'
-    import {
-        transformFieldObject2FieldArray
-    } from 'shared/data-source'
     import chooseDataTable from '@/components/choose-data-table.vue'
 
     interface Iprop {
@@ -60,7 +57,7 @@
                         name: 'bk-table-column',
                         type: 'table-list',
                         displayName: '表头配置',
-                        val: transformFieldObject2FieldArray(table.columns)?.map((item) => {
+                        val: table.columns?.map((item) => {
                             return {
                                 label: item.name,
                                 prop: item.name,

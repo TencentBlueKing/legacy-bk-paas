@@ -73,7 +73,6 @@ export const DeleteAuthorization = ({ perm, tableName, getId = ctx => ctx.reques
 
 /**
  * 判断用户是否有该项目权限
- * 权限通过情况：1. 拥有删除权限 2. 是该资源的创建者
  * @param {*} options { getId: Function } 获取 projectId 的方法
  */
 export const ProjectAuthorization = ({ getId = ctx => ctx.request.query.projectId }) => {

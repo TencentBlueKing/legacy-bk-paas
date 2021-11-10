@@ -9,35 +9,26 @@
  * specific language governing permissions and limitations under the License.
  */
 
+// 数据源功能使用到的 db 配置信息
 module.exports = {
     prod: {
-        // 线上数据库名
-        database: '',
-        // 线上数据库用户名
-        username: '',
-        // 线上数据库密码
-        password: '',
         // 线上host
         host: '',
-        // 线上端口
+        // 线上预览端口
         port: 3306,
-        dialect: 'mysql',
-        // 线上记录日志类型，默认为记录 error 日志，可选为 ['error', 'info', 'warn']
-        logging: ['error']
+        // 线上预览数据库用户名
+        username: '',
+        // 线上预览数据库密码
+        password: ''
     },
     dev: {
-        // 本地开发数据库名
-        database: '',
-        // 本地开发数据库用户名
-        username: '',
-        // 本地开发数据库密码
-        password: '',
         // 本地开发host
         host: 'localhost',
         // 本地开发端口
         port: 3306,
-        dialect: 'mysql',
-        // 本地记录日志类型，默认为记录所有日志，可选为 ['error', 'info', 'warn']
-        logging: 'all'
+        // 本地开发数据库用户名
+        username: '',
+        // 本地开发数据库密码
+        password: ''
     }
 }

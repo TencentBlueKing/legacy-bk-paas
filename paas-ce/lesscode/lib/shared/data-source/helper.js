@@ -69,34 +69,3 @@ export const generateExportDatas = (datas, fileType, name) => {
         })
     }
 }
-
-/**
- * 表格的table object数据转换为展示用的table array
- * 不一样是因为 table 需要 array，但是 orm 需要 object
- * @param fields 数据库中存储的表格字段
- * @returns 展示的表格数组
- */
-export function transformFieldObject2FieldArray (fields) {
-    const keys = Object.keys(fields)
-    return keys.map((key) => {
-        const value = fields[key]
-        return {
-            ...value,
-            name: key
-        }
-    })
-}
-
-/**
- * 将用户编辑的字段数组转换为存储的table object
- * 不一样是因为 table 需要 array，但是 orm 需要 object
- * @param fieldArray 编辑表格中展示的字段列表
- * @returns 数据库中存储的表格字段
- */
-export function transformFieldArray2FieldObject (fieldArray) {
-    return fieldArray.reduce((acc, cur) => {
-        const { name, ...rest } = cur
-        acc[name] = rest
-        return acc
-    }, {})
-}
