@@ -13,10 +13,9 @@ import DBEngineService from './db-engine-service'
 import dataService, { getDataService } from './data-service'
 import { EntitySchema, createConnection, getConnection, EventSubscriber } from 'typeorm'
 import { RequestContext } from '../middleware/request-context'
-import {
-    decrypt
-} from '../util'
-const dataBaseConf = require('../conf/data-base')
+import { decrypt } from '../util'
+import { BASE_COLUMNS } from '../../shared/data-source'
+const dataBaseConf = require('../conf/data-source')
 
 /**
  * 获取预览环境下的db配置
@@ -24,7 +23,7 @@ const dataBaseConf = require('../conf/data-base')
  */
 export const getPreviewDbConfig = async (projectId = null) => {
     const previewDb = await dataService.findOne('preview-db', { projectId, deleteFlag: 0 })
-    const config = process.env.NODE_ENV === 'production' ? dataBaseConf.preview : dataBaseConf.dev
+    const config = process.env.NODE_ENV === 'production' ? dataBaseConf.prod : dataBaseConf.dev
     const dbConfig = {
         host: config.host,
         port: config.port,
@@ -76,11 +75,14 @@ export const getPreviewDataService = async (projectId) => {
     ])
 
     const { entities, entityMap } = tables.reduce((acc, cur) => {
+        const columns = JSON.parse(cur.columns || '[]').reduce((acc, cur) => {
+            const baseColumn = BASE_COLUMNS.find(column => column.name === cur.name)
+            acc[cur.name] = baseColumn || cur
+            return acc
+        }, {})
         const entity = new EntitySchema({
             name: cur.tableName,
-            columns: {
-                ...JSON.parse(cur.columns || '{}')
-            }
+            columns
         })
         acc.entities.push(entity)
         acc.entityMap[cur.tableName] = entity

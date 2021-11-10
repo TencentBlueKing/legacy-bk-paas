@@ -52,9 +52,7 @@
         BASE_COLUMNS,
         DataParse,
         StructJsonParser,
-        StructSqlParser,
-        transformFieldObject2FieldArray,
-        transformFieldArray2FieldObject
+        StructSqlParser
     } from 'shared/data-source'
     import {
         messageSuccess,
@@ -104,7 +102,7 @@
                 basicFormRef,
                 fieldTableRef
             } = useTableStatus({
-                data: transformFieldObject2FieldArray(BASE_COLUMNS)
+                data: BASE_COLUMNS
             })
 
             const goBack = () => {
@@ -142,7 +140,7 @@
                 const dataTable = {
                     ...tableStatus.basicInfo,
                     projectId,
-                    columns: transformFieldArray2FieldObject(tableStatus.data)
+                    columns: tableStatus.data
                 }
                 const record = {
                     projectId,

@@ -12,8 +12,9 @@
 /**
  * 数据源，公共 orm columns
  */
-export const BASE_COLUMNS = {
-    id: {
+export const BASE_COLUMNS = [
+    {
+        name: 'id',
         type: 'int',
         primary: true,
         generated: true,
@@ -21,31 +22,35 @@ export const BASE_COLUMNS = {
         nullable: false,
         comment: '自增唯一主键。系统保留字段，不可修改'
     },
-    createTime: {
+    {
+        name: 'createTime',
         type: 'datetime',
         createDate: true,
         nullable: true,
         comment: '系统会默认写入数据创建时间。系统保留字段，不推荐修改'
     },
-    createUser: {
+    {
+        name: 'createUser',
         type: 'varchar',
         length: 255,
         nullable: true,
         comment: '系统会默认写入数据创建人。系统保留字段，不推荐修改'
     },
-    updateTime: {
+    {
+        name: 'updateTime',
         type: 'datetime',
         updateDate: true,
         nullable: true,
         comment: '系统会默认写入数据更新时间。系统保留字段，不推荐修改'
     },
-    updateUser: {
+    {
+        name: 'updateUser',
         type: 'varchar',
         length: 255,
         nullable: true,
         comment: '系统会默认写入数据更新人。系统保留字段，不推荐修改'
     }
-}
+]
 
 /**
  * 数据源使用的 ORM KEYS

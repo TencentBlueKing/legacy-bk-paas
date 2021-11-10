@@ -33,8 +33,7 @@ import {
 } from '../decorator'
 import {
     generateExportDatas,
-    generateExportStruct,
-    transformFieldObject2FieldArray
+    generateExportStruct
 } from '../../shared/data-source'
 const util = require('../util')
 
@@ -266,7 +265,7 @@ export default class DataSourceController {
         } catch (error) {
             return error
         } finally {
-            await dataService.close()
+            if (dataService) await dataService.close()
         }
     }
 
@@ -287,7 +286,7 @@ export default class DataSourceController {
         } catch (error) {
             throw new global.BusinessError(error.message || error, -1, 500)
         } finally {
-            await dataService.close()
+            if (dataService) await dataService.close()
         }
     }
 
@@ -308,7 +307,7 @@ export default class DataSourceController {
         } catch (error) {
             throw new global.BusinessError(error.message || error, -1, 500)
         } finally {
-            await dataService.close()
+            if (dataService) await dataService.close()
         }
     }
 
@@ -329,7 +328,7 @@ export default class DataSourceController {
         } catch (error) {
             throw new global.BusinessError(error.message || error, -1, 500)
         } finally {
-            await dataService.close()
+            if (dataService) await dataService.close()
         }
     }
 
@@ -341,11 +340,15 @@ export default class DataSourceController {
         @PathParams({ name: 'projectId', require: true }) projectId,
         @PathParams({ name: 'fileType', require: true }) fileType
     ) {
-        const tableList = await dataService.get('data-table', { deleteFlag: 0, projectId })
-        const tables = tableList.map((table) => {
+        const { list = [] } = await dataService.get('data-table', { deleteFlag: 0, projectId })
+        if (list.length <= 0) {
+            // 未查询到数据提示
+            throw new Error('暂无表结构')
+        }
+        const tables = list.map((table) => {
             return {
                 ...table,
-                columns: transformFieldObject2FieldArray(JSON.parse(table.columns || '{}'))
+                columns: JSON.parse(table.columns || '[]')
             }
         })
         const fileName = fileType === 'sql' ? `lesscode-struct-${projectId}.sql` : ''
@@ -357,25 +360,28 @@ export default class DataSourceController {
     // 导出项目下所有表数据
     @OutputZip()
     @ProjectAuthorization({ getId: ctx => ctx.params.projectId })
-    @Get('/exportDatas/projectId/:projectId/fileType/:fileType/tableName/:tableName')
+    @Get('/exportDatas/projectId/:projectId/fileType/:fileType/tableName/:tableName/environment/:environment')
     async exportDatas (
         @PathParams({ name: 'projectId', require: true }) projectId,
         @PathParams({ name: 'fileType', require: true }) fileType,
-        @PathParams({ name: 'tableName', require: true }) tableName
+        @PathParams({ name: 'tableName', require: true }) tableName,
+        @PathParams({ name: 'environment', require: true }) environment
     ) {
-        let dataService
-        try {
-            dataService = await getPreviewDataService(projectId)
-            const { list } = await dataService.get(tableName, {})
-            const datas = [{ tableName, list }]
-            const fileName = fileType === 'sql' ? `lesscode-data-${projectId}.sql` : ''
-            const zipName = `lesscode-data-${projectId}`
-            const fileList = generateExportDatas(datas, fileType, fileName)
-            return { fileList, zipName }
-        } catch (error) {
-            throw new global.BusinessError(error.message || error, -1, 500)
-        } finally {
-            await dataService.close()
+        const dbConfigMap = {
+            preview: getPreviewDbConfig
         }
+        const previewDbConfig = await dbConfigMap[environment](projectId)
+        const dbEngine = new DBEngineService(previewDbConfig)
+        const onlineDBService = new OnlineDBService(dbEngine)
+        const { list } = await onlineDBService.getTableAllData(tableName)
+        if (list.length <= 0) {
+            // 未查询到数据提示
+            throw new Error(`${tableName} 表暂无数据`)
+        }
+        const datas = [{ tableName, list }]
+        const fileName = fileType === 'sql' ? `lesscode-data-${projectId}.sql` : ''
+        const zipName = `lesscode-data-${projectId}`
+        const fileList = generateExportDatas(datas, fileType, fileName)
+        return { fileList, zipName }
     }
 }
