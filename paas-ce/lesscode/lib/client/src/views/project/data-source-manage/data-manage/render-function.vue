@@ -142,6 +142,7 @@
         },
         setup (props) {
             const projectId = router?.currentRoute?.params?.projectId
+            const versionId = store.getters['projectVersion/currentVersionId']
             const activeTable = toRef(props, 'activeTable')
             const functionList = computed(() => getDataFuncList(activeTable.value.tableName, projectId).map(funcHelper.getDefaultFunc))
             const funcRef = ref(null)
@@ -170,7 +171,7 @@
             const submitAddFunc = () => {
                 funcRef.value.validate().then((postData) => {
                     showAddFunc.loading = true
-                    const varWhere = { projectId, effectiveRange: 0 }
+                    const varWhere = { projectId, versionId, effectiveRange: 0 }
                     store.dispatch('functions/addFunc', { groupId: postData.funcGroupId, func: { projectId, ...postData }, varWhere }).then(() => {
                         messageSuccess('添加成功')
                         initData()
@@ -191,8 +192,8 @@
 
             const initData = () => {
                 return Promise.all([
-                    store.dispatch('functions/getAllGroupFuncs', projectId),
-                    store.dispatch('variable/getAllVariable', { projectId, effectiveRange: 0 })
+                    store.dispatch('functions/getAllGroupFuncs', { projectId, versionId }),
+                    store.dispatch('variable/getAllVariable', { projectId, versionId, effectiveRange: 0 })
                 ]).catch((err) => {
                     messageError(err.message || err)
                 })

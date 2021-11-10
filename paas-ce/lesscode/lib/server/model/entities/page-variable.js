@@ -12,6 +12,12 @@ export default class extends Base {
     @Column({ type: 'int', comment: '变量Id' })
     variableId
 
+    @Column({
+        type: 'int',
+        comment: 'project_version 表主键'
+    })
+    versionId
+
     @Column({ type: 'mediumtext', comment: '关联情况' })
     useInfo
 }

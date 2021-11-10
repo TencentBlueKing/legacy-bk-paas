@@ -24,7 +24,7 @@
                                 <div class="mask">
                                     <div class="operate-btns">
                                         <bk-button class="edit-btn" theme="primary" @click.stop="handlePreview(template)">预览</bk-button>
-                                        <bk-button class="preview-btn" @click="handleDownloadSource(template.content, template.id)">下载源码</bk-button>
+                                        <bk-button class="preview-btn" @click="handleDownloadSource(template)">下载源码</bk-button>
                                     </div>
                                 </div>
                             </div>
@@ -137,12 +137,15 @@
                     this.isLoading = false
                 }
             },
-            async handleDownloadSource (content, templateId) {
+            async handleDownloadSource (template) {
+                const { content, id: templateId, versionId, fromPageCode } = template
                 const targetData = []
                 targetData.push(JSON.parse(content))
                 this.$store.dispatch('vueCode/getPageCode', {
                     targetData,
                     projectId: this.projectId,
+                    versionId,
+                    fromPageCode,
                     from: 'download_page'
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
@@ -208,7 +211,8 @@
                     })
                     return
                 }
-                window.open(`/preview-template/project/${this.projectId}/${template.id}`, '_blank')
+                const versionQuery = `${template.versionId ? `?v=${template.versionId}` : ''}`
+                window.open(`/preview-template/project/${this.projectId}/${template.id}${versionQuery}`, '_blank')
             },
             handleSearch (clear = false) {
                 if (clear) {

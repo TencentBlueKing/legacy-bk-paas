@@ -1,7 +1,7 @@
 <template>
     <bk-dialog
         class="component-version-log-dialog"
-        :title="title"
+        :title="dialogTitle"
         :value="isShow"
         @cancel="handleCancel"
         quick-close
@@ -21,13 +21,19 @@
                 type: Boolean,
                 default: false
             },
+            title: {
+                type: String
+            },
             data: {
                 type: Object,
                 default: () => ({})
             }
         },
         computed: {
-            title () {
+            dialogTitle () {
+                if (this.title) {
+                    return this.title
+                }
                 return `${this.data.name}  ${this.data.version}版本日志`
             }
         },
@@ -38,8 +44,8 @@
         }
     }
 </script>
-<style lang='postcss'>
-    .component-version-log-dialog{
+<style lang="postcss">
+    .component-version-log-dialog {
         .markdown-body{
             box-shadow: none !important;
             .v-show-content {
@@ -48,5 +54,4 @@
             }
         }
     }
-
 </style>

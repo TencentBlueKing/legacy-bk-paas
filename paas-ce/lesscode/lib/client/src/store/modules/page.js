@@ -43,8 +43,8 @@ export default {
                 return data
             })
         },
-        getList ({ commit }, { projectId }) {
-            return http.get(`/page/getList?projectId=${projectId}`).then(response => {
+        getList ({ commit }, params) {
+            return http.get('/page/getList', { params }).then(response => {
                 const data = response.data || ''
                 return data
             })
