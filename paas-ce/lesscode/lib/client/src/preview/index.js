@@ -20,6 +20,12 @@ const location = window.parent.location
 const projectIdReg = new RegExp(`${location.origin}/preview/project/(\\d+)`)
 const [, projectId] = projectIdReg.exec(location.href) || []
 
+const storageKey = `preview-project-version-${projectId}`
+const versionId = new URLSearchParams(location.search).get('v') || sessionStorage.getItem(storageKey) || ''
+if (versionId) {
+    sessionStorage.setItem(storageKey, versionId)
+}
+
 // 获取初始化路由
 let proxyResolve
 const getDefaultRoute = new Promise(resolve => {
@@ -34,7 +40,7 @@ window.addEventListener('message', ({ data }) => {
 })
 
 auth(projectId).then(() => {
-    return Promise.all([pureAxios.get(`/projectCode/previewCode?projectId=${projectId}`), registerComponent(Vue, projectId)]).then(([res]) => {
+    return Promise.all([pureAxios.get(`/projectCode/previewCode?projectId=${projectId}&versionId=${versionId}`), registerComponent(Vue, projectId, versionId)]).then(([res]) => {
         Vue.prototype.$http = pureAxios
         const data = res.data || {}
         const projectPageRouteList = (data.pageRouteList || []).map(item => ({

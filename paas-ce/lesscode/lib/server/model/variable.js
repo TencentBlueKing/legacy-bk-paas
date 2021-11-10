@@ -14,10 +14,11 @@ import Variable from './entities/variable'
 import PageVariable from './entities/page-variable'
 import FuncVariable from './entities/func-variable'
 import VariableVariable from './entities/variable-variable'
+import { whereVersionLiteral } from './common'
 
 module.exports = {
-    async getAll ({ projectId, pageCode, effectiveRange }) {
-        const where = [{ projectId, deleteFlag: 0 }]
+    async getAll ({ projectId, versionId, pageCode, effectiveRange }) {
+        const where = [{ projectId, versionId: whereVersionLiteral(versionId), deleteFlag: 0 }]
         if (effectiveRange !== undefined) {
             where[0].effectiveRange = effectiveRange
         }
@@ -28,7 +29,7 @@ module.exports = {
         const variableIds = variableList.map((variable) => (variable.id))
         const usedVariableData = []
         if (variableIds.length) {
-            const where = { variableId: In(variableIds), deleteFlag: 0, projectId }
+            const where = { variableId: In(variableIds), deleteFlag: 0, projectId, versionId: whereVersionLiteral(versionId) }
             const [usedInPage, usedInFunc, usedInVar] = await Promise.all([
                 getRepository(PageVariable).find({ where }),
                 getRepository(FuncVariable).find({ where }),

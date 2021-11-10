@@ -125,6 +125,7 @@
             ...mapGetters(['user']),
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('project', ['currentProject']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', currentVersion: 'currentVersion' }),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -161,10 +162,11 @@
             async getPageList () {
                 this.isLoading = true
                 try {
+                    const where = { projectId: this.projectId, versionId: this.versionId || '' }
                     const [pageList, pageRouteList, routeGroup] = await Promise.all([
-                        this.$store.dispatch('page/getList', { projectId: this.projectId }),
-                        this.$store.dispatch('route/query', { projectId: this.projectId }),
-                        this.$store.dispatch('route/getProjectRouteTree', { projectId: this.projectId })
+                        this.$store.dispatch('page/getList', where),
+                        this.$store.dispatch('route/query', where),
+                        this.$store.dispatch('route/getProjectRouteTree', where)
                     ])
 
                     this.pageList = pageList
@@ -192,7 +194,9 @@
                 this.$refs.pageDialog.dialog.visible = true
             },
             handlePreviewProject () {
-                window.open(`/preview/project/${this.projectId}/`, '_blank')
+                // 跳转到预览入口页面
+                const versionQuery = `${this.versionId ? `?v=${this.versionId}` : ''}`
+                window.open(`/preview/project/${this.projectId}/${versionQuery}`, '_blank')
             },
             async handleCopy (page) {
                 this.action = 'copy'
@@ -216,6 +220,7 @@
                 this.$store.dispatch('vueCode/getPageCode', {
                     targetData: JSON.parse(targetData),
                     projectId: this.projectId,
+                    versionId: this.versionId,
                     lifeCycle,
                     pageId,
                     styleSetting,
@@ -283,11 +288,15 @@
                     })
                     return
                 }
-                window.open(`/preview/project/${this.projectId}/?pageCode=${page.pageCode}`, '_blank')
+
+                // 跳转到预览入口页面
+                const versionQuery = `${this.versionId ? `&v=${this.versionId}` : ''}`
+                window.open(`/preview/project/${this.projectId}/?pageCode=${page.pageCode}${versionQuery}`, '_blank')
             },
             handleDownLoadProject () {
                 this.$refs.downloadDialog.isShow = true
                 this.$refs.downloadDialog.projectId = this.projectId
+                this.$refs.downloadDialog.version = this.versionId ? `${this.currentVersion.id}:${this.currentVersion.version}` : ''
                 this.$refs.downloadDialog.projectName = this.currentProject.projectName
             },
             handleSearch (clear = false) {

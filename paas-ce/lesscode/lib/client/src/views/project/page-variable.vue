@@ -35,6 +35,7 @@
         },
 
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             ...mapGetters('page', ['pageDetail']),
 
             projectId () {
@@ -53,6 +54,7 @@
                 this.isLoading = true
                 const params = {
                     projectId: this.projectId,
+                    versionId: this.versionId,
                     pageCode: this.pageDetail.pageCode,
                     effectiveRange: 0
                 }

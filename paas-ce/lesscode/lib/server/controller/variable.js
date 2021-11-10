@@ -14,7 +14,8 @@ import { updateVariableRelation } from '../model/variable-relation'
 import fileService from '../utils/file-service/index'
 import FuncVariable from '../model/entities/func-variable'
 import { checkFuncEslint } from '../util'
-import { getRepository } from 'typeorm'
+import { getRepository, In } from 'typeorm'
+import { whereVersionLiteral } from '../model/common'
 
 const variable = {
     async uploadImage (ctx) {
@@ -61,26 +62,23 @@ const variable = {
 
     async getFunctionVariable (ctx) {
         try {
-            const { projectId, funcCodes } = ctx.request.body || {}
+            const { projectId, versionId, funcCodes } = ctx.request.body || {}
             // 找出函数中使用的变量
             let data = []
             if (funcCodes && funcCodes.length) {
-                data = await getRepository(FuncVariable)
-                    .createQueryBuilder()
-                    .select(['id', 'variableId'])
-                    .where('deleteFlag = 0')
-                    .andWhere('projectId = :projectId', { projectId })
-                    .andWhere('funcCode IN (:funcCodes)', { funcCodes })
-                    .getRawMany()
+                const select = ['id', 'variableId']
+                const where = { funcCode: In(funcCodes), deleteFlag: 0, projectId, versionId: whereVersionLiteral(versionId) }
+                data = await getRepository(FuncVariable).find({ select, where })
             } else {
                 data = await getRepository(FuncVariable).find({
                     where: {
                         projectId: projectId,
+                        versionId: whereVersionLiteral(versionId),
                         deleteFlag: 0
                     }
                 })
             }
-            
+
             ctx.send({
                 code: 0,
                 message: 'success',

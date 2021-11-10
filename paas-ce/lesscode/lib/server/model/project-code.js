@@ -40,7 +40,7 @@ const STATIC_URL = `${DIR_PATH}/lib/server/project-template/`
 
 const projectCode = {
 
-    async previewCode (projectId) {
+    async previewCode (projectId, versionId) {
         // 获取预览相关的数据
         const [
             routeList,
@@ -49,11 +49,11 @@ const projectCode = {
             funcGroups = [],
             allVarableList = []
         ] = await Promise.all([
-            routeModel.findProjectRoute(projectId),
-            routeModel.queryProjectPageRoute(projectId),
+            routeModel.findProjectRoute(projectId, versionId),
+            routeModel.queryProjectPageRoute(projectId, versionId),
             ComponentModel.getNameMap(),
-            FuncModel.allGroupFuncDetail(projectId),
-            VariableModel.getAll({ projectId })
+            FuncModel.allGroupFuncDetail(projectId, versionId),
+            VariableModel.getAll({ projectId, versionId })
         ])
 
         const routeGroup = {}
@@ -138,9 +138,9 @@ const projectCode = {
         return { routeGroup, storeData, pageRouteList }
     },
 
-    async generateCode (projectId, pathName) {
+    async generateCode (projectId, versionId, pathName) {
         const sourcePath = STATIC_URL + 'project-init-code'
-        const targetPath = STATIC_URL + (pathName || `project-target-code${projectId}`)
+        const targetPath = STATIC_URL + (pathName || `project-target-code${projectId}${versionId ? `-${versionId}` : ''}`)
 
         return new Promise(async (resolve, reject) => {
             try {
@@ -155,11 +155,11 @@ const projectCode = {
                     { list: dataTables = [] },
                     dataTableModifyRecords
                 ] = await Promise.all([
-                    routeModel.findProjectRoute(projectId),
-                    routeModel.queryProjectPageRoute(projectId),
+                    routeModel.findProjectRoute(projectId, versionId),
+                    routeModel.queryProjectPageRoute(projectId, versionId),
                     ComponentModel.getNameMap(),
-                    FuncModel.allGroupFuncDetail(projectId),
-                    VariableModel.getAll({ projectId }),
+                    FuncModel.allGroupFuncDetail(projectId, versionId),
+                    VariableModel.getAll({ projectId, versionId }),
                     dataService.get('data-table', { projectId, deleteFlag: 0 }),
                     DataTableModifyRecord.getListByTime({ query: { projectId } })
                 ])
@@ -286,7 +286,7 @@ const projectCode = {
                         ) || []
 
                         usedMethodList = [...usedMethodList, ...methodStrList]
-                        const packageJsonArr = await PageCompModel.getProjectComp(projectId)
+                        const packageJsonArr = await PageCompModel.getProjectComp(projectId, versionId)
                         await this.writePackageJSON(
                             path.join(targetPath, 'package.json'),
                             packageJsonArr

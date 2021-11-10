@@ -180,6 +180,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             ...mapGetters('page', {
                 page: 'pageDetail'
             }),
@@ -365,8 +366,8 @@
                     this.pageLoading = true
                     const [pageRoute, layoutList, routeGroup] = await Promise.all([
                         this.$store.dispatch('route/find', { pageId: this.page.id }),
-                        this.$store.dispatch('layout/getList', { projectId: this.projectId }),
-                        this.$store.dispatch('route/getProjectRouteGroup', { projectId: this.projectId })
+                        this.$store.dispatch('layout/getList', { projectId: this.projectId, versionId: this.versionId }),
+                        this.$store.dispatch('route/getProjectRouteGroup', { projectId: this.projectId, versionId: this.versionId })
                     ])
                     layoutList.forEach(item => {
                         item.defaultName = item.showName || item.defaultName
@@ -442,6 +443,7 @@
                             pageName: value,
                             currentName: this.page.pageName,
                             projectId: this.project.id,
+                            versionId: this.versionId,
                             from: 'setting'
                         }
                     })
@@ -469,6 +471,7 @@
                     data: {
                         pageData,
                         projectId: this.project.id,
+                        versionId: this.versionId,
                         functionData: Object.keys(usedFuncMap),
                         from: 'setting'
                     }
@@ -504,6 +507,7 @@
                 const data = {
                     pageRoute: {},
                     projectId: this.project.id,
+                    versionId: this.versionId,
                     pageId: this.page.id
                 }
                 if (field.id === 'layoutId') {
