@@ -39,8 +39,7 @@ export default class DataSourceController {
             order: {
                 id: 'DESC'
             },
-            query: {},
-            countQuery: {}
+            query: {}
         }
         const result = page && pageSize
             ? await dataService.getByPage(queryParams)
