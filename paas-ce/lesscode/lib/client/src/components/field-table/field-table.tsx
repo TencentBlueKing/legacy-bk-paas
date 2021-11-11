@@ -87,7 +87,7 @@ export default defineComponent({
                             <bk-input
                                 key={item.prop}
                                 placeholder={item.placeholder || '请输入'}
-                                class={`field-table-input ${errHandle(row, item.prop) ? 'error' : ''}`}
+                                class={`field-table-input ${errHandle(row, item.prop, item) ? 'error' : ''}`}
                                 value={row[item.prop]}
                                 type={row[`${item.prop}InputType`] || 'text'}
                                 disabled={row?.isEdit}
@@ -96,7 +96,7 @@ export default defineComponent({
                                 }
                             />
                             {
-                                errHandle(row, item.prop)
+                                errHandle(row, item.prop, item)
                                     ? <i v-bk-tooltips={item.tips} class={['bk-icon icon-exclamation-circle-shape row-icons']} />
                                     : ''
                             }
@@ -124,7 +124,7 @@ export default defineComponent({
                     const { row, $index } = props
                     const defaultSlot = (
                         <bk-select
-                            class={`field-table-select ${errHandle(row, item.prop) ? 'error' : ''}`}
+                            class={`field-table-select ${errHandle(row, item.prop, item) ? 'error' : ''}`}
                             clearable={false}
                             value={row[item.prop]}
                             disabled={row?.isEdit}
@@ -214,7 +214,7 @@ export default defineComponent({
         }
         const regStatus = (data, item, ele) => {
             if (typeof data.reg === 'function') {
-                return data.reg(item[ele.prop], item)
+                return !data.reg(item[ele.prop], item)
             }
             return !data.reg.test(item[ele.prop])
         }
@@ -236,7 +236,14 @@ export default defineComponent({
             list.forEach(ele => listStr.push(ele.prop))
             return listStr
         }
-        const errHandle = (row, key) => {
+        const regCheck = (reg, item, ele) => {
+            const isFun = typeof reg === 'function'
+            if (isFun) {
+                return reg()
+            }
+            return reg.test(item[ele])
+        }
+        const errHandle = (row, key, column) => {
             /** 检查是否必填 */
             const listStr = getTableColumnsArr('isRequire')
             const errStr = []
@@ -250,11 +257,13 @@ export default defineComponent({
             const listReg = getTableColumnsArr('reg')
             const regStr: any[] = []
             listReg.forEach(ele => props.data.map(item => {
+                // console.log(item, 'item')
                 const reg = props.column.filter(item => item.prop === ele)[0]?.reg
-                if (reg && !reg.test(item[ele])) {
+                if (reg && !regCheck(reg, column, item)) {
                     regStr.push(ele)
                 }
             }))
+            console.log(row)
             const errStatus = listStr.includes(key) && row.isErr && errStr.includes(key)
             const regStatus = row.isReg && regStr.includes(key)
             return errStatus || regStatus
