@@ -228,6 +228,8 @@
             }
 
             const getDataList = () => {
+                if (!activeTable.value?.tableName) return
+
                 const queryData = {
                     projectId,
                     environment: environment.value,

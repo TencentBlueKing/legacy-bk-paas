@@ -24,7 +24,12 @@ instance.interceptors.response.use(
             if (response.data && response.data.detail) {
                 message = response.data.detail
             }
-            return Promise.reject(new global.BusinessError(message, response.status || -1))
+            // 默认给出的 code
+            let code = response.status || -1
+            if (response.data && response.data.code) {
+                code = response.data.code
+            }
+            return Promise.reject(new global.BusinessError(message, code))
         }
         return Promise.reject(new global.BusinessError('接口访问异常', -1))
     }

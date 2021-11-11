@@ -116,7 +116,9 @@
                     {
                         title: '版本管理',
                         icon: 'version',
-                        toPath: 'versions'
+                        toPath: {
+                            name: 'versions'
+                        }
                     },
                     {
                         title: '成员管理',
@@ -304,12 +306,6 @@
                 display: flex;
                 align-items: center;
 
-                .current {
-                    color: #000;
-                    font-size: 16px;
-                    font-weight: normal;
-                }
-
                 .version-selector {
                     margin-left: 25px;
                     position: relative;
@@ -330,6 +326,12 @@
                         width: 90px;
                     }
                 }
+            }
+
+            .current {
+                color: #000;
+                font-size: 16px;
+                font-weight: normal;
             }
         }
 

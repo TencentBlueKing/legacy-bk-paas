@@ -83,11 +83,11 @@ export default defineComponent({
                 default: (props) => {
                     const { row, $index } = props
                     const defaultSlot = (
-                        <div>
+                        <div title={row[item.prop]}>
                             <bk-input
                                 key={item.prop}
                                 placeholder={item.placeholder || '请输入'}
-                                class={`field-table-input ${item.isRequire && row.isErr ? 'error' : ''}`}
+                                class={`field-table-input ${errHandle(row, item.prop, item) ? 'error' : ''}`}
                                 value={row[item.prop]}
                                 type={row[`${item.prop}InputType`] || 'text'}
                                 disabled={row?.isEdit}
@@ -96,8 +96,8 @@ export default defineComponent({
                                 }
                             />
                             {
-                                (item.isRequire && row.isErr) || row.isReg
-                                    ? <i v-bk-tooltips={item.tips} class={['bk-icon icon-exclamation-circle row-icons']} />
+                                errHandle(row, item.prop, item)
+                                    ? <i v-bk-tooltips={item.tips} class={['bk-icon icon-exclamation-circle-shape row-icons']} />
                                     : ''
                             }
                         </div>
@@ -124,7 +124,7 @@ export default defineComponent({
                     const { row, $index } = props
                     const defaultSlot = (
                         <bk-select
-                            class={`field-table-select ${item.isRequire && row.isErr ? 'error' : ''}`}
+                            class={`field-table-select ${errHandle(row, item.prop, item) ? 'error' : ''}`}
                             clearable={false}
                             value={row[item.prop]}
                             disabled={row?.isEdit}
@@ -212,17 +212,61 @@ export default defineComponent({
                 return status
             }
         }
+        const regStatus = (data, item, ele) => {
+            if (typeof data.reg === 'function') {
+                return !data.reg(item[ele.prop], item)
+            }
+            return !data.reg.test(item[ele.prop])
+        }
         const handleIsReg = (list, item) => {
             const length = list.length
             if (length === 1) {
-                return !list[0].reg.test(item[list[0].prop])
+                return regStatus(list[0], item, list[0])
             } else {
                 let status = false
                 for (let i = 0; i < length - 1; i++) {
-                    status = !list[i].reg.test(item[list[i].prop]) || !list[i].reg.test(item[list[i + 1].prop])
+                    status = regStatus(list[i], item, list[i]) || regStatus(list[i], item, list[i + 1])
                 }
                 return status
             }
+        }
+        const getTableColumnsArr = (type: string) => {
+            const list = props.column.filter(item => !!item[type])
+            const listStr = []
+            list.forEach(ele => listStr.push(ele.prop))
+            return listStr
+        }
+        const regCheck = (reg, item, ele) => {
+            const isFun = typeof reg === 'function'
+            if (isFun) {
+                return reg()
+            }
+            return reg.test(item[ele])
+        }
+        const errHandle = (row, key, column) => {
+            /** 检查是否必填 */
+            const listStr = getTableColumnsArr('isRequire')
+            const errStr = []
+            listStr.forEach(ele => props.data.map(item => {
+                if (!item[ele]) {
+                    errStr.push(ele)
+                }
+            })
+            )
+            /** 检查输入是否符合正则规则 */
+            const listReg = getTableColumnsArr('reg')
+            const regStr: any[] = []
+            listReg.forEach(ele => props.data.map(item => {
+                // console.log(item, 'item')
+                const reg = props.column.filter(item => item.prop === ele)[0]?.reg
+                if (reg && !regCheck(reg, column, item)) {
+                    regStr.push(ele)
+                }
+            }))
+            console.log(row)
+            const errStatus = listStr.includes(key) && row.isErr && errStr.includes(key)
+            const regStatus = row.isReg && regStr.includes(key)
+            return errStatus || regStatus
         }
         return {
             renderCheckbox,
@@ -232,7 +276,8 @@ export default defineComponent({
             renderOperate,
             renderHeader,
             verification,
-            tableList
+            tableList,
+            errHandle
         }
     },
     render (): VNode {

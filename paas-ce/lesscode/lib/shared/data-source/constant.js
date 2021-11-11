@@ -15,6 +15,7 @@
 export const BASE_COLUMNS = [
     {
         name: 'id',
+        columnId: 'id',
         type: 'int',
         primary: true,
         generated: true,
@@ -24,6 +25,7 @@ export const BASE_COLUMNS = [
     },
     {
         name: 'createTime',
+        columnId: 'createTime',
         type: 'datetime',
         createDate: true,
         nullable: true,
@@ -31,6 +33,7 @@ export const BASE_COLUMNS = [
     },
     {
         name: 'createUser',
+        columnId: 'createUser',
         type: 'varchar',
         length: 255,
         nullable: true,
@@ -38,6 +41,7 @@ export const BASE_COLUMNS = [
     },
     {
         name: 'updateTime',
+        columnId: 'updateTime',
         type: 'datetime',
         updateDate: true,
         nullable: true,
@@ -45,6 +49,7 @@ export const BASE_COLUMNS = [
     },
     {
         name: 'updateUser',
+        columnId: 'updateUser',
         type: 'varchar',
         length: 255,
         nullable: true,

@@ -12,6 +12,26 @@ const compressing = require('compressing')
 const send = require('koa-send')
 const path = require('path')
 const fse = require('fs-extra')
+const { logger } = require('../../logger')
+
+const outputError = (error, ctx) => {
+    // 结构化日志记录错误
+    logger.error(error)
+    // 输出错误给前端
+    const {
+        status = 500,
+        code,
+        message,
+        data
+    } = error
+    
+    ctx.status = status
+    ctx.body = {
+        code,
+        message,
+        data
+    }
+}
 
 /**
  * 输出 json
@@ -22,9 +42,10 @@ export const OutputJson = () => {
         descriptor.value = async (ctx) => {
             try {
                 const data = await originValue.apply(this, [ctx])
-                ctx.send({ code: 0, message: 'success', data })
+                ctx.set('Content-Type', 'application/json')
+                ctx.body = JSON.stringify({ code: 0, message: 'success', data })
             } catch (error) {
-                ctx.throwError(error)
+                outputError(error, ctx)
             }
         }
     }
@@ -64,7 +85,7 @@ export const OutputZip = () => {
                 ctx.attachment(curDownLoadZipPath)
                 await send(ctx, curDownLoadZipPath)
             } catch (error) {
-                ctx.throwError(error)
+                outputError(error, ctx)
             } finally {
                 if (curDownLoadFilesPath) fse.remove(curDownLoadFilesPath)
                 if (curDownLoadDirPath) fse.remove(curDownLoadDirPath)
