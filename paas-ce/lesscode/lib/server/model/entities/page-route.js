@@ -28,4 +28,10 @@ export default class extends Base {
 
     @Column({ type: 'int', comment: 'project 表主键' })
     projectId
+
+    @Column({
+        type: 'int',
+        comment: 'project_version 表主键'
+    })
+    versionId
 }

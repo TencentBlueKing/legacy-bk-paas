@@ -31,7 +31,8 @@
                             @selected="changeProjectPage">
                             <div slot="trigger">
                                 <div class="name-content" :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
-                                    {{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span>
+                                    <div class="col-name">{{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span></div>
+                                    <div class="col-version">{{versionName}}</div>
                                 </div>
                                 <i class="bk-select-angle bk-icon icon-angle-down"></i>
                             </div>
@@ -503,6 +504,7 @@
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('components', ['interactiveComponents']),
             ...mapGetters('variable', ['variableList']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' }),
             ...mapState('route', ['layoutPageList']),
             copyIconStyle () {
                 return {
@@ -622,6 +624,10 @@
                     target: '#editPageSwitchPage'
                 }
             ]
+
+            // 获取并设置当前版本信息
+            this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
+
             await this.fetchData()
 
             const mockCurSelectComponentData = {
@@ -906,24 +912,25 @@
             },
 
             async fetchData () {
+                console.log('versionId:::', this.versionId)
                 try {
                     this.contentLoading = true
                     const [pageDetail, pageList, projectDetail] = await Promise.all([
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
-                        this.$store.dispatch('page/getList', { projectId: this.projectId }),
+                        this.$store.dispatch('page/getList', { projectId: this.projectId, versionId: this.versionId }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
                         this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
-                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId }),
+                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, versionId: this.versionId }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
-                        this.getAllGroupFuncs(this.projectId)
+                        this.getAllGroupFuncs({ projectId: this.projectId, versionId: this.versionId })
                     ])
 
                     await Promise.all([
                         // 处理加锁逻辑
                         this.lockStatsuPolling('lock'),
                         // 添加变量
-                        this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 }),
+                        this.getAllVariable({ projectId: this.projectId, versionId: this.versionId, pageCode: pageDetail.pageCode, effectiveRange: 0 }),
                         // 添加表
                         this.$store.dispatch('dataSource/list', { projectId: this.projectId })
                     ])
@@ -1535,7 +1542,8 @@
                     try {
                         localStorage.removeItem('layout-target-data')
                         localStorage.setItem('layout-target-data', circleJSON(this.targetData))
-                        const routerUrl = `/preview/project/${this.projectId}/?pageCode=${this.pageDetail.pageCode}`
+                        const versionQuery = `${this.versionId ? `&v=${this.versionId}` : ''}`
+                        const routerUrl = `/preview/project/${this.projectId}/?pageCode=${this.pageDetail.pageCode}${versionQuery}`
                         window.open(routerUrl, '_blank')
                     } catch (err) {
                         errTips = err.message || err || '预览异常'
@@ -1579,6 +1587,7 @@
                         data: {
                             from,
                             projectId: this.projectId,
+                            versionId: this.versionId,
                             pageCode: this.pageDetail.pageCode,
                             pageData: {
                                 id: parseInt(this.$route.params.pageId),
@@ -1591,8 +1600,7 @@
                         }
                     })
                     this.savePreviewImg()
-                    const projectId = this.$route.params.projectId || 1
-                    this.getAllGroupFuncs(projectId)
+                    this.getAllGroupFuncs({ projectId: this.projectId, versionId: this.versionId })
                     res && this.$bkMessage({
                         theme: 'success',
                         message: '保存成功',
@@ -1776,6 +1784,7 @@
                         this.$store.dispatch('page/update', {
                             data: {
                                 projectId: this.projectId,
+                                versionId: this.versionId,
                                 pageData: {
                                     id: parseInt(this.$route.params.pageId),
                                     previewImg: imgData || previewErrorImg

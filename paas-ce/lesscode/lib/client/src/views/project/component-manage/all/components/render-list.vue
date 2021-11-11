@@ -78,7 +78,7 @@
 <script>
     import { execCopy } from '@/common/util'
     import Operation from './operation'
-    import VersionLog from '../../version-log'
+    import VersionLog from '@/components/version-log'
     import PublicScope from '../../public-scope'
 
     export default {

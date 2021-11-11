@@ -65,13 +65,16 @@
             templateId () {
                 return this.$route.params.templateId || ''
             },
+            versionId () {
+                return this.$route.query.v || ''
+            },
             type () {
                 return this.$route.query.type || ''
             }
         },
         async created () {
             const script = document.createElement('script')
-            script.src = `/${parseInt(this.projectId)}/component/preview-register.js`
+            script.src = `/${parseInt(this.projectId)}/component/preview-register.js?v=${this.versionId}`
             script.onload = () => {
                 window.previewCustomCompontensPlugin.forEach(callback => {
                     const [config, source] = callback(Vue)
@@ -83,7 +86,7 @@
 
             if (this.type === 'nav-template') {
                 try {
-                    const { list } = await this.$store.dispatch('layout/getFullList', { projectId: this.projectId })
+                    const { list } = await this.$store.dispatch('layout/getFullList', { projectId: this.projectId, versionId: this.versionId })
                     this.detail = list.filter(item => item.id === parseInt(this.templateId))[0]
                 } catch (e) {
                     console.error(e)
@@ -125,6 +128,7 @@
                             targetData: [],
                             pageType: 'previewSingle',
                             projectId: projectId,
+                            versionId: this.detail.versionId,
                             layoutContent,
                             withNav: true,
                             layoutType: this.detail.type
@@ -133,11 +137,12 @@
                         code = await this.$store.dispatch('vueCode/getPageCode', {
                             targetData,
                             projectId: projectId,
+                            versionId: this.detail.versionId,
                             pageType: 'previewSingle',
                             fromPageCode: this.detail.fromPageCode
                         })
                     }
-                    
+
                     code = code.replace('export default', 'module.exports =').replace('components: { chart: ECharts },', '')
                     const res = httpVueLoader(code)
                     setTimeout(() => {

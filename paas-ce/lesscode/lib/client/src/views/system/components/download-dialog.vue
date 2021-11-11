@@ -40,13 +40,14 @@
             return {
                 isShow: false,
                 projectId: '',
+                version: '',
                 projectName: '',
                 title: '下载源码包'
             }
         },
         methods: {
             handleDownloadSource () {
-                window.open(`/api/projectCode/downloadCode?projectId=${this.projectId}`, '_self')
+                window.open(`/api/projectCode/downloadCode?projectId=${this.projectId}&v=${this.version}`, '_self')
                 setTimeout(() => {
                     this.isShow = false
                 }, 500)

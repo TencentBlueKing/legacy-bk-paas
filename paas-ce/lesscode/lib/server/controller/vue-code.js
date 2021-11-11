@@ -57,6 +57,7 @@ const VueCode = {
             const {
                 pageType = 'vueCode',
                 projectId = '',
+                versionId,
                 lifeCycle,
                 pageId,
                 layoutContent,
@@ -69,7 +70,12 @@ const VueCode = {
                 layoutType
             } = ctx.request.body
 
-            const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([getNameMap(), allGroupFuncDetail(projectId), routeModel.findProjectRoute(projectId), variableModel.getAll({ projectId })])
+            const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([
+                getNameMap(),
+                allGroupFuncDetail(projectId, versionId),
+                routeModel.findProjectRoute(projectId, versionId),
+                variableModel.getAll({ projectId, versionId })
+            ])
             const curPage = routeList.find((route) => (route.pageId === +pageId)) || {}
             const variableList = [
                 ...allVarableList.filter(variable => variable.effectiveRange === 0),

@@ -65,4 +65,10 @@ export default class extends Base {
         comment: '所属项目id'
     })
     belongProjectId
+
+    @Column({
+        type: 'int',
+        comment: 'project_version 表主键'
+    })
+    versionId
 }

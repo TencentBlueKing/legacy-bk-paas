@@ -145,6 +145,7 @@ export default defineComponent({
                 name: '字段类型',
                 type: 'select',
                 prop: 'type',
+                isRequire: true,
                 optionsList: [
                     {
                         id: 'varchar',

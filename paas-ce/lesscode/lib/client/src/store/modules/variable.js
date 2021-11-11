@@ -46,8 +46,8 @@ export default {
             commit('setVariableFormData', data)
         },
 
-        getAllProjectVariable ({ commit }, projectId) {
-            return http.get(`${variablePerfix}/getAllVariable`, { params: { projectId } }).then(response => {
+        getAllProjectVariable ({ commit }, params) {
+            return http.get(`${variablePerfix}/getAllVariable`, { params }).then(response => {
                 const data = response.data || []
                 return data
             })

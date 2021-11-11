@@ -43,7 +43,7 @@
             ></bk-table-column>
             <bk-table-column label="操作" width="180">
                 <template slot-scope="props">
-                    <bk-button text @click="editData(props.row)" class="mr5">编辑</bk-button>
+                    <bk-button text @click="editData(props.row)" class="mr10">编辑</bk-button>
                     <bk-button text @click="deleteData([props.row])">删除</bk-button>
                 </template>
             </bk-table-column>

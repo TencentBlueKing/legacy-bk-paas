@@ -114,6 +114,7 @@
         },
         computed: {
             ...mapGetters(['isPlatformAdmin']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             },

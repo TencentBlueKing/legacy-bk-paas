@@ -51,6 +51,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import { compile } from 'path-to-regexp'
     import LayoutThumbList from '@/components/project/layout-thumb-list'
     export default {
@@ -141,6 +142,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -186,7 +188,7 @@
         methods: {
             async getProjectLayout () {
                 try {
-                    const layoutList = await this.$store.dispatch('layout/getList', { projectId: this.projectId })
+                    const layoutList = await this.$store.dispatch('layout/getList', { projectId: this.projectId, versionId: this.versionId })
                     layoutList.forEach(item => {
                         item.checked = item.isDefault === 1
                         item.defaultName = item.showName || item.defaultName
@@ -194,7 +196,7 @@
                         item.isDefault = false
                     })
                     this.layoutList = layoutList
-                    this.selectedLayout = layoutList.find(item => item.checked)
+                    this.selectedLayout = layoutList.find(item => item.checked) || {}
                 } catch (e) {
                     console.error(e)
                 }
@@ -215,6 +217,7 @@
                         data: {
                             ...formData,
                             projectId: this.projectId,
+                            versionId: this.versionId,
                             currentName: this.currentName,
                             from: this.action
                         }
@@ -223,7 +226,8 @@
                     const payload = {
                         data: {
                             pageData: this.dialog.formData,
-                            projectId: this.projectId
+                            projectId: this.projectId,
+                            versionId: this.versionId
                         }
                     }
                     if (this.action === 'create') {

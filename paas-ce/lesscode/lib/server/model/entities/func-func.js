@@ -25,4 +25,10 @@ export default class extends Base {
     // 父函数中使用的函数
     @Column({ type: 'int' })
     funcCode
+
+    @Column({
+        type: 'int',
+        comment: 'project_version 表主键'
+    })
+    versionId
 }

@@ -17,7 +17,7 @@
             ></bk-table-column>
             <bk-table-column label="操作" width="180">
                 <template slot-scope="props">
-                    <bk-button text @click="showCode(props.row)" class="mr5">查看源码</bk-button>
+                    <bk-button text @click="showCode(props.row)" class="mr10">查看源码</bk-button>
                     <bk-button text @click="addToProject(props.row)">添加至项目</bk-button>
                 </template>
             </bk-table-column>
@@ -142,6 +142,7 @@
         },
         setup (props) {
             const projectId = router?.currentRoute?.params?.projectId
+            const versionId = store.getters['projectVersion/currentVersionId']
             const activeTable = toRef(props, 'activeTable')
             const functionList = computed(() => getDataFuncList(activeTable.value.tableName, projectId).map(funcHelper.getDefaultFunc))
             const funcRef = ref(null)
@@ -170,7 +171,7 @@
             const submitAddFunc = () => {
                 funcRef.value.validate().then((postData) => {
                     showAddFunc.loading = true
-                    const varWhere = { projectId, effectiveRange: 0 }
+                    const varWhere = { projectId, versionId, effectiveRange: 0 }
                     store.dispatch('functions/addFunc', { groupId: postData.funcGroupId, func: { projectId, ...postData }, varWhere }).then(() => {
                         messageSuccess('添加成功')
                         initData()
@@ -191,8 +192,8 @@
 
             const initData = () => {
                 return Promise.all([
-                    store.dispatch('functions/getAllGroupFuncs', projectId),
-                    store.dispatch('variable/getAllVariable', { projectId, effectiveRange: 0 })
+                    store.dispatch('functions/getAllGroupFuncs', { projectId, versionId }),
+                    store.dispatch('variable/getAllVariable', { projectId, versionId, effectiveRange: 0 })
                 ]).catch((err) => {
                     messageError(err.message || err)
                 })

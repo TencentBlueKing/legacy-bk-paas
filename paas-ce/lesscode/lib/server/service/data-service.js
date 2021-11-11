@@ -61,12 +61,11 @@ export function getDataService (name = 'default', customEntityMap) {
          * @param {*} page 页码
          * @param {*} pageSize 每页数量
          * @param {*} query 查询参数
-         * @param {*} countQuery 总数查询参数
          * @param {*} like 模糊搜索，传入：{ name: 'jack', middleName: 'tom' }
          * @param {*} order 排序，传入：{ updateTime: 'DESC' }
          * @returns 数据列表 & 总数
          */
-        async getByPage ({ tableFileName, page, pageSize, query = { deleteFlag: 0 }, countQuery = { deleteFlag: 0 }, like, order = { updateTime: 'DESC' } }) {
+        async getByPage ({ tableFileName, page, pageSize, query = { deleteFlag: 0 }, like, order = { updateTime: 'DESC' } }) {
             const repository = getRepositoryByName(tableFileName)
             const queryObject = {
                 skip: (page - 1) * pageSize,
@@ -91,7 +90,7 @@ export function getDataService (name = 'default', customEntityMap) {
 
             const [list, count] = await Promise.all([
                 repository.find(queryObject),
-                repository.count(countQuery)
+                repository.count(query)
             ])
             return { list, count }
         },
