@@ -38,6 +38,7 @@ export function getDataService (name = 'default', customEntityMap) {
     function getRepositoryByName (tableFileName) {
         const sourceMap = customEntityMap || entityMap
         const entity = sourceMap[tableFileName]
+        if (entity === undefined) throw new Error(`未查询到表名为【${tableFileName}】的表`)
         return getRepository(entity, name)
     }
 

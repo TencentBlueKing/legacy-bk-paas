@@ -132,8 +132,8 @@
                 pageStatus.activeEnvironment = val
             }
 
-            const setActiveTable = (item) => {
-                pageStatus.activeTable = item || pageStatus.tableList[0]
+            const setActiveTable = (item = pageStatus.tableList[0]) => {
+                pageStatus.activeTable = item
             }
 
             const getTableList = () => {
@@ -145,11 +145,14 @@
                 store.dispatch('dataSource/getOnlineTableList', queryData).then((data) => {
                     pageStatus.tableList = data || []
                     const activeTable = data.find(x => x.tableName === tableName)
-                    pageStatus.errorCode = data.length <= 0 ? 'NO_DATA' : ''
                     setActiveTable(activeTable)
                 }).catch((error) => {
+                    // 清除数据
+                    pageStatus.tableList = []
+                    setActiveTable()
                     messageError(error.message || error)
                 }).finally(() => {
+                    pageStatus.errorCode = pageStatus.tableList.length <= 0 ? 'NO_DATA' : ''
                     pageStatus.isLoading = false
                 })
             }

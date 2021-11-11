@@ -1742,7 +1742,7 @@ class PageCode {
     }
 
     dataSourceTemplate (key, sourceData) {
-        this.remoteDataStr += `const ${key}Source = await this.$http.get('/data-source/user/projectId/${this.projectId}/tableName/${sourceData.tableName}')\nthis.${key} = ${key}Source.data\n`
+        this.remoteDataStr += `const ${key}Source = await this.$http.get('/data-source/user/projectId/${this.projectId}/tableName/${sourceData.tableName}')\nthis.${key} = ${key}Source.data.list || []\n`
     }
 
     generateCharts (item) {

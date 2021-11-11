@@ -262,7 +262,7 @@ export default class DataSourceController {
                 : await dataService.get(tableFileName, {})
             return result
         } catch (error) {
-            return error
+            throw new global.BusinessError(error.message || error, -1, 500, error.stack)
         } finally {
             if (dataService) await dataService.close()
         }
@@ -283,7 +283,7 @@ export default class DataSourceController {
             const result = await dataService.add(tableName, data)
             return result
         } catch (error) {
-            throw new global.BusinessError(error.message || error, -1, 500)
+            throw new global.BusinessError(error.message || error, -1, 500, error.stack)
         } finally {
             if (dataService) await dataService.close()
         }
@@ -304,7 +304,7 @@ export default class DataSourceController {
             const result = await dataService.update(tableName, data)
             return result
         } catch (error) {
-            throw new global.BusinessError(error.message || error, -1, 500)
+            throw new global.BusinessError(error.message || error, -1, 500, error.stack)
         } finally {
             if (dataService) await dataService.close()
         }
@@ -325,7 +325,7 @@ export default class DataSourceController {
             const result = await dataService.delete(tableName, id)
             return result
         } catch (error) {
-            throw new global.BusinessError(error.message || error, -1, 500)
+            throw new global.BusinessError(error.message || error, -1, 500, error.stack)
         } finally {
             if (dataService) await dataService.close()
         }

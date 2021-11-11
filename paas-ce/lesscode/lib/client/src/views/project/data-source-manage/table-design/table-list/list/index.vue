@@ -50,6 +50,8 @@
         </bk-table>
 
         <confirm-dialog
+            title="确认删除"
+            tips="确认后将会删除该表，且使用到该表的接口会受到影响。在下次部署的时候执行下面的 SQL，请确认影响后确认"
             :is-show.sync="listStatus.showConfirmDialog"
             :sql="listStatus.sql"
             :is-loading="listStatus.isSaving"

@@ -1,5 +1,6 @@
 require('reflect-metadata')
 require('@babel/register')
+require('./custom-global')
 const http = require('http')
 const { resolve } = require('path')
 const Koa = require('koa')
