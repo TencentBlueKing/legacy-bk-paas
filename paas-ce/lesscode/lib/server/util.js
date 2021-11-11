@@ -18,8 +18,7 @@ const interactiveComponents = ['bk-dialog', 'bk-sideslider']
 const acorn = require('acorn')
 const { RequestContext } = require('./middleware/request-context')
 const algorithm = 'aes-256-ctr'
-// 加密key，需要是长度为32位的字符串
-const secretKey = '_use_your_own_crypto_srcret_key_'
+const secretKey = require('./conf/encrypt-secret-key')
 
 /**
  * 加密
