@@ -116,7 +116,9 @@
                     {
                         title: '版本管理',
                         icon: 'version',
-                        toPath: 'versions'
+                        toPath: {
+                            name: 'versions'
+                        }
                     },
                     {
                         title: '成员管理',

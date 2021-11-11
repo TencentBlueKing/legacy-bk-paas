@@ -35,7 +35,7 @@ export interface ITableField {
     isRequire?: boolean
     inputType?: string
     isEdit?: boolean,
-    reg?: RegExp,
+    reg?: RegExp | ((val: string, row: any) => boolean),
     tips?: string
 }
 
@@ -98,7 +98,7 @@ function normalizeTableItem (item) {
         }
     }
     // 默认列不可修改
-    if (BASE_COLUMNS.some(item => item.name === normalizedItem.name)) {
+    if (BASE_COLUMNS.some(item => item.columnId === normalizedItem.columnId)) {
         normalizedItem.isEdit = true
     }
     // 每一行加id，用于 diff
@@ -138,8 +138,12 @@ export default defineComponent({
                 type: 'input',
                 prop: 'name',
                 isRequire: true,
-                reg: /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/,
-                tips: '字段名称必填。开头和结尾需是大小写字母，中间可以是大小写字母、连字符和下划线。长度最少为2个字符'
+                reg (val, row) {
+                    const isValidateReg = /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/.test(val)
+                    const isNotRepeatName = !tableList.find((table) => table.name === val && row.columnId !== table.columnId)
+                    return isValidateReg && isNotRepeatName
+                },
+                tips: '字段名称必填且不能重复。开头和结尾需是大小写字母，中间可以是大小写字母、连字符和下划线。长度最少为2个字符'
             },
             {
                 name: '字段类型',
