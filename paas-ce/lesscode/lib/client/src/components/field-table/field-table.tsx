@@ -233,7 +233,7 @@ export default defineComponent({
         const getTableColumnsArr = (type: string) => {
             const list = props.column.filter(item => !!item[type])
             const listStr = []
-            list.forEach(ele => listStr.push(ele[type]))
+            list.forEach(ele => listStr.push(ele.prop))
             return listStr
         }
         const errHandle = (row, key) => {
@@ -256,9 +256,8 @@ export default defineComponent({
                 }
             }))
             const errStatus = listStr.includes(key) && row.isErr && errStr.includes(key)
-            const repeatStatus = row.isError && row.repeat.includes(key)
             const regStatus = row.isReg && regStr.includes(key)
-            return errStatus || repeatStatus || regStatus
+            return errStatus || regStatus
         }
         return {
             renderCheckbox,
@@ -268,7 +267,8 @@ export default defineComponent({
             renderOperate,
             renderHeader,
             verification,
-            tableList
+            tableList,
+            errHandle
         }
     },
     render (): VNode {
