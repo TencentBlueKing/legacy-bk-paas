@@ -214,7 +214,7 @@ export default defineComponent({
         }
         const regStatus = (data, item, ele) => {
             if (typeof data.reg === 'function') {
-                return data.reg(item[ele.prop])
+                return data.reg(item[ele.prop], item)
             }
             return !data.reg.test(item[ele.prop])
         }

@@ -15,54 +15,56 @@
             >{{ environment.name }}</div>
         </div>
 
-        <layout class="data-manage-main" v-if="pageStatus.tableList.length">
-            <aside class="table-list" slot="left">
-                <bk-input
-                    clearable
-                    class="filter-table-name"
-                    placeholder="请输入表名"
-                    right-icon="bk-icon icon-search"
-                    v-model="pageStatus.tableName"
-                ></bk-input>
+        <template v-if="!pageStatus.isLoading">
+            <layout class="data-manage-main" v-if="!pageStatus.errorCode">
+                <aside class="table-list" slot="left">
+                    <bk-input
+                        clearable
+                        class="filter-table-name"
+                        placeholder="请输入表名"
+                        right-icon="bk-icon icon-search"
+                        v-model="pageStatus.tableName"
+                    ></bk-input>
 
-                <ul class="table-item-list" v-if="displayTableList.length">
-                    <li
-                        @click="setActiveTable(item)"
-                        v-for="item in displayTableList"
-                        :key="item.tableName"
-                        :class="{
-                            active: item.tableName === pageStatus.activeTable.tableName,
-                            'table-item': true
-                        }"
-                    >
-                        <span class="table-item-name">
-                            <i class="bk-drag-icon bk-drag-data-table"></i>
-                            {{ item.tableName }}
-                        </span>
-                    </li>
-                </ul>
-                <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part" v-else>
-                    <div>暂无搜索结果</div>
-                </bk-exception>
-            </aside>
-            <bk-tab class="data-main">
-                <bk-tab-panel
-                    v-for="(panel, index) in panels"
-                    v-bind="panel"
-                    :key="index">
-                    <component
-                        :is="panel.name"
-                        :environment="pageStatus.activeEnvironment.key"
-                        :active-table="pageStatus.activeTable"
-                    ></component>
-                </bk-tab-panel>
-            </bk-tab>
-        </layout>
-        <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part" v-else-if="!pageStatus.isLoading">
-            <div v-if="!pageStatus.tableList.length">
-                {{ pageStatus.activeEnvironment.name }}未查询到表，无法进行数据管理，请修改数据库后再试
-            </div>
-        </bk-exception>
+                    <ul class="table-item-list" v-if="displayTableList.length">
+                        <li
+                            @click="setActiveTable(item)"
+                            v-for="item in displayTableList"
+                            :key="item.tableName"
+                            :class="{
+                                active: item.tableName === pageStatus.activeTable.tableName,
+                                'table-item': true
+                            }"
+                        >
+                            <span class="table-item-name">
+                                <i class="bk-drag-icon bk-drag-data-table"></i>
+                                {{ item.tableName }}
+                            </span>
+                        </li>
+                    </ul>
+                    <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part" v-else>
+                        <div>暂无搜索结果</div>
+                    </bk-exception>
+                </aside>
+                <bk-tab class="data-main">
+                    <bk-tab-panel
+                        v-for="(panel, index) in panels"
+                        v-bind="panel"
+                        :key="index">
+                        <component
+                            :is="panel.name"
+                            :environment="pageStatus.activeEnvironment.key"
+                            :active-table="pageStatus.activeTable"
+                        ></component>
+                    </bk-tab-panel>
+                </bk-tab>
+            </layout>
+            <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part" v-else>
+                <div v-if="!pageStatus.tableList.length">
+                    {{ pageStatus.activeEnvironment.name }}未查询到表，无法进行数据管理，请修改数据库后再试
+                </div>
+            </bk-exception>
+        </template>
     </article>
 </template>
 
@@ -118,7 +120,8 @@
                     comment: '',
                     columns: []
                 },
-                tableList: []
+                tableList: [],
+                errorCode: ''
             })
 
             const goBack = () => {
@@ -140,8 +143,9 @@
                     projectId
                 }
                 store.dispatch('dataSource/getOnlineTableList', queryData).then((data) => {
-                    pageStatus.tableList = data
+                    pageStatus.tableList = data || []
                     const activeTable = data.find(x => x.tableName === tableName)
+                    pageStatus.errorCode = data.length <= 0 ? 'NO_DATA' : ''
                     setActiveTable(activeTable)
                 }).catch((error) => {
                     messageError(error.message || error)
