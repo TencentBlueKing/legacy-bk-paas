@@ -2,16 +2,16 @@
     <section class="select-variable">
         <section class="item-title">
             <slot name="title"></slot>
-            <bk-select class="select-val-type"
+            <bk-select
+                v-if="show"
+                class="select-val-type"
                 :value="valType"
                 :clearable="false"
                 :disabled="disabledChange"
                 style="width: 68px;"
                 behavior="simplicity"
                 ext-popover-cls="select-popover-variable"
-                @change="selectValType"
-                v-if="show"
-            >
+                @change="selectValType">
                 <bk-option v-for="(val, key) in avaliableVariableTypes"
                     :key="key"
                     :id="key"
@@ -25,17 +25,30 @@
         </section>
 
         <section v-else style="width: 100%">
-            <slot v-if="computedValType === 'value'" class="item-content"></slot>
+            <slot
+                v-if="computedValType === 'value'"
+                class="item-content" />
 
             <template v-if="computedValType === 'variable'">
-                <section :class="{ 'select-variable-value': true, 'is-focus': isShowVariable }" v-bk-tooltips="htmlConfig" ref="tooltipsHtml">
+                <section
+                    :class="{
+                        'select-variable-value': true,
+                        'is-focus': isShowVariable
+                    }"
+                    v-bk-tooltips="htmlConfig"
+                    ref="tooltipsHtml">
                     <span v-if="value">{{ value }}</span>
                     <span v-else class="select-variable-placeholder">请选择变量</span>
                     <i :class="['bk-icon icon-close-circle-shape', { 'has-val': value }]" @click.stop="clearVariable"></i>
                     <i :class="['bk-icon icon-angle-down', { 'icon-flip': isShowVariable, 'has-val': value }]"></i>
                 </section>
                 <section class="variable-list">
-                    <bk-input placeholder="请输入变量名称进行搜索" behavior="simplicity" class="variable-input" left-icon="bk-icon icon-search" v-model="variableName"></bk-input>
+                    <bk-input
+                        placeholder="请输入变量名称进行搜索"
+                        behavior="simplicity"
+                        class="variable-input"
+                        left-icon="bk-icon icon-search"
+                        v-model="variableName"></bk-input>
                     <bk-table :data="filterVariableList"
                         :outer-border="false"
                         :header-border="false"
@@ -76,7 +89,14 @@
                 </section>
             </template>
 
-            <bk-input v-if="computedValType === 'expression'" class="item-content" :value="value" @change="inputExpression" :disabled="disabledChange" clearable placeholder="请输入表达式，如：curTab === 'Tab-1'"></bk-input>
+            <bk-input
+                v-if="computedValType === 'expression'"
+                class="item-content"
+                :value="value"
+                @change="inputExpression"
+                :disabled="disabledChange"
+                clearable
+                placeholder="请输入表达式，如：curTab === 'Tab-1'" />
             <span v-if="remoteConfig.show && computedValType === 'variable'"
                 class="remote-example"
                 @click="handleShowExample">数据示例</span>
@@ -219,7 +239,6 @@
             },
 
             selectValType (key) {
-                console.log('from selectValType', this)
                 this.triggerUpdate((dir) => {
                     dir.val = ''
                     dir.valType = key

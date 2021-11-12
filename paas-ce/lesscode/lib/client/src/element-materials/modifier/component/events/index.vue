@@ -63,14 +63,12 @@
         created () {
             this.lastEvents = {}
             this.currentComponentNode = LC.getActiveNode()
-            if (this.currentComponentNode) {
-                const {
-                    material,
-                    renderEvents
-                } = this.currentComponentNode
-                this.config = Object.freeze(material.events)
-                this.lastEvents = Object.assign({}, renderEvents)
-            }
+            const {
+                material,
+                renderEvents
+            } = this.currentComponentNode
+            this.config = Object.freeze(material.events || [])
+            this.lastEvents = Object.assign({}, renderEvents)
         },
         methods: {
             componentEventChange (eventCallback, eventName) {

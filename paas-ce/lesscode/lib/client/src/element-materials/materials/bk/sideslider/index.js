@@ -32,6 +32,7 @@ export default {
             val: true,
             staticValue: true, // 静态值，表示只是代码和UI改变，画布内的值不变
             modifiers: ['sync'],
+            asdasda: '',
             disableVariableType: ['expression'] // 不兼容的类型
         },
         'title': {

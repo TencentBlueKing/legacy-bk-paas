@@ -9,7 +9,7 @@
             :slot-val="lastSlots[slotName]"
             :slot-config="slotConfig"
             :render-props="lastProps"
-            @change="change"
+            @change="handleChange"
             @batchUpdate="batchUpdate"
         ></renderSlot>
     </article>
@@ -27,7 +27,8 @@
 
         data () {
             return {
-                config: {}
+                config: {},
+                lastSlots: {}
             }
         },
 
@@ -47,20 +48,22 @@
             this.lastProps = {}
             this.lastSlots = {}
             this.currentComponentNode = LC.getActiveNode()
-            if (this.currentComponentNode) {
-                const {
-                    material,
-                    renderProps,
-                    renderSlots
-                } = this.currentComponentNode
-                this.config = Object.freeze(material.slots || {})
-                this.lastProps = Object.assign({}, renderProps)
-                this.lastSlots = Object.assign({}, renderSlots)
-            }
+            const {
+                material,
+                renderProps,
+                renderSlots
+            } = this.currentComponentNode
+            this.config = Object.freeze(material.slots || {})
+            this.lastProps = Object.assign({}, renderProps)
+            this.lastSlots = Object.freeze(Object.assign({}, renderSlots))
         },
 
         methods: {
-            change: _.throttle(function (slotName, slotVal) {
+            handleChange: _.throttle(function (slotName, slotVal) {
+                this.lastSlots = Object.freeze({
+                    ...this.lastSlots,
+                    [slotName]: slotVal
+                })
                 this.currentComponentNode.setRenderSlots(slotVal, slotName)
             }, 60),
             batchUpdate (renderData) {

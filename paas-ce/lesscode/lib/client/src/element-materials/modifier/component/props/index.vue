@@ -15,7 +15,7 @@
             <render-slots />
             <template v-for="(item, key) in propsConfig">
                 <render-prop
-                    v-if="!(key === 'slots' && item.type === 'hidden')"
+                    v-if="item.type !== 'hidden'"
                     :describe="item"
                     :last-value="lastProps[key]"
                     :last-directives="lastDirectives"
@@ -44,15 +44,10 @@
             RenderProp,
             RenderSlots
         },
-        props: {
-            lastDirectives: {
-                type: Array,
-                default: () => ([])
-            }
-        },
         data () {
             return {
-                propsConfig: {}
+                propsConfig: {},
+                lastDirectives: []
             }
         },
         computed: {
@@ -74,10 +69,12 @@
             if (this.currentComponentNode) {
                 const {
                     material,
-                    renderProps
+                    renderProps,
+                    renderDirectives
                 } = this.currentComponentNode
                 this.propsConfig = Object.freeze(material.props)
                 this.lastProps = Object.assign({}, renderProps)
+                this.lastDirectives = Object.freeze(_.cloneDeep(renderDirectives))
                 this.renderProps = _.cloneDeep(renderProps)
             }
         },
@@ -106,10 +103,16 @@
             },
             /**
              * @desc 更新 renderProps
-             * @param { Object } renderData
+             * @param { Object } { renderProps, renderDirectives }
              */
-            batchUpdate (renderData) {
-                this.currentComponentNode.setRenderProps(_.cloneDeep(renderData.renderProps))
+            batchUpdate ({ renderProps, renderDirectives }) {
+                if (renderProps) {
+                    this.currentComponentNode.setRenderProps(renderProps)
+                }
+                if (renderDirectives) {
+                    this.lastDirectives = Object.freeze(renderDirectives)
+                    this.currentComponentNode.setRenderDirectives(renderDirectives)
+                }
             }
         }
     }
