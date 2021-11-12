@@ -254,7 +254,7 @@
         <page-dialog ref="pageDialog" :action="action"></page-dialog>
         <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
-        <save-template-dialog v-if="showTemplateDialog" :is-show="showTemplateDialog" :is-whole-page="true" :toggle-is-show="toggleShowTemplateDialog"></save-template-dialog>
+        <save-template-dialog />
         <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
     </main>
 </template>
@@ -281,7 +281,7 @@
     import ComponentBasePanel from './children/component-panel-base'
     import ExtraLinks from '@/components/ui/extra-links'
     import PageDialog from '@/components/project/page-dialog'
-    import SaveTemplateDialog from '@/components/render/save-template-dialog'
+    import SaveTemplateDialog from '@/components/template/save-template-dialog'
     import PageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
     import PageSetting from '@/views/project/page-setting'
     import PageJson from '@/views/project/page-json'
@@ -413,7 +413,6 @@
                 actionSelected: 'edit',
                 curDragingComponent: null,
                 isShowFun: false,
-                showTemplateDialog: false,
                 componentSearchResult: null,
                 refreshDragAreaKey: +new Date(),
                 delComponentConf: {
@@ -1031,11 +1030,13 @@
             },
 
             toggleShowTemplateDialog (isShow) {
-                if (typeof isShow === 'boolean') {
-                    this.showTemplateDialog = isShow
-                } else {
-                    this.showTemplateDialog = !this.showTemplateDialog
-                }
+                const activeNode = LC.getRoot()
+                LC.triggerEventListener('saveTemplate', {
+                    target: activeNode,
+                    type: 'saveTemplate',
+                    isWholePage: true,
+                    value: JSON.parse(JSON.stringify(activeNode))
+                })
             },
 
             toggleQuickOperation (event) {
