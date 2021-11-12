@@ -4,7 +4,6 @@
             render-directive="if"
             title="存为模板"
             width="600"
-            :show-mask="true"
             :mask-close="false"
             :auto-close="false"
             :close-icon="false"
@@ -36,63 +35,26 @@
                     theme="primary"
                     :loading="dialog.loading"
                     @click="handleDialogConfirm">确定</bk-button>
-                <bk-button @click="toggleIsShow(false)" :disabled="dialog.loading">取消</bk-button>
+                <bk-button @click="closeDialog" :disabled="dialog.loading">取消</bk-button>
             </div>
         </bk-dialog>
     </section>
 </template>
 
 <script>
+    import LC from '@/element-materials/core'
     import { mapGetters } from 'vuex'
     import html2canvas from 'html2canvas'
-    import { uuid } from '@/common/util'
+    import safeStringify from '@/common/json-safe-stringify'
     import { bus } from '@/common/bus'
-
-    const initGridData = {
-        componentId: 'grid-' + uuid(),
-        renderKey: uuid(),
-        name: 'grid',
-        type: 'render-grid',
-        tabPanelActive: 'props',
-        renderProps: {
-            'margin-horizontal': {
-                type: 'number',
-                val: 0
-            },
-            'margin-vertical': {
-                type: 'number',
-                val: 0
-            }
-        },
-        renderStyles: {},
-        renderEvents: {},
-        renderDirectives: [],
-        renderSlots: {
-            default: {
-                type: 'column',
-                val: [{ span: 1, children: [], width: '100%' }]
-            }
-        }
-    }
 
     export default {
         name: 'template-dialog',
-        props: {
-            isShow: {
-                type: Boolean,
-                required: true
-            },
-            isWholePage: {
-                type: Boolean,
-                default: false
-            },
-            toggleIsShow: {
-                type: Function,
-                required: true
-            }
-        },
         data () {
             return {
+                isShow: false,
+                isWholePage: false,
+                eventData: {},
                 categoryList: [],
                 dialog: {
                     loading: false,
@@ -125,29 +87,60 @@
             }
         },
         computed: {
-            ...mapGetters('drag', [
-                'targetData',
-                'curSelectedComponentData'
-            ]),
             ...mapGetters('page', [
                 'pageDetail'
             ]),
             ...mapGetters('layout', ['pageLayout']),
             projectId () {
                 return this.$route.params.projectId
+            },
+            templateData () {
+                let content = {}
+                if (this.isWholePage) {
+                    try {
+                        const targetData = this.eventData.value.renderSlots.default || []
+                        const children = targetData.filter(component => !LC.isInteractiveType(component.type))
+                        if (children.length === 1) {
+                            content = children[0]
+                        } else if (children.length > 1) {
+                            const gridNode = LC.createNode('render-grid')
+                            const gridData = JSON.parse(JSON.stringify(gridNode))
+                            gridData.renderSlots.default[0].renderSlots.default = children
+                            content = gridData
+                        }
+                    } catch (err) {
+                        console.log(err, err)
+                        content = {}
+                    }
+                } else {
+                    content = this.eventData.value || {}
+                }
+                return content
             }
         },
         watch: {
             isShow (val) {
                 if (val) {
+                    this.getTemplateCategory()
                     setTimeout(() => {
                         this.$refs.nameInput && this.$refs.nameInput.$el.querySelector('input').focus()
                     }, 50)
+                } else {
+                    this.dialog.formData.templateName = ''
+                    this.dialog.formData.categoryId = ''
                 }
             }
         },
         created () {
-            this.getTemplateCategory()
+            const showCallback = (data) => {
+                this.isShow = true
+                this.eventData = data || {}
+                this.isWholePage = data.isWholePage
+            }
+            LC.addEventListener('saveTemplate', showCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('saveTemplate', showCallback)
+            })
         },
         methods: {
             async getTemplateCategory () {
@@ -160,63 +153,52 @@
             },
             async handleDialogConfirm () {
                 await this.$refs.pageTemplateFrom.validate()
-                try {
-                    this.dialog.loading = true
-                    
-                    const className = this.isWholePage ? (this.pageLayout && this.pageLayout.layoutType !== 'empty' ? '.container-content' : '.main-content') : `div[data-component-id="${this.curSelectedComponentData.name}-${this.curSelectedComponentData.componentId}"]`
-                    html2canvas(document.querySelector(className)).then(async (canvas) => {
-                        try {
-                            const imgData = canvas.toDataURL('image/png')
-                            let content = {}
-                            if (this.isWholePage) {
-                                if (this.targetData.length === 1) {
-                                    content = this.targetData[0]
-                                } else if (this.targetData.length > 1) {
-                                    content = Object.assign({}, initGridData)
-                                    content.renderSlots.default.val[0].children = this.targetData
-                                }
-                            } else {
-                                content = this.curSelectedComponentData
+                
+                this.dialog.loading = true
+                const className = this.isWholePage ? (this.pageLayout && this.pageLayout.layoutType !== 'empty' ? '.container-content' : '.main-content') : `div[data-component-id="component-${this.templateData.componentId}"]`
+                html2canvas(document.querySelector(className)).then(async (canvas) => {
+                    try {
+                        const imgData = canvas.toDataURL('image/png')
+                        
+                        const data = {
+                            projectId: this.projectId,
+                            params: {
+                                templateName: this.dialog.formData.templateName,
+                                categoryId: this.dialog.formData.categoryId,
+                                belongProjectId: this.projectId,
+                                fromPageCode: this.pageDetail && this.pageDetail.pageCode,
+                                content: safeStringify(this.templateData),
+                                previewImg: imgData
                             }
-                            
-                            const data = {
-                                projectId: this.projectId,
-                                params: {
-                                    templateName: this.dialog.formData.templateName,
-                                    categoryId: this.dialog.formData.categoryId,
-                                    belongProjectId: this.projectId,
-                                    fromPageCode: this.pageDetail && this.pageDetail.pageCode,
-                                    content: JSON.stringify(content),
-                                    previewImg: imgData
-                                }
-                            }
-                            
-                            const res = await this.$store.dispatch('pageTemplate/create', data)
-                            if (res) {
-                                this.dialog.loading = false
-                                this.$bkMessage({
-                                    theme: 'success',
-                                    message: `另存为模板成功`
-                                })
-                                this.toggleIsShow(false)
-                                bus.$emit('update-template-list')
-                            }
-                        } catch (err) {
-                            this.$bkMessage({
-                                theme: 'error',
-                                message: err.message || err
-                            })
-                        } finally {
-                            this.dialog.loading = false
                         }
-                    })
-                } catch (err) {
+                        const res = await this.$store.dispatch('pageTemplate/create', data)
+                        if (res) {
+                            this.dialog.loading = false
+                            this.$bkMessage({
+                                theme: 'success',
+                                message: '另存为模板成功'
+                            })
+                            this.isShow = false
+                            bus.$emit('update-template-list')
+                        }
+                    } catch (err) {
+                        this.$bkMessage({
+                            theme: 'error',
+                            message: err.message || err
+                        })
+                    } finally {
+                        this.dialog.loading = false
+                    }
+                }).catch((err) => {
                     this.dialog.loading = false
                     this.$bkMessage({
                         theme: 'error',
                         message: err.message || err
                     })
-                }
+                })
+            },
+            closeDialog () {
+                this.isShow = false
             }
         }
     }
@@ -224,8 +206,7 @@
 
 <style lang="postcss">
     .template-operate-dialog {
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 2000 !important;
+        z-index: 2100 !important;
         .bk-dialog-body {
             padding: 10px 15px 25px;
         }

@@ -194,12 +194,13 @@
             onChoose (e, list) {
                 const contentStr = list[e.oldIndex] && list[e.oldIndex].content
                 const node = JSON.parse(contentStr)
-                this.curDragingComponent = this.$td().cloneNode(node, true)
+                console.log(node)
+                // this.curDragingComponent = this.$td().cloneNode(node, true)
                 
-                this.$emit('update:dragingComponent', this.curDragingComponent)
+                // this.$emit('update:dragingComponent', this.curDragingComponent)
  
                 const dragableSourceGroup = Object.assign({}, this.draggableSourceGroup, {
-                    name: this.curDragingComponent.type || 'render-grid'
+                    name: 'layout'
                 })
 
                 this.setDraggableSourceGroup(dragableSourceGroup)

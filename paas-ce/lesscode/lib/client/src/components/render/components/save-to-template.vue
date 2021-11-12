@@ -24,6 +24,7 @@
                 LC.triggerEventListener('saveTemplate', {
                     target: activeNode,
                     type: 'saveTemplate',
+                    isWholePage: false,
                     value: JSON.parse(JSON.stringify(activeNode))
                 })
             }
