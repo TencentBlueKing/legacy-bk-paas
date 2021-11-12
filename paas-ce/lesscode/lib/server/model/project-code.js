@@ -423,10 +423,11 @@ const projectCode = {
                     }
                     return acc
                 }, '')
+                const importColumnStr = tableFields ? ', Column' : ''
                 await this.generateFileByReplace(
                     path.join(STATIC_URL, 'entity-template.js'),
                     path.join(targetPath, `lib/server/model/entities/${tableName}.js`),
-                    content => content.replace(/\$\{tableName\}/, tableName).replace(/\$\{tableFields\}/, tableFields)
+                    content => content.replace(/\$\{importColumnStr\}/, importColumnStr).replace(/\$\{tableName\}/, tableName).replace(/\$\{tableFields\}/, tableFields)
                 )
             }
         }
