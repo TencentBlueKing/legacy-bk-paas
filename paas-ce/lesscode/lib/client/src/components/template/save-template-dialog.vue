@@ -91,7 +91,6 @@
                 'pageDetail'
             ]),
             ...mapGetters('layout', ['pageLayout']),
-            ...mapGetters('components', ['interactiveComponents']),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -100,7 +99,7 @@
                 if (this.isWholePage) {
                     try {
                         const targetData = this.eventData.value.renderSlots.default || []
-                        const children = targetData.filter(component => !this.interactiveComponents.includes(component.type))
+                        const children = targetData.filter(component => !LC.isInteractiveType(component.type))
                         if (children.length === 1) {
                             content = children[0]
                         } else if (children.length > 1) {
@@ -156,7 +155,7 @@
                 await this.$refs.pageTemplateFrom.validate()
                 
                 this.dialog.loading = true
-                const className = this.isWholePage ? (this.pageLayout && this.pageLayout.layoutType !== 'empty' ? '.container-content' : '.maiin-content') : `div[data-component-id="component-${this.templateData.componentId}"]`
+                const className = this.isWholePage ? (this.pageLayout && this.pageLayout.layoutType !== 'empty' ? '.container-content' : '.main-content') : `div[data-component-id="component-${this.templateData.componentId}"]`
                 html2canvas(document.querySelector(className)).then(async (canvas) => {
                     try {
                         const imgData = canvas.toDataURL('image/png')
