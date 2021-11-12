@@ -91,11 +91,7 @@
         },
         methods: {
             handleChange (key, value) {
-                const renderStyles = {
-                    ...this.lastStyles,
-                    [key]: value
-                }
-                this.currentComponentNode.setRenderStyles(renderStyles)
+                this.currentComponentNode.setStyle(key, value)
             }
         }
     }

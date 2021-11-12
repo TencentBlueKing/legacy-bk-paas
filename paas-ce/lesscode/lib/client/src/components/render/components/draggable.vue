@@ -134,7 +134,7 @@
     }
     .chosen{
         opacity: .5;
-        background-color: #ffdddd;
+        /* background-color: #ffdddd; */
     }
     .ghost{
         &::before{

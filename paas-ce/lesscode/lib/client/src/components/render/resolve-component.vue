@@ -144,15 +144,15 @@
             console.log('**************** component update **************', this.componentData.componentId)
         },
         mounted () {
+            this.calcDefaultDisplay()
             this.setDefaultStyleWidthAttachToFreelayout()
-            this.initComponentStyleDispaly()
             this.$emit('component-mounted')
         },
         methods: {
             /**
              * @desc 判断渲染组件的 display 的值
              */
-            initComponentStyleDispaly () {
+            calcDefaultDisplay () {
                 let result = ''
                 if (this.$refs[this.componentData.componentId]) {
                     const domNode = this.$refs[this.componentData.componentId].$el

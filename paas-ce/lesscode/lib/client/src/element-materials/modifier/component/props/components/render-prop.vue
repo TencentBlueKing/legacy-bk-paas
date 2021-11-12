@@ -11,8 +11,9 @@
 
 <template>
     <div :class="classes">
-        <variable-select :show="!namedStrategy && !remoteStrategy"
+        <variable-select
             v-if="describe.type !== 'hidden'"
+            :show="!namedStrategy && !remoteStrategy"
             :value="defaultVariable.val"
             :val-type="defaultVariable.valType"
             :available-types="formCom.map(x => x.valueType)"
@@ -303,6 +304,7 @@
             } else {
                 this.mutlTypeSelected = this.lastValue.type
             }
+            console.log('from render propspssps = = = = ', this)
             this.$set(this.mutlTypeVal, this.mutlTypeSelected, JSON.parse(safeStringify(this.lastValue)))
         },
         methods: {
@@ -333,9 +335,6 @@
                     })
                 }
             },
-            batchUpdate (renderData) {
-                this.$emit('batch-update', renderData)
-            },
             changePropType (type) {
                 if (!this.mutlTypeVal.hasOwnProperty(type)) {
                     const typeDefaultValueMap = {
@@ -355,16 +354,22 @@
                 this.handleUpdate(this.name, this.defaultValue, type, this.defaultPayload)
             },
             changeVariable (variableData) {
+                console.log('asdchangeVariableasd == ', variableData, this)
                 const value = variableData.defaultVal === undefined ? this.describe.val : variableData.defaultVal
                 const com = this.formCom.find((com) => (variableData.valueType === com.typeName)) || {}
                 const type = com.typeName || this.mutlTypeSelected
                 const payload = {}
                 if (this.name === 'slots') {
-                    payload.variableData = { val: variableData.val, valType: variableData.valType }
+                    payload.variableData = {
+                        val: variableData.val,
+                        valType: variableData.valType
+                    }
                 } else {
-                    this.updateDirectives(variableData)
+                    console.log('updateDirectives == == ', variableData)
+                    // this.updateDirectives(variableData)
                 }
-                this.handleUpdate(this.name, value, type, payload)
+                console.log('handleUpdate == == ', this.name, value, type, payload)
+                // this.handleUpdate(this.name, value, type, payload)
             },
             updateDirectives (variableData) {
                 const renderDirectives = JSON.parse(safeStringify(this.lastDirectives || []))
@@ -373,9 +378,17 @@
                 if (index <= -1) {
                     renderDirectives.push(curDirective)
                 }
-                const data = { type: 'v-bind', prop: this.name, val: variableData.val, valType: variableData.valType, modifiers: this.describe.modifiers }
+                const data = {
+                    type: 'v-bind',
+                    prop: this.name,
+                    val: variableData.val,
+                    valType: variableData.valType,
+                    modifiers: this.describe.modifiers
+                }
                 Object.assign(curDirective, data)
-                this.batchUpdate({ renderDirectives })
+                this.$emit('batch-update', {
+                    renderDirectives
+                })
             }
         }
     }
