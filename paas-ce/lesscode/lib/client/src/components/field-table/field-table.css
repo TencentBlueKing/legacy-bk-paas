@@ -12,8 +12,8 @@
       top: 13px;
       color: #EA3636;
     }
-    .error {
-      border: 1px solid red;
+    .field-error {
+      border: 1px solid red !important;
     }
     tr.bk-table-row.hover-row {
       > td {

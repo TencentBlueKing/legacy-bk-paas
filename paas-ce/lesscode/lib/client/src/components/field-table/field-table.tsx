@@ -9,8 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { defineComponent, reactive } from '@vue/composition-api'
-import { VNode } from 'vue'
+import { defineComponent, toRef } from '@vue/composition-api'
+import Vue, { VNode } from 'vue'
 
 import './field-table.css'
 
@@ -43,7 +43,8 @@ export default defineComponent({
         isShowCheck: Boolean
     },
     setup (props, { emit }) {
-        const tableList = reactive([])
+        const tableList = toRef(props, 'data')
+
         const renderHeader = (h, { column, $index }, item) => {
             return (
                 <span>
@@ -87,7 +88,7 @@ export default defineComponent({
                             <bk-input
                                 key={item.prop}
                                 placeholder={item.placeholder || '请输入'}
-                                class={`field-table-input ${errHandle(row, item.prop, item) ? 'error' : ''}`}
+                                class={`field-table-input ${row.isRowErr && errHandle(row, item.prop, item) ? 'field-error' : ''}`}
                                 value={row[item.prop]}
                                 type={row[`${item.prop}InputType`] || 'text'}
                                 disabled={row?.isEdit}
@@ -96,10 +97,11 @@ export default defineComponent({
                                 }
                             />
                             {
-                                errHandle(row, item.prop, item)
+                                row.isRowErr && errHandle(row, item.prop, item)
                                     ? <i v-bk-tooltips={item.tips} class={['bk-icon icon-exclamation-circle-shape row-icons']} />
                                     : ''
                             }
+                            <label class="row-icons">{errHandle(row, item.prop, item)}</label>
                         </div>
                     )
                     return defaultSlot
@@ -124,7 +126,7 @@ export default defineComponent({
                     const { row, $index } = props
                     const defaultSlot = (
                         <bk-select
-                            class={`field-table-select ${errHandle(row, item.prop, item) ? 'error' : ''}`}
+                            class={`field-table-select ${row.isRowErr && errHandle(row, item.prop, item) ? 'field-error' : ''}`}
                             clearable={false}
                             value={row[item.prop]}
                             disabled={row?.isEdit}
@@ -193,11 +195,12 @@ export default defineComponent({
         const verification = () => {
             const list = props.column.filter(item => !!(item as any).isRequire)
             const listReg = props.column.filter(item => !!(item as any).reg)
-            props.data.map(item => Object.assign(item, {
-                isErr: handleIsRequire(list, item),
-                isReg: handleIsReg(listReg, item)
-            }))
-            return props.data.findIndex(item => (item as any).isErr || (item as any).isReg) === -1
+            tableList.value.forEach(item => {
+                Vue.set(item as any, 'isErr', handleIsRequire(list, item))
+                Vue.set(item as any, 'isRowErr', handleIsRequire(list, item) || handleIsReg(listReg, item))
+                Vue.set(item as any, 'isReg', handleIsReg(listReg, item))
+            })
+            return tableList.value.findIndex(item => (item as any).isErr || (item as any).isReg) === -1
         }
         /** 校验是否必填 */
         const handleIsRequire = (list, item) => {
@@ -251,20 +254,19 @@ export default defineComponent({
                 if (!item[ele]) {
                     errStr.push(ele)
                 }
-            })
-            )
+            }))
             /** 检查输入是否符合正则规则 */
             const listReg = getTableColumnsArr('reg')
             const regStr: any[] = []
             listReg.forEach(ele => props.data.map(item => {
-                // console.log(item, 'item')
                 const reg = props.column.filter(item => item.prop === ele)[0]?.reg
-                if (reg && !regCheck(reg, column, item)) {
+                if (reg && regCheck(reg, column, item)) {
                     regStr.push(ele)
                 }
             }))
-            console.log(row)
-            const errStatus = listStr.includes(key) && row.isErr && errStr.includes(key)
+            
+            const hasErr = Object.keys(row).findIndex(item => item === 'isErr') === -1
+            const errStatus = (!hasErr ? row.isErr : false) && listStr.includes(key) && errStr.includes(key)
             const regStatus = row.isReg && regStr.includes(key)
             return errStatus || regStatus
         }
@@ -291,7 +293,7 @@ export default defineComponent({
         const dynamicProps = {
             class: 'g-hairless-table',
             props: {
-                data: this.data,
+                data: this.tableList,
                 outerBorder: false,
                 headerBorder: false,
                 headerCellStyle: {
