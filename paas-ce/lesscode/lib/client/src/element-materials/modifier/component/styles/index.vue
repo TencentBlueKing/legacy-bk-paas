@@ -78,16 +78,14 @@
         },
         created () {
             this.currentComponentNode = LC.getActiveNode()
-            if (this.currentComponentNode) {
-                const {
-                    componentId,
-                    material,
-                    renderStyles
-                } = this.currentComponentNode
-                this.componentId = componentId
-                this.config = Object.freeze(material.styles)
-                this.lastStyles = Object.assign({}, renderStyles)
-            }
+            const {
+                componentId,
+                material,
+                renderStyles
+            } = this.currentComponentNode
+            this.componentId = componentId
+            this.config = Object.freeze(material.styles)
+            this.lastStyles = Object.assign({}, renderStyles)
         },
         methods: {
             handleChange (key, value) {

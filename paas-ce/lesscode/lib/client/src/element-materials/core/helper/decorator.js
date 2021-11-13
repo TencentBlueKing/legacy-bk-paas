@@ -30,8 +30,8 @@ export function notify (target, name, descriptor) {
             triggerEventListener('active', event)
         }
         if (name === 'activeClear' && isActived !== this.isActived) {
-            event.isActived = this.isActived
-            triggerEventListener('activeClear', this, name)
+            event.isActived = false
+            triggerEventListener('activeClear', event)
         }
     }
     return descriptor

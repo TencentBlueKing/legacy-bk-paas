@@ -31,7 +31,6 @@
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
     import _ from 'lodash'
     import { bus } from '@/common/bus'
     import LC from '@/element-materials/core'
@@ -51,7 +50,6 @@
             }
         },
         computed: {
-            ...mapGetters('drag', ['curSelectedComponentData']),
             hasMaterialConfig () {
                 const configs = { ...this.propsConfig, ...this.slotsConfig }
                 const keys = Object.keys(configs).filter(key => configs[key].display !== 'hidden')

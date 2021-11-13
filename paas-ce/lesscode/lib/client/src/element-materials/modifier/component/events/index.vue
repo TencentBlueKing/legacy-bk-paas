@@ -29,7 +29,7 @@
                     </h3>
                     <select-func
                         :value="lastEvents[event.name]"
-                        @change="(value) => componentEventChange(value, event.name)" />
+                        @change="(value) => handleChange(value, event.name)" />
                 </li>
             </ul>
         </template>
@@ -71,11 +71,13 @@
             this.lastEvents = Object.assign({}, renderEvents)
         },
         methods: {
-            componentEventChange (eventCallback, eventName) {
-                this.currentComponentNode.setRenderEvents({
+            handleChange (value, eventName) {
+                const renderEvents = {
                     ...this.lastEvents,
-                    [eventName]: eventCallback
-                })
+                    [eventName]: value
+                }
+                this.lastEvents = renderEvents
+                this.currentComponentNode.setRenderEvents(renderEvents)
             }
         }
     }

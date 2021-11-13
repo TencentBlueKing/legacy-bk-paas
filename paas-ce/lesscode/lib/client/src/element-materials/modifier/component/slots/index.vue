@@ -54,8 +54,8 @@
                 renderSlots
             } = this.currentComponentNode
             this.config = Object.freeze(material.slots || {})
-            this.lastProps = Object.assign({}, renderProps)
-            this.lastSlots = Object.freeze(Object.assign({}, renderSlots))
+            this.lastProps = _.cloneDeep(renderProps)
+            this.lastSlots = Object.freeze(_.cloneDeep(renderSlots))
         },
 
         methods: {

@@ -33,11 +33,11 @@
 </template>
 <script>
     import _ from 'lodash'
+    import LC from '@/element-materials/core'
     import ModifierStyles from './styles'
     import ModifierProps from './props'
     import ModifierEvents from './events'
     import ModifierDirectives from './directives'
-    import LC from '@/element-materials/core'
 
     // const dataClean = data => {
     //     const isInvalid = val => {
