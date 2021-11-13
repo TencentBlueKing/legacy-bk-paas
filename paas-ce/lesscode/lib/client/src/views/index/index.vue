@@ -91,151 +91,23 @@
                     </ul>
                 </div>
             </div>
-            <extra-links show-help-box
+            <extra-links
+                show-help-box
                 :help-click="handleStartGuide"
-                :help-tooltips="{ content: '画布操作指引', placements: ['bottom'] }">
-            </extra-links>
+                :help-tooltips="{
+                    content: '画布操作指引',
+                    placements: ['bottom']
+                }" />
         </div>
         <div class="main-container">
-            <aside id="editPageLeftSideBar" class="main-left-sidebar" :class="{ 'is-collapse': collapseSide.left }">
-                <div class="main-left-side-nav">
-                    <ul class="nav-tabs">
-                        <li :class="['nav-item', { active: item.name === activeSideNav }]"
-                            v-for="(item, index) in leftNavTabList"
-                            :key="index"
-                            v-bk-tooltips="item.label"
-                            :data-name="item.name"
-                            @click="activeSideNav = item.name">
-                            <i :class="['bk-drag-icon', item.icon]">
-                                <i v-if="item.redPoint" class="red-point"></i>
-                            </i>
-                        </li>
-                    </ul>
-                </div>
-                <div class="sidebar-panel" v-if="activeSideNav === 'nav-tab-component'">
-                    <div class="sidebar-hd">
-                        <ul class="category-tabs">
-                            <li
-                                v-for="(tab, index) in componentTabs.list"
-                                :class="['tab-item', { active: tab.active }]"
-                                :key="index"
-                                @click.stop.prevent="handleToggleCompTab(index)">
-                                <!-- {{tab.label}}
-                                <i v-if="tab.name === 'base'" v-bk-tooltips="tab.tips" class="bk-drag-icon bk-drag-vesion-fill"></i> -->
-                                <template v-if="tab.name === 'base'">
-                                    <bk-dropdown-menu class="toggle-component" v-if="tab.name === 'base'" trigger="click"
-                                        @show="isShowToggleComponentLib = true" @hide="isShowToggleComponentLib = false" ref="dropdownMenuComp">
-                                        <div class="dropdown-trigger-text" slot="dropdown-trigger">
-                                            <span class="tab-item-label" v-if="curComponentLib === 'bk'" title="蓝鲸Vue组件库">蓝鲸Vue组件库</span>
-                                            <span class="tab-item-label" v-else-if="curComponentLib === 'element'" title="element">element-ui</span>
-                                            <i class="bk-drag-icon toggle-icon" :class="isShowToggleComponentLib ? 'bk-drag-angle-down-fill' : 'bk-drag-angle-up-fill'"></i>
-                                        </div>
-                                        <ul class="bk-dropdown-list" slot="dropdown-content">
-                                            <li :class="curComponentLib === 'bk' ? 'selected' : ''">
-                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('bk')">
-                                                    蓝鲸Vue组件库
-                                                    <i v-bk-tooltips="{ content: tab.tips, placements: ['bottom-end'] }" class="bk-drag-icon bk-drag-vesion-fill"></i>
-                                                </a>
-                                            </li>
-                                            <li :class="curComponentLib === 'element' ? 'selected' : ''">
-                                                <a href="javascript:;" @click.stop.prevent="toggleComponentLib('element')">
-                                                    element-ui
-                                                    <i v-bk-tooltips="{ content: elementUiTips, placements: ['bottom-end'] }" class="bk-drag-icon bk-drag-vesion-fill"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </bk-dropdown-menu>
-                                </template>
-                                <template v-else>
-                                    <span class="tab-item-label">{{tab.label}}</span>
-                                </template>
-                            </li>
-                        </ul>
-                        <div class="search-bar">
-                            <component-search
-                                :key="componentTabsCurrentRefresh"
-                                :source="componentConfigList"
-                                :result.sync="componentSearchResult" />
-                        </div>
-                    </div>
-                    <div class="sidebar-bd">
-                        <component
-                            :key="componentTabsCurrentRefresh"
-                            :is="componentTabs.current.component"
-                            :search-result="componentSearchResult"
-                            :draging-component.sync="curDragingComponent"
-                            @setCurSelectedComponent="setTreeSelected"
-                            v-bind="componentTabs.current.props">
-                        </component>
-                    </div>
-                </div>
-                <div class="sidebar-panel" v-show="activeSideNav === 'nav-tab-template'">
-                    <template-panel :target-data="targetData" :draging-component.sync="curDragingComponent"></template-panel>
-                </div>
-                <div class="sidebar-panel" v-show="activeSideNav === 'nav-tab-tree'">
-                    <component-tree :target-data="targetData" ref="componentTree"></component-tree>
-                </div>
-                <i
-                    class="bk-drag-icon bk-drag-angle-left collapse-icon"
-                    v-bk-tooltips.right="{ content: '查看所有组件', disabled: !collapseSide.left }"
-                    @click="handleCollapseSide('left')">
-                </i>
-            </aside>
-
-            <!-- 这里用 v-show，切换源码或者预览时，如果时 v-if，那么 grid.vue 里的 renderDataSlot 会重置，这个值并没有存在 store 中 -->
-            <div
-                v-show="actionSelected === 'edit'"
-                class="main-content"
-                v-bkloading="{ isLoading: contentLoading || isCustomComponentLoading, opacity: 1 }"
-                :class="mainContentClass"
-                @click="dragWrapperClickHandler">
-                <render-index :key="pageId" />
-            </div>
-            <div class="main-content border-none" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
-                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
-            </div>
-            <div class="main-content" v-if="['pageFunction', 'setting'].includes(actionSelected)">
-                <page-setting :project="projectDetail" :type="actionSelected"></page-setting>
-            </div>
-            <div class="main-content border-none" v-if="actionSelected === 'jsonSource'">
-                <page-json :target-data="targetData"></page-json>
-            </div>
-            <div class="main-content" v-if="actionSelected === 'pageVariable'">
-                <page-variable />
-            </div>
-
-            <aside class="main-right-sidebar" :class="{ 'is-collapse': collapseSide.right }">
-                <div class="selected-component-info" v-if="curSelectedComponentData.componentId && !collapseSide.right">
-                    <div class="component-id overflow" v-bk-overflow-tips>{{curSelectedComponentData.componentId}}</div>
-                    <div class="action-wrapper">
-                        <i
-                            v-if="!curSelectedComponentData.inFormItem"
-                            class="bk-drag-icon bk-drag-shanchu mr5"
-                            id="del-component-right-sidebar"
-                            @click="showDeleteElement"
-                            v-bk-tooltips="'删除'"></i>
-                        <i class="bk-drag-icon"
-                            v-show="isInteractiveComponent"
-                            :class="interactiveIconClass"
-                            @click="setComponentVisible"
-                            v-bk-tooltips="interactiveBtnText"></i>
-                    </div>
-                </div>
-                <material-modifier />
-                <i class="bk-drag-icon bk-drag-angle-left collapse-icon"
-                    v-bk-tooltips.right="{ content: '查看组件配置', disabled: !collapseSide.right }"
-                    @click="handleCollapseSide('right')" />
-                <div class="prop-doc"
-                    v-if="infoLinkDict[curSelectedComponentData.type] || infoLinkDict[curSelectedComponentData.name]"
-                    @click="jumpInfoLink(curSelectedComponentData)">
-                    <i class="bk-drag-icon bk-drag-jump-link"></i>
-                    <span>查看详细属性文档</span>
-                </div>
-            </aside>
+            <left-panel @onCustomComponentLoaded="handleCustomComponentLoaded" />
+            <operation-area
+                :operaion="actionSelected"
+                :project="projectDetail"
+                :type="actionSelected" />
+            <right-panel />
         </div>
-
-        <Methods :show.sync="isShowFun"></Methods>
-
+        <Methods :show.sync="isShowFun" />
         <bk-dialog v-model="delComponentConf.visiable"
             class="del-component-dialog"
             theme="primary"
@@ -251,170 +123,59 @@
                 <p class="del-tip" v-else-if="delComponentConf.isCustomOffline">已下架的自定义组件删除后将不能再被使用</p>
             </div>
         </bk-dialog>
-        <page-dialog ref="pageDialog" :action="action"></page-dialog>
+        <page-dialog ref="pageDialog" :action="action" />
         <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
         <save-template-dialog />
-        <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
+        <page-from-template-dialog ref="pageFromTemplateDialog" />
     </main>
 </template>
 
 <script>
-    import Vue from 'vue'
     import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
     import html2canvas from 'html2canvas'
-    import { uuid, walkGrid, removeClassWithNodeClass, getNodeWithClass, circleJSON } from '@/common/util'
+    import { uuid, walkGrid, getNodeWithClass, circleJSON } from '@/common/util'
     import { getCurUsedFuncs, replaceFuncKeyword } from '@/components/methods/function-helper.js'
-    import RenderIndex from '@/components/render/index'
-    import MaterialModifier from '@/element-materials/modifier'
-    import VueCode from '@/components/vue-code'
     import Methods from '@/components/methods'
-    // import Layout from '@/components/widget/layout'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
-    import allComponentConf from '@/element-materials/materials'
-    import iconComponentList from '@/element-materials/materials/icon-list.js'
-
-    import ComponentSearch from './children/component-search'
-    import ComponentCustomPanel from './children/component-panel-custom'
-    import ComponentBasePanel from './children/component-panel-base'
     import ExtraLinks from '@/components/ui/extra-links'
     import PageDialog from '@/components/project/page-dialog'
     import SaveTemplateDialog from '@/components/template/save-template-dialog'
     import PageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
-    import PageSetting from '@/views/project/page-setting'
-    import PageJson from '@/views/project/page-json'
-    import pageVariable from '@/views/project/page-variable'
-
-    import ComponentTree from './children/component-tree'
-    import TemplatePanel from './children/template-panel.vue'
     import { bus } from '@/common/bus'
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
-    import { infoLink } from '@/element-materials/materials/index'
     import LC from '@/element-materials/core'
+    import LeftPanel from './components/left-panel'
+    import RightPanel from './components/right-panel'
+    import OperationArea from './components/operation-area'
 
     export default {
         components: {
-            RenderIndex,
-            MaterialModifier,
-            VueCode,
             Methods,
             NoviceGuide,
             VariableForm,
-            ComponentSearch,
-            [ComponentCustomPanel.name]: ComponentCustomPanel,
-            [ComponentBasePanel.name]: ComponentBasePanel,
             ExtraLinks,
-            PageSetting,
             PageDialog,
             SaveTemplateDialog,
             PageFromTemplateDialog,
-            ComponentTree,
-            TemplatePanel,
-            PageJson,
-            pageVariable
+            LeftPanel,
+            RightPanel,
+            OperationArea
         },
         data () {
-            const baseComponentList = []
-            baseComponentList.splice(0, 0, ...allComponentConf['bk'])
-
             return {
                 lockNotify: null,
                 lockCheckTimer: null,
-                leftNavTabList: [
-                    {
-                        icon: 'bk-drag-custom-comp-default',
-                        name: 'nav-tab-component',
-                        label: {
-                            content: '组件库',
-                            placement: 'right',
-                            interactive: false
-                        }
-                    }, {
-                        icon: 'bk-drag-template-fill',
-                        name: 'nav-tab-template',
-                        redPoint: true,
-                        label: {
-                            content: '模板库',
-                            placement: 'right',
-                            interactive: false
-                        }
-                    }, {
-                        icon: 'bk-drag-level-down',
-                        name: 'nav-tab-tree',
-                        label: {
-                            content: '页面组件树',
-                            placement: 'right',
-                            interactive: false
-                        }
-                    }
-                ],
                 canvasHeight: 0,
                 resizeObserve: null,
-                activeSideNav: 'nav-tab-component',
-                componentTabsCurrentRefresh: +new Date(),
-                curComponentLib: 'bk',
-                baseComponentList,
-                elementUiTips: '当前组件库版本为“2.15.1”，<a target="_blank" href="https://github.com/ElemeFE/element/releases" style="cursor: pointer;color: #3a84ff">查看更新日志</a>',
-                componentTabs: {
-                    list: [
-                        { name: 'base', label: '基础组件', active: true, tips: '当前组件库版本为“latest”，<a target="_blank" href="https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/changelog" style="cursor: pointer;color: #3a84ff">查看更新日志</a>' },
-                        { name: 'custom', label: '自定义组件', active: false },
-                        { name: 'icon', label: '图标', active: false }
-                    ],
-                    current: {
-                        component: ComponentBasePanel.name,
-                        props: {
-                            componentList: baseComponentList,
-                            // componentGroupList: ['布局', '基础', '表单', '导航', '数据', '反馈', '图表'],
-                            componentGroupList: allComponentConf['bkComponentGroupList'],
-                            type: 'base',
-                            loading: true
-                        }
-                    }
-                },
-                panelMap: {
-                    base: {
-                        component: ComponentBasePanel.name,
-                        props: {
-                            componentList: baseComponentList,
-                            // componentGroupList: ['布局', '基础', '表单', '导航', '数据', '反馈', '图表'],
-                            componentGroupList: allComponentConf['bkComponentGroupList'],
-                            type: 'base'
-                        }
-                    },
-                    custom: {
-                        component: ComponentCustomPanel.name,
-                        props: {
-                            componentList: [],
-                            componentGroupList: [],
-                            type: 'custom',
-                            loading: true
-                        }
-                    },
-                    icon: {
-                        component: ComponentBasePanel.name,
-                        props: {
-                            componentList: iconComponentList,
-                            componentGroupList: ['小图标', '填充图标', '线性图标'],
-                            type: 'icon'
-                        }
-                    }
-                },
                 wholeComponentList: [],
                 customComponentList: [],
                 projectDetail: {},
-                collapseSide: {
-                    left: false,
-                    right: false
-                },
                 actionSelected: 'edit',
-                curDragingComponent: null,
                 isShowFun: false,
-                componentSearchResult: null,
-                refreshDragAreaKey: +new Date(),
                 delComponentConf: {
                     visiable: false,
                     headerPosition: 'left',
@@ -436,8 +197,6 @@
                 contentLoading: true,
                 isCustomComponentLoading: true,
                 isSaving: false,
-                isShowToggleComponentLib: false,
-                withNav: true,
                 action: 'create',
                 toolsGroupList: [
                     [
@@ -456,8 +215,7 @@
                         { icon: 'bk-drag-icon bk-drag-hanshuku', text: '函数库', func: this.showFunManage },
                         { icon: 'bk-drag-icon bk-drag-keyboard', text: '快捷键', func: () => this.toggleShowQuickOperation(true) }
                     ]
-                ],
-                infoLinkDict: {}
+                ]
             }
         },
         computed: {
@@ -490,25 +248,9 @@
             projectId () {
                 return this.$route.params.projectId || ''
             },
-            isInteractiveComponent () {
-                return this.interactiveComponents.includes(this.curSelectedComponentData.type)
-            },
-            interactiveBtnText () {
-                return this.curSelectedComponentData.interactiveShow ? '隐藏' : '显示'
-            },
-            interactiveIconClass () {
-                return this.curSelectedComponentData.interactiveShow ? 'bk-drag-visible-eye' : 'bk-drag-invisible-eye'
-            },
+            
             pageId () {
                 return this.$route.params.pageId || ''
-            },
-
-            mainContentClass () {
-                return {
-                    'collapse-none': !this.collapseSide.left && !this.collapseSide.right,
-                    'collapse-one-side': (this.collapseSide.left && !this.collapseSide.right) || (!this.collapseSide.left && this.collapseSide.right),
-                    'collapse-both-side': this.collapseSide.left && this.collapseSide.right
-                }
             },
 
             targetData: {
@@ -521,10 +263,6 @@
                     this.setTargetData(value)
                 }
             },
-
-            componentConfigList () {
-                return this.componentTabs.current.props.componentList
-            },
             showNotVisibleMask () {
                 return this.curSelectedComponentData
                     && this.curSelectedComponentData.interactiveShow === false
@@ -532,13 +270,6 @@
             }
         },
         watch: {
-            curComponentLib (v) {
-                this.componentTabs.current.props.componentList = this.baseComponentList
-                this.componentTabs.current.props.componentGroupList = allComponentConf[`${v}ComponentGroupList`]
-
-                this.panelMap.base.props.componentList = this.baseComponentList
-                this.panelMap.base.props.componentGroupList = allComponentConf[`${v}ComponentGroupList`]
-            },
             targetData: {
                 deep: true,
                 handler () {
@@ -599,8 +330,6 @@
             ]
             await this.fetchData()
 
-            this.curDragingComponent = null
-
             // 设置初始targetData
             let initData = []
             try {
@@ -608,7 +337,6 @@
                 if (content && content !== 'null') {
                     initData = JSON.parse(content)
                 }
-                this.refreshDragAreaKey = +new Date()
             } catch (err) {
                 this.$bkMessage({
                     theme: 'error',
@@ -617,21 +345,9 @@
                 })
             }
             LC.parseData(initData)
-            // this.setTargetData(initData)
-
-            // console.log('from init print = :', tagetColumn.componentId, M.getNodeById(tagetColumn.componentId))
-
-            // 注册自定义组件
-            this.registerCustomComponent()
-
-            // 清空选中的组件数据
-            this.setCurSelectedComponentData({})
 
             // 设置权限相关的信息
             this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
-
-            // 组件文档链接
-            this.infoLinkDict = Object.assign({}, infoLink)
 
             // for test
             window.test = this.test
@@ -641,7 +357,6 @@
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
-            // window.addEventListener('beforeunload', this.beforeunloadConfirm)
             window.addEventListener('unload', this.relasePage)
 
             bus.$on('on-delete-component', this.showDeleteElement)
@@ -672,8 +387,6 @@
             ...mapMutations('drag', [
                 'setTargetData',
                 'setDraggableTargetGroup',
-                'setCurSelectedComponentData',
-
                 'setCopyData',
                 'pushTargetHistory',
                 'backTargetHistory',
@@ -684,15 +397,12 @@
                 'getAllGroupFuncs'
             ]),
             ...mapActions('variable', ['getAllVariable']),
-            onLayoutMounted () {
-                const canvas = document.getElementsByClassName('lesscode-editor-layout')[0]
-                this.canvasHeight = canvas.offsetHeight
-                this.resizeObserve = new ResizeObserver(entries => {
-                    for (const entry of entries) {
-                        this.canvasHeight = entry.target.offsetHeight
-                    }
-                })
-                this.resizeObserve.observe(canvas)
+            
+            /**
+             * @desc 自定义组件加载完成
+             */
+            handleCustomComponentLoaded () {
+                this.isCustomComponentLoading = false
             },
             relasePage () {
                 const data = new FormData()
@@ -839,25 +549,6 @@
                 return item.key === this.actionSelected
             },
 
-            setTreeSelected (id) {
-                this.$refs.tree.setTreeSelected(id)
-            },
-            setComponentVisible () {
-                const id = this.curSelectedComponentData.componentId
-                id && this.$refs.componentTree.setComponentVisible(id)
-            },
-
-            toggleComponentLib (idx) {
-                this.$refs.dropdownMenuComp[0].hide()
-                if (this.curComponentLib === idx) {
-                    return
-                }
-                this.curComponentLib = idx
-                this.baseComponentList.splice(0, this.baseComponentList.length, ...allComponentConf[idx])
-                this.componentTabsCurrentRefresh = +new Date()
-                this.componentSearchResult = null
-            },
-
             async fetchData () {
                 try {
                     this.contentLoading = true
@@ -874,7 +565,11 @@
 
                     await this.lockStatsuPolling('lock') // 处理加锁逻辑
 
-                    await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
+                    await this.getAllVariable({
+                        projectId: this.projectId,
+                        pageCode: pageDetail.pageCode,
+                        effectiveRange: 0
+                    })
                     // update targetdata
                     const content = pageDetail.content
                     if (content) {
@@ -946,57 +641,6 @@
                 }
 
                 targetData.forEach((grid, index) => walkGrid(targetData, grid, callBack, callBack, index))
-            },
-
-            registerCustomComponent () {
-                const ExtraGroup = {
-                    Favourite: '我的收藏',
-                    Public: '其他项目公开的组件'
-                }
-                // 包含所有的自定组件
-                this.wholeComponentList = []
-                window.__innerCustomRegisterComponent__ = {}
-                const script = document.createElement('script')
-                script.src = `/${parseInt(this.$route.params.projectId)}/${parseInt(this.$route.params.pageId)}/component/register.js`
-                script.onload = () => {
-                    const customComponentList = window.customCompontensPlugin.map(callback => {
-                        const [
-                            config,
-                            componentSource,
-                            baseInfo
-                        ] = callback(Vue)
-                        window.__innerCustomRegisterComponent__[config.type] = componentSource
-                        return {
-                            ...config,
-                            group: baseInfo.category,
-                            meta: { ...baseInfo }
-                        }
-                    })
-
-                    const publicList = []
-                    const otherList = []
-                    for (const comp of customComponentList) {
-                        this.wholeComponentList.push(comp)
-                        if (comp.meta.offline) {
-                            continue
-                        }
-                        if (comp.meta.isPublic) {
-                            publicList.push({ ...comp, group: ExtraGroup.Public })
-                        } else {
-                            otherList.push(comp)
-                        }
-                    }
-                    this.customComponentList = [...otherList, ...publicList]
-                    this.isCustomComponentLoading = false
-                    if (this.componentTabs.current.props.type === 'custom') {
-                        this.componentTabs.current.props.componentList = this.customComponentList
-                        this.componentTabs.current.props.loading = this.isCustomComponentLoading
-                    }
-                }
-                document.body.appendChild(script)
-                this.$once('hook:beforeDestroy', () => {
-                    document.body.removeChild(script)
-                })
             },
 
             /**
@@ -1170,33 +814,6 @@
             },
 
             /**
-             * 收起/显示左侧、右侧边栏
-             *
-             * @param {string} side 左、右方向标识
-             */
-            handleCollapseSide (side) {
-                this.collapseSide[side] = !this.collapseSide[side]
-            },
-
-            handleToggleCompTab (index) {
-                const currentTab = this.componentTabs.list[index]
-                this.componentTabs.list.forEach(item => (item.active = false))
-                currentTab.active = true
-
-                const key = currentTab.name
-                this.componentTabs.current.component = this.panelMap[key].component
-                this.componentTabs.current.props = this.panelMap[key].props
-                if (key === 'custom') {
-                    this.componentTabs.current.props.componentList = this.customComponentList
-                    this.componentTabs.current.props.loading = this.isCustomComponentLoading
-                }
-
-                if (key !== 'base') {
-                    this.componentSearchResult = null
-                }
-            },
-
-            /**
              * 左侧组件列表 hover 事件
              *
              * @param {Object} e 事件对象
@@ -1224,20 +841,6 @@
                     })
                 }
                 popoverInstance.show()
-            },
-
-            /**
-             * drag-wrapper 拖拽容器点击事件回调，用于把当前点击的组件设置为空
-             *
-             * @param {Object} e 事件对象
-             */
-            dragWrapperClickHandler (e) {
-                this.setCurSelectedComponentData({})
-
-                removeClassWithNodeClass('.bk-layout-grid-row', 'selected')
-                removeClassWithNodeClass('.bk-lesscode-free-layout', 'selected')
-                removeClassWithNodeClass('.component-wrapper', 'selected')
-                removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
             },
 
             /**
@@ -1314,14 +917,12 @@
                         })
                         return
                     }
-                    this.dragWrapperClickHandler()
                 }
                 // 切换回编辑区，对画布数据进行更新
                 if (action === 'edit' && this.actionSelected !== 'edit') {
                     const targetData = JSON.parse(safeStringify(this.targetData || []))
                     this.updateTargetData(targetData)
                     this.targetData = targetData
-                    this.refreshDragAreaKey = +new Date()
                 }
                 this.actionSelected = action
             },
@@ -1370,9 +971,6 @@
                             type: 'clear'
                         }
                         me.pushTargetHistory(pushData)
-                        me.curDragingComponent = Object.assign({}, mockCurSelectComponentData)
-                        me.setCurSelectedComponentData(me.curDragingComponent)
-                        me.setTargetData([me.curDragingComponent])
                     }
                 })
             },
@@ -1389,13 +987,6 @@
                 const { type } = this.curSelectedComponentData
                 const customComp = this.customComponentList.find(item => item.type === type)
                 this.delComponentConf.isCustomOffline = customComp && customComp.meta.offline
-            },
-            /**
-             * 跳转选中的元素文档链接
-             */
-            jumpInfoLink (item) {
-                const type = (item.type === 'chart' || item.type === 'bk-charts') ? item.name : item.type
-                window.open(this.infoLinkDict[type], '_blank')
             },
 
             /**
@@ -1445,8 +1036,6 @@
                 }
                 del(targetData, componentId)
                 this.setTargetData(targetData)
-                this.refreshDragAreaKey = +new Date()
-                this.setCurSelectedComponentData({})
                 this.pushTargetHistory(pushData)
                 this.delComponentConf.visiable = false
             },
