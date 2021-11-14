@@ -100,12 +100,12 @@
                 }" />
         </div>
         <div class="main-container">
-            <left-panel @onCustomComponentLoaded="handleCustomComponentLoaded" />
+            <material-panel @onCustomComponentLoaded="handleCustomComponentLoaded" />
             <operation-area
                 :operaion="actionSelected"
                 :project="projectDetail"
                 :type="actionSelected" />
-            <right-panel />
+            <modifier-panel />
         </div>
         <Methods :show.sync="isShowFun" />
         <bk-dialog v-model="delComponentConf.visiable"
@@ -148,8 +148,8 @@
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
     import LC from '@/element-materials/core'
-    import LeftPanel from './components/left-panel'
-    import RightPanel from './components/right-panel'
+    import MaterialPanel from './components/material-panel'
+    import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
 
     export default {
@@ -161,8 +161,8 @@
             PageDialog,
             SaveTemplateDialog,
             PageFromTemplateDialog,
-            LeftPanel,
-            RightPanel,
+            MaterialPanel,
+            ModifierPanel,
             OperationArea
         },
         data () {

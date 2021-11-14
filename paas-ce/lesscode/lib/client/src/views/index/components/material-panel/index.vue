@@ -134,11 +134,11 @@
     import Vue from 'vue'
     import iconComponentList from '@/element-materials/materials/icon-list.js'
     import allComponentConf from '@/element-materials/materials'
-    import ComponentCustomPanel from '../../children/component-panel-custom'
-    import ComponentBasePanel from '../../children/component-panel-base'
-    import ComponentSearch from '../../children/component-search'
-    import ComponentTree from '../../children/component-tree'
-    import TemplatePanel from '../../children/template-panel.vue'
+    import ComponentCustomPanel from './components/component-panel-custom'
+    import ComponentBasePanel from './components/component-panel-base'
+    import ComponentSearch from './components/component-search'
+    import ComponentTree from './components/component-tree'
+    import TemplatePanel from './components/template-panel'
 
     export default {
         name: '',
