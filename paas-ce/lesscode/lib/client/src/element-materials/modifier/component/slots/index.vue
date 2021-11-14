@@ -36,7 +36,7 @@
             renderConfig () {
                 return Object.keys(this.config).reduce((result, slotName) => {
                     const config = this.config[slotName]
-                    if (config.display !== 'hidden') {
+                    if (config.name.includes('layout') || config.display !== 'hidden') {
                         result[slotName] = config
                     }
                     return result
@@ -46,13 +46,12 @@
 
         created () {
             this.lastProps = {}
-            this.lastSlots = {}
-            this.currentComponentNode = LC.getActiveNode()
+            this.componentNode = LC.getActiveNode()
             const {
                 material,
                 renderProps,
                 renderSlots
-            } = this.currentComponentNode
+            } = this.componentNode
             this.config = Object.freeze(material.slots || {})
             this.lastProps = _.cloneDeep(renderProps)
             this.lastSlots = Object.freeze(_.cloneDeep(renderSlots))
@@ -64,7 +63,7 @@
                     ...this.lastSlots,
                     [slotName]: slotVal
                 })
-                this.currentComponentNode.setRenderSlots(slotVal, slotName)
+                this.componentNode.setRenderSlots(slotVal, slotName)
             }, 60),
             batchUpdate (renderData) {
                 console.log('from slot batchUpdate', renderData)

@@ -145,7 +145,7 @@
         },
         mounted () {
             this.calcDefaultDisplay()
-            this.setDefaultStyleWidthAttachToFreelayout()
+            this.setDefaultStyleWithAttachToFreelayout()
             this.$emit('component-mounted')
         },
         methods: {
@@ -185,7 +185,7 @@
             /**
              * @desc 当组件在 freelayout 布局中时需要设置一些默认样式
              */
-            setDefaultStyleWidthAttachToFreelayout () {
+            setDefaultStyleWithAttachToFreelayout () {
                 if (!this.attachToFreelayout) {
                     return
                 }

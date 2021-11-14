@@ -61,8 +61,8 @@
         },
         mounted () {
             setTimeout(() => {
-                this.$refs.draggable.computeIndexes()
-            }, 500)
+                this.$refs.draggable && this.$refs.draggable.computeIndexes()
+            })
         },
         methods: {
             /**

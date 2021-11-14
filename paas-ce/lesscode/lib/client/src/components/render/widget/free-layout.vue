@@ -101,8 +101,6 @@
                     container: dragEle.parentNode
                 })
 
-                console.log('from freelayoutfreelayoutfreelayoutfreelayoutfreelayout', this.dragLine, childNode, dragEle.parentNode)
-
                 this.dragLine.setContainer(dragEle.parentNode)
 
                 this.drag.on('move', () => {
@@ -169,6 +167,8 @@
                     let left = 0
                     // 组件默认不能超过容器范围
                     // top 位置计算
+
+                    console.log('from freeefreeefreeefreeefreee', childNode.style.top, childNode.style.left)
                     if (childNode.style.top) {
                         top = parseInt(childNode.style.top)
                     } else {
@@ -177,6 +177,7 @@
                         } else {
                             top = originalTop - containerTop - 15
                         }
+                        top = Math.max(top, 10)
                     }
                     // left 位置计算
                     if (childNode.style.left) {
@@ -187,11 +188,12 @@
                         } else {
                             left = originalLeft - containerLeft - 15
                         }
+                        left = Math.max(left, 10)
                     }
 
                     childNode.setStyle({
-                        top: `${Math.max(top, 10)}px`,
-                        left: `${Math.max(left, 10)}px`
+                        top: `${top}px`,
+                        left: `${left}px`
                     })
                 })
             },

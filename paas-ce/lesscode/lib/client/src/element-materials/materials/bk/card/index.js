@@ -70,7 +70,11 @@ export default {
             children: [
                 {
                     name: ['text'],
-                    type: ['span']
+                    type: ['span'],
+                    renderStyles: {
+                        top: '0px',
+                        left: '0px'
+                    }
                 }
             ]
         },
