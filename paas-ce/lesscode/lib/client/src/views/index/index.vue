@@ -349,6 +349,8 @@
             // 设置权限相关的信息
             this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
 
+            bus.$emit('pageInitialized')
+
             // for test
             window.test = this.test
             window.test1 = this.test1

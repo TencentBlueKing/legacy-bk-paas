@@ -27,10 +27,10 @@
                     <div class="component-tree-node-item">
                         <i :class="nodeIcon(data)"></i>
                         <span>{{data.componentId}}</span>
-                        <i v-if="showComponentEye(data.type)"
-                            v-bk-tooltips="componentEyeTips(data.componentId)"
-                            :class="['component-eye-control', 'bk-drag-icon', eyeIconClass(data.componentId)]"
-                            @click="setComponentVisible(data.componentId)"></i>
+                        <i v-if="data.isInteractiveComponent"
+                            v-bk-tooltips="componentEyeTips(data)"
+                            :class="['component-eye-control', 'bk-drag-icon', eyeIconClass(data)]"
+                            @click.stop="eyeClickHandler(data)"></i>
                     </div>
                 </div>
             </tree>
@@ -42,7 +42,7 @@
     import _ from 'lodash'
     import LC from '@/element-materials/core'
     import Tree from './tree/tree.vue'
-    import { deepSearchStack } from '@/common/util.js'
+    import { deepSearchStack, activeNodeProcess } from '@/common/util.js'
     import { mapMutations, mapGetters } from 'vuex'
 
     export default {
@@ -92,9 +92,26 @@
             const updateCallback = _.throttle(() => {
                 this.data = Object.freeze(LC.getRoot().children)
             }, 100)
+            /**
+             * 组件树监听update的回调
+             * @description 当update的的时候需要做几件事
+             *    ① 展开所有父级节点（这样才能看到当前节点）
+             *    ② 判断当前激活节点或其祖先节点是否是交互式组件，如果是交互式组件，需要将其设置为可见状态
+             */
             const activeCallback = async event => {
                 await this.expandParent(event.target)
                 this.$refs.tree.setSelected(event.target.componentId)
+
+                const activeNode = LC.getActiveNode()
+                if (activeNode) {
+                    const parent = this.isParentInteractive(activeNode)
+                    activeNode && this.data.forEach(item => {
+                        item.hideInteractive()
+                    })
+                    if (parent) {
+                        this.setComponentVisible(parent)
+                    }
+                }
             }
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('active', activeCallback)
@@ -109,6 +126,16 @@
                 'setCurSelectedComponentData',
                 'setTargetData'
             ]),
+            /** 判断当前组件及其父组件是否是交互式组件 */
+            isParentInteractive (node) {
+                if (node.isInteractiveComponent) {
+                    return node
+                } else if (node.parentNode.type !== 'root') {
+                    return this.isParentInteractive(node.parentNode)
+                } else {
+                    return false
+                }
+            },
             expandParent (node, queue = []) {
                 if (node.parentNode.type !== 'root') {
                     queue.push(node.parentNode.componentId)
@@ -119,24 +146,27 @@
                 }
                 return Promise.resolve(true)
             },
-            isInteractiveNodeShow (id) {
-                return this.targetData.find(target => target.componentId === id).interactiveShow
+            eyeIconClass (node) {
+                return node.interactiveShow ? 'bk-drag-visible-eye' : 'bk-drag-invisible-eye'
             },
-            eyeIconClass (id) {
-                return this.isInteractiveNodeShow(id) ? 'bk-drag-visible-eye' : 'bk-drag-invisible-eye'
+            eyeClickHandler (node) {
+                if (!node.isActived) {
+                    activeNodeProcess(node)
+                }
+                setTimeout(() => {
+                    this.setComponentVisible(node)
+                }, 0)
             },
-            componentEyeTips (id) {
+            componentEyeTips (node) {
                 return {
-                    content: this.isInteractiveNodeShow(id) ? '隐藏' : '显示',
+                    content: node.interactiveShow ? '隐藏' : '显示',
                     placement: 'top',
                     interactive: false
                 }
             },
-            showComponentEye (type) {
-                return this.interactiveComponents.includes(type)
-            },
-            setComponentVisible (id) {
-                this.$td().setCurInteractiveVisible(id, false)
+            /** toggle interactive component visible status */
+            setComponentVisible (node) {
+                node.toggleInteractive()
 
                 /** 去除dialog交互式组件 插入在body的mask */
                 setTimeout(() => {
@@ -189,21 +219,11 @@
                 }
                 return curNode.id === node.id ? null : curNode
             },
-
-            getNodeVisableStatus (node) {
-                return this.targetData.find(item => item.componentId === node.id).interactiveShow
-            },
-
             activeNode (node) {
                 if (node.data.isActived || node.data.type === 'render-column') {
                     return
                 }
-                const activeNode = LC.getActiveNode()
-                if (activeNode) {
-                    activeNode.activeClear()
-                }
-                node.data && node.data.active()
-
+                node.data && activeNodeProcess(node.data)
                 /** 将画布中的目标节点移动至视区 */
                 this.transformCanvasToView(node.data.componentId)
             },

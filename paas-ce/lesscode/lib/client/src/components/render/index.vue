@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <layout @layout-mounted="onLayoutMounted">
+    <layout>
         <draggable
             class="target-drag-area"
             :component-data="componentData"
@@ -39,11 +39,11 @@
             </template>
         </draggable>
         <div
-            v-if="showNotVisibleMask"
+            v-show="showNotVisibleMask"
             class="not-visible-mask"
             :style="{ height: canvasHeight + 'px' }">
             <span class="not-visible-text">
-                {{`该组件()处于隐藏状态，请先打开`}}
+                {{`该组件(${invisibleComponent})处于隐藏状态，请先打开`}}
             </span>
         </div>
     </layout>
@@ -54,6 +54,7 @@
     import Draggable from './components/draggable'
     import Layout from './widget/layout'
     import ResolveInteractiveComponent from './resolve-interactive-component'
+    import { bus } from '@/common/bus'
 
     export default {
         name: 'render',
@@ -68,13 +69,28 @@
                 attachToInteractiveComponent: false
             }
         },
+        props: {
+            mainContentLoading: {
+                type: Boolean,
+                default: false
+            }
+        },
         data () {
             return {
                 showNotVisibleMask: false,
-                canvasHeight: 100
+                canvasHeight: 100,
+                resizeObserve: null,
+                invisibleComponent: ''
             }
         },
-        
+        watch: {
+            showNotVisibleMask (val) {
+                if (val) {
+                    const activeNode = LC.getActiveNode()
+                    this.invisibleComponent = activeNode.componentId
+                }
+            }
+        },
         created () {
             this.componentData = LC.getRoot()
             const updateCallback = _.throttle((event) => {
@@ -83,9 +99,27 @@
                     this.$forceUpdate()
                 }
             }, 100)
+            /** 当主页面拉去数据、加载页面后，调用动态计算遮罩的方法 */
+            bus.$on('pageInitialized', this.observeInteractiveMask)
+
+            /**
+             * @name interactiveWatcher
+             * @description 当交互式组件的状态改变，每次更新需要监测是否显示“打开交互式组件”的提示
+             */
+            const interactiveWatcher = event => {
+                const activeNode = LC.getActiveNode()
+                if (activeNode) {
+                    this.showNotVisibleMask = activeNode.isInteractiveComponent && !activeNode.interactiveShow
+                }
+            }
             LC.addEventListener('update', updateCallback)
+            LC.addEventListener('active', interactiveWatcher)
+            LC.addEventListener('toggleInteractive', interactiveWatcher)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
+                LC.removeEventListener('active', interactiveWatcher)
+                LC.removeEventListener('toggleInteractive', interactiveWatcher)
+                bus.$off('pageInitialized')
             })
         },
         mounted () {
@@ -95,11 +129,12 @@
             document.body.addEventListener('click', resetCallback)
             this.$once('hook:beforeDestroy', () => {
                 document.body.removeEventListener('click', resetCallback)
+                this.resizeObserve.disconnect()
             })
         },
         methods: {
-            onLayoutMounted () {
-                const canvas = document.getElementsByClassName('lesscode-editor-layout')[0]
+            observeInteractiveMask () {
+                const canvas = document.querySelector('.lesscode-editor-layout')
                 this.canvasHeight = canvas.offsetHeight
                 this.resizeObserve = new ResizeObserver(entries => {
                     for (const entry of entries) {
