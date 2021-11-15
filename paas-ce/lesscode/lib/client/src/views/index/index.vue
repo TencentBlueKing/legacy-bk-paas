@@ -866,39 +866,6 @@
                 }))
             },
 
-            log (evt, column) {
-                const addEle = evt.added
-                const removedEle = evt.removed
-                const moveEle = evt.moved
-                const element = (addEle || removedEle || moveEle).element
-                const pos = this.$td().getNodePosition(element.componentId)
-                const pushData = {
-                    parentId: pos.parent && pos.parent.componentId,
-                    component: element,
-                    columnIndex: pos.columnIndex,
-                    childrenIndex: pos.childrenIndex
-                }
-                if (addEle) {
-                    pushData.type = 'add'
-                }
-                if (removedEle) {
-                    pushData.type = 'remove'
-                    pushData.parentId = this.startDragPosition.parent && this.startDragPosition.parent.componentId
-                    pushData.columnIndex = this.startDragPosition.columnIndex
-                    pushData.childrenIndex = this.startDragPosition.childrenIndex
-                }
-                if (moveEle) {
-                    pushData.type = 'move'
-                    pushData.sourceParentNodeId = pushData.parentId
-                    pushData.sourceColumnIndex = pos.columnIndex
-                    pushData.sourceChildrenIndex = moveEle.oldIndex
-                    pushData.targetParentNodeId = pushData.parentId
-                    pushData.targetColumnIndex = pos.columnIndex
-                    pushData.targetChildrenIndex = moveEle.newIndex
-                }
-                this.pushTargetHistory(pushData)
-            },
-
             targetAreaEndHandler (e) {
                 // console.error('onEnd11111', e)
             },

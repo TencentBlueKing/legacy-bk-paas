@@ -22,6 +22,10 @@ import transformProps from './helper/transform-props'
 import transformSlots from './helper/transform-slots'
 import findParent from './helper/find-parent'
 import flatneChildren from './helper/flatne-chilren'
+import {
+    findRelatedVariableFromRenderDirective,
+    findRelatedVariableFromRenderSlot
+} from './helper/find-related-variable'
 
 import getRoot from './get-root'
 import getMaterial from './get-material'
@@ -174,7 +178,41 @@ export default class Node {
     get children () {
         return flatneChildren(this)
     }
-
+    /**
+     * @desc 关联变量
+     * @returns { Object }
+     */
+    get variable () {
+        const directiveRelatedVariableMap = findRelatedVariableFromRenderDirective(this.renderDirectives)
+        const slotRelatedVariableMap = this.layoutType ? {} : findRelatedVariableFromRenderSlot(this.renderSlots)
+        return Object.seal(Object.assign({}, directiveRelatedVariableMap, slotRelatedVariableMap))
+    }
+    /**
+     * @desc 关联函数
+     * @returns { Object }
+     */
+    get method () {
+        const methodMap = {}
+        Object.keys(this.renderProps).forEach(propName => {
+            const prop = this.renderProps[propName]
+            if (prop.type === 'remote') {
+                if (prop.payload && prop.payload.methodData && prop.payload.methodData.methodCode) {
+                    methodMap[prop.payload.methodData.methodCode] = true
+                }
+            }
+        })
+        if (!this.layoutType) {
+            Object.keys(this.renderSlots).forEach(slotName => {
+                const slot = this.renderSlots[slotName]
+                if (slot.type === 'remote') {
+                    if (slot.payload && slot.payload.methodData && slot.payload.methodData.methodCode) {
+                        methodMap[slot.payload.methodData.methodCode] = true
+                    }
+                }
+            })
+        }
+        return methodMap
+    }
     /**
      * @desc 设置节点属性
      * @param { String } key 属性名
