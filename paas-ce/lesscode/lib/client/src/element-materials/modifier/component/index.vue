@@ -36,7 +36,6 @@
     </div>
 </template>
 <script>
-    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import ModifierStyles from './styles'
     import ModifierSlots from './slots'
@@ -121,11 +120,11 @@
         
         created () {
             this.activeComponentNode = null
-            const activeCallback = _.debounce(({ target }) => {
+            const activeCallback = ({ target }) => {
                 this.tabPanelActive = target.tabPanelActive
                 this.renderKey = target.renderKey
                 this.activeComponentNode = target
-            }, 60)
+            }
 
             const activeClearCallback = () => {
                 this.tabPanelActive = 'props'

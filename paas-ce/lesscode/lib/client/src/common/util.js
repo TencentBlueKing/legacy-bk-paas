@@ -13,6 +13,7 @@ import { messageSuccess } from '@/common/bkmagic'
 import domToImage from './dom-to-image'
 import store from '@/store'
 import Vue from 'vue'
+import LC from '@/element-materials/core'
 
 /***
  * 遍历targetData
@@ -992,4 +993,10 @@ export const isInteractiveCompActive = () => {
     const components = document.querySelectorAll('.interactive-component')
     const target = Array.from(components).find(el => el.style.display !== 'none')
     return target !== undefined
+}
+
+export const activeNodeProcess = node => {
+    const activeNode = LC.getActiveNode()
+    activeNode && activeNode.activeClear()
+    node.active()
 }

@@ -323,7 +323,11 @@
              */
             handleUpdate (name, value, type, payload = {}) {
                 try {
-                    const val = getRealValue(type, value)
+                    /** 设置了staticValue的属性，在画布中不需要更新其真实值，保持staticValue不变 */
+                    const val = Object.hasOwnProperty.call(this.describe, 'staticValue')
+                        ? this.describe.staticValue
+                        : getRealValue(type, value)
+
                     // 缓存用户本地编辑值
                     this.propTypeValueMemo[type] = {
                         val,

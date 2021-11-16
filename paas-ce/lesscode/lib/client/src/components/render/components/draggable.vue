@@ -42,8 +42,11 @@
         },
         created () {
             const dragableCheck = _.debounce((event) => {
-                // 交互式组件是显示状态
-                // 所有不属于交互式组件的drag area都不可拖动
+                /**
+                 * 交互式组件状态更新
+                 * @description 当交互式组件激活时，不属于交互式组件的drag area不可拖动
+                 *  只有关闭后，才可以继续拖拽
+                 */
                 if (event.interactiveShow
                     && !this.attachToInteractiveComponent) {
                     this.dragGroup = Object.freeze({
@@ -54,9 +57,9 @@
                     this.dragGroup = this.group
                 }
             }, 60)
-            LC.addEventListener('toggleInteractive', dragableCheck)
+            LC.addEventListener('update', dragableCheck)
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('toggleInteractive', dragableCheck)
+                LC.removeEventListener('update', dragableCheck)
             })
         },
         mounted () {
