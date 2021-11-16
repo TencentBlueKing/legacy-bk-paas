@@ -13,6 +13,7 @@
 </template>
 <script>
     import ResolveComponent from './resolve-component'
+    import { activeNodeProcess } from '@/common/util.js'
 
     export default {
         name: 'resolve-interactive-component',
@@ -49,10 +50,8 @@
             this.canvas = document.getElementsByClassName('main-content')[0]
             this.resizeObserver = new ResizeObserver(this.resizeInteractiveWrapper)
             this.resizeObserver.observe(this.canvas)
-            setTimeout(() => {
-                this.componentData.toggleInteractive()
-                this.componentData.toggleInteractive()
-            }, 2000)
+            
+            activeNodeProcess(this.componentData)
         },
         beforeDestroy () {
             this.resizeObserver && this.resizeObserver.unobserve(this.canvas)

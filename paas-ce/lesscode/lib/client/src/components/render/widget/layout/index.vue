@@ -56,9 +56,6 @@
         created () {
             this.fetchPageList()
         },
-        mounted () {
-            this.$emit('layout-mounted')
-        },
         methods: {
             ...mapMutations('drag', ['setCurTemplateData']),
             fetchPageList () {

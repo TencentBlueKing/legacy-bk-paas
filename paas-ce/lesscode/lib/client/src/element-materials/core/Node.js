@@ -3,6 +3,7 @@ import { uuid } from '@/common/util'
 import active from './extends/active'
 import activeClear from './extends/active-clear'
 import toggleInteractive from './extends/toggle-interactive'
+import hideInteractive from './extends/hide-interactive'
 import appendChild from './extends/append-child'
 import removeChild from './extends/remove-child'
 import rerender from './extends/rerender'
@@ -272,6 +273,13 @@ export default class Node {
     @notify
     toggleInteractive () {
         toggleInteractive(this)
+        return this
+    }
+
+    @readonly
+    @notify
+    hideInteractive () {
+        hideInteractive(this)
         return this
     }
     /**
