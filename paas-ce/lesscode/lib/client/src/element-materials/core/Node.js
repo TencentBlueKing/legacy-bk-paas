@@ -4,6 +4,8 @@ import active from './extends/active'
 import activeClear from './extends/active-clear'
 import toggleInteractive from './extends/toggle-interactive'
 import appendChild from './extends/append-child'
+import insertBefore from './extends/insert-before'
+import insertAfter from './extends/insert-after'
 import removeChild from './extends/remove-child'
 import rerender from './extends/rerender'
 import setRenderSlots from './extends/set-render-slots'
@@ -12,6 +14,7 @@ import setRenderProps from './extends/set-render-props'
 import setRenderStyles from './extends/set-render-styles'
 import setRenderDirectives from './extends/set-render-directives'
 import setStyle from './extends/set-style'
+import setProp from './extends/set-prop'
 
 import {
     notify,
@@ -26,6 +29,11 @@ import {
     findRelatedVariableFromRenderDirective,
     findRelatedVariableFromRenderSlot
 } from './helper/find-related-variable'
+import {
+    findRelatedMethodFromRenderProps,
+    findRelatedMethodFromRenderSlot,
+    findRelatedMethodFromRenderEvent
+} from './helper/find-related-method'
 
 import getRoot from './get-root'
 import getMaterial from './get-material'
@@ -83,7 +91,9 @@ export default class Node {
             'root',
             'render-grid',
             'render-column',
-            'free-layout'
+            'free-layout',
+            'widget-form',
+            'widget-form-item'
         ].includes(this.type)
     }
     /**
@@ -192,26 +202,10 @@ export default class Node {
      * @returns { Object }
      */
     get method () {
-        const methodMap = {}
-        Object.keys(this.renderProps).forEach(propName => {
-            const prop = this.renderProps[propName]
-            if (prop.type === 'remote') {
-                if (prop.payload && prop.payload.methodData && prop.payload.methodData.methodCode) {
-                    methodMap[prop.payload.methodData.methodCode] = true
-                }
-            }
-        })
-        if (!this.layoutType) {
-            Object.keys(this.renderSlots).forEach(slotName => {
-                const slot = this.renderSlots[slotName]
-                if (slot.type === 'remote') {
-                    if (slot.payload && slot.payload.methodData && slot.payload.methodData.methodCode) {
-                        methodMap[slot.payload.methodData.methodCode] = true
-                    }
-                }
-            })
-        }
-        return methodMap
+        const eventRelatedMethodMap = findRelatedMethodFromRenderEvent(this.renderEvents)
+        const propRelatedVariableMap = findRelatedMethodFromRenderProps(this.renderProps)
+        const slotRelatedVariableMap = this.layoutType ? {} : findRelatedMethodFromRenderSlot(this.renderSlots)
+        return Object.seal(Object.assign({}, eventRelatedMethodMap, propRelatedVariableMap, slotRelatedVariableMap))
     }
     /**
      * @desc 设置节点属性
@@ -298,6 +292,20 @@ export default class Node {
         return this
     }
 
+    @readonly
+    @notify
+    insertBefore (child) {
+        insertBefore(this, child)
+        return this
+    }
+
+    @readonly
+    @notify
+    insertAfter (child) {
+        insertAfter(this, child)
+        return this
+    }
+
     /**
      * @desc 移除子组件
      * @param { Node } child
@@ -371,7 +379,7 @@ export default class Node {
         return this
     }
     /**
-     * @desc 设置指令
+     * @desc 设置 style
      * @param { String | Object } params1
      * @param { Number | String } params2
      * @returns { Node }
@@ -380,6 +388,18 @@ export default class Node {
     @notify
     setStyle (params1, params2) {
         setStyle(this, params1, params2)
+        return this
+    }
+    /**
+     * @desc 设置 prop
+     * @param { String | Object } params1
+     * @param { Number | String } params2
+     * @returns { Node }
+     */
+    @readonly
+    @notify
+    setProp (params1, params2) {
+        setProp(this, params1, params2)
         return this
     }
 }

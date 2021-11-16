@@ -12,7 +12,6 @@ export default function (node, childNode, slotName) {
     if (node.layoutType) {
         node.renderSlots[slotName].push(childNode)
     } else if (node.layoutSlotType[slotName]) {
-        console.log('from append child = == = = = == = ', node)
         node.slot[slotName].appendChild(node)
     }
     return true

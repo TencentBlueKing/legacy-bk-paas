@@ -12,7 +12,6 @@
 <template>
     <div>
         <template v-if="hasMaterialConfig">
-            <render-slots />
             <template v-for="(item, key) in propsConfig">
                 <render-prop
                     v-if="item.type !== 'hidden'"
@@ -35,13 +34,11 @@
     import { bus } from '@/common/bus'
     import LC from '@/element-materials/core'
     import RenderProp from './components/render-prop'
-    import RenderSlots from '../slots'
 
     export default {
         name: 'modifier-prop',
         components: {
-            RenderProp,
-            RenderSlots
+            RenderProp
         },
         data () {
             return {

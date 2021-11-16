@@ -1,6 +1,6 @@
 <template>
-    <article
-        v-if="Object.keys(renderConfig).length"
+    <div
+        v-if="isShow && Object.keys(renderConfig).length"
         class="modifier-slot">
         <renderSlot
             v-for="(slotConfig, slotName) in renderConfig"
@@ -10,9 +10,8 @@
             :slot-config="slotConfig"
             :render-props="lastProps"
             @change="handleChange"
-            @batchUpdate="batchUpdate"
-        ></renderSlot>
-    </article>
+            @batchUpdate="batchUpdate" />
+    </div>
 </template>
 
 <script>
@@ -27,6 +26,7 @@
 
         data () {
             return {
+                isShow: true,
                 config: {},
                 lastSlots: {}
             }
@@ -45,8 +45,12 @@
         },
 
         created () {
-            this.lastProps = {}
             this.componentNode = LC.getActiveNode()
+            // 布局类型的组件不支持 slot 配置
+            if (this.componentNode.layoutType) {
+                this.isShow = false
+            }
+            this.lastProps = {}
             const {
                 material,
                 renderProps,

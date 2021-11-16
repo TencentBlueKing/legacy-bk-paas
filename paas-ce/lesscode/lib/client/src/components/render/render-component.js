@@ -58,8 +58,6 @@ export default {
             return result
         }, {})
 
-        console.log('from rendercomponentrendercomponentrendercomponent', props)
-
         return h('span',
             {
                 style: {

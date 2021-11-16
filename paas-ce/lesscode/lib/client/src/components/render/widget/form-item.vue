@@ -12,18 +12,19 @@
 <template>
     <div
         class="widget-form-item"
-        @click="handleSelect"
-        :data-component-id="`component-${componentData.componentId}`">
-        <bk-form-item
-            :label="componentData.renderProps.label && componentData.renderProps.label.val"
-            :required="componentData.renderProps.required && componentData.renderProps.required.val">
-            <template v-for="(item) in componentData.renderSlots.default.val">
-                <resolve-component :component-data="item" :key="item.componentId" />
+        @click="handleSelect">
+        <bk-form-item v-bind="componentData.prop">
+            <template v-for="componentDate in componentData.slot.default">
+                <resolve-component
+                    :component-data="componentDate"
+                    :key="componentDate.componentId" />
             </template>
         </bk-form-item>
     </div>
 </template>
 <script>
+    import LC from '@/element-materials/core'
+
     export default {
         name: 'widget-form-item',
         components: {
@@ -34,6 +35,18 @@
                 type: Object,
                 default: () => ({})
             }
+        },
+        created () {
+            const updateCallback = ({ target }) => {
+                if (target.componentId === this.componentData.componentId) {
+                    this.$forceUpdate()
+                }
+            }
+
+            LC.addEventListener('update', updateCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', updateCallback)
+            })
         },
         methods: {
             handleSelect () {

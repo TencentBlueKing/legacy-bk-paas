@@ -71,6 +71,7 @@ import bkChartsScatter from './bk-charts-scatter'
 
 import freeLayout from './free-layout'
 import form from './form'
+import formItem from './form-item'
 
 import dialog from './dialog'
 import sideslider from './sideslider'
@@ -135,6 +136,7 @@ const bkComponents = Object.seal([
     dialog,
     freeLayout,
     form,
+    formItem,
     divider,
     sideslider,
     bkChartsLine,

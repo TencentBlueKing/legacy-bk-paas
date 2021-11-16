@@ -66,6 +66,8 @@
             const updateCallback = ({ target }) => {
                 if (target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
+                    // 需要同时触发父级 grid 更新
+                    this.renderGrid.$forceUpdate()
                 }
             }
 

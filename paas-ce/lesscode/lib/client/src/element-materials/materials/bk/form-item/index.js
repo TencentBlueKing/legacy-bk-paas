@@ -10,13 +10,13 @@
  */
 
 export default {
-    name: 'form',
-    type: 'widget-form',
+    name: 'form-item',
+    type: 'widget-form-item',
     displayName: '表单容器',
     icon: 'bk-drag-form',
     group: '表单',
     order: 0,
-    styles: ['size', 'margin', 'font', 'backgroundColor'],
+    styles: [],
     directives: [
         {
             type: 'v-bind',
@@ -26,27 +26,34 @@ export default {
         }
     ],
     props: {
-        model: {
-            type: 'hidden',
-            val: {}
-        },
-        rules: {
-            type: 'hidden',
-            val: {}
-        },
-        ref: {
+        property: {
             type: 'string',
-            val: 'form',
-            tips: '表单的ref标识，如当值为form时，this.$refs.form可选中当前表单，可用来表单校验等，当页面内含有多个表单时请保证ref唯一'
+            val: ''
         },
-        'form-type': {
+        label: {
             type: 'string',
-            options: ['horizontal', 'vertical', 'inline'],
-            val: 'horizontal'
+            val: ''
         },
         'label-width': {
             type: 'number',
             val: 150
+        },
+        'error-display-type': {
+            type: 'string',
+            options: ['tooltips', 'normal'],
+            val: 'tooltips'
+        },
+        'required': {
+            type: 'boolean',
+            val: false
+        },
+        'icon-offset': {
+            type: 'number',
+            val: 8
+        },
+        'auto-check': {
+            type: 'boolean',
+            val: false
         }
     },
     slots: {

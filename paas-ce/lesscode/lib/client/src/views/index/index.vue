@@ -1041,7 +1041,8 @@
             },
 
             async handleSave (callBack, from) {
-                console.log('from save == ', LC.getRoot())
+                this.processTargetData()
+                // console.log('from save == ', LC.getRoot())
                 // const isLock = await this.checkLockStatus('lock')
                 // if (isLock) return // 如果被锁，不可保存
 
@@ -1106,6 +1107,23 @@
              * 3. more
              */
             processTargetData () {
+                const targetData = LC.getRoot().children
+
+                console.log('from processTargetData = ', targetData, this.variableList)
+
+                const customComponentMap = {}
+                const recTree = node => {
+                    if (!node) {
+                        return
+                    }
+                    if (node.isCustomComponent) {
+                        customComponentMap[node.type] = true
+                    }
+                    node.children.forEach(childNode => recTree(childNode))
+                }
+                recTree(LC.getRoot())
+            },
+            processTargetData___bak () {
                 // 记录已使用的变量
                 const usedVariableMap = {}
                 function addUsedVariable (id, dir) {

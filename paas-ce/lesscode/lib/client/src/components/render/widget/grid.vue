@@ -18,7 +18,7 @@
                 v-for="(componentItem, columnIndex) in componentData.slot.default"
                 :component-data="componentItem"
                 :key="componentItem.componentId"
-                :count="componentData.slot.default.length"
+                :count="getSpanNums()"
                 :class="{
                     last: columnIndex === componentData.slot.default.length - 1
                 }" />
@@ -65,6 +65,11 @@
             }
         },
         methods: {
+            getSpanNums () {
+                return this.componentData.children.reduce((result, columnNode) => {
+                    return result + columnNode.prop.span
+                }, 0)
+            },
             /**
              * @desc 添加栅格
              */

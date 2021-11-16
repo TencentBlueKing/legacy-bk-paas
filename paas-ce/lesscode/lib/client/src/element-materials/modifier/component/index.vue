@@ -21,10 +21,14 @@
                 v-bind="tabPanel"
                 :key="panelIndex" />
         </bk-tab>
-        <div class="material-modifier-container">
-            <component
-                :is="modifierCom"
-                :key="renderKey" />
+        <div
+            v-if="renderKey"
+            class="material-modifier-container">
+            <template v-for="(com, index) in modifierComList">
+                <component
+                    :is="com"
+                    :key="`${renderKey}_${index}`" />
+            </template>
         </div>
         <div v-if="!renderKey" class="empty">
             <span>请选择组件</span>
@@ -35,6 +39,9 @@
     import _ from 'lodash'
     import LC from '@/element-materials/core'
     import ModifierStyles from './styles'
+    import ModifierSlots from './slots'
+    import ModifierGird from './gird'
+    import ModifierForm from './form'
     import ModifierProps from './props'
     import ModifierEvents from './events'
     import ModifierDirectives from './directives'
@@ -96,17 +103,17 @@
                 ],
                 tabPanelActive: 'props',
                 currentTabPanelType: 'unborder-card',
-                renderKey: Date.now()
+                renderKey: ''
             }
         },
         computed: {
-            modifierCom () {
+            modifierComList () {
                 // 当前属性面板的编辑组件
                 const comMap = {
-                    styles: ModifierStyles,
-                    props: ModifierProps,
-                    events: ModifierEvents,
-                    directives: ModifierDirectives
+                    styles: [ModifierStyles],
+                    props: [ModifierGird, ModifierForm, ModifierSlots, ModifierProps],
+                    events: [ModifierEvents],
+                    directives: [ModifierDirectives]
                 }
                 return comMap[this.tabPanelActive]
             }
