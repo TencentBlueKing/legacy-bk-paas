@@ -1,5 +1,6 @@
 export const findRelatedMethodFromRenderProps = (renderProps) => {
     const methodMap = {}
+    // prop 设置为 remote 类型时会使用 method
     Object.keys(renderProps).forEach(propName => {
         const prop = renderProps[propName]
         if (prop.type === 'remote') {
@@ -10,6 +11,18 @@ export const findRelatedMethodFromRenderProps = (renderProps) => {
             }
         }
     })
+    // form 组件需要额外检测 rules 的自定义验证规则
+    if (renderProps.hasOwnProperty('rules')) {
+        const formRuleMap = renderProps.rules.val || {}
+        Object.keys(formRuleMap).forEach(propertyName => {
+            const propertyRuleList = formRuleMap[propertyName] || []
+            propertyRuleList.forEach(rule => {
+                if (rule.type && rule.validator) {
+                    methodMap[rule.validator] = true
+                }
+            })
+        })
+    }
     return methodMap
 }
 
