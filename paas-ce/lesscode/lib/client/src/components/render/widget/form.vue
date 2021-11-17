@@ -10,8 +10,10 @@
 -->
 
 <template>
-    <div class="widget-form">
-        <div v-if="componentData.slot.default.length < 1" class="normal empty-widget-form">
+    <div>
+        <div
+            v-if="componentData.slot.default.length < 1"
+            :class="$style['empty']">
             请在右侧配置表单项
         </div>
         <template v-else>
@@ -36,37 +38,17 @@
         props: {
             componentData: {
                 type: Object,
-                default: () => ({})
+                required: true
             }
-        },
-        // computed: {
-        //     formItemList () {
-        //         const result = []
-        //         for (let i = 0; i < this.componentData.renderSlots.default.val.length; i++) {
-        //             const currentSlot = this.componentData.renderSlots.default.val[i]
-        //             if (currentSlot.type === 'bk-form-item') {
-        //                 result.push(currentSlot)
-        //             }
-        //         }
-        //         return result
-        //     }
-        // },
-        updated () {
-            console.log('================= widget form update  =================')
-        },
-        created () {
-            console.log('from form watch   =  ', this.componentData)
         }
     }
 </script>
-<style lang='postcss'>
-    .widget-form{
-        .normal{
-            height: 80px;
-            line-height: 80px;
-            font-size: 18px;
-            color: #ccc;
-            text-align: center;
-        }
+<style lang='postcss' module>
+    .empty{
+        height: 80px;
+        line-height: 80px;
+        font-size: 18px;
+        color: #ccc;
+        text-align: center;
     }
 </style>

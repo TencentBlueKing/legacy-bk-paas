@@ -10,9 +10,7 @@
 -->
 
 <template>
-    <div
-        class="widget-form-item"
-        @click="handleSelect">
+    <div :class="$style['form-item']">
         <bk-form-item v-bind="componentData.prop">
             <template v-for="componentDate in componentData.slot.default">
                 <resolve-component
@@ -47,25 +45,13 @@
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
             })
-        },
-        methods: {
-            handleSelect () {
-                console.log('selefa')
-            }
         }
     }
 </script>
-<style lang='postcss' scoped>
-    .widget-form-item {
-        margin: 10px;
-        .component-wrapper{
-            margin: 0;
+<style lang='postcss' module>
+    .form-item {
+        & + .form-item{
+            margin-top: 20px
         }
-        .bk-form-content .component-wrapper {
-            position: relative;
-        }
-    }
-    .wrapper-cls-selected {
-        border: 1px solid #3a84ff !important;
     }
 </style>
