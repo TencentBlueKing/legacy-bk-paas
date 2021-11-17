@@ -5,6 +5,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import LC from '@/element-materials/core'
+    // import { circleJSON } from '@/common/util'
     import MenuItem from './menu-item'
     
     export default {
@@ -22,10 +23,16 @@
         },
         computed: {
             ...mapGetters('functions', ['funcGroups']),
-            ...mapGetters('variable', ['variableList'])
+            ...mapGetters('variable', ['variableList']),
+            ...mapGetters('page', [
+                'pageDetail'
+            ]),
+            ...mapGetters('drag', [
+                'curTemplateData'
+            ])
         },
         methods: {
-            handleSave () {
+            async handleSave () {
                 const targetData = LC.getRoot().children
 
                 console.log('from processTargetData = ', targetData, this.variableList, this.funcGroups)
@@ -33,6 +40,7 @@
                 const customComponentMap = {}
                 const relatedVariableCodeMap = {}
                 const relatedMethodCodeMap = {}
+
                 const recTree = node => {
                     if (!node) {
                         return
@@ -45,6 +53,7 @@
                     })
                     Object.keys(node.variable).forEach(variableStyle => {
                         const variableCode = node.variable[variableStyle].val
+                        // 需要记录变量的每一处使用细节
                         if (!relatedVariableCodeMap[variableCode]) {
                             relatedVariableCodeMap[variableCode] = []
                         }
@@ -102,7 +111,42 @@
                     return result
                 }, [])
 
-                console.log('print processTargetData result = ', customComponentMap, releateMethodIdList, relateVariableIdMap)
+                // 页面模板数据
+                const {
+                    layoutType,
+                    logo,
+                    siteName,
+                    menuList = [],
+                    topMenuList = [],
+                    renderProps = {}
+                } = this.curTemplateData
+
+                const templateData = layoutType === 'empty' ? {} : {
+                    logo,
+                    siteName,
+                    menuList,
+                    topMenuList,
+                    renderProps
+                }
+
+                // await this.$store.dispatch('page/update', {
+                //     data: {
+                //         from: '',
+                //         projectId: this.$route.params.projectId,
+                //         pageCode: this.pageDetail.pageCode,
+                //         pageData: {
+                //             id: parseInt(this.$route.params.pageId),
+                //             content: circleJSON(targetData)
+                //         },
+                //         // TODO.
+                //         customCompData: [],
+                //         functionData: releateMethodIdList,
+                //         usedVariableMap: releateMethodIdList,
+                //         templateData
+                //     }
+                // })
+
+                console.log('print processTargetData result = ', customComponentMap, releateMethodIdList, relateVariableIdMap, templateData)
             }
         }
     }
