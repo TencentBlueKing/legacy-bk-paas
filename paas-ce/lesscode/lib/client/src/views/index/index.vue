@@ -89,6 +89,7 @@
                             </template>
                         </li>
                     </ul>
+                    <extra-action></extra-action>
                 </div>
             </div>
             <extra-links
@@ -135,7 +136,7 @@
     import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
     import html2canvas from 'html2canvas'
-    import { uuid, walkGrid, getNodeWithClass, circleJSON } from '@/common/util'
+    import { uuid, walkGrid, circleJSON } from '@/common/util'
     import { getCurUsedFuncs, replaceFuncKeyword } from '@/components/methods/function-helper.js'
     import Methods from '@/components/methods'
     import NoviceGuide from '@/components/novice-guide'
@@ -151,6 +152,7 @@
     import MaterialPanel from './components/material-panel'
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
+    import ExtraAction from './components/action-bar/extra-index'
 
     export default {
         components: {
@@ -163,7 +165,8 @@
             PageFromTemplateDialog,
             MaterialPanel,
             ModifierPanel,
-            OperationArea
+            OperationArea,
+            ExtraAction
         },
         data () {
             return {
@@ -206,14 +209,6 @@
                         { icon: 'bk-drag-icon bk-drag-yemianhanshu', key: 'pageFunction', text: '页面函数', func: () => this.handleToolAction('pageFunction') },
                         { icon: 'bk-drag-icon bk-drag-variable-manage', key: 'pageVariable', text: '页面变量', func: () => this.handleToolAction('pageVariable') },
                         { icon: 'bk-drag-icon bk-drag-set', key: 'setting', text: '页面设置', func: () => this.handleToolAction('setting') }
-                    ],
-                    [
-                        { icon: 'bk-drag-icon bk-drag-save', text: '保存', func: this.handleSave },
-                        { icon: 'bk-drag-icon bk-drag-play', text: '预览', func: this.handlePreview },
-                        { icon: 'bk-drag-icon bk-drag-template-fill', text: '存为模板', func: this.toggleShowTemplateDialog, tips: '将画布内容区域（不包含导航部分）存为模板' },
-                        { icon: 'bk-drag-icon bk-drag-delete', text: '清空', func: this.handleClearAll },
-                        { icon: 'bk-drag-icon bk-drag-hanshuku', text: '函数库', func: this.showFunManage },
-                        { icon: 'bk-drag-icon bk-drag-keyboard', text: '快捷键', func: () => this.toggleShowQuickOperation(true) }
                     ]
                 ]
             }
@@ -356,20 +351,9 @@
             window.test1 = this.test1
         },
         mounted () {
-            window.addEventListener('keydown', this.quickOperation)
-            window.addEventListener('keyup', this.judgeCtrl)
-            window.addEventListener('click', this.toggleQuickOperation, true)
             window.addEventListener('unload', this.relasePage)
-
-            bus.$on('on-delete-component', this.showDeleteElement)
-            this.$once('hook:beforeDestroy', () => {
-                bus.$off('on-delete-component', this.showDeleteElement)
-            })
         },
         beforeDestroy () {
-            window.removeEventListener('keydown', this.quickOperation)
-            window.removeEventListener('keyup', this.judgeCtrl)
-            window.removeEventListener('click', this.toggleQuickOperation, true)
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
             window.removeEventListener('unload', this.relasePage)
             this.resizeObserve.disconnect()
@@ -685,127 +669,14 @@
                 })
             },
 
-            toggleQuickOperation (event) {
-                const mainNode = getNodeWithClass(event.target, 'target-drag-area')
-                this.isInDragArea = mainNode && mainNode.classList.contains('target-drag-area')
-            },
-
             toggleShowQuickOperation (val) {
                 this.showQuickOperation = val
-            },
-
-            judgeCtrl (event) {
-                switch (event.keyCode) {
-                    case 91:
-                    case 224:
-                    case 93:
-                    case 17:
-                        this.hasCtrl = false
-                        break
-                }
-            },
-
-            quickOperation (event) {
-                const vm = this
-                const funcChainMap = {
-                    stopped: false,
-                    isInDragArea: function () {
-                        if (!vm.isInDragArea) this.stopped = true
-                        return this
-                    },
-                    hasCtrl: function () {
-                        if (!vm.hasCtrl) this.stopped = true
-                        return this
-                    },
-                    preventDefault: function () {
-                        if (!this.stopped) event.preventDefault()
-                        return this
-                    },
-                    isDelComponentConfirm: function () {
-                        if (!vm.delComponentConf.visiable) this.stopped = true
-                        return this
-                    },
-                    exec: function (callBack) {
-                        if (!this.stopped) callBack()
-                        return this
-                    }
-                }
-
-                switch (event.keyCode) {
-                    case 91:
-                    case 224:
-                    case 93:
-                    case 17:
-                        this.hasCtrl = true
-                        break
-                    case 67:
-                        funcChainMap.isInDragArea().exec(this.putComponentData)
-                        break
-                    case 83:
-                        funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)
-                        break
-                    case 86:
-                        funcChainMap.isInDragArea().exec(this.copyComponent)
-                        break
-                    case 88:
-                        funcChainMap.isInDragArea().exec(this.cutComponent)
-                        break
-                    case 90:
-                        funcChainMap.isInDragArea().hasCtrl().exec(this.backTargetHistory)
-                        break
-                    case 89:
-                        funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.forwardTargetHistory)
-                        break
-                    case 8:
-                    case 46:
-                        funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
-                        break
-                    case 13:
-                        funcChainMap.isDelComponentConfirm().exec(this.confirmDelComponent)
-                        break
-                }
             },
 
             beforeunloadConfirm (event) {
                 const confirmationMessage = '...';
                 (event || window.event).returnValue = confirmationMessage
                 return confirmationMessage
-            },
-
-            cutComponent () {
-                if (!this.hasCtrl || Object.keys(this.curSelectedComponentData || {}).length <= 0) return
-
-                if (!this.checkIsDelComponent()) {
-                    return
-                }
-
-                const copyData = cloneDeep(this.curSelectedComponentData)
-                this.setCopyData(copyData)
-                this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
-                this.confirmDelComponent()
-            },
-
-            putComponentData () {
-                if (!this.hasCtrl) return
-                const copyData = cloneDeep(this.curSelectedComponentData)
-                this.setCopyData(copyData)
-            },
-
-            copyComponent () {
-                if (!this.hasCtrl || Object.keys(this.copyData).length <= 0) return
-                const copyNode = this.$td(this.curSelectedComponentData.componentId).appendChild(this.copyData, true)
-                const pos = copyNode.getNodePosition()
-                if (pos) {
-                    const pushData = {
-                        parentId: pos.parent && pos.parent.componentId,
-                        component: copyNode.value(),
-                        columnIndex: pos.columnIndex,
-                        childrenIndex: pos.childrenIndex,
-                        type: 'add'
-                    }
-
-                    this.pushTargetHistory(pushData)
-                }
             },
 
             /***
