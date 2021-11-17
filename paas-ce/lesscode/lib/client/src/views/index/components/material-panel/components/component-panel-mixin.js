@@ -1,6 +1,5 @@
 import { mapGetters, mapMutations } from 'vuex'
 import cloneDeep from 'lodash.clonedeep'
-import { isInteractiveCompActive } from '@/common/util'
 // import { bus } from '@/common/bus'
 import LC from '@/element-materials/core'
 
@@ -142,21 +141,13 @@ export default {
             let groupName = ''
             if (['free-layout', 'render-grid'].includes(type)) {
                 groupName = 'layout'
-            } else if (this.interactiveComponents.includes(type)) {
+            } else if (LC.isInteractiveType(type)) {
                 groupName = 'interactive'
             } else {
                 groupName = 'component'
             }
 
-            /**
-             * 当交互式组件激活时，仅允许拖拽到交互式组件的slots中，且交互式组件内部不允许嵌套交互式组件
-             * 当有交互式组件打开时，禁用蒙层下方的画布拖拽和交互
-             */
-            const dragableSourceGroup = Object.assign({}, this.draggableSourceGroup, {
-                name: isInteractiveCompActive() && groupName !== 'interactive' ? 'interactiveInnerComp' : groupName
-            })
-
-            this.setDraggableSourceGroup(dragableSourceGroup)
+            this.setDraggableSourceGroup(Object.assign({}, this.draggableSourceGroup, { name: groupName }))
         },
 
         /**
