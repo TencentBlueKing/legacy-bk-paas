@@ -147,20 +147,7 @@
     }
 </script>
 <style lang="postcss">
-    .save-as-template {
-        z-index: 1001;
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 20px;
-        font-size: 12px;
-        color: #fff;
-        background: #3a84ff;
-        border-radius: 2px;
-        padding: 2px 5px;
-        cursor: pointer;
-        &:hover {
-            background: #1964E1;
-        }
+    .target-drag-area{
+        z-index: 100000000;
     }
 </style>
