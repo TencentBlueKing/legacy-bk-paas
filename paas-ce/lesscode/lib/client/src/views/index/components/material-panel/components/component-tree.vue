@@ -42,7 +42,6 @@
     import _ from 'lodash'
     import LC from '@/element-materials/core'
     import Tree from './tree/tree.vue'
-    import { deepSearchStack, activeNodeProcess } from '@/common/util.js'
     import { mapMutations, mapGetters } from 'vuex'
 
     export default {
@@ -75,12 +74,6 @@
             },
             tooltip () {
                 return this.allExpanded ? '收起所有' : '展开所有'
-            },
-            // data () {
-            //     return []
-            // },
-            nodesNameList () {
-                return deepSearchStack(this.data, 'id')
             }
         },
         created () {
@@ -151,7 +144,8 @@
             },
             eyeClickHandler (node) {
                 if (!node.isActived) {
-                    activeNodeProcess(node)
+                    node.active()
+                    return
                 }
                 setTimeout(() => {
                     this.setComponentVisible(node)
@@ -223,7 +217,7 @@
                 if (node.data.isActived || node.data.type === 'render-column') {
                     return
                 }
-                node.data && activeNodeProcess(node.data)
+                node.data && node.data.active()
                 /** 将画布中的目标节点移动至视区 */
                 this.transformCanvasToView(node.data.componentId)
             },
