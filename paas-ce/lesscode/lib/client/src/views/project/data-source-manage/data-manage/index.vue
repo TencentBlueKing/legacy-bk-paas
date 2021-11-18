@@ -48,10 +48,11 @@
                 </aside>
                 <bk-tab class="data-main">
                     <bk-tab-panel
-                        v-for="(panel, index) in panels"
+                        v-for="panel in panels"
                         v-bind="panel"
-                        :key="index">
+                        :key="panel.name">
                         <component
+                            :key="panel.name + pageStatus.activeTable.tableName"
                             :is="panel.name"
                             :environment="pageStatus.activeEnvironment.key"
                             :active-table="pageStatus.activeTable"

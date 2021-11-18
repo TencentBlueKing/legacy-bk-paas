@@ -14,7 +14,7 @@ import dataService, { getDataService } from './data-service'
 import { EntitySchema, createConnection, getConnection, EventSubscriber } from 'typeorm'
 import { RequestContext } from '../middleware/request-context'
 import { decrypt } from '../util'
-import { BASE_COLUMNS } from '../../shared/data-source'
+import { NO_LENGTH_ORM_KEY } from '../../shared/data-source'
 const dataBaseConf = require('../conf/data-source')
 
 /**
@@ -76,8 +76,8 @@ export const getPreviewDataService = async (projectId) => {
 
     const { entities, entityMap } = tables.reduce((acc, cur) => {
         const columns = JSON.parse(cur.columns || '[]').reduce((acc, cur) => {
-            const baseColumn = BASE_COLUMNS.find(column => column.name === cur.name)
-            acc[cur.name] = baseColumn || cur
+            const { length, ...rest } = cur
+            acc[cur.name] = NO_LENGTH_ORM_KEY.includes(cur.type) ? rest : cur
             return acc
         }, {})
         const entity = new EntitySchema({

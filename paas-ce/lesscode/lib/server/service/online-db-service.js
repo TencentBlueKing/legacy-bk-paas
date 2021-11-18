@@ -54,30 +54,40 @@ export default class OnlineService {
                 TABLE_COLLATION,
                 COLUMN_NAME,
                 COLUMN_TYPE,
+                DATA_TYPE,
                 COLUMN_DEFAULT,
                 COLUMN_COMMENT,
-                IS_NULLABLE
+                IS_NULLABLE,
+                CHARACTER_MAXIMUM_LENGTH,
+                DATETIME_PRECISION,
+                NUMERIC_PRECISION,
+                NUMERIC_SCALE
             } = cur
-
-            const normalizeColumnType = (type) => {
-                const typeMap = {
-                    'int(11)': 'int',
-                    'varchar(255)': 'varchar'
-                }
-                return typeMap[type] || type
-            }
 
             const normalizeColumnIndex = () => {
                 return indexList.findIndex(x => x.TABLE_NAME === TABLE_NAME && x.COLUMN_NAME === COLUMN_NAME) > -1
             }
 
+            const normalizeColumnLength = () => {
+                const lengthMap = {
+                    datetime: DATETIME_PRECISION,
+                    varchar: CHARACTER_MAXIMUM_LENGTH,
+                    text: CHARACTER_MAXIMUM_LENGTH,
+                    int: COLUMN_TYPE.replace(/[^\d]/g, ''),
+                    decimal: NUMERIC_PRECISION
+                }
+                return lengthMap[DATA_TYPE]
+            }
+
             const column = {
                 name: COLUMN_NAME,
-                type: normalizeColumnType(COLUMN_TYPE),
+                type: DATA_TYPE,
                 index: normalizeColumnIndex(),
                 nullable: IS_NULLABLE !== 'NO',
                 default: COLUMN_DEFAULT,
-                comment: COLUMN_COMMENT
+                comment: COLUMN_COMMENT,
+                length: normalizeColumnLength(),
+                scale: NUMERIC_SCALE
             }
 
             const table = {
@@ -98,7 +108,7 @@ export default class OnlineService {
     // 分页获取表数据
     async getTableData (tableName, page, pageSize) {
         const [list, foundRows = []] = await this.dbEngine.execMultSql(`
-            SELECT SQL_CALC_FOUND_ROWS * FROM  ${tableName} ORDER BY id DESC LIMIT ${(page - 1) * pageSize},${pageSize};
+            SELECT SQL_CALC_FOUND_ROWS * FROM \`${tableName}\` ORDER BY id DESC LIMIT ${(page - 1) * pageSize},${pageSize};
             SELECT FOUND_ROWS();
         `)
         const rows = foundRows[0] || {}
@@ -109,7 +119,7 @@ export default class OnlineService {
     // 获取表所有的数据
     async getTableAllData (tableName) {
         const [list, foundRows = []] = await this.dbEngine.execMultSql(`
-            SELECT SQL_CALC_FOUND_ROWS * FROM  ${tableName} ORDER BY id DESC;
+            SELECT SQL_CALC_FOUND_ROWS * FROM  \`${tableName}\` ORDER BY id DESC;
             SELECT FOUND_ROWS();
         `)
         const rows = foundRows[0] || {}
