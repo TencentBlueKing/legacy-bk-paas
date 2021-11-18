@@ -172,8 +172,6 @@
             return {
                 lockNotify: null,
                 lockCheckTimer: null,
-                canvasHeight: 0,
-                resizeObserve: null,
                 wholeComponentList: [],
                 customComponentList: [],
                 projectDetail: {},
@@ -356,7 +354,6 @@
         beforeDestroy () {
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
             window.removeEventListener('unload', this.relasePage)
-            this.resizeObserve.disconnect()
             this.relasePage()
             this.lockNotify && this.lockNotify.close()
         },
