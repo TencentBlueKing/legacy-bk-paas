@@ -546,6 +546,11 @@
                         this.getAllGroupFuncs(this.projectId)
                     ])
 
+                    await this.$store.dispatch('page/getPageSetting', {
+                        pageId: this.pageId,
+                        projectId: this.projectId
+                    })
+
                     await this.lockStatsuPolling('lock') // 处理加锁逻辑
 
                     await this.getAllVariable({

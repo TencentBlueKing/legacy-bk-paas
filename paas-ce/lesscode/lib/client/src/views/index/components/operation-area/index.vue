@@ -9,6 +9,7 @@
     import PageSetting from '@/views/project/page-setting'
     import PageJson from '@/views/project/page-json'
     import PageVariable from '@/views/project/page-variable'
+    import PageFunction from '@/views/project/page-function'
 
     export default {
         name: '',
@@ -34,7 +35,7 @@
                 const comMap = {
                     edit: RenderIndex,
                     vueCode: VueCode,
-                    pageFunction: PageSetting,
+                    pageFunction: PageFunction,
                     setting: PageSetting,
                     jsonSource: PageJson,
                     pageVariable: PageVariable
