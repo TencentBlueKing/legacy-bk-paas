@@ -17,6 +17,7 @@ const createNodeFromData = (data) => {
     newNode.interactiveShow = false
     newNode.isComplexComponent = data.isComplexComponent || false
 
+    // fix: 老数据 renderProps.no-response 格式不规范的问题
     if (newNode.renderProps.hasOwnProperty('no-response')) {
         newNode.renderProps['no-response'] = {
             type: 'boolean',
@@ -31,14 +32,19 @@ const traverse = (parentNode, childDataList, slot) => {
     childDataList.forEach(childData => {
         const childNode = createNodeFromData(childData)
         if (childNode.layoutType) {
+            // 布局类型的组件
+            // slot 的值类型 Array
             traverse(childNode, childData.renderSlots.default, 'default')
         } else if (childNode.layoutSlot) {
+            // slot 为布局类型组件
+            // slot 的值类型为 Node
             Object.keys(childNode.layoutSlotType).forEach(slotName => {
                 const slotData = childData.renderSlots[slotName]
                 if (Object.prototype.toString.call(slotData) === '[object Object]') {
                     traverse(childNode, [slotData], slotName)
                 } else if (Array.isArray(slotData)) {
-                    console.log('\n\n\n\n\n Array Array Array Array Array Array==========', childNode, slotData, slotName)
+                    // TODO. 这种情况应该不会出现
+                    console.error('\n\n\n\n\n ========== go die ========== \n\n\n\n')
                     traverse(childNode, slotData, slotName)
                 }
             })
@@ -60,37 +66,41 @@ const tansform = (root, data) => {
             return null
         }
         if (parentNode.type === 'render-grid') {
-            const columnList = parentNode.renderSlots.default.val
             parentNode.renderSlots = {
                 default: []
             }
-            columnList.forEach((columnItem, index) => {
-                const uid = `${uuid()}${index}`
-                const columnData = {
-                    tabPanelActive: 'props',
-                    componentId: `column-${uid}`,
-                    name: 'render-column',
-                    type: 'render-column',
-                    renderKey: uid,
-                    renderStyles: {
-                        padding: '5px'
-                    },
-                    renderProps: {
-                        span: {
-                            type: 'number',
-                            val: 1
-                        }
-                    },
-                    renderSlots: {
-                        default: tansform(parentNode, columnItem.children)
-                    },
-                    renderDirectives: [],
-                    renderEvents: {},
-                    interactiveShow: false,
-                    isComplexComponent: false
-                }
-                parentNode.renderSlots.default.push(columnData)
-            })
+            if (parentNode.renderSlots
+                && parentNode.renderSlots.default
+                && parentNode.renderSlots.default.val) {
+                const columnList = parentNode.renderSlots.default.val
+                columnList.forEach((columnItem, index) => {
+                    const uid = `${uuid()}${index}`
+                    const columnData = {
+                        tabPanelActive: 'props',
+                        componentId: `column-${uid}`,
+                        name: 'render-column',
+                        type: 'render-column',
+                        renderKey: uid,
+                        renderStyles: {
+                            padding: '5px'
+                        },
+                        renderProps: {
+                            span: {
+                                type: 'number',
+                                val: columnItem.span || 1
+                            }
+                        },
+                        renderSlots: {
+                            default: tansform(parentNode, columnItem.children)
+                        },
+                        renderDirectives: [],
+                        renderEvents: {},
+                        interactiveShow: false,
+                        isComplexComponent: false
+                    }
+                    parentNode.renderSlots.default.push(columnData)
+                })
+            }
         } else if (parentNode.type === 'free-layout') {
             const freelayoutItem = parentNode.renderSlots.default.val[0] || []
             let freelayoutSlot = []
@@ -157,7 +167,7 @@ const checkVersion = (data) => {
 }
 
 export default function (data) {
-    console.log('from parsedata parsedataparsedataparsedataparsedata', data)
+    console.log('\n\n\n\n==================== page data transform to node tree start ===================\n\n\n\n', data)
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
@@ -165,11 +175,27 @@ export default function (data) {
     }
     const root = getRoot()
     root.setRenderSlots([])
-    console.log('print root =', root)
+    
     root.renderSlots.default = []
     if (version === 'v0') {
         root.appendChild(create('render-grid'))
     } else {
         traverse(root, versionData, 'default')
     }
+    console.log('\n\n\n\n==================== page data transform to node tree end ===================\n\n\n\n')
+}
+
+export const parseTemplate = data => {
+    console.log('\n\n\n\n==================== page data transform to node tree start ===================\n\n\n\n', data)
+
+    let versionData = data
+    const version = checkVersion(data)
+    if (version === 'v1') {
+        versionData = tansform({ type: 'template' }, [data])
+    }
+    console.log('from parseTemplate = ', versionData)
+    const root = create('render-column')
+    traverse(root, [versionData], 'default')
+    console.log('\n\n\n\n==================== template data transform to node tree end ===================\n\n\n\n', root)
+    return root.children[0]
 }

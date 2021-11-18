@@ -18,7 +18,7 @@
             disabled
             :sort="true"
             :group="{
-                pull: 'clone',
+                pull: false,
                 put: [
                     'layout',
                     'interactive'

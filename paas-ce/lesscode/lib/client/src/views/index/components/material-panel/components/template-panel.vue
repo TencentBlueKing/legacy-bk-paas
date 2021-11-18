@@ -24,7 +24,11 @@
                 </li>
             </ul>
             <div class="search-bar">
-                <component-search :key="templateTabsCurrentRefresh" :source="renderTemplateList" :result.sync="searchResult" search-type="template" />
+                <component-search
+                    :key="templateTabsCurrentRefresh"
+                    :source="renderTemplateList"
+                    :result.sync="searchResult"
+                    search-type="template" />
             </div>
         </div>
         <div class="sidebar-bd">
@@ -36,7 +40,10 @@
                             :class="getComponentGroupClass(group.id, groupIndex)"
                             v-show="!searchResult || (searchResult && (group.id === searchResult.categoryId || group.id === searchResult.offcialType))"
                         >
-                            <div class="group-title" :title="group.categoryName" @click="handleCompGroupFold(group.id)">
+                            <div
+                                class="group-title"
+                                :title="group.categoryName"
+                                @click="handleCompGroupFold(group.id)">
                                 <i class="bk-drag-icon bk-drag-arrow-down"></i>
                                 {{group.categoryName}}
                             </div>
@@ -48,25 +55,48 @@
                                     drag-class="source-drag"
                                     :list="group.list"
                                     :sort="false"
-                                    :group="draggableSourceGroup"
+                                    :group="{
+                                        pull: 'clone',
+                                        put: false,
+                                        name: 'layout'
+                                    }"
                                     :force-fallback="false"
                                     :clone="cloneFunc"
                                     filter=".uninstall"
                                     @choose="onChoose($event, group.list)"
                                     @end="sourceAreaEndHandler">
                                     <template>
-                                        <div v-for="(template, templateIndex) in group.list" class="template-item" :class="{ 'uninstall': type === 'market' && !template.hasInstall }" :key="templateIndex"
-                                            v-show="!searchResult || template.id === searchResult.id">
+                                        <div
+                                            v-for="(template, templateIndex) in group.list"
+                                            v-show="!searchResult || template.id === searchResult.id"
+                                            class="template-item"
+                                            :class="{
+                                                'uninstall': type === 'market' && !template.hasInstall
+                                            }"
+                                            :key="templateIndex">
                                             <div class="item-img">
                                                 <img :src="template.previewImg" />
-                                                <div class="mask" v-if="type === 'market' && !template.hasInstall">
-                                                    <bk-button class="apply-btn" theme="primary" size="small" @click.stop="handleApply(template)">应用</bk-button>
+                                                <div
+                                                    v-if="type === 'market' && !template.hasInstall"
+                                                    class="mask">
+                                                    <bk-button
+                                                        class="apply-btn"
+                                                        theme="primary"
+                                                        size="small"
+                                                        @click.stop="handleApply(template)">
+                                                        应用
+                                                    </bk-button>
                                                 </div>
                                             </div>
-
-                                            <div class="item-info" :title="template.templateName">
+                                            <div
+                                                class="item-info"
+                                                :title="template.templateName">
                                                 <span class="item-name">{{ template.templateName }}</span>
-                                                <span class="preview" @click="handlePreview(template.id)">预览</span>
+                                                <span
+                                                    class="preview"
+                                                    @click="handlePreview(template.id)">
+                                                    预览
+                                                </span>
                                             </div>
                                         </div>
                                     </template>
@@ -85,12 +115,16 @@
                 </section>
             </div>
         </div>
-        <template-edit-dialog ref="templateApplyDialog" action-type="apply" :refresh-list="initTemplates"></template-edit-dialog>
+        <template-edit-dialog
+            ref="templateApplyDialog"
+            action-type="apply"
+            :refresh-list="initTemplates" />
     </section>
 </template>
 
 <script>
     import { mapGetters, mapMutations } from 'vuex'
+    import LC from '@/element-materials/core'
     import componentSearch from './component-search.vue'
     import templateEditDialog from '@/views/project/template-manage/components/template-edit-dialog'
     import { PAGE_TEMPLATE_TYPE } from '@/common/constant'
@@ -111,7 +145,6 @@
         data () {
             return {
                 isLoading: false,
-                curDragingComponent: this.dragingComponent,
                 type: 'project',
                 marketTemplateGroups: PAGE_TEMPLATE_TYPE,
                 projectTemplateList: [],
@@ -146,6 +179,7 @@
         },
         created () {
             this.initTemplates()
+            this.curDragingComponent = null
             bus.$on('update-template-list', this.initTemplates)
         },
         methods: {
@@ -193,19 +227,10 @@
             },
             onChoose (e, list) {
                 const contentStr = list[e.oldIndex] && list[e.oldIndex].content
-                const node = JSON.parse(contentStr)
-                console.log(node)
-                // this.curDragingComponent = this.$td().cloneNode(node, true)
-                
-                // this.$emit('update:dragingComponent', this.curDragingComponent)
- 
-                const dragableSourceGroup = Object.assign({}, this.draggableSourceGroup, {
-                    name: 'layout'
-                })
-
-                this.setDraggableSourceGroup(dragableSourceGroup)
+                this.curDragingComponent = LC.parseTemplate(JSON.parse(contentStr))
             },
             cloneFunc () {
+                console.log('from cloneFunccloneFunccloneFunccloneFunccloneFunc = ', this.curDragingComponent)
                 return this.curDragingComponent
             },
             sourceAreaStartHandler (e) {
