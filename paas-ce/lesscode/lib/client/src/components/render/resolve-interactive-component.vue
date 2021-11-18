@@ -13,7 +13,6 @@
 </template>
 <script>
     import ResolveComponent from './resolve-component'
-    import { activeNodeProcess } from '@/common/util.js'
 
     export default {
         name: 'resolve-interactive-component',
@@ -51,7 +50,7 @@
             this.resizeObserver = new ResizeObserver(this.resizeInteractiveWrapper)
             this.resizeObserver.observe(this.canvas)
             
-            activeNodeProcess(this.componentData)
+            this.componentData.active()
         },
         beforeDestroy () {
             this.resizeObserver && this.resizeObserver.unobserve(this.canvas)

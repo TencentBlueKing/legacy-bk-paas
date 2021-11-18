@@ -7,7 +7,11 @@ export const findRelatedMethodFromRenderProps = (renderProps) => {
             if (prop.payload
                 && prop.payload.methodData
                 && prop.payload.methodData.methodCode) {
-                methodMap[prop.payload.methodData.methodCode] = true
+                methodMap[`prop.${propName}`] = {
+                    source: 'prop',
+                    key: propName,
+                    code: `${prop.payload.methodData.methodCode}`
+                }
             }
         }
     })
@@ -16,9 +20,15 @@ export const findRelatedMethodFromRenderProps = (renderProps) => {
         const formRuleMap = renderProps.rules.val || {}
         Object.keys(formRuleMap).forEach(propertyName => {
             const propertyRuleList = formRuleMap[propertyName] || []
-            propertyRuleList.forEach(rule => {
+            
+            propertyRuleList.forEach((rule, index) => {
                 if (rule.type && rule.validator) {
-                    methodMap[rule.validator] = true
+                    const suffix = index < 1 ? '' : `_${index}`
+                    methodMap[`prop.rules.${propertyName}${suffix}`] = {
+                        source: 'prop',
+                        key: `rules.${propertyName}`,
+                        code: `${rule.validator}`
+                    }
                 }
             })
         })
@@ -34,7 +44,11 @@ export const findRelatedMethodFromRenderSlot = (renderSlots) => {
             if (slot.payload
                 && slot.payload.methodData
                 && slot.payload.methodData.methodCode) {
-                methodMap[slot.payload.methodData.methodCode] = true
+                methodMap[`slot.${slotName}`] = {
+                    source: 'slot',
+                    key: slotName,
+                    code: `${slot.payload.methodData.methodCode}`
+                }
             }
         }
     })
@@ -45,7 +59,11 @@ export const findRelatedMethodFromRenderEvent = renderEvents => {
     const methodMap = {}
     Object.keys(renderEvents).forEach(eventName => {
         if (renderEvents[eventName].methodCode) {
-            methodMap[renderEvents[eventName].methodCode] = true
+            methodMap[`event.${eventName}`] = {
+                source: 'event',
+                key: eventName,
+                code: `${renderEvents[eventName].methodCode}`
+            }
         }
     })
     return methodMap

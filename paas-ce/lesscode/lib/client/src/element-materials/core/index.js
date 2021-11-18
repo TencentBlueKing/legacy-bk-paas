@@ -1,6 +1,7 @@
 import Node from './Node'
 
 import parseData from './parse-data'
+import parseTemplate from './parse-template'
 import getRoot from './get-root'
 import getActiveNode from './get-active-node'
 import getNodeById from './get-node-by-id'
@@ -43,6 +44,7 @@ function core (id) {
 }
 
 core.parseData = parseData
+core.parseTemplate = parseTemplate
 core.getRoot = getRoot
 core.getActiveNode = getActiveNode
 core.getNodeById = getNodeById

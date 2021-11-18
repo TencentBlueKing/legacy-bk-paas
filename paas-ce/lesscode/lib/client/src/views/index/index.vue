@@ -169,8 +169,6 @@
             return {
                 lockNotify: null,
                 lockCheckTimer: null,
-                canvasHeight: 0,
-                resizeObserve: null,
                 wholeComponentList: [],
                 customComponentList: [],
                 projectDetail: {},
@@ -352,7 +350,6 @@
         beforeDestroy () {
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
             window.removeEventListener('unload', this.relasePage)
-            this.resizeObserve.disconnect()
             this.relasePage()
             this.lockNotify && this.lockNotify.close()
         },
@@ -544,6 +541,11 @@
                         this.$store.dispatch('components/componentNameMap'),
                         this.getAllGroupFuncs(this.projectId)
                     ])
+
+                    await this.$store.dispatch('page/getPageSetting', {
+                        pageId: this.pageId,
+                        projectId: this.projectId
+                    })
 
                     await this.lockStatsuPolling('lock') // 处理加锁逻辑
 

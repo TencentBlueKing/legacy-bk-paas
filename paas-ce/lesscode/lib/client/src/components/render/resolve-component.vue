@@ -36,7 +36,7 @@
 </template>
 <script>
     import _ from 'lodash'
-    import { getStyle, activeNodeProcess } from '@/common/util'
+    import { getStyle } from '@/common/util'
     import LC from '@/element-materials/core'
     import SaveToTemplate from './components/save-to-template'
     import WidgetForm from './widget/form'
@@ -231,7 +231,7 @@
                 if (this.componentData.isActived) {
                     return
                 }
-                activeNodeProcess(this.componentData)
+                this.componentData.active()
             },
             /**
              * @desc 鼠标右键，弹出菜单

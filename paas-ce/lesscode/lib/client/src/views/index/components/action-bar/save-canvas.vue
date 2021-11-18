@@ -7,7 +7,27 @@
     import LC from '@/element-materials/core'
     // import { circleJSON } from '@/common/util'
     import MenuItem from './menu-item'
-    
+
+    const parseFuncBodyVariable = str => {
+        const pat = /lesscode\['\$\{prop:([^}]+)\}'\]/g
+        const res = {}
+        let match = null
+        while ((match = pat.exec(str)) !== null) {
+            res[match[1]] = true
+        }
+        return res
+    }
+
+    const parseFuncBodyMethod = str => {
+        const pat = /lesscode\['\$\{func:([^}]+)\}'\]/g
+        const res = {}
+        let match = null
+        while ((match = pat.exec(str)) !== null) {
+            res[match[1]] = true
+        }
+        return res
+    }
+
     export default {
         components: {
             MenuItem
@@ -48,8 +68,10 @@
                     if (node.isCustomComponent) {
                         customComponentMap[node.type] = true
                     }
-                    Object.keys(node.method).forEach(methodCode => {
-                        relatedMethodCodeMap[methodCode] = true
+                    Object.keys(node.method).forEach(methodStyle => {
+                        relatedMethodCodeMap[node.method[methodStyle].code] = Object.assign({
+                            componentId: node.componentId
+                        }, node.method[methodStyle])
                     })
                     Object.keys(node.variable).forEach(variableStyle => {
                         const variableCode = node.variable[variableStyle].val
@@ -63,7 +85,10 @@
                     })
                     node.children.forEach(childNode => recTree(childNode))
                 }
+                // 遍历 node tree 收集组件中 variable、method 的引用信息
                 recTree(LC.getRoot())
+
+                console.log('print fron rect ree == ', relatedVariableCodeMap, relatedMethodCodeMap)
 
                 const errorStack = []
                 const projectVarialbeMap = this.variableList.reduce((result, variableData) => {
@@ -71,8 +96,8 @@
                     return result
                 }, {})
                 const projectMethodMap = this.funcGroups.reduce((result, methodGroup) => {
-                    methodGroup.functionList.forEach(method => {
-                        result[method.funcCode] = method
+                    methodGroup.functionList.forEach(methodData => {
+                        result[methodData.funcCode] = methodData
                     })
                     return result
                 }, {})
@@ -80,19 +105,42 @@
                 // 检测 varaible 有效性
                 Object.keys(relatedVariableCodeMap).forEach(variableCode => {
                     if (!projectVarialbeMap.hasOwnProperty(variableCode)) {
-                        errorStack.push(`组件【${relatedVariableCodeMap[variableCode].componentId}】使用的变量【${variableCode}】不存在，请修改后再试`)
+                        errorStack.push(`组件【${relatedVariableCodeMap[variableCode].componentId}】使用的变量【${variableCode}】不存在`)
                     }
                 })
+
                 // 检测 method 有效性
+                // 解析被引用 method 的 funcBody 内使用的 method、variable
                 Object.keys(relatedMethodCodeMap).forEach(methodCode => {
                     if (!projectMethodMap.hasOwnProperty(methodCode)) {
-                        errorStack.push(`函数【${methodCode}】未找到，请修改后再试`)
+                        const {
+                            componentId,
+                            source,
+                            key
+                        } = relatedMethodCodeMap[methodCode]
+                        errorStack.push(`组件【${componentId}】的 ${source} ${key} 引用标识为【${methodCode}】的函数不存在`)
+                        return
                     }
+                    const funcBodyContainontainMethodMap = {}
+                    const funcBodyContainontainVariableMap = {}
+                    const funcbody = projectMethodMap[methodCode].funcBody
+                    Object.assign(funcBodyContainontainMethodMap, parseFuncBodyMethod(funcbody))
+                    Object.assign(funcBodyContainontainVariableMap, parseFuncBodyVariable(funcbody))
+                    Object.keys(funcBodyContainontainVariableMap).forEach(variableCode => {
+                        if (!projectVarialbeMap.hasOwnProperty(variableCode)) {
+                            errorStack.push(`函数【${methodCode}】函数体中标识为【${variableCode}】的变量不存在`)
+                        }
+                    })
+                    Object.keys(funcBodyContainontainMethodMap).forEach(code => {
+                        if (!projectMethodMap.hasOwnProperty(code)) {
+                            errorStack.push(`函数【${methodCode}】函数体中标识为【${code}】的函数不存在`)
+                        }
+                    })
                 })
                 // 检测 variable 和 method 重名
                 Object.keys(relatedVariableCodeMap).forEach(variableCode => {
                     if (relatedMethodCodeMap[variableCode]) {
-                        errorStack.push(`页面中使用了函数【${variableCode}】，与使用的变量【${variableCode}】的标识存在冲突，请修改后再试`)
+                        errorStack.push(`页面中标识为【${variableCode}】的函数与标识为【${variableCode}】的变量存在冲突`)
                     }
                 })
                 // 错误提示
