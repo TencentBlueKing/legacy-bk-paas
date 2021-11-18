@@ -545,6 +545,7 @@
   path: /v2/monitor_v3/save_notice_group/
   suggest_method: POST
 
+
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
@@ -1084,3 +1085,290 @@
   name: update_partial_strategy_v2
   path: /v2/monitor_v3/update_partial_strategy_v2/
   suggest_method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/create_es_snapshot_repository/
+  is_hidden: true
+  label: 创建ES快照仓库
+  label_en: null
+  name: metadata_create_es_snapshot_repository
+  path: /v2/monitor_v3/metadata_create_es_snapshot_repository/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/modify_es_snapshot_repository/
+  is_hidden: true
+  label: 修改ES快照仓库
+  label_en: null
+  name: metadata_modify_es_snapshot_repository
+  path: /v2/monitor_v3/metadata_modify_es_snapshot_repository/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/delete_es_snapshot_repository/
+  is_hidden: true
+  label: 删除ES快照仓库
+  label_en: null
+  name: metadata_delete_es_snapshot_repository
+  path: /v2/monitor_v3/metadata_delete_es_snapshot_repository/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/verify_es_snapshot_repository/
+  is_hidden: true
+  label: 验证ES快照仓库
+  label_en: null
+  name: metadata_verify_es_snapshot_repository
+  path: /v2/monitor_v3/metadata_verify_es_snapshot_repository/
+  method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/es_snapshot_repository/
+  is_hidden: true
+  label: 查询指定ES快照仓库
+  label_en: null
+  name: es_snapshot_repository
+  path: /v2/monitor_v3/metadata_es_snapshot_repository/
+  method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/list_es_snapshot_repository/
+  is_hidden: true
+  label: 快照仓库列表
+  label_en: null
+  name: list_es_snapshot_repository
+  path: /v2/monitor_v3/metadata_list_es_snapshot_repository/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/create_result_table_snapshot/
+  is_hidden: true
+  label: 创建结果表快照配置
+  label_en: null
+  name: create_result_table_snapshot
+  path: /v2/monitor_v3/metadata_create_result_table_snapshot/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/modify_result_table_snapshot/
+  is_hidden: true
+  label: 修改结果表快照配置
+  label_en: null
+  name: modify_result_table_snapshot
+  path: /v2/monitor_v3/metadata_modify_result_table_snapshot/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/delete_result_table_snapshot/
+  is_hidden: true
+  label: 删除结果表快照配置
+  label_en: null
+  name: delete_result_table_snapshot
+  path: /v2/monitor_v3/metadata_delete_result_table_snapshot/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/list_result_table_snapshot/
+  is_hidden: true
+  label: 结果表快照配置列表
+  label_en: null
+  name: list_result_table_snapshot
+  path: /v2/monitor_v3/metadata_list_result_table_snapshot/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/list_result_table_snapshot_indices/
+  is_hidden: true
+  label: 结果表快照配置列表含物理索引
+  label_en: null
+  name: list_result_table_snapshot_indices
+  path: /v2/monitor_v3/metadata_list_result_table_snapshot_indices/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/get_result_table_snapshot_state/
+  is_hidden: true
+  label: 验证ES快照仓库
+  label_en: null
+  name: get_result_table_snapshot_state
+  path: /v2/monitor_v3/metadata_get_result_table_snapshot_state/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/restore_result_table_snapshot/
+  is_hidden: true
+  label: 快照回溯
+  label_en: null
+  name: restore_result_table_snapshot
+  path: /v2/monitor_v3/metadata_restore_result_table_snapshot/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/modify_restore_result_table_snapshot/
+  is_hidden: true
+  label: 修改快照回溯配置
+  label_en: null
+  name: modify_restore_result_table_snapshot
+  path: /v2/monitor_v3/metadata_modify_restore_result_table_snapshot/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/delete_restore_result_table_snapshot/
+  is_hidden: true
+  label: 删除快照回溯配置
+  label_en: null
+  name: delete_restore_result_table_snapshot
+  path: /v2/monitor_v3/metadata_delete_restore_result_table_snapshot/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/list_restore_result_table_snapshot/
+  is_hidden: true
+  label: 快照回溯列表
+  label_en: null
+  name: list_restore_result_table_snapshot
+  path: /v2/monitor_v3/metadata_list_restore_result_table_snapshot/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/get_restore_result_table_snapshot_state/
+  is_hidden: true
+  label: 快照回溯状态
+  label_en: null
+  name: get_restore_result_table_snapshot_state
+  path: /v2/monitor_v3/metadata_get_restore_result_table_snapshot_state/
+  method: POST
+
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/check_or_create_kafka_storage/
+  is_hidden: false
+  label: 创建实时监控表对应的kafka存储
+  label_en: check or create kafka storage
+  name: check_or_create_kafka_storage
+  path: /v2/monitor_v3/check_or_create_kafka_storage/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/action_instance/batch_create_action/
+  is_hidden: false
+  label: 批量创建处理事件
+  label_en: batch_create_action
+  name: batch_create_action
+  path: /v2/monitor_v3/batch_create_action/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/register_bcs_cluster/
+  is_hidden: false
+  label: 注册bcs集群到metadata
+  label_en: register bcs cluster
+  name: register_bcs_cluster
+  path: /v2/monitor_v3/register_bcs_cluster/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/modify_bcs_resource_info/
+  is_hidden: false
+  label: 修改metadata的bcs_resouce信息
+  label_en: modify bcs monitor info
+  name: modify_bcs_resource_info
+  path: /v2/monitor_v3/modify_bcs_resource_info/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/list_bcs_resource_info/
+  is_hidden: false
+  label: 查询metadata的bcs_resouce信息
+  label_en: list bcs monitor info
+  name: list_bcs_resource_info
+  path: /v2/monitor_v3/list_bcs_resource_info/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/apply_yaml_to_bcs_cluster/
+  is_hidden: true
+  label: 应用yaml配置到指定集群
+  label_en: apply yaml to bcs cluster
+  name: apply_yaml_to_bcs_cluster
+  path: /v2/monitor_v3/apply_yaml_to_bcs_cluster/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/list_bcs_cluster_info/
+  is_hidden: false
+  label: 查询metadata的bcs_cluster信息
+  label_en: list bcs cluster info
+  name: list_bcs_cluster_info
+  path: /v2/monitor_v3/list_bcs_cluster_info/
+  method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/query_bcs_metrics/
+  is_hidden: false
+  label: 查询metadata的bcs指标信息
+  label_en: query bcs metrics info
+  name: query_bcs_metrics
+  path: /v2/monitor_v3/query_bcs_metrics/
+  method: GET
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/delete_cluster_info/
+  is_hidden: true
+  label: 删除存储集群信息
+  label_en: null
+  name: metadata_delete_cluster_info
+  path: /v2/monitor_v3/metadata_delete_cluster_info/
+  method: POST
