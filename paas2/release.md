@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.15
+    - update: esb update monitor_v3, nodeman confapis
+
 # 2.13.14
     - update: esb udpate data confapis
 
