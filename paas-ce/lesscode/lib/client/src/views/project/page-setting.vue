@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <div :class="['page-setting', { function: type === 'pageFunction' }]"
+    <div :class="['page-setting']"
         v-bkloading="{ isLoading: pageLoading, opacity: 1 }">
         <section v-for="setting in settingGroup" :key="setting.title">
             <div class="title" v-show="!pageLoading">{{ setting.title }}</div>
@@ -32,42 +32,15 @@
                         </template>
                         <template v-else-if="!loadingState.includes(field)">
                             <div class="field-form">
-                                <component
-                                    :is="`bk-${field.type}`"
-                                    :class="[`form-component ${field.type}`, { error: (errors[field.id] || []).length }]"
+                                <component :is="getEditComponent(field)"
                                     :placeholder="getPlaceholder(field)"
+                                    :field="field" :value.sync="editField.value"
+                                    :errors="errors"
+                                    :class="[`form-component ${field.type}`, { error: (errors[field.id] || []).length }]"
                                     v-model.trim="editField.value"
                                     v-on="getEvents(field)"
                                     v-bind="field.props"
-                                    :ref="`component-${field.id}`">
-                                    <slot-component
-                                        v-for="child in field.children"
-                                        :key="child.id"
-                                        :is="`bk-${child.type}`"
-                                        v-bind="child.props"
-                                    >
-                                        <slot-component-child
-                                            v-for="childSlot in child.children"
-                                            :key="childSlot.id"
-                                            :is="`bk-${childSlot.type}`"
-                                            v-bind="childSlot.props"
-                                        >
-                                            <template v-if="field.id === 'pageRoute'">
-                                                <div class="bk-option-content-default" :title="childSlot.props.name">
-                                                    <div class="bk-option-name">
-                                                        {{childSlot.props.name}}<span class="bound" v-if="childSlot.props.disabled">（已绑定）</span>
-                                                    </div>
-                                                </div>
-                                            </template>
-                                        </slot-component-child>
-                                    </slot-component>
-                                    <div slot="extension" style="cursor: pointer;" @click="goToPage('layout', true)" v-if="field.id === 'layoutId'">
-                                        <i class="bk-drag-icon bk-drag-jump-link"></i> 新建模板实例
-                                    </div>
-                                    <div slot="extension" style="cursor: pointer;" @click="goToPage('routes', true)" v-if="field.id === 'pageRoute'">
-                                        <i class="bk-drag-icon bk-drag-jump-link"></i> 新建路由
-                                    </div>
-                                </component>
+                                    :ref="`component-${field.id}`"></component>
                                 <div class="buttons">
                                     <bk-button text size="small" theme="primary"
                                         :disabled="disabled"
@@ -89,52 +62,36 @@
 
 <script>
     import { mapGetters, mapMutations } from 'vuex'
-    import bkSelectFunc from '@/components/methods/select-func'
     import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
-
-    const lifeCycleDescMap = {
-        created: '在页面创建完成后被立即调用，这个时候页面还未渲染，可以做获取远程数据的操作',
-        beforeMount: '在页面挂载开始之前被调用',
-        mounted: '页面被挂载后调用，这个时候页面已经渲染完成，可以做 DOM 操作',
-        beforeUpdate: '在数据更新后，页面实时更新前调用，这里适合在更新之前访问现有的 DOM',
-        updated: '在数据更新后，页面实时更新后调用',
-        activated: '被 keep-alive 缓存的组件激活时调用',
-        deactivated: '被 keep-alive 缓存的组件停用时调用',
-        beforeDestroy: '页面关闭之前调用，页面中的数据仍然完全可用，可以做离开页面前的操作',
-        destroyed: '页面关闭后调用，该钩子被调用后，页面中的数据不可用'
-    }
+    import pageRouterSelect from '@/components/project/page-router-select'
 
     export default {
         components: {
-            bkSelectFunc
+            pageRouterSelect
         },
         props: {
             project: {
                 type: Object,
                 default: () => ({})
-            },
-            type: {
-                type: String,
-                default: 'pageFunction'
             }
         },
         data () {
             return {
-                pageRoute: {},
-                layoutList: [],
-                routeGroup: [],
                 editField: {
                     field: null,
                     value: null
                 },
                 loadingState: [],
                 errors: {},
-                pageLoading: true
+                pageLoading: false
             }
         },
         computed: {
             ...mapGetters('page', {
-                page: 'pageDetail'
+                page: 'pageDetail',
+                pageRoute: 'pageRoute',
+                layoutList: 'layoutList',
+                routeGroup: 'routeGroup'
             }),
             ...mapGetters('functions', ['funcGroups']),
             disabled () {
@@ -149,22 +106,6 @@
                 return path.endsWith('/') ? path : `${path}/`
             },
             settingGroup () {
-                const lifeCycleKeys = Object.keys(this.page.lifeCycle) || []
-                const lifeCycleSettingFields = lifeCycleKeys.map((lifeCycleKey) => {
-                    return {
-                        id: lifeCycleKey,
-                        name: lifeCycleKey,
-                        type: 'selectFunc',
-                        editable: true,
-                        desc: lifeCycleDescMap[lifeCycleKey]
-                    }
-                })
-
-                const lifeCycleSettings = {
-                    title: '生命周期配置',
-                    settingFields: lifeCycleSettingFields
-                }
-
                 const baseSettings = {
                     title: '基本配置',
                     settingFields: [
@@ -251,30 +192,18 @@
                     ]
                 }
 
-                return this.type === 'pageFunction'
-                    ? [lifeCycleSettings]
-                    : [baseSettings, pageSettings]
+                return [baseSettings, pageSettings]
             }
-        },
-        created () {
-            this.fetchData()
         },
         methods: {
             ...mapMutations('drag', ['setCurTemplateData']),
             async fetchData () {
                 try {
                     this.pageLoading = true
-                    const [pageRoute, layoutList, routeGroup] = await Promise.all([
-                        this.$store.dispatch('route/find', { pageId: this.page.id }),
-                        this.$store.dispatch('layout/getList', { projectId: this.projectId }),
-                        this.$store.dispatch('route/getProjectRouteGroup', { projectId: this.projectId })
-                    ])
-                    layoutList.forEach(item => {
-                        item.defaultName = item.showName || item.defaultName
+                    await this.$store.dispatch('page/getPageSetting', {
+                        pageId: this.page.id,
+                        projectId: this.projectId
                     })
-                    this.routeGroup = routeGroup
-                    this.layoutList = layoutList
-                    this.pageRoute = pageRoute
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -284,10 +213,13 @@
             handleEdit (field) {
                 this.editField.field = field
                 this.editField.value = this.getFieldValue(field)
-                this.$nextTick(() => {
+                field.type === 'input' && this.$nextTick(() => {
                     const component = this.$refs[`component-${field.id}`]
                     component[0] && component[0].focus && component[0].focus()
                 })
+            },
+            getEditComponent (field) {
+                return field.type === 'input' ? 'bk-input' : 'pageRouterSelect'
             },
             handleCancel () {
                 this.$delete(this.errors, this.editField.field.id)
@@ -343,16 +275,7 @@
                         }
                     })
                 }
-                let fieldData = { [field.id]: value }
-                if (field.id in this.page.lifeCycle) {
-                    fieldData = {
-                        lifeCycle: {
-                            ...this.page.lifeCycle,
-                            [field.id]: value
-                        }
-                    }
-                    this.page.lifeCycle[field.id] = value
-                }
+                const fieldData = { [field.id]: value }
                 // 获取当前页面使用中的函数
                 const [usedFuncMap] = getCurUsedFuncs()
                 // 调用更新方法
@@ -404,22 +327,6 @@
                     const layoutRoutePath = layout.routePath || ''
                     return `${layoutName}（路由：${layoutRoutePath}）`
                 }
-                if (field.id in this.page.lifeCycle) {
-                    let methodCode = this.page.lifeCycle[field.id] || ''
-                    let params = []
-                    if (typeof methodCode === 'object') {
-                        params = (methodCode.params || []).map(param => param.value)
-                        methodCode = methodCode.methodCode
-                    }
-                    let curFunc = {}
-                    this.funcGroups.forEach((group) => {
-                        const functionList = group.functionList || []
-                        functionList.forEach((func) => {
-                            if (func.funcCode === methodCode) curFunc = func
-                        })
-                    })
-                    return curFunc.funcName ? `${curFunc.funcName}(${params.join(', ')})` : ''
-                }
                 return this.page[field.id]
             },
             getFieldValue (field) {
@@ -427,9 +334,6 @@
                     return this.pageRoute.id || ''
                 } else if (field.id === 'layoutId') {
                     return this.pageRoute.layoutId
-                }
-                if (field.id in this.page.lifeCycle) {
-                    return this.page.lifeCycle[field.id]
                 }
                 return this.page[field.id]
             },
@@ -440,7 +344,11 @@
                 return ['input'].includes(field.type) ? '请输入' : '请选择'
             },
             getEvents (field) {
-                const events = {}
+                const events = {
+                    'goPage': (value) => {
+                        this.goToPage(value, true)
+                    }
+                }
                 if (field.type === 'input') {
                     events['input'] = (value) => {
                         this.validate(field, value)
@@ -490,8 +398,7 @@
                 return true
             },
             unsetEditField () {
-                this.editField.field = null
-                this.editField.value = null
+                this.editField = this.$options.data().editField
             },
             goToPage (name, newTab) {
                 const route = this.$router.resolve({
@@ -511,127 +418,5 @@
 </script>
 
 <style lang="postcss" scoped>
-    .page-setting {
-        padding: 5px 40px 30px;
-        height: 100%;
-
-        .title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #63656E;
-            padding: 20px 0 12px;
-        }
-
-        .setting-list {
-            padding-left: 24px;
-
-            .setting-item {
-                display: flex;
-                align-items: flex-start;
-                margin-bottom: 10px;
-                line-height: 32px;
-
-                .field-label {
-                    flex: none;
-                    width: 110px;
-                    margin-right: 4px;
-                    font-size: 12px;
-                    color: #63656E;
-                }
-                .field-value {
-                    position: relative;
-                    flex: none;
-                    width: 410px;
-
-                    .field-content {
-                        display: flex;
-                        font-size: 12px;
-
-                        .route {
-                            .unset {
-                                color: #FF9C01;
-                            }
-                        }
-                    }
-                    .field-display-value {
-                        word-break: break-all;
-                    }
-
-                    &.is-loading {
-                        font-size: 0;
-                        .field-content {
-                            display: none;
-                        }
-                        &:before {
-                            content: "";
-                            display: inline-block;
-                            position: absolute;
-                            width: 16px;
-                            height: 16px;
-                            top: 8px;
-                            background-image: url("../../images/svg/loading.svg");
-                        }
-                    }
-
-                    .form-error {
-                        position: absolute;
-                        top: 100%;
-                        left: 0;
-                        font-size: 12px;
-                        color: #ff5656;
-                        line-height: 18px;
-                        margin: 2px 0px 0px;
-                    }
-                }
-
-                .field-edit {
-                    position: relative;
-                    font-size: 22px;
-                    top: 5px;
-                    cursor: pointer;
-                    &:hover {
-                        color: #3A84FF;
-                    }
-                }
-            }
-        }
-
-        .field-form {
-            display: flex;
-            align-items: center;
-            .form-component {
-                width: 100%;
-            }
-            .buttons {
-                display: flex;
-                align-items: center;
-                margin-left: 4px;
-
-                .bk-button-text {
-                    width: 36px;
-                    padding: 0 6px;
-                }
-                .divider {
-                    color: #979BA5;
-                    line-height: 26px;
-                    margin-top: -2px;
-                }
-            }
-        }
-
-        &.function {
-            .field-form {
-                align-items: flex-start;
-            }
-            .field-display-name {
-                cursor: pointer;
-                border-bottom: 1px dashed #999;
-            }
-        }
-    }
-    .bk-option-name {
-        .bound {
-            color: #c4c6cc;
-        }
-    }
+@import url('../../css/page-setting.css')
 </style>

@@ -129,7 +129,7 @@
             document.body.addEventListener('click', resetCallback)
             this.$once('hook:beforeDestroy', () => {
                 document.body.removeEventListener('click', resetCallback)
-                this.resizeObserve.disconnect()
+                this.resizeObserve && this.resizeObserve.disconnect()
             })
         },
         methods: {
