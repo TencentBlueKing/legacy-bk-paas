@@ -9,6 +9,8 @@
         <bk-table-column label="字段名称" prop="name" show-overflow-tooltip></bk-table-column>
         <bk-table-column label="字段类型" prop="type"></bk-table-column>
         <bk-table-column label="主键" prop="primary" :formatter="boolFormatter"></bk-table-column>
+        <bk-table-column label="长度" prop="length"></bk-table-column>
+        <bk-table-column label="小数点" prop="scale"></bk-table-column>
         <bk-table-column label="索引" prop="index" :formatter="boolFormatter"></bk-table-column>
         <bk-table-column label="可空" prop="nullable" :formatter="boolFormatter"></bk-table-column>
         <bk-table-column label="默认值" prop="default" show-overflow-tooltip></bk-table-column>

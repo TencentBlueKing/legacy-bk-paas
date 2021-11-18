@@ -48,9 +48,9 @@ function getTableColumnSql (column) {
         const length = column.length || 0
         const scale = column.scale || 0
         const typeMap = {
-            int: `int(${length})`,
+            int: 'int(11)',
             varchar: `varchar(${length}) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`,
-            datetime: `datetime(${length})`,
+            datetime: 'datetime(0)',
             text: 'text',
             decimal: `decimal(${length}, ${scale})`
         }

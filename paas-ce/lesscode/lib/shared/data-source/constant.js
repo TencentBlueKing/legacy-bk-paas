@@ -77,6 +77,16 @@ export const ORM_KEYS = [
 ]
 
 /**
+ * typeorm 不支持 length 属性的 key
+ */
+export const NO_LENGTH_ORM_KEY = [
+    'decimal',
+    'datetime',
+    'text',
+    'int'
+]
+
+/**
  * 数据的修改类型
  */
 export const DATA_MODIFY_TYPE = {

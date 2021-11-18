@@ -44,7 +44,7 @@
                 <template slot-scope="props">
                     <bk-button class="mr10" theme="primary" text @click="goToDataDesign(props.row)">表结构设计</bk-button>
                     <bk-button class="mr10" theme="primary" text @click="goToDataManage(props.row)">数据管理</bk-button>
-                    <bk-button class="mr10" theme="primary" text @click="deleteTable([props.row])">删除</bk-button>
+                    <bk-button class="mr10" theme="primary" text @click="deleteTable([props.row])" :disabled="isDisableDeleteTable(props.row)">删除</bk-button>
                 </template>
             </bk-table-column>
         </bk-table>
@@ -240,6 +240,13 @@
                 }
             }
 
+            const isDisableDeleteTable = (row) => {
+                const userPerm = store.getters['member/userPerm']
+                const user = store.state.user || {}
+                const username = user.bk_username || user.username
+                return userPerm.roleId !== 1 && username !== row.createUser
+            }
+
             onBeforeMount(getTableList)
 
             return {
@@ -253,7 +260,8 @@
                 bulkDelete,
                 deleteTable,
                 confirmDelete,
-                exportTables
+                exportTables,
+                isDisableDeleteTable
             }
         }
     })

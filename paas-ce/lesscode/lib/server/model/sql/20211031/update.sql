@@ -56,3 +56,6 @@ CREATE TABLE `preview_db`  (
 
 ALTER TABLE `project`
 ADD COLUMN `isEnableDataSource` int(11) NULL DEFAULT 0 COMMENT '是否开启数据源，1代表已开启' AFTER `isOffcial`;
+
+INSERT INTO `perm` (permCode, permDesc, createTime, updateTime, deleteFlag) VALUES ('delete_table', '删除表结构', '2021-10-31 12:00:38', '2021-10-31 12:00:38', 0);
+INSERT INTO `r_role_perm` (roleId, permId, deleteFlag) VALUES (1, LAST_INSERT_ID(), 0);
