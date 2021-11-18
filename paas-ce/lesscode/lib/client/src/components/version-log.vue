@@ -7,7 +7,7 @@
         quick-close
         :width="860"
         header-position="left">
-        <mavon-editor :value="data.versionLog" :external-link="false" :editable="false" :subfield="false" :toolbars-flag="false" default-open="preview" />
+        <mavon-editor :value="localValue" :external-link="false" :editable="false" :subfield="false" :toolbars-flag="false" default-open="preview" />
         <div slot="footer">
             <bk-button @click="handleCancel">关闭</bk-button>
         </div>
@@ -30,6 +30,9 @@
             }
         },
         computed: {
+            localValue () {
+                return this.data.versionLog || ''
+            },
             dialogTitle () {
                 if (this.title) {
                     return this.title
@@ -47,6 +50,7 @@
 <style lang="postcss">
     .component-version-log-dialog {
         .markdown-body{
+            max-height: 460px;
             box-shadow: none !important;
             .v-show-content {
                 padding: 0 !important;

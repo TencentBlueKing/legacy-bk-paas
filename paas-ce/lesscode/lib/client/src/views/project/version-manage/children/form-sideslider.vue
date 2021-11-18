@@ -35,7 +35,7 @@
 <script>
     const generatorData = () => ({
         version: '',
-        log: ''
+        versionLog: ''
     })
 
     export default {
@@ -83,7 +83,7 @@
             }
         },
         created () {
-            this.versionLogPlaceholder = `eg: 新增 XXX 功能\n    优化 XXX 功能\n    修复 XXX 功能\n`
+            this.versionLogPlaceholder = 'eg: 新增 XXX 功能\n    优化 XXX 功能\n    修复 XXX 功能\n'
             this.rules = {
                 version: [
                     { required: true, message: '项目版本不能为空', trigger: 'blur' },
@@ -166,7 +166,7 @@
     .version-sideslider {
         .form-content {
             .markdown-body {
-                min-height: 460px;
+                height: 460px;
                 box-shadow: none !important;
                 border: 1px solid #C4C6CC;
                 border-radius: 2px;
