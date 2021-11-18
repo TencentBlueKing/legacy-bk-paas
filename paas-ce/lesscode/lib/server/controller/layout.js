@@ -195,10 +195,10 @@ const Layout = {
     },
 
     async checkName (ctx) {
-        const { showName, routePath, layoutCode, projectId } = ctx.request.body
+        const { showName, routePath, layoutCode, projectId, versionId } = ctx.request.body
         try {
             if (showName) {
-                const existShowName = await getRepository(LayoutInst).findOne({ projectId, showName })
+                const existShowName = await getRepository(LayoutInst).findOne({ projectId, versionId, showName, deleteFlag: 0 })
                 if (existShowName) {
                     ctx.throwError({
                         message: '该模板名称已存在'
@@ -207,7 +207,7 @@ const Layout = {
             }
 
             if (layoutCode) {
-                const existLayoutCode = await getRepository(LayoutInst).findOne({ projectId, layoutCode })
+                const existLayoutCode = await getRepository(LayoutInst).findOne({ projectId, versionId, layoutCode, deleteFlag: 0 })
                 if (existLayoutCode) {
                     ctx.throwError({
                         message: '该模板ID已存在'
@@ -216,7 +216,7 @@ const Layout = {
             }
 
             if (routePath) {
-                const existRoutePath = await getRepository(LayoutInst).findOne({ projectId, routePath })
+                const existRoutePath = await getRepository(LayoutInst).findOne({ projectId, versionId, routePath, deleteFlag: 0 })
                 if (existRoutePath) {
                     ctx.throwError({
                         message: '该模板路由已存在'
