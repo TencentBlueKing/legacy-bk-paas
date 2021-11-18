@@ -12,7 +12,7 @@ import prop from 'lodash/fp/prop'
 import map from 'lodash/fp/map'
 
 const has = async (projectId, version) => {
-    const versionData = await projectVersionModel.getOne({ projectId, version })
+    const versionData = await projectVersionModel.getOne({ projectId, version, deleteFlag: 0 })
     return versionData && versionData.id
 }
 
@@ -84,7 +84,7 @@ const update = async (id, data) => {
 
 const getList = async (projectId, fields = []) => {
     const select = fields.length ? ['id'].concat(fields) : null
-    const list = await getRepository(ProjectVersion).find({ where: { projectId }, order: { id: -1 }, select })
+    const list = await getRepository(ProjectVersion).find({ where: { projectId, deleteFlag: 0 }, order: { id: -1 }, select })
     return list
 }
 

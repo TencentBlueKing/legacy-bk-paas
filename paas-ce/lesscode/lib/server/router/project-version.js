@@ -25,8 +25,8 @@ const router = new Router({
 
 router.use(['/create', '/update'], async (ctx, next) => {
     const id = ['POST', 'PUT', 'DELETE'].includes(ctx.request.method)
-        ? (ctx.request.body.id || ctx.request.body.projectId)
-        : (ctx.request.query.id || ctx.request.query.projectId)
+        ? (ctx.request.body.projectId || ctx.request.body.id)
+        : (ctx.request.query.projectId || ctx.request.query.id)
     const project = await projectModel.findUserProjectById(ctx.session.userInfo.id, id)
     if (!project) {
         ctx.throw(403)
