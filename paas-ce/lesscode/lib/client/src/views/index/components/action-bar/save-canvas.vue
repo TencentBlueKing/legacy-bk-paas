@@ -9,23 +9,23 @@
     import MenuItem from './menu-item'
 
     const parseFuncBodyVariable = str => {
-        const varialbePat = /lesscode\['\$\{prop:([^}]+)\}'\]/g
-        const variableMap = {}
-        let variableMatch = null
-        while ((variableMatch = varialbePat.exec(str)) !== null) {
-            variableMap[variableMatch[1]] = true
+        const pat = /lesscode\['\$\{prop:([^}]+)\}'\]/g
+        const res = {}
+        let match = null
+        while ((match = pat.exec(str)) !== null) {
+            res[match[1]] = true
         }
-        return variableMatch
+        return res
     }
 
     const parseFuncBodyMethod = str => {
-        const methodPat = /lesscode\['\$\{func:([^}]+)\}'\]/g
-        const methodMap = {}
-        let methodMatch = null
-        while ((methodMatch = methodPat.exec(str)) !== null) {
-            methodMap[methodMatch[1]] = true
+        const pat = /lesscode\['\$\{func:([^}]+)\}'\]/g
+        const res = {}
+        let match = null
+        while ((match = pat.exec(str)) !== null) {
+            res[match[1]] = true
         }
-        return methodMap
+        return res
     }
 
     export default {
@@ -108,7 +108,7 @@
                         errorStack.push(`组件【${relatedVariableCodeMap[variableCode].componentId}】使用的变量【${variableCode}】不存在`)
                     }
                 })
-                
+
                 // 检测 method 有效性
                 // 解析被引用 method 的 funcBody 内使用的 method、variable
                 Object.keys(relatedMethodCodeMap).forEach(methodCode => {
