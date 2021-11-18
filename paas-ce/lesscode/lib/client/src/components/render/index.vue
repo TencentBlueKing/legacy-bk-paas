@@ -18,7 +18,7 @@
             disabled
             :sort="true"
             :group="{
-                pull: false,
+                pull: 'clone',
                 put: [
                     'layout',
                     'interactive'
@@ -129,7 +129,7 @@
             document.body.addEventListener('click', resetCallback)
             this.$once('hook:beforeDestroy', () => {
                 document.body.removeEventListener('click', resetCallback)
-                this.resizeObserve && this.resizeObserve.disconnect()
+                this.resizeObserve.disconnect()
             })
         },
         methods: {
