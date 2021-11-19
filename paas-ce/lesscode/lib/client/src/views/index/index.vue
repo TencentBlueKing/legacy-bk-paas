@@ -108,7 +108,6 @@
                 :type="actionSelected" />
             <modifier-panel />
         </div>
-        <Methods :show.sync="isShowFun" />
         <bk-dialog v-model="delComponentConf.visiable"
             class="del-component-dialog"
             theme="primary"
@@ -138,7 +137,6 @@
     import html2canvas from 'html2canvas'
     import { uuid, walkGrid, circleJSON } from '@/common/util'
     import { getCurUsedFuncs, replaceFuncKeyword } from '@/components/methods/function-helper.js'
-    import Methods from '@/components/methods'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
     import ExtraLinks from '@/components/ui/extra-links'
@@ -156,7 +154,6 @@
 
     export default {
         components: {
-            Methods,
             NoviceGuide,
             VariableForm,
             ExtraLinks,
@@ -176,7 +173,6 @@
                 customComponentList: [],
                 projectDetail: {},
                 actionSelected: 'edit',
-                isShowFun: false,
                 delComponentConf: {
                     visiable: false,
                     headerPosition: 'left',
@@ -661,16 +657,6 @@
                 this.$refs.guide.start()
             },
 
-            toggleShowTemplateDialog (isShow) {
-                const activeNode = LC.getRoot()
-                LC.triggerEventListener('saveTemplate', {
-                    target: activeNode,
-                    type: 'saveTemplate',
-                    isWholePage: true,
-                    value: JSON.parse(JSON.stringify(activeNode))
-                })
-            },
-
             toggleShowQuickOperation (val) {
                 this.showQuickOperation = val
             },
@@ -679,13 +665,6 @@
                 const confirmationMessage = '...';
                 (event || window.event).returnValue = confirmationMessage
                 return confirmationMessage
-            },
-
-            /***
-             * 显示函数管理面版
-             */
-            showFunManage () {
-                this.isShowFun = true
             },
 
             /**

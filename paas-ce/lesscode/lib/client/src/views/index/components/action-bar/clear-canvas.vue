@@ -3,8 +3,8 @@
 </template>
 
 <script>
-
     import MenuItem from './menu-item'
+    import LC from '@/element-materials/core'
     
     export default {
         components: {
@@ -20,8 +20,22 @@
             }
         },
         methods: {
-            handleClearAll () {
-                console.log(this.item.text)
+            async handleClearAll () {
+                // const isLock = await this.checkLockStatus('lock')
+                // if (isLock) return // 如果被锁，不可清空
+
+                const me = this
+                me.$bkInfo({
+                    title: '确定清空所有组件元素？',
+                    subTitle: '包含的已下架自定义组件将不能再被使用',
+                    confirmFn () {
+                        const root = LC.getRoot()
+                        const gridNode = LC.createNode('render-grid')
+                        const slots = []
+                        slots.push(gridNode)
+                        root.setRenderSlots(slots)
+                    }
+                })
             }
         }
     }
