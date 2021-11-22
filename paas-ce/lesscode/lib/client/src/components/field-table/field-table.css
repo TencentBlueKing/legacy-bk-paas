@@ -31,6 +31,9 @@
           }
         }
       }
+      .bk-select.is-disabled, .bk-form-input[disabled] {
+          background-color: #f5f7fa !important;
+      }
     }
     .field-table-icon {
         color: #c4c6cc;
@@ -65,9 +68,15 @@
         &:first-child {
             margin-right: 10px;
         }
+        &:hover {
+            color: #979BA5;
+        }
     }
     .icon-disabled {
         color: #dcdee5;
         cursor: not-allowed;
+    }
+    .bk-select.is-disabled, .bk-form-input[disabled] {
+        background-color: #fff !important;
     }
   }
