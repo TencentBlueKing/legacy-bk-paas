@@ -171,6 +171,7 @@ def info(request, app_code):
     # app_developers = Permission().app_developers(app_code)
     # developers = subjects_display(app_developers)
     developers = "--"
+    paas_host = "{}://{}".format(settings.HTTP_SCHEMA, settings.PAAS_DOMAIN)
 
     token = "--" if app.code in ("bk_cmdb", "bk_job") else (app.auth_token or "--")
 
@@ -195,6 +196,7 @@ def info(request, app_code):
         "open_mode": app.open_mode,
         "open_mode_name": _(OPENMODE_DICT.get(app.open_mode)) or "",
         "visiable_labels": parse_app_visiable_labels(app.visiable_labels),
+        "paas_host": paas_host,
     }
     return render_mako_context(
         request,
