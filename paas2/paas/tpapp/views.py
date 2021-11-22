@@ -23,6 +23,7 @@ from django.utils.translation import ugettext as _
 from app.constants import AppStateEnum, OPENMODE_CHOICES, OPENMODE_DICT
 from app.models import App, AppTags
 from app.validators import validate_app_code, validate_app_name, validate_external_url, validate_app_tags
+from app.utils import parse_app_visiable_labels
 from common.decorators import app_exists, has_app_develop_permission
 from common.log import logger
 from common.mymako import render_mako_context, render_json, render_mako_tostring_context
@@ -193,6 +194,7 @@ def info(request, app_code):
         "external_url": app.external_url,
         "open_mode": app.open_mode,
         "open_mode_name": _(OPENMODE_DICT.get(app.open_mode)) or "",
+        "visiable_labels": parse_app_visiable_labels(app.visiable_labels),
     }
     return render_mako_context(
         request,

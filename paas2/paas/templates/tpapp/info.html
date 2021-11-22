@@ -2,6 +2,42 @@
 
 <%block name="right_content">
     <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_app.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/paas_app_visiable.${CSS_SUFFIX}?v=${STATIC_VERSION}">
+    <link rel="stylesheet" type="text/css" href="${STATIC_URL}assets/components_vue/bk-magic-vue.css?v=${STATIC_VERSION}">
+    <style>
+    [v-cloak] { display: none }
+    .bk-dialog [class*=" icon-"], .bk-dialog [class^=icon-] {
+      background-image: none;
+      width: auto;
+    }
+    .bk-infinite-tree .node-radio .node-checkbox.is-checked:after,
+    .bk-infinite-list .node-checkbox.is-checked:after {
+      left: 5px;
+      top: 2px;
+    }
+    .bk-infinite-tree .arrow-icon {
+      margin-right: 3px;
+      top: 0;
+    }
+    .bk-infinite-list .user-content .user-icon {
+      top: 0;
+      margin-right: 5px;
+    }
+    .bk-infinite-tree .node-icon {
+      top: -1px;
+      margin-right: 5px;
+      margin-left: 2px;
+    }
+    .bk-add-member-dialog .add-member-content-wrapper .right .content .user-content .user-icon {
+      top: 0;
+      margin-right: 5px;
+    }
+    .bk-add-member-dialog .add-member-content-wrapper .right .content .organization-content .folder-icon {
+      top: 0;
+      margin-right: 5px;
+    }
+    </style>
+
         <div class="ml50 app-info">
             <div class="t_b mb10">${_(u'注册信息')}
             </div>
@@ -98,6 +134,40 @@
                 </div>
             </div>
 
+            % if EDITION == "ee":
+            <div class="row mt5 chmt">
+                <div class="col-sm-10 col-xs-10" style="width:100%">
+                    <div class="row" >
+                        <div class="col-sm-2 col-xs-2">
+                            <div><font class="t_grey"> ${_(u'可见范围')}：</font></div>
+                        </div>
+                        <div class="col-sm-8 col-xs-8" style="margin-left: -94px;">
+                          <div id="app">
+                                <div class="selected-text" ref="selectedText" style="font-size: 14px; margin-bottom: 10px;">--</div>
+                                <div class="item">
+                                <bk-button type="default" @click="handleChoose" size="small">${_(u'选择组织/人员')}</bk-button>
+                                </div>
+
+                                <bk-user-selector
+                                    :show="isShow"
+                                    :users="users"
+                                    :departments="departments"
+                                    api-host="${app_info.get('paas_host')}"
+                                    @submit="handleSubmit"
+                                    @cancel="handleCancel">
+                                </bk-user-selector>
+                                <div id="#error_tip"></div>
+                          </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-2">
+                            <div id="tip_developer" style="color: #f00;" class="app-info-tips"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            % endif
+
+
         </div>
         <hr/>
         <div class="ml50 app-info">
@@ -171,8 +241,15 @@
 
 <script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}"></script>
 <script src="${STATIC_URL}js/paas_app.${JS_SUFFIX}"></script>
+<script src="${STATIC_URL}js/paas_app_visiable.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script src="${STATIC_URL}assets/vue/vue-2.5.22.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+<script src="${STATIC_URL}assets/components_vue/bk-magic-vue.min.js?v=${STATIC_VERSION}"></script>
+<script src="${STATIC_URL}assets/components_vue/bk-user-selector.umd.js?v=${STATIC_VERSION}"></script>
 <script type="text/javascript">
     $(function(){
         APP_INFO.get_tpapp_access_info('${app_code}');
+
+        var data = JSON.parse('${app_info.get("visiable_labels", "[]")}');
+        APP_VISIABLE.init('${app_code}', data);
     })
 </script>
