@@ -168,7 +168,7 @@ export default class DataSourceController {
 
     // 删除表结构
     @OutputJson()
-    @DeleteAuthorization({ perm: 'delete_variable', tableName: 'data-table', getId: ctx => ctx.request.body.id })
+    @DeleteAuthorization({ perm: 'delete_table', tableName: 'data-table', getId: ctx => ctx.request.body.id })
     @Put('/deleteTable')
     async deleteTable (
         @BodyParams({ name: 'ids', require: true }) ids,

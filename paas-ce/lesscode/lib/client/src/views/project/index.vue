@@ -166,12 +166,19 @@
             next()
         },
         async created () {
-            this.updateCurrentVersion(this.getInitialVersion())
-            bus.$on('update-project-version', this.updateCurrentVersion)
+            try {
+                this.pageLoading = true
+                this.updateCurrentVersion(this.getInitialVersion())
+                bus.$on('update-project-version', this.updateCurrentVersion)
 
-            this.projectId = parseInt(this.$route.params.projectId)
-            await this.getProjectList()
-            this.setCurrentProject()
+                this.projectId = parseInt(this.$route.params.projectId)
+                await this.getProjectList()
+                await this.setCurrentProject()
+            } catch (e) {
+                console.error(e)
+            } finally {
+                this.pageLoading = false
+            }
         },
         methods: {
             toProjects () {
@@ -189,15 +196,8 @@
                 this.setCurrentVersion(version)
             },
             async getProjectList () {
-                try {
-                    this.pageLoading = true
-                    const projectList = await this.$store.dispatch('project/my', { config: {} })
-                    this.projectList = projectList
-                } catch (e) {
-                    console.error(e)
-                } finally {
-                    this.pageLoading = false
-                }
+                const projectList = await this.$store.dispatch('project/my', { config: {} })
+                this.projectList = projectList
             },
             changeProject (id) {
                 this.$store.dispatch('member/setCurUserPermInfo', { id })

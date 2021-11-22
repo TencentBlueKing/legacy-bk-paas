@@ -409,24 +409,22 @@ const projectCode = {
             )
 
             // generate model & entity
-            fse.ensureDirSync(path.join(targetPath, 'lib/server/model'))
-            fse.ensureDirSync(path.join(targetPath, 'lib/server/model/entities'))
-            await this.generateFileByReplace(
-                path.join(STATIC_URL, 'base-entity-template.js'),
-                path.join(targetPath, 'lib/server/model/entities/base.js')
-            )
             for (const dataTable of dataTables) {
                 const { tableName, columns = '[]' } = dataTable
                 const tableFields = JSON.parse(columns).reduce((acc, cur) => {
                     if (BASE_COLUMNS.every(item => item.name !== cur.name)) {
-                        acc += `\r\n    @Column({ type: '${cur.type}' })\r\n    ${cur.name}\r\n`
+                        let columnPropStr = `name: '${cur.name}', type: '${cur.type}'`
+                        if (cur.type === 'varchar') columnPropStr += `, length: ${cur.length}`
+                        if (cur.type === 'decimal') columnPropStr += `, precision: ${cur.length}, scale: ${cur.scale}`
+                        acc += `\r\n    @Column({ ${columnPropStr} })\r\n    ${cur.name}\r\n`
                     }
                     return acc
                 }, '')
+                const importColumnStr = tableFields ? ', Column' : ''
                 await this.generateFileByReplace(
                     path.join(STATIC_URL, 'entity-template.js'),
                     path.join(targetPath, `lib/server/model/entities/${tableName}.js`),
-                    content => content.replace(/\$\{tableName\}/, tableName).replace(/\$\{tableFields\}/, tableFields)
+                    content => content.replace(/\$\{importColumnStr\}/, importColumnStr).replace(/\$\{tableName\}/, tableName).replace(/\$\{tableFields\}/, tableFields)
                 )
             }
         }
