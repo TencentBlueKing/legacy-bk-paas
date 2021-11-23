@@ -1,5 +1,3 @@
-import Node from '../Node'
-
 import isNode from '../is-node'
 
 /**
