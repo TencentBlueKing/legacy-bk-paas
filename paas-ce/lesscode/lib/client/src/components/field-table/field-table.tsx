@@ -38,7 +38,7 @@ interface IColumnItem {
     renderFn?: Function
     /** 是否只读 */
     isReadonly?: Function | boolean
-    componentProps?: IPropsObject
+    componentProps?: IPropsObject | Function
     /** 校验规则 */
     rules?: IRuleItem[]
 }
@@ -62,6 +62,11 @@ export default defineComponent({
          */
         const errorMap = reactive({})
         let renderColumns = reactive<IColumnItem[]>([])
+        /**
+         * 生成随机ID
+         * @param {String} prefix 统一前缀
+         * @param {Int} idLength 随机ID长度
+         */
         const generateId = (prefix = '', length = 6) => {
             let d = new Date().getTime()
             const uuid = new Array(length).fill('x').join('').replace(/[xy]/g, c => {
@@ -90,6 +95,13 @@ export default defineComponent({
                 return item.isReadonly.apply(this, [item, props])
             }
             return item.isReadonly
+        }
+
+        const handleComponentProps = (item: any, props: any) => {
+            if (typeof item.componentProps === 'function') {
+                return item.componentProps.apply(this, [item, props])
+            }
+            return item.componentProps
         }
 
         const renderHeader = (h, { column, $index }, item) => {
@@ -127,7 +139,7 @@ export default defineComponent({
                     change(value, row, item, $index)
                 }
                 onBlur={handleValidator.bind(this, props, item)}
-                {...{ props: (item.componentProps || {}) }} />
+                {...{ props: (handleComponentProps(item, props)) }} />
         }
         /** select */
         const renderSelect = (item: IColumnItem, props: any) => {
@@ -151,7 +163,7 @@ export default defineComponent({
                 onChange={(value) =>
                     change(value, row, item, $index)
                 }
-                {...{ props: (item.componentProps || {}) }}>
+                {...{ props: (handleComponentProps(item, props)) }}>
                 {item.optionsList ? options : ''}
             </bk-select>
         }
@@ -200,17 +212,7 @@ export default defineComponent({
                 />
             )
         }
-        /** 自定义 */
-        const renderCustomize = (item: IColumnItem) => {
-            return {
-                default: (props) => item.renderFn.apply(this, [props])
-            }
-        }
-        /**
-         * 生成随机ID
-         * @param {String} prefix 统一前缀
-         * @param {Int} idLength 随机ID长度
-         */
+        
         const isEmpty = (value: any) => {
             return value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)
         }
@@ -300,13 +302,13 @@ export default defineComponent({
             renderCheckbox,
             renderInput,
             renderSelect,
-            renderCustomize,
             renderOperate,
             renderHeader,
             verification,
             tableList,
             handleDisabled,
-            renderColumns
+            renderColumns,
+            handleComponentProps
         }
     },
     render (): VNode {
@@ -323,7 +325,6 @@ export default defineComponent({
             }
         }
         const typeList = {
-            custom: 'renderCustomize',
             input: 'renderInput',
             select: 'renderSelect',
             checkbox: 'renderCheckbox'
