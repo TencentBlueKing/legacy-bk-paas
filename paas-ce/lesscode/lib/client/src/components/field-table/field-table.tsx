@@ -226,7 +226,7 @@ export default defineComponent({
             const errorKey = `${column.prop}_${$index}`
             // 必填校验
             if (column.isRequire && isEmpty(value)) {
-                Vue.set(errorMap, errorKey, '必填项')
+                Vue.set(errorMap, errorKey, `${column.name}是必填项`)
                 updateColumnKey(column)
                 return false
             }
@@ -276,7 +276,7 @@ export default defineComponent({
                 setTimeout(async () => {
                     // 有未处理错误直接 reject
                     if (Object.keys(errorMap).length) {
-                        reject(new Error())
+                        reject(new Error(Object.values<string>(errorMap)[0]))
                     }
                     const length = props.data.length
                     for (const item of renderColumns) {
@@ -290,7 +290,7 @@ export default defineComponent({
                     }
                     // 统一校验完再次验证是否有错误没处理
                     if (Object.keys(errorMap).length) {
-                        reject(new Error())
+                        reject(new Error(Object.values<string>(errorMap)[0]))
                     }
                     resolve(true)
                 }, 400)
