@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 /**
  * @desc 设置节点的 renderStyles（全量覆盖）
  * @param { Node } node
@@ -5,6 +7,6 @@
  * @returns { Boolean }
  */
 export default function (node, styles = {}) {
-    node.renderStyles = Object.assign({}, styles)
+    node.renderStyles = _.cloneDeep(styles)
     return true
 }

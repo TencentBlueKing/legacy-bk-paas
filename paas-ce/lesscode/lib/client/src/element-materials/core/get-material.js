@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash.clonedeep'
+import _ from 'lodash'
 import ElementMaterials from '../materials'
 
 const {
@@ -6,15 +6,18 @@ const {
     element
 } = ElementMaterials
 
-const allElementList = [
+const elementMap = [
     ...bk,
     ...element
-]
+].reduce((result, item) => {
+    result[item.type] = item
+    return result
+}, {})
 
 export default function (elementType) {
-    const material = allElementList.find(elementMaterial => elementMaterial.type === elementType)
+    const material = elementMap[elementType]
     if (!material) {
         return null
     }
-    return cloneDeep(material)
+    return _.cloneDeep(material)
 }

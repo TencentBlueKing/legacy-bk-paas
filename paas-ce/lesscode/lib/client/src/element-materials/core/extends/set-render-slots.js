@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash.clonedeep'
+import _ from 'lodash'
 
 /**
  * @desc 设置组件指定的 slot 值，默认为 default (全量覆盖)
@@ -7,7 +7,7 @@ import cloneDeep from 'lodash.clonedeep'
  * @param { String } slotName
  * @returns { Boolean }
  */
-export default function (node, slotValue, slotName) {
+export default function (node, slotValue, slotName = 'default') {
     if (!slotValue) {
         return false
     }
@@ -15,7 +15,7 @@ export default function (node, slotValue, slotName) {
     // - 布局类型的组件 slot 结构是 Array
     // - 普通组件的 slot 的数据接口是 Object
     node.renderSlots = Object.assign({}, node.renderSlots, {
-        [slotName]: cloneDeep(slotValue)
+        [slotName]: _.cloneDeep(slotValue)
     })
     return true
 }
