@@ -16,6 +16,11 @@
       border: 1px solid red !important;
     }
     tr.bk-table-row.hover-row {
+      .disable-row {
+        .bk-select.is-disabled, .bk-form-input[disabled] {
+          background-color: #fff !important;
+      }
+      }
       > td {
         background-color: #fff;
         .field-table-input {
@@ -30,6 +35,9 @@
             display: block;
           }
         }
+      }
+      .bk-select.is-disabled, .bk-form-input[disabled] {
+          background-color: #fafbfd !important;
       }
     }
     .field-table-icon {
@@ -65,9 +73,15 @@
         &:first-child {
             margin-right: 10px;
         }
+        &:hover {
+            color: #979BA5;
+        }
     }
     .icon-disabled {
         color: #dcdee5;
         cursor: not-allowed;
+    }
+    .bk-select.is-disabled, .bk-form-input[disabled] {
+        background-color: #fff !important;
     }
   }

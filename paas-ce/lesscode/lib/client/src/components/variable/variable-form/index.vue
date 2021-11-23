@@ -80,8 +80,8 @@
                     trigger: 'blur'
                 },
                 codeRule: {
-                    validator: (val) => (/^[A-Za-z_][A-Za-z_0-9]{0,19}$/.test(val)),
-                    message: '由大小写英文字母、下划线开头，后面可以是大小写英文字母、下划线和数字，长度小于20个字符',
+                    validator: (val) => (/^[A-Za-z]{0,19}$/.test(val)),
+                    message: '由大小写英文字母组成，长度小于20个字符',
                     trigger: 'blur'
                 },
                 nameRule: {

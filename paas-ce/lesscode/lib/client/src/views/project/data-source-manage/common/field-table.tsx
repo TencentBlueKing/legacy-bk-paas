@@ -26,6 +26,11 @@ export interface IFieldSelectOption {
     name: string
 }
 
+interface ITableFieldRule {
+    validator: Function,
+    message: string
+}
+
 export interface ITableField {
     name: string
     type: string
@@ -34,8 +39,9 @@ export interface ITableField {
     width?: string
     isRequire?: boolean
     inputType?: string
-    isEdit?: boolean,
-    reg?: RegExp | ((val: string, row: any) => boolean),
+    isReadonly?: boolean | Function,
+    componentProps?: Function | any,
+    rules?: ITableFieldRule[],
     tips?: string
 }
 
@@ -52,9 +58,6 @@ function getDefaultRow () {
         nullable: false,
         default: '',
         comment: '',
-        defaultInputType: 'text',
-        lengthInputType: 'number',
-        scaleInputType: 'number',
         generated: false,
         createDate: false,
         updateDate: false,
@@ -71,35 +74,31 @@ function getDefaultRow () {
 function normalizeTableItem (item) {
     const defaultRow = getDefaultRow()
     const normalizedItem = Object.assign({}, defaultRow, item)
-    // 设置默认值
-    if (['int', 'datetime', 'decimal'].includes(normalizedItem.type)) {
-        normalizedItem.defaultInputType = 'number'
-        normalizedItem.default = 0
-    } else {
-        normalizedItem.defaultInputType = 'text'
-        normalizedItem.default = ''
-    }
-    // 设置默认 length
-    if (normalizedItem.length === '') {
-        if (normalizedItem.type === 'int') {
+    // 由于mysql限制，部分字段不可修改，需要设置默认值
+    switch (normalizedItem.type) {
+        case 'int':
             normalizedItem.length = 11
-        }
-        if (normalizedItem.type === 'varchar') {
-            normalizedItem.length = 255
-        }
-        if (normalizedItem.type === 'decimal') {
-            normalizedItem.length = 20
-        }
-    }
-    // 设置默认 scale
-    if (normalizedItem.scale === '') {
-        if (normalizedItem.type === 'decimal') {
-            normalizedItem.scale = 5
-        }
+            normalizedItem.scale = 0
+            break
+        case 'varchar':
+            normalizedItem.scale = 0
+            break
+        case 'text':
+            normalizedItem.scale = 0
+            normalizedItem.length = 65535
+            normalizedItem.index = false
+            break
+        case 'datetime':
+            normalizedItem.scale = 0
+            normalizedItem.length = 0
+            normalizedItem.default = ''
+            break
+        default:
+            break
     }
     // 默认列不可修改
     if (BASE_COLUMNS.some(item => item.columnId === normalizedItem.columnId)) {
-        normalizedItem.isEdit = true
+        normalizedItem.isReadonly = true
     }
     // 每一行加id，用于 diff
     if (!Reflect.has(normalizedItem, 'columnId')) {
@@ -138,12 +137,20 @@ export default defineComponent({
                 type: 'input',
                 prop: 'name',
                 isRequire: true,
-                reg (val, row) {
-                    const isValidateReg = /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/.test(val)
-                    const isNotRepeatName = !tableList.find((table) => table.name === val && row.columnId !== table.columnId)
-                    return isValidateReg && isNotRepeatName
-                },
-                tips: '字段名称必填且不能重复。开头和结尾需是大小写字母，中间可以是大小写字母、连字符和下划线。长度最少为2个字符'
+                rules: [
+                    {
+                        validator (val, row) {
+                            return /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/.test(val)
+                        },
+                        message: '开头和结尾需是大小写字母，中间可以是大小写字母、连字符和下划线。长度最少为2个字符'
+                    },
+                    {
+                        validator (val, row) {
+                            return !tableList.find((table) => table.name === val && row.columnId !== table.columnId)
+                        },
+                        message: '字段名称不能重复'
+                    }
+                ]
             },
             {
                 name: '字段类型',
@@ -176,18 +183,55 @@ export default defineComponent({
             {
                 name: '长度',
                 type: 'input',
-                prop: 'length'
+                componentProps: {
+                    type: 'number'
+                },
+                prop: 'length',
+                isReadonly (item, props) {
+                    return !['varchar', 'decimal'].includes(props?.row?.type)
+                },
+                rules: [
+                    {
+                        validator (val = 0, row) {
+                            return row.type !== 'varchar' || (val <= 15000 && val > 0)
+                        },
+                        message: 'varchar 类型的长度需大于 0 小于 15000'
+                    },
+                    {
+                        validator (val = 0, row) {
+                            return row.type !== 'decimal' || (val <= 65 && val > 0)
+                        },
+                        message: 'decimal 类型的长度需大于 0 小于 65'
+                    }
+                ]
             },
             {
                 name: '小数点',
                 type: 'input',
-                prop: 'scale'
+                prop: 'scale',
+                componentProps: {
+                    type: 'number'
+                },
+                isReadonly (item, props) {
+                    return !['decimal'].includes(props?.row?.type)
+                },
+                rules: [
+                    {
+                        validator (val = 0, row) {
+                            return row.type !== 'decimal' || (val > 0 && val < row.length)
+                        },
+                        message: '小数点字段需要大于 0 且小于长度字段'
+                    }
+                ]
             },
             {
                 name: '索引',
                 type: 'checkbox',
                 prop: 'index',
-                width: '100px'
+                width: '100px',
+                isReadonly (item, props) {
+                    return props?.row?.type === 'text'
+                }
             },
             {
                 name: '可空',
@@ -198,7 +242,22 @@ export default defineComponent({
             {
                 name: '默认值',
                 type: 'input',
-                prop: 'default'
+                prop: 'default',
+                isReadonly (item, props) {
+                    return ['text', 'datetime'].includes(props?.row?.type)
+                },
+                componentProps (item, props) {
+                    if (['int', 'datetime', 'decimal'].includes(props?.row?.type)) {
+                        return {
+                            type: 'number',
+                            precision: +props?.row?.scale
+                        }
+                    } else {
+                        return {
+                            type: 'text'
+                        }
+                    }
+                }
             },
             {
                 name: '备注',
@@ -249,12 +308,9 @@ export default defineComponent({
 
         const validate = () => {
             return new Promise((resolve, reject) => {
-                const isValidate = tableRef.value.verification()
-                if (isValidate) {
+                tableRef.value?.verification().then(() => {
                     resolve(tableList.map(normalizeOrmItem))
-                } else {
-                    reject(new Error('字段配置校验不通过'))
-                }
+                }).catch(reject)
             })
         }
 

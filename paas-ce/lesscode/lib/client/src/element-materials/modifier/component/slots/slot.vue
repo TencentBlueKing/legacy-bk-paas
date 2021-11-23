@@ -116,9 +116,19 @@
             },
 
             computedSlotTypes () {
+                const labelMap = {
+                    'object': '对象',
+                    'number': '数字',
+                    'string': '字符串',
+                    'array': '数组',
+                    'remote': '远程函数',
+                    'data-source': '数据源',
+                    'list': '数据列表',
+                    'table-list': '数据列表'
+                }
                 return this.slotConfig?.type?.map((item) => {
-                    const slotType = typeof item === 'string' ? item : item.type
-                    const slotLabel = typeof item === 'string' ? item : item.label
+                    const slotType = item
+                    const slotLabel = labelMap[item] || item
                     return { slotType, slotLabel }
                 })
             },

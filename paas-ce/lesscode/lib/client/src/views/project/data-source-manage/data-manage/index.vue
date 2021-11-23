@@ -54,7 +54,7 @@
                         <component
                             :key="panel.name + pageStatus.activeTable.tableName"
                             :is="panel.name"
-                            :environment="pageStatus.activeEnvironment.key"
+                            :environment="pageStatus.activeEnvironment"
                             :active-table="pageStatus.activeTable"
                         ></component>
                     </bk-tab-panel>
@@ -165,7 +165,7 @@
             })
 
             watch(
-                pageStatus.activeEnvironment,
+                () => pageStatus.activeEnvironment.key,
                 getTableList,
                 {
                     immediate: true

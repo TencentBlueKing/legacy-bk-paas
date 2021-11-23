@@ -18,7 +18,12 @@ const interactiveComponents = ['bk-dialog', 'bk-sideslider']
 const acorn = require('acorn')
 const { RequestContext } = require('./middleware/request-context')
 const algorithm = 'aes-256-ctr'
-const secretKey = require('./conf/encrypt-secret-key')
+let secretKey
+try {
+    secretKey = require('./conf/encrypt-secret-key')
+} catch (_) {
+    secretKey = ''
+}
 
 /**
  * 加密

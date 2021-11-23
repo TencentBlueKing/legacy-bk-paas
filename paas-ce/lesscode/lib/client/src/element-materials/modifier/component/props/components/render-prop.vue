@@ -29,7 +29,7 @@
                         <component
                             :is="renderCom.typeCom"
                             :describe="describe"
-                            :type="renderCom.propType"
+                            :type="renderCom.typeName"
                             :name="name"
                             :default-value="defaultValue"
                             :key="renderCom.typeName + index"
@@ -45,18 +45,18 @@
                     <bk-radio-button
                         v-for="item in formCom"
                         :key="item.typeName"
-                        :value="item.propType">
-                        {{ item.typeName | propTypeFormat }}
+                        :value="item.typeName">
+                        {{ item.label | propTypeFormat }}
                     </bk-radio-button>
                 </bk-radio-group>
                 <div class="prop-action">
                     <template v-for="(renderCom, index) in formCom">
-                        <template v-if="mutlTypeSelected === renderCom.propType">
+                        <template v-if="mutlTypeSelected === renderCom.typeName">
                             <component
                                 :is="renderCom.typeCom"
                                 :describe="describe"
                                 :key="renderCom.typeName + index"
-                                :type="renderCom.propType"
+                                :type="renderCom.typeName"
                                 :name="name"
                                 :payload="defaultPayload"
                                 :default-value="defaultValue"
@@ -240,21 +240,28 @@
                     'icon': 'string',
                     'float': 'number'
                 }
+                const labelMap = {
+                    'object': '对象',
+                    'number': '数字',
+                    'string': '字符串',
+                    'array': '数组',
+                    'remote': '远程函数',
+                    'data-source': '数据源',
+                    'table-data-source': '数据源'
+                }
                 // 属性type支持配置数组，内部逻辑全部按数组处理
                 if (typeof config.type === 'string') {
                     realType = [config.type]
                 }
 
-                return realType.reduce((res, cur) => {
-                    const propType = typeof cur === 'string' ? cur : cur.type
-                    const typeName = typeof cur === 'string' ? cur : cur.label
+                return realType.reduce((res, propType) => {
                     if (typeMap.hasOwnProperty(propType)) {
                         const renderType = Array.isArray(config.options) ? 'select' : typeMap[propType]
                         res.push({
-                            typeName,
-                            propType,
+                            typeName: propType,
                             typeCom: comMap[renderType],
-                            valueType: valueMap[propType] || propType
+                            valueType: valueMap[propType] || propType,
+                            label: labelMap[propType] || propType
                         })
                     }
                     return res

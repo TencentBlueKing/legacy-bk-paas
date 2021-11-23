@@ -1,5 +1,6 @@
 <template>
     <bk-dialog
+        class="confirm-dialog"
         theme="primary"
         width="1100"
         :title="title"
@@ -69,11 +70,16 @@
     })
 </script>
 
-<style lang="postcss" scoped>
-    .confirm-title {
-        line-height: 22px;
-        color: #313238;
-        margin: 0 0 14px;
-        font-size: 14px;
+<style lang="postcss">
+    .confirm-dialog {
+        .confirm-title {
+            line-height: 22px;
+            color: #313238;
+            margin: 0 0 14px;
+            font-size: 14px;
+        }
+        .bk-dialog {
+            top: calc(50vh - 360px);
+        }
     }
 </style>

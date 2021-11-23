@@ -76,7 +76,7 @@ $headerHeight: 64px;
                         position: absolute;
                         width: 530px;
                         height: 230px;
-                        left: 0;
+                        right: 0;
                         top: 60px;
                         background: #fff;
                         color: #000;
@@ -90,7 +90,7 @@ $headerHeight: 64px;
                             width: 12px;
                             height: 12px;
                             transform: rotate(45deg);
-                            left: 13px;
+                            right: 13px;
                             top: -6px;
                             background: #fff;
                         }
