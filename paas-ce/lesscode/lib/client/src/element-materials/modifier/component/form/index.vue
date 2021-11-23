@@ -248,7 +248,7 @@
 
                     // 新建表单的操作按钮
                     // prop.property 为空表示为 form 的操作项
-                    let actionFormItemNode = _.find(this.componentNode.children, node => !!node.prop.property)
+                    let actionFormItemNode = _.find(this.componentNode.children, node => !node.prop.property)
                     if (!actionFormItemNode) {
                         // 提交按钮
                         const submitBtnNode = LC.createNode('bk-button')
@@ -273,7 +273,7 @@
                     }
 
                     // 新建的表单项放在操作按钮的前面
-                    actionFormItemNode.insertBefore(formItemNode)
+                    this.componentNode.insertBefore(formItemNode, actionFormItemNode)
                 }
 
                 // 更新 form 的 rules prop

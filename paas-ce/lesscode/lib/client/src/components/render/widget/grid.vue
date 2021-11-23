@@ -64,9 +64,6 @@
                 default: () => ({})
             }
         },
-        created () {
-            console.log('from grid cloneNode = ', this.componentData.cloneNode())
-        },
         methods: {
             getSpanNums () {
                 return this.componentData.children.reduce((result, columnNode) => {

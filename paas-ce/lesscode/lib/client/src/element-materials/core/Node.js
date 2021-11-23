@@ -301,17 +301,29 @@ export default class Node {
         return this
     }
 
+    /**
+     * @desc 在 referenceNode 前面插入一个新节点
+     * @param { Node } newNode
+     * @param { Node } referenceNode newNode 将要插在这个节点之前
+     * @returns { Node }
+     */
     @readonly
     @notify
-    insertBefore (child) {
-        insertBefore(this, child)
+    insertBefore (newNode, referenceNode) {
+        insertBefore(this, newNode, referenceNode)
         return this
     }
 
+    /**
+     * @desc 在 referenceNode 后面插入一个新节点
+     * @param { Node } newNode
+     * @param { Node } referenceNode newNode 将要插在这个节点之后
+     * @returns { Node }
+     */
     @readonly
     @notify
-    insertAfter (child) {
-        insertAfter(this, child)
+    insertAfter (newNode, referenceNode) {
+        insertAfter(this, newNode, referenceNode)
         return this
     }
 

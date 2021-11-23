@@ -7,12 +7,12 @@
  * @returns { Boolean }
  */
 export default function (node, newNode, referenceNode) {
-    const parentNode = node.parentNode
     if (newNode.parentNode) {
         newNode.parentNode.removeChild(newNode)
     }
 
-    const slotList = parentNode.renderSlots.default
+    const slotList = node.renderSlots.default
+    
     if (!Array.isArray(slotList)) {
         return false
     }
