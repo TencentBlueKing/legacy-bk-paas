@@ -20,6 +20,11 @@ export default Extends({
     props: {
     },
     slots: {
-        default: []
+        default: [
+            {
+                name: ['layout'],
+                type: ['render-column']
+            }
+        ]
     }
 })
