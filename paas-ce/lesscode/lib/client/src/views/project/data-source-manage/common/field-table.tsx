@@ -40,6 +40,7 @@ export interface ITableField {
     isRequire?: boolean
     inputType?: string
     isReadonly?: boolean | Function,
+    componentProps?: Function | any,
     rules?: ITableFieldRule[],
     tips?: string
 }
@@ -85,10 +86,12 @@ function normalizeTableItem (item) {
         case 'text':
             normalizedItem.scale = 0
             normalizedItem.length = 65535
+            normalizedItem.index = false
             break
         case 'datetime':
             normalizedItem.scale = 0
             normalizedItem.length = 0
+            normalizedItem.default = ''
             break
         default:
             break
@@ -180,6 +183,9 @@ export default defineComponent({
             {
                 name: '长度',
                 type: 'input',
+                componentProps: {
+                    type: 'number'
+                },
                 prop: 'length',
                 isReadonly (item, props) {
                     return !['varchar', 'decimal'].includes(props?.row?.type)
@@ -203,6 +209,9 @@ export default defineComponent({
                 name: '小数点',
                 type: 'input',
                 prop: 'scale',
+                componentProps: {
+                    type: 'number'
+                },
                 isReadonly (item, props) {
                     return !['decimal'].includes(props?.row?.type)
                 },
@@ -235,7 +244,19 @@ export default defineComponent({
                 type: 'input',
                 prop: 'default',
                 isReadonly (item, props) {
-                    return props?.row?.type === 'text'
+                    return ['text', 'datetime'].includes(props?.row?.type)
+                },
+                componentProps (item, props) {
+                    if (['int', 'datetime', 'decimal'].includes(props?.row?.type)) {
+                        return {
+                            type: 'number',
+                            precision: +props?.row?.scale
+                        }
+                    } else {
+                        return {
+                            type: 'text'
+                        }
+                    }
                 }
             },
             {
