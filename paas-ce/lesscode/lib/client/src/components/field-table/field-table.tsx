@@ -224,14 +224,14 @@ export default defineComponent({
             const errorKey = `${column.prop}_${$index}`
             // 必填校验
             if (column.isRequire && isEmpty(value)) {
-                errorMap[errorKey] = '必填项'
+                Vue.set(errorMap, errorKey, '必填项')
                 updateColumnKey(column)
                 return false
             }
             // 没有自定义校验规则
             if (!column.rules || !column.rules.length) {
                 if (errorMap[errorKey]) {
-                    delete errorMap[errorKey]
+                    Vue.delete(errorMap, errorKey)
                     updateColumnKey(column)
                 }
                 return true
@@ -255,12 +255,12 @@ export default defineComponent({
                     await p()
                     ++count
                 } catch (e) {
-                    errorMap[errorKey] = rule.message
+                    Vue.set(errorMap, errorKey, rule.message)
                     updateColumnKey(column)
                     return false
                 }
                 if (count === column.rules.length && errorMap[errorKey]) {
-                    delete errorMap[errorKey]
+                    Vue.delete(errorMap, errorKey)
                     updateColumnKey(column)
                     return true
                 }
