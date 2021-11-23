@@ -7,6 +7,7 @@ import hideInteractive from './extends/hide-interactive'
 import appendChild from './extends/append-child'
 import insertBefore from './extends/insert-before'
 import insertAfter from './extends/insert-after'
+import pasteNode from './extends/paste-node'
 import removeChild from './extends/remove-child'
 import rerender from './extends/rerender'
 import setRenderSlots from './extends/set-render-slots'
@@ -311,6 +312,13 @@ export default class Node {
     @notify
     insertAfter (child) {
         insertAfter(this, child)
+        return this
+    }
+
+    @readonly
+    @notify
+    pasteNode (child) {
+        pasteNode(this, child)
         return this
     }
 

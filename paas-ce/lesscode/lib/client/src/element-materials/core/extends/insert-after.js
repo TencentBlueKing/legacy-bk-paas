@@ -11,14 +11,18 @@ export default function (node, childNode) {
         return false
     }
     const slotList = parentNode.renderSlots.default
-    
+
     if (!Array.isArray(slotList)) {
         return false
     }
 
-    const index = slotList.findIndex(_ => _ === childNode)
+    const index = slotList.findIndex(_ => _ === node)
 
     slotList.splice(index + 1, 0, childNode)
+
+    if (parentNode.type === 'root') {
+        console.log(parentNode, 677, slotList)
+    }
 
     return true
 }

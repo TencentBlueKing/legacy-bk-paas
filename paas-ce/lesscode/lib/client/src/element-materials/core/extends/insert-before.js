@@ -16,7 +16,7 @@ export default function (node, childNode) {
         return false
     }
 
-    const index = slotList.findIndex(_ => _ === childNode)
+    const index = slotList.findIndex(_ => _ === node)
     slotList.splice(index, 0, childNode)
 
     return true
