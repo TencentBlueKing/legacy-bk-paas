@@ -3,13 +3,16 @@ import { uuid } from '@/common/util'
 import getRoot from './get-root'
 import create, { createNode } from './create-node'
 
+let isClone = false
+
 const createNodeFromData = (data) => {
+    const id = uuid()
     const newNode = createNode(data.type)
     newNode.tabPanelActive = data.tabPanelActive || 'props'
-    newNode.componentId = data.componentId
+    newNode.componentId = isClone ? `${data.name}-${id}` : data.componentId
     newNode.name = data.name
     newNode.type = data.type
-    newNode.renderKey = data.renderKey
+    newNode.renderKey = id
     newNode.renderStyles = data.renderStyles || {}
     newNode.renderProps = data.renderProps || {}
     newNode.renderDirectives = data.renderDirectives || []
@@ -193,9 +196,13 @@ export const parseTemplate = data => {
     if (version === 'v1') {
         versionData = tansform({ type: 'template' }, [data])
     }
-    console.log('from parseTemplate = ', versionData)
-    const root = create('render-column')
-    traverse(root, [versionData], 'default')
-    console.log('\n\n\n\n==================== template data transform to node tree end ===================\n\n\n\n', root)
-    return root.children[0]
+    try {
+        isClone = true
+        const root = create('render-column')
+        traverse(root, [versionData], 'default')
+        console.log('\n\n\n\n==================== template data transform to node tree end ===================\n\n\n\n', root)
+        return root.children[0]
+    } finally {
+        isClone = false
+    }
 }

@@ -5,7 +5,7 @@
             'is-collapse': isCollapse
         }">
         <div
-            v-if="componentData && !isCollapse"
+            v-if="componentId && !isCollapse"
             class="selected-component-info">
             <div class="component-id overflow" v-bk-overflow-tips>{{ componentData.componentId }}</div>
             <div class="action-wrapper">
@@ -51,7 +51,6 @@
         data () {
             return {
                 isCollapse: false,
-                componentData: null,
                 inFormItem: false,
                 componentId: '',
                 componentType: ''
@@ -59,21 +58,23 @@
         },
         created () {
             this.infoLinkDict = infoLink
-            this.componentData = null
+            this.componentData = {}
 
             const updateCallback = _.throttle((event) => {
-                if (this.componentData
-                    && event.target.componentId === this.componentData.componentId) {
+                if (this.componentId
+                    && event.target.componentId === this.componentId) {
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
             }, 100)
 
             const activeCallback = ({ target }) => {
-                this.componentData = Object.freeze(target)
+                this.componentId = target.componentId
+                this.componentData = target
             }
 
             const activeClearCallback = () => {
+                this.componentId = ''
                 this.componentData = null
             }
             

@@ -20,6 +20,11 @@
     import _ from 'lodash'
     import LC from '@/element-materials/core'
 
+    let choostTargetType = null
+    export const getChooseTargetType = () => {
+        return choostTargetType
+    }
+
     export default {
         name: 'render-draggable',
         inheritAttrs: false,
@@ -107,7 +112,7 @@
              * @param { Object } dragEvent
              */
             handleChoose (event) {
-                // console.log('print drag choose', event)
+                choostTargetType = event.item.dataset['layout'] ? 'layout' : 'component'
                 this.$emit('choose', event)
             },
             /**
@@ -123,7 +128,8 @@
              * @param { Object } dragEvent
              */
             handleEnd (event) {
-                // console.log('print drag end', event)
+                console.log('print drag end', event)
+                choostTargetType = ''
                 this.$emit('end', event)
             }
         }

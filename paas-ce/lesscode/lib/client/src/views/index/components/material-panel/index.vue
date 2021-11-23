@@ -111,12 +111,12 @@
             </div>
         </div>
         <div
-            v-show="activeSideNav === 'nav-tab-template'"
+            v-if="activeSideNav === 'nav-tab-template'"
             class="sidebar-panel">
             <template-panel :draging-component.sync="curDragingComponent" />
         </div>
         <div
-            v-show="activeSideNav === 'nav-tab-tree'"
+            v-if="activeSideNav === 'nav-tab-tree'"
             class="sidebar-panel">
             <component-tree ref="componentTree" />
         </div>

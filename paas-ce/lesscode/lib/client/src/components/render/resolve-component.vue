@@ -17,9 +17,10 @@
             [$style['hover']]: isHover,
             'bk-layout-custom-component-wrapper': componentData.isCustomComponent
         }"
-        :style="componentData.style"
-        :data-component-id="`component-${componentData.componentId}`"
         role="component-root"
+        :data-component-id="`component-${componentData.componentId}`"
+        :data-layout="componentData.layoutType"
+        :style="componentData.style"
         @mousedown.stop="handleMousedown"
         @mousemove="handleMousemove"
         @mouseup="handleMouseup"

@@ -4,8 +4,11 @@ import Node from './Node'
 
 export const createNode = type => {
     const material = getMaterial(type)
+    if (!material) {
+        throw new Error(`不支持的组件 * ${type} * `)
+    }
 
-    return material ? new Node(material) : undefined
+    return new Node(material)
 }
 
 const parseTemplateTree = (templateRoot) => {

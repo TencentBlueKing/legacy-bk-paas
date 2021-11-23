@@ -8,6 +8,7 @@ import appendChild from './extends/append-child'
 import insertBefore from './extends/insert-before'
 import insertAfter from './extends/insert-after'
 import removeChild from './extends/remove-child'
+import cloneNode from './extends/clone-node'
 import rerender from './extends/rerender'
 import setRenderSlots from './extends/set-render-slots'
 import setRenderEvents from './extends/set-render-events'
@@ -327,16 +328,27 @@ export default class Node {
     }
 
     /**
+     * @desc clone 几点
+     * @param { Boolean } deep 是否采用深度克隆,如果为true,则该节点的所有后代节点也都会被克隆,如果为false,则只克隆该节点本身.
+     * @returns { Node }
+     */
+     @readonly
+     @notify
+    cloneNode (deep) {
+        return cloneNode(this, deep)
+    }
+
+    /**
      * @desc 设置style
      * @param { Object } styles
      * @returns { Node }
      */
     @readonly
     @notify
-    setRenderStyles (styles = {}) {
-        setRenderStyles(this, styles)
-        return this
-    }
+     setRenderStyles (styles = {}) {
+         setRenderStyles(this, styles)
+         return this
+     }
 
     /**
      * @desc 设置slot
