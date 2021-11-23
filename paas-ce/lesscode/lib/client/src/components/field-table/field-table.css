@@ -16,6 +16,11 @@
       border: 1px solid red !important;
     }
     tr.bk-table-row.hover-row {
+      .disable-row {
+        .bk-select.is-disabled, .bk-form-input[disabled] {
+          background-color: #fff !important;
+      }
+      }
       > td {
         background-color: #fff;
         .field-table-input {
@@ -32,7 +37,7 @@
         }
       }
       .bk-select.is-disabled, .bk-form-input[disabled] {
-          background-color: #f5f7fa !important;
+          background-color: #fafbfd !important;
       }
     }
     .field-table-icon {

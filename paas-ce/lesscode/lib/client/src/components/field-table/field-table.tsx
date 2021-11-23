@@ -91,6 +91,10 @@ export default defineComponent({
         
         /** 指定列/行disabled */
         const handleDisabled = (item: any, props: any) => {
+            const { row } = props
+            if (row.isReadonly) {
+                return row.isReadonly
+            }
             if (typeof item.isReadonly === 'function') {
                 return item.isReadonly.apply(this, [item, props])
             }
@@ -141,12 +145,23 @@ export default defineComponent({
                 onBlur={handleValidator.bind(this, props, item)}
                 {...{ props: (handleComponentProps(item, props)) }} />
         }
+        const handleChangeValue = (row: any, column: any, value: any) => {
+            if (typeof column.changeFn === 'function') {
+                column.changeFn(value, column, row)
+                return
+            }
+            row[column.prop] = value
+        }
+        const handleSelected = (props: any, column: any, value: any) => {
+            const { row, $index } = props
+            emit('change', value, row, column, $index)
+            handleChangeValue(props.row, column, value)
+            Object.keys(errorMap).map(item => item.endsWith($index) && Vue.delete(errorMap, item))
+            handleValidator(props, column)
+        }
         /** select */
         const renderSelect = (item: IColumnItem, props: any) => {
-            const change = (value, row, item, index) => {
-                emit('change', value, row, item, index)
-            }
-            const { row, $index } = props
+            const { row } = props
             const optionList = typeof item.optionsList === 'function'
                 ? item.optionsList.apply(this, [item, props]) : item.optionsList
             const options = (optionList || []).map((option: any) => (
@@ -160,9 +175,7 @@ export default defineComponent({
                 clearable={false}
                 value={row[item.prop]}
                 disabled={handleDisabled(item, props)}
-                onChange={(value) =>
-                    change(value, row, item, $index)
-                }
+                onChange={handleSelected.bind(this, props, item)}
                 {...{ props: (handleComponentProps(item, props)) }}>
                 {item.optionsList ? options : ''}
             </bk-select>
@@ -336,8 +349,9 @@ export default defineComponent({
                     if (item.type === 'custom') {
                         return item.renderFn && item.renderFn.apply(this, [props, this.errorMap])
                     }
+                    const { row } = props
                     const errorInfo = this.errorMap[`${item.prop}_${props.$index}`]
-                    const defaultSlot = <div class={{ 'field-error': !!errorInfo }}>
+                    const defaultSlot = <div class={{ 'field-error': !!errorInfo, 'disable-row': row.isReadonly }}>
                         { (this as any)[typeList[item.type]](item, props) }
                         { !!errorInfo
                     && <i class="bk-icon icon-exclamation-circle-shape row-icons" v-bk-tooltips={errorInfo} /> }
