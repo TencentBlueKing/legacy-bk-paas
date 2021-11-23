@@ -46,6 +46,9 @@ const mergeData = (newNode, oldNode, deep) => {
  * @returns { Node }
  */
 export default function (node, deep = true) {
+    if (!isNode(node)) {
+        throw new Error('node 不是 Node 类型')
+    }
     const dupNode = createNode(node.type)
     mergeData(dupNode, node, deep)
     return dupNode
