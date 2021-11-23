@@ -57,9 +57,6 @@ function getDefaultRow () {
         nullable: false,
         default: '',
         comment: '',
-        defaultInputType: 'text',
-        lengthInputType: 'number',
-        scaleInputType: 'number',
         generated: false,
         createDate: false,
         updateDate: false,
@@ -76,31 +73,25 @@ function getDefaultRow () {
 function normalizeTableItem (item) {
     const defaultRow = getDefaultRow()
     const normalizedItem = Object.assign({}, defaultRow, item)
-    // 设置默认值
-    if (['int', 'datetime', 'decimal'].includes(normalizedItem.type)) {
-        normalizedItem.defaultInputType = 'number'
-        normalizedItem.default = 0
-    } else if (normalizedItem.defaultInputType === 'number') {
-        normalizedItem.defaultInputType = 'text'
-        normalizedItem.default = ''
-    }
-    // 设置默认 length
-    if (normalizedItem.length === '') {
-        if (normalizedItem.type === 'int') {
+    // 由于mysql限制，部分字段不可修改，需要设置默认值
+    switch (normalizedItem.type) {
+        case 'int':
             normalizedItem.length = 11
-        }
-        if (normalizedItem.type === 'varchar') {
-            normalizedItem.length = 255
-        }
-        if (normalizedItem.type === 'decimal') {
-            normalizedItem.length = 20
-        }
-    }
-    // 设置默认 scale
-    if (normalizedItem.scale === '') {
-        if (normalizedItem.type === 'decimal') {
-            normalizedItem.scale = 5
-        }
+            normalizedItem.scale = 0
+            break
+        case 'varchar':
+            normalizedItem.scale = 0
+            break
+        case 'text':
+            normalizedItem.scale = 0
+            normalizedItem.length = 65535
+            break
+        case 'datetime':
+            normalizedItem.scale = 0
+            normalizedItem.length = 0
+            break
+        default:
+            break
     }
     // 默认列不可修改
     if (BASE_COLUMNS.some(item => item.columnId === normalizedItem.columnId)) {
@@ -192,7 +183,21 @@ export default defineComponent({
                 prop: 'length',
                 isReadonly (item, props) {
                     return !['varchar', 'decimal'].includes(props?.row?.type)
-                }
+                },
+                rules: [
+                    {
+                        validator (val = 0, row) {
+                            return row.type !== 'varchar' || (val <= 15000 && val > 0)
+                        },
+                        message: 'varchar 类型的长度需大于 0 小于 15000'
+                    },
+                    {
+                        validator (val = 0, row) {
+                            return row.type !== 'decimal' || (val <= 65 && val > 0)
+                        },
+                        message: 'decimal 类型的长度需大于 0 小于 65'
+                    }
+                ]
             },
             {
                 name: '小数点',
@@ -200,7 +205,15 @@ export default defineComponent({
                 prop: 'scale',
                 isReadonly (item, props) {
                     return !['decimal'].includes(props?.row?.type)
-                }
+                },
+                rules: [
+                    {
+                        validator (val = 0, row) {
+                            return row.type !== 'decimal' || (val > 0 && val < row.length)
+                        },
+                        message: '小数点字段需要大于 0 且小于长度字段'
+                    }
+                ]
             },
             {
                 name: '索引',
@@ -274,12 +287,9 @@ export default defineComponent({
 
         const validate = () => {
             return new Promise((resolve, reject) => {
-                const isValidate = tableRef.value.verification()
-                if (isValidate) {
+                tableRef.value?.verification().then(() => {
                     resolve(tableList.map(normalizeOrmItem))
-                } else {
-                    reject(new Error('字段配置校验不通过'))
-                }
+                }).catch(reject)
             })
         }
 
