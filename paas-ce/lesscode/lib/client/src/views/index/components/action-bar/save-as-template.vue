@@ -3,8 +3,8 @@
 </template>
 
 <script>
-
     import MenuItem from './menu-item'
+    import LC from '@/element-materials/core'
     
     export default {
         components: {
@@ -22,7 +22,13 @@
         },
         methods: {
             toggleShowTemplateDialog () {
-                console.log(this.item.text)
+                const activeNode = LC.getRoot()
+                LC.triggerEventListener('saveTemplate', {
+                    target: activeNode,
+                    type: 'saveTemplate',
+                    isWholePage: true,
+                    value: JSON.parse(JSON.stringify(activeNode))
+                })
             }
         }
         

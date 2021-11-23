@@ -6,7 +6,7 @@
     import MenuItem from './menu-item'
     import cloneDeep from 'lodash.clonedeep'
     import { getNodeWithClass } from '@/common/util'
-    import { bus } from '@/common/bus'
+    // import { bus } from '@/common/bus'
     // import LC from '@/element-materials/core'
 
     export default {
@@ -24,14 +24,14 @@
             }
         },
         mounted () {
-            window.addEventListener('keydown', this.quickOperation)
-            window.addEventListener('keyup', this.judgeCtrl)
-            window.addEventListener('click', this.toggleQuickOperation, true)
+            // window.addEventListener('keydown', this.quickOperation)
+            // window.addEventListener('keyup', this.judgeCtrl)
+            // window.addEventListener('click', this.toggleQuickOperation, true)
 
-            bus.$on('on-delete-component', this.showDeleteElement)
-            this.$once('hook:beforeDestroy', () => {
-                bus.$off('on-delete-component', this.showDeleteElement)
-            })
+            // bus.$on('on-delete-component', this.showDeleteElement)
+            // this.$once('hook:beforeDestroy', () => {
+            //     bus.$off('on-delete-component', this.showDeleteElement)
+            // })
         },
         methods: {
             toggleShowQuickOperation () {

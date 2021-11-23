@@ -1,14 +1,18 @@
 <template>
-    <menu-item :item="item"></menu-item>
+    <section>
+        <menu-item :item="item"></menu-item>
+        <Methods :show.sync="isShowFun" />
+    </section>
 </template>
 
 <script>
-
     import MenuItem from './menu-item'
+    import Methods from '@/components/methods'
     
     export default {
         components: {
-            MenuItem
+            MenuItem,
+            Methods
         },
         data () {
             return {
@@ -16,12 +20,13 @@
                     icon: 'bk-drag-icon bk-drag-hanshuku',
                     text: '函数库',
                     func: this.showFunManage
-                }
+                },
+                isShowFun: false
             }
         },
         methods: {
             showFunManage () {
-                console.log(this.item.text)
+                this.isShowFun = true
             }
         }
     }
