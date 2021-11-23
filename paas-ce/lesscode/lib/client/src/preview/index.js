@@ -49,11 +49,12 @@ auth(projectId).then(() => {
         }))
         const projectRouteList = (Object.values(data.routeGroup) || []).map(({ children }) => children)
             .reduce((pre, cur) => pre.concat(cur), [])
-            .map(({ id, layoutPath, path, redirect }) => ({
+            .map(({ id, layoutPath, path, redirect, pageCode }) => ({
                 id,
                 layoutPath,
                 path,
                 redirect,
+                pageCode,
                 fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
             }))
         const { router, App } = generateRouter(data.routeGroup, projectPageRouteList)
@@ -95,7 +96,7 @@ auth(projectId).then(() => {
                         // 绑定的跳转路由可能未绑定页面或路由
                         this.$router.replace({ path: '/404', query: { p: pageCode } })
                     } else {
-                        this.$router.replace({ path: pageRoute.fullPath })
+                        this.$router.replace({ path: pageRoute.fullPath, query: { pageCode: pageRoute.pageCode } })
                     }
                 } else {
                     this.$router.replace({ path: '/404', query: { p: pageCode } })

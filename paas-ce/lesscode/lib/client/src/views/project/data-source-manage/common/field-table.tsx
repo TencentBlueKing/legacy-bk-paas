@@ -26,6 +26,11 @@ export interface IFieldSelectOption {
     name: string
 }
 
+interface ITableFieldRule {
+    validator: Function,
+    message: string
+}
+
 export interface ITableField {
     name: string
     type: string
@@ -34,8 +39,8 @@ export interface ITableField {
     width?: string
     isRequire?: boolean
     inputType?: string
-    isEdit?: boolean,
-    reg?: RegExp | ((val: string, row: any) => boolean),
+    isReadonly?: boolean | Function,
+    rules?: ITableFieldRule[],
     tips?: string
 }
 
@@ -75,7 +80,7 @@ function normalizeTableItem (item) {
     if (['int', 'datetime', 'decimal'].includes(normalizedItem.type)) {
         normalizedItem.defaultInputType = 'number'
         normalizedItem.default = 0
-    } else {
+    } else if (normalizedItem.defaultInputType === 'number') {
         normalizedItem.defaultInputType = 'text'
         normalizedItem.default = ''
     }
@@ -99,7 +104,7 @@ function normalizeTableItem (item) {
     }
     // 默认列不可修改
     if (BASE_COLUMNS.some(item => item.columnId === normalizedItem.columnId)) {
-        normalizedItem.isEdit = true
+        normalizedItem.isReadonly = true
     }
     // 每一行加id，用于 diff
     if (!Reflect.has(normalizedItem, 'columnId')) {
@@ -138,12 +143,20 @@ export default defineComponent({
                 type: 'input',
                 prop: 'name',
                 isRequire: true,
-                reg (val, row) {
-                    const isValidateReg = /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/.test(val)
-                    const isNotRepeatName = !tableList.find((table) => table.name === val && row.columnId !== table.columnId)
-                    return isValidateReg && isNotRepeatName
-                },
-                tips: '字段名称必填且不能重复。开头和结尾需是大小写字母，中间可以是大小写字母、连字符和下划线。长度最少为2个字符'
+                rules: [
+                    {
+                        validator (val, row) {
+                            return /^[a-zA-Z][a-zA-Z-_]*[a-zA-Z]$/.test(val)
+                        },
+                        message: '开头和结尾需是大小写字母，中间可以是大小写字母、连字符和下划线。长度最少为2个字符'
+                    },
+                    {
+                        validator (val, row) {
+                            return !tableList.find((table) => table.name === val && row.columnId !== table.columnId)
+                        },
+                        message: '字段名称不能重复'
+                    }
+                ]
             },
             {
                 name: '字段类型',
@@ -176,18 +189,27 @@ export default defineComponent({
             {
                 name: '长度',
                 type: 'input',
-                prop: 'length'
+                prop: 'length',
+                isReadonly (item, props) {
+                    return !['varchar', 'decimal'].includes(props?.row?.type)
+                }
             },
             {
                 name: '小数点',
                 type: 'input',
-                prop: 'scale'
+                prop: 'scale',
+                isReadonly (item, props) {
+                    return !['decimal'].includes(props?.row?.type)
+                }
             },
             {
                 name: '索引',
                 type: 'checkbox',
                 prop: 'index',
-                width: '100px'
+                width: '100px',
+                isReadonly (item, props) {
+                    return props?.row?.type === 'text'
+                }
             },
             {
                 name: '可空',
@@ -198,7 +220,10 @@ export default defineComponent({
             {
                 name: '默认值',
                 type: 'input',
-                prop: 'default'
+                prop: 'default',
+                isReadonly (item, props) {
+                    return props?.row?.type === 'text'
+                }
             },
             {
                 name: '备注',

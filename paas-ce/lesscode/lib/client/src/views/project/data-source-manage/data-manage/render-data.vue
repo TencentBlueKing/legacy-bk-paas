@@ -1,6 +1,6 @@
 <template>
     <article>
-        <bk-alert type="warning" title="数据的增删改会直接影响到线上环境，请谨慎操作"></bk-alert>
+        <bk-alert type="warning" :title="`数据的增删改会直接影响到${environment.name}，请谨慎操作`"></bk-alert>
 
         <section class="render-data-header">
             <bk-button theme="primary" class="mr10" @click="addData">新增</bk-button>
@@ -149,7 +149,7 @@
     }
 
     interface IProps {
-        environment?: string,
+        environment?: any,
         activeTable?: ITable
     }
 
@@ -183,7 +183,7 @@
         },
 
         props: {
-            environment: String,
+            environment: Object,
             activeTable: Object as PropType<ITable>
         },
 
@@ -232,7 +232,7 @@
 
                 const queryData = {
                     projectId,
-                    environment: environment.value,
+                    environment: environment.value.key,
                     tableName: activeTable.value.tableName,
                     page: dataStatus.pagination.current,
                     pageSize: dataStatus.pagination.limit
@@ -327,7 +327,7 @@
                 const sql = dataParse.set(dataJsonParser).export(dataSqlParser)
                 bkInfoBox({
                     title: '确认要删除？',
-                    subTitle: `将会直接删除线上环境 id 为【${list.map(x => x.id).join(',')}】的数据`,
+                    subTitle: `将会直接删除${environment.value.name} id 为【${list.map(x => x.id).join(',')}】的数据`,
                     theme: 'danger',
                     confirmLoading: true,
                     confirmFn () {
@@ -342,12 +342,12 @@
             }
 
             const modifyOnlineDb = (sql) => {
-                const apiData = { environment: environment.value, projectId, sql }
+                const apiData = { environment: environment.value.key, projectId, sql }
                 return store.dispatch('dataSource/modifyOnlineDb', apiData)
             }
 
             const exportAllDatas = (fileType) => {
-                window.open(`/api/data-source/exportDatas/projectId/${projectId}/fileType/${fileType}/tableName/${activeTable.value.tableName}/environment/${environment.value}`)
+                window.open(`/api/data-source/exportDatas/projectId/${projectId}/fileType/${fileType}/tableName/${activeTable.value.tableName}/environment/${environment.value.key}`)
             }
 
             const exportSelectDatas = (fileType) => {

@@ -241,7 +241,7 @@ export default defineComponent({
             for (const rule of column.rules) {
                 const p = () => new Promise(async (resolve, reject) => {
                     try {
-                        const result = await rule.validator(value)
+                        const result = await rule.validator(value, props.row)
                         if (result) {
                             resolve(rule)
                         } else {

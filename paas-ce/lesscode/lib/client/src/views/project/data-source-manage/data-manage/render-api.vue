@@ -19,8 +19,11 @@
             </bk-table-column>
             <bk-table-column
                 label="请求方法"
-                prop="type"
-            ></bk-table-column>
+            >
+                <template slot-scope="props">
+                    <span :class="[props.row.type, 'api-type']">{{ firstUpperCase(props.row.type) }}</span>
+                </template>
+            </bk-table-column>
             <bk-table-column
                 label="请求参数"
                 prop="params"
@@ -176,13 +179,18 @@
                 isShowDetail.value = true
             }
 
+            const firstUpperCase = (val) => {
+                return val?.replace(/.?/, x => x.toUpperCase())
+            }
+
             return {
                 apiList,
                 isShowDetail,
                 showDetailValue,
                 detailTitle,
                 options,
-                showDetail
+                showDetail,
+                firstUpperCase
             }
         }
     })
@@ -201,5 +209,25 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         vertical-align: bottom;
+    }
+    .api-type {
+        display: inline-block;
+        text-align: center;
+        width: 48px;
+        height: 22px;
+        line-height: 22px;
+        border-radius: 2px;
+        &.delete {
+            background: #f8d8d4;
+        }
+        &.put {
+            background: #fff2c9;
+        }
+        &.get {
+            background: #cde8fb;
+        }
+        &.post {
+            background: #dbd4ed;
+        }
     }
 </style>

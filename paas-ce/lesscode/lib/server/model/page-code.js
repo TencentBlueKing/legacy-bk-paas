@@ -1493,8 +1493,8 @@ class PageCode {
                     },
                 `
                 let setNav = ''
-                const pageKey = this.pageType === 'projectCode' ? 'pageCode' : 'pageId'
-                const pageValue = this.pageType === 'projectCode' ? 'this.$route.name' : '+this.$route.params.pageId'
+                const pageKey = this.pageType === 'projectCode' ? 'pageCode' : 'pageCode'
+                const pageValue = this.pageType === 'projectCode' ? 'this.$route.name' : 'this.$route.query.pageCode'
                 switch (this.layoutType) {
                     case 'top-bottom':
                         setNav = `setNav (id) {
