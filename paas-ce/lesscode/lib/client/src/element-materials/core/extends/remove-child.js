@@ -1,29 +1,24 @@
-import Node from '../Node'
+import isNode from '../is-node'
 
 /**
  * @desc 删除指定节点的子节点
- * @param { Node } parentNode
+ * @param { Node } node
  * @param { Node } childNode
  * @returns { Boolean }
  */
-export default function (parentNode, childNode) {
+export default function (node, childNode) {
     // layout 类型的组件节点才支持删除子元素
-    if (!parentNode.layoutType) {
+    if (!node.layoutType) {
         return false
     }
-    if (!(childNode instanceof Node)) {
+    if (!isNode(childNode)) {
         throw new Error('childNode 不是 Node 类型')
     }
-
-    const childrens = parentNode.renderSlots.default
-    let childIndex = -1
-    for (let i = 0; i < childrens.length; i++) {
-        if (childrens[i] === childNode) {
-            childIndex = i
-        }
-    }
+    const slotList = node.renderSlots.default
+    const childIndex = slotList.findIndex(_ => _ === childNode)
     if (childIndex > -1) {
-        parentNode.renderSlots.default.splice(childIndex, 1)
+        slotList.splice(childIndex, 1)
+        return true
     }
-    return true
+    return false
 }

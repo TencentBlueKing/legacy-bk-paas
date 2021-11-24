@@ -90,16 +90,15 @@
 <script>
     import { mapGetters, mapMutations } from 'vuex'
     import _ from 'lodash'
+    import LC from '@/element-materials/core'
     import { bus } from '@/common/bus'
-    import { getNodeWithClass, removeClassWithNodeClass } from '@/common/util'
+    import { getNodeWithClass } from '@/common/util'
 
     const unselectComponent = () => {
-        removeClassWithNodeClass('.bk-layout-grid-row', 'selected')
-        removeClassWithNodeClass('.component-wrapper', 'selected')
-        removeClassWithNodeClass('.side-menu-wraper', 'selected')
-        removeClassWithNodeClass('.complex-top-menu-wraper', 'selected')
-        removeClassWithNodeClass('.navigation-header-item', 'selected')
-        removeClassWithNodeClass('.wrapperCls', 'wrapper-cls-selected')
+        const activeNode = LC.getActiveNode()
+        if (activeNode) {
+            activeNode.activeClear()
+        }
     }
 
     export default {
@@ -133,24 +132,23 @@
             }
         },
         watch: {
-            curSelectedComponentData: {
-                handler () {
-                    const curComponentNode = getNodeWithClass(this.$refs.layout, 'component-wrapper')
-                    curComponentNode.classList.remove('selected')
-                    this.isTopMenuSelected = false
-                    this.isSideMenuSelected = false
-                    this.selectTopMenuId = ''
-                    this.activeTopMenuId = ''
-                },
-                deep: true
-            },
             currentSideMenuList () {
                 this.handleOpenMenu()
             }
         },
         created () {
+            const activeCallback = () => {
+                const curComponentNode = getNodeWithClass(this.$refs.layout, 'component-wrapper')
+                curComponentNode.classList.remove('selected')
+                this.isTopMenuSelected = false
+                this.isSideMenuSelected = false
+                this.selectTopMenuId = ''
+                this.activeTopMenuId = ''
+            }
+            LC.addEventListener('active', activeCallback)
             bus.$on('on-template-change', this.handleTemplateChange)
             this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('active', activeCallback)
                 bus.$off('on-template-change', this.handleTemplateChange)
             })
             this.refreshKey = Date.now()

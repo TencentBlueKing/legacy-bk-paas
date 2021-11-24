@@ -4,8 +4,11 @@ import Node from './Node'
 
 export const createNode = type => {
     const material = getMaterial(type)
+    if (!material) {
+        throw new Error(`不支持的组件 * ${type} * `)
+    }
 
-    return material ? new Node(material) : undefined
+    return new Node(material)
 }
 
 const parseTemplateTree = (templateRoot) => {
@@ -33,7 +36,7 @@ export default function (elementType) {
     if (!node) {
         return node
     }
-    // 创建节点时需要解析多层级的slot
+    // 创建节点时需要解析多层级的 slot 配置
     if (node.layoutType) {
         if (Array.isArray(node.material.slots.default)) {
             node.material.slots.default.forEach(slotTemplate => {

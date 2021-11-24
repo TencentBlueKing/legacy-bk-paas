@@ -18,11 +18,9 @@
             disabled
             :sort="true"
             :group="{
-                pull: 'clone',
-                put: [
-                    'layout',
-                    'interactive'
-                ]
+                name: 'layout',
+                pull: true,
+                put: putCheck
             }">
             <template v-for="componentNode in componentData.slot.default">
                 <!-- root 的子组件只会是布局组件和交互式组件 -->
@@ -49,9 +47,10 @@
     </layout>
 </template>
 <script>
-    import _ from 'lodash'
     import LC from '@/element-materials/core'
-    import Draggable from './components/draggable'
+    import Draggable, {
+        getChooseTargetType
+    } from './components/draggable'
     import Layout from './widget/layout'
     import ResolveInteractiveComponent from './resolve-interactive-component'
     import { bus } from '@/common/bus'
@@ -93,12 +92,12 @@
         },
         created () {
             this.componentData = LC.getRoot()
-            const updateCallback = _.throttle((event) => {
+            const updateCallback = (event) => {
                 console.log('from target updateCallback == ', event)
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
                 }
-            }, 100)
+            }
             /** 当主页面拉去数据、加载页面后，调用动态计算遮罩的方法 */
             bus.$on('pageInitialized', this.observeInteractiveMask)
 
@@ -142,6 +141,20 @@
                     }
                 })
                 this.resizeObserve.observe(canvas)
+            },
+            putCheck (target, source) {
+                // 画布区域内部拖动
+                if (getChooseTargetType() === 'layout') {
+                    return true
+                }
+                // 从物料区拖入
+                const {
+                    group
+                } = source.options
+                if (['layout', 'interactive'].includes(group.name)) {
+                    return true
+                }
+                return false
             }
         }
     }
