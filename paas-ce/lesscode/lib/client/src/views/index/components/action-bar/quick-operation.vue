@@ -26,7 +26,6 @@
 
 <script>
     import MenuItem from './menu-item'
-    import cloneDeep from 'lodash.clonedeep'
     import { getNodeWithClass } from '@/common/util'
     // import { bus } from '@/common/bus'
     import LC from '@/element-materials/core'
@@ -56,11 +55,11 @@
                 ]
             }
         },
-        computed: {
-            curSelectedComponentData () {
-                return LC.getActiveNode()
-            }
-        },
+        // computed: {
+        //     curSelectedNode () {
+        //         return LC.getActiveNode()
+        //     }
+        // },
         mounted () {
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
@@ -164,22 +163,23 @@
 
             // 剪切
             cutComponent () {
-                if (!this.hasCtrl || Object.keys(this.curSelectedComponentData || {}).length <= 0) return
+                if (!this.hasCtrl || Object.keys(LC.getActiveNode() || {}).length <= 0) return
 
                 if (!this.checkIsDelComponent()) {
                     return
                 }
 
-                const copyData = cloneDeep(this.curSelectedComponentData)
+                const copyData = LC.getActiveNode().cloneNode(true)
                 this.setCopyData(copyData)
-                this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
+                this.delComponentConf.item = Object.assign({}, LC.getActiveNode())
                 this.confirmDelComponent()
             },
 
             // 复制
             putComponentData () {
-                if (!this.hasCtrl || Object.keys(this.curSelectedComponentData).length <= 0) return
-                const copyNode = cloneDeep(this.curSelectedComponentData)
+                if (!this.hasCtrl || Object.keys(LC.getActiveNode()).length <= 0) return
+                const copyNode = LC.getActiveNode().cloneNode(true)
+                console.log(LC.getActiveNode(), copyNode, 'diffclone')
                 NodeHistory.setCopyNode(copyNode)
             },
 
@@ -188,14 +188,11 @@
                 const copyNode = NodeHistory.curCopyNode || {}
                 if (!this.hasCtrl || Object.keys(copyNode).length <= 0) return
 
-                console.log(copyNode, 'curCpNode', this.curSelectedComponentData.parentNode)
-                
-                // this.curSelectedComponentData.insertAfter(copyNode)
-                this.curSelectedComponentData.pasteNode(copyNode)
+                LC.getActiveNode().pasteNode(copyNode)
                 // if (copyNode.layoutType) {
                 //     LC.getRoot().appendChild(NodeHistory.curCopyNode)
                 // } else {
-                //     console.log(this.curSelectedComponentData)
+                //     console.log(LC.getActiveNode())
                     
                 // }
                 // const pos = copyNode.getNodePosition()
