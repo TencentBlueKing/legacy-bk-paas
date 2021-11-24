@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    const defaultOptions = () => ([{ id: 0, version: '草稿' }])
+    const defaultOptions = () => ([{ id: 0, version: '默认' }])
 
     export default {
         props: {

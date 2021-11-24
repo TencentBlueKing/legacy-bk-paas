@@ -322,7 +322,12 @@
 </script>
 
 <style lang="postcss" scoped>
-/* page */
+    .create-dropdown {
+        /deep/ .bk-dropdown-trigger .bk-button {
+            font-size: 14px;
+        }
+    }
+
     .pages-content {
         padding: 16px 24px;
         display: flex;

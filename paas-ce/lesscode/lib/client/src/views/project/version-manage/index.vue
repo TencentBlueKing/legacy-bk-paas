@@ -22,7 +22,7 @@
                 :header-cell-style="{ background: '#f0f1f5' }"
                 :data="displayList"
                 v-show="!loading.list">
-                <bk-table-column label="版本号" prop="version" min-width="150" show-overflow-tooltip>
+                <bk-table-column label="版本号" prop="version" min-width="120" show-overflow-tooltip>
                     <template slot-scope="{ row }">
                         <div class="component-version" @click="handleVersionDetail(row)">
                             <span>{{ row.version }}</span>
@@ -31,20 +31,37 @@
                     </template>
                 </bk-table-column>
                 <bk-table-column label="更新人" prop="updateUser" min-width="120" show-overflow-tooltip></bk-table-column>
-                <bk-table-column label="更新日期" prop="updateTime" min-width="220" show-overflow-tooltip>
+                <bk-table-column label="更新日期" prop="updateTime" min-width="150" show-overflow-tooltip>
                     <template slot-scope="{ row }">
                         <span>{{ row.updateTime | time }}</span>
                     </template>
                 </bk-table-column>
                 <bk-table-column label="创建人" prop="createUser" min-width="120" show-overflow-tooltip />
-                <bk-table-column label="创建日期 " prop="operateDesc" min-width="300" show-overflow-tooltip>
+                <bk-table-column label="创建日期 " prop="operateDesc" min-width="150" show-overflow-tooltip>
                     <template slot-scope="{ row }">
                         <span>{{ row.createTime | time }}</span>
                     </template>
                 </bk-table-column>
-                <bk-table-column label="操作" prop="statusText" align="left" width="200">
+                <bk-table-column label="是否归档 " prop="archiveFlag" min-width="110" :render-header="renderArchiveHeader" sortable>
                     <template slot-scope="{ row }">
-                        <bk-button text @click="handleEdit(row)">编辑</bk-button>
+                        <span>{{ row.archiveFlag ? '是' : '否' }}</span>
+                    </template>
+                </bk-table-column>
+                <bk-table-column label="操作" prop="statusText" align="left" min-width="200">
+                    <template slot-scope="{ row }">
+                        <bk-button v-if="row.archiveFlag === 1" text @click="handleRecover(row)">恢复</bk-button>
+                        <bk-popconfirm trigger="click" width="340"
+                            confirm-text="归档"
+                            @confirm="handleArchive(row)">
+                            <div slot="content">
+                                <div class="archive-tips">
+                                    <i class="bk-icon icon-info-circle-shape pr5 content-icon"></i>
+                                    <div class="content-text">归档后版本不会在"页面列表"和"发布部署"页面中展示</div>
+                                </div>
+                            </div>
+                            <bk-button v-if="row.archiveFlag === 0" text>归档</bk-button>
+                        </bk-popconfirm>
+                        <bk-button class="ml10" text @click="handleEdit(row)">编辑</bk-button>
                         <bk-button text @click="handleGoPageList(row)">进入页面</bk-button>
                     </template>
                 </bk-table-column>
@@ -133,7 +150,7 @@
                 this.sideslider.show = true
             },
             handleEdit (data) {
-                this.versionData = data
+                this.versionData = Object.freeze({ ...data })
                 this.sideslider.show = true
             },
             handleGoPageList (row) {
@@ -163,6 +180,30 @@
                 this.versionDialog.show = true
                 this.versionDialog.data = row
                 this.versionDialog.title = `${row.version} 版本日志`
+            },
+            async handleRecover (version) {
+                await this.$store.dispatch('projectVersion/recover', {
+                    id: version.id,
+                    projectId: this.projectId
+                })
+                this.getList()
+                this.messageSuccess('操作成功')
+            },
+            async handleArchive (version) {
+                await this.$store.dispatch('projectVersion/archive', {
+                    id: version.id,
+                    projectId: this.projectId
+                })
+                this.getList()
+                this.messageSuccess('操作成功')
+            },
+            renderArchiveHeader (h, data) {
+                const directive = {
+                    name: 'bkTooltips',
+                    content: '已归档的版本不会在"页面列表"和"发布部署"页面中展示',
+                    placement: 'right'
+                }
+                return <span class="header-cell-with-tips" v-bk-tooltips={ directive }>{ data.column.label }</span>
             }
         }
     }
@@ -205,6 +246,29 @@
             ::v-deep .bk-link-text {
                 font-size: 12px;
             }
+        }
+    }
+    .archive-tips {
+        font-size: 14px;
+        line-height: 24px;
+        color: #63656e;
+        padding-bottom: 10px;
+        .content-icon {
+            color: #ea3636;
+            position: absolute;
+            top: 20px;
+        }
+        .content-text {
+            display: inline-block;
+            margin-left: 20px;
+        }
+    }
+    ::v-deep .bk-table-header {
+        .header-cell-with-tips {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-style: dashed;
+            text-underline-position: under;
         }
     }
 </style>

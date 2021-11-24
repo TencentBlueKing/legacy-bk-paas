@@ -19,4 +19,10 @@ export default class extends Base {
         comment: '版本日志'
     })
     versionLog
+
+    @Column({
+        type: 'int',
+        comment: '是否归档'
+    })
+    archiveFlag
 }

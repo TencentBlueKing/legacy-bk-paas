@@ -912,7 +912,6 @@
             },
 
             async fetchData () {
-                console.log('versionId:::', this.versionId)
                 try {
                     this.contentLoading = true
                     const [pageDetail, pageList, projectDetail] = await Promise.all([
