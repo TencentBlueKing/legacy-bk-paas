@@ -52,21 +52,21 @@
                 chooseTableName.value = tableName
                 propStatus.change.value(props.name, result.list, props.type, { sourceData: { tableName } })
                 // update table columns
-                const renderSlots = {
-                    default: {
-                        name: 'bk-table-column',
-                        type: 'table-list',
-                        displayName: '表头配置',
-                        val: table.columns?.map((item) => {
-                            return {
-                                label: item.name,
-                                prop: item.name,
-                                sortable: false,
-                                type: ''
-                            }
-                        }),
-                        payload: {}
-                    }
+                const slotKey = props.name === 'table-data-list' ? 'column' : 'default'
+                const renderSlots = {}
+                renderSlots[slotKey] = {
+                    name: 'bk-table-column',
+                    type: 'table-list',
+                    displayName: '表头配置',
+                    val: table.columns?.map((item) => {
+                        return {
+                            label: item.name,
+                            prop: item.name,
+                            sortable: false,
+                            type: ''
+                        }
+                    }),
+                    payload: {}
                 }
                 propStatus.batchUpdate.value({ renderSlots })
             }
