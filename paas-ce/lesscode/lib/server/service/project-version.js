@@ -92,9 +92,9 @@ const getList = async (projectId, fields = []) => {
     return list
 }
 
-const getOptionList = async (projectId) => {
+const getOptionList = async (projectId, fields = ['id', 'version']) => {
     const list = await getRepository(ProjectVersion).find({
-        select: ['id', 'version'],
+        select: fields,
         where: { projectId, archiveFlag: 0, deleteFlag: 0 },
         order: { id: 'DESC' }
     })

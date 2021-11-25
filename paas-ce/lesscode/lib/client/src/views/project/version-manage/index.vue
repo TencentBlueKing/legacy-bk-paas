@@ -62,7 +62,7 @@
                             <bk-button v-if="row.archiveFlag === 0" text>归档</bk-button>
                         </bk-popconfirm>
                         <bk-button class="ml10" text @click="handleEdit(row)">编辑</bk-button>
-                        <bk-button text @click="handleGoPageList(row)">进入页面</bk-button>
+                        <bk-button v-if="row.archiveFlag === 0" text @click="handleGoPageList(row)">进入页面</bk-button>
                     </template>
                 </bk-table-column>
                 <bk-exception slot="empty" class="component-list-empty" type="empty">
