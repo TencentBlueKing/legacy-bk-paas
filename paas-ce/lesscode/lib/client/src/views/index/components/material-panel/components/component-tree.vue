@@ -222,7 +222,7 @@
                 this.transformCanvasToView(node.data.componentId)
             },
             transformCanvasToView (id) {
-                const canvasTarget = document.querySelector(`div[data-component-id="component-${id}"]`)
+                const canvasTarget = document.querySelector(`div[data-component-id="${id}"]`)
                 const anchorNode = this.setAnchorPoint(canvasTarget)
                 anchorNode.scrollIntoView({ behavior: 'smooth', inline: 'nearest' })
                 canvasTarget.parentNode.removeChild(anchorNode)

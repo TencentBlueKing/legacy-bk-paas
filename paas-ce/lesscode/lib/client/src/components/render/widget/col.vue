@@ -14,6 +14,7 @@
         :class="$style['col']"
         :style="componentData.style">
         <draggable
+            ref="draggable"
             :sort="true"
             :list="componentData.slot.default"
             :component-data="componentData"
@@ -27,6 +28,7 @@
             }">
             <resolve-component
                 v-for="slotComponentData in componentData.slot.default"
+                ref="component"
                 :key="slotComponentData.renderKey"
                 :component-data="slotComponentData" />
         </draggable>
@@ -68,6 +70,7 @@
                     this.$forceUpdate()
                     // 需要同时触发父级 grid 更新
                     this.renderGrid.$forceUpdate()
+                    this.autoType()
                 }
             }
 
@@ -85,8 +88,40 @@
                     return result
                 }, 0)
                 const selfSpanNums = this.componentData.prop.span
-                
-                this.componentData.setStyle('width', `${Number((selfSpanNums / gridSpanNums * 100).toFixed(4))}%`)
+
+                const renderWidth = `${Number((selfSpanNums / gridSpanNums * 100).toFixed(4))}%`
+                if (this.componentData.style.width !== renderWidth) {
+                    this.componentData.setStyle('width', renderWidth)
+                }
+            },
+            autoType () {
+                setTimeout(() => {
+                    if (!this.$refs.component) {
+                        return
+                    }
+                    const {
+                        width: boxWidth,
+                        left: boxLeft
+                    } = this.$refs.draggable.$el.getBoundingClientRect()
+                    const sepMarginLeft = 5
+                    console.log('from will autotypeautotypeautotypeautotype', this.$refs.component)
+                    // 计算 marginRight
+                    this.$refs.component.forEach(componentInstance => {
+                        const $el = componentInstance.$el
+                        const {
+                            left: componentLeft,
+                            width: componentWidth
+                        } = $el.getBoundingClientRect()
+                        if (!componentInstance.componentData.style.marginLeft) {
+                            if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
+                                componentInstance.componentData.setStyle('marginRight', '5px')
+                            }
+                        }
+                        if (!componentInstance.componentData.style.marginBottom) {
+                            componentInstance.componentData.setStyle('marginBottom', '5px')
+                        }
+                    })
+                })
             }
         }
     }

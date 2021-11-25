@@ -34,7 +34,7 @@
 <style lang="postcss" module>
     .button{
         position: absolute;
-        top: 0;
+        top: -19px;
         left: 0;
         z-index: 10;
         height: 20px;
@@ -42,7 +42,8 @@
         font-size: 12px;
         color: #fff;
         background: #3a84ff;
-        border-radius: 2px;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
         cursor: pointer;
         &:hover {
             background: #1964E1;

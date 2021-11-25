@@ -11,6 +11,7 @@
 
 <template>
     <div
+        ref="componentRoot"
         :class="{
             [$style['component']]: true,
             [$style['selected']]: componentData.isActived,
@@ -18,7 +19,7 @@
             'bk-layout-custom-component-wrapper': componentData.isCustomComponent
         }"
         role="component-root"
-        :data-component-id="`component-${componentData.componentId}`"
+        :data-component-id="`${componentData.componentId}`"
         :data-layout="componentData.layoutType"
         :style="componentData.style"
         @mousedown.stop="handleMousedown"
@@ -141,15 +142,22 @@
                 LC.removeEventListener('component-hover', componentHoverCallback)
             })
         },
-        updated () {
-            console.log('**************** component update **************', this.componentData.componentId)
-        },
         mounted () {
             this.calcDefaultDisplay()
             this.setDefaultStyleWithAttachToFreelayout()
             this.$emit('component-mounted')
         },
         methods: {
+            checkNativeComponent (type) {
+                const shadowComMap = {
+                    'free-layout': true,
+                    'render-grid': true,
+                    'widget-form': true,
+                    'widget-form-item': true,
+                    'resolve-component': true
+                }
+                return !shadowComMap[type]
+            },
             /**
              * @desc 判断渲染组件的 display 的值
              */
@@ -290,50 +298,10 @@
             &:before {
                 border: 1px dashed #3a84ff !important;
             }
-            /* &.in-column-ghost {
-                &:before {
-                    border: none !important;
-                }
-            }
-            &.in-free-layout-item-ghost {
-                &:before {
-                    border: none !important;
-                }
-            } */
         }
-        /* .bk-dialog-wrapper > .bk-dialog {
+        &.disabled{
             pointer-events: none;
-            .bk-dialog-body {
-                pointer-events: auto;
-            }
-        }
-        .bk-sideslider-wrapper > .bk-sideslider-content {
-            padding: 10px;
-        } */
-    }
-
-    /* .wrapper-cls-hover {
-        .bk-card, .empty-widget-form, .bk-form {
-            border: 1px dashed #3a84ff !important;
-        }
-        
-    }
-
-    .wrapper-cls-selected {
-        .bk-card, .bk-form, .empty-widget-form {
-            border: 1px solid #3a84ff !important;
         }
     }
-    .wrapperCls {
-        .bk-dialog-wrapper > .bk-dialog {
-            pointer-events: none;
-            .bk-dialog-body {
-                pointer-events: auto;
-            }
-        }
-        .bk-sideslider-wrapper > .bk-sideslider-content {
-            padding: 10px;
-        }
-    } */
 
 </style>

@@ -2,6 +2,7 @@
     <vue-draggable
         ref="draggable"
         :class="$style['drag-area']"
+        :list="list"
         :group="dragGroup"
         :chosen-class="$style['chosen']"
         :ghost-class="ghostClass || $style['ghost']"
@@ -29,6 +30,11 @@
         name: 'render-draggable',
         inheritAttrs: false,
         props: {
+            list: {
+                type: Array,
+                required: false,
+                default: null
+            },
             componentData: {
                 type: Object,
                 required: true
@@ -73,6 +79,7 @@
             })
         },
         methods: {
+            
             /**
              * @desc 添加组件
              * @param { Object } dragEvent
@@ -86,22 +93,32 @@
              * @param { Object } dragEvent
              */
             handleChange (event) {
+                console.log('from change event == ', event)
+                let targetElement = null
                 if (event.added) {
+                    targetElement = event.added.element
                     LC.triggerEventListener('update', {
                         target: this.componentData,
                         type: 'appendChildren'
                     })
                 } else if (event.removed) {
+                    targetElement = event.removed.element
                     LC.triggerEventListener('update', {
                         target: this.componentData,
                         type: 'removeChildren'
                     })
                 } else if (event.moved) {
+                    targetElement = event.moved.element
                     LC.triggerEventListener('update', {
                         target: this.componentData,
                         type: 'moveChildren'
                     })
                 }
+                // 拖动组件需要重置会影响排版的样式
+                targetElement.setStyle({
+                    marginTop: 0,
+                    marginLeft: 0
+                })
                 // fix: vue-draggable内部没有更新
                 this.$refs.draggable.computeIndexes()
                 
@@ -120,7 +137,6 @@
              * @param { Object } dragEvent
              */
             handleStart (event) {
-                // console.log('print drag start', event)
                 this.$emit('start', event)
             },
             /**
@@ -128,7 +144,6 @@
              * @param { Object } dragEvent
              */
             handleEnd (event) {
-                console.log('print drag end', event)
                 choostTargetType = ''
                 this.$emit('end', event)
             }
@@ -143,7 +158,6 @@
     }
     .chosen{
         opacity: .5;
-        /* background-color: #ffdddd; */
     }
     .ghost{
         &::before{
