@@ -176,7 +176,8 @@
                 },
                 loadingState: [],
                 errors: {},
-                pageLoading: true
+                pageLoading: true,
+                styleData: {}
             }
         },
         computed: {
@@ -384,7 +385,9 @@
             handleEdit (field) {
                 this.editField.field = field
                 this.editField.value = this.getFieldValue(field)
-                if (field.type !== 'style') {
+                if (field.type === 'style') {
+                    this.styleData = JSON.parse(JSON.stringify(this.page.styleSetting))
+                } else {
                     this.$nextTick(() => {
                         const component = this.$refs[`component-${field.id}`]
                         component[0] && component[0].focus && component[0].focus()
@@ -392,6 +395,7 @@
                 }
             },
             handleCancel () {
+                if (this.editField.field.type === 'style') this.page.styleSetting = JSON.parse(JSON.stringify(this.styleData))
                 this.$delete(this.errors, this.editField.field.id)
                 this.unsetEditField()
             },
