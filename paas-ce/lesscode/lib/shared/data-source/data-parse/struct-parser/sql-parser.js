@@ -134,7 +134,6 @@ function createTable (data, index) {
         '-- ----------------------------\n'
         + `-- TABLE STRUCTURE FOR ${tableName}\n`
         + '-- ----------------------------\n'
-        + `DROP TABLE IF EXISTS \`${tableName}\`;\n`
         + `CREATE TABLE \`${tableName}\`  (\n`
         + fields.join(',\n')
         + '\n'
