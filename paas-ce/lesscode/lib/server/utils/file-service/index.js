@@ -6,7 +6,7 @@ const path = require('path')
 let config
 try {
     config = require('../../conf/bk-repo')
-} catch(_) {
+} catch (_) {
     config = {}
 }
 const headers = {
@@ -17,7 +17,7 @@ const urlPrefix = `${config.BKREPO_ENDPOINT_URL}/generic/${config.BKREPO_PROJECT
 
 const checkSetting = () => {
     if (!config.BKREPO_USERNAME || !config.BKREPO_PROJECT || !config.BKREPO_ENDPOINT_URL) {
-        throw new Error(`bkRepo: 请先搭建bkRepo服务并确认配置信息已设置正确`)
+        throw new Error('bkRepo: 请先搭建bkRepo服务并确认配置信息已设置正确')
     }
 }
 

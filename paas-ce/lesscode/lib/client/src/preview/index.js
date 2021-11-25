@@ -20,6 +20,12 @@ const location = window.parent.location
 const projectIdReg = new RegExp(`${location.origin}/preview/project/(\\d+)`)
 const [, projectId] = projectIdReg.exec(location.href) || []
 
+const storageKey = `preview-project-version-${projectId}`
+const versionId = new URLSearchParams(location.search).get('v') || sessionStorage.getItem(storageKey) || ''
+if (versionId) {
+    sessionStorage.setItem(storageKey, versionId)
+}
+
 // 获取初始化路由
 let proxyResolve
 const getDefaultRoute = new Promise(resolve => {
@@ -34,7 +40,7 @@ window.addEventListener('message', ({ data }) => {
 })
 
 auth(projectId).then(() => {
-    return Promise.all([pureAxios.get(`/projectCode/previewCode?projectId=${projectId}`), registerComponent(Vue, projectId)]).then(([res]) => {
+    return Promise.all([pureAxios.get(`/projectCode/previewCode?projectId=${projectId}&versionId=${versionId}`), registerComponent(Vue, projectId, versionId)]).then(([res]) => {
         Vue.prototype.$http = pureAxios
         const data = res.data || {}
         const projectPageRouteList = (data.pageRouteList || []).map(item => ({
@@ -43,11 +49,12 @@ auth(projectId).then(() => {
         }))
         const projectRouteList = (Object.values(data.routeGroup) || []).map(({ children }) => children)
             .reduce((pre, cur) => pre.concat(cur), [])
-            .map(({ id, layoutPath, path, redirect }) => ({
+            .map(({ id, layoutPath, path, redirect, pageCode }) => ({
                 id,
                 layoutPath,
                 path,
                 redirect,
+                pageCode,
                 fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
             }))
         const { router, App } = generateRouter(data.routeGroup, projectPageRouteList)
@@ -73,7 +80,7 @@ auth(projectId).then(() => {
                 let pageRoute
                 if (pageCode) {
                     pageRoute = projectPageRouteList.find(item => item.pageCode === pageCode)
-                } else if (fullPath === '/') {
+                } else if (/^\/(\?v=\d+)*$/.test(fullPath)) {
                     // 判定为项目预览，找到父路由是/的页面
                     pageRoute = this.getProjectDefaultHome()
                     pageCode = ''
@@ -89,7 +96,7 @@ auth(projectId).then(() => {
                         // 绑定的跳转路由可能未绑定页面或路由
                         this.$router.replace({ path: '/404', query: { p: pageCode } })
                     } else {
-                        this.$router.replace({ path: pageRoute.fullPath })
+                        this.$router.replace({ path: pageRoute.fullPath, query: { pageCode: pageRoute.pageCode } })
                     }
                 } else {
                     this.$router.replace({ path: '/404', query: { p: pageCode } })

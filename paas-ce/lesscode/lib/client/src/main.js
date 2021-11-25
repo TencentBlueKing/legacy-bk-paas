@@ -12,6 +12,7 @@
 import Vue from 'vue'
 import VueDraggable from 'vuedraggable'
 import mavonEditor from 'mavon-editor'
+import VueCompositionAPI from '@vue/composition-api'
 import 'mavon-editor/dist/css/index.css'
 import '@/common/bkui-vue-complex'
 import '@/common/bkmagic'
@@ -28,6 +29,7 @@ import Exception from '@/components/exception'
 import { bus } from '@/common/bus'
 import header from '@/components/header.vue'
 import renderHtml from '@/components/render/html.vue'
+import ProjectVersionSelector from '@/components/project-version-selector.vue'
 
 import '@icon-cool/bk-icon-vue-drag-vis'
 import '@icon-cool/bk-icon-vue-drag-vis/src/index'
@@ -40,11 +42,13 @@ Vue.prototype.$http = pureAxios
 Vue.prototype.$td = targetData
 
 Vue.use(mavonEditor)
+Vue.use(VueCompositionAPI)
 
 Vue.component('VueDraggable', VueDraggable)
 Vue.component('app-exception', Exception)
 Vue.component('app-header', header)
 Vue.component('render-html', renderHtml)
+Vue.component('project-version-selector', ProjectVersionSelector)
 
 auth.requestCurrentUser().then(user => {
     injectCSRFTokenToHeaders()

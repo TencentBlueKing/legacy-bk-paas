@@ -36,6 +36,7 @@ const RouterManage = () => import(/* webpackChunkName: 'route' */'@/views/projec
 const Basic = () => import(/* webpackChunkName: 'basic' */'@/views/project/basic')
 const Logs = () => import(/* webpackChunkName: 'basic' */'@/views/project/logs')
 const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/layout')
+const VersionManage = () => import(/* webpackChunkName: 'version' */'@/views/project/version-manage')
 
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
@@ -59,6 +60,15 @@ const Variable = () => import(/* webpackChunkName: 'variable' */'@/views/help/do
 const Directive = () => import(/* webpackChunkName: 'directive' */'@/views/help/docs/directive.md')
 const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
 const Interactive = () => import(/* webpackChunkName: 'interactive' */'@/views/help/docs/interactive.md')
+
+// 数据源管理
+const DataSourceHome = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/index.vue')
+const DataSourceTableList = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/table-list/index.vue')
+const DataSourceCreateTable = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/create-table.vue')
+const DataSourceEditTable = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/edit-table.vue')
+const DataSourceShowTable = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/show-table.vue')
+const DataSourceUpdateRecord = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/table-design/update-record.vue')
+const DataSourceDataManage = () => import(/* webpackChunkName: 'DataSource' */'@/views/project/data-source-manage/data-manage/index.vue')
 
 // 运营统计
 const OperationEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/operation/index.vue')
@@ -224,6 +234,44 @@ const routes = [
                 }
             },
             {
+                path: 'data-source-manage',
+                name: 'dataSourceManage',
+                component: DataSourceHome,
+                redirect: { name: 'tableList' },
+                children: [
+                    {
+                        path: '',
+                        name: 'tableList',
+                        component: DataSourceTableList
+                    },
+                    {
+                        path: 'create-table',
+                        name: 'createTable',
+                        component: DataSourceCreateTable
+                    },
+                    {
+                        path: 'edit-table',
+                        name: 'editTable',
+                        component: DataSourceEditTable
+                    },
+                    {
+                        path: 'show-table',
+                        name: 'showTable',
+                        component: DataSourceShowTable
+                    },
+                    {
+                        path: 'update-table-record',
+                        name: 'updateTableRecord',
+                        component: DataSourceUpdateRecord
+                    },
+                    {
+                        path: 'data-manage',
+                        name: 'dataManage',
+                        component: DataSourceDataManage
+                    }
+                ]
+            },
+            {
                 path: 'layout',
                 name: 'layout',
                 component: Layout,
@@ -237,6 +285,14 @@ const routes = [
                 component: RouterManage,
                 meta: {
                     title: '路由配置'
+                }
+            },
+            {
+                path: 'versions',
+                name: 'versions',
+                component: VersionManage,
+                meta: {
+                    title: '版本管理'
                 }
             },
             {
@@ -267,7 +323,7 @@ const routes = [
     },
     {
         name: 'page-entry',
-        path: `/project/:projectId/page/:pageId`,
+        path: '/project/:projectId/page/:pageId',
         components: {
             default: MainEntry,
             permission: require('@/views/status/non-exist-project').default

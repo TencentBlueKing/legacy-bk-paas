@@ -9,14 +9,73 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { getFunctionTips } from '../shared'
+import crypto from 'crypto'
 const os = require('os')
 const eslintConfig = require('./conf/eslint-config')
 const { ESLint } = require('eslint')
 const interactiveComponents = ['bk-dialog', 'bk-sideslider']
 const acorn = require('acorn')
+const { RequestContext } = require('./middleware/request-context')
+const algorithm = 'aes-256-ctr'
+let secretKey
+try {
+    secretKey = require('./conf/encrypt-secret-key')
+} catch (_) {
+    secretKey = ''
+}
+
+/**
+ * 加密
+ * @param {} text 原文
+ * @returns 加密后的字符串
+ */
+export const encrypt = (text) => {
+    const iv = crypto.randomBytes(16)
+    const cipher = crypto.createCipheriv(algorithm, secretKey, iv)
+    const encrypted = Buffer.concat([cipher.update(text), cipher.final()])
+    return iv.toString('hex') + '::lesscode::' + encrypted.toString('hex')
+}
+
+/**
+ * 解密
+ * @param {} hash 加密后的字符串
+ * @returns 原文
+ */
+export const decrypt = (hash = '') => {
+    const [iv, hashText] = hash.split('::lesscode::')
+    const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(iv, 'hex'))
+    const decrpyted = Buffer.concat([decipher.update(Buffer.from(hashText, 'hex')), decipher.final()])
+    return decrpyted.toString()
+}
+
+exports.splitSql = (sqlString) => {
+    const sqlArr = []
+    let strCharNum = 0
+    let lastCharIndex = 0
+    for (let charIndex in sqlString) {
+        charIndex = +charIndex
+        const sqlChar = sqlString[charIndex]
+        if (sqlChar === ';' && sqlString.slice(charIndex + 1, charIndex + 8) !== 'base64,' && (strCharNum & 1) === 0) {
+            const currentStr = sqlString.slice(lastCharIndex, charIndex + 1)
+            sqlArr.push(currentStr)
+            lastCharIndex = charIndex + 1
+        }
+        if (/'|"|`/.test(sqlChar)) strCharNum++
+    }
+    return sqlArr
+}
 
 // 替换函数中的变量和函数
 exports.replaceFuncKeyword = (funcBody = '', callBack) => {
+    // remove comment
+    const ctx = RequestContext.getCurrentCtx()
+    const functionTips = getFunctionTips(ctx.origin)
+    Object.values(functionTips).forEach((tip) => {
+        funcBody = funcBody.replace(tip, '')
+    })
+
+    // parse keyword
     const commentsPositions = []
     acorn.parse(funcBody, {
         onComment (isBlock, text, start, end) {
@@ -25,7 +84,8 @@ exports.replaceFuncKeyword = (funcBody = '', callBack) => {
                 end
             })
         },
-        allowReturnOutsideFunction: true
+        allowReturnOutsideFunction: true,
+        allowAwaitOutsideFunction: true
     })
     return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
         const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
@@ -115,6 +175,8 @@ exports.CODE = {
         PROJECT_ID_EXISTED: 4043,
         // 项目ID非法
         PROJECT_ID_INVALID: 4044,
+        // 项目版本已经存在
+        PROJECT_VERSION_EXISTED: 4045,
         // 未定义的业务逻辑错误
         NOT_DEFINED: 9999
     }

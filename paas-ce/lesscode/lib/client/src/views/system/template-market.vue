@@ -503,8 +503,13 @@
                         templateInfo
                     }
                     const [variableList, funcGroups] = await Promise.all([
-                        this.getAllVariable({ projectId: fromTemplate.belongProjectId, pageCode: fromTemplate.fromPageCode, effectiveRange: 0 }, false),
-                        this.getAllGroupFuncs(fromTemplate.belongProjectId, false)
+                        this.getAllVariable({
+                            projectId: fromTemplate.belongProjectId,
+                            versionId: fromTemplate.versionId,
+                            pageCode: fromTemplate.fromPageCode,
+                            effectiveRange: 0
+                        }, false),
+                        this.getAllGroupFuncs({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId }, false)
                     ])
                     const targetData = []
                     targetData.push(JSON.parse(fromTemplate.content || {}))
@@ -514,7 +519,7 @@
                     const funcList = getFuncList(targetData, funcGroups)
                     Object.assign(data, { valList, funcList })
                     console.log(data, 'submit data')
-                    const res = await this.$store.dispatch(`pageTemplate/apply`, data)
+                    const res = await this.$store.dispatch('pageTemplate/apply', data)
                     if (res) {
                         this.$bkMessage({
                             theme: 'success',

@@ -162,7 +162,7 @@ module.exports = {
             })
         } catch (error) {
             operationLogger.error(error, {
-                operateTarget: `从函数市场添加函数`
+                operateTarget: '从函数市场添加函数'
             })
             ctx.throwError(error)
         }

@@ -57,6 +57,7 @@ const VueCode = {
             const {
                 pageType = 'vueCode',
                 projectId = '',
+                versionId,
                 lifeCycle,
                 pageId,
                 layoutContent,
@@ -64,10 +65,17 @@ const VueCode = {
                 isEmpty = false,
                 from,
                 withNav,
-                fromPageCode = ''
+                fromPageCode = '',
+                styleSetting,
+                layoutType
             } = ctx.request.body
 
-            const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([getNameMap(), allGroupFuncDetail(projectId), routeModel.findProjectRoute(projectId), variableModel.getAll({ projectId })])
+            const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([
+                getNameMap(),
+                allGroupFuncDetail(projectId, versionId),
+                routeModel.findProjectRoute(projectId, versionId),
+                variableModel.getAll({ projectId, versionId })
+            ])
             const curPage = routeList.find((route) => (route.pageId === +pageId)) || {}
             const variableList = [
                 ...allVarableList.filter(variable => variable.effectiveRange === 0),
@@ -88,7 +96,7 @@ const VueCode = {
                 })
             }
             const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
-            const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, curPage.layoutType, variableList)
+            const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, layoutType || curPage.layoutType, variableList, styleSetting)
             // 此接口被多方调用，目前仅收集下载页面源码
             if (from === 'download_page') {
                 operationLogger.success()

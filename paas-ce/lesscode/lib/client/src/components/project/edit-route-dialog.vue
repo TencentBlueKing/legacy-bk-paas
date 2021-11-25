@@ -40,6 +40,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     export default {
         props: {
             routeGroup: {
@@ -62,6 +63,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -100,6 +102,7 @@
                         routeId: route.id
                     },
                     projectId: this.projectId,
+                    versionId: this.versionId,
                     pageId: this.dialog.pageId
                 }
                 try {

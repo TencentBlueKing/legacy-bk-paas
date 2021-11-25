@@ -11,16 +11,25 @@
 
 <template>
     <style-layout title="尺寸">
-        <style-item name="宽度">
-            <size-input v-model="widthValue" @change="handleInputChange('width', $event)">
-                <append-select v-model="widthUnit" @change="handleSelectChange('width', $event)"></append-select>
-            </size-input>
-        </style-item>
-        <style-item name="高度">
-            <size-input v-model="heightValue" @change="handleInputChange('height', $event)">
-                <append-select v-model="heightUnit" @change="handleSelectChange('height', $event)"></append-select>
-            </size-input>
-        </style-item>
+        <template v-if="type === 'min-width'">
+            <style-item name="最小宽度">
+                <size-input v-model="minWidthValue" @change="handleInputChange('minWidth', $event)">
+                    <append-select v-model="minWidthUnit" @change="handleSelectChange('minWidth', $event)"></append-select>
+                </size-input>
+            </style-item>
+        </template>
+        <template v-else>
+            <style-item name="宽度">
+                <size-input v-model="widthValue" @change="handleInputChange('width', $event)">
+                    <append-select v-model="widthUnit" @change="handleSelectChange('width', $event)"></append-select>
+                </size-input>
+            </style-item>
+            <style-item name="高度">
+                <size-input v-model="heightValue" @change="handleInputChange('height', $event)">
+                    <append-select v-model="heightUnit" @change="handleSelectChange('height', $event)"></append-select>
+                </size-input>
+            </style-item>
+        </template>
     </style-layout>
 </template>
 
@@ -43,6 +52,10 @@
                 type: Object,
                 required: true
             },
+            type: {
+                type: String,
+                default: ''
+            },
             change: {
                 type: Function,
                 required: true
@@ -50,8 +63,10 @@
         },
         data () {
             return {
+                minWidthValue: splitValueAndUnit('value', this.value.minWidth),
                 widthValue: splitValueAndUnit('value', this.value.width),
                 heightValue: splitValueAndUnit('value', this.value.height),
+                minWidthUnit: splitValueAndUnit('unit', this.value.minWidth) || 'px',
                 widthUnit: splitValueAndUnit('unit', this.value.width) || 'px',
                 heightUnit: splitValueAndUnit('unit', this.value.height) || 'px'
             }
@@ -60,7 +75,8 @@
             handleInputChange (key, val) {
                 const unitMap = {
                     width: this.widthUnit,
-                    height: this.heightUnit
+                    height: this.heightUnit,
+                    minWidth: this.minWidthUnit
                 }
                 const newValue = val === '' ? '' : val + unitMap[key]
                 this.change(key, newValue)
@@ -72,9 +88,13 @@
                 if (key === 'height' && this.heightValue !== '') {
                     this.heightValue = Math.min(this.heightValue, unit === '%' ? 100 : this.heightValue)
                 }
+                if (key === 'minWidth' && this.minWidthValue !== '') {
+                    this.minWidthValue = Math.min(this.minWidthValue, unit === '%' ? 100 : this.minWidthValue)
+                }
                 const valueMap = {
                     width: this.widthValue,
-                    height: this.heightValue
+                    height: this.heightValue,
+                    minWidth: this.minWidthValue
                 }
                 if (valueMap[key] !== '') {
                     this.change(key, valueMap[key] + unit)

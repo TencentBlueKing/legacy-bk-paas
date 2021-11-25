@@ -37,7 +37,8 @@
                     <form-item-validate :default-value="defaultRule || []" :change="itemChange" name="validate"></form-item-validate>
                 </div>
                 <div>
-                    <bk-button ext-cls="mr5" theme="primary" title="提交" @click="handleSave">提交</bk-button>
+                    <bk-button ext-cls="mr5" theme="primary" title="提交" @click="handleSave(false)">提交</bk-button>
+                    <bk-button ext-cls="mr5" theme="primary" title="提交并继续新增" @click="handleSave(true)">提交并继续新增</bk-button>
                     <bk-button ext-cls="mr5" theme="default" title="取消" @click="beforeClose">取消</bk-button>
                 </div>
             </bk-form>
@@ -47,6 +48,15 @@
 
 <script>
     import formItemValidate from './form-item-validate'
+
+    const generateFormData = () => ({
+        type: 'input',
+        label: '',
+        property: '',
+        required: false,
+        validate: []
+    })
+    
     export default {
         components: {
             formItemValidate
@@ -119,23 +129,29 @@
         },
         methods: {
             initValue () {
-                this.formItemData = Object.assign({}, this.defaultValue)
+                this.formItemData = Object.assign({}, this.defaultValue, { validate: this.defaultRule })
+                this.changeCount = 0
             },
-            handleSave () {
+            handleSave (toAdd = false) {
                 this.$refs.operation.validate()
                     .then(() => {
                         this.$bkMessage({
                             theme: 'success',
                             message: '修改成功'
                         })
-                        this.submit(this.formItemData)
+                        this.submit(this.formItemData, toAdd)
+                        if (toAdd) {
+                            this.changeCount = 0
+                            this.formItemData = generateFormData()
+                        }
                     })
             },
             itemChange (name, value) {
                 Object.assign(this.formItemData, { [name]: value })
             },
             beforeClose () {
-                if (this.changeCount < 2) {
+                if (this.changeCount <= 1) {
+                    this.changeCount = 0
                     this.close()
                 } else {
                     this.$bkInfo({

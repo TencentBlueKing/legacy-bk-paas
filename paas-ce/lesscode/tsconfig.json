@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "noImplicitAny": false,
+        "noImplicitThis": true,
+        "strictNullChecks": false,
+        "removeComments": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "jsx": "preserve",
+        "outDir": "dist",
+        "paths": {
+            "@/*": [
+                "./lib/client/src/*"
+            ],
+            "shared/*": [
+                "./lib/shared/*"
+            ]
+        },
+        "lib": [
+            "esnext",
+            "dom",
+            "dom.iterable",
+            "scripthost"
+        ]
+    },
+    "include": [
+        "./lib/client/src/**/*.js",
+        "./lib/client/src/**/*.ts",
+        "./lib/client/src/**/*.tsx",
+        "./lib/client/src/**/*.vue",
+        "./lib/client/typings/*"
+    ],
+    "compileOnSave": false
+}

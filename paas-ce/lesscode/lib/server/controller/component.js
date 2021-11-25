@@ -14,6 +14,7 @@ import fileService from '../utils/file-service/index'
 import { RequestContext } from '../middleware/request-context'
 import OperationLogger from '../service/operation-logger'
 import { POST_COMPONENT_CREATE, POST_COMPONENT_UPDATE } from '../conf/operate-log'
+import { whereVersionLiteral } from '../model/common'
 
 // 所有组件
 export const list = async (ctx) => {
@@ -100,19 +101,20 @@ export const list = async (ctx) => {
 // 使用中的组件
 export const useing = async (ctx) => {
     try {
-        const { belongProjectId } = ctx.query
+        const { belongProjectId, projectVersionId } = ctx.query
         if (!belongProjectId) {
-            throw new Error(`项目id不能为空`)
+            throw new Error('项目id不能为空')
         }
         const useingCompList = await PageCompModel.getAll({
-            projectId: belongProjectId
+            projectId: belongProjectId,
+            projectVersionId: whereVersionLiteral(projectVersionId)
         })
 
         let list = []
 
         if (useingCompList.length > 0) {
             const compIds = useingCompList.map(comp => comp.compId)
-            const componentList = await ComponentModel.getDataByCompIds(compIds)
+            const componentList = await ComponentModel.getDataByCompIds([...new Set(compIds)])
 
             const sourceProjectList = await ProjectModel.getDataByIds(componentList.map(_ => _.belongProjectId))
             const sourceProjectMap = sourceProjectList.reduce((result, item) => {
@@ -120,7 +122,10 @@ export const useing = async (ctx) => {
                 return result
             }, {})
 
-            const compPageData = await PageCompModel.getPageAndVersion({ projectId: belongProjectId })
+            const compPageData = await PageCompModel.getPageAndVersion({
+                projectId: belongProjectId,
+                projectVersionId: whereVersionLiteral(projectVersionId)
+            })
             const compRelatePageMap = compPageData.reduce((result, item) => {
                 const compId = item.compId
                 if (!result[compId]) {
@@ -168,8 +173,12 @@ export const useing = async (ctx) => {
 
 export const updatePageComp = async (ctx) => {
     const operationLogger = new OperationLogger(ctx)
-    const { projectId, compId, versionId } = ctx.request.body
-    const { affected } = await PageCompModel.update({ projectId, compId }, { versionId })
+    const { projectId, projectVersionId, compId, versionId } = ctx.request.body
+    const { affected } = await PageCompModel.update({
+        projectId,
+        projectVersionId: whereVersionLiteral(projectVersionId),
+        compId
+    }, { versionId })
     operationLogger.success({
         operateTarget: `组件名称：${ctx.request.body.displayName}`
     })
@@ -557,7 +566,7 @@ export const upload = async (ctx) => {
 
     try {
         if (!belongProjectId) {
-            throw new Error(`项目 ID 不能为空`)
+            throw new Error('项目 ID 不能为空')
         }
         const uploadComponent = ctx.request.files.upload_file
 
@@ -616,7 +625,7 @@ export const upload = async (ctx) => {
         })
         const currentProjectCode = currentProject.length > 0 ? currentProject[0].projectCode : ''
         if (!currentProjectCode) {
-            throw new Error(`项目不存在`)
+            throw new Error('项目不存在')
         }
         // 验证组件名是否合法
         const { name, displayName, type } = componentConfig
@@ -876,6 +885,7 @@ export const previewRegister = async (ctx) => {
             throw new Error('路由参数不合法')
         }
         const [belongProjectId] = requestParams
+        const { v: projectVersionId } = ctx.query
 
         const registeromponentMap = {}
 
@@ -911,7 +921,8 @@ export const previewRegister = async (ctx) => {
 
         // 页面中使用到的组件
         const useingVersionList = await PageCompModel.getAll({
-            projectId: belongProjectId
+            projectId: belongProjectId,
+            projectVersionId
         })
         if (useingVersionList.length > 0) {
             const allUseingVersion = useingVersionList.map(_ => _.versionId)

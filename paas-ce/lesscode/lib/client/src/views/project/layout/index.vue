@@ -24,6 +24,7 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list more-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(layout.id)">
+                                        <li class="action-item" v-if="layout.type !== 'empty'"><a href="javascript:;" @click="handlePreview(layout)">预览</a></li>
                                         <li class="action-item"><a href="javascript:;" @click="handleUpdate(layout)">修改模板</a></li>
                                         <li v-bk-tooltips.bottom="{ content: '模板已被使用，不可删除', disabled: !layoutPageMap[layout.id] }"
                                             :class="['action-item', { disabled: layoutPageMap[layout.id] }]">
@@ -49,6 +50,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import layoutDialog from './components/layout-dialog'
 
     export default {
@@ -65,6 +67,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             }
@@ -76,7 +79,7 @@
             async getLayoutList () {
                 this.isLoading = true
                 try {
-                    const { list, pageList } = await this.$store.dispatch('layout/getFullList', { projectId: this.projectId })
+                    const { list, pageList } = await this.$store.dispatch('layout/getFullList', { projectId: this.projectId, versionId: this.versionId })
                     list.forEach(layout => {
                         layout.showName = layout.showName || layout.defaultName
                     })
@@ -131,7 +134,8 @@
                 try {
                     const data = {
                         id: layout.id,
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        versionId: this.versionId
                     }
                     await this.$store.dispatch('layout/default', { data })
                     this.messageSuccess('设置成功')
@@ -146,6 +150,9 @@
             getPreviewImg (layout) {
                 const previewImg = `layout/preview-${layout.type}.png`
                 return require(`@/images/${previewImg}`)
+            },
+            handlePreview (layout) {
+                window.open(`/preview-template/project/${layout.projectId}/${layout.id}?type=nav-template&v=${layout.versionId || ''}`, '_blank')
             }
         }
     }

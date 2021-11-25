@@ -132,6 +132,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import { compile } from 'path-to-regexp'
     import BindRouteForm from './children/bind-route-form'
 
@@ -183,6 +184,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return Number(this.$route.params.projectId)
             },
@@ -221,7 +223,7 @@
             async getRouteList () {
                 this.pageLoading = true
                 try {
-                    const params = { projectId: this.projectId }
+                    const params = { projectId: this.projectId, versionId: this.versionId }
                     const [routeGroup, layoutList] = await Promise.all([
                         this.$store.dispatch('route/getProjectRouteTree', params),
                         this.$store.dispatch('layout/getList', params)
@@ -250,7 +252,7 @@
                 }
             },
             async getPageList () {
-                const list = await this.$store.dispatch('page/getLiteList', { projectId: this.projectId })
+                const list = await this.$store.dispatch('page/getLiteList', { projectId: this.projectId, versionId: this.versionId })
                 this.bindRouteSelectorProps.pageList = list.map(({ id, pageName: name }) => ({ id, name }))
             },
             handleEditLayoutPath (group) {
@@ -328,6 +330,7 @@
                 const data = {
                     id: activeGroup.layoutId,
                     projectId: this.projectId,
+                    versionId: this.versionId,
                     routePath: '/' + value.replace(/^\/+|\/+$/g, '')
                 }
                 this.loadingState.layout.push(group)
@@ -420,6 +423,7 @@
                             path: value
                         },
                         projectId: this.projectId,
+                        versionId: this.versionId,
                         pageId: route.pageId
                     }
                 })
@@ -434,7 +438,8 @@
                             layoutId: route.layoutId,
                             layoutPath: route.layoutPath
                         },
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        versionId: this.versionId
                     }
                 })
                 return res

@@ -46,6 +46,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import { compile } from 'path-to-regexp'
     import LayoutThumbList from '@/components/project/layout-thumb-list'
 
@@ -132,6 +133,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -221,14 +223,16 @@
                     await this.$store.dispatch('layout/checkName', {
                         data: {
                             ...formData,
-                            projectId: this.projectId
+                            projectId: this.projectId,
+                            versionId: this.versionId
                         }
                     })
 
                     const res = await this.$store.dispatch(this.requestMethod, {
                         data: {
                             layoutData: formData,
-                            projectId: this.projectId
+                            projectId: this.projectId,
+                            versionId: this.versionId
                         }
                     })
                     if (res) {

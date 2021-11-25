@@ -621,6 +621,7 @@ export const updateDirectives = async (ctx) => {
                     if (dirKey) {
                         const curDir = propsMap[dirKey]
                         if (curDir) {
+                            // eslint-disable-next-line @typescript-eslint/quotes
                             return "lesscode['${prop:" + curDir + "}']"
                         } else {
                             return all

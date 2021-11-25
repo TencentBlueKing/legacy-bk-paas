@@ -557,7 +557,7 @@ function newUtil () {
             .replace(/:(\w+)/g, (match, p1) => p1)
             // .replace(/\:checked/g, 'checked')
             .replace(/\n/g, '%0A')
-            .replace(/"/g, "'")
+            .replace(/"/g, '\'')
             .replace(/%/g, '%25')
             .replace(/#/g, '%23')
             .replace(/{/g, '%7B')

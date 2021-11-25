@@ -21,11 +21,12 @@ const STATIC_URL = `${DIR_PATH}/lib/server/project-template/`
 const ProjectCode = {
     async downloadCode (ctx) {
         const operationLogger = new OperationLogger(ctx)
-        const { projectId } = ctx.request.query
+        const { projectId, v: version } = ctx.request.query
+        const [versionId, versionName] = version.split(':')
 
         try {
-            const pathName = `bklesscode-proj-${projectId}`
-            await ProjectCodeModel.generateCode(projectId, pathName)
+            const pathName = `bklesscode-proj-${projectId}${versionId ? `-${versionName}` : ''}`
+            await ProjectCodeModel.generateCode(projectId, versionId, pathName)
 
             const sourcePath = path.join(STATIC_URL, pathName)
             const targetPath = path.join(STATIC_URL, `${pathName}.zip`)
@@ -54,9 +55,9 @@ const ProjectCode = {
 
     async previewCode (ctx) {
         const operationLogger = new OperationLogger(ctx)
-        const { projectId } = ctx.request.query
+        const { projectId, versionId } = ctx.request.query
         try {
-            const data = await ProjectCodeModel.previewCode(projectId)
+            const data = await ProjectCodeModel.previewCode(projectId, versionId)
             operationLogger.success({
                 operateTarget: `项目ID：${projectId}`
             })

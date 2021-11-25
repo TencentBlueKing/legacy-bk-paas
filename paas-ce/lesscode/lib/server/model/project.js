@@ -44,7 +44,8 @@ const projectSelectFields = [
     'project.offcialType',
     'project.createTime',
     'project.createUser',
-    'project.deleteFlag'
+    'project.deleteFlag',
+    'project.isEnableDataSource'
 ]
 
 const defaultGroup = {
