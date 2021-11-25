@@ -72,6 +72,18 @@ export default {
                 const data = response.data || ''
                 return data
             })
+        },
+        recover ({ commit }, data) {
+            return http.post('/projectVersion/recover', data).then(response => {
+                const data = response.data || ''
+                return data
+            })
+        },
+        archive ({ commit }, data) {
+            return http.post('/projectVersion/archive', data).then(response => {
+                const data = response.data || ''
+                return data
+            })
         }
     }
 }

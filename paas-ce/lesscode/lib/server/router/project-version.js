@@ -16,7 +16,9 @@ const {
     create,
     update,
     list,
-    optionList
+    optionList,
+    recover,
+    archive
 } = require('../controller/project-version')
 
 const router = new Router({
@@ -38,5 +40,7 @@ router.post('/create', create)
 router.put('/update', update)
 router.get('/list', list)
 router.get('/optionList', optionList)
+router.post('/recover', recover)
+router.post('/archive', archive)
 
 module.exports = router

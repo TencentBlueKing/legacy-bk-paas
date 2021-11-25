@@ -68,10 +68,42 @@ module.exports = {
     async optionList (ctx) {
         const { projectId } = ctx.request.query
         try {
-            const list = await projectVersionService.getList(projectId, ['version'])
+            const list = await projectVersionService.getOptionList(projectId)
             ctx.send({
                 code: 0,
                 data: list,
+                message: 'success'
+            })
+        } catch (e) {
+            ctx.throw(e)
+        }
+    },
+
+    async recover (ctx) {
+        const { id: versionId } = ctx.request.body
+        try {
+            await projectVersionService.update(versionId, {
+                archiveFlag: 0
+            })
+            ctx.send({
+                code: 0,
+                data: versionId,
+                message: 'success'
+            })
+        } catch (e) {
+            ctx.throw(e)
+        }
+    },
+
+    async archive (ctx) {
+        const { id: versionId } = ctx.request.body
+        try {
+            await projectVersionService.update(versionId, {
+                archiveFlag: 1
+            })
+            ctx.send({
+                code: 0,
+                data: versionId,
                 message: 'success'
             })
         } catch (e) {

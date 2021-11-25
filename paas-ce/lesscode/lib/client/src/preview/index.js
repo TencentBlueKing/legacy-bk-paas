@@ -80,7 +80,7 @@ auth(projectId).then(() => {
                 let pageRoute
                 if (pageCode) {
                     pageRoute = projectPageRouteList.find(item => item.pageCode === pageCode)
-                } else if (fullPath === '/') {
+                } else if (/^\/(\?v=\d+)*$/.test(fullPath)) {
                     // 判定为项目预览，找到父路由是/的页面
                     pageRoute = this.getProjectDefaultHome()
                     pageCode = ''

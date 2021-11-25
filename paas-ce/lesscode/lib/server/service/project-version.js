@@ -84,7 +84,20 @@ const update = async (id, data) => {
 
 const getList = async (projectId, fields = []) => {
     const select = fields.length ? ['id'].concat(fields) : null
-    const list = await getRepository(ProjectVersion).find({ where: { projectId, deleteFlag: 0 }, order: { id: -1 }, select })
+    const list = await getRepository(ProjectVersion).find({
+        select,
+        where: { projectId, deleteFlag: 0 },
+        order: { archiveFlag: 'ASC', id: 'DESC' }
+    })
+    return list
+}
+
+const getOptionList = async (projectId) => {
+    const list = await getRepository(ProjectVersion).find({
+        select: ['id', 'version'],
+        where: { projectId, archiveFlag: 0, deleteFlag: 0 },
+        order: { id: 'DESC' }
+    })
     return list
 }
 
@@ -92,5 +105,6 @@ export default {
     has,
     create,
     getList,
+    getOptionList,
     update
 }

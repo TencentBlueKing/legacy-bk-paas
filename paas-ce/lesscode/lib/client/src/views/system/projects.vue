@@ -609,9 +609,9 @@
 <style lang="postcss" scoped>
     @import "@/css/mixins/ellipsis";
 
-    .create-dropdown{
-        /deep/ .bk-dropdown-content{
-            margin-top: 10px;
+    .create-dropdown {
+        /deep/ .bk-dropdown-trigger .bk-button {
+            font-size: 14px;
         }
     }
 

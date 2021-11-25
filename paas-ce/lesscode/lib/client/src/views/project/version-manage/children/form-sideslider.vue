@@ -6,7 +6,7 @@
         :width="796"
         :title="isEdit ? '编辑版本' : '新建版本'">
         <div slot="content" class="form-content">
-            <bk-alert class="alert-info" type="info" title="默认基于草稿内容新建"></bk-alert>
+            <bk-alert class="alert-info" type="info" title="基于“默认”版本内容新建" v-if="!isEdit"></bk-alert>
             <bk-form :label-width="90" :model="formData" :rules="rules" ref="form">
                 <bk-form-item label="项目版本" :required="true" property="version" error-display-type="normal">
                     <bk-input
@@ -166,12 +166,17 @@
     .version-sideslider {
         .form-content {
             .markdown-body {
-                height: 460px;
+                height: 560px;
                 box-shadow: none !important;
                 border: 1px solid #C4C6CC;
                 border-radius: 2px;
                 .auto-textarea-input{
                     min-height: 100px;
+                }
+
+                &.fullscreen {
+                    width: 100%;
+                    height: 100%;
                 }
             }
         }
