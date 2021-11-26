@@ -229,6 +229,9 @@ const projectCode = {
                     const layoutName = layout.name.replace(/-(\w)/g, (a, b) => b.toUpperCase()) + uniqStr
                     routerImport += `const ${layoutName} = () => import(/* webpackChunkName: '${layout.name}' */'@/views/${layout.name}/bkindex')\n`
 
+                    // 布局下的第一个子路由，用于默认跳转
+                    let firstChildRouteName = ''
+
                     // 预览路由优化使用path跳转（防止因name不存在自动跳到首页），生成代码使用name跳转，因导航菜单中已经使用name跳转
                     const childRoute = routeList.map((route) => {
                         const meta = `meta: { pageName: '${route.pageName}' }`
@@ -237,8 +240,14 @@ const projectCode = {
                             const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
                             const routeName = route.pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${route.id}`
                             const routeComponent = route.pageCode ? ` component: ${route.pageCode},` : ''
+                            if (!firstChildRouteName) {
+                                firstChildRouteName = routeName
+                            }
                             return `{ path: '${route.path}', name: '${routeName}',${routeComponent} redirect: { path: '${fullPath}' }, ${meta} }`
                         } else if (route.pageId !== -1) {
+                            if (!firstChildRouteName) {
+                                firstChildRouteName = route.pageCode
+                            }
                             return `{ path: '${route.path}', name: '${route.pageCode}', component: ${route.pageCode}, ${meta} }`
                         } else {
                             return `{ path: '${route.path}', redirect: { name: '404' } }`
@@ -253,6 +262,7 @@ const projectCode = {
                         path: '${layout.path.replace(/^\//, '')}',
                         name: '${layout.name + uniqStr}',
                         component: ${layoutName},
+                        redirect: ${firstChildRouteName ? `{ name: '${firstChildRouteName}' }` : ''},
                         children: [
                             ${childRoute.join(',\n')}
                         ]
