@@ -72,7 +72,7 @@ function getTableColumnSql (column) {
 
         if (column.updateDate) return 'DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0)'
 
-        if (Reflect.has(column, 'default')) {
+        if (Reflect.has(column, 'default') && column.default !== '') {
             const defaultVal = column.default
             return typeof defaultVal === 'string' ? `DEFAULT '${defaultVal}'` : `DEFAULT ${defaultVal}`
         }
