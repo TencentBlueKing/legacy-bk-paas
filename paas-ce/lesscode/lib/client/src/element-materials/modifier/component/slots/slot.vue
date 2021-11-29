@@ -17,8 +17,15 @@
                 </span>
                 <template v-if="slotConfig.name && slotConfig.name.length > 1">
                     <span class="slot-label">组件标签</span>
-                    <bk-radio-group :value="computedSlotVal.name" @change="changeSlot('name', ...arguments)" class="mb10">
-                        <bk-radio-button :value="name" v-for="name in slotConfig.name" :key="name" class="mr10">
+                    <bk-radio-group
+                        :value="computedSlotVal.name"
+                        @change="changeSlot('name', ...arguments)"
+                        class="mb10">
+                        <bk-radio-button
+                            v-for="name in slotConfig.name"
+                            :value="name"
+                            :key="name"
+                            class="mr10">
                             {{ name | capFirstLetter }}
                         </bk-radio-button>
                     </bk-radio-group>
@@ -45,8 +52,7 @@
             :slot-config="slotConfig"
             :render-props="renderProps"
             :change="change"
-            @batchUpdate="batchUpdate"
-        ></component>
+            @batchUpdate="batchUpdate" />
     </variable-select>
 </template>
 
@@ -56,9 +62,9 @@
     import variableSelect from '@/components/variable/variable-select'
 
     import slotList from './components/list'
-    import slotColumn from './components/column'
+    // import slotColumn from './components/column'
     import slotRemote from './components/remote'
-    import slotFormItem from './components/form-item'
+    // import slotFormItem from './components/form-item'
     import slotTable from './components/table'
     import slotHtml from './components/slot-html'
     import slotText from './components/text'
@@ -66,12 +72,12 @@
 
     const comMap = {
         list: slotList,
-        column: slotColumn,
+        // column: slotColumn,
         remote: slotRemote,
         html: slotHtml,
         text: slotText,
         textarea: slotTextArea,
-        'form-item': slotFormItem,
+        // 'form-item': slotFormItem,
         'table-list': slotTable
     }
 
@@ -154,11 +160,17 @@
             },
             
             remoteConfig () {
-                if (this.slotConfig.type.includes('remote') || this.slotConfig.type.includes('form-item')) {
-                    const name = this.slotConfig.type.includes('form-item') ? 'initFormData' : ''
-                    return { show: true, name: name, value: this.computedSlotVal.val }
+                if (this.slotConfig.type.includes('remote')) {
+                    return {
+                        show: true,
+                        name: '',
+                        value: this.computedSlotVal.val
+                    }
                 }
-                return { show: false, value: '' }
+                return {
+                    show: false,
+                    value: ''
+                }
             }
         },
 
