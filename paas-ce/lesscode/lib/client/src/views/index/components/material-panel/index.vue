@@ -132,6 +132,7 @@
 </template>
 <script>
     import Vue from 'vue'
+    import LC from '@/element-materials/core'
     import iconComponentList from '@/element-materials/materials/icon-list.js'
     import allComponentConf from '@/element-materials/materials'
     import ComponentCustomPanel from './components/component-panel-custom'
@@ -287,6 +288,8 @@
                             baseInfo
                         ] = callback(Vue)
                         window.__innerCustomRegisterComponent__[config.type] = componentSource
+                        // 注册自定义组件 material
+                        LC.registerMaterial(config.type, config)
                         allCustomComponentList.push({
                             ...config,
                             group: baseInfo.category,

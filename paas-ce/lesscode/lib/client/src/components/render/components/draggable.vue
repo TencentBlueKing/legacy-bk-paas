@@ -21,9 +21,9 @@
     import _ from 'lodash'
     import LC from '@/element-materials/core'
 
-    let choostTargetType = null
-    export const getChooseTargetType = () => {
-        return choostTargetType
+    let dragTargetGroup = null
+    export const getDragTargetGroup = () => {
+        return dragTargetGroup
     }
 
     export default {
@@ -76,7 +76,7 @@
         mounted () {
             setTimeout(() => {
                 this.$refs.draggable && this.$refs.draggable.computeIndexes()
-            })
+            }, 500)
         },
         methods: {
             
@@ -116,8 +116,8 @@
                 }
                 // 拖动组件需要重置会影响排版的样式
                 targetElement.setStyle({
-                    marginTop: 0,
-                    marginLeft: 0
+                    marginTop: 'unset',
+                    marginLeft: 'unset'
                 })
                 // fix: vue-draggable内部没有更新
                 this.$refs.draggable.computeIndexes()
@@ -129,7 +129,7 @@
              * @param { Object } dragEvent
              */
             handleChoose (event) {
-                choostTargetType = event.item.dataset['layout'] ? 'layout' : 'component'
+                dragTargetGroup = event.item.dataset['layout'] ? 'layout' : 'component'
                 this.$emit('choose', event)
             },
             /**
@@ -144,7 +144,7 @@
              * @param { Object } dragEvent
              */
             handleEnd (event) {
-                choostTargetType = ''
+                dragTargetGroup = ''
                 this.$emit('end', event)
             }
         }

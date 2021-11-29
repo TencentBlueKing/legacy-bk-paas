@@ -104,7 +104,7 @@
                         left: boxLeft
                     } = this.$refs.draggable.$el.getBoundingClientRect()
                     const sepMarginLeft = 5
-                    console.log('from will autotypeautotypeautotypeautotype', this.$refs.component)
+                    // console.log('from will autotypeautotypeautotypeautotype', this.$refs.component)
                     // 计算 marginRight
                     this.$refs.component.forEach(componentInstance => {
                         const $el = componentInstance.$el
@@ -112,12 +112,16 @@
                             left: componentLeft,
                             width: componentWidth
                         } = $el.getBoundingClientRect()
-                        if (!componentInstance.componentData.style.marginLeft) {
+                        const {
+                            marginLeft,
+                            marginBottom
+                        } = componentInstance.componentData.style
+                        if (!marginLeft || marginLeft === 'unset') {
                             if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
                                 componentInstance.componentData.setStyle('marginRight', '5px')
                             }
                         }
-                        if (!componentInstance.componentData.style.marginBottom) {
+                        if (!marginBottom || marginBottom === 'unset') {
                             componentInstance.componentData.setStyle('marginBottom', '5px')
                         }
                     })

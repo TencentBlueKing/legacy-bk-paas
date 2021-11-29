@@ -94,17 +94,6 @@
     }
 </script>
 <style lang="postcss" module>
-
-    /* .bk-layout-grid-row-wrapper {
-        ~ .bk-layout-grid-row-wrapper {
-            margin-top: 10px;
-            position: relative;
-        }
-        ~ .bk-layout-free-wrapper {
-            margin-top: 10px;
-            position: relative;
-        }
-    } */
     .grid{
         position: relative;
         z-index: inherit;

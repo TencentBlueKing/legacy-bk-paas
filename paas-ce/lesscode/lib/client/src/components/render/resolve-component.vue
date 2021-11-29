@@ -148,6 +148,11 @@
             this.$emit('component-mounted')
         },
         methods: {
+            /**
+             * @desc 判断是否是组件库组价类型
+             * @param { String } type
+             * @returns { Boolean }
+             */
             checkNativeComponent (type) {
                 const shadowComMap = {
                     'free-layout': true,
@@ -272,7 +277,7 @@
 </script>
 <style lang="postcss" module>
     .component {
-        vertical-align: middle;
+        /* vertical-align: middle; */
         -webkit-text-size-adjust: none;
         &.selected,
         &.hover{

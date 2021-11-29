@@ -7,6 +7,7 @@ import getActiveNode from './get-active-node'
 import getNodeById from './get-node-by-id'
 import getNodesByType from './get-nodes-by-type'
 import createNode from './create-node'
+import { registerMaterial } from './get-material'
 import isNode from './is-node'
 import isInteractiveType from './is-interactive-type'
 
@@ -52,6 +53,7 @@ core.getNodesByType = getNodesByType
 core.isNode = isNode
 core.isInteractiveType = isInteractiveType
 core.createNode = createNode
+core.registerMaterial = registerMaterial
 core.cloneNode = cloneNode
 core.appendChild = appendChild
 core.removeChild = removeChild

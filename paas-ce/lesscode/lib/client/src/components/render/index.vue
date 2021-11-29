@@ -49,7 +49,7 @@
 <script>
     import LC from '@/element-materials/core'
     import Draggable, {
-        getChooseTargetType
+        getDragTargetGroup
     } from './components/draggable'
     import Layout from './widget/layout'
     import ResolveInteractiveComponent from './resolve-interactive-component'
@@ -144,7 +144,7 @@
             },
             putCheck (target, source) {
                 // 画布区域内部拖动
-                if (getChooseTargetType() === 'layout') {
+                if (getDragTargetGroup() === 'layout') {
                     return true
                 }
                 // 从物料区拖入
