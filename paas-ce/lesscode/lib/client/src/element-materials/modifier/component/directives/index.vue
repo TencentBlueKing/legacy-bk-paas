@@ -24,6 +24,7 @@
                         :val-type="directive.valType"
                         :available-types="directive.propTypes"
                         :disabled-change="curSelectedComponentData.inFormItem && directive.type === 'v-model'"
+                        :disable-variable-type="directive.type === 'v-model' ? ['value', 'expression'] : []"
                         @change="(data) => changeVariable(directive, data)"
                     >
                         <template v-slot:title>

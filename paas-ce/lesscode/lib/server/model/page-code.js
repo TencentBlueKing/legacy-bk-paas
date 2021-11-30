@@ -15,6 +15,7 @@ import VueCodeModel from './vue-code'
 import { RequestContext } from '../middleware/request-context'
 import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
 import safeStringify from '../../client/src/common/json-safe-stringify'
+import { VARIABLE_TYPE } from '../../shared/variable/constant'
 
 const httpConf = require('../conf/http')
 // npm.js配置文件不存在时赋值空对象
@@ -131,11 +132,11 @@ class PageCode {
     handleVariable () {
         this.projectVariables = this.usingVariables.filter((variable) => (!['vueCode', 'previewSingle'].includes(this.pageType) && variable.effectiveRange === 0))
         const pageVariables = this.usingVariables.filter((variable) => (['vueCode', 'previewSingle'].includes(this.pageType) || variable.effectiveRange === 1))
-        this.pageDataVariables = pageVariables.filter((variable) => (variable.variableType !== 1))
-        this.pageComputedVariables = pageVariables.filter((variable) => (variable.variableType === 1))
+        this.pageDataVariables = pageVariables.filter((variable) => (variable.valueType !== VARIABLE_TYPE.COMPUTED.VAL))
+        this.pageComputedVariables = pageVariables.filter((variable) => (variable.valueType === VARIABLE_TYPE.COMPUTED.VAL))
         this.pageDataVariables.forEach((variable) => {
             const { defaultValue = {}, variableCode, defaultValueType } = variable
-            if ([3, 4].includes(variable.valueType)) {
+            if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(variable.valueType)) {
                 ['all', 'prod', 'stag'].forEach((key) => {
                     const val = defaultValue[key]
                     if (typeof val === 'string') {
@@ -780,14 +781,15 @@ class PageCode {
         const lifeCycleValues = Object.values(lifeCycle)
         const exisLifyCycle = lifeCycleValues.filter(x => x)
         const lifeCircleStr = this.getLifeCycle()
-        const methodsStr = this.getMethods()
         this.handleVariable()
+        const computedStr = this.getComputed()
+        const methodsStr = this.getMethods()
 
         const importContent = this.getImportContent()
         let scriptContent = `${this.getComponents() ? `${this.getComponents()},` : ''}
                         ${this.pageType === 'projectCode' && (this.usingFuncCodes.length > 0 || exisLifyCycle.length > 0) ? 'mixins: [methodsMixin],' : ''}
                         ${this.getData() ? `${this.getData()},` : ''}
-                        ${this.getComputed()}
+                        ${computedStr}
                         ${this.getWatch()}
                         ${lifeCircleStr}
                         ${methodsStr}`

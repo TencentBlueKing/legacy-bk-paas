@@ -193,13 +193,13 @@ export default defineComponent({
                 rules: [
                     {
                         validator (val = 0, row) {
-                            return row.type !== 'varchar' || (val <= 15000 && val > 0)
+                            return row.type !== 'varchar' || (+val <= 15000 && +val > 0)
                         },
                         message: 'varchar 类型的长度需大于 0 小于 15000'
                     },
                     {
                         validator (val = 0, row) {
-                            return row.type !== 'decimal' || (val <= 65 && val > 0)
+                            return row.type !== 'decimal' || (+val <= 65 && +val > 0)
                         },
                         message: 'decimal 类型的长度需大于 0 小于 65'
                     }
@@ -218,7 +218,7 @@ export default defineComponent({
                 rules: [
                     {
                         validator (val = 0, row) {
-                            return row.type !== 'decimal' || (val > 0 && val < row.length)
+                            return row.type !== 'decimal' || (+val > 0 && +val < +row.length)
                         },
                         message: '小数点字段需要大于 0 且小于长度字段'
                     }
