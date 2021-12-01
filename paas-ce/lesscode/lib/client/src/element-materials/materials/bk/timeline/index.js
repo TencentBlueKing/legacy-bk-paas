@@ -20,7 +20,7 @@ export default {
         name: 'select',
         tips: '点击标题时调用该事件函数，事件回调参数 (data: Object)'
     }],
-    styles: ['size', 'margin', 'padding'],
+    styles: ['size', 'margin', 'padding', 'display', 'border'],
     directives: [
         {
             type: 'v-bind',

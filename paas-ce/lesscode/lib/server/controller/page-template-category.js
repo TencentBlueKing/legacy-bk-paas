@@ -117,7 +117,7 @@ export const update = async (ctx) => {
             belongProjectId
         })
         if (record) {
-            throw new Error(`分类已存在`)
+            throw new Error('分类已存在')
         }
         await TemplateCategoryModel.updateById(id, {
             name

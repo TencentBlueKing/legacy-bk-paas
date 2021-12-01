@@ -80,8 +80,8 @@
                     trigger: 'blur'
                 },
                 codeRule: {
-                    validator: (val) => (/^[A-Za-z_][A-Za-z_0-9]{0,19}$/.test(val)),
-                    message: '由大小写英文字母、下划线开头，后面可以是大小写英文字母、下划线和数字，长度小于20个字符',
+                    validator: (val) => (/^[A-Za-z]{0,19}$/.test(val)),
+                    message: '由大小写英文字母组成，长度小于20个字符',
                     trigger: 'blur'
                 },
                 nameRule: {
@@ -108,6 +108,7 @@
         computed: {
             ...mapGetters('variable', ['variableFormData', 'variableList']),
             ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
 
             isAdd () {
                 return this.copyForm.id === undefined
@@ -171,10 +172,11 @@
                     description: '',
                     effectiveRange: this.pageId ? 1 : 0,
                     projectId: this.projectId,
+                    versionId: this.versionId,
                     pageCode: this.pageDetail.pageCode
                 }
                 this.copyForm = Object.assign(defaultForm, JSON.parse(JSON.stringify(this.variableFormData.form)))
-                this.getAllProjectVariable(this.projectId).then((res) => {
+                this.getAllProjectVariable({ projectId: this.projectId, versionId: this.versionId }).then((res) => {
                     this.allProjectVariableList = res || []
                 }).catch((err) => {
                     this.$bkMessage({ message: err.message, theme: 'error' })
@@ -203,6 +205,7 @@
                         defaultItemValue = ''
                         break
                     case 6:
+                        // eslint-disable-next-line @typescript-eslint/quotes
                         defaultItemValue = `return ''\r\n`
                         break
                 }
@@ -226,7 +229,7 @@
                     return confirmMethod(this.copyForm).then(() => {
                         this.$bkMessage({ theme: 'success', message: this.isAdd ? '新增变量成功' : '编辑变量成功' })
                         this.hidden()
-                        const params = { projectId: this.projectId, effectiveRange: 0 }
+                        const params = { projectId: this.projectId, versionId: this.versionId, effectiveRange: 0 }
                         if (this.pageId) {
                             params.pageCode = this.pageDetail.pageCode
                         }

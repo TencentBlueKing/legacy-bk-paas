@@ -11,7 +11,15 @@
             <div class="layout-img" v-if="layout.type !== 'empty'">
                 <img :src="getPreviewImg(layout)" />
             </div>
-            <div class="layout-name" :title="layout.defaultName">
+            <div class="layout-label" v-if="layout.type !== 'empty' && layout.projectId">
+                <div class="layout-name" :title="layout.defaultName">
+                    {{ layout.defaultName }}
+                </div>
+                <div class="layout-preview" @click.prevent.stop="handlePreview(layout)">
+                    预览
+                </div>
+            </div>
+            <div v-else class="layout-empty-name" :title="layout.defaultName">
                 {{ layout.defaultName }}
             </div>
         </li>
@@ -49,6 +57,9 @@
             getPreviewImg (layout) {
                 const previewImg = `layout/preview-${layout.type}-s.png`
                 return require(`@/images/${previewImg}`)
+            },
+            handlePreview (layout) {
+                window.open(`/preview-template/project/${layout.projectId}/${layout.id}?type=nav-template`, '_blank')
             }
         }
     }
@@ -83,6 +94,10 @@
 
             &:hover {
                 border-color: #3a84ff;
+
+                .layout-preview {
+                    display: block;
+                }
             }
 
             &.checked {
@@ -97,6 +112,10 @@
                         &.setting {
                             display: block;
                         }
+                    }
+
+                    .layout-preview {
+                        display: none;
                     }
                 }
             }
@@ -159,12 +178,33 @@
                     height: 100%;
                 }
             }
-            .layout-name {
+
+            .layout-empty-name {
                 text-align: center;
+                padding: 0 6px;
                 font-size: 14px;
                 color: #63656e;
-                padding: 0 6px;
                 @mixin ellipsis 100%, block;
+            }
+
+            .layout-label {
+                width: 100%;
+                padding: 0 6px;
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+            }
+            .layout-name {
+                width: 110px;
+                color: #63656e;
+                @mixin ellipsis 100%, block;
+            }
+
+            .layout-preview {
+                font-size: 12px;
+                color: #3a84ff;
+                cursor: pointer;
+                display: none;
             }
         }
     }

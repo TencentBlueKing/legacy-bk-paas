@@ -16,9 +16,10 @@ export default {
     icon: 'bk-drag-colorpick',
     group: '表单',
     order: 1,
-    styles: ['margin', 'padding', 'display'],
+    styles: ['size', 'margin', 'padding', 'display'],
     renderStyles: {
-        display: 'inline-flex'
+        display: 'inline-flex',
+        width: '150px'
     },
     events: [{
         name: 'change', tips: '当前选择的RGB颜色值变化时调用该事件函数，事件回调参数 (value: String)'

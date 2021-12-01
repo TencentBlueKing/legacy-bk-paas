@@ -9,14 +9,13 @@
  * specific language governing permissions and limitations under the License.
  */
 
- const Router = require('koa-router')
- const { check } = require('../controller/health')
+const Router = require('koa-router')
+const { check } = require('../controller/health')
  
- const router = new Router({
-     prefix: '/api/health'
- })
+const router = new Router({
+    prefix: '/api/health'
+})
  
- router.get('/check', check)
+router.get('/check', check)
  
- module.exports = router
- 
+module.exports = router

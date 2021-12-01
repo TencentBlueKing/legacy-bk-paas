@@ -23,8 +23,8 @@ export default {
         funcGroups: state => state.funcGroups
     },
     actions: {
-        getAllGroupFuncs ({ state }, projectId, isCommit = true) {
-            return http.get(`${perfix}/getAllGroupFunc`, { params: { projectId } }).then((res = {}) => {
+        getAllGroupFuncs ({ state }, params, isCommit = true) {
+            return http.get(`${perfix}/getAllGroupFunc`, { params }).then((res = {}) => {
                 isCommit && (state.funcGroups = res.data || [])
                 return res.data || []
             })

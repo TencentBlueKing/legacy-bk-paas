@@ -157,7 +157,7 @@
             组件ID对应的组件包内config.json里的type配置，上传成功后会自动添加项目ID(${this.currentProject.projectCode})前缀，即：${this.currentProject.projectCode}-xxx；
             组件源码须使用平台提供的打包工具打包生成min.js文件后再上传。
             `
-            this.versionLogPlaceholder = `eg: 新增 XXX 功能\n    优化 XXX 功能\n    修复 XXX 功能\n`
+            this.versionLogPlaceholder = 'eg: 新增 XXX 功能\n    优化 XXX 功能\n    修复 XXX 功能\n'
 
             this.markdownOption = {
                 defaultOpen: 'edit'

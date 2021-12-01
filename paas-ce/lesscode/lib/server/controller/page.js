@@ -16,8 +16,8 @@ const fs = require('fs')
 
 export const getPageList = async (ctx) => {
     try {
-        const { projectId, lite } = ctx.query
-        const res = await PageModel.getProjectPages(projectId)
+        const { projectId, versionId, lite } = ctx.query
+        const res = await PageModel.getProjectPages(projectId, versionId)
 
         let list = res
         if (lite) {
@@ -122,9 +122,10 @@ export const createDefaultPage = async (projectId) => {
 // 新建页面
 export const createPage = async (ctx) => {
     try {
-        const { projectId, pageData, layout } = ctx.request.body
+        const { projectId, versionId, pageData, layout } = ctx.request.body
         const projectPageData = {
-            projectId
+            projectId,
+            versionId
         }
 
         if (pageData.pageCode && invalidPageIds.includes(pageData.pageCode)) {
@@ -134,7 +135,7 @@ export const createPage = async (ctx) => {
         pageData.pageRoute = formatRoutePath(pageData.pageRoute)
 
         const fullPath = `${layout.routePath}/${pageData.pageRoute}`
-        if (await hasRoute({ path: fullPath }, projectId)) {
+        if (await hasRoute({ path: fullPath }, projectId, versionId)) {
             ctx.throw(400, '该页面路由已存在')
         }
 
@@ -167,7 +168,7 @@ export const createPage = async (ctx) => {
 // 编辑页面
 export const updatePage = async (ctx) => {
     try {
-        const { pageData, customCompData, projectId, pageCode, functionData, templateData, usedVariableMap } = ctx.request.body
+        const { pageData, customCompData, projectId, versionId, pageCode, functionData, templateData, usedVariableMap } = ctx.request.body
         const editPage = getRepository(Page).create(pageData)
         const userInfo = ctx.session.userInfo || {}
 
@@ -196,6 +197,7 @@ export const updatePage = async (ctx) => {
                     ...item,
                     pageId,
                     projectId,
+                    projectVersionId: versionId,
                     createTime: new Date()
                 })))
                 await transactionalEntityManager.save(addCompValues)
@@ -221,6 +223,7 @@ export const updatePage = async (ctx) => {
                     funcId,
                     pageId,
                     projectId,
+                    versionId,
                     createTime: new Date()
                 })))
                 await transactionalEntityManager.save(addFuncValues)
@@ -232,6 +235,7 @@ export const updatePage = async (ctx) => {
                 await transactionalEntityManager.remove(delFuncList)
             }
 
+            // 布局模板
             if (templateData) {
                 const { layoutId } = await getRepository(PageRoute).findOne({ pageId })
                 const layoutInst = await getRepository(LayoutInst).findOne(layoutId)
@@ -242,11 +246,12 @@ export const updatePage = async (ctx) => {
             // 页面与变量关联更新
             if (usedVariableMap) {
                 const variableIds = Object.keys(usedVariableMap || {})
-                const exitsUsedVariables = await getRepository(PageVariable).find({ where: { projectId, pageCode } }) || []
+                const exitsUsedVariables = await getRepository(PageVariable).find({ where: { projectId, versionId, pageCode } }) || []
                 // 新增部分
                 const addUsedVariables = variableIds.filter((id) => exitsUsedVariables.findIndex(x => x.id === id) < 0)
                 const addUsedVariableValues = getRepository(PageVariable).create(addUsedVariables.map(variableId => ({
                     projectId,
+                    versionId,
                     variableId,
                     pageCode,
                     useInfo: JSON.stringify(usedVariableMap[variableId])
@@ -261,8 +266,9 @@ export const updatePage = async (ctx) => {
                 await Promise.all([transactionalEntityManager.save(addUsedVariableValues), transactionalEntityManager.remove(deleteUsedVariables)])
             }
 
-            // 处理lifeCycle
+            // 处理lifeCycle、styleSetting
             page.lifeCycle = typeof page.lifeCycle === 'string' ? JSON.parse(page.lifeCycle) : page.lifeCycle
+            page.styleSetting = typeof page.styleSetting === 'string' ? JSON.parse(page.styleSetting) : page.styleSetting
 
             return page
         })
@@ -280,9 +286,10 @@ export const updatePage = async (ctx) => {
 // 复制页面
 export const copyPage = async (ctx) => {
     try {
-        const { projectId, pageData } = ctx.request.body
+        const { projectId, versionId, pageData } = ctx.request.body
         const projectPageData = {
-            projectId
+            projectId,
+            versionId
         }
 
         const { id: postId, pageName: postName, pageCode, pageRoute } = pageData
@@ -295,7 +302,7 @@ export const copyPage = async (ctx) => {
         const layoutInst = await getRepository(LayoutInst).findOne(layoutId)
         const fullPath = `${layoutInst.routePath}/${newPageData.pageRoute}`
 
-        if (await hasRoute({ path: fullPath }, projectId)) {
+        if (await hasRoute({ path: fullPath }, projectId, versionId)) {
             throw Error('该页面路由已存在')
         }
 
@@ -377,12 +384,12 @@ export const deletePage = async (ctx) => {
 
 // checkName
 export const checkName = async (ctx) => {
-    const { pageName, pageCode, projectId, from } = ctx.request.body
+    const { pageName, pageCode, projectId, versionId, from } = ctx.request.body
     try {
         let existPageCode
-        const existPageName = await PageModel.checkProjectPageExist(projectId, pageName)
+        const existPageName = await PageModel.checkProjectPageExist(projectId, versionId, pageName)
         if (pageCode) {
-            existPageCode = await PageModel.checkProjectPageCodeExist(projectId, pageCode)
+            existPageCode = await PageModel.checkProjectPageCodeExist(projectId, versionId, pageCode)
         }
 
         if (existPageName && existPageName.length) {
@@ -417,6 +424,24 @@ export const pageDetail = async (ctx) => {
         const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
         const detail = await getRepository(Page).findOne(queryParams) || {}
         if (detail.lifeCycle) detail.lifeCycle = JSON.parse(detail.lifeCycle)
+        if (detail.styleSetting) {
+            detail.styleSetting = JSON.parse(detail.styleSetting)
+        } else {
+            // migration调整
+            detail.styleSetting = {
+                minWidth: '',
+                marginTop: '',
+                marginBottom: '',
+                marginLeft: '',
+                marginRight: '',
+                paddingTop: '',
+                paddingBottom: '',
+                paddingLeft: '',
+                paddingRight: '',
+                backgroundColor: '',
+                customStyle: {}
+            }
+        }
         ctx.send({
             code: 0,
             message: 'OK',

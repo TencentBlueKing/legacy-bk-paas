@@ -87,6 +87,10 @@
 <script>
     import mixins from './form-item-mixins'
     import dynamicTag from '@/components/dynamic-tag.vue'
+    import {
+        FUNCTION_TYPE,
+        FUNCTION_METHOD
+    } from 'shared/function/'
 
     export default {
         components: {
@@ -107,20 +111,10 @@
                 monacoHeight: 200,
                 monacoWidth: 200,
                 tempList: [
-                    { id: 0, name: '空白函数' },
-                    { id: 1, name: '远程函数', info: '建议以下几种情况使用 "远程函数":\n1、远程API需要携带用户登录态认证\n2、远程API无法跨域或纯前端访问' }
+                    { id: FUNCTION_TYPE.EMPTY, name: '空白函数' },
+                    { id: FUNCTION_TYPE.REMOTE, name: '远程函数', info: '建议以下几种情况使用 "远程函数":\n1、远程API需要携带用户登录态认证\n2、远程API无法跨域或纯前端访问' }
                 ],
-                methodList: [
-                    { name: 'GET', id: 'get' },
-                    { name: 'POST', id: 'post' },
-                    { name: 'PUT', id: 'put' },
-                    { name: 'DELETE', id: 'delete' },
-                    { name: 'HEAD', id: 'head' },
-                    { name: 'OPTIONS', id: 'options' },
-                    { name: 'TRACE', id: 'trace' },
-                    { name: 'CONNECT', id: 'connect' },
-                    { name: 'PATCH', id: 'patch' }
-                ],
+                methodList: Object.keys(FUNCTION_METHOD).map((key) => ({ name: key, id: FUNCTION_METHOD[key] })),
                 nameRule: {
                     validator: (val) => (val.length <= 0 || val.every(x => /^[A-Za-z_0-9]+$/.test(x))),
                     message: '由大小写英文字母、下划线、数字组成',
