@@ -33,6 +33,7 @@ module.exports = {
                 'page.id',
                 'page.pageName',
                 'page.pageCode',
+                'page.pageType',
                 'page.content',
                 'page.lifeCycle',
                 'page.styleSetting',

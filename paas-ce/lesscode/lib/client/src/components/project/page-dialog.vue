@@ -11,6 +11,24 @@
             ext-cls="page-operate-dialog"
         >
             <bk-form ref="dialogForm" class="dialog-form" :label-width="86" :rules="dialog.formRules" :model="dialog.formData">
+                <bk-form-item label="页面类型" required property="pageType" error-display-type="normal">
+                    <div class="bk-button-group">
+                        <bk-button
+                            :ext-cls="'type-button'"
+                            @click="dialog.formData.pageType = 'PC'"
+                            :class="dialog.formData.pageType === 'PC' ? 'is-selected' : ''">
+                            <i class="bk-drag-icon bk-drag-pc"> </i>
+                            PC 页面
+                        </bk-button>
+                        <bk-button
+                            :ext-cls="'type-button'"
+                            @click="dialog.formData.pageType = 'MOBILE'"
+                            :class="dialog.formData.pageType === 'MOBILE' ? 'is-selected' : ''">
+                            <i class="bk-drag-icon bk-drag-mobilephone"> </i>
+                            Mobile 页面
+                        </bk-button>
+                    </div>
+                </bk-form-item>
                 <bk-form-item label="页面名称" required property="pageName" error-display-type="normal">
                     <bk-input ref="projectDialogInput"
                         maxlength="60"
@@ -85,12 +103,20 @@
                     visible: false,
                     loading: false,
                     formData: {
+                        pageType: 'PC',
                         pageName: '',
                         pageCode: '',
                         pageRoute: '',
                         layoutId: null
                     },
                     formRules: {
+                        pageType: [
+                            {
+                                required: true,
+                                message: '必填项',
+                                trigger: 'blur'
+                            }
+                        ],
                         pageName: [
                             {
                                 required: true,
@@ -303,6 +329,22 @@
                 line-height: 30px;
                 padding: 0 8px;
             }
+        }
+
+        .bk-button-group {
+            .type-button{
+                width: 310px;
+
+                i {
+                    font-size: 18px;
+                    margin-right: 3px;
+                    color: #979ba5;
+                }
+            }
+
+             .is-selected i {
+                 color: #3a84ff;
+             }
         }
     }
 </style>
