@@ -44,7 +44,7 @@ export default {
             })
         },
         detailInfo ({ state }, postData) {
-            return http.post(`/release/detailInfo`, postData).then(response => {
+            return http.post('/release/detailInfo', postData).then(response => {
                 const data = response.data || {}
                 return data
             })
@@ -74,19 +74,19 @@ export default {
             })
         },
         updateVersion ({ state }, { id, data }) {
-            return http.put(`/release/updateReleaseVersion`, { id, data }).then(response => {
+            return http.put('/release/updateReleaseVersion', { id, data }).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
         checkAppInfoExist ({ state }, data) {
-            return http.post(`/release/checkAppInfoExist`, data).then(response => {
+            return http.post('/release/checkAppInfoExist', data).then(response => {
                 const data = response.data || false
                 return data
             })
         },
         offlineProject ({ state }, data) {
-            return http.post(`/release/offlineProject`, data).then(response => {
+            return http.post('/release/offlineProject', data).then(response => {
                 const data = response.data || false
                 return data
             })

@@ -1,13 +1,13 @@
 <template>
     <bk-dialog
         class="component-version-log-dialog"
-        :title="title"
+        :title="dialogTitle"
         :value="isShow"
         @cancel="handleCancel"
         quick-close
         :width="860"
         header-position="left">
-        <mavon-editor :value="data.versionLog" :external-link="false" :editable="false" :subfield="false" :toolbars-flag="false" default-open="preview" />
+        <mavon-editor :value="localValue" :external-link="false" :editable="false" :subfield="false" :toolbars-flag="false" default-open="preview" />
         <div slot="footer">
             <bk-button @click="handleCancel">关闭</bk-button>
         </div>
@@ -21,13 +21,22 @@
                 type: Boolean,
                 default: false
             },
+            title: {
+                type: String
+            },
             data: {
                 type: Object,
                 default: () => ({})
             }
         },
         computed: {
-            title () {
+            localValue () {
+                return this.data.versionLog || ''
+            },
+            dialogTitle () {
+                if (this.title) {
+                    return this.title
+                }
                 return `${this.data.name}  ${this.data.version}版本日志`
             }
         },
@@ -38,9 +47,10 @@
         }
     }
 </script>
-<style lang='postcss'>
-    .component-version-log-dialog{
+<style lang="postcss">
+    .component-version-log-dialog {
         .markdown-body{
+            max-height: 460px;
             box-shadow: none !important;
             .v-show-content {
                 padding: 0 !important;
@@ -48,5 +58,4 @@
             }
         }
     }
-
 </style>

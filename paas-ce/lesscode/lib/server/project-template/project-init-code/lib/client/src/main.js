@@ -60,10 +60,10 @@ auth.requestCurrentUser().then(user => {
 
     const h2Style = 'font-size: 20px;color: #979797; margin: 32px 0;font-weight: normal'
 
-    const content = ``
+    const content = ''
         + `<div class="bk-exception bk-exception-center" style="${divStyle}">`
         + `<img src="${Img403}"><h2 class="exception-text" style="${h2Style}">${message}</h2>`
-        + `</div>`
+        + '</div>'
 
     document.write(content)
 })

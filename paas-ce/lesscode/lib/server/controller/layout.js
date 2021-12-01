@@ -12,6 +12,7 @@ import { getRepository } from 'typeorm'
 import LayoutModel from '../model/layout'
 import LayoutInst from '../model/entities/layout-inst'
 import PageRoute from '../model/entities/page-route'
+import { whereVersionLiteral } from '../model/common'
 
 const Layout = {
     async getPlatformList (ctx) {
@@ -24,8 +25,8 @@ const Layout = {
     },
 
     async getList (ctx) {
-        const { projectId } = ctx.request.query
-        const list = await LayoutModel.getList(projectId)
+        const { projectId, versionId } = ctx.request.query
+        const list = await LayoutModel.getList(projectId, versionId)
         ctx.send({
             code: 0,
             message: 'success',
@@ -35,8 +36,8 @@ const Layout = {
 
     async getFullList (ctx) {
         try {
-            const { projectId } = ctx.request.query
-            const list = await LayoutModel.getList(projectId)
+            const { projectId, versionId } = ctx.request.query
+            const list = await LayoutModel.getList(projectId, versionId)
             if (!list || !list.length) {
                 ctx.throwError({
                     message: 'Layout instance data not found'
@@ -87,11 +88,12 @@ const Layout = {
 
     async create (ctx) {
         try {
-            const { projectId, layoutData } = ctx.request.body
+            const { projectId, versionId = null, layoutData } = ctx.request.body
 
             const layoutInstRepo = getRepository(LayoutInst)
             const layoutInst = layoutInstRepo.create({
                 projectId,
+                versionId,
                 content: layoutData.content,
                 layoutId: layoutData.layoutId,
                 routePath: layoutData.routePath,
@@ -151,9 +153,9 @@ const Layout = {
     },
 
     async setDefault (ctx) {
-        const { id: layoutId, projectId } = ctx.request.body
+        const { id: layoutId, projectId, versionId } = ctx.request.body
         try {
-            await getRepository(LayoutInst).update({ projectId: parseInt(projectId) }, { isDefault: 0 })
+            await getRepository(LayoutInst).update({ projectId: parseInt(projectId), versionId: whereVersionLiteral(versionId) }, { isDefault: 0 })
             const { id } = await getRepository(LayoutInst).save({
                 id: parseInt(layoutId),
                 isDefault: 1
@@ -172,9 +174,9 @@ const Layout = {
     },
 
     async setRoutePath (ctx) {
-        const { id, projectId, routePath } = ctx.request.body
+        const { id, projectId, versionId, routePath } = ctx.request.body
         try {
-            const existRoutePath = await getRepository(LayoutInst).findOne({ projectId, routePath })
+            const existRoutePath = await getRepository(LayoutInst).findOne({ projectId, versionId, routePath })
             if (existRoutePath) {
                 throw Error('该模板路由已存在')
             }
@@ -193,10 +195,10 @@ const Layout = {
     },
 
     async checkName (ctx) {
-        const { showName, routePath, layoutCode, projectId } = ctx.request.body
+        const { showName, routePath, layoutCode, projectId, versionId } = ctx.request.body
         try {
             if (showName) {
-                const existShowName = await getRepository(LayoutInst).findOne({ projectId, showName })
+                const existShowName = await getRepository(LayoutInst).findOne({ projectId, versionId, showName, deleteFlag: 0 })
                 if (existShowName) {
                     ctx.throwError({
                         message: '该模板名称已存在'
@@ -205,7 +207,7 @@ const Layout = {
             }
 
             if (layoutCode) {
-                const existLayoutCode = await getRepository(LayoutInst).findOne({ projectId, layoutCode })
+                const existLayoutCode = await getRepository(LayoutInst).findOne({ projectId, versionId, layoutCode, deleteFlag: 0 })
                 if (existLayoutCode) {
                     ctx.throwError({
                         message: '该模板ID已存在'
@@ -214,7 +216,7 @@ const Layout = {
             }
 
             if (routePath) {
-                const existRoutePath = await getRepository(LayoutInst).findOne({ projectId, routePath })
+                const existRoutePath = await getRepository(LayoutInst).findOne({ projectId, versionId, routePath, deleteFlag: 0 })
                 if (existRoutePath) {
                     ctx.throwError({
                         message: '该模板路由已存在'

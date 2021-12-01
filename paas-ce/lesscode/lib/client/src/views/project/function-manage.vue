@@ -210,6 +210,7 @@
             ...mapGetters(['user']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('member', ['userPerm']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName' }),
             projectId () {
                 return parseInt(this.$route.params.projectId)
             },
@@ -317,7 +318,7 @@
                     if (!postData.projectId) {
                         postData.projectId = this.projectId
                     }
-                    const varWhere = { projectId: this.projectId, effectiveRange: 0 }
+                    const varWhere = { projectId: this.projectId, versionId: this.versionId, effectiveRange: 0 }
                     const add = () => this.addFunc({ groupId: this.curGroupId, func: postData, varWhere })
                     const edit = () => this.editFunc({ groupId: this.curGroupId, func: postData, varWhere })
 
@@ -325,7 +326,7 @@
                     curMethod().then((res) => {
                         if (!res) return
                         const projectId = this.$route.params.projectId
-                        return this.getAllGroupFuncs(projectId).then(() => {
+                        return this.getAllGroupFuncs({ projectId, versionId: this.versionId }).then(() => {
                             this.curGroupId = postData.funcGroupId
                             this.closeAddFunction()
                             this.$bkMessage({ theme: 'success', message: `${this.funcObj.title}成功` })
@@ -357,7 +358,11 @@
             initData () {
                 this.isLoadingGroup = true
                 const projectId = this.$route.params.projectId
-                Promise.all([this.getAllGroupFuncs(projectId), this.getAllVariable({ projectId, effectiveRange: 0 })]).then(() => {
+                const versionId = this.versionId
+                Promise.all([
+                    this.getAllGroupFuncs({ projectId, versionId }),
+                    this.getAllVariable({ projectId, versionId, effectiveRange: 0 })
+                ]).then(() => {
                     const firstGroup = this.funcGroups[0] || {}
                     this.curGroupId = firstGroup.id
                 }).finally(() => {
@@ -430,7 +435,8 @@
                     const projectId = this.$route.params.projectId
                     const postData = {
                         inputStr: this.groupNameStr,
-                        projectId
+                        projectId,
+                        versionId: this.versionId
                     }
                     this.addGroup(postData).then((res) => {
                         this.groupNameStr = ''
@@ -481,7 +487,8 @@
             },
 
             exportFunction () {
-                functionHelper.exportFunction(this.selectionData, `lesscode-${this.projectId}-func.json`)
+                const versionName = this.versionId ? `-${this.versionName}` : ''
+                functionHelper.exportFunction(this.selectionData, `lesscode-${this.projectId}${versionName}-func.json`)
             },
 
             exportDemoFunction () {
@@ -541,12 +548,12 @@
             },
 
             bulkAddFuncFromApi (funcList) {
-                const varWhere = { projectId: this.projectId, effectiveRange: 0 }
+                const varWhere = { projectId: this.projectId, versionId: this.versionId, effectiveRange: 0 }
                 const postData = { groupId: this.curGroupId, funcList, varWhere }
                 return this.bulkAddFunc(postData).then((res) => {
                     if (!res) return
                     const projectId = this.$route.params.projectId
-                    return this.getAllGroupFuncs(projectId)
+                    return this.getAllGroupFuncs({ projectId, versionId: this.versionId })
                 })
             }
         }

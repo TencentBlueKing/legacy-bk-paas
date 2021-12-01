@@ -13,6 +13,7 @@ import { getRepository } from 'typeorm'
 import LayoutInst from './entities/layout-inst'
 import Layout from './entities/layout'
 import PageRoute from './entities/page-route'
+import { whereVersion } from './common'
 
 module.exports = {
     // 获取平台默认布局列表
@@ -24,11 +25,12 @@ module.exports = {
     },
 
     // 获取项目下可见的布局列表
-    getList (projectId) {
+    getList (projectId, versionId) {
         return getRepository(LayoutInst).createQueryBuilder('layout_inst')
             .leftJoinAndSelect(Layout, 'layout', 'layout_inst.layoutId = layout.id')
             .select(['layout_inst.*', 'layout.type as type', 'layout.defaultName as defaultName', 'layout.defaultPath as defaultPath'])
             .where('layout_inst.projectId = :projectId', { projectId })
+            .andWhere(whereVersion(versionId, 'layout_inst'))
             .andWhere('layout_inst.deleteFlag = 0')
             .orderBy('layout_inst.id', 'ASC')
             .getRawMany()

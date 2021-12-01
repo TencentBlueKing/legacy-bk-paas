@@ -8,30 +8,29 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
- import healthModel from '../model/health'
+import healthModel from '../model/health'
 
- const Health = {
-     async check (ctx) {
-         try {
+const Health = {
+    async check (ctx) {
+        try {
             const bkRepoRes = await healthModel.checkBkRepo()
             const dbRes = await healthModel.checkDb()
  
-             const checkList = [
+            const checkList = [
                 { type: 'bkRepo', code: bkRepoRes.code, result: bkRepoRes.result, message: bkRepoRes.message },
                 { type: 'db', code: dbRes.code, result: dbRes.result, message: dbRes.message }
-             ]
-             ctx.send({
-                 code: 0,
-                 message: '',
-                 data: checkList
-             })
-         } catch (err) {
-             ctx.throwError({
-                 message: err.message || err
-             })
-         }
-     }
- }
+            ]
+            ctx.send({
+                code: 0,
+                message: '',
+                data: checkList
+            })
+        } catch (err) {
+            ctx.throwError({
+                message: err.message || err
+            })
+        }
+    }
+}
  
- module.exports = Health
- 
+module.exports = Health

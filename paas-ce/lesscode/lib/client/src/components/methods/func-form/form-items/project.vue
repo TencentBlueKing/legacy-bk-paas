@@ -55,7 +55,7 @@
 
             changeMarketFunc (id) {
                 this.updateValue('projectId', id)
-                this.getAllGroupFuncs(id).then((res = []) => {
+                this.getAllGroupFuncs({ projectId: id }).then((res = []) => {
                     const firstGroup = res[0] || {}
                     this.updateValue('funcGroupId', firstGroup.id)
                 }).catch((err) => {

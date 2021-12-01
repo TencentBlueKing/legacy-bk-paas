@@ -58,7 +58,7 @@ export default {
         
         return h('span',
             {
-                style: { 'font-size': 'initial' }
+                style: { 'font-size': 'initial', width: params['component-type'] === 'bk-color-picker' ? 'inherit' : '' }
             },
             [
                 h(renderData.type, {
@@ -69,7 +69,7 @@ export default {
                         ...dynamicEvent
                     },
                     scopedSlots,
-                    style: Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }, marginStyle),
+                    style: renderData.type === 'render-grid' ? {} : Object.assign({}, renderStyles, renderStyles.customStyle || {}, { top: 0, left: 0 }, marginStyle),
                     ref: renderData.componentId
                 }, context.children)
             ])

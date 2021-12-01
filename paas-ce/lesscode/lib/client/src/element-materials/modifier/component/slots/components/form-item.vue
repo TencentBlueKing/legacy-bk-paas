@@ -348,33 +348,51 @@
             /**
              * @desc 提交表单项
             */
-            handleSave (itemData) {
-                const hasRequired = ((itemData.validate || []).filter(item => item.required === true).length > 0)
+            handleSave (itemData, isContinue = false) {
+                // 判断表单项类型是否改变
+                const slotChange = this.formItemData.type !== itemData.type
                 // 将校验规则里的required同步到form-item层级
+                const hasRequired = ((itemData.validate || []).filter(item => item.required === true).length > 0)
                 this.formItemData = Object.assign({}, itemData, { required: hasRequired })
-                // formItem编辑后，里面的表单项组件也默认值重新生成了，这里应该做个判断，如果是类型没变，里面的targetData不用变
-                this.createTargetDataFromItem(this.formItemData)
-                this.handleCancel()
+                // formItem编辑后，里面的表单项组件也默认值重新生成了，这里应该做个判断，如果是类型没变，表单组件内容不用变
+                this.createTargetDataFromItem(this.formItemData, slotChange)
                 this.triggerChange()
+                if (isContinue) {
+                    this.formItemData = generateFormData()
+                    this.handleShowOperation(-1)
+                } else {
+                    this.handleCancel()
+                }
             },
             
-            createTargetDataFromItem (formItemData) {
+            createTargetDataFromItem (formItemData, changeSlot = true) {
                 const formItemNode = createTargetDataFormItemNode(formItemData)
                 const defaultVal = this.getDefaultValFromType(formItemData.type)
                 const modelItem = { key: formItemData.property, value: defaultVal }
                 const ruleItem = { key: formItemData.property, value: formItemData.validate || [] }
+                
                 let style = {}
                 if (['input', 'select', 'date-picker', 'time-picker'].includes(formItemData.type)) {
                     style = {
                         'width': '300px'
                     }
                 }
-                const inputNode = createTargetDataNode(formItemData.type, {
+                
+                let inputNode = createTargetDataNode(formItemData.type, {
                     style,
                     directive: {
                         'v-model': `${camelCase(this.curSelectedComponentData.componentId, { transform: camelCaseTransformMerge })}model.${formItemData.property}`
                     }
                 })
+
+                if (!changeSlot && this.editIndex > -1) {
+                    try {
+                        inputNode = this.formItemList[this.editIndex].renderSlots.default.val[0] || inputNode
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+                
                 if (this.editIndex > -1 && this.formItemList[this.editIndex]) {
                     this.formItemList.splice(this.editIndex, 1, formItemNode)
                     this.formModelList.splice(this.editIndex, 1, modelItem)
