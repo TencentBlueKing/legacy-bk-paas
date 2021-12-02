@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.17
+    - update: esb update data/iam confapis
+
 # 2.13.16
     - add: 3rd-app(tpapp) support visiable labels
 
@@ -52,6 +55,23 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.32
+    - update: esb update data/iam confapis
+
+# 2.12.31
+    - update: esb update data confapis
+
+# 2.12.30
+    - update: esb update monitor_v3, nodeman confapis
+
+# 2.12.29
+    - update: esb update data confapis
+
+# 2.12.28
+    - update: esb update data v3_storekit confapis
+    - update: esb jobv3 add api generate_local_file_upload_url
+    - update: esb cc search_business add parameter biz_property_filter
 
 # 2.12.27
     - update: esb update data/jobv3/sops confapis

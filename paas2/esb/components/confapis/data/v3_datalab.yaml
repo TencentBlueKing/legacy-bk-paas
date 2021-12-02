@@ -250,6 +250,15 @@
   dest_http_method: GET
   is_hidden: true
 
+- path: /data/v3/datalab/queries/{query_id}/info/
+  name: v3_datalab_queries__query_id__info_get
+  label: 查看查询详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/datalab/queries/{query_id}/info/
+  dest_http_method: GET
+  is_hidden: true
+
 - path: /data/v3/datalab/es_query/{result_table_id}/query/
   name: v3_datalab_es_query__result_table_id__query
   label: es查询
