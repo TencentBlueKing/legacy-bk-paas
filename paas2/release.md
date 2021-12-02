@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.32
+    - update: esb update data/iam confapis
+
 # 2.12.31
     - update: esb update data confapis
 

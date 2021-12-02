@@ -39,7 +39,7 @@
   label_en: mgmt api delete grade manager member
   method: DELETE
   api_type: operate
-  comp_codename: generic.v2.iam.iam_component
+  comp_codename: generic.v2.iam.iam_delete_component
   dest_path: /o/bk_iam/api/v1/open/management/grade_managers/{grade_manager_id}/members/
   dest_http_method: DELETE
   is_hidden: true
@@ -83,7 +83,7 @@
   label_en: mgmt api delete group
   method: DELETE
   api_type: operate
-  comp_codename: generic.v2.iam.iam_component
+  comp_codename: generic.v2.iam.iam_delete_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/
   dest_http_method: DELETE
   is_hidden: true
@@ -116,7 +116,7 @@
   label_en: mgmt api delete group member
   method: DELETE
   api_type: operate
-  comp_codename: generic.v2.iam.iam_component
+  comp_codename: generic.v2.iam.iam_delete_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/members/
   dest_http_method: DELETE
   is_hidden: true
