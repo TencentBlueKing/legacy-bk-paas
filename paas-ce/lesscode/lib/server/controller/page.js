@@ -89,7 +89,8 @@ export const createDefaultPage = async (projectId) => {
         const pageData = {
             pageName: 'home',
             pageCode: 'home',
-            pageRoute: '/'
+            pageRoute: '/',
+            pageType: 'PC'
         }
 
         pageData.pageRoute = formatRoutePath(pageData.pageRoute)

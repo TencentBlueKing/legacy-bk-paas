@@ -11,19 +11,19 @@
             ext-cls="page-operate-dialog"
         >
             <bk-form ref="dialogForm" class="dialog-form" :label-width="86" :rules="dialog.formRules" :model="dialog.formData">
-                <bk-form-item label="页面类型" required property="pageType" error-display-type="normal">
+                <bk-form-item label="页面类型" required property="pageType" v-if="action !== 'rename'" error-display-type="normal">
                     <div class="bk-button-group">
                         <bk-button
                             :ext-cls="'type-button'"
-                            @click="dialog.formData.pageType = 'PC'"
-                            :class="dialog.formData.pageType === 'PC' ? 'is-selected' : ''">
+                            @click="handleChangePageType('PC')"
+                            :class="!isMobile ? 'is-selected' : ''">
                             <i class="bk-drag-icon bk-drag-pc"> </i>
                             PC 页面
                         </bk-button>
                         <bk-button
                             :ext-cls="'type-button'"
-                            @click="dialog.formData.pageType = 'MOBILE'"
-                            :class="dialog.formData.pageType === 'MOBILE' ? 'is-selected' : ''">
+                            @click="handleChangePageType('MOBILE')"
+                            :class="isMobile ? 'is-selected' : ''">
                             <i class="bk-drag-icon bk-drag-mobilephone"> </i>
                             Mobile 页面
                         </bk-button>
@@ -48,12 +48,17 @@
                 <bk-form-item label="页面路由" required property="pageRoute" v-if="action !== 'rename'"
                     :style="{ marginTop: action === 'create' ? 0 : '' }"
                     error-display-type="normal">
-                    <bk-input maxlength="60" v-model.trim="dialog.formData.pageRoute"
-                        placeholder="由数字、字母、下划线、中划线(-)、冒号(:)或反斜杠(/)组成">
-                        <template slot="prepend">
-                            <div class="group-text">{{layoutRoutePath}}</div>
-                        </template>
-                    </bk-input>
+                    <div class="page-route">
+                        <div class="mobile-tag" v-if="isMobile">/mobile</div>
+                        <bk-input maxlength="60" v-model.trim="dialog.formData.pageRoute"
+                            placeholder="由数字、字母、下划线、中划线(-)、冒号(:)或反斜杠(/)组成">
+                            <template slot="prepend">
+                                <div class="group-text">
+                                    {{layoutRoutePath}}
+                                </div>
+                            </template>
+                        </bk-input>
+                    </div>
                 </bk-form-item>
             </bk-form>
             <div class="dialog-footer" slot="footer">
@@ -99,6 +104,7 @@
                 requestMethod: '',
                 pageCodeOldValue: '',
                 layoutList: [],
+                layoutListMap: { 'PC': [], 'MOBILE': [] },
                 dialog: {
                     visible: false,
                     loading: false,
@@ -184,6 +190,9 @@
                     return routePath.endsWith('/') ? routePath : `${routePath}/`
                 }
                 return ''
+            },
+            isMobile () {
+                return this.dialog.formData.pageType === 'MOBILE'
             }
         },
         watch: {
@@ -215,14 +224,21 @@
             async getProjectLayout () {
                 try {
                     const layoutList = await this.$store.dispatch('layout/getList', { projectId: this.projectId, versionId: this.versionId })
+                    const that = this
                     layoutList.forEach(item => {
                         item.checked = item.isDefault === 1
                         item.defaultName = item.showName || item.defaultName
                         // 不需要显示选中态标签
                         item.isDefault = false
+                        if (item.layoutType === 'MOBILE') {
+                            item.checked = item.type === 'mobile-empty' ? 1 : 0
+                            that.layoutListMap['MOBILE'].push(item)
+                        } else {
+                            that.layoutListMap['PC'].push(item)
+                        }
                     })
-                    this.layoutList = layoutList
-                    this.selectedLayout = layoutList.find(item => item.checked) || {}
+                    this.layoutList = this.layoutListMap[this.dialog.formData.pageType]
+                    this.selectedLayout = this.layoutList.find(item => item.checked) || {}
                 } catch (e) {
                     console.error(e)
                 }
@@ -303,6 +319,11 @@
                 setTimeout(() => {
                     this.dialog.visible = false
                 }, 160)
+            },
+            handleChangePageType (pageType) {
+                this.dialog.formData.pageType = pageType
+                this.layoutList = this.layoutListMap[this.dialog.formData.pageType]
+                this.selectedLayout = this.layoutList.find(item => item.checked) || {}
             }
         }
     }
@@ -345,6 +366,20 @@
              .is-selected i {
                  color: #3a84ff;
              }
+        }
+
+        .page-route{
+            display: flex;
+
+            .mobile-tag{
+                color: #63656e;
+                padding: 0 15px;
+                font-size: 12px;
+                border: 1px solid #c4c6cc;
+                border-radius: 2px 0 0 2px;
+                background-color: #f2f4f8;
+                border-right: none;
+            }
         }
     }
 </style>

@@ -228,6 +228,8 @@
                         this.$store.dispatch('route/getProjectRouteTree', params),
                         this.$store.dispatch('layout/getList', params)
                     ])
+                    console.log(routeGroup)
+                    console.log(layoutList)
                     this.layoutList = layoutList.map(({ id: layoutId, routePath: layoutPath }) => ({ layoutId, layoutPath }))
 
                     // 补全所有布局模板父路由，便于父路由下没有路由时能快速的创建

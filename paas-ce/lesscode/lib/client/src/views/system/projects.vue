@@ -323,7 +323,8 @@
                 activatedProject: {},
                 pageLoading: true,
                 projectCodeOldValue: '',
-                defaultLayoutList: []
+                defaultLayoutList: [],
+                mobileLayoutList: []
             }
         },
         computed: {
@@ -359,7 +360,8 @@
                         item.checked = isEmptyType
                         item.disabled = isEmptyType
                     })
-                    this.defaultLayoutList = layoutList
+                    this.defaultLayoutList = layoutList.filter(layout => layout.layoutType !== 'MOBILE')
+                    this.mobileLayoutList = layoutList.filter(layout => layout.layoutType === 'MOBILE')
                 } catch (e) {
                     console.error(e)
                 }
@@ -396,10 +398,22 @@
                             isDefault: layout.isDefault,
                             showName: layout.defaultName,
                             layoutCode: layout.defaultCode,
-                            content: layout.defaultContent
+                            content: layout.defaultContent,
+                            layoutType: layout.layoutType
                         }
                     })
-                    data.layouts = layouts
+                    const mobileLayout = this.mobileLayoutList.map(layout => {
+                        return {
+                            layoutId: layout.id,
+                            routePath: layout.defaultPath,
+                            isDefault: layout.isDefault,
+                            showName: layout.defaultName,
+                            layoutCode: layout.defaultCode,
+                            content: layout.defaultContent,
+                            layoutType: layout.layoutType
+                        }
+                    })
+                    data.layouts = layouts.concat(mobileLayout)
 
                     this.dialog.create.loading = true
                     const projectId = await this.$store.dispatch('project/create', { data })
