@@ -98,9 +98,11 @@ export default {
             .leftJoinAndSelect(PageRoute, 'pr', 'layoutinst.id = pr.layoutId AND (pr.deleteFlag IS NULL OR pr.deleteFlag = 0)')
             .leftJoinAndSelect(Page, 'page', 'page.id = pr.pageId')
             .leftJoinAndSelect(Route, 'route', 'route.id = pr.routeId')
+            .leftJoinAndSelect(Layout, 'layout', 'layout.id = layoutinst.layoutId')
             .select([
                 'layoutinst.id as layoutId',
                 'layoutinst.routePath as layoutPath',
+                'layout.layoutType as layoutType',
                 'pr.pageId as pageId',
                 'pr.redirect as redirect',
                 'route.id as id',

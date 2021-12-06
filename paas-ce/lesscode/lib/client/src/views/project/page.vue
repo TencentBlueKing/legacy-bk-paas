@@ -112,7 +112,7 @@
             </div>
             <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :refresh-list="getPageList"></page-dialog>
             <download-dialog ref="downloadDialog"></download-dialog>
-            <edit-route-dialog ref="editRouteDialog" :route-group="routeGroup" :current-route="currentRoute" @success="getPageList" />
+            <edit-route-dialog ref="editRouteDialog" :route-group="editRouteGroup" :current-route="currentRoute" @success="getPageList" />
             <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
         </main>
     </section>
@@ -166,7 +166,8 @@
                 pageRouteList: [],
                 routeGroup: [],
                 typeList: pageTypeList,
-                isLoading: true
+                isLoading: true,
+                editRouteGroup: []
             }
         },
         computed: {
@@ -221,7 +222,6 @@
                     ])
 
                     this.pageList = pageList
-                    console.log(this.pageList)
                     this.pageRouteList = pageRouteList
                     this.routeGroup = routeGroup
 
@@ -254,6 +254,7 @@
                 this.action = 'copy'
                 const layoutId = this.routeMap[page.id].layoutId
                 this.$refs.pageDialog.dialog.formData.id = page.id
+                this.$refs.pageDialog.dialog.formData.pageType = page.pageType
                 this.$refs.pageDialog.dialog.formData.pageName = `${page.pageName}-copy`
                 this.$refs.pageDialog.dialog.formData.pageCode = ''
                 this.$refs.pageDialog.dialog.formData.pageRoute = ''
@@ -302,6 +303,7 @@
             handleEditRoute (page) {
                 this.$refs.editRouteDialog.dialog.visible = true
                 this.$refs.editRouteDialog.dialog.pageId = page.id
+                this.editRouteGroup = this.routeGroup.filter(item => item.layoutType === page.pageType)
                 this.currentRoute = this.routeMap[page.id]
             },
             handleDelete (page) {

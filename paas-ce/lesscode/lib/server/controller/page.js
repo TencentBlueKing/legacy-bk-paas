@@ -21,7 +21,7 @@ export const getPageList = async (ctx) => {
 
         let list = res
         if (lite) {
-            list = list.map(({ id, pageCode, pageName }) => ({ id, pageCode, pageName }))
+            list = list.map(({ id, pageCode, pageName, pageType }) => ({ id, pageCode, pageName, pageType }))
         }
 
         ctx.send({

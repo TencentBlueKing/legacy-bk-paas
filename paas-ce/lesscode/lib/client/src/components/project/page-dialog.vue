@@ -11,7 +11,7 @@
             ext-cls="page-operate-dialog"
         >
             <bk-form ref="dialogForm" class="dialog-form" :label-width="86" :rules="dialog.formRules" :model="dialog.formData">
-                <bk-form-item label="页面类型" required property="pageType" v-if="action !== 'rename'" error-display-type="normal">
+                <bk-form-item label="页面类型" required property="pageType" v-if="action !== 'rename' && action !== 'copy'" error-display-type="normal">
                     <div class="bk-button-group">
                         <bk-button
                             :ext-cls="'type-button'"
@@ -213,6 +213,7 @@
             },
             'dialog.formData.layoutId' (layoutId) {
                 if (this.action === 'copy' && layoutId) {
+                    this.layoutList = this.layoutListMap[this.dialog.formData.pageType]
                     this.selectedLayout = this.layoutList.find(item => item.id === layoutId)
                 }
             }
