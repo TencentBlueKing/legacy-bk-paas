@@ -18,7 +18,6 @@ const parseTemplateTree = (templateRoot) => {
     templateRoot.renderStyles && node.setRenderStyles(templateRoot.renderStyles)
     templateRoot.renderProps && node.setRenderProps(templateRoot.renderProps)
     templateRoot.renderDirectives && node.setRenderDirectives(templateRoot.renderDirectives)
-    templateRoot.renderSlots && node.setRenderSlots(templateRoot.renderSlots)
     templateRoot.renderEvents && node.setRenderEvents(templateRoot.renderEvents)
     
     // 当前组件是布局类型的组件才会解析下一次 template 配置

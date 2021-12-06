@@ -1,4 +1,3 @@
-// import Node from './Node'
 import { uuid } from '@/common/util'
 import getRoot from './get-root'
 import create, { createNode } from './create-node'
@@ -10,13 +9,12 @@ const createNodeFromData = (data) => {
     const newNode = createNode(data.type)
     newNode.tabPanelActive = data.tabPanelActive || 'props'
     newNode.componentId = isClone ? `${data.name}-${id}` : data.componentId
-    newNode.name = data.name
-    newNode.type = data.type
     newNode.renderKey = id
-    newNode.renderStyles = data.renderStyles || {}
-    newNode.renderProps = data.renderProps || {}
-    newNode.renderDirectives = data.renderDirectives || []
-    newNode.renderEvents = data.renderEvents || {}
+    data.renderStyles && newNode.setRenderStyles(newNode.renderStyles)
+    data.renderProps && newNode.setRenderProps(data.renderProps)
+    data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
+    data.renderEvents && newNode.setRenderEvents(data.renderEvents)
+    
     newNode.interactiveShow = false
     newNode.isComplexComponent = data.isComplexComponent || false
 
@@ -83,7 +81,6 @@ const tansform = (root, data) => {
                         componentId: `column-${uid}`,
                         name: 'render-column',
                         type: 'render-column',
-                        renderKey: uid,
                         renderStyles: {
                             padding: '5px'
                         },
@@ -170,7 +167,6 @@ const checkVersion = (data) => {
 }
 
 export default function (data) {
-    console.log('\n\n\n\n==================== page data transform to node tree start ===================\n\n\n\n', data)
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
@@ -185,12 +181,9 @@ export default function (data) {
     } else {
         traverse(root, versionData, 'default')
     }
-    console.log('\n\n\n\n==================== page data transform to node tree end ===================\n\n\n\n')
 }
 
 export const parseTemplate = data => {
-    console.log('\n\n\n\n==================== page data transform to node tree start ===================\n\n\n\n', data)
-
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
@@ -200,7 +193,6 @@ export const parseTemplate = data => {
         isClone = true
         const root = create('render-column')
         traverse(root, [versionData], 'default')
-        console.log('\n\n\n\n==================== template data transform to node tree end ===================\n\n\n\n', root)
         return root.children[0]
     } finally {
         isClone = false

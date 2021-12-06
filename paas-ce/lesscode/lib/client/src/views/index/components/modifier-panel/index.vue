@@ -7,7 +7,11 @@
         <div
             v-if="componentId && !isCollapse"
             class="selected-component-info">
-            <div class="component-id overflow" v-bk-overflow-tips>{{ componentData.componentId }}</div>
+            <div
+                class="component-id overflow"
+                v-bk-overflow-tips>
+                {{ componentData.componentId }}
+            </div>
             <div class="action-wrapper">
                 <i
                     v-if="!inFormItem"
@@ -100,6 +104,9 @@
             },
             handleToggleInteractiveShow () {
                 this.componentData.toggleInteractive()
+            },
+            handleCollapseSide () {
+                this.isCollapse = !this.isCollapse
             },
             /**
              * @desc 调整链接

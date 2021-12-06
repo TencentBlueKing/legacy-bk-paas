@@ -74,9 +74,12 @@
             })
         },
         mounted () {
-            setTimeout(() => {
-                this.$refs.draggable && this.$refs.draggable.computeIndexes()
+            const timer = setTimeout(() => {
+                this.$refs.draggable.computeIndexes()
             }, 500)
+            this.$once('hook:beforeDestroy', () => {
+                clearTimeout(timer)
+            })
         },
         methods: {
             
@@ -93,7 +96,6 @@
              * @param { Object } dragEvent
              */
             handleChange (event) {
-                console.log('from change event == ', event)
                 let targetElement = null
                 if (event.added) {
                     targetElement = event.added.element

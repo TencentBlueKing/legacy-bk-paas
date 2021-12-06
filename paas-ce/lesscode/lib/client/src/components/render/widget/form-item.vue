@@ -10,7 +10,10 @@
 -->
 
 <template>
-    <div :class="$style['form-item']">
+    <div :class="{
+        [$style['form-item']]: true,
+        [$style['inline']]: isInlineLayout
+    }">
         <bk-form-item v-bind="componentData.prop">
             <template v-for="componentDate in componentData.slot.default">
                 <resolve-component
@@ -32,6 +35,15 @@
             componentData: {
                 type: Object,
                 default: () => ({})
+            },
+            formType: {
+                type: String,
+                default: ''
+            }
+        },
+        computed: {
+            isInlineLayout () {
+                return this.formType === 'inline'
             }
         },
         created () {
@@ -54,6 +66,15 @@
         z-index: 10;
         & + .form-item{
             margin-top: 20px
+        }
+        &.inline{
+            display: inline-block;
+            margin-top: 0;
+            margin-bottom: 0;
+            vertical-align: middle;
+            & + .inline{
+                margin-left: 8px;
+            }
         }
     }
 </style>

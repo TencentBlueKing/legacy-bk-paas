@@ -160,6 +160,44 @@
             min-height: calc(100% - 20px) !important;
             padding-bottom: 100px;
         }
+        .component-wrapper {
+            z-index: 1000;
+            margin: 5px;
+            vertical-align: middle;
+            &.selected {
+                position: relative;
+                z-index: 1000;
+                &:before {
+                    position: absolute !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    top: 0 !important;
+                    bottom: 0 !important;
+                    display: block !important;
+                    z-index: 999 !important;
+                    content: "" !important;
+                    border: 1px solid #3a84ff !important;
+                    pointer-events: auto !important;
+                }
+            }
+        }
+        .component-wrapper-hover {
+            position: relative;
+            z-index: 1000;
+            &:before {
+                position: absolute !important;
+                left: 0 !important;
+                right: 0 !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                display: block !important;
+                z-index: 999 !important;
+                content: "" !important;
+                border: 1px dashed #3a84ff !important;
+                cursor: pointer !important;
+                pointer-events: auto !important;
+            }
+        }
     }
     .lesscode-layout-empty {
         min-height: calc(100vh - 160px);

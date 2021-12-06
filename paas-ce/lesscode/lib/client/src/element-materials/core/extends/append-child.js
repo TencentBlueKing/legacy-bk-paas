@@ -12,7 +12,7 @@ export default function (node, childNode, slotName) {
         throw new Error('childNode 不是 Node 类型')
     }
     // 布局类型的组件才支持
-    // - 本身是布局组件（Grid、Column、Freelayout）
+    // - 本身是布局组件（Grid、Column、Freelayout、Form）
     // - 组件指定的 slot 是个布局组件
     if (node.layoutType) {
         node.renderSlots[slotName].push(childNode)

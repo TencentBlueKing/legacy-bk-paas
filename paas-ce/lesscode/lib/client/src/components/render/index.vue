@@ -11,31 +11,33 @@
 
 <template>
     <layout>
-        <draggable
-            class="target-drag-area"
-            :component-data="componentData"
-            :list="componentData.slot.default"
-            disabled
-            :sort="true"
-            :group="{
-                name: 'layout',
-                pull: true,
-                put: putCheck
-            }">
-            <template v-for="componentNode in componentData.slot.default">
-                <!-- root 的子组件只会是布局组件和交互式组件 -->
-                <!-- 布局组件 -->
-                <resolve-component
-                    v-if="!componentNode.isInteractiveComponent"
-                    :key="componentNode.renderKey"
-                    :component-data="componentNode" />
-                <!-- 交互式组件 -->
-                <resolve-interactive-component
-                    v-else
-                    :key="componentNode.renderKey"
-                    :component-data="componentNode" />
-            </template>
-        </draggable>
+        <div @mouseleave="handleMouseleave">
+            <draggable
+                class="target-drag-area"
+                :component-data="componentData"
+                :list="componentData.slot.default"
+                disabled
+                :sort="true"
+                :group="{
+                    name: 'layout',
+                    pull: true,
+                    put: putCheck
+                }">
+                <template v-for="componentNode in componentData.slot.default">
+                    <!-- root 的子组件只会是布局组件和交互式组件 -->
+                    <!-- 布局组件 -->
+                    <resolve-component
+                        v-if="!componentNode.isInteractiveComponent"
+                        :key="componentNode.renderKey"
+                        :component-data="componentNode" />
+                    <!-- 交互式组件 -->
+                    <resolve-interactive-component
+                        v-else
+                        :key="componentNode.renderKey"
+                        :component-data="componentNode" />
+                </template>
+            </draggable>
+        </div>
         <div
             v-show="showNotVisibleMask"
             class="not-visible-mask"
@@ -92,15 +94,13 @@
         },
         created () {
             this.componentData = LC.getRoot()
+
             const updateCallback = (event) => {
                 console.log('from target updateCallback == ', event)
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
                 }
             }
-            /** 当主页面拉去数据、加载页面后，调用动态计算遮罩的方法 */
-            bus.$on('pageInitialized', this.observeInteractiveMask)
-
             /**
              * @name interactiveWatcher
              * @description 当交互式组件的状态改变，每次更新需要监测是否显示“打开交互式组件”的提示
@@ -111,6 +111,9 @@
                     this.showNotVisibleMask = activeNode.isInteractiveComponent && !activeNode.interactiveShow
                 }
             }
+            /** 当主页面拉去数据、加载页面后，调用动态计算遮罩的方法 */
+            bus.$on('pageInitialized', this.observeInteractiveMask)
+
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('active', interactiveWatcher)
             LC.addEventListener('toggleInteractive', interactiveWatcher)
@@ -142,6 +145,12 @@
                 })
                 this.resizeObserve.observe(canvas)
             },
+            /**
+             * @desc 只可以放入布局类型和交互是类型的组件
+             * @param { Object } target
+             * @param { Object } source
+             * @returns { Boolean }
+             */
             putCheck (target, source) {
                 // 画布区域内部拖动
                 if (getDragTargetGroup() === 'layout') {
@@ -155,6 +164,14 @@
                     return true
                 }
                 return false
+            },
+            /**
+             * @desc 鼠标离开时清除组件 hover 效果
+             * @param { Boolean } name
+             * @returns { Boolean }
+             */
+            handleMouseleave () {
+                LC.triggerEventListener('component-mouserleave')
             }
         }
     }

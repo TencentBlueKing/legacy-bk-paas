@@ -41,9 +41,6 @@
     import { getStyle } from '@/common/util'
     import LC from '@/element-materials/core'
     import SaveToTemplate from './components/save-to-template'
-    import WidgetForm from './widget/form'
-    import WidgetFormItem from './widget/form-item'
-    import offsetMixin from './widget/offset-mixin'
     import RenderComponent from './render-component'
     import RenderSlot from './render-slot'
 
@@ -88,17 +85,16 @@
     export default {
         name: 'resolve-component',
         components: {
-            SaveToTemplate,
             /* eslint-disable vue/no-unused-components */
-            WidgetForm,
-            WidgetFormItem,
-            RenderGrid: () => import('./widget/grid'),
             FreeLayout: () => import('./widget/free-layout'),
+            RenderGrid: () => import('./widget/grid'),
+            WidgetForm: () => import('./widget/form'),
+            WidgetFormItem: () => import('./widget/form-item'),
             ResolveComponent: () => import('./resolve-component'),
             RenderComponent,
-            RenderSlot
+            RenderSlot,
+            SaveToTemplate
         },
-        mixins: [offsetMixin],
         inheritAttrs: false,
         props: {
             componentData: {
@@ -134,12 +130,18 @@
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
             }, 100)
+            const componentMouseleaveCallback = () => {
+                hoverComponentId = ''
+                this.isHover = false
+            }
 
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('component-hover', componentHoverCallback)
+            LC.addEventListener('component-mouserleave', componentMouseleaveCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
                 LC.removeEventListener('component-hover', componentHoverCallback)
+                LC.removeEventListener('component-mouserleave', componentMouseleaveCallback)
             })
         },
         mounted () {

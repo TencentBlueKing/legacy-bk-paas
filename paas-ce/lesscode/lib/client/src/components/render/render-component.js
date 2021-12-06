@@ -88,23 +88,15 @@ export default {
             return result
         }, {})
 
-        return h('span',
-            {
-                style: {
-                    'font-size': 'initial'
-                }
+        return h(componentData.type, {
+            key: componentData.renderKey,
+            props,
+            attrs: {
+                role: componentData.type
             },
-            [
-                h(componentData.type, {
-                    key: componentData.renderKey,
-                    props,
-                    attrs: {
-                        role: componentData.type
-                    },
-                    on: events,
-                    scopedSlots: renderSlotMap,
-                    style: Object.assign({}, componentData.style, nativeComponentStyleReset)
-                }, renderSlotMap.default && renderSlotMap.default())
-            ])
+            on: events,
+            scopedSlots: renderSlotMap,
+            style: Object.assign({}, componentData.style, nativeComponentStyleReset)
+        }, renderSlotMap.default && renderSlotMap.default())
     }
 }
