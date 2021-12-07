@@ -293,6 +293,7 @@
             async handleRename (page) {
                 this.action = 'rename'
                 this.currentName = page.pageName
+                this.$refs.pageDialog.dialog.formData.pageType = page.pageType
                 this.$refs.pageDialog.dialog.formData.pageName = page.pageName
                 this.$refs.pageDialog.dialog.formData.pageCode = page.pageCode
                 this.$refs.pageDialog.dialog.formData.pageRoute = page.pageRoute

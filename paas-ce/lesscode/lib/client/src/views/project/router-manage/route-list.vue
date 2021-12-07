@@ -260,13 +260,11 @@
     import { mapGetters } from 'vuex'
     import { compile } from 'path-to-regexp'
     import BindRouteForm from './children/bind-route-form'
-    // import RouteGroup from './children/route-group'
 
     export default {
         name: 'route-list',
         components: {
             [BindRouteForm.name]: BindRouteForm
-            // RouteGroup: RouteGroup
         },
         filters: {
             routeShow (value) {
@@ -285,7 +283,8 @@
         data () {
             return {
                 pageLoading: true,
-                // routeGroup: [],
+                routeGroup: [],
+                pageList: [],
                 layoutList: [],
                 foldeds: {},
                 editState: {
@@ -346,19 +345,12 @@
             },
             removeLoading () {
                 return this.loadingState.remove.length > 0
-            },
-            routeGroup () {
-                return this.routeMap[this.type]
-            },
-            pageList () {
-                return this.pageMap[this.type]
-            },
-            vnode () {
-                return this.type === 'MOBILE' ? <span>test</span> : <div></div>
             }
         },
         watch: {
-            type () {
+            type (val) {
+                this.pageList = this.pageMap[val]
+                this.routeGroup = this.routeMap[val]
                 this.bindRouteSelectorProps.pageList = this.pageList
                 this.bindRouteSelectorProps.routeGroup = this.routeGroup
             }
@@ -399,7 +391,7 @@
                     })
                     this.routeMap['PC'].sort((g1, g2) => g1.layoutId - g2.layoutId)
                     this.routeMap['MOBILE'].sort((g1, g2) => g1.layoutId - g2.layoutId)
-
+                    this.routeGroup = this.routeMap[this.type]
                     this.bindRouteSelectorProps.routeGroup = this.routeGroup
                 } catch (e) {
                     console.error(e)
@@ -417,6 +409,7 @@
                         name: page.pageName
                     })
                 })
+                this.pageList = this.pageMap[this.type]
                 this.bindRouteSelectorProps.pageList = this.pageList
             },
             handleEditLayoutPath (group) {
