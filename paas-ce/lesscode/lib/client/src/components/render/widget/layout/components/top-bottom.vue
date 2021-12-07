@@ -73,13 +73,15 @@
     import { mapGetters, mapMutations } from 'vuex'
     import LC from '@/element-materials/core'
     import { bus } from '@/common/bus'
-    import { getNodeWithClass } from '@/common/util'
 
     const unselectComponent = () => {
         const activeNode = LC.getActiveNode()
         if (activeNode) {
             activeNode.activeClear()
         }
+        document.body.querySelectorAll('.component-wrapper').forEach($el => {
+            $el.classList.remove('selectd')
+        })
     }
 
     export default {
@@ -92,16 +94,16 @@
         computed: {
             ...mapGetters(['user']),
             ...mapGetters('drag', [
-                'curSelectedComponentData',
                 'curTemplateData'
             ]),
             ...mapGetters('layout', ['pageLayout'])
         },
         created () {
             const activeCallback = () => {
-                const curComponentNode = getNodeWithClass(this.$refs.layout, 'component-wrapper')
-                curComponentNode.classList.remove('selected')
                 this.isTopMenuSelected = false
+                document.body.querySelectorAll('.component-wrapper').forEach($el => {
+                    $el.classList.remove('selectd')
+                })
             }
             LC.addEventListener('active', activeCallback)
             bus.$on('on-template-change', this.handleTemplateChange)

@@ -11,6 +11,7 @@
 
 <template>
     <div
+        ref="componentRoot"
         :class="{
             [$style['component']]: true,
             [$style['selected']]: componentData.isActived,
@@ -18,7 +19,7 @@
             'bk-layout-custom-component-wrapper': componentData.isCustomComponent
         }"
         role="component-root"
-        :data-component-id="`component-${componentData.componentId}`"
+        :data-component-id="`${componentData.componentId}`"
         :data-layout="componentData.layoutType"
         :style="componentData.style"
         @mousedown.stop="handleMousedown"
@@ -40,9 +41,6 @@
     import { getStyle } from '@/common/util'
     import LC from '@/element-materials/core'
     import SaveToTemplate from './components/save-to-template'
-    import WidgetForm from './widget/form'
-    import WidgetFormItem from './widget/form-item'
-    import offsetMixin from './widget/offset-mixin'
     import RenderComponent from './render-component'
     import RenderSlot from './render-slot'
 
@@ -87,17 +85,16 @@
     export default {
         name: 'resolve-component',
         components: {
-            SaveToTemplate,
             /* eslint-disable vue/no-unused-components */
-            WidgetForm,
-            WidgetFormItem,
-            RenderGrid: () => import('./widget/grid'),
             FreeLayout: () => import('./widget/free-layout'),
+            RenderGrid: () => import('./widget/grid'),
+            WidgetForm: () => import('./widget/form'),
+            WidgetFormItem: () => import('./widget/form-item'),
             ResolveComponent: () => import('./resolve-component'),
             RenderComponent,
-            RenderSlot
+            RenderSlot,
+            SaveToTemplate
         },
-        mixins: [offsetMixin],
         inheritAttrs: false,
         props: {
             componentData: {
@@ -133,16 +130,19 @@
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
             }, 100)
+            const componentMouseleaveCallback = () => {
+                hoverComponentId = ''
+                this.isHover = false
+            }
 
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('component-hover', componentHoverCallback)
+            LC.addEventListener('component-mouserleave', componentMouseleaveCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
                 LC.removeEventListener('component-hover', componentHoverCallback)
+                LC.removeEventListener('component-mouserleave', componentMouseleaveCallback)
             })
-        },
-        updated () {
-            console.log('**************** component update **************', this.componentData.componentId)
         },
         mounted () {
             this.calcDefaultDisplay()
@@ -150,6 +150,21 @@
             this.$emit('component-mounted')
         },
         methods: {
+            /**
+             * @desc 判断是否是组件库组价类型
+             * @param { String } type
+             * @returns { Boolean }
+             */
+            checkNativeComponent (type) {
+                const shadowComMap = {
+                    'free-layout': true,
+                    'render-grid': true,
+                    'widget-form': true,
+                    'widget-form-item': true,
+                    'resolve-component': true
+                }
+                return !shadowComMap[type]
+            },
             /**
              * @desc 判断渲染组件的 display 的值
              */
@@ -264,7 +279,7 @@
 </script>
 <style lang="postcss" module>
     .component {
-        vertical-align: middle;
+        /* vertical-align: middle; */
         -webkit-text-size-adjust: none;
         &.selected,
         &.hover{
@@ -290,50 +305,10 @@
             &:before {
                 border: 1px dashed #3a84ff !important;
             }
-            /* &.in-column-ghost {
-                &:before {
-                    border: none !important;
-                }
-            }
-            &.in-free-layout-item-ghost {
-                &:before {
-                    border: none !important;
-                }
-            } */
         }
-        /* .bk-dialog-wrapper > .bk-dialog {
+        &.disabled{
             pointer-events: none;
-            .bk-dialog-body {
-                pointer-events: auto;
-            }
-        }
-        .bk-sideslider-wrapper > .bk-sideslider-content {
-            padding: 10px;
-        } */
-    }
-
-    /* .wrapper-cls-hover {
-        .bk-card, .empty-widget-form, .bk-form {
-            border: 1px dashed #3a84ff !important;
-        }
-        
-    }
-
-    .wrapper-cls-selected {
-        .bk-card, .bk-form, .empty-widget-form {
-            border: 1px solid #3a84ff !important;
         }
     }
-    .wrapperCls {
-        .bk-dialog-wrapper > .bk-dialog {
-            pointer-events: none;
-            .bk-dialog-body {
-                pointer-events: auto;
-            }
-        }
-        .bk-sideslider-wrapper > .bk-sideslider-content {
-            padding: 10px;
-        }
-    } */
 
 </style>

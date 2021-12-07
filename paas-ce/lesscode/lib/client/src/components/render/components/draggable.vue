@@ -2,6 +2,7 @@
     <vue-draggable
         ref="draggable"
         :class="$style['drag-area']"
+        :list="list"
         :group="dragGroup"
         :chosen-class="$style['chosen']"
         :ghost-class="ghostClass || $style['ghost']"
@@ -20,15 +21,20 @@
     import _ from 'lodash'
     import LC from '@/element-materials/core'
 
-    let choostTargetType = null
-    export const getChooseTargetType = () => {
-        return choostTargetType
+    let dragTargetGroup = null
+    export const getDragTargetGroup = () => {
+        return dragTargetGroup
     }
 
     export default {
         name: 'render-draggable',
         inheritAttrs: false,
         props: {
+            list: {
+                type: Array,
+                required: false,
+                default: null
+            },
             componentData: {
                 type: Object,
                 required: true
@@ -68,11 +74,15 @@
             })
         },
         mounted () {
-            setTimeout(() => {
-                this.$refs.draggable && this.$refs.draggable.computeIndexes()
+            const timer = setTimeout(() => {
+                this.$refs.draggable.computeIndexes()
+            }, 500)
+            this.$once('hook:beforeDestroy', () => {
+                clearTimeout(timer)
             })
         },
         methods: {
+            
             /**
              * @desc 添加组件
              * @param { Object } dragEvent
@@ -86,22 +96,31 @@
              * @param { Object } dragEvent
              */
             handleChange (event) {
+                let targetElement = null
                 if (event.added) {
+                    targetElement = event.added.element
                     LC.triggerEventListener('update', {
                         target: this.componentData,
                         type: 'appendChildren'
                     })
                 } else if (event.removed) {
+                    targetElement = event.removed.element
                     LC.triggerEventListener('update', {
                         target: this.componentData,
                         type: 'removeChildren'
                     })
                 } else if (event.moved) {
+                    targetElement = event.moved.element
                     LC.triggerEventListener('update', {
                         target: this.componentData,
                         type: 'moveChildren'
                     })
                 }
+                // 拖动组件需要重置会影响排版的样式
+                targetElement.setStyle({
+                    marginTop: 'unset',
+                    marginLeft: 'unset'
+                })
                 // fix: vue-draggable内部没有更新
                 this.$refs.draggable.computeIndexes()
                 
@@ -112,7 +131,7 @@
              * @param { Object } dragEvent
              */
             handleChoose (event) {
-                choostTargetType = event.item.dataset['layout'] ? 'layout' : 'component'
+                dragTargetGroup = event.item.dataset['layout'] ? 'layout' : 'component'
                 this.$emit('choose', event)
             },
             /**
@@ -120,7 +139,6 @@
              * @param { Object } dragEvent
              */
             handleStart (event) {
-                // console.log('print drag start', event)
                 this.$emit('start', event)
             },
             /**
@@ -128,8 +146,7 @@
              * @param { Object } dragEvent
              */
             handleEnd (event) {
-                console.log('print drag end', event)
-                choostTargetType = ''
+                dragTargetGroup = ''
                 this.$emit('end', event)
             }
         }
@@ -143,7 +160,6 @@
     }
     .chosen{
         opacity: .5;
-        /* background-color: #ffdddd; */
     }
     .ghost{
         &::before{

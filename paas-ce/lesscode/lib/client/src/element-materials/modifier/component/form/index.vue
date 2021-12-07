@@ -265,7 +265,7 @@
                             type: 'text',
                             val: '取消'
                         })
-                        cancelBtnNode.setStyle('marginLeft', '5px')
+                        cancelBtnNode.setStyle('marginLeft', '10px')
                         actionFormItemNode = LC.createNode('widget-form-item')
                         actionFormItemNode.appendChild(submitBtnNode)
                         actionFormItemNode.appendChild(cancelBtnNode)

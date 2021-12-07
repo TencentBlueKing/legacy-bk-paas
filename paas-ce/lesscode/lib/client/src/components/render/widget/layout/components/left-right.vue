@@ -1,5 +1,5 @@
 <template>
-    <div ref="layout" class="monitor-navigation">
+    <div ref="layout">
         <bk-navigation
             :header-title="navActive"
             :side-title="siteTitle"
@@ -78,13 +78,15 @@
     import { mapGetters, mapMutations } from 'vuex'
     import { bus } from '@/common/bus'
     import LC from '@/element-materials/core'
-    import { getNodeWithClass } from '@/common/util'
 
     const unselectComponent = () => {
         const activeNode = LC.getActiveNode()
         if (activeNode) {
             activeNode.activeClear()
         }
+        document.body.querySelectorAll('.component-wrapper').forEach($el => {
+            $el.classList.remove('selected')
+        })
     }
 
     export default {
@@ -100,15 +102,15 @@
         computed: {
             ...mapGetters(['user']),
             ...mapGetters('drag', [
-                'curSelectedComponentData',
                 'curTemplateData'
             ]),
             ...mapGetters('layout', ['pageLayout'])
         },
         created () {
             const activeCallback = () => {
-                const curComponentNode = getNodeWithClass(this.$refs.layout, 'component-wrapper')
-                curComponentNode.classList.remove('selected')
+                document.body.querySelectorAll('.component-wrapper').forEach($el => {
+                    $el.classList.remove('selectd')
+                })
                 this.isSideMenuSelected = false
             }
             LC.addEventListener('active', activeCallback)
@@ -130,6 +132,9 @@
             componentWrapperMouseleaveHandler (event) {
                 event.target.classList.remove('component-wrapper-hover')
             },
+            /**
+             * @desc 展开菜单
+             */
             handleOpenMenu () {
                 if (!this.$refs.item) {
                     return
@@ -139,14 +144,22 @@
                     this.$refs.item.forEach(item => item.handleOpen())
                 })
             },
+            /**
+             * @desc 选中站点Logo 块进行配置
+             * @param { Object } event
+             */
             handleSiteInfo (event) {
                 unselectComponent()
+                this.isSideMenuSelected = false
                 event.target.classList.add('selected')
                 this.setCurTemplateData({
                     ...this.curTemplateData,
                     panelActive: 'info'
                 })
             },
+            /**
+             * @desc 选中左侧导航进行配置
+             */
             handleSideMenuSelect () {
                 unselectComponent()
                 this.isSideMenuSelected = true
@@ -155,6 +168,10 @@
                     panelActive: 'menu'
                 })
             },
+            /**
+             * @desc 更新模板配置
+             * @param { Object } payload
+             */
             handleTemplateChange (payload) {
                 const {
                     logo,

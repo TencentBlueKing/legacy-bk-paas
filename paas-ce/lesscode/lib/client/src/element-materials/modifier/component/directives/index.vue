@@ -24,7 +24,7 @@
                         :value="directive.val"
                         :val-type="directive.valType"
                         :available-types="directive.propTypes"
-                        :disabled-change="curSelectedComponentData.inFormItem && directive.type === 'v-model'"
+                        :disabled-change="isAttachToForm"
                         @change="(data) => changeVariable(directive, data)">
                         <template v-slot:title>
                             <span
@@ -55,7 +55,6 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
     import _ from 'lodash'
     import LC from '@/element-materials/core'
     import variableSelect from '@/components/variable/variable-select'
@@ -72,12 +71,10 @@
 
         data () {
             return {
-                renderDirectiveList: [],
-                lastDirectiveMap: {}
+                // renderDirectiveList: [],
+                // lastDirectiveMap: {},
+                isAttachToForm: false
             }
-        },
-        computed: {
-            ...mapGetters('drag', ['targetData', 'curSelectedComponentData'])
         },
         created () {
             this.currentComponentNode = LC.getActiveNode()
@@ -126,8 +123,12 @@
             }
             this.renderDirectiveList = Object.freeze(renderDirectiveList)
             this.calcDirectiveValue()
+            this.checkAttachToFrom()
         },
         methods: {
+            /**
+             * @desc 合并 directive config 和用户设置的指令值配置
+             */
             calcDirectiveValue () {
                 const renderDirectiveList = [...this.renderDirectiveList]
                 renderDirectiveList.forEach(directive => {
@@ -138,8 +139,30 @@
                 })
                 this.renderDirectiveList = Object.freeze(renderDirectiveList)
             },
+            /**
+             * @desc 检测是否是 form 的子节点
+             */
+            checkAttachToFrom () {
+                this.isAttachToForm = false
+                let parentNode = this.currentComponentNode.parentNode
+                while (parentNode) {
+                    if (parentNode.type === 'widget-form') {
+                        this.isAttachToForm = true
+                    }
+                    parentNode = parentNode.parentNode
+                }
+            },
+            /**
+             * @desc directive 显示 label
+             * @param { Boolean } Object
+             * @returns { String }
+             */
             getLabel (directive) {
-                const { type, modifiers = [], prop = '' } = directive
+                const {
+                    type,
+                    modifiers = [],
+                    prop = ''
+                } = directive
                 let res = ''
                 switch (type) {
                     case 'v-model':
@@ -157,7 +180,11 @@
                 }
                 return res
             },
-
+            /**
+             * @desc directive 值类型切换（值、变量、表达式）
+             * @param { Boolean } name
+             * @returns { Boolean }
+             */
             changeVariable (directive, data) {
                 this.lastDirectiveMap[genDirectiveKey(directive)] = {
                     ...directive,
@@ -169,6 +196,11 @@
                 this.triggleUpdate()
             },
 
+            /**
+             * @desc directive 是值类型时，值得 value 改变
+             * @param { Object } directive
+             * @param { String } value
+             */
             handleChange (directive, value) {
                 this.lastDirectiveMap[genDirectiveKey(directive)] = {
                     ...directive,

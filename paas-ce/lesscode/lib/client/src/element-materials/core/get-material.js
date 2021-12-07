@@ -14,6 +14,14 @@ const elementMap = [
     return result
 }, {})
 
+export const registerMaterial = (type, config) => {
+    if (elementMap[type]) {
+        console.error(`组件 ${type} 已存在`)
+        return
+    }
+    elementMap[type] = config
+}
+
 export default function (elementType) {
     const material = elementMap[elementType]
     if (!material) {

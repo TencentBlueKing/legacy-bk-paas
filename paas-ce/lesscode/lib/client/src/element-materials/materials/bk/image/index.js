@@ -11,7 +11,7 @@
 
 export default {
     name: 'image',
-    type: 'img',
+    type: 'bk-image',
     displayName: '图片',
     icon: 'bk-drag-image',
     group: '基础',

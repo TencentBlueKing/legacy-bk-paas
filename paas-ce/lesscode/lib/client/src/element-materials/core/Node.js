@@ -1,5 +1,6 @@
 import { uuid } from '@/common/util'
 
+import toJSON from './extends/to-json'
 import active from './extends/active'
 import activeClear from './extends/active-clear'
 import toggleInteractive from './extends/toggle-interactive'
@@ -75,8 +76,6 @@ export default class Node {
         this.isCustomComponent = isCustomComponent
         // 组件被选中
         this.isActived = false
-        // 附加属性
-        this.attributes = {}
     }
     /**
      * @desc 组件 material 配置
@@ -211,6 +210,14 @@ export default class Node {
         return Object.seal(Object.assign({}, eventRelatedMethodMap, propRelatedVariableMap, slotRelatedVariableMap))
     }
     /**
+     * @desc 获取节点的 JSON 数据
+     * @param { Boolean } deep 是否深层编辑，false 只返回当前节点的的数据，true 会返回自己节点的数据
+     * @returns { Boolean }
+     */
+    toJSON (deep = true) {
+        return toJSON(this, deep)
+    }
+    /**
      * @desc 设置节点属性
      * @param { String } key 属性名
      * @param { Any } value 属性值
@@ -229,17 +236,6 @@ export default class Node {
         if (setKeyList.includes(key)) {
             this[key] = value
         }
-    }
-
-    /**
-     * @desc 设置节点附加属性
-     * @returns { Node }
-     */
-    @readonly
-    @notify
-    setAttribute (key, value) {
-        this.attributes[key] = value
-        return this
     }
 
     /**

@@ -32,6 +32,11 @@ export default {
                 left: 'initial'
             })
         }
+        if (context.parent.checkNativeComponent(componentData.type)) {
+            Object.assign(nativeComponentStyleReset, {
+                'pointer-events': 'none'
+            })
+        }
 
         const props = Object.assign({}, componentData.prop, {
             'component-data': componentData
@@ -66,7 +71,7 @@ export default {
             result[slotName] = () => slotList.map(slot => {
                 // 如果是组件渲染组件
                 if (LC.isNode(slot)) {
-                    return h('ResolveComponent', {
+                    return h('resolve-component', {
                         props: {
                             componentData: slot
                         },
@@ -83,24 +88,15 @@ export default {
             return result
         }, {})
 
-        return h('span',
-            {
-                style: {
-                    'font-size': 'initial'
-                }
+        return h(componentData.type, {
+            key: componentData.renderKey,
+            props,
+            attrs: {
+                role: componentData.type
             },
-            [
-                h(componentData.type, {
-                    // key: params['component-type'] === 'bk-sideslider' ? 'bk-slider' : refreshKey, // sideSlider 固定key，防止属性修改动画刷新
-                    key: componentData.renderKey,
-                    props,
-                    attrs: {
-                        role: componentData.type
-                    },
-                    on: events,
-                    scopedSlots: renderSlotMap,
-                    style: Object.assign({}, componentData.style, nativeComponentStyleReset)
-                }, renderSlotMap.default && renderSlotMap.default())
-            ])
+            on: events,
+            scopedSlots: renderSlotMap,
+            style: Object.assign({}, componentData.style, nativeComponentStyleReset)
+        }, renderSlotMap.default && renderSlotMap.default())
     }
 }

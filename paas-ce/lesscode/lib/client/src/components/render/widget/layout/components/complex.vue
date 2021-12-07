@@ -1,5 +1,5 @@
 <template>
-    <div ref="layout" class="monitor-navigation">
+    <div ref="layout">
         <bk-navigation
             navigation-type="top-bottom"
             default-open
@@ -92,13 +92,15 @@
     import _ from 'lodash'
     import LC from '@/element-materials/core'
     import { bus } from '@/common/bus'
-    import { getNodeWithClass } from '@/common/util'
 
     const unselectComponent = () => {
         const activeNode = LC.getActiveNode()
         if (activeNode) {
             activeNode.activeClear()
         }
+        document.body.querySelectorAll('.component-wrapper').forEach($el => {
+            $el.classList.remove('selected')
+        })
     }
 
     export default {
@@ -115,7 +117,6 @@
         computed: {
             ...mapGetters(['user']),
             ...mapGetters('drag', [
-                'curSelectedComponentData',
                 'curTemplateData'
             ]),
             ...mapGetters('layout', ['pageLayout']),
@@ -138,12 +139,13 @@
         },
         created () {
             const activeCallback = () => {
-                const curComponentNode = getNodeWithClass(this.$refs.layout, 'component-wrapper')
-                curComponentNode.classList.remove('selected')
                 this.isTopMenuSelected = false
                 this.isSideMenuSelected = false
                 this.selectTopMenuId = ''
                 this.activeTopMenuId = ''
+                document.body.querySelectorAll('.component-wrapper').forEach($el => {
+                    $el.classList.remove('selected')
+                })
             }
             LC.addEventListener('active', activeCallback)
             bus.$on('on-template-change', this.handleTemplateChange)
@@ -170,10 +172,9 @@
                     this.$refs.item.forEach(item => item.handleOpen())
                 })
             },
-            handleSiteInfo () {
+            handleSiteInfo (event) {
                 unselectComponent()
-                const curComponentNode = getNodeWithClass(event.target, 'component-wrapper')
-                curComponentNode.classList.add('selected')
+                event.target.classList.add('selected')
                 this.setCurTemplateData({
                     ...this.curTemplateData,
                     panelActive: 'info'

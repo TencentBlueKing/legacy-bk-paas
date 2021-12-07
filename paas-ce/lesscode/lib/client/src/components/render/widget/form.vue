@@ -21,7 +21,8 @@
                 <widget-form-item
                     v-for="formItemNode in componentData.slot.default"
                     :key="formItemNode.componentId"
-                    :component-data="formItemNode" />
+                    :component-data="formItemNode"
+                    :form-type="componentData.prop['form-type']" />
             </bk-form>
         </template>
     </div>
