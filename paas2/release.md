@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.18
+    - bug: esb fix iam_delete_component
+
 # 2.13.17
     - update: esb update data/iam confapis
 
@@ -55,6 +58,9 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.33
+    - bug: esb fix iam_delete_component
 
 # 2.12.32
     - update: esb update data/iam confapis
