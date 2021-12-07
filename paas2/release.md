@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.33
+    - bug: esb fix iam_delete_component
+
 # 2.12.32
     - update: esb update data/iam confapis
 
