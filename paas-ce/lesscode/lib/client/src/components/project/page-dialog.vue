@@ -11,7 +11,7 @@
             ext-cls="page-operate-dialog"
         >
             <bk-form ref="dialogForm" class="dialog-form" :label-width="86" :rules="dialog.formRules" :model="dialog.formData">
-                <bk-form-item label="页面类型" required property="pageType" v-if="action !== 'rename' && action !== 'copy'" error-display-type="normal">
+                <bk-form-item label="页面类型" required property="pageType" v-if="action === 'create'" error-display-type="normal">
                     <div class="bk-button-group">
                         <bk-button
                             :ext-cls="'type-button'"
@@ -232,7 +232,7 @@
                         // 不需要显示选中态标签
                         item.isDefault = false
                         if (item.layoutType === 'MOBILE') {
-                            item.checked = item.type === 'mobile-empty' ? 1 : 0
+                            item.checked = item.type === 'mobile-empty'
                             that.layoutListMap['MOBILE'].push(item)
                         } else {
                             that.layoutListMap['PC'].push(item)
