@@ -9,6 +9,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import json
 
 from common.constants import API_TYPE_OP
 from components.component import ConfComponent
@@ -27,7 +28,7 @@ class IamDeleteComponent(ConfComponent):
             self.dest_http_method,
             host=configs.host,
             path=request_info["path"],
-            params=request_info["data"],
+            params=json.loads(request_info["data"]),
             with_jwt_header=True,
             headers=request_info["headers"],
             response_encoding="utf-8",
