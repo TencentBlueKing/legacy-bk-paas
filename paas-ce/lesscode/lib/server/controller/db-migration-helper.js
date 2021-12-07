@@ -4,10 +4,11 @@ import Project from '../model/entities/project'
 import { logger } from '../logger'
 import Page from '../model/entities/page'
 import PageTemplateCategory from '../model/entities/page-template-category'
+import Layout from '../model/entities/layout'
 import { walkGrid, uuid } from '../util'
 
 // 将函数名称写到这个数组里，函数会自动执行，返回成功则后续不会再执行
-const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots']
+const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'setMobileLayout']
 
 export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
@@ -318,6 +319,47 @@ async function fixCardsSlots () {
             code: -1,
             message: error.message || error,
             data: null
+        }
+    }
+}
+
+/**
+ *  layout表新增mobile布局模板
+ */
+// eslint-disable-next-line no-unused-vars
+async function setMobileLayout (apiName) {
+    const layoutRepo = getRepository(Layout)
+    try {
+        await getConnection().transaction(async transactionalEntityManager => {
+            // 更新布局模板类型
+            const layoutUpdateList = (await layoutRepo.find()).map(layout => {
+                return {
+                    id: layout.id,
+                    layoutType: 'PC'
+                }
+            })
+            await transactionalEntityManager.save(Layout, layoutUpdateList)
+            // 创建布局模板基本信息记录
+            const mobileLayout = layoutRepo.create({
+                layoutType: 'MOBILE',
+                defaultPath: '/',
+                defaultName: '空白布局',
+                defaultCode: 'mobileEmptyView',
+                type: 'mobile-empty',
+                defaultContent: JSON.stringify({}),
+                createUser: 'admin',
+                updateUser: 'admin'
+            })
+            await transactionalEntityManager.save(mobileLayout)
+        })
+        return {
+            code: 0,
+            message: `${apiName}: Insert success`
+        }
+    } catch (err) {
+        return {
+            code: -1,
+            message: `${apiName}: ${err.message || err}`
         }
     }
 }

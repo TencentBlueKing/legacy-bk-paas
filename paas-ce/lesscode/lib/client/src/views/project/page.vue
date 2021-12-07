@@ -11,10 +11,35 @@
                         <li><a href="javascript:;" @click="handleTempCreate">从模板新建</a></li>
                     </ul>
                 </bk-dropdown-menu>
-                <bk-button @click="handlePreviewProject">预览项目</bk-button>
+                <template>
+                    <bk-dropdown-menu v-if="hasMobilePage" trigger="click" :align="'center'" :ext-cls="'preview-dropdown'">
+                        <div class="dropdown-trigger-btn" slot="dropdown-trigger">
+                            <bk-button icon-right="icon-angle-down">预览项目</bk-button>
+                        </div>
+                        <ul class="bk-dropdown-list" slot="dropdown-content">
+                            <li><a href="javascript:;">预览PC页面</a></li>
+                            <li><a href="javascript:;">预览移动端页面</a></li>
+                        </ul>
+                    </bk-dropdown-menu>
+                    <bk-button v-else @click="handlePreviewProject">预览项目</bk-button>
+                </template>
                 <bk-button @click="handleDownLoadProject">源码下载</bk-button>
                 <div class="extra">
-                    <span class="total" v-show="renderList.length">共<em class="count">{{renderList.length}}</em>个页面</span>
+                    <template>
+                        <bk-select
+                            v-if="hasMobilePage"
+                            v-model="pageType"
+                            :clearable="false"
+                            :ext-cls="'type-select'"
+                            @change="handleSearch(false)">
+                            <bk-option v-for="option in typeList"
+                                :key="option.id"
+                                :id="option.id"
+                                :name="option.name">
+                            </bk-option>
+                        </bk-select>
+                        <span v-else class="total" v-show="renderList.length">共<em class="count">{{renderList.length}}</em>个页面</span>
+                    </template>
                     <bk-input
                         :style="{ width: '400px' }"
                         placeholder="请输入页面名称"
@@ -42,7 +67,13 @@
                         </div>
                         <div class="item-ft">
                             <div class="col">
-                                <h3 class="name" :title="page.pageName">{{page.pageName}}</h3>
+                                <div class="page-name">
+                                    <span class="page-type">
+                                        <i v-if="page.pageType === 'MOBILE'" class="bk-drag-icon bk-drag-mobilephone"> </i>
+                                        <i v-else class="bk-drag-icon bk-drag-pc"> </i>
+                                    </span>
+                                    <div class="name" :title="page.pageName">{{page.pageName}}</div>
+                                </div>
                                 <div class="route">
                                     <svg class="label" width="22" height="14" viewBox="0 0 22 14">
                                         <rect x="0" width="22" height="14" rx="2" fill="#F0F1F5" />
@@ -81,7 +112,7 @@
             </div>
             <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :refresh-list="getPageList"></page-dialog>
             <download-dialog ref="downloadDialog"></download-dialog>
-            <edit-route-dialog ref="editRouteDialog" :route-group="routeGroup" :current-route="currentRoute" @success="getPageList" />
+            <edit-route-dialog ref="editRouteDialog" :route-group="editRouteGroup" :current-route="currentRoute" @success="getPageList" />
             <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
         </main>
     </section>
@@ -100,6 +131,21 @@
     dayjs.extend(relativeTime)
     dayjs.locale('zh-cn')
 
+    const pageTypeList = [
+        {
+            id: 'ALL',
+            name: '全部'
+        },
+        {
+            id: 'PC',
+            name: 'PC端'
+        },
+        {
+            id: 'MOBILE',
+            name: '移动端'
+        }
+    ]
+
     export default {
         components: {
             pageDialog,
@@ -114,11 +160,14 @@
                 currentName: '',
                 currentRoute: {},
                 keyword: '',
+                pageType: 'ALL',
                 renderList: [],
                 pageList: [],
                 pageRouteList: [],
                 routeGroup: [],
-                isLoading: true
+                typeList: pageTypeList,
+                isLoading: true,
+                editRouteGroup: []
             }
         },
         computed: {
@@ -146,6 +195,9 @@
                     }
                 })
                 return routeMap
+            },
+            hasMobilePage () {
+                return this.pageList.find(page => page.pageType === 'MOBILE')
             }
         },
         watch: {
@@ -202,6 +254,7 @@
                 this.action = 'copy'
                 const layoutId = this.routeMap[page.id].layoutId
                 this.$refs.pageDialog.dialog.formData.id = page.id
+                this.$refs.pageDialog.dialog.formData.pageType = page.pageType
                 this.$refs.pageDialog.dialog.formData.pageName = `${page.pageName}-copy`
                 this.$refs.pageDialog.dialog.formData.pageCode = ''
                 this.$refs.pageDialog.dialog.formData.pageRoute = ''
@@ -240,6 +293,7 @@
             async handleRename (page) {
                 this.action = 'rename'
                 this.currentName = page.pageName
+                this.$refs.pageDialog.dialog.formData.pageType = page.pageType
                 this.$refs.pageDialog.dialog.formData.pageName = page.pageName
                 this.$refs.pageDialog.dialog.formData.pageCode = page.pageCode
                 this.$refs.pageDialog.dialog.formData.pageRoute = page.pageRoute
@@ -250,6 +304,7 @@
             handleEditRoute (page) {
                 this.$refs.editRouteDialog.dialog.visible = true
                 this.$refs.editRouteDialog.dialog.pageId = page.id
+                this.editRouteGroup = this.routeGroup.filter(item => item.layoutType === page.pageType)
                 this.currentRoute = this.routeMap[page.id]
             },
             handleDelete (page) {
@@ -306,12 +361,20 @@
                 } else {
                     this.renderList = this.pageList.filter(item => item.pageName.toLowerCase().indexOf(this.keyword.toLowerCase()) !== -1)
                 }
+                this.handleTypeChange()
             },
             hideDropdownMenu (pageId) {
                 this.$refs[`moreActionDropdown${pageId}`][0].hide()
             },
             getRelativeTime (time) {
                 return dayjs(time).fromNow() || ''
+            },
+            handleTypeChange () {
+                if (this.pageType === 'PC') {
+                    this.renderList = this.renderList.filter(item => item.pageType !== 'MOBILE')
+                } else if (this.pageType === 'MOBILE') {
+                    this.renderList = this.renderList.filter(item => item.pageType === 'MOBILE')
+                }
             },
             // 从模板创建
             handleTempCreate () {
@@ -326,6 +389,22 @@
         /deep/ .bk-dropdown-trigger .bk-button {
             font-size: 14px;
         }
+    }
+
+    .preview-dropdown {
+        margin-left: 10px;
+
+        /deep/ .bk-dropdown-trigger .bk-button {
+            font-size: 14px;
+            width: 110px;
+        }
+    }
+
+    .type-select {
+        width: 120px;
+        background: #fff;
+        display: inline-block;
+        margin-right: 10px;
     }
 
     .pages-content {
@@ -346,6 +425,8 @@
             }
 
             .extra {
+                display: flex;
+                align-items: center;
                 flex: none;
                 margin-left: auto;
             }
@@ -509,15 +590,33 @@
                         background: #f0f1f5;
                         border-radius: 4px 4px 0px 0px;
                     }
-                    .name {
-                        margin: 0;
-                        font-size: 12px;
-                        font-weight: 700;
-                        color: #63656E;
-                        width: 240px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
+                    .page-name {
+                        display: flex;
+                        align-items: center;
+                        margin: -2px 0 0 0;
+
+                        .name {
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: #63656E;
+                            width: 215px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            margin-left: 7px;
+                        }
+
+                        .page-type {
+                            font-size: 16px;
+                            line-height: 18px;
+                            height: 20px;
+                            width: 20px;
+                            text-align: center;
+                            margin-left: -2px;
+                            color: #979ba5;
+                            border-radius: 2px;
+                            background: #f0f1f5;
+                        }
                     }
                     .stat {
                         font-size: 12px;
