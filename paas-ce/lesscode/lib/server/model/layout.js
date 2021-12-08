@@ -32,7 +32,10 @@ module.exports = {
             .where('layout_inst.projectId = :projectId', { projectId })
             .andWhere(whereVersion(versionId, 'layout_inst'))
             .andWhere('layout_inst.deleteFlag = 0')
-            .orderBy('layout_inst.id', 'ASC')
+            .orderBy({
+                'layout.layoutType': 'DESC',
+                'layout_inst.id': 'ASC'
+            })
             .getRawMany()
     },
 

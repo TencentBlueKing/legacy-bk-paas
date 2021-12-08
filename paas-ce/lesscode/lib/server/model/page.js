@@ -44,7 +44,10 @@ module.exports = {
             .where('t.projectId = :projectId', { projectId })
             .andWhere(whereVersion(versionId))
             .andWhere('page.deleteFlag = 0')
-            .orderBy('page.id', 'DESC')
+            .orderBy({
+                'page.pageType': 'DESC',
+                'page.id': 'DESC'
+            })
             .getMany()
     },
 

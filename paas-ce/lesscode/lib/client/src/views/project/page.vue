@@ -80,7 +80,9 @@
                                         <text font-family="'PingFang SC','Microsoft Yahei'" fill="#979ba5" style="text-anchor: middle" font-size="8" x="11" y="10">路由</text>
                                     </svg>
                                     <div class="path">
-                                        <span class="fullpath" :title="routeMap[page.id].fullPath" v-if="routeMap[page.id].id">{{routeMap[page.id].fullPath}}</span>
+                                        <span class="fullpath" :title="routeMap[page.id].fullPath" v-if="routeMap[page.id].id">
+                                            {{ page.pageType === 'MOBILE' ? '/mobile' : '' }}{{routeMap[page.id].fullPath}}
+                                        </span>
                                         <span class="unset" v-else>未配置</span>
                                     </div>
                                 </div>
