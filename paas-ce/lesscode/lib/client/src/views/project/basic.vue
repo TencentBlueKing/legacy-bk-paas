@@ -95,6 +95,8 @@
 
 <script>
     import dayjs from 'dayjs'
+    import { bus } from '@/common/bus'
+
     export default {
         filters: {
             time: function (value) {
@@ -215,6 +217,8 @@
 
                     this.projectDetail = { ...this.projectDetail, ...data.fields }
                     this.$store.commit('project/updateCurrentProject', data.fields)
+
+                    bus.$emit('update-project-list')
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -302,6 +306,7 @@
             }
             .bk-form-content {
                 font-size: 12px;
+                line-height: 32px;
             }
         }
     }
