@@ -1,9 +1,17 @@
 import { uuid } from '@/common/util'
 import getRoot from './get-root'
 import create, { createNode } from './create-node'
+import {
+    triggerEventListener
+} from './event'
 
 let isClone = false
 
+/**
+ * @desc 通过 JSON 创建 Node
+ * @param { Object } data
+ * @returns { Node }
+ */
 const createNodeFromData = (data) => {
     const id = uuid()
     const newNode = createNode(data.type)
@@ -29,6 +37,12 @@ const createNodeFromData = (data) => {
     return newNode
 }
 
+/**
+ * @desc 遍历 JSON
+ * @param { Node } parentNode
+ * @param { Array } childDataList
+ * @param { String } slot
+ */
 const traverse = (parentNode, childDataList, slot) => {
     childDataList.forEach(childData => {
         const childNode = createNodeFromData(childData)
@@ -61,6 +75,12 @@ const traverse = (parentNode, childDataList, slot) => {
     })
 }
 
+/**
+ * @desc 转换老版本的数据
+ * @param { Object } root
+ * @param { Array } data
+ * @returns { Array }
+ */
 const tansform = (root, data) => {
     return data.map((parentNode, index) => {
         if (!parentNode) {
@@ -147,6 +167,11 @@ const tansform = (root, data) => {
     })
 }
 
+/**
+ * @desc 检测 JSON 数据的版本
+ * @param { Array } data
+ * @returns { String }
+ */
 const checkVersion = (data) => {
     for (let i = 0; i < data.length; i++) {
         const rootLayout = data[i]
@@ -174,12 +199,16 @@ export default function (data) {
     }
     const root = getRoot()
     root.setRenderSlots([])
-    
-    root.renderSlots.default = []
-    if (version === 'v0') {
-        root.appendChild(create('render-grid'))
-    } else {
-        traverse(root, versionData, 'default')
+    try {
+        root.renderSlots.default = []
+        if (version === 'v0') {
+            root.appendChild(create('render-grid'))
+        } else {
+            traverse(root, versionData, 'default')
+        }
+        triggerEventListener('ready')
+    } catch {
+        triggerEventListener('error')
     }
 }
 

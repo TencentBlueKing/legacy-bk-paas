@@ -222,11 +222,12 @@
         position: relative;
         width: 100%;
         border: 1px dashed #ccc;
+        pointer-events: all;
         /* 设置slider、card在自由布局中的pointer-events属性 */
-        :global(.bk-slider),
+        /* :global(.bk-slider),
         :global(.bk-card) {
             pointer-events: none;
-        }
+        } */
     }
     .drag-placeholder {
         position: absolute;

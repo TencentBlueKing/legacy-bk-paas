@@ -39,7 +39,6 @@
         </template>
     </div>
 </template>
-
 <script>
     import LC from '@/element-materials/core'
     import renderRow from './row'
@@ -97,6 +96,7 @@
     .grid{
         position: relative;
         z-index: inherit;
+        pointer-events: all;
         .add-column,
         .add-clone {
             position: absolute;

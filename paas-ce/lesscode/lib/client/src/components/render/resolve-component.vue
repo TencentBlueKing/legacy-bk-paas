@@ -306,9 +306,6 @@
                 border: 1px dashed #3a84ff !important;
             }
         }
-        &.disabled{
-            pointer-events: none;
-        }
     }
 
 </style>

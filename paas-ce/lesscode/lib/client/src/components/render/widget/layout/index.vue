@@ -70,6 +70,8 @@
     @import "@/css/mixins/scroller";
     .lesscode-editor-layout {
         min-width: 1080px;
+        transform: translate(0, 0);
+        
         .bk-navigation {
             width: auto;
             height: auto;

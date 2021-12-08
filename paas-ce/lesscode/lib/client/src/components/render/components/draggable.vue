@@ -123,7 +123,7 @@
                 })
                 // fix: vue-draggable内部没有更新
                 this.$refs.draggable.computeIndexes()
-                
+                dragTargetGroup = ''
                 this.$emit('change', event)
             },
             /**

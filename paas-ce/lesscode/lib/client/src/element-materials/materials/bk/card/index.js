@@ -64,8 +64,7 @@ export default {
             name: ['layout'],
             type: ['free-layout'],
             renderStyles: {
-                'height': '50px',
-                'pointer-events': 'auto'
+                'height': '50px'
             },
             children: [
                 {
@@ -82,16 +81,14 @@ export default {
             name: ['layout'],
             type: ['free-layout'],
             renderStyles: {
-                'height': '200px',
-                'pointer-events': 'auto'
+                'height': '200px'
             }
         },
         footer: {
             name: ['layout'],
             type: ['free-layout'],
             renderStyles: {
-                'height': '50px',
-                'pointer-events': 'auto'
+                'height': '50px'
             }
         }
     }

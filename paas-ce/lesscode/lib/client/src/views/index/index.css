@@ -242,7 +242,7 @@ $headerHeight: 64px;
             &.collapse-both-side {
                 width: calc(100vw - 42px);
             }
-            .not-visible-mask {
+            /* .not-visible-mask {
                 position: absolute;
                 width: 100%;
                 top: 0;
@@ -256,7 +256,7 @@ $headerHeight: 64px;
                     text-align: center;
                     margin-top: 100px;
                 }
-            }
+            } */
             &.border-none {
                 border: none;
             }

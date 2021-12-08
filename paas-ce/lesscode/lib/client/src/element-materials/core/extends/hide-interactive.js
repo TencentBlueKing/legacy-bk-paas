@@ -4,6 +4,8 @@
  * @returns { Boolean }
  */
 export default function (node) {
-    node.interactiveShow = false
+    if (node.isInteractiveComponent) {
+        node.interactiveShow = false
+    }
     return true
 }

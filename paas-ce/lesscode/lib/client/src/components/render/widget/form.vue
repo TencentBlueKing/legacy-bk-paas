@@ -51,5 +51,6 @@
         font-size: 18px;
         color: #ccc;
         text-align: center;
+        pointer-events: all;
     }
 </style>

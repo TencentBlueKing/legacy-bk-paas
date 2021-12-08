@@ -209,6 +209,13 @@ export default class Node {
         return Object.seal(Object.assign({}, eventRelatedMethodMap, propRelatedVariableMap, slotRelatedVariableMap))
     }
     /**
+     * @desc 用户配置相关的错误信息
+     * @returns { String }
+     */
+    get error () {
+        return 'hello world!'
+    }
+    /**
      * @desc 获取节点的 JSON 数据
      * @param { Boolean } deep 是否深层编辑，false 只返回当前节点的的数据，true 会返回自己节点的数据
      * @returns { Boolean }

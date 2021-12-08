@@ -10,29 +10,65 @@
 -->
 
 <template>
-    <div :class="['page-setting']"
-        v-bkloading="{ isLoading: pageLoading, opacity: 1 }">
-        <section v-for="setting in settingGroup" :key="setting.title">
-            <div class="title" v-show="!pageLoading">{{ setting.title }}</div>
+    <div
+        :class="['page-setting']"
+        v-bkloading="{
+            isLoading: pageLoading,
+            opacity: 1
+        }">
+        <section
+            v-for="setting in settingGroup"
+            :key="setting.title">
+            <div
+                class="title"
+                v-show="!pageLoading">
+                {{ setting.title }}
+            </div>
             <div class="setting-list" v-show="!pageLoading">
-                <div class="setting-item" v-for="(field, index) in setting.settingFields" :key="index">
+                <div
+                    v-for="(field, index) in setting.settingFields"
+                    class="setting-item"
+                    :key="index">
                     <div class="field-label">
-                        <span v-bk-tooltips="{ content: field.desc, disabled: !field.desc }" class="field-display-name">{{field.name}}</span>：
+                        <span
+                            v-bk-tooltips="{
+                                content: field.desc,
+                                disabled: !field.desc
+                            }"
+                            class="field-display-name">
+                            {{field.name}}
+                        </span>：
                     </div>
-                    <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
+                    <div
+                        :class="[
+                            'field-value',
+                            {
+                                'is-loading': loadingState.includes(field)
+                            }
+                        ]">
                         <template v-if="field !== editField.field">
                             <div class="field-content">
-                                <div class="route" v-if="field.id === 'pageRoute'">
+                                <div
+                                    class="route"
+                                    v-if="field.id === 'pageRoute'">
                                     <div v-if="pageRoute.id">{{layoutPath}}<span>{{pageRoute.path}}</span></div>
                                     <div v-else class="unset">未设置</div>
                                 </div>
-                                <span v-else class="field-display-value">{{getFieldDisplayValue(field) || '--'}}</span>
-                                <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
+                                <span
+                                    v-else
+                                    class="field-display-value">
+                                    {{getFieldDisplayValue(field) || '--'}}
+                                </span>
+                                <i
+                                    v-if="field.editable"
+                                    class="bk-icon icon-edit2 field-edit"
+                                    @click="handleEdit(field)" />
                             </div>
                         </template>
                         <template v-else-if="!loadingState.includes(field)">
                             <div class="field-form">
-                                <component :is="getEditComponent(field)"
+                                <component
+                                    :is="getEditComponent(field)"
                                     :placeholder="getPlaceholder(field)"
                                     :field="field" :value.sync="editField.value"
                                     :errors="errors"
@@ -49,7 +85,9 @@
                                     <bk-button text size="small" theme="primary" @click="handleCancel">取消</bk-button>
                                 </div>
                             </div>
-                            <span class="form-error" v-if="(errors[field.id] || []).length">
+                            <span
+                                v-if="(errors[field.id] || []).length"
+                                class="form-error">
                                 {{errors[field.id][0].message}}
                             </span>
                         </template>
@@ -418,5 +456,127 @@
 </script>
 
 <style lang="postcss" scoped>
-@import url('../../css/page-setting.css')
+    .page-setting {
+        padding: 5px 40px 30px;
+        height: 100%;
+
+        .title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #63656E;
+            padding: 20px 0 12px;
+        }
+
+        .setting-list {
+            padding-left: 24px;
+
+            .setting-item {
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 10px;
+                line-height: 32px;
+
+                .field-label {
+                    flex: none;
+                    width: 110px;
+                    margin-right: 4px;
+                    font-size: 12px;
+                    color: #63656E;
+                }
+                .field-value {
+                    position: relative;
+                    flex: none;
+                    width: 410px;
+
+                    .field-content {
+                        display: flex;
+                        font-size: 12px;
+
+                        .route {
+                            .unset {
+                                color: #FF9C01;
+                            }
+                        }
+                    }
+                    .field-display-value {
+                        word-break: break-all;
+                    }
+
+                    &.is-loading {
+                        font-size: 0;
+                        .field-content {
+                            display: none;
+                        }
+                        &:before {
+                            content: "";
+                            display: inline-block;
+                            position: absolute;
+                            width: 16px;
+                            height: 16px;
+                            top: 8px;
+                            background-image: url("../../../../../images/svg/loading.svg");
+                        }
+                    }
+
+                    .form-error {
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        font-size: 12px;
+                        color: #ff5656;
+                        line-height: 18px;
+                        margin: 2px 0px 0px;
+                    }
+                }
+
+                .field-edit {
+                    position: relative;
+                    font-size: 22px;
+                    top: 5px;
+                    cursor: pointer;
+                    &:hover {
+                        color: #3A84FF;
+                    }
+                }
+            }
+        }
+
+        .field-form {
+            display: flex;
+            align-items: center;
+            .form-component {
+                width: 100%;
+            }
+            .buttons {
+                display: flex;
+                align-items: center;
+                margin-left: 4px;
+
+                .bk-button-text {
+                    width: 36px;
+                    padding: 0 6px;
+                }
+                .divider {
+                    color: #979BA5;
+                    line-height: 26px;
+                    margin-top: -2px;
+                }
+            }
+        }
+
+        &.function {
+            .field-form {
+                align-items: flex-start;
+            }
+            .field-display-name {
+                cursor: pointer;
+                border-bottom: 1px dashed #999;
+            }
+        }
+    }
+    .bk-option-name {
+        .bound {
+            color: #c4c6cc;
+        }
+    }
 </style>
