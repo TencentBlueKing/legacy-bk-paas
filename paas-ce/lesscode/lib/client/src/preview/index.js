@@ -12,6 +12,7 @@ import Vue from 'vue'
 import pureAxios from '@/api/pureAxios.js'
 import { auth, errorHandle } from './auth'
 import registerComponent from './component'
+import App from './children/App.vue'
 import generateRouter from './router'
 import generateStore from './store'
 
@@ -26,21 +27,11 @@ if (versionId) {
     sessionStorage.setItem(storageKey, versionId)
 }
 
-// 获取初始化路由
-let proxyResolve
-const getDefaultRoute = new Promise(resolve => {
-    proxyResolve = resolve
-})
-window.addEventListener('message', ({ data }) => {
-    const { type, ...route } = data
-    if (type !== 'initRouter') {
-        return
-    }
-    proxyResolve && proxyResolve(route)
-})
-
 auth(projectId).then(() => {
-    return Promise.all([pureAxios.get(`/projectCode/previewCode?projectId=${projectId}&versionId=${versionId}`), registerComponent(Vue, projectId, versionId)]).then(([res]) => {
+    return Promise.all([
+        pureAxios.get(`/projectCode/previewCode?projectId=${projectId}&versionId=${versionId}`),
+        registerComponent(Vue, projectId, versionId)
+    ]).then(([res]) => {
         Vue.prototype.$http = pureAxios
         const data = res.data || {}
         const projectPageRouteList = (data.pageRouteList || []).map(item => ({
@@ -57,68 +48,13 @@ auth(projectId).then(() => {
                 pageCode,
                 fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
             }))
-        const { router, App } = generateRouter(data.routeGroup, projectPageRouteList)
+        const router = generateRouter(data.routeGroup, projectPageRouteList, projectId)
         const store = generateStore(data.storeData, { projectPageRouteList, projectRouteList })
         window.app = new Vue({
             el: '#preview-app',
             components: { App },
             router,
             store,
-            async created () {
-                const defaultRoute = await getDefaultRoute
-
-                const { fullPath, query } = defaultRoute
-                // 当前预览的页面
-                let pageCode = query.pageCode
-
-                // 刷新404页面时，使用404带的pageCode
-                if (fullPath.startsWith('/404')) {
-                    pageCode = query.p
-                }
-
-                const { projectPageRouteList } = this.$store.state
-                let pageRoute
-                if (pageCode) {
-                    pageRoute = projectPageRouteList.find(item => item.pageCode === pageCode)
-                } else if (/^\/(\?v=\d+)*$/.test(fullPath)) {
-                    // 判定为项目预览，找到父路由是/的页面
-                    pageRoute = this.getProjectDefaultHome()
-                    pageCode = ''
-                } else if (fullPath) {
-                    // 刷新
-                    this.$router.replace({ path: fullPath })
-                    return
-                }
-
-                if (pageRoute && pageRoute.id) {
-                    const { resolved } = router.resolve({ path: pageRoute.fullPath })
-                    if (resolved.name === '404') {
-                        // 绑定的跳转路由可能未绑定页面或路由
-                        this.$router.replace({ path: '/404', query: { p: pageCode } })
-                    } else {
-                        this.$router.replace({ path: pageRoute.fullPath, query: { pageCode: pageRoute.pageCode } })
-                    }
-                } else {
-                    this.$router.replace({ path: '/404', query: { p: pageCode } })
-                }
-            },
-            methods: {
-                getProjectDefaultHome () {
-                    const { projectRouteList, projectPageRouteList } = this.$store.state
-                    const defaultHome = projectRouteList.find(item => item.fullPath === '/')
-                    if (defaultHome) {
-                        return defaultHome
-                    }
-                    // 否则返回第1个父路由为/的有效路由
-                    const rootPathRoute = projectPageRouteList.find(item => item.layoutPath === '/')
-                    if (rootPathRoute && rootPathRoute.id) {
-                        return rootPathRoute
-                    }
-
-                    // 返回项目的第1个路由
-                    return projectRouteList[0]
-                }
-            },
             template: '<App/>'
         })
     })

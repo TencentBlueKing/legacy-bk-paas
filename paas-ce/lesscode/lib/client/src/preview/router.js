@@ -25,72 +25,6 @@ function registerComponent (code) {
     return httpVueLoader(code)
 }
 
-function generateApp () {
-    return registerComponent(`
-        <template>
-            <div id="app">
-                <router-view></router-view>
-            </div>
-        </template>
-        <script>
-            export default {
-                name: 'app'
-            }
-        </script>
-        <style>
-            * {
-                box-sizing: border-box;
-            }
-            html,body {
-                margin: 0;
-                padding: 0;
-            }
-            ul,li {
-                margin: 0;
-                padding: 0;
-                list-style: none;
-            }
-            dl,dt,dd,p {
-                margin: 0;
-                padding: 0;
-            }
-            a {
-                text-decoration: none;
-            }
-            button {
-                outline: none;
-            }
-            table {
-                border-collapse: collapse;
-                border-spacing: 0;
-            }
-            td,th {
-                padding: 0;
-            }
-            .navigation-bar {
-                width: 100%;
-                height: 100%;
-            }
-            .navigation-bar-container {
-                width: 100%;
-                max-width: 100%;
-            }
-            .bk-navigation {
-                min-width: 1360px;
-            }
-            .bk-navigation-wrapper .navigation-container {
-                max-width: 100% !important;
-            }
-            .navigation-header .tippy-popper .tippy-tooltip.navigation-message-theme {
-                padding: 0;
-                border-radius: 0;
-                -webkit-box-shadow: none;
-                box-shadow: none;
-            }
-        </style>
-    `)
-}
-
 const Home = registerComponent(`
     <template>
         <router-view></router-view>
@@ -103,7 +37,7 @@ const Home = registerComponent(`
 `)
 
 // 生成路由
-module.exports = (routeGroup, projectPageRouteList) => {
+module.exports = (routeGroup, projectPageRouteList, projectId) => {
     const routes = []
     for (const key in routeGroup) {
         const layout = routeGroup[key]
@@ -157,6 +91,7 @@ module.exports = (routeGroup, projectPageRouteList) => {
     })
     router = new VueRouter({
         mode: 'history',
+        base: `/preview/project/${projectId}`,
         routes: [
             {
                 path: '/',
@@ -171,20 +106,5 @@ module.exports = (routeGroup, projectPageRouteList) => {
             }
         ]
     })
-    router.beforeEach(async (to, from, next) => {
-        if (to.fullPath === '/preview.html') return
-        next()
-    })
-    // 传递url信息
-    router.afterEach((route) => {
-        const data = {
-            type: 'preview',
-            name: route.name,
-            fullPath: route.fullPath,
-            query: route.query
-        }
-        window.parent.postMessage(data, '\*')
-    })
-    const App = generateApp()
-    return { router, App }
+    return router
 }
