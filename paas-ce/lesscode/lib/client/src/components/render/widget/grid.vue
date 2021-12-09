@@ -15,13 +15,10 @@
             :ref="componentData.componentId"
             :style="componentData.style">
             <render-col
-                v-for="(componentItem, columnIndex) in componentData.slot.default"
+                v-for="(componentItem) in componentData.slot.default"
                 :component-data="componentItem"
                 :key="componentItem.componentId"
-                :count="getSpanNums()"
-                :class="{
-                    last: columnIndex === componentData.slot.default.length - 1
-                }" />
+                :count="getSpanNums()" />
         </render-row>
         <template v-if="componentData.isActived">
             <div
@@ -43,7 +40,6 @@
     import LC from '@/element-materials/core'
     import renderRow from './row'
     import renderCol from './col'
-    import offsetMixin from './offset-mixin'
 
     export default {
         name: 'render-grid',
@@ -56,7 +52,6 @@
                 renderGrid: this
             }
         },
-        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,

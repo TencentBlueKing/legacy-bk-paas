@@ -277,9 +277,11 @@
                     content: '以全局组件树的形式，快速切换查看页面的所有组件',
                     target: '#editPageLeftSideBar',
                     entry: () => {
+                        // 切换组件树 tab
                         document.body.querySelector('[data-name="nav-tab-tree"]').click()
                     },
                     leave: () => {
+                        // 离开时切换到组件选择 tab
                         document.body.querySelector('[data-name="nav-tab-component"]').click()
                     }
                 },
@@ -293,15 +295,9 @@
                     content: '在画布中选中对应组件，可在这里进行组件样式、属性、事件及指令的配置',
                     target: '.main-right-sidebar',
                     entry: () => {
-                        const $dragAreaEle = document.body.querySelector('.target-drag-area')
-                        const $gridEle = $dragAreaEle.querySelector('.drag-area')
-                        if ($gridEle) {
-                            $gridEle.click()
-                            return
-                        }
-                        const $freeLayoutEle = $dragAreaEle.querySelector('.bk-lesscode-free-layout')
-                        if ($freeLayoutEle) {
-                            $freeLayoutEle.click()
+                        const $componentEl = document.body.querySelector('[role="component-root"]')
+                        if ($componentEl) {
+                            $componentEl.click()
                         }
                     }
                 },

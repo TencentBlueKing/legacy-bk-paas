@@ -82,13 +82,11 @@
             })
         },
         methods: {
-            
             /**
              * @desc 添加组件
              * @param { Object } dragEvent
              */
             handleAdd (event) {
-                // console.log('============print drag add', event)
                 this.$emit('add', event)
             },
             /**
@@ -196,7 +194,7 @@
             }
         }
         & > * {
-            display: none;
+            display: none !important;
         }
     }
 </style>

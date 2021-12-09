@@ -1,6 +1,5 @@
 import { mapGetters, mapMutations } from 'vuex'
 import cloneDeep from 'lodash.clonedeep'
-// import { bus } from '@/common/bus'
 import LC from '@/element-materials/core'
 
 export default {
@@ -139,7 +138,7 @@ export default {
             this.newNode = node
 
             let groupName = ''
-            if (['free-layout', 'render-grid'].includes(type)) {
+            if (['free-layout', 'render-grid', 'widget-form'].includes(type)) {
                 groupName = 'layout'
             } else if (LC.isInteractiveType(type)) {
                 groupName = 'interactive'

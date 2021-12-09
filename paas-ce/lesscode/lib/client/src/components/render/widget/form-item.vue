@@ -10,10 +10,11 @@
 -->
 
 <template>
-    <div :class="{
-        [$style['form-item']]: true,
-        [$style['inline']]: isInlineLayout
-    }">
+    <div
+        :class="{
+            [$style['form-item']]: true,
+            [$style['inline']]: isInlineLayout
+        }">
         <bk-form-item v-bind="componentData.prop">
             <template v-for="componentDate in componentData.slot.default">
                 <resolve-component

@@ -127,9 +127,11 @@
                     this.$emit('component-update')
                 }
             }, 60)
+            
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
-            }, 100)
+            }, 60)
+
             const componentMouseleaveCallback = () => {
                 hoverComponentId = ''
                 this.isHover = false
@@ -244,6 +246,7 @@
              * @desc 组件点击事件回调
              */
             handleClick () {
+                LC.clearMenu()
                 if (this.componentData.isActived) {
                     return
                 }

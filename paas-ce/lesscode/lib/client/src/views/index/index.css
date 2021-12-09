@@ -260,13 +260,6 @@ $headerHeight: 64px;
             &.border-none {
                 border: none;
             }
-            .target-drag-area {
-                min-height: 100%;
-                height: auto;
-                .bk-layout-grid-row-wrapper {
-                    position: relative;
-                }
-            }
             .preview-area,
             .code-area {
                 height: 100%;

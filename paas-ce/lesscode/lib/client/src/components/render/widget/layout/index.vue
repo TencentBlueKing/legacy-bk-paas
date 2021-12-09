@@ -158,10 +158,6 @@
                 margin-left: 5px;
             }
         }
-        .target-drag-area{
-            min-height: calc(100% - 20px) !important;
-            padding-bottom: 100px;
-        }
         .component-wrapper {
             z-index: 1000;
             margin: 5px;
