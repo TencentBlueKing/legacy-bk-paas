@@ -1,6 +1,6 @@
 Release Log
 ===============================
-# 2.12.34
+# 2.12.35
     - bug: esb fix bk_login get_batch_users
 
 # 2.12.33
