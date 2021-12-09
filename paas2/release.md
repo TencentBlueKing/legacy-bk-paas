@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.19
+    - fix: esb fix bk_login get_batch_users
+
 # 2.13.18
     - bug: esb fix iam_delete_component
 
@@ -58,6 +61,9 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.34
+    - bug: esb fix bk_login get_batch_users
 
 # 2.12.33
     - bug: esb fix iam_delete_component
