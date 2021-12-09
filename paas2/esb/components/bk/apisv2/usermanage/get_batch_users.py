@@ -10,6 +10,7 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from common.forms import BaseComponentForm, ListField
 from common.constants import API_TYPE_Q
 from components.component import Component
 from .toolkit import configs
@@ -24,15 +25,19 @@ class GetBatchUsers(Component):
     sys_name = configs.SYSTEM_NAME
     api_type = API_TYPE_Q
 
+    class Form(BaseComponentForm):
+        bk_username_list = ListField(label="username list", required=True)
+
     def handle(self):
-        comp_obj = self.prepare_other(
-            "generic.v2.usermanage.usermanage_component",
-            kwargs=self.request.kwargs,
-        )
-        comp_obj.setup_conf(
-            {
-                "dest_path": "/api/v1/profile_batch/",
-                "dest_http_method": "POST",
-            }
-        )
-        self.response.payload = comp_obj.invoke()
+        params = {
+            "lookup_field": "username",
+            "no_page": True,
+            "best_match": 1,
+            "exact_lookups": ",".join(self.form_data["bk_username_list"]),
+            "fields": "username,country_code,telephone,email,wx_userid,display_name,qq,language,time_zone",
+        }
+
+        result = self.invoke_other("generic.v2.usermanage.list_users", kwargs=params)
+        if result["result"]:
+            result["data"] = dict([(user["username"], user) for user in result["data"]])
+        self.response.payload = result

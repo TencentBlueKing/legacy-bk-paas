@@ -55,13 +55,13 @@ class LOGINClient(object):
 
 def convert_user_info(user):
     return {
-        "bk_username": user.get("bk_username", ""),
+        "username": user.get("username", ""),
         "qq": user.get("qq", ""),
         "language": user.get("language", ""),
         "wx_userid": user.get("wx_userid", ""),
         "time_zone": user.get("time_zone", ""),
         "phone": user.get("telephone", ""),
-        "bk_role": user.get("bk_role", 0),
-        "email": user.get("email"),
-        "chname": user.get("display_name"),
+        "role": str(user.get("bk_role", 0)),
+        "email": user.get("email", ""),
+        "chname": user.get("display_name", ""),
     }

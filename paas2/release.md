@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.34
+    - bug: esb fix bk_login get_batch_users
+
 # 2.12.33
     - bug: esb fix iam_delete_component
 
