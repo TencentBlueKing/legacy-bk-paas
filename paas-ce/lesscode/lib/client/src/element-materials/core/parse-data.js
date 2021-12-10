@@ -121,6 +121,34 @@ const tansform = (root, data) => {
                     parentNode.renderSlots.default.push(columnData)
                 })
             }
+        } else if (parentNode.type === 'widget-form') {
+            if (parentNode.renderSlots
+                && parentNode.renderSlots.default
+                && parentNode.renderSlots.default.val) {
+                const formItemList = parentNode.renderSlots.default.val
+                parentNode.renderSlots = {
+                    default: []
+                }
+                formItemList.forEach((formItem) => {
+                    const formItemData = {
+                        tabPanelActive: 'props',
+                        componentId: formItem.componentId,
+                        name: 'form-item',
+                        type: 'widget-form-item',
+                        renderStyles: formItem.renderStyles,
+                        renderProps: formItem.renderProps,
+                        renderSlots: {
+                            default: tansform(parentNode, formItem.renderSlots.default)
+                        },
+                        renderDirectives: [],
+                        renderEvents: {},
+                        interactiveShow: false,
+                        isComplexComponent: false
+                    }
+
+                    parentNode.renderSlots.default.push(formItemData)
+                })
+            }
         } else if (parentNode.type === 'free-layout') {
             const freelayoutItem = parentNode.renderSlots.default.val[0] || []
             let freelayoutSlot = []
