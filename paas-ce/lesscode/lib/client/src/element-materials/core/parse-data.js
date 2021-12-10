@@ -87,13 +87,13 @@ const tansform = (root, data) => {
             return null
         }
         if (parentNode.type === 'render-grid') {
-            parentNode.renderSlots = {
-                default: []
-            }
             if (parentNode.renderSlots
                 && parentNode.renderSlots.default
                 && parentNode.renderSlots.default.val) {
                 const columnList = parentNode.renderSlots.default.val
+                parentNode.renderSlots = {
+                    default: []
+                }
                 columnList.forEach((columnItem, index) => {
                     const uid = `${uuid()}${index}`
                     const columnData = {
@@ -192,6 +192,7 @@ const checkVersion = (data) => {
 }
 
 export default function (data) {
+    console.dir(JSON.parse(JSON.stringify(data)))
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
