@@ -18,11 +18,11 @@ const createNodeFromData = (data) => {
     newNode.tabPanelActive = data.tabPanelActive || 'props'
     newNode.componentId = isClone ? `${data.name}-${id}` : data.componentId
     newNode.renderKey = id
-    data.renderStyles && newNode.setRenderStyles(newNode.renderStyles)
+    data.renderStyles && newNode.setRenderStyles(data.renderStyles)
     data.renderProps && newNode.setRenderProps(data.renderProps)
     data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
     data.renderEvents && newNode.setRenderEvents(data.renderEvents)
-    
+
     newNode.interactiveShow = false
     newNode.isComplexComponent = data.isComplexComponent || false
 
@@ -81,17 +81,17 @@ const traverse = (parentNode, childDataList, slot) => {
  * @param { Array } data
  * @returns { Array }
  */
-const tansform = (root, data) => {
-    return data.map((parentNode, index) => {
-        if (!parentNode) {
+const tansform = (parentNode, data) => {
+    return data.map((curDataNode, index) => {
+        if (!curDataNode) {
             return null
         }
-        if (parentNode.type === 'render-grid') {
-            if (parentNode.renderSlots
-                && parentNode.renderSlots.default
-                && parentNode.renderSlots.default.val) {
-                const columnList = parentNode.renderSlots.default.val
-                parentNode.renderSlots = {
+        if (curDataNode.type === 'render-grid') {
+            if (curDataNode.renderSlots
+                && curDataNode.renderSlots.default
+                && curDataNode.renderSlots.default.val) {
+                const columnList = curDataNode.renderSlots.default.val
+                curDataNode.renderSlots = {
                     default: []
                 }
                 columnList.forEach((columnItem, index) => {
@@ -111,22 +111,22 @@ const tansform = (root, data) => {
                             }
                         },
                         renderSlots: {
-                            default: tansform(parentNode, columnItem.children)
+                            default: tansform(curDataNode, columnItem.children)
                         },
                         renderDirectives: [],
                         renderEvents: {},
                         interactiveShow: false,
                         isComplexComponent: false
                     }
-                    parentNode.renderSlots.default.push(columnData)
+                    curDataNode.renderSlots.default.push(columnData)
                 })
             }
-        } else if (parentNode.type === 'widget-form') {
-            if (parentNode.renderSlots
-                && parentNode.renderSlots.default
-                && parentNode.renderSlots.default.val) {
-                const formItemList = parentNode.renderSlots.default.val
-                parentNode.renderSlots = {
+        } else if (curDataNode.type === 'widget-form') {
+            if (curDataNode.renderSlots
+                && curDataNode.renderSlots.default
+                && curDataNode.renderSlots.default.val) {
+                const formItemList = curDataNode.renderSlots.default.val
+                curDataNode.renderSlots = {
                     default: []
                 }
                 formItemList.forEach((formItem) => {
@@ -138,60 +138,68 @@ const tansform = (root, data) => {
                         renderStyles: formItem.renderStyles,
                         renderProps: formItem.renderProps,
                         renderSlots: {
-                            default: tansform(parentNode, formItem.renderSlots.default)
+                            default: tansform(curDataNode, formItem.renderSlots.default.val)
                         },
                         renderDirectives: [],
                         renderEvents: {},
                         interactiveShow: false,
                         isComplexComponent: false
                     }
-
-                    parentNode.renderSlots.default.push(formItemData)
+                    console.log('from print form item == ', formItemData)
+                    curDataNode.renderSlots.default.push(formItemData)
                 })
             }
-        } else if (parentNode.type === 'free-layout') {
-            const freelayoutItem = parentNode.renderSlots.default.val[0] || []
+        } else if (curDataNode.type === 'free-layout') {
+            const freelayoutItem = curDataNode.renderSlots.default.val[0] || []
             let freelayoutSlot = []
             if (freelayoutItem && freelayoutItem.children) {
-                freelayoutSlot = tansform(parentNode, freelayoutItem.children)
+                freelayoutSlot = tansform(curDataNode, freelayoutItem.children)
             }
-            parentNode.renderSlots = {
+            curDataNode.renderSlots = {
                 default: freelayoutSlot
             }
-        } else if (parentNode.type === 'bk-sideslider') {
-            const child = parentNode.renderSlots.content.val
-            parentNode.renderSlots = {
-                content: tansform(parentNode, [child])[0]
+        } else if (curDataNode.type === 'bk-sideslider') {
+            const child = curDataNode.renderSlots.content.val
+            curDataNode.renderSlots = {
+                content: tansform(curDataNode, [child])[0]
             }
-        } else if (parentNode.type === 'bk-dialog') {
-            const child = parentNode.renderSlots.default.val
-            parentNode.renderSlots = {
-                default: tansform(parentNode, [child])[0]
+        } else if (curDataNode.type === 'bk-dialog') {
+            const child = curDataNode.renderSlots.default.val
+            curDataNode.renderSlots = {
+                default: tansform(curDataNode, [child])[0]
             }
-        } else if (parentNode.type === 'bk-card') {
-            const renderSlots = parentNode.renderSlots
-            parentNode.renderSlots = {
-                header: tansform(parentNode, [renderSlots.header.val])[0],
-                default: tansform(parentNode, [renderSlots.default.val])[0],
-                footer: tansform(parentNode, [renderSlots.footer.val])[0]
+        } else if (curDataNode.type === 'bk-card') {
+            const renderSlots = curDataNode.renderSlots
+            curDataNode.renderSlots = {
+                header: tansform(curDataNode, [renderSlots.header.val])[0],
+                default: tansform(curDataNode, [renderSlots.default.val])[0],
+                footer: tansform(curDataNode, [renderSlots.footer.val])[0]
             }
         }
-        if (['render-grid', 'free-layout'].includes(parentNode.type)) {
+        if (['render-grid', 'free-layout'].includes(curDataNode.type)) {
             if (index < data.length - 1) {
-                parentNode.renderStyles = {
-                    ...parentNode.renderStyles,
+                curDataNode.renderStyles = {
+                    ...curDataNode.renderStyles,
                     'margin-bottom': '10px'
                 }
             }
         } else {
-            if (root.type === 'render-grid') {
-                parentNode.renderStyles = {
-                    ...parentNode.renderStyles,
+            if (parentNode.type === 'render-grid') {
+                curDataNode.renderStyles = {
+                    ...curDataNode.renderStyles,
                     'margin': '5px'
                 }
             }
         }
-        return parentNode
+        if (curDataNode.type === 'bk-button' && parentNode.type === 'widget-form') {
+            curDataNode.renderStyles = {
+                ...curDataNode.renderStyles,
+                display: 'inline-block',
+                margin: '',
+                marginLeft: index > 0 ? '10px' : ''
+            }
+        }
+        return curDataNode
     })
 }
 
@@ -224,12 +232,10 @@ export default function (data) {
     console.dir(JSON.parse(JSON.stringify(data)))
     let versionData = data
     const version = checkVersion(data)
-    console.log('adadasd = ', version)
     if (version === 'v1') {
         versionData = tansform({ type: 'root' }, data)
     }
 
-    console.log('from parand ata = ==  ', version, versionData)
     const root = getRoot()
     root.setRenderSlots([])
     try {
