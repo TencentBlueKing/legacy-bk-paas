@@ -10,34 +10,36 @@ export default {
 
         const nativeComponentStyleReset = {
             // 修正组件会影响位置的样式
-            'padding': 'initial',
-            'paddingTop': 'initial',
-            'paddingRight': 'initial',
-            'paddingBottom': 'initial',
-            'paddingLeft': 'initial',
-            'margin': 'initial',
-            'marginTop': 'initial',
-            'marginRight': 'initial',
-            'marginBottom': 'initial',
-            'marginLeft': 'initial',
-            'transform': 'initial'
+            'padding': '',
+            'paddingTop': '',
+            'paddingRight': '',
+            'paddingBottom': '',
+            'paddingLeft': '',
+            'margin': '',
+            'marginTop': '',
+            'marginRight': '',
+            'marginBottom': '',
+            'marginLeft': '',
+            'transform': ''
         }
+        // 在 freelayout 里面时对组件进行位置修正，
+        // 基础组件的根可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
         if (context.parent.attachToFreelayout) {
-            // 在 freelayout 里面时对组件进行位置修正，
-            // 基础组件的根可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
             Object.assign(nativeComponentStyleReset, {
-                top: 'initial',
-                right: 'initial',
-                bottom: 'initial',
-                left: 'initial'
+                top: '',
+                right: '',
+                bottom: '',
+                left: ''
             })
         }
+        // 隔绝基础组件的鼠标事件响应
         if (context.parent.checkNativeComponent(componentData.type)) {
             Object.assign(nativeComponentStyleReset, {
                 'pointer-events': 'none'
             })
         }
 
+        // 如果是画布区域的 shadow 组件需要透传 componentData
         const props = Object.assign({}, componentData.prop, {
             'component-data': componentData
         })
@@ -57,11 +59,6 @@ export default {
                 props[key] = value.staticValue
             }
         }
-
-        // const widthChangeableCompoennts = ['img', 'p', 'span', 'bk-link', 'el-link']
-        // if (!widthChangeableCompoennts.includes(componentData.type)) {
-        //     delete renderStyles.width
-        // }
 
         const renderSlotMap = Object.keys(componentData.slot).reduce((result, slotName) => {
             const slotList = Array.isArray(componentData.slot[slotName])

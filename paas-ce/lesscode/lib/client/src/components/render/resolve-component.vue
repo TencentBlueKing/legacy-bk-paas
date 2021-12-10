@@ -283,6 +283,7 @@
 <style lang="postcss" module>
     .component {
         /* vertical-align: middle; */
+        cursor: pointer;
         -webkit-text-size-adjust: none;
         &.selected,
         &.hover{
