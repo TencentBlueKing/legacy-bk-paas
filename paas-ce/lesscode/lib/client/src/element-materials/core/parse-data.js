@@ -201,20 +201,21 @@ const tansform = (root, data) => {
  * @returns { String }
  */
 const checkVersion = (data) => {
-    for (let i = 0; i < data.length; i++) {
-        const rootLayout = data[i]
-        if (rootLayout.type === 'render-grid') {
-            if (!rootLayout.renderSlots) {
-                return 'v0'
-            }
-            return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
-        } else if (rootLayout.type === 'bk-sideslider') {
-            return rootLayout.renderSlots.content.hasOwnProperty('val') ? 'v1' : 'v2'
-        } else if (rootLayout.type === 'free-layout') {
-            return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
-        } else if (rootLayout.type === 'bk-dialog') {
-            return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
+    if (data.length < 1) {
+        return 'v2'
+    }
+    const rootLayout = data.slice(-1)[0]
+    if (rootLayout.type === 'render-grid') {
+        if (!rootLayout.renderSlots) {
+            return 'v0'
         }
+        return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
+    } else if (rootLayout.type === 'bk-sideslider') {
+        return rootLayout.renderSlots.content.hasOwnProperty('val') ? 'v1' : 'v2'
+    } else if (rootLayout.type === 'free-layout') {
+        return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
+    } else if (rootLayout.type === 'bk-dialog') {
+        return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
     }
     return 'v2'
 }
@@ -223,9 +224,12 @@ export default function (data) {
     console.dir(JSON.parse(JSON.stringify(data)))
     let versionData = data
     const version = checkVersion(data)
+    console.log('adadasd = ', version)
     if (version === 'v1') {
         versionData = tansform({ type: 'root' }, data)
     }
+
+    console.log('from parand ata = ==  ', version, versionData)
     const root = getRoot()
     root.setRenderSlots([])
     try {
