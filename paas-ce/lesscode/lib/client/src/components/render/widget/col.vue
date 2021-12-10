@@ -34,8 +34,8 @@
         </draggable>
     </div>
 </template>
-
 <script>
+    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
@@ -80,6 +80,9 @@
             })
         },
         methods: {
+            /**
+             * @desc 计算每一列的宽度
+             */
             calcStyle () {
                 const siblingList = this.componentData.parentNode.children
                 
@@ -94,7 +97,10 @@
                     this.componentData.setStyle('width', renderWidth)
                 }
             },
-            autoType () {
+            /**
+             * @desc 自动排版子组件
+             */
+            autoType: _.throttle(function () {
                 setTimeout(() => {
                     if (!this.$refs.component) {
                         return
@@ -104,7 +110,7 @@
                         left: boxLeft
                     } = this.$refs.draggable.$el.getBoundingClientRect()
                     const sepMarginLeft = 5
-                    // console.log('from will autotypeautotypeautotypeautotype', this.$refs.component)
+                    
                     // 计算 marginRight
                     this.$refs.component.forEach(componentInstance => {
                         const $el = componentInstance.$el
@@ -126,11 +132,10 @@
                         }
                     })
                 })
-            }
+            }, 20)
         }
     }
 </script>
-
 <style lang="postcss" module>
     .col {
         float: left;

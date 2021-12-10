@@ -5,6 +5,12 @@ const getChild = slot => {
     return isNode(slot) ? slot.toJSON() : slot
 }
 
+/**
+ * @desc 判断 renderProps 的配置值是否有效
+ * @param { Any } value
+ * @param { Any } configValue
+ * @returns { Boolean }
+ */
 const isValidPropValue = (value, configValue) => {
     // 值为空
     if (value === ''
@@ -16,6 +22,11 @@ const isValidPropValue = (value, configValue) => {
     return value !== configValue
 }
 
+/**
+ * @desc 判断 renderStyles 的配置时候有效
+ * @param { String | Number } value
+ * @returns { Boolean }
+ */
 const isValidStyleValue = value => {
     if (value === ''
         || value === undefined
@@ -73,6 +84,7 @@ export default function (node) {
         }
         return result
     }, {})
+    
     const renderStylesJSON = Object.keys(renderStyles).reduce((result, styleName) => {
         if (isValidStyleValue(renderStyles[styleName])) {
             result[styleName] = renderStyles[styleName]

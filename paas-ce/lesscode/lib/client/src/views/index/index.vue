@@ -122,7 +122,6 @@
     import PageDialog from '@/components/project/page-dialog'
     import SaveTemplateDialog from '@/components/template/save-template-dialog'
     import PageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
-    import { bus } from '@/common/bus'
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
     import LC from '@/element-materials/core'
@@ -246,9 +245,11 @@
                     content: '以全局组件树的形式，快速切换查看页面的所有组件',
                     target: '#editPageLeftSideBar',
                     entry: () => {
+                        // 切换组件树 tab
                         document.body.querySelector('[data-name="nav-tab-tree"]').click()
                     },
                     leave: () => {
+                        // 离开时切换到组件选择 tab
                         document.body.querySelector('[data-name="nav-tab-component"]').click()
                     }
                 },
@@ -262,15 +263,9 @@
                     content: '在画布中选中对应组件，可在这里进行组件样式、属性、事件及指令的配置',
                     target: '.main-right-sidebar',
                     entry: () => {
-                        const $dragAreaEle = document.body.querySelector('.target-drag-area')
-                        const $gridEle = $dragAreaEle.querySelector('.drag-area')
-                        if ($gridEle) {
-                            $gridEle.click()
-                            return
-                        }
-                        const $freeLayoutEle = $dragAreaEle.querySelector('.bk-lesscode-free-layout')
-                        if ($freeLayoutEle) {
-                            $freeLayoutEle.click()
+                        const $componentEl = document.body.querySelector('[role="component-root"]')
+                        if ($componentEl) {
+                            $componentEl.click()
                         }
                     }
                 },
@@ -305,8 +300,6 @@
 
             // 设置权限相关的信息
             this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
-
-            bus.$emit('pageInitialized')
 
             // for test
             window.test = this.test
@@ -695,24 +688,24 @@
             async handleToolAction (action) {
                 // 点击源码的时候，需要让右侧属性面板消失
                 // 如果停留在源码页面时属性面板不消失，这个时候修改属性会生效，预览的时候就会生效，但是源码并不会随着属性的变化而重新生成
-                if (['setting', 'vueCode'].includes(action)) {
-                    const processTargetResult = this.processTargetData()
-                    if (processTargetResult.errMessage) {
-                        this.$bkMessage({
-                            theme: 'error',
-                            message: processTargetResult.errMessage,
-                            limit: 1,
-                            ellipsisLine: 0
-                        })
-                        return
-                    }
-                }
-                // 切换回编辑区，对画布数据进行更新
-                if (action === 'edit' && this.actionSelected !== 'edit') {
-                    const targetData = JSON.parse(safeStringify(this.targetData || []))
-                    this.updateTargetData(targetData)
-                    this.targetData = targetData
-                }
+                // if (['setting', 'vueCode'].includes(action)) {
+                //     const processTargetResult = this.processTargetData()
+                //     if (processTargetResult.errMessage) {
+                //         this.$bkMessage({
+                //             theme: 'error',
+                //             message: processTargetResult.errMessage,
+                //             limit: 1,
+                //             ellipsisLine: 0
+                //         })
+                //         return
+                //     }
+                // }
+                // // 切换回编辑区，对画布数据进行更新
+                // if (action === 'edit' && this.actionSelected !== 'edit') {
+                //     const targetData = JSON.parse(safeStringify(this.targetData || []))
+                //     this.updateTargetData(targetData)
+                //     this.targetData = targetData
+                // }
                 this.actionSelected = action
             },
 

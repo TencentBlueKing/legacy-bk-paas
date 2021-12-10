@@ -19,7 +19,7 @@ export default {
         'minHeight': '80px',
         'paddingTop': '10px',
         'paddingRight': '10px',
-        'paddingBottom': '10px',
+        'paddingBottom': '5px',
         'paddingLeft': '10px'
     },
     props: {

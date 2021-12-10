@@ -4,12 +4,12 @@
     </div>
 </template>
 <script>
-    import RenderIndex from '@/components/render/index'
+    import Render from '@/components/render/index'
     import VueCode from '@/components/vue-code'
-    import PageSetting from '@/views/project/page-setting'
-    import PageJson from '@/views/project/page-json'
-    import PageVariable from '@/views/project/page-variable'
-    import PageFunction from '@/views/project/page-function'
+    import PageSetting from './components/page-setting'
+    import PageJson from './components/page-json'
+    import PageVariable from './components/page-variable'
+    import PageFunction from './components/page-function'
 
     export default {
         name: '',
@@ -33,7 +33,7 @@
         computed: {
             com () {
                 const comMap = {
-                    edit: RenderIndex,
+                    edit: Render,
                     vueCode: VueCode,
                     pageFunction: PageFunction,
                     setting: PageSetting,

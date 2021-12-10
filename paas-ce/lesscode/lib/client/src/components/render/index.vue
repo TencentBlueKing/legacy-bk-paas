@@ -11,12 +11,14 @@
 
 <template>
     <layout>
-        <div @mouseleave="handleMouseleave">
+        <div
+            :class="$style['canvas']"
+            @mouseleave="handleMouseleave">
             <draggable
-                class="target-drag-area"
+                v-if="isReady"
+                :class="$style['editor']"
                 :component-data="componentData"
                 :list="componentData.slot.default"
-                disabled
                 :sort="true"
                 :group="{
                     name: 'layout',
@@ -28,6 +30,7 @@
                     <!-- 布局组件 -->
                     <resolve-component
                         v-if="!componentNode.isInteractiveComponent"
+                        ref="component"
                         :key="componentNode.renderKey"
                         :component-data="componentNode" />
                     <!-- 交互式组件 -->
@@ -39,23 +42,20 @@
             </draggable>
         </div>
         <div
-            v-show="showNotVisibleMask"
-            class="not-visible-mask"
-            :style="{ height: canvasHeight + 'px' }">
-            <span class="not-visible-text">
-                {{`该组件(${invisibleComponent})处于隐藏状态，请先打开`}}
-            </span>
+            v-if="showNotVisibleMask"
+            :class="$style['not-visible-mask']">
+            {{`该组件(${invisibleComponent})处于隐藏状态，请先打开`}}
         </div>
     </layout>
 </template>
 <script>
+    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import Draggable, {
         getDragTargetGroup
     } from './components/draggable'
     import Layout from './widget/layout'
     import ResolveInteractiveComponent from './resolve-interactive-component'
-    import { bus } from '@/common/bus'
 
     export default {
         name: 'render',
@@ -70,17 +70,10 @@
                 attachToInteractiveComponent: false
             }
         },
-        props: {
-            mainContentLoading: {
-                type: Boolean,
-                default: false
-            }
-        },
         data () {
             return {
+                isReady: false,
                 showNotVisibleMask: false,
-                canvasHeight: 100,
-                resizeObserve: null,
                 invisibleComponent: ''
             }
         },
@@ -95,10 +88,15 @@
         created () {
             this.componentData = LC.getRoot()
 
+            const nodeTreeReadyCallback = () => {
+                this.isReady = true
+            }
+
             const updateCallback = (event) => {
                 console.log('from target updateCallback == ', event)
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
+                    this.autoType()
                 }
             }
             /**
@@ -111,17 +109,16 @@
                     this.showNotVisibleMask = activeNode.isInteractiveComponent && !activeNode.interactiveShow
                 }
             }
-            /** 当主页面拉去数据、加载页面后，调用动态计算遮罩的方法 */
-            bus.$on('pageInitialized', this.observeInteractiveMask)
 
+            LC.addEventListener('ready', nodeTreeReadyCallback)
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('active', interactiveWatcher)
             LC.addEventListener('toggleInteractive', interactiveWatcher)
             this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('ready', nodeTreeReadyCallback)
                 LC.removeEventListener('update', updateCallback)
                 LC.removeEventListener('active', interactiveWatcher)
                 LC.removeEventListener('toggleInteractive', interactiveWatcher)
-                bus.$off('pageInitialized')
             })
         },
         mounted () {
@@ -131,20 +128,22 @@
             document.body.addEventListener('click', resetCallback)
             this.$once('hook:beforeDestroy', () => {
                 document.body.removeEventListener('click', resetCallback)
-                this.resizeObserve.disconnect()
             })
         },
         methods: {
-            observeInteractiveMask () {
-                const canvas = document.querySelector('.lesscode-editor-layout')
-                this.canvasHeight = canvas.offsetHeight
-                this.resizeObserve = new ResizeObserver(entries => {
-                    for (const entry of entries) {
-                        this.canvasHeight = entry.target.offsetHeight
-                    }
+            /**
+             * @desc 自动排版子组件
+             */
+            autoType: _.throttle(function () {
+                setTimeout(() => {
+                    this.$refs.component.forEach((componentIns, index) => {
+                        componentIns.componentData.setStyle('marginBottom', '10px')
+                        if (index > 0) {
+                            componentIns.componentData.setStyle('marginTop', '10px')
+                        }
+                    })
                 })
-                this.resizeObserve.observe(canvas)
-            },
+            }, 20),
             /**
              * @desc 只可以放入布局类型和交互是类型的组件
              * @param { Object } target
@@ -176,8 +175,25 @@
         }
     }
 </script>
-<style lang="postcss">
-    .target-drag-area{
-        z-index: 100000000;
+<style lang="postcss" module>
+    .canvas{
+        min-height: calc(100% - 20px) !important;
+        z-index: 1000000000000;
+    }
+    .editor{
+        padding-bottom: 300px;
+    }
+    .not-visible-mask{
+        position: fixed;
+        z-index: 1000000000000;
+        display: flex;
+        justify-content: center;
+        background: rgba(0,0,0,0.8);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding-top: 100px;
+        color: #fff;
     }
 </style>

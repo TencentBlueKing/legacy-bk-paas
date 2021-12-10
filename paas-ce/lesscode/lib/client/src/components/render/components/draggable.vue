@@ -82,13 +82,11 @@
             })
         },
         methods: {
-            
             /**
              * @desc 添加组件
              * @param { Object } dragEvent
              */
             handleAdd (event) {
-                // console.log('============print drag add', event)
                 this.$emit('add', event)
             },
             /**
@@ -123,7 +121,7 @@
                 })
                 // fix: vue-draggable内部没有更新
                 this.$refs.draggable.computeIndexes()
-                
+                dragTargetGroup = ''
                 this.$emit('change', event)
             },
             /**
@@ -162,13 +160,10 @@
         opacity: .5;
     }
     .ghost{
-        &::before{
-            content: none !important;
-        }
+        margin-bottom: 5px;
         &:after {
             content: "放在这里";
             display: block;
-            height: 32px;
             height: 32px;
             padding: 0 5px;
             font-size: 12px;
@@ -176,7 +171,6 @@
             text-align: center;
             line-height: 32px;
             background-color: #C2D7F9;
-            
         }
         &:global(.inline-block) {
             display: inline-block;
@@ -196,7 +190,7 @@
             }
         }
         & > * {
-            display: none;
+            display: none !important;
         }
     }
 </style>

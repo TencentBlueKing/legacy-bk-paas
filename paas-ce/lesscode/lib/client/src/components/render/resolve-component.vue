@@ -127,9 +127,11 @@
                     this.$emit('component-update')
                 }
             }, 60)
+            
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
-            }, 100)
+            }, 60)
+
             const componentMouseleaveCallback = () => {
                 hoverComponentId = ''
                 this.isHover = false
@@ -244,6 +246,7 @@
              * @desc 组件点击事件回调
              */
             handleClick () {
+                LC.clearMenu()
                 if (this.componentData.isActived) {
                     return
                 }
@@ -280,6 +283,7 @@
 <style lang="postcss" module>
     .component {
         /* vertical-align: middle; */
+        cursor: pointer;
         -webkit-text-size-adjust: none;
         &.selected,
         &.hover{
@@ -305,9 +309,6 @@
             &:before {
                 border: 1px dashed #3a84ff !important;
             }
-        }
-        &.disabled{
-            pointer-events: none;
         }
     }
 

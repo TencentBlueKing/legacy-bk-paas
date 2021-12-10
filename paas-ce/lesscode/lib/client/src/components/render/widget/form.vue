@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <div>
+    <div :class="$style['form']">
         <div
             v-if="componentData.slot.default.length < 1"
             :class="$style['empty']">
@@ -45,11 +45,15 @@
     }
 </script>
 <style lang='postcss' module>
+    .form{
+        border: 1px dashed #ccc;
+    }
     .empty{
         height: 80px;
         line-height: 80px;
         font-size: 18px;
         color: #ccc;
         text-align: center;
+        pointer-events: all;
     }
 </style>

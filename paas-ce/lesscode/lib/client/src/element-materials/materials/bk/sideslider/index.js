@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-dialog',
     group: '反馈',
     order: 5,
-    interactiveShow: false,
+    interactiveShow: true,
     events: [
         { name: 'show', tips: '显示组件后调用该事件函数，暂无事件回调参数' },
         { name: 'hidden', tips: '关闭组件后调用该事件函数，暂无事件回调参数' },

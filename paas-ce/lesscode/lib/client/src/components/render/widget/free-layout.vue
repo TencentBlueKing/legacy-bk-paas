@@ -29,12 +29,12 @@
             :ghost-class="$style['drag-component-ghost']"
             :force-fallback="false"
             @add="handleAdd">
-            <div
+            <!-- <div
                 :class="$style['drag-placeholder']"
                 :style="{
                     height: componentData.style.height,
                     pointerEvents: freeLayoutItemPlaceholderPointerEvents
-                }" />
+                }" /> -->
             <resolve-component
                 v-for="slotData in componentData.slot.default"
                 :ref="slotData.componentId"
@@ -54,7 +54,6 @@
     import Drag from '@/common/drag'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
-    import offsetMixin from './offset-mixin'
 
     export default {
         name: 'free-layout',
@@ -62,7 +61,6 @@
             Draggable,
             ResolveComponent
         },
-        mixins: [offsetMixin],
         props: {
             componentData: {
                 type: Object,
@@ -168,7 +166,6 @@
                     // 组件默认不能超过容器范围
                     // top 位置计算
 
-                    console.log('from freeefreeefreeefreeefreee', childNode.style.top, childNode.style.left)
                     if (childNode.style.top) {
                         top = parseInt(childNode.style.top)
                     } else {
@@ -222,11 +219,7 @@
         position: relative;
         width: 100%;
         border: 1px dashed #ccc;
-        /* 设置slider、card在自由布局中的pointer-events属性 */
-        :global(.bk-slider),
-        :global(.bk-card) {
-            pointer-events: none;
-        }
+        pointer-events: all;
     }
     .drag-placeholder {
         position: absolute;

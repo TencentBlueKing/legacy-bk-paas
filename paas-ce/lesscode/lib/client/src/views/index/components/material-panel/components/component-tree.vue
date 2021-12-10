@@ -93,17 +93,17 @@
              */
             const activeCallback = async event => {
                 await this.expandParent(event.target)
-                this.$refs.tree.setSelected(event.target.componentId)
 
-                const activeNode = LC.getActiveNode()
-                if (activeNode) {
-                    const parent = this.isParentInteractive(activeNode)
-                    activeNode && this.data.forEach(item => {
-                        item.hideInteractive()
-                    })
-                    if (parent) {
-                        this.setComponentVisible(parent)
-                    }
+                const activeNode = event.target
+                
+                this.$refs.tree.setSelected(activeNode.componentId)
+
+                this.data.forEach(item => {
+                    item.hideInteractive()
+                })
+                const parent = this.isParentInteractive(activeNode)
+                if (parent) {
+                    this.setComponentVisible(parent)
                 }
             }
             LC.addEventListener('update', updateCallback)
