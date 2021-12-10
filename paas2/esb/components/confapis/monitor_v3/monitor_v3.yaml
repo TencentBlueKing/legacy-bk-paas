@@ -1372,3 +1372,14 @@
   name: metadata_delete_cluster_info
   path: /v2/monitor_v3/metadata_delete_cluster_info/
   method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/alert_info/search_alert_by_event/
+  is_hidden: true
+  label: 根据event获取告警处理信息
+  label_en: null
+  name: search_alert_by_event
+  path: /v2/monitor_v3/search_alert_by_event/
+  method: POST
