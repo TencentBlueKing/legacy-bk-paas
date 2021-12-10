@@ -72,7 +72,7 @@
         },
         data () {
             return {
-                isReady: false,
+                isReady: LC.isReady,
                 showNotVisibleMask: false,
                 invisibleComponent: ''
             }

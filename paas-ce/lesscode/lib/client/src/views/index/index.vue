@@ -738,6 +738,7 @@
                 //     this.updateTargetData(targetData)
                 //     this.targetData = targetData
                 // }
+                
                 this.actionSelected = action
             },
 
