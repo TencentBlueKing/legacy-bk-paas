@@ -157,7 +157,7 @@
         height: 100%;
     }
     .chosen{
-        opacity: .5;
+        opacity: .9;
     }
     .ghost{
         margin-bottom: 5px;

@@ -9,6 +9,8 @@ export default {
         } = context.props
 
         const nativeComponentStyleReset = {
+            // 基础组件以块的形式渲染，屏蔽掉其它样式操作的排版问题
+            // 'float': 'left',
             // 修正组件会影响位置的样式
             'padding': '',
             'paddingTop': '',
@@ -32,10 +34,15 @@ export default {
                 left: ''
             })
         }
-        // 隔绝基础组件的鼠标事件响应
-        if (context.parent.checkNativeComponent(componentData.type)) {
+        
+        if (!context.parent.isShadowComponent) {
             Object.assign(nativeComponentStyleReset, {
+                // 基础组件的层级最低
+                'z-index': 0,
+                // 隔绝基础组件的鼠标事件响应
                 'pointer-events': 'none'
+                // 修正 inline-block 组件会因为字体的原因导致偏移,
+                // 'vertical-align': 'bottom'
             })
         }
 
@@ -58,6 +65,14 @@ export default {
             if (Object.prototype.hasOwnProperty.call(value, 'staticValue')) {
                 props[key] = value.staticValue
             }
+        }
+
+        const attrs = {
+            role: componentData.type
+        }
+        // 打上类型为基础组件的标记
+        if (!context.parent.isShadowComponent) {
+            attrs['data-base-component'] = true
         }
 
         const renderSlotMap = Object.keys(componentData.slot).reduce((result, slotName) => {
@@ -88,9 +103,7 @@ export default {
         return h(componentData.type, {
             key: componentData.renderKey,
             props,
-            attrs: {
-                role: componentData.type
-            },
+            attrs,
             on: events,
             scopedSlots: renderSlotMap,
             style: Object.assign({}, componentData.style, nativeComponentStyleReset)

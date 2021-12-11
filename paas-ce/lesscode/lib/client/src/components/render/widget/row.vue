@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <div :class="$style['row']" :style="style">
+    <div :class="$style['row']">
         <slot />
     </div>
 </template>
@@ -45,25 +45,7 @@
             return {
                 renderCols: 0,
                 renderGutter: this.gutter,
-                renderFlex: this.flex,
-                showTemplateDialog: false
-            }
-        },
-        computed: {
-            style () {
-                // // const { renderGutter, marginHorizontal, marginVertical } = this
-                // const { marginHorizontal, marginVertical } = this
-                // const o = this.renderFlex ? { display: ['-webkit-box', '-ms-flexbox', 'flex'] } : {}
-                // return {
-                //     'padding-right': `${marginHorizontal}px`,
-                //     'padding-left': `${marginHorizontal}px`,
-                //     'padding-top': `${marginVertical}px`,
-                //     'padding-bottom': `${marginVertical}px`,
-                //     ...o
-                //     // 'margin-right': `-${renderGutter / 2}px`,
-                //     // 'margin-left': `-${renderGutter / 2}px`
-                // }
-                return {}
+                renderFlex: this.flex
             }
         },
         watch: {
@@ -84,9 +66,7 @@
 </script>
 
 <style lang="postcss" module>
-    @import "@/css/mixins/clearfix";
     .row{
-        @mixin clearfix;
         display: flex !important;
     }
 </style>

@@ -41,7 +41,7 @@
         },
         created () {
             const root = LC.getRoot()
-            this.code = circleJSON(root.toJSON().renderSlots.default)
+            this.code = circleJSON(root.toJSON().slot.default)
         },
         methods: {
             ...mapMutations('drag', [

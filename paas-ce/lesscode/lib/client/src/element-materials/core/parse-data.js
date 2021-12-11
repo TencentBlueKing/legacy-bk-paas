@@ -13,11 +13,11 @@ let isClone = false
  * @returns { Node }
  */
 const createNodeFromData = (data) => {
-    const id = uuid()
     const newNode = createNode(data.type)
     newNode.tabPanelActive = data.tabPanelActive || 'props'
-    newNode.componentId = isClone ? `${data.name}-${id}` : data.componentId
-    newNode.renderKey = id
+    if (!isClone) {
+        newNode.componentId = data.componentId
+    }
     data.renderStyles && newNode.setRenderStyles(data.renderStyles)
     data.renderProps && newNode.setRenderProps(data.renderProps)
     data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
@@ -63,14 +63,14 @@ const traverse = (parentNode, childDataList, slot) => {
                     traverse(childNode, slotData, slotName)
                 }
             })
+        } else {
+            childNode.renderSlots = childData.renderSlots || {}
         }
         
         if (parentNode.layoutType) {
             parentNode.appendChild(childNode, slot)
         } else if (parentNode.layoutSlotType[slot]) {
             parentNode.renderSlots[slot] = childNode
-        } else {
-            childNode.renderSlots = childData.renderSlots || {}
         }
     })
 }
@@ -229,7 +229,6 @@ const checkVersion = (data) => {
 }
 
 export default function (data) {
-    console.dir(JSON.parse(JSON.stringify(data)))
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {

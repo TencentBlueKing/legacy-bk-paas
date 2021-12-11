@@ -21,7 +21,7 @@
         role="component-root"
         :data-component-id="`${componentData.componentId}`"
         :data-layout="componentData.layoutType"
-        :style="componentData.style"
+        :style="Object.assign({}, componentData.style, resetStyle)"
         @mousedown.stop="handleMousedown"
         @mousemove="handleMousemove"
         @mouseup="handleMouseup"
@@ -38,44 +38,28 @@
 </template>
 <script>
     import _ from 'lodash'
-    import { getStyle } from '@/common/util'
     import LC from '@/element-materials/core'
     import SaveToTemplate from './components/save-to-template'
     import RenderComponent from './render-component'
     import RenderSlot from './render-slot'
 
-    const BLOCK_ELEMS = [
-        'div',
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'p',
-        'ul',
-        'ol',
-        'dl',
-        'table',
-        'form'
-    ]
-
-    const INLINE_ELEMS = [
-        'span',
-        'a',
-        'strong',
-        'b',
-        'em',
-        'i',
-        'big',
-        'small',
-        'label',
-        'img',
-        'input',
-        'select',
-        'textarea',
-        'svg'
-    ]
+    const getRenderStyleDisplayValue = display => {
+        switch (display) {
+            case 'flex':
+            case 'gird':
+            case 'block':
+                return 'block'
+            case 'inline-flex':
+            case 'inline-grid':
+            case 'inline-block':
+                return 'inline-block'
+            case 'inline':
+                return 'inline'
+            // 默认按块级元素处理
+            default:
+                return 'block'
+        }
+    }
 
     // 记录鼠标 hover 组件的 id
     let hoverComponentId = ''
@@ -114,7 +98,22 @@
                 }
             }
             return {
-                isHover: false
+                isHover: false,
+                resetStyle: {
+                    display: 'block'
+                }
+            }
+        },
+        computed: {
+            isShadowComponent () {
+                const shadowComMap = {
+                    'free-layout': true,
+                    'render-grid': true,
+                    'widget-form': true,
+                    'widget-form-item': true,
+                    'resolve-component': true
+                }
+                return shadowComMap[this.componentData.type] || false
             }
         },
         created () {
@@ -153,11 +152,11 @@
         },
         methods: {
             /**
-             * @desc 判断是否是组件库组价类型
+             * @desc 判断是否是 render 内置的 shadow component
              * @param { String } type
              * @returns { Boolean }
              */
-            checkNativeComponent (type) {
+            checkShadowComponent (type) {
                 const shadowComMap = {
                     'free-layout': true,
                     'render-grid': true,
@@ -165,39 +164,31 @@
                     'widget-form-item': true,
                     'resolve-component': true
                 }
-                return !shadowComMap[type]
+                return shadowComMap[type] || false
             },
             /**
              * @desc 判断渲染组件的 display 的值
              */
             calcDefaultDisplay () {
-                let result = ''
-                if (this.$refs[this.componentData.componentId]) {
-                    const domNode = this.$refs[this.componentData.componentId].$el
-                        || this.$refs[this.componentData.componentId] // 原生html不会有$el元素
-                    if (!domNode) {
-                        return
-                    }
-                    const componentDisplay = getStyle(domNode, 'display')
-
-                    if (componentDisplay) {
-                        result = componentDisplay
-                    } else {
-                        const tagName = domNode.tagName.toLocaleLowerCase()
-                        if (BLOCK_ELEMS.indexOf(tagName) > -1) {
-                            result = 'block'
-                        } else if (INLINE_ELEMS.indexOf(tagName) > -1) {
-                            result = 'inline-block'
-                        }
-                    }
-                } else {
-                    // 兼容异步组件 bk-custom-icon，初始无法获取 ref
-                    if (['bk-custom-icon'].includes(this.componentData.type)) {
-                        result = 'inline-block'
-                    }
+                if (this.isShadowComponent) {
+                    return
                 }
-                if (result) {
-                    this.componentData.setStyle('display', result)
+                
+                // 兼容异步组件 bk-custom-icon
+                if (['bk-custom-icon'].includes(this.componentData.type)) {
+                    this.resetStyle = {
+                        display: 'inline-block'
+                    }
+                    return
+                }
+                const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
+                if ($baseComponentEl) {
+                    const {
+                        display
+                    } = window.getComputedStyle($baseComponentEl)
+                    this.resetStyle = {
+                        display: getRenderStyleDisplayValue(display)
+                    }
                 }
             },
             /**
