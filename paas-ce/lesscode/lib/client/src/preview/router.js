@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 import httpVueLoader from '@/common/http-vue-loader'
-import { uuid } from '@/common/util'
+import { uuid } from 'shared/util'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 

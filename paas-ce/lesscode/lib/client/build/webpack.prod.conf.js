@@ -24,6 +24,7 @@ const clientConf = require('./conf')
 const { pathToNodeModules } = require('./util')
 const baseConf = require('./webpack.base.conf')
 const manifest = require('../static/lib-manifest.json')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = merge(baseConf, {
     mode: 'production',
@@ -90,12 +91,19 @@ module.exports = merge(baseConf, {
                     // 单独将 bkMagicVue 拆包
                     name: 'chunk-bk-magic-vue',
                     // 权重
-                    priority: 5,
+                    priority: 7,
                     // 表示是否使用已有的 chunk，如果为 true 则表示如果当前的 chunk 包含的模块已经被提取出去了，那么将不会重新生成新的。
                     reuseExistingChunk: true,
                     test: module => {
                         return /bk-magic-vue/.test(module.context)
                     }
+                },
+                // 提取 element 代码块
+                element: {
+                    chunks: 'all',
+                    name: 'element-ui',
+                    test: /[\\/]element-ui[\\/]/,
+                    priority: 8
                 },
                 // 所有 node_modules 的模块被不同的 chunk 引入超过 1 次的提取为 twice
                 // 如果去掉 test 那么提取的就是所有模块被不同的 chunk 引入超过 1 次的
@@ -268,6 +276,9 @@ module.exports = merge(baseConf, {
                 toType: 'dir'
             }
         ]),
-        new ReplaceStaticUrlPlugin({ fileNamePrefix: 'main' })
+        new ReplaceStaticUrlPlugin({ fileNamePrefix: 'main' }),
+        new BundleAnalyzerPlugin({
+            generateStatsFile: true
+        })
     ]
 })

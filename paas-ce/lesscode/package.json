@@ -13,7 +13,8 @@
     "dev": "better-npm-run dev",
     "stop": "cross-env FOREVER_ROOT=./ forever stop lesscode",
     "list": "cross-env FOREVER_ROOT=./ forever list",
-    "logs": "cross-env FOREVER_ROOT=./ forever logs"
+    "logs": "cross-env FOREVER_ROOT=./ forever logs",
+    "bundle": "webpack-bundle-analyzer lib/client/dist/stats.json"
   },
   "betterScripts": {
     "dll": {
@@ -245,5 +246,8 @@
   "engines": {
     "node": ">= 14.17.6",
     "npm": "6.14.15"
+  },
+  "devDependencies": {
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }
