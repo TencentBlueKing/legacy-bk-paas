@@ -10,7 +10,7 @@
  */
 import Vue from 'vue'
 import pureAxios from '@/api/pureAxios.js'
-import { auth, errorHandle } from './auth'
+import { errorHandle } from './overlay'
 import registerComponent from './component'
 import App from './children/App.vue'
 import generateRouter from './router'
@@ -27,35 +27,33 @@ if (versionId) {
     sessionStorage.setItem(storageKey, versionId)
 }
 
-auth(projectId).then(() => {
-    return Promise.all([
-        pureAxios.get(`/projectCode/previewCode?projectId=${projectId}&versionId=${versionId}`),
-        registerComponent(Vue, projectId, versionId)
-    ]).then(([res]) => {
-        Vue.prototype.$http = pureAxios
-        const data = res.data || {}
-        const projectPageRouteList = (data.pageRouteList || []).map(item => ({
-            ...item,
-            fullPath: item.id ? `${item.layoutPath}${item.layoutPath.endsWith('/') ? '' : '/'}${item.path}` : ''
+Promise.all([
+    pureAxios.get(`/projectCode/previewCode?projectId=${projectId}&versionId=${versionId}`),
+    registerComponent(Vue, projectId, versionId)
+]).then(([res]) => {
+    Vue.prototype.$http = pureAxios
+    const data = res.data || {}
+    const projectPageRouteList = (data.pageRouteList || []).map(item => ({
+        ...item,
+        fullPath: item.id ? `${item.layoutPath}${item.layoutPath.endsWith('/') ? '' : '/'}${item.path}` : ''
+    }))
+    const projectRouteList = (Object.values(data.routeGroup) || []).map(({ children }) => children)
+        .reduce((pre, cur) => pre.concat(cur), [])
+        .map(({ id, layoutPath, path, redirect, pageCode }) => ({
+            id,
+            layoutPath,
+            path,
+            redirect,
+            pageCode,
+            fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
         }))
-        const projectRouteList = (Object.values(data.routeGroup) || []).map(({ children }) => children)
-            .reduce((pre, cur) => pre.concat(cur), [])
-            .map(({ id, layoutPath, path, redirect, pageCode }) => ({
-                id,
-                layoutPath,
-                path,
-                redirect,
-                pageCode,
-                fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
-            }))
-        const router = generateRouter(data.routeGroup, projectPageRouteList, projectId)
-        const store = generateStore(data.storeData, { projectPageRouteList, projectRouteList })
-        window.app = new Vue({
-            el: '#preview-app',
-            components: { App },
-            router,
-            store,
-            template: '<App/>'
-        })
+    const router = generateRouter(data.routeGroup, projectPageRouteList, projectId)
+    const store = generateStore(data.storeData, { projectPageRouteList, projectRouteList })
+    window.app = new Vue({
+        el: '#preview-app',
+        components: { App },
+        router,
+        store,
+        template: '<App/>'
     })
 }).catch(errorHandle)

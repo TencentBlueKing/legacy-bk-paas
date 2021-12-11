@@ -12,29 +12,16 @@ import httpVueLoader from '@/common/http-vue-loader'
 import { uuid } from 'shared/util'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
-
+import Home from './children/home.vue'
 import BkNotFound from './children/404.vue'
 
 Vue.use(VueRouter)
-
 const uniqStr = uuid()
-let router = {}
 
 function registerComponent (code) {
     code = code.replace('export default', 'module.exports =')
     return httpVueLoader(code)
 }
-
-const Home = registerComponent(`
-    <template>
-        <router-view></router-view>
-    </template>
-    <script>
-        export default {
-            name: 'Home'
-        }
-    </script>
-`)
 
 // 生成路由
 module.exports = (routeGroup, projectPageRouteList, projectId) => {
@@ -89,7 +76,7 @@ module.exports = (routeGroup, projectPageRouteList, projectId) => {
             redirect: { name: '404' }
         }
     })
-    router = new VueRouter({
+    return new VueRouter({
         mode: 'history',
         base: `/preview/project/${projectId}`,
         routes: [
@@ -106,5 +93,4 @@ module.exports = (routeGroup, projectPageRouteList, projectId) => {
             }
         ]
     })
-    return router
 }
