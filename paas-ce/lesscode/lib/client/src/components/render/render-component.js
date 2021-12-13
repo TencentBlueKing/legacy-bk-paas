@@ -9,8 +9,6 @@ export default {
         } = context.props
 
         const nativeComponentStyleReset = {
-            // 基础组件以块的形式渲染，屏蔽掉其它样式操作的排版问题
-            // 'float': 'left',
             // 修正组件会影响位置的样式
             'padding': '',
             'paddingTop': '',
@@ -37,12 +35,10 @@ export default {
         
         if (!context.parent.isShadowComponent) {
             Object.assign(nativeComponentStyleReset, {
-                // 基础组件的层级最低
+                // 基础组件的层级最低（基础组件可能本身有 border 样式，保证组件选中和 hover 时的边框效果能显示出来）
                 'z-index': 0,
                 // 隔绝基础组件的鼠标事件响应
                 'pointer-events': 'none'
-                // 修正 inline-block 组件会因为字体的原因导致偏移,
-                // 'vertical-align': 'bottom'
             })
         }
 
@@ -60,17 +56,19 @@ export default {
             }
         }
 
-        /** 设置了静态的变量，即使值改变，但不在画布中绑定和渲染 */
-        for (const [key, value] of Object.entries(componentData.prop)) {
-            if (Object.prototype.hasOwnProperty.call(value, 'staticValue')) {
-                props[key] = value.staticValue
+        Object.keys(context.parent.material.props || {}).forEach(propName => {
+            const propConfig = context.parent.material.props[propName]
+            // prop 被标记为 staticValue，在画布编辑时不动态改变
+            // 永远使用默认值
+            if (Object.prototype.hasOwnProperty.call(propConfig, 'staticValue')) {
+                props[propName] = propConfig.staticValue
             }
-        }
+        })
 
         const attrs = {
             role: componentData.type
         }
-        // 打上类型为基础组件的标记
+        // 为基础组件打上标记
         if (!context.parent.isShadowComponent) {
             attrs['data-base-component'] = true
         }

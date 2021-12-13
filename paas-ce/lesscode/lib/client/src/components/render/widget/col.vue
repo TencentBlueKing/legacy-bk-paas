@@ -46,6 +46,7 @@
             Draggable,
             ResolveComponent
         },
+        inheritAttrs: false,
         props: {
             componentData: {
                 type: Object,

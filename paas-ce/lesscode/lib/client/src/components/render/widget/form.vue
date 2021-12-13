@@ -16,15 +16,15 @@
             :class="$style['empty']">
             请在右侧配置表单项
         </div>
-        <template v-else>
-            <bk-form v-bind="componentData.prop">
-                <widget-form-item
-                    v-for="formItemNode in componentData.slot.default"
-                    :key="formItemNode.componentId"
-                    :component-data="formItemNode"
-                    :form-type="componentData.prop['form-type']" />
-            </bk-form>
-        </template>
+        <bk-form
+            v-else
+            v-bind="componentData.prop">
+            <widget-form-item
+                v-for="formItemNode in componentData.slot.default"
+                :key="formItemNode.componentId"
+                :component-data="formItemNode"
+                :form-type="componentData.prop['form-type']" />
+        </bk-form>
     </div>
 </template>
 <script>

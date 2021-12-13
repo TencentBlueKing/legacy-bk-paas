@@ -60,6 +60,7 @@
             Draggable,
             ResolveComponent
         },
+        inheritAttrs: false,
         props: {
             componentData: {
                 type: Object,
@@ -213,6 +214,7 @@
         position: relative;
         width: 100%;
         border: 1px dashed #ccc;
+        /* 如果基础的 slot 可以拖拽需要设置这个屏蔽掉基础组件上面的 pointer-events: none 效果 */
         pointer-events: all;
     }
     .drag-placeholder {
@@ -230,7 +232,7 @@
         z-index: -1;
         background: #E9F1FD;
         & > * {
-            display: none;
+            display: none !important;
         }
     }
 </style>

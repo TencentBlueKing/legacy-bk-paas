@@ -47,6 +47,7 @@
             renderRow,
             renderCol
         },
+        inheritAttrs: false,
         provide () {
             return {
                 renderGrid: this
@@ -90,7 +91,7 @@
 <style lang="postcss" module>
     .grid{
         position: relative;
-        z-index: inherit;
+        /* 如果基础的 slot 可以拖拽需要设置这个屏蔽掉基础组件上面的 pointer-events: none 效果 */
         pointer-events: all;
         .add-column,
         .add-clone {
