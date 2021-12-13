@@ -21,19 +21,25 @@
         role="component-root"
         :data-component-id="`${componentData.componentId}`"
         :data-layout="componentData.layoutType"
-        :style="Object.assign({}, componentData.style, resetStyle)"
+        :style="Object.assign({}, componentData.style, safeStyles)"
         @mousedown.stop="handleMousedown"
         @mousemove="handleMousemove"
         @mouseup="handleMouseup"
         @click.stop="handleClick"
         @contextmenu.stop="handleShowContextmenu">
-        <render-component
-            :ref="componentData.componentId"
-            :component-data="componentData" />
         <save-to-template
             v-if="componentData.layoutType
                 && componentData.parentNode.layoutType
                 && componentData.isActived" />
+        <render-component
+            :ref="componentData.componentId"
+            :component-data="componentData" />
+        <template v-if="componentData.isActived || isHover">
+            <div :class="$style['line-top']" key="lineTop" role="line-top" />
+            <div :class="$style['line-right']" key="lineRight" role="line-right" />
+            <div :class="$style['line-bottom']" key="lineBottom" role="line-bottom" />
+            <div :class="$style['line-left']" key="lineLeft" role="line-left" />
+        </template>
     </div>
 </template>
 <script>
@@ -99,8 +105,12 @@
             }
             return {
                 isHover: false,
-                resetStyle: {
-                    display: 'block'
+                // 默认会继承组件的 style 配置，如果直接继承有些样式会造成排版问题需要重置
+                // 大多数样式是影响组件内部子元素的
+                safeStyles: {
+                    display: 'block',
+                    'white-space': 'unset',
+                    'word-break': 'unset'
                 }
             }
         },
@@ -117,6 +127,8 @@
             }
         },
         created () {
+            // 优先获取组件的 material Config 缓存起来，后续需要使用直接使用这个不在从 componentData.material 获取
+            this.material = this.componentData.material
             const updateCallback = _.throttle((event) => {
                 const {
                     target
@@ -146,39 +158,24 @@
             })
         },
         mounted () {
-            this.calcDefaultDisplay()
+            this.safeBaseComponentStyle()
             this.setDefaultStyleWithAttachToFreelayout()
             this.$emit('component-mounted')
         },
         methods: {
             /**
-             * @desc 判断是否是 render 内置的 shadow component
-             * @param { String } type
-             * @returns { Boolean }
+             * @desc 继承基础组件的某些特殊样式
              */
-            checkShadowComponent (type) {
-                const shadowComMap = {
-                    'free-layout': true,
-                    'render-grid': true,
-                    'widget-form': true,
-                    'widget-form-item': true,
-                    'resolve-component': true
-                }
-                return shadowComMap[type] || false
-            },
-            /**
-             * @desc 判断渲染组件的 display 的值
-             */
-            calcDefaultDisplay () {
+            safeBaseComponentStyle () {
                 if (this.isShadowComponent) {
                     return
                 }
                 
                 // 兼容异步组件 bk-custom-icon
                 if (['bk-custom-icon'].includes(this.componentData.type)) {
-                    this.resetStyle = {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
                         display: 'inline-block'
-                    }
+                    })
                     return
                 }
                 const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
@@ -186,9 +183,9 @@
                     const {
                         display
                     } = window.getComputedStyle($baseComponentEl)
-                    this.resetStyle = {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
                         display: getRenderStyleDisplayValue(display)
-                    }
+                    })
                 }
             },
             /**
@@ -273,34 +270,58 @@
 </script>
 <style lang="postcss" module>
     .component {
-        /* vertical-align: middle; */
         cursor: pointer;
         -webkit-text-size-adjust: none;
-        &.selected,
+        &.selected{
+            position: relative;
+           .line-top,
+            .line-right,
+            .line-bottom,
+            .line-left {
+                border-style: solid;
+            }
+        }
         &.hover{
             position: relative;
-            &:before {
-                content: "";
-                position: absolute;
-                left: 0;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                z-index: 1;
-                pointer-events: auto;
+            .line-top,
+            .line-right,
+            .line-bottom,
+            .line-left {
+                border-style: dashed;
             }
         }
-        &.selected {
-            &:before {
-                border: 1px solid #3a84ff;
-            }
+        .line-top,
+        .line-right,
+        .line-bottom,
+        .line-left{
+            position: absolute;
+            
+            border-width: 0;
+            border-color: #3a84ff;
         }
-        &.hover{
-            cursor: pointer;
-            &:before {
-                border: 1px dashed #3a84ff !important;
-            }
+        .line-top {
+            top: 0;
+            right: 0;
+            left: 0;
+            border-top-width: 1px;
+        }
+        .line-right{
+            top: 0;
+            right: 0;
+            bottom: 0;
+            border-right-width: 1px;
+        }
+        .line-bottom{
+            right: 0;
+            bottom: 0;
+            left: 0;
+            border-bottom-width: 1px;
+        }
+        .line-left{
+            top: 0;
+            bottom: 0;
+            left: 0;
+            border-left-width: 1px;
         }
     }
-
 </style>

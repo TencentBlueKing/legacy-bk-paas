@@ -32,6 +32,7 @@
         components: {
             ResolveComponent: () => import('../resolve-component')
         },
+        inheritAttrs: false,
         props: {
             componentData: {
                 type: Object,
@@ -63,8 +64,6 @@
 </script>
 <style lang='postcss' module>
     .form-item {
-        position: relative;
-        z-index: 10;
         & + .form-item{
             margin-top: 20px
         }

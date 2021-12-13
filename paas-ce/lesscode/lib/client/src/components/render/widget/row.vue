@@ -18,6 +18,7 @@
 <script>
     export default {
         name: 'render-row',
+        inheritAttrs: false,
         props: {
             // 栅格间距，单位 px，左右平分
             gutter: {
