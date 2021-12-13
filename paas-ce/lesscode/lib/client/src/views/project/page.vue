@@ -26,18 +26,7 @@
                 <bk-button @click="handleDownLoadProject">源码下载</bk-button>
                 <div class="extra">
                     <template>
-                        <bk-select
-                            v-if="hasMobilePage"
-                            v-model="pageType"
-                            :clearable="false"
-                            :ext-cls="'type-select'"
-                            @change="handleSearch(false)">
-                            <bk-option v-for="option in typeList"
-                                :key="option.id"
-                                :id="option.id"
-                                :name="option.name">
-                            </bk-option>
-                        </bk-select>
+                        <type-select v-if="hasMobilePage" @select-change="handleSelectChange"></type-select>
                         <span v-else class="total" v-show="renderList.length">共<em class="count">{{renderList.length}}</em>个页面</span>
                     </template>
                     <bk-input
@@ -127,26 +116,12 @@
     import downloadDialog from '@/views/system/components/download-dialog'
     import editRouteDialog from '@/components/project/edit-route-dialog'
     import pageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
+    import typeSelect from '@/components/project/type-select'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
     dayjs.extend(relativeTime)
     dayjs.locale('zh-cn')
-
-    const pageTypeList = [
-        {
-            id: 'ALL',
-            name: '全部'
-        },
-        {
-            id: 'PC',
-            name: 'PC端'
-        },
-        {
-            id: 'MOBILE',
-            name: '移动端'
-        }
-    ]
 
     export default {
         components: {
@@ -154,7 +129,8 @@
             pagePreviewThumb,
             downloadDialog,
             editRouteDialog,
-            pageFromTemplateDialog
+            pageFromTemplateDialog,
+            typeSelect
         },
         data () {
             return {
@@ -162,14 +138,13 @@
                 currentName: '',
                 currentRoute: {},
                 keyword: '',
-                pageType: 'ALL',
                 renderList: [],
                 pageList: [],
                 pageRouteList: [],
                 routeGroup: [],
-                typeList: pageTypeList,
                 isLoading: true,
-                editRouteGroup: []
+                editRouteGroup: [],
+                pageType: 'ALL'
             }
         },
         computed: {
@@ -378,6 +353,10 @@
                     this.renderList = this.renderList.filter(item => item.pageType === 'MOBILE')
                 }
             },
+            handleSelectChange (type) {
+                this.pageType = type
+                this.handleSearch(false)
+            },
             // 从模板创建
             handleTempCreate () {
                 this.$refs.pageFromTemplateDialog.isShow = true
@@ -400,13 +379,6 @@
             font-size: 14px;
             width: 110px;
         }
-    }
-
-    .type-select {
-        width: 120px;
-        background: #fff;
-        display: inline-block;
-        margin-right: 10px;
     }
 
     .pages-content {
