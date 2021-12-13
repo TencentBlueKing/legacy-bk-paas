@@ -49,7 +49,6 @@
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
     import DragLine from '@/common/drag-line'
     import Drag from '@/common/drag'
     import Draggable from '../components/draggable'
@@ -66,11 +65,6 @@
                 type: Object,
                 default: () => ({})
             }
-        },
-        computed: {
-            ...mapGetters('drag', [
-                'freeLayoutItemPlaceholderPointerEvents'
-            ])
         },
         created () {
             this.dragLine = null

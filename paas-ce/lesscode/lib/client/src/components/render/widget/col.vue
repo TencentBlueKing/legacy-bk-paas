@@ -124,11 +124,11 @@
                         } = componentInstance.componentData.style
                         if (!marginLeft || marginLeft === 'unset') {
                             if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
-                                componentInstance.componentData.setStyle('marginRight', '5px')
+                                componentInstance.componentData.setStyle('marginRight', '10px')
                             }
                         }
                         if (!marginBottom || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', '5px')
+                            componentInstance.componentData.setStyle('marginBottom', '10px')
                         }
                     })
                 })
@@ -138,7 +138,6 @@
 </script>
 <style lang="postcss" module>
     .col {
-        float: left;
         border: 1px dashed #ccc;
         ~ .col {
             border-left: none;

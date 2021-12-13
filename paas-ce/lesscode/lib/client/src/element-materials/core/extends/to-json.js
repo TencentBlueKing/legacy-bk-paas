@@ -46,9 +46,7 @@ const isValidStyleValue = value => {
  */
 export default function (node) {
     const {
-        tabPanelActive,
         componentId,
-        name,
         type,
         isComplexComponent,
         isCustomComponent,
@@ -76,7 +74,7 @@ export default function (node) {
         const curProp = renderProps[propName]
         // prop 为 remote 类型，或者 prop 的值等于默认值时在 JSON 结构中过滤掉
         if (curProp.type === 'remote'
-            || isValidPropValue(curProp.val, material.props[propName].val)) {
+            || isValidPropValue(curProp.val, material.props[propName] && material.props[propName].val)) {
             result[propName] = {
                 type: curProp.type,
                 val: curProp.val
@@ -93,17 +91,15 @@ export default function (node) {
     }, {})
 
     return _.cloneDeep({
-        tabPanelActive,
-        componentId,
-        name,
+        id: componentId,
         type,
-        isComplexComponent,
-        isCustomComponent,
-        isInteractiveComponent,
-        renderDirectives,
-        renderEvents,
-        renderProps: renderPropsJSON,
-        renderSlots: renderSlotsJSON,
-        renderStyles: renderStylesJSON
+        isComplex: isComplexComponent,
+        isCustom: isCustomComponent,
+        isInteractive: isInteractiveComponent,
+        directive: renderDirectives,
+        event: renderEvents,
+        prop: renderPropsJSON,
+        slot: renderSlotsJSON,
+        style: renderStylesJSON
     })
 }

@@ -27,8 +27,9 @@
                 return this.$route.params.pageId || ''
             }
         },
-        mounted () {
-            this.code = circleJSON(LC.getRoot().toJSON() || [])
+        created () {
+            const root = LC.getRoot()
+            this.code = circleJSON(root.toJSON().slot.default)
         },
         methods: {
             showEditData () {

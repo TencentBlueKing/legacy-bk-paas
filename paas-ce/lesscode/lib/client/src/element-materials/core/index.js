@@ -44,6 +44,8 @@ function core (id) {
     return node
 }
 
+// isReady 标记 api 数据加载完毕
+core.isReady = false
 core.parseData = parseData
 core.parseTemplate = parseTemplate
 core.getRoot = getRoot
@@ -64,5 +66,9 @@ core.triggerEventListener = triggerEventListener
 
 core.showMenu = showMenu
 core.clearMenu = clearMenu
+
+core.addEventListener('ready', () => {
+    core.isReady = true
+})
 
 export default core
