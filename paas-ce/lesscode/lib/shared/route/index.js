@@ -9,11 +9,4 @@
  * specific language governing permissions and limitations under the License.
  */
 
-/**
- * 抛出前后端公用模块
- * 代码可能会在node或者浏览器环境下运行
- * 不能写node或者浏览器环境下专有语法
- */
-export * from './function'
-export * from './data-source'
-export * from './route'
+export * from './helper'

@@ -10,6 +10,7 @@
  */
 import httpVueLoader from '@/common/http-vue-loader'
 import { uuid } from 'shared/util'
+import { getRouteFullPath, getRouteName, getProjectDefaultRoute } from 'shared/route'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 import Home from './children/home.vue'
@@ -24,12 +25,14 @@ function registerComponent (code) {
 }
 
 // 生成路由
-module.exports = (routeGroup, projectPageRouteList, projectId) => {
+module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId) => {
     const routes = []
     for (const key in routeGroup) {
         const layout = routeGroup[key]
+
         // 父路由
         const parentCom = registerComponent(layout.content)
+
         // 子路由
         const routeList = layout.children
         const children = routeList.map((route) => {
@@ -39,16 +42,13 @@ module.exports = (routeGroup, projectPageRouteList, projectId) => {
 
             // 与vue-router保持一致，优先使用redirect
             if (route.redirectRoute) {
-                const { layoutPath, path } = route.redirectRoute
-                // 导航菜单会通过name跳转所以仍然需要name，未绑定页面的路由使用跳转路径作为name
-                const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
-                routeConifg.name = route.pageCode || fullPath.replace(/[\/\-\:]/g, '')
+                routeConifg.name = getRouteName(route)
                 routeConifg.redirect = {
-                    path: fullPath
+                    path: getRouteFullPath(route.redirectRoute)
                 }
             } else if (route.pageId !== -1) {
                 const childCom = registerComponent(route.content)
-                routeConifg.name = route.pageCode
+                routeConifg.name = getRouteName(route)
                 routeConifg.component = childCom
             } else {
                 routeConifg.redirect = {
@@ -58,14 +58,17 @@ module.exports = (routeGroup, projectPageRouteList, projectId) => {
 
             return routeConifg
         })
+
         // 404
         if (layout.path !== '/') {
             children.push({ path: '*', component: BkNotFound })
         }
+
         routes.push({
             path: layout.path.replace(/^\//, ''),
             name: layout.name + uniqStr,
             component: parentCom,
+            redirect: children[0].name ? { name: children[0].name } : null,
             children
         })
     }
@@ -76,21 +79,32 @@ module.exports = (routeGroup, projectPageRouteList, projectId) => {
             redirect: { name: '404' }
         }
     })
+
+    // 项目默认首页
+    const defaultRoute = getProjectDefaultRoute(projectPageRouteList, projectRouteList)
+
+    const allRoutes = [
+        {
+            path: '/',
+            name: 'previewHome',
+            component: Home,
+            redirect: (defaultRoute && defaultRoute?.id) ? { name: getRouteName(defaultRoute) } : null,
+            children: [...routes, ...noRoutePages]
+        },
+        {
+            path: '/404',
+            name: '404',
+            component: BkNotFound
+        },
+        {
+            path: '*',
+            redirect: { name: '404' }
+        }
+    ]
+
     return new VueRouter({
         mode: 'history',
         base: `/preview/project/${projectId}`,
-        routes: [
-            {
-                path: '/',
-                name: 'previewHome',
-                component: Home,
-                children: [...routes, ...noRoutePages]
-            },
-            {
-                path: '/404',
-                name: '404',
-                component: BkNotFound
-            }
-        ]
+        routes: allRoutes
     })
 }

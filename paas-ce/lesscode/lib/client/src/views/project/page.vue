@@ -94,6 +94,7 @@
     import downloadDialog from '@/views/system/components/download-dialog'
     import editRouteDialog from '@/components/project/edit-route-dialog'
     import pageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
+    import { getRouteFullPath } from 'shared/route'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
@@ -137,12 +138,13 @@
             },
             routeMap () {
                 const routeMap = {}
-                this.pageRouteList.forEach(({ id, pageId, layoutId, layoutPath, path }) => {
+                this.pageRouteList.forEach((route) => {
+                    const { id, pageId, layoutId } = route
                     routeMap[pageId] = {
                         id,
                         pageId,
                         layoutId,
-                        fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                        fullPath: id ? getRouteFullPath(route) : null
                     }
                 })
                 return routeMap
@@ -289,9 +291,19 @@
                     return
                 }
 
+                const route = this.routeMap[page.id]
+                if (!route.id) {
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: '页面未配置路由，请先配置',
+                        limit: 1
+                    })
+                    return
+                }
+
                 // 跳转到预览入口页面
                 const versionQuery = `${this.versionId ? `&v=${this.versionId}` : ''}`
-                window.open(`/preview/project/${this.projectId}/?pageCode=${page.pageCode}${versionQuery}`, '_blank')
+                window.open(`/preview/project/${this.projectId}${route.fullPath}?pageCode=${page.pageCode}${versionQuery}`, '_blank')
             },
             handleDownLoadProject () {
                 this.$refs.downloadDialog.isShow = true
