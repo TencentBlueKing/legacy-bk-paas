@@ -47,7 +47,7 @@ Promise.all([
             pageCode,
             fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
         }))
-    const router = generateRouter(data.routeGroup, projectPageRouteList, projectId)
+    const router = generateRouter(data.routeGroup, projectPageRouteList, projectRouteList, projectId)
     const store = generateStore(data.storeData, { projectPageRouteList, projectRouteList })
     window.app = new Vue({
         el: '#preview-app',

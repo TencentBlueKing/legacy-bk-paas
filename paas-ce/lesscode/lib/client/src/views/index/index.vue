@@ -317,6 +317,7 @@
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
     import { infoLink } from '@/element-materials/materials/index'
+    import { getRouteFullPath } from 'shared/route'
 
     export default {
         components: {
@@ -1539,10 +1540,15 @@
                 this.handleSave(() => {
                     let errTips = ''
                     try {
+                        const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+                        if (!pageRoute.id) {
+                            throw new Error('页面未配置路由，请先配置')
+                        }
                         localStorage.removeItem('layout-target-data')
                         localStorage.setItem('layout-target-data', circleJSON(this.targetData))
                         const versionQuery = `${this.versionId ? `&v=${this.versionId}` : ''}`
-                        const routerUrl = `/preview/project/${this.projectId}/?pageCode=${this.pageDetail.pageCode}${versionQuery}`
+                        const fullPath = getRouteFullPath(pageRoute)
+                        const routerUrl = `/preview/project/${this.projectId}${fullPath}?pageCode=${this.pageDetail.pageCode}${versionQuery}`
                         window.open(routerUrl, '_blank')
                     } catch (err) {
                         errTips = err.message || err || '预览异常'
