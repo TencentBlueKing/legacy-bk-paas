@@ -6,7 +6,6 @@ class History {
         copyNode = {},
         historyList = []
     }) {
-        console.log('enter cons')
         this.curHistoryIndex = curHistoryIndex
         this.copyNode = copyNode
         this.historyList = historyList

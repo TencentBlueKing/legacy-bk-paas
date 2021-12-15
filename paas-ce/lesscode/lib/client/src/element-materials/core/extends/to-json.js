@@ -48,6 +48,7 @@ export default function (node) {
     const {
         componentId,
         type,
+        name,
         isComplexComponent,
         isCustomComponent,
         isInteractiveComponent,
@@ -91,15 +92,16 @@ export default function (node) {
     }, {})
 
     return _.cloneDeep({
-        id: componentId,
+        componentId: componentId,
         type,
+        name,
         complex: isComplexComponent,
         custom: isCustomComponent,
         interactive: isInteractiveComponent,
-        directive: renderDirectives,
-        event: renderEvents,
-        prop: renderPropsJSON,
-        slot: renderSlotsJSON,
-        style: renderStylesJSON
+        renderDirectives: renderDirectives,
+        renderEvents: renderEvents,
+        renderProps: renderPropsJSON,
+        renderSlots: renderSlotsJSON,
+        renderStyles: renderStylesJSON
     })
 }

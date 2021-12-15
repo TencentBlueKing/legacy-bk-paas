@@ -55,11 +55,6 @@
                 ]
             }
         },
-        // computed: {
-        //     curSelectedNode () {
-        //         return LC.getActiveNode()
-        //     }
-        // },
         mounted () {
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
@@ -179,7 +174,6 @@
             putComponentData () {
                 if (!this.hasCtrl || Object.keys(LC.getActiveNode()).length <= 0) return
                 const copyNode = LC.getActiveNode().cloneNode(true)
-                console.log(LC.getActiveNode(), copyNode, 'diffclone')
                 NodeHistory.setCopyNode(copyNode)
             },
 
@@ -189,24 +183,6 @@
                 if (!this.hasCtrl || Object.keys(copyNode).length <= 0) return
 
                 LC.getActiveNode().pasteNode(copyNode)
-                // if (copyNode.layoutType) {
-                //     LC.getRoot().appendChild(NodeHistory.curCopyNode)
-                // } else {
-                //     console.log(LC.getActiveNode())
-                    
-                // }
-                // const pos = copyNode.getNodePosition()
-                // if (pos) {
-                //     const pushData = {
-                //         parentId: pos.parent && pos.parent.componentId,
-                //         component: copyNode.value(),
-                //         columnIndex: pos.columnIndex,
-                //         childrenIndex: pos.childrenIndex,
-                //         type: 'add'
-                //     }
-
-                //     this.pushTargetHistory(pushData)
-                // }
             }
         }
     }

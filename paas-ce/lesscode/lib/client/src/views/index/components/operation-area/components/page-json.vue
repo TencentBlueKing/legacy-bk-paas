@@ -1,7 +1,18 @@
 <template>
     <section style="height: 100%;">
-        <code-viewer :code="code" :filename="`bklesscode-${pageId}.json`" @show-edit-data="showEditData" page-type="json" />
-        <json-view ref="editDialog" :show-input="false" :default-value="[]" :change="setImportData" name="targetData" type="json" :dialog-title="dialogTitle"></json-view>
+        <code-viewer
+            :code="code"
+            :filename="`bklesscode-${pageId}.json`"
+            @show-edit-data="showEditData"
+            page-type="json" />
+        <json-view
+            ref="editDialog"
+            :show-input="false"
+            :default-value="[]"
+            :change="setImportData"
+            name="targetData"
+            type="json"
+            :dialog-title="dialogTitle" />
     </section>
 </template>
 
@@ -29,7 +40,7 @@
         },
         created () {
             const root = LC.getRoot()
-            this.code = circleJSON(root.toJSON().slot.default)
+            this.code = circleJSON(root.toJSON().renderSlots.default)
         },
         methods: {
             showEditData () {
