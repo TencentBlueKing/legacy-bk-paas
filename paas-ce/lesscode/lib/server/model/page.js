@@ -44,10 +44,8 @@ module.exports = {
             .where('t.projectId = :projectId', { projectId })
             .andWhere(whereVersion(versionId))
             .andWhere('page.deleteFlag = 0')
-            .orderBy({
-                'page.pageType': 'DESC',
-                'page.id': 'DESC'
-            })
+            .orderBy('CASE page.pageType WHEN "MOBILE" THEN "PC" END')
+            .addOrderBy('page.id', 'DESC')
             .getMany()
     },
 
