@@ -132,7 +132,7 @@
                 this.isLoading = true
                 try {
                     this.templateList = await this.$store.dispatch('pageTemplate/list', { projectId: this.projectId, categoryId: this.categoryId })
-                    console.log(this.templateList)
+
                     if (this.keyword) {
                         this.renderList = this.templateList.filter(item => item.templateName.indexOf(this.keyword) !== -1)
                     } else {

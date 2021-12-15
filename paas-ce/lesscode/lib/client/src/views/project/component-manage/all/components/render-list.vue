@@ -120,12 +120,12 @@
                 },
                 pagination: {
                     count: 0,
-                    limit: 5,
+                    limit: 10,
                     current: 1,
                     limitList: [
-                        1,
-                        2,
-                        5,
+                        10,
+                        20,
+                        50,
                         100
                     ]
                 },
