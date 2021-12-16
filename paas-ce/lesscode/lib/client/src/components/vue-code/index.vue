@@ -18,32 +18,26 @@
 <script>
     import { circleJSON } from '@/common/util.js'
     import CodeViewer from '@/components/code-viewer'
+    import LC from '@/element-materials/core'
+    import { mapGetters } from 'vuex'
+
     export default {
         name: 'vue-code',
         components: {
             CodeViewer
         },
-        props: {
-            targetData: {
-                type: Array,
-                default: () => ([])
-            },
-            lifeCycle: {
-                type: Object,
-                default: () => ({})
-            },
-            withNav: {
-                type: Boolean
-            }
-        },
+        props: {},
         data () {
             return {
                 pageType: 'vueCode',
                 formatCode: '',
+                withNav: false,
                 isLoading: true
             }
         },
         computed: {
+            ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('page', ['pageDetail']),
             projectId () {
                 return this.$route.params.projectId || ''
             },
@@ -52,6 +46,9 @@
             },
             filename () {
                 return `bklesscode-${this.pageId}.vue`
+            },
+            lifeCycle () {
+                return this.pageDetail.lifeCycle || {}
             }
         },
         mounted () {
@@ -62,11 +59,8 @@
                 this.isLoading = true
                 console.log('查看源码 getFormatCode')
                 const { pageType, projectId, lifeCycle, pageId } = this
-                const state = this.$store.state || {}
-                const drag = state.drag || {}
-                const layoutContent = drag.curTemplateData
-                const targetData = JSON.parse(circleJSON(this.targetData))
-                this.$emit('update:withNav', withNav)
+                const targetData = JSON.parse(circleJSON(LC.getRoot().toJSON().renderSlots.default))
+                const { layoutContent } = this.pageLayout
                 this.$store.dispatch('vueCode/getPageCode', {
                     targetData,
                     pageType,

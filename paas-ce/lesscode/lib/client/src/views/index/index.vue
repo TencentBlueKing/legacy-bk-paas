@@ -62,28 +62,7 @@
                             :class="{ active: isToolItemActive(item) }"
                             v-bk-tooltips="{ placement: 'bottom', content: item.tips, disabled: !item.tips }"
                             @click="item.func">
-                            <template v-if="item.text === '快捷键'">
-                                <div class="quick-operation" v-bk-clickoutside="toggleShowQuickOperation">
-                                    <div class="tool-item" @click="toggleShowQuickOperation(true)">
-                                        <i class="bk-drag-icon bk-drag-keyboard"></i>
-                                        <span>快捷键</span>
-                                    </div>
-                                    <section class="operation-main" v-if="showQuickOperation === true">
-                                        <h5 class="operation-title"><span class="title-main">快捷键说明</span><i class="bk-icon icon-close" @click.stop="toggleShowQuickOperation(false)"></i></h5>
-                                        <ul class="operation-list">
-                                            <li v-for="(operation, shortcutIndex) in quickOperationList" :key="shortcutIndex" class="operation-item">
-                                                <span class="operation-keys">
-                                                    <span v-for="(key, keyIndex) in operation.keys" :key="key">
-                                                        <span class="operation-key">{{ key }}</span><span v-if="keyIndex !== operation.keys.length - 1" class="operation-plus">+</span>
-                                                    </span>
-                                                </span>
-                                                <span class="operation-name">{{ operation.name }}</span>
-                                            </li>
-                                        </ul>
-                                    </section>
-                                </div>
-                            </template>
-                            <template v-else>
+                            <template>
                                 <i :class="item.icon"></i>
                                 <span>{{item.text}}</span>
                             </template>
@@ -178,18 +157,7 @@
                     item: {},
                     isCustomOffline: false
                 },
-                hasCtrl: false,
                 startDragPosition: {},
-                showQuickOperation: false,
-                quickOperationList: [
-                    { keys: ['Ctrl / Cmd', 'C'], name: '复制' },
-                    { keys: ['Ctrl / Cmd', 'V'], name: '粘贴' },
-                    { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
-                    { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
-                    { keys: ['Ctrl / Cmd', 'S'], name: '保存' },
-                    { keys: ['Delete / Backspace'], name: '删除' }
-                ],
-                isInDragArea: false,
                 contentLoading: true,
                 isCustomComponentLoading: true,
                 isSaving: false,

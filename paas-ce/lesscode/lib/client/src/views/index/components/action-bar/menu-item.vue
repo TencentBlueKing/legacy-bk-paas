@@ -2,10 +2,10 @@
     <li class="tool-item"
         v-bk-tooltips="{ placement: 'bottom', content: item.tips, disabled: !item.tips }"
         @click="item.func">
-        <template>
+        <slot>
             <i :class="item.icon"></i>
             <span>{{item.text}}</span>
-        </template>
+        </slot>
     </li>
 </template>
 

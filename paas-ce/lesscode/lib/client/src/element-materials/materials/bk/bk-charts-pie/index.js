@@ -21,14 +21,20 @@ export default {
     renderStyles: {
         display: 'inline-block'
     },
-    props: {
+    renderProps: {
         width: {
-            type: 'size',
             val: '400px'
         },
         height: {
+            val: 200
+        }
+    },
+    props: {
+        width: {
+            type: 'size'
+        },
+        height: {
             type: 'number',
-            val: 200,
             tips: '图表高度，单位为px'
         },
         options: {
