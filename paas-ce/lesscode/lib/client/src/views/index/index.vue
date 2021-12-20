@@ -318,6 +318,9 @@
     import previewErrorImg from '@/images/preview-error.png'
     import { infoLink } from '@/element-materials/materials/index'
     import { getRouteFullPath } from 'shared/route'
+    import { VARIABLE_TYPE } from 'shared/variable/constant'
+    // 生成源码重构后，需要支持前端单独调用
+    import { getPageData } from '../../../../server/model/page-code'
 
     export default {
         components: {
@@ -570,8 +573,27 @@
             targetData: {
                 deep: true,
                 handler () {
+                    this.updatePreview(false, this.pageDetail.pageCode, {}, ['rerender', 'style'])
                     this.lockStatsuPolling('lock')
                 }
+            },
+            curTemplateData: {
+                handler () {
+                    const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+                    this.updatePreview(true, pageRoute.layoutPath, this.curTemplateData, ['reload'])
+                }
+            },
+            variableList () {
+                // 变量发生变化的时候  reload
+                this.updatePreview(false, this.pageDetail.pageCode, {}, ['reload', 'style'])
+            },
+            funcGroups () {
+                // 函数发生变化的时候  reload
+                this.updatePreview(false, this.pageDetail.pageCode, {}, ['reload', 'style'])
+            },
+            'pageDetail.lifeCycle' () {
+                // 生命周期发生变化的时候  reload
+                this.updatePreview(false, this.pageDetail.pageCode, {}, ['reload', 'style'])
             }
         },
         async created () {
@@ -738,6 +760,35 @@
                 'getAllGroupFuncs'
             ]),
             ...mapActions('variable', ['getAllVariable']),
+            updatePreview (isGenerateNav, id, curTemplateData, types) {
+                const pageData = getPageData(
+                    JSON.parse(JSON.stringify(this.targetData)),
+                    'preview',
+                    this.customComponentList.reduce((result, item) => {
+                        result[item.type] = true
+                        return result
+                    }, {}),
+                    this.funcGroups,
+                    this.pageDetail.lifeCycle,
+                    this.projectId,
+                    this.pageId,
+                    curTemplateData,
+                    isGenerateNav,
+                    false,
+                    this.curTemplateData.layoutType,
+                    this.variableList,
+                    this.pageDetail.styleSetting,
+                    this.user,
+                    {},
+                    location.origin
+                )
+                const payload = JSON.stringify({
+                    types,
+                    source: pageData.code,
+                    id
+                })
+                localStorage.setItem('ONLINE_PREVIEW', payload)
+            },
             onLayoutMounted () {
                 const canvas = document.getElementsByClassName('lesscode-editor-layout')[0]
                 this.canvasHeight = canvas.offsetHeight
@@ -967,8 +1018,8 @@
                         if (defaultValueType === 1) {
                             value = defaultValue.stag
                         }
-                        if ([3, 4].includes(valueType)) value = JSON.parse(value)
-                        if (valueType === 6) value = undefined
+                        if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(valueType)) value = JSON.parse(value)
+                        if (valueType === VARIABLE_TYPE.COMPUTED.VAL) value = undefined
                         return value
                     }
 

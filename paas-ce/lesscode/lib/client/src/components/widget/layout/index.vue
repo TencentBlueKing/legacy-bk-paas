@@ -65,6 +65,7 @@
                     this.layout = layoutType
                     this.setCurTemplateData({
                         showName,
+                        layoutType,
                         ...layoutContent
                     })
                 },

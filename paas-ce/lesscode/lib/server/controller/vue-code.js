@@ -20,6 +20,14 @@ import OperationLogger from '../service/operation-logger'
 const AU = require('ansi_up')
 const ansiUp = new AU.default  // eslint-disable-line
 
+// npm.js配置文件不存在时赋值空对象
+let npmConf
+try {
+    npmConf = require('../conf/npm')
+} catch (_) {
+    npmConf = {}
+}
+
 const VueCode = {
     async saveAsFile (ctx) {
         try {
@@ -96,7 +104,35 @@ const VueCode = {
                 })
             }
             const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
-            const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, layoutType || curPage.layoutType, variableList, styleSetting)
+            const pageCodeData = await PageCodeModel.getPageData(
+                pageTargetData,
+                pageType,
+                allCustomMap,
+                funcGroups,
+                lifeCycle,
+                projectId,
+                pageId,
+                curLayoutCon,
+                false,
+                isEmpty,
+                layoutType || curPage.layoutType,
+                variableList,
+                styleSetting,
+                ctx.session.userInfo,
+                npmConf,
+                ctx.origin
+            )
+            let code = ''
+            if (pageType === 'vueCode') {
+                // 格式化，报错是抛出异常
+                code = await VueCodeModel.formatPageCode(pageCodeData.code)
+            } else if (['preview', 'previewSingle'].includes(pageType)) {
+                // 不需格式化
+                code = pageCodeData.code
+            } else {
+                // 格式化，报错不抛出异常
+                code = await VueCodeModel.formatCode(pageCodeData.code)
+            }
             // 此接口被多方调用，目前仅收集下载页面源码
             if (from === 'download_page') {
                 operationLogger.success()
@@ -105,7 +141,7 @@ const VueCode = {
                 code: 0,
                 message: 'success',
                 data: code,
-                codeErrMessage
+                codeErrMessage: pageCodeData.codeErrMessage
             })
         } catch (err) {
             if (ctx.request.body.from === 'download_page') {

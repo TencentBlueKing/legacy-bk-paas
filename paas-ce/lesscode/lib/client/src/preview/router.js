@@ -8,20 +8,25 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import httpVueLoader from '@/common/http-vue-loader'
+// import httpVueLoader from '@/common/http-vue-loader'
 import { uuid } from 'shared/util'
 import { getRouteFullPath, getRouteName, getProjectDefaultRoute } from 'shared/route'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 import Home from './children/home.vue'
 import BkNotFound from './children/404.vue'
+import { bundless } from './bundless/index'
+import bundlessPluginVue2 from './bundless/plugins/vue2/index'
 
 Vue.use(VueRouter)
 const uniqStr = uuid()
 
-function registerComponent (code) {
-    code = code.replace('export default', 'module.exports =')
-    return httpVueLoader(code)
+function registerComponent (source, id) {
+    return bundless({
+        source,
+        id,
+        plugins: [bundlessPluginVue2]
+    })
 }
 
 // 生成路由
@@ -31,7 +36,7 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId)
         const layout = routeGroup[key]
 
         // 父路由
-        const parentCom = registerComponent(layout.content)
+        const parentCom = registerComponent(layout.content, layout.path)
 
         // 子路由
         const routeList = layout.children
@@ -47,7 +52,7 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId)
                     path: getRouteFullPath(route.redirectRoute)
                 }
             } else if (route.pageId !== -1) {
-                const childCom = registerComponent(route.content)
+                const childCom = registerComponent(route.content, route.pageCode)
                 routeConifg.name = getRouteName(route)
                 routeConifg.component = childCom
             } else {
