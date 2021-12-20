@@ -15,8 +15,8 @@ import VueRouter from 'vue-router'
 import Vue from 'vue'
 import Home from './children/home.vue'
 import BkNotFound from './children/404.vue'
-import { bundless } from './bundless/index'
-import bundlessPluginVue2 from './bundless/plugins/vue2/index'
+import { bundless } from '@blueking/bundless'
+import bundlessPluginVue2 from '@blueking/bundless-plugin-vue2'
 
 Vue.use(VueRouter)
 const uniqStr = uuid()

@@ -573,15 +573,14 @@
             targetData: {
                 deep: true,
                 handler () {
-                    this.updatePreview(false, this.pageDetail.pageCode, {}, ['rerender', 'style'])
+                    this.updatePreview(false, this.pageDetail.pageCode, {}, ['reload', 'style'])
                     this.lockStatsuPolling('lock')
                 }
             },
-            curTemplateData: {
-                handler () {
-                    const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
-                    this.updatePreview(true, pageRoute.layoutPath, this.curTemplateData, ['reload'])
-                }
+            curTemplateData () {
+                // 导航变化的时候 reload
+                const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+                this.updatePreview(true, pageRoute.layoutPath, this.curTemplateData, ['reload'])
             },
             variableList () {
                 // 变量发生变化的时候  reload
