@@ -24,34 +24,58 @@
                             <span v-bk-tooltips="{ content: field.desc, disabled: !field.desc }" class="field-display-name">{{field.name}}</span>：
                         </div>
                         <div :class="['field-value', { 'is-loading': loadingState.includes(field) }]">
-                            <template v-if="field.type === 'style' && !field.editable">
-                                <component
-                                    class="style-setting"
-                                    :is="field.id"
-                                    :key="field.id"
-                                    :type="field.type"
-                                    :component-id="'pageStyleSetting'"
-                                    :value="page.styleSetting"
-                                    :change="changeStyle" />
-                            </template>
-                            <template v-else-if="field !== editField.field">
-                                <div class="field-content">
-                                    <div class="route" v-if="field.id === 'pageRoute'">
-                                        <div v-if="pageRoute.id">{{layoutPath}}<span>{{pageRoute.path}}</span></div>
-                                        <div v-else class="unset">未设置</div>
+                            <template v-if="field !== editField.field">
+                                <template v-if="field.type === 'distance'">
+                                    <div class="distance-tag">
+                                        <bk-tag v-for="distance in styleValue[field.id]" :key="distance.key">
+                                            <span class="distance-key">{{`${distance.key}: `}}</span>
+                                            <span :class="{ 'distance-value': distance.value !== '--' }">{{distance.value}}</span>
+                                        </bk-tag>
+                                        <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
                                     </div>
-                                    <span v-else class="field-display-value">{{getFieldDisplayValue(field) || '--'}}</span>
-                                    <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
-                                </div>
-                            </template>
-                            <template v-else-if="!loadingState.includes(field)">
-                                <div class="field-form">
-                                    <template v-if="field.type === 'style'">
+                                </template>
+                                <template v-else-if="field.type === 'background'">
+                                    <div class="style-background">
+                                        <span v-if="page.styleSetting.backgroundColor" class="color-icon"
+                                            :style="{
+                                                backgroundColor: page.styleSetting.backgroundColor
+                                            }">
+                                        </span>
+                                        <span class="color-value">{{ page.styleSetting.backgroundColor || '--' }}</span>
+                                        <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
+                                    </div>
+                                </template>
+                                <template v-else-if="field.type === 'custom'">
+                                    <div class="style-custom">
+                                        <span class="custom-status">{{styleValue.hasCustomStyle ? '已配置' : '--'}}</span>
                                         <component
                                             class="style-setting"
                                             :is="field.id"
                                             :key="field.id"
-                                            :type="field.type"
+                                            :is-page-setting="true"
+                                            :component-id="'pageStyleSetting'"
+                                            :value="page.styleSetting"
+                                            :change="changeStyle" />
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <div class="field-content">
+                                        <div class="route" v-if="field.id === 'pageRoute'">
+                                            <div v-if="pageRoute.id">{{layoutPath}}<span>{{pageRoute.path}}</span></div>
+                                            <div v-else class="unset">未设置</div>
+                                        </div>
+                                        <span v-else class="field-display-value">{{getFieldDisplayValue(field) || '--'}}</span>
+                                        <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
+                                    </div>
+                                </template>
+                            </template>
+                            <template v-else-if="!loadingState.includes(field)">
+                                <div class="field-form">
+                                    <template v-if="field.from === 'style'">
+                                        <component
+                                            class="style-setting"
+                                            :is="field.id"
+                                            :key="field.id"
                                             :component-id="'pageStyleSetting'"
                                             :value="page.styleSetting"
                                             :change="changeStyle" />
@@ -136,14 +160,14 @@
         destroyed: '页面关闭后调用，该钩子被调用后，页面中的数据不可用'
     }
     const styleSettingMap = {
-        marginTop: 'top',
-        marginRight: 'right',
-        marginBottom: 'bottom',
-        marginLeft: 'left',
-        paddingTop: 'top',
-        paddingRight: 'right',
-        paddingBottom: 'bottom',
-        paddingLeft: 'left'
+        marginTop: 'Top',
+        marginRight: 'Right',
+        marginBottom: 'Bottom',
+        marginLeft: 'Left',
+        paddingTop: 'Top',
+        paddingRight: 'Right',
+        paddingBottom: 'Bottom',
+        paddingLeft: 'Left'
     }
 
     export default {
@@ -305,32 +329,36 @@
                         {
                             id: 'minWidth',
                             name: '最小宽度',
-                            type: 'style',
+                            type: 'size',
+                            from: 'style',
                             editable: true
                         },
                         {
                             id: 'margin',
                             name: '外边距',
-                            type: 'style',
+                            type: 'distance',
+                            from: 'style',
                             editable: true
                         },
                         {
                             id: 'padding',
                             name: '内边距',
-                            type: 'style',
+                            type: 'distance',
+                            from: 'style',
                             editable: true
                         },
                         {
                             id: 'backgroundColor',
                             name: '背景色',
-                            type: 'style',
-                            editable: false
+                            from: 'style',
+                            type: 'background',
+                            editable: true
                         },
                         {
                             id: 'StyleCustom',
                             name: '自定义样式',
-                            type: 'style',
-                            editable: false
+                            from: 'style',
+                            type: 'custom'
                         }
                     ]
                 }
@@ -341,19 +369,21 @@
             },
             styleValue () {
                 const style = this.page.styleSetting
-                let margin = ''
-                let padding = ''
+                const margin = []
+                const padding = []
                 for (const i in style) {
-                    if (i.startsWith('margin') && style[i]) {
-                        margin += `${styleSettingMap[i]}：${style[i]}，`
-                    } else if (i.startsWith('padding') && style[i]) {
-                        padding += `${styleSettingMap[i]}：${style[i]}，`
+                    if (i.startsWith('margin')) {
+                        margin.push({ key: styleSettingMap[i], value: style[i] ? style[i] : '--' })
+                    } else if (i.startsWith('padding')) {
+                        padding.push({ key: styleSettingMap[i], value: style[i] ? style[i] : '--' })
                     }
                 }
                 return {
                     minWidth: this.page.styleSetting.minWidth,
-                    margin: margin.slice(0, -1),
-                    padding: padding.slice(0, -1)
+                    margin: margin,
+                    padding: padding,
+                    backgroundColor: this.page.styleSetting.backgroundColor,
+                    hasCustomStyle: Object.keys(this.page.styleSetting.customStyle).length !== 0
                 }
             }
         },
@@ -385,7 +415,7 @@
             handleEdit (field) {
                 this.editField.field = field
                 this.editField.value = this.getFieldValue(field)
-                if (field.type === 'style') {
+                if (field.from === 'style') {
                     this.styleData = JSON.parse(JSON.stringify(this.page.styleSetting))
                 } else {
                     this.$nextTick(() => {
@@ -395,7 +425,7 @@
                 }
             },
             handleCancel () {
-                if (this.editField.field.type === 'style') this.page.styleSetting = JSON.parse(JSON.stringify(this.styleData))
+                if (this.editField.field.from === 'style') this.page.styleSetting = JSON.parse(JSON.stringify(this.styleData))
                 this.$delete(this.errors, this.editField.field.id)
                 this.unsetEditField()
             },
@@ -424,7 +454,7 @@
                         this.fetchData()
                         // 导航模板切换后需要获取当前模板的导航数据，并更新更新本地curTemplateData
                         await this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id })
-                    } else if (field.type === 'style') {
+                    } else if (field.from === 'style') {
                         await this.saveStyle()
                     } else {
                         const pageData = await this.saveField(field, value)
@@ -488,7 +518,7 @@
                 } else {
                     this.page.styleSetting[key] = ''
                 }
-                if (key === 'customStyle' || key === 'backgroundColor') {
+                if (key === 'customStyle') {
                     await this.saveStyle()
                 }
             },
@@ -766,6 +796,36 @@
                         color: #ff5656;
                         line-height: 18px;
                         margin: 2px 0px 0px;
+                    }
+
+                    .distance-tag{
+                        margin-left: -5px;
+    
+                        .distance-value {
+                            font-family: Helvetica, Arial, sans-serif;
+                            font-weight: 700;
+                        }
+                    }
+
+                    .style-background {
+                        display: flex;
+                        align-items: center;
+
+                        .color-icon {
+                            width: 14px;
+                            height: 14px;
+                            border: 1px solid #f0f1f5;
+                            margin-right: 10px;
+                        }
+
+                        i{
+                            margin-top: -10px;
+                        }
+                    }
+
+                    .style-custom{
+                        display: flex;
+                        align-items: center;
                     }
                 }
 

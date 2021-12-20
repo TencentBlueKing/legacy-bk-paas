@@ -13,7 +13,10 @@
     <section>
         <style-layout title="自定义样式">
             <style-item name="自定义样式">
-                <div style="width: 200px;text-align: right"><bk-button theme="primary" @click="showEditStyle(true)">样式编辑</bk-button></div>
+                <div style="width: 200px;text-align: right">
+                    <i v-if="isPageSetting" class="bk-icon icon-edit2 field-edit" @click="showEditStyle(true)"></i>
+                    <bk-button v-else theme="primary" @click="showEditStyle(true)">样式编辑</bk-button>
+                </div>
             </style-item>
         </style-layout>
         <article class="custom-style" v-if="isShow">
@@ -50,6 +53,10 @@
             Monaco
         },
         props: {
+            isPageSetting: {
+                type: Boolean,
+                default: false
+            },
             componentId: {
                 type: String
             },
@@ -137,6 +144,15 @@
 </script>
 
 <style lang="postcss">
+      .field-edit {
+          position: relative;
+          font-size: 22px;
+          top: 2px;
+          cursor: pointer;
+          &:hover {
+            color: #3A84FF;
+          }
+      }
       .custom-style {
         position: fixed !important;
         top: 0;
