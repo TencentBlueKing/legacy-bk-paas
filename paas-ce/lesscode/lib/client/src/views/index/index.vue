@@ -319,8 +319,6 @@
     import { infoLink } from '@/element-materials/materials/index'
     import { getRouteFullPath } from 'shared/route'
     import { VARIABLE_TYPE } from 'shared/variable/constant'
-    // 生成源码重构后，需要支持前端单独调用
-    import { getPageData } from '../../../../server/model/page-code'
 
     export default {
         components: {
@@ -573,26 +571,51 @@
             targetData: {
                 deep: true,
                 handler () {
-                    this.updatePreview(false, this.pageDetail.pageCode, {}, ['reload', 'style'])
+                    this.updatePreview({
+                        isGenerateNav: false,
+                        id: this.pageDetail.pageCode,
+                        curTemplateData: {},
+                        types: ['reload', 'update_style']
+                    })
                     this.lockStatsuPolling('lock')
                 }
             },
             curTemplateData () {
                 // 导航变化的时候 reload
                 const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
-                this.updatePreview(true, pageRoute.layoutPath, this.curTemplateData, ['reload'])
+                this.updatePreview({
+                    isGenerateNav: true,
+                    id: pageRoute.layoutPath,
+                    curTemplateData: this.curTemplateData,
+                    types: ['reload']
+                })
             },
             variableList () {
                 // 变量发生变化的时候  reload
-                this.updatePreview(false, this.pageDetail.pageCode, {}, ['reload', 'style'])
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
             },
             funcGroups () {
                 // 函数发生变化的时候  reload
-                this.updatePreview(false, this.pageDetail.pageCode, {}, ['reload', 'style'])
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
             },
             'pageDetail.lifeCycle' () {
                 // 生命周期发生变化的时候  reload
-                this.updatePreview(false, this.pageDetail.pageCode, {}, ['reload', 'style'])
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
             }
         },
         async created () {
@@ -759,35 +782,8 @@
                 'getAllGroupFuncs'
             ]),
             ...mapActions('variable', ['getAllVariable']),
-            updatePreview (isGenerateNav, id, curTemplateData, types) {
-                const pageData = getPageData(
-                    JSON.parse(JSON.stringify(this.targetData)),
-                    'preview',
-                    this.customComponentList.reduce((result, item) => {
-                        result[item.type] = true
-                        return result
-                    }, {}),
-                    this.funcGroups,
-                    this.pageDetail.lifeCycle,
-                    this.projectId,
-                    this.pageId,
-                    curTemplateData,
-                    isGenerateNav,
-                    false,
-                    this.curTemplateData.layoutType,
-                    this.variableList,
-                    this.pageDetail.styleSetting,
-                    this.user,
-                    {},
-                    location.origin
-                )
-                const payload = JSON.stringify({
-                    types,
-                    source: pageData.code,
-                    id
-                })
-                localStorage.setItem('ONLINE_PREVIEW', payload)
-            },
+            ...mapActions(['updatePreview']),
+
             onLayoutMounted () {
                 const canvas = document.getElementsByClassName('lesscode-editor-layout')[0]
                 this.canvasHeight = canvas.offsetHeight

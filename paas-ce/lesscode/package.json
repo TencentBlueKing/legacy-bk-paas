@@ -13,8 +13,7 @@
     "dev": "better-npm-run dev",
     "stop": "cross-env FOREVER_ROOT=./ forever stop lesscode",
     "list": "cross-env FOREVER_ROOT=./ forever list",
-    "logs": "cross-env FOREVER_ROOT=./ forever logs",
-    "bundle": "webpack-bundle-analyzer lib/client/dist/stats.json"
+    "logs": "cross-env FOREVER_ROOT=./ forever logs"
   },
   "betterScripts": {
     "dll": {
@@ -91,8 +90,8 @@
     "@babel/runtime": "~7.6.3",
     "@blueking/bkcharts": "^2.0.11-alpha.5",
     "@blueking/bkui-vue-complex": "0.0.6",
-    "@blueking/bundless": "0.0.3",
-    "@blueking/bundless-plugin-vue2": "0.0.3",
+    "@blueking/bundless": "0.0.4",
+    "@blueking/bundless-plugin-vue2": "0.0.4",
     "@blueking/magicbox-header": "~1.1.30",
     "@icon-cool/bk-icon-vue-drag-vis": "^0.2.11",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
@@ -248,8 +247,5 @@
   "engines": {
     "node": ">= 14.17.6",
     "npm": "6.14.15"
-  },
-  "devDependencies": {
-    "webpack-bundle-analyzer": "^4.5.0"
   }
 }
