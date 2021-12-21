@@ -756,7 +756,6 @@
                 .field-value {
                     position: relative;
                     flex: none;
-                    width: 410px;
 
                     .field-content {
                         display: flex;
