@@ -317,6 +317,8 @@
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
     import { infoLink } from '@/element-materials/materials/index'
+    import { getRouteFullPath } from 'shared/route'
+    import { VARIABLE_TYPE } from 'shared/variable/constant'
 
     export default {
         components: {
@@ -569,8 +571,51 @@
             targetData: {
                 deep: true,
                 handler () {
+                    this.updatePreview({
+                        isGenerateNav: false,
+                        id: this.pageDetail.pageCode,
+                        curTemplateData: {},
+                        types: ['reload', 'update_style']
+                    })
                     this.lockStatsuPolling('lock')
                 }
+            },
+            curTemplateData () {
+                // 导航变化的时候 reload
+                const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+                this.updatePreview({
+                    isGenerateNav: true,
+                    id: pageRoute.layoutPath,
+                    curTemplateData: this.curTemplateData,
+                    types: ['reload']
+                })
+            },
+            variableList () {
+                // 变量发生变化的时候  reload
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
+            },
+            funcGroups () {
+                // 函数发生变化的时候  reload
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
+            },
+            'pageDetail.lifeCycle' () {
+                // 生命周期发生变化的时候  reload
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
             }
         },
         async created () {
@@ -737,6 +782,8 @@
                 'getAllGroupFuncs'
             ]),
             ...mapActions('variable', ['getAllVariable']),
+            ...mapActions(['updatePreview']),
+
             onLayoutMounted () {
                 const canvas = document.getElementsByClassName('lesscode-editor-layout')[0]
                 this.canvasHeight = canvas.offsetHeight
@@ -966,8 +1013,8 @@
                         if (defaultValueType === 1) {
                             value = defaultValue.stag
                         }
-                        if ([3, 4].includes(valueType)) value = JSON.parse(value)
-                        if (valueType === 6) value = undefined
+                        if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(valueType)) value = JSON.parse(value)
+                        if (valueType === VARIABLE_TYPE.COMPUTED.VAL) value = undefined
                         return value
                     }
 
@@ -1539,10 +1586,15 @@
                 this.handleSave(() => {
                     let errTips = ''
                     try {
+                        const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+                        if (!pageRoute.id) {
+                            throw new Error('页面未配置路由，请先配置')
+                        }
                         localStorage.removeItem('layout-target-data')
                         localStorage.setItem('layout-target-data', circleJSON(this.targetData))
                         const versionQuery = `${this.versionId ? `&v=${this.versionId}` : ''}`
-                        const routerUrl = `/preview/project/${this.projectId}/?pageCode=${this.pageDetail.pageCode}${versionQuery}`
+                        const fullPath = getRouteFullPath(pageRoute)
+                        const routerUrl = `/preview/project/${this.projectId}${fullPath}?pageCode=${this.pageDetail.pageCode}${versionQuery}`
                         window.open(routerUrl, '_blank')
                     } catch (err) {
                         errTips = err.message || err || '预览异常'

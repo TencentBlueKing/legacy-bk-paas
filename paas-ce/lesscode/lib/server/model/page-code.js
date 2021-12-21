@@ -10,21 +10,11 @@
  */
 import { paramCase, camelCase, camelCaseTransformMerge } from 'change-case'
 
-import { uuid, replaceFuncKeyword } from '../util'
-import VueCodeModel from './vue-code'
-import { RequestContext } from '../middleware/request-context'
+import { uuid } from '../../shared/util.js'
+import { replaceFuncKeyword } from '../../shared/function/helper'
 import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
 import safeStringify from '../../client/src/common/json-safe-stringify'
 import { VARIABLE_TYPE } from '../../shared/variable/constant'
-
-const httpConf = require('../conf/http')
-// npm.js配置文件不存在时赋值空对象
-let npmConf
-try {
-    npmConf = require('../conf/npm')
-} catch (_) {
-    npmConf = {}
-}
 
 function transformToString (val) {
     const type = typeof val
@@ -107,7 +97,24 @@ class PageCode {
     layoutType = ''
     isUseElementComponentLib = false
 
-    constructor (targetData = [], pageType = 'vueCode', allCustomMap = {}, funcGroups = [], lifeCycle = '', projectId, pageId, layoutContent, isGenerateNav = false, isEmpty = false, layoutType, variableList, styleSetting = '') {
+    constructor (
+        targetData = [],
+        pageType = 'vueCode',
+        allCustomMap = {},
+        funcGroups = [],
+        lifeCycle = '',
+        projectId,
+        pageId,
+        layoutContent,
+        isGenerateNav = false,
+        isEmpty = false,
+        layoutType,
+        variableList,
+        styleSetting = '',
+        user = {},
+        npmConf = {},
+        origin = ''
+    ) {
         this.targetData = targetData || []
         this.pageType = pageType
         this.allCustomMap = allCustomMap || {}
@@ -123,6 +130,9 @@ class PageCode {
         this.layoutType = layoutType
         this.variableList = variableList || []
         this.styleSetting = styleSetting || {}
+        this.user = user
+        this.npmConf = npmConf
+        this.origin = origin
     }
 
     getCode () {
@@ -598,7 +608,7 @@ class PageCode {
 
         this.dataTemplate('curNav', '{}')
         if (['preview', 'previewSingle'].includes(this.pageType)) {
-            const user = JSON.stringify(RequestContext.getCurrentUser())
+            const user = JSON.stringify(this.user)
             this.dataTemplate('user', user)
         }
 
@@ -622,7 +632,7 @@ class PageCode {
     }
 
     getTopBottomLayout (navContent, componentProps) {
-        const topMenuKey = `topMenu${this.uniqueKey}`
+        const topMenuKey = 'topMenuLesscode'
         const { layoutContent } = this
         this.dataTemplate(topMenuKey, JSON.stringify(layoutContent.topMenuList))
 
@@ -665,7 +675,7 @@ class PageCode {
     }
 
     getLeftRightLayout (navContent, componentProps) {
-        const leftMenuKey = `leftMenu${this.uniqueKey}`
+        const leftMenuKey = 'leftMenuLesscode'
         const { layoutContent } = this
 
         this.dataTemplate(leftMenuKey, JSON.stringify(layoutContent.menuList))
@@ -719,8 +729,8 @@ class PageCode {
     }
 
     getComplexLayout (navContent, componentProps) {
-        const complexMenuKey = `complexMenu${this.uniqueKey}`
-        const curLeftMenuKey = `leftMenu${this.uniqueKey}`
+        const complexMenuKey = 'complexMenuLesscode'
+        const curLeftMenuKey = 'leftMenuLesscode'
         const { layoutContent } = this
 
         this.dataTemplate('toggleActive', 'false')
@@ -1403,7 +1413,7 @@ class PageCode {
 
     processFuncBody (code) {
         const encodeCode = (code || '').replace(new RegExp('(<)([^>]+)(>)', 'gi'), (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`)
-        return replaceFuncKeyword(encodeCode, (all, first, second, dirKey, funcStr, funcCode) => {
+        return replaceFuncKeyword(encodeCode, this.origin, (all, first, second, dirKey, funcStr, funcCode) => {
             return this.handleVarInFunc(dirKey, funcCode) || all
         })
     }
@@ -1502,7 +1512,7 @@ class PageCode {
                         setNav = `setNav (id) {
                             const itemId = id || this.$route.query.id
                             const name = ${pageValue};
-                            (this.topMenu${this.uniqueKey} || []).forEach((topNav) => {
+                            (this.topMenuLesscode || []).forEach((topNav) => {
                                 const isSameId = itemId && (topNav.id === itemId || (Array.isArray(topNav.children) && topNav.children.find((nav) => (nav.id === itemId))))
                                 const isSameName = !itemId && name && (topNav.${pageKey} === name || (Array.isArray(topNav.children) && topNav.children.find((nav) => (nav.${pageKey} === name))))
                                 if (isSameId || isSameName) this.curNav = topNav || {}
@@ -1513,7 +1523,7 @@ class PageCode {
                         setNav = `setNav (id) {
                             const itemId = id || this.$route.query.id
                             const name = ${pageValue};
-                            (this.leftMenu${this.uniqueKey} || []).forEach((menu) => {
+                            (this.leftMenuLesscode || []).forEach((menu) => {
                                 let tempItem
                                 if (itemId) {
                                     tempItem = [menu, ...(menu.children || [])].find((child) => (child.id === itemId))
@@ -1528,7 +1538,7 @@ class PageCode {
                         setNav = `setNav (id) {
                             const itemId = id || this.$route.query.id
                             const name = ${pageValue};
-                            (this.complexMenu${this.uniqueKey} || []).forEach((menu) => {
+                            (this.complexMenuLesscode || []).forEach((menu) => {
                                 const allMenus = [menu];
                                 (menu.children || []).forEach((child) => {
                                     allMenus.push(...[child, ...(child.children || [])])
@@ -1536,7 +1546,7 @@ class PageCode {
                                 const tempItem = itemId ? allMenus.find((child) => (child.id === itemId)) : allMenus.find((child) => (child.${pageKey} === name))
                                 if (tempItem) {
                                     this.curNav = tempItem
-                                    this.leftMenu${this.uniqueKey} = menu.children || []
+                                    this.leftMenuLesscode = menu.children || []
                                 }
                             })
                         },`
@@ -1549,9 +1559,8 @@ class PageCode {
                         },
                     `
                 } else {
-                    const loginRedirectUrl = `${httpConf.loginUrl}?app_id=${httpConf.appCode}`
                     methods += `signOut () {
-                            window.parent.location.href = '${loginRedirectUrl}' + '&c_url=' + window.parent.location.href
+                            this.$bkMessage({ message: '请部署后使用本功能', theme: 'warn' })
                         },
                     `
                 }
@@ -1648,6 +1657,8 @@ class PageCode {
     getImportContent () {
         let importStr = ''
 
+        if (['preview'].includes(this.pageType)) return importStr
+
         if (this.isUseElementComponentLib) {
             importStr = `
                 /**
@@ -1714,7 +1725,7 @@ class PageCode {
                 forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
             }
             for (const i in this.usingCustomArr) {
-                importStr += `const ${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })} = require('${npmConf.scopename}/${this.usingCustomArr[i]}')\n`
+                importStr += `const ${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })} = require('${this.npmConf.scopename}/${this.usingCustomArr[i]}')\n`
             }
         }
         const lifeCycle = typeof this.lifeCycle === 'string' ? JSON.parse(this.lifeCycle) : this.lifeCycle
@@ -1760,21 +1771,10 @@ class PageCode {
 }
 
 module.exports = {
-    async getPageData (targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList, styleSetting) {
-        const pageCode = new PageCode(targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList, styleSetting)
-        let code = ''
-        if (pageType === 'vueCode') {
-            // 格式化，报错是抛出异常
-            code = await VueCodeModel.formatPageCode(pageCode.getCode())
-        } else if (['preview', 'previewSingle'].includes(pageType)) {
-            // 不需格式化
-            code = pageCode.getCode()
-        } else {
-            // 格式化，报错不抛出异常
-            code = await VueCodeModel.formatCode(pageCode.getCode())
-        }
+    getPageData (...params) {
+        const pageCode = new PageCode(...params)
         return {
-            code,
+            code: pageCode.getCode(),
             methodStrList: pageCode.methodStrList || [],
             codeErrMessage: pageCode.codeErrMessage || ''
         }

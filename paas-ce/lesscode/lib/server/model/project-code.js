@@ -18,6 +18,7 @@ import * as PageCompModel from './page-comp'
 import * as ComponentModel from './component'
 import { uuid, walkGrid } from '../util'
 import dataService from '../service/data-service'
+import { RequestContext } from '../middleware/request-context'
 import {
     BASE_COLUMNS
 } from '../../shared/data-source'
@@ -91,7 +92,7 @@ const projectCode = {
         const layoutIns = Object.values(routeGroup)
         for (const layout of layoutIns) {
             // 父路由（布局）内容
-            const pageDetail = await PageCodeModel.getPageData([], 'preview', pageData.allCustomMap, pageData.funcGroups, {}, projectId, '', layout.content, true, false, layout.layoutType, [], {})
+            const pageDetail = await PageCodeModel.getPageData([], 'preview', pageData.allCustomMap, pageData.funcGroups, {}, projectId, '', layout.content, true, false, layout.layoutType, [], {}, RequestContext.getCurrentUser(), npmConf, '')
             layout.content = pageDetail.code
 
             // 子路由（页面）内容，先排除未绑定页面的路由
@@ -115,7 +116,10 @@ const projectCode = {
                     false,
                     route.layoutType,
                     variableData,
-                    route.styleSetting || {}
+                    route.styleSetting || {},
+                    RequestContext.getCurrentUser(),
+                    npmConf,
+                    ''
                 )
                 // 生成代码校验
                 if (pageDetail.codeErrMessage) {
@@ -532,8 +536,25 @@ const projectCode = {
             fse.ensureFile(currentFilePath).then(async () => {
                 let code = ''
                 let methodStrList = []
-                const pageDetail = await PageCodeModel.getPageData(pageData.targetData, 'projectCode', pageData.allCustomMap, pageData.funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, false, layoutType, variableData, styleSetting)
-                code = pageDetail.code
+                const pageDetail = await PageCodeModel.getPageData(
+                    pageData.targetData,
+                    'projectCode',
+                    pageData.allCustomMap,
+                    pageData.funcGroups,
+                    lifeCycle,
+                    projectId,
+                    pageId,
+                    layoutContent,
+                    isGenerateNav,
+                    false,
+                    layoutType,
+                    variableData,
+                    styleSetting,
+                    RequestContext.getCurrentUser(),
+                    npmConf,
+                    RequestContext.getCurrentCtx().origin
+                )
+                code = await VueCodeModel.formatCode(pageDetail.code)
                 methodStrList = pageDetail.methodStrList
                 // 生成代码校验
                 if (pageDetail.codeErrMessage && !pathName) {

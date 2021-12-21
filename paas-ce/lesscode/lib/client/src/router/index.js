@@ -40,7 +40,6 @@ const VersionManage = () => import(/* webpackChunkName: 'version' */'@/views/pro
 
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
-const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
 const PreviewTemplate = () => import(/* webpackChunkName: 'previewTemplate' */'@/views/preview/preview-template')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
 
@@ -336,11 +335,6 @@ const routes = [
                 component: Index
             }
         ]
-    },
-    {
-        path: '/preview/project/:projectId/*',
-        name: 'preview',
-        component: Preview
     },
     {
         path: '/preview-template/project/:projectId/:templateId',
