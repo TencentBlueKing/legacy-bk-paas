@@ -27,9 +27,9 @@
 <script>
     import MenuItem from './menu-item'
     import { getNodeWithClass } from '@/common/util'
-    // import { bus } from '@/common/bus'
     import LC from '@/element-materials/core'
     import { NodeHistory } from '@/element-materials/core/Node-history'
+    import { remove } from '@/element-materials/core/helper/commands'
 
     export default {
         components: {
@@ -48,8 +48,9 @@
                 quickOperationList: [
                     { keys: ['Ctrl / Cmd', 'C'], name: '复制' },
                     { keys: ['Ctrl / Cmd', 'V'], name: '粘贴' },
-                    { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
-                    { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
+                    { keys: ['Ctrl / Cmd', 'X'], name: '剪切' },
+                    // { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
+                    // { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
                     { keys: ['Ctrl / Cmd', 'S'], name: '保存' },
                     { keys: ['Delete / Backspace'], name: '删除' }
                 ]
@@ -59,11 +60,6 @@
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
-
-            // bus.$on('on-delete-component', this.showDeleteElement)
-            // this.$once('hook:beforeDestroy', () => {
-            //     bus.$off('on-delete-component', this.showDeleteElement)
-            // })
         },
         methods: {
             toggleShowQuickOperation (show) {
@@ -90,7 +86,6 @@
             },
 
             quickOperation (event) {
-                console.log(NodeHistory, NodeHistory.nodeHistoryList, 45, NodeHistory.curCopyNode)
                 const vm = this
                 const funcChainMap = {
                     stopped: false,
@@ -111,8 +106,10 @@
                         return this
                     },
                     exec: function (callBack) {
-                        if (!this.stopped) callBack()
-                        return this
+                        vm.$nextTick(() => {
+                            if (!this.stopped) callBack()
+                            return this
+                        })
                     }
                 }
 
@@ -138,14 +135,14 @@
                         console.log('ctrlx,剪切')
                         funcChainMap.isInDragArea().exec(this.cutComponent)
                         break
-                    case 90:
-                        console.log('ctrlz,撤销')
-                        funcChainMap.isInDragArea().hasCtrl().exec(this.backTargetHistory)
-                        break
-                    case 89:
-                        console.log('ctrly,恢复')
-                        funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.forwardTargetHistory)
-                        break
+                    // case 90:
+                    //     console.log('ctrlz,撤销')
+                    //     funcChainMap.isInDragArea().hasCtrl().exec(this.backHistory)
+                    //     break
+                    // case 89:
+                    //     console.log('ctrly,恢复')
+                    //     funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.forwardHistory)
+                    //     break
                     case 8:
                     case 46:
                         funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
@@ -160,29 +157,35 @@
             cutComponent () {
                 if (!this.hasCtrl || Object.keys(LC.getActiveNode() || {}).length <= 0) return
 
-                if (!this.checkIsDelComponent()) {
-                    return
-                }
-
-                const copyData = LC.getActiveNode().cloneNode(true)
-                this.setCopyData(copyData)
-                this.delComponentConf.item = Object.assign({}, LC.getActiveNode())
-                this.confirmDelComponent()
+                const copyNode = LC.getActiveNode()
+                NodeHistory.setCopyNode(copyNode)
+                remove(LC.getActiveNode())
             },
 
             // 复制
             putComponentData () {
-                if (!this.hasCtrl || Object.keys(LC.getActiveNode()).length <= 0) return
-                const copyNode = LC.getActiveNode().cloneNode(true)
+                if (!this.hasCtrl || Object.keys(LC.getActiveNode() || {}).length <= 0) return
+                const copyNode = LC.getActiveNode()
                 NodeHistory.setCopyNode(copyNode)
             },
 
             // 粘贴
             copyComponent () {
                 const copyNode = NodeHistory.curCopyNode || {}
-                if (!this.hasCtrl || Object.keys(copyNode).length <= 0) return
-
+                if (!this.hasCtrl || Object.keys(copyNode).length <= 0 || Object.keys(LC.getActiveNode() || {}).length <= 0) return
                 LC.getActiveNode().pasteNode(copyNode)
+            },
+
+            showDeleteElement () {
+                remove(LC.getActiveNode())
+            },
+
+            backHistory () {
+                NodeHistory.backHistoryList()
+            },
+
+            forwardTargetHistory () {
+                NodeHistory.forwardHistoryList()
             }
         }
     }
