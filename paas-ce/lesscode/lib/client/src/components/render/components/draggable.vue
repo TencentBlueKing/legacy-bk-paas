@@ -51,6 +51,7 @@
             }
         },
         created () {
+            dragTargetGroup = null
             const dragableCheck = (event) => {
                 /**
                  * 交互式组件状态更新
