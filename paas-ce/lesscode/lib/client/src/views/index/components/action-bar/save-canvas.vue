@@ -149,10 +149,10 @@
                     }
                 })
                 // 错误提示
-                if (errorStack.length > 0) {
-                    this.messageError(errorStack.join('\n'))
-                    return
-                }
+                // if (errorStack.length > 0) {
+                //     this.messageError(errorStack.join('\n'))
+                //     return
+                // }
 
                 // 转换 variableCode、methodCode 到具体的资源 id
                 const relateVariableIdMap = Object.keys(relatedVariableCodeMap).reduce((result, variableCode) => {
@@ -182,22 +182,22 @@
                     renderProps
                 }
 
-                // await this.$store.dispatch('page/update', {
-                //     data: {
-                //         from: '',
-                //         projectId: this.$route.params.projectId,
-                //         pageCode: this.pageDetail.pageCode,
-                //         pageData: {
-                //             id: parseInt(this.$route.params.pageId),
-                //             content: circleJSON(targetData)
-                //         },
-                //         // TODO.
-                //         customCompData: [],
-                //         functionData: releateMethodIdList,
-                //         usedVariableMap: releateMethodIdList,
-                //         templateData
-                //     }
-                // })
+                await this.$store.dispatch('page/update', {
+                    data: {
+                        from: '',
+                        projectId: this.$route.params.projectId,
+                        pageCode: this.pageDetail.pageCode,
+                        pageData: {
+                            id: parseInt(this.$route.params.pageId),
+                            content: JSON.stringify(LC.getRoot().toJSON().renderSlots.default)
+                        },
+                        // TODO.
+                        customCompData: [],
+                        functionData: releateMethodIdList,
+                        usedVariableMap: releateMethodIdList,
+                        templateData
+                    }
+                })
 
                 console.log('print processTargetData result = ', customComponentMap, releateMethodIdList, relateVariableIdMap, templateData)
             }
