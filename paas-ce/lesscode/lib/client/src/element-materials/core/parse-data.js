@@ -244,7 +244,7 @@ export default function (data) {
     root.setRenderSlots([])
     try {
         root.renderSlots.default = []
-        if (version === 'v0') {
+        if (version === 'v0' || data.length < 1) {
             root.appendChild(create('render-grid'))
         } else {
             traverse(root, versionData, 'default')

@@ -47,7 +47,8 @@ export default {
 
         // 如果是画布区域的 shadow 组件需要透传 componentData
         const props = Object.assign({}, componentData.prop, {
-            'component-data': componentData
+            'component-data': componentData,
+            'show-mask': false
         })
         const events = {}
 

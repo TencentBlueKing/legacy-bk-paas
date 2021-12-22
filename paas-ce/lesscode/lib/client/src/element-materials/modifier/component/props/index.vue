@@ -24,9 +24,6 @@
                     @batch-update="batchUpdate" />
             </template>
         </template>
-        <div class="no-prop" v-else>
-            <span>该组件暂无属性</span>
-        </div>
     </div>
 </template>
 <script>

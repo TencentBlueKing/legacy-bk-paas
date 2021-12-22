@@ -26,9 +26,9 @@
             :component-id="componentId"
             :value="lastStyles"
             :change="handleChange" />
-        <div v-else class="no-style">
+        <!-- <div v-else class="no-style">
             <span v-if="Object.keys(config).length">该组件暂无样式</span>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>

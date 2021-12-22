@@ -18,7 +18,6 @@
     </vue-draggable>
 </template>
 <script>
-    import _ from 'lodash'
     import LC from '@/element-materials/core'
 
     let dragTargetGroup = null
@@ -52,7 +51,7 @@
             }
         },
         created () {
-            const dragableCheck = _.debounce((event) => {
+            const dragableCheck = (event) => {
                 /**
                  * 交互式组件状态更新
                  * @description 当交互式组件激活时，不属于交互式组件的drag area不可拖动
@@ -67,10 +66,12 @@
                 } else {
                     this.dragGroup = this.group
                 }
-            }, 60)
-            LC.addEventListener('update', dragableCheck)
+            }
+            LC.addEventListener('toggleInteractive', dragableCheck)
+            LC.addEventListener('hideInteractive', dragableCheck)
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('update', dragableCheck)
+                LC.removeEventListener('toggleInteractive', dragableCheck)
+                LC.removeEventListener('hideInteractive', dragableCheck)
             })
         },
         mounted () {

@@ -48,9 +48,9 @@
                 </bk-form-item>
             </bk-form>
         </template>
-        <div class="no-prop" v-else>
+        <!-- <div class="no-prop" v-else>
             该组件暂无指令
-        </div>
+        </div> -->
     </section>
 </template>
 
