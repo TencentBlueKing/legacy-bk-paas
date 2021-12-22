@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <div :class="$style['row']">
+    <div :class="$style['row']" role="render-row">
         <slot />
     </div>
 </template>
@@ -69,5 +69,6 @@
 <style lang="postcss" module>
     .row{
         display: flex !important;
+        flex: 1 0 100%;
     }
 </style>

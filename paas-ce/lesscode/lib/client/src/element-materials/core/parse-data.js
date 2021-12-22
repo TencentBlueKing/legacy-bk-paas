@@ -13,7 +13,7 @@ let isClone = false
  * @returns { Node }
  */
 const createNodeFromData = (data) => {
-    const newNode = createNode(data.type)
+    const newNode = createNode(data.type === 'img' ? 'bk-image' : data.type)
     newNode.tabPanelActive = data.tabPanelActive || 'props'
     if (!isClone) {
         newNode.componentId = data.componentId
@@ -44,8 +44,10 @@ const createNodeFromData = (data) => {
  * @param { String } slot
  */
 const traverse = (parentNode, childDataList, slot) => {
+    console.log('asdadasdasd == = ', parentNode, childDataList, slot)
     childDataList.forEach(childData => {
         const childNode = createNodeFromData(childData)
+        
         if (childNode.layoutType) {
             // 布局类型的组件
             // slot 的值类型 Array
@@ -66,7 +68,6 @@ const traverse = (parentNode, childDataList, slot) => {
         } else {
             childNode.renderSlots = childData.renderSlots || {}
         }
-        
         if (parentNode.layoutType) {
             parentNode.appendChild(childNode, slot)
         } else if (parentNode.layoutSlotType[slot]) {
@@ -179,24 +180,27 @@ const tansform = (parentNode, data) => {
         if (['render-grid', 'free-layout'].includes(curDataNode.type)) {
             if (index < data.length - 1) {
                 curDataNode.renderStyles = {
-                    ...curDataNode.renderStyles,
-                    'margin-bottom': '10px'
+                    marginBottom: '10px',
+                    ...curDataNode.renderStyles
                 }
             }
         } else {
             if (parentNode.type === 'render-grid') {
                 curDataNode.renderStyles = {
-                    ...curDataNode.renderStyles,
-                    'margin': '5px'
+                    marginTop: '5px',
+                    marginRight: '5px',
+                    marginBottom: '5px',
+                    marginLeft: '5px',
+                    ...curDataNode.renderStyles
                 }
             }
         }
         if (curDataNode.type === 'bk-button' && parentNode.type === 'widget-form') {
             curDataNode.renderStyles = {
+                marginLeft: index > 0 ? '10px' : '',
                 ...curDataNode.renderStyles,
                 display: 'inline-block',
-                margin: '',
-                marginLeft: index > 0 ? '10px' : ''
+                margin: ''
             }
         }
         return curDataNode
@@ -229,6 +233,7 @@ const checkVersion = (data) => {
 }
 
 export default function (data) {
+    console.log('from parser data == ', JSON.parse(JSON.stringify(data)))
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
@@ -245,7 +250,8 @@ export default function (data) {
             traverse(root, versionData, 'default')
         }
         triggerEventListener('ready')
-    } catch {
+    } catch (error) {
+        console.error(error)
         triggerEventListener('error')
     }
 }

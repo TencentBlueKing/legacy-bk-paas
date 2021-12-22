@@ -12,7 +12,8 @@
 <template>
     <div
         :class="$style['col']"
-        :style="componentData.style">
+        :style="componentData.style"
+        role="render-col">
         <draggable
             ref="draggable"
             :sort="true"

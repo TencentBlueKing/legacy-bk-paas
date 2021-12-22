@@ -20,7 +20,10 @@ export default {
             'marginRight': '',
             'marginBottom': '',
             'marginLeft': '',
-            'transform': ''
+            'transform': '',
+            // 修正会产生叠加效果的样式
+            border: '',
+            'box-shadow': ''
         }
         // 在 freelayout 里面时对组件进行位置修正，
         // 基础组件的根可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
