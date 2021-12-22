@@ -483,9 +483,6 @@
                 }
             },
             isToolItemActive (item) {
-                if (item.text === '快捷键') {
-                    return this.showQuickOperation === true
-                }
                 return item.key === this.actionSelected
             },
 
@@ -616,10 +613,6 @@
 
             handleStartGuide () {
                 this.$refs.guide.start()
-            },
-
-            toggleShowQuickOperation (val) {
-                this.showQuickOperation = val
             },
 
             beforeunloadConfirm (event) {
