@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section style="height: 100%;">
         <code-viewer
             :code="code"
             :filename="`bklesscode-${pageId}.json`"
@@ -20,7 +20,6 @@
     import CodeViewer from '@/components/code-viewer'
     import JsonView from '@/element-materials/modifier/component/props/components/strategy/json-view.vue'
     import { circleJSON } from '@/common/util.js'
-    import { mapMutations } from 'vuex'
     import LC from '@/element-materials/core'
 
     export default {
@@ -41,18 +40,15 @@
         },
         created () {
             const root = LC.getRoot()
-            this.code = circleJSON(root.toJSON().slot.default)
+            this.code = circleJSON(root.toJSON().renderSlots.default)
         },
         methods: {
-            ...mapMutations('drag', [
-                'setTargetData'
-            ]),
             showEditData () {
                 this.$refs.editDialog && this.$refs.editDialog.showEdit()
             },
             setImportData (name, data) {
                 if (data && Array.isArray(data)) {
-                    this.setTargetData(data)
+                    LC.parseData(data)
                 }
             }
         }

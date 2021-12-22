@@ -16,6 +16,7 @@
             @mouseleave="handleMouseleave">
             <draggable
                 v-if="isReady"
+                class="target-drag-area"
                 :class="$style['editor']"
                 :component-data="componentData"
                 :list="componentData.slot.default"
