@@ -37,6 +37,7 @@ import {
     findRelatedMethodFromRenderSlot,
     findRelatedMethodFromRenderEvent
 } from './helper/find-related-method'
+import validator from './helper/validator'
 
 import getRoot from './get-root'
 import getMaterial from './get-material'
@@ -212,16 +213,15 @@ export default class Node {
      * @desc 用户配置相关的错误信息
      * @returns { String }
      */
-    get error () {
-        return 'hello world!'
+    get errorStack () {
+        return validator(this)
     }
     /**
      * @desc 获取节点的 JSON 数据
-     * @param { Boolean } deep 是否深层编辑，false 只返回当前节点的的数据，true 会返回自己节点的数据
      * @returns { Boolean }
      */
-    toJSON (deep = true) {
-        return toJSON(this, deep)
+    toJSON () {
+        return toJSON(this)
     }
     /**
      * @desc 设置节点属性

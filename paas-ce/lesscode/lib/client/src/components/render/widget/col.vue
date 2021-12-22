@@ -123,6 +123,11 @@
                             marginLeft,
                             marginBottom
                         } = componentInstance.componentData.style
+                        if (componentInstance.componentData.layoutType
+                            || marginBottom === 'unset') {
+                            componentInstance.componentData.setStyle('marginBottom', '10px')
+                            return
+                        }
                         if (!marginLeft || marginLeft === 'unset') {
                             if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
                                 componentInstance.componentData.setStyle('marginRight', '10px')

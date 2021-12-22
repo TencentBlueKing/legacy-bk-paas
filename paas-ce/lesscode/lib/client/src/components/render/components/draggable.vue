@@ -74,11 +74,8 @@
             })
         },
         mounted () {
-            const timer = setTimeout(() => {
+            setTimeout(() => {
                 this.$refs.draggable.computeIndexes()
-            }, 500)
-            this.$once('hook:beforeDestroy', () => {
-                clearTimeout(timer)
             })
         },
         methods: {
@@ -119,7 +116,7 @@
                     marginTop: 'unset',
                     marginLeft: 'unset'
                 })
-                // fix: vue-draggable内部没有更新
+                // fix: vue-draggable 内部索引不更新的问题
                 this.$refs.draggable.computeIndexes()
                 dragTargetGroup = ''
                 this.$emit('change', event)

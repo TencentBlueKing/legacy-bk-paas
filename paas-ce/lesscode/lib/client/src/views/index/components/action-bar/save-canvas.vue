@@ -75,6 +75,9 @@
                     })
                     Object.keys(node.variable).forEach(variableStyle => {
                         const variableCode = node.variable[variableStyle].val
+                        if (!variableCode) {
+                            return
+                        }
                         // 需要记录变量的每一处使用细节
                         if (!relatedVariableCodeMap[variableCode]) {
                             relatedVariableCodeMap[variableCode] = []
@@ -105,7 +108,9 @@
                 // 检测 varaible 有效性
                 Object.keys(relatedVariableCodeMap).forEach(variableCode => {
                     if (!projectVarialbeMap.hasOwnProperty(variableCode)) {
-                        errorStack.push(`组件【${relatedVariableCodeMap[variableCode].componentId}】使用的变量【${variableCode}】不存在`)
+                        relatedVariableCodeMap[variableCode].forEach(record => {
+                            errorStack.push(`组件【${record.componentId}】使用的变量【${variableCode}】不存在`)
+                        })
                     }
                 })
 
