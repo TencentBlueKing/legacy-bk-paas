@@ -1165,14 +1165,14 @@ class PageCode {
             compId = compId + key
             slotStr += '\n'
             if (!isDefaultSlot) slotStr += `<template slot="${key}">\n`
-            if (['render-grid', 'render-row', 'render-col', 'free-layout'].includes(slot.type)) {
+            if (['render-grid', 'free-layout'].includes(slot.type)) {
                 const codeArr = []
                 // card, dialog, sideslider 组件的 slots 配置中 val 没有 componentId
                 // 会导致在 getDirectives 方法中 componentId.replace 报错
-                if (!slot.val.componentId) {
-                    slot.val.componentId = `${slot.val.name}-${uuid()}`
+                if (!slot.componentId) {
+                    slot.componentId = `${slot.val.name}-${uuid()}`
                 }
-                codeArr.push(slot.val)
+                codeArr.push(slot)
                 slotStr += this.generateCode(codeArr, slot.type === 'free-layout')
             } else if (slot.type === 'form-item-content') {
                 slotStr += this.generateCode(slot.val)
