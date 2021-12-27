@@ -58,8 +58,8 @@ const Method = () => import(/* webpackChunkName: 'method' */'@/views/help/docs/m
 const Variable = () => import(/* webpackChunkName: 'variable' */'@/views/help/docs/variable.md')
 const Directive = () => import(/* webpackChunkName: 'directive' */'@/views/help/docs/directive.md')
 const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
-const TemplateProject = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/template-project.md')
-const TemplatePage = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/template-page.md')
+const TemplateProject = () => import(/* webpackChunkName: 'template-project' */'@/views/help/docs/template-project.md')
+const TemplatePage = () => import(/* webpackChunkName: 'template-page' */'@/views/help/docs/template-page.md')
 const Interactive = () => import(/* webpackChunkName: 'interactive' */'@/views/help/docs/interactive.md')
 
 // 数据源管理
