@@ -1,5 +1,5 @@
 <template>
-    <main class="project-layout">
+    <main :class="['project-layout', { 'no-breadcrumb': !hasBreadcrumb }]">
         <aside class="aside">
             <div class="side-hd">
                 <i class="back-icon bk-drag-icon bk-drag-arrow-back" title="返回项目列表" @click="toProjects"></i>
@@ -26,7 +26,7 @@
                 </nav>
             </div>
         </aside>
-        <div class="breadcrumbs" v-if="currentPage">
+        <div class="breadcrumbs" v-if="hasBreadcrumb">
             <div class="page-top">
                 <h3 class="current">{{ currentPage }}</h3>
                 <div class="version-selector" v-if="isShowProjectVersionSelector">
@@ -158,6 +158,9 @@
             isShowProjectVersionSelector () {
                 const withSelectorRoutes = ['pageList', 'functionManage', 'variableManage', 'layout', 'routes']
                 return withSelectorRoutes.includes(this.$route.name)
+            },
+            hasBreadcrumb () {
+                return this.currentPage?.length > 0
             }
         },
         beforeRouteUpdate (to, from, next) {
@@ -170,6 +173,7 @@
                 this.pageLoading = true
                 this.updateCurrentVersion(this.getInitialVersion())
                 bus.$on('update-project-version', this.updateCurrentVersion)
+                bus.$on('update-project-list', this.getProjectList)
 
                 this.projectId = parseInt(this.$route.params.projectId)
                 await this.getProjectList()
@@ -283,8 +287,9 @@
                 }
             }
             .side-bd {
-                height: calc(100% - var(--side-hd-height) - var(--side-ft-height));
+                height: calc(100% - var(--side-hd-height) - var(--side-ft-height, 0px));
                 overflow-y: auto;
+                @mixin scroller;
             }
             .no-click {
                 pointer-events: none;
@@ -336,7 +341,7 @@
         }
 
         .main-container {
-            height: 100%;
+            height: calc(100% - var(--breadcrumb-height));
             overflow: auto;
             @mixin scroller;
 
@@ -370,6 +375,12 @@
                     background: #E1ECFF;
                     color: #3A84FF;
                 }
+            }
+        }
+
+        &.no-breadcrumb {
+            .main-container {
+                height: 100%;
             }
         }
     }
