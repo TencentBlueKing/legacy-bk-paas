@@ -61,6 +61,11 @@
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
         },
+        beforeDestroy () {
+            window.removeEventListener('keydown', this.quickOperation)
+            window.removeEventListener('keyup', this.toggleQuickOperation)
+            window.removeEventListener('click', this.toggleShowQuickOperation)
+        },
         methods: {
             toggleShowQuickOperation (show) {
                 if (show === true) {

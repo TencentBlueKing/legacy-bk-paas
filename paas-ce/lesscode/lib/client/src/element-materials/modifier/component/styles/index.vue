@@ -73,7 +73,7 @@
         },
         computed: {
             isShowCustom () {
-                return /$chart-/.test(this.componentId)
+                return !/$chart-/.test(this.componentId)
             }
         },
         created () {

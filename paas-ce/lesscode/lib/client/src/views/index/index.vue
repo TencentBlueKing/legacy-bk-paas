@@ -68,6 +68,7 @@
                             </template>
                         </li>
                     </ul>
+                    <!-- 保存、预览、快捷键等tool单独抽离 -->
                     <extra-action></extra-action>
                 </div>
             </div>
