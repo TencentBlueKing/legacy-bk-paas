@@ -1,70 +1,67 @@
 <template>
     <variable-select
-        :value="computedSlotVariable.val"
-        :val-type="computedSlotVariable.valType"
-        :available-types="computedAvailableTypes"
+        :data="variableSelectData"
+        :value="formData"
         :remote-config="remoteConfig"
-        @change="changeVariable">
+        @change="handleVariableSelectChange">
         <template v-slot:title>
             <section class="slot-title-wrapper">
                 <span
-                    :class="['slot-name', { 'slot-tips': slotConfig.tips }]"
+                    class="slot-name"
+                    :class="{
+                        'slot-tips': describe.tips
+                    }"
                     v-bk-tooltips="computedSlotTip">
-                    {{ slotConfig.displayName }}
-                    <span v-if="slotConfig.type && slotConfig.type.length <= 1">
-                        ({{ computedSlotVal.type | capFirstLetter }})
+                    {{ describe.displayName }}
+                    <span v-if="describe.type && describe.type.length <= 1">
+                        ({{ formData.valueType | capFirstLetter }})
                     </span>
                 </span>
-                <template v-if="slotConfig.name && slotConfig.name.length > 1">
+                <template v-if="describe.name && describe.name.length > 1">
                     <span class="slot-label">组件标签</span>
                     <bk-radio-group
-                        :value="computedSlotVal.name"
-                        @change="changeSlot('name', ...arguments)"
+                        :value="formData.component"
+                        @change="handleSlotComponentChange"
                         class="mb10">
                         <bk-radio-button
-                            v-for="name in slotConfig.name"
-                            :value="name"
-                            :key="name"
+                            v-for="itemName in describe.name"
+                            :value="itemName"
+                            :key="itemName"
                             class="mr10">
-                            {{ name | capFirstLetter }}
+                            {{ itemName | capFirstLetter }}
                         </bk-radio-button>
                     </bk-radio-group>
                 </template>
             </section>
         </template>
-        <template v-if="slotConfig.type && slotConfig.type.length > 1">
+        <template v-if="describe.type && describe.type.length > 1">
             <span class="slot-label">数据类型</span>
             <bk-radio-group
-                :value="computedSlotVal.type"
-                @change="changeSlot('type', ...arguments)"
+                :value="formData.valueType"
+                @change="handleValueTypeChange"
                 class="mb10">
                 <bk-radio-button
                     :value="type"
-                    v-for="type in slotConfig.type"
+                    v-for="type in describe.type"
                     :key="type">
                     {{ type | capFirstLetter }}
                 </bk-radio-button>
             </bk-radio-group>
         </template>
         <component
-            :is="computedSlotType"
-            :slot-val="computedSlotVal"
-            :slot-config="slotConfig"
-            :render-props="renderProps"
-            :change="change"
-            @batchUpdate="batchUpdate" />
+            :is="renderValueComponent"
+            :slot-val="slotTypeValueMemo[formData.valueType]"
+            :slot-config="describe"
+            :change="handleValueChange" />
     </variable-select>
 </template>
 
 <script>
     import { transformTipsWidth } from '@/common/util'
-    import safeStringify from '@/common/json-safe-stringify'
     import variableSelect from '@/components/variable/variable-select'
 
     import slotList from './components/list'
-    // import slotColumn from './components/column'
     import slotRemote from './components/remote'
-    // import slotFormItem from './components/form-item'
     import slotTable from './components/table'
     import slotHtml from './components/slot-html'
     import slotText from './components/text'
@@ -72,12 +69,10 @@
 
     const comMap = {
         list: slotList,
-        // column: slotColumn,
         remote: slotRemote,
         html: slotHtml,
         text: slotText,
         textarea: slotTextArea,
-        // 'form-item': slotFormItem,
         'table-list': slotTable
     }
 
@@ -93,18 +88,14 @@
         },
 
         props: {
-            slotName: {
+            name: {
                 type: String
             },
-            slotVal: {
+            lastValue: {
                 type: Object,
                 default: () => ({})
             },
-            slotConfig: {
-                type: Object,
-                default: () => ({})
-            },
-            renderProps: {
+            describe: {
                 type: Object,
                 default: () => ({})
             }
@@ -112,59 +103,31 @@
 
         data () {
             return {
-                mutlTypeVal: {}
+                mutlTypeVal: {},
+                formData: {}
             }
         },
 
         computed: {
+            renderValueComponent () {
+                return comMap[this.formData.valueType]
+            },
             computedSlotTip () {
-                const transformTips = transformTipsWidth(this.slotConfig.tips)
+                const transformTips = transformTipsWidth(this.describe.tips)
                 const tips = typeof transformTips === 'string' ? { content: transformTips } : transformTips
-                const disabled = !this.slotConfig.tips
+                const disabled = !this.describe.tips
                 return {
                     ...(tips || {}),
                     disabled
                 }
             },
-
-            computedSlotType () {
-                const type = this.slotVal.type
-                return comMap[type]
-            },
-
-            // val 值类型
-            computedAvailableTypes () {
-                const val = this.slotVal.val
-                const type = Object.prototype.toString.apply(val)
-                const typeMap = {
-                    '[object Array]': 'array',
-                    '[object Object]': 'object',
-                    '[object Number]': 'number',
-                    '[object Boolean]': 'boolean',
-                    '[object String]': 'string'
-                }
-                return [typeMap[type]]
-            },
-
-            computedSlotVariable () {
-                const slotPayload = this.slotVal.payload || {}
-                return slotPayload.variableData || { val: '', valType: 'value' }
-            },
-
-            computedCombinType () {
-                return this.slotVal.type + this.slotVal.name
-            },
-
-            computedSlotVal () {
-                return this.mutlTypeVal[this.computedCombinType]
-            },
             
             remoteConfig () {
-                if (this.slotConfig.type.includes('remote')) {
+                if (this.describe.type.includes('remote')) {
                     return {
                         show: true,
                         name: '',
-                        value: this.computedSlotVal.val
+                        value: this.formData.renderValue
                     }
                 }
                 return {
@@ -173,55 +136,130 @@
                 }
             }
         },
+        created () {
+            const {
+                val,
+                name,
+                type
+            } = this.describe
+            const defaultValue = val
+            const component = Array.isArray[name] ? name : [name]
 
-        watch: {
-            slotVal: {
-                handler (val) {
-                    this.mutlTypeVal[this.computedCombinType] = JSON.parse(safeStringify(val))
-                },
-                deep: true,
-                immediate: true
+            // 构造 variable-select 的配置
+            this.variableSelectData = {
+                type: 'slot',
+                prop: this.name,
+                format: 'value',
+                includesFormat: ['value', 'variable', 'expression'],
+                code: defaultValue,
+                includesValueType: undefined
+            }
+
+            // slot 的初始值
+            this.formData = Object.freeze({
+                format: 'value',
+                component: component[0],
+                code: defaultValue,
+                payload: {},
+                valueType: type[0],
+                renderValue: defaultValue
+            })
+
+            // 编辑状态缓存
+            this.slotTypeValueMemo = {
+                [this.formData.valueType]: {
+                    val: defaultValue,
+                    payload: {},
+                    component: this.formData.component
+                }
+            }
+
+            if (this.lastValue && this.lastValue.valueType) {
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    format: this.lastValue.format,
+                    component: this.lastValue.component,
+                    code: this.lastValue.code,
+                    payload: this.lastValue.payload || {},
+                    valueType: this.lastValue.valueType
+                })
+                this.slotTypeValueMemo[this.formData.valueType] = {
+                    val: this.formData.code,
+                    payload: this.formData.payload,
+                    component: this.formData.component
+                }
             }
         },
-
         methods: {
-            changeSlot (key, name) {
-                let slotVal = {
-                    ...this.computedSlotVal,
-                    [key]: name
+            triggerChange () {
+                // 缓存用户本地编辑值
+                this.slotTypeValueMemo[this.formData.valueType] = {
+                    val: this.formData.code,
+                    payload: this.formData.payload,
+                    component: this.formData.component
                 }
 
-                const type = slotVal.type + slotVal.name
-                const slot = this.mutlTypeVal.hasOwnProperty(type) ? this.mutlTypeVal[type] : this.slotConfig
-
-                slotVal = {
-                    ...slotVal,
-                    val: slot.val,
-                    payload: slot.payload
-                }
-
-                this.change(slotVal)
+                this.$emit('on-change', this.name, {
+                    ...this.formData
+                })
             },
-
-            changeVariable (variableData) {
-                const val = variableData.defaultVal === undefined ? this.slotConfig.val : variableData.defaultVal
-                const payload = {
-                    variableData: { val: variableData.val, valType: variableData.valType }
-                }
-                const slotVal = {
-                    ...this.computedSlotVal,
-                    payload,
-                    val
-                }
-                this.change(slotVal)
+            /**
+             * @desc format 更新
+             * @param { Object } variableSelectData
+             */
+            handleVariableSelectChange (variableSelectData) {
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    format: variableSelectData.format,
+                    code: variableSelectData.code,
+                    renderValue: variableSelectData.renderValue
+                })
+                this.triggerChange()
             },
-
-            change (slotVal) {
-                this.$emit('change', this.slotName, slotVal)
+            /**
+             * @desc slot 组件类型切换
+             */
+            handleSlotComponentChange (component) {
+                this.format = Object.freeze({
+                    ...this.format,
+                    component
+                })
+                this.triggerChange()
             },
-
-            batchUpdate () {
-                this.$emit('batchUpdate', ...arguments)
+            /**
+             * @desc format 等于 value 时，value 的类型切换
+             * @param { String } valueType
+             */
+            handleValueTypeChange (valueType) {
+                let code = null
+                let payload = {}
+                if (this.slotTypeValueMemo.hasOwnProperty(valueType)) {
+                    code = this.slotTypeValueMemo[valueType].val
+                    payload = this.slotTypeValueMemo[valueType].payload
+                } else {
+                    code = ''
+                }
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    code,
+                    valueType,
+                    renderValue: code,
+                    payload
+                })
+                this.triggerChange()
+            },
+            /**
+             * @desc format 等于 value 时，编辑 code 的值
+             * @param { Object } valueData
+             */
+            handleValueChange (valueData) {
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    code: valueData.val,
+                    payload: valueData.payload,
+                    renderValue: valueData.val
+                })
+                this.triggerChange()
             }
         }
     }

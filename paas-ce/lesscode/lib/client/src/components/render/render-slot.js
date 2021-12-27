@@ -25,12 +25,15 @@ export default {
     render (h, ctx) {
         const { key, slotData } = ctx.props
         
-        const { name } = slotData
-        const render = slotRenderConfig[name] || (() => {})
+        const { component } = slotData
+        const render = slotRenderConfig[component] || (() => {})
         const slotRenderParams = []
         let curSlot = slotData
         do {
-            const param = { val: curSlot.val, type: 'value' }
+            const param = {
+                val: curSlot.renderValue,
+                type: 'value'
+            }
             slotRenderParams.push(param)
             curSlot = curSlot.renderSlots
         } while (curSlot && Object.keys(curSlot).length > 0)

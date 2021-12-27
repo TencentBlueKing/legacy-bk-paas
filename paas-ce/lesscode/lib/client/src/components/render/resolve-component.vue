@@ -129,7 +129,7 @@
         created () {
             // 优先获取组件的 material Config 缓存起来，后续需要使用直接使用这个不在从 componentData.material 获取
             this.material = this.componentData.material
-            const updateCallback = _.throttle((event) => {
+            const updateCallback = (event) => {
                 const {
                     target
                 } = event
@@ -137,7 +137,7 @@
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
-            }, 60)
+            }
             
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId

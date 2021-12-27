@@ -51,6 +51,7 @@ export default class Node {
         directives = [],
         slots = {},
         renderStyles = {},
+        renderProps = {},
         interactiveShow = false,
         isComplexComponent = false,
         isCustomComponent = false
@@ -63,7 +64,7 @@ export default class Node {
         this.name = name
         this.type = type
         this.renderStyles = renderStyles
-        this.renderProps = transformProps(props, type)
+        this.renderProps = transformProps(props, renderProps, type)
         this.renderSlots = transformSlots(slots)
         this.renderDirectives = directives
         this.renderEvents = {}
@@ -160,7 +161,7 @@ export default class Node {
      */
     get prop () {
         const props = Object.keys(this.renderProps).reduce((result, propKey) => {
-            result[propKey] = this.renderProps[propKey].val
+            result[propKey] = this.renderProps[propKey].renderValue
             return result
         }, {})
         return Object.seal(props)

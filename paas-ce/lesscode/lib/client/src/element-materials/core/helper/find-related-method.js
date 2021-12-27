@@ -3,7 +3,9 @@ export const findRelatedMethodFromRenderProps = (renderProps) => {
     // prop 设置为 remote 类型时会使用 method
     Object.keys(renderProps).forEach(propName => {
         const prop = renderProps[propName]
-        if (prop.type === 'remote') {
+
+        // prop 的format 配置为 value 并且 valueType 为 remote 表示选择的是远程函数
+        if (prop.format === 'value' && prop.valueType === 'remote') {
             if (prop.payload
                 && prop.payload.methodData
                 && prop.payload.methodData.methodCode) {
@@ -17,7 +19,7 @@ export const findRelatedMethodFromRenderProps = (renderProps) => {
     })
     // form 组件需要额外检测 rules 的自定义验证规则
     if (renderProps.hasOwnProperty('rules')) {
-        const formRuleMap = renderProps.rules.val || {}
+        const formRuleMap = renderProps.rules.code || {}
         Object.keys(formRuleMap).forEach(propertyName => {
             const propertyRuleList = formRuleMap[propertyName] || []
             
@@ -40,7 +42,8 @@ export const findRelatedMethodFromRenderSlot = (renderSlots) => {
     const methodMap = {}
     Object.keys(renderSlots).forEach(slotName => {
         const slot = renderSlots[slotName]
-        if (slot.type === 'remote') {
+        // slot 的format 配置为 value 并且 valueType 为 remote 表示选择的是远程函数
+        if (slot.format === 'value' && slot.valueType === 'remote') {
             if (slot.payload
                 && slot.payload.methodData
                 && slot.payload.methodData.methodCode) {

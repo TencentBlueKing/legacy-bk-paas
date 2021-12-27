@@ -11,21 +11,21 @@
 
 <template>
     <section class="directive-home">
-        <template v-if="renderDirectiveList.length">
+        <template v-if="directiveList.length">
             <h3 class="directive-tip">
                 编辑函数时，可以使用 lesscode.指令值，必须通过编辑器自动补全功能选择对应属性指令值，来获取或者修改当前页面中配置了指令的组件属性值
             </h3>
             <bk-form form-type="vertical" :label-width="280">
                 <bk-form-item
-                    v-for="(directive, index) in renderDirectiveList"
+                    v-for="(directive, index) in directiveList"
                     :key="index"
                     class="directive-item">
                     <variable-select
-                        :value="directive.val"
-                        :val-type="directive.valType"
+                        :data="directive"
+                        :value="lastDirectiveMap[genDirectiveKey(directive)]"
                         :available-types="directive.propTypes"
-                        :disabled-change="isAttachToForm"
-                        @change="(data) => changeVariable(directive, data)">
+                        :readonly="isAttachToForm"
+                        @change="value => handleVariableSelectChange(directive, value)">
                         <template v-slot:title>
                             <span
                                 v-bk-tooltips="{
@@ -42,7 +42,7 @@
                         </template>
                         <bk-input
                             :value="directive.val"
-                            @change="(val) => handleChange(directive, val)"
+                            @change="(val) => handleValueChange(directive, val)"
                             clearable />
                     </variable-select>
                 </bk-form-item>
@@ -60,20 +60,38 @@
     import variableSelect from '@/components/variable/variable-select'
 
     const camelize = str => str.replace(/-(\w)/g, (_, c) => c ? c.toUpperCase() : '')
-    const genDirectiveKey = ({ type, prop }) => `${type}${prop}`
+
+    const optionDirectives = [
+        {
+            type: 'v-if',
+            prop: '',
+            format: 'variable',
+            includesFormat: ['variable', 'expression'], // v-if 支持配置（变量、表达式）
+            code: '',
+            includesValueType: ['boolean'],
+            renderValue: true
+        },
+        {
+            type: 'v-show',
+            prop: '',
+            format: 'variable',
+            includesFormat: ['variable', 'expression'], // v-show 支持配置（变量、表达式）
+            code: '',
+            includesValueType: ['boolean'],
+            renderValue: true
+        }
+    ]
 
     export default {
         name: 'modifier-directives',
-
         components: {
             variableSelect
         },
-
         data () {
             return {
-                // renderDirectiveList: [],
-                // lastDirectiveMap: {},
-                isAttachToForm: false
+                isAttachToForm: false,
+                directiveList: [],
+                lastDirectiveMap: {}
             }
         },
         created () {
@@ -86,61 +104,112 @@
 
             this.id = camelize(componentId)
 
-            this.lastDirectiveMap = _.cloneDeep(renderDirectives).reduce((result, directive) => {
-                result[genDirectiveKey(directive)] = directive
+            // 解析组件 directive 配置
+            const propConfig = material.props || {}
+            const directiveConfig = material.directives || []
+            const directiveList = directiveConfig.reduce((result, directiveConfig) => {
+                const {
+                    type,
+                    prop,
+                    valType,
+                    val,
+                    tips
+                } = directiveConfig
+                if (propConfig[prop]) {
+                    const propConfigType = propConfig[directiveConfig.prop].type
+                    const includesValueType = Array.isArray(propConfigType) ? propConfigType : [propConfigType]
+                    const renderValue = propConfig[directiveConfig.prop].val
+                    if (type === 'v-bind') {
+                        result.push({
+                            type,
+                            prop,
+                            format: valType,
+                            includesFormat: ['value', 'variable'], // v-bind 支持配置（值、变量）
+                            code: val,
+                            includesValueType,
+                            renderValue,
+                            tips: tips
+                        })
+                    } else if (type === 'v-model') {
+                        result.push({
+                            type,
+                            prop,
+                            format: 'variable',
+                            includesFormat: ['variable'], // v-bind 支持配置（变量）
+                            code: val,
+                            includesValueType,
+                            renderValue,
+                            tips: tips
+                        })
+                    }
+                }
                 return result
-            }, {})
-
-            const configDirectives = _.cloneDeep(material.directives || [])
-            const renderDirectiveList = [
+            }, [])
+            // 公共 v-for
+            directiveList.unshift(
                 {
                     type: 'v-for',
-                    val: '',
-                    valType: 'variable',
+                    prop: '',
+                    format: 'variable',
+                    includesFormat: ['value', 'variable'], // v-bind 支持配置（值、变量）
+                    code: '',
+                    includesValueType: ['boolean'],
+                    renderValue: 1,
                     tips: (dir) => {
                         return dir.val
                             ? `可以使用 【${this.id}Item】 为当前组件和子组件的指令赋值，当前组件的 v-if 和 v-show 除外`
                             : '可以使用 v-for 指令， 把一个数组转换为一组元素'
                     }
-                },
-                ...configDirectives
-            ]
-            const optionDirectives = [
-                {
-                    type: 'v-if',
-                    val: '',
-                    valType: 'variable'
-                },
-                {
-                    type: 'v-show',
-                    val: '',
-                    valType: 'variable'
                 }
-            ]
+            )
+            
             // 目前bk-dialog与bk-sidesslider不支持v-if和v-show
-            if (!['bk-dialog', 'bk-sideslider'].includes(this.currentComponentNode.type)) {
-                renderDirectiveList.push(...optionDirectives)
+            if (![
+                'bk-dialog',
+                'bk-sideslider'
+            ].includes(this.currentComponentNode.type)) {
+                directiveList.push(...optionDirectives)
             }
-            this.renderDirectiveList = Object.freeze(renderDirectiveList)
-            this.calcDirectiveValue()
+            this.directiveList = Object.freeze(directiveList)
+
+            // directive last 配置
+            const lastDirectiveMap = directiveList.reduce((result, directive) => {
+                const {
+                    type,
+                    prop,
+                    format,
+                    code,
+                    renderValue
+                } = directive
+                result[this.genDirectiveKey(directive)] = {
+                    type,
+                    prop,
+                    format,
+                    code,
+                    renderValue
+                }
+                return result
+            }, {})
+
+            renderDirectives.forEach((directive) => {
+                const directiveKey = this.genDirectiveKey(directive)
+                if (lastDirectiveMap[directiveKey]) {
+                    Object.assign(lastDirectiveMap[directiveKey], {
+                        format: directive.format,
+                        code: directive.code
+                    })
+                }
+            })
+            this.lastDirectiveMap = Object.freeze(lastDirectiveMap)
+            
             this.checkAttachToFrom()
         },
         methods: {
-            /**
-             * @desc 合并 directive config 和用户设置的指令值配置
-             */
-            calcDirectiveValue () {
-                const renderDirectiveList = [...this.renderDirectiveList]
-                renderDirectiveList.forEach(directive => {
-                    const directiveValue = this.lastDirectiveMap[genDirectiveKey(directive)]
-                    if (directiveValue) {
-                        Object.assign(directive, directiveValue)
-                    }
-                })
-                this.renderDirectiveList = Object.freeze(renderDirectiveList)
+            genDirectiveKey (directive) {
+                return `${directive.type}${directive.prop ? ':' + directive.prop : ''}`
             },
             /**
-             * @desc 检测是否是 form 的子节点
+             * @desc 检测是否是 widget-form 的子节点
              */
             checkAttachToFrom () {
                 this.isAttachToForm = false
@@ -182,17 +251,20 @@
             },
             /**
              * @desc directive 值类型切换（值、变量、表达式）
-             * @param { Boolean } name
-             * @returns { Boolean }
+             * @param { Object } directive
+             * @param { Object } variableSelectData
              */
-            changeVariable (directive, data) {
-                this.lastDirectiveMap[genDirectiveKey(directive)] = {
-                    ...directive,
-                    val: data.val,
-                    valType: data.valType,
-                    value: ''
-                }
-                this.calcDirectiveValue()
+            handleVariableSelectChange (directive, variableSelectData) {
+                this.lastDirectiveMap = Object.freeze({
+                    ...this.lastDirectiveMap,
+                    [this.genDirectiveKey(directive)]: {
+                        type: directive.type,
+                        prop: directive.prop,
+                        format: variableSelectData.format,
+                        code: variableSelectData.code,
+                        renderValue: variableSelectData.renderValue
+                    }
+                })
                 this.triggleUpdate()
             },
 
@@ -201,18 +273,22 @@
              * @param { Object } directive
              * @param { String } value
              */
-            handleChange (directive, value) {
-                this.lastDirectiveMap[genDirectiveKey(directive)] = {
-                    ...directive,
-                    val: value
-                }
-                this.calcDirectiveValue()
+            handleValueChange (directive, value) {
+                const directiveKey = this.genDirectiveKey(directive)
+                this.lastDirectiveMap = Object.freeze({
+                    ...this.lastDirectiveMap,
+                    [directiveKey]: {
+                        ...this.lastDirectiveMap[directiveKey],
+                        code: value,
+                        renderValue: value
+                    }
+                })
                 this.triggleUpdate()
             },
 
-            triggleUpdate () {
+            triggleUpdate: _.throttle(function () {
                 this.currentComponentNode.setRenderDirectives(Object.values(this.lastDirectiveMap))
-            }
+            }, 60)
         }
     }
 </script>

@@ -201,7 +201,6 @@
                 }
 
                 const setProp = node => {
-                    console.log('from setPropsetPropsetPropsetProp = ', node)
                     const formItemPropList = ['label', 'property', 'required']
                     formItemPropList.forEach(propName => {
                         node.setProp(propName, itemData[propName])
@@ -217,9 +216,10 @@
                     node.setRenderDirectives([
                         {
                             type: 'v-model',
+                            format: 'variable',
                             prop: 'value',
-                            val: `${camelCase(this.componentNode.componentId, { transform: camelCaseTransformMerge })}model.${itemData.property}`,
-                            valType: 'variable'
+                            code: `${camelCase(this.componentNode.componentId, { transform: camelCaseTransformMerge })}model.${itemData.property}`,
+                            valueType: 'string'
                         }
                     ])
                 }
@@ -253,17 +253,21 @@
                         // 提交按钮
                         const submitBtnNode = LC.createNode('bk-button')
                         submitBtnNode.setRenderSlots({
-                            name: 'html',
-                            type: 'text',
-                            val: '提交'
+                            format: 'value',
+                            component: 'text',
+                            code: '提交',
+                            valueType: 'text',
+                            renderValue: '提交'
                         })
                         submitBtnNode.setProp('theme', 'primary')
                         // 取消按钮
                         const cancelBtnNode = LC.createNode('bk-button')
                         cancelBtnNode.setRenderSlots({
-                            name: 'html',
-                            type: 'text',
-                            val: '取消'
+                            format: 'value',
+                            component: 'text',
+                            code: '取消',
+                            valueType: 'text',
+                            renderValue: '取消'
                         })
                         cancelBtnNode.setStyle('marginLeft', '10px')
                         actionFormItemNode = LC.createNode('widget-form-item')

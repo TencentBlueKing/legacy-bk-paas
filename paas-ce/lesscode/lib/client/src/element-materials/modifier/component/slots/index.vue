@@ -5,12 +5,10 @@
         <renderSlot
             v-for="(slotConfig, slotName) in renderConfig"
             :key="slotName"
-            :slot-name="slotName"
-            :slot-val="lastSlots[slotName]"
-            :slot-config="slotConfig"
-            :render-props="lastProps"
-            @change="handleChange"
-            @batchUpdate="batchUpdate" />
+            :name="slotName"
+            :last-value="lastSlots[slotName]"
+            :describe="slotConfig"
+            @on-change="handleChange" />
     </div>
 </template>
 
@@ -49,29 +47,24 @@
             // 布局类型的组件不支持 slot 配置
             if (this.componentNode.layoutType) {
                 this.isShow = false
+                return
             }
-            this.lastProps = {}
             const {
                 material,
-                renderProps,
                 renderSlots
             } = this.componentNode
             this.config = Object.freeze(material.slots || {})
-            this.lastProps = _.cloneDeep(renderProps)
             this.lastSlots = Object.freeze(_.cloneDeep(renderSlots))
         },
 
         methods: {
-            handleChange: _.throttle(function (slotName, slotVal) {
+            handleChange: _.throttle(function (slotName, slotData) {
                 this.lastSlots = Object.freeze({
                     ...this.lastSlots,
-                    [slotName]: slotVal
+                    [slotName]: slotData
                 })
-                this.componentNode.setRenderSlots(slotVal, slotName)
-            }, 60),
-            batchUpdate (renderData) {
-                console.log('from slot batchUpdate', renderData)
-            }
+                this.componentNode.setRenderSlots(slotData, slotName)
+            }, 60)
         }
     }
 </script>

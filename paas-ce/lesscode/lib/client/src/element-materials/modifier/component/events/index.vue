@@ -77,7 +77,9 @@
                     [eventName]: value
                 }
                 this.lastEvents = renderEvents
-                this.currentComponentNode.setRenderEvents(renderEvents)
+                this.currentComponentNode.setRenderEvents({
+                    ...renderEvents
+                })
             }
         }
     }

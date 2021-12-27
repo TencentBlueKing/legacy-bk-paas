@@ -1,26 +1,28 @@
 export const findRelatedVariableFromRenderDirective = renderDirectives => {
-    const variableMap = {}
-    renderDirectives.forEach(directive => {
-        variableMap[`${directive.type}:${directive.prop}`] = {
-            type: 'v-bind',
-            prop: directive.prop,
-            val: directive.val
+    renderDirectives.reduce((variableMap, directive) => {
+        if (directive.format === 'value') {
+            return
         }
-    })
-    return variableMap
+        variableMap[`${directive.type}${directive.prop ? '.' + directive.prop : ''}`] = {
+            type: directive.type,
+            key: directive.prop,
+            code: directive.code
+        }
+        return variableMap
+    }, {})
 }
 
 export const findRelatedVariableFromRenderSlot = renderSlots => {
-    const variableMap = {}
-    Object.keys(renderSlots).forEach(slotName => {
+    return Object.keys(renderSlots).reduce((variableMap, slotName) => {
         const slot = renderSlots[slotName]
-        if (slot.payload && slot.payload.variableData) {
-            variableMap[`slot:${slotName}`] = {
-                type: 'slots',
-                slot: slotName,
-                val: slot.payload.variableData.val
-            }
+        if (slot.format === 'value') {
+            return
         }
-    })
-    return variableMap
+        variableMap[`slot.${slotName}`] = {
+            type: 'slot',
+            key: slotName,
+            code: slot.code
+        }
+        return variableMap
+    }, {})
 }

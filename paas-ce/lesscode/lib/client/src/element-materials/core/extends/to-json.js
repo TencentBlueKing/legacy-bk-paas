@@ -12,14 +12,15 @@ const getChild = slot => {
  * @returns { Boolean }
  */
 const isValidPropValue = (value, configValue) => {
-    // 值为空
-    if (value === ''
-         || value === null
-         || value === undefined) {
-        return false
-    }
-    // prop 有配置值，但是值不为默认
-    return value !== configValue
+    // // 值为空
+    // if (value === ''
+    //      || value === null
+    //      || value === undefined) {
+    //     return false
+    // }
+    // // prop 有配置值，但是值不为默认
+    // return value !== configValue
+    return true
 }
 
 /**
@@ -76,10 +77,7 @@ export default function (node) {
         // prop 为 remote 类型，或者 prop 的值等于默认值时在 JSON 结构中过滤掉
         if (curProp.type === 'remote'
             || isValidPropValue(curProp.val, material.props[propName] && material.props[propName].val)) {
-            result[propName] = {
-                type: curProp.type,
-                val: curProp.val
-            }
+            result[propName] = curProp
         }
         return result
     }, {})
