@@ -23,14 +23,18 @@
                     </span>
                     <span class="seperate-line">|</span>
                     <div id="editPageSwitchPage" class="select-page-box">
-                        <bk-select ext-cls="select-page" ext-popover-cls="select-page-dropdown"
+                        <bk-select
+                            ext-cls="select-page"
+                            ext-popover-cls="select-page-dropdown"
                             ref="pageSelect"
-                            v-model="pageDetail.id"
+                            :value="pageDetail.id"
                             :clearable="false"
                             :searchable="true"
-                            @selected="changeProjectPage">
+                            @change="handlePageChange">
                             <div slot="trigger">
-                                <div class="name-content" :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
+                                <div
+                                    class="name-content"
+                                    :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
                                     {{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span>
                                 </div>
                                 <i class="bk-select-angle bk-icon icon-angle-down"></i>
@@ -55,17 +59,48 @@
             </div>
             <div class="function-and-tool">
                 <div id="toolActionBox" class="function-wrapper tool-actions">
-                    <ul class="function-and-tool-list" v-for="(group, index) in toolsGroupList"
-                        :key="index">
-                        <li class="tool-item" v-for="(item, innerIndex) in group"
-                            :key="innerIndex"
-                            :class="{ active: isToolItemActive(item) }"
-                            v-bk-tooltips="{ placement: 'bottom', content: item.tips, disabled: !item.tips }"
-                            @click="item.func">
-                            <template>
-                                <i :class="item.icon"></i>
-                                <span>{{item.text}}</span>
-                            </template>
+                    <ul class="function-and-tool-list">
+                        <li
+                            class="tool-item"
+                            :class="{ active: contentTab === 'edit' }"
+                            @click="handleContentTabChange('edit')">
+                            <i class="bk-drag-icon bk-drag-huabu" />
+                            <span>画布</span>
+                        </li>
+                        <li
+                            class="tool-item"
+                            :class="{ active: contentTab === 'vueCode' }"
+                            @click="handleContentTabChange('vueCode')">
+                            <i class="bk-drag-icon bk-drag-yuanma" />
+                            <span>源码</span>
+                        </li>
+                        <li
+                            class="tool-item"
+                            :class="{ active: contentTab === 'jsonSource' }"
+                            @click="handleContentTabChange('jsonSource')">
+                            <i class="bk-drag-icon bk-drag-json" />
+                            <span>JSON</span>
+                        </li>
+                        <li
+                            class="tool-item"
+                            :class="{ active: contentTab === 'pageFunction' }"
+                            @click="handleContentTabChange('pageFunction')">
+                            <i class="bk-drag-icon bk-drag-yemianhanshu" />
+                            <span>页面函数</span>
+                        </li>
+                        <li
+                            class="tool-item"
+                            :class="{ active: contentTab === 'pageVariable' }"
+                            @click="handleContentTabChange('pageVariable')">
+                            <i class="bk-drag-icon bk-drag-variable-manage" />
+                            <span>页面变量</span>
+                        </li>
+                        <li
+                            class="tool-item"
+                            :class="{ active: contentTab === 'setting' }"
+                            @click="handleContentTabChange('setting')">
+                            <i class="bk-drag-icon bk-drag-set" />
+                            <span>页面设置</span>
                         </li>
                     </ul>
                     <!-- 保存、预览、快捷键等tool单独抽离 -->
@@ -83,9 +118,9 @@
         <div class="main-container">
             <material-panel @onCustomComponentLoaded="handleCustomComponentLoaded" />
             <operation-area
-                :operaion="actionSelected"
+                :operaion="contentTab"
                 :project="projectDetail"
-                :type="actionSelected" />
+                :type="contentTab" />
             <modifier-panel />
         </div>
         <bk-dialog v-model="delComponentConf.visiable"
@@ -114,9 +149,12 @@
 <script>
     import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
-    import html2canvas from 'html2canvas'
-    import { uuid, walkGrid, circleJSON } from '@/common/util'
-    import { getCurUsedFuncs, replaceFuncKeyword } from '@/components/methods/function-helper.js'
+    import LC from '@/element-materials/core'
+    import {
+        // uuid,
+        // walkGrid,
+        circleJSON
+    } from '@/common/util'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
     import ExtraLinks from '@/components/ui/extra-links'
@@ -124,8 +162,6 @@
     import SaveTemplateDialog from '@/components/template/save-template-dialog'
     import PageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
     import safeStringify from '@/common/json-safe-stringify'
-    import previewErrorImg from '@/images/preview-error.png'
-    import LC from '@/element-materials/core'
     import MaterialPanel from './components/material-panel'
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
@@ -151,28 +187,17 @@
                 wholeComponentList: [],
                 customComponentList: [],
                 projectDetail: {},
-                actionSelected: 'edit',
                 delComponentConf: {
                     visiable: false,
                     headerPosition: 'left',
                     item: {},
                     isCustomOffline: false
                 },
-                startDragPosition: {},
                 contentLoading: true,
                 isCustomComponentLoading: true,
                 isSaving: false,
                 action: 'create',
-                toolsGroupList: [
-                    [
-                        { icon: 'bk-drag-icon bk-drag-huabu', key: 'edit', text: '画布', func: () => this.handleToolAction('edit') },
-                        { icon: 'bk-drag-icon bk-drag-yuanma', key: 'vueCode', text: '源码', func: () => this.handleToolAction('vueCode') },
-                        { icon: 'bk-drag-icon bk-drag-json', key: 'jsonSource', text: 'Json', func: () => this.handleToolAction('jsonSource') },
-                        { icon: 'bk-drag-icon bk-drag-yemianhanshu', key: 'pageFunction', text: '页面函数', func: () => this.handleToolAction('pageFunction') },
-                        { icon: 'bk-drag-icon bk-drag-variable-manage', key: 'pageVariable', text: '页面变量', func: () => this.handleToolAction('pageVariable') },
-                        { icon: 'bk-drag-icon bk-drag-set', key: 'setting', text: '页面设置', func: () => this.handleToolAction('setting') }
-                    ]
-                ]
+                contentTab: 'edit'
             }
         },
         computed: {
@@ -208,32 +233,16 @@
             
             pageId () {
                 return this.$route.params.pageId || ''
-            },
-
-            targetData: {
-                get () {
-                    console.warn('get Target')
-                    return this.$store.state.drag.targetData
-                },
-                set (value) {
-                    console.warn('set Target')
-                    this.setTargetData(value)
-                }
-            },
-            showNotVisibleMask () {
-                return this.curSelectedComponentData
-                    && this.curSelectedComponentData.interactiveShow === false
-                    && this.interactiveComponents.includes(this.curSelectedComponentData.type)
             }
         },
-        watch: {
-            targetData: {
-                deep: true,
-                handler () {
-                    this.lockStatsuPolling('lock')
-                }
-            }
-        },
+        // watch: {
+        //     targetData: {
+        //         deep: true,
+        //         handler () {
+        //             this.lockStatsuPolling('lock')
+        //         }
+        //     }
+        // },
         async created () {
             this.guideStep = [
                 {
@@ -301,10 +310,6 @@
 
             // 设置权限相关的信息
             this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
-
-            // for test
-            window.test = this.test
-            window.test1 = this.test1
         },
         mounted () {
             window.addEventListener('unload', this.relasePage)
@@ -338,7 +343,9 @@
                 'getAllGroupFuncs'
             ]),
             ...mapActions('variable', ['getAllVariable']),
-            
+            handleContentTabChange (contentTab) {
+                this.contentTab = contentTab
+            },
             /**
              * @desc 自定义组件加载完成
              */
@@ -483,9 +490,6 @@
                     })
                 }
             },
-            isToolItemActive (item) {
-                return item.key === this.actionSelected
-            },
 
             async fetchData () {
                 try {
@@ -517,7 +521,6 @@
                     const content = pageDetail.content
                     if (content) {
                         const targetData = JSON.parse(content)
-                        this.updateTargetData(targetData)
                         pageDetail.content = safeStringify(targetData)
                     }
 
@@ -530,60 +533,6 @@
                 } finally {
                     this.contentLoading = false
                 }
-            },
-
-            /**
-             * 在初始化和切换tab的时候更新画布数据
-             * 将targetdata与其他业务结合
-             */
-            updateTargetData (targetData) {
-                const getVariableVal = (data) => {
-                    function getVariableValue ({ valueType, defaultValueType, defaultValue }) {
-                        let value
-                        if (defaultValueType === 0) {
-                            value = defaultValue.all
-                        }
-                        if (defaultValueType === 1) {
-                            value = defaultValue.stag
-                        }
-                        if ([3, 4].includes(valueType)) value = JSON.parse(value)
-                        if (valueType === 6) value = undefined
-                        return value
-                    }
-
-                    const { val, valType } = data
-                    let variableVal
-
-                    if (valType === 'variable' && val !== '') {
-                        const curVariable = this.variableList.find((variable) => (variable.variableCode === val)) || {}
-                        variableVal = getVariableValue(curVariable)
-                    }
-
-                    return variableVal
-                }
-
-                const callBack = (component) => {
-                    const renderDirectives = component.renderDirectives || []
-                    const renderProps = component.renderProps || {}
-                    // update prop val
-                    Object.keys(renderProps).forEach((key) => {
-                        const renderProp = renderProps[key] || {}
-                        const { payload = {} } = renderProp
-                        const variableData = payload.variableData || {}
-
-                        const data = variableData.val
-                            ? variableData
-                            : renderDirectives.find((dir) => ((dir.type + dir.prop) === (`v-bind${key}`) && ![undefined, ''].includes(dir.val)))
-                        if (data) {
-                            const varVal = getVariableVal(data)
-                            if (varVal !== undefined) {
-                                renderProp.val = varVal
-                            }
-                        }
-                    })
-                }
-
-                targetData.forEach((grid, index) => walkGrid(targetData, grid, callBack, callBack, index))
             },
 
             /**
@@ -650,106 +599,6 @@
                     })
                 }
                 popoverInstance.show()
-            },
-
-            /**
-             * 选中画布中的元素时触发，在画布中的只有 render-grid 和 free-layout 元素
-             * 选中 render-grid 和 free-layout 内部的元素不会触发
-             *
-             * @param {Object} e 事件对象
-             */
-            onCanvasChoose (e) {
-                const evt = e[0]
-                const curChooseComponent = this.targetData[evt.oldIndex]
-                this.startDragPosition = this.$td().getNodePosition(curChooseComponent.componentId)
-
-                let name = ''
-                if (curChooseComponent.type === 'render-grid') {
-                    name = 'render-grid'
-                } else if (curChooseComponent.type === 'free-layout') {
-                    name = 'free-layout'
-                }
-
-                this.setDraggableTargetGroup(Object.assign({}, this.draggableTargetGroup, {
-                    name
-                }))
-            },
-
-            targetAreaEndHandler (e) {
-                // console.error('onEnd11111', e)
-            },
-
-            async handleToolAction (action) {
-                // 点击源码的时候，需要让右侧属性面板消失
-                // 如果停留在源码页面时属性面板不消失，这个时候修改属性会生效，预览的时候就会生效，但是源码并不会随着属性的变化而重新生成
-                // if (['setting', 'vueCode'].includes(action)) {
-                //     const processTargetResult = this.processTargetData()
-                //     if (processTargetResult.errMessage) {
-                //         this.$bkMessage({
-                //             theme: 'error',
-                //             message: processTargetResult.errMessage,
-                //             limit: 1,
-                //             ellipsisLine: 0
-                //         })
-                //         return
-                //     }
-                // }
-                // // 切换回编辑区，对画布数据进行更新
-                // if (action === 'edit' && this.actionSelected !== 'edit') {
-                //     const targetData = JSON.parse(safeStringify(this.targetData || []))
-                //     this.updateTargetData(targetData)
-                //     this.targetData = targetData
-                // }
-                
-                this.actionSelected = action
-            },
-
-            /**
-             * 清空页面已拖拽的元素
-             */
-            async handleClearAll () {
-                const isLock = await this.checkLockStatus('lock')
-                if (isLock) return // 如果被锁，不可清空
-
-                const me = this
-                me.$bkInfo({
-                    title: '确定清空所有组件元素？',
-                    subTitle: '包含的已下架自定义组件将不能再被使用',
-                    confirmFn () {
-                        const mockCurSelectComponentData = {
-                            componentId: 'grid-' + uuid(),
-                            renderKey: uuid(),
-                            name: 'grid',
-                            type: 'render-grid',
-                            tabPanelActive: 'props',
-                            renderProps: {
-                                'margin-horizontal': {
-                                    type: 'number',
-                                    val: 0
-                                },
-                                'margin-vertical': {
-                                    type: 'number',
-                                    val: 0
-                                }
-                            },
-                            renderStyles: {},
-                            renderEvents: {},
-                            renderDirectives: [],
-                            renderSlots: {
-                                default: {
-                                    type: 'column',
-                                    val: [{ 'span': 1, 'children': [], 'width': '100%' }]
-                                }
-                            }
-                        }
-                        const pushData = {
-                            oldTargetData: me.targetData,
-                            newTargetData: [mockCurSelectComponentData],
-                            type: 'clear'
-                        }
-                        me.pushTargetHistory(pushData)
-                    }
-                })
             },
 
             /**
@@ -850,316 +699,6 @@
                 }, 'preview')
             },
 
-            async handleSave (callBack, from) {
-                this.processTargetData()
-                // console.log('from save == ', LC.getRoot())
-                // const isLock = await this.checkLockStatus('lock')
-                // if (isLock) return // 如果被锁，不可保存
-
-                // if (this.isSaving) {
-                //     return
-                // }
-
-                // const processTargetDataResult = this.processTargetData()
-                // if (processTargetDataResult.errMessage) {
-                //     this.$bkMessage({
-                //         theme: 'error',
-                //         message: processTargetDataResult.errMessage,
-                //         ellipsisLine: 0
-                //     })
-                //     return
-                // }
-                // this.isSaving = true
-
-                // const { curFuncIds, draggedCustomComponentList, usedVariableMap } = processTargetDataResult
-
-                // try {
-                //     const customCompData = draggedCustomComponentList.map(item => ({
-                //         compId: item.meta.id,
-                //         versionId: item.meta.versionId
-                //     }))
-                //     const functionData = [...new Set(curFuncIds.filter(item => item))]
-                //     const res = await this.$store.dispatch('page/update', {
-                //         data: {
-                //             from,
-                //             projectId: this.projectId,
-                //             pageCode: this.pageDetail.pageCode,
-                //             pageData: {
-                //                 id: parseInt(this.$route.params.pageId),
-                //                 content: circleJSON(this.targetData || [])
-                //             },
-                //             customCompData,
-                //             functionData,
-                //             templateData: this.processTemplateData(),
-                //             usedVariableMap
-                //         }
-                //     })
-                //     this.savePreviewImg()
-                //     const projectId = this.$route.params.projectId || 1
-                //     this.getAllGroupFuncs(projectId)
-                //     res && this.$bkMessage({
-                //         theme: 'success',
-                //         message: '保存成功',
-                //         limit: 1
-                //     })
-                //     if (typeof callBack === 'function') callBack()
-                // } catch (err) {
-                //     console.log(err)
-                // } finally {
-                //     this.isSaving = false
-                // }
-            },
-
-            /**
-             * 遍历一次 targetData
-             * 1. 找出使用的函数 id
-             * 2. 校验 targetData
-             * 3. more
-             */
-            processTargetData () {
-                const targetData = LC.getRoot().children
-
-                console.log('from processTargetData = ', targetData, this.variableList, this.funcGroups)
-
-                const customComponentMap = {}
-                const relatedVariableCodeMap = {}
-                const relatedMethodCodeMap = {}
-                const recTree = node => {
-                    if (!node) {
-                        return
-                    }
-                    if (node.isCustomComponent) {
-                        customComponentMap[node.type] = true
-                    }
-                    Object.keys(node.method).forEach(methodCode => {
-                        relatedMethodCodeMap[methodCode] = true
-                    })
-                    Object.keys(node.variable).forEach(variableStyle => {
-                        const variableCode = node.variable[variableStyle].val
-                        if (!relatedVariableCodeMap[variableCode]) {
-                            relatedVariableCodeMap[variableCode] = []
-                        }
-                        relatedVariableCodeMap[variableCode].push(Object.assign({
-                            componentId: node.componentId
-                        }, node.variable[variableStyle]))
-                    })
-                    node.children.forEach(childNode => recTree(childNode))
-                }
-                recTree(LC.getRoot())
-
-                const errorStack = []
-                const projectVarialbeMap = this.variableList.reduce((result, variableData) => {
-                    result[variableData.variableCode] = variableData
-                    return result
-                }, {})
-                const projectMethodMap = this.funcGroups.reduce((result, methodGroup) => {
-                    methodGroup.functionList.forEach(method => {
-                        result[method.funcCode] = method
-                    })
-                    return result
-                }, {})
-
-                // 检测 varaible 有效性
-                Object.keys(relatedVariableCodeMap).forEach(variableCode => {
-                    if (!projectVarialbeMap.hasOwnProperty(variableCode)) {
-                        errorStack.push(`组件【${relatedVariableCodeMap[variableCode].componentId}】使用的变量【${variableCode}】不存在，请修改后再试`)
-                    }
-                })
-                // 检测 method 有效性
-                Object.keys(relatedMethodCodeMap).forEach(methodCode => {
-                    if (!projectMethodMap.hasOwnProperty(methodCode)) {
-                        errorStack.push(`函数【${methodCode}】未找到，请修改后再试`)
-                    }
-                })
-                // 检测 variable 和 method 重名
-                Object.keys(relatedVariableCodeMap).forEach(variableCode => {
-                    if (relatedMethodCodeMap[variableCode]) {
-                        errorStack.push(`页面中使用了函数【${variableCode}】，与使用的变量【${variableCode}】的标识存在冲突，请修改后再试`)
-                    }
-                })
-                // 错误提示
-                if (errorStack.length > 0) {
-                    this.messageError(errorStack.join('\n'))
-                    return
-                }
-
-                // 转换 variableCode、methodCode 到具体的资源 id
-                const relateVariableIdMap = Object.keys(relatedVariableCodeMap).reduce((result, variableCode) => {
-                    result[projectVarialbeMap[variableCode].id] = relatedVariableCodeMap[variableCode]
-                    return result
-                }, {})
-                const releateMethodIdList = Object.keys(relatedMethodCodeMap).reduce((result, methodCode) => {
-                    result.push(projectMethodMap[methodCode].id)
-                    return result
-                }, [])
-
-                console.log('print processTargetData result = ', customComponentMap, releateMethodIdList, relateVariableIdMap)
-            },
-            processTargetData___bak () {
-                // 记录已使用的变量
-                const usedVariableMap = {}
-                function addUsedVariable (id, dir) {
-                    const { modifiers, prop, type, val, valType, slot } = dir
-                    function generateUseInfo (variableId) {
-                        const useInfo = { type, componentId: id, prop, modifiers, val, slot }
-                        const useInfos = (usedVariableMap[variableId] || (usedVariableMap[variableId] = [], usedVariableMap[variableId]))
-                        useInfos.push(useInfo)
-                    }
-                    if (val !== '' && !(val.startsWith('form') && val.indexOf('.') > 0) && valType === 'variable') {
-                        const variable = this.variableList.find((variable) => (variable.variableCode === val))
-                        if (!variable) {
-                            errMessage = `组件【${id}】使用的变量【${val}】不存在，请修改后再试`
-                        } else {
-                            generateUseInfo(variable.id)
-                        }
-                    }
-                    if (val !== '' && valType === 'expression') {
-                        this.variableList.forEach(({ variableCode, id }) => {
-                            if (val.includes(variableCode)) generateUseInfo(id)
-                        })
-                    }
-                }
-                const typeMap = {
-                    array: '[object Array]',
-                    string: '[object String]',
-                    boolean: '[object Boolean]',
-                    number: '[object Number]',
-                    float: '[object Number]'
-                }
-                let errMessage = ''
-                const draggedCustomComponentList = []
-
-                const callBack = (component) => {
-                    const customComp = this.wholeComponentList.find(item => item.type === component.type)
-                    const dragged = draggedCustomComponentList.findIndex(item => item.type === component.type) !== -1
-                    if (customComp && !dragged) {
-                        draggedCustomComponentList.push(customComp)
-                    }
-
-                    const renderProps = component.renderProps || {}
-                    Object.keys(renderProps).forEach((key) => {
-                        const { type, val, payload = {} } = renderProps[key] || {}
-
-                        const corValType = typeMap[type]
-                        if (corValType && corValType !== Object.prototype.toString.apply(val)) {
-                            errMessage = `组件【${component.componentId}】的属性【${key}】，类型和值不匹配，请修改后再试`
-                        }
-                        if (type === 'remote' && key !== 'remoteOptions') {
-                            const hasMethod = payload && payload.methodCode
-                            if (!hasMethod) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为 remote 但未选择远程函数，请修改后再试`
-                        }
-                    })
-
-                    const renderSlots = component.renderSlots || {}
-                    Object.keys(renderSlots).forEach((key) => {
-                        const { type, payload = {} } = renderSlots[key] || {}
-
-                        if (payload.variableData && payload.variableData.val) {
-                            const { val, valType } = payload.variableData
-                            const dir = { slot: key, type: 'slots', val, valType }
-                            addUsedVariable.call(this, component.componentId, dir)
-                        }
-
-                        if (type === 'remote') {
-                            const hasMethod = payload.methodData && payload.methodData.methodCode
-                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${key}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
-                        }
-                    })
-
-                    const renderDirectives = component.renderDirectives || []
-                    renderDirectives.forEach((dir) => {
-                        addUsedVariable.call(this, component.componentId, dir)
-                    })
-                }
-                this.targetData.forEach((grid, index) => walkGrid(this.targetData, grid, callBack, callBack, index))
-
-                // 检查函数内容
-                const [usedFunctionMap, message] = getCurUsedFuncs()
-                if (message) errMessage = message
-                const curFuncIds = Object.keys(usedFunctionMap)
-                curFuncIds.forEach((key) => {
-                    const { funcName, funcBody, funcCode } = usedFunctionMap[key]
-                    replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
-                        if (dirKey) {
-                            const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
-                            if (!curDir) {
-                                errMessage = `页面中使用了函数【${funcName}】，该函数使用的变量【${dirKey}】不存在，请修改后再试`
-                            }
-                        }
-                    })
-                    // 使用到的函数名和变量名不能重复
-                    Object.keys(usedVariableMap).forEach((id) => {
-                        const useInfos = usedVariableMap[id]
-                        const variableCode = (useInfos[0] || {}).val
-                        if (variableCode === funcCode) {
-                            errMessage = `页面中使用了函数【${funcCode}】，与使用的变量【${variableCode}】的标识存在冲突，请修改后再试`
-                        }
-                    })
-                })
-                return {
-                    curFuncIds,
-                    errMessage,
-                    draggedCustomComponentList,
-                    usedVariableMap
-                }
-            },
-
-            /**
-             * 遍历一次 templateData
-             * 校验 templateData
-             */
-            processTemplateData () {
-                const {
-                    layoutType,
-                    logo,
-                    siteName,
-                    menuList = [],
-                    topMenuList = [],
-                    renderProps = {}
-                } = this.curTemplateData
-
-                if (layoutType === 'empty') {
-                    return {}
-                } else {
-                    return {
-                        logo,
-                        siteName,
-                        menuList,
-                        topMenuList,
-                        renderProps
-                    }
-                }
-            },
-
-            savePreviewImg () {
-                if (this.actionSelected === 'edit') {
-                    // dom2Img(document.querySelector('.lesscode-editor-layout'), imgData => {
-                    //     this.$store.dispatch('page/update', {
-                    //         data: {
-                    //             projectId: this.projectId,
-                    //             pageCode: this.pageDetail.pageCode,
-                    //             pageData: {
-                    //                 id: parseInt(this.$route.params.pageId),
-                    //                 previewImg: imgData || previewErrorImg
-                    //             }
-                    //         }
-                    //     })
-                    // })
-                    html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
-                        const imgData = canvas.toDataURL('image/png')
-                        this.$store.dispatch('page/update', {
-                            data: {
-                                projectId: this.projectId,
-                                pageData: {
-                                    id: parseInt(this.$route.params.pageId),
-                                    previewImg: imgData || previewErrorImg
-                                }
-                            }
-                        })
-                    })
-                }
-            },
-
             leavePage (routeName) {
                 this.$router.push({
                     name: routeName,
@@ -1170,7 +709,7 @@
                 })
             },
 
-            changeProjectPage (pageId) {
+            handlePageChange (pageId) {
                 const me = this
                 if (pageId === me.pageId) {
                     return
@@ -1210,18 +749,6 @@
                 this.$refs.pageDialog.dialog.formData.pageRoute = ''
                 this.$refs.pageDialog.dialog.visible = true
                 this.$refs.pageSelect.close()
-            },
-
-            test () {
-                console.warn(safeStringify(this.targetData))
-                console.warn(this.targetData)
-            },
-            test1 (data) {
-                if (data) {
-                    this.setTargetData(data)
-                } else {
-                    this.setTargetData([{ 'componentId': 'grid8B6FFD74', 'renderKey': 'grid8B6FFD74', 'name': 'grid', 'type': 'render-grid', 'renderProps': { 'margin-horizontal': { 'type': 'number', 'val': 0 }, 'margin-vertical': { 'type': 'number', 'val': 0 }, 'slots': { 'type': 'column', 'val': [{ 'span': 1, 'children': [{ 'componentId': 'input8B753E61', 'renderKey': 'input8B753E61', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }, { 'componentId': 'input482301F3', 'renderKey': 'input482301F3', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }, { 'componentId': 'inputB0159B6D', 'renderKey': 'inputB0159B6D', 'name': 'input', 'type': 'bk-input', 'renderProps': { 'value': { 'type': 'string', 'val': 'hello world' }, 'type': { 'type': 'string', 'options': ['text', 'textarea', 'password', 'number', 'email', 'url', 'date'], 'val': 'text' }, 'font-size': { 'type': 'string', 'options': ['normal', 'medium', 'large'], 'val': 'normal' }, 'disabled': { 'type': 'boolean', 'val': false }, 'readonly': { 'type': 'boolean', 'val': false }, 'clearable': { 'type': 'boolean', 'val': true }, 'show-controls': { 'type': 'boolean', 'val': true } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }], 'width': '50%' }, { 'span': 1, 'children': [{ 'componentId': 'transfer01163C24', 'renderKey': 'transfer01163C24', 'name': 'transfer', 'type': 'bk-transfer', 'renderProps': { 'display-key': { 'type': 'string', 'val': 'name' }, 'setting-key': { 'type': 'string', 'val': 'id' }, 'sortable': { 'type': 'boolean', 'val': false } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }], 'width': '50%' }] } }, 'renderStyles': {}, 'renderEvents': {}, 'renderDirectives': [] }])
-                }
             }
         }
     }

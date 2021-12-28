@@ -4,6 +4,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import html2canvas from 'html2canvas'
+    import previewErrorImg from '@/images/preview-error.png'
     import LC from '@/element-materials/core'
     import MenuItem from './menu-item'
 
@@ -51,6 +53,20 @@
             ])
         },
         methods: {
+            updatePreviewImg () {
+                html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
+                    const imgData = canvas.toDataURL('image/png')
+                    this.$store.dispatch('page/update', {
+                        data: {
+                            projectId: this.projectId,
+                            pageData: {
+                                id: parseInt(this.$route.params.pageId),
+                                previewImg: imgData || previewErrorImg
+                            }
+                        }
+                    })
+                })
+            },
             async handleSave () {
                 const targetData = LC.getRoot().children
 
@@ -200,6 +216,7 @@
                         templateData
                     }
                 })
+                this.updatePreviewImg()
 
                 this.messageSuccess('保存成功')
 
