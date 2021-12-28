@@ -33,6 +33,7 @@ upload
 temp
 npmTemp
 lib/server/conf/data-base.js
+lib/server/conf/data-source.js
 lib/server/conf/http.js
 lib/server/conf/db-migrate.json
 lib/server/conf/npm.js
