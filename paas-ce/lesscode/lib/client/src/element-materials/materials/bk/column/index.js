@@ -12,6 +12,7 @@
 export default {
     name: 'column',
     type: 'render-column',
+    display: 'none',
     order: 1,
     group: '布局',
     styles: ['padding'],
