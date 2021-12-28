@@ -12,8 +12,7 @@
 <template>
     <div :class="$style['grid']">
         <render-row
-            :ref="componentData.componentId"
-            :style="componentData.style">
+            :ref="componentData.componentId">
             <render-col
                 v-for="(componentItem) in componentData.slot.default"
                 :component-data="componentItem"
@@ -91,6 +90,7 @@
 <style lang="postcss" module>
     .grid{
         position: relative;
+        display: flex;
         /* 如果基础的 slot 可以拖拽需要设置这个屏蔽掉基础组件上面的 pointer-events: none 效果 */
         pointer-events: all;
         .add-column,

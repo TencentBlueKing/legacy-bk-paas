@@ -4,8 +4,9 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import html2canvas from 'html2canvas'
+    import previewErrorImg from '@/images/preview-error.png'
     import LC from '@/element-materials/core'
-    // import { circleJSON } from '@/common/util'
     import MenuItem from './menu-item'
 
     const parseFuncBodyVariable = str => {
@@ -52,6 +53,20 @@
             ])
         },
         methods: {
+            updatePreviewImg () {
+                html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
+                    const imgData = canvas.toDataURL('image/png')
+                    this.$store.dispatch('page/update', {
+                        data: {
+                            projectId: this.projectId,
+                            pageData: {
+                                id: parseInt(this.$route.params.pageId),
+                                previewImg: imgData || previewErrorImg
+                            }
+                        }
+                    })
+                })
+            },
             async handleSave () {
                 const targetData = LC.getRoot().children
 
@@ -65,36 +80,41 @@
                     if (!node) {
                         return
                     }
+                    // 手机页面使用的自定义组件
                     if (node.isCustomComponent) {
                         customComponentMap[node.type] = true
                     }
-                    Object.keys(node.method).forEach(methodStyle => {
-                        relatedMethodCodeMap[node.method[methodStyle].code] = Object.assign({
+                    Object.keys(node.method).forEach(methodPathKey => {
+                        relatedMethodCodeMap[node.method[methodPathKey].code] = Object.assign(node.method[methodPathKey], {
                             componentId: node.componentId
-                        }, node.method[methodStyle])
+                        })
                     })
-                    Object.keys(node.variable).forEach(variableStyle => {
-                        const variableCode = node.variable[variableStyle].val
+                    Object.keys(node.variable).forEach(variablePathKey => {
+                        const variableCode = node.variable[variablePathKey].code
+                        if (!variableCode) {
+                            return
+                        }
+                        // 一个变量可能被一个组件多次使用
                         // 需要记录变量的每一处使用细节
                         if (!relatedVariableCodeMap[variableCode]) {
                             relatedVariableCodeMap[variableCode] = []
                         }
-                        relatedVariableCodeMap[variableCode].push(Object.assign({
+                        relatedVariableCodeMap[variableCode].push(Object.assign(node.variable[variablePathKey], {
                             componentId: node.componentId
-                        }, node.variable[variableStyle]))
+                        }))
                     })
                     node.children.forEach(childNode => recTree(childNode))
                 }
                 // 遍历 node tree 收集组件中 variable、method 的引用信息
                 recTree(LC.getRoot())
 
-                console.log('print fron rect ree == ', relatedVariableCodeMap, relatedMethodCodeMap)
-
                 const errorStack = []
+                // 项目中所有变量，以 variableCode 作为索引 key
                 const projectVarialbeMap = this.variableList.reduce((result, variableData) => {
                     result[variableData.variableCode] = variableData
                     return result
                 }, {})
+                // 项目中所有函数，以 funcCode 作为索引 key
                 const projectMethodMap = this.funcGroups.reduce((result, methodGroup) => {
                     methodGroup.functionList.forEach(methodData => {
                         result[methodData.funcCode] = methodData
@@ -105,7 +125,9 @@
                 // 检测 varaible 有效性
                 Object.keys(relatedVariableCodeMap).forEach(variableCode => {
                     if (!projectVarialbeMap.hasOwnProperty(variableCode)) {
-                        errorStack.push(`组件【${relatedVariableCodeMap[variableCode].componentId}】使用的变量【${variableCode}】不存在`)
+                        relatedVariableCodeMap[variableCode].forEach(record => {
+                            errorStack.push(`组件【${record.componentId}】使用的变量【${variableCode}】不存在`)
+                        })
                     }
                 })
 
@@ -124,6 +146,7 @@
                     const funcBodyContainontainMethodMap = {}
                     const funcBodyContainontainVariableMap = {}
                     const funcbody = projectMethodMap[methodCode].funcBody
+                    // 使用的函数在检测变量时需要解析出 funcbody 引用的变量，并判断变量的有效性
                     Object.assign(funcBodyContainontainMethodMap, parseFuncBodyMethod(funcbody))
                     Object.assign(funcBodyContainontainVariableMap, parseFuncBodyVariable(funcbody))
                     Object.keys(funcBodyContainontainVariableMap).forEach(variableCode => {
@@ -177,22 +200,25 @@
                     renderProps
                 }
 
-                // await this.$store.dispatch('page/update', {
-                //     data: {
-                //         from: '',
-                //         projectId: this.$route.params.projectId,
-                //         pageCode: this.pageDetail.pageCode,
-                //         pageData: {
-                //             id: parseInt(this.$route.params.pageId),
-                //             content: circleJSON(targetData)
-                //         },
-                //         // TODO.
-                //         customCompData: [],
-                //         functionData: releateMethodIdList,
-                //         usedVariableMap: releateMethodIdList,
-                //         templateData
-                //     }
-                // })
+                await this.$store.dispatch('page/update', {
+                    data: {
+                        from: '',
+                        projectId: this.$route.params.projectId,
+                        pageCode: this.pageDetail.pageCode,
+                        pageData: {
+                            id: parseInt(this.$route.params.pageId),
+                            content: JSON.stringify(LC.getRoot().toJSON().renderSlots.default)
+                        },
+                        // TODO.
+                        customCompData: [],
+                        functionData: releateMethodIdList,
+                        usedVariableMap: releateMethodIdList,
+                        templateData
+                    }
+                })
+                this.updatePreviewImg()
+
+                this.messageSuccess('保存成功')
 
                 console.log('print processTargetData result = ', customComponentMap, releateMethodIdList, relateVariableIdMap, templateData)
             }

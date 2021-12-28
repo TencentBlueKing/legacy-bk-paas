@@ -16,16 +16,16 @@ export default {
     icon: 'bk-drag-dialog',
     group: '反馈',
     order: 1,
-    interactiveShow: true,
+    interactiveShow: false,
+    renderStyles: {
+        display: 'inline-block'
+    },
     events: [
         { name: 'confirm', tips: '点击确定按钮时调用该事件函数，暂无事件回调参数' },
         { name: 'cancel', tips: '点击取消按钮时调用该事件函数，主动调用关闭才会触发，通过改变双向绑定的值关闭弹框时不会触发，暂无事件回调参数' },
         { name: 'value-change', tips: '弹框显示状态变化时调用该事件函数，暂无事件回调参数' },
         { name: 'after-leave', tips: '弹框消失的动画结束后调用该事件函数，暂无事件回调参数' }
     ],
-    renderStyles: {
-        display: 'inline-block'
-    },
     directives: [
         {
             type: 'v-model',

@@ -85,12 +85,6 @@
 
     export default {
         name: '',
-        components: {
-            ModifierStyles,
-            ModifierProps,
-            ModifierEvents,
-            ModifierDirectives
-        },
         inheritAttrs: false,
         data () {
             return {
@@ -111,6 +105,7 @@
                 const comMap = {
                     styles: [ModifierStyles],
                     props: [ModifierGird, ModifierForm, ModifierSlots, ModifierProps],
+                    // props: [ModifierGird, ModifierForm, ModifierProps],
                     events: [ModifierEvents],
                     directives: [ModifierDirectives]
                 }

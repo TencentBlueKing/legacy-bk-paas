@@ -5,7 +5,7 @@
 </template>
 <script>
     import Render from '@/components/render/index'
-    import VueCode from '@/components/vue-code'
+    import SourceCode from './components/source-code.vue'
     import PageSetting from './components/page-setting'
     import PageJson from './components/page-json'
     import PageVariable from './components/page-variable'
@@ -34,7 +34,7 @@
             com () {
                 const comMap = {
                     edit: Render,
-                    vueCode: VueCode,
+                    vueCode: SourceCode,
                     pageFunction: PageFunction,
                     setting: PageSetting,
                     jsonSource: PageJson,
@@ -46,4 +46,7 @@
     }
 </script>
 <style lang="postcss">
+    .main-content{
+        min-height: calc(100vh - 120px);
+    }
 </style>

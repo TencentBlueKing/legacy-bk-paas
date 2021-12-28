@@ -42,6 +42,7 @@
         },
         mounted () {
             this.componentData.active()
+            this.componentData.toggleInteractive()
         }
     }
 </script>

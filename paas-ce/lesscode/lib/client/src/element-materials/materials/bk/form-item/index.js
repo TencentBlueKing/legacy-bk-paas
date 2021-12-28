@@ -13,18 +13,12 @@ export default {
     name: 'form-item',
     type: 'widget-form-item',
     displayName: '表单容器',
+    display: 'none',
     icon: 'bk-drag-form',
     group: '表单',
     order: 0,
     styles: [],
-    directives: [
-        {
-            type: 'v-bind',
-            prop: 'model',
-            val: '',
-            defaultVal: {}
-        }
-    ],
+    directives: [],
     props: {
         property: {
             type: 'string',

@@ -29,7 +29,7 @@
     import { getNodeWithClass } from '@/common/util'
     import LC from '@/element-materials/core'
     import { NodeHistory } from '@/element-materials/core/Node-history'
-    import { remove } from '@/element-materials/core/helper/commands'
+    import { remove, removeCallBack } from '@/element-materials/core/helper/commands'
 
     export default {
         components: {
@@ -60,6 +60,11 @@
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
             window.addEventListener('click', this.toggleQuickOperation, true)
+        },
+        beforeDestroy () {
+            window.removeEventListener('keydown', this.quickOperation)
+            window.removeEventListener('keyup', this.toggleQuickOperation)
+            window.removeEventListener('click', this.toggleShowQuickOperation)
         },
         methods: {
             toggleShowQuickOperation (show) {
@@ -177,7 +182,7 @@
             },
 
             showDeleteElement () {
-                remove(LC.getActiveNode())
+                removeCallBack()
             },
 
             backHistory () {

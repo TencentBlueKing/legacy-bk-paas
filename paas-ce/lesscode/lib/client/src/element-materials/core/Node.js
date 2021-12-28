@@ -38,6 +38,7 @@ import {
     findRelatedMethodFromRenderSlot,
     findRelatedMethodFromRenderEvent
 } from './helper/find-related-method'
+import validator from './helper/validator'
 
 import getRoot from './get-root'
 import getMaterial from './get-material'
@@ -50,6 +51,7 @@ export default class Node {
         directives = [],
         slots = {},
         renderStyles = {},
+        renderProps = {},
         interactiveShow = false,
         isComplexComponent = false,
         isCustomComponent = false
@@ -62,7 +64,7 @@ export default class Node {
         this.name = name
         this.type = type
         this.renderStyles = renderStyles
-        this.renderProps = transformProps(props, type)
+        this.renderProps = transformProps(props, renderProps, type)
         this.renderSlots = transformSlots(slots)
         this.renderDirectives = directives
         this.renderEvents = {}
@@ -159,7 +161,7 @@ export default class Node {
      */
     get prop () {
         const props = Object.keys(this.renderProps).reduce((result, propKey) => {
-            result[propKey] = this.renderProps[propKey].val
+            result[propKey] = this.renderProps[propKey].renderValue
             return result
         }, {})
         return Object.seal(props)
@@ -213,16 +215,15 @@ export default class Node {
      * @desc 用户配置相关的错误信息
      * @returns { String }
      */
-    get error () {
-        return 'hello world!'
+    get errorStack () {
+        return validator(this)
     }
     /**
      * @desc 获取节点的 JSON 数据
-     * @param { Boolean } deep 是否深层编辑，false 只返回当前节点的的数据，true 会返回自己节点的数据
      * @returns { Boolean }
      */
-    toJSON (deep = true) {
-        return toJSON(this, deep)
+    toJSON () {
+        return toJSON(this)
     }
     /**
      * @desc 设置节点属性

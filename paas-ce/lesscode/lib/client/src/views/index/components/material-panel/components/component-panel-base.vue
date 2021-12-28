@@ -16,7 +16,10 @@
                 v-show="isShowComponentGroup(group)"
                 :key="groupIndex"
                 :class="getComponentGroupClass(group, groupIndex)">
-                <div class="group-title" :title="group" @click="handleCompGroupFold(group)">
+                <div
+                    class="group-title"
+                    :title="group"
+                    @click="handleCompGroupFold(group)">
                     <i class="bk-drag-icon bk-drag-arrow-down"></i>
                     {{group}}
                 </div>
@@ -36,25 +39,38 @@
                         @choose="onChoose($event, group)"
                         @end="sourceAreaEndHandler">
                         <template v-if="type === 'base' && group !== '图标集合'">
-                            <!-- @mouseenter="handleComponentMouseenter($event, component)" -->
-                            <div
-                                v-for="(component, componentIndex) in componentGroups[group]"
-                                class="component-item"
-                                @dragstart="dragstartHandler"
-                                :class="placeholderElemDisplay"
-                                :key="componentIndex"
-                                :role="component.displayName"
-                                v-show="!searchResult || component.displayName === searchResult.displayName"
-                                v-bk-tooltips="{ content: component.displayName, disabled: !(component.displayName && component.displayName.length > 8) }">
-                                <div class="component-icon">
-                                    <i class="bk-drag-icon" :class="component.icon"></i>
-                                </div>
-                                <div class="component-name" v-if="component.displayName">{{component.displayName}}</div>
-                            </div>
+                            <template v-for="(component, componentIndex) in componentGroups[group]">
+                                <template v-if="component.display !== 'none'">
+                                    <div
+                                        class="component-item"
+                                        @dragstart="dragstartHandler"
+                                        :class="placeholderElemDisplay"
+                                        :key="componentIndex"
+                                        :role="component.displayName"
+                                        v-show="!searchResult || component.displayName === searchResult.displayName"
+                                        v-bk-tooltips="{
+                                            content: component.displayName,
+                                            disabled: !(component.displayName && component.displayName.length > 8)
+                                        }">
+                                        <div class="component-icon">
+                                            <i class="bk-drag-icon" :class="component.icon"></i>
+                                        </div>
+                                        <div
+                                            v-if="component.displayName"
+                                            class="component-name">
+                                            {{component.displayName}}
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
                         </template>
                         <template v-else>
-                            <div class="icon-item" v-for="(component, componentIndex) in componentGroups[group]" @dragstart="dragstartHandler" :key="componentIndex"
-                                v-show="!searchResult || component.name === searchResult.name">
+                            <div
+                                v-show="!searchResult || component.name === searchResult.name"
+                                class="icon-item"
+                                v-for="(component, componentIndex) in componentGroups[group]"
+                                @dragstart="dragstartHandler"
+                                :key="componentIndex">
                                 <bk-icon v-if="type === 'icon'" :type="component.icon"></bk-icon>
                                 <i v-else :class="component.icon"></i>
                             </div>

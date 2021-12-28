@@ -33,9 +33,9 @@
                 </li>
             </ul>
         </template>
-        <div class="no-event" v-else>
+        <!-- <div class="no-event" v-else>
             <span>该组件暂无事件</span>
-        </div>
+        </div> -->
     </section>
 </template>
 
@@ -77,7 +77,9 @@
                     [eventName]: value
                 }
                 this.lastEvents = renderEvents
-                this.currentComponentNode.setRenderEvents(renderEvents)
+                this.currentComponentNode.setRenderEvents({
+                    ...renderEvents
+                })
             }
         }
     }

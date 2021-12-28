@@ -1,21 +1,46 @@
-import _ from 'lodash'
-
-const transformProps = (props, type) => {
+export default function (props, defaultRenderProps = {}, type = '') {
     const renderProps = Object.keys(props).reduce((result, propName) => {
-        if (props[propName].hasOwnProperty('val') && props[propName].val !== '') {
-            result[propName] = Object.assign(_.cloneDeep(props[propName]), {
-                type: Array.isArray(props[propName].type) ? props[propName].type[0] : props[propName].type
-            })
+        if (props[propName].hasOwnProperty('val')
+            && props[propName].val !== '') {
+            const {
+                type,
+                val,
+                payload = {}
+            } = props[propName]
+            result[propName] = {
+                format: 'value',
+                code: val,
+                renderValue: val,
+                valueType: Array.isArray(type) ? type[0] : type,
+                payload
+            }
         }
         return result
     }, {})
+    
+    Object.keys(defaultRenderProps).forEach(propName => {
+        const {
+            type,
+            val,
+            payload = {}
+        } = defaultRenderProps[propName]
+
+        renderProps[propName] = {
+            format: 'value',
+            code: val,
+            valueType: type,
+            payload
+        }
+    })
     if (['bk-dialog', 'bk-sideslider'].includes(type)) {
         renderProps.transfer = {
-            type: 'boolean',
-            val: false
+            type: 'v-bind',
+            prop: 'transfer',
+            format: 'value',
+            code: false,
+            valueType: 'boolean'
         }
     }
+
     return renderProps
 }
-
-export default transformProps

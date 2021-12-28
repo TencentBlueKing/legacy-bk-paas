@@ -13,10 +13,8 @@
     <div class="modifier-prop">
         <variable-select
             :show="variableSelectEnable"
-            :value="defaultRelatedVariable.val"
-            :val-type="defaultRelatedVariable.valType"
-            :available-types="renderComponentList.map(x => x.valueType)"
-            :disable-variable-type="disableVariableType"
+            :data="variableSelectData"
+            :value="formData"
             @change="handleVariableSelectChange">
             <template v-slot:title>
                 <div class="prop-name">
@@ -51,7 +49,7 @@
                             :payload="propTypeValueMemo[selectValueType].payload"
                             :remote-validate="describe.remoteValidate"
                             :key="`${renderCom.type}_${index}`"
-                            :change="handleUpdate" />
+                            :change="handleValueChange" />
                     </template>
                 </template>
             </div>
@@ -59,7 +57,6 @@
     </div>
 </template>
 <script>
-    import _ from 'lodash'
     import { transformTipsWidth } from '@/common/util'
     import safeStringify from '@/common/json-safe-stringify'
     import variableSelect from '@/components/variable/variable-select'
@@ -137,16 +134,12 @@
             lastValue: {
                 type: [Number, String, Boolean, Object, Array],
                 default: () => ({})
-            },
-            // 组件的执行配置
-            lastDirectives: {
-                type: Array,
-                default: () => ([])
             }
         },
         data () {
             return {
-                selectValueType: ''
+                selectValueType: '',
+                formData: {}
             }
         },
         computed: {
@@ -269,22 +262,6 @@
                 } : Object.assign(tip, { disabled, interactive: false })
             },
             /**
-             * @desc 从 renderDirectives 中解析 prop 关联的变量
-             * @returns { Object }
-             */
-            defaultRelatedVariable () {
-                const relateDirective = this.lastDirectives.find(({ type, prop }) => `${type}${prop}` === `v-bind${this.name}`)
-                
-                if (relateDirective) {
-                    return relateDirective
-                }
-                    
-                return {
-                    val: '',
-                    valType: 'value'
-                }
-            },
-            /**
              * @desc type 支持 remote 类型的不支持配置变量
              * @returns { Boolean }
              */
@@ -293,27 +270,112 @@
             }
         },
         created () {
-            // 记录每个 prop type 的用户编辑值
-            this.propTypeValueMemo = {}
+            const {
+                type,
+                val
+            } = this.describe
+            const defaultValue = val !== undefined ? val : getDefaultValueWithType(type)
+            const includesValueType = Array.isArray(type) ? type : [type]
+
+            // 构造 variable-select 的配置
+            this.variableSelectData = {
+                type: 'v-bind',
+                prop: this.name,
+                format: 'value',
+                includesFormat: ['value', 'variable', 'expression'],
+                code: defaultValue,
+                includesValueType: includesValueType
+            }
+
+            // prop 的初始值
+            this.formData = Object.freeze({
+                format: 'value',
+                code: defaultValue,
+                valueType: includesValueType[0],
+                renderValue: defaultValue,
+                payload: this.lastValue.payload || {}
+            })
             
-            if (this.lastValue && this.lastValue.type) {
-                // 用户配置过该 prop ，使用用户的配置项（优先级最高）
-                this.selectValueType = this.lastValue.type
-                this.propTypeValueMemo[this.selectValueType] = {
-                    val: this.lastValue.val,
-                    payload: this.lastValue.payload || {}
-                }
-            } else {
-                // 默认选中第一个属性 type
-                const configType = this.describe.type
-                this.selectValueType = Array.isArray(configType) ? configType[0] : configType
-                this.propTypeValueMemo[this.selectValueType] = {
-                    val: this.describe.hasOwnProperty('val') ? this.describe.val : '',
-                    payload: this.describe.payload || {}
+            // 编辑状态缓存
+            this.propTypeValueMemo = {
+                [this.formData.valueType]: {
+                    val: this.formData.renderValue,
+                    payload: this.formData.payload
                 }
             }
+
+            if (this.lastValue && this.lastValue.type) {
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    format: this.lastValue.format,
+                    code: this.lastValue.code,
+                    valueType: this.lastValue.valueType
+                })
+                // TODO. format 为变量的时候时是否需要去获取变量的默认值
+                if (this.formData.format === 'value') {
+                    this.propTypeValueMemo[this.formData.valueType] = {
+                        val: this.lastValue.code,
+                        payload: this.lastValue.payload || {}
+                    }
+                } else {
+                    this.propTypeValueMemo[this.formData.valueType] = {
+                        val: defaultValue,
+                        payload: this.lastValue.payload || {}
+                    }
+                }
+            }
+            this.selectValueType = this.formData.valueType
         },
         methods: {
+            triggerChange () {
+                // 缓存用户本地编辑值
+                this.propTypeValueMemo[this.formData.valueType] = {
+                    val: this.formData.code,
+                    payload: this.formData.payload
+                }
+
+                this.$emit('on-change', this.name, {
+                    ...this.formData
+                })
+            },
+            /**
+             * @desc 变量切换
+             * @param { Object } variableSelectData
+             */
+            handleVariableSelectChange (variableSelectData) {
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    format: variableSelectData.format,
+                    code: variableSelectData.code,
+                    renderValue: variableSelectData.renderValue
+                })
+                this.triggerChange()
+            },
+            /**
+             * @desc prop 值得类型切换
+             * @param { String } valueType
+             */
+            handlePropValueTypeChange (valueType) {
+                this.selectValueType = valueType
+                let code = null
+                let payload = {}
+                if (this.propTypeValueMemo.hasOwnProperty(valueType)) {
+                    code = this.propTypeValueMemo[valueType].val
+                    payload = this.propTypeValueMemo[valueType].payload
+                } else {
+                    code = getDefaultValueWithType(valueType)
+                }
+                
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    code,
+                    payload,
+                    valueType,
+                    renderValue: code
+                })
+                
+                this.triggerChange()
+            },
             /**
              * @desc 更新 prop 的配置
              * @param { String } name
@@ -321,79 +383,24 @@
              * @param { String } type
              * @param { Object } payload prop 配置附带的额外信息(eq: type 为 remote 时接口函数相关的配置)
              */
-            handleUpdate (name, value, type, payload = {}) {
+            handleValueChange (name, value, type, payload = {}) {
                 try {
                     /** 设置了staticValue的属性，在画布中不需要更新其真实值，保持staticValue不变 */
                     const val = Object.hasOwnProperty.call(this.describe, 'staticValue')
                         ? this.describe.staticValue
                         : getRealValue(type, value)
-
-                    // 缓存用户本地编辑值
-                    this.propTypeValueMemo[type] = {
-                        val,
-                        payload
-                    }
-                    // 应用 prop 配置
-                    this.$emit('on-change', name, {
-                        type,
-                        val,
+                    
+                    this.formData = Object.freeze({
+                        ...this.formData,
+                        code: val,
                         payload,
-                        attrs: this.describe.attrs || []
+                        renderValue: val
                     })
+                    this.triggerChange()
                 } catch {
                     this.$bkMessage({
                         theme: 'error',
                         message: `属性【${name}】的值设置不正确`
-                    })
-                }
-            },
-            /**
-             * @desc prop 值得类型切换
-             * @param { String } type
-             */
-            handlePropValueTypeChange (type) {
-                this.selectValueType = type
-                let defaultValue = null
-                let payload = {}
-                if (this.propTypeValueMemo.hasOwnProperty(type)) {
-                    defaultValue = this.propTypeValueMemo[type].val
-                    payload = this.propTypeValueMemo[type].payload
-                } else {
-                    defaultValue = getDefaultValueWithType(type)
-                }
-                this.handleUpdate(this.name, defaultValue, type, payload)
-            },
-            /**
-             * @desc 变量切换
-             * @param { Object } variableData
-             */
-            handleVariableSelectChange (variableData) {
-                if (variableData.valueType === 'value') {
-                    // 为值类型时
-
-                    // prop 值的 type 默认设置为第一个
-                    const type = this.renderComponentList[0].type
-                    this.handlePropValueTypeChange(type)
-                } else {
-                    // 为变量、表达式类型时
-
-                    // 转换 prop 的变量配置为 renderDirectives
-                    const newDirective = {
-                        type: 'v-bind',
-                        prop: this.name,
-                        val: variableData.val,
-                        valType: variableData.valType,
-                        modifiers: this.describe.modifiers
-                    }
-                    const renderDirectives = _.cloneDeep(this.lastDirectives)
-                    const index = renderDirectives.findIndex(({ type, prop }) => `${type}${prop}` === `v-bind${this.name}`)
-                    if (index > -1) {
-                        renderDirectives.splice(index, 1, newDirective)
-                    } else {
-                        renderDirectives.push(newDirective)
-                    }
-                    this.$emit('batch-update', {
-                        renderDirectives
                     })
                 }
             }
@@ -435,9 +442,6 @@
         }
     }
     .modifier-prop {
-        display: flex;
-        align-items: flex-start;
-        flex-direction: column;
         margin: 0 10px;
         .prop-name {
             display: flex;

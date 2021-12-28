@@ -13,7 +13,7 @@ let isClone = false
  * @returns { Node }
  */
 const createNodeFromData = (data) => {
-    const newNode = createNode(data.type)
+    const newNode = createNode(data.type === 'img' ? 'bk-image' : data.type)
     newNode.tabPanelActive = data.tabPanelActive || 'props'
     if (!isClone) {
         newNode.componentId = data.componentId
@@ -44,8 +44,10 @@ const createNodeFromData = (data) => {
  * @param { String } slot
  */
 const traverse = (parentNode, childDataList, slot) => {
+    // console.log('asdadasdasd == = ', parentNode, childDataList, slot)
     childDataList.forEach(childData => {
         const childNode = createNodeFromData(childData)
+        
         if (childNode.layoutType) {
             // 布局类型的组件
             // slot 的值类型 Array
@@ -66,7 +68,6 @@ const traverse = (parentNode, childDataList, slot) => {
         } else {
             childNode.renderSlots = childData.renderSlots || {}
         }
-        
         if (parentNode.layoutType) {
             parentNode.appendChild(childNode, slot)
         } else if (parentNode.layoutSlotType[slot]) {
@@ -106,8 +107,11 @@ const tansform = (parentNode, data) => {
                         },
                         renderProps: {
                             span: {
-                                type: 'number',
-                                val: columnItem.span || 1
+                                format: 'value',
+                                code: columnItem.span || 1,
+                                valueType: 'number',
+                                payload: {},
+                                renderValue: columnItem.span || 1
                             }
                         },
                         renderSlots: {
@@ -145,7 +149,7 @@ const tansform = (parentNode, data) => {
                         interactiveShow: false,
                         isComplexComponent: false
                     }
-                    console.log('from print form item == ', formItemData)
+                    // console.log('from print form item == ', formItemData)
                     curDataNode.renderSlots.default.push(formItemData)
                 })
             }
@@ -176,29 +180,116 @@ const tansform = (parentNode, data) => {
                 footer: tansform(curDataNode, [renderSlots.footer.val])[0]
             }
         }
+
+        // 转换 renderStyles
         if (['render-grid', 'free-layout'].includes(curDataNode.type)) {
             if (index < data.length - 1) {
                 curDataNode.renderStyles = {
-                    ...curDataNode.renderStyles,
-                    'margin-bottom': '10px'
+                    marginBottom: '10px',
+                    ...curDataNode.renderStyles
                 }
             }
         } else {
             if (parentNode.type === 'render-grid') {
                 curDataNode.renderStyles = {
-                    ...curDataNode.renderStyles,
-                    'margin': '5px'
+                    marginTop: '5px',
+                    marginRight: '5px',
+                    marginBottom: '5px',
+                    marginLeft: '5px',
+                    ...curDataNode.renderStyles
                 }
             }
         }
         if (curDataNode.type === 'bk-button' && parentNode.type === 'widget-form') {
             curDataNode.renderStyles = {
+                marginLeft: index > 0 ? '10px' : '',
                 ...curDataNode.renderStyles,
                 display: 'inline-block',
-                margin: '',
-                marginLeft: index > 0 ? '10px' : ''
+                margin: ''
             }
         }
+
+        // 转换 renderProps
+        const origanlRenderProps = curDataNode.renderProps || {}
+        curDataNode.renderProps = Object.keys(origanlRenderProps).reduce((result, propName) => {
+            const prop = origanlRenderProps[propName]
+            result[propName] = {
+                format: 'value',
+                code: prop.val,
+                payload: prop.payload || {},
+                valueType: prop.type,
+                renderValue: prop.val
+            }
+            return result
+        }, {})
+        // prop 还需要解析 renderDirectives 中 v-bind 的关联数据
+        ;(curDataNode.renderDirectives || []).forEach(directive => {
+            if (directive.type === 'v-bind' && curDataNode.renderProps[directive.prop]) {
+                const renderProp = origanlRenderProps[directive.prop]
+                curDataNode.renderProps[directive.prop] = {
+                    format: directive.valType,
+                    code: directive.val,
+                    payload: {},
+                    valueType: renderProp.type,
+                    renderValue: renderProp.val
+                }
+            }
+        })
+
+        // 转换 renderDirectives
+        curDataNode.renderDirectives = (curDataNode.renderDirectives || []).reduce((result, directive) => {
+            const {
+                type,
+                prop = '',
+                val,
+                valType = 'value'
+            } = directive
+            if (type !== 'v-bind') {
+                result.push({
+                    type,
+                    prop,
+                    format: valType,
+                    code: val
+                })
+            }
+            return result
+        }, [])
+
+        // 非布局类型的组件需要转换 renderSlots
+        if (![
+            'render-grid',
+            'free-layout',
+            'widget-form',
+            'widget-form-item',
+            'bk-sideslider',
+            'bk-dialog',
+            'bk-card'
+        ].includes(curDataNode.type)) {
+            curDataNode.renderSlots = Object.keys(curDataNode.renderSlots || {}).reduce((result, slotName) => {
+                const slotData = curDataNode.renderSlots[slotName]
+                let format = 'value'
+                let code = slotData.val
+                const component = slotData.name
+                const valueType = slotData.type
+                const payload = slotData.payload || {}
+                if (slotData.payload
+                     && slotData.payload.variableData
+                      && slotData.payload.variableData.valType) {
+                    format = slotData.payload.variableData.valType
+                    code = slotData.payload.variableData.val
+                }
+                result[slotName] = {
+                    format,
+                    component,
+                    code,
+                    payload,
+                    valueType,
+                    renderValue: code
+                }
+                return result
+            }, {})
+        }
+        
         return curDataNode
     })
 }
@@ -229,6 +320,7 @@ const checkVersion = (data) => {
 }
 
 export default function (data) {
+    console.log('from parser data == ', JSON.parse(JSON.stringify(data)))
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
@@ -239,13 +331,14 @@ export default function (data) {
     root.setRenderSlots([])
     try {
         root.renderSlots.default = []
-        if (version === 'v0') {
+        if (version === 'v0' || data.length < 1) {
             root.appendChild(create('render-grid'))
         } else {
             traverse(root, versionData, 'default')
         }
         triggerEventListener('ready')
-    } catch {
+    } catch (error) {
+        console.error(error)
         triggerEventListener('error')
     }
 }

@@ -153,6 +153,7 @@
              */
             putCheck (target, source) {
                 // 画布区域内部拖动
+                console.log('from render putCheckputCheckputCheckputCheckputCheckputCheck = ', getDragTargetGroup())
                 if (getDragTargetGroup() === 'layout') {
                     return true
                 }
@@ -160,7 +161,10 @@
                 const {
                     group
                 } = source.options
-                if (['layout', 'interactive'].includes(group.name)) {
+                if ([
+                    'layout',
+                    'interactive'
+                ].includes(group.name)) {
                     return true
                 }
                 return false

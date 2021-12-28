@@ -17,16 +17,11 @@
                     v-if="item.type !== 'hidden'"
                     :describe="item"
                     :last-value="lastProps[key]"
-                    :last-directives="lastDirectives"
                     :name="key"
                     :key="key"
-                    @on-change="handleChange"
-                    @batch-update="batchUpdate" />
+                    @on-change="handleChange" />
             </template>
         </template>
-        <div class="no-prop" v-else>
-            <span>该组件暂无属性</span>
-        </div>
     </div>
 </template>
 <script>
@@ -42,8 +37,7 @@
         },
         data () {
             return {
-                propsConfig: {},
-                lastDirectives: []
+                propsConfig: {}
             }
         },
         computed: {
@@ -64,51 +58,37 @@
             if (this.currentComponentNode) {
                 const {
                     material,
-                    renderProps,
-                    renderDirectives
+                    renderProps
                 } = this.currentComponentNode
                 this.propsConfig = Object.freeze(material.props)
                 this.lastProps = Object.assign({}, renderProps)
-                this.lastDirectives = Object.freeze(_.cloneDeep(renderDirectives))
                 this.renderProps = _.cloneDeep(renderProps)
             }
         },
         methods: {
             // 针对chart类型，将动态返回的remoteOptions与options合并
             updateChartOptions (res) {
-                if (this.renderProps['options']
-                    && this.renderProps['options'].val
-                    && typeof this.renderProps['options'].val === 'object') {
-                    const options = Object.assign({}, this.renderProps['options'].val, res)
-                    this.renderProps['options'] = {
-                        ...this.renderProps['options'],
-                        val: options
-                    }
-                    this.renderProps['options'].val = options
-                    this.batchUpdate({
-                        renderProps: this.renderProps
-                    })
-                }
+                // if (this.renderProps['options']
+                //     && this.renderProps['options'].val
+                //     && typeof this.renderProps['options'].val === 'object') {
+                //     const options = Object.assign({}, this.renderProps['options'].val, res)
+                //     this.renderProps['options'] = {
+                //         ...this.renderProps['options'],
+                //         val: options
+                //     }
+                //     this.renderProps['options'].val = options
+                //     this.batchUpdate({
+                //         renderProps: this.renderProps
+                //     })
+                // }
             },
-            handleChange (key, value = {}) {
-                this.renderProps[key] = value
-                this.batchUpdate({
-                    renderProps: this.renderProps
+            handleChange: _.throttle(function (propName, propData) {
+                this.lastProps[propName] = propData
+                this.currentComponentNode.setRenderProps({
+                    ...this.lastProps,
+                    [propName]: propData
                 })
-            },
-            /**
-             * @desc 更新 renderProps
-             * @param { Object } { renderProps, renderDirectives }
-             */
-            batchUpdate ({ renderProps, renderDirectives }) {
-                if (renderProps) {
-                    this.currentComponentNode.setRenderProps(renderProps)
-                }
-                if (renderDirectives) {
-                    this.lastDirectives = Object.freeze(renderDirectives)
-                    this.currentComponentNode.setRenderDirectives(renderDirectives)
-                }
-            }
+            }, 60)
         }
     }
 </script>
