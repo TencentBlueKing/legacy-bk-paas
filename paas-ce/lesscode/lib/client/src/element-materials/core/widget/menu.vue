@@ -15,8 +15,8 @@
 <script>
     import getActiveNode from '../get-active-node'
     import {
-        remove,
-        cleayLayout
+        removeCallBack,
+        popClearLayout
     } from '../helper/commands'
 
     export default {
@@ -40,17 +40,17 @@
             this.activeNode = getActiveNode()
             if (this.activeNode.type === 'free-layout') {
                 this.menuList = [
-                    { name: '删除自由布局', command: remove },
-                    { name: '清空自由布局', command: cleayLayout }
+                    { name: '删除自由布局', command: removeCallBack },
+                    { name: '清空自由布局', command: popClearLayout }
                 ]
             } else if (this.activeNode.type === 'render-grid') {
                 this.menuList = [
-                    { name: '删除栅格布局', command: remove },
-                    { name: '清空栅格布局', command: cleayLayout }
+                    { name: '删除栅格布局', command: removeCallBack },
+                    { name: '清空栅格布局', command: popClearLayout }
                 ]
             } else {
                 this.menuList = [
-                    { name: '删除', command: remove }
+                    { name: '删除', command: removeCallBack }
                 ]
             }
         },

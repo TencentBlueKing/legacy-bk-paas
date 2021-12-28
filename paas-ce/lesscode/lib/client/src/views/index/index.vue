@@ -14,9 +14,15 @@
         <div class="main-top">
             <div class="page-title">
                 <div class="page-name">
-                    <i class="bk-drag-icon bk-drag-arrow-back" title="返回页面列表" @click="leavePage('pageList')"></i>
+                    <i
+                        class="bk-drag-icon bk-drag-arrow-back"
+                        title="返回页面列表"
+                        @click="leavePage('pageList')" />
                     <span class="seperate-line">|</span>
-                    <span class="bk-drag-icon template-logo" title="返回项目列表" @click="leavePage('projects')">
+                    <span
+                        class="bk-drag-icon template-logo"
+                        title="返回项目列表"
+                        @click="leavePage('projects')">
                         <svg aria-hidden="true" width="16" height="16">
                             <use xlink:href="#bk-drag-logo"></use>
                         </svg>
@@ -50,8 +56,16 @@
                                     title="复制页面"></i>
                             </bk-option>
                             <div slot="extension" class="extension">
-                                <div class="page-row" @click="handlePageAction('create')"><i class="bk-icon icon-plus-circle"></i> 新建空白页面</div>
-                                <div class="page-row" @click="handlePageFromTemplate"><i class="bk-icon icon-plus-circle"></i> 从模板新建页面</div>
+                                <div
+                                    class="page-row"
+                                    @click="handlePageAction('create')">
+                                    <i class="bk-icon icon-plus-circle" /> 新建空白页面
+                                </div>
+                                <div
+                                    class="page-row"
+                                    @click="handlePageFromTemplate">
+                                    <i class="bk-icon icon-plus-circle" /> 从模板新建页面
+                                </div>
                             </div>
                         </bk-select>
                     </div>
@@ -104,7 +118,7 @@
                         </li>
                     </ul>
                     <!-- 保存、预览、快捷键等tool单独抽离 -->
-                    <extra-action></extra-action>
+                    <extra-action />
                 </div>
             </div>
             <extra-links
@@ -123,21 +137,6 @@
                 :type="contentTab" />
             <modifier-panel />
         </div>
-        <bk-dialog v-model="delComponentConf.visiable"
-            class="del-component-dialog"
-            theme="primary"
-            :mask-close="false"
-            :header-position="delComponentConf.headerPosition"
-            title="删除"
-            @confirm="confirmDelComponent"
-            @cancel="cancelDelComponent"
-            @after-leave="afterLeaveDelComponent">
-            <div>
-                <p>确认删除{{delComponentConf.item.name}}组件【{{delComponentConf.item.componentId}}】？</p>
-                <p class="del-tip" v-if="delComponentConf.item.type === 'render-grid'">删除grid元素会连带删除grid中所有子元素</p>
-                <p class="del-tip" v-else-if="delComponentConf.isCustomOffline">已下架的自定义组件删除后将不能再被使用</p>
-            </div>
-        </bk-dialog>
         <page-dialog ref="pageDialog" :action="action" />
         <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
@@ -148,7 +147,6 @@
 
 <script>
     import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-    import cloneDeep from 'lodash.clonedeep'
     import LC from '@/element-materials/core'
     import {
         // uuid,
@@ -187,12 +185,8 @@
                 wholeComponentList: [],
                 customComponentList: [],
                 projectDetail: {},
-                delComponentConf: {
-                    visiable: false,
-                    headerPosition: 'left',
-                    item: {},
-                    isCustomOffline: false
-                },
+                actionSelected: 'edit',
+                startDragPosition: {},
                 contentLoading: true,
                 isCustomComponentLoading: true,
                 isSaving: false,
@@ -235,14 +229,6 @@
                 return this.$route.params.pageId || ''
             }
         },
-        // watch: {
-        //     targetData: {
-        //         deep: true,
-        //         handler () {
-        //             this.lockStatsuPolling('lock')
-        //         }
-        //     }
-        // },
         async created () {
             this.guideStep = [
                 {
@@ -535,32 +521,6 @@
                 }
             },
 
-            /**
-             * 检测是否能删除组件
-             *
-             * @return {boolean} 是否可以删除
-             */
-            checkIsDelComponent () {
-                let msg = ''
-                const { type, componentId, slotContainer } = this.curSelectedComponentData
-                if (slotContainer === true) {
-                    msg = 'slot容器不能刪除'
-                } else if (type === 'render-grid'
-                    && this.targetData.length === 1 && componentId === this.targetData[0].componentId
-                ) {
-                    msg = '画布中至少要有一个栅格布局'
-                }
-                if (msg) {
-                    this.$bkMessage({
-                        theme: 'warning',
-                        limit: 1,
-                        message: msg
-                    })
-                    return false
-                }
-                return true
-            },
-
             handleStartGuide () {
                 this.$refs.guide.start()
             },
@@ -599,85 +559,6 @@
                     })
                 }
                 popoverInstance.show()
-            },
-
-            /**
-             * 显示删除选中的元素弹框
-             */
-            showDeleteElement () {
-                if (!this.checkIsDelComponent()) {
-                    return
-                }
-                this.delComponentConf.visiable = true
-                this.delComponentConf.item = Object.assign({}, this.curSelectedComponentData)
-                const { type } = this.curSelectedComponentData
-                const customComp = this.customComponentList.find(item => item.type === type)
-                this.delComponentConf.isCustomOffline = customComp && customComp.meta.offline
-            },
-
-            /**
-             * 确认删除选中的元素
-             */
-            confirmDelComponent () {
-                const targetData = cloneDeep(this.targetData)
-                const { componentId } = this.delComponentConf.item
-
-                const del = (target, cid) => {
-                    const len = target.length
-                    for (let i = 0; i < len; i++) {
-                        const item = target[i]
-                        if (item.componentId === cid) {
-                            target.splice(i, 1)
-                            return target
-                        }
-                        if (item.children) {
-                            del(item.children, cid)
-                        } else if (item.renderSlots.default && item.renderSlots.default.type === 'form-item') {
-                            // form表单内的元素不允许通过画布删除
-                        } else if (
-                            item.renderSlots.default && (item.renderSlots.default.type === 'column' || item.renderSlots.default.type === 'free-layout-item')
-                        ) {
-                            del(item.renderSlots.default.val, cid)
-                        } else {
-                            const renderSlots = item.renderSlots || {}
-                            const slotKeys = Object.keys(renderSlots)
-                            slotKeys.forEach((key) => {
-                                const renderSlot = renderSlots[key]
-                                if (renderSlot && renderSlot.name === 'layout') {
-                                    del([renderSlot.val], cid)
-                                }
-                            })
-                        }
-                    }
-                    return ''
-                }
-                const pos = this.$td().getNodePosition(componentId)
-                if (pos === undefined) return
-                const pushData = {
-                    parentId: pos.parent && pos.parent.componentId,
-                    component: this.delComponentConf.item,
-                    columnIndex: pos.columnIndex,
-                    childrenIndex: pos.childrenIndex,
-                    type: 'remove'
-                }
-                del(targetData, componentId)
-                this.setTargetData(targetData)
-                this.pushTargetHistory(pushData)
-                this.delComponentConf.visiable = false
-            },
-
-            /**
-             * 取消删除选中的元素弹框
-             */
-            cancelDelComponent () {
-                this.delComponentConf.visiable = false
-            },
-
-            /**
-             * 删除选中元素弹框 afterLeave 回调
-             */
-            afterLeaveDelComponent () {
-                this.delComponentConf.item = Object.assign({}, {})
             },
 
             handlePreview () {
