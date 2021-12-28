@@ -116,7 +116,8 @@
                     renderStyles: {},
                     renderProps: {},
                     renderEvents: {},
-                    renderDirectives: []
+                    renderDirectives: [],
+                    renderSlots: {}
                 }
             }
         },

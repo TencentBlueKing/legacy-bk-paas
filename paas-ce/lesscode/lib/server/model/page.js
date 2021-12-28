@@ -22,10 +22,11 @@ import PageVariable from './entities/page-variable'
 import FuncVariable from './entities/func-variable'
 import VariableFunc from './entities/variable-func'
 import VariableVariable from './entities/variable-variable'
+import { whereVersion } from './common'
 
 module.exports = {
     // 获取项目下可见的页面列表
-    getProjectPages (projectId) {
+    getProjectPages (projectId, versionId) {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
             .select([
@@ -33,31 +34,36 @@ module.exports = {
                 'page.pageName',
                 'page.pageCode',
                 'page.content',
+                'page.lifeCycle',
+                'page.styleSetting',
                 'page.updateUser',
                 'page.createUser',
                 'page.updateTime'
             ])
             .where('t.projectId = :projectId', { projectId })
+            .andWhere(whereVersion(versionId))
             .andWhere('page.deleteFlag = 0')
             .orderBy('page.id', 'DESC')
             .getMany()
     },
 
     // check页面名称是否存在
-    checkProjectPageExist (projectId, pageName) {
+    checkProjectPageExist (projectId, versionId, pageName) {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
             .where('t.projectId = :projectId', { projectId })
+            .andWhere(whereVersion(versionId))
             .andWhere('BINARY page.pageName = :pageName', { pageName })
             .andWhere('page.deleteFlag = 0')
             .getMany()
     },
 
     // check页面ID是否存在
-    checkProjectPageCodeExist (projectId, pageCode) {
+    checkProjectPageCodeExist (projectId, versionId, pageCode) {
         return getRepository(Page).createQueryBuilder('page')
             .leftJoinAndSelect(ProjectPage, 't', 't.pageId = page.id')
             .where('t.projectId = :projectId', { projectId })
+            .andWhere(whereVersion(versionId))
             .andWhere('page.pageCode = :pageCode', { pageCode })
             .andWhere('page.deleteFlag = 0')
             .getMany()
@@ -84,6 +90,7 @@ module.exports = {
                 routeId,
                 pageId,
                 projectId: projectPageData.projectId,
+                versionId: projectPageData.versionId,
                 layoutId: pageData.layoutId
             })
             await transactionalEntityManager.save(pageRoute)
@@ -121,7 +128,12 @@ module.exports = {
                 // 复制变量
                 const variableList = await getRepository(Variable)
                     .createQueryBuilder('variable')
-                    .where('variable.projectId = :projectId AND variable.pageCode = :pageCode', { projectId: projectPageData.projectId, pageCode: oldPageData.pageCode, effectiveRange: 1 })
+                    .where('variable.projectId = :projectId AND variable.pageCode = :pageCode', {
+                        projectId: projectPageData.projectId,
+                        versionId: projectPageData.versionId,
+                        pageCode: oldPageData.pageCode,
+                        effectiveRange: 1
+                    })
                     .getMany()
                 if (variableList.length) {
                     const saveVariableList = getRepository(Variable).create(variableList.map(item => {

@@ -31,14 +31,14 @@ export default {
                 return data
             })
         },
-        getList ({ state }, { projectId }) {
-            return http.get(`/layout/getList?projectId=${projectId}`).then(response => {
+        getList ({ state }, params) {
+            return http.get('/layout/getList', { params }).then(response => {
                 const data = response.data || []
                 return data
             })
         },
-        getFullList ({ state }, { projectId }) {
-            return http.get(`/layout/getFullList?projectId=${projectId}`).then(response => {
+        getFullList ({ state }, params) {
+            return http.get('/layout/getFullList', { params }).then(response => {
                 const data = response.data
                 return data
             })
@@ -51,13 +51,13 @@ export default {
             })
         },
         create ({ commit }, { data, config }) {
-            return http.post(`/layout/create`, data, config).then(response => {
+            return http.post('/layout/create', data, config).then(response => {
                 const data = response.data || ''
                 return data
             })
         },
         update ({ commit }, { data, config }) {
-            return http.post(`/layout/update`, data, config).then(response => {
+            return http.post('/layout/update', data, config).then(response => {
                 const data = response.data || ''
                 return data
             })

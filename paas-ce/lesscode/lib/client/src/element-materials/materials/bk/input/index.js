@@ -41,7 +41,7 @@ export default {
     }, {
         name: 'right-icon-click', tips: '点击配置的右图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
     }],
-    styles: ['size', 'margin', 'padding', 'display'],
+    styles: ['size', 'margin', 'padding', 'display', 'border'],
     directives: [
         {
             type: 'v-model',

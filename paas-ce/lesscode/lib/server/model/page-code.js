@@ -10,20 +10,11 @@
  */
 import { paramCase, camelCase, camelCaseTransformMerge } from 'change-case'
 
-import { uuid, replaceFuncKeyword } from '../util'
-import VueCodeModel from './vue-code'
-import { RequestContext } from '../middleware/request-context'
+import { uuid } from '../../shared/util.js'
+import { replaceFuncKeyword } from '../../shared/function/helper'
 import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
 import safeStringify from '../../client/src/common/json-safe-stringify'
-
-const httpConf = require('../conf/http')
-// npm.js配置文件不存在时赋值空对象
-let npmConf
-try {
-    npmConf = require('../conf/npm')
-} catch (_) {
-    npmConf = {}
-}
+import { VARIABLE_TYPE } from '../../shared/variable/constant'
 
 function transformToString (val) {
     const type = typeof val
@@ -97,6 +88,7 @@ class PageCode {
     codeErrMessage = '' // 记录函数里的错误信息
     selfClosingTags = ['img', 'input', 'link', 'hr', 'br']
     lifeCycle = {} // 页面的生命周期
+    styleSetting = {} // 页面样式设置
     projectId = ''
     pageId = ''
     layoutContent = ''
@@ -105,7 +97,24 @@ class PageCode {
     layoutType = ''
     isUseElementComponentLib = false
 
-    constructor (targetData = [], pageType = 'vueCode', allCustomMap = {}, funcGroups = [], lifeCycle = '', projectId, pageId, layoutContent, isGenerateNav = false, isEmpty = false, layoutType, variableList) {
+    constructor (
+        targetData = [],
+        pageType = 'vueCode',
+        allCustomMap = {},
+        funcGroups = [],
+        lifeCycle = '',
+        projectId,
+        pageId,
+        layoutContent,
+        isGenerateNav = false,
+        isEmpty = false,
+        layoutType,
+        variableList,
+        styleSetting = '',
+        user = {},
+        npmConf = {},
+        origin = ''
+    ) {
         this.targetData = targetData || []
         this.pageType = pageType
         this.allCustomMap = allCustomMap || {}
@@ -120,6 +129,10 @@ class PageCode {
         this.isEmpty = isEmpty
         this.layoutType = layoutType
         this.variableList = variableList || []
+        this.styleSetting = styleSetting || {}
+        this.user = user
+        this.npmConf = npmConf
+        this.origin = origin
     }
 
     getCode () {
@@ -129,11 +142,11 @@ class PageCode {
     handleVariable () {
         this.projectVariables = this.usingVariables.filter((variable) => (!['vueCode', 'previewSingle'].includes(this.pageType) && variable.effectiveRange === 0))
         const pageVariables = this.usingVariables.filter((variable) => (['vueCode', 'previewSingle'].includes(this.pageType) || variable.effectiveRange === 1))
-        this.pageDataVariables = pageVariables.filter((variable) => (variable.variableType !== 1))
-        this.pageComputedVariables = pageVariables.filter((variable) => (variable.variableType === 1))
+        this.pageDataVariables = pageVariables.filter((variable) => (variable.valueType !== VARIABLE_TYPE.COMPUTED.VAL))
+        this.pageComputedVariables = pageVariables.filter((variable) => (variable.valueType === VARIABLE_TYPE.COMPUTED.VAL))
         this.pageDataVariables.forEach((variable) => {
             const { defaultValue = {}, variableCode, defaultValueType } = variable
-            if ([3, 4].includes(variable.valueType)) {
+            if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(variable.valueType)) {
                 ['all', 'prod', 'stag'].forEach((key) => {
                     const val = defaultValue[key]
                     if (typeof val === 'string') {
@@ -341,9 +354,22 @@ class PageCode {
     }
 
     generateCss () {
-        let head = `<style lang="css" scoped>
-            .container-${this.uniqueKey} {
-                margin: ${this.hasLayOut ? '0' : '10'}px;
+        // 页面级样式设置
+        const styleSetting = typeof this.styleSetting === 'string' ? JSON.parse(this.styleSetting) : this.styleSetting
+        let pageStyle = ''
+        for (const i in styleSetting) {
+            if (i === 'customStyle') {
+                for (const key in styleSetting[i]) {
+                    pageStyle += `${key}: ${styleSetting[i][key]};\n`
+                }
+            } else if (styleSetting[i] !== '') {
+                pageStyle += `${paramCase(i)}: ${styleSetting[i]};\n`
+            }
+        }
+
+        let head = this.hasLayOut || this.layoutType === 'empty' ? '<style lang="css" scoped>' : '<style type="text/css">'
+        head += `.container-${this.uniqueKey} {
+                ${this.layoutType === 'empty' ? pageStyle : ''}
             }
             .bk-layout-row-${this.uniqueKey} {
                 display: flex;
@@ -545,14 +571,20 @@ class PageCode {
                     align-items: center;
                     cursor: pointer;
                 }
+               
             `
         }
-        if (this.isGenerateNav) {
-            head += `.bk-layout-custom-component-wrapper .page-container {
-                    margin: 0px
-                }
-            `
+        if (!this.isEmpty && this.layoutType !== 'empty') {
+            head += `.bk-navigation-wrapper .navigation-container .container-content{
+                ${pageStyle}
+            }`
         }
+        // if (this.isGenerateNav) {
+        //     head += `.bk-layout-custom-component-wrapper .page-container {
+        //             margin: 0px
+        //         }
+        //     `
+        // }
         const end = '</style>\n'
 
         return head + this.cssStr + end
@@ -560,12 +592,12 @@ class PageCode {
 
     generateTemplate () {
         let pageCode = this.isGenerateNav ? '<router-view class="page-container"></router-view>' : `\n<section class="bk-layout-custom-component-wrapper container-${this.uniqueKey}">\n${this.generateCode(this.targetData)}\n</section>\n`
-        if (this.isEmpty) pageCode = `<bk-exception class="exception-wrap-item" type="404"></bk-exception>`
+        if (this.isEmpty) pageCode = '<bk-exception class="exception-wrap-item" type="404"></bk-exception>'
         let source = pageCode
         if (this.hasLayOut) source = this.getLayout(pageCode)
         // bk-layout-custom-component-wrapper 打包自定义组件时添加此类作为最上层父类，避免自定义组件的类污染画布页面的东西
         // 预览时最顶层容器也要加上此类，让自定义组件的样式生效
-        return `<template>\n` + source + '\n</template>'
+        return '<template>\n' + source + '\n</template>'
     }
 
     getLayout (navContent) {
@@ -576,7 +608,7 @@ class PageCode {
 
         this.dataTemplate('curNav', '{}')
         if (['preview', 'previewSingle'].includes(this.pageType)) {
-            const user = JSON.stringify(RequestContext.getCurrentUser())
+            const user = JSON.stringify(this.user)
             this.dataTemplate('user', user)
         }
 
@@ -600,7 +632,7 @@ class PageCode {
     }
 
     getTopBottomLayout (navContent, componentProps) {
-        const topMenuKey = `topMenu${this.uniqueKey}`
+        const topMenuKey = 'topMenuLesscode'
         const { layoutContent } = this
         this.dataTemplate(topMenuKey, JSON.stringify(layoutContent.topMenuList))
 
@@ -643,7 +675,7 @@ class PageCode {
     }
 
     getLeftRightLayout (navContent, componentProps) {
-        const leftMenuKey = `leftMenu${this.uniqueKey}`
+        const leftMenuKey = 'leftMenuLesscode'
         const { layoutContent } = this
 
         this.dataTemplate(leftMenuKey, JSON.stringify(layoutContent.menuList))
@@ -697,8 +729,8 @@ class PageCode {
     }
 
     getComplexLayout (navContent, componentProps) {
-        const complexMenuKey = `complexMenu${this.uniqueKey}`
-        const curLeftMenuKey = `leftMenu${this.uniqueKey}`
+        const complexMenuKey = 'complexMenuLesscode'
+        const curLeftMenuKey = 'leftMenuLesscode'
         const { layoutContent } = this
 
         this.dataTemplate('toggleActive', 'false')
@@ -759,14 +791,15 @@ class PageCode {
         const lifeCycleValues = Object.values(lifeCycle)
         const exisLifyCycle = lifeCycleValues.filter(x => x)
         const lifeCircleStr = this.getLifeCycle()
-        const methodsStr = this.getMethods()
         this.handleVariable()
+        const computedStr = this.getComputed()
+        const methodsStr = this.getMethods()
 
         const importContent = this.getImportContent()
         let scriptContent = `${this.getComponents() ? `${this.getComponents()},` : ''}
-                        ${this.pageType === 'projectCode' && (this.usingFuncCodes.length > 0 || exisLifyCycle.length > 0) ? `mixins: [methodsMixin],` : ''}
+                        ${this.pageType === 'projectCode' && (this.usingFuncCodes.length > 0 || exisLifyCycle.length > 0) ? 'mixins: [methodsMixin],' : ''}
                         ${this.getData() ? `${this.getData()},` : ''}
-                        ${this.getComputed()}
+                        ${computedStr}
                         ${this.getWatch()}
                         ${lifeCircleStr}
                         ${methodsStr}`
@@ -798,7 +831,7 @@ class PageCode {
         if ((['vueCode', 'projectCode'].includes(this.pageType) && this.hasLayOut) || this.projectVariables.length || this.pageComputedVariables.length) {
             computed += 'computed: {\n'
             if (['vueCode', 'projectCode'].includes(this.pageType) && this.hasLayOut) {
-                computed += `...mapGetters(['user']),\n`
+                computed += '...mapGetters([\'user\']),\n'
             }
             this.projectVariables.forEach((variable) => {
                 computed += `${variable.variableCode}: {
@@ -863,7 +896,7 @@ class PageCode {
             } else {
                 code += this.generateComponment(item, vueDirective, propDirective)
             }
-            if (templateDirective) code += `\n</template>`
+            if (templateDirective) code += '\n</template>'
         }
         return code
     }
@@ -884,7 +917,7 @@ class PageCode {
         let elementComId = ''
         const componentType = type
         for (const i in props) {
-            if (dirProps.find((directive) => (directive.prop === i)) && props[i].type !== 'remote') continue
+            if (dirProps.find((directive) => (directive.prop === i)) && !['remote', 'data-source', 'table-data-source'].includes(props[i].type)) continue
 
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
@@ -902,6 +935,17 @@ class PageCode {
                     const curDir = dirProps.find((directive) => (directive.prop === i))
                     const key = (curDir || {}).val || propVar
                     this.remoteMethodsTemplate(key, props[i].payload || {})
+                    if (!curDir) {
+                        this.dataTemplate(propVar, JSON.stringify([]))
+                        propsStr += curPropStr
+                    }
+                    continue
+                }
+
+                if (['data-source', 'table-data-source'].includes(type)) {
+                    const curDir = dirProps.find((directive) => (directive.prop === i))
+                    const key = (curDir || {}).val || propVar
+                    this.dataSourceTemplate(key, props[i].payload.sourceData || {})
                     if (!curDir) {
                         this.dataTemplate(propVar, JSON.stringify([]))
                         propsStr += curPropStr
@@ -1024,7 +1068,7 @@ class PageCode {
                         })
                         jsonStr = jsonStr.replace(reg, '')
                     }
-                    jsonStr += `],`
+                    jsonStr += '],'
                 }
                 jsonStr = jsonStr.replace(reg, '')
                 jsonStr += '}'
@@ -1199,7 +1243,7 @@ class PageCode {
                         '[object Boolean]': false,
                         '[object String]': ''
                     }
-                    const { variableData = {}, methodData = {} } = slot.payload || {}
+                    const { variableData = {}, methodData = {}, sourceData = {} } = slot.payload || {}
                     const type = Object.prototype.toString.call(slot.val)
                     let disPlayVal = defaultValMap[type] || ''
                     const param = { val: disPlayVal, type: 'variable' }
@@ -1209,6 +1253,10 @@ class PageCode {
                     } else if (methodData.methodCode) {
                         this.dataTemplate(compId, transformToString(disPlayVal))
                         this.remoteMethodsTemplate(compId, methodData || {})
+                        disPlayVal = compId
+                    } else if (sourceData.tableName) {
+                        this.dataTemplate(compId, transformToString(disPlayVal))
+                        this.dataSourceTemplate(compId, sourceData || {})
                         disPlayVal = compId
                     } else {
                         if (typeof slot.val === 'object') {
@@ -1231,7 +1279,7 @@ class PageCode {
                 } while (curSlot && Object.keys(curSlot).length > 0)
                 slotStr += render(...slotRenderParams)
             }
-            if (!isDefaultSlot) slotStr += `\n</template>\n`
+            if (!isDefaultSlot) slotStr += '\n</template>\n'
         })
         return slotStr
 
@@ -1365,7 +1413,7 @@ class PageCode {
 
     processFuncBody (code) {
         const encodeCode = (code || '').replace(new RegExp('(<)([^>]+)(>)', 'gi'), (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`)
-        return replaceFuncKeyword(encodeCode, (all, first, second, dirKey, funcStr, funcCode) => {
+        return replaceFuncKeyword(encodeCode, this.origin, (all, first, second, dirKey, funcStr, funcCode) => {
             return this.handleVarInFunc(dirKey, funcCode) || all
         })
     }
@@ -1427,7 +1475,7 @@ class PageCode {
         }
 
         if (this.hasLayOut || this.remoteDataStr || (this.usingFuncCodes.length && ['vueCode', 'preview', 'previewSingle'].includes(this.pageType))) {
-            methods += `methods: {`
+            methods += 'methods: {'
 
             // 布局相关的方法
             if (this.hasLayOut) {
@@ -1457,14 +1505,14 @@ class PageCode {
                     },
                 `
                 let setNav = ''
-                const pageKey = this.pageType === 'projectCode' ? 'pageCode' : 'pageId'
-                const pageValue = this.pageType === 'projectCode' ? 'this.$route.name' : '+this.$route.params.pageId'
+                const pageKey = this.pageType === 'projectCode' ? 'pageCode' : 'pageCode'
+                const pageValue = this.pageType === 'projectCode' ? 'this.$route.name' : 'this.$route.query.pageCode'
                 switch (this.layoutType) {
                     case 'top-bottom':
                         setNav = `setNav (id) {
                             const itemId = id || this.$route.query.id
                             const name = ${pageValue};
-                            (this.topMenu${this.uniqueKey} || []).forEach((topNav) => {
+                            (this.topMenuLesscode || []).forEach((topNav) => {
                                 const isSameId = itemId && (topNav.id === itemId || (Array.isArray(topNav.children) && topNav.children.find((nav) => (nav.id === itemId))))
                                 const isSameName = !itemId && name && (topNav.${pageKey} === name || (Array.isArray(topNav.children) && topNav.children.find((nav) => (nav.${pageKey} === name))))
                                 if (isSameId || isSameName) this.curNav = topNav || {}
@@ -1475,7 +1523,7 @@ class PageCode {
                         setNav = `setNav (id) {
                             const itemId = id || this.$route.query.id
                             const name = ${pageValue};
-                            (this.leftMenu${this.uniqueKey} || []).forEach((menu) => {
+                            (this.leftMenuLesscode || []).forEach((menu) => {
                                 let tempItem
                                 if (itemId) {
                                     tempItem = [menu, ...(menu.children || [])].find((child) => (child.id === itemId))
@@ -1490,7 +1538,7 @@ class PageCode {
                         setNav = `setNav (id) {
                             const itemId = id || this.$route.query.id
                             const name = ${pageValue};
-                            (this.complexMenu${this.uniqueKey} || []).forEach((menu) => {
+                            (this.complexMenuLesscode || []).forEach((menu) => {
                                 const allMenus = [menu];
                                 (menu.children || []).forEach((child) => {
                                     allMenus.push(...[child, ...(child.children || [])])
@@ -1498,7 +1546,7 @@ class PageCode {
                                 const tempItem = itemId ? allMenus.find((child) => (child.id === itemId)) : allMenus.find((child) => (child.${pageKey} === name))
                                 if (tempItem) {
                                     this.curNav = tempItem
-                                    this.leftMenu${this.uniqueKey} = menu.children || []
+                                    this.leftMenuLesscode = menu.children || []
                                 }
                             })
                         },`
@@ -1511,9 +1559,8 @@ class PageCode {
                         },
                     `
                 } else {
-                    const loginRedirectUrl = `${httpConf.loginUrl}?app_id=${httpConf.appCode}`
                     methods += `signOut () {
-                            window.parent.location.href = '${loginRedirectUrl}' + '&c_url=' + window.parent.location.href
+                            this.$bkMessage({ message: '请部署后使用本功能', theme: 'warn' })
                         },
                     `
                 }
@@ -1610,6 +1657,8 @@ class PageCode {
     getImportContent () {
         let importStr = ''
 
+        if (['preview'].includes(this.pageType)) return importStr
+
         if (this.isUseElementComponentLib) {
             importStr = `
                 /**
@@ -1641,7 +1690,7 @@ class PageCode {
                  * 请先安装 bk-charts 相关依赖: npm install @blueking/bkcharts
                  */
             `
-            importStr += `const bkCharts = require('@/components/bkCharts.vue')\n`
+            importStr += 'const bkCharts = require(\'@/components/bkCharts.vue\')\n'
         }
 
         if (this.chartTypeArr && this.chartTypeArr.length) {
@@ -1666,8 +1715,8 @@ class PageCode {
                     */
                 `
             }
-            importStr += `import { mapGetters } from 'vuex'\n`
-            importStr += `import auth from '@/common/auth'\n`
+            importStr += 'import { mapGetters } from \'vuex\'\n'
+            importStr += 'import auth from \'@/common/auth\'\n'
         }
         if (!['preview', 'previewSingle'].includes(this.pageType) && this.usingCustomArr && this.usingCustomArr.length) {
             // dev 和 t 环境，npm 包名字前面加了 test- 前缀，生成的变量名字应该去掉 test 前缀
@@ -1676,14 +1725,14 @@ class PageCode {
                 forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
             }
             for (const i in this.usingCustomArr) {
-                importStr += `const ${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })} = require('${npmConf.scopename}/${this.usingCustomArr[i]}')\n`
+                importStr += `const ${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })} = require('${this.npmConf.scopename}/${this.usingCustomArr[i]}')\n`
             }
         }
         const lifeCycle = typeof this.lifeCycle === 'string' ? JSON.parse(this.lifeCycle) : this.lifeCycle
         const lifeCycleValues = Object.values(lifeCycle)
         const exisLifyCycle = lifeCycleValues.filter(x => x)
         if (this.pageType === 'projectCode' && (this.usingFuncCodes.length > 0 || exisLifyCycle.length > 0)) {
-            importStr += `import methodsMixin from '@/mixins/methods-mixin'`
+            importStr += 'import methodsMixin from \'@/mixins/methods-mixin\''
         }
         return importStr
     }
@@ -1705,6 +1754,10 @@ class PageCode {
         if (method.funcCode) this.usingFuncCodes.push(method.funcCode)
     }
 
+    dataSourceTemplate (key, sourceData) {
+        this.remoteDataStr += `const ${key}Source = await this.$http.get('/data-source/user/projectId/${this.projectId}/tableName/${sourceData.tableName}')\nthis.${key} = ${key}Source.data.list || []\n`
+    }
+
     generateCharts (item) {
         const type = item.name.replace('chart-', '')
         this.dataTemplate(item.componentId, JSON.stringify(item.renderProps.options.val))
@@ -1718,21 +1771,10 @@ class PageCode {
 }
 
 module.exports = {
-    async getPageData (targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList) {
-        const pageCode = new PageCode(targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList)
-        let code = ''
-        if (pageType === 'vueCode') {
-            // 格式化，报错是抛出异常
-            code = await VueCodeModel.formatPageCode(pageCode.getCode())
-        } else if (['preview', 'previewSingle'].includes(pageType)) {
-            // 不需格式化
-            code = pageCode.getCode()
-        } else {
-            // 格式化，报错不抛出异常
-            code = await VueCodeModel.formatCode(pageCode.getCode())
-        }
+    getPageData (...params) {
+        const pageCode = new PageCode(...params)
         return {
-            code,
+            code: pageCode.getCode(),
             methodStrList: pageCode.methodStrList || [],
             codeErrMessage: pageCode.codeErrMessage || ''
         }

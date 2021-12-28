@@ -14,12 +14,13 @@ import PageComp from './entities/page-comp'
 import Page from './entities/page'
 import Comp from './entities/comp'
 import Version from './entities/version'
+import { whereVersion } from './common'
 
 // npm.js配置文件不存在时赋值空对象
 let npmConf
 try {
     npmConf = require('../conf/npm')
-} catch(_) {
+} catch (_) {
     npmConf = {}
 }
 
@@ -53,12 +54,13 @@ export const update = async function (params, data) {
     return getRepository(PageComp).update(params, data)
 }
 
-export const getProjectComp = async function (projectId) {
+export const getProjectComp = async function (projectId, versionId) {
     const res = await getRepository(PageComp)
         .createQueryBuilder('pageComp')
         .leftJoinAndSelect(Comp, 'c', 'pageComp.compId = c.id')
         .leftJoinAndSelect(Version, 'v', 'pageComp.versionId = v.id')
         .where('pageComp.projectId = :projectId', { projectId })
+        .andWhere(whereVersion(versionId, 'pageComp'))
         .andWhere('c.deleteFlag = 0')
         .select(['v.version as version', 'c.type as type'])
         .distinct('pageComp.compId')

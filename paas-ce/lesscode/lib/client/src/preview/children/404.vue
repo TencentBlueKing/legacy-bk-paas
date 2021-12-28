@@ -17,7 +17,7 @@
         computed: {
             ...mapState(['projectPageRouteList']),
             pageRoute () {
-                const pageCode = this.$route.query.p // '' | undefined | code
+                const pageCode = this.$route.query.pageCode // '' | undefined | code
                 const pageRoute = this.projectPageRouteList.find(item => item.pageCode === pageCode)
                 return pageRoute || { pageCode }
             }

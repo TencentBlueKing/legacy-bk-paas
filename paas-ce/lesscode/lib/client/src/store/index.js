@@ -28,9 +28,13 @@ import member from './modules/member'
 import logs from './modules/logs'
 import functionMarket from './modules/function-market'
 import perm from './modules/perm'
+import projectVersion from './modules/project-version'
+import dataSource from './modules/data-source'
 import http from '@/api'
 import router from '../router'
 import { unifyObjectStyle, json2Query } from '@/common/util'
+// 生成源码重构后，需要支持前端单独调用
+import { getPageData } from '../../../server/model/page-code'
 
 Vue.use(Vuex)
 
@@ -52,7 +56,9 @@ const store = new Vuex.Store({
         member,
         logs,
         functionMarket,
-        perm
+        perm,
+        projectVersion,
+        dataSource
     },
     // 公共 store
     state: {
@@ -164,6 +170,33 @@ const store = new Vuex.Store({
             return http.get(`/test/getTable?${json2Query(params)}`, {}, config).then(res => {
                 return res
             })
+        },
+
+        updatePreview ({ state }, { isGenerateNav, id, curTemplateData, types }) {
+            const pageData = getPageData(
+                JSON.parse(JSON.stringify(state.drag.targetData || [])),
+                'preview',
+                state.components.curNameMap,
+                state.functions.funcGroups,
+                state.page.pageDetail?.lifeCycle,
+                router.currentRoute.params?.projectId,
+                router.currentRoute.params?.pageId,
+                curTemplateData,
+                isGenerateNav,
+                false,
+                state.drag.curTemplateData?.layoutType,
+                state.variable.variableList,
+                state.page.pageDetail?.styleSetting,
+                state.user,
+                {},
+                location.origin
+            )
+            const payload = JSON.stringify({
+                types,
+                source: pageData.code,
+                id
+            })
+            localStorage.setItem('ONLINE_PREVIEW', payload)
         }
     }
 })

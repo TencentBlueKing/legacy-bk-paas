@@ -1,5 +1,5 @@
 <template>
-    <main :class="['layout', { 'aside-folded': asideFolded }]">
+    <main :class="['layout', { 'aside-folded': asideFolded, 'aside-hover': asideHover }]">
         <aside class="aside">
             <div class="side-hd">
                 <div class="brand">
@@ -11,7 +11,9 @@
                     <h2 class="app-name">可视化开发平台</h2>
                 </div>
             </div>
-            <div class="side-bd">
+            <div class="side-bd"
+                @mouseenter="asideHover = true"
+                @mouseleave="asideHover = false">
                 <nav class="nav-list">
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="/projects">
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
@@ -80,6 +82,7 @@
             return {
                 currentYear: new Date().getUTCFullYear(),
                 asideFolded: false,
+                asideHover: false,
                 region: 'tencent',
                 navFolded: {}
             }
@@ -108,7 +111,9 @@
         &.aside-folded {
             .aside {
                 width: var(--aside-folded-width);
-
+                .side-bd {
+                    overflow: hidden;
+                }
                 .side-ft {
                     .nav-toggle {
                         transform: rotate(0);
@@ -118,6 +123,27 @@
 
             .footer {
                 padding-left: var(--aside-folded-width);
+            }
+
+            .nav-list {
+                .nav-item-parent {
+                    .sub-nav {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        &.aside-hover {
+            .aside {
+                width: var(--aside-width);
+            }
+            .nav-list {
+                .nav-item-parent {
+                    .sub-nav {
+                        display: block;
+                    }
+                }
             }
         }
 
@@ -293,6 +319,7 @@
                     line-height: 42px;
                     padding: 0 12px 0 22px;
                     cursor: pointer;
+                    white-space: nowrap;
 
                     &::before {
                         width: 16px;

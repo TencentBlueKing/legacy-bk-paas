@@ -31,7 +31,8 @@
                             @selected="changeProjectPage">
                             <div slot="trigger">
                                 <div class="name-content" :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
-                                    {{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span>
+                                    <div class="col-name">{{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span></div>
+                                    <div class="col-version">{{versionName}}</div>
                                 </div>
                                 <i class="bk-select-angle bk-icon icon-angle-down"></i>
                             </div>
@@ -222,7 +223,7 @@
                 </div>
             </div>
             <div class="main-content border-none" :class="mainContentClass" v-if="actionSelected === 'vueCode'">
-                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
+                <vue-code class="code-area" :target-data="targetData" :life-cycle="pageDetail.lifeCycle" :style-setting="pageDetail.styleSetting" :layout-content="pageLayout.layoutContent" :with-nav.sync="withNav"></vue-code>
             </div>
             <div class="main-content" v-if="['pageFunction', 'setting'].includes(actionSelected)">
                 <page-setting :project="projectDetail" :type="actionSelected"></page-setting>
@@ -324,6 +325,8 @@
     import safeStringify from '@/common/json-safe-stringify'
     import previewErrorImg from '@/images/preview-error.png'
     import { infoLink } from '@/element-materials/materials/index'
+    import { getRouteFullPath } from 'shared/route'
+    import { VARIABLE_TYPE } from 'shared/variable/constant'
 
     export default {
         components: {
@@ -491,7 +494,7 @@
                     ]
                 ],
                 infoLinkDict: {},
-                lesscodeCanvasHost: 'http://dev.open.oa.com:5001/'
+                lesscodeCanvasHost: 'http://localhost:5001/'
             }
         },
         computed: {
@@ -512,6 +515,7 @@
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('components', ['interactiveComponents']),
             ...mapGetters('variable', ['variableList']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' }),
             ...mapState('route', ['layoutPageList']),
             copyIconStyle () {
                 return {
@@ -576,8 +580,51 @@
             targetData: {
                 deep: true,
                 handler () {
+                    this.updatePreview({
+                        isGenerateNav: false,
+                        id: this.pageDetail.pageCode,
+                        curTemplateData: {},
+                        types: ['reload', 'update_style']
+                    })
                     this.lockStatsuPolling('lock')
                 }
+            },
+            curTemplateData () {
+                // 导航变化的时候 reload
+                const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+                this.updatePreview({
+                    isGenerateNav: true,
+                    id: pageRoute.layoutPath,
+                    curTemplateData: this.curTemplateData,
+                    types: ['reload']
+                })
+            },
+            variableList () {
+                // 变量发生变化的时候  reload
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
+            },
+            funcGroups () {
+                // 函数发生变化的时候  reload
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
+            },
+            'pageDetail.lifeCycle' () {
+                // 生命周期发生变化的时候  reload
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
             }
         },
         async created () {
@@ -635,6 +682,10 @@
                     target: '#editPageSwitchPage'
                 }
             ]
+
+            // 获取并设置当前版本信息
+            this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
+
             await this.fetchData()
 
             const mockCurSelectComponentData = {
@@ -722,7 +773,7 @@
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
                 title: '确认离开?',
-                subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                subTitle: '您将离开画布编辑页面，请确认相应修改已保存',
                 confirmFn: async () => {
                     next()
                 }
@@ -744,6 +795,8 @@
                 'getAllGroupFuncs'
             ]),
             ...mapActions('variable', ['getAllVariable']),
+            ...mapActions(['updatePreview']),
+
             onLayoutMounted () {
                 const canvas = document.getElementsByClassName('lesscode-editor-layout')[0]
                 this.canvasHeight = canvas.offsetHeight
@@ -923,18 +976,23 @@
                     this.contentLoading = true
                     const [pageDetail, pageList, projectDetail] = await Promise.all([
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
-                        this.$store.dispatch('page/getList', { projectId: this.projectId }),
+                        this.$store.dispatch('page/getList', { projectId: this.projectId, versionId: this.versionId }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
                         this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
-                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId }),
+                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId, versionId: this.versionId }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
-                        this.getAllGroupFuncs(this.projectId)
+                        this.getAllGroupFuncs({ projectId: this.projectId, versionId: this.versionId })
                     ])
 
-                    await this.lockStatsuPolling('lock') // 处理加锁逻辑
-
-                    await this.getAllVariable({ projectId: this.projectId, pageCode: pageDetail.pageCode, effectiveRange: 0 })
+                    await Promise.all([
+                        // 处理加锁逻辑
+                        this.lockStatsuPolling('lock'),
+                        // 添加变量
+                        this.getAllVariable({ projectId: this.projectId, versionId: this.versionId, pageCode: pageDetail.pageCode, effectiveRange: 0 }),
+                        // 添加表
+                        this.$store.dispatch('dataSource/list', { projectId: this.projectId })
+                    ])
                     // update targetdata
                     const content = pageDetail.content
                     if (content) {
@@ -968,8 +1026,8 @@
                         if (defaultValueType === 1) {
                             value = defaultValue.stag
                         }
-                        if ([3, 4].includes(valueType)) value = JSON.parse(value)
-                        if (valueType === 6) value = undefined
+                        if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(valueType)) value = JSON.parse(value)
+                        if (valueType === VARIABLE_TYPE.COMPUTED.VAL) value = undefined
                         return value
                     }
 
@@ -1541,9 +1599,15 @@
                 this.handleSave(() => {
                     let errTips = ''
                     try {
+                        const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+                        if (!pageRoute.id) {
+                            throw new Error('页面未配置路由，请先配置')
+                        }
                         localStorage.removeItem('layout-target-data')
                         localStorage.setItem('layout-target-data', circleJSON(this.targetData))
-                        const routerUrl = `/preview/project/${this.projectId}/?pageCode=${this.pageDetail.pageCode}`
+                        const versionQuery = `${this.versionId ? `&v=${this.versionId}` : ''}`
+                        const fullPath = getRouteFullPath(pageRoute)
+                        const routerUrl = `/preview/project/${this.projectId}${fullPath}?pageCode=${this.pageDetail.pageCode}${versionQuery}`
                         window.open(routerUrl, '_blank')
                     } catch (err) {
                         errTips = err.message || err || '预览异常'
@@ -1587,6 +1651,7 @@
                         data: {
                             from,
                             projectId: this.projectId,
+                            versionId: this.versionId,
                             pageCode: this.pageDetail.pageCode,
                             pageData: {
                                 id: parseInt(this.$route.params.pageId),
@@ -1599,8 +1664,7 @@
                         }
                     })
                     this.savePreviewImg()
-                    const projectId = this.$route.params.projectId || 1
-                    this.getAllGroupFuncs(projectId)
+                    this.getAllGroupFuncs({ projectId: this.projectId, versionId: this.versionId })
                     res && this.$bkMessage({
                         theme: 'success',
                         message: '保存成功',
@@ -1673,11 +1737,15 @@
                             const hasMethod = payload && payload.methodCode
                             if (!hasMethod) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为 remote 但未选择远程函数，请修改后再试`
                         }
+                        if (['data-source', 'table-data-source'].includes(type)) {
+                            const hasTableName = payload?.sourceData?.tableName
+                            if (!hasTableName) errMessage = `组件【${component.componentId}】的属性【${key}】，类型为数据源但未选择表，请修改后再试`
+                        }
                     })
 
                     const renderSlots = component.renderSlots || {}
                     Object.keys(renderSlots).forEach((key) => {
-                        const { type, payload = {} } = renderSlots[key] || {}
+                        const { type, payload = {}, displayName } = renderSlots[key] || {}
 
                         if (payload.variableData && payload.variableData.val) {
                             const { val, valType } = payload.variableData
@@ -1687,7 +1755,12 @@
 
                         if (type === 'remote') {
                             const hasMethod = payload.methodData && payload.methodData.methodCode
-                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${key}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
+                            if (!hasMethod) errMessage = `组件【${component.componentId}】的【${displayName}】插槽，类型为 remote 但未选择远程函数，请修改后再试`
+                        }
+
+                        if (['data-source'].includes(type)) {
+                            const hasTableName = payload?.sourceData?.tableName
+                            if (!hasTableName) errMessage = `组件【${component.componentId}】的【${displayName}】插槽，类型为数据源但未选择表，请修改后再试`
                         }
                     })
 
@@ -1775,6 +1848,7 @@
                         this.$store.dispatch('page/update', {
                             data: {
                                 projectId: this.projectId,
+                                versionId: this.versionId,
                                 pageData: {
                                     id: parseInt(this.$route.params.pageId),
                                     previewImg: imgData || previewErrorImg
@@ -1802,7 +1876,7 @@
                 }
                 me.$bkInfo({
                     title: '确认离开?',
-                    subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                    subTitle: '您将离开画布编辑页面，请确认相应修改已保存',
                     confirmFn: async () => {
                         me.$router.push({
                             params: {

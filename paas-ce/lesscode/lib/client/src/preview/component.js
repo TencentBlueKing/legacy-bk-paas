@@ -11,12 +11,13 @@
 
 // 注入组件库
 import '@/common/bkui-vue-complex'
-import '@/common/bkmagic'
+import '@/common/fully-import'
 import '@/common/element'
+
 // 注入全局组件
 import renderHtml from '@/components/render/html'
 
-module.exports = (Vue, projectId) => {
+module.exports = (Vue, projectId, versionId) => {
     return new Promise((resolve, reject) => {
         // 注入自定义组件
         window.previewCustomCompontensPlugin = []
@@ -24,7 +25,7 @@ module.exports = (Vue, projectId) => {
             window.previewCustomCompontensPlugin.push(callback)
         }
         const script = document.createElement('script')
-        script.src = `/${parseInt(projectId)}/component/preview-register.js`
+        script.src = `/${parseInt(projectId)}/component/preview-register.js?v=${versionId || ''}`
         script.onload = () => {
             window.previewCustomCompontensPlugin.forEach(callback => {
                 const [config, source] = callback(Vue)

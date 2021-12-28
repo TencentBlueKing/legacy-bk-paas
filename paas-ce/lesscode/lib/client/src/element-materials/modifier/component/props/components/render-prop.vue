@@ -35,7 +35,8 @@
                             :key="renderCom.typeName + index"
                             :payload="defaultPayload"
                             :remote-validate="describe.remoteValidate"
-                            :change="handleUpdate" />
+                            :change="handleUpdate"
+                            :batch-update="batchUpdate" />
                     </template>
                 </div>
             </template>
@@ -45,7 +46,7 @@
                         v-for="item in formCom"
                         :key="item.typeName"
                         :value="item.typeName">
-                        {{ item.typeName | propTypeFormat }}
+                        {{ item.label | propTypeFormat }}
                     </bk-radio-button>
                 </bk-radio-group>
                 <div class="prop-action">
@@ -60,7 +61,8 @@
                                 :payload="defaultPayload"
                                 :default-value="defaultValue"
                                 :remote-validate="describe.remoteValidate"
-                                :change="handleUpdate" />
+                                :change="handleUpdate"
+                                :batch-update="batchUpdate" />
                         </template>
                     </template>
                 </div>
@@ -91,6 +93,8 @@
     import TypeIcon from './strategy/icon'
     import TypeColor from './strategy/color'
     import TypleElProps from './strategy/el-props'
+    import TypeDataSource from './strategy/data-source.vue'
+    import TypeTableDataSource from './strategy/table-data-source.vue'
 
     import { transformTipsWidth } from '@/common/util'
     import safeStringify from '@/common/json-safe-stringify'
@@ -184,7 +188,9 @@
                     'carousel': TypeSlotWrapper,
                     'el-radio': TypeSlotWrapper,
                     'el-checkbox': TypeSlotWrapper,
-                    'el-props': TypleElProps
+                    'el-props': TypleElProps,
+                    'data-source': TypeDataSource,
+                    'table-data-source': TypeTableDataSource
                 }
 
                 let realType = config.type
@@ -222,7 +228,9 @@
                     'carousel': 'carousel',
                     'el-radio': 'el-radio',
                     'el-checkbox': 'el-checkbox',
-                    'el-props': 'el-props'
+                    'el-props': 'el-props',
+                    'data-source': 'data-source',
+                    'table-data-source': 'table-data-source'
                 }
                 const valueMap = {
                     'text': 'string',
@@ -231,6 +239,15 @@
                     'json': 'object',
                     'icon': 'string',
                     'float': 'number'
+                }
+                const labelMap = {
+                    'object': '对象',
+                    'number': '数字',
+                    'string': '字符串',
+                    'array': '数组',
+                    'remote': '远程函数',
+                    'data-source': '数据源',
+                    'table-data-source': '数据源'
                 }
                 // 属性type支持配置数组，内部逻辑全部按数组处理
                 if (typeof config.type === 'string') {
@@ -243,7 +260,8 @@
                         res.push({
                             typeName: propType,
                             typeCom: comMap[renderType],
-                            valueType: valueMap[propType] || propType
+                            valueType: valueMap[propType] || propType,
+                            label: labelMap[propType] || propType
                         })
                     }
                     return res

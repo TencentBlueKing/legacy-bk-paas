@@ -154,7 +154,6 @@ const webpackConfig = merge(baseConf, {
         new HtmlWebpackPlugin({
             filename: 'preview.html',
             template: resolve(__dirname, '..', 'preview.html'),
-            inject: true,
             chunks: ['preview'],
             staticUrl: clientConf.dev.staticUrl,
             BKPAAS_ENVIRONMENT: clientConf.dev.BKPAAS_ENVIRONMENT

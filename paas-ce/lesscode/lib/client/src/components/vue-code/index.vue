@@ -16,6 +16,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import { circleJSON } from '@/common/util.js'
     import CodeViewer from '@/components/code-viewer'
     export default {
@@ -32,6 +33,10 @@
                 type: Object,
                 default: () => ({})
             },
+            styleSetting: {
+                type: Object,
+                default: () => ({})
+            },
             withNav: {
                 type: Boolean
             }
@@ -44,6 +49,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId || ''
             },
@@ -61,7 +67,7 @@
             getFormatCode (withNav) {
                 this.isLoading = true
                 console.log('查看源码 getFormatCode')
-                const { pageType, projectId, lifeCycle, pageId } = this
+                const { pageType, projectId, versionId, lifeCycle, pageId, styleSetting } = this
                 const state = this.$store.state || {}
                 const drag = state.drag || {}
                 const layoutContent = drag.curTemplateData
@@ -71,9 +77,11 @@
                     targetData,
                     pageType,
                     projectId,
+                    versionId,
                     lifeCycle,
                     pageId,
                     layoutContent,
+                    styleSetting,
                     withNav
                 }).then(res => {
                     this.formatCode = res

@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Entity, Column } from 'typeorm';
+import { Entity, Column } from 'typeorm'
 import Base from './base'
 
 @Entity({ name: 'token', comment: 'token' })

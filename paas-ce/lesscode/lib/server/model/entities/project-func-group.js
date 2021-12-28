@@ -22,6 +22,12 @@ export default class extends Base {
 
     @Column({
         type: 'int',
+        comment: 'project_version 表主键'
+    })
+    versionId
+
+    @Column({
+        type: 'int',
         comment: 'function 表主键'
     })
     funcGroupId
