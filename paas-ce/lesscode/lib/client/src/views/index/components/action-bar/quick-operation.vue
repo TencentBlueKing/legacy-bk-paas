@@ -29,7 +29,7 @@
     import { getNodeWithClass } from '@/common/util'
     import LC from '@/element-materials/core'
     import { NodeHistory } from '@/element-materials/core/Node-history'
-    import { remove } from '@/element-materials/core/helper/commands'
+    import { remove, removeCallBack } from '@/element-materials/core/helper/commands'
 
     export default {
         components: {
@@ -182,7 +182,7 @@
             },
 
             showDeleteElement () {
-                remove(LC.getActiveNode())
+                removeCallBack()
             },
 
             backHistory () {

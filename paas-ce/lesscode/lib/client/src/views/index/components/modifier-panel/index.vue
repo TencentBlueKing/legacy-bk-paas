@@ -46,6 +46,7 @@
     import LC from '@/element-materials/core'
     import MaterialModifier from '@/element-materials/modifier'
     import { infoLink } from '@/element-materials/materials/index'
+    import { removeCallBack } from '@/element-materials/core/helper/commands'
 
     export default {
         name: '',
@@ -96,11 +97,7 @@
              * @desc 显示删除选中的元素弹框
              */
             handleRemoveElement () {
-                const parentNode = this.componentData.parentNode
-                if (parentNode) {
-                    parentNode.removeChild(this.componentData)
-                    this.componentData = null
-                }
+                removeCallBack()
             },
             handleToggleInteractiveShow () {
                 this.componentData.toggleInteractive()
