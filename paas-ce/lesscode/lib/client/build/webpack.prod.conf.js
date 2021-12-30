@@ -24,6 +24,7 @@ const clientConf = require('./conf')
 const { pathToNodeModules } = require('./util')
 const baseConf = require('./webpack.base.conf')
 const manifest = require('../static/lib-manifest.json')
+const WebpackBundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = merge(baseConf, {
     mode: 'production',
@@ -275,6 +276,9 @@ module.exports = merge(baseConf, {
                 toType: 'dir'
             }
         ]),
-        new ReplaceStaticUrlPlugin({ fileNamePrefix: 'main' })
+        new ReplaceStaticUrlPlugin({ fileNamePrefix: 'main' }),
+        new WebpackBundleAnalyzer({
+            assets: true
+        })
     ]
 })

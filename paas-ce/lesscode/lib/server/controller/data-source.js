@@ -49,7 +49,7 @@ export default class DataSourceController {
 
         const dbInfo = {
             projectId,
-            dbName: projectInfo.projectCode,
+            dbName: projectInfo.projectCode + projectInfo.id,
             userName: util.uuid(),
             passWord: util.uuid()
         }
@@ -58,7 +58,7 @@ export default class DataSourceController {
         const previewDbEngine = await getPreviewDbEngine()
         await previewDbEngine.execCb(async (pool) => {
             // 创建项目对应的预览数据库
-            await pool.query(`CREATE DATABASE ${dbInfo.dbName};`)
+            await pool.query(`CREATE DATABASE \`${dbInfo.dbName}\`;`)
             // 创建用户并授权对应的库
             await pool.query(`CREATE USER '${dbInfo.userName}'@'%' IDENTIFIED BY '${dbInfo.passWord}';`)
             await pool.query(`GRANT ALL ON ${dbInfo.dbName}.* TO '${dbInfo.userName}'@'%';`)
