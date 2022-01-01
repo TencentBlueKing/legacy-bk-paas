@@ -59,32 +59,6 @@ class PageCode {
     remoteDataStr = ''
     lifeCircleStr = ''
     existFunc = []
-    // slotTagMap = {
-    //     'bk-table': 'bk-table-column',
-    //     'bk-select': 'bk-option',
-    //     'bk-checkbox-group': 'bk-checkbox',
-    //     'bk-radio-group': 'bk-radio',
-    //     'bk-tab': 'bk-tab-panel',
-    //     'bk-breadcrumb': 'bk-breadcrumb-item',
-    //     'search-table': 'bk-table-column',
-    //     'folding-table': 'bk-table-column',
-    //     'el-select': 'el-option',
-    //     'el-radio-group': 'el-radio',
-    //     'el-checkbox-group': 'el-checkbox',
-    //     'el-table': 'el-table-column',
-    //     'el-tabs': 'el-tab-pane',
-    //     'el-breadcrumb': 'el-breadcrumb-item',
-    //     'el-steps': 'el-step',
-    //     'el-timeline': 'el-timeline-item',
-    //     'el-carousel': 'el-carousel-item'
-    // }
-    // slotContentArray = [
-    //     'bk-checkbox',
-    //     'bk-radio',
-    //     'bk-breadcrumb-item',
-    //     'el-breadcrumb-item',
-    //     'el-timeline-item'
-    // ]
     chartTypeArr = [] // echarts 相关，要引入echarts依赖
     useBkCharts = false // 是否使用bkcharts标志位
     usingCustomArr = []
@@ -228,7 +202,7 @@ class PageCode {
             componentCode = `
                     <div ${itemClass} style="${css}">
                         <bk-form ${vueDirective} ${propDirective} ${itemProps}>
-                            ${this.generateCode(item.renderSlots.default.val)}
+                            ${this.generateCode(item.renderSlots.default)}
                         </bk-form>
                     </div>
                  `
@@ -856,6 +830,7 @@ class PageCode {
                 `
                 /* eslint-enable no-unused-vars, indent */
             } else {
+                if (item.type === 'widget-form-item')    item.type = 'bk-form-item'
                 code += this.generateComponment(item, vueDirective, propDirective, inFreeLayout)
             }
             if (templateDirective) code += `\n</template>`
@@ -865,7 +840,7 @@ class PageCode {
 
     getItemProps (type, props, compId, directives, slots) {
         const hasProps = props && typeof props === 'object' && Object.keys(props).length > 0
-        const dirProps = (directives || []).filter((directive) => (directive.val !== '' && directive.prop !== ''))
+        const dirProps = (directives || []).filter((directive) => (directive.code !== undefined && directive.code !== '' && directive.prop !== ''))
         let itemProps = ''
         if (hasProps || slots) {
             itemProps = this.getPropsStr(type, props, compId, dirProps, slots)
@@ -884,27 +859,26 @@ class PageCode {
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
                 if (i === 'value') elementComId = compId
-                const { 'v-bind': vBind, 'v-model': vModel, val, type, modifiers = [] } = props[i]
+                const { format, valueType: type, code: val, modifiers = [] } = props[i]
 
-                const propVar = vBind || vModel || compId
-                const hasVBind = ![undefined, ''].includes(vBind)
-                const hasVModel = ![undefined, ''].includes(vModel)
-                const propName = vBind && modifiers && modifiers.length ? `${i}.${modifiers.join('.')}` : i
+                const propVar = format !== 'value' ? val : compId
+                const propName = format !== 'value' && modifiers && modifiers.length ? `${i}.${modifiers.join('.')}` : i
                 let curPropStr = `${val === undefined ? '' : ':'}${propName}="${propVar}" `
-                if (hasVModel) curPropStr = `v-model=${propVar} `
 
-                if (type === 'remote') {
+                if (format !== 'value') {
+                    this.handleUsedVariable(format, val, compId)
+                    propsStr = curPropStr
+                    continue
+                } else if (type === 'remote') {
                     const curDir = dirProps.find((directive) => (directive.prop === i))
-                    const key = (curDir || {}).val || propVar
+                    const key = (curDir || {}).code || propVar
                     this.remoteMethodsTemplate(key, props[i].payload || {})
                     if (!curDir) {
                         this.dataTemplate(propVar, JSON.stringify([]))
                         propsStr += curPropStr
                     }
                     continue
-                }
-
-                if (type === 'array' || typeof val === 'object') {
+                } else if (type === 'array' || typeof val === 'object') {
                     if (componentType === 'widget-form' && i === 'rules') {
                         this.handleFormRules(propVar, val)
                     } else {
@@ -912,9 +886,7 @@ class PageCode {
                     }
                     propsStr += curPropStr
                     continue
-                }
-
-                if (type === 'function') {
+                } else if (type === 'function') {
                     const [method] = this.getMethodByCode(props[i].payload || {})
                     if (method.funcName && method.funcCode) {
                         // 这个属性 不用支持参数
@@ -928,45 +900,27 @@ class PageCode {
                         this.usingFuncCodes.push(method.funcCode)
                     }
                     continue
-                }
-
-                if (val !== undefined) {
-                    if (hasVBind || hasVModel) {
-                        if (typeof val === 'string') {
-                            this.dataTemplate(propVar, `'${val}'`)
-                        } else {
-                            const v = (typeof val === 'object' ? JSON.stringify(val).replace(/\"/g, '\'') : val)
-                            this.dataTemplate(propVar, v)
-                        }
-                        propsStr += curPropStr
-                    } else {
+                } else {
+                    if (val !== undefined) {
                         const v = (typeof val === 'object' ? JSON.stringify(val).replace(/\"/g, '\'') : val)
                         propsStr += `${typeof val === 'string' ? '' : ':'}${propName}="${v}" `
                     }
                 }
             }
-            // } else {
-            //     const hasVModel = dirProps.filter(item => item.type === 'v-model').length
-            //     if (type === 'bk-checkbox-group' && !hasVModel) {
-            //         const checkedValue = slots.default.val.filter(c => c.checked === true).map(c => c.value)
-            //         this.dataTemplate(compId, JSON.stringify(checkedValue))
-            //         propsStr += `v-model="${compId}"`
-            //     }
-            // }
         }
         const hasVModel = dirProps.filter(item => item.type === 'v-model').length
         if (type === 'bk-checkbox-group' && !hasVModel) {
-            const checkedValue = slots.default.val.filter(c => c.checked === true).map(c => c.value)
+            const checkedValue = (slots.default.code || []).filter(c => c.checked === true).map(c => c.value)
             this.dataTemplate(compId, JSON.stringify(checkedValue))
             propsStr += `v-model="${compId}"`
         }
         // element组件添加vmodel
         if (type.startsWith('el-')) {
             if (!hasVModel && elementComId !== '') {
-                const valueType = typeof props['value'].val
+                const valueType = typeof props['value'].code
                 if (valueType !== 'array' && valueType !== 'object') {
-                    let vModelValue = props['value'].val.toString()
-                    if (valueType === 'string') vModelValue = `'${props['value'].val}'`
+                    let vModelValue = props['value'].code.toString()
+                    if (valueType === 'string') vModelValue = `'${props['value'].code}'`
                     this.dataTemplate(elementComId, vModelValue)
                 }
                 propsStr += `v-model="${elementComId}"`
@@ -1117,16 +1071,16 @@ class PageCode {
 
     getDirectives (renderDirectives, renderProps, componentId) {
         // 过滤
-        const exisDirectives = (renderDirectives || []).filter((directive) => (directive.val !== ''))
+        const exisDirectives = (renderDirectives || []).filter((directive) => (directive.code !== '' && directive.val !== ''))
         const vueDirectives = []
         const templateDirectives = []
         const propDirectives = []
         const id = componentId.replace(/\-(.)/g, x => (x.slice(1)).toUpperCase())
 
         exisDirectives.forEach((directive) => {
-            const { type, modifiers = [], prop = '', valType, val } = directive
+            const { type, modifiers = [], prop = '', format, code: val } = directive
             const modifierStr = (modifiers || []).map((modifier) => `.${modifier}`).join('')
-            const disPlayVal = this.handleUsedVariable(valType, val, componentId)
+            const disPlayVal = this.handleUsedVariable(format, val, componentId)
             switch (type) {
                 case 'v-if':
                     const exitsVFor = exisDirectives.find((dir) => (dir.type === 'v-for'))
@@ -1137,8 +1091,8 @@ class PageCode {
                 case 'v-for':
                     vueDirectives.push(`v-for="(${id}Item, ${id}Index) in ${disPlayVal}" :key="${id}Index"`)
                     break
-                case 'v-model':
                 case 'v-show':
+                case 'v-model':
                 case 'v-html':
                     propDirectives.push(`${type}="${disPlayVal}"`)
                     break
@@ -1165,18 +1119,15 @@ class PageCode {
             compId = compId + key
             slotStr += '\n'
             if (!isDefaultSlot) slotStr += `<template slot="${key}">\n`
-            if (['render-grid', 'render-row', 'render-col', 'free-layout'].includes(slot.type)) {
+            if (Array.isArray(slot)) {
+                slotStr += this.generateCode(slot)
+            } else if (typeof slot === 'object' && slot.componentId) {
                 const codeArr = []
-                // card, dialog, sideslider 组件的 slots 配置中 val 没有 componentId
-                // 会导致在 getDirectives 方法中 componentId.replace 报错
-                if (!slot.val.componentId) {
-                    slot.val.componentId = `${slot.val.name}-${uuid()}`
-                }
-                codeArr.push(slot.val)
-                slotStr += this.generateCode(codeArr, slot.type === 'free-layout')
-            } else if (slot.type === 'form-item-content') {
-                slotStr += this.generateCode(slot.val)
+                codeArr.push(slot)
+                slotStr += this.generateCode(codeArr)
             } else {
+                slot.val = slot.code
+                slot.name =slot.component
                 const render = slotRenderConfig[slot.name] || (() => {})
                 const slotRenderParams = []
                 let curSlot = slot
@@ -1188,13 +1139,13 @@ class PageCode {
                         '[object Boolean]': false,
                         '[object String]': ''
                     }
-                    const { variableData = {}, methodData = {} } = slot.payload || {}
+                    const { methodData = {} } = slot.payload || {}
                     const type = Object.prototype.toString.call(slot.val)
                     let disPlayVal = defaultValMap[type] || ''
                     const param = { val: disPlayVal, type: 'variable' }
 
-                    if (variableData.val) {
-                        disPlayVal = this.handleUsedVariable(variableData.valType, variableData.val, compId)
+                    if (slot.format !== 'value') {
+                        disPlayVal = this.handleUsedVariable(slot.format, slot.val, compId)
                     } else if (methodData.methodCode) {
                         this.dataTemplate(compId, transformToString(disPlayVal))
                         this.remoteMethodsTemplate(compId, methodData || {})
@@ -1223,92 +1174,7 @@ class PageCode {
             if (!isDefaultSlot) slotStr += `\n</template>\n`
         })
         return slotStr
-
-        // if (slot.type === 'layout') {
-        //     const codeArr = []
-        //     // card, dialog, sideslider 组件的 slots 配置中 val 没有 componentId
-        //     // 会导致在 getDirectives 方法中 componentId.replace 报错
-        //     if (!slot.val.componentId) {
-        //         slot.val.componentId = `${slot.val.name}-${uuid()}`
-        //     }
-        //     codeArr.push(slot.val)
-        //     const slotName = slot.val.slotName || 'default'
-        //     slotStr += `
-        //     <template slot="${slotName}">
-        //         ${this.generateCode(codeArr)}
-        //     </template>`
-        // } else if (slot.type === 'form-item-content') {
-        //     slotStr += this.generateCode(slot.val)
-        // } else if (slot.payload && slot.payload.variableData && slot.payload.variableData.val) {
-        //     const variableData = slot.payload.variableData
-        //     const disPlayVal = this.handleUsedVariable(variableData.valType, variableData.val, compId)
-        //     if (slot.type === 'html') {
-        //         slotStr += `<div v-html="${disPlayVal}"></div>`
-        //     }
-        //     if (slot.name === 'text') {
-        //         slotStr += `{{${disPlayVal}}}`
-        //     }
-        // } else if (typeof slot.val === 'string') {
-        //     slotStr = slot.val
-        // } else if (typeof slot === 'object') {
-        //     let slotType = this.slotTagMap[type] ? this.slotTagMap[type] : ''
-        //     if (type === 'bk-radio-group' && slot.name === 'bk-radio-button') {
-        //         slotType = slot.name
-        //     }
-        //     if (slotType) {
-        //         if (slot.type === 'remote') {
-        //             this.dataTemplate(compId, JSON.stringify([]))
-        //             this.remoteMethodsTemplate(compId, slot.payload || {})
-        //             let content = this.slotContentArray.includes(slotType) ? '{{item.label}}' : ''
-        //             content = slotType === 'el-carousel-item' ? '{{item.content}}' : content
-        //             const attrStr = (slot.attrs && slot.attrs.map((item, index) => `:${item.key}="item.${item.value}"`).join('\n')) || ''
-
-        //             slotStr += `<${slotType} v-for="item in ${compId}" ${attrStr}>
-        //                 ${content}
-        //             </${slotType}>`
-        //         } else {
-        //             slot.val && slot.val.map(item => {
-        //                 if ((slotType === 'bk-table-column' || slotType === 'el-table-column') && item.type === 'customCol') {
-        //                     // const scopeName = slotType === 'bk-table-column' ? 'props' : 'scope'
-        //                     slotStr += `<${slotType} label="${item.label}" width="${item.width}">
-        //                         <template slot-scope="props">
-        //                             ${item.templateCol}
-        //                         </template>
-        //                     </${slotType}>`
-        //                     item.methodCode && (this.usingFuncCodes = this.usingFuncCodes.concat(item.methodCode))
-        //                 } else {
-        //                     let content = this.slotContentArray.includes(slotType) ? item.label : ''
-        //                     content = slotType === 'el-carousel-item' ? item.content : content
-        //                     const itemProps = this.getSlotPropsStr(item, slot.attrs, slotType)
-        //                     slotStr += ''
-        //                         + `<${slotType} ${itemProps}>`
-        //                         + content
-        //                         + `</${slotType}>`
-        //                         + '\n'
-        //                 }
-        //             })
-        //         }
-        //     }
-        //     if (type === 'search-table' || type === 'folding-table') {
-        //         slotStr = `<template slot="table-column">${slotStr}</template>`
-        //     }
-        // }
     }
-
-    // getSlotPropsStr (props, attrs, slotType) {
-    //     let propsStr = ''
-    //     for (const i in props) {
-    //         if (slotType === 'el-carousel-item' && i === 'content') {
-    //             continue
-    //         }
-    //         if (i !== 'slots') {
-    //             const propsValue = typeof props[i] === 'object' ? JSON.stringify(props[i]).replace(/\"/g, '\'') : props[i]
-    //             const propsKey = (attrs && attrs.find(item => item.value === i)) ? attrs.find(item => item.value === i).key : i
-    //             propsStr += `${typeof props[i] === 'string' ? '' : ':'}${propsKey}="${propsValue}" `
-    //         }
-    //     }
-    //     return propsStr
-    // }
 
     getData () {
         let data = ''
