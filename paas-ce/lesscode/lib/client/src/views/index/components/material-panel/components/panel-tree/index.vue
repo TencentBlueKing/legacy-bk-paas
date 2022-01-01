@@ -1,5 +1,5 @@
 <template>
-    <div class="component-tree-wrapper">
+    <div class="panel-tree">
         <div class="tree-search-area">
             <bk-input ext-cls="tree-search"
                 :right-icon="'bk-icon icon-search'"
@@ -22,15 +22,14 @@
                 @expand-change="checkIsAllExpanded"
                 @select-change="activeNode"
                 ref="tree">
-                <!-- eslint-disable-next-line vue/no-template-shadow -->
-                <div slot-scope="{ data }">
+                <div slot-scope="{ data: nodeData }">
                     <div class="component-tree-node-item">
-                        <i :class="nodeIcon(data)"></i>
-                        <span>{{data.componentId}}</span>
-                        <i v-if="data.isInteractiveComponent"
-                            v-bk-tooltips="componentEyeTips(data)"
-                            :class="['component-eye-control', 'bk-drag-icon', eyeIconClass(data)]"
-                            @click.stop="eyeClickHandler(data)"></i>
+                        <i :class="nodeIcon(nodeData)"></i>
+                        <span>{{nodeData.componentId}}</span>
+                        <i v-if="nodeData.isInteractiveComponent"
+                            v-bk-tooltips="componentEyeTips(nodeData)"
+                            :class="['component-eye-control', 'bk-drag-icon', eyeIconClass(nodeData)]"
+                            @click.stop="eyeClickHandler(nodeData)"></i>
                     </div>
                 </div>
             </tree>
@@ -40,35 +39,24 @@
 
 <script>
     import _ from 'lodash'
-    import LC from '@/element-materials/core'
-    import Tree from './tree/tree.vue'
     import { mapMutations, mapGetters } from 'vuex'
+    import LC from '@/element-materials/core'
+    import Tree from './components/tree'
 
     export default {
         components: {
             Tree
-        },
-        props: {
-            targetData: {
-                type: Array,
-                default: () => ([])
-            }
         },
         data () {
             return {
                 filter: '',
                 allExpanded: false,
                 treeWidth: 300,
-                data: [],
-                LC: LC
+                data: []
             }
         },
         computed: {
             ...mapGetters(['pagePopMaskObserve']),
-            ...mapGetters('drag', [
-                'curSelectedComponentData'
-            ]),
-            ...mapGetters('components', ['interactiveComponents']),
             treeFoldIcon () {
                 return this.allExpanded ? 'bk-drag-unfold' : 'bk-drag-fold'
             },
@@ -115,10 +103,6 @@
         },
         methods: {
             ...mapMutations(['setPopMaskObserve']),
-            ...mapMutations('drag', [
-                'setCurSelectedComponentData',
-                'setTargetData'
-            ]),
             /** 判断当前组件及其父组件是否是交互式组件 */
             isParentInteractive (node) {
                 if (node.isInteractiveComponent) {
@@ -259,7 +243,7 @@
 <style lang="postcss" scoped>
 @import "@/css/mixins/scroller";
 
-.component-tree-wrapper {
+.panel-tree {
     height: calc(100% - 13px);
     .tree-search-area {
         margin: 13px 10px 10px 10px;

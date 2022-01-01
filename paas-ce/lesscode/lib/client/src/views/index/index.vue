@@ -45,7 +45,8 @@
                                 </div>
                                 <i class="bk-select-angle bk-icon icon-angle-down"></i>
                             </div>
-                            <bk-option v-for="option in pageList"
+                            <bk-option
+                                v-for="option in pageList"
                                 :key="option.id"
                                 :id="option.id"
                                 :name="option.pageName">
@@ -146,13 +147,9 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     import LC from '@/element-materials/core'
-    import {
-        // uuid,
-        // walkGrid,
-        circleJSON
-    } from '@/common/util'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
     import ExtraLinks from '@/components/ui/extra-links'
@@ -220,16 +217,12 @@
                     top: '50%',
                     transform: 'translateY(-50%)'
                 }
-            },
-            projectId () {
-                return this.$route.params.projectId || ''
-            },
-            
-            pageId () {
-                return this.$route.params.pageId || ''
             }
         },
         async created () {
+            this.projectId = parseInt(this.$route.params.projectId)
+            this.pageId = parseInt(this.$route.params.pageId)
+
             this.guideStep = [
                 {
                     title: '组件库和图标',
@@ -298,6 +291,7 @@
             this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
         },
         mounted () {
+            this.registerCustomComponent()
             window.addEventListener('unload', this.relasePage)
         },
         beforeDestroy () {
@@ -337,6 +331,28 @@
              */
             handleCustomComponentLoaded () {
                 this.isCustomComponentLoading = false
+            },
+            registerCustomComponent () {
+                // 包含所有的自定组件
+                window.__innerCustomRegisterComponent__ = {}
+                const script = document.createElement('script')
+                script.src = `/${parseInt(this.projectId)}/${parseInt(this.pageId)}/component/register.js`
+                script.onload = () => {
+                    window.customCompontensPlugin.forEach((callback) => {
+                        const [
+                            config,
+                            componentSource
+                        ] = callback(Vue)
+                        window.__innerCustomRegisterComponent__[config.type] = componentSource
+                        // 注册自定义组件 material
+                        LC.registerMaterial(config.type, config)
+                    })
+                    this.isCustomComponentLoading = false
+                }
+                document.body.appendChild(script)
+                this.$once('hook:beforeDestroy', () => {
+                    document.body.removeChild(script)
+                })
             },
             relasePage () {
                 const data = new FormData()
@@ -531,55 +547,6 @@
                 return confirmationMessage
             },
 
-            /**
-             * 左侧组件列表 hover 事件
-             *
-             * @param {Object} e 事件对象
-             * @param {Object} component 组件对象
-             */
-            handleComponentMouseenter (e, component) {
-                let popoverInstance = e.target._tippy
-                // const componentPreviewImg = `component-preview/${component.name}.png`
-                const componentPreviewImg = 'component-preview.png'
-                if (!popoverInstance) {
-                    popoverInstance = this.$bkPopover(e.target, {
-                        content: `<img width="210" src="${require(`@/images/${componentPreviewImg}`)}" />`,
-                        boundary: 'viewport',
-                        placement: 'right-start',
-                        animation: 'fade',
-                        duration: [500, 50],
-                        theme: 'light popover-component',
-                        onShow (instance) {
-                            const left = 300 - instance.reference.offsetLeft - 60
-                            instance.set({
-                                distance: left
-                            })
-                        },
-                        delay: 0
-                    })
-                }
-                popoverInstance.show()
-            },
-
-            handlePreview () {
-                this.handleSave(() => {
-                    let errTips = ''
-                    try {
-                        localStorage.removeItem('layout-target-data')
-                        localStorage.setItem('layout-target-data', circleJSON(this.targetData))
-                        const routerUrl = `/preview/project/${this.projectId}/?pageCode=${this.pageDetail.pageCode}`
-                        window.open(routerUrl, '_blank')
-                    } catch (err) {
-                        errTips = err.message || err || '预览异常'
-                    }
-                    errTips && this.$bkMessage({
-                        theme: 'error',
-                        message: errTips,
-                        limit: 1
-                    })
-                }, 'preview')
-            },
-
             leavePage (routeName) {
                 this.$router.push({
                     name: routeName,
@@ -591,17 +558,16 @@
             },
 
             handlePageChange (pageId) {
-                const me = this
-                if (pageId === me.pageId) {
+                if (pageId === this.pageId) {
                     return
                 }
-                me.$bkInfo({
+                this.$bkInfo({
                     title: '确认离开?',
                     subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
                     confirmFn: async () => {
-                        me.$router.push({
+                        this.$router.push({
                             params: {
-                                projectId: me.projectId,
+                                projectId: this.projectId,
                                 pageId
                             }
                         })

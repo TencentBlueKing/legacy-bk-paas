@@ -91,71 +91,71 @@
             },
 
             quickOperation (event) {
-                const vm = this
-                const funcChainMap = {
-                    stopped: false,
-                    isInDragArea: function () {
-                        if (!vm.isInDragArea) this.stopped = true
-                        return this
-                    },
-                    hasCtrl: function () {
-                        if (!vm.hasCtrl) this.stopped = true
-                        return this
-                    },
-                    preventDefault: function () {
-                        if (!this.stopped) event.preventDefault()
-                        return this
-                    },
-                    isDelComponentConfirm: function () {
-                        if (!vm.delComponentConf.visiable) this.stopped = true
-                        return this
-                    },
-                    exec: function (callBack) {
-                        vm.$nextTick(() => {
-                            if (!this.stopped) callBack()
-                            return this
-                        })
-                    }
-                }
+                // const vm = this
+                // const funcChainMap = {
+                //     stopped: false,
+                //     isInDragArea: function () {
+                //         if (!vm.isInDragArea) this.stopped = true
+                //         return this
+                //     },
+                //     hasCtrl: function () {
+                //         if (!vm.hasCtrl) this.stopped = true
+                //         return this
+                //     },
+                //     preventDefault: function () {
+                //         if (!this.stopped) event.preventDefault()
+                //         return this
+                //     },
+                //     isDelComponentConfirm: function () {
+                //         if (!vm.delComponentConf.visiable) this.stopped = true
+                //         return this
+                //     },
+                //     exec: function (callBack) {
+                //         vm.$nextTick(() => {
+                //             if (!this.stopped) callBack()
+                //             return this
+                //         })
+                //     }
+                // }
 
-                switch (event.keyCode) {
-                    case 91:
-                    case 224:
-                    case 93:
-                    case 17:
-                        this.hasCtrl = true
-                        break
-                    case 67:
-                        console.log('ctrlc')
-                        funcChainMap.isInDragArea().exec(this.putComponentData)
-                        break
-                    case 83:
-                        funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)
-                        break
-                    case 86:
-                        console.log('ctrlv')
-                        funcChainMap.isInDragArea().exec(this.copyComponent)
-                        break
-                    case 88:
-                        console.log('ctrlx,剪切')
-                        funcChainMap.isInDragArea().exec(this.cutComponent)
-                        break
-                    // case 90:
-                    //     console.log('ctrlz,撤销')
-                    //     funcChainMap.isInDragArea().hasCtrl().exec(this.backHistory)
-                    //     break
-                    // case 89:
-                    //     console.log('ctrly,恢复')
-                    //     funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.forwardHistory)
-                    //     break
-                    case 8:
-                    case 46:
-                        funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
-                        break
-                    case 13:
-                        funcChainMap.isDelComponentConfirm().exec(this.confirmDelComponent)
-                        break
-                }
+                // switch (event.keyCode) {
+                //     case 91:
+                //     case 224:
+                //     case 93:
+                //     case 17:
+                //         this.hasCtrl = true
+                //         break
+                //     case 67:
+                //         console.log('ctrlc')
+                //         funcChainMap.isInDragArea().exec(this.putComponentData)
+                //         break
+                //     case 83:
+                //         funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)
+                //         break
+                //     case 86:
+                //         console.log('ctrlv')
+                //         funcChainMap.isInDragArea().exec(this.copyComponent)
+                //         break
+                //     case 88:
+                //         console.log('ctrlx,剪切')
+                //         funcChainMap.isInDragArea().exec(this.cutComponent)
+                //         break
+                //     // case 90:
+                //     //     console.log('ctrlz,撤销')
+                //     //     funcChainMap.isInDragArea().hasCtrl().exec(this.backHistory)
+                //     //     break
+                //     // case 89:
+                //     //     console.log('ctrly,恢复')
+                //     //     funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.forwardHistory)
+                //     //     break
+                //     case 8:
+                //     case 46:
+                //         funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
+                //         break
+                //     case 13:
+                //         funcChainMap.isDelComponentConfirm().exec(this.confirmDelComponent)
+                //         break
+                // }
             },
 
             // 剪切
