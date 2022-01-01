@@ -35,7 +35,7 @@ export default {
         'error-display-type': {
             type: 'string',
             options: ['tooltips', 'normal'],
-            val: 'tooltips'
+            val: 'normal'
         },
         'required': {
             type: 'boolean',
