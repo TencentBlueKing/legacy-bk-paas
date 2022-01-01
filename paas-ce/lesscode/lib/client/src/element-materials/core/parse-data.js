@@ -224,7 +224,9 @@ const tansform = (parentNode, data) => {
         }, {})
         // prop 还需要解析 renderDirectives 中 v-bind 的关联数据
         ;(curDataNode.renderDirectives || []).forEach(directive => {
-            if (directive.type === 'v-bind' && curDataNode.renderProps[directive.prop]) {
+            if (directive.type === 'v-bind'
+                && directive.val
+                 && curDataNode.renderProps[directive.prop]) {
                 const renderProp = origanlRenderProps[directive.prop]
                 curDataNode.renderProps[directive.prop] = {
                     format: directive.valType,
