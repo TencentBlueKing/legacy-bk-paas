@@ -36,6 +36,21 @@
 <script>
     import { mapGetters } from 'vuex'
     import LC from '@/element-materials/core'
+    import {
+        createGrid2,
+        createGrid3,
+        createGrid4,
+        createBkIcon,
+        createElIcon
+    } from './hacker'
+
+    const hackerQueue = [
+        createGrid2,
+        createGrid3,
+        createGrid4,
+        createBkIcon,
+        createElIcon
+    ]
 
     export default {
         props: {
@@ -74,25 +89,12 @@
              */
             handleChoose (event) {
                 // console.log('from group handle choose = ', event, this.list)
-                const {
-                    type,
-                    name
-                } = this.list[event.oldIndex]
+                const materialConfig = this.list[event.oldIndex]
 
-                const node = LC.createNode(type)
+                const node = LC.createNode(materialConfig.type)
 
-                if (type === 'render-grid') {
-                    if (name === 'grid2') {
-                        node.appendChild(LC.createNode('render-column'))
-                    } else if (name === 'grid3') {
-                        node.appendChild(LC.createNode('render-column'))
-                        node.appendChild(LC.createNode('render-column'))
-                    } else if (name === 'grid4') {
-                        node.appendChild(LC.createNode('render-column'))
-                        node.appendChild(LC.createNode('render-column'))
-                        node.appendChild(LC.createNode('render-column'))
-                    }
-                }
+                hackerQueue.forEach(task => task(node, materialConfig))
+
                 // 自定义组件
                 if (this.curNameMap[node.type]) {
                     node.setProperty('isCustomComponent', true)
@@ -112,9 +114,9 @@
                         'free-layout',
                         'render-grid',
                         'widget-form'
-                    ].includes(type)) {
+                    ].includes(node.type)) {
                         groupName = 'layout'
-                    } else if (LC.isInteractiveType(type)) {
+                    } else if (LC.isInteractiveType(node.type)) {
                         groupName = 'interactive'
                     } else {
                         groupName = 'component'
@@ -219,7 +221,7 @@
                 width: 36px;
                 height: 36px;
                 margin-right: 12px;
-                margin-bottom: 10px;
+                margin-top: 10px;
                 background-color: #fafbfd;
                 color: #979ba5;
                 text-align: center;

@@ -58,6 +58,7 @@ import popconfirm from './popconfirm'
 import breadCrumb from './bread-crumb'
 import paragraph from './paragraph'
 import divider from './divider'
+import icon from './icon'
 
 import chartsLine from './charts-line'
 import chartsBar from './charts-bar'
@@ -138,6 +139,7 @@ const bkComponents = Object.seal([
     form,
     formItem,
     divider,
+    icon,
     sideslider,
     bkChartsLine,
     bkChartsBar,

@@ -50,7 +50,7 @@
             }
         },
         created () {
-            this.change(this.name, this.defaultValue, this.type)
+            // this.change(this.name, this.defaultValue, this.type)
         },
         methods: {
             handleChange (val) {

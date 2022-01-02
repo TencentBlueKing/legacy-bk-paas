@@ -94,7 +94,7 @@
             }
 
             const updateCallback = (event) => {
-                // console.log('from target updateCallback == ', event)
+                console.log('from target updateCallback == ', event)
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
                     this.autoType()

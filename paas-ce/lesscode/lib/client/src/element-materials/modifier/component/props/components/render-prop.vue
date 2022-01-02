@@ -304,7 +304,7 @@
                 }
             }
 
-            if (this.lastValue && this.lastValue.type) {
+            if (this.lastValue && this.lastValue.valueType) {
                 this.formData = Object.freeze({
                     ...this.formData,
                     format: this.lastValue.format,

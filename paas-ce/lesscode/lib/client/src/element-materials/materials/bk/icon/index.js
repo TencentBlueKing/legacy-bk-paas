@@ -12,11 +12,12 @@
 export default {
     name: `bk-icon`,
     displayName: '',
+    display: 'none',
     type: 'bk-icon',
     icon: 'bk-cion',
-    events: [{ name: 'click' }],
-    group: 0,
+    group: 'layout',
     order: 1,
+    events: [{ name: 'click' }],
     styles: ['margin', 'display', 'font'],
     renderStyles: {
         display: 'inline-block',
