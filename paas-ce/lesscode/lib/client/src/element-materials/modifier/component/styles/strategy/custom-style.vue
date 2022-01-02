@@ -21,7 +21,7 @@
                 <div class="container-tips">
                     请在{}内编写该组件的自定义样式，样式优先级：自定义样式 > 样式面板设置 > 组件默认样式
                 </div>
-                <monaco :value.sync="styleValue" height="400px" class="monaco" ref="monaco"></monaco>
+                <monaco :value.sync="styleValue" height="400px" language="css" show-header="false" class="monaco" ref="monaco"></monaco>
                 <div class="container-footer">
                     <div class="footer-wrapper">
                         <bk-button theme="primary" @click.native="confirm">
@@ -40,7 +40,7 @@
 <script>
     import StyleLayout from '../layout/index'
     import StyleItem from '../layout/item'
-    import Monaco from './monaco'
+    import Monaco from '@/components/monaco'
     import { camelCase } from 'change-case'
 
     export default {

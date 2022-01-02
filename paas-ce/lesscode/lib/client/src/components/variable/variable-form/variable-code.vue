@@ -13,7 +13,7 @@
 
 <script>
     import mixins from './variable.mixin'
-    import monaco from '@/components/methods/monaco'
+    import monaco from '@/components/monaco'
     import { mapActions } from 'vuex'
 
     export default {
