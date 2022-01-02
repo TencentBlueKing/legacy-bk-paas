@@ -22,8 +22,8 @@
             </div>
         </div>
         <div :class="$style['content']">
-            <div :class="$style['code-panel']">
-                <code viewer :class="$style['code']">{{ code }}</code>
+            <div :class="$style['code-panel']" style="height: 100%">
+                <monaco :value.sync="code" :show-header="false" :read-only="true" height="100%" :class="$style['monaco-code']" ref="monaco"></monaco>
             </div>
         </div>
     </div>
@@ -31,10 +31,12 @@
 
 <script>
     import screenfull from 'screenfull'
-    import hljs from 'highlight.js'
-    import 'highlight.js/styles/monokai-sublime.css'
+    import monaco from '@/components/monaco'
 
     export default {
+        components: {
+            monaco
+        },
         props: {
             code: {
                 type: String,
@@ -62,14 +64,6 @@
                 return this.pageType === 'json' ? 'json' : '源码'
             }
         },
-        watch: {
-            code: {
-                handler () {
-                    this.highlightCode()
-                },
-                immediate: true
-            }
-        },
         mounted () {
             this.screenfullChange = () => {
                 this.isFullscreen = screenfull.isFullscreen
@@ -87,15 +81,6 @@
             },
             showEditData () {
                 this.$emit('show-edit-data')
-            },
-            highlightCode () {
-                this.$nextTick(() => {
-                    const ele = document.querySelector('code[viewer]')
-                    if (this.code) {
-                        ele.textContent = this.code
-                        hljs.highlightBlock(ele)
-                    }
-                })
             },
             handleDownloadFile () {
                 const downlondEl = document.createElement('a')
@@ -190,18 +175,13 @@
             height: calc(100% - var(--toolbar-height));
             min-height: 400px;
             overflow: auto;
+            background: #1e1e1e;
             @mixin scroller #63656E;
 
             .code-panel {
                 white-space: pre;
-                .code {
-                    background: #313238 !important;
-                    word-break: break-all;
-                    word-wrap: break-word;
-                    @mixin scroller;
-                    .hljs-attr {
-                        color: #a6e22e;
-                    }
+                .monaco-code {
+                    height: 100%;
                 }
             }
         }

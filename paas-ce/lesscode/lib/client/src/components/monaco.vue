@@ -1,6 +1,6 @@
 <template>
     <section>
-        <section class="monaco-head">
+        <section class="monaco-head" v-if="showHeader">
             <span class="monaco-title">
                 <slot name="title"></slot>
             </span>
@@ -24,6 +24,14 @@
     export default {
         props: {
             value: String,
+            showHeader: {
+                type: Boolean,
+                default: true
+            },
+            language: {
+                type: String,
+                default: 'javascript'
+            },
             width: {
                 type: [String, Number],
                 default: 'auto'
@@ -107,7 +115,7 @@
                 const options = Object.assign({
                     value: this.value,
                     theme: 'vs-dark',
-                    language: 'javascript',
+                    language: this.language,
                     fontSize: 14,
                     fontFamily: 'Consolas',
                     cursorBlinking: 'solid',
