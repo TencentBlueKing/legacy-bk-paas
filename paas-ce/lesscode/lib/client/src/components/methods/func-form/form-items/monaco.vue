@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import monaco from '../../monaco.vue'
+    import monaco from '@/components/monaco.vue'
     import mixins from './form-item-mixins'
     import { mapActions } from 'vuex'
     import { bus } from '@/common/bus'
