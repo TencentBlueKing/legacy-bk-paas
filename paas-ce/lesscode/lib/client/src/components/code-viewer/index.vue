@@ -23,7 +23,7 @@
         </div>
         <div :class="$style['content']">
             <div :class="$style['code-panel']" style="height: 100%">
-                <monaco :value.sync="code" :show-header="false" :read-only="true" height="100%" :class="$style['monaco-code']" ref="monaco"></monaco>
+                <monaco :value.sync="code" :language="pageType === 'code' ? 'html' : 'json'" :show-header="false" :read-only="true" height="100%" :class="$style['monaco-code']" ref="monaco"></monaco>
             </div>
         </div>
     </div>
