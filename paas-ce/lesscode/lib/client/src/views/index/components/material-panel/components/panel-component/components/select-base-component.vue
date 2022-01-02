@@ -76,7 +76,7 @@
             }
         },
         created () {
-            this.elementUiTips = ''
+            this.elementUiTips = '当前组件库版本为“2.15.1”，<a target="_blank" href="https://github.com/ElemeFE/element/releases" style="cursor: pointer;color: #3a84ff">查看更新日志</a>'
         },
         methods: {
             handleToggleSelectPanel () {

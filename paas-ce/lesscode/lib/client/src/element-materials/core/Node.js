@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { uuid } from '@/common/util'
 
 import toJSON from './extends/to-json'
@@ -164,7 +165,7 @@ export default class Node {
             result[propKey] = this.renderProps[propKey].renderValue
             return result
         }, {})
-        return Object.seal(props)
+        return Object.seal(_.cloneDeep(props))
     }
     /**
      * @desc 组件 slot

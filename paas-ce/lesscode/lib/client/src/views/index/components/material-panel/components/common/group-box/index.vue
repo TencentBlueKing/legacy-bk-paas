@@ -36,7 +36,6 @@
 <script>
     import { mapGetters } from 'vuex'
     import LC from '@/element-materials/core'
-    import cloneDeep from 'lodash.clonedeep'
 
     export default {
         props: {
@@ -51,7 +50,8 @@
         data () {
             return {
                 dragGroup: {
-                    name: 'component'
+                    name: 'component',
+                    pull: 'clone'
                 },
                 isFolded: true
             }
@@ -69,16 +69,15 @@
                 this.isFolded = !this.isFolded
             },
             /**
-             * 左侧组件列表区域拖拽 choose 回调函数
-             * 事件触发顺序 handleChoose cloneFunc onStart moveFunc(n) onEnd
-             *
+             * @desc 左侧组件列表区域拖拽 choose 回调函数
              * @param {Object} event 事件对象
              */
             handleChoose (event) {
+                // console.log('from group handle choose = ', event, this.list)
                 const {
                     type,
                     name
-                } = cloneDeep(this.list[event.oldIndex])
+                } = this.list[event.oldIndex]
 
                 const node = LC.createNode(type)
 
@@ -109,7 +108,11 @@
                 if (this.group) {
                     groupName = this.group
                 } else {
-                    if (['free-layout', 'render-grid', 'widget-form'].includes(type)) {
+                    if ([
+                        'free-layout',
+                        'render-grid',
+                        'widget-form'
+                    ].includes(type)) {
                         groupName = 'layout'
                     } else if (LC.isInteractiveType(type)) {
                         groupName = 'interactive'
@@ -120,7 +123,7 @@
 
                 this.dragGroup = Object.freeze({
                     ...this.dragGroup,
-                    group: groupName
+                    name: groupName
                 })
             },
             cloneFunc () {

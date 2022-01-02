@@ -8,6 +8,7 @@ export default {
             componentData
         } = context.props
 
+        // fix
         const nativeComponentStyleReset = {
             // 修正组件会影响位置的样式
             'padding': '',
@@ -25,6 +26,7 @@ export default {
             border: '',
             'box-shadow': ''
         }
+        // fix
         // 在 freelayout 里面时对组件进行位置修正，
         // 基础组件的根可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
         if (context.parent.attachToFreelayout) {
@@ -38,9 +40,9 @@ export default {
         
         if (!context.parent.isShadowComponent) {
             Object.assign(nativeComponentStyleReset, {
-                // 基础组件的层级最低（基础组件可能本身有 border 样式，保证组件选中和 hover 时的边框效果能显示出来）
+                // fix: 基础组件的层级最低（基础组件可能本身有 border 样式，保证组件选中和 hover 时的边框效果能显示出来）
                 'z-index': 0,
-                // 隔绝基础组件的鼠标事件响应
+                // fix: 隔绝基础组件的鼠标事件响应
                 'pointer-events': 'none'
             })
         }
@@ -60,6 +62,10 @@ export default {
             }
         }
 
+        const attrs = {
+            role: componentData.type
+        }
+        
         Object.keys(context.parent.material.props || {}).forEach(propName => {
             const propConfig = context.parent.material.props[propName]
             // prop 被标记为 staticValue，在画布编辑时不动态改变
@@ -67,11 +73,12 @@ export default {
             if (Object.prototype.hasOwnProperty.call(propConfig, 'staticValue')) {
                 props[propName] = propConfig.staticValue
             }
+            // fix: vue 特性，class、style默认会被子组件继承
+            if (['class', 'style'].includes(propName)) {
+                attrs[propName] = componentData.prop[propName]
+            }
         })
-
-        const attrs = {
-            role: componentData.type
-        }
+        
         // 为基础组件打上标记
         if (!context.parent.isShadowComponent) {
             attrs['data-base-component'] = true

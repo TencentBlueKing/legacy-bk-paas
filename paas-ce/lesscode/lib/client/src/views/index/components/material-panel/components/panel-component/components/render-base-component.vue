@@ -9,10 +9,16 @@
                 :key="groupName"
                 :list="comList"
                 :group-name="groupName">
-                <render-component
-                    v-for="component in comList"
-                    :key="component.name"
-                    :data="component" />
+                <template v-for="component in comList">
+                    <render-icon
+                        v-if="groupName === '图标集合'"
+                        :key="component.name"
+                        :data="component" />
+                    <render-component
+                        v-else
+                        :key="component.name"
+                        :data="component" />
+                </template>
             </group-box>
         </div>
     </div>
@@ -22,12 +28,16 @@
     import SearchBox from '../../common/search-box'
     import GroupBox from '../../common/group-box'
     import RenderComponent from '../../common/group-box/render-component'
+    import RenderIcon from '../../common/group-box/render-icon.vue'
+
+    console.log('from base component = ', MaterialConfig)
 
     export default {
         components: {
             SearchBox,
             GroupBox,
-            RenderComponent
+            RenderComponent,
+            RenderIcon
         },
         props: {
             baseComponent: {
@@ -87,8 +97,8 @@
                     groupComponentMap[component.group].push(component)
                 })
 
-                this.groupComponentMap = Object.freeze(groupComponentMap)
                 this.searchList = searchList
+                this.groupComponentMap = Object.freeze(groupComponentMap)
                 this.renderGroupComponentMap = Object.freeze(groupComponentMap)
             },
             /**
