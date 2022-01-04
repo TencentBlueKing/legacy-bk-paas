@@ -87,6 +87,7 @@
              * @param { Object } event
              */
             const updateCallback = _.throttle((event) => {
+                // 选中组件时不需要更新组件树
                 if ([
                     'active',
                     'activeClear'

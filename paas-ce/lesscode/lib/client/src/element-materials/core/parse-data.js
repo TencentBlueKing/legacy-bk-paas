@@ -349,12 +349,12 @@ export const parseTemplate = data => {
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
-        versionData = tansform({ type: 'template' }, [data])
+        versionData = tansform({ type: 'template' }, data)
     }
     try {
         isClone = true
         const root = create('render-column')
-        traverse(root, [versionData], 'default')
+        traverse(root, versionData, 'default')
         return root.children[0]
     } finally {
         isClone = false

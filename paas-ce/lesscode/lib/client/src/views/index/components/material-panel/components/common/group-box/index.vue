@@ -60,7 +60,9 @@
             // 如果设置了 group
             // 则该 group-box 下所有拖拽组件统一为配置的 group 值
             // 为空，通过组件 type 动态计算 group 的值
-            group: String
+            group: String,
+            // 选中组件时的回调
+            createFallback: Function
         },
         data () {
             return {
@@ -88,38 +90,37 @@
              * @param {Object} event 事件对象
              */
             handleChoose (event) {
-                const materialConfig = this.list[event.oldIndex]
-                console.log('from group handle choose = ', event, this.list, materialConfig)
-                const node = LC.createNode(materialConfig.type)
+                if (typeof this.createFallback === 'function') {
+                    this.newNode = this.createFallback(this.list, event.oldIndex)
+                } else {
+                    const materialConfig = this.list[event.oldIndex]
+                    const node = LC.createNode(materialConfig.type)
 
-                hackerQueue.forEach(task => task(node, materialConfig))
+                    hackerQueue.forEach(task => task(node, materialConfig))
 
-                // 自定义组件
-                if (this.curNameMap[node.type]) {
-                    node.setProperty('isCustomComponent', true)
+                    // 自定义组件
+                    if (this.curNameMap[node.type]) {
+                        node.setProperty('isCustomComponent', true)
+                    }
+                    // 交互式组件
+                    if (LC.isInteractiveType(node.type)) {
+                        node.setProperty('isInteractiveComponent', true)
+                    }
+                    this.newNode = node
                 }
-                // 交互式组件
-                if (LC.isInteractiveType(node.type)) {
-                    node.setProperty('isInteractiveComponent', true)
-                }
-
-                this.newNode = node
                 
                 let groupName = ''
-                if (this.group) {
-                    groupName = this.group
+                
+                if ([
+                    'free-layout',
+                    'render-grid',
+                    'widget-form'
+                ].includes(this.newNode.type)) {
+                    groupName = 'layout'
+                } else if (LC.isInteractiveType(this.newNode.type)) {
+                    groupName = 'interactive'
                 } else {
-                    if ([
-                        'free-layout',
-                        'render-grid',
-                        'widget-form'
-                    ].includes(node.type)) {
-                        groupName = 'layout'
-                    } else if (LC.isInteractiveType(node.type)) {
-                        groupName = 'interactive'
-                    } else {
-                        groupName = 'component'
-                    }
+                    groupName = 'component'
                 }
 
                 this.dragGroup = Object.freeze({

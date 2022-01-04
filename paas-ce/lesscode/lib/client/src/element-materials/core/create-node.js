@@ -30,24 +30,32 @@ const parseTemplateTree = (templateRoot) => {
     return node
 }
 
-export default function (elementType) {
+/**
+ * @desc 根据传入的组件 type 创建 Node
+ * @param { String } elementType
+ * @param { Boolean } parseSlot 是否解析配置的slot
+ * @returns { Node }
+ */
+export default function (elementType, parseSlot = true) {
     const node = createNode(elementType)
     if (!node) {
         return node
     }
-    // 创建节点时需要解析多层级的 slot 配置
-    if (node.layoutType) {
-        if (Array.isArray(node.material.slots.default)) {
-            node.material.slots.default.forEach(slotTemplate => {
-                node.appendChild(parseTemplateTree(slotTemplate), 'default')
+    if (parseSlot) {
+        // 创建节点时需要解析多层级的 slot 配置
+        if (node.layoutType) {
+            if (Array.isArray(node.material.slots.default)) {
+                node.material.slots.default.forEach(slotTemplate => {
+                    node.appendChild(parseTemplateTree(slotTemplate), 'default')
+                })
+            } else {
+                node.appendChild(parseTemplateTree(node.material.slots.default), 'default')
+            }
+        } else if (node.layoutSlot) {
+            Object.keys(node.layoutSlotType).forEach((slotName) => {
+                node.setRenderSlots(parseTemplateTree(node.material.slots[slotName]), slotName)
             })
-        } else {
-            node.appendChild(parseTemplateTree(node.material.slots.default), 'default')
         }
-    } else if (node.layoutSlot) {
-        Object.keys(node.layoutSlotType).forEach((slotName) => {
-            node.setRenderSlots(parseTemplateTree(node.material.slots[slotName]), slotName)
-        })
     }
 
     console.log(`print createNode (${elementType}): `, node)

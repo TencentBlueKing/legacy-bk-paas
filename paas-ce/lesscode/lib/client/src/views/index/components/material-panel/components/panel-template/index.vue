@@ -31,6 +31,7 @@
                 :list="group.list"
                 :group-name="group.categoryName"
                 group="layout"
+                :create-fallback="createFallback"
                 :key="group.id">
                 <div
                     v-for="(template, templateIndex) in group.list"
@@ -67,7 +68,7 @@
         <template-edit-dialog
             ref="templateApplyDialog"
             action-type="apply"
-            :refresh-list="initTemplates" />
+            :refresh-list="fetchData" />
     </section>
 </template>
 <script>
@@ -99,13 +100,6 @@
                 marketTemplateList: [],
                 projectTemplateGroupList: [],
                 marketTemplateGroupList: [],
-                templateTabs: {
-                    list: [
-                        { name: 'project', label: '项目模板', active: true },
-                        { name: 'market', label: '模板市场', active: false }
-                    ]
-                },
-                templateTabsCurrentRefresh: +new Date(),
                 searchResult: null,
                 templateGroupFolded: {}
             }
@@ -120,12 +114,15 @@
         },
         created () {
             this.projectId = this.$route.params.projectId
-            this.initTemplates()
             this.curDragingComponent = null
-            bus.$on('update-template-list', this.initTemplates)
+            this.fetchData()
+            bus.$on('update-template-list', this.fetchData)
         },
         methods: {
-            async initTemplates () {
+            /**
+             * @desc 获取模板数据
+             */
+            async fetchData () {
                 try {
                     this.isLoading = true
                     const [
@@ -164,6 +161,14 @@
                     this.isLoading = false
                 }
             },
+            createFallback (list, index) {
+                console.log('from maste fallsbaen = =', JSON.parse(list[index].content))
+                return LC.parseTemplate(JSON.parse(list[index].content))
+            },
+            /**
+             * @desc tab 切换
+             * @param { String } tab
+             */
             handleToggleTab (tab) {
                 this.tab = tab
             },
@@ -185,11 +190,10 @@
                     }
                 ]
             },
-
-            handleCompGroupFold (groupId) {
-                this.$set(this.templateGroupFolded, groupId, !this.templateGroupFolded[groupId])
-            },
-
+            /**
+             * @desc 预览模板
+             * @param { Number } templateId
+             */
             handlePreview (templateId) {
                 window.open(`/preview-template/project/${this.projectId}/${templateId}`, '_blank')
             },

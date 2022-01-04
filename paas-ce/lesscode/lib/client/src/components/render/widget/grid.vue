@@ -65,6 +65,16 @@
                 }, 0)
             },
             /**
+             * @desc 克隆 grid，只克隆布局数据树结构不克隆
+             */
+            handleAddClone () {
+                const gridNode = LC.createNode('render-grid', false)
+                this.componentData.children.forEach(() => {
+                    gridNode.appendChild(LC.createNode('render-column'))
+                })
+                this.componentData.parentNode.insertAfter(gridNode, this.componentData)
+            },
+            /**
              * @desc 添加栅格
              */
             handleAddColumn () {
@@ -73,16 +83,6 @@
                     return
                 }
                 this.componentData.appendChild(LC.createNode('render-column'))
-            },
-            /**
-             * @desc 克隆 grid，只克隆布局数据树结构不克隆
-             */
-            handleAddClone () {
-                const gridNode = LC.createNode('render-grid')
-                this.componentData.children.forEach(() => {
-                    gridNode.appendChild(LC.createNode('render-column'))
-                })
-                this.componentData.parentNode.appendChild(gridNode)
             }
         }
     }
