@@ -24,7 +24,7 @@
 
         data () {
             return {
-                isShow: false,
+                isShow: true,
                 lastSlots: {}
             }
         },
