@@ -69,10 +69,8 @@
                 }
             }
             LC.addEventListener('toggleInteractive', dragableCheck)
-            LC.addEventListener('hideInteractive', dragableCheck)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('toggleInteractive', dragableCheck)
-                LC.removeEventListener('hideInteractive', dragableCheck)
             })
         },
         mounted () {

@@ -1,18 +1,18 @@
 import LC from '@/element-materials/core'
 
-export const createGrid2 = (node) => {
-    if (node.name === 'grid2') {
+export const createGrid2 = (node, config) => {
+    if (node.type === 'render-grid' && config.name === 'grid2') {
         node.appendChild(LC.createNode('render-column'))
     }
 }
-export const createGrid3 = (node) => {
-    if (node.name === 'grid3') {
+export const createGrid3 = (node, config) => {
+    if (node.type === 'render-grid' && config.name === 'grid3') {
         node.appendChild(LC.createNode('render-column'))
         node.appendChild(LC.createNode('render-column'))
     }
 }
-export const createGrid4 = (node) => {
-    if (node.name === 'grid4') {
+export const createGrid4 = (node, config) => {
+    if (node.type === 'render-grid' && config.name === 'grid4') {
         node.appendChild(LC.createNode('render-column'))
         node.appendChild(LC.createNode('render-column'))
         node.appendChild(LC.createNode('render-column'))

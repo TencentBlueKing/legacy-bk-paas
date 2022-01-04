@@ -187,6 +187,7 @@
     }
     .editor{
         padding-bottom: 300px;
+        z-index: 1000000000000 !important;
     }
     .not-visible-mask{
         position: fixed;

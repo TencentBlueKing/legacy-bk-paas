@@ -11,7 +11,6 @@ export function notify (target, name, descriptor) {
     const fn = descriptor.value
     descriptor.value = function () {
         const isActived = this.isActived
-        const interactiveShow = this.interactiveShow
         const result = fn.apply(this, arguments)
         // 节点没有被添加到Node tree 中不触发事件
         if (!this.parentNode && this.type !== 'root') {
@@ -26,10 +25,7 @@ export function notify (target, name, descriptor) {
             event.interactiveShow = this.interactiveShow
             triggerEventListener('toggleInteractive', event)
         }
-        if (name === 'hideInteractive' && !interactiveShow) {
-            event.interactiveShow = false
-            triggerEventListener('hideInteractive', event)
-        }
+        
         if (name === 'active' && isActived !== this.isActived) {
             event.isActived = true
             triggerEventListener('active', event)

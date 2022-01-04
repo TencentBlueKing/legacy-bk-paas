@@ -5,7 +5,6 @@ import toJSON from './extends/to-json'
 import active from './extends/active'
 import activeClear from './extends/active-clear'
 import toggleInteractive from './extends/toggle-interactive'
-import hideInteractive from './extends/hide-interactive'
 import appendChild from './extends/append-child'
 import insertBefore from './extends/insert-before'
 import insertAfter from './extends/insert-after'
@@ -52,10 +51,7 @@ export default class Node {
         directives = [],
         slots = {},
         renderStyles = {},
-        renderProps = {},
-        interactiveShow = false,
-        isComplexComponent = false,
-        isCustomComponent = false
+        renderProps = {}
     }) {
         const uid = uuid()
             
@@ -70,13 +66,13 @@ export default class Node {
         this.renderDirectives = directives
         this.renderEvents = {}
         // 交互式组件的显示状态
-        this.interactiveShow = interactiveShow
+        this.interactiveShow = false
         // 交互式组件
         this.isInteractiveComponent = false
         // 复合组件
-        this.isComplexComponent = isComplexComponent
+        this.isComplexComponent = false
         // 自定义组件
-        this.isCustomComponent = isCustomComponent
+        this.isCustomComponent = false
         // 组件被选中
         this.isActived = false
     }
@@ -165,6 +161,12 @@ export default class Node {
             result[propKey] = this.renderProps[propKey].renderValue
             return result
         }, {})
+        // 配置了 v-model，获取对应的值
+        this.renderDirectives.forEach(directive => {
+            if (directive.type === 'v-model') {
+                props[directive.prop] = directive.renderValue
+            }
+        })
         return Object.seal(_.cloneDeep(props))
     }
     /**
@@ -266,21 +268,16 @@ export default class Node {
         activeClear(this)
         return this
     }
+    
     /**
      * @desc 切换交互式组件的显示状态
+     * @param { Boolean } state
      * @returns { Node }
      */
-    @readonly
-    @notify
-    toggleInteractive () {
-        toggleInteractive(this)
-        return this
-    }
-
-    @readonly
-    @notify
-    hideInteractive () {
-        hideInteractive(this)
+     @readonly
+     @notify
+    toggleInteractive (state) {
+        toggleInteractive(this, state)
         return this
     }
     /**
@@ -289,10 +286,10 @@ export default class Node {
      */
     @readonly
     @notify
-    rerender () {
-        rerender(this)
-        return this
-    }
+     rerender () {
+         rerender(this)
+         return this
+     }
 
     /**
      * @desc 添加子组件

@@ -30,14 +30,16 @@ export default {
         {
             type: 'v-model',
             prop: 'value',
-            propTypes: ['boolean'],
-            val: '',
-            valType: 'variable'
+            format: 'value',
+            code: true,
+            valueType: 'boolean',
+            renderValue: true
         }
     ],
     props: {
         'value': {
             type: 'boolean',
+            staticValue: true,
             tips: '是否显示弹框，支持v-model双向绑定'
         },
         'title': {
@@ -83,7 +85,8 @@ export default {
         },
         'show-mask': {
             type: 'boolean',
-            val: true
+            val: true,
+            staticValue: false
         },
         'ok-text': {
             type: 'string',
@@ -100,6 +103,11 @@ export default {
         'ext-cls': {
             type: 'string',
             tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
+        },
+        transfer: {
+            type: 'boolean',
+            val: true,
+            staticValue: false
         }
     },
     slots: {

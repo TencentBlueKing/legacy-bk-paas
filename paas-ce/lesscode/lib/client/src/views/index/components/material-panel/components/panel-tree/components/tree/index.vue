@@ -190,13 +190,14 @@
         },
         mounted () {
             this.setData(this.data)
+            console.log('print trree = ', this)
         },
         methods: {
             setData (data) {
                 const nodes = []
                 const map = {}
                 this.recurrenceNodes(data, null, nodes, map)
-                this.nodes = nodes
+                this.nodes = Object.freeze(nodes)
                 this.map = map
                 this.initNodeState()
                 this.setVirtualScrollList()

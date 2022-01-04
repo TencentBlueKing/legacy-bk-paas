@@ -88,9 +88,8 @@
              * @param {Object} event 事件对象
              */
             handleChoose (event) {
-                // console.log('from group handle choose = ', event, this.list)
                 const materialConfig = this.list[event.oldIndex]
-
+                console.log('from group handle choose = ', event, this.list, materialConfig)
                 const node = LC.createNode(materialConfig.type)
 
                 hackerQueue.forEach(task => task(node, materialConfig))
@@ -181,7 +180,6 @@
         .group-content{
             display: flex;
             flex-wrap: wrap;
-            padding: 0 12px;
             .render-drag-item{
                 position: relative;
                 width: 60px;
@@ -192,15 +190,12 @@
                 border-radius: 2px;
                 background: #FAFBFD;
                 margin-top: 10px;
-                margin-right: 12px;
+                margin-left: 12px;
                 cursor: pointer;
                 &:hover{
                     border: 1px solid #3a84ff;
                     background: #3a84ff;
                     color: #fff;
-                }
-                &:nth-child(4n) {
-                    margin-right: 0;
                 }
                 .component-icon{
                     margin: 11px 0 2px 0;
@@ -220,7 +215,7 @@
             .render-drag-icon-item{
                 width: 36px;
                 height: 36px;
-                margin-right: 12px;
+                margin-left: 12px;
                 margin-top: 10px;
                 background-color: #fafbfd;
                 color: #979ba5;
@@ -231,9 +226,6 @@
                 &:hover{
                     background: #3a84ff;
                     color: #fff;
-                }
-                &:nth-child(6n){
-                    margin-right: 0;
                 }
             }
         }

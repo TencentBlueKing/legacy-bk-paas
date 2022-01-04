@@ -1,9 +1,9 @@
 <template>
     <div
-        v-if="isShow && Object.keys(renderConfig).length"
+        v-if="isShow && Object.keys(config).length"
         class="modifier-slot">
         <renderSlot
-            v-for="(slotConfig, slotName) in renderConfig"
+            v-for="(slotConfig, slotName) in config"
             :key="slotName"
             :name="slotName"
             :last-value="lastSlots[slotName]"
@@ -24,21 +24,8 @@
 
         data () {
             return {
-                isShow: true,
-                config: {},
+                isShow: false,
                 lastSlots: {}
-            }
-        },
-
-        computed: {
-            renderConfig () {
-                return Object.keys(this.config).reduce((result, slotName) => {
-                    const config = this.config[slotName]
-                    if (config.name.includes('layout') || config.display !== 'hidden') {
-                        result[slotName] = config
-                    }
-                    return result
-                }, {})
             }
         },
 
@@ -53,7 +40,14 @@
                 material,
                 renderSlots
             } = this.componentNode
-            this.config = Object.freeze(material.slots || {})
+            const slotConfig = material.slots || {}
+            this.config = Object.keys(slotConfig).reduce((result, slotName) => {
+                const config = slotConfig[slotName]
+                if (config.name.includes('layout') || config.display !== 'hidden') {
+                    result[slotName] = config
+                }
+                return result
+            }, {})
             this.lastSlots = Object.freeze(_.cloneDeep(renderSlots))
         },
 

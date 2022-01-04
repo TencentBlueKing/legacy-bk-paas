@@ -1,62 +1,77 @@
 <template>
     <div class="panel-tree">
         <div class="tree-search-area">
-            <bk-input ext-cls="tree-search"
+            <bk-input
+                class="tree-search"
                 :right-icon="'bk-icon icon-search'"
                 :clearable="true"
-                v-model="filter"
-                @change="searchTree"></bk-input>
-            <span :class="['bk-drag-icon', treeFoldIcon]"
+                @change="handleSearch" />
+            <span
+                :class="['bk-drag-icon', treeFoldIcon]"
                 v-bk-tooltips="tooltip"
-                @click="foldIcon">
+                @click="handleToggleExpandTree">
             </span>
-
         </div>
         <div class="tree-wrapper">
-            <tree :data="data"
+            <bk-big-tree
+                ref="tree"
                 :selectable="true"
-                :style="`width: ${treeWidth + 'px'}`"
                 :expand-on-click="false"
-                ext-cls="component-tree"
-                :options="{ idKey: 'componentId' }"
+                class="component-tree"
                 @expand-change="checkIsAllExpanded"
-                @select-change="activeNode"
-                ref="tree">
+                @select-change="handleNodeSelect">
                 <div slot-scope="{ data: nodeData }">
                     <div class="component-tree-node-item">
-                        <i :class="nodeIcon(nodeData)"></i>
-                        <span>{{nodeData.componentId}}</span>
-                        <i v-if="nodeData.isInteractiveComponent"
-                            v-bk-tooltips="componentEyeTips(nodeData)"
-                            :class="['component-eye-control', 'bk-drag-icon', eyeIconClass(nodeData)]"
-                            @click.stop="eyeClickHandler(nodeData)"></i>
+                        <i
+                            class="bk-drag-icon"
+                            :class="nodeData.payload.componentData.material.icon" />
+                        <span>{{ nodeData.name }}</span>
+                        <i
+                            v-if="nodeData.payload.componentData.isInteractiveComponent"
+                            class="component-eye-control bk-drag-icon"
+                            :class="{
+                                'bk-drag-visible-eye': nodeData.payload.componentData.interactiveShow,
+                                'bk-drag-invisible-eye': !nodeData.payload.componentData.interactiveShow
+                            }"
+                            v-bk-tooltips="{
+                                content: nodeData.payload.componentData.interactiveShow ? '隐藏' : '显示',
+                                placement: 'top',
+                                interactive: false
+                            }"
+                            @click.self.stop="handleToggleInteractive(nodeData)"></i>
                     </div>
                 </div>
-            </tree>
+            </bk-big-tree>
         </div>
     </div>
 </template>
 
 <script>
     import _ from 'lodash'
-    import { mapMutations, mapGetters } from 'vuex'
     import LC from '@/element-materials/core'
-    import Tree from './components/tree'
+
+    const getDataFromNodeTree = tree => {
+        if (!tree) {
+            return []
+        }
+        
+        return tree.map(node => Object.freeze({
+            id: node.componentId,
+            name: node.componentId,
+            children: getDataFromNodeTree(node.children),
+            payload: {
+                componentData: node
+            }
+        }))
+    }
 
     export default {
-        components: {
-            Tree
-        },
         data () {
             return {
-                filter: '',
-                allExpanded: false,
-                treeWidth: 300,
-                data: []
+                allExpanded: false
             }
         },
         computed: {
-            ...mapGetters(['pagePopMaskObserve']),
             treeFoldIcon () {
                 return this.allExpanded ? 'bk-drag-unfold' : 'bk-drag-fold'
             },
@@ -64,35 +79,59 @@
                 return this.allExpanded ? '收起所有' : '展开所有'
             }
         },
-        created () {
-            this.data = Object.freeze(LC.getRoot().children)
-        },
+        
         mounted () {
-            this.$nextTick(() => this.computeTreeWidth()) // 初始化时，动态计算tree的宽度
-
-            const updateCallback = _.throttle(() => {
-                this.data = Object.freeze(LC.getRoot().children)
+            this.$refs.tree.setData(getDataFromNodeTree(LC.getRoot().children))
+            /**
+             * @desc 组件树监听 update 回调
+             * @param { Object } event
+             */
+            const updateCallback = _.throttle((event) => {
+                if ([
+                    'active',
+                    'activeClear'
+                ].includes(event.type)) {
+                    return
+                }
+                
+                // 切换交互式组件的显示、隐藏状态同样需要刷新整个 tree 的 data，
+                // 但是需要保留节点的展开状态
+                let expandIdListMemo = []
+                if ([
+                    'toggleInteractive'
+                ].includes(event.type)) {
+                    expandIdListMemo = this.$refs.tree.nodes.reduce((result, node) => {
+                        if (node.expanded) {
+                            result.push(node.id)
+                        }
+                        return result
+                    }, [])
+                }
+                this.$refs.tree.setData(getDataFromNodeTree(LC.getRoot().children))
+                // 还原展开状态
+                expandIdListMemo.forEach((nodeId) => {
+                    this.$refs.tree.setExpanded(nodeId)
+                })
             }, 100)
             /**
-             * 组件树监听update的回调
-             * @description 当update的的时候需要做几件事
-             *    ① 展开所有父级节点（这样才能看到当前节点）
-             *    ② 判断当前激活节点或其祖先节点是否是交互式组件，如果是交互式组件，需要将其设置为可见状态
+             *
+             * @desc 组件树监听 active 回调
+             * @param { Object } event
+             *
+             * 展开所有父级节点（这样才能看到当前节点）
              */
-            const activeCallback = async event => {
-                await this.expandParent(event.target)
-
+            const activeCallback = event => {
                 const activeNode = event.target
+
+                let activeNodeParent = activeNode.parentNode
+                while (activeNodeParent && activeNodeParent.type !== 'root') {
+                    this.$refs.tree.setExpanded(activeNodeParent.componentId, {
+                        expanded: true
+                    })
+                    activeNodeParent = activeNodeParent.parentNode
+                }
                 
                 this.$refs.tree.setSelected(activeNode.componentId)
-
-                this.data.forEach(item => {
-                    item.hideInteractive()
-                })
-                const parent = this.isParentInteractive(activeNode)
-                if (parent) {
-                    this.setComponentVisible(parent)
-                }
             }
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('active', activeCallback)
@@ -102,139 +141,137 @@
             })
         },
         methods: {
-            ...mapMutations(['setPopMaskObserve']),
-            /** 判断当前组件及其父组件是否是交互式组件 */
-            isParentInteractive (node) {
-                if (node.isInteractiveComponent) {
-                    return node
-                } else if (node.parentNode.type !== 'root') {
-                    return this.isParentInteractive(node.parentNode)
-                } else {
-                    return false
+            /**
+             * @desc 节点搜索
+             * @param { String } text
+             *
+             * 默认选中搜索结果的第一个节点
+             */
+            handleSearch: _.debounce(function (text) {
+                const data = this.$refs.tree.filter(text.trim())
+                if (data.length > 0) {
+                    this.$nextTick(() => {
+                        this.$refs.tree.setSelected(data[0].id, {
+                            emitEvent: true
+                        })
+                    })
                 }
-            },
-            expandParent (node, queue = []) {
-                if (node.parentNode.type !== 'root') {
-                    queue.push(node.parentNode.componentId)
-                    return this.expandParent(node.parentNode, queue)
-                }
-                for (let i = queue.length - 1; i >= 0; i--) {
-                    this.$refs.tree.setExpanded(queue[i], { expanded: true, emitEvent: true })
-                }
-                return Promise.resolve(true)
-            },
-            eyeIconClass (node) {
-                return node.interactiveShow ? 'bk-drag-visible-eye' : 'bk-drag-invisible-eye'
-            },
-            eyeClickHandler (node) {
-                if (!node.isActived) {
-                    node.active()
-                    return
-                }
-                setTimeout(() => {
-                    this.setComponentVisible(node)
-                }, 0)
-            },
-            componentEyeTips (node) {
-                return {
-                    content: node.interactiveShow ? '隐藏' : '显示',
-                    placement: 'top',
-                    interactive: false
-                }
-            },
-            /** toggle interactive component visible status */
-            setComponentVisible (node) {
-                node.toggleInteractive()
-
-                /** 去除dialog交互式组件 插入在body的mask */
-                setTimeout(() => {
-                    const dialogMask = document.getElementsByClassName('bk-dialog-mask')[0]
-                    if (dialogMask) {
-                        if (this.pagePopMaskObserve === null) {
-                            this.setPopMaskObserve(new MutationObserver((mutation) => {
-                                console.log('监听dialog中')
-                                /** 判断mask的Zindex，来判断是否是对话框关闭动作 */
-                                const reg = /^z-index:\s?(\d{4})/
-                                const oldValue = mutation[0] && mutation[0].oldValue
-                                const curValue = mutation[0] && mutation[0].target
-
-                                const oldZIndex = parseInt(reg.exec(oldValue) && reg.exec(oldValue)[1]) || 0
-                                const curZIndex = parseInt(curValue.style.zIndex)
-                                if (oldZIndex > curZIndex) {
-                                    dialogMask.style.display = 'none'
-                                }
-                            }))
-                            this.pagePopMaskObserve.observe(dialogMask, { attributes: true, attributeOldValue: true, attributeFilter: ['style'] })
-                        }
-                        dialogMask.style.display = 'none'
+            }, 300),
+            /**
+             * @desc 切换整个树的展开、收起状态
+             */
+            handleToggleExpandTree () {
+                this.allExpanded = !this.allExpanded
+                const commandTreeNodes = (nodes, command) => {
+                    if (!nodes || nodes.length < 1) {
+                        return
                     }
-                }, 50)
-            },
-            foldIcon () {
-                this.commandTreeNodes(this.data, !this.allExpanded)
-            },
-            checkIsAllExpanded () {
-                this.allExpanded = this.$refs.tree.nodes.every(node => node.isLeaf || node.expanded)
-                setTimeout(() => {
-                    this.computeTreeWidth()
-                }, 0)
-            },
-            computeTreeWidth () {
-                const tree = document.getElementsByClassName('bk-big-tree')[0]
-                const nodeLevels = Array.from(tree.children)
-                    .map(item => item.getAttribute('style'))
-                    .map(item => +item.replace(/^--level:(\d+).*/, '$1'))
-
-                const maxLevel = Math.max(...nodeLevels)
-                const width = maxLevel <= 3 ? 300 : 300 + (maxLevel - 3) * 30
-                this.treeWidth = width
-            },
-
-            findTopParent (node) {
-                let curNode = node
-                while (curNode.parent) {
-                    curNode = curNode.parent
+                    nodes.forEach(node => {
+                        this.$refs.tree.setExpanded(node.id, {
+                            expanded: command,
+                            emitEvent: true
+                        })
+                        commandTreeNodes(node.children, command)
+                    })
                 }
-                return curNode.id === node.id ? null : curNode
-            },
-            activeNode (node) {
-                if (node.data.isActived || node.data.type === 'render-column') {
-                    return
-                }
-                node.data && node.data.active()
-                /** 将画布中的目标节点移动至视区 */
-                this.transformCanvasToView(node.data.componentId)
-            },
-            transformCanvasToView (id) {
-                const canvasTarget = document.querySelector(`div[data-component-id="${id}"]`)
-                const anchorNode = this.setAnchorPoint(canvasTarget)
-                anchorNode.scrollIntoView({ behavior: 'smooth', inline: 'nearest' })
-                canvasTarget.parentNode.removeChild(anchorNode)
+                commandTreeNodes(this.data, this.allExpanded)
             },
             /**
-             * @desc 设置targetData的一个不可见的元素，用于做scrollIntoView的偏移
+             * @desc 切换交互式组件的显示状态
+             * @param { Object } node 树节点
              */
-            setAnchorPoint (targetNode) {
-                const anchorNode = document.createElement('div')
-                anchorNode.style.position = 'absolute'
-                anchorNode.style.top = (targetNode.offsetTop - 10) + 'px'
-                anchorNode.style.left = targetNode.offsetLeft + 'px'
-                targetNode.parentNode.appendChild(anchorNode)
-                return anchorNode
+            handleToggleInteractive (node) {
+                const componentData = node.payload.componentData
+                componentData.active()
+                componentData.toggleInteractive()
             },
-            commandTreeNodes (nodes, command) {
-                nodes.forEach(node => {
-                    this.$refs.tree.setExpanded(node.componentId, { expanded: command, emitEvent: true })
-                    if (node.children.length) {
-                        this.commandTreeNodes(node.children, command)
+            /**
+             * @desc 选中树节点
+             * @param { Object } node 树节点
+             */
+            handleNodeSelect (node) {
+                const componentData = node.data.payload.componentData
+
+                /**
+                 * @desc 显示指定的交互式组件
+                 * @param { Object } targetComponentNode 需要显示的交互式组件
+                 */
+                const showInteractiveComponent = (targetComponentNode) => {
+                    let currentShowInteractiveComponent = null
+                    const firstLevelChild = LC.getRoot().children
+                    for (let i = 0; i < firstLevelChild.length; i++) {
+                        const componentNode = firstLevelChild[i]
+                        if (componentNode.isInteractiveComponent && componentNode.interactiveShow) {
+                            currentShowInteractiveComponent = componentNode
+                            break
+                        }
                     }
-                })
+                    // 隐藏是显示状态的交互式组件
+                    if (currentShowInteractiveComponent
+                        && currentShowInteractiveComponent !== targetComponentNode) {
+                        currentShowInteractiveComponent.toggleInteractive(false)
+                    }
+                    // 显示指定的交互式组件
+                    targetComponentNode && targetComponentNode.toggleInteractive(true)
+                }
+                /**
+                 * @desc 找到父级的交互式组件
+                 * @returns { Object | null }
+                 */
+                const findInteractiveParent = () => {
+                    let parentNode = componentData.parentNode
+                    while (parentNode) {
+                        if (parentNode.isInteractiveComponent) {
+                            return parentNode
+                        }
+                        parentNode = parentNode.parentNode
+                    }
+                    return null
+                }
+                
+                // 选中节点对应的组件是交互式组件
+                if (componentData.isInteractiveComponent) {
+                    showInteractiveComponent(componentData)
+                    return
+                }
+
+                // 选中节点对应组件的附属于交互式组件
+                const interactiveParent = findInteractiveParent()
+                if (interactiveParent) {
+                    showInteractiveComponent(interactiveParent)
+                } else {
+                    showInteractiveComponent(null)
+                }
+
+                // render-column 暂时无法被选中
+                if (componentData.type === 'render-column') {
+                    const activeNode = LC.getActiveNode()
+                    if (activeNode) {
+                        activeNode.activeClear()
+                    }
+                    return
+                }
+
+                // 组件被选中并滚动到视窗内
+                componentData.active()
+                const canvasTarget = document.querySelector(`div[data-component-id="${componentData.componentId}"]`)
+                canvasTarget.scrollIntoView()
+                // console.log('from aciteve node = ', node, LC.getActiveNode())
+                /** 将画布中的目标节点移动至视区 */
+                // const canvasTarget = document.querySelector(`div[data-component-id="${node.data.componentId}"]`)
+                // const anchorNode = document.createElement('div')
+                // anchorNode.style.position = 'absolute'
+                // anchorNode.style.top = (canvasTarget.offsetTop - 10) + 'px'
+                // anchorNode.style.left = canvasTarget.offsetLeft + 'px'
+                // canvasTarget.parentNode.appendChild(anchorNode)
+                // canvasTarget.scrollIntoView({ behavior: 'smooth', inline: 'nearest' })
+                // canvasTarget.parentNode.removeChild(anchorNode)
             },
-            searchTree () {
-                this.$refs.tree.filter(this.filter)
-            },
-            nodeIcon (node) {
-                return `bk-drag-icon ${node.material.icon}`
+            /**
+             * @desc 展开节点时检测整棵树的展开状态
+             */
+            checkIsAllExpanded () {
+                this.allExpanded = this.$refs.tree.nodes.every(node => node.isLeaf || node.expanded)
             }
         }
     }
@@ -263,14 +300,18 @@
         }
     }
     .tree-wrapper {
+        width: 300px;
         height: calc(100% - 42px);
         overflow-x: overlay;
         padding-bottom: 10px;
         @mixin scroller;
         /deep/ .component-tree {
+            width: max-content;
+            min-width: 100%;
             .bk-big-tree-node {
                 .component-tree-node-item {
                     position: relative;
+                    padding-right: 30px;
                     .component-eye-control {
                         position: absolute;
                         right: 18px;
