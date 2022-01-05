@@ -8,7 +8,7 @@
                 }" />
             <span>{{ groupName }}</span>
         </div>
-        <template v-if="isFolded">
+        <template v-if="!isFolded">
             <bk-exception
                 v-if="list.length < 1"
                 class="group-list-empty"
@@ -70,7 +70,7 @@
                     name: 'component',
                     pull: 'clone'
                 },
-                isFolded: true
+                isFolded: false
             }
         },
         computed: {

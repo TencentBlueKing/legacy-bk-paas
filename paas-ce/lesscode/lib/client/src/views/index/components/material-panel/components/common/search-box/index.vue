@@ -6,6 +6,7 @@
             ref="input"
             right-icon="bk-icon icon-search"
             :value="keyword"
+            :clearable="true"
             @change="handleSearch"
             @keydown="handleKeydown"
             @focus="handleShowDropList"
@@ -31,7 +32,7 @@
                     }"
                     :key="index"
                     @click="handleSelect(data)">
-                    {{ data.type }}
+                    <SearchItemRender :query="keyword" :node="data" />
                 </li>
             </ul>
             <ul
@@ -48,6 +49,8 @@
     </div>
 </template>
 <script>
+    import { pascalCase } from 'change-case'
+
     const encodeRegexp = (paramStr) => {
         const regexpKeyword = [
             '\\', '.', '*', '-', '{', '}', '[', ']', '^', '(', ')', '$', '+', '?', '|'
@@ -59,8 +62,29 @@
         return res
     }
 
+    const SearchItemRender = {
+        name: 'SearchItemRender',
+        functional: true,
+        props: {
+            node: Object,
+            query: String
+        },
+        render (h, ctx) {
+            const textClass = 'text'
+            const { node, query } = ctx.props
+            return (
+                <span title={node.searchName} domPropsInnerHTML={
+                    query ? node.searchName.replace(new RegExp(`(${query})`, 'i'), '<em style="font-style: normal;color: #3a84ff;">$1</em>') : node.searchName
+                } class={textClass}></span>
+            )
+        }
+    }
+
     export default {
         name: '',
+        components: {
+            SearchItemRender
+        },
         props: {
             list: {
                 type: Array,
@@ -76,6 +100,24 @@
                 renderList: []
             }
         },
+        computed: {
+            searchList () {
+                return this.list.map(item => {
+                    return {
+                        ...item,
+                        searchName: `${pascalCase(item.name)} ${item.displayName}`
+                    }
+                })
+            }
+        },
+        watch: {
+            list: {
+                handler (val) {
+                    this.keyword = ''
+                },
+                immediate: true
+            }
+        },
         methods: {
             handleSearch (searchText) {
                 const keyword = searchText.trim()
@@ -87,8 +129,8 @@
                     return
                 }
                 const reg = new RegExp(encodeRegexp(searchText), 'i')
-                const renderList = this.list.reduce((result, item) => {
-                    if (reg.test(item.type) || reg.test(item.name)) {
+                const renderList = this.searchList.reduce((result, item) => {
+                    if (reg.test(item.searchName)) {
                         result.push(item)
                     }
                     return result
@@ -108,7 +150,7 @@
             },
             handleSelect (data) {
                 this.isShowList = false
-                this.keyword = data.type
+                this.keyword = data.searchName
                 this.$emit('on-change', data)
             },
             handleKeydown (value, e) {
