@@ -41,7 +41,8 @@
         createGrid3,
         createGrid4,
         createBkIcon,
-        createElIcon
+        createElIcon,
+        createCharts
     } from './hacker'
 
     const hackerQueue = [
@@ -49,7 +50,8 @@
         createGrid3,
         createGrid4,
         createBkIcon,
-        createElIcon
+        createElIcon,
+        createCharts
     ]
 
     export default {

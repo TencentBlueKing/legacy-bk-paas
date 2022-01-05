@@ -173,10 +173,10 @@ class PageCode {
         }
         if (item.name && item.name.startsWith('chart-')) {
             this.generateCharts(item)
-            const width = item.renderProps.width && item.renderProps.width.val
+            const width = item.renderProps.width && item.renderProps.width.code
             const widthVal = width ? (typeof width === 'number' ? `${width}px` : width) : '100%'
             const widthStr = `width:${widthVal};`
-            const height = item.renderProps.height && item.renderProps.height.val
+            const height = item.renderProps.height && item.renderProps.height.code
             const heightStr = `height:${height || 200}px;`
             const displayStr = item.renderStyles.display ? `display: ${item.renderStyles.display};vertical-align: middle;` : ''
 
@@ -245,7 +245,7 @@ class PageCode {
                     // 自由布局中的表格，如果不设置宽度，那么宽度会一直增大，表格组件本身的缺陷
                     if (item.type === 'bk-table' || item.type === 'el-table') {
                         let width = 0
-                        const colConf = item.renderSlots.default.val || []
+                        const colConf = item.renderSlots.default.code || []
                         colConf.forEach(col => {
                             if (col.width === null || col.width === undefined || col.width === '') {
                                 width = parseFloat(width) + 80
@@ -984,7 +984,7 @@ class PageCode {
     getItemStyles (compId, styles, props) {
         // 分离class和其它style属性
         let className = compId
-        className += (props && props.hasOwnProperty('class') && ` ${props.class.val}`) || '' // 添加原生标签的用户自定义class
+        className += (props && props.hasOwnProperty('class') && ` ${props.class.code}`) || '' // 添加原生标签的用户自定义class
 
         let hasStyle = false
         if (styles && typeof styles === 'object') {
@@ -1562,7 +1562,7 @@ class PageCode {
 
     generateCharts (item) {
         const type = item.name.replace('chart-', '')
-        this.dataTemplate(item.componentId, JSON.stringify(item.renderProps.options.val))
+        this.dataTemplate(item.componentId, JSON.stringify(item.renderProps.options.code))
         if (item.renderProps.remoteOptions && item.renderProps.remoteOptions.payload && item.renderProps.remoteOptions.payload.methodCode) {
             this.remoteMethodsTemplate(item.componentId, item.renderProps.remoteOptions.payload || {}, true)
         }
