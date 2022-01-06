@@ -162,6 +162,7 @@
                 theme: 'light',
                 content: '.variable-list',
                 placement: 'bottom-start',
+                boundary: 'window',
                 onShow () {
                     this.isShowVariable = true
                 },

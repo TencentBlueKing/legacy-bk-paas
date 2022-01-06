@@ -10,7 +10,11 @@
 -->
 
 <template>
-    <main class="app-main">
+    <main
+        class="app-main"
+        v-bkloading="{
+            isLoading: isContentLoading || isCustomComponentLoading
+        }">
         <div class="main-top">
             <div class="page-title">
                 <div class="page-name">
@@ -43,7 +47,7 @@
                                     :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
                                     {{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span>
                                 </div>
-                                <i class="bk-select-angle bk-icon icon-angle-down"></i>
+                                <i class="bk-select-angle bk-icon icon-angle-down" />
                             </div>
                             <bk-option
                                 v-for="option in pageList"
@@ -52,7 +56,7 @@
                                 :name="option.pageName">
                                 <span>{{option.pageName}}</span>
                                 <i class="bk-drag-icon bk-drag-copy"
-                                    :style="copyIconStyle"
+                                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%)"
                                     @click.stop="handlePageAction('copy')"
                                     title="复制页面"></i>
                             </bk-option>
@@ -73,53 +77,13 @@
                 </div>
             </div>
             <div class="function-and-tool">
-                <div id="toolActionBox" class="function-wrapper tool-actions">
-                    <ul class="function-and-tool-list">
-                        <li
-                            class="tool-item"
-                            :class="{ active: contentTab === 'edit' }"
-                            @click="handleContentTabChange('edit')">
-                            <i class="bk-drag-icon bk-drag-huabu" />
-                            <span>画布</span>
-                        </li>
-                        <li
-                            class="tool-item"
-                            :class="{ active: contentTab === 'vueCode' }"
-                            @click="handleContentTabChange('vueCode')">
-                            <i class="bk-drag-icon bk-drag-yuanma" />
-                            <span>源码</span>
-                        </li>
-                        <li
-                            class="tool-item"
-                            :class="{ active: contentTab === 'jsonSource' }"
-                            @click="handleContentTabChange('jsonSource')">
-                            <i class="bk-drag-icon bk-drag-json" />
-                            <span>JSON</span>
-                        </li>
-                        <li
-                            class="tool-item"
-                            :class="{ active: contentTab === 'pageFunction' }"
-                            @click="handleContentTabChange('pageFunction')">
-                            <i class="bk-drag-icon bk-drag-yemianhanshu" />
-                            <span>页面函数</span>
-                        </li>
-                        <li
-                            class="tool-item"
-                            :class="{ active: contentTab === 'pageVariable' }"
-                            @click="handleContentTabChange('pageVariable')">
-                            <i class="bk-drag-icon bk-drag-variable-manage" />
-                            <span>页面变量</span>
-                        </li>
-                        <li
-                            class="tool-item"
-                            :class="{ active: contentTab === 'setting' }"
-                            @click="handleContentTabChange('setting')">
-                            <i class="bk-drag-icon bk-drag-set" />
-                            <span>页面设置</span>
-                        </li>
-                    </ul>
+                <div
+                    id="toolActionBox"
+                    class="function-tool-wrapper">
+                    <operation-select v-model="contentTab" />
+                    <div style="height: 22px; width: 1px; margin: 0 5px; background-color: #dcdee5;" />
                     <!-- 保存、预览、快捷键等tool单独抽离 -->
-                    <extra-action />
+                    <action-tool />
                 </div>
             </div>
             <extra-links
@@ -130,8 +94,10 @@
                     placements: ['bottom']
                 }" />
         </div>
-        <div class="main-container">
-            <material-panel @onCustomComponentLoaded="handleCustomComponentLoaded" />
+        <div
+            v-if="!isContentLoading && !isCustomComponentLoading"
+            class="main-container">
+            <material-panel />
             <operation-area
                 :operaion="contentTab"
                 :project="projectDetail"
@@ -148,19 +114,19 @@
 
 <script>
     import Vue from 'vue'
-    import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+    import { mapState, mapGetters, mapActions } from 'vuex'
     import LC from '@/element-materials/core'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
     import ExtraLinks from '@/components/ui/extra-links'
     import PageDialog from '@/components/project/page-dialog'
     import SaveTemplateDialog from '@/components/template/save-template-dialog'
-    import PageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
-    import safeStringify from '@/common/json-safe-stringify'
+    import PageFromTemplateDialog from '@/components/project/page-from-template-dialog'
+    import OperationSelect from './components/operation-select'
     import MaterialPanel from './components/material-panel'
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
-    import ExtraAction from './components/action-bar/extra-index'
+    import ActionTool from './components/action-tool'
 
     export default {
         components: {
@@ -170,21 +136,18 @@
             PageDialog,
             SaveTemplateDialog,
             PageFromTemplateDialog,
+            OperationSelect,
             MaterialPanel,
             ModifierPanel,
             OperationArea,
-            ExtraAction
+            ActionTool
         },
         data () {
             return {
+                isContentLoading: true,
                 lockNotify: null,
                 lockCheckTimer: null,
-                wholeComponentList: [],
-                customComponentList: [],
                 projectDetail: {},
-                actionSelected: 'edit',
-                startDragPosition: {},
-                contentLoading: true,
                 isCustomComponentLoading: true,
                 isSaving: false,
                 action: 'create',
@@ -193,14 +156,6 @@
         },
         computed: {
             ...mapGetters(['user']),
-            ...mapGetters(['mainContentLoading']),
-            ...mapGetters('drag', [
-                'draggableSourceGroup',
-                'draggableTargetGroup',
-                'curSelectedComponentData',
-                'curTemplateData',
-                'copyData'
-            ]),
             ...mapGetters('page', [
                 'pageDetail',
                 'pageList'
@@ -209,19 +164,17 @@
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('components', ['interactiveComponents']),
             ...mapGetters('variable', ['variableList']),
-            ...mapState('route', ['layoutPageList']),
-            copyIconStyle () {
-                return {
-                    position: 'absolute',
-                    right: '10px',
-                    top: '50%',
-                    transform: 'translateY(-50%)'
-                }
-            }
+            ...mapState('route', ['layoutPageList'])
         },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
+            this.registerCustomComponent()
+            
+            this.fetchData()
+
+            // 设置权限相关的信息
+            this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
 
             this.guideStep = [
                 {
@@ -269,32 +222,12 @@
                     target: '#editPageSwitchPage'
                 }
             ]
-            await this.fetchData()
-
-            // 设置初始targetData
-            let initData = []
-            try {
-                const content = this.pageDetail.content
-                if (content && content !== 'null') {
-                    initData = JSON.parse(content)
-                }
-            } catch (err) {
-                this.$bkMessage({
-                    theme: 'error',
-                    message: 'targetData格式错误',
-                    limit: 1
-                })
-            }
-            LC.parseData(initData)
-
-            // 设置权限相关的信息
-            this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
         },
         mounted () {
-            this.registerCustomComponent()
             window.addEventListener('unload', this.relasePage)
         },
         beforeDestroy () {
+            LC.parseData([])
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
             window.removeEventListener('unload', this.relasePage)
             this.relasePage()
@@ -310,15 +243,6 @@
             })
         },
         methods: {
-            ...mapMutations('drag', [
-                'setTargetData',
-                'setDraggableTargetGroup',
-                'setCopyData',
-                'pushTargetHistory',
-                'backTargetHistory',
-                'forwardTargetHistory'
-            ]),
-
             ...mapActions('functions', [
                 'getAllGroupFuncs'
             ]),
@@ -326,13 +250,8 @@
             handleContentTabChange (contentTab) {
                 this.contentTab = contentTab
             },
-            /**
-             * @desc 自定义组件加载完成
-             */
-            handleCustomComponentLoaded () {
-                this.isCustomComponentLoading = false
-            },
             registerCustomComponent () {
+                this.isCustomComponentLoading = true
                 // 包含所有的自定组件
                 window.__innerCustomRegisterComponent__ = {}
                 const script = document.createElement('script')
@@ -495,7 +414,7 @@
 
             async fetchData () {
                 try {
-                    this.contentLoading = true
+                    this.isContentLoading = true
                     const [pageDetail, pageList, projectDetail] = await Promise.all([
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
                         this.$store.dispatch('page/getList', { projectId: this.projectId }),
@@ -519,12 +438,22 @@
                         pageCode: pageDetail.pageCode,
                         effectiveRange: 0
                     })
-                    // update targetdata
-                    const content = pageDetail.content
-                    if (content) {
-                        const targetData = JSON.parse(content)
-                        pageDetail.content = safeStringify(targetData)
+
+                    // 设置初始targetData
+                    let initData = []
+                    try {
+                        const content = pageDetail.content
+                        if (content && content !== 'null') {
+                            initData = JSON.parse(content)
+                        }
+                    } catch (err) {
+                        this.$bkMessage({
+                            theme: 'error',
+                            message: 'targetData格式错误',
+                            limit: 1
+                        })
                     }
+                    LC.parseData(initData)
 
                     this.$store.commit('page/setPageDetail', pageDetail || {})
                     this.$store.commit('page/setPageList', pageList || [])
@@ -533,7 +462,7 @@
                 } catch (e) {
                     console.error(e)
                 } finally {
-                    this.contentLoading = false
+                    this.isContentLoading = false
                 }
             },
 

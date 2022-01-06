@@ -11,11 +11,6 @@ export default {
         // fix
         const nativeComponentStyleReset = {
             // 修正组件会影响位置的样式
-            'padding': '',
-            'paddingTop': '',
-            'paddingRight': '',
-            'paddingBottom': '',
-            'paddingLeft': '',
             'margin': '',
             'marginTop': '',
             'marginRight': '',

@@ -109,6 +109,11 @@
                 // 大多数样式是影响组件内部子元素的
                 safeStyles: {
                     display: 'block',
+                    'padding': '',
+                    'paddingTop': '',
+                    'paddingRight': '',
+                    'paddingBottom': '',
+                    'paddingLeft': '',
                     'white-space': 'unset',
                     'word-break': 'unset'
                 }
@@ -142,7 +147,7 @@
             
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
-            }, 60)
+            }, 20)
 
             const componentMouseleaveCallback = () => {
                 hoverComponentId = ''
@@ -285,10 +290,10 @@
         }
         &.hover{
             position: relative;
-            .line-top,
-            .line-right,
-            .line-bottom,
-            .line-left {
+            > .line-top,
+            > .line-right,
+            > .line-bottom,
+            > .line-left {
                 border-style: dashed;
             }
         }
@@ -297,7 +302,6 @@
         .line-bottom,
         .line-left{
             position: absolute;
-            
             border-width: 0;
             border-color: #3a84ff;
         }
