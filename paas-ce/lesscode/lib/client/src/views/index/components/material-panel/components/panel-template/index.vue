@@ -26,6 +26,8 @@
             </div>
         </div>
         <div class="template-list">
+            <search-box :list="renderTemplateList"
+                @on-change="handleSearchChange" />
             <group-box
                 v-for="(group) in renderGroupTemplateList"
                 :list="group.list"
@@ -77,11 +79,13 @@
     import { PAGE_TEMPLATE_TYPE } from '@/common/constant'
     import { bus } from '@/common/bus'
     import GroupBox from '../common/group-box'
+    import SearchBox from '../common/search-box'
 
     export default {
         name: 'template-panel',
         components: {
             GroupBox,
+            SearchBox,
             templateEditDialog
         },
         props: {
@@ -101,13 +105,11 @@
                 projectTemplateGroupList: [],
                 marketTemplateGroupList: [],
                 searchResult: null,
-                templateGroupFolded: {}
+                templateGroupFolded: {},
+                renderGroupTemplateList: []
             }
         },
         computed: {
-            renderGroupTemplateList () {
-                return this.type === 'project' ? this.projectTemplateGroupList : this.marketTemplateGroupList
-            },
             renderTemplateList () {
                 return this.type === 'project' ? this.projectTemplateList : this.marketTemplateList
             }
@@ -150,6 +152,7 @@
                     }))
                     this.projectTemplateList = Object.freeze(projectTemplateList)
                     this.marketTemplateList = Object.freeze(marketTemplateList)
+                    this.renderGroupTemplateList = this.projectTemplateGroupList
 
                     console.log('from tempalte print == ', this.projectTemplateList, this.marketTemplateList)
                 } catch (err) {
@@ -171,6 +174,8 @@
              */
             handleToggleTab (tab) {
                 this.tab = tab
+                this.type = tab
+                this.renderGroupTemplateList = this.type === 'project' ? this.projectTemplateGroupList : this.marketTemplateGroupList
             },
             onChoose (e, list) {
                 const contentStr = list[e.oldIndex] && list[e.oldIndex].content
@@ -207,6 +212,26 @@
                     belongProjectId: this.projectId,
                     templateName: template.templateName
                 }
+            },
+            /**
+             * @desc 模板搜索
+             */
+            handleSearchChange (data) {
+                if (!data) {
+                    this.renderGroupTemplateList = this.type === 'project' ? this.projectTemplateGroupList : this.marketTemplateGroupList
+                    return
+                }
+                const renderGroupTemplateList = []
+                this.renderGroupTemplateList.forEach(template => {
+                    if (template.list.includes(data)) {
+                        renderGroupTemplateList.push({
+                            id: template.id,
+                            categoryName: template.categoryName,
+                            list: [data]
+                        })
+                    }
+                })
+                this.renderGroupTemplateList = renderGroupTemplateList
             }
         }
     }
@@ -216,7 +241,6 @@
         min-height: 100%;
         .category-tabs{
             display: flex;
-            margin-bottom: 12px;
             border-bottom: 1px solid #ccc;
             .tab-item {
                 flex: 1;
@@ -234,6 +258,9 @@
                     border-bottom: 2px solid #3a84ff;
                 }
             }
+        }
+        .search-box {
+            padding: 12px 20px;
         }
         .template-item {
             margin-top: 10px;

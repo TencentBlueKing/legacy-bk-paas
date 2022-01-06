@@ -10,7 +10,6 @@
             @change="handleSearch"
             @keydown="handleKeydown"
             @focus="handleShowDropList"
-            @clear="handleClear"
             :native-attributes="{
                 spellcheck: false
             }" />
@@ -72,7 +71,7 @@
         render (h, ctx) {
             const textClass = 'text'
             const { node, query } = ctx.props
-            const searchName = `${pascalCase(node.name)} ${node.displayName}`
+            const searchName = node.templateName || `${pascalCase(node.name)} ${node.displayName}`
             return (
                 <span title={searchName} domPropsInnerHTML={
                     query ? searchName.replace(new RegExp(`(${query})`, 'i'), '<em style="font-style: normal;color: #3a84ff;">$1</em>') : searchName
@@ -121,10 +120,13 @@
                     return
                 }
                 const reg = new RegExp(encodeRegexp(searchText), 'i')
+                const testParams = ['type', 'name', 'templateName']
                 const renderList = this.list.reduce((result, item) => {
-                    if (reg.test(item.type) || reg.test(item.name)) {
-                        result.push(item)
-                    }
+                    testParams.forEach(param => {
+                        if (item[param] && reg.test(item[param]) && !result.includes(item)) {
+                            result.push(item)
+                        }
+                    })
                     return result
                 }, [])
                 this.renderList = Object.freeze(renderList)
@@ -142,7 +144,7 @@
             },
             handleSelect (data) {
                 this.isShowList = false
-                this.keyword = data.type
+                this.keyword = data.templateName || data.name
                 this.$emit('on-change', data)
             },
             handleKeydown (value, e) {
@@ -196,10 +198,6 @@
                     default:
                         break
                 }
-            },
-            handleClear () {
-                this.selectedIndex = 0
-                this.$emit('on-change', null)
             }
         }
     }
