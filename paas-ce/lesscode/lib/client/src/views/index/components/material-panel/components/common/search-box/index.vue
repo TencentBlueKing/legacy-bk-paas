@@ -48,8 +48,6 @@
     </div>
 </template>
 <script>
-    import { pascalCase } from 'change-case'
-
     const encodeRegexp = (paramStr) => {
         const regexpKeyword = [
             '\\', '.', '*', '-', '{', '}', '[', ']', '^', '(', ')', '$', '+', '?', '|'
@@ -60,7 +58,6 @@
         )
         return res
     }
-
     const SearchItemRender = {
         name: 'SearchItemRender',
         functional: true,
@@ -71,7 +68,7 @@
         render (h, ctx) {
             const textClass = 'text'
             const { node, query } = ctx.props
-            const searchName = node.templateName || `${pascalCase(node.name)} ${node.displayName}`
+            const searchName = `${node.name} ${node.displayName}`
             return (
                 <span title={searchName} domPropsInnerHTML={
                     query ? searchName.replace(new RegExp(`(${query})`, 'i'), '<em style="font-style: normal;color: #3a84ff;">$1</em>') : searchName
@@ -79,7 +76,6 @@
             )
         }
     }
-
     export default {
         name: '',
         components: {
@@ -120,13 +116,10 @@
                     return
                 }
                 const reg = new RegExp(encodeRegexp(searchText), 'i')
-                const testParams = ['type', 'name', 'templateName']
                 const renderList = this.list.reduce((result, item) => {
-                    testParams.forEach(param => {
-                        if (item[param] && reg.test(item[param]) && !result.includes(item)) {
-                            result.push(item)
-                        }
-                    })
+                    if (reg.test(item.type) || reg.test(item.name)) {
+                        result.push(item)
+                    }
                     return result
                 }, [])
                 this.renderList = Object.freeze(renderList)
@@ -144,13 +137,12 @@
             },
             handleSelect (data) {
                 this.isShowList = false
-                this.keyword = data.templateName || data.name
+                this.keyword = data.name
                 this.$emit('on-change', data)
             },
             handleKeydown (value, e) {
                 const keyCode = e.keyCode
                 const length = this.renderList.length
-
                 switch (keyCode) {
                     // 上
                     case 38:
@@ -205,7 +197,6 @@
 <style lang="postcss" scoped>
     @import "@/css/mixins/scroller";
     @import "@/css/mixins/ellipsis";
-
     .search-box {
         position: relative;
         .search-dropdown-list {

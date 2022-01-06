@@ -129,15 +129,24 @@
                     this.isLoading = true
                     const [
                         projectTemplateGroups,
-                        projectTemplateList,
+                        tmpProjectTemplateList,
                         tmpMarketTemplateList
                     ] = await Promise.all([
                         this.$store.dispatch('pageTemplate/categoryList', { projectId: this.projectId }),
                         this.$store.dispatch('pageTemplate/list', { projectId: this.projectId }),
                         this.$store.dispatch('pageTemplate/list', { type: 'OFFCIAL' })
                     ])
+                    const projectTemplateList = tmpProjectTemplateList.map(item => ({
+                        ...item,
+                        type: item.templateName,
+                        name: item.templateName,
+                        displayName: ''
+                    }))
                     const marketTemplateList = tmpMarketTemplateList.map(item => ({
                         ...item,
+                        type: item.templateName,
+                        name: item.templateName,
+                        displayName: '',
                         hasInstall: projectTemplateList.filter(template => template.parentId === item.id).length > 0
                     }))
                     this.projectTemplateGroupList = projectTemplateGroups.map(item => ({
