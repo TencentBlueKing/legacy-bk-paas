@@ -13,9 +13,9 @@
     <div class="modifier-prop">
         <variable-select
             :show="variableSelectEnable"
-            :data="variableSelectData"
+            :options="variableSelectOptions"
             :value="formData"
-            @change="handleVariableSelectChange">
+            @change="handleVariableFormatChange">
             <template v-slot:title>
                 <div class="prop-name">
                     <span
@@ -29,7 +29,7 @@
                 v-if="renderComponentList.length > 1"
                 :value="selectValueType"
                 style="margin-bottom: 10px;"
-                @change="handlePropValueTypeChange">
+                @change="handleValueTypeChange">
                 <bk-radio-button
                     v-for="item in renderComponentList"
                     :key="item.type"
@@ -49,7 +49,7 @@
                             :payload="propTypeValueMemo[selectValueType].payload"
                             :remote-validate="describe.remoteValidate"
                             :key="`${renderCom.type}_${index}`"
-                            :change="handleValueChange" />
+                            :change="handleCodeChange" />
                     </template>
                 </template>
             </div>
@@ -60,6 +60,11 @@
     import { transformTipsWidth } from '@/common/util'
     import safeStringify from '@/common/json-safe-stringify'
     import variableSelect from '@/components/variable/variable-select'
+
+    import {
+        getDefaultValueByType,
+        isEmpty
+    } from '../../utils'
 
     import TypeSize from './strategy/size'
     import TypeRemote from './strategy/remote'
@@ -89,23 +94,6 @@
         }
         return target
     }
-
-    const getDefaultValueWithType = (() => {
-        const typeValueMap = {
-            'string': '',
-            'array': [],
-            'object': {},
-            'boolean': false,
-            'number': 0,
-            'json': {}
-        }
-        return type => {
-            if (typeValueMap.hasOwnProperty(type)) {
-                return typeValueMap[type]
-            }
-            return ''
-        }
-    })()
 
     const propTypeFormat = type => `${type.substring(0, 1).toUpperCase()}${type.substring(1).toLowerCase()}`
 
@@ -143,6 +131,10 @@
             }
         },
         computed: {
+            /**
+             * @desc format 为 value 时 valueType 编辑组件
+             * @returns { Object }
+             */
             renderComponentList () {
                 const config = this.describe
                 const comMap = {
@@ -274,11 +266,11 @@
                 type,
                 val
             } = this.describe
-            const defaultValue = val !== undefined ? val : getDefaultValueWithType(type)
+            const defaultValue = val !== undefined ? val : getDefaultValueByType(type)
             const includesValueType = Array.isArray(type) ? type : [type]
 
             // 构造 variable-select 的配置
-            this.variableSelectData = {
+            this.variableSelectOptions = {
                 type: 'v-bind',
                 prop: this.name,
                 format: 'value',
@@ -327,6 +319,9 @@
             this.selectValueType = this.formData.valueType
         },
         methods: {
+            /**
+             * @desc 同步更新用户操作
+             */
             triggerChange () {
                 // 缓存用户本地编辑值
                 this.propTypeValueMemo[this.formData.valueType] = {
@@ -342,7 +337,7 @@
              * @desc 变量切换
              * @param { Object } variableSelectData
              */
-            handleVariableSelectChange (variableSelectData) {
+            handleVariableFormatChange (variableSelectData) {
                 this.formData = Object.freeze({
                     ...this.formData,
                     format: variableSelectData.format,
@@ -355,15 +350,19 @@
              * @desc prop 值得类型切换
              * @param { String } valueType
              */
-            handlePropValueTypeChange (valueType) {
+            handleValueTypeChange (valueType) {
                 this.selectValueType = valueType
                 let code = null
                 let payload = {}
                 if (this.propTypeValueMemo.hasOwnProperty(valueType)) {
                     code = this.propTypeValueMemo[valueType].val
                     payload = this.propTypeValueMemo[valueType].payload
+                } else if (valueType === 'remote') {
+                    // fix: 配置远程函数类型，接口数据没返回时使用配置文件设置的默认值
+                    code = this.describe.val
                 } else {
-                    code = getDefaultValueWithType(valueType)
+                    // 切换值类型时，通过类型获取默认值
+                    code = getDefaultValueByType(valueType)
                 }
                 
                 this.formData = Object.freeze({
@@ -383,18 +382,30 @@
              * @param { String } type
              * @param { Object } payload prop 配置附带的额外信息(eq: type 为 remote 时接口函数相关的配置)
              */
-            handleValueChange (name, value, type, payload = {}) {
+            handleCodeChange (name, value, type, payload = {}) {
                 try {
-                    /** 设置了staticValue的属性，在画布中不需要更新其真实值，保持staticValue不变 */
-                    const val = Object.hasOwnProperty.call(this.describe, 'staticValue')
-                        ? this.describe.staticValue
-                        : getRealValue(type, value)
+                    let code = null
+                    let renderValue
+
+                    const val = getRealValue(type, value)
+
+                    if (this.formData.valueType === 'remote') {
+                        // 配置的是远程函数
+                        // code 此时无效设置为 null
+                        // api 返回数据不为空才应用接口数据
+                        if (!isEmpty(val)) {
+                            renderValue = val
+                        }
+                    } else {
+                        code = val
+                        renderValue = val
+                    }
                     
                     this.formData = Object.freeze({
                         ...this.formData,
-                        code: val,
+                        code,
                         payload,
-                        renderValue: val
+                        renderValue
                     })
                     this.triggerChange()
                 } catch {

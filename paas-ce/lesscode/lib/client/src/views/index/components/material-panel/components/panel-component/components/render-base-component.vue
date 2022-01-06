@@ -28,7 +28,7 @@
     import SearchBox from '../../common/search-box'
     import GroupBox from '../../common/group-box'
     import RenderComponent from '../../common/group-box/render-component'
-    import RenderIcon from '../../common/group-box/render-icon.vue'
+    import RenderIcon from '../../common/group-box/render-icon'
 
     console.log('from base component = ', MaterialConfig)
 

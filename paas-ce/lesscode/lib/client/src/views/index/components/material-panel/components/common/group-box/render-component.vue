@@ -1,5 +1,5 @@
 <template>
-    <div class="render-drag-item">
+    <div class="render-drag-item" :class="displayClass">
         <div class="component-icon">
             <i class="bk-drag-icon" :class="data.icon" />
         </div>
@@ -11,9 +11,12 @@
         name: '',
         props: {
             data: Object
+        },
+        created () {
+            this.displayClass = ''
+            if (this.data.renderStyles && this.data.renderStyles.display) {
+                this.displayClass = this.data.renderStyles.display
+            }
         }
     }
 </script>
-<style lang="postcss">
-    
-</style>

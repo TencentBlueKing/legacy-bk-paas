@@ -127,7 +127,8 @@
             }
         },
         created () {
-            // 优先获取组件的 material Config 缓存起来，后续需要使用直接使用这个不在从 componentData.material 获取
+            // 优先获取组件的 material Config 缓存起来，
+            // 后续需要使用直接使用这个不在从 componentData.material 获取
             this.material = this.componentData.material
             const updateCallback = (event) => {
                 const {
@@ -270,6 +271,7 @@
 </script>
 <style lang="postcss" module>
     .component {
+        pointer-events: auto !important;
         cursor: pointer;
         -webkit-text-size-adjust: none;
         &.selected{

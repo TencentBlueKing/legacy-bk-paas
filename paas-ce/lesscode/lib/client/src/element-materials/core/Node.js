@@ -48,7 +48,7 @@ export default class Node {
         name = '',
         type = '',
         props = {},
-        directives = [],
+        // directives = [],
         slots = {},
         renderStyles = {},
         renderProps = {}
@@ -63,7 +63,7 @@ export default class Node {
         this.renderStyles = renderStyles
         this.renderProps = transformProps(props, renderProps, type)
         this.renderSlots = transformSlots(slots)
-        this.renderDirectives = directives
+        this.renderDirectives = []
         this.renderEvents = {}
         // 交互式组件的显示状态
         this.interactiveShow = false

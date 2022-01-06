@@ -21,11 +21,10 @@
                     :key="index"
                     class="directive-item">
                     <variable-select
-                        :data="directive"
+                        :options="directive"
                         :value="lastDirectiveMap[genDirectiveKey(directive)]"
-                        :available-types="directive.propTypes"
                         :readonly="isAttachToForm"
-                        @change="value => handleVariableSelectChange(directive, value)">
+                        @change="value => handleVariableFormatChange(directive, value)">
                         <template v-slot:title>
                             <span
                                 v-bk-tooltips="{
@@ -42,7 +41,7 @@
                         </template>
                         <bk-input
                             :value="directive.val"
-                            @change="(val) => handleValueChange(directive, val)"
+                            @change="(val) => handleCodeChange(directive, val)"
                             clearable />
                     </variable-select>
                 </bk-form-item>
@@ -117,14 +116,15 @@
                 } = directiveConfig
                 if (propConfig[prop]) {
                     const propConfigType = propConfig[directiveConfig.prop].type
+                    // 解析对应 prop 配置的值类型、默认值
                     const includesValueType = Array.isArray(propConfigType) ? propConfigType : [propConfigType]
                     const renderValue = propConfig[directiveConfig.prop].val
                     if (type === 'v-bind') {
                         result.push({
-                            type,
+                            type: 'v-bind',
                             prop,
                             format: valType,
-                            includesFormat: ['value', 'variable'], // v-bind 支持配置（值、变量）
+                            includesFormat: ['variable'], // v-bind 支持配置（变量）
                             code: val,
                             includesValueType,
                             renderValue,
@@ -132,11 +132,11 @@
                         })
                     } else if (type === 'v-model') {
                         result.push({
-                            type,
+                            type: 'v-model',
                             prop,
                             format: 'variable',
                             includesFormat: ['variable'], // v-bind 支持配置（变量）
-                            code: val,
+                            code: '',
                             includesValueType,
                             renderValue,
                             tips: tips
@@ -172,7 +172,7 @@
             }
             this.directiveList = Object.freeze(directiveList)
 
-            // directive last 配置
+            // directives 默认配置解析
             const lastDirectiveMap = directiveList.reduce((result, directive) => {
                 const {
                     type,
@@ -191,6 +191,7 @@
                 return result
             }, {})
 
+            // 同步用户配置
             renderDirectives.forEach((directive) => {
                 const directiveKey = this.genDirectiveKey(directive)
                 if (lastDirectiveMap[directiveKey]) {
@@ -254,7 +255,7 @@
              * @param { Object } directive
              * @param { Object } variableSelectData
              */
-            handleVariableSelectChange (directive, variableSelectData) {
+            handleVariableFormatChange (directive, variableSelectData) {
                 this.lastDirectiveMap = Object.freeze({
                     ...this.lastDirectiveMap,
                     [this.genDirectiveKey(directive)]: {
@@ -273,7 +274,7 @@
              * @param { Object } directive
              * @param { String } value
              */
-            handleValueChange (directive, value) {
+            handleCodeChange (directive, value) {
                 const directiveKey = this.genDirectiveKey(directive)
                 this.lastDirectiveMap = Object.freeze({
                     ...this.lastDirectiveMap,

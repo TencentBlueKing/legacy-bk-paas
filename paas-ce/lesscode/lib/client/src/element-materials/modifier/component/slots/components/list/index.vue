@@ -99,7 +99,7 @@
         },
         created () {
             this.optionList = JSON.parse(JSON.stringify(this.slotVal.val))
-            this.trigger()
+            // this.trigger()
         },
         methods: {
             trigger () {

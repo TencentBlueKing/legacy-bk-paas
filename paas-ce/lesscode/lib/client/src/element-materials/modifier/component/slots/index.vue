@@ -38,10 +38,15 @@
             }
             const {
                 material,
-                renderSlots
+                renderSlots,
+                layoutSlotType
             } = this.componentNode
             const slotConfig = material.slots || {}
             this.config = Object.keys(slotConfig).reduce((result, slotName) => {
+                // slot 支持拖拽就不支持配置
+                if (_.has(layoutSlotType, slotName)) {
+                    return result
+                }
                 const config = slotConfig[slotName]
                 if (config.name.includes('layout') || config.display !== 'hidden') {
                     result[slotName] = config

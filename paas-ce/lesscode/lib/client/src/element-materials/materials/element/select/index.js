@@ -33,10 +33,7 @@ export default {
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['string', 'boolean', 'number'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

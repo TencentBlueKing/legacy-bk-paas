@@ -184,6 +184,10 @@
     .canvas{
         min-height: calc(100% - 20px) !important;
         z-index: 1000000000000;
+        /* 规避一些组件内部因为设置了 pointer-events 导致鼠标事件非法触发 */
+        * {
+            pointer-events: none;
+        }
     }
     .editor{
         padding-bottom: 300px;

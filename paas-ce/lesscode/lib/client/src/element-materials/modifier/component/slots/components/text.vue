@@ -53,7 +53,6 @@
         watch: {
             'slotVal.val': {
                 handler (v) {
-                    console.log('form wtahc slotVal.val = ', this.slotVal)
                     this.renderValue = unescapeHtml(v)
                 },
                 immediate: true

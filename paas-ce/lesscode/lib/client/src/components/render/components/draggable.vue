@@ -152,6 +152,7 @@
         position: relative;
         z-index: 10;
         height: 100%;
+        pointer-events: auto !important;
     }
     .chosen{
         opacity: .9;

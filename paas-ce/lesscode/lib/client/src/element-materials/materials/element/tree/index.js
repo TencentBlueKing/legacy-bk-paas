@@ -25,13 +25,13 @@ export default {
     }],
     styles: ['size', 'margin'],
     directives: [
-        {
-            type: 'v-bind',
-            prop: 'data',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'data',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         data: {

@@ -61,13 +61,14 @@ export default {
     }],
     styles: ['size', 'margin', 'display'],
     directives: [
-        {
-            type: 'v-bind',
-            prop: 'data',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'data',
+        //     format: 'variable',
+        //     includesFormat: ['variable'],
+        //     code: '',
+        //     renderValue: ''
+        // }
     ],
     props: {
         data: {

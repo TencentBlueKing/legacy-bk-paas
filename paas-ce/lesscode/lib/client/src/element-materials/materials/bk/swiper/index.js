@@ -30,13 +30,13 @@ export default {
         height: '300px'
     },
     directives: [
-        {
-            type: 'v-bind',
-            prop: 'pics',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'pics',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         'is-loop': {
