@@ -8,7 +8,7 @@
                 }" />
             <span>{{ groupName }}</span>
         </div>
-        <template v-if="isFolded">
+        <template v-if="!isFolded">
             <bk-exception
                 v-if="list.length < 1"
                 class="group-list-empty"
@@ -41,7 +41,8 @@
         createGrid3,
         createGrid4,
         createBkIcon,
-        createElIcon
+        createElIcon,
+        createCharts
     } from './hacker'
 
     const hackerQueue = [
@@ -49,7 +50,8 @@
         createGrid3,
         createGrid4,
         createBkIcon,
-        createElIcon
+        createElIcon,
+        createCharts
     ]
 
     export default {
@@ -70,7 +72,7 @@
                     name: 'component',
                     pull: 'clone'
                 },
-                isFolded: true
+                isFolded: false
             }
         },
         computed: {

@@ -1,4 +1,5 @@
 import LC from '@/element-materials/core'
+import Node from '@/element-materials/core/Node'
 
 export const createGrid2 = (node, config) => {
     if (node.type === 'render-grid' && config.name === 'grid2') {
@@ -28,5 +29,11 @@ export const createBkIcon = (node, config) => {
 export const createElIcon = (node, config) => {
     if (node.type === 'i' && /^el-icon-/.test(node.name)) {
         node.setProp('class', config.props.class.val)
+    }
+}
+
+export const createCharts = (node, config) => {
+    if (node.type === 'chart' || node.type.startsWith('bk-charts')) {
+        Object.assign(node, new Node(config))
     }
 }
