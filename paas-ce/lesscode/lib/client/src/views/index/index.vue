@@ -1144,7 +1144,10 @@
 
             toggleQuickOperation (event) {
                 const mainNode = getNodeWithClass(event.target, 'target-drag-area')
-                this.isInDragArea = mainNode && mainNode.classList.contains('target-drag-area')
+                const collapseIconNode = getNodeWithClass(event.target, 'collapse-icon')
+                this.isInDragArea
+                    = (mainNode && mainNode.classList.contains('target-drag-area'))
+                        || (collapseIconNode && collapseIconNode.classList.contains('collapse-icon'))
             },
 
             toggleShowQuickOperation (val) {
