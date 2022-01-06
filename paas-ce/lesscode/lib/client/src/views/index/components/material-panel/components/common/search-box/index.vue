@@ -6,6 +6,7 @@
             ref="input"
             right-icon="bk-icon icon-search"
             :value="keyword"
+            :clearable="true"
             @change="handleSearch"
             @keydown="handleKeydown"
             @focus="handleShowDropList"
@@ -31,7 +32,7 @@
                     }"
                     :key="index"
                     @click="handleSelect(data)">
-                    {{ data.type }}
+                    <SearchItemRender :query="keyword" :node="data" />
                 </li>
             </ul>
             <ul
@@ -48,6 +49,8 @@
     </div>
 </template>
 <script>
+    import { pascalCase } from 'change-case'
+
     const encodeRegexp = (paramStr) => {
         const regexpKeyword = [
             '\\', '.', '*', '-', '{', '}', '[', ']', '^', '(', ')', '$', '+', '?', '|'
@@ -59,8 +62,30 @@
         return res
     }
 
+    const SearchItemRender = {
+        name: 'SearchItemRender',
+        functional: true,
+        props: {
+            node: Object,
+            query: String
+        },
+        render (h, ctx) {
+            const textClass = 'text'
+            const { node, query } = ctx.props
+            const searchName = `${pascalCase(node.name)} ${node.displayName}`
+            return (
+                <span title={searchName} domPropsInnerHTML={
+                    query ? searchName.replace(new RegExp(`(${query})`, 'i'), '<em style="font-style: normal;color: #3a84ff;">$1</em>') : searchName
+                } class={textClass}></span>
+            )
+        }
+    }
+
     export default {
         name: '',
+        components: {
+            SearchItemRender
+        },
         props: {
             list: {
                 type: Array,
@@ -76,12 +101,21 @@
                 renderList: []
             }
         },
+        watch: {
+            list: {
+                handler (val) {
+                    this.keyword = ''
+                },
+                immediate: true
+            }
+        },
         methods: {
             handleSearch (searchText) {
                 const keyword = searchText.trim()
                 if (!keyword) {
                     this.renderList = []
                     this.isShowList = false
+                    this.selectedIndex = 0
                     this.keyword = ''
                     this.$emit('on-change', null)
                     return
@@ -164,6 +198,7 @@
                 }
             },
             handleClear () {
+                this.selectedIndex = 0
                 this.$emit('on-change', null)
             }
         }
