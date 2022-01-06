@@ -134,11 +134,11 @@
                     this.favoriteComponentList = Object.freeze(favoriteComponentList)
                     this.publicComponentList = Object.freeze(publicComponentList)
                     this.groupComponentMap = Object.freeze(groupComponentMap)
-                    this.renderGroupComponentMap = {
+                    this.renderGroupComponentMap = Object.freeze({
                         '我的收藏': this.favoriteComponentList,
                         '其他项目公开的组件': this.publicComponentList,
                         ...this.groupComponentMap
-                    }
+                    })
                     this.searchList = Object.freeze(searchList)
                 } finally {
                     this.isLoading = false
@@ -245,11 +245,11 @@
             handleSearchChange (data) {
                 if (!data) {
                     this.isSearch = false
-                    this.renderGroupComponentMap = {
+                    this.renderGroupComponentMap = Object.freeze({
                         '我的收藏': this.favoriteComponentList,
                         '其他项目公开的组件': this.publicComponentList,
                         ...this.groupComponentMap
-                    }
+                    })
                     return
                 }
                 const renderGroupComponentMap = {}

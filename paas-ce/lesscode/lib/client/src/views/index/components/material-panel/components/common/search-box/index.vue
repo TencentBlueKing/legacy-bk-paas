@@ -72,9 +72,10 @@
         render (h, ctx) {
             const textClass = 'text'
             const { node, query } = ctx.props
+            const searchName = `${pascalCase(node.name)} ${node.displayName}`
             return (
-                <span title={node.searchName} domPropsInnerHTML={
-                    query ? node.searchName.replace(new RegExp(`(${query})`, 'i'), '<em style="font-style: normal;color: #3a84ff;">$1</em>') : node.searchName
+                <span title={searchName} domPropsInnerHTML={
+                    query ? searchName.replace(new RegExp(`(${query})`, 'i'), '<em style="font-style: normal;color: #3a84ff;">$1</em>') : searchName
                 } class={textClass}></span>
             )
         }
@@ -100,16 +101,6 @@
                 renderList: []
             }
         },
-        computed: {
-            searchList () {
-                return this.list.map(item => {
-                    return {
-                        ...item,
-                        searchName: `${pascalCase(item.name)} ${item.displayName}`
-                    }
-                })
-            }
-        },
         watch: {
             list: {
                 handler (val) {
@@ -124,13 +115,14 @@
                 if (!keyword) {
                     this.renderList = []
                     this.isShowList = false
+                    this.selectedIndex = 0
                     this.keyword = ''
                     this.$emit('on-change', null)
                     return
                 }
                 const reg = new RegExp(encodeRegexp(searchText), 'i')
-                const renderList = this.searchList.reduce((result, item) => {
-                    if (reg.test(item.searchName)) {
+                const renderList = this.list.reduce((result, item) => {
+                    if (reg.test(item.type) || reg.test(item.name)) {
                         result.push(item)
                     }
                     return result
@@ -150,7 +142,7 @@
             },
             handleSelect (data) {
                 this.isShowList = false
-                this.keyword = data.searchName
+                this.keyword = data.type
                 this.$emit('on-change', data)
             },
             handleKeydown (value, e) {
@@ -206,6 +198,7 @@
                 }
             },
             handleClear () {
+                this.selectedIndex = 0
                 this.$emit('on-change', null)
             }
         }

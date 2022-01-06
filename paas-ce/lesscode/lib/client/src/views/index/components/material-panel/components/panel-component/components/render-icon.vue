@@ -49,7 +49,7 @@
             })
             this.groupIconMap = Object.freeze(groupIconMap)
             this.renderGroupIconMap = Object.freeze(groupIconMap)
-            this.searchList = searchList
+            this.searchList = Object.freeze(searchList)
             console.log('from icon list = ', groupIconMap)
         },
         methods: {
