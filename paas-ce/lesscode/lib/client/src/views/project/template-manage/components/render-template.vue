@@ -136,8 +136,7 @@
                 targetData.push(JSON.parse(content))
                 this.$store.dispatch('vueCode/getPageCode', {
                     targetData,
-                    projectId: this.projectId,
-                    from: 'download_page'
+                    projectId: this.projectId
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
                     const blob = new Blob([res])

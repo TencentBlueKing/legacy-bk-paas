@@ -13,7 +13,6 @@ import PageCodeModel from '../model/page-code'
 import routeModel from '../model/route'
 import variableModel from '../model/variable'
 
-import { getNameMap } from '../model/component'
 import { allGroupFuncDetail } from '../model/function'
 import OperationLogger from '../service/operation-logger'
 
@@ -57,18 +56,19 @@ const VueCode = {
             const {
                 pageType = 'vueCode',
                 projectId = '',
-                lifeCycle,
                 pageId,
                 layoutContent,
                 targetData = [],
-                isEmpty = false,
                 from,
                 withNav,
                 fromPageCode = ''
             } = ctx.request.body
 
-            const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([getNameMap(), allGroupFuncDetail(projectId), routeModel.findProjectRoute(projectId), variableModel.getAll({ projectId })])
+            console.time('vueCode')
+
+            const [funcGroups, routeList, allVarableList] = await Promise.all([allGroupFuncDetail(projectId), routeModel.findProjectRoute(projectId), variableModel.getAll({ projectId })])
             const curPage = routeList.find((route) => (route.pageId === +pageId)) || {}
+            console.log(curPage, 235111)
             const variableList = [
                 ...allVarableList.filter(variable => variable.effectiveRange === 0),
                 ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && (variable.pageCode === curPage.pageCode || variable.pageCode === fromPageCode)))
@@ -88,11 +88,26 @@ const VueCode = {
                 })
             }
             const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
-            const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, curLayoutCon, false, isEmpty, curPage.layoutType, variableList)
+            
+            const { code, codeErrMessage } = await PageCodeModel.getPageData({
+                targetData: pageTargetData,
+                pageType,
+                funcGroups,
+                lifeCycle: curPage.lifeCycle || {}, 
+                projectId,
+                pageId,
+                layoutContent: curLayoutCon,
+                isGenerateNav: false, 
+                isEmpty: false,
+                layoutType: curPage.layoutType,
+                variableList
+            })
+            
             // 此接口被多方调用，目前仅收集下载页面源码
             if (from === 'download_page') {
                 operationLogger.success()
             }
+            console.timeEnd('vueCode')
             ctx.send({
                 code: 0,
                 message: 'success',

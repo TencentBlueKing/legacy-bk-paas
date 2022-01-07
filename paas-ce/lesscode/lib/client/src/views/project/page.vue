@@ -215,9 +215,7 @@
                 this.$store.dispatch('vueCode/getPageCode', {
                     targetData: JSON.parse(targetData),
                     projectId: this.projectId,
-                    lifeCycle,
                     pageId,
-                    layoutContent: this.pageLayout.layoutContent,
                     from: 'download_page'
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
