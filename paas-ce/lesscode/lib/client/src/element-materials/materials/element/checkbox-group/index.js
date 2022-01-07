@@ -21,10 +21,7 @@ export default {
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

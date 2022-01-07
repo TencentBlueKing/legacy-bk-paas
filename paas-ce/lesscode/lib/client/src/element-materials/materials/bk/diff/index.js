@@ -20,22 +20,6 @@ export default {
     renderStyles: {
         display: 'block'
     },
-    directives: [
-        {
-            type: 'v-bind',
-            prop: 'old-content',
-            propTypes: ['string'],
-            val: '',
-            valType: 'variable'
-        },
-        {
-            type: 'v-bind',
-            prop: 'new-content',
-            propTypes: ['string'],
-            val: '',
-            valType: 'variable'
-        }
-    ],
     props: {
         'old-content': {
             type: ['string', 'remote'],

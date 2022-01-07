@@ -2,6 +2,7 @@
     <div
         class="render-drag-item"
         :class="{
+            [displayClass]: true,
             favorite: data.meta && data.meta.favorite
         }"
         v-bk-tooltips="{
@@ -43,7 +44,12 @@
         props: {
             data: Object
         },
-        
+        created () {
+            this.displayClass = ''
+            if (this.data.renderStyles && this.data.renderStyles.display) {
+                this.displayClass = this.data.renderStyles.display
+            }
+        },
         methods: {
             async handleShowIntroduction (component, event) {
                 const componentId = component.meta.id

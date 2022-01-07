@@ -65,7 +65,7 @@
             }
         },
         created () {
-            this.trigger()
+            // this.trigger()
         },
         methods: {
             handleChange (value, key, index) {

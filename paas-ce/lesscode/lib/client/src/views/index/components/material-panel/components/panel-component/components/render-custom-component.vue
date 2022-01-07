@@ -1,36 +1,53 @@
 <template>
     <div class="render-custom-component" v-bkloading="{ isLoading }">
+        <search-box
+            :list="searchList"
+            @on-change="handleSearchChange" />
         <div>
-            <group-box
-                :list="favoriteComponentList"
-                group="我的收藏"
-                key="favorite">
-                <render-component
-                    v-for="component in favoriteComponentList"
-                    :key="component.name"
-                    :data="component" />
-            </group-box>
-            <template v-for="(componentList, groupName) in groupComponentMap">
+            <template v-if="isSearch">
                 <group-box
-                    v-if="componentList.length > 0"
+                    v-for="(comList, groupName) in renderGroupComponentMap"
                     :key="groupName"
-                    :list="componentList"
+                    :list="comList"
                     :group-name="groupName">
                     <render-component
-                        v-for="component in componentList"
+                        v-for="component in comList"
                         :key="component.name"
                         :data="component" />
                 </group-box>
             </template>
-            <group-box
-                :list="publicComponentList"
-                group="其它项目公开的组件"
-                key="publice">
-                <render-component
-                    v-for="component in publicComponentList"
-                    :key="component.name"
-                    :data="component" />
-            </group-box>
+            <template v-else>
+                <group-box
+                    :list="favoriteComponentList"
+                    :group-name="'我的收藏'"
+                    key="favorite">
+                    <render-component
+                        v-for="component in favoriteComponentList"
+                        :key="component.name"
+                        :data="component" />
+                </group-box>
+                <template v-for="(componentList, groupName) in groupComponentMap">
+                    <group-box
+                        v-if="componentList.length > 0"
+                        :key="groupName"
+                        :list="componentList"
+                        :group-name="groupName">
+                        <render-component
+                            v-for="component in componentList"
+                            :key="component.name"
+                            :data="component" />
+                    </group-box>
+                </template>
+                <group-box
+                    :list="publicComponentList"
+                    :group-name="'其他项目公开的组件'"
+                    key="publice">
+                    <render-component
+                        v-for="component in publicComponentList"
+                        :key="component.name"
+                        :data="component" />
+                </group-box>
+            </template>
         </div>
         <div class="fixed-opts">
             <bk-link
@@ -47,12 +64,14 @@
     import Vue from 'vue'
     import Tippy from 'bk-magic-vue/lib/utils/tippy'
     import GroupBox from '../../common/group-box'
+    import SearchBox from '../../common/search-box'
     import RenderComponent from '../../common/group-box/render-component'
 
     export default {
         name: '',
         components: {
             GroupBox,
+            SearchBox,
             RenderComponent
         },
         data () {
@@ -60,7 +79,10 @@
                 isLoading: false,
                 favoriteComponentList: [],
                 publicComponentList: [],
-                groupComponentMap: {}
+                groupComponentMap: {},
+                renderGroupComponentMap: {},
+                searchList: [],
+                isSearch: false
             }
         },
         created () {
@@ -88,7 +110,7 @@
                     const searchList = []
                     window.customCompontensPlugin.forEach(registerCallback => {
                         const [
-                            config,
+                            config,,
                             baseInfo
                         ] = registerCallback(Vue)
                         const realConfig = {
@@ -104,7 +126,7 @@
                             publicComponentList.push(realConfig)
                             return
                         }
-                        if (groupComponentMap[baseInfo.category]) {
+                        if (!groupComponentMap[baseInfo.category]) {
                             groupComponentMap[baseInfo.category] = []
                         }
                         groupComponentMap[baseInfo.category].push(realConfig)
@@ -112,6 +134,11 @@
                     this.favoriteComponentList = Object.freeze(favoriteComponentList)
                     this.publicComponentList = Object.freeze(publicComponentList)
                     this.groupComponentMap = Object.freeze(groupComponentMap)
+                    this.renderGroupComponentMap = Object.freeze({
+                        '我的收藏': this.favoriteComponentList,
+                        '其他项目公开的组件': this.publicComponentList,
+                        ...this.groupComponentMap
+                    })
                     this.searchList = Object.freeze(searchList)
                 } finally {
                     this.isLoading = false
@@ -211,13 +238,40 @@
                     }
                 })
                 window.open(route.href, '_blank')
+            },
+            /**
+             * @desc 组件搜索
+             */
+            handleSearchChange (data) {
+                if (!data) {
+                    this.isSearch = false
+                    this.renderGroupComponentMap = Object.freeze({
+                        '我的收藏': this.favoriteComponentList,
+                        '其他项目公开的组件': this.publicComponentList,
+                        ...this.groupComponentMap
+                    })
+                    return
+                }
+                const renderGroupComponentMap = {}
+                Object.keys(this.renderGroupComponentMap).forEach(groupName => {
+                    const groupList = this.renderGroupComponentMap[groupName]
+                    groupList.forEach(component => {
+                        if (component.name === data.name) {
+                            if (!renderGroupComponentMap[groupName]) {
+                                renderGroupComponentMap[groupName] = []
+                            }
+                            renderGroupComponentMap[groupName].push(component)
+                        }
+                    })
+                })
+                this.renderGroupComponentMap = Object.freeze(renderGroupComponentMap)
+                this.isSearch = true
             }
         }
     }
 </script>
 <style lang="postcss">
     .render-custom-component{
-        padding-top: 12px;
         .fixed-opts{
             position: fixed;
             bottom: 0;

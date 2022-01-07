@@ -28,7 +28,7 @@
     import SearchBox from '../../common/search-box'
     import GroupBox from '../../common/group-box'
     import RenderComponent from '../../common/group-box/render-component'
-    import RenderIcon from '../../common/group-box/render-icon.vue'
+    import RenderIcon from '../../common/group-box/render-icon'
 
     console.log('from base component = ', MaterialConfig)
 
@@ -49,7 +49,8 @@
         },
         data () {
             return {
-                renderGroupComponentMap: {}
+                renderGroupComponentMap: {},
+                searchList: []
             }
         },
         computed: {
@@ -113,7 +114,7 @@
                 Object.keys(this.groupComponentMap).forEach(groupName => {
                     const groupList = this.groupComponentMap[groupName]
                     groupList.forEach(component => {
-                        if (component.type === data.type) {
+                        if (component.name === data.name) {
                             if (!renderGroupComponentMap[groupName]) {
                                 renderGroupComponentMap[groupName] = []
                             }

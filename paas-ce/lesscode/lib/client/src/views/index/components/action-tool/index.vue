@@ -1,14 +1,13 @@
 <template>
-    <ul class="function-and-tool-list">
-        <save-canvas></save-canvas>
-        <preview></preview>
-        <save-as-template></save-as-template>
-        <clear-canvas></clear-canvas>
-        <show-function></show-function>
-        <quick-operation></quick-operation>
-    </ul>
+    <div class="action-tool-list">
+        <save-canvas />
+        <preview />
+        <save-as-template />
+        <clear-canvas />
+        <show-function />
+        <quick-operation />
+    </div>
 </template>
-
 <script>
     import SaveCanvas from './save-canvas'
     import Preview from './preview'
@@ -28,3 +27,10 @@
         }
     }
 </script>
+<style scoped>
+    .action-tool-list{
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+</style>

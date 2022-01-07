@@ -29,11 +29,7 @@ export default {
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            format: 'value',
-            code: true,
-            valueType: 'boolean',
-            renderValue: true
+            prop: 'value'
         }
     ],
     props: {

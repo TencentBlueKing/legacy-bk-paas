@@ -22,13 +22,13 @@ export default {
     }],
     styles: ['margin'],
     directives: [
-        {
-            type: 'v-bind',
-            prop: 'list',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'list',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         list: {

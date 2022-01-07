@@ -29,13 +29,13 @@
             <slot v-if="formData.format === 'value'" />
             <render-variable
                 v-if="formData.format === 'variable'"
-                :data="data"
+                :options="options"
                 :form-data="formData"
                 :remote-config="remoteConfig"
                 @on-change="handleChange" />
             <render-expression
                 v-if="formData.format === 'expression'"
-                :data="data"
+                :options="options"
                 :form-data="formData"
                 @on-change="handleChange"
             />
@@ -92,7 +92,7 @@
              *      includesValueType: [] | undefined // undefined 表示支持所有值类型
              * }
              */
-            data: {
+            options: {
                 type: Object,
                 required: true
             },
@@ -130,12 +130,12 @@
 
         computed: {
             renderFormatMap () {
-                if (!this.data.includesFormat) {
+                if (!this.options.includesFormat) {
                     return {
                         ...formatTypeMap
                     }
                 }
-                return this.data.includesFormat.reduce((result, format) => {
+                return this.options.includesFormat.reduce((result, format) => {
                     if (formatTypeMap[format]) {
                         result[format] = formatTypeMap[format]
                     }

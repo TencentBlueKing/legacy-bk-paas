@@ -15,7 +15,7 @@
     export default {
         name: '',
         props: {
-            data: {
+            options: {
                 type: Object,
                 required: true
             },
@@ -30,5 +30,3 @@
         }
     }
 </script>
-<style lang="postcss">
-</style>

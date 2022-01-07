@@ -31,18 +31,15 @@ export default {
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        },
-        {
-            type: 'v-bind',
-            prop: 'list',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'list',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         list: {

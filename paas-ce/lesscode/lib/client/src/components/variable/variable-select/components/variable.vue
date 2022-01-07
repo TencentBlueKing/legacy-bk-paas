@@ -120,7 +120,7 @@
             remoteExample
         },
         props: {
-            data: {
+            options: {
                 type: Object,
                 required: true
             },
@@ -144,7 +144,7 @@
                 return {
                     ...variable,
                     disabled: variableValueTypeStr !== 'all'
-                        && (this.data.includesValueType && !this.data.includesValueType.includes(variableValueTypeStr))
+                        && (this.options.includesValueType && !this.options.includesValueType.includes(variableValueTypeStr))
                 }
             })
             
@@ -162,6 +162,7 @@
                 theme: 'light',
                 content: '.variable-list',
                 placement: 'bottom-start',
+                boundary: 'window',
                 onShow () {
                     this.isShowVariable = true
                 },

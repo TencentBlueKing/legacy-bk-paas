@@ -20,15 +20,7 @@ export default {
     renderStyles: {
         display: 'inline-block'
     },
-    directives: [
-        {
-            type: 'v-bind',
-            prop: 'percent',
-            propTypes: ['number'],
-            val: '',
-            valType: 'variable'
-        }
-    ],
+    directives: [],
     props: {
         percent: {
             type: 'float',

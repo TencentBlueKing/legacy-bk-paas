@@ -11,15 +11,37 @@
 
 <template>
     <section>
-        <div class="remote-title" v-bk-tooltips="{ content: tips, disabled: !tips, width: 290 }">
-            <span :class="{ 'under-line': tips }">{{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}</span>
-            <span class="remote-example" @click="handleShowExample">数据示例</span>
+        <div
+            class="remote-title"
+            v-bk-tooltips="{
+                content: tips,
+                disabled: !tips,
+                width: 290
+            }">
+            <span :class="{ 'under-line': tips }">
+                {{ title === undefined ? ((name === 'remoteOptions' ? '动态配置' : '远程函数')) : title }}
+            </span>
+            <span
+                class="remote-example"
+                @click="handleShowExample">
+                数据示例
+            </span>
         </div>
         <div class="remote-content">
-            <select-func v-model="remoteData" @change="changeFunc"></select-func>
-            <bk-button @click="getApiData" theme="primary" class="remote-button" size="small">获取数据</bk-button>
+            <select-func
+                v-model="remoteData"
+                @change="changeFunc" />
+            <bk-button
+                @click="getApiData"
+                theme="primary"
+                class="remote-button"
+                size="small">
+                获取数据
+            </bk-button>
         </div>
-        <remote-example ref="example" :data="exampleData"></remote-example>
+        <remote-example
+            ref="example"
+            :data="exampleData" />
     </section>
 </template>
 
@@ -77,7 +99,6 @@
         },
         computed: {
             ...mapGetters('functions', ['funcGroups']),
-            ...mapGetters('drag', ['targetData']),
             ...mapGetters('variable', ['variableList']),
             exampleData () {
                 return { name: this.name, value: this.defaultValue }
@@ -85,18 +106,13 @@
         },
         created () {
             this.remoteData = Object.assign({}, this.remoteData, this.payload)
-            this.saveChange()
         },
         methods: {
             changeFunc () {
-                this.saveChange()
+                this.change(this.name, this.defaultValue, this.type, JSON.parse(JSON.stringify(this.remoteData)))
                 if (this.autoGetData) {
                     this.getApiData()
                 }
-            },
-
-            saveChange () {
-                this.change(this.name, this.defaultValue, this.type, JSON.parse(JSON.stringify(this.remoteData)))
             },
 
             getVariableVal (variable) {
@@ -247,7 +263,11 @@
 
             async getApiData () {
                 if (!this.remoteData.methodCode) {
-                    this.$bkMessage({ theme: 'error', message: '请先选择函数', limit: 1 })
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: '请先选择函数',
+                        limit: 1
+                    })
                     return
                 }
 
@@ -255,13 +275,18 @@
                 try {
                     methodStr = this.generateMethod(this.remoteData.methodCode)
                 } catch (error) {
-                    this.$bkMessage({ theme: 'error', message: error.message || error || '函数格式有误，请修改后再试', limit: 1 })
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: error.message || error || '函数格式有误，请修改后再试',
+                        limit: 1
+                    })
                     return
                 }
-
+                
                 try {
                     const sandBox = this.createSandBox()
                     const res = await sandBox.exec(methodStr, this.remoteData.params)
+                    
                     let message = this.remoteValidate(res)
                     if (message) {
                         message = '数据源设置成功，以下问题可能会导致组件表现异常，请检查：' + message
@@ -274,7 +299,11 @@
                         this.$bkMessage({ theme: 'success', message: '获取数据成功', limit: 1 })
                     }
                 } catch (error) {
-                    this.$bkMessage({ theme: 'error', message: error.message || error || '获取数据失败，请检查函数是否正确', limit: 1 })
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: error.message || error || '获取数据失败，请检查函数是否正确',
+                        limit: 1
+                    })
                 }
             },
 
@@ -286,7 +315,7 @@
     }
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
     .remote-title {
         display: flex;
         justify-content: space-between;
@@ -294,10 +323,9 @@
         line-height: 24px;
         font-size: 12px;
 
-    &
-    :first-child {
-        margin-top: 0;
-    }
+        &:first-child {
+            margin-top: 0;
+        }
 
     }
     .under-line {
@@ -316,10 +344,9 @@
         color: #63656E;
         height: 22px;
 
-    .form-tip {
-        font-weight: normal;
-        color: #979ba5;
-    }
-
+        .form-tip {
+            font-weight: normal;
+            color: #979ba5;
+        }
     }
 </style>

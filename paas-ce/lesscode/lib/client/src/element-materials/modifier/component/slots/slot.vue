@@ -1,9 +1,9 @@
 <template>
     <variable-select
-        :data="variableSelectData"
+        :options="variableSelectOptions"
         :value="formData"
         :remote-config="remoteConfig"
-        @change="handleVariableSelectChange">
+        @change="handleVariableFormatChange">
         <template v-slot:title>
             <section class="slot-title-wrapper">
                 <span
@@ -50,15 +50,21 @@
         </template>
         <component
             :is="renderValueComponent"
+            :remote-validate="describe.remoteValidate"
             :slot-val="slotTypeValueMemo[formData.valueType]"
             :slot-config="describe"
-            :change="handleValueChange" />
+            :change="handleCodeChange" />
     </variable-select>
 </template>
 
 <script>
     import { transformTipsWidth } from '@/common/util'
     import variableSelect from '@/components/variable/variable-select'
+
+    import {
+        getDefaultValueByType,
+        isEmpty
+    } from '../utils'
 
     import slotList from './components/list'
     import slotRemote from './components/remote'
@@ -109,9 +115,17 @@
         },
 
         computed: {
+            /**
+             * @desc 配置为值类型时的设置组件
+             * @returns { Object }
+             */
             renderValueComponent () {
                 return comMap[this.formData.valueType]
             },
+            /**
+             * @desc tips
+             * @returns { Object }
+             */
             computedSlotTip () {
                 const transformTips = transformTipsWidth(this.describe.tips)
                 const tips = typeof transformTips === 'string' ? { content: transformTips } : transformTips
@@ -121,7 +135,10 @@
                     disabled
                 }
             },
-            
+            /**
+             * @desc 支持远程函数配置是的 config 信息
+             * @returns { Object }
+             */
             remoteConfig () {
                 if (this.describe.type.includes('remote')) {
                     return {
@@ -146,7 +163,7 @@
             const component = Array.isArray[name] ? name : [name]
 
             // 构造 variable-select 的配置
-            this.variableSelectData = {
+            this.variableSelectOptions = {
                 type: 'slot',
                 prop: this.name,
                 format: 'value',
@@ -191,6 +208,9 @@
             }
         },
         methods: {
+            /**
+             * @desc 同步更新用户操作
+             */
             triggerChange () {
                 // 缓存用户本地编辑值
                 this.slotTypeValueMemo[this.formData.valueType] = {
@@ -207,7 +227,7 @@
              * @desc format 更新
              * @param { Object } variableSelectData
              */
-            handleVariableSelectChange (variableSelectData) {
+            handleVariableFormatChange (variableSelectData) {
                 this.formData = Object.freeze({
                     ...this.formData,
                     format: variableSelectData.format,
@@ -236,8 +256,12 @@
                 if (this.slotTypeValueMemo.hasOwnProperty(valueType)) {
                     code = this.slotTypeValueMemo[valueType].val
                     payload = this.slotTypeValueMemo[valueType].payload
+                } else if (valueType === 'remote') {
+                    // fix: 配置远程函数类型，接口数据没返回时使用配置文件设置的默认值
+                    code = this.describe.val
                 } else {
-                    code = ''
+                    // 切换值类型时，通过类型获取默认值
+                    code = getDefaultValueByType(valueType)
                 }
                 this.formData = Object.freeze({
                     ...this.formData,
@@ -252,13 +276,28 @@
              * @desc format 等于 value 时，编辑 code 的值
              * @param { Object } valueData
              */
-            handleValueChange (valueData) {
+            handleCodeChange (valueData) {
+                let code = null
+                let renderValue = ''
+                
+                if (this.formData.valueType === 'remote') {
+                    // 配置的是远程函数
+                    // code 此时无效设置为 null
+                    // api 返回数据不为空才应用接口数据
+                    if (!isEmpty(valueData.val)) {
+                        renderValue = valueData.val
+                    }
+                } else {
+                    code = valueData.val
+                    renderValue = valueData.val
+                }
                 this.formData = Object.freeze({
                     ...this.formData,
-                    code: valueData.val,
+                    code,
                     payload: valueData.payload,
-                    renderValue: valueData.val
+                    renderValue
                 })
+                
                 this.triggerChange()
             }
         }

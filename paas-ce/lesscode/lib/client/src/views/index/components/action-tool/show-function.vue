@@ -1,10 +1,8 @@
 <template>
-    <section>
-        <menu-item :item="item"></menu-item>
-        <Methods :show.sync="isShowFun" />
-    </section>
+    <menu-item :item="item">
+        <methods :show.sync="isShowFun" />
+    </menu-item>
 </template>
-
 <script>
     import MenuItem from './menu-item'
     import Methods from '@/components/methods'

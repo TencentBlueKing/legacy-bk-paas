@@ -26,13 +26,13 @@ export default {
         wordBreak: 'break-all'
     },
     directives: [
-        {
-            type: 'v-html',
-            prop: 'slots',
-            propTypes: ['string'],
-            val: '',
-            valType: 'variable'
-        }
+        // {
+        //     type: 'v-html',
+        //     prop: 'slots',
+        //     propTypes: ['string'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         title: {
@@ -48,7 +48,6 @@ export default {
             displayName: '文本配置',
             regExp: /\S/,
             val: '默认段落文字',
-            // val: '<script>alert(1)</script>',
             regErrorText: '文本配置不能为空'
         }
     }
