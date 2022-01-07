@@ -88,7 +88,7 @@ const VueCode = {
                 })
             }
             const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
-            // const { code, codeErrMessage } = await PageCodeModel.getPageData(pageTargetData, pageType, allCustomMap, funcGroups, curPage.lifeCycle || {}, projectId, pageId, curLayoutCon, false, false, curPage.layoutType, variableList)
+            
             const { code, codeErrMessage } = await PageCodeModel.getPageData({
                 targetData: pageTargetData,
                 pageType,
