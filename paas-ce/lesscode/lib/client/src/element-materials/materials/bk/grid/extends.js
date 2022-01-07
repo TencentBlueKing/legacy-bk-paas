@@ -15,7 +15,7 @@ export default function (children) {
         type: 'render-grid',
         order: 1,
         group: '布局',
-        styles: ['size', 'margin', 'padding'],
+        styles: ['size', 'margin', 'padding', 'backgroundColor'],
         renderStyles: {
             'margin-bottom': '10px'
         },

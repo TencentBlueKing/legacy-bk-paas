@@ -1,29 +1,45 @@
 <template>
-    <menu-item :item="item">
-        <template>
-            <div class="quick-operation" v-bk-clickoutside="toggleShowQuickOperation">
-                <div class="tool-item" @click="toggleShowQuickOperation(true)">
-                    <i :class="item.icon"></i>
-                    <span>{{item.text}}</span>
+    <menu-item
+        :item="item"
+        v-bk-tooltips="{
+            allowHtml: true,
+            width: 530,
+            distance: 10,
+            trigger: 'mouseenter',
+            theme: 'light',
+            content: `#quickOperationIntro`,
+            placement: 'bottom',
+            boundary: 'window'
+        }">
+        <div style="display: none">
+            <div id="quickOperationIntro">
+                <div class="operation-title">
+                    <span class="title-main">快捷键说明</span>
                 </div>
-                <section class="operation-main" v-if="showQuickOperation === true">
-                    <h5 class="operation-title"><span class="title-main">快捷键说明</span><i class="bk-icon icon-close" @click.stop="toggleShowQuickOperation(false)"></i></h5>
-                    <ul class="operation-list">
-                        <li v-for="(operation, shortcutIndex) in quickOperationList" :key="shortcutIndex" class="operation-item">
-                            <span class="operation-keys">
-                                <span v-for="(key, keyIndex) in operation.keys" :key="key">
-                                    <span class="operation-key">{{ key }}</span><span v-if="keyIndex !== operation.keys.length - 1" class="operation-plus">+</span>
+                <ul class="operation-list">
+                    <li
+                        v-for="(operation, shortcutIndex) in quickOperationList"
+                        :key="shortcutIndex"
+                        class="operation-item">
+                        <span class="operation-keys">
+                            <span
+                                v-for="(key, keyIndex) in operation.keys"
+                                :key="key">
+                                <span class="operation-key">{{ key }}</span>
+                                <span
+                                    v-if="keyIndex !== operation.keys.length - 1"
+                                    class="operation-plus">
+                                    +
                                 </span>
                             </span>
-                            <span class="operation-name">{{ operation.name }}</span>
-                        </li>
-                    </ul>
-                </section>
+                        </span>
+                        <span class="operation-name">{{ operation.name }}</span>
+                    </li>
+                </ul>
             </div>
-        </template>
+        </div>
     </menu-item>
 </template>
-
 <script>
     import MenuItem from './menu-item'
     import { getNodeWithClass } from '@/common/util'
@@ -40,10 +56,9 @@
                 item: {
                     icon: 'bk-drag-icon bk-drag-keyboard',
                     text: '快捷键',
-                    func: () => this.toggleShowQuickOperation(true)
+                    func: () => {}
                 },
                 hasCtrl: false,
-                showQuickOperation: false,
                 isInDragArea: false,
                 quickOperationList: [
                     { keys: ['Ctrl / Cmd', 'C'], name: '复制' },
@@ -59,21 +74,12 @@
         mounted () {
             window.addEventListener('keydown', this.quickOperation)
             window.addEventListener('keyup', this.judgeCtrl)
-            window.addEventListener('click', this.toggleQuickOperation, true)
         },
         beforeDestroy () {
             window.removeEventListener('keydown', this.quickOperation)
             window.removeEventListener('keyup', this.toggleQuickOperation)
-            window.removeEventListener('click', this.toggleShowQuickOperation)
         },
         methods: {
-            toggleShowQuickOperation (show) {
-                if (show === true) {
-                    this.showQuickOperation = true
-                } else {
-                    this.showQuickOperation = false
-                }
-            },
             judgeCtrl (event) {
                 switch (event.keyCode) {
                     case 91:
@@ -195,3 +201,62 @@
         }
     }
 </script>
+<style lang="postcss">
+    #quickOperationIntro {
+        height: 230px;
+        left: 0;
+        top: 60px;
+        color: #000;
+        cursor: default;
+        .operation-title {
+            margin: 0;
+            padding: 0;
+            line-height: 26px;
+            font-size: 20px;
+            font-weight: normal;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 22px;
+            .icon-close {
+                position: absolute;
+                font-size: 32px;
+                right: 6px;
+                top: 0;
+                color: #979ba5;
+                cursor: pointer;
+            }
+        }
+        .operation-item {
+            float: left;
+            margin: 10px 0;
+            line-height: 28px;
+            font-size: 12px;
+            color: #63656e;
+            .operation-keys {
+                margin-right: 26px;
+                .operation-key {
+                    display: inline-block;
+                    text-align: center;
+                    width: 40px;
+                    height: 30px;
+                    border: 1pt solid #c4c6cc;
+                    border-radius: 2px;
+                }
+                .operation-plus {
+                    display: inline-block;
+                    margin: 0 15px;
+                }
+                >span:first-child .operation-key {
+                    width: 80px;
+                }
+            }
+            &:nth-child(odd) {
+                margin-right: 50px;
+            }
+            &:last-child .operation-keys span.operation-key{
+                width: 160px;
+            }
+        }
+    }
+</style>
