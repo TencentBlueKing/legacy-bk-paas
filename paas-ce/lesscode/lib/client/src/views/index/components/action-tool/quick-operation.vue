@@ -66,7 +66,7 @@
                     { keys: ['Ctrl / Cmd', 'X'], name: '剪切' },
                     // { keys: ['Ctrl / Cmd', 'Z'], name: '撤销' },
                     // { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
-                    { keys: ['Ctrl / Cmd', 'S'], name: '保存' },
+                    // { keys: ['Ctrl / Cmd', 'S'], name: '保存' },
                     { keys: ['Delete / Backspace'], name: '删除' }
                 ]
             }
@@ -138,9 +138,9 @@
                         funcChainMap.isInDragArea().exec(this.putComponentData)
                         console.log(566)
                         break
-                    case 83:
-                        funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)
-                        break
+                    // case 83:
+                    //     funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)
+                    //     break
                     case 86:
                         console.log('ctrlv')
                         funcChainMap.isInDragArea().exec(this.copyComponent)
