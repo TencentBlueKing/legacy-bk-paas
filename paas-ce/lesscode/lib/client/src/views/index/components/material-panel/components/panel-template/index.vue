@@ -161,7 +161,7 @@
                     }))
                     this.projectTemplateList = Object.freeze(projectTemplateList)
                     this.marketTemplateList = Object.freeze(marketTemplateList)
-                    this.renderGroupTemplateList = this.projectTemplateGroupList
+                    this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
 
                     console.log('from tempalte print == ', this.projectTemplateList, this.marketTemplateList)
                 } catch (err) {
@@ -184,7 +184,7 @@
             handleToggleTab (tab) {
                 this.tab = tab
                 this.type = tab
-                this.renderGroupTemplateList = this.type === 'project' ? this.projectTemplateGroupList : this.marketTemplateGroupList
+                this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
             },
             onChoose (e, list) {
                 const contentStr = list[e.oldIndex] && list[e.oldIndex].content
@@ -227,7 +227,7 @@
              */
             handleSearchChange (data) {
                 if (!data) {
-                    this.renderGroupTemplateList = this.type === 'project' ? this.projectTemplateGroupList : this.marketTemplateGroupList
+                    this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
                     return
                 }
                 const renderGroupTemplateList = []
@@ -240,7 +240,7 @@
                         })
                     }
                 })
-                this.renderGroupTemplateList = renderGroupTemplateList
+                this.renderGroupTemplateList = Object.freeze(renderGroupTemplateList)
             }
         }
     }
