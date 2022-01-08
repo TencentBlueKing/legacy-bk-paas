@@ -9,12 +9,12 @@
     </div>
 </template>
 <script>
-    import SaveCanvas from './save-canvas'
-    import Preview from './preview'
-    import SaveAsTemplate from './save-as-template'
-    import ClearCanvas from './clear-canvas'
-    import ShowFunction from './show-function'
-    import QuickOperation from './quick-operation.vue'
+    import SaveCanvas from './components/save-canvas'
+    import Preview from './components/preview'
+    import SaveAsTemplate from './components/save-as-template'
+    import ClearCanvas from './components/clear-canvas'
+    import ShowFunction from './components/show-function'
+    import QuickOperation from './components/quick-operation'
 
     export default {
         components: {
@@ -27,7 +27,7 @@
         }
     }
 </script>
-<style scoped>
+<style lang="postcss" scoped>
     .action-tool-list{
         display: flex;
         align-items: center;

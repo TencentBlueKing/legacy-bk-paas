@@ -140,5 +140,21 @@
     }
 </script>
 <style lang="postcss">
-    
+    .custom-component-introduction-theme{
+        max-width: 355px;
+        min-width: 260px;
+        padding-top: 7px !important;
+        padding-bottom: 7px !important;
+        font-size: 12px;
+        color: #63656E;
+        td{
+            line-height: 30px;
+        }
+        .label{
+            width: 60px;
+            vertical-align: top;
+            font-weight: bold;
+            color: #63656E;
+        }
+    }
 </style>

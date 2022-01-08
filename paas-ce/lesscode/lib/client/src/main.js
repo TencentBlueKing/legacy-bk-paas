@@ -10,6 +10,7 @@
  */
 
 import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
 import VueDraggable from 'vuedraggable'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
@@ -43,7 +44,7 @@ Vue.prototype.$clearMenu = () => {
         node.style.display = 'none'
     })
 }
-
+Vue.use(VueCompositionAPI)
 Vue.use(mavonEditor)
 
 Vue.component('VueDraggable', VueDraggable)
