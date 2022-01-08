@@ -42,7 +42,6 @@
             }
         },
         computed: {
-            ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('page', ['pageDetail']),
             projectId () {
                 return this.$route.params.projectId || ''
@@ -64,16 +63,13 @@
             getFormatCode (withNav) {
                 this.isLoading = true
                 console.log('查看源码 getFormatCode')
-                const { pageType, projectId, lifeCycle, pageId } = this
+                const { pageType, projectId, pageId } = this
                 const targetData = JSON.parse(circleJSON(LC.getRoot().toJSON().renderSlots.default))
-                const { layoutContent } = this.pageLayout
                 this.$store.dispatch('vueCode/getPageCode', {
                     targetData,
                     pageType,
                     projectId,
-                    lifeCycle,
                     pageId,
-                    layoutContent,
                     withNav
                 }).then(res => {
                     this.formatCode = res

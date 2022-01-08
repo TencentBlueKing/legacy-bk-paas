@@ -50,7 +50,6 @@ class PageCode {
      * 3. projectCode: 生成整个项目代码
      */
     pageType = ''
-    allCustomMap = {}
     funcGroups = []
     code = ''
     scriptStr = ''
@@ -79,10 +78,9 @@ class PageCode {
     layoutType = ''
     isUseElementComponentLib = false
 
-    constructor (targetData = [], pageType = 'vueCode', allCustomMap = {}, funcGroups = [], lifeCycle = '', projectId, pageId, layoutContent, isGenerateNav = false, isEmpty = false, layoutType, variableList) {
+    constructor (targetData = [], pageType = 'vueCode', funcGroups = [], lifeCycle = '', projectId, pageId, layoutContent, isGenerateNav = false, isEmpty = false, layoutType, variableList) {
         this.targetData = targetData || []
         this.pageType = pageType
-        this.allCustomMap = allCustomMap || {}
         this.funcGroups = funcGroups || []
         this.uniqueKey = uuid()
         this.lifeCycle = lifeCycle || {}
@@ -218,7 +216,7 @@ class PageCode {
             }
             // item.componentId = item.componentId.replace('_', '')
             // 记录是否为自定义组件
-            if (this.allCustomMap && this.allCustomMap[item.type] && this.usingCustomArr.indexOf(item.type) === -1) {
+            if (item.custom && this.usingCustomArr.indexOf(item.type) === -1) {
                 const prefix = process.env.BKPAAS_ENVIRONMENT === 'prod' ? '' : 'test-'
                 const type = prefix + item.type
                 if (this.usingCustomArr.indexOf(type) < 0) {
@@ -1573,8 +1571,9 @@ class PageCode {
 }
 
 module.exports = {
-    async getPageData (targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList) {
-        const pageCode = new PageCode(targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList)
+    async getPageData (codeData) {
+        const { targetData, pageType, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList } = codeData
+        const pageCode = new PageCode(targetData, pageType, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList)
         let code = ''
         if (pageType === 'vueCode') {
             // 格式化，报错是抛出异常

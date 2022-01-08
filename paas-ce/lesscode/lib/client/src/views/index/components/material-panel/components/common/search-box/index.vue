@@ -10,7 +10,6 @@
             @change="handleSearch"
             @keydown="handleKeydown"
             @focus="handleShowDropList"
-            @clear="handleClear"
             :native-attributes="{
                 spellcheck: false
             }" />
@@ -49,8 +48,6 @@
     </div>
 </template>
 <script>
-    import { pascalCase } from 'change-case'
-
     const encodeRegexp = (paramStr) => {
         const regexpKeyword = [
             '\\', '.', '*', '-', '{', '}', '[', ']', '^', '(', ')', '$', '+', '?', '|'
@@ -61,7 +58,6 @@
         )
         return res
     }
-
     const SearchItemRender = {
         name: 'SearchItemRender',
         functional: true,
@@ -72,7 +68,7 @@
         render (h, ctx) {
             const textClass = 'text'
             const { node, query } = ctx.props
-            const searchName = `${pascalCase(node.name)} ${node.displayName}`
+            const searchName = `${node.name} ${node.displayName}`
             return (
                 <span title={searchName} domPropsInnerHTML={
                     query ? searchName.replace(new RegExp(`(${query})`, 'i'), '<em style="font-style: normal;color: #3a84ff;">$1</em>') : searchName
@@ -80,7 +76,6 @@
             )
         }
     }
-
     export default {
         name: '',
         components: {
@@ -142,13 +137,12 @@
             },
             handleSelect (data) {
                 this.isShowList = false
-                this.keyword = data.type
+                this.keyword = data.name
                 this.$emit('on-change', data)
             },
             handleKeydown (value, e) {
                 const keyCode = e.keyCode
                 const length = this.renderList.length
-
                 switch (keyCode) {
                     // 上
                     case 38:
@@ -196,10 +190,6 @@
                     default:
                         break
                 }
-            },
-            handleClear () {
-                this.selectedIndex = 0
-                this.$emit('on-change', null)
             }
         }
     }
@@ -207,7 +197,6 @@
 <style lang="postcss" scoped>
     @import "@/css/mixins/scroller";
     @import "@/css/mixins/ellipsis";
-
     .search-box {
         position: relative;
         .search-dropdown-list {
