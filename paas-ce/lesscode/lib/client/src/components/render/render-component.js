@@ -22,10 +22,13 @@ export default {
             'box-shadow': ''
         }
         // fix
-        // 在 freelayout 里面时对组件进行位置修正，
+        // - 在 freelayout 里面时对组件进行位置修正
+        // - 对非交互式组件对组件进行位置修正
         // 基础组件的根可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
-        if (context.parent.attachToFreelayout) {
+        if (context.parent.attachToFreelayout
+            || componentData.isInteractiveComponent) {
             Object.assign(nativeComponentStyleReset, {
+                position: '',
                 top: '',
                 right: '',
                 bottom: '',
