@@ -19,7 +19,8 @@ export default {
             'transform': '',
             // 修正会产生叠加效果的样式
             border: '',
-            'box-shadow': ''
+            'box-shadow': '',
+            'z-index': ''
         }
         // fix
         // - 在 freelayout 里面时对组件进行位置修正
