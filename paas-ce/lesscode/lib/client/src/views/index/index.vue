@@ -145,8 +145,6 @@
         data () {
             return {
                 isContentLoading: true,
-                lockNotify: null,
-                lockCheckTimer: null,
                 isCustomComponentLoading: true,
                 isSaving: false,
                 action: 'create',
@@ -171,6 +169,7 @@
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
+            
             this.registerCustomComponent()
             
             this.fetchData()
@@ -225,15 +224,9 @@
                 }
             ]
         },
-        mounted () {
-            window.addEventListener('unload', this.relasePage)
-        },
         beforeDestroy () {
             LC.parseData([])
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
-            window.removeEventListener('unload', this.relasePage)
-            this.relasePage()
-            this.lockNotify && this.lockNotify.close()
         },
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
@@ -275,145 +268,6 @@
                     document.body.removeChild(script)
                 })
             },
-            relasePage () {
-                const data = new FormData()
-                data.append('activeUser', this.user.username)
-                data.append('pageId', this.pageId)
-                navigator.sendBeacon('/api/page/releasePage', data)
-            },
-            async lockStatsuPolling (type) {
-                const interval = 20 * 1000 // 节流，状态检查每20s一次
-                if (this.lockCheckTimer === null) {
-                    await this.checkLockStatus(type)
-                    this.lockCheckTimer = setTimeout(() => {
-                        clearTimeout(this.lockCheckTimer)
-                        this.lockCheckTimer = null
-                    }, interval)
-                }
-            },
-            async checkLockStatus (type) {
-                try {
-                    const status = await this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId })
-                    if (status.isLock) {
-                        if (this.lockNotify !== null) return true// 当前有弹窗，代表无权限
-                        const messageType = `${type}-${status.accessible ? 'valiad' : 'invaliad'}`
-                        this.lockNotify = this.$bkNotify({
-                            title: '暂无编辑权限',
-                            theme: 'warning',
-                            delay: 0,
-                            onClose: () => {
-                                this.lockNotify = null
-                            },
-                            message: this.getLockMessage(messageType, status.activeUser)
-                        })
-                        return true
-                    } else { // 未加锁，更新当前画布的加锁者为当前用户
-                        this.$store.dispatch('page/updatePageLock', { data: {
-                            pageId: this.pageId
-                        } })
-                        return false
-                    }
-                } catch (error) {
-                    throw Error({
-                        message: error
-                    })
-                }
-            },
-            userText (text) {
-                const h = this.$createElement
-                return h('span', {
-                    style: {
-                        color: '#EA3636'
-                    }
-                }, [text])
-            },
-            hpyerTextGenerator (text, handler) {
-                const h = this.$createElement
-                return h('span', {
-                    style: {
-                        cursor: 'pointer',
-                        color: '#3a84ff'
-                    },
-                    on: {
-                        click: handler
-                    }
-                }, [text])
-            },
-            getLockMessage (type, user) {
-                const h = this.$createElement
-                switch (type) {
-                    case 'lock-invaliad':
-                        return h('p', {
-                            style: {
-                                'line-height': '26px'
-                            }
-                        }, [
-                            '当前画布正在被',
-                            this.userText(user),
-                            '编辑，您暂无编辑权限，如需操作请联系其退出编辑，如仅需查看页面最新状态，请直接',
-                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
-
-                        ])
-                    case 'lock-valiad':
-                        return h('p', {
-                            style: {
-                                'line-height': '26px'
-                            }
-                        }, [
-                            '当前页面正在被',
-                            this.userText(user),
-                            '编辑，如需获取操作，可点击',
-                            this.hpyerTextGenerator('获取权限', this.occupyPage.bind(this)),
-                            '，如仅需查看页面最新状态，请直接',
-                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
-                        ])
-                    case 'taked-invaliad':
-                        return h('p', {
-                            style: {
-                                'line-height': '26px'
-                            }
-                        }, [
-                            '由于您长时间未操作，页面编辑权已被释放；当前页面正在被',
-                            this.userText(user),
-                            '编辑，如仍需操作请联系其退出，如仅需查看页面最新状态，请直接',
-                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
-                        ])
-                    case 'taked-valiad':
-                        return h('p', {
-                            style: {
-                                'line-height': '26px'
-                            }
-                        }, [
-                            '由于您长时间未操作，页面编辑权已被释放；当前页面正在被',
-                            this.userText(user),
-                            '编辑，如需获取操作，可点击',
-                            this.hpyerTextGenerator('获取权限', this.occupyPage.bind(this)),
-                            '获取权限，如仅需查看页面最新状态，请直接',
-                            this.hpyerTextGenerator('刷新页面', location.reload.bind(location))
-                        ])
-                }
-            },
-            async occupyPage () {
-                try {
-                    const resp = await this.$store.dispatch('page/occupyPage', {
-                        data: {
-                            pageId: this.pageId
-                        }
-                    })
-                    if (resp.activeUser === this.user.username) {
-                        this.lockNotify && this.lockNotify.close()
-                        this.$bkMessage({
-                            message: '抢占成功',
-                            theme: 'success'
-                        })
-                    }
-                } catch (error) {
-                    throw Error({
-                        message: error
-                    })
-                }
-            },
-
             async fetchData () {
                 try {
                     this.isContentLoading = true
@@ -432,8 +286,6 @@
                         pageId: this.pageId,
                         projectId: this.projectId
                     })
-
-                    await this.lockStatsuPolling('lock') // 处理加锁逻辑
 
                     await this.getAllVariable({
                         projectId: this.projectId,

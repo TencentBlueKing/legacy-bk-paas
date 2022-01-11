@@ -60,6 +60,8 @@
                 await handleUpdatePreiviewImg()
             }
 
+            window.addEventListener('unload', canvasLockRelase)
+
             // 组件卸载释放页面的编辑权
             onBeforeUnmount(() => {
                 canvasLockRelase()
