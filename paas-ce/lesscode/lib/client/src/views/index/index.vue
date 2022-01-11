@@ -16,66 +16,7 @@
             isLoading: isContentLoading || isCustomComponentLoading
         }">
         <div class="main-top">
-            <div class="page-title">
-                <div class="page-name">
-                    <i
-                        class="bk-drag-icon bk-drag-arrow-back"
-                        title="返回页面列表"
-                        @click="leavePage('pageList')" />
-                    <span class="seperate-line">|</span>
-                    <span
-                        class="bk-drag-icon template-logo"
-                        title="返回项目列表"
-                        @click="leavePage('projects')">
-                        <svg aria-hidden="true" width="16" height="16">
-                            <use xlink:href="#bk-drag-logo"></use>
-                        </svg>
-                    </span>
-                    <span class="seperate-line">|</span>
-                    <div id="editPageSwitchPage" class="select-page-box">
-                        <bk-select
-                            ext-cls="select-page"
-                            ext-popover-cls="select-page-dropdown"
-                            ref="pageSelect"
-                            :value="pageDetail.id"
-                            :clearable="false"
-                            :searchable="true"
-                            @change="handlePageChange">
-                            <div slot="trigger">
-                                <div
-                                    class="name-content"
-                                    :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
-                                    {{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span>
-                                </div>
-                                <i class="bk-select-angle bk-icon icon-angle-down" />
-                            </div>
-                            <bk-option
-                                v-for="option in pageList"
-                                :key="option.id"
-                                :id="option.id"
-                                :name="option.pageName">
-                                <span>{{option.pageName}}</span>
-                                <i class="bk-drag-icon bk-drag-copy"
-                                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%)"
-                                    @click.stop="handlePageAction('copy')"
-                                    title="复制页面"></i>
-                            </bk-option>
-                            <div slot="extension" class="extension">
-                                <div
-                                    class="page-row"
-                                    @click="handlePageAction('create')">
-                                    <i class="bk-icon icon-plus-circle" /> 新建空白页面
-                                </div>
-                                <div
-                                    class="page-row"
-                                    @click="handlePageFromTemplate">
-                                    <i class="bk-icon icon-plus-circle" /> 从模板新建页面
-                                </div>
-                            </div>
-                        </bk-select>
-                    </div>
-                </div>
-            </div>
+            <page-list />
             <div class="function-and-tool">
                 <div
                     id="toolActionBox"
@@ -100,28 +41,23 @@
             <material-panel />
             <operation-area
                 :operaion="contentTab"
-                :project="projectDetail"
                 :type="contentTab" />
             <modifier-panel />
         </div>
-        <page-dialog ref="pageDialog" :action="action" />
         <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
         <save-template-dialog />
-        <page-from-template-dialog ref="pageFromTemplateDialog" />
     </main>
 </template>
-
 <script>
     import Vue from 'vue'
-    import { mapState, mapGetters, mapActions } from 'vuex'
+    import { mapActions } from 'vuex'
     import LC from '@/element-materials/core'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
     import ExtraLinks from '@/components/ui/extra-links'
-    import PageDialog from '@/components/project/page-dialog'
     import SaveTemplateDialog from '@/components/template/save-template-dialog'
-    import PageFromTemplateDialog from '@/components/project/page-from-template-dialog'
+    import PageList from './components/page-list'
     import OperationSelect from './components/operation-select'
     import MaterialPanel from './components/material-panel'
     import ModifierPanel from './components/modifier-panel'
@@ -133,9 +69,8 @@
             NoviceGuide,
             VariableForm,
             ExtraLinks,
-            PageDialog,
             SaveTemplateDialog,
-            PageFromTemplateDialog,
+            PageList,
             OperationSelect,
             MaterialPanel,
             ModifierPanel,
@@ -146,36 +81,21 @@
             return {
                 isContentLoading: true,
                 isCustomComponentLoading: true,
-                isSaving: false,
-                action: 'create',
                 contentTab: 'edit'
             }
-        },
-        computed: {
-            ...mapGetters(['user']),
-            ...mapGetters('project', [
-                'projectDetail'
-            ]),
-            ...mapGetters('page', [
-                'pageDetail',
-                'pageList'
-            ]),
-            ...mapGetters('functions', ['funcGroups']),
-            ...mapGetters('layout', ['pageLayout']),
-            ...mapGetters('components', ['interactiveComponents']),
-            ...mapGetters('variable', ['variableList']),
-            ...mapState('route', ['layoutPageList'])
         },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
-            
+
             this.registerCustomComponent()
             
             this.fetchData()
 
             // 设置权限相关的信息
-            this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
+            this.$store.dispatch('member/setCurUserPermInfo', {
+                id: this.projectId
+            })
 
             this.guideStep = [
                 {
@@ -242,9 +162,9 @@
                 'getAllGroupFuncs'
             ]),
             ...mapActions('variable', ['getAllVariable']),
-            handleContentTabChange (contentTab) {
-                this.contentTab = contentTab
-            },
+            /**
+             * @desc 注册自定义组件
+             */
             registerCustomComponent () {
                 this.isCustomComponentLoading = true
                 // 包含所有的自定组件
@@ -268,6 +188,9 @@
                     document.body.removeChild(script)
                 })
             },
+            /**
+             * @desc 获取页面编辑基础数据
+             */
             async fetchData () {
                 try {
                     this.isContentLoading = true
@@ -293,6 +216,10 @@
                         effectiveRange: 0
                     })
 
+                    this.$store.commit('page/setPageDetail', pageDetail || {})
+                    this.$store.commit('page/setPageList', pageList || [])
+                    this.$store.commit('project/setCurrentProject', projectDetail || {})
+
                     // 设置初始targetData
                     let initData = []
                     try {
@@ -308,76 +235,33 @@
                         })
                     }
                     LC.parseData(initData)
-
-                    this.$store.commit('page/setPageDetail', pageDetail || {})
-                    this.$store.commit('page/setPageList', pageList || [])
-                    this.$store.commit('project/setCurrentProject', projectDetail || {})
                 } catch (e) {
                     console.error(e)
                 } finally {
                     this.isContentLoading = false
                 }
             },
-
+            /**
+             * @desc 编辑区 tab 切换
+             * @param { String } contentTab
+             */
+            handleContentTabChange (contentTab) {
+                this.contentTab = contentTab
+            },
+            /**
+             * @desc 显示新手指引
+             */
             handleStartGuide () {
                 this.$refs.guide.start()
             },
-
+            /**
+             * @desc 页面离开确认
+             * @param { Object } event
+             */
             beforeunloadConfirm (event) {
                 const confirmationMessage = '...';
                 (event || window.event).returnValue = confirmationMessage
                 return confirmationMessage
-            },
-
-            leavePage (routeName) {
-                this.$router.push({
-                    name: routeName,
-                    params: {
-                        projectId: this.projectId,
-                        pageId: this.pageId
-                    }
-                })
-            },
-
-            handlePageChange (pageId) {
-                if (pageId === this.pageId) {
-                    return
-                }
-                this.$bkInfo({
-                    title: '确认离开?',
-                    subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
-                    confirmFn: async () => {
-                        this.$router.push({
-                            params: {
-                                projectId: this.projectId,
-                                pageId
-                            }
-                        })
-                    }
-                })
-            },
-
-            // 从模板创建
-            handlePageFromTemplate () {
-                this.$refs.pageFromTemplateDialog.isShow = true
-            },
-
-            handlePageAction (action = 'create') {
-                this.action = action
-                if (action === 'create') {
-                    this.$refs.pageDialog.dialog.formData.id = undefined
-                    this.$refs.pageDialog.dialog.formData.pageName = ''
-                } else {
-                    const layoutId = (this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId)) || {}).layoutId
-                    this.$refs.pageDialog.dialog.formData.id = this.pageId
-                    this.$refs.pageDialog.dialog.formData.layoutId = layoutId
-                    this.$refs.pageDialog.dialog.formData.pageName = `${this.pageDetail.pageName}-copy`
-                }
-
-                this.$refs.pageDialog.dialog.formData.pageCode = ''
-                this.$refs.pageDialog.dialog.formData.pageRoute = ''
-                this.$refs.pageDialog.dialog.visible = true
-                this.$refs.pageSelect.close()
             }
         }
     }
