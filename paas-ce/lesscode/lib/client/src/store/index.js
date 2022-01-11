@@ -198,4 +198,6 @@ store.dispatch = function (_type, _payload, config = {}) {
         : entry[0](payload, config)
 }
 
+export const useStore = () => store
+
 export default store

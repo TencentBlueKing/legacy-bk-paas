@@ -398,4 +398,8 @@ router.afterEach(async (to, from) => {
     }
 })
 
+export const useRouter = () => router
+
+export const useRoute = () => router.currentRoute
+
 export default router

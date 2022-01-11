@@ -147,7 +147,6 @@
                 isContentLoading: true,
                 lockNotify: null,
                 lockCheckTimer: null,
-                projectDetail: {},
                 isCustomComponentLoading: true,
                 isSaving: false,
                 action: 'create',
@@ -156,6 +155,9 @@
         },
         computed: {
             ...mapGetters(['user']),
+            ...mapGetters('project', [
+                'projectDetail'
+            ]),
             ...mapGetters('page', [
                 'pageDetail',
                 'pageList'
@@ -458,7 +460,6 @@
                     this.$store.commit('page/setPageDetail', pageDetail || {})
                     this.$store.commit('page/setPageList', pageList || [])
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
-                    this.projectDetail = projectDetail || {}
                 } catch (e) {
                     console.error(e)
                 } finally {
