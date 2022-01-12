@@ -21,14 +21,6 @@ export default {
     renderStyles: {
         display: 'inline-block'
     },
-    renderProps: {
-        width: {
-            val: '400px'
-        },
-        height: {
-            val: 200
-        }
-    },
     props: {
         width: {
             type: 'size',
@@ -36,7 +28,8 @@ export default {
         },
         height: {
             type: 'number',
-            tips: '图表高度，单位为px'
+            tips: '图表高度，单位为px',
+            val: 200
         },
         options: {
             type: 'json',

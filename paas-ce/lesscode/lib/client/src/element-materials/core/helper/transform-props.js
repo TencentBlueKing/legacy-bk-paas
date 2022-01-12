@@ -29,7 +29,8 @@ export default function (props, defaultRenderProps = {}, type = '') {
             format: 'value',
             code: val,
             valueType: type,
-            payload
+            payload,
+            renderValue: val
         }
     })
     if (['bk-dialog', 'bk-sideslider'].includes(type)) {
