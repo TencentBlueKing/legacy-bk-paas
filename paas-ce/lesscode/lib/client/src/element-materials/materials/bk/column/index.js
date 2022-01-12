@@ -17,11 +17,11 @@ export default {
     group: '布局',
     styles: ['padding'],
     renderStyles: {
-        'minHeight': '80px',
-        'paddingTop': '10px',
-        'paddingRight': '10px',
-        'paddingBottom': '5px',
-        'paddingLeft': '10px'
+        'minHeight': '80px'
+        // 'paddingTop': '10px',
+        // 'paddingRight': '10px',
+        // 'paddingBottom': '5px',
+        // 'paddingLeft': '10px'
     },
     props: {
         'span': {

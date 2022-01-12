@@ -37,3 +37,16 @@ export const createCharts = (node, config) => {
         Object.assign(node, new Node(config))
     }
 }
+
+export const createBkRadioGroup = (node, config) => {
+    if (node.type === 'bk-radio-group' && config.name === 'radio-group') {
+        const slotConfig = config.slots.default
+        node.setRenderSlots({
+            format: 'value',
+            component: 'bk-radio',
+            code: slotConfig.val,
+            valueType: 'list',
+            renderValue: slotConfig.val
+        })
+    }
+}

@@ -42,7 +42,8 @@
         createGrid4,
         createBkIcon,
         createElIcon,
-        createCharts
+        createCharts,
+        createBkRadioGroup
     } from './hacker'
 
     const hackerQueue = [
@@ -51,7 +52,8 @@
         createGrid4,
         createBkIcon,
         createElIcon,
-        createCharts
+        createCharts,
+        createBkRadioGroup
     ]
 
     export default {
@@ -70,7 +72,8 @@
             return {
                 dragGroup: {
                     name: 'component',
-                    pull: 'clone'
+                    pull: 'clone',
+                    put: false
                 },
                 isFolded: false
             }

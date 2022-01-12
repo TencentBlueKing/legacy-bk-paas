@@ -15,7 +15,7 @@ export default {
     display: 'none',
     type: 'bk-icon',
     icon: 'bk-cion',
-    group: 'layout',
+    group: '布局',
     order: 1,
     events: [{ name: 'click' }],
     styles: ['margin', 'display', 'font'],
