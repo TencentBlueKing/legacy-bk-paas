@@ -1,5 +1,5 @@
 <template>
-    <div class="main-content">
+    <div class="operation-area">
         <component :is="com" v-bind="$attrs" />
     </div>
 </template>
@@ -46,7 +46,13 @@
     }
 </script>
 <style lang="postcss">
-    .main-content{
-        min-height: calc(100vh - 120px);
+    @import "@/css/mixins/scroller";
+
+    .operation-area{
+        height: 100%;
+        border: 1px solid #DCDEE5;
+        background: #FFF;
+        overflow: auto;
+        @mixin scroller;
     }
 </style>

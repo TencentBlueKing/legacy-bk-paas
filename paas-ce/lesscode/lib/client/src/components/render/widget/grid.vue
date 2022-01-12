@@ -22,12 +22,14 @@
         <template v-if="componentData.isActived">
             <div
                 :class="$style['add-column']"
+                role="append-column"
                 @click="handleAddColumn"
                 data-render-drag="disabled">
                 <img src="../../../images/svg/add-line.svg" />
             </div>
             <div
                 :class="$style['add-clone']"
+                role="clone-grid"
                 @click="handleAddClone"
                 data-render-drag="disabled">
                 <img src="../../../images/svg/add-line.svg" />
@@ -68,6 +70,7 @@
              * @desc 克隆 grid，只克隆布局数据树结构不克隆
              */
             handleAddClone () {
+                console.log('from clone')
                 const gridNode = LC.createNode('render-grid', false)
                 this.componentData.children.forEach(() => {
                     gridNode.appendChild(LC.createNode('render-column'))
@@ -105,6 +108,7 @@
             border-radius: 50%;
             background: #3A84FF;
             cursor: pointer;
+            pointer-events: all;
             img {
                 position: absolute;
                 transform: translate(-50%, -50%);
@@ -118,13 +122,13 @@
             top: 50%;
             right: -10px;
             transform: translateY(-50%);
-            z-index: 1;
+            z-index: 11;
         }
         .add-clone {
             bottom: -9px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1;
+            z-index: 11;
         }
     }
 </style>

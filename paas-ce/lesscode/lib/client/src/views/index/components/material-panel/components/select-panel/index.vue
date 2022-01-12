@@ -43,9 +43,13 @@
     }
 </script>
 <style lang="postcss" scoped>
+    @import "@/css/mixins/scroller";
+    
     .select-panel{
         font-size: 14px;
         border-right: 1px solid #dcdee5;
+        @mixin scroller;
+
         .tab-item{
             width: 100%;
             height: 42px;

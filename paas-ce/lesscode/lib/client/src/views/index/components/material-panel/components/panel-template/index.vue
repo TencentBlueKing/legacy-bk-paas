@@ -246,6 +246,8 @@
     }
 </script>
 <style lang="postcss" scoped>
+    @import "@/css/mixins/scroller";
+
     .panel-template{
         min-height: 100%;
         .category-tabs{
@@ -270,6 +272,12 @@
         }
         .search-box {
             padding: 12px 20px;
+        }
+        .template-list{
+            height: calc(100% - 46px);
+            padding-bottom: 10px;
+            overflow-y: auto;
+            @mixin scroller;
         }
         .template-item {
             margin-top: 10px;

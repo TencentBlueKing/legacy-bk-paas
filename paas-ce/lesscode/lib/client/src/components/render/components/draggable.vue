@@ -170,6 +170,7 @@
             line-height: 32px;
             background-color: #C2D7F9;
         }
+        &:global(.inline),
         &:global(.inline-block) {
             display: inline-block;
             &:after {

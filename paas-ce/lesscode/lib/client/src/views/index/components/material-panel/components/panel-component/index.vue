@@ -61,8 +61,10 @@
 </script>
 <style lang="postcss">
     @import "@/css/mixins/ellipsis";
+    @import "@/css/mixins/scroller";
 
     .panel-component{
+        height: 100%;
         .category-tabs {
             display: flex;
             height: 46px;
@@ -104,8 +106,10 @@
             padding: 12px 20px;
         }
         .drag-component-list{
-            height: calc(100vh - 168px);
+            height: calc(100% - 46px);
+            padding-bottom: 10px;
             overflow-y: auto;
+            @mixin scroller;
         }
     }
 </style>

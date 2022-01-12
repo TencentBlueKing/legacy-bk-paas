@@ -11,21 +11,19 @@
 
 <template>
     <main
-        class="app-main"
+        class="lessocde-draw-page"
         v-bkloading="{
             isLoading: isContentLoading || isCustomComponentLoading
         }">
-        <div class="main-top">
+        <div class="draw-page-header">
             <page-list />
-            <div class="function-and-tool">
-                <div
-                    id="toolActionBox"
-                    class="function-tool-wrapper">
-                    <operation-select v-model="contentTab" />
-                    <div style="height: 22px; width: 1px; margin: 0 5px; background-color: #dcdee5;" />
-                    <!-- 保存、预览、快捷键等tool单独抽离 -->
-                    <action-tool />
-                </div>
+            <div
+                id="toolActionBox"
+                class="function-and-tool">
+                <operation-select v-model="operationType" />
+                <div style="height: 22px; width: 1px; margin: 0 5px; background-color: #dcdee5;" />
+                <!-- 保存、预览、快捷键等tool单独抽离 -->
+                <action-tool />
             </div>
             <extra-links
                 show-help-box
@@ -35,15 +33,13 @@
                     placements: ['bottom']
                 }" />
         </div>
-        <div
-            v-if="!isContentLoading && !isCustomComponentLoading"
-            class="main-container">
-            <material-panel />
+        <draw-layout v-if="!isContentLoading && !isCustomComponentLoading">
+            <material-panel slot="left" />
             <operation-area
-                :operaion="contentTab"
-                :type="contentTab" />
-            <modifier-panel />
-        </div>
+                :operaion="operationType"
+                :type="operationType" />
+            <modifier-panel slot="right" />
+        </draw-layout>
         <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
         <save-template-dialog />
@@ -57,6 +53,7 @@
     import VariableForm from '@/components/variable/variable-form'
     import ExtraLinks from '@/components/ui/extra-links'
     import SaveTemplateDialog from '@/components/template/save-template-dialog'
+    import DrawLayout from './components/draw-layout'
     import PageList from './components/page-list'
     import OperationSelect from './components/operation-select'
     import MaterialPanel from './components/material-panel'
@@ -70,6 +67,7 @@
             VariableForm,
             ExtraLinks,
             SaveTemplateDialog,
+            DrawLayout,
             PageList,
             OperationSelect,
             MaterialPanel,
@@ -81,7 +79,7 @@
             return {
                 isContentLoading: true,
                 isCustomComponentLoading: true,
-                contentTab: 'edit'
+                operationType: 'edit'
             }
         },
         async created () {
@@ -242,13 +240,6 @@
                 }
             },
             /**
-             * @desc 编辑区 tab 切换
-             * @param { String } contentTab
-             */
-            handleContentTabChange (contentTab) {
-                this.contentTab = contentTab
-            },
-            /**
              * @desc 显示新手指引
              */
             handleStartGuide () {
@@ -266,7 +257,30 @@
         }
     }
 </script>
-
 <style lang="postcss">
-    @import './index.css';
+    $topHeight: 52px;
+    $headerHeight: 64px;
+
+    .lessocde-draw-page {
+        min-width: 1280px;
+        height: calc(100vh - $headerHeight);
+        margin-top: $headerHeight;
+        .draw-page-header {
+            position: relative;
+            z-index: 99;
+            display: flex;
+            justify-content: center;
+            height: $topHeight;
+            background: #fff;
+            box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+            
+            .function-and-tool {
+                position: relative;
+                display: flex;
+                flex: auto;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
 </style>

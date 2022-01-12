@@ -239,4 +239,15 @@
             }
         }
     }
+    .select-page-dropdown {
+        .bk-select-search-input {
+            padding: 0 10px 0 30px;
+        }
+        .extension {
+            cursor: pointer;
+            .page-row:hover {
+                color: #3A84FF;
+            }
+        }
+    }
 </style>

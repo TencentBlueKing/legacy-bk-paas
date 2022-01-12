@@ -69,8 +69,7 @@
 <style lang='postcss'>
     @import "@/css/mixins/scroller";
     .lesscode-editor-layout {
-        min-width: 1080px;
-        width: 1560px;
+        min-width: 1560px;
         transform: translate(0, 0);
         
         .bk-navigation {
@@ -85,7 +84,6 @@
                     }
                 }
                 .navigation-container {
-                    max-width: 1560px !important;
                     .container-content {
                         flex: unset;
                         height: calc(100vh - 211px);

@@ -1,5 +1,5 @@
 <template>
-    <div class="render-drag-icon-item">
+    <div class="render-drag-icon-item inline">
         <bk-icon
             v-if="data.type === 'bk-icon'"
             :type="data.icon" />

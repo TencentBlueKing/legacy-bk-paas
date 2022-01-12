@@ -1,14 +1,8 @@
 <template>
-    <aside
-        class="main-right-sidebar"
-        :class="{
-            'is-collapse': isCollapse
-        }">
-        <div
-            v-if="componentId && !isCollapse"
-            class="selected-component-info">
+    <div class="draw-page-modifier-panel">
+        <div class="component-info">
             <div
-                class="component-id overflow"
+                class="component-id"
                 v-bk-overflow-tips>
                 {{ componentData.componentId }}
             </div>
@@ -27,19 +21,14 @@
             </div>
         </div>
         <material-modifier />
-        <i class="bk-drag-icon bk-drag-angle-left collapse-icon"
-            v-bk-tooltips.right="{
-                content: '查看组件配置',
-                disabled: !isCollapse
-            }"
-            @click="handleCollapseSide('right')" />
-        <div class="prop-doc"
+        <div
             v-if="infoLinkDict[componentType]"
+            class="link-prop-doc"
             @click="handleJumpLink">
             <i class="bk-drag-icon bk-drag-jump-link"></i>
             <span>查看详细属性文档</span>
         </div>
-    </aside>
+    </div>
 </template>
 <script>
     import _ from 'lodash'
@@ -69,18 +58,18 @@
                 if (this.componentId
                     && event.target.componentId === this.componentId) {
                     this.$forceUpdate()
-                    this.$emit('component-update')
                 }
             }, 100)
 
             const activeCallback = ({ target }) => {
                 this.componentId = target.componentId
+                this.componentType = target.type
                 this.componentData = target
             }
 
             const activeClearCallback = () => {
                 this.componentId = ''
-                this.componentData = null
+                this.componentData = {}
             }
             
             LC.addEventListener('update', updateCallback)
@@ -99,14 +88,14 @@
             handleRemoveElement () {
                 removeCallBack()
             },
+            /**
+             * @desc 切换交互组件显示状态
+             */
             handleToggleInteractiveShow () {
                 this.componentData.toggleInteractive()
             },
-            handleCollapseSide () {
-                this.isCollapse = !this.isCollapse
-            },
             /**
-             * @desc 调整链接
+             * @desc 跳转组件文档
              */
             handleJumpLink () {
                 const {
@@ -119,34 +108,17 @@
         }
     }
 </script>
-<style lang="postcss">
-    .main-right-sidebar {
-        flex-shrink: 0;
+<style lang="postcss" scoped>
+    .draw-page-modifier-panel {
         position: relative;
-        width: 301px;
-        box-shadow: -2px 0px 4px 0px rgba(0,0,0,0.1);
-        background: #FFF;
-        transition: width .1s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
 
-        &.is-collapse {
-            flex: 0 1 0;
-            width: 0;
-            .collapse-icon::before {
-                transform: rotate(0);
-            }
-            .bk-tab-label-wrapper {
-                padding: 0;
-            }
-            .empty {
-                display: none;
-            }
-        }
-
-        .selected-component-info {
-            border-bottom: 1px solid #dcdee5;
-            text-align: center;
-            padding: 15px 0;
+        .component-info {
             display: flex;
+            padding: 15px 0;
+            text-align: center;
+            border-bottom: 1px solid #dcdee5;
+            
             .component-id {
                 padding: 0 10px;
                 overflow: hidden;
@@ -167,14 +139,11 @@
 
         }
 
-        .collapse-icon {
-            right: 100%;
-            border-radius: 8px 0 0 8px;
-        }
-
-        .collapse-icon::before {
+        .link-prop-doc{
+            margin: 10px 0 0 10px;
+            color: #3a84ff;
+            cursor: pointer;
             display: inline-block;
-            transform: rotate(180deg);
         }
     }
 </style>
