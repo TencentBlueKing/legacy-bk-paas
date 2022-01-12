@@ -176,7 +176,7 @@ class PageCode {
             const widthStr = `width:${widthVal};`
             const height = item.renderProps.height && item.renderProps.height.code
             const heightStr = `height:${height || 200}px;`
-            const displayStr = item.renderStyles.display ? `display: ${item.renderStyles.display};vertical-align: middle;` : ''
+            const displayStr = item.renderStyles.display ? `display: ${item.renderStyles.display};vertical-align: ${item.renderStyles.verticalAlign || 'middle'};` : ''
 
             let componentCode = ''
             if (inFreeLayout) {
@@ -227,8 +227,10 @@ class PageCode {
             // icon 组件，样式中设置字体大小不生效，是因为 bk-icon 组件通过 size 属性来设置 font-size，默认值为 inherit
             if (item.type === 'bk-icon') {
                 item.renderProps['size'] = {
-                    type: 'string',
-                    val: item.renderStyles.fontSize
+                    format: 'value',
+                    code: item.renderStyles.fontSize,
+                    valueType: 'string',
+                    renderValue: item.renderStyles.fontSize
                 }
             }
 
@@ -357,11 +359,6 @@ class PageCode {
             /* 设置 bk-exception 组件宽度为 100% */
             .bk-layout-col-${this.uniqueKey} .bk-exception-img {
                 width: 100%;
-            }
-            /* 每个组件之间默认外边距 5px */
-            .bk-layout-component-${this.uniqueKey} {
-                margin: 5px;
-                vertical-align: middle;
             }
             .bk-form-item {
                 margin: 10px;
