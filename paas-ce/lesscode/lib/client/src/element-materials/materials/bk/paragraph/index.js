@@ -20,6 +20,7 @@ export default {
     renderStyles: {
         display: 'inline-block',
         width: '281px',
+        height: '102px',
         textAlign: 'left',
         fontSize: '14px',
         whiteSpace: 'pre-wrap',

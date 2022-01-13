@@ -120,6 +120,10 @@
             }
         },
         computed: {
+            /**
+             * @desc 为了达到编辑区渲染排版效果而创建的一些影子组件
+             * @returns { Boolean }
+             */
             isShadowComponent () {
                 const shadowComMap = {
                     'free-layout': true,

@@ -45,6 +45,7 @@
         border-top-left-radius: 2px;
         border-top-right-radius: 2px;
         cursor: pointer;
+        pointer-events: all !important;
         &:hover {
             background: #1964E1;
         }

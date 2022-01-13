@@ -117,7 +117,7 @@
                 {
                     title: '画布编辑区',
                     content: '可在画布自由拖动组件、图标等进行页面布局',
-                    target: '.main-content'
+                    target: '#operationArea'
                 },
                 {
                     title: '组件配置',

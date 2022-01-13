@@ -68,7 +68,7 @@
             },
 
             updatePreviewImg () {
-                html2canvas(document.querySelector('.main-content')).then(async (canvas) => {
+                html2canvas(document.querySelector('#operationArea')).then(async (canvas) => {
                     const imgData = canvas.toDataURL('image/png')
                     this.$store.dispatch('page/update', {
                         data: {

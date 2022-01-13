@@ -70,7 +70,6 @@
              * @desc 克隆 grid，只克隆布局数据树结构不克隆
              */
             handleAddClone () {
-                console.log('from clone')
                 const gridNode = LC.createNode('render-grid', false)
                 this.componentData.children.forEach(() => {
                     gridNode.appendChild(LC.createNode('render-column'))

@@ -29,12 +29,6 @@
             :ghost-class="$style['drag-component-ghost']"
             :force-fallback="false"
             @add="handleAdd">
-            <!-- <div
-                :class="$style['drag-placeholder']"
-                :style="{
-                    height: componentData.style.height,
-                    pointerEvents: freeLayoutItemPlaceholderPointerEvents
-                }" /> -->
             <resolve-component
                 v-for="slotData in componentData.slot.default"
                 :ref="slotData.componentId"
@@ -49,8 +43,8 @@
     </div>
 </template>
 <script>
-    import DragLine from '@/common/drag-line'
-    import Drag from '@/common/drag'
+    import DragLine from '../../common/drag-line'
+    import Drag from '../../common/drag'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
 
@@ -216,12 +210,6 @@
         border: 1px dashed #ccc;
         /* 如果基础的 slot 可以拖拽需要设置这个屏蔽掉基础组件上面的 pointer-events: none 效果 */
         pointer-events: all;
-    }
-    .drag-placeholder {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: transparent;
     }
     .drag-component-ghost {
         position: absolute;

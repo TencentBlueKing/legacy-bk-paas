@@ -1,5 +1,5 @@
 <template>
-    <div class="operation-area">
+    <div id="operationArea" class="operation-area">
         <component :is="com" v-bind="$attrs" />
     </div>
 </template>

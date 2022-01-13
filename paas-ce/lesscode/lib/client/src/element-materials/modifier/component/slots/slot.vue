@@ -292,7 +292,7 @@
                     code = valueData.val
                     renderValue = valueData.val
                     // 用户设置数据为空时显示配置默认值（fix: 数据为空可能导致组件无法显示）
-                    if (renderValue.trim() === '') {
+                    if (isEmpty(renderValue)) {
                         renderValue = this.describe.val
                     }
                 }

@@ -12,6 +12,7 @@
 <template>
     <layout>
         <div
+            id="drawTarget"
             :class="$style['canvas']"
             @mouseleave="handleMouseleave">
             <draggable

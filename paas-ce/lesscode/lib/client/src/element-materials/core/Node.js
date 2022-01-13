@@ -43,6 +43,8 @@ import validator from './helper/validator'
 import getRoot from './get-root'
 import getMaterial from './get-material'
 
+export let activeNode = null
+
 export default class Node {
     constructor ({
         name = '',
@@ -256,7 +258,12 @@ export default class Node {
     @readonly
     @notify
     active () {
+        if (activeNode && activeNode !== this) {
+            activeNode.activeClear()
+        }
         active(this)
+        activeNode = this
+        return this
     }
     /**
      * @desc 取消选中组件

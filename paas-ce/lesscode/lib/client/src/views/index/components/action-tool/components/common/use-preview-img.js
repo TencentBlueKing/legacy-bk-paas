@@ -12,7 +12,7 @@ export default () => {
 
     const submit = () => {
         isLoading.value = true
-        return html2canvas(document.querySelector('.main-content'))
+        return html2canvas(document.querySelector('#drawTarget'))
             .then(async (canvas) => {
                 const imgData = canvas.toDataURL('image/png')
                 return store.dispatch('page/update', {
