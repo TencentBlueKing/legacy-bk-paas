@@ -257,7 +257,8 @@
                     code = this.slotTypeValueMemo[valueType].val
                     payload = this.slotTypeValueMemo[valueType].payload
                 } else if (valueType === 'remote') {
-                    // fix: 配置远程函数类型，接口数据没返回时使用配置文件设置的默认值
+                    // fix: 配置远程函数类型，
+                    // 接口数据没返回时使用配置文件设置的默认值
                     code = this.describe.val
                 } else {
                     // 切换值类型时，通过类型获取默认值
@@ -283,13 +284,17 @@
                 if (this.formData.valueType === 'remote') {
                     // 配置的是远程函数
                     // code 此时无效设置为 null
-                    // api 返回数据不为空才应用接口数据
+                    // api 返回数据不为空才应用接口数据（fix: 数据为空可能导致组件无法显示）
                     if (!isEmpty(valueData.val)) {
                         renderValue = valueData.val
                     }
                 } else {
                     code = valueData.val
                     renderValue = valueData.val
+                    // 用户设置数据为空时显示配置默认值（fix: 数据为空可能导致组件无法显示）
+                    if (renderValue.trim() === '') {
+                        renderValue = this.describe.val
+                    }
                 }
                 this.formData = Object.freeze({
                     ...this.formData,
