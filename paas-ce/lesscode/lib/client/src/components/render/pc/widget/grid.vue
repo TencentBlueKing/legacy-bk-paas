@@ -25,14 +25,14 @@
                 role="append-column"
                 @click="handleAddColumn"
                 data-render-drag="disabled">
-                <img src="../../../images/svg/add-line.svg" />
+                <img src="../../../../images/svg/add-line.svg" />
             </div>
             <div
                 :class="$style['add-clone']"
                 role="clone-grid"
                 @click="handleAddClone"
                 data-render-drag="disabled">
-                <img src="../../../images/svg/add-line.svg" />
+                <img src="../../../../images/svg/add-line.svg" />
             </div>
         </template>
     </div>
