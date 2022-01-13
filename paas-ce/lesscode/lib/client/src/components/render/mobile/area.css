@@ -1,0 +1,52 @@
+.area-wrapper {
+    .title {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 13px;
+        .title-text {
+            font-size: 12px;
+            font-weight: 700;
+            color: #313238;
+        }
+        .dropdown-text {
+            cursor: pointer;
+            span {
+                font-size: 12px;
+                color: #313238;
+            }
+        }
+        .bk-dropdown-list {
+            width: 232px;
+            ul {
+                padding: 8px 0;
+            }
+            li {
+                height: 32px;
+                line-height: 32px;
+                padding: 0 12px;
+                cursor: pointer;
+                font-size: 12px;
+                color: #63656e;
+                &:hover {
+                    background: #f5f7fa;
+                }
+                &.active {
+                    background: rgba(225,236,255,0.60);
+                    color: #3a84ff;
+                }
+                .list-item-text {
+                    display: inline-block;
+                    width: 100%;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+    .edit-area {
+        background: #ffffff;
+        border-radius: 2px;
+        box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.10);
+    }
+  }
