@@ -1,6 +1,6 @@
+import { bkInfoBox, bkMessage } from 'bk-magic-vue'
 import LC from '../index'
 
-import { bkInfoBox, bkMessage } from 'bk-magic-vue'
 export const remove = node => {
     if (node.parentNode) {
         node.parentNode.removeChild(node)

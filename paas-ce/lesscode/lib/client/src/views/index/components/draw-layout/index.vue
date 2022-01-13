@@ -145,6 +145,7 @@
         }
         .center{
             position: relative;
+            height: 100%;
             padding: 20px;
         }
     }

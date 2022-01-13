@@ -86,6 +86,7 @@
              * @desc 显示删除选中的元素弹框
              */
             handleRemoveElement () {
+                this.componentData.activeClear()
                 removeCallBack()
             },
             /**

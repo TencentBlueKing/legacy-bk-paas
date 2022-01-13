@@ -54,5 +54,8 @@
         background: #FFF;
         overflow: auto;
         @mixin scroller;
+        & > * {
+            height: 100%;
+        }
     }
 </style>
