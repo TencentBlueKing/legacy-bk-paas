@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.21
+    - bugfix: console app logo get fail while is_display=false
+
 # 2.13.20
     - update: esb update monitor_v3 confapis
     - bug: esb fix bk_login get_batch_users
