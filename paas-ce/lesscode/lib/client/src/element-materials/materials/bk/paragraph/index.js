@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-text',
     group: '基础',
     order: 1,
-    styles: [{ name: 'pointer' }, 'size', 'margin', 'display', 'font', 'backgroundColor', 'textAlign'],
+    styles: ['size', 'margin', 'display', 'font', 'backgroundColor', 'textAlign'],
     renderStyles: {
         display: 'inline-block',
         width: '281px',
