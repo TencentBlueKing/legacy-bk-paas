@@ -11,9 +11,9 @@
 
 <template>
     <style-layout title="鼠标">
-        <style-item :name="item.name" v-for="item in pointerConfigRender" :key="item.key">
-            <bk-select :value="item.value" style="width: 100%;" font-size="medium" :clearable="false" @change="handleChange(item, $event)">
-                <bk-option v-for="option in item.valueList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+        <style-item :name="'cursor'">
+            <bk-select :value="cursorValue" style="width: 100%;" font-size="medium" :clearable="false" @change="handleChange">
+                <bk-option v-for="option in cursorList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
             </bk-select>
         </style-item>
     </style-layout>
@@ -22,32 +22,6 @@
 <script>
     import StyleLayout from '../layout/index'
     import StyleItem from '../layout/item'
-    
-    const pointerConfig = [
-        {
-            name: 'pointer-events',
-            key: 'pointerEvents',
-            valueList: [
-                { name: 'auto', id: 'auto' },
-                { name: 'none', id: 'none' },
-                { name: 'inherit', id: 'inherit' }
-            ]
-        },
-        {
-            name: 'cursor',
-            key: 'cursor',
-            valueList: [
-                { name: 'auto', id: 'auto' },
-                { name: 'default', id: 'default' },
-                { name: 'crosshair', id: 'crosshair' },
-                { name: 'pointer', id: 'pointer' },
-                { name: 'move', id: 'move' },
-                { name: 'text', id: 'text' },
-                { name: 'wait', id: 'wait' },
-                { name: 'help', id: 'help' }
-            ]
-        }
-    ]
 
     export default {
         components: {
@@ -59,12 +33,6 @@
                 type: Object,
                 required: true
             },
-            include: {
-                type: Array
-            },
-            exclude: {
-                type: Array
-            },
             change: {
                 type: Function,
                 required: true
@@ -72,31 +40,23 @@
         },
         data () {
             return {
-                pointerConfigRender: []
+                cursorValue: this.value.cursor || 'auto',
+                cursorList: [
+                    { name: 'auto', id: 'auto' },
+                    { name: 'default', id: 'default' },
+                    { name: 'crosshair', id: 'crosshair' },
+                    { name: 'pointer', id: 'pointer' },
+                    { name: 'move', id: 'move' },
+                    { name: 'text', id: 'text' },
+                    { name: 'wait', id: 'wait' },
+                    { name: 'help', id: 'help' }
+                ]
             }
         },
-        mounted () {
-            this.handleInitValueList()
-        },
         methods: {
-            handleInitValueList () {
-                let result = pointerConfig
-                if (this.include && this.include.length) {
-                    result = result.filter(item => this.include.includes(item.key))
-                }
-                if (this.exclude) {
-                    result = result.filter(item => !this.exclude.includes(item.key))
-                }
-                const that = this
-                result = result.map(function (item) {
-                    item['value'] = that.value[item.key] || 'auto'
-                    return item
-                })
-                this.pointerConfigRender = result
-            },
-            handleChange (item, val) {
-                item.value = val
-                this.change(item.key, val)
+            handleChange (val) {
+                this.cursorValue = val
+                this.change('cursor', val)
             }
         }
     }

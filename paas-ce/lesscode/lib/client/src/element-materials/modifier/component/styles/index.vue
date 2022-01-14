@@ -96,8 +96,6 @@
             this.componentId = componentId
             this.config = Object.freeze(material.styles)
             this.lastStyles = Object.assign({}, renderStyles)
-            console.log(this.config)
-            console.log(this.lastStyles)
         },
         methods: {
             handleChange (key, value) {
