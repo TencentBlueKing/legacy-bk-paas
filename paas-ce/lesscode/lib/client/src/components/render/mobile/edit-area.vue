@@ -25,47 +25,29 @@
     </div>
 </template>
 <script>
-    import { list } from './model-list'
-    import { bus } from '@/common/bus'
     import render from '../pc/index'
+    import getModelInfo from './common/model'
+    import { watch } from '@vue/composition-api'
+    import emitter from 'tiny-emitter/instance'
     export default {
         components: {
             render
         },
-        data () {
+        setup () {
+            const { canvasSize, currentResolution, model, modelList } = getModelInfo()
+
+            const sizeChangeWatcher = watch(
+                () => ({ ...canvasSize }),
+                val => {
+                    emitter.emit('update-canvas-size', val)
+                }
+            )
             return {
-                model: 'iPhone 11 Pro',
-                modelList: list
-            }
-        },
-        computed: {
-            currentResolution () {
-                const resolution = (this.activeModelInfo.length && this.activeModelInfo[1])
-                    || ''
-                return resolution
-            },
-            activeModelInfo () {
-                const currentModel = this.modelList.find(item => item.key === this.model)
-                return /\((\d+\s?x\s?\d+)\)/.exec(currentModel.text)
-            },
-            canvasSize () {
-                const size = { // 默认为iPhone 12 的尺寸
-                    width: 375,
-                    height: 812
-                }
-                if (this.activeModelInfo && this.activeModelInfo.length) {
-                    size.width = parseInt(this.activeModelInfo[1].split('x')[0])
-                    size.height = parseInt(this.activeModelInfo[1].split('x')[1])
-                }
-                return size
-            }
-        },
-        watch: {
-            canvasSize: {
-                immediate: true,
-                handler (val) {
-                    bus.$emit('canvasSizeChange', val)
-                }
+                canvasSize,
+                currentResolution,
+                model,
+                modelList,
+                sizeChangeWatcher
             }
         }
     }

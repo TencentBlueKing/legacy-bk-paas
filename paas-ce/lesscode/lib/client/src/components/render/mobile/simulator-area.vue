@@ -3,11 +3,11 @@
         <div class="title">
             <span class="title-text">效果预览</span>
         </div>
-        <div class="simulator-wrapper" :style="{ width: width, height: height }">
+        <div class="simulator-wrapper" :style="{ width: width + 'px', height: height + 'px' }">
             <div class="device-phone-frame">
                 <div class="device-phone"></div>
             </div>
-            <div class="simulator-preview" :style="{ width: width, height: height }">
+            <div class="simulator-preview" :style="{ width: width + 'px', height: height + 'px' }">
                 123123123123
             </div>
         </div>
@@ -15,22 +15,24 @@
 </template>
 
 <script>
-    import { bus } from '@/common/bus'
+    import getModelInfo from './common/model'
+    import emitter from 'tiny-emitter/instance'
+    import { ref } from '@vue/composition-api'
 
     export default {
-        data () {
+        setup () {
+            const { canvasSize } = getModelInfo()
+            const width = ref(canvasSize.value.width)
+            const height = ref(canvasSize.value.height)
+
+            emitter.on('update-canvas-size', val => {
+                width.value = val.value.width
+                height.value = val.value.height
+            })
+
             return {
-                width: '375px',
-                height: '812px'
-            }
-        },
-        created () {
-            bus.$on('canvasSizeChange', this.updateSize)
-        },
-        methods: {
-            updateSize (size) {
-                this.width = `${size.width}px`
-                this.height = `${size.height}px`
+                width,
+                height
             }
         }
     }

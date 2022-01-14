@@ -15,7 +15,7 @@
         props: {
             platform: {
                 type: String,
-                default: 'pc'
+                default: 'pcs'
             }
         },
         computed: {
