@@ -15,9 +15,11 @@
             <p class="style-setting-tips">样式面板中设置的样式将覆盖组件自带的默认样式，请谨慎调整</p>
             <template v-for="(com, index) in config">
                 <component
-                    :is="com"
+                    :is="com.name || com"
                     :key="index"
                     :value="lastStyles"
+                    :include="com.include"
+                    :exclude="com.exclude"
                     :change="handleChange" />
             </template>
         </template>
@@ -46,6 +48,10 @@
     import StyleColor from './strategy/color'
     import StyleTextAlign from './strategy/text-align'
     import StyleDisplay from './strategy/display'
+    import StylePosition from './strategy/position'
+    import StylePointer from './strategy/pointer'
+    import StyleOpacity from './strategy/opacity'
+    import StyleBackground from './strategy/background'
 
     const components = {
         StyleLayout,
@@ -59,7 +65,11 @@
         backgroundColor: StyleBackgroundColor,
         color: StyleColor,
         textAlign: StyleTextAlign,
-        display: StyleDisplay
+        display: StyleDisplay,
+        position: StylePosition,
+        pointer: StylePointer,
+        opacity: StyleOpacity,
+        background: StyleBackground
     }
 
     export default {
@@ -86,6 +96,8 @@
             this.componentId = componentId
             this.config = Object.freeze(material.styles)
             this.lastStyles = Object.assign({}, renderStyles)
+            console.log(this.config)
+            console.log(this.lastStyles)
         },
         methods: {
             handleChange (key, value) {

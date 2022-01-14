@@ -125,20 +125,41 @@
                 @borderColorChange="handleBorderColorChange('borderLeft', $event)"
             ></border-detail>
         </div>
+        <style-item name="边框图片">
+            <bk-switcher :value="borderImage.show" theme="primary" size="small" @change="handelImageShowChange" />
+        </style-item>
+        <template v-if="borderImage.show">
+            <style-item name="url">
+                <bk-input style="width: 100%" :value="borderImage.borderImageSource" @change="handleBorderSourceChange" />
+            </style-item>
+            <style-item name="偏移">
+                <size-input style="width: 85px" :placeholder="' '" v-model="borderImageSlice.x" @change="handleBorderSliceChange"></size-input>
+                <size-input style="width: 85px" :placeholder="' '" v-model="borderImageSlice.y" @change="handleBorderSliceChange"></size-input>
+            </style-item>
+            <style-item name="repeat">
+                <bk-select :value="borderImage.borderImageRepeat" style="width: 100%;" :clearable="false" font-size="medium" @change="handleBorderRepeatChange">
+                    <bk-option v-for="option in repeatList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+                </bk-select>
+            </style-item>
+        </template>
     </style-layout>
 </template>
 
 <script>
     import StyleLayout from '../layout/index'
+    import StyleItem from '../layout/item'
     import AppendNumberInput from '@/components/modifier/append-number-input'
     import BorderDetail from '@/components/modifier/border-detail'
+    import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit, computeIsDifferent } from '@/common/util'
 
     export default {
         components: {
             StyleLayout,
+            StyleItem,
             AppendNumberInput,
-            BorderDetail
+            BorderDetail,
+            SizeInput
         },
         props: {
             value: {
@@ -176,7 +197,20 @@
                 borderTopStyle: this.value.borderTopStyle || '',
                 borderRightStyle: this.value.borderRightStyle || '',
                 borderBottomStyle: this.value.borderBottomStyle || '',
-                borderLeftStyle: this.value.borderLeftStyle || ''
+                borderLeftStyle: this.value.borderLeftStyle || '',
+                // 边框图片
+                borderImage: {
+                    show: false,
+                    borderImageSource: '',
+                    borderImageSlice: '',
+                    borderImageRepeat: 'stretch'
+                },
+                borderImageSlice: { x: '', y: '' },
+                repeatList: [
+                    { id: 'stretch', name: 'stretch' },
+                    { id: 'repeat', name: 'repeat' },
+                    { id: 'round', name: 'round' }
+                ]
             }
         },
         watch: {
@@ -205,6 +239,7 @@
                 // 一键修改时初始化四个方向的值
                 this.borderTopLeftRadius = this.borderTopRightRadius = this.borderBottomRightRadius = this.borderBottomLeftRadius = this.borderRadius
             }
+            this.handleBorderImageInit()
         },
         methods: {
             changeSeparateBorderRadius (key, val) {
@@ -248,6 +283,53 @@
                     this[key] = ''
                     this.change(key, '')
                 })
+            },
+            // border-image
+            handleBorderImageInit () {
+                if (this.value.borderImage) {
+                    this.borderImage.show = true
+                    const itemList = this.value.borderImage.split(' ')
+                    this.borderImage.borderImageSource = itemList[0].replace(/url\(|\)/g, '')
+                    if (itemList.length > 2) {
+                        this.borderImageSlice.x = itemList[1]
+                        this.borderImageSlice.y = itemList[2]
+                        this.borderImage.borderImageRepeat = itemList[3]
+                    } else {
+                        this.borderImage.borderImageRepeat = itemList[1]
+                    }
+                }
+            },
+            handelImageShowChange (val) {
+                this.borderImage.show = val
+                if (!this.borderImage.show) {
+                    this.borderImageSlice = { x: '', y: '' }
+                    this.borderImage.borderImageSource = ''
+                    this.borderImage.borderImageRepeat = 'stretch'
+                    this.handleBorderImageCss()
+                }
+            },
+            handleBorderSourceChange (value) {
+                this.borderImage.borderImageSource = value
+                this.handleBorderImageCss()
+            },
+            handleBorderRepeatChange (value) {
+                this.borderImage.borderImageRepeat = value
+                this.handleBorderImageCss()
+            },
+            handleBorderSliceChange (value) {
+                const x = this.borderImageSlice.x ? this.borderImageSlice.x : 0
+                const y = this.borderImageSlice.y ? this.borderImageSlice.y : 0
+                this.borderImage.borderImageSlice = !x && !y ? '' : `${x} ${y}`
+                this.handleBorderImageCss()
+            },
+            handleBorderImageCss () {
+                if (this.borderImage.borderImageSource) {
+                    const imageSource = `url(${this.borderImage.borderImageSource})`
+                    const value = `${imageSource} ${this.borderImage.borderImageSlice} ${this.borderImage.borderImageRepeat}`
+                    this.change('borderImage', value)
+                } else {
+                    this.change('borderImage', '')
+                }
             }
         }
     }

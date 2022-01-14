@@ -10,54 +10,51 @@
 -->
 
 <template>
-    <bk-input type="number"
-        :ext-cls="isError ? 'king-input-modifier-style-error' : ''"
-        :precision="0"
-        :value="value"
-        :min="min"
-        :placeholder="placeholder"
-        @change="handleChange">
-        <template slot="append">
-            <slot></slot>
-        </template>
-    </bk-input>
+    <style-layout title="透明度">
+        <style-item name="opacity">
+            <bk-input
+                style="width: 100%"
+                type="number"
+                placeholder="请输入"
+                :value="opacityValue"
+                :min="0"
+                :max="1"
+                :native-attributes="{ step: 0.1 }"
+                @change="handleOpacityChange">
+            </bk-input>
+        </style-item>
+    </style-layout>
 </template>
 
 <script>
-    import { validateNaturalNumber } from '@/common/util'
+    import StyleLayout from '../layout/index'
+    import StyleItem from '../layout/item'
 
     export default {
-        model: {
-            event: 'change'
+        components: {
+            StyleLayout,
+            StyleItem
         },
         props: {
             value: {
-                type: [String, Number],
+                type: Object,
                 required: true
             },
-            min: {
-                type: [String, Number],
-                default: 1
-            },
-            placeholder: {
-                type: String,
-                default: ''
+            change: {
+                type: Function,
+                required: true
             }
         },
         data () {
             return {
+                opacityValue: this.value.opacity || 1,
                 isError: false
             }
         },
         methods: {
-            handleChange (val) {
-                if (!validateNaturalNumber(val)) {
-                    this.isError = true
-                    return
-                }
-                this.isError = false
-
-                this.$emit('change', val)
+            handleOpacityChange (val) {
+                this.displayValue = val
+                this.change('opacity', val)
             }
         }
     }
