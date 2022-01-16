@@ -30,6 +30,7 @@ import transformSlots from './helper/transform-slots'
 import findParent from './helper/find-parent'
 import flatneChildren from './helper/flatne-chilren'
 import {
+    findRelatedVariableFromRenderProps,
     findRelatedVariableFromRenderDirective,
     findRelatedVariableFromRenderSlot
 } from './helper/find-related-variable'
@@ -202,9 +203,10 @@ export default class Node {
      * @returns { Object }
      */
     get variable () {
+        const propRelatedVariableMap = findRelatedVariableFromRenderProps(this.renderProps)
         const directiveRelatedVariableMap = findRelatedVariableFromRenderDirective(this.renderDirectives)
         const slotRelatedVariableMap = this.layoutType ? {} : findRelatedVariableFromRenderSlot(this.renderSlots)
-        return Object.seal(Object.assign({}, directiveRelatedVariableMap, slotRelatedVariableMap))
+        return Object.seal(Object.assign({}, propRelatedVariableMap, directiveRelatedVariableMap, slotRelatedVariableMap))
     }
     /**
      * @desc 关联函数

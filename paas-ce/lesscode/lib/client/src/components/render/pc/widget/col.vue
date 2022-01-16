@@ -145,9 +145,9 @@
 </script>
 <style lang="postcss" module>
     .col {
-        border: 1px dashed #ccc;
+        outline: 1px dashed #ccc;
         ~ .col {
-            border-left: none;
+            outline-left: none;
         }
     }
 </style>

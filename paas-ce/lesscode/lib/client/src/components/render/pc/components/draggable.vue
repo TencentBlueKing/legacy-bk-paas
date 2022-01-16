@@ -150,7 +150,6 @@
 <style lang="postcss" module>
     .drag-area{
         position: relative;
-        z-index: 10;
         height: 100%;
         pointer-events: auto !important;
     }

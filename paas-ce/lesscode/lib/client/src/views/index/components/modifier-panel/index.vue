@@ -1,5 +1,7 @@
 <template>
-    <div class="draw-page-modifier-panel">
+    <div
+        id="modifierPanel"
+        class="draw-page-modifier-panel">
         <div class="component-info">
             <div
                 class="component-id"

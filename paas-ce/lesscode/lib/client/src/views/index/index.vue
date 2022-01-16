@@ -33,14 +33,16 @@
                     placements: ['bottom']
                 }" />
         </div>
-        <draw-layout v-if="!isContentLoading && !isCustomComponentLoading">
-            <material-panel slot="left" />
-            <operation-area
-                :operaion="operationType"
-                :type="operationType" />
-            <modifier-panel slot="right" />
-        </draw-layout>
-        <novice-guide ref="guide" :data="guideStep" />
+        <template v-if="!isContentLoading && !isCustomComponentLoading">
+            <draw-layout>
+                <material-panel slot="left" />
+                <operation-area
+                    :operaion="operationType"
+                    :type="operationType" />
+                <modifier-panel slot="right" />
+            </draw-layout>
+            <novice-guide ref="guide" :data="guideStep" />
+        </template>
         <variable-form />
         <save-template-dialog />
     </main>
@@ -107,22 +109,22 @@
                     target: '#editPageLeftSideBar',
                     entry: () => {
                         // 切换组件树 tab
-                        document.body.querySelector('[data-name="nav-tab-tree"]').click()
+                        document.body.querySelector('[role="component-tree-panel-tab"]').click()
                     },
                     leave: () => {
                         // 离开时切换到组件选择 tab
-                        document.body.querySelector('[data-name="nav-tab-component"]').click()
+                        document.body.querySelector('[role="component-panel-tab"]').click()
                     }
                 },
                 {
                     title: '画布编辑区',
                     content: '可在画布自由拖动组件、图标等进行页面布局',
-                    target: '#operationArea'
+                    target: '#drawContent'
                 },
                 {
                     title: '组件配置',
                     content: '在画布中选中对应组件，可在这里进行组件样式、属性、事件及指令的配置',
-                    target: '.main-right-sidebar',
+                    target: '#modifierPanel',
                     entry: () => {
                         const $componentEl = document.body.querySelector('[role="component-root"]')
                         if ($componentEl) {
@@ -267,20 +269,29 @@
         margin-top: $headerHeight;
         .draw-page-header {
             position: relative;
-            z-index: 99;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             height: $topHeight;
             background: #fff;
-            box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+
+            &:after{
+                content: '';
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 99;
+                height: 1px;
+                box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+            }
             
             .function-and-tool {
                 position: relative;
                 display: flex;
-                flex: auto;
                 justify-content: center;
                 align-items: center;
             }
+
         }
     }
 </style>
