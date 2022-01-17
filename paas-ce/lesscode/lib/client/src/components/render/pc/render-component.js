@@ -8,24 +8,22 @@ export default {
             componentData
         } = context.props
 
-        // fix
+        // 修正部分样式在编辑时应用到实际的组件会产生偏差和重叠
         const nativeComponentStyleReset = {
-            // 修正组件会影响位置的样式
+            // fix: 修正组件会影响位置的样式
             'margin': '',
             'marginTop': '',
             'marginRight': '',
             'marginBottom': '',
             'marginLeft': '',
             'transform': '',
-            // 修正会产生叠加效果的样式
-            border: '',
+            // fix: 修正会产生叠加效果的样式
             'box-shadow': '',
             'z-index': ''
         }
-        // fix
         // - 在 freelayout 里面时对组件进行位置修正
-        // - 对非交互式组件对组件进行位置修正
-        // 基础组件的根可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
+        // - 非交互式组件对定位样式进行修正
+        // fix: 基础组件的根可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
         if (context.parent.attachToFreelayout
             || componentData.isInteractiveComponent) {
             Object.assign(nativeComponentStyleReset, {
@@ -37,6 +35,7 @@ export default {
             })
         }
         
+        // 样式导致基础组件的交互问题
         if (!context.parent.isShadowComponent) {
             Object.assign(nativeComponentStyleReset, {
                 // fix: 基础组件的层级最低（基础组件可能本身有 border 样式，保证组件选中和 hover 时的边框效果能显示出来）
@@ -72,7 +71,8 @@ export default {
             if (Object.prototype.hasOwnProperty.call(propConfig, 'staticValue')) {
                 props[propName] = propConfig.staticValue
             }
-            // fix: vue 特性，class、style默认会被子组件继承
+            // fix
+            // vue 特性——class、style默认会被子组件继承
             if (['class', 'style'].includes(propName)) {
                 attrs[propName] = componentData.prop[propName]
             }

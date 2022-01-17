@@ -9,7 +9,7 @@
             <slot name="left" />
             
         </div>
-        <div :class="$style['center']">
+        <div id="drawContent" :class="$style['center']">
             <div
                 :class="$style['left-btn']"
                 v-bk-tooltips.right="{

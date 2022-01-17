@@ -73,12 +73,12 @@ export default () => {
 
         const errorStack = []
         // 项目中所有变量，以 variableCode 作为索引 key
-        const projectVarialbeMap = variableList.value.reduce((result, variableData) => {
+        const projectVarialbeCodeMap = variableList.value.reduce((result, variableData) => {
             result[variableData.variableCode] = variableData
             return result
         }, {})
         // 项目中所有函数，以 funcCode 作为索引 key
-        const projectMethodMap = funcGroups.value.reduce((result, methodGroup) => {
+        const projectMethodCodeMap = funcGroups.value.reduce((result, methodGroup) => {
             methodGroup.functionList.forEach(methodData => {
                 result[methodData.funcCode] = methodData
             })
@@ -87,7 +87,7 @@ export default () => {
 
         // 检测 varaible 有效性
         Object.keys(relatedVariableCodeMap).forEach(variableCode => {
-            if (!projectVarialbeMap.hasOwnProperty(variableCode)) {
+            if (!projectVarialbeCodeMap.hasOwnProperty(variableCode)) {
                 relatedVariableCodeMap[variableCode].forEach(record => {
                     errorStack.push(`组件【${record.componentId}】使用的变量【${variableCode}】不存在`)
                 })
@@ -97,7 +97,7 @@ export default () => {
         // 检测 method 有效性
         // 解析被引用 method 的 funcBody 内使用的 method、variable
         Object.keys(relatedMethodCodeMap).forEach(methodCode => {
-            if (!projectMethodMap.hasOwnProperty(methodCode)) {
+            if (!projectMethodCodeMap.hasOwnProperty(methodCode)) {
                 const {
                     componentId,
                     source,
@@ -108,17 +108,17 @@ export default () => {
             }
             const funcBodyContainontainMethodMap = {}
             const funcBodyContainontainVariableMap = {}
-            const funcbody = projectMethodMap[methodCode].funcBody
+            const funcbody = projectMethodCodeMap[methodCode].funcBody
             // 使用的函数在检测变量时需要解析出 funcbody 引用的变量，并判断变量的有效性
             Object.assign(funcBodyContainontainMethodMap, parseFuncBodyMethod(funcbody))
             Object.assign(funcBodyContainontainVariableMap, parseFuncBodyVariable(funcbody))
             Object.keys(funcBodyContainontainVariableMap).forEach(variableCode => {
-                if (!projectVarialbeMap.hasOwnProperty(variableCode)) {
+                if (!projectVarialbeCodeMap.hasOwnProperty(variableCode)) {
                     errorStack.push(`函数【${methodCode}】函数体中标识为【${variableCode}】的变量不存在`)
                 }
             })
             Object.keys(funcBodyContainontainMethodMap).forEach(code => {
-                if (!projectMethodMap.hasOwnProperty(code)) {
+                if (!projectMethodCodeMap.hasOwnProperty(code)) {
                     errorStack.push(`函数【${methodCode}】函数体中标识为【${code}】的函数不存在`)
                 }
             })
@@ -137,11 +137,11 @@ export default () => {
 
         // 转换 variableCode、methodCode 到具体的资源 id
         const relateVariableIdMap = Object.keys(relatedVariableCodeMap).reduce((result, variableCode) => {
-            result[projectVarialbeMap[variableCode].id] = relatedVariableCodeMap[variableCode]
+            result[projectVarialbeCodeMap[variableCode].id] = relatedVariableCodeMap[variableCode]
             return result
         }, {})
         const releateMethodIdList = Object.keys(relatedMethodCodeMap).reduce((result, methodCode) => {
-            result.push(projectMethodMap[methodCode].id)
+            result.push(projectMethodCodeMap[methodCode].id)
             return result
         }, [])
 
