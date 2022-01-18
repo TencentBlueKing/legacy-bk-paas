@@ -12,14 +12,25 @@
 <template>
     <style-layout title="定位">
         <style-item name="position">
-            <bk-select :value="positionValue" style="width: 100%;" font-size="medium" placeholder="请选择" @change="handlePositionChange">
-                <bk-option v-for="option in positionList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="positionValue"
+                font-size="medium"
+                placeholder="请选择"
+                @change="handlePositionChange">
+                <bk-option id="absolute" name="absolute" />
+                <bk-option id="fixed" name="fixed" />
+                <bk-option id="static" name="static" />
             </bk-select>
         </style-item>
         <template v-if="positionValue && positionValue !== 'static'">
             <style-item :name="item.name" v-for="item in posConfigRender" :key="item.key">
                 <size-input v-model="item.value" @change="handleInputChange(item, $event)">
-                    <append-select v-if="item.key !== 'zIndex'" v-model="item.unit" @change="handleSelectChange(item, $event)"></append-select>
+                    <append-select
+                        v-if="item.key !== 'zIndex'"
+                        :value="item.unit"
+                        @change="handleSelectChange(item, $event)">
+                    </append-select>
                 </size-input>
             </style-item>
         </template>
@@ -82,12 +93,7 @@
         data () {
             return {
                 positionValue: this.value.position || '',
-                posConfigRender: [],
-                positionList: [
-                    { id: 'absolute', name: 'absolute' },
-                    { id: 'fixed', name: 'fixed' },
-                    { id: 'static', name: 'static' }
-                ]
+                posConfigRender: []
             }
         },
         mounted () {

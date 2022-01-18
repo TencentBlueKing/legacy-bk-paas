@@ -12,11 +12,19 @@
 <template>
     <style-layout title="尺寸">
         <style-item :name="item.name" v-for="item in sizeConfigRender" :key="item.key">
-            <bk-select v-if="item.key === 'display'" :value="item.value" style="width: 100%;" font-size="medium" :clearable="false" @change="handleDisplayChange(item, $event)">
-                <bk-option v-for="option in displayList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                v-if="item.key === 'display'"
+                :value="item.value" style="width: 100%;"
+                font-size="medium" :clearable="false"
+                @change="handleDisplayChange(item, $event)">
+                <bk-option id="block" name="block" />
+                <bk-option id="inline" name="inline" />
+                <bk-option id="inline-block" name="inline-block" />
+                <bk-option id="inherit" name="inherit" />
+                <bk-option id="initial" name="initial" />
             </bk-select>
-            <size-input v-else v-model="item.value" @change="handleInputChange(item, $event)">
-                <append-select v-model="item.unit" @change="handleSelectChange(item, $event)"></append-select>
+            <size-input v-else :value="item.value" @change="handleInputChange(item, $event)">
+                <append-select :value="item.unit" @change="handleSelectChange(item, $event)"></append-select>
             </size-input>
         </style-item>
     </style-layout>
@@ -85,14 +93,7 @@
         },
         data () {
             return {
-                sizeConfigRender: [],
-                displayList: [
-                    { id: 'inherit', name: 'inherit' },
-                    { id: 'initial', name: 'initial' },
-                    { id: 'inline', name: 'inline' },
-                    { id: 'inline-block', name: 'inline-block' },
-                    { id: 'block', name: 'block' }
-                ]
+                sizeConfigRender: []
             }
         },
         mounted () {

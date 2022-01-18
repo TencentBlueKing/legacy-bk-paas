@@ -12,7 +12,7 @@
 <template>
     <style-layout title="背景">
         <style-item name="颜色" v-if="handleHasKey('backgroundColor')">
-            <bk-color-picker style="width: 100%;" v-model="renderValueMap.backgroundColor" @change="handleValueChange('backgroundColor', $event)"></bk-color-picker>
+            <bk-color-picker style="width: 100%;" :value="renderValueMap.backgroundColor" @change="handleValueChange('backgroundColor', $event)"></bk-color-picker>
         </style-item>
         <style-item name="背景图" v-if="handleHasKey('backgroundImage')">
             <bk-switcher theme="primary" size="small" :value="backgroundImageShow" @change="handleImageShowChange" />
@@ -23,26 +23,68 @@
             </style-item>
             <style-item name="大小">
                 <template>
-                    <size-input style="width: 60px" v-model="backgroundSize.width" :placeholder="' '" @change="handleInputChange('backgroundSize', $event)"></size-input>
-                    <size-input style="width: 60px" v-model="backgroundSize.height" :placeholder="' '" @change="handleInputChange('backgroundSize', $event)"></size-input>
+                    <size-input
+                        style="width: 60px"
+                        :value="backgroundSize.width"
+                        :placeholder="' '"
+                        @change="handleBackgroundSizeChange('width', $event)">
+                    </size-input>
+                    <size-input
+                        style="width: 60px"
+                        :value="backgroundSize.height"
+                        :placeholder="' '"
+                        @change="handleBackgroundSizeChange('height', $event)">
+                    </size-input>
                 </template>
-                <append-select style="border: 1px solid #c4c6cc" :value="backgroundSize.unit" :is-margin-style="true" @change="handleUnitChange('backgroundSize', $event)"></append-select>
+                <append-select
+                    style="border: 1px solid #c4c6cc"
+                    :value="backgroundSize.unit"
+                    :is-margin-style="true"
+                    @change="handleUnitChange('backgroundSize', $event)">
+                </append-select>
             </style-item>
             <style-item name="位置">
                 <template>
-                    <size-input style="width: 60px" v-model="backgroundPosition.x" :placeholder="' '" @change="handleInputChange('backgroundPosition', $event)"></size-input>
-                    <size-input style="width: 60px" v-model="backgroundPosition.y" :placeholder="' '" @change="handleInputChange('backgroundPosition', $event)"></size-input>
+                    <size-input
+                        style="width: 60px"
+                        :value="backgroundPosition.x"
+                        :placeholder="' '"
+                        @change="handleBackgroundPositionChange('x', $event)">
+                    </size-input>
+                    <size-input
+                        style="width: 60px"
+                        :value="backgroundPosition.y"
+                        :placeholder="' '"
+                        @change="handleBackgroundPositionChange('y', $event)">
+                    </size-input>
                 </template>
-                <append-select style="border: 1px solid #c4c6cc" :value="backgroundPosition.unit" :is-margin-style="true" @change="handleUnitChange('backgroundPosition', $event)"></append-select>
+                <append-select
+                    style="border: 1px solid #c4c6cc"
+                    :value="backgroundPosition.unit"
+                    :is-margin-style="true"
+                    @change="handleUnitChange('backgroundPosition', $event)">
+                </append-select>
             </style-item>
             <style-item name="repeat">
-                <bk-select :value="imageConfig.backgroundRepeat" style="width: 100%;" font-size="medium" @change="handleConfigChange('backgroundRepeat', $event)">
-                    <bk-option v-for="option in repeatList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+                <bk-select
+                    style="width: 100%;"
+                    :value="imageConfig.backgroundRepeat"
+                    font-size="medium"
+                    @change="handleConfigChange('backgroundRepeat', $event)">
+                    <bk-option id="repeat" name="repeat" />
+                    <bk-option id="repeat-x" name="repeat-x" />
+                    <bk-option id="repeat-y" name="repeat-y" />
+                    <bk-option id="no-repeat" name="no-repeat" />
                 </bk-select>
             </style-item>
             <style-item name="attachment">
-                <bk-select :value="imageConfig.backgroundAttachment" style="width: 100%;" font-size="medium" @change="handleConfigChange('backgroundAttachment', $event)">
-                    <bk-option v-for="option in attachmentList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+                <bk-select
+                    style="width: 100%;"
+                    :value="imageConfig.backgroundAttachment"
+                    font-size="medium"
+                    @change="handleConfigChange('backgroundAttachment', $event)">
+                    <bk-option id="scroll" name="scroll" />
+                    <bk-option id="fixed" name="fixed" />
                 </bk-select>
             </style-item>
         </template>
@@ -84,16 +126,6 @@
                 unitList: [
                     { name: 'px', id: 'px' },
                     { name: '%', id: '%' }
-                ],
-                repeatList: [
-                    { name: 'repeat', id: 'repeat' },
-                    { name: 'repeat-x', id: 'repeat-x' },
-                    { name: 'repeat-y', id: 'repeat-y' },
-                    { name: 'no-repeat', id: 'no-repeat' }
-                ],
-                attachmentList: [
-                    { name: 'scroll', id: 'scroll' },
-                    { name: 'fixed', id: 'fixed' }
                 ],
                 valueMap: {
                     backgroundColor: this.value.backgroundColor,
@@ -163,7 +195,15 @@
                 }
                 this.handleInputChange(key)
             },
-            handleInputChange (key, val) {
+            handleBackgroundSizeChange (key, val) {
+                this.backgroundSize[key] = val
+                this.handleInputChange('backgroundSize')
+            },
+            handleBackgroundPositionChange (key, val) {
+                this.backgroundPosition[key] = val
+                this.handleInputChange('backgroundPosition')
+            },
+            handleInputChange (key) {
                 let newValue
                 if (key === 'backgroundSize' && this.backgroundSize.width && this.backgroundSize.height) {
                     const unit = this.backgroundSize.unit
@@ -189,7 +229,9 @@
                     this.backgroundPosition = { x: '', y: '', unit: 'px' }
                     this.handleInputChange('backgroundSize', '')
                     this.handleInputChange('backgroundPosition', '')
+                    return
                 }
+                this.handleValueChange('backgroundColor', '')
             },
             handleHasKey (key) {
                 return this.renderValueMap.hasOwnProperty(key)

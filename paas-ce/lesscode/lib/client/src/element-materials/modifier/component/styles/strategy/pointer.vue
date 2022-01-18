@@ -12,8 +12,20 @@
 <template>
     <style-layout title="鼠标">
         <style-item :name="'cursor'">
-            <bk-select :value="cursorValue" style="width: 100%;" font-size="medium" :clearable="false" @change="handleChange">
-                <bk-option v-for="option in cursorList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="cursorValue"
+                font-size="medium"
+                :clearable="false"
+                @change="handleChange">
+                <bk-option id="auto" name="auto" />
+                <bk-option id="default" name="default" />
+                <bk-option id="crosshair" name="crosshair" />
+                <bk-option id="pointer" name="pointer" />
+                <bk-option id="move" name="move" />
+                <bk-option id="text" name="text" />
+                <bk-option id="wait" name="wait" />
+                <bk-option id="help" name="help" />
             </bk-select>
         </style-item>
     </style-layout>
@@ -40,17 +52,7 @@
         },
         data () {
             return {
-                cursorValue: this.value.cursor || 'auto',
-                cursorList: [
-                    { name: 'auto', id: 'auto' },
-                    { name: 'default', id: 'default' },
-                    { name: 'crosshair', id: 'crosshair' },
-                    { name: 'pointer', id: 'pointer' },
-                    { name: 'move', id: 'move' },
-                    { name: 'text', id: 'text' },
-                    { name: 'wait', id: 'wait' },
-                    { name: 'help', id: 'help' }
-                ]
+                cursorValue: this.value.cursor || 'auto'
             }
         },
         methods: {

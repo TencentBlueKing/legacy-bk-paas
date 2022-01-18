@@ -133,12 +133,28 @@
                 <bk-input style="width: 100%" :value="borderImage.borderImageSource" @change="handleBorderSourceChange" />
             </style-item>
             <style-item name="偏移">
-                <size-input style="width: 85px" :placeholder="' '" v-model="borderImageSlice.x" @change="handleBorderSliceChange"></size-input>
-                <size-input style="width: 85px" :placeholder="' '" v-model="borderImageSlice.y" @change="handleBorderSliceChange"></size-input>
+                <size-input
+                    style="width: 85px"
+                    :placeholder="' '"
+                    :value="borderImageSlice.x"
+                    @change="handleBorderSliceChange('x', $event)">
+                </size-input>
+                <size-input
+                    style="width: 85px"
+                    :placeholder="' '"
+                    :value="borderImageSlice.y"
+                    @change="handleBorderSliceChange('y', $event)">
+                </size-input>
             </style-item>
             <style-item name="repeat">
-                <bk-select :value="borderImage.borderImageRepeat" style="width: 100%;" :clearable="false" font-size="medium" @change="handleBorderRepeatChange">
-                    <bk-option v-for="option in repeatList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+                <bk-select
+                    style="width: 100%;"
+                    :value="borderImage.borderImageRepeat"
+                    :clearable="false" font-size="medium"
+                    @change="handleBorderRepeatChange">
+                    <bk-option id="stretch" name="stretch" />
+                    <bk-option id="repeat" name="repeat" />
+                    <bk-option id="round" name="round" />
                 </bk-select>
             </style-item>
         </template>
@@ -205,12 +221,7 @@
                     borderImageSlice: '',
                     borderImageRepeat: 'stretch'
                 },
-                borderImageSlice: { x: '', y: '' },
-                repeatList: [
-                    { id: 'stretch', name: 'stretch' },
-                    { id: 'repeat', name: 'repeat' },
-                    { id: 'round', name: 'round' }
-                ]
+                borderImageSlice: { x: '', y: '' }
             }
         },
         watch: {
@@ -316,7 +327,8 @@
                 this.borderImage.borderImageRepeat = value
                 this.handleBorderImageCss()
             },
-            handleBorderSliceChange (value) {
+            handleBorderSliceChange (key, value) {
+                this.borderImageSlice[key] = value
                 const x = this.borderImageSlice.x ? this.borderImageSlice.x : 0
                 const y = this.borderImageSlice.y ? this.borderImageSlice.y : 0
                 this.borderImage.borderImageSlice = !x && !y ? '' : `${x} ${y}`

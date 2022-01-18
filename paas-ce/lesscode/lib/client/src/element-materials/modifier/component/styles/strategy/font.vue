@@ -12,73 +12,170 @@
 <template>
     <style-layout title="文字">
         <style-item name="字体" v-if="handleHasKey('fontFamily')">
-            <bk-select :value="renderValueMap.fontFamily" style="width: 100%;" font-size="medium" :clearable="false" @change="handleFontChange('fontFamily', $event)">
-                <bk-option v-for="option in fontFamilyList" :key="option.id" :id="option.id" :name="option.name" :style="'font-family:' + option.id"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="renderValueMap.fontFamily"
+                font-size="medium"
+                :clearable="false"
+                @change="handleFontChange('fontFamily', $event)">
+                <bk-option id="inherit" name="默认" />
+                <bk-option id="PingFang SC, sans-serif" name="苹方" />
+                <bk-option id="Microsoft Yahei, san-serif" name="微软雅黑" />
+                <bk-option id="Songti SC, sans-serif" name="宋体" />
+                <bk-option id="Arial, sans-serif" name="Arial" />
+                <bk-option id="Helvetica, sans-serif" name="Helvetica" />
             </bk-select>
         </style-item>
         <style-item name="字号字重" v-if="handleHasKey('fontSize') || handleHasKey('fontWeight')">
             <font-size-input :value="renderValueMap.fontSize" @change="handleFontWithUnitChange('fontSize', $event)"></font-size-input>
-            <bk-select :value="renderValueMap.fontWeight" style="width: 96px;" font-size="medium" :clearable="false" @change="handleFontChange('fontWeight', $event)">
-                <bk-option v-for="option in fontWeightList" :key="option.id" :id="option.id" :name="option.name" :style="'font-weight:' + option.id"></bk-option>
+            <bk-select
+                style="width: 96px;"
+                :value="renderValueMap.fontWeight"
+                font-size="medium"
+                :clearable="false"
+                @change="handleFontChange('fontWeight', $event)">
+                <bk-option id="inherit" name="默认" />
+                <bk-option id="normal" name="normal" />
+                <bk-option id="lighter" name="lighter" />
+                <bk-option id="bolder" name="bolder" />
+                <bk-option id="400" name="400" />
+                <bk-option id="500" name="500" />
+                <bk-option id="600" name="600" />
+                <bk-option id="700" name="700" />
+                <bk-option id="800" name="800" />
+                <bk-option id="900" name="900" />
             </bk-select>
         </style-item>
         <style-item name="颜色" v-if="handleHasKey('color')">
-            <bk-color-picker style="width: 100%;" v-model="renderValueMap.color" @change="handleFontChange('color', $event)"></bk-color-picker>
+            <bk-color-picker style="width: 100%;" :value="renderValueMap.color" @change="handleFontChange('color', $event)"></bk-color-picker>
         </style-item>
         <style-item name="字体样式" v-if="handleHasKey('fontStyle')">
-            <bk-select :value="renderValueMap.fontStyle" style="width: 100%;" font-size="medium" :clearable="false" @change="handleFontChange('fontStyle', $event)">
-                <bk-option v-for="option in fontStyleList" :key="option.id" :id="option.id" :name="option.name" :style="'font-style:' + option.id"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="renderValueMap.fontStyle"
+                font-size="medium"
+                :clearable="false"
+                @change="handleFontChange('fontStyle', $event)">
+                <bk-option id="normal" name="normal" />
+                <bk-option id="italic" name="italic" />
+                <bk-option id="oblique" name="oblique" />
+                <bk-option id="inherit" name="inherit" />
             </bk-select>
         </style-item>
         <style-item name="行间距" v-if="handleHasKey('lineHeight')">
-            <size-input v-model="renderValueMap.lineHeight" @change="handleInputChange('lineHeight', $event)">
-                <append-select v-model="unitMap.lineHeight" @change="handleSelectChange('lineHeight', $event)"></append-select>
+            <size-input :value="renderValueMap.lineHeight" @change="handleInputChange('lineHeight', $event)">
+                <append-select :value="unitMap.lineHeight" @change="handleSelectChange('lineHeight', $event)"></append-select>
             </size-input>
         </style-item>
         <style-item name="字符间距" v-if="handleHasKey('letterSpacing')">
-            <font-size-input style="width: 100%" :value="renderValueMap.letterSpacing" placeholder="请输入" @change="handleFontWithUnitChange('letterSpacing', $event)"></font-size-input>
+            <font-size-input
+                style="width: 100%"
+                :value="renderValueMap.letterSpacing"
+                placeholder="请输入"
+                @change="handleFontWithUnitChange('letterSpacing', $event)">
+            </font-size-input>
         </style-item>
         <style-item name="word-spacing" v-if="handleHasKey('wordSpacing')">
-            <font-size-input style="width: 100%" :value="renderValueMap.wordSpacing" placeholder="请输入" @change="handleFontWithUnitChange('wordSpacing', $event)"></font-size-input>
+            <font-size-input
+                style="width: 100%"
+                :value="renderValueMap.wordSpacing"
+                placeholder="请输入"
+                @change="handleFontWithUnitChange('wordSpacing', $event)">
+            </font-size-input>
         </style-item>
         <style-item name="text-align" v-if="handleHasKey('textAlign')">
-            <bk-select :value="renderValueMap.textAlign" style="width: 100%;" font-size="medium" :clearable="false" @change="handleFontChange('textAlign', $event)">
-                <bk-option v-for="option in textAlignList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="renderValueMap.textAlign"
+                font-size="medium"
+                :clearable="false"
+                @change="handleFontChange('textAlign', $event)">
+                <bk-option id="left" name="left" />
+                <bk-option id="center" name="center" />
+                <bk-option id="right" name="right" />
             </bk-select>
         </style-item>
         <style-item name="text-decoration" v-if="handleHasKey('textDecoration')">
-            <bk-select :value="renderValueMap.textDecoration" style="width: 100%;" font-size="medium" :clearable="false" @change="handleFontChange('textDecoration', $event)">
-                <bk-option v-for="option in textDecorationList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="renderValueMap.textDecoration"
+                font-size="medium" :clearable="false"
+                @change="handleFontChange('textDecoration', $event)">
+                <bk-option id="none" name="none" />
+                <bk-option id="underline" name="underline" />
+                <bk-option id="overline" name="overline" />
+                <bk-option id="line-through" name="line-through" />
             </bk-select>
         </style-item>
         <style-item name="缩进" v-if="handleHasKey('textIndent')">
-            <size-input v-model="renderValueMap.textIndent" @change="handleInputChange('textIndent', $event)">
-                <append-select v-model="unitMap.textIndent" @change="handleSelectChange('textIndent', $event)"></append-select>
+            <size-input :value="renderValueMap.textIndent" @change="handleInputChange('textIndent', $event)">
+                <append-select :value="unitMap.textIndent" @change="handleSelectChange('textIndent', $event)"></append-select>
             </size-input>
         </style-item>
         <style-item name="text-overflow" v-if="handleHasKey('textOverflow')">
-            <bk-select :value="renderValueMap.textOverflow" style="width: 100%;" font-size="medium" :clearable="false" @change="handleFontChange('textOverflow', $event)">
-                <bk-option v-for="option in textOverflowList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="renderValueMap.textOverflow"
+                font-size="medium"
+                :clearable="false"
+                @change="handleFontChange('textOverflow', $event)">
+                <bk-option id="clip" name="clip" />
+                <bk-option id="ellipsis" name="ellipsis" />
             </bk-select>
         </style-item>
         <style-item name="word-break" v-if="handleHasKey('wordBreak')">
-            <bk-select :value="renderValueMap.wordBreak" style="width: 100%;" font-size="medium" :clearable="false" @change="handleFontChange('wordBreak', $event)">
-                <bk-option v-for="option in wordBreakList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="renderValueMap.wordBreak"
+                font-size="medium"
+                :clearable="false"
+                @change="handleFontChange('wordBreak', $event)">
+                <bk-option id="normal" name="normal" />
+                <bk-option id="break-all" name="break-all" />
+                <bk-option id="keep-all" name="keep-all" />
             </bk-select>
         </style-item>
         <style-item name="word-wrap" v-if="handleHasKey('wordWrap')">
-            <bk-select :value="renderValueMap.wordWrap" style="width: 100%;" font-size="medium" :clearable="false" @change="handleFontChange('wordWrap', $event)">
-                <bk-option v-for="option in wordWrapList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="renderValueMap.wordWrap"
+                font-size="medium"
+                :clearable="false"
+                @change="handleFontChange('wordWrap', $event)">
+                <bk-option id="normal" name="normal" />
+                <bk-option id="break-word" name="break-word" />
             </bk-select>
         </style-item>
         <style-item name="white-space" v-if="handleHasKey('whiteSpace')">
-            <bk-select :value="renderValueMap.whiteSpace" style="width: 100%;" font-size="medium" :clearable="false" @change="handleFontChange('whiteSpace', $event)">
-                <bk-option v-for="option in whiteSpaceList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="renderValueMap.whiteSpace"
+                font-size="medium"
+                :clearable="false"
+                @change="handleFontChange('whiteSpace', $event)">
+                <bk-option id="normal" name="normal" />
+                <bk-option id="pre" name="pre" />
+                <bk-option id="nowrap" name="nowrap" />
+                <bk-option id="pre-wrap" name="pre-wrap" />
+                <bk-option id="pre-line" name="pre-line" />
+                <bk-option id="inherit" name="inherit" />
             </bk-select>
         </style-item>
         <style-item name="垂直对齐" v-if="handleHasKey('verticalAlign')">
-            <bk-select :value="renderValueMap.verticalAlign" style="width: 100%;" font-size="medium" :clearable="false" @change="handleFontChange('verticalAlign', $event)">
-                <bk-option v-for="option in verticalAlignList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+            <bk-select
+                style="width: 100%;"
+                :value="renderValueMap.verticalAlign"
+                font-size="medium"
+                :clearable="false"
+                @change="handleFontChange('verticalAlign', $event)">
+                <bk-option id="baseline" name="baseline" />
+                <bk-option id="sub" name="sub" />
+                <bk-option id="super" name="super" />
+                <bk-option id="top" name="top" />
+                <bk-option id="text-top" name="text-top" />
+                <bk-option id="middle" name="middle" />
+                <bk-option id="bottom" name="bottom" />
+                <bk-option id="text-bottom" name="text-bottom" />
             </bk-select>
         </style-item>
     </style-layout>
@@ -118,112 +215,6 @@
         },
         data () {
             return {
-                fontFamilyList: [{
-                    id: 'inherit', name: '默认'
-                }, {
-                    id: 'PingFang SC, sans-serif', name: '苹方'
-                }, {
-                    id: 'Microsoft Yahei, san-serif', name: '微软雅黑'
-                }, {
-                    id: 'Songti SC, sans-serif', name: '宋体'
-                }, {
-                    id: 'Arial, sans-serif', name: 'Arial'
-                }, {
-                    id: 'Helvetica, sans-serif', name: 'Helvetica'
-                }],
-                fontWeightList: [{
-                    id: 'inherit', name: '默认'
-                }, {
-                    id: 'normal', name: 'normal'
-                }, {
-                    id: 'lighter', name: 'lighter'
-                }, {
-                    id: 'bolder', name: 'bolder'
-                }, {
-                    id: '400', name: '400'
-                }, {
-                    id: '500', name: '500'
-                }, {
-                    id: '600', name: '600'
-                }, {
-                    id: '700', name: '700'
-                }, {
-                    id: '800', name: '800'
-                }, {
-                    id: '900', name: '900'
-                }],
-                fontStyleList: [{
-                    id: 'normal', name: 'normal'
-                }, {
-                    id: 'italic', name: 'italic'
-                }, {
-                    id: 'oblique', name: 'oblique'
-                }, {
-                    id: 'inherit', name: 'inherit'
-                }],
-                textAlignList: [{
-                    id: 'left', name: 'left'
-                }, {
-                    id: 'center', name: 'center'
-                }, {
-                    id: 'right', name: 'right'
-                }],
-                textDecorationList: [{
-                    id: 'none', name: 'none'
-                }, {
-                    id: 'underline', name: 'underline'
-                }, {
-                    id: 'overline', name: 'overline'
-                }, {
-                    id: 'line-through', name: 'line-through'
-                }],
-                textOverflowList: [{
-                    id: 'clip', name: 'clip'
-                }, {
-                    id: 'ellipsis', name: 'ellipsis'
-                }],
-                wordBreakList: [{
-                    id: 'normal', name: 'normal'
-                }, {
-                    id: 'break-all', name: 'break-all'
-                }, {
-                    id: 'keep-all', name: 'keep-all'
-                }],
-                wordWrapList: [{
-                    id: 'normal', name: 'normal'
-                }, {
-                    id: 'break-word', name: 'break-word'
-                }],
-                whiteSpaceList: [{
-                    id: 'normal', name: 'normal'
-                }, {
-                    id: 'pre', name: 'pre'
-                }, {
-                    id: 'nowrap', name: 'nowrap'
-                }, {
-                    id: 'pre-wrap', name: 'pre-wrap'
-                }, {
-                    id: 'pre-line', name: 'pre-line'
-                }, {
-                    id: 'inherit', name: 'inherit'
-                }],
-                verticalAlignList: [{
-                    id: 'baseline', name: 'baseline'
-                }, {
-                    id: 'sub', name: 'sub'
-                }, {
-                    id: 'super', name: 'super'
-                }, {
-                    id: 'top', name: 'top'
-                }, {
-                    id: 'text-top', name: 'text-top'
-                }, {
-                    id: 'middle', name: 'middle'
-                }, {
-                    id: 'bottom', name: 'bottom'
-                }, {
-                    id: 'text-bottom', name: 'text-bottom'
-                }],
                 valueMap: {
                     fontFamily: this.value.fontFamily || 'inherit',
                     fontSize: splitValueAndUnit('value', this.value.fontSize),

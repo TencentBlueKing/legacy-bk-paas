@@ -53,7 +53,7 @@
         },
         methods: {
             handleOpacityChange (val) {
-                this.displayValue = val
+                this.opacityValue = val
                 this.change('opacity', val)
             }
         }
