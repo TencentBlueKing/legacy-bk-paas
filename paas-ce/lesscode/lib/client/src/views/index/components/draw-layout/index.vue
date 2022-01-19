@@ -96,7 +96,7 @@
             left: 0;
             width: 340px;
             background: #fff;
-            box-shadow: 2px 0 4px 0 rgb(0 0 0 / 10%);
+            box-shadow: 2px 4px 4px 0 rgb(0 0 0 / 10%);
         }
         .right{
             position: absolute;
@@ -105,7 +105,7 @@
             bottom: 0;
             width: 300px;
             background: #FFF;
-            box-shadow: -2px 0px 4px 0px rgba(0,0,0,0.1);
+            box-shadow: -2px 4px 4px 0px rgba(0,0,0,0.1);
         }
         .left-btn,
         .right-btn{

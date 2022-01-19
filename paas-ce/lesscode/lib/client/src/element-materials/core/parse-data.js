@@ -140,7 +140,20 @@ const tansform = (parentNode, data) => {
                         name: 'form-item',
                         type: 'widget-form-item',
                         renderStyles: formItem.renderStyles,
-                        renderProps: formItem.renderProps,
+                        renderProps: Object.keys(formItem.renderProps || {}).reduce((result, name) => {
+                            const {
+                                type,
+                                val
+                            } = formItem.renderProps[name]
+                            result[name] = {
+                                format: 'value',
+                                code: val,
+                                payload: {},
+                                valueType: type,
+                                renderValue: val
+                            }
+                            return result
+                        }, {}),
                         renderSlots: {
                             default: tansform(curDataNode, formItem.renderSlots.default.val)
                         },

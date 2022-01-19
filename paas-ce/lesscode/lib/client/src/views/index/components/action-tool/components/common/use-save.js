@@ -129,10 +129,17 @@ export default () => {
                 errorStack.push(`页面中标识为【${variableCode}】的函数与标识为【${variableCode}】的变量存在冲突`)
             }
         })
+        
         // 错误提示
         if (errorStack.length > 0) {
-            currentInstance.proxy.messageError(errorStack.join('\n'))
-            return
+            const h = currentInstance.proxy.$createElement
+            currentInstance.proxy.$bkMessage({
+                theme: 'error',
+                offsetY: 80,
+                ellipsisLine: 0,
+                message: h('div', {}, errorStack.map(errorText => h('div', errorText)))
+            })
+            return Promise.reject(new Error('数据不完整'))
         }
 
         // 转换 variableCode、methodCode 到具体的资源 id
