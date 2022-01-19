@@ -21,13 +21,10 @@ export default {
         name: 'process-changed', tips: '当前步骤变化时调用该事件函数，事件回调参数 (curProcess: Number, data: Object)'
     }],
     directives: [
-        {
-            type: 'v-bind',
-            prop: 'list',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'list',
+        // }
     ],
     props: {
         list: {

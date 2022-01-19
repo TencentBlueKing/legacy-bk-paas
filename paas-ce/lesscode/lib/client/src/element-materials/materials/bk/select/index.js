@@ -31,10 +31,7 @@ export default {
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['string', 'array', 'number'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {
@@ -124,7 +121,7 @@ export default {
     slots: {
         default: {
             name: ['bk-option'],
-            type: ['list', 'remote', 'data-source'],
+            type: ['list', 'remote'],
             displayName: '可选项配置',
             tips: '默认插槽，填写的数据需要是数组且每个元素需包含id和name字段',
             remoteValidate (data) {

@@ -26,15 +26,6 @@ export default {
         name: 'disable-change', tips: '节点拖拽结束时调用该事件函数，事件回调参数 (treeNode: Object | Array)'
     }],
     styles: ['size', 'margin'],
-    directives: [
-        {
-            type: 'v-bind',
-            prop: 'data',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        }
-    ],
     props: {
         data: {
             type: ['array', 'remote'],

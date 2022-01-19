@@ -11,26 +11,37 @@
 
 <template>
     <section>
-        <template v-if="eventKeys.length">
+        <template v-if="config.length">
             <h3 class="event-tip">可以添加函数执行参数，执行的时候会把事件相关的实参放在自定义参数后传入</h3>
             <ul>
-                <li v-for="event in eventKeys" :key="event.name" class="event-item">
+                <li
+                    v-for="event in config"
+                    :key="event.name"
+                    class="event-item">
                     <h3 class="event-title">
-                        <span class="label" v-if="event.tips" v-bk-tooltips="transformTipsWidth(event.tips)">{{ event.name }}</span>
+                        <span
+                            v-if="event.tips"
+                            class="label"
+                            v-bk-tooltips="transformTipsWidth(event.tips)">
+                            {{ event.name }}
+                        </span>
                         <span v-else>{{ event.name }}</span>
                     </h3>
-                    <select-func :value="eventValues[event.name]" @change="(value) => componentEventChange(value, event.name)"></select-func>
+                    <select-func
+                        :value="lastEvents[event.name]"
+                        @change="(value) => handleChange(value, event.name)" />
                 </li>
             </ul>
         </template>
-        <div class="no-event" v-else>
-            <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无事件</span>
-        </div>
+        <!-- <div class="no-event" v-else>
+            <span>该组件暂无事件</span>
+        </div> -->
     </section>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
+    import LC from '@/element-materials/core'
     import { transformTipsWidth } from '@/common/util'
     import selectFunc from '@/components/methods/select-func'
 
@@ -39,49 +50,36 @@
         components: {
             selectFunc
         },
-        props: {
-            materialConfig: {
-                type: Array,
-                default: () => []
-            },
-
-            lastEvents: {
-                type: Object,
-                default: () => ({})
-            },
-
-            componentId: {
-                type: String
-            }
-        },
+        
         data () {
             return {
-                eventKeys: [],
-                eventValues: [],
+                config: [],
                 transformTipsWidth
             }
         },
         computed: {
-            ...mapGetters('drag', ['curSelectedComponentData']),
             ...mapGetters('functions', ['funcGroups'])
         },
-        watch: {
-            materialConfig: {
-                handler () {
-                    this.eventKeys = this.materialConfig
-                    this.eventValues = this.lastEvents || {}
-                },
-                immediate: true
-            }
+        created () {
+            this.lastEvents = {}
+            this.currentComponentNode = LC.getActiveNode()
+            const {
+                material,
+                renderEvents
+            } = this.currentComponentNode
+            this.config = Object.freeze(material.events || [])
+            this.lastEvents = Object.assign({}, renderEvents)
         },
         methods: {
-            componentEventChange (val, event) {
+            handleChange (value, eventName) {
                 const renderEvents = {
-                    ...this.eventValues,
-                    [event]: val
+                    ...this.lastEvents,
+                    [eventName]: value
                 }
-                this.eventValues = renderEvents
-                this.$emit('on-change', { renderEvents })
+                this.lastEvents = renderEvents
+                this.currentComponentNode.setRenderEvents({
+                    ...renderEvents
+                })
             }
         }
     }

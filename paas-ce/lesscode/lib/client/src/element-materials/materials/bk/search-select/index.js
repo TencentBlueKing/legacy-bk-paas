@@ -50,18 +50,15 @@ export default {
     directives: [
         {
             type: 'v-model',
-            prop: 'values',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        },
-        {
-            type: 'v-bind',
-            prop: 'data',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            prop: 'values'
         }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'data',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         data: {

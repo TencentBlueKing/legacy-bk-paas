@@ -23,11 +23,13 @@ export default {
     directives: [
         {
             type: 'v-model',
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {
+        value: {
+            type: ['string', 'number', 'boolean']
+        }
     },
     slots: {
         default: {

@@ -16,14 +16,11 @@ export default {
     icon: 'bk-drag-slider',
     group: '表单',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    styles: ['margin', 'display'],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['number'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-form',
     group: '表单',
     order: 0,
-    styles: ['size', 'margin', 'padding', 'font', 'border', 'backgroundColor'],
+    styles: ['size', 'margin', 'font', 'backgroundColor'],
     directives: [
         {
             type: 'v-bind',
@@ -50,11 +50,6 @@ export default {
         }
     },
     slots: {
-        default: {
-            name: ['layout'],
-            type: ['form-item'],
-            displayName: '表单项配置',
-            val: []
-        }
+        default: []
     }
 }

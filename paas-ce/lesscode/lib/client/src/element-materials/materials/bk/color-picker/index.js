@@ -16,10 +16,9 @@ export default {
     icon: 'bk-drag-colorpick',
     group: '表单',
     order: 1,
-    styles: ['size', 'margin', 'padding', 'display'],
+    styles: ['margin', 'padding', 'display'],
     renderStyles: {
-        display: 'inline-flex',
-        width: '150px'
+        display: 'inline-flex'
     },
     events: [{
         name: 'change', tips: '当前选择的RGB颜色值变化时调用该事件函数，事件回调参数 (value: String)'
@@ -27,10 +26,7 @@ export default {
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['string'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

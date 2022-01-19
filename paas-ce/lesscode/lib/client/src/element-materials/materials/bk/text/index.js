@@ -16,12 +16,11 @@ export default {
     icon: 'bk-drag-text',
     group: '基础',
     order: 1,
-    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor', 'textAlign', 'color'],
+    styles: ['size', 'margin', 'display', 'font', 'backgroundColor', 'textAlign'],
     renderStyles: {
         display: 'inline-block',
         textAlign: 'center',
-        fontSize: '14px',
-        color: '#63656e'
+        fontSize: '14px'
     },
     props: {
         title: {

@@ -25,7 +25,8 @@ export default {
         }
     },
     getters: {
-        currentProject: state => state.currentProject
+        currentProject: state => state.currentProject,
+        projectDetail: state => state.currentProject
     },
     actions: {
         create ({ commit }, { data, config }) {

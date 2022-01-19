@@ -5,6 +5,7 @@
 </template>
 <script>
     import { mapGetters } from 'vuex'
+    import LC from '@/element-materials/core'
     import ComponentModifier from './component'
     import TemplateModifier from './template'
 
@@ -23,7 +24,6 @@
         },
         computed: {
             ...mapGetters('drag', [
-                'curSelectedComponentData',
                 'curTemplateData'
             ]),
             com () {
@@ -34,9 +34,6 @@
             }
         },
         watch: {
-            curSelectedComponentData () {
-                this.panel = 'component'
-            },
             // template没有指定面板，展示component修改器
             curTemplateData (curTemplateData) {
                 if (curTemplateData.panelActive) {
@@ -45,6 +42,15 @@
                     this.panel = 'component'
                 }
             }
+        },
+        created () {
+            const activeCallback = () => {
+                this.panel = 'component'
+            }
+            LC.addEventListener('active', activeCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('active', activeCallback)
+            })
         }
     }
 </script>

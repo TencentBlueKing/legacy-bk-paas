@@ -176,8 +176,7 @@
                 borderTopStyle: this.value.borderTopStyle || '',
                 borderRightStyle: this.value.borderRightStyle || '',
                 borderBottomStyle: this.value.borderBottomStyle || '',
-                borderLeftStyle: this.value.borderLeftStyle || '',
-                borderList: ['borderTop', 'borderRight', 'borderBottom', 'borderLeft']
+                borderLeftStyle: this.value.borderLeftStyle || ''
             }
         },
         watch: {
@@ -209,10 +208,12 @@
         },
         methods: {
             changeSeparateBorderRadius (key, val) {
-                const newVal = val === '' ? '' : val + 'px'
-                this.change(key, newVal)
                 if (!this.isAllBorder) {
+                    const newVal = val === '' ? '' : val + 'px'
+                    this.change(key, newVal)
                     this.isDifferent = computeIsDifferent([this.borderTopLeftRadius, this.borderTopRightRadius, this.borderBottomRightRadius, this.borderBottomLeftRadius])
+                } else {
+                    this.change(key, '')
                 }
             },
             handleBorderStyleChange (pattern, val) {
@@ -220,9 +221,7 @@
                 this[key] = val
                 this.change(key, val)
                 if (pattern === 'border') {
-                    for (const e of this.borderList) {
-                        this.change(e + 'Style', val)
-                    }
+                    this.clearSeparateData('Style')
                 }
             },
             handleBorderWidthChange (pattern, val) {
@@ -231,9 +230,7 @@
                 const newVal = val === '' ? '' : val + 'px'
                 this.change(key, newVal)
                 if (pattern === 'border') {
-                    for (const e of this.borderList) {
-                        this.change(e + 'Width', val)
-                    }
+                    this.clearSeparateData('Width')
                 }
             },
             handleBorderColorChange (pattern, val) {
@@ -241,9 +238,7 @@
                 this[key] = val
                 this.change(key, val)
                 if (pattern === 'border') {
-                    for (const e of this.borderList) {
-                        this.change(e + 'Color', val)
-                    }
+                    this.clearSeparateData('Color')
                 }
             },
             // 修改 border 简写 css 时，清除其他四个方向的 css

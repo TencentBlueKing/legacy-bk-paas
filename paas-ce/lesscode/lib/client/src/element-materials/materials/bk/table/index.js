@@ -61,17 +61,18 @@ export default {
     }],
     styles: ['size', 'margin', 'display'],
     directives: [
-        {
-            type: 'v-bind',
-            prop: 'data',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'data',
+        //     format: 'variable',
+        //     includesFormat: ['variable'],
+        //     code: '',
+        //     renderValue: ''
+        // }
     ],
     props: {
         data: {
-            type: ['array', 'remote', 'table-data-source'],
+            type: ['array', 'remote'],
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
             },

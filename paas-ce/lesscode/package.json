@@ -97,7 +97,7 @@
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.31.2",
     "@vue/babel-preset-jsx": "^1.2.4",
-    "@vue/composition-api": "^1.2.2",
+    "@vue/composition-api": "^1.4.3",
     "@vue/eslint-config-typescript": "^7.0.0",
     "acorn": "~8.5.0",
     "ansi_up": "^4.0.4",
