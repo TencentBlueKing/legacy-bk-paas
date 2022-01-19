@@ -147,12 +147,15 @@ export default class Node {
      */
     get style () {
         const style = Object.keys(this.renderStyles).reduce((result, key) => {
-            result[key] = this.renderStyles[key]
+            if (key !== 'customStyle') {
+                result[key] = this.renderStyles[key]
+            }
             return result
         }, {})
         const {
             customStyle = {}
         } = this.renderStyles
+        
         return Object.seal(Object.assign(style, customStyle))
     }
     /**
