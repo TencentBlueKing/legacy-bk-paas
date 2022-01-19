@@ -10,121 +10,229 @@
 -->
 
 <template>
-    <section v-if="Object.keys(curSelectedComponentData).length" class="directive-home">
-        <template v-if="renderDirectives.length">
-            <h3 class="directive-tip">编辑函数时，可以使用 lesscode.指令值，必须通过编辑器自动补全功能选择对应属性指令值，来获取或者修改当前页面中配置了指令的组件属性值</h3>
+    <section class="directive-home">
+        <template v-if="directiveList.length">
+            <h3 class="directive-tip">
+                编辑函数时，可以使用 lesscode.指令值，必须通过编辑器自动补全功能选择对应属性指令值，来获取或者修改当前页面中配置了指令的组件属性值
+            </h3>
             <bk-form form-type="vertical" :label-width="280">
-                <bk-form-item error-display-type="normal"
-                    v-for="(directive, index) in renderDirectives"
+                <bk-form-item
+                    v-for="(directive, index) in directiveList"
                     :key="index"
-                    class="directive-item"
-                    :property="directive.type + directive.prop"
-                >
-                    <variable-select :value="directive.val"
-                        :val-type="directive.valType"
-                        :available-types="directive.propTypes"
-                        :disabled-change="curSelectedComponentData.inFormItem && directive.type === 'v-model'"
-                        :disable-variable-type="directive.type === 'v-model' ? ['value', 'expression'] : []"
-                        @change="(data) => changeVariable(directive, data)"
-                    >
+                    class="directive-item">
+                    <variable-select
+                        :options="directive"
+                        :value="lastDirectiveMap[genDirectiveKey(directive)]"
+                        :readonly="isAttachToForm"
+                        @change="value => handleVariableFormatChange(directive, value)">
                         <template v-slot:title>
-                            <span v-bk-tooltips="{ content: directive.tips && directive.tips(directive), disabled: !directive.tips, width: 290 }"
-                                :class="{ 'under-line': directive.tips, 'directive-label': true }"
-                            >
+                            <span
+                                v-bk-tooltips="{
+                                    content: directive.tips && directive.tips(directive),
+                                    disabled: !directive.tips,
+                                    width: 290
+                                }"
+                                :class="{
+                                    'under-line': directive.tips,
+                                    'directive-label': true
+                                }">
                                 {{ getLabel(directive) }}
                             </span>
                         </template>
-                        <bk-input :value="directive.val" @change="(val) => handleChange(directive, val)" clearable></bk-input>
+                        <bk-input
+                            :value="directive.val"
+                            @change="(val) => handleCodeChange(directive, val)"
+                            clearable />
                     </variable-select>
                 </bk-form-item>
             </bk-form>
         </template>
-        <div class="no-prop" v-else>
+        <!-- <div class="no-prop" v-else>
             该组件暂无指令
-        </div>
+        </div> -->
     </section>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
     import _ from 'lodash'
+    import LC from '@/element-materials/core'
     import variableSelect from '@/components/variable/variable-select'
+
+    const camelize = str => str.replace(/-(\w)/g, (_, c) => c ? c.toUpperCase() : '')
+
+    const optionDirectives = [
+        {
+            type: 'v-if',
+            prop: '',
+            format: 'variable',
+            includesFormat: ['variable', 'expression'], // v-if 支持配置（变量、表达式）
+            code: '',
+            includesValueType: ['boolean'],
+            renderValue: true
+        },
+        {
+            type: 'v-show',
+            prop: '',
+            format: 'variable',
+            includesFormat: ['variable', 'expression'], // v-show 支持配置（变量、表达式）
+            code: '',
+            includesValueType: ['boolean'],
+            renderValue: true
+        }
+    ]
 
     export default {
         name: 'modifier-directives',
-
         components: {
             variableSelect
         },
-
-        props: {
-            materialConfig: {
-                type: Array,
-                required: true
-            },
-
-            lastDirectives: {
-                type: Array,
-                default: () => ([])
-            },
-
-            componentId: {
-                type: String
-            },
-
-            componentType: {
-                type: String
-            }
-        },
-
         data () {
             return {
-                optionCommonDirectives: [
-                    { type: 'v-if', val: '', valType: 'variable' },
-                    { type: 'v-show', val: '', valType: 'variable' }
-                ],
-                id: (this.componentId || '').replace(/\-(.)/g, x => (x.slice(1)).toUpperCase())
+                isAttachToForm: false,
+                directiveList: [],
+                lastDirectiveMap: {}
             }
         },
+        created () {
+            this.currentComponentNode = LC.getActiveNode()
+            const {
+                componentId,
+                material,
+                renderDirectives
+            } = this.currentComponentNode
 
-        computed: {
-            ...mapGetters('drag', ['targetData', 'curSelectedComponentData']),
+            this.id = camelize(componentId)
 
-            commonDirectives () {
-                const id = this.id
-                return [
-                    {
-                        type: 'v-for',
-                        val: '',
-                        valType: 'variable',
-                        tips (dir) {
-                            const content = dir.val ? `可以使用 【${id}Item】 为当前组件和子组件的指令赋值，当前组件的 v-if 和 v-show 除外` : '可以使用 v-for 指令， 把一个数组转换为一组元素'
-                            return content
-                        }
+            // 解析组件 directive 配置
+            const propConfig = material.props || {}
+            const directiveConfig = material.directives || []
+            const directiveList = directiveConfig.reduce((result, directiveConfig) => {
+                const {
+                    type,
+                    prop,
+                    valType,
+                    val,
+                    tips
+                } = directiveConfig
+                if (propConfig[prop]) {
+                    const propConfigType = propConfig[directiveConfig.prop].type
+                    // 解析对应 prop 配置的值类型、默认值
+                    const includesValueType = Array.isArray(propConfigType) ? propConfigType : [propConfigType]
+                    const renderValue = propConfig[directiveConfig.prop].val
+                    if (type === 'v-bind') {
+                        result.push({
+                            type: 'v-bind',
+                            prop,
+                            format: valType,
+                            includesFormat: ['variable'], // v-bind 支持配置（变量）
+                            code: val,
+                            includesValueType,
+                            renderValue,
+                            tips: tips
+                        })
+                    } else if (type === 'v-model') {
+                        result.push({
+                            type: 'v-model',
+                            prop,
+                            format: 'variable',
+                            includesFormat: ['variable'], // v-bind 支持配置（变量）
+                            code: '',
+                            includesValueType,
+                            renderValue,
+                            tips: tips
+                        })
                     }
-                ]
-            },
-
-            renderDirectives () {
-                const lastDirectives = _.cloneDeep(this.lastDirectives || [])
-                const materialConfig = _.cloneDeep(this.materialConfig || [])
-                const renderDirectives = []
-                const allDirectivs = [...materialConfig, ...this.commonDirectives]
-                // 目前bk-dialog与bk-sidesslider不支持v-if和v-show
-                if (!['bk-dialog', 'bk-sideslider'].includes(this.componentType)) allDirectivs.push(...this.optionCommonDirectives)
-
-                allDirectivs.forEach((directive) => {
-                    const lastDirective = lastDirectives.find((dirVal) => ((dirVal.type + dirVal.prop) === (directive.type + directive.prop))) || {}
-                    Object.assign(directive, lastDirective)
-                    renderDirectives.push(directive)
-                })
-                return renderDirectives
+                }
+                return result
+            }, [])
+            // 公共 v-for
+            directiveList.unshift(
+                {
+                    type: 'v-for',
+                    prop: '',
+                    format: 'variable',
+                    includesFormat: ['value', 'variable'], // v-bind 支持配置（值、变量）
+                    code: '',
+                    includesValueType: ['boolean'],
+                    renderValue: 1,
+                    tips: (dir) => {
+                        return dir.val
+                            ? `可以使用 【${this.id}Item】 为当前组件和子组件的指令赋值，当前组件的 v-if 和 v-show 除外`
+                            : '可以使用 v-for 指令， 把一个数组转换为一组元素'
+                    }
+                }
+            )
+            
+            // 目前bk-dialog与bk-sidesslider不支持v-if和v-show
+            if (![
+                'bk-dialog',
+                'bk-sideslider'
+            ].includes(this.currentComponentNode.type)) {
+                directiveList.push(...optionDirectives)
             }
-        },
+            this.directiveList = Object.freeze(directiveList)
 
+            // directives 默认配置解析
+            const lastDirectiveMap = directiveList.reduce((result, directive) => {
+                const {
+                    type,
+                    prop,
+                    format,
+                    code,
+                    renderValue
+                } = directive
+                result[this.genDirectiveKey(directive)] = {
+                    type,
+                    prop,
+                    format,
+                    code,
+                    renderValue
+                }
+                return result
+            }, {})
+
+            // 同步用户配置
+            renderDirectives.forEach((directive) => {
+                const directiveKey = this.genDirectiveKey(directive)
+                if (lastDirectiveMap[directiveKey]) {
+                    Object.assign(lastDirectiveMap[directiveKey], {
+                        format: directive.format,
+                        code: directive.code
+                    })
+                }
+            })
+            this.lastDirectiveMap = Object.freeze(lastDirectiveMap)
+            
+            this.checkAttachToFrom()
+        },
         methods: {
+            genDirectiveKey (directive) {
+                return `${directive.type}${directive.prop ? ':' + directive.prop : ''}`
+            },
+            /**
+             * @desc 检测是否是 widget-form 的子节点
+             */
+            checkAttachToFrom () {
+                this.isAttachToForm = false
+                let parentNode = this.currentComponentNode.parentNode
+                while (parentNode) {
+                    if (parentNode.type === 'widget-form') {
+                        this.isAttachToForm = true
+                    }
+                    parentNode = parentNode.parentNode
+                }
+            },
+            /**
+             * @desc directive 显示 label
+             * @param { Boolean } Object
+             * @returns { String }
+             */
             getLabel (directive) {
-                const { type, modifiers = [], prop = '' } = directive
+                const {
+                    type,
+                    modifiers = [],
+                    prop = ''
+                } = directive
                 let res = ''
                 switch (type) {
                     case 'v-model':
@@ -142,28 +250,46 @@
                 }
                 return res
             },
-
-            changeVariable (directive, data) {
-                directive.val = data.val
-                directive.valType = data.valType
-                this.triggleUpdate(directive)
+            /**
+             * @desc directive 值类型切换（值、变量、表达式）
+             * @param { Object } directive
+             * @param { Object } variableSelectData
+             */
+            handleVariableFormatChange (directive, variableSelectData) {
+                this.lastDirectiveMap = Object.freeze({
+                    ...this.lastDirectiveMap,
+                    [this.genDirectiveKey(directive)]: {
+                        type: directive.type,
+                        prop: directive.prop,
+                        format: variableSelectData.format,
+                        code: variableSelectData.code,
+                        renderValue: variableSelectData.renderValue
+                    }
+                })
+                this.triggleUpdate()
             },
 
-            handleChange (directive, value) {
-                directive.val = value
-                this.triggleUpdate(directive)
+            /**
+             * @desc directive 是值类型时，值得 value 改变
+             * @param { Object } directive
+             * @param { String } value
+             */
+            handleCodeChange (directive, value) {
+                const directiveKey = this.genDirectiveKey(directive)
+                this.lastDirectiveMap = Object.freeze({
+                    ...this.lastDirectiveMap,
+                    [directiveKey]: {
+                        ...this.lastDirectiveMap[directiveKey],
+                        code: value,
+                        renderValue: value
+                    }
+                })
+                this.triggleUpdate()
             },
 
-            triggleUpdate (directive) {
-                const renderDirectives = JSON.parse(JSON.stringify(this.lastDirectives))
-                const index = renderDirectives.findIndex((dirVal) => ((dirVal.type + dirVal.prop) === (directive.type + directive.prop)))
-                const changedDirective = renderDirectives[index] || {}
-                if (index <= -1) {
-                    renderDirectives.push(changedDirective)
-                }
-                Object.assign(changedDirective, directive)
-                this.$emit('on-change', { renderDirectives })
-            }
+            triggleUpdate: _.throttle(function () {
+                this.currentComponentNode.setRenderDirectives(Object.values(this.lastDirectiveMap))
+            }, 60)
         }
     }
 </script>

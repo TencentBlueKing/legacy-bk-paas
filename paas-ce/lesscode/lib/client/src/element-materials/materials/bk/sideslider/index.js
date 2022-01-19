@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-dialog',
     group: '反馈',
     order: 5,
-    interactiveShow: false,
+    interactiveShow: true,
     events: [
         { name: 'show', tips: '显示组件后调用该事件函数，暂无事件回调参数' },
         { name: 'hidden', tips: '关闭组件后调用该事件函数，暂无事件回调参数' },
@@ -32,6 +32,7 @@ export default {
             val: true,
             staticValue: true, // 静态值，表示只是代码和UI改变，画布内的值不变
             modifiers: ['sync'],
+            asdasda: '',
             disableVariableType: ['expression'] // 不兼容的类型
         },
         'title': {
@@ -69,29 +70,12 @@ export default {
             name: ['layout'],
             type: ['render-grid'],
             display: 'hidden',
-            val: {
-                name: 'grid',
-                type: 'render-grid',
-                slotName: '',
-                slotContainer: true,
-                renderSlots: {
-                    default: {
-                        type: 'column',
-                        val:
-                          [
-                              {
-                                  children: [],
-                                  span: 1,
-                                  width: '100%'
-                              }
-                          ]
-                    }
-                },
-                renderProps: {},
-                renderStyles: {},
-                renderEvents: {},
-                renderDirectives: []
-            }
+            children: [
+                {
+                    name: ['layout'],
+                    type: ['render-column']
+                }
+            ]
         }
     }
 }

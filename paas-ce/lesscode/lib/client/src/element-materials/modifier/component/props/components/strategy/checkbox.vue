@@ -62,7 +62,7 @@
         },
         created () {
             this.checkboxOption = JSON.parse(JSON.stringify(this.defaultValue))
-            this.trigger()
+            // this.trigger()
         },
         methods: {
             handleDelete (index) {

@@ -1,56 +1,73 @@
 <template>
     <variable-select
-        :value="computedSlotVariable.val"
-        :val-type="computedSlotVariable.valType"
-        :available-types="computedAvailableTypes"
+        :options="variableSelectOptions"
+        :value="formData"
         :remote-config="remoteConfig"
-        @change="changeVariable"
-    >
+        @change="handleVariableFormatChange">
         <template v-slot:title>
             <section class="slot-title-wrapper">
                 <span
-                    :class="['slot-name', { 'slot-tips': slotConfig.tips }]"
-                    v-bk-tooltips="computedSlotTip"
-                >{{ slotConfig.displayName }}<span v-if="slotConfig.type && slotConfig.type.length <= 1">({{ computedSlotVal.type | capFirstLetter }})</span>
+                    class="slot-name"
+                    :class="{
+                        'slot-tips': describe.tips
+                    }"
+                    v-bk-tooltips="computedSlotTip">
+                    {{ describe.displayName }}
+                    <span v-if="describe.type && describe.type.length <= 1">
+                        ({{ formData.valueType | capFirstLetter }})
+                    </span>
                 </span>
-                <template v-if="slotConfig.name && slotConfig.name.length > 1">
+                <template v-if="describe.name && describe.name.length > 1">
                     <span class="slot-label">组件标签</span>
-                    <bk-radio-group :value="computedSlotVal.name" @change="changeSlot('name', ...arguments)" class="mb10">
-                        <bk-radio-button :value="name" v-for="name in slotConfig.name" :key="name" class="mr10">
-                            {{ name | capFirstLetter }}
+                    <bk-radio-group
+                        :value="formData.component"
+                        @change="handleSlotComponentChange"
+                        class="mb10">
+                        <bk-radio-button
+                            v-for="itemName in describe.name"
+                            :value="itemName"
+                            :key="itemName"
+                            class="mr10">
+                            {{ itemName | capFirstLetter }}
                         </bk-radio-button>
                     </bk-radio-group>
                 </template>
             </section>
         </template>
-        <template v-if="slotConfig.type && slotConfig.type.length > 1">
+        <template v-if="describe.type && describe.type.length > 1">
             <span class="slot-label">数据类型</span>
-            <bk-radio-group :value="computedSlotVal.type" @change="changeSlot('type', ...arguments)" class="mb10">
-                <bk-radio-button :value="type.slotType" v-for="type in computedSlotTypes" :key="type.slotType">
-                    {{ type.slotLabel | capFirstLetter }}
+            <bk-radio-group
+                :value="formData.valueType"
+                @change="handleValueTypeChange"
+                class="mb10">
+                <bk-radio-button
+                    :value="type"
+                    v-for="type in describe.type"
+                    :key="type">
+                    {{ type | capFirstLetter }}
                 </bk-radio-button>
             </bk-radio-group>
         </template>
         <component
-            :is="computedSlotType"
-            :slot-val="computedSlotVal"
-            :slot-config="slotConfig"
-            :render-props="renderProps"
-            :change="change"
-            @batchUpdate="batchUpdate"
-        ></component>
+            :is="renderValueComponent"
+            :remote-validate="describe.remoteValidate"
+            :slot-val="slotTypeValueMemo[formData.valueType]"
+            :slot-config="describe"
+            :change="handleCodeChange" />
     </variable-select>
 </template>
 
 <script>
     import { transformTipsWidth } from '@/common/util'
-    import safeStringify from '@/common/json-safe-stringify'
     import variableSelect from '@/components/variable/variable-select'
 
+    import {
+        getDefaultValueByType,
+        isEmpty
+    } from '../utils'
+
     import slotList from './components/list'
-    import slotColumn from './components/column'
     import slotRemote from './components/remote'
-    import slotFormItem from './components/form-item'
     import slotTable from './components/table'
     import slotHtml from './components/slot-html'
     import slotText from './components/text'
@@ -59,12 +76,10 @@
 
     const comMap = {
         list: slotList,
-        column: slotColumn,
         remote: slotRemote,
         html: slotHtml,
         text: slotText,
         textarea: slotTextArea,
-        'form-item': slotFormItem,
         'table-list': slotTable,
         'data-source': slotDataSource
     }
@@ -81,18 +96,14 @@
         },
 
         props: {
-            slotName: {
+            name: {
                 type: String
             },
-            slotVal: {
+            lastValue: {
                 type: Object,
                 default: () => ({})
             },
-            slotConfig: {
-                type: Object,
-                default: () => ({})
-            },
-            renderProps: {
+            describe: {
                 type: Object,
                 default: () => ({})
             }
@@ -100,128 +111,201 @@
 
         data () {
             return {
-                mutlTypeVal: {}
+                mutlTypeVal: {},
+                formData: {}
             }
         },
 
         computed: {
+            /**
+             * @desc 配置为值类型时的设置组件
+             * @returns { Object }
+             */
+            renderValueComponent () {
+                return comMap[this.formData.valueType]
+            },
+            /**
+             * @desc tips
+             * @returns { Object }
+             */
             computedSlotTip () {
-                const transformTips = transformTipsWidth(this.slotConfig.tips)
+                const transformTips = transformTipsWidth(this.describe.tips)
                 const tips = typeof transformTips === 'string' ? { content: transformTips } : transformTips
-                const disabled = !this.slotConfig.tips
+                const disabled = !this.describe.tips
                 return {
                     ...(tips || {}),
                     disabled
                 }
             },
-
-            computedSlotTypes () {
-                const labelMap = {
-                    'object': '对象',
-                    'number': '数字',
-                    'string': '字符串',
-                    'array': '数组',
-                    'remote': '远程函数',
-                    'data-source': '数据源',
-                    'list': '数据列表',
-                    'table-list': '数据列表'
+            /**
+             * @desc 支持远程函数配置是的 config 信息
+             * @returns { Object }
+             */
+            remoteConfig () {
+                if (this.describe.type.includes('remote')) {
+                    return {
+                        show: true,
+                        name: '',
+                        value: this.formData.renderValue
+                    }
                 }
-                return this.slotConfig?.type?.map((item) => {
-                    const slotType = item
-                    const slotLabel = labelMap[item] || item
-                    return { slotType, slotLabel }
+                return {
+                    show: false,
+                    value: ''
+                }
+            }
+        },
+        created () {
+            const {
+                val,
+                name,
+                type
+            } = this.describe
+            const defaultValue = val
+            const component = Array.isArray[name] ? name : [name]
+
+            // 构造 variable-select 的配置
+            this.variableSelectOptions = {
+                type: 'slot',
+                prop: this.name,
+                format: 'value',
+                includesFormat: ['value', 'variable', 'expression'],
+                code: defaultValue,
+                includesValueType: undefined
+            }
+
+            // slot 的初始值
+            this.formData = Object.freeze({
+                format: 'value',
+                component: component[0],
+                code: defaultValue,
+                payload: {},
+                valueType: type[0],
+                renderValue: defaultValue
+            })
+
+            // 编辑状态缓存
+            this.slotTypeValueMemo = {
+                [this.formData.valueType]: {
+                    val: defaultValue,
+                    payload: {},
+                    component: this.formData.component
+                }
+            }
+
+            if (this.lastValue && this.lastValue.valueType) {
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    format: this.lastValue.format,
+                    component: this.lastValue.component,
+                    code: this.lastValue.code,
+                    payload: this.lastValue.payload || {},
+                    valueType: this.lastValue.valueType
+                })
+                this.slotTypeValueMemo[this.formData.valueType] = {
+                    val: this.formData.code,
+                    payload: this.formData.payload,
+                    component: this.formData.component
+                }
+            }
+        },
+        methods: {
+            /**
+             * @desc 同步更新用户操作
+             */
+            triggerChange () {
+                // 缓存用户本地编辑值
+                this.slotTypeValueMemo[this.formData.valueType] = {
+                    val: this.formData.code,
+                    payload: this.formData.payload,
+                    component: this.formData.component
+                }
+
+                this.$emit('on-change', this.name, {
+                    ...this.formData
                 })
             },
-
-            computedSlotType () {
-                const type = this.slotVal.type
-                return comMap[type]
+            /**
+             * @desc format 更新
+             * @param { Object } variableSelectData
+             */
+            handleVariableFormatChange (variableSelectData) {
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    format: variableSelectData.format,
+                    code: variableSelectData.code,
+                    renderValue: variableSelectData.renderValue
+                })
+                this.triggerChange()
             },
-
-            // val 值类型
-            computedAvailableTypes () {
-                const val = this.slotVal.val
-                const type = Object.prototype.toString.apply(val)
-                const typeMap = {
-                    '[object Array]': 'array',
-                    '[object Object]': 'object',
-                    '[object Number]': 'number',
-                    '[object Boolean]': 'boolean',
-                    '[object String]': 'string'
+            /**
+             * @desc slot 组件类型切换
+             */
+            handleSlotComponentChange (component) {
+                this.format = Object.freeze({
+                    ...this.format,
+                    component
+                })
+                this.triggerChange()
+            },
+            /**
+             * @desc format 等于 value 时，value 的类型切换
+             * @param { String } valueType
+             */
+            handleValueTypeChange (valueType) {
+                let code = null
+                let payload = {}
+                if (this.slotTypeValueMemo.hasOwnProperty(valueType)) {
+                    code = this.slotTypeValueMemo[valueType].val
+                    payload = this.slotTypeValueMemo[valueType].payload
+                } else if (valueType === 'remote') {
+                    // fix: 配置远程函数类型，
+                    // 接口数据没返回时使用配置文件设置的默认值
+                    code = this.describe.val
+                } else {
+                    // 切换值类型时，通过类型获取默认值
+                    code = getDefaultValueByType(valueType)
                 }
-                return [typeMap[type]]
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    code,
+                    valueType,
+                    renderValue: code,
+                    payload
+                })
+                this.triggerChange()
             },
-
-            computedSlotVariable () {
-                const slotPayload = this.slotVal.payload || {}
-                return slotPayload.variableData || { val: '', valType: 'value' }
-            },
-
-            computedCombinType () {
-                return this.slotVal.type + this.slotVal.name
-            },
-
-            computedSlotVal () {
-                return this.mutlTypeVal[this.computedCombinType]
-            },
-            
-            remoteConfig () {
-                if (this.slotConfig.type.includes('remote') || this.slotConfig.type.includes('form-item')) {
-                    const name = this.slotConfig.type.includes('form-item') ? 'initFormData' : ''
-                    return { show: true, name: name, value: this.computedSlotVal.val }
+            /**
+             * @desc format 等于 value 时，编辑 code 的值
+             * @param { Object } valueData
+             */
+            handleCodeChange (valueData) {
+                let code = null
+                let renderValue = ''
+                
+                if (this.formData.valueType === 'remote') {
+                    // 配置的是远程函数
+                    // code 此时无效设置为 null
+                    // api 返回数据不为空才应用接口数据（fix: 数据为空可能导致组件无法显示）
+                    if (!isEmpty(valueData.val)) {
+                        renderValue = valueData.val
+                    }
+                } else {
+                    code = valueData.val
+                    renderValue = valueData.val
+                    // 用户设置数据为空时显示配置默认值（fix: 数据为空可能导致组件无法显示）
+                    if (isEmpty(renderValue)) {
+                        renderValue = this.describe.val
+                    }
                 }
-                return { show: false, value: '' }
-            }
-        },
-
-        watch: {
-            slotVal: {
-                handler (val) {
-                    this.mutlTypeVal[this.computedCombinType] = JSON.parse(safeStringify(val))
-                },
-                deep: true,
-                immediate: true
-            }
-        },
-
-        methods: {
-            changeSlot (key, name) {
-                let slotVal = {
-                    ...this.computedSlotVal,
-                    [key]: name
-                }
-
-                const type = slotVal.type + slotVal.name
-                const slot = this.mutlTypeVal.hasOwnProperty(type) ? this.mutlTypeVal[type] : this.slotConfig
-
-                slotVal = {
-                    ...slotVal,
-                    val: slot.val,
-                    payload: slot.payload
-                }
-
-                this.change(slotVal)
-            },
-
-            changeVariable (variableData) {
-                const val = variableData.defaultVal === undefined ? this.slotConfig.val : variableData.defaultVal
-                const payload = {
-                    variableData: { val: variableData.val, valType: variableData.valType }
-                }
-                const slotVal = {
-                    ...this.computedSlotVal,
-                    payload,
-                    val
-                }
-                this.change(slotVal)
-            },
-
-            change (slotVal) {
-                this.$emit('change', this.slotName, slotVal)
-            },
-
-            batchUpdate () {
-                this.$emit('batchUpdate', ...arguments)
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    code,
+                    payload: valueData.payload,
+                    renderValue
+                })
+                
+                this.triggerChange()
             }
         }
     }

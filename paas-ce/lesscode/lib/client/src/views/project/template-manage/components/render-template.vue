@@ -145,8 +145,7 @@
                     targetData,
                     projectId: this.projectId,
                     versionId,
-                    fromPageCode,
-                    from: 'download_page'
+                    fromPageCode
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
                     const blob = new Blob([res])

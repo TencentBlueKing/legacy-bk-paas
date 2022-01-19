@@ -16,7 +16,7 @@ export default {
     icon: 'bk-drag-animatenumber',
     group: '数据',
     order: 1,
-    styles: ['margin', 'padding', 'display', 'font', 'backgroundColor'],
+    styles: ['margin', 'display', 'font', 'backgroundColor'],
     renderStyles: {
         display: 'inline-block'
     },

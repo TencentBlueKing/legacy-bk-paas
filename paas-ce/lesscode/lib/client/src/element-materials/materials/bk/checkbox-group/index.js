@@ -21,11 +21,14 @@ export default {
     directives: [
         {
             type: 'v-model',
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {
+        value: {
+            type: 'array',
+            val: []
+        }
     },
     slots: {
         default: {

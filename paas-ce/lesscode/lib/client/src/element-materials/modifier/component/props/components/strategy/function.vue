@@ -54,7 +54,7 @@
         },
         created () {
             this.remoteData = Object.assign({}, this.remoteData, this.payload)
-            this.saveChange()
+            // this.saveChange()
         },
         methods: {
             saveChange () {

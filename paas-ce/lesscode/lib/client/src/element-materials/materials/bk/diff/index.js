@@ -16,26 +16,10 @@ export default {
     icon: 'bk-drag-diff',
     group: '数据',
     order: 1,
-    styles: ['size', 'margin', 'padding', 'display'],
+    styles: ['size', 'margin', 'display'],
     renderStyles: {
         display: 'block'
     },
-    directives: [
-        {
-            type: 'v-bind',
-            prop: 'old-content',
-            propTypes: ['string'],
-            val: '',
-            valType: 'variable'
-        },
-        {
-            type: 'v-bind',
-            prop: 'new-content',
-            propTypes: ['string'],
-            val: '',
-            valType: 'variable'
-        }
-    ],
     props: {
         'old-content': {
             type: ['string', 'remote'],

@@ -19,17 +19,14 @@ export default {
     events: [{
         name: 'change', tips: '状态发生变化时调用该事件函数，事件回调参数 (status: Boolean)'
     }],
-    styles: ['margin', 'display', 'backgroundColor', 'border'],
+    styles: ['margin', 'display', 'backgroundColor'],
     renderStyles: {
         display: 'inline-block'
     },
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['boolean'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

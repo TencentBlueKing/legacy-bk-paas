@@ -13,10 +13,7 @@
     <section>
         <style-layout title="自定义样式">
             <style-item name="自定义样式">
-                <div style="width: 200px;text-align: right">
-                    <i v-if="isPageSetting" class="bk-icon icon-edit2 field-edit" @click="showEditStyle(true)"></i>
-                    <bk-button v-else theme="primary" @click="showEditStyle(true)">样式编辑</bk-button>
-                </div>
+                <div style="width: 200px;text-align: right"><bk-button theme="primary" @click="showEditStyle(true)">样式编辑</bk-button></div>
             </style-item>
         </style-layout>
         <article class="custom-style" v-if="isShow">
@@ -24,7 +21,7 @@
                 <div class="container-tips">
                     请在{}内编写该组件的自定义样式，样式优先级：自定义样式 > 样式面板设置 > 组件默认样式
                 </div>
-                <monaco :value.sync="styleValue" height="400px" class="monaco" ref="monaco"></monaco>
+                <monaco :value.sync="styleValue" height="400px" language="css" show-header="false" class="monaco" ref="monaco"></monaco>
                 <div class="container-footer">
                     <div class="footer-wrapper">
                         <bk-button theme="primary" @click.native="confirm">
@@ -43,8 +40,8 @@
 <script>
     import StyleLayout from '../layout/index'
     import StyleItem from '../layout/item'
-    import Monaco from './monaco'
-    import { paramCase, camelCase } from 'change-case'
+    import Monaco from '@/components/monaco'
+    import { camelCase } from 'change-case'
 
     export default {
         components: {
@@ -53,10 +50,6 @@
             Monaco
         },
         props: {
-            isPageSetting: {
-                type: Boolean,
-                default: false
-            },
             componentId: {
                 type: String
             },
@@ -81,7 +74,7 @@
                 let mapStr = ''
                 const className = camelCase(this.componentId.replace(/-/g, ''))
                 for (const i in this.initMap) {
-                    mapStr += `\t${paramCase(i)}: ${this.initMap[i]};\n`
+                    mapStr += `\t${i}: ${this.initMap[i]};\n`
                 }
                 if (!mapStr) {
                     mapStr = '\n'
@@ -121,7 +114,7 @@
                         if (item) {
                             const itemArr = item.split(':')
                             if (itemArr.length === 2 && itemArr[0].trim() && itemArr[1].trim()) {
-                                Object.assign(customMap, { [camelCase(itemArr[0].trim())]: itemArr[1].trim() })
+                                Object.assign(customMap, { [itemArr[0].trim()]: itemArr[1].trim() })
                             }
                         }
                     })
@@ -144,15 +137,6 @@
 </script>
 
 <style lang="postcss">
-      .field-edit {
-          position: relative;
-          font-size: 22px;
-          top: 2px;
-          cursor: pointer;
-          &:hover {
-            color: #3A84FF;
-          }
-      }
       .custom-style {
         position: fixed !important;
         top: 0;

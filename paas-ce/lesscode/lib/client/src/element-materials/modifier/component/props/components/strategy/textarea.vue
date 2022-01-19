@@ -57,7 +57,7 @@
             }
         },
         created () {
-            this.handleChange(circleJSON(this.defaultValue))
+            // this.handleChange(circleJSON(this.defaultValue))
         },
         methods: {
             handleChange (val) {

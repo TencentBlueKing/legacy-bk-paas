@@ -21,14 +21,14 @@ export default {
     }],
     styles: ['margin', 'display'],
     directives: [
-        {
-            type: 'v-bind',
-            prop: 'rate',
-            propTypes: ['number'],
-            val: '',
-            valType: 'variable',
-            modifiers: ['sync']
-        }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'rate',
+        //     propTypes: ['number'],
+        //     val: '',
+        //     valType: 'variable',
+        //     modifiers: ['sync']
+        // }
     ],
     props: {
         rate: {

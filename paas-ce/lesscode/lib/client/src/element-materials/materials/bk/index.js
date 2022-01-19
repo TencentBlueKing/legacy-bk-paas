@@ -13,6 +13,7 @@ import grid1 from './grid/column1'
 import grid2 from './grid/column2'
 import grid3 from './grid/column3'
 import grid4 from './grid/column4'
+import column from './column'
 
 import input from './input'
 import button from './button'
@@ -57,6 +58,7 @@ import popconfirm from './popconfirm'
 import breadCrumb from './bread-crumb'
 import paragraph from './paragraph'
 import divider from './divider'
+import icon from './icon'
 
 import chartsLine from './charts-line'
 import chartsBar from './charts-bar'
@@ -70,6 +72,7 @@ import bkChartsScatter from './bk-charts-scatter'
 
 import freeLayout from './free-layout'
 import form from './form'
+import formItem from './form-item'
 
 import dialog from './dialog'
 import sideslider from './sideslider'
@@ -85,6 +88,7 @@ const bkComponents = Object.seal([
     grid2,
     grid3,
     grid4,
+    column,
     paragraph,
     button,
     text,
@@ -133,7 +137,9 @@ const bkComponents = Object.seal([
     dialog,
     freeLayout,
     form,
+    formItem,
     divider,
+    icon,
     sideslider,
     bkChartsLine,
     bkChartsBar,

@@ -12,106 +12,83 @@
 <template>
     <div>
         <template v-if="hasMaterialConfig">
-            <render-slots
-                :material-config="materialConfig.slots"
-                :last-slots="lastSlots"
-                :last-props="lastProps"
-                @change="batchUpdate">
-            </render-slots>
-            <template v-for="(item, key) in materialConfig.props">
+            <template v-for="(item, key) in propsConfig">
                 <render-prop
-                    v-if="!(key === 'slots' && item.type === 'hidden')"
+                    v-if="item.type !== 'hidden'"
                     :describe="item"
                     :last-value="lastProps[key]"
-                    :last-directives="lastDirectives"
                     :name="key"
                     :key="key"
-                    @on-change="handleChange"
-                    @batch-update="batchUpdate" />
+                    @on-change="handleChange" />
             </template>
         </template>
-        <div class="no-prop" v-else>
-            <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无属性</span>
-        </div>
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
-
-    import RenderProp from './components/render-prop'
-    import RenderSlots from '../slots'
+    import _ from 'lodash'
     import { bus } from '@/common/bus'
+    import LC from '@/element-materials/core'
+    import RenderProp from './components/render-prop'
 
     export default {
         name: 'modifier-prop',
         components: {
-            RenderProp,
-            RenderSlots
+            RenderProp
         },
-        props: {
-            materialConfig: {
-                type: Object,
-                required: true
-            },
-            lastProps: {
-                type: Object,
-                default: () => ({})
-            },
-            lastDirectives: {
-                type: Array,
-                default: () => ([])
-            },
-            lastSlots: {
-                type: Object,
-                default: () => ({})
+        data () {
+            return {
+                propsConfig: {}
             }
         },
         computed: {
-            ...mapGetters('drag', ['curSelectedComponentData']),
-
             hasMaterialConfig () {
-                const propConfig = this.materialConfig.props || {}
-                const slotConfig = this.materialConfig.slots || {}
-                const configs = { ...propConfig, ...slotConfig }
+                const configs = { ...this.propsConfig, ...this.slotsConfig }
                 const keys = Object.keys(configs).filter(key => configs[key].display !== 'hidden')
                 return keys.length
             }
         },
         created () {
-            this.renderProps = this.lastProps
+            this.lastProps = {}
+            this.renderProps = {}
             bus.$on('update-chart-options', this.updateChartOptions)
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('update-chart-options', this.updateChartOptions)
             })
+            this.currentComponentNode = LC.getActiveNode()
+            if (this.currentComponentNode) {
+                const {
+                    material,
+                    renderProps
+                } = this.currentComponentNode
+                this.propsConfig = Object.freeze(material.props)
+                this.lastProps = Object.assign({}, renderProps)
+                this.renderProps = _.cloneDeep(renderProps)
+            }
         },
         methods: {
             // 针对chart类型，将动态返回的remoteOptions与options合并
             updateChartOptions (res) {
-                if (this.renderProps['options'] && this.renderProps['options'].val && typeof this.renderProps['options'].val === 'object') {
-                    const options = Object.assign({}, this.renderProps['options'].val, res)
-                    this.renderProps['options'].val = options
-                    this.$emit('on-change', {
-                        renderProps: this.renderProps
-                    })
-                }
+                // if (this.renderProps['options']
+                //     && this.renderProps['options'].val
+                //     && typeof this.renderProps['options'].val === 'object') {
+                //     const options = Object.assign({}, this.renderProps['options'].val, res)
+                //     this.renderProps['options'] = {
+                //         ...this.renderProps['options'],
+                //         val: options
+                //     }
+                //     this.renderProps['options'].val = options
+                //     this.batchUpdate({
+                //         renderProps: this.renderProps
+                //     })
+                // }
             },
-            handleChange (key, args) {
-                // 使用增量更新的方式更新 props
-                this.renderProps[key] = this.renderProps[key] || {}
-                for (const argKey in (args || {})) {
-                    if (Object.hasOwnProperty.call(args, argKey)) {
-                        const element = args[argKey]
-                        this.$set(this.renderProps[key], argKey, element)
-                    }
-                }
-                const renderProps = {
-                    renderProps: this.renderProps
-                }
-                this.batchUpdate(renderProps)
-            },
-            batchUpdate (renderData) {
-                this.$emit('on-change', renderData)
-            }
+            handleChange: _.throttle(function (propName, propData) {
+                this.lastProps[propName] = propData
+                this.currentComponentNode.setRenderProps({
+                    ...this.lastProps,
+                    [propName]: propData
+                })
+            }, 60)
         }
     }
 </script>

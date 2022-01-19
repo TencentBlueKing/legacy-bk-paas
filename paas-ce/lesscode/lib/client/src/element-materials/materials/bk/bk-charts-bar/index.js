@@ -28,8 +28,8 @@ export default {
         },
         height: {
             type: 'number',
-            val: 200,
-            tips: '图表高度，单位为px'
+            tips: '图表高度，单位为px',
+            val: 200
         },
         options: {
             type: 'json',

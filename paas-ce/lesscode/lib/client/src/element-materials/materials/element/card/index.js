@@ -53,7 +53,6 @@ export default {
                 renderProps: {},
                 renderStyles: { 'height': '200px', 'pointer-events': 'auto' },
                 renderEvents: {},
-                renderDirectives: [],
                 renderSlots: {
                     default: {
                         type: 'free-layout-item',
