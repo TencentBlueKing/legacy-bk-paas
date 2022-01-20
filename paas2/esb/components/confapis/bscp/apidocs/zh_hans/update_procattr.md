@@ -16,7 +16,7 @@
 | ip        |  string   | 是     | 节点IP   |
 | path      |  string   | 是     | 节点配置缓存路径 (max_length: 256) |
 | labels    |  map      | 是     | 节点标签KV集合, 例如"version:1.0" |
-| memo      |  string   | 否     | 备注 (max_length: 64) |
+| memo      |  string   | 否     | 备注 (max_length: 256) |
 
 ### 请求参数示例
 

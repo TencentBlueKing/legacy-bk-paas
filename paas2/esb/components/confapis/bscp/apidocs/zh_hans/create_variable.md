@@ -11,7 +11,7 @@
 | 字段           |  类型     | 必选   |  描述      |
 |----------------|-----------|--------|------------|
 | biz_id         |  string   | 是     | 业务ID     |
-| name           |  string   | 是     | 变量名称 (max_length: 64)  |
+| name           |  string   | 是     | 变量名称 (max_length: 128)  |
 | value          |  string   | 是     | 变量值 (max_length: 2048)  |
 | var_group_id   |  string   | 否     | 可选， 变量分组ID, 可为指定分组创建变量，不指定则为空分组或默认分组 |
 | memo           |  string   | 否     | 备注 |

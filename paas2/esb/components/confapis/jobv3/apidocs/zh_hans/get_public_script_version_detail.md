@@ -38,12 +38,12 @@
         "version": "V1.0",
         "content": "#!/bin/bash***",
         "status": 1,
-        "version_desc": "版本描述"
+        "version_desc": "版本描述",
         "creator": "admin",
         "create_time": 1600746078520,
         "last_modify_user": "admin",
         "last_modify_time": 1600746078520
-    },
+    }
 }
 ```
 

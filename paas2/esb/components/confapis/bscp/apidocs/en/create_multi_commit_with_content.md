@@ -14,8 +14,9 @@ create new multi commit for N configs of one app with contents
 |------------------|-----------|-----------|-------------|
 | biz_id           |  string   | Y         | business id |
 | app_id           |  string   | Y         | application id |
-| memo             |  string   | N         | memo description (max_length: 64) |
+| memo             |  string   | N         | memo description (max_length: 256) |
 | metadatas        |  array    | Y         | commit metadatas |
+| validate_content |  bool     | N         | validate content or not, default: false |
 
 #### metadatas[n]
 

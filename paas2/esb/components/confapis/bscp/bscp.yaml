@@ -7,6 +7,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/update_app/
   name: update_app
@@ -17,6 +18,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}
   dest_http_method: PUT
+  is_hidden: true
 
 - path: /v2/bscp/get_app/
   name: get_app
@@ -27,6 +29,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_app_list/
   name: get_app_list
@@ -37,6 +40,18 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list/biz/{biz_id}/app
   dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/bscp/get_audit_list/
+  name: get_audit_list
+  label: 查询审计历史记录
+  label_en: query audit list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/list/biz/{biz_id}/audit
+  dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/delete_app/
   name: delete_app
@@ -47,6 +62,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}
   dest_http_method: DELETE
+  is_hidden: true
 
 - path: /v2/bscp/create_config/
   name: create_config
@@ -57,6 +73,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/config
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/update_config/
   name: update_config
@@ -67,6 +84,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/config/{cfg_id}
   dest_http_method: PUT
+  is_hidden: true
 
 - path: /v2/bscp/get_config/
   name: get_config
@@ -77,6 +95,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/config
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_config_list/
   name: get_config_list
@@ -87,6 +106,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/config
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/delete_config/
   name: delete_config
@@ -97,6 +117,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/config/{cfg_id}
   dest_http_method: DELETE
+  is_hidden: true
 
 - path: /v2/bscp/get_commit/
   name: get_commit
@@ -107,6 +128,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/commit/{commit_id}
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_commit_list/
   name: get_commit_list
@@ -117,6 +139,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/commit
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_release/
   name: get_release
@@ -127,6 +150,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/release/{release_id}
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_release_list/
   name: get_release_list
@@ -137,16 +161,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/release
   dest_http_method: POST
-
-- path: /v2/bscp/create_multi_commit_with_content/
-  name: create_multi_commit_with_content
-  label: 创建混合提交, 附带内容
-  label_en: create multi commit with contents
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.bscp.bscp_component
-  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_commit_with_content
-  dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/update_multi_commit/
   name: update_multi_commit
@@ -157,6 +172,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_commit/{multi_commit_id}
   dest_http_method: PUT
+  is_hidden: true
 
 - path: /v2/bscp/get_multi_commit/
   name: get_multi_commit
@@ -167,6 +183,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_commit/{multi_commit_id}
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_multi_commit_list/
   name: get_multi_commit_list
@@ -177,6 +194,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/multi_commit
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/cancel_multi_commit/
   name: cancel_multi_commit
@@ -187,6 +205,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/cancel/biz/{biz_id}/app/{app_id}/multi_commit/{multi_commit_id}
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/confirm_multi_commit/
   name: confirm_multi_commit
@@ -197,6 +216,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/confirm/biz/{biz_id}/app/{app_id}/multi_commit/{multi_commit_id}
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/create_multi_release/
   name: create_multi_release
@@ -207,6 +227,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_release
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/update_multi_release/
   name: update_multi_release
@@ -217,6 +238,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
   dest_http_method: PUT
+  is_hidden: true
 
 - path: /v2/bscp/get_multi_release/
   name: get_multi_release
@@ -227,6 +249,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_multi_release_list/
   name: get_multi_release_list
@@ -237,6 +260,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/multi_release
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/cancel_multi_release/
   name: cancel_multi_release
@@ -247,6 +271,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/cancel/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/publish_multi_release/
   name: publish_multi_release
@@ -257,6 +282,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/publish/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/rollback_multi_release/
   name: rollback_multi_release
@@ -267,6 +293,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/rollback/biz/{biz_id}/app/{app_id}/multi_release/{multi_release_id}
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/reload_multi_release/
   name: reload_multi_release
@@ -277,6 +304,18 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/reload
   dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/bscp/create_content/
+  name: create_content
+  label: 创建配置提交内容
+  label_en: create config commit content
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/content
+  dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_content_list/
   name: get_content_list
@@ -287,6 +326,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/content
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_content_by_instance/
   name: get_content_by_instance
@@ -297,6 +337,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/find_by_inst/biz/{biz_id}/app/{app_id}/content
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_content_by_labels/
   name: get_content_by_labels
@@ -307,6 +348,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/find_by_labels/biz/{biz_id}/app/{app_id}/content
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/create_strategy/
   name: create_strategy
@@ -317,6 +359,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/strategy
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_strategy/
   name: get_strategy
@@ -327,6 +370,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/strategy
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_strategy_list/
   name: get_strategy_list
@@ -337,6 +381,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list/biz/{biz_id}/app/{app_id}/strategy
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/delete_strategy/
   name: delete_strategy
@@ -347,6 +392,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/strategy/{strategy_id}
   dest_http_method: DELETE
+  is_hidden: true
 
 - path: /v2/bscp/get_app_instance_release/
   name: get_app_instance_release
@@ -357,6 +403,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/app_instance_release
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_effected_app_instance_list/
   name: get_effected_app_instance_list
@@ -367,6 +414,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list_effected/biz/{biz_id}/app/{app_id}/app_instance
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_matched_app_instance_list/
   name: get_matched_app_instance_list
@@ -377,6 +425,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list_matched/biz/{biz_id}/app/{app_id}/app_instance
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_reachable_app_instance_list/
   name: get_reachable_app_instance_list
@@ -387,16 +436,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list_reachable/biz/{biz_id}/app/{app_id}/app_instance
   dest_http_method: POST
-
-- path: /v2/bscp/get_history_app_instance_list/
-  name: get_history_app_instance_list
-  label: 查询历史应用实例列表
-  label_en: quert history app instance list
-  suggest_method: POST
-  api_type: query
-  comp_codename: generic.v2.bscp.bscp_component
-  dest_path: /api/v2/config/list_history/biz/{biz_id}/app/{app_id}/app_instance
-  dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/create_procattr/
   name: create_procattr
@@ -407,6 +447,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/procattr
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/create_procattr_batch/
   name: create_procattr_batch
@@ -417,6 +458,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/batch/biz/{biz_id}/app/{app_id}/procattr
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/update_procattr/
   name: update_procattr
@@ -427,6 +469,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/procattr
   dest_http_method: PUT
+  is_hidden: true
 
 - path: /v2/bscp/get_procattr/
   name: get_procattr
@@ -437,6 +480,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/procattr
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_procattr_list_by_app/
   name: get_procattr_list_by_app
@@ -447,6 +491,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list_by_app/procattr
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_procattr_list_by_host/
   name: get_procattr_list_by_host
@@ -457,6 +502,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/list_by_host/procattr
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/delete_procattr/
   name: delete_procattr
@@ -467,6 +513,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/procattr
   dest_http_method: DELETE
+  is_hidden: true
 
 - path: /v2/bscp/create_template/
   name: create_template
@@ -477,6 +524,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/update_template/
   name: update_template
@@ -487,6 +535,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}
   dest_http_method: PUT
+  is_hidden: true
 
 - path: /v2/bscp/get_template/
   name: get_template
@@ -497,6 +546,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_template_list/
   name: get_template_list
@@ -507,6 +557,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/list/biz/{biz_id}/template
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/delete_template/
   name: delete_template
@@ -517,6 +568,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}
   dest_http_method: DELETE
+  is_hidden: true
 
 - path: /v2/bscp/render_template/
   name: render_template
@@ -527,6 +579,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/render/biz/{biz_id}/template/{template_id}
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/create_template_bind/
   name: create_template_bind
@@ -537,6 +590,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/template_bind
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_template_bind/
   name: get_template_bind
@@ -547,6 +601,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/template_bind
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_template_bind_list/
   name: get_template_bind_list
@@ -557,6 +612,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/list/biz/{biz_id}/template_bind
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/delete_template_bind/
   name: delete_template_bind
@@ -567,6 +623,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/template_bind
   dest_http_method: DELETE
+  is_hidden: true
 
 - path: /v2/bscp/create_template_version/
   name: create_template_version
@@ -577,6 +634,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/version
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_template_version/
   name: get_template_version
@@ -587,6 +645,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/version/{version_id}
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_template_version_list/
   name: get_template_version_list
@@ -597,6 +656,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/list/biz/{biz_id}/template/{template_id}/version
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/update_template_version/
   name: update_template_version
@@ -607,6 +667,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/version/{version_id}
   dest_http_method: PUT
+  is_hidden: true
 
 - path: /v2/bscp/delete_template_version/
   name: delete_template_version
@@ -617,6 +678,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/template/{template_id}/version/{version_id}
   dest_http_method: DELETE
+  is_hidden: true
 
 - path: /v2/bscp/create_variable_group/
   name: create_variable_group
@@ -627,6 +689,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/var_group
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/get_variable_group/
   name: get_variable_group
@@ -637,6 +700,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/var_group
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_variable_group_list/
   name: get_variable_group_list
@@ -647,6 +711,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/list/biz/{biz_id}/var_group
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/delete_variable_group/
   name: delete_variable_group
@@ -657,6 +722,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/var_group/{var_group_id}
   dest_http_method: DELETE
+  is_hidden: true
 
 - path: /v2/bscp/create_variable/
   name: create_variable
@@ -667,6 +733,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/variable
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/update_variable/
   name: update_variable
@@ -677,6 +744,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/variable/{var_id}
   dest_http_method: PUT
+  is_hidden: true
 
 - path: /v2/bscp/get_variable/
   name: get_variable
@@ -687,6 +755,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/variable
   dest_http_method: GET
+  is_hidden: true
 
 - path: /v2/bscp/get_variable_list/
   name: get_variable_list
@@ -697,6 +766,7 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/list/biz/{biz_id}/variable
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/bscp/delete_variable/
   name: delete_variable
@@ -707,3 +777,37 @@
   comp_codename: generic.v2.bscp.bscp_component
   dest_path: /api/v2/template/biz/{biz_id}/variable/{var_id}
   dest_http_method: DELETE
+  is_hidden: true
+
+- path: /v2/bscp/create_commit/
+  name: create_commit
+  label: 创建一个配置的commit
+  label_en: create a new commit for a configuration
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/commit
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/bscp/create_multi_commit/
+  name: create_multi_commit
+  label: 创建一个配置的混合commit
+  label_en: create a new multiple commit for a configuration
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/config/biz/{biz_id}/app/{app_id}/multi_commit
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/bscp/get_web_aggregate_data/
+  name: get_web_aggregate_data
+  label: 为SAAS提供的聚合查询接口
+  label_en: aggregate query interface for SAAS
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.bscp.bscp_component
+  dest_path: /api/v2/web/{web_service}/aggregate/{web_method}
+  dest_http_method: POST
+  is_hidden: true

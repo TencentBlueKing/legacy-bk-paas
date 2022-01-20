@@ -18,11 +18,14 @@
 
 ```json
 {
-  "bk_app_code": "esb_test",
-  "bk_app_secret": "xxx",
-  "bk_token": "xxx",
-  "bk_biz_id": 1,
-  "file_name_list": ["file1.txt","file2.txt"]
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id": 1,
+    "file_name_list": [
+        "file1.txt",
+        "file2.txt"
+    ]
 }
 ```
 
@@ -30,21 +33,21 @@
 
 ```json
 {
-  "result": true,
-  "code": 0,
-  "message": "success",
-  "data": {
-    "url_map": {
-      "file1.txt":{
-        "upload_url": "http://bkrepo.com/generic/temporary/upload/bkjob/localupload/1/008f821f-259b-4f62-bd84-1e89d6f05f0d/admin/file1.txt?token=30adf862fdce4b02b909e6a1a1c762c6",
-        "path": "1/008f821f-259b-4f62-bd84-1e89d6f05f0d/admin/file1.txt"
-      },
-      "file2.txt":{
-        "upload_url": "http://bkrepo.com/generic/temporary/upload/bkjob/localupload/1/008f821f-259b-4f62-bd84-1e89d6f05f0d/admin/file2.txt?token=30adf862fdce4b02b909e6a1a1c762c6",
-        "path": "1/008f821f-259b-4f62-bd84-1e89d6f05f0d/admin/file2.txt"
-      }
+    "result": true,
+    "code": 0,
+    "message": "success",
+    "data": {
+        "url_map": {
+            "file1.txt": {
+                "upload_url": "http://bkrepo.com/generic/temporary/upload/bkjob/localupload/1/008f821f-259b-4f62-bd84-1e89d6f05f0d/admin/file1.txt?token=30adf862fdce4b02b909e6a1a1c762c6",
+                "path": "1/008f821f-259b-4f62-bd84-1e89d6f05f0d/admin/file1.txt"
+            },
+            "file2.txt": {
+                "upload_url": "http://bkrepo.com/generic/temporary/upload/bkjob/localupload/1/008f821f-259b-4f62-bd84-1e89d6f05f0d/admin/file2.txt?token=30adf862fdce4b02b909e6a1a1c762c6",
+                "path": "1/008f821f-259b-4f62-bd84-1e89d6f05f0d/admin/file2.txt"
+            }
+        }
     }
-  }
 }
 ```
 

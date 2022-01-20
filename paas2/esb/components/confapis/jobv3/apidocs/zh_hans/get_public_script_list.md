@@ -22,8 +22,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "name":"脚本1",
-    "script_language":1,
+    "name": "脚本1",
+    "script_language": 1,
     "start": 0,
     "length": 10
 }
@@ -33,25 +33,25 @@
 
 ```json
 {
-    "result": true, 
-    "code": 0, 
-    "message": "success", 
+    "result": true,
+    "code": 0,
+    "message": "success",
     "data": {
         "data": [
             {
-                "id": "000dbdddc06c453baf1f2decddf00c69", 
-                "name": "a.sh", 
-                "script_language": 1, 
-                "public": false, 
-                "online_script_version_id": 100, 
-                "creator": "admin", 
-                "create_time": 1600746078520, 
-                "last_modify_user": "admin", 
+                "id": "000dbdddc06c453baf1f2decddf00c69",
+                "name": "a.sh",
+                "script_language": 1,
+                "public": false,
+                "online_script_version_id": 100,
+                "creator": "admin",
+                "create_time": 1600746078520,
+                "last_modify_user": "admin",
                 "last_modify_time": 1600746078520
             }
-        ], 
-        "start": 0, 
-        "length": 10, 
+        ],
+        "start": 0,
+        "length": 10,
         "total": 1
     }
 }

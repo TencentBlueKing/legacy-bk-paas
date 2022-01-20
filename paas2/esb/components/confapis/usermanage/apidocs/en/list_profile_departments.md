@@ -19,7 +19,13 @@ List certain user's departments
 
 ``` json
 {
-  "with_family": true
+  "bk_app_code": "xxx",
+  "bk_app_secret": "xxx",
+  "bk_token": "xxx",
+  "bk_username": "xxx",
+  "id": 1,
+  "with_family": true,
+  "lookup_field": "username"
 }
 ```
 
@@ -31,7 +37,7 @@ List certain user's departments
     "code": 0,
     "data": [{
         "id": 4,
-        "name": "PaaS",
+        "name": "admin",
         "family": [
            {"id": 5, "name": "BlueKing1"},
            {"id": 6, "name": "BlueKing2"},
