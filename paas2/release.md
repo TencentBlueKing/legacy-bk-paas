@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.22
+    - update: esb update  usermanage/sops/monitor_v3/jobv3/itsm/iam/gsekit/bscp confapi and apidocs
+
 # 2.13.21
     - bugfix: console app logo get fail while is_display=false
 
@@ -65,6 +68,12 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.37
+    - update: esb update  usermanage/sops/monitor_v3/jobv3/itsm/iam/gsekit/bscp confapis and apidocs
+
+# 2.12.36
+    - bugfix: console app logo get fail while is_display=false
 
 # 2.12.35
     - update: esb update monitor_v3 confapis
