@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.37
+    - update: esb update  usermanage/sops/monitor_v3/jobv3/itsm/iam/gsekit/bscp confapis and apidocs
+
 # 2.12.36
     - bugfix: console app logo get fail while is_display=false
 
