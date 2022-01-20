@@ -14,7 +14,7 @@ query history release list
 | app_id      |  string   | Y         | application id |
 | cfg_id      |  string   | Y         | config id   |
 | operator    |  string   | N         | operator    |
-| query_type  |  integer  | N         | query type，0:all 1:inited 2:published 3:canceled 4:rollbacked |
+| query_type  |  integer  | N         | query type，1:all 2:inited 3:published 4:canceled 5:rollbacked |
 | order_type  |  integer  | N         | order type，0: desc by serid 1:desc by update time |
 | page        |  object   | Y         | query page settings |
 
@@ -24,7 +24,7 @@ query history release list
 |--------------|--------|----------|-------------|
 | return_total |  bool  | N        | return total num or not, not return as default |
 | start        |  int   | Y        | start record |
-| limit        |  int   | Y        | page limit, max is 100 |
+| limit        |  int   | Y        | page limit, max is 500 |
 
 ### Request Parameters Example
 
@@ -41,7 +41,7 @@ query history release list
     "order_type": 0,
     "page": {
         "start": 0,
-        "limit": 100
+        "limit": 500
     }
 }
 ```

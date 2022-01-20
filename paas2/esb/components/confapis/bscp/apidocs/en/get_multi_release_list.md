@@ -13,7 +13,7 @@ query multi release list
 | biz_id      |  string   | Y        | business id |
 | app_id      |  string   | Y        | application id |
 | operator    |  string   | N        | query by operator |
-| query_type  |  integer  | N        | query type，0:all 1:inited 2:confirmed 3:canceled |
+| query_type  |  integer  | N        | query type，1:all 2:inited 3:confirmed 4:canceled |
 | order_type  |  integer  | N        | order type，0: desc by serid 1:desc by update time |
 | page        |  object   | Y        | query page settings |
 
@@ -23,7 +23,7 @@ query multi release list
 |--------------|--------|----------|-------------|
 | return_total |  bool  | N        | return total num or not, not return as default |
 | start        |  int   | Y        | start record |
-| limit        |  int   | Y        | page limit, max is 100 |
+| limit        |  int   | Y        | page limit, max is 500 |
 
 ### Request Parameters Example
 
@@ -39,7 +39,7 @@ query multi release list
     "order_type": 0,
     "page": {
         "start": 0,
-        "limit": 100
+        "limit": 500
     }
 }
 ```

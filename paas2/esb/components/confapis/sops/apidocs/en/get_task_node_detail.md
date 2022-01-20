@@ -1,14 +1,27 @@
+### Request Address
+
+/v2/sops/get_task_node_detail/
+
+### Request Method
+
+GET
+
 ### Functional description
 
 Query a task node execution details
 
-### Request Parameters
+#### General Parameters
 
-{{ common_args_desc }}
+|   Field         |  Type       | Required |  Description    |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   YES    |  APP ID |
+|   bk_app_secret |   string    |   YES    |  APP Secret(APP TOKEN), which can be got via BlueKing Developer Center -> Click APP ID -> Basic Info |
+|   bk_token      |   string    |   NO     |  Current user login token, bk_token or bk_username must be valid, bk_token can be got by Cookie      |
+|   bk_username   |   string    |   NO     |  Current user username, APP in the white list, can use this field to specify the current user        |
 
 #### Interface Parameters
 
-| Field          |  Type       | Required   |  Description          |
+|   Field         |  Type       | Required |  Description     |
 |---------------|------------|--------|------------------|
 |   bk_biz_id   |   string   |   YES   |  the business ID             |
 |   task_id     |   string   |   YES   |  the task ID   |
@@ -23,6 +36,7 @@ Query a task node execution details
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "bk_biz_id": "2",
     "task_id": "10",
     "node_id": "node0df0431f8f553925af01a94854bd"
@@ -60,18 +74,21 @@ Query a task node execution details
         "outputs": [
             {
                 "value": 407584,
-                "name": "task ID",
-                "key": "job_inst_id"
+                "name": "JOB任务ID",
+                "key": "job_inst_id",
+                "preset": true
             },
             {
                 "value": "",
-                "name": "link",
-                "key": "job_inst_url"
+                "name": "JOB任务链接",
+                "key": "job_inst_url",
+                "preset": true
             },
             {
                 "value": true,
-                "name": "result",
-                "key": "_result"
+                "name": "执行结果",
+                "key": "_result",
+                "preset": true
             }
         ],
         "state": "FINISHED",
@@ -80,7 +97,9 @@ Query a task node execution details
         "id": "node0df0431f8f553925af01a94854bd",
         "loop": 1
     },
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -91,6 +110,8 @@ Query a task node execution details
 |  result   |    bool    |      true or false, indicate success or failure                      |
 |  data     |    dict    |      data returned when result is true, details are described below  |
 |  message  |    string  |      error message returned when result is false                     |
+|  request_id     |    string  | esb request id         |
+|  trace_id     |    string  | open telemetry trace_id       |
 
 #### data
 

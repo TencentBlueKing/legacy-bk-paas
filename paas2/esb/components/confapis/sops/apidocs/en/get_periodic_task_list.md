@@ -1,16 +1,32 @@
+### Request Address
+
+/v2/sops/get_periodic_task_list/
+
+### Request Method
+
+GET
+
 ### Functional description
 
 Query periodic task for business
 
 ### Request Parameters
 
-{{ common_args_desc }}
+#### General Parameters
+
+|   Field         |  Type       | Required |  Description    |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   YES    |  APP ID |
+|   bk_app_secret |   string    |   YES    |  APP Secret(APP TOKEN), which can be got via BlueKing Developer Center -> Click APP ID -> Basic Info |
+|   bk_token      |   string    |   NO     |  Current user login token, bk_token or bk_username must be valid, bk_token can be got by Cookie      |
+|   bk_username   |   string    |   NO     |  Current user username, APP in the white list, can use this field to specify the current user        |
 
 #### Interface Parameters
 
 | Field          |  Type       | Required   |  Description             |
 |---------------|------------|--------|------------------|
 |   bk_biz_id    |   string     |   YES   |  business ID |
+| scope | string | NO | bk_biz_id scope. default value is 'cmdb_biz' and bk_sops will find a project which relate cmdb business id equal to bk_biz_id. otherwise, bk_sops will find a project which id equal to bk_biz_id when scope value is 'project'|
 
 ### Request Parameters Example
 
@@ -18,8 +34,10 @@ Query periodic task for business
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
-    "bk_token": "xxx",
-    "bk_biz_id": "2"
+    "bk_token": "xxx"
+    "bk_username": "xxx",
+    "bk_biz_id": "2",
+    "scope": "cmdb_biz"
 }
 ```
 
@@ -36,7 +54,12 @@ Query periodic task for business
             "last_run_at": "2018-11-28 15:57:01 +0900",
             "enabled": false,
             "id": 11,
-            "template_id": "2"
+            "template_id": "2",
+            "auth_actions": [
+                "periodic_task_view",
+                "periodic_task_delete",
+                "periodic_task_edit"
+            ]
         },
         {
             "cron": "1,2,3-19/2 2 3 4 5 (m/h/d/dM/MY)",
@@ -46,7 +69,12 @@ Query periodic task for business
             "last_run_at": "",
             "enabled": false,
             "id": 6,
-            "template_id": "2"
+            "template_id": "2",
+            "auth_actions": [
+                "periodic_task_view",
+                "periodic_task_delete",
+                "periodic_task_edit"
+            ]
         },
         {
             "cron": "*/5 * * * * (m/h/d/dM/MY)",
@@ -56,10 +84,17 @@ Query periodic task for business
             "last_run_at": "",
             "enabled": false,
             "id": 4,
-            "template_id": "2"
+            "template_id": "2",
+            "auth_actions": [
+                "periodic_task_view",
+                "periodic_task_delete",
+                "periodic_task_edit"
+            ]
         }
     ],
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -70,6 +105,8 @@ Query periodic task for business
 |  result   |    bool    |      true or false, indicate success or failure                      |
 |  data     |    dict    |      data returned when result is true, details are described below  |
 |  message  |    string  |      error message returned when result is false                     |
+|  request_id     |    string  | esb request id             |
+|  trace_id     |    string  | open telemetry trace_id        |
 
 #### data
 
@@ -83,3 +120,4 @@ Query periodic task for business
 |  enabled      |    bool    |   is the task enabled   |
 |  id      |    int    |    task id   |
 |  template_id      |    string    |    template id for the task   |
+|  auth_actions      |    array   |      actions with permissions for the current user   |

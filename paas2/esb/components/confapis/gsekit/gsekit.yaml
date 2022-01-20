@@ -3,7 +3,7 @@
   name: flush_process
   label: 刷新业务进程缓存
   label_en: null
-  dest_path: /api/{bk_biz_id}/process/flush_process/
+  dest_path: /o/bk_gsekit/api/{bk_biz_id}/process/flush_process/
   path: /v2/gsekit/api/process/flush_process/
   dest_http_method: POST
   suggest_method: POST

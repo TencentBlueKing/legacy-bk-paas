@@ -11,7 +11,7 @@
 | 字段  | 类型  | 必选  | 描述  |
 | --- | --- | --- | --- |
 |  has_service   |  string   |  否   |  默认返回全部服务目录，has_service="true"时只返回绑定了服务项的目录 |
-|  service_key   |  string   |  否   |  服务项key值，支持通过服务项key值过滤绑定了服务的服务目录 |
+|  service_key   |  string   |  否   |  服务项key值：change(变更)，event(事件)，request(请求)，question(问题)，支持通过服务项key值过滤绑定了服务的服务目录 |
 
 
 ### 请求参数示例

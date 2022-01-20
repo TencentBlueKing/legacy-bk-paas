@@ -8,14 +8,15 @@
 
 #### 接口参数
 
-| 字段         |  类型      | 必选   |  描述      |
-|--------------|------------|--------|------------|
-| biz_id       |  string    | 是     | 业务ID     |
-| template_id  |  string    | 是     | 模板ID     |
-| version_tag  |  string    | 是     | 版本TAG  (max_length: 64)  |
-| content_id   |  string    | 是     | 版本内容ID, SHA256值（与上传内容时计算的资源ID一致）(min_length: 64, max_length: 64) |
-| content_size |  integer   | 是     | 版本内容大小 |
-| memo         |  string    | 否     | 备注 (max_length: 64) |
+| 字段             |  类型      | 必选   |  描述      |
+|------------------|------------|--------|------------|
+| biz_id           |  string    | 是     | 业务ID     |
+| template_id      |  string    | 是     | 模板ID     |
+| version_tag      |  string    | 是     | 版本TAG  (max_length: 64)  |
+| content_id       |  string    | 是     | 版本内容ID, SHA256值（与上传内容时计算的资源ID一致）(min_length: 64, max_length: 64) |
+| content_size     |  integer   | 是     | 版本内容大小 |
+| memo             |  string    | 否     | 备注 (max_length: 256) |
+| validate_content |  bool      | 否     | 是否验证提交的Content，默认不验证，验证需要额外开销，不验证的情况下调用方需要保证指定Content确认已经提交成功 |
 
 ### 请求参数示例
 

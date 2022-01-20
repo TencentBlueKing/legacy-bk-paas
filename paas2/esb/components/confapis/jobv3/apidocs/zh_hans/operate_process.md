@@ -52,7 +52,7 @@
 
 ### 请求参数示例
 
-```python
+```json
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
@@ -81,7 +81,7 @@
 
 ### 返回结果示例
 
-```python
+```json
 {
     "result": true,
     "code": 0,

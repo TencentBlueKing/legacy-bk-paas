@@ -10,9 +10,10 @@ query service list
 
 | Field           | Type     | Required  | Description     |
 | ------------ | ------ | --- | ------ |
-| catalog_id   | int    | NO   | service catalog id |
-| service_type | string | NO   | service type   |
-| display_type | string | NO   | display type   |
+| catalog_id   | int    | NO   | service catalog id, Available in the `data["id"]` field of the `get_service_catalogs` interface |
+| service_type | string | NO   | service type: change(change)，event(event)，request(request)，question(question)   |
+| display_type | string | NO   | display range type: GENERAL (Generic Role List), ORGANIZATION (ORGANIZATION), Third Party System (API)  |
+| display_role | string | NO   | display range: display_type is the role ID when ORGANIZATION, GENERAL/API is the system unique identification |
 
 ### Request Parameters Example
 

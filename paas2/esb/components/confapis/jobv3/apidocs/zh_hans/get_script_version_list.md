@@ -35,27 +35,27 @@
 
 ```json
 {
-    "result": true, 
-    "code": 0, 
-    "message": "success", 
+    "result": true,
+    "code": 0,
+    "message": "success",
     "data": {
         "data": [
             {
-                "id": 1, 
-                "bk_biz_id": 1, 
-                "script_id": "000dbdddc06c453baf1f2decddf00c69", 
-                "version": "V1.0", 
-                "content": "#!/bin/bash***", 
-                "status": 1, 
-                "version_desc": "版本描述", 
-                "creator": "admin", 
-                "create_time": 1600746078520, 
-                "last_modify_user": "admin", 
+                "id": 1,
+                "bk_biz_id": 1,
+                "script_id": "000dbdddc06c453baf1f2decddf00c69",
+                "version": "V1.0",
+                "content": "#!/bin/bash***",
+                "status": 1,
+                "version_desc": "版本描述",
+                "creator": "admin",
+                "create_time": 1600746078520,
+                "last_modify_user": "admin",
                 "last_modify_time": 1600746078520
             }
-        ], 
-        "start": 0, 
-        "length": 10, 
+        ],
+        "start": 0,
+        "length": 10,
         "total": 1
     }
 }

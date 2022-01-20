@@ -9,6 +9,7 @@
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/application/
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/iam/authorization/instance/
   name: authorization_instance
@@ -19,6 +20,7 @@
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/authorization/instance/
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/iam/authorization/path/
   name: authorization_path
@@ -29,6 +31,7 @@
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/authorization/path/
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/iam/authorization/batch_instance/
   name: authorization_batch_instance
@@ -39,6 +42,7 @@
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/authorization/batch_instance/
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/iam/authorization/batch_path/
   name: authorization_batch_path
@@ -49,6 +53,7 @@
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/authorization/batch_path/
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/iam/authorization/resource_creator_action/
   name: authorization_resource_creator_action
@@ -59,6 +64,7 @@
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/authorization/resource_creator_action/
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/iam/authorization/batch_resource_creator_action/
   name: authorization_batch_resource_creator_action
@@ -69,6 +75,7 @@
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/authorization/batch_resource_creator_action/
   dest_http_method: POST
+  is_hidden: true
 
 - path: /v2/iam/authorization/resource_creator_action_attribute/
   name: authorization_resource_creator_action_attribute
@@ -79,3 +86,4 @@
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/authorization/resource_creator_action_attribute/
   dest_http_method: POST
+  is_hidden: true

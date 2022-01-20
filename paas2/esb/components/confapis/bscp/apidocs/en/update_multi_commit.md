@@ -13,7 +13,7 @@ update multi commit information
 | biz_id           |  string   | Y         | business id |
 | app_id           |  string   | Y         | application id |
 | multi_commit_id  |  string   | Y         | multi commit id |
-| memo             |  string   | Y         | memo description (max_length: 64) |
+| memo             |  string   | Y         | memo description (max_length: 256) |
 
 ### Request Parameters Example
 

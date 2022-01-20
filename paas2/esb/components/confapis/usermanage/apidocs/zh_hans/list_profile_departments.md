@@ -20,19 +20,26 @@
 
 ``` json
 {
-  "with_family": true
+  "bk_app_code": "xxx",
+  "bk_app_secret": "xxx",
+  "bk_token": "xxx",
+  "bk_username": "xxx",
+  "id": 1,
+  "with_family": true,
+  "lookup_field": "username"
 }
 ```
 
 ### 返回结果示例
  
+ 仅示意，请以实际请求结果为准
 ```json
 {
     "message": "Success",
     "code": 0,
     "data": [{
         "id": 4,
-        "name": "PaaS",
+        "name": "admin",
         "family": [
            {"id": 5, "name": "BlueKing1"},
            {"id": 6, "name": "BlueKing2"},
@@ -49,4 +56,4 @@
 |result| bool | 返回结果，true为成功，false为失败 |
 |code|int|返回码，0表示成功，其他值表示失败|
 |message|string|错误信息|
-|data| array| 结果 |
+|data| array| 结果，请参照返回结果示例 | 

@@ -5,8 +5,18 @@
 查询存储集群配置
 根据给定的配置参数，创建一个存储集群配置
 
+### 请求参数
 
 {{ common_args_desc }}
+
+#### 通用参数
+
+| 字段          | 类型   | 必选 | 描述                                                         |
+| ------------- | ------ | ---- | ------------------------------------------------------------ |
+| bk_app_code   | string | 是   | 应用ID                                                       |
+| bk_app_secret | string | 是   | 安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取 |
+| bk_token      | string | 否   | 当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取 |
+| bk_username   | string | 否   | 当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户 |
 
 #### 接口参数
 
@@ -16,10 +26,10 @@
 | cluster_name     | string | 是   | 存储集群名 |
 | operator | string | 是 | 修改者 |
 | description   | string | 否   | 存储集群描述信息 |
-| auth_info | object | 否 | 集群用户名 |
-| custom_label | string | 否 | 自定义标签 | 
-| schema | string | 否 | 强行配置schema，可用于配置https等情形 | 
-| is_ssl_verify | bool | 否 | 是否需要跳过SSL\TLS 认证 | 
+| auth_info | dict | 否 | 集群用户名 |
+| custom_label | string | 否 | 自定义标签 |
+| schema | string | 否 | 强行配置schema，可用于配置https等情形 |
+| is_ssl_verify | bool | 否 | 是否需要跳过SSL\TLS 认证 |
 
 **注意**: 上述信息是否可以修改，主要决定于该修改参数是否会导致历史数据丢失；例如，修改domain_name需要运维介入的操作，不支持在此处修改
 
@@ -35,6 +45,9 @@
 
 ```json
 { 
+    "bk_app_code": "xxx",
+  	"bk_app_secret": "xxxxx",
+  	"bk_token": "xxxx",
     "cluster_id": 1,
 	"cluster_name": "first_influxdb",
 	"operator": "admin"
@@ -45,18 +58,40 @@
 
 ### 返回结果
 
-#### 字段说明
+| 字段       | 类型   | 描述         |
+| ---------- | ------ | ------------ |
+| result     | bool   | 请求是否成功 |
+| code       | int    | 返回的状态码 |
+| message    | string | 描述信息     |
+| data       | dict   | 数据         |
+| request_id | string | 请求ID       |
+
+#### data字段说明
 
 | 字段                | 类型   | 描述     |
 | ------------------- | ------ | -------- |
-| cluster_id | int | 集群ID |
+| cluster_config | dict | 集群信息 |
+| cluster_type | string | 集群类型 |
+| auth_info | dict | 集群用户名 |
+
+#### cluster_config详细说明
+
+| 参数          | 类型   | 说明              |
+| ------------- | ------ | ----------------- |
+| domain_name   | string | 集群域名          |
+| port          | int    | 端口              |
+| schema        | string | 访问协议          |
+| is_ssl_verify | bool   | SSL验证是否强验证 |
+| cluster_id    | int    | 集群ID            |
+| cluster_name  | string | 集群名称          |
+| version       | string | 存储集群版本      |
 
 #### 结果示例
 
 ```json
 {
     "message":"OK",
-    "code":"0",
+    "code":200,
     "data": [{
         "cluster_config": {
             "domain_name": "service.consul",

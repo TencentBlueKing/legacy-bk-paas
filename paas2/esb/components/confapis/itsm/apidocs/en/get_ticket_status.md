@@ -137,7 +137,7 @@ query ticket status
 
 | Field                     | Type     | Description       |
 | ---------------------- | ------ | -------- |
-| current_status         | string | ticket current status，RUNNING（processing）/FINISHED（over）/TERMINATED（terminated）/ SUSPENDED（suspended）/ REVOKED（revoked）|
+| current_status         | string | ticket current status，RUNNING（processing）/FINISHED（over）/TERMINATED（terminated）/ SUSPENDED（suspended）/ REVOKED（revoked）   |
 | current_steps          | array  | ticket current steps   |
 | operations          | array  | ticket current support operations   |
 | is_commented           | bool   | is ticket commented or not  |

@@ -13,7 +13,7 @@
 | biz_id           |  string   | 是     | 业务ID  |
 | app_id           |  string   | 是     | 应用ID     |
 | multi_release_id |  string   | 是     | 混合版本ID |
-| memo             |  string   | 是     | 备注 (max_length: 64) |
+| memo             |  string   | 是     | 备注 (max_length: 256) |
 
 ### 请求参数示例
 

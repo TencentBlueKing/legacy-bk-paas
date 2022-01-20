@@ -14,8 +14,9 @@
 |------------------|-----------|--------|------------|
 | biz_id           |  string   | 是     | 业务ID     |
 | app_id           |  string   | 是     | 应用ID     |
-| memo             |  string   | 否     | 备注 (max_length: 64) |
+| memo             |  string   | 否     | 备注 (max_length: 256) |
 | metadatas        |  array    | 是     | 提交数据, 多个配置的改动数据 |
+| validate_content |  bool     | 否     | 是否验证提交的Content，默认不验证，验证需要额外开销，不验证的情况下调用方需要保证指定Content确认已经提交成功 |
 
 #### metadatas[n]
 

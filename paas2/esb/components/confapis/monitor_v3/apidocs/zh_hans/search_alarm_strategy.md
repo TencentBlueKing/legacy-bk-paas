@@ -2,9 +2,18 @@
 
 查询告警策略
 
-### 接口参数
+### 请求参数
 
 {{ common_args_desc }}
+
+#### 通用参数
+
+| 字段          | 类型   | 必选 | 描述                                                         |
+| ------------- | ------ | ---- | ------------------------------------------------------------ |
+| bk_app_code   | string | 是   | 应用ID                                                       |
+| bk_app_secret | string | 是   | 安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取 |
+| bk_token      | string | 否   | 当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取 |
+| bk_username   | string | 否   | 当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户 |
 
 #### 接口参数
 
@@ -21,12 +30,24 @@
 
 ```json
 {
-  "bk_biz_id": 2,
-  "ids": [1, 2]
+    "bk_app_code": "xxx",
+    "bk_app_secret": "xxxxx",
+    "bk_token": "xxxx",
+    "bk_biz_id": 2,
+    "ids": [1, 2]
 }
 ```
 
 ### 响应参数
+
+| 字段    | 类型   | 描述         |
+| ------- | ------ | ------------ |
+| result  | bool   | 请求是否成功 |
+| code    | int    | 返回的状态码 |
+| message | string | 描述信息     |
+| data    | dict   | 数据         |
+
+#### data字段说明
 
 | 字段        | 类型   | 描述             |
 | :---------- | ------ | ---------------- |
@@ -39,7 +60,7 @@
 | scenario    | string | 监控对象         |
 | id          | int    | 策略ID           |
 
-#### NoticeAction
+#### data.action_list
 
 | 字段                              | 类型   | 描述                    |
 | --------------------------------- | ------ | ----------------------- |
@@ -54,7 +75,7 @@
 | notice_template.recovery_template | string | 恢复通知模板            |
 | notice_group_list                 | list   | 通知组列表(NoticeGroup) |
 
-#### NoticeGroup
+#### data.action_list.notice_group_list
 
 | 字段            | 类型   | 描述                                               |
 | --------------- | ------ | -------------------------------------------------- |
@@ -64,7 +85,7 @@
 | message         | string | 备注                                               |
 | id              | int    | 通知组ID                                           |
 
-#### Item
+#### item_list
 
 | 字段                      | 类型   | 描述                        |
 | ------------------------- | ------ | --------------------------- |
@@ -78,7 +99,7 @@
 | no_data_config.continous  | int    | 无数据告警检测周期数        |
 | data_type_label           | string | 数据类型                    |
 
-#### RtQueryConfig
+#### item_list.rt_query_config
 
 | 字段            | 类型   | 描述     |
 | --------------- | ------ | -------- |
@@ -92,7 +113,7 @@
 | agg_method      | string | 聚合方法 |
 | result_table_id | string | 结果表ID |
 
-#### Algorithm
+#### item_list.algorithm_list
 
 | 字段                         | 类型   | 描述           |
 | ---------------------------- | ------ | -------------- |
@@ -111,7 +132,7 @@
 ```json
 {
     "message": "OK",
-    "code": "0",
+    "code": 200,
     "data": [
         {
             "bk_biz_id": 2,
@@ -186,7 +207,7 @@
                         "method": "eq",
                         "value": [
                             {
-                                "bk_target_ip": "10.0.1.10",
+                                "bk_target_ip": "10.0.0.1",
                                 "bk_target_cloud_id": 0
                             }
                         ]

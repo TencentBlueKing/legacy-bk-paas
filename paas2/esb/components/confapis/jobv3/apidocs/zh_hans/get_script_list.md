@@ -24,8 +24,8 @@
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
     "bk_biz_id": 1,
-    "name":"脚本1",
-    "script_language":1,
+    "name": "脚本1",
+    "script_language": 1,
     "start": 0,
     "length": 10
 }
