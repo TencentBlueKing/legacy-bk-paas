@@ -12,7 +12,7 @@ create variable group
 |----------------|-----------|----------|-------------|
 | biz_id         |  string   | Y        | business id     |
 | name           |  string   | Y        | group name (max_length: 64)  |
-| memo           |  string   | N        | memo description (max_length: 64) |
+| memo           |  string   | N        | memo description (max_length: 256) |
 
 ### Request Parameters Example
 

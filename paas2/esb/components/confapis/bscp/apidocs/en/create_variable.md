@@ -11,10 +11,10 @@ create variable
 | Field          | Type      | Required | Description |
 |----------------|-----------|----------|-------------|
 | biz_id         |  string   | Y        | business id     |
-| name           |  string   | Y        | variable name (max_length: 64)  |
+| name           |  string   | Y        | variable name (max_length: 128)  |
 | value          |  string   | Y        | variable value (max_length: 2048)  |
 | var_group_id   |  string   | N        | option, add to target variable group id (max_length: 64)  |
-| memo           |  string   | N        | memo description (max_length: 64) |
+| memo           |  string   | N        | memo description (max_length: 256) |
 
 ### Request Parameters Example
 

@@ -37,8 +37,8 @@
     "bk_token": "xxx",
     "bk_biz_id": 1,
     "job_instance_id": 100,
-	"step_instance_id": 200,
-	"operation_code": 2
+    "step_instance_id": 200,
+    "operation_code": 2
 }
 ```
 
@@ -48,7 +48,7 @@
 {
     "result": true,
     "code": 0,
-    "message": "success",s
+    "message": "success",
     "data": {
         "step_instance_id": 200,
         "job_instance_id": 100

@@ -11,16 +11,16 @@ create template
 | Field          | Type      | Required | Description |
 |----------------|-----------|----------|-------------|
 | biz_id         |  string   | Y        | business id     |
-| name           |  string   | Y        | template name (max_length: 64)  |
-| cfg_name       |  string   | Y        | config file name, e.g. server.yaml (max_length: 64)  |
+| name           |  string   | Y        | template name (max_length: 128)  |
+| cfg_name       |  string   | Y        | config file name, e.g. server.yaml (max_length: 128)  |
 | cfg_fpath      |  string   | Y        | config file path, e.g. /etc (max_length: 256) |
 | user           |  string   | Y        | file user in system, e.g. root (max_length: 64) |
 | user_group     |  string   | Y        | file user group in system, e.g. root (max_length: 64) |
 | file_privilege |  string   | Y        | file privilege，e.g. 0755 (min_length: 4, max_length: 4) |
 | file_format    |  string   | Y        | file format，e.g. unix (unix/windows)|
-| file_mode      |  integer  | Y        | file mode, 0: text  1: binary 2: template |
-| engine_type    |  integer  | Y        | engine type, 0:not template 1:Golang 2:Py Mako 3:external |
-| memo           |  string   | N        | memo description (max_length: 64) |
+| file_mode      |  integer  | Y        | file mode, 1: text  2: binary 3: template |
+| engine_type    |  integer  | Y        | engine type, 1:not template 2:Golang 3:Py Mako 4:external |
+| memo           |  string   | N        | memo description (max_length: 256) |
 
 ### Request Parameters Example
 

@@ -11,7 +11,7 @@ query service catalogs
 | Field  | Type  | Required  | Description  |
 | --- | --- | --- | --- |
 |  has_service   |  string   |  NO   |  return all catalogs default, return no empty catalogs when has_service="true" |
-|  service_key   |  string   |  NO   |  service key bind to catalogs|
+|  service_key   |  string   |  NO   |  service key bind to catalogs: change(change)，event(event)，request(request)，question(question)|
 
 
 ### Request Parameters Example

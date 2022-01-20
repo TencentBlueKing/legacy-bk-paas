@@ -8,14 +8,15 @@ update template version
 
 #### Interface Parameters
 
-| Field        | Type       | Required | Description |
-|--------------|------------|----------|-------------|
-| biz_id       |  string    | Y        | business id |
-| template_id  |  string    | Y        | template id |
-| version_id   |  string    | Y        | version id  |
-| content_id   |  string    | Y        | content sha256 id (min_length: 64, max_length: 64) |
-| content_size |  integer   | Y        | content size |
-| memo         |  string    | Y        | memo description (max_length: 64) |
+| Field            | Type       | Required | Description |
+|------------------|------------|----------|-------------|
+| biz_id           |  string    | Y        | business id |
+| template_id      |  string    | Y        | template id |
+| version_id       |  string    | Y        | version id  |
+| content_id       |  string    | Y        | content sha256 id (min_length: 64, max_length: 64) |
+| content_size     |  integer   | Y        | content size |
+| memo             |  string    | Y        | memo description (max_length: 256) |
+| validate_content |  bool      | N        | validate content or not, default: false |
 
 ### Request Parameters Example
 

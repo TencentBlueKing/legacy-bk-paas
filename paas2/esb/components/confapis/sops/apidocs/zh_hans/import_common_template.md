@@ -1,10 +1,25 @@
+### 请求地址
+
+/v2/sops/import_common_template/
+
+### 请求方法
+
+POST
+
 ### 功能描述
 
 导入公共流程
 
 ### 请求参数
 
-{{ common_args_desc }}
+#### 通用参数
+
+|   字段           |  类型       | 必选     |  描述             |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   是    |  应用ID |
+|   bk_app_secret |   string    |   是    |  安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取 |
+|   bk_token      |   string    |   否    |  当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取  |
+|   bk_username   |   string    |   否    |  当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户              |
 
 #### 接口参数
 
@@ -20,8 +35,9 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "template_data": "xxx",
-    "override": true,
+    "override": true
 }
 ```
 
@@ -31,9 +47,16 @@
 {
     "message": "Successfully imported 2 common flows",
     "data": {
-        "count": 2
+        "count": 2,
+        "flows": {
+              11: "flowA",
+              12: "flowB",
+              ...
+        },
     },
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -44,9 +67,12 @@
 |  result       | bool       | true/false 成功与否            |
 |  message      | string     | result=false 时错误信息        |
 |  data         | dict        | 返回数据                    |
+|  request_id     |    string  |      esb 请求 id     |
+|  trace_id     |    string  |      open telemetry trace_id     |
 
 #### data
 
-|   名称   |  类型  |           说明             |
-| ------------ | ---------- | ------------------------------ |
-|  count      |    int    |      导入的流程数    |
+| 名称    | 类型   | 说明         |
+|-------|------|------------|
+| count | int  | 导入的流程数     |
+| flows  | dict | 导入的流程ID与名字的映射 |

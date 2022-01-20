@@ -1,24 +1,42 @@
+### Request Address
+
+/v2/sops/create_task/
+
+### Request Method
+
+POST
+
 ### Functional description
 
 Create a task with a flow template
 
 ### Request Parameters
 
-{{ common_args_desc }}
+#### General Parameters
+
+|   Field         |  Type       | Required |  Description    |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   YES    |  APP ID |
+|   bk_app_secret |   string    |   YES    |  APP Secret(APP TOKEN), which can be got via BlueKing Developer Center -> Click APP ID -> Basic Info |
+|   bk_token      |   string    |   NO     |  Current user login token, bk_token or bk_username must be valid, bk_token can be got by Cookie      |
+|   bk_username   |   string    |   NO     |  Current user username, APP in the white list, can use this field to specify the current user        |
 
 #### Interface Parameters
 
-| Field         |  Type      | Required   |  Description             |
+| Field         |  Type      | Required   |  Description |
 |---------------|------------|--------|------------------|
 |   bk_biz_id    |   string     |   YES   |  the business ID |
 |   template_id  |   string     |   YES   |  the flow template ID |
 |   template_source | string   | NO    | source of flow，default value is business. business: from business, common: from common flow |
-|   name         |   string     |   YES   |  Task name |
-|   flow_type    |   string     |   NO    |  flow type，common: common flow，common_func：functional flow |
+|   name         |   string     |   YES   |  task name |
+|   flow_type    |   string     |   NO    |  flow type，common: common flow，common_func：functional flow. Default is common |
 |   constants    |   dict       |   NO    |  global variables，details are described below |
-|   exclude_task_nodes_id | list |   NO   |  nodes id not be executed, which are set ignore in flow |
+|   exclude_task_nodes_id | list |   NO   | nodes id not be executed, which are set ignore in flow(if you have execute_task_nodes_id and exclude_task_nodes_id, then execute_task_nodes_id will be using.) |
+| scope | string | NO | bk_biz_id scope. default value is 'cmdb_biz' and bk_sops will find a project which relate cmdb business id equal to bk_biz_id. otherwise, bk_sops will find a project which id equal to bk_biz_id when scope value is 'project'|
+|   simplify_vars    |   list       |   NO    |  list of constants key for type simplify.(after the task is created, the simplified constants will lose the type originally configured in the template, and they will all become variables of this textarea. By using this option, the difference in value format of different types of constants can be shielded when API calls are made, and they are uniformly passed through the text type. value) |
+| execute_task_nodes_id | list | NO | nodes id only be executed.(if you have execute_task_nodes_id and exclude_task_nodes_id, then execute_task_nodes_id will be using.) |
 
-#### constants.KEY
+#### constants KEY
 
 constant KEY, the format is like ${key}
 
@@ -33,13 +51,21 @@ constant value, the type of value should be same with data from API[get_template
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "name": "tasktest",
+    "bk_biz_id":"1",
+    "template_id":"1",
+    "template_source":"business",
     "flow_type": "common",
     "constants": {
-        "${content}: "echo 1",
+        "${content}": "echo 1",
         "${params}": "",
         "${script_timeout}": 20
-    }
+    },
+    "simplify_vars": ["${k1}", "${k2}", "${ip}", "${force_check}"],
+    "execute_task_nodes_id": [1, 2, 3],
+    "exclude_task_nodes_id": [4, 5, 6],
+    "scope": "cmdb_biz",
 }
 ```
 
@@ -50,7 +76,7 @@ constant value, the type of value should be same with data from API[get_template
     "result": true,
     "data": {
         "task_id": 10,
-        "task_url": "http://bk_sops_host/taskflow/execute/3/?instance_id=15364",
+        "task_url": "http://bk_sops_host/taskflow/execute/3/?instance_id=10",
         "pipeline_tree": {
             "activities": {
                 "node9b5ae13799d63e179f0ce3088b62": {
@@ -68,8 +94,8 @@ constant value, the type of value should be same with data from API[get_template
                         }
                     },
                     "stage_name": "stage1",
-                    "can_retry": true,
-                    "isSkipped": true,
+                    "retryable": true,
+                    "skippable": true,
                     "type": "ServiceActivity",
                     "optional": false,
                     "id": "node9b5ae13799d63e179f0ce3088b62",
@@ -85,8 +111,8 @@ constant value, the type of value should be same with data from API[get_template
                         "data": {}
                     },
                     "stage_name": "stage1",
-                    "can_retry": true,
-                    "isSkipped": true,
+                    "retryable": true,
+                    "skippable": true,
                     "type": "ServiceActivity",
                     "optional": true,
                     "id": "node880ded556c6c3c269be3cedc64b6",
@@ -165,7 +191,25 @@ constant value, the type of value should be same with data from API[get_template
                 "name": ""
             },
             "id": "node7ef6970d06ad3bc092594cb5ec5f",
-            "constants": {},
+            "constants": {
+                "${bk_timing}": {
+                    "source_tag": "sleep_timer.bk_timing",
+                    "source_info": {
+                        "node76393dcfedcf73dbc726f1c4786d": [
+                            "bk_timing"
+                        ]
+                    },
+                    "name": "定时时间",
+                    "index": 0,
+                    "custom_type": "",
+                    "value": "100",
+                    "show_type": "show",
+                    "source_type": "component_inputs",
+                    "key": "${bk_timing}",
+                    "validation": "",
+                    "desc": ""
+                }
+            },
             "location": [
                 {
                     "stage_name": "stage1",
@@ -197,7 +241,9 @@ constant value, the type of value should be same with data from API[get_template
                 }
             ]
         }
-    }
+    },
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -208,13 +254,15 @@ constant value, the type of value should be same with data from API[get_template
 |  result      |    bool    |   true/false, indicate success or failure     |
 |  data        |    dict  |   data returned when result is true, details are described below        |
 |  message     |    string  |   error message returned when result is false |
+|  request_id     |    string  | esb request id             |
+|  trace_id     |    string  | open telemetry trace_id        |
 
 ####  data
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
 |  task_id      |    int    |   the task instance ID    |
-|  task_url     |    str     |    task instance url     |
+|  task_url     |    string |    task instance url     |
 |  pipeline_tree     |    dict     |    task pipeline tree     |
 
 #### data.pipeline_tree
@@ -223,17 +271,17 @@ constant value, the type of value should be same with data from API[get_template
 |-----------|----------|-----------|
 |  start_event      |    dict    |      start node     |
 |  end_event      |    dict    |      end node    |
-|  activities      |    dict    |      task node（atoms or subprocess）info    |
+|  activities      |    dict    |      task node（plugins or subprocess）info    |
 |  gateways      |    dict    |      gateways（parallel gateway、exclusive gateway、exclusive gateway）info    |
 |  flows      |    dict    |      sequenceFlow（the line between nodes）info    |
 |  constants      |    dict    |  global variables, details are described below    |
 |  outputs      |    list    |    outputs info, indicate outputs field of global  |
 
-#### data.pipeline_tree.constants.KEY
+#### data.pipeline_tree.constants KEY
 
 KEY, the format is like ${key}
 
-#### data.pipeline_tree.constants.VALUE
+#### data.pipeline_tree.constants VALUE
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -243,5 +291,5 @@ KEY, the format is like ${key}
 |  desc      |    string    |     description   |
 |  source_type  | string   |      source of variable, custom mean manual variable, component_inputs means variables comes from task node inputs parameters, component_outputs means variables comes from task node outputs parameters   |
 |  custom_type  | string   |      custom type, which is not empty when source_type is custom,  the value is input ,or textarea, or datetime, or int |
-|  source_tag   | string   |      source tag and atom info, which is not empty when source_type is  component_inputs or component_outputs  |
+|  source_tag   | string   |      source tag and plugin info, which is not empty when source_type is  component_inputs or component_outputs  |
 |  source_info | dict    |        source info about task node ID  |

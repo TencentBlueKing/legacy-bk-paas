@@ -1,10 +1,25 @@
+### 请求地址
+
+/v2/sops/get_task_detail/
+
+### 请求方法
+
+GET
+
 ### 功能描述
 
 查询任务执行详情
 
 ### 请求参数
 
-{{ common_args_desc }}
+#### 通用参数
+
+|   字段           |  类型       | 必选     |  描述             |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   是    |  应用ID |
+|   bk_app_secret |   string    |   是    |  安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取 |
+|   bk_token      |   string    |   否    |  当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取  |
+|   bk_username   |   string    |   否    |  当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户              |
 
 #### 接口参数
 
@@ -12,6 +27,7 @@
 |---------------|------------|--------|------------------|
 |   bk_biz_id   |   string   |   是   |  所属业务ID   |
 |   task_id     |   string   |   是   |  任务ID     |
+| scope | string | 否 | bk_biz_id 检索的作用域。默认为 cmdb_biz，此时检索的是绑定的 CMDB 业务 ID 为 bk_biz_id 的项目；当值为 project 时则检索项目 ID 为 bk_biz_id 的项目|
 
 ### 请求参数示例
 
@@ -20,8 +36,10 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "bk_biz_id": "2",
-    "task_id": "10"
+    "task_id": "10",
+    "scope": "cmdb_biz"
 }
 ```
 
@@ -30,6 +48,7 @@
 ```
 {
     "data": {
+        "name": "xxx",
         "creator": "admin",
         "outputs": [
             {
@@ -108,6 +127,7 @@
         "create_method": "app",
         "elapsed_time": 7,
         "ex_data": "",
+        "finish_time":"",
         "instance_name": "job输出变量测试_20190117121300",
         "end_time": "2019-01-17 04:13:15",
         "executor": "admin",
@@ -130,8 +150,8 @@
                         }
                     },
                     "stage_name": "步骤1",
-                    "can_retry": true,
-                    "isSkipped": true,
+                    "retryable": true,
+                    "skippable": true,
                     "type": "ServiceActivity",
                     "optional": false,
                     "id": "node9b5ae13799d63e179f0ce3088b62",
@@ -147,8 +167,8 @@
                         "data": {}
                     },
                     "stage_name": "步骤1",
-                    "can_retry": true,
-                    "isSkipped": true,
+                    "retryable": true,
+                    "skippable": true,
                     "type": "ServiceActivity",
                     "optional": true,
                     "id": "node880ded556c6c3c269be3cedc64b6",
@@ -260,7 +280,9 @@
             ]
         }
     },
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -271,6 +293,8 @@
 |  result   |    bool    |      true/false 查询成功与否     |
 |  data     |    dict    |      result=true 时返回数据，详细信息见下面说明     |
 |  message  |    string  |      result=false 时错误信息     |
+|  request_id     |    string  |      esb 请求 id     |
+|  trace_id     |    string  |      open telemetry trace_id     |
 
 #### data
 
@@ -293,12 +317,12 @@
 |  task_url     |    str     |    任务实例链接     |
 |  pipeline_tree     |    dict     |    任务实例树     |
 
-#### data.constants.KEY
+#### data.constants KEY
 
 全局变量 KEY，${key} 格式
 
+#### data.constants VALUE
 
-#### data.constants.VALUE
 |   字段   |  类型  |           描述             |
 | ------------ | ---------- | ------------------------------ |
 |  key      |    string    |      同 KEY     |
@@ -310,8 +334,8 @@
 |  source_tag      |    string    |      source_type=component_inputs/component_outputs 时有效，变量的来源标准插件   |
 |  source_info   |   dict  |  source_type=component_inputs/component_outputs 时有效，变量的来源节点信息 |
 
+#### data.outputs[]
 
-#### data.outputs[] 
 |      字段     |     类型   |               描述             |
 | ------------  | ---------- | ------------------------------ |
 |  name         | string     | 输出参数名称                   |
@@ -325,7 +349,7 @@
 |-----------|----------|-----------|
 |  start_event      |    dict    |      开始节点信息     |
 |  end_event      |    dict    |      结束节点信息    |
-|  activities      |    dict    |      任务节点（原子和子流程）信息    |
+|  activities      |    dict    |      任务节点（标准插件和子流程）信息    |
 |  gateways      |    dict    |      网关节点（并行网关、分支网关和汇聚网关）信息    |
 |  flows      |    dict    |     顺序流（节点连线）信息    |
 |  constants      |    dict    |  全局变量信息，详情见下面    |

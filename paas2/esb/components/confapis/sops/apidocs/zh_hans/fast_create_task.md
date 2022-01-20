@@ -1,18 +1,34 @@
+### 请求地址
+
+/v2/sops/fast_create_task/
+
+### 请求方法
+
+POST
+
 ### 功能描述
 
 创建一次性任务
 
 ### 请求参数
 
-{{ common_args_desc }}
+#### 通用参数
+
+|   字段           |  类型       | 必选     |  描述             |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   是    |  应用ID |
+|   bk_app_secret |   string    |   是    |  安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取 |
+|   bk_token      |   string    |   否    |  当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取  |
+|   bk_username   |   string    |   否    |  当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户              |
 
 #### 接口参数
 
 | 字段          |  类型       | 必选   |  描述             |
 |---------------|------------|--------|------------------|
-|   project_id  |   int      |   是   |  项目ID           |
+|   bk_biz_id  |   int      |   是   |  项目ID           |
 |   name        |   string   |   是   |  任务名称         |
 |   pipeline_tree | dict     |   是   |  任务实例树，详细信息请见下面说明 |
+|   has_common_subprocess | bool | 否 |  所包含的子流程来源，true：来自公共流程模版，false：来自项目流程模版，默认值为false |
 |   flow_type   |   string   |   否   |  任务流程类型，common: 常规流程，common_func：职能化流程，默认值为common |
 |   description |   string   |   否   |  任务描述         |
 |   category    |   string   |   否   |  任务分类，详细信息请见下面说明 |
@@ -141,9 +157,14 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
+    "bk_biz_id": "2",
     "name": "tasktest",
     "flow_type": "common",
-    "pipeline_tree"：{
+    "description":"...",
+    "has_common_subprocess":false
+    "category":"OpsTools"
+    "pipeline_tree": {
         "start_event": {
             "incoming": "",
             "outgoing": "line7ed74aa679d19063b6d7037ce6db",
@@ -600,7 +621,9 @@
             },
             "outputs": ["${bk_timing}"]
         }
-    }
+    },
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -611,8 +634,10 @@
 |  result   |  bool    | true/false 操作是否成功     |
 |  data     |  dict    | result=true 时成功数据，详细信息请见下面说明      |
 |  message  |  string  | result=false 时错误信息     |
+|  request_id     |    string  |      esb 请求 id     |
+|  trace_id     |    string  |      open telemetry trace_id     |
 
-####  data
+#### data
 
 | 字段      | 类型      | 说明      |
 |-----------|----------|-----------|

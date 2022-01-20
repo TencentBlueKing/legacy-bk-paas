@@ -10,7 +10,7 @@ query service's workflow detail
 
 | Field         | Type  | Required  | Description   |
 | ---------- | --- | --- | ---- |
-| workflow_id | int | YES   | service's workflow id |
+| workflow_id | int | YES   | service's workflow id, Get from the `data["workflow_id"]` field in the `get_service_detail` interface |
 
 ### Request Parameters Example
 

@@ -1,18 +1,34 @@
+### Request Address
+
+/v2/sops/get_template_info/
+
+### Request Method
+
+GET
+
 ### Functional description
 
 Query individual flow template details of the business
 
 ### Request Parameters
 
-{{ common_args_desc }}
+#### General Parameters
+
+|   Field         |  Type       | Required |  Description    |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   YES    |  APP ID |
+|   bk_app_secret |   string    |   YES    |  APP Secret(APP TOKEN), which can be got via BlueKing Developer Center -> Click APP ID -> Basic Info |
+|   bk_token      |   string    |   NO     |  Current user login token, bk_token or bk_username must be valid, bk_token can be got by Cookie      |
+|   bk_username   |   string    |   NO     |  Current user username, APP in the white list, can use this field to specify the current user        |
 
 #### Interface Parameters
 
-| Field          |  Type       | Required   |  Description          |
-|---------------|------------|--------|---------------|
+| Field         |   Type     | Required   |  Description    |
+|---------------|------------|---------|--------------------|
 | bk_biz_id     | string     |   YES   |  the business ID   |
-| template_id   | string     |   YES   |  the task ID       |
-|   template_source | string   | NO    | source of flow，default value is business. business: from business, common: from common flow |
+| template_id   | string     |   YES   |  the template ID       |
+| template_source | string   |   NO    | source of flow，default value is business. business: from business, common: from common flow |
+| scope | string | NO | bk_biz_id scope. default value is 'cmdb_biz' and bk_sops will find a project which relate cmdb business id equal to bk_biz_id. otherwise, bk_sops will find a project which id equal to bk_biz_id when scope value is 'project'|
 
 ### Request Parameters Example
 
@@ -21,9 +37,11 @@ Query individual flow template details of the business
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "bk_biz_id": "1",
     "template_id": "30",
     "template_source": "business",
+    "scope": "cmdb_biz"
 }
 ```
 
@@ -176,6 +194,8 @@ Query individual flow template details of the business
         "id": 30,
         "editor": "admin"
     },
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -186,6 +206,8 @@ Query individual flow template details of the business
 |  result   |    bool    |      true or false, indicate success or failure                      |
 |  data     |    dict    |      data returned when result is true, details are described below  |
 |  message  |    string  |      error message returned when result is false                     |
+|  request_id     |    string  | esb request id         |
+|  trace_id     |    string  | open telemetry trace_id       |
 
 #### data
 
@@ -195,7 +217,7 @@ Query individual flow template details of the business
 |  bk_biz_name   |    string    |      the business name    |
 |  id            |    int       |      flow template ID             |
 |  name          |    string    |      flow template name            |
-|  category      |    string    |      flow type，the value is described below    |
+|  category      |    string    |      flow template type, the value is described below    |
 |  creator       |    string    |      person who created this flow template      |
 |  create_time   |    string    |      datetime when this flow template created   |
 |  editor        |    string or null | person who edited this flow template last |
@@ -220,17 +242,17 @@ Query individual flow template details of the business
 |-----------|----------|-----------|
 |  start_event      |    dict    |      start node     |
 |  end_event      |    dict    |      end node    |
-|  activities      |    dict    |      task node（atoms or subprocess）info    |
+|  activities      |    dict    |      task node（standard plugins or subprocess）info    |
 |  gateways      |    dict    |      gateways（parallel gateway、exclusive gateway、exclusive gateway）info    |
 |  flows      |    dict    |      sequenceFlow（the line between nodes）info    |
 |  constants      |    dict    |  global variables, details are described below    |
 |  outputs      |    list    |    outputs info, indicate outputs field of global variables|
 
-#### data.pipeline_tree.constants.KEY
+#### data.pipeline_tree.constants KEY
 
 KEY, the format is like ${key}
 
-#### data.pipeline_tree.constants.VALUE
+#### data.pipeline_tree.constants VALUE
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -238,7 +260,7 @@ KEY, the format is like ${key}
 |  name      |    string    |     name    |
 |  index      |    int    |       display order at the front end   |
 |  desc      |    string    |     description   |
-|  source_type  | string   |      source of variable, custom mean manual variable, component_inputs means variables comes from task node inputs parameters, component_outputs means variables comes from task node outputs parameters   |
+|  source_type  | string   |      source of variable, custom mean manual variable, component_inputs means variables comes from task node inputs parameters, component_outputs means variables comes from task node outputs parameters |
 |  custom_type  | string   |      custom type, which is not empty when source_type is custom,  the value is input ,or textarea, or datetime, or int |
-|  source_tag   | string   |      source tag and atom info, which is not empty when source_type is  component_inputs or component_outputs  |
+|  source_tag   | string   |      source tag and standard plugin info, which is not empty when source_type is  component_inputs or component_outputs  |
 |  source_info | dict    |        source info about task node ID  |

@@ -14,7 +14,7 @@
 | job_plan_id     |  long      | 是     | 要定时执行的作业的执行方案 ID |
 | id              |  long      | 否     | 定时任务 ID，更新定时任务时，必须传这个值 |
 | name            |  string    | 否     | 定时作业名称，新建时必填，修改时选填 |
-| expression      |  string    | 否     | 定时任务 crontab 的定时规则，新建时必填，修改时选填，各字段含义为：分 时 日 月 周，如: 0/5 * * * ? 表示每5分钟执行一次 |
+| expression      |  string    | 否     | 定时任务 crontab 的定时规则，新建时必填，修改时选填，各字段含义为：分 时 日 月 周，如: 0/5 * * * * 表示每5分钟执行一次，注意：不支持? |
 | execute_time    |  long      | 否     | 定时任务单次执行的执行时间，Unix时间戳，新建定时任务时不可与expression同时为空 |
 | global_var_list |  array     | 否     | 全局变量信息，可使用 查询执行方案详情 接口查询方案可设置的变量信息 |
 
@@ -49,63 +49,270 @@
 
 
 ### 请求参数示例
-
+#### 1.创建定时任务
 ```json
 {
-  "bk_app_code": "esb_test",
-  "bk_app_secret": "xxx",
-  "bk_token": "xxx",
-  "bk_biz_id": 1,
-  "job_plan_id": 100,
-  "name": "test",
-  "expression": "0/5 * * * ?",
-  "global_var_list": [
-    {
-      "id": 436,
-      "name": "ip",
-      "server": {
-        "dynamic_group_id_list": [
-            {
-                "id": "blo8gojho0skft7pr5q0"
-            },
-            {
-                "id": "blo8gojho0sabc7priuy"
+    "bk_app_code": "xxx",
+    "bk_app_secret": "xxx",
+    "access_token": "xxx",
+    "bk_username": "admin",
+    "bk_biz_id": 2,
+    "execute_time": 0,
+    "expression": "0 0/5 * * *",
+    "job_plan_id": 1023060,
+    "name": "test API",
+    "global_var_list": [
+        {
+            "name": "stringVar",
+            "value": "value11112"
+        },
+        {
+            "name": "nsVar",
+            "value": "nsvalue11112"
+        },
+        {
+            "name": "secretVar",
+            "value": "secretvalue11112"
+        },
+        {
+            "name": "dictVar",
+            "value": "([\"var1\"]=1, [\"var2\"]=2)"
+        },
+        {
+            "name": "indexArrVar",
+            "value": "(2 3 4)"
+        },
+        {
+            "name": "hostVar",
+            "server": {
+                "ip_list": [
+                    {
+                        "bk_cloud_id": 0,
+                        "ip": "10.0.0.1"
+                    }
+                ]
             }
-        ],
-        "ip_list": [
-          {
-            "bk_cloud_id": 0,
-            "ip": "10.0.0.1"
-          },
-          {
-            "bk_cloud_id": 0,
-            "ip": "10.0.0.2"
-          }
-        ],
-        "topo_node_list": [
-          {
-            "id": 1000,
-            "node_type": "module"
-          }
-        ]
-      }
-    },
-    {
-      "id": 437,
-      "name": "text",
-      "value": "new String value"
-    }
-  ]
+        }
+    ]
+}
+```
+#### 2.更新定时任务
+```json
+{
+    "id": 1000064,
+    "bk_app_code": "xxx",
+    "bk_app_secret": "xxx",
+    "access_token": "xxx",
+    "bk_username": "admin",
+    "bk_biz_id": 2,
+    "execute_time": 0,
+    "expression": "0 0/5 * * *",
+    "job_plan_id": 1023060,
+    "name": "test API",
+    "global_var_list": [
+        {
+            "name": "stringVar",
+            "value": "value111333312"
+        },
+        {
+            "name": "nsVar",
+            "value": "nsvalue111333312"
+        },
+        {
+            "name": "secretVar",
+            "value": "secretvalue111333312"
+        },
+        {
+            "name": "dictVar",
+            "value": "([\"var1\"]=1, [\"var2\"]=2)"
+        },
+        {
+            "name": "indexArrVar",
+            "value": "(22 3 4)"
+        },
+        {
+            "name": "hostVar",
+            "server": {
+                "ip_list": [
+                    {
+                        "bk_cloud_id": 0,
+                        "ip": "10.0.0.1"
+                    }
+                ]
+            }
+        }
+    ]
 }
 ```
 
 ### 返回结果示例
-
+#### 1.创建定时任务
 ```json
 {
-  "result": true,
-  "code": 0,
-  "message": "success",
-  "data": 10
+    "code": 0,
+    "result": true,
+    "data": {
+        "id": 1000067,                
+        "name": "test API",  
+        "status": 2,                 
+        "creator": "admin",          
+        "bk_biz_id": 2,              
+        "job_plan_id": 1023060,     
+        "expression": "0 0/5 * * *",  
+        "global_var_list": [          
+            {
+                "id": 1001101,        
+                "name": "stringVar", 
+                "value": "value11112",
+                "description": null,  
+                "type": 1,            
+                "required": null,    
+                "server": null      
+            },
+            {
+                "id": 1001102,
+                "name": "nsVar",
+                "value": "nsvalue11112",
+                "description": null,
+                "type": 2,
+                "required": null,
+                "server": null
+            },
+            {
+                "id": 1001104,
+                "name": "secretVar",
+                "value": "secretvalue11112",
+                "description": null,
+                "type": 4,
+                "required": null,
+                "server": null
+            },
+            {
+                "id": 1001105,
+                "name": "dictVar",
+                "value": ""value": "([\"var1\"]=1, [\"var2\"]=2)"",
+                "description": null,
+                "type": 5,
+                "required": null,
+                "server": null
+            },
+            {
+                "id": 1001106,
+                "name": "indexArrVar",
+                "value": "(2 3 4)",
+                "description": null,
+                "type": 6,
+                "required": null,
+                "server": null
+            },
+            {
+                "id": 1001103,
+                "name": "hostVar",
+                "value": null,
+                "description": null,
+                "type": 3,
+                "required": null,
+                "server": {                  
+                    "ip_list": [
+                        {
+                            "bk_cloud_id": 0, 
+                            "ip": "10.0.0.1"  
+                        }
+                    ],
+                    "dynamic_group_list": null, 
+                    "topo_node_list": null     
+                }
+            }
+        ],
+        "create_time": 1642045370,         
+        "last_modify_user": "admin",       
+        "last_modify_time": 1642045370     
+    },
+    "job_request_id": "19b76b84e481846e"  
+}
+```
+#### 2.更新定时任务
+```json
+{
+    "code": 0,
+    "result": true,
+    "data": {
+        "id": 1000064,
+        "name": "test API",
+        "status": 2,
+        "creator": "admin",
+        "bk_biz_id": 2,
+        "job_plan_id": 1023060,
+        "expression": "0 0/5 * * *",
+        "global_var_list": [
+            {
+                "id": 1001101,
+                "name": "stringVar",
+                "value": "value111333312",
+                "description": null,
+                "type": 1,
+                "required": null,
+                "server": null
+            },
+            {
+                "id": 1001102,
+                "name": "nsVar",
+                "value": "nsvalue111333312",
+                "description": null,
+                "type": 2,
+                "required": null,
+                "server": null
+            },
+            {
+                "id": 1001104,
+                "name": "secretVar",
+                "value": "secretvalue111333312",
+                "description": null,
+                "type": 4,
+                "required": null,
+                "server": null
+            },
+            {
+                "id": 1001105,
+                "name": "dictVar",
+                "value": "([\"var1\"]=1, [\"var2\"]=2)",
+                "description": null,
+                "type": 5,
+                "required": null,
+                "server": null
+            },
+            {
+                "id": 1001106,
+                "name": "indexArrVar",
+                "value": "(22 3 4)",
+                "description": null,
+                "type": 6,
+                "required": null,
+                "server": null
+            },
+            {
+                "id": 1001103,
+                "name": "hostVar",
+                "value": null,
+                "description": null,
+                "type": 3,
+                "required": null,
+                "server": {
+                    "ip_list": [
+                        {
+                            "bk_cloud_id": 0,
+                            "ip": "10.0.0.1"
+                        }
+                    ],
+                    "dynamic_group_list": null,
+                    "topo_node_list": null
+                }
+            }
+        ],
+        "create_time": 1641990674,
+        "last_modify_user": "admin",
+        "last_modify_time": 1641995052
+    },
+    "job_request_id": "69f5b499072003aa"
 }
 ```

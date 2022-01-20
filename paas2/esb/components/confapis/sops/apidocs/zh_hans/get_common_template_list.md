@@ -1,10 +1,25 @@
+### 请求地址
+
+/v2/sops/get_common_template_list/
+
+### 请求方法
+
+GET
+
 ### 功能描述
 
 查询公共模板列表
 
 ### 请求参数
 
-{{ common_args_desc }}
+#### 通用参数
+
+|   字段           |  类型       | 必选     |  描述             |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   是    |  应用ID |
+|   bk_app_secret |   string    |   是    |  安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取 |
+|   bk_token      |   string    |   否    |  当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取  |
+|   bk_username   |   string    |   否    |  当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户              |
 
 #### 接口参数
 
@@ -17,6 +32,7 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
 }
 ```
 
@@ -32,7 +48,15 @@
             "edit_time": "2019-07-15 15:13:22 +0800",
             "create_time": "2019-07-15 15:13:22 +0800",
             "editor": "admin",
-            "id": 10014
+            "id": 10014,
+            "auth_actions": [
+                "common_flow_create_task",
+                "common_flow_edit",
+                "common_flow_delete",
+                "common_flow_view",
+                "common_flow_create",
+                "common_flow_create_periodic_task"
+            ]
         },
         {
             "category": "Other",
@@ -41,10 +65,20 @@
             "edit_time": "2019-07-15 15:13:22 +0800",
             "create_time": "2019-07-15 15:13:22 +0800",
             "editor": "admin",
-            "id": 10013
+            "id": 10013,
+            "auth_actions": [
+                "common_flow_create_task",
+                "common_flow_edit",
+                "common_flow_delete",
+                "common_flow_view",
+                "common_flow_create",
+                "common_flow_create_periodic_task"
+            ]
         },
     ],
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -55,6 +89,8 @@
 | result    | bool     | true/false 查询成功与否 |
 | data      | list     | result=true时模板列表，item 信息见下面说明 |
 | message   | string   | result=false时错误信息 |
+|  request_id     |    string  |      esb 请求 id     |
+|  trace_id     |    string  |      open telemetry trace_id     |
 
 #### data
 
@@ -67,6 +103,7 @@
 |  create_time      |    string    |      模板创建时间   |
 |  editor      |    string 或者 null    |      模板编辑人   |
 |  edit_time      |    string   |      模板最新编辑时间   |
+|  auth_actions      |    array   |      用户对该资源有权限的操作   |
 
 #### data.category
 

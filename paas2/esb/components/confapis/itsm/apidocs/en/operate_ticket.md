@@ -25,40 +25,49 @@ operate ticket
     "bk_token": "xxxx", 
     "sn": "NO2019100818365320",
     "operator": "zhangsan",
-	"action_type": "SUSPEND",
-	"action_message": "test"
+    "action_type": "SUSPEND",
+    "action_message": "test"
 }
 ```
 
 ### demo2：unsuspend
 
 ```json
-{  
+{
+    "bk_app_secret": "xxxx", 
+    "bk_app_code": "xxxx", 
+    "bk_token": "xxxx", 
     "sn": "NO2019100818365320",
     "operator": "zhangsan",
-	"action_type": "UNSUSPEND",
-	"action_message": "test"
+    "action_type": "UNSUSPEND",
+    "action_message": "test"
 }
 ```
 
 ### demo3：withdraw
 
 ```json
-{  
+{ 
+    "bk_app_secret": "xxxx", 
+    "bk_app_code": "xxxx", 
+    "bk_token": "xxxx",
     "sn": "NO2019100818365320",
     "operator": "zhangsan",
-   "action_type": "WITHDRAW",
-   "action_message": "test"
+    "action_type": "WITHDRAW",
+    "action_message": "test"
 }
 ```
 ### demo4：terminate
 
 ```json
-{  
+{
+    "bk_app_secret": "xxxx", 
+    "bk_app_code": "xxxx", 
+    "bk_token": "xxxx",
     "sn": "NO2019100818365320",
     "operator": "zhangsan",
-   "action_type": "TERMINATE",
-   "action_message": "test"
+    "action_type": "TERMINATE",
+    "action_message": "test"
 }
 ```
 

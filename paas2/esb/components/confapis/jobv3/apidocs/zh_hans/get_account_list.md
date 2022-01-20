@@ -33,30 +33,30 @@
 
 ```json
 {
-  "code": 0,
-  "message": null,
-  "result": true,
-  "data": {
-    "start": 0,
-    "total": 12,
-    "data": [
-      {
-        "id": 70,
-        "account": "aaa",
-        "alias": "aaa",
-        "category": 1,
-        "type": 1,
-        "os": "Linux",
-        "creator": "admin",
-        "bk_biz_id": 2,
-        "create_time": 1614659536108,
-        "last_modify_user": "admin",
-        "last_modify_time": 1614659536116
-      }
-    ],
-    "length": 1
-  },
-  "request_id": "4e7acb216087eb96"
+    "code": 0,
+    "message": null,
+    "result": true,
+    "data": {
+        "start": 0,
+        "total": 12,
+        "data": [
+            {
+                "id": 70,
+                "account": "aaa",
+                "alias": "aaa",
+                "category": 1,
+                "type": 1,
+                "os": "Linux",
+                "creator": "admin",
+                "bk_biz_id": 2,
+                "create_time": 1614659536108,
+                "last_modify_user": "admin",
+                "last_modify_time": 1614659536116
+            }
+        ],
+        "length": 1
+    },
+    "request_id": "4e7acb216087eb96"
 }
 ```
 

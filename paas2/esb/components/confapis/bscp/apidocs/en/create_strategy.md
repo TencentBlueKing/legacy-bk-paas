@@ -12,34 +12,70 @@ create strategy
 |----------------|-----------|----------|-------------|
 | biz_id         |  string   | Y        | business id |
 | app_id         |  string   | Y        | application id |
-| name           |  string   | Y        | strategy name (max_length: 64) |
-| labels_or      |  array    | N        | labels OR list  |
-| labels_and     |  array    | N        | labels AND list  |
-| memo           |  string   | N        | memo description (max_length: 64) |
+| name           |  string   | Y        | strategy name (max_length: 128) |
+| labels      |  array    | N        | labels list  |
+| memo           |  string   | N        | memo description (max_length: 256) |
 
-#### labels_or[n]
-
-| Field  | Type    | Required | Description |
-|--------|---------|----------|-------------|
-| labels |  map    | Y        | labels OR   |
-
-#### labels_and[m]
-
-| Field  | Type    | Required | Description |
-|--------|---------|----------|-------------|
-| labels |  map    | Y        | labels AND  |
+#### labels
 
 ```json
-
-	KV labels format: "KEY": "OP|VALUE"
-
-	OP(Bash Shell Operators):
-			1.=: empty or eq
-			2.!=: ne
-			3.>: gt
-			4.<: lt
-			5.>=: ge
-			6.<=: le
+1. Labels contains the desired logic or set of node instance labels. This dimension supports multiple labels. The relationship between each label is a logical AND, and the relationship between labels_or and labels_and is an OR.
+2. Each label contains 3 elements key, op, value. Among them, key and value are the values ​​of the key and value of a label; op is the calculation method of the key and value of the label, currently
+The supported operators (op) are: eq (equal to), ne (not equal to), gt (greater than), ge (greater than or equal to), lt (less than), le (less than or equal to), in (inclusive), nin (not Include). Mid-term label value
+The value type is related to the operator (op), and different ops correspond to different value types. details as follows:
+  2.1. When op is eq,ne, the value of value is string;
+  2.2. When op is gt, ge, lt, le, the value of value is a numeric type;
+  2.3. When op is in, nin, the value of value is a string array type;
+3. When match_all is true and labels_or and labels_and are empty, it is a full match.
+{
+   "match_all": false,
+   "labels_or":
+   [
+       {
+           "key": "bscp.io/ns/biz",
+           "op": "eq",
+           "value": "lol"
+       },
+       {
+           "key": "bscp.io/ns/set_id",
+           "op": "gt",
+           "value": 88
+       },
+       {
+           "key": "bscp.io/ns/group_id",
+           "op": "in",
+           "value": ["1", "2", "3"]
+       },
+       {
+           "key": "bscp.io/ns/age",
+           "op": "lt",
+           "value": 66
+       }
+   ],
+   "labels_and":
+   [
+       {
+           "key": "bscp.io/ns/biz",
+           "op": "ne",
+           "value": "legend"
+       },
+       {
+           "key": "bscp.io/ns/high",
+           "op": "ge",
+           "value": 77
+       },
+       {
+           "key": "bscp.io/ns/role",
+           "op": "nin",
+           "value": ["11", "22", "33"]
+       },
+       {
+           "key": "bscp.io/ns/module_id",
+           "op": "le",
+           "value": 66
+       }
+   ]
+}
 ```
 
 ### Request Parameters Example

@@ -1,10 +1,25 @@
+### Request Address
+
+/v2/sops/get_task_detail/
+
+### Request Method
+
+GET
+
 ### Functional description
 
 Query a task execution details
 
 ### Request Parameters
 
-{{ common_args_desc }}
+#### General Parameters
+
+|   Field         |  Type       | Required |  Description    |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   YES    |  APP ID |
+|   bk_app_secret |   string    |   YES    |  APP Secret(APP TOKEN), which can be got via BlueKing Developer Center -> Click APP ID -> Basic Info |
+|   bk_token      |   string    |   NO     |  Current user login token, bk_token or bk_username must be valid, bk_token can be got by Cookie      |
+|   bk_username   |   string    |   NO     |  Current user username, APP in the white list, can use this field to specify the current user        |
 
 #### Interface Parameters
 
@@ -12,6 +27,7 @@ Query a task execution details
 |---------------|------------|--------|------------------|
 |   bk_biz_id   |   string   |   YES   |  the business ID             |
 |   task_id     |   string   |   YES   |  the task ID   |
+| scope | string | NO | bk_biz_id scope. default value is 'cmdb_biz' and bk_sops will find a project which relate cmdb business id equal to bk_biz_id. otherwise, bk_sops will find a project which id equal to bk_biz_id when scope value is 'project'|
 
 ### Request Parameters Example
 
@@ -20,8 +36,10 @@ Query a task execution details
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "bk_biz_id": "2",
-    "task_id": "10"
+    "task_id": "10",
+    "scope": "cmdb_biz"
 }
 ```
 
@@ -30,6 +48,7 @@ Query a task execution details
 ```
 {
     "data": {
+        "name": "xxx",
         "creator": "admin",
         "outputs": [
             {
@@ -108,6 +127,7 @@ Query a task execution details
         "create_method": "app",
         "elapsed_time": 7,
         "ex_data": "",
+        "finish_time":"",
         "instance_name": "job_20190117121300",
         "end_time": "2019-01-17 04:13:15",
         "executor": "admin",
@@ -130,8 +150,8 @@ Query a task execution details
                         }
                     },
                     "stage_name": "stage1",
-                    "can_retry": true,
-                    "isSkipped": true,
+                    "retryable": true,
+                    "skippable": true,
                     "type": "ServiceActivity",
                     "optional": false,
                     "id": "node9b5ae13799d63e179f0ce3088b62",
@@ -147,8 +167,8 @@ Query a task execution details
                         "data": {}
                     },
                     "stage_name": "stage1",
-                    "can_retry": true,
-                    "isSkipped": true,
+                    "retryable": true,
+                    "skippable": true,
                     "type": "ServiceActivity",
                     "optional": true,
                     "id": "node880ded556c6c3c269be3cedc64b6",
@@ -260,7 +280,9 @@ Query a task execution details
             ]
         }
     },
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -271,6 +293,8 @@ Query a task execution details
 |  result   |    bool    |      true or false, indicate success or failure                      |
 |  data     |    dict    |      data returned when result is true, details are described below  |
 |  message  |    string  |      error message returned when result is false                     |
+|  request_id     |    string  | esb request id         |
+|  trace_id     |    string  | open telemetry trace_id       |
 
 
 #### data
@@ -294,12 +318,12 @@ Query a task execution details
 |  task_url     |    str     |    task instance url     |
 |  pipeline_tree     |    dict     |    task pipeline tree     |
 
-#### data.constants.KEY
+#### data.constants KEY
 
 KEY, the format is like ${key}
 
 
-#### data.constants.VALUE
+#### data.constants VALUE
 | Field      | Type      | Description      |
 | ------------ | ---------- | ------------------------------ |
 |  key      |    string    |      same with KEY     |
@@ -308,7 +332,7 @@ KEY, the format is like ${key}
 |  desc      |    string    |     description   |
 |  source_type  | string   |      source of variable, custom mean manual variable, component_inputs means variables comes from task node inputs parameters, component_outputs means variables comes from task node outputs parameters   |
 |  custom_type  | string   |      custom type, which is not empty when source_type is custom,  the value is input ,or textarea, or datetime, or int |
-|  source_tag   | string   |      source tag and atom info, which is not empty when source_type is  component_inputs or component_outputs  |
+|  source_tag   | string   |      source tag and plugin info, which is not empty when source_type is  component_inputs or component_outputs  |
 |  source_info | dict    |        source info about task node ID  |
 
 
@@ -326,7 +350,7 @@ KEY, the format is like ${key}
 |-----------|----------|-----------|
 |  start_event      |    dict    |      start node     |
 |  end_event      |    dict    |      end node    |
-|  activities      |    dict    |      task node（atoms or subprocess）info    |
+|  activities      |    dict    |      task node（plugins or subprocess）info    |
 |  gateways      |    dict    |      gateways（parallel gateway、exclusive gateway、exclusive gateway）info    |
 |  flows      |    dict    |      sequenceFlow（the line between nodes）info    |
 |  constants      |    dict    |  global variables, details are described below    |

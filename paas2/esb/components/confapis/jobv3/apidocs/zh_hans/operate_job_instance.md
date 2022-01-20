@@ -23,7 +23,7 @@
     "bk_token": "xxx",
     "bk_biz_id": 1,
     "job_instance_id": 100,
-	"operation_code": 1
+    "operation_code": 1
 }
 ```
 

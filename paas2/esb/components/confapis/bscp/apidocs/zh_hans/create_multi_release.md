@@ -12,10 +12,10 @@
 |------------------|-----------|--------|------------|
 | biz_id           |  string   | 是     | 业务ID     |
 | app_id           |  string   | 是     | 应用ID     |
-| name             |  string   | 是     | 版本名称 (max_length: 64)  |
+| name             |  string   | 是     | 版本名称 (max_length: 128)  |
 | multi_commit_id  |  string   | 是     | 提交ID(来自create_multi_commit) |
 | strategy_id      |  string   | 否     | 策略ID, 为空则表示不附带策略发布，即全局可见 |
-| memo             |  string   | 否     | 备注 (max_length: 64) |
+| memo             |  string   | 否     | 备注 (max_length: 256) |
 
 ### 请求参数示例
 
