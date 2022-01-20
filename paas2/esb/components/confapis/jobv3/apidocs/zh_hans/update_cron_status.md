@@ -18,12 +18,12 @@
 
 ```json
 {
-  "bk_app_code": "esb_test",
-  "bk_app_secret": "xxx",
-  "bk_token": "xxx",
-  "bk_biz_id": 1,
-  "id": 2,
-  "status": 1
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id": 1,
+    "id": 2,
+    "status": 1
 }
 ```
 
@@ -31,9 +31,9 @@
 
 ```json
 {
-  "result": true,
-  "code": 0,
-  "message": "success",
-  "data": 2
+    "result": true,
+    "code": 0,
+    "message": "success",
+    "data": 2
 }
 ```

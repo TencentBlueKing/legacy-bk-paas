@@ -10,7 +10,7 @@
 | account_id | long | 否 | 目标执行帐号ID，可从get_account_list接口获取。与account_alias必须存在一个。当同时存在account_alias和account_id时，account_id优先。 |
 | file_target_path |  string    | 是     | 文件传输目标路径 |
 | file_source_list |  array     | 是     | 源文件对象数组，见下面file_source定义 |
-| timeout          |  int    | 否     | 任务超时时间，秒，默认值为7200。取值范围60-86400。|
+| timeout          |  int    | 否     | 任务超时时间，秒，默认值为7200。取值范围1-86400。|
 | download_speed_limit|  int    | 否     | 下载限速，单位MB。如果未传入该参数，表示不限速|
 | upload_speed_limit|  int    | 否     | 上传限速，单位MB。如果未传入该参数，表示不限速|
 | transfer_mode | int | 否 | 传输模式。1-严谨模式，2-强制模式。默认使用强制模式 |
@@ -103,13 +103,13 @@
             "file_type": 3,
             "file_source_id": 1
         },
-         {
-             "file_list": [
-                 "testbucket/test2.txt"
-             ],
-             "file_type": 3,
-             "file_source_code": "testInnerCOS"
-         }
+        {
+            "file_list": [
+                "testbucket/test2.txt"
+            ],
+            "file_type": 3,
+            "file_source_code": "testInnerCOS"
+        }
     ],
     "target_server": {
         "dynamic_group_list": [
@@ -149,7 +149,7 @@
     "data": {
         "job_instance_name": "API Quick Distribution File1521101427176",
         "job_instance_id": 10000,
-		"step_instance_id": 10001
+        "step_instance_id": 10001
     }
 }
 ```

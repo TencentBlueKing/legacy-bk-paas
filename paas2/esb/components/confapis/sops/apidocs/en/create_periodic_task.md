@@ -1,33 +1,50 @@
+### Request Address
+
+/v2/sops/create_periodic_task/
+
+### Request Method
+
+POST
+
 ### Functional description
 
 Create a periodic task
 
 ### Request Parameters
 
-{{ common_args_desc }}
+#### General Parameters
+
+|   Field         |  Type       | Required |  Description    |
+|-----------------|-------------|---------|------------------|
+|   bk_app_code   |   string    |   YES    |  APP ID |
+|   bk_app_secret |   string    |   YES    |  APP Secret(APP TOKEN), which can be got via BlueKing Developer Center -> Click APP ID -> Basic Info |
+|   bk_token      |   string    |   NO     |  Current user login token, bk_token or bk_username must be valid, bk_token can be got by Cookie      |
+|   bk_username   |   string    |   NO     |  Current user username, APP in the white list, can use this field to specify the current user        |
 
 #### Interface Parameters
 
 | Field          |  Type       | Required   |  Description             |
 |---------------|------------|--------|------------------|
 |   template_id    |   string     |   YES   |  ID of template which used to create task |
+| template_source | string   |   NO    | source of flow，default value is business. business: from business, common: from common flow |
 |   bk_biz_id    |   string     |   YES   |  business ID |
 |   name    |   string     |   YES   |  name of task |
 |   cron    |   dict     |   YES   |  crontab dict |
 |   flow_type    |   string     |   NO    |  flow type，common: common flow，common_func：functional flow |
 |   constants    |   dict       |   NO    |  global variables，details are described below |
+| scope | string | NO | bk_biz_id scope. default value is 'cmdb_biz' and bk_sops will find a project which relate cmdb business id equal to bk_biz_id. otherwise, bk_sops will find a project which id equal to bk_biz_id when scope value is 'project'|
 
-#### constants.KEY
+#### constants KEY
 
 constant KEY, the format is like ${key}
 
-#### constants.VALUE
+#### constants VALUE
 
 constant value
 
 #### cron
- 
- | Field          |  Type       | Required   |  Description             |
+
+| Field          |  Type       | Required   |  Description             |
 | ------------ | ------------ | ------ | ---------------- |
 |   minute    |   string     |   NO   |  minute, default value is * |
 |   hour    |   string     |   NO   |  hour, default value is * |
@@ -42,12 +59,23 @@ constant value
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "template_id": "1",
     "bk_biz_id": "2",
+    "template_source": "business",
 	"name": "from api 3",
-	"cron" : {"minute": "*/1", "hour": "15", "day_of_week":"*", "day_of_month":"*", "month_of_year":"*"},
-	"constants": {"${bk_timing}": "100"},
-	"exclude_task_nodes_id": ["nodea5c396a3ef0f9f3cd7d4d7695f78"]
+	"cron" : {
+	    "minute": "*/1", 
+	    "hour": "15", 
+	    "day_of_week":"*", 
+	    "day_of_month":"*", 
+	    "month_of_year":"*"
+    },
+	"constants": {
+	    "${bk_timing}": "100"
+    },
+	"exclude_task_nodes_id": ["nodea5c396a3ef0f9f3cd7d4d7695f78"],
+	"scope":"cmdb_biz"
 }
 ```
 
@@ -242,9 +270,12 @@ constant value
         "last_run_at": "",
         "enabled": true,
         "id": 5,
-        "template_id": "2"
+        "template_id": 2,
+        "template_source": "business"
     },
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -255,6 +286,8 @@ constant value
 |  result   |    bool    |      true or false, indicate success or failure                      |
 |  data     |    dict    |      data returned when result is true, details are described below  |
 |  message  |    string  |      error message returned when result is false                     |
+|  request_id     |    string  | esb request id             |
+|  trace_id     |    string  | open telemetry trace_id        |
 
 #### data
 
@@ -268,9 +301,9 @@ constant value
 |  enabled      |    bool    |   is the task enabled   |
 |  id      |    int    |    task id   |
 |  template_id      |    string    |    template id for the task   |
+| template_source | string  | source of flow，default value is business. business: from business, common: from common flow |
 |  form      |    dict    |    form dict for the task   |
 |  pipeline_tree      |    dict    |    flow tree for the task   |
-
 
 #### data.pipeline_tree
 
@@ -278,17 +311,17 @@ constant value
 |-----------|----------|-----------|
 |  start_event      |    dict    |      start node     |
 |  end_event      |    dict    |      end node    |
-|  activities      |    dict    |      task node（atoms or subprocess）info    |
+|  activities      |    dict    |      task node（standard plugins or subprocess）info    |
 |  gateways      |    dict    |      gateways（parallel gateway、exclusive gateway、exclusive gateway）info    |
 |  flows      |    dict    |      sequenceFlow（the line between nodes）info    |
 |  constants      |    dict    |  global variables, details are described below    |
 |  outputs      |    list    |    outputs info, indicate outputs field of global variables|
 
-#### data.form.KEY, data.pipeline_tree.constants.KEY
+#### data.form KEY, data.pipeline_tree.constants KEY
 
 KEY, the format is like ${key}
 
-#### data.form.VALUE, data.pipeline_tree.constants.VALUE
+#### data.form VALUE, data.pipeline_tree.constants VALUE
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -297,6 +330,6 @@ KEY, the format is like ${key}
 |  index      |    int    |       display order at the front end   |
 |  desc      |    string    |     description   |
 |  source_type  | string   |      source of variable, custom mean manual variable, component_inputs means variables comes from task node inputs parameters, component_outputs means variables comes from task node outputs parameters   |
-|  custom_type  | string   |      custom type, which is not empty when source_type is custom,  the value is input ,or textarea, or datetime, or int |
-|  source_tag   | string   |      source tag and atom info, which is not empty when source_type is  component_inputs or component_outputs  |
+|  custom_type  | string   |      custom type, which is not empty when source_type is custom, the value is input ,or textarea, or datetime, or int |
+|  source_tag   | string   |      source tag and standard plugin info, which is not empty when source_type is  component_inputs or component_outputs  |
 |  source_info | dict    |        source info about task node ID  |

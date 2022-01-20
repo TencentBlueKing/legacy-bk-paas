@@ -14,7 +14,7 @@
 | script_version_id |  long       | 否     | SQL脚本版本ID |
 | script_id | string | 否 | 脚本ID。当传入script_id，且script_version_id为空的时候，使用当前脚本的上线版本 |
 | script_content |  string    | 否     | 脚本内容Base64。如果不存在script_version_id和script_id,那么使用script_content。优先级：script_version_id>script_id>script_content |
-| timeout |  int       | 否     | 脚本超时时间，秒。默认7200，取值范围60-86400 |
+| timeout |  int       | 否     | 脚本超时时间，秒。默认7200，取值范围1-86400 |
 | db_account_id  |  long       | 是     | SQL执行的db帐号ID，必填, 从帐号管理-DB帐号处获得。 |
 | target_server    |  object   | 否     | 目标服务器，见server定义 |
 | callback_url |  string   | 否     | 回调URL，当任务执行完成后，JOB会调用该URL告知任务执行结果。回调协议参考callback_protocol组件文档 |
@@ -94,7 +94,7 @@
     "data": {
         "job_instance_name": "API Quick SQL Execution1524454292038",
         "job_instance_id": 10000,
-		"step_instance_id": 10001
+        "step_instance_id": 10001
     }
 }
 ```

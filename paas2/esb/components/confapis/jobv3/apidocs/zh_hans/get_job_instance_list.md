@@ -28,19 +28,19 @@
 
 ```json
 {
-  "bk_app_code": "esb_test",
-  "bk_app_secret": "xxx",
-  "bk_token": "xxx",
-  "bk_biz_id": 1,
-  "type": 0,
-  "launch_mode": 1,
-  "status": 3,
-  "operator": "admin",
-  "name": "test",
-  "create_time_start": 1546272000000,
-  "create_time_end": 1577807999999,
-  "start": 0,
-  "length": 20
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id": 1,
+    "type": 0,
+    "launch_mode": 1,
+    "status": 3,
+    "operator": "admin",
+    "name": "test",
+    "create_time_start": 1546272000000,
+    "create_time_end": 1577807999999,
+    "start": 0,
+    "length": 20
 }
 ```
 
@@ -48,29 +48,29 @@
 
 ```json
 {
-    "result": true, 
-    "code": 0, 
-    "message": "success", 
+    "result": true,
+    "code": 0,
+    "message": "success",
     "data": {
         "data": [
             {
-                "bk_biz_id": 1, 
-                "id": 100, 
-                "job_template_id": 1, 
-                "job_plan_id": 1, 
-                "name": "test", 
-                "operator": "admin", 
-                "create_time": 1546272000000, 
-                "start_time": 1546272000000, 
-                "end_time": 1546272001000, 
-                "total_time": 1000, 
-                "launch_mode": 1, 
-                "task_status": 3, 
+                "bk_biz_id": 1,
+                "id": 100,
+                "job_template_id": 1,
+                "job_plan_id": 1,
+                "name": "test",
+                "operator": "admin",
+                "create_time": 1546272000000,
+                "start_time": 1546272000000,
+                "end_time": 1546272001000,
+                "total_time": 1000,
+                "launch_mode": 1,
+                "task_status": 3,
                 "task_type": 0
             }
-        ], 
-        "start": 0, 
-        "length": 20, 
+        ],
+        "start": 0,
+        "length": 20,
         "total": 1
     }
 }

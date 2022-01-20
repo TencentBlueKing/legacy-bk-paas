@@ -143,7 +143,7 @@
 
 - path: /v2/itsm/get_workflow_detail/
   name: get_workflow_detail
-  label: 服务流程详情
+  label: 单据详情查询
   label_en: get workflow detail
   suggest_method: GET
   api_type: query

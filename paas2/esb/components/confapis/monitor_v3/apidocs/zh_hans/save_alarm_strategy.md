@@ -6,6 +6,15 @@
 
 {{ common_args_desc }}
 
+#### 通用参数
+
+| 字段          | 类型   | 必选 | 描述                                                         |
+| ------------- | ------ | ---- | ------------------------------------------------------------ |
+| bk_app_code   | string | 是   | 应用ID                                                       |
+| bk_app_secret | string | 是   | 安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取 |
+| bk_token      | string | 否   | 当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取 |
+| bk_username   | string | 否   | 当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户 |
+
 #### 接口参数
 
 | 字段        | 类型   | 必选 | 描述             |
@@ -17,7 +26,7 @@
 | scenario    | string | 是   | 监控对象         |
 | is_enabled    | string | 否   | 是否开启，默认开启|
 
-#### NoticeAction
+#### action_list
 
 action目前只有通知类型，创建策略时，如果传入通知组的ID，则使用通知组
 
@@ -34,7 +43,7 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
 | notice_template.recovery_template | string | 否   | 恢复通知模板            |
 | notice_group_list                 | list   | 是   | 通知组列表(NoticeGroup) |
 
-#### NoticeGroup
+#### action_list.notice_group_list
 
 可以使用已存在的通知组
 
@@ -49,7 +58,7 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
 | message         | string | 否   | 备注                                               |
 | id              | int    | 否   | 通知组ID                                           |
 
-#### Item
+#### item_list
 
 | 字段                      | 类型   | 必选 | 描述                        |
 | ------------------------- | ------ | ---- | --------------------------- |
@@ -64,7 +73,7 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
 | data_type_label           | string | 是   | 数据类型                    |
 | target      | list   | 是   | 监控目标         |
 
-#### RtQueryConfig
+#### item_list.rt_query_config
 
 | 字段            | 类型   | 必选 | 描述     |
 | --------------- | ------ | ---- | -------- |
@@ -78,7 +87,7 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
 | agg_method      | string | 是   | 聚合方法 |
 | result_table_id | string | 是   | 结果表ID |
 
-#### Algorithm
+#### item_list.algorithm_list
 
 | 字段                         | 类型   | 必选 | 描述           |
 | ---------------------------- | ------ | ---- | -------------- |
@@ -91,6 +100,31 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
 | recovery_config              | dict   | 是   | 恢复配置       |
 | recovery_config.check_window | int    | 是   | 恢复周期数     |
 | message_template             | string | 否   |                |
+
+#### item_list.target字段说明
+
+| 字段   | 类型   | 必选 | 描述           |
+| ------ | ------ | ---- | -------------- |
+| field  | string | 是   | 监控目标类型   |
+| value  | dict   | 是   | 监控目标数据项 |
+| method | string | 是   | 监控目标方法   |
+
+field - 根据目标节点类型和目标对象类型组合
+host_target_ip
+host_ip
+host_topo
+service_topo
+service_service_template
+service_set_template
+host_service_template
+host_set_template
+
+#### item_list.target.value字段说明
+
+| 字段        | 类型   | 必选 | 描述     |
+| ----------- | ------ | ---- | -------- |
+| ip          | string | 是   | 目标ip   |
+| bk_cloud_id | string | 是   | 云区域id |
 
 #### 算法配置
 
@@ -151,102 +185,114 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
 
 ```json
 {
-  "bk_biz_id":2,
-  "item_list":[
-    {
-      "rt_query_config":{
-        "metric_field":"idle",
-        "agg_dimension":["ip", "bk_cloud_id"],
-        "unit_conversion":1.0,
-        "extend_fields":"",
-        "agg_method":"AVG",
-        "agg_condition":[],
-        "agg_interval":60,
-        "result_table_id":"system.cpu_detail",
-        "unit":"%"
-      },
-      "metric_id":"bk_monitor.system.cpu_detail.idle",
-      "item_name":"\u7a7a\u95f2\u7387",
-      "data_source_label":"bk_monitor",
-      "algorithm_list":[
+    "bk_app_code": "xxx",
+    "bk_app_secret": "xxxxx",
+    "bk_token": "xxxx",
+    "bk_biz_id":2,
+    "item_list":[
         {
-          "algorithm_config":[[
-            {
-              "threshold":0.1,
-              "method":"gte"
-            }
-          ]],
-          "level":1,
-          "trigger_config":{
-            "count":1,
-            "check_window":5
-          },
-          "algorithm_type":"Threshold",
-          "recovery_config":{
-            "check_window":5
-          },
-          "message_template":""
-        }
-      ],
-      "no_data_config":{
-        "is_enabled":false,
-        "continuous":5
-      },
-      "data_type_label":"time_series",
-      "name":"\u7a7a\u95f2\u7387",
-      "target":[
-        [
-          {
-            "field":"bk_target_ip",
-            "method":"eq",
-            "value":[
-              {
-                "ip":"127.0.0.1",
-                "bk_cloud_id":0
-              }
+            "rt_query_config":{
+                "metric_field":"idle",
+                "agg_dimension":["ip", "bk_cloud_id"],
+                "unit_conversion":1.0,
+                "extend_fields":"",
+                "agg_method":"AVG",
+                "agg_condition":[],
+                "agg_interval":60,
+                "result_table_id":"system.cpu_detail",
+                "unit":"%"
+            },
+            "metric_id":"bk_monitor.system.cpu_detail.idle",
+            "name":"\u7a7a\u95f2\u7387",
+            "data_source_label":"bk_monitor",
+            "algorithm_list":[
+                {
+                    "algorithm_config":[[
+                        {
+                            "threshold":0.1,
+                            "method":"gte"
+                        }
+                    ]],
+                    "level":1,
+                    "trigger_config":{
+                        "count":1,
+                        "check_window":5
+                    },
+                    "algorithm_type":"Threshold",
+                    "recovery_config":{
+                        "check_window":5
+                    },
+                    "message_template":""
+                }
+            ],
+            "no_data_config":{
+                "is_enabled":false,
+                "continuous":5
+            },
+            "data_type_label":"time_series",
+            "name":"\u7a7a\u95f2\u7387",
+            "target":[
+                [
+                    {
+                        "field":"bk_target_ip",
+                        "method":"eq",
+                        "value":[
+                            {
+                                "ip":"127.0.0.1",
+                                "bk_cloud_id":0
+                            }
+                        ]
+                    }
+                ]
             ]
-          }
-        ]
-      ]
-    }
-  ],
-  "scenario":"os",
-  "action_list":[
-    {
-      "notice_template":{
-        "anomaly_template":"aa",
-        "recovery_template":""
-      },
-      "notice_group_list":[
-        {
-          "notice_receiver":[
-            "user#test"
-          ],
-          "name":"test",
-          "notice_way":{
-            "1":["weixin"],
-            "3":["weixin"],
-            "2":["weixin"]
-          },
-          "message":"",
-          "notice_group_name":"test",
-          "id":1
         }
-      ],
-      "action_type":"notice",
-      "config":{
-        "alarm_end_time":"23:59:59",
-        "send_recovery_alarm":false,
-        "alarm_start_time":"00:00:00",
-        "alarm_interval":120
-      }
-    }
-  ],
-  "name":"test"
+    ],
+    "scenario":"os",
+    "action_list":[
+        {
+            "notice_template":{
+                "anomaly_template":"aa",
+                "recovery_template":""
+            },
+            "notice_group_list":[
+                {
+                    "notice_receiver":[
+                        "user#test"
+                    ],
+                    "name":"test",
+                    "notice_way":{
+                        "1":["weixin"],
+                        "3":["weixin"],
+                        "2":["weixin"]
+                    },
+                    "message":"",
+                    "notice_group_name":"test",
+                    "id":1
+                }
+            ],
+            "action_type":"notice",
+            "config":{
+                "alarm_end_time":"23:59:59",
+                "send_recovery_alarm":false,
+                "alarm_start_time":"00:00:00",
+                "alarm_interval":120
+            }
+        }
+    ],
+    "name":"test"
 }
 ```
 
 ### 响应参数
+
+| 字段    | 类型   | 描述         |
+| ------- | ------ | ------------ |
+| result  | bool   | 请求是否成功 |
+| code    | int    | 返回的状态码 |
+| message | string | 描述信息     |
+| data    | dict   | 数据         |
+
+#### data字段说明
 
 | 字段        | 类型 | 必选 | 描述   |
 | ----------- | ---- | ---- | ------ |
@@ -256,10 +302,11 @@ action目前只有通知类型，创建策略时，如果传入通知组的ID�
 
 ```json
 {
-	"result": true,
-  "data": {
-    "strategy_id": 1
-  },
-  "message": ""
+    "result": true,
+    "code": 200,
+    "data": {
+        "strategy_id": 1
+    },
+    "message": ""
 }
 ```

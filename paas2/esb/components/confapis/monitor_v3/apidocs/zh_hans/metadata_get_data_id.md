@@ -5,15 +5,25 @@
 查询一个数据源的ID
 根据给定的数据源ID，返回这个结果表的具体信息
 
+### 请求参数
 
 {{ common_args_desc }}
+
+#### 通用参数
+
+| 字段          | 类型   | 必选 | 描述                                                         |
+| ------------- | ------ | ---- | ------------------------------------------------------------ |
+| bk_app_code   | string | 是   | 应用ID                                                       |
+| bk_app_secret | string | 是   | 安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取 |
+| bk_token      | string | 否   | 当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取 |
+| bk_username   | string | 否   | 当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户 |
 
 #### 接口参数
 
 | 字段           | 类型   | 必选 | 描述        |
 | -------------- | ------ | ---- | ----------- |
-| bk\_data_id  | int | 否   | 数据源ID |
-| data\_name | string | 否 | 数据源名称 |
+| bk_data_id  | int | 否   | 数据源ID |
+| data_name | string | 否 | 数据源名称 |
 
 > 注意：
 > 1. 上述两个必须提供一个，不可以两者同时为空;
@@ -23,34 +33,54 @@
 
 ```json
 {
+    "bk_app_code": "xxx",
+  	"bk_app_secret": "xxxxx",
+  	"bk_token": "xxxx",
 	"bk_data_id": 1001
 }
 ```
 
 ### 返回结果
 
-#### 字段说明
+| 字段       | 类型   | 描述         |
+| ---------- | ------ | ------------ |
+| result     | bool   | 请求是否成功 |
+| code       | int    | 返回的状态码 |
+| message    | string | 描述信息     |
+| data       | dict   | 数据         |
+| request_id | string | 请求ID       |
+
+#### data字段说明
 
 | 字段                | 类型   | 描述     |
 | ------------------- | ------ | -------- |
-| bk\_data_id | int | 数据源ID  |
-| data_name | string | 数据源名称| 
-| data_description | string | 数据源描述 | 
-| mq\_cluster_info | object | 消息队列集群信息, 样例会有具体描述 | 
-| etl_config | string | 清洗配置名称 | 
-| is_custom_source | boolean | 是否用户自定义数据源 | 
-| creator | string | 创建者 | 
-| create_time | string | 创建时间, 格式为【2018-10-10 10:00:00】| 
-| last\_modify_user | string | 最后修改者 | 
-| last\_modify_time | string | 最后修改时间【2018-10-10 10:00:00】|
+| bk_data_id | int | 数据源ID  |
+| data_name | string | 数据源名称|
+| data_description | string | 数据源描述 |
+| mq_cluster_info | dict | 消息队列集群信息, 样例会有具体描述 |
+| etl_config | string | 清洗配置名称 |
+| is_custom_source | bool | 是否用户自定义数据源 |
+| creator | string | 创建者 |
+| create_time | string | 创建时间, 格式为【2018-10-10 10:00:00】|
+| last_modify_user | string | 最后修改者 |
+| last_modify_time | string | 最后修改时间【2018-10-10 10:00:00】|
 | token | string | dataID的验证码 |
+
+#### data.mq_cluster_info字段说明
+
+| 字段           | 类型   | 描述                               |
+| -------------- | ------ | ---------------------------------- |
+| storage_config | dict   | 存储集群特性，各个存储下字段不一致 |
+| cluster_config | dict   | 存储集群信息                       |
+| cluster_type   | string | 存储集群类型                       |
+| auth_info      | dict   | 身份认证信息                       |
 
 #### 结果示例
 
 ```json
 {
     "message":"OK",
-    "code":"0",
+    "code": 200,
     "data":{
     	"bk_data_id": 1001,
     	"data_name": "基础数据",

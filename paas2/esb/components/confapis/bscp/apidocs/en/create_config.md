@@ -18,8 +18,8 @@ create config
 | user_group     |  string   | N         | file user group in system, e.g. root (max_length: 64) |
 | file_privilege |  string   | N         | file privilege，e.g. 0755 (min_length: 4, max_length: 4) |
 | file_format    |  string   | N         | file format，e.g. unix (unix/windows)|
-| file_mode      |  integer  | N         | file mode, 0: text  1: binary 2: template |
-| memo           |  string   | N         | memo description (max_length: 64) |
+| file_mode      |  integer  | N         | file mode, 1: text  2: binary 3: template |
+| memo           |  string   | N         | memo description (max_length: 256) |
 
 ### Request Parameters Example
 

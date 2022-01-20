@@ -16,6 +16,13 @@ create ticket of service
 | fast_approval| boolean    | NO   | is fast approval ticket|
 | meta| dict    | NO   | extend |
 
+### fields
+
+| Field                     | Type    | Required | Description       |
+| ---------------------- | ------ | -------- |------|
+| key     | string |YES| Unique identification of bill of lading fields|
+| value | string |YES   |  Bill of lading field value|
+
 ### meta
 
 | Field                     | Type    | Required | Description       |
@@ -38,7 +45,7 @@ create ticket of service
 		"value": "test approval"
 	}, {
 		"key": "APPROVER",
-		"value": "xx,xxx,xxx"
+		"value": "xx,xxx,xxxx"
 	}, {
 		"key": "APPROVAL_CONTENT",
 		"value": "this is a ticket"
@@ -47,7 +54,7 @@ create ticket of service
 	"meta": {
 		"callback_url": "http://***",
 		"state_processors": {
-			"407": "xxx,xxx"
+			"407": "xxx,xxxx"
 		}
 	}
 }  
@@ -57,12 +64,14 @@ create ticket of service
 
 ```json
 {
+	"result": true,
 	"message": "success",
 	"code": 0,
 	"data": {
-		"sn": "NO2019090519542603"
-	},
-    "result": true
+		"sn": "NO2019090519542603",
+		"id": 101,
+		"ticket_url": "http://bk_itsm/#/ticket/detail?id=101"
+	}
 }
 
 ```
@@ -81,3 +90,5 @@ create ticket of service
 | Field                     | Type     | Description       |
 | ---------------------- | ------ | -------- |
 | sn                     | string | ticket number     |
+| id                     | int | ticket ID     |
+| ticket_url                     | string |  ticket url    |

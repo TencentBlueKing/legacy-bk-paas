@@ -19,7 +19,7 @@ query application list
 |--------------|--------|----------|-------------|
 | return_total |  bool  | N        | return total num or not, not return as default |
 | start        |  int   | Y        | start record |
-| limit        |  int   | Y        | page limit, max is 100 |
+| limit        |  int   | Y        | page limit, max is 500 |
 
 ### Request Parameters Example
 
@@ -31,7 +31,7 @@ query application list
     "biz_id": "xxx",
     "page": {
         "start": 0,
-        "limit": 100
+        "limit": 500
     }
 }
 ```
@@ -50,11 +50,11 @@ query application list
                 "biz_id": "XXX",
                 "app_id": "A-0b67a798-e9c1-11e9-8c23-525400f99278",
                 "name": "myapp",
-                "deploy_type": 0,
+                "deploy_type": 1,
                 "creator": "melo",
                 "last_modify_by": "melo",
                 "memo": "my first app",
-                "state": 0,
+                "state": 1,
                 "created_at": "2019-07-29 11:57:20",
                 "updated_at": "2019-07-29 11:57:20"
             }
@@ -79,9 +79,9 @@ query application list
 | biz_id         |  string   | business id  |
 | app_id         |  string   | application id  |
 | name           |  string   | application name  |
-| deploy_type    |  integer  | deploy type, 0: container  1: process |
+| deploy_type    |  integer  | deploy type, 1: container  2: process |
 | memo           |  string   | memo description |
-| state          |  integer  | state default 0: valid |
+| state          |  integer  | state default 1: valid |
 | creator        |  string   | creator |
 | last_modify_by |  string   | last modify operator |
 | created_at     |  string   | create time |

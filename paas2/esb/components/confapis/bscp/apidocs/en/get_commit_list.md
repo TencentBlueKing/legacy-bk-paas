@@ -14,7 +14,7 @@ query history commit list
 | app_id      |  string   | Y         | application id |
 | cfg_id      |  string   | N         | config id  |
 | operator    |  string   | N         | operator name   |
-| query_type  |  integer  | N         | query type，0:all 1:inited  2:confirmed 3:canceled |
+| query_type  |  integer  | N         | query type，1:all 2:inited  3:confirmed 4:canceled |
 | page        |  object   | Y         | query page settings |
 
 #### page
@@ -23,7 +23,7 @@ query history commit list
 |--------------|--------|----------|-------------|
 | return_total |  bool  | N        | return total num or not, not return as default |
 | start        |  int   | Y        | start record |
-| limit        |  int   | Y        | page limit, max is 100 |
+| limit        |  int   | Y        | page limit, max is 500 |
 
 ### Request Parameters Example
 
@@ -39,7 +39,7 @@ query history commit list
     "query_type": 0,
     "page": {
         "start": 0,
-        "limit": 100
+        "limit": 500
     }
 }
 ```

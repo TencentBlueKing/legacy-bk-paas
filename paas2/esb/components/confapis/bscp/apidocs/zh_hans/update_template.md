@@ -13,7 +13,7 @@
 | biz_id         |  string    | 是     | 业务ID     |
 | template_id    |  string    | 是     | 模板ID     |
 | name           |  string    | 是     | 模板名称 (max_length: 64) |
-| cfg_name       |  string    | 是     | 配置名称, 例如server.yaml (max_length: 64) |
+| cfg_name       |  string    | 是     | 配置名称, 例如server.yaml (max_length: 128) |
 | cfg_fpath      |  string    | 是     | 配置相对路径, 例如/etc (max_length: 256) |
 | user           |  string    | 是     | 归属用户信息, 例如root (max_length: 64) |
 | user_group     |  string    | 是     | 归属用户组信息, 例如root (max_length: 64) |

@@ -13,7 +13,7 @@
 | biz_id      |  string   | 是     | 业务ID   |
 | app_id      |  string   | 是     | 应用ID   |
 | operator    |  string   | 否     | 按操作人查询 |
-| query_type  |  integer  | 否     | 查询类型，0:全部状态 1:初始化的 2:已确认的 3:已撤销的 |
+| query_type  |  integer  | 否     | 查询类型，1:全部状态 2:初始化的 3:已确认的 4:已撤销的 |
 | order_type  |  integer  | 否     | 排序类型，0:版本序列号从大到小(版本新到旧)  1:更新时间从新到旧 |
 | page        |  object   | 是     | 分页设置 |
 
@@ -23,7 +23,7 @@
 |--------------|--------|--------|------------|
 | return_total |  bool  | 否     | 是否返回总记录条数, 默认不返回 |
 | start        |  int   | 是     | 记录开始位置 |
-| limit        |  int   | 是     | 每页限制条数,最大100 |
+| limit        |  int   | 是     | 每页限制条数,最大500 |
 
 ### 请求参数示例
 
@@ -39,7 +39,7 @@
     "order_type": 0,
     "page": {
         "start": 0,
-        "limit": 100
+        "limit": 500
     }
 }
 ```

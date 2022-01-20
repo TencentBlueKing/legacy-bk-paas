@@ -10,7 +10,7 @@ query service detail info
 
 | Field         | Type  | Required  | Description   |
 | ---------- | --- | --- | ---- |
-| service_id | int | YES   | service id |
+| service_id | int | YES   | service id, Get from the `data["id"]` field in the `get_services` interface |
 
 ### Request Parameters Example
 
