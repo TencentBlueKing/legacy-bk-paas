@@ -185,8 +185,9 @@
 <style lang="postcss" scoped>
     .page-select {
         display: flex;
-        width: 342px;
+        min-width: 342px;
         align-items: center;
+        margin-right: 18px;
         .page-name {
             display: flex;
             align-items: center;

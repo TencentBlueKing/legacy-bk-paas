@@ -8,7 +8,11 @@
                 <div class="device-phone"></div>
             </div>
             <div class="simulator-preview" :style="{ width: width + 'px', height: height + 'px' }">
-                123123123123
+                <iframe width="100%"
+                    height="100%"
+                    :src="source"
+                >
+                </iframe>
             </div>
         </div>
     </div>
@@ -18,12 +22,22 @@
     import getModelInfo from './common/model'
     import emitter from 'tiny-emitter/instance'
     import { ref } from '@vue/composition-api'
+    import { useStore } from '@/store'
+    import { useRoute } from '@/router'
 
     export default {
         setup () {
+            const store = useStore()
+            const route = useRoute()
             const { canvasSize } = getModelInfo()
             const width = ref(canvasSize.value.width)
             const height = ref(canvasSize.value.height)
+
+            const projectId = route.params.projectId
+            const pageCode = store.getters['page/pageDetail'].pageCode
+            const versionId = store.getters['projectVersion/currentVersionId']
+
+            const versionQuery = `${versionId ? `&v=${versionId}` : ''}`
 
             emitter.on('update-canvas-size', val => {
                 width.value = val.value.width
@@ -32,19 +46,21 @@
 
             return {
                 width,
-                height
+                height,
+                source: `/preview/project/${projectId}/preveiew?pageCode=${pageCode}${versionQuery}`
             }
         }
     }
 </script>
 
 <style lang="postcss" scoped>
-    @import './area.css';
+    @import './area.scss';
 
     .simulator-wrapper {
         position: relative;
         .device-phone-frame {
             z-index: 1;
+            pointer-events: none;
             position: absolute;
             height: 100%;
             width: 100%;
@@ -69,6 +85,9 @@
             width: 100%;
             box-sizing: content-box;
             padding: 5% 6.5% 5.6%;
+            &::-webkit-scrollbar {
+                display: none;
+            }
         }
     }
 </style>

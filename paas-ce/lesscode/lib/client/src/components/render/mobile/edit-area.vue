@@ -54,5 +54,5 @@
 </script>¬
 
 <style lang="postcss" scoped>
-    @import './area.css'
+    @import './area.scss'
 </style>

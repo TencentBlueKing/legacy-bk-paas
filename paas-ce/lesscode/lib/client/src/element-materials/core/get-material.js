@@ -3,12 +3,14 @@ import ElementMaterials from '../materials'
 
 const {
     bk,
-    element
+    element,
+    vant
 } = ElementMaterials
 
 const elementMap = [
     ...bk,
-    ...element
+    ...element,
+    ...vant
 ].reduce((result, item) => {
     result[item.type] = item
     return result

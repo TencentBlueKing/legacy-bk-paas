@@ -43,7 +43,7 @@
             baseComponent: {
                 type: String,
                 validator: function (value) {
-                    return ['bk', 'element'].includes(value)
+                    return ['bk', 'element', 'vant'].includes(value)
                 }
             }
         },
@@ -61,7 +61,8 @@
             groupList () {
                 const groupNameMap = {
                     bk: 'bkComponentGroupList',
-                    element: 'elementComponentGroupList'
+                    element: 'elementComponentGroupList',
+                    vant: 'vantComponentGroupList'
                 }
                 return MaterialConfig[groupNameMap[this.baseComponent]]
             },

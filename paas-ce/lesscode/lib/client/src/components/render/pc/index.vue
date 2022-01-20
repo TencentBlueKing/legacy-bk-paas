@@ -18,7 +18,7 @@
             <draggable
                 v-if="isReady"
                 class="target-drag-area"
-                :class="$style['editor']"
+                :class="[$style['editor'], platform === 'mobile' && $style['mobile']]"
                 :component-data="componentData"
                 :list="componentData.slot.default"
                 :sort="true"
@@ -58,6 +58,7 @@
     } from './components/draggable'
     import Layout from './widget/layout'
     import ResolveInteractiveComponent from './resolve-interactive-component'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'render',
@@ -78,6 +79,9 @@
                 showNotVisibleMask: false,
                 invisibleComponent: ''
             }
+        },
+        computed: {
+            ...mapGetters('page', ['platform'])
         },
         watch: {
             showNotVisibleMask (val) {
@@ -195,6 +199,9 @@
     .editor{
         padding-bottom: 300px;
         z-index: 1000000000000 !important;
+    }
+    .mobile {
+        padding-bottom: 50px;
     }
     .not-visible-mask{
         position: fixed;

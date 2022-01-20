@@ -149,7 +149,14 @@ export default class Node {
      */
     get style () {
         const style = Object.keys(this.renderStyles).reduce((result, key) => {
-            if (key !== 'customStyle') {
+            /** 样式获取和处理
+             * 如果是rpx单位，转换为rem，使浏览器可识别和渲染
+             */
+            if (/\d+rpx$/.test(this.renderStyles[key])) {
+                const sizeNumber = /(\d+)rpx$/.exec(this.renderStyles[key])[1] / 750 * 20
+                result[key] = sizeNumber + 'rem'
+                return result
+            } else if (key !== 'customStyle') {
                 result[key] = this.renderStyles[key]
             }
             return result

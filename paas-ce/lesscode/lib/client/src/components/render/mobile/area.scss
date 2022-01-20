@@ -48,5 +48,9 @@
         background: #ffffff;
         border-radius: 2px;
         box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.10);
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
   }
