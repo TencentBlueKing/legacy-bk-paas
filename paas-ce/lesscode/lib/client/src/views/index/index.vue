@@ -49,7 +49,7 @@
 </template>
 <script>
     import Vue from 'vue'
-    import { mapActions } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
     import LC from '@/element-materials/core'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
@@ -84,6 +84,13 @@
                 operationType: 'edit'
             }
         },
+        computed: {
+            ...mapGetters('projectVersion', {
+                versionId: 'currentVersionId',
+                versionName: 'currentVersionName',
+                getInitialVersion: 'initialVersion'
+            })
+        },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
@@ -96,6 +103,9 @@
             this.$store.dispatch('member/setCurUserPermInfo', {
                 id: this.projectId
             })
+
+            // 获取并设置当前版本信息
+            this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
 
             this.guideStep = [
                 {
@@ -151,7 +161,7 @@
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
                 title: '确认离开?',
-                subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                subTitle: '您将离开画布编辑页面，请确认相应修改已保存',
                 confirmFn: async () => {
                     next()
                 }
@@ -196,13 +206,23 @@
                     this.isContentLoading = true
                     const [pageDetail, pageList, projectDetail] = await Promise.all([
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
-                        this.$store.dispatch('page/getList', { projectId: this.projectId }),
+                        this.$store.dispatch('page/getList', {
+                            projectId: this.projectId,
+                            versionId: this.versionId
+                        }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
                         this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
-                        this.$store.dispatch('route/getProjectPageRoute', { projectId: this.projectId }),
+                        this.$store.dispatch('route/getProjectPageRoute', {
+                            projectId: this.projectId,
+                            versionId: this.versionId
+                        }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
-                        this.getAllGroupFuncs(this.projectId)
+                        this.$store.dispatch('functions/getAllGroupFuncs', {
+                            projectId: this.projectId,
+                            versionId: this.versionId
+                        }),
+                        this.$store.dispatch('dataSource/list', { projectId: this.projectId })
                     ])
 
                     await this.$store.dispatch('page/getPageSetting', {
@@ -213,6 +233,7 @@
                     await this.getAllVariable({
                         projectId: this.projectId,
                         pageCode: pageDetail.pageCode,
+                        versionId: this.versionId,
                         effectiveRange: 0
                     })
 

@@ -32,6 +32,8 @@ export default () => {
     const variableList = computed(() => store.getters['variable/variableList'])
     const curTemplateData = computed(() => store.getters['drag/curTemplateData'])
     const pageDetail = computed(() => store.getters['page/pageDetail'])
+    const versionId = computed(() => store.getters['projectVersion/versionId'])
+    
     const currentInstance = getCurrentInstance()
 
     const submit = () => {
@@ -176,6 +178,7 @@ export default () => {
                 from: '',
                 projectId: route.params.projectId,
                 pageCode: pageDetail.value.pageCode,
+                versionId: versionId.vlaue,
                 pageData: {
                     id: parseInt(route.params.pageId),
                     content: JSON.stringify(LC.getRoot().toJSON().renderSlots.default)

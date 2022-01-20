@@ -1,5 +1,5 @@
 import html2canvas from 'html2canvas'
-import { ref } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 import { useStore } from '@/store'
 import { useRoute } from '@/router'
 import previewErrorImg from '@/images/preview-error.png'
@@ -7,6 +7,8 @@ import previewErrorImg from '@/images/preview-error.png'
 export default () => {
     const store = useStore()
     const route = useRoute()
+
+    const versionId = computed(() => store.getters['projectVersion/versionId'])
 
     const isLoading = ref(false)
 
@@ -18,6 +20,7 @@ export default () => {
                 return store.dispatch('page/update', {
                     data: {
                         projectId: route.params.projectId,
+                        versionId: versionId.value,
                         pageData: {
                             id: parseInt(route.params.pageId),
                             previewImg: imgData || previewErrorImg

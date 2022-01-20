@@ -363,8 +363,13 @@
                 if (this.propTypeValueMemo.hasOwnProperty(valueType)) {
                     code = this.propTypeValueMemo[valueType].val
                     payload = this.propTypeValueMemo[valueType].payload
-                } else if (valueType === 'remote') {
-                    // fix: 配置远程函数类型，接口数据没返回时使用配置文件设置的默认值
+                } else if ([
+                    'remote',
+                    'data-source',
+                    'table-data-source'
+                ].includes(valueType)) {
+                    // fix:
+                    // 远程函数、数据源类型在没有获取数据前使用配置文件设置的默认值
                     code = this.describe.val
                 } else {
                     // 切换值类型时，通过类型获取默认值

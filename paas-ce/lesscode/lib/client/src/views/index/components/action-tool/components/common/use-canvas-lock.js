@@ -9,7 +9,7 @@ import { useRoute } from '@/router'
 
 let lockNotify = ''
 
-export default () => {
+export default function () {
     const store = useStore()
     const route = useRoute()
 
