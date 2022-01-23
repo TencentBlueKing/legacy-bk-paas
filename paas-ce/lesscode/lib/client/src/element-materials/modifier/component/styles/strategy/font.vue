@@ -99,7 +99,8 @@
         <style-item name="text-decoration" v-if="handleHasKey('textDecoration')">
             <bk-select
                 :value="renderValueMap.textDecoration"
-                font-size="medium" :clearable="false"
+                font-size="medium"
+                :clearable="false"
                 @change="handleFontChange('textDecoration', $event)"
                 style="width: 100%;">
                 <bk-option id="none" name="none" />

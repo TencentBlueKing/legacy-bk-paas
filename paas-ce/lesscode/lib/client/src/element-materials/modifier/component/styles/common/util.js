@@ -3,7 +3,7 @@
  *
  * @param {array | Object} props 组件所有样式属性
  * @param {array} include 包含样式属性
- * @param {array} exclude 不包样式含属性
+ * @param {array} exclude 不包含样式属性
  *
  * @return {Array | Object} 样式属性
  */
@@ -28,6 +28,5 @@ export function getCssProperties (props, include, exclude) {
             }
         }
     }
-    console.log(propsValue)
     return propsValue
 }
