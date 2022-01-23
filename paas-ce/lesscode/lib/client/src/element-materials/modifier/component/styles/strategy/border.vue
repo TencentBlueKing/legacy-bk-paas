@@ -126,32 +126,38 @@
             ></border-detail>
         </div>
         <style-item name="边框图片">
-            <bk-switcher :value="borderImage.show" theme="primary" size="small" @change="handelImageShowChange" />
+            <bk-switcher
+                :value="borderImage.show"
+                theme="primary"
+                size="small"
+                @change="handelImageShowChange" />
         </style-item>
         <template v-if="borderImage.show">
             <style-item name="url">
-                <bk-input style="width: 100%" :value="borderImage.borderImageSource" @change="handleBorderSourceChange" />
+                <bk-input
+                    :value="borderImage.borderImageSource"
+                    @change="handleBorderSourceChange"
+                    style="width: 100%" />
             </style-item>
             <style-item name="偏移">
                 <size-input
-                    style="width: 85px"
-                    :placeholder="' '"
                     :value="borderImageSlice.x"
-                    @change="handleBorderSliceChange('x', $event)">
-                </size-input>
-                <size-input
-                    style="width: 85px"
                     :placeholder="' '"
+                    @change="handleBorderSliceChange('x', $event)"
+                    style="width: 85px" />
+                <size-input
                     :value="borderImageSlice.y"
-                    @change="handleBorderSliceChange('y', $event)">
-                </size-input>
+                    :placeholder="' '"
+                    @change="handleBorderSliceChange('y', $event)"
+                    style="width: 85px" />
             </style-item>
             <style-item name="repeat">
                 <bk-select
-                    style="width: 100%;"
                     :value="borderImage.borderImageRepeat"
-                    :clearable="false" font-size="medium"
-                    @change="handleBorderRepeatChange">
+                    :clearable="false"
+                    font-size="medium"
+                    @change="handleBorderRepeatChange"
+                    style="width: 100%;">
                     <bk-option id="stretch" name="stretch" />
                     <bk-option id="repeat" name="repeat" />
                     <bk-option id="round" name="round" />

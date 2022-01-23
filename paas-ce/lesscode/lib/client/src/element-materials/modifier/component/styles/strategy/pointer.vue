@@ -13,11 +13,11 @@
     <style-layout title="鼠标">
         <style-item :name="'cursor'">
             <bk-select
-                style="width: 100%;"
                 :value="cursorValue"
                 font-size="medium"
                 :clearable="false"
-                @change="handleChange">
+                @change="handleChange"
+                style="width: 100%;">
                 <bk-option id="auto" name="auto" />
                 <bk-option id="default" name="default" />
                 <bk-option id="crosshair" name="crosshair" />

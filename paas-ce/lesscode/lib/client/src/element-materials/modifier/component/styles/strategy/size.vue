@@ -14,9 +14,11 @@
         <style-item :name="item.name" v-for="item in sizeConfigRender" :key="item.key">
             <bk-select
                 v-if="item.key === 'display'"
-                :value="item.value" style="width: 100%;"
-                font-size="medium" :clearable="false"
-                @change="handleDisplayChange(item, $event)">
+                :value="item.value"
+                font-size="medium"
+                :clearable="false"
+                @change="handleDisplayChange(item, $event)"
+                style="width: 100%;">
                 <bk-option id="block" name="block" />
                 <bk-option id="inline" name="inline" />
                 <bk-option id="inline-block" name="inline-block" />
@@ -24,7 +26,7 @@
                 <bk-option id="initial" name="initial" />
             </bk-select>
             <size-input v-else :value="item.value" @change="handleInputChange(item, $event)">
-                <append-select :value="item.unit" @change="handleSelectChange(item, $event)"></append-select>
+                <append-select :value="item.unit" @change="handleSelectChange(item, $event)" />
             </size-input>
         </style-item>
     </style-layout>
@@ -36,6 +38,7 @@
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
+    import { getCssProperties } from '../common/util'
 
     const sizeConfig = [
         {
@@ -101,13 +104,7 @@
         },
         methods: {
             handleInitValueList () {
-                let result = sizeConfig
-                if (this.include && this.include.length) {
-                    result = result.filter(item => this.include.includes(item.key))
-                }
-                if (this.exclude) {
-                    result = result.filter(item => !this.exclude.includes(item.key))
-                }
+                let result = getCssProperties(sizeConfig, this.include, this.exclude)
                 const that = this
                 result = result.map(function (item) {
                     if (item.key === 'display') {

@@ -13,11 +13,11 @@
     <style-layout title="文字">
         <style-item name="字体" v-if="handleHasKey('fontFamily')">
             <bk-select
-                style="width: 100%;"
                 :value="renderValueMap.fontFamily"
                 font-size="medium"
                 :clearable="false"
-                @change="handleFontChange('fontFamily', $event)">
+                @change="handleFontChange('fontFamily', $event)"
+                style="width: 100%;">
                 <bk-option id="inherit" name="默认" />
                 <bk-option id="PingFang SC, sans-serif" name="苹方" />
                 <bk-option id="Microsoft Yahei, san-serif" name="微软雅黑" />
@@ -27,13 +27,13 @@
             </bk-select>
         </style-item>
         <style-item name="字号字重" v-if="handleHasKey('fontSize') || handleHasKey('fontWeight')">
-            <font-size-input :value="renderValueMap.fontSize" @change="handleFontWithUnitChange('fontSize', $event)"></font-size-input>
+            <font-size-input :value="renderValueMap.fontSize" @change="handleFontWithUnitChange('fontSize', $event)" />
             <bk-select
-                style="width: 96px;"
                 :value="renderValueMap.fontWeight"
                 font-size="medium"
                 :clearable="false"
-                @change="handleFontChange('fontWeight', $event)">
+                @change="handleFontChange('fontWeight', $event)"
+                style="width: 96px;">
                 <bk-option id="inherit" name="默认" />
                 <bk-option id="normal" name="normal" />
                 <bk-option id="lighter" name="lighter" />
@@ -47,15 +47,18 @@
             </bk-select>
         </style-item>
         <style-item name="颜色" v-if="handleHasKey('color')">
-            <bk-color-picker style="width: 100%;" :value="renderValueMap.color" @change="handleFontChange('color', $event)"></bk-color-picker>
+            <bk-color-picker
+                :value="renderValueMap.color"
+                style="width: 100%;"
+                @change="handleFontChange('color', $event)" />
         </style-item>
         <style-item name="字体样式" v-if="handleHasKey('fontStyle')">
             <bk-select
-                style="width: 100%;"
                 :value="renderValueMap.fontStyle"
                 font-size="medium"
                 :clearable="false"
-                @change="handleFontChange('fontStyle', $event)">
+                @change="handleFontChange('fontStyle', $event)"
+                style="width: 100%;">
                 <bk-option id="normal" name="normal" />
                 <bk-option id="italic" name="italic" />
                 <bk-option id="oblique" name="oblique" />
@@ -64,32 +67,30 @@
         </style-item>
         <style-item name="行间距" v-if="handleHasKey('lineHeight')">
             <size-input :value="renderValueMap.lineHeight" @change="handleInputChange('lineHeight', $event)">
-                <append-select :value="unitMap.lineHeight" @change="handleSelectChange('lineHeight', $event)"></append-select>
+                <append-select :value="unitMap.lineHeight" @change="handleSelectChange('lineHeight', $event)" />
             </size-input>
         </style-item>
         <style-item name="字符间距" v-if="handleHasKey('letterSpacing')">
             <font-size-input
-                style="width: 100%"
                 :value="renderValueMap.letterSpacing"
                 placeholder="请输入"
-                @change="handleFontWithUnitChange('letterSpacing', $event)">
-            </font-size-input>
+                @change="handleFontWithUnitChange('letterSpacing', $event)"
+                style="width: 100%" />
         </style-item>
         <style-item name="word-spacing" v-if="handleHasKey('wordSpacing')">
             <font-size-input
-                style="width: 100%"
                 :value="renderValueMap.wordSpacing"
                 placeholder="请输入"
-                @change="handleFontWithUnitChange('wordSpacing', $event)">
-            </font-size-input>
+                @change="handleFontWithUnitChange('wordSpacing', $event)"
+                style="width: 100%" />
         </style-item>
         <style-item name="text-align" v-if="handleHasKey('textAlign')">
             <bk-select
-                style="width: 100%;"
                 :value="renderValueMap.textAlign"
                 font-size="medium"
                 :clearable="false"
-                @change="handleFontChange('textAlign', $event)">
+                @change="handleFontChange('textAlign', $event)"
+                style="width: 100%;">
                 <bk-option id="left" name="left" />
                 <bk-option id="center" name="center" />
                 <bk-option id="right" name="right" />
@@ -97,10 +98,10 @@
         </style-item>
         <style-item name="text-decoration" v-if="handleHasKey('textDecoration')">
             <bk-select
-                style="width: 100%;"
                 :value="renderValueMap.textDecoration"
                 font-size="medium" :clearable="false"
-                @change="handleFontChange('textDecoration', $event)">
+                @change="handleFontChange('textDecoration', $event)"
+                style="width: 100%;">
                 <bk-option id="none" name="none" />
                 <bk-option id="underline" name="underline" />
                 <bk-option id="overline" name="overline" />
@@ -109,27 +110,27 @@
         </style-item>
         <style-item name="缩进" v-if="handleHasKey('textIndent')">
             <size-input :value="renderValueMap.textIndent" @change="handleInputChange('textIndent', $event)">
-                <append-select :value="unitMap.textIndent" @change="handleSelectChange('textIndent', $event)"></append-select>
+                <append-select :value="unitMap.textIndent" @change="handleSelectChange('textIndent', $event)" />
             </size-input>
         </style-item>
         <style-item name="text-overflow" v-if="handleHasKey('textOverflow')">
             <bk-select
-                style="width: 100%;"
                 :value="renderValueMap.textOverflow"
                 font-size="medium"
                 :clearable="false"
-                @change="handleFontChange('textOverflow', $event)">
+                @change="handleFontChange('textOverflow', $event)"
+                style="width: 100%;">
                 <bk-option id="clip" name="clip" />
                 <bk-option id="ellipsis" name="ellipsis" />
             </bk-select>
         </style-item>
         <style-item name="word-break" v-if="handleHasKey('wordBreak')">
             <bk-select
-                style="width: 100%;"
                 :value="renderValueMap.wordBreak"
                 font-size="medium"
                 :clearable="false"
-                @change="handleFontChange('wordBreak', $event)">
+                @change="handleFontChange('wordBreak', $event)"
+                style="width: 100%;">
                 <bk-option id="normal" name="normal" />
                 <bk-option id="break-all" name="break-all" />
                 <bk-option id="keep-all" name="keep-all" />
@@ -137,22 +138,22 @@
         </style-item>
         <style-item name="word-wrap" v-if="handleHasKey('wordWrap')">
             <bk-select
-                style="width: 100%;"
                 :value="renderValueMap.wordWrap"
                 font-size="medium"
                 :clearable="false"
-                @change="handleFontChange('wordWrap', $event)">
+                @change="handleFontChange('wordWrap', $event)"
+                style="width: 100%;">
                 <bk-option id="normal" name="normal" />
                 <bk-option id="break-word" name="break-word" />
             </bk-select>
         </style-item>
         <style-item name="white-space" v-if="handleHasKey('whiteSpace')">
             <bk-select
-                style="width: 100%;"
                 :value="renderValueMap.whiteSpace"
                 font-size="medium"
                 :clearable="false"
-                @change="handleFontChange('whiteSpace', $event)">
+                @change="handleFontChange('whiteSpace', $event)"
+                style="width: 100%;">
                 <bk-option id="normal" name="normal" />
                 <bk-option id="pre" name="pre" />
                 <bk-option id="nowrap" name="nowrap" />
@@ -163,11 +164,11 @@
         </style-item>
         <style-item name="垂直对齐" v-if="handleHasKey('verticalAlign')">
             <bk-select
-                style="width: 100%;"
                 :value="renderValueMap.verticalAlign"
                 font-size="medium"
                 :clearable="false"
-                @change="handleFontChange('verticalAlign', $event)">
+                @change="handleFontChange('verticalAlign', $event)"
+                style="width: 100%;">
                 <bk-option id="baseline" name="baseline" />
                 <bk-option id="sub" name="sub" />
                 <bk-option id="super" name="super" />
@@ -188,6 +189,7 @@
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
+    import { getCssProperties } from '../common/util'
 
     export default {
         components: {
@@ -245,14 +247,10 @@
         },
         methods: {
             handleInitValueMap () {
-                const result = this.include && this.include.length ? {} : this.valueMap
-                for (const i in this.valueMap) {
-                    if (this.include && this.include.includes(i)) {
-                        result[i] = this.valueMap[i]
-                    }
-                    if (this.exclude && this.exclude.includes(i)) {
-                        delete result[i]
-                    }
+                const result = getCssProperties(this.valueMap, this.include, this.exclude)
+                if (result.hasOwnProperty('fontSize') || result.hasOwnProperty('fontWeight')) {
+                    result['fontSize'] = this.valueMap['fontSize']
+                    result['fontWeight'] = this.valueMap['fontWeight']
                 }
                 this.renderValueMap = result
             },

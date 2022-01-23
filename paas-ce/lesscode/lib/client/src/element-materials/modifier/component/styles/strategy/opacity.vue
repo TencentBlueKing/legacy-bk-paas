@@ -13,15 +13,14 @@
     <style-layout title="透明度">
         <style-item name="opacity">
             <bk-input
-                style="width: 100%"
+                :value="opacityValue"
                 type="number"
                 placeholder="请输入"
-                :value="opacityValue"
                 :min="0"
                 :max="1"
                 :native-attributes="{ step: 0.1 }"
-                @change="handleOpacityChange">
-            </bk-input>
+                @change="handleOpacityChange"
+                style="width: 100%" />
         </style-item>
     </style-layout>
 </template>

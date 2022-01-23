@@ -12,65 +12,69 @@
 <template>
     <style-layout title="背景">
         <style-item name="颜色" v-if="handleHasKey('backgroundColor')">
-            <bk-color-picker style="width: 100%;" :value="renderValueMap.backgroundColor" @change="handleValueChange('backgroundColor', $event)"></bk-color-picker>
+            <bk-color-picker
+                :value="renderValueMap.backgroundColor"
+                @change="handleValueChange('backgroundColor', $event)"
+                style="width: 100%;" />
         </style-item>
         <style-item name="背景图" v-if="handleHasKey('backgroundImage')">
-            <bk-switcher theme="primary" size="small" :value="backgroundImageShow" @change="handleImageShowChange" />
+            <bk-switcher
+                :value="backgroundImageShow"
+                theme="primary"
+                size="small"
+                @change="handleImageShowChange" />
         </style-item>
         <template v-if="backgroundImageShow">
             <style-item name="url">
-                <bk-input style="width: 100%" :value="renderValueMap.backgroundImage" @change="handleValueChange('backgroundImage', $event)" />
+                <bk-input
+                    :value="renderValueMap.backgroundImage"
+                    @change="handleValueChange('backgroundImage', $event)"
+                    style="width: 100%" />
             </style-item>
             <style-item name="大小">
                 <template>
                     <size-input
-                        style="width: 60px"
                         :value="backgroundSize.width"
                         :placeholder="' '"
-                        @change="handleBackgroundSizeChange('width', $event)">
-                    </size-input>
+                        @change="handleBackgroundSizeChange('width', $event)"
+                        style="width: 60px" />
                     <size-input
-                        style="width: 60px"
                         :value="backgroundSize.height"
                         :placeholder="' '"
-                        @change="handleBackgroundSizeChange('height', $event)">
-                    </size-input>
+                        @change="handleBackgroundSizeChange('height', $event)"
+                        style="width: 60px" />
                 </template>
                 <append-select
-                    style="border: 1px solid #c4c6cc"
                     :value="backgroundSize.unit"
-                    :is-margin-style="true"
-                    @change="handleUnitChange('backgroundSize', $event)">
-                </append-select>
+                    is-margin-style
+                    @change="handleUnitChange('backgroundSize', $event)"
+                    style="border: 1px solid #c4c6cc" />
             </style-item>
             <style-item name="位置">
                 <template>
                     <size-input
-                        style="width: 60px"
                         :value="backgroundPosition.x"
                         :placeholder="' '"
-                        @change="handleBackgroundPositionChange('x', $event)">
-                    </size-input>
+                        @change="handleBackgroundPositionChange('x', $event)"
+                        style="width: 60px" />
                     <size-input
-                        style="width: 60px"
                         :value="backgroundPosition.y"
                         :placeholder="' '"
-                        @change="handleBackgroundPositionChange('y', $event)">
-                    </size-input>
+                        @change="handleBackgroundPositionChange('y', $event)"
+                        style="width: 60px" />
                 </template>
                 <append-select
-                    style="border: 1px solid #c4c6cc"
                     :value="backgroundPosition.unit"
-                    :is-margin-style="true"
-                    @change="handleUnitChange('backgroundPosition', $event)">
-                </append-select>
+                    is-margin-style
+                    @change="handleUnitChange('backgroundPosition', $event)"
+                    style="border: 1px solid #c4c6cc" />
             </style-item>
             <style-item name="repeat">
                 <bk-select
-                    style="width: 100%;"
                     :value="imageConfig.backgroundRepeat"
                     font-size="medium"
-                    @change="handleConfigChange('backgroundRepeat', $event)">
+                    @change="handleConfigChange('backgroundRepeat', $event)"
+                    style="width: 100%;">
                     <bk-option id="repeat" name="repeat" />
                     <bk-option id="repeat-x" name="repeat-x" />
                     <bk-option id="repeat-y" name="repeat-y" />
@@ -79,10 +83,10 @@
             </style-item>
             <style-item name="attachment">
                 <bk-select
-                    style="width: 100%;"
                     :value="imageConfig.backgroundAttachment"
                     font-size="medium"
-                    @change="handleConfigChange('backgroundAttachment', $event)">
+                    @change="handleConfigChange('backgroundAttachment', $event)"
+                    style="width: 100%;">
                     <bk-option id="scroll" name="scroll" />
                     <bk-option id="fixed" name="fixed" />
                 </bk-select>
@@ -97,6 +101,7 @@
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
+    import { getCssProperties } from '../common/util'
 
     export default {
         components: {
@@ -147,16 +152,7 @@
         },
         methods: {
             handleMapInit () {
-                const result = this.include && this.include.length ? {} : this.valueMap
-                for (const i in this.valueMap) {
-                    if (this.include && this.include.includes(i)) {
-                        result[i] = this.valueMap[i]
-                    }
-                    if (this.exclude && this.exclude.includes(i)) {
-                        delete result[i]
-                    }
-                }
-                this.renderValueMap = result
+                this.renderValueMap = getCssProperties(this.valueMap, this.include, this.exclude)
 
                 // 初始化background-image相关属性
                 if (this.renderValueMap.hasOwnProperty('backgroundImage')) {

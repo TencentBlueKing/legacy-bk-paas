@@ -13,11 +13,11 @@
     <style-layout title="定位">
         <style-item name="position">
             <bk-select
-                style="width: 100%;"
                 :value="positionValue"
                 font-size="medium"
                 placeholder="请选择"
-                @change="handlePositionChange">
+                @change="handlePositionChange"
+                style="width: 100%;">
                 <bk-option id="absolute" name="absolute" />
                 <bk-option id="fixed" name="fixed" />
                 <bk-option id="static" name="static" />
@@ -25,7 +25,7 @@
         </style-item>
         <template v-if="positionValue && positionValue !== 'static'">
             <style-item :name="item.name" v-for="item in posConfigRender" :key="item.key">
-                <size-input v-model="item.value" @change="handleInputChange(item, $event)">
+                <size-input :value="item.value" @change="handleInputChange(item, $event)">
                     <append-select
                         v-if="item.key !== 'zIndex'"
                         :value="item.unit"
@@ -43,6 +43,7 @@
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
+    import { getCssProperties } from '../common/util'
 
     const posConfig = [
         {
@@ -101,13 +102,7 @@
         },
         methods: {
             handleInitValueList () {
-                let result = posConfig
-                if (this.include && this.include.length) {
-                    result = result.filter(item => this.include.includes(item.key))
-                }
-                if (this.exclude) {
-                    result = result.filter(item => !this.exclude.includes(item.key))
-                }
+                let result = getCssProperties(posConfig, this.include, this.exclude)
                 const that = this
                 result = result.map(function (item) {
                     if (item.key === 'zIndex') {
