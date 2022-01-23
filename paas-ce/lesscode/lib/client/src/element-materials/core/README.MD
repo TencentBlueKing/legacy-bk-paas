@@ -1,4 +1,4 @@
-# core aip 描述文档
+# core api 描述文档
 
 ### Node 结构描述
 
