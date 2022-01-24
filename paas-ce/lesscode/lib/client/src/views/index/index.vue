@@ -103,10 +103,9 @@
             curTemplateData: {
                 handler () {
                     const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
-                    console.log(this.versionId, pageRoute, this.pageId, 664423)
                     this.updatePreview({
                         isGenerateNav: true,
-                        id: pageRoute.layoutPath,
+                        id: `lesscode-${pageRoute.layoutPath}`,
                         curTemplateData: this.curTemplateData,
                         types: ['reload']
                     })
@@ -114,41 +113,31 @@
             },
             variableList () {
                 // 变量发生变化的时候  reload
-                this.updatePreview({
-                    isGenerateNav: false,
-                    id: this.pageDetail.pageCode,
-                    curTemplateData: {},
-                    types: ['reload', 'update_style']
-                })
+                this.handleUpdatePreview()
             },
             funcGroups () {
                 // 函数发生变化的时候  reload
-                this.updatePreview({
-                    isGenerateNav: false,
-                    id: this.pageDetail.pageCode,
-                    curTemplateData: {},
-                    types: ['reload', 'update_style']
-                })
+                this.handleUpdatePreview()
             },
             'pageDetail.lifeCycle' () {
                 // 生命周期发生变化的时候  reload
-                this.updatePreview({
-                    isGenerateNav: false,
-                    id: this.pageDetail.pageCode,
-                    curTemplateData: {},
-                    types: ['reload', 'update_style']
-                })
+                this.handleUpdatePreview()
             }
         },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
 
+            LC.addEventListener('update', this.handleUpdatePreview)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', this.handleUpdatePreview)
+            })
+
             this.registerCustomComponent()
 
             // 获取并设置当前版本信息
             this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
-            
+
             this.fetchData()
 
             // 设置权限相关的信息
@@ -327,6 +316,15 @@
                 const confirmationMessage = '...';
                 (event || window.event).returnValue = confirmationMessage
                 return confirmationMessage
+            },
+            handleUpdatePreview (setting = {}) {
+                const defaultSetting = {
+                    isGenerateNav: false,
+                    id: `lesscode-page-${this.pageId}`,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                }
+                this.updatePreview(Object.assign(defaultSetting, setting))
             }
         }
     }
