@@ -255,75 +255,7 @@
             }
         }
     }
-        /* .page-name {
-            display: flex;
-            align-items: center;
-            height: 100%;
-            .bk-drag-icon {
-                padding: 10px;
-                cursor: pointer;
-            }
-            .bk-drag-arrow-back {
-                font-size: 13px;
-                color: #3a84ff;
-            }
-            .template-logo svg {
-                vertical-align: middle;
-            }
-            .seperate-line {
-                width: 1px;
-                color: #d8d8d8;
-                margin-left: -2px;
-            }
-
-            .name-content {
-                font-size: 14px;
-                margin-left: 10px;
-                width: 190px;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                .project-name {
-                    color: #979BA5;
-                }
-                .col-name {
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                }
-                .col-version {
-                    background: #dcdee5;
-                    border-radius: 9px;
-                    height: 18px;
-                    font-size: 12px;
-                    line-height: 18px;
-                    color: #63656e;
-                    padding: 0 8px;
-                    white-space: nowrap;
-                }
-            }
-
-            .select-page-box{
-                display: flex;
-                flex: 1;
-                align-items: center;
-                height: 100%;
-                .select-page {
-                    width: 250px;
-                    margin-left: 5px;
-                    border: none;
-                    background-color: #f0f1f5;
-                    &:hover {
-                        background-color: #dedee5;
-                    }
-                    &.is-focus {
-                        box-shadow: none;
-                        background-color: #dedee5;
-                    }
-                }
-            }
-        }
-    } */
+    
     .select-page-dropdown {
         .bk-select-search-input {
             padding: 0 10px 0 30px;
