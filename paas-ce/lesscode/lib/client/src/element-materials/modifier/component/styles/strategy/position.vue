@@ -10,25 +10,30 @@
 -->
 
 <template>
-    <style-layout title="尺寸">
-        <style-item :name="item.name" v-for="item in sizeConfigRender" :key="item.key">
+    <style-layout title="定位">
+        <style-item name="position">
             <bk-select
-                v-if="item.key === 'display'"
-                :value="item.value"
+                :value="positionValue"
                 font-size="medium"
-                :clearable="false"
-                @change="handleDisplayChange(item, $event)"
+                placeholder="请选择"
+                @change="handlePositionChange"
                 style="width: 100%;">
-                <bk-option id="block" name="block" />
-                <bk-option id="inline" name="inline" />
-                <bk-option id="inline-block" name="inline-block" />
-                <bk-option id="inherit" name="inherit" />
-                <bk-option id="initial" name="initial" />
+                <bk-option id="absolute" name="absolute" />
+                <bk-option id="fixed" name="fixed" />
+                <bk-option id="static" name="static" />
             </bk-select>
-            <size-input v-else :value="item.value" @change="handleInputChange(item, $event)">
-                <append-select :value="item.unit" @change="handleSelectChange(item, $event)" />
-            </size-input>
         </style-item>
+        <template v-if="positionValue && positionValue !== 'static'">
+            <style-item :name="item.name" v-for="item in posConfigRender" :key="item.key">
+                <size-input :value="item.value" @change="handleInputChange(item, $event)">
+                    <append-select
+                        v-if="item.key !== 'zIndex'"
+                        :value="item.unit"
+                        @change="handleSelectChange(item, $event)">
+                    </append-select>
+                </size-input>
+            </style-item>
+        </template>
     </style-layout>
 </template>
 
@@ -40,34 +45,26 @@
     import { splitValueAndUnit } from '@/common/util'
     import { getCssProperties } from '../common/util'
 
-    const sizeConfig = [
+    const posConfig = [
         {
-            name: 'display',
-            key: 'display'
+            name: 'top',
+            key: 'top'
         },
         {
-            name: '宽度',
-            key: 'width'
+            name: 'left',
+            key: 'left'
         },
         {
-            name: '高度',
-            key: 'height'
+            name: 'right',
+            key: 'right'
         },
         {
-            name: '最小宽度',
-            key: 'minWidth'
+            name: 'bottom',
+            key: 'bottom'
         },
         {
-            name: '最大宽度',
-            key: 'maxWidth'
-        },
-        {
-            name: '最小高度',
-            key: 'minHeight'
-        },
-        {
-            name: '最大高度',
-            key: 'maxHeight'
+            name: 'z-index',
+            key: 'zIndex'
         }
     ]
     
@@ -96,7 +93,8 @@
         },
         data () {
             return {
-                sizeConfigRender: []
+                positionValue: this.value.position || '',
+                posConfigRender: []
             }
         },
         mounted () {
@@ -104,32 +102,39 @@
         },
         methods: {
             handleInitValueList () {
-                let result = getCssProperties(sizeConfig, this.include, this.exclude)
+                let result = getCssProperties(posConfig, this.include, this.exclude)
                 const that = this
                 result = result.map(function (item) {
-                    if (item.key === 'display') {
-                        item['value'] = that.value.display || ''
+                    if (item.key === 'zIndex') {
+                        item['value'] = that.value[item.key] || ''
                     } else {
                         item['value'] = splitValueAndUnit('value', that.value[item.key])
                         item['unit'] = splitValueAndUnit('unit', that.value[item.key]) || 'px'
                     }
                     return item
                 })
-                this.sizeConfigRender = result
+                this.posConfigRender = result
             },
             handleInputChange (item, val) {
-                const newValue = val === '' ? '' : val + item.unit
+                item.value = val
+                const unit = item.key !== 'zIndex' ? item.unit : ''
+                const newValue = val === '' ? '' : val + unit
                 this.change(item.key, newValue)
             },
             handleSelectChange (item, unit) {
                 if (item.value !== '') {
+                    item.unit = unit
                     item.value = Math.min(item.value, unit === '%' ? 100 : item.value)
                     this.change(item.key, item.value + unit)
                 }
             },
-            handleDisplayChange (item, val) {
-                item.value = val
-                this.change('display', val)
+            handlePositionChange (val) {
+                this.posConfigRender.forEach(item => {
+                    this.handleSelectChange(item, 'px')
+                    this.handleInputChange(item, '')
+                })
+                this.positionValue = val
+                this.change('position', val)
             }
         }
     }
