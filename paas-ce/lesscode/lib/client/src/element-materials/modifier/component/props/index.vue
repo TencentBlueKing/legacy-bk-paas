@@ -42,14 +42,13 @@
         },
         computed: {
             hasMaterialConfig () {
-                const configs = { ...this.propsConfig, ...this.slotsConfig }
-                const keys = Object.keys(configs).filter(key => configs[key].display !== 'hidden')
+                const keys = Object.keys(this.propsConfig).filter(key => this.propsConfig[key].display !== 'hidden')
                 return keys.length
             }
         },
         created () {
             this.lastProps = {}
-            this.renderProps = {}
+            this.material = {}
             bus.$on('update-chart-options', this.updateChartOptions)
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('update-chart-options', this.updateChartOptions)
@@ -62,7 +61,7 @@
                 } = this.currentComponentNode
                 this.propsConfig = Object.freeze(material.props)
                 this.lastProps = Object.assign({}, renderProps)
-                this.renderProps = _.cloneDeep(renderProps)
+                this.material = material
             }
         },
         methods: {
@@ -82,12 +81,61 @@
                 //     })
                 // }
             },
+            /**
+             * @desc 部分场景需要通过 prop 的配置自动推导 slot 的配置
+             * @param { Object } propData
+             *
+             * eq:
+             * 通过 table 的 data 推导出 table 列的配置
+             */
+            syncSlot (propData) {
+                const {
+                    format,
+                    valueType,
+                    payload
+                } = propData
+
+                // 需要同步 prop 配置到 slot 的场景
+                // 同时满足下面的条件
+                // - prop format 配置为值类型
+                // - prop 的值类型是数据源
+                if (format !== 'value' || !payload.sourceData) {
+                    return
+                }
+                if (valueType === 'table-data-source') {
+                    // 默认同步 slot.default
+                    const slotName = 'default'
+                    const slotConfig = this.material.slots[slotName]
+                    const columns = payload.sourceData.columns
+                    const slotValue = columns.map(columnName => ({
+                        label: columnName,
+                        prop: columnName,
+                        sortable: false,
+                        type: ''
+                    }))
+                    this.currentComponentNode.setRenderSlots({
+                        format: 'value',
+                        component: Array.isArray(slotConfig.name) ? slotConfig.name[0] : slotConfig.name,
+                        code: slotValue,
+                        valueType: 'table-list',
+                        renderValue: slotValue
+                    }, slotName)
+                }
+            },
+            /**
+             * @desc 更新 prop 配置
+             * @param { String } propName
+             * @param { Object } propData
+             *
+             * 更新列配置并同步 slot
+             */
             handleChange: _.throttle(function (propName, propData) {
                 this.lastProps[propName] = propData
                 this.currentComponentNode.setRenderProps({
                     ...this.lastProps,
                     [propName]: propData
                 })
+                this.syncSlot(propData)
             }, 60)
         }
     }

@@ -28,7 +28,7 @@
                             :value="itemName"
                             :key="itemName"
                             class="mr10">
-                            {{ itemName | capFirstLetter }}
+                            {{ itemName | renderTypeText }}
                         </bk-radio-button>
                     </bk-radio-group>
                 </template>
@@ -63,7 +63,8 @@
 
     import {
         getDefaultValueByType,
-        isEmpty
+        isEmpty,
+        toPascal
     } from '../utils'
 
     import slotList from './components/list'
@@ -90,8 +91,21 @@
         },
 
         filters: {
+            renderTypeText (type) {
+                const labelMap = {
+                    'object': '对象',
+                    'number': '数字',
+                    'string': '字符串',
+                    'array': '数组',
+                    'remote': '远程函数',
+                    'data-source': '数据源',
+                    'list': '数据列表',
+                    'table-list': '数据列表'
+                }
+                return labelMap[type] || toPascal(type)
+            },
             capFirstLetter (val = '') {
-                return `${val.substring(0, 1).toUpperCase()}${val.substring(1).toLowerCase()}`
+                return toPascal(val)
             }
         },
 

@@ -34,7 +34,7 @@
                     v-for="item in renderComponentList"
                     :key="item.type"
                     :value="item.type">
-                    {{ item.type | propTypeFormat }}
+                    {{ item.type | valueTypeTextFormat }}
                 </bk-radio-button>
             </bk-radio-group>
             <div class="prop-action">
@@ -63,7 +63,8 @@
 
     import {
         getDefaultValueByType,
-        isEmpty
+        isEmpty,
+        toPascal
     } from '../../utils'
 
     import TypeSize from './strategy/size'
@@ -97,16 +98,24 @@
         return target
     }
 
-    const propTypeFormat = type => `${type.substring(0, 1).toUpperCase()}${type.substring(1).toLowerCase()}`
-
     export default {
         name: 'render-prop-modifier',
         components: {
             variableSelect
         },
         filters: {
-            propTypeFormat (propType) {
-                return propTypeFormat(propType)
+            valueTypeTextFormat (valueType) {
+                const textMap = {
+                    'areatext': '文本',
+                    'number': '数字',
+                    'object': '对象',
+                    'string': '字符串',
+                    'array': '数组',
+                    'remote': '远程函数',
+                    'data-source': '数据源',
+                    'table-data-source': '数据源'
+                }
+                return textMap[valueType] || toPascal(valueType)
             }
         },
         props: {
@@ -237,7 +246,7 @@
                     return this.name
                 }
                 const [editCom] = this.renderComponentList
-                return `${this.name}(${propTypeFormat(editCom.type)})`
+                return `${this.name}(${toPascal(editCom.type)})`
             },
             /**
              * @desc 不支持的变量切换类型(variable、expression)
@@ -387,7 +396,7 @@
                 this.triggerChange()
             },
             /**
-             * @desc 更新 prop 的配置
+             * @desc 更新 prop value 的配置
              * @param { String } name
              * @param { Any } value
              * @param { String } type
@@ -401,9 +410,9 @@
                     const val = getRealValue(type, value)
 
                     if (this.formData.valueType === 'remote') {
-                        // 配置的是远程函数
-                        // code 此时无效设置为 null
-                        // api 返回数据不为空才应用接口数据
+                        // 配置的是远程函数、数据源
+                        // code 此时无效，设置为 null
+                        // api 返回数据不为空时在画布编辑区才应用 api 数据
                         if (!isEmpty(val)) {
                             renderValue = val
                         }
