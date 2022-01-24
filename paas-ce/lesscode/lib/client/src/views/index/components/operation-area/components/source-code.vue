@@ -43,6 +43,7 @@
         },
         computed: {
             ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', currentVersion: 'currentVersion' }),
             projectId () {
                 return this.$route.params.projectId || ''
             },
@@ -51,9 +52,6 @@
             },
             filename () {
                 return `bklesscode-${this.pageId}.vue`
-            },
-            lifeCycle () {
-                return this.pageDetail.lifeCycle || {}
             }
         },
         mounted () {
@@ -69,6 +67,7 @@
                     targetData,
                     pageType,
                     projectId,
+                    versionId: this.versionId,
                     pageId,
                     withNav
                 }).then(res => {

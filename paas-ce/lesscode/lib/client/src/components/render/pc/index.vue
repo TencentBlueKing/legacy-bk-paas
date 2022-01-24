@@ -53,6 +53,7 @@
 <script>
     import _ from 'lodash'
     import LC from '@/element-materials/core'
+    import { mapActions, mapGetters } from 'vuex'
     import Draggable, {
         getDragTargetGroup
     } from './components/draggable'
@@ -79,6 +80,9 @@
                 invisibleComponent: ''
             }
         },
+        computed: {
+            ...mapGetters('page', ['pageDetail'])
+        },
         watch: {
             showNotVisibleMask (val) {
                 if (val) {
@@ -100,6 +104,12 @@
                     this.$forceUpdate()
                     this.autoType()
                 }
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
             }
             /**
              * @name interactiveWatcher
@@ -133,6 +143,7 @@
             })
         },
         methods: {
+            ...mapActions(['updatePreview']),
             /**
              * @desc 自动排版子组件
              */

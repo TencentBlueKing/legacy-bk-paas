@@ -49,7 +49,7 @@
 </template>
 <script>
     import Vue from 'vue'
-    import { mapActions, mapGetters } from 'vuex'
+    import { mapActions, mapGetters, mapState } from 'vuex'
     import LC from '@/element-materials/core'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
@@ -85,17 +85,69 @@
             }
         },
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters('projectVersion', {
                 versionId: 'currentVersionId',
                 versionName: 'currentVersionName',
                 getInitialVersion: 'initialVersion'
-            })
+            }),
+            ...mapGetters('drag', ['curTemplateData']),
+            ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('functions', ['funcGroups']),
+            ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('variable', ['variableList']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' }),
+            ...mapState('route', ['layoutPageList'])
+        },
+        watch: {
+            curTemplateData: {
+                handler () {
+                    const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+                    console.log(this.versionId, pageRoute, this.pageId, 664423)
+                    this.updatePreview({
+                        isGenerateNav: true,
+                        id: pageRoute.layoutPath,
+                        curTemplateData: this.curTemplateData,
+                        types: ['reload']
+                    })
+                }
+            },
+            variableList () {
+                // 变量发生变化的时候  reload
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
+            },
+            funcGroups () {
+                // 函数发生变化的时候  reload
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
+            },
+            'pageDetail.lifeCycle' () {
+                // 生命周期发生变化的时候  reload
+                this.updatePreview({
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                })
+            }
         },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
 
             this.registerCustomComponent()
+
+            // 获取并设置当前版本信息
+            this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
             
             this.fetchData()
 
@@ -103,9 +155,6 @@
             this.$store.dispatch('member/setCurUserPermInfo', {
                 id: this.projectId
             })
-
-            // 获取并设置当前版本信息
-            this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
 
             this.guideStep = [
                 {
@@ -172,6 +221,7 @@
                 'getAllGroupFuncs'
             ]),
             ...mapActions('variable', ['getAllVariable']),
+            ...mapActions(['updatePreview']),
             /**
              * @desc 注册自定义组件
              */
@@ -227,7 +277,8 @@
 
                     await this.$store.dispatch('page/getPageSetting', {
                         pageId: this.pageId,
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        versionId: this.versionId
                     })
 
                     await this.getAllVariable({

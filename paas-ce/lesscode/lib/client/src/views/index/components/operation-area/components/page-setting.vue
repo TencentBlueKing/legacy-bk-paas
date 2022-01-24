@@ -125,6 +125,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             ...mapGetters('page', {
                 page: 'pageDetail',
                 pageRoute: 'pageRoute',
@@ -240,7 +241,8 @@
                     this.pageLoading = true
                     await this.$store.dispatch('page/getPageSetting', {
                         pageId: this.page.id,
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        versionId: this.versionId
                     })
                 } catch (e) {
                     console.error(e)
@@ -309,6 +311,7 @@
                             pageName: value,
                             currentName: this.page.pageName,
                             projectId: this.project.id,
+                            versionId: this.versionId,
                             from: 'setting'
                         }
                     })
@@ -326,6 +329,7 @@
                     data: {
                         pageData,
                         projectId: this.project.id,
+                        versionId: this.versionId,
                         functionData: Object.keys(usedFuncMap),
                         from: 'setting'
                     }
@@ -336,6 +340,7 @@
                 const data = {
                     pageRoute: {},
                     projectId: this.project.id,
+                    versionId: this.versionId,
                     pageId: this.page.id
                 }
                 if (field.id === 'layoutId') {

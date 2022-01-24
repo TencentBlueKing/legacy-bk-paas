@@ -89,7 +89,6 @@ class PageCode {
             origin = ''
         }
     ) {
-        console.log(targetData, 'class params')
         this.targetData = targetData || []
         this.pageType = pageType
         this.funcGroups = funcGroups || []
