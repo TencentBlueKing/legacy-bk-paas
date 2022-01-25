@@ -105,7 +105,7 @@
                     const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
                     this.updatePreview({
                         isGenerateNav: true,
-                        id: `lesscode-${pageRoute.layoutPath}`,
+                        id: pageRoute.layoutPath,
                         curTemplateData: this.curTemplateData,
                         types: ['reload']
                     })
