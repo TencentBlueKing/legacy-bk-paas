@@ -320,7 +320,7 @@
             handleUpdatePreview (setting = {}) {
                 const defaultSetting = {
                     isGenerateNav: false,
-                    id: `lesscode-page-${this.pageId}`,
+                    id: this.pageDetail.pageCode,
                     curTemplateData: {},
                     types: ['reload', 'update_style']
                 }
