@@ -88,6 +88,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             ...mapGetters('page', {
                 page: 'pageDetail'
             }),
@@ -166,6 +167,7 @@
                     data: {
                         pageData,
                         projectId: this.project.id,
+                        versionId: this.versionId,
                         functionData: Object.keys(usedFuncMap),
                         from: 'setting'
                     }
