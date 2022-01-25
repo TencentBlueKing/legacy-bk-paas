@@ -1709,7 +1709,6 @@ class PageCode {
 
 module.exports = {
     getPageData (params) {
-        console.log(params, 'params')
         const pageCode = new PageCode(params)
         return {
             code: pageCode.getCode(),
