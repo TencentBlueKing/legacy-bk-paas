@@ -144,11 +144,11 @@
     import { mapGetters, mapMutations } from 'vuex'
     import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
     import pageRouterSelect from '@/components/project/page-router-select'
-    import StyleBackgroundColor from '@/element-materials/modifier/component/styles/strategy/background-color'
-    import StyleMinWidth from '@/element-materials/modifier/component/styles/strategy/min-width'
     import StylePadding from '@/element-materials/modifier/component/styles/strategy/padding'
     import StyleMargin from '@/element-materials/modifier/component/styles/strategy/margin'
     import StyleCustom from '@/element-materials/modifier/component/styles/strategy/custom-style'
+    import StyleBackgroundColor from './common/background-color'
+    import StyleMinWidth from './common/min-width'
 
     const styleSettingMap = {
         marginTop: 'Top',
