@@ -182,6 +182,8 @@
     }
 </script>
 <style lang="postcss" module>
+    @import './widget/patch.css';
+
     .canvas{
         min-height: calc(100% - 20px) !important;
         z-index: 1000000000000;

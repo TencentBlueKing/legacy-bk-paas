@@ -16,7 +16,10 @@ const createNodeFromData = (data) => {
     const newNode = createNode(data.type === 'img' ? 'bk-image' : data.type)
     newNode.tabPanelActive = data.tabPanelActive || 'props'
     if (!isClone) {
-        newNode.componentId = data.componentId
+        // fix: 老数据存在 componentId 为空的情况
+        if (data.componentId) {
+            newNode.componentId = data.componentId
+        }
     }
     data.renderStyles && newNode.setRenderStyles(data.renderStyles)
     data.renderProps && newNode.setRenderProps(data.renderProps)
@@ -24,7 +27,8 @@ const createNodeFromData = (data) => {
     data.renderEvents && newNode.setRenderEvents(data.renderEvents)
 
     newNode.interactiveShow = false
-    newNode.isComplexComponent = data.isComplexComponent || false
+    newNode.isComplexComponent = Boolean(data.isComplexComponent)
+    newNode.isInteractiveComponent = Boolean(data.isInteractiveComponent)
 
     // fix: 老数据 renderProps.no-response 格式不规范的问题
     if (newNode.renderProps.hasOwnProperty('no-response')) {
@@ -103,7 +107,8 @@ const tansform = (parentNode, data) => {
                         name: 'render-column',
                         type: 'render-column',
                         renderStyles: {
-                            padding: '5px'
+                            padding: '5px',
+                            minHeight: '80px'
                         },
                         renderProps: {
                             span: {
@@ -176,11 +181,13 @@ const tansform = (parentNode, data) => {
                 default: freelayoutSlot
             }
         } else if (curDataNode.type === 'bk-sideslider') {
+            curDataNode.isInteractiveComponent = true
             const child = curDataNode.renderSlots.content.val
             curDataNode.renderSlots = {
                 content: tansform(curDataNode, [child])[0]
             }
         } else if (curDataNode.type === 'bk-dialog') {
+            curDataNode.isInteractiveComponent = true
             const child = curDataNode.renderSlots.default.val
             curDataNode.renderSlots = {
                 default: tansform(curDataNode, [child])[0]
