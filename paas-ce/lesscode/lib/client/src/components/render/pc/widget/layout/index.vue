@@ -25,6 +25,7 @@
         },
         computed: {
             ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             layoutCom () {
                 if (!componentMap[this.layout]) {
                     return 'div'
@@ -47,6 +48,7 @@
                     this.layout = layoutType
                     this.setCurTemplateData({
                         showName,
+                        layoutType,
                         ...layoutContent
                     })
                 },
@@ -60,7 +62,8 @@
             ...mapMutations('drag', ['setCurTemplateData']),
             fetchPageList () {
                 this.$store.dispatch('route/getProjectPageRoute', {
-                    projectId: this.projectId
+                    projectId: this.projectId,
+                    versionId: this.versionId
                 })
             }
         }
