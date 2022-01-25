@@ -87,19 +87,21 @@
             }
         },
         created () {
-            this.currentComponentNode = LC.getActiveNode()
+            this.componentData = LC.getActiveNode()
             const {
                 componentId,
                 material,
                 renderStyles
-            } = this.currentComponentNode
+            } = this.componentData
             this.componentId = componentId
-            this.config = Object.freeze(material.styles)
+            this.config = Object.freeze(material.styles || {})
             this.lastStyles = Object.assign({}, renderStyles)
+            console.log('from modift stylese == ', this.componentData, this.config, renderStyles)
         },
         methods: {
             handleChange (key, value) {
-                this.currentComponentNode.setStyle(key, value)
+                this.componentData.setStyle(key, value)
+                this.lastStyles[key] = value
             }
         }
     }

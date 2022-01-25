@@ -13,18 +13,34 @@
     <section>
         <style-layout title="自定义样式">
             <style-item name="自定义样式">
-                <div style="width: 200px;text-align: right"><bk-button theme="primary" @click="showEditStyle(true)">样式编辑</bk-button></div>
+                <div style="width: 200px; text-align: right">
+                    <bk-button
+                        theme="primary"
+                        @click="showEditStyle(true)">
+                        样式编辑
+                    </bk-button>
+                </div>
             </style-item>
         </style-layout>
-        <article class="custom-style" v-if="isShow">
+        <article
+            v-if="isShow"
+            class="custom-style">
             <div class="custom-style-container">
                 <div class="container-tips">
                     请在{}内编写该组件的自定义样式，样式优先级：自定义样式 > 样式面板设置 > 组件默认样式
                 </div>
-                <monaco :value.sync="styleValue" height="400px" language="css" show-header="false" class="monaco" ref="monaco"></monaco>
+                <monaco
+                    :value.sync="styleValue"
+                    height="400px"
+                    language="css"
+                    :show-header="false"
+                    class="monaco"
+                    ref="monaco" />
                 <div class="container-footer">
                     <div class="footer-wrapper">
-                        <bk-button theme="primary" @click.native="confirm">
+                        <bk-button
+                            theme="primary"
+                            @click.native="confirm">
                             保存
                         </bk-button>
                         <bk-button @click="showEditStyle(false)">
