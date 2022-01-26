@@ -545,6 +545,7 @@ const updagePageActiveInfo = async (pageId, username) => {
     const repository = getRepository(Page)
     const currentPage = await repository.findOne(pageId) || {}
 
+    currentPage.updateBySystem = true
     currentPage.activeUser = username
     currentPage.activeTime = new Date()
     repository.save(currentPage)
@@ -627,6 +628,7 @@ export const relasePage = async ctx => {
         const currentPage = await repository.findOne(pageId) || {}
 
         if (activeUser === currentPage.activeUser) {
+            currentPage.updateBySystem = true
             currentPage.activeUser = null
             repository.save(currentPage)
             ctx.send({
