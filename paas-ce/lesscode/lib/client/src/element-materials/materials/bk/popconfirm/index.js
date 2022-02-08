@@ -16,12 +16,18 @@ export default {
     icon: 'bk-drag-popconfrim',
     group: '反馈',
     order: 1,
-    styles: ['margin', 'display'],
-    events: [{
-        name: 'confirm', tips: '点击确定按钮时调用该事件函数，暂无事件回调参数'
-    }, {
-        name: 'cancel', tips: '点击取消按钮时调用该事件函数，暂无事件回调参数'
-    }],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/popconfirm',
+    events: [
+        {
+            name: 'confirm',
+            tips: '点击确定按钮时调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'cancel',
+            tips: '点击取消按钮时调用该事件函数，暂无事件回调参数'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'font', 'pointer', 'background', 'border', 'opacity'],
     props: {
         title: {
             type: 'string',

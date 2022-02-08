@@ -16,10 +16,14 @@ export default {
     icon: 'bk-drag-process',
     group: '导航',
     order: 1,
-    styles: ['size', 'margin'],
-    events: [{
-        name: 'process-changed', tips: '当前步骤变化时调用该事件函数，事件回调参数 (curProcess: Number, data: Object)'
-    }],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/process',
+    events: [
+        {
+            name: 'process-changed',
+            tips: '当前步骤变化时调用该事件函数，事件回调参数 (curProcess: Number, data: Object)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

@@ -16,10 +16,23 @@ export default {
     icon: 'bk-drag-switcher',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: 'switch 状态发生变化时调用该事件函数，事件回调参数 (value: Boolean|String|Number)'
-    }],
-    styles: ['margin', 'display', 'backgroundColor'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/switch',
+    events: [
+        {
+            name: 'change',
+            tips: 'switch 状态发生变化时调用该事件函数，事件回调参数 (value: Boolean|String|Number)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },

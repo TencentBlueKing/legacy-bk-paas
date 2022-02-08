@@ -16,8 +16,26 @@ export default {
     icon: 'bk-drag-button',
     displayName: '按钮',
     group: '基础',
-    events: [{ name: 'click', tips: '点击时调用该事件函数，事件回调参数 (e: Event)' }],
-    styles: ['size', 'padding', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/button',
+    events: [
+        {
+            name: 'click',
+            tips: '点击时调用该事件函数，事件回调参数 (e: Event)'
+        }
+    ],
+    styles: [
+        'position',
+        'size',
+        'margin',
+        {
+            name: 'font',
+            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
+        },
+        'pointer',
+        'background',
+        'border',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },

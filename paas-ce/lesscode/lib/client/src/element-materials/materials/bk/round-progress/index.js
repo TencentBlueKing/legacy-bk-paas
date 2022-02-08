@@ -16,7 +16,18 @@ export default {
     icon: 'bk-drag-roundprogress',
     group: '数据',
     order: 1,
-    styles: ['margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/round-progress',
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },

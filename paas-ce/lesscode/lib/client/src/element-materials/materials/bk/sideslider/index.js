@@ -17,10 +17,20 @@ export default {
     group: '反馈',
     order: 5,
     interactiveShow: true,
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/sideslider',
     events: [
-        { name: 'show', tips: '显示组件后调用该事件函数，暂无事件回调参数' },
-        { name: 'hidden', tips: '关闭组件后调用该事件函数，暂无事件回调参数' },
-        { name: 'animation-end', tips: '关闭组件后动画结束时调用该事件函数，暂无事件回调参数' }
+        {
+            name: 'show',
+            tips: '显示组件后调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'hidden',
+            tips: '关闭组件后调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'animation-end',
+            tips: '关闭组件后动画结束时调用该事件函数，暂无事件回调参数'
+        }
     ],
     renderStyles: {
         display: 'inline-block'

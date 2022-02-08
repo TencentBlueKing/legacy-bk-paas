@@ -16,10 +16,14 @@ export default {
     icon: 'bk-drag-rate',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'score', tips: '评分的时候调用该事件函数，事件回调参数 (rate: Number)'
-    }],
-    styles: ['margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/rate',
+    events: [
+        {
+            name: 'score',
+            tips: '评分的时候调用该事件函数，事件回调参数 (rate: Number)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

@@ -16,16 +16,26 @@ export default {
     icon: 'bk-drag-tab',
     group: '导航',
     order: 1,
-    events: [{
-        name: 'tab-click', tips: 'tab 被选中时调用该事件函数，事件回调参数 (tab: Object)'
-    }, {
-        name: 'tab-remove', tips: '点击 tab 移除按钮时调用该事件函数，事件回调参数 (name: String)'
-    }, {
-        name: 'tab-add', tips: '点击 tabs 的新增按钮时调用该事件函数，无回调参数'
-    }, {
-        name: 'edit', tips: '点击 tabs 的新增按钮或 tab 被关闭时调用该事件函数，事件回调参数 (targetName: String, action: String)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/tabs',
+    events: [
+        {
+            name: 'tab-click',
+            tips: 'tab 被选中时调用该事件函数，事件回调参数 (tab: Object)'
+        },
+        {
+            name: 'tab-remove',
+            tips: '点击 tab 移除按钮时调用该事件函数，事件回调参数 (name: String)'
+        },
+        {
+            name: 'tab-add',
+            tips: '点击 tabs 的新增按钮时调用该事件函数，无回调参数'
+        },
+        {
+            name: 'edit',
+            tips: '点击 tabs 的新增按钮或 tab 被关闭时调用该事件函数，事件回调参数 (targetName: String, action: String)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
     directives: [
         {
             type: 'v-model',

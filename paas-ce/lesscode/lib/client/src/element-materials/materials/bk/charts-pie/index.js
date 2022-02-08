@@ -17,7 +17,12 @@ export default {
     group: 'ECharts',
     order: 1,
     events: [],
-    styles: ['display'],
+    styles: [
+        {
+            name: 'size',
+            include: ['display']
+        }
+    ],
     renderStyles: {
         display: 'inline-block'
     },

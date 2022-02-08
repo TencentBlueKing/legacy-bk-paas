@@ -16,14 +16,22 @@ export default {
     icon: 'bk-drag-tab',
     group: '导航',
     order: 1,
-    events: [{
-        name: 'tab-change', tips: '选项卡切换时调用该事件函数，事件回调参数 (name: String)'
-    }, {
-        name: 'close-panel', tips: '关闭选项卡时调用该事件函数，事件回调参数 (index: Number, panel: Object)'
-    }, {
-        name: 'add-panel', tips: '新增选项卡时调用该事件函数，暂无事件回调参数'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/tab',
+    events: [
+        {
+            name: 'tab-change',
+            tips: '选项卡切换时调用该事件函数，事件回调参数 (name: String)'
+        },
+        {
+            name: 'close-panel',
+            tips: '关闭选项卡时调用该事件函数，事件回调参数 (index: Number, panel: Object)'
+        },
+        {
+            name: 'add-panel',
+            tips: '新增选项卡时调用该事件函数，暂无事件回调参数'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
     props: {
         active: {
             type: 'string',

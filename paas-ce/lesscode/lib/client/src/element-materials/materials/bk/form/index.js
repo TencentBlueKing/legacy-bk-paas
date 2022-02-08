@@ -16,7 +16,15 @@ export default {
     icon: 'bk-drag-form',
     group: '表单',
     order: 0,
-    styles: ['size', 'margin', 'font', 'backgroundColor'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/form',
+    styles: [
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'background'
+    ],
     directives: [
         {
             type: 'v-bind',

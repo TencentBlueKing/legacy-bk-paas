@@ -17,7 +17,7 @@ export default {
     group: '布局',
     icon: 'bk-drag-freedrag',
     order: 5,
-    styles: ['size', 'margin', 'padding', 'backgroundColor'],
+    styles: ['size', 'padding', 'margin', 'background'],
     renderStyles: {
         height: '500px'
     },
