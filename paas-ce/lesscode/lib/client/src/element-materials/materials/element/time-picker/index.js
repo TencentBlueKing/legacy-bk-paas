@@ -16,10 +16,24 @@ export default {
     icon: 'bk-drag-time-2',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '用户确认选定的值时调用该事件函数，事件回调参数 (value: String)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/time-picker',
+    events: [
+        {
+            name: 'change',
+            tips: '用户确认选定的值时调用该事件函数，事件回调参数 (value: String)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },

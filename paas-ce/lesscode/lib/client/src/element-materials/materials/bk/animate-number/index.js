@@ -16,7 +16,25 @@ export default {
     icon: 'bk-drag-animatenumber',
     group: '数据',
     order: 1,
-    styles: ['margin', 'display', 'font', 'backgroundColor'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/animate-number',
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'padding',
+        'margin',
+        {
+            name: 'font',
+            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
+        },
+        {
+            name: 'background',
+            include: ['backgroundColor']
+        },
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },

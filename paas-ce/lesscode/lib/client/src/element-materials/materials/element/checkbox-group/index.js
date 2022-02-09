@@ -16,8 +16,24 @@ export default {
     icon: 'bk-drag-checkbox',
     group: '表单',
     order: 1,
-    styles: ['margin'],
-    events: [{ name: 'change', tips: '当绑定值变化时调用该事件函数，事件回调参数 (value: Array)' }],
+    document: 'https://element.eleme.cn/#/zh-CN/component/checkbox',
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
+    events: [
+        {
+            name: 'change',
+            tips: '当绑定值变化时调用该事件函数，事件回调参数 (value: Array)'
+        }
+    ],
     directives: [
         {
             type: 'v-model',

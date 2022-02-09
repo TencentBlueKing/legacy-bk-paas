@@ -16,20 +16,45 @@ export default {
     icon: 'bk-drag-upload',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'on-done', tips: '所有文件上传完毕后调用该事件函数，事件回调参数 (fileList: Array)'
-    }, {
-        name: 'on-progress', tips: '文件上传进行时调用该事件函数，事件回调参数 (event: Event, file: Object, fileList: Array)'
-    }, {
-        name: 'on-success', tips: '文件上传成功后调用该事件函数，事件回调参数 (file: Object, fileList: Array)'
-    }, {
-        name: 'on-error', tips: '文件上传失败后调用该事件函数，事件回调参数 (file: Object, fileList: Array)'
-    }, {
-        name: 'on-exceed', tips: '文件上传个数超出限制后调用该事件函数，事件回调参数 (file: Object, fileList: Array)'
-    }, {
-        name: 'on-delete', tips: '文件上传成功后，点击删除文件时调用该事件函数，事件回调参数 (file: Object, fileList: Array)'
-    }],
-    styles: ['size', 'margin'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/upload',
+    events: [
+        {
+            name: 'on-done',
+            tips: '所有文件上传完毕后调用该事件函数，事件回调参数 (fileList: Array)'
+        },
+        {
+            name: 'on-progress',
+            tips: '文件上传进行时调用该事件函数，事件回调参数 (event: Event, file: Object, fileList: Array)'
+        },
+        {
+            name: 'on-success',
+            tips: '文件上传成功后调用该事件函数，事件回调参数 (file: Object, fileList: Array)'
+        },
+        {
+            name: 'on-error',
+            tips: '文件上传失败后调用该事件函数，事件回调参数 (file: Object, fileList: Array)'
+        },
+        {
+            name: 'on-exceed',
+            tips: '文件上传个数超出限制后调用该事件函数，事件回调参数 (file: Object, fileList: Array)'
+        },
+        {
+            name: 'on-delete',
+            tips: '文件上传成功后，点击删除文件时调用该事件函数，事件回调参数 (file: Object, fileList: Array)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'background',
+        'opacity'
+    ],
     props: {
         accept: {
             type: 'string',

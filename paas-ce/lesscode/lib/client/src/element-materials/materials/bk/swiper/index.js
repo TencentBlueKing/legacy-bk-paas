@@ -21,10 +21,14 @@ export default {
     icon: 'bk-drag-swiper',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'index-change', tips: '图片索引改变时调用该事件函数，事件回调参数 (index: Number)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/swiper',
+    events: [
+        {
+            name: 'index-change',
+            tips: '图片索引改变时调用该事件函数，事件回调参数 (index: Number)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         width: '600px',
         height: '300px'

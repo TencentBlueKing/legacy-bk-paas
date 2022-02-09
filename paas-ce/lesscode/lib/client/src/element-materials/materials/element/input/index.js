@@ -16,6 +16,7 @@ export default {
     icon: 'bk-drag-input',
     group: '表单',
     order: 1,
+    document: 'https://element.eleme.cn/#/zh-CN/component/input',
     events: [
         {
             name: 'change',
@@ -38,7 +39,17 @@ export default {
             tips: '在点击由 clearable 属性生成的清空按钮时调用该事件函数, 无回调参数'
         }
     ],
-    styles: ['size', 'margin', 'display'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         width: '200px'
     },
