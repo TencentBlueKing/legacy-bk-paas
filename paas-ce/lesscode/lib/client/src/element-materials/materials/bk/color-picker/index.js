@@ -16,13 +16,17 @@ export default {
     icon: 'bk-drag-colorpick',
     group: '表单',
     order: 1,
-    styles: ['margin', 'padding', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/color-picker',
+    events: [
+        {
+            name: 'change',
+            tips: '当前选择的RGB颜色值变化时调用该事件函数，事件回调参数 (value: String)'
+        }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'background', 'border', 'opacity'],
     renderStyles: {
         display: 'inline-flex'
     },
-    events: [{
-        name: 'change', tips: '当前选择的RGB颜色值变化时调用该事件函数，事件回调参数 (value: String)'
-    }],
     directives: [
         {
             type: 'v-model',

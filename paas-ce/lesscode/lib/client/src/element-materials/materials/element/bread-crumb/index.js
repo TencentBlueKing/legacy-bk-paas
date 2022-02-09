@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-breadcrumb',
     group: '导航',
     order: 4,
-    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/breadcrumb',
+    styles: ['position', 'size', 'padding', 'margin', 'font', 'pointer', 'background', 'opacity'],
     props: {
         separator: {
             type: 'string',

@@ -16,12 +16,18 @@ export default {
     icon: 'bk-drag-pagination',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'change', tips: '当前页码变化时调用该事件函数，事件回调参数 (current: Number)'
-    }, {
-        name: 'limit-change', tips: '当前分页尺寸变化时调用该事件函数，事件回调参数 (limit: Number)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/pagination',
+    events: [
+        {
+            name: 'change',
+            tips: '当前页码变化时调用该事件函数，事件回调参数 (current: Number)'
+        },
+        {
+            name: 'limit-change',
+            tips: '当前分页尺寸变化时调用该事件函数，事件回调参数 (limit: Number)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'block'
     },

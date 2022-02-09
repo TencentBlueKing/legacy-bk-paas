@@ -16,10 +16,26 @@ export default {
     icon: 'bk-drag-alert-line',
     group: '反馈',
     order: 1,
-    styles: ['size', 'margin', 'padding', 'display'],
-    events: [{
-        name: 'close', tips: ' 关闭alert时调用该事件函数，无回调参数'
-    }],
+    document: 'https://element.eleme.cn/#/zh-CN/component/alert',
+    events: [
+        {
+            name: 'close',
+            tips: ' 关闭alert时调用该事件函数，无回调参数'
+        }
+    ],
+    styles: [
+        'position',
+        'size',
+        'padding',
+        'margin',
+        {
+            name: 'font',
+            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
+        },
+        'pointer',
+        'background',
+        'opacity'
+    ],
     props: {
         type: {
             type: 'string',

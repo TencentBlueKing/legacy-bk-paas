@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-step',
     group: '导航',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/steps',
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     props: {
         space: {
             type: ['number', 'string'],

@@ -16,17 +16,22 @@ export default {
     icon: 'bk-drag-transfer',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change',
-        tips: '右侧列表元素变化时调用该事件函数，事件回调参数 (value: Array、direction: String、 moveKey: Array)'
-    }, {
-        name: 'left-check-change',
-        tips: '左侧列表元素被用户选中 / 取消选中时调用该事件函数，事件回调参数 (selectedKey: Array、 changeKey: Array)'
-    }, {
-        name: 'right-check-change',
-        tips: '右侧列表元素被用户选中 / 取消选中时调用该事件函数，事件回调参数 (selectedKey: Array、 changeKey: Array)'
-    }],
-    styles: ['size', 'margin'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/transfer',
+    events: [
+        {
+            name: 'change',
+            tips: '右侧列表元素变化时调用该事件函数，事件回调参数 (value: Array、direction: String、 moveKey: Array)'
+        },
+        {
+            name: 'left-check-change',
+            tips: '左侧列表元素被用户选中 / 取消选中时调用该事件函数，事件回调参数 (selectedKey: Array、 changeKey: Array)'
+        },
+        {
+            name: 'right-check-change',
+            tips: '右侧列表元素被用户选中 / 取消选中时调用该事件函数，事件回调参数 (selectedKey: Array、 changeKey: Array)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
     directives: [
         {
             type: 'v-model',

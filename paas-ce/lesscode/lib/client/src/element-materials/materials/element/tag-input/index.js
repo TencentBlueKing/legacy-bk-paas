@@ -16,12 +16,18 @@ export default {
     icon: 'bk-drag-tag',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'click', tips: '点击 Tag 时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'close', tips: '关闭 Tag 时调用该事件函数，事件回调参数 (event: Event)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/tag',
+    events: [
+        {
+            name: 'click',
+            tips: '点击 Tag 时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'close',
+            tips: '关闭 Tag 时调用该事件函数，事件回调参数 (event: Event)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'font', 'pointer', 'background', 'opacity'],
     props: {
         type: {
             type: 'string',

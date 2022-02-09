@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-slider',
     group: '表单',
     order: 1,
-    styles: ['margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/slider',
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',
