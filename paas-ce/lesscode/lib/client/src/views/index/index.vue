@@ -128,10 +128,10 @@
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
 
-            LC.addEventListener('update', this.handleUpdatePreview)
-            this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('update', this.handleUpdatePreview)
-            })
+            // LC.addEventListener('update', this.handleUpdatePreview)
+            // this.$once('hook:beforeDestroy', () => {
+            //     LC.removeEventListener('update', this.handleUpdatePreview)
+            // })
 
             this.registerCustomComponent()
 

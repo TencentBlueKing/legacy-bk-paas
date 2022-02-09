@@ -41,8 +41,11 @@
             })
         },
         mounted () {
-            this.componentData.active()
-            this.componentData.toggleInteractive(true)
+            if (!this.componentData._isMounted) {
+                this.componentData.active()
+                this.componentData.toggleInteractive(true)
+                this.componentData.mounted()
+            }
         }
     }
 </script>

@@ -34,7 +34,7 @@
 <style lang="postcss" module>
     .button{
         position: absolute;
-        top: -19px;
+        top: -0;
         left: 0;
         z-index: 10;
         height: 20px;

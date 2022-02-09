@@ -21,14 +21,16 @@ const createNodeFromData = (data) => {
             newNode.componentId = data.componentId
         }
     }
+
     data.renderStyles && newNode.setRenderStyles(data.renderStyles)
     data.renderProps && newNode.setRenderProps(data.renderProps)
     data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
     data.renderEvents && newNode.setRenderEvents(data.renderEvents)
 
+    newNode._isMounted = true
     newNode.interactiveShow = false
-    newNode.isComplexComponent = Boolean(data.isComplexComponent)
-    newNode.isInteractiveComponent = Boolean(data.isInteractiveComponent)
+    newNode.isComplexComponent = Boolean(data.complex)
+    newNode.isInteractiveComponent = Boolean(data.interactive)
 
     // fix: 老数据 renderProps.no-response 格式不规范的问题
     if (newNode.renderProps.hasOwnProperty('no-response')) {
@@ -181,13 +183,13 @@ const tansform = (parentNode, data) => {
                 default: freelayoutSlot
             }
         } else if (curDataNode.type === 'bk-sideslider') {
-            curDataNode.isInteractiveComponent = true
+            curDataNode.interactive = true
             const child = curDataNode.renderSlots.content.val
             curDataNode.renderSlots = {
                 content: tansform(curDataNode, [child])[0]
             }
         } else if (curDataNode.type === 'bk-dialog') {
-            curDataNode.isInteractiveComponent = true
+            curDataNode.interactive = true
             const child = curDataNode.renderSlots.default.val
             curDataNode.renderSlots = {
                 default: tansform(curDataNode, [child])[0]
@@ -216,16 +218,17 @@ const tansform = (parentNode, data) => {
                     marginRight: '5px',
                     marginBottom: '5px',
                     marginLeft: '5px',
+                    verticalAlign: 'middle',
                     ...curDataNode.renderStyles
                 }
             }
         }
         if (curDataNode.type === 'bk-button' && parentNode.type === 'widget-form') {
             curDataNode.renderStyles = {
-                marginLeft: index > 0 ? '10px' : '',
-                ...curDataNode.renderStyles,
                 display: 'inline-block',
-                margin: ''
+                margin: '',
+                marginLeft: index > 0 ? '10px' : '',
+                ...curDataNode.renderStyles
             }
         }
 
