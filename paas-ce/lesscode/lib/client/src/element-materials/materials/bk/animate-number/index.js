@@ -51,10 +51,6 @@ export default {
             regExp: /^([0-9]|10)$/,
             regErrorText: '请输入0-10之间的整数',
             tips: '数字的位数'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

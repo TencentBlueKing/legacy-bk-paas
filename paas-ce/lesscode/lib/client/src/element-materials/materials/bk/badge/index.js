@@ -73,10 +73,6 @@ export default {
             val: 'top-right',
             options: ['top-right', 'bottom-right', 'bottom-left', 'top-left'],
             tips: '组件相对于其兄弟组件的位置'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     },
     slots: {

@@ -152,10 +152,6 @@ export default {
             type: 'number',
             val: 0,
             tips: '文字与左边框距离'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

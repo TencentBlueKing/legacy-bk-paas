@@ -72,10 +72,6 @@ export default {
                 activeColor: '#2dcb56'
             },
             tips: '设置进度圆环的颜色 bgColor、宽度 strokeWidth、背景色 bgColor'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }
