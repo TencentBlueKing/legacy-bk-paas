@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.23
+    - update: esb update data confapis, jobv3/monitor_v3 apidocs
+
 # 2.13.22
     - update: esb update  usermanage/sops/monitor_v3/jobv3/itsm/iam/gsekit/bscp confapi and apidocs
 
@@ -68,6 +71,9 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.38
+    - update: esb update data confapis, jobv3/monitor_v3 apidocs
 
 # 2.12.37
     - update: esb update  usermanage/sops/monitor_v3/jobv3/itsm/iam/gsekit/bscp confapis and apidocs
