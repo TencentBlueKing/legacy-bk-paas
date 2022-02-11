@@ -11,24 +11,24 @@
 
 <template>
     <style-layout title="尺寸">
-        <style-item :name="item.name" v-for="item in sizeConfigRender" :key="item.key">
-            <bk-select
-                v-if="item.key === 'display'"
-                :value="item.value"
-                font-size="medium"
-                :clearable="false"
-                @change="handleDisplayChange(item, $event)"
-                style="width: 100%;">
-                <bk-option id="block" name="block" />
-                <bk-option id="inline" name="inline" />
-                <bk-option id="inline-block" name="inline-block" />
-                <bk-option id="inherit" name="inherit" />
-                <bk-option id="initial" name="initial" />
-            </bk-select>
-            <size-input v-else :value="item.value" @change="handleInputChange(item, $event)">
-                <append-select :value="item.unit" @change="handleSelectChange(item, $event)" />
-            </size-input>
-        </style-item>
+        <template v-for="item in sizeConfigRender">
+            <style-item v-if="item.key === 'display' || (item.key !== 'display' && !isInline)" :name="item.name" :key="item.key">
+                <bk-select
+                    v-if="item.key === 'display'"
+                    :value="item.value"
+                    font-size="medium"
+                    :clearable="false"
+                    @change="handleDisplayChange(item, $event)"
+                    style="width: 100%;">
+                    <bk-option id="block" name="block" />
+                    <bk-option id="inline" name="inline" />
+                    <bk-option id="inline-block" name="inline-block" />
+                </bk-select>
+                <size-input v-else :value="item.value" @change="handleInputChange(item, $event)">
+                    <append-select :value="item.unit" @change="handleSelectChange(item, $event)" />
+                </size-input>
+            </style-item>
+        </template>
     </style-layout>
 </template>
 
@@ -97,6 +97,12 @@
         data () {
             return {
                 sizeConfigRender: []
+            }
+        },
+        computed: {
+            isInline () {
+                const display = this.sizeConfigRender.filter(item => item.key === 'display')
+                return display.length && display[0].value === 'inline'
             }
         },
         mounted () {
