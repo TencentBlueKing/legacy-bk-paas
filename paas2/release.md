@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.38
+    - update: esb update data confapis, jobv3/monitor_v3 apidocs
+
 # 2.12.37
     - update: esb update  usermanage/sops/monitor_v3/jobv3/itsm/iam/gsekit/bscp confapis and apidocs
 
