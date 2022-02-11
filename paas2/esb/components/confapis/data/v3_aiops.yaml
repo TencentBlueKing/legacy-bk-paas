@@ -108,7 +108,7 @@
 
 - path: /data/v3/aiops/models/
   name: v3_aiops_get_model_info_list
-  label: 模型创建
+  label: 模型列表
   method: GET
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/models/
@@ -322,6 +322,15 @@
   dest_http_method: GET
   is_hidden: true
 
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/training_status/
+  name: v3_aiops_basic_model_training_result_v2
+  label: 备选模型训练状态列表
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/training_status/
+  dest_http_method: POST
+  is_hidden: true
+
 - path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/evaluation_status/
   name: v3_aiops_get_basic_models_evaluation_status
   label: 备选模型评估状态列表
@@ -329,6 +338,15 @@
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/evaluation_status/
   dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/evaluation_status/
+  name: v3_aiops_get_basic_models_evaluation_status_v2
+  label: 备选模型评估状态列表
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/evaluation_status/
+  dest_http_method: POST
   is_hidden: true
 
 - path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_result/
@@ -340,6 +358,15 @@
   dest_http_method: GET
   is_hidden: true
 
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_result/
+  name: v3_aiops_basic_model_training_result_v2
+  label: 单个备选模型训练结果
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_result/
+  dest_http_method: POST
+  is_hidden: true
+
 - path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/evaluation_result/
   name: v3_aiops_get_single_basic_model_evaluation_result
   label: 备选模型评估结果
@@ -347,6 +374,15 @@
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/evaluation_result/
   dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/evaluation_result/
+  name: v3_aiops_get_single_basic_model_evaluation_result_v2
+  label: 备选模型评估结果
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/evaluation_result/
+  dest_http_method: POST
   is_hidden: true
 
 - path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/change_disable_status/
@@ -365,6 +401,15 @@
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_visualization/
   dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_visualization/
+  name: v3_aiops_training_visualization_v2
+  label: 训练结果可视化
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/training_visualization/
+  dest_http_method: POST
   is_hidden: true
 
 - path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/basic_models/{basic_model_id}/evaluation_visualization/
@@ -430,6 +475,15 @@
   dest_http_method: GET
   is_hidden: true
 
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/status/
+  name: v3_aiops_model_experiment_nodes_execute_status_v2
+  label: 实验步骤状态
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/status/
+  dest_http_method: POST
+  is_hidden: true
+
 - path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/result/
   name: v3_aiops_model_experiment_nodes_execute_result
   label: 实验步骤运行结果
@@ -437,6 +491,15 @@
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/result/
   dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/result/
+  name: v3_aiops_model_experiment_nodes_execute_result_v2
+  label: 实验步骤运行结果
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/node/execute/result/
+  dest_http_method: POST
   is_hidden: true
 
 - path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/node/update_result/
@@ -608,6 +671,15 @@
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/sample_set/{sample_set_id}/label/define/
   dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/sample_set/{sample_set_id}/label/define/
+  name: v3_aiops_delete_sample_set_label_define
+  label: 样本标注删除
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/label/define/
+  dest_http_method: DELETE
   is_hidden: true
 
 - path: /data/v3/aiops/sample_set/{sample_set_id}/preview/
@@ -793,10 +865,10 @@
 - path: /data/v3/aiops/user_log/
   name: v3_aiops_get_user_debug_logs
   label: 获取操作记录候选过滤条件
-  method: GET
+  method: POST
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/user_log/
-  dest_http_method: GET
+  dest_http_method: POST
   is_hidden: true
 
 - path: /data/v3/aiops/serving/
@@ -906,6 +978,7 @@
   method: POST
   name: v3_aiops_experiment_sampling_info
   path: /data/v3/aiops/models/{model_id}/experiments/{model_experiment_id}/sampling_info/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/sample_set/{sample_set_id}/label_configs/list/
@@ -914,6 +987,7 @@
   method: POST
   name: v3_aiops_label_config_list
   path: /data/v3/aiops/sample_set/{sample_set_id}/label_configs/list/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/session/action/
@@ -931,6 +1005,7 @@
   method: POST
   name: v3_aiops_get_sample_set_formal_lines
   path: /data/v3/aiops/sample_set/{sample_set_id}/formal/lines/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/models/{model_id}/modeling/alert/
@@ -948,6 +1023,7 @@
   method: PUT
   name: v3_aiops_get_execute_config
   path: /data/v3/aiops/meta_data/retrieve_execute_config/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: GET
   dest_path: /v3/aiops/sample_set/{sample_set_id}/feedback/unlabeled_sample/
@@ -956,6 +1032,7 @@
   method: GET
   name: v3_aiops_unlabeled_sample
   path: /data/v3/aiops/sample_set/{sample_set_id}/feedback/unlabeled_sample/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/sample_set/{sample_set_id}/collect_configs/
@@ -964,6 +1041,7 @@
   method: POST
   name: v3_aiops_create_sample_collect_config
   path: /data/v3/aiops/sample_set/{sample_set_id}/collect_configs/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/meta_data/with_filter/
@@ -981,6 +1059,7 @@
   method: GET
   name: v3_aiops_bool_check_group_info
   path: /data/v3/aiops/serving/check_group_info/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: PUT
   dest_path: /v3/aiops/models/{model_id}/experiments/{model_experiment_id}/
@@ -998,6 +1077,7 @@
   method: POST
   name: v3_aiops_sample_set_status
   path: /data/v3/aiops/models/{model_id}/modeling/sample_set_status/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/sample_set/{sample_set_id}/collect_configs/list/
@@ -1015,6 +1095,7 @@
   method: GET
   name: v3_aiops_get_AIOps_SampleSet_features
   path: /data/v3/aiops/sample_set/{sample_set_id}/features/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: GET
   dest_path: /v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/before_delete/
@@ -1023,6 +1104,7 @@
   method: GET
   name: v3_aiops_sample_set_before_delete_result_table
   path: /data/v3/aiops/sample_set/{sample_set_id}/result_table/{result_table_id}/before_delete/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/sample_set/{sample_set_id}/groups/
@@ -1031,6 +1113,7 @@
   method: POST
   name: v3_aiops_AIOps_SampleSet_groups
   path: /data/v3/aiops/sample_set/{sample_set_id}/groups/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/sample_set/{sample_set_id}/formal/result_tables/
@@ -1039,6 +1122,7 @@
   method: POST
   name: v3_aiops_get_sample_set_formal_rts
   path: /data/v3/aiops/sample_set/{sample_set_id}/formal/result_tables/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/models/{model_id}/experiments/{model_experiment_id}/training_input/
@@ -1047,6 +1131,7 @@
   method: POST
   name: v3_aiops_experiment_algorithm_training_input
   path: /data/v3/aiops/models/{model_id}/experiments/{model_experiment_id}/training_input/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: GET
   dest_path: /v3/aiops/metric/
@@ -1057,6 +1142,24 @@
   path: /data/v3/aiops/metric/
 
 - comp_codename: generic.data.datav3_component
+  dest_http_method: GET
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/collect_configs/feedback_config/
+  is_hidden: true
+  label: 1.16 手动反馈策略详情
+  method: GET
+  name: v3_aiops_sample_collect_config_feedback_config
+  path: /data/v3/aiops/sample_set/{sample_set_id}/collect_configs/feedback_config/
+
+- comp_codename: generic.data.datav3_component
+  dest_http_method: GET
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/collect_configs/{collect_config_id}/
+  is_hidden: true
+  label: 1.14 获取样本集采集策略详情
+  method: GET
+  name: v3_aiops_get_sample_collect_config
+  path: /data/v3/aiops/sample_set/{sample_set_id}/collect_configs/{collect_config_id}/
+
+- comp_codename: generic.data.datav3_component
   dest_http_method: PUT
   dest_path: /v3/aiops/sample_set/{sample_set_id}/collect_configs/{collect_config_id}/
   is_hidden: true
@@ -1064,6 +1167,16 @@
   method: PUT
   name: v3_aiops_update_sample_collect_config
   path: /data/v3/aiops/sample_set/{sample_set_id}/collect_configs/{collect_config_id}/
+
+- comp_codename: generic.data.datav3_component
+  dest_http_method: DELETE
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/collect_configs/{collect_config_id}/
+  is_hidden: true
+  label: 1.13 删除样本采集配置
+  method: DELETE
+  name: v3_aiops_delete_sample_collect_config
+  path: /data/v3/aiops/sample_set/{sample_set_id}/collect_configs/{collect_config_id}/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/models/{model_id}/modeling/finished_modeling/
@@ -1072,6 +1185,7 @@
   method: POST
   name: v3_aiops_finished_modeling
   path: /data/v3/aiops/models/{model_id}/modeling/finished_modeling/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/algorithm/check_add_on_input_field/
@@ -1080,6 +1194,7 @@
   method: POST
   name: v3_aiops_update_feature
   path: /data/v3/aiops/algorithm/check_add_on_input_field/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: PUT
   dest_path: /v3/aiops/models/{model_id}/modeling/
@@ -1088,6 +1203,16 @@
   method: PUT
   name: v3_aiops_update_continuous_training_status
   path: /data/v3/aiops/models/{model_id}/modeling/
+
+- comp_codename: generic.data.datav3_component
+  dest_http_method: GET
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/label_configs/{config_id}/
+  is_hidden: true
+  label: 1.19 获取标注映射配置详情
+  method: GET
+  name: v3_aiops_get_label_config
+  path: /data/v3/aiops/sample_set/{sample_set_id}/label_configs/{config_id}/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: PUT
   dest_path: /v3/aiops/sample_set/{sample_set_id}/label_configs/{config_id}/
@@ -1096,6 +1221,16 @@
   method: PUT
   name: v3_aiops_update_label_config
   path: /data/v3/aiops/sample_set/{sample_set_id}/label_configs/{config_id}/
+
+- comp_codename: generic.data.datav3_component
+  dest_http_method: DELETE
+  dest_path: /v3/aiops/sample_set/{sample_set_id}/label_configs/{config_id}/
+  is_hidden: true
+  label: 1.18 删除标注映射配置
+  method: DELETE
+  name: v3_aiops_delete_label_config
+  path: /data/v3/aiops/sample_set/{sample_set_id}/label_configs/{config_id}/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/models/{model_id}/modeling/auto_release/
@@ -1113,6 +1248,7 @@
   method: POST
   name: v3_aiops_labeled_sample
   path: /data/v3/aiops/sample_set/{sample_set_id}/feedback/labeled_sample/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/sample_set/{sample_set_id}/{object_type}/
@@ -1121,6 +1257,7 @@
   method: POST
   name: v3_aiops_get_sample_set_rts_or_lines
   path: /data/v3/aiops/sample_set/{sample_set_id}/{object_type}/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/models/{model_id}/modeling/start/
@@ -1147,6 +1284,7 @@
   method: POST
   name: v3_aiops_session_status
   path: /data/v3/aiops/session/status/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/sample_set/{sample_set_id}/label_configs/
@@ -1155,6 +1293,7 @@
   method: POST
   name: v3_aiops_create_label_config
   path: /data/v3/aiops/sample_set/{sample_set_id}/label_configs/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/experiments/debug/
@@ -1163,6 +1302,7 @@
   method: POST
   name: v3_aiops_experiment_debug
   path: /data/v3/aiops/experiments/debug/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: GET
   dest_path: /v3/aiops/models/{model_id}/release/{model_release_id}/model_file/
@@ -1180,6 +1320,7 @@
   method: POST
   name: v3_aiops_stop_task
   path: /data/v3/aiops/models/{model_id}/experiments/{model_experiment_id}/node/stop/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/models/{model_id}/release/release_log/
@@ -1197,6 +1338,7 @@
   method: POST
   name: v3_aiops_update_execute_config
   path: /data/v3/aiops/meta_data/update_execute_config/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: GET
   dest_path: /v3/aiops/errorcodes/
@@ -1205,6 +1347,7 @@
   method: GET
   name: v3_aiops_list_errorcodes
   path: /data/v3/aiops/errorcodes/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: GET
   dest_path: /v3/aiops/session/action/status/
@@ -1213,6 +1356,7 @@
   method: GET
   name: v3_aiops_session_action_status
   path: /data/v3/aiops/session/action/status/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/models/{model_id}/modeling/training_log/
@@ -1221,6 +1365,7 @@
   method: POST
   name: v3_aiops_training_log
   path: /data/v3/aiops/models/{model_id}/modeling/training_log/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: GET
   dest_path: /v3/aiops/sample_set/{sample_set_id}/label_configs/default_mapping_config/
@@ -1229,6 +1374,7 @@
   method: GET
   name: v3_aiops_default_mapping_config
   path: /data/v3/aiops/sample_set/{sample_set_id}/label_configs/default_mapping_config/
+
 - comp_codename: generic.data.datav3_component
   dest_http_method: POST
   dest_path: /v3/aiops/models/{model_id}/experiments/{model_experiment_id}/node/execute/groups/
