@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-card',
     group: '反馈',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/card',
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'border', 'opacity'],
     renderStyles: {
         width: '320px',
         display: 'inline-block'

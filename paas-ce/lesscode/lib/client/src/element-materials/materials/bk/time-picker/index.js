@@ -16,12 +16,28 @@ export default {
     icon: 'bk-drag-time-2',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '时间改变时调用该事件函数，事件回调参数 (time: Date | String | Array)'
-    }, {
-        name: 'open-change', tips: '面板弹出或收起时调用该事件函数，事件回调参数 (state: Boolean)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/time-picker',
+    events: [
+        {
+            name: 'change',
+            tips: '时间改变时调用该事件函数，事件回调参数 (time: Date | String | Array)'
+        },
+        {
+            name: 'open-change',
+            tips: '面板弹出或收起时调用该事件函数，事件回调参数 (state: Boolean)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },
@@ -75,10 +91,6 @@ export default {
             type: 'boolean',
             val: true,
             tips: '是否开启回车模式'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

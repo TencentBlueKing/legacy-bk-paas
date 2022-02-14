@@ -16,16 +16,26 @@ export default {
     icon: 'bk-drag-bigtree',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'select-change', tips: '选中的节点发生变化时调用该事件函数，事件回调参数 (treeNode: Object)'
-    }, {
-        name: 'check-change', tips: '复选节点发生变化时调用该事件函数，事件回调参数 (id: String | Number | Array, checked: Boolean)'
-    }, {
-        name: 'expand-change', tips: '展开/折叠节点时调用该事件函数，事件回调参数 (treeNode: Object)'
-    }, {
-        name: 'disable-change', tips: '节点拖拽结束时调用该事件函数，事件回调参数 (treeNode: Object | Array)'
-    }],
-    styles: ['size', 'margin'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/big-tree',
+    events: [
+        {
+            name: 'select-change',
+            tips: '选中的节点发生变化时调用该事件函数，事件回调参数 (treeNode: Object)'
+        },
+        {
+            name: 'check-change',
+            tips: '复选节点发生变化时调用该事件函数，事件回调参数 (id: String | Number | Array, checked: Boolean)'
+        },
+        {
+            name: 'expand-change',
+            tips: '展开/折叠节点时调用该事件函数，事件回调参数 (treeNode: Object)'
+        },
+        {
+            name: 'disable-change',
+            tips: '节点拖拽结束时调用该事件函数，事件回调参数 (treeNode: Object | Array)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'font', 'pointer', 'background', 'opacity'],
     props: {
         data: {
             type: ['array', 'remote'],
@@ -87,10 +97,6 @@ export default {
             type: 'boolean',
             val: false,
             tips: '是否显示层级连线'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

@@ -49,7 +49,7 @@
 </template>
 <script>
     import Vue from 'vue'
-    import { mapActions, mapGetters } from 'vuex'
+    import { mapActions, mapGetters, mapState } from 'vuex'
     import LC from '@/element-materials/core'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
@@ -85,27 +85,65 @@
             }
         },
         computed: {
+            ...mapGetters(['user']),
             ...mapGetters('projectVersion', {
                 versionId: 'currentVersionId',
                 versionName: 'currentVersionName',
                 getInitialVersion: 'initialVersion'
-            })
+            }),
+            ...mapGetters('drag', ['curTemplateData']),
+            ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('functions', ['funcGroups']),
+            ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('variable', ['variableList']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' }),
+            ...mapState('route', ['layoutPageList'])
+        },
+        watch: {
+            curTemplateData: {
+                handler () {
+                    const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+                    this.updatePreview({
+                        isGenerateNav: true,
+                        id: pageRoute.layoutPath,
+                        curTemplateData: this.curTemplateData,
+                        types: ['reload']
+                    })
+                }
+            },
+            variableList () {
+                // 变量发生变化的时候  reload
+                this.handleUpdatePreview()
+            },
+            funcGroups () {
+                // 函数发生变化的时候  reload
+                this.handleUpdatePreview()
+            },
+            'pageDetail.lifeCycle' () {
+                // 生命周期发生变化的时候  reload
+                this.handleUpdatePreview()
+            }
         },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
 
+            // LC.addEventListener('update', this.handleUpdatePreview)
+            // this.$once('hook:beforeDestroy', () => {
+            //     LC.removeEventListener('update', this.handleUpdatePreview)
+            // })
+
             this.registerCustomComponent()
-            
+
+            // 获取并设置当前版本信息
+            this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
+
             this.fetchData()
 
             // 设置权限相关的信息
             this.$store.dispatch('member/setCurUserPermInfo', {
                 id: this.projectId
             })
-
-            // 获取并设置当前版本信息
-            this.$store.commit('projectVersion/setCurrentVersion', this.getInitialVersion())
 
             this.guideStep = [
                 {
@@ -172,6 +210,7 @@
                 'getAllGroupFuncs'
             ]),
             ...mapActions('variable', ['getAllVariable']),
+            ...mapActions(['updatePreview']),
             /**
              * @desc 注册自定义组件
              */
@@ -227,7 +266,8 @@
 
                     await this.$store.dispatch('page/getPageSetting', {
                         pageId: this.pageId,
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        versionId: this.versionId
                     })
 
                     await this.getAllVariable({
@@ -276,6 +316,15 @@
                 const confirmationMessage = '...';
                 (event || window.event).returnValue = confirmationMessage
                 return confirmationMessage
+            },
+            handleUpdatePreview (setting = {}) {
+                const defaultSetting = {
+                    isGenerateNav: false,
+                    id: this.pageDetail.pageCode,
+                    curTemplateData: {},
+                    types: ['reload', 'update_style']
+                }
+                this.updatePreview(Object.assign(defaultSetting, setting))
             }
         }
     }

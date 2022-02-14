@@ -16,8 +16,14 @@ export default {
     icon: 'bk-drag-image',
     group: '基础',
     order: 1,
-    events: [{ name: 'click', tips: '点击组件时调用该事件函数，事件回调参数 (event: Event)' }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/image',
+    events: [
+        {
+            name: 'click',
+            tips: '点击组件时调用该事件函数，事件回调参数 (event: Event)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-block',
         width: '60px'

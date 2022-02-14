@@ -16,18 +16,40 @@ export default {
     icon: 'bk-drag-date',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '日期改变时调用该事件函数，事件回调参数 (date: Date | String | Array, type: String)'
-    }, {
-        name: 'clear', tips: '日历面板点击清空时调用该事件函数，暂无事件回调参数'
-    }, {
-        name: 'open-change', tips: '日历面板弹出或收起时调用该事件函数，事件回调参数 (state: Boolean)'
-    }, {
-        name: 'pick-success', tips: '日历面板选择日期后，点击确定选择成功时调用该事件函数，暂无事件回调参数'
-    }, {
-        name: 'shortcut-change', tips: '快捷项改变时调用该事件函数，事件回调参数 (value: Object, index: Number)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/date-picker',
+    events: [
+        {
+            name: 'change',
+            tips: '日期改变时调用该事件函数，事件回调参数 (date: Date | String | Array, type: String)'
+        },
+        {
+            name: 'clear',
+            tips: '日历面板点击清空时调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'open-change',
+            tips: '日历面板弹出或收起时调用该事件函数，事件回调参数 (state: Boolean)'
+        },
+        {
+            name: 'pick-success',
+            tips: '日历面板选择日期后，点击确定选择成功时调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'shortcut-change',
+            tips: '快捷项改变时调用该事件函数，事件回调参数 (value: Object, index: Number)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },
@@ -90,10 +112,6 @@ export default {
         clearable: {
             type: 'boolean',
             val: true
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

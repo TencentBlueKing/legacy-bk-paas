@@ -51,7 +51,6 @@ const projectCode = {
         ] = await Promise.all([
             routeModel.findProjectRoute(projectId, versionId),
             routeModel.queryProjectPageRoute(projectId, versionId),
-            ComponentModel.getNameMap(),
             FuncModel.allGroupFuncDetail(projectId, versionId),
             VariableModel.getAll({ projectId, versionId })
         ])
@@ -173,7 +172,6 @@ const projectCode = {
                 ] = await Promise.all([
                     routeModel.findProjectRoute(projectId, versionId),
                     routeModel.queryProjectPageRoute(projectId, versionId),
-                    ComponentModel.getNameMap(),
                     FuncModel.allGroupFuncDetail(projectId, versionId),
                     VariableModel.getAll({ projectId, versionId }),
                     dataService.get('data-table', { projectId, deleteFlag: 0 }),

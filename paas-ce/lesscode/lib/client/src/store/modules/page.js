@@ -52,11 +52,11 @@ export default {
         routeGroup: state => state.routeGroup
     },
     actions: {
-        async getPageSetting ({ dispatch, commit }, { pageId, projectId }) {
+        async getPageSetting ({ dispatch, commit }, { pageId, projectId, versionId }) {
             const [pageRoute, layoutList, routeGroup] = await Promise.all([
-                dispatch('route/find', { pageId: pageId }, { root: true }),
-                dispatch('layout/getList', { projectId: projectId }, { root: true }),
-                dispatch('route/getProjectRouteGroup', { projectId: projectId }, { root: true })
+                dispatch('route/find', { pageId }, { root: true }),
+                dispatch('layout/getList', { projectId, versionId }, { root: true }),
+                dispatch('route/getProjectRouteGroup', { projectId, versionId }, { root: true })
             ])
             layoutList.forEach(item => {
                 item.defaultName = item.showName || item.defaultName

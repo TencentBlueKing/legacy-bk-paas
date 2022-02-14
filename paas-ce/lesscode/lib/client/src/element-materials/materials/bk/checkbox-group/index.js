@@ -16,8 +16,24 @@ export default {
     icon: 'bk-drag-checkbox',
     group: '表单',
     order: 1,
-    styles: ['margin'],
-    events: [{ name: 'change', tips: '选项发生变化时调用该事件函数，参数为(newValue: String | Number | Boolean, oldValue: String | Number | Boolean)' }],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/checkbox',
+    events: [
+        {
+            name: 'change',
+            tips: '选项发生变化时调用该事件函数，参数为(newValue: String | Number | Boolean, oldValue: String | Number | Boolean)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         {
             type: 'v-model',

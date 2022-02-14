@@ -1,6 +1,6 @@
 <template>
     <section>
-        <bk-select @change="chooseTable" :value="value" :clearable="false" searchable>
+        <bk-select @change="chooseTable" :value="value" searchable>
             <bk-option v-for="table in tableList"
                 :key="table.tableName"
                 :id="table.tableName"

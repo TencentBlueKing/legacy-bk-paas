@@ -1,7 +1,6 @@
 export default function (props, defaultRenderProps = {}, type = '') {
     const renderProps = Object.keys(props).reduce((result, propName) => {
-        if (props[propName].hasOwnProperty('val')
-            && props[propName].val !== '') {
+        if (props[propName].hasOwnProperty('val')) {
             const {
                 type,
                 val,

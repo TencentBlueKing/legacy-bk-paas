@@ -20,8 +20,8 @@
 </template>
 
 <script>
-    import StyleLayout from '../layout/index'
-    import StyleItem from '../layout/item'
+    import StyleLayout from '@/element-materials/modifier/component/styles/layout/index'
+    import StyleItem from '@/element-materials/modifier/component/styles/layout/item'
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'

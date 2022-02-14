@@ -89,7 +89,6 @@ class PageCode {
             origin = ''
         }
     ) {
-        console.log(targetData, 'class params')
         this.targetData = targetData || []
         this.pageType = pageType
         this.funcGroups = funcGroups || []
@@ -1710,7 +1709,6 @@ class PageCode {
 
 module.exports = {
     getPageData (params) {
-        console.log(params, 'params')
         const pageCode = new PageCode(params)
         return {
             code: pageCode.getCode(),

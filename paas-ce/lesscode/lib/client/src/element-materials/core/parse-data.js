@@ -16,15 +16,21 @@ const createNodeFromData = (data) => {
     const newNode = createNode(data.type === 'img' ? 'bk-image' : data.type)
     newNode.tabPanelActive = data.tabPanelActive || 'props'
     if (!isClone) {
-        newNode.componentId = data.componentId
+        // fix: 老数据存在 componentId 为空的情况
+        if (data.componentId) {
+            newNode.componentId = data.componentId
+        }
     }
+
     data.renderStyles && newNode.setRenderStyles(data.renderStyles)
     data.renderProps && newNode.setRenderProps(data.renderProps)
     data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
     data.renderEvents && newNode.setRenderEvents(data.renderEvents)
 
+    newNode._isMounted = true
     newNode.interactiveShow = false
-    newNode.isComplexComponent = data.isComplexComponent || false
+    newNode.isComplexComponent = Boolean(data.complex)
+    newNode.isInteractiveComponent = Boolean(data.interactive)
 
     // fix: 老数据 renderProps.no-response 格式不规范的问题
     if (newNode.renderProps.hasOwnProperty('no-response')) {
@@ -103,7 +109,11 @@ const tansform = (parentNode, data) => {
                         name: 'render-column',
                         type: 'render-column',
                         renderStyles: {
-                            padding: '5px'
+                            paddingTop: '5px',
+                            paddingRight: '5px',
+                            paddingBottom: '5px',
+                            paddingLeft: '5px',
+                            minHeight: '80px'
                         },
                         renderProps: {
                             span: {
@@ -119,8 +129,8 @@ const tansform = (parentNode, data) => {
                         },
                         renderDirectives: [],
                         renderEvents: {},
-                        interactiveShow: false,
-                        isComplexComponent: false
+                        complex: false,
+                        interactive: false
                     }
                     curDataNode.renderSlots.default.push(columnData)
                 })
@@ -159,8 +169,8 @@ const tansform = (parentNode, data) => {
                         },
                         renderDirectives: [],
                         renderEvents: {},
-                        interactiveShow: false,
-                        isComplexComponent: false
+                        complex: false,
+                        interactive: false
                     }
                     // console.log('from print form item == ', formItemData)
                     curDataNode.renderSlots.default.push(formItemData)
@@ -176,11 +186,13 @@ const tansform = (parentNode, data) => {
                 default: freelayoutSlot
             }
         } else if (curDataNode.type === 'bk-sideslider') {
+            curDataNode.interactive = true
             const child = curDataNode.renderSlots.content.val
             curDataNode.renderSlots = {
                 content: tansform(curDataNode, [child])[0]
             }
         } else if (curDataNode.type === 'bk-dialog') {
+            curDataNode.interactive = true
             const child = curDataNode.renderSlots.default.val
             curDataNode.renderSlots = {
                 default: tansform(curDataNode, [child])[0]
@@ -209,16 +221,17 @@ const tansform = (parentNode, data) => {
                     marginRight: '5px',
                     marginBottom: '5px',
                     marginLeft: '5px',
+                    verticalAlign: 'middle',
                     ...curDataNode.renderStyles
                 }
             }
         }
         if (curDataNode.type === 'bk-button' && parentNode.type === 'widget-form') {
             curDataNode.renderStyles = {
-                marginLeft: index > 0 ? '10px' : '',
-                ...curDataNode.renderStyles,
                 display: 'inline-block',
-                margin: ''
+                margin: '',
+                marginLeft: index > 0 ? '10px' : '',
+                ...curDataNode.renderStyles
             }
         }
 
@@ -226,12 +239,16 @@ const tansform = (parentNode, data) => {
         const origanlRenderProps = curDataNode.renderProps || {}
         curDataNode.renderProps = Object.keys(origanlRenderProps).reduce((result, propName) => {
             const prop = origanlRenderProps[propName]
+            let renderValue = prop.val
+            if (prop.type !== 'string' && renderValue === '') {
+                renderValue = undefined
+            }
             result[propName] = {
                 format: 'value',
                 code: prop.val,
                 payload: prop.payload || {},
                 valueType: prop.type,
-                renderValue: prop.val
+                renderValue
             }
             return result
         }, {})
@@ -284,6 +301,7 @@ const tansform = (parentNode, data) => {
                 const slotData = curDataNode.renderSlots[slotName]
                 let format = 'value'
                 let code = slotData.val
+                const renderValue = code
                 const component = slotData.name
                 const valueType = slotData.type
                 const payload = slotData.payload || {}
@@ -299,7 +317,7 @@ const tansform = (parentNode, data) => {
                     code,
                     payload,
                     valueType,
-                    renderValue: code
+                    renderValue
                 }
                 return result
             }, {})

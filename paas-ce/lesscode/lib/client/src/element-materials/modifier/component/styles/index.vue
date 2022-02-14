@@ -13,13 +13,60 @@
     <div>
         <template v-if="config.length">
             <p class="style-setting-tips">样式面板中设置的样式将覆盖组件自带的默认样式，请谨慎调整</p>
-            <template v-for="(com, index) in config">
-                <component
-                    :is="com"
-                    :key="index"
-                    :value="lastStyles"
-                    :change="handleChange" />
-            </template>
+            <position
+                v-if="handleConfigIsShow('position')"
+                :value="lastStyles"
+                :include="handleGetConfig('position').include"
+                :exclude="handleGetConfig('position').exclude"
+                :change="handleChange" />
+            <size
+                v-if="handleConfigIsShow('size')"
+                :value="lastStyles"
+                :include="handleGetConfig('size').include"
+                :exclude="handleGetConfig('size').exclude"
+                :change="handleChange" />
+            <padding
+                v-if="handleConfigIsShow('padding')"
+                :value="lastStyles"
+                :include="handleGetConfig('padding').include"
+                :exclude="handleGetConfig('padding').exclude"
+                :change="handleChange" />
+            <margin
+                v-if="handleConfigIsShow('margin')"
+                :value="lastStyles"
+                :include="handleGetConfig('margin').include"
+                :exclude="handleGetConfig('margin').exclude"
+                :change="handleChange" />
+            <font-config
+                v-if="handleConfigIsShow('font')"
+                :value="lastStyles"
+                :include="handleGetConfig('font').include"
+                :exclude="handleGetConfig('font').exclude"
+                :change="handleChange" />
+            <pointer
+                v-if="handleConfigIsShow('pointer')"
+                :value="lastStyles"
+                :include="handleGetConfig('pointer').include"
+                :exclude="handleGetConfig('pointer').exclude"
+                :change="handleChange" />
+            <background
+                v-if="handleConfigIsShow('background')"
+                :value="lastStyles"
+                :include="handleGetConfig('background').include"
+                :exclude="handleGetConfig('background').exclude"
+                :change="handleChange" />
+            <border
+                v-if="handleConfigIsShow('border')"
+                :value="lastStyles"
+                :include="handleGetConfig('border').include"
+                :exclude="handleGetConfig('border').exclude"
+                :change="handleChange" />
+            <opacity
+                v-if="handleConfigIsShow('opacity')"
+                :value="lastStyles"
+                :include="handleGetConfig('opacity').include"
+                :exclude="handleGetConfig('opacity').exclude"
+                :change="handleChange" />
         </template>
         <style-custom
             v-if="isShowCustom"
@@ -42,24 +89,24 @@
     import StyleMargin from './strategy/margin'
     import StyleFont from './strategy/font'
     import StyleBorder from './strategy/border'
-    import StyleBackgroundColor from './strategy/background-color'
-    import StyleColor from './strategy/color'
-    import StyleTextAlign from './strategy/text-align'
-    import StyleDisplay from './strategy/display'
+    import StylePosition from './strategy/position'
+    import StylePointer from './strategy/pointer'
+    import StyleOpacity from './strategy/opacity'
+    import StyleBackground from './strategy/background'
 
     const components = {
         StyleLayout,
         StyleItem,
         StyleCustom,
+        position: StylePosition,
         size: StyleSize,
         padding: StylePadding,
         margin: StyleMargin,
-        font: StyleFont,
+        fontConfig: StyleFont,
+        pointer: StylePointer,
+        background: StyleBackground,
         border: StyleBorder,
-        backgroundColor: StyleBackgroundColor,
-        color: StyleColor,
-        textAlign: StyleTextAlign,
-        display: StyleDisplay
+        opacity: StyleOpacity
     }
 
     export default {
@@ -77,19 +124,36 @@
             }
         },
         created () {
-            this.currentComponentNode = LC.getActiveNode()
+            this.componentData = LC.getActiveNode()
             const {
                 componentId,
                 material,
                 renderStyles
-            } = this.currentComponentNode
+            } = this.componentData
             this.componentId = componentId
-            this.config = Object.freeze(material.styles)
+            this.config = Object.freeze(material.styles || {})
             this.lastStyles = Object.assign({}, renderStyles)
+            console.log('from modift stylese == ', this.componentData, this.config, renderStyles)
         },
         methods: {
             handleChange (key, value) {
-                this.currentComponentNode.setStyle(key, value)
+                this.componentData.setStyle(key, value)
+                this.lastStyles[key] = value
+            },
+            handleConfigIsShow (key) {
+                return this.config.some(item => (item.name && item.name === key) || item === key)
+            },
+            handleGetConfig (key) {
+                const config = {
+                    include: [],
+                    exclude: []
+                }
+                const item = this.config.filter(item => item.name && item.name === key)
+                if (item.length) {
+                    config.include = item[0].include || []
+                    config.exclude = item[0].exclude || []
+                }
+                return config
             }
         }
     }

@@ -15,7 +15,7 @@ export default {
     display: 'none',
     order: 1,
     group: '布局',
-    styles: ['padding'],
+    styles: ['size', 'padding'],
     renderStyles: {
         'minHeight': '80px'
         // 'paddingTop': '10px',

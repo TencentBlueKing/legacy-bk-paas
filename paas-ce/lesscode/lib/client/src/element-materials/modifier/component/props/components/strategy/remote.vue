@@ -155,7 +155,7 @@
                     const data = `{
                         url: '${this.processVarInFunParams(returnMethod.funcApiUrl, returnMethod.funcName)}',
                         type: '${returnMethod.funcMethod}',
-                        apiData: ${this.processVarInFunParams(returnMethod.funcApiData, returnMethod.funcName) || "''"},
+                        apiData: ${this.processVarInFunParams(returnMethod.funcApiData, returnMethod.funcName) || '\'\''},
                         withToken: ${returnMethod.withToken}
                     }`
                     returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { return this.$store.dispatch('getApiData', ${data}).then((${remoteParams}) => { ${returnMethod.funcBody} }) };`

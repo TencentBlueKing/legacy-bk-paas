@@ -10,12 +10,23 @@
 -->
 
 <template>
-    <style-layout title="背景">
-        <style-item name="颜色">
-            <bk-color-picker style="width: 100%;" v-model="backgroundColorValue" @change="handleBackgroundColorChange"></bk-color-picker>
-            <!-- <bk-select :value="backgroundColorValue" style="width: 96px;" font-size="medium" :clearable="false" @change="handleTextAlignChange">
-                <bk-option v-for="option in textAlignList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
-            </bk-select> -->
+    <style-layout title="鼠标">
+        <style-item :name="'cursor'">
+            <bk-select
+                :value="cursorValue"
+                font-size="medium"
+                :clearable="false"
+                @change="handleChange"
+                style="width: 100%;">
+                <bk-option id="auto" name="auto" />
+                <bk-option id="default" name="default" />
+                <bk-option id="crosshair" name="crosshair" />
+                <bk-option id="pointer" name="pointer" />
+                <bk-option id="move" name="move" />
+                <bk-option id="text" name="text" />
+                <bk-option id="wait" name="wait" />
+                <bk-option id="help" name="help" />
+            </bk-select>
         </style-item>
     </style-layout>
 </template>
@@ -41,13 +52,13 @@
         },
         data () {
             return {
-                backgroundColorValue: this.value['backgroundColor']
+                cursorValue: this.value.cursor || 'auto'
             }
         },
         methods: {
-            handleBackgroundColorChange (value) {
-                this.backgroundColorValue = value
-                this.change('backgroundColor', value)
+            handleChange (val) {
+                this.cursorValue = val
+                this.change('cursor', val)
             }
         }
     }

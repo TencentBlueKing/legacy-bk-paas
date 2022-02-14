@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-card',
     group: '其他',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/card',
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'border', 'opacity'],
     renderStyles: {
         width: '320px',
         height: '320px',

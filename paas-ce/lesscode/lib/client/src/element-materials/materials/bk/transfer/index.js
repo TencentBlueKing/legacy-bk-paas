@@ -16,11 +16,14 @@ export default {
     icon: 'bk-drag-transfer',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change',
-        tips: '数据源改变时调用该事件函数，事件回调参数 (sourceList: Array, targetList: Array, targetValueList: Array)'
-    }],
-    styles: ['size', 'margin'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/transfer',
+    events: [
+        {
+            name: 'change',
+            tips: '数据源改变时调用该事件函数，事件回调参数 (sourceList: Array, targetList: Array, targetValueList: Array)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',
@@ -92,10 +95,6 @@ export default {
             type: 'boolean',
             val: false,
             tips: '是否一直显示关闭icon'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

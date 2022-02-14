@@ -16,12 +16,29 @@ export default {
     icon: 'bk-drag-badge',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'hover', tips: '鼠标 hover 时调用该事件函数，暂无回调参数'
-    }, {
-        name: 'leave', tips: '鼠标 leave 时调用该事件函数，暂无回调参数'
-    }],
-    styles: ['size', 'margin', 'display', 'font', 'backgroundColor'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/badge',
+    events: [
+        {
+            name: 'hover',
+            tips: '鼠标 hover 时调用该事件函数，暂无回调参数'
+        },
+        {
+            name: 'leave',
+            tips: '鼠标 leave 时调用该事件函数，暂无回调参数'
+        }
+    ],
+    styles: [
+        'position',
+        'size',
+        'margin',
+        {
+            name: 'font',
+            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
+        },
+        'pointer',
+        'background',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },
@@ -56,10 +73,6 @@ export default {
             val: 'top-right',
             options: ['top-right', 'bottom-right', 'bottom-left', 'top-left'],
             tips: '组件相对于其兄弟组件的位置'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     },
     slots: {

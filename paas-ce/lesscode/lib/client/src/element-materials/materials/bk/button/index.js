@@ -16,8 +16,27 @@ export default {
     icon: 'bk-drag-button',
     group: '基础',
     order: 1,
-    events: [{ name: 'click', tips: '点击组件时调用该事件函数，事件回调参数 (event: Event)' }],
-    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/button',
+    events: [
+        {
+            name: 'click',
+            tips: '点击组件时调用该事件函数，事件回调参数 (event: Event)'
+        }
+    ],
+    styles: [
+        'position',
+        'size',
+        'padding',
+        'margin',
+        {
+            name: 'font',
+            exclude: ['textAlign', 'wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
+        },
+        'pointer',
+        'background',
+        'border',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },
@@ -52,10 +71,6 @@ export default {
         },
         'icon-right': {
             type: 'icon'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     },
     slots: {

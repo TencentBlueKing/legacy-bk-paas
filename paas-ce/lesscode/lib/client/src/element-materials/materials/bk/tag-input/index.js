@@ -16,18 +16,39 @@ export default {
     icon: 'bk-drag-tag',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '数据发生变化时调用该事件函数，事件回调参数 (tags: Array)'
-    }, {
-        name: 'select', tips: '选择数据后调用该事件函数，暂无事件回调参数'
-    }, {
-        name: 'remove', tips: '删除数据后调用该事件函数，暂无事件回调参数'
-    }, {
-        name: 'removeAll', tips: '一键清空数据后调用该事件函数，暂无事件回调参数'
-    }, {
-        name: 'blur', tips: '输入状态时失焦时调用该事件函数，事件回调参数 (inputStr: String, tags: Array)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/tag',
+    events: [
+        {
+            name: 'change',
+            tips: '数据发生变化时调用该事件函数，事件回调参数 (tags: Array)'
+        },
+        {
+            name: 'select',
+            tips: '选择数据后调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'remove',
+            tips: '删除数据后调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'removeAll',
+            tips: '一键清空数据后调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'blur',
+            tips: '输入状态时失焦时调用该事件函数，事件回调参数 (inputStr: String, tags: Array)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         {
             type: 'v-model',
@@ -131,10 +152,6 @@ export default {
             type: 'number',
             val: 0,
             tips: '文字与左边框距离'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

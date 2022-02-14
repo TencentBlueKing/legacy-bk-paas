@@ -10,18 +10,19 @@
 -->
 
 <template>
-    <style-layout title="对齐方式">
-        <style-item name="text-align">
-            <bk-select :value="textAlignValue" style="width: 96px;" font-size="medium" :clearable="false" @change="handleTextAlignChange">
+    <style-layout title="背景">
+        <style-item name="颜色">
+            <bk-color-picker style="width: 100%;" v-model="backgroundColorValue" @change="handleBackgroundColorChange"></bk-color-picker>
+            <!-- <bk-select :value="backgroundColorValue" style="width: 96px;" font-size="medium" :clearable="false" @change="handleTextAlignChange">
                 <bk-option v-for="option in textAlignList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
-            </bk-select>
+            </bk-select> -->
         </style-item>
     </style-layout>
 </template>
 
 <script>
-    import StyleLayout from '../layout/index'
-    import StyleItem from '../layout/item'
+    import StyleLayout from '@/element-materials/modifier/component/styles/layout/index'
+    import StyleItem from '@/element-materials/modifier/component/styles/layout/item'
 
     export default {
         components: {
@@ -40,24 +41,13 @@
         },
         data () {
             return {
-                textAlignValue: this.value['textAlign'] || 'center',
-                textAlignList: [
-                    {
-                        id: 'center', name: 'center'
-                    },
-                    {
-                        id: 'left', name: 'left'
-                    },
-                    {
-                        id: 'right', name: 'right'
-                    }
-                ]
+                backgroundColorValue: this.value['backgroundColor']
             }
         },
         methods: {
-            handleTextAlignChange (value) {
-                this.textAlignValue = value
-                this.change('textAlign', value)
+            handleBackgroundColorChange (value) {
+                this.backgroundColorValue = value
+                this.change('backgroundColor', value)
             }
         }
     }

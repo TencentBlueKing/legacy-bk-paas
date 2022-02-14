@@ -16,36 +16,66 @@ export default {
     icon: 'bk-drag-table',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'select', tips: '当用户手动勾选数据行的 Checkbox 时调用该事件函数，事件回调参数 (selection: Array, row: Object)'
-    }, {
-        name: 'select-all', tips: '当用户手动勾选全选 Checkbox 时调用该事件函数，事件回调参数 (selection: Array)'
-    }, {
-        name: 'selection-change', tips: '当选择项发生变化时调用该事件函数，事件回调参数 (selection: Array)'
-    }, {
-        name: 'cell-mouse-enter', tips: '当单元格 hover 进入时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
-    }, {
-        name: 'cell-mouse-leave', tips: '当单元格 hover 退出时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
-    }, {
-        name: 'cell-click', tips: '当某个单元格被点击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
-    }, {
-        name: 'cell-dblclick', tips: '当某个单元格被双击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
-    }, {
-        name: 'row-click', tips: '当某一行被点击时调用该事件函数，事件回调参数 (row: Object, column: Object, event: Event)'
-    }, {
-        name: 'row-contextmenu', tips: '当某一行被鼠标右键点击时调用该事件函数，事件回调参数 (row: Object, column: Object, event: Event)'
-    }, {
-        name: 'row-dblclick', tips: '当某一行被双击时调用该事件函数，事件回调参数 (row: Object, column: Object, event: Event)'
-    }, {
-        name: 'header-click', tips: '当某一列的表头被点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
-    }, {
-        name: 'header-contextmenu', tips: '当某一列的表头被鼠标右键点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
-    }, {
-        name: 'sort-change', tips: '当表格的排序条件发生变化时调用该事件函数，事件回调参数 ({ column, prop, order }: Object)'
-    }, {
-        name: 'header-dragend', tips: '当拖动表头改变了列的宽度时调用该事件函数，事件回调参数 (newWidth: Number, oldWidth: Number, column: Object, event: Event)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/table',
+    events: [
+        {
+            name: 'select',
+            tips: '当用户手动勾选数据行的 Checkbox 时调用该事件函数，事件回调参数 (selection: Array, row: Object)'
+        },
+        {
+            name: 'select-all',
+            tips: '当用户手动勾选全选 Checkbox 时调用该事件函数，事件回调参数 (selection: Array)'
+        },
+        {
+            name: 'selection-change',
+            tips: '当选择项发生变化时调用该事件函数，事件回调参数 (selection: Array)'
+        },
+        {
+            name: 'cell-mouse-enter',
+            tips: '当单元格 hover 进入时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
+        },
+        {
+            name: 'cell-mouse-leave',
+            tips: '当单元格 hover 退出时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
+        },
+        {
+            name: 'cell-click',
+            tips: '当某个单元格被点击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
+        },
+        {
+            name: 'cell-dblclick',
+            tips: '当某个单元格被双击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
+        },
+        {
+            name: 'row-click',
+            tips: '当某一行被点击时调用该事件函数，事件回调参数 (row: Object, column: Object, event: Event)'
+        },
+        {
+            name: 'row-contextmenu',
+            tips: '当某一行被鼠标右键点击时调用该事件函数，事件回调参数 (row: Object, column: Object, event: Event)'
+        },
+        {
+            name: 'row-dblclick',
+            tips: '当某一行被双击时调用该事件函数，事件回调参数 (row: Object, column: Object, event: Event)'
+        },
+        {
+            name: 'header-click',
+            tips: '当某一列的表头被点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
+        },
+        {
+            name: 'header-contextmenu',
+            tips: '当某一列的表头被鼠标右键点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
+        },
+        {
+            name: 'sort-change',
+            tips: '当表格的排序条件发生变化时调用该事件函数，事件回调参数 ({ column, prop, order }: Object)'
+        },
+        {
+            name: 'header-dragend',
+            tips: '当拖动表头改变了列的宽度时调用该事件函数，事件回调参数 (newWidth: Number, oldWidth: Number, column: Object, event: Event)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

@@ -47,7 +47,40 @@
                             }
                         ]">
                         <template v-if="field !== editField.field">
-                            <div class="field-content">
+                            <template v-if="field.type === 'distance'">
+                                <div class="distance-tag">
+                                    <bk-tag v-for="distance in styleValue[field.id]" :key="distance.key">
+                                        <span class="distance-key">{{`${distance.key}: `}}</span>
+                                        <span :class="{ 'distance-value': distance.value !== '--' }">{{distance.value}}</span>
+                                    </bk-tag>
+                                    <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
+                                </div>
+                            </template>
+                            <template v-else-if="field.type === 'background'">
+                                <div class="style-background">
+                                    <span v-if="page.styleSetting.backgroundColor" class="color-icon"
+                                        :style="{
+                                            backgroundColor: page.styleSetting.backgroundColor
+                                        }">
+                                    </span>
+                                    <span class="color-value">{{ page.styleSetting.backgroundColor || '--' }}</span>
+                                    <i v-if="field.editable" class="bk-icon icon-edit2 field-edit" @click="handleEdit(field)"></i>
+                                </div>
+                            </template>
+                            <template v-else-if="field.type === 'custom'">
+                                <div class="style-custom">
+                                    <span class="custom-status">{{styleValue.hasCustomStyle ? '已配置' : '--'}}</span>
+                                    <component
+                                        class="style-setting"
+                                        :is="field.id"
+                                        :key="field.id"
+                                        :is-page-setting="true"
+                                        :component-id="'pageStyleSetting'"
+                                        :value="page.styleSetting"
+                                        :change="changeStyle" />
+                                </div>
+                            </template>
+                            <div v-else class="field-content">
                                 <div
                                     class="route"
                                     v-if="field.id === 'pageRoute'">
@@ -68,11 +101,20 @@
                         <template v-else-if="!loadingState.includes(field)">
                             <div class="field-form">
                                 <component
+                                    v-if="field.from === 'style'"
+                                    :is="field.id"
+                                    :key="field.id"
+                                    class="style-setting"
+                                    :value="page.styleSetting"
+                                    :change="changeStyle" />
+                                <component
+                                    v-else
                                     :is="getEditComponent(field)"
                                     :placeholder="getPlaceholder(field)"
-                                    :field="field" :value.sync="editField.value"
+                                    :field="field"
+                                    :value.sync="editField.value"
                                     :errors="errors"
-                                    :class="[`form-component ${field.type}`, { error: (errors[field.id] || []).length }]"
+                                    :class="[`form-component ${field.type}`, { error: (errors[field.id] || []).length }, 'style-setting']"
                                     v-model.trim="editField.value"
                                     v-on="getEvents(field)"
                                     v-bind="field.props"
@@ -102,11 +144,33 @@
     import { mapGetters, mapMutations } from 'vuex'
     import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
     import pageRouterSelect from '@/components/project/page-router-select'
+    import StylePadding from '@/element-materials/modifier/component/styles/strategy/padding'
+    import StyleMargin from '@/element-materials/modifier/component/styles/strategy/margin'
+    import StyleCustom from '@/element-materials/modifier/component/styles/strategy/custom-style'
+    import StyleBackgroundColor from './common/background-color'
+    import StyleMinWidth from './common/min-width'
+
+    const styleSettingMap = {
+        marginTop: 'Top',
+        marginRight: 'Right',
+        marginBottom: 'Bottom',
+        marginLeft: 'Left',
+        paddingTop: 'Top',
+        paddingRight: 'Right',
+        paddingBottom: 'Bottom',
+        paddingLeft: 'Left'
+    }
+    const components = {
+        pageRouterSelect,
+        StyleCustom,
+        minWidth: StyleMinWidth,
+        padding: StylePadding,
+        margin: StyleMargin,
+        backgroundColor: StyleBackgroundColor
+    }
 
     export default {
-        components: {
-            pageRouterSelect
-        },
+        components: components,
         props: {
             project: {
                 type: Object,
@@ -121,15 +185,18 @@
                 },
                 loadingState: [],
                 errors: {},
-                pageLoading: false
+                pageLoading: false,
+                styleData: {}
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             ...mapGetters('page', {
                 page: 'pageDetail',
                 pageRoute: 'pageRoute',
                 layoutList: 'layoutList',
-                routeGroup: 'routeGroup'
+                routeGroup: 'routeGroup',
+                styleSetting: 'styleSetting'
             }),
             ...mapGetters('functions', ['funcGroups']),
             disabled () {
@@ -229,8 +296,66 @@
                         }
                     ]
                 }
+                const styleSettings = {
+                    title: '页面样式设置',
+                    settingFields: [
+                        {
+                            id: 'minWidth',
+                            name: '最小宽度',
+                            type: 'size',
+                            from: 'style',
+                            editable: true
+                        },
+                        {
+                            id: 'margin',
+                            name: '外边距',
+                            type: 'distance',
+                            from: 'style',
+                            editable: true
+                        },
+                        {
+                            id: 'padding',
+                            name: '内边距',
+                            type: 'distance',
+                            from: 'style',
+                            editable: true
+                        },
+                        {
+                            id: 'backgroundColor',
+                            name: '背景色',
+                            from: 'style',
+                            type: 'background',
+                            editable: true
+                        },
+                        {
+                            id: 'StyleCustom',
+                            name: '自定义样式',
+                            from: 'style',
+                            type: 'custom'
+                        }
+                    ]
+                }
 
-                return [baseSettings, pageSettings]
+                return [baseSettings, pageSettings, styleSettings]
+            },
+            styleValue () {
+                const style = this.page.styleSetting
+                const margin = []
+                const padding = []
+                for (const i in style) {
+                    if (i.startsWith('margin')) {
+                        margin.push({ key: styleSettingMap[i], value: style[i] ? style[i] : '--' })
+                    } else if (i.startsWith('padding')) {
+                        padding.push({ key: styleSettingMap[i], value: style[i] ? style[i] : '--' })
+                    }
+                }
+                return {
+                    minWidth: this.page.styleSetting.minWidth,
+                    margin: margin,
+                    padding: padding,
+                    backgroundColor: this.page.styleSetting.backgroundColor,
+                    hasCustomStyle: Object.keys(this.page.styleSetting.customStyle).length !== 0
+                }
             }
         },
         methods: {
@@ -240,7 +365,8 @@
                     this.pageLoading = true
                     await this.$store.dispatch('page/getPageSetting', {
                         pageId: this.page.id,
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        versionId: this.versionId
                     })
                 } catch (e) {
                     console.error(e)
@@ -251,15 +377,23 @@
             handleEdit (field) {
                 this.editField.field = field
                 this.editField.value = this.getFieldValue(field)
-                field.type === 'input' && this.$nextTick(() => {
-                    const component = this.$refs[`component-${field.id}`]
-                    component[0] && component[0].focus && component[0].focus()
-                })
+                if (field.from === 'style') {
+                    this.styleData = JSON.parse(JSON.stringify(this.page.styleSetting))
+                } else {
+                    field.type === 'input' && this.$nextTick(() => {
+                        const component = this.$refs[`component-${field.id}`]
+                        component[0] && component[0].focus && component[0].focus()
+                    })
+                }
             },
             getEditComponent (field) {
+                if (field.from && field.from === 'style') {
+                    return field.id
+                }
                 return field.type === 'input' ? 'bk-input' : 'pageRouterSelect'
             },
             handleCancel () {
+                if (this.editField.field.from === 'style') this.page.styleSetting = JSON.parse(JSON.stringify(this.styleData))
                 this.$delete(this.errors, this.editField.field.id)
                 this.unsetEditField()
             },
@@ -288,6 +422,8 @@
                         this.fetchData()
                         // 导航模板切换后需要获取当前模板的导航数据，并更新更新本地curTemplateData
                         await this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id })
+                    } else if (field.from === 'style') {
+                        await this.saveStyle()
                     } else {
                         const pageData = await this.saveField(field, value)
 
@@ -309,6 +445,7 @@
                             pageName: value,
                             currentName: this.page.pageName,
                             projectId: this.project.id,
+                            versionId: this.versionId,
                             from: 'setting'
                         }
                     })
@@ -322,11 +459,38 @@
                     ...fieldData
                 }
                 pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
+                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
                 const res = await this.$store.dispatch('page/update', {
                     data: {
                         pageData,
                         projectId: this.project.id,
+                        versionId: this.versionId,
                         functionData: Object.keys(usedFuncMap),
+                        from: 'setting'
+                    }
+                })
+                return res
+            },
+            async changeStyle (key, value) {
+                if (value) {
+                    this.page.styleSetting[key] = value
+                } else {
+                    this.page.styleSetting[key] = ''
+                }
+                if (key === 'customStyle') {
+                    await this.saveStyle()
+                }
+            },
+            async saveStyle () {
+                const pageData = {
+                    ...this.page
+                }
+                pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
+                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
+                const res = await this.$store.dispatch('page/update', {
+                    data: {
+                        pageData,
+                        projectId: this.project.id,
                         from: 'setting'
                     }
                 })
@@ -336,6 +500,7 @@
                 const data = {
                     pageRoute: {},
                     projectId: this.project.id,
+                    versionId: this.versionId,
                     pageId: this.page.id
                 }
                 if (field.id === 'layoutId') {
@@ -365,6 +530,9 @@
                     const layoutRoutePath = layout.routePath || ''
                     return `${layoutName}（路由：${layoutRoutePath}）`
                 }
+                if (field.id in this.styleValue) {
+                    return this.styleValue[field.id]
+                }
                 return this.page[field.id]
             },
             getFieldValue (field) {
@@ -372,6 +540,8 @@
                     return this.pageRoute.id || ''
                 } else if (field.id === 'layoutId') {
                     return this.pageRoute.layoutId
+                } else if (field.id in this.styleValue) {
+                    return this.styleValue[field.id]
                 }
                 return this.page[field.id]
             },
@@ -467,6 +637,40 @@
             padding: 20px 0 12px;
         }
 
+        /deep/ .style-setting {
+            margin-left: 0;
+            padding: 0 0;
+            .style-title{
+                display: none;
+              }
+            .style-item{
+                margin-top: 0;
+              }
+            .item-label{
+                display: none;
+              }
+            .margin-style-col-container :nth-child(1){
+                margin-top: 0;
+              }
+            .modifier-style {
+                margin-left: 0;
+                padding: 0 0;
+              }
+            .item-content div {
+                text-align: left !important;
+              }
+            .common-input-slot-text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 32px;
+                height: 100%;
+                font-size: 14px;
+                line-height: 20px;
+                background: #fafbfd;
+            }
+        }
+
         .setting-list {
             padding-left: 24px;
 
@@ -526,6 +730,40 @@
                         color: #ff5656;
                         line-height: 18px;
                         margin: 2px 0px 0px;
+                    }
+
+                                        .distance-tag{
+                        margin-left: -5px;
+
+                        .distance-value {
+                            font-family: Helvetica, Arial, sans-serif;
+                            font-weight: 700;
+                        }
+                    }
+
+                    .style-background {
+                        display: flex;
+                        align-items: center;
+
+                        .color-icon {
+                            width: 14px;
+                            height: 14px;
+                            border: 1px solid #f0f1f5;
+                            margin-right: 10px;
+                        }
+
+                        i{
+                            margin-top: -10px;
+                        }
+                    }
+
+                    .style-custom{
+                        display: flex;
+                        align-items: center;
+
+                        .custom-status {
+                            margin-right: 20px;
+                        }
                     }
                 }
 

@@ -10,9 +10,17 @@
 -->
 
 <template>
-    <style-layout title="前景">
-        <style-item name="颜色">
-            <bk-color-picker style="width: 100%;" v-model="colorValue" @change="handleChange"></bk-color-picker>
+    <style-layout title="透明度">
+        <style-item name="opacity">
+            <bk-input
+                :value="opacityValue"
+                type="number"
+                placeholder="请输入"
+                :min="0"
+                :max="1"
+                :native-attributes="{ step: 0.1 }"
+                @change="handleOpacityChange"
+                style="width: 100%" />
         </style-item>
     </style-layout>
 </template>
@@ -38,13 +46,14 @@
         },
         data () {
             return {
-                colorValue: this.value.color
+                opacityValue: this.value.opacity || 1,
+                isError: false
             }
         },
         methods: {
-            handleChange (val) {
-                this.colorValue = val
-                this.change('color', val)
+            handleOpacityChange (val) {
+                this.opacityValue = val
+                this.change('opacity', val)
             }
         }
     }

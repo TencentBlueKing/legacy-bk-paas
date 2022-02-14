@@ -99,6 +99,7 @@
             },
 
             quickOperation (event) {
+                console.log('from quickOperation= ', event)
                 const vm = this
                 const funcChainMap = {
                     stopped: false,

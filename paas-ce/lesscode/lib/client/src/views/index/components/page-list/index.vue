@@ -33,7 +33,8 @@
                         <div
                             class="name-content"
                             :title="`${pageDetail.pageName}【${projectDetail.projectName}】`">
-                            {{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span>
+                            <div class="col-name">{{ pageDetail.pageName }}<span class="project-name">【{{ projectDetail.projectName }}】</span></div>
+                            <div class="col-version">{{versionName}}</div>
                         </div>
                         <i class="bk-select-angle bk-icon icon-angle-down" />
                     </div>
@@ -96,7 +97,8 @@
             ...mapGetters('page', [
                 'pageDetail',
                 'pageList'
-            ])
+            ]),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' })
         },
         created () {
             this.projectId = parseInt(this.$route.params.projectId)
@@ -136,7 +138,7 @@
                 }
                 this.$bkInfo({
                     title: '确认离开?',
-                    subTitle: `您将离开画布编辑页面，请确认相应修改已保存`,
+                    subTitle: '您将离开画布编辑页面，请确认相应修改已保存',
                     confirmFn: async () => {
                         this.$router.push({
                             params: {
@@ -207,24 +209,38 @@
             }
 
             .name-content {
+                display: flex;
+                align-items: center;
                 font-size: 14px;
-                margin-left: 10px;
-                width: 190px;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
+                margin: 0 24px 0 10px;
                 .project-name {
                     color: #979BA5;
                 }
+
+                .col-name {
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+                .col-version {
+                    background: #dcdee5;
+                    border-radius: 9px;
+                    height: 18px;
+                    font-size: 12px;
+                    line-height: 18px;
+                    color: #63656e;
+                    padding: 0 8px;
+                    white-space: nowrap;
+                }
             }
 
-            .select-page-box{
+            .select-page-box {
                 display: flex;
                 flex: 1;
                 align-items: center;
                 height: 100%;
                 .select-page {
-                    width: 250px;
+                    width: 290px;
                     margin-left: 5px;
                     border: none;
                     background-color: #f0f1f5;
@@ -239,6 +255,7 @@
             }
         }
     }
+    
     .select-page-dropdown {
         .bk-select-search-input {
             padding: 0 10px 0 30px;

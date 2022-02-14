@@ -16,7 +16,25 @@ export default {
     icon: 'bk-drag-animatenumber',
     group: '数据',
     order: 1,
-    styles: ['margin', 'display', 'font', 'backgroundColor'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/animate-number',
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'padding',
+        'margin',
+        {
+            name: 'font',
+            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
+        },
+        {
+            name: 'background',
+            include: ['backgroundColor']
+        },
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },
@@ -33,10 +51,6 @@ export default {
             regExp: /^([0-9]|10)$/,
             regErrorText: '请输入0-10之间的整数',
             tips: '数字的位数'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

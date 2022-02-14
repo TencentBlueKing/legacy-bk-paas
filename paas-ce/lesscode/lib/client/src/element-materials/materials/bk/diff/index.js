@@ -16,7 +16,20 @@ export default {
     icon: 'bk-drag-diff',
     group: '数据',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/diff',
+    styles: [
+        'position',
+        'size',
+        'padding',
+        'margin',
+        {
+            name: 'font',
+            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
+        },
+        'pointer',
+        'background',
+        'opacity'
+    ],
     renderStyles: {
         display: 'block'
     },
@@ -49,10 +62,6 @@ export default {
             type: 'string',
             options: ['javascript', 'python', 'java', 'c'],
             val: 'javascript'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

@@ -16,9 +16,18 @@ export default {
     icon: 'bk-drag-image',
     group: '其他',
     order: 1,
-    events: [{ name: 'load', tips: '图片加载成功时调用该事件函数，事件回调参数 (e: Event)' },
-        { name: 'error', tips: '图片加载失败时调用该事件函数，事件回调参数 (e: Error)' }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/image',
+    events: [
+        {
+            name: 'load',
+            tips: '图片加载成功时调用该事件函数，事件回调参数 (e: Event)'
+        },
+        {
+            name: 'error',
+            tips: '图片加载失败时调用该事件函数，事件回调参数 (e: Error)'
+        }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-block',
         width: '60px'
