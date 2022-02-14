@@ -126,14 +126,6 @@ export default {
             val: '',
             tips: '设置下拉已选择及列表的字体大小'
         },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
-        },
-        'ext-popover-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在下拉菜单的 DOM .bk-select-dropdown-content 上'
-        },
         'z-index': {
             type: 'number',
             val: 2500,

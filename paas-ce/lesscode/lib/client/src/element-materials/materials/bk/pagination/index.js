@@ -87,10 +87,6 @@ export default {
             options: ['default', 'small'],
             val: 'default',
             tips: '页码尺寸大小'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

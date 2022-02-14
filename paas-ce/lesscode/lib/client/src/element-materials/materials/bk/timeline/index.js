@@ -47,10 +47,6 @@ export default {
                 { tag: '一周前', content: '由<strong>李四</strong>部署到<p style="color: #ff5656">生产环境</p>并发布至<strong>应用市场</strong>' }
             ],
             tips: '时间轴数据源'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }
