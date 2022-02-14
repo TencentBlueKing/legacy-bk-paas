@@ -16,10 +16,7 @@ export default function (children) {
         order: 1,
         group: '布局',
         styles: [
-            {
-                name: 'size',
-                exclude: ['height', 'maxHeight', 'minHeight']
-            },
+            'size',
             'margin',
             'padding',
             'background'
