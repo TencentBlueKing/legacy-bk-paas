@@ -25,12 +25,15 @@
         </style-item>
         <template v-if="positionValue && positionValue !== 'static'">
             <style-item :name="item.name" v-for="item in posConfigRender" :key="item.key">
-                <size-input :value="item.value" @change="handleInputChange(item, $event)">
+                <size-input
+                    :value="item.value"
+                    :is-natural="item.key !== 'zIndex'"
+                    :min="item.key === 'zIndex' ? -Infinity : 1"
+                    @change="handleInputChange(item, $event)">
                     <append-select
                         v-if="item.key !== 'zIndex'"
                         :value="item.unit"
-                        @change="handleSelectChange(item, $event)">
-                    </append-select>
+                        @change="handleSelectChange(item, $event)" />
                 </size-input>
             </style-item>
         </template>
