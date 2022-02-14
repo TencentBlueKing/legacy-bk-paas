@@ -12,7 +12,7 @@
 import Extends from './extends'
 
 export default Extends({
-    name: 'grid',
+    name: 'grid4',
     type: 'render-grid',
     displayName: '四格',
     icon: 'bk-drag-grid-4',
@@ -20,15 +20,11 @@ export default Extends({
     props: {
     },
     slots: {
-        default: {
-            type: ['column'],
-            displayName: '列配置',
-            val: [
-                { span: 1, children: [] },
-                { span: 1, children: [] },
-                { span: 1, children: [] },
-                { span: 1, children: [] }
-            ]
-        }
+        default: [
+            {
+                name: ['layout'],
+                type: ['render-column']
+            }
+        ]
     }
 })

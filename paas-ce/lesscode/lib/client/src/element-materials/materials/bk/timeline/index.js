@@ -16,19 +16,22 @@ export default {
     icon: 'bk-drag-timeline',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'select',
-        tips: '点击标题时调用该事件函数，事件回调参数 (data: Object)'
-    }],
-    styles: ['size', 'margin', 'padding', 'display', 'border'],
-    directives: [
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/timeline',
+    events: [
         {
-            type: 'v-bind',
-            prop: 'list',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            name: 'select',
+            tips: '点击标题时调用该事件函数，事件回调参数 (data: Object)'
         }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
+    directives: [
+        // {
+        //     type: 'v-bind',
+        //     prop: 'list',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         list: {
@@ -44,10 +47,6 @@ export default {
                 { tag: '一周前', content: '由<strong>李四</strong>部署到<p style="color: #ff5656">生产环境</p>并发布至<strong>应用市场</strong>' }
             ],
             tips: '时间轴数据源'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

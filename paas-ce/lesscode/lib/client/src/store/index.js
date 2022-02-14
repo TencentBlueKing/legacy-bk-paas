@@ -32,7 +32,8 @@ import projectVersion from './modules/project-version'
 import dataSource from './modules/data-source'
 import http from '@/api'
 import router from '../router'
-import { unifyObjectStyle, json2Query } from '@/common/util'
+import { unifyObjectStyle, json2Query, circleJSON } from '@/common/util'
+import LC from '@/element-materials/core'
 // 生成源码重构后，需要支持前端单独调用
 import { getPageData } from '../../../server/model/page-code'
 
@@ -173,24 +174,30 @@ const store = new Vuex.Store({
         },
 
         updatePreview ({ state }, { isGenerateNav, id, curTemplateData, types }) {
-            const pageData = getPageData(
-                JSON.parse(JSON.stringify(state.drag.targetData || [])),
-                'preview',
-                state.components.curNameMap,
-                state.functions.funcGroups,
-                state.page.pageDetail?.lifeCycle,
-                router.currentRoute.params?.projectId,
-                router.currentRoute.params?.pageId,
-                curTemplateData,
+            let targetData = []
+            try {
+                targetData = JSON.parse(circleJSON(LC.getRoot().toJSON().renderSlots.default))
+            } catch (error) {
+                targetData = []
+            }
+            const pageData = getPageData({
+                // targetData: JSON.parse(JSON.stringify(state.drag.targetData || [])),
+                targetData,
+                pageType: 'preview',
+                funcGroups: state.functions.funcGroups,
+                lifeCycle: state.page.pageDetail?.lifeCycle,
+                projectId: router.currentRoute.params?.projectId,
+                pageId: router.currentRoute.params?.pageId,
+                layoutContent: curTemplateData,
                 isGenerateNav,
-                false,
-                state.drag.curTemplateData?.layoutType,
-                state.variable.variableList,
-                state.page.pageDetail?.styleSetting,
-                state.user,
-                {},
-                location.origin
-            )
+                isEmpty: false,
+                layoutType: state.drag.curTemplateData?.layoutType,
+                variableList: state.variable.variableList,
+                styleSetting: state.page.pageDetail?.styleSetting,
+                user: state.user,
+                npmConf: {},
+                origin: location.origin
+            })
             const payload = JSON.stringify({
                 types,
                 source: pageData.code,
@@ -230,5 +237,7 @@ store.dispatch = function (_type, _payload, config = {}) {
         ? Promise.all(entry.map(handler => handler(payload, config)))
         : entry[0](payload, config)
 }
+
+export const useStore = () => store
 
 export default store

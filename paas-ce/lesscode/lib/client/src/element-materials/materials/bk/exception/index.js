@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-exception',
     group: '反馈',
     order: 1,
-    styles: ['margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/exception',
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'block'
     },
@@ -26,10 +27,6 @@ export default {
             val: '404',
             options: ['403', '404', '500', 'building'],
             tips: '异常类型'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

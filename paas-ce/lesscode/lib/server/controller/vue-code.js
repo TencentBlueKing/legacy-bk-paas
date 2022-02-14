@@ -13,7 +13,6 @@ import PageCodeModel from '../model/page-code'
 import routeModel from '../model/route'
 import variableModel from '../model/variable'
 
-import { getNameMap } from '../model/component'
 import { allGroupFuncDetail } from '../model/function'
 import OperationLogger from '../service/operation-logger'
 
@@ -66,20 +65,16 @@ const VueCode = {
                 pageType = 'vueCode',
                 projectId = '',
                 versionId,
-                lifeCycle,
                 pageId,
                 layoutContent,
                 targetData = [],
-                isEmpty = false,
                 from,
                 withNav,
                 fromPageCode = '',
-                styleSetting,
                 layoutType
             } = ctx.request.body
 
-            const [allCustomMap, funcGroups, routeList, allVarableList] = await Promise.all([
-                getNameMap(),
+            const [funcGroups, routeList, allVarableList] = await Promise.all([
                 allGroupFuncDetail(projectId, versionId),
                 routeModel.findProjectRoute(projectId, versionId),
                 variableModel.getAll({ projectId, versionId })
@@ -104,24 +99,23 @@ const VueCode = {
                 })
             }
             const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
-            const pageCodeData = await PageCodeModel.getPageData(
-                pageTargetData,
+            const pageCodeData = await PageCodeModel.getPageData({
+                targetData: pageTargetData,
                 pageType,
-                allCustomMap,
                 funcGroups,
-                lifeCycle,
+                lifeCycle: curPage.lifeCycle || {}, 
                 projectId,
                 pageId,
-                curLayoutCon,
-                false,
-                isEmpty,
-                layoutType || curPage.layoutType,
+                layoutContent: curLayoutCon,
+                isGenerateNav: false, 
+                isEmpty: false,
+                layoutType: layoutType || curPage.layoutType,
                 variableList,
-                styleSetting,
-                ctx.session.userInfo,
+                styleSetting: curPage.styleSetting || {},
+                user: ctx.session.userInfo,
                 npmConf,
-                ctx.origin
-            )
+                origin: ctx.origin
+            })
             let code = ''
             if (pageType === 'vueCode') {
                 // 格式化，报错是抛出异常

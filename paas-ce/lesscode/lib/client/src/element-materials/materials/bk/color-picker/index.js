@@ -16,21 +16,21 @@ export default {
     icon: 'bk-drag-colorpick',
     group: '表单',
     order: 1,
-    styles: ['size', 'margin', 'padding', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/color-picker',
+    events: [
+        {
+            name: 'change',
+            tips: '当前选择的RGB颜色值变化时调用该事件函数，事件回调参数 (value: String)'
+        }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'background', 'border', 'opacity'],
     renderStyles: {
-        display: 'inline-flex',
-        width: '150px'
+        display: 'inline-flex'
     },
-    events: [{
-        name: 'change', tips: '当前选择的RGB颜色值变化时调用该事件函数，事件回调参数 (value: String)'
-    }],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['string'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {
@@ -49,10 +49,6 @@ export default {
             type: 'boolean',
             val: true,
             tips: '是否显示当前选择的RGB颜色值'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

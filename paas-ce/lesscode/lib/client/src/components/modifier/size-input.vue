@@ -37,6 +37,10 @@
             min: {
                 type: [String, Number],
                 default: 1
+            },
+            isNatural: {
+                type: Boolean,
+                default: true
             }
         },
         data () {
@@ -46,7 +50,7 @@
         },
         methods: {
             handleChange (val) {
-                if (!validateNaturalNumber(val)) {
+                if (this.isNatural && !validateNaturalNumber(val)) {
                     this.isError = true
                     return
                 }

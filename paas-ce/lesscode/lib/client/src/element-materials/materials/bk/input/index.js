@@ -16,39 +16,72 @@ export default {
     icon: 'bk-drag-input',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '文本框内容变化时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'input', tips: '文本框输入时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'focus', tips: '文本框获取焦点时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'blur', tips: '文本框失去焦点时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'keypress', tips: '文本框输入按下键盘时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'keydown', tips: '文本框输入按下键盘时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'keyup', tips: '文本框输入按下键盘按键松开时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'enter', tips: '文本框获取焦点时，按下回车时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'paste', tips: '文本框粘贴内容时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'clear', tips: '点击文本框的清除图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'left-icon-click', tips: '点击配置的左图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }, {
-        name: 'right-icon-click', tips: '点击配置的右图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
-    }],
-    styles: ['size', 'margin', 'padding', 'display', 'border'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/input',
+    events: [
+        {
+            name: 'change',
+            tips: '文本框内容变化时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'input',
+            tips: '文本框输入时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'focus',
+            tips: '文本框获取焦点时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'blur',
+            tips: '文本框失去焦点时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'keypress',
+            tips: '文本框输入按下键盘时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'keydown',
+            tips: '文本框输入按下键盘时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'keyup',
+            tips: '文本框输入按下键盘按键松开时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'enter',
+            tips: '文本框获取焦点时，按下回车时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'paste',
+            tips: '文本框粘贴内容时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'clear',
+            tips: '点击文本框的清除图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'left-icon-click',
+            tips: '点击配置的左图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        },
+        {
+            name: 'right-icon-click',
+            tips: '点击配置的右图标时调用该事件函数，事件回调参数 (value: String, event: Event)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['string'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {
@@ -111,10 +144,6 @@ export default {
             type: 'number',
             options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
             tips: '保留小数位'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

@@ -16,8 +16,20 @@ export default {
     icon: 'bk-drag-custom-comp-default',
     group: '基础',
     order: 1,
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/divider',
     events: [],
-    styles: ['size', 'margin', 'padding'],
+    styles: [
+        'position',
+        'size',
+        'padding',
+        'margin',
+        {
+            name: 'font',
+            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
+        },
+        'pointer',
+        'background',
+        'opacity'],
     renderStyles: {
         display: 'block'
     },
@@ -45,7 +57,7 @@ export default {
             name: ['html'],
             type: ['text'],
             displayName: '文本配置',
-            val: '文字链接'
+            val: '分割线'
         }
     }
 }

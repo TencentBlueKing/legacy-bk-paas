@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-timeline',
     group: '其他',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/timeline',
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
     props: {
     },
     slots: {

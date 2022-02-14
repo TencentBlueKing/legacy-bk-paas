@@ -43,9 +43,19 @@
             const propStatus = toRefs<Iprop>(props)
             const chooseTableName = ref(propStatus.payload?.value?.sourceData?.tableName)
 
-            const chooseTable = (tableName, result) => {
+            const chooseTable = (tableName, result, table) => {
                 chooseTableName.value = tableName
-                propStatus.change.value(props.name, result.list, props.type, { sourceData: { tableName } })
+                propStatus.change.value(
+                    props.name,
+                    result.list,
+                    props.type,
+                    {
+                        sourceData: {
+                            tableName,
+                            columns: table.columns.map(({ name }) => name)
+                        }
+                    }
+                )
             }
 
             return {

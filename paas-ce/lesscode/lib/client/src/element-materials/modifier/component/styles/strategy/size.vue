@@ -11,22 +11,21 @@
 
 <template>
     <style-layout title="尺寸">
-        <template v-if="type === 'min-width'">
-            <style-item name="最小宽度">
-                <size-input v-model="minWidthValue" @change="handleInputChange('minWidth', $event)">
-                    <append-select v-model="minWidthUnit" @change="handleSelectChange('minWidth', $event)"></append-select>
-                </size-input>
-            </style-item>
-        </template>
-        <template v-else>
-            <style-item name="宽度">
-                <size-input v-model="widthValue" @change="handleInputChange('width', $event)">
-                    <append-select v-model="widthUnit" @change="handleSelectChange('width', $event)"></append-select>
-                </size-input>
-            </style-item>
-            <style-item name="高度">
-                <size-input v-model="heightValue" @change="handleInputChange('height', $event)">
-                    <append-select v-model="heightUnit" @change="handleSelectChange('height', $event)"></append-select>
+        <template v-for="item in sizeConfigRender">
+            <style-item v-if="item.key === 'display' || (item.key !== 'display' && !isInline)" :name="item.name" :key="item.key">
+                <bk-select
+                    v-if="item.key === 'display'"
+                    :value="item.value"
+                    font-size="medium"
+                    :clearable="false"
+                    @change="handleDisplayChange(item, $event)"
+                    style="width: 100%;">
+                    <bk-option id="block" name="block" />
+                    <bk-option id="inline" name="inline" />
+                    <bk-option id="inline-block" name="inline-block" />
+                </bk-select>
+                <size-input v-else :value="item.value" @change="handleInputChange(item, $event)">
+                    <append-select :value="item.unit" @change="handleSelectChange(item, $event)" />
                 </size-input>
             </style-item>
         </template>
@@ -39,7 +38,39 @@
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
+    import { getCssProperties } from '../common/util'
 
+    const sizeConfig = [
+        {
+            name: 'display',
+            key: 'display'
+        },
+        {
+            name: '宽度',
+            key: 'width'
+        },
+        {
+            name: '高度',
+            key: 'height'
+        },
+        {
+            name: '最小宽度',
+            key: 'minWidth'
+        },
+        {
+            name: '最大宽度',
+            key: 'maxWidth'
+        },
+        {
+            name: '最小高度',
+            key: 'minHeight'
+        },
+        {
+            name: '最大高度',
+            key: 'maxHeight'
+        }
+    ]
+    
     export default {
         components: {
             StyleLayout,
@@ -52,9 +83,11 @@
                 type: Object,
                 required: true
             },
-            type: {
-                type: String,
-                default: ''
+            include: {
+                type: Array
+            },
+            exclude: {
+                type: Array
             },
             change: {
                 type: Function,
@@ -63,42 +96,46 @@
         },
         data () {
             return {
-                minWidthValue: splitValueAndUnit('value', this.value.minWidth),
-                widthValue: splitValueAndUnit('value', this.value.width),
-                heightValue: splitValueAndUnit('value', this.value.height),
-                minWidthUnit: splitValueAndUnit('unit', this.value.minWidth) || 'px',
-                widthUnit: splitValueAndUnit('unit', this.value.width) || 'px',
-                heightUnit: splitValueAndUnit('unit', this.value.height) || 'px'
+                sizeConfigRender: []
             }
         },
+        computed: {
+            isInline () {
+                const display = this.sizeConfigRender.filter(item => item.key === 'display')
+                return display.length && display[0].value === 'inline'
+            }
+        },
+        mounted () {
+            this.handleInitValueList()
+        },
         methods: {
-            handleInputChange (key, val) {
-                const unitMap = {
-                    width: this.widthUnit,
-                    height: this.heightUnit,
-                    minWidth: this.minWidthUnit
-                }
-                const newValue = val === '' ? '' : val + unitMap[key]
-                this.change(key, newValue)
+            handleInitValueList () {
+                let result = getCssProperties(sizeConfig, this.include, this.exclude)
+                const that = this
+                result = result.map(function (item) {
+                    if (item.key === 'display') {
+                        item['value'] = that.value.display || ''
+                    } else {
+                        item['value'] = splitValueAndUnit('value', that.value[item.key])
+                        item['unit'] = splitValueAndUnit('unit', that.value[item.key]) || 'px'
+                    }
+                    return item
+                })
+                this.sizeConfigRender = result
             },
-            handleSelectChange (key, unit) {
-                if (key === 'width' && this.widthValue !== '') {
-                    this.widthValue = Math.min(this.widthValue, unit === '%' ? 100 : this.widthValue)
+            handleInputChange (item, val) {
+                const newValue = val === '' ? '' : val + item.unit
+                this.change(item.key, newValue)
+            },
+            handleSelectChange (item, unit) {
+                if (item.value !== '') {
+                    item.value = Math.min(item.value, unit === '%' ? 100 : item.value)
+                    this.change(item.key, item.value + unit)
                 }
-                if (key === 'height' && this.heightValue !== '') {
-                    this.heightValue = Math.min(this.heightValue, unit === '%' ? 100 : this.heightValue)
-                }
-                if (key === 'minWidth' && this.minWidthValue !== '') {
-                    this.minWidthValue = Math.min(this.minWidthValue, unit === '%' ? 100 : this.minWidthValue)
-                }
-                const valueMap = {
-                    width: this.widthValue,
-                    height: this.heightValue,
-                    minWidth: this.minWidthValue
-                }
-                if (valueMap[key] !== '') {
-                    this.change(key, valueMap[key] + unit)
-                }
+            },
+            handleDisplayChange (item, val) {
+                item.value = val
+                this.change('display', val)
             }
         }
     }

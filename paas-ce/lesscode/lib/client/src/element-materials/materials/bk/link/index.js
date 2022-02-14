@@ -16,8 +16,27 @@ export default {
     icon: 'bk-drag-link1',
     group: '基础',
     order: 1,
-    events: [{ name: 'click', tips: '文字链接点击时调用该事件函数，事件回调参数 (event: Event)' }],
-    styles: ['size', 'margin', 'padding', 'display', 'font', 'textAlign', 'border', 'backgroundColor'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/link',
+    events: [
+        {
+            name: 'click',
+            tips: '文字链接点击时调用该事件函数，事件回调参数 (event: Event)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'padding',
+        'margin',
+        'font',
+        'pointer',
+        'background',
+        'border',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block',
         textAlign: 'center'

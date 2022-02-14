@@ -10,68 +10,63 @@
 -->
 
 <template>
-    <div :class="classes">
-        <variable-select :show="!namedStrategy && !remoteStrategy"
-            v-if="describe.type !== 'hidden'"
-            :value="defaultVariable.val"
-            :val-type="defaultVariable.valType"
-            :available-types="formCom.map(x => x.valueType)"
-            :disable-variable-type="disableVariableType"
-            @change="changeVariable">
+    <div class="modifier-prop">
+        <variable-select
+            :show="variableSelectEnable"
+            :options="variableSelectOptions"
+            :value="formData"
+            @change="handleVariableFormatChange">
             <template v-slot:title>
-                <div class="prop-name" v-if="describe.type !== 'free-layout-item' && !namedStrategy">
-                    <span :class="{ label: name !== 'slots' && describe.tips }" v-bk-tooltips="computedTips">{{ defaultName }}</span>
+                <div class="prop-name">
+                    <span
+                        :class="{ label: describe.tips }"
+                        v-bk-tooltips="introTips">
+                        {{ displayName }}
+                    </span>
                 </div>
             </template>
-            <template v-if="formCom.length < 2">
-                <div class="prop-action">
-                    <template v-for="(renderCom, index) in formCom">
+            <bk-radio-group
+                v-if="renderComponentList.length > 1"
+                :value="selectValueType"
+                style="margin-bottom: 10px;"
+                @change="handleValueTypeChange">
+                <bk-radio-button
+                    v-for="item in renderComponentList"
+                    :key="item.type"
+                    :value="item.type">
+                    {{ item.type | valueTypeTextFormat }}
+                </bk-radio-button>
+            </bk-radio-group>
+            <div class="prop-action">
+                <template v-for="(renderCom, index) in renderComponentList">
+                    <template v-if="selectValueType === renderCom.type">
                         <component
-                            :is="renderCom.typeCom"
-                            :describe="describe"
-                            :type="renderCom.typeName"
+                            :is="renderCom.component"
                             :name="name"
-                            :default-value="defaultValue"
-                            :key="renderCom.typeName + index"
-                            :payload="defaultPayload"
+                            :type="renderCom.type"
+                            :describe="describe"
+                            :default-value="propTypeValueMemo[selectValueType].val"
+                            :payload="propTypeValueMemo[selectValueType].payload"
                             :remote-validate="describe.remoteValidate"
-                            :change="handleUpdate"
-                            :batch-update="batchUpdate" />
+                            :key="`${renderCom.type}_${index}`"
+                            :change="handleCodeChange" />
                     </template>
-                </div>
-            </template>
-            <template v-else>
-                <bk-radio-group :value="mutlTypeSelected" style="margin-bottom: 10px;" @change="changePropType">
-                    <bk-radio-button
-                        v-for="item in formCom"
-                        :key="item.typeName"
-                        :value="item.typeName">
-                        {{ item.label | propTypeFormat }}
-                    </bk-radio-button>
-                </bk-radio-group>
-                <div class="prop-action">
-                    <template v-for="(renderCom, index) in formCom">
-                        <template v-if="mutlTypeSelected === renderCom.typeName">
-                            <component
-                                :is="renderCom.typeCom"
-                                :describe="describe"
-                                :key="renderCom.typeName + index"
-                                :type="renderCom.typeName"
-                                :name="name"
-                                :payload="defaultPayload"
-                                :default-value="defaultValue"
-                                :remote-validate="describe.remoteValidate"
-                                :change="handleUpdate"
-                                :batch-update="batchUpdate" />
-                        </template>
-                    </template>
-                </div>
-            </template>
+                </template>
+            </div>
         </variable-select>
     </div>
 </template>
 <script>
+    import { transformTipsWidth } from '@/common/util'
+    import safeStringify from '@/common/json-safe-stringify'
     import variableSelect from '@/components/variable/variable-select'
+
+    import {
+        getDefaultValueByType,
+        isEmpty,
+        toPascal
+    } from '../../utils'
+
     import TypeSize from './strategy/size'
     import TypeRemote from './strategy/remote'
     import TypeFunction from './strategy/function'
@@ -83,7 +78,6 @@
     import TypeString from './strategy/string'
     import TypeTextarea from './strategy/textarea'
     import TypeText from './strategy/text'
-    import TypeRadioButton from './strategy/radio-button'
     import TypeTableColumn from './strategy/table-column'
     import TypeCollapse from './strategy/collapse.vue'
     import TypeJson from './strategy/json-view.vue'
@@ -95,9 +89,6 @@
     import TypleElProps from './strategy/el-props'
     import TypeDataSource from './strategy/data-source.vue'
     import TypeTableDataSource from './strategy/table-data-source.vue'
-
-    import { transformTipsWidth } from '@/common/util'
-    import safeStringify from '@/common/json-safe-stringify'
 
     const getRealValue = (type, target) => {
         if (type === 'object') {
@@ -113,49 +104,49 @@
             variableSelect
         },
         filters: {
-            propTypeFormat (propType) {
-                return `${propType.substring(0, 1).toUpperCase()}${propType.substring(1).toLowerCase()}`
+            valueTypeTextFormat (valueType) {
+                const textMap = {
+                    'areatext': '文本',
+                    'number': '数字',
+                    'object': '对象',
+                    'string': '字符串',
+                    'array': '数组',
+                    'remote': '远程函数',
+                    'data-source': '数据源',
+                    'table-data-source': '数据源'
+                }
+                return textMap[valueType] || toPascal(valueType)
             }
         },
         props: {
+            // prop 的 name
             name: {
                 type: String,
                 required: true
             },
+            // prop 的 配置
             describe: {
                 type: Object,
                 required: true
             },
+            // 用户的配置的值
             lastValue: {
                 type: [Number, String, Boolean, Object, Array],
                 default: () => ({})
-            },
-            lastDirectives: {
-                type: Array,
-                default: () => ([])
             }
         },
         data () {
             return {
-                mutlTypeSelected: '',
-                mutlTypeVal: {}
+                selectValueType: '',
+                formData: {}
             }
         },
         computed: {
-            disableVariableType () {
-                return this.describe.disableVariableType ? this.describe.disableVariableType : []
-            },
-            computedTips () {
-                const tip = transformTipsWidth(this.describe.tips)
-                const disabled = name === 'slots' || !tip
-                return typeof tip === 'string' ? {
-                    disabled,
-                    content: tip,
-                    interactive: false
-                } : Object.assign(tip, { disabled, interactive: false })
-                // return transformTipsWidth(this.describe.tips)
-            },
-            formCom () {
+            /**
+             * @desc format 为 value 时 valueType 编辑组件
+             * @returns { Object }
+             */
+            renderComponentList () {
                 const config = this.describe
                 const comMap = {
                     'areatext': TypeTextarea,
@@ -167,33 +158,20 @@
                     'select': TypeSelect,
                     'string': TypeString,
                     'text': TypeText,
-                    'tab-panel': TypeSlotWrapper,
-                    'radio': TypeSlotWrapper,
-                    'radio-button': TypeRadioButton,
-                    'checkbox': TypeSlotWrapper,
                     'table-column': TypeTableColumn,
-                    'option': TypeSlotWrapper,
                     'collapse': TypeCollapse,
                     'remote': TypeRemote,
                     'json': TypeJson,
                     'slot-html': TypeSlot,
                     'free-layout-item': TypeFreeLayoutItem,
-                    'bread-crumb': TypeSlotWrapper,
                     'icon': TypeIcon,
                     'color': TypeColor,
                     'step': TypeSlotWrapper,
                     'function': TypeFunction,
-                    'el-step': TypeSlotWrapper,
-                    'timeline': TypeSlotWrapper,
-                    'carousel': TypeSlotWrapper,
-                    'el-radio': TypeSlotWrapper,
-                    'el-checkbox': TypeSlotWrapper,
                     'el-props': TypleElProps,
                     'data-source': TypeDataSource,
                     'table-data-source': TypeTableDataSource
                 }
-
-                let realType = config.type
 
                 const typeMap = {
                     'array': 'json',
@@ -240,15 +218,8 @@
                     'icon': 'string',
                     'float': 'number'
                 }
-                const labelMap = {
-                    'object': '对象',
-                    'number': '数字',
-                    'string': '字符串',
-                    'array': '数组',
-                    'remote': '远程函数',
-                    'data-source': '数据源',
-                    'table-data-source': '数据源'
-                }
+
+                let realType = config.type
                 // 属性type支持配置数组，内部逻辑全部按数组处理
                 if (typeof config.type === 'string') {
                     realType = [config.type]
@@ -258,142 +229,211 @@
                     if (typeMap.hasOwnProperty(propType)) {
                         const renderType = Array.isArray(config.options) ? 'select' : typeMap[propType]
                         res.push({
-                            typeName: propType,
-                            typeCom: comMap[renderType],
-                            valueType: valueMap[propType] || propType,
-                            label: labelMap[propType] || propType
+                            type: propType,
+                            component: comMap[renderType],
+                            valueType: valueMap[propType] || propType
                         })
                     }
                     return res
                 }, [])
             },
-            defaultValue () {
-                const typeVal = this.mutlTypeVal[this.mutlTypeSelected] || {}
-                return typeVal.hasOwnProperty('val') ? typeVal.val : ''
-            },
-            defaultPayload () {
-                return this.mutlTypeVal[this.mutlTypeSelected].payload || this.lastValue.payload || {}
-            },
-            defaultVariable () {
-                let data
-                if (this.name === 'slots') {
-                    const payload = this.defaultPayload || {}
-                    data = payload.variableData
-                } else {
-                    data = (this.lastDirectives || []).find((item) => {
-                        return (item.type + item.prop) === ('v-bind' + this.name)
-                    })
+            /**
+             * @desc prop name
+             * @returns { String }
+             */
+            displayName () {
+                if (this.renderComponentList.length > 1) {
+                    return this.name
                 }
-                return data || { val: '', valType: 'value' }
+                const [editCom] = this.renderComponentList
+                return `${this.name}(${toPascal(editCom.type)})`
             },
-            defaultName () {
-                const { 0: { typeName, typeCom }, length } = this.formCom
-                const showDisplayType = length < 2
-                const displayType = showDisplayType ? `(${typeName.substring(0, 1).toUpperCase()}${typeName.substring(1).toLowerCase()})` : ''
-                const displayName = typeCom === TypeText ? '文本配置' : this.name
-                return displayName + displayType
+            /**
+             * @desc 不支持的变量切换类型(variable、expression)
+             * @returns { Array }
+             */
+            disableVariableType () {
+                return this.describe.disableVariableType ? this.describe.disableVariableType : []
             },
-            classes () {
-                return {
-                    slots: this.name === 'slots',
-                    'modifier-prop': true
-                }
+            /**
+             * @desc prop 描述 tips
+             * @returns { Object }
+             */
+            introTips () {
+                const tip = transformTipsWidth(this.describe.tips)
+                const disabled = !tip
+                return typeof tip === 'string' ? {
+                    disabled,
+                    content: tip,
+                    interactive: false
+                } : Object.assign(tip, { disabled, interactive: false })
             },
-            namedStrategy () {
-                return ['steps', 'slots'].includes(this.name) && ![TypeSlot, TypeText].includes(this.formCom[0].typeCom)
-            },
-            remoteStrategy () {
-                return this.formCom.some(com => com.typeName === 'remote')
+            /**
+             * @desc type 支持 remote 类型的不支持配置变量
+             * @returns { Boolean }
+             */
+            variableSelectEnable () {
+                return !this.renderComponentList.some(com => com.type === 'remote')
             }
         },
         created () {
-            if (Array.isArray(this.describe.type)) {
-                this.mutlTypeSelected = this.describe.type[0]
-            } else {
-                this.mutlTypeSelected = this.describe.type
+            const {
+                type,
+                val
+            } = this.describe
+            const defaultValue = val !== undefined ? val : getDefaultValueByType(type)
+            const includesValueType = Array.isArray(type) ? type : [type]
+
+            // 构造 variable-select 的配置
+            this.variableSelectOptions = {
+                type: 'v-bind',
+                prop: this.name,
+                format: 'value',
+                includesFormat: ['value', 'variable', 'expression'],
+                code: defaultValue,
+                includesValueType: includesValueType
             }
-            this.$set(this.mutlTypeVal, this.mutlTypeSelected, JSON.parse(safeStringify(this.describe)))
-            if (!this.lastValue || !this.lastValue.type) {
-                return
+
+            // prop 的初始值
+            this.formData = Object.freeze({
+                format: 'value',
+                code: defaultValue,
+                valueType: includesValueType[0],
+                renderValue: defaultValue,
+                payload: this.lastValue.payload || {}
+            })
+            
+            // 编辑状态缓存
+            this.propTypeValueMemo = {
+                [this.formData.valueType]: {
+                    val: this.formData.renderValue,
+                    payload: this.formData.payload
+                }
             }
-            if (Array.isArray(this.lastValue.type)) {
-                this.mutlTypeSelected = this.lastValue.type[0]
-            } else {
-                this.mutlTypeSelected = this.lastValue.type
+
+            if (this.lastValue && this.lastValue.valueType) {
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    format: this.lastValue.format,
+                    code: this.lastValue.code,
+                    valueType: this.lastValue.valueType
+                })
+                // TODO. format 为变量的时候时是否需要去获取变量的默认值
+                if (this.formData.format === 'value') {
+                    this.propTypeValueMemo[this.formData.valueType] = {
+                        val: this.lastValue.code,
+                        payload: this.lastValue.payload || {}
+                    }
+                } else {
+                    this.propTypeValueMemo[this.formData.valueType] = {
+                        val: defaultValue,
+                        payload: this.lastValue.payload || {}
+                    }
+                }
             }
-            this.$set(this.mutlTypeVal, this.mutlTypeSelected, JSON.parse(safeStringify(this.lastValue)))
+            this.selectValueType = this.formData.valueType
         },
         methods: {
-            handleUpdate (name, value, type, payload = {}) {
+            /**
+             * @desc 同步更新用户操作
+             */
+            triggerChange () {
+                // 缓存用户本地编辑值
+                this.propTypeValueMemo[this.formData.valueType] = {
+                    val: this.formData.code,
+                    payload: this.formData.payload
+                }
+
+                this.$emit('on-change', this.name, {
+                    ...this.formData
+                })
+            },
+            /**
+             * @desc 变量切换
+             * @param { Object } variableSelectData
+             */
+            handleVariableFormatChange (variableSelectData) {
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    format: variableSelectData.format,
+                    code: variableSelectData.code,
+                    renderValue: variableSelectData.renderValue
+                })
+                this.triggerChange()
+            },
+            /**
+             * @desc prop 值得类型切换
+             * @param { String } valueType
+             */
+            handleValueTypeChange (valueType) {
+                this.selectValueType = valueType
+                let code = null
+                let payload = {}
+                if (this.propTypeValueMemo.hasOwnProperty(valueType)) {
+                    code = this.propTypeValueMemo[valueType].val
+                    payload = this.propTypeValueMemo[valueType].payload
+                } else if ([
+                    'remote',
+                    'data-source',
+                    'table-data-source'
+                ].includes(valueType)) {
+                    // fix:
+                    // 远程函数、数据源类型在没有获取数据前使用配置文件设置的默认值
+                    code = this.describe.val
+                } else {
+                    // 切换值类型时，通过类型获取默认值
+                    code = getDefaultValueByType(valueType)
+                }
+                
+                this.formData = Object.freeze({
+                    ...this.formData,
+                    code,
+                    payload,
+                    valueType,
+                    renderValue: code
+                })
+                
+                this.triggerChange()
+            },
+            /**
+             * @desc 更新 prop value 的配置
+             * @param { String } name
+             * @param { Any } value
+             * @param { String } type
+             * @param { Object } payload prop 配置附带的额外信息(eq: type 为 remote 时接口函数相关的配置)
+             */
+            handleCodeChange (name, value, type, payload = {}) {
                 try {
+                    let code = null
+                    let renderValue
+
                     const val = getRealValue(type, value)
-                    const args = {
-                        type,
-                        val,
-                        payload,
-                        attrs: this.describe.attrs || []
-                    }
-                    if (name === 'slots') {
-                        // args.name = type
-                        args.name = this.describe.name
-                    }
-                    this.$emit('on-change', name, args)
-                    this.mutlTypeVal[type] = {
-                        val,
-                        payload: {
-                            ...payload
+
+                    if (this.formData.valueType === 'remote') {
+                        // 配置的是远程函数、数据源
+                        // code 此时无效，设置为 null
+                        // api 返回数据不为空时在画布编辑区才应用 api 数据
+                        if (!isEmpty(val)) {
+                            renderValue = val
                         }
+                    } else {
+                        code = val
+                        renderValue = val
                     }
+                    
+                    this.formData = Object.freeze({
+                        ...this.formData,
+                        code,
+                        payload,
+                        renderValue
+                    })
+                    this.triggerChange()
                 } catch {
                     this.$bkMessage({
                         theme: 'error',
                         message: `属性【${name}】的值设置不正确`
                     })
                 }
-            },
-            batchUpdate (renderData) {
-                this.$emit('batch-update', renderData)
-            },
-            changePropType (type) {
-                if (!this.mutlTypeVal.hasOwnProperty(type)) {
-                    const typeDefaultValueMap = {
-                        'string': '',
-                        'array': [],
-                        'object': {},
-                        'boolean': false,
-                        'number': 0,
-                        'json': {},
-                        'remote': this.mutlTypeVal[this.mutlTypeSelected].val
-                    }
-                    this.mutlTypeVal[type] = {
-                        val: typeDefaultValueMap[type]
-                    }
-                }
-                this.mutlTypeSelected = type
-                this.handleUpdate(this.name, this.defaultValue, type, this.defaultPayload)
-            },
-            changeVariable (variableData) {
-                const value = variableData.defaultVal === undefined ? this.describe.val : variableData.defaultVal
-                const com = this.formCom.find((com) => (variableData.valueType === com.typeName)) || {}
-                const type = com.typeName || this.mutlTypeSelected
-                const payload = {}
-                if (this.name === 'slots') {
-                    payload.variableData = { val: variableData.val, valType: variableData.valType }
-                } else {
-                    this.updateDirectives(variableData)
-                }
-                this.handleUpdate(this.name, value, type, payload)
-            },
-            updateDirectives (variableData) {
-                const renderDirectives = JSON.parse(safeStringify(this.lastDirectives || []))
-                const index = renderDirectives.findIndex((item) => (item.type + item.prop) === ('v-bind' + this.name))
-                const curDirective = renderDirectives[index] || {}
-                if (index <= -1) {
-                    renderDirectives.push(curDirective)
-                }
-                const data = { type: 'v-bind', prop: this.name, val: variableData.val, valType: variableData.valType, modifiers: this.describe.modifiers }
-                Object.assign(curDirective, data)
-                this.batchUpdate({ renderDirectives })
             }
         }
     }
@@ -433,9 +473,6 @@
         }
     }
     .modifier-prop {
-        display: flex;
-        align-items: flex-start;
-        flex-direction: column;
         margin: 0 10px;
         .prop-name {
             display: flex;

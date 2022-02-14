@@ -46,13 +46,11 @@ const projectCode = {
         const [
             routeList,
             pageRouteList,
-            allCustomMap,
             funcGroups = [],
             allVarableList = []
         ] = await Promise.all([
             routeModel.findProjectRoute(projectId, versionId),
             routeModel.queryProjectPageRoute(projectId, versionId),
-            ComponentModel.getNameMap(),
             FuncModel.allGroupFuncDetail(projectId, versionId),
             VariableModel.getAll({ projectId, versionId })
         ])
@@ -86,13 +84,28 @@ const projectCode = {
 
         const projectVariables = allVarableList.filter(variable => variable.effectiveRange === 0)
         const pageData = {
-            allCustomMap,
             funcGroups
         }
         const layoutIns = Object.values(routeGroup)
         for (const layout of layoutIns) {
             // 父路由（布局）内容
-            const pageDetail = await PageCodeModel.getPageData([], 'preview', pageData.allCustomMap, pageData.funcGroups, {}, projectId, '', layout.content, true, false, layout.layoutType, [], {}, RequestContext.getCurrentUser(), npmConf, '')
+            const pageDetail = await PageCodeModel.getPageData({
+                targetData: [],
+                pageType: 'preview',
+                funcGroups: pageData.funcGroups,
+                lifeCycle: {},
+                projectId,
+                pageId: '',
+                layoutContent: layout.content,
+                isGenerateNav: true,
+                isEmpty: false,
+                layoutType: layout.layoutType,
+                variableList: [],
+                styleSetting: {},
+                user: RequestContext.getCurrentUser(),
+                npmConf,
+                origin: ''
+            })
             layout.content = pageDetail.code
 
             // 子路由（页面）内容，先排除未绑定页面的路由
@@ -103,24 +116,23 @@ const projectCode = {
                     ...projectVariables,
                     ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && variable.pageCode === route.pageCode))
                 ]
-                const pageDetail = await PageCodeModel.getPageData(
-                    JSON.parse(route.content || '[]'),
-                    'preview',
-                    pageData.allCustomMap,
-                    pageData.funcGroups,
-                    route.lifeCycle || {},
+                const pageDetail = await PageCodeModel.getPageData({
+                    targetData: JSON.parse(route.content || '[]'),
+                    pageType: 'preview',
+                    funcGroups: pageData.funcGroups,
+                    lifeCycle: route.lifeCycle || {},
                     projectId,
-                    route.pageId,
-                    '',
-                    false,
-                    false,
-                    route.layoutType,
-                    variableData,
-                    route.styleSetting || {},
-                    RequestContext.getCurrentUser(),
+                    pageId: route.pageId,
+                    layoutContent: '',
+                    isGenerateNav: false,
+                    isEmpty: false,
+                    layoutType: route.layoutType,
+                    variableList: variableData,
+                    styleSetting: route.styleSetting || {},
+                    user: RequestContext.getCurrentUser(),
                     npmConf,
-                    ''
-                )
+                    origin: ''
+                })
                 // 生成代码校验
                 if (pageDetail.codeErrMessage) {
                     throw new Error(`页面【${route.pageCode}】里面，${pageDetail.codeErrMessage}`)
@@ -153,7 +165,6 @@ const projectCode = {
                 const [
                     routeList,
                     pageRouteList,
-                    allCustomMap,
                     funcGroups = [],
                     allVarableList = [],
                     { list: dataTables = [] },
@@ -161,7 +172,6 @@ const projectCode = {
                 ] = await Promise.all([
                     routeModel.findProjectRoute(projectId, versionId),
                     routeModel.queryProjectPageRoute(projectId, versionId),
-                    ComponentModel.getNameMap(),
                     FuncModel.allGroupFuncDetail(projectId, versionId),
                     VariableModel.getAll({ projectId, versionId }),
                     dataService.get('data-table', { projectId, deleteFlag: 0 }),
@@ -222,7 +232,6 @@ const projectCode = {
                 // 获取生成view文件所需的数据
                 const projectVariables = allVarableList.filter(variable => variable.effectiveRange === 0)
                 const pageData = {
-                    allCustomMap,
                     funcGroups
                 }
                 let usedMethodList = []
@@ -536,24 +545,23 @@ const projectCode = {
             fse.ensureFile(currentFilePath).then(async () => {
                 let code = ''
                 let methodStrList = []
-                const pageDetail = await PageCodeModel.getPageData(
-                    pageData.targetData,
-                    'projectCode',
-                    pageData.allCustomMap,
-                    pageData.funcGroups,
-                    lifeCycle,
+                const pageDetail = await PageCodeModel.getPageData({
+                    targetData: pageData.targetData,
+                    pageType: 'projectCode',
+                    funcGroups: pageData.funcGroups,
+                    lifeCycle: lifeCycle || {},
                     projectId,
                     pageId,
                     layoutContent,
-                    isGenerateNav,
-                    false,
+                    isGenerateNav, 
+                    isEmpty: false,
                     layoutType,
-                    variableData,
+                    variableList: variableData,
                     styleSetting,
-                    RequestContext.getCurrentUser(),
+                    user: RequestContext.getCurrentUser(),
                     npmConf,
-                    RequestContext.getCurrentCtx().origin
-                )
+                    origin: RequestContext.getCurrentCtx().origin
+                })
                 code = await VueCodeModel.formatCode(pageDetail.code)
                 methodStrList = pageDetail.methodStrList
                 // 生成代码校验

@@ -12,106 +12,131 @@
 <template>
     <div>
         <template v-if="hasMaterialConfig">
-            <render-slots
-                :material-config="materialConfig.slots"
-                :last-slots="lastSlots"
-                :last-props="lastProps"
-                @change="batchUpdate">
-            </render-slots>
-            <template v-for="(item, key) in materialConfig.props">
+            <template v-for="(item, key) in propsConfig">
                 <render-prop
-                    v-if="!(key === 'slots' && item.type === 'hidden')"
+                    v-if="item.type !== 'hidden'"
                     :describe="item"
                     :last-value="lastProps[key]"
-                    :last-directives="lastDirectives"
                     :name="key"
                     :key="key"
-                    @on-change="handleChange"
-                    @batch-update="batchUpdate" />
+                    @on-change="handleChange" />
             </template>
         </template>
-        <div class="no-prop" v-else>
-            <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无属性</span>
-        </div>
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
-
-    import RenderProp from './components/render-prop'
-    import RenderSlots from '../slots'
+    import _ from 'lodash'
     import { bus } from '@/common/bus'
+    import LC from '@/element-materials/core'
+    import RenderProp from './components/render-prop'
 
     export default {
         name: 'modifier-prop',
         components: {
-            RenderProp,
-            RenderSlots
+            RenderProp
         },
-        props: {
-            materialConfig: {
-                type: Object,
-                required: true
-            },
-            lastProps: {
-                type: Object,
-                default: () => ({})
-            },
-            lastDirectives: {
-                type: Array,
-                default: () => ([])
-            },
-            lastSlots: {
-                type: Object,
-                default: () => ({})
+        data () {
+            return {
+                propsConfig: {}
             }
         },
         computed: {
-            ...mapGetters('drag', ['curSelectedComponentData']),
-
             hasMaterialConfig () {
-                const propConfig = this.materialConfig.props || {}
-                const slotConfig = this.materialConfig.slots || {}
-                const configs = { ...propConfig, ...slotConfig }
-                const keys = Object.keys(configs).filter(key => configs[key].display !== 'hidden')
+                const keys = Object.keys(this.propsConfig).filter(key => this.propsConfig[key].display !== 'hidden')
                 return keys.length
             }
         },
         created () {
-            this.renderProps = this.lastProps
+            this.lastProps = {}
+            this.material = {}
             bus.$on('update-chart-options', this.updateChartOptions)
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('update-chart-options', this.updateChartOptions)
             })
+            this.currentComponentNode = LC.getActiveNode()
+            if (this.currentComponentNode) {
+                const {
+                    material,
+                    renderProps
+                } = this.currentComponentNode
+                this.propsConfig = Object.freeze(material.props)
+                this.lastProps = Object.assign({}, renderProps)
+                this.material = material
+            }
         },
         methods: {
             // 针对chart类型，将动态返回的remoteOptions与options合并
             updateChartOptions (res) {
-                if (this.renderProps['options'] && this.renderProps['options'].val && typeof this.renderProps['options'].val === 'object') {
-                    const options = Object.assign({}, this.renderProps['options'].val, res)
-                    this.renderProps['options'].val = options
-                    this.$emit('on-change', {
-                        renderProps: this.renderProps
-                    })
+                // if (this.renderProps['options']
+                //     && this.renderProps['options'].val
+                //     && typeof this.renderProps['options'].val === 'object') {
+                //     const options = Object.assign({}, this.renderProps['options'].val, res)
+                //     this.renderProps['options'] = {
+                //         ...this.renderProps['options'],
+                //         val: options
+                //     }
+                //     this.renderProps['options'].val = options
+                //     this.batchUpdate({
+                //         renderProps: this.renderProps
+                //     })
+                // }
+            },
+            /**
+             * @desc 部分场景需要通过 prop 的配置自动推导 slot 的配置
+             * @param { Object } propData
+             *
+             * eq:
+             * 通过 table 的 data 推导出 table 列的配置
+             */
+            syncSlot (propData) {
+                const {
+                    format,
+                    valueType,
+                    payload
+                } = propData
+
+                // 需要同步 prop 配置到 slot 的场景
+                // 同时满足下面的条件
+                // - prop format 配置为值类型
+                // - prop 的值类型是数据源
+                if (format !== 'value' || !payload.sourceData) {
+                    return
+                }
+                if (valueType === 'table-data-source') {
+                    // 默认同步 slot.default
+                    const slotName = 'default'
+                    const slotConfig = this.material.slots[slotName]
+                    const columns = payload.sourceData.columns
+                    const slotValue = columns.map(columnName => ({
+                        label: columnName,
+                        prop: columnName,
+                        sortable: false,
+                        type: ''
+                    }))
+                    this.currentComponentNode.setRenderSlots({
+                        format: 'value',
+                        component: Array.isArray(slotConfig.name) ? slotConfig.name[0] : slotConfig.name,
+                        code: slotValue,
+                        valueType: 'table-list',
+                        renderValue: slotValue
+                    }, slotName)
                 }
             },
-            handleChange (key, args) {
-                // 使用增量更新的方式更新 props
-                this.renderProps[key] = this.renderProps[key] || {}
-                for (const argKey in (args || {})) {
-                    if (Object.hasOwnProperty.call(args, argKey)) {
-                        const element = args[argKey]
-                        this.$set(this.renderProps[key], argKey, element)
-                    }
-                }
-                const renderProps = {
-                    renderProps: this.renderProps
-                }
-                this.batchUpdate(renderProps)
-            },
-            batchUpdate (renderData) {
-                this.$emit('on-change', renderData)
-            }
+            /**
+             * @desc 更新 prop 配置
+             * @param { String } propName
+             * @param { Object } propData
+             *
+             * 更新列配置并同步 slot
+             */
+            handleChange: _.throttle(function (propName, propData) {
+                this.lastProps[propName] = propData
+                this.currentComponentNode.setRenderProps({
+                    ...this.lastProps,
+                    [propName]: propData
+                })
+                this.syncSlot(propData)
+            }, 60)
         }
     }
 </script>

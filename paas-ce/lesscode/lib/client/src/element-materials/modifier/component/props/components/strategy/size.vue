@@ -11,8 +11,8 @@
 
 <template>
     <section>
-        <size-input v-model="sizeValue" @change="handleInputChange">
-            <append-select v-model="sizeUnit" @change="handleSelectChange"></append-select>
+        <size-input :value="sizeValue" @change="handleInputChange">
+            <append-select :value="sizeUnit" @change="handleSelectChange"></append-select>
         </size-input>
     </section>
 </template>
@@ -42,14 +42,6 @@
             },
             type: String
         },
-        // computed: {
-        //     sizeValue () {
-        //         return splitValueAndUnit('value', this.defaultValue)
-        //     },
-        //     sizeUnit () {
-        //         return splitValueAndUnit('unit', this.defaultValue) || 'px'
-        //     }
-        // },
         data () {
             return {
                 sizeValue: splitValueAndUnit('value', this.defaultValue),

@@ -1,0 +1,8 @@
+:global([role="component-root"]){
+    :global(.bk-dialog){
+        pointer-events: auto !important;
+    }
+    :global(.bk-sideslider){
+        pointer-events: auto !important;
+    }
+}

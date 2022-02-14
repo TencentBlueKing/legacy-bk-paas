@@ -20,7 +20,8 @@ export default {
     icon: 'bk-drag-swiper',
     group: '数据',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/zoom-image',
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
     // renderStyles: {
     //     width: '600px',
     //     height: '300px'
@@ -30,10 +31,6 @@ export default {
             type: 'string',
             val: exmapleFirstImgUrl,
             tips: '图片地址'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

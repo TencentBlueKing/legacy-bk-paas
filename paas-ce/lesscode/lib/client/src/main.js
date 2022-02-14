@@ -93,3 +93,5 @@ auth.requestCurrentUser().then(user => {
 
     document.write(content)
 })
+
+export default Vue
