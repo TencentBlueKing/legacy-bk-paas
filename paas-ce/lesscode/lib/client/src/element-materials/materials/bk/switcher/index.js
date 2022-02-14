@@ -86,10 +86,6 @@ export default {
             type: 'string',
             val: 'OFF',
             tips: '关闭状态显示文本'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

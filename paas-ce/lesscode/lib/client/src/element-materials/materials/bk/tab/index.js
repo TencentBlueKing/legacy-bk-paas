@@ -74,10 +74,6 @@ export default {
             type: 'boolean',
             val: true,
             tips: '是否校验ActiveName，true：如果active匹配不到，默认激活第一个Tab，触发tab-change；false：active匹配不到不显示'
-        },
-        'ext-cls': {
-            type: 'string',
-            val: ''
         }
     },
     slots: {
