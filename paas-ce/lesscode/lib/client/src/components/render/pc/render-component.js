@@ -8,25 +8,25 @@ export default {
             componentData
         } = context.props
 
-        // 修正部分样式在编辑时应用到实际的组件会产生偏差和重叠
-        const nativeComponentStyleReset = {
-            // fix: 修正组件会影响位置的样式
+        // fix: 修正部分样式在编辑时应用到实际的组件会产生偏差和重叠
+        const baseComponentStyleReset = {
+            // 修正组件会影响位置的样式
             'margin': '',
             'marginTop': '',
             'marginRight': '',
             'marginBottom': '',
             'marginLeft': '',
             'transform': '',
-            // fix: 修正会产生叠加效果的样式
-            'box-shadow': '',
-            'z-index': ''
+            // 修正会产生叠加效果的样式
+            'boxShadow': '',
+            'zIndex': ''
         }
-        // - 在 freelayout 里面时对组件进行位置修正
+        // fix: 基础组件的根元素可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
+        // - 组件在 freelayout 里面时进行位置修正
         // - 非交互式组件对定位样式进行修正
-        // fix: 基础组件的根可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
         if (context.parent.attachToFreelayout
-            || componentData.isInteractiveComponent) {
-            Object.assign(nativeComponentStyleReset, {
+            || !componentData.isInteractiveComponent) {
+            Object.assign(baseComponentStyleReset, {
                 position: '',
                 top: '',
                 right: '',
@@ -35,12 +35,12 @@ export default {
             })
         }
         
-        // 样式导致基础组件的交互问题
+        // fix: 样式导致基础组件的交互问题
         if (!context.parent.isShadowComponent) {
-            Object.assign(nativeComponentStyleReset, {
-                // fix: 基础组件的层级最低（基础组件可能本身有 border 样式，保证组件选中和 hover 时的边框效果能显示出来）
+            Object.assign(baseComponentStyleReset, {
+                // 基础组件的层级最低（基础组件可能本身有 border 样式，保证组件选中和 hover 时的边框效果能显示出来）
                 'z-index': 0,
-                // fix: 隔绝基础组件的鼠标事件响应
+                // 隔绝基础组件的鼠标事件响应
                 'pointer-events': 'none'
             })
         }
@@ -66,13 +66,13 @@ export default {
         
         Object.keys(context.parent.material.props || {}).forEach(propName => {
             const propConfig = context.parent.material.props[propName]
-            // prop 被标记为 staticValue，在画布编辑时不动态改变
+            // feature: prop 被标记为 staticValue，在画布编辑时不动态改变
             // 永远使用默认值
             if (Object.prototype.hasOwnProperty.call(propConfig, 'staticValue')) {
                 props[propName] = propConfig.staticValue
             }
-            // fix
-            // vue 特性——class、style默认会被子组件继承
+            // fix：vue 特性
+            // class、style属性默认会被子组件继承
             if (['class', 'style'].includes(propName)) {
                 attrs[propName] = componentData.prop[propName]
             }
@@ -114,7 +114,7 @@ export default {
             attrs,
             on: events,
             scopedSlots: renderSlotMap,
-            style: Object.assign({}, componentData.style, nativeComponentStyleReset)
+            style: Object.assign({}, componentData.style, baseComponentStyleReset)
         }, renderSlotMap.default && renderSlotMap.default())
     }
 }

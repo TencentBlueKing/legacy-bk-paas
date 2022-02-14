@@ -233,7 +233,16 @@
                 if (this.isShadowComponent) {
                     return
                 }
-                
+
+                // 优先使用自定义配置的 display
+                const customDisplay = this.componentData.style.display
+                if (customDisplay) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        display: getRenderStyleDisplayValue(customDisplay)
+                    })
+                    return
+                }
+
                 // 兼容异步组件 bk-custom-icon
                 if (['bk-custom-icon'].includes(this.componentData.type)) {
                     this.safeStyles = Object.assign({}, this.safeStyles, {
@@ -241,6 +250,8 @@
                     })
                     return
                 }
+                
+                // 继承组件渲染结果的 display
                 const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
                 if ($baseComponentEl) {
                     const {

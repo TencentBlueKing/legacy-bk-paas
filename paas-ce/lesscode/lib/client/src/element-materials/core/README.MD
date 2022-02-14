@@ -267,15 +267,11 @@ interface IPropData {
 
 #### - node.renderDirectives
 ``` typescript
-type DirectiveValueTypeType = 'Array' | 'remote' | 'data-source' | 'string'
-
 interface IDirectiveData {
     type: 'v-model' | 'v-for' | 'v-if' | 'v-show',
     prop: String
     format: 'value' | 'variable' | 'expression',
     code: Any,
-    valueType: DirectiveValueTypeType,
-    payload: IPayloadData,
     renderValue: Any
 }
 ```
