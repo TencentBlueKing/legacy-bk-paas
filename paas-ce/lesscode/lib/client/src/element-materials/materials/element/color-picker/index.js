@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     document: 'https://element.eleme.cn/#/zh-CN/component/color-picker',
-    styles: ['position', 'size', 'margin', 'pointer', 'background', 'border', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-flex'
     },

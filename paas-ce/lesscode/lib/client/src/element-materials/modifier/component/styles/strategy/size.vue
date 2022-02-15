@@ -23,6 +23,7 @@
                     <bk-option id="block" name="block" />
                     <bk-option id="inline" name="inline" />
                     <bk-option id="inline-block" name="inline-block" />
+                    <bk-option id="unset" name="unset" />
                 </bk-select>
                 <size-input v-else :value="item.value" @change="handleInputChange(item, $event)">
                     <append-select :value="item.unit" @change="handleSelectChange(item, $event)" />
@@ -135,6 +136,15 @@
             },
             handleDisplayChange (item, val) {
                 item.value = val
+                if (val === 'inline') {
+                    const that = this
+                    this.sizeConfigRender.forEach(function (item) {
+                        if (item.key !== 'display') {
+                            item.value = ''
+                            that.handleInputChange(item, '')
+                        }
+                    })
+                }
                 this.change('display', val)
             }
         }

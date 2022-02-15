@@ -294,7 +294,13 @@ for (const [key, value] of Object.entries(iconGroupList)) {
             events: [{ name: 'click' }],
             group: key,
             order: 1,
-            styles: ['margin', 'display', 'font'],
+            styles: [
+                'margin',
+                {
+                    name: 'font',
+                    include: ['fontSize', 'color']
+                }
+            ],
             renderStyles: {
                 display: 'inline-block',
                 fontSize: '14px'

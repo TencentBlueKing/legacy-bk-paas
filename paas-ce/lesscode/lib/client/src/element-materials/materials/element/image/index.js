@@ -27,7 +27,7 @@ export default {
             tips: '图片加载失败时调用该事件函数，事件回调参数 (e: Error)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-block',
         width: '60px'

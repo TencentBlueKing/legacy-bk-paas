@@ -16,10 +16,15 @@ export default function (children) {
         order: 1,
         group: '布局',
         styles: [
+            'position',
             'size',
             'margin',
             'padding',
-            'background'
+            'background',
+            'font',
+            'opacity',
+            'pointer',
+            'border'
         ],
         renderStyles: {
             'margin-bottom': '10px'

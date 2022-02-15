@@ -29,7 +29,6 @@ export default {
             name: 'size',
             exclude: ['height', 'maxHeight', 'minHeight']
         },
-        'padding',
         'margin',
         'pointer',
         'opacity'

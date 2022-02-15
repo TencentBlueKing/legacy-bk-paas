@@ -17,7 +17,7 @@ export default {
     group: '导航',
     order: 1,
     document: 'https://element.eleme.cn/#/zh-CN/component/steps',
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
         space: {
             type: ['number', 'string'],

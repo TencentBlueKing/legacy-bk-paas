@@ -17,7 +17,7 @@ export default {
     group: '数据',
     order: 1,
     document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/progress',
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
         theme: {
             type: 'string',

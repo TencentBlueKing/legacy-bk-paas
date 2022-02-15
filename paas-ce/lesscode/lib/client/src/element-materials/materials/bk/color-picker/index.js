@@ -23,7 +23,7 @@ export default {
             tips: '当前选择的RGB颜色值变化时调用该事件函数，事件回调参数 (value: String)'
         }
     ],
-    styles: ['position', 'size', 'margin', 'pointer', 'background', 'border', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-flex'
     },

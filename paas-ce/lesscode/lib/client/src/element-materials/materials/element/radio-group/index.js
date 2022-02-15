@@ -29,7 +29,6 @@ export default {
             name: 'size',
             include: ['display']
         },
-        'padding',
         'margin',
         'pointer',
         'opacity'

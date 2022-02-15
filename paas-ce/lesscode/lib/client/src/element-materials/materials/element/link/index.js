@@ -23,7 +23,7 @@ export default {
             tips: '文字链接点击时调用该事件函数，事件回调参数 (event: Event)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'font', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-block',
         textAlign: 'center'

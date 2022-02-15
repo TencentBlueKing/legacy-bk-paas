@@ -29,12 +29,8 @@ export default {
             name: 'size',
             exclude: ['height', 'maxHeight', 'minHeight']
         },
-        'padding',
         'margin',
-        'font',
         'pointer',
-        'background',
-        'border',
         'opacity'
     ],
     renderStyles: {
