@@ -61,7 +61,7 @@ import timeline from './timeline'
 import image from './image'
 
 // 组件文档地址
-import infoLink from './info-link'
+import infoLinkBak from './info-link.bak'
 
 const elementComponents = Object.seal([
     grid1,
@@ -108,4 +108,4 @@ export default elementComponents
 
 export const elementComponentGroupList = Array.from(new Set(elementComponents.map(item => item.group)))
 
-export const eleLink = infoLink
+export const eleLink = infoLinkBak

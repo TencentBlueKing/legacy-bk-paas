@@ -78,7 +78,7 @@ import dialog from './dialog'
 import sideslider from './sideslider'
 
 // 组件文档地址
-import infoLink from './info-link'
+import infoLinkBak from './info-link.bak'
 
 // 这个对象里组件的顺序与页面左侧待选组件区的顺序一致，从左至右，从上至下
 // 是为了要保证 Array.from(new Set(bkComponents.map(item => item.group))) 得到的结果是
@@ -153,4 +153,4 @@ export default bkComponents
 
 export const bkComponentGroupList = Array.from(new Set(bkComponents.map(item => item.group)))
 
-export const bkLink = infoLink
+export const bkLink = infoLinkBak

@@ -75,7 +75,7 @@ export default {
             tips: '当拖动表头改变了列的宽度时调用该事件函数，事件回调参数 (newWidth: Number, oldWidth: Number, column: Object, event: Event)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

@@ -26,7 +26,6 @@ export default {
     styles: [
         'position',
         'size',
-        'padding',
         'margin',
         {
             name: 'font',

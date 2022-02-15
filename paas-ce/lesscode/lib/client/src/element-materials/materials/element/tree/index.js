@@ -31,7 +31,7 @@ export default {
             tips: '节点被展开时调用该事件函数，事件回调参数 (nodeValue: Object、node: Object、component: Object)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'font', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'font', 'pointer', 'background', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

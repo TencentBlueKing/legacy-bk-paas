@@ -17,7 +17,7 @@ export default {
     group: '导航',
     order: 4,
     document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/breadcrumb',
-    styles: ['position', 'size', 'padding', 'margin', 'font', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'font', 'pointer', 'background', 'opacity'],
     props: {
         separator: {
             type: 'string',
