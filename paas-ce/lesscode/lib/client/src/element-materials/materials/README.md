@@ -69,9 +69,7 @@
     </tr>
 </table>
 
-:::info
-events —— 组件内部支持的事件（this.$emit('click')）
-:::
+##### events —— 组件内部支持的事件（this.$emit('click')）
 
 ```js
 // events
@@ -90,9 +88,7 @@ events —— 组件内部支持的事件（this.$emit('click')）
 }
 ```
 
-:::info
-styles —— 组件支持的样式
-:::
+##### styles —— 组件支持的样式
 
 ```js
 // styles 三种使用方式
@@ -112,9 +108,7 @@ styles —— 组件支持的样式
 }
 ```
 
-:::info
-props —— 组件支持配置的 props
-:::
+##### props —— 组件支持配置的 props
 
 ```js
 // props
@@ -130,9 +124,7 @@ props —— 组件支持配置的 props
 }
 ```
 
-:::info
-directives —— 支持配置的指令
-:::
+##### directives —— 支持配置的指令
 
 ```js
 // directives
@@ -150,9 +142,7 @@ directives —— 支持配置的指令
 }
 ```
 
-:::info
-slots —— 组件支持的插槽
-:::
+##### slots —— 组件支持的插槽
 
 ```js
 // slots
