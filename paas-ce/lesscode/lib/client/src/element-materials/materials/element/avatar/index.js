@@ -23,7 +23,7 @@ export default {
             tips: ' 图片类头像加载失败时调用该事件函数，事件回调参数 (e: Event)'
         }
     ],
-    styles: ['position', 'size', 'margin', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-block'
     },

@@ -18,12 +18,16 @@ export default {
     order: 0,
     document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/form',
     styles: [
+        'position',
         {
             name: 'size',
             exclude: ['height', 'maxHeight', 'minHeight']
         },
         'margin',
-        'background'
+        'background',
+        'border',
+        'pointer',
+        'opacity'
     ],
     directives: [
         {

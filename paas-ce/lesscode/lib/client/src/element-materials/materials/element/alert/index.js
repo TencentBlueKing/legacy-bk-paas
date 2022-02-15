@@ -27,12 +27,7 @@ export default {
         'position',
         'size',
         'margin',
-        {
-            name: 'font',
-            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
-        },
         'pointer',
-        'background',
         'opacity'
     ],
     props: {

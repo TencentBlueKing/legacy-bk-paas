@@ -31,7 +31,7 @@ export default {
             tips: '右侧列表元素被用户选中 / 取消选中时调用该事件函数，事件回调参数 (selectedKey: Array、 changeKey: Array)'
         }
     ],
-    styles: ['position', 'size', 'margin', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',

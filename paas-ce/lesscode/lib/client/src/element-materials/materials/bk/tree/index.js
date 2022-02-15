@@ -39,7 +39,7 @@ export default {
             tips: '异步加载节点数据时调用该事件函数，事件回调参数 (node: Object)'
         }
     ],
-    styles: ['position', 'size', 'margin', 'font', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

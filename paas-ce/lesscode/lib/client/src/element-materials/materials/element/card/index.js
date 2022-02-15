@@ -17,7 +17,7 @@ export default {
     group: '其他',
     order: 1,
     document: 'https://element.eleme.cn/#/zh-CN/component/card',
-    styles: ['position', 'size', 'margin', 'pointer', 'background', 'border', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         width: '320px',
         height: '320px',

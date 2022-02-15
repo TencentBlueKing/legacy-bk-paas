@@ -30,10 +30,7 @@ export default {
             exclude: ['height', 'maxHeight', 'minHeight']
         },
         'margin',
-        'font',
         'pointer',
-        'background',
-        'border',
         'opacity'
     ],
     renderStyles: {

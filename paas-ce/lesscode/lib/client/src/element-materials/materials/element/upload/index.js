@@ -25,7 +25,6 @@ export default {
         },
         'margin',
         'pointer',
-        'background',
         'opacity'
     ],
     props: {

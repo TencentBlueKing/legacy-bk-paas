@@ -24,14 +24,7 @@ export default {
             include: ['display']
         },
         'margin',
-        {
-            name: 'font',
-            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
-        },
-        {
-            name: 'background',
-            include: ['backgroundColor']
-        },
+        'pointer',
         'opacity'
     ],
     renderStyles: {

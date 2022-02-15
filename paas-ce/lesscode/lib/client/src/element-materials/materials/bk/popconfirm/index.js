@@ -27,7 +27,7 @@ export default {
             tips: '点击取消按钮时调用该事件函数，暂无事件回调参数'
         }
     ],
-    styles: ['position', 'size', 'margin', 'font', 'pointer', 'background', 'border', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
         title: {
             type: 'string',

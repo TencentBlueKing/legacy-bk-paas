@@ -27,7 +27,7 @@ export default {
             tips: '关闭 Tag 时调用该事件函数，事件回调参数 (event: Event)'
         }
     ],
-    styles: ['position', 'size', 'margin', 'font', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
         type: {
             type: 'string',

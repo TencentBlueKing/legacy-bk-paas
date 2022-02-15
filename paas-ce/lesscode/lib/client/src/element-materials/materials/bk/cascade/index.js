@@ -43,7 +43,6 @@ export default {
         },
         'margin',
         'pointer',
-        'border',
         'opacity'
     ],
     directives: [

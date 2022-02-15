@@ -27,13 +27,7 @@ export default {
         'position',
         'size',
         'margin',
-        {
-            name: 'font',
-            exclude: ['textAlign', 'wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
-        },
         'pointer',
-        'background',
-        'border',
         'opacity'
     ],
     renderStyles: {
