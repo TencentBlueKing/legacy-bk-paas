@@ -27,8 +27,8 @@
             <style-item :name="item.name" v-for="item in posConfigRender" :key="item.key">
                 <size-input
                     :value="item.value"
-                    :is-natural="item.key !== 'zIndex'"
-                    :min="item.key === 'zIndex' ? -Infinity : 1"
+                    :is-natural="false"
+                    :min="-Infinity"
                     @change="handleInputChange(item, $event)">
                     <append-select
                         v-if="item.key !== 'zIndex'"
