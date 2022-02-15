@@ -21,9 +21,10 @@
                 <bk-option id="absolute" name="absolute" />
                 <bk-option id="fixed" name="fixed" />
                 <bk-option id="static" name="static" />
+                <bk-option id="unset" name="unset" />
             </bk-select>
         </style-item>
-        <template v-if="positionValue && positionValue !== 'static'">
+        <template v-if="positionValue && positionValue !== 'static' && positionValue !== 'unset'">
             <style-item :name="item.name" v-for="item in posConfigRender" :key="item.key">
                 <size-input
                     :value="item.value"
