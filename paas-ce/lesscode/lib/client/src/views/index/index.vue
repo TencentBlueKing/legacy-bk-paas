@@ -193,6 +193,7 @@
             ]
         },
         beforeDestroy () {
+            console.log('from index beforeDestroy')
             LC.parseData([])
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
         },
