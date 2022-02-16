@@ -58,11 +58,12 @@
 
 <script>
     import { PAGE_TEMPLATE_TYPE } from '@/common/constant'
-    import { mapGetters, mapActions } from 'vuex'
-    import { getVarList, getFuncList } from '@/common/process-targetdata'
+    import { mapGetters } from 'vuex'
+    import templateMixin from './template-mixin'
 
     export default {
         name: 'template-dialog',
+        mixins: [templateMixin],
         props: {
             actionType: {
                 type: String,
@@ -113,6 +114,7 @@
         },
         computed: {
             ...mapGetters(['isPlatformAdmin']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -120,7 +122,7 @@
                 return this.actionType === 'apply' ? `添加模板【${this.fromTemplate.templateName}】到本项目，请重命名模板` : '编辑模板'
             },
             actionName () {
-                return this.actionType === 'apply' ? `添加模板` : '编辑模板'
+                return this.actionType === 'apply' ? '添加模板' : '编辑模板'
             }
         },
         watch: {
@@ -139,11 +141,6 @@
             this.getTemplateCategory()
         },
         methods: {
-            ...mapActions('functions', [
-                'getAllGroupFuncs'
-            ]),
-            ...mapActions('variable', ['getAllVariable']),
-
             async getTemplateCategory () {
                 try {
                     this.categoryList = await this.$store.dispatch('pageTemplate/categoryList', { projectId: this.projectId })
@@ -179,16 +176,8 @@
                         templateInfo: [{ templateName: this.dialog.formData.templateName, belongProjectId: this.projectId, categoryId: this.dialog.formData.categoryId }]
                     }
                     if (this.actionType === 'apply') {
-                        // 将模板中用到的函数和变量都获取出来
-                        const [variableList, funcGroups] = await Promise.all([
-                            this.getAllVariable({ projectId: this.fromTemplate.belongProjectId, pageCode: this.fromTemplate.fromPageCode, effectiveRange: 0 }, false),
-                            this.getAllGroupFuncs(this.fromTemplate.belongProjectId, false)
-                        ])
-                        const targetData = []
-                        targetData.push(JSON.parse(this.fromTemplate.content || {}))
-                        const valList = getVarList(targetData, variableList)
-                        const funcList = getFuncList(targetData, funcGroups)
-                        Object.assign(data, { valList, funcList })
+                        const { varList, funcList } = await this.getVarAndFuncList(this.fromTemplate)
+                        Object.assign(data, { varList, funcList })
                     }
                     const res = await this.$store.dispatch(`pageTemplate/${this.actionType}`, data)
                     if (res) {

@@ -16,62 +16,107 @@ export default {
     icon: 'bk-drag-table',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'select', tips: '当用户手动勾选数据行的 Checkbox 时调用该事件函数，事件回调参数 (selection: Array, row: Object)'
-    }, {
-        name: 'select-all', tips: '当用户手动勾选全选 Checkbox 时调用该事件函数，事件回调参数 (selection: Array)'
-    }, {
-        name: 'selection-change', tips: '当选择项发生变化时调用该事件函数，事件回调参数 (selection: Array)'
-    }, {
-        name: 'cell-mouse-enter', tips: '当单元格 hover 进入时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
-    }, {
-        name: 'cell-mouse-leave', tips: '当单元格 hover 退出时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
-    }, {
-        name: 'row-mouse-enter', tips: '当表格行 hover 进入时调用该事件函数，事件回调参数 (index: Number, row: Object, event: Event)'
-    }, {
-        name: 'row-mouse-leave', tips: '当表格行 hover 退出时调用该事件函数，事件回调参数 (index: Number, row: Object, event: Event)'
-    }, {
-        name: 'cell-click', tips: '当某个单元格被点击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
-    }, {
-        name: 'cell-dblclick', tips: '当某个单元格被双击击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
-    }, {
-        name: 'row-click', tips: '当某一行被点击时调用该事件函数，事件回调参数 (row: Object, event: Event, column: Object)'
-    }, {
-        name: 'row-contextmenu', tips: '当某一行被鼠标右键点击时调用该事件函数，事件回调参数 (row: Object, event: Event)'
-    }, {
-        name: 'row-dblclick', tips: '当某一行被双击时调用该事件函数，事件回调参数 (row: Object, event: Event)'
-    }, {
-        name: 'header-click', tips: '当某一列的表头被点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
-    }, {
-        name: 'header-contextmenu', tips: '当某一列的表头被鼠标右键点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
-    }, {
-        name: 'sort-change', tips: '当表格的排序条件发生变化时调用该事件函数，事件回调参数 (data: { column, prop, order })'
-    }, {
-        name: 'filter-change', tips: '当表格的筛选条件发生变化时调用该事件函数，事件回调参数 (filters: { key, value })。参数对象的 key 是 column 的 columnKey，对应的 value 为用户选择的筛选条件的数组。'
-    }, {
-        name: 'current-change', tips: '当表格的当前行发生变化时调用该事件函数，如果要高亮当前行，请打开表格的 highlight-current-row 属性，事件回调参数 (currentRow: Object, oldCurrentRow: Object)'
-    }, {
-        name: 'header-dragend', tips: '当拖动表头改变了列的宽度时调用该事件函数，事件回调参数 (newWidth: Number, oldWidth: Number, column: Object, event: Event)'
-    }, {
-        name: 'expand-change', tips: '当用户对某一行展开或者关闭时调用该事件函数，事件回调参数 (row: Object, expandedRows: Array)'
-    }, {
-        name: 'page-change', tips: '当用户切换表格分页时调用该事件函数，事件回调参数 (newPage: Number)'
-    }, {
-        name: 'page-limit-change', tips: '当用户切换表格每页显示条数时调用该事件函数，事件回调参数 (limit: Number)'
-    }],
-    styles: ['size', 'margin', 'display'],
-    directives: [
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/table',
+    events: [
         {
-            type: 'v-bind',
-            prop: 'data',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            name: 'select',
+            tips: '当用户手动勾选数据行的 Checkbox 时调用该事件函数，事件回调参数 (selection: Array, row: Object)'
+        },
+        {
+            name: 'select-all',
+            tips: '当用户手动勾选全选 Checkbox 时调用该事件函数，事件回调参数 (selection: Array)'
+        },
+        {
+            name: 'selection-change',
+            tips: '当选择项发生变化时调用该事件函数，事件回调参数 (selection: Array)'
+        },
+        {
+            name: 'cell-mouse-enter',
+            tips: '当单元格 hover 进入时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
+        },
+        {
+            name: 'cell-mouse-leave',
+            tips: '当单元格 hover 退出时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
+        },
+        {
+            name: 'row-mouse-enter',
+            tips: '当表格行 hover 进入时调用该事件函数，事件回调参数 (index: Number, row: Object, event: Event)'
+        },
+        {
+            name: 'row-mouse-leave',
+            tips: '当表格行 hover 退出时调用该事件函数，事件回调参数 (index: Number, row: Object, event: Event)'
+        },
+        {
+            name: 'cell-click',
+            tips: '当某个单元格被点击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
+        },
+        {
+            name: 'cell-dblclick',
+            tips: '当某个单元格被双击击时调用该事件函数，事件回调参数 (row: Object, column: Object, cell: Object, event: Event)'
+        },
+        {
+            name: 'row-click',
+            tips: '当某一行被点击时调用该事件函数，事件回调参数 (row: Object, event: Event, column: Object)'
+        },
+        {
+            name: 'row-contextmenu',
+            tips: '当某一行被鼠标右键点击时调用该事件函数，事件回调参数 (row: Object, event: Event)'
+        },
+        {
+            name: 'row-dblclick',
+            tips: '当某一行被双击时调用该事件函数，事件回调参数 (row: Object, event: Event)'
+        },
+        {
+            name: 'header-click',
+            tips: '当某一列的表头被点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
+        },
+        {
+            name: 'header-contextmenu',
+            tips: '当某一列的表头被鼠标右键点击时调用该事件函数，事件回调参数 (column: Object, event: Event)'
+        },
+        {
+            name: 'sort-change',
+            tips: '当表格的排序条件发生变化时调用该事件函数，事件回调参数 (data: { column, prop, order })'
+        },
+        {
+            name: 'filter-change',
+            tips: '当表格的筛选条件发生变化时调用该事件函数，事件回调参数 (filters: { key, value })。参数对象的 key 是 column 的 columnKey，对应的 value 为用户选择的筛选条件的数组。'
+        },
+        {
+            name: 'current-change',
+            tips: '当表格的当前行发生变化时调用该事件函数，如果要高亮当前行，请打开表格的 highlight-current-row 属性，事件回调参数 (currentRow: Object, oldCurrentRow: Object)'
+        },
+        {
+            name: 'header-dragend',
+            tips: '当拖动表头改变了列的宽度时调用该事件函数，事件回调参数 (newWidth: Number, oldWidth: Number, column: Object, event: Event)'
+        },
+        {
+            name: 'expand-change',
+            tips: '当用户对某一行展开或者关闭时调用该事件函数，事件回调参数 (row: Object, expandedRows: Array)'
+        },
+        {
+            name: 'page-change',
+            tips: '当用户切换表格分页时调用该事件函数，事件回调参数 (newPage: Number)'
+        },
+        {
+            name: 'page-limit-change',
+            tips: '当用户切换表格每页显示条数时调用该事件函数，事件回调参数 (limit: Number)'
         }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    directives: [
+        // {
+        //     type: 'v-bind',
+        //     prop: 'data',
+        //     format: 'variable',
+        //     includesFormat: ['variable'],
+        //     code: '',
+        //     renderValue: ''
+        // }
     ],
     props: {
         data: {
-            type: ['array', 'remote'],
+            type: ['array', 'remote', 'table-data-source'],
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
             },

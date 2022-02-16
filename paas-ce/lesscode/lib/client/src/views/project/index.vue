@@ -1,5 +1,5 @@
 <template>
-    <main class="project-layout">
+    <main :class="['project-layout', { 'no-breadcrumb': !hasBreadcrumb }]">
         <aside class="aside">
             <div class="side-hd">
                 <i class="back-icon bk-drag-icon bk-drag-arrow-back" title="返回项目列表" @click="toProjects"></i>
@@ -26,18 +26,25 @@
                 </nav>
             </div>
         </aside>
-        <div class="breadcrumbs">
-            <h3 class="current">{{ currentPage }}</h3>
+        <div class="breadcrumbs" v-if="hasBreadcrumb">
+            <div class="page-top">
+                <h3 class="current">{{ currentPage }}</h3>
+                <div class="version-selector" v-if="isShowProjectVersionSelector">
+                    当前版本：
+                    <project-version-selector :bordered="false" :popover-width="200" v-model="projectVersionId" @change="handleChangeProjectVersion" />
+                </div>
+            </div>
             <extra-links></extra-links>
         </div>
         <!-- 使用v-if因子组件依赖获取的项目信息 -->
         <div class="main-container" v-bkloading="{ isLoading: pageLoading }">
-            <router-view v-if="!pageLoading" :key="$route.path"></router-view>
+            <router-view v-if="!pageLoading" :key="routeKey"></router-view>
         </div>
     </main>
 </template>
 
 <script>
+    import { bus } from '@/common/bus'
     import ExtraLinks from '@/components/ui/extra-links'
     export default {
         components: {
@@ -47,11 +54,14 @@
             return {
                 pageLoading: false,
                 projectId: '',
+                projectVersionId: '',
                 navList: [
                     {
                         title: '页面列表',
                         icon: 'list-fill',
-                        toPath: 'pages'
+                        toPath: {
+                            name: 'pageList'
+                        }
                     },
                     {
                         title: '自定义组件库',
@@ -63,43 +73,73 @@
                     {
                         title: '函数库',
                         icon: 'function-fill',
-                        toPath: 'function-manage'
+                        toPath: {
+                            name: 'functionManage'
+                        }
                     },
                     {
                         title: '模板库',
                         icon: 'template-fill',
-                        toPath: 'template-manage',
+                        toPath: {
+                            name: 'templateManage'
+                        },
                         redPoint: true
                     },
                     {
                         title: '变量管理',
                         icon: 'variable-manage',
-                        toPath: 'variable-manage'
+                        toPath: {
+                            name: 'variableManage'
+                        }
+                    },
+                    {
+                        title: '数据源管理',
+                        icon: 'data-source-manage',
+                        toPath: {
+                            name: 'dataSourceManage'
+                        }
                     },
                     {
                         title: '布局模板实例',
                         icon: 'template-fill-2',
-                        toPath: 'layout'
+                        toPath: {
+                            name: 'layout'
+                        }
                     },
                     {
                         title: '路由配置',
                         icon: 'router',
-                        toPath: 'routes'
+                        toPath: {
+                            name: 'routes'
+                        }
+                    },
+                    {
+                        title: '版本管理',
+                        icon: 'version',
+                        toPath: {
+                            name: 'versions'
+                        }
                     },
                     {
                         title: '成员管理',
                         icon: 'user-group',
-                        toPath: 'member-manage'
+                        toPath: {
+                            name: 'memberManage'
+                        }
                     },
                     {
                         title: '基本信息',
                         icon: 'info-fill',
-                        toPath: 'basic'
+                        toPath: {
+                            name: 'basicInfo'
+                        }
                     },
                     {
                         title: '操作审计',
                         icon: 'audit',
-                        toPath: 'logs'
+                        toPath: {
+                            name: 'logs'
+                        }
                     }
                 ],
                 projectList: [],
@@ -108,8 +148,19 @@
             }
         },
         computed: {
+            routeKey () {
+                const { id } = this.$store.getters['projectVersion/currentVersion']
+                return `${this.$route.path}_${id}`
+            },
             currentPage () {
                 return this.$route.meta.title
+            },
+            isShowProjectVersionSelector () {
+                const withSelectorRoutes = ['pageList', 'functionManage', 'variableManage', 'layout', 'routes']
+                return withSelectorRoutes.includes(this.$route.name)
+            },
+            hasBreadcrumb () {
+                return this.currentPage?.length > 0
             }
         },
         beforeRouteUpdate (to, from, next) {
@@ -118,9 +169,20 @@
             next()
         },
         async created () {
-            this.projectId = parseInt(this.$route.params.projectId)
-            await this.getProjectList()
-            this.setCurrentProject()
+            try {
+                this.pageLoading = true
+                this.updateCurrentVersion(this.getInitialVersion())
+                bus.$on('update-project-version', this.updateCurrentVersion)
+                bus.$on('update-project-list', this.getProjectList)
+
+                this.projectId = parseInt(this.$route.params.projectId)
+                await this.getProjectList()
+                await this.setCurrentProject()
+            } catch (e) {
+                console.error(e)
+            } finally {
+                this.pageLoading = false
+            }
         },
         methods: {
             toProjects () {
@@ -133,16 +195,13 @@
                 this.$store.commit('project/setCurrentProject', project)
                 await this.$store.dispatch('member/setCurUserPermInfo', project)
             },
+            updateCurrentVersion (version) {
+                this.projectVersionId = version.id
+                this.setCurrentVersion(version)
+            },
             async getProjectList () {
-                try {
-                    this.pageLoading = true
-                    const projectList = await this.$store.dispatch('project/my', { config: {} })
-                    this.projectList = projectList
-                } catch (e) {
-                    console.error(e)
-                } finally {
-                    this.pageLoading = false
-                }
+                const projectList = await this.$store.dispatch('project/my', { config: {} })
+                this.projectList = projectList
             },
             changeProject (id) {
                 this.$store.dispatch('member/setCurUserPermInfo', { id })
@@ -151,6 +210,15 @@
                         projectId: id
                     }
                 })
+            },
+            handleChangeProjectVersion (versionId, version) {
+                this.setCurrentVersion(version)
+            },
+            getInitialVersion () {
+                return this.$store.getters['projectVersion/initialVersion']()
+            },
+            setCurrentVersion (version) {
+                this.$store.commit('projectVersion/setCurrentVersion', version)
             }
         }
     }
@@ -219,8 +287,9 @@
                 }
             }
             .side-bd {
-                height: calc(100% - var(--side-hd-height) - var(--side-ft-height));
+                height: calc(100% - var(--side-hd-height) - var(--side-ft-height, 0px));
                 overflow-y: auto;
+                @mixin scroller;
             }
             .no-click {
                 pointer-events: none;
@@ -237,6 +306,33 @@
             background: #fff;
             box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.1);
             padding-left: 24px;
+
+            .page-top {
+                display: flex;
+                align-items: center;
+
+                .version-selector {
+                    margin-left: 25px;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    font-size: 12px;
+
+                    &::before {
+                        content: '|';
+                        position: absolute;
+                        left: -13px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        color: #C4C6CC;
+                    }
+
+                    .project-version-selector {
+                        width: 90px;
+                    }
+                }
+            }
+
             .current {
                 color: #000;
                 font-size: 16px;
@@ -279,6 +375,12 @@
                     background: #E1ECFF;
                     color: #3A84FF;
                 }
+            }
+        }
+
+        &.no-breadcrumb {
+            .main-container {
+                height: 100%;
             }
         }
     }

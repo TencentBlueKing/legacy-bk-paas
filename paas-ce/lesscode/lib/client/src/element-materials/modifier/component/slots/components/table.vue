@@ -19,30 +19,60 @@
                 handle=".option-col-drag"
                 @change="trigger"
                 :group="{ name: 'table-col' }">
-                <transition-group type="transition" :name="'flip-list'">
-                    <div class="table-column-option" v-for="(item, index) in column" :key="`col${index}`">
+                <transition-group
+                    type="transition"
+                    :name="'flip-list'">
+                    <div
+                        class="table-column-option"
+                        v-for="(item, index) in column"
+                        :key="`col${index}`">
                         <div class="option-col-operate">
                             <i class="bk-drag-icon bk-drag-drag-small1 option-col-drag" />
                             <i class="bk-icon icon-close option-col-del" @click="handleDelete(index)"></i>
                         </div>
                         <section style="margin-top: 20px">
-                            <div class="option-item" :class="item.type === 'selection' ? 'disabled' : ''">
+                            <div
+                                class="option-item"
+                                :class="item.type === 'selection' ? 'disabled' : ''">
                                 <div class="label">label</div>
-                                <bk-input :value="item.label" @change="val => handleChange(val, 'label', index)" />
+                                <bk-input
+                                    :value="item.label"
+                                    @change="val => handleChange(val, 'label', index)" />
                             </div>
 
                             <template v-if="item.type === 'customCol'">
                                 <div class="option-item">
                                     <div class="label">
-                                        <span class="show-tip" v-bk-tooltips="{ content: '可输入html模板或vue template，<br>`props.row`作为内置变量代表表格每一行的数据，如`props.row.id`代表每一行的id字段，<br>也可以在此处调用函数库已有的函数（若使用了函数库函数，需在模板绑定函数项勾选用到的函数），<br>如默认值demo即可实现一项编辑操作列' }">自定义列模板</span>
+                                        <span
+                                            class="show-tip"
+                                            v-bk-tooltips="{
+                                                content: '可输入html模板或vue template，<br>`props.row`作为内置变量代表表格每一行的数据，如`props.row.id`代表每一行的id字段，<br>也可以在此处调用函数库已有的函数（若使用了函数库函数，需在模板绑定函数项勾选用到的函数），<br>如默认值demo即可实现一项编辑操作列'
+                                            }">
+                                            自定义列模板
+                                        </span>
                                     </div>
-                                    <bk-input type="textarea" :value="item.templateCol" @change="val => handleChange(val, 'templateCol', index)" />
+                                    <bk-input
+                                        type="textarea"
+                                        :value="item.templateCol"
+                                        @change="val => handleChange(val, 'templateCol', index)" />
                                 </div>
                                 <div class="option-item">
                                     <div class="label">
-                                        <span class="show-tip" v-bk-tooltips="{ content: '请勾选列模板中使用到的函数库函数，<br>未使用函数则无须勾选' }">模板绑定函数</span>
+                                        <span
+                                            class="show-tip"
+                                            v-bk-tooltips="{
+                                                content: '请勾选列模板中使用到的函数库函数，<br>未使用函数则无须勾选'
+                                            }">
+                                            模板绑定函数
+                                        </span>
                                     </div>
-                                    <bk-select style="width: 100%" class="event-choose" ref="eventChooseComp" :value="item.methodCode" :multiple="true" @change="val => handleChange(val, 'methodCode', index)">
+                                    <bk-select
+                                        ref="eventChooseComp"
+                                        style="width: 100%"
+                                        class="event-choose"
+                                        :value="item.methodCode"
+                                        :multiple="true"
+                                        @change="val => handleChange(val, 'methodCode', index)">
                                         <bk-option-group
                                             v-for="(group, funcIndex) in funcGroups"
                                             :name="group.groupName"
@@ -109,6 +139,7 @@
     </div>
 </template>
 <script>
+    import Vue from 'vue'
     import { mapGetters } from 'vuex'
     import methods from '@/components/methods'
 
@@ -121,7 +152,7 @@
     const generateCustomColumn = (index) => ({
         type: 'customCol',
         label: `选项${index}`,
-        templateCol: `<span><a style="color:#3A84FF;cursor:pointer" @click="editCallBack(props.row)">编辑</a> <a style="color:red;">获取行数据{{props.row.prop1}}</a></span>`,
+        templateCol: '<span><a style="color:#3A84FF;cursor:pointer" @click="editCallBack(props.row)">编辑</a> <a style="color:red;">获取行数据{{props.row.prop1}}</a></span>',
         methodCode: [],
         sortable: false
     })
@@ -158,6 +189,14 @@
         },
         computed: {
             ...mapGetters('functions', ['funcGroups'])
+        },
+        watch: {
+            'slotVal.val': {
+                handler (val) {
+                    Vue.set(this, 'column', JSON.parse(JSON.stringify(val)))
+                },
+                deep: true
+            }
         },
         created () {
             this.column = JSON.parse(JSON.stringify(this.slotVal.val))

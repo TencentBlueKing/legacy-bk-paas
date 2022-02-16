@@ -50,6 +50,7 @@ const httpConf = require('./conf/http')
 
 const { createConnection } = require('typeorm')
 const dataBaseConf = require('./conf/data-base')
+const { OrmLog } = require('./logger')
 
 const componentController = require('./controller/component')
 
@@ -117,7 +118,7 @@ async function startServer () {
         }
     ))
     app.use(json())
-    
+
     app.use(httpMiddleware())
     app.use(jsonSendMiddleware())
     app.use(authMiddleware().unless({ path: [/^\/api\/open\//] }))
@@ -154,6 +155,10 @@ async function startServer () {
                 // connect-history-api-fallback 默认会对 url 中有 . 的 url 当成静态资源处理而不是当成页面地址来处理
                 from: /\/\/+.*\..*\//,
                 to: '/'
+            },
+            {
+                from: /preview\/project/,
+                to: '/preview.html'
             }
         ]
     }))
@@ -229,7 +234,7 @@ async function execSql (connection, callBack) {
         const prefixPath = '.'
         const migrateUp = `node node_modules/db-migrate/bin/db-migrate up --config ${prefixPath}/lib/server/conf/db-migrate.json --migrations-dir ${prefixPath}/lib/server/model/migrations -e ${databaseEnv}`
         shell.exec(migrateUp)
-        
+
         // 自动执行接口刷数据
         await executeApi()
         callBack()
@@ -239,6 +244,26 @@ async function execSql (connection, callBack) {
     }
 }
 
-createConnection(dataBaseConf).then((connection) => {
+const config = process.env.NODE_ENV === 'production' ? dataBaseConf.prod : dataBaseConf.dev
+const ormConfig = {
+    type: config.dialect,
+    host: config.host,
+    port: config.port,
+    username: config.username,
+    password: config.password,
+    database: config.database,
+    entities: [resolve(__dirname, '.', 'model/entities/!(base){.js,.ts}')],
+    // 打印日志的类型
+    logger: new OrmLog(config.logging),
+    // 自动同步数据库表结构，有删除数据风险，推荐关闭
+    synchronize: false,
+    // 会自动执行更新SQL，推荐手动执行脚本，关闭该选项
+    migrationsRun: false,
+    extra: {
+        connectionLimit: 5
+    }
+}
+
+createConnection(ormConfig).then((connection) => {
     return execSql(connection, startServer)
 }).catch((err) => logger.error(err.message || err))

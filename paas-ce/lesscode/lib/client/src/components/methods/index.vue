@@ -4,7 +4,10 @@
             <layout class="function-main method-layout" :init-width="initWidth <= 240 ? 240 : initWidth" ref="methodMain" v-bkloading="{ isLoading: isLoadingGroup }">
                 <section slot="left" class="func-left">
                     <h3 class="left-title">
-                        <span>函数库</span>
+                        <div class="title-name">
+                            <span>函数库</span>
+                            <version-tag :version-name="versionName" />
+                        </div>
                         <bk-popconfirm trigger="click" confirm-text="" cancel-text=""
                             :on-hide="() => (groupNameErrMessage = '')"
                             theme="light func-group-add-name">
@@ -129,12 +132,14 @@
 <script>
     import { mapActions, mapGetters } from 'vuex'
     import layout from '@/components/ui/layout'
+    import versionTag from '@/components/ui/project-version-tag'
     import funcDialog from '@/components/methods/func-form/func-dialog'
 
     export default {
         components: {
             layout,
-            funcDialog
+            funcDialog,
+            versionTag
         },
 
         props: {
@@ -170,6 +175,7 @@
         },
 
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName' }),
             ...mapGetters(['user']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('member', ['userPerm']),
@@ -235,7 +241,7 @@
             initData () {
                 this.isLoadingGroup = true
                 const projectId = this.$route.params.projectId
-                this.getAllGroupFuncs(projectId).then(() => {
+                this.getAllGroupFuncs({ projectId, versionId: this.versionId }).then(() => {
                     let curGroup = this.funcGroups[0] || {}
                     const funcList = curGroup.functionList || []
                     let curFunc = funcList[0] || {}
@@ -443,7 +449,7 @@
                         postData.projectId = this.projectId
                     }
                     this.isSaving = true
-                    const varWhere = { projectId: this.$route.params.projectId, pageCode: this.pageDetail.pageCode, effectiveRange: 0 }
+                    const varWhere = { projectId: this.$route.params.projectId, versionId: this.versionId, pageCode: this.pageDetail.pageCode, effectiveRange: 0 }
                     const editFunc = () => {
                         return this.editFunc({ groupId: this.curGroup.id, func: postData, varWhere }).then((res) => {
                             if (!res) {
@@ -451,7 +457,7 @@
                                 return
                             }
                             const projectId = this.$route.params.projectId
-                            return this.getAllGroupFuncs(projectId).then(() => {
+                            return this.getAllGroupFuncs({ projectId, versionId: this.versionId }).then(() => {
                                 if (!this.openGroupIds.includes(res.funcGroupId)) this.openGroupIds.push(res.funcGroupId)
                                 this.chooseId = res.id
                                 this.$bkMessage({ theme: 'success', message: '修改函数成功' })
@@ -545,7 +551,8 @@
                     const projectId = this.$route.params.projectId
                     const postData = {
                         inputStr: this.groupNameStr,
-                        projectId
+                        projectId,
+                        versionId: this.versionId
                     }
                     this.addGroup(postData).then((res) => {
                         this.groupNameStr = ''
@@ -660,6 +667,16 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        .title-name {
+            display: flex;
+            align-items: center;
+
+            ::v-deep .version-tag {
+                margin-left: 8px;
+            }
+        }
+
         .icon-plus {
             cursor: pointer;
             font-size: 26px;

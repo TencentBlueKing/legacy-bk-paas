@@ -16,25 +16,44 @@ export default {
     icon: 'bk-drag-select',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'selected', tips: '选择列表时调用该事件函数，多选时，回调参数均为数组(value: String | Number | Array, option: Object | Array)'
-    }, {
-        name: 'toggle', tips: '切换下拉折叠状态时调用该事件函数，回调参数(status: Boolean)'
-    }, {
-        name: 'change', tips: '选项发生变化时调用该事件函数，回调参数(newValue: String | Number | Array, oldValue: String | Number | Array)'
-    }, {
-        name: 'clear', tips: '清空已选项时调用该事件函数，回调参数(oldValue: String | Number | Array)'
-    }, {
-        name: 'tab-remove', tips: '删除tab时调用该事件函数，回调参数(options: Array)'
-    }],
-    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/select',
+    events: [
+        {
+            name: 'selected',
+            tips: '选择列表时调用该事件函数，多选时，回调参数均为数组(value: String | Number | Array, option: Object | Array)'
+        },
+        {
+            name: 'toggle',
+            tips: '切换下拉折叠状态时调用该事件函数，回调参数(status: Boolean)'
+        },
+        {
+            name: 'change',
+            tips: '选项发生变化时调用该事件函数，回调参数(newValue: String | Number | Array, oldValue: String | Number | Array)'
+        },
+        {
+            name: 'clear',
+            tips: '清空已选项时调用该事件函数，回调参数(oldValue: String | Number | Array)'
+        },
+        {
+            name: 'tab-remove',
+            tips: '删除tab时调用该事件函数，回调参数(options: Array)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'border',
+        'opacity'
+    ],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['string', 'array', 'number'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {
@@ -106,14 +125,6 @@ export default {
             type: 'string',
             val: '',
             tips: '设置下拉已选择及列表的字体大小'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
-        },
-        'ext-popover-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在下拉菜单的 DOM .bk-select-dropdown-content 上'
         },
         'z-index': {
             type: 'number',

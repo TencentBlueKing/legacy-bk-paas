@@ -14,15 +14,17 @@ import PageRoute from './entities/page-route'
 import Page from './entities/page'
 import LayoutInst from './entities/layout-inst'
 import Layout from './entities/layout'
+import { whereVersion } from './common'
 
 export default {
-    queryProjectPageRoute (projectId) {
+    queryProjectPageRoute (projectId, versionId) {
         return getRepository(Page)
             .createQueryBuilder('p')
             .leftJoinAndSelect(PageRoute, 'pr', 'p.id = pr.pageId')
             .leftJoinAndSelect(Route, 'route', 'route.id = pr.routeId')
             .leftJoinAndSelect(LayoutInst, 'layoutinst', 'layoutinst.id = pr.layoutId')
             .where('pr.projectId = :projectId', { projectId })
+            .andWhere(whereVersion(versionId, 'pr'))
             .andWhere('p.deleteFlag = 0')
             .select([
                 'route.id as id',
@@ -58,7 +60,7 @@ export default {
     },
 
     // 获取项目下的路由
-    findProjectRoute (projectId) {
+    findProjectRoute (projectId, versionId) {
         return getRepository(Route)
             .createQueryBuilder('route')
             .leftJoinAndSelect(PageRoute, 'pr', 'route.id = pr.routeId')
@@ -84,12 +86,13 @@ export default {
                 'layout.type as layoutType'
             ])
             .where('pr.projectId = :projectId', { projectId })
+            .andWhere(whereVersion(versionId, 'pr'))
             .andWhere('route.deleteFlag = 0')
             .andWhere('(pr.deleteFlag IS NULL OR pr.deleteFlag = 0)')
             .getRawMany()
     },
 
-    queryProjectRouteTree (projectId) {
+    queryProjectRouteTree (projectId, versionId) {
         return getRepository(LayoutInst)
             .createQueryBuilder('layoutinst')
             .leftJoinAndSelect(PageRoute, 'pr', 'layoutinst.id = pr.layoutId AND (pr.deleteFlag IS NULL OR pr.deleteFlag = 0)')
@@ -106,6 +109,7 @@ export default {
                 'page.pageName as pageName'
             ])
             .where('layoutinst.projectId = :projectId', { projectId })
+            .andWhere(whereVersion(versionId, 'layoutinst'))
             .andWhere('layoutinst.deleteFlag = 0')
             .andWhere('pr.routeId != -1') // 过虑已删除的路由（与页面解除绑定）
             .orderBy('layoutinst.id')
@@ -114,12 +118,12 @@ export default {
 
     createProjectRoute (projectId, { routeData }) {
         return getConnection().transaction(async transactionalEntityManager => {
-            const { path, layoutId } = routeData
+            const { path, layoutId, versionId = null } = routeData
             const route = getRepository(Route).create({ path })
             const routeSaved = await transactionalEntityManager.save(route)
 
             // 页面路由关联记录，包括layoutId
-            const pageRoute = getRepository(PageRoute).create({ routeId: routeSaved.id, pageId: -1, layoutId, projectId })
+            const pageRoute = getRepository(PageRoute).create({ routeId: routeSaved.id, pageId: -1, layoutId, projectId, versionId })
             await transactionalEntityManager.save(pageRoute)
 
             return routeSaved

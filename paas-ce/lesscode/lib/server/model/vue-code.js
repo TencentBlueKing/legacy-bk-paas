@@ -169,8 +169,8 @@ module.exports = {
             const formatter = await eslint.loadFormatter('stylish')
             let resultText = formatter.format(results)
             const errStrArr = ansiparse(resultText)
-            if (errStrArr.length) resultText = `eslint检查不通过，请检查项目中使用到的函数：\n${errStrArr.map((err) => (err.message)).join('')}`
-            return [resultText, results[0].output]
+            if (errStrArr.length) resultText = `eslint检查不通过：\n${errStrArr.map((err) => (err.message)).join('')}`
+            return [resultText, results[0].output || code]
         } catch (err) {
             console.log(err, 'format err')
         }

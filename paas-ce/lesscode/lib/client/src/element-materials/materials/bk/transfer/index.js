@@ -16,29 +16,22 @@ export default {
     icon: 'bk-drag-transfer',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change',
-        tips: '数据源改变时调用该事件函数，事件回调参数 (sourceList: Array, targetList: Array, targetValueList: Array)'
-    }],
-    styles: ['size', 'margin'],
-    directives: [
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/transfer',
+    events: [
         {
-            type: 'v-bind',
-            prop: 'target-list',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable',
-            tips () {
-                return '已选择数据，数据格式[\'shenzhen\', \'guangzhou\']'
-            }
-        },
-        {
-            type: 'v-bind',
-            prop: 'source-list',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            name: 'change',
+            tips: '数据源改变时调用该事件函数，事件回调参数 (sourceList: Array, targetList: Array, targetValueList: Array)'
         }
+    ],
+    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
+    directives: [
+        // {
+        //     type: 'v-bind',
+        //     prop: 'source-list',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         title: {
@@ -102,10 +95,6 @@ export default {
             type: 'boolean',
             val: false,
             tips: '是否一直显示关闭icon'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

@@ -13,7 +13,7 @@ import axios from 'axios'
 
 import CachedPromise from './cached-promise'
 import RequestQueue from './request-queue'
-import { messageError } from '@/common/bkmagic'
+import { bkMessage } from 'bk-magic-vue'
 
 // axios 实例
 const axiosInstance = axios.create({
@@ -151,9 +151,20 @@ function handleReject (error, config) {
     }
 
     http.queue.delete(config.requestId)
-    let errMessage = error.message || error
-    if (typeof errMessage === 'string' && errMessage.match(/Network Error/)) errMessage = 'Network Error，网络不可用，有可能是跨域原因引起'
-    messageError(errMessage)
+
+    let message = error.message || '接口异常，无法访问'
+    const { response } = error
+    if (response) {
+        // 默认提示 http 状态码错误标记
+        message = response.statusText
+        // 兼容后端响应时通过body返回错误信息
+        if (response.data && response.data.message) {
+            message = response.data.message
+        }
+    }
+
+    if (typeof message === 'string' && message.match(/Network Error/)) message = 'Network Error，网络不可用，有可能是跨域原因引起'
+    bkMessage({ theme: 'error', message })
     console.error(error)
     return Promise.reject(error)
 }

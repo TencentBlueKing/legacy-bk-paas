@@ -1,10 +1,19 @@
+import {
+    Controller,
+    Get,
+    Ctx,
+    OutputJson
+} from '../decorator'
 const axios = require('axios')
 const querystring = require('querystring')
 const https = require('https')
+const { setRequestContext } = require('../middleware/request-context')
 
-
-const user = {
-    async getUser (ctx) {
+@Controller('/api/user')
+export default class UserController {
+    @OutputJson()
+    @Get('/getUser')
+    async getUser (@Ctx() ctx) {
         try {
             const bkToken = ctx.cookies.get('bk_token')
             const params = querystring.stringify({
@@ -31,6 +40,8 @@ const user = {
                 Object.assign(response.data.data, {
                     username: response.data.data.bk_username
                 })
+                setRequestContext(ctx)
+                ctx.session.userInfo = { ...response.data.data }
                 ctx.send(response.data || {})
             }
         } catch (err) {
@@ -40,5 +51,3 @@ const user = {
         }
     }
 }
-
-module.exports = user

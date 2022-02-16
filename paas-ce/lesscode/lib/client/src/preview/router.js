@@ -8,107 +8,39 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import httpVueLoader from '@/common/http-vue-loader'
-import { uuid } from '@/common/util'
+// import httpVueLoader from '@/common/http-vue-loader'
+import { uuid } from 'shared/util'
+import { getRouteFullPath, getRouteName, getProjectDefaultRoute } from 'shared/route'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
-
+import Home from './children/home.vue'
 import BkNotFound from './children/404.vue'
+import { bundless } from '@blueking/bundless'
+import bundlessPluginVue2 from '@blueking/bundless-plugin-vue2'
 
 Vue.use(VueRouter)
-
 const uniqStr = uuid()
-let router = {}
 
-function registerComponent (code) {
-    code = code.replace('export default', 'module.exports =')
-    return httpVueLoader(code)
+function registerComponent (source, id) {
+    return bundless({
+        source,
+        id,
+        plugins: [bundlessPluginVue2]
+    })
 }
-
-function generateApp () {
-    return registerComponent(`
-        <template>
-            <div id="app">
-                <router-view></router-view>
-            </div>
-        </template>
-        <script>
-            export default {
-                name: 'app'
-            }
-        </script>
-        <style>
-            * {
-                box-sizing: border-box;
-            }
-            html,body {
-                margin: 0;
-                padding: 0;
-            }
-            ul,li {
-                margin: 0;
-                padding: 0;
-                list-style: none;
-            }
-            dl,dt,dd,p {
-                margin: 0;
-                padding: 0;
-            }
-            a {
-                text-decoration: none;
-            }
-            button {
-                outline: none;
-            }
-            table {
-                border-collapse: collapse;
-                border-spacing: 0;
-            }
-            td,th {
-                padding: 0;
-            }
-            .navigation-bar {
-                width: 100%;
-                height: 100%;
-            }
-            .navigation-bar-container {
-                width: 100%;
-                max-width: 100%;
-            }
-            .bk-navigation {
-                min-width: 1360px;
-            }
-            .bk-navigation-wrapper .navigation-container {
-                max-width: 100% !important;
-            }
-            .navigation-header .tippy-popper .tippy-tooltip.navigation-message-theme {
-                padding: 0;
-                border-radius: 0;
-                -webkit-box-shadow: none;
-                box-shadow: none;
-            }
-        </style>
-    `)
-}
-
-const Home = registerComponent(`
-    <template>
-        <router-view></router-view>
-    </template>
-    <script>
-        export default {
-            name: 'Home'
-        }
-    </script>
-`)
 
 // 生成路由
-module.exports = (routeGroup, projectPageRouteList) => {
+module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId) => {
     const routes = []
+    const curStorageData = localStorage.getItem('ONLINE_PREVIEW') || '{}'
+    const curPageData = JSON.parse(curStorageData)
+
     for (const key in routeGroup) {
         const layout = routeGroup[key]
+
         // 父路由
-        const parentCom = registerComponent(layout.content)
+        const parentCom = registerComponent(layout.content, layout.path)
+
         // 子路由
         const routeList = layout.children
         const children = routeList.map((route) => {
@@ -118,16 +50,17 @@ module.exports = (routeGroup, projectPageRouteList) => {
 
             // 与vue-router保持一致，优先使用redirect
             if (route.redirectRoute) {
-                const { layoutPath, path } = route.redirectRoute
-                // 导航菜单会通过name跳转所以仍然需要name，未绑定页面的路由使用跳转路径作为name
-                const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
-                routeConifg.name = route.pageCode || fullPath.replace(/[\/\-\:]/g, '')
+                routeConifg.name = getRouteName(route)
                 routeConifg.redirect = {
-                    path: fullPath
+                    path: getRouteFullPath(route.redirectRoute)
                 }
             } else if (route.pageId !== -1) {
-                const childCom = registerComponent(route.content)
-                routeConifg.name = route.pageCode
+                const source = route.pageCode === curPageData.id
+                    ? curPageData.source
+                    : route.content
+
+                const childCom = registerComponent(source, route.pageCode)
+                routeConifg.name = getRouteName(route)
                 routeConifg.component = childCom
             } else {
                 routeConifg.redirect = {
@@ -137,14 +70,17 @@ module.exports = (routeGroup, projectPageRouteList) => {
 
             return routeConifg
         })
+
         // 404
         if (layout.path !== '/') {
             children.push({ path: '*', component: BkNotFound })
         }
+
         routes.push({
             path: layout.path.replace(/^\//, ''),
             name: layout.name + uniqStr,
             component: parentCom,
+            redirect: children[0].name ? { name: children[0].name } : null,
             children
         })
     }
@@ -155,36 +91,32 @@ module.exports = (routeGroup, projectPageRouteList) => {
             redirect: { name: '404' }
         }
     })
-    router = new VueRouter({
-        mode: 'history',
-        routes: [
-            {
-                path: '/',
-                name: 'previewHome',
-                component: Home,
-                children: [...routes, ...noRoutePages]
-            },
-            {
-                path: '/404',
-                name: '404',
-                component: BkNotFound
-            }
-        ]
-    })
-    router.beforeEach(async (to, from, next) => {
-        if (to.fullPath === '/preview.html') return
-        next()
-    })
-    // 传递url信息
-    router.afterEach((route) => {
-        const data = {
-            type: 'preview',
-            name: route.name,
-            fullPath: route.fullPath,
-            query: route.query
+
+    // 项目默认首页
+    const defaultRoute = getProjectDefaultRoute(projectPageRouteList, projectRouteList)
+
+    const allRoutes = [
+        {
+            path: '/',
+            name: 'previewHome',
+            component: Home,
+            redirect: (defaultRoute && defaultRoute?.id) ? { name: getRouteName(defaultRoute) } : null,
+            children: [...routes, ...noRoutePages]
+        },
+        {
+            path: '/404',
+            name: '404',
+            component: BkNotFound
+        },
+        {
+            path: '*',
+            redirect: { name: '404' }
         }
-        window.parent.postMessage(data, '\*')
+    ]
+
+    return new VueRouter({
+        mode: 'history',
+        base: `/preview/project/${projectId}`,
+        routes: allRoutes
     })
-    const App = generateApp()
-    return { router, App }
 }

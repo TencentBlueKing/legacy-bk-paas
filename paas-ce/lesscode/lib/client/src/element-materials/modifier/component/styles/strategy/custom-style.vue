@@ -13,18 +13,34 @@
     <section>
         <style-layout title="自定义样式">
             <style-item name="自定义样式">
-                <div style="width: 200px;text-align: right"><bk-button theme="primary" @click="showEditStyle(true)">样式编辑</bk-button></div>
+                <div style="width: 200px; text-align: right">
+                    <bk-button
+                        theme="primary"
+                        @click="showEditStyle(true)">
+                        样式编辑
+                    </bk-button>
+                </div>
             </style-item>
         </style-layout>
-        <article class="custom-style" v-if="isShow">
+        <article
+            v-if="isShow"
+            class="custom-style">
             <div class="custom-style-container">
                 <div class="container-tips">
                     请在{}内编写该组件的自定义样式，样式优先级：自定义样式 > 样式面板设置 > 组件默认样式
                 </div>
-                <monaco :value.sync="styleValue" height="400px" class="monaco" ref="monaco"></monaco>
+                <monaco
+                    :value.sync="styleValue"
+                    height="400px"
+                    language="css"
+                    :show-header="false"
+                    class="monaco"
+                    ref="monaco" />
                 <div class="container-footer">
                     <div class="footer-wrapper">
-                        <bk-button theme="primary" @click.native="confirm">
+                        <bk-button
+                            theme="primary"
+                            @click.native="confirm">
                             保存
                         </bk-button>
                         <bk-button @click="showEditStyle(false)">
@@ -40,8 +56,8 @@
 <script>
     import StyleLayout from '../layout/index'
     import StyleItem from '../layout/item'
-    import Monaco from './monaco'
-    import { paramCase, camelCase } from 'change-case'
+    import Monaco from '@/components/monaco'
+    import { camelCase } from 'change-case'
 
     export default {
         components: {
@@ -74,7 +90,7 @@
                 let mapStr = ''
                 const className = camelCase(this.componentId.replace(/-/g, ''))
                 for (const i in this.initMap) {
-                    mapStr += `\t${paramCase(i)}: ${this.initMap[i]};\n`
+                    mapStr += `\t${i}: ${this.initMap[i]};\n`
                 }
                 if (!mapStr) {
                     mapStr = '\n'
@@ -114,7 +130,7 @@
                         if (item) {
                             const itemArr = item.split(':')
                             if (itemArr.length === 2 && itemArr[0].trim() && itemArr[1].trim()) {
-                                Object.assign(customMap, { [camelCase(itemArr[0].trim())]: itemArr[1].trim() })
+                                Object.assign(customMap, { [itemArr[0].trim()]: itemArr[1].trim() })
                             }
                         }
                     })

@@ -16,21 +16,36 @@ export default {
     icon: 'bk-drag-input',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '绑定值被改变时调用该事件函数，事件回调参数 (currentValue: Number, oldValue: Number)'
-    }, {
-        name: 'focus', tips: '在组件 Input 获得焦点时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'blur', tips: '在组件 Input 失去焦点时调用该事件函数，事件回调参数 (event: Event)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/input-number',
+    events: [
+        {
+            name: 'change',
+            tips: '绑定值被改变时调用该事件函数，事件回调参数 (currentValue: Number, oldValue: Number)'
+        },
+        {
+            name: 'focus',
+            tips: '在组件 Input 获得焦点时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'blur',
+            tips: '在组件 Input 失去焦点时调用该事件函数，事件回调参数 (event: Event)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'padding',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['number'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

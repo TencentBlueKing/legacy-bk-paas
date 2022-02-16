@@ -13,9 +13,15 @@ import routeModel from './route'
 import PageCodeModel from './page-code'
 import FuncModel from './function'
 import VariableModel from './variable'
+import DataTableModifyRecord from './data-table-modify-record'
 import * as PageCompModel from './page-comp'
 import * as ComponentModel from './component'
 import { uuid, walkGrid } from '../util'
+import dataService from '../service/data-service'
+import { RequestContext } from '../middleware/request-context'
+import {
+    BASE_COLUMNS
+} from '../../shared/data-source'
 const httpConf = require('../conf/http')
 // npm.js配置文件不存在时赋值空对象
 let npmConf
@@ -35,11 +41,18 @@ const STATIC_URL = `${DIR_PATH}/lib/server/project-template/`
 
 const projectCode = {
 
-    async previewCode (projectId) {
-        // 生成路由相关的数据
-        const [routeList, pageRouteList] = await Promise.all([
-            routeModel.findProjectRoute(projectId),
-            routeModel.queryProjectPageRoute(projectId)
+    async previewCode (projectId, versionId) {
+        // 获取预览相关的数据
+        const [
+            routeList,
+            pageRouteList,
+            funcGroups = [],
+            allVarableList = []
+        ] = await Promise.all([
+            routeModel.findProjectRoute(projectId, versionId),
+            routeModel.queryProjectPageRoute(projectId, versionId),
+            FuncModel.allGroupFuncDetail(projectId, versionId),
+            VariableModel.getAll({ projectId, versionId })
         ])
 
         const routeGroup = {}
@@ -69,19 +82,30 @@ const projectCode = {
             }
         }
 
-        // 获取生成view文件所需的数据
-        const allCustomMap = await ComponentModel.getNameMap()
-        const funcGroups = await FuncModel.allGroupFuncDetail(projectId) || []
-        const allVarableList = await VariableModel.getAll({ projectId }) || []
         const projectVariables = allVarableList.filter(variable => variable.effectiveRange === 0)
         const pageData = {
-            allCustomMap,
             funcGroups
         }
         const layoutIns = Object.values(routeGroup)
         for (const layout of layoutIns) {
             // 父路由（布局）内容
-            const pageDetail = await PageCodeModel.getPageData([], 'preview', pageData.allCustomMap, pageData.funcGroups, {}, projectId, '', layout.content, true, false, layout.layoutType, [], {})
+            const pageDetail = await PageCodeModel.getPageData({
+                targetData: [],
+                pageType: 'preview',
+                funcGroups: pageData.funcGroups,
+                lifeCycle: {},
+                projectId,
+                pageId: '',
+                layoutContent: layout.content,
+                isGenerateNav: true,
+                isEmpty: false,
+                layoutType: layout.layoutType,
+                variableList: [],
+                styleSetting: {},
+                user: RequestContext.getCurrentUser(),
+                npmConf,
+                origin: ''
+            })
             layout.content = pageDetail.code
 
             // 子路由（页面）内容，先排除未绑定页面的路由
@@ -92,21 +116,23 @@ const projectCode = {
                     ...projectVariables,
                     ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && variable.pageCode === route.pageCode))
                 ]
-                const pageDetail = await PageCodeModel.getPageData(
-                    JSON.parse(route.content || '[]'),
-                    'preview',
-                    pageData.allCustomMap,
-                    pageData.funcGroups,
-                    route.lifeCycle || {},
+                const pageDetail = await PageCodeModel.getPageData({
+                    targetData: JSON.parse(route.content || '[]'),
+                    pageType: 'preview',
+                    funcGroups: pageData.funcGroups,
+                    lifeCycle: route.lifeCycle || {},
                     projectId,
-                    route.pageId,
-                    '',
-                    false,
-                    false,
-                    route.layoutType,
-                    variableData,
-                    route.styleSetting || {}
-                )
+                    pageId: route.pageId,
+                    layoutContent: '',
+                    isGenerateNav: false,
+                    isEmpty: false,
+                    layoutType: route.layoutType,
+                    variableList: variableData,
+                    styleSetting: route.styleSetting || {},
+                    user: RequestContext.getCurrentUser(),
+                    npmConf,
+                    origin: ''
+                })
                 // 生成代码校验
                 if (pageDetail.codeErrMessage) {
                     throw new Error(`页面【${route.pageCode}】里面，${pageDetail.codeErrMessage}`)
@@ -128,17 +154,28 @@ const projectCode = {
         return { routeGroup, storeData, pageRouteList }
     },
 
-    async generateCode (projectId, pathName) {
+    async generateCode (projectId, versionId, pathName) {
         const sourcePath = STATIC_URL + 'project-init-code'
-        const targetPath = STATIC_URL + (pathName || `project-target-code${projectId}`)
+        const targetPath = STATIC_URL + (pathName || `project-target-code${projectId}${versionId ? `-${versionId}` : ''}`)
 
         return new Promise(async (resolve, reject) => {
             try {
                 fse.copySync(sourcePath, targetPath)
 
-                const [routeList, pageRouteList] = await Promise.all([
-                    routeModel.findProjectRoute(projectId),
-                    routeModel.queryProjectPageRoute(projectId)
+                const [
+                    routeList,
+                    pageRouteList,
+                    funcGroups = [],
+                    allVarableList = [],
+                    { list: dataTables = [] },
+                    dataTableModifyRecords
+                ] = await Promise.all([
+                    routeModel.findProjectRoute(projectId, versionId),
+                    routeModel.queryProjectPageRoute(projectId, versionId),
+                    FuncModel.allGroupFuncDetail(projectId, versionId),
+                    VariableModel.getAll({ projectId, versionId }),
+                    dataService.get('data-table', { projectId, deleteFlag: 0 }),
+                    DataTableModifyRecord.getListByTime({ query: { projectId } })
                 ])
 
                 const routeGroup = {}
@@ -193,12 +230,8 @@ const projectCode = {
                 let defaultRouteRedirect = 'redirect: { name: \'404\' }'
 
                 // 获取生成view文件所需的数据
-                const allCustomMap = await ComponentModel.getNameMap()
-                const funcGroups = await FuncModel.allGroupFuncDetail(projectId) || []
-                const allVarableList = await VariableModel.getAll({ projectId }) || []
                 const projectVariables = allVarableList.filter(variable => variable.effectiveRange === 0)
                 const pageData = {
-                    allCustomMap,
                     funcGroups
                 }
                 let usedMethodList = []
@@ -209,6 +242,9 @@ const projectCode = {
                     const layoutName = layout.name.replace(/-(\w)/g, (a, b) => b.toUpperCase()) + uniqStr
                     routerImport += `const ${layoutName} = () => import(/* webpackChunkName: '${layout.name}' */'@/views/${layout.name}/bkindex')\n`
 
+                    // 布局下的第一个子路由，用于默认跳转
+                    let firstChildRouteName = ''
+
                     // 预览路由优化使用path跳转（防止因name不存在自动跳到首页），生成代码使用name跳转，因导航菜单中已经使用name跳转
                     const childRoute = routeList.map((route) => {
                         const meta = `meta: { pageName: '${route.pageName}' }`
@@ -217,14 +253,20 @@ const projectCode = {
                             const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
                             const routeName = route.pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${route.id}`
                             const routeComponent = route.pageCode ? ` component: ${route.pageCode},` : ''
+                            if (!firstChildRouteName) {
+                                firstChildRouteName = routeName
+                            }
                             return `{ path: '${route.path}', name: '${routeName}',${routeComponent} redirect: { path: '${fullPath}' }, ${meta} }`
                         } else if (route.pageId !== -1) {
+                            if (!firstChildRouteName) {
+                                firstChildRouteName = route.pageCode
+                            }
                             return `{ path: '${route.path}', name: '${route.pageCode}', component: ${route.pageCode}, ${meta} }`
                         } else {
                             return `{ path: '${route.path}', redirect: { name: '404' } }`
                         }
                     })
-                    if (layout.path !== '/') childRoute.push(`{ path: '*', component: BkNotFound, meta: { pageName: '404' } }`)
+                    if (layout.path !== '/') childRoute.push('{ path: \'*\', component: BkNotFound, meta: { pageName: \'404\' } }')
 
                     const currentFilePath = path.join(targetPath, `lib/client/src/views/${layout.name}/bkindex.vue`)
                     await this.writeViewCode(currentFilePath, { targetData: [] }, '', pathName, projectId, {}, '', layout.content, true, layout.layoutType, [], {})
@@ -233,6 +275,7 @@ const projectCode = {
                         path: '${layout.path.replace(/^\//, '')}',
                         name: '${layout.name + uniqStr}',
                         component: ${layoutName},
+                        redirect: ${firstChildRouteName ? `{ name: '${firstChildRouteName}' }` : ''},
                         children: [
                             ${childRoute.join(',\n')}
                         ]
@@ -266,7 +309,7 @@ const projectCode = {
                         ) || []
 
                         usedMethodList = [...usedMethodList, ...methodStrList]
-                        const packageJsonArr = await PageCompModel.getProjectComp(projectId)
+                        const packageJsonArr = await PageCompModel.getProjectComp(projectId, versionId)
                         await this.writePackageJSON(
                             path.join(targetPath, 'package.json'),
                             packageJsonArr
@@ -275,7 +318,7 @@ const projectCode = {
                 }
 
                 // 生成函数mixin
-                const methodsMixinPath = path.join(targetPath, `lib/client/src/mixins/methods-mixin.js`)
+                const methodsMixinPath = path.join(targetPath, 'lib/client/src/mixins/methods-mixin.js')
                 if (usedMethodList.length) await this.writeMethodsMixin(methodsMixinPath, usedMethodList, pathName)
 
                 // 生成.npmrc文件内容
@@ -327,7 +370,7 @@ const projectCode = {
                 })
 
                 // 生成store
-                const storeStr = projectVariables.length ? [] : [`example: getInitVariableValue({all: 0, stag: 0, prod: 0}, 0)`]
+                const storeStr = projectVariables.length ? [] : ['example: getInitVariableValue({all: 0, stag: 0, prod: 0}, 0)']
                 projectVariables.forEach(({ variableCode, defaultValue, valueType, defaultValueType }) => {
                     if ([3, 4].includes(valueType)) {
                         // eslint-disable-next-line no-return-assign
@@ -346,7 +389,7 @@ const projectCode = {
                 if (isUseElement) {
                     fs.writeFileSync(
                         mainFilePath,
-                        mainFileContent.replace(/\$\{importElementLib\}/, `import '@/common/element'`),
+                        mainFileContent.replace(/\$\{importElementLib\}/, 'import \'@/common/element\''),
                         'utf8'
                     )
                     await this.writePackageJSON(
@@ -362,6 +405,7 @@ const projectCode = {
                     fs.unlinkSync(path.join(targetPath, 'lib/client/src/common/element.js'))
                 }
 
+                await this.generateDataSource(dataTables, dataTableModifyRecords, targetPath)
                 resolve('success')
             } catch (err) {
                 reject(err.message || err)
@@ -369,7 +413,68 @@ const projectCode = {
         })
     },
 
-    async generateFileByReplace (sourcePath, targetPath, replaceCallBack) {
+    async generateDataSource (dataTables = [], dataTableModifyRecords = [], targetPath) {
+        const hasDataTable = dataTables.length > 0
+
+        // replace app.browser.js
+        const appPath = path.join(targetPath, 'lib/server/app.browser.js')
+        await this.generateFileByReplace(appPath, appPath, (content) => {
+            const dbImport = hasDataTable ? 'const { createConnection } = require(\'typeorm\')\r\nconst dataBaseConf = require(\'./conf/data-base\')\r\n' : ''
+            const startStr = hasDataTable ? 'createConnection(dataBaseConf).then((connection) => {\r\n    return startServer()\r\n}).catch((err) => logger.error(err.message || err))\r\n' : 'startServer()'
+            return content.replace(/\$\{dbImport\}/, dbImport).replace(/\$\{startStr\}/, startStr)
+        })
+
+        if (hasDataTable) {
+            // generate data-base-config
+            await this.generateFileByReplace(
+                path.join(STATIC_URL, 'data-base-template.js'),
+                path.join(targetPath, 'lib/server/conf/data-base.js')
+            )
+
+            // generate model & entity
+            for (const dataTable of dataTables) {
+                const { tableName, columns = '[]' } = dataTable
+                const tableFields = JSON.parse(columns).reduce((acc, cur) => {
+                    if (BASE_COLUMNS.every(item => item.name !== cur.name)) {
+                        let columnPropStr = `name: '${cur.name}', type: '${cur.type}'`
+                        if (cur.type === 'varchar') columnPropStr += `, length: ${cur.length}`
+                        if (cur.type === 'decimal') columnPropStr += `, precision: ${cur.length}, scale: ${cur.scale}`
+                        acc += `\r\n    @Column({ ${columnPropStr} })\r\n    ${cur.name}\r\n`
+                    }
+                    return acc
+                }, '')
+                const importColumnStr = tableFields ? ', Column' : ''
+                await this.generateFileByReplace(
+                    path.join(STATIC_URL, 'entity-template.js'),
+                    path.join(targetPath, `lib/server/model/entities/${tableName}.js`),
+                    content => content.replace(/\$\{importColumnStr\}/, importColumnStr).replace(/\$\{tableName\}/, tableName).replace(/\$\{tableFields\}/, tableFields)
+                )
+            }
+        }
+
+        if (dataTableModifyRecords.length) {
+            // generate migrations
+            fse.ensureDirSync(path.join(targetPath, 'lib/server/model/migrations'))
+            fse.ensureDirSync(path.join(targetPath, 'lib/server/model/migrations/sql'))
+            for (const record of dataTableModifyRecords) {
+                const { sql, createTime } = record
+                const migrationName = `Lesscode${+createTime}`
+                const fileName = `${+createTime}-lesscode`
+                fs.writeFileSync(
+                    path.join(targetPath, `lib/server/model/migrations/sql/${fileName}.sql`),
+                    sql,
+                    'utf8'
+                )
+                await this.generateFileByReplace(
+                    path.join(STATIC_URL, 'data-migration-template.js'),
+                    path.join(targetPath, `lib/server/model/migrations/${fileName}.js`),
+                    content => content.replace(/\$\{migrationName\}/, migrationName).replace(/\$\{fileName\}/, fileName)
+                )
+            }
+        }
+    },
+
+    async generateFileByReplace (sourcePath, targetPath, replaceCallBack = str => str) {
         const fileConent = fs.readFileSync(sourcePath, 'utf8')
         const newFileContent = replaceCallBack(fileConent)
         const [message, fileStr] = await VueCodeModel.formatJsByEslint(newFileContent)
@@ -440,8 +545,24 @@ const projectCode = {
             fse.ensureFile(currentFilePath).then(async () => {
                 let code = ''
                 let methodStrList = []
-                const pageDetail = await PageCodeModel.getPageData(pageData.targetData, 'projectCode', pageData.allCustomMap, pageData.funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, false, layoutType, variableData, styleSetting)
-                code = pageDetail.code
+                const pageDetail = await PageCodeModel.getPageData({
+                    targetData: pageData.targetData,
+                    pageType: 'projectCode',
+                    funcGroups: pageData.funcGroups,
+                    lifeCycle: lifeCycle || {},
+                    projectId,
+                    pageId,
+                    layoutContent,
+                    isGenerateNav, 
+                    isEmpty: false,
+                    layoutType,
+                    variableList: variableData,
+                    styleSetting,
+                    user: RequestContext.getCurrentUser(),
+                    npmConf,
+                    origin: RequestContext.getCurrentCtx().origin
+                })
+                code = await VueCodeModel.formatCode(pageDetail.code)
                 methodStrList = pageDetail.methodStrList
                 // 生成代码校验
                 if (pageDetail.codeErrMessage && !pathName) {
