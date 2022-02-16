@@ -282,20 +282,7 @@
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
 
                     // 设置初始targetData
-                    let initData = []
-                    try {
-                        const content = pageDetail.content
-                        if (content && content !== 'null') {
-                            initData = JSON.parse(content)
-                        }
-                    } catch (err) {
-                        this.$bkMessage({
-                            theme: 'error',
-                            message: 'targetData格式错误',
-                            limit: 1
-                        })
-                    }
-                    LC.parseData(initData)
+                    LC.parseData(pageDetail.content)
                 } catch (e) {
                     console.error(e)
                 } finally {

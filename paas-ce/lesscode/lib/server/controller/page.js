@@ -423,6 +423,7 @@ export const pageDetail = async (ctx) => {
         const { pageId } = ctx.request.query
         const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
         const detail = await getRepository(Page).findOne(queryParams) || {}
+        detail.content = JSON.parse(detail.content || '[]')
         if (detail.lifeCycle) detail.lifeCycle = JSON.parse(detail.lifeCycle)
         if (detail.styleSetting) {
             detail.styleSetting = JSON.parse(detail.styleSetting)
