@@ -42,3 +42,13 @@ export const VARIABLE_TYPE = {
         VAL: 6
     }
 }
+
+/**
+ * 变量影响范围
+ */
+export const VARIABLE_EFFECTIVE_RANGE = {
+    // 项目级别
+    PROJECT: 0,
+    // 页面级别
+    PAGE: 1
+}

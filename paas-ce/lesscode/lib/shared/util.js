@@ -49,3 +49,39 @@ export function uuid (len = 8, radix = 16) {
 
     return uuid.join('')
 }
+
+/**
+ * 防抖，延迟一段时间执行
+ * @param {*} fn 需要执行的函数
+ * @param {*} delay 延迟时间，默认200
+ * @returns
+ */
+export function debounce (fn, delay = 200) {
+    let timer = null
+    return function (params) {
+        if (timer) {
+            clearTimeout(timer)
+        }
+        timer = setTimeout(() => fn(params), delay)
+    }
+}
+
+/**
+ * 节流，每隔一段时间执行
+ * @param {*} fn 需要执行的函数
+ * @param {*} delay 延迟时间，默认200
+ * @returns
+ */
+export function throttle (fn, delay = 200) {
+    let valid = true
+    return function (params) {
+        if (!valid) {
+            return false
+        }
+        valid = false
+        setTimeout(() => {
+            fn(params)
+            valid = true
+        }, delay)
+    }
+}
