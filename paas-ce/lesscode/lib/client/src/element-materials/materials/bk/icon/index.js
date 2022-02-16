@@ -10,7 +10,7 @@
  */
 
 export default {
-    name: `bk-icon`,
+    name: 'bk-icon',
     displayName: '',
     display: 'none',
     type: 'bk-icon',
@@ -18,7 +18,17 @@ export default {
     group: '布局',
     order: 1,
     events: [{ name: 'click' }],
-    styles: ['margin', 'display', 'font'],
+    styles: [
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        {
+            name: 'font',
+            include: ['fontSize', 'color']
+        }
+    ],
     renderStyles: {
         display: 'inline-block',
         fontSize: '14px'

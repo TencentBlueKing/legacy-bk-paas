@@ -17,7 +17,7 @@ export default {
     group: '其他',
     order: 1,
     document: 'https://element.eleme.cn/#/zh-CN/component/timeline',
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
     },
     slots: {

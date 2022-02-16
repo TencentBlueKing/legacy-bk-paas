@@ -23,7 +23,7 @@ export default {
             tips: '点击标题时调用该事件函数，事件回调参数 (data: Object)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

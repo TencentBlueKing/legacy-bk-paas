@@ -17,7 +17,7 @@ export default {
     group: '导航',
     order: 4,
     document: 'https://element.eleme.cn/#/zh-CN/component/breadcrumb',
-    styles: ['position', 'size', 'padding', 'margin', 'font', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
         separator: {
             type: 'string',

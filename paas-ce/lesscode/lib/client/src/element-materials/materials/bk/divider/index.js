@@ -21,15 +21,10 @@ export default {
     styles: [
         'position',
         'size',
-        'padding',
         'margin',
-        {
-            name: 'font',
-            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
-        },
         'pointer',
-        'background',
-        'opacity'],
+        'opacity'
+    ],
     renderStyles: {
         display: 'block'
     },
