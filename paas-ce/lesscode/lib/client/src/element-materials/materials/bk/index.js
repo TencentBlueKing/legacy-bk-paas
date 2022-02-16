@@ -77,9 +77,6 @@ import formItem from './form-item'
 import dialog from './dialog'
 import sideslider from './sideslider'
 
-// 组件文档地址
-import infoLinkBak from './info-link.bak'
-
 // 这个对象里组件的顺序与页面左侧待选组件区的顺序一致，从左至右，从上至下
 // 是为了要保证 Array.from(new Set(bkComponents.map(item => item.group))) 得到的结果是
 // ['布局', '基础', '表单', '导航', '数据', '反馈', '图表']
@@ -152,5 +149,3 @@ const bkComponents = Object.seal([
 export default bkComponents
 
 export const bkComponentGroupList = Array.from(new Set(bkComponents.map(item => item.group)))
-
-export const bkLink = infoLinkBak

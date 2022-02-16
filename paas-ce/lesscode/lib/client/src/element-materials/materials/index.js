@@ -9,8 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import bkComponents, { bkComponentGroupList, bkLink } from './bk'
-import elementComponents, { elementComponentGroupList, eleLink } from './element'
+import bkComponents, { bkComponentGroupList } from './bk'
+import elementComponents, { elementComponentGroupList } from './element'
 
 import { componentConfigs as complexComponentConfigs } from '@blueking/bkui-vue-complex'
 
@@ -25,6 +25,5 @@ export default {
     bk: bkComponents.concat(...complexComponentConfigs),
     bkComponentGroupList,
     element: elementComponents,
-    elementComponentGroupList,
-    infoLink: Object.assign(bkLink, eleLink)
+    elementComponentGroupList
 }
