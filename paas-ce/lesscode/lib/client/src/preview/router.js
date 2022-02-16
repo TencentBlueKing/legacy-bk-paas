@@ -32,6 +32,9 @@ function registerComponent (source, id) {
 // 生成路由
 module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId) => {
     const routes = []
+    const curStorageData = localStorage.getItem('ONLINE_PREVIEW') || '{}'
+    const curPageData = JSON.parse(curStorageData)
+
     for (const key in routeGroup) {
         const layout = routeGroup[key]
 
@@ -52,7 +55,11 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId)
                     path: getRouteFullPath(route.redirectRoute)
                 }
             } else if (route.pageId !== -1) {
-                const childCom = registerComponent(route.content, route.pageCode)
+                const source = route.pageCode === curPageData.id
+                    ? curPageData.source
+                    : route.content
+
+                const childCom = registerComponent(source, route.pageCode)
                 routeConifg.name = getRouteName(route)
                 routeConifg.component = childCom
             } else {

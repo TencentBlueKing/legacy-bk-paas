@@ -14,7 +14,7 @@ import { uuid } from '../../shared/util.js'
 import { replaceFuncKeyword } from '../../shared/function/helper'
 import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
 import safeStringify from '../../client/src/common/json-safe-stringify'
-import { VARIABLE_TYPE } from '../../shared/variable/constant'
+import { VARIABLE_TYPE, VARIABLE_EFFECTIVE_RANGE } from '../../shared/variable/constant'
 
 function transformToString (val) {
     const type = typeof val
@@ -48,12 +48,13 @@ class PageCode {
     dataStr = ''
     remoteDataStr = ''
     lifeCircleStr = ''
-    existFunc = []
     chartTypeArr = [] // echarts 相关，要引入echarts依赖
     useBkCharts = false // 是否使用bkcharts标志位
     usingCustomArr = []
-    usingFuncCodes = []
-    usingVariables = []
+    usingFuncCodes = [] // 使用到的函数code
+    unhandledFunc = [] // 未处理的函数列表
+    usingVariables = [] // 使用到的变量列表
+    unhandledVariables = [] // 未处理的变量列表
     projectVariables = []
     pageDataVariables = []
     pageComputedVariables = []
@@ -112,23 +113,75 @@ class PageCode {
         return this.generateTemplate() + this.generateScript() + this.generateCss()
     }
 
-    handleVariable () {
-        this.projectVariables = this.usingVariables.filter((variable) => (!['vueCode', 'previewSingle'].includes(this.pageType) && variable.effectiveRange === 0))
-        const pageVariables = this.usingVariables.filter((variable) => (['vueCode', 'previewSingle'].includes(this.pageType) || variable.effectiveRange === 1))
-        this.pageDataVariables = pageVariables.filter((variable) => (variable.valueType !== VARIABLE_TYPE.COMPUTED.VAL))
-        this.pageComputedVariables = pageVariables.filter((variable) => (variable.valueType === VARIABLE_TYPE.COMPUTED.VAL))
-        this.pageDataVariables.forEach((variable) => {
-            const { defaultValue = {}, variableCode, defaultValueType } = variable
-            if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(variable.valueType)) {
-                ['all', 'prod', 'stag'].forEach((key) => {
-                    const val = defaultValue[key]
-                    if (typeof val === 'string') {
-                        defaultValue[key] = JSON.parse(val)
-                    }
-                })
+    // 解析完json以后，处理使用到的函数和变量，方便后续生成源码使用
+    handleUsedVarAndFunc () {
+        while (this.unhandledFunc.length > 0 || this.unhandledVariables.length > 0) {
+            // 处理函数
+            for (let index = 0, l = this.unhandledFunc.length; index < l; index++) {
+                const funcCode = this.unhandledFunc.shift()
+                const func = this.getComplateFuncByCode(funcCode) || {}
+                if (func.code) {
+                    this.methodStrList.push({
+                        id: func.id,
+                        funcStr: func.code
+                    })
+                }
             }
-            this.dataTemplate(variableCode, `getInitVariableValue(${JSON.stringify(defaultValue)}, ${defaultValueType})`)
-        })
+
+            // 处理变量
+            for (let index = 0, l = this.unhandledVariables.length; index < l; index++) {
+                const variable = this.unhandledVariables.shift()
+
+                // 项目级别变量，添加到store中
+                if (
+                    !['vueCode', 'previewSingle'].includes(this.pageType)
+                    && variable.effectiveRange === VARIABLE_EFFECTIVE_RANGE.PROJECT
+                ) {
+                    this.projectVariables.push(variable)
+                }
+
+                // 页面级别变量
+                if (
+                    ['vueCode', 'previewSingle'].includes(this.pageType)
+                    || variable.effectiveRange === VARIABLE_EFFECTIVE_RANGE.PAGE
+                ) {
+                    // 处理非计算变量
+                    if (variable.valueType !== VARIABLE_TYPE.COMPUTED.VAL) {
+                        const { defaultValue = {}, variableCode, defaultValueType } = variable
+                        if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(variable.valueType)) {
+                            ['all', 'prod', 'stag'].forEach((key) => {
+                                const val = defaultValue[key]
+                                if (typeof val === 'string') {
+                                    defaultValue[key] = JSON.parse(val)
+                                }
+                            })
+                        }
+                        this.dataTemplate(variableCode, `getInitVariableValue(${JSON.stringify(defaultValue)}, ${defaultValueType})`)
+                        this.pageDataVariables.push(variable)
+                    }
+  
+                    // 处理计算变量
+                    if (variable.valueType === VARIABLE_TYPE.COMPUTED.VAL) {
+                        variable.defaultValue.all = this.processFuncBody(variable.defaultValue.all)
+                        this.pageComputedVariables.push(variable)
+                    }
+                }
+            }
+        }
+    }
+
+    addUsedFunc (funcCode) {
+        if (this.usingFuncCodes.includes(funcCode)) return
+
+        this.unhandledFunc.push(funcCode)
+        this.usingFuncCodes.push(funcCode)
+    }
+
+    addUsedVariable (variable) {
+        if (this.usingVariables.find(x => x.variableCode === variable.variableCode)) return
+
+        this.unhandledVariables.push(variable)
+        this.usingVariables.push(variable)
     }
 
     getValueType (val) {
@@ -761,9 +814,9 @@ class PageCode {
         const lifeCycleValues = Object.values(lifeCycle)
         const exisLifyCycle = lifeCycleValues.filter(x => x)
         const lifeCircleStr = this.getLifeCycle()
-        this.handleVariable()
-        const computedStr = this.getComputed()
+        this.handleUsedVarAndFunc()
         const methodsStr = this.getMethods()
+        const computedStr = this.getComputed()
 
         const importContent = this.getImportContent()
         let scriptContent = `${this.getComponents() ? `${this.getComponents()},` : ''}
@@ -816,7 +869,7 @@ class PageCode {
             })
             this.pageComputedVariables.forEach((variable) => {
                 computed += `${variable.variableCode} () {
-                    ${this.processFuncBody(variable.defaultValue.all)}
+                    ${variable.defaultValue.all}
                 },
                 `
             })
@@ -861,7 +914,7 @@ class PageCode {
                 `
                 /* eslint-enable no-unused-vars, indent */
             } else {
-                if (item.type === 'widget-form-item')    item.type = 'bk-form-item'
+                if (item.type === 'widget-form-item') item.type = 'bk-form-item'
                 code += this.generateComponment(item, vueDirective, propDirective, inFreeLayout)
             }
             if (templateDirective) code += '\n</template>'
@@ -895,7 +948,7 @@ class PageCode {
  
                 const propVar = format !== 'value' ? val : compId
                 const propName = format !== 'value' && modifiers && modifiers.length ? `${i}.${modifiers.join('.')}` : i
-                let curPropStr = `${val === undefined ? '' : ':'}${propName}="${propVar}" `
+                const curPropStr = `${val === undefined ? '' : ':'}${propName}="${propVar}" `
 
                 if (format !== 'value') {
                     this.handleUsedVariable(format, val, compId)
@@ -932,7 +985,7 @@ class PageCode {
                     if (method.funcName && method.funcCode) {
                         propsStr += (`:${propName}="${method.funcName}" `)
 
-                        this.usingFuncCodes.push(method.funcCode)
+                        this.addUsedFunc(method.funcCode)
                     }
                     continue
                 } else {
@@ -940,7 +993,7 @@ class PageCode {
                         const v = (typeof val === 'object' ? JSON.stringify(val).replace(/\"/g, '\'') : val)
                         propsStr += `${typeof val === 'string' ? '' : ':'}${propName}="${v}" `
                     }
-                } 
+                }
             }
         }
         const hasVModel = dirProps.filter(item => item.type === 'v-model').length
@@ -985,7 +1038,7 @@ class PageCode {
                         funcItems.map(item => {
                             const [method] = this.getMethodByCode({ methodCode: item.validator })
                             if (method.funcCode) {
-                                this.usingFuncCodes.push(method.funcCode)
+                                this.addUsedFunc(method.funcCode)
                             }
                             item.validator = `this.${item.validator}`
                         })
@@ -1075,7 +1128,7 @@ class PageCode {
                     let curEventStr = `@${key}="${fun.funcName}" `
                     if (params.length > 0) curEventStr = `@${key}="${fun.funcName}(${params.join(', ')}, ...arguments)" `
                     eventStr += curEventStr
-                    this.usingFuncCodes.push(fun.funcCode)
+                    this.addUsedFunc(fun.funcCode)
                 }
             }
         }
@@ -1090,19 +1143,18 @@ class PageCode {
                 break
             case 'variable':
                 const variable = this.variableList.find(x => x.variableCode === val)
-                const hasUsed = this.usingVariables.find(x => x.variableCode === val)
                 // form表单内的v-model绑定值忽略这个判断
                 if (!variable && !(val.startsWith('form') && val.indexOf('.') > 0)) {
                     this.codeErrMessage = `组件【${componentId}】使用了不存在的变量【${val}】，请修改后重试`
                 }
-                if (!hasUsed && variable) {
-                    this.usingVariables.push(variable)
+                if (variable) {
+                    this.addUsedVariable(variable)
                 }
                 break
             case 'expression':
                 this.variableList.forEach((variable) => {
-                    if (val.includes(variable.variableCode) && !this.usingVariables.find(x => x.variableCode === variable.variableCode)) {
-                        this.usingVariables.push(variable)
+                    if (val.includes(variable.variableCode)) {
+                        this.addUsedVariable(variable)
                     }
                 })
                 break
@@ -1168,7 +1220,7 @@ class PageCode {
                 slotStr += this.generateCode(codeArr)
             } else {
                 slot.val = slot.code
-                slot.name =slot.component
+                slot.name = slot.component
                 const render = slotRenderConfig[slot.name] || (() => {})
                 const slotRenderParams = []
                 let curSlot = slot
@@ -1207,7 +1259,9 @@ class PageCode {
                     // table slot 可能会用到fun，需要特殊处理一下。其他情况也可以在slot value 里面加上 methodCode 字段来处理
                     if (Array.isArray(slot.val)) {
                         (slot.val || []).forEach((item) => {
-                            item.methodCode && (this.usingFuncCodes = this.usingFuncCodes.concat(item.methodCode))
+                            if (item.methodCode) {
+                                this.addUsedFunc(item.methodCode)
+                            }
                         })
                     }
                     param.val = disPlayVal
@@ -1328,21 +1382,18 @@ class PageCode {
         if (funcCode) {
             const [curFunc] = this.getMethodByCode(funcCode)
             if (curFunc.id) {
-                this.usingFuncCodes.push(funcCode)
+                this.addUsedFunc(funcCode)
             } else {
                 this.codeErrMessage = `函数【${funcCode}】不存在，函数执行可能存在异常，请修改后再试`
             }
             return `this.${curFunc.funcName}`
         }
         if (dirKey) {
-            const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
-            if (curDir) {
-                const hasUsed = this.usingVariables.find((variable) => (variable.id) === curDir.id)
-                if (!hasUsed) {
-                    this.usingVariables.push(curDir)
-                }
+            const variable = this.variableList.find((variable) => (variable.variableCode === dirKey))
+            if (variable) {
+                this.addUsedVariable(variable)
             } else {
-                this.codeErrMessage = `指令【${dirKey}】不存在，函数执行可能存在异常，请修改后再试`
+                this.codeErrMessage = `变量【${dirKey}】不存在，函数执行可能存在异常，请修改后再试`
             }
             return `this.${dirKey}`
         }
@@ -1398,18 +1449,6 @@ class PageCode {
 
     getMethods () {
         let methods = ''
-
-        // 分析页面使用到的方法，下载的源码（pageType === projectCode）放到单独的文件
-        if (this.usingFuncCodes.length) {
-            for (let index = 0; index < this.usingFuncCodes.length; index++) {
-                const code = this.usingFuncCodes[index]
-                if (this.existFunc.includes(code)) continue
-                this.existFunc.push(code)
-                const func = this.getComplateFuncByCode(code) || {}
-                const funcStr = func.code || ''
-                if (funcStr) this.methodStrList.push({ id: func.id, funcStr })
-            }
-        }
 
         if (this.hasLayOut || this.remoteDataStr || (this.usingFuncCodes.length && ['vueCode', 'preview', 'previewSingle'].includes(this.pageType))) {
             methods += 'methods: {'
@@ -1538,7 +1577,7 @@ class PageCode {
             const [method, params] = this.getMethodByCode(funcPayload)
             lifeCycleStrObj[key] = []
             if (method.id) {
-                if (method.funcCode) this.usingFuncCodes.push(method.funcCode)
+                if (method.funcCode) this.addUsedFunc(method.funcCode)
                 lifeCycleStrObj[key].push(`this.${method.funcName}(${params.join(', ')})`)
             }
         })
@@ -1688,7 +1727,7 @@ class PageCode {
             }
         }
         // 处理chartRemote
-        if (method.funcCode) this.usingFuncCodes.push(method.funcCode)
+        if (method.funcCode) this.addUsedFunc(method.funcCode)
     }
 
     dataSourceTemplate (key, sourceData) {
