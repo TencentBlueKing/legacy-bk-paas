@@ -35,7 +35,7 @@ export default {
             tips: '点击 tabs 的新增按钮或 tab 被关闭时调用该事件函数，事件回调参数 (targetName: String, action: String)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',

@@ -23,7 +23,7 @@ export default {
             tips: '点击组件时调用该事件函数，事件回调参数 (event: Event)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-block',
         width: '60px'

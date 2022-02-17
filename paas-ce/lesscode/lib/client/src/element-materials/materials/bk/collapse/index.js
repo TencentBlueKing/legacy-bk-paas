@@ -17,7 +17,7 @@ export default {
     group: '数据',
     order: 1,
     events: [{ name: 'item-click', tips: '点击时调用该事件函数，事件回调参数 (names: Array)' }],
-    styles: ['size', 'margin', 'color', 'backgroundColor'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
         'active-name': {
             type: 'string',

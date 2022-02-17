@@ -101,8 +101,13 @@ const tansform = (parentNode, data) => {
                 curDataNode.renderSlots = {
                     default: []
                 }
+                const spanNums = columnList.reduce((result, item) => {
+                    const span = item.span || 1
+                    return result + span
+                }, 0)
                 columnList.forEach((columnItem, index) => {
                     const uid = `${uuid()}${index}`
+                    const span = columnItem.span || 1
                     const columnData = {
                         tabPanelActive: 'props',
                         componentId: `column-${uid}`,
@@ -113,15 +118,16 @@ const tansform = (parentNode, data) => {
                             paddingRight: '5px',
                             paddingBottom: '5px',
                             paddingLeft: '5px',
-                            minHeight: '80px'
+                            minHeight: '80px',
+                            width: `${span / spanNums * 100}%`
                         },
                         renderProps: {
                             span: {
                                 format: 'value',
-                                code: columnItem.span || 1,
+                                code: span,
                                 valueType: 'number',
                                 payload: {},
-                                renderValue: columnItem.span || 1
+                                renderValue: span
                             }
                         },
                         renderSlots: {
@@ -307,7 +313,8 @@ const tansform = (parentNode, data) => {
                 const payload = slotData.payload || {}
                 if (slotData.payload
                      && slotData.payload.variableData
-                      && slotData.payload.variableData.valType) {
+                      && slotData.payload.variableData.valType
+                      && slotData.payload.variableData.valType !== 'value') {
                     format = slotData.payload.variableData.valType
                     code = slotData.payload.variableData.val
                 }

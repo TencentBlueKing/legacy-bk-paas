@@ -23,7 +23,7 @@ export default {
             tips: '当前步骤变化时调用该事件函数，事件回调参数 (curProcess: Number, data: Object)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

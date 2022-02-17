@@ -993,7 +993,7 @@ class PageCode {
                         const v = (typeof val === 'object' ? JSON.stringify(val).replace(/\"/g, '\'') : val)
                         propsStr += `${typeof val === 'string' ? '' : ':'}${propName}="${v}" `
                     }
-                }
+                } 
             }
         }
         const hasVModel = dirProps.filter(item => item.type === 'v-model').length
