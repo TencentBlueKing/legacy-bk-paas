@@ -58,7 +58,5 @@ export default function (elementType, parseSlot = true) {
         }
     }
 
-    console.log(`print createNode (${elementType}): `, node)
-
     return node
 }

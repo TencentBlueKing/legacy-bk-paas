@@ -99,7 +99,6 @@
             },
 
             quickOperation (event) {
-                console.log('from quickOperation= ', event)
                 const vm = this
                 const funcChainMap = {
                     stopped: false,
@@ -135,7 +134,6 @@
                         this.hasCtrl = true
                         break
                     case 67:
-                        console.log('ctrlc')
                         funcChainMap.isInDragArea().exec(this.putComponentData)
                         console.log(566)
                         break
@@ -143,11 +141,9 @@
                     //     funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)
                     //     break
                     case 86:
-                        console.log('ctrlv')
                         funcChainMap.isInDragArea().exec(this.copyComponent)
                         break
                     case 88:
-                        console.log('ctrlx,剪切')
                         funcChainMap.isInDragArea().exec(this.cutComponent)
                         break
                     // case 90:

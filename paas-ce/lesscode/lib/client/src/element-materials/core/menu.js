@@ -7,7 +7,6 @@ export const showMenu = (domEevent) => {
     domEevent.preventDefault()
     clearMenu()
     const activeNode = getActiveNode()
-    console.log('from show menu = = = = ', activeNode)
     if (activeNode) {
         instance = new Vue({
             render (h) {

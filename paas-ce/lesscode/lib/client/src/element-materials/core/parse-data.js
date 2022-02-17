@@ -50,7 +50,6 @@ const createNodeFromData = (data) => {
  * @param { String } slot
  */
 const traverse = (parentNode, childDataList, slot) => {
-    // console.log('asdadasdasd == = ', parentNode, childDataList, slot)
     childDataList.forEach(childData => {
         const childNode = createNodeFromData(childData)
         
@@ -360,7 +359,6 @@ const checkVersion = (data) => {
 }
 
 export default function (data) {
-    console.log('from parser data == ', JSON.parse(JSON.stringify(data)))
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {

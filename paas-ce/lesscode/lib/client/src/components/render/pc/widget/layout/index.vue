@@ -1,5 +1,7 @@
 <template>
-    <component class="lesscode-editor-layout" :is="layoutCom">
+    <component
+        class="lesscode-editor-layout"
+        :is="layoutCom">
         <slot />
     </component>
 </template>
@@ -31,9 +33,6 @@
                     return 'div'
                 }
                 return componentMap[this.layout]
-            },
-            projectId () {
-                return this.$route.params.projectId
             }
         },
         watch: {
@@ -56,6 +55,7 @@
             }
         },
         created () {
+            this.projectId = this.$route.params.projectId
             this.fetchPageList()
         },
         methods: {
@@ -72,7 +72,6 @@
 <style lang='postcss'>
     @import "@/css/mixins/scroller";
     .lesscode-editor-layout {
-        min-width: 1560px;
         transform: translate(0, 0);
         
         .bk-navigation {

@@ -154,7 +154,6 @@
              */
             putCheck (target, source) {
                 // 画布区域内部拖动
-                // console.log('from render putCheckputCheckputCheckputCheckputCheckputCheck = ', source, getDragTargetGroup())
                 if (getDragTargetGroup() === 'layout') {
                     return true
                 }
