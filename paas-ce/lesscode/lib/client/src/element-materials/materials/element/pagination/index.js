@@ -35,7 +35,7 @@ export default {
             tips: '用户点击下一页按钮改变当前页时调用该事件函数，事件回调参数 (currentPage: Number)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'block'
     },

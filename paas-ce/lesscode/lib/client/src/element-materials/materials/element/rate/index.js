@@ -23,7 +23,7 @@ export default {
             tips: '分值改变时调用该事件函数，事件回调参数 (value: Number)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',

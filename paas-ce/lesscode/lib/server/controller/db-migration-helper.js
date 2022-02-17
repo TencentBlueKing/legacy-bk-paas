@@ -321,3 +321,314 @@ async function fixCardsSlots () {
         }
     }
 }
+
+export async function syncPageData (ctx) {
+    try {
+        const checkVersion = (data) => {
+            if (data.length < 1) {
+                return 'v2'
+            }
+            const rootLayout = data.slice(-1)[0]
+            if (!rootLayout.renderSlots) {
+                return 'v0'
+            }
+            if (rootLayout.type === 'render-grid') {
+                return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
+            } else if (rootLayout.type === 'bk-sideslider') {
+                return rootLayout.renderSlots.content.hasOwnProperty('val') ? 'v1' : 'v2'
+            } else if (rootLayout.type === 'free-layout') {
+                return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
+            } else if (rootLayout.type === 'bk-dialog') {
+                return rootLayout.renderSlots.default.hasOwnProperty('val') ? 'v1' : 'v2'
+            }
+            return 'v2'
+        }
+        const tansform = (parentNode, data) => {
+            return data.map((curDataNode, index) => {
+                if (!curDataNode) {
+                    return null
+                }
+                if (curDataNode.type === 'render-grid') {
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.default
+                        && curDataNode.renderSlots.default.val) {
+                        const columnList = curDataNode.renderSlots.default.val
+                        curDataNode.renderSlots = {
+                            default: []
+                        }
+                        const spanNums = columnList.reduce((result, item) => {
+                            const span = item.span || 1
+                            return result + span
+                        }, 0)
+                        columnList.forEach((columnItem, index) => {
+                            const uid = `${uuid()}${index}`
+                            const span = columnItem.span || 1
+                            const columnData = {
+                                tabPanelActive: 'props',
+                                componentId: `column-${uid}`,
+                                name: 'render-column',
+                                type: 'render-column',
+                                renderStyles: {
+                                    paddingTop: '5px',
+                                    paddingRight: '5px',
+                                    paddingBottom: '5px',
+                                    paddingLeft: '5px',
+                                    minHeight: '80px',
+                                    width: `${span / spanNums * 100}%`
+                                },
+                                renderProps: {
+                                    span: {
+                                        format: 'value',
+                                        code: span,
+                                        valueType: 'number',
+                                        payload: {},
+                                        renderValue: span
+                                    }
+                                },
+                                renderSlots: {
+                                    default: tansform(curDataNode, columnItem.children)
+                                },
+                                renderDirectives: [],
+                                renderEvents: {},
+                                complex: false,
+                                interactive: false
+                            }
+                            curDataNode.renderSlots.default.push(columnData)
+                        })
+                    }
+                } else if (curDataNode.type === 'widget-form') {
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.default
+                        && curDataNode.renderSlots.default.val) {
+                        const formItemList = curDataNode.renderSlots.default.val
+                        curDataNode.renderSlots = {
+                            default: []
+                        }
+                        formItemList.forEach((formItem) => {
+                            const formItemData = {
+                                tabPanelActive: 'props',
+                                componentId: formItem.componentId,
+                                name: 'form-item',
+                                type: 'widget-form-item',
+                                renderStyles: formItem.renderStyles,
+                                renderProps: Object.keys(formItem.renderProps || {}).reduce((result, name) => {
+                                    const {
+                                        type,
+                                        val
+                                    } = formItem.renderProps[name]
+                                    result[name] = {
+                                        format: 'value',
+                                        code: val,
+                                        payload: {},
+                                        valueType: type,
+                                        renderValue: val
+                                    }
+                                    return result
+                                }, {}),
+                                renderSlots: {
+                                    default: tansform(curDataNode, formItem.renderSlots.default.val)
+                                },
+                                renderDirectives: [],
+                                renderEvents: {},
+                                complex: false,
+                                interactive: false
+                            }
+                            // console.log('from print form item == ', formItemData)
+                            curDataNode.renderSlots.default.push(formItemData)
+                        })
+                    }
+                } else if (curDataNode.type === 'free-layout') {
+                    const freelayoutItem = curDataNode.renderSlots.default.val[0] || []
+                    let freelayoutSlot = []
+                    if (freelayoutItem && freelayoutItem.children) {
+                        freelayoutSlot = tansform(curDataNode, freelayoutItem.children)
+                    }
+                    curDataNode.renderSlots = {
+                        default: freelayoutSlot
+                    }
+                } else if (curDataNode.type === 'bk-sideslider') {
+                    curDataNode.interactive = true
+                    const child = curDataNode.renderSlots.content.val
+                    curDataNode.renderSlots = {
+                        content: tansform(curDataNode, [child])[0]
+                    }
+                } else if (curDataNode.type === 'bk-dialog') {
+                    curDataNode.interactive = true
+                    const child = curDataNode.renderSlots.default.val
+                    curDataNode.renderSlots = {
+                        default: tansform(curDataNode, [child])[0]
+                    }
+                } else if (curDataNode.type === 'bk-card') {
+                    const renderSlots = curDataNode.renderSlots
+                    curDataNode.renderSlots = {
+                        header: tansform(curDataNode, [renderSlots.header.val])[0],
+                        default: tansform(curDataNode, [renderSlots.default.val])[0],
+                        footer: tansform(curDataNode, [renderSlots.footer.val])[0]
+                    }
+                }
+        
+                // 转换 renderStyles
+                if (['render-grid', 'free-layout'].includes(curDataNode.type)) {
+                    if (index < data.length - 1) {
+                        curDataNode.renderStyles = {
+                            marginBottom: '10px',
+                            ...curDataNode.renderStyles
+                        }
+                    }
+                } else {
+                    if (parentNode.type === 'render-grid') {
+                        curDataNode.renderStyles = {
+                            marginTop: '5px',
+                            marginRight: '5px',
+                            marginBottom: '5px',
+                            marginLeft: '5px',
+                            verticalAlign: 'middle',
+                            ...curDataNode.renderStyles
+                        }
+                    }
+                }
+                if (curDataNode.type === 'bk-button' && parentNode.type === 'widget-form') {
+                    curDataNode.renderStyles = {
+                        display: 'inline-block',
+                        margin: '',
+                        marginLeft: index > 0 ? '10px' : '',
+                        ...curDataNode.renderStyles
+                    }
+                }
+        
+                // 转换 renderProps
+                const origanlRenderProps = curDataNode.renderProps || {}
+                curDataNode.renderProps = Object.keys(origanlRenderProps).reduce((result, propName) => {
+                    const prop = origanlRenderProps[propName]
+                    let renderValue = prop.val
+                    if (prop.type !== 'string' && renderValue === '') {
+                        renderValue = undefined
+                    }
+                    result[propName] = {
+                        format: 'value',
+                        code: prop.val,
+                        payload: prop.payload || {},
+                        valueType: prop.type,
+                        renderValue
+                    }
+                    return result
+                }, {})
+                // prop 还需要解析 renderDirectives 中 v-bind 的关联数据
+                ;(curDataNode.renderDirectives || []).forEach(directive => {
+                    if (directive.type === 'v-bind'
+                        && directive.val
+                         && curDataNode.renderProps[directive.prop]) {
+                        const renderProp = origanlRenderProps[directive.prop]
+                        curDataNode.renderProps[directive.prop] = {
+                            format: directive.valType,
+                            code: directive.val,
+                            payload: {},
+                            valueType: renderProp.type,
+                            renderValue: renderProp.val
+                        }
+                    }
+                })
+        
+                // 转换 renderDirectives
+                curDataNode.renderDirectives = (curDataNode.renderDirectives || []).reduce((result, directive) => {
+                    const {
+                        type,
+                        prop = '',
+                        val,
+                        valType = 'value'
+                    } = directive
+                    if (type !== 'v-bind') {
+                        result.push({
+                            type,
+                            prop,
+                            format: valType,
+                            code: val
+                        })
+                    }
+                    return result
+                }, [])
+        
+                // 非布局类型的组件需要转换 renderSlots
+                if (![
+                    'render-grid',
+                    'free-layout',
+                    'widget-form',
+                    'widget-form-item',
+                    'bk-sideslider',
+                    'bk-dialog',
+                    'bk-card'
+                ].includes(curDataNode.type)) {
+                    curDataNode.renderSlots = Object.keys(curDataNode.renderSlots || {}).reduce((result, slotName) => {
+                        const slotData = curDataNode.renderSlots[slotName]
+                        let format = 'value'
+                        let code = slotData.val
+                        const renderValue = code
+                        const component = slotData.name
+                        const valueType = slotData.type
+                        const payload = slotData.payload || {}
+                        if (slotData.payload
+                             && slotData.payload.variableData
+                              && slotData.payload.variableData.valType
+                              && slotData.payload.variableData.valType !== 'value') {
+                            format = slotData.payload.variableData.valType
+                            code = slotData.payload.variableData.val
+                        }
+                        result[slotName] = {
+                            format,
+                            component,
+                            code,
+                            payload,
+                            valueType,
+                            renderValue
+                        }
+                        return result
+                    }, {})
+                }
+                
+                return curDataNode
+            })
+        }
+        const pageRepository = getRepository(Page)
+        const pageList = await pageRepository.find()
+        
+        await getConnection().transaction(async transactionalEntityManager => {
+            const taskList = pageList.map(pageData => {
+                let targetData = []
+                try {
+                    targetData = JSON.parse(pageData.content || '[]')
+                    if (!Array.isArray(targetData)) {
+                        targetData = []
+                    }
+                } catch (err) {
+                    targetData = []
+                }
+                const dataVersion = checkVersion(targetData)
+                if (dataVersion === 'v0') {
+                    targetData = []
+                } else if (dataVersion === 'v1') {
+                    targetData = tansform({ type: 'root' }, targetData)
+                }
+                
+                return transactionalEntityManager.update(Page, {
+                    id: pageData.id
+                }, {
+                    content: JSON.stringify(targetData)
+                })
+            })
+            await Promise.all(taskList)
+        })
+        ctx.send({
+            code: 0,
+            message: `成功：${(new Date()).toString()}`,
+            data: null
+        })
+        // await pageRepository.save(pageList)
+    } catch (error) {
+        console.dir(error)
+        ctx.send({
+            code: -1,
+            message: error,
+            data: null
+        })
+    }
+}

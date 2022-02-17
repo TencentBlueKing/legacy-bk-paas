@@ -24,7 +24,6 @@
         </div>
         <material-modifier />
         <div
-            v-if="infoLinkDict[componentType]"
             class="link-prop-doc"
             @click="handleJumpLink">
             <i class="bk-drag-icon bk-drag-jump-link"></i>
@@ -36,7 +35,6 @@
     import _ from 'lodash'
     import LC from '@/element-materials/core'
     import MaterialModifier from '@/element-materials/modifier'
-    import { infoLink } from '@/element-materials/materials/index'
     import { removeCallBack } from '@/element-materials/core/helper/commands'
 
     export default {
@@ -53,7 +51,6 @@
             }
         },
         created () {
-            this.infoLinkDict = infoLink
             this.componentData = {}
 
             const updateCallback = _.throttle((event) => {
@@ -102,11 +99,12 @@
              */
             handleJumpLink () {
                 const {
-                    type,
-                    name
+                    material
                 } = this.componentData
-                const realType = (type === 'chart' || type === 'bk-charts') ? name : type
-                window.open(this.infoLinkDict[realType], '_blank')
+                const document = material.document
+                if (document) {
+                    window.open(document, '_blank')
+                }
             }
         }
     }

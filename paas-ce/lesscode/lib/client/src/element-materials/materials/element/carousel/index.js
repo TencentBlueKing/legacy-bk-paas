@@ -23,7 +23,7 @@ export default {
             tips: '幻灯片切换时触发时调用该事件函数，事件回调参数 (currentIndex: Number、preIndex: Number)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         width: '600px',
         height: '300px'

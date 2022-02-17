@@ -103,7 +103,7 @@ export default {
             tips: '当用户切换表格每页显示条数时调用该事件函数，事件回调参数 (limit: Number)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

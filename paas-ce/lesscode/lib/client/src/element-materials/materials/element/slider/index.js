@@ -17,7 +17,7 @@ export default {
     group: '表单',
     order: 1,
     document: 'https://element.eleme.cn/#/zh-CN/component/slider',
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',

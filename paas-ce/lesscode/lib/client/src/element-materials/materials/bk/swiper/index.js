@@ -28,7 +28,7 @@ export default {
             tips: '图片索引改变时调用该事件函数，事件回调参数 (index: Number)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         width: '600px',
         height: '300px'

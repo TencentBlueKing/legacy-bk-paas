@@ -23,7 +23,7 @@ export default {
             tips: '单选组选中的值改变时调用该事件函数，事件回调参数 (value: String | Number | Boolean)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'background', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',

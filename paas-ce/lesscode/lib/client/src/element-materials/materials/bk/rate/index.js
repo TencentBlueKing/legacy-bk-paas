@@ -23,7 +23,7 @@ export default {
             tips: '评分的时候调用该事件函数，事件回调参数 (rate: Number)'
         }
     ],
-    styles: ['position', 'size', 'padding', 'margin', 'pointer', 'opacity'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         // {
         //     type: 'v-bind',

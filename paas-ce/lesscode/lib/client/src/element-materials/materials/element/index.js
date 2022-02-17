@@ -60,9 +60,6 @@ import carousel from './carousel'
 import timeline from './timeline'
 import image from './image'
 
-// 组件文档地址
-import infoLink from './info-link'
-
 const elementComponents = Object.seal([
     grid1,
     grid2,
@@ -107,5 +104,3 @@ const elementComponents = Object.seal([
 export default elementComponents
 
 export const elementComponentGroupList = Array.from(new Set(elementComponents.map(item => item.group)))
-
-export const eleLink = infoLink

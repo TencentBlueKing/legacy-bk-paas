@@ -23,16 +23,8 @@ export default {
             name: 'size',
             include: ['display']
         },
-        'padding',
         'margin',
-        {
-            name: 'font',
-            exclude: ['wordSpacing', 'textOverflow', 'wordBreak', 'wordWrap', 'whiteSpace', 'verticalAlign']
-        },
-        {
-            name: 'background',
-            include: ['backgroundColor']
-        },
+        'pointer',
         'opacity'
     ],
     renderStyles: {
