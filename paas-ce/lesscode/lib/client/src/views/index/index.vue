@@ -50,6 +50,7 @@
 <script>
     import Vue from 'vue'
     import { mapActions, mapGetters, mapState } from 'vuex'
+    import { debounce } from 'shared/util.js'
     import LC from '@/element-materials/core'
     import NoviceGuide from '@/components/novice-guide'
     import VariableForm from '@/components/variable/variable-form'
@@ -103,7 +104,7 @@
             curTemplateData: {
                 handler () {
                     const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
-                    this.updatePreview({
+                    this.handleUpdatePreview({
                         isGenerateNav: true,
                         id: pageRoute.layoutPath,
                         curTemplateData: this.curTemplateData,
@@ -128,10 +129,7 @@
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
 
-            // LC.addEventListener('update', this.handleUpdatePreview)
-            // this.$once('hook:beforeDestroy', () => {
-            //     LC.removeEventListener('update', this.handleUpdatePreview)
-            // })
+            LC.addEventListener('update', this.handleUpdatePreview)
 
             this.registerCustomComponent()
 
@@ -144,6 +142,8 @@
             this.$store.dispatch('member/setCurUserPermInfo', {
                 id: this.projectId
             })
+
+            this.debounceUpdatePreview = debounce(this.updatePreview)
 
             this.guideStep = [
                 {
@@ -193,8 +193,10 @@
             ]
         },
         beforeDestroy () {
+            LC.removeEventListener('update', this.handleUpdatePreview)
             LC.parseData([])
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
+            localStorage.removeItem('ONLINE_PREVIEW')
         },
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
@@ -311,7 +313,7 @@
                     curTemplateData: {},
                     types: ['reload', 'update_style']
                 }
-                this.updatePreview(Object.assign(defaultSetting, setting))
+                this.debounceUpdatePreview(Object.assign(defaultSetting, setting))
             }
         }
     }
