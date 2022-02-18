@@ -348,6 +348,10 @@ export async function syncPageData (ctx) {
                 if (!curDataNode) {
                     return null
                 }
+                curDataNode.complex = Boolean(curDataNode.isComplexComponent)
+                curDataNode.interactive = ['bk-sideslider', 'bk-dialog'].includes(curDataNode.type)
+                curDataNode.custom = Boolean(curDataNode.isCustomComponent)
+        
                 if (curDataNode.type === 'render-grid') {
                     if (curDataNode.renderSlots
                         && curDataNode.renderSlots.default
@@ -391,7 +395,8 @@ export async function syncPageData (ctx) {
                                 renderDirectives: [],
                                 renderEvents: {},
                                 complex: false,
-                                interactive: false
+                                interactive: false,
+                                custom: false
                             }
                             curDataNode.renderSlots.default.push(columnData)
                         })
