@@ -15,12 +15,9 @@ from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
-"""
-检测服务可用性
-"""
-
 
 class Command(BaseCommand):
+    """检测服务可用性"""
 
     option_list = BaseCommand.option_list + (
         make_option("--service", action="store", dest="service", help="Service name"),

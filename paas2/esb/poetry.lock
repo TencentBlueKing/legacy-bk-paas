@@ -272,6 +272,22 @@ url = "http://mirrors.cloud.tencent.com/pypi/simple"
 reference = "tencent"
 
 [[package]]
+name = "django-dynamic-fixture"
+version = "3.1.2"
+description = "A full library to create dynamic model instances for testing purposes."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+
+[package.source]
+type = "legacy"
+url = "http://mirrors.cloud.tencent.com/pypi/simple"
+reference = "tencent"
+
+[[package]]
 name = "django-environ"
 version = "0.4.5"
 description = "Django-environ allows you to utilize 12factor inspired environment variables to configure your Django application."
@@ -1367,7 +1383,7 @@ reference = "tencent"
 [metadata]
 lock-version = "1.1"
 python-versions = "^2.7"
-content-hash = "66eb050cfd759a205a8b8fbbde82e7bf764d5b473e686c9404ffcaed9e835aeb"
+content-hash = "3f7ca8c4f6104d02f77864a95b361d9a8a1760d849dad246f048ccb399813510"
 
 [metadata.files]
 appdirs = [
@@ -1443,6 +1459,9 @@ distlib = [
 django = [
     {file = "Django-1.8.19-py2.py3-none-any.whl", hash = "sha256:674c525d3aa90ed683313b64aa27490c31874e16155e6b44772d84e76c83c46c"},
     {file = "Django-1.8.19.tar.gz", hash = "sha256:33d44a5cf9d333247a9a374ae1478b78b83c9b78eb316fc04adde62053b4c047"},
+]
+django-dynamic-fixture = [
+    {file = "django-dynamic-fixture-3.1.2.tar.gz", hash = "sha256:08cf0dadb91a1058ef7bf2486e5df2a93571f4517a7de1b806d1a6ee6d78b078"},
 ]
 django-environ = [
     {file = "django-environ-0.4.5.tar.gz", hash = "sha256:6c9d87660142608f63ec7d5ce5564c49b603ea8ff25da595fd6098f6dc82afde"},

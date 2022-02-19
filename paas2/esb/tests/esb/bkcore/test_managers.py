@@ -9,15 +9,28 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import pytest
+from ddf import G
 
-from django.core.management.base import BaseCommand
-from django.core.management import call_command
+from esb.bkcore.models import ComponentSystem, ESBChannel
+
+pytestmark = pytest.mark.django_db
 
 
-class Command(BaseCommand):
-    """update system and channel data to db"""
+class TestComponentSystem:
+    def test_get_official_ids(self, mocker, unique_id):
+        mocker.patch(
+            "esb.bkcore.managers.BK_SYSTEMS",
+            new_callable=mocker.PropertyMock(return_value={unique_id: "test"}),
+        )
 
-    def handle(self, *args, **options):
-        call_command("sync_function_controller")
-        call_command("sync_system_and_channel_data", force=False)
-        call_command("sync_api_docs", all=False)
+        G(ComponentSystem, name=unique_id)
+
+        assert len(ComponentSystem.objects.get_official_ids()) == 1
+
+    def test_filter_channels(self):
+        system = G(ComponentSystem)
+
+        G(ESBChannel, component_system=system, is_hidden=False, is_active=True)
+
+        assert ESBChannel.objects.filter_channels(system_ids=[system.id], is_hidden=False, is_active=True).count() == 1

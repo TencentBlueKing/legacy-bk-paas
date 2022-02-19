@@ -10,31 +10,37 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-import json
+import datetime
 import logging
-from optparse import make_option
+import os
 
 from django.core.management.base import BaseCommand
-from esb.bkcore.models import ComponentAPIDoc, ESBChannel
+from django.conf import settings
+
+from common.base_utils import smart_str
+from common.file import generate_temp_dir, generate_tarfile, write_to_file
+from esb.bkcore.models import ESBChannel, ComponentSystem
 from esb.management.utils.api_docs import ApiDocManager, DocNotChangedException
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    """update api_doc to db"""
-
-    option_list = BaseCommand.option_list + (
-        make_option("--all", action="store_true", dest="all", default=False, help="update all api docs"),
-    )
+    """export official public api docs"""
 
     def handle(self, *args, **options):
-        self.update_api_docs(is_update_all_api_doc=options["all"])
+        with generate_temp_dir() as output_dir:
+            self._generate_api_docs(output_dir)
 
-    def update_api_docs(self, is_update_all_api_doc):
-        # init api docs
-        api_doc_manager = ApiDocManager(is_update_all_api_doc=is_update_all_api_doc)
-        for channel in ESBChannel.objects.filter(is_active=True, is_hidden=False):
+            output_filename = os.path.join(settings.BASE_DIR, "bk-esb-api-docs-%s.tar.gz" % self._now_str)
+            generate_tarfile(output_filename, output_dir, "bk-esb-api-docs")
+
+        logger.info("Export api docs to file: %s", output_filename)
+
+    def _generate_api_docs(self, output_dir):
+        api_doc_manager = ApiDocManager(is_update_all_api_doc=True)
+        official_system_ids = ComponentSystem.objects.get_official_ids()
+        for channel in ESBChannel.objects.filter_channels(system_ids=official_system_ids, is_hidden=False, is_active=True):
             try:
                 api_data = api_doc_manager.get_api_doc(channel)
             except DocNotChangedException:
@@ -50,13 +56,15 @@ class Command(BaseCommand):
                 )
                 continue
 
-            ComponentAPIDoc.objects.update_or_create(
-                component_id=channel.id,
-                defaults={
-                    "board": "",
-                    "doc_md": json.dumps(api_data["doc_md"]),
-                    "doc_html": json.dumps(api_data["doc_html"]),
-                    "doc_md_md5": api_data["raw_doc_md_md5"],
-                },
-            )
-            logger.info("Document synced for api [%s](%s)", api_data["system_name"], api_data["component_name"])
+            for language, content in api_data["doc_md"].items():
+                doc_dir_path = os.path.join(output_dir, api_data["system_name"].lower(), language)
+                doc_path = os.path.join(doc_dir_path, "%s.md" % api_data["component_name"])
+
+                if not os.path.exists(doc_dir_path):
+                    os.makedirs(doc_dir_path)
+
+                write_to_file(smart_str(content), doc_path)
+
+    @property
+    def _now_str(self):
+        return datetime.datetime.now().strftime("%Y%m%d%H%M%S")

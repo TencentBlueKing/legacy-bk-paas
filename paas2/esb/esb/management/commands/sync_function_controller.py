@@ -19,12 +19,10 @@ from esb.utils.func_ctrl import FunctionControllerClient
 from esb.utils.jwt_utils import JWTKey
 from esb.management.utils.constants import FUNCTION_CONTROLLERS
 
-"""
-将系统和通道Channel数据，更新到数据库中
-"""
-
 
 class Command(BaseCommand):
+    """将系统和通道Channel数据，更新到数据库中"""
+
     def handle(self, *args, **options):
         update_function_controller()
         save_jwt_key()

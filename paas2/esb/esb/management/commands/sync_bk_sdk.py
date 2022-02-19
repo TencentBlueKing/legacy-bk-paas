@@ -20,12 +20,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-"""
-生成最新SDK
-"""
-
 
 class Command(BaseCommand):
+    """生成最新SDK"""
+
     def get_target_dir(self):
         return getattr(settings, "SDK_TARGET_DIR", "/tmp/open_paas_esb_sdk/")
 
