@@ -151,7 +151,6 @@ class APIDoc(object):
 
         return formated_document
 
-
     def _get_url_part(self):
         return self._format(API_PATH, {"api_path": self.api_path})
 
