@@ -9,15 +9,33 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import os
+import shutil
+import tempfile
+import tarfile
+import logging
+from contextlib import contextmanager
 
-from django.core.management.base import BaseCommand
-from django.core.management import call_command
+logger = logging.getLogger(__name__)
 
 
-class Command(BaseCommand):
-    """update system and channel data to db"""
+@contextmanager
+def generate_temp_dir():
+    """生成临时目录"""
+    try:
+        path = tempfile.mkdtemp()
+        logger.debug("Generate temp dir: %s", path)
+        yield path
+    finally:
+        if os.path.exists(path):
+            shutil.rmtree(path)
 
-    def handle(self, *args, **options):
-        call_command("sync_function_controller")
-        call_command("sync_system_and_channel_data", force=False)
-        call_command("sync_api_docs", all=False)
+
+def generate_tarfile(output_filename, source_dir, arcname):
+    with tarfile.open(output_filename, "w:gz") as tar:
+        tar.add(source_dir, arcname=arcname)
+
+
+def write_to_file(content, path, mode="w"):
+    with open(path, mode) as fp:
+        fp.write(content)

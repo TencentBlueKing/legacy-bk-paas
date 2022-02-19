@@ -13,20 +13,19 @@ specific language governing permissions and limitations under the License.
 import json
 import logging
 
-from common.constants import API_TYPE_Q
 from django.core.management.base import BaseCommand
+
+from common.constants import API_TYPE_Q
 from esb.bkcore.models import ComponentSystem, ESBBuffetComponent, ESBChannel, SystemDocCategory
 from esb.management.utils import conf_tools
 from past.builtins import basestring
 
 logger = logging.getLogger(__name__)
 
-"""
-update system and channel data to db
-"""
-
 
 class Command(BaseCommand):
+    """update system and channel data to db"""
+
     def add_arguments(self, parser):
         parser.add_argument("--force", action="store_true", dest="force", help="Force data update to db")
 
@@ -42,6 +41,7 @@ class Command(BaseCommand):
 
         for msg in self.warning_msgs:
             logger.warning(msg)
+
         logger.info("Sync system/channels done")
 
     def update_systems(self):
@@ -90,8 +90,8 @@ class Command(BaseCommand):
 
         try:
             channel.save()
-        except Exception as err:
-            logger.error("update channel %d failed: %s", channel.pk, err)
+        except Exception:
+            logger.exception("update channel fail: id=%s, config=%s", channel.pk, json.dumps(config))
 
     def create_channel_by_config(self, config, default_update_fields, force_update_fields):
         esb_channel = ESBChannel(**self.get_by_fields(config, default_update_fields + force_update_fields))
@@ -102,13 +102,18 @@ class Command(BaseCommand):
 
         try:
             esb_channel.save()
-            logger.info("add channel: %s", config["path"])
-        except Exception as err:
-            logger.error("create channel %s failed: %s", config["component_name"], err)
+        except Exception:
+            logger.exception("create channel fail: config=%s", json.dumps(config))
+        else:
+            logger.info("add channel: path=%s", config["path"])
 
     def update_channels(self):
-        default_update_fields = ["name", "component_codename", "component_name", "method"]
-        force_update_fields = ["component_system_id", "type", "is_hidden", "timeout_time"]
+        default_update_fields = ["name", "component_codename", "component_name", "method", "is_hidden"]
+        force_update_fields = ["component_system_id", "type", "timeout_time"]
+
+        current_official_channel_ids = self._get_official_channel_ids()
+        current_official_channels = dict.fromkeys(current_official_channel_ids, None)
+
         conf_client = conf_tools.ConfClient()
         for system_name, channels in list(conf_client.channels.items()):
             try:
@@ -140,7 +145,11 @@ class Command(BaseCommand):
                         continue
                     self.create_channel_by_config(channel, default_update_fields, force_update_fields)
                 else:
+                    current_official_channels.pop(esb_channel.id, None)
                     self.update_channel_by_config(esb_channel, channel, default_update_fields, force_update_fields)
+
+        if current_official_channels:
+            self._hide_channels(current_official_channels.keys())
 
     def update_doc_category(self):
         conf_client = conf_tools.ConfClient()
@@ -226,3 +235,12 @@ class Command(BaseCommand):
             logger.info("%s changed: %s", flag, ", ".join(info))
         if warning:
             self.warning_msgs.append("%s change: %s" % (flag, ", ".join(warning)))
+
+    def _get_official_channel_ids(self):
+        official_system_ids = ComponentSystem.objects.get_official_ids()
+        return list(
+            ESBChannel.objects.filter(component_system_id__in=official_system_ids).values_list("id", flat=True)
+        )
+
+    def _hide_channels(self, channel_ids):
+        ESBChannel.objects.filter(id__in=channel_ids).update(is_hidden=True)

@@ -12,6 +12,8 @@ specific language governing permissions and limitations under the License.
 
 from builtins import object
 import json
+import logging
+import re
 import textwrap
 
 import markdown
@@ -24,6 +26,8 @@ from esb.bkcore.models import ComponentAPIDoc
 from esb.management.utils import component_tools
 from esb.utils import config
 
+logger = logging.getLogger(__name__)
+
 
 class ApiDocManager(object):
     def __init__(self, is_update_all_api_doc=False):
@@ -35,7 +39,7 @@ class ApiDocManager(object):
         api_doc_info = api_doc.get_doc_info()
 
         old_doc_md_md5 = self.get_old_doc_md5(channel.id)
-        if not (self.is_update_all_api_doc or api_doc.is_doc_changed(old_doc_md_md5)):
+        if not (self.is_update_all_api_doc or api_doc._is_doc_changed(old_doc_md_md5)):
             raise DocNotChangedException
         return api_doc_info
 
@@ -64,19 +68,18 @@ API_METHOD = u"""
 class APIDoc(object):
     def __init__(self, channel):
         self.jinja2_engine = engines["jinja2"]
-        self.jinja2_context = {}
 
         self.channel = channel
         self.api_path = self.channel.api_path
         self.api_data = self.get_api_data()
 
-        self.update_doc_md()
-        self.raw_doc_md_md5 = self.get_raw_doc_md_md5()
+        self._update_doc_md()
+        self.raw_doc_md_md5 = self._get_raw_doc_md_md5()
 
     def get_doc_info(self):
         return {
             "doc_md": self.doc_md,
-            "doc_html": self.get_doc_html(),
+            "doc_html": self._get_doc_html(),
             # 用于计算原始文档的 md5
             "raw_doc_md_md5": self.raw_doc_md_md5,
             "system_name": self.api_data["system_name"],
@@ -105,70 +108,83 @@ class APIDoc(object):
             },
         }
 
-    def get_doc_html(self):
+    def _get_doc_html(self):
         doc_html = {}
         for language, _doc_md in list(self.doc_md.items()):
-            doc_html[language] = self.format_md_to_html(_doc_md)
+            doc_html[language] = self._format_md_to_html(_doc_md)
         return doc_html
 
-    def get_raw_doc_md_md5(self):
+    def _get_raw_doc_md_md5(self):
         return get_md5(json.dumps(self.doc_md))
 
-    def is_doc_changed(self, old_doc_md_md5):
+    def _is_doc_changed(self, old_doc_md_md5):
         return old_doc_md_md5 != self.raw_doc_md_md5
 
-    def update_doc_md(self):
+    def _update_doc_md(self):
         doc_md = {}
         for language, _doc_md in list(self.api_data["doc_md"].items()):
             with translation.override(language):
-                common_args_desc = self.get_doc_common_args()
-                self.jinja2_context["common_args_desc"] = textwrap.dedent(common_args_desc)
+                _doc_md_parts = [
+                    smart_unicode(self._get_api_method_part()),
+                    smart_unicode(self._get_url_part()),
+                    smart_unicode(self._get_doc_common_args_part()),
+                    "\n",
+                    smart_unicode(self._format_origin_document(_doc_md)),
+                ]
+                doc_md[language] = "\n".join(_doc_md_parts)
 
-                _doc_md = textwrap.dedent(_doc_md).strip()
-                _doc_md = self.clear_api_flag(_doc_md)
-                _doc_md = self.add_api_method(_doc_md)
-                _doc_md = self.add_url(_doc_md)
-                _doc_md = self.format(_doc_md, self.jinja2_context)
-
-                doc_md[language] = _doc_md
         self.doc_md = doc_md
 
-    def clear_api_flag(self, doc_md):
-        doc_md = doc_md.splitlines()
-        for index, line in enumerate(doc_md):
-            if line.startswith("api"):
-                doc_md[index] = ""
-            else:
-                break
-        return "\n".join(doc_md).strip()
+    def _format_origin_document(self, document):
+        """格式化原始文档
 
-    def add_url(self, doc_md):
-        self.jinja2_context["api_path"] = self.api_path
-        return self.insert_to_doc_md(doc_md, API_PATH)
+        不要使用 Jinja2 模板渲染，因其中内容可能与 Jinja2 模板冲突
+        """
+        formated_document = document
 
-    def add_api_method(self, doc_md):
+        formated_document = textwrap.dedent(formated_document).strip()
+
+        # 将文档中 `{{ common_args_desc }}` 替换为空，公共参数拼接到开头，不需要再写到原始文档中
+        formated_document = re.sub(r"{{ *common_args_desc *}}", "", formated_document)
+
+        # 去除文档中 apiMethod 和 apiLabel 的标记
+        formated_document = self._clear_api_flag(formated_document)
+
+        return formated_document
+
+    def _get_url_part(self):
+        return self._format(API_PATH, {"api_path": self.api_path})
+
+    def _get_api_method_part(self):
         api_method = self.api_data["suggest_method"].upper()
         if not api_method:
-            return doc_md
-        self.jinja2_context["api_method"] = api_method
-        return self.insert_to_doc_md(doc_md, API_METHOD)
+            return ""
+        return self._format(API_METHOD, {"api_method": api_method})
 
-    def insert_to_doc_md(self, doc_md, content):
-        return u"%s\n%s" % (smart_unicode(content), doc_md)
+    def _get_doc_common_args_part(self):
+        doc_common_args = config.ESB_CONFIG["config"].get("doc_common_args", "")
+        part = self._format(doc_common_args, {}).replace("&gt;", ">")
+        return textwrap.dedent(part)
 
-    def format(self, content, context):
-        return self.jinja2_engine.from_string(content).render(context=context)
+    def _clear_api_flag(self, document):
+        lines = document.splitlines()
+        for index, line in enumerate(lines):
+            # 去除文档开头几行中，以 api 标记开头的行
+            if line.startswith("api"):
+                lines[index] = ""
+            else:
+                break
+        return "\n".join(lines).strip()
 
-    def format_md_to_html(self, doc_md):
+    def _format_md_to_html(self, doc_md):
         doc_html = markdown.markdown(
             doc_md,
             extensions=["tables", "attr_list", "fenced_code", "smart_strong", "codehilite", "toc"],
         )
         return doc_html
 
-    def get_doc_common_args(self):
-        doc_common_args = config.ESB_CONFIG["config"].get("doc_common_args", "")
-        return self.jinja2_engine.from_string(doc_common_args).render().replace("&gt;", ">")
+    def _format(self, content, context):
+        return self.jinja2_engine.from_string(content).render(context=context)
 
 
 class DocNotChangedException(Exception):

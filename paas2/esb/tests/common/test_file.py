@@ -9,15 +9,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import os
 
-from django.core.management.base import BaseCommand
-from django.core.management import call_command
+from common.file import generate_temp_dir
 
 
-class Command(BaseCommand):
-    """update system and channel data to db"""
+def test_generate_temp_dir():
+    with generate_temp_dir() as output_dir:
+        assert os.path.exists(output_dir)
 
-    def handle(self, *args, **options):
-        call_command("sync_function_controller")
-        call_command("sync_system_and_channel_data", force=False)
-        call_command("sync_api_docs", all=False)
+    assert not os.path.exists(output_dir)

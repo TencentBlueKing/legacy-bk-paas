@@ -9,15 +9,27 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from django.db import models
 
-from django.core.management.base import BaseCommand
-from django.core.management import call_command
+from components.constants import BK_SYSTEMS
 
 
-class Command(BaseCommand):
-    """update system and channel data to db"""
+class ComponentSystemManager(models.Manager):
+    def get_official_ids(self):
+        return list(self.filter(name__in=BK_SYSTEMS.keys()).values_list("id", flat=True))
 
-    def handle(self, *args, **options):
-        call_command("sync_function_controller")
-        call_command("sync_system_and_channel_data", force=False)
-        call_command("sync_api_docs", all=False)
+
+class ESBChannelManager(models.Manager):
+    def filter_channels(self, system_ids=None, is_hidden=None, is_active=None):
+        queryset = self.all()
+
+        if system_ids is not None:
+            queryset = queryset.filter(component_system_id__in=system_ids)
+
+        if is_hidden is not None:
+            queryset = queryset.filter(is_hidden=is_hidden)
+
+        if is_active is not None:
+            queryset = queryset.filter(is_active=is_active)
+
+        return queryset
