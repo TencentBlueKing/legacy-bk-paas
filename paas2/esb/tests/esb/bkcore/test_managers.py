@@ -28,6 +28,8 @@ class TestComponentSystem:
 
         assert len(ComponentSystem.objects.get_official_ids()) == 1
 
+
+class TestESBChannel:
     def test_filter_channels(self):
         system = G(ComponentSystem)
 
