@@ -72,17 +72,109 @@ value: 进程的值，不同的字段类型不一样
 
 ```python
 {
+  "bk_app_code": "esb_test",
+  "bk_app_secret": "xxx",
+  "bk_username": "xxx",
+  "bk_token": "xxx",
   "bk_biz_id": 1,
   "process_template_id": 50,
   "process_property": {
-    "user": {
-      "as_default_value": true,
-      "value": "root100"
-    },
     "proc_num": {
-      "as_default_value": true,
-      "value": 300
-    }
+        "value": 300,
+        "as_default_value": false
+      },
+      "stop_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "restart_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "face_stop_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bk_func_name": {
+        "value": "p1",
+        "as_default_value": true
+      },
+      "work_path": {
+        "value": "",
+        "as_default_value": false
+      },
+      "priority": {
+        "value": null,
+        "as_default_value": false
+      },
+      "reload_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bk_process_name": {
+        "value": "p1",
+        "as_default_value": true
+      },
+      "pid_file": {
+        "value": "",
+        "as_default_value": false
+      },
+      "auto_start": {
+        "value": false,
+        "as_default_value": false
+      },
+      "auto_time_gap": {
+        "value": null,
+        "as_default_value": false
+      },
+      "start_cmd": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bk_func_id": {
+        "value": null,
+        "as_default_value": false
+      },
+      "user": {
+        "value": "root100",
+        "as_default_value": false
+      },
+      "timeout": {
+        "value": null,
+        "as_default_value": false
+      },
+      "description": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bk_start_param_regex": {
+        "value": "",
+        "as_default_value": false
+      },
+      "bind_info": {
+        "value": [
+            {
+                "enable": {
+                    "value": false,
+                    "as_default_value": true
+                },
+                "ip": {
+                    "value": "1",
+                    "as_default_value": true
+                },
+                "port": {
+                    "value": "100",
+                    "as_default_value": true
+                },
+                "protocol": {
+                    "value": "1",
+                    "as_default_value": true
+                },
+                "row_id": 1
+            }
+        ],
+        "as_default_value": true
+      }
   }
 }
 ```
@@ -94,6 +186,8 @@ value: 进程的值，不同的字段类型不一样
   "result": true,
   "code": 0,
   "message": "success",
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "id": 50,
     "bk_process_name": "p1",
@@ -215,4 +309,21 @@ value: 进程的值，不同的字段类型不一样
 | result | bool | 请求成功与否。true:请求成功；false请求失败 |
 | code | int | 错误编码。 0表示success，>0表示失败错误 |
 | message | string | 请求失败返回的错误信息 |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 | data | object | 更新后的进程模板信息 |
+
+#### data 字段说明
+
+| 名称  | 类型  | 描述 |
+|---|---|---|
+| id | int | 数据id |
+| bk_process_name | string |进程别名  |
+| bk_biz_id |  int| 业务id |
+| service_template_id | int |服务模版id  |
+| property |object  |  属性|
+| creator              | string             | 本条数据创建者                                                                                 |
+| modifier             | string             | 本条数据的最后修改人员            |
+| create_time         | string | 创建时间     |
+| last_time           | string | 更新时间     |
+| bk_supplier_account | string       | 开发商账号 |
