@@ -12,13 +12,17 @@ search the business
 |-----------|------------|--------|------------|
 | bk_supplier_account | string     | No     | supplier account code |
 | fields         |  array   | No     | need to show |
-| condition      |  dict    | No     | search condition |
+| condition      |  dict    | No     | search condition, legach field, please do not use this any more, use biz_property_filter instead |
+| biz_property_filter    |  dict  | No     | business property filter |
 | page           |  dict    | No     | page condition |
 
 Note: a business has two status: normal or archived.
 - search a archived business，please add rules `bk_data_status:disabled` to condition field.
 - search a normal business，please do not add filed `bk_data_status` in condition , or add rule `bk_data_status: {"$ne":disabled"}` to condition.
-
+- only one of `biz_property_filter` and `condition` parameters can take effect, and `condition` is not recommended to continue to use it.
+- the number of array class elements involved in the parameter `biz_property_filter` shall not exceed 500.
+  the number of `rules` involved in the parameter `biz_property_filter` does not exceed 20.
+  the nesting level of parameter `biz_property_filter` shall not exceed 3 levels.
 
 #### page
 
@@ -32,21 +36,45 @@ Note: a business has two status: normal or archived.
 
 ```python
 {
-    "bk_app_code": "esb_test",
-    "bk_app_secret": "xxx",
-    "bk_token": "xxx",
-    "bk_supplier_account": "123456789",
-    "fields": [
+    "bk_app_code":"esb_test",
+    "bk_app_secret":"xxx",
+    "bk_token":"xxx",
+    "bk_supplier_account":"123456789",
+    "fields":[
         "bk_biz_id",
         "bk_biz_name"
     ],
-    "condition": {
-        "bk_biz_name": "esb-test"
+    "biz_property_filter":{
+        "condition":"AND",
+        "rules":[
+            {
+                "field":"bk_biz_maintainer",
+                "operator":"equal",
+                "value":"admin"
+            },
+            {
+                "condition":"OR",
+                "rules":[
+                    {
+                        "field":"bk_biz_name",
+                        "operator":"in",
+                        "value":[
+                            "test"
+                        ]
+                    },
+                    {
+                        "field":"bk_biz_id",
+                        "operator":"equal",
+                        "value":0
+                    }
+                ]
+            }
+        ]
     },
-    "page": {
-        "start": 0,
-        "limit": 10,
-        "sort": ""
+    "page":{
+        "start":0,
+        "limit":10,
+        "sort":""
     }
 }
 ```

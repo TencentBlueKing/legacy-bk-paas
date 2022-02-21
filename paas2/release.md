@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.39
+    - update: esb update channel is_hidden, add export_official_api_docs command, update api docs
+
 # 2.12.38
     - update: esb update data confapis, jobv3/monitor_v3 apidocs
 

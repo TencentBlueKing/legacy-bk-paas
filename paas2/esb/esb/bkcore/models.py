@@ -14,9 +14,11 @@ import datetime
 import json
 import re
 
-from components.constants import BK_SYSTEMS
 from django.db import models
 from django.utils import timezone
+
+from components.constants import BK_SYSTEMS
+from esb.bkcore import managers
 
 
 class ComponentSystem(models.Model):
@@ -34,6 +36,8 @@ class ComponentSystem(models.Model):
     execute_timeout = models.IntegerField(u"执行类超时时长", null=True, blank=True, help_text=u"单位秒，未设置时超时时长为30秒")
     query_timeout = models.IntegerField(u"查询类超时时长", null=True, blank=True, help_text=u"单位秒，未设置时超时时长为30秒")
     doc_category_id = models.IntegerField(u"文档分类ID", null=True, blank=True)
+
+    objects = managers.ComponentSystemManager()
 
     class Meta:
         ordering = ["name"]
@@ -91,6 +95,8 @@ class ESBChannel(models.Model):
         ),
     )  # noqa
     extra_info = models.TextField(u"额外信息", default="", blank=True, help_text=u"存储组件额外信息，用于文档展示等")
+
+    objects = managers.ESBChannelManager()
 
     class Meta:
         db_table = "esb_channel"
