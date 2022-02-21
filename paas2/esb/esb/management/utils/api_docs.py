@@ -169,7 +169,9 @@ class APIDoc(object):
     def _clear_api_flag(self, document):
         lines = document.splitlines()
         for index, line in enumerate(lines):
-            # 去除文档开头几行中，以 api 标记开头的行
+            # 部分组件使用组件类的 docstring 管理组件文档，
+            # 此类文档中，文档开头的 apiMethod、apiLabel 用于描述组件的一些属性，不属于文档内容，需去除，
+            # 用 apiMethod、apiLabel 描述组件属性的方案，已不推荐使用
             if line.startswith("api"):
                 lines[index] = ""
             else:
