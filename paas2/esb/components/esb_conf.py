@@ -142,6 +142,7 @@ config = {
                         {
                             "comp_codename": "generic.v2.job.callback_protocol",
                             "no_sdk": True,
+                            "is_hidden": True,
                         },
                     ),
                     # jobv3
