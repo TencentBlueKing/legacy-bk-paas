@@ -17,7 +17,7 @@ import generateRouter from './router'
 import generateStore from './store'
 
 // 解析 url 参数
-const location = window.parent.location
+const location = window.location
 const projectIdReg = new RegExp(`${location.origin}/preview/project/(\\d+)`)
 const [, projectId] = projectIdReg.exec(location.href) || []
 
@@ -47,6 +47,8 @@ Promise.all([
             pageCode,
             fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
         }))
+
+    debugger
     const router = generateRouter(data.routeGroup, projectPageRouteList, projectRouteList, projectId)
     const store = generateStore(data.storeData, { projectPageRouteList, projectRouteList })
     window.app = new Vue({
