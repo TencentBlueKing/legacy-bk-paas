@@ -12,15 +12,18 @@
 | -------------------- | ------ | ----- | -------------- |
 | bk_biz_id            | int    | 是    | 业务ID        |
 | set_template_id      | int    | 是    | 集群模板ID     |
-| name                 | string | 二选一 | 集群模板名称   |
-| service_template_ids | array  | 二选一 | 服务模板ID列表 |
+| name                 | string | 和service_template_ids二选一必填，可都填 | 集群模板名称  |
+| service_template_ids | array  | 和name二选一必填，可都填 | 服务模板ID列表 |
 
 
 ### 请求参数示例
 
 ```json
 {
-    "bk_supplier_account": "0",
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "name": "test",
     "bk_biz_id": 20,
     "set_template_id": 6,
@@ -36,6 +39,7 @@
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "id": 6,
         "name": "test",
@@ -59,6 +63,8 @@
 | result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
 | code    | int    | 错误编码。 0表示success，>0表示失败错误   |
 | message | string | 请求失败返回的错误信息                   |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 | data    | object | 请求返回的数据                          |
 
 #### data 字段说明
@@ -66,7 +72,7 @@
 | 字段                | 类型   | 描述         |
 | ------------------- | ------ | ------------ |
 | id                  | int    | 集群模板ID   |
-| name                | array  | 集群模板名称 |
+| name                | string  | 集群模板名称 |
 | bk_biz_id           | int    | 业务ID       |
 | version             | int    | 集群模板版本 |
 | creator             | string | 创建者       |

@@ -30,17 +30,21 @@
 ```python
 
 {
-        "bk_set_name":"set1",
-        "bk_module_name":"module2",
-        "bk_host_innerip":"127.0.0.1",
-        "bk_cloud_id":0,
-        "host_info":{
-                "bk_comment":"test bk_comment 1",
-                "bk_os_type":"1"
-        },
-        "proc_info":{
-                "p1":{"description":"xxx"}
-        }
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
+    "bk_set_name":"set1",
+    "bk_module_name":"module2",
+    "bk_host_innerip":"127.0.0.1",
+    "bk_cloud_id":0,
+    "host_info":{
+            "bk_comment":"test bk_comment 1",
+            "bk_os_type":"1"
+    },
+    "proc_info":{
+            "p1":{"description":"xxx"}
+    }
 }
 
 ```
@@ -52,6 +56,8 @@
   "result": true,
   "code": 0,
   "message": "success",
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
 }
 ```
 
@@ -64,5 +70,7 @@
 | result | bool | 请求成功与否。true:请求成功；false请求失败 |
 | code | int | 错误编码。 0表示success，>0表示失败错误 |
 | message | string | 请求失败返回的错误信息 |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 
 

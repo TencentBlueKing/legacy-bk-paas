@@ -40,6 +40,7 @@ pytest = "4.6.11"
 future = "0.18.2"
 
 [tool.poetry.dev-dependencies]
+django-dynamic-fixture = "^3.1.2"
 pytest-mock = "2.0.0"
 flake8 = "*"
 ipython = "*"

@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.24
+    - update: esb update channel is_hidden, add export_official_api_docs command, update api docs
+
 # 2.13.23
     - update: esb update data confapis, jobv3/monitor_v3 apidocs
 
@@ -71,6 +74,9 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.39
+    - update: esb update channel is_hidden, add export_official_api_docs command, update api docs
 
 # 2.12.38
     - update: esb update data confapis, jobv3/monitor_v3 apidocs

@@ -30,6 +30,7 @@
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
+    "bk_username": "xxx",
     "bk_token": "xxx",
     "bk_biz_id": 1,
     "disable_counter": true,
@@ -54,6 +55,8 @@
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 1,
         "info": [
@@ -71,9 +74,29 @@
 
 ### 返回结果参数
 
+#### response
+
+| 名称    | 类型   | 描述                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code    | int    | 错误编码。 0表示success，>0表示失败错误   |
+| message | string | 请求失败返回的错误信息                   |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data    | object | 请求返回的数据                          |
+
 #### data
 
 | 字段      | 类型      | 描述      |
 |-----------|-----------|-----------|
 | count     | int | 当前规则能匹配到的总记录条数（用于调用者进行预分页，实际单次请求返回数量以及数据是否全部拉取完毕以JSON Array解析数量为准） |
 | info      | array        | dict数组，主机实际数据, 当动态分组为host查询时返回host自身属性信息,当动态分组为set查询时返回set信息 |
+
+#### data.info
+| 名称  | 类型  | 说明 |
+| ---------------- | ------ | ---------------|
+| bk_obj_id       | string | 模型id  |               
+| bk_host_name           | string | 主机名   |                                                               |                              |
+| bk_host_innerip  | string | 内网IP        |                                 
+| bk_host_id       | int    | 主机ID        |                                 
+| bk_cloud_id      | int    | 云区域        |  

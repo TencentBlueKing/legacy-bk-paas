@@ -11,22 +11,13 @@ specific language governing permissions and limitations under the License.
 """
 
 from django.core.management.base import BaseCommand
-
-"""
-update system and channel data to db
-"""
+from django.core.management import call_command
 
 
 class Command(BaseCommand):
+    """update system and channel data to db"""
+
     def handle(self, *args, **options):
-        from esb.management.commands import sync_function_controller
-
-        sync_function_controller.Command().handle()
-
-        from esb.management.commands import sync_system_and_channel_data
-
-        sync_system_and_channel_data.Command().handle(force=False)
-
-        from esb.management.commands import sync_api_docs
-
-        sync_api_docs.Command().handle(all=False)
+        call_command("sync_function_controller")
+        call_command("sync_system_and_channel_data", force=False)
+        call_command("sync_api_docs", all=False)
