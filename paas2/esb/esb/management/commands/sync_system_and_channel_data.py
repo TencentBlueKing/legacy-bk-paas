@@ -112,8 +112,8 @@ class Command(BaseCommand):
         default_update_fields = ["name", "component_codename", "component_name", "method", "is_hidden"]
         force_update_fields = ["component_system_id", "type", "timeout_time"]
 
-        current_official_channel_ids = self._get_official_channel_ids()
-        current_official_channels = dict.fromkeys(current_official_channel_ids, None)
+        remaining_official_channel_ids = self._get_official_channel_ids()
+        remaining_official_channels = dict.fromkeys(remaining_official_channel_ids, None)
 
         conf_client = conf_tools.ConfClient()
         for system_name, channels in conf_client.channels.items():
@@ -146,11 +146,11 @@ class Command(BaseCommand):
                         continue
                     self.create_channel_by_config(channel, default_update_fields, force_update_fields)
                 else:
-                    current_official_channels.pop(esb_channel.id, None)
+                    remaining_official_channels.pop(esb_channel.id, None)
                     self.update_channel_by_config(esb_channel, channel, default_update_fields, force_update_fields)
 
-        if current_official_channels:
-            self._hide_channels(current_official_channels.keys())
+        if remaining_official_channels:
+            self._hide_channels(remaining_official_channels.keys())
 
     def update_doc_category(self):
         conf_client = conf_tools.ConfClient()
