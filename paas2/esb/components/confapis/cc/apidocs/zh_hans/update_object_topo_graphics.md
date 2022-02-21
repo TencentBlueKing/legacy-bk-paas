@@ -16,7 +16,7 @@
 | node_type     | string     | 是     | 节点类型,可选obj,inst                           |
 | bk_obj_id     | string     | 是     | 对象模型的ID                                    |
 | bk_inst_id    | int        | 是     | 实例ID                                          |
-| position      | string     | 否     | 节点在图中的位置                                |
+| position      | object     | 否     | 节点在图中的位置                                |
 | ext           | object     | 否     | 前端扩展字段                                    |
 | bk_obj_icon   | string     | 否     | 对象模型的图标                                  |
 
@@ -29,8 +29,12 @@
 ```python
 
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "action": "update",
-    "scope_tpye": "global",
+    "scope_type": "global",
     "scope_id": "0",
     "node_type": "obj",
     "bk_obj_id": "switch",
@@ -57,6 +61,21 @@
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": "success"
 }
 ```
+
+### 返回结果参数说明
+
+#### response
+
+| 名称  | 类型  | 描述 |
+|---|---|---|
+| result | bool | 请求成功与否。true:请求成功；false请求失败 |
+| code | int | 错误编码。 0表示success，>0表示失败错误 |
+| message | string | 请求失败返回的错误信息 |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data | object | 无数据返回 |

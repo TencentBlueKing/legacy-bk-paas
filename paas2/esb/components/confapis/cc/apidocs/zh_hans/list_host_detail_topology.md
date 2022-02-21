@@ -4,15 +4,7 @@
 
 ### 请求参数
 
-
-#### 通用参数
-
-| 字段 | 类型 | 必选 |  描述 |
-|-----------|------------|--------|------------|
-| bk_app_code  |  string    | 是 | 应用ID     |
-| bk_app_secret|  string    | 是 | 安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -&gt; 点击应用ID -&gt; 基本信息 获取 |
-| bk_token     |  string    | 否 | 当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取 |
-| bk_username  |  string    | 否 | 当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户 |
+{{ common_args_desc }}
 
 #### 接口参数
 
@@ -26,9 +18,17 @@
 该参数为主机属性字段过滤规则的组合，用于根据主机属性字段搜索主机。组合支持AND 和 OR 两种方式，可以嵌套，最多嵌套2层。
 过滤规则为四元组 `field`, `operator`, `value`
 
+| 字段      |  类型      | 必选   |  描述      |
+|-----------|------------|--------|------------|
+| condition       |  string    | 否     |  组合查询条件|
+| rules      |  array    | 否     | 规则 |
+
+
+#### rules
+
 | 名称  | 类型 |必填| 默认值 | 说明 | Description|
 | ---  | ---  | --- |---  | --- | ---| 
-| field|string|是|无|字段名 ||
+| field|string|是|无|字段名 |字段名|
 | operator|string|是|无|操作符 |可选值 equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between,contains,exists,not_exists; 其中contains为正则匹配，大小写不敏感, exists为过滤某字段存在的条件, not_exists为过滤某字段不存在的条件  |
 | value| - | 否| 无|操作数|不同的operator对应不同的value格式|
 
@@ -52,6 +52,7 @@
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
+    "bk_username": "xxx",
     "bk_token": "xxx",
     "page": {
         "start": 0,
@@ -100,6 +101,7 @@
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 2,
         "info": [
@@ -220,6 +222,16 @@
 ```
 
 ### 返回结果参数说明
+#### response
+
+| 名称  | 类型  | 描述 |
+|---|---|---|
+| result | bool | 请求成功与否。true:请求成功；false请求失败 |
+| code | int | 错误编码。 0表示success，>0表示失败错误 |
+| message | string | 请求失败返回的错误信息 |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data | object | 请求返回的数据 |
 
 #### data
 

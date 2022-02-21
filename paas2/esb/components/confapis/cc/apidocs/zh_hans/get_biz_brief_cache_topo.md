@@ -22,6 +22,10 @@
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "bk_biz_id": 2
 }
 ```
@@ -33,11 +37,14 @@
   "result": true,
   "code": 0,
   "message": "success",
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "biz": {
       "id": 3,
       "nm": "lee",
-      "dft": 0
+      "dft": 0,
+      "bk_supplier_account": "0"
     },
     "idle": [
       {
@@ -106,6 +113,15 @@
 ```
 
 ### 返回结果参数说明
+#### response
+| 名称    | 类型   | 说明                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code    | int    | 错误编码。 0表示success，>0表示失败错误    |
+| message | string | 请求失败返回的错误信息                     |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data    | object | 请求返回的数据                             |
 
 #### data.biz 参数说明
 
@@ -114,7 +130,7 @@
 | id    | int          | 业务ID   |
 | nm  | string       | 业务名   |
 | dft | int | 业务类型，该值>=0，0: 表示该业务为普通业务。1: 表示该业务为资源池业务 |
-
+| bk_supplier_account | string       | 开发商账号    |
 #### data.idle 对象参数说明
 idle对象中的数据表示该业务的空闲set中的数据，目前只有一个空闲set，后续可能有多个set，请勿依赖此数量。
 

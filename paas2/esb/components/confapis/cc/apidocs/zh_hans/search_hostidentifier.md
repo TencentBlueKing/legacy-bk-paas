@@ -4,22 +4,14 @@
 
 ### 请求参数
 
-
-#### 通用参数
-
-| 字段 | 类型 | 必选 |  描述 |
-|-----------|------------|--------|------------|
-| bk_app_code  |  string    | 是 | 应用ID     |
-| bk_app_secret|  string    | 是 | 安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -&gt; 点击应用ID -&gt; 基本信息 获取 |
-| bk_token     |  string    | 否 | 当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取 |
-| bk_username  |  string    | 否 | 当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户 |
+{{ common_args_desc }}
 
 #### 接口参数
 
 | 字段 | 类型 | 必选 | 描述       |
 | ---- | ---- | ---- | ---------- |
-| ip   | dict | 否   | 主机ip查询条件 |
-| page | dict | 否   | 分页查询条件   |
+| ip   | object | 否   | 主机ip查询条件 |
+| page | object | 否   | 分页查询条件   |
 
 #### ip
 
@@ -42,6 +34,10 @@
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "ip": {
         "data": [
             "192.168.0.1"
@@ -60,79 +56,73 @@
 
 ```json
 {
-  "result": true,
-  "code": 0,
-  "message": "success",
-  "data": {
+    "result": true,
+    "code": 0,
+    "data": {
         "count": 1,
         "info": [
             {
-                "bk_host_id": 4,
-                "bk_host_name": "",
-                "bk_supplier_account": "",
+                "bk_host_id": 11,
                 "bk_cloud_id": 0,
-                "bk_cloud_name": "default area",
-                "bk_host_innerip": "192.168.0.1",
-                "bk_host_outerip": "",
+                "bk_host_innerip": "1.1.1.1",
                 "bk_os_type": "",
-                "bk_os_name": "",
-                "bk_mem": 0,
-                "bk_cpu": 0,
-                "bk_disk": 0,
+                "bk_supplier_account": "0",
                 "associations": {
-                    "51": {
-                        "bk_biz_id": 3,
-                        "bk_biz_name": "test",
-                        "bk_set_id": 8,
-                        "bk_set_name": "test",
-                        "bk_module_id": 51,
-                        "bk_module_name": "test",
-                        "bk_service_status": "1",
-                        "bk_set_env": "3",
-                         "layer": {
-                              "bk_inst_id": 3,
-                              "bk_inst_name": "a",
-                              "bk_obj_id": "a",
-                              "child": {
-                                    "bk_inst_id": 5,
-                                    "bk_inst_name": "b",
-                                    "bk_obj_id": "b",
-                                    "child": {}
-                              }
-                        }
+                    "15553": {
+                        "bk_biz_id": 11,
+                        "bk_set_id": 4760,
+                        "bk_module_id": 15553,
+                        "layer": null
                     }
                 },
                 "process": [
                     {
-                        "bk_process_id": 43,
+                        "bk_process_id": 90908,
                         "bk_process_name": "test",
-                        "bind_ip": "",
-                        "port": "8000",
+                        "bind_ip": "1.1.1.1",
+                        "port": "8080",
                         "protocol": "1",
-                        "bk_func_id": "",
                         "bk_func_name": "test",
-                        "bk_start_param_regex": "",
+                        "bk_start_param_regex": "./test",
+                        "bk_enable_port": true,
                         "bind_info": [
                             {
-                                "enable": false,  
-                                "ip": "127.0.0.1",  
-                                "port": "8000",  
-                                "protocol": "1", 
-                                "template_row_id": 1  
+                                "enable": false,
+                                "ip": "1.1.1.1",
+                                "port": "8080",
+                                "protocol": "1",
+                                "template_row_id": 1
+                            },
+                            {
+                                "enable": true,
+                                "ip": "127.0.0.1",
+                                "port": "8081",
+                                "protocol": "2",
+                                "template_row_id": 2
                             }
-                        ],
-                        "bind_modules": [
-                            51
                         ]
                     }
                 ]
             }
         ]
-    }
+    },
+    "message": "success",
+    "permission": null,
+    "request_id": "cc26632ed3c344c79c0002ae9bcf3009"
 }
 ```
 
 ### 返回结果参数说明
+#### response
+
+| 名称    | 类型   | 描述                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code    | int    | 错误编码。 0表示success，>0表示失败错误    |
+| message | string | 请求失败返回的错误信息                     |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data    | object | 请求返回的数据                             |
 
 #### data
 
@@ -145,17 +135,10 @@
 | 字段                | 类型   | 描述                                |
 | ------------------- | ------ | ----------------------------------- |
 | bk_host_id          | int    | 主机ID                              |
-| bk_host_name        | string | 主机名称                            |
 | bk_supplier_account | string | 开发商账号                          |
 | bk_cloud_id         | int    | 云区域ID                            |
-| bk_cloud_name       | string | 云区域名称                          |
 | bk_host_innerip     | string | 内网IP                              |
-| bk_host_outerip     | string | 外网IP                              |
 | bk_os_type          | string | 操作系统类型                        |
-| bk_os_name          | string | 操作系统名称                        |
-| bk_mem              | string | 内存容量                            |
-| bk_cpu              | int    | CPU逻辑核心数                       |
-| bk_disk             | int    | 磁盘容量                            |
 | associations        | dict   | 主机主线关联，key为主机所属的模块ID |
 | process             | array  | 主机进程信息                        |
 
@@ -164,13 +147,8 @@
 | 字段              | 类型   | 描述                                  |
 | ----------------- | ------ | ------------------------------------- |
 | bk_biz_id         | int    | 主机所属的业务ID                      |
-| bk_biz_name       | string | 主机所属的业务名字                    |
 | bk_set_id         | int    | 主机所属的集群ID                      |
-| bk_set_name       | string | 主机所属的集群名字                    |
 | bk_module_id      | int    | 主机所属的模块ID                      |
-| bk_module_name    | string | 主机所属的模块名字                    |
-| bk_service_status | enum   | 服务状态:1/2(1:开放,2:关闭)           |
-| bk_set_env        | enum   | 环境类型：1/2/3(1:测试,2:体验,3:正式) |
 | layer             | dict   | 自定义层级信息                        |
 
 #### data.info[n].associations.layer
@@ -206,4 +184,4 @@
 |ip|string|绑定的ip||
 |port|string|绑定的端口||
 |protocol|string|使用的协议||
-|row_id|int|实例化使用的模板行索引，进程内唯一|
+|template_row_id|int|实例化使用的模板行索引，进程内唯一|

@@ -42,19 +42,48 @@
 | bk_fields           | array string   | 看情况 | 返回的事件中需要返回的字段列表，目前监听主机资源该字段为必填字段，不能置空，主机关系可以置空。置空则默认为返回所有字段。 |
 | bk_start_from       | Int64          | 否     | 监听事件的起始时间，该值为unix time的秒数，即为从UTC1970年1月1日0时0分0秒起至你要watch的时间点的总秒数。 |
 | bk_cursor           | string         | 否     | 监听事件的游标，代表了要开始或者继续watch(监听)的事件地址，系统会返回这个游标的下一个、或一批事件。 |
-| bk_resource         | string         | 是     | 要监听的资源类型，枚举值为：host, host_relation, biz, set, module, process。其中host代表主机详情事件，host_relation代表主机的关系事件，biz代表业务详情事件，set代表集群详情事件，module代表模块详情事件，process代表进程详情事件。 |
+| bk_resource         | string         | 是     | 要监听的资源类型，枚举值为：host, host_relation, biz, set, module, process, object_instance, mainline_instance。其中host代表主机详情事件，host_relation代表主机的关系事件，biz代表业务详情事件，set代表集群详情事件，module代表模块详情事件，process代表进程详情事件，object_instance代表通用模型实例事件，mainline_instance代表主线模型实例事件。 |
 | bk_supplier_account | string         | 是     | 开发商账号                                                   |
+| bk_filter           | object         | 否     | 过滤条件                                                     |
+
+#### bk_filter
+
+| 字段                 | 类型           | 必选   | 描述                                                         |
+| ------------------- | -------------- | ------ | ------------------------------------------------------------ |
+| bk_sub_resource     | string         | 否     | 要监听的下级资源类型，仅支持bk_resource为object_instance或mainline_instance时使用，代表需要监听的模型的bk_obj_id |
 
 
 ### 请求参数示例
 
+主机：
+
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "bk_event_types": ["create","update","delete"],
     "bk_fields": ["bk_host_innerip", "bk_mac"],
     "bk_start_from": 12345678999,
     "bk_cursor": "MQ0yDTE1ODkyMDcyODENMQ01ZWI3ZWZjNTBiOTA5ZTYyMGFmYWQzZGY=",
-    "bk_resource": "host",
+    "bk_resource": "host"
+}
+
+```
+
+通用模型实例：
+
+```json
+{
+    "bk_event_types": [],
+    "bk_fields": ["bk_inst_id", "bk_inst_name"],
+    "bk_start_from": 12345678999,
+    "bk_cursor": "MQ0yDTE1ODkyMDcyODENMQ01ZWI3ZWZjNTBiOTA5ZTYyMGFmYWQzZGY=",
+    "bk_resource": "object_instance",
+    "bk_filter": {
+        "bk_sub_resource": "xxx"
+    },
     "bk_supplier_account": "0"
 }
 
@@ -68,6 +97,7 @@
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "bk_watched": true,
         "bk_events": [
@@ -102,6 +132,8 @@
 | result | bool | 请求成功与否。true:请求成功；false请求失败 |
 | code | int | 错误编码。 0表示success，>0表示失败错误 |
 | message | string | 请求失败返回的错误信息 |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 | data | Array | 事件数据详情，是一个有序的数组，数组尾部的事件为新的事件。 |
 
 - data 数据描述
@@ -124,6 +156,10 @@
 ```json
 
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
 	"bk_biz_id" : 1,
 	"bk_host_id" : 2,
 	"bk_module_id" : 3,
@@ -142,7 +178,7 @@
 	"bk_cpu" : null,
 	"bk_mac" : "",
 	"bk_host_innerip" : "192.168.1.1",	
-    "bk_supplier_account" : "0",
+        "bk_supplier_account" : "0",
 	....
 }
 ```
