@@ -82,19 +82,37 @@ config = {
                     # CC v2
                     ("/v2/cc/add_host_to_resource/", {"comp_codename": "generic.v2.cc.add_host_to_resource"}),
                     ("/v2/cc/create_business/", {"comp_codename": "generic.v2.cc.create_business"}),
-                    ("/v2/cc/create_custom_query/", {"comp_codename": "generic.v2.cc.create_custom_query"}),
+                    ("/v2/cc/create_custom_query/", {
+                        "comp_codename": "generic.v2.cc.create_custom_query",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/create_module/", {"comp_codename": "generic.v2.cc.create_module"}),
                     ("/v2/cc/create_set/", {"comp_codename": "generic.v2.cc.create_set"}),
-                    ("/v2/cc/delete_business/", {"comp_codename": "generic.v2.cc.delete_business"}),
-                    ("/v2/cc/delete_custom_query/", {"comp_codename": "generic.v2.cc.delete_custom_query"}),
+                    ("/v2/cc/delete_business/", {
+                        "comp_codename": "generic.v2.cc.delete_business",
+                        "is_hidden": True,
+                    }),
+                    ("/v2/cc/delete_custom_query/", {
+                        "comp_codename": "generic.v2.cc.delete_custom_query",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/delete_host/", {"comp_codename": "generic.v2.cc.delete_host"}),
                     ("/v2/cc/delete_module/", {"comp_codename": "generic.v2.cc.delete_module"}),
                     ("/v2/cc/delete_set/", {"comp_codename": "generic.v2.cc.delete_set"}),
-                    ("/v2/cc/get_custom_query_data/", {"comp_codename": "generic.v2.cc.get_custom_query_data"}),
-                    ("/v2/cc/get_custom_query_detail/", {"comp_codename": "generic.v2.cc.get_custom_query_detail"}),
+                    ("/v2/cc/get_custom_query_data/", {
+                        "comp_codename": "generic.v2.cc.get_custom_query_data",
+                        "is_hidden": True,
+                    }),
+                    ("/v2/cc/get_custom_query_detail/", {
+                        "comp_codename": "generic.v2.cc.get_custom_query_detail",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/get_host_base_info/", {"comp_codename": "generic.v2.cc.get_host_base_info"}),
                     ("/v2/cc/search_business/", {"comp_codename": "generic.v2.cc.search_business"}),
-                    ("/v2/cc/search_custom_query/", {"comp_codename": "generic.v2.cc.search_custom_query"}),
+                    ("/v2/cc/search_custom_query/", {
+                        "comp_codename": "generic.v2.cc.search_custom_query",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/search_module/", {"comp_codename": "generic.v2.cc.search_module"}),
                     ("/v2/cc/search_set/", {"comp_codename": "generic.v2.cc.search_set"}),
                     ("/v2/cc/transfer_host_module/", {"comp_codename": "generic.v2.cc.transfer_host_module"}),
@@ -123,13 +141,19 @@ config = {
                         },
                     ),
                     ("/v2/cc/update_business/", {"comp_codename": "generic.v2.cc.update_business"}),
-                    ("/v2/cc/update_custom_query/", {"comp_codename": "generic.v2.cc.update_custom_query"}),
+                    ("/v2/cc/update_custom_query/", {
+                        "comp_codename": "generic.v2.cc.update_custom_query",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/update_host/", {"comp_codename": "generic.v2.cc.update_host"}),
                     ("/v2/cc/update_module/", {"comp_codename": "generic.v2.cc.update_module"}),
                     ("/v2/cc/update_set/", {"comp_codename": "generic.v2.cc.update_set"}),
                     ("/v2/cc/search_biz_inst_topo/", {"comp_codename": "generic.v2.cc.search_biz_inst_topo"}),
                     ("/v2/cc/search_inst_by_object/", {"comp_codename": "generic.v2.cc.search_inst_by_object"}),
-                    ("/v2/cc/bind_role_privilege/", {"comp_codename": "generic.v2.cc.bind_role_privilege"}),
+                    ("/v2/cc/bind_role_privilege/", {
+                        "comp_codename": "generic.v2.cc.bind_role_privilege",
+                        "is_hidden": True,
+                    }),
                     (
                         "/v2/cc/update_object_topo_graphics/",
                         {
