@@ -72,6 +72,71 @@
     // 记录 mousedown 状态
     let isMousedown = false
 
+    const safeStyles = {
+        // fix: 影响子元素排版
+        display: 'block',
+        'padding': '',
+        'paddingTop': '',
+        'paddingRight': '',
+        'paddingBottom': '',
+        'paddingLeft': '',
+        'line-height': '',
+        'letter-spacing': '',
+        'word-spacing': '',
+        'text-align': '',
+        'text-decoration': '',
+        'text-indent': '',
+        'text-overflow': '',
+        'text-rendering': '',
+        'text-size-adjust': '',
+        'text-shadow': '',
+        'text-transform': '',
+        'word-break': '',
+        'word-wrap': '',
+        'white-space': '',
+        // fix: 父子元素效果叠加
+        'background': '',
+        'background-attachment': '',
+        'background-color': '',
+        'background-image': '',
+        'background-position': '',
+        'background-repeat': '',
+        'background-size': '',
+        'border': '',
+        'border-image': '',
+        'border-collapse': '',
+        'border-color': '',
+        'border-top': '',
+        'border-right': '',
+        'border-bottom': '',
+        'border-left': '',
+        'border-top-color': '',
+        'border-right-color': '',
+        'border-bottom-color': '',
+        'border-left-color': '',
+        'border-spacing': '',
+        'border-style': '',
+        'border-top-style': '',
+        'border-right-style': '',
+        'border-bottom-style': '',
+        'border-left-style': '',
+        'border-width': '',
+        'border-top-width': '',
+        'border-right-width': '',
+        'border-bottom-width': '',
+        'border-left-width': '',
+        'border-radius': '',
+        'border-top-right-radius': '',
+        'border-bottom-right-radius': '',
+        'border-bottom-left-radius': '',
+        'border-top-left-radius': '',
+        'border-radius-topright': '',
+        'border-radius-bottomright': '',
+        'border-radius-bottomleft': '',
+        'border-radius-topleft': '',
+        opacity: ''
+    }
+
     export default {
         name: 'resolve-component',
         components: {
@@ -106,70 +171,7 @@
             return {
                 isHover: false,
                 // 默认会继承组件的 style 配置，如果直接继承有些样式会造成排版问题需要重置
-                safeStyles: {
-                    // fix: 影响子元素排版
-                    display: 'block',
-                    'padding': '',
-                    'paddingTop': '',
-                    'paddingRight': '',
-                    'paddingBottom': '',
-                    'paddingLeft': '',
-                    'line-height': '',
-                    'letter-spacing': '',
-                    'word-spacing': '',
-                    'text-align': '',
-                    'text-decoration': '',
-                    'text-indent': '',
-                    'text-overflow': '',
-                    'text-rendering': '',
-                    'text-size-adjust': '',
-                    'text-shadow': '',
-                    'text-transform': '',
-                    'word-break': '',
-                    'word-wrap': '',
-                    'white-space': '',
-                    // fix: 父子元素效果叠加
-                    'background': '',
-                    'background-attachment': '',
-                    'background-color': '',
-                    'background-image': '',
-                    'background-position': '',
-                    'background-repeat': '',
-                    'background-size': '',
-                    'border': '',
-                    'border-image': '',
-                    'border-collapse': '',
-                    'border-color': '',
-                    'border-top': '',
-                    'border-right': '',
-                    'border-bottom': '',
-                    'border-left': '',
-                    'border-top-color': '',
-                    'border-right-color': '',
-                    'border-bottom-color': '',
-                    'border-left-color': '',
-                    'border-spacing': '',
-                    'border-style': '',
-                    'border-top-style': '',
-                    'border-right-style': '',
-                    'border-bottom-style': '',
-                    'border-left-style': '',
-                    'border-width': '',
-                    'border-top-width': '',
-                    'border-right-width': '',
-                    'border-bottom-width': '',
-                    'border-left-width': '',
-                    'border-radius': '',
-                    'border-top-right-radius': '',
-                    'border-bottom-right-radius': '',
-                    'border-bottom-left-radius': '',
-                    'border-top-left-radius': '',
-                    'border-radius-topright': '',
-                    'border-radius-bottomright': '',
-                    'border-radius-bottomleft': '',
-                    'border-radius-topleft': '',
-                    opacity: ''
-                }
+                safeStyles: Object.assign({}, safeStyles)
             }
         },
         computed: {
@@ -192,15 +194,19 @@
             // 优先获取组件的 material Config 缓存起来，
             // 后续需要使用直接使用这个不在从 componentData.material 获取
             this.material = this.componentData.material
-            const updateCallback = (event) => {
+
+            // 编辑更新
+            const updateCallback = _.throttle((event) => {
                 const {
                     target
                 } = event
                 if (target.componentId === this.componentData.componentId) {
+                    this.safeStyleWithWidth()
+                    this.safeStyleWithHeight()
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
-            }
+            })
             
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
@@ -225,15 +231,17 @@
             })
         },
         mounted () {
-            this.safeBaseComponentStyle()
+            this.safeStylesWithDisplay()
+            this.safeStyleWithWidth()
+            this.safeStyleWithHeight()
             this.setDefaultStyleWithAttachToFreelayout()
             this.$emit('component-mounted')
         },
         methods: {
             /**
-             * @desc 继承基础组件的某些特殊样式
+             * @desc 保证组件的 display 配置和渲染正确
              */
-            safeBaseComponentStyle () {
+            safeStylesWithDisplay () {
                 if (this.isShadowComponent) {
                     return
                 }
@@ -265,6 +273,65 @@
                         display: getRenderStyleDisplayValue(display)
                     })
                 }
+            },
+            /**
+             * @desc 保证组件的 width 渲染正确
+             *
+             * 某些组件可能是通过 prop 配置 width 而不是直接配置 css 的 width
+             */
+            safeStyleWithWidth () {
+                if (this.isShadowComponent) {
+                    return
+                }
+                // 优先使用自定义配置的 width
+                if (this.componentData.style.width) {
+                    return
+                }
+
+                this.$nextTick(() => {
+                    const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
+                    if ($baseComponentEl) {
+                        if ($baseComponentEl.style.width) {
+                            this.safeStyles = Object.assign({}, this.safeStyles, {
+                                width: $baseComponentEl.style.width
+                            })
+                        } else {
+                            this.safeStyles = Object.assign({}, this.safeStyles, {
+                                width: window.getComputedStyle($baseComponentEl).width
+                            })
+                        }
+                    }
+                })
+            },
+            /**
+             * @desc 保证组件的 height 渲染正确
+             *
+             * 某些组件可能是通过 prop 配置 height 而不是直接配置 css 的 height
+             */
+            safeStyleWithHeight () {
+                if (this.isShadowComponent) {
+                    return
+                }
+                
+                // 优先使用自定义配置的 height
+                if (this.componentData.style.height) {
+                    return
+                }
+
+                this.$nextTick(() => {
+                    const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
+                    if ($baseComponentEl) {
+                        if ($baseComponentEl.style.height) {
+                            this.safeStyles = Object.assign({}, this.safeStyles, {
+                                height: $baseComponentEl.style.height
+                            })
+                        } else {
+                            this.safeStyles = Object.assign({}, this.safeStyles, {
+                                height: window.getComputedStyle($baseComponentEl).height
+                            })
+                        }
+                    }
+                })
             },
             /**
              * @desc 当组件在 freelayout 布局中时需要设置一些默认样式
@@ -333,7 +400,7 @@
              */
             handleMousemove (event) {
                 // fix: 在自由布局中同样监听 mouseover 事件
-                // 鼠标 hover 效果和 自由布局拖动效果有点冲突
+                // 鼠标 hover 效果和自由布局拖动效果有点冲突
                 if (isMousedown) {
                     return
                 }
