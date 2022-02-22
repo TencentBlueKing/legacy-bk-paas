@@ -1,6 +1,8 @@
 <template>
     <div id="operationArea" class="operation-area">
-        <component :is="com" v-bind="$attrs" />
+        <keep-alive>
+            <component :is="com" v-bind="$attrs" />
+        </keep-alive>
     </div>
 </template>
 <script>

@@ -34,10 +34,10 @@
             const height = ref(canvasSize.value.height)
 
             const projectId = route.params.projectId
-            const pageCode = store.getters['page/pageDetail'].pageCode
+            const pagePath = store.getters['page/pageRoute'].path
             const versionId = store.getters['projectVersion/currentVersionId']
 
-            const versionQuery = `${versionId ? `&v=${versionId}` : ''}`
+            const versionQuery = `${versionId ? `?v=${versionId}` : ''}`
 
             emitter.on('update-canvas-size', val => {
                 width.value = val.value.width
@@ -47,7 +47,7 @@
             return {
                 width,
                 height,
-                source: `/preview/project/${projectId}/preveiew?pageCode=${pageCode}${versionQuery}`
+                source: `${location.origin}/preview/project/${projectId}/${pagePath}${versionQuery}`
             }
         }
     }
