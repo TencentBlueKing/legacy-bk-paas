@@ -101,6 +101,7 @@
     </div>
 </template>
 <script>
+    import _ from 'lodash'
     import { mapGetters, mapActions } from 'vuex'
     import remoteExample from '@/element-materials/modifier/component/props/components/strategy/remote-example'
 
@@ -135,19 +136,25 @@
             }
         },
         computed: {
-            ...mapGetters('variable', ['variableList'])
+            ...mapGetters('variable', ['variableList']),
+            /**
+             * @desc 可供选择的完整变量列表
+             * @returns { Array }
+             */
+            wholeVariableList () {
+                return this.variableList.map(variable => {
+                    const variableValueTypeStr = typeEnum[variable.valueType]
+                    return {
+                        ...variable,
+                        disabled: variableValueTypeStr !== 'all'
+                            && (this.options.valueTypeInclude
+                                && !this.options.valueTypeInclude.includes(variableValueTypeStr))
+                    }
+                })
+            }
         },
         
         created () {
-            this.wholeVariableList = this.variableList.map(variable => {
-                const variableValueTypeStr = typeEnum[variable.valueType]
-                return {
-                    ...variable,
-                    disabled: variableValueTypeStr !== 'all'
-                        && (this.options.includesValueType && !this.options.includesValueType.includes(variableValueTypeStr))
-                }
-            })
-            
             this.renderVarialbeList = Object.freeze(this.wholeVariableList)
 
             this.envTextMap = {
@@ -163,10 +170,11 @@
                 content: '.variable-list',
                 placement: 'bottom-start',
                 boundary: 'window',
-                onShow () {
+                onShow: () => {
                     this.isShowVariable = true
+                    this.handleSearch(this.searchText)
                 },
-                onHide () {
+                onHide: () => {
                     this.isShowVariable = false
                 }
             }
@@ -232,18 +240,19 @@
              * @desc 变量列表搜索
              * @param { String } searchText
              */
-            handleSearch (searchText) {
-                if (searchText.trim() === '') {
+            handleSearch: _.throttle(function (searchText) {
+                this.searchText = searchText.trim()
+                if (this.searchText === '') {
                     this.renderVarialbeList = Object.freeze(this.wholeVariableList)
                     return
                 }
                 this.renderVarialbeList = Object.freeze(this.wholeVariableList.reduce((result, variable) => {
-                    if (variable.variableName.includes(searchText)) {
+                    if (variable.variableName.includes(this.searchText)) {
                         result.push(variable)
                     }
                     return result
                 }, []))
-            },
+            }, 60),
             /**
              * @desc 选中变量
              * @param { Object } variableData

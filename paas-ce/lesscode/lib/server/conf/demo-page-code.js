@@ -2,39 +2,50 @@
 
 const blankTemplate = [
     {
-        'componentId': 'grid-83db5ee8',
-        'renderKey': '222d54ed',
-        'name': 'grid',
+        'componentId': 'grid4-8982ecfd',
         'type': 'render-grid',
-        'tabPanelActive': 'props',
-        'renderProps': {
-            'margin-horizontal': {
-                'type': 'number',
-                'val': 0
-            },
-            'margin-vertical': {
-                'type': 'number',
-                'val': 0
-            },
-            'slots': {
-                'type': 'column',
-                'val': [
-                    {
-                        'span': 1,
-                        'children': [
+        'name': 'grid4',
+        'complex': false,
+        'custom': false,
+        'interactive': false,
+        'renderDirectives': [],
+        'renderEvents': {},
+        'renderProps': {},
+        'renderSlots': {
+            'default': [
+                {
+                    'componentId': 'column-904aef00',
+                    'type': 'render-column',
+                    'name': 'column',
+                    'complex': false,
+                    'custom': false,
+                    'interactive': false,
+                    'renderDirectives': [],
+                    'renderEvents': {},
+                    'renderProps': {
+                        'span': {
+                            'format': 'value',
+                            'code': 1,
+                            'renderValue': 1,
+                            'valueType': 'number',
+                            'payload': {}
+                        }
+                    },
+                    'renderSlots': {
+                        'default': [
                             {
-                                'componentId': 'search-select-e6e416c8',
-                                'tabPanelActive': 'props',
-                                'renderKey': 'efa03f30',
-                                'name': 'search-select',
+                                'componentId': 'search-select-522fdf75',
                                 'type': 'bk-search-select',
+                                'name': 'search-select',
+                                'complex': false,
+                                'custom': false,
+                                'interactive': false,
+                                'renderDirectives': [],
+                                'renderEvents': {},
                                 'renderProps': {
                                     'data': {
-                                        'type': [
-                                            'array',
-                                            'remote'
-                                        ],
-                                        'val': [
+                                        'format': 'value',
+                                        'code': [
                                             {
                                                 'name': '实例状态',
                                                 'id': '1',
@@ -89,132 +100,206 @@ const blankTemplate = [
                                                 'id': '6'
                                             }
                                         ],
-                                        'v-bind': ''
+                                        'valueType': 'array',
+                                        'payload': {}
                                     },
                                     'values': {
-                                        'type': 'array',
-                                        'val': [],
-                                        'tips': '选择中查询条件',
-                                        'v-model': ''
+                                        'format': 'value',
+                                        'code': [],
+                                        'valueType': 'array',
+                                        'payload': {}
                                     },
                                     'split-code': {
-                                        'type': 'string',
-                                        'val': '|',
-                                        'tips': '查询条件分隔符'
+                                        'format': 'value',
+                                        'code': '|',
+                                        'renderValue': '|',
+                                        'valueType': 'string',
+                                        'payload': {}
                                     },
                                     'explain-code': {
-                                        'type': 'string',
-                                        'val': '|',
-                                        'tips': '查询条件解释符'
+                                        'format': 'value',
+                                        'code': '|',
+                                        'renderValue': '|',
+                                        'valueType': 'string',
+                                        'payload': {}
+                                    },
+                                    'placeholder': {
+                                        'format': 'value',
+                                        'code': '',
+                                        'renderValue': '',
+                                        'valueType': 'string',
+                                        'payload': {}
+                                    },
+                                    'empty-text': {
+                                        'format': 'value',
+                                        'code': '',
+                                        'renderValue': '',
+                                        'valueType': 'string',
+                                        'payload': {}
                                     },
                                     'max-height': {
-                                        'type': 'number',
-                                        'val': 120
+                                        'format': 'value',
+                                        'code': 120,
+                                        'renderValue': 120,
+                                        'valueType': 'number',
+                                        'payload': {}
                                     },
                                     'min-height': {
-                                        'type': 'number',
-                                        'val': 32
+                                        'format': 'value',
+                                        'code': 32,
+                                        'renderValue': 32,
+                                        'valueType': 'number',
+                                        'payload': {}
                                     },
                                     'strink': {
-                                        'type': 'boolean',
-                                        'val': true,
-                                        'tips': '当输入条件过多超出input最小值时是否伸缩input框'
+                                        'format': 'value',
+                                        'code': true,
+                                        'renderValue': true,
+                                        'valueType': 'boolean',
+                                        'payload': {}
                                     },
                                     'show-delay': {
-                                        'type': 'number',
-                                        'val': 100,
-                                        'tips': '列表弹窗动画延时时间'
+                                        'format': 'value',
+                                        'code': 100,
+                                        'renderValue': 100,
+                                        'valueType': 'number',
+                                        'payload': {}
                                     },
                                     'display-key': {
-                                        'type': 'string',
-                                        'val': 'name',
-                                        'tips': '显示的字段名称'
+                                        'format': 'value',
+                                        'code': 'name',
+                                        'renderValue': 'name',
+                                        'valueType': 'string',
+                                        'payload': {}
                                     },
                                     'primary-key': {
-                                        'type': 'string',
-                                        'val': 'id',
-                                        'tips': '项目的唯一id字段名称'
+                                        'format': 'value',
+                                        'code': 'id',
+                                        'renderValue': 'id',
+                                        'valueType': 'string',
+                                        'payload': {}
                                     },
                                     'condition': {
-                                        'type': 'object',
-                                        'val': {},
-                                        'tips': '查询条件的其他关系值'
+                                        'format': 'value',
+                                        'code': {},
+                                        'valueType': 'object',
+                                        'payload': {}
                                     },
                                     'filter': {
-                                        'type': 'boolean',
-                                        'val': false,
-                                        'tips': '是否过滤'
+                                        'format': 'value',
+                                        'code': false,
+                                        'renderValue': false,
+                                        'valueType': 'boolean',
+                                        'payload': {}
                                     },
                                     'show-condition': {
-                                        'type': 'boolean',
-                                        'val': true,
-                                        'tips': '是否显示条件选择 （或）'
+                                        'format': 'value',
+                                        'code': true,
+                                        'renderValue': true,
+                                        'valueType': 'boolean',
+                                        'payload': {}
                                     },
                                     'key-delay': {
-                                        'type': 'number',
-                                        'val': 300,
-                                        'tips': '监听输入和过滤的延时间隔'
+                                        'format': 'value',
+                                        'code': 300,
+                                        'renderValue': 300,
+                                        'valueType': 'number',
+                                        'payload': {}
                                     },
                                     'readonly': {
-                                        'type': 'boolean',
-                                        'val': false
+                                        'format': 'value',
+                                        'code': false,
+                                        'renderValue': false,
+                                        'valueType': 'boolean',
+                                        'payload': {}
                                     },
                                     'wrap-zindex': {
-                                        'type': 'string',
-                                        'val': '9',
-                                        'tips': '设置组件的层级高度'
+                                        'format': 'value',
+                                        'code': '9',
+                                        'renderValue': '9',
+                                        'valueType': 'string',
+                                        'payload': {}
                                     },
                                     'default-focus': {
-                                        'type': 'boolean',
-                                        'val': false,
-                                        'tips': '组件初始化时是否获取焦点'
+                                        'format': 'value',
+                                        'code': false,
+                                        'renderValue': false,
+                                        'valueType': 'boolean',
+                                        'payload': {}
                                     },
                                     'input-type': {
-                                        'type': 'string',
-                                        'val': 'text',
-                                        'tips': '输入框类型'
+                                        'format': 'value',
+                                        'code': 'text',
+                                        'renderValue': 'text',
+                                        'valueType': 'string',
+                                        'payload': {}
                                     }
                                 },
+                                'renderSlots': {},
                                 'renderStyles': {
-                                    'display': 'block'
-                                },
-                                'renderEvents': {},
-                                'renderDirectives': []
-                            },
+                                    'display': 'block',
+                                    'marginBottom': '10px'
+                                }
+                            }
+                        ]
+                    },
+                    'renderStyles': {
+                        'minHeight': '80px',
+                        'width': '100%'
+                    }
+                }
+            ]
+        },
+        'renderStyles': {
+            'margin-bottom': '10px',
+            'marginBottom': '10px'
+        }
+    },
+    {
+        'componentId': 'grid4-d06cf360',
+        'type': 'render-grid',
+        'name': 'grid4',
+        'complex': false,
+        'custom': false,
+        'interactive': false,
+        'renderDirectives': [],
+        'renderEvents': {},
+        'renderProps': {},
+        'renderSlots': {
+            'default': [
+                {
+                    'componentId': 'column-7acf482b',
+                    'type': 'render-column',
+                    'name': 'column',
+                    'complex': false,
+                    'custom': false,
+                    'interactive': false,
+                    'renderDirectives': [],
+                    'renderEvents': {},
+                    'renderProps': {
+                        'span': {
+                            'format': 'value',
+                            'code': 1,
+                            'renderValue': 1,
+                            'valueType': 'number',
+                            'payload': {}
+                        }
+                    },
+                    'renderSlots': {
+                        'default': [
                             {
-                                'componentId': 'table-f5ae5ad2',
-                                'tabPanelActive': 'props',
-                                'renderKey': 'fe28f96a',
-                                'name': 'table',
+                                'componentId': 'table-28ea1436',
                                 'type': 'bk-table',
+                                'name': 'table',
+                                'complex': false,
+                                'custom': false,
+                                'interactive': false,
+                                'renderDirectives': [],
+                                'renderEvents': {},
                                 'renderProps': {
-                                    'slots': {
-                                        'name': 'bk-table-column',
-                                        'type': 'table-column',
-                                        'val': [
-                                            {
-                                                'label': '第一列',
-                                                'prop': 'prop1',
-                                                'sortable': false
-                                            },
-                                            {
-                                                'label': '第二列',
-                                                'prop': 'prop2',
-                                                'sortable': false
-                                            },
-                                            {
-                                                'label': '第三列',
-                                                'prop': 'prop3',
-                                                'sortable': false
-                                            }
-                                        ]
-                                    },
                                     'data': {
-                                        'type': [
-                                            'array',
-                                            'remote'
-                                        ],
-                                        'val': [
+                                        'format': 'value',
+                                        'code': [
                                             {
                                                 'prop1': '1-1',
                                                 'prop2': '1-2',
@@ -231,88 +316,203 @@ const blankTemplate = [
                                                 'prop3': '3-3'
                                             }
                                         ],
-                                        'tips': '显示的数据',
-                                        'v-bind': ''
+                                        'valueType': 'array',
+                                        'payload': {}
+                                    },
+                                    'stripe': {
+                                        'format': 'value',
+                                        'code': false,
+                                        'renderValue': false,
+                                        'valueType': 'boolean',
+                                        'payload': {}
+                                    },
+                                    'border': {
+                                        'format': 'value',
+                                        'code': false,
+                                        'renderValue': false,
+                                        'valueType': 'boolean',
+                                        'payload': {}
+                                    },
+                                    'outer-border': {
+                                        'format': 'value',
+                                        'code': false,
+                                        'renderValue': false,
+                                        'valueType': 'boolean',
+                                        'payload': {}
+                                    },
+                                    'row-border': {
+                                        'format': 'value',
+                                        'code': true,
+                                        'renderValue': true,
+                                        'valueType': 'boolean',
+                                        'payload': {}
+                                    },
+                                    'col-border': {
+                                        'format': 'value',
+                                        'code': false,
+                                        'renderValue': false,
+                                        'valueType': 'boolean',
+                                        'payload': {}
                                     },
                                     'size': {
-                                        'type': 'string',
-                                        'val': 'medium',
-                                        'options': [
-                                            'small',
-                                            'medium',
-                                            'large'
-                                        ]
+                                        'format': 'value',
+                                        'code': 'medium',
+                                        'renderValue': 'medium',
+                                        'valueType': 'string',
+                                        'payload': {}
                                     },
                                     'fit': {
-                                        'type': 'boolean',
-                                        'val': true,
-                                        'tips': '列的看度是否自动撑开'
+                                        'format': 'value',
+                                        'code': true,
+                                        'renderValue': true,
+                                        'valueType': 'boolean',
+                                        'payload': {}
                                     },
                                     'show-header': {
-                                        'type': 'boolean',
-                                        'val': true,
-                                        'tips': '是否显示表头'
+                                        'format': 'value',
+                                        'code': true,
+                                        'renderValue': true,
+                                        'valueType': 'boolean',
+                                        'payload': {}
                                     },
                                     'highlight-current-row': {
-                                        'type': 'boolean',
-                                        'val': false,
-                                        'tips': '是否高亮当前行'
+                                        'format': 'value',
+                                        'code': false,
+                                        'renderValue': false,
+                                        'valueType': 'boolean',
+                                        'payload': {}
+                                    },
+                                    'pagination': {
+                                        'format': 'value',
+                                        'code': {
+                                            'current': 1,
+                                            'count': 3,
+                                            'limit': 10,
+                                            'limitList': [
+                                                10,
+                                                20,
+                                                50,
+                                                100
+                                            ],
+                                            'showLimit': false
+                                        },
+                                        'valueType': 'object',
+                                        'payload': {}
+                                    },
+                                    'show-pagination-info': {
+                                        'format': 'value',
+                                        'code': true,
+                                        'renderValue': true,
+                                        'valueType': 'boolean',
+                                        'payload': {}
                                     }
                                 },
-                                'renderStyles': {},
-                                'renderEvents': {},
-                                'renderDirectives': []
+                                'renderSlots': {
+                                    'default': {
+                                        'format': 'value',
+                                        'component': 'bk-table-column',
+                                        'code': [
+                                            {
+                                                'label': '第一列',
+                                                'prop': 'prop1',
+                                                'sortable': false,
+                                                'type': ''
+                                            },
+                                            {
+                                                'label': '第二列',
+                                                'prop': 'prop2',
+                                                'sortable': false,
+                                                'type': ''
+                                            },
+                                            {
+                                                'label': '第三列',
+                                                'prop': 'prop3',
+                                                'sortable': false,
+                                                'type': ''
+                                            }
+                                        ],
+                                        'payload': {},
+                                        'valueType': 'table-list'
+                                    }
+                                },
+                                'renderStyles': {
+                                    'marginBottom': '10px'
+                                }
                             }
-                        ],
+                        ]
+                    },
+                    'renderStyles': {
+                        'minHeight': '80px',
                         'width': '100%'
                     }
-                ]
-            }
+                }
+            ]
         },
-        'renderStyles': {},
-        'renderEvents': {},
-        'renderDirectives': []
+        'renderStyles': {
+            'margin-bottom': '10px',
+            'marginTop': '10px',
+            'marginBottom': '10px'
+        }
     },
     {
-        'componentId': 'grid-0f5d0a3d',
-        'tabPanelActive': 'props',
-        'renderKey': '5feb8889',
-        'name': 'grid',
+        'componentId': 'grid4-325ef845',
         'type': 'render-grid',
-        'renderProps': {
-            'margin-horizontal': {
-                'type': 'number',
-                'val': 0
-            },
-            'margin-vertical': {
-                'type': 'number',
-                'val': 0
-            },
-            'slots': {
-                'type': 'column',
-                'val': [
-                    {
-                        'span': 1,
-                        'children': [
+        'name': 'grid4',
+        'complex': false,
+        'custom': false,
+        'interactive': false,
+        'renderDirectives': [],
+        'renderEvents': {},
+        'renderProps': {},
+        'renderSlots': {
+            'default': [
+                {
+                    'componentId': 'column-72767184',
+                    'type': 'render-column',
+                    'name': 'column',
+                    'complex': false,
+                    'custom': false,
+                    'interactive': false,
+                    'renderDirectives': [],
+                    'renderEvents': {},
+                    'renderProps': {
+                        'span': {
+                            'format': 'value',
+                            'code': 1,
+                            'renderValue': 1,
+                            'valueType': 'number',
+                            'payload': {}
+                        }
+                    },
+                    'renderSlots': {
+                        'default': [
                             {
-                                'componentId': 'chart-line-a165515c',
-                                'tabPanelActive': 'props',
-                                'renderKey': '74fc5b4b',
-                                'name': 'chart-line',
+                                'componentId': 'chart-line-b53d1574',
                                 'type': 'chart',
+                                'name': 'chart-line',
+                                'complex': false,
+                                'custom': false,
+                                'interactive': false,
+                                'renderDirectives': [],
+                                'renderEvents': {},
                                 'renderProps': {
                                     'width': {
-                                        'type': 'size',
-                                        'val': '400px'
+                                        'format': 'value',
+                                        'code': '400px',
+                                        'renderValue': '400px',
+                                        'valueType': 'size',
+                                        'payload': {}
                                     },
                                     'height': {
-                                        'type': 'number',
-                                        'val': 300,
-                                        'tips': '图表高度，单位为px'
+                                        'format': 'value',
+                                        'code': 200,
+                                        'renderValue': 200,
+                                        'valueType': 'number',
+                                        'payload': {}
                                     },
                                     'options': {
-                                        'type': 'json',
-                                        'val': {
+                                        'format': 'value',
+                                        'code': {
                                             'title': {
                                                 'text': '折线图demo',
                                                 'x': 'center'
@@ -326,12 +526,6 @@ const blankTemplate = [
                                             'calculable': true,
                                             'xAxis': [
                                                 {
-                                                    'axisLine': {
-                                                        'lineStyle': {
-                                                            'color': '#CECECE'
-                                                        }
-                                                    },
-                                                    'boundaryGap': false,
                                                     'data': [
                                                         '一',
                                                         '二',
@@ -368,34 +562,126 @@ const blankTemplate = [
                                                 }
                                             ]
                                         },
-                                        'tips': '图表配置，配置项同echarts'
+                                        'valueType': 'json',
+                                        'payload': {}
+                                    },
+                                    'remoteOptions': {
+                                        'format': 'value',
+                                        'code': {
+                                            'title': {
+                                                'text': '折线图demo',
+                                                'x': 'center'
+                                            },
+                                            'legend': {
+                                                'left': 'left',
+                                                'data': [
+                                                    'issue数量'
+                                                ]
+                                            },
+                                            'calculable': true,
+                                            'xAxis': [
+                                                {
+                                                    'data': [
+                                                        '一',
+                                                        '二',
+                                                        '三',
+                                                        '四',
+                                                        '五'
+                                                    ]
+                                                }
+                                            ],
+                                            'yAxis': [
+                                                {
+                                                    'axisLine': {
+                                                        'lineStyle': {
+                                                            'color': '#CECECE'
+                                                        }
+                                                    }
+                                                }
+                                            ],
+                                            'series': [
+                                                {
+                                                    'name': 'issue数量',
+                                                    'type': 'line',
+                                                    'smooth': 0.3,
+                                                    'color': [
+                                                        '#66AEDE'
+                                                    ],
+                                                    'data': [
+                                                        8,
+                                                        3,
+                                                        5,
+                                                        8,
+                                                        5
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        'valueType': 'remote',
+                                        'payload': {}
                                     }
                                 },
-                                'renderStyles': {},
-                                'renderEvents': {},
-                                'renderDirectives': []
+                                'renderSlots': {},
+                                'renderStyles': {
+                                    'display': 'inline-block',
+                                    'marginRight': '10px',
+                                    'marginBottom': '10px'
+                                }
                             }
-                        ],
-                        'width': '50%'
+                        ]
                     },
-                    {
-                        'span': 1,
-                        'children': [
+                    'renderStyles': {
+                        'minHeight': '80px',
+                        'width': '50%'
+                    }
+                },
+                {
+                    'componentId': 'column-8ddf9d0f',
+                    'type': 'render-column',
+                    'name': 'column',
+                    'complex': false,
+                    'custom': false,
+                    'interactive': false,
+                    'renderDirectives': [],
+                    'renderEvents': {},
+                    'renderProps': {
+                        'span': {
+                            'format': 'value',
+                            'code': 1,
+                            'renderValue': 1,
+                            'valueType': 'number',
+                            'payload': {}
+                        }
+                    },
+                    'renderSlots': {
+                        'default': [
                             {
-                                'componentId': 'chart-bar-d0c193b1',
-                                'tabPanelActive': 'props',
-                                'renderKey': 'cc038a18',
-                                'name': 'chart-bar',
+                                'componentId': 'chart-bar-7318c97f',
                                 'type': 'chart',
+                                'name': 'chart-bar',
+                                'complex': false,
+                                'custom': false,
+                                'interactive': false,
+                                'renderDirectives': [],
+                                'renderEvents': {},
                                 'renderProps': {
+                                    'width': {
+                                        'format': 'value',
+                                        'code': '400%',
+                                        'valueType': 'size',
+                                        'renderValue': '400%',
+                                        'payload': {}
+                                    },
                                     'height': {
-                                        'type': 'number',
-                                        'val': 300,
-                                        'tips': '图表高度，单位为px'
+                                        'format': 'value',
+                                        'code': 200,
+                                        'renderValue': 200,
+                                        'valueType': 'number',
+                                        'payload': {}
                                     },
                                     'options': {
-                                        'type': 'json',
-                                        'val': {
+                                        'format': 'value',
+                                        'code': {
                                             'title': {
                                                 'text': '柱状图demo',
                                                 'x': 'center'
@@ -431,22 +717,72 @@ const blankTemplate = [
                                                 }
                                             ]
                                         },
-                                        'tips': '图表配置，配置项同echarts'
+                                        'valueType': 'json',
+                                        'payload': {}
+                                    },
+                                    'remoteOptions': {
+                                        'format': 'value',
+                                        'code': {
+                                            'title': {
+                                                'text': '柱状图demo',
+                                                'x': 'center'
+                                            },
+                                            'tooltip': {},
+                                            'legend': {
+                                                'data': [
+                                                    'issue数量'
+                                                ],
+                                                'left': 'left'
+                                            },
+                                            'xAxis': {
+                                                'data': [
+                                                    '一',
+                                                    '二',
+                                                    '三',
+                                                    '四',
+                                                    '五'
+                                                ]
+                                            },
+                                            'yAxis': {},
+                                            'series': [
+                                                {
+                                                    'name': 'issue数量',
+                                                    'type': 'bar',
+                                                    'data': [
+                                                        3,
+                                                        5,
+                                                        8,
+                                                        3,
+                                                        5
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        'valueType': 'remote',
+                                        'payload': {}
                                     }
                                 },
-                                'renderStyles': {},
-                                'renderEvents': {},
-                                'renderDirectives': []
+                                'renderSlots': {},
+                                'renderStyles': {
+                                    'display': 'inline-block',
+                                    'marginRight': '10px',
+                                    'marginBottom': '10px'
+                                }
                             }
-                        ],
+                        ]
+                    },
+                    'renderStyles': {
+                        'minHeight': '80px',
                         'width': '50%'
                     }
-                ]
-            }
+                }
+            ]
         },
-        'renderStyles': {},
-        'renderEvents': {},
-        'renderDirectives': []
+        'renderStyles': {
+            'margin-bottom': '10px',
+            'marginTop': '10px',
+            'marginBottom': '10px'
+        }
     }
 ]
 

@@ -65,18 +65,18 @@
             type: 'v-if',
             prop: '',
             format: 'variable',
-            includesFormat: ['variable', 'expression'], // v-if 支持配置（变量、表达式）
+            formatInclude: ['variable', 'expression'], // v-if 支持配置（变量、表达式）
             code: '',
-            includesValueType: ['boolean'],
+            valueTypeInclude: ['boolean'],
             renderValue: true
         },
         {
             type: 'v-show',
             prop: '',
             format: 'variable',
-            includesFormat: ['variable', 'expression'], // v-show 支持配置（变量、表达式）
+            formatInclude: ['variable', 'expression'], // v-show 支持配置（变量、表达式）
             code: '',
-            includesValueType: ['boolean'],
+            valueTypeInclude: ['boolean'],
             renderValue: true
         }
     ]
@@ -117,16 +117,16 @@
                 if (propConfig[prop]) {
                     const propConfigType = propConfig[directiveConfig.prop].type
                     // 解析对应 prop 配置的值类型、默认值
-                    const includesValueType = Array.isArray(propConfigType) ? propConfigType : [propConfigType]
+                    const valueTypeInclude = Array.isArray(propConfigType) ? propConfigType : [propConfigType]
                     const renderValue = propConfig[directiveConfig.prop].val
                     if (type === 'v-bind') {
                         result.push({
                             type: 'v-bind',
                             prop,
                             format: valType,
-                            includesFormat: ['variable'], // v-bind 支持配置（变量）
+                            formatInclude: ['variable'], // v-bind 支持配置（变量）
                             code: val,
-                            includesValueType,
+                            valueTypeInclude,
                             renderValue,
                             tips: tips
                         })
@@ -135,9 +135,9 @@
                             type: 'v-model',
                             prop,
                             format: 'variable',
-                            includesFormat: ['variable'], // v-bind 支持配置（变量）
+                            formatInclude: ['variable'], // v-bind 支持配置（变量）
                             code: '',
-                            includesValueType,
+                            valueTypeInclude,
                             renderValue,
                             tips: tips
                         })
@@ -151,9 +151,9 @@
                     type: 'v-for',
                     prop: '',
                     format: 'variable',
-                    includesFormat: ['value', 'variable'], // v-bind 支持配置（值、变量）
+                    formatInclude: ['value', 'variable'], // v-bind 支持配置（值、变量）
                     code: '',
-                    includesValueType: ['boolean'],
+                    valueTypeInclude: ['boolean'],
                     renderValue: 1,
                     tips: (dir) => {
                         return dir.val

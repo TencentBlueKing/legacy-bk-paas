@@ -133,7 +133,6 @@
             this.componentId = componentId
             this.config = Object.freeze(material.styles || {})
             this.lastStyles = Object.assign({}, renderStyles)
-            console.log('from modift stylese == ', this.componentData, this.config, renderStyles)
         },
         methods: {
             handleChange (key, value) {

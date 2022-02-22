@@ -48,7 +48,6 @@ export const popClearLayout = (activeNode) => {
 export const removeCallBack = () => {
     const activeNode = LC.getActiveNode()
     const rootNode = LC.getRoot()
-    console.log(rootNode, 'rootNode')
     let msg = ''
     const { type, componentId, slotContainer } = activeNode
     if (slotContainer === true) {

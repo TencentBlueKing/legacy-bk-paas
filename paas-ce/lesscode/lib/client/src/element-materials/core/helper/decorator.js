@@ -20,19 +20,30 @@ export function notify (target, name, descriptor) {
             type: name,
             target: this
         }
-        triggerEventListener('update', event)
+
+        // 不属于下面事件触发时同时会触发update事件
+        if (![
+            'error',
+            'activeClear',
+            'active',
+            'toggleInteractive',
+            'componentHover',
+            'componentMouserleave'
+        ].includes(name)) {
+            triggerEventListener('update', event)
+        }
+        
         if (name === 'toggleInteractive') {
             event.interactiveShow = this.interactiveShow
             triggerEventListener('toggleInteractive', event)
-        }
-        
-        if (name === 'active' && isActived !== this.isActived) {
+        } else if (name === 'active' && isActived !== this.isActived) {
             event.isActived = true
             triggerEventListener('active', event)
-        }
-        if (name === 'activeClear' && isActived !== this.isActived) {
+        } else if (name === 'activeClear' && isActived !== this.isActived) {
             event.isActived = false
             triggerEventListener('activeClear', event)
+        } else {
+            triggerEventListener(name, event)
         }
         return result
     }
