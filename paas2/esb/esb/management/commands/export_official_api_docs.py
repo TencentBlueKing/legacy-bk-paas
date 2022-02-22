@@ -63,7 +63,7 @@ class Command(BaseCommand):
                 if not os.path.exists(doc_dir_path):
                     os.makedirs(doc_dir_path)
 
-                write_to_file(smart_str(content), doc_path)
+                write_to_file(smart_str(content), doc_path, mode="wb")
 
     @property
     def _now_str(self):
