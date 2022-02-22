@@ -36,8 +36,10 @@
                 }
             }
             LC.addEventListener('update', updateCallback)
+            LC.addEventListener('toggleInteractive', updateCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
+                LC.removeEventListener('toggleInteractive', updateCallback)
             })
         },
         mounted () {

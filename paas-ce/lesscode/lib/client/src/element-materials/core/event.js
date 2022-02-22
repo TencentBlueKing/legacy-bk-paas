@@ -1,5 +1,32 @@
 import { bus } from '@/common/bus'
 
+/**
+ * EVENT LIST:
+ *
+ * ready
+ * error
+ * activeClear
+ * active
+ * appendChild
+ * cloneNode
+ * insertAfter
+ * insertBefore
+ * pasteNode
+ * removeChild
+ * rerender
+ * setProp
+ * setRenderDirectives
+ * setRenderEvents
+ * setRenderProps
+ * setRenderSlots
+ * setRenderStyles
+ * setSlot
+ * setStyle
+ * toggleInteractive
+ * componentHover
+ * componentMouserleave
+ */
+
 export const addEventListener = (eventName, callback) => {
     bus.$on(eventName, callback)
 }

@@ -23,12 +23,14 @@
             </div>
         </div>
         <material-modifier />
-        <div
+        <a
+            v-if="componentDocument"
             class="link-prop-doc"
-            @click="handleJumpLink">
+            :href="componentDocument"
+            target="_blank">
             <i class="bk-drag-icon bk-drag-jump-link"></i>
             <span>查看详细属性文档</span>
-        </div>
+        </a>
     </div>
 </template>
 <script>
@@ -47,13 +49,13 @@
                 isCollapse: false,
                 inFormItem: false,
                 componentId: '',
-                componentType: ''
+                componentDocument: ''
             }
         },
         created () {
             this.componentData = {}
 
-            const updateCallback = _.throttle((event) => {
+            const toggleInteractiveCallback = _.throttle((event) => {
                 if (this.componentId
                     && event.target.componentId === this.componentId) {
                     this.$forceUpdate()
@@ -61,21 +63,22 @@
             }, 100)
 
             const activeCallback = ({ target }) => {
-                this.componentId = target.componentId
-                this.componentType = target.type
                 this.componentData = target
+                this.componentId = target.componentId
+                this.componentDocument = target.material.document || ''
             }
 
             const activeClearCallback = () => {
                 this.componentId = ''
                 this.componentData = {}
+                this.componentDocument = ''
             }
             
-            LC.addEventListener('update', updateCallback)
+            LC.addEventListener('toggleInteractive', toggleInteractiveCallback)
             LC.addEventListener('active', activeCallback)
             LC.addEventListener('activeClear', activeClearCallback)
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('update', updateCallback)
+                LC.removeEventListener('toggleInteractive', toggleInteractiveCallback)
                 LC.removeEventListener('active', activeCallback)
                 LC.removeEventListener('activeClear', activeClearCallback)
             })
@@ -93,18 +96,6 @@
              */
             handleToggleInteractiveShow () {
                 this.componentData.toggleInteractive()
-            },
-            /**
-             * @desc 跳转组件文档
-             */
-            handleJumpLink () {
-                const {
-                    material
-                } = this.componentData
-                const document = material.document
-                if (document) {
-                    window.open(document, '_blank')
-                }
             }
         }
     }

@@ -212,12 +212,16 @@
             }
 
             LC.addEventListener('update', updateCallback)
-            LC.addEventListener('component-hover', componentHoverCallback)
-            LC.addEventListener('component-mouserleave', componentMouseleaveCallback)
+            LC.addEventListener('active', updateCallback)
+            LC.addEventListener('activeClear', updateCallback)
+            LC.addEventListener('componentHover', componentHoverCallback)
+            LC.addEventListener('componentMouserleave', componentMouseleaveCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
-                LC.removeEventListener('component-hover', componentHoverCallback)
-                LC.removeEventListener('component-mouserleave', componentMouseleaveCallback)
+                LC.removeEventListener('active', updateCallback)
+                LC.removeEventListener('activeClear', updateCallback)
+                LC.removeEventListener('componentHover', componentHoverCallback)
+                LC.removeEventListener('componentMouserleave', componentMouseleaveCallback)
             })
         },
         mounted () {
@@ -337,7 +341,7 @@
                 event.stopPropagation()
                 event.preventDefault()
                 hoverComponentId = this.componentData.componentId
-                LC.triggerEventListener('component-hover')
+                LC.triggerEventListener('componentHover')
             }
         }
     }
@@ -370,6 +374,7 @@
         .line-bottom,
         .line-left{
             position: absolute;
+            z-index: 9999999;
             border-width: 0;
             border-color: #3a84ff;
         }

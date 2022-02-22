@@ -175,7 +175,7 @@
              * @returns { Boolean }
              */
             handleMouseleave () {
-                LC.triggerEventListener('component-mouserleave')
+                LC.triggerEventListener('componentMouserleave')
             }
         }
     }

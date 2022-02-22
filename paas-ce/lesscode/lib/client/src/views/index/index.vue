@@ -192,7 +192,6 @@
             ]
         },
         beforeDestroy () {
-            console.log('from index beforeDestroy')
             LC.removeEventListener('update', this.handleUpdatePreview)
             LC.parseData([])
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)

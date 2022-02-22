@@ -3,6 +3,7 @@ import ApiMigraion from '../model/entities/api-migration'
 import Project from '../model/entities/project'
 import { logger } from '../logger'
 import Page from '../model/entities/page'
+import PageTemplate from '../model/entities/page-template'
 import PageTemplateCategory from '../model/entities/page-template-category'
 import { walkGrid, uuid } from '../util'
 
@@ -595,6 +596,9 @@ export async function syncPageData (ctx) {
         }
         const pageRepository = getRepository(Page)
         const pageList = await pageRepository.find()
+
+        const PageTemplateRepository = getRepository(PageTemplate)
+        const pageTemplateList = await PageTemplateRepository.find()
         
         await getConnection().transaction(async transactionalEntityManager => {
             const taskList = pageList.map(pageData => {
@@ -620,14 +624,36 @@ export async function syncPageData (ctx) {
                     content: JSON.stringify(targetData)
                 })
             })
-            await Promise.all(taskList)
+            const templateTaskList = pageTemplateList.map(templateData => {
+                let targetData = []
+                try {
+                    targetData = JSON.parse(templateData.content || '{}')
+                    if (Object.prototype.toString.call(targetData) !== '[object Object]') {
+                        targetData = {}
+                    }
+                } catch (err) {
+                    targetData = {}
+                }
+                targetData = [targetData]
+                const dataVersion = checkVersion(targetData)
+                if (dataVersion === 'v1') {
+                    targetData = tansform({ type: 'template' }, targetData)
+                    return transactionalEntityManager.update(PageTemplate, {
+                        id: templateData.id
+                    }, {
+                        content: JSON.stringify(targetData[0])
+                    })
+                } else {
+                    return Promise.resolve()
+                }
+            })
+            await Promise.all([...taskList, ...templateTaskList])
         })
         ctx.send({
             code: 0,
             message: `成功：${(new Date()).toString()}`,
             data: null
         })
-        // await pageRepository.save(pageList)
     } catch (error) {
         console.dir(error)
         ctx.send({
