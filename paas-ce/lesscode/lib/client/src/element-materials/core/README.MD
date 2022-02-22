@@ -176,9 +176,7 @@
         </tr>
         <tr>
             <td>setProperty</td>
-            <td>
-                `key, value`
-            </td>
+            <td>key, value</td>
             <td>设置的节点属性</td>
         </tr>
         <tr>
