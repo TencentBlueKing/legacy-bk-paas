@@ -87,9 +87,9 @@
              *      type: '',
              *      prop: '',
              *      format: '',
-             *      includesFormat: [] | undefined, // undefined 表示支持所有 format
+             *      formatInclude: [] | undefined, // undefined 表示支持所有 format
              *      code: '',
-             *      includesValueType: [] | undefined // undefined 表示支持所有值类型
+             *      valueTypeInclude: [] | undefined // undefined 表示支持所有值类型
              * }
              */
             options: {
@@ -130,12 +130,12 @@
 
         computed: {
             renderFormatMap () {
-                if (!this.options.includesFormat) {
+                if (!this.options.formatInclude) {
                     return {
                         ...formatTypeMap
                     }
                 }
-                return this.options.includesFormat.reduce((result, format) => {
+                return this.options.formatInclude.reduce((result, format) => {
                     if (formatTypeMap[format]) {
                         result[format] = formatTypeMap[format]
                     }

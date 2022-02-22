@@ -183,9 +183,9 @@
                 type: 'slot',
                 prop: this.name,
                 format: 'value',
-                includesFormat: ['value', 'variable', 'expression'],
+                formatInclude: ['value', 'variable', 'expression'],
                 code: defaultValue,
-                includesValueType: undefined
+                valueTypeInclude: undefined
             }
 
             // slot 的初始值

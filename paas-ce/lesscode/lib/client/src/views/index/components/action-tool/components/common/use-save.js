@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { ref, computed, getCurrentInstance } from '@vue/composition-api'
 import LC from '@/element-materials/core'
 import { useStore } from '@/store'
@@ -37,7 +38,7 @@ export default () => {
     const currentInstance = getCurrentInstance()
 
     const submit = () => {
-        const customComponentMap = {}
+        const relatedCustomComponentMap = {}
         const relatedVariableCodeMap = {}
         const relatedMethodCodeMap = {}
 
@@ -45,9 +46,10 @@ export default () => {
             if (!node) {
                 return
             }
-            // 手机页面使用的自定义组件
+
+            // 收集页面使用的自定义组件
             if (node.isCustomComponent) {
-                customComponentMap[node.type] = true
+                relatedCustomComponentMap[node.type] = true
             }
             Object.keys(node.method).forEach(methodPathKey => {
                 relatedMethodCodeMap[node.method[methodPathKey].code] = Object.assign(node.method[methodPathKey], {
@@ -172,6 +174,22 @@ export default () => {
             renderProps
         }
 
+        // 关联自定义组件的id、versionId
+        const customCompData = window.customCompontensPlugin.reduce((result, registerCallback) => {
+            const [
+                config,
+                ,
+                baseInfo
+            ] = registerCallback(Vue)
+            if (relatedCustomComponentMap[config.type]) {
+                result.push({
+                    compId: baseInfo.id,
+                    versionId: baseInfo.versionId
+                })
+            }
+            return result
+        }, [])
+
         isLoading.value = true
         return store.dispatch('page/update', {
             data: {
@@ -183,8 +201,7 @@ export default () => {
                     id: parseInt(route.params.pageId),
                     content: JSON.stringify(LC.getRoot().toJSON().renderSlots.default)
                 },
-                // TODO.
-                customCompData: [],
+                customCompData: customCompData,
                 functionData: releateMethodIdList,
                 usedVariableMap: relateVariableIdMap,
                 templateData
