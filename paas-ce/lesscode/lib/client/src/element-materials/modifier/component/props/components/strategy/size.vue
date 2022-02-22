@@ -21,12 +21,14 @@
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
 
     export default {
         components: {
             AppendSelect,
             SizeInput
         },
+        mixins: [defaultUnitMixin],
         props: {
             defaultValue: {
                 type: [String, Number],
@@ -44,11 +46,18 @@
         },
         data () {
             return {
-                sizeValue: splitValueAndUnit('value', this.defaultValue),
-                sizeUnit: splitValueAndUnit('unit', this.defaultValue) || 'px'
+                sizeValue: '',
+                sizeUnit: ''
             }
         },
+        created () {
+            this.initData()
+        },
         methods: {
+            initData () {
+                this.sizeValue = splitValueAndUnit('value', this.defaultValue)
+                this.sizeUnit = splitValueAndUnit('unit', this.defaultValue) || this.defaultUnit
+            },
             handleInputChange (val) {
                 this.change(this.name, val + this.sizeUnit, this.type)
             },

@@ -20,7 +20,7 @@ export default {
     renderStyles: {
         display: 'inline-block',
         textAlign: 'left',
-        fontSize: '14px',
+        fontSize: '28rpx',
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-all'
     },

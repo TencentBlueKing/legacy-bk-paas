@@ -48,7 +48,6 @@ Promise.all([
             fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
         }))
 
-    debugger
     const router = generateRouter(data.routeGroup, projectPageRouteList, projectRouteList, projectId)
     const store = generateStore(data.storeData, { projectPageRouteList, projectRouteList })
     window.app = new Vue({

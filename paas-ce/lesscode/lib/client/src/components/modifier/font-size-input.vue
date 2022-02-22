@@ -19,16 +19,16 @@
         :value="value"
         @change="handleFontSizeChange">
         <template slot="append">
-            <div class="common-input-slot-text" style="width: 24px;">{{fontUnit}}</div>
+            <div class="common-input-slot-text" style="width: 24px;">{{defaultUnit}}</div>
         </template>
     </bk-input>
 </template>
 
 <script>
     import { validateNaturalNumber } from '@/common/util'
-    import { mapGetters } from 'vuex'
-
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
     export default {
+        mixins: [defaultUnitMixin],
         props: {
             value: {
                 type: [String, Number],
@@ -40,12 +40,6 @@
                 isError: false
             }
         },
-        computed: {
-            ...mapGetters('page', ['platform']),
-            fontUnit () {
-                return this.platform === 'pc' ? 'px' : 'rpx'
-            }
-        },
         methods: {
             handleFontSizeChange (val) {
                 if (!validateNaturalNumber(val)) {
@@ -54,10 +48,7 @@
                 }
                 this.isError = false
 
-                this.$emit('change', {
-                    value: val,
-                    unit: this.fontUnit
-                })
+                this.$emit('change', val)
             }
         }
     }

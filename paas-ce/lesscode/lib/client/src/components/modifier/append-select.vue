@@ -39,7 +39,7 @@
             unitList () {
                 return this.platform === 'pc'
                     ? ['px', '%']
-                    : ['rpx', '%']
+                    : ['rpx', '%', 'px']
             }
 
         }

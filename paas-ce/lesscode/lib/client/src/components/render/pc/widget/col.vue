@@ -40,6 +40,7 @@
     import LC from '@/element-materials/core'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'render-col',
@@ -58,6 +59,12 @@
         inject: [
             'renderGrid'
         ],
+        computed: {
+            ...mapGetters('page', ['platform']),
+            defaultMargin () {
+                return this.platform === 'pc' ? '10px' : '20rpx'
+            }
+        },
         watch: {
             count: {
                 handler () {
@@ -126,16 +133,16 @@
                         } = componentInstance.componentData.style
                         if (componentInstance.componentData.layoutType
                             || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', '10px')
+                            componentInstance.componentData.setStyle('marginBottom', this.defaultMargin)
                             return
                         }
                         if (!marginLeft || marginLeft === 'unset') {
                             if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
-                                componentInstance.componentData.setStyle('marginRight', '10px')
+                                componentInstance.componentData.setStyle('marginRight', this.defaultMargin)
                             }
                         }
                         if (!marginBottom || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', '10px')
+                            componentInstance.componentData.setStyle('marginBottom', this.defaultMargin)
                         }
                     })
                 })

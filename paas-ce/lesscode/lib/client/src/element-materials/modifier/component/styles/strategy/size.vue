@@ -40,6 +40,7 @@
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
     import { getCssProperties } from '../common/util'
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
 
     const sizeConfig = [
         {
@@ -79,6 +80,7 @@
             AppendSelect,
             SizeInput
         },
+        mixins: [defaultUnitMixin],
         props: {
             value: {
                 type: Object,
@@ -118,7 +120,7 @@
                         item['value'] = that.value.display || ''
                     } else {
                         item['value'] = splitValueAndUnit('value', that.value[item.key])
-                        item['unit'] = splitValueAndUnit('unit', that.value[item.key]) || 'px'
+                        item['unit'] = splitValueAndUnit('unit', that.value[item.key]) || that.defaultUnit
                     }
                     return item
                 })

@@ -27,13 +27,13 @@ export default {
     props: {
         size: {
             type: 'string',
-            val: '',
+            val: 'normal',
             options: ['normal', 'large', 'small', 'mini'],
             tips: '尺寸'
         },
         type: {
             type: 'string',
-            val: '',
+            val: 'default',
             options: ['primary', 'warning', 'danger', 'info', 'default'],
             tips: '类型'
         },
@@ -41,11 +41,6 @@ export default {
             type: 'boolean',
             val: false,
             tips: '是否朴素按钮'
-        },
-        block: {
-            type: 'boolean',
-            val: false,
-            tips: '是否为块级元素'
         },
         square: {
             type: 'boolean',
