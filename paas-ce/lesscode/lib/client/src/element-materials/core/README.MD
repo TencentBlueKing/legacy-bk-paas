@@ -164,80 +164,101 @@
     <thead>
         <tr>
             <th>api</th>
+            <th>params</th>
             <th>描述</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>toJSON</td>
+            <td>-</td>
             <td>获取节点的 JSON 数据</td>
         </tr>
         <tr>
             <td>setProperty</td>
+            <td>
+                `key, value`
+            </td>
             <td>设置的节点属性</td>
         </tr>
         <tr>
             <td>active</td>
+            <td>-</td>
             <td>选中组件</td>
         </tr>
         <tr>
             <td>activeClear</td>
+            <td>-</td>
             <td>取消选中组件</td>
         </tr>
         <tr>
             <td>toggleInteractive</td>
+            <td>-</td>
             <td>切换交互式组件的显示状态</td>
         </tr>
         <tr>
             <td>rerender</td>
+            <td>-</td>
             <td>重新渲染组件</td>
         </tr>
         <tr>
             <td>appendChild</td>
+            <td>childNode, slotName</td>
             <td>布局类型组件添加子组件</td>
         </tr>
         <tr>
             <td>insertBefore</td>
+            <td>newNode, referenceNode</td>
             <td>布局类型的组件在指定的子组件之前插入兄弟组件</td>
         </tr>
         <tr>
             <td>insertAfter</td>
+            <td>newNode, referenceNode</td>
             <td>布局类型的组件在指定的子组件之后插入兄弟组件</td>
         </tr>
         <tr>
             <td>pasteNode</td>
+            <td>childNode</td>
             <td>布局类型的组件粘贴一个子组件</td>
         </tr>
         <tr>
             <td>removeChild</td>
+            <td>childNode</td>
             <td>布局类型的组件删除指定的子组件</td>
         </tr>
         <tr>
             <td>cloneNode</td>
+            <td>deep</td>
             <td>组件克隆</td>
         </tr>
         <tr>
             <td>setRenderStyles</td>
+            <td>style</td>
             <td>设置组件 style（全量覆盖）</td>
         </tr>
         <tr>
             <td>setRenderSlots</td>
+            <td>slots, slotName</td>
             <td>设置组件 slot（指定 slot 的全量覆盖）</td>
         </tr>
         <tr>
             <td>setRenderEvents</td>
+            <td>events</td>
             <td>设置组件 event（全量覆盖）</td>
         </tr>
         <tr>
             <td>setRenderDirectives</td>
+            <td>directives</td>
             <td>设置组件 directive（全量覆盖）</td>
         </tr>
         <tr>
             <td>setStyle</td>
+            <td>params1, params2</td>
             <td>设置指定 style name 的值</td>
         </tr>
         <tr>
             <td>setProp</td>
+            <td>params1, params2</td>
             <td>设置指定 prop name 的值</td>
         </tr>
     </tbody>
