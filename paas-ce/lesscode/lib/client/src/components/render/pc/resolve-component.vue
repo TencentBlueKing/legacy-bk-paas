@@ -201,6 +201,7 @@
                     target
                 } = event
                 if (target.componentId === this.componentData.componentId) {
+                    this.safeStylesWithDisplay()
                     this.safeStyleWithWidth()
                     this.safeStyleWithHeight()
                     this.$forceUpdate()
