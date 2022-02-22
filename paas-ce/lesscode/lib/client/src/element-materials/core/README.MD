@@ -55,24 +55,24 @@
             <td>Object</td>
             <td>组件支持的 prop 配置</td>
             <td>
-                <pre>
-                    {
-                        format: '', // 可选值（value、variable、expression）
-                        code: '',
-                        valueType: '', // format 是 value 时的值类型
-                        payload: {  // 存放远程函数、数据源配置相关信息
-                            method: {
-                                methodCode: '' // 函数名
-                                params: [] // 传递的参数
-                            },
-                            sourceData: {
-                                tableName: '', // 数据源表名
-                                columns: [] // 数据源表字段
-                            }
-                        }, 
-                        renderValue: '' // 作用于画布编辑区的显示效果
-                    }
-                </pre>
+<pre>
+    {
+        format: '', // 可选值（value、variable、expression）
+        code: '',
+        valueType: '', // format 是 value 时的值类型
+        payload: {  // 存放远程函数、数据源配置相关信息
+            method: {
+                methodCode: '' // 函数名
+                params: [] // 传递的参数
+            },
+            sourceData: {
+                tableName: '', // 数据源表名
+                columns: [] // 数据源表字段
+            }
+        }, 
+        renderValue: '' // 作用于画布编辑区的显示效果
+    }
+</pre>
             </td>
         </tr>
         <tr>
@@ -80,16 +80,16 @@
             <td>Object</td>
             <td>组件支持的 slot 配置</td>
             <td>
-                <pre>
-                    {
-                        format: '',
-                        code: '',
-                        component: '', // slot 生成的组件类型，
-                        valueType: '',
-                        payload: {},
-                        renderValue: ''
-                    }
-                </pre>
+<pre>
+    {
+        format: '',
+        code: '',
+        component: '', // slot 生成的组件类型，
+        valueType: '',
+        payload: {},
+        renderValue: ''
+    }
+</pre>
             </td>
         </tr>
         <tr>
@@ -97,12 +97,12 @@
             <td>Array</td>
             <td>组件支持的 directive 配置</td>
             <td>
-                <pre>
-                    {
-                        format: '',
-                        code: '',
-                    }
-                </pre>
+<pre>
+    {
+        format: '',
+        code: '',
+    }
+</pre>
             </td>
         </tr>
         <tr>
@@ -110,12 +110,12 @@
             <td>Object</td>
             <td>组件支持的 event 配置</td>
             <td>
-                <pre>
-                    {
-                        format: '',
-                        code: '',
-                    }
-                </pre>
+<pre>
+    {
+        format: '',
+        code: '',
+    }
+</pre>
             </td>
         </tr>
         <tr>
