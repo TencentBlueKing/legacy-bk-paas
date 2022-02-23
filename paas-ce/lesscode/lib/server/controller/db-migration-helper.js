@@ -629,7 +629,12 @@ export async function syncPageData (ctx) {
                 if (dataVersion === 'v0') {
                     targetData = []
                 } else if (dataVersion === 'v1') {
-                    targetData = tansform({ type: 'root' }, targetData)
+                    try {
+                        targetData = tansform({ type: 'root' }, targetData)
+                    } catch (error) {
+                        console.dir(error)
+                        return Promise.reject(new Error(`error page ==== ${pageData.id}`))
+                    }
                 }
                 
                 return transactionalEntityManager.update(Page, {
@@ -651,7 +656,13 @@ export async function syncPageData (ctx) {
                 targetData = [targetData]
                 const dataVersion = checkVersion(targetData)
                 if (dataVersion === 'v1') {
-                    targetData = tansform({ type: 'template' }, targetData)
+                    try {
+                        targetData = tansform({ type: 'template' }, targetData)
+                    } catch (error) {
+                        console.dir(error)
+                        return Promise.reject(new Error(`error template ==== ${templateData.id}`))
+                    }
+                    
                     return transactionalEntityManager.update(PageTemplate, {
                         id: templateData.id
                     }, {
