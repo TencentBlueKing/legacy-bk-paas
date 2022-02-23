@@ -286,6 +286,7 @@ export default class Node {
     @notify
     activeClear () {
         activeClear(this)
+        activeNode = null
         return this
     }
     

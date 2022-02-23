@@ -485,6 +485,15 @@ export async function syncPageData (ctx) {
                             footer: tansform(curDataNode, [renderSlots.footer.val])[0]
                         }
                     }
+                } else if (curDataNode.type === 'el-card') {
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.default
+                        && curDataNode.renderSlots.default.val) {
+                        const child = curDataNode.renderSlots.default.val
+                        curDataNode.renderSlots = {
+                            default: tansform(curDataNode, [child])[0]
+                        }
+                    }
                 }
         
                 // 转换 renderStyles
@@ -576,7 +585,8 @@ export async function syncPageData (ctx) {
                     'widget-form-item',
                     'bk-sideslider',
                     'bk-dialog',
-                    'bk-card'
+                    'bk-card',
+                    'el-card'
                 ].includes(curDataNode.type)) {
                     curDataNode.renderSlots = Object.keys(curDataNode.renderSlots || {}).reduce((result, slotName) => {
                         const slotData = curDataNode.renderSlots[slotName]
