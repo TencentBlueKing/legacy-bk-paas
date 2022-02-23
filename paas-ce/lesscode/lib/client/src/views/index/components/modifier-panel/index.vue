@@ -6,11 +6,11 @@
             <div
                 class="component-id"
                 v-bk-overflow-tips>
-                {{ componentData.componentId }}
+                {{ componentId }}
             </div>
             <div class="action-wrapper">
                 <i
-                    v-if="!inFormItem"
+                    v-if="!isAttachToForm"
                     class="bk-drag-icon bk-drag-shanchu mr5"
                     id="del-component-right-sidebar"
                     @click="handleRemoveElement"
@@ -46,10 +46,9 @@
         },
         data () {
             return {
-                isCollapse: false,
-                inFormItem: false,
                 componentId: '',
-                componentDocument: ''
+                componentDocument: '',
+                isAttachToForm: false
             }
         },
         created () {
@@ -66,24 +65,39 @@
                 this.componentData = target
                 this.componentId = target.componentId
                 this.componentDocument = target.material.document || ''
+                this.checkAttachToFrom()
             }
 
             const activeClearCallback = () => {
-                this.componentId = ''
                 this.componentData = {}
+                this.componentId = ''
                 this.componentDocument = ''
+                this.isAttachToForm = false
             }
             
-            LC.addEventListener('toggleInteractive', toggleInteractiveCallback)
             LC.addEventListener('active', activeCallback)
             LC.addEventListener('activeClear', activeClearCallback)
+            LC.addEventListener('toggleInteractive', toggleInteractiveCallback)
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('toggleInteractive', toggleInteractiveCallback)
                 LC.removeEventListener('active', activeCallback)
                 LC.removeEventListener('activeClear', activeClearCallback)
+                LC.removeEventListener('toggleInteractive', toggleInteractiveCallback)
             })
         },
         methods: {
+            /**
+             * @desc 检测选中的组件是否是 from 的子组件
+             */
+            checkAttachToFrom () {
+                this.isAttachToForm = false
+                let parentNode = this.componentData.parentNode
+                while (parentNode) {
+                    if (parentNode.type === 'widget-form') {
+                        this.isAttachToForm = true
+                    }
+                    parentNode = parentNode.parentNode
+                }
+            },
             /**
              * @desc 显示删除选中的元素弹框
              */
