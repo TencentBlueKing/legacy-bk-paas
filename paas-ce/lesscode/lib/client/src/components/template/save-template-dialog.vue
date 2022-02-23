@@ -156,7 +156,7 @@
                 await this.$refs.pageTemplateFrom.validate()
                 
                 this.dialog.loading = true
-                const className = this.isWholePage ? (this.pageLayout && this.pageLayout.layoutType !== 'empty' ? '.container-content' : '.main-content') : `div[data-component-id="${this.templateData.componentId}"]`
+                const className = this.isWholePage ? (this.pageLayout && this.pageLayout.layoutType !== 'empty' ? '.container-content' : '.operation-area') : `div[data-component-id="${this.templateData.componentId}"]`
                 html2canvas(document.querySelector(className)).then(async (canvas) => {
                     try {
                         const imgData = canvas.toDataURL('image/png')

@@ -265,18 +265,13 @@ export const updatePage = async (ctx) => {
 
                 await Promise.all([transactionalEntityManager.save(addUsedVariableValues), transactionalEntityManager.remove(deleteUsedVariables)])
             }
-
-            // 处理lifeCycle、styleSetting
-            page.lifeCycle = typeof page.lifeCycle === 'string' ? JSON.parse(page.lifeCycle) : page.lifeCycle
-            page.styleSetting = typeof page.styleSetting === 'string' ? JSON.parse(page.styleSetting) : page.styleSetting
-
-            return page
         })
+        const detail = await queryPageDeatail(pageData.id)
 
         ctx.send({
             code: 0,
             message: 'success',
-            data: result
+            data: detail
         })
     } catch (err) {
         ctx.throw(err)
@@ -421,28 +416,7 @@ export const checkName = async (ctx) => {
 export const pageDetail = async (ctx) => {
     try {
         const { pageId } = ctx.request.query
-        const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
-        const detail = await getRepository(Page).findOne(queryParams) || {}
-        detail.content = JSON.parse(detail.content || '[]')
-        if (detail.lifeCycle) detail.lifeCycle = JSON.parse(detail.lifeCycle)
-        if (detail.styleSetting) {
-            detail.styleSetting = JSON.parse(detail.styleSetting)
-        } else {
-            // migration调整
-            detail.styleSetting = {
-                minWidth: '',
-                marginTop: '',
-                marginBottom: '',
-                marginLeft: '',
-                marginRight: '',
-                paddingTop: '',
-                paddingBottom: '',
-                paddingLeft: '',
-                paddingRight: '',
-                backgroundColor: '',
-                customStyle: {}
-            }
-        }
+        const detail = await queryPageDeatail(pageId)
         ctx.send({
             code: 0,
             message: 'OK',
@@ -453,6 +427,32 @@ export const pageDetail = async (ctx) => {
             message: err.message || err
         })
     }
+}
+
+async function queryPageDeatail(pageId) {
+    const queryParams = Object.assign({}, { id: pageId }, { deleteFlag: 0 })
+    const detail = await getRepository(Page).findOne(queryParams) || {}
+    detail.content = JSON.parse(detail.content || '[]')
+    if (detail.lifeCycle) detail.lifeCycle = JSON.parse(detail.lifeCycle)
+    if (detail.styleSetting) {
+        detail.styleSetting = JSON.parse(detail.styleSetting)
+    } else {
+        // migration调整
+        detail.styleSetting = {
+            minWidth: '',
+            marginTop: '',
+            marginBottom: '',
+            marginLeft: '',
+            marginRight: '',
+            paddingTop: '',
+            paddingBottom: '',
+            paddingLeft: '',
+            paddingRight: '',
+            backgroundColor: '',
+            customStyle: {}
+        }
+    }
+    return detail
 }
 
 // 访问验证
