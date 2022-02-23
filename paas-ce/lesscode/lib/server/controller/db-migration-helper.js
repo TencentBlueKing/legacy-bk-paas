@@ -8,7 +8,7 @@ import PageTemplateCategory from '../model/entities/page-template-category'
 import { walkGrid, uuid } from '../util'
 
 // 将函数名称写到这个数组里，函数会自动执行，返回成功则后续不会再执行
-const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots']
+const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots']
 
 export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
@@ -312,6 +312,216 @@ async function fixCardsSlots () {
         return {
             code: 0,
             message: 'card修复成功'
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            code: -1,
+            message: error.message || error,
+            data: null
+        }
+    }
+}
+
+// eslint-disable-next-line no-unused-vars
+async function templateCardsSlots () {
+    try {
+        const templateRepository = getRepository(PageTemplate)
+        const allTemplateData = await templateRepository.find()
+
+        allTemplateData.forEach(template => {
+            let targetData = []
+            try {
+                targetData = (typeof template.content) === 'string' ? JSON.parse(template.content) : template.content
+            } catch (err) {
+                targetData = []
+            }
+            if (!targetData || targetData === 'null') {
+                logger.warn('targetData does not exist or is \'null\'')
+                targetData = []
+            }
+
+            ([targetData] || []).forEach((grid, index) => {
+                const callBack = (component) => {
+                /** renderSlots如果没有header，证明是旧数据，应该格式化其结构 */
+                    if (component.type === 'bk-card' && component.renderSlots.header === undefined) {
+                        const originValue = component.renderProps.title.val
+                        component.renderProps['disable-header-style'] = { 'type': 'hidden', 'val': true, 'payload': {}, 'attrs': [] }
+                        component.renderSlots = {
+                            'default': {
+                                'name': 'layout',
+                                'type': 'free-layout',
+                                'display': 'hidden',
+                                'val': {
+                                    'name': 'free-layout',
+                                    'type': 'free-layout',
+                                    'slotName': '',
+                                    'slotContainer': true,
+                                    'renderProps': {
+
+                                    },
+                                    'renderStyles': {
+                                        'height': '200px',
+                                        'pointer-events': 'auto'
+                                    },
+                                    'renderEvents': {
+
+                                    },
+                                    'renderDirectives': [
+
+                                    ],
+                                    'renderSlots': {
+                                        'default': {
+                                            'type': 'free-layout-item',
+                                            'val': [
+                                                {
+                                                    'children': [
+
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    'componentId': `free-layout-${uuid()}`
+                                }
+                            },
+                            'header': {
+                                'name': 'layout',
+                                'type': 'free-layout',
+                                'display': 'hidden',
+                                'val': {
+                                    'name': 'free-layout',
+                                    'type': 'free-layout',
+                                    'slotName': '',
+                                    'slotContainer': true,
+                                    'renderProps': {
+                                        'no-response': true
+                                    },
+                                    'renderStyles': {
+                                        'height': '50px',
+                                        'pointer-events': 'auto'
+                                    },
+                                    'renderEvents': {
+
+                                    },
+                                    'renderDirectives': [
+
+                                    ],
+                                    'renderSlots': {
+                                        'default': {
+                                            'type': 'free-layout-item',
+                                            'val': [
+                                                {
+                                                    'children': [
+                                                        {
+                                                            'componentId': `text-${uuid()}`,
+                                                            'tabPanelActive': 'styles',
+                                                            'renderKey': 'dcadd06d',
+                                                            'name': 'text',
+                                                            'type': 'span',
+                                                            'renderProps': {
+                                                                'inFreeLayout': {
+                                                                    'val': true
+                                                                },
+                                                                'title': {
+                                                                    'type': 'string',
+                                                                    'val': '',
+                                                                    'payload': {
+
+                                                                    },
+                                                                    'attrs': [
+
+                                                                    ]
+                                                                }
+                                                            },
+                                                            'renderStyles': {
+                                                                'display': 'inline-block',
+                                                                'fontSize': '16px',
+                                                                'textAlign': 'center',
+                                                                'top': '12px',
+                                                                'left': '7px'
+                                                            },
+                                                            'renderEvents': {
+
+                                                            },
+                                                            'interactiveShow': false,
+                                                            'isComplexComponent': false,
+                                                            'renderDirectives': [
+
+                                                            ],
+                                                            'renderSlots': {
+                                                                'default': {
+                                                                    'name': 'text',
+                                                                    'type': 'text',
+                                                                    'displayName': '文本配置',
+                                                                    'val': originValue,
+                                                                    'regExp': {
+
+                                                                    },
+                                                                    'regErrorText': '文本配置不能为空'
+                                                                }
+                                                            },
+                                                            'isCustomComponent': false
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    'componentId': `free-layout-${uuid()}`
+                                }
+                            },
+                            'footer': {
+                                'name': 'layout',
+                                'type': 'free-layout',
+                                'display': 'hidden',
+                                'val': {
+                                    'name': 'free-layout',
+                                    'type': 'free-layout',
+                                    'slotName': '',
+                                    'slotContainer': true,
+                                    'renderProps': {
+
+                                    },
+                                    'renderStyles': {
+                                        'height': '50px',
+                                        'pointer-events': 'auto'
+                                    },
+                                    'renderEvents': {
+
+                                    },
+                                    'renderDirectives': [
+
+                                    ],
+                                    'renderSlots': {
+                                        'default': {
+                                            'type': 'free-layout-item',
+                                            'val': [
+                                                {
+                                                    'children': [
+
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    'componentId': `free-layout-${uuid()}`
+                                }
+                            }
+                        }
+                    }
+                }
+                walkGrid(targetData, grid, callBack, callBack, index)
+            })
+
+            template.content = JSON.stringify(targetData[0])
+            template.updateBySystem = true
+        })
+
+        await templateRepository.save(allTemplateData)
+        return {
+            code: 0,
+            message: '模板card旧数据更新成功'
         }
     } catch (error) {
         console.log(error)
