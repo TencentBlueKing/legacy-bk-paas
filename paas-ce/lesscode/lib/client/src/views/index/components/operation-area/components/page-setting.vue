@@ -142,7 +142,6 @@
 
 <script>
     import { mapGetters, mapMutations } from 'vuex'
-    import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
     import pageRouterSelect from '@/components/project/page-router-select'
     import StylePadding from '@/element-materials/modifier/component/styles/strategy/padding'
     import StyleMargin from '@/element-materials/modifier/component/styles/strategy/margin'
@@ -451,21 +450,16 @@
                     })
                 }
                 const fieldData = { [field.id]: value }
-                // 获取当前页面使用中的函数
-                const [usedFuncMap] = getCurUsedFuncs()
                 // 调用更新方法
                 const pageData = {
-                    ...this.page,
+                    id: this.page.id,
                     ...fieldData
                 }
-                pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
-                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
                 const res = await this.$store.dispatch('page/update', {
                     data: {
                         pageData,
                         projectId: this.project.id,
                         versionId: this.versionId,
-                        functionData: Object.keys(usedFuncMap),
                         from: 'setting'
                     }
                 })
@@ -483,9 +477,8 @@
             },
             async saveStyle () {
                 const pageData = {
-                    ...this.page
+                    id: this.page.id
                 }
-                pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
                 pageData.styleSetting = JSON.stringify(pageData.styleSetting)
                 const res = await this.$store.dispatch('page/update', {
                     data: {

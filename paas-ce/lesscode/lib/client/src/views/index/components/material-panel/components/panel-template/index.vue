@@ -247,6 +247,7 @@
 
     .panel-template{
         min-height: 100%;
+        height: 100%;
         .category-tabs{
             display: flex;
             border-bottom: 1px solid #ccc;
