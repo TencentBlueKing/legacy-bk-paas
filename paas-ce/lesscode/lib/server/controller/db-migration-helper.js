@@ -444,32 +444,46 @@ export async function syncPageData (ctx) {
                         })
                     }
                 } else if (curDataNode.type === 'free-layout') {
-                    const freelayoutItem = curDataNode.renderSlots.default.val[0] || []
-                    let freelayoutSlot = []
-                    if (freelayoutItem && freelayoutItem.children) {
-                        freelayoutSlot = tansform(curDataNode, freelayoutItem.children)
-                    }
-                    curDataNode.renderSlots = {
-                        default: freelayoutSlot
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.default
+                        && Array.isArray(curDataNode.renderSlots.default.val)) {
+                        const freelayoutItem = curDataNode.renderSlots.default.val[0] || []
+                        let freelayoutSlot = []
+                        if (freelayoutItem && freelayoutItem.children) {
+                            freelayoutSlot = tansform(curDataNode, freelayoutItem.children)
+                        }
+                        curDataNode.renderSlots = {
+                            default: freelayoutSlot
+                        }
                     }
                 } else if (curDataNode.type === 'bk-sideslider') {
                     curDataNode.interactive = true
-                    const child = curDataNode.renderSlots.content.val
-                    curDataNode.renderSlots = {
-                        content: tansform(curDataNode, [child])[0]
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.content
+                        && curDataNode.renderSlots.content.val) {
+                        const child = curDataNode.renderSlots.content.val
+                        curDataNode.renderSlots = {
+                            content: tansform(curDataNode, [child])[0]
+                        }
                     }
                 } else if (curDataNode.type === 'bk-dialog') {
                     curDataNode.interactive = true
-                    const child = curDataNode.renderSlots.default.val
-                    curDataNode.renderSlots = {
-                        default: tansform(curDataNode, [child])[0]
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.content
+                        && curDataNode.renderSlots.content.val) {
+                        const child = curDataNode.renderSlots.default.val
+                        curDataNode.renderSlots = {
+                            default: tansform(curDataNode, [child])[0]
+                        }
                     }
                 } else if (curDataNode.type === 'bk-card') {
-                    const renderSlots = curDataNode.renderSlots
-                    curDataNode.renderSlots = {
-                        header: tansform(curDataNode, [renderSlots.header.val])[0],
-                        default: tansform(curDataNode, [renderSlots.default.val])[0],
-                        footer: tansform(curDataNode, [renderSlots.footer.val])[0]
+                    if (curDataNode.renderSlots) {
+                        const renderSlots = curDataNode.renderSlots
+                        curDataNode.renderSlots = {
+                            header: tansform(curDataNode, [renderSlots.header.val])[0],
+                            default: tansform(curDataNode, [renderSlots.default.val])[0],
+                            footer: tansform(curDataNode, [renderSlots.footer.val])[0]
+                        }
                     }
                 }
         
