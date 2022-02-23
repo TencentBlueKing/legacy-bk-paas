@@ -330,18 +330,18 @@ async function templateCardsSlots () {
         const allTemplateData = await templateRepository.find()
 
         allTemplateData.forEach(template => {
-            let targetData = []
+            let targetData = {}
             try {
-                targetData = (typeof template.content) === 'string' ? JSON.parse(template.content) : template.content
+                targetData = JSON.parse(template.content || '{}')
+                if (Object.prototype.toString.call(targetData) !== '[object Object]') {
+                    targetData = {}
+                }
             } catch (err) {
-                targetData = []
+                targetData = {}
             }
-            if (!targetData || targetData === 'null') {
-                logger.warn('targetData does not exist or is \'null\'')
-                targetData = []
-            }
+            const targetList = [targetData]
 
-            ([targetData] || []).forEach((grid, index) => {
+            targetList.forEach((grid, index) => {
                 const callBack = (component) => {
                 /** renderSlots如果没有header，证明是旧数据，应该格式化其结构 */
                     if (component.type === 'bk-card' && component.renderSlots.header === undefined) {
@@ -511,10 +511,10 @@ async function templateCardsSlots () {
                         }
                     }
                 }
-                walkGrid(targetData, grid, callBack, callBack, index)
+                walkGrid(targetList, grid, callBack, callBack, index)
             })
 
-            template.content = JSON.stringify(targetData[0])
+            template.content = JSON.stringify(targetList[0])
             template.updateBySystem = true
         })
 
@@ -524,7 +524,7 @@ async function templateCardsSlots () {
             message: '模板card旧数据更新成功'
         }
     } catch (error) {
-        console.log(error)
+        console.dir(error)
         return {
             code: -1,
             message: error.message || error,
