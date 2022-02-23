@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.25
+    - update: esb update cc confapis to rename batch_create_instance
+
 # 2.13.24
     - update: esb update channel is_hidden, add export_official_api_docs command, update api docs
 
