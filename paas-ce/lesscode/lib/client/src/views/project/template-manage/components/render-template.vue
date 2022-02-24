@@ -227,7 +227,7 @@
                     functions: [],
                     vars: []
                 }
-                const { varDetailList: vars = [], funcList: functions = [] } = await this.getVarAndFuncList(template)
+                const { varList: vars = [], funcList: functions = [] } = await this.getVarAndFuncList(template)
                 Object.assign(templateJson, { functions, vars }, { template })
                 console.log(templateJson, template)
                 const jsonStr = JSON.stringify(templateJson)

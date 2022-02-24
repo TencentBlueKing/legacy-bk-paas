@@ -228,7 +228,8 @@
     import PagePreviewThumb from '@/components/project/page-preview-thumb.vue'
     import { PROJECT_TEMPLATE_TYPE, PAGE_TEMPLATE_TYPE } from '@/common/constant'
     import { mapActions } from 'vuex'
-    import { getVarList, getFuncList } from '@/common/process-targetdata'
+    import { parseFuncAndVar } from '@/common/parse-function-var'
+    import LC from '@/element-materials/core'
 
     const PROJECT_TYPE_LIST = [{ id: '', name: '全部' }].concat(PROJECT_TEMPLATE_TYPE)
     const PAGE_TYPE_LIST = [{ id: '', name: '全部' }].concat(PAGE_TEMPLATE_TYPE)
@@ -511,12 +512,10 @@
                         }, false),
                         this.getAllGroupFuncs({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId }, false)
                     ])
-                    const targetData = []
-                    targetData.push(JSON.parse(fromTemplate.content || {}))
-                    // 解析出模板targetData绑定的变量
-                    const valList = getVarList(targetData, variableList)
-                    // 解析出模板targetData绑定的函数
-                    const funcList = getFuncList(targetData, funcGroups)
+                    
+                    const templateNode = LC.parseTemplate(JSON.parse(fromTemplate.content || {}))
+                    // 解析出模板targetData绑定的变量和函数
+                    const { varList: valList = [], funcList = [] } = parseFuncAndVar(templateNode, variableList, funcGroups)
                     Object.assign(data, { valList, funcList })
                     console.log(data, 'submit data')
                     const res = await this.$store.dispatch('pageTemplate/apply', data)
