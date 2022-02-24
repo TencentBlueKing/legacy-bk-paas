@@ -13,6 +13,7 @@
     <div
         :class="$style['col']"
         :style="componentData.style"
+        :data-component-id="`${componentData.componentId}`"
         role="render-col">
         <draggable
             ref="draggable"

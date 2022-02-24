@@ -32,15 +32,7 @@ const createNodeFromData = (data) => {
     newNode.isComplexComponent = Boolean(data.complex)
     newNode.isInteractiveComponent = Boolean(data.interactive)
     newNode.isCustomComponent = Boolean(data.custom)
-
-    // fix: 老数据 renderProps.no-response 格式不规范的问题
-    if (newNode.renderProps.hasOwnProperty('no-response')) {
-        newNode.renderProps['no-response'] = {
-            type: 'boolean',
-            val: newNode.renderProps['no-response']
-        }
-    }
-
+    
     return newNode
 }
 
@@ -213,8 +205,8 @@ const tansform = (parentNode, data) => {
         } else if (curDataNode.type === 'bk-dialog') {
             curDataNode.interactive = true
             if (curDataNode.renderSlots
-                && curDataNode.renderSlots.content
-                && curDataNode.renderSlots.content.val) {
+                && curDataNode.renderSlots.default
+                && curDataNode.renderSlots.default.val) {
                 const child = curDataNode.renderSlots.default.val
                 curDataNode.renderSlots = {
                     default: tansform(curDataNode, [child])[0]
@@ -277,13 +269,26 @@ const tansform = (parentNode, data) => {
             if (prop.type !== 'string' && renderValue === '') {
                 renderValue = undefined
             }
-            result[propName] = {
-                format: 'value',
-                code: prop.val,
-                payload: prop.payload || {},
-                valueType: prop.type,
-                renderValue
+            
+            if (propName === 'no-response') {
+                // fix: 老数据 renderProps.no-response 格式不规范的问题
+                result[propName] = {
+                    format: 'value',
+                    code: prop,
+                    payload: {},
+                    valueType: 'boolean',
+                    renderValue: prop
+                }
+            } else {
+                result[propName] = {
+                    format: 'value',
+                    code: prop.val,
+                    payload: prop.payload || {},
+                    valueType: prop.type,
+                    renderValue
+                }
             }
+            
             return result
         }, {})
         // prop 还需要解析 renderDirectives 中 v-bind 的关联数据
@@ -388,12 +393,64 @@ const checkVersion = (data) => {
     return 'v2'
 }
 
+// const traverseFix = (childDataList) => {
+//     if (childDataList.length < 1) {
+//         return
+//     }
+//     childDataList.forEach(childData => {
+//         if (!childData) {
+//             return
+//         }
+        
+//         if (childData && childData.type === 'bk-dialog') {
+//             if (childData.renderSlots
+//                 && childData.renderSlots.default
+//                 && childData.renderSlots.default.val) {
+//                 const child = childData.renderSlots.default.val
+//                 // console.log('\n\n\n\n\n\n\n\n ===============')
+//                 // console.dir(tansformPageData(childData, [child]))
+//                 childData.renderSlots = {
+//                     default: tansform(childData, [child])[0]
+//                 }
+//             }
+//             return
+//         }
+//         if ([
+//             'root',
+//             'render-grid',
+//             'render-column',
+//             'free-layout',
+//             'widget-form',
+//             'widget-form-item'
+//         ].includes(childData.type)) {
+//             // 布局类型的组件
+//             // slot 的值类型 Array
+//             traverseFix(childData.renderSlots.default)
+//         } else {
+//             // slot 为布局类型组件
+//             // slot 的值类型为 Node
+//             Object.keys(childData.renderSlots).forEach(slotName => {
+//                 const slotData = childData.renderSlots[slotName]
+//                 if (Object.prototype.toString.call(slotData) === '[object Object]') {
+//                     if (slotData.componentId && slotData.type) {
+//                         traverseFix([slotData])
+//                     }
+//                 }
+//             })
+//         }
+//     })
+//     return childDataList
+// }
+
 export default function (data) {
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
         versionData = tansform({ type: 'root' }, data)
     }
+
+    // traverseFix(versionData)
+    // console.dir(versionData)
 
     const root = getRoot()
     root.setRenderSlots([])

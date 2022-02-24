@@ -78,6 +78,9 @@
                 this.$refs.draggable.computeIndexes()
             })
         },
+        beforeDestroy () {
+            dragTargetGroup = ''
+        },
         methods: {
             /**
              * @desc 添加组件
@@ -91,31 +94,30 @@
              * @param { Object } dragEvent
              */
             handleChange (event) {
-                let targetElement = null
+                let operationNode = null
+                const triggerEvent = {
+                    target: this.componentData,
+                    type: ''
+                }
                 if (event.added) {
-                    targetElement = event.added.element
-                    LC.triggerEventListener('update', {
-                        target: this.componentData,
-                        type: 'appendChildren'
-                    })
+                    operationNode = event.added.element
+                    triggerEvent.type = 'appendChildren'
+                    LC.triggerEventListener('appendChildren', triggerEvent)
                 } else if (event.removed) {
-                    targetElement = event.removed.element
-                    LC.triggerEventListener('update', {
-                        target: this.componentData,
-                        type: 'removeChildren'
-                    })
+                    operationNode = event.removed.element
+                    triggerEvent.type = 'removeChildren'
+                    LC.triggerEventListener('removeChildren', triggerEvent)
                 } else if (event.moved) {
-                    targetElement = event.moved.element
-                    LC.triggerEventListener('update', {
-                        target: this.componentData,
-                        type: 'moveChildren'
-                    })
+                    operationNode = event.moved.element
+                    triggerEvent.type = 'moveChildren'
+                    LC.triggerEventListener('moveChildren', triggerEvent)
                 }
                 // 拖动组件需要重置会影响排版的样式
-                targetElement.setStyle({
+                operationNode.setStyle({
                     marginTop: 'unset',
                     marginLeft: 'unset'
                 })
+                LC.triggerEventListener('update', triggerEvent)
                 // fix: vue-draggable 内部索引不更新的问题
                 this.$refs.draggable.computeIndexes()
                 dragTargetGroup = ''
