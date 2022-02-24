@@ -197,7 +197,6 @@
 
             // 编辑更新
             const updateCallback = _.throttle((event) => {
-                console.log('print event = ', event)
                 const {
                     target
                 } = event
