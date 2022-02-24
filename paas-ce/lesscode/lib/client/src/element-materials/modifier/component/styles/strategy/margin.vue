@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <style-layout title="外边距">
+    <style-layout title="外边距" :icon-show="true" @reset="handleReset">
         <div class="margin-style-container">
             <div class="margin-style-col-container">
                 <margin-style
@@ -114,6 +114,12 @@
                 } else {
                     this.change(key, styleValue)
                 }
+            },
+            handleReset () {
+                this.handleInputChange('marginBottom', '')
+                this.handleInputChange('marginTop', '')
+                this.handleInputChange('marginRight', '')
+                this.handleInputChange('marginLeft', '')
             }
         }
     }
