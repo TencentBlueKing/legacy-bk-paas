@@ -109,7 +109,7 @@ export default {
         //     type: 'v-bind',
         //     prop: 'data',
         //     format: 'variable',
-        //     includesFormat: ['variable'],
+        //     formatInclude: ['variable'],
         //     code: '',
         //     renderValue: ''
         // }

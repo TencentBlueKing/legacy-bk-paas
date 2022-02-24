@@ -282,23 +282,23 @@
                 val
             } = this.describe
             const defaultValue = val !== undefined ? val : getDefaultValueByType(type)
-            const includesValueType = Array.isArray(type) ? type : [type]
+            const valueTypeInclude = Array.isArray(type) ? type : [type]
 
             // 构造 variable-select 的配置
             this.variableSelectOptions = {
                 type: 'v-bind',
                 prop: this.name,
                 format: 'value',
-                includesFormat: ['value', 'variable', 'expression'],
+                formatInclude: ['value', 'variable', 'expression'],
                 code: defaultValue,
-                includesValueType: includesValueType
+                valueTypeInclude: valueTypeInclude
             }
 
             // prop 的初始值
             this.formData = Object.freeze({
                 format: 'value',
                 code: defaultValue,
-                valueType: includesValueType[0],
+                valueType: valueTypeInclude[0],
                 renderValue: defaultValue,
                 payload: this.lastValue.payload || {}
             })

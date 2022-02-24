@@ -87,17 +87,16 @@
         },
         computed: {
             ...mapGetters(['user']),
-            ...mapGetters('projectVersion', {
-                versionId: 'currentVersionId',
-                versionName: 'currentVersionName',
-                getInitialVersion: 'initialVersion'
-            }),
             ...mapGetters('drag', ['curTemplateData']),
             ...mapGetters('page', ['pageDetail']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('variable', ['variableList']),
-            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' }),
+            ...mapGetters('projectVersion', {
+                versionId: 'currentVersionId',
+                versionName: 'currentVersionName',
+                getInitialVersion: 'initialVersion'
+            }),
             ...mapState('route', ['layoutPageList'])
         },
         watch: {
@@ -193,7 +192,6 @@
             ]
         },
         beforeDestroy () {
-            console.log('from index beforeDestroy')
             LC.removeEventListener('update', this.handleUpdatePreview)
             LC.parseData([])
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
@@ -209,10 +207,6 @@
             })
         },
         methods: {
-            ...mapActions('functions', [
-                'getAllGroupFuncs'
-            ]),
-            ...mapActions('variable', ['getAllVariable']),
             ...mapActions(['updatePreview']),
             /**
              * @desc 注册自定义组件
@@ -273,7 +267,7 @@
                         versionId: this.versionId
                     })
 
-                    await this.getAllVariable({
+                    await this.$store.dispatch('variable/getAllVariable', {
                         projectId: this.projectId,
                         pageCode: pageDetail.pageCode,
                         versionId: this.versionId,
