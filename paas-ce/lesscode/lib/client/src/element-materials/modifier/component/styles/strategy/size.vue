@@ -126,6 +126,7 @@
             },
             handleInputChange (item, val) {
                 const newValue = val === '' ? '' : val + item.unit
+                item.value = val
                 this.change(item.key, newValue)
             },
             handleSelectChange (item, unit) {
