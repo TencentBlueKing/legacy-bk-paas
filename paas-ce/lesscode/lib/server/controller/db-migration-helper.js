@@ -8,7 +8,7 @@ import PageTemplateCategory from '../model/entities/page-template-category'
 import { walkGrid, uuid } from '../util'
 
 // 将函数名称写到这个数组里，函数会自动执行，返回成功则后续不会再执行
-const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots']
+const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots']
 
 export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
@@ -323,6 +323,216 @@ async function fixCardsSlots () {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
+async function templateCardsSlots () {
+    try {
+        const templateRepository = getRepository(PageTemplate)
+        const allTemplateData = await templateRepository.find()
+
+        allTemplateData.forEach(template => {
+            let targetData = {}
+            try {
+                targetData = JSON.parse(template.content || '{}')
+                if (Object.prototype.toString.call(targetData) !== '[object Object]') {
+                    targetData = {}
+                }
+            } catch (err) {
+                targetData = {}
+            }
+            const targetList = [targetData]
+
+            targetList.forEach((grid, index) => {
+                const callBack = (component) => {
+                /** renderSlots如果没有header，证明是旧数据，应该格式化其结构 */
+                    if (component.type === 'bk-card' && component.renderSlots.header === undefined) {
+                        const originValue = component.renderProps.title.val
+                        component.renderProps['disable-header-style'] = { 'type': 'hidden', 'val': true, 'payload': {}, 'attrs': [] }
+                        component.renderSlots = {
+                            'default': {
+                                'name': 'layout',
+                                'type': 'free-layout',
+                                'display': 'hidden',
+                                'val': {
+                                    'name': 'free-layout',
+                                    'type': 'free-layout',
+                                    'slotName': '',
+                                    'slotContainer': true,
+                                    'renderProps': {
+
+                                    },
+                                    'renderStyles': {
+                                        'height': '200px',
+                                        'pointer-events': 'auto'
+                                    },
+                                    'renderEvents': {
+
+                                    },
+                                    'renderDirectives': [
+
+                                    ],
+                                    'renderSlots': {
+                                        'default': {
+                                            'type': 'free-layout-item',
+                                            'val': [
+                                                {
+                                                    'children': [
+
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    'componentId': `free-layout-${uuid()}`
+                                }
+                            },
+                            'header': {
+                                'name': 'layout',
+                                'type': 'free-layout',
+                                'display': 'hidden',
+                                'val': {
+                                    'name': 'free-layout',
+                                    'type': 'free-layout',
+                                    'slotName': '',
+                                    'slotContainer': true,
+                                    'renderProps': {
+                                        'no-response': true
+                                    },
+                                    'renderStyles': {
+                                        'height': '50px',
+                                        'pointer-events': 'auto'
+                                    },
+                                    'renderEvents': {
+
+                                    },
+                                    'renderDirectives': [
+
+                                    ],
+                                    'renderSlots': {
+                                        'default': {
+                                            'type': 'free-layout-item',
+                                            'val': [
+                                                {
+                                                    'children': [
+                                                        {
+                                                            'componentId': `text-${uuid()}`,
+                                                            'tabPanelActive': 'styles',
+                                                            'renderKey': 'dcadd06d',
+                                                            'name': 'text',
+                                                            'type': 'span',
+                                                            'renderProps': {
+                                                                'inFreeLayout': {
+                                                                    'val': true
+                                                                },
+                                                                'title': {
+                                                                    'type': 'string',
+                                                                    'val': '',
+                                                                    'payload': {
+
+                                                                    },
+                                                                    'attrs': [
+
+                                                                    ]
+                                                                }
+                                                            },
+                                                            'renderStyles': {
+                                                                'display': 'inline-block',
+                                                                'fontSize': '16px',
+                                                                'textAlign': 'center',
+                                                                'top': '12px',
+                                                                'left': '7px'
+                                                            },
+                                                            'renderEvents': {
+
+                                                            },
+                                                            'interactiveShow': false,
+                                                            'isComplexComponent': false,
+                                                            'renderDirectives': [
+
+                                                            ],
+                                                            'renderSlots': {
+                                                                'default': {
+                                                                    'name': 'text',
+                                                                    'type': 'text',
+                                                                    'displayName': '文本配置',
+                                                                    'val': originValue,
+                                                                    'regExp': {
+
+                                                                    },
+                                                                    'regErrorText': '文本配置不能为空'
+                                                                }
+                                                            },
+                                                            'isCustomComponent': false
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    'componentId': `free-layout-${uuid()}`
+                                }
+                            },
+                            'footer': {
+                                'name': 'layout',
+                                'type': 'free-layout',
+                                'display': 'hidden',
+                                'val': {
+                                    'name': 'free-layout',
+                                    'type': 'free-layout',
+                                    'slotName': '',
+                                    'slotContainer': true,
+                                    'renderProps': {
+
+                                    },
+                                    'renderStyles': {
+                                        'height': '50px',
+                                        'pointer-events': 'auto'
+                                    },
+                                    'renderEvents': {
+
+                                    },
+                                    'renderDirectives': [
+
+                                    ],
+                                    'renderSlots': {
+                                        'default': {
+                                            'type': 'free-layout-item',
+                                            'val': [
+                                                {
+                                                    'children': [
+
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    'componentId': `free-layout-${uuid()}`
+                                }
+                            }
+                        }
+                    }
+                }
+                walkGrid(targetList, grid, callBack, callBack, index)
+            })
+
+            template.content = JSON.stringify(targetList[0])
+            template.updateBySystem = true
+        })
+
+        await templateRepository.save(allTemplateData)
+        return {
+            code: 0,
+            message: '模板card旧数据更新成功'
+        }
+    } catch (error) {
+        console.dir(error)
+        return {
+            code: -1,
+            message: error.message || error,
+            data: null
+        }
+    }
+}
+
 export async function syncPageData (ctx) {
     try {
         const checkVersion = (data) => {
@@ -444,32 +654,55 @@ export async function syncPageData (ctx) {
                         })
                     }
                 } else if (curDataNode.type === 'free-layout') {
-                    const freelayoutItem = curDataNode.renderSlots.default.val[0] || []
-                    let freelayoutSlot = []
-                    if (freelayoutItem && freelayoutItem.children) {
-                        freelayoutSlot = tansform(curDataNode, freelayoutItem.children)
-                    }
-                    curDataNode.renderSlots = {
-                        default: freelayoutSlot
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.default
+                        && Array.isArray(curDataNode.renderSlots.default.val)) {
+                        const freelayoutItem = curDataNode.renderSlots.default.val[0] || []
+                        let freelayoutSlot = []
+                        if (freelayoutItem && freelayoutItem.children) {
+                            freelayoutSlot = tansform(curDataNode, freelayoutItem.children)
+                        }
+                        curDataNode.renderSlots = {
+                            default: freelayoutSlot
+                        }
                     }
                 } else if (curDataNode.type === 'bk-sideslider') {
                     curDataNode.interactive = true
-                    const child = curDataNode.renderSlots.content.val
-                    curDataNode.renderSlots = {
-                        content: tansform(curDataNode, [child])[0]
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.content
+                        && curDataNode.renderSlots.content.val) {
+                        const child = curDataNode.renderSlots.content.val
+                        curDataNode.renderSlots = {
+                            content: tansform(curDataNode, [child])[0]
+                        }
                     }
                 } else if (curDataNode.type === 'bk-dialog') {
                     curDataNode.interactive = true
-                    const child = curDataNode.renderSlots.default.val
-                    curDataNode.renderSlots = {
-                        default: tansform(curDataNode, [child])[0]
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.content
+                        && curDataNode.renderSlots.content.val) {
+                        const child = curDataNode.renderSlots.default.val
+                        curDataNode.renderSlots = {
+                            default: tansform(curDataNode, [child])[0]
+                        }
                     }
                 } else if (curDataNode.type === 'bk-card') {
-                    const renderSlots = curDataNode.renderSlots
-                    curDataNode.renderSlots = {
-                        header: tansform(curDataNode, [renderSlots.header.val])[0],
-                        default: tansform(curDataNode, [renderSlots.default.val])[0],
-                        footer: tansform(curDataNode, [renderSlots.footer.val])[0]
+                    if (curDataNode.renderSlots) {
+                        const renderSlots = curDataNode.renderSlots
+                        curDataNode.renderSlots = {
+                            header: tansform(curDataNode, [renderSlots.header.val])[0],
+                            default: tansform(curDataNode, [renderSlots.default.val])[0],
+                            footer: tansform(curDataNode, [renderSlots.footer.val])[0]
+                        }
+                    }
+                } else if (curDataNode.type === 'el-card') {
+                    if (curDataNode.renderSlots
+                        && curDataNode.renderSlots.default
+                        && curDataNode.renderSlots.default.val) {
+                        const child = curDataNode.renderSlots.default.val
+                        curDataNode.renderSlots = {
+                            default: tansform(curDataNode, [child])[0]
+                        }
                     }
                 }
         
@@ -562,7 +795,8 @@ export async function syncPageData (ctx) {
                     'widget-form-item',
                     'bk-sideslider',
                     'bk-dialog',
-                    'bk-card'
+                    'bk-card',
+                    'el-card'
                 ].includes(curDataNode.type)) {
                     curDataNode.renderSlots = Object.keys(curDataNode.renderSlots || {}).reduce((result, slotName) => {
                         const slotData = curDataNode.renderSlots[slotName]
@@ -615,7 +849,12 @@ export async function syncPageData (ctx) {
                 if (dataVersion === 'v0') {
                     targetData = []
                 } else if (dataVersion === 'v1') {
-                    targetData = tansform({ type: 'root' }, targetData)
+                    try {
+                        targetData = tansform({ type: 'root' }, targetData)
+                    } catch (error) {
+                        console.dir(error)
+                        return Promise.reject(new Error(`error page ==== ${pageData.id}`))
+                    }
                 }
                 
                 return transactionalEntityManager.update(Page, {
@@ -637,7 +876,13 @@ export async function syncPageData (ctx) {
                 targetData = [targetData]
                 const dataVersion = checkVersion(targetData)
                 if (dataVersion === 'v1') {
-                    targetData = tansform({ type: 'template' }, targetData)
+                    try {
+                        targetData = tansform({ type: 'template' }, targetData)
+                    } catch (error) {
+                        console.dir(error)
+                        return Promise.reject(new Error(`error template ==== ${templateData.id}`))
+                    }
+                    
                     return transactionalEntityManager.update(PageTemplate, {
                         id: templateData.id
                     }, {

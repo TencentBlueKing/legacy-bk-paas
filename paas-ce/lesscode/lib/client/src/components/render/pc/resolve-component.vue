@@ -197,6 +197,7 @@
 
             // 编辑更新
             const updateCallback = _.throttle((event) => {
+                console.log('print event = ', event)
                 const {
                     target
                 } = event
@@ -207,7 +208,7 @@
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
-            })
+            }, 20)
             
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
@@ -237,6 +238,16 @@
             this.safeStyleWithHeight()
             this.setDefaultStyleWithAttachToFreelayout()
             this.$emit('component-mounted')
+        },
+        beforeDestroy () {
+            if (hoverComponentId === this.componentData.componentId) {
+                hoverComponentId = ''
+                isMousedown = false
+            }
+            // 销毁时如果组件被激活，取消激活状态
+            if (this.componentData.isActived) {
+                this.componentData.activeClear()
+            }
         },
         methods: {
             /**
@@ -391,6 +402,7 @@
              * @param { Object } event
              */
             handleShowContextmenu (event) {
+                console.log('from handleShowContextmenu', this.componentData)
                 LC.showMenu(event)
             },
             /**
