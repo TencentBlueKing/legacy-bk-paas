@@ -82,24 +82,17 @@
         
         mounted () {
             this.$refs.tree.setData(getDataFromNodeTree(LC.getRoot().children))
+            
             /**
              * @desc 组件树监听 update 回调
              * @param { Object } event
              */
             const updateCallback = _.throttle((event) => {
-                // 选中组件时不需要更新组件树
-                if ([
-                    'active',
-                    'activeClear'
-                ].includes(event.type)) {
-                    return
-                }
-                
-                // 切换交互式组件的显示、隐藏状态同样需要刷新整个 tree 的 data，
-                // 但是需要保留节点的展开状态
+                // 缓存节点的展开状态
                 let expandIdListMemo = []
-                if ([
-                    'toggleInteractive'
+                // 非移除组件操作都需要保留节点的展开状态
+                if (![
+                    'removeChildren'
                 ].includes(event.type)) {
                     expandIdListMemo = this.$refs.tree.nodes.reduce((result, node) => {
                         if (node.expanded) {
@@ -122,6 +115,7 @@
              * 展开所有父级节点（这样才能看到当前节点）
              */
             const activeCallback = event => {
+                console.log('from componetn treeeee activeCallbackactiveCallbackactiveCallback  == ', event)
                 const activeNode = event.target
 
                 let activeNodeParent = activeNode.parentNode
@@ -134,11 +128,15 @@
                 
                 this.$refs.tree.setSelected(activeNode.componentId)
             }
+
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('active', activeCallback)
+            LC.addEventListener('toggleInteractive', updateCallback)
+            
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
                 LC.removeEventListener('active', activeCallback)
+                LC.removeEventListener('toggleInteractive', activeCallback)
             })
         },
         methods: {
@@ -245,21 +243,24 @@
                 }
 
                 // render-column 暂时无法被选中
-                if (componentData.type === 'render-column') {
-                    const activeNode = LC.getActiveNode()
-                    if (activeNode) {
-                        activeNode.activeClear()
-                    }
-                    return
-                }
+                // if (componentData.type === 'render-column') {
+                //     const activeNode = LC.getActiveNode()
+                //     if (activeNode) {
+                //         activeNode.activeClear()
+                //     }
+                //     return
+                // }
 
                 // 组件被选中并滚动到视窗内
                 componentData.active()
                 const canvasTarget = document.querySelector(`div[data-component-id="${componentData.componentId}"]`)
-                canvasTarget.scrollIntoView()
+                canvasTarget.scrollIntoView({
+                    behavior: 'smooth',
+                    inline: 'nearest'
+                })
                 // console.log('from aciteve node = ', node, LC.getActiveNode())
                 /** 将画布中的目标节点移动至视区 */
-                // const canvasTarget = document.querySelector(`div[data-component-id="${node.data.componentId}"]`)
+                // const canvasTarget = document.querySelector(`div[data-component-id="${componentData.componentId}"]`)
                 // const anchorNode = document.createElement('div')
                 // anchorNode.style.position = 'absolute'
                 // anchorNode.style.top = (canvasTarget.offsetTop - 10) + 'px'

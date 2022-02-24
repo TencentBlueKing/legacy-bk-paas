@@ -25,6 +25,9 @@ import { bus } from '@/common/bus'
  * toggleInteractive
  * componentHover
  * componentMouserleave
+ * appendChildren
+ * removeChildren
+ * moveChildren
  */
 
 export const addEventListener = (eventName, callback) => {

@@ -14,6 +14,7 @@
         <div
             id="drawTarget"
             :class="$style['canvas']"
+            @click="handleCanvaseClick"
             @mouseleave="handleMouseleave">
             <draggable
                 v-if="isReady"
@@ -176,6 +177,19 @@
              */
             handleMouseleave () {
                 LC.triggerEventListener('componentMouserleave')
+            },
+            /**
+             * @desc 画布编辑区空白区域被点击取消组件的选中状态
+             * @param { Object } event
+             */
+            handleCanvaseClick (event) {
+                if (event.target.classList.contains(this.$style['editor'])) {
+                    const activeNode = LC.getActiveNode()
+                    if (activeNode) {
+                        activeNode.activeClear()
+                    }
+                    LC.triggerEventListener('componentMouserleave')
+                }
             }
         }
     }
