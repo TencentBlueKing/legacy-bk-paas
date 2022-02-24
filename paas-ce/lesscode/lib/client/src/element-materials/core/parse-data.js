@@ -13,27 +13,31 @@ let isClone = false
  * @returns { Node }
  */
 const createNodeFromData = (data) => {
-    const newNode = createNode(data.type === 'img' ? 'bk-image' : data.type)
-    newNode.tabPanelActive = data.tabPanelActive || 'props'
-    if (!isClone) {
+    try {
+        const newNode = createNode(data.type === 'img' ? 'bk-image' : data.type)
+        newNode.tabPanelActive = data.tabPanelActive || 'props'
+        if (!isClone) {
         // fix: 老数据存在 componentId 为空的情况
-        if (data.componentId) {
-            newNode.componentId = data.componentId
+            if (data.componentId) {
+                newNode.componentId = data.componentId
+            }
         }
-    }
 
-    data.renderStyles && newNode.setRenderStyles(data.renderStyles)
-    data.renderProps && newNode.setRenderProps(data.renderProps)
-    data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
-    data.renderEvents && newNode.setRenderEvents(data.renderEvents)
+        data.renderStyles && newNode.setRenderStyles(data.renderStyles)
+        data.renderProps && newNode.setRenderProps(data.renderProps)
+        data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
+        data.renderEvents && newNode.setRenderEvents(data.renderEvents)
 
-    newNode._isMounted = true
-    newNode.interactiveShow = false
-    newNode.isComplexComponent = Boolean(data.complex)
-    newNode.isInteractiveComponent = Boolean(data.interactive)
-    newNode.isCustomComponent = Boolean(data.custom)
+        newNode._isMounted = true
+        newNode.interactiveShow = false
+        newNode.isComplexComponent = Boolean(data.complex)
+        newNode.isInteractiveComponent = Boolean(data.interactive)
+        newNode.isCustomComponent = Boolean(data.custom)
     
-    return newNode
+        return newNode
+    } catch {
+        return null
+    }
 }
 
 /**
@@ -45,6 +49,11 @@ const createNodeFromData = (data) => {
 const traverse = (parentNode, childDataList, slot) => {
     childDataList.forEach(childData => {
         const childNode = createNodeFromData(childData)
+
+        // 页面中的组件物料被删除跳过组件处理
+        if (!childNode) {
+            return
+        }
         
         if (childNode.layoutType) {
             // 布局类型的组件
