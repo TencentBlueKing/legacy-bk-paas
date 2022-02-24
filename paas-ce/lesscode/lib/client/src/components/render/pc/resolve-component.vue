@@ -431,15 +431,6 @@
         pointer-events: auto !important;
         cursor: pointer;
         -webkit-text-size-adjust: none;
-        &.selected{
-            position: relative;
-           .line-top,
-            .line-right,
-            .line-bottom,
-            .line-left {
-                border-style: solid;
-            }
-        }
         &.hover{
             position: relative;
             > .line-top,
@@ -449,6 +440,16 @@
                 border-style: dashed;
             }
         }
+        &.selected{
+            position: relative;
+            > .line-top,
+            > .line-right,
+            > .line-bottom,
+            > .line-left {
+                border-style: solid;
+            }
+        }
+        
         .line-top,
         .line-right,
         .line-bottom,
