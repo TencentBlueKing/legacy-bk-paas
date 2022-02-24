@@ -31,7 +31,11 @@ export default {
         },
         'margin',
         'pointer',
-        'opacity'
+        'opacity',
+        {
+            name: 'font',
+            exclude: ['color']
+        }
     ],
     renderStyles: {
         display: 'inline-block',
