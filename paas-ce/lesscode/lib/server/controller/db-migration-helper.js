@@ -647,7 +647,6 @@ const tansformPageData = (parentNode, data) => {
                         complex: false,
                         interactive: false
                     }
-<<<<<<< HEAD
                     // console.log('from print form item == ', formItemData)
                     curDataNode.renderSlots.default.push(formItemData)
                 })
@@ -660,17 +659,6 @@ const tansformPageData = (parentNode, data) => {
                 let freelayoutSlot = []
                 if (freelayoutItem && freelayoutItem.children) {
                     freelayoutSlot = tansformPageData(curDataNode, freelayoutItem.children)
-=======
-                } else if (curDataNode.type === 'el-card') {
-                    if (curDataNode.renderSlots
-                        && curDataNode.renderSlots.default
-                        && curDataNode.renderSlots.default.val) {
-                        const child = curDataNode.renderSlots.default.val
-                        curDataNode.renderSlots = {
-                            default: tansform(curDataNode, [child])[0]
-                        }
-                    }
->>>>>>> base/lesscode-develop
                 }
                 curDataNode.renderSlots = {
                     default: freelayoutSlot
@@ -806,7 +794,6 @@ const tansformPageData = (parentNode, data) => {
                     format: valType,
                     code: val
                 })
-<<<<<<< HEAD
             }
             return result
         }, [])
@@ -836,64 +823,6 @@ const tansformPageData = (parentNode, data) => {
                       && slotData.payload.variableData.valType !== 'value') {
                     format = slotData.payload.variableData.valType
                     code = slotData.payload.variableData.val
-=======
-        
-                // 转换 renderDirectives
-                curDataNode.renderDirectives = (curDataNode.renderDirectives || []).reduce((result, directive) => {
-                    const {
-                        type,
-                        prop = '',
-                        val,
-                        valType = 'value'
-                    } = directive
-                    if (type !== 'v-bind') {
-                        result.push({
-                            type,
-                            prop,
-                            format: valType,
-                            code: val
-                        })
-                    }
-                    return result
-                }, [])
-        
-                // 非布局类型的组件需要转换 renderSlots
-                if (![
-                    'render-grid',
-                    'free-layout',
-                    'widget-form',
-                    'widget-form-item',
-                    'bk-sideslider',
-                    'bk-dialog',
-                    'bk-card',
-                    'el-card'
-                ].includes(curDataNode.type)) {
-                    curDataNode.renderSlots = Object.keys(curDataNode.renderSlots || {}).reduce((result, slotName) => {
-                        const slotData = curDataNode.renderSlots[slotName]
-                        let format = 'value'
-                        let code = slotData.val
-                        const renderValue = code
-                        const component = slotData.name
-                        const valueType = slotData.type
-                        const payload = slotData.payload || {}
-                        if (slotData.payload
-                             && slotData.payload.variableData
-                              && slotData.payload.variableData.valType
-                              && slotData.payload.variableData.valType !== 'value') {
-                            format = slotData.payload.variableData.valType
-                            code = slotData.payload.variableData.val
-                        }
-                        result[slotName] = {
-                            format,
-                            component,
-                            code,
-                            payload,
-                            valueType,
-                            renderValue
-                        }
-                        return result
-                    }, {})
->>>>>>> base/lesscode-develop
                 }
                 result[slotName] = {
                     format,
@@ -934,11 +863,7 @@ export async function syncPageData (ctx) {
                     targetData = []
                 } else if (dataVersion === 'v1') {
                     try {
-<<<<<<< HEAD
                         targetData = tansformPageData({ type: 'root' }, targetData)
-=======
-                        targetData = tansform({ type: 'root' }, targetData)
->>>>>>> base/lesscode-develop
                     } catch (error) {
                         console.dir(error)
                         return Promise.reject(new Error(`error page ==== ${pageData.id}`))
@@ -965,11 +890,7 @@ export async function syncPageData (ctx) {
                 const dataVersion = checkPageDataVersion(targetData)
                 if (dataVersion === 'v1') {
                     try {
-<<<<<<< HEAD
                         targetData = tansformPageData({ type: 'template' }, targetData)
-=======
-                        targetData = tansform({ type: 'template' }, targetData)
->>>>>>> base/lesscode-develop
                     } catch (error) {
                         console.dir(error)
                         return Promise.reject(new Error(`error template ==== ${templateData.id}`))
