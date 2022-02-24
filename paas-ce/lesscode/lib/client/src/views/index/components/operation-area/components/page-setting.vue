@@ -479,11 +479,12 @@
                 const pageData = {
                     id: this.page.id
                 }
-                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
+                pageData.styleSetting = JSON.stringify(this.page.styleSetting)
                 const res = await this.$store.dispatch('page/update', {
                     data: {
                         pageData,
                         projectId: this.project.id,
+                        versionId: this.versionId,
                         from: 'setting'
                     }
                 })
