@@ -130,6 +130,7 @@
                 this.change(item.key, newValue)
             },
             handleSelectChange (item, unit) {
+                item.unit = unit
                 if (item.value !== '') {
                     item.value = Math.min(item.value, unit === '%' ? 100 : item.value)
                     this.change(item.key, item.value + unit)
