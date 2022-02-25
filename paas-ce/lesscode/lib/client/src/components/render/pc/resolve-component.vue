@@ -301,6 +301,10 @@
                 }
 
                 this.$nextTick(() => {
+                    // 因为异步任务执行的时机问题，此时可能组件已经被销毁
+                    if (!this.$refs.componentRoot) {
+                        return
+                    }
                     const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
                     if ($baseComponentEl) {
                         if ($baseComponentEl.style.width) {
@@ -327,6 +331,10 @@
                 }
 
                 this.$nextTick(() => {
+                    // 因为异步任务执行的时机问题，此时可能组件已经被销毁
+                    if (!this.$refs.componentRoot) {
+                        return
+                    }
                     const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
                     if ($baseComponentEl) {
                         if ($baseComponentEl.style.height) {

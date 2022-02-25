@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { getStyle } from '@/common/util'
 
 const Watcher = function () {
@@ -87,24 +88,23 @@ Drag.prototype = {
             hasMove = false
 
             const $parent = me.$elem.offsetParent
-            const diffX = e.clientX - me.$elem.offsetLeft
-            const diffY = e.clientY - me.$elem.offsetTop
-            const pDiffX = $parent.offsetLeft || 0
-            const pDiffY = $parent.offsetTop || 0
+            const diffX = parseInt(e.clientX - me.$elem.offsetLeft, 10)
+            const diffY = parseInt(e.clientY - me.$elem.offsetTop, 10)
+            const pDiffX = parseInt($parent.offsetLeft || 0, 10)
+            const pDiffY = parseInt($parent.offsetTop || 0, 10)
 
-            const elemWidth = me.$elem.offsetWidth
-            const elemHeight = me.$elem.offsetHeight
+            const elemWidth = parseInt(me.$elem.offsetWidth, 10)
+            const elemHeight = parseInt(me.$elem.offsetHeight, 10)
             // const style = getComputedStyle(me.$elem)
             // const transition = style['transition'] || style['-webkit-transition'] || style['-moz-transition']
             // const zIndex = getComputedStyle(me.$elem).zIndex
 
             me.watcher.trigger('start', e, me.$elem)
-            document.addEventListener('mousemove', move)
 
-            me.containerWidth = parseFloat(getStyle(me.container, 'width'))
-            me.containerHeight = parseFloat(getStyle(me.container, 'height'))
+            const containerWidth = parseFloat(getStyle(me.container, 'width'))
+            const containerHeight = parseFloat(getStyle(me.container, 'height'))
 
-            function move (e) {
+            const move = _.throttle(function (e) {
                 if (!me.dragable) {
                     return
                 }
@@ -119,11 +119,11 @@ Drag.prototype = {
                 if (top + pDiffY < 0) {
                     top = top - (top + pDiffY)
                 }
-                if (left + pDiffX + elemWidth > me.containerWidth) {
-                    left = me.containerWidth - (pDiffX + elemWidth)
+                if (left + pDiffX + elemWidth > containerWidth) {
+                    left = containerWidth - (pDiffX + elemWidth)
                 }
-                if (top + pDiffY + elemHeight > me.containerHeight) {
-                    top = me.containerHeight - (pDiffY + elemHeight)
+                if (top + pDiffY + elemHeight > containerHeight) {
+                    top = containerHeight - (pDiffY + elemHeight)
                 }
 
                 me.$elem.style.position = 'absolute'
@@ -133,9 +133,7 @@ Drag.prototype = {
                 // me.$elem.style.zIndex = 99999999
 
                 me.watcher.trigger('move', e, me.$elem)
-            }
-
-            document.addEventListener('mouseup', end)
+            }, 20)
             function end (e) {
                 if (!me.dragable) {
                     return
@@ -149,6 +147,8 @@ Drag.prototype = {
                     me.watcher.trigger('end', e, me.$elem)
                 }
             }
+            document.addEventListener('mousemove', move)
+            document.addEventListener('mouseup', end)
         }
         me.$elem.addEventListener('mousedown', mousedown)
     },
