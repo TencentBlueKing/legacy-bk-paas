@@ -390,11 +390,11 @@
                 this.componentData.active()
             },
             /**
-             * @desc 鼠标右键，弹出菜单
+             * @desc 鼠标右键——选中组件、弹出菜单
              * @param { Object } event
              */
             handleShowContextmenu (event) {
-                console.log('from handleShowContextmenu', this.componentData)
+                this.componentData.active()
                 LC.showMenu(event)
             },
             /**
@@ -423,6 +423,7 @@
         pointer-events: auto !important;
         cursor: pointer;
         -webkit-text-size-adjust: none;
+        min-height: 10px;
         &.hover{
             position: relative;
             > .line-top,

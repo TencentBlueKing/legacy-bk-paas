@@ -1,12 +1,14 @@
 <template>
     <component
         class="lesscode-editor-layout"
+        :style="style"
         :is="layoutCom">
         <slot />
     </component>
 </template>
 <script>
     import { mapGetters, mapMutations } from 'vuex'
+    import LC from '@/element-materials/core'
     import LayoutEmpty from './components/empty'
     import LayoutLeftRight from './components/left-right'
     import LayoutComplex from './components/complex'
@@ -22,7 +24,8 @@
     export default {
         data () {
             return {
-                layout: 'left-right'
+                layout: 'left-right',
+                style: {}
             }
         },
         computed: {
@@ -57,9 +60,32 @@
         created () {
             this.projectId = this.$route.params.projectId
             this.fetchPageList()
+            
+            LC.addEventListener('set-page-style', this.applyPageSetting)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('set-page-style', this.applyPageSetting)
+            })
+        },
+        mounted () {
+            this.applyPageSetting()
         },
         methods: {
             ...mapMutations('drag', ['setCurTemplateData']),
+            /**
+             * @desc 引用页面样式配置
+             */
+            applyPageSetting () {
+                const pageStyle = LC.pageStyle
+                this.style = {
+                    'min-width': pageStyle['min-width'] || ''
+                }
+                const $pageContentTarget = document.querySelector('.lesscode-editor-layout .container-content')
+                Object.keys(pageStyle).forEach(key => {
+                    if (key !== 'min-width') {
+                        $pageContentTarget.style[key] = pageStyle[key] || ''
+                    }
+                })
+            },
             fetchPageList () {
                 this.$store.dispatch('route/getProjectPageRoute', {
                     projectId: this.projectId,
@@ -201,7 +227,9 @@
     }
     .lesscode-layout-empty {
         min-height: calc(100vh - 160px);
-        padding: 10px;
+        .container-content{
+            padding: 20px 24px 0;
+        }
     }
     .lesscode-layout-message-theme{
         padding: 0 !important;

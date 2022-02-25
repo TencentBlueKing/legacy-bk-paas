@@ -752,11 +752,12 @@ const tansformPageData = (parentNode, data) => {
                     renderValue: prop
                 }
             } else {
+                const valueType = Array.isArray(prop.type) ? prop.type[0] : prop.type
                 result[propName] = {
                     format: 'value',
                     code: prop.val,
                     payload: prop.payload || {},
-                    valueType: prop.type,
+                    valueType,
                     renderValue
                 }
             }
@@ -769,11 +770,12 @@ const tansformPageData = (parentNode, data) => {
                 && directive.val
                  && curDataNode.renderProps[directive.prop]) {
                 const renderProp = origanlRenderProps[directive.prop]
+                const valueType = Array.isArray(renderProp.type) ? renderProp.type[0] : renderProp.type
                 curDataNode.renderProps[directive.prop] = {
                     format: directive.valType,
                     code: directive.val,
                     payload: {},
-                    valueType: renderProp.type,
+                    valueType,
                     renderValue: renderProp.val
                 }
             }
