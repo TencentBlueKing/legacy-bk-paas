@@ -375,6 +375,9 @@ export default class Node {
     @notify
     removeChild (child) {
         removeChild(this, child)
+        if (activeNode && activeNode === child) {
+            activeNode.activeClear()
+        }
         return this
     }
 

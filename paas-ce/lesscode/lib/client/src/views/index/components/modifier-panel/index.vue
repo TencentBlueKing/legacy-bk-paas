@@ -9,7 +9,7 @@
                     v-bk-overflow-tips>
                     {{ componentId }}
                 </div>
-                <div v-if="componentId" class="action-wrapper">
+                <div class="action-wrapper">
                     <i
                         v-if="!isAttachToForm"
                         class="bk-drag-icon bk-drag-shanchu mr5"
@@ -71,7 +71,8 @@
                 this.checkAttachToFrom()
             }
 
-            const activeClearCallback = () => {
+            const resetCallback = () => {
+                console.log('from resetCallbackresetCallbackresetCallbackresetCallback')
                 this.componentData = {}
                 this.componentId = ''
                 this.componentDocument = ''
@@ -79,11 +80,13 @@
             }
             
             LC.addEventListener('active', activeCallback)
-            LC.addEventListener('activeClear', activeClearCallback)
+            LC.addEventListener('activeClear', resetCallback)
+            LC.addEventListener('removeChild', resetCallback)
             LC.addEventListener('toggleInteractive', toggleInteractiveCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('active', activeCallback)
-                LC.removeEventListener('activeClear', activeClearCallback)
+                LC.removeEventListener('activeClear', resetCallback)
+                LC.removeEventListener('removeChild', resetCallback)
                 LC.removeEventListener('toggleInteractive', toggleInteractiveCallback)
             })
         },
@@ -106,6 +109,7 @@
              */
             handleRemoveElement () {
                 removeCallBack()
+                this.componentData.activeClear()
             },
             /**
              * @desc 切换交互组件显示状态
