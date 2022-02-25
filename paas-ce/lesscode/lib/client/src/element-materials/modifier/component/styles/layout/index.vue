@@ -9,16 +9,43 @@
   specific language governing permissions and limitations under the License.
 -->
 
-<template functional>
+<template>
     <div class="modifier-style">
         <div class="style-title">
-            {{ props.title }}
+            {{ title }}
+            <span
+                class="style-icon"
+                v-if="iconShow"
+                v-bk-tooltips.top="'重置属性值'"
+                @click="handleClick">
+                <i class="bk-drag-icon bk-drag-undo" />
+            </span>
         </div>
         <div class="style-action">
             <slot />
         </div>
     </div>
 </template>
+
+<script>
+    export default {
+        props: {
+            title: {
+                type: String,
+                default: ''
+            },
+            iconShow: {
+                type: Boolean,
+                default: false
+            }
+        },
+        methods: {
+            handleClick () {
+                this.$emit('reset')
+            }
+        }
+    }
+</script>
 
 <style lang='postcss'>
     .modifier-style {
@@ -34,6 +61,14 @@
             height: 20px;
             line-height: 20px;
             font-weight: bold;
+
+            .style-icon {
+                height: 20px;
+                cursor: pointer;
+                font-size: 16px;
+                line-height: 18px;
+                margin-left: 10px;
+            }
         }
     }
 </style>

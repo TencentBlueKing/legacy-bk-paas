@@ -40,6 +40,7 @@ import {
     findRelatedMethodFromRenderEvent
 } from './helper/find-related-method'
 import validator from './helper/validator'
+import { toHyphenate } from './helper/utils'
 
 import getRoot from './get-root'
 import getMaterial from './get-material'
@@ -150,13 +151,16 @@ export default class Node {
     get style () {
         const style = Object.keys(this.renderStyles).reduce((result, key) => {
             if (key !== 'customStyle') {
-                result[key] = this.renderStyles[key]
+                result[toHyphenate(key)] = this.renderStyles[key]
             }
             return result
         }, {})
         const {
             customStyle = {}
         } = this.renderStyles
+        Object.keys(customStyle).forEach(key => {
+            style[toHyphenate(key)] = customStyle[key]
+        })
         
         return Object.seal(Object.assign(style, customStyle))
     }

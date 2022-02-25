@@ -76,10 +76,10 @@
         // fix: 影响子元素排版
         display: 'block',
         'padding': '',
-        'paddingTop': '',
-        'paddingRight': '',
-        'paddingBottom': '',
-        'paddingLeft': '',
+        'padding-top': '',
+        'padding-right': '',
+        'padding-bottom': '',
+        'padding-left': '',
         'line-height': '',
         'letter-spacing': '',
         'word-spacing': '',
@@ -197,11 +197,11 @@
 
             // 编辑更新
             const updateCallback = _.throttle((event) => {
-                console.log('print event = ', event)
                 const {
                     target
                 } = event
                 if (target.componentId === this.componentData.componentId) {
+                    console.log('print event = ', event)
                     this.safeStylesWithDisplay()
                     this.safeStyleWithWidth()
                     this.safeStyleWithHeight()
@@ -307,10 +307,6 @@
                             this.safeStyles = Object.assign({}, this.safeStyles, {
                                 width: $baseComponentEl.style.width
                             })
-                        } else {
-                            this.safeStyles = Object.assign({}, this.safeStyles, {
-                                width: window.getComputedStyle($baseComponentEl).width
-                            })
                         }
                     }
                 })
@@ -336,10 +332,6 @@
                         if ($baseComponentEl.style.height) {
                             this.safeStyles = Object.assign({}, this.safeStyles, {
                                 height: $baseComponentEl.style.height
-                            })
-                        } else {
-                            this.safeStyles = Object.assign({}, this.safeStyles, {
-                                height: window.getComputedStyle($baseComponentEl).height
                             })
                         }
                     }
@@ -431,15 +423,6 @@
         pointer-events: auto !important;
         cursor: pointer;
         -webkit-text-size-adjust: none;
-        &.selected{
-            position: relative;
-           .line-top,
-            .line-right,
-            .line-bottom,
-            .line-left {
-                border-style: solid;
-            }
-        }
         &.hover{
             position: relative;
             > .line-top,
@@ -449,6 +432,16 @@
                 border-style: dashed;
             }
         }
+        &.selected{
+            position: relative;
+            > .line-top,
+            > .line-right,
+            > .line-bottom,
+            > .line-left {
+                border-style: solid;
+            }
+        }
+        
         .line-top,
         .line-right,
         .line-bottom,
