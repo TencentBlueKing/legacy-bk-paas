@@ -301,6 +301,10 @@
                 }
 
                 this.$nextTick(() => {
+                    // 因为异步任务执行的时机问题，此时可能组件已经被销毁
+                    if (!this.$refs.componentRoot) {
+                        return
+                    }
                     const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
                     if ($baseComponentEl) {
                         if ($baseComponentEl.style.width) {
@@ -327,6 +331,10 @@
                 }
 
                 this.$nextTick(() => {
+                    // 因为异步任务执行的时机问题，此时可能组件已经被销毁
+                    if (!this.$refs.componentRoot) {
+                        return
+                    }
                     const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
                     if ($baseComponentEl) {
                         if ($baseComponentEl.style.height) {
@@ -390,11 +398,11 @@
                 this.componentData.active()
             },
             /**
-             * @desc 鼠标右键，弹出菜单
+             * @desc 鼠标右键——选中组件、弹出菜单
              * @param { Object } event
              */
             handleShowContextmenu (event) {
-                console.log('from handleShowContextmenu', this.componentData)
+                this.componentData.active()
                 LC.showMenu(event)
             },
             /**
@@ -423,6 +431,7 @@
         pointer-events: auto !important;
         cursor: pointer;
         -webkit-text-size-adjust: none;
+        min-height: 10px;
         &.hover{
             position: relative;
             > .line-top,

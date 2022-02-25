@@ -312,11 +312,15 @@
             }
 
             if (this.lastValue && this.lastValue.valueType) {
+                // fix: 旧数据存在 valueType 是数组的情况
+                const lastValueType = Array.isArray(this.lastValue.valueType)
+                    ? this.lastValue.valueType[0]
+                    : this.lastValue.valueType
                 this.formData = Object.freeze({
                     ...this.formData,
                     format: this.lastValue.format,
                     code: this.lastValue.code,
-                    valueType: this.lastValue.valueType
+                    valueType: lastValueType
                 })
                 // TODO. format 为变量的时候时是否需要去获取变量的默认值
                 if (this.formData.format === 'value') {

@@ -2,35 +2,38 @@
     <div
         id="modifierPanel"
         class="draw-page-modifier-panel">
-        <div class="component-info">
-            <div
-                class="component-id"
-                v-bk-overflow-tips>
-                {{ componentId }}
+        <div v-if="componentId">
+            <div class="component-info">
+                <div
+                    class="component-id"
+                    v-bk-overflow-tips>
+                    {{ componentId }}
+                </div>
+                <div class="action-wrapper">
+                    <i
+                        v-if="!isAttachToForm"
+                        class="bk-drag-icon bk-drag-shanchu mr5"
+                        id="del-component-right-sidebar"
+                        @click="handleRemoveElement"
+                        v-bk-tooltips="'删除'" />
+                    <i class="bk-drag-icon"
+                        v-show="componentData.isInteractiveComponent"
+                        :class="componentData.interactiveShow ? 'bk-drag-visible-eye' : 'bk-drag-invisible-eye'"
+                        @click="handleToggleInteractiveShow"
+                        v-bk-tooltips="componentData.interactiveShow ? '隐藏' : '显示'" />
+                </div>
             </div>
-            <div class="action-wrapper">
-                <i
-                    v-if="!isAttachToForm"
-                    class="bk-drag-icon bk-drag-shanchu mr5"
-                    id="del-component-right-sidebar"
-                    @click="handleRemoveElement"
-                    v-bk-tooltips="'删除'" />
-                <i class="bk-drag-icon"
-                    v-show="componentData.isInteractiveComponent"
-                    :class="componentData.interactiveShow ? 'bk-drag-visible-eye' : 'bk-drag-invisible-eye'"
-                    @click="handleToggleInteractiveShow"
-                    v-bk-tooltips="componentData.interactiveShow ? '隐藏' : '显示'" />
-            </div>
+            <material-modifier />
+            <a
+                v-if="componentDocument"
+                class="link-prop-doc"
+                :href="componentDocument"
+                target="_blank">
+                <i class="bk-drag-icon bk-drag-jump-link"></i>
+                <span>查看详细属性文档</span>
+            </a>
         </div>
-        <material-modifier />
-        <a
-            v-if="componentDocument"
-            class="link-prop-doc"
-            :href="componentDocument"
-            target="_blank">
-            <i class="bk-drag-icon bk-drag-jump-link"></i>
-            <span>查看详细属性文档</span>
-        </a>
+        <div v-else class="active-empty">暂无选中组件</div>
     </div>
 </template>
 <script>
@@ -68,7 +71,8 @@
                 this.checkAttachToFrom()
             }
 
-            const activeClearCallback = () => {
+            const resetCallback = () => {
+                console.log('from resetCallbackresetCallbackresetCallbackresetCallback')
                 this.componentData = {}
                 this.componentId = ''
                 this.componentDocument = ''
@@ -76,11 +80,13 @@
             }
             
             LC.addEventListener('active', activeCallback)
-            LC.addEventListener('activeClear', activeClearCallback)
+            LC.addEventListener('activeClear', resetCallback)
+            LC.addEventListener('removeChild', resetCallback)
             LC.addEventListener('toggleInteractive', toggleInteractiveCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('active', activeCallback)
-                LC.removeEventListener('activeClear', activeClearCallback)
+                LC.removeEventListener('activeClear', resetCallback)
+                LC.removeEventListener('removeChild', resetCallback)
                 LC.removeEventListener('toggleInteractive', toggleInteractiveCallback)
             })
         },
@@ -102,8 +108,8 @@
              * @desc 显示删除选中的元素弹框
              */
             handleRemoveElement () {
-                this.componentData.activeClear()
                 removeCallBack()
+                this.componentData.activeClear()
             },
             /**
              * @desc 切换交互组件显示状态
@@ -150,6 +156,12 @@
             color: #3a84ff;
             cursor: pointer;
             display: inline-block;
+        }
+        .active-empty{
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 </style>

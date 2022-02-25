@@ -92,7 +92,7 @@
                 let expandIdListMemo = []
                 // 非移除组件操作都需要保留节点的展开状态
                 if (![
-                    'removeChildren'
+                    'removeChild'
                 ].includes(event.type)) {
                     expandIdListMemo = this.$refs.tree.nodes.reduce((result, node) => {
                         if (node.expanded) {

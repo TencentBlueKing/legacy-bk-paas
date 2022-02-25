@@ -24,9 +24,16 @@ const createNodeFromData = (data) => {
         }
 
         data.renderStyles && newNode.setRenderStyles(data.renderStyles)
-        data.renderProps && newNode.setRenderProps(data.renderProps)
+        // data.renderProps && newNode.setRenderProps(data.renderProps)
         data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
         data.renderEvents && newNode.setRenderEvents(data.renderEvents)
+        if (data.renderProps) {
+            // prop 通过 merge 的方式加载
+            // 兼容组件 prop 扩展的场景
+            Object.keys(data.renderProps).forEach(key => {
+                newNode.renderProps[key] = data.renderProps[key]
+            })
+        }
 
         newNode._isMounted = true
         newNode.interactiveShow = false
@@ -89,7 +96,7 @@ const traverse = (parentNode, childDataList, slot) => {
  * @param { Array } data
  * @returns { Array }
  */
-const tansform = (parentNode, data) => {
+const tansformPageData = (parentNode, data) => {
     return data.map((curDataNode, index) => {
         if (!curDataNode) {
             return null
@@ -136,7 +143,7 @@ const tansform = (parentNode, data) => {
                             }
                         },
                         renderSlots: {
-                            default: tansform(curDataNode, columnItem.children)
+                            default: tansformPageData(curDataNode, columnItem.children)
                         },
                         renderDirectives: [],
                         renderEvents: {},
@@ -177,7 +184,7 @@ const tansform = (parentNode, data) => {
                             return result
                         }, {}),
                         renderSlots: {
-                            default: tansform(curDataNode, formItem.renderSlots.default.val)
+                            default: tansformPageData(curDataNode, formItem.renderSlots.default.val)
                         },
                         renderDirectives: [],
                         renderEvents: {},
@@ -195,7 +202,7 @@ const tansform = (parentNode, data) => {
                 const freelayoutItem = curDataNode.renderSlots.default.val[0] || []
                 let freelayoutSlot = []
                 if (freelayoutItem && freelayoutItem.children) {
-                    freelayoutSlot = tansform(curDataNode, freelayoutItem.children)
+                    freelayoutSlot = tansformPageData(curDataNode, freelayoutItem.children)
                 }
                 curDataNode.renderSlots = {
                     default: freelayoutSlot
@@ -208,7 +215,7 @@ const tansform = (parentNode, data) => {
                 && curDataNode.renderSlots.content.val) {
                 const child = curDataNode.renderSlots.content.val
                 curDataNode.renderSlots = {
-                    content: tansform(curDataNode, [child])[0]
+                    content: tansformPageData(curDataNode, [child])[0]
                 }
             }
         } else if (curDataNode.type === 'bk-dialog') {
@@ -218,16 +225,16 @@ const tansform = (parentNode, data) => {
                 && curDataNode.renderSlots.default.val) {
                 const child = curDataNode.renderSlots.default.val
                 curDataNode.renderSlots = {
-                    default: tansform(curDataNode, [child])[0]
+                    default: tansformPageData(curDataNode, [child])[0]
                 }
             }
         } else if (curDataNode.type === 'bk-card') {
             if (curDataNode.renderSlots) {
                 const renderSlots = curDataNode.renderSlots
                 curDataNode.renderSlots = {
-                    header: tansform(curDataNode, [renderSlots.header.val])[0],
-                    default: tansform(curDataNode, [renderSlots.default.val])[0],
-                    footer: tansform(curDataNode, [renderSlots.footer.val])[0]
+                    header: tansformPageData(curDataNode, [renderSlots.header.val])[0],
+                    default: tansformPageData(curDataNode, [renderSlots.default.val])[0],
+                    footer: tansformPageData(curDataNode, [renderSlots.footer.val])[0]
                 }
             }
         } else if (curDataNode.type === 'el-card') {
@@ -236,7 +243,7 @@ const tansform = (parentNode, data) => {
                 && curDataNode.renderSlots.default.val) {
                 const child = curDataNode.renderSlots.default.val
                 curDataNode.renderSlots = {
-                    default: tansform(curDataNode, [child])[0]
+                    default: tansformPageData(curDataNode, [child])[0]
                 }
             }
         }
@@ -289,11 +296,12 @@ const tansform = (parentNode, data) => {
                     renderValue: prop
                 }
             } else {
+                const valueType = Array.isArray(prop.type) ? prop.type[0] : prop.type
                 result[propName] = {
                     format: 'value',
                     code: prop.val,
                     payload: prop.payload || {},
-                    valueType: prop.type,
+                    valueType,
                     renderValue
                 }
             }
@@ -306,11 +314,12 @@ const tansform = (parentNode, data) => {
                 && directive.val
                  && curDataNode.renderProps[directive.prop]) {
                 const renderProp = origanlRenderProps[directive.prop]
+                const valueType = Array.isArray(renderProp.type) ? renderProp.type[0] : renderProp.type
                 curDataNode.renderProps[directive.prop] = {
                     format: directive.valType,
                     code: directive.val,
                     payload: {},
-                    valueType: renderProp.type,
+                    valueType,
                     renderValue: renderProp.val
                 }
             }
@@ -417,9 +426,9 @@ const checkVersion = (data) => {
 //                 && childData.renderSlots.default.val) {
 //                 const child = childData.renderSlots.default.val
 //                 // console.log('\n\n\n\n\n\n\n\n ===============')
-//                 // console.dir(tansformPageData(childData, [child]))
+//                 // console.dir(tansformPageDataPageData(childData, [child]))
 //                 childData.renderSlots = {
-//                     default: tansform(childData, [child])[0]
+//                     default: tansformPageData(childData, [child])[0]
 //                 }
 //             }
 //             return
@@ -455,7 +464,7 @@ export default function (data) {
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
-        versionData = tansform({ type: 'root' }, data)
+        versionData = tansformPageData({ type: 'root' }, data)
     }
 
     // traverseFix(versionData)
@@ -481,7 +490,7 @@ export const parseTemplate = data => {
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
-        versionData = tansform({ type: 'template' }, data)
+        versionData = tansformPageData({ type: 'template' }, data)
     }
     try {
         isClone = true

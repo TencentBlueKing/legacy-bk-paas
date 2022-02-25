@@ -149,17 +149,18 @@ export default class Node {
      * @returns { Object }
      */
     get style () {
-        const style = Object.keys(this.renderStyles).reduce((result, key) => {
-            if (key !== 'customStyle') {
-                result[toHyphenate(key)] = this.renderStyles[key]
-            }
-            return result
-        }, {})
+        const style = {}
         const {
             customStyle = {}
         } = this.renderStyles
+        
         Object.keys(customStyle).forEach(key => {
             style[toHyphenate(key)] = customStyle[key]
+        })
+        Object.keys(this.renderStyles).forEach(key => {
+            if (key !== 'customStyle') {
+                style[toHyphenate(key)] = this.renderStyles[key]
+            }
         })
         
         return Object.seal(Object.assign(style, customStyle))
@@ -170,7 +171,10 @@ export default class Node {
      */
     get prop () {
         const props = Object.keys(this.renderProps).reduce((result, propKey) => {
-            result[propKey] = this.renderProps[propKey].renderValue
+            const renderValue = this.renderProps[propKey].renderValue
+            if (renderValue !== '') {
+                result[propKey] = this.renderProps[propKey].renderValue
+            }
             return result
         }, {})
         // 配置了 v-model，获取对应的值
@@ -371,6 +375,9 @@ export default class Node {
     @notify
     removeChild (child) {
         removeChild(this, child)
+        if (activeNode && activeNode === child) {
+            activeNode.activeClear()
+        }
         return this
     }
 
