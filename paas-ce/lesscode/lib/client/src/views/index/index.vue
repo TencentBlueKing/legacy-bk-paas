@@ -99,15 +99,27 @@
                 versionName: 'currentVersionName',
                 getInitialVersion: 'initialVersion'
             }),
-            ...mapState('route', ['layoutPageList'])
+            ...mapState('route', ['layoutPageList']),
+            pageRoute () {
+                return this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+            }
         },
         watch: {
             curTemplateData: {
                 handler () {
-                    const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
                     this.handleUpdatePreview({
                         isGenerateNav: true,
-                        id: pageRoute.layoutPath,
+                        id: this.pageRoute.layoutPath,
+                        curTemplateData: this.curTemplateData,
+                        types: ['reload']
+                    })
+                }
+            },
+            layoutPageList: {
+                handler () {
+                    this.handleUpdatePreview({
+                        isGenerateNav: true,
+                        id: this.pageRoute.layoutPath,
                         curTemplateData: this.curTemplateData,
                         types: ['reload']
                     })
@@ -123,6 +135,11 @@
             },
             'pageDetail.lifeCycle' () {
                 // 生命周期发生变化的时候  reload
+                this.handleUpdatePreview()
+            },
+            'pageDetail.styleSetting' () {
+                // 页面样式发生变化的时候  reload
+                console.log('styleSettingchange')
                 this.handleUpdatePreview()
             }
         },
