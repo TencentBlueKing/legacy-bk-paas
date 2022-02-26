@@ -142,6 +142,7 @@
 
 <script>
     import { mapGetters, mapMutations } from 'vuex'
+    import LC from '@/element-materials/core'
     import pageRouterSelect from '@/components/project/page-router-select'
     import StylePadding from '@/element-materials/modifier/component/styles/strategy/padding'
     import StyleMargin from '@/element-materials/modifier/component/styles/strategy/margin'
@@ -488,6 +489,7 @@
                         from: 'setting'
                     }
                 })
+                LC.pageStyle = res.styleSetting
                 return res
             },
             async savePageRoute (field, value) {

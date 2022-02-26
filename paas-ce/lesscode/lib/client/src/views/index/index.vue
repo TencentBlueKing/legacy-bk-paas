@@ -64,6 +64,8 @@
     import OperationArea from './components/operation-area'
     import ActionTool from './components/action-tool'
 
+    console.dir(LC)
+
     export default {
         components: {
             NoviceGuide,
@@ -280,6 +282,8 @@
 
                     // 设置初始targetData
                     LC.parseData(pageDetail.content)
+                    LC.pageStyle = pageDetail.styleSetting
+                    this.handleUpdatePreview()
                 } catch (e) {
                     console.error(e)
                 } finally {

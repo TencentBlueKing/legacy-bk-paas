@@ -12,14 +12,14 @@ export default {
         const baseComponentStyleReset = {
             // 修正组件会影响位置的样式
             'margin': '',
-            'marginTop': '',
-            'marginRight': '',
-            'marginBottom': '',
-            'marginLeft': '',
+            'margin-top': '',
+            'margin-right': '',
+            'margin-bottom': '',
+            'margin-left': '',
             'transform': '',
             // 修正会产生叠加效果的样式
-            'boxShadow': '',
-            'zIndex': ''
+            'box-shadow': '',
+            'z-index': ''
         }
         // fix: 基础组件的根元素可能会有定位样式(relative, absolute)当top、right、bottom、left 生效时会导致偏移
         // - 组件在 freelayout 里面时进行位置修正

@@ -26,6 +26,11 @@ import {
     clearMenu
 } from './menu'
 
+import {
+    getPageStyle,
+    setPageStyle
+} from './page-style'
+
 export const root = new Node({
     name: 'targetData',
     type: 'root'
@@ -69,6 +74,15 @@ core.clearMenu = clearMenu
 
 core.addEventListener('ready', () => {
     core.isReady = true
+})
+
+Object.defineProperty(core, 'pageStyle', {
+    set (value) {
+        setPageStyle(value)
+    },
+    get () {
+        return getPageStyle()
+    }
 })
 
 export default core
