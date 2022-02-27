@@ -2,14 +2,16 @@
     <div
         id="modifierPanel"
         class="draw-page-modifier-panel">
-        <div v-if="componentId">
+        <div>
             <div class="component-info">
                 <div
                     class="component-id"
                     v-bk-overflow-tips>
-                    {{ componentId }}
+                    {{ componentId || '--' }}
                 </div>
-                <div class="action-wrapper">
+                <div
+                    v-if="componentId"
+                    class="action-wrapper">
                     <i
                         v-if="!isAttachToForm"
                         class="bk-drag-icon bk-drag-shanchu mr5"
@@ -33,7 +35,6 @@
                 <span>查看详细属性文档</span>
             </a>
         </div>
-        <div v-else class="active-empty">暂无选中组件</div>
     </div>
 </template>
 <script>
@@ -71,8 +72,7 @@
                 this.checkAttachToFrom()
             }
 
-            const resetCallback = () => {
-                console.log('from resetCallbackresetCallbackresetCallbackresetCallback')
+            const resetCallback = (event) => {
                 this.componentData = {}
                 this.componentId = ''
                 this.componentDocument = ''
@@ -109,7 +109,6 @@
              */
             handleRemoveElement () {
                 removeCallBack()
-                this.componentData.activeClear()
             },
             /**
              * @desc 切换交互组件显示状态

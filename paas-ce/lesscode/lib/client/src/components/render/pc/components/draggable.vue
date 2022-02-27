@@ -7,11 +7,13 @@
         :chosen-class="$style['chosen']"
         :ghost-class="ghostClass || $style['ghost']"
         filter="[data-render-drag='disabled']"
-        @add="handleAdd"
-        @change="handleChange"
         @choose="handleChoose"
+        @onUnchoose="handleUnchoose"
         @start="handleStart"
         @end="handleEnd"
+        @add="handleAdd"
+        @onSort="handleSort"
+        @change="handleChange"
         v-bind="$attrs"
         v-on="$listeners">
         <slot />
@@ -83,11 +85,41 @@
         },
         methods: {
             /**
+             * @desc 拖动选中
+             * @param { Object } dragEvent
+             */
+            handleChoose (event) {
+                dragTargetGroup = event.item.dataset['layout'] ? 'layout' : 'component'
+                this.$emit('choose', event)
+            },
+            handleUnchoose (event) {
+                dragTargetGroup = ''
+                this.$emit('unchoose', event)
+            },
+            /**
+             * @desc 开始拖拽
+             * @param { Object } dragEvent
+             */
+            handleStart (event) {
+                this.$emit('start', event)
+            },
+            /**
+             * @desc 结束拖拽
+             * @param { Object } dragEvent
+             */
+            handleEnd (event) {
+                dragTargetGroup = ''
+                this.$emit('end', event)
+            },
+            /**
              * @desc 添加组件
              * @param { Object } dragEvent
              */
             handleAdd (event) {
                 this.$emit('add', event)
+            },
+            handleSort (event) {
+                this.$emit('sort', event)
             },
             /**
              * @desc 拖动更新
@@ -122,29 +154,6 @@
                 this.$refs.draggable.computeIndexes()
                 dragTargetGroup = ''
                 this.$emit('change', event)
-            },
-            /**
-             * @desc 拖动选中
-             * @param { Object } dragEvent
-             */
-            handleChoose (event) {
-                dragTargetGroup = event.item.dataset['layout'] ? 'layout' : 'component'
-                this.$emit('choose', event)
-            },
-            /**
-             * @desc 开始拖拽
-             * @param { Object } dragEvent
-             */
-            handleStart (event) {
-                this.$emit('start', event)
-            },
-            /**
-             * @desc 结束拖拽
-             * @param { Object } dragEvent
-             */
-            handleEnd (event) {
-                dragTargetGroup = ''
-                this.$emit('end', event)
             }
         }
     }

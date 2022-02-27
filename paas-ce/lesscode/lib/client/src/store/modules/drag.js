@@ -68,7 +68,6 @@ export default {
             state.freeLayoutItemPlaceholderPointerEvents = freeLayoutItemPlaceholderPointerEvents
         },
         setCurTemplateData (state, payload) {
-            console.log('from teplate data == ', payload)
             state.curTemplateData = payload
         },
         pushTargetHistory (state, pushData) {
