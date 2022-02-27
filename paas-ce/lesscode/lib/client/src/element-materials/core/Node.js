@@ -374,10 +374,11 @@ export default class Node {
     @readonly
     @notify
     removeChild (child) {
-        removeChild(this, child)
         if (activeNode && activeNode === child) {
             activeNode.activeClear()
         }
+        removeChild(this, child)
+        
         return this
     }
 
