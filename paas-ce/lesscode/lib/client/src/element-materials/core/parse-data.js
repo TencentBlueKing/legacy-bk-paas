@@ -381,6 +381,11 @@ const tansformPageData = (parentNode, data) => {
                 return result
             }, {})
         }
+
+        // fix: img 配置 type 问题
+        if (curDataNode.type === 'img') {
+            curDataNode.type = 'bk-image'
+        }
         
         return curDataNode
     })

@@ -552,6 +552,7 @@ const checkPageDataVersion = (data) => {
     }
     return 'v2'
 }
+
 const tansformPageData = (parentNode, data) => {
     return data.map((curDataNode, index) => {
         if (!curDataNode) {
@@ -837,10 +838,16 @@ const tansformPageData = (parentNode, data) => {
                 return result
             }, {})
         }
+
+        // fix: img 配置 type 问题
+        if (curDataNode.type === 'img') {
+            curDataNode.type = 'bk-image'
+        }
         
         return curDataNode
     })
 }
+
 export async function syncPageData (ctx) {
     try {
         const pageRepository = getRepository(Page)
