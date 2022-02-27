@@ -109,6 +109,7 @@
              */
             handleRemoveElement () {
                 removeCallBack()
+                this.componentData.activeClear()
             },
             /**
              * @desc 切换交互组件显示状态

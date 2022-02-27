@@ -419,14 +419,22 @@
                 try {
                     if (field.id === 'pageRoute' || field.id === 'layoutId') {
                         await this.savePageRoute(field, value)
-                        this.fetchData()
-                        // 导航模板切换后需要获取当前模板的导航数据，并更新更新本地curTemplateData
-                        await this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id })
-                    } else if (field.from === 'style') {
-                        await this.saveStyle()
+                        await Promise.all([
+                            this.fetchData(),
+                            // 导航模板切换后需要获取当前模板的导航数据，并更新更新本地curTemplateData
+                            this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id }),
+                            this.$store.dispatch('route/getProjectPageRoute', {
+                                projectId: this.projectId,
+                                versionId: this.versionId
+                            })
+                        ])
                     } else {
-                        const pageData = await this.saveField(field, value)
-
+                        let pageData = {}
+                        if (field.from === 'style') {
+                            pageData = await this.saveStyle()
+                        } else {
+                            pageData = await this.saveField(field, value)
+                        }
                         this.$store.commit('page/updatePageDetail', pageData)
                         this.$store.commit('page/updatePageList', pageData)
                     }
@@ -444,7 +452,7 @@
                         data: {
                             pageName: value,
                             currentName: this.page.pageName,
-                            projectId: this.project.id,
+                            projectId: this.projectId,
                             versionId: this.versionId,
                             from: 'setting'
                         }

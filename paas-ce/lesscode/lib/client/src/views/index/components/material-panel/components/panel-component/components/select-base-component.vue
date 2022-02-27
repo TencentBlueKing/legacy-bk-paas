@@ -29,7 +29,7 @@
                     <i
                         class="bk-drag-icon bk-drag-vesion-fill"
                         v-bk-tooltips="{
-                            content: '',
+                            content: bkUiTips,
                             placements: ['bottom-end']
                         }" />
                 </div>
@@ -76,6 +76,7 @@
             }
         },
         created () {
+            this.bkUiTips = '当前组件库版本为“latest”，<a target="_blank" href="https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/changelog" style="cursor: pointer;color: #3a84ff">查看更新日志</a>'
             this.elementUiTips = '当前组件库版本为“2.15.1”，<a target="_blank" href="https://github.com/ElemeFE/element/releases" style="cursor: pointer;color: #3a84ff">查看更新日志</a>'
         },
         methods: {
