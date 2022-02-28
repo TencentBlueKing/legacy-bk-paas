@@ -20,7 +20,7 @@
             <p
                 v-if="isError"
                 class="modifier-input-error-text">
-                {{describe.regErrorText || '格式错误，请重新输入'}}
+                {{slotConfig.regErrorText || '格式错误，请重新输入'}}
             </p>
         </div>
     </div>

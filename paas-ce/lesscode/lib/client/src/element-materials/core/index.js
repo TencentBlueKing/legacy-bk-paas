@@ -7,7 +7,7 @@ import getActiveNode from './get-active-node'
 import getNodeById from './get-node-by-id'
 import getNodesByType from './get-nodes-by-type'
 import createNode from './create-node'
-import { registerMaterial } from './get-material'
+import { registerMaterial, unregisterMaterial } from './get-material'
 import isNode from './is-node'
 import isInteractiveType from './is-interactive-type'
 
@@ -74,6 +74,12 @@ core.clearMenu = clearMenu
 
 core.addEventListener('ready', () => {
     core.isReady = true
+})
+
+core.addEventListener('unload', () => {
+    core.isReady = false
+    // 卸载时需要移除所有动态注册的 material
+    unregisterMaterial()
 })
 
 Object.defineProperty(core, 'pageStyle', {
