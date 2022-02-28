@@ -114,10 +114,6 @@
                         if (!this.stopped) event.preventDefault()
                         return this
                     },
-                    isDelComponentConfirm: function () {
-                        if (!vm.delComponentConf.visiable) this.stopped = true
-                        return this
-                    },
                     exec: function (callBack) {
                         vm.$nextTick(() => {
                             if (!this.stopped) callBack()
@@ -157,9 +153,6 @@
                     case 8:
                     case 46:
                         funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
-                        break
-                    case 13:
-                        funcChainMap.isDelComponentConfirm().exec(this.confirmDelComponent)
                         break
                 }
             },

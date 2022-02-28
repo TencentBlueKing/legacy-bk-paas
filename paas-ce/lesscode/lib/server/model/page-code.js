@@ -937,6 +937,11 @@ class PageCode {
         const preCompId = camelCase(compId, { transform: camelCaseTransformMerge })
         let elementComId = ''
         const componentType = type
+        if (type === 'bk-table') {
+            if (props.hasOwnProperty('show-pagination-info') && props.hasOwnProperty('showPaginationInfo')) {
+                delete props.showPaginationInfo
+            }
+        }
         for (const i in props) {
             if (dirProps.find((directive) => (directive.prop === i)) && !['remote', 'data-source', 'table-data-source'].includes(props[i].type)) continue
 
@@ -999,14 +1004,14 @@ class PageCode {
         const hasVModel = dirProps.filter(item => item.type === 'v-model').length
         if (type === 'bk-checkbox-group' && !hasVModel) {
             const checkedValue = (slots.default.code || []).filter(c => c.checked === true).map(c => c.value)
-            this.dataTemplate(compId, JSON.stringify(checkedValue))
-            propsStr += `v-model="${compId}"`
+            this.dataTemplate(`${compId}Vmodel`, JSON.stringify(checkedValue))
+            propsStr += `v-model="${compId}Vmodel"`
         }
         if (type === 'bk-radio-group' && !hasVModel) {
             const checkedItem = (slots.default.code || []).find(c => c.checked === true)
             const checkedValue = (checkedItem && checkedItem.value) || ''
-            this.dataTemplate(compId, `'${checkedValue}'`)
-            propsStr += `v-model="${compId}"`
+            this.dataTemplate(`${compId}Vmodel`, `'${checkedValue}'`)
+            propsStr += `v-model="${compId}Vmodel"`
         }
         // element组件添加vmodel
         if (type.startsWith('el-')) {
