@@ -105,7 +105,7 @@
         --breadcrumb-height: 52px;
         --aside-folded-width: 60px;
         min-width: 1280px;
-        height: calc(100vh - 64px);
+        height: calc(100vh - 68px);
         margin-top: 64px;
 
         &.aside-folded {

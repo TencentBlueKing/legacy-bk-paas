@@ -340,7 +340,7 @@
 
     .lessocde-draw-page {
         min-width: 1280px;
-        height: calc(100vh - $headerHeight);
+        height: calc(100vh - $headerHeight - 4px);
         margin-top: $headerHeight;
         .draw-page-header {
             position: relative;

@@ -105,6 +105,7 @@
         width: 100%;
         height: 100%;
         overflow-y: hidden;
+        @mixin scroller;
         font-size: 14px;
         color: #63656e;
     }
