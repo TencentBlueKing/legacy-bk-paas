@@ -32,7 +32,7 @@ export function notify (target, name, descriptor) {
         ].includes(name)) {
             triggerEventListener('update', event)
         }
-        
+
         if (name === 'toggleInteractive') {
             event.interactiveShow = this.interactiveShow
             triggerEventListener('toggleInteractive', event)

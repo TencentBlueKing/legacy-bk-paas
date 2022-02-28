@@ -115,22 +115,30 @@
         created () {
             this.activeComponentNode = null
             const activeCallback = ({ target }) => {
-                this.tabPanelActive = target.tabPanelActive
+                this.tabPanelActive = target.tabPanelActive || 'props'
                 this.renderKey = target.renderKey
                 this.activeComponentNode = target
             }
 
-            const activeClearCallback = () => {
+            const resetCallback = () => {
                 this.tabPanelActive = 'props'
                 this.renderKey = ''
                 this.activeComponentNode = null
             }
+
+            // 默认有选中的节点
+            const activeNode = LC.getActiveNode()
+            if (activeNode && activeNode.parentNode) {
+                activeCallback({ target: activeNode })
+            }
             
             LC.addEventListener('active', activeCallback)
-            LC.addEventListener('activeClear', activeClearCallback)
+            LC.addEventListener('activeClear', resetCallback)
+            LC.addEventListener('removeChild', resetCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('active', activeCallback)
-                LC.removeEventListener('activeClear', activeClearCallback)
+                LC.removeEventListener('activeClear', resetCallback)
+                LC.removeEventListener('removeChild', resetCallback)
             })
         },
         methods: {
