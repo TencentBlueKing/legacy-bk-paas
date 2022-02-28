@@ -328,7 +328,7 @@
                     }
 
                     .project-version-selector {
-                        width: 90px;
+                        max-width: 320px;
                     }
                 }
             }
