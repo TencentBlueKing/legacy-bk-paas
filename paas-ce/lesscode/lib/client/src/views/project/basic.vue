@@ -250,7 +250,6 @@
                     data: { name }
                 })
                 if (res.code !== 0) {
-                    this.messageError(res.message)
                     return false
                 }
                 return true
