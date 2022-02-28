@@ -57,7 +57,7 @@
 <style lang="postcss" module>
     .draw-layout{
         position: relative;
-        height: calc(100vh - 116px);
+        height: calc(100vh - 120px);
         padding-right: 300px;
         padding-left: 340px;
         transition: all .1s;
