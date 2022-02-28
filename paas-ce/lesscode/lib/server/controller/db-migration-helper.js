@@ -882,7 +882,9 @@ export async function syncPageData (ctx) {
                 return transactionalEntityManager.update(Page, {
                     id: pageData.id
                 }, {
-                    content: JSON.stringify(targetData)
+                    content: JSON.stringify(targetData),
+                    updateTime: pageData.updateTime,
+                    updateUser: pageData.updateUser
                 })
             })
             const templateTaskList = pageTemplateList.map(templateData => {
@@ -908,7 +910,9 @@ export async function syncPageData (ctx) {
                     return transactionalEntityManager.update(PageTemplate, {
                         id: templateData.id
                     }, {
-                        content: JSON.stringify(targetData[0])
+                        content: JSON.stringify(targetData[0]),
+                        updateTime: templateData.updateTime,
+                        updateUser: templateData.updateUser
                     })
                 } else {
                     return Promise.resolve()
@@ -1007,7 +1011,9 @@ export async function fixPageData (ctx) {
                     return transactionalEntityManager.update(Page, {
                         id: pageData.id
                     }, {
-                        content: JSON.stringify(targetData)
+                        content: JSON.stringify(targetData),
+                        updateTime: pageData.updateTime,
+                        updateUser: pageData.updateUser
                     })
                 } else {
                     return Promise.resolve()
@@ -1036,7 +1042,9 @@ export async function fixPageData (ctx) {
                     return transactionalEntityManager.update(PageTemplate, {
                         id: templateData.id
                     }, {
-                        content: JSON.stringify(targetData)
+                        content: JSON.stringify(targetData),
+                        updateTime: templateData.updateTime,
+                        updateUser: templateData.updateUser
                     })
                 } else {
                     return Promise.resolve()
