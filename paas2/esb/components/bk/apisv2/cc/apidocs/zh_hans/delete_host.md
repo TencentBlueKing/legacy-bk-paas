@@ -22,7 +22,7 @@
     "bk_username": "xxx",
     "bk_token": "xxx",
     "bk_supplier_account": "123456789",
-    "bk_host_id": "1,2,3",
+    "bk_host_id": "1,2,3"
 }
 ```
 
@@ -34,7 +34,9 @@
     "result": true,
     "code": 0,
     "message": "",
-    "data": {}
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
+    "data": null
 }
 ```
 ### 返回结果参数说明
@@ -46,3 +48,5 @@
 | code    | int    | 错误编码。 0表示success，>0表示失败错误    |
 | message | string | 请求失败返回的错误信息                    |
 | data    | object | 请求返回的数据                           |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |

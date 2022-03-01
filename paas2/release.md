@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.12.41
+    - update: esb update cc confapis; esb update cmsi apidocs
+    - update: esb update title/footer
+
 # 2.12.40
     - bugfix: fix esb export api docs command
 

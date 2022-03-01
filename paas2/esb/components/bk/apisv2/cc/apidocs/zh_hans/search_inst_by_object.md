@@ -63,6 +63,8 @@ condition 参数为查询的目标实例对应的模型定义的所有字段
     "result": true,
     "code": 0,
     "message": "success",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 4,
         "info": [
@@ -85,6 +87,8 @@ condition 参数为查询的目标实例对应的模型定义的所有字段
 | code    | int    | 错误编码。 0表示success，>0表示失败错误    |
 | message | string | 请求失败返回的错误信息                    |
 | data    | object | 请求返回的数据                           |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 
 #### data
 
