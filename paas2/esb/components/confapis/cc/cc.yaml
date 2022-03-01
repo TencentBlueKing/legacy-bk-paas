@@ -1173,3 +1173,34 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/createmany/instassociation
   dest_http_method: POST
+
+- path: /v2/cc/find_host_service_template/
+  name: list_host_service_template_id
+  label: 查询主机所属的服务模版id列表信息
+  label_en: search the service template id corresponding to the host.
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/hosts/service_template
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/cc/find_instassociation_with_inst/
+  name: find_instassociation_with_inst
+  label: 查询模型实例的关联关系及可选返回原模型或目标模型的实例详情
+  label_en: search the association of model instances and optionally return the instance details of the source object or target object.
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/find/instassociation/object/{bk_obj_id}/inst/detail
+  dest_http_method: POST
+
+- path: /v2/cc/add_host_to_resource_pool/
+  name: add_host_to_resource_pool
+  label: 添加主机到资源池
+  label_en: add host to resource pool
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/add/resource
+  dest_http_method: POST
