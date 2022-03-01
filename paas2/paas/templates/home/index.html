@@ -171,8 +171,99 @@
 			<!-- % endif -->
 		</div>
 		<div class="main-right">
-			<div class="main-panel" style="margin-bottom: 16px;">
-				<p class="right-title"> 帮助指引</p>
+			<style>
+				@keyframes guide-float {
+					50% {
+						transform: translate(6px, 0);
+					}
+				}
+				.home-guide-wrapper {
+					position: absolute;
+					width: 206px;
+					border-radius: 2px;
+					box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.14);
+					transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+					z-index: 10;
+				}
+				.home-guide-wrapper.has-animation {
+					animation: guide-float 1s ease-out 5;
+				}
+				.home-guide-wrapper .content-wrapper {
+					position: relative;
+				}
+				.home-guide-wrapper .content-shade {
+					padding: 4px 8px;
+					background-color: #699df4;
+					border-radius: 3px;
+				}
+				.home-guide-wrapper .text {
+					line-height: 18px;
+					font-size: 12px;
+					color: #fff;
+					font-weight: normal;
+					word-break: break-all;
+				}
+				.home-guide-wrapper .knowed-action {
+					position: relative;
+					left: 138px;
+					width: 50px;
+					line-height: 18px;
+					background: #fff;
+					border-radius: 2px;
+					font-size: 12px;
+					color: #3a84ff;
+					text-align: center;
+					cursor: pointer;
+					margin-bottom: 4px;
+				}
+				.home-guide-wrapper .triangle {
+					position: absolute;
+					width: 6px;
+					height: 6px;
+					background: #699df4;
+					transform: rotate(45deg);
+					z-index: -1;
+				}
+				.home-guide-wrapper .triangle.top {
+					top: -4px;
+					left: 105px;
+					border-bottom: none;
+					border-right: none;
+				}
+				.home-guide-wrapper .triangle.right {
+					top: 16%;
+					transform: rotate(45deg) translateY(-50%);
+					right: -1px;
+					border-bottom: none;
+					border-left: none;
+				}
+				.home-guide-wrapper .triangle.bottom {
+					bottom: -4px;
+					left: 105px;
+					border-left: none;
+					border-top: none;
+				}
+				.home-guide-wrapper .triangle.left {
+					top: 50%;
+					transform: rotate(45deg) translateY(-50%);
+					left: -8px;
+					border-top: none;
+					border-right: none;
+				}
+			</style>
+			<div class="main-panel" style="margin-bottom: 16px; position: relative;">
+				<p class="right-title">
+					帮助指引
+					<div class="home-guide-wrapper has-animation" data-idx="help" style="display: none; top: 15px; left: -200px;">
+						<div class="content-wrapper">
+							<section class="content-shade">
+								<div class="text">新增 “帮助指引” 可以快速上手和找到入门文档</div>
+								<div class="knowed-action" data-idx="help">知道了</div>
+							</section>
+							<div class="triangle right"></div>
+						</div>
+					</div>
+				</p>
 				<ul class="list special">
 					<li class="list-item">
 						<a target="_blank" href="${SITE_URL}download/docs/quick-start-v6.0.pdf">
@@ -197,8 +288,19 @@
 				</ul>
 			</div>
 
-			<div class="main-panel">
-				<p class="right-title">常用链接</p>
+			<div class="main-panel" style="position: relative;">
+				<p class="right-title">
+					常用链接
+					<div class="home-guide-wrapper has-animation" data-idx="link" style="display: none; top: 15px; left: -200px;">
+						<div class="content-wrapper">
+							<section class="content-shade">
+								<div class="text">新增 “常用链接” 可以快速找到相关教程和资源</div>
+								<div class="knowed-action" data-idx="link">知道了</div>
+							</section>
+							<div class="triangle right"></div>
+						</div>
+					</div>
+				</p>
 				<ul class="list">
 					<li class="list-item">
 						<a target="_blank" href="http://bk.tencent.com/s-mart/">蓝鲸S-mart</a>
@@ -252,5 +354,58 @@
 	<!-- scripts -->
 	<script src="${STATIC_URL}home/js/particles.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
 	<script src="${STATIC_URL}home/js/app.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+	<script>
+		$(document).ready(function () {
+			function getCookie (name) {
+    		var arr = '';
+				var reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
+    		if (arr = document.cookie.match(reg)) {
+					return unescape(arr[2]);
+				}
+        return null;
+			}
+			function getSecond (str) {
+				var str1 = str.substring(1, str.length) * 1;
+				var str2 = str.substring(0, 1);
+				if (str2 === 's') {
+					return str1 * 1000;
+				} else if (str2 === 'h') {
+					return str1 * 60 * 60 * 1000;
+				} else if (str2 == 'd') {
+					return str1 * 24 * 60 * 60 * 1000;
+				}
+			}
+			function setCookie (name, value, time) {
+				var strsec = getSecond(time);
+				var exp = new Date();
+				exp.setTime(exp.getTime() + strsec * 1);
+				document.cookie = name + '='+ escape (value) + ';expires=' + exp.toGMTString();
+			}
+
+			var cookieLink = getCookie('guide_link')
+			if (!cookieLink) {
+				var wrapper = $('.home-guide-wrapper[data-idx="link"]')
+				if (wrapper.length) {
+					wrapper.show()
+				}
+			}
+
+			var cookieHelp = getCookie('guide_help')
+			if (!cookieHelp) {
+				var wrapper = $('.home-guide-wrapper[data-idx="help"]')
+				if (wrapper.length) {
+					wrapper.show()
+				}
+			}
+
+			function knowdClickHandler () {
+				var idx = $(this).data('idx');
+				var cookie = getCookie('guide_' + idx)
+				setCookie('guide_' + idx, '1', 'd10');
+				$(this).parents('.home-guide-wrapper').fadeOut(500)
+			}
+			$('.knowed-action').click(knowdClickHandler)
+		})
+	</script>
 </body>
 </html>
