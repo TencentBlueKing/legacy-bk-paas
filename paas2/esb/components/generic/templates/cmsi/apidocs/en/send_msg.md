@@ -4,8 +4,6 @@ Universal messaging interface
 
 ### Request Parameters
 
-{{ common_args_desc }}
-
 #### Interface Parameters
 
 | Field              |  Type      | Required|  Description      |

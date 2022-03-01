@@ -4,8 +4,6 @@
 
 ### 请求参数
 
-{{ common_args_desc }}
-
 ### 请求参数示例
 
 ```python
