@@ -4,8 +4,6 @@ Query the type of send_msg component that supports sending messages
 
 ### Request Parameters
 
-{{ common_args_desc }}
-
 ### Request Parameters Example
 
 ```python
