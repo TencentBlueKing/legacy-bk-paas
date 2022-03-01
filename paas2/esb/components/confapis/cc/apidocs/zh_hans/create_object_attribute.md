@@ -143,7 +143,8 @@
 | bk_asst_obj_id      | string       | 如果有关联其它的模型，那么就必需设置此字段，否则就不需要设置|
 | bk_biz_id           | int          | 业务自定义字段的业务id                                       |
 | bk_asst_obj_id      | string       | 如果有关联其它的模型，那么就必需设置此字段，否则就不需要设置|
-| bk_property_group_name           | string          | 字段分栏的名字                                       |      | string       | 如果有关联其它的模型，那么就必需设置此字段，否则就不需要设置|
+| bk_property_group_name           | string          | 字段分栏的名字                                       |
+
 #### bk_property_type
 
 | 标识       | 名字     |

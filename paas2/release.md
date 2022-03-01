@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.13.26
+    - update: esb update cc confapis; esb update cmsi apidocs
+    - update: esb update title/footer
+
 # 2.13.25
     - update: esb update cc confapis to rename batch_create_instance
 
