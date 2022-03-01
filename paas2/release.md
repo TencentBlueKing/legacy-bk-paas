@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.42
+    - update: fix console page display
+
 # 2.12.41
     - update: esb update cc confapis; esb update cmsi apidocs
     - update: esb update title/footer
