@@ -56,11 +56,14 @@
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 1,
         "info": [
             {
-                "bk_set_name": "test"
+                "bk_set_name": "test",
+                "default": 0
             }
         ]
     }
@@ -76,6 +79,8 @@
 | code    | int    | 错误编码。 0表示success，>0表示失败错误    |
 | message | string | 请求失败返回的错误信息                    |
 | data    | object | 请求返回的数据                           |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 
 #### data
 
@@ -83,3 +88,9 @@
 |-----------|-----------|-----------|
 | count     | int       | 数据数量 |
 | info      | array     | 结果集，其中，所有字段均为集群定义的属性字段 |
+
+#### info
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| bk_set_name     | string       | 集群名称 |
+| default             |  int     | 0-普通集群，1-内置模块集合，默认为0 |

@@ -39,6 +39,8 @@
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {}
 }
 ```
@@ -52,5 +54,6 @@
 | code    | int    | 错误编码。 0表示success，>0表示失败错误    |
 | message | string | 请求失败返回的错误信息                    |
 | data    | object | 请求返回的数据                           |
-
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 

@@ -1173,3 +1173,14 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/createmany/instassociation
   dest_http_method: POST
+
+- path: /v2/cc/add_host_to_resource_pool/
+  name: add_host_to_resource_pool
+  label: 添加主机到资源池
+  label_en: add host to resource pool
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/hosts/add/resource
+  dest_http_method: POST
+

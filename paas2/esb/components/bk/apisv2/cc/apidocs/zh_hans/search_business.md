@@ -87,12 +87,15 @@ Note: 业务分为两类，未归档的业务和已归档的业务。
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 1,
         "info": [
             {
                 "bk_biz_id": 1,
-                "bk_biz_name": "esb-test"
+                "bk_biz_name": "esb-test",
+                "default": 0
             }
         ]
     }
@@ -108,6 +111,8 @@ Note: 业务分为两类，未归档的业务和已归档的业务。
 | code    | int    | 错误编码。 0表示success，>0表示失败错误    |
 | message | string | 请求失败返回的错误信息                    |
 | data    | object | 请求返回的数据                           |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 
 #### data
 
@@ -115,3 +120,10 @@ Note: 业务分为两类，未归档的业务和已归档的业务。
 |-----------|-----------|-----------|
 | count     | int       | 记录条数 |
 | info      | array     | 业务实际数据 |
+
+#### info
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| bk_biz_id     | int       | 业务id |
+| bk_biz_name     | string       | 业务名称 |
+|default | int | 表示业务类型 |
