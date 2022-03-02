@@ -158,6 +158,7 @@ config = {
                         "/v2/cc/update_object_topo_graphics/",
                         {
                             "comp_codename": "generic.v2.cc.update_object_topo_graphics",
+                            "is_hidden": True,
                         },
                     ),
                     # job
