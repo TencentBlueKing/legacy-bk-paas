@@ -72,7 +72,7 @@
                 this.checkAttachToFrom()
             }
 
-            const resetCallback = (event) => {
+            const activeClearCallback = (event) => {
                 this.componentData = {}
                 this.componentId = ''
                 this.componentDocument = ''
@@ -80,13 +80,11 @@
             }
             
             LC.addEventListener('active', activeCallback)
-            LC.addEventListener('activeClear', resetCallback)
-            LC.addEventListener('removeChild', resetCallback)
+            LC.addEventListener('activeClear', activeClearCallback)
             LC.addEventListener('toggleInteractive', toggleInteractiveCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('active', activeCallback)
-                LC.removeEventListener('activeClear', resetCallback)
-                LC.removeEventListener('removeChild', resetCallback)
+                LC.removeEventListener('activeClear', activeClearCallback)
                 LC.removeEventListener('toggleInteractive', toggleInteractiveCallback)
             })
         },

@@ -69,7 +69,7 @@
         },
         methods: {
             handleSpanChange (value, columnNode) {
-                columnNode.setProp('span', value)
+                columnNode.setProp('span', parseInt(value, 10))
             },
             handleDelete (columnNode) {
                 this.componentNode.removeChild(columnNode)

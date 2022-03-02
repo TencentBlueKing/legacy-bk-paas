@@ -120,7 +120,7 @@
                 this.activeComponentNode = target
             }
 
-            const resetCallback = () => {
+            const activeClearCallback = () => {
                 this.tabPanelActive = 'props'
                 this.renderKey = ''
                 this.activeComponentNode = null
@@ -133,12 +133,10 @@
             }
             
             LC.addEventListener('active', activeCallback)
-            LC.addEventListener('activeClear', resetCallback)
-            LC.addEventListener('removeChild', resetCallback)
+            LC.addEventListener('activeClear', activeClearCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('active', activeCallback)
-                LC.removeEventListener('activeClear', resetCallback)
-                LC.removeEventListener('removeChild', resetCallback)
+                LC.removeEventListener('activeClear', activeClearCallback)
             })
         },
         methods: {
