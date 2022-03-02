@@ -20,6 +20,7 @@ from django.views.decorators.csrf import csrf_exempt
 from account.decorators import login_exempt
 from api.decorators import bk_paas_backend_required
 from common.log import logger
+from common.bk_iam import Permission
 from common.mymako import render_json, render_mako_context, render_mako_tostring_context
 from common.decorators import has_smart_manage_permission, smart_app_exists, has_smart_develop_permission
 from common.constants import (
@@ -91,15 +92,27 @@ def query_app_list(request):
         logger.exception(u"query app list param is invalid:%s" % e)
         return render_json({"data": _(u"请求参数异常"), "total_num": 0, "extend_fun": ""})
 
-    total, app_list = SaaSApp.objects.query_app_list(keyword, hide_outline, page, page_size)
+    total, app_list = SaaSApp.objects.query_app_list(keyword, hide_outline)
 
     permissions = {}
     if len(app_list) > 0:
         app_codes = [app.code for app in app_list]
         permissions = Permission().batch_allowed_develop_apps(request.user.username, app_codes)
+        print(permissions)
 
+    # re-order, has permission app first
+    has_permission_list = []
+    no_permission_list = []
     for app in app_list:
         app.has_permission = permissions.get(app.code, False)
+        if app.has_permission:
+            has_permission_list.append(app)
+        else:
+            no_permission_list.append(app)
+
+    start = (page - 1) * page_size
+    end = page * page_size
+    app_list = (has_permission_list + no_permission_list)[start:end]
 
     # 应用状态是否需要刷新
     update_app_state_in_list(app_list)
@@ -198,8 +211,8 @@ def info(request, app_code):
 
 
 @has_smart_manage_permission
-def upload_page_0(request, app_code):
-    return upload_page(request, app_code)
+def upload_page_0(request):
+    return upload_page(request, "0")
 
 @smart_app_exists
 @has_smart_develop_permission
@@ -256,8 +269,8 @@ def upload_page(request, app_code):
 
 
 @has_smart_manage_permission
-def version_list_0(request, app_code):
-    return version_list(request, app_code)
+def version_list_0(request):
+    return version_list(request, "0")
 
 
 @smart_app_exists
@@ -278,8 +291,8 @@ def version_list(request, app_code):
 
 
 @has_smart_manage_permission
-def do_upload_0(request, app_code):
-    return _do_upload(request, app_code)
+def do_upload_0(request):
+    return _do_upload(request, "0")
 
 @smart_app_exists
 @has_smart_develop_permission

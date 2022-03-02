@@ -228,7 +228,7 @@ def iam_query_app_list(keyword, limit, offset):
     # app + deployed smart app
     app_total = app_all_list.count()
     app_code_list = [i.code for i in app_all_list]
-    app_list = app_all_list.all()
+    app_list = list(app_all_list.all())
 
     # not-deployed smart app => SaaSApp
     saas_all_list = SaaSApp.objects.filter(app__isnull=True).order_by("-created_time").distinct()

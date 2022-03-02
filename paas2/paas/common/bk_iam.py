@@ -20,6 +20,7 @@ from iam import IAM, Request, Subject, Action, Resource
 from iam.apply.models import ActionWithoutResources, ActionWithResources, Application, RelatedResourceType
 from iam.apply.models import ResourceInstance, ResourceNode
 from app.models import App
+from saas.models import SaaSApp
 
 if settings.DEBUG:
     import sys
@@ -217,8 +218,16 @@ class Permission(object):
         try:
             app_name = App.objects.get(code=app_code).name
         except Exception:
-            logger.Exception("make_app_application fail")
+            logger.exception("make_app_application try to get app name from paas_app fail")
             pass
+
+        # get from SaaSApp, just have a try
+        if app_name == app_code:
+            try:
+                app_name = SaaSApp.objects.get(code=app_code).name
+            except Exception:
+                logger.exception("make_app_application try to get app name from paas_saas_app fail")
+                pass
 
         instance = ResourceInstance([ResourceNode("app", app_code, app_name)])
         related_resource_type = RelatedResourceType(SYSTEM_ID, "app", [instance])
