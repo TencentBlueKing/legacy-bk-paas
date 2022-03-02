@@ -101,7 +101,13 @@
                                 </div>
                                 <div class="item-ft">
                                     <div class="col">
-                                        <h3 class="name" :title="page.templateName">{{page.templateName}}</h3>
+                                        <div class="page-name">
+                                            <span class="page-type">
+                                                <i v-if="page.templateType === 'MOBILE'" class="bk-drag-icon bk-drag-mobilephone"> </i>
+                                                <i v-else class="bk-drag-icon bk-drag-pc"> </i>
+                                            </span>
+                                            <div class="name" :title="page.templateName">{{page.templateName}}</div>
+                                        </div>
                                         <div class="stat">{{page.createUser ? `由 ${page.createUser} 上传` : ''}}</div>
                                     </div>
                                 </div>
@@ -783,6 +789,34 @@
                 font-weight: 700;
                 color: #63656E;
                 @mixin ellipsis 240px, block;
+            }
+            .page-name {
+                display: flex;
+                align-items: center;
+                margin: -2px 0 0 0;
+
+                .name {
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #63656E;
+                    width: 215px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    margin-left: 7px;
+                }
+
+                .page-type {
+                    font-size: 16px;
+                    line-height: 18px;
+                    height: 20px;
+                    width: 20px;
+                    text-align: center;
+                    margin-left: -2px;
+                    color: #979ba5;
+                    border-radius: 2px;
+                    background: #f0f1f5;
+                }
             }
             .stat {
                 font-size: 12px;

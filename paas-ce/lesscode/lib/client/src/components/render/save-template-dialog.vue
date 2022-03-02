@@ -189,6 +189,7 @@
                                     templateName: this.dialog.formData.templateName,
                                     categoryId: this.dialog.formData.categoryId,
                                     belongProjectId: this.projectId,
+                                    templateType: this.pageDetail.pageType,
                                     versionId: this.versionId,
                                     fromPageCode: this.pageDetail && this.pageDetail.pageCode,
                                     content: safeStringify(content),

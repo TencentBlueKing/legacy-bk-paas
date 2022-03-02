@@ -6,132 +6,10 @@
                 <div :class="$style['col']">绑定页面跳转路由</div>
             </div>
             <dl :class="$style['content']" v-if="routeGroup.length">
-                <div v-if="type === 'MOBILE'" :class="$style['route-group']">
-                    <dt :class="$style['group-title']">
-                        <i :class="['bk-drag-icon bk-drag-angle-up-fill', $style['arrow']]"></i>
-                        <div :class="$style['node-row']">
-                            <div :class="[$style['path']]">
-                                <div :class="$style['path-name']">/mobile</div>
-                            </div>
-                        </div>
-                    </dt>
-                    <div :class="$style['route-group']"
-                        v-for="group in routeGroup"
-                        :key="group.layoutId">
-                        <dt :class="$style['group-title']">
-                            <i v-show="group.children.length"
-                                :class="['bk-drag-icon bk-drag-angle-up-fill', { 'bk-drag-angle-right-fill': foldeds[group.layoutId] }, $style['arrow']]"
-                                @click="handleToggle(group.layoutId)">
-                            </i>
-                            <div :class="$style['node-row']">
-                                <div :class="[
-                                    $style['path'],
-                                    { [$style['editing']]: layoutEditState.group === group.layoutId }
-                                ]">
-                                    <div :class="$style['path-name']" v-if="layoutEditState.group !== group.layoutId">{{group.layoutPath}}</div>
-                                    <div v-else
-                                        :class="[
-                                            $style['edit-form'],
-                                            'edit-route-form', { 'has-error': layoutEditState.error }
-                                        ]">
-                                        <div :class="[$style['form-el'], { [$style['is-loading']]: loadingState.layout.includes(group.layoutId) }]">
-                                            <bk-input
-                                                :ref="`input-layout-${group.layoutId}`"
-                                                v-model.trim="layoutEditState.value"
-                                                :maxlength="60"
-                                                @enter="handleConfirmParentRoute"
-                                                @input="handleParentRouteInput"
-                                                placeholder="请输入路由名称，回车结束"
-                                            />
-                                            <i class="bk-icon icon-exclamation-circle-shape tips-icon"
-                                                v-bk-tooltips="editState.error === 1 ? '请检查路径正确性' : '需由数字、字母、下划线、中划线(-)、冒号(:)或反斜杠(/)组成'"></i>
-                                        </div>
-                                        <div :class="$style['buttons']">
-                                            <bk-button text size="small" theme="primary"
-                                                :disabled="parentPathInputDisabled"
-                                                @click="handleConfirmParentRoute">确定</bk-button>
-                                            <span :class="$style['divider']">|</span>
-                                            <bk-button text size="small" theme="primary" @click="handleParentRouteCancel">取消</bk-button>
-                                        </div>
-                                    </div>
-                                    <div :class="[$style['opts'], { [$style['hide']]: editState.route !== null || removeLoading }]">
-                                        <i :class="['bk-icon icon-edit2 ml10', $style['icon']]" @click="handleEditLayoutPath(group)"></i>
-                                        <i :class="['bk-icon icon-plus', $style['icon']]"
-                                            v-show="editState.type !== 'new'"
-                                            v-bk-tooltips="'添加子路由'"
-                                            @click="handleAddSubRoute(group)"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </dt>
-                        <dd :class="$style['group-content']" v-show="!foldeds[group.layoutId]">
-                            <div :class="$style['route-item']" v-for="route in group.children" :key="route.id">
-                                <div :class="[$style['node-row'], { [$style['active']]: activeState.routeId === route.id }]">
-                                    <div :class="[
-                                        $style['path'],
-                                        { [$style['editing']]: editState.route === route }
-                                    ]">
-                                        <div :class="$style['path-name']">
-                                            <span v-if="editState.route !== route" :title="route.path">{{route.path | routeShow}}</span>
-                                            <div
-                                                :class="[
-                                                    $style['edit-form'],
-                                                    'edit-route-form', { 'has-error': editState.error }
-                                                ]"
-                                                v-else>
-                                                <div :class="[$style['form-el'], { [$style['is-loading']]: loadingState.route.includes(route.id) }]">
-                                                    <bk-input
-                                                        :ref="`input-${editState.route.id}`"
-                                                        v-model.trim="editState.value"
-                                                        :maxlength="60"
-                                                        @enter="handleConfirmSubRoute"
-                                                        @input="handleSubRouteInput"
-                                                        placeholder="请输入路由名称，回车结束"
-                                                    />
-                                                    <i class="bk-icon icon-exclamation-circle-shape tips-icon"
-                                                        v-bk-tooltips="editState.error === 1 ? '请检查路径正确性' : '需由数字、字母、下划线、中划线(-)、冒号(:)或反斜杠(/)组成'"></i>
-                                                </div>
-                                                <div :class="$style['buttons']">
-                                                    <bk-button text size="small" theme="primary"
-                                                        :disabled="pathInputDisabled"
-                                                        @click="handleConfirmSubRoute">确定</bk-button>
-                                                    <span :class="$style['divider']">|</span>
-                                                    <bk-button text size="small" theme="primary" @click="handleSubRouteCancel">取消</bk-button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div :class="[$style['opts'], { [$style['hide']]: editState.route !== null || removeLoading }]">
-                                            <i :class="['bk-icon icon-edit2', $style['icon']]" @click="handleEditRoute(route)"></i>
-                                            <bk-popconfirm trigger="click" width="320"
-                                                confirm-text="删除"
-                                                @confirm="handleConfirmDelRoute(route)"
-                                                :on-hide="handleHideDelPopover">
-                                                <div slot="content">
-                                                    <div :class="$style['del-tips']">
-                                                        <i :class="['bk-icon icon-info-circle-shape pr5', $style['content-icon']]"></i>
-                                                        <div :class="$style['content-text']">删除路由后，绑定到此路由的页面则无法访问，指向此路由的跳转路由也将失效</div>
-                                                    </div>
-                                                </div>
-                                                <i :class="['bk-icon icon-close ml10', $style['icon']]" @click="handleShowDelPopover(route)"></i>
-                                            </bk-popconfirm>
-                                        </div>
-                                    </div>
-                                    <div :class="[$style['bind'], { [$style['disabled']]: editState.route !== null || removeLoading }]">
-                                        <div :class="$style['bind-name']" @click="handleEditBinding(route)" v-if="bindState.route !== route">
-                                            {{getBindDisplayValue(route)}}
-                                        </div>
-                                        <bind-route-form v-else
-                                            :selector-props="bindRouteSelectorProps"
-                                            :project-id="projectId"
-                                            @success="handleBindSuccess"
-                                            @cancel="handleBindCancel" />
-                                    </div>
-                                </div>
-                            </div>
-                        </dd>
-                    </div>
+                <div v-if="type === 'MOBILE'" :class="$style['mobile-route']">
+                    /mobile
                 </div>
-                <div v-else :class="$style['route-group']"
+                <div :class="$style['route-group']"
                     v-for="group in routeGroup"
                     :key="group.layoutId">
                     <dt :class="$style['group-title']">
@@ -716,6 +594,21 @@
             overflow: auto;
             height: calc(100% - 72px);
         }
+    }
+
+    .mobile-route {
+        position: relative;
+        height: 36px;
+        line-height: 36px;
+
+        & + .route-group {
+            margin-left: 66px;
+          }
+        
+        &:hover {
+             background: #E1ECFF;
+             color: #3A84FF;
+         }
     }
 
     .route-group {

@@ -48,17 +48,14 @@
                 <bk-form-item label="页面路由" required property="pageRoute" v-if="action !== 'rename'"
                     :style="{ marginTop: action === 'create' ? 0 : '' }"
                     error-display-type="normal">
-                    <div class="page-route">
-                        <div class="mobile-tag" v-if="isMobile">/mobile</div>
-                        <bk-input maxlength="60" v-model.trim="dialog.formData.pageRoute"
-                            placeholder="由数字、字母、下划线、中划线(-)、冒号(:)或反斜杠(/)组成">
-                            <template slot="prepend">
-                                <div class="group-text">
-                                    {{layoutRoutePath}}
-                                </div>
-                            </template>
-                        </bk-input>
-                    </div>
+                    <bk-input maxlength="60" v-model.trim="dialog.formData.pageRoute"
+                        placeholder="由数字、字母、下划线、中划线(-)、冒号(:)或反斜杠(/)组成">
+                        <template slot="prepend">
+                            <div class="group-text">
+                                {{ dialog.formData.pageType === 'MOBILE' ? '/mobile' : '' }}{{layoutRoutePath}}
+                            </div>
+                        </template>
+                    </bk-input>
                 </bk-form-item>
             </bk-form>
             <div class="dialog-footer" slot="footer">
@@ -367,20 +364,6 @@
              .is-selected i {
                  color: #3a84ff;
              }
-        }
-
-        .page-route{
-            display: flex;
-
-            .mobile-tag{
-                color: #63656e;
-                padding: 0 15px;
-                font-size: 12px;
-                border: 1px solid #c4c6cc;
-                border-radius: 2px 0 0 2px;
-                background-color: #f2f4f8;
-                border-right: none;
-            }
         }
     }
 </style>
