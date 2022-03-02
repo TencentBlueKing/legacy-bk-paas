@@ -167,6 +167,21 @@ class Permission(object):
         request = self._make_request_with_resources(username, ActionEnum.DEVELOP_APP, resources)
         return self._iam.is_allowed(request)
 
+    def batch_allowed_develop_apps(self, username, app_codes):
+        """
+        批量app开发权限
+        """
+        app_list = []
+        for app_code in app_codes:
+            r = Resource(SYSTEM_ID, ResourceTypeEnum.APP, app_code, {})
+            resources = [r]
+
+            app_list.append(resources)
+
+        request = self._make_request_without_resources(username, ActionEnum.DEVELOP_APP)
+
+        return self._iam.batch_is_allowed(request, app_list)
+
     def app_list(self, username):
         """
         用户有权限的应用列表

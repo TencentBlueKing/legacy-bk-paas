@@ -93,12 +93,21 @@ def query_app_list(request):
 
     total, app_list = SaaSApp.objects.query_app_list(keyword, hide_outline, page, page_size)
 
+    permissions = {}
+    if len(app_list) > 0:
+        app_codes = [app.code for app in app_list]
+        permissions = Permission().batch_allowed_develop_apps(request.user.username, app_codes)
+
+    for app in app_list:
+        app.has_permission = permissions.get(app.code, False)
+
     # 应用状态是否需要刷新
     update_app_state_in_list(app_list)
     data = {
         "total": total,
         "app_list": app_list,
     }
+
     html_data = render_mako_tostring_context(request, "saas/list_table.part", data)
     return render_json({"data": html_data, "total_num": total, "extend_fun": ""})
 
