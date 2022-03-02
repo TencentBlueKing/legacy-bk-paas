@@ -16,6 +16,8 @@
             [$style['component']]: true,
             [$style['selected']]: componentData.isActived,
             [$style['hover']]: isHover,
+            [$style['precent-width']]: fixPercentStyleWidth,
+            [$style['precent-height']]: fixPercentStyleHeight,
             'bk-layout-custom-component-wrapper': componentData.isCustomComponent
         }"
         role="component-root"
@@ -171,7 +173,11 @@
             return {
                 isHover: false,
                 // 默认会继承组件的 style 配置，如果直接继承有些样式会造成排版问题需要重置
-                safeStyles: Object.assign({}, safeStyles)
+                safeStyles: Object.assign({}, safeStyles),
+                // 百分比宽度时需要修正相对父级的值
+                fixPercentStyleWidth: false,
+                // 百分比高度时需要修正相对父级的值
+                fixPercentStyleHeight: false
             }
         },
         computed: {
@@ -297,6 +303,7 @@
                 }
                 // 优先使用自定义配置的 width
                 if (this.componentData.style.width) {
+                    this.fixPercentStyleWidth = /%$/.test(this.componentData.style.width)
                     return
                 }
 
@@ -307,11 +314,13 @@
                     }
                     const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
                     if ($baseComponentEl) {
-                        if ($baseComponentEl.style.width) {
+                        const styleWidth = $baseComponentEl.style.width
+                        if (styleWidth) {
                             this.safeStyles = Object.assign({}, this.safeStyles, {
-                                width: $baseComponentEl.style.width
+                                width: styleWidth
                             })
                         }
+                        this.fixPercentStyleWidth = /%$/.test(styleWidth)
                     }
                 })
             },
@@ -327,6 +336,7 @@
                 
                 // 优先使用自定义配置的 height
                 if (this.componentData.style.height) {
+                    this.fixPercentStyleHeight = /%$/.test(this.componentData.style.height)
                     return
                 }
 
@@ -337,11 +347,13 @@
                     }
                     const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
                     if ($baseComponentEl) {
-                        if ($baseComponentEl.style.height) {
+                        const styleHeight = $baseComponentEl.style.height
+                        if (styleHeight) {
                             this.safeStyles = Object.assign({}, this.safeStyles, {
-                                height: $baseComponentEl.style.height
+                                height: styleHeight
                             })
                         }
+                        this.fixPercentStyleHeight = /%$/.test(styleHeight)
                     }
                 })
             },
@@ -430,8 +442,17 @@
     .component {
         pointer-events: auto !important;
         cursor: pointer;
-        -webkit-text-size-adjust: none;
         min-height: 10px;
+        &.precent-width{
+            & > * {
+                width: 100% !important;
+            }
+        }
+        &.precent-height{
+            & > * {
+                height: 100% !important;
+            }
+        }
         &.hover{
             position: relative;
             > .line-top,
