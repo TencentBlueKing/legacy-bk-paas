@@ -51,8 +51,12 @@ function core (id) {
 
 // isReady 标记 api 数据加载完毕
 core.isReady = false
+// 数据解析 JSON -> NodeTree
 core.parseData = parseData
 core.parseTemplate = parseTemplate
+// 扩展 material 注册
+core.registerMaterial = registerMaterial
+// NodeTree 操作 api
 core.getRoot = getRoot
 core.getActiveNode = getActiveNode
 core.getNodeById = getNodeById
@@ -60,7 +64,6 @@ core.getNodesByType = getNodesByType
 core.isNode = isNode
 core.isInteractiveType = isInteractiveType
 core.createNode = createNode
-core.registerMaterial = registerMaterial
 core.cloneNode = cloneNode
 core.appendChild = appendChild
 core.removeChild = removeChild
@@ -78,6 +81,8 @@ core.addEventListener('ready', () => {
 
 core.addEventListener('unload', () => {
     core.isReady = false
+    // 重置 Node Tree
+    parseData([])
     // 卸载时需要移除所有动态注册的 material
     unregisterMaterial()
 })

@@ -64,8 +64,9 @@
         &.left-collapse{
             padding-left: 0;
             .left {
-                transform: translateX(-100%);
-                
+                /* transform: translateX(-100%); */
+                width: 0;
+                overflow: hidden;
             }
             .left-btn{
                 :global(.bk-drag-angle-left){
@@ -77,7 +78,9 @@
         &.right-collapse{
             padding-right: 0;
             .right{
-                transform: translateX(100%);
+                /* transform: translateX(100%); */
+                width: 0;
+                overflow: hidden;
             }
             .right-btn{
                 :global(.bk-drag-angle-left){
@@ -87,7 +90,7 @@
         }
         .left,
         .right{
-            transition: transform .15s;
+            transition: all .15s;
         }
         .left{
             position: absolute;
