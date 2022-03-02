@@ -21,7 +21,7 @@ from account.decorators import login_exempt
 from api.decorators import bk_paas_backend_required
 from common.log import logger
 from common.mymako import render_json, render_mako_context, render_mako_tostring_context
-from common.decorators import has_smart_manage_permission, smart_app_exists
+from common.decorators import has_smart_manage_permission, smart_app_exists, has_smart_develop_permission
 from common.constants import (
     ModeEnum,
     DESKTOP_DEFAULT_APP_WIDTH,
@@ -53,6 +53,18 @@ from common.utils.file import md5_for_file
 ####################
 #  saas list page  #
 ####################
+
+
+# TODO:
+#    - smart管理权限只能看到新应用上传页面
+#    - 所有人都可以看到所有smart应用, 点击申请权限 (需要修改)
+#    - 每个应用细粒度控制
+#    - smart应用的app_code会不会跟app表app_code重复? 上传saasApp存在, 但没有检查app, 只有部署的时候知道, 此时不能用app_code
+#       - 路径中是app_code, 如果用了, 那么同名的`我的应用`app_code会有对应smart应用权限
+#       - 如果不用app_code, 那么每次判断的时候, 都需要判断is_saas, 拼接独特的唯一id进行鉴权, 例如 {smart:app_code}
+#       - app资源回调返回的列表中, 需要有 smart应用的对应数据
+#    - 无权限申请链路也需要改: make_app_application(当前只支持app)
+#    - 菜单展示得改: templates/base_center.html
 
 
 @has_smart_manage_permission
@@ -97,7 +109,7 @@ def query_app_list(request):
 
 
 @smart_app_exists
-@has_smart_manage_permission
+@has_smart_develop_permission
 def info(request, app_code):
     """
     SaaS 应用基本信息
@@ -177,6 +189,15 @@ def info(request, app_code):
 
 
 @has_smart_manage_permission
+def upload_page_0(request, app_code):
+    return upload_page(request, app_code)
+
+@smart_app_exists
+@has_smart_develop_permission
+def upload_page_app_code(request, app_code):
+    return upload_page(request, app_code)
+
+
 def upload_page(request, app_code):
     """
     上传版本页面
@@ -190,6 +211,12 @@ def upload_page(request, app_code):
     test_version = _(u"未部署")
 
     if app_code != "0":
+        # TODO: 需要判断有没有这个应用的权限
+        # # 判断开发者权限
+        # if not Permission().allowed_develop_app(request.user.username, app_code):
+        #     # return no_app_develop_permission
+        #     return redirect_403(request, username, ActionEnum.DEVELOP_APP, app_code)
+
         base_tpl = "/base_saas.html"
         saas_app = SaaSApp.objects.get(code=app_code)
         app_state_display = saas_app.saas_state_display
@@ -220,6 +247,16 @@ def upload_page(request, app_code):
 
 
 @has_smart_manage_permission
+def version_list_0(request, app_code):
+    return version_list(request, app_code)
+
+
+@smart_app_exists
+@has_smart_develop_permission
+def version_list_app_code(request, app_code):
+    return version_list(request, app_code)
+
+
 def version_list(request, app_code):
     """
     上传版本页面
@@ -232,7 +269,12 @@ def version_list(request, app_code):
 
 
 @has_smart_manage_permission
-def do_upload(request, app_code):
+def do_upload_0(request, app_code):
+    return _do_upload(request, app_code)
+
+@smart_app_exists
+@has_smart_develop_permission
+def do_upload_app_code(request, app_code):
     return _do_upload(request, app_code)
 
 
@@ -317,7 +359,7 @@ def _do_upload(request, app_code):
 
 
 @smart_app_exists
-@has_smart_manage_permission
+@has_smart_develop_permission
 def online_page(request, app_code):
     """
     部署页面
@@ -331,7 +373,7 @@ def online_page(request, app_code):
 
 
 @smart_app_exists
-@has_smart_manage_permission
+@has_smart_develop_permission
 def online_env(request, app_code):
     """
     部署子页面 - 区分正式/测试
@@ -350,7 +392,7 @@ def online_env(request, app_code):
 
 
 @smart_app_exists
-@has_smart_manage_permission
+@has_smart_develop_permission
 def offline_page(request, app_code):
     """
     下架页面
@@ -364,7 +406,7 @@ def offline_page(request, app_code):
 
 
 @smart_app_exists
-@has_smart_manage_permission
+@has_smart_develop_permission
 def offline_env(request, app_code):
     """
     下架子页面 - 区分正式/测试
@@ -373,6 +415,9 @@ def offline_env(request, app_code):
     data = get_env_data(app_code, mode)
     return render_mako_context(request, "saas/release/offline_env.part", data)
 
+
+# TODO: 问题, 这个怎么处理?
+# 此时, smart已上传, 但是还没有点击部署 => 即, app表暂时还没有这个应用 => 不能限制没有app先部署, 因为这个就是部署页面
 
 @has_smart_manage_permission
 def do_online(request, saas_app_version_id):
@@ -406,7 +451,7 @@ def _do_online(request, saas_app_version_id):
 
 
 @smart_app_exists
-@has_smart_manage_permission
+@has_smart_develop_permission
 def do_delete(request, app_code):
     """
     删除某个 saas 及其所有版本
@@ -422,7 +467,7 @@ def do_delete(request, app_code):
 
 
 @smart_app_exists
-@has_smart_manage_permission
+@has_smart_develop_permission
 def record_page(request, app_code):
     """
     应用发布记录
@@ -438,7 +483,7 @@ def record_page(request, app_code):
 
 
 @smart_app_exists
-@has_smart_manage_permission
+@has_smart_develop_permission
 def modify_app_logo(request, app_code):
     """
     修改应用图标
