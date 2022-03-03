@@ -35,7 +35,16 @@ export default {
             tips: '节点拖拽结束时调用该事件函数，事件回调参数 (treeNode: Object | Array)'
         }
     ],
-    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     props: {
         data: {
             type: ['array', 'remote'],

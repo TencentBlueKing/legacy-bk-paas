@@ -31,7 +31,16 @@ export default {
             tips: '新增选项卡时调用该事件函数，暂无事件回调参数'
         }
     ],
-    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     props: {
         active: {
             type: 'string',
