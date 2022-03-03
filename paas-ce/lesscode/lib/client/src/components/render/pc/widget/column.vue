@@ -10,31 +10,25 @@
 -->
 
 <template>
-    <div
-        :class="$style['col']"
-        :style="componentData.style"
-        :data-component-id="`${componentData.componentId}`"
-        role="render-col">
-        <draggable
-            ref="draggable"
-            :sort="true"
-            :list="componentData.slot.default"
-            :component-data="componentData"
-            :group="{
-                name: 'component',
-                pull: true,
-                put: [
-                    'layout',
-                    'component'
-                ]
-            }">
-            <resolve-component
-                v-for="slotComponentData in componentData.slot.default"
-                ref="component"
-                :key="slotComponentData.renderKey"
-                :component-data="slotComponentData" />
-        </draggable>
-    </div>
+    <draggable
+        ref="draggable"
+        :sort="true"
+        :list="componentData.slot.default"
+        :component-data="componentData"
+        :group="{
+            name: 'component',
+            pull: true,
+            put: [
+                'layout',
+                'component'
+            ]
+        }">
+        <resolve-component
+            v-for="slotComponentData in componentData.slot.default"
+            ref="component"
+            :key="slotComponentData.renderKey"
+            :component-data="slotComponentData" />
+    </draggable>
 </template>
 <script>
     import _ from 'lodash'
@@ -53,53 +47,29 @@
             componentData: {
                 type: Object,
                 default: () => ({})
-            },
-            count: Number
+            }
         },
         inject: [
             'renderGrid'
         ],
-        watch: {
-            count: {
-                handler () {
-                    this.calcStyle()
-                },
-                immediate: true
-            }
-        },
         created () {
-            const updateCallback = ({ target }) => {
-                if (target.componentId === this.componentData.componentId) {
+            const parentNodeChildCallback = (event) => {
+                if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
                     // 需要同时触发父级 grid 更新
-                    this.renderGrid.$forceUpdate()
                     this.autoType()
                 }
             }
 
-            LC.addEventListener('update', updateCallback)
+            LC.addEventListener('appendChild', parentNodeChildCallback)
+            LC.addEventListener('removeChild', parentNodeChildCallback)
+            
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('update', updateCallback)
+                LC.removeEventListener('appendChild', parentNodeChildCallback)
+                LC.removeEventListener('removeChild', parentNodeChildCallback)
             })
         },
         methods: {
-            /**
-             * @desc 计算每一列的宽度
-             */
-            calcStyle () {
-                const siblingList = this.componentData.parentNode.children
-                
-                const gridSpanNums = siblingList.reduce((result, columnNode) => {
-                    result += columnNode.prop.span
-                    return result
-                }, 0)
-                const selfSpanNums = this.componentData.prop.span
-
-                const renderWidth = `${Number((selfSpanNums / gridSpanNums * 100).toFixed(4))}%`
-                if (this.componentData.style.width !== renderWidth) {
-                    this.componentData.setStyle('width', renderWidth)
-                }
-            },
             /**
              * @desc 自动排版子组件
              */
@@ -144,11 +114,3 @@
         }
     }
 </script>
-<style lang="postcss" module>
-    .col {
-        border: 1px dashed #ccc;
-        ~ .col {
-            border-left: none;
-        }
-    }
-</style>

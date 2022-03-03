@@ -11,17 +11,15 @@
 
 <template>
     <div :class="$style['grid']">
-        <render-row
-            :ref="componentData.componentId">
-            <render-col
-                v-for="(componentItem) in componentData.slot.default"
-                :component-data="componentItem"
-                :key="componentItem.componentId"
-                :count="getSpanNums()" />
-        </render-row>
+        <resolve-component
+            v-for="slotComponentData in componentData.slot.default"
+            :class="$style['col']"
+            :key="slotComponentData.renderKey"
+            :component-data="slotComponentData" />
         <template v-if="componentData.isActived">
             <div
                 :class="$style['add-column']"
+                key="append-column"
                 role="append-column"
                 @click="handleAddColumn"
                 data-render-drag="disabled">
@@ -29,6 +27,7 @@
             </div>
             <div
                 :class="$style['add-clone']"
+                key="clone-grid"
                 role="clone-grid"
                 @click="handleAddClone"
                 data-render-drag="disabled">
@@ -39,14 +38,12 @@
 </template>
 <script>
     import LC from '@/element-materials/core'
-    import renderRow from './row'
-    import renderCol from './col'
+    import ResolveComponent from '../resolve-component'
 
     export default {
         name: 'render-grid',
         components: {
-            renderRow,
-            renderCol
+            ResolveComponent
         },
         inheritAttrs: false,
         provide () {
@@ -60,11 +57,40 @@
                 default: () => ({})
             }
         },
+        created () {
+            this.spanTotalNumsMemo = 0
+            this.updateChildColumn()
+
+            const updateCallback = (event) => {
+                if (event.target.componentId === this.componentData.componentId
+                    || (
+                        event.target.type === 'render-column'
+                        && event.target.parentNode.componentId === this.componentData.componentId
+                    )) {
+                    this.$forceUpdate()
+                    this.updateChildColumn()
+                }
+            }
+            LC.addEventListener('update', updateCallback)
+        },
         methods: {
-            getSpanNums () {
-                return this.componentData.children.reduce((result, columnNode) => {
+            updateChildColumn () {
+                const columnNodeList = this.componentData.children
+                const spanTotalNums = columnNodeList.reduce((result, columnNode) => {
                     return result + columnNode.prop.span
                 }, 0)
+                if (this.spanTotalNumsMemo === spanTotalNums) {
+                    return
+                }
+                
+                this.spanTotalNumsMemo = spanTotalNums
+                columnNodeList.forEach(node => {
+                    const renderWidth = `${Number((node.prop.span / spanTotalNums * 100).toFixed(4))}%`
+                       
+                    if (node.style.width !== renderWidth) {
+                        node.setStyle('width', renderWidth)
+                    }
+                })
             },
             /**
              * @desc 克隆 grid，只克隆布局数据树结构不克隆
@@ -95,6 +121,14 @@
         display: flex;
         /* 如果基础的 slot 可以拖拽需要设置这个屏蔽掉基础组件上面的 pointer-events: none 效果 */
         pointer-events: all;
+
+        .col {
+            border: 1px dashed #ccc;
+            ~ .col {
+                border-left: none;
+            }
+        }
+
         .add-column,
         .add-clone {
             position: absolute;

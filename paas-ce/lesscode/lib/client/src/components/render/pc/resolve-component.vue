@@ -145,6 +145,7 @@
             /* eslint-disable vue/no-unused-components */
             FreeLayout: () => import('./widget/free-layout'),
             RenderGrid: () => import('./widget/grid'),
+            RenderColumn: () => import('./widget/column'),
             WidgetForm: () => import('./widget/form'),
             WidgetFormItem: () => import('./widget/form-item'),
             ResolveComponent: () => import('./resolve-component'),
@@ -189,6 +190,7 @@
                 const shadowComMap = {
                     'free-layout': true,
                     'render-grid': true,
+                    'render-column': true,
                     'widget-form': true,
                     'widget-form-item': true,
                     'resolve-component': true
@@ -202,19 +204,18 @@
             this.material = this.componentData.material
 
             // 编辑更新
-            const updateCallback = _.throttle((event) => {
+            const updateCallback = (event) => {
                 const {
                     target
                 } = event
                 if (target.componentId === this.componentData.componentId) {
-                    console.log('print event = ', event)
                     this.safeStylesWithDisplay()
                     this.safeStyleWithWidth()
                     this.safeStyleWithHeight()
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
-            }, 20)
+            }
             
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
@@ -386,20 +387,6 @@
                 })
             },
             /**
-             * @desc 记录鼠标按下状态，抛出 component-mousedown 事件
-             * @param {Object} event 事件对象
-             */
-            handleMousedown (event) {
-                isMousedown = true
-                this.$emit('component-mousedown', event)
-            },
-            /**
-             * @desc 切换鼠标按下状态
-             */
-            handleMouseup () {
-                isMousedown = false
-            },
-            /**
              * @desc 组件点击事件回调
              */
             handleClick () {
@@ -416,6 +403,20 @@
             handleShowContextmenu (event) {
                 this.componentData.active()
                 LC.showMenu(event)
+            },
+            /**
+             * @desc 记录鼠标按下状态，抛出 component-mousedown 事件
+             * @param {Object} event 事件对象
+             */
+            handleMousedown (event) {
+                isMousedown = true
+                this.$emit('component-mousedown', event)
+            },
+            /**
+             * @desc 切换鼠标按下状态
+             */
+            handleMouseup () {
+                isMousedown = false
             },
             /**
              * @desc 组件 wrapper mousemove 事件回调

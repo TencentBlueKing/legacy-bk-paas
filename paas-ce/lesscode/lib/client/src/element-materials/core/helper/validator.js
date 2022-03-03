@@ -45,7 +45,7 @@ export default function (node) {
         } = renderSlots[slotName]
         if (type === 'remote') {
             if (!(payload.methodData && payload.methodData.methodCode)) {
-                stack.push(`插槽【slotName】的类型为 remote 但为选择远程函数`)
+                stack.push(`插槽【${slotName}】的类型为 remote 但为选择远程函数`)
             }
         }
     })

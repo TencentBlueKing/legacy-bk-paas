@@ -14,7 +14,6 @@
         <slot />
     </div>
 </template>
-
 <script>
     export default {
         name: 'render-row',
@@ -65,7 +64,6 @@
         }
     }
 </script>
-
 <style lang="postcss" module>
     .row{
         display: flex !important;

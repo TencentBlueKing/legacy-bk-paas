@@ -161,7 +161,8 @@
 <style lang="postcss" module>
     .drag-area{
         position: relative;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
         pointer-events: auto !important;
     }
     .chosen{

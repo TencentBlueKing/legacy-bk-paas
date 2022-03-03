@@ -256,6 +256,7 @@
                 const canvasTarget = document.querySelector(`div[data-component-id="${componentData.componentId}"]`)
                 canvasTarget.scrollIntoView({
                     behavior: 'smooth',
+                    block: 'center',
                     inline: 'nearest'
                 })
                 // console.log('from aciteve node = ', node, LC.getActiveNode())
