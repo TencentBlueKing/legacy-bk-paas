@@ -23,9 +23,9 @@ class SaaSAppManager(models.Manager):
     def is_already_exist(self, app_code):
         return self.filter(code=app_code).exists()
 
-    def query_app_list(self, keyword, hide_outline, page, page_size):
-        start = (page - 1) * page_size
-        end = page * page_size
+    def query_app_list(self, keyword, hide_outline):
+        # start = (page - 1) * page_size
+        # end = page * page_size
         # base
         app_all_list = self.all().order_by("-created_time")
         # 获取应用
@@ -36,7 +36,7 @@ class SaaSAppManager(models.Manager):
             app_all_list = app_all_list.exclude(app__state=0)
 
         total = app_all_list.count()
-        app_list = app_all_list[start:end]
+        app_list = list(app_all_list)
 
         return total, app_list
 

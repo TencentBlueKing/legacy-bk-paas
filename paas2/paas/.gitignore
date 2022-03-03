@@ -96,3 +96,15 @@ conf/settings_production.py
 # gulpfile.js
 # package.json
 .envrc
+
+# for ee only
+app_analysis
+app_log
+app_monitor
+storage
+esb/apps/status
+static/assets/daterangepicker/
+static/assets/echarts-3.6.1/
+static/esb/assets/easy-pie-chart-2.1.7/
+static/esb/assets/echarts-3.6.1/
+templates/app_analysis

@@ -23,7 +23,7 @@ from api.decorators import bk_paas_backend_required
 from common.mymako import render_mako_context, render_json
 from common.record import record_user_operate
 from common.log import logger
-from common.decorators import app_exists, has_app_develop_permission, has_app_develop_permission_or_is_smart_admin
+from common.decorators import app_exists, has_app_develop_permission, has_app_develop_or_smart_develop_permission
 from engine.deploy import app_to_test_task, app_to_online_task, app_to_outline_task
 from engine.api import get_event_log
 from engine.models import BkApp, BkServer, ThirdServer
@@ -68,7 +68,7 @@ def record(request, app_code):
 
 # @has_app_develop_permission
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 def get_app_record(request, app_code, operate_code):
     """
     获取发布记录页面
@@ -439,7 +439,7 @@ def release_delete(request, app_code):
 
 
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 def get_event_status(request, app_code):
     """
     查询事件状态
@@ -465,7 +465,7 @@ def raw_get_event_status(request, app_code):
 
 
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 def check_unfinished_task(request, app_code):
     """
     到app engine检查并更新最近10条未完成的task的状态
