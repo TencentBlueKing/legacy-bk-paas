@@ -31,6 +31,7 @@ from common.constants import (
 )
 from app.constants import OPENMODE_DICT
 from app.utils import get_open_mode_choices, parse_app_visiable_labels
+from app.models import App
 from saas.models import SaaSUploadFile, SaaSApp, SaaSAppVersion
 from saas.validators import (
     validate_upload_file,
@@ -92,27 +93,36 @@ def query_app_list(request):
         logger.exception(u"query app list param is invalid:%s" % e)
         return render_json({"data": _(u"请求参数异常"), "total_num": 0, "extend_fun": ""})
 
-    total, app_list = SaaSApp.objects.query_app_list(keyword, hide_outline)
+    # filter the conflict app_code which has already deployed in paas_app
+    conflict_app_codes = App.objects.filter(is_lapp=False).values_list('code', flat=True)
 
+    _, app_list = SaaSApp.objects.query_app_list(keyword, hide_outline)
     permissions = {}
     if len(app_list) > 0:
         app_codes = [app.code for app in app_list]
         permissions = Permission().batch_allowed_develop_apps(request.user.username, app_codes)
-        print(permissions)
 
     # re-order, has permission app first
     has_permission_list = []
     no_permission_list = []
     for app in app_list:
+        # filter the conflict app_code which has already deployed in paas_app
+        # not deployed and binded to paas_app, and app_code is conflict
+        if not app.app and app.code in conflict_app_codes:
+            continue
+
         app.has_permission = permissions.get(app.code, False)
         if app.has_permission:
             has_permission_list.append(app)
         else:
             no_permission_list.append(app)
 
+    all_list = has_permission_list + no_permission_list
+    total = len(all_list)
+
     start = (page - 1) * page_size
     end = page * page_size
-    app_list = (has_permission_list + no_permission_list)[start:end]
+    app_list = all_list[start:end]
 
     # 应用状态是否需要刷新
     update_app_state_in_list(app_list)
