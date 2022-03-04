@@ -113,7 +113,6 @@
              * @param { Object } dragEvent
              */
             handleAdd (event) {
-                console.log('from asdas =handleAdd ')
                 this.$emit('add', event)
             },
             handleSort (event) {

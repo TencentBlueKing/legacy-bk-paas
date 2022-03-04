@@ -115,7 +115,6 @@
              * 展开所有父级节点（这样才能看到当前节点）
              */
             const activeCallback = event => {
-                console.log('from componetn treeeee activeCallbackactiveCallbackactiveCallback  == ', event)
                 const activeNode = event.target
 
                 let activeNodeParent = activeNode.parentNode

@@ -205,7 +205,6 @@
             }
         },
         created () {
-            console.log('from componet create = ', this.componentData.componentId)
             // 优先获取组件的 material Config 缓存起来，
             // 后续需要使用直接使用这个不在从 componentData.material 获取
             this.material = this.componentData.material
@@ -213,7 +212,8 @@
             // 编辑更新
             const updateCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
-                    console.log('record event: ', this.componentData.componentId, event)
+                    console.log(`\n${new Date()}`)
+                    console.log('record event : ', event)
                     this.safeStylesWithDisplay()
                     this.safeStyleWithWidth()
                     this.safeStyleWithHeight()
