@@ -14,6 +14,9 @@ import Base from './base'
 
 @Entity({ name: 'layout', comment: '模板布局表' })
 export default class extends Base {
+    @Column({ type: 'varchar', comment: '布局模板类型：PC 或 MOBILE' })
+    layoutType
+
     @Column({ type: 'varchar', comment: '默认名称' })
     defaultName
 

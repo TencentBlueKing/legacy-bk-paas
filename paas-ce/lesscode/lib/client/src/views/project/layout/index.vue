@@ -9,14 +9,22 @@
                     <div class="layout-item" v-for="(layout, index) in layoutList" :key="index">
                         <div class="item-bd">
                             <div class="preview">
-                                <img v-if="layout.type !== 'empty'" :src="getPreviewImg(layout)" alt="布局缩略预览">
+                                <img v-if="layout.type !== 'empty' && layout.type !== 'mobile-empty'" :src="getPreviewImg(layout)" alt="布局缩略预览">
                                 <div class="empty-preview-img" v-else>空白布局</div>
                             </div>
                         </div>
                         <div class="item-ft">
                             <div class="col">
-                                <h3 class="name" :title="layout.showName">{{layout.showName}}</h3>
-                                <div class="stat" :title="layout.routePath">路由: {{layout.routePath}}</div>
+                                <div class="layout-name">
+                                    <span class="layout-type">
+                                        <i v-if="layout.layoutType === 'MOBILE'" class="bk-drag-icon bk-drag-mobilephone"> </i>
+                                        <i v-else class="bk-drag-icon bk-drag-pc"> </i>
+                                    </span>
+                                    <div class="name" :title="layout.showName">{{layout.showName}}</div>
+                                </div>
+                                <div class="stat" :title="layout.routePath">
+                                    路由: {{ layout.layoutType === 'MOBILE' ? '/mobile' : '' }}{{layout.routePath}}
+                                </div>
                             </div>
                             <div class="col">
                                 <bk-dropdown-menu :ref="`moreActionDropdown${layout.id}`">
@@ -24,9 +32,9 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list more-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(layout.id)">
-                                        <li class="action-item" v-if="layout.type !== 'empty'"><a href="javascript:;" @click="handlePreview(layout)">预览</a></li>
+                                        <li class="action-item" v-if="layout.type !== 'empty' && layout.type !== 'mobile-empty'"><a href="javascript:;" @click="handlePreview(layout)">预览</a></li>
                                         <li class="action-item"><a href="javascript:;" @click="handleUpdate(layout)">修改模板</a></li>
-                                        <li v-bk-tooltips.bottom="{ content: '模板已被使用，不可删除', disabled: !layoutPageMap[layout.id] }"
+                                        <li v-if="layout.layoutType !== 'MOBILE'" v-bk-tooltips.bottom="{ content: '模板已被使用，不可删除', disabled: !layoutPageMap[layout.id] }"
                                             :class="['action-item', { disabled: layoutPageMap[layout.id] }]">
                                             <a href="javascript:;" @click="handleDelete(layout)">删除模板</a>
                                         </li>
@@ -35,7 +43,7 @@
                             </div>
                         </div>
                         <span v-if="layout.isDefault" class="default-tag checked">默认</span>
-                        <span v-else class="default-tag setting" @click.stop="handleSetDefault(layout)">设为默认</span>
+                        <span v-else-if="layout.type !== 'mobile-empty'" class="default-tag setting" @click.stop="handleSetDefault(layout)">设为默认</span>
                     </div>
                 </div>
                 <div class="empty" v-show="!layoutList.length && !isLoading">
@@ -337,15 +345,33 @@
                         background: #f0f1f5;
                         border-radius: 4px 4px 0px 0px;
                     }
-                    .name {
-                        margin: 0;
-                        font-size: 12px;
-                        font-weight: 700;
-                        color: #63656E;
-                        width: 240px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
+                    .layout-name {
+                        display: flex;
+                        align-items: center;
+                        margin: -2px 0 0 0;
+
+                        .name {
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: #63656E;
+                            width: 215px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            margin-left: 7px;
+                        }
+
+                        .layout-type {
+                            font-size: 16px;
+                            line-height: 18px;
+                            height: 20px;
+                            width: 20px;
+                            text-align: center;
+                            margin-left: -2px;
+                            color: #979ba5;
+                            border-radius: 2px;
+                            background: #f0f1f5;
+                        }
                     }
                     .stat {
                         font-size: 12px;
