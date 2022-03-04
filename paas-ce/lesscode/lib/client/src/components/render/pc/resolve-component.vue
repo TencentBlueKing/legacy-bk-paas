@@ -29,10 +29,6 @@
         @mouseup="handleMouseup"
         @click.stop="handleClick"
         @contextmenu.stop="handleShowContextmenu">
-        <save-to-template
-            v-if="componentData.layoutType
-                && componentData.parentNode.layoutType
-                && componentData.isActived" />
         <render-component
             :ref="componentData.componentId"
             :component-data="componentData" />
@@ -42,6 +38,16 @@
             <div :class="$style['line-bottom']" key="lineBottom" role="line-bottom" />
             <div :class="$style['line-left']" key="lineLeft" role="line-left" />
         </template>
+        <div
+            v-if="componentData.isActived"
+            :class="$style['tools']">
+            <div :class="$style['tools-btn']">
+                {{ componentData.componentId }}
+            </div>
+            <save-to-template
+                v-if="componentData.layoutType
+                    && componentData.parentNode.layoutType" />
+        </div>
     </div>
 </template>
 <script>
@@ -199,16 +205,15 @@
             }
         },
         created () {
+            console.log('from componet create = ', this.componentData.componentId)
             // 优先获取组件的 material Config 缓存起来，
             // 后续需要使用直接使用这个不在从 componentData.material 获取
             this.material = this.componentData.material
 
             // 编辑更新
             const updateCallback = (event) => {
-                const {
-                    target
-                } = event
-                if (target.componentId === this.componentData.componentId) {
+                if (event.target.componentId === this.componentData.componentId) {
+                    console.log('record event: ', this.componentData.componentId, event)
                     this.safeStylesWithDisplay()
                     this.safeStyleWithWidth()
                     this.safeStyleWithHeight()
@@ -244,6 +249,7 @@
             this.safeStyleWithWidth()
             this.safeStyleWithHeight()
             this.setDefaultStyleWithAttachToFreelayout()
+            this.componentData.mounted(this.$refs.componentRoot)
             this.$emit('component-mounted')
         },
         beforeDestroy () {
@@ -505,6 +511,26 @@
             bottom: 0;
             left: 0;
             border-left-width: 1px;
+        }
+        .tools{
+            position: absolute;
+            top: -22px;
+            left: 0;
+            display: flex;
+            & > * {
+                flex: 0 0 auto;
+            }
+        }
+        .tools-btn{
+            height: 20px;
+            padding: 0 7px;
+            margin-right: 4px;
+            line-height: 20px;
+            text-align: center;
+            background: #3A84FF;
+            border-radius: 2px;
+            color: #fff;
+            text-align: center;
         }
     }
 </style>

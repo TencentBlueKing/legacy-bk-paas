@@ -10,25 +10,51 @@
 -->
 
 <template>
-    <draggable
-        ref="draggable"
-        :sort="true"
-        :list="componentData.slot.default"
-        :component-data="componentData"
-        :group="{
-            name: 'component',
-            pull: true,
-            put: [
-                'layout',
-                'component'
-            ]
+    <div
+        :class="{
+            [$style['column']]: true,
+            [$style['empty']]: componentData.slot.default.length < 1
         }">
-        <resolve-component
-            v-for="slotComponentData in componentData.slot.default"
-            ref="component"
-            :key="slotComponentData.renderKey"
-            :component-data="slotComponentData" />
-    </draggable>
+        <draggable
+            ref="draggable"
+            :sort="true"
+            :list="componentData.slot.default"
+            :component-data="componentData"
+            :group="{
+                name: 'component',
+                pull: true,
+                put: [
+                    'layout',
+                    'component'
+                ]
+            }">
+            <resolve-component
+                v-for="slotComponentData in componentData.slot.default"
+                ref="component"
+                :key="slotComponentData.renderKey"
+                :component-data="slotComponentData" />
+        </draggable>
+        <template v-if="componentData.isActived">
+            <div
+                :class="$style['insert-before']"
+                key="insert-before"
+                role="insert-before"
+                v-bk-tooltips.top-start="'在左侧新建一列'"
+                @click="handleInsertBefore"
+                data-render-drag="disabled">
+                <img src="../../../../images/svg/add-line.svg" />
+            </div>
+            <div
+                :class="$style['insert-after']"
+                key="insert-after"
+                role="insert-after"
+                v-bk-tooltips.top-end="'在右侧新建一列'"
+                @click="handleInsertAfter"
+                data-render-drag="disabled">
+                <img src="../../../../images/svg/add-line.svg" />
+            </div>
+        </template>
+    </div>
 </template>
 <script>
     import _ from 'lodash'
@@ -49,11 +75,8 @@
                 default: () => ({})
             }
         },
-        inject: [
-            'renderGrid'
-        ],
         created () {
-            const parentNodeChildCallback = (event) => {
+            const nodeCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
                     // 需要同时触发父级 grid 更新
@@ -61,15 +84,29 @@
                 }
             }
 
-            LC.addEventListener('appendChild', parentNodeChildCallback)
-            LC.addEventListener('removeChild', parentNodeChildCallback)
+            LC.addEventListener('appendChild', nodeCallback)
+            LC.addEventListener('removeChild', nodeCallback)
             
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('appendChild', parentNodeChildCallback)
-                LC.removeEventListener('removeChild', parentNodeChildCallback)
+                LC.removeEventListener('appendChild', nodeCallback)
+                LC.removeEventListener('removeChild', nodeCallback)
             })
         },
         methods: {
+            handleInsertBefore () {
+                if (this.componentData.parentNode.children.length >= 12) {
+                    this.messageWarn('最多支持12栅格')
+                    return
+                }
+                this.componentData.parentNode.insertBefore(LC.createNode('render-column'), this.componentData)
+            },
+            handleInsertAfter () {
+                if (this.componentData.parentNode.children.length >= 12) {
+                    this.messageWarn('最多支持12栅格')
+                    return
+                }
+                this.componentData.parentNode.insertAfter(LC.createNode('render-column'), this.componentData)
+            },
             /**
              * @desc 自动排版子组件
              */
@@ -114,3 +151,54 @@
         }
     }
 </script>
+<style lang="postcss" module>
+    .column{
+        position: relative;
+        width: 100% !important;
+        height: 100% !important;
+        &.empty{
+            min-height: 64px !important;
+            background: #FAFBFD;
+            &::before{
+                content: "请拖入组件";
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 14px;
+                color: #C4C6CC;
+                pointer-events: all;
+            }
+        }
+        .insert-before,
+        .insert-after{
+            position: absolute;
+            top: 50%;
+            z-index: 11;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3A84FF;
+            cursor: pointer;
+            pointer-events: all;
+            transform: translateY(-50%);
+            :global(img){
+                width: 14px;
+                height: 14px;
+            }
+        }
+        .insert-before{
+            left: -10px;
+        }
+        .insert-after{
+            right: -10px;
+        }
+    }
+</style>

@@ -8,7 +8,7 @@
         :ghost-class="ghostClass || $style['ghost']"
         filter="[data-render-drag='disabled']"
         @choose="handleChoose"
-        @onUnchoose="handleUnchoose"
+        @unchoose="handleUnchoose"
         @start="handleStart"
         @end="handleEnd"
         @add="handleAdd"
@@ -80,9 +80,6 @@
                 this.$refs.draggable.computeIndexes()
             })
         },
-        beforeDestroy () {
-            dragTargetGroup = ''
-        },
         methods: {
             /**
              * @desc 拖动选中
@@ -93,7 +90,7 @@
                 this.$emit('choose', event)
             },
             handleUnchoose (event) {
-                dragTargetGroup = ''
+                dragTargetGroup = null
                 this.$emit('unchoose', event)
             },
             /**
@@ -108,7 +105,7 @@
              * @param { Object } dragEvent
              */
             handleEnd (event) {
-                dragTargetGroup = ''
+                dragTargetGroup = null
                 this.$emit('end', event)
             },
             /**
@@ -116,6 +113,7 @@
              * @param { Object } dragEvent
              */
             handleAdd (event) {
+                console.log('from asdas =handleAdd ')
                 this.$emit('add', event)
             },
             handleSort (event) {
@@ -134,6 +132,7 @@
                 if (event.added) {
                     operationNode = event.added.element
                     triggerEvent.type = 'appendChild'
+                    
                     LC.triggerEventListener('appendChild', triggerEvent)
                 } else if (event.removed) {
                     operationNode = event.removed.element
@@ -152,7 +151,7 @@
                 LC.triggerEventListener('update', triggerEvent)
                 // fix: vue-draggable 内部索引不更新的问题
                 this.$refs.draggable.computeIndexes()
-                dragTargetGroup = ''
+                dragTargetGroup = null
                 this.$emit('change', event)
             }
         }

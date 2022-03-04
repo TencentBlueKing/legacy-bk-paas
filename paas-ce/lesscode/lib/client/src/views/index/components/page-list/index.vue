@@ -133,7 +133,7 @@
              * @desc 页面切换
              */
             handlePageChange (pageId) {
-                if (pageId === this.pageId) {
+                if (!pageId || pageId === this.pageId) {
                     return
                 }
                 this.$bkInfo({

@@ -34,6 +34,11 @@
                 <img src="../../../../images/svg/add-line.svg" />
             </div>
         </template>
+        <div
+            v-if="isShowActiveBtn"
+            :class="$style['active-btn']">
+            选中行
+        </div>
     </div>
 </template>
 <script>
@@ -46,15 +51,15 @@
             ResolveComponent
         },
         inheritAttrs: false,
-        provide () {
-            return {
-                renderGrid: this
-            }
-        },
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
+            }
+        },
+        data () {
+            return {
+                isShowActiveBtn: false
             }
         },
         created () {
@@ -71,7 +76,21 @@
                     this.updateChildColumn()
                 }
             }
+            const activeCallback = event => {
+                this.isShowActiveBtn = event.target.parentNode === this.componentData
+            }
+            const activeClearCallback = () => {
+                this.isShowActiveBtn = false
+            }
             LC.addEventListener('update', updateCallback)
+            LC.addEventListener('active', activeCallback)
+            LC.addEventListener('activeClear', activeClearCallback)
+
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', updateCallback)
+                LC.removeEventListener('active', activeCallback)
+                LC.removeEventListener('activeClear', activeClearCallback)
+            })
         },
         methods: {
             updateChildColumn () {
@@ -93,7 +112,7 @@
                 })
             },
             /**
-             * @desc 克隆 grid，只克隆布局数据树结构不克隆
+             * @desc 克隆 grid——只克隆布局,数据树结构不克隆
              */
             handleAddClone () {
                 const gridNode = LC.createNode('render-grid', false)
@@ -124,8 +143,11 @@
 
         .col {
             border: 1px dashed #ccc;
-            ~ .col {
-                border-left: none;
+            &:nth-child(n + 1) {
+                border-right: none;
+            }
+            &:last-child{
+                border-right: 1px dashed #ccc;
             }
         }
 
@@ -162,6 +184,23 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 11;
+        }
+        .active-btn {
+            position: absolute;
+            top: 0;
+            left: -22px;
+            z-index: 11;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            width: 20px;
+            font-size: 12px;
+            color: #fff;
+            background: #3A84FF;
+            border-radius: 2px;
+            text-align: center;
+            cursor: pointer;
+            pointer-events: all;
         }
     }
 </style>
