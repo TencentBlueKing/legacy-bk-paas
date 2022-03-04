@@ -139,7 +139,6 @@
             },
             'pageDetail.styleSetting' () {
                 // 页面样式发生变化的时候  reload
-                console.log('styleSettingchange')
                 this.handleUpdatePreview()
             }
         },

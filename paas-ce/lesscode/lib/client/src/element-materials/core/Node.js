@@ -60,6 +60,8 @@ export default class Node {
         const uid = uuid()
         // 只有刚被拖入才会是 false，画布重新渲染（页面刷新）一直是 true
         this._isMounted = false
+        // 组件被渲染时对应画布中的根原素
+        this.$elm = null
             
         this.tabPanelActive = 'props' // 默认tab选中的面板
         this.componentId = `${name}-${uid}`
@@ -239,10 +241,12 @@ export default class Node {
         return validator(this)
     }
     /**
-     * @desc 管理组件是已经被渲染
+     * @desc 组件被画布渲染
+     * @param {Element} elm
      */
-    mounted () {
+    mounted (elm) {
         this._isMounted = true
+        this.$elm = elm
     }
     /**
      * @desc 获取节点的 JSON 数据
