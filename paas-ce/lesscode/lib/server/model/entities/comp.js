@@ -6,6 +6,9 @@ export default class extends Base {
     @Column({ type: 'int' })
     id
 
+    @Column({ type: 'varchar', comment: '自定义组件类型：PC 或 MOBILE' })
+    compType
+
     @Column({ type: 'varchar' })
     type
 

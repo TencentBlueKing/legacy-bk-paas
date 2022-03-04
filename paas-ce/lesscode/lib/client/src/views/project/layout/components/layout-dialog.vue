@@ -26,6 +26,9 @@
                 <bk-form-item label="模板路由" required property="routePath" error-display-type="normal">
                     <bk-input maxlength="60" v-model.trim="dialog.formData.routePath"
                         placeholder="请输入，由数字、字母、下划线、中划线(-)、冒号(:)或反斜杠(/)组成">
+                        <template slot="prepend" v-if="currentLayout.layoutType === 'MOBILE'">
+                            <div class="group-text">/mobile</div>
+                        </template>
                     </bk-input>
                     <p class="mt5 mb0 f12" slot="tip">模板实例路由将会作为项目一级路由，请谨慎命名</p>
                 </bk-form-item>
@@ -183,7 +186,7 @@
             async getDefaultLayout () {
                 try {
                     const res = await this.$store.dispatch('layout/getPlatformList')
-                    const layoutList = res.filter(item => item.type !== 'empty')
+                    const layoutList = res.filter(item => item.type !== 'empty' && item.layoutType !== 'MOBILE')
                     layoutList.forEach((item, index) => {
                         item.checked = index === 0
                     })

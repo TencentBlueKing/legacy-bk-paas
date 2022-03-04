@@ -15,7 +15,7 @@ import Comp from './entities/comp'
 import CompCategory from './entities/comp-category'
 import Version from './entities/version'
 
-export const all = async function (params = {}) {
+export const all = async function (params = {}, condition = [], conParams = {}) {
     const res = await getRepository(Comp)
         .createQueryBuilder('comp')
         .leftJoin(CompCategory, 'compCategory', 'comp.categoryId = compCategory.id')
@@ -32,6 +32,7 @@ export const all = async function (params = {}) {
         .where({
             ...params
         })
+        .andWhere(condition, conParams)
         .orderBy('comp.createTime')
         .andWhere('comp.deleteFlag = 0')
         .andWhere('version.isLast = 1')
