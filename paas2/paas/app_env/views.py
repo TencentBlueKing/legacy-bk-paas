@@ -12,7 +12,7 @@ specific language governing permissions and limitations under the License.
 
 from django.utils.translation import ugettext as _
 
-from common.decorators import app_exists, has_app_develop_permission_or_is_smart_admin, escape_exempt
+from common.decorators import app_exists, has_app_develop_or_smart_develop_permission, escape_exempt
 from common.mymako import render_mako_context, render_json
 from common.log import logger
 from common.constants import ModeEnum
@@ -22,7 +22,7 @@ from app_env.validators import validate_id, validate_env_var_value, validate_env
 
 
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 def home(request, app_code):
     """
     环境变量管理页面
@@ -53,7 +53,7 @@ def home(request, app_code):
 
 
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 @escape_exempt
 def add_or_update_env_var(request, app_code):
     name = request.POST.get("name", "")
@@ -117,7 +117,7 @@ def add_or_update_env_var(request, app_code):
 
 
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 def delete_env_var(request, app_code):
     id = request.POST.get("id")
 

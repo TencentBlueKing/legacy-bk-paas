@@ -43,6 +43,8 @@
                     % endif
                 </td>
                 <td style="vertical-align:middle;">
+
+                  % if _app.has_permission:
                     <a href="${SITE_URL}saas/release/online/${_app.code}/" class="hit mr10">${_(u'部署')}</a>
                     % if _app.state in [1]:
                         <a href="###" onclick="REL_MANAGER.saas_app_del(this, '${_app.code}');" app_code="${_app.code}" class="hit saas_app_del mr10">${_(u'删除')}</a>
@@ -56,6 +58,11 @@
                     % if _app.state not in [0, 1] and _app.is_already_online:
                         <a href="${_app.app_prod_url}" target="_blank" class="hit mr10">${_(u'正式地址')}</a>
                     % endif
+
+                  % else:
+                    <a href="${SITE_URL}saas/info/${_app.code}/" class="hit mr10">${_(u'申请权限')}</a>
+                  % endif
+
                 </td>
             </tr>
             % endfor

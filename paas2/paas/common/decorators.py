@@ -64,11 +64,14 @@ def has_app_develop_permission(view_func):
     return _wrapped_view
 
 
-def has_app_develop_permission_or_is_smart_admin(view_func):
+def has_app_develop_or_smart_develop_permission(view_func):
     """
-    应用开发权限 或 smart 管理员
+    NOTE: 所有使用处都有 app_exists, 所以无需担心app不存在的情况
+
+    应用开发权限 或 smart 开发权限 => smart也作为一种app看待
     使用位置: 日志查询等位于多个位置的权限校验
     NOTE: smart管理员可能会有权限看到其他应用的日志
+
     """
 
     @wraps(view_func, assigned=available_attrs(view_func))
@@ -82,21 +85,22 @@ def has_app_develop_permission_or_is_smart_admin(view_func):
         try:
             app = App.objects.get(code=app_code)
         except Exception:
+            # 此时如果smart未部署, 会提示 `出错了！内置应用尚未部署, 请先执行部署！`
             return redirect_app_not_exists(request, app_code)
 
-        if app.is_saas:
-            # 判断是否有smart管理权限
-            if not Permission().allowed_manage_smart(username):
-                return redirect_403(request, username, ActionEnum.MANAGE_SMART)
-            else:
-                return view_func(request, *args, **kwargs)
+        # if app.is_saas:
+        #     # 判断是否有smart管理权限
+        #     if not Permission().allowed_manage_smart(username):
+        #         return redirect_403(request, username, ActionEnum.MANAGE_SMART)
+        #     else:
+        #         return view_func(request, *args, **kwargs)
+        # else:
+        # 判断开发者权限
+        if Permission().allowed_develop_app(username, app_code):
+            return view_func(request, *args, **kwargs)
         else:
-            # 判断开发者权限
-            if Permission().allowed_develop_app(username, app_code):
-                return view_func(request, *args, **kwargs)
-            else:
-                # return no_app_develop_permission
-                return redirect_403(request, username, ActionEnum.DEVELOP_APP, app_code)
+            # return no_app_develop_permission
+            return redirect_403(request, username, ActionEnum.DEVELOP_APP, app_code)
 
     return _wrapped_view
 
@@ -120,6 +124,39 @@ def smart_app_exists(view_func):
 
     return _wrapped_view
 
+
+def has_smart_develop_permission(view_func):
+    """
+    NOTE: 所有使用处都有 smart_app_exists, 所以无需担心app不存在的情况
+
+    应用开发权限 或 smart 开发权限 => smart也作为一种app看待
+    使用位置: 日志查询等位于多个位置的权限校验
+    NOTE: smart管理员可能会有权限看到其他应用的日志
+
+    """
+
+    @wraps(view_func, assigned=available_attrs(view_func))
+    def _wrapped_view(request, *args, **kwargs):
+        username = request.user.username
+        app_code = kwargs.get("app_code")
+        if not app_code:
+            return view_func(request, *args, **kwargs)
+
+        # 查表, 确认app身份
+        try:
+            smart_app = SaaSApp.objects.get(code=app_code)
+        except Exception:
+            # 此时如果smart未部署, 会提示 `出错了！内置应用尚未部署, 请先执行部署！`
+            return redirect_app_not_exists(request, app_code)
+
+        # 判断开发者权限
+        if Permission().allowed_develop_app(username, app_code):
+            return view_func(request, *args, **kwargs)
+        else:
+            # return no_app_develop_permission
+            return redirect_403(request, username, ActionEnum.DEVELOP_APP, app_code)
+
+    return _wrapped_view
 
 def has_smart_manage_permission(view_func):
     @wraps(view_func, assigned=available_attrs(view_func))

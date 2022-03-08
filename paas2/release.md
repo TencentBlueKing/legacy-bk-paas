@@ -1,5 +1,11 @@
 Release Log
 ===============================
+# 2.13.29
+    - update: bkiam action name/description
+
+# 2.13.28
+    - update: s-mart app use `develop_app` permission supported by IAM
+
 # 2.13.27
     - update: fix console page display
 
@@ -153,7 +159,7 @@ Release Log
 
 # 2.12.18
     - esb: add get_weixin_config
-    - paas: use get_weixin_config to fetch weixin config 
+    - paas: use get_weixin_config to fetch weixin config
 
 # 2.12.17
     - esb: update esb cc confapis

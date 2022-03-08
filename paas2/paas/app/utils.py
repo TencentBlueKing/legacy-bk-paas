@@ -242,7 +242,7 @@ def parse_app_visiable_labels(labels):  # noqa
             if not ok:
                 user_names = {}
         except Exception:
-            logger.Exception("fetch_user_names fail")
+            logger.exception("fetch_user_names fail")
             user_names = {}
 
     for uid in user_id_list:
@@ -255,7 +255,7 @@ def parse_app_visiable_labels(labels):  # noqa
             if not ok:
                 department_names = {}
         except Exception:
-            logger.Exception("fetch_department_names fail")
+            logger.exception("fetch_department_names fail")
             department_names = {}
 
     for did in department_id_list:
