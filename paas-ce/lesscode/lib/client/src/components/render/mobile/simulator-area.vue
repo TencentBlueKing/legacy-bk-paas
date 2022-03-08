@@ -10,6 +10,7 @@
             <div class="simulator-preview" :style="{ width: width + 'px', height: height + 'px' }">
                 <iframe width="100%"
                     height="100%"
+                    style="border: none"
                     :src="source"
                 >
                 </iframe>

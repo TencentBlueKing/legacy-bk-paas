@@ -41,6 +41,7 @@ class PageCode {
      * 3. projectCode: 生成整个项目代码
      */
     pageType = ''
+    platform = '' // ['PC', 'MOBILE']
     funcGroups = []
     code = ''
     scriptStr = ''
@@ -75,6 +76,7 @@ class PageCode {
         {
             targetData = [],
             pageType = 'vueCode',
+            platform = 'PC',
             funcGroups = [],
             lifeCycle = '',
             projectId,
@@ -92,6 +94,7 @@ class PageCode {
     ) {
         this.targetData = targetData || []
         this.pageType = pageType
+        this.platform = platform
         this.funcGroups = funcGroups || []
         this.uniqueKey = uuid()
         this.lifeCycle = lifeCycle || {}
@@ -366,8 +369,7 @@ class PageCode {
                             <!-- eslint-disable -->
                             <!-- prettier-ignore -->
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
-                                >${slotStr}
-                            </${item.type}>
+                                >${slotStr}</${item.type}>
                             <!-- eslint-enable -->`
                     } else {
                         componentCode += `

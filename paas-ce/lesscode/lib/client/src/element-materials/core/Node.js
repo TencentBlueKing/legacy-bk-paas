@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { uuid } from '@/common/util'
+import { unitFilter } from 'shared/util.js'
 
 import toJSON from './extends/to-json'
 import active from './extends/active'
@@ -151,19 +152,7 @@ export default class Node {
      * @returns { Object }
      */
     get style () {
-        const style = Object.keys(this.renderStyles).reduce((result, key) => {
-            /** 样式获取和处理
-             * 如果是rpx单位，转换为rem，使浏览器可识别和渲染
-             */
-            if (/\d+rpx$/.test(this.renderStyles[key])) {
-                const sizeNumber = /(\d+)rpx$/.exec(this.renderStyles[key])[1] / 750 * 20
-                result[key] = sizeNumber + 'rem'
-                return result
-            } else if (key !== 'customStyle') {
-                result[key] = this.renderStyles[key]
-            }
-            return result
-        }, {})
+        const style = {}
         const {
             customStyle = {}
         } = this.renderStyles
@@ -172,9 +161,7 @@ export default class Node {
             style[toHyphenate(key)] = customStyle[key]
         })
         Object.keys(this.renderStyles).forEach(key => {
-            if (key !== 'customStyle') {
-                style[toHyphenate(key)] = this.renderStyles[key]
-            }
+            style[toHyphenate(key)] = unitFilter(this.renderStyles[key])
         })
         
         return Object.seal(Object.assign(style, customStyle))

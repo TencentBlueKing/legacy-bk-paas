@@ -121,6 +121,18 @@
         <div class="preview-tip">未发布<br>请勿分享</div>
         <script>
             var BKPAAS_ENVIRONMENT = '<%= htmlWebpackPlugin.options.BKPAAS_ENVIRONMENT %>'
+
+            
+            
+            const recalculate = () => {
+                const html = window.document.documentElement
+                const clientWidth = html.clientWidth || 375
+                html.style.fontSize = `${clientWidth / 20}px`
+            }
+
+            
+            window.addEventListener('resize', recalculate, false)
+            window.document.addEventListener('DOMContentLoaded', recalculate, false)
         </script>
         <script src="<%= htmlWebpackPlugin.options.staticUrl %>/lib.bundle.js"></script>
     </body>

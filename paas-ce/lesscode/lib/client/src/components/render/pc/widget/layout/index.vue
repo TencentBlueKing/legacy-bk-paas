@@ -80,7 +80,7 @@
                     'min-width': pageStyle['min-width'] || ''
                 }
                 const $pageContentTarget = document.querySelector('.lesscode-editor-layout .container-content')
-                Object.keys(pageStyle).forEach(key => {
+                $pageContentTarget && Object.keys(pageStyle).forEach(key => {
                     if (key !== 'min-width') {
                         $pageContentTarget.style[key] = pageStyle[key] || ''
                     }

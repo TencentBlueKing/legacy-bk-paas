@@ -184,6 +184,7 @@ const store = new Vuex.Store({
                 // targetData: JSON.parse(JSON.stringify(state.drag.targetData || [])),
                 targetData,
                 pageType: 'preview',
+                platform: state.page.pageDetail?.pageType,
                 funcGroups: state.functions.funcGroups,
                 lifeCycle: state.page.pageDetail?.lifeCycle,
                 projectId: router.currentRoute.params?.projectId,
