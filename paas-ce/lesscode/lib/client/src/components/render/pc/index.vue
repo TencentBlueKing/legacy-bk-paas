@@ -20,7 +20,7 @@
             <draggable
                 v-if="isReady"
                 class="target-drag-area"
-                :class="[$style['editor'], platform === 'mobile' && $style['mobile']]"
+                :class="[$style['editor'], platform === 'MOBILE' && $style['mobile']]"
                 :component-data="componentData"
                 :list="componentData.slot.default"
                 :sort="true"

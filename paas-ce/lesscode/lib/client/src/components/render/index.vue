@@ -16,7 +16,7 @@
         computed: {
             ...mapGetters('page', ['platform']),
             canvas () {
-                return this.platform === 'pc' ? PC : Mobile
+                return this.platform === 'MOBILE' ? Mobile : PC
             }
         }
     }

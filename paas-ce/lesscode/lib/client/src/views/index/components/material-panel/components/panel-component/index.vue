@@ -63,8 +63,8 @@
             },
             initPlatform () {
                 const map = {
-                    pc: 'bk',
-                    mobile: 'vant'
+                    PC: 'bk',
+                    MOBILE: 'vant'
                 }
                 this.baseComponent = map[this.platform]
             }

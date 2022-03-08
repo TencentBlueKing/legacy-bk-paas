@@ -20,7 +20,7 @@
             <div
                 id="toolActionBox"
                 class="function-and-tool">
-                <mobile-preview></mobile-preview>
+                <mobile-preview v-if="platform === 'MOBILE'"></mobile-preview>
                 <operation-select v-model="operationType" />
                 <div style="height: 22px; width: 1px; margin: 0 5px; background-color: #dcdee5;" />
                 <!-- 保存、预览、快捷键等tool单独抽离 -->
@@ -93,7 +93,7 @@
         computed: {
             ...mapGetters(['user']),
             ...mapGetters('drag', ['curTemplateData']),
-            ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('page', ['pageDetail', 'platform']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('variable', ['variableList']),

@@ -79,7 +79,7 @@
         computed: {
             ...mapGetters('page', ['platform']),
             defaultMargin () {
-                return this.platform === 'pc' ? '10px' : '20rpx'
+                return this.platform === 'PC' ? '10px' : '20rpx'
             }
         },
         created () {
@@ -146,10 +146,12 @@
                         }
                         if (!marginLeft || marginLeft === 'unset') {
                             if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
+                                debugger
                                 componentInstance.componentData.setStyle('marginRight', this.defaultMargin)
                             }
                         }
                         if (!marginBottom || marginBottom === 'unset') {
+                            debugger
                             componentInstance.componentData.setStyle('marginBottom', this.defaultMargin)
                         }
                     })

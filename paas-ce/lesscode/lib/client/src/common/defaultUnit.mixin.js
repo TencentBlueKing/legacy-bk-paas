@@ -4,7 +4,7 @@ export default {
     computed: {
         ...mapGetters('page', ['platform']),
         defaultUnit () {
-            return this.platform === 'pc' ? 'px' : 'rpx'
+            return this.platform === 'PC' ? 'px' : 'rpx'
         }
     }
 }

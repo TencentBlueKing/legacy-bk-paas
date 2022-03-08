@@ -51,7 +51,7 @@
             return {
                 isShowSelectPanel: false,
                 list: {
-                    pc: [
+                    PC: [
                         {
                             key: 'bk',
                             name: '蓝鲸Vue组件库',
@@ -63,7 +63,7 @@
                             tooltip: this.elementUiTips
                         }
                     ],
-                    mobile: [{
+                    MOBILE: [{
                         key: 'vant',
                         name: 'vant-ui',
                         tooltip: ''

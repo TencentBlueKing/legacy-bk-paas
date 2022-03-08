@@ -37,7 +37,7 @@
                 return this.isMarginStyle ? 'king-select-append-input king-select-margin-style' : 'king-select-append-input'
             },
             unitList () {
-                return this.platform === 'pc'
+                return this.platform === 'PC'
                     ? ['px', '%']
                     : ['rpx', '%', 'px']
             }

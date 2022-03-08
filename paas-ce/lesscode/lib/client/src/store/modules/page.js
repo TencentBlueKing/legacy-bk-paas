@@ -19,15 +19,11 @@ export default {
         pageRoute: {},
         layoutList: [],
         routeGroup: [],
-        platform: 'mobile',
         mobilePreview: true
     },
     mutations: {
         setMobilePreview (state, preview) {
             state.mobilePreview = preview
-        },
-        setPlatform (state, platform) {
-            state.platform = platform
         },
         setPageDetail (state, page) {
             state.pageDetail = page
@@ -58,7 +54,7 @@ export default {
         pageRoute: state => state.pageRoute,
         layoutList: state => state.layoutList,
         routeGroup: state => state.routeGroup,
-        platform: state => state.platform,
+        platform: state => state.pageDetail.pageType,
         mobilePreview: state => state.mobilePreview
     },
     actions: {
