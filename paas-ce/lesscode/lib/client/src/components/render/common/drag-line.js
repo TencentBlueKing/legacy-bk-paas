@@ -216,14 +216,14 @@ export default class DragLine {
                         // dragNode.style[key] = `${condition.dragValue - this.containerLeft - 1}px`
 
                         // 没有 layout 导航布局模板时，contentNode 和 mainContentNode 是一样的，为 .main-content
-                        const offsetLeft = this.hasNavLayout
-                            ? this.docBody.scrollLeft + this.contentNode.scrollLeft + this.mainContentNode.scrollLeft
-                            : this.docBody.scrollLeft + this.mainContentNode.scrollLeft
+                        // const offsetLeft = this.hasNavLayout
+                        //     ? this.docBody.scrollLeft + this.contentNode.scrollLeft + this.mainContentNode.scrollLeft
+                        //     : this.docBody.scrollLeft + this.mainContentNode.scrollLeft
 
-                        dragNode.style[key] = `${condition.dragValue - (this.containerLeft - offsetLeft + parseInt(this.offset.left)) - 1}px`
+                        // dragNode.style[key] = `${condition.dragValue - (this.containerLeft - offsetLeft + parseInt(this.offset.left)) - 1}px`
                         condition.lineNode.setTranslateX(condition.lineValue)
                     } else {
-                        dragNode.style[key] = `${condition.dragValue - (this.containerTop - this.contentNode.scrollTop + parseInt(this.offset.top)) - 1}px`
+                        // dragNode.style[key] = `${condition.dragValue - (this.containerTop - this.contentNode.scrollTop + parseInt(this.offset.top)) - 1}px`
                         condition.lineNode.setTranslateY(condition.lineValue)
                     }
                     // condition.lineNode.style[key] = `${condition.lineValue}px`

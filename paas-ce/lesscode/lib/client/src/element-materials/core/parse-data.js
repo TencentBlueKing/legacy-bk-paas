@@ -13,34 +13,38 @@ let isClone = false
  * @returns { Node }
  */
 const createNodeFromData = (data) => {
-    const newNode = createNode(data.type === 'img' ? 'bk-image' : data.type)
-    newNode.tabPanelActive = data.tabPanelActive || 'props'
-    if (!isClone) {
+    try {
+        const newNode = createNode(data.type === 'img' ? 'bk-image' : data.type)
+        newNode.tabPanelActive = data.tabPanelActive || 'props'
+        if (!isClone) {
         // fix: 老数据存在 componentId 为空的情况
-        if (data.componentId) {
-            newNode.componentId = data.componentId
+            if (data.componentId) {
+                newNode.componentId = data.componentId
+            }
         }
-    }
 
-    data.renderStyles && newNode.setRenderStyles(data.renderStyles)
-    data.renderProps && newNode.setRenderProps(data.renderProps)
-    data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
-    data.renderEvents && newNode.setRenderEvents(data.renderEvents)
-
-    newNode._isMounted = true
-    newNode.interactiveShow = false
-    newNode.isComplexComponent = Boolean(data.complex)
-    newNode.isInteractiveComponent = Boolean(data.interactive)
-
-    // fix: 老数据 renderProps.no-response 格式不规范的问题
-    if (newNode.renderProps.hasOwnProperty('no-response')) {
-        newNode.renderProps['no-response'] = {
-            type: 'boolean',
-            val: newNode.renderProps['no-response']
+        data.renderStyles && newNode.setRenderStyles(data.renderStyles)
+        // data.renderProps && newNode.setRenderProps(data.renderProps)
+        data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
+        data.renderEvents && newNode.setRenderEvents(data.renderEvents)
+        if (data.renderProps) {
+            // prop 通过 merge 的方式加载
+            // 兼容组件 prop 扩展的场景
+            Object.keys(data.renderProps).forEach(key => {
+                newNode.renderProps[key] = data.renderProps[key]
+            })
         }
-    }
 
-    return newNode
+        newNode._isMounted = true
+        newNode.interactiveShow = false
+        newNode.isComplexComponent = Boolean(data.complex)
+        newNode.isInteractiveComponent = Boolean(data.interactive)
+        newNode.isCustomComponent = Boolean(data.custom)
+    
+        return newNode
+    } catch {
+        return null
+    }
 }
 
 /**
@@ -50,9 +54,13 @@ const createNodeFromData = (data) => {
  * @param { String } slot
  */
 const traverse = (parentNode, childDataList, slot) => {
-    // console.log('asdadasdasd == = ', parentNode, childDataList, slot)
     childDataList.forEach(childData => {
         const childNode = createNodeFromData(childData)
+
+        // 页面中的组件物料被删除跳过组件处理
+        if (!childNode) {
+            return
+        }
         
         if (childNode.layoutType) {
             // 布局类型的组件
@@ -88,11 +96,15 @@ const traverse = (parentNode, childDataList, slot) => {
  * @param { Array } data
  * @returns { Array }
  */
-const tansform = (parentNode, data) => {
+const tansformPageData = (parentNode, data) => {
     return data.map((curDataNode, index) => {
         if (!curDataNode) {
             return null
         }
+        curDataNode.complex = Boolean(curDataNode.isComplexComponent)
+        curDataNode.interactive = ['bk-sideslider', 'bk-dialog'].includes(curDataNode.type)
+        curDataNode.custom = Boolean(curDataNode.isCustomComponent)
+
         if (curDataNode.type === 'render-grid') {
             if (curDataNode.renderSlots
                 && curDataNode.renderSlots.default
@@ -131,12 +143,13 @@ const tansform = (parentNode, data) => {
                             }
                         },
                         renderSlots: {
-                            default: tansform(curDataNode, columnItem.children)
+                            default: tansformPageData(curDataNode, columnItem.children)
                         },
                         renderDirectives: [],
                         renderEvents: {},
                         complex: false,
-                        interactive: false
+                        interactive: false,
+                        custom: false
                     }
                     curDataNode.renderSlots.default.push(columnData)
                 })
@@ -171,7 +184,7 @@ const tansform = (parentNode, data) => {
                             return result
                         }, {}),
                         renderSlots: {
-                            default: tansform(curDataNode, formItem.renderSlots.default.val)
+                            default: tansformPageData(curDataNode, formItem.renderSlots.default.val)
                         },
                         renderDirectives: [],
                         renderEvents: {},
@@ -183,32 +196,55 @@ const tansform = (parentNode, data) => {
                 })
             }
         } else if (curDataNode.type === 'free-layout') {
-            const freelayoutItem = curDataNode.renderSlots.default.val[0] || []
-            let freelayoutSlot = []
-            if (freelayoutItem && freelayoutItem.children) {
-                freelayoutSlot = tansform(curDataNode, freelayoutItem.children)
-            }
-            curDataNode.renderSlots = {
-                default: freelayoutSlot
+            if (curDataNode.renderSlots
+                && curDataNode.renderSlots.default
+                && Array.isArray(curDataNode.renderSlots.default.val)) {
+                const freelayoutItem = curDataNode.renderSlots.default.val[0] || []
+                let freelayoutSlot = []
+                if (freelayoutItem && freelayoutItem.children) {
+                    freelayoutSlot = tansformPageData(curDataNode, freelayoutItem.children)
+                }
+                curDataNode.renderSlots = {
+                    default: freelayoutSlot
+                }
             }
         } else if (curDataNode.type === 'bk-sideslider') {
             curDataNode.interactive = true
-            const child = curDataNode.renderSlots.content.val
-            curDataNode.renderSlots = {
-                content: tansform(curDataNode, [child])[0]
+            if (curDataNode.renderSlots
+                && curDataNode.renderSlots.content
+                && curDataNode.renderSlots.content.val) {
+                const child = curDataNode.renderSlots.content.val
+                curDataNode.renderSlots = {
+                    content: tansformPageData(curDataNode, [child])[0]
+                }
             }
         } else if (curDataNode.type === 'bk-dialog') {
             curDataNode.interactive = true
-            const child = curDataNode.renderSlots.default.val
-            curDataNode.renderSlots = {
-                default: tansform(curDataNode, [child])[0]
+            if (curDataNode.renderSlots
+                && curDataNode.renderSlots.default
+                && curDataNode.renderSlots.default.val) {
+                const child = curDataNode.renderSlots.default.val
+                curDataNode.renderSlots = {
+                    default: tansformPageData(curDataNode, [child])[0]
+                }
             }
         } else if (curDataNode.type === 'bk-card') {
-            const renderSlots = curDataNode.renderSlots
-            curDataNode.renderSlots = {
-                header: tansform(curDataNode, [renderSlots.header.val])[0],
-                default: tansform(curDataNode, [renderSlots.default.val])[0],
-                footer: tansform(curDataNode, [renderSlots.footer.val])[0]
+            if (curDataNode.renderSlots) {
+                const renderSlots = curDataNode.renderSlots
+                curDataNode.renderSlots = {
+                    header: tansformPageData(curDataNode, [renderSlots.header.val])[0],
+                    default: tansformPageData(curDataNode, [renderSlots.default.val])[0],
+                    footer: tansformPageData(curDataNode, [renderSlots.footer.val])[0]
+                }
+            }
+        } else if (curDataNode.type === 'el-card') {
+            if (curDataNode.renderSlots
+                && curDataNode.renderSlots.default
+                && curDataNode.renderSlots.default.val) {
+                const child = curDataNode.renderSlots.default.val
+                curDataNode.renderSlots = {
+                    default: tansformPageData(curDataNode, [child])[0]
+                }
             }
         }
 
@@ -249,13 +285,27 @@ const tansform = (parentNode, data) => {
             if (prop.type !== 'string' && renderValue === '') {
                 renderValue = undefined
             }
-            result[propName] = {
-                format: 'value',
-                code: prop.val,
-                payload: prop.payload || {},
-                valueType: prop.type,
-                renderValue
+            
+            if (propName === 'no-response') {
+                // fix: 老数据 renderProps.no-response 格式不规范的问题
+                result[propName] = {
+                    format: 'value',
+                    code: prop,
+                    payload: {},
+                    valueType: 'boolean',
+                    renderValue: prop
+                }
+            } else {
+                const valueType = Array.isArray(prop.type) ? prop.type[0] : prop.type
+                result[propName] = {
+                    format: 'value',
+                    code: prop.val,
+                    payload: prop.payload || {},
+                    valueType,
+                    renderValue
+                }
             }
+            
             return result
         }, {})
         // prop 还需要解析 renderDirectives 中 v-bind 的关联数据
@@ -264,11 +314,12 @@ const tansform = (parentNode, data) => {
                 && directive.val
                  && curDataNode.renderProps[directive.prop]) {
                 const renderProp = origanlRenderProps[directive.prop]
+                const valueType = Array.isArray(renderProp.type) ? renderProp.type[0] : renderProp.type
                 curDataNode.renderProps[directive.prop] = {
                     format: directive.valType,
                     code: directive.val,
                     payload: {},
-                    valueType: renderProp.type,
+                    valueType,
                     renderValue: renderProp.val
                 }
             }
@@ -301,7 +352,8 @@ const tansform = (parentNode, data) => {
             'widget-form-item',
             'bk-sideslider',
             'bk-dialog',
-            'bk-card'
+            'bk-card',
+            'el-card'
         ].includes(curDataNode.type)) {
             curDataNode.renderSlots = Object.keys(curDataNode.renderSlots || {}).reduce((result, slotName) => {
                 const slotData = curDataNode.renderSlots[slotName]
@@ -328,6 +380,11 @@ const tansform = (parentNode, data) => {
                 }
                 return result
             }, {})
+        }
+
+        // fix: img 配置 type 问题
+        if (curDataNode.type === 'img') {
+            curDataNode.type = 'bk-image'
         }
         
         return curDataNode
@@ -359,13 +416,64 @@ const checkVersion = (data) => {
     return 'v2'
 }
 
+// const traverseFix = (childDataList) => {
+//     if (childDataList.length < 1) {
+//         return
+//     }
+//     childDataList.forEach(childData => {
+//         if (!childData) {
+//             return
+//         }
+        
+//         if (childData && childData.type === 'bk-dialog') {
+//             if (childData.renderSlots
+//                 && childData.renderSlots.default
+//                 && childData.renderSlots.default.val) {
+//                 const child = childData.renderSlots.default.val
+//                 // console.log('\n\n\n\n\n\n\n\n ===============')
+//                 // console.dir(tansformPageDataPageData(childData, [child]))
+//                 childData.renderSlots = {
+//                     default: tansformPageData(childData, [child])[0]
+//                 }
+//             }
+//             return
+//         }
+//         if ([
+//             'root',
+//             'render-grid',
+//             'render-column',
+//             'free-layout',
+//             'widget-form',
+//             'widget-form-item'
+//         ].includes(childData.type)) {
+//             // 布局类型的组件
+//             // slot 的值类型 Array
+//             traverseFix(childData.renderSlots.default)
+//         } else {
+//             // slot 为布局类型组件
+//             // slot 的值类型为 Node
+//             Object.keys(childData.renderSlots).forEach(slotName => {
+//                 const slotData = childData.renderSlots[slotName]
+//                 if (Object.prototype.toString.call(slotData) === '[object Object]') {
+//                     if (slotData.componentId && slotData.type) {
+//                         traverseFix([slotData])
+//                     }
+//                 }
+//             })
+//         }
+//     })
+//     return childDataList
+// }
+
 export default function (data) {
-    console.log('from parser data == ', JSON.parse(JSON.stringify(data)))
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
-        versionData = tansform({ type: 'root' }, data)
+        versionData = tansformPageData({ type: 'root' }, data)
     }
+
+    // traverseFix(versionData)
+    // console.dir(versionData)
 
     const root = getRoot()
     root.setRenderSlots([])
@@ -387,7 +495,7 @@ export const parseTemplate = data => {
     let versionData = data
     const version = checkVersion(data)
     if (version === 'v1') {
-        versionData = tansform({ type: 'template' }, data)
+        versionData = tansformPageData({ type: 'template' }, data)
     }
     try {
         isClone = true

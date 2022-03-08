@@ -66,6 +66,8 @@
     import ActionTool from './components/action-tool'
     import MobilePreview from './components/preview-switch'
 
+    console.dir(LC)
+
     export default {
         components: {
             NoviceGuide,
@@ -90,26 +92,37 @@
         },
         computed: {
             ...mapGetters(['user']),
-            ...mapGetters('projectVersion', {
-                versionId: 'currentVersionId',
-                versionName: 'currentVersionName',
-                getInitialVersion: 'initialVersion'
-            }),
             ...mapGetters('drag', ['curTemplateData']),
             ...mapGetters('page', ['pageDetail']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('variable', ['variableList']),
-            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' }),
-            ...mapState('route', ['layoutPageList'])
+            ...mapGetters('projectVersion', {
+                versionId: 'currentVersionId',
+                versionName: 'currentVersionName',
+                getInitialVersion: 'initialVersion'
+            }),
+            ...mapState('route', ['layoutPageList']),
+            pageRoute () {
+                return this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+            }
         },
         watch: {
             curTemplateData: {
                 handler () {
-                    const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
                     this.handleUpdatePreview({
                         isGenerateNav: true,
-                        id: pageRoute.layoutPath,
+                        id: this.pageRoute.layoutPath,
+                        curTemplateData: this.curTemplateData,
+                        types: ['reload']
+                    })
+                }
+            },
+            layoutPageList: {
+                handler () {
+                    this.handleUpdatePreview({
+                        isGenerateNav: true,
+                        id: this.pageRoute.layoutPath,
                         curTemplateData: this.curTemplateData,
                         types: ['reload']
                     })
@@ -125,6 +138,10 @@
             },
             'pageDetail.lifeCycle' () {
                 // 生命周期发生变化的时候  reload
+                this.handleUpdatePreview()
+            },
+            'pageDetail.styleSetting' () {
+                // 页面样式发生变化的时候  reload
                 this.handleUpdatePreview()
             }
         },
@@ -196,9 +213,9 @@
             ]
         },
         beforeDestroy () {
-            console.log('from index beforeDestroy')
             LC.removeEventListener('update', this.handleUpdatePreview)
-            LC.parseData([])
+            LC.triggerEventListener('unload')
+            
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
             localStorage.removeItem('ONLINE_PREVIEW')
         },
@@ -212,10 +229,6 @@
             })
         },
         methods: {
-            ...mapActions('functions', [
-                'getAllGroupFuncs'
-            ]),
-            ...mapActions('variable', ['getAllVariable']),
             ...mapActions(['updatePreview']),
             /**
              * @desc 注册自定义组件
@@ -276,7 +289,7 @@
                         versionId: this.versionId
                     })
 
-                    await this.getAllVariable({
+                    await this.$store.dispatch('variable/getAllVariable', {
                         projectId: this.projectId,
                         pageCode: pageDetail.pageCode,
                         versionId: this.versionId,
@@ -289,6 +302,8 @@
 
                     // 设置初始targetData
                     LC.parseData(pageDetail.content)
+                    LC.pageStyle = pageDetail.styleSetting
+                    this.handleUpdatePreview()
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -328,7 +343,7 @@
 
     .lessocde-draw-page {
         min-width: 1280px;
-        height: calc(100vh - $headerHeight);
+        height: calc(100vh - $headerHeight - 4px);
         margin-top: $headerHeight;
         .draw-page-header {
             position: relative;

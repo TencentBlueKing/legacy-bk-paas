@@ -54,60 +54,68 @@
             <td>renderProps</td>
             <td>Object</td>
             <td>组件支持的 prop 配置</td>
-            <td style="white-space: pre;">
-                {
-                    format: '', // 可选值（value、variable、expression）
-                    code: '',
-                    valueType: '', // format 是 value 时的值类型
-                    payload: {  // 存放远程函数、数据源配置相关信息
-                        method: {
-                            methodCode: '' // 函数名
-                            params: [] // 传递的参数
-                        },
-                        sourceData: {
-                            tableName: '', // 数据源表名
-                            columns: [] // 数据源表字段
-                        }
-                    }, 
-                    renderValue: '' // 作用于画布编辑区的显示效果
-                }
+            <td>
+<pre>
+    {
+        format: '', // 可选值（value、variable、expression）
+        code: '',
+        valueType: '', // format 是 value 时的值类型
+        payload: {  // 存放远程函数、数据源配置相关信息
+            method: {
+                methodCode: '' // 函数名
+                params: [] // 传递的参数
+            },
+            sourceData: {
+                tableName: '', // 数据源表名
+                columns: [] // 数据源表字段
+            }
+        }, 
+        renderValue: '' // 作用于画布编辑区的显示效果
+    }
+</pre>
             </td>
         </tr>
         <tr>
             <td>renderSlots</td>
             <td>Object</td>
             <td>组件支持的 slot 配置</td>
-            <td style="white-space: pre;">
-                {
-                    format: '',
-                    code: '',
-                    component: '', // slot 生成的组件类型，
-                    valueType: '',
-                    payload: {},
-                    renderValue: ''
-                }
+            <td>
+<pre>
+    {
+        format: '',
+        code: '',
+        component: '', // slot 生成的组件类型，
+        valueType: '',
+        payload: {},
+        renderValue: ''
+    }
+</pre>
             </td>
         </tr>
         <tr>
             <td>renderDirectives</td>
             <td>Array</td>
             <td>组件支持的 directive 配置</td>
-            <td style="white-space: pre;">
-                {
-                    format: '',
-                    code: '',
-                }
+            <td>
+<pre>
+    {
+        format: '',
+        code: '',
+    }
+</pre>
             </td>
         </tr>
         <tr>
             <td>renderEvents</td>
             <td>Object</td>
             <td>组件支持的 event 配置</td>
-            <td style="white-space: pre;">
-                {
-                    format: '',
-                    code: '',
-                }
+            <td>
+<pre>
+    {
+        format: '',
+        code: '',
+    }
+</pre>
             </td>
         </tr>
         <tr>
@@ -156,80 +164,99 @@
     <thead>
         <tr>
             <th>api</th>
+            <th>params</th>
             <th>描述</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>toJSON</td>
+            <td>-</td>
             <td>获取节点的 JSON 数据</td>
         </tr>
         <tr>
             <td>setProperty</td>
+            <td>key, value</td>
             <td>设置的节点属性</td>
         </tr>
         <tr>
             <td>active</td>
+            <td>-</td>
             <td>选中组件</td>
         </tr>
         <tr>
             <td>activeClear</td>
+            <td>-</td>
             <td>取消选中组件</td>
         </tr>
         <tr>
             <td>toggleInteractive</td>
+            <td>-</td>
             <td>切换交互式组件的显示状态</td>
         </tr>
         <tr>
             <td>rerender</td>
+            <td>-</td>
             <td>重新渲染组件</td>
         </tr>
         <tr>
             <td>appendChild</td>
+            <td>childNode, slotName</td>
             <td>布局类型组件添加子组件</td>
         </tr>
         <tr>
             <td>insertBefore</td>
+            <td>newNode, referenceNode</td>
             <td>布局类型的组件在指定的子组件之前插入兄弟组件</td>
         </tr>
         <tr>
             <td>insertAfter</td>
+            <td>newNode, referenceNode</td>
             <td>布局类型的组件在指定的子组件之后插入兄弟组件</td>
         </tr>
         <tr>
             <td>pasteNode</td>
+            <td>childNode</td>
             <td>布局类型的组件粘贴一个子组件</td>
         </tr>
         <tr>
             <td>removeChild</td>
+            <td>childNode</td>
             <td>布局类型的组件删除指定的子组件</td>
         </tr>
         <tr>
             <td>cloneNode</td>
+            <td>deep</td>
             <td>组件克隆</td>
         </tr>
         <tr>
             <td>setRenderStyles</td>
+            <td>style</td>
             <td>设置组件 style（全量覆盖）</td>
         </tr>
         <tr>
             <td>setRenderSlots</td>
+            <td>slots, slotName</td>
             <td>设置组件 slot（指定 slot 的全量覆盖）</td>
         </tr>
         <tr>
             <td>setRenderEvents</td>
+            <td>events</td>
             <td>设置组件 event（全量覆盖）</td>
         </tr>
         <tr>
             <td>setRenderDirectives</td>
+            <td>directives</td>
             <td>设置组件 directive（全量覆盖）</td>
         </tr>
         <tr>
             <td>setStyle</td>
+            <td>params1, params2</td>
             <td>设置指定 style name 的值</td>
         </tr>
         <tr>
             <td>setProp</td>
+            <td>params1, params2</td>
             <td>设置指定 prop name 的值</td>
         </tr>
     </tbody>

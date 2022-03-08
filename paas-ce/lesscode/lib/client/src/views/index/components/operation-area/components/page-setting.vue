@@ -142,7 +142,7 @@
 
 <script>
     import { mapGetters, mapMutations } from 'vuex'
-    import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
+    import LC from '@/element-materials/core'
     import pageRouterSelect from '@/components/project/page-router-select'
     import StylePadding from '@/element-materials/modifier/component/styles/strategy/padding'
     import StyleMargin from '@/element-materials/modifier/component/styles/strategy/margin'
@@ -419,14 +419,22 @@
                 try {
                     if (field.id === 'pageRoute' || field.id === 'layoutId') {
                         await this.savePageRoute(field, value)
-                        this.fetchData()
-                        // 导航模板切换后需要获取当前模板的导航数据，并更新更新本地curTemplateData
-                        await this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id })
-                    } else if (field.from === 'style') {
-                        await this.saveStyle()
+                        await Promise.all([
+                            this.fetchData(),
+                            // 导航模板切换后需要获取当前模板的导航数据，并更新更新本地curTemplateData
+                            this.$store.dispatch('layout/getPageLayout', { pageId: this.page.id }),
+                            this.$store.dispatch('route/getProjectPageRoute', {
+                                projectId: this.projectId,
+                                versionId: this.versionId
+                            })
+                        ])
                     } else {
-                        const pageData = await this.saveField(field, value)
-
+                        let pageData = {}
+                        if (field.from === 'style') {
+                            pageData = await this.saveStyle()
+                        } else {
+                            pageData = await this.saveField(field, value)
+                        }
                         this.$store.commit('page/updatePageDetail', pageData)
                         this.$store.commit('page/updatePageList', pageData)
                     }
@@ -444,28 +452,23 @@
                         data: {
                             pageName: value,
                             currentName: this.page.pageName,
-                            projectId: this.project.id,
+                            projectId: this.projectId,
                             versionId: this.versionId,
                             from: 'setting'
                         }
                     })
                 }
                 const fieldData = { [field.id]: value }
-                // 获取当前页面使用中的函数
-                const [usedFuncMap] = getCurUsedFuncs()
                 // 调用更新方法
                 const pageData = {
-                    ...this.page,
+                    id: this.page.id,
                     ...fieldData
                 }
-                pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
-                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
                 const res = await this.$store.dispatch('page/update', {
                     data: {
                         pageData,
                         projectId: this.project.id,
                         versionId: this.versionId,
-                        functionData: Object.keys(usedFuncMap),
                         from: 'setting'
                     }
                 })
@@ -483,17 +486,18 @@
             },
             async saveStyle () {
                 const pageData = {
-                    ...this.page
+                    id: this.page.id
                 }
-                pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)
-                pageData.styleSetting = JSON.stringify(pageData.styleSetting)
+                pageData.styleSetting = JSON.stringify(this.page.styleSetting)
                 const res = await this.$store.dispatch('page/update', {
                     data: {
                         pageData,
                         projectId: this.project.id,
+                        versionId: this.versionId,
                         from: 'setting'
                     }
                 })
+                LC.pageStyle = res.styleSetting
                 return res
             },
             async savePageRoute (field, value) {

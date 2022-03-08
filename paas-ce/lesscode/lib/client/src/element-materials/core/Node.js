@@ -40,6 +40,7 @@ import {
     findRelatedMethodFromRenderEvent
 } from './helper/find-related-method'
 import validator from './helper/validator'
+import { toHyphenate } from './helper/utils'
 
 import getRoot from './get-root'
 import getMaterial from './get-material'
@@ -59,6 +60,8 @@ export default class Node {
         const uid = uuid()
         // 只有刚被拖入才会是 false，画布重新渲染（页面刷新）一直是 true
         this._isMounted = false
+        // 组件被渲染时对应画布中的根原素
+        this.$elm = null
             
         this.tabPanelActive = 'props' // 默认tab选中的面板
         this.componentId = `${name}-${uid}`
@@ -165,6 +168,15 @@ export default class Node {
             customStyle = {}
         } = this.renderStyles
         
+        Object.keys(customStyle).forEach(key => {
+            style[toHyphenate(key)] = customStyle[key]
+        })
+        Object.keys(this.renderStyles).forEach(key => {
+            if (key !== 'customStyle') {
+                style[toHyphenate(key)] = this.renderStyles[key]
+            }
+        })
+        
         return Object.seal(Object.assign(style, customStyle))
     }
     /**
@@ -173,7 +185,10 @@ export default class Node {
      */
     get prop () {
         const props = Object.keys(this.renderProps).reduce((result, propKey) => {
-            result[propKey] = this.renderProps[propKey].renderValue
+            const renderValue = this.renderProps[propKey].renderValue
+            if (renderValue !== '') {
+                result[propKey] = this.renderProps[propKey].renderValue
+            }
             return result
         }, {})
         // 配置了 v-model，获取对应的值
@@ -238,10 +253,12 @@ export default class Node {
         return validator(this)
     }
     /**
-     * @desc 管理组件是已经被渲染
+     * @desc 组件被画布渲染
+     * @param {Element} elm
      */
-    mounted () {
+    mounted (elm) {
         this._isMounted = true
+        this.$elm = elm
     }
     /**
      * @desc 获取节点的 JSON 数据
@@ -293,6 +310,7 @@ export default class Node {
     @notify
     activeClear () {
         activeClear(this)
+        activeNode = null
         return this
     }
     
@@ -372,7 +390,11 @@ export default class Node {
     @readonly
     @notify
     removeChild (child) {
+        if (activeNode && activeNode === child) {
+            activeNode.activeClear()
+        }
         removeChild(this, child)
+        
         return this
     }
 

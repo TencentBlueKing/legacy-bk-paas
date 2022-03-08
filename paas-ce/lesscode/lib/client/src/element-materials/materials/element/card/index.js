@@ -45,23 +45,8 @@ export default {
         default: {
             name: ['layout'],
             type: ['free-layout'],
-            display: 'hidden',
-            val: {
-                name: 'free-layout',
-                type: 'free-layout',
-                slotName: '',
-                slotContainer: true,
-                renderProps: {},
-                renderStyles: { 'height': '200px', 'pointer-events': 'auto' },
-                renderEvents: {},
-                renderSlots: {
-                    default: {
-                        type: 'free-layout-item',
-                        val: [
-                            { children: [] }
-                        ]
-                    }
-                }
+            renderStyles: {
+                'height': '200px'
             }
         }
     }

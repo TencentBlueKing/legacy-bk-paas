@@ -13,7 +13,9 @@
     <layout>
         <div
             id="drawTarget"
+            ref="root"
             :class="$style['canvas']"
+            @click="handleCanvaseClick"
             @mouseleave="handleMouseleave">
             <draggable
                 v-if="isReady"
@@ -57,6 +59,7 @@
         getDragTargetGroup
     } from './components/draggable'
     import Layout from './widget/layout'
+    import ResolveComponent from './resolve-component'
     import ResolveInteractiveComponent from './resolve-interactive-component'
     import { mapGetters } from 'vuex'
 
@@ -65,7 +68,7 @@
         components: {
             Draggable,
             Layout,
-            ResolveComponent: () => import('./resolve-component'),
+            ResolveComponent,
             ResolveInteractiveComponent
         },
         provide () {
@@ -94,40 +97,40 @@
         created () {
             this.componentData = LC.getRoot()
 
-            const nodeTreeReadyCallback = () => {
+            const readyCallback = () => {
                 this.isReady = true
             }
 
             const updateCallback = (event) => {
-                console.log('from target updateCallback == ', event)
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
                     this.autoType()
                 }
             }
             /**
-             * @name interactiveWatcher
+             * @name interactiveCallbak
              * @description 当交互式组件的状态改变，每次更新需要监测是否显示“打开交互式组件”的提示
              */
-            const interactiveWatcher = event => {
+            const interactiveCallbak = event => {
                 const activeNode = LC.getActiveNode()
                 if (activeNode) {
                     this.showNotVisibleMask = activeNode.isInteractiveComponent && !activeNode.interactiveShow
                 }
             }
 
-            LC.addEventListener('ready', nodeTreeReadyCallback)
+            LC.addEventListener('ready', readyCallback)
             LC.addEventListener('update', updateCallback)
-            LC.addEventListener('active', interactiveWatcher)
-            LC.addEventListener('toggleInteractive', interactiveWatcher)
+            LC.addEventListener('active', interactiveCallbak)
+            LC.addEventListener('toggleInteractive', interactiveCallbak)
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('ready', nodeTreeReadyCallback)
+                LC.removeEventListener('ready', readyCallback)
                 LC.removeEventListener('update', updateCallback)
-                LC.removeEventListener('active', interactiveWatcher)
-                LC.removeEventListener('toggleInteractive', interactiveWatcher)
+                LC.removeEventListener('active', interactiveCallbak)
+                LC.removeEventListener('toggleInteractive', interactiveCallbak)
             })
         },
         mounted () {
+            this.componentData.mounted(this.$refs.root)
             const resetCallback = () => {
                 LC.clearMenu()
             }
@@ -143,9 +146,9 @@
             autoType: _.throttle(function () {
                 setTimeout(() => {
                     this.$refs.component.forEach((componentIns, index) => {
-                        componentIns.componentData.setStyle('marginBottom', '10px')
+                        componentIns.componentData.setStyle('margin-bottom', '10px')
                         if (index > 0) {
-                            componentIns.componentData.setStyle('marginTop', '10px')
+                            componentIns.componentData.setStyle('margin-top', '10px')
                         }
                     })
                 })
@@ -158,7 +161,6 @@
              */
             putCheck (target, source) {
                 // 画布区域内部拖动
-                // console.log('from render putCheckputCheckputCheckputCheckputCheckputCheck = ', source, getDragTargetGroup())
                 if (getDragTargetGroup() === 'layout') {
                     return true
                 }
@@ -180,7 +182,20 @@
              * @returns { Boolean }
              */
             handleMouseleave () {
-                LC.triggerEventListener('component-mouserleave')
+                LC.triggerEventListener('componentMouserleave')
+            },
+            /**
+             * @desc 画布编辑区空白区域被点击取消组件的选中状态
+             * @param { Object } event
+             */
+            handleCanvaseClick (event) {
+                if (event.target.classList.contains(this.$style['editor'])) {
+                    const activeNode = LC.getActiveNode()
+                    if (activeNode) {
+                        activeNode.activeClear()
+                    }
+                    LC.triggerEventListener('componentMouserleave')
+                }
             }
         }
     }

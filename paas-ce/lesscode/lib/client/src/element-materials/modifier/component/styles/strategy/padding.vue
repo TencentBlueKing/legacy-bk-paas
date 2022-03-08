@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <style-layout title="内边距">
+    <style-layout title="内边距" :icon-show="true" @reset="handleReset">
         <div class="margin-style-container">
             <div class="margin-style-col-container">
                 <margin-style
@@ -112,6 +112,12 @@
                 const styleValue = this[key + 'Value'] === '' ? '' : this[key + 'Value'] + unit
                 this[key + 'Unit'] = unit
                 this.change(key, styleValue)
+            },
+            handleReset () {
+                this.handleInputChange('paddingBottom', '')
+                this.handleInputChange('paddingTop', '')
+                this.handleInputChange('paddingRight', '')
+                this.handleInputChange('paddingLeft', '')
             }
         }
     }

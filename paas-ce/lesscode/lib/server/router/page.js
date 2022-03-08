@@ -32,7 +32,8 @@ const {
 } = require('../controller/page')
 
 const {
-    syncPageData
+    syncPageData,
+    fixPageData
 } = require('../controller/db-migration-helper')
 
 const router = new Router({
@@ -81,5 +82,6 @@ router.post('/occupyPage', occupyPage)
 router.post('/releasePage', relasePage)
 router.get('/previewimg', getPreviewImg)
 router.get('/syncPageData', syncPageData)
+router.get('/fixPageData', fixPageData)
 
 module.exports = router

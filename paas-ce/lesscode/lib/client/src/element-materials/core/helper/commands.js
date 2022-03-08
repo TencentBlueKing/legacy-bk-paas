@@ -27,7 +27,7 @@ export const popDeleteConfirm = (activeNode) => {
     const { name, componentId } = activeNode
     bkInfoBox({
         title: '删除',
-        subTitle: `确认删除${name}组件【${componentId}】？`,
+        subTitle: `确认删除 ${name}(${componentId}) 组件？`,
         confirmFn: () => {
             remove(activeNode)
         }
@@ -35,10 +35,10 @@ export const popDeleteConfirm = (activeNode) => {
 }
 
 export const popClearLayout = (activeNode) => {
-    const { name, componentId } = activeNode
+    const { type, componentId } = activeNode
     bkInfoBox({
         title: '清空',
-        subTitle: `确认清空${name}组件【${componentId}】？`,
+        subTitle: `确认清空 ${type}(${componentId}) 组件？`,
         confirmFn: () => {
             clearLayout(activeNode)
         }
@@ -47,19 +47,17 @@ export const popClearLayout = (activeNode) => {
 
 export const removeCallBack = () => {
     const activeNode = LC.getActiveNode()
-    const rootNode = LC.getRoot()
-    console.log(rootNode, 'rootNode')
     let msg = ''
-    const { type, componentId, slotContainer } = activeNode
-    if (slotContainer === true) {
-        msg = 'slot容器不能刪除'
-    } else if (type === 'render-grid'
-        && componentId === rootNode.slot.default[0].componentId
-    ) {
-        msg = '画布中至少要有一个栅格布局'
-    } else if (activeNode.parentNode.name === 'form-item') {
+    const parentNode = activeNode.parentNode
+    if (!parentNode.layoutType) {
+        msg = `组件 ${parentNode.type} 的 slot 容器不能刪除`
+    } else if (parentNode.type === 'widget-form-item') {
         msg = '表单内元素不可删除,请在右侧面板编辑'
+    } else if (parentNode.type === 'root'
+        && parentNode.children.length < 2) {
+        msg = '画布中至少要有一个布局组件'
     }
+    
     if (msg) {
         bkMessage({
             theme: 'warning',

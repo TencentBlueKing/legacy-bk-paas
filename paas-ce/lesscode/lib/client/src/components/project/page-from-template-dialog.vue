@@ -447,10 +447,10 @@
                 .template-container{
                     width: 100%;
                     height: calc(100% - 72px);
-                    margin-top: 14px;
+                    margin: 14px 0 0 18px;
 
                     .template-container-wrapper{
-                        width: 100%;
+                        width: calc(100% - 20px);
                         height: 100%;
                         overflow-y: auto;
                         @mixin scroller;
@@ -627,7 +627,7 @@
         .filter-links {
             display: flex;
             align-items: center;
-            margin-top: 10px;
+            margin: 10px 0 0 10px;
 
             .link-item {
                 padding: 6px 12px;

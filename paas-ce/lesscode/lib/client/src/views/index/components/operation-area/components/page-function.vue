@@ -159,7 +159,7 @@
                 const [usedFuncMap] = getCurUsedFuncs()
                 // 调用更新方法
                 const pageData = {
-                    ...this.page,
+                    id: this.page.id,
                     ...fieldData
                 }
                 pageData.lifeCycle = JSON.stringify(pageData.lifeCycle)

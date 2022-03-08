@@ -162,8 +162,6 @@
                     this.projectTemplateList = Object.freeze(projectTemplateList)
                     this.marketTemplateList = Object.freeze(marketTemplateList)
                     this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
-
-                    console.log('from tempalte print == ', this.projectTemplateList, this.marketTemplateList)
                 } catch (err) {
                     this.$bkMessage({
                         theme: 'error',
@@ -174,7 +172,6 @@
                 }
             },
             createFallback (list, index) {
-                console.log('from maste fallsbaen = =', JSON.parse(list[index].content))
                 return LC.parseTemplate(JSON.parse(list[index].content))
             },
             /**
@@ -250,6 +247,7 @@
 
     .panel-template{
         min-height: 100%;
+        height: 100%;
         .category-tabs{
             display: flex;
             border-bottom: 1px solid #ccc;

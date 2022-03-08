@@ -30,8 +30,6 @@
     import RenderComponent from '../../common/group-box/render-component'
     import RenderIcon from '../../common/group-box/render-icon'
 
-    console.log('from base component = ', MaterialConfig)
-
     export default {
         components: {
             SearchBox,

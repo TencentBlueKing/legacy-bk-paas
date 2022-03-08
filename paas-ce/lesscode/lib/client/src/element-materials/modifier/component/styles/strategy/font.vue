@@ -65,7 +65,7 @@
                 <bk-option id="inherit" name="inherit" />
             </bk-select>
         </style-item>
-        <style-item name="行间距" v-if="handleHasKey('lineHeight')">
+        <style-item name="行高" v-if="handleHasKey('lineHeight')">
             <size-input :value="renderValueMap.lineHeight" @change="handleInputChange('lineHeight', $event)">
                 <append-select :value="unitMap.lineHeight" @change="handleSelectChange('lineHeight', $event)" />
             </size-input>
