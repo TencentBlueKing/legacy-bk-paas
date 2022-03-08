@@ -18,9 +18,17 @@ export default {
         pageDetail: {},
         pageRoute: {},
         layoutList: [],
-        routeGroup: []
+        routeGroup: [],
+        platform: 'mobile',
+        mobilePreview: true
     },
     mutations: {
+        setMobilePreview (state, preview) {
+            state.mobilePreview = preview
+        },
+        setPlatform (state, platform) {
+            state.platform = platform
+        },
         setPageDetail (state, page) {
             state.pageDetail = page
         },
@@ -49,7 +57,9 @@ export default {
         pageList: state => state.pageList,
         pageRoute: state => state.pageRoute,
         layoutList: state => state.layoutList,
-        routeGroup: state => state.routeGroup
+        routeGroup: state => state.routeGroup,
+        platform: state => state.platform,
+        mobilePreview: state => state.mobilePreview
     },
     actions: {
         async getPageSetting ({ dispatch, commit }, { pageId, projectId, versionId }) {

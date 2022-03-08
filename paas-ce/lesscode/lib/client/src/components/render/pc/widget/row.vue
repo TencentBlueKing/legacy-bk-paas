@@ -70,5 +70,6 @@
     .row{
         display: flex !important;
         flex: 1 0 100%;
+        width: 100%;
     }
 </style>

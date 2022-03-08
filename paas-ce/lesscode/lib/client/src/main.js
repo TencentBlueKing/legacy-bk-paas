@@ -17,6 +17,7 @@ import 'mavon-editor/dist/css/index.css'
 import '@/common/bkui-vue-complex'
 import '@/common/bkmagic'
 import '@/common/element'
+import '@/common/vant'
 import auth from '@/common/auth'
 
 import App from '@/App'

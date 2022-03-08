@@ -19,15 +19,16 @@
         :value="value"
         @change="handleFontSizeChange">
         <template slot="append">
-            <div class="common-input-slot-text" style="width: 24px;">px</div>
+            <div class="common-input-slot-text" style="width: 24px;">{{defaultUnit}}</div>
         </template>
     </bk-input>
 </template>
 
 <script>
     import { validateNaturalNumber } from '@/common/util'
-
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
     export default {
+        mixins: [defaultUnitMixin],
         props: {
             value: {
                 type: [String, Number],

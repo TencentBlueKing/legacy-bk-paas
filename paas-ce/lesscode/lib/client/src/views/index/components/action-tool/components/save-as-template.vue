@@ -23,11 +23,25 @@
         methods: {
             toggleShowTemplateDialog () {
                 const activeNode = LC.getRoot()
+                const newTemplateNode = activeNode.cloneNode()
+                const excludeInteractiveChildrenJSON = newTemplateNode.children.reduce((result, node) => {
+                    if (!node.isInteractiveComponent) {
+                        result.push(node.toJSON())
+                    }
+                    return result
+                }, [])
+                if (excludeInteractiveChildrenJSON.length < 1) {
+                    this.messageError('页面模板不能为空')
+                    return
+                }
+                const girdNodeJSON = LC.createNode('render-grid').toJSON()
+                const columnNodeJSON = LC.createNode('render-column').setStyle('width', '100%').toJSON()
+                columnNodeJSON.renderSlots.default = excludeInteractiveChildrenJSON
+                girdNodeJSON.renderSlots.default = [columnNodeJSON]
                 LC.triggerEventListener('saveTemplate', {
                     target: activeNode,
                     type: 'saveTemplate',
-                    isWholePage: true,
-                    value: JSON.parse(JSON.stringify(activeNode))
+                    value: girdNodeJSON
                 })
             }
         }

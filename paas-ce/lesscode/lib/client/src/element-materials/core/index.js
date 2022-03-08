@@ -32,7 +32,7 @@ import {
 } from './page-style'
 
 export const root = new Node({
-    name: 'targetData',
+    name: 'root',
     type: 'root'
 })
 

@@ -10,7 +10,7 @@
  */
 import { paramCase, camelCase, camelCaseTransformMerge } from 'change-case'
 
-import { uuid } from '../../shared/util.js'
+import { uuid, unitFilter } from '../../shared/util.js'
 import { replaceFuncKeyword } from '../../shared/function/helper'
 import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
 import safeStringify from '../../client/src/common/json-safe-stringify'
@@ -998,7 +998,7 @@ class PageCode {
                         const v = (typeof val === 'object' ? JSON.stringify(val).replace(/\"/g, '\'') : val)
                         propsStr += `${typeof val === 'string' ? '' : ':'}${propName}="${v}" `
                     }
-                } 
+                }
             }
         }
         const hasVModel = dirProps.filter(item => item.type === 'v-model').length
@@ -1109,7 +1109,7 @@ class PageCode {
                 if (i === 'top' || i === 'left') {
                     tmpStr += `${i}: 0px;\n`
                 } else {
-                    tmpStr += `${paramCase(i)}: ${styles[i]};\n`
+                    tmpStr += `${paramCase(i)}: ${unitFilter(styles[i])};\n`
                 }
             }
 

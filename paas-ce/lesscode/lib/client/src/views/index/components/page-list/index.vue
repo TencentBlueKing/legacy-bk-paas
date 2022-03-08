@@ -133,7 +133,7 @@
              * @desc 页面切换
              */
             handlePageChange (pageId) {
-                if (pageId === this.pageId) {
+                if (!pageId || pageId === this.pageId) {
                     return
                 }
                 this.$bkInfo({
@@ -185,8 +185,9 @@
 <style lang="postcss" scoped>
     .page-select {
         display: flex;
-        width: 342px;
+        min-width: 342px;
         align-items: center;
+        margin-right: 18px;
         .page-name {
             display: flex;
             align-items: center;

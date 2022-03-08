@@ -60,6 +60,8 @@ export default class Node {
         const uid = uuid()
         // 只有刚被拖入才会是 false，画布重新渲染（页面刷新）一直是 true
         this._isMounted = false
+        // 组件被渲染时对应画布中的根原素
+        this.$elm = null
             
         this.tabPanelActive = 'props' // 默认tab选中的面板
         this.componentId = `${name}-${uid}`
@@ -149,7 +151,19 @@ export default class Node {
      * @returns { Object }
      */
     get style () {
-        const style = {}
+        const style = Object.keys(this.renderStyles).reduce((result, key) => {
+            /** 样式获取和处理
+             * 如果是rpx单位，转换为rem，使浏览器可识别和渲染
+             */
+            if (/\d+rpx$/.test(this.renderStyles[key])) {
+                const sizeNumber = /(\d+)rpx$/.exec(this.renderStyles[key])[1] / 750 * 20
+                result[key] = sizeNumber + 'rem'
+                return result
+            } else if (key !== 'customStyle') {
+                result[key] = this.renderStyles[key]
+            }
+            return result
+        }, {})
         const {
             customStyle = {}
         } = this.renderStyles
@@ -239,10 +253,12 @@ export default class Node {
         return validator(this)
     }
     /**
-     * @desc 管理组件是已经被渲染
+     * @desc 组件被画布渲染
+     * @param {Element} elm
      */
-    mounted () {
+    mounted (elm) {
         this._isMounted = true
+        this.$elm = elm
     }
     /**
      * @desc 获取节点的 JSON 数据

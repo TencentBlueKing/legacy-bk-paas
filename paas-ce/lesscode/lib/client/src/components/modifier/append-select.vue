@@ -11,12 +11,12 @@
 
 <template>
     <bk-select :value="value" :ext-cls="extCls" ext-popover-cls="king-select-dropdown" :clearable="false" @change="$emit('change', $event)">
-        <bk-option id="px" name="px"></bk-option>
-        <bk-option id="%" name="%"></bk-option>
+        <bk-option v-for="item in unitList" :key="item" :id="item" :name="item"></bk-option>
     </bk-select>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     export default {
         model: {
             event: 'change'
@@ -32,9 +32,16 @@
             }
         },
         computed: {
+            ...mapGetters('page', ['platform']),
             extCls () {
                 return this.isMarginStyle ? 'king-select-append-input king-select-margin-style' : 'king-select-append-input'
+            },
+            unitList () {
+                return this.platform === 'pc'
+                    ? ['px', '%']
+                    : ['rpx', '%', 'px']
             }
+
         }
     }
 </script>
