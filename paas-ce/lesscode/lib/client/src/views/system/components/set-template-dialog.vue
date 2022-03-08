@@ -11,7 +11,7 @@
             ext-cls="set-template-dialog"
         >
             <bk-form ref="pageTemplateFrom" class="dialog-form" :label-width="120">
-                <bk-form-item label="设为项目模板" required property="isOffcial" error-display-type="normal">
+                <bk-form-item label="是否公开" required property="isOffcial" error-display-type="normal">
                     <bk-radio-group v-model="formData.isOffcial">
                         <bk-radio :value="1" style="margin-right: 20px;">是</bk-radio>
                         <bk-radio :value="0">否</bk-radio>
