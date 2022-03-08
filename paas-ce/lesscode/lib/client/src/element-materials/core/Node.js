@@ -85,8 +85,15 @@ export default class Node {
         this.isActived = false
     }
     /**
-     * @desc 组件 material 配置
+     * @desc 是否是根节点
      * @returns { Boolean }
+     */
+    get root () {
+        return this.type === 'root'
+    }
+    /**
+     * @desc 组件 material 配置
+     * @returns { Object }
      */
     get material () {
         return getMaterial(this.type)

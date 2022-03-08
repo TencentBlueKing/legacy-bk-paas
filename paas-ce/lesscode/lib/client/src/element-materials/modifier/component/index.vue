@@ -45,44 +45,6 @@
     import ModifierEvents from './events'
     import ModifierDirectives from './directives'
 
-    // const dataClean = data => {
-    //     const isInvalid = val => {
-    //         return val === null || val === undefined
-    //     }
-    //     const result = {
-    //         renderStyles: {},
-    //         renderProps: {}
-    //     }
-    //     if (data.renderStyles) {
-    //         const styles = data.renderStyles
-    //         Object.keys(styles).forEach(key => {
-    //             if (isInvalid(styles[key]) || styles[key] === 'px') {
-    //                 return
-    //             }
-    //             result.renderStyles[key] = styles[key]
-    //         })
-    //     }
-    //     if (data.renderProps) {
-    //         const props = data.renderProps
-    //         Object.keys(props).forEach(key => {
-    //             if (isInvalid(props[key].val)) {
-    //                 return
-    //             }
-    //             result.renderProps[key] = props[key]
-    //         })
-    //     }
-    //     if (data.renderEvents) {
-    //         result.renderEvents = { ...data.renderEvents }
-    //     }
-    //     if (data.renderDirectives) {
-    //         result.renderDirectives = [...data.renderDirectives]
-    //     }
-    //     if (data.renderSlots) {
-    //         result.renderSlots = { ...data.renderSlots }
-    //     }
-    //     return result
-    // }
-
     export default {
         name: '',
         inheritAttrs: false,
