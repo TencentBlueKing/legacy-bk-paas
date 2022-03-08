@@ -1,23 +1,20 @@
 <template>
     <div
-        class="lesscode-edit-action-menu"
+        :class="$style['menu']"
         :style="style"
-        role="action-menu">
+        role="lesscode-menu">
         <div
             v-for="item in menuList"
             :key="item.name"
-            class="item"
+            :class="$style['item']"
             @click="handleExec(item.command)">
             {{ item.name }}
         </div>
     </div>
 </template>
 <script>
+    import LC from '../index'
     import getActiveNode from '../get-active-node'
-    import {
-        removeCallBack,
-        popClearLayout
-    } from '../helper/commands'
 
     export default {
         name: '',
@@ -37,32 +34,47 @@
             }
         },
         created () {
-            this.activeNode = getActiveNode()
-            if (this.activeNode.type === 'free-layout') {
+            const activeNode = getActiveNode()
+            if (activeNode.type === 'free-layout') {
                 this.menuList = [
-                    { name: '删除自由布局', command: removeCallBack },
-                    { name: '清空自由布局', command: popClearLayout }
+                    {
+                        name: '删除自由布局',
+                        command: 'remove'
+                    },
+                    {
+                        name: '清空自由布局',
+                        command: 'clearLayout'
+                    }
                 ]
-            } else if (this.activeNode.type === 'render-grid') {
+            } else if (activeNode.type === 'render-column') {
                 this.menuList = [
-                    { name: '删除栅格布局', command: removeCallBack },
-                    { name: '清空栅格布局', command: popClearLayout }
+                    {
+                        name: '删除列',
+                        command: 'remove'
+                    },
+                    {
+                        name: '清空列',
+                        command: 'clearLayout'
+                    }
                 ]
             } else {
                 this.menuList = [
-                    { name: '删除', command: removeCallBack }
+                    {
+                        name: '删除',
+                        command: 'remove'
+                    }
                 ]
             }
         },
         methods: {
             handleExec (command) {
-                command(this.activeNode)
+                LC.execCommand(command)
             }
         }
     }
 </script>
-<style lang="postcss">
-    .lesscode-edit-action-menu{
+<style lang="postcss" module>
+    .menu{
         z-index: 10000000;
         border: 1px solid #eee;
         box-shadow: 0 0.5em 1em 0 rgb(0 0 0 / 10%);
