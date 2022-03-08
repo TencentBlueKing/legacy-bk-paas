@@ -185,7 +185,7 @@
                             theme: 'success',
                             message: `${this.actionName}成功`
                         })
-                        this.refreshList()
+                        this.refreshList(params)
                         this.isShow = false
                     }
                 } catch (err) {
