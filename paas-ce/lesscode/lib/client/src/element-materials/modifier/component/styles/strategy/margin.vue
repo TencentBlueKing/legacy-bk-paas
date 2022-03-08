@@ -73,7 +73,6 @@
             }
         },
         data () {
-            console.log(this.defaultUnit, 'fuck unit')
             return {
                 marginTopValue: splitValueAndUnit('value', this.value.marginTop),
                 marginRightValue: splitValueAndUnit('value', this.value.marginRight),

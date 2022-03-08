@@ -36,6 +36,8 @@ const fse = require('fs-extra')
 
 const DIR_PATH = '.'
 
+const SHARE_PATH = `${DIR_PATH}/lib/shared/`
+
 const STATIC_URL = `${DIR_PATH}/lib/server/project-template/`
 
 const projectCode = {
@@ -181,9 +183,14 @@ const projectCode = {
                 const routeMap = {}
 
                 let isUseElement = false
+                let hasMobilePage = false
                 routeList.forEach((route) => {
                     routeMap[route.pageCode] = route.pageId
 
+                    // 有一个页面是移动端，则要引入Vant-ui
+                    if (!hasMobilePage) {
+                        hasMobilePage = route.platform === 'MOBILE'
+                    }
                     // 每个 route 是一个页面，只有要一个页面使用了 element，那么其他页面就不用检测是否使用了
                     if (!isUseElement) {
                         const targetData = JSON.parse(route.content || '[]')
@@ -382,27 +389,42 @@ const projectCode = {
                     return content.replace(/\$\{stateStr\}/, storeStr.join(',\n'))
                 })
 
-                // 对 element 组件库的处理
+                /**
+                 * 对element、vant处理
+                 */
                 const mainFilePath = path.join(targetPath, 'lib/client/src/main.js')
-                const mainFileContent = fs.readFileSync(mainFilePath, 'utf8')
+                const remJS = fs.readFileSync(path.join(SHARE_PATH, 'rem.js'), 'utf8')
+                let mainFileContent = fs.readFileSync(mainFilePath, 'utf8')
+
                 if (isUseElement) {
-                    fs.writeFileSync(
-                        mainFilePath,
-                        mainFileContent.replace(/\$\{importElementLib\}/, 'import \'@/common/element\''),
-                        'utf8'
-                    )
+                    mainFileContent = mainFileContent.replace(/\$\{importElementLib\}/, 'import \'@/common/element\'')
                     await this.writePackageJSON(
                         path.join(targetPath, 'package.json'),
                         [{ name: 'element-ui', version: 'latest' }]
                     )
                 } else {
-                    fs.writeFileSync(
-                        mainFilePath,
-                        mainFileContent.replace(/\$\{importElementLib\}/, ''),
-                        'utf8'
-                    )
+                    mainFileContent = mainFileContent.replace(/\$\{importElementLib\}/, '')
                     fs.unlinkSync(path.join(targetPath, 'lib/client/src/common/element.js'))
                 }
+
+                if (hasMobilePage) {
+                    mainFileContent = mainFileContent.replace(/\$\{importVantLib\}/, 'import \'@/common/vant\'')
+                    mainFileContent = mainFileContent.replace(/\$\{remJs\}/, remJS)
+                    await this.writePackageJSON(
+                        path.join(targetPath, 'package.json'),
+                        [{ name: 'vant', version: 'latest' }]
+                    )
+                } else {
+                    mainFileContent = mainFileContent.replace(/\$\{importVantLib\}/, '')
+                    mainFileContent = mainFileContent.replace(/\$\{remJs\}/, '')
+                    fs.unlinkSync(path.join(targetPath, 'lib/client/src/common/vant.js'))
+                }
+
+                fs.writeFileSync(
+                    mainFilePath,
+                    mainFileContent,
+                    'utf8'
+                )
 
                 await this.generateDataSource(dataTables, dataTableModifyRecords, targetPath)
                 resolve('success')
