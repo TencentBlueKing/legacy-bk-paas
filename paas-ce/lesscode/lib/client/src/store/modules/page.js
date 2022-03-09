@@ -54,7 +54,7 @@ export default {
         pageRoute: state => state.pageRoute,
         layoutList: state => state.layoutList,
         routeGroup: state => state.routeGroup,
-        platform: state => state.pageDetail.pageType,
+        platform: state => state.pageDetail.pageType ? state.pageDetail.pageType : 'PC',
         mobilePreview: state => state.mobilePreview
     },
     actions: {
