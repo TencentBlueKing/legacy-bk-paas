@@ -42,11 +42,6 @@ export default {
             val: false,
             tips: '是否朴素按钮'
         },
-        square: {
-            type: 'boolean',
-            val: false,
-            tips: '是否方形按钮'
-        },
         round: {
             type: 'boolean',
             val: false,

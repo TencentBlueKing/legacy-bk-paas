@@ -9,41 +9,30 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import grid1 from '../bk/grid/column1'
-import grid2 from '../bk/grid/column2'
-import grid3 from '../bk/grid/column3'
-import grid4 from '../bk/grid/column4'
-import freeLayout from '../bk/free-layout'
-
-import paragraph from './paragraph'
-
-// Basic
-import button from './button'
-import cell from './cell'
-
-// import calendar from './calendar'
- 
-// Form
- 
-// 数据
- 
-// 反馈
- 
-// 导航
- 
-// 其他
- 
-const vantComponents = Object.seal([
-    grid1,
-    grid2,
-    grid3,
-    grid4,
-    freeLayout,
-    paragraph,
-    button,
-    cell
-])
- 
-export default vantComponents
- 
-export const vantComponentGroupList = Array.from(new Set(vantComponents.map(item => item.group)))
+export default {
+    name: 'van-calendar',
+    type: 'van-calendar',
+    // bk-drag-custom-comp-default
+    icon: 'bk-drag-button',
+    interactiveShow: true,
+    displayName: '日历',
+    group: '基础',
+    events: [
+        { name: 'click', tips: '点击时调用该事件函数，事件回调参数 (e: Event)' }
+    ],
+    styles: ['size', 'padding', 'margin', 'display'],
+    renderStyles: {
+    },
+    directives: [
+        {
+            type: 'v-model',
+            prop: 'value'
+        }
+    ],
+    props: {
+        value: {
+            type: 'boolean',
+            val: false
+        }
+    }
+}
