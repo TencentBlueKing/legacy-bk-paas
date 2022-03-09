@@ -9,24 +9,42 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import bkComponents, { bkComponentGroupList } from './bk'
-import elementComponents, { elementComponentGroupList } from './element'
-import vantComponents, { vantComponentGroupList } from './vant'
+import grid1 from '../bk/grid/column1'
+import grid2 from '../bk/grid/column2'
+import grid3 from '../bk/grid/column3'
+import grid4 from '../bk/grid/column4'
+import freeLayout from '../bk/free-layout'
 
-import { componentConfigs as complexComponentConfigs } from '@blueking/bkui-vue-complex'
+import paragraph from './paragraph'
 
-complexComponentConfigs.forEach(item => {
-    item.group = '复合组件'
-    item.isComplexComponent = true
-    item.icon = item.icon || 'bk-drag-custom-comp-default'
-})
-bkComponentGroupList.push('复合组件')
+// Basic
+import button from './button'
+import cell from './cell'
 
-export default {
-    bk: bkComponents.concat(...complexComponentConfigs),
-    bkComponentGroupList,
-    element: elementComponents,
-    elementComponentGroupList,
-    vant: vantComponents,
-    vantComponentGroupList
-}
+// import calendar from './calendar'
+ 
+// Form
+ 
+// 数据
+ 
+// 反馈
+ 
+// 导航
+ 
+// 其他
+ 
+const vantComponents = Object.seal([
+    grid1,
+    grid2,
+    grid3,
+    grid4,
+    freeLayout,
+    paragraph,
+    button,
+    cell,
+    calendar
+])
+ 
+export default vantComponents
+ 
+export const vantComponentGroupList = Array.from(new Set(vantComponents.map(item => item.group)))

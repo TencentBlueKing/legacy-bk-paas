@@ -464,7 +464,7 @@ export function getWindowHeight () {
  *
  * @return {string} uuid
  */
-export function uuid (len = 8, radix = 16) {
+export function uuid (len = 5, radix = 16) {
     const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
     const uuid = []
     radix = radix || chars.length
