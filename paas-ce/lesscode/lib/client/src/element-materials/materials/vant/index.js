@@ -41,8 +41,7 @@ const vantComponents = Object.seal([
     freeLayout,
     paragraph,
     button,
-    cell,
-    calendar
+    cell
 ])
  
 export default vantComponents
