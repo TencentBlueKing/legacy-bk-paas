@@ -48,8 +48,8 @@ ActionEnum = enum(
 
 ActionNameDict = {
     ActionEnum.ACCESS_DEVELOPER_CENTER: _(u"访问开发者中心"),
-    ActionEnum.DEVELOP_APP: _(u"开发SaaS应用及外链应用"),
-    ActionEnum.MANAGE_SMART: _(u"管理S-mart应用"),
+    ActionEnum.DEVELOP_APP: _(u"管理应用"),
+    ActionEnum.MANAGE_SMART: _(u"Smart应用上传及查看列表"),
     ActionEnum.OPS_SYSTEM: _(u"系统维护"),
     ActionEnum.MANAGE_APIGATEWAY: _(u"API网关维护"),
 }

@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.30
+    - bugfix: bkima permission name
+
 # 2.13.29
     - update: bkiam action name/description
 
