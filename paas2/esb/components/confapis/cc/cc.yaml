@@ -1098,7 +1098,7 @@
   label: 根据主机条件信息查询主机详情及其所属的拓扑信息
   label_en: list host's detail info and its topology it belongs to
   suggest_method: POST
-  api_type: operate
+  api_type: query
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/findmany/hosts/detail_topo
   dest_http_method: POST
@@ -1109,7 +1109,7 @@
   label: 查询模型实例
   label_en: search object instances
   suggest_method: POST
-  api_type: operate
+  api_type: query
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/search/instances/object/{bk_obj_id}
   dest_http_method: POST
@@ -1119,7 +1119,7 @@
   label: 查询模型实例数量
   label_en: count object instances num
   suggest_method: POST
-  api_type: operate
+  api_type: query
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/count/instances/object/{bk_obj_id}
   dest_http_method: POST
@@ -1129,7 +1129,7 @@
   label: 查询模型实例关系
   label_en: search instance associations
   suggest_method: POST
-  api_type: operate
+  api_type: query
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/search/instance_associations/object/{bk_obj_id}
   dest_http_method: POST
@@ -1139,7 +1139,7 @@
   label: 查询模型实例关系数量
   label_en: count instance associations num
   suggest_method: POST
-  api_type: operate
+  api_type: query
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/count/instance_associations/object/{bk_obj_id}
   dest_http_method: POST
@@ -1149,7 +1149,7 @@
   label: 查询业务主线实例拓扑源与目标节点的关系信息
   label_en: search the brief relations of the source object instance with the destination object instance.
   suggest_method: POST
-  api_type: operate
+  api_type: query
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/find/topo/biz/brief_node_relation
   dest_http_method: POST
@@ -1169,10 +1169,70 @@
   label: 批量创建模型实例关联关系
   label_en: batch create association between object's instance
   suggest_method: POST
-  api_type: query
+  api_type: operate
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/createmany/instassociation
   dest_http_method: POST
+
+- path: /v2/cc/create_business_set/
+  name: create_business_set
+  label: 创建业务集
+  label_en: create business set
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/create/biz_set
+  dest_http_method: POST
+
+- path: /v2/cc/batch_delete_business_set/
+  name: batch_delete_business_set
+  label: 批量删除业务集
+  label_en: delete business set batch
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/deletemany/biz_set
+  dest_http_method: POST
+
+- path: /v2/cc/list_business_in_business_set/
+  name: list_business_in_business_set
+  label: 查询业务集中的业务列表
+  label_en: list business in business set
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/find/biz_set/biz_list
+  dest_http_method: POST
+
+- path: /v2/cc/list_business_set/
+  name: list_business_set
+  label: 查询业务集
+  label_en: list business set
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/biz_set
+  dest_http_method: POST
+
+- path: /v2/cc/list_business_set_topo/
+  name: list_business_set_topo
+  label: 查询业务集拓扑
+  label_en: list business set topo
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/find/biz_set/topo_path
+  dest_http_method: POST
+
+- path: /v2/cc/batch_update_business_set/
+  name: batch_update_business_set
+  label: 批量更新业务集信息
+  label_en: batch update business set info
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/updatemany/biz_set
+  dest_http_method: PUT
 
 - path: /v2/cc/find_host_service_template/
   name: list_host_service_template_id

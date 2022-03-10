@@ -52,7 +52,13 @@ Universal messaging interface
     "result": true,
     "code": 0,
     "message": "OK",
-    "data": [],
-    "request_id": "sdfdfdfsdfasdasdasas"
 }
 ```
+
+### Return Result Description
+
+| Field      | Type      | Description      |
+|-----------|----------|-----------|
+|  result   |    bool    |      return result, true for success, false for failure  |
+|  code     |    int     |      return code, 0 for success, other values for failure |
+|  message  |    string  |      error message |

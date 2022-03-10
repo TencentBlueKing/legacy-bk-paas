@@ -15,9 +15,11 @@ watch and get the change of a kind of resource's event.
 | bk_fields           | array string   | Depends on resource | the resource event fields you want to return, the host resource need to be set.  |
 | bk_start_from       | Int64          | No     | watch from a unix seconds time, It is the number of seconds that have elapsed since the Unix epoch, minus leap seconds;  |
 | bk_cursor           | string         | No     | a cursor to represent the event you are watched at, you can use a cursor to watch the next event after it. |
-| bk_resource         | string         | Yes     | resource you can watch, now is host, host_relation, biz, set, module, process, object_instance, mainline_instance. "host" means a host's detail info, "host_relation" means host's relation with biz, set and module, "biz" means a biz's detail info, "set" means a set's detail info, "module" means a module's detail info, "process" means a process's detail info, object_instance means common object instance event, mainline_instance means mainline object instance event. |
+| bk_resource         | string         | Yes     | resource you can watch, now is host, host_relation, biz, set, module, process, object_instance, mainline_instance, biz_set, biz_set_relation. "host" means a host's detail info, "host_relation" means host's relation with biz, set and module, "biz" means a biz's detail info, "set" means a set's detail info, "module" means a module's detail info, "process" means a process's detail info, "object_instance" means common object instance event, "mainline_instance" means mainline object instance event, "biz_set" means biz set event info, "biz_set_relation" means biz set to biz relation event info. |
 | bk_supplier_account | string         | Yes    | supplier account                                                  |
 | bk_filter           | object         | No     | filter condition                                                  |
+
+**Note: The biz_set_relation event will be triggered when biz set is added, deleted or its "bk_scope" field is updated, and when biz is added, deleted or updated which results in its relationship with biz set changed. The event detail includes the ID of the biz set whose relation changed and all of the biz IDs it contains after the change**
 
 #### bk_filter
 
@@ -145,6 +147,21 @@ common object instance:
 }
 ```
 
+#### biz_set_relation resource details example：
+```json
+{
+	"bk_biz_set_id": 1,
+	"bk_biz_ids": [1 ,2, 3]
+}
+```
+
+- biz_set_relation resource bk_detail description
+
+| Field         | Type      | Description                                     |
+| ------------- | --------- | ----------------------------------------------- |
+| bk_biz_set_id | int       | ID of the biz set whose relation to biz changes |
+| bk_biz_ids    | int array | all of the biz ID list that biz set contains    |
+
 
 
 ### Usage description
@@ -172,7 +189,6 @@ how to use this api：
 the event's expired time is 3h at now. if event is expire, then it will be removed from system
 , and the cursor target to it will turn to illegal. you can watch resource with "start from now
 " or "start from a time" policy to watch events again.
-
 
 
 

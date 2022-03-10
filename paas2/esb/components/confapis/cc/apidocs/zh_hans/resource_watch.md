@@ -42,9 +42,11 @@
 | bk_fields           | array string   | 看情况 | 返回的事件中需要返回的字段列表，目前监听主机资源该字段为必填字段，不能置空，主机关系可以置空。置空则默认为返回所有字段。 |
 | bk_start_from       | Int64          | 否     | 监听事件的起始时间，该值为unix time的秒数，即为从UTC1970年1月1日0时0分0秒起至你要watch的时间点的总秒数。 |
 | bk_cursor           | string         | 否     | 监听事件的游标，代表了要开始或者继续watch(监听)的事件地址，系统会返回这个游标的下一个、或一批事件。 |
-| bk_resource         | string         | 是     | 要监听的资源类型，枚举值为：host, host_relation, biz, set, module, process, object_instance, mainline_instance。其中host代表主机详情事件，host_relation代表主机的关系事件，biz代表业务详情事件，set代表集群详情事件，module代表模块详情事件，process代表进程详情事件，object_instance代表通用模型实例事件，mainline_instance代表主线模型实例事件。 |
+| bk_resource         | string         | 是     | 要监听的资源类型，枚举值为：host, host_relation, biz, set, module, process, object_instance, mainline_instance, biz_set, biz_set_relation。其中host代表主机详情事件，host_relation代表主机的关系事件，biz代表业务详情事件，set代表集群详情事件，module代表模块详情事件，process代表进程详情事件，object_instance代表通用模型实例事件，mainline_instance代表主线模型实例事件，biz_set代表业务集事件，biz_set_relation代表业务集和业务的关系事件。 |
 | bk_supplier_account | string         | 是     | 开发商账号                                                   |
 | bk_filter           | object         | 否     | 过滤条件                                                     |
+
+**注: biz_set_relation事件会在业务集的新增、删除和更新"bk_scope"字段时和业务的新增、删除、更新涉及到业务集关系变更时触发。事件详情中会返回关系发生了变更的业务集的ID和该业务集所包含的所有业务ID列表**
 
 #### bk_filter
 
@@ -156,10 +158,6 @@
 ```json
 
 {
-    "bk_app_code": "esb_test",
-    "bk_app_secret": "xxx",
-    "bk_username": "xxx",
-    "bk_token": "xxx",
 	"bk_biz_id" : 1,
 	"bk_host_id" : 2,
 	"bk_module_id" : 3,
@@ -183,6 +181,20 @@
 }
 ```
 
+#### biz_set_relation资源 bk_detail字段数据示例：
+```json
+{
+	"bk_biz_set_id": 1,
+	"bk_biz_ids": [1 ,2, 3]
+}
+```
+
+- biz_set_relation资源 bk_detail数据描述
+
+| 名称          | 类型      | 描述                                   |
+| ------------- | --------- | -------------------------------------- |
+| bk_biz_set_id | int       | 业务集和业务的关系发生了变化的业务集ID |
+| bk_biz_ids    | int array | 该业务集所包含的所有业务的ID列表      |
 
 
 ### 使用说明
