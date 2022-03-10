@@ -39,10 +39,15 @@ Public voice notice
 ```python
 {
     "result": true,
-    "code": "00",
-    "message": "",
-    "data": {
-        "instance_id": "2662152044"
-    }
+    "code": 0,
+    "message": ""
 }
 ```
+
+### Return Result Description
+
+| Field      | Type      | Description      |
+|-----------|----------|-----------|
+|  result   |    bool    |      true or false, indicate success or failure                      |
+|  code     |    int     |      0 indicates success, non-0 indicates failure                    |
+|  message  |    string  |      operation result description                                    |

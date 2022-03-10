@@ -54,6 +54,7 @@ Query the type of send_msg component that supports sending messages
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
 |  result   |    bool    |      true or false, indicate success or failure                      |
+|  code     |    int     |      0 indicates success, non-0 indicates failure                    |
 |  data     |    list    |      data returned when result is true, details are described below  |
 
 #### data

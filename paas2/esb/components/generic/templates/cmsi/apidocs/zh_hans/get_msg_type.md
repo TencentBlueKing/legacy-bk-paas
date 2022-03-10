@@ -53,7 +53,8 @@
 
 | 字段      | 类型      | 描述      |
 |-----------|----------|-----------|
-|  result   |    bool    |      true/false 操作是否成功     |
+|  result   |    bool    |      true/false 查询是否成功     |
+|  code     |    int     |      查询是否成功，为 0 表示成功，非 0 表示失败 |
 |  data     |    list    |      result=true 时成功数据，详细信息请见下面说明      |
 
 ####  data

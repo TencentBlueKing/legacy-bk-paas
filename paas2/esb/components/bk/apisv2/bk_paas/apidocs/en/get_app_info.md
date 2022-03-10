@@ -41,3 +41,19 @@ get application info, bulk supported
     ]
 }
 ```
+
+### Return Result Description
+
+| Field      | Type      | Description      |
+|-----------|----------|-----------|
+|  result   |    bool    |      true or false, indicate success or failure                      |
+|  code     |    int     |      0 indicates success, non-0 indicates failure                    |
+|  message  |    string  |      result description |
+|  data     |    list    |      result data, details are described below  |
+
+#### data
+
+| Field      | Type      | Description      |
+|-----------|----------|-----------|
+|  bk_app_code     |    string      |    application code     |
+|  bk_app_name     |    string      |    application name     |
