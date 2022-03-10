@@ -61,6 +61,6 @@
 
 | 字段      | 类型      | 描述      |
 |-----------|----------|-----------|
-|  result   |    bool    |      true/false 操作是否成功     |
-|  code     |    int     |      操作是否成功，为 0 表示成功，非 0 表示失败 |
-|  message  |    string  |      操作结果说明      |
+|  result   |    bool    |      返回结果，true 为成功，false 为失败     |
+|  code     |    int     |      返回码，0 表示成功，其它值表示失败 |
+|  message  |    string  |      错误信息      |
