@@ -20,6 +20,7 @@ import paragraph from './paragraph'
 // Basic
 import button from './button'
 import cell from './cell'
+import icon from './icon'
 
 // import calendar from './calendar'
  
@@ -41,7 +42,8 @@ const vantComponents = Object.seal([
     freeLayout,
     paragraph,
     button,
-    cell
+    cell,
+    icon
 ])
  
 export default vantComponents
