@@ -54,7 +54,13 @@
     "result": true,
     "code": 0,
     "message": "OK",
-    "data": [],
-    "request_id": "sdfdfdfsdfasdasdasas"
 }
 ```
+
+### 返回结果参数说明
+
+| 字段      | 类型      | 描述      |
+|-----------|----------|-----------|
+|  result   |    bool    |      true/false 操作是否成功     |
+|  code     |    int     |      操作是否成功，为 0 表示成功，非 0 表示失败 |
+|  message  |    string  |      操作结果说明      |
