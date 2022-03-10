@@ -1,7 +1,7 @@
 Release Log
 ===============================
 # 2.13.31
-    - update: esb update cmsi, usermanage apidocs, update monitor_v3 apis
+    - update: esb update cmsi, usermanage apidocs, update cc, monitor_v3 apis
 
 # 2.13.30
     - bugfix: bkima permission name
