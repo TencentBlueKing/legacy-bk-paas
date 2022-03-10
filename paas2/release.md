@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.31
+    - update: esb update cmsi, usermanage apidocs, update monitor_v3 apis
+
 # 2.13.30
     - bugfix: bkima permission name
 
@@ -8,9 +11,6 @@ Release Log
 
 # 2.13.28
     - update: s-mart app use `develop_app` permission supported by IAM
-
-# 2.13.27
-    - update: fix console page display
 
 # 2.13.26
     - update: esb update cc confapis; esb update cmsi apidocs
@@ -93,6 +93,12 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.43
+    - update: esb update cmsi, usermanage apidocs, update monitor_v3 apis
+
+# 2.12.42
+    - update: fix console page display
 
 # 2.12.39
     - update: esb update channel is_hidden, add export_official_api_docs command, update api docs
