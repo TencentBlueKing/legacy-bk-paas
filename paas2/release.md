@@ -12,6 +12,9 @@ Release Log
 # 2.13.28
     - update: s-mart app use `develop_app` permission supported by IAM
 
+# 2.13.27
+    - update: fix console page display
+
 # 2.13.26
     - update: esb update cc confapis; esb update cmsi apidocs
     - update: esb update title/footer
