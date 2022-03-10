@@ -1023,17 +1023,6 @@
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
-  dest_path: /api/v3/meta/check_or_create_kafka_storage/
-  is_hidden: true
-  label: 创建实时监控表对应的kafka存储
-  label_en: check or create kafka storage
-  name: check_or_create_kafka_storage
-  path: /v2/monitor_v3/check_or_create_kafka_storage/
-  method: POST
-
-- api_type: operate
-  comp_codename: generic.v2.monitor_v3.monitor_v3_component
-  dest_http_method: POST
   dest_path: /api/v4/base/remote_call/
   is_hidden: true
   label: 远程调用
@@ -1382,4 +1371,15 @@
   label_en: null
   name: search_alert_by_event
   path: /v2/monitor_v3/search_alert_by_event/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/action_instance/get_action_params_by_config/
+  is_hidden: true
+  label: 根据套餐ID获取当前告警处理参数
+  label_en: null
+  name: get_action_params_by_config
+  path: /v2/monitor_v3/get_action_params_by_config/
   method: POST

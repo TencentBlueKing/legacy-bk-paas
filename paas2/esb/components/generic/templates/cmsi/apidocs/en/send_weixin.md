@@ -46,7 +46,15 @@ Send WeChat message, with WeChat official account message and WeChat corporation
 ```python
 {
     "result": true,
-    "code": "00",
+    "code": 0,
     "message": "OK",
 }
 ```
+
+### Return Result Description
+
+| Field      | Type      | Description      |
+|-----------|----------|-----------|
+|  result   |    bool    |      return result, true for success, false for failure  |
+|  code     |    int     |      return code, 0 for success, other values for failure |
+|  message  |    string  |      error message |

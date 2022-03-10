@@ -20,6 +20,7 @@ Query the type of send_msg component that supports sending messages
 {
     "result": true,
     "code": 0,
+    "message": "",
     "data": [
         {
             "type": "weixin",
@@ -53,8 +54,10 @@ Query the type of send_msg component that supports sending messages
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
-|  result   |    bool    |      true or false, indicate success or failure                      |
-|  data     |    list    |      data returned when result is true, details are described below  |
+|  result   |    bool    |      return result, true for success, false for failure  |
+|  code     |    int     |      return code, 0 for success, other values for failure |
+|  message  |    string  |      error message |
+|  data     |    list    |      result data, details are described below  |
 
 #### data
 
