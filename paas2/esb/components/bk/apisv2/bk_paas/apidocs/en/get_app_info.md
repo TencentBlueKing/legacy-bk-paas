@@ -46,9 +46,9 @@ get application info, bulk supported
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
-|  result   |    bool    |      true or false, indicate success or failure                      |
-|  code     |    int     |      0 indicates success, non-0 indicates failure                    |
-|  message  |    string  |      result description |
+|  result   |    bool    |      return result, true for success, false for failure  |
+|  code     |    int     |      return code, 0 for success, other values for failure |
+|  message  |    string  |      error message |
 |  data     |    list    |      result data, details are described below  |
 
 #### data
