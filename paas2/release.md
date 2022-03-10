@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.43
+    - update: esb update cmsi, usermanage apidocs, update monitor_v3 apis
+
 # 2.12.42
     - update: fix console page display
 
