@@ -25,6 +25,7 @@
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
 
     export default {
         components: {
@@ -33,6 +34,7 @@
             AppendSelect,
             SizeInput
         },
+        mixins: [defaultUnitMixin],
         props: {
             value: {
                 type: Object,
@@ -49,11 +51,18 @@
         },
         data () {
             return {
-                minWidthValue: splitValueAndUnit('value', this.value.minWidth),
-                minWidthUnit: splitValueAndUnit('unit', this.value.minWidth) || 'px'
+                minWidthValue: '',
+                minWidthUnit: ''
             }
         },
+        created () {
+            this.initData()
+        },
         methods: {
+            initData () {
+                this.minWidthValue = splitValueAndUnit('value', this.value.minWidth)
+                this.minWidthUnit = splitValueAndUnit('unit', this.value.minWidth) || this.defaultUnit
+            },
             handleInputChange (key, val) {
                 const unitMap = {
                     minWidth: this.minWidthUnit

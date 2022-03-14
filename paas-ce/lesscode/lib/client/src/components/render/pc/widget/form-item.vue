@@ -11,6 +11,7 @@
 
 <template>
     <div
+        ref="root"
         :class="{
             [$style['form-item']]: true,
             [$style['inline']]: isInlineLayout
@@ -59,6 +60,9 @@
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
             })
+        },
+        mounted () {
+            this.componentData.mounted(this.$refs.root)
         }
     }
 </script>

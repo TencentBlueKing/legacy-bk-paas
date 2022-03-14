@@ -115,7 +115,6 @@
              * 展开所有父级节点（这样才能看到当前节点）
              */
             const activeCallback = event => {
-                console.log('from componetn treeeee activeCallbackactiveCallbackactiveCallback  == ', event)
                 const activeNode = event.target
 
                 let activeNodeParent = activeNode.parentNode
@@ -242,32 +241,13 @@
                     showInteractiveComponent(null)
                 }
 
-                // render-column 暂时无法被选中
-                // if (componentData.type === 'render-column') {
-                //     const activeNode = LC.getActiveNode()
-                //     if (activeNode) {
-                //         activeNode.activeClear()
-                //     }
-                //     return
-                // }
-
                 // 组件被选中并滚动到视窗内
                 componentData.active()
-                const canvasTarget = document.querySelector(`div[data-component-id="${componentData.componentId}"]`)
-                canvasTarget.scrollIntoView({
+                componentData.$elm.scrollIntoView({
                     behavior: 'smooth',
+                    block: 'center',
                     inline: 'nearest'
                 })
-                // console.log('from aciteve node = ', node, LC.getActiveNode())
-                /** 将画布中的目标节点移动至视区 */
-                // const canvasTarget = document.querySelector(`div[data-component-id="${componentData.componentId}"]`)
-                // const anchorNode = document.createElement('div')
-                // anchorNode.style.position = 'absolute'
-                // anchorNode.style.top = (canvasTarget.offsetTop - 10) + 'px'
-                // anchorNode.style.left = canvasTarget.offsetLeft + 'px'
-                // canvasTarget.parentNode.appendChild(anchorNode)
-                // canvasTarget.scrollIntoView({ behavior: 'smooth', inline: 'nearest' })
-                // canvasTarget.parentNode.removeChild(anchorNode)
             },
             /**
              * @desc 展开节点时检测整棵树的展开状态

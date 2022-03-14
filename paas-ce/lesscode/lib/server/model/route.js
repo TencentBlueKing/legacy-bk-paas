@@ -73,6 +73,7 @@ export default {
                 'route.parentId as parentId',
                 'page.pageCode as pageCode',
                 'page.pageName as pageName',
+                'page.pageType as platform',
                 'page.content as content',
                 'page.deleteFlag as pageDeleteFlag',
                 'page.lifeCycle as lifeCycle',

@@ -29,10 +29,6 @@
         @mouseup="handleMouseup"
         @click.stop="handleClick"
         @contextmenu.stop="handleShowContextmenu">
-        <save-to-template
-            v-if="componentData.layoutType
-                && componentData.parentNode.layoutType
-                && componentData.isActived" />
         <render-component
             :ref="componentData.componentId"
             :component-data="componentData" />
@@ -42,6 +38,16 @@
             <div :class="$style['line-bottom']" key="lineBottom" role="line-bottom" />
             <div :class="$style['line-left']" key="lineLeft" role="line-left" />
         </template>
+        <div
+            v-if="componentData.isActived"
+            :class="$style['tools']">
+            <div :class="$style['tools-btn']">
+                {{ componentData.componentId }}
+            </div>
+            <save-to-template
+                v-if="componentData.layoutType
+                    && componentData.parentNode.layoutType" />
+        </div>
     </div>
 </template>
 <script>
@@ -145,6 +151,7 @@
             /* eslint-disable vue/no-unused-components */
             FreeLayout: () => import('./widget/free-layout'),
             RenderGrid: () => import('./widget/grid'),
+            RenderColumn: () => import('./widget/column'),
             WidgetForm: () => import('./widget/form'),
             WidgetFormItem: () => import('./widget/form-item'),
             ResolveComponent: () => import('./resolve-component'),
@@ -189,6 +196,7 @@
                 const shadowComMap = {
                     'free-layout': true,
                     'render-grid': true,
+                    'render-column': true,
                     'widget-form': true,
                     'widget-form-item': true,
                     'resolve-component': true
@@ -202,19 +210,17 @@
             this.material = this.componentData.material
 
             // 编辑更新
-            const updateCallback = _.throttle((event) => {
-                const {
-                    target
-                } = event
-                if (target.componentId === this.componentData.componentId) {
-                    console.log('print event = ', event)
+            const updateCallback = (event) => {
+                if (event.target.componentId === this.componentData.componentId) {
+                    console.log(`\n${new Date()}`)
+                    console.log('record event : ', event)
                     this.safeStylesWithDisplay()
                     this.safeStyleWithWidth()
                     this.safeStyleWithHeight()
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
-            }, 20)
+            }
             
             const componentHoverCallback = _.throttle(() => {
                 this.isHover = hoverComponentId === this.componentData.componentId
@@ -243,6 +249,7 @@
             this.safeStyleWithWidth()
             this.safeStyleWithHeight()
             this.setDefaultStyleWithAttachToFreelayout()
+            this.componentData.mounted(this.$refs.componentRoot)
             this.$emit('component-mounted')
         },
         beforeDestroy () {
@@ -386,20 +393,6 @@
                 })
             },
             /**
-             * @desc 记录鼠标按下状态，抛出 component-mousedown 事件
-             * @param {Object} event 事件对象
-             */
-            handleMousedown (event) {
-                isMousedown = true
-                this.$emit('component-mousedown', event)
-            },
-            /**
-             * @desc 切换鼠标按下状态
-             */
-            handleMouseup () {
-                isMousedown = false
-            },
-            /**
              * @desc 组件点击事件回调
              */
             handleClick () {
@@ -416,6 +409,20 @@
             handleShowContextmenu (event) {
                 this.componentData.active()
                 LC.showMenu(event)
+            },
+            /**
+             * @desc 记录鼠标按下状态，抛出 component-mousedown 事件
+             * @param {Object} event 事件对象
+             */
+            handleMousedown (event) {
+                isMousedown = true
+                this.$emit('component-mousedown', event)
+            },
+            /**
+             * @desc 切换鼠标按下状态
+             */
+            handleMouseup () {
+                isMousedown = false
             },
             /**
              * @desc 组件 wrapper mousemove 事件回调
@@ -504,6 +511,26 @@
             bottom: 0;
             left: 0;
             border-left-width: 1px;
+        }
+        .tools{
+            position: absolute;
+            top: -22px;
+            left: 0;
+            display: flex;
+            & > * {
+                flex: 0 0 auto;
+            }
+        }
+        .tools-btn{
+            height: 20px;
+            padding: 0 7px;
+            margin-right: 4px;
+            line-height: 20px;
+            text-align: center;
+            background: #3A84FF;
+            border-radius: 2px;
+            color: #fff;
+            text-align: center;
         }
     }
 </style>

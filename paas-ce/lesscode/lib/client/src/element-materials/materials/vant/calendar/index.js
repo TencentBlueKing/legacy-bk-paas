@@ -9,24 +9,30 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import bkComponents, { bkComponentGroupList } from './bk'
-import elementComponents, { elementComponentGroupList } from './element'
-import vantComponents, { vantComponentGroupList } from './vant'
-
-import { componentConfigs as complexComponentConfigs } from '@blueking/bkui-vue-complex'
-
-complexComponentConfigs.forEach(item => {
-    item.group = '复合组件'
-    item.isComplexComponent = true
-    item.icon = item.icon || 'bk-drag-custom-comp-default'
-})
-bkComponentGroupList.push('复合组件')
-
 export default {
-    bk: bkComponents.concat(...complexComponentConfigs),
-    bkComponentGroupList,
-    element: elementComponents,
-    elementComponentGroupList,
-    vant: vantComponents,
-    vantComponentGroupList
+    name: 'van-calendar',
+    type: 'van-calendar',
+    // bk-drag-custom-comp-default
+    icon: 'bk-drag-button',
+    interactiveShow: true,
+    displayName: '日历',
+    group: '基础',
+    events: [
+        { name: 'click', tips: '点击时调用该事件函数，事件回调参数 (e: Event)' }
+    ],
+    styles: ['size', 'padding', 'margin', 'display'],
+    renderStyles: {
+    },
+    directives: [
+        {
+            type: 'v-model',
+            prop: 'value'
+        }
+    ],
+    props: {
+        value: {
+            type: 'boolean',
+            val: false
+        }
+    }
 }

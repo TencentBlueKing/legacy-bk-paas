@@ -20,6 +20,7 @@
             <div
                 id="toolActionBox"
                 class="function-and-tool">
+                <mobile-preview v-if="platform === 'MOBILE'"></mobile-preview>
                 <operation-select v-model="operationType" />
                 <div style="height: 22px; width: 1px; margin: 0 5px; background-color: #dcdee5;" />
                 <!-- 保存、预览、快捷键等tool单独抽离 -->
@@ -63,6 +64,7 @@
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
     import ActionTool from './components/action-tool'
+    import MobilePreview from './components/preview-switch'
 
     console.dir(LC)
 
@@ -78,7 +80,8 @@
             MaterialPanel,
             ModifierPanel,
             OperationArea,
-            ActionTool
+            ActionTool,
+            MobilePreview
         },
         data () {
             return {
@@ -90,7 +93,7 @@
         computed: {
             ...mapGetters(['user']),
             ...mapGetters('drag', ['curTemplateData']),
-            ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('page', ['pageDetail', 'platform']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('variable', ['variableList']),
@@ -139,7 +142,6 @@
             },
             'pageDetail.styleSetting' () {
                 // 页面样式发生变化的时候  reload
-                console.log('styleSettingchange')
                 this.handleUpdatePreview()
             }
         },
@@ -364,6 +366,7 @@
             .function-and-tool {
                 position: relative;
                 display: flex;
+                flex: 1;
                 justify-content: center;
                 align-items: center;
             }
