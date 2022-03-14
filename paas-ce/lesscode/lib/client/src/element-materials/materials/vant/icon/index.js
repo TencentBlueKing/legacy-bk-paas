@@ -27,8 +27,8 @@ export default {
     },
     props: {
         name: {
-            type: 'string',
-            val: 'cart-o',
+            type: 'van-icon',
+            val: 'chat-o',
             tips: '图标名称或图片链接'
         },
         dot: {
