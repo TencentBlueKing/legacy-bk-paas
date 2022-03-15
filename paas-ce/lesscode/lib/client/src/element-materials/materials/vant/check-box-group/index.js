@@ -18,7 +18,7 @@ export default {
     events: [
         {
             name: 'change',
-            tips: '选项发生变化时调用该事件函数，参数为(newValue: String | Number | Boolean, oldValue: String | Number | Boolean)'
+            tips: '当绑定值变化时调用该事件函数，事件回调参数 (names: Array)'
         }
     ],
     styles: ['size', 'padding', 'margin', 'display'],
@@ -35,7 +35,6 @@ export default {
         },
         max: {
             type: ['number', 'string'],
-            val: '0',
             tips: '最大可选数，0为无限制'
         },
         direction: {
