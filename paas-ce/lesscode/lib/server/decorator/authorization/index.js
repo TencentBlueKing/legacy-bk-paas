@@ -8,7 +8,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import dataService from '../../service/data-service'
+import { LCDataService } from '../../service/data-service'
 import projectModel from '../../model/project'
 
 /**
@@ -56,7 +56,7 @@ export const DeleteAuthorization = ({ perm, tableName, getId = ctx => ctx.reques
                     const exitPermCodes = userPermsInfo.permCodes || []
                     const noPermission = needPerms.some(perm => !exitPermCodes.includes(perm))
                     // 判断是不是该资源的创建者
-                    const record = await dataService.findOne(tableName, { id: getId(ctx), deleteFlag: 0 }) || {}
+                    const record = await LCDataService.findOne(tableName, { id: getId(ctx), deleteFlag: 0 }) || {}
                     const userInfo = ctx.session.userInfo
                     const notCreateUser = record.createUser !== userInfo.username
 
