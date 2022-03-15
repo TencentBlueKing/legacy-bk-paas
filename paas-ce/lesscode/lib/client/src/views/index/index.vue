@@ -20,7 +20,6 @@
             <div
                 id="toolActionBox"
                 class="function-and-tool">
-                <mobile-preview v-if="platform === 'MOBILE'"></mobile-preview>
                 <operation-select v-model="operationType" />
                 <div style="height: 22px; width: 1px; margin: 0 5px; background-color: #dcdee5;" />
                 <!-- 保存、预览、快捷键等tool单独抽离 -->
@@ -64,7 +63,6 @@
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
     import ActionTool from './components/action-tool'
-    import MobilePreview from './components/preview-switch'
 
     console.dir(LC)
 
@@ -80,8 +78,7 @@
             MaterialPanel,
             ModifierPanel,
             OperationArea,
-            ActionTool,
-            MobilePreview
+            ActionTool
         },
         data () {
             return {

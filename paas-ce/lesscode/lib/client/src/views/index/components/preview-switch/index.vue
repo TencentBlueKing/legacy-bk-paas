@@ -20,10 +20,9 @@
 <style lang="postcss" scoped>
 .mobile-preview-switcher {
     display: flex;
-    position: absolute;
-    left: 0;
     align-items: center;
     justify-self: flex-start;
+    margin-left: 20px;
     span {
         margin-right: 8px;
     }
