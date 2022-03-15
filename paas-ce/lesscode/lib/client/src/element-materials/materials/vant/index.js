@@ -21,6 +21,8 @@ import paragraph from './paragraph'
 import button from './button'
 import cell from './cell'
 import icon from './icon'
+import image from './image'
+import checkboxGroup from './check-box-group'
 
 // import calendar from './calendar'
  
@@ -43,7 +45,9 @@ const vantComponents = Object.seal([
     paragraph,
     button,
     cell,
-    icon
+    icon,
+    image,
+    checkboxGroup
 ])
  
 export default vantComponents
