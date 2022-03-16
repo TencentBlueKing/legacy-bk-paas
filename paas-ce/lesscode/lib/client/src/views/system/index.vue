@@ -39,6 +39,15 @@
                             <router-link tag="div" class="sub-nav-item" to="/op/stats/comp">自定义组件数据</router-link>
                         </div>
                     </div>
+                    <div :class="['nav-item-parent', { folded: navFolded.pm }]" v-if="isPlatformAdmin">
+                        <div class="nav-item" @click="$set(navFolded, 'pm', !navFolded.pm)">
+                            <i class="bk-icon icon-monitors-cog"></i>平台管理
+                            <i class="bk-drag-icon bk-drag-arrow-down"></i>
+                        </div>
+                        <div class="sub-nav">
+                            <router-link tag="div" class="sub-nav-item" to="/pm/platform/project-member">项目成员</router-link>
+                        </div>
+                    </div>
                 </nav>
             </div>
             <div class="side-ft">

@@ -79,6 +79,9 @@ const OperationStatsProject = () => import(/* webpackChunkName: 'operation-stats
 const OperationStatsFunc = () => import(/* webpackChunkName: 'operation-stats-func' */'@/views/system/operation/stats/func/index.vue')
 const OperationStatsComp = () => import(/* webpackChunkName: 'operation-stats-comp' */'@/views/system/operation/stats/comp/index.vue')
 
+// 平台管理
+const PlatformManageEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/index.vue')
+const ProjectMember = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/project-member/index.vue')
 const routes = [
     {
         path: '/help',
@@ -182,6 +185,22 @@ const routes = [
                         component: OperationStatsComp,
                         meta: {
                             title: '自定义组件数据'
+                        }
+                    }
+                ]
+            },
+            {
+                name: 'pm-entry',
+                path: '/pm',
+                component: PlatformManageEntry,
+                redirect: { name: 'pm-project-member' },
+                children: [
+                    {
+                        path: 'platform/project-member',
+                        name: 'pm-project-member',
+                        component: ProjectMember,
+                        meta: {
+                            title: '项目成员'
                         }
                     }
                 ]
