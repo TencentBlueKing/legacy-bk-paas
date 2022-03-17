@@ -43,7 +43,7 @@
                                 class="mr5"
                                 theme="primary"
                                 @click="editManager(row.id)"
-                            >编辑项目成员</bk-button>
+                            >编辑项目管理员</bk-button>
                         </template>
                         
                     </bk-table-column>
@@ -51,8 +51,8 @@
             </div>
         </div>
         <bk-sideslider :is-show.sync="sideObj.isShow" :title="sideObj.title" quick-close :width="796" @hidden="clearForm">
-            <bk-form :label-width="120" :model="sideObj.form" class="member-form" slot="content">
-                <bk-form-item label="项目成员" :required="true" property="users">
+            <bk-form :label-width="130" :model="sideObj.form" class="member-form" slot="content">
+                <bk-form-item label="项目管理员" :required="true" property="users">
                     <member-selector class="member-form-select" v-model="sideObj.form.users" :user-list.sync="filterUserList"></member-selector>
                 </bk-form-item>
                 <bk-form-item>
