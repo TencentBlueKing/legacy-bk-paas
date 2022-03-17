@@ -9,7 +9,7 @@
             <slot name="left" />
             
         </div>
-        <div id="drawContent" :class="$style['center']">
+        <div id="lesscodeDrawContent" :class="$style['center']">
             <div
                 :class="$style['left-btn']"
                 v-bk-tooltips.right="{
@@ -150,8 +150,8 @@
         .center{
             position: relative;
             height: 100%;
-            padding: 20px;
-            overflow: auto;
+            padding: 20px 0;
+            overflow: hidden;
             @mixin scroller;
         }
     }

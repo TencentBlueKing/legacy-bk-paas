@@ -42,6 +42,13 @@ export function notify (target, name, descriptor) {
         } else if (name === 'activeClear' && isActived !== this.isActived) {
             event.isActived = false
             triggerEventListener('activeClear', event)
+        } else if ([
+            'appendChild',
+            'removeChild',
+            'moveChild'
+        ].includes(name)) {
+            event.child = arguments[0]
+            triggerEventListener(name, event)
         } else {
             triggerEventListener(name, event)
         }

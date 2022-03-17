@@ -634,6 +634,7 @@
     .page-setting {
         padding: 5px 40px 30px;
         height: 100%;
+        border: 1px solid #DCDEE5;
 
         .title {
             font-size: 14px;
