@@ -131,8 +131,13 @@ BK_SYSTEMS = {
         "label": ugettext(u"流程服务"),
         "remark": ugettext(u"流程服务"),
     },
-    "LOG_SEARCH": {
-        "name": "LOG_SEARCH",
+    # "LOG_SEARCH": {
+    #     "name": "LOG_SEARCH",
+    #     "label": ugettext(u"日志平台"),
+    #     "remark": ugettext(u"日志平台"),
+    # },
+    "BK_LOG": {
+        "name": "BK_LOG",
         "label": ugettext(u"日志平台"),
         "remark": ugettext(u"日志平台"),
     },

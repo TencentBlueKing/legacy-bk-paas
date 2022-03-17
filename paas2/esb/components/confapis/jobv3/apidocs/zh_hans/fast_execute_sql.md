@@ -98,3 +98,13 @@
     }
 }
 ```
+
+### 返回结果参数说明
+
+#### data
+
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| job_instance_id     | long      | 作业实例ID |
+| job_instance_name   | long      | 作业实例名称 |
+| step_instance_id    | long      | 步骤实例ID |

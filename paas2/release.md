@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.32
+    - update: esb update cc, sops, bk-log, job, bkmonitor-v3, bk-docs-center apidocs
+
 # 2.13.31
     - update: esb update cmsi, usermanage apidocs, update cc, monitor_v3 apis
 
@@ -96,6 +99,12 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.44
+    - update: esb update sops, bk-log, job, bkmonitor-v3, bk-docs-center apidocs
+
+# 2.12.43
+    - update: esb update cmsi, usermanage apidocs, update monitor_v3 apis
 
 # 2.12.43
     - update: esb update cmsi, usermanage apidocs, update monitor_v3 apis
