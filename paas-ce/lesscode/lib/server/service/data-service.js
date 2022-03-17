@@ -14,7 +14,12 @@
  * 部分业务需要进一步处理的，可以在model里面新增文件处理，也可以在这个基础上做数据处理
  * 请勿在此处添加特定业务
  */
-import { getRepository, In, Like, createQueryBuilder } from 'typeorm'
+import {
+    getRepository,
+    In,
+    Like,
+    createQueryBuilder
+} from 'typeorm'
 const fs = require('fs')
 const path = require('path')
 
@@ -72,19 +77,6 @@ export function getDataService (name = 'default', customEntityMap) {
         },
 
         /**
-         * 获取数据列表
-         * @param {*} tableFileName 表模型的文件名
-         * @param {*} query 查询参数
-         * @returns 数据列表 & 总数
-         */
-        async get (tableFileName, query = { deleteFlag: 0 }) {
-            const repository = getRepositoryByName(tableFileName)
-            const list = await repository.find(query) || []
-            const count = list.length
-            return { list, count }
-        },
-
-        /**
          * 分页的方式获取数据列表
          * @param {*} tableFileName 表名
          * @param {*} page 页码
@@ -94,12 +86,22 @@ export function getDataService (name = 'default', customEntityMap) {
          * @param {*} order 排序，传入：{ updateTime: 'DESC' }
          * @returns 数据列表 & 总数
          */
-        async getByPage ({ tableFileName, page, pageSize, query = { deleteFlag: 0 }, like, order = { updateTime: 'DESC' } }) {
+        async get ({
+            tableFileName,
+            page,
+            pageSize,
+            query = { deleteFlag: 0 },
+            like,
+            order = { updateTime: 'DESC' }
+        }) {
             const repository = getRepositoryByName(tableFileName)
             const queryObject = {
-                skip: (page - 1) * pageSize,
-                take: pageSize,
                 where: query
+            }
+            // 分页
+            if (page && pageSize) {
+                queryObject.skip = (page - 1) * pageSize
+                queryObject.take = pageSize
             }
             // 排序
             if (order) {
@@ -117,10 +119,7 @@ export function getDataService (name = 'default', customEntityMap) {
                 })
             }
 
-            const [list, count] = await Promise.all([
-                repository.find(queryObject),
-                repository.count(query)
-            ])
+            const [list, count] = await repository.findAndCount(queryObject)
             return { list, count }
         },
 
@@ -183,8 +182,11 @@ export function getDataService (name = 'default', customEntityMap) {
             if (editData === undefined) {
                 throw new Error(`更新 ${tableFileName} 表数据的时候，未找到 id 为 【${data.id}】的数据，请检查数据后重试`)
             }
-
-            Object.assign(editData, data)
+            for (const key in editData) {
+                if (Reflect.has(editData, key) && Reflect.has(data, key)) {
+                    editData[key] = data[key]
+                }
+            }
             try {
                 const { affected = 0 } = await repository.update(data.id, editData)
                 return affected
@@ -209,7 +211,11 @@ export function getDataService (name = 'default', customEntityMap) {
             const editDataList = await repository.find({ where: { id: In(ids) } })
             editDataList.forEach((editData) => {
                 const newData = dataList.find(data => +data.id === +editData.id)
-                Object.assign(editData, newData)
+                for (const key in editData) {
+                    if (Reflect.has(editData, key) && Reflect.has(newData, key)) {
+                        editData[key] = newData[key]
+                    }
+                }
             })
             if (editDataList.length <= 0) throw new Error(`批量更新 ${tableFileName} 表数据的时候，未找到 id 为 【${ids.join(',')}】的数据，请检查数据后重试`)
 

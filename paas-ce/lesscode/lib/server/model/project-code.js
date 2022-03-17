@@ -174,7 +174,10 @@ const projectCode = {
                     routeModel.queryProjectPageRoute(projectId, versionId),
                     FuncModel.allGroupFuncDetail(projectId, versionId),
                     VariableModel.getAll({ projectId, versionId }),
-                    LCDataService.get(TABLE_FILE_NAME.DATA_TABLE, { projectId, deleteFlag: 0 }),
+                    LCDataService.get({
+                        tableFileName: TABLE_FILE_NAME.DATA_TABLE,
+                        query: { projectId, deleteFlag: 0 }
+                    }),
                     DataTableModifyRecord.getListByTime({ query: { projectId } })
                 ])
 
