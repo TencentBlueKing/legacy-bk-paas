@@ -1,7 +1,7 @@
 Release Log
 ===============================
 # 2.13.32
-    - update: esb update sops, bk-log, job, bkmonitor-v3, bk-docs-center apidocs
+    - update: esb update cc, sops, bk-log, job, bkmonitor-v3, bk-docs-center apidocs
 
 # 2.13.31
     - update: esb update cmsi, usermanage apidocs, update cc, monitor_v3 apis
