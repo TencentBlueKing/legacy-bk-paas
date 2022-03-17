@@ -1,6 +1,8 @@
 <template>
-    <div id="operationArea" class="operation-area">
-        <component :is="com" v-bind="$attrs" />
+    <div id="lesscodeOperationArea" :class="$style['operation-area']">
+        <div :class="$style['wraper']">
+            <component :is="com" v-bind="$attrs" />
+        </div>
     </div>
 </template>
 <script>
@@ -45,17 +47,20 @@
         }
     }
 </script>
-<style lang="postcss">
+<style lang="postcss" module>
     @import "@/css/mixins/scroller";
 
     .operation-area{
         height: 100%;
-        border: 1px solid #DCDEE5;
-        background: #FFF;
+        padding: 0 20px;
         overflow: auto;
         @mixin scroller;
-        & > * {
-            height: 100%;
+        .wraper{
+            /* border: 1px solid #DCDEE5; */
+            background: #fff;
+            & > * {
+                height: 100%;
+            }
         }
     }
 </style>
