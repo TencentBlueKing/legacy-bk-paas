@@ -33,6 +33,9 @@ import checkboxGroup from './check-box-group'
 // 反馈
  
 // 导航
+import TreeSelect from './tree-select'
+import Pagination from './pagination'
+import Navbar from './navbar'
  
 // 其他
  
@@ -47,7 +50,10 @@ const vantComponents = Object.seal([
     cell,
     icon,
     image,
-    checkboxGroup
+    checkboxGroup,
+    TreeSelect,
+    Pagination,
+    Navbar
 ])
  
 export default vantComponents
