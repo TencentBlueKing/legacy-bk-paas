@@ -19,7 +19,7 @@ watch and get the change of a kind of resource's event.
 | bk_supplier_account | string         | Yes    | supplier account                                                  |
 | bk_filter           | object         | No     | filter condition                                                  |
 
-**Note: The biz_set_relation event will be triggered when biz set is added, deleted or its "bk_scope" field is updated, and when biz is added, deleted or updated which results in its relationship with biz set changed. The event detail includes the ID of the biz set whose relation changed and all of the biz IDs it contains after the change**
+**Note: The biz_set_relation event will be triggered when biz set is added, deleted or its "bk_scope" field is updated, and when biz is added, deleted or updated which results in its relationship with biz set changed. The event type(bk_event_type) of these events are all "update", and event detail includes the ID of the biz set whose relation changed and all of the biz IDs it contains after the change. When the event is triggered by the biz set deletion event, the biz ID list in the returned event detail is empty**
 
 #### bk_filter
 
