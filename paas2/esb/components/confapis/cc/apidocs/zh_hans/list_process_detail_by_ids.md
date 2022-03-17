@@ -71,4 +71,12 @@
 | message | string | 请求失败返回的错误信息 |
 | permission    | object | 权限信息    |
 | request_id    | string | 请求链id    |
-| data | object | 请求返回的数据 |
+| data | array | 请求返回的数据 |
+
+#### data
+| 名称  | 类型  | 描述 |
+|---|---|--- |
+|bk_func_id|string|功能ID|
+|bk_func_name|string|进程名称|
+|bk_process_id|int|进程id|
+|bk_process_name|string|进程别名|

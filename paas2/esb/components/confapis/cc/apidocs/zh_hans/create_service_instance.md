@@ -16,52 +16,52 @@
 
 #### instances 字段说明
 
-| 字段|类型|说明|Description|
-|---|---|---|---|
-|instances.bk_host_id|int|主机ID|服务实例绑定的主机ID|
-|instances.processes|array|进程信息|服务实例下新建的进程信息|
-|instances.processes.process_template_id|int|进程模板ID|如果模块没有绑定服务模板则填0|
-|instances.processes.process_info|object|进程实例信息|如果进程绑定有模板，则仅模板中没有锁定的字段有效|
+| 字段|类型|必选	   |说明|Description|
+|---|---|---|---|---|
+|instances.bk_host_id|int|是|主机ID|服务实例绑定的主机ID|
+|instances.processes|array|是|进程信息|服务实例下新建的进程信息|
+|instances.processes.process_template_id|int|是|进程模板ID|如果模块没有绑定服务模板则填0|
+|instances.processes.process_info|object|是|进程实例信息|如果进程绑定有模板，则仅模板中没有锁定的字段有效|
 
 #### processes 字段说明
-| 字段|类型|说明|
-|---|---|---|
-|process_template_id|int|进程模版id|
-|auto_start|bool|是否自动拉起|
-|auto_time_gap|int|拉起间隔|
-|bk_biz_id|int|业务id|
-|bk_func_id|string|功能ID|
-|bk_func_name|string|进程名称|
-|bk_process_id|int|进程id|
-|bk_process_name|string|进程别名|
-|bk_supplier_account|string|开发商账号|
-|face_stop_cmd|string|强制停止命令|
-|pid_file|string|PID文件路径|
-|priority|int|启动优先级|
-|proc_num|int|启动数量|
-|reload_cmd|string|进程重载命令|
-|restart_cmd|string|重启命令|
-|start_cmd|string|启动命令|
-|stop_cmd|string|停止命令|
-|timeout|int|操作超时时长|
-|user|string|启动用户|
-|work_path|string|工作路径|
-|process_info|object|进程信息|
+| 字段|类型|必选	   |说明|
+|---|---|---|---|
+|process_template_id|int|是|进程模版id|
+|auto_start|bool|否|是否自动拉起|
+|auto_time_gap|int|否|拉起间隔|
+|bk_biz_id|int|否|业务id|
+|bk_func_id|string|否|功能ID|
+|bk_func_name|string|否|进程名称|
+|bk_process_id|int|否|进程id|
+|bk_process_name|string|否|进程别名|
+|bk_supplier_account|string|否|开发商账号|
+|face_stop_cmd|string|否|强制停止命令|
+|pid_file|string|否|PID文件路径|
+|priority|int|否|启动优先级|
+|proc_num|int|否|启动数量|
+|reload_cmd|string|否|进程重载命令|
+|restart_cmd|string|否|重启命令|
+|start_cmd|string|否|启动命令|
+|stop_cmd|string|否|停止命令|
+|timeout|int|否|操作超时时长|
+|user|string|否|启动用户|
+|work_path|string|否|工作路径|
+|process_info|object|是|进程信息|
 
 #### process_info 字段说明
-| 字段|类型|说明|
-|---|---|---|
-|bind_info|object|绑定信息|
-|bk_supplier_account|string|开发商账号|
+| 字段|类型|必选	   |说明|
+|---|---|---|---|
+|bind_info|object|是|绑定信息|
+|bk_supplier_account|string|是|开发商账号|
 
 #### bind_info 字段说明
-| 字段|类型|说明|
-|---|---|---|
-|enable|bool|端口是否启用|
-|ip|string|绑定的ip|
-|port|string|绑定的端口|
-|protocol|string|使用的协议|
-|template_row_id|int|实例化使用的模板行索引，进程内唯一|
+| 字段|类型|必选	   |说明|
+|---|---|---|---|
+|enable|bool|是|端口是否启用|
+|ip|string|是|绑定的ip|
+|port|string|是|绑定的端口|
+|protocol|string|是|使用的协议|
+|template_row_id|int|是|实例化使用的模板行索引，进程内唯一|
 
 ### 请求参数示例
 
