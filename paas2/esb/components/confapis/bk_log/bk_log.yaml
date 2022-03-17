@@ -2,18 +2,17 @@
 
 - path: /v2/bk_log/esquery_search/
   name: esquery_search
-  label: 日志平台索引集查询接口
+  label: 日志查询接口
   label_en: bk_log index-set search api
   method: POST
   api_type: query
   comp_codename: generic.v2.bk_log.bk_log_component
   dest_path: /api/v1/esquery/search/
   dest_http_method: POST
-  is_hidden: True
 
 - path: /v2/bk_log/esquery_monitor/
   name: esquery_monitor
-  label: 日志平台索引集查询接口
+  label: 日志查询接口(供监控使用)
   label_en: bk_log index-set search api for bkmonitor
   method: POST
   api_type: query
@@ -81,7 +80,7 @@
 
 - path: /v2/bk_log/esquery_es_route/
   name: esquery_es_route
-  label: ES-获取集群信息
+  label: ES-转发get请求
   label_en: ES-ROUTE api
   method: GET
   api_type: query
@@ -385,6 +384,7 @@
   comp_codename: generic.v2.bk_log.bk_log_component
   dest_path: /api/v1/grafana/query_log/
   dest_http_method: POST
+  is_hidden: True
 
 - path: /v2/bk_log/grafana/target_tree/
   name: grafana_target_tree
