@@ -113,7 +113,6 @@
             params () {
                 const params = {
                     q: this.filters.keyword,
-                    time: this.timeParam, // mixin
                     pageSize: this.pagination.limit,
                     pageNum: this.pagination.current
                 }
