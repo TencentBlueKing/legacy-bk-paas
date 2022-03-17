@@ -19,9 +19,12 @@
 
 ```json
 {
-	"version":"2.6",
-	"md_path": "ITSM/产品白皮书/FAQ/FAQ.md"
-	
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
+    "version":"2.6",
+    "md_path": "ITSM/产品白皮书/FAQ/FAQ.md"
 }
 ```
 
@@ -35,3 +38,13 @@
     "data": "document/2.6/2/1"
 }
 ```
+
+### 返回结果参数说明
+
+
+| 名称    | 类型   | 描述                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code    | int    | 错误编码。 0表示success，>0表示失败错误    |
+| message | string | 请求失败返回的错误信息                    |
+| data    | object | 请求返回的数据，文档中心的URL及ID         |

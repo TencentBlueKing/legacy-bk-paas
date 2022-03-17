@@ -9,7 +9,6 @@
   comp_codename: generic.v2.bk_log.bk_log_component
   dest_path: /api/v1/esquery/search/
   dest_http_method: POST
-  is_hidden: True
 
 - path: /v2/bk_log/esquery_monitor/
   name: esquery_monitor
@@ -385,6 +384,7 @@
   comp_codename: generic.v2.bk_log.bk_log_component
   dest_path: /api/v1/grafana/query_log/
   dest_http_method: POST
+  is_hidden: True
 
 - path: /v2/bk_log/grafana/target_tree/
   name: grafana_target_tree

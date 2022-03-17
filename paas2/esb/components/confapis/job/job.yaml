@@ -9,7 +9,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/execute_job/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/fast_execute_script/
   name: fast_execute_script
@@ -20,7 +19,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/fast_execute_script/
   dest_http_method: POST
-  is_hidden: true
 
 - path: /v2/job/fast_execute_sql/
   name: fast_execute_sql
@@ -31,7 +29,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/fast_execute_sql/
   dest_http_method: POST  
-  is_hidden: true
   
 - path: /v2/job/fast_push_file/
   name: fast_push_file
@@ -42,7 +39,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/fast_push_file/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/push_config_file/
   name: push_config_file
@@ -53,7 +49,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/push_config_file/
   dest_http_method: POST
-  is_hidden: true
 
 - path: /v2/job/operate_step_instance/
   name: operate_step_instance
@@ -64,7 +59,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/operate_step_instance/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/operate_job_instance/
   name: operate_job_instance
@@ -75,7 +69,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/operate_job_instance/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/get_job_instance_status/
   name: get_job_instance_status
@@ -86,7 +79,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/get_job_instance_status/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/get_step_instance_status/
   name: get_step_instance_status
@@ -97,7 +89,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/get_step_instance_status/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/get_job_instance_log/
   name: get_job_instance_log
@@ -108,7 +99,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/get_job_instance_log/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/get_job_instance_global_var_value/
   name: get_job_instance_global_var_value
@@ -119,7 +109,7 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/get_job_instance_global_var_value/
   dest_http_method: POST
-  is_hidden: true
+  is_hidden: True
 
 # Job management API
 - path: /v2/job/get_job_list/
@@ -131,7 +121,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-manage/get_job_list/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/get_job_detail/
   name: get_job_detail
@@ -142,7 +131,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-manage/get_job_detail/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/get_script_list/
   name: get_script_list
@@ -153,7 +141,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-manage/get_script_list/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/get_public_script_list/
   name: get_public_script_list
@@ -164,7 +151,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-manage/get_public_script_list/
   dest_http_method: POST
-  is_hidden: true
 
 - path: /v2/job/get_script_detail/
   name: get_script_detail
@@ -175,7 +161,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-manage/get_script_detail/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/get_os_account/
   name: get_os_account
@@ -186,7 +171,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-manage/get_os_account/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/get_own_db_account_list/
   name: get_own_db_account_list
@@ -197,7 +181,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-manage/get_own_db_account_list/
   dest_http_method: POST
-  is_hidden: true
 
 # Job Crontab API
 - path: /v2/job/get_cron_list/
@@ -209,7 +192,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-crontab/get_cron_list/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/save_cron/
   name: save_cron
@@ -220,7 +202,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-crontab/save_cron/
   dest_http_method: POST
-  is_hidden: true
   
 - path: /v2/job/update_cron_status/
   name: update_cron_status
@@ -231,7 +212,6 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-crontab/update_cron_status/
   dest_http_method: POST
-  is_hidden: true
   
 # GSE API
 - path: /v2/job/get_proc_result/
@@ -243,7 +223,7 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/get_proc_result/
   dest_http_method: POST
-  is_hidden: true
+  is_hidden: True
   
 - path: /v2/job/manage_proc/
   name: manage_proc
@@ -254,7 +234,7 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/manage_proc/
   dest_http_method: POST
-  is_hidden: true
+  is_hidden: True
   
 - path: /v2/job/operate_proc/
   name: operate_proc
@@ -265,7 +245,7 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/operate_proc/
   dest_http_method: POST
-  is_hidden: true
+  is_hidden: True
     
 - path: /v2/job/operate_process/
   name: operate_process
@@ -276,7 +256,7 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/operate_process/
   dest_http_method: POST
-  is_hidden: true
+  is_hidden: True
   
 - path: /v2/job/set_base_report/
   name: set_base_report
@@ -287,4 +267,4 @@
   comp_codename: generic.v2.job.job_component
   dest_path: /api/job/v2/job-execute/set_base_report/
   dest_http_method: POST
-  is_hidden: true
+  is_hidden: True
