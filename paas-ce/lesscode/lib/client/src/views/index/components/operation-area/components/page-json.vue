@@ -1,5 +1,5 @@
 <template>
-    <section style="height: 100%;">
+    <section style="height: 100%; border: 1px solid #DCDEE5;">
         <code-viewer
             :code="code"
             :filename="`bklesscode-${pageId}.json`"

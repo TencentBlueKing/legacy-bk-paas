@@ -44,6 +44,8 @@
                         :component-data="componentNode" />
                 </template>
             </draggable>
+            <lesscode-focus />
+            <lesscode-tools />
         </div>
         <div
             v-if="showNotVisibleMask"
@@ -58,6 +60,8 @@
     import Draggable, {
         getDragTargetGroup
     } from './components/draggable'
+    import LesscodeFocus from './components/lesscode-focus'
+    import LesscodeTools from './components/lesscode-tools'
     import Layout from './widget/layout'
     import ResolveComponent from './resolve-component'
     import ResolveInteractiveComponent from './resolve-interactive-component'
@@ -66,6 +70,8 @@
         name: 'render',
         components: {
             Draggable,
+            LesscodeFocus,
+            LesscodeTools,
             Layout,
             ResolveComponent,
             ResolveInteractiveComponent
@@ -178,7 +184,9 @@
              * @returns { Boolean }
              */
             handleMouseleave () {
-                LC.triggerEventListener('componentMouserleave')
+                LC.triggerEventListener('componentMouserleave', {
+                    type: 'componentMouserleave'
+                })
             },
             /**
              * @desc 画布编辑区空白区域被点击取消组件的选中状态
@@ -190,7 +198,9 @@
                     if (activeNode) {
                         activeNode.activeClear()
                     }
-                    LC.triggerEventListener('componentMouserleave')
+                    LC.triggerEventListener('componentMouserleave', {
+                        type: 'componentMouserleave'
+                    })
                 }
             }
         }
@@ -200,16 +210,16 @@
     @import './widget/patch.css';
 
     .canvas{
+        position: relative;
+        z-index: 1000000000000 !important;
         min-height: calc(100% - 20px) !important;
-        z-index: 1000000000000;
+    }
+    .editor{
         /* 规避一些组件内部因为设置了 pointer-events 导致鼠标事件非法触发 */
+        padding-bottom: 300px;
         * {
             pointer-events: none;
         }
-    }
-    .editor{
-        padding-bottom: 300px;
-        z-index: 1000000000000 !important;
     }
     .not-visible-mask{
         position: fixed;

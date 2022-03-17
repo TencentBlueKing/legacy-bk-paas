@@ -35,7 +35,7 @@ export default function () {
             }
         }).then(() => {
             updateTimer = setTimeout(() => {
-                update()
+                // update()
             }, 20000)
         })
     }

@@ -126,27 +126,26 @@
                 let operationNode = null
                 const triggerEvent = {
                     target: this.componentData,
-                    type: ''
+                    type: '',
+                    child: null
                 }
                 if (event.added) {
                     operationNode = event.added.element
                     triggerEvent.type = 'appendChild'
-                    
-                    LC.triggerEventListener('appendChild', triggerEvent)
                 } else if (event.removed) {
                     operationNode = event.removed.element
                     triggerEvent.type = 'removeChild'
-                    LC.triggerEventListener('removeChild', triggerEvent)
                 } else if (event.moved) {
                     operationNode = event.moved.element
                     triggerEvent.type = 'moveChild'
-                    LC.triggerEventListener('moveChild', triggerEvent)
                 }
                 // 拖动组件需要重置会影响排版的样式
                 operationNode.setStyle({
                     marginTop: 'unset',
                     marginLeft: 'unset'
                 })
+                triggerEvent.child = operationNode
+                LC.triggerEventListener(triggerEvent.type, triggerEvent)
                 LC.triggerEventListener('update', triggerEvent)
                 // fix: vue-draggable 内部索引不更新的问题
                 this.$refs.draggable.computeIndexes()
