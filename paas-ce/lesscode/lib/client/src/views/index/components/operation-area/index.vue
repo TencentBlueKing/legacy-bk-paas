@@ -4,7 +4,6 @@
     </div>
 </template>
 <script>
-    import Render from '@/components/render/index'
     import SourceCode from './components/source-code.vue'
     import PageSetting from './components/page-setting'
     import PageJson from './components/page-json'
@@ -33,7 +32,6 @@
         computed: {
             com () {
                 const comMap = {
-                    edit: Render,
                     vueCode: SourceCode,
                     pageFunction: PageFunction,
                     setting: PageSetting,

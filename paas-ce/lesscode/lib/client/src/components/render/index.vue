@@ -24,5 +24,6 @@
 .<style lang="postcss" scoped>
 .canvas-wrapper {
     height: calc(100vh - 160px);
+    min-width: 920px;
 }
 </style>
