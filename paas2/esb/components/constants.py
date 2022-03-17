@@ -145,6 +145,12 @@ BK_SYSTEMS = {
         "remark": _(u"日志平台"),
         "doc_category": SystemDocCategoryEnum.MANAGEMENT_TOOLS.value,
     },
+    "BK_LOG": {
+        "name": "BK_LOG",
+        "label": _(u"日志平台"),
+        "remark": _(u"日志平台"),
+        "doc_category": SystemDocCategoryEnum.MANAGEMENT_TOOLS.value,
+    },
     "IAM": {
         "name": "IAM",
         "label": _(u"权限中心"),
