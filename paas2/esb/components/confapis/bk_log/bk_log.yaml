@@ -2,7 +2,7 @@
 
 - path: /v2/bk_log/esquery_search/
   name: esquery_search
-  label: 日志平台索引集查询接口
+  label: 日志查询接口
   label_en: bk_log index-set search api
   method: POST
   api_type: query
@@ -12,7 +12,7 @@
 
 - path: /v2/bk_log/esquery_monitor/
   name: esquery_monitor
-  label: 日志平台索引集查询接口
+  label: 日志查询接口(供监控使用)
   label_en: bk_log index-set search api for bkmonitor
   method: POST
   api_type: query
@@ -80,7 +80,7 @@
 
 - path: /v2/bk_log/esquery_es_route/
   name: esquery_es_route
-  label: ES-获取集群信息
+  label: ES-转发get请求
   label_en: ES-ROUTE api
   method: GET
   api_type: query
