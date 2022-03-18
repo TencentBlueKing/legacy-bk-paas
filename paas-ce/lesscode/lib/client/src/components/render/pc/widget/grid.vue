@@ -19,7 +19,9 @@
         <div
             v-if="isShowActiveBtn || componentData.isActived"
             :class="$style['placholder']">
-            <div :class="$style['btn']">选中{{ componentData.componentId }}</div>
+            <div :class="$style['btn']">
+                <i class="bk-drag-icon bk-drag-drag-small1" />
+            </div>
         </div>
     </div>
 </template>
@@ -133,9 +135,6 @@
             &:nth-child(n + 2) {
                 border-left: none;
             }
-            /* &:last-child{
-                border-right: 1px dashed #ccc;
-            } */
         }
     }
     .placholder {
@@ -145,21 +144,21 @@
         bottom: 0;
         z-index: 99;
         display: flex;
-        height: 2px;
-        justify-content: center;
-        font-size: 12px;
-        background: #3A84FF;
         .btn{
-            height: 20px;
-            padding: 0 10px;
-            color: #fff;
-            border-radius: 2px;
-            text-align: center;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            margin-bottom: -14px;
+            font-size: 14px;
+            color: #C4C6CC;
+            background: #EAEBF0;
             cursor: pointer;
-            background: #3A84FF;
             pointer-events: all;
             &:hover{
-                background: skyblue;
+                color: #699DF4;
+                background: #A3C5FD;
             }
         }
     }
