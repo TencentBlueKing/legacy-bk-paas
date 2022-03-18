@@ -16,12 +16,23 @@ export default {
     icon: 'bk-drag-icon',
     displayName: '图标',
     group: '基础',
+    document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/icon',
     events: [
         {
             name: 'click',
-            tips: '点击图标时触发，事件回调参数 (e: Event)' }
+            tips: '点击图标时触发，事件回调参数 (e: Event)'
+        }
     ],
-    styles: ['size', 'padding', 'margin', 'display'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },

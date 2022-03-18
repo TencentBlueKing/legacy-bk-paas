@@ -15,13 +15,23 @@ export default {
     displayName: '多选框',
     icon: 'bk-drag-checkbox',
     group: '表单',
+    document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/checkbox',
     events: [
         {
             name: 'change',
             tips: '当绑定值变化时调用该事件函数，事件回调参数 (names: Array)'
         }
     ],
-    styles: ['size', 'padding', 'margin', 'display'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         {
             type: 'v-model',
