@@ -74,7 +74,7 @@
             padding: 0 16px;
             line-height: 32px;
             color: #63656e;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             &:hover{
                 color: #3A84FF;
