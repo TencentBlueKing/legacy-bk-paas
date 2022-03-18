@@ -135,6 +135,12 @@
             &:nth-child(n + 2) {
                 border-left: none;
             }
+<<<<<<< HEAD
+=======
+            /* &:last-child{
+                border-right: 1px dashed #ccc;
+            } */
+>>>>>>> base/lesscode-develop
         }
     }
     .placholder {
@@ -144,6 +150,7 @@
         bottom: 0;
         z-index: 99;
         display: flex;
+<<<<<<< HEAD
         .btn{
             display: flex;
             align-content: center;
@@ -159,6 +166,23 @@
             &:hover{
                 color: #699DF4;
                 background: #A3C5FD;
+=======
+        height: 2px;
+        justify-content: center;
+        font-size: 12px;
+        background: #3A84FF;
+        .btn{
+            height: 20px;
+            padding: 0 10px;
+            color: #fff;
+            border-radius: 2px;
+            text-align: center;
+            cursor: pointer;
+            background: #3A84FF;
+            pointer-events: all;
+            &:hover{
+                background: skyblue;
+>>>>>>> base/lesscode-develop
             }
         }
     }

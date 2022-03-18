@@ -14,7 +14,7 @@
  * 部分业务需要进一步处理的，可以在model里面新增文件处理，也可以在这个基础上做数据处理
  * 请勿在此处添加特定业务
  */
-import { getRepository, In, Like } from 'typeorm'
+import { getRepository, In, Like, createQueryBuilder } from 'typeorm'
 const fs = require('fs')
 const path = require('path')
 
@@ -43,6 +43,34 @@ export function getDataService (name = 'default', customEntityMap) {
     }
 
     return {
+        /**
+         * leftJoin 的方式多表联查
+         * @param { String } tableName 主表名
+         * @param { Array } leftJoins 联查信息，传入：[{ tableName: 'xxx', on: 'xxx.id = tableName.id' }]
+         * @param { Array } query 查询条件，传入：{ express: 'xxx.id = :id AND xxx.name = :name', data: { id: 1, name: 'xxx' } }
+         * @param { Object } pageData 分页，传入：{ page, pageSize }
+         * @returns 数据列表和总数
+         */
+        leftJoinQuery (tableName, leftJoins, query, pageData) {
+            const queryBuilder = createQueryBuilder(tableName)
+            // left join
+            leftJoins?.forEach((leftJoin) => {
+                queryBuilder.leftJoinAndSelect(leftJoin.tableName, leftJoin.tableName, leftJoin.on)
+            })
+            // 添加查询条件
+            if (query) {
+                queryBuilder.where(query.express, query.data)
+            }
+            // 添加分页
+            if (pageData) {
+                const { page, pageSize } = pageData
+                queryBuilder
+                    .skip((page - 1) * pageSize)
+                    .take(pageSize)
+            }
+            return queryBuilder.getManyAndCount()
+        },
+
         /**
          * 获取数据列表
          * @param {*} tableFileName 表模型的文件名
@@ -258,5 +286,50 @@ export function getDataService (name = 'default', customEntityMap) {
     }
 }
 
-// 默认导出lesscode的orm快捷操作
-export default getDataService()
+// 导出 lesscode 的 orm 快捷操作
+export const LCDataService = getDataService()
+
+// 导出 lesscode 的表
+export const TABLE_FILE_NAME = {
+    COMP_CATEGORY: 'comp-category',
+    COMP_FAVOURITE: 'comp-favourite',
+    COMP_SHARE: 'comp-share',
+    COMP: 'comp',
+    DATA_TABLE_MODIFY_RECORD: 'data-table-modify-record',
+    DATA_TABLE: 'data-table',
+    FUNC_FUNC: 'func-func',
+    FUNC_GROUP: 'func-group',
+    FUNC_MARKET: 'func-market',
+    FUNC_VARIABLE: 'func-variable',
+    FUNC: 'func',
+    LAYOUT_INST: 'layout-inst',
+    LAYOUT: 'layout',
+    OPERATE_LOG: 'operate-log',
+    PAGE_COMP: 'page-comp',
+    PAGE_FUNC: 'page-func',
+    PAGE_ROUTE: 'page-route',
+    PAGE_TEMPLATE_CATEGORY: 'page-template-category',
+    PAGE_TEMPLATE: 'page-template',
+    PAGE_VARIABLE: 'page-variable',
+    PAGE: 'page',
+    PERM: 'perm',
+    PLATFORM_ADMIN: 'platform-admin',
+    PREVIEW_DB: 'preview-db',
+    PROJECT: 'project',
+    PROJECT_COMP: 'project-comp',
+    PROJECT_FAVOURITE: 'project-favourite',
+    PROJECT_FUNC_GROUP: 'project-func-group',
+    PROJECT_FUNC_MARKET: 'project-func-market',
+    PROJECT_PAGE: 'project-page',
+    PROJECT_VERSION: 'project-version',
+    ROLE_PERM: 'role-perm',
+    ROLE: 'role',
+    ROUTE: 'route',
+    TOKEN: 'token',
+    USER_PROJECT_ROLE: 'user-project-role',
+    USER: 'user',
+    VARIABLE_FUNC: 'variable-func',
+    VARIABLE_VARIABLE: 'variable-variable',
+    VARIABLE: 'variable',
+    VERSION: 'version'
+}
