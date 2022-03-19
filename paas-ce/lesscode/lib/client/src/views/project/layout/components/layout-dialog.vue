@@ -140,11 +140,14 @@
             projectId () {
                 return this.$route.params.projectId
             },
+            realRoutePath () {
+                return (this.currentLayout.layoutType === 'MOBILE' ? '/mobile/' : '/') + this.dialog.formData.routePath.replace(/^\/+|\/+$/g, '')
+            },
             disabled () {
                 if (this.action === 'edit') {
                     return (this.dialog.formData.showName === this.currentLayout.showName || !this.dialog.formData.showName)
                         && (this.dialog.formData.layoutCode === this.currentLayout.layoutCode || !this.dialog.formData.layoutCode)
-                        && (this.dialog.formData.routePath === this.currentLayout.routePath || !this.dialog.formData.routePath)
+                        && (this.realRoutePath === this.currentLayout.routePath || !this.dialog.formData.routePath)
                 }
                 return !this.dialog.formData.showName || !this.dialog.formData.routePath
             }
@@ -159,7 +162,7 @@
                     if (this.action === 'edit') {
                         this.dialog.formData.showName = this.currentLayout.showName
                         this.dialog.formData.layoutCode = this.currentLayout.layoutCode
-                        this.dialog.formData.routePath = this.currentLayout.routePath
+                        this.dialog.formData.routePath = this.getDisplayLayoutPath(this.currentLayout.routePath)
                     } else {
                         this.dialog.formData.showName = ''
                         this.dialog.formData.layoutCode = ''
@@ -183,6 +186,9 @@
             this.getDefaultLayout()
         },
         methods: {
+            getDisplayLayoutPath (path) {
+                return this.currentLayout.layoutType === 'MOBILE' && path.startsWith('/mobile') ? path.replace('/mobile', '') : path
+            },
             async getDefaultLayout () {
                 try {
                     const res = await this.$store.dispatch('layout/getPlatformList')
@@ -199,11 +205,11 @@
                 this.dialog.loading = true
                 try {
                     await this.$refs.dialogForm.validate()
-
+ 
                     const formData = {
                         showName: this.dialog.formData.showName,
                         layoutCode: this.dialog.formData.layoutCode,
-                        routePath: '/' + this.dialog.formData.routePath.replace(/^\/+|\/+$/g, '')
+                        routePath: this.realRoutePath
                     }
 
                     if (this.action === 'create') {
@@ -226,6 +232,7 @@
                     await this.$store.dispatch('layout/checkName', {
                         data: {
                             ...formData,
+                            routePath: this.realRoutePath,
                             projectId: this.projectId,
                             versionId: this.versionId
                         }

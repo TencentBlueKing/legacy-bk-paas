@@ -30,7 +30,7 @@ function registerComponent (source, id) {
 }
 
 // 生成路由
-module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId) => {
+module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId, platform) => {
     const routes = []
     const curStorageData = localStorage.getItem('ONLINE_PREVIEW') || '{}'
     const curPageData = JSON.parse(curStorageData)
@@ -93,7 +93,7 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId)
     })
 
     // 项目默认首页
-    const defaultRoute = getProjectDefaultRoute(projectPageRouteList, projectRouteList)
+    const defaultRoute = getProjectDefaultRoute(projectPageRouteList, projectRouteList, platform)
 
     const allRoutes = [
         {
