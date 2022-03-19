@@ -32,6 +32,7 @@ export default {
                 'p.id as pageId',
                 'p.pageCode as pageCode',
                 'p.pageName as pageName',
+                'p.pageType as pageType',
                 'layoutinst.id as layoutId',
                 'layoutinst.routePath as layoutPath'
             ])
@@ -73,7 +74,6 @@ export default {
                 'route.parentId as parentId',
                 'page.pageCode as pageCode',
                 'page.pageName as pageName',
-                'page.pageType as platform',
                 'page.content as content',
                 'page.deleteFlag as pageDeleteFlag',
                 'page.lifeCycle as lifeCycle',
@@ -84,7 +84,8 @@ export default {
                 'layoutinst.routePath as layoutPath',
                 'layoutinst.layoutCode as layoutCode',
                 'layoutinst.content as layoutContent',
-                'layout.type as layoutType'
+                'layout.type as layoutType',
+                'layout.layoutType as platform'
             ])
             .where('pr.projectId = :projectId', { projectId })
             .andWhere(whereVersion(versionId, 'pr'))

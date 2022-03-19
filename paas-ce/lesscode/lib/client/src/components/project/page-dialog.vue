@@ -52,7 +52,7 @@
                         placeholder="由数字、字母、下划线、中划线(-)、冒号(:)或反斜杠(/)组成">
                         <template slot="prepend">
                             <div class="group-text">
-                                {{ dialog.formData.pageType === 'MOBILE' ? '/mobile' : '' }}{{layoutRoutePath}}
+                                {{layoutRoutePath}}
                             </div>
                         </template>
                     </bk-input>

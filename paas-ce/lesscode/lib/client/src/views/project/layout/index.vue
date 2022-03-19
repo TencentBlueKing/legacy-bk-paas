@@ -23,7 +23,7 @@
                                     <div class="name" :title="layout.showName">{{layout.showName}}</div>
                                 </div>
                                 <div class="stat" :title="layout.routePath">
-                                    路由: {{ layout.layoutType === 'MOBILE' ? '/mobile' : '' }}{{layout.routePath}}
+                                    路由: {{layout.routePath}}
                                 </div>
                             </div>
                             <div class="col">
