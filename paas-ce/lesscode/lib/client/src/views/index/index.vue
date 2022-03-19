@@ -20,7 +20,6 @@
             <div
                 id="toolActionBox"
                 class="function-and-tool">
-                <mobile-preview v-if="platform === 'MOBILE'"></mobile-preview>
                 <operation-select v-model="operationType" />
                 <div style="height: 22px; width: 1px; margin: 0 5px; background-color: #dcdee5;" />
                 <!-- 保存、预览、快捷键等tool单独抽离 -->
@@ -37,9 +36,11 @@
         <template v-if="!isContentLoading && !isCustomComponentLoading">
             <draw-layout>
                 <material-panel slot="left" />
-                <operation-area
+                <operation-area v-if="operationType !== 'edit'"
                     :operaion="operationType"
                     :type="operationType" />
+                <!-- 主画布使用v-show 不更新 -->
+                <Render v-show="operationType === 'edit'" />
                 <modifier-panel slot="right" />
             </draw-layout>
             <novice-guide ref="guide" :data="guideStep" />
@@ -64,7 +65,7 @@
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
     import ActionTool from './components/action-tool'
-    import MobilePreview from './components/preview-switch'
+    import Render from '@/components/render/index'
 
     console.dir(LC)
 
@@ -81,7 +82,7 @@
             ModifierPanel,
             OperationArea,
             ActionTool,
-            MobilePreview
+            Render
         },
         data () {
             return {

@@ -20,6 +20,9 @@ import paragraph from './paragraph'
 // Basic
 import button from './button'
 import cell from './cell'
+import icon from './icon'
+import image from './image'
+import checkboxGroup from './check-box-group'
 
 // import calendar from './calendar'
  
@@ -30,6 +33,9 @@ import cell from './cell'
 // 反馈
  
 // 导航
+import TreeSelect from './tree-select'
+import Pagination from './pagination'
+import Navbar from './navbar'
  
 // 其他
  
@@ -41,7 +47,13 @@ const vantComponents = Object.seal([
     freeLayout,
     paragraph,
     button,
-    cell
+    cell,
+    icon,
+    image,
+    checkboxGroup,
+    TreeSelect,
+    Pagination,
+    Navbar
 ])
  
 export default vantComponents
