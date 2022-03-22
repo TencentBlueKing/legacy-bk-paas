@@ -55,6 +55,7 @@
     }
 </script>
 <style lang="postcss" module>
+    @import "@/css/mixins/scroller";
     .draw-layout{
         position: relative;
         height: calc(100vh - 120px);
@@ -112,7 +113,7 @@
         }
         .left-btn,
         .right-btn{
-            position: absolute;
+            position: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -133,14 +134,14 @@
             }
         }
         .left-btn{
-            left: 0;
+            left: 340px;
             border-radius: 0 8px 8px 0;
             :global(.bk-drag-angle-left) {
                 transform: rotate(0deg);
             }
         }
         .right-btn{
-            right: 0;
+            right: 300px;
             border-radius: 8px 0 0 8px;
             :global(.bk-drag-angle-left) {
                 transform: rotate(180deg);
@@ -150,6 +151,8 @@
             position: relative;
             height: 100%;
             padding: 20px;
+            overflow: auto;
+            @mixin scroller;
         }
     }
 </style>

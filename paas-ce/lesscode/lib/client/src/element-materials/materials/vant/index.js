@@ -26,6 +26,7 @@ import Image from './image'
 // import calendar from './calendar'
  
 // Form
+import Switch from './switch'
 import CheckboxGroup from './check-box-group'
 import DatetimePicker from './datetime-picker'
 import Field from './field'
@@ -36,8 +37,19 @@ import RadioGroup from './radio-group'
 import Rate from './rate'
  
 // 数据
+import Tag from './tag'
+import Skeleton from './skeleton'
+import Progress from './progress'
+import NoticeBar from './notice-bar'
+import Empty from './empty'
+import Divider from './divider'
+import CountDown from './count-down'
+import Circle from './circle'
+import Badge from './badge'
  
 // 反馈
+
+import Loading from './loading'
  
 // 导航
 import TreeSelect from './tree-select'
@@ -67,7 +79,18 @@ const vantComponents = Object.seal([
     Rate,
     TreeSelect,
     Pagination,
-    Navbar
+    Navbar,
+    Tag,
+    Skeleton,
+    Progress,
+    NoticeBar,
+    Empty,
+    Divider,
+    CountDown,
+    Circle,
+    Loading,
+    Badge,
+    Switch
 ])
  
 export default vantComponents
