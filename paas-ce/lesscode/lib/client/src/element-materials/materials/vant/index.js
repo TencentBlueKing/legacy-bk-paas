@@ -27,10 +27,22 @@ import checkboxGroup from './check-box-group'
 // import calendar from './calendar'
  
 // Form
+import Switch from './switch'
  
 // 数据
+import Tag from './tag'
+import Skeleton from './skeleton'
+import Progress from './progress'
+import NoticeBar from './notice-bar'
+import Empty from './empty'
+import Divider from './divider'
+import CountDown from './count-down'
+import Circle from './circle'
+import Badge from './badge'
  
 // 反馈
+
+import Loading from './loading'
  
 // 导航
 import TreeSelect from './tree-select'
@@ -53,7 +65,18 @@ const vantComponents = Object.seal([
     checkboxGroup,
     TreeSelect,
     Pagination,
-    Navbar
+    Navbar,
+    Tag,
+    Skeleton,
+    Progress,
+    NoticeBar,
+    Empty,
+    Divider,
+    CountDown,
+    Circle,
+    Loading,
+    Badge,
+    Switch
 ])
  
 export default vantComponents
