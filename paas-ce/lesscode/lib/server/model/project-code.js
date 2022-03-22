@@ -42,11 +42,11 @@ const STATIC_URL = `${DIR_PATH}/lib/server/project-template/`
 
 const projectCode = {
 
-    async previewCode (projectId, versionId) {
+    async previewCode (projectId, versionId, platform = 'PC') {
         // 获取预览相关的数据
         const [
-            routeList,
-            pageRouteList,
+            allRouteList,
+            allPageRouteList,
             funcGroups = [],
             allVarableList = []
         ] = await Promise.all([
@@ -55,6 +55,9 @@ const projectCode = {
             FuncModel.allGroupFuncDetail(projectId, versionId),
             VariableModel.getAll({ projectId, versionId })
         ])
+
+        const routeList = allRouteList.filter(route => route.platform === platform)
+        const pageRouteList = allPageRouteList.filter(page => (page.pageType === platform || (!page.pageType && platform === 'PC')))
 
         const routeGroup = {}
         for (const route of routeList) {

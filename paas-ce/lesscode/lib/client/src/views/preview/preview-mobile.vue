@@ -1,8 +1,5 @@
 <template>
     <div class="area-wrapper">
-        <div class="title">
-            <span class="title-text">效果预览</span>
-        </div>
         <div class="simulator-wrapper" :style="{ width: width + 'px', height: height + 'px' }">
             <div class="device-phone-frame">
                 <div class="device-phone"></div>
@@ -20,9 +17,6 @@
 </template>
 
 <script>
-    import getModelInfo from './common/model'
-    import emitter from 'tiny-emitter/instance'
-    import { ref } from '@vue/composition-api'
     import { useStore } from '@/store'
     import { useRoute } from '@/router'
 
@@ -30,21 +24,16 @@
         setup () {
             const store = useStore()
             const route = useRoute()
-            const { canvasSize } = getModelInfo()
-            const width = ref(canvasSize.value.width)
-            const height = ref(canvasSize.value.height)
+            const width = '375'
+            const height = '812'
 
             const projectId = route.params.projectId
-            const pagePath = `${store.getters['page/pageRoute'].layoutPath}${store.getters['page/pageRoute'].layoutPath.endsWith('/') ? '' : '/'}${store.getters['page/pageRoute'].path}`
+            const pagePath = route.query.pagePath || '/'
+            // const pagePath = `${store.getters['page/pageRoute'].layoutPath}${store.getters['page/pageRoute'].layoutPath.endsWith('/') ? '' : '/'}${store.getters['page/pageRoute'].path}`
             const versionId = store.getters['projectVersion/currentVersionId']
 
             let queryStr = '?platform=MOBILE'
             queryStr += `${versionId ? `&v=${versionId}` : ''}`
-
-            emitter.on('update-canvas-size', val => {
-                width.value = val.value.width
-                height.value = val.value.height
-            })
 
             return {
                 width,
@@ -56,5 +45,11 @@
 </script>
 
 <style lang="postcss" scoped>
-    @import './area.scss';
+    @import './../../components/render/mobile/area.scss';
+
+    .area-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
 </style>

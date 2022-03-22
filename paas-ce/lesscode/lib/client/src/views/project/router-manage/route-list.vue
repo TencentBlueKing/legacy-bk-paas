@@ -22,7 +22,7 @@
                                 $style['path'],
                                 { [$style['editing']]: layoutEditState.group === group.layoutId }
                             ]">
-                                <div :class="$style['path-name']" v-if="layoutEditState.group !== group.layoutId">{{group.layoutPath}}</div>
+                                <div :class="$style['path-name']" v-if="layoutEditState.group !== group.layoutId">{{getDisplayLayoutPath(group.layoutPath)}}</div>
                                 <div v-else
                                     :class="[
                                         $style['edit-form'],
@@ -294,7 +294,7 @@
                 this.unsetEditState()
                 this.unsetBindState()
 
-                this.layoutEditState.value = group.layoutPath
+                this.layoutEditState.value = this.getDisplayLayoutPath(group.layoutPath)
                 this.layoutEditState.group = group.layoutId
 
                 this.foucsInput(`input-layout-${group.layoutId}`)
@@ -361,12 +361,12 @@
                 if (this.parentPathInputDisabled) {
                     return
                 }
-
+                const prefix = this.type === 'MOBILE' ? '/mobile/' : '/'
                 const data = {
                     id: activeGroup.layoutId,
                     projectId: this.projectId,
                     versionId: this.versionId,
-                    routePath: '/' + value.replace(/^\/+|\/+$/g, '')
+                    routePath: prefix + value.replace(/^\/+|\/+$/g, '')
                 }
                 this.loadingState.layout.push(group)
                 try {
@@ -529,6 +529,9 @@
             },
             handleToggle (group) {
                 this.$set(this.foldeds, group, !this.foldeds[group])
+            },
+            getDisplayLayoutPath (path) {
+                return this.type === 'MOBILE' && path.startsWith('/mobile') ? path.replace('/mobile', '') : path
             },
             getBindDisplayValue (route) {
                 const { pageId, pageName, redirect } = route

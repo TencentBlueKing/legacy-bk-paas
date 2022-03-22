@@ -17,11 +17,11 @@
                             <bk-button icon-right="icon-angle-down">预览项目</bk-button>
                         </div>
                         <ul class="bk-dropdown-list" slot="dropdown-content">
-                            <li><a href="javascript:;">预览PC页面</a></li>
-                            <li><a href="javascript:;">预览移动端页面</a></li>
+                            <li><a href="javascript:;" @click="handlePreviewPcProject">预览PC页面</a></li>
+                            <li><a href="javascript:;" @click="handlePreviewMobileProject">预览移动端页面</a></li>
                         </ul>
                     </bk-dropdown-menu>
-                    <bk-button v-else @click="handlePreviewProject">预览项目</bk-button>
+                    <bk-button v-else @click="handlePreviewPcProject">预览项目</bk-button>
                 </template>
                 <bk-button @click="handleDownLoadProject">源码下载</bk-button>
                 <div class="extra">
@@ -70,7 +70,7 @@
                                     </svg>
                                     <div class="path">
                                         <span class="fullpath" :title="routeMap[page.id].fullPath" v-if="routeMap[page.id].id">
-                                            {{ page.pageType === 'MOBILE' ? '/mobile' : '' }}{{routeMap[page.id].fullPath}}
+                                            {{routeMap[page.id].fullPath}}
                                         </span>
                                         <span class="unset" v-else>未配置</span>
                                     </div>
@@ -224,10 +224,14 @@
                 this.$refs.pageDialog.dialog.formData.layoutId = null
                 this.$refs.pageDialog.dialog.visible = true
             },
-            handlePreviewProject () {
+            handlePreviewPcProject () {
                 // 跳转到预览入口页面
                 const versionQuery = `${this.versionId ? `?v=${this.versionId}` : ''}`
                 window.open(`/preview/project/${this.projectId}/${versionQuery}`, '_blank')
+            },
+            handlePreviewMobileProject () {
+                // 跳转到预览入口页面
+                window.open(`/preview-mobile/project/${this.projectId}`, '_blank')
             },
             async handleCopy (page) {
                 this.action = 'copy'
