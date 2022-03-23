@@ -10,7 +10,7 @@ Get the list of components for the specified system
 
 | Field          |  Type       | Required   |  Description             |
 |---------------|------------|--------|------------------|
-|   system_names   |   list     |   YES   |  System name, Available through the component get_systems.|
+|   system_names   |   array     |   YES   |  System name, Available through the component get_systems.|
 
 ### Request Parameters Example
 
@@ -58,6 +58,13 @@ Get the list of components for the specified system
 ```
 
 ### Return Result Description
+
+| Field      | Type      | Description      |
+|-----------|----------|-----------|
+|  result   |    bool    |      return result, true for success, false for failure  |
+|  code     |    int     |      return code, 0 for success, other values for failure |
+|  message  |    string  |      error message |
+|  data     |    array   |      result data, details are described below  |
 
 #### data
 

@@ -63,7 +63,7 @@ List all departments
 |message|string|error message|
 |data| array| result, please refer to sample results |
 
-`data` fields（The specific field depends on the parameter `fields`）
+**data** fields（The specific field depends on the parameter `fields`）
 
 | field      | type     | description      |
 |-----------|-----------|-----------|
