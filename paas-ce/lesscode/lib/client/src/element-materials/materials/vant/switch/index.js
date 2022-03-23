@@ -10,17 +10,21 @@
  */
 
 export default {
-    name: 'van-icon',
-    type: 'van-icon',
-    // bk-drag-custom-comp-default
-    icon: 'bk-drag-icon',
-    displayName: '图标',
-    group: '基础',
-    document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/icon',
+    name: 'van-switch',
+    type: 'van-switch',
+    displayName: '开关',
+    icon: 'bk-drag-switcher',
+    group: '表单',
+    order: 1,
+    document: 'https://youzan.github.io/vant/v2/#/zh-CN/switch',
     events: [
         {
+            name: 'change',
+            tips: '状态发生变化时调用该事件函数，事件回调参数 (value: boolean)'
+        },
+        {
             name: 'click',
-            tips: '点击图标时触发，事件回调参数 (e: Event)'
+            tips: '点击时触发，事件回调参数 (event: Event)'
         }
     ],
     styles: [
@@ -36,36 +40,40 @@ export default {
     renderStyles: {
         display: 'inline-block'
     },
+    directives: [
+        {
+            type: 'v-model',
+            prop: 'value'
+        }
+    ],
     props: {
-        name: {
-            type: 'van-icon',
-            val: 'chat-o',
-            tips: '图标名称或图片链接'
-        },
-        dot: {
+        value: {
             type: 'boolean',
             val: false,
-            tips: '是否显示图标右上角小红点'
+            tips: '开关选中状态'
         },
-        badge: {
-            type: ['string', 'number'],
-            val: '',
-            tips: '图标右上角徽标的内容'
+        loading: {
+            type: 'boolean',
+            val: false
         },
-        color: {
-            type: 'color',
-            val: 'inherit',
-            tips: '图标颜色'
+        disabled: {
+            type: 'boolean',
+            val: false
         },
         size: {
             type: ['string', 'number'],
-            val: 'inherit',
-            tips: '图标大小，如 20px 2em，默认单位为px'
+            val: '30px',
+            tips: '开关尺寸，默认单位为px'
         },
-        tag: {
+        'active-color': {
             type: 'string',
-            val: 'i',
-            vips: 'HTML 标签'
+            val: '#1989fa',
+            tips: '打开时的背景色'
+        },
+        'inactive-color': {
+            type: 'string',
+            val: 'white',
+            tips: '关闭时的背景色'
         }
     }
 }

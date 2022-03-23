@@ -18,19 +18,38 @@ import freeLayout from '../bk/free-layout'
 import paragraph from './paragraph'
 
 // Basic
-import button from './button'
-import cell from './cell'
-import icon from './icon'
-import image from './image'
-import checkboxGroup from './check-box-group'
+import Button from './button'
+import Cell from './cell'
+import Icon from './icon'
+import Image from './image'
 
 // import calendar from './calendar'
  
 // Form
+import Switch from './switch'
+import CheckboxGroup from './check-box-group'
+import DatetimePicker from './datetime-picker'
+import Field from './field'
+import NumberKeyboard from './number-keyboard'
+import PasswordInput from './password-input'
+import Picker from './picker'
+import RadioGroup from './radio-group'
+import Rate from './rate'
  
 // 数据
+import Tag from './tag'
+import Skeleton from './skeleton'
+import Progress from './progress'
+import NoticeBar from './notice-bar'
+import Empty from './empty'
+import Divider from './divider'
+import CountDown from './count-down'
+import Circle from './circle'
+import Badge from './badge'
  
 // 反馈
+
+import Loading from './loading'
  
 // 导航
 import TreeSelect from './tree-select'
@@ -46,14 +65,32 @@ const vantComponents = Object.seal([
     grid4,
     freeLayout,
     paragraph,
-    button,
-    cell,
-    icon,
-    image,
-    checkboxGroup,
+    Button,
+    Cell,
+    Icon,
+    Image,
+    CheckboxGroup,
+    DatetimePicker,
+    Field,
+    NumberKeyboard,
+    PasswordInput,
+    Picker,
+    RadioGroup,
+    Rate,
     TreeSelect,
     Pagination,
-    Navbar
+    Navbar,
+    Tag,
+    Skeleton,
+    Progress,
+    NoticeBar,
+    Empty,
+    Divider,
+    CountDown,
+    Circle,
+    Loading,
+    Badge,
+    Switch
 ])
  
 export default vantComponents

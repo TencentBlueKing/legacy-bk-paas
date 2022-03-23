@@ -16,10 +16,24 @@ export default {
     icon: 'bk-drag-button',
     displayName: '单元格',
     group: '基础',
+    document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/cell',
     events: [
-        { name: 'click', tips: '点击时调用该事件函数，事件回调参数 (e: Event)' }
+        {
+            name: 'click',
+            tips: '点击时调用该事件函数，事件回调参数 (e: Event)'
+        }
     ],
-    styles: ['size', 'padding', 'margin', 'display'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'padding',
+        'opacity',
+        'pointer'
+    ],
     renderStyles: {
     },
     props: {

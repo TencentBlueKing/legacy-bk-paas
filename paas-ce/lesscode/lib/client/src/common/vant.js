@@ -5,10 +5,29 @@ import { Button,
     Image,
     Checkbox,
     CheckboxGroup,
+    DatetimePicker,
+    Field,
+    NumberKeyboard,
+    PasswordInput,
+    Picker,
+    Radio,
+    RadioGroup,
+    Rate,
     Lazyload,
     TreeSelect,
     Pagination,
-    NavBar } from 'vant'
+    NavBar,
+    Tag,
+    Skeleton,
+    Progress,
+    NoticeBar,
+    Empty,
+    Divider,
+    CountDown,
+    Circle,
+    Badge,
+    Loading,
+    Switch } from 'vant'
 import 'vant/lib/index.css'
 
 Vue.use(Button)
@@ -17,10 +36,28 @@ Vue.use(Icon)
 Vue.use(Image)
 Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
-
-Vue.use(Lazyload)
+Vue.use(DatetimePicker)
+Vue.use(Field)
+Vue.use(NumberKeyboard)
+Vue.use(PasswordInput)
+Vue.use(Picker)
+Vue.use(Radio)
+Vue.use(RadioGroup)
+Vue.use(Rate)
 Vue.use(TreeSelect)
 Vue.use(Pagination)
 Vue.use(NavBar)
+Vue.use(Tag)
+Vue.use(Skeleton)
+Vue.use(Progress)
+Vue.use(NoticeBar)
+Vue.use(Empty)
+Vue.use(Divider)
+Vue.use(CountDown)
+Vue.use(Circle)
+Vue.use(Loading)
+Vue.use(Badge)
+Vue.use(Switch)
 
 // Vue.use(Calendar)
+Vue.use(Lazyload)

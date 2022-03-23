@@ -16,11 +16,24 @@ export default {
     icon: 'bk-drag-button',
     displayName: '按钮',
     group: '基础',
+    document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/button',
     events: [
-        { name: 'click', tips: '点击时调用该事件函数，事件回调参数 (e: Event)' },
-        { name: 'touchstart', tips: '开始触摸按钮时触发，事件回调参数 (e: TouchEvent)' }
+        {
+            name: 'click',
+            tips: '点击时调用该事件函数，事件回调参数 (e: Event)'
+        },
+        {
+            name: 'touchstart',
+            tips: '开始触摸按钮时触发，事件回调参数 (e: TouchEvent)'
+        }
     ],
-    styles: ['size', 'padding', 'margin', 'display'],
+    styles: [
+        'position',
+        'size',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },

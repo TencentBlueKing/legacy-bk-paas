@@ -16,6 +16,7 @@ export default {
     icon: 'bk-drag-image',
     displayName: '图片',
     group: '基础',
+    document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/image',
     events: [
         {
             name: 'click',
@@ -30,7 +31,16 @@ export default {
             tips: '图片加载失败时触发，无回调参数'
         }
     ],
-    styles: ['size', 'padding', 'margin', 'display'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },

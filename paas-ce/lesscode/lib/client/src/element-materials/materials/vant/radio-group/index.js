@@ -10,16 +10,16 @@
  */
 
 export default {
-    name: 'van-checkbox-group',
-    type: 'van-checkbox-group',
-    displayName: '多选框',
-    icon: 'bk-drag-checkbox',
+    name: 'van-radio-group',
+    type: 'van-radio-group',
+    displayName: '单选框',
+    icon: 'bk-drag-radio',
     group: '表单',
-    document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/checkbox',
+    document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/radio',
     events: [
         {
-            name: 'change',
-            tips: '当绑定值变化时调用该事件函数，事件回调参数 (names: Array)'
+            name: 'click',
+            tips: '点击单选框时调用该事件函数，事件回调参数 (event: Event)'
         }
     ],
     styles: [
@@ -40,12 +40,7 @@ export default {
     ],
     props: {
         value: {
-            type: 'array',
-            val: []
-        },
-        max: {
-            type: ['number', 'string'],
-            tips: '最大可选数，0为无限制'
+            type: ['string', 'number', 'boolean']
         },
         direction: {
             type: 'string',
@@ -56,19 +51,19 @@ export default {
         'icon-size': {
             type: ['string', 'number'],
             val: '20px',
-            tips: '所有复选框的图标大小，默认单位为 px'
+            tips: '所有单选框的图标大小，默认单位为 px'
         },
         'checked-color': {
             type: 'color',
             val: '#1989fa',
-            tips: '所有复选框的选中状态颜色'
+            tips: '所有单选框的选中状态颜色'
         }
     },
     slots: {
         default: {
-            name: ['van-checkbox'],
+            name: ['van-radio'],
             type: ['list', 'remote'],
-            displayName: 'van-checkbox 可选项配置',
+            displayName: 'van-radio 可选项配置',
             tips: '默认插槽，填写的数据需要是数组且每个元素需包含label和value字段',
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
