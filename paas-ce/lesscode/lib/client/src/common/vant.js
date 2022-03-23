@@ -27,7 +27,12 @@ import { Button,
     Circle,
     Badge,
     Loading,
-    Switch } from 'vant'
+    Switch,
+    Step,
+    Steps,
+    Stepper,
+    Slider,
+    Search } from 'vant'
 import 'vant/lib/index.css'
 
 Vue.use(Button)
@@ -58,6 +63,11 @@ Vue.use(Circle)
 Vue.use(Loading)
 Vue.use(Badge)
 Vue.use(Switch)
+Vue.use(Step)
+Vue.use(Steps)
+Vue.use(Stepper)
+Vue.use(Slider)
+Vue.use(Search)
 
 // Vue.use(Calendar)
 Vue.use(Lazyload)

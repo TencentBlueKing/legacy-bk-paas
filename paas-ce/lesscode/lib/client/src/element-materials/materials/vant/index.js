@@ -35,6 +35,9 @@ import PasswordInput from './password-input'
 import Picker from './picker'
 import RadioGroup from './radio-group'
 import Rate from './rate'
+import Stepper from './stepper'
+import Slider from './slider'
+import Search from './search'
  
 // 数据
 import Tag from './tag'
@@ -55,6 +58,7 @@ import Loading from './loading'
 import TreeSelect from './tree-select'
 import Pagination from './pagination'
 import Navbar from './navbar'
+import Steps from './steps'
  
 // 其他
  
@@ -90,7 +94,11 @@ const vantComponents = Object.seal([
     Circle,
     Loading,
     Badge,
-    Switch
+    Switch,
+    Steps,
+    Stepper,
+    Slider,
+    Search
 ])
  
 export default vantComponents
