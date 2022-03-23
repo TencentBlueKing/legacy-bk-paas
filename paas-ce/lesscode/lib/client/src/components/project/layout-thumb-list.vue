@@ -8,10 +8,10 @@
             <div class="checkbox">
                 <i class="bk-icon icon-check-1 checked-icon"></i>
             </div>
-            <div class="layout-img" v-if="layout.type !== 'empty'">
+            <div class="layout-img" v-if="layout.type !== 'empty' && layout.type !== 'mobile-empty'">
                 <img :src="getPreviewImg(layout)" />
             </div>
-            <div class="layout-label" v-if="layout.type !== 'empty' && layout.projectId">
+            <div class="layout-label" v-if="layout.type !== 'empty' && layout.type !== 'mobile-empty' && layout.projectId">
                 <div class="layout-name" :title="layout.defaultName">
                     {{ layout.defaultName }}
                 </div>

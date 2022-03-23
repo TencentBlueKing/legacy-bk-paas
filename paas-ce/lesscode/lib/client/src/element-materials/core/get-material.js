@@ -3,7 +3,8 @@ import ElementMaterials from '../materials'
 
 const {
     bk,
-    element
+    element,
+    vant
 } = ElementMaterials
 
 const materialMap = {
@@ -21,6 +22,7 @@ const register = (lib) => {
 
 register(bk)
 register(element)
+register(vant)
 
 const registerCustomMemo = {}
 

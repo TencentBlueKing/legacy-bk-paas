@@ -63,6 +63,7 @@
                     </div>
                 </bk-select>
             </div>
+            <previewSwitch v-if="platform === 'MOBILE'" />
         </div>
         <page-dialog
             ref="pageDialog"
@@ -77,12 +78,14 @@
     } from 'vuex'
     import PageDialog from '@/components/project/page-dialog'
     import PageFromTemplateDialog from '@/components/project/page-from-template-dialog'
+    import previewSwitch from '../preview-switch'
 
     export default {
         name: '',
         components: {
             PageDialog,
-            PageFromTemplateDialog
+            PageFromTemplateDialog,
+            previewSwitch
         },
         data () {
             return {
@@ -96,7 +99,8 @@
             ]),
             ...mapGetters('page', [
                 'pageDetail',
-                'pageList'
+                'pageList',
+                'platform'
             ]),
             ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' })
         },
@@ -185,8 +189,9 @@
 <style lang="postcss" scoped>
     .page-select {
         display: flex;
-        width: 342px;
+        min-width: 450px;
         align-items: center;
+        margin-right: 18px;
         .page-name {
             display: flex;
             align-items: center;

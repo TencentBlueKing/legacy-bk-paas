@@ -56,7 +56,7 @@ const ProjectCode = {
 
     async previewCode (ctx) {
         const operationLogger = new OperationLogger(ctx)
-        const { projectId, versionId } = ctx.request.query
+        const { projectId, versionId, platform } = ctx.request.query
 
         try {
             // 参数校验
@@ -73,7 +73,7 @@ const ProjectCode = {
                 if (!isTemProj && !myProj) throw new global.BusinessError('项目ID不存在或者没有该项目权限，请在 Lesscode 上重新打开预览', 403, 403)
             })
 
-            const data = await ProjectCodeModel.previewCode(projectId, versionId)
+            const data = await ProjectCodeModel.previewCode(projectId, versionId, platform)
             operationLogger.success({
                 operateTarget: `项目ID：${projectId}`
             })

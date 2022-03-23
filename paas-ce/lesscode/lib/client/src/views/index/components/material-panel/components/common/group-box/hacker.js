@@ -1,5 +1,25 @@
 import LC from '@/element-materials/core'
 import Node from '@/element-materials/core/Node'
+import store from '@/store'
+
+const paragraphStyle = {
+    PC: {
+        display: 'inline-block',
+        width: '281px',
+        height: '102px',
+        textAlign: 'left',
+        fontSize: '14px',
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-all'
+    },
+    MOBILE: {
+        display: 'inline-block',
+        textAlign: 'left',
+        fontSize: '28rpx',
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-all'
+    }
+}
 
 export const createGrid2 = (node, config) => {
     if (node.type === 'render-grid' && config.name === 'grid2') {
@@ -48,5 +68,14 @@ export const createBkRadioGroup = (node, config) => {
             valueType: 'list',
             renderValue: slotConfig.val
         })
+    }
+}
+
+export const createParagraph = (node, config) => {
+    if (node.type === 'p') {
+        const platform = store.getters['page/platform']
+        const renderStyle = paragraphStyle[platform]
+        debugger
+        node.setRenderStyles(renderStyle)
     }
 }

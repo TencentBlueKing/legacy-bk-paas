@@ -36,9 +36,11 @@
         <template v-if="!isContentLoading && !isCustomComponentLoading">
             <draw-layout>
                 <material-panel slot="left" />
-                <operation-area
+                <operation-area v-if="operationType !== 'edit'"
                     :operaion="operationType"
                     :type="operationType" />
+                <!-- 主画布使用v-show 不更新 -->
+                <Render v-show="operationType === 'edit'" />
                 <modifier-panel slot="right" />
             </draw-layout>
             <novice-guide ref="guide" :data="guideStep" />
@@ -63,6 +65,7 @@
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
     import ActionTool from './components/action-tool'
+    import Render from '@/components/render/index'
 
     console.dir(LC)
 
@@ -78,7 +81,8 @@
             MaterialPanel,
             ModifierPanel,
             OperationArea,
-            ActionTool
+            ActionTool,
+            Render
         },
         data () {
             return {
@@ -90,7 +94,7 @@
         computed: {
             ...mapGetters(['user']),
             ...mapGetters('drag', ['curTemplateData']),
-            ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('page', ['pageDetail', 'platform']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('variable', ['variableList']),
@@ -363,6 +367,7 @@
             .function-and-tool {
                 position: relative;
                 display: flex;
+                flex: 1;
                 justify-content: center;
                 align-items: center;
             }
