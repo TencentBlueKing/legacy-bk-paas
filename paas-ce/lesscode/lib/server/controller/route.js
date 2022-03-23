@@ -123,12 +123,13 @@ module.exports = {
             const routeList = await routeModel.queryProjectRouteTree(projectId, versionId)
             const routeTree = []
             routeList.forEach(route => {
-                const { layoutId, layoutPath } = route
-                const parentNode = routeTree.find(item => item.layoutPath === layoutPath)
+                const { layoutId, layoutPath, layoutType } = route
+                const parentNode = routeTree.find(item => item.layoutPath === layoutPath && item.layoutType === layoutType)
                 if (!parentNode) {
                     routeTree.push({
                         layoutId,
                         layoutPath,
+                        layoutType,
                         children: route.id ? [route] : []
                     })
                 } else {

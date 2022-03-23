@@ -165,6 +165,7 @@
                     'slot-html': TypeSlot,
                     'free-layout-item': TypeFreeLayoutItem,
                     'icon': TypeIcon,
+                    'van-icon': TypeIcon,
                     'color': TypeColor,
                     'step': TypeSlotWrapper,
                     'function': TypeFunction,
@@ -197,6 +198,7 @@
                     'free-layout-item': 'free-layout-item',
                     'bread-crumb': 'bread-crumb',
                     'icon': 'icon',
+                    'van-icon': 'icon',
                     'form-item': 'form-item',
                     'color': 'color',
                     'step': 'step',
@@ -216,6 +218,7 @@
                     'html': 'string',
                     'json': 'object',
                     'icon': 'string',
+                    'van-icon': 'string',
                     'float': 'number'
                 }
 

@@ -7,26 +7,23 @@
 <script>
     import PC from './pc/index.vue'
     import Mobile from './mobile/index.vue'
+    import { mapGetters } from 'vuex'
     export default {
         components: {
             PC,
             Mobile
         },
-        props: {
-            platform: {
-                type: String,
-                default: 'pc'
-            }
-        },
         computed: {
+            ...mapGetters('page', ['platform']),
             canvas () {
-                return this.platform === 'pc' ? PC : Mobile
+                return this.platform === 'MOBILE' ? Mobile : PC
             }
         }
     }
 </script>
 .<style lang="postcss" scoped>
 .canvas-wrapper {
-    height: 100%;
+    height: calc(100vh - 160px);
+    min-width: 920px;
 }
 </style>

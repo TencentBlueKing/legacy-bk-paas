@@ -16,8 +16,18 @@
             searchable
             :value="value"
             @change="handleChange">
-            <bk-option v-for="item in list" :id="item.name" :name="item.icon" :key="item.name">
-                <i class="bk-icon" :class="item.name" />
+            <bk-option
+                v-for="item in list"
+                :id="item.name"
+                :name="item.icon"
+                :key="item.name">
+                <i
+                    v-if="!isVantIcon"
+                    class="bk-icon"
+                    :class="item.name" />
+                <van-icon
+                    v-else
+                    :name="item.name" />
                 <span>{{ item.icon }}</span>
             </bk-option>
         </bk-select>
@@ -26,6 +36,7 @@
 
 <script>
     import iconComponentList from '@/element-materials/materials/icon-list.js'
+    import vanIconList from '@/element-materials/materials/vant/icon-list.js'
 
     export default {
         props: {
@@ -48,16 +59,25 @@
         },
         data () {
             return {
-                value: this.defaultValue ? this.defaultValue.replace('bk-icon ', '') : ''
+                value: ''
+            }
+        },
+        computed: {
+            isVantIcon () {
+                return this.type === 'van-icon'
             }
         },
         created () {
-            this.list = iconComponentList
+            this.list = this.isVantIcon ? vanIconList : iconComponentList
+            if (this.defaultValue) {
+                this.value = this.isVantIcon ? this.defaultValue : this.defaultValue.replace('bk-icon ', '')
+            }
         },
         methods: {
             handleChange (val) {
                 if (val) {
-                    this.change(this.name, `bk-icon ${val}`, this.type)
+                    const returnIcon = this.isVantIcon ? val : `bk-icon ${val}`
+                    this.change(this.name, returnIcon, this.type)
                 } else {
                     this.change(this.name, '', this.type)
                 }

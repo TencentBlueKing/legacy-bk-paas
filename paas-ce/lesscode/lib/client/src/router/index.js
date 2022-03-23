@@ -41,6 +41,7 @@ const VersionManage = () => import(/* webpackChunkName: 'version' */'@/views/pro
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const PreviewTemplate = () => import(/* webpackChunkName: 'previewTemplate' */'@/views/preview/preview-template')
+const PreviewMobile = () => import(/* webpackChunkName: 'previewMobile' */'@/views/preview/preview-mobile')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
 
 const HealthPage = () => import(/* webpackChunkName: 'none' */'@/views/system/health')
@@ -365,6 +366,14 @@ const routes = [
         component: PreviewTemplate,
         meta: {
             title: '模板预览'
+        }
+    },
+    {
+        path: '/preview-mobile/project/:projectId',
+        name: 'previewMobile',
+        component: PreviewMobile,
+        meta: {
+            title: '移动端预览'
         }
     },
     {

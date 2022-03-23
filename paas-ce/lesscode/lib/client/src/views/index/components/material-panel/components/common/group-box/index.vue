@@ -43,7 +43,8 @@
         createBkIcon,
         createElIcon,
         createCharts,
-        createBkRadioGroup
+        createBkRadioGroup,
+        createParagraph
     } from './hacker'
 
     const hackerQueue = [
@@ -53,7 +54,8 @@
         createBkIcon,
         createElIcon,
         createCharts,
-        createBkRadioGroup
+        createBkRadioGroup,
+        createParagraph
     ]
 
     export default {
@@ -100,6 +102,8 @@
                 } else {
                     const materialConfig = this.list[event.oldIndex]
                     const node = LC.createNode(materialConfig.type)
+
+                    debugger
 
                     hackerQueue.forEach(task => task(node, materialConfig))
 
