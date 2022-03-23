@@ -42,6 +42,7 @@ export default {
     props: {
         value: {
             type: 'number',
+            val: 0,
             tips: '当前分值'
         },
         count: {
