@@ -40,7 +40,8 @@ export default {
     ],
     props: {
         value: {
-            type: ['string', 'number', 'boolean']
+            type: ['string', 'number', 'boolean'],
+            val: ''
         },
         direction: {
             type: 'string',

@@ -937,7 +937,8 @@ class PageCode {
     getPropsStr (type, props, compId, dirProps, slots) {
         let propsStr = ''
         const preCompId = camelCase(compId, { transform: camelCaseTransformMerge })
-        let elementComId = ''
+        // 需配置vmodel的组件
+        let modelComId = ''
         const componentType = type
         if (type === 'bk-table') {
             if (props.hasOwnProperty('show-pagination-info') && props.hasOwnProperty('showPaginationInfo')) {
@@ -949,7 +950,7 @@ class PageCode {
 
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
-                if (i === 'value') elementComId = compId
+                if (i === 'value') modelComId = compId
                 
                 const { format, valueType: type, code: val, modifiers = [] } = props[i]
  
@@ -1015,16 +1016,16 @@ class PageCode {
             this.dataTemplate(`${compId}Vmodel`, `'${checkedValue}'`)
             propsStr += `v-model="${compId}Vmodel"`
         }
-        // element组件添加vmodel
-        if (type.startsWith('el-')) {
-            if (!hasVModel && elementComId !== '') {
+        // element组件、vant组件添加vmodel
+        if (type.startsWith('el-') || type.startsWith('van')) {
+            if (!hasVModel && modelComId !== '') {
                 const valueType = typeof props['value'].code
                 if (valueType !== 'array' && valueType !== 'object') {
                     let vModelValue = props['value'].code.toString()
                     if (valueType === 'string') vModelValue = `'${props['value'].code}'`
-                    this.dataTemplate(elementComId, vModelValue)
+                    this.dataTemplate(modelComId, vModelValue)
                 }
-                propsStr += `v-model="${elementComId}"`
+                propsStr += `v-model="${modelComId}"`
             }
         }
         return propsStr
