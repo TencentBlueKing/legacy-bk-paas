@@ -42,14 +42,14 @@ get application info, bulk supported
 }
 ```
 
-### Return Result Description
+### Return Result Parameters Description
 
-| Field      | Type      | Description      |
-|-----------|----------|-----------|
-|  result   |    bool    |      return result, true for success, false for failure  |
-|  code     |    int     |      return code, 0 for success, other values for failure |
-|  message  |    string  |      error message |
-|  data     |    list    |      result data, details are described below  |
+| field      | type      | description      |
+|-----------|-----------|-----------|
+|result| bool | returns a result, true for success and false for failure |
+|code|int|The return code, 0 for success, and other values for failure|
+|message|string|error message|
+|data| array| result, please refer to sample results |
 
 #### data
 

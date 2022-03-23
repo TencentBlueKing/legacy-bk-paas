@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.12.45
+    - update: esb update jobv3, sops, monitor_v3, usermanage, bk_login apidocs
+    - update: esb cc add header Content-Type to backend
+
 # 2.12.44
     - update: esb update cc, sops, bk-log, job, bkmonitor-v3, bk-docs-center apidocs
 

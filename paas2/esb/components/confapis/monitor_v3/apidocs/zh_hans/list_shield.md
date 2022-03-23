@@ -8,13 +8,13 @@
 
 #### 接口参数
 
-| 字段       | 类型   | 描述     |
-| ---------- | ------ | -------- |
-| time_range | string | 时间范围 |
-| bk_biz_id  | int    | 业务ID   |
-| is_active  | bool   | 是否生效 |
-| page       | int    | 页数     |
-| page_size  | int    | 每页数量 |
+| 字段       | 类型   | 是否必选 | 描述     |
+| ---------- | ------ |------| -------- |
+| time_range | string | 否    | 时间范围 |
+| bk_biz_id  | int    | 否    | 业务ID   |
+| is_active  | bool   | 否    | 是否生效 |
+| page       | int    | 否    | 页数     |
+| page_size  | int    | 否    | 每页数量 |
 
 #### 示例数据
 
