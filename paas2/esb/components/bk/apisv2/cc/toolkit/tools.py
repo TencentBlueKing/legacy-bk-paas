@@ -14,6 +14,7 @@ import copy
 import json
 
 from common.errors import CommonAPIError
+from common.log import logger
 
 from . import configs
 
@@ -24,6 +25,7 @@ class CCClient(object):
 
         self.bk_username = component.current_user.username
         self.bk_app_code = component.request.app_code
+        self.request_id = component.request.request_id
 
         self.bk_language = component.request.bk_language
         self.bk_supplier_account = (
@@ -42,6 +44,14 @@ class CCClient(object):
                 "HTTP_BLUEKING_SUPPLIER_ID": "0",
             }
         )
+
+        if not self.bk_username:
+            logger.warning(
+                "request cc with empty username, request_id=%s, headers=%s",
+                self.request_id,
+                json.dumps(headers),
+            )
+
         return self.http_client.request(
             method,
             host,
@@ -59,11 +69,23 @@ class CCClient(object):
         response = self.request("GET", host, path, params=params, headers=headers, **kwargs)
         return self.format_response(response)
 
-    def post(self, host, path, data=None, headers={}, **kwargs):
+    def post(self, host, path, data=None, headers=None, **kwargs):
+        headers = copy.copy(headers or {})
+        headers.update(
+            {
+                "Content-Type": "application/json",
+            }
+        )
         response = self.request("POST", host, path, data=data, headers=headers, **kwargs)
         return self.format_response(response)
 
-    def put(self, host, path, data=None, headers={}, **kwargs):
+    def put(self, host, path, data=None, headers=None, **kwargs):
+        headers = copy.copy(headers or {})
+        headers.update(
+            {
+                "Content-Type": "application/json",
+            }
+        )
         response = self.request("PUT", host, path, data=data, headers=headers, **kwargs)
         return self.format_response(response)
 
@@ -84,7 +106,7 @@ class CCClient(object):
         bk_error_code = response.get("bk_error_code", response.get("code"))
         if bk_error_code is None:
             raise CommonAPIError(
-                "An error occurred while requesting CC interface, " "the response content does not contain code field."
+                "An error occurred while requesting CC interface, the response content does not contain code field."
             )
         elif bk_error_code == 0:
             return {
