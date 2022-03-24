@@ -26,6 +26,16 @@ const vantRenderMap = {
                 :disabled="item.disabled"
             >{{item.label}}</van-radio>
         `
+    },
+    'van-step' ({ val }) {
+        const displayVal = getVal(val)
+        return `
+            <van-step
+                v-for="(item,index) in ${displayVal}"
+                :key="index"
+            >
+            {{item.text}}</van-step>    
+        `
     }
 }
 

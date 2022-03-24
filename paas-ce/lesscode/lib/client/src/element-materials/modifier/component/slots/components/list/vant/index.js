@@ -42,6 +42,18 @@ const vantListMap = {
             value: `单选项${index}`,
             disabled: false
         })
+    },
+    'van-step': {
+        template: [
+            {
+                name: 'text',
+                key: 'text',
+                type: 'input'
+            }
+        ],
+        generateFunc: index => ({
+            text: `步骤${index}`
+        })
     }
 }
 
