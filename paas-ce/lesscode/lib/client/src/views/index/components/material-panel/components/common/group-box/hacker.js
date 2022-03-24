@@ -75,7 +75,6 @@ export const createParagraph = (node, config) => {
     if (node.type === 'p') {
         const platform = store.getters['page/platform']
         const renderStyle = paragraphStyle[platform]
-        debugger
         node.setRenderStyles(renderStyle)
     }
 }

@@ -45,6 +45,8 @@
     </div>
 </template>
 <script>
+    import LC from '@/element-materials/core'
+
     export default {
         name: '',
         props: {
@@ -56,6 +58,10 @@
         methods: {
             handleChange (value) {
                 this.$emit('input', value)
+                const activeNode = LC.getActiveNode()
+                if (activeNode) {
+                    activeNode.activeClear()
+                }
             }
         }
     }
