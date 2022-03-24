@@ -65,6 +65,7 @@
         @mixin scroller;
         .wraper{
             display: inline-block;
+            height: 100%;
             min-width: 100%;
             min-height: 100%;
             background: #fff;
