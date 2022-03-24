@@ -4,14 +4,17 @@
             <div :class="$style['version-selector']">
                 项目版本：<project-version-selector :bordered="false" :popover-width="200" v-model="projectVersionId" />
             </div>
-            <bk-input
-                :class="$style['search-input']"
-                right-icon="bk-icon icon-search"
-                placeholder="请输入组件名称"
-                v-model.trim="keyword"
-                @clear="handleSearch"
-                @enter="handleSearch"
-                :clearable="true" />
+            <div :class="$style['comp-type-select']">
+                <type-select @select-change="handleSelectChange"></type-select>
+                <bk-input
+                    :class="$style['search-input']"
+                    right-icon="bk-icon icon-search"
+                    placeholder="请输入组件名称"
+                    v-model.trim="keyword"
+                    @clear="handleSearch"
+                    @enter="handleSearch"
+                    :clearable="true" />
+            </div>
         </div>
         <div :class="$style['data-list']" v-bkloading="{ isLoading, opacity: 0.1 }">
             <bk-table
@@ -22,6 +25,10 @@
                 v-show="!isLoading">
                 <bk-table-column label="组件名称" prop="compName" min-width="180" show-overflow-tooltip>
                     <template slot-scope="{ row }">
+                        <span :class="$style['comp-type']">
+                            <i v-if="row.compType === 'MOBILE'" class="bk-drag-icon bk-drag-mobilephone"> </i>
+                            <i v-else class="bk-drag-icon bk-drag-pc"> </i>
+                        </span>
                         <span :class="$style['component-name']">{{ row.displayName }}({{ row.name }})</span>
                     </template>
                 </bk-table-column>
@@ -101,11 +108,13 @@
 <script>
     import { mapGetters } from 'vuex'
     import VersionLog from '@/components/version-log'
+    import typeSelect from '@/components/project/type-select'
 
     export default {
         name: '',
         components: {
-            VersionLog
+            VersionLog,
+            typeSelect
         },
         data () {
             return {
@@ -121,7 +130,8 @@
                     data: {}
                 },
                 verionDetail: {},
-                selectedProjectVersionId: ''
+                selectedProjectVersionId: '',
+                compType: 'ALL'
             }
         },
         computed: {
@@ -194,9 +204,21 @@
                             || item.name.toLowerCase().indexOf(this.keyword.toLowerCase()) !== -1
                     })
                 }
+                this.handleTypeChange()
+            },
+            handleTypeChange () {
+                if (this.compType === 'PC') {
+                    this.list = this.list.filter(item => item.compType !== 'MOBILE')
+                } else if (this.compType === 'MOBILE') {
+                    this.list = this.list.filter(item => item.compType === 'MOBILE')
+                }
             },
             getInitialVersion () {
                 return this.$store.getters['projectVersion/initialVersion']()
+            },
+            handleSelectChange (type) {
+                this.compType = type
+                this.handleSearch()
             }
         }
     }
@@ -219,10 +241,20 @@
             .search-input {
                 width: 400px;
             }
+
+            .comp-type-select{
+                display: flex;
+            }
         }
 
         .data-list {
             min-height: calc(100vh - 250px);
+
+            .comp-type {
+                font-size: 16px;
+                color: #979ba5;
+                margin-right: 10px;
+            }
         }
 
         .component-version {

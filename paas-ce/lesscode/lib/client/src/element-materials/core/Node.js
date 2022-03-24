@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { uuid } from '@/common/util'
+import { unitFilter } from 'shared/util.js'
 
 import toJSON from './extends/to-json'
 import active from './extends/active'
@@ -167,9 +168,7 @@ export default class Node {
             style[toHyphenate(key)] = customStyle[key]
         })
         Object.keys(this.renderStyles).forEach(key => {
-            if (key !== 'customStyle') {
-                style[toHyphenate(key)] = this.renderStyles[key]
-            }
+            style[toHyphenate(key)] = unitFilter(this.renderStyles[key])
         })
         
         return Object.seal(Object.assign(style, customStyle))

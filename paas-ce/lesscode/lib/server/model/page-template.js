@@ -13,12 +13,15 @@ import { getRepository } from 'typeorm'
 import PageTemplate from './entities/page-template'
 
 export const all = async function (params = {}) {
-    const res = await getRepository(PageTemplate).find({
-        where: {
-            ...params,
-            deleteFlag: 0
-        }
-    })
+    const res = await getRepository(PageTemplate)
+        .createQueryBuilder('pageTemplate')
+        .where({
+            ...params
+        })
+        .andWhere('pageTemplate.deleteFlag = 0')
+        .orderBy('CASE pageTemplate.templateType WHEN "MOBILE" THEN "PC" END')
+        .addOrderBy('pageTemplate.id', 'DESC')
+        .getMany()
     return res
 }
 

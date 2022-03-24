@@ -323,7 +323,8 @@
                 activatedProject: {},
                 pageLoading: true,
                 projectCodeOldValue: '',
-                defaultLayoutList: []
+                defaultLayoutList: [],
+                layoutFullList: []
             }
         },
         computed: {
@@ -359,7 +360,8 @@
                         item.checked = isEmptyType
                         item.disabled = isEmptyType
                     })
-                    this.defaultLayoutList = layoutList
+                    this.layoutFullList = layoutList
+                    this.defaultLayoutList = this.layoutFullList.filter(item => item.layoutType !== 'MOBILE')
                 } catch (e) {
                     console.error(e)
                 }
@@ -389,14 +391,15 @@
                 try {
                     await this.$refs.createForm.validate()
                     const data = this.dialog.create.formData
-                    const layouts = this.defaultLayoutList.filter(layout => layout.checked).map(layout => {
+                    const layouts = this.layoutFullList.filter(layout => layout.checked || layout.layoutType === 'MOBILE').map(layout => {
                         return {
                             layoutId: layout.id,
                             routePath: layout.defaultPath,
                             isDefault: layout.isDefault,
                             showName: layout.defaultName,
                             layoutCode: layout.defaultCode,
-                            content: layout.defaultContent
+                            content: layout.defaultContent,
+                            layoutType: layout.layoutType
                         }
                     })
                     data.layouts = layouts

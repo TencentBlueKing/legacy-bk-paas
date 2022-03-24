@@ -11,6 +11,27 @@
                 <a href="/help/custom" target="_blank">组件开发指引</a>
             </div>
             <bk-form ref="form" :label-width="90" :model="formData" :rules="rules">
+                <bk-form-item label="组件类型" required error-display-type="normal">
+                    <bk-radio-group v-model="formData.compType">
+                        <bk-radio-button value="PC">
+                            <bk-radio :checked="formData.compType === 'PC'"
+                            ></bk-radio>
+                            <i class="bk-drag-icon bk-drag-pc"></i>
+                            <div class="component-type-desc">
+                                <span class="comp-type-tag">PC 组件</span>
+                                <span>适用于搭建 PC 端 Web 界面</span>
+                            </div>
+                        </bk-radio-button>
+                        <bk-radio-button value="MOBILE">
+                            <bk-radio :checked="formData.compType === 'MOBILE'"></bk-radio>
+                            <i class="bk-drag-icon bk-drag-mobilephone"></i>
+                            <div class="component-type-desc">
+                                <span class="comp-type-tag">Mobile 组件</span>
+                                <span>适用于搭建H5，小程序，APP页面</span>
+                            </div>
+                        </bk-radio-button>
+                    </bk-radio-group>
+                </bk-form-item>
                 <bk-form-item label="组件包" required error-display-type="normal">
                     <bk-upload
                         class="component-upload"
@@ -78,7 +99,8 @@
         version: '',
         categoryId: '',
         description: '',
-        log: ''
+        log: '',
+        compType: 'PC'
     })
     export default {
         name: '',
@@ -165,6 +187,9 @@
             this.rules = {
                 name: [
                     { required: true, message: '请先上传组件', trigger: 'blur' }
+                ],
+                compType: [
+                    { required: true, message: '请选择组件类型', trigger: 'blur' }
                 ],
                 type: [
                     { required: true, message: '请先上传组件', trigger: 'blur' },
@@ -293,6 +318,39 @@
         }
         .sideslider-footer{
             padding-left: 120px;
+        }
+
+        .bk-form-radio-button .bk-radio-button-text {
+            width: 315px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+
+            i {
+                font-size: 30px;
+                margin-left: 5px;
+                color: #979ba5;
+            }
+
+            .component-type-desc {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-left: 10px;
+
+                span {
+                    line-height: 20px;
+                    font-size: 12px;
+                }
+
+                .comp-type-tag{
+                    font-weight: 700;
+                }
+            }
+        }
+
+        .bk-form-radio-button .bk-radio-button-input:checked+.bk-radio-button-text i{
+            color: #3a84ff;
         }
     }
 </style>

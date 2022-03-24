@@ -30,6 +30,7 @@
     import RenderBaseComponent from './components/render-base-component'
     import RenderCustomComponent from './components/render-custom-component'
     import RnderIcon from './components/render-icon'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: '',
@@ -43,6 +44,7 @@
             }
         },
         computed: {
+            ...mapGetters('page', ['platform']),
             com () {
                 const comMap = {
                     baseComponent: RenderBaseComponent,
@@ -52,9 +54,19 @@
                 return comMap[this.tab]
             }
         },
+        created () {
+            this.initPlatform()
+        },
         methods: {
             handleChangeTab (tab) {
                 this.tab = tab
+            },
+            initPlatform () {
+                const map = {
+                    PC: 'bk',
+                    MOBILE: 'vant'
+                }
+                this.baseComponent = map[this.platform]
             }
         }
     }
