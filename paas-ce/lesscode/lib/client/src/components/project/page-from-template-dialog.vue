@@ -664,6 +664,7 @@
                 @mixin scroller;
                 .type-button {
                     width: 176px;
+                }
                 .bk-form-control.control-prepend-group {
                     background: #fff;
                     .group-text {
