@@ -10,7 +10,7 @@
  */
 import { paramCase, camelCase, camelCaseTransformMerge } from 'change-case'
 
-import { uuid } from '../../shared/util.js'
+import { uuid, unitFilter } from '../../shared/util.js'
 import { replaceFuncKeyword } from '../../shared/function/helper'
 import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
 import safeStringify from '../../client/src/common/json-safe-stringify'
@@ -41,6 +41,7 @@ class PageCode {
      * 3. projectCode: 生成整个项目代码
      */
     pageType = ''
+    platform = '' // ['PC', 'MOBILE']
     funcGroups = []
     code = ''
     scriptStr = ''
@@ -75,6 +76,7 @@ class PageCode {
         {
             targetData = [],
             pageType = 'vueCode',
+            platform = 'PC',
             funcGroups = [],
             lifeCycle = '',
             projectId,
@@ -92,6 +94,7 @@ class PageCode {
     ) {
         this.targetData = targetData || []
         this.pageType = pageType
+        this.platform = platform
         this.funcGroups = funcGroups || []
         this.uniqueKey = uuid()
         this.lifeCycle = lifeCycle || {}
@@ -366,8 +369,7 @@ class PageCode {
                             <!-- eslint-disable -->
                             <!-- prettier-ignore -->
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
-                                >${slotStr}
-                            </${item.type}>
+                                >${slotStr}</${item.type}>
                             <!-- eslint-enable -->`
                     } else {
                         componentCode += `
@@ -1043,14 +1045,20 @@ class PageCode {
     getPropsStr (type, props, compId, dirProps, slots) {
         let propsStr = ''
         const preCompId = camelCase(compId, { transform: camelCaseTransformMerge })
-        let elementComId = ''
+        // 需配置vmodel的组件
+        let modelComId = ''
         const componentType = type
+        if (type === 'bk-table') {
+            if (props.hasOwnProperty('show-pagination-info') && props.hasOwnProperty('showPaginationInfo')) {
+                delete props.showPaginationInfo
+            }
+        }
         for (const i in props) {
             if (dirProps.find((directive) => (directive.prop === i)) && !['remote', 'data-source', 'table-data-source'].includes(props[i].type)) continue
 
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
-                if (i === 'value') elementComId = compId
+                if (i === 'value') modelComId = compId
                 
                 const { format, valueType: type, code: val, modifiers = [] } = props[i]
  
@@ -1107,25 +1115,25 @@ class PageCode {
         const hasVModel = dirProps.filter(item => item.type === 'v-model').length
         if (type === 'bk-checkbox-group' && !hasVModel) {
             const checkedValue = (slots.default.code || []).filter(c => c.checked === true).map(c => c.value)
-            this.dataTemplate(compId, JSON.stringify(checkedValue))
-            propsStr += `v-model="${compId}"`
+            this.dataTemplate(`${compId}Vmodel`, JSON.stringify(checkedValue))
+            propsStr += `v-model="${compId}Vmodel"`
         }
         if (type === 'bk-radio-group' && !hasVModel) {
             const checkedItem = (slots.default.code || []).find(c => c.checked === true)
             const checkedValue = (checkedItem && checkedItem.value) || ''
-            this.dataTemplate(compId, `'${checkedValue}'`)
-            propsStr += `v-model="${compId}"`
+            this.dataTemplate(`${compId}Vmodel`, `'${checkedValue}'`)
+            propsStr += `v-model="${compId}Vmodel"`
         }
-        // element组件添加vmodel
-        if (type.startsWith('el-')) {
-            if (!hasVModel && elementComId !== '') {
+        // element组件、vant组件添加vmodel
+        if (type.startsWith('el-') || type.startsWith('van')) {
+            if (!hasVModel && modelComId !== '') {
                 const valueType = typeof props['value'].code
                 if (valueType !== 'array' && valueType !== 'object') {
                     let vModelValue = props['value'].code.toString()
                     if (valueType === 'string') vModelValue = `'${props['value'].code}'`
-                    this.dataTemplate(elementComId, vModelValue)
+                    this.dataTemplate(modelComId, vModelValue)
                 }
-                propsStr += `v-model="${elementComId}"`
+                propsStr += `v-model="${modelComId}"`
             }
         }
         return propsStr
@@ -1212,7 +1220,7 @@ class PageCode {
                 if (i === 'top' || i === 'left') {
                     tmpStr += `${i}: 0px;\n`
                 } else {
-                    tmpStr += `${paramCase(i)}: ${styles[i]};\n`
+                    tmpStr += `${paramCase(i)}: ${unitFilter(styles[i])};\n`
                 }
             }
 

@@ -1,5 +1,7 @@
 <template>
     <div class="lesscode-layout-empty">
-        <slot />
+        <div class="container-content">
+            <slot />
+        </div>
     </div>
 </template>

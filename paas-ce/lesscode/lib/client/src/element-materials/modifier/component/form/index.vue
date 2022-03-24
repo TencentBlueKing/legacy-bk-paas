@@ -207,9 +207,7 @@
                     })
                     // 验证规则里面配有 required 规则
                     const hasRequired = ((itemData.validate || []).filter(item => item.required === true).length > 0)
-                    if (hasRequired) {
-                        node.setProp('required', true)
-                    }
+                    node.setProp('required', hasRequired)
                 }
 
                 const setDirective = node => {

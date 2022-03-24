@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./iconcool.js"></script>
+  <style>
+    html,
+    body,
+    ul,
+    li {
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      margin: 0 auto;
+      padding: 50px;
+      width: 980px;
+    }
+    .container .page-title {
+      margin: 0;
+      padding: 0;
+    }
+    .container .page-title .logo {
+      height: 50px;
+    }
+    .tab-wrapper {
+      padding-top: 26px;
+      border-bottom: 1px solid #dcdee5;
+      overflow: hidden;
+    }
+    .tab-wrapper .tab-panel {
+      float: left;
+      padding: 9px;
+      min-width: 124px;
+      font-size: 16px;
+      color: #979ba5;
+      text-align: center;
+      cursor: pointer;
+    }
+    .tab-wrapper .tab-panel.active {
+      color: #313238;
+      border-bottom: 3px solid #361ec6;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .icon-list .icon-item {
+      display: inline-block;
+      margin-top: 20px;
+      width: 116px;
+      color: #313238;
+      text-align: center;
+      vertical-align: top;
+      overflow: hidden;
+      list-style: none;
+    }
+    .icon-list .icon-item .icon {
+      display: inline-block;
+      height: 92px;
+      line-height: 92px;
+      font-size: 44px;
+    }
+    .icon-list .icon-text {
+      margin: 0;
+      font-size: 14px;
+      word-break: break-all;
+    }
+    .icon-list .colorful-icon {
+      display: inline-block;
+      margin-top: 20px;
+      width: 116px;
+      text-align: center;
+      vertical-align: top;
+      overflow: hidden;
+      list-style: none;
+    }
+    .icon-list .colorful-icon .icon {
+      display: block;
+      margin: 0 auto;
+      width: 1em;
+      height: 92px;
+      font-size: 44px;
+    }
+    .describe-title {
+      margin: 60px 0 0;
+      padding-bottom: 10px;
+      font-size: 20px;
+      font-weight: normal;
+      color: #313238;
+      border-bottom: 1px solid #dcdee5;
+    }
+    .use-describe {
+      padding-left: 20px;
+    }
+    .use-describe li {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #313238;
+      line-height: 20px;
+    }
+  </style>
+  <title>Icon Cool</title>
+</head>
+<body>
+  <div class="container">
+    <h2 class="page-title">
+      <img class="logo" src="data:image/svg+xml;base64,PHN2ZyBpZD0i5Zu+5bGCXzEiIGRhdGEtbmFtZT0i5Zu+5bGCIDEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDMzMSA2NCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNlNWVlZmY7fS5jbHMtMntmaWxsOiMzNjFlYzY7fS5jbHMtM3tmaWxsOiNiNWNiZmY7fS5jbHMtNHtmaWxsOiNkY2U5ZmY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5pY29uIGNvb2wgbG9nbzwvdGl0bGU+PHBvbHlnb24gY2xhc3M9ImNscy0xIiBwb2ludHM9IjI2LjkgNjIuOTQgMC42OCA0Ny4yMSAwLjY4IDE1LjczIDI2LjkgMzEuNDcgMjYuOSA2Mi45NCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIyMC4zNCA1MS4xNCA3LjIzIDQzLjI3IDcuMjMgMjcuNTQgMjAuMzQgMzUuNCAyMC4zNCA1MS4xNCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMyIgcG9pbnRzPSIyNi45IDYyLjk0IDUzLjEzIDQ3LjIxIDUzLjEzIDE1LjczIDI2LjkgMzEuNDcgMjYuOSA2Mi45NCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtNCIgcG9pbnRzPSIyNi45IDAgMC42OCAxNS43MyAyNi45IDMxLjQ3IDUzLjEzIDE1LjczIDI2LjkgMCIvPjxlbGxpcHNlIGNsYXNzPSJjbHMtMiIgY3g9IjI2LjkiIGN5PSIxNS43NCIgcng9IjEwLjQ5IiByeT0iNS44MyIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIzNC4yMyA1MS4xNCA0OC4xOCA0Mi43NyA0MS4zMSAzOS4zNCAzNC4yMyA1MS4xNCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSI0OC4xOCAyNy41NCAzNC4yMyAzNS45MSA0MS4xIDM5LjM0IDQ4LjE4IDI3LjU0Ii8+PHBhdGggZD0iTTcxLjIzLDE4LjU0aDkuOTRWMTUuOGgzLjg5djIuNzRoOC42N1YxNS44aDMuOXYyLjc0aDkuNjd2My4zMUg5Ny42M3YyaC0zLjl2LTJIODUuMDZ2MS45M0g4MS4xN1YyMS44NUg3MS4yM1ptMCwyOS4xSDc1VjM4LjI3aDI4LjY0djkuMzdoMy43VjUxSDcxLjIzWm0yLjg1LTIyaDMuN1YzNi4zNWgtMy43Wm01LDIyaDQuNDNWNDEuNDdINzkuMDlabTIuODUtMjNIODUuOHYxMkg4MS45NFptNC41OSw5LjgzYTI3LjI2LDI3LjI2LDAsMCwwLDUuMzktMTBsMy45LjU3TDk1LDI3LjI1aDExLjY3djMuMjhIOTMuNThhMzcuMjIsMzcuMjIsMCwwLDEtMy44NSw2LjEyQzg4LjgsMzYsODcuNjUsMzUuMTksODYuNTMsMzQuNVptLjU4LDEzLjE0aDQuNDNWNDEuNDdIODcuMTFabTcuMzYtMTQuNDksMi4yNy0yLjI4YzIuMzEsMS40Nyw0LjE2LDIuNyw2LjQsNC4yOGwtMi40MywyLjU0Qzk4LjY3LDM2LjExLDk2Ljc4LDM0LjczLDk0LjQ3LDMzLjE1Wm0uNjEsOC4zMnY2LjE3aDQuNDdWNDEuNDdaIi8+PHBhdGggZD0iTTEwOS4zNCwyNS40YTM2LjgzLDM2LjgzLDAsMCwwLDUuMzYtOS42M2wzLjUxLjVjLS40MywxLS44MSwxLjkyLTEuMjQsMi44MWg2djNsLTIuMiw0LjA5aDMuNTFWNDMuNTlIMTExLjEyVjI4LjUybC0uMzEuMzlBMzcuMTQsMzcuMTQsMCwwLDAsMTA5LjM0LDI1LjRaTTEyNCw0OC4xNGMwLC4zNSwwLC42OSwwLDEuMDgtNS4xMi40Mi05LjgyLjg1LTE0LDEuMzVsLS40Ny0zLjUxYzQuMDUtLjI3LDkuMjEtLjY5LDE0LjQ5LTEuMjMsMCwuNzMsMCwxLjM1LDAsMmE1NSw1NSwwLDAsMCw0Ljc0LTcuNTFsMywxLjYyYy0xLjc3LDMtMy4zMSw1LjQ3LTUuMiw4LjE3QzEyNS43Miw0OS4zNywxMjUsNDguNzksMTI0LDQ4LjE0Wm0tOC42OC0yNS44NmEzOS44MSwzOS44MSwwLDAsMS0yLjUsMy45M2g0LjU1bDIuMTktMy45M1ptLTEuNDIsMTEuMjFoMi41OFYyOS4xOGgtMi41OFptMCw3LjFoMi41OFYzNi4yN2gtMi41OFpNMTE5LDI5LjE4djQuMzFoMi41OFYyOS4xOFptMCwxMS40MWgyLjU4VjM2LjI3SDExOVpNMTI1LjQ1LDIwaDguMzdjLS40My0xLjI3LS44OS0yLjYyLTEuMzItMy43N2w0LjA5LS41Yy40NiwxLjM4LjkyLDIuODUsMS4zNSw0LjI3SDE0NlYyMy40SDEyNS40NVpNMTI5LDQ4LjFjMSwuMDgsMi4xMi4xMiwzLjEyLjEyLDEuMzUsMCwxLjg1LS41NCwxLjg1LTEuODV2LThoLTYuNzVWMjYuNTZoMTYuNjFWMzguMzVoLTYuMjR2OS4yMWMwLDIuNjYtMSw0LTMuNjYsNC4xMi0xLjE2LDAtMi43OC4wOC00LjE2LjA4QzEyOS41OCw1MC41MywxMjkuMzEsNDkuMjYsMTI5LDQ4LjFabTEuNzMtMTNoOS42VjI5LjgzaC05LjZaTTEzOSw0MS43OCwxNDIsNDAuMzVjMS42OSwyLjc4LDIuOTMsNSw0LjQ3LDcuNzlMMTQzLjMsNDkuOEMxNDIsNDcuMSwxNDAuNjgsNDQuNzEsMTM5LDQxLjc4WiIvPjxwYXRoIGQ9Ik0xNjAuNDUsMTcuNDR2NC43N2gtNVYxNy40NFptMCw5LjIyVjUyLjNoLTVWMjYuNjZaIi8+PHBhdGggZD0iTTE4MS41Miw0Mi43NWg1cTAsNC44OS0xLjMyLDYuODJhNi4xNiw2LjE2LDAsMCwxLTMuMzIsMi4zNywyMywyMywwLDAsMS02LjQxLjY4LDI0Ljc1LDI0Ljc1LDAsMCwxLTUuNDUtLjQ4LDguMjgsOC4yOCwwLDAsMS0zLjM4LTEuNTgsNy4yMiw3LjIyLDAsMCwxLTIuMjYtMy44OCwzMS4yMiwzMS4yMiwwLDAsMS0uNjYtNy4zOSwyNCwyNCwwLDAsMSwuODgtNy42Nyw3LjE2LDcuMTYsMCwwLDEsMy42My00LjEzcTIuMy0xLjE1LDcuMDgtMS4xNWExOSwxOSwwLDAsMSw2LjcxLjk0LDUuNzIsNS43MiwwLDAsMSwzLjMyLDMsMTMsMTMsMCwwLDEsLjc3LDUuMWgtNWE3LDcsMCwwLDAtLjUzLTMuMjcsMi44MywyLjgzLDAsMCwwLTEuNzQtMS4zLDEzLjIsMTMuMiwwLDAsMC0zLjcxLS4zOWMtMi41MywwLTQuMjEuNDMtNSwxLjMxcy0xLjIzLDMuNTEtMS4yMyw3LjgzcTAsNS44MiwxLjI2LDcuNTksMSwxLjQsNS42OCwxLjRjMi40MywwLDQtLjM1LDQuNjUtMVMxODEuNTIsNDUuMjQsMTgxLjUyLDQyLjc1WiIvPjxwYXRoIGQ9Ik0yMDAuMjUsMjYuMzRhMjQuMTMsMjQuMTMsMCwwLDEsNi40OS42Miw2LjY5LDYuNjksMCwwLDEsNC43OCw1LjEyLDI5Ljc1LDI5Ljc1LDAsMCwxLC41OSw2Ljg3cTAsNi0uODYsOC41NWE2LjQ2LDYuNDYsMCwwLDEtMy4zMSw0cS0yLjMzLDEuMDgtNy42MywxLjA4YTE5LjY5LDE5LjY5LDAsMCwxLTcuMTEtLjk0LDYuMzEsNi4zMSwwLDAsMS0yLjM5LTEuNjIsNy42NCw3LjY0LDAsMCwxLTEuNDQtMi43NSwzMC41LDMwLjUsMCwwLDEtLjc2LTguMjMsMzMuMjIsMzMuMjIsMCwwLDEsLjQ5LTYuNDEsOC4zOCw4LjM4LDAsMCwxLDEuNjEtMy43LDYuNDQsNi40NCwwLDAsMSwzLjM2LTJBMjQuNjEsMjQuNjEsMCwwLDEsMjAwLjI1LDI2LjM0Wm0uMDgsNC4wNXEtNC41LDAtNS40NywxLjUzdC0xLDcuMzJhNDIuNTQsNDIuNTQsMCwwLDAsLjI0LDUuMjYsNS45LDUuOSwwLDAsMCwuODYsMi42MnExLDEuNDYsNS41MiwxLjQ1LDMuOTIsMCw1LjA3LTEuMTVhNC44MSw0LjgxLDAsMCwwLDEuMDktMi42LDM3LjQzLDM3LjQzLDAsMCwwLC4zLTUuNTVxMC02LTEuMTItNy41MVEyMDQuNzYsMzAuNCwyMDAuMzMsMzAuMzlaIi8+PHBhdGggZD0iTTIxNS4zOSwyNi42Nmg1LjA1bC0uMTYsMi4xNmMxLjMxLTIuMTksNC0yLjQ4LDguMzEtMi40OHM3LDEuMSw4LjI5LDMuM3EuODgsMS41Ljg4LDUuNThWNTIuM2gtNVYzNi40MmExMC4zOSwxMC4zOSwwLDAsMC0uNTQtNC4xMywyLjc0LDIuNzQsMCwwLDAtMS42MS0xLjQsOS40OCw5LjQ4LDAsMCwwLTMuMTktLjQycS0zLjY3LDAtNS4zMSwxLjUzdC0xLjYzLDVWNTIuM2gtNS4wNVoiLz48cGF0aCBkPSJNMjY0LjQ4LDQyLjc1aDVjMCwzLjI2LS40Miw1LjUzLTEuMzIsNi44MmE2LjE2LDYuMTYsMCwwLDEtMy4zMiwyLjM3LDIzLDIzLDAsMCwxLTYuNDEuNjgsMjQuNzUsMjQuNzUsMCwwLDEtNS40NS0uNDgsOC4yOCw4LjI4LDAsMCwxLTMuMzgtMS41OCw3LjI5LDcuMjksMCwwLDEtMi4yNi0zLjg4LDMxLjIyLDMxLjIyLDAsMCwxLS42Ni03LjM5LDI0LDI0LDAsMCwxLC44OS03LjY3LDcuMTEsNy4xMSwwLDAsMSwzLjYyLTQuMTNxMi4yOS0xLjE1LDcuMDgtMS4xNWExOSwxOSwwLDAsMSw2LjcxLjk0LDUuNzIsNS43MiwwLDAsMSwzLjMyLDMsMTMsMTMsMCwwLDEsLjc3LDUuMWgtNWE3LjEsNy4xLDAsMCwwLS41NC0zLjI3LDIuODMsMi44MywwLDAsMC0xLjc0LTEuMywxMy4yLDEzLjIsMCwwLDAtMy43MS0uMzljLTIuNTMsMC00LjIxLjQzLTUsMS4zMXMtMS4yMywzLjUxLTEuMjMsNy44M3EwLDUuODIsMS4yNiw3LjU5Yy42NC45MywyLjU0LDEuNCw1LjY4LDEuNCwyLjQzLDAsNC0uMzUsNC42Ni0xUzI2NC40OCw0NS4yNCwyNjQuNDgsNDIuNzVaIi8+PHBhdGggZD0iTTI4My4yMSwyNi4zNGEyNC4xMywyNC4xMywwLDAsMSw2LjQ5LjYyLDYuNjksNi42OSwwLDAsMSw0Ljc4LDUuMTIsMjkuNzUsMjkuNzUsMCwwLDEsLjU5LDYuODdxMCw2LS44Niw4LjU1YTYuNDYsNi40NiwwLDAsMS0zLjMxLDRxLTIuMzIsMS4wOC03LjYzLDEuMDhhMTkuNjksMTkuNjksMCwwLDEtNy4xMS0uOTQsNi4zMSw2LjMxLDAsMCwxLTIuMzktMS42Miw3LjY0LDcuNjQsMCwwLDEtMS40NC0yLjc1LDMwLjYxLDMwLjYxLDAsMCwxLS43NS04LjIzLDMzLjM2LDMzLjM2LDAsMCwxLC40OC02LjQxLDguMzgsOC4zOCwwLDAsMSwxLjYxLTMuNyw2LjQ4LDYuNDgsMCwwLDEsMy4zNi0yQTI0LjYxLDI0LjYxLDAsMCwxLDI4My4yMSwyNi4zNFptLjA5LDQuMDVjLTMsMC00LjgzLjUxLTUuNDgsMS41M3MtMSwzLjUzLTEsNy4zMkE0Mi41NCw0Mi41NCwwLDAsMCwyNzcsNDQuNWE1LjksNS45LDAsMCwwLC44NiwyLjYycTEsMS40Niw1LjUyLDEuNDUsMy45MiwwLDUuMDctMS4xNWE0LjgxLDQuODEsMCwwLDAsMS4wOS0yLjYsMzcuMTMsMzcuMTMsMCwwLDAsLjMxLTUuNTVxMC02LTEuMTMtNy41MVEyODcuNzIsMzAuNCwyODMuMywzMC4zOVoiLz48cGF0aCBkPSJNMzA5LjE2LDI2LjM0YTI0LjEzLDI0LjEzLDAsMCwxLDYuNDkuNjIsNi42OSw2LjY5LDAsMCwxLDQuNzgsNS4xMkEyOS43NSwyOS43NSwwLDAsMSwzMjEsMzlxMCw2LS44Niw4LjU1YTYuNDYsNi40NiwwLDAsMS0zLjMxLDRxLTIuMzMsMS4wOC03LjYzLDEuMDhhMTkuNjksMTkuNjksMCwwLDEtNy4xMS0uOTQsNi4zMSw2LjMxLDAsMCwxLTIuMzktMS42Miw3LjgsNy44LDAsMCwxLTEuNDUtMi43NSwzMC42MSwzMC42MSwwLDAsMS0uNzUtOC4yMywzMi40NCwzMi40NCwwLDAsMSwuNDktNi40MSw4LjI2LDguMjYsMCwwLDEsMS42MS0zLjcsNi40NCw2LjQ0LDAsMCwxLDMuMzYtMkEyNC42MSwyNC42MSwwLDAsMSwzMDkuMTYsMjYuMzRabS4wOCw0LjA1cS00LjUsMC01LjQ3LDEuNTNjLS43LDEuMDktMSwzLjUzLTEsNy4zMkE0Mi41NCw0Mi41NCwwLDAsMCwzMDMsNDQuNWE1Ljc3LDUuNzcsMCwwLDAsLjg2LDIuNjJxMSwxLjQ2LDUuNTIsMS40NSwzLjkxLDAsNS4wNy0xLjE1YTQuODEsNC44MSwwLDAsMCwxLjA5LTIuNiwzNy40MywzNy40MywwLDAsMCwuMy01LjU1cTAtNi0xLjEyLTcuNTFRMzEzLjY3LDMwLjQsMzA5LjI0LDMwLjM5WiIvPjxwYXRoIGQ9Ik0zMjkuMzQsMTUuNjlWNTIuM2gtNVYxNS42OVoiLz48L3N2Zz4=">
+    </h2>
+    <div class="tab-wrapper">
+      <div class="tab-panel active" data-type="singleColor">单色图标</div>
+      <div class="tab-panel"  data-type="multipleColor">彩色图标</div>
+    </div>
+    <section class="tab-content single-color active" data-type="singleColor">
+      <ul class="icon-list">
+        <li class="icon-item" title="home">
+          <span class="icon bk-drag-icon bk-drag-home"></span>
+          <p class="icon-text">home</p>
+        </li>
+        <li class="icon-item" title="check-circle-fill">
+          <span class="icon bk-drag-icon bk-drag-check-circle-fill"></span>
+          <p class="icon-text">check-circle-fill</p>
+        </li>
+        <li class="icon-item" title="close-circle-fill">
+          <span class="icon bk-drag-icon bk-drag-close-circle-fill"></span>
+          <p class="icon-text">close-circle-fill</p>
+        </li>
+        <li class="icon-item" title="play">
+          <span class="icon bk-drag-icon bk-drag-play"></span>
+          <p class="icon-text">play</p>
+        </li>
+        <li class="icon-item" title="delete">
+          <span class="icon bk-drag-icon bk-drag-delete"></span>
+          <p class="icon-text">delete</p>
+        </li>
+        <li class="icon-item" title="undo">
+          <span class="icon bk-drag-icon bk-drag-undo"></span>
+          <p class="icon-text">undo</p>
+        </li>
+        <li class="icon-item" title="add-fill">
+          <span class="icon bk-drag-icon bk-drag-add-fill"></span>
+          <p class="icon-text">add-fill</p>
+        </li>
+        <li class="icon-item" title="reduce-fill">
+          <span class="icon bk-drag-icon bk-drag-reduce-fill"></span>
+          <p class="icon-text">reduce-fill</p>
+        </li>
+        <li class="icon-item" title="link">
+          <span class="icon bk-drag-icon bk-drag-link"></span>
+          <p class="icon-text">link</p>
+        </li>
+        <li class="icon-item" title="full-screen">
+          <span class="icon bk-drag-icon bk-drag-full-screen"></span>
+          <p class="icon-text">full-screen</p>
+        </li>
+        <li class="icon-item" title="delet">
+          <span class="icon bk-drag-icon bk-drag-delet"></span>
+          <p class="icon-text">delet</p>
+        </li>
+        <li class="icon-item" title="upload">
+          <span class="icon bk-drag-icon bk-drag-upload"></span>
+          <p class="icon-text">upload</p>
+        </li>
+        <li class="icon-item" title="set">
+          <span class="icon bk-drag-icon bk-drag-set"></span>
+          <p class="icon-text">set</p>
+        </li>
+        <li class="icon-item" title="image">
+          <span class="icon bk-drag-icon bk-drag-image"></span>
+          <p class="icon-text">image</p>
+        </li>
+        <li class="icon-item" title="download">
+          <span class="icon bk-drag-icon bk-drag-download"></span>
+          <p class="icon-text">download</p>
+        </li>
+        <li class="icon-item" title="member">
+          <span class="icon bk-drag-icon bk-drag-member"></span>
+          <p class="icon-text">member</p>
+        </li>
+        <li class="icon-item" title="info-tips">
+          <span class="icon bk-drag-icon bk-drag-info-tips"></span>
+          <p class="icon-text">info-tips</p>
+        </li>
+        <li class="icon-item" title="edit">
+          <span class="icon bk-drag-icon bk-drag-edit"></span>
+          <p class="icon-text">edit</p>
+        </li>
+        <li class="icon-item" title="close-small">
+          <span class="icon bk-drag-icon bk-drag-close-small"></span>
+          <p class="icon-text">close-small</p>
+        </li>
+        <li class="icon-item" title="arrow-down">
+          <span class="icon bk-drag-icon bk-drag-arrow-down"></span>
+          <p class="icon-text">arrow-down</p>
+        </li>
+        <li class="icon-item" title="batch-edit">
+          <span class="icon bk-drag-icon bk-drag-batch-edit"></span>
+          <p class="icon-text">batch-edit</p>
+        </li>
+        <li class="icon-item" title="jump-link">
+          <span class="icon bk-drag-icon bk-drag-jump-link"></span>
+          <p class="icon-text">jump-link</p>
+        </li>
+        <li class="icon-item" title="stretch">
+          <span class="icon bk-drag-icon bk-drag-stretch"></span>
+          <p class="icon-text">stretch</p>
+        </li>
+        <li class="icon-item" title="drag">
+          <span class="icon bk-drag-icon bk-drag-drag"></span>
+          <p class="icon-text">drag</p>
+        </li>
+        <li class="icon-item" title="circle-shape">
+          <span class="icon bk-drag-icon bk-drag-circle-shape"></span>
+          <p class="icon-text">circle-shape</p>
+        </li>
+        <li class="icon-item" title="angle-left">
+          <span class="icon bk-drag-icon bk-drag-angle-left"></span>
+          <p class="icon-text">angle-left</p>
+        </li>
+        <li class="icon-item" title="arrow-back">
+          <span class="icon bk-drag-icon bk-drag-arrow-back"></span>
+          <p class="icon-text">arrow-back</p>
+        </li>
+        <li class="icon-item" title="badge">
+          <span class="icon bk-drag-icon bk-drag-badge"></span>
+          <p class="icon-text">badge</p>
+        </li>
+        <li class="icon-item" title="46">
+          <span class="icon bk-drag-icon bk-drag-46"></span>
+          <p class="icon-text">46</p>
+        </li>
+        <li class="icon-item" title="animatenumber">
+          <span class="icon bk-drag-icon bk-drag-animatenumber"></span>
+          <p class="icon-text">animatenumber</p>
+        </li>
+        <li class="icon-item" title="button">
+          <span class="icon bk-drag-icon bk-drag-button"></span>
+          <p class="icon-text">button</p>
+        </li>
+        <li class="icon-item" title="collapse">
+          <span class="icon bk-drag-icon bk-drag-collapse"></span>
+          <p class="icon-text">collapse</p>
+        </li>
+        <li class="icon-item" title="checkbox">
+          <span class="icon bk-drag-icon bk-drag-checkbox"></span>
+          <p class="icon-text">checkbox</p>
+        </li>
+        <li class="icon-item" title="dialog">
+          <span class="icon bk-drag-icon bk-drag-dialog"></span>
+          <p class="icon-text">dialog</p>
+        </li>
+        <li class="icon-item" title="exception">
+          <span class="icon bk-drag-icon bk-drag-exception"></span>
+          <p class="icon-text">exception</p>
+        </li>
+        <li class="icon-item" title="dropdownmenu">
+          <span class="icon bk-drag-icon bk-drag-dropdownmenu"></span>
+          <p class="icon-text">dropdownmenu</p>
+        </li>
+        <li class="icon-item" title="info">
+          <span class="icon bk-drag-icon bk-drag-info"></span>
+          <p class="icon-text">info</p>
+        </li>
+        <li class="icon-item" title="input">
+          <span class="icon bk-drag-icon bk-drag-input"></span>
+          <p class="icon-text">input</p>
+        </li>
+        <li class="icon-item" title="form">
+          <span class="icon bk-drag-icon bk-drag-form"></span>
+          <p class="icon-text">form</p>
+        </li>
+        <li class="icon-item" title="loading">
+          <span class="icon bk-drag-icon bk-drag-loading"></span>
+          <p class="icon-text">loading</p>
+        </li>
+        <li class="icon-item" title="message">
+          <span class="icon bk-drag-icon bk-drag-message"></span>
+          <p class="icon-text">message</p>
+        </li>
+        <li class="icon-item" title="nav">
+          <span class="icon bk-drag-icon bk-drag-nav"></span>
+          <p class="icon-text">nav</p>
+        </li>
+        <li class="icon-item" title="notify">
+          <span class="icon bk-drag-icon bk-drag-notify"></span>
+          <p class="icon-text">notify</p>
+        </li>
+        <li class="icon-item" title="pagination">
+          <span class="icon bk-drag-icon bk-drag-pagination"></span>
+          <p class="icon-text">pagination</p>
+        </li>
+        <li class="icon-item" title="play-2">
+          <span class="icon bk-drag-icon bk-drag-play-2"></span>
+          <p class="icon-text">play-2</p>
+        </li>
+        <li class="icon-item" title="popconfrim">
+          <span class="icon bk-drag-icon bk-drag-popconfrim"></span>
+          <p class="icon-text">popconfrim</p>
+        </li>
+        <li class="icon-item" title="progress">
+          <span class="icon bk-drag-icon bk-drag-progress"></span>
+          <p class="icon-text">progress</p>
+        </li>
+        <li class="icon-item" title="radio">
+          <span class="icon bk-drag-icon bk-drag-radio"></span>
+          <p class="icon-text">radio</p>
+        </li>
+        <li class="icon-item" title="rate">
+          <span class="icon bk-drag-icon bk-drag-rate"></span>
+          <p class="icon-text">rate</p>
+        </li>
+        <li class="icon-item" title="save">
+          <span class="icon bk-drag-icon bk-drag-save"></span>
+          <p class="icon-text">save</p>
+        </li>
+        <li class="icon-item" title="roundprogress">
+          <span class="icon bk-drag-icon bk-drag-roundprogress"></span>
+          <p class="icon-text">roundprogress</p>
+        </li>
+        <li class="icon-item" title="select">
+          <span class="icon bk-drag-icon bk-drag-select"></span>
+          <p class="icon-text">select</p>
+        </li>
+        <li class="icon-item" title="sideslider">
+          <span class="icon bk-drag-icon bk-drag-sideslider"></span>
+          <p class="icon-text">sideslider</p>
+        </li>
+        <li class="icon-item" title="slider">
+          <span class="icon bk-drag-icon bk-drag-slider"></span>
+          <p class="icon-text">slider</p>
+        </li>
+        <li class="icon-item" title="step">
+          <span class="icon bk-drag-icon bk-drag-step"></span>
+          <p class="icon-text">step</p>
+        </li>
+        <li class="icon-item" title="swiper">
+          <span class="icon bk-drag-icon bk-drag-swiper"></span>
+          <p class="icon-text">swiper</p>
+        </li>
+        <li class="icon-item" title="switcher">
+          <span class="icon bk-drag-icon bk-drag-switcher"></span>
+          <p class="icon-text">switcher</p>
+        </li>
+        <li class="icon-item" title="tab">
+          <span class="icon bk-drag-icon bk-drag-tab"></span>
+          <p class="icon-text">tab</p>
+        </li>
+        <li class="icon-item" title="table">
+          <span class="icon bk-drag-icon bk-drag-table"></span>
+          <p class="icon-text">table</p>
+        </li>
+        <li class="icon-item" title="text">
+          <span class="icon bk-drag-icon bk-drag-text"></span>
+          <p class="icon-text">text</p>
+        </li>
+        <li class="icon-item" title="tag">
+          <span class="icon bk-drag-icon bk-drag-tag"></span>
+          <p class="icon-text">tag</p>
+        </li>
+        <li class="icon-item" title="timeline">
+          <span class="icon bk-drag-icon bk-drag-timeline"></span>
+          <p class="icon-text">timeline</p>
+        </li>
+        <li class="icon-item" title="tooltip">
+          <span class="icon bk-drag-icon bk-drag-tooltip"></span>
+          <p class="icon-text">tooltip</p>
+        </li>
+        <li class="icon-item" title="transfer">
+          <span class="icon bk-drag-icon bk-drag-transfer"></span>
+          <p class="icon-text">transfer</p>
+        </li>
+        <li class="icon-item" title="tree">
+          <span class="icon bk-drag-icon bk-drag-tree"></span>
+          <p class="icon-text">tree</p>
+        </li>
+        <li class="icon-item" title="ctr+y">
+          <span class="icon bk-drag-icon bk-drag-ctr+y"></span>
+          <p class="icon-text">ctr+y</p>
+        </li>
+        <li class="icon-item" title="ctr+z">
+          <span class="icon bk-drag-icon bk-drag-ctr+z"></span>
+          <p class="icon-text">ctr+z</p>
+        </li>
+        <li class="icon-item" title="keyboard">
+          <span class="icon bk-drag-icon bk-drag-keyboard"></span>
+          <p class="icon-text">keyboard</p>
+        </li>
+        <li class="icon-item" title="grid-2">
+          <span class="icon bk-drag-icon bk-drag-grid-2"></span>
+          <p class="icon-text">grid-2</p>
+        </li>
+        <li class="icon-item" title="grid-3">
+          <span class="icon bk-drag-icon bk-drag-grid-3"></span>
+          <p class="icon-text">grid-3</p>
+        </li>
+        <li class="icon-item" title="grid-4">
+          <span class="icon bk-drag-icon bk-drag-grid-4"></span>
+          <p class="icon-text">grid-4</p>
+        </li>
+        <li class="icon-item" title="grid-6">
+          <span class="icon bk-drag-icon bk-drag-grid-6"></span>
+          <p class="icon-text">grid-6</p>
+        </li>
+        <li class="icon-item" title="grid-5">
+          <span class="icon bk-drag-icon bk-drag-grid-5"></span>
+          <p class="icon-text">grid-5</p>
+        </li>
+        <li class="icon-item" title="grid-7">
+          <span class="icon bk-drag-icon bk-drag-grid-7"></span>
+          <p class="icon-text">grid-7</p>
+        </li>
+        <li class="icon-item" title="grid-8">
+          <span class="icon bk-drag-icon bk-drag-grid-8"></span>
+          <p class="icon-text">grid-8</p>
+        </li>
+        <li class="icon-item" title="grid-9">
+          <span class="icon bk-drag-icon bk-drag-grid-9"></span>
+          <p class="icon-text">grid-9</p>
+        </li>
+        <li class="icon-item" title="grid-10">
+          <span class="icon bk-drag-icon bk-drag-grid-10"></span>
+          <p class="icon-text">grid-10</p>
+        </li>
+        <li class="icon-item" title="grid-11">
+          <span class="icon bk-drag-icon bk-drag-grid-11"></span>
+          <p class="icon-text">grid-11</p>
+        </li>
+        <li class="icon-item" title="grid-12">
+          <span class="icon bk-drag-icon bk-drag-grid-12"></span>
+          <p class="icon-text">grid-12</p>
+        </li>
+        <li class="icon-item" title="grid-1">
+          <span class="icon bk-drag-icon bk-drag-grid-1"></span>
+          <p class="icon-text">grid-1</p>
+        </li>
+        <li class="icon-item" title="copy">
+          <span class="icon bk-drag-icon bk-drag-copy"></span>
+          <p class="icon-text">copy</p>
+        </li>
+        <li class="icon-item" title="search">
+          <span class="icon bk-drag-icon bk-drag-search"></span>
+          <p class="icon-text">search</p>
+        </li>
+        <li class="icon-item" title="diff">
+          <span class="icon bk-drag-icon bk-drag-diff"></span>
+          <p class="icon-text">diff</p>
+        </li>
+        <li class="icon-item" title="user">
+          <span class="icon bk-drag-icon bk-drag-user"></span>
+          <p class="icon-text">user</p>
+        </li>
+        <li class="icon-item" title="time-2">
+          <span class="icon bk-drag-icon bk-drag-time-2"></span>
+          <p class="icon-text">time-2</p>
+        </li>
+        <li class="icon-item" title="date">
+          <span class="icon bk-drag-icon bk-drag-date"></span>
+          <p class="icon-text">date</p>
+        </li>
+        <li class="icon-item" title="text-2">
+          <span class="icon bk-drag-icon bk-drag-text-2"></span>
+          <p class="icon-text">text-2</p>
+        </li>
+        <li class="icon-item" title="border-y">
+          <span class="icon bk-drag-icon bk-drag-border-y"></span>
+          <p class="icon-text">border-y</p>
+        </li>
+        <li class="icon-item" title="border-x">
+          <span class="icon bk-drag-icon bk-drag-border-x"></span>
+          <p class="icon-text">border-x</p>
+        </li>
+        <li class="icon-item" title="border-all">
+          <span class="icon bk-drag-icon bk-drag-border-all"></span>
+          <p class="icon-text">border-all</p>
+        </li>
+        <li class="icon-item" title="border-s">
+          <span class="icon bk-drag-icon bk-drag-border-s"></span>
+          <p class="icon-text">border-s</p>
+        </li>
+        <li class="icon-item" title="radius-all">
+          <span class="icon bk-drag-icon bk-drag-radius-all"></span>
+          <p class="icon-text">radius-all</p>
+        </li>
+        <li class="icon-item" title="border-z">
+          <span class="icon bk-drag-icon bk-drag-border-z"></span>
+          <p class="icon-text">border-z</p>
+        </li>
+        <li class="icon-item" title="radius-s">
+          <span class="icon bk-drag-icon bk-drag-radius-s"></span>
+          <p class="icon-text">radius-s</p>
+        </li>
+        <li class="icon-item" title="radius-sj">
+          <span class="icon bk-drag-icon bk-drag-radius-sj"></span>
+          <p class="icon-text">radius-sj</p>
+        </li>
+        <li class="icon-item" title="radius-ys">
+          <span class="icon bk-drag-icon bk-drag-radius-ys"></span>
+          <p class="icon-text">radius-ys</p>
+        </li>
+        <li class="icon-item" title="radius-yx">
+          <span class="icon bk-drag-icon bk-drag-radius-yx"></span>
+          <p class="icon-text">radius-yx</p>
+        </li>
+        <li class="icon-item" title="radius-zs">
+          <span class="icon bk-drag-icon bk-drag-radius-zs"></span>
+          <p class="icon-text">radius-zs</p>
+        </li>
+        <li class="icon-item" title="github-logo">
+          <span class="icon bk-drag-icon bk-drag-github-logo"></span>
+          <p class="icon-text">github-logo</p>
+        </li>
+        <li class="icon-item" title="update-log-fill">
+          <span class="icon bk-drag-icon bk-drag-update-log-fill"></span>
+          <p class="icon-text">update-log-fill</p>
+        </li>
+        <li class="icon-item" title="histogram">
+          <span class="icon bk-drag-icon bk-drag-histogram"></span>
+          <p class="icon-text">histogram</p>
+        </li>
+        <li class="icon-item" title="line-chart">
+          <span class="icon bk-drag-icon bk-drag-line-chart"></span>
+          <p class="icon-text">line-chart</p>
+        </li>
+        <li class="icon-item" title="pie-chart">
+          <span class="icon bk-drag-icon bk-drag-pie-chart"></span>
+          <p class="icon-text">pie-chart</p>
+        </li>
+        <li class="icon-item" title="nav-toggle">
+          <span class="icon bk-drag-icon bk-drag-nav-toggle"></span>
+          <p class="icon-text">nav-toggle</p>
+        </li>
+        <li class="icon-item" title="function-fill">
+          <span class="icon bk-drag-icon bk-drag-function-fill"></span>
+          <p class="icon-text">function-fill</p>
+        </li>
+        <li class="icon-item" title="info-fill">
+          <span class="icon bk-drag-icon bk-drag-info-fill"></span>
+          <p class="icon-text">info-fill</p>
+        </li>
+        <li class="icon-item" title="favorite">
+          <span class="icon bk-drag-icon bk-drag-favorite"></span>
+          <p class="icon-text">favorite</p>
+        </li>
+        <li class="icon-item" title="template-fill">
+          <span class="icon bk-drag-icon bk-drag-template-fill"></span>
+          <p class="icon-text">template-fill</p>
+        </li>
+        <li class="icon-item" title="summary-fill">
+          <span class="icon bk-drag-icon bk-drag-summary-fill"></span>
+          <p class="icon-text">summary-fill</p>
+        </li>
+        <li class="icon-item" title="favorite-o">
+          <span class="icon bk-drag-icon bk-drag-favorite-o"></span>
+          <p class="icon-text">favorite-o</p>
+        </li>
+        <li class="icon-item" title="list-fill">
+          <span class="icon bk-drag-icon bk-drag-list-fill"></span>
+          <p class="icon-text">list-fill</p>
+        </li>
+        <li class="icon-item" title="user-group">
+          <span class="icon bk-drag-icon bk-drag-user-group"></span>
+          <p class="icon-text">user-group</p>
+        </li>
+        <li class="icon-item" title="project-list">
+          <span class="icon bk-drag-icon bk-drag-project-list"></span>
+          <p class="icon-text">project-list</p>
+        </li>
+        <li class="icon-item" title="more-dot">
+          <span class="icon bk-drag-icon bk-drag-more-dot"></span>
+          <p class="icon-text">more-dot</p>
+        </li>
+        <li class="icon-item" title="grag-fill">
+          <span class="icon bk-drag-icon bk-drag-grag-fill"></span>
+          <p class="icon-text">grag-fill</p>
+        </li>
+        <li class="icon-item" title="custom-comp-default">
+          <span class="icon bk-drag-icon bk-drag-custom-comp-default"></span>
+          <p class="icon-text">custom-comp-default</p>
+        </li>
+        <li class="icon-item" title="folder-fill">
+          <span class="icon bk-drag-icon bk-drag-folder-fill"></span>
+          <p class="icon-text">folder-fill</p>
+        </li>
+        <li class="icon-item" title="template-logo">
+          <span class="icon bk-drag-icon bk-drag-template-logo"></span>
+          <p class="icon-text">template-logo</p>
+        </li>
+        <li class="icon-item" title="function-fill">
+          <span class="icon bk-drag-icon bk-drag-function-fill"></span>
+          <p class="icon-text">function-fill</p>
+        </li>
+        <li class="icon-item" title="un-full-screen">
+          <span class="icon bk-drag-icon bk-drag-un-full-screen"></span>
+          <p class="icon-text">un-full-screen</p>
+        </li>
+        <li class="icon-item" title="code-full-screen">
+          <span class="icon bk-drag-icon bk-drag-code-full-screen"></span>
+          <p class="icon-text">code-full-screen</p>
+        </li>
+        <li class="icon-item" title="angle-down-fill">
+          <span class="icon bk-drag-icon bk-drag-angle-down-fill"></span>
+          <p class="icon-text">angle-down-fill</p>
+        </li>
+        <li class="icon-item" title="angle-up-fill">
+          <span class="icon bk-drag-icon bk-drag-angle-up-fill"></span>
+          <p class="icon-text">angle-up-fill</p>
+        </li>
+        <li class="icon-item" title="angle-right-fill">
+          <span class="icon bk-drag-icon bk-drag-angle-right-fill"></span>
+          <p class="icon-text">angle-right-fill</p>
+        </li>
+        <li class="icon-item" title="angle-left-fill">
+          <span class="icon bk-drag-icon bk-drag-angle-left-fill"></span>
+          <p class="icon-text">angle-left-fill</p>
+        </li>
+        <li class="icon-item" title="close-line">
+          <span class="icon bk-drag-icon bk-drag-close-line"></span>
+          <p class="icon-text">close-line</p>
+        </li>
+        <li class="icon-item" title="add-line">
+          <span class="icon bk-drag-icon bk-drag-add-line"></span>
+          <p class="icon-text">add-line</p>
+        </li>
+        <li class="icon-item" title="save-line">
+          <span class="icon bk-drag-icon bk-drag-save-line"></span>
+          <p class="icon-text">save-line</p>
+        </li>
+        <li class="icon-item" title="cc-jump-link">
+          <span class="icon bk-drag-icon bk-drag-cc-jump-link"></span>
+          <p class="icon-text">cc-jump-link</p>
+        </li>
+        <li class="icon-item" title="offshelf">
+          <span class="icon bk-drag-icon bk-drag-offshelf"></span>
+          <p class="icon-text">offshelf</p>
+        </li>
+        <li class="icon-item" title="add-3">
+          <span class="icon bk-drag-icon bk-drag-add-3"></span>
+          <p class="icon-text">add-3</p>
+        </li>
+        <li class="icon-item" title="picture-fail-line">
+          <span class="icon bk-drag-icon bk-drag-picture-fail-line"></span>
+          <p class="icon-text">picture-fail-line</p>
+        </li>
+        <li class="icon-item" title="1_deploy-fill">
+          <span class="icon bk-drag-icon bk-drag-1_deploy-fill"></span>
+          <p class="icon-text">1_deploy-fill</p>
+        </li>
+        <li class="icon-item" title="loading-2">
+          <span class="icon bk-drag-icon bk-drag-loading-2"></span>
+          <p class="icon-text">loading-2</p>
+        </li>
+        <li class="icon-item" title="router">
+          <span class="icon bk-drag-icon bk-drag-router"></span>
+          <p class="icon-text">router</p>
+        </li>
+        <li class="icon-item" title="card">
+          <span class="icon bk-drag-icon bk-drag-card"></span>
+          <p class="icon-text">card</p>
+        </li>
+        <li class="icon-item" title="popover-2">
+          <span class="icon bk-drag-icon bk-drag-popover-2"></span>
+          <p class="icon-text">popover-2</p>
+        </li>
+        <li class="icon-item" title="colorpick">
+          <span class="icon bk-drag-icon bk-drag-colorpick"></span>
+          <p class="icon-text">colorpick</p>
+        </li>
+        <li class="icon-item" title="bigtree">
+          <span class="icon bk-drag-icon bk-drag-bigtree"></span>
+          <p class="icon-text">bigtree</p>
+        </li>
+        <li class="icon-item" title="cascade-jilianxuankuang">
+          <span class="icon bk-drag-icon bk-drag-cascade-jilianxuankuang"></span>
+          <p class="icon-text">cascade-jilianxuankuang</p>
+        </li>
+        <li class="icon-item" title="link1">
+          <span class="icon bk-drag-icon bk-drag-link1"></span>
+          <p class="icon-text">link1</p>
+        </li>
+        <li class="icon-item" title="vesion-fill">
+          <span class="icon bk-drag-icon bk-drag-vesion-fill"></span>
+          <p class="icon-text">vesion-fill</p>
+        </li>
+        <li class="icon-item" title="process">
+          <span class="icon bk-drag-icon bk-drag-process"></span>
+          <p class="icon-text">process</p>
+        </li>
+        <li class="icon-item" title="off-shelf">
+          <span class="icon bk-drag-icon bk-drag-off-shelf"></span>
+          <p class="icon-text">off-shelf</p>
+        </li>
+        <li class="icon-item" title="alert-line">
+          <span class="icon bk-drag-icon bk-drag-alert-line"></span>
+          <p class="icon-text">alert-line</p>
+        </li>
+        <li class="icon-item" title="reflash-line">
+          <span class="icon bk-drag-icon bk-drag-reflash-line"></span>
+          <p class="icon-text">reflash-line</p>
+        </li>
+        <li class="icon-item" title="token-fill">
+          <span class="icon bk-drag-icon bk-drag-token-fill"></span>
+          <p class="icon-text">token-fill</p>
+        </li>
+        <li class="icon-item" title="template-fill-2">
+          <span class="icon bk-drag-icon bk-drag-template-fill-2"></span>
+          <p class="icon-text">template-fill-2</p>
+        </li>
+        <li class="icon-item" title="breadcrumb">
+          <span class="icon bk-drag-icon bk-drag-breadcrumb"></span>
+          <p class="icon-text">breadcrumb</p>
+        </li>
+        <li class="icon-item" title="bottom-group">
+          <span class="icon bk-drag-icon bk-drag-bottom-group"></span>
+          <p class="icon-text">bottom-group</p>
+        </li>
+        <li class="icon-item" title="freedrag">
+          <span class="icon bk-drag-icon bk-drag-freedrag"></span>
+          <p class="icon-text">freedrag</p>
+        </li>
+        <li class="icon-item" title="copy-line">
+          <span class="icon bk-drag-icon bk-drag-copy-line"></span>
+          <p class="icon-text">copy-line</p>
+        </li>
+        <li class="icon-item" title="comment-fill">
+          <span class="icon bk-drag-icon bk-drag-comment-fill"></span>
+          <p class="icon-text">comment-fill</p>
+        </li>
+        <li class="icon-item" title="download-line">
+          <span class="icon bk-drag-icon bk-drag-download-line"></span>
+          <p class="icon-text">download-line</p>
+        </li>
+        <li class="icon-item" title="invisible-eye">
+          <span class="icon bk-drag-icon bk-drag-invisible-eye"></span>
+          <p class="icon-text">invisible-eye</p>
+        </li>
+        <li class="icon-item" title="level-down">
+          <span class="icon bk-drag-icon bk-drag-level-down"></span>
+          <p class="icon-text">level-down</p>
+        </li>
+        <li class="icon-item" title="audit">
+          <span class="icon bk-drag-icon bk-drag-audit"></span>
+          <p class="icon-text">audit</p>
+        </li>
+        <li class="icon-item" title="unfold">
+          <span class="icon bk-drag-icon bk-drag-unfold"></span>
+          <p class="icon-text">unfold</p>
+        </li>
+        <li class="icon-item" title="fold">
+          <span class="icon bk-drag-icon bk-drag-fold"></span>
+          <p class="icon-text">fold</p>
+        </li>
+        <li class="icon-item" title="directives">
+          <span class="icon bk-drag-icon bk-drag-directives"></span>
+          <p class="icon-text">directives</p>
+        </li>
+        <li class="icon-item" title="variable">
+          <span class="icon bk-drag-icon bk-drag-variable"></span>
+          <p class="icon-text">variable</p>
+        </li>
+        <li class="icon-item" title="variable-manage">
+          <span class="icon bk-drag-icon bk-drag-variable-manage"></span>
+          <p class="icon-text">variable-manage</p>
+        </li>
+        <li class="icon-item" title="yemianhanshu">
+          <span class="icon bk-drag-icon bk-drag-yemianhanshu"></span>
+          <p class="icon-text">yemianhanshu</p>
+        </li>
+        <li class="icon-item" title="hanshuku">
+          <span class="icon bk-drag-icon bk-drag-hanshuku"></span>
+          <p class="icon-text">hanshuku</p>
+        </li>
+        <li class="icon-item" title="page-variable">
+          <span class="icon bk-drag-icon bk-drag-page-variable"></span>
+          <p class="icon-text">page-variable</p>
+        </li>
+        <li class="icon-item" title="yuanma">
+          <span class="icon bk-drag-icon bk-drag-yuanma"></span>
+          <p class="icon-text">yuanma</p>
+        </li>
+        <li class="icon-item" title="shanchu">
+          <span class="icon bk-drag-icon bk-drag-shanchu"></span>
+          <p class="icon-text">shanchu</p>
+        </li>
+        <li class="icon-item" title="fankui">
+          <span class="icon bk-drag-icon bk-drag-fankui"></span>
+          <p class="icon-text">fankui</p>
+        </li>
+        <li class="icon-item" title="auth-set">
+          <span class="icon bk-drag-icon bk-drag-auth-set"></span>
+          <p class="icon-text">auth-set</p>
+        </li>
+        <li class="icon-item" title="json">
+          <span class="icon bk-drag-icon bk-drag-json"></span>
+          <p class="icon-text">json</p>
+        </li>
+        <li class="icon-item" title="logo">
+          <span class="icon bk-drag-icon bk-drag-logo"></span>
+          <p class="icon-text">logo</p>
+        </li>
+        <li class="icon-item" title="visible-eye">
+          <span class="icon bk-drag-icon bk-drag-visible-eye"></span>
+          <p class="icon-text">visible-eye</p>
+        </li>
+        <li class="icon-item" title="process">
+          <span class="icon bk-drag-icon bk-drag-process"></span>
+          <p class="icon-text">process</p>
+        </li>
+        <li class="icon-item" title="huabu">
+          <span class="icon bk-drag-icon bk-drag-huabu"></span>
+          <p class="icon-text">huabu</p>
+        </li>
+        <li class="icon-item" title="drag-small">
+          <span class="icon bk-drag-icon bk-drag-drag-small"></span>
+          <p class="icon-text">drag-small</p>
+        </li>
+        <li class="icon-item" title="select-value">
+          <span class="icon bk-drag-icon bk-drag-select-value"></span>
+          <p class="icon-text">select-value</p>
+        </li>
+        <li class="icon-item" title="select-variable">
+          <span class="icon bk-drag-icon bk-drag-select-variable"></span>
+          <p class="icon-text">select-variable</p>
+        </li>
+        <li class="icon-item" title="select-expression">
+          <span class="icon bk-drag-icon bk-drag-select-expression"></span>
+          <p class="icon-text">select-expression</p>
+        </li>
+        <li class="icon-item" title="drag-small1">
+          <span class="icon bk-drag-icon bk-drag-drag-small1"></span>
+          <p class="icon-text">drag-small1</p>
+        </li>
+        <li class="icon-item" title="icon-manage">
+          <span class="icon bk-drag-icon bk-drag-icon-manage"></span>
+          <p class="icon-text">icon-manage</p>
+        </li>
+        <li class="icon-item" title="document">
+          <span class="icon bk-drag-icon bk-drag-document"></span>
+          <p class="icon-text">document</p>
+        </li>
+        <li class="icon-item" title="qiyeweixin">
+          <span class="icon bk-drag-icon bk-drag-qiyeweixin"></span>
+          <p class="icon-text">qiyeweixin</p>
+        </li>
+        <li class="icon-item" title="erweima">
+          <span class="icon bk-drag-icon bk-drag-erweima"></span>
+          <p class="icon-text">erweima</p>
+        </li>
+        <li class="icon-item" title="lianxi">
+          <span class="icon bk-drag-icon bk-drag-lianxi"></span>
+          <p class="icon-text">lianxi</p>
+        </li>
+        <li class="icon-item" title="qq-2">
+          <span class="icon bk-drag-icon bk-drag-qq-2"></span>
+          <p class="icon-text">qq-2</p>
+        </li>
+        <li class="icon-item" title="gaojing">
+          <span class="icon bk-drag-icon bk-drag-gaojing"></span>
+          <p class="icon-text">gaojing</p>
+        </li>
+        <li class="icon-item" title="bubble-chart">
+          <span class="icon bk-drag-icon bk-drag-bubble-chart"></span>
+          <p class="icon-text">bubble-chart</p>
+        </li>
+        <li class="icon-item" title="scatter-chart">
+          <span class="icon bk-drag-icon bk-drag-scatter-chart"></span>
+          <p class="icon-text">scatter-chart</p>
+        </li>
+        <li class="icon-item" title="radar-chart">
+          <span class="icon bk-drag-icon bk-drag-radar-chart"></span>
+          <p class="icon-text">radar-chart</p>
+        </li>
+        <li class="icon-item" title="bk-bubble-chart">
+          <span class="icon bk-drag-icon bk-drag-bk-bubble-chart"></span>
+          <p class="icon-text">bk-bubble-chart</p>
+        </li>
+        <li class="icon-item" title="bk-scatter-chart">
+          <span class="icon bk-drag-icon bk-drag-bk-scatter-chart"></span>
+          <p class="icon-text">bk-scatter-chart</p>
+        </li>
+        <li class="icon-item" title="fix">
+          <span class="icon bk-drag-icon bk-drag-fix"></span>
+          <p class="icon-text">fix</p>
+        </li>
+        <li class="icon-item" title="export">
+          <span class="icon bk-drag-icon bk-drag-export"></span>
+          <p class="icon-text">export</p>
+        </li>
+        <li class="icon-item" title="sql">
+          <span class="icon bk-drag-icon bk-drag-sql"></span>
+          <p class="icon-text">sql</p>
+        </li>
+        <li class="icon-item" title="csv">
+          <span class="icon bk-drag-icon bk-drag-csv"></span>
+          <p class="icon-text">csv</p>
+        </li>
+        <li class="icon-item" title="shuipingjuzhuduiqi">
+          <span class="icon bk-drag-icon bk-drag-shuipingjuzhuduiqi"></span>
+          <p class="icon-text">shuipingjuzhuduiqi</p>
+        </li>
+        <li class="icon-item" title="diduiqi">
+          <span class="icon bk-drag-icon bk-drag-diduiqi"></span>
+          <p class="icon-text">diduiqi</p>
+        </li>
+        <li class="icon-item" title="chuizhijuzhongduiqi">
+          <span class="icon bk-drag-icon bk-drag-chuizhijuzhongduiqi"></span>
+          <p class="icon-text">chuizhijuzhongduiqi</p>
+        </li>
+        <li class="icon-item" title="youduiqi">
+          <span class="icon bk-drag-icon bk-drag-youduiqi"></span>
+          <p class="icon-text">youduiqi</p>
+        </li>
+        <li class="icon-item" title="dingduiqi">
+          <span class="icon bk-drag-icon bk-drag-dingduiqi"></span>
+          <p class="icon-text">dingduiqi</p>
+        </li>
+        <li class="icon-item" title="zuoduiqi">
+          <span class="icon bk-drag-icon bk-drag-zuoduiqi"></span>
+          <p class="icon-text">zuoduiqi</p>
+        </li>
+        <li class="icon-item" title="data-table">
+          <span class="icon bk-drag-icon bk-drag-data-table"></span>
+          <p class="icon-text">data-table</p>
+        </li>
+        <li class="icon-item" title="data-source-manage">
+          <span class="icon bk-drag-icon bk-drag-data-source-manage"></span>
+          <p class="icon-text">data-source-manage</p>
+        </li>
+        <li class="icon-item" title="version">
+          <span class="icon bk-drag-icon bk-drag-version"></span>
+          <p class="icon-text">version</p>
+        </li>
+        <li class="icon-item" title="mobilephone">
+          <span class="icon bk-drag-icon bk-drag-mobilephone"></span>
+          <p class="icon-text">mobilephone</p>
+        </li>
+        <li class="icon-item" title="pc">
+          <span class="icon bk-drag-icon bk-drag-pc"></span>
+          <p class="icon-text">pc</p>
+        </li>
+        <li class="icon-item" title="templateline">
+          <span class="icon bk-drag-icon bk-drag-templateline"></span>
+          <p class="icon-text">templateline</p>
+        </li>
+        <li class="icon-item" title="cellcellgroup">
+          <span class="icon bk-drag-icon bk-drag-cellcellgroup"></span>
+          <p class="icon-text">cellcellgroup</p>
+        </li>
+        <li class="icon-item" title="circle">
+          <span class="icon bk-drag-icon bk-drag-circle"></span>
+          <p class="icon-text">circle</p>
+        </li>
+        <li class="icon-item" title="empty">
+          <span class="icon bk-drag-icon bk-drag-empty"></span>
+          <p class="icon-text">empty</p>
+        </li>
+        <li class="icon-item" title="countdown">
+          <span class="icon bk-drag-icon bk-drag-countdown"></span>
+          <p class="icon-text">countdown</p>
+        </li>
+        <li class="icon-item" title="divider">
+          <span class="icon bk-drag-icon bk-drag-divider"></span>
+          <p class="icon-text">divider</p>
+        </li>
+        <li class="icon-item" title="noticebar">
+          <span class="icon bk-drag-icon bk-drag-noticebar"></span>
+          <p class="icon-text">noticebar</p>
+        </li>
+        <li class="icon-item" title="loading">
+          <span class="icon bk-drag-icon bk-drag-loading"></span>
+          <p class="icon-text">loading</p>
+        </li>
+        <li class="icon-item" title="navbar">
+          <span class="icon bk-drag-icon bk-drag-navbar"></span>
+          <p class="icon-text">navbar</p>
+        </li>
+        <li class="icon-item" title="numberkeyborad">
+          <span class="icon bk-drag-icon bk-drag-numberkeyborad"></span>
+          <p class="icon-text">numberkeyborad</p>
+        </li>
+        <li class="icon-item" title="passwordinput">
+          <span class="icon bk-drag-icon bk-drag-passwordinput"></span>
+          <p class="icon-text">passwordinput</p>
+        </li>
+        <li class="icon-item" title="picker">
+          <span class="icon bk-drag-icon bk-drag-picker"></span>
+          <p class="icon-text">picker</p>
+        </li>
+        <li class="icon-item" title="search-2">
+          <span class="icon bk-drag-icon bk-drag-search-2"></span>
+          <p class="icon-text">search-2</p>
+        </li>
+        <li class="icon-item" title="skeleton">
+          <span class="icon bk-drag-icon bk-drag-skeleton"></span>
+          <p class="icon-text">skeleton</p>
+        </li>
+        <li class="icon-item" title="step">
+          <span class="icon bk-drag-icon bk-drag-step"></span>
+          <p class="icon-text">step</p>
+        </li>
+        <li class="icon-item" title="treeselect">
+          <span class="icon bk-drag-icon bk-drag-treeselect"></span>
+          <p class="icon-text">treeselect</p>
+        </li>
+        <li class="icon-item" title="stepper">
+          <span class="icon bk-drag-icon bk-drag-stepper"></span>
+          <p class="icon-text">stepper</p>
+        </li>
+        <li class="icon-item" title="icon-2">
+          <span class="icon bk-drag-icon bk-drag-icon-2"></span>
+          <p class="icon-text">icon-2</p>
+        </li>
+      </ul>
+      <h3 class="describe-title">为什么使用</h3>
+      <ul class="use-describe">
+        <li>弹性，在网页或者 app 上，展示字体是很便捷的。用字体图标可以很方便的改变 icon 的颜色，或者加入一些其他的效果</li>
+        <li>可缩放，可以很方便的改变图标的大小</li>
+        <li>矢量，字体图标是矢量的并且具有独立的分辨率，不管在高分辨率还是低分辨率，不管是在网页还是手机端，都具有很好的展示效果，不会出现锯齿或者马赛克模糊</li>
+        <li>节省加载时间，字体图标很小，每个小图标只有几 kb，大大节省了加载时间</li>
+      </ul>
+      <h3 class="describe-title">如何使用</h3>
+      <ul class="use-describe">
+        <li>将整个目录复制到您的项目里</li>
+        <li>引入 style.css</li>
+        <li>挑选相应图标并获取类名，如 .bk-icon .icon-demo</li>
+      </ul>
+    </section>
+    <section class="tab-content multiple-color"  data-type="multipleColor">
+      <ul class="icon-list">
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-home"></use>
+          </svg>
+          <p class="icon-text">home</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-check-circle-fill"></use>
+          </svg>
+          <p class="icon-text">check-circle-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-close-circle-fill"></use>
+          </svg>
+          <p class="icon-text">close-circle-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-play"></use>
+          </svg>
+          <p class="icon-text">play</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-delete"></use>
+          </svg>
+          <p class="icon-text">delete</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-undo"></use>
+          </svg>
+          <p class="icon-text">undo</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-add-fill"></use>
+          </svg>
+          <p class="icon-text">add-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-reduce-fill"></use>
+          </svg>
+          <p class="icon-text">reduce-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-link"></use>
+          </svg>
+          <p class="icon-text">link</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-full-screen"></use>
+          </svg>
+          <p class="icon-text">full-screen</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-delet"></use>
+          </svg>
+          <p class="icon-text">delet</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-upload"></use>
+          </svg>
+          <p class="icon-text">upload</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-set"></use>
+          </svg>
+          <p class="icon-text">set</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-image"></use>
+          </svg>
+          <p class="icon-text">image</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-download"></use>
+          </svg>
+          <p class="icon-text">download</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-member"></use>
+          </svg>
+          <p class="icon-text">member</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-info-tips"></use>
+          </svg>
+          <p class="icon-text">info-tips</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-edit"></use>
+          </svg>
+          <p class="icon-text">edit</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-close-small"></use>
+          </svg>
+          <p class="icon-text">close-small</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-arrow-down"></use>
+          </svg>
+          <p class="icon-text">arrow-down</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-batch-edit"></use>
+          </svg>
+          <p class="icon-text">batch-edit</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-jump-link"></use>
+          </svg>
+          <p class="icon-text">jump-link</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-stretch"></use>
+          </svg>
+          <p class="icon-text">stretch</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-drag"></use>
+          </svg>
+          <p class="icon-text">drag</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-circle-shape"></use>
+          </svg>
+          <p class="icon-text">circle-shape</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-angle-left"></use>
+          </svg>
+          <p class="icon-text">angle-left</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-arrow-back"></use>
+          </svg>
+          <p class="icon-text">arrow-back</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-badge"></use>
+          </svg>
+          <p class="icon-text">badge</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-46"></use>
+          </svg>
+          <p class="icon-text">46</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-animatenumber"></use>
+          </svg>
+          <p class="icon-text">animatenumber</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-button"></use>
+          </svg>
+          <p class="icon-text">button</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-collapse"></use>
+          </svg>
+          <p class="icon-text">collapse</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-checkbox"></use>
+          </svg>
+          <p class="icon-text">checkbox</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-dialog"></use>
+          </svg>
+          <p class="icon-text">dialog</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-exception"></use>
+          </svg>
+          <p class="icon-text">exception</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-dropdownmenu"></use>
+          </svg>
+          <p class="icon-text">dropdownmenu</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-info"></use>
+          </svg>
+          <p class="icon-text">info</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-input"></use>
+          </svg>
+          <p class="icon-text">input</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-form"></use>
+          </svg>
+          <p class="icon-text">form</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-loading"></use>
+          </svg>
+          <p class="icon-text">loading</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-message"></use>
+          </svg>
+          <p class="icon-text">message</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-nav"></use>
+          </svg>
+          <p class="icon-text">nav</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-notify"></use>
+          </svg>
+          <p class="icon-text">notify</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-pagination"></use>
+          </svg>
+          <p class="icon-text">pagination</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-play-2"></use>
+          </svg>
+          <p class="icon-text">play-2</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-popconfrim"></use>
+          </svg>
+          <p class="icon-text">popconfrim</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-progress"></use>
+          </svg>
+          <p class="icon-text">progress</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-radio"></use>
+          </svg>
+          <p class="icon-text">radio</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-rate"></use>
+          </svg>
+          <p class="icon-text">rate</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-save"></use>
+          </svg>
+          <p class="icon-text">save</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-roundprogress"></use>
+          </svg>
+          <p class="icon-text">roundprogress</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-select"></use>
+          </svg>
+          <p class="icon-text">select</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-sideslider"></use>
+          </svg>
+          <p class="icon-text">sideslider</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-slider"></use>
+          </svg>
+          <p class="icon-text">slider</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-step"></use>
+          </svg>
+          <p class="icon-text">step</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-swiper"></use>
+          </svg>
+          <p class="icon-text">swiper</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-switcher"></use>
+          </svg>
+          <p class="icon-text">switcher</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-tab"></use>
+          </svg>
+          <p class="icon-text">tab</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-table"></use>
+          </svg>
+          <p class="icon-text">table</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-text"></use>
+          </svg>
+          <p class="icon-text">text</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-tag"></use>
+          </svg>
+          <p class="icon-text">tag</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-timeline"></use>
+          </svg>
+          <p class="icon-text">timeline</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-tooltip"></use>
+          </svg>
+          <p class="icon-text">tooltip</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-transfer"></use>
+          </svg>
+          <p class="icon-text">transfer</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-tree"></use>
+          </svg>
+          <p class="icon-text">tree</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-ctr+y"></use>
+          </svg>
+          <p class="icon-text">ctr+y</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-ctr+z"></use>
+          </svg>
+          <p class="icon-text">ctr+z</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-keyboard"></use>
+          </svg>
+          <p class="icon-text">keyboard</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-2"></use>
+          </svg>
+          <p class="icon-text">grid-2</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-3"></use>
+          </svg>
+          <p class="icon-text">grid-3</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-4"></use>
+          </svg>
+          <p class="icon-text">grid-4</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-6"></use>
+          </svg>
+          <p class="icon-text">grid-6</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-5"></use>
+          </svg>
+          <p class="icon-text">grid-5</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-7"></use>
+          </svg>
+          <p class="icon-text">grid-7</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-8"></use>
+          </svg>
+          <p class="icon-text">grid-8</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-9"></use>
+          </svg>
+          <p class="icon-text">grid-9</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-10"></use>
+          </svg>
+          <p class="icon-text">grid-10</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-11"></use>
+          </svg>
+          <p class="icon-text">grid-11</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-12"></use>
+          </svg>
+          <p class="icon-text">grid-12</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grid-1"></use>
+          </svg>
+          <p class="icon-text">grid-1</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-copy"></use>
+          </svg>
+          <p class="icon-text">copy</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-search"></use>
+          </svg>
+          <p class="icon-text">search</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-diff"></use>
+          </svg>
+          <p class="icon-text">diff</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-user"></use>
+          </svg>
+          <p class="icon-text">user</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-time-2"></use>
+          </svg>
+          <p class="icon-text">time-2</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-date"></use>
+          </svg>
+          <p class="icon-text">date</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-text-2"></use>
+          </svg>
+          <p class="icon-text">text-2</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-border-y"></use>
+          </svg>
+          <p class="icon-text">border-y</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-border-x"></use>
+          </svg>
+          <p class="icon-text">border-x</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-border-all"></use>
+          </svg>
+          <p class="icon-text">border-all</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-border-s"></use>
+          </svg>
+          <p class="icon-text">border-s</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-radius-all"></use>
+          </svg>
+          <p class="icon-text">radius-all</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-border-z"></use>
+          </svg>
+          <p class="icon-text">border-z</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-radius-s"></use>
+          </svg>
+          <p class="icon-text">radius-s</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-radius-sj"></use>
+          </svg>
+          <p class="icon-text">radius-sj</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-radius-ys"></use>
+          </svg>
+          <p class="icon-text">radius-ys</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-radius-yx"></use>
+          </svg>
+          <p class="icon-text">radius-yx</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-radius-zs"></use>
+          </svg>
+          <p class="icon-text">radius-zs</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-github-logo"></use>
+          </svg>
+          <p class="icon-text">github-logo</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-update-log-fill"></use>
+          </svg>
+          <p class="icon-text">update-log-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-histogram"></use>
+          </svg>
+          <p class="icon-text">histogram</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-line-chart"></use>
+          </svg>
+          <p class="icon-text">line-chart</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-pie-chart"></use>
+          </svg>
+          <p class="icon-text">pie-chart</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-nav-toggle"></use>
+          </svg>
+          <p class="icon-text">nav-toggle</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-function-fill"></use>
+          </svg>
+          <p class="icon-text">function-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-info-fill"></use>
+          </svg>
+          <p class="icon-text">info-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-favorite"></use>
+          </svg>
+          <p class="icon-text">favorite</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-template-fill"></use>
+          </svg>
+          <p class="icon-text">template-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-summary-fill"></use>
+          </svg>
+          <p class="icon-text">summary-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-favorite-o"></use>
+          </svg>
+          <p class="icon-text">favorite-o</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-list-fill"></use>
+          </svg>
+          <p class="icon-text">list-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-user-group"></use>
+          </svg>
+          <p class="icon-text">user-group</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-project-list"></use>
+          </svg>
+          <p class="icon-text">project-list</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-more-dot"></use>
+          </svg>
+          <p class="icon-text">more-dot</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-grag-fill"></use>
+          </svg>
+          <p class="icon-text">grag-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-custom-comp-default"></use>
+          </svg>
+          <p class="icon-text">custom-comp-default</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-folder-fill"></use>
+          </svg>
+          <p class="icon-text">folder-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-template-logo"></use>
+          </svg>
+          <p class="icon-text">template-logo</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-function-fill"></use>
+          </svg>
+          <p class="icon-text">function-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-un-full-screen"></use>
+          </svg>
+          <p class="icon-text">un-full-screen</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-code-full-screen"></use>
+          </svg>
+          <p class="icon-text">code-full-screen</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-angle-down-fill"></use>
+          </svg>
+          <p class="icon-text">angle-down-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-angle-up-fill"></use>
+          </svg>
+          <p class="icon-text">angle-up-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-angle-right-fill"></use>
+          </svg>
+          <p class="icon-text">angle-right-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-angle-left-fill"></use>
+          </svg>
+          <p class="icon-text">angle-left-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-close-line"></use>
+          </svg>
+          <p class="icon-text">close-line</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-add-line"></use>
+          </svg>
+          <p class="icon-text">add-line</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-save-line"></use>
+          </svg>
+          <p class="icon-text">save-line</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-cc-jump-link"></use>
+          </svg>
+          <p class="icon-text">cc-jump-link</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-offshelf"></use>
+          </svg>
+          <p class="icon-text">offshelf</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-add-3"></use>
+          </svg>
+          <p class="icon-text">add-3</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-picture-fail-line"></use>
+          </svg>
+          <p class="icon-text">picture-fail-line</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-1_deploy-fill"></use>
+          </svg>
+          <p class="icon-text">1_deploy-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-loading-2"></use>
+          </svg>
+          <p class="icon-text">loading-2</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-router"></use>
+          </svg>
+          <p class="icon-text">router</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-card"></use>
+          </svg>
+          <p class="icon-text">card</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-popover-2"></use>
+          </svg>
+          <p class="icon-text">popover-2</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-colorpick"></use>
+          </svg>
+          <p class="icon-text">colorpick</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-bigtree"></use>
+          </svg>
+          <p class="icon-text">bigtree</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-cascade-jilianxuankuang"></use>
+          </svg>
+          <p class="icon-text">cascade-jilianxuankuang</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-link1"></use>
+          </svg>
+          <p class="icon-text">link1</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-vesion-fill"></use>
+          </svg>
+          <p class="icon-text">vesion-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-process"></use>
+          </svg>
+          <p class="icon-text">process</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-off-shelf"></use>
+          </svg>
+          <p class="icon-text">off-shelf</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-alert-line"></use>
+          </svg>
+          <p class="icon-text">alert-line</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-reflash-line"></use>
+          </svg>
+          <p class="icon-text">reflash-line</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-token-fill"></use>
+          </svg>
+          <p class="icon-text">token-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-template-fill-2"></use>
+          </svg>
+          <p class="icon-text">template-fill-2</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-breadcrumb"></use>
+          </svg>
+          <p class="icon-text">breadcrumb</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-bottom-group"></use>
+          </svg>
+          <p class="icon-text">bottom-group</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-freedrag"></use>
+          </svg>
+          <p class="icon-text">freedrag</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-copy-line"></use>
+          </svg>
+          <p class="icon-text">copy-line</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-comment-fill"></use>
+          </svg>
+          <p class="icon-text">comment-fill</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-download-line"></use>
+          </svg>
+          <p class="icon-text">download-line</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-invisible-eye"></use>
+          </svg>
+          <p class="icon-text">invisible-eye</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-level-down"></use>
+          </svg>
+          <p class="icon-text">level-down</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-audit"></use>
+          </svg>
+          <p class="icon-text">audit</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-unfold"></use>
+          </svg>
+          <p class="icon-text">unfold</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-fold"></use>
+          </svg>
+          <p class="icon-text">fold</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-directives"></use>
+          </svg>
+          <p class="icon-text">directives</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-variable"></use>
+          </svg>
+          <p class="icon-text">variable</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-variable-manage"></use>
+          </svg>
+          <p class="icon-text">variable-manage</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-yemianhanshu"></use>
+          </svg>
+          <p class="icon-text">yemianhanshu</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-hanshuku"></use>
+          </svg>
+          <p class="icon-text">hanshuku</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-page-variable"></use>
+          </svg>
+          <p class="icon-text">page-variable</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-yuanma"></use>
+          </svg>
+          <p class="icon-text">yuanma</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-shanchu"></use>
+          </svg>
+          <p class="icon-text">shanchu</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-fankui"></use>
+          </svg>
+          <p class="icon-text">fankui</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-auth-set"></use>
+          </svg>
+          <p class="icon-text">auth-set</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-json"></use>
+          </svg>
+          <p class="icon-text">json</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-logo"></use>
+          </svg>
+          <p class="icon-text">logo</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-visible-eye"></use>
+          </svg>
+          <p class="icon-text">visible-eye</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-process"></use>
+          </svg>
+          <p class="icon-text">process</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-huabu"></use>
+          </svg>
+          <p class="icon-text">huabu</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-drag-small"></use>
+          </svg>
+          <p class="icon-text">drag-small</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-select-value"></use>
+          </svg>
+          <p class="icon-text">select-value</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-select-variable"></use>
+          </svg>
+          <p class="icon-text">select-variable</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-select-expression"></use>
+          </svg>
+          <p class="icon-text">select-expression</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-drag-small1"></use>
+          </svg>
+          <p class="icon-text">drag-small1</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-icon-manage"></use>
+          </svg>
+          <p class="icon-text">icon-manage</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-document"></use>
+          </svg>
+          <p class="icon-text">document</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-qiyeweixin"></use>
+          </svg>
+          <p class="icon-text">qiyeweixin</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-erweima"></use>
+          </svg>
+          <p class="icon-text">erweima</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-lianxi"></use>
+          </svg>
+          <p class="icon-text">lianxi</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-qq-2"></use>
+          </svg>
+          <p class="icon-text">qq-2</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-gaojing"></use>
+          </svg>
+          <p class="icon-text">gaojing</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-bubble-chart"></use>
+          </svg>
+          <p class="icon-text">bubble-chart</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-scatter-chart"></use>
+          </svg>
+          <p class="icon-text">scatter-chart</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-radar-chart"></use>
+          </svg>
+          <p class="icon-text">radar-chart</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-bk-bubble-chart"></use>
+          </svg>
+          <p class="icon-text">bk-bubble-chart</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-bk-scatter-chart"></use>
+          </svg>
+          <p class="icon-text">bk-scatter-chart</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-fix"></use>
+          </svg>
+          <p class="icon-text">fix</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-export"></use>
+          </svg>
+          <p class="icon-text">export</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-sql"></use>
+          </svg>
+          <p class="icon-text">sql</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-csv"></use>
+          </svg>
+          <p class="icon-text">csv</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-shuipingjuzhuduiqi"></use>
+          </svg>
+          <p class="icon-text">shuipingjuzhuduiqi</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-diduiqi"></use>
+          </svg>
+          <p class="icon-text">diduiqi</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-chuizhijuzhongduiqi"></use>
+          </svg>
+          <p class="icon-text">chuizhijuzhongduiqi</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-youduiqi"></use>
+          </svg>
+          <p class="icon-text">youduiqi</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-dingduiqi"></use>
+          </svg>
+          <p class="icon-text">dingduiqi</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-zuoduiqi"></use>
+          </svg>
+          <p class="icon-text">zuoduiqi</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-data-table"></use>
+          </svg>
+          <p class="icon-text">data-table</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-data-source-manage"></use>
+          </svg>
+          <p class="icon-text">data-source-manage</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-version"></use>
+          </svg>
+          <p class="icon-text">version</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-mobilephone"></use>
+          </svg>
+          <p class="icon-text">mobilephone</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-pc"></use>
+          </svg>
+          <p class="icon-text">pc</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-templateline"></use>
+          </svg>
+          <p class="icon-text">templateline</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-cellcellgroup"></use>
+          </svg>
+          <p class="icon-text">cellcellgroup</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-circle"></use>
+          </svg>
+          <p class="icon-text">circle</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-empty"></use>
+          </svg>
+          <p class="icon-text">empty</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-countdown"></use>
+          </svg>
+          <p class="icon-text">countdown</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-divider"></use>
+          </svg>
+          <p class="icon-text">divider</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-noticebar"></use>
+          </svg>
+          <p class="icon-text">noticebar</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-loading"></use>
+          </svg>
+          <p class="icon-text">loading</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-navbar"></use>
+          </svg>
+          <p class="icon-text">navbar</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-numberkeyborad"></use>
+          </svg>
+          <p class="icon-text">numberkeyborad</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-passwordinput"></use>
+          </svg>
+          <p class="icon-text">passwordinput</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-picker"></use>
+          </svg>
+          <p class="icon-text">picker</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-search-2"></use>
+          </svg>
+          <p class="icon-text">search-2</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-skeleton"></use>
+          </svg>
+          <p class="icon-text">skeleton</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-step"></use>
+          </svg>
+          <p class="icon-text">step</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-treeselect"></use>
+          </svg>
+          <p class="icon-text">treeselect</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-stepper"></use>
+          </svg>
+          <p class="icon-text">stepper</p>
+        </li>
+        <li class="colorful-icon">
+          <svg class="icon svg-icon">
+            <use xlink:href="#bk-drag-icon-2"></use>
+          </svg>
+          <p class="icon-text">icon-2</p>
+        </li>
+      </ul>
+      <h3 class="describe-title">为什么使用</h3>
+      <ul class="use-describe">
+          <li>支持彩色图标</li>
+          <li>跨 SVG 使用，使用 use 可调用文档中加载的所有 SVG 图标 </li>
+      </ul>
+      <h3 class="describe-title">如何使用</h3>
+      <ul class="use-describe">
+        <li>将下载的资源文件中 iconcool.js 文件外部资源通过 script 标签引入</li>
+        <li>在 html 模板文件中挑选对应的对应图标的名称使用，例如：
+          <pre>
+    &lt;svg aria-hidden="true"&gt;
+      &lt;use xlink:href="#icon-xxx"&gt;&lt;/use&gt;
+    &lt;/svg&gt;
+          </pre>
+        </li>
+      </ul>
+      </section>
+    </section>
+  </div>
+  <script>
+    document.addEventListener('click', function (e) {
+      if (event.target.classList.contains('tab-panel')) {
+        const type = event.target.dataset.type
+        const tabPanels = document.querySelectorAll('.tab-panel')
+        const tabContents = document.querySelectorAll('.tab-content')
+
+        tabPanels.forEach(function(item) {
+          item.classList.remove('active')
+        })
+
+        e.target.classList.add('active')
+        
+        tabContents.forEach(function (item) {
+          const contentType = item.dataset.type
+          if (contentType === type) {
+            item.classList.add('active')
+          } else {
+            item.classList.remove('active')
+          }
+        })
+      }
+      
+    })
+  </script>
+</body>
+</html>

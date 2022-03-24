@@ -43,7 +43,9 @@
         createBkIcon,
         createElIcon,
         createCharts,
-        createBkRadioGroup
+        createBkRadioGroup,
+        createParagraph,
+        createColumn
     } from './hacker'
 
     const hackerQueue = [
@@ -53,7 +55,9 @@
         createBkIcon,
         createElIcon,
         createCharts,
-        createBkRadioGroup
+        createBkRadioGroup,
+        createParagraph,
+        createColumn
     ]
 
     export default {

@@ -11,6 +11,7 @@
 
 import bkComponents, { bkComponentGroupList } from './bk'
 import elementComponents, { elementComponentGroupList } from './element'
+import vantComponents, { vantComponentGroupList } from './vant'
 
 import { componentConfigs as complexComponentConfigs } from '@blueking/bkui-vue-complex'
 
@@ -25,5 +26,7 @@ export default {
     bk: bkComponents.concat(...complexComponentConfigs),
     bkComponentGroupList,
     element: elementComponents,
-    elementComponentGroupList
+    elementComponentGroupList,
+    vant: vantComponents,
+    vantComponentGroupList
 }

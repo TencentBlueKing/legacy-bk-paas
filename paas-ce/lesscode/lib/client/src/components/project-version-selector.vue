@@ -1,6 +1,7 @@
 <template>
     <bk-select :class="['project-version-selector', { borderless: !bordered }]"
         v-model="selected"
+        placeholder="--"
         :searchable="searchable"
         :clearable="clearable"
         :popover-options="{
@@ -120,12 +121,14 @@
 
 <style lang="postcss" scoped>
     .project-version-selector {
-        width: 320px;
-
         &.borderless {
-            width: 90px;
+            min-width: 54px;
+            max-width: 320px;
             border: none;
             ::v-deep {
+                .bk-select-name {
+                    padding-right: 24px;
+                }
                 .bk-select-name,
                 .bk-select-angle {
                     color: #3A84FF;

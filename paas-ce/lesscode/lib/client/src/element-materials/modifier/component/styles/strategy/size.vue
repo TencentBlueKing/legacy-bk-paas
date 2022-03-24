@@ -40,6 +40,7 @@
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
     import { getCssProperties } from '../common/util'
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
 
     const sizeConfig = [
         {
@@ -79,6 +80,7 @@
             AppendSelect,
             SizeInput
         },
+        mixins: [defaultUnitMixin],
         props: {
             value: {
                 type: Object,
@@ -118,7 +120,7 @@
                         item['value'] = that.value.display || ''
                     } else {
                         item['value'] = splitValueAndUnit('value', that.value[item.key])
-                        item['unit'] = splitValueAndUnit('unit', that.value[item.key]) || 'px'
+                        item['unit'] = splitValueAndUnit('unit', that.value[item.key]) || that.defaultUnit
                     }
                     return item
                 })
@@ -126,9 +128,11 @@
             },
             handleInputChange (item, val) {
                 const newValue = val === '' ? '' : val + item.unit
+                item.value = val
                 this.change(item.key, newValue)
             },
             handleSelectChange (item, unit) {
+                item.unit = unit
                 if (item.value !== '') {
                     item.value = Math.min(item.value, unit === '%' ? 100 : item.value)
                     this.change(item.key, item.value + unit)

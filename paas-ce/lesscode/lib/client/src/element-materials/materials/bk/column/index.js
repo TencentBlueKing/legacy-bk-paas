@@ -15,13 +15,12 @@ export default {
     display: 'none',
     order: 1,
     group: '布局',
-    styles: ['size', 'padding'],
+    styles: ['padding', 'font', 'background'],
     renderStyles: {
-        'minHeight': '80px'
-        // 'paddingTop': '10px',
-        // 'paddingRight': '10px',
-        // 'paddingBottom': '5px',
-        // 'paddingLeft': '10px'
+        'paddingTop': '5px',
+        'paddingRight': '5px',
+        'paddingBottom': '5px',
+        'paddingLeft': '5px'
     },
     props: {
         'span': {

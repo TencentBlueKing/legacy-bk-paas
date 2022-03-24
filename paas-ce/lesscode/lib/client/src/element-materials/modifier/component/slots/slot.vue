@@ -85,6 +85,17 @@
         'data-source': slotDataSource
     }
 
+    const typeTextMap = {
+        'object': '对象',
+        'number': '数字',
+        'string': '字符串',
+        'array': '数组',
+        'remote': '远程函数',
+        'data-source': '数据源',
+        'list': '数据列表',
+        'table-list': '数据列表'
+    }
+
     export default {
         components: {
             variableSelect
@@ -92,17 +103,7 @@
 
         filters: {
             renderTypeText (type) {
-                const labelMap = {
-                    'object': '对象',
-                    'number': '数字',
-                    'string': '字符串',
-                    'array': '数组',
-                    'remote': '远程函数',
-                    'data-source': '数据源',
-                    'list': '数据列表',
-                    'table-list': '数据列表'
-                }
-                return labelMap[type] || toPascal(type)
+                return typeTextMap[type] || toPascal(type)
             },
             capFirstLetter (val = '') {
                 return toPascal(val)
@@ -183,9 +184,9 @@
                 type: 'slot',
                 prop: this.name,
                 format: 'value',
-                includesFormat: ['value', 'variable', 'expression'],
+                formatInclude: ['value', 'variable', 'expression'],
                 code: defaultValue,
-                includesValueType: undefined
+                valueTypeInclude: undefined
             }
 
             // slot 的初始值

@@ -44,3 +44,6 @@ lib/server/conf/encrypt-secret-key.js
 !lib/server/project-template/project-init-code/bin
 lib/server/project-template/project-target*
 lib/server/project-template/bklesscode-proj*
+
+.codecc
+build.yml

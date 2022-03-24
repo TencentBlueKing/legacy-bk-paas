@@ -17,18 +17,19 @@ import generateRouter from './router'
 import generateStore from './store'
 
 // 解析 url 参数
-const location = window.parent.location
+const location = window.location
 const projectIdReg = new RegExp(`${location.origin}/preview/project/(\\d+)`)
 const [, projectId] = projectIdReg.exec(location.href) || []
 
 const storageKey = `preview-project-version-${projectId}`
 const versionId = new URLSearchParams(location.search).get('v') || sessionStorage.getItem(storageKey) || ''
+const platform = new URLSearchParams(location.search).get('platform') || 'PC'
 if (versionId) {
     sessionStorage.setItem(storageKey, versionId)
 }
 
 Promise.all([
-    pureAxios.get(`/projectCode/previewCode?projectId=${projectId}&versionId=${versionId}`),
+    pureAxios.get(`/projectCode/previewCode?projectId=${projectId}&platform=${platform}&versionId=${versionId}`),
     registerComponent(Vue, projectId, versionId)
 ]).then(([res]) => {
     Vue.prototype.$http = pureAxios
@@ -47,7 +48,8 @@ Promise.all([
             pageCode,
             fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
         }))
-    const router = generateRouter(data.routeGroup, projectPageRouteList, projectRouteList, projectId)
+
+    const router = generateRouter(data.routeGroup, projectPageRouteList, projectRouteList, projectId, platform)
     const store = generateStore(data.storeData, { projectPageRouteList, projectRouteList })
     window.app = new Vue({
         el: '#preview-app',

@@ -85,6 +85,7 @@
     import TypeFreeLayoutItem from './strategy/free-layout-item.vue'
     import TypeSlotWrapper from './strategy/slot-wrapper'
     import TypeIcon from './strategy/icon'
+    import TypeVanIcon from './strategy/van-icon'
     import TypeColor from './strategy/color'
     import TypleElProps from './strategy/el-props'
     import TypeDataSource from './strategy/data-source.vue'
@@ -165,6 +166,7 @@
                     'slot-html': TypeSlot,
                     'free-layout-item': TypeFreeLayoutItem,
                     'icon': TypeIcon,
+                    'van-icon': TypeVanIcon,
                     'color': TypeColor,
                     'step': TypeSlotWrapper,
                     'function': TypeFunction,
@@ -197,6 +199,7 @@
                     'free-layout-item': 'free-layout-item',
                     'bread-crumb': 'bread-crumb',
                     'icon': 'icon',
+                    'van-icon': 'van-icon',
                     'form-item': 'form-item',
                     'color': 'color',
                     'step': 'step',
@@ -216,6 +219,7 @@
                     'html': 'string',
                     'json': 'object',
                     'icon': 'string',
+                    'van-icon': 'string',
                     'float': 'number'
                 }
 
@@ -282,23 +286,23 @@
                 val
             } = this.describe
             const defaultValue = val !== undefined ? val : getDefaultValueByType(type)
-            const includesValueType = Array.isArray(type) ? type : [type]
+            const valueTypeInclude = Array.isArray(type) ? type : [type]
 
             // 构造 variable-select 的配置
             this.variableSelectOptions = {
                 type: 'v-bind',
                 prop: this.name,
                 format: 'value',
-                includesFormat: ['value', 'variable', 'expression'],
+                formatInclude: ['value', 'variable', 'expression'],
                 code: defaultValue,
-                includesValueType: includesValueType
+                valueTypeInclude: valueTypeInclude
             }
 
             // prop 的初始值
             this.formData = Object.freeze({
                 format: 'value',
                 code: defaultValue,
-                valueType: includesValueType[0],
+                valueType: valueTypeInclude[0],
                 renderValue: defaultValue,
                 payload: this.lastValue.payload || {}
             })
@@ -312,11 +316,15 @@
             }
 
             if (this.lastValue && this.lastValue.valueType) {
+                // fix: 旧数据存在 valueType 是数组的情况
+                const lastValueType = Array.isArray(this.lastValue.valueType)
+                    ? this.lastValue.valueType[0]
+                    : this.lastValue.valueType
                 this.formData = Object.freeze({
                     ...this.formData,
                     format: this.lastValue.format,
                     code: this.lastValue.code,
-                    valueType: this.lastValue.valueType
+                    valueType: lastValueType
                 })
                 // TODO. format 为变量的时候时是否需要去获取变量的默认值
                 if (this.formData.format === 'value') {

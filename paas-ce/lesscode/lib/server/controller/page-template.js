@@ -206,7 +206,7 @@ export const importTemplate = async (ctx) => {
     try {
         const { belongProjectId, template = {}, vars = [], functions = [] } = ctx.request.body
 
-        // 校验模板名称是否重复        
+        // 校验模板名称是否重复
         const record = await PageTemplateModel.getOne({
             templateName: template.templateName,
             belongProjectId: template.belongProjectId,
@@ -223,11 +223,11 @@ export const importTemplate = async (ctx) => {
         
         await getConnection().transaction(async transactionalEntityManager => {
             const createTemplate = getRepository(PageTemplate).create(newTemplate)
-            const res = await transactionalEntityManager.save(createTemplate)
+            await transactionalEntityManager.save(createTemplate)
             const saveQueue = []
             if (valList.length) {
                 await Promise.all(valList.map(async val => {
-                    const { id, createTime, createUser, updateTime, updateUser, userInfo, ...other} = val
+                    const { id, createTime, createUser, updateTime, updateUser, userInfo, ...other } = val
                     const newVal = Object.assign(other, {
                         projectId: belongProjectId,
                         pageCode: '',
@@ -240,14 +240,14 @@ export const importTemplate = async (ctx) => {
             }
             if (funcList.length) {
                 await Promise.all(funcList.map(async func => {
-                    const { id, createTime, createUser, updateTime, updateUser, pages, ...other} = func
-                    const newFunc = Object.assign(other, { 
+                    const { id, createTime, createUser, updateTime, updateUser, pages, ...other } = func
+                    const newFunc = Object.assign(other, {
                         funcGroupId: defaultFuncGroupId,
                         remoteParams: (other.remoteParams || []).join(', '),
                         funcParams: (other.funcParams || []).join(', ')
                     })
                     const createFunc = getRepository(Func).create(newFunc)
-                    saveQueue.push(transactionalEntityManager.save(createFunc))    
+                    saveQueue.push(transactionalEntityManager.save(createFunc))
                 }))
             }
             saveQueue.length && await Promise.all(saveQueue)
@@ -255,8 +255,8 @@ export const importTemplate = async (ctx) => {
         
         ctx.send({
             code: 0,
-            message: `success`,
-            data: `模板导入成功`
+            message: 'success',
+            data: '模板导入成功'
         })
     } catch (err) {
         ctx.throwError({

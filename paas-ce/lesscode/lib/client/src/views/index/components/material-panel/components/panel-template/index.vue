@@ -80,6 +80,7 @@
     import { bus } from '@/common/bus'
     import GroupBox from '../common/group-box'
     import SearchBox from '../common/search-box'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'template-panel',
@@ -110,6 +111,7 @@
             }
         },
         computed: {
+            ...mapGetters('page', ['platform']),
             renderTemplateList () {
                 return this.type === 'project' ? this.projectTemplateList : this.marketTemplateList
             }
@@ -141,14 +143,16 @@
                         type: item.templateName,
                         name: item.templateName,
                         displayName: ''
-                    }))
+                    })).filter(item => item.templateType === this.platform || (this.platform === 'PC' && !item.templateType))
+
                     const marketTemplateList = tmpMarketTemplateList.map(item => ({
                         ...item,
                         type: item.templateName,
                         name: item.templateName,
                         displayName: '',
                         hasInstall: projectTemplateList.filter(template => template.parentId === item.id).length > 0
-                    }))
+                    })).filter(item => item.templateType === this.platform || (this.platform === 'PC' && !item.templateType))
+
                     this.projectTemplateGroupList = projectTemplateGroups.map(item => ({
                         id: item.id,
                         categoryName: item.name,
@@ -162,8 +166,6 @@
                     this.projectTemplateList = Object.freeze(projectTemplateList)
                     this.marketTemplateList = Object.freeze(marketTemplateList)
                     this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
-
-                    console.log('from tempalte print == ', this.projectTemplateList, this.marketTemplateList)
                 } catch (err) {
                     this.$bkMessage({
                         theme: 'error',
@@ -174,7 +176,6 @@
                 }
             },
             createFallback (list, index) {
-                console.log('from maste fallsbaen = =', JSON.parse(list[index].content))
                 return LC.parseTemplate(JSON.parse(list[index].content))
             },
             /**
@@ -250,6 +251,7 @@
 
     .panel-template{
         min-height: 100%;
+        height: 100%;
         .category-tabs{
             display: flex;
             border-bottom: 1px solid #ccc;

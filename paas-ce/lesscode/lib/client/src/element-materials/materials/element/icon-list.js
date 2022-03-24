@@ -295,6 +295,10 @@ for (const [key, value] of Object.entries(iconGroupList)) {
             group: key,
             order: 1,
             styles: [
+                {
+                    name: 'size',
+                    include: ['display']
+                },
                 'margin',
                 {
                     name: 'font',

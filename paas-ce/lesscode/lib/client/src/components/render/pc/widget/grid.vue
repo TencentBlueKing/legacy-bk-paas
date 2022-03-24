@@ -11,80 +11,114 @@
 
 <template>
     <div :class="$style['grid']">
-        <render-row
-            :ref="componentData.componentId">
-            <render-col
-                v-for="(componentItem) in componentData.slot.default"
-                :component-data="componentItem"
-                :key="componentItem.componentId"
-                :count="getSpanNums()" />
-        </render-row>
-        <template v-if="componentData.isActived">
-            <div
-                :class="$style['add-column']"
-                role="append-column"
-                @click="handleAddColumn"
-                data-render-drag="disabled">
-                <img src="../../../../images/svg/add-line.svg" />
+        <resolve-component
+            v-for="slotComponentData in componentData.slot.default"
+            :class="$style['col']"
+            :key="slotComponentData.renderKey"
+            :component-data="slotComponentData" />
+        <div
+            v-if="isShowActiveBtn || componentData.isActived"
+            :class="$style['placholder']">
+            <div :class="$style['btn']">
+                <i class="bk-drag-icon bk-drag-drag-small1" />
             </div>
-            <div
-                :class="$style['add-clone']"
-                role="clone-grid"
-                @click="handleAddClone"
-                data-render-drag="disabled">
-                <img src="../../../../images/svg/add-line.svg" />
-            </div>
-        </template>
+        </div>
     </div>
 </template>
 <script>
     import LC from '@/element-materials/core'
-    import renderRow from './row'
-    import renderCol from './col'
+    import ResolveComponent from '../resolve-component'
 
     export default {
         name: 'render-grid',
         components: {
-            renderRow,
-            renderCol
+            ResolveComponent
         },
         inheritAttrs: false,
-        provide () {
-            return {
-                renderGrid: this
-            }
-        },
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
             }
         },
+        provide () {
+            return {
+                renderGrid: this
+            }
+        },
+        data () {
+            return {
+                isColumnEmpty: true,
+                isShowActiveBtn: false
+            }
+        },
+        created () {
+            this.spanTotalNumsMemo = 0
+            this.updateChildColumn()
+
+            /**
+             * @desc grid本身更新或者子组件column更新时都需要重新执行
+             * @param { Object } event
+             */
+            const updateCallback = (event) => {
+                if (event.target.componentId === this.componentData.componentId
+                    || (
+                        event.target.type === 'render-column'
+                        && event.target.parentNode.componentId === this.componentData.componentId
+                    )) {
+                    this.$forceUpdate()
+                    this.updateChildColumn()
+                }
+            }
+            /**
+             * @desc 子组件column选中时需要给grid的tips
+             */
+            const activeCallback = event => {
+                this.isShowActiveBtn = event.target.parentNode === this.componentData
+            }
+            const activeClearCallback = () => {
+                this.isShowActiveBtn = false
+            }
+            LC.addEventListener('update', updateCallback)
+            LC.addEventListener('active', activeCallback)
+            LC.addEventListener('activeClear', activeClearCallback)
+
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', updateCallback)
+                LC.removeEventListener('active', activeCallback)
+                LC.removeEventListener('activeClear', activeClearCallback)
+            })
+        },
         methods: {
-            getSpanNums () {
-                return this.componentData.children.reduce((result, columnNode) => {
+            /**
+             * @desc gird有更新需要同步计算colum的样式
+             */
+            updateChildColumn () {
+                const columnNodeList = this.componentData.children
+
+                // 直接子组件column是否有拖入组件
+                this.isColumnEmpty = true
+                columnNodeList.forEach(node => {
+                    if (node.children.length > 0) {
+                        this.isColumnEmpty = false
+                    }
+                })
+                // 计算每个column的宽度
+                const spanTotalNums = columnNodeList.reduce((result, columnNode) => {
                     return result + columnNode.prop.span
                 }, 0)
-            },
-            /**
-             * @desc 克隆 grid，只克隆布局数据树结构不克隆
-             */
-            handleAddClone () {
-                const gridNode = LC.createNode('render-grid', false)
-                this.componentData.children.forEach(() => {
-                    gridNode.appendChild(LC.createNode('render-column'))
-                })
-                this.componentData.parentNode.insertAfter(gridNode, this.componentData)
-            },
-            /**
-             * @desc 添加栅格
-             */
-            handleAddColumn () {
-                if (this.componentData.children.length >= 12) {
-                    this.messageWarn('最多支持12栅格')
+                if (this.spanTotalNumsMemo === spanTotalNums) {
                     return
                 }
-                this.componentData.appendChild(LC.createNode('render-column'))
+                
+                this.spanTotalNumsMemo = spanTotalNums
+                columnNodeList.forEach(node => {
+                    const renderWidth = `${Number((node.prop.span / spanTotalNums * 100).toFixed(4))}%`
+                       
+                    if (node.style.width !== renderWidth) {
+                        node.setStyle('width', renderWidth)
+                    }
+                })
             }
         }
     }
@@ -95,39 +129,37 @@
         display: flex;
         /* 如果基础的 slot 可以拖拽需要设置这个屏蔽掉基础组件上面的 pointer-events: none 效果 */
         pointer-events: all;
-        .add-column,
-        .add-clone {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            font-size: 14px;
-            color: #fff;
-            text-align: center;
-            line-height: 19px;
-            border-radius: 50%;
-            background: #3A84FF;
-            cursor: pointer;
-            pointer-events: all;
-            img {
-                position: absolute;
-                transform: translate(-50%, -50%);
-                top: 50%;
-                left: 50%;
-                width: 14px;
-                height: 14px;
+
+        .col {
+            border: 1px dashed #ccc;
+            &:nth-child(n + 2) {
+                border-left: none;
             }
         }
-        .add-column {
-            top: 50%;
-            right: -10px;
-            transform: translateY(-50%);
-            z-index: 11;
-        }
-        .add-clone {
-            bottom: -9px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 11;
+    }
+    .placholder {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 99;
+        display: flex;
+        .btn{
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            margin-bottom: -14px;
+            font-size: 14px;
+            color: #C4C6CC;
+            background: #EAEBF0;
+            cursor: pointer;
+            pointer-events: all;
+            &:hover{
+                color: #699DF4;
+                background: #A3C5FD;
+            }
         }
     }
 </style>

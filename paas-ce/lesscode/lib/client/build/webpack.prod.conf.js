@@ -157,7 +157,7 @@ module.exports = merge(baseConf, {
                                 loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
                                 options: {
                                     modules: {
-                                        localIdentName: '[name]_[local]_[hash:base64:5]'
+                                        localIdentName: '[hash:base64:5]'
                                     },
                                     importLoaders: 1
                                 }
@@ -180,7 +180,7 @@ module.exports = merge(baseConf, {
                                 loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
                                 options: {
                                     modules: {
-                                        localIdentName: '[name]_[local]_[hash:base64:5]'
+                                        localIdentName: '[hash:base64:5]'
                                     },
                                     importLoaders: 1
                                 }

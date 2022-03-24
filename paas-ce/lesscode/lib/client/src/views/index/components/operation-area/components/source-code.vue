@@ -60,7 +60,6 @@
         methods: {
             getFormatCode (withNav) {
                 this.isLoading = true
-                console.log('查看源码 getFormatCode')
                 const { pageType, projectId, pageId } = this
                 const targetData = JSON.parse(circleJSON(LC.getRoot().toJSON().renderSlots.default))
                 this.$store.dispatch('vueCode/getPageCode', {
@@ -83,6 +82,7 @@
 <style lang="postcss">
     .vue-code {
         height: 100%;
+        border: 1px solid #DCDEE5;
         .hljs-attr {
             color: #a6e22e;
         }

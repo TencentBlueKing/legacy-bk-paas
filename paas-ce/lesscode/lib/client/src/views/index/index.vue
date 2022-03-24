@@ -36,9 +36,7 @@
         <template v-if="!isContentLoading && !isCustomComponentLoading">
             <draw-layout>
                 <material-panel slot="left" />
-                <operation-area
-                    :operaion="operationType"
-                    :type="operationType" />
+                <operation-area :operation="operationType" />
                 <modifier-panel slot="right" />
             </draw-layout>
             <novice-guide ref="guide" :data="guideStep" />
@@ -64,6 +62,8 @@
     import OperationArea from './components/operation-area'
     import ActionTool from './components/action-tool'
 
+    console.dir(LC)
+
     export default {
         components: {
             NoviceGuide,
@@ -87,26 +87,37 @@
         },
         computed: {
             ...mapGetters(['user']),
+            ...mapGetters('drag', ['curTemplateData']),
+            ...mapGetters('page', ['pageDetail', 'platform']),
+            ...mapGetters('functions', ['funcGroups']),
+            ...mapGetters('layout', ['pageLayout']),
+            ...mapGetters('variable', ['variableList']),
             ...mapGetters('projectVersion', {
                 versionId: 'currentVersionId',
                 versionName: 'currentVersionName',
                 getInitialVersion: 'initialVersion'
             }),
-            ...mapGetters('drag', ['curTemplateData']),
-            ...mapGetters('page', ['pageDetail']),
-            ...mapGetters('functions', ['funcGroups']),
-            ...mapGetters('layout', ['pageLayout']),
-            ...mapGetters('variable', ['variableList']),
-            ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' }),
-            ...mapState('route', ['layoutPageList'])
+            ...mapState('route', ['layoutPageList']),
+            pageRoute () {
+                return this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
+            }
         },
         watch: {
             curTemplateData: {
                 handler () {
-                    const pageRoute = this.layoutPageList.find(({ pageId }) => pageId === Number(this.pageId))
                     this.handleUpdatePreview({
                         isGenerateNav: true,
-                        id: pageRoute.layoutPath,
+                        id: this.pageRoute.layoutPath,
+                        curTemplateData: this.curTemplateData,
+                        types: ['reload']
+                    })
+                }
+            },
+            layoutPageList: {
+                handler () {
+                    this.handleUpdatePreview({
+                        isGenerateNav: true,
+                        id: this.pageRoute.layoutPath,
                         curTemplateData: this.curTemplateData,
                         types: ['reload']
                     })
@@ -122,6 +133,10 @@
             },
             'pageDetail.lifeCycle' () {
                 // 生命周期发生变化的时候  reload
+                this.handleUpdatePreview()
+            },
+            'pageDetail.styleSetting' () {
+                // 页面样式发生变化的时候  reload
                 this.handleUpdatePreview()
             }
         },
@@ -167,7 +182,7 @@
                 {
                     title: '画布编辑区',
                     content: '可在画布自由拖动组件、图标等进行页面布局',
-                    target: '#drawContent'
+                    target: '#lesscodeDrawContent'
                 },
                 {
                     title: '组件配置',
@@ -194,7 +209,8 @@
         },
         beforeDestroy () {
             LC.removeEventListener('update', this.handleUpdatePreview)
-            LC.parseData([])
+            LC.triggerEventListener('unload')
+            
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
             localStorage.removeItem('ONLINE_PREVIEW')
         },
@@ -208,10 +224,6 @@
             })
         },
         methods: {
-            ...mapActions('functions', [
-                'getAllGroupFuncs'
-            ]),
-            ...mapActions('variable', ['getAllVariable']),
             ...mapActions(['updatePreview']),
             /**
              * @desc 注册自定义组件
@@ -272,7 +284,7 @@
                         versionId: this.versionId
                     })
 
-                    await this.getAllVariable({
+                    await this.$store.dispatch('variable/getAllVariable', {
                         projectId: this.projectId,
                         pageCode: pageDetail.pageCode,
                         versionId: this.versionId,
@@ -285,6 +297,8 @@
 
                     // 设置初始targetData
                     LC.parseData(pageDetail.content)
+                    LC.pageStyle = pageDetail.styleSetting
+                    this.handleUpdatePreview()
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -324,7 +338,7 @@
 
     .lessocde-draw-page {
         min-width: 1280px;
-        height: calc(100vh - $headerHeight);
+        height: calc(100vh - $headerHeight - 4px);
         margin-top: $headerHeight;
         .draw-page-header {
             position: relative;
@@ -347,6 +361,7 @@
             .function-and-tool {
                 position: relative;
                 display: flex;
+                flex: 1;
                 justify-content: center;
                 align-items: center;
             }

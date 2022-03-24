@@ -42,15 +42,16 @@ export const getRouteName = (route) => {
  * @param {Array} projectRouteList 项目路由列表，以路由数据为视角，数据已打平
  * @returns 路由数据
  */
-export const getProjectDefaultRoute = (projectPageRouteList, projectRouteList) => {
+export const getProjectDefaultRoute = (projectPageRouteList, projectRouteList, platform) => {
+    const rootPath = platform === 'MOBILE' ? '/mobile/' : '/'
     // 先看是否存在根'/'路由配置
-    const defaultHome = projectRouteList.find(item => item.fullPath === '/')
+    const defaultHome = projectRouteList.find(item => item.fullPath === rootPath)
     if (defaultHome) {
         return defaultHome
     }
 
     // 否则找配置了父路由为'/'的第一个页面，将其路由作为默认首页路由
-    const rootPathRoute = projectPageRouteList.find(item => item.layoutPath === '/')
+    const rootPathRoute = projectPageRouteList.find(item => item.layoutPath === rootPath)
     if (rootPathRoute && rootPathRoute.id) {
         return rootPathRoute
     }
