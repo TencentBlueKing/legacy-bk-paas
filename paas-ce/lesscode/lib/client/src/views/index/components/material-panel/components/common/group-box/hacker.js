@@ -78,3 +78,18 @@ export const createParagraph = (node, config) => {
         node.setRenderStyles(renderStyle)
     }
 }
+
+export const createColumn = (node) => {
+    if (node.type === 'render-column') {
+        const platform = store.getters['page/platform']
+        const padding = platform === 'PC'
+            ? '5px'
+            : '10rpx'
+        node.setRenderStyles({
+            'paddingTop': padding,
+            'paddingRight': padding,
+            'paddingBottom': padding,
+            'paddingLeft': padding
+        })
+    }
+}

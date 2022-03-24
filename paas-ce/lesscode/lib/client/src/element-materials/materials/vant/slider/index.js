@@ -13,7 +13,7 @@ export default {
     name: 'van-slider',
     type: 'van-slider',
     displayName: '滑块',
-    icon: '',
+    icon: 'bk-drag-slider',
     group: '表单',
     order: 1,
     document: 'https://youzan.github.io/vant/v2/#/zh-CN/slider',

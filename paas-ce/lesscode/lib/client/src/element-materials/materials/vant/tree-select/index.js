@@ -13,7 +13,7 @@ export default {
     name: 'van-tree-select',
     type: 'van-tree-select',
     // bk-drag-custom-comp-default
-    icon: 'bk-drag-button',
+    icon: 'bk-drag-treeselect',
     displayName: '分类选择',
     group: '导航',
     events: [

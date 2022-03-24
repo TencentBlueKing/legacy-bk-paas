@@ -1,7 +1,7 @@
 <template>
     <div class="mobile-canvas-wrapper">
         <edit-area></edit-area>
-        <simulator v-show="mobilePreview" style="margin-left: 10%;"></simulator>
+        <simulator v-show="mobilePreview" style="transform: translateX(-40px)"></simulator>
     </div>
 </template>
 
@@ -23,7 +23,7 @@
 .mobile-canvas-wrapper {
     min-height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     padding: 40px 0 80px;
     ::v-deep .lesscode-layout-empty {

@@ -43,7 +43,6 @@ export default {
         },
         max: {
             type: ['number', 'string'],
-            val: undefined,
             tips: '最大值，超过最大值会显示 {max}+，仅当 content 为数字时有效'
         }
     },

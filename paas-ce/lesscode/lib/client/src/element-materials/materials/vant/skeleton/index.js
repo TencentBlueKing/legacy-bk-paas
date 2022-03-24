@@ -13,7 +13,7 @@ export default {
     name: 'van-skeleton',
     type: 'van-skeleton',
     // bk-drag-custom-comp-default
-    icon: '',
+    icon: 'bk-drag-skeleton',
     displayName: '骨架屏',
     group: '数据',
     events: [],
