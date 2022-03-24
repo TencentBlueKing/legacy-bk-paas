@@ -28,7 +28,6 @@ export default {
         },
         'image-size': {
             type: ['string', 'number'],
-            val: undefined,
             tips: '图片大小，默认单位为 px'
         },
         'description': {

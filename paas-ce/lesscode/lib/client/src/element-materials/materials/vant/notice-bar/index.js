@@ -64,7 +64,6 @@ export default {
         },
         'scrollable': {
             type: 'boolean',
-            val: undefined,
             tips: '是否开启滚动播放，内容长度溢出时默认开启'
         },
         'wrapable': {

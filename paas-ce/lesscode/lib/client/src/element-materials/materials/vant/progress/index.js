@@ -42,7 +42,6 @@ export default {
         },
         'pivot-text': {
             type: 'string',
-            val: undefined,
             tips: '进度文字内容'
         },
         'pivot-color': {
