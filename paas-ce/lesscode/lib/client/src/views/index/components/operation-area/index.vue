@@ -64,7 +64,9 @@
         overflow: auto;
         @mixin scroller;
         .wraper{
-            height: 100%;
+            display: inline-block;
+            min-width: 100%;
+            min-height: 100%;
             background: #fff;
             & > * {
                 height: 100%;

@@ -13,7 +13,7 @@ export default {
     name: 'van-loading',
     type: 'van-loading',
     // bk-drag-custom-comp-default
-    icon: '',
+    icon: 'bk-drag-loading',
     displayName: '加载',
     group: '反馈',
     styles: ['padding', 'margin', 'font'],

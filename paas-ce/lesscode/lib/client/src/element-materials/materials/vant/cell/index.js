@@ -13,7 +13,7 @@ export default {
     name: 'van-cell',
     type: 'van-cell',
     // bk-drag-custom-comp-default
-    icon: 'bk-drag-button',
+    icon: 'bk-drag-cellcellgroup',
     displayName: '单元格',
     group: '基础',
     document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/cell',

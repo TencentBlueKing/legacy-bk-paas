@@ -13,7 +13,7 @@ export default {
     name: 'van-password-input',
     type: 'van-password-input',
     // bk-drag-custom-comp-default
-    icon: 'bk-drag-input',
+    icon: 'bk-drag-passwordinput',
     displayName: '密码输入框',
     group: '表单',
     document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/password-input',

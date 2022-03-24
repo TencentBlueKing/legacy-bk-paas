@@ -13,7 +13,7 @@ export default {
     name: 'van-notice-bar',
     type: 'van-notice-bar',
     // bk-drag-custom-comp-default
-    icon: '',
+    icon: 'bk-drag-noticebar',
     displayName: '通知栏',
     group: '数据',
     events: [
@@ -64,7 +64,6 @@ export default {
         },
         'scrollable': {
             type: 'boolean',
-            val: undefined,
             tips: '是否开启滚动播放，内容长度溢出时默认开启'
         },
         'wrapable': {

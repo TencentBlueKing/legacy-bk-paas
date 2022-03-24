@@ -13,7 +13,7 @@ export default {
     name: 'van-number-keyboard',
     type: 'van-number-keyboard',
     // bk-drag-custom-comp-default
-    icon: 'bk-drag-input',
+    icon: 'bk-drag-numberkeyborad',
     displayName: '数字键盘',
     group: '表单',
     document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/number-keyboard',

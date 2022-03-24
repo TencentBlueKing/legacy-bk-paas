@@ -13,7 +13,7 @@ export default {
     name: 'van-icon',
     type: 'van-icon',
     // bk-drag-custom-comp-default
-    icon: 'bk-drag-icon',
+    icon: 'bk-drag-icon-2',
     displayName: '图标',
     group: '基础',
     document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/icon',

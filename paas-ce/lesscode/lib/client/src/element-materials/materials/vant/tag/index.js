@@ -13,7 +13,7 @@ export default {
     name: 'van-tag',
     type: 'van-tag',
     // bk-drag-custom-comp-default
-    icon: '',
+    icon: 'bk-drag-tag',
     displayName: '标签',
     group: '数据',
     events: [

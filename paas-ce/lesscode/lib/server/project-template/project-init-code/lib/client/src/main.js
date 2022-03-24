@@ -17,8 +17,8 @@ import '@/common/bkmagic'
 import '@/common/bkui-vue-complex'
 import renderHtml from '@/components/html'
 ${importElementLib}
-${importVantLib}
 import pureAxios from '@/api/pureAxios.js'
+${importVantLib}
 // 用户调用接口使用，无业务逻辑，直接返回数据
 Vue.prototype.$http = pureAxios
 
@@ -68,6 +68,4 @@ auth.requestCurrentUser().then(user => {
 
     document.write(content)
 })
-
-/** 如果是移动端，需要注入rem响应式修改fontSize的代码 */
 ${remJs}

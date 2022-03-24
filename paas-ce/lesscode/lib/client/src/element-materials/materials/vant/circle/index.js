@@ -13,7 +13,7 @@ export default {
     name: 'van-circle',
     type: 'van-circle',
     // bk-drag-custom-comp-default
-    icon: '',
+    icon: 'bk-drag-circle',
     displayName: '环形进度条',
     group: '数据',
     styles: ['padding', 'margin', 'font'],
