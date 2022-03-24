@@ -26,6 +26,8 @@ import {
     clearMenu
 } from './menu'
 
+import { execCommand } from './helper/commands'
+
 import {
     getPageStyle,
     setPageStyle
@@ -72,8 +74,12 @@ core.addEventListener = addEventListener
 core.removeEventListener = removeEventListener
 core.triggerEventListener = triggerEventListener
 
+// 右键快捷面板
 core.showMenu = showMenu
 core.clearMenu = clearMenu
+
+// 执行快捷命令
+core.execCommand = execCommand
 
 core.addEventListener('ready', () => {
     core.isReady = true

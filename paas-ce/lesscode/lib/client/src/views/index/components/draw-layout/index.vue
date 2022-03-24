@@ -9,7 +9,7 @@
             <slot name="left" />
             
         </div>
-        <div id="drawContent" :class="$style['center']">
+        <div id="lesscodeDrawContent" :class="$style['center']">
             <div
                 :class="$style['left-btn']"
                 v-bk-tooltips.right="{
@@ -65,7 +65,6 @@
         &.left-collapse{
             padding-left: 0;
             .left {
-                /* transform: translateX(-100%); */
                 width: 0;
                 overflow: hidden;
             }
@@ -79,7 +78,6 @@
         &.right-collapse{
             padding-right: 0;
             .right{
-                /* transform: translateX(100%); */
                 width: 0;
                 overflow: hidden;
             }
@@ -113,7 +111,7 @@
         }
         .left-btn,
         .right-btn{
-            position: fixed;
+            position: absolute;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -134,14 +132,14 @@
             }
         }
         .left-btn{
-            left: 340px;
+            left: 0;
             border-radius: 0 8px 8px 0;
             :global(.bk-drag-angle-left) {
                 transform: rotate(0deg);
             }
         }
         .right-btn{
-            right: 300px;
+            right: 0;
             border-radius: 8px 0 0 8px;
             :global(.bk-drag-angle-left) {
                 transform: rotate(180deg);
@@ -150,7 +148,7 @@
         .center{
             position: relative;
             height: 100%;
-            padding: 20px;
+            padding: 20px 0;
             overflow: auto;
             @mixin scroller;
         }

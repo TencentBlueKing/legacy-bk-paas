@@ -103,8 +103,6 @@
                     const materialConfig = this.list[event.oldIndex]
                     const node = LC.createNode(materialConfig.type)
 
-                    debugger
-
                     hackerQueue.forEach(task => task(node, materialConfig))
 
                     // 自定义组件

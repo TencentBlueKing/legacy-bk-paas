@@ -122,7 +122,7 @@
                 <bk-button @click="handleDialogCancel" :disabled="loading">取消</bk-button>
             </div>
         </bk-dialog>
-        <template-edit-dialog ref="templateApplyDialog" action-type="apply" :refresh-list="initData"></template-edit-dialog>
+        <template-edit-dialog ref="templateApplyDialog" action-type="apply" :refresh-list="applySuccess"></template-edit-dialog>
     </section>
 </template>
 
@@ -434,6 +434,7 @@
                 window.open(`/preview-template/project/${template.belongProjectId}/${template.id}`, '_blank')
             },
             handleApply (template) {
+                this.selectApplyTemplate = Object.assign({}, template)
                 this.$refs.templateApplyDialog.isShow = true
                 this.$refs.templateApplyDialog.templateId = template.id
                 this.$refs.templateApplyDialog.fromTemplate = template
@@ -442,6 +443,19 @@
                     belongProjectId: this.projectId,
                     templateName: template.templateName
                 }
+            },
+            applySuccess (param = {}) {
+                const template = this.list.find(item => item.id === this.selectApplyTemplate.id)
+                if (param.templateName) {
+                    template.templateName = param.templateName
+                }
+                if (template.id) {
+                    template.hasInstall = true
+                    this.formData.templateName = template.templateName
+                    this.formData.copyFrom = template.id
+                    this.handleReSelect()
+                }
+                this.selectApplyTemplate = {}
             }
         }
     }
@@ -650,6 +664,11 @@
                 @mixin scroller;
                 .type-button {
                     width: 176px;
+                .bk-form-control.control-prepend-group {
+                    background: #fff;
+                    .group-text {
+                        padding: 0 8px;
+                    }
                 }
             }
         }

@@ -10,7 +10,7 @@
  */
 
 import DBEngineService from './db-engine-service'
-import dataService, { getDataService } from './data-service'
+import { LCDataService, TABLE_FILE_NAME, getDataService } from './data-service'
 import { EntitySchema, createConnection, getConnection, EventSubscriber } from 'typeorm'
 import { RequestContext } from '../middleware/request-context'
 import { decrypt } from '../util'
@@ -22,7 +22,7 @@ const dataBaseConf = require('../conf/data-source')
  * @param {*} projectId 项目id
  */
 export const getPreviewDbConfig = async (projectId = null) => {
-    const previewDb = await dataService.findOne('preview-db', { projectId, deleteFlag: 0 })
+    const previewDb = await LCDataService.findOne(TABLE_FILE_NAME.PREVIEW_DB, { projectId, deleteFlag: 0 })
     const config = process.env.NODE_ENV === 'production' ? dataBaseConf.prod : dataBaseConf.dev
     const dbConfig = {
         host: config.host,
@@ -70,7 +70,7 @@ class PreviewSubscriber {
  */
 export const getPreviewDataService = async (projectId) => {
     const [{ list: tables }, config] = await Promise.all([
-        dataService.get('data-table', { projectId, deleteFlag: 0 }),
+        LCDataService.get(TABLE_FILE_NAME.DATA_TABLE, { projectId, deleteFlag: 0 }),
         getPreviewDbConfig(projectId)
     ])
 

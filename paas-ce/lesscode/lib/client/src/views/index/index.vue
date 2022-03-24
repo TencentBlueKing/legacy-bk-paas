@@ -36,11 +36,7 @@
         <template v-if="!isContentLoading && !isCustomComponentLoading">
             <draw-layout>
                 <material-panel slot="left" />
-                <operation-area v-if="operationType !== 'edit'"
-                    :operaion="operationType"
-                    :type="operationType" />
-                <!-- 主画布使用v-show 不更新 -->
-                <Render v-show="operationType === 'edit'" />
+                <operation-area :operation="operationType" />
                 <modifier-panel slot="right" />
             </draw-layout>
             <novice-guide ref="guide" :data="guideStep" />
@@ -65,7 +61,6 @@
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
     import ActionTool from './components/action-tool'
-    import Render from '@/components/render/index'
 
     console.dir(LC)
 
@@ -81,8 +76,7 @@
             MaterialPanel,
             ModifierPanel,
             OperationArea,
-            ActionTool,
-            Render
+            ActionTool
         },
         data () {
             return {
@@ -188,7 +182,7 @@
                 {
                     title: '画布编辑区',
                     content: '可在画布自由拖动组件、图标等进行页面布局',
-                    target: '#drawContent'
+                    target: '#lesscodeDrawContent'
                 },
                 {
                     title: '组件配置',

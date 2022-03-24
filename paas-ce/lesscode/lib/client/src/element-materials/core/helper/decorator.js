@@ -13,7 +13,7 @@ export function notify (target, name, descriptor) {
         const isActived = this.isActived
         const result = fn.apply(this, arguments)
         // 节点没有被添加到Node tree 中不触发事件
-        if (!this.parentNode && this.type !== 'root') {
+        if (!this.parentNode && !this.root) {
             return result
         }
         const event = {
@@ -42,6 +42,13 @@ export function notify (target, name, descriptor) {
         } else if (name === 'activeClear' && isActived !== this.isActived) {
             event.isActived = false
             triggerEventListener('activeClear', event)
+        } else if ([
+            'appendChild',
+            'removeChild',
+            'moveChild'
+        ].includes(name)) {
+            event.child = arguments[0]
+            triggerEventListener(name, event)
         } else {
             triggerEventListener(name, event)
         }

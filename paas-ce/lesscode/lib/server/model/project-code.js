@@ -16,7 +16,7 @@ import VariableModel from './variable'
 import DataTableModifyRecord from './data-table-modify-record'
 import * as PageCompModel from './page-comp'
 import { uuid, walkGrid } from '../util'
-import dataService from '../service/data-service'
+import { LCDataService, TABLE_FILE_NAME } from '../service/data-service'
 import { RequestContext } from '../middleware/request-context'
 import {
     BASE_COLUMNS
@@ -178,7 +178,7 @@ const projectCode = {
                     routeModel.queryProjectPageRoute(projectId, versionId),
                     FuncModel.allGroupFuncDetail(projectId, versionId),
                     VariableModel.getAll({ projectId, versionId }),
-                    dataService.get('data-table', { projectId, deleteFlag: 0 }),
+                    LCDataService.get(TABLE_FILE_NAME.DATA_TABLE, { projectId, deleteFlag: 0 }),
                     DataTableModifyRecord.getListByTime({ query: { projectId } })
                 ])
 

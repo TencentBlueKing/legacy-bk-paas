@@ -118,7 +118,7 @@
                 const activeNode = event.target
 
                 let activeNodeParent = activeNode.parentNode
-                while (activeNodeParent && activeNodeParent.type !== 'root') {
+                while (activeNodeParent && !activeNodeParent.type.root) {
                     this.$refs.tree.setExpanded(activeNodeParent.componentId, {
                         expanded: true
                     })
