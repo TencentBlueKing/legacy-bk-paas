@@ -1,11 +1,19 @@
 <template>
-    <div id="lesscodeOperationArea" :class="$style['operation-area']">
+    <div
+        id="lesscodeOperationArea"
+        :class="$style['operation-area']">
         <div :class="$style['wraper']">
-            <component :is="com" v-bind="$attrs" />
+            <render v-show="operation === 'edit'" />
+            <template v-if="operation !== 'edit'">
+                <component
+                    :is="com"
+                    v-bind="$attrs" />
+            </template>
         </div>
     </div>
 </template>
 <script>
+    import Render from '@/components/render/index'
     import SourceCode from './components/source-code.vue'
     import PageSetting from './components/page-setting'
     import PageJson from './components/page-json'
@@ -14,16 +22,18 @@
 
     export default {
         name: '',
+        components: {
+            Render
+        },
         props: {
             /**
-             * @value edit
              * @value vueCode
              * @value pageFunction
              * @value setting
              * @value jsonSource
              * @value pageVariable
              */
-            operaion: {
+            operation: {
                 type: String,
                 required: true
             }
@@ -40,7 +50,7 @@
                     jsonSource: PageJson,
                     pageVariable: PageVariable
                 }
-                return comMap[this.operaion]
+                return comMap[this.operation]
             }
         }
     }
@@ -54,7 +64,7 @@
         overflow: auto;
         @mixin scroller;
         .wraper{
-            /* border: 1px solid #DCDEE5; */
+            height: 100%;
             background: #fff;
             & > * {
                 height: 100%;
