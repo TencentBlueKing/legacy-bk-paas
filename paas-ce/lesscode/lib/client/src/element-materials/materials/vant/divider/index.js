@@ -13,7 +13,7 @@ export default {
     name: 'van-divider',
     type: 'van-divider',
     // bk-drag-custom-comp-default
-    icon: '',
+    icon: 'bk-drag-divider',
     displayName: '分割线',
     group: '数据',
     styles: ['padding', 'margin'],

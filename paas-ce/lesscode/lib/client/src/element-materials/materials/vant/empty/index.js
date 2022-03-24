@@ -13,7 +13,7 @@ export default {
     name: 'van-empty',
     type: 'van-empty',
     // bk-drag-custom-comp-default
-    icon: '',
+    icon: 'bk-drag-empty',
     displayName: '空状态',
     group: '数据',
     styles: ['padding', 'margin', 'size'],

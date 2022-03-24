@@ -13,7 +13,7 @@ export default {
     name: 'van-stepper',
     type: 'van-stepper',
     displayName: '步进器',
-    icon: '',
+    icon: 'bk-drag-stepper',
     group: '表单',
     order: 1,
     document: 'https://youzan.github.io/vant/v2/#/zh-CN/stepper',

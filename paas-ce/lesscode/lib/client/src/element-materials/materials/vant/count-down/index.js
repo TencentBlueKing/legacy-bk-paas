@@ -13,7 +13,7 @@ export default {
     name: 'van-count-down',
     type: 'van-count-down',
     // bk-drag-custom-comp-default
-    icon: '',
+    icon: 'bk-drag-countdown',
     displayName: '倒计时',
     group: '数据',
     styles: ['padding', 'margin'],

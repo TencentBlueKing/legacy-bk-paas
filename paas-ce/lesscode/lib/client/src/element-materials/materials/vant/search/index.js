@@ -13,7 +13,7 @@ export default {
     name: 'van-search',
     type: 'van-search',
     displayName: '搜索',
-    icon: '',
+    icon: 'bk-drag-search-2',
     group: '表单',
     order: 1,
     document: 'https://youzan.github.io/vant/v2/#/zh-CN/search',
