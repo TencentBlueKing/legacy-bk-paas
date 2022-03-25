@@ -20,7 +20,7 @@
             <draggable
                 v-if="isReady"
                 class="target-drag-area"
-                :class="[$style['editor'], platform === 'MOBILE' && $style['mobile']]"
+                :class="[$style['editor']]"
                 :component-data="componentData"
                 :list="componentData.slot.default"
                 :sort="true"
@@ -224,9 +224,6 @@
         * {
             pointer-events: none;
         }
-    }
-    .mobile {
-        padding-bottom: 50px;
     }
     .not-visible-mask{
         position: fixed;
