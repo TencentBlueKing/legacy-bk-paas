@@ -11,7 +11,7 @@ import LayoutInst from '../model/entities/layout-inst'
 import { walkGrid, uuid } from '../util'
 
 // 将函数名称写到这个数组里，函数会自动执行，返回成功则后续不会再执行
-const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots', 'setMobileLayout', 'setProjectMobileLayoutInst']
+const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots', 'setProjectMobileLayoutInst']
 
 export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
@@ -1072,10 +1072,10 @@ export async function fixPageData (ctx) {
 }
 
 /**
- *  layout表新增mobile布局模板
+ *  layout表新增mobile布局模板, layoutInst表,为历史项目增加移动端空白模板实例
  */
 // eslint-disable-next-line no-unused-vars
-async function setMobileLayout (apiName) {
+async function setProjectMobileLayoutInst (apiName) {
     const layoutRepo = getRepository(Layout)
     try {
         await getConnection().transaction(async transactionalEntityManager => {
@@ -1098,45 +1098,10 @@ async function setMobileLayout (apiName) {
                 createUser: 'admin',
                 updateUser: 'admin'
             })
-            await transactionalEntityManager.save(mobileLayout)
-        })
-        return {
-            code: 0,
-            message: `${apiName}: Insert success`
-        }
-    } catch (err) {
-        return {
-            code: -1,
-            message: `${apiName}: ${err.message || err}`
-        }
-    }
-}
+            const res = await transactionalEntityManager.save(mobileLayout)
 
-/**
- *  layoutInst表,为历史项目增加移动端空白模板实例
- */
-// eslint-disable-next-line no-unused-vars
-async function setProjectMobileLayoutInst (apiName) {
-    const mobileLayout = await getRepository(Layout).findOne({
-        layoutType: 'MOBILE',
-        type: 'mobile-empty'
-    })
-    const { id: layoutId, defaultPath } = mobileLayout
-    if (!layoutId || !defaultPath) {
-        return {
-            code: -1,
-            message: `${apiName}: mobile-layout记录不存在`
-        }
-    }
-    try {
-        await getConnection().transaction(async transactionalEntityManager => {
-            // 兼容旧数据
-            if (defaultPath === '/') {
-                const layoutList = [
-                    { 'id': layoutId, defaultPath: '/mobile/' }
-                ]
-                await transactionalEntityManager.save(Layout, layoutList)
-            }
+            const layoutId = res && res.id
+
             const projectList = await getRepository(Project).find()
             
             // 先给项目列表的默认版本插一条移动端空白路由数据

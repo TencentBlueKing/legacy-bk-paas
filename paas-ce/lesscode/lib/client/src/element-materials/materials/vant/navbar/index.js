@@ -13,7 +13,7 @@ export default {
     name: 'van-nav-bar',
     type: 'van-nav-bar',
     // bk-drag-custom-comp-default
-    icon: 'bk-drag-pagination',
+    icon: 'bk-drag-navbar',
     displayName: '导航栏',
     group: '导航',
     events: [

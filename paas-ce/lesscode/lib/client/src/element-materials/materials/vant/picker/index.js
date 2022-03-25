@@ -13,7 +13,7 @@ export default {
     name: 'van-picker',
     type: 'van-picker',
     // bk-drag-custom-comp-default
-    icon: 'bk-drag-select',
+    icon: 'bk-drag-picker',
     displayName: '选择器',
     group: '表单',
     document: 'https://vant-contrib.gitee.io/vant/v2/#/zh-CN/picker',

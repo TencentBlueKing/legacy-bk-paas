@@ -16,8 +16,13 @@
             searchable
             :value="value"
             @change="handleChange">
-            <bk-option v-for="item in list" :id="item.name" :name="item.icon" :key="item.name">
-                <i class="bk-icon" :class="item.name" />
+            <bk-option
+                v-for="item in list"
+                :id="item.name"
+                :name="item.icon"
+                :key="item.name">
+                <van-icon
+                    :name="item.name" />
                 <span>{{ item.icon }}</span>
             </bk-option>
         </bk-select>
@@ -25,7 +30,7 @@
 </template>
 
 <script>
-    import iconComponentList from '@/element-materials/materials/icon-list.js'
+    import vanIconList from '@/element-materials/materials/vant/icon-list.js'
 
     export default {
         props: {
@@ -48,16 +53,19 @@
         },
         data () {
             return {
-                value: this.defaultValue ? this.defaultValue.replace('bk-icon ', '') : ''
+                value: ''
             }
         },
         created () {
-            this.list = iconComponentList
+            this.list = vanIconList
+            if (this.defaultValue) {
+                this.value = this.defaultValue
+            }
         },
         methods: {
             handleChange (val) {
                 if (val) {
-                    this.change(this.name, `bk-icon ${val}`, this.type)
+                    this.change(this.name, val, this.type)
                 } else {
                     this.change(this.name, '', this.type)
                 }

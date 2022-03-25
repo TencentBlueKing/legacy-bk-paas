@@ -644,3 +644,54 @@ url("fonts/iconcool.eot?#iefix") format("embedded-opentype");
 .bk-drag-templateline:before {
 	content: "\e1d4";
 }
+.bk-drag-cellcellgroup:before {
+	content: "\e1d5";
+}
+.bk-drag-circle:before {
+	content: "\e1d6";
+}
+.bk-drag-empty:before {
+	content: "\e1d7";
+}
+.bk-drag-countdown:before {
+	content: "\e1d8";
+}
+.bk-drag-divider:before {
+	content: "\e1d9";
+}
+.bk-drag-noticebar:before {
+	content: "\e1da";
+}
+.bk-drag-loading:before {
+	content: "\e1db";
+}
+.bk-drag-navbar:before {
+	content: "\e1dc";
+}
+.bk-drag-numberkeyborad:before {
+	content: "\e1dd";
+}
+.bk-drag-passwordinput:before {
+	content: "\e1de";
+}
+.bk-drag-picker:before {
+	content: "\e1df";
+}
+.bk-drag-search-2:before {
+	content: "\e1e0";
+}
+.bk-drag-skeleton:before {
+	content: "\e1e1";
+}
+.bk-drag-step:before {
+	content: "\e1e2";
+}
+.bk-drag-treeselect:before {
+	content: "\e1e3";
+}
+.bk-drag-stepper:before {
+	content: "\e1e4";
+}
+.bk-drag-icon-2:before {
+	content: "\e1e5";
+}
