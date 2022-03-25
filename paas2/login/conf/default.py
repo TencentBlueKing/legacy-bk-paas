@@ -121,7 +121,7 @@ STATIC_URL = "/static/"
 
 STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"),)
 
-STATIC_VERSION = "0.2.3"
+STATIC_VERSION = "0.2.4"
 
 # CSS 文件后缀名
 CSS_SUFFIX = "min.css"
