@@ -72,6 +72,7 @@
     ],
     "data":{
         "bk_biz_set_attr":{
+            "bk_biz_set_name": "test",
             "bk_biz_set_desc":"xxx",
             "biz_set_maintainer":"xxx"
         },

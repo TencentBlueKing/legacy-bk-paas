@@ -1155,7 +1155,7 @@
   dest_http_method: POST
 
 - path: /v2/cc/batch_create_inst/
-  name: batch_create_instance
+  name: batch_create_inst
   label: 批量创建通用模型实例
   label_en: batch create common object instance
   suggest_method: POST
