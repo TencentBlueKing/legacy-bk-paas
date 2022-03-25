@@ -1,5 +1,11 @@
 Release Log
 ===============================
+# 2.13.33
+    - update: esb update cc, jobv3, sops, monitor_v3, usermanage, bk_login apidocs
+    - update: esb cc add header Content-Type to backend
+    - update: esb add with_jwt_header for usermanage
+    - 社区版登录页面支持国际化
+
 # 2.13.32
     - update: esb update cc, sops, bk-log, job, bkmonitor-v3, bk-docs-center apidocs
 
@@ -99,6 +105,10 @@ Release Log
 
 # 2.13.0
     - add: support python2/3 both
+
+# 2.12.45
+    - update: esb update jobv3, sops, monitor_v3, usermanage, bk_login apidocs
+    - update: esb cc add header Content-Type to backend
 
 # 2.12.44
     - update: esb update sops, bk-log, job, bkmonitor-v3, bk-docs-center apidocs

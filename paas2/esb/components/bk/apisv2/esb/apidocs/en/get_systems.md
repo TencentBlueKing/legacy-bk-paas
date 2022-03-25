@@ -42,6 +42,13 @@ Get the list of systems accessing the ESB
 
 ### Return Result Description
 
+| Field      | Type      | Description      |
+|-----------|----------|-----------|
+|  result   |    bool    |      return result, true for success, false for failure  |
+|  code     |    int     |      return code, 0 for success, other values for failure |
+|  message  |    string  |      error message |
+|  data     |    array   |      result data, details are described below  |
+
 ####  data
 
 | Field      | Type      | Description      |

@@ -30,6 +30,7 @@ class UsermanageComponent(ConfComponent):
             params=request_info["params"],
             data=request_info["data"],
             response_encoding="utf-8",
+            with_jwt_header=True,
             headers={
                 "Bk-Username": self.current_user.username,
                 "Bk-App-Code": self.request.app_code,

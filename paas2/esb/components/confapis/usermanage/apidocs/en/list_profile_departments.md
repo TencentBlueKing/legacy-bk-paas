@@ -53,7 +53,7 @@ List certain user's departments
 |message|string|error message|
 |data| array| result |
 
-`data` fields（The specific field depends on the parameter `fields`）
+**data** fields（The specific field depends on the parameter `fields`）
 
 | field      | type     | description      |
 |-----------|-----------|-----------|
