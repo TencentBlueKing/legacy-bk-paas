@@ -96,6 +96,7 @@
             top: 0;
             bottom: 0;
             left: 0;
+            z-index: 1;
             width: 340px;
             background: #fff;
             box-shadow: 2px 4px 4px 0 rgb(0 0 0 / 10%);
