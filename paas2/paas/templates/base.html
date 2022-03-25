@@ -41,8 +41,42 @@
     </%block>
     <style>
       html,body{
-          height: 100%;
+        height: 100%;
       }
+      .follow-us {
+        position: relative;
+      }
+      .follow-us:hover {
+        cursor: pointer;
+      }
+      .follow-us:hover .qr-box{
+        display: inline-block;
+      }
+      .follow-us .qr-box {
+        position: absolute;
+        bottom: 25px;
+        right: -20px;
+        display: none;
+        width: 100px;
+        height: 100px;
+        background-color: #fff;
+        z-index: 101;
+      }
+      .follow-us .qr-box::before {
+        content: "";
+        width: 0px;
+        height: 0px;
+        border-top: 6px solid #fff;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        position: absolute;
+        top: 100px;
+        left: 50px;
+      }
+      .follow-us .qr-box .qr {
+        padding-top: 5px;
+      }
+
     </style>
 </head>
 
@@ -143,13 +177,17 @@
       <div class="foot" id="footer">
         <ul class="links ft">
             <li>
-                <a id="contact_us" class="link">${_(u'QQ咨询(800802001)')}</a>
-                | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'蓝鲸论坛')}</a>
-                | <a href="https://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'蓝鲸官网')}</a>
-                | <a href="${SITE_URL}" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'蓝鲸智云桌面')}</a>
+                <a href="https://wpa1.qq.com/KziXGWJs?_type=wpa&qidian=true" class="link">${_(u'技术支持')}</a>
+                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'社区论坛')}</a>
+                    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'产品官网')}</a>
+                    | <a href="###" hotrep="hp.footer.feedback" class="link follow-us" style="z-index:101;">
+                      ${_(u'关注我们')}
+                        <span class="qr-box"><img class="qr" src="../../../static/img/logo_ce/qr.png" alt=""></span>
+                      </a>
+
+                    <p>Copyright © 2012-${NOW.year} Tencent BlueKing. All Rights Reserved.</p>
+                    <p class="copyright">${_(u'蓝鲸智云 版权所有')}</p>
             </li>
-            <li><p class="copyright">Copyright © 2012-${NOW.year} Tencent BlueKing. All Rights Reserved.</p> </li>
-          <li><p class="copyright">${_(u'蓝鲸智云 版权所有')}</p> </li>
         </ul>
       </div>
       <!-- 尾部声明 end -->
