@@ -66,6 +66,7 @@
         .wraper{
             height: 100%;
             background: #fff;
+            min-width: min-content;
             & > * {
                 height: 100%;
             }
