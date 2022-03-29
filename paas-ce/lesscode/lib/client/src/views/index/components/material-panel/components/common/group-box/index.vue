@@ -36,30 +36,8 @@
 <script>
     import { mapGetters } from 'vuex'
     import LC from '@/element-materials/core'
-    import {
-        createGrid2,
-        createGrid3,
-        createGrid4,
-        createBkIcon,
-        createElIcon,
-        createCharts,
-        createBkRadioGroup,
-        createParagraph,
-        createColumn
-    } from './hacker'
-
-    const hackerQueue = [
-        createGrid2,
-        createGrid3,
-        createGrid4,
-        createBkIcon,
-        createElIcon,
-        createCharts,
-        createBkRadioGroup,
-        createParagraph,
-        createColumn
-    ]
-
+    import * as createHacker from './hacker'
+    
     export default {
         props: {
             list: Array,
@@ -105,7 +83,7 @@
                     const materialConfig = this.list[event.oldIndex]
                     const node = LC.createNode(materialConfig.type)
 
-                    hackerQueue.forEach(task => task(node, materialConfig))
+                    Object.values(createHacker).forEach(task => task(node, materialConfig))
 
                     // 自定义组件
                     if (this.curNameMap[node.type]) {
