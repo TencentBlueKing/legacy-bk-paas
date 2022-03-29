@@ -15,7 +15,7 @@ import os
 from django.conf import settings
 
 from components.component import ApiChannelForAPIS, ESBApiChannelForAPIS, FTAApiChannelForAPIS
-from esb.bkapp.validators import AppAuthValidator
+from esb.bkapp.validators import AppAuthValidator, AppCodeWhiteListValidator
 from esb.bkauth.validators import UserAuthWithBKTokenValidator
 
 
@@ -584,6 +584,73 @@ config = {
                             },
                         },
                     ),
+                    (
+                        "/v1/usermanage/login/check/",
+                        {
+                            "comp_codename": "generic.v2.usermanage.usermanage_component",
+                            "request_validators": [
+                                AppAuthValidator(),
+                                AppCodeWhiteListValidator(
+                                    (
+                                        "bk_login",
+                                        "bk_paas",
+                                        "bk_console",
+                                    )
+                                ),
+                            ],
+                            "is_hidden": True,
+                            "comp_conf": {
+                                "name": "api_v1_login_check",
+                                "dest_http_method": "POST",
+                                "dest_path": "/api/v1/login/check/",
+                            },
+                        },
+                    ),
+                    (
+                        "/v1/usermanage/login/profile/",
+                        {
+                            "comp_codename": "generic.v2.usermanage.usermanage_component",
+                            "request_validators": [
+                                AppAuthValidator(),
+                                AppCodeWhiteListValidator(
+                                    (
+                                        "bk_login",
+                                        "bk_paas",
+                                        "bk_console",
+                                    )
+                                ),
+                            ],
+                            "is_hidden": True,
+                            "comp_conf": {
+                                "name": "api_v1_login_profile",
+                                "dest_http_method": "POST",
+                                "dest_path": "/api/v1/login/profile/",
+                            },
+                        },
+                    ),
+                    (
+                        "/v1/usermanage/login/profile/query/",
+                        {
+                            "comp_codename": "generic.v2.usermanage.usermanage_component",
+                            "request_validators": [
+                                AppAuthValidator(),
+                                AppCodeWhiteListValidator(
+                                    (
+                                        "bk_login",
+                                        "bk_paas",
+                                        "bk_console",
+                                    )
+                                ),
+                            ],
+                            "is_hidden": True,
+                            "comp_conf": {
+                                "name": "api_v1_login_profile_query",
+                                "dest_http_method": "POST",
+                                "dest_path": "/api/v1/login/profile/query/",
+                            },
+                        },
+                    ),
+
                 ],
             },
             "esb": {
