@@ -4,7 +4,9 @@
         id="lesscodeOperationArea"
         :class="$style['operation-area']">
         <div :class="$style['operation-wraper']">
-            <render v-show="operation === 'edit'" />
+            <render
+                v-show="operation === 'edit'"
+                :style="renderStyles" />
             <component
                 v-if="operation !== 'edit'"
                 :is="com"
@@ -42,6 +44,7 @@
         },
         data () {
             return {
+                renderStyles: {},
                 oprationItemStyles: {
                     height: '200px'
                 }
@@ -63,6 +66,10 @@
             const {
                 top
             } = getOffset(this.$refs.root)
+
+            this.renderStyles = {
+                'min-height': `calc(100vh - ${top}px - 20px)`
+            }
             this.oprationItemStyles = {
                 'height': `calc(100vh - ${top}px - 20px)`
             }
