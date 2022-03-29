@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.47
+    - update: esb update usermanage apis, for bk_login
+
 # 2.12.46
     - update: esb add with_jwt_header=True for usermanage
 
