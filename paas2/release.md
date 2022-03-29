@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.34
+    - update: esb update usermanage apis, for bk_login
+
 # 2.13.33
     - update: esb update cc, jobv3, sops, monitor_v3, usermanage, bk_login apidocs
     - update: esb cc add header Content-Type to backend
