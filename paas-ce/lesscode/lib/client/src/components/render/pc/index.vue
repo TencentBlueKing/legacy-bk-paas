@@ -20,7 +20,7 @@
             <draggable
                 v-if="isReady"
                 class="target-drag-area"
-                :class="[$style['editor'], platform === 'MOBILE' && $style['mobile']]"
+                :class="[$style['editor']]"
                 :component-data="componentData"
                 :list="componentData.slot.default"
                 :sort="true"
@@ -65,7 +65,6 @@
     import Layout from './widget/layout'
     import ResolveComponent from './resolve-component'
     import ResolveInteractiveComponent from './resolve-interactive-component'
-    import { mapGetters } from 'vuex'
 
     export default {
         name: 'render',
@@ -88,9 +87,6 @@
                 showNotVisibleMask: false,
                 invisibleComponent: ''
             }
-        },
-        computed: {
-            ...mapGetters('page', ['platform'])
         },
         watch: {
             showNotVisibleMask (val) {
@@ -224,9 +220,6 @@
             /* 规避一些组件内部因为设置了 pointer-events 导致鼠标事件非法触发 */
             pointer-events: none;
         }
-    }
-    .mobile {
-        padding-bottom: 50px;
     }
     .not-visible-mask{
         position: fixed;

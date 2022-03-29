@@ -5,16 +5,15 @@
 <script>
     import PC from './pc/index.vue'
     import Mobile from './mobile/index.vue'
-    import { mapGetters } from 'vuex'
+    import LC from '@/element-materials/core'
     export default {
         components: {
             PC,
             Mobile
         },
         computed: {
-            ...mapGetters('page', ['platform']),
             canvas () {
-                return this.platform === 'MOBILE' ? Mobile : PC
+                return LC.platform === 'MOBILE' ? Mobile : PC
             }
         }
     }
