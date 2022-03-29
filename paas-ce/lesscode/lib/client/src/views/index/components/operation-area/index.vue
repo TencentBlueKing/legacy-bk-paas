@@ -31,6 +31,7 @@
         },
         props: {
             /**
+             * @value render
              * @value vueCode
              * @value pageFunction
              * @value setting
