@@ -252,7 +252,6 @@
                     })
                     return
                 }
-                console.log('页面列表的下载')
                 this.$store.dispatch('vueCode/getPageCode', {
                     projectId: this.projectId,
                     versionId: this.versionId,

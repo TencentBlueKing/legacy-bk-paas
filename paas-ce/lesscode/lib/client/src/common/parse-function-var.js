@@ -27,7 +27,6 @@ export function parseFuncAndVar (templateNode, variableList, funcGroups) {
         }
 
         Object.keys(node.method).forEach(methodPathKey => {
-            console.log(node.method, 'method')
             const methodCode = node.method[methodPathKey].code
             if (methodCodes.indexOf(methodCode) === -1) {
                 methodCodes.push(methodCode)
@@ -97,7 +96,6 @@ export function parseFuncAndVar (templateNode, variableList, funcGroups) {
             })
         }
     })
-    console.log(varList, funcList, 'list')
     return {
         varList,
         funcList

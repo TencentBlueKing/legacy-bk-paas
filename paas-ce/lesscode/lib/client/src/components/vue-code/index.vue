@@ -66,7 +66,6 @@
         methods: {
             getFormatCode (withNav) {
                 this.isLoading = true
-                console.log('查看源码 getFormatCode')
                 const { pageType, projectId, versionId, lifeCycle, pageId, styleSetting } = this
                 const state = this.$store.state || {}
                 const drag = state.drag || {}
