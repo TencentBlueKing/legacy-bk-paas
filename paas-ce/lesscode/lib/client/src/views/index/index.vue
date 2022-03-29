@@ -298,6 +298,8 @@
                     // 设置初始targetData
                     LC.parseData(pageDetail.content)
                     LC.pageStyle = pageDetail.styleSetting
+
+                    LC.platform = this.platform
                     this.handleUpdatePreview()
                 } catch (e) {
                     console.error(e)

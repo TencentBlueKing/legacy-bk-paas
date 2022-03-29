@@ -1,21 +1,25 @@
 <template>
     <div class="mobile-canvas-wrapper">
         <edit-area></edit-area>
-        <simulator v-show="mobilePreview" style="transform: translateX(-40px)"></simulator>
+        <simulator v-show="preview" style="transform: translateX(-40px)"></simulator>
+        <preview-switch :value.sync="preview"></preview-switch>
     </div>
 </template>
 
 <script>
     import editArea from './edit-area.vue'
     import simulator from './simulator-area.vue'
-    import { mapGetters } from 'vuex'
+    import previewSwitch from './preview-switch'
     export default {
         components: {
             editArea,
-            simulator
+            simulator,
+            previewSwitch
         },
-        computed: {
-            ...mapGetters('page', ['mobilePreview'])
+        data () {
+            return {
+                preview: true
+            }
         }
     }
 </script>

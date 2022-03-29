@@ -42,7 +42,6 @@
     import LC from '@/element-materials/core'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
-    import { mapGetters } from 'vuex'
 
     export default {
         name: 'render-col',
@@ -59,9 +58,8 @@
             }
         },
         computed: {
-            ...mapGetters('page', ['platform']),
             defaultMargin () {
-                return this.platform === 'PC' ? '10px' : '20rpx'
+                return LC.platform === 'PC' ? '10px' : '20rpx'
             }
         },
         created () {

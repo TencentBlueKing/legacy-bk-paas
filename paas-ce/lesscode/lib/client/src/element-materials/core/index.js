@@ -81,6 +81,9 @@ core.clearMenu = clearMenu
 // 执行快捷命令
 core.execCommand = execCommand
 
+// platform: 'PC' | 'MOBILE'
+core.platform = 'PC'
+
 core.addEventListener('ready', () => {
     core.isReady = true
 })
