@@ -65,7 +65,6 @@
     import Layout from './widget/layout'
     import ResolveComponent from './resolve-component'
     import ResolveInteractiveComponent from './resolve-interactive-component'
-    import { mapGetters } from 'vuex'
 
     export default {
         name: 'render',
@@ -88,9 +87,6 @@
                 showNotVisibleMask: false,
                 invisibleComponent: ''
             }
-        },
-        computed: {
-            ...mapGetters('page', ['platform'])
         },
         watch: {
             showNotVisibleMask (val) {

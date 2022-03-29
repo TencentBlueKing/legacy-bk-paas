@@ -63,7 +63,6 @@
                     </div>
                 </bk-select>
             </div>
-            <previewSwitch v-if="platform === 'MOBILE'" />
         </div>
         <page-dialog
             ref="pageDialog"
@@ -78,14 +77,12 @@
     } from 'vuex'
     import PageDialog from '@/components/project/page-dialog'
     import PageFromTemplateDialog from '@/components/project/page-from-template-dialog'
-    import previewSwitch from '../preview-switch'
 
     export default {
         name: '',
         components: {
             PageDialog,
-            PageFromTemplateDialog,
-            previewSwitch
+            PageFromTemplateDialog
         },
         data () {
             return {
