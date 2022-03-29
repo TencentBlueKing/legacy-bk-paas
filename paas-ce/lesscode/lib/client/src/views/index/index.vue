@@ -11,17 +11,17 @@
 
 <template>
     <main
-        class="lessocde-draw-page"
+        class="lessocde-editor-page"
         v-bkloading="{
             isLoading: isContentLoading || isCustomComponentLoading
         }">
-        <div class="draw-page-header">
+        <div class="lesscode-editor-page-header">
             <page-list />
             <div
                 id="toolActionBox"
                 class="function-and-tool">
                 <operation-select v-model="operationType" />
-                <div style="height: 22px; width: 1px; margin: 0 5px; background-color: #dcdee5;" />
+                <div class="spilt-line" />
                 <!-- 保存、预览、快捷键等tool单独抽离 -->
                 <action-tool />
             </div>
@@ -33,14 +33,14 @@
                     placements: ['bottom']
                 }" />
         </div>
-        <template v-if="!isContentLoading && !isCustomComponentLoading">
-            <draw-layout>
-                <material-panel slot="left" />
-                <operation-area :operation="operationType" />
-                <modifier-panel slot="right" />
-            </draw-layout>
-            <novice-guide ref="guide" :data="guideStep" />
-        </template>
+        <draw-layout
+            v-if="!isContentLoading && !isCustomComponentLoading"
+            class="lesscode-editor-page-content">
+            <material-panel slot="left" />
+            <operation-area :operation="operationType" />
+            <modifier-panel slot="right" />
+        </draw-layout>
+        <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
         <save-template-dialog />
     </main>
@@ -333,39 +333,47 @@
     }
 </script>
 <style lang="postcss">
-    $topHeight: 52px;
     $headerHeight: 64px;
+    $pageHeaderHeight: 52px;
 
-    .lessocde-draw-page {
+    .lessocde-editor-page {
         min-width: 1280px;
-        height: calc(100vh - $headerHeight - 4px);
+        height: calc(100vh - $headerHeight);
         margin-top: $headerHeight;
-        .draw-page-header {
+    }
+    .lesscode-editor-page-header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        height: 52px;
+        background: #fff;
+
+        &:after{
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 99;
+            height: 1px;
+            box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+        }
+        
+        .function-and-tool {
             position: relative;
             display: flex;
-            justify-content: space-between;
-            height: $topHeight;
-            background: #fff;
-
-            &:after{
-                content: '';
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                z-index: 99;
-                height: 1px;
-                box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
-            }
-            
-            .function-and-tool {
-                position: relative;
-                display: flex;
-                flex: 1;
-                justify-content: center;
-                align-items: center;
-            }
-
+            flex: 1;
+            justify-content: center;
+            align-items: center;
         }
+        .spilt-line {
+            height: 22px;
+            width: 1px;
+            margin: 0 5px;
+            background-color: #dcdee5;
+        }
+    }
+    .lesscode-editor-page-content{
+        height: calc(100vh - $headerHeight - $pageHeaderHeight);
     }
 </style>

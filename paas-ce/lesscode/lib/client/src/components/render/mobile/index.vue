@@ -23,9 +23,7 @@
 .mobile-canvas-wrapper {
     display: flex;
     justify-content: space-around;
-    height: 100%;
     padding: 40px 0 80px;
-    overflow: auto;
     ::v-deep .lesscode-layout-empty {
         min-height: 0;
         min-width: 0;

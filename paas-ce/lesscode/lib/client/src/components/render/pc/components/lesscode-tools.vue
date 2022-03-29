@@ -45,6 +45,10 @@
         created () {
             this.hoverComponentData = {}
             this.activeComponentData = {}
+            /**
+             * @desc 组件被选中
+             * @param { Object } event
+             */
             const activeCallback = (event) => {
                 if (event.target.componentId === this.activeComponentData.componentId) {
                     return
@@ -56,6 +60,10 @@
                 this.showActive()
                 this.activeComponentData = {}
             }
+            /**
+             * @desc 鼠标hover
+             * @param { Objecy } event
+             */
             const componentHoverCallback = _.throttle((event) => {
                 if (event.target.componentId === this.hoverComponentData.componentId) {
                     return
@@ -69,7 +77,10 @@
                 this.hoverComponentData = {}
             }
 
-            // 目标组件被删除时需要重置所有交互效果
+            /**
+             * @desc 目标组件被删除时需要重置所有交互效果
+             * @param { Object } event
+             */
             const removeChildCallbak = (event) => {
                 if (event.child === this.hoverComponentData) {
                     componentMouserleaveCallback()

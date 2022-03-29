@@ -1,7 +1,5 @@
 <template>
-    <div class="canvas-wrapper">
-        <component :is="canvas"></component>
-    </div>
+    <component :is="canvas" />
 </template>
 
 <script>
@@ -21,9 +19,3 @@
         }
     }
 </script>
-.<style lang="postcss" scoped>
-.canvas-wrapper {
-    height: calc(100vh - 160px);
-    min-width: 920px;
-}
-</style>

@@ -1,18 +1,20 @@
 <template>
     <div
+        ref="root"
         id="lesscodeOperationArea"
         :class="$style['operation-area']">
-        <div :class="$style['wraper']">
+        <div :class="$style['operation-wraper']">
             <render v-show="operation === 'edit'" />
-            <template v-if="operation !== 'edit'">
-                <component
-                    :is="com"
-                    v-bind="$attrs" />
-            </template>
+            <component
+                v-if="operation !== 'edit'"
+                :is="com"
+                v-bind="$attrs"
+                :style="oprationItemStyles" />
         </div>
     </div>
 </template>
 <script>
+    import { getOffset } from '@/common/util'
     import Render from '@/components/render/index'
     import SourceCode from './components/source-code.vue'
     import PageSetting from './components/page-setting'
@@ -39,7 +41,11 @@
             }
         },
         data () {
-            return {}
+            return {
+                oprationItemStyles: {
+                    height: '200px'
+                }
+            }
         },
         computed: {
             com () {
@@ -52,6 +58,14 @@
                 }
                 return comMap[this.operation]
             }
+        },
+        mounted () {
+            const {
+                top
+            } = getOffset(this.$refs.root)
+            this.oprationItemStyles = {
+                'height': `calc(100vh - ${top}px - 20px)`
+            }
         }
     }
 </script>
@@ -59,17 +73,14 @@
     @import "@/css/mixins/scroller";
 
     .operation-area{
-        height: 100%;
+        height: calc(100% - 40px);
         padding: 0 20px;
+        margin: 20px 0;
         overflow: auto;
         @mixin scroller;
-        .wraper{
-            height: 100%;
+        .operation-wraper{
             background: #fff;
             min-width: min-content;
-            & > * {
-                height: 100%;
-            }
         }
     }
 </style>

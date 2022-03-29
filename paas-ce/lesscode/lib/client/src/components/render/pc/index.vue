@@ -219,9 +219,9 @@
         min-height: calc(100% - 20px) !important;
     }
     .editor{
-        /* 规避一些组件内部因为设置了 pointer-events 导致鼠标事件非法触发 */
         padding-bottom: 300px;
         * {
+            /* 规避一些组件内部因为设置了 pointer-events 导致鼠标事件非法触发 */
             pointer-events: none;
         }
     }
