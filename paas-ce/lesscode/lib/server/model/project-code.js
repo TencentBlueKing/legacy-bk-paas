@@ -415,7 +415,7 @@ const projectCode = {
                     mainFileContent = mainFileContent.replace(/\$\{remJs\}/, remJS)
                     await this.writePackageJSON(
                         path.join(targetPath, 'package.json'),
-                        [{ name: 'vant', version: 'latest' }]
+                        [{ name: 'vant', version: 'latest-v2' }]
                     )
                 } else {
                     mainFileContent = mainFileContent.replace(/\$\{importVantLib\}/, '')
