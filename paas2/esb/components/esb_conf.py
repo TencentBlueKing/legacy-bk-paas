@@ -644,7 +644,7 @@ config = {
                             ],
                             "is_hidden": True,
                             "comp_conf": {
-                                "name": "fe_list_department_profiles",
+                                "name": "api_v1_login_profile_query",
                                 "dest_http_method": "POST",
                                 "dest_path": "/api/v1/login/profile/query/",
                             },
