@@ -1,5 +1,5 @@
 <template>
-    <div class="mobile-preview-switcher">
+    <div :class="$style['mobile-preview-switcher']">
         <span>预览</span>
         <bk-switcher v-model="syncValue" size="small" theme="primary"></bk-switcher>
     </div>
@@ -30,7 +30,7 @@
         }
     }
 </script>
-<style lang="postcss" scoped>
+<style lang="postcss" module>
 .mobile-preview-switcher {
     display: flex;
     align-items: center;

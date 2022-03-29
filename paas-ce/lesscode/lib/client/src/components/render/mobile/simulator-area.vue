@@ -1,13 +1,13 @@
 <template>
-    <div class="area-wrapper">
-        <div class="title">
-            <span class="title-text">效果预览</span>
+    <div :class="$style['area-wrapper']">
+        <div :class="$style['title']">
+            <span :class="$style['title-text']">效果预览</span>
         </div>
-        <div class="simulator-wrapper" :style="{ width: width + 'px', height: height + 'px' }">
-            <div class="device-phone-frame">
-                <div class="device-phone"></div>
+        <div :class="$style['simulator-wrapper']" :style="{ width: width + 'px', height: height + 'px' }">
+            <div :class="$style['device-phone-frame']">
+                <div :class="$style['device-phone']"></div>
             </div>
-            <div class="simulator-preview" :style="{ width: width + 'px', height: height + 'px' }">
+            <div :class="$style['simulator-preview']" :style="{ width: width + 'px', height: height + 'px' }">
                 <iframe width="100%"
                     height="100%"
                     style="border: none"
@@ -55,6 +55,6 @@
     }
 </script>
 
-<style lang="postcss" scoped>
+<style lang="postcss" module>
     @import './area.scss';
 </style>
