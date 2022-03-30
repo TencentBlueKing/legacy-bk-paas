@@ -82,6 +82,7 @@
 
     .operation-area{
         height: calc(100% - 40px);
+        min-width: min-content;
         padding: 0 20px;
         margin: 20px 0;
         overflow: auto;

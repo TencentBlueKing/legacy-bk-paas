@@ -5,6 +5,8 @@
     </div>
 </template>
 <script>
+    import LC from '@/element-materials/core'
+
     export default {
         props: {
             value: {
@@ -19,6 +21,13 @@
                 },
                 set (val) {
                     this.$emit('update:value', val)
+                    const activeNode = LC.getActiveNode()
+                    if (activeNode) {
+                        activeNode.activeClear()
+                    }
+                    LC.triggerEventListener('componentMouserleave', {
+                        type: 'componentMouserleave'
+                    })
                 }
             }
         },
