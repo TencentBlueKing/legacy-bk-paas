@@ -34,6 +34,7 @@ class UsermanageComponent(ConfComponent):
             headers={
                 "Bk-Username": self.current_user.username,
                 "Bk-App-Code": self.request.app_code,
+                "Content-Type": "application/json",
             },
         )
 
