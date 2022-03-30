@@ -523,7 +523,7 @@
                     // 解析出模板targetData绑定的变量和函数
                     const { varList: valList = [], funcList = [] } = parseFuncAndVar(templateNode, variableList, funcGroups)
                     Object.assign(data, { valList, funcList })
-                    console.log(data, 'submit data')
+                    
                     const res = await this.$store.dispatch('pageTemplate/apply', data)
                     if (res) {
                         this.$bkMessage({

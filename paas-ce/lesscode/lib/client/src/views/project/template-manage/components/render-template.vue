@@ -240,7 +240,7 @@
                 }
                 const { varList: vars = [], funcList: functions = [] } = await this.getVarAndFuncList(template)
                 Object.assign(templateJson, { functions, vars }, { template })
-                console.log(templateJson, template)
+                
                 const jsonStr = JSON.stringify(templateJson)
                 const downlondEl = document.createElement('a')
                 const blob = new Blob([jsonStr])

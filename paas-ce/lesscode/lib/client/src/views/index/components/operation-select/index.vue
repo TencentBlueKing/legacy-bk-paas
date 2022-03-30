@@ -62,6 +62,9 @@
                 if (activeNode) {
                     activeNode.activeClear()
                 }
+                LC.triggerEventListener('componentMouserleave', {
+                    type: 'componentMouserleave'
+                })
             }
         }
     }

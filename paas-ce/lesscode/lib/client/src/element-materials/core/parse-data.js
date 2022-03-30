@@ -191,7 +191,6 @@ const tansformPageData = (parentNode, data) => {
                         complex: false,
                         interactive: false
                     }
-                    // console.log('from print form item == ', formItemData)
                     curDataNode.renderSlots.default.push(formItemData)
                 })
             }

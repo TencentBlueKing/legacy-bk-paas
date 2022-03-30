@@ -110,7 +110,6 @@
         created () {
             this.eventData = {}
             const showCallback = (event) => {
-                console.log('from save templaet = ', event)
                 this.isShow = true
                 this.eventData = event
             }
