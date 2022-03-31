@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.37
+    - bugfix: esb usermgr api username missing
+
 # 2.13.36
     - bugfix: login call usermgr api via esb fail
 
