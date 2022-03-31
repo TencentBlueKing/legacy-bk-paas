@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.0
+    - add: paas/ce call usermgr api via esb
+
 # 2.13.37
     - bugfix: esb usermgr api username missing
 
