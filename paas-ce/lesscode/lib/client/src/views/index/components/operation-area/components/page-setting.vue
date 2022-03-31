@@ -633,6 +633,7 @@
 <style lang="postcss" scoped>
     .page-setting {
         padding: 5px 40px 30px;
+        overflow: auto;
         /* border: 1px solid #DCDEE5; */
 
         .title {
