@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.36
+    - bugfix: login call usermgr api via esb fail
+
 # 2.13.35
     - update: login call usermgr api via esb
 
