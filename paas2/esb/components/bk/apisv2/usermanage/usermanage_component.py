@@ -21,7 +21,13 @@ class UsermanageComponent(ConfComponent):
     api_type = API_TYPE_Q
 
     def handle(self):
-        request_info = self.get_request_info()
+        extra_params = {}
+        username = self.request.kwargs.get("username")
+        if username:
+            extra_params["username"] = username
+
+        request_info = self.get_request_info(extra_params=extra_params)
+        # request_info = self.get_request_info()
 
         response = self.outgoing.http_client.request(
             self.dest_http_method,
@@ -34,6 +40,7 @@ class UsermanageComponent(ConfComponent):
             headers={
                 "Bk-Username": self.current_user.username,
                 "Bk-App-Code": self.request.app_code,
+                "Content-Type": "application/json",
             },
         )
 
