@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.13.35
+    - update: login call usermgr api via esb
+
 # 2.13.34
     - update: esb update usermanage apis, for bk_login
 
