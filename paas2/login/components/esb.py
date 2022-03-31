@@ -75,7 +75,6 @@ def _remove_sensitive_info(info):
     """
     去除敏感信息
     """
-    return info
     if info is None:
         return ""
 
