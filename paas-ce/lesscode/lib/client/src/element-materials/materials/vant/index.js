@@ -30,7 +30,7 @@ import Switch from './switch'
 import CheckboxGroup from './check-box-group'
 import DatetimePicker from './datetime-picker'
 import Field from './field'
-import NumberKeyboard from './number-keyboard'
+// import NumberKeyboard from './number-keyboard'
 import PasswordInput from './password-input'
 import Picker from './picker'
 import RadioGroup from './radio-group'
@@ -76,7 +76,7 @@ const vantComponents = Object.seal([
     CheckboxGroup,
     DatetimePicker,
     Field,
-    NumberKeyboard,
+    // NumberKeyboard,
     PasswordInput,
     Picker,
     RadioGroup,
