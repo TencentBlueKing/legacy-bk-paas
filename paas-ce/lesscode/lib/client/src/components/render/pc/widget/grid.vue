@@ -151,8 +151,8 @@
             width: 14px;
             height: 14px;
             font-size: 14px;
-            color: #C4C6CC;
-            background: #979BA5;
+            color: #979BA5;
+            background: #EAEBF0;
             cursor: pointer;
             pointer-events: all;
             &:hover{
