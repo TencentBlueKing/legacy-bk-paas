@@ -372,6 +372,9 @@ class PageCode {
                                 >${slotStr}</${item.type}>
                             <!-- eslint-enable -->`
                     } else {
+                        if (item.type === 'bk-checkbox-group') {
+                            console.log(itemProps, 1, vueDirective, 2, propDirective)
+                        }
                         componentCode += `
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
                                 >${slotStr}
@@ -1034,7 +1037,7 @@ class PageCode {
 
     getItemProps (type, props, compId, directives, slots) {
         const hasProps = props && typeof props === 'object' && Object.keys(props).length > 0
-        const dirProps = (directives || []).filter((directive) => (directive.code !== undefined && directive.code !== '' && directive.prop !== ''))
+        const dirProps = (directives || []).filter((directive) => (directive.code !== undefined && directive.code !== ''))
         let itemProps = ''
         if (hasProps || slots) {
             itemProps = this.getPropsStr(type, props, compId, dirProps, slots)
