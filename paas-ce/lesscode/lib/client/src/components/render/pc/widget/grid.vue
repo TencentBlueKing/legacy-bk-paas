@@ -19,7 +19,7 @@
         <div
             v-if="isShowActiveBtn || componentData.isActived"
             :class="$style['placholder']">
-            <div :class="$style['btn']">
+            <div :class="$style['btn']" v-bk-tooltips="`选中整行 ${componentData.componentId}`">
                 <i class="bk-drag-icon bk-drag-drag-small1" />
             </div>
         </div>
@@ -141,7 +141,7 @@
         position: absolute;
         left: 0;
         right: 0;
-        bottom: 0;
+        bottom: -14px;
         z-index: 99;
         display: flex;
         .btn{
@@ -150,10 +150,9 @@
             justify-content: center;
             width: 14px;
             height: 14px;
-            margin-bottom: -14px;
             font-size: 14px;
             color: #C4C6CC;
-            background: #EAEBF0;
+            background: #979BA5;
             cursor: pointer;
             pointer-events: all;
             &:hover{

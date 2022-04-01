@@ -74,6 +74,7 @@
 <style lang="postcss" scoped>
     .page-variable-home {
         padding: 28px 30px;
+        overflow: auto;
         /* border: 1px solid #DCDEE5; */
     }
     .page-variable-header {
