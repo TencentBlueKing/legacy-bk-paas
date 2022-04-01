@@ -1,5 +1,5 @@
 <template>
-    <div class="mobile-canvas-wrapper">
+    <div :class="$style['mobile-canvas-wrapper']">
         <edit-area></edit-area>
         <simulator v-show="preview" style="transform: translateX(-40px)"></simulator>
         <preview-switch :value.sync="preview"></preview-switch>
@@ -23,7 +23,7 @@
         }
     }
 </script>
-<style lang="postcss" scoped>
+<style lang="postcss" module>
 .mobile-canvas-wrapper {
     display: flex;
     justify-content: space-around;
