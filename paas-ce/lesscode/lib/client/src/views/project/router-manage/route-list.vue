@@ -366,7 +366,8 @@
                     id: activeGroup.layoutId,
                     projectId: this.projectId,
                     versionId: this.versionId,
-                    routePath: prefix + value.replace(/^\/+|\/+$/g, '')
+                    routePath: prefix + value.replace(/^\/+|\/+$/g, ''),
+                    layoutType: this.type
                 }
                 this.loadingState.layout.push(group)
                 try {

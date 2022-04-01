@@ -28,7 +28,7 @@
             const height = '812'
 
             const projectId = route.params.projectId
-            const pagePath = route.query.pagePath || '/'
+            const pagePath = route.query.pagePath || '/mobile'
             // const pagePath = `${store.getters['page/pageRoute'].layoutPath}${store.getters['page/pageRoute'].layoutPath.endsWith('/') ? '' : '/'}${store.getters['page/pageRoute'].path}`
             const versionId = store.getters['projectVersion/currentVersionId']
 
