@@ -516,6 +516,8 @@ config = {
                             "is_hidden": True,
                         },
                     ),
+                    ("/esb/echo/", {"comp_codename": "generic.esb.echo", "is_hidden": True}),
+                    ("/esb/sleep/", {"comp_codename": "generic.esb.sleep", "is_hidden": True}),
                     # BKUSER
                     (
                         "/v2/usermanage/fe_list_departments/",

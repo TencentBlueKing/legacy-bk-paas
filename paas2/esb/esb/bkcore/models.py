@@ -13,12 +13,16 @@ specific language governing permissions and limitations under the License.
 import datetime
 import json
 import re
+import warnings
 
 from django.db import models
 from django.utils import timezone
+from django.utils.deprecation import RemovedInDjango19Warning
 
 from components.constants import BK_SYSTEMS
 from esb.bkcore import managers
+
+warnings.simplefilter("ignore", RemovedInDjango19Warning)
 
 
 class ComponentSystem(models.Model):
