@@ -21,7 +21,7 @@
             <div class="side-bd" :class="{ 'no-click': pageLoading }">
                 <nav class="nav-list">
                     <router-link tag="div" class="nav-item" v-for="item in navList" :key="item.title" :to="item.toPath">
-                        <i :class="`bk-drag-icon bk-drag-${item.icon}`"></i>{{ item.title }} <i v-if="item.redPoint" class="red-point"></i>
+                        <i :class="`bk-drag-icon bk-drag-${item.icon}`"></i>{{ item.title }}<i v-if="item.redPoint" class="red-point"></i>
                     </router-link>
                 </nav>
             </div>
