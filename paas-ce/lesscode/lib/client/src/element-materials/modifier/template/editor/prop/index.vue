@@ -44,6 +44,7 @@
         props: {
             panelActive: String,
             theme: String,
+            layoutType: String, // top-bottom | left-right | complex
             renderProps: {
                 type: Object,
                 default: () => ({})
