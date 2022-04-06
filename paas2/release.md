@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.2
+    - bugfix: login page follow-us missing
+
 # 2.14.1
     - bugfix: login page follow-us missing
 
