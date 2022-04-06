@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+import base64
 from builtins import str
 from future import standard_library
 
@@ -30,6 +31,7 @@ context_processor for common(setting)
 def site_settings(request):
     real_static_url = urllib.parse.urljoin(str(settings.SITE_URL), str("." + settings.STATIC_URL))
     cur_domain = request.get_host()
+    password_rsa_public_key = base64.b64encode(settings.PASSWORD_RSA_PUBLIC_KEY.encode())
     return {
         "LOGIN_URL": settings.LOGIN_URL,
         "LOGOUT_URL": settings.LOGOUT_URL,
@@ -44,6 +46,6 @@ def site_settings(request):
         "JS_SUFFIX": settings.JS_SUFFIX,
         # 本地 css 后缀名
         "CSS_SUFFIX": settings.CSS_SUFFIX,
-        "PASSWORD_RSA_PUBLIC_KEY": settings.PASSWORD_RSA_PUBLIC_KEY,
+        "PASSWORD_RSA_PUBLIC_KEY": password_rsa_public_key,
         "ENABLE_PASSWORD_RSA_ENCRYPTED": settings.ENABLE_PASSWORD_RSA_ENCRYPTED
     }
