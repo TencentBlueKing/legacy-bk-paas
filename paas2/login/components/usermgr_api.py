@@ -68,7 +68,7 @@ def upsert_user(username, **kwargs):
 
 
 def get_categories():
-    path = "/api/c/compapi//v2/usermanage/list_categories/"
+    path = "/api/c/compapi/v2/usermanage/list_categories/"
 
     data = {
         "no_page": True,
