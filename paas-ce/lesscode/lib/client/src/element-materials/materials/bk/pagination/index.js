@@ -16,12 +16,18 @@ export default {
     icon: 'bk-drag-pagination',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'change', tips: '当前页码变化时调用该事件函数，事件回调参数 (current: Number)'
-    }, {
-        name: 'limit-change', tips: '当前分页尺寸变化时调用该事件函数，事件回调参数 (limit: Number)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/pagination',
+    events: [
+        {
+            name: 'change',
+            tips: '当前页码变化时调用该事件函数，事件回调参数 (current: Number)'
+        },
+        {
+            name: 'limit-change',
+            tips: '当前分页尺寸变化时调用该事件函数，事件回调参数 (limit: Number)'
+        }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'block'
     },
@@ -81,10 +87,6 @@ export default {
             options: ['default', 'small'],
             val: 'default',
             tips: '页码尺寸大小'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

@@ -10,6 +10,7 @@
  */
 import ProjectCodeModel from '../model/project-code'
 import OperationLogger from '../service/operation-logger'
+import projectModel from '../model/project'
 const fse = require('fs-extra')
 const path = require('path')
 const send = require('koa-send')
@@ -55,9 +56,24 @@ const ProjectCode = {
 
     async previewCode (ctx) {
         const operationLogger = new OperationLogger(ctx)
-        const { projectId, versionId } = ctx.request.query
+        const { projectId, versionId, platform } = ctx.request.query
+
         try {
-            const data = await ProjectCodeModel.previewCode(projectId, versionId)
+            // 参数校验
+            if ([undefined, ''].includes(projectId)) {
+                throw new global.BusinessError('暂无项目ID，请在 Lesscode 上重新打开预览', 400, 400)
+            }
+            // 权限验证
+            const userInfo = ctx.session.userInfo || {}
+            await Promise.all([
+                projectModel.findProjects({ where: { isOffcial: 1 }, order: { id: 'DESC' } }),
+                projectModel.findUserProjectById(userInfo.id, projectId)
+            ]).then(([temProjList, myProj]) => {
+                const isTemProj = temProjList.find(x => +x.id === +projectId)
+                if (!isTemProj && !myProj) throw new global.BusinessError('项目ID不存在或者没有该项目权限，请在 Lesscode 上重新打开预览', 403, 403)
+            })
+
+            const data = await ProjectCodeModel.previewCode(projectId, versionId, platform)
             operationLogger.success({
                 operateTarget: `项目ID：${projectId}`
             })

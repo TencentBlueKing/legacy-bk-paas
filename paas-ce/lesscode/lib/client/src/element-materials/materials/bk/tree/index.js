@@ -16,26 +16,38 @@ export default {
     icon: 'bk-drag-tree',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'on-click', tips: '节点点击时调用该事件函数，事件回调参数 (node: Object)'
-    }, {
-        name: 'on-check', tips: '多选框 chang 时调用该事件函数（单选时不生效），事件回调参数 (node: Object)'
-    }, {
-        name: 'on-expanded', tips: '节点展开/收起时调用该事件函数，事件回调参数 (node: Object, expanded: Boolean)'
-    }, {
-        name: 'on-drag-node', tips: '节点拖拽结束时调用该事件函数，事件回调参数 (dragNode: Object, targetNode: Object)'
-    }, {
-        name: 'async-load-nodes', tips: '异步加载节点数据时调用该事件函数，事件回调参数 (node: Object)'
-    }],
-    styles: ['size', 'margin'],
-    directives: [
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/tree',
+    events: [
         {
-            type: 'v-bind',
-            prop: 'data',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            name: 'on-click',
+            tips: '节点点击时调用该事件函数，事件回调参数 (node: Object)'
+        },
+        {
+            name: 'on-check',
+            tips: '多选框 chang 时调用该事件函数（单选时不生效），事件回调参数 (node: Object)'
+        },
+        {
+            name: 'on-expanded',
+            tips: '节点展开/收起时调用该事件函数，事件回调参数 (node: Object, expanded: Boolean)'
+        },
+        {
+            name: 'on-drag-node',
+            tips: '节点拖拽结束时调用该事件函数，事件回调参数 (dragNode: Object, targetNode: Object)'
+        },
+        {
+            name: 'async-load-nodes',
+            tips: '异步加载节点数据时调用该事件函数，事件回调参数 (node: Object)'
         }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    directives: [
+        // {
+        //     type: 'v-bind',
+        //     prop: 'data',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         'node-key': {
@@ -88,10 +100,6 @@ export default {
                 }
             ],
             tips: 'tree 数据源'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

@@ -16,16 +16,26 @@ export default {
     icon: 'bk-drag-pagination',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'size-change', tips: 'pageSize 改变时调用该事件函数，事件回调参数 (pageSize: Number)'
-    }, {
-        name: 'current-change', tips: 'currentPage 改变时调用该事件函数，事件回调参数 (currentPage: Number)'
-    }, {
-        name: 'prev-click', tips: '用户点击上一页按钮改变当前页时调用该事件函数，事件回调参数 (currentPage: Number)'
-    }, {
-        name: 'next-click', tips: '用户点击下一页按钮改变当前页时调用该事件函数，事件回调参数 (currentPage: Number)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/pagination',
+    events: [
+        {
+            name: 'size-change',
+            tips: 'pageSize 改变时调用该事件函数，事件回调参数 (pageSize: Number)'
+        },
+        {
+            name: 'current-change',
+            tips: 'currentPage 改变时调用该事件函数，事件回调参数 (currentPage: Number)'
+        },
+        {
+            name: 'prev-click',
+            tips: '用户点击上一页按钮改变当前页时调用该事件函数，事件回调参数 (currentPage: Number)'
+        },
+        {
+            name: 'next-click',
+            tips: '用户点击下一页按钮改变当前页时调用该事件函数，事件回调参数 (currentPage: Number)'
+        }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'block'
     },

@@ -19,19 +19,41 @@
                 @change="trigger"
                 handle=".option-col-drag"
                 :group="{ name: 'table-col' }">
-                <transition-group type="transition" :name="'flip-list'">
-                    <div class="card-item-content" v-for="(item, index) in optionList" :key="`option${index}`">
+                <transition-group
+                    type="transition"
+                    :name="'flip-list'">
+                    <div
+                        v-for="(item, index) in optionList"
+                        class="card-item-content"
+                    
+                        :key="`option${index}`">
                         <div class="option-col-operate">
                             <i class="bk-drag-icon bk-drag-drag-small1 option-col-drag" />
                             <i class="bk-icon icon-close option-col-del" @click="handleDelete(index)"></i>
                         </div>
                         <section style="margin-top: 20px">
-                            <div class="card-item" v-for="(option, idx) in currentConfig.template" :key="idx">
+                            <div
+                                v-for="(option, idx) in currentConfig.template"
+                                class="card-item"
+                                :key="idx">
                                 <div class="label">{{option.name}}</div>
-                                <bk-input v-if="option.type === 'input'" :value="item[option.key]" @change="val => handleChange(val, option.key, index)" />
-                                <bk-radio v-else-if="option.type === 'radio'" :checked="item[option.key]" @change="val => handleCheckChange(val, option.key, index)" />
-                                <bk-checkbox v-else-if="option.type === 'checkbox'" :checked="item[option.key]" @change="val => handleChange(val, option.key, index)" />
-                                <icon v-else-if="option.type === 'icon'" :default-value="item[option.key]" :include-number="true" :change="val => handleChange(val, option.key, index)"></icon>
+                                <bk-input
+                                    v-if="option.type === 'input'"
+                                    :value="item[option.key]"
+                                    @change="val => handleChange(val, option.key, index)" />
+                                <bk-radio
+                                    v-else-if="option.type === 'radio'"
+                                    :checked="item[option.key]"
+                                    @change="val => handleCheckChange(val, option.key, index)" />
+                                <bk-checkbox
+                                    v-else-if="option.type === 'checkbox'"
+                                    :checked="item[option.key]"
+                                    @change="val => handleChange(val, option.key, index)" />
+                                <icon
+                                    v-else-if="option.type === 'icon'"
+                                    :default-value="item[option.key]"
+                                    :include-number="true"
+                                    :change="val => handleChange(val, option.key, index)"></icon>
                             </div>
                         </section>
                     </div>
@@ -72,12 +94,12 @@
         },
         computed: {
             currentConfig () {
-                return configMap[this.slotVal.name]
+                return configMap[this.slotVal.component]
             }
         },
         created () {
             this.optionList = JSON.parse(JSON.stringify(this.slotVal.val))
-            this.trigger()
+            // this.trigger()
         },
         methods: {
             trigger () {

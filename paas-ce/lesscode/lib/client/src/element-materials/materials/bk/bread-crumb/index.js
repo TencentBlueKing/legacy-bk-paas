@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-breadcrumb',
     group: '导航',
     order: 4,
-    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/breadcrumb',
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
         separator: {
             type: 'string',

@@ -17,21 +17,6 @@ class TargetData {
         return this
     }
 
-    setCurInteractiveVisible (id, init = false) {
-        const targetData = store.getters['drag/targetData'] || []
-        let targetNode
-        targetData.forEach(item => {
-            if (item.componentId === id) {
-                item.interactiveShow = init || !item.interactiveShow
-                targetNode = item
-            } else {
-                item.interactiveShow = false
-            }
-            this.update(item)
-        })
-        return targetNode
-    }
-
     hideAllInteractiveComponents () {
         const targetData = store.getters['drag/targetData'] || []
         targetData.forEach(item => {

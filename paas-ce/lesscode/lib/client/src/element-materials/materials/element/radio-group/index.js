@@ -16,17 +16,27 @@ export default {
     icon: 'bk-drag-radio',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '绑定值变化时调用该事件函数，事件回调参数 (value: String|Number|Boolean)'
-    }],
-    styles: ['margin'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/radio',
+    events: [
+        {
+            name: 'change',
+            tips: '绑定值变化时调用该事件函数，事件回调参数 (value: String|Number|Boolean)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['string', 'number', 'boolean'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

@@ -16,7 +16,17 @@ export default {
     icon: 'bk-drag-upload',
     group: '表单',
     order: 1,
-    styles: ['size', 'margin'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/upload',
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     props: {
         accept: {
             type: 'string',

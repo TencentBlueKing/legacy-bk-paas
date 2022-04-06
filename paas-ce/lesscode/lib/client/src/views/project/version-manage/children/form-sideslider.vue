@@ -128,7 +128,7 @@
                     this.$emit('updated')
                     this.handleCancel()
                 } catch (error) {
-                    this.messageError(error.message)
+                    console.error(error)
                 } finally {
                     this.submitting = false
                 }

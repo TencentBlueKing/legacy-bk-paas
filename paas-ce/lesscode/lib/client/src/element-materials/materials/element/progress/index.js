@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-progress',
     group: '数据',
     order: 1,
-    styles: ['size', 'margin'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/progress',
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
         percentage: {
             type: 'float',

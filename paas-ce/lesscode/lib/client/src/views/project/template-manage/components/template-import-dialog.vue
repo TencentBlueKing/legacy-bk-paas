@@ -166,7 +166,7 @@
                     if (res) {
                         this.$bkMessage({
                             theme: 'success',
-                            message: `导入成功`
+                            message: '导入成功'
                         })
                         this.refreshList()
                         this.isShow = false

@@ -16,24 +16,38 @@ export default {
     icon: 'bk-drag-date',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '用户确认选定的值时调用该事件函数，事件回调参数 (value: Date|Array)'
-    }, {
-        name: 'blur', tips: '当 input 失去焦点时调用该事件函数，事件回调参数 (component: Object)'
-    }, {
-        name: 'focus', tips: '当 input 获得焦点时调用该事件函数，事件回调参数 (component: Object)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/date-picker',
+    events: [
+        {
+            name: 'change',
+            tips: '用户确认选定的值时调用该事件函数，事件回调参数 (value: Date|Array)'
+        },
+        {
+            name: 'blur',
+            tips: '当 input 失去焦点时调用该事件函数，事件回调参数 (component: Object)'
+        },
+        {
+            name: 'focus',
+            tips: '当 input 获得焦点时调用该事件函数，事件回调参数 (component: Object)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['string', 'array'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

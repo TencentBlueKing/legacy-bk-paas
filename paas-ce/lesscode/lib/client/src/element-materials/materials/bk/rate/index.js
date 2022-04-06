@@ -16,19 +16,23 @@ export default {
     icon: 'bk-drag-rate',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'score', tips: '评分的时候调用该事件函数，事件回调参数 (rate: Number)'
-    }],
-    styles: ['margin', 'display'],
-    directives: [
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/rate',
+    events: [
         {
-            type: 'v-bind',
-            prop: 'rate',
-            propTypes: ['number'],
-            val: '',
-            valType: 'variable',
-            modifiers: ['sync']
+            name: 'score',
+            tips: '评分的时候调用该事件函数，事件回调参数 (rate: Number)'
         }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    directives: [
+        // {
+        //     type: 'v-bind',
+        //     prop: 'rate',
+        //     propTypes: ['number'],
+        //     val: '',
+        //     valType: 'variable',
+        //     modifiers: ['sync']
+        // }
     ],
     props: {
         rate: {
@@ -50,10 +54,6 @@ export default {
         edit: {
             type: 'boolean',
             val: true
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

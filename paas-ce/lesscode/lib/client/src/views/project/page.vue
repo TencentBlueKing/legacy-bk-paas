@@ -11,10 +11,24 @@
                         <li><a href="javascript:;" @click="handleTempCreate">从模板新建</a></li>
                     </ul>
                 </bk-dropdown-menu>
-                <bk-button @click="handlePreviewProject">预览项目</bk-button>
+                <template>
+                    <bk-dropdown-menu v-if="hasMobilePage" trigger="click" :align="'center'" :ext-cls="'preview-dropdown'">
+                        <div class="dropdown-trigger-btn" slot="dropdown-trigger">
+                            <bk-button icon-right="icon-angle-down">预览项目</bk-button>
+                        </div>
+                        <ul class="bk-dropdown-list" slot="dropdown-content">
+                            <li><a href="javascript:;" @click="handlePreviewPcProject">预览PC页面</a></li>
+                            <li><a href="javascript:;" @click="handlePreviewMobileProject">预览移动端页面</a></li>
+                        </ul>
+                    </bk-dropdown-menu>
+                    <bk-button v-else @click="handlePreviewPcProject">预览项目</bk-button>
+                </template>
                 <bk-button @click="handleDownLoadProject">源码下载</bk-button>
                 <div class="extra">
-                    <span class="total" v-show="renderList.length">共<em class="count">{{renderList.length}}</em>个页面</span>
+                    <template>
+                        <type-select v-if="hasMobilePage" @select-change="handleSelectChange"></type-select>
+                        <span v-else class="total" v-show="renderList.length">共<em class="count">{{renderList.length}}</em>个页面</span>
+                    </template>
                     <bk-input
                         :style="{ width: '400px' }"
                         placeholder="请输入页面名称"
@@ -42,14 +56,22 @@
                         </div>
                         <div class="item-ft">
                             <div class="col">
-                                <h3 class="name" :title="page.pageName">{{page.pageName}}</h3>
+                                <div class="page-name">
+                                    <span class="page-type">
+                                        <i v-if="page.pageType === 'MOBILE'" class="bk-drag-icon bk-drag-mobilephone"> </i>
+                                        <i v-else class="bk-drag-icon bk-drag-pc"> </i>
+                                    </span>
+                                    <div class="name" :title="page.pageName">{{page.pageName}}</div>
+                                </div>
                                 <div class="route">
                                     <svg class="label" width="22" height="14" viewBox="0 0 22 14">
                                         <rect x="0" width="22" height="14" rx="2" fill="#F0F1F5" />
                                         <text font-family="'PingFang SC','Microsoft Yahei'" fill="#979ba5" style="text-anchor: middle" font-size="8" x="11" y="10">路由</text>
                                     </svg>
                                     <div class="path">
-                                        <span class="fullpath" :title="routeMap[page.id].fullPath" v-if="routeMap[page.id].id">{{routeMap[page.id].fullPath}}</span>
+                                        <span class="fullpath" :title="routeMap[page.id].fullPath" v-if="routeMap[page.id].id">
+                                            {{routeMap[page.id].fullPath}}
+                                        </span>
                                         <span class="unset" v-else>未配置</span>
                                     </div>
                                 </div>
@@ -61,7 +83,7 @@
                                         <i class="bk-drag-icon bk-drag-more-dot"></i>
                                     </span>
                                     <ul class="bk-dropdown-list" slot="dropdown-content" @click="hideDropdownMenu(page.id)">
-                                        <li><a href="javascript:;" @click="handleDownloadSource(page.content, page.id, page.lifeCycle, page.styleSetting)">下载源码</a></li>
+                                        <li><a href="javascript:;" @click="handleDownloadSource(page.content, page.id, page.styleSetting)">下载源码</a></li>
                                         <li><a href="javascript:;" @click="handleRename(page)">重命名</a></li>
                                         <li><a href="javascript:;" @click="handleEditRoute(page)">修改路由</a></li>
                                         <li><a href="javascript:;" @click="handleCopy(page)">复制</a></li>
@@ -81,7 +103,7 @@
             </div>
             <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :refresh-list="getPageList"></page-dialog>
             <download-dialog ref="downloadDialog"></download-dialog>
-            <edit-route-dialog ref="editRouteDialog" :route-group="routeGroup" :current-route="currentRoute" @success="getPageList" />
+            <edit-route-dialog ref="editRouteDialog" :route-group="editRouteGroup" :current-route="currentRoute" @success="getPageList" />
             <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
         </main>
     </section>
@@ -94,6 +116,8 @@
     import downloadDialog from '@/views/system/components/download-dialog'
     import editRouteDialog from '@/components/project/edit-route-dialog'
     import pageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
+    import { getRouteFullPath } from 'shared/route'
+    import typeSelect from '@/components/project/type-select'
     import dayjs from 'dayjs'
     import relativeTime from 'dayjs/plugin/relativeTime'
     import 'dayjs/locale/zh-cn'
@@ -106,7 +130,8 @@
             pagePreviewThumb,
             downloadDialog,
             editRouteDialog,
-            pageFromTemplateDialog
+            pageFromTemplateDialog,
+            typeSelect
         },
         data () {
             return {
@@ -118,7 +143,9 @@
                 pageList: [],
                 pageRouteList: [],
                 routeGroup: [],
-                isLoading: true
+                isLoading: true,
+                editRouteGroup: [],
+                pageType: 'ALL'
             }
         },
         computed: {
@@ -137,15 +164,19 @@
             },
             routeMap () {
                 const routeMap = {}
-                this.pageRouteList.forEach(({ id, pageId, layoutId, layoutPath, path }) => {
+                this.pageRouteList.forEach((route) => {
+                    const { id, pageId, layoutId } = route
                     routeMap[pageId] = {
                         id,
                         pageId,
                         layoutId,
-                        fullPath: `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                        fullPath: id ? getRouteFullPath(route) : null
                     }
                 })
                 return routeMap
+            },
+            hasMobilePage () {
+                return this.pageList.find(page => page.pageType === 'MOBILE')
             }
         },
         watch: {
@@ -193,22 +224,27 @@
                 this.$refs.pageDialog.dialog.formData.layoutId = null
                 this.$refs.pageDialog.dialog.visible = true
             },
-            handlePreviewProject () {
+            handlePreviewPcProject () {
                 // 跳转到预览入口页面
                 const versionQuery = `${this.versionId ? `?v=${this.versionId}` : ''}`
                 window.open(`/preview/project/${this.projectId}/${versionQuery}`, '_blank')
+            },
+            handlePreviewMobileProject () {
+                // 跳转到预览入口页面
+                window.open(`/preview-mobile/project/${this.projectId}`, '_blank')
             },
             async handleCopy (page) {
                 this.action = 'copy'
                 const layoutId = this.routeMap[page.id].layoutId
                 this.$refs.pageDialog.dialog.formData.id = page.id
+                this.$refs.pageDialog.dialog.formData.pageType = page.pageType
                 this.$refs.pageDialog.dialog.formData.pageName = `${page.pageName}-copy`
                 this.$refs.pageDialog.dialog.formData.pageCode = ''
                 this.$refs.pageDialog.dialog.formData.pageRoute = ''
                 this.$refs.pageDialog.dialog.formData.layoutId = layoutId
                 this.$refs.pageDialog.dialog.visible = true
             },
-            async handleDownloadSource (targetData, pageId, lifeCycle, styleSetting) {
+            async handleDownloadSource (targetData, pageId, styleSetting) {
                 if (!targetData) {
                     this.$bkMessage({
                         theme: 'error',
@@ -216,15 +252,11 @@
                     })
                     return
                 }
-                console.log('页面列表的下载')
                 this.$store.dispatch('vueCode/getPageCode', {
-                    targetData: JSON.parse(targetData),
                     projectId: this.projectId,
                     versionId: this.versionId,
-                    lifeCycle,
                     pageId,
                     styleSetting,
-                    layoutContent: this.pageLayout.layoutContent,
                     from: 'download_page'
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
@@ -240,6 +272,7 @@
             async handleRename (page) {
                 this.action = 'rename'
                 this.currentName = page.pageName
+                this.$refs.pageDialog.dialog.formData.pageType = page.pageType
                 this.$refs.pageDialog.dialog.formData.pageName = page.pageName
                 this.$refs.pageDialog.dialog.formData.pageCode = page.pageCode
                 this.$refs.pageDialog.dialog.formData.pageRoute = page.pageRoute
@@ -250,6 +283,7 @@
             handleEditRoute (page) {
                 this.$refs.editRouteDialog.dialog.visible = true
                 this.$refs.editRouteDialog.dialog.pageId = page.id
+                this.editRouteGroup = this.routeGroup.filter(item => item.layoutType === page.pageType)
                 this.currentRoute = this.routeMap[page.id]
             },
             handleDelete (page) {
@@ -289,9 +323,19 @@
                     return
                 }
 
+                const route = this.routeMap[page.id]
+                if (!route.id) {
+                    this.$bkMessage({
+                        theme: 'error',
+                        message: '页面未配置路由，请先配置',
+                        limit: 1
+                    })
+                    return
+                }
+
                 // 跳转到预览入口页面
                 const versionQuery = `${this.versionId ? `&v=${this.versionId}` : ''}`
-                window.open(`/preview/project/${this.projectId}/?pageCode=${page.pageCode}${versionQuery}`, '_blank')
+                window.open(`/preview/project/${this.projectId}${route.fullPath}?pageCode=${page.pageCode}${versionQuery}`, '_blank')
             },
             handleDownLoadProject () {
                 this.$refs.downloadDialog.isShow = true
@@ -306,12 +350,24 @@
                 } else {
                     this.renderList = this.pageList.filter(item => item.pageName.toLowerCase().indexOf(this.keyword.toLowerCase()) !== -1)
                 }
+                this.handleTypeChange()
             },
             hideDropdownMenu (pageId) {
                 this.$refs[`moreActionDropdown${pageId}`][0].hide()
             },
             getRelativeTime (time) {
                 return dayjs(time).fromNow() || ''
+            },
+            handleTypeChange () {
+                if (this.pageType === 'PC') {
+                    this.renderList = this.renderList.filter(item => item.pageType !== 'MOBILE')
+                } else if (this.pageType === 'MOBILE') {
+                    this.renderList = this.renderList.filter(item => item.pageType === 'MOBILE')
+                }
+            },
+            handleSelectChange (type) {
+                this.pageType = type
+                this.handleSearch(false)
             },
             // 从模板创建
             handleTempCreate () {
@@ -325,6 +381,15 @@
     .create-dropdown {
         /deep/ .bk-dropdown-trigger .bk-button {
             font-size: 14px;
+        }
+    }
+
+    .preview-dropdown {
+        margin-left: 10px;
+
+        /deep/ .bk-dropdown-trigger .bk-button {
+            font-size: 14px;
+            width: 110px;
         }
     }
 
@@ -346,6 +411,8 @@
             }
 
             .extra {
+                display: flex;
+                align-items: center;
                 flex: none;
                 margin-left: auto;
             }
@@ -509,15 +576,33 @@
                         background: #f0f1f5;
                         border-radius: 4px 4px 0px 0px;
                     }
-                    .name {
-                        margin: 0;
-                        font-size: 12px;
-                        font-weight: 700;
-                        color: #63656E;
-                        width: 240px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
+                    .page-name {
+                        display: flex;
+                        align-items: center;
+                        margin: -2px 0 0 0;
+
+                        .name {
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: #63656E;
+                            width: 215px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            margin-left: 7px;
+                        }
+
+                        .page-type {
+                            font-size: 16px;
+                            line-height: 18px;
+                            height: 20px;
+                            width: 20px;
+                            text-align: center;
+                            margin-left: -2px;
+                            color: #979ba5;
+                            border-radius: 2px;
+                            background: #f0f1f5;
+                        }
                     }
                     .stat {
                         font-size: 12px;

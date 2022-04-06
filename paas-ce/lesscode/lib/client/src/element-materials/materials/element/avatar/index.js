@@ -16,10 +16,14 @@ export default {
     icon: 'bk-drag-image',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'error', tips: ' 图片类头像加载失败时调用该事件函数，事件回调参数 (e: Event)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/avatar',
+    events: [
+        {
+            name: 'error',
+            tips: ' 图片类头像加载失败时调用该事件函数，事件回调参数 (e: Event)'
+        }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-block'
     },

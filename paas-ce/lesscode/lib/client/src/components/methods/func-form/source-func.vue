@@ -17,7 +17,7 @@
 
 <script>
     import mixins from './form-mixins'
-    import monaco from '@/components/methods/monaco'
+    import monaco from '@/components/monaco'
 
     export default {
         components: {

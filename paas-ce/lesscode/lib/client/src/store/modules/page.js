@@ -15,9 +15,16 @@ export default {
     namespaced: true,
     state: {
         pageList: [],
-        pageDetail: {}
+        pageDetail: {},
+        pageRoute: {},
+        layoutList: [],
+        routeGroup: [],
+        mobilePreview: true
     },
     mutations: {
+        setMobilePreview (state, preview) {
+            state.mobilePreview = preview
+        },
         setPageDetail (state, page) {
             state.pageDetail = page
         },
@@ -30,13 +37,41 @@ export default {
         updatePageList (state, page) {
             const index = state.pageList.findIndex(item => item.id === page.id)
             state.pageList[index] = { ...state.pageList[index], ...page }
+        },
+        setPageRoute (state, route) {
+            state.pageRoute = route
+        },
+        setLayoutList (state, list) {
+            state.layoutList = list
+        },
+        setRouteGroup (state, group) {
+            state.routeGroup = group
         }
     },
     getters: {
         pageDetail: state => state.pageDetail,
-        pageList: state => state.pageList
+        pageList: state => state.pageList,
+        pageRoute: state => state.pageRoute,
+        layoutList: state => state.layoutList,
+        routeGroup: state => state.routeGroup,
+        platform: state => state.pageDetail.pageType ? state.pageDetail.pageType : 'PC',
+        mobilePreview: state => state.mobilePreview
     },
     actions: {
+        async getPageSetting ({ dispatch, commit }, { pageId, projectId, versionId }) {
+            const [pageRoute, layoutList, routeGroup] = await Promise.all([
+                dispatch('route/find', { pageId }, { root: true }),
+                dispatch('layout/getList', { projectId, versionId }, { root: true }),
+                dispatch('route/getProjectRouteGroup', { projectId, versionId }, { root: true })
+            ])
+            layoutList.forEach(item => {
+                item.defaultName = item.showName || item.defaultName
+            })
+            commit('setRouteGroup', routeGroup)
+            commit('setLayoutList', layoutList)
+            commit('setPageRoute', pageRoute)
+            return true
+        },
         create ({ commit }, { data = {} }) {
             return http.post('/page/create', data).then(response => {
                 const data = response.data || ''

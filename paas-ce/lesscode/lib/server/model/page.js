@@ -33,6 +33,7 @@ module.exports = {
                 'page.id',
                 'page.pageName',
                 'page.pageCode',
+                'page.pageType',
                 'page.content',
                 'page.lifeCycle',
                 'page.styleSetting',
@@ -43,7 +44,8 @@ module.exports = {
             .where('t.projectId = :projectId', { projectId })
             .andWhere(whereVersion(versionId))
             .andWhere('page.deleteFlag = 0')
-            .orderBy('page.id', 'DESC')
+            .orderBy('CASE page.pageType WHEN "MOBILE" THEN "PC" END')
+            .addOrderBy('page.id', 'DESC')
             .getMany()
     },
 

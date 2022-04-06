@@ -10,7 +10,7 @@
 -->
 
 <template>
-    <style-layout title="外边距">
+    <style-layout title="外边距" :icon-show="true" @reset="handleReset">
         <div class="margin-style-container">
             <div class="margin-style-col-container">
                 <margin-style
@@ -54,12 +54,14 @@
     import StyleLayout from '../layout/index'
     import MarginStyle from '@/components/modifier/margin-style'
     import { splitValueAndUnit } from '@/common/util'
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
 
     export default {
         components: {
             StyleLayout,
             MarginStyle
         },
+        mixins: [defaultUnitMixin],
         props: {
             value: {
                 type: Object,
@@ -76,10 +78,10 @@
                 marginRightValue: splitValueAndUnit('value', this.value.marginRight),
                 marginBottomValue: splitValueAndUnit('value', this.value.marginBottom),
                 marginLeftValue: splitValueAndUnit('value', this.value.marginLeft),
-                marginTopUnit: splitValueAndUnit('unit', this.value.marginTop) || 'px',
-                marginRightUnit: splitValueAndUnit('unit', this.value.marginRight) || 'px',
-                marginBottomUnit: splitValueAndUnit('unit', this.value.marginBottom) || 'px',
-                marginLeftUnit: splitValueAndUnit('unit', this.value.marginLeft) || 'px',
+                marginTopUnit: '',
+                marginRightUnit: '',
+                marginBottomUnit: '',
+                marginLeftUnit: '',
                 styleMap: {
                     marginTop: 'marginBottom',
                     marginBottom: 'marginTop',
@@ -91,7 +93,16 @@
         computed: {
             ...mapGetters('drag', ['curSelectedComponentData'])
         },
+        created () {
+            this.initData()
+        },
         methods: {
+            initData () {
+                this.marginTopUnit = splitValueAndUnit('unit', this.value.marginTop) || this.defaultUnit
+                this.marginRightUnit = splitValueAndUnit('unit', this.value.marginRight) || this.defaultUnit
+                this.marginBottomUnit = splitValueAndUnit('unit', this.value.marginBottom) || this.defaultUnit
+                this.marginLeftUnit = splitValueAndUnit('unit', this.value.marginLeft) || this.defaultUnit
+            },
             handleInputChange (key, value) {
                 // 修改对应属性值并通知父组件
                 const styleValue = value === '' ? '' : value + this[key + 'Unit']
@@ -114,6 +125,12 @@
                 } else {
                     this.change(key, styleValue)
                 }
+            },
+            handleReset () {
+                this.handleInputChange('marginBottom', '')
+                this.handleInputChange('marginTop', '')
+                this.handleInputChange('marginRight', '')
+                this.handleInputChange('marginLeft', '')
             }
         }
     }

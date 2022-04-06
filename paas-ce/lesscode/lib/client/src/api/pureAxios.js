@@ -13,7 +13,7 @@ import axios from 'axios'
 
 import CachedPromise from './cached-promise'
 import RequestQueue from './request-queue'
-import { messageError } from '@/common/bkmagic'
+import { bkMessage } from 'bk-magic-vue'
 
 // axios 实例
 const axiosInstance = axios.create({
@@ -164,7 +164,7 @@ function handleReject (error, config) {
     }
 
     if (typeof message === 'string' && message.match(/Network Error/)) message = 'Network Error，网络不可用，有可能是跨域原因引起'
-    messageError(message)
+    bkMessage({ theme: 'error', message })
     console.error(error)
     return Promise.reject(error)
 }

@@ -16,18 +16,19 @@ export default {
     icon: 'bk-drag-process',
     group: '导航',
     order: 1,
-    styles: ['size', 'margin'],
-    events: [{
-        name: 'process-changed', tips: '当前步骤变化时调用该事件函数，事件回调参数 (curProcess: Number, data: Object)'
-    }],
-    directives: [
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/process',
+    events: [
         {
-            type: 'v-bind',
-            prop: 'list',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            name: 'process-changed',
+            tips: '当前步骤变化时调用该事件函数，事件回调参数 (curProcess: Number, data: Object)'
         }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    directives: [
+        // {
+        //     type: 'v-bind',
+        //     prop: 'list',
+        // }
     ],
     props: {
         list: {
@@ -74,10 +75,6 @@ export default {
             type: 'boolean',
             val: false,
             tips: '是否显示子步骤操作按钮'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

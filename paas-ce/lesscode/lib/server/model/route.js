@@ -32,6 +32,7 @@ export default {
                 'p.id as pageId',
                 'p.pageCode as pageCode',
                 'p.pageName as pageName',
+                'p.pageType as pageType',
                 'layoutinst.id as layoutId',
                 'layoutinst.routePath as layoutPath'
             ])
@@ -83,7 +84,8 @@ export default {
                 'layoutinst.routePath as layoutPath',
                 'layoutinst.layoutCode as layoutCode',
                 'layoutinst.content as layoutContent',
-                'layout.type as layoutType'
+                'layout.type as layoutType',
+                'layout.layoutType as platform'
             ])
             .where('pr.projectId = :projectId', { projectId })
             .andWhere(whereVersion(versionId, 'pr'))
@@ -98,9 +100,11 @@ export default {
             .leftJoinAndSelect(PageRoute, 'pr', 'layoutinst.id = pr.layoutId AND (pr.deleteFlag IS NULL OR pr.deleteFlag = 0)')
             .leftJoinAndSelect(Page, 'page', 'page.id = pr.pageId')
             .leftJoinAndSelect(Route, 'route', 'route.id = pr.routeId')
+            .leftJoinAndSelect(Layout, 'layout', 'layout.id = layoutinst.layoutId')
             .select([
                 'layoutinst.id as layoutId',
                 'layoutinst.routePath as layoutPath',
+                'layout.layoutType as layoutType',
                 'pr.pageId as pageId',
                 'pr.redirect as redirect',
                 'route.id as id',

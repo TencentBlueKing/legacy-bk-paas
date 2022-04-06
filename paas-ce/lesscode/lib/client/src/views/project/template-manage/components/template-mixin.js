@@ -1,5 +1,6 @@
-import { getVarList, getFuncList } from '@/common/process-targetdata'
+import { parseFuncAndVar } from '@/common/parse-function-var'
 import { mapActions } from 'vuex'
+import LC from '@/element-materials/core'
 
 export default {
     methods: {
@@ -14,19 +15,9 @@ export default {
                 this.getAllVariable({ projectId: template.belongProjectId, versionId: template.versionId, pageCode: template.fromPageCode, effectiveRange: 0 }, false),
                 this.getAllGroupFuncs({ projectId: template.belongProjectId, versionId: template.versionId }, false)
             ])
-            const targetData = []
-            targetData.push(JSON.parse(template.content || {}))
-            const varList = getVarList(targetData, variableList)
-            const funcList = getFuncList(targetData, funcGroups)
-
-            const funcCodes = funcList.map(func => func.funcCode) || []
-            let funcVars = []
-            if (funcCodes && funcCodes.length) {
-                funcVars = await this.getFunctionVariable({ projectId: template.belongProjectId, versionId: template.versionId, funcCodes })
-            }
-            const varDetailList = variableList.filter(item => (varList.find(val => val.variableCode === item.variableCode) || funcVars.find(val => val.variableId === item.id)))
-            return { varList, funcList, varDetailList }
+            const templateNode = LC.parseTemplate(JSON.parse(template.content || {}))
+            const result = parseFuncAndVar(templateNode, variableList, funcGroups)
+            return result
         }
-
     }
 }

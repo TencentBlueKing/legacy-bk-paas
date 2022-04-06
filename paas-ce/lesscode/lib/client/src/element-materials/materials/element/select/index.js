@@ -16,27 +16,47 @@ export default {
     icon: 'bk-drag-select',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '选中值发生变化时调用该事件函数，事件回调参数 (value: Array)'
-    }, {
-        name: 'visible-change', tips: '下拉框出现/隐藏时调用该事件函数，事件回调参数 (value: Boolean)'
-    }, {
-        name: 'remove-tag', tips: '多选模式下移除tag时调用该事件函数，事件回调参数 (value: String|Number|Boolean)'
-    }, {
-        name: 'clear', tips: '可清空的单选模式下用户点击清空按钮时调用该事件函数，无回调参数'
-    }, {
-        name: 'blur', tips: '当 input 失去焦点时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'focus', tips: '当 input 获得焦点时调用该事件函数，事件回调参数 (event: Event)'
-    }],
-    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/select',
+    events: [
+        {
+            name: 'change',
+            tips: '选中值发生变化时调用该事件函数，事件回调参数 (value: Array)'
+        },
+        {
+            name: 'visible-change',
+            tips: '下拉框出现/隐藏时调用该事件函数，事件回调参数 (value: Boolean)'
+        },
+        {
+            name: 'remove-tag',
+            tips: '多选模式下移除tag时调用该事件函数，事件回调参数 (value: String|Number|Boolean)'
+        },
+        {
+            name: 'clear',
+            tips: '可清空的单选模式下用户点击清空按钮时调用该事件函数，无回调参数'
+        },
+        {
+            name: 'blur',
+            tips: '当 input 失去焦点时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'focus',
+            tips: '当 input 获得焦点时调用该事件函数，事件回调参数 (event: Event)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['string', 'boolean', 'number'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

@@ -16,52 +16,86 @@ export default {
     icon: 'bk-drag-search',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'show-menu', tips: '父列表显示时调用该事件函数，事件回调参数 (menuInstance: Object)'
-    }, {
-        name: 'input-change', tips: '当用户输入时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'input-cut', tips: '当用户剪切内容时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'input-click', tips: '当用户点击input时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'input-focus', tips: '当单元格获取焦点时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'menu-select', tips: '当选择父列表项时调用该事件函数，事件回调参数 (item: Object, index: Number)'
-    }, {
-        name: 'menu-child-select', tips: '当选择子列表项时调用该事件函数，事件回调参数 (item: Object, index: Number)'
-    }, {
-        name: 'change', tips: '当输入内容发生变化时调用该事件函数，按下回车时调用，事件回调参数 (list: Array)'
-    }, {
-        name: 'key-delete', tips: '当用户键入delete删除时会调用该事件函数，事件回调参数 (item: Object)'
-    }, {
-        name: 'key-enter', tips: '当用户键入enter删除时会调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'child-checked', tips: '当用户选中子项时调用该事件函数，事件回调参数 (item: Object, index: Number, checked: Boolean)'
-    }, {
-        name: 'clear', tips: '当用户点击清空时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'search', tips: '当用户点击搜索图标时调用该事件函数，事件回调参数 (event: Event)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/searchselect',
+    events: [
+        {
+            name: 'show-menu',
+            tips: '父列表显示时调用该事件函数，事件回调参数 (menuInstance: Object)'
+        },
+        {
+            name: 'input-change',
+            tips: '当用户输入时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'input-cut',
+            tips: '当用户剪切内容时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'input-click',
+            tips: '当用户点击input时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'input-focus',
+            tips: '当单元格获取焦点时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'menu-select',
+            tips: '当选择父列表项时调用该事件函数，事件回调参数 (item: Object, index: Number)'
+        },
+        {
+            name: 'menu-child-select',
+            tips: '当选择子列表项时调用该事件函数，事件回调参数 (item: Object, index: Number)'
+        },
+        {
+            name: 'change',
+            tips: '当输入内容发生变化时调用该事件函数，按下回车时调用，事件回调参数 (list: Array)'
+        },
+        {
+            name: 'key-delete',
+            tips: '当用户键入delete删除时会调用该事件函数，事件回调参数 (item: Object)'
+        },
+        {
+            name: 'key-enter',
+            tips: '当用户键入enter删除时会调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'child-checked',
+            tips: '当用户选中子项时调用该事件函数，事件回调参数 (item: Object, index: Number, checked: Boolean)'
+        },
+        {
+            name: 'clear',
+            tips: '当用户点击清空时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'search',
+            tips: '当用户点击搜索图标时调用该事件函数，事件回调参数 (event: Event)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'block'
     },
     directives: [
         {
             type: 'v-model',
-            prop: 'values',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        },
-        {
-            type: 'v-bind',
-            prop: 'data',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            prop: 'values'
         }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'data',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         data: {
@@ -186,10 +220,6 @@ export default {
             type: 'string',
             val: 'text',
             tips: '输入框类型'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

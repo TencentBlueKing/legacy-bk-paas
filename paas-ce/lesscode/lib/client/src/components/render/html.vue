@@ -43,7 +43,7 @@
 
         methods: {
             updateRender () {
-                const compiled = Vue.compile(this.html)
+                const compiled = Vue.compile(`<span>${this.html}</span>`)
                 this.templateRender = compiled.render
                 this.$options.staticRenderFns = []
                 for (const staticRenderFunction of compiled.staticRenderFns) {

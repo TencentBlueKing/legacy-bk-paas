@@ -43,7 +43,7 @@ export function createRouterDecorator (method) {
             const originValue = descriptor.value
             descriptor.value = async (ctx) => {
                 try {
-                    const metadata = target.__metadata[originValue.name]
+                    const metadata = target.__metadata?.[originValue.name]
                     const params = Array(originValue.length).fill('_').map((_, index) => metadata[index](ctx))
                     const data = await originValue.apply(this, params)
                     return data

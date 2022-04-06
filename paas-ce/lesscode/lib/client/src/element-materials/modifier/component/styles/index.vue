@@ -11,24 +11,75 @@
 
 <template>
     <div>
-        <template v-if="materialConfig.length">
+        <template v-if="config.length">
             <p class="style-setting-tips">样式面板中设置的样式将覆盖组件自带的默认样式，请谨慎调整</p>
-            <template v-for="(com, index) in materialConfig">
-                <component
-                    :is="com"
-                    :key="index"
-                    :value="lastStyles"
-                    :change="handleChange" />
-            </template>
+            <position
+                v-if="handleConfigIsShow('position')"
+                :value="lastStyles"
+                :include="handleGetConfig('position').include"
+                :exclude="handleGetConfig('position').exclude"
+                :change="handleChange" />
+            <size
+                v-if="handleConfigIsShow('size')"
+                :value="lastStyles"
+                :include="handleGetConfig('size').include"
+                :exclude="handleGetConfig('size').exclude"
+                :change="handleChange" />
+            <padding
+                v-if="handleConfigIsShow('padding')"
+                :value="lastStyles"
+                :include="handleGetConfig('padding').include"
+                :exclude="handleGetConfig('padding').exclude"
+                :change="handleChange" />
+            <margin
+                v-if="handleConfigIsShow('margin')"
+                :value="lastStyles"
+                :include="handleGetConfig('margin').include"
+                :exclude="handleGetConfig('margin').exclude"
+                :change="handleChange" />
+            <font-config
+                v-if="handleConfigIsShow('font')"
+                :value="lastStyles"
+                :include="handleGetConfig('font').include"
+                :exclude="handleGetConfig('font').exclude"
+                :change="handleChange" />
+            <pointer
+                v-if="handleConfigIsShow('pointer')"
+                :value="lastStyles"
+                :include="handleGetConfig('pointer').include"
+                :exclude="handleGetConfig('pointer').exclude"
+                :change="handleChange" />
+            <background
+                v-if="handleConfigIsShow('background')"
+                :value="lastStyles"
+                :include="handleGetConfig('background').include"
+                :exclude="handleGetConfig('background').exclude"
+                :change="handleChange" />
+            <border
+                v-if="handleConfigIsShow('border')"
+                :value="lastStyles"
+                :include="handleGetConfig('border').include"
+                :exclude="handleGetConfig('border').exclude"
+                :change="handleChange" />
+            <opacity
+                v-if="handleConfigIsShow('opacity')"
+                :value="lastStyles"
+                :include="handleGetConfig('opacity').include"
+                :exclude="handleGetConfig('opacity').exclude"
+                :change="handleChange" />
         </template>
-        <style-custom v-if="componentId && !componentId.startsWith('chart-')" :component-id="componentId" :value="lastStyles" :change="handleChange"></style-custom>
-        <div v-else class="no-style">
-            <span v-if="Object.keys(curSelectedComponentData).length">该组件暂无样式</span>
-        </div>
+        <style-custom
+            v-if="isShowCustom"
+            :component-id="componentId"
+            :value="lastStyles"
+            :change="handleChange" />
+        <!-- <div v-else class="no-style">
+            <span v-if="Object.keys(config).length">该组件暂无样式</span>
+        </div> -->
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
+    import LC from '@/element-materials/core'
 
     import StyleLayout from './layout/index'
     import StyleItem from './layout/item'
@@ -38,60 +89,70 @@
     import StyleMargin from './strategy/margin'
     import StyleFont from './strategy/font'
     import StyleBorder from './strategy/border'
-    import StyleBackgroundColor from './strategy/background-color'
-    import StyleColor from './strategy/color'
-    import StyleTextAlign from './strategy/text-align'
-    import StyleDisplay from './strategy/display'
-    import StyleMinWidth from './strategy/min-width'
+    import StylePosition from './strategy/position'
+    import StylePointer from './strategy/pointer'
+    import StyleOpacity from './strategy/opacity'
+    import StyleBackground from './strategy/background'
 
     const components = {
         StyleLayout,
         StyleItem,
         StyleCustom,
+        position: StylePosition,
         size: StyleSize,
         padding: StylePadding,
         margin: StyleMargin,
-        font: StyleFont,
+        fontConfig: StyleFont,
+        pointer: StylePointer,
+        background: StyleBackground,
         border: StyleBorder,
-        backgroundColor: StyleBackgroundColor,
-        color: StyleColor,
-        textAlign: StyleTextAlign,
-        display: StyleDisplay,
-        minWidth: StyleMinWidth
+        opacity: StyleOpacity
     }
 
     export default {
         name: 'modifier-style',
         components,
-        props: {
-            materialConfig: {
-                type: Array,
-                required: true
-            },
-            lastStyles: {
-                type: Object,
-                default: () => ({})
-            },
-            componentId: {
-                type: String
+        data () {
+            return {
+                componentId: '',
+                config: {}
             }
         },
         computed: {
-            ...mapGetters('drag', ['curSelectedComponentData'])
+            isShowCustom () {
+                return !/$chart-/.test(this.componentId)
+            }
         },
         created () {
-            this.renderStyles = this.lastStyles
+            this.componentData = LC.getActiveNode()
+            const {
+                componentId,
+                material,
+                renderStyles
+            } = this.componentData
+            this.componentId = componentId
+            this.config = Object.freeze(material.styles || {})
+            this.lastStyles = Object.assign({}, renderStyles)
         },
         methods: {
             handleChange (key, value) {
-                const renderStyles = {
-                    ...this.renderStyles,
-                    [key]: value
+                this.componentData.setStyle(key, value)
+                this.lastStyles[key] = value
+            },
+            handleConfigIsShow (key) {
+                return this.config.some(item => (item.name && item.name === key) || item === key)
+            },
+            handleGetConfig (key) {
+                const config = {
+                    include: [],
+                    exclude: []
                 }
-                this.renderStyles = renderStyles
-                this.$emit('on-change', {
-                    renderStyles
-                })
+                const item = this.config.filter(item => item.name && item.name === key)
+                if (item.length) {
+                    config.include = item[0].include || []
+                    config.exclude = item[0].exclude || []
+                }
+                return config
             }
         }
     }

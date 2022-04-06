@@ -155,6 +155,10 @@ async function startServer () {
                 // connect-history-api-fallback 默认会对 url 中有 . 的 url 当成静态资源处理而不是当成页面地址来处理
                 from: /\/\/+.*\..*\//,
                 to: '/'
+            },
+            {
+                from: /preview\/project/,
+                to: '/preview.html'
             }
         ]
     }))

@@ -19,7 +19,7 @@ const IS_DEV = process.env.NODE_ENV === 'development'
 // 不同场景渲染不同html
 function getRenderTemplateName (ctx) {
     let pageTemplateName = IS_DEV ? 'index-dev' : 'index'
-    if (ctx.path.includes('preview.html')) pageTemplateName = 'preview'
+    if (ctx.originalUrl.startsWith('/preview/project/')) pageTemplateName = 'preview'
     return pageTemplateName
 }
 const renderParams = { STATIC_URL: '' }

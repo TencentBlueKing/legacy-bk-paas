@@ -16,14 +16,12 @@ export default {
     icon: 'bk-drag-slider',
     group: '表单',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/slider',
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['number'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {
@@ -47,10 +45,6 @@ export default {
             type: 'boolean',
             val: true,
             tips: 'hover 时是否显示提示'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

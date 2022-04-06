@@ -16,17 +16,18 @@ export default {
     icon: 'bk-drag-rate',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '分值改变时调用该事件函数，事件回调参数 (value: Number)'
-    }],
-    styles: ['margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/rate',
+    events: [
+        {
+            name: 'change',
+            tips: '分值改变时调用该事件函数，事件回调参数 (value: Number)'
+        }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['number'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

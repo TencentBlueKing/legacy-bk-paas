@@ -32,7 +32,10 @@ import projectVersion from './modules/project-version'
 import dataSource from './modules/data-source'
 import http from '@/api'
 import router from '../router'
-import { unifyObjectStyle, json2Query } from '@/common/util'
+import { unifyObjectStyle, json2Query, circleJSON } from '@/common/util'
+import LC from '@/element-materials/core'
+// 生成源码重构后，需要支持前端单独调用
+import { getPageData } from '../../../server/model/page-code'
 
 Vue.use(Vuex)
 
@@ -168,6 +171,40 @@ const store = new Vuex.Store({
             return http.get(`/test/getTable?${json2Query(params)}`, {}, config).then(res => {
                 return res
             })
+        },
+
+        updatePreview ({ state }, { isGenerateNav, id, curTemplateData, types }) {
+            let targetData = []
+            try {
+                targetData = JSON.parse(circleJSON(LC.getRoot().toJSON().renderSlots.default))
+            } catch (error) {
+                targetData = []
+            }
+            const pageData = getPageData({
+                // targetData: JSON.parse(JSON.stringify(state.drag.targetData || [])),
+                targetData,
+                pageType: 'preview',
+                platform: state.page.pageDetail?.pageType,
+                funcGroups: state.functions.funcGroups,
+                lifeCycle: state.page.pageDetail?.lifeCycle,
+                projectId: router.currentRoute.params?.projectId,
+                pageId: router.currentRoute.params?.pageId,
+                layoutContent: curTemplateData,
+                isGenerateNav,
+                isEmpty: false,
+                layoutType: state.drag.curTemplateData?.layoutType,
+                variableList: state.variable.variableList,
+                styleSetting: state.page.pageDetail?.styleSetting,
+                user: state.user,
+                npmConf: {},
+                origin: location.origin
+            })
+            const payload = JSON.stringify({
+                types,
+                source: pageData.code,
+                id
+            })
+            localStorage.setItem('ONLINE_PREVIEW', payload)
         }
     }
 })
@@ -201,5 +238,7 @@ store.dispatch = function (_type, _payload, config = {}) {
         ? Promise.all(entry.map(handler => handler(payload, config)))
         : entry[0](payload, config)
 }
+
+export const useStore = () => store
 
 export default store

@@ -16,7 +16,17 @@ export default {
     icon: 'bk-drag-popover-2',
     group: '反馈',
     order: 1,
-    styles: ['margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/popover',
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     props: {
         content: {
             type: 'string',
@@ -49,10 +59,6 @@ export default {
             type: 'number',
             val: 2500,
             tips: '弹出层z-index'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM .tippy-popper 上'
         }
     },
     slots: {

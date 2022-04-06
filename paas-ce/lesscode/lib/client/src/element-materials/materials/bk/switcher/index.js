@@ -16,20 +16,30 @@ export default {
     icon: 'bk-drag-switcher',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '状态发生变化时调用该事件函数，事件回调参数 (status: Boolean)'
-    }],
-    styles: ['margin', 'display', 'backgroundColor', 'border'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/switcher',
+    events: [
+        {
+            name: 'change',
+            tips: '状态发生变化时调用该事件函数，事件回调参数 (status: Boolean)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['boolean'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {
@@ -75,10 +85,6 @@ export default {
             type: 'string',
             val: 'OFF',
             tips: '关闭状态显示文本'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }
