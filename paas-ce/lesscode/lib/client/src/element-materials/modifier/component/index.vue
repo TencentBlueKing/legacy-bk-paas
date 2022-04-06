@@ -11,26 +11,28 @@
 
 <template>
     <div class="material-modifier">
-        <bk-tab
-            :active="tabPanelActive"
-            type="unborder-card"
-            ext-cls="king-tab"
-            @tab-change="handleModifier">
-            <bk-tab-panel
-                v-for="(tabPanel, panelIndex) in tabPanels"
-                v-bind="tabPanel"
-                :key="panelIndex" />
-        </bk-tab>
-        <div
-            v-if="renderKey"
-            class="material-modifier-container">
-            <template v-for="(com, index) in modifierComList">
-                <component
-                    :is="com"
-                    :key="`${renderKey}_${index}`" />
-            </template>
-        </div>
-        <div v-if="!renderKey" class="empty">
+        <template v-if="renderKey">
+            <bk-tab
+                :active="tabPanelActive"
+                type="unborder-card"
+                ext-cls="king-tab"
+                @tab-change="handleModifier">
+                <bk-tab-panel
+                    v-for="(tabPanel, panelIndex) in tabPanels"
+                    v-bind="tabPanel"
+                    :key="panelIndex" />
+            </bk-tab>
+            <div
+                
+                class="material-modifier-container">
+                <template v-for="(com, index) in modifierComList">
+                    <component
+                        :is="com"
+                        :key="`${renderKey}_${index}`" />
+                </template>
+            </div>
+        </template>
+        <div v-else class="empty">
             <span>请选择组件</span>
         </div>
     </div>

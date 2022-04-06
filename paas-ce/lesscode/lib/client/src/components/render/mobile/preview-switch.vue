@@ -34,7 +34,7 @@
         mounted () {
             document.querySelector('.page-name').appendChild(this.$el)
         },
-        destroyed () {
+        beforeDestroy () {
             document.querySelector('.page-name').removeChild(this.$el)
         }
     }
