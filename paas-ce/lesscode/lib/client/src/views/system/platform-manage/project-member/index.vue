@@ -71,7 +71,6 @@
     import tableListMixin from '../table-list-mixin.js'
     import memberSelector from '@/components/member-selector'
     import _ from 'lodash'
-    import { mapGetters } from 'vuex'
 
     export default {
         components: {
@@ -113,13 +112,12 @@
             }
         },
         computed: {
-            ...mapGetters(['isPlatformAdmin']),
             params () {
                 const params = {
                     q: this.filters.keyword,
                     pageSize: this.pagination.limit,
                     pageNum: this.pagination.current,
-                    needDemo: true
+                    excludeDemo: false
                 }
                 return params
             },
@@ -174,10 +172,20 @@
                 }
             },
 
+            handlePageChange (page) {
+                this.pagination.current = page
+                this.getProjectBase()
+            },
+            handlePageLimitChange (limit) {
+                this.pagination.limit = limit
+                this.pagination.current = 1
+                this.getProjectBase()
+            },
+
             async editManager (projectId) {
                 this.projectId = projectId
                 this.sideObj.isShow = true
-                await this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId, isPlatformAdmin: this.isPlatformAdmin })
+                await this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId })
                 this.getMember()
             },
 

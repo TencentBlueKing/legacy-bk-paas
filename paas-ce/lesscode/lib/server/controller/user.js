@@ -11,6 +11,7 @@
 
 import { unique } from '../util'
 import UserModel from '../model/user'
+import { isPlatformAdmin } from '../model/perm'
 const httpConf = require('../conf/http')
 const axios = require('axios')
 const querystring = require('querystring')
@@ -146,9 +147,7 @@ export const deleteMultipleMember = async ctx => {
     try {
         const query = ctx.request.query || {}
         const ids = query.ids.split(',')
-        ids.forEach(async (id) => {
-            await UserModel.deleteMember(id)
-        })
+        await UserModel.deleteMultipleMember(ids)
         ctx.send({
             code: 0,
             message: 'success'
@@ -164,9 +163,9 @@ export const setCurUserPermInfo = async ctx => {
     try {
         const project = ctx.request.body || {}
         const projectId = project.id
-        const needPlatformOperation = project.isPlatformAdmin
         const userInfo = ctx.session.userInfo || {}
         const permsInfo = await UserModel.getMemberPermInfo(projectId, userInfo.id)
+        const platFormAdminDatas = await isPlatformAdmin(userInfo.username) || []
         const data = {
             permCodes: []
         }
@@ -175,7 +174,7 @@ export const setCurUserPermInfo = async ctx => {
             data.roleId = perm.roleId
             data.permCodes.push(perm.permCode)
         })
-        if (needPlatformOperation) {
+        if (platFormAdminDatas.length) { // 平台管理员
             if (!data.permCodes.includes('add_member')) data.permCodes.push('add_member')
             if (!data.permCodes.includes('delete_member')) data.permCodes.push('delete_member')
         }
