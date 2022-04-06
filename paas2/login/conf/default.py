@@ -15,6 +15,8 @@ from __future__ import unicode_literals
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+import base64
+
 from django.utils.functional import SimpleLazyObject
 
 try:
@@ -336,7 +338,18 @@ LOGGING = {
     },
 }
 
-# 是否启用密码rsa加密, 启用: "enable"; 不启用: 空 or 其他值;
-ENABLE_PASSWORD_RSA_ENCRYPTED = os.getenv("BK_ENABLE_PASSWORD_RSA_ENCRYPTED", "")
+# 是否启用密码rsa加密, 启用: "true"; 不启用: "false";
+ENABLE_PASSWORD_RSA_ENCRYPTED = os.getenv("BK_ENABLE_PASSWORD_RSA_ENCRYPTED", "False").lower()
+
 PASSWORD_RSA_PUBLIC_KEY = os.getenv("BK_PASSWORD_RSA_PUBLIC_KEY", "")
 PASSWORD_RSA_PRIVATE_KEY = os.getenv("BK_PASSWORD_RSA_PRIVATE_KEY", "")
+
+try:
+    PASSWORD_RSA_PUBLIC_KEY = base64.b64decode(PASSWORD_RSA_PUBLIC_KEY).decode()
+except Exception as e:
+    print('b64decode PASSWORD_RSA_PUBLIC_KEY error', e)
+
+try:
+    PASSWORD_RSA_PRIVATE_KEY = base64.b64decode(PASSWORD_RSA_PRIVATE_KEY).decode()
+except Exception as e:
+    print('b64decode PASSWORD_RSA_PRIVATE_KEY error', e)

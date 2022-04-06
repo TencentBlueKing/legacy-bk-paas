@@ -127,7 +127,7 @@
             $('#password').val(encrypted);
         }
         $(document).ready(function(){
-             if (ENABLE_PASSWORD_RSA_ENCRYPTED === "enable") {
+             if (ENABLE_PASSWORD_RSA_ENCRYPTED === "true") {
                  $('#login-form').submit(() => {
                      rsa_encrypt_password();
                 });
