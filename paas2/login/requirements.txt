@@ -20,3 +20,5 @@ django-environ==0.4.5
 # prometheus metrics
 django-prometheus==1.0.15
 future==0.18.2
+
+rsa==3.4.2
