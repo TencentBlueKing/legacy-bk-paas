@@ -19,7 +19,9 @@
         <div
             v-if="isShowActiveBtn || componentData.isActived"
             :class="$style['placholder']">
-            <div :class="$style['btn']" v-bk-tooltips="`选中整行 ${componentData.componentId}`">
+            <div
+                :class="$style['btn']"
+                v-bk-tooltips="`选中整行 ${componentData.componentId}`">
                 <i class="bk-drag-icon bk-drag-drag-small1" />
             </div>
         </div>
@@ -78,6 +80,7 @@
             }
             const activeClearCallback = () => {
                 this.isShowActiveBtn = false
+                this.$forceUpdate()
             }
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('active', activeCallback)
