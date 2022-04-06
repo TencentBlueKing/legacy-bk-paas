@@ -44,5 +44,6 @@ def site_settings(request):
         "JS_SUFFIX": settings.JS_SUFFIX,
         # 本地 css 后缀名
         "CSS_SUFFIX": settings.CSS_SUFFIX,
-        "RSA_PUBLIC_KEY": settings.RSA_PUBLIC_KEY
+        "PASSWORD_RSA_PUBLIC_KEY": settings.PASSWORD_RSA_PUBLIC_KEY,
+        "ENABLE_PASSWORD_RSA_ENCRYPTED": settings.ENABLE_PASSWORD_RSA_ENCRYPTED
     }

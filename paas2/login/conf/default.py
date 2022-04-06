@@ -342,32 +342,7 @@ LOGGING = {
     },
 }
 
-DEFAULT_RSA_PUBLIC_KEY = ("-----BEGIN PUBLIC KEY-----" +
-                          "MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgEc4DhR2e61sLg+x3ayP3SIefNyW" +
-                          "H2Ad0df/Chjvwi9xZtCRiDyYxgjNOexnhL5Yl4DEp4/vb26OfrMmcBpijNgZg5NV" +
-                          "utfyRdJLTaUyaami3cCu/6QvJMOXW1JRLxnppJZPR+Q71IZSSk+gnp9lfqqYd1ph" +
-                          "zDuVAcpXmmLRW5QfAgMBAAE=" +
-                          "-----END PUBLIC KEY-----"
-                          )
-
-
-DEFAULT_RSA_PRIVATE_KEY = """
------BEGIN RSA PRIVATE KEY-----
-MIICWgIBAAKBgEc4DhR2e61sLg+x3ayP3SIefNyWH2Ad0df/Chjvwi9xZtCRiDyY
-xgjNOexnhL5Yl4DEp4/vb26OfrMmcBpijNgZg5NVutfyRdJLTaUyaami3cCu/6Qv
-JMOXW1JRLxnppJZPR+Q71IZSSk+gnp9lfqqYd1phzDuVAcpXmmLRW5QfAgMBAAEC
-gYADjxaNCTq2+N/4YtAMDohjaxicQVhCCltxKsqLYnfWvRkBNTSUqqHC0NajLK0i
-gfTYN3uUIsfzw2UreLFDcEdPe8AlWLMvo1HEkIHFSOYq31y5lhre09xsiGq6T8JI
-nhbNjv1OGZU9/y06pk1+h6j44qAjc9QtYP4sT6yEgvvteQJBAIcMZKZgmHMjm7Iy
-oYYW+2oBMxHgYEAU9//dV1z9eDTsDwZEs1h/6mWdfEGs4E6pnBdDWZ1ec7wrV3te
-2WInrLUCQQCHAPwfU1fEb9fWSOpLXAAZyDvJBE19xtV0D8jja15LyVyzLNj1NEfI
-dzdOXIl0NCT4aEqPdbzP4iZsi0Du+RYDAkAbF+Vpa5+qGc62pWm6WQn/blYsk/M7
-Z/mJH4LTaRagp2ssOsQwURlZYYr4MhKeNXDXSe/EnppheeCHI7RA+OyxAkBVn9xI
-ifWak00Tjb97+Gff8k1o2x/C7D8pk3FYPBrcemQfCAy6yGPW0zXyr2JGn2PrYUoY
-3xXXy5mPMmsGpli9AkB5KdfS5/YPR2wlHgTtkQPmX+kdyzdtSqsc4DC56EnfxcNm
-KH1z9P5V6rU7TJZyQcOsuWIuYYIJwLjC3WVmTgKc
------END RSA PRIVATE KEY-----
-"""
-
-RSA_PUBLIC_KEY = os.getenv("BKAPP_RSA_PUBLIC_KEY", DEFAULT_RSA_PUBLIC_KEY)
-RSA_PRIVATE_KEY = os.getenv("BKAPP_RSA_PRIVATE_KEY", DEFAULT_RSA_PRIVATE_KEY)
+# 是否启用密码rsa加密, 启用: "enable"; 不启用: 空 or 其他值;
+ENABLE_PASSWORD_RSA_ENCRYPTED = os.getenv("BK_ENABLE_PASSWORD_RSA_ENCRYPTED", "")
+PASSWORD_RSA_PUBLIC_KEY = os.getenv("BK_PASSWORD_RSA_PUBLIC_KEY", "")
+PASSWORD_RSA_PRIVATE_KEY = os.getenv("BK_PASSWORD_RSA_PRIVATE_KEY", "")
