@@ -164,8 +164,8 @@ export const setCurUserPermInfo = async ctx => {
         const project = ctx.request.body || {}
         const projectId = project.id
         const userInfo = ctx.session.userInfo || {}
+        const needCheckAdmin = project.needCheckAdmin // 是否需要校验平台管理员
         const permsInfo = await UserModel.getMemberPermInfo(projectId, userInfo.id)
-        const platFormAdminDatas = await isPlatformAdmin(userInfo.username) || []
         const data = {
             permCodes: []
         }
@@ -174,9 +174,12 @@ export const setCurUserPermInfo = async ctx => {
             data.roleId = perm.roleId
             data.permCodes.push(perm.permCode)
         })
-        if (platFormAdminDatas.length) { // 平台管理员
-            if (!data.permCodes.includes('add_member')) data.permCodes.push('add_member')
-            if (!data.permCodes.includes('delete_member')) data.permCodes.push('delete_member')
+        if (needCheckAdmin) {
+            const platFormAdminDatas = await isPlatformAdmin(userInfo.username) || []
+            if (platFormAdminDatas.length) {
+                if (!data.permCodes.includes('add_member')) data.permCodes.push('add_member')
+                if (!data.permCodes.includes('delete_member')) data.permCodes.push('delete_member')
+            }
         }
         ctx.session.permsInfo = data
         ctx.send({
