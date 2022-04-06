@@ -40,4 +40,5 @@ def site_settings(request):
         "JS_SUFFIX": settings.JS_SUFFIX,
         # 本地 css 后缀名
         "CSS_SUFFIX": settings.CSS_SUFFIX,
+        "RSA_PUBLIC_KEY": settings.RSA_PUBLIC_KEY
     }

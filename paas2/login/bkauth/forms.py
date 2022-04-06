@@ -15,13 +15,14 @@ from __future__ import unicode_literals
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
+from common.utils.crypt import rsa_decrypt_password
 
 
 class BkAuthenticationForm(AuthenticationForm):
     def clean(self):
         username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
-
+        password = rsa_decrypt_password(password)
         if username and password:
             self.user_cache = authenticate(
                 username=username,
