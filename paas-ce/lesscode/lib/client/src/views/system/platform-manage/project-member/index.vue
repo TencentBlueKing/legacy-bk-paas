@@ -172,16 +172,6 @@
                 }
             },
 
-            handlePageChange (page) {
-                this.pagination.current = page
-                this.getProjectBase()
-            },
-            handlePageLimitChange (limit) {
-                this.pagination.limit = limit
-                this.pagination.current = 1
-                this.getProjectBase()
-            },
-
             async editManager (projectId) {
                 this.projectId = projectId
                 this.sideObj.isShow = true
