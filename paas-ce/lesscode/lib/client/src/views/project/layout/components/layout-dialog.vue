@@ -83,7 +83,8 @@
                     formData: {
                         showName: '',
                         routePath: '',
-                        layoutCode: ''
+                        layoutCode: '',
+                        layoutType: ''
                     },
                     formRules: {
                         showName: [
@@ -163,10 +164,12 @@
                         this.dialog.formData.showName = this.currentLayout.showName
                         this.dialog.formData.layoutCode = this.currentLayout.layoutCode
                         this.dialog.formData.routePath = this.getDisplayLayoutPath(this.currentLayout.routePath)
+                        this.dislog.formData.layoutType = this.currentLayout.layoutType
                     } else {
                         this.dialog.formData.showName = ''
                         this.dialog.formData.layoutCode = ''
                         this.dialog.formData.routePath = ''
+                        this.currentLayout.layoutType = ''
                     }
                     this.defaultLayoutList.forEach((item, index) => {
                         item.checked = index === 0

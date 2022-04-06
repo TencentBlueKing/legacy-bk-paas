@@ -259,7 +259,7 @@ const projectCode = {
                         const meta = `meta: { pageName: '${route.pageName}' }`
                         if (route.redirectRoute) {
                             const { layoutPath, path } = route.redirectRoute
-                            const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                            const fullPath = `${layoutPath}${layoutPath?.endsWith('/') ? '' : '/'}${path}`
                             const routeName = route.pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${route.id}`
                             const routeComponent = route.pageCode ? ` component: ${route.pageCode},` : ''
                             if (!firstChildRouteName) {
@@ -347,7 +347,7 @@ const projectCode = {
                         },\n`
                     }
                 })
-                if (routerStr.endsWith(',\n')) {
+                if (routerStr?.endsWith(',\n')) {
                     routerStr = routerStr.substr(0, routerStr.length - 2)
                 }
 
@@ -361,9 +361,9 @@ const projectCode = {
                 const defaultRoute = defaultHomeRoute || availableRoutList[0]
                 if (defaultRoute) {
                     const { id, layoutPath, path, pageCode, redirectRoute } = defaultRoute
-                    let fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                    let fullPath = `${layoutPath}${layoutPath?.endsWith('/') ? '' : '/'}${path}`
                     if (redirectRoute) {
-                        fullPath = `${redirectRoute.layoutPath}${redirectRoute.layoutPath.endsWith('/') ? '' : '/'}${redirectRoute.path}`
+                        fullPath = `${redirectRoute.layoutPath}${redirectRoute.layoutPath?.endsWith('/') ? '' : '/'}${redirectRoute.path}`
                     }
                     // 跳转路由可能没有pageCode，使用跳转路径作为name，同时跳转路径可能会重复加上路由id防止
                     const redirectRouteName = pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${id}`
