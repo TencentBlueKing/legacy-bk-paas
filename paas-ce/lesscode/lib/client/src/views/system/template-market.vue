@@ -101,7 +101,13 @@
                                 </div>
                                 <div class="item-ft">
                                     <div class="col">
-                                        <h3 class="name" :title="page.templateName">{{page.templateName}}</h3>
+                                        <div class="page-name">
+                                            <span class="page-type">
+                                                <i v-if="page.templateType === 'MOBILE'" class="bk-drag-icon bk-drag-mobilephone"> </i>
+                                                <i v-else class="bk-drag-icon bk-drag-pc"> </i>
+                                            </span>
+                                            <div class="name" :title="page.templateName">{{page.templateName}}</div>
+                                        </div>
                                         <div class="stat">{{page.createUser ? `由 ${page.createUser} 上传` : ''}}</div>
                                     </div>
                                 </div>
@@ -228,7 +234,8 @@
     import PagePreviewThumb from '@/components/project/page-preview-thumb.vue'
     import { PROJECT_TEMPLATE_TYPE, PAGE_TEMPLATE_TYPE } from '@/common/constant'
     import { mapActions } from 'vuex'
-    import { getVarList, getFuncList } from '@/common/process-targetdata'
+    import { parseFuncAndVar } from '@/common/parse-function-var'
+    import LC from '@/element-materials/core'
 
     const PROJECT_TYPE_LIST = [{ id: '', name: '全部' }].concat(PROJECT_TEMPLATE_TYPE)
     const PAGE_TYPE_LIST = [{ id: '', name: '全部' }].concat(PAGE_TEMPLATE_TYPE)
@@ -511,14 +518,12 @@
                         }, false),
                         this.getAllGroupFuncs({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId }, false)
                     ])
-                    const targetData = []
-                    targetData.push(JSON.parse(fromTemplate.content || {}))
-                    // 解析出模板targetData绑定的变量
-                    const valList = getVarList(targetData, variableList)
-                    // 解析出模板targetData绑定的函数
-                    const funcList = getFuncList(targetData, funcGroups)
+                    
+                    const templateNode = LC.parseTemplate(JSON.parse(fromTemplate.content || {}))
+                    // 解析出模板targetData绑定的变量和函数
+                    const { varList: valList = [], funcList = [] } = parseFuncAndVar(templateNode, variableList, funcGroups)
                     Object.assign(data, { valList, funcList })
-                    console.log(data, 'submit data')
+                    
                     const res = await this.$store.dispatch('pageTemplate/apply', data)
                     if (res) {
                         this.$bkMessage({
@@ -589,8 +594,7 @@
                 targetData.push(JSON.parse(template.content))
                 this.$store.dispatch('vueCode/getPageCode', {
                     targetData,
-                    projectId: template.belongProjectId,
-                    from: 'download_page'
+                    projectId: template.belongProjectId
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
                     const blob = new Blob([res])
@@ -783,6 +787,34 @@
                 font-weight: 700;
                 color: #63656E;
                 @mixin ellipsis 240px, block;
+            }
+            .page-name {
+                display: flex;
+                align-items: center;
+                margin: -2px 0 0 0;
+
+                .name {
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #63656E;
+                    width: 215px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    margin-left: 7px;
+                }
+
+                .page-type {
+                    font-size: 16px;
+                    line-height: 18px;
+                    height: 20px;
+                    width: 20px;
+                    text-align: center;
+                    margin-left: -2px;
+                    color: #979ba5;
+                    border-radius: 2px;
+                    background: #f0f1f5;
+                }
             }
             .stat {
                 font-size: 12px;

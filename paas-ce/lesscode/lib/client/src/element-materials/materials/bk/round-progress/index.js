@@ -16,19 +16,21 @@ export default {
     icon: 'bk-drag-roundprogress',
     group: '数据',
     order: 1,
-    styles: ['margin', 'display'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/round-progress',
+    styles: [
+        'position',
+        {
+            name: 'size',
+            include: ['display']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },
-    directives: [
-        {
-            type: 'v-bind',
-            prop: 'percent',
-            propTypes: ['number'],
-            val: '',
-            valType: 'variable'
-        }
-    ],
+    directives: [],
     props: {
         percent: {
             type: 'float',
@@ -69,10 +71,6 @@ export default {
                 activeColor: '#2dcb56'
             },
             tips: '设置进度圆环的颜色 bgColor、宽度 strokeWidth、背景色 bgColor'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
         }
     }
 }

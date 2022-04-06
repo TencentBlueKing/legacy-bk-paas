@@ -16,35 +16,55 @@ export default {
     icon: 'bk-drag-cascade-jilianxuankuang',
     group: '表单',
     order: 1,
-    styles: ['size', 'margin', 'display'],
-    events: [{
-        name: 'expand-change', tips: '当展开节点发生变化时调用该事件函数，事件回调参数 (valueList: Array)'
-    }, {
-        name: 'change', tips: '当选中节点变时调用该事件函数，事件回调参数 (value: Array)'
-    }, {
-        name: 'blur', tips: '当失去焦点时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'focus', tips: '当获得焦点时调用该事件函数，事件回调参数 (event: Event)'
-    }, {
-        name: 'visible-change', tips: '下拉框出现/隐藏时调用该事件函数，事件回调参数 (value: Boolean)'
-    }, {
-        name: 'remove-tag', tips: '在多选模式下，移除Tag时调用该事件函数，事件回调参数 (value: Array)'
-    }],
+    document: 'https://element.eleme.cn/#/zh-CN/component/cascader',
+    events: [
+        {
+            name: 'expand-change',
+            tips: '当展开节点发生变化时调用该事件函数，事件回调参数 (valueList: Array)'
+        },
+        {
+            name: 'change',
+            tips: '当选中节点变时调用该事件函数，事件回调参数 (value: Array)'
+        },
+        {
+            name: 'blur',
+            tips: '当失去焦点时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'focus',
+            tips: '当获得焦点时调用该事件函数，事件回调参数 (event: Event)'
+        },
+        {
+            name: 'visible-change',
+            tips: '下拉框出现/隐藏时调用该事件函数，事件回调参数 (value: Boolean)'
+        },
+        {
+            name: 'remove-tag',
+            tips: '在多选模式下，移除Tag时调用该事件函数，事件回调参数 (value: Array)'
+        }
+    ],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
-        },
-        {
-            type: 'v-bind',
-            prop: 'options',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'options',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         value: {

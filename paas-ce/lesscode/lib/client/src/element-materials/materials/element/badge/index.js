@@ -16,7 +16,14 @@ export default {
     icon: 'bk-drag-badge',
     group: '数据',
     order: 1,
-    styles: ['size', 'margin', 'display', 'font', 'backgroundColor'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/badge',
+    styles: [
+        'position',
+        'size',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block'
     },

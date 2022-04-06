@@ -40,8 +40,8 @@ const VersionManage = () => import(/* webpackChunkName: 'version' */'@/views/pro
 
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
-const Preview = () => import(/* webpackChunkName: 'preview' */'@/views/preview')
 const PreviewTemplate = () => import(/* webpackChunkName: 'previewTemplate' */'@/views/preview/preview-template')
+const PreviewMobile = () => import(/* webpackChunkName: 'previewMobile' */'@/views/preview/preview-mobile')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
 
 const HealthPage = () => import(/* webpackChunkName: 'none' */'@/views/system/health')
@@ -59,6 +59,8 @@ const Method = () => import(/* webpackChunkName: 'method' */'@/views/help/docs/m
 const Variable = () => import(/* webpackChunkName: 'variable' */'@/views/help/docs/variable.md')
 const Directive = () => import(/* webpackChunkName: 'directive' */'@/views/help/docs/directive.md')
 const FreeLayoutDoc = () => import(/* webpackChunkName: 'grid' */'@/views/help/docs/free-layout.md')
+const TemplateProject = () => import(/* webpackChunkName: 'template-project' */'@/views/help/docs/template-project.md')
+const TemplatePage = () => import(/* webpackChunkName: 'template-page' */'@/views/help/docs/template-page.md')
 const Interactive = () => import(/* webpackChunkName: 'interactive' */'@/views/help/docs/interactive.md')
 
 // 数据源管理
@@ -77,6 +79,9 @@ const OperationStatsProject = () => import(/* webpackChunkName: 'operation-stats
 const OperationStatsFunc = () => import(/* webpackChunkName: 'operation-stats-func' */'@/views/system/operation/stats/func/index.vue')
 const OperationStatsComp = () => import(/* webpackChunkName: 'operation-stats-comp' */'@/views/system/operation/stats/comp/index.vue')
 
+// 平台管理
+const PlatformManageEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/index.vue')
+const ProjectMember = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/project-member/index.vue')
 const routes = [
     {
         path: '/help',
@@ -94,6 +99,8 @@ const routes = [
             { path: 'method', name: 'method', component: Method },
             { path: 'variable', name: 'variable', component: Variable },
             { path: 'directive', name: 'directive', component: Directive },
+            { path: 'template-project', name: 'template-project', component: TemplateProject },
+            { path: 'template-page', name: 'template-page', component: TemplatePage },
             { path: 'free-layout', name: 'freeLayout', component: FreeLayoutDoc },
             { path: 'interactive', name: 'interactive', component: Interactive }
         ]
@@ -178,6 +185,22 @@ const routes = [
                         component: OperationStatsComp,
                         meta: {
                             title: '自定义组件数据'
+                        }
+                    }
+                ]
+            },
+            {
+                name: 'pm-entry',
+                path: '/pm',
+                component: PlatformManageEntry,
+                redirect: { name: 'pm-project-member' },
+                children: [
+                    {
+                        path: 'platform/project-member',
+                        name: 'pm-project-member',
+                        component: ProjectMember,
+                        meta: {
+                            title: '项目成员'
                         }
                     }
                 ]
@@ -338,16 +361,19 @@ const routes = [
         ]
     },
     {
-        path: '/preview/project/:projectId/*',
-        name: 'preview',
-        component: Preview
-    },
-    {
         path: '/preview-template/project/:projectId/:templateId',
         name: 'previewTemplate',
         component: PreviewTemplate,
         meta: {
             title: '模板预览'
+        }
+    },
+    {
+        path: '/preview-mobile/project/:projectId',
+        name: 'previewMobile',
+        component: PreviewMobile,
+        meta: {
+            title: '移动端预览'
         }
     },
     {
@@ -453,5 +479,9 @@ router.afterEach(async (to, from) => {
         store.commit('setMainContentLoading', false)
     }
 })
+
+export const useRouter = () => router
+
+export const useRoute = () => router.currentRoute
 
 export default router

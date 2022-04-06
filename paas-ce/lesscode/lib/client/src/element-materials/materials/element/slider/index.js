@@ -16,14 +16,12 @@ export default {
     icon: 'bk-drag-slider',
     group: '表单',
     order: 1,
-    styles: ['margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/slider',
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['number'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

@@ -10,21 +10,11 @@
  */
 import { paramCase, camelCase, camelCaseTransformMerge } from 'change-case'
 
-import { uuid, replaceFuncKeyword } from '../util'
-import VueCodeModel from './vue-code'
-import { RequestContext } from '../middleware/request-context'
+import { uuid, unitFilter } from '../../shared/util.js'
+import { replaceFuncKeyword } from '../../shared/function/helper'
 import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
 import safeStringify from '../../client/src/common/json-safe-stringify'
-import { VARIABLE_TYPE } from '../../shared/variable/constant'
-
-const httpConf = require('../conf/http')
-// npm.js配置文件不存在时赋值空对象
-let npmConf
-try {
-    npmConf = require('../conf/npm')
-} catch (_) {
-    npmConf = {}
-}
+import { VARIABLE_TYPE, VARIABLE_EFFECTIVE_RANGE } from '../../shared/variable/constant'
 
 function transformToString (val) {
     const type = typeof val
@@ -51,7 +41,7 @@ class PageCode {
      * 3. projectCode: 生成整个项目代码
      */
     pageType = ''
-    allCustomMap = {}
+    platform = '' // ['PC', 'MOBILE']
     funcGroups = []
     code = ''
     scriptStr = ''
@@ -59,38 +49,13 @@ class PageCode {
     dataStr = ''
     remoteDataStr = ''
     lifeCircleStr = ''
-    existFunc = []
-    // slotTagMap = {
-    //     'bk-table': 'bk-table-column',
-    //     'bk-select': 'bk-option',
-    //     'bk-checkbox-group': 'bk-checkbox',
-    //     'bk-radio-group': 'bk-radio',
-    //     'bk-tab': 'bk-tab-panel',
-    //     'bk-breadcrumb': 'bk-breadcrumb-item',
-    //     'search-table': 'bk-table-column',
-    //     'folding-table': 'bk-table-column',
-    //     'el-select': 'el-option',
-    //     'el-radio-group': 'el-radio',
-    //     'el-checkbox-group': 'el-checkbox',
-    //     'el-table': 'el-table-column',
-    //     'el-tabs': 'el-tab-pane',
-    //     'el-breadcrumb': 'el-breadcrumb-item',
-    //     'el-steps': 'el-step',
-    //     'el-timeline': 'el-timeline-item',
-    //     'el-carousel': 'el-carousel-item'
-    // }
-    // slotContentArray = [
-    //     'bk-checkbox',
-    //     'bk-radio',
-    //     'bk-breadcrumb-item',
-    //     'el-breadcrumb-item',
-    //     'el-timeline-item'
-    // ]
     chartTypeArr = [] // echarts 相关，要引入echarts依赖
     useBkCharts = false // 是否使用bkcharts标志位
     usingCustomArr = []
-    usingFuncCodes = []
-    usingVariables = []
+    usingFuncCodes = [] // 使用到的函数code
+    unhandledFunc = [] // 未处理的函数列表
+    usingVariables = [] // 使用到的变量列表
+    unhandledVariables = [] // 未处理的变量列表
     projectVariables = []
     pageDataVariables = []
     pageComputedVariables = []
@@ -107,10 +72,29 @@ class PageCode {
     layoutType = ''
     isUseElementComponentLib = false
 
-    constructor (targetData = [], pageType = 'vueCode', allCustomMap = {}, funcGroups = [], lifeCycle = '', projectId, pageId, layoutContent, isGenerateNav = false, isEmpty = false, layoutType, variableList, styleSetting = '') {
+    constructor (
+        {
+            targetData = [],
+            pageType = 'vueCode',
+            platform = 'PC',
+            funcGroups = [],
+            lifeCycle = '',
+            projectId,
+            pageId,
+            layoutContent,
+            isGenerateNav = false,
+            isEmpty = false,
+            layoutType,
+            variableList,
+            styleSetting = '',
+            user = {},
+            npmConf = {},
+            origin = ''
+        }
+    ) {
         this.targetData = targetData || []
         this.pageType = pageType
-        this.allCustomMap = allCustomMap || {}
+        this.platform = platform
         this.funcGroups = funcGroups || []
         this.uniqueKey = uuid()
         this.lifeCycle = lifeCycle || {}
@@ -123,29 +107,84 @@ class PageCode {
         this.layoutType = layoutType
         this.variableList = variableList || []
         this.styleSetting = styleSetting || {}
+        this.user = user
+        this.npmConf = npmConf
+        this.origin = origin
     }
 
     getCode () {
         return this.generateTemplate() + this.generateScript() + this.generateCss()
     }
 
-    handleVariable () {
-        this.projectVariables = this.usingVariables.filter((variable) => (!['vueCode', 'previewSingle'].includes(this.pageType) && variable.effectiveRange === 0))
-        const pageVariables = this.usingVariables.filter((variable) => (['vueCode', 'previewSingle'].includes(this.pageType) || variable.effectiveRange === 1))
-        this.pageDataVariables = pageVariables.filter((variable) => (variable.valueType !== VARIABLE_TYPE.COMPUTED.VAL))
-        this.pageComputedVariables = pageVariables.filter((variable) => (variable.valueType === VARIABLE_TYPE.COMPUTED.VAL))
-        this.pageDataVariables.forEach((variable) => {
-            const { defaultValue = {}, variableCode, defaultValueType } = variable
-            if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(variable.valueType)) {
-                ['all', 'prod', 'stag'].forEach((key) => {
-                    const val = defaultValue[key]
-                    if (typeof val === 'string') {
-                        defaultValue[key] = JSON.parse(val)
-                    }
-                })
+    // 解析完json以后，处理使用到的函数和变量，方便后续生成源码使用
+    handleUsedVarAndFunc () {
+        while (this.unhandledFunc.length > 0 || this.unhandledVariables.length > 0) {
+            // 处理函数
+            for (let index = 0, l = this.unhandledFunc.length; index < l; index++) {
+                const funcCode = this.unhandledFunc.shift()
+                const func = this.getComplateFuncByCode(funcCode) || {}
+                if (func.code) {
+                    this.methodStrList.push({
+                        id: func.id,
+                        funcStr: func.code
+                    })
+                }
             }
-            this.dataTemplate(variableCode, `getInitVariableValue(${JSON.stringify(defaultValue)}, ${defaultValueType})`)
-        })
+
+            // 处理变量
+            for (let index = 0, l = this.unhandledVariables.length; index < l; index++) {
+                const variable = this.unhandledVariables.shift()
+
+                // 项目级别变量，添加到store中
+                if (
+                    !['vueCode', 'previewSingle'].includes(this.pageType)
+                    && variable.effectiveRange === VARIABLE_EFFECTIVE_RANGE.PROJECT
+                ) {
+                    this.projectVariables.push(variable)
+                }
+
+                // 页面级别变量
+                if (
+                    ['vueCode', 'previewSingle'].includes(this.pageType)
+                    || variable.effectiveRange === VARIABLE_EFFECTIVE_RANGE.PAGE
+                ) {
+                    // 处理非计算变量
+                    if (variable.valueType !== VARIABLE_TYPE.COMPUTED.VAL) {
+                        const { defaultValue = {}, variableCode, defaultValueType } = variable
+                        if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(variable.valueType)) {
+                            ['all', 'prod', 'stag'].forEach((key) => {
+                                const val = defaultValue[key]
+                                if (typeof val === 'string') {
+                                    defaultValue[key] = JSON.parse(val)
+                                }
+                            })
+                        }
+                        this.dataTemplate(variableCode, `getInitVariableValue(${JSON.stringify(defaultValue)}, ${defaultValueType})`)
+                        this.pageDataVariables.push(variable)
+                    }
+  
+                    // 处理计算变量
+                    if (variable.valueType === VARIABLE_TYPE.COMPUTED.VAL) {
+                        variable.defaultValue.all = this.processFuncBody(variable.defaultValue.all)
+                        this.pageComputedVariables.push(variable)
+                    }
+                }
+            }
+        }
+    }
+
+    addUsedFunc (funcCode) {
+        if (this.usingFuncCodes.includes(funcCode)) return
+
+        this.unhandledFunc.push(funcCode)
+        this.usingFuncCodes.push(funcCode)
+    }
+
+    addUsedVariable (variable) {
+        if (this.usingVariables.find(x => x.variableCode === variable.variableCode)) return
+
+        this.unhandledVariables.push(variable)
+        this.usingVariables.push(variable)
     }
 
     getValueType (val) {
@@ -188,9 +227,8 @@ class PageCode {
         return [res || {}, params]
     }
 
-    generateComponment (item, vueDirective, propDirective) {
+    generateComponment (item, vueDirective, propDirective, inFreeLayout = false) {
         item = Object.assign({}, item, { componentId: camelCase(item.componentId, { transform: camelCaseTransformMerge }) })
-        const inFreeLayout = item.renderProps && item.renderProps.inFreeLayout && item.renderProps.inFreeLayout.val
         let css = ''
         if (inFreeLayout) {
             css += 'position: absolute;'
@@ -201,13 +239,14 @@ class PageCode {
                 css += ` left: ${item.renderStyles.left};`
             }
         }
-        if (item.name.startsWith('chart-')) {
+        if (item.name && item.name.startsWith('chart-')) {
             this.generateCharts(item)
-            const width = item.renderProps.width && item.renderProps.width.val
+            const width = item.renderProps.width && item.renderProps.width.code
             const widthVal = width ? (typeof width === 'number' ? `${width}px` : width) : '100%'
             const widthStr = `width:${widthVal};`
-            const heightStr = `height:${item.renderProps.height.val || 0}px;`
-            const displayStr = item.renderStyles.display ? `display: ${item.renderStyles.display};vertical-align: middle;` : ''
+            const height = item.renderProps.height && item.renderProps.height.code
+            const heightStr = `height:${height || 200}px;`
+            const displayStr = item.renderStyles.display ? `display: ${item.renderStyles.display};vertical-align: ${item.renderStyles.verticalAlign || 'middle'};` : ''
 
             let componentCode = ''
             if (inFreeLayout) {
@@ -231,23 +270,23 @@ class PageCode {
             componentCode = `
                     <div ${itemClass} style="${css}">
                         <bk-form ${vueDirective} ${propDirective} ${itemProps}>
-                            ${this.generateCode(item.renderSlots.default.val)}
+                            ${this.generateCode(item.renderSlots.default)}
                         </bk-form>
                     </div>
                  `
             return componentCode
         } else {
             // 使用了 element 组件库
-            if (item.name.startsWith('el-')) {
+            if (item.type.startsWith('el-')) {
                 this.isUseElementComponentLib = true
             }
             // 使用了bkcharts
-            if (item.name.startsWith('bk-charts')) {
+            if (item.type.startsWith('bk-charts')) {
                 this.useBkCharts = true
             }
             // item.componentId = item.componentId.replace('_', '')
             // 记录是否为自定义组件
-            if (this.allCustomMap && this.allCustomMap[item.type] && this.usingCustomArr.indexOf(item.type) === -1) {
+            if (item.custom && this.usingCustomArr.indexOf(item.type) === -1) {
                 const prefix = process.env.BKPAAS_ENVIRONMENT === 'prod' ? '' : 'test-'
                 const type = prefix + item.type
                 if (this.usingCustomArr.indexOf(type) < 0) {
@@ -258,8 +297,10 @@ class PageCode {
             // icon 组件，样式中设置字体大小不生效，是因为 bk-icon 组件通过 size 属性来设置 font-size，默认值为 inherit
             if (item.type === 'bk-icon') {
                 item.renderProps['size'] = {
-                    type: 'string',
-                    val: item.renderStyles.fontSize
+                    format: 'value',
+                    code: item.renderStyles.fontSize,
+                    valueType: 'string',
+                    renderValue: item.renderStyles.fontSize
                 }
             }
 
@@ -274,7 +315,7 @@ class PageCode {
                     // 自由布局中的表格，如果不设置宽度，那么宽度会一直增大，表格组件本身的缺陷
                     if (item.type === 'bk-table' || item.type === 'el-table') {
                         let width = 0
-                        const colConf = item.renderSlots.default.val || []
+                        const colConf = item.renderSlots.default.code || []
                         colConf.forEach(col => {
                             if (col.width === null || col.width === undefined || col.width === '') {
                                 width = parseFloat(width) + 80
@@ -328,10 +369,12 @@ class PageCode {
                             <!-- eslint-disable -->
                             <!-- prettier-ignore -->
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
-                                >${slotStr}
-                            </${item.type}>
+                                >${slotStr}</${item.type}>
                             <!-- eslint-enable -->`
                     } else {
+                        if (item.type === 'bk-checkbox-group') {
+                            console.log(itemProps, 1, vueDirective, 2, propDirective)
+                        }
                         componentCode += `
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
                                 >${slotStr}
@@ -401,11 +444,6 @@ class PageCode {
             /* 设置 bk-exception 组件宽度为 100% */
             .bk-layout-col-${this.uniqueKey} .bk-exception-img {
                 width: 100%;
-            }
-            /* 每个组件之间默认外边距 5px */
-            .bk-layout-component-${this.uniqueKey} {
-                margin: 5px;
-                vertical-align: middle;
             }
             .bk-form-item {
                 margin: 10px;
@@ -563,6 +601,55 @@ class PageCode {
                 }
                
             `
+
+            // 设置了导航主题色 则添加以下样式
+            if (this.layoutContent.theme && this.layoutContent.theme !== '#182132') {
+                head += `
+                    .bk-navigation .theme-style {
+                        color:#FFFFFF;
+                        opacity:0.86;
+                        font-weight:normal;
+                    }
+                    .title-desc.white-theme-title {
+                        color:#313238;
+                        font-weight:normal;
+                    }
+                    .navigation-header .header-nav-item.theme-item {
+                        color:#FFFFFF !important;
+                        opacity:0.68;
+                    }
+                    .navigation-header .header-nav-item.theme-item:hover {
+                        opacity:1;
+                    }
+                    .header-user.theme-style:hover {
+                        color:#FFFFFF;
+                        opacity:1;
+                    }
+                    .white-navigation .theme-style {
+                        color:#313238;
+                    }
+                    .white-navigation .header-nav-item.theme-item {
+                        color:#63656E !important;
+                        opacity:1;
+                    }
+                    .white-navigation .header-nav-item.item-active,
+                    .white-navigation .header-nav-item.theme-item:hover {
+                        color:#000000 !important;
+                    }
+                    .white-navigation .header-user {
+                        color:#63656E;
+                    }
+                    .white-navigation .header-user:hover {
+                        color:#000000;
+                    }
+                    .white-theme-menu .navigation-sbmenu-title-arrow {
+                        color:#c4c6cc !important;
+                    }
+                    .white-theme-menu-item:hover .navigation-menu-item-name {
+                        color:#313238 !important;
+                    }
+                `
+            }
         }
         if (!this.isEmpty && this.layoutType !== 'empty') {
             head += `.bk-navigation-wrapper .navigation-container .container-content{
@@ -598,7 +685,7 @@ class PageCode {
 
         this.dataTemplate('curNav', '{}')
         if (['preview', 'previewSingle'].includes(this.pageType)) {
-            const user = JSON.stringify(RequestContext.getCurrentUser())
+            const user = JSON.stringify(this.user)
             this.dataTemplate('user', user)
         }
 
@@ -622,22 +709,25 @@ class PageCode {
     }
 
     getTopBottomLayout (navContent, componentProps) {
-        const topMenuKey = `topMenu${this.uniqueKey}`
+        const topMenuKey = 'topMenuLesscode'
         const { layoutContent } = this
+        const { theme = '#182132' } = layoutContent
+        const isDefaultTheme = theme === '#182132' // 默认主题
+        const isWhiteTheme = theme === '#FFFFFF' // 白色主题
         this.dataTemplate(topMenuKey, JSON.stringify(layoutContent.topMenuList))
 
         return `
-            <bk-navigation ${componentProps} navigation-type="top-bottom" :need-menu="false" class="bk-layout-custom-component-wrapper">
+            <bk-navigation head-theme-color=${theme} ${componentProps} navigation-type="top-bottom" :need-menu="false" class="bk-layout-custom-component-wrapper" :class="{ 'white-navigation': ${isWhiteTheme} }">
                 <template slot="side-header">
                     <span class="title-icon">
                         <img src="${layoutContent.logo}" style="width: 28px; height: 28px;">
                     </span>
-                    <span class="title-desc">${layoutContent.siteName}</span>
+                    <span class="title-desc" :class="{ 'theme-style': ${!isDefaultTheme} }">${layoutContent.siteName}</span>
                 </template>
                 <div class="navigation-header" slot="header">
                     <ol class="header-nav">
                         <bk-popover v-for="item in  ${topMenuKey}" :disabled="!item.children || item.children.length <= 0" :key="item.id" theme="light navigation-message" :arrow="false" offset="0, -5" placement="bottom" :tippy-options="{ flipBehavior: ['bottom'], appendTo: 'parent' }">
-                            <li class="header-nav-item" :class="{ 'item-active': item.id === curNav.id }" @click="goToPage(item)">
+                            <li class="header-nav-item" :class="{ 'item-active': item.id === curNav.id, 'theme-item': ${!isDefaultTheme} }" @click="goToPage(item)">
                                 {{item.name}}
                             </li>
                             <template slot="content">
@@ -650,7 +740,7 @@ class PageCode {
                         </bk-popover>
                     </ol>
                     <bk-popover class="nav-head-right" theme="light navigation-message" :arrow="false" offset="-10, 0" placement="bottom-start" :tippy-options="{ 'hideOnClick': false, appendTo: 'parent' }">
-                        <div class="header-user">
+                        <div class="header-user" :class="{ 'theme-style': ${!isDefaultTheme} }">
                             <span>{{ user.username }}</span>
                             <i class="bk-icon icon-down-shape"></i>
                         </div>
@@ -665,19 +755,43 @@ class PageCode {
     }
 
     getLeftRightLayout (navContent, componentProps) {
-        const leftMenuKey = `leftMenu${this.uniqueKey}`
+        const leftMenuKey = 'leftMenuLesscode'
         const { layoutContent } = this
+        const { theme = '#182132' } = layoutContent
+        const isDefaultTheme = theme === '#182132' // 默认主题色
+        const isBlackTheme = theme === '#1A1A1A' // 黑色主题
+        const isWhiteTheme = theme === '#FFFFFF' // 白色主题
+        // 左侧选中项背景色 默认、黑色、白色、其他主题 共四种效果
+        const targetTheme = isDefaultTheme ? '#3c96ff' : isBlackTheme ? '#ffffff33' : isWhiteTheme ? '#E1ECFF' : theme
+
+        let themeColorProps = `item-active-bg-color="${isWhiteTheme ? '#e1ecff' : targetTheme}"`
+        if (isWhiteTheme) { // 当设置了白色主题 需要通过以下属性设置
+            themeColorProps += `
+                \n item-default-bg-color='white'
+                \n item-hover-bg-color='#f0f1f5'
+                \n sub-menu-open-bg-color='#f5f7fa'
+                \n item-hover-color='#63656e'
+                \n item-active-color='#699df4'
+                \n item-default-color='#63656e'
+                \n item-default-icon-color='#63656ead'
+                \n item-child-icon-default-color='#63656ead'
+                \n item-child-icon-hover-color='#313238'
+                \n item-active-icon-color='#699df4'
+                \n item-hover-icon-color='#63656e'
+                \n item-child-icon-active-color='#699df4'
+            `
+        }
 
         this.dataTemplate(leftMenuKey, JSON.stringify(layoutContent.menuList))
         this.dataTemplate('toggleActive', 'false')
 
         return `
-            <bk-navigation ${componentProps} navigation-type="left-right" need-menu class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v">
+            <bk-navigation ${componentProps} theme-color="${isWhiteTheme ? '#ffffff' : '#182132'}" navigation-type="left-right" need-menu class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v">
                 <template slot="side-header">
                     <span class="title-icon">
                         <img src="${layoutContent.logo}" style="width: 28px; height: 28px;">
                     </span>
-                    <span class="title-desc">${layoutContent.siteName}</span>
+                    <span class="title-desc" :class="{ 'white-theme-title': ${isWhiteTheme} }">${layoutContent.siteName}</span>
                 </template>
                 <div class="navigation-header" slot="header">
                     <div class="header-title">
@@ -693,7 +807,12 @@ class PageCode {
                         </template>
                     </bk-popover>
                 </div>
-                <bk-navigation-menu slot="menu" :default-active="curNav.id" :toggle-active="toggleActive">
+                <bk-navigation-menu
+                    slot="menu"
+                    :default-active="curNav.id"
+                    :toggle-active="toggleActive"
+                    :class="{ 'white-theme-menu': ${isWhiteTheme}}"
+                    ${themeColorProps}>
                     <bk-navigation-menu-item
                         @click="goToPage(child)"
                         :key="child.id"
@@ -707,7 +826,8 @@ class PageCode {
                                 @click="goToPage(set)"
                                 :key="set.id"
                                 v-for="set in child.children"
-                                :id="set.id">
+                                :id="set.id"
+                                :class="{ 'white-theme-menu-item': ${isWhiteTheme} && curNav.id !== set.id}">
                                 <span>{{set.name}}</span>
                             </bk-navigation-menu-item>
                         </div>
@@ -719,30 +839,54 @@ class PageCode {
     }
 
     getComplexLayout (navContent, componentProps) {
-        const complexMenuKey = `complexMenu${this.uniqueKey}`
-        const curLeftMenuKey = `leftMenu${this.uniqueKey}`
+        const complexMenuKey = 'complexMenuLesscode'
+        const curLeftMenuKey = 'leftMenuLesscode'
         const { layoutContent } = this
+        const { theme = '#182132' } = layoutContent
+        const isDefaultTheme = theme === '#182132' // 默认主题色
+        const isBlackTheme = theme === '#1A1A1A' // 黑色主题
+        const isWhiteTheme = theme === '#FFFFFF' // 白色主题
+        const themeColor = isWhiteTheme ? 'ffffff' : '#2C354D' // 左侧导航默认背景色
+        const headThemeColor = isDefaultTheme ? '#182132' : theme
+        // 左侧选中项背景色 默认、黑色、白色、其他主题 共四种效果
+        const targetTheme = isDefaultTheme ? '#0083FF' : isBlackTheme ? '#ffffff33' : isWhiteTheme ? '#E1ECFF' : theme
+        // 左侧菜单白色与其他主题区分属性
+        const themeColorProps = `
+            item-active-bg-color="${targetTheme}"
+            item-hover-bg-color="${isWhiteTheme ? '#f0f1f5' : '#3a4561'}"
+            item-hover-color="${isWhiteTheme ? '#63656e' : '#FFFFFF'}"
+            item-active-color="${isWhiteTheme ? '#699df4' : '#FFFFFF'}"
+            item-default-bg-color="${isWhiteTheme ? '#ffffff' : '#2C354D'}"
+            item-default-color="${isWhiteTheme ? '#63656e' : '#acb5c6'}"
+            item-default-icon-color="${isWhiteTheme ? '#63656ead' : '#acb5c6'}"
+            item-child-icon-default-color="${isWhiteTheme ? '#63656ead' : '#acb5c6'}"
+            item-child-icon-hover-color="${isWhiteTheme ? '#313238' : '#acb5c6'}"
+            item-active-icon-color="${isWhiteTheme ? '#699df4' : '#FFFFFF'}"
+            item-hover-icon-color="${isWhiteTheme ? '#63656e' : '#FFFFFF'}"
+            item-child-icon-active-color="${isWhiteTheme ? '#699df4' : '#FFFFFF'}"
+            sub-menu-open-bg-color="${isWhiteTheme ? '#f5f7fa' : '#272F45'}"
+        `
 
         this.dataTemplate('toggleActive', 'false')
         this.dataTemplate(complexMenuKey, JSON.stringify(layoutContent.topMenuList))
         this.dataTemplate(curLeftMenuKey, '[]')
 
         return `
-            <bk-navigation ${componentProps} navigation-type="top-bottom" :need-menu="${curLeftMenuKey}.length > 0" class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v">
+            <bk-navigation ${componentProps} head-theme-color=${headThemeColor} navigation-type="top-bottom" :need-menu="${curLeftMenuKey}.length > 0" class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v" theme-color="${themeColor}" :class="{ 'white-navigation': ${isWhiteTheme} }">
                 <template slot="side-header">
                     <span class="title-icon">
                         <img src="${layoutContent.logo}" style="width: 28px; height: 28px;">
                     </span>
-                    <span class="title-desc">${layoutContent.siteName}</span>
+                    <span class="title-desc" :class="{ 'theme-style': ${!isDefaultTheme} }">${layoutContent.siteName}</span>
                 </template>
                 <div class="navigation-header" slot="header">
                     <ul class="header-nav">
-                        <li v-for="(item) in ${complexMenuKey}" :class="{ 'item-active': item.id === curNav.id }" :key="item.id" theme="light navigation-message" class="header-nav-item" @click="goToPage(item)">
+                        <li v-for="(item) in ${complexMenuKey}" :class="{ 'item-active': item.id === curNav.id, 'theme-item': ${!isDefaultTheme} }" :key="item.id" theme="light navigation-message" class="header-nav-item" @click="goToPage(item)">
                             {{item.name}}
                         </li>
                     </ul>
                     <bk-popover class="nav-head-right" theme="light navigation-message" :arrow="false" offset="-10, 0" placement="bottom-start" :tippy-options="{ 'hideOnClick': false, appendTo: 'parent' }">
-                        <div class="header-user">
+                        <div class="header-user" :class="{ 'theme-style': ${!isDefaultTheme} }">
                             <span>{{ user.username }}</span>
                             <i class="bk-icon icon-down-shape"></i>
                         </div>
@@ -751,7 +895,7 @@ class PageCode {
                         </template>
                     </bk-popover>
                 </div>
-                <bk-navigation-menu slot="menu" :default-active="curNav.id" :toggle-active="toggleActive">
+                <bk-navigation-menu slot="menu" :default-active="curNav.id" :toggle-active="toggleActive" ${themeColorProps} :class="{ 'white-theme-menu': ${isWhiteTheme}}">
                     <bk-navigation-menu-item
                         @click="goToPage(child)"
                         :key="child.id"
@@ -765,7 +909,8 @@ class PageCode {
                                 @click="goToPage(set)"
                                 :key="set.id"
                                 v-for="set in child.children"
-                                :id="set.id">
+                                :id="set.id"
+                                :class="{ 'white-theme-menu-item': ${isWhiteTheme} && curNav.id !== set.id}">
                                 <span>{{set.name}}</span>
                             </bk-navigation-menu-item>
                         </div>
@@ -781,9 +926,9 @@ class PageCode {
         const lifeCycleValues = Object.values(lifeCycle)
         const exisLifyCycle = lifeCycleValues.filter(x => x)
         const lifeCircleStr = this.getLifeCycle()
-        this.handleVariable()
-        const computedStr = this.getComputed()
+        this.handleUsedVarAndFunc()
         const methodsStr = this.getMethods()
+        const computedStr = this.getComputed()
 
         const importContent = this.getImportContent()
         let scriptContent = `${this.getComponents() ? `${this.getComponents()},` : ''}
@@ -836,7 +981,7 @@ class PageCode {
             })
             this.pageComputedVariables.forEach((variable) => {
                 computed += `${variable.variableCode} () {
-                    ${this.processFuncBody(variable.defaultValue.all)}
+                    ${variable.defaultValue.all}
                 },
                 `
             })
@@ -845,7 +990,7 @@ class PageCode {
         return computed
     }
 
-    generateCode (v) {
+    generateCode (v, inFreeLayout = false) {
         const len = v.length
         let code = ''
         for (let i = 0; i < len; i++) {
@@ -857,34 +1002,32 @@ class PageCode {
             if (templateDirective) code += `\n<template ${templateDirective}>`
             if (item.type === 'render-grid') {
                 /* eslint-disable no-unused-vars, indent */
-                const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
-                const gutterVal = item.renderProps.gutter ? item.renderProps.gutter.val : 0
-                const paddingStyleStr = `padding-right: ${gutterVal / 2}px;padding-left: ${gutterVal / 2}px;`
+                const { itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
                 code += `
                     ${itemClass ? `\n<div class="bk-layout-row-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-layout-row-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
-                        ${item.renderSlots && item.renderSlots.default && item.renderSlots.default.val && item.renderSlots.default.val.map(col => {
-                    return `<div class="bk-layout-col-${this.uniqueKey}" style="width: ${col.width || ''};${paddingStyleStr}">
-                                        ${col.children.length ? `${this.generateCode(col.children)}` : ''}
+                        ${item.renderSlots && item.renderSlots.default && item.renderSlots.default.map(col => {
+                            const { itemClass = '' } = this.getItemStyles(col.componentId, col.renderStyles, col.renderProps)
+                    return `<div class="bk-layout-col-${this.uniqueKey} ${col.componentId}">
+                                        ${col.renderSlots.default.length ? `${this.generateCode(col.renderSlots.default)}` : ''}
                                     </div>`
                 }).join('\n')}
                     </div>
                 `
             } else if (item.type === 'free-layout') {
-                const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
+                const { itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
                 code += `
                     ${itemClass ? `\n<div class="bk-free-layout-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-free-layout-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
-                        ${item.renderSlots && item.renderSlots.default && item.renderSlots.default.val && item.renderSlots.default.val.map(slotData => {
-                    return `<div class="bk-free-layout-item-inner-${this.uniqueKey}">
-                                        <div style="height: ${item.renderStyles.height || '500px'}">
-                                            ${slotData.children.length ? `${this.generateCode(slotData.children)}` : ''}
-                                        </div>
-                                    </div>`
-                }).join('\n')}
+                    <div class="bk-free-layout-item-inner-${this.uniqueKey}">
+                        ${this.generateCode(item.renderSlots.default || [], true)}
+ 
+ 
                     </div>
+                </div>
                 `
                 /* eslint-enable no-unused-vars, indent */
             } else {
-                code += this.generateComponment(item, vueDirective, propDirective)
+                if (item.type === 'widget-form-item') item.type = 'bk-form-item'
+                code += this.generateComponment(item, vueDirective, propDirective, inFreeLayout)
             }
             if (templateDirective) code += '\n</template>'
         }
@@ -893,7 +1036,7 @@ class PageCode {
 
     getItemProps (type, props, compId, directives, slots) {
         const hasProps = props && typeof props === 'object' && Object.keys(props).length > 0
-        const dirProps = (directives || []).filter((directive) => (directive.val !== '' && directive.prop !== ''))
+        const dirProps = (directives || []).filter((directive) => (directive.code !== undefined && directive.code !== ''))
         let itemProps = ''
         if (hasProps || slots) {
             itemProps = this.getPropsStr(type, props, compId, dirProps, slots)
@@ -904,24 +1047,32 @@ class PageCode {
     getPropsStr (type, props, compId, dirProps, slots) {
         let propsStr = ''
         const preCompId = camelCase(compId, { transform: camelCaseTransformMerge })
-        let elementComId = ''
+        // 需配置vmodel的组件
+        let modelComId = ''
         const componentType = type
+        if (type === 'bk-table') {
+            if (props.hasOwnProperty('show-pagination-info') && props.hasOwnProperty('showPaginationInfo')) {
+                delete props.showPaginationInfo
+            }
+        }
         for (const i in props) {
             if (dirProps.find((directive) => (directive.prop === i)) && !['remote', 'data-source', 'table-data-source'].includes(props[i].type)) continue
 
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
-                if (i === 'value') elementComId = compId
-                const { 'v-bind': vBind, 'v-model': vModel, val, type, modifiers = [] } = props[i]
+                if (i === 'value') modelComId = compId
+                
+                const { format, valueType: type, code: val, modifiers = [] } = props[i]
+ 
+                const propVar = format !== 'value' ? val : compId
+                const propName = format !== 'value' && modifiers && modifiers.length ? `${i}.${modifiers.join('.')}` : i
+                const curPropStr = `${val === undefined ? '' : ':'}${propName}="${propVar}" `
 
-                const propVar = vBind || vModel || compId
-                const hasVBind = ![undefined, ''].includes(vBind)
-                const hasVModel = ![undefined, ''].includes(vModel)
-                const propName = vBind && modifiers && modifiers.length ? `${i}.${modifiers.join('.')}` : i
-                let curPropStr = `${val === undefined ? '' : ':'}${propName}="${propVar}" `
-                if (hasVModel) curPropStr = `v-model=${propVar} `
-
-                if (type === 'remote') {
+                if (format !== 'value') {
+                    this.handleUsedVariable(format, val, compId)
+                    propsStr = curPropStr
+                    continue
+                } else if (type === 'remote') {
                     const curDir = dirProps.find((directive) => (directive.prop === i))
                     const key = (curDir || {}).val || propVar
                     this.remoteMethodsTemplate(key, props[i].payload || {})
@@ -930,20 +1081,16 @@ class PageCode {
                         propsStr += curPropStr
                     }
                     continue
-                }
-
-                if (['data-source', 'table-data-source'].includes(type)) {
+                } else if (['data-source', 'table-data-source'].includes(type)) {
                     const curDir = dirProps.find((directive) => (directive.prop === i))
-                    const key = (curDir || {}).val || propVar
+                    const key = (curDir || {}).code || propVar
                     this.dataSourceTemplate(key, props[i].payload.sourceData || {})
                     if (!curDir) {
                         this.dataTemplate(propVar, JSON.stringify([]))
                         propsStr += curPropStr
                     }
                     continue
-                }
-
-                if (type === 'array' || typeof val === 'object') {
+                } else if (type === 'array' || typeof val === 'object') {
                     if (componentType === 'widget-form' && i === 'rules') {
                         this.handleFormRules(propVar, val)
                     } else {
@@ -951,70 +1098,44 @@ class PageCode {
                     }
                     propsStr += curPropStr
                     continue
-                }
-
-                if (type === 'function') {
+                } else if (type === 'function') {
                     const [method] = this.getMethodByCode(props[i].payload || {})
                     if (method.funcName && method.funcCode) {
-                        // 这个属性 不用支持参数
-                        // let funcParamsStr = ''
-                        // if (params.length > 0) {
-                        //     funcParamsStr = `(${params.join(', ')}, ...arguments)`
-                        // }
-                        // propsStr += (`:${propName}="${method.funcName}${funcParamsStr}" `)
                         propsStr += (`:${propName}="${method.funcName}" `)
 
-                        this.usingFuncCodes.push(method.funcCode)
+                        this.addUsedFunc(method.funcCode)
                     }
                     continue
-                }
-
-                if (val !== undefined) {
-                    if (hasVBind || hasVModel) {
-                        if (typeof val === 'string') {
-                            this.dataTemplate(propVar, `'${val}'`)
-                        } else {
-                            const v = (typeof val === 'object' ? JSON.stringify(val).replace(/\"/g, '\'') : val)
-                            this.dataTemplate(propVar, v)
-                        }
-                        propsStr += curPropStr
-                    } else {
+                } else {
+                    if (val !== undefined) {
                         const v = (typeof val === 'object' ? JSON.stringify(val).replace(/\"/g, '\'') : val)
                         propsStr += `${typeof val === 'string' ? '' : ':'}${propName}="${v}" `
                     }
                 }
             }
-            // } else {
-            //     const hasVModel = dirProps.filter(item => item.type === 'v-model').length
-            //     if (type === 'bk-checkbox-group' && !hasVModel) {
-            //         const checkedValue = slots.default.val.filter(c => c.checked === true).map(c => c.value)
-            //         this.dataTemplate(compId, JSON.stringify(checkedValue))
-            //         propsStr += `v-model="${compId}"`
-            //     }
-            // }
         }
         const hasVModel = dirProps.filter(item => item.type === 'v-model').length
         if (type === 'bk-checkbox-group' && !hasVModel) {
-            const checkedValue = slots.default.val.filter(c => c.checked === true).map(c => c.value)
-            this.dataTemplate(compId, JSON.stringify(checkedValue))
-            propsStr += `v-model="${compId}"`
+            const checkedValue = (slots.default.code || []).filter(c => c.checked === true).map(c => c.value)
+            this.dataTemplate(`${compId}Vmodel`, JSON.stringify(checkedValue))
+            propsStr += `v-model="${compId}Vmodel"`
         }
         if (type === 'bk-radio-group' && !hasVModel) {
-            const checkedItem = slots.default.val.find(c => c.checked === true)
+            const checkedItem = (slots.default.code || []).find(c => c.checked === true)
             const checkedValue = (checkedItem && checkedItem.value) || ''
-            this.dataTemplate(compId, `'${checkedValue}'`)
-            propsStr += `v-model="${compId}"`
+            this.dataTemplate(`${compId}Vmodel`, `'${checkedValue}'`)
+            propsStr += `v-model="${compId}Vmodel"`
         }
-        // element组件添加vmodel
-        if (type.startsWith('el-')) {
-            if (!hasVModel && elementComId !== '') {
-                const valueType = typeof props['value'].val
+        // element组件、vant组件添加vmodel
+        if (type.startsWith('el-') || type.startsWith('van')) {
+            if (!hasVModel && modelComId !== '') {
+                const valueType = typeof props['value'].code
                 if (valueType !== 'array' && valueType !== 'object') {
-                    let vModelValue = props['value'].val.toString()
-                    if (valueType === 'string') vModelValue = `'${props['value'].val}'`
-                    this.dataTemplate(elementComId, vModelValue)
+                    let vModelValue = props['value'].code.toString()
+                    if (valueType === 'string') vModelValue = `'${props['value'].code}'`
+                    this.dataTemplate(modelComId, vModelValue)
                 }
-                propsStr += `v-model="${elementComId}"`
+                propsStr += `v-model="${modelComId}"`
             }
         }
         return propsStr
@@ -1035,7 +1156,7 @@ class PageCode {
                         funcItems.map(item => {
                             const [method] = this.getMethodByCode({ methodCode: item.validator })
                             if (method.funcCode) {
-                                this.usingFuncCodes.push(method.funcCode)
+                                this.addUsedFunc(method.funcCode)
                             }
                             item.validator = `this.${item.validator}`
                         })
@@ -1075,7 +1196,7 @@ class PageCode {
     getItemStyles (compId, styles, props) {
         // 分离class和其它style属性
         let className = compId
-        className += (props && props.hasOwnProperty('class') && ` ${props.class.val}`) || '' // 添加原生标签的用户自定义class
+        className += (props && props.hasOwnProperty('class') && ` ${props.class.code}`) || '' // 添加原生标签的用户自定义class
 
         let hasStyle = false
         if (styles && typeof styles === 'object') {
@@ -1101,7 +1222,7 @@ class PageCode {
                 if (i === 'top' || i === 'left') {
                     tmpStr += `${i}: 0px;\n`
                 } else {
-                    tmpStr += `${paramCase(i)}: ${styles[i]};\n`
+                    tmpStr += `${paramCase(i)}: ${unitFilter(styles[i])};\n`
                 }
             }
 
@@ -1125,7 +1246,7 @@ class PageCode {
                     let curEventStr = `@${key}="${fun.funcName}" `
                     if (params.length > 0) curEventStr = `@${key}="${fun.funcName}(${params.join(', ')}, ...arguments)" `
                     eventStr += curEventStr
-                    this.usingFuncCodes.push(fun.funcCode)
+                    this.addUsedFunc(fun.funcCode)
                 }
             }
         }
@@ -1140,19 +1261,18 @@ class PageCode {
                 break
             case 'variable':
                 const variable = this.variableList.find(x => x.variableCode === val)
-                const hasUsed = this.usingVariables.find(x => x.variableCode === val)
                 // form表单内的v-model绑定值忽略这个判断
                 if (!variable && !(val.startsWith('form') && val.indexOf('.') > 0)) {
                     this.codeErrMessage = `组件【${componentId}】使用了不存在的变量【${val}】，请修改后重试`
                 }
-                if (!hasUsed && variable) {
-                    this.usingVariables.push(variable)
+                if (variable) {
+                    this.addUsedVariable(variable)
                 }
                 break
             case 'expression':
                 this.variableList.forEach((variable) => {
-                    if (val.includes(variable.variableCode) && !this.usingVariables.find(x => x.variableCode === variable.variableCode)) {
-                        this.usingVariables.push(variable)
+                    if (val.includes(variable.variableCode)) {
+                        this.addUsedVariable(variable)
                     }
                 })
                 break
@@ -1162,16 +1282,16 @@ class PageCode {
 
     getDirectives (renderDirectives, renderProps, componentId) {
         // 过滤
-        const exisDirectives = (renderDirectives || []).filter((directive) => (directive.val !== ''))
+        const exisDirectives = (renderDirectives || []).filter((directive) => (directive.code !== '' && directive.val !== ''))
         const vueDirectives = []
         const templateDirectives = []
         const propDirectives = []
         const id = componentId.replace(/\-(.)/g, x => (x.slice(1)).toUpperCase())
 
         exisDirectives.forEach((directive) => {
-            const { type, modifiers = [], prop = '', valType, val } = directive
+            const { type, modifiers = [], prop = '', format, code: val } = directive
             const modifierStr = (modifiers || []).map((modifier) => `.${modifier}`).join('')
-            const disPlayVal = this.handleUsedVariable(valType, val, componentId)
+            const disPlayVal = this.handleUsedVariable(format, val, componentId)
             switch (type) {
                 case 'v-if':
                     const exitsVFor = exisDirectives.find((dir) => (dir.type === 'v-for'))
@@ -1210,18 +1330,15 @@ class PageCode {
             compId = compId + key
             slotStr += '\n'
             if (!isDefaultSlot) slotStr += `<template slot="${key}">\n`
-            if (['render-grid', 'render-row', 'render-col', 'free-layout'].includes(slot.type)) {
+            if (Array.isArray(slot)) {
+                slotStr += this.generateCode(slot)
+            } else if (typeof slot === 'object' && slot.componentId) {
                 const codeArr = []
-                // card, dialog, sideslider 组件的 slots 配置中 val 没有 componentId
-                // 会导致在 getDirectives 方法中 componentId.replace 报错
-                if (!slot.val.componentId) {
-                    slot.val.componentId = `${slot.val.name}-${uuid()}`
-                }
-                codeArr.push(slot.val)
+                codeArr.push(slot)
                 slotStr += this.generateCode(codeArr)
-            } else if (slot.type === 'form-item-content') {
-                slotStr += this.generateCode(slot.val)
             } else {
+                slot.val = slot.code
+                slot.name = slot.component
                 const render = slotRenderConfig[slot.name] || (() => {})
                 const slotRenderParams = []
                 let curSlot = slot
@@ -1233,13 +1350,13 @@ class PageCode {
                         '[object Boolean]': false,
                         '[object String]': ''
                     }
-                    const { variableData = {}, methodData = {}, sourceData = {} } = slot.payload || {}
+                    const { methodData = {}, sourceData = {} } = slot.payload || {}
                     const type = Object.prototype.toString.call(slot.val)
                     let disPlayVal = defaultValMap[type] || ''
                     const param = { val: disPlayVal, type: 'variable' }
 
-                    if (variableData.val) {
-                        disPlayVal = this.handleUsedVariable(variableData.valType, variableData.val, compId)
+                    if (slot.format !== 'value') {
+                        disPlayVal = this.handleUsedVariable(slot.format, slot.val, compId)
                     } else if (methodData.methodCode) {
                         this.dataTemplate(compId, transformToString(disPlayVal))
                         this.remoteMethodsTemplate(compId, methodData || {})
@@ -1260,7 +1377,9 @@ class PageCode {
                     // table slot 可能会用到fun，需要特殊处理一下。其他情况也可以在slot value 里面加上 methodCode 字段来处理
                     if (Array.isArray(slot.val)) {
                         (slot.val || []).forEach((item) => {
-                            item.methodCode && (this.usingFuncCodes = this.usingFuncCodes.concat(item.methodCode))
+                            if (item.methodCode) {
+                                this.addUsedFunc(item.methodCode)
+                            }
                         })
                     }
                     param.val = disPlayVal
@@ -1381,21 +1500,18 @@ class PageCode {
         if (funcCode) {
             const [curFunc] = this.getMethodByCode(funcCode)
             if (curFunc.id) {
-                this.usingFuncCodes.push(funcCode)
+                this.addUsedFunc(funcCode)
             } else {
                 this.codeErrMessage = `函数【${funcCode}】不存在，函数执行可能存在异常，请修改后再试`
             }
             return `this.${curFunc.funcName}`
         }
         if (dirKey) {
-            const curDir = this.variableList.find((variable) => (variable.variableCode === dirKey))
-            if (curDir) {
-                const hasUsed = this.usingVariables.find((variable) => (variable.id) === curDir.id)
-                if (!hasUsed) {
-                    this.usingVariables.push(curDir)
-                }
+            const variable = this.variableList.find((variable) => (variable.variableCode === dirKey))
+            if (variable) {
+                this.addUsedVariable(variable)
             } else {
-                this.codeErrMessage = `指令【${dirKey}】不存在，函数执行可能存在异常，请修改后再试`
+                this.codeErrMessage = `变量【${dirKey}】不存在，函数执行可能存在异常，请修改后再试`
             }
             return `this.${dirKey}`
         }
@@ -1403,7 +1519,7 @@ class PageCode {
 
     processFuncBody (code) {
         const encodeCode = (code || '').replace(new RegExp('(<)([^>]+)(>)', 'gi'), (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`)
-        return replaceFuncKeyword(encodeCode, (all, first, second, dirKey, funcStr, funcCode) => {
+        return replaceFuncKeyword(encodeCode, this.origin, (all, first, second, dirKey, funcStr, funcCode) => {
             return this.handleVarInFunc(dirKey, funcCode) || all
         })
     }
@@ -1452,18 +1568,6 @@ class PageCode {
     getMethods () {
         let methods = ''
 
-        // 分析页面使用到的方法，下载的源码（pageType === projectCode）放到单独的文件
-        if (this.usingFuncCodes.length) {
-            for (let index = 0; index < this.usingFuncCodes.length; index++) {
-                const code = this.usingFuncCodes[index]
-                if (this.existFunc.includes(code)) continue
-                this.existFunc.push(code)
-                const func = this.getComplateFuncByCode(code) || {}
-                const funcStr = func.code || ''
-                if (funcStr) this.methodStrList.push({ id: func.id, funcStr })
-            }
-        }
-
         if (this.hasLayOut || this.remoteDataStr || (this.usingFuncCodes.length && ['vueCode', 'preview', 'previewSingle'].includes(this.pageType))) {
             methods += 'methods: {'
 
@@ -1502,7 +1606,7 @@ class PageCode {
                         setNav = `setNav (id) {
                             const itemId = id || this.$route.query.id
                             const name = ${pageValue};
-                            (this.topMenu${this.uniqueKey} || []).forEach((topNav) => {
+                            (this.topMenuLesscode || []).forEach((topNav) => {
                                 const isSameId = itemId && (topNav.id === itemId || (Array.isArray(topNav.children) && topNav.children.find((nav) => (nav.id === itemId))))
                                 const isSameName = !itemId && name && (topNav.${pageKey} === name || (Array.isArray(topNav.children) && topNav.children.find((nav) => (nav.${pageKey} === name))))
                                 if (isSameId || isSameName) this.curNav = topNav || {}
@@ -1513,7 +1617,7 @@ class PageCode {
                         setNav = `setNav (id) {
                             const itemId = id || this.$route.query.id
                             const name = ${pageValue};
-                            (this.leftMenu${this.uniqueKey} || []).forEach((menu) => {
+                            (this.leftMenuLesscode || []).forEach((menu) => {
                                 let tempItem
                                 if (itemId) {
                                     tempItem = [menu, ...(menu.children || [])].find((child) => (child.id === itemId))
@@ -1528,7 +1632,7 @@ class PageCode {
                         setNav = `setNav (id) {
                             const itemId = id || this.$route.query.id
                             const name = ${pageValue};
-                            (this.complexMenu${this.uniqueKey} || []).forEach((menu) => {
+                            (this.complexMenuLesscode || []).forEach((menu) => {
                                 const allMenus = [menu];
                                 (menu.children || []).forEach((child) => {
                                     allMenus.push(...[child, ...(child.children || [])])
@@ -1536,7 +1640,7 @@ class PageCode {
                                 const tempItem = itemId ? allMenus.find((child) => (child.id === itemId)) : allMenus.find((child) => (child.${pageKey} === name))
                                 if (tempItem) {
                                     this.curNav = tempItem
-                                    this.leftMenu${this.uniqueKey} = menu.children || []
+                                    this.leftMenuLesscode = menu.children || []
                                 }
                             })
                         },`
@@ -1549,9 +1653,8 @@ class PageCode {
                         },
                     `
                 } else {
-                    const loginRedirectUrl = `${httpConf.loginUrl}?app_id=${httpConf.appCode}`
                     methods += `signOut () {
-                            window.parent.location.href = '${loginRedirectUrl}' + '&c_url=' + window.parent.location.href
+                            this.$bkMessage({ message: '请部署后使用本功能', theme: 'warn' })
                         },
                     `
                 }
@@ -1592,7 +1695,7 @@ class PageCode {
             const [method, params] = this.getMethodByCode(funcPayload)
             lifeCycleStrObj[key] = []
             if (method.id) {
-                if (method.funcCode) this.usingFuncCodes.push(method.funcCode)
+                if (method.funcCode) this.addUsedFunc(method.funcCode)
                 lifeCycleStrObj[key].push(`this.${method.funcName}(${params.join(', ')})`)
             }
         })
@@ -1647,6 +1750,8 @@ class PageCode {
 
     getImportContent () {
         let importStr = ''
+
+        if (['preview'].includes(this.pageType)) return importStr
 
         if (this.isUseElementComponentLib) {
             importStr = `
@@ -1714,7 +1819,7 @@ class PageCode {
                 forkUsingCustomArr = this.usingCustomArr.map(item => item.replace(/^test\-/, ''))
             }
             for (const i in this.usingCustomArr) {
-                importStr += `const ${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })} = require('${npmConf.scopename}/${this.usingCustomArr[i]}')\n`
+                importStr += `const ${camelCase(forkUsingCustomArr[i], { transform: camelCaseTransformMerge })} = require('${this.npmConf.scopename}/${this.usingCustomArr[i]}')\n`
             }
         }
         const lifeCycle = typeof this.lifeCycle === 'string' ? JSON.parse(this.lifeCycle) : this.lifeCycle
@@ -1740,7 +1845,7 @@ class PageCode {
             }
         }
         // 处理chartRemote
-        if (method.funcCode) this.usingFuncCodes.push(method.funcCode)
+        if (method.funcCode) this.addUsedFunc(method.funcCode)
     }
 
     dataSourceTemplate (key, sourceData) {
@@ -1748,8 +1853,8 @@ class PageCode {
     }
 
     generateCharts (item) {
-        const type = item.name.replace('chart-', '')
-        this.dataTemplate(item.componentId, JSON.stringify(item.renderProps.options.val))
+        const type = item.name && item.name.replace('chart-', '')
+        this.dataTemplate(item.componentId, JSON.stringify(item.renderProps.options.code))
         if (item.renderProps.remoteOptions && item.renderProps.remoteOptions.payload && item.renderProps.remoteOptions.payload.methodCode) {
             this.remoteMethodsTemplate(item.componentId, item.renderProps.remoteOptions.payload || {}, true)
         }
@@ -1760,21 +1865,10 @@ class PageCode {
 }
 
 module.exports = {
-    async getPageData (targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList, styleSetting) {
-        const pageCode = new PageCode(targetData, pageType, allCustomMap, funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, isEmpty, layoutType, variableList, styleSetting)
-        let code = ''
-        if (pageType === 'vueCode') {
-            // 格式化，报错是抛出异常
-            code = await VueCodeModel.formatPageCode(pageCode.getCode())
-        } else if (['preview', 'previewSingle'].includes(pageType)) {
-            // 不需格式化
-            code = pageCode.getCode()
-        } else {
-            // 格式化，报错不抛出异常
-            code = await VueCodeModel.formatCode(pageCode.getCode())
-        }
+    getPageData (params) {
+        const pageCode = new PageCode(params)
         return {
-            code,
+            code: pageCode.getCode(),
             methodStrList: pageCode.methodStrList || [],
             codeErrMessage: pageCode.codeErrMessage || ''
         }

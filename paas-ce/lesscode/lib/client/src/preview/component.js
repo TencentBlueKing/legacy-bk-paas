@@ -11,8 +11,10 @@
 
 // 注入组件库
 import '@/common/bkui-vue-complex'
-import '@/common/bkmagic'
+import '@/common/fully-import'
 import '@/common/element'
+import '@/common/vant'
+
 // 注入全局组件
 import renderHtml from '@/components/render/html'
 

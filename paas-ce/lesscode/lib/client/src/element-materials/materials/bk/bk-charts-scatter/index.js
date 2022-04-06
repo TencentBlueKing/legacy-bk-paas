@@ -17,7 +17,12 @@ export default {
     group: 'BKCharts',
     order: 1,
     events: [],
-    styles: ['display'],
+    styles: [
+        {
+            name: 'size',
+            include: ['display']
+        }
+    ],
     renderStyles: {
         display: 'inline-block'
     },
@@ -28,8 +33,8 @@ export default {
         },
         height: {
             type: 'number',
-            val: 200,
-            tips: '图表高度，单位为px'
+            tips: '图表高度，单位为px',
+            val: 200
         },
         options: {
             type: 'json',
@@ -103,7 +108,6 @@ export default {
                 }
             },
             remoteValidate (data) {
-                console.log(data, 'valid')
                 if (typeof data !== 'object') return '返回值需要是object'
             }
         }

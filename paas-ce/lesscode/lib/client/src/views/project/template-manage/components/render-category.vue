@@ -221,7 +221,6 @@
                 this.handleShowCreate(event)
             },
             async handleDelete (category) {
-                console.log(category, '======category')
                 if (this.list.length === 1) {
                     this.messageError('模板分类不能为空')
                     return

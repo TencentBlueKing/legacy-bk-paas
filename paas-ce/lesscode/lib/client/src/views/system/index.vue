@@ -1,5 +1,5 @@
 <template>
-    <main :class="['layout', { 'aside-folded': asideFolded }]">
+    <main :class="['layout', { 'aside-folded': asideFolded, 'aside-hover': asideHover }]">
         <aside class="aside">
             <div class="side-hd">
                 <div class="brand">
@@ -11,7 +11,9 @@
                     <h2 class="app-name">可视化开发平台</h2>
                 </div>
             </div>
-            <div class="side-bd">
+            <div class="side-bd"
+                @mouseenter="asideHover = true"
+                @mouseleave="asideHover = false">
                 <nav class="nav-list">
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="/projects">
                         <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
@@ -35,6 +37,15 @@
                             <router-link tag="div" class="sub-nav-item" to="/op/stats/project">项目数据</router-link>
                             <router-link tag="div" class="sub-nav-item" to="/op/stats/func">函数数据</router-link>
                             <router-link tag="div" class="sub-nav-item" to="/op/stats/comp">自定义组件数据</router-link>
+                        </div>
+                    </div>
+                    <div :class="['nav-item-parent', { folded: navFolded.pm }]" v-if="isPlatformAdmin">
+                        <div class="nav-item" @click="$set(navFolded, 'pm', !navFolded.pm)">
+                            <i class="bk-icon icon-monitors-cog"></i>平台管理
+                            <i class="bk-drag-icon bk-drag-arrow-down"></i>
+                        </div>
+                        <div class="sub-nav">
+                            <router-link tag="div" class="sub-nav-item" to="/pm/platform/project-member">项目成员</router-link>
                         </div>
                     </div>
                 </nav>
@@ -80,6 +91,7 @@
             return {
                 currentYear: new Date().getUTCFullYear(),
                 asideFolded: false,
+                asideHover: false,
                 region: 'tencent',
                 navFolded: {}
             }
@@ -102,13 +114,15 @@
         --breadcrumb-height: 52px;
         --aside-folded-width: 60px;
         min-width: 1280px;
-        height: calc(100vh - 64px);
+        height: calc(100vh - 68px);
         margin-top: 64px;
 
         &.aside-folded {
             .aside {
                 width: var(--aside-folded-width);
-
+                .side-bd {
+                    overflow: hidden;
+                }
                 .side-ft {
                     .nav-toggle {
                         transform: rotate(0);
@@ -118,6 +132,27 @@
 
             .footer {
                 padding-left: var(--aside-folded-width);
+            }
+
+            .nav-list {
+                .nav-item-parent {
+                    .sub-nav {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        &.aside-hover {
+            .aside {
+                width: var(--aside-width);
+            }
+            .nav-list {
+                .nav-item-parent {
+                    .sub-nav {
+                        display: block;
+                    }
+                }
             }
         }
 
@@ -293,6 +328,7 @@
                     line-height: 42px;
                     padding: 0 12px 0 22px;
                     cursor: pointer;
+                    white-space: nowrap;
 
                     &::before {
                         width: 16px;

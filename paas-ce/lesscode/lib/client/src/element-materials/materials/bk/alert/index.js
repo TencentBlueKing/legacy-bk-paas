@@ -16,10 +16,20 @@ export default {
     icon: 'bk-drag-alert-line',
     group: '反馈',
     order: 1,
-    styles: ['size', 'margin', 'padding', 'display'],
-    events: [{
-        name: 'close', tips: '关闭警告时调用该事件函数，事件回调参数 (event: Event)'
-    }],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/alert',
+    events: [
+        {
+            name: 'close',
+            tips: '关闭警告时调用该事件函数，事件回调参数 (event: Event)'
+        }
+    ],
+    styles: [
+        'position',
+        'size',
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     props: {
         type: {
             type: 'string',

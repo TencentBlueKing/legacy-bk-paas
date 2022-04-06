@@ -16,17 +16,15 @@ export default {
     icon: 'bk-drag-popconfrim',
     group: '其他',
     order: 1,
-    styles: ['margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/tooltip',
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-block'
     },
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['boolean'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {

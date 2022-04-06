@@ -16,12 +16,18 @@ export default {
     icon: 'bk-drag-popconfrim',
     group: '反馈',
     order: 1,
-    styles: ['margin', 'display'],
-    events: [{
-        name: 'confirm', tips: '点击确定按钮时调用该事件函数，暂无事件回调参数'
-    }, {
-        name: 'cancel', tips: '点击取消按钮时调用该事件函数，暂无事件回调参数'
-    }],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/popconfirm',
+    events: [
+        {
+            name: 'confirm',
+            tips: '点击确定按钮时调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'cancel',
+            tips: '点击取消按钮时调用该事件函数，暂无事件回调参数'
+        }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     props: {
         title: {
             type: 'string',
@@ -64,14 +70,6 @@ export default {
             type: 'number',
             val: 2500,
             tips: '弹出层z-index'
-        },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置 pop 弹层自定义样式类名，传入的类会被加在 pop 弹层的 DOM .tippy-popper 上'
-        },
-        'ext-popover-cls': {
-            type: 'string',
-            tips: '配置 pop 弹层主内容区域自定义样式类名，传入的类会被加在 pop 弹层主内容区域的 DOM .bk-popconfirm-content 上'
         }
     },
     slots: {

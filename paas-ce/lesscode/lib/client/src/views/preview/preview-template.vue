@@ -119,7 +119,6 @@
                 }
 
                 try {
-                    console.log('预览 loadFile')
                     const { targetData, projectId } = this
                     let code
                     if (this.type === 'nav-template') {

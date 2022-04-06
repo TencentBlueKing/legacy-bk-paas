@@ -31,6 +31,11 @@ const {
     getPreviewImg
 } = require('../controller/page')
 
+const {
+    syncPageData,
+    fixPageData
+} = require('../controller/db-migration-helper')
+
 const router = new Router({
     prefix: '/api/page'
 })
@@ -76,5 +81,7 @@ router.post('/updatePageActive', updatePageActive)
 router.post('/occupyPage', occupyPage)
 router.post('/releasePage', relasePage)
 router.get('/previewimg', getPreviewImg)
+router.get('/syncPageData', syncPageData)
+router.get('/fixPageData', fixPageData)
 
 module.exports = router

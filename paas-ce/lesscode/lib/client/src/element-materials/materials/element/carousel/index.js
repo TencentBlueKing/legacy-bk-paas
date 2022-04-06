@@ -16,10 +16,14 @@ export default {
     icon: 'bk-drag-swiper',
     group: '其他',
     order: 1,
-    events: [{
-        name: 'change', tips: '幻灯片切换时触发时调用该事件函数，事件回调参数 (currentIndex: Number、preIndex: Number)'
-    }],
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/carousel',
+    events: [
+        {
+            name: 'change',
+            tips: '幻灯片切换时触发时调用该事件函数，事件回调参数 (currentIndex: Number、preIndex: Number)'
+        }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         width: '600px',
         height: '300px'

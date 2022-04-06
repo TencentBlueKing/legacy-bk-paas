@@ -16,7 +16,8 @@ export default {
     icon: 'bk-drag-card',
     group: '其他',
     order: 1,
-    styles: ['size', 'margin', 'display'],
+    document: 'https://element.eleme.cn/#/zh-CN/component/card',
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         width: '320px',
         height: '320px',
@@ -44,24 +45,8 @@ export default {
         default: {
             name: ['layout'],
             type: ['free-layout'],
-            display: 'hidden',
-            val: {
-                name: 'free-layout',
-                type: 'free-layout',
-                slotName: '',
-                slotContainer: true,
-                renderProps: {},
-                renderStyles: { 'height': '200px', 'pointer-events': 'auto' },
-                renderEvents: {},
-                renderDirectives: [],
-                renderSlots: {
-                    default: {
-                        type: 'free-layout-item',
-                        val: [
-                            { children: [] }
-                        ]
-                    }
-                }
+            renderStyles: {
+                'height': '200px'
             }
         }
     }

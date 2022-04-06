@@ -16,22 +16,30 @@ export default {
     icon: 'bk-drag-tree',
     group: '数据',
     order: 1,
-    events: [{
-        name: 'node-click', tips: '节点被点击时调用该事件函数，事件回调参数 (nodeValue: Object、node: Object、component: Object)'
-    }, {
-        name: 'check', tips: '当复选框被点击时调用该事件函数，事件回调参数 (checkValue: Object, checkNode: Object)'
-    }, {
-        name: 'node-expand', tips: '节点被展开时调用该事件函数，事件回调参数 (nodeValue: Object、node: Object、component: Object)'
-    }],
-    styles: ['size', 'margin'],
-    directives: [
+    document: 'https://element.eleme.cn/#/zh-CN/component/tree',
+    events: [
         {
-            type: 'v-bind',
-            prop: 'data',
-            propTypes: ['array'],
-            val: '',
-            valType: 'variable'
+            name: 'node-click',
+            tips: '节点被点击时调用该事件函数，事件回调参数 (nodeValue: Object、node: Object、component: Object)'
+        },
+        {
+            name: 'check',
+            tips: '当复选框被点击时调用该事件函数，事件回调参数 (checkValue: Object, checkNode: Object)'
+        },
+        {
+            name: 'node-expand',
+            tips: '节点被展开时调用该事件函数，事件回调参数 (nodeValue: Object、node: Object、component: Object)'
         }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    directives: [
+        // {
+        //     type: 'v-bind',
+        //     prop: 'data',
+        //     propTypes: ['array'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         data: {

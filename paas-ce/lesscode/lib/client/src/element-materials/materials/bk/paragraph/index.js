@@ -16,25 +16,24 @@ export default {
     icon: 'bk-drag-text',
     group: '基础',
     order: 1,
-    styles: ['size', 'margin', 'padding', 'display', 'font', 'border', 'backgroundColor', 'textAlign', 'color'],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity', 'font', 'background'],
     renderStyles: {
         display: 'inline-block',
         width: '281px',
+        height: '102px',
         textAlign: 'left',
         fontSize: '14px',
-        // whiteSpace: 'pre-wrap',
-        wordBreak: 'break-all',
-        color: '#63656e',
-        height: '102px'
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-all'
     },
     directives: [
-        {
-            type: 'v-html',
-            prop: 'slots',
-            propTypes: ['string'],
-            val: '',
-            valType: 'variable'
-        }
+        // {
+        //     type: 'v-html',
+        //     prop: 'slots',
+        //     propTypes: ['string'],
+        //     val: '',
+        //     valType: 'variable'
+        // }
     ],
     props: {
         title: {
@@ -50,7 +49,6 @@ export default {
             displayName: '文本配置',
             regExp: /\S/,
             val: '默认段落文字',
-            // val: '<script>alert(1)</script>',
             regErrorText: '文本配置不能为空'
         }
     }

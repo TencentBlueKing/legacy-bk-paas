@@ -15,9 +15,9 @@ import FuncModel from './function'
 import VariableModel from './variable'
 import DataTableModifyRecord from './data-table-modify-record'
 import * as PageCompModel from './page-comp'
-import * as ComponentModel from './component'
 import { uuid, walkGrid } from '../util'
-import dataService from '../service/data-service'
+import { LCDataService, TABLE_FILE_NAME } from '../service/data-service'
+import { RequestContext } from '../middleware/request-context'
 import {
     BASE_COLUMNS
 } from '../../shared/data-source'
@@ -36,25 +36,28 @@ const fse = require('fs-extra')
 
 const DIR_PATH = '.'
 
+const SHARE_PATH = `${DIR_PATH}/lib/shared/`
+
 const STATIC_URL = `${DIR_PATH}/lib/server/project-template/`
 
 const projectCode = {
 
-    async previewCode (projectId, versionId) {
+    async previewCode (projectId, versionId, platform = 'PC') {
         // 获取预览相关的数据
         const [
-            routeList,
-            pageRouteList,
-            allCustomMap,
+            allRouteList,
+            allPageRouteList,
             funcGroups = [],
             allVarableList = []
         ] = await Promise.all([
             routeModel.findProjectRoute(projectId, versionId),
             routeModel.queryProjectPageRoute(projectId, versionId),
-            ComponentModel.getNameMap(),
             FuncModel.allGroupFuncDetail(projectId, versionId),
             VariableModel.getAll({ projectId, versionId })
         ])
+
+        const routeList = allRouteList.filter(route => route.platform === platform)
+        const pageRouteList = allPageRouteList.filter(page => (page.pageType === platform || (!page.pageType && platform === 'PC')))
 
         const routeGroup = {}
         for (const route of routeList) {
@@ -85,13 +88,28 @@ const projectCode = {
 
         const projectVariables = allVarableList.filter(variable => variable.effectiveRange === 0)
         const pageData = {
-            allCustomMap,
             funcGroups
         }
         const layoutIns = Object.values(routeGroup)
         for (const layout of layoutIns) {
             // 父路由（布局）内容
-            const pageDetail = await PageCodeModel.getPageData([], 'preview', pageData.allCustomMap, pageData.funcGroups, {}, projectId, '', layout.content, true, false, layout.layoutType, [], {})
+            const pageDetail = await PageCodeModel.getPageData({
+                targetData: [],
+                pageType: 'preview',
+                funcGroups: pageData.funcGroups,
+                lifeCycle: {},
+                projectId,
+                pageId: '',
+                layoutContent: layout.content,
+                isGenerateNav: true,
+                isEmpty: false,
+                layoutType: layout.layoutType,
+                variableList: [],
+                styleSetting: {},
+                user: RequestContext.getCurrentUser(),
+                npmConf,
+                origin: ''
+            })
             layout.content = pageDetail.code
 
             // 子路由（页面）内容，先排除未绑定页面的路由
@@ -102,21 +120,23 @@ const projectCode = {
                     ...projectVariables,
                     ...allVarableList.filter((variable) => (variable.effectiveRange === 1 && variable.pageCode === route.pageCode))
                 ]
-                const pageDetail = await PageCodeModel.getPageData(
-                    JSON.parse(route.content || '[]'),
-                    'preview',
-                    pageData.allCustomMap,
-                    pageData.funcGroups,
-                    route.lifeCycle || {},
+                const pageDetail = await PageCodeModel.getPageData({
+                    targetData: JSON.parse(route.content || '[]'),
+                    pageType: 'preview',
+                    funcGroups: pageData.funcGroups,
+                    lifeCycle: route.lifeCycle || {},
                     projectId,
-                    route.pageId,
-                    '',
-                    false,
-                    false,
-                    route.layoutType,
-                    variableData,
-                    route.styleSetting || {}
-                )
+                    pageId: route.pageId,
+                    layoutContent: '',
+                    isGenerateNav: false,
+                    isEmpty: false,
+                    layoutType: route.layoutType,
+                    variableList: variableData,
+                    styleSetting: route.styleSetting || {},
+                    user: RequestContext.getCurrentUser(),
+                    npmConf,
+                    origin: ''
+                })
                 // 生成代码校验
                 if (pageDetail.codeErrMessage) {
                     throw new Error(`页面【${route.pageCode}】里面，${pageDetail.codeErrMessage}`)
@@ -149,7 +169,6 @@ const projectCode = {
                 const [
                     routeList,
                     pageRouteList,
-                    allCustomMap,
                     funcGroups = [],
                     allVarableList = [],
                     { list: dataTables = [] },
@@ -157,10 +176,9 @@ const projectCode = {
                 ] = await Promise.all([
                     routeModel.findProjectRoute(projectId, versionId),
                     routeModel.queryProjectPageRoute(projectId, versionId),
-                    ComponentModel.getNameMap(),
                     FuncModel.allGroupFuncDetail(projectId, versionId),
                     VariableModel.getAll({ projectId, versionId }),
-                    dataService.get('data-table', { projectId, deleteFlag: 0 }),
+                    LCDataService.get(TABLE_FILE_NAME.DATA_TABLE, { projectId, deleteFlag: 0 }),
                     DataTableModifyRecord.getListByTime({ query: { projectId } })
                 ])
 
@@ -168,9 +186,14 @@ const projectCode = {
                 const routeMap = {}
 
                 let isUseElement = false
+                let hasMobilePage = false
                 routeList.forEach((route) => {
                     routeMap[route.pageCode] = route.pageId
 
+                    // 有一个页面是移动端，则要引入Vant-ui
+                    if (!hasMobilePage) {
+                        hasMobilePage = route.platform === 'MOBILE'
+                    }
                     // 每个 route 是一个页面，只有要一个页面使用了 element，那么其他页面就不用检测是否使用了
                     if (!isUseElement) {
                         const targetData = JSON.parse(route.content || '[]')
@@ -218,7 +241,6 @@ const projectCode = {
                 // 获取生成view文件所需的数据
                 const projectVariables = allVarableList.filter(variable => variable.effectiveRange === 0)
                 const pageData = {
-                    allCustomMap,
                     funcGroups
                 }
                 let usedMethodList = []
@@ -237,7 +259,7 @@ const projectCode = {
                         const meta = `meta: { pageName: '${route.pageName}' }`
                         if (route.redirectRoute) {
                             const { layoutPath, path } = route.redirectRoute
-                            const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                            const fullPath = `${layoutPath}${layoutPath?.endsWith('/') ? '' : '/'}${path}`
                             const routeName = route.pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${route.id}`
                             const routeComponent = route.pageCode ? ` component: ${route.pageCode},` : ''
                             if (!firstChildRouteName) {
@@ -325,7 +347,7 @@ const projectCode = {
                         },\n`
                     }
                 })
-                if (routerStr.endsWith(',\n')) {
+                if (routerStr?.endsWith(',\n')) {
                     routerStr = routerStr.substr(0, routerStr.length - 2)
                 }
 
@@ -339,9 +361,9 @@ const projectCode = {
                 const defaultRoute = defaultHomeRoute || availableRoutList[0]
                 if (defaultRoute) {
                     const { id, layoutPath, path, pageCode, redirectRoute } = defaultRoute
-                    let fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                    let fullPath = `${layoutPath}${layoutPath?.endsWith('/') ? '' : '/'}${path}`
                     if (redirectRoute) {
-                        fullPath = `${redirectRoute.layoutPath}${redirectRoute.layoutPath.endsWith('/') ? '' : '/'}${redirectRoute.path}`
+                        fullPath = `${redirectRoute.layoutPath}${redirectRoute.layoutPath?.endsWith('/') ? '' : '/'}${redirectRoute.path}`
                     }
                     // 跳转路由可能没有pageCode，使用跳转路径作为name，同时跳转路径可能会重复加上路由id防止
                     const redirectRouteName = pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${id}`
@@ -370,27 +392,42 @@ const projectCode = {
                     return content.replace(/\$\{stateStr\}/, storeStr.join(',\n'))
                 })
 
-                // 对 element 组件库的处理
+                /**
+                 * 对element、vant处理
+                 */
                 const mainFilePath = path.join(targetPath, 'lib/client/src/main.js')
-                const mainFileContent = fs.readFileSync(mainFilePath, 'utf8')
+                const remJS = fs.readFileSync(path.join(SHARE_PATH, 'rem.js'), 'utf8')
+                let mainFileContent = fs.readFileSync(mainFilePath, 'utf8')
+
                 if (isUseElement) {
-                    fs.writeFileSync(
-                        mainFilePath,
-                        mainFileContent.replace(/\$\{importElementLib\}/, 'import \'@/common/element\''),
-                        'utf8'
-                    )
+                    mainFileContent = mainFileContent.replace(/\$\{importElementLib\}/, 'import \'@/common/element\'')
                     await this.writePackageJSON(
                         path.join(targetPath, 'package.json'),
                         [{ name: 'element-ui', version: 'latest' }]
                     )
                 } else {
-                    fs.writeFileSync(
-                        mainFilePath,
-                        mainFileContent.replace(/\$\{importElementLib\}/, ''),
-                        'utf8'
-                    )
+                    mainFileContent = mainFileContent.replace(/\$\{importElementLib\}/, '')
                     fs.unlinkSync(path.join(targetPath, 'lib/client/src/common/element.js'))
                 }
+
+                if (hasMobilePage) {
+                    mainFileContent = mainFileContent.replace(/\$\{importVantLib\}/, 'import \'@/common/vant\'')
+                    mainFileContent = mainFileContent.replace(/\$\{remJs\}/, remJS)
+                    await this.writePackageJSON(
+                        path.join(targetPath, 'package.json'),
+                        [{ name: 'vant', version: 'latest-v2' }]
+                    )
+                } else {
+                    mainFileContent = mainFileContent.replace(/\$\{importVantLib\}/, '')
+                    mainFileContent = mainFileContent.replace(/\$\{remJs\}/, '')
+                    fs.unlinkSync(path.join(targetPath, 'lib/client/src/common/vant.js'))
+                }
+
+                fs.writeFileSync(
+                    mainFilePath,
+                    mainFileContent,
+                    'utf8'
+                )
 
                 await this.generateDataSource(dataTables, dataTableModifyRecords, targetPath)
                 resolve('success')
@@ -532,8 +569,24 @@ const projectCode = {
             fse.ensureFile(currentFilePath).then(async () => {
                 let code = ''
                 let methodStrList = []
-                const pageDetail = await PageCodeModel.getPageData(pageData.targetData, 'projectCode', pageData.allCustomMap, pageData.funcGroups, lifeCycle, projectId, pageId, layoutContent, isGenerateNav, false, layoutType, variableData, styleSetting)
-                code = pageDetail.code
+                const pageDetail = await PageCodeModel.getPageData({
+                    targetData: pageData.targetData,
+                    pageType: 'projectCode',
+                    funcGroups: pageData.funcGroups,
+                    lifeCycle: lifeCycle || {},
+                    projectId,
+                    pageId,
+                    layoutContent,
+                    isGenerateNav,
+                    isEmpty: false,
+                    layoutType,
+                    variableList: variableData,
+                    styleSetting,
+                    user: RequestContext.getCurrentUser(),
+                    npmConf,
+                    origin: RequestContext.getCurrentCtx().origin
+                })
+                code = await VueCodeModel.formatCode(pageDetail.code)
                 methodStrList = pageDetail.methodStrList
                 // 生成代码校验
                 if (pageDetail.codeErrMessage && !pathName) {

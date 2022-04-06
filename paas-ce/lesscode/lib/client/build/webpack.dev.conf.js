@@ -69,7 +69,7 @@ const webpackConfig = merge(baseConf, {
                                 loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
                                 options: {
                                     modules: {
-                                        localIdentName: '[name]_[local]_[hash:base64:5]'
+                                        localIdentName: '[local]_[hash:base64:6]'
                                     },
                                     importLoaders: 1
                                 }
@@ -92,7 +92,7 @@ const webpackConfig = merge(baseConf, {
                                 loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
                                 options: {
                                     modules: {
-                                        localIdentName: '[name]_[local]_[hash:base64:5]'
+                                        localIdentName: '[local]_[hash:base64:5]'
                                     },
                                     importLoaders: 1
                                 }
@@ -153,7 +153,6 @@ const webpackConfig = merge(baseConf, {
         new HtmlWebpackPlugin({
             filename: 'preview.html',
             template: resolve(__dirname, '..', 'preview.html'),
-            inject: true,
             chunks: ['preview'],
             staticUrl: clientConf.dev.staticUrl,
             BKPAAS_ENVIRONMENT: clientConf.dev.BKPAAS_ENVIRONMENT

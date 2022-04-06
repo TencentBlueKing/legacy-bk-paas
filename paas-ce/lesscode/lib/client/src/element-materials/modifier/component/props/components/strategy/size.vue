@@ -11,8 +11,8 @@
 
 <template>
     <section>
-        <size-input v-model="sizeValue" @change="handleInputChange">
-            <append-select v-model="sizeUnit" @change="handleSelectChange"></append-select>
+        <size-input :value="sizeValue" @change="handleInputChange">
+            <append-select :value="sizeUnit" @change="handleSelectChange"></append-select>
         </size-input>
     </section>
 </template>
@@ -21,12 +21,14 @@
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
 
     export default {
         components: {
             AppendSelect,
             SizeInput
         },
+        mixins: [defaultUnitMixin],
         props: {
             defaultValue: {
                 type: [String, Number],
@@ -42,21 +44,20 @@
             },
             type: String
         },
-        // computed: {
-        //     sizeValue () {
-        //         return splitValueAndUnit('value', this.defaultValue)
-        //     },
-        //     sizeUnit () {
-        //         return splitValueAndUnit('unit', this.defaultValue) || 'px'
-        //     }
-        // },
         data () {
             return {
-                sizeValue: splitValueAndUnit('value', this.defaultValue),
-                sizeUnit: splitValueAndUnit('unit', this.defaultValue) || 'px'
+                sizeValue: '',
+                sizeUnit: ''
             }
         },
+        created () {
+            this.initData()
+        },
         methods: {
+            initData () {
+                this.sizeValue = splitValueAndUnit('value', this.defaultValue)
+                this.sizeUnit = splitValueAndUnit('unit', this.defaultValue) || this.defaultUnit
+            },
             handleInputChange (val) {
                 this.change(this.name, val + this.sizeUnit, this.type)
             },

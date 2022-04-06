@@ -16,12 +16,25 @@ export default {
     icon: 'bk-drag-dialog',
     group: '反馈',
     order: 1,
-    interactiveShow: true,
+    interactiveShow: false,
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/dialog',
     events: [
-        { name: 'confirm', tips: '点击确定按钮时调用该事件函数，暂无事件回调参数' },
-        { name: 'cancel', tips: '点击取消按钮时调用该事件函数，主动调用关闭才会触发，通过改变双向绑定的值关闭弹框时不会触发，暂无事件回调参数' },
-        { name: 'value-change', tips: '弹框显示状态变化时调用该事件函数，暂无事件回调参数' },
-        { name: 'after-leave', tips: '弹框消失的动画结束后调用该事件函数，暂无事件回调参数' }
+        {
+            name: 'confirm',
+            tips: '点击确定按钮时调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'cancel',
+            tips: '点击取消按钮时调用该事件函数，主动调用关闭才会触发，通过改变双向绑定的值关闭弹框时不会触发，暂无事件回调参数'
+        },
+        {
+            name: 'value-change',
+            tips: '弹框显示状态变化时调用该事件函数，暂无事件回调参数'
+        },
+        {
+            name: 'after-leave',
+            tips: '弹框消失的动画结束后调用该事件函数，暂无事件回调参数'
+        }
     ],
     renderStyles: {
         display: 'inline-block'
@@ -29,44 +42,13 @@ export default {
     directives: [
         {
             type: 'v-model',
-            prop: 'value',
-            propTypes: ['boolean'],
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
-    slots: {
-        default: {
-            name: ['layout'],
-            type: ['render-grid'],
-            display: 'hidden',
-            val: {
-                name: 'grid',
-                type: 'render-grid',
-                slotName: '',
-                slotContainer: true,
-                renderProps: {},
-                renderStyles: {},
-                renderEvents: {},
-                renderDirectives: [],
-                renderSlots: {
-                    default: {
-                        type: 'column',
-                        val: [
-                            {
-                                children: [],
-                                span: 1,
-                                width: '100%'
-                            }
-                        ]
-                    }
-                }
-            }
-        }
-    },
     props: {
         'value': {
             type: 'boolean',
+            staticValue: true,
             tips: '是否显示弹框，支持v-model双向绑定'
         },
         'title': {
@@ -112,7 +94,8 @@ export default {
         },
         'show-mask': {
             type: 'boolean',
-            val: true
+            val: true,
+            staticValue: false
         },
         'ok-text': {
             type: 'string',
@@ -126,9 +109,23 @@ export default {
             type: 'boolean',
             val: true
         },
-        'ext-cls': {
-            type: 'string',
-            tips: '配置自定义样式类名，传入的类会被加在组件最外层的 DOM 上'
+        transfer: {
+            type: 'boolean',
+            val: true,
+            staticValue: false
+        }
+    },
+    slots: {
+        default: {
+            name: ['layout'],
+            type: ['render-grid'],
+            display: 'hidden',
+            children: [
+                {
+                    name: ['layout'],
+                    type: ['render-column']
+                }
+            ]
         }
     }
 }

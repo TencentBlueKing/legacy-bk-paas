@@ -16,7 +16,7 @@ import RequestError from './request-error'
 import CachedPromise from './cached-promise'
 import RequestQueue from './request-queue'
 import { bus } from '../common/bus'
-import { messageError } from '@/common/bkmagic'
+import { bkMessage } from 'bk-magic-vue'
 
 // 解析错误
 axios.interceptors.response.use(
@@ -65,7 +65,7 @@ axios.interceptors.response.use(undefined, error => {
     if (response) {
         const { config } = response
         if (config.globalError) {
-            messageError(message)
+            bkMessage({ theme: 'error', message })
         }
     }
     return Promise.reject(error)

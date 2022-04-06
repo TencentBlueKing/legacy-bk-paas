@@ -39,6 +39,8 @@
                             <div class="nav-content" :class="$route.name === 'method' ? 'nav-active' : ''" @click="jump('method')">函数使用指引</div>
                             <div class="nav-content" :class="$route.name === 'variable' ? 'nav-active' : ''" @click="jump('variable')">变量使用指引</div>
                             <div class="nav-content" :class="$route.name === 'directive' ? 'nav-active' : ''" @click="jump('directive')">指令使用指引</div>
+                            <div class="nav-content" :class="$route.name === 'template-project' ? 'nav-active' : ''" @click="jump('template-project')">项目模板使用指引</div>
+                            <div class="nav-content" :class="$route.name === 'template-page' ? 'nav-active' : ''" @click="jump('template-page')">页面模板使用指引</div>
                             <div class="nav-content" :class="$route.name === 'develop' ? 'nav-active' : ''" @click="jump('develop')">二次开发指引</div>
                             <div class="nav-content" :class="$route.name === 'table-search' ? 'nav-active' : ''" @click="jump('table-search')">表格查询实战案例</div>
                             <div class="nav-content" :class="$route.name === 'changelog' ? 'nav-active' : ''" @click="jump('changelog')">更新日志</div>

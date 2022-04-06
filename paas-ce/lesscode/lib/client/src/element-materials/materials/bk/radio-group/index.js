@@ -16,18 +16,24 @@ export default {
     icon: 'bk-drag-radio',
     group: '表单',
     order: 1,
-    events: [{
-        name: 'change', tips: '单选组选中的值改变时调用该事件函数，事件回调参数 (value: String | Number | Boolean)'
-    }],
-    styles: ['margin'],
+    document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/radio',
+    events: [
+        {
+            name: 'change',
+            tips: '单选组选中的值改变时调用该事件函数，事件回调参数 (value: String | Number | Boolean)'
+        }
+    ],
+    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     directives: [
         {
             type: 'v-model',
-            val: '',
-            valType: 'variable'
+            prop: 'value'
         }
     ],
     props: {
+        value: {
+            type: ['string', 'number', 'boolean']
+        }
     },
     slots: {
         default: {

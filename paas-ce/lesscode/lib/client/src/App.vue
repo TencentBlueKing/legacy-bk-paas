@@ -60,7 +60,7 @@
         computed: {
             ...mapGetters(['mainContentLoading']),
             emptyPage () {
-                return this.$route.name === 'preview' || this.$route.name === 'previewTemplate'
+                return this.$route.name === 'preview' || this.$route.name === 'previewTemplate' || this.$route.name === 'previewMobile'
             },
             authed () {
                 return this.$route.meta.authed
@@ -105,6 +105,7 @@
         width: 100%;
         height: 100%;
         overflow-y: hidden;
+        @mixin scroller;
         font-size: 14px;
         color: #63656e;
     }

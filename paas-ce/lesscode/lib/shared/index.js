@@ -16,3 +16,4 @@
  */
 export * from './function'
 export * from './data-source'
+export * from './route'
