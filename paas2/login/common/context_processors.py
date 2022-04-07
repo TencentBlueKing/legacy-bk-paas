@@ -32,6 +32,7 @@ def site_settings(request):
     real_static_url = urllib.parse.urljoin(str(settings.SITE_URL), str("." + settings.STATIC_URL))
     cur_domain = request.get_host()
     password_rsa_public_key = base64.b64encode(settings.PASSWORD_RSA_PUBLIC_KEY.encode())
+    enable_password_rsa_encrypted = str(settings.ENABLE_PASSWORD_RSA_ENCRYPTED).lower()
     return {
         "LOGIN_URL": settings.LOGIN_URL,
         "LOGOUT_URL": settings.LOGOUT_URL,
@@ -47,5 +48,5 @@ def site_settings(request):
         # 本地 css 后缀名
         "CSS_SUFFIX": settings.CSS_SUFFIX,
         "PASSWORD_RSA_PUBLIC_KEY": password_rsa_public_key,
-        "ENABLE_PASSWORD_RSA_ENCRYPTED": settings.ENABLE_PASSWORD_RSA_ENCRYPTED
+        "ENABLE_PASSWORD_RSA_ENCRYPTED": enable_password_rsa_encrypted,
     }

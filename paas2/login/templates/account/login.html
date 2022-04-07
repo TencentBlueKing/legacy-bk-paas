@@ -162,7 +162,7 @@
     <script src="{{STATIC_URL}}assets/jsencrypt.js"></script>
     <script type="text/javascript">
         PASSWORD_RSA_PUBLIC_KEY = "{{ PASSWORD_RSA_PUBLIC_KEY }}"
-        ENABLE_PASSWORD_RSA_ENCRYPTED = "{{ ENABLE_PASSWORD_RSA_ENCRYPTED }}"
+        ENABLE_PASSWORD_RSA_ENCRYPTED = "{{ ENABLE_PASSWORD_RSA_ENCRYPTED }}" === "true"
         // 密码传输rsa加密
         function rsa_encrypt_password() {
             var public_key = window.atob(PASSWORD_RSA_PUBLIC_KEY).split('\n').join("");
@@ -173,7 +173,7 @@
             $('#password').val(encrypted);
         }
         $(document).ready(function(){
-             if (ENABLE_PASSWORD_RSA_ENCRYPTED === "true") {
+             if (ENABLE_PASSWORD_RSA_ENCRYPTED) {
                  $('#login-form').submit(() => {
                      rsa_encrypt_password();
                 });
