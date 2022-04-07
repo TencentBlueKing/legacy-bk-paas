@@ -33,6 +33,10 @@ export default {
     ],
     styles: [
         'position',
+        {
+            name: 'size',
+            include: ['display', 'width', 'height']
+        },
         'margin',
         'pointer',
         'opacity'

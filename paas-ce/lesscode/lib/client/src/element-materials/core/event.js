@@ -28,6 +28,7 @@ import { bus } from '@/common/bus'
  * appendChild
  * removeChild
  * moveChild
+ * mobilePreviewSwitch
  */
 
 export const addEventListener = (eventName, callback) => {
