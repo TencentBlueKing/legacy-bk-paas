@@ -369,7 +369,7 @@ class PageCode {
                             <!-- eslint-disable -->
                             <!-- prettier-ignore -->
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
-                                >${slotStr}</${item.type}>
+                            >${slotStr}</${item.type}>
                             <!-- eslint-enable -->`
                     } else {
                         if (item.type === 'bk-checkbox-group') {
@@ -1329,7 +1329,7 @@ class PageCode {
             const slot = slots[key]
             const isDefaultSlot = key === 'default'
             compId = compId + key
-            slotStr += '\n'
+            slotStr += type === 'p' ? '' : '\n'
             if (!isDefaultSlot) slotStr += `<template slot="${key}">\n`
             if (Array.isArray(slot)) {
                 slotStr += this.generateCode(slot)

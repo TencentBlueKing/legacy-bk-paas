@@ -247,6 +247,7 @@
         },
         mounted () {
             this.handleInitValueMap()
+            this.initData()
         },
         methods: {
             initData () {
