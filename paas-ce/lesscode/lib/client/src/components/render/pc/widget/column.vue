@@ -13,7 +13,8 @@
     <div
         :class="{
             [$style['column']]: true,
-            [$style['empty']]: componentData.slot.default.length < 1
+            [$style['render-grid-empty']]: renderGrid.isColumnEmpty,
+            [$style['empty']]: componentData.children.length < 1
         }">
         <draggable
             ref="draggable"
@@ -34,26 +35,6 @@
                 :key="slotComponentData.renderKey"
                 :component-data="slotComponentData" />
         </draggable>
-        <template v-if="componentData.isActived">
-            <div
-                :class="$style['insert-before']"
-                key="insert-before"
-                role="insert-before"
-                v-bk-tooltips.top-start="'在左侧新建一列'"
-                @click="handleInsertBefore"
-                data-render-drag="disabled">
-                <img src="../../../../images/svg/add-line.svg" />
-            </div>
-            <div
-                :class="$style['insert-after']"
-                key="insert-after"
-                role="insert-after"
-                v-bk-tooltips.top-end="'在右侧新建一列'"
-                @click="handleInsertAfter"
-                data-render-drag="disabled">
-                <img src="../../../../images/svg/add-line.svg" />
-            </div>
-        </template>
     </div>
 </template>
 <script>
@@ -69,10 +50,16 @@
             ResolveComponent
         },
         inheritAttrs: false,
+        inject: ['renderGrid'],
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
+            }
+        },
+        computed: {
+            defaultMargin () {
+                return LC.platform === 'PC' ? '10px' : '20rpx'
             }
         },
         created () {
@@ -86,27 +73,12 @@
 
             LC.addEventListener('appendChild', nodeCallback)
             LC.addEventListener('removeChild', nodeCallback)
-            
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('appendChild', nodeCallback)
                 LC.removeEventListener('removeChild', nodeCallback)
             })
         },
         methods: {
-            handleInsertBefore () {
-                if (this.componentData.parentNode.children.length >= 12) {
-                    this.messageWarn('最多支持12栅格')
-                    return
-                }
-                this.componentData.parentNode.insertBefore(LC.createNode('render-column'), this.componentData)
-            },
-            handleInsertAfter () {
-                if (this.componentData.parentNode.children.length >= 12) {
-                    this.messageWarn('最多支持12栅格')
-                    return
-                }
-                this.componentData.parentNode.insertAfter(LC.createNode('render-column'), this.componentData)
-            },
             /**
              * @desc 自动排版子组件
              */
@@ -134,16 +106,16 @@
                         } = componentInstance.componentData.style
                         if (componentInstance.componentData.layoutType
                             || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', '10px')
+                            componentInstance.componentData.setStyle('marginBottom', this.defaultMargin)
                             return
                         }
                         if (!marginLeft || marginLeft === 'unset') {
                             if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
-                                componentInstance.componentData.setStyle('marginRight', '10px')
+                                componentInstance.componentData.setStyle('marginRight', this.defaultMargin)
                             }
                         }
                         if (!marginBottom || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', '10px')
+                            componentInstance.componentData.setStyle('marginBottom', this.defaultMargin)
                         }
                     })
                 })
@@ -156,8 +128,10 @@
         position: relative;
         width: 100% !important;
         height: 100% !important;
-        &.empty{
+        &.render-grid-empty{
             min-height: 64px !important;
+        }
+        &.empty{
             background: #FAFBFD;
             &::before{
                 content: "请拖入组件";

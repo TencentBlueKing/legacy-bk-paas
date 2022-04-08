@@ -16,6 +16,12 @@ export default class extends Base {
     pageCode
 
     @Column({
+        type: 'varchar',
+        comment: '页面类型'
+    })
+    pageType
+
+    @Column({
         type: 'mediumtext',
         comment: '页面的 targetData（JSON 串）'
     })

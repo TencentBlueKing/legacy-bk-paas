@@ -161,6 +161,7 @@ export default () => {
             layoutType,
             logo,
             siteName,
+            theme,
             menuList = [],
             topMenuList = [],
             renderProps = {}
@@ -169,6 +170,7 @@ export default () => {
         const templateData = layoutType === 'empty' ? {} : {
             logo,
             siteName,
+            theme,
             menuList,
             topMenuList,
             renderProps

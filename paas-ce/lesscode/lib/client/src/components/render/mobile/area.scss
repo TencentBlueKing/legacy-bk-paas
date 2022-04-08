@@ -8,6 +8,9 @@
             font-weight: 700;
             color: #313238;
         }
+        .edit-button {
+            display: flex;
+        }
         .dropdown-text {
             cursor: pointer;
             span {
@@ -48,5 +51,43 @@
         background: #ffffff;
         border-radius: 2px;
         box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.10);
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    .simulator-wrapper {
+        position: relative;
+        .device-phone-frame {
+            z-index: 1;
+            pointer-events: none;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            padding: 5% 6.5% 5.6%;
+            box-sizing: content-box;
+
+        }
+        .device-phone {
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: url(../../../images/phone.png);
+            background-size: 100% 100%;
+        }
+        .simulator-preview {
+            height: 100%;
+            width: 100%;
+            box-sizing: content-box;
+            padding: 5% 6.5% 5.6%;
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
     }
   }

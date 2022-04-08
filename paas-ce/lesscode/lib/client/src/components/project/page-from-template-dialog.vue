@@ -64,6 +64,24 @@
             </div>
             <div class="layout-right">
                 <bk-form ref="templateForm" :label-width="150" :rules="formRules" :model="formData" :form-type="'vertical'">
+                    <bk-form-item label="页面类型" property="pageType">
+                        <div class="bk-button-group">
+                            <bk-button
+                                :ext-cls="'type-button'"
+                                @click="changePageType('PC')"
+                                :class="formData.pageType === 'PC' ? 'is-selected' : ''">
+                                <i class="bk-drag-icon bk-drag-pc"> </i>
+                                PC 页面
+                            </bk-button>
+                            <bk-button
+                                :ext-cls="'type-button'"
+                                @click="changePageType('MOBILE')"
+                                :class="formData.pageType === 'MOBILE' ? 'is-selected' : ''">
+                                <i class="bk-drag-icon bk-drag-mobilephone"> </i>
+                                Mobile 页面
+                            </bk-button>
+                        </div>
+                    </bk-form-item>
                     <bk-form-item label="当前已选模板" property="templateName" error-display-type="normal">
                         <bk-input readonly v-model.trim="formData.templateName"
                             placeholder="模板名称">
@@ -82,7 +100,7 @@
                         </bk-input>
                     </bk-form-item>
                     <bk-form-item label="布局模板" error-display-type="normal">
-                        <layout-thumb-list :toolkit="['select']" :list="layoutList" @change-checked="handleLayoutChecked" />
+                        <layout-thumb-list :toolkit="['select']" :list="showLayoutList" @change-checked="handleLayoutChecked" />
                         <bk-link theme="primary" class="jump-link" icon="bk-drag-icon bk-drag-jump-link" @click="handleCreateLayout">跳转新建</bk-link>
                     </bk-form-item>
                     <bk-form-item label="页面路由" required property="pageRoute"
@@ -196,6 +214,9 @@
                     return routePath.endsWith('/') ? routePath : `${routePath}/`
                 }
                 return ''
+            },
+            showLayoutList () {
+                return this.layoutList.filter(layout => layout.layoutType === this.formData.pageType)
             }
         },
         watch: {
@@ -280,7 +301,7 @@
                         }
                     }
 
-                    const { id, routePath } = this.layoutList.find(layout => layout.checked)
+                    const { id, routePath } = this.showLayoutList.find(layout => layout.checked)
                     payload.data.layout = { id, routePath }
 
                     const res = await this.$store.dispatch('page/create', payload)
@@ -304,6 +325,11 @@
                     this.loading = false
                 }
             },
+            resetSelectedLayout () {
+                const layout = this.showLayoutList.find(item => item.checked) || this.showLayoutList[0]
+                layout.checked = true
+                this.selectedLayout = layout
+            },
             getPreviewImg (previewImg) {
                 if (previewImg && previewImg.length > 20) {
                     return previewImg
@@ -318,8 +344,14 @@
                 if (this.searchFilter) {
                     this.filterList = this.filterList.filter(item => item.templateName.toUpperCase().includes(this.searchFilter.toUpperCase()))
                 }
-                this.list = this.filterList
+                this.list = this.filterList.filter(item => item.templateType === this.formData.pageType || (this.formData.pageType === 'PC' && !item.templateType))
                 this.handleReSelect()
+            },
+            changePageType (val) {
+                this.formData.pageType = val
+                this.selectedLayout = this.showLayoutList.find(item => item.checked) || {}
+                this.resetSelectedLayout()
+                this.changeList()
             },
             handleClickFilter (link) {
                 this.filter = link
@@ -365,6 +397,7 @@
                     this.searchFilter = ''
                     this.templateList = []
                     this.formData = {
+                        pageType: 'PC',
                         templateName: '',
                         pageName: '',
                         pageCode: '',
@@ -375,7 +408,7 @@
                 }
             },
             handleLayoutChecked (layout) {
-                this.layoutList.forEach(item => (item.checked = false))
+                this.showLayoutList.forEach(item => (item.checked = false))
                 layout.checked = true
                 this.selectedLayout = layout
             },
@@ -629,6 +662,9 @@
                 padding: 20px;
                 overflow-y: auto;
                 @mixin scroller;
+                .type-button {
+                    width: 176px;
+                }
                 .bk-form-control.control-prepend-group {
                     background: #fff;
                     .group-text {

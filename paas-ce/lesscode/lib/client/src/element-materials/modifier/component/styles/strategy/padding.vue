@@ -56,12 +56,14 @@
     import StyleLayout from '../layout/index'
     import MarginStyle from '@/components/modifier/margin-style'
     import { splitValueAndUnit } from '@/common/util'
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
 
     export default {
         components: {
             StyleLayout,
             MarginStyle
         },
+        mixins: [defaultUnitMixin],
         props: {
             value: {
                 type: Object,
@@ -78,10 +80,10 @@
                 paddingRightValue: splitValueAndUnit('value', this.value.paddingRight),
                 paddingBottomValue: splitValueAndUnit('value', this.value.paddingBottom),
                 paddingLeftValue: splitValueAndUnit('value', this.value.paddingLeft),
-                paddingTopUnit: splitValueAndUnit('unit', this.value.paddingTop) || 'px',
-                paddingRightUnit: splitValueAndUnit('unit', this.value.paddingRight) || 'px',
-                paddingBottomUnit: splitValueAndUnit('unit', this.value.paddingBottom) || 'px',
-                paddingLeftUnit: splitValueAndUnit('unit', this.value.paddingLeft) || 'px',
+                paddingTopUnit: '',
+                paddingRightUnit: '',
+                paddingBottomUnit: '',
+                paddingLeftUnit: '',
                 styleMap: {
                     paddingTop: 'paddingBottom',
                     paddingBottom: 'paddingTop',
@@ -90,7 +92,16 @@
                 }
             }
         },
+        created () {
+            this.initData()
+        },
         methods: {
+            initData () {
+                this.paddingTopUnit = splitValueAndUnit('unit', this.value.paddingTop) || this.defaultUnit
+                this.paddingRightUnit = splitValueAndUnit('unit', this.value.paddingRight) || this.defaultUnit
+                this.paddingBottomUnit = splitValueAndUnit('unit', this.value.paddingBottom) || this.defaultUnit
+                this.paddingLeftUnit = splitValueAndUnit('unit', this.value.paddingLeft) || this.defaultUnit
+            },
             handleInputChange (key, val) {
                 // 修改对应属性值并通知父组件
                 const styleValue = val === '' ? '' : val + this[key + 'Unit']

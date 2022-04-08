@@ -192,6 +192,7 @@
         computed: {
             ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             ...mapGetters('page', {
+                platform: 'platform',
                 page: 'pageDetail',
                 pageRoute: 'pageRoute',
                 layoutList: 'layoutList',
@@ -272,7 +273,7 @@
                                 clearable: false
                             },
                             editable: true,
-                            children: this.layoutList.map((layout) => {
+                            children: this.layoutList.filter(item => item.layoutType === this.platform).map((layout) => {
                                 return {
                                     id: layout.id,
                                     type: 'option',
@@ -632,7 +633,8 @@
 <style lang="postcss" scoped>
     .page-setting {
         padding: 5px 40px 30px;
-        height: 100%;
+        overflow: auto;
+        /* border: 1px solid #DCDEE5; */
 
         .title {
             font-size: 14px;

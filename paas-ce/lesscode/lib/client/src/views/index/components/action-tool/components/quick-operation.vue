@@ -130,7 +130,6 @@
                         break
                     case 67:
                         funcChainMap.isInDragArea().exec(this.putComponentData)
-                        console.log(566)
                         break
                     // case 83:
                     //     funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)

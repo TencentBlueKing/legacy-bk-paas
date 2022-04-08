@@ -16,28 +16,14 @@
             :class="$style['col']"
             :key="slotComponentData.renderKey"
             :component-data="slotComponentData" />
-        <template v-if="componentData.isActived">
-            <div
-                :class="$style['add-column']"
-                key="append-column"
-                role="append-column"
-                @click="handleAddColumn"
-                data-render-drag="disabled">
-                <img src="../../../../images/svg/add-line.svg" />
-            </div>
-            <div
-                :class="$style['add-clone']"
-                key="clone-grid"
-                role="clone-grid"
-                @click="handleAddClone"
-                data-render-drag="disabled">
-                <img src="../../../../images/svg/add-line.svg" />
-            </div>
-        </template>
         <div
-            v-if="isShowActiveBtn"
-            :class="$style['active-btn']">
-            选中行
+            v-if="isShowActiveBtn || componentData.isActived"
+            :class="$style['placholder']">
+            <div
+                :class="$style['btn']"
+                v-bk-tooltips="`选中整行 ${componentData.componentId}`">
+                <i class="bk-drag-icon bk-drag-drag-small1" />
+            </div>
         </div>
     </div>
 </template>
@@ -57,8 +43,14 @@
                 default: () => ({})
             }
         },
+        provide () {
+            return {
+                renderGrid: this
+            }
+        },
         data () {
             return {
+                isColumnEmpty: true,
                 isShowActiveBtn: false
             }
         },
@@ -66,6 +58,10 @@
             this.spanTotalNumsMemo = 0
             this.updateChildColumn()
 
+            /**
+             * @desc grid本身更新或者子组件column更新时都需要重新执行
+             * @param { Object } event
+             */
             const updateCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId
                     || (
@@ -76,11 +72,15 @@
                     this.updateChildColumn()
                 }
             }
+            /**
+             * @desc 子组件column选中时需要给grid的tips
+             */
             const activeCallback = event => {
                 this.isShowActiveBtn = event.target.parentNode === this.componentData
             }
             const activeClearCallback = () => {
                 this.isShowActiveBtn = false
+                this.$forceUpdate()
             }
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('active', activeCallback)
@@ -93,8 +93,20 @@
             })
         },
         methods: {
+            /**
+             * @desc gird有更新需要同步计算colum的样式
+             */
             updateChildColumn () {
                 const columnNodeList = this.componentData.children
+
+                // 直接子组件column是否有拖入组件
+                this.isColumnEmpty = true
+                columnNodeList.forEach(node => {
+                    if (node.children.length > 0) {
+                        this.isColumnEmpty = false
+                    }
+                })
+                // 计算每个column的宽度
                 const spanTotalNums = columnNodeList.reduce((result, columnNode) => {
                     return result + columnNode.prop.span
                 }, 0)
@@ -110,26 +122,6 @@
                         node.setStyle('width', renderWidth)
                     }
                 })
-            },
-            /**
-             * @desc 克隆 grid——只克隆布局,数据树结构不克隆
-             */
-            handleAddClone () {
-                const gridNode = LC.createNode('render-grid', false)
-                this.componentData.children.forEach(() => {
-                    gridNode.appendChild(LC.createNode('render-column'))
-                })
-                this.componentData.parentNode.insertAfter(gridNode, this.componentData)
-            },
-            /**
-             * @desc 添加栅格
-             */
-            handleAddColumn () {
-                if (this.componentData.children.length >= 12) {
-                    this.messageWarn('最多支持12栅格')
-                    return
-                }
-                this.componentData.appendChild(LC.createNode('render-column'))
             }
         }
     }
@@ -143,64 +135,33 @@
 
         .col {
             border: 1px dashed #ccc;
-            &:nth-child(n + 1) {
-                border-right: none;
-            }
-            &:last-child{
-                border-right: 1px dashed #ccc;
+            &:nth-child(n + 2) {
+                border-left: none;
             }
         }
-
-        .add-column,
-        .add-clone {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            font-size: 14px;
-            color: #fff;
-            text-align: center;
-            line-height: 19px;
-            border-radius: 50%;
-            background: #3A84FF;
-            cursor: pointer;
-            pointer-events: all;
-            img {
-                position: absolute;
-                transform: translate(-50%, -50%);
-                top: 50%;
-                left: 50%;
-                width: 14px;
-                height: 14px;
-            }
-        }
-        .add-column {
-            top: 50%;
-            right: -10px;
-            transform: translateY(-50%);
-            z-index: 11;
-        }
-        .add-clone {
-            bottom: -9px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 11;
-        }
-        .active-btn {
-            position: absolute;
-            top: 0;
-            left: -22px;
-            z-index: 11;
-            bottom: 0;
+    }
+    .placholder {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -14px;
+        z-index: 99;
+        display: flex;
+        .btn{
             display: flex;
-            align-items: center;
-            width: 20px;
-            font-size: 12px;
-            color: #fff;
-            background: #3A84FF;
-            border-radius: 2px;
-            text-align: center;
+            align-content: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            font-size: 14px;
+            color: #979BA5;
+            background: #EAEBF0;
             cursor: pointer;
             pointer-events: all;
+            &:hover{
+                color: #699DF4;
+                background: #A3C5FD;
+            }
         }
     }
 </style>
