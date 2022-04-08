@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.3
+    - bugfix: i18n issues
+
 # 2.14.2
     - bugfix: login page follow-us missing
 
