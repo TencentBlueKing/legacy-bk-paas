@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-04-08 11:25+0800\n"
+"POT-Creation-Date: 2022-04-08 14:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -411,7 +411,7 @@ msgstr ""
 msgid "应用开发状态"
 msgstr ""
 
-#: app/models.py:97 app/models.py:394
+#: app/models.py:97 app/models.py:397
 msgid "app的开发状态"
 msgstr ""
 
@@ -594,59 +594,59 @@ msgstr ""
 msgid "是否已经迁移到 Paas3.0"
 msgstr ""
 
-#: app/models.py:382 app/models.py:383
+#: app/models.py:385 app/models.py:386
 msgid "应用基本信息"
 msgstr ""
 
-#: app/models.py:391 release/models.py:32
+#: app/models.py:394 release/models.py:32
 msgid "对应的appcode"
 msgstr ""
 
-#: app/models.py:394
+#: app/models.py:397
 msgid "版本控制类型"
 msgstr ""
 
-#: app/models.py:395
+#: app/models.py:398
 msgid "版本库URL"
 msgstr ""
 
-#: app/models.py:396
+#: app/models.py:399
 msgid "版本库用户名"
 msgstr ""
 
-#: app/models.py:397
+#: app/models.py:400
 msgid "版本库密码"
 msgstr ""
 
-#: app/models.py:398
+#: app/models.py:401
 msgid "版本库检出分支或Tag"
 msgstr ""
 
-#: app/models.py:402
+#: app/models.py:405
 msgid "数据库类型"
 msgstr ""
 
-#: app/models.py:404
+#: app/models.py:407
 msgid "数据库HOST"
 msgstr ""
 
-#: app/models.py:405
+#: app/models.py:408
 msgid "数据库PORT"
 msgstr ""
 
-#: app/models.py:406
+#: app/models.py:409
 msgid "数据库名称"
 msgstr ""
 
-#: app/models.py:407
+#: app/models.py:410
 msgid "数据库用户名"
 msgstr ""
 
-#: app/models.py:408
+#: app/models.py:411
 msgid "数据库密码"
 msgstr ""
 
-#: app/models.py:434 app/models.py:435
+#: app/models.py:437 app/models.py:438
 msgid "应用安全相关信息"
 msgstr ""
 
@@ -1029,7 +1029,7 @@ msgstr ""
 msgid "蓝鲸企业版"
 msgstr ""
 
-#: bksuite/constants.py:34 common/constants.py:91 home/constants.py:26
+#: bksuite/constants.py:34 common/constants.py:91 home/constants.py:27
 msgid "配置平台"
 msgstr ""
 
@@ -1041,7 +1041,7 @@ msgstr ""
 msgid "管控平台"
 msgstr ""
 
-#: bksuite/constants.py:37 common/constants.py:90 home/constants.py:34
+#: bksuite/constants.py:37 common/constants.py:90 home/constants.py:38
 msgid "作业平台"
 msgstr ""
 
@@ -1122,11 +1122,11 @@ msgstr ""
 msgid "职能化用户"
 msgstr ""
 
-#: common/constants.py:95 esb/configs/default.py:78
+#: common/constants.py:95 esb/configs/default.py:78 home/constants.py:29
 msgid "蓝鲸配置平台是一款面向应用的CMDB，在ITIL体系里，CMDB是构建其它流程的基石，而在蓝鲸智云体系里，配置平台就扮演着基石的角色，为应用提供了各种运维场景的配置数据服务。"
 msgstr ""
 
-#: common/constants.py:98
+#: common/constants.py:98 home/constants.py:39
 msgid "作业平台是为运维量身定制的脚本自动化操作平台，实现各种复杂运维场景的一键式、自动化操作。包含：批量脚本执行、文件分发、文件拉取、定时任务。流程化执行一系列脚本，各个步骤可自动或人工执行。"
 msgstr ""
 
@@ -2274,6 +2274,7 @@ msgid "监控平台V3"
 msgstr ""
 
 #: esb/configs/default.py:121 esb/configs/default.py:122
+#: templates/account/profile.html:46
 msgid "用户管理"
 msgstr ""
 
@@ -2286,6 +2287,7 @@ msgstr ""
 msgid "流程服务"
 msgstr ""
 
+#: esb/configs/default.py:136 esb/configs/default.py:137
 #: esb/configs/default.py:141 esb/configs/default.py:142
 msgid "日志平台"
 msgstr ""
@@ -2931,11 +2933,11 @@ msgstr ""
 msgid "开发者中心|蓝鲸智云社区版"
 msgstr ""
 
-#: templates/base.html:19
+#: templates/base.html:19 templates/home/index.html:13
 msgid "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台"
 msgstr ""
 
-#: templates/base.html:20
+#: templates/base.html:20 templates/home/index.html:14
 msgid "蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。"
 msgstr ""
 
@@ -2960,6 +2962,7 @@ msgid "体验新版开发者中心"
 msgstr ""
 
 #: templates/base.html:129 templates/base_profile.html:43
+#: templates/home/index.html:105
 msgid "注销"
 msgstr ""
 
@@ -2971,23 +2974,23 @@ msgstr ""
 msgid "返回底部"
 msgstr ""
 
-#: templates/base.html:180
+#: templates/base.html:180 templates/home/index.html:319
 msgid "技术支持"
 msgstr ""
 
-#: templates/base.html:181
+#: templates/base.html:181 templates/home/index.html:320
 msgid "社区论坛"
 msgstr ""
 
-#: templates/base.html:182
+#: templates/base.html:182 templates/home/index.html:321
 msgid "产品官网"
 msgstr ""
 
-#: templates/base.html:184
+#: templates/base.html:184 templates/home/index.html:323
 msgid "关注我们"
 msgstr ""
 
-#: templates/base.html:189
+#: templates/base.html:189 templates/home/index.html:327
 msgid "蓝鲸智云 版权所有"
 msgstr ""
 
@@ -3161,7 +3164,7 @@ msgstr ""
 msgid "img/logo/logo_developer_03.png"
 msgstr ""
 
-#: templates/base_profile.html:65
+#: templates/base_profile.html:65 templates/home/index.html:65
 msgid "个人信息"
 msgstr ""
 
@@ -3181,6 +3184,64 @@ msgstr ""
 #: templates/saas/info.html:187 templates/saas/info.html:191
 #: templates/tpapp/info.html:219
 msgid "访问地址"
+msgstr ""
+
+#: templates/account/profile.html:12
+msgid "用户名："
+msgstr ""
+
+#: templates/account/profile.html:18 templates/account/profile_modify.html:3
+msgid "中文名："
+msgstr ""
+
+#: templates/account/profile.html:24 templates/account/profile_modify.html:8
+msgid "联系电话："
+msgstr ""
+
+#: templates/account/profile.html:30 templates/account/profile_modify.html:13
+msgid "常用邮箱："
+msgstr ""
+
+#: templates/account/profile.html:36
+msgid "常用操作："
+msgstr ""
+
+#: templates/account/profile.html:38
+msgid "修改个人信息"
+msgstr ""
+
+#: templates/account/profile.html:39
+msgid "重置密码"
+msgstr ""
+
+#: templates/account/profile.html:44
+msgid "用户管理："
+msgstr ""
+
+#: templates/account/profile_modify.html:5
+#: templates/account/profile_modify.html:10
+#: templates/account/profile_modify.html:15
+msgid "必填"
+msgstr ""
+
+#: templates/account/profile_modify.html:22 templates/app_env/home.html:63
+#: templates/app_monitor/alarm_configure.part:252
+#: templates/app_monitor/alarm_configure.part:304
+#: templates/app_monitor/alarm_configure.part:342
+#: templates/app_monitor/alarm_configure.part:456
+#: templates/app_monitor/alarm_configure.part:510
+#: templates/engine/servers.html:62 templates/engine/third_servers.html:59
+msgid "保存"
+msgstr ""
+
+#: templates/account/profile_modify.html:23 templates/app/info.html:74
+#: templates/app/info.html:90 templates/app/info.html:194
+#: templates/app/info.html:257 templates/app_env/home.html:64
+#: templates/engine/servers.html:63 templates/engine/third_servers.html:60
+#: templates/error/403.html:159 templates/saas/info.html:141
+#: templates/tpapp/info.html:58 templates/tpapp/info.html:74
+#: templates/tpapp/info.html:176
+msgid "取消"
 msgstr ""
 
 #: templates/app/create.html:8 templates/tpapp/create.html:8
@@ -3293,15 +3354,6 @@ msgstr ""
 
 #: templates/app/info.html:66 templates/tpapp/info.html:49
 msgid "应用 TOKEN"
-msgstr ""
-
-#: templates/app/info.html:74 templates/app/info.html:90
-#: templates/app/info.html:194 templates/app/info.html:257
-#: templates/app_env/home.html:64 templates/engine/servers.html:63
-#: templates/engine/third_servers.html:60 templates/error/403.html:159
-#: templates/saas/info.html:141 templates/tpapp/info.html:58
-#: templates/tpapp/info.html:74 templates/tpapp/info.html:176
-msgid "取消"
 msgstr ""
 
 #: templates/app/info.html:75 templates/app/info.html:91
@@ -3503,16 +3555,6 @@ msgstr ""
 #: templates/app_env/home.html:26 templates/app_esb_auth/esb_sys_api.part:31
 #: templates/storage/info.html:60
 msgid "说明"
-msgstr ""
-
-#: templates/app_env/home.html:63
-#: templates/app_monitor/alarm_configure.part:252
-#: templates/app_monitor/alarm_configure.part:304
-#: templates/app_monitor/alarm_configure.part:342
-#: templates/app_monitor/alarm_configure.part:456
-#: templates/app_monitor/alarm_configure.part:510
-#: templates/engine/servers.html:62 templates/engine/third_servers.html:59
-msgid "保存"
 msgstr ""
 
 #: templates/app_env/home.html:71
@@ -4627,6 +4669,70 @@ msgstr ""
 
 #: templates/guide/services.html:118
 msgid "除系统默认的告警配置外（如负载），蓝鲸也支持开发者针对日志进行自定义告警配置，触发告警条件，即发送告警给告警接收人。"
+msgstr ""
+
+#: templates/home/index.html:12
+msgid "工作台|蓝鲸智云社区版"
+msgstr ""
+
+#: templates/home/index.html:39 templates/home/index.html:126
+msgid "应用列表"
+msgstr ""
+
+#: templates/home/index.html:44
+msgid "开发者中心"
+msgstr ""
+
+#: templates/home/index.html:83
+msgid "解绑微信"
+msgstr ""
+
+#: templates/home/index.html:89 templates/home/index.html:94
+msgid "绑定微信"
+msgstr ""
+
+#: templates/home/index.html:120
+msgid "欢迎来到蓝鲸社区版工作台！"
+msgstr ""
+
+#: templates/home/index.html:238
+msgid "帮助指引"
+msgstr ""
+
+#: templates/home/index.html:242
+msgid "新增 “帮助指引” 可以快速上手和找到入门文档"
+msgstr ""
+
+#: templates/home/index.html:243 templates/home/index.html:280
+msgid "知道了"
+msgstr ""
+
+#: templates/home/index.html:257
+msgid "快速入门"
+msgstr ""
+
+#: templates/home/index.html:267
+msgid "帮助文档"
+msgstr ""
+
+#: templates/home/index.html:275
+msgid "常用链接"
+msgstr ""
+
+#: templates/home/index.html:279
+msgid "新增 “常用链接” 可以快速找到相关教程和资源"
+msgstr ""
+
+#: templates/home/index.html:288
+msgid "蓝鲸S-mart"
+msgstr ""
+
+#: templates/home/index.html:291
+msgid "视频教程"
+msgstr ""
+
+#: templates/home/index.html:305
+msgid "服务协议"
 msgstr ""
 
 #: templates/release/base_history.html:12

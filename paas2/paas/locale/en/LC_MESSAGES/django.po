@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-04-08 11:25+0800\n"
+"POT-Creation-Date: 2022-04-08 14:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -415,7 +415,7 @@ msgstr "Created Time"
 msgid "应用开发状态"
 msgstr "state"
 
-#: app/models.py:97 app/models.py:394
+#: app/models.py:97 app/models.py:397
 msgid "app的开发状态"
 msgstr "state"
 
@@ -598,59 +598,59 @@ msgstr ""
 msgid "是否已经迁移到 Paas3.0"
 msgstr ""
 
-#: app/models.py:382 app/models.py:383
+#: app/models.py:385 app/models.py:386
 msgid "应用基本信息"
 msgstr "App"
 
-#: app/models.py:391 release/models.py:32
+#: app/models.py:394 release/models.py:32
 msgid "对应的appcode"
 msgstr "app id"
 
-#: app/models.py:394
+#: app/models.py:397
 msgid "版本控制类型"
 msgstr "vcs_type"
 
-#: app/models.py:395
+#: app/models.py:398
 msgid "版本库URL"
 msgstr "vcs_url"
 
-#: app/models.py:396
+#: app/models.py:399
 msgid "版本库用户名"
 msgstr "vcs_username"
 
-#: app/models.py:397
+#: app/models.py:400
 msgid "版本库密码"
 msgstr "vcs_password"
 
-#: app/models.py:398
+#: app/models.py:401
 msgid "版本库检出分支或Tag"
 msgstr "vcs_checkout_target"
 
-#: app/models.py:402
+#: app/models.py:405
 msgid "数据库类型"
 msgstr "db_type"
 
-#: app/models.py:404
+#: app/models.py:407
 msgid "数据库HOST"
 msgstr "db_host"
 
-#: app/models.py:405
+#: app/models.py:408
 msgid "数据库PORT"
 msgstr "db_port"
 
-#: app/models.py:406
+#: app/models.py:409
 msgid "数据库名称"
 msgstr "db_name"
 
-#: app/models.py:407
+#: app/models.py:410
 msgid "数据库用户名"
 msgstr "db_username"
 
-#: app/models.py:408
+#: app/models.py:411
 msgid "数据库密码"
 msgstr "db_password"
 
-#: app/models.py:434 app/models.py:435
+#: app/models.py:437 app/models.py:438
 msgid "应用安全相关信息"
 msgstr "AppSecureInfo"
 
@@ -1049,7 +1049,7 @@ msgstr "DataFlow"
 msgid "蓝鲸企业版"
 msgstr "BlueKing Enterprise Edtion"
 
-#: bksuite/constants.py:34 common/constants.py:91 home/constants.py:26
+#: bksuite/constants.py:34 common/constants.py:91 home/constants.py:27
 msgid "配置平台"
 msgstr "CMDB"
 
@@ -1061,7 +1061,7 @@ msgstr "Fault Auto-recovery"
 msgid "管控平台"
 msgstr "Control System"
 
-#: bksuite/constants.py:37 common/constants.py:90 home/constants.py:34
+#: bksuite/constants.py:37 common/constants.py:90 home/constants.py:38
 msgid "作业平台"
 msgstr "JOB"
 
@@ -1142,7 +1142,7 @@ msgstr "Super administrator"
 msgid "职能化用户"
 msgstr "Functional user"
 
-#: common/constants.py:95 esb/configs/default.py:78
+#: common/constants.py:95 esb/configs/default.py:78 home/constants.py:29
 msgid "蓝鲸配置平台是一款面向应用的CMDB，在ITIL体系里，CMDB是构建其它流程的基石，而在蓝鲸智云体系里，配置平台就扮演着基石的角色，为应用提供了各种运维场景的配置数据服务。"
 msgstr ""
 "BlueKing Configuration System is an application-oriented CMDB. In the "
@@ -1151,7 +1151,7 @@ msgstr ""
 "applications with data configuration services for different operation "
 "scenarios."
 
-#: common/constants.py:98
+#: common/constants.py:98 home/constants.py:39
 msgid "作业平台是为运维量身定制的脚本自动化操作平台，实现各种复杂运维场景的一键式、自动化操作。包含：批量脚本执行、文件分发、文件拉取、定时任务。流程化执行一系列脚本，各个步骤可自动或人工执行。"
 msgstr ""
 "The Job System is a script automation operating platform tailored for "
@@ -2351,6 +2351,7 @@ msgid "监控平台V3"
 msgstr ""
 
 #: esb/configs/default.py:121 esb/configs/default.py:122
+#: templates/account/profile.html:46
 msgid "用户管理"
 msgstr "User management"
 
@@ -2363,6 +2364,7 @@ msgstr "API Gateway"
 msgid "流程服务"
 msgstr ""
 
+#: esb/configs/default.py:136 esb/configs/default.py:137
 #: esb/configs/default.py:141 esb/configs/default.py:142
 msgid "日志平台"
 msgstr ""
@@ -3074,11 +3076,10 @@ msgstr ""
 "technical staff's DevOps capabilities. It supports CC/JOB/PaaS."
 
 #: templates/base.html:18
-#, fuzzy
 msgid "开发者中心|蓝鲸智云社区版"
-msgstr "Developer Center|BlueKing Enterprise Edition"
+msgstr "Developer Center|Tencent BlueKing"
 
-#: templates/base.html:19
+#: templates/base.html:19 templates/home/index.html:13
 #, fuzzy
 msgid "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台"
 msgstr ""
@@ -3087,7 +3088,7 @@ msgstr ""
 "Enterprise, Enterprise, Job System, Integration System, Configuration "
 "System, Control System"
 
-#: templates/base.html:20
+#: templates/base.html:20 templates/home/index.html:14
 #, fuzzy
 msgid "蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。"
 msgstr ""
@@ -3117,6 +3118,7 @@ msgid "体验新版开发者中心"
 msgstr "Experience the PaaS3.0 Developer Center"
 
 #: templates/base.html:129 templates/base_profile.html:43
+#: templates/home/index.html:105
 msgid "注销"
 msgstr "Logout"
 
@@ -3128,23 +3130,23 @@ msgstr "To Top"
 msgid "返回底部"
 msgstr "To Bottom"
 
-#: templates/base.html:180
+#: templates/base.html:180 templates/home/index.html:319
 msgid "技术支持"
 msgstr "Support"
 
-#: templates/base.html:181
+#: templates/base.html:181 templates/home/index.html:320
 msgid "社区论坛"
 msgstr "Forum"
 
-#: templates/base.html:182
+#: templates/base.html:182 templates/home/index.html:321
 msgid "产品官网"
 msgstr "Official"
 
-#: templates/base.html:184
+#: templates/base.html:184 templates/home/index.html:323
 msgid "关注我们"
 msgstr "Follow-us"
 
-#: templates/base.html:189
+#: templates/base.html:189 templates/home/index.html:327
 msgid "蓝鲸智云 版权所有"
 msgstr "BlueKing All rights reserved"
 
@@ -3315,16 +3317,14 @@ msgid "版本信息"
 msgstr "Version"
 
 #: templates/base_profile.html:19
-#, fuzzy
 msgid "蓝鲸智云个人中心"
-msgstr "BlueKing Developer Center"
+msgstr "BlueKing User Profile"
 
 #: templates/base_profile.html:20
-#, fuzzy
 msgid "img/logo/logo_developer_03.png"
 msgstr "img/logo/logo_develper_02_en.png"
 
-#: templates/base_profile.html:65
+#: templates/base_profile.html:65 templates/home/index.html:65
 msgid "个人信息"
 msgstr "Profile"
 
@@ -3345,6 +3345,64 @@ msgstr "Back to Ext-Link App"
 #: templates/tpapp/info.html:219
 msgid "访问地址"
 msgstr "Access address"
+
+#: templates/account/profile.html:12
+msgid "用户名："
+msgstr "Username: "
+
+#: templates/account/profile.html:18 templates/account/profile_modify.html:3
+msgid "中文名："
+msgstr "Name: "
+
+#: templates/account/profile.html:24 templates/account/profile_modify.html:8
+msgid "联系电话："
+msgstr "Phone: "
+
+#: templates/account/profile.html:30 templates/account/profile_modify.html:13
+msgid "常用邮箱："
+msgstr "E-mali: "
+
+#: templates/account/profile.html:36
+msgid "常用操作："
+msgstr "Operation: "
+
+#: templates/account/profile.html:38
+msgid "修改个人信息"
+msgstr "Modify"
+
+#: templates/account/profile.html:39
+msgid "重置密码"
+msgstr "Reset Password"
+
+#: templates/account/profile.html:44
+msgid "用户管理："
+msgstr "Links: "
+
+#: templates/account/profile_modify.html:5
+#: templates/account/profile_modify.html:10
+#: templates/account/profile_modify.html:15
+msgid "必填"
+msgstr "required"
+
+#: templates/account/profile_modify.html:22 templates/app_env/home.html:63
+#: templates/app_monitor/alarm_configure.part:252
+#: templates/app_monitor/alarm_configure.part:304
+#: templates/app_monitor/alarm_configure.part:342
+#: templates/app_monitor/alarm_configure.part:456
+#: templates/app_monitor/alarm_configure.part:510
+#: templates/engine/servers.html:62 templates/engine/third_servers.html:59
+msgid "保存"
+msgstr "Save"
+
+#: templates/account/profile_modify.html:23 templates/app/info.html:74
+#: templates/app/info.html:90 templates/app/info.html:194
+#: templates/app/info.html:257 templates/app_env/home.html:64
+#: templates/engine/servers.html:63 templates/engine/third_servers.html:60
+#: templates/error/403.html:159 templates/saas/info.html:141
+#: templates/tpapp/info.html:58 templates/tpapp/info.html:74
+#: templates/tpapp/info.html:176
+msgid "取消"
+msgstr "Cancel"
 
 #: templates/app/create.html:8 templates/tpapp/create.html:8
 msgid "基本信息填写"
@@ -3461,15 +3519,6 @@ msgstr "Register"
 #: templates/app/info.html:66 templates/tpapp/info.html:49
 msgid "应用 TOKEN"
 msgstr "App Token"
-
-#: templates/app/info.html:74 templates/app/info.html:90
-#: templates/app/info.html:194 templates/app/info.html:257
-#: templates/app_env/home.html:64 templates/engine/servers.html:63
-#: templates/engine/third_servers.html:60 templates/error/403.html:159
-#: templates/saas/info.html:141 templates/tpapp/info.html:58
-#: templates/tpapp/info.html:74 templates/tpapp/info.html:176
-msgid "取消"
-msgstr "Cancel"
 
 #: templates/app/info.html:75 templates/app/info.html:91
 #: templates/app/info.html:195 templates/app/info.html:258
@@ -3673,16 +3722,6 @@ msgstr "Env"
 #: templates/storage/info.html:60
 msgid "说明"
 msgstr "Description"
-
-#: templates/app_env/home.html:63
-#: templates/app_monitor/alarm_configure.part:252
-#: templates/app_monitor/alarm_configure.part:304
-#: templates/app_monitor/alarm_configure.part:342
-#: templates/app_monitor/alarm_configure.part:456
-#: templates/app_monitor/alarm_configure.part:510
-#: templates/engine/servers.html:62 templates/engine/third_servers.html:59
-msgid "保存"
-msgstr "Save"
 
 #: templates/app_env/home.html:71
 msgid "未设置环境变量"
@@ -4750,7 +4789,9 @@ msgstr "Execute manage.py migrate;"
 msgid ""
 "执行 manage.py startapp "
 "yourappname、添加yourappname到config/default.py文件\"INSTALLED_APPS\"中;"
-msgstr "Execute manage.py startapp youappname and add yourappname into INSTALLED_APPS in config/default.py;"
+msgstr ""
+"Execute manage.py startapp youappname and add yourappname into "
+"INSTALLED_APPS in config/default.py;"
 
 #: templates/guide/newbie.html:237 templates/guide/newbie.html:246
 msgid "在Django的models.py中建立数据库模型后，执行manage.py makemigrations yourappname;"
@@ -4943,6 +4984,70 @@ msgstr ""
 "BlueKing provides a support for the developer to customize alarm "
 "configuration for the log, and when an alarm is triggered, the alarm is "
 "sent to an alarm recipient."
+
+#: templates/home/index.html:12
+msgid "工作台|蓝鲸智云社区版"
+msgstr "Dashboard|Tencent BlueKing"
+
+#: templates/home/index.html:39 templates/home/index.html:126
+msgid "应用列表"
+msgstr "App List"
+
+#: templates/home/index.html:44
+msgid "开发者中心"
+msgstr "Developer Center"
+
+#: templates/home/index.html:83
+msgid "解绑微信"
+msgstr "Unbind wechat"
+
+#: templates/home/index.html:89 templates/home/index.html:94
+msgid "绑定微信"
+msgstr "Bind Wechat"
+
+#: templates/home/index.html:120
+msgid "欢迎来到蓝鲸社区版工作台！"
+msgstr "Welcome to Tencent Blueking dashboard"
+
+#: templates/home/index.html:238
+msgid "帮助指引"
+msgstr "Guide"
+
+#: templates/home/index.html:242
+msgid "新增 “帮助指引” 可以快速上手和找到入门文档"
+msgstr "guide for quick start"
+
+#: templates/home/index.html:243 templates/home/index.html:280
+msgid "知道了"
+msgstr "Got it"
+
+#: templates/home/index.html:257
+msgid "快速入门"
+msgstr "QuickStart"
+
+#: templates/home/index.html:267
+msgid "帮助文档"
+msgstr "Document"
+
+#: templates/home/index.html:275
+msgid "常用链接"
+msgstr "Common Link"
+
+#: templates/home/index.html:279
+msgid "新增 “常用链接” 可以快速找到相关教程和资源"
+msgstr "links for courses and resources"
+
+#: templates/home/index.html:288
+msgid "蓝鲸S-mart"
+msgstr "S-mart App"
+
+#: templates/home/index.html:291
+msgid "视频教程"
+msgstr "Video tutorials"
+
+#: templates/home/index.html:305
+msgid "服务协议"
+msgstr "Service agreement"
 
 #: templates/release/base_history.html:12
 msgid "发布记录"
@@ -5301,7 +5406,9 @@ msgstr "Removal description"
 
 #: templates/saas/release/offline.html:26
 msgid "下架后，访问地址失效，应用入口从\"桌面\"和\"应用市场\"下线"
-msgstr "After removal, the access url will be invalid, you can't see the app on desktop or market"
+msgstr ""
+"After removal, the access url will be invalid, you can't see the app on "
+"desktop or market"
 
 #: templates/saas/release/offline.html:27
 msgid "下架后，数据库信息不丢失，可以重新部署"
@@ -5682,8 +5789,6 @@ msgstr ""
 #~ msgid "只有创建人能删除该应用，请在删除前与其他同事提前沟通，确定"
 #~ msgstr ""
 
-#~ msgid "工作台|蓝鲸智云企业版"
-#~ msgstr "Dashboard|BlueKing Enterprise Edition"
 
 #~ msgid "应用面板"
 #~ msgstr "Dashboard"
@@ -5693,12 +5798,6 @@ msgstr ""
 
 #~ msgid "加载更多"
 #~ msgstr "Load more"
-
-#~ msgid "常用链接"
-#~ msgstr "Common Link"
-
-#~ msgid "视频教程"
-#~ msgstr "Video tutorials"
 
 
 #~ msgid "在线客服"
@@ -5710,11 +5809,6 @@ msgstr ""
 #~ msgid "进入论坛"
 #~ msgstr "Forum"
 
-#~ msgid "服务协议"
-#~ msgstr "Service agreement"
-
-#~ msgid "开发者中心"
-#~ msgstr "Developer Center"
 
 #~ msgid "PaaS系统维护"
 #~ msgstr "PaaS System Maintain"
@@ -5932,9 +6026,6 @@ msgstr ""
 #~ msgid "新密码"
 #~ msgstr "New Password"
 
-#~ msgid "必填"
-#~ msgstr "Required"
-
 #~ msgid "仅包含数字、字母或!@#$%^*()_-+=，长度在4-20个字符"
 #~ msgstr ""
 #~ "It is composed of numbers, letter "
@@ -6099,11 +6190,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "QQ咨询(800802001)"
-#~ msgstr "QQ(800802001)"
+#~ msgstr ""
 
 #~ msgid "蓝鲸论坛"
-#~ msgstr "BlueKing Forum"
+#~ msgstr ""
 
 #~ msgid "蓝鲸官网"
-#~ msgstr "BlueKing Official"
+#~ msgstr ""
 

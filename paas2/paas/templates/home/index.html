@@ -315,12 +315,14 @@
 	</div>
 	<footer class="footer">
 		<p>
-		    <a id="contact_us" class="link">${_(u'QQ咨询(800802001)')}</a>
-        | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'蓝鲸论坛')}</a>
-        | <a href="https://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'蓝鲸官网')}</a>
-		    <!-- | <a href="${SITE_URL}" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸智云工作台</a> -->
-		    |<a class="follow-us" href="###">${_(u'关注我们')}<span class="qr-box" style="z-index:1"><span class="qr"><img src="${STATIC_URL}home/images/qr.png"></span><span class="qr-caret"></span></span></a>
 		</p>
+                <a href="https://wpa1.qq.com/KziXGWJs?_type=wpa&qidian=true" class="link">${_(u'技术支持')}</a>
+                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'社区论坛')}</a>
+                    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'产品官网')}</a>
+                    | <a href="###" hotrep="hp.footer.feedback" class="link follow-us" style="z-index:101;">
+                      ${_(u'关注我们')}
+                        <span class="qr-box"><img class="qr" src="../../../static/img/qr.png" alt=""></span>
+                      </a>
 		<p>Copyright © 2012-${NOW.year}</p>
 		<p>${_(u'蓝鲸智云 版权所有')}</p>
 	</footer>
