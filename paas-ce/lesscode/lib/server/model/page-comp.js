@@ -60,7 +60,7 @@ export const getProjectComp = async function (projectId, versionId) {
         .leftJoinAndSelect(Comp, 'c', 'pageComp.compId = c.id')
         .leftJoinAndSelect(Version, 'v', 'pageComp.versionId = v.id')
         .where('pageComp.projectId = :projectId', { projectId })
-        .andWhere(whereVersion(versionId, 'pageComp'))
+        .andWhere(whereVersion(versionId, 'pageComp', 'projectVersionId'))
         .andWhere('c.deleteFlag = 0')
         .select(['v.version as version', 'c.type as type'])
         .distinct('pageComp.compId')
