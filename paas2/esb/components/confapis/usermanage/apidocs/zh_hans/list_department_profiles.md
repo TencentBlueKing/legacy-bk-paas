@@ -14,7 +14,6 @@
 | id | 字符串 | 是 | 部门 ID |
 | lookup_field | 字符串 | 否 | 查询字段, 默认为 'id' |
 | recursive | 布尔 | 否 | 是否级联查询部门用户,默认为否 |
-| no_page | 布尔 | 否 | 是否不分页一次性返回所有结果，默认为否（注意：当使用 no_page=true 时，结果返回内容会根据 leader 关联情况平铺展开，可能出现 username 重复情况） |
 
 
 
@@ -22,21 +21,30 @@
 
 ``` json
 {
+  "bk_app_code": "xxx",
+  "bk_app_secret": "xxx",
+  "bk_token": "xxx",
+  "bk_username": "xxx",
+  "id": 1,
+  "lookup_field": "id",
   "recursive": true
 }
 ```
 
 ### 返回结果示例
 
+仅示意，请以实际请求结果为准
 ```json
 {
     "message": "Success",
     "code": 0,
-    "data": [
-        {"username":"GW67279","id":90909},
-        {"username":"GW67280","id":90910},
-        {"username":"GW67281","id":90911}
-    ],
+    "data": [{
+      "id":1,
+      "username":"admin",
+      "departments":[],
+      "extras":{},
+      "leader":[]
+    }],
     "result": true
 }
 ```
@@ -48,4 +56,14 @@
 |result| bool | 返回结果，true为成功，false为失败 |
 |code|int|返回码，0表示成功，其他值表示失败|
 |message|string|错误信息|
-|data| array| 结果 |
+|data| array| 结果，根据请求参数动态返回，可以参考上述返回结果示例 |
+
+**data** 字段简析
+
+| 字段      | 类型     | 描述      |
+|-----------|-----------|-----------|
+|id| int | 用户 ID |
+|username|string| 用户名 |
+|departments|array| 用户关联的部门列表 |
+|extras| dict | 用户扩展字段 |
+|leader| array| 用户关联上级 |

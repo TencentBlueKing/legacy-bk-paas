@@ -1,6 +1,6 @@
 ### 功能描述
 
-查询时间流水
+查询事件流转记录
 
 ### 请求参数
 
@@ -8,46 +8,58 @@
 
 #### 接口参数
 
-| 字段 | 类型 | 描述   |
-| ---- | ---- | ------ |
-| id   | int  | 事件ID |
+| 字段 | 类型   | 必选 | 描述   |
+| ---- | ------ | ---- | ------ |
+| id   | string | 是   | 告警ID |
 
 #### 示例数据
 
 ```json
 {
-  "id": 1
+  "bk_app_code": "xxx",
+  "bk_app_secret": "xxxxx",
+  "bk_token": "xxxx",
+  "id": 164239028644167
 }
 ```
 
 ### 响应参数
+
+| 字段    | 类型   | 描述         |
+| ------- | ------ | ------------ |
+| result  | bool   | 请求是否成功 |
+| code    | int    | 返回的状态码 |
+| message | string | 描述信息     |
+| data    | dict   | 数据         |
+
+#### data字段说明
 
 | 字段        | 类型   | 描述     |
 | ----------- | ------ | -------- |
 | status      | string | 状态     |
 | event_id    | string | 事件ID   |
 | message     | string | 记录消息 |
-| operate     | int    | 记录类型 |
+| operate     | string | 记录类型 |
 | extend_info | dict   | 其他数据 |
 | create_time | string | 创建时间 |
 
 #### operate - 记录类型
 
-* ACK - 告警确认
-* ANOMALY_NOTICE - 告警通知
-* RECOVERY_NOTICE - 恢复通知
-* CREATE - 触发告警
+* CREATE - 告警产生
 * CONVERGE - 告警收敛
 * RECOVER - 告警恢复
 * CLOSE - 告警关闭
+* DELAY_RECOVER - 延迟恢复
+* ABORT_RECOVER - 中断恢复
+* SYSTEM_RECOVER - 告警恢复
+* SYSTEM_CLOSE - 告警关闭
+* ACK - 告警确认
+* SEVERITY_UP - 告警级别调整
+* ACTION - 处理动作
 
 #### status - 状态
 
-* RUNNING - 运行中
 * SUCCESS - 成功
-* PARTIAL_SUCCESS - 部分成功
-* FAILED - 失败
-* SHIELDED - 被屏蔽
 
 #### extend_info
 
@@ -59,7 +71,7 @@
 
 ```json
 {
-  "action": {}
+    "action": {}
 }
 ```
 
@@ -72,40 +84,38 @@
 
 ```json
 {
-  "process_time": {
-    "max": 1583914154,
-    "min": 1583911227
-  },
-  "anomaly_record": {},
-  "data_time": {
-    "max": 1583914020,
-    "min": 1583911080
-  },
-  "anomaly_count": 50
+    "process_time": {
+        "max": 1583914154,
+        "min": 1583911227
+    },
+    "anomaly_record": {},
+    "data_time": {
+        "max": 1583914020,
+        "min": 1583911080
+    },
+    "anomaly_count": 50
 }
 ```
 
 #### 示例数据
 
 ```json
-[
-  {
-    "status": "SUCCESS",
-    "event_id": "d751713988987e9331980363e24189ce.1574439660.88.118.1",
-    "message": "",
-    "operate": "CREATE",
-    "extend_info": "",
-    "create_time": "2020-01-01 00:00:00"
-  },
-  {
-    "status": "FAILED",
-    "event_id": "d751713988987e9331980363e24189ce.1574439660.88.118.1",
-    "message": "通知人为空",
-    "operate": "ANOMALY_NOTICE",
-    "extend_info": {
-      "action": {}
-    },
-    "create_time": "2020-01-01 00:00:00"
-  }
-]
+{
+    "result": true,
+    "code": 200,
+    "message": "ok",
+    "data": [
+        {
+            "status": "SUCCESS",
+            "event_id": "164239028644167",
+            "message": "",
+            "operate": "CREATE",
+            "extend_info": "",
+            "create_time": "2020-01-01 00:00:00"
+        }
+    ]
+}
 ```
+
+|
+|

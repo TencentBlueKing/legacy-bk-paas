@@ -15,7 +15,7 @@ create multi release
 | name             |  string   | Y         | release name (max_length: 64)  |
 | multi_commit_id  |  string   | Y         | multi release id (from create_multi_commit) |
 | strategy_id      |  string   | N         | strategy id, empty means publish with no strategy |
-| memo             |  string   | N         | memo description (max_length: 64) |
+| memo             |  string   | N         | memo description (max_length: 256) |
 
 ### Request Parameters Example
 

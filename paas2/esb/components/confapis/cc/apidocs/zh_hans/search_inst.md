@@ -16,7 +16,7 @@
 | page                | object     | 是     | 分页参数                    |
 | condition           | object     | 否     | 具有关联关系的模型实例查询条件                    |
 | time_condition      | object     | 否     | 按时间查询模型实例的查询条件 |
-| fields              | map     | 否     | 指定查询模型实例返回的字段,key为模型ID，value为该查询模型要返回的模型属性字段|
+| fields              | object     | 否     | 指定查询模型实例返回的字段,key为模型ID，value为该查询模型要返回的模型属性字段|
 
 #### page
 
@@ -27,6 +27,7 @@
 | sort      |  string    | 否     | 排序字段             |
 
 #### condition
+示例中的user为模型
 
 | 字段      |  类型      | 必选   |  描述      |
 |-----------|------------|--------|------------|
@@ -54,8 +55,11 @@
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "bk_obj_id": "bk_switch",
-    "bk_supplier_account": "0",
     "page": {
         "start": 0,
         "limit": 10,
@@ -99,6 +103,7 @@
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 2,
         "info": [
@@ -120,6 +125,16 @@
 ```
 
 ### 返回结果参数说明
+#### response
+
+| 名称    | 类型   | 描述                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code    | int    | 错误编码。 0表示success，>0表示失败错误    |
+| message | string | 请求失败返回的错误信息                     |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data    | object | 请求返回的数据                             |
 
 #### data
 

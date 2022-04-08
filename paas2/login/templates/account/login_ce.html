@@ -6,98 +6,133 @@
         <link rel="icon" type="image/x-icon" href="{{STATIC_URL}}favicon.ico">
         <link href="{{STATIC_URL}}css_ce/bk.{{CSS_SUFFIX}}" rel="stylesheet" type="text/css" />
         <link href="{{STATIC_URL}}assets/bk-icon-2.0/iconfont.css" rel="stylesheet" type="text/css" />
+        <link href="{{STATIC_URL}}assets/blueking-icon/index.css" rel="stylesheet" type="text/css" />
         <link href="{{STATIC_URL}}css_ce/login.{{CSS_SUFFIX}}?v={{STATIC_VERSION}}" rel="stylesheet" type="text/css" />
-        <title>登录|蓝鲸智云</title>
+        <title>{% trans '登录 | 腾讯蓝鲸智云' %}</title>
 
         {% if is_plain %}
           <style>
               .login-from {
                 left: 50% !important;
-                top: 50% !important;
+                top: 58% !important;
                 margin: 0 !important;
-                transform: translate(-50%, -50%);
-                border-radius: 0 !important;
-              }
-              .logo-title {
-                border-radius: 0 !important;
+                transform: translate(-50%, -58%);
               }
               .protocol-btn {
                 display: none !important;
-              }
-              .footer {
-                display: none !important;
-              }
-              .page-content {
-                background: #e3eefa !important;
               }
           </style>
         {% endif %}
     </head>
     <body>
         <div class="page-content">
+            <div id="particles-js"></div>
+            <div class="right-top">
+                <img src="{{STATIC_URL}}img/logo_ce/right-top.png" alt="">
+            </div>
+            <div class="right-bottom">
+                <img src="{{STATIC_URL}}img/logo_ce/right-bottom2.png" alt="">
+            </div>
+            <div class="left-bottom">
+                <img src="{{STATIC_URL}}img/logo_ce/left-bottom.png" alt="">
+            </div>
             <div class="login-from">
                 <div class="logo-title">
-                    <img src="{{STATIC_URL}}img/logo_ce/bk_login.png" height="32" width="311" alt="">
+                    <img class="logo-img" src="{{STATIC_URL}}{% trans 'img/logo_ce/logo_ch.png' %}" alt="">
                 </div>
                 <div class="from-detail">
-                    <form action="{{ app_path }}" method="post" id="login-form" onsubmit="return refresh_token()">{% csrf_token %}
-                        <div class="is-danger-tip">
-                            {% if error_message %}
-                            <i class="bk-icon icon-exclamation-circle-shape"></i><span>{{ error_message }}</span>
-                            {% endif %}
-                        </div>
-                        <div class="form-login">
+                    <div class="form-login">
+                        <form action="{{ app_path }}" method="post" id="login-form" onsubmit="return refresh_token()">{% csrf_token %}
                             <div class="user group-control">
-                                <i class="bk-icon icon-user"></i>
-                                <input id="user" type="text" name="username" placeholder="请输入用户名" >
+                                <input id="user" type="text" name="username" placeholder="{% trans '请输入用户名' %}">
                             </div>
                             <div class="pwd group-control">
-                                <i class="bk-icon icon-password"></i>
-                                <input class="password" id="password" type="password" name="password" value="" placeholder="请输入用户密码">
+                                <i class="bk-icon icon-invisible-eye" id="invisible"></i>
+                                <input class="password" id="password" type="password" name="password" value="" placeholder="{% trans '请输入密码' %}">
                             </div>
+                            <p class="change-password">
+                                {% if error_message %}
+                                <span>{{ error_message }}</span>
+                                    {% if token_set_password_url %}
+                                        ,<a href="{{ token_set_password_url }}" target="_blank">{% trans '请修改密码' %}</a>
+                                    {% endif %}
+                                {% endif %}
+                            </p>
                             <div>
                                 <input type="hidden" name="next" value="{{ next }}" />
-                                <input type="hidden" name="app_id" value="{{app_id }}">
+                                <input type="hidden" name="app_id" value="{{ app_id }}">
                             </div>
                             <div class="btn-content clearfix">
-                                <button class="login-btn">登录</button>
-                                <span class="protocol-btn">查看用户协议</span>
+                                <button class="login-btn" id="login-btn">{% trans '立即登录' %}</button>
+                                <!-- <span class="protocol-btn">查看用户协议</span> -->
                             </div>
+                            <div class="action clearfix">
+                                <!-- {% if "/plain/" not in APP_PATH %} -->
+                                <a href="javascript: void(0);" class="protocol-btn fl">{% trans '用户协议 >' %}</a>
+                                <!-- {% endif %} -->
+                                <a href="{{ forget_password_url }}" class="password-btn fr" target="_blank">{% trans '忘记密码？' %}</a>
+                            </div>
+                        </form>
+                        <div class="language-switcher">
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            <form id="language-form" action="{{SITE_URL}}i18n/setlang/" method="post">{% csrf_token %}
+                                <input name="next" type="hidden" value="{{ redirect_to }}" />
+                                <select name="language" style="display: none;">
+                                    {% for language in languages %}
+                                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                                            {{ language.name_local }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            <div class="language-select" style="display: flex">
+                                <p class="language-item {% if LANGUAGE_CODE == 'zh-hans' %} active {% endif %}"  >
+                                    <span id="ch"  class="text-active">中文</span>
+                                </p>
+                                <p class="language-item {% if LANGUAGE_CODE == 'en' %} active {% endif %}">
+                                    <span id="en" class="text-active">English</span>
+                                </p>
+                            </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
             <footer class="footer">
                 <p>
-                    <a id="contact_us" class="link">QQ咨询(800802001)</a>
-                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸论坛</a>
-                    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸官网</a>
-                    | <a href="/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸智云工作台</a>
-                    |<a class="follow-us" href="###">关注我们
-                    <span class="qr-box">
-                        <span class="qr">
-                            <img src="{{STATIC_URL}}img/logo_ce/qr.png">
-                            <span class="qr-caret"></span>
-                        </span>
-                    </span>
+                    <a href="https://wpa1.qq.com/KziXGWJs?_type=wpa&qidian=true" >{% trans '技术支持' %}</a>
+                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '社区论坛' %}</a>
+                    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '产品官网' %}</a>
+                    | <a href="###" hotrep="hp.footer.feedback" class="follow-us" style="z-index:101;">
+                        {% trans '关注我们' %}
+                        <span class="qr-box" style="right: -20px;"><img class="qr" src="{{STATIC_URL}}img/logo_ce/qr.png" alt=""></span>
                     </a>
                 </p>
-                <p>Copyright © 2012-{{NOW.year}} Tencent BlueKing. All Rights Reserved.</p>
-                <p>蓝鲸智云 版权所有</p>
+                <p>Copyright © 2012-{{NOW.year}} Tencent BlueKing. All Rights Reserved. </p>
+                <p>{% trans '蓝鲸智云 版权所有' %}</p>
             </footer>
         </div>
         <!-- 查看用户协议 -->
         {% include "account/agreement.part" %}
         <!-- 浏览器验证 -->
         <div class="error-message-content is-chrome">
-            <span>您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果</span><i class="bk-icon icon-close-circle-shape" id="close-chrome"></i>
+            <span>{% trans '您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果' %}</span><i class="bk-icon icon-close-circle-shape" id="close-chrome"></i>
         </div>
     </body>
     <!-- js 国际化 -->
-    <!--
-    <script type="text/javascript" src="{{SITE_URL}}jsi18n/i18n/"></script>
-    -->
-    <script src="{{STATIC_URL}}assets/jquery-1.10.2.min.js"></script>
-    <script src="{{STATIC_URL}}js_ce/login.{{JS_SUFFIX}}?v={{STATIC_VERSION}}"></script>
 
+    <script type="text/javascript" src="{{SITE_URL}}jsi18n/i18n/"></script>
+
+    <script src="{{STATIC_URL}}assets/jquery-1.10.2.min.js"></script>
+    <script src="{{STATIC_URL}}js_ce/login.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
+    <script src="{{STATIC_URL}}js_ce/particles.js"></script>
+    <script src="{{STATIC_URL}}js_ce/app.js"></script>
+    <script src="{{STATIC_URL}}js_ce/stats.js"></script>
+    <script type="text/javascript">
+        {% if login_redirect_to %}
+        window.open("{{login_redirect_to}}");
+        {% endif %}
+    </script>
 </html>

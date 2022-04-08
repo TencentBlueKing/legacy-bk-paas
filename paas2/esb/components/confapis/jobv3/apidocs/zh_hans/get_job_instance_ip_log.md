@@ -61,27 +61,27 @@
         "bk_cloud_id": 0,
         "file_logs": [
             {
-                "mode": 1, 
+                "mode": 1,
                 "src_ip": {
-                    "bk_cloud_id": 0, 
+                    "bk_cloud_id": 0,
                     "ip": "10.0.0.2"
-                }, 
-                "src_path": "/data/1.log", 
+                },
+                "src_path": "/data/1.log",
                 "dest_ip": {
-                    "bk_cloud_id": 0, 
+                    "bk_cloud_id": 0,
                     "ip": "10.0.0.1"
-                }, 
-                "dest_path": "/tmp/1.log", 
+                },
+                "dest_path": "/tmp/1.log",
                 "status": 4,
-                "log_content": "[2021-06-28 11:32:16] FileName: /tmp/1.log FileSize: 9.0 Bytes State: dest agent success download file Speed: 1 KB/s Progress: 100% StatusDesc: dest agent success download file Detail: success" 
-            }, 
+                "log_content": "[2021-06-28 11:32:16] FileName: /tmp/1.log FileSize: 9.0 Bytes State: dest agent success download file Speed: 1 KB/s Progress: 100% StatusDesc: dest agent success download file Detail: success"
+            },
             {
-                "mode": 0, 
+                "mode": 0,
                 "src_ip": {
-                    "bk_cloud_id": 0, 
+                    "bk_cloud_id": 0,
                     "ip": "10.0.0.2"
-                }, 
-                "src_path": "/data/1.log",  
+                },
+                "src_path": "/data/1.log",
                 "status": 4,
                 "log_content": "[2021-06-28 11:32:16] FileName: /data/1.log FileSize: 9.0 Bytes State: source agent success upload file Speed: 1 KB/s Progress: 100% StatusDesc: source agent success upload file Detail: success upload"
             }
@@ -96,6 +96,16 @@
 - dest_ip 与请求参数的bk_cloud_id/ip对应
 
 ### 返回结果参数说明
+
+#### response
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| result       | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code         | int    | 错误编码。 0表示success，>0表示失败错误 |
+| message      | string | 请求失败返回的错误信息|
+| data         | object | 请求返回的数据|
+| permission   | object | 权限信息|
+| request_id   | string | 请求链id|
 
 #### data
 

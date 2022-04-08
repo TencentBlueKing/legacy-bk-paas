@@ -47,31 +47,43 @@
 
 ```json
 {
-  "bk_biz_id": 2,
-  "notice_receiver": [
-    {
-      "type": "user",
-      "id": "admin"
+    "bk_app_code": "xxx",
+    "bk_app_secret": "xxxxx",
+    "bk_token": "xxxx",
+    "bk_biz_id": 2,
+    "notice_receiver": [
+        {
+            "type": "user",
+            "id": "admin"
+        }
+    ],
+    "name": "layman",
+    "notice_way": {
+        "1": ["weixin"],
+        "2": ["weixin"],
+        "3": ["weixin"]
+    },
+    "webhook_url": "https://www.qq.com",
+    "message": "测试通知",
+    "id": 1,
+    "wxwork_group": {
+        "1": "群会话ID",
+        "2": "群会话ID",
+        "3": "群会话ID"
     }
-  ],
-  "name": "layman",
-  "notice_way": {
-    "1": ["weixin"],
-    "2": ["weixin"],
-    "3": ["weixin"]
-  },
-  "webhook_url": "https://www.qq.com",
-  "message": "测试通知",
-  "id": 1,
-  "wxwork_group": {
-    "1": "群会话ID",
-    "2": "群会话ID",
-    "3": "群会话ID"
-  }
 }
 ```
 
 ### 响应参数
+
+| 字段    | 类型   | 描述         |
+| ------- | ------ | ------------ |
+| result  | bool   | 请求是否成功 |
+| code    | int    | 返回的状态码 |
+| message | string | 描述信息     |
+| data    | dict   | 数据         |
+
+#### data字段说明
 
 | 字段            | 类型   | 描述               |
 | --------------- | ------ | ------------------ |
@@ -82,7 +94,7 @@
 ```json
 {
   "message": "OK",
-  "code": "0",
+  "code": 200,
   "data": {
     "id": 1
   },

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 10:49+0800\n"
+"POT-Creation-Date: 2022-03-25 11:33+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,177 +17,177 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: api/views.py:35 api/views.py:71 api/views.py:107
+#: api/views.py:46 api/views.py:82 api/views.py:118
 msgid "用户验证成功"
 msgstr "User authentication succeeded"
 
-#: api/views.py:57 api/views.py:93 api/views.py:130 bk_oauth2/views.py:28
+#: api/views.py:68 api/views.py:104 api/views.py:141 bk_oauth2/views.py:39
 msgid "用户信息获取成功"
 msgstr "Get user information succeeded"
 
-#: app/constants.py:18
+#: app/constants.py:29
 msgid "已下架"
 msgstr ""
 
-#: app/constants.py:19
+#: app/constants.py:30
 #, fuzzy
 #| msgid "开发者"
 msgid "开发中"
 msgstr "developer"
 
-#: app/constants.py:20
+#: app/constants.py:31
 msgid "测试中"
 msgstr ""
 
-#: app/constants.py:21
+#: app/constants.py:32
 msgid "已上线"
 msgstr ""
 
-#: app/constants.py:22
+#: app/constants.py:33
 msgid "正在提测"
 msgstr ""
 
-#: app/constants.py:23
+#: app/constants.py:34
 msgid "正在上线"
 msgstr ""
 
-#: app/constants.py:24
+#: app/constants.py:35
 msgid "正在下架"
 msgstr ""
 
-#: app/constants.py:36
+#: app/constants.py:47
 msgid "桌面"
 msgstr ""
 
-#: app/constants.py:36
+#: app/constants.py:47
 msgid "新标签页"
 msgstr ""
 
-#: bk_oauth2/models.py:53
+#: bk_oauth2/models.py:66
 msgid "Confidential"
 msgstr ""
 
-#: bk_oauth2/models.py:54
+#: bk_oauth2/models.py:67
 msgid "Public"
 msgstr ""
 
-#: bk_oauth2/models.py:62
+#: bk_oauth2/models.py:75
 msgid "Authorization code"
 msgstr ""
 
-#: bk_oauth2/models.py:63
+#: bk_oauth2/models.py:76
 msgid "Implicit"
 msgstr ""
 
-#: bk_oauth2/models.py:64
+#: bk_oauth2/models.py:77
 msgid "Resource owner password-based"
 msgstr ""
 
-#: bk_oauth2/models.py:65
+#: bk_oauth2/models.py:78
 msgid "Client credentials"
 msgstr ""
 
-#: bk_oauth2/models.py:81
+#: bk_oauth2/models.py:94
 msgid "Allowed URIs list, space separated"
 msgstr ""
 
-#: bk_oauth2/models.py:149
+#: bk_oauth2/models.py:162
 #, python-brace-format
 msgid "Redirect_uris could not be empty with {0} grant_type"
 msgstr ""
 
-#: bkaccount/manager.py:24
+#: bkaccount/manager.py:35
 msgid "记录成功"
 msgstr "Record succeeded"
 
-#: bkaccount/manager.py:26
+#: bkaccount/manager.py:37
 msgid "用户登录记录失败"
 msgstr "User login record failed"
 
-#: bkauth/utils.py:53
+#: bkauth/utils.py:64
 msgid "缺少参数bk_token"
 msgstr "Missing parameters bk_token"
 
-#: bkauth/utils.py:64
+#: bkauth/utils.py:75
 msgid "参数bk_token非法"
 msgstr "Parameters bk_token is illegal"
 
-#: bkauth/utils.py:82
+#: bkauth/utils.py:93
 #, python-format
 msgid "不存在bk_token[%s]的记录"
 msgstr "Record of bk_token [%s] does not exist"
 
-#: bkauth/utils.py:89
+#: bkauth/utils.py:100
 msgid "登录态已注销"
 msgstr "login status has been logged out"
 
-#: bkauth/utils.py:93
+#: bkauth/utils.py:104
 msgid "登录态已过期"
 msgstr "Login status has expired"
 
-#: bkauth/utils.py:97
+#: bkauth/utils.py:108
 msgid "登录态有效期不合法"
 msgstr "Login validity is illegal"
 
-#: bkauth/utils.py:102
+#: bkauth/utils.py:113
 #, fuzzy
 #| msgid "登录态已过期"
 msgid "长时间无操作，登录态已过期"
 msgstr "Login status has expired"
 
-#: bkauth/views.py:115
+#: bkauth/views.py:126
 msgid "账户或者密码错误，请重新输入"
 msgstr "Username or password is incorrect"
 
-#: common/license.py:29
+#: common/license.py:40
 #, python-format
 msgid "证书文件(platform.cert)不存在: %s"
 msgstr "Certificate file (platform.cert) does not exist: %s"
 
-#: common/license.py:32
+#: common/license.py:43
 #, python-format
 msgid "密钥文件(platform.key)不存在: %s"
 msgstr "Secret key file (platform.key) does not exist: %s"
 
-#: common/license.py:40
+#: common/license.py:51
 msgid "证书文件(platform.cert)为空或已被损坏"
 msgstr "Certificate file (platform.cert) is empty or has been damaged"
 
-#: common/license.py:63
+#: common/license.py:74
 msgid "license_server请求校验证书异常"
 msgstr ""
 "Exceptions occurred in request license server to certificate validation"
 
-#: common/license.py:114
+#: common/license.py:125
 msgid "证书不可用，请求未返回有效期或返回格式有误"
 msgstr ""
 "Certificate is not available, the request did not return a valid period or "
 "the return format is incorrect"
 
-#: common/license.py:115
+#: common/license.py:126
 msgid "证书校验成功"
 msgstr "Certificate validation succeeded"
 
-#: conf/default.py:225
+#: conf/default.py:226
 msgid "English"
 msgstr "英文"
 
-#: conf/default.py:226
+#: conf/default.py:227
 msgid "简体中文"
 msgstr "Simplified Chinese"
 
-#: healthz/views.py:66
+#: healthz/views.py:78
 #, python-format
 msgid "配置文件不正确, 缺失对应配置: %s"
 msgstr ""
 "Configuration file is incorrect, with corresponding configurations missed: %s"
 
-#: healthz/views.py:78
+#: healthz/views.py:90
 #, python-format
 msgid "数据库连接存在问题: %s"
 msgstr "There is a problem with database connection: %s"
 
-#: healthz/views.py:87
+#: healthz/views.py:99
 #, python-format
 msgid "企业证书无效：%s; 只影响桌面版本信息的展示"
 msgstr ""
@@ -202,7 +202,7 @@ msgstr "Have not logged in BlueKing platform (page 401)"
 msgid "您需要登录蓝鲸智云"
 msgstr "You need to log in BlueKing"
 
-#: templates/401.html:21
+#: templates/401.html:21 templates/account/login_ce.html:66
 msgid "立即登录"
 msgstr "Log in right now"
 
@@ -235,7 +235,7 @@ msgstr "Exceptions occurred in system"
 msgid "努力恢复中，请稍后再试......"
 msgstr "Trying to recover, please try again later..."
 
-#: templates/50x.html:6 templates/50x.html.py:19
+#: templates/50x.html:6 templates/50x.html:19
 msgid "服务故障，努力修复中..."
 msgstr "Service failure, trying to repair ..."
 
@@ -826,52 +826,52 @@ msgstr ""
 "enterprises rapidly achieve basic OPS support capability and enhancing "
 "technical staff's DevOps capabilities. It supports CC/JOB/PaaS."
 
-#: templates/account/base.html:42 templates/account/base.html.py:97
+#: templates/account/base.html:43 templates/account/base.html:98
 #: templates/account/login.html:89
 msgid "蓝鲸智云桌面"
 msgstr "BlueKing Desktop"
 
-#: templates/account/base.html:43
+#: templates/account/base.html:44
 msgid "img/logo/logo_user_01.png"
 msgstr "img/logo/logo_user_01_en.png"
 
-#: templates/account/base.html:45
+#: templates/account/base.html:46
 msgid "蓝鲸智云用户管理"
 msgstr "BlueKing User Management"
 
-#: templates/account/base.html:46
+#: templates/account/base.html:47
 msgid "img/logo/logo_user_02.png"
 msgstr "img/logo/logo_user_02_en.png"
 
-#: templates/account/base.html:67 templates/admin/base_site.html:14
+#: templates/account/base.html:68 templates/admin/base_site.html:14
 #: templates/admin/login.html:21
 msgid "注销"
 msgstr "Logout"
 
-#: templates/account/base.html:82
+#: templates/account/base.html:83
 msgid "返回顶部"
 msgstr "Back top"
 
-#: templates/account/base.html:85
+#: templates/account/base.html:86
 msgid "返回底部"
 msgstr "Back bottom"
 
-#: templates/account/base.html:94 templates/account/login.html:86
-#: templates/account/login_ce_i18n.html:51
+#: templates/account/base.html:95 templates/account/login.html:86
+#: templates/account/login_ce_i18n.html:48
 msgid "QQ咨询"
 msgstr "QQ"
 
-#: templates/account/base.html:95 templates/account/login.html:87
-#: templates/account/login_ce_i18n.html:52
+#: templates/account/base.html:96 templates/account/login.html:87
+#: templates/account/login_ce_i18n.html:49
 msgid "蓝鲸论坛"
 msgstr "BlueKing Forum"
 
-#: templates/account/base.html:96 templates/account/login.html:88
-#: templates/account/login_ce_i18n.html:53
+#: templates/account/base.html:97 templates/account/login.html:88
+#: templates/account/login_ce_i18n.html:50
 msgid "蓝鲸官网"
 msgstr "Blueking Official"
 
-#: templates/account/base.html:100
+#: templates/account/base.html:101 templates/account/login_ce.html:113
 msgid "蓝鲸智云 版权所有"
 msgstr " "
 
@@ -895,12 +895,12 @@ msgstr "password"
 msgid "登录"
 msgstr "SIGN IN"
 
-#: templates/account/login.html:45 templates/account/login.html.py:50
+#: templates/account/login.html:45 templates/account/login.html:50
 #: templates/account/login_ce_i18n.html:40
 msgid "查看用户协议"
 msgstr "Agreement"
 
-#: templates/account/login.html:53
+#: templates/account/login.html:53 templates/account/login_ce.html:73
 msgid "忘记密码？"
 msgstr "Forget password?"
 
@@ -908,7 +908,8 @@ msgstr "Forget password?"
 msgid "img/logo/btn_cn.png"
 msgstr "img/logo/btn_en.png"
 
-#: templates/account/login.html:99 templates/account/login_ce_i18n.html:72
+#: templates/account/login.html:99 templates/account/login_ce.html:120
+#: templates/account/login_ce_i18n.html:69
 msgid ""
 "您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果"
 msgstr ""
@@ -921,29 +922,57 @@ msgstr ""
 "Enterprise certificate verification ineffective, please contact the system "
 "administrator"
 
+#: templates/account/login_ce.html:11
+msgid "登录 | 腾讯蓝鲸智云"
+msgstr "Login | BlueKing"
+
+#: templates/account/login_ce.html:41
+msgid "img/logo_ce/logo_ch.png"
+msgstr "img/logo_ce/logo_en.png"
+
+#: templates/account/login_ce.html:47 templates/account/login_ce_i18n.html:28
+msgid "请输入用户名"
+msgstr "Please enter your username"
+
+#: templates/account/login_ce.html:51
+msgid "请输入密码"
+msgstr "Please enter your password"
+
+#: templates/account/login_ce.html:57
+msgid "请修改密码"
+msgstr "Change Password"
+
+#: templates/account/login_ce.html:71
+msgid "用户协议 >"
+msgstr "Agreement >"
+
+#: templates/account/login_ce.html:104
+msgid "技术支持"
+msgstr "Support"
+
+#: templates/account/login_ce.html:105
+msgid "社区论坛"
+msgstr "Community"
+
+#: templates/account/login_ce.html:106
+msgid "产品官网"
+msgstr "Official"
+
+#: templates/account/login_ce.html:108 templates/account/login_ce_i18n.html:52
+msgid "关注我们"
+msgstr "Follow us"
+
 #: templates/account/login_ce_i18n.html:10
 msgid "登录|蓝鲸智云"
 msgstr "Login|BlueKing"
-
-#: templates/account/login_ce_i18n.html:28
-msgid "请输入用户名"
-msgstr "Please enter your username"
 
 #: templates/account/login_ce_i18n.html:32
 msgid "请输入用户密码"
 msgstr "Please enter your password"
 
-#: templates/account/login_ce_i18n.html:48
-msgid "青藤云安全提供安全检测"
-msgstr "Safety testing provided by QingTeng"
-
-#: templates/account/login_ce_i18n.html:54
+#: templates/account/login_ce_i18n.html:51
 msgid "蓝鲸智云工作台"
 msgstr "BlueKing Desktop"
-
-#: templates/account/login_ce_i18n.html:55
-msgid "关注我们"
-msgstr "Follow us"
 
 #: templates/account/no_right.html:5
 msgid "你不是管理员, 没有用户管理的权限!"
@@ -1135,7 +1164,7 @@ msgstr ""
 msgid "新密码："
 msgstr "Password: "
 
-#: templates/account/users.html:85 templates/account/users.html.py:91
+#: templates/account/users.html:85 templates/account/users.html:91
 msgid "必填"
 msgstr "Required"
 
@@ -1175,7 +1204,7 @@ msgstr ""
 "You are currently not able to access the site's backend management for the "
 "following reasons."
 
-#: templates/admin/login.html:15 templates/admin/login.html.py:17
+#: templates/admin/login.html:15 templates/admin/login.html:17
 msgid "用户"
 msgstr "user"
 
@@ -1188,7 +1217,7 @@ msgid "没有管理员权限，请联系管理员！"
 msgstr ""
 " do not have administrator privileges, please contact the administrator!"
 
-#: templates/csrf_failure.html:6 templates/csrf_failure.html.py:20
+#: templates/csrf_failure.html:6 templates/csrf_failure.html:20
 msgid "CSRF验证失败"
 msgstr "CSRF verification failed"
 
@@ -1221,6 +1250,9 @@ msgstr ""
 #: templates/oauth2_provider/authorize.html:43
 msgid "将允许应用进行以下操作"
 msgstr ""
+
+#~ msgid "青藤云安全提供安全检测"
+#~ msgstr "Safety testing provided by QingTeng"
 
 #~ msgid "请求参数格式错误,必须为json格式"
 #~ msgstr "Request parameters format error, it must be in json format"

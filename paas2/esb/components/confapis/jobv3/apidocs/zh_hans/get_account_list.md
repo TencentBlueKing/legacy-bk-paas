@@ -33,34 +33,44 @@
 
 ```json
 {
-  "code": 0,
-  "message": null,
-  "result": true,
-  "data": {
-    "start": 0,
-    "total": 12,
-    "data": [
-      {
-        "id": 70,
-        "account": "aaa",
-        "alias": "aaa",
-        "category": 1,
-        "type": 1,
-        "os": "Linux",
-        "creator": "admin",
-        "bk_biz_id": 2,
-        "create_time": 1614659536108,
-        "last_modify_user": "admin",
-        "last_modify_time": 1614659536116
-      }
-    ],
-    "length": 1
-  },
-  "request_id": "4e7acb216087eb96"
+    "code": 0,
+    "message": null,
+    "result": true,
+    "data": {
+        "start": 0,
+        "total": 12,
+        "data": [
+            {
+                "id": 70,
+                "account": "aaa",
+                "alias": "aaa",
+                "category": 1,
+                "type": 1,
+                "os": "Linux",
+                "creator": "admin",
+                "bk_biz_id": 2,
+                "create_time": 1614659536108,
+                "last_modify_user": "admin",
+                "last_modify_time": 1614659536116
+            }
+        ],
+        "length": 1
+    },
+    "request_id": "4e7acb216087eb96"
 }
 ```
 
 ### 返回结果参数说明
+
+#### response
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| result       | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code         | int    | 错误编码。 0表示success，>0表示失败错误 |
+| message      | string | 请求失败返回的错误信息|
+| data         | object | 请求返回的数据|
+| permission   | object | 权限信息|
+| request_id   | string | 请求链id|
 
 #### data.data
 

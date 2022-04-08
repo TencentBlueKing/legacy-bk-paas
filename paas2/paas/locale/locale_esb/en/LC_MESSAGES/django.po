@@ -1356,8 +1356,8 @@ msgid "管理工具"
 msgstr "Management Tools"
 
 #: mainsite/templates/mainsite/base.html:6
-msgid "API网关|蓝鲸智云企业版"
-msgstr "API Gateway|BlueKing Enterprise Edition"
+msgid "API网关 | 腾讯蓝鲸智云"
+msgstr "API Gateway | Tencent BlueKing"
 
 #: mainsite/templates/mainsite/base.html:7
 msgid ""
@@ -1395,16 +1395,16 @@ msgid "注销"
 msgstr "Logout"
 
 #: mainsite/templates/mainsite/footer.html:5
-msgid "QQ咨询(800802001)"
-msgstr ""
+msgid "技术支持"
+msgstr "Support"
 
 #: mainsite/templates/mainsite/footer.html:6
-msgid "蓝鲸论坛"
-msgstr ""
+msgid "社区论坛"
+msgstr "Forum"
 
 #: mainsite/templates/mainsite/footer.html:7
-msgid "蓝鲸官网"
-msgstr ""
+msgid "产品官网"
+msgstr "Official"
 
 #~ msgid "蓝鲸监控"
 #~ msgstr "Monitor"

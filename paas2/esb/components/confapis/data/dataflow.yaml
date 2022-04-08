@@ -383,3 +383,12 @@
   dest_path: /dataflow/flow/flows/get_link_rules_config
   dest_http_method: GET
   is_hidden: true
+
+- path: /data/v3/dataflow/flow/get_latest_msg/
+  name: v3_dataflow_flow_get_latest_msg_get
+  label: 获取节点使用的结果表最近一条数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/get_latest_msg/
+  dest_http_method: GET
+  is_hidden: true

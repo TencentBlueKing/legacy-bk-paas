@@ -15,7 +15,7 @@ import os
 from django.conf import settings
 
 from components.component import ApiChannelForAPIS, ESBApiChannelForAPIS, FTAApiChannelForAPIS
-from esb.bkapp.validators import AppAuthValidator
+from esb.bkapp.validators import AppAuthValidator, AppCodeWhiteListValidator
 from esb.bkauth.validators import UserAuthWithBKTokenValidator
 
 
@@ -56,7 +56,7 @@ config = {
         ],
         "default_channel_classes": None,
         "doc_common_args": u"""
-            #### {{ _("通用参数") }}
+            ### {{ _("通用参数") }}
 
             | {{ _("字段") }} | {{ _("类型") }} | {{ _("必选") }} |  {{ _("描述") }} |
             |-----------|------------|--------|------------|
@@ -82,19 +82,37 @@ config = {
                     # CC v2
                     ("/v2/cc/add_host_to_resource/", {"comp_codename": "generic.v2.cc.add_host_to_resource"}),
                     ("/v2/cc/create_business/", {"comp_codename": "generic.v2.cc.create_business"}),
-                    ("/v2/cc/create_custom_query/", {"comp_codename": "generic.v2.cc.create_custom_query"}),
+                    ("/v2/cc/create_custom_query/", {
+                        "comp_codename": "generic.v2.cc.create_custom_query",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/create_module/", {"comp_codename": "generic.v2.cc.create_module"}),
                     ("/v2/cc/create_set/", {"comp_codename": "generic.v2.cc.create_set"}),
-                    ("/v2/cc/delete_business/", {"comp_codename": "generic.v2.cc.delete_business"}),
-                    ("/v2/cc/delete_custom_query/", {"comp_codename": "generic.v2.cc.delete_custom_query"}),
+                    ("/v2/cc/delete_business/", {
+                        "comp_codename": "generic.v2.cc.delete_business",
+                        "is_hidden": True,
+                    }),
+                    ("/v2/cc/delete_custom_query/", {
+                        "comp_codename": "generic.v2.cc.delete_custom_query",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/delete_host/", {"comp_codename": "generic.v2.cc.delete_host"}),
                     ("/v2/cc/delete_module/", {"comp_codename": "generic.v2.cc.delete_module"}),
                     ("/v2/cc/delete_set/", {"comp_codename": "generic.v2.cc.delete_set"}),
-                    ("/v2/cc/get_custom_query_data/", {"comp_codename": "generic.v2.cc.get_custom_query_data"}),
-                    ("/v2/cc/get_custom_query_detail/", {"comp_codename": "generic.v2.cc.get_custom_query_detail"}),
+                    ("/v2/cc/get_custom_query_data/", {
+                        "comp_codename": "generic.v2.cc.get_custom_query_data",
+                        "is_hidden": True,
+                    }),
+                    ("/v2/cc/get_custom_query_detail/", {
+                        "comp_codename": "generic.v2.cc.get_custom_query_detail",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/get_host_base_info/", {"comp_codename": "generic.v2.cc.get_host_base_info"}),
                     ("/v2/cc/search_business/", {"comp_codename": "generic.v2.cc.search_business"}),
-                    ("/v2/cc/search_custom_query/", {"comp_codename": "generic.v2.cc.search_custom_query"}),
+                    ("/v2/cc/search_custom_query/", {
+                        "comp_codename": "generic.v2.cc.search_custom_query",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/search_module/", {"comp_codename": "generic.v2.cc.search_module"}),
                     ("/v2/cc/search_set/", {"comp_codename": "generic.v2.cc.search_set"}),
                     ("/v2/cc/transfer_host_module/", {"comp_codename": "generic.v2.cc.transfer_host_module"}),
@@ -123,17 +141,24 @@ config = {
                         },
                     ),
                     ("/v2/cc/update_business/", {"comp_codename": "generic.v2.cc.update_business"}),
-                    ("/v2/cc/update_custom_query/", {"comp_codename": "generic.v2.cc.update_custom_query"}),
+                    ("/v2/cc/update_custom_query/", {
+                        "comp_codename": "generic.v2.cc.update_custom_query",
+                        "is_hidden": True,
+                    }),
                     ("/v2/cc/update_host/", {"comp_codename": "generic.v2.cc.update_host"}),
                     ("/v2/cc/update_module/", {"comp_codename": "generic.v2.cc.update_module"}),
                     ("/v2/cc/update_set/", {"comp_codename": "generic.v2.cc.update_set"}),
                     ("/v2/cc/search_biz_inst_topo/", {"comp_codename": "generic.v2.cc.search_biz_inst_topo"}),
                     ("/v2/cc/search_inst_by_object/", {"comp_codename": "generic.v2.cc.search_inst_by_object"}),
-                    ("/v2/cc/bind_role_privilege/", {"comp_codename": "generic.v2.cc.bind_role_privilege"}),
+                    ("/v2/cc/bind_role_privilege/", {
+                        "comp_codename": "generic.v2.cc.bind_role_privilege",
+                        "is_hidden": True,
+                    }),
                     (
                         "/v2/cc/update_object_topo_graphics/",
                         {
                             "comp_codename": "generic.v2.cc.update_object_topo_graphics",
+                            "is_hidden": True,
                         },
                     ),
                     # job
@@ -142,6 +167,7 @@ config = {
                         {
                             "comp_codename": "generic.v2.job.callback_protocol",
                             "no_sdk": True,
+                            "is_hidden": True,
                         },
                     ),
                     # jobv3
@@ -558,6 +584,73 @@ config = {
                             },
                         },
                     ),
+                    (
+                        "/v1/usermanage/login/check/",
+                        {
+                            "comp_codename": "generic.v2.usermanage.usermanage_component",
+                            "request_validators": [
+                                AppAuthValidator(),
+                                AppCodeWhiteListValidator(
+                                    (
+                                        "bk_login",
+                                        "bk_paas",
+                                        "bk_console",
+                                    )
+                                ),
+                            ],
+                            "is_hidden": True,
+                            "comp_conf": {
+                                "name": "api_v1_login_check",
+                                "dest_http_method": "POST",
+                                "dest_path": "/api/v1/login/check/",
+                            },
+                        },
+                    ),
+                    (
+                        "/v1/usermanage/login/profile/",
+                        {
+                            "comp_codename": "generic.v2.usermanage.usermanage_component",
+                            "request_validators": [
+                                AppAuthValidator(),
+                                AppCodeWhiteListValidator(
+                                    (
+                                        "bk_login",
+                                        "bk_paas",
+                                        "bk_console",
+                                    )
+                                ),
+                            ],
+                            "is_hidden": True,
+                            "comp_conf": {
+                                "name": "api_v1_login_profile",
+                                "dest_http_method": "POST",
+                                "dest_path": "/api/v1/login/profile/",
+                            },
+                        },
+                    ),
+                    (
+                        "/v1/usermanage/login/profile/query/",
+                        {
+                            "comp_codename": "generic.v2.usermanage.usermanage_component",
+                            "request_validators": [
+                                AppAuthValidator(),
+                                AppCodeWhiteListValidator(
+                                    (
+                                        "bk_login",
+                                        "bk_paas",
+                                        "bk_console",
+                                    )
+                                ),
+                            ],
+                            "is_hidden": True,
+                            "comp_conf": {
+                                "name": "api_v1_login_profile_query",
+                                "dest_http_method": "POST",
+                                "dest_path": "/api/v1/login/profile/query/",
+                            },
+                        },
+                    ),
+
                 ],
             },
             "esb": {

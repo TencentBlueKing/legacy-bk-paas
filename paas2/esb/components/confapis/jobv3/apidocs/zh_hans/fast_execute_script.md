@@ -16,7 +16,7 @@
 | script_content | string | 否 | 脚本内容Base64。如果不存在script_version_id和script_id,那么使用script_content。优先级：script_version_id>script_id>script_content |
 | task_name      |  string    | 否     | 自定义作业名称 |
 | script_param   |  string    | 否     | 脚本参数Base64。注意：如果有多个参数，比如&#34;param1 param2&#34;这种，需要对&#34;param1 param2&#34;整体进行base64编码，而不是对每个参数进行base64编码再拼接起来 |
-| timeout |  long       | 否     | 脚本执行超时时间，秒。默认7200，取值范围60-86400 |
+| timeout |  long       | 否     | 脚本执行超时时间，秒。默认7200，取值范围1-86400 |
 | account_alias |  string    | 否    | 执行帐号别名。与account_id必须存在一个。当同时存在account_alias和account_id时，account_id优先。 |
 | account_id | long | 否 | 执行账号ID。与account_alias必须存在一个。当同时存在account_alias和account_id时，account_id优先。 |
 | is_param_sensitive |  int   | 否     | 敏感参数将会在执行详情页面上隐藏, 0:不是（默认），1:是 |
@@ -102,7 +102,27 @@
     "data": {
         "job_instance_name": "API Quick execution script1521100521303",
         "job_instance_id": 10000,
-		"step_instance_id": 10001
+        "step_instance_id": 10001
     }
 }
 ```
+
+### 返回结果参数说明
+
+#### response
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| result       | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code         | int    | 错误编码。 0表示success，>0表示失败错误 |
+| message      | string | 请求失败返回的错误信息|
+| data         | object | 请求返回的数据|
+| permission   | object | 权限信息|
+| request_id   | string | 请求链id|
+
+#### data
+
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| job_instance_id     | long      | 作业实例ID |
+| job_instance_name   | long      | 作业实例名称 |
+| step_instance_id    | long      | 步骤实例ID |

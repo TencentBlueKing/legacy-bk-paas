@@ -33,7 +33,7 @@ Callback failed ticket number
 
 ### Return Result Description
 
-| 字段      | 类型        | 描述                      |
+| Field      | Type        | Description                      |
 | ------- | --------- | ----------------------- |
 | result  | bool      | true/false, indicate success or failure|
 | code    | int       | return code. 0 indicates success, other values indicate failure       |

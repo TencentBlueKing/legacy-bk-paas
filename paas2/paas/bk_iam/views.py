@@ -20,6 +20,7 @@ from django.conf import settings
 
 from account.decorators import login_exempt
 from app.models import App
+from saas.models import SaaSApp
 from bk_iam.utils import OKJsonResponse, FailJsonResponse
 from bk_iam.decorators import basic_auth_required
 from iam import DjangoQuerySetConverter
@@ -114,6 +115,7 @@ def _do_query_instance(data, is_en, keyword=""):
     offset = page_info.get("offset", 0)
 
     # TODO: add cache?
+    # NOTE: disable is_en for now
     total, app_list = iam_query_app_list(keyword=keyword, limit=limit, offset=offset)
 
     result = {
@@ -140,6 +142,10 @@ def list_instance_by_policy(data, is_en):
         }
     }
     """
+    # 2022-03-02 not supported yet, because smart app filter not working for now
+    result = {"count": 0, "results": []}
+    return OKJsonResponse(data=result)
+
     # validate
     _type = data.get("type")
     if _type != "app":
@@ -206,7 +212,8 @@ def iam_query_app_list(keyword, limit, offset):
     end = offset + limit
 
     q = App.objects.filter(
-        is_saas=False,
+        # 2022-03-02 support smart app permission controlled by action=develop_app
+        # is_saas=False,
         is_lapp=False,
     )
 
@@ -218,10 +225,21 @@ def iam_query_app_list(keyword, limit, offset):
     if keyword:
         app_all_list = app_all_list.filter(Q(name__icontains=keyword) | Q(code__icontains=keyword))
 
-    total = app_all_list.count()
-    app_list = app_all_list[start:end]
+    # app + deployed smart app
+    app_total = app_all_list.count()
+    app_code_list = [i.code for i in app_all_list]
+    app_list = list(app_all_list.all())
 
-    return total, app_list
+    # not-deployed smart app => SaaSApp
+    saas_all_list = SaaSApp.objects.filter(app__isnull=True).order_by("-created_time").distinct()
+    if keyword:
+        saas_all_list = saas_all_list.filter(Q(name__icontains=keyword) | Q(code__icontains=keyword))
+
+    # smart应用上传, 但是其app_code跟已有的冲突, 此时不能展示出来
+    saas_list = [s for s in saas_all_list.all() if s.code not in app_code_list]
+    saas_total = len(saas_list)
+
+    return app_total+saas_total, (app_list + saas_list)[start:end]
 
 
 def iam_query_app_list_with_filters(filters, limit, offset):
@@ -229,7 +247,8 @@ def iam_query_app_list_with_filters(filters, limit, offset):
     end = offset + limit
 
     q = App.objects.filter(filters).filter(
-        is_saas=False,
+        # 2022-03-02 support smart app permission controlled by action=develop_app
+        # is_saas=False,
         is_lapp=False,
     )
 
@@ -248,10 +267,21 @@ def iam_query_app_list_by_ids(ids):
     SaaS和外链应用 => 需要申请权限
     """
     app_list = App.objects.filter(
-        is_saas=False,
+        # 2022-03-02 support smart app permission controlled by action=develop_app
+        # is_saas=False,
         is_lapp=False,
         # is_third=False,
         code__in=ids,
     ).all()
 
-    return app_list
+    # if got all ids, return
+    if len(app_list) == len(ids):
+        return app_list
+
+    # query from smart app => SaaSApp
+    app_codes = [i.code for i in app_list]
+    not_found_ids = [i for i in ids if i not in app_codes]
+    saas_list = SaaSApp.objects.filter(app__isnull=True, code__in=not_found_ids).all()
+
+    total_list = list(app_list) + list(saas_list)
+    return total_list

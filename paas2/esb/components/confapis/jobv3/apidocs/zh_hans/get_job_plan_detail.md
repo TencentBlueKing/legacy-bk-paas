@@ -17,173 +17,183 @@
 
 ```json
 {
-  "bk_app_code": "esb_test",
-  "bk_app_secret": "xxx",
-  "bk_token": "xxx",
-  "bk_biz_id": 1,
-  "job_plan_id": 100
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id": 1,
+    "job_plan_id": 100
 }
 ```
 
 ### 返回结果示例
 ```json
 {
-  "result": true,
-  "code": 0,
-  "message": "",
-  "data": {
-    "bk_biz_id": 1,
-    "job_plan_id": 100,
-    "name": "test",
-    "creator": "admin",
-    "create_time": 1546272000000,
-    "last_modify_user": "admin",
-    "last_modify_time": 1577807999999,
-    "global_var_list": [
-      {
-        "id": 11,
-        "type": 1,
-        "name": "varName",
-        "value": "value is Me",
-        "description": "hello",
-        "required": 1
-      },
-      {
-        "id": 12,
-        "type": 3,
-        "name": "servers",
-        "description": "",
-        "required": 0,
-        "server": {
-          "dynamic_group_list": [
+    "result": true,
+    "code": 0,
+    "message": "",
+    "data": {
+        "bk_biz_id": 1,
+        "job_plan_id": 100,
+        "name": "test",
+        "creator": "admin",
+        "create_time": 1546272000000,
+        "last_modify_user": "admin",
+        "last_modify_time": 1577807999999,
+        "global_var_list": [
             {
-              "id": "blo8gojho0skft7pr5q0"
+                "id": 11,
+                "type": 1,
+                "name": "varName",
+                "value": "value is Me",
+                "description": "hello",
+                "required": 1
             },
             {
-              "id": "blo8gojho0sabc7priuy"
+                "id": 12,
+                "type": 3,
+                "name": "servers",
+                "description": "",
+                "required": 0,
+                "server": {
+                    "dynamic_group_list": [
+                        {
+                            "id": "blo8gojho0skft7pr5q0"
+                        },
+                        {
+                            "id": "blo8gojho0sabc7priuy"
+                        }
+                    ],
+                    "ip_list": [
+                        {
+                            "bk_cloud_id": 0,
+                            "ip": "10.0.0.1"
+                        },
+                        {
+                            "bk_cloud_id": 0,
+                            "ip": "10.0.0.2"
+                        }
+                    ],
+                    "topo_node_list": [
+                        {
+                            "id": 1000,
+                            "node_type": "module"
+                        }
+                    ]
+                }
             }
-          ],
-          "ip_list": [
+        ],
+        "step_list": [
             {
-              "bk_cloud_id": 0,
-              "ip": "10.0.0.1"
+                "id": 1059,
+                "type": 1,
+                "name": "run local script",
+                "script_info": {
+                    "script_type": 1,
+                    "script_timeout": 1000,
+                    "script_content": "ZWNobyAkMSAkMiAkMw==",
+                    "script_param": "YTEgYTIgYTM=",
+                    "is_param_sensitive": 0,
+                    "account": "root"
+                }
             },
             {
-              "bk_cloud_id": 0,
-              "ip": "10.0.0.2"
-            }
-          ],
-          "topo_node_list": [
-            {
-              "id": 1000,
-              "node_type": "module"
-            }
-          ]
-        }
-      }
-    ],
-    "step_list": [
-      {
-        "id": 1059,
-        "type": 1,
-        "name": "run local script",
-        "script_info": {
-          "script_type": 1,
-          "script_timeout": 1000,
-          "script_content": "ZWNobyAkMSAkMiAkMw==",
-          "script_param": "YTEgYTIgYTM=",
-          "is_param_sensitive": 0,
-          "account": "root"
-        }
-      },
-      {
-        "id": 1060,
-        "type": 1,
-        "name": "run cite script",
-        "script_info": {
-          "script_type": 2,
-          "script_id": "aaaaa-bbb-ccc-ddddd",
-          "script_version_id": 1078,
-          "script_timeout": 1000,
-          "script_param": "YTEgYTIgYTM=",
-          "is_param_sensitive": 1,
-          "account": "root"
-        }
-      },
-      {
-        "id": 1061,
-        "type": 2,
-        "name": "xxx",
-        "file_info": {
-          "file_source": [
-                {
-                  "file_list": [
-                    "/tmp/REGEX:[a-z]*.txt"
-                  ],
-                  "server": {
-                    "variable": "servers"
-                  },
-                  "account": {
-                    "id": 1,
-                    "name": "root"
-                  },
-                  "file_type": 1
-                },
-                {
-                 "file_list": [
-                     "testbucket/test.txt"
-                 ],
-                 "file_type": 3,
-                 "file_source_id": 1
+                "id": 1060,
+                "type": 1,
+                "name": "run cite script",
+                "script_info": {
+                    "script_type": 2,
+                    "script_id": "aaaaa-bbb-ccc-ddddd",
+                    "script_version_id": 1078,
+                    "script_timeout": 1000,
+                    "script_param": "YTEgYTIgYTM=",
+                    "is_param_sensitive": 1,
+                    "account": "root"
                 }
-          ],
-          "file_destination": {
-            "path": "/tmp/",
-            "account": {
-              "id": 1,
-              "name": "root"
             },
-            "server": {
-              "variable": "",
-              "dynamic_group_list": [
-                {
-                  "id": "blo8gojho0skft7pr5q0"
-                },
-                {
-                  "id": "blo8gojho0sabc7priuy"
+            {
+                "id": 1061,
+                "type": 2,
+                "name": "xxx",
+                "file_info": {
+                    "file_source": [
+                        {
+                            "file_list": [
+                                "/tmp/REGEX:[a-z]*.txt"
+                            ],
+                            "server": {
+                                "variable": "servers"
+                            },
+                            "account": {
+                                "id": 1,
+                                "name": "root"
+                            },
+                            "file_type": 1
+                        },
+                        {
+                            "file_list": [
+                                "testbucket/test.txt"
+                            ],
+                            "file_type": 3,
+                            "file_source_id": 1
+                        }
+                    ],
+                    "file_destination": {
+                        "path": "/tmp/",
+                        "account": {
+                            "id": 1,
+                            "name": "root"
+                        },
+                        "server": {
+                            "variable": "",
+                            "dynamic_group_list": [
+                                {
+                                    "id": "blo8gojho0skft7pr5q0"
+                                },
+                                {
+                                    "id": "blo8gojho0sabc7priuy"
+                                }
+                            ],
+                            "ip_list": [
+                                {
+                                    "bk_cloud_id": 0,
+                                    "ip": "10.0.0.3"
+                                },
+                                {
+                                    "bk_cloud_id": 0,
+                                    "ip": "10.0.0.4"
+                                }
+                            ],
+                            "topo_node_list": [
+                                {
+                                    "id": 1000,
+                                    "node_type": "module"
+                                }
+                            ]
+                        }
+                    },
+                    "timeout": 60,
+                    "transfer_mode": 1,
+                    "upload_speed_limit": 1000,
+                    "download_speed_limit": 1000
                 }
-              ],
-              "ip_list": [
-                {
-                  "bk_cloud_id": 0,
-                  "ip": "10.0.0.3"
-                },
-                {
-                  "bk_cloud_id": 0,
-                  "ip": "10.0.0.4"
-                }
-              ],
-              "topo_node_list": [
-                {
-                  "id": 1000,
-                  "node_type": "module"
-                }
-              ]
             }
-          },
-          "timeout": 60,
-          "transfer_mode": 1,
-          "upload_speed_limit": 1000,
-          "download_speed_limit": 1000
-        }
-      }
-    ]
-  }
+        ]
+    }
 }
 ```
 
 
 ### 返回结果参数说明
+
+#### response
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| result       | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code         | int    | 错误编码。 0表示success，>0表示失败错误 |
+| message      | string | 请求失败返回的错误信息|
+| data         | object | 请求返回的数据|
+| permission   | object | 权限信息|
+| request_id   | string | 请求链id|
 
 #### data
 

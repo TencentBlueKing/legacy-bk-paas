@@ -19,9 +19,15 @@ Query user info
 ### sample request parameters
 
 Query a profile which has 'admin' as username, only return selected fields (`username`, `id`)
+
 ``` json
 {
+  "bk_app_code": "xxx",
+  "bk_app_secret": "xxx",
+  "bk_token": "xxx",
+  "bk_username": "xxx",
   "id": "admin",
+  "lookup_field": "username",
   "fields": "username,id"
 }
 ```
@@ -33,8 +39,11 @@ Query a profile which has 'admin' as username, only return selected fields (`use
     "message": "Success",
     "code": 0,
     "data": {
-        "id": 4,
-        "username": "jackma",
+      "id":1,
+      "username":"admin",
+      "departments":[],
+      "extras":{},
+      "leader":[]
     },
     "result": true
 }
@@ -49,3 +58,12 @@ Query a profile which has 'admin' as username, only return selected fields (`use
 |message|string|error message|
 |data| array| result |
 
+**data** fields（The specific field depends on the parameter `fields`）
+
+| field      | type     | description     |
+|-----------|-----------|-----------|
+|id| int | user ID |
+|username|string| username |
+|departments|array| related departments |
+|extras| dict | extras fields |
+|leader| array| related leaders |

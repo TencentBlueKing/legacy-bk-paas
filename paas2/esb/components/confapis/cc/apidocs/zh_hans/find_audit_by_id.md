@@ -10,12 +10,16 @@
 
 | 字段      |  类型      | 必选   |  描述      |
 |-----------|------------|--------|------------|
-| id     |int  array    |是      | 审计id数组,一次限制最大传200个                                             |  
+| id     |  array    |是      | 审计id数组,一次限制最大传200个                                             |  
 
 ### 请求参数示例
 
 ```python
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "id":[95,118]
 }
 
@@ -26,9 +30,10 @@
 ```json
 {
     "result": true,
-    "bk_error_code": 0,
-    "bk_error_msg": "success",
+    "code": 0,
+    "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": [
         {
             "id": 95,
@@ -158,14 +163,19 @@
 
 ### 返回结果参数说明
 
+#### response
+
+| 名称    | 类型   | 描述                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code    | int    | 错误编码。 0表示success，>0表示失败错误   |
+| message | string | 请求失败返回的错误信息                   |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data    | object | 请求返回的数据                          |
+
 #### data
 
-| 字段      | 类型      | 描述         |
-|-----------|-----------|--------------|
-|       | array     | 操作审计的记录信息 |
-
-
-### 单条审计详情
 | 字段      | 类型      | 描述         |
 |-----------|-----------|--------------|
 |    id |      int  |    审计ID  |
@@ -180,4 +190,17 @@
 |  bk_biz_id   |       int |    业务id  |
 | resource_id    |     int   |    资源id  |
 |   resource_name  |     string   |  资源名称    |
+|   rid  |     string   |  请求链id    |
 
+#### operation_detail
+| 字段      | 类型      | 描述         |
+|-----------|-----------|--------------|
+|    details |      object  |    详细数据   |
+|    bk_obj_id |      string  |    模型类型   |
+
+#### details
+| 字段      | 类型      | 描述         |
+|-----------|-----------|--------------|
+|    pre_data |      object  |    之前数据   |
+|   cur_data  |     object   |   现在数据   |
+|   update_fields  |     object   |   更新的字段   |

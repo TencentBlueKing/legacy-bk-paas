@@ -2,15 +2,6 @@
 
 Get tasks list for a business, support task name keyword searching
 
-#### General Parameters
-
-|   Field         |  Type       | Required |  Description    |
-|-----------------|-------------|---------|------------------|
-|   bk_app_code   |   string    |   YES    |  APP ID |
-|   bk_app_secret |   string    |   YES    |  APP Secret(APP TOKEN), which can be got via BlueKing Developer Center -> Click APP ID -> Basic Info |
-|   bk_token      |   string    |   NO     |  Current user login token, bk_token or bk_username must be valid, bk_token can be got by Cookie      |
-|   bk_username   |   string    |   NO     |  Current user username, APP in the white list, can use this field to specify the current user        |
-
 #### Interface Parameters
 
 |   Field         |  Type       | Required |  Description     |
@@ -20,7 +11,7 @@ Get tasks list for a business, support task name keyword searching
 |   keyword     |   string     |   NO   |  keyword to filter the task list based on the task name. default is no filter |
 |   is_started  |   bool       |   NO   |  task status to filter the task list based on the start status. default is no filter |
 |   is_finished |   bool       |   NO   |  task status to filter the task list based on the finish status. default is no filter |
-|   limit       |   int        |   NO   |  pagination, the number of tasks in the task list in each result. default is 15 |
+|   limit       |   int        |   NO   | pagination, the number of tasks in the task list in each result. default is 100 |
 |   offset      |   int        |   NO   |  pagination, the start index of task in the task list in each result. default is 0 |
 
 ### Request Parameters Example
@@ -30,10 +21,14 @@ Get tasks list for a business, support task name keyword searching
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "bk_biz_id": "2",
     "keyword": "定时",
     "is_started": true,
     "limit": 5,
+    "offset":0,
+    "is_finished": "false",
+    "scope":"cmdb_biz"
 }
 ```
 
@@ -59,7 +54,15 @@ Get tasks list for a business, support task name keyword searching
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         },
         {
             "id": 166,
@@ -77,7 +80,15 @@ Get tasks list for a business, support task name keyword searching
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         },
         {
             "id": 159,
@@ -95,7 +106,15 @@ Get tasks list for a business, support task name keyword searching
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         },
         {
             "id": 158,
@@ -113,7 +132,15 @@ Get tasks list for a business, support task name keyword searching
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         },
         {
             "id": 157,
@@ -131,9 +158,19 @@ Get tasks list for a business, support task name keyword searching
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         }
-    ]
+    ],
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -144,6 +181,9 @@ Get tasks list for a business, support task name keyword searching
 |  result   |    bool    |      true or false, indicate success or failure                      |
 |  data     |    list    |      data returned when result is true, details are described below  |
 |  message  |    string  |      error message returned when result is false                     |
+| count | int | amount of data list |
+|  request_id     |    string  | esb request id         |
+|  trace_id     |    string  | open telemetry trace_id       |
 
 ##### data[item]
 
@@ -165,9 +205,4 @@ Get tasks list for a business, support task name keyword searching
 |  project_name    |  string      | project name |
 |  bk_biz_id       |  int         | business ID  |
 |  bk_biz_name     |  string      | business name |
-
-
-
-
-
-
+|  auth_actions      |    array   |      actions with permissions for the current user   |

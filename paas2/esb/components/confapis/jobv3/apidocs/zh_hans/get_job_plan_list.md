@@ -26,20 +26,20 @@
 
 ```json
 {
-  "bk_app_code": "esb_test",
-  "bk_app_secret": "xxx",
-  "bk_token": "xxx",
-  "bk_biz_id": 1,
-  "job_template_id": 1,
-  "creator": "admin",
-  "name": "test",
-  "create_time_start": 1546272000000,
-  "create_time_end": 1577807999999,
-  "last_modify_user": "admin",
-  "last_modify_time_start": 1546272000000,
-  "last_modify_time_end": 1577807999999,
-  "start": 0,
-  "length": 20
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id": 1,
+    "job_template_id": 1,
+    "creator": "admin",
+    "name": "test",
+    "create_time_start": 1546272000000,
+    "create_time_end": 1577807999999,
+    "last_modify_user": "admin",
+    "last_modify_time_start": 1546272000000,
+    "last_modify_time_end": 1577807999999,
+    "start": 0,
+    "length": 20
 }
 ```
 
@@ -47,30 +47,40 @@
 
 ```json
 {
-    "result": true, 
-    "code": 0, 
-    "message": "success", 
+    "result": true,
+    "code": 0,
+    "message": "success",
     "data": {
         "data": [
             {
-                "bk_biz_id": 1, 
-                "id": 100, 
-                "job_template_id": 1, 
-                "name": "test", 
-                "creator": "admin", 
-                "create_time": 1546272000000, 
-                "last_modify_user": "admin", 
+                "bk_biz_id": 1,
+                "id": 100,
+                "job_template_id": 1,
+                "name": "test",
+                "creator": "admin",
+                "create_time": 1546272000000,
+                "last_modify_user": "admin",
                 "last_modify_time": 1546272000000
             }
-        ], 
-        "start": 0, 
-        "length": 20, 
+        ],
+        "start": 0,
+        "length": 20,
         "total": 1
     }
 }
 ```
 
 ### 返回结果参数说明
+
+#### response
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| result       | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code         | int    | 错误编码。 0表示success，>0表示失败错误 |
+| message      | string | 请求失败返回的错误信息|
+| data         | object | 请求返回的数据|
+| permission   | object | 权限信息|
+| request_id   | string | 请求链id|
 
 #### data
 

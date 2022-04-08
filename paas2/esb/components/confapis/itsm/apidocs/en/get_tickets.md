@@ -26,7 +26,12 @@ query tickets
     "bk_app_code": "xxxx",
     "bk_token": "xxxx",
     "sns": ["NO2019091610001755"],
-    "create_at__lte": "2019-09-16 10:00:00"
+    "creator": "admin",
+    "create_at__lte": "2019-09-16 10:00:00",
+    "create_at__gte": "2020-09-16 10:00:00",
+    "page": 1,
+    "page_size": "10",
+    "username": "admin"
 }
 ```
 ### Return Result Example

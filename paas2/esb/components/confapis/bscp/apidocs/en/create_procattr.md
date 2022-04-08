@@ -16,7 +16,8 @@ create app instance process attribute
 | ip        |  string   | Y        | ip of instance |
 | path      |  string   | Y        | configs cache path of instance (max_length: 256) |
 | labels    |  map      | Y        | labels of instance(JSON raw string) |
-| memo      |  string   | N        | memo description (max_length: 64) |
+| memo      |  string   | N        | memo description (max_length: 256) |
+| override  |  bool     | N        | override already exist procattr or not, default not override |
 
 ### Request Parameters Example
 

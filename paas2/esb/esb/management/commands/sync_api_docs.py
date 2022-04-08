@@ -17,14 +17,12 @@ from django.core.management.base import BaseCommand
 from esb.bkcore.models import ComponentAPIDoc, ESBChannel
 from esb.management.utils.api_docs import ApiDocManager, DocNotChangedException
 
-"""
-update api_doc to db
-"""
-
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
+    """update api_doc to db"""
+
     def add_arguments(self, parser):
         parser.add_argument("--all", action="store_true", dest="all", default=False, help="update all api docs")
 
@@ -39,14 +37,14 @@ class Command(BaseCommand):
                 api_data = api_doc_manager.get_api_doc(channel)
             except DocNotChangedException:
                 continue
-            except Exception as ex:
-                logger.error("fail to generate apidoc for %s, Exception: %s", channel.component_codename, ex)
+            except Exception:
+                logger.exception("Generate apidoc fail, component_codename=%s", channel.component_codename)
                 continue
 
             if not api_data:
                 logger.warning(
-                    "Oooops, No api document define found in component %(comp_name)s, you better write one."
-                    % {"comp_name": channel.component_codename}
+                    "Oooops, No api document define found in component %s, you better write one.",
+                    channel.component_codename,
                 )
                 continue
 

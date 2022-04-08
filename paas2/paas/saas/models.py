@@ -145,6 +145,10 @@ class SaaSApp(models.Model):
         return _(self.name)
 
     @property
+    def name_en(self):
+        return self.code
+
+    @property
     def state(self):
         if not self.app:
             return 1

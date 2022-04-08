@@ -1,0 +1,46 @@
+@font-face {
+	font-family: "bk";
+	src: url("fonts/iconcool.svg#iconcool") format("svg"),
+url("fonts/iconcool.ttf") format("truetype"),
+url("fonts/iconcool.woff") format("woff"),
+url("fonts/iconcool.eot?#iefix") format("embedded-opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.bk-icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'bk' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  text-align: center;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yuyanqiehuanzhongwen:before {
+	content: "\e102";
+}
+.icon-yuyanqiehuanyingwen:before {
+	content: "\e101";
+}
+.icon-kejian:before {
+	content: "\e103";
+}
+.icon-invisible-eye:before {
+	content: "\e104";
+}
+.icon-v7:before {
+	content: "\e105";
+}
+.icon-logo:before {
+	content: "\e106";
+}
+.icon-lanjingzhiyunen:before {
+	content: "\e107";
+}

@@ -137,7 +137,7 @@
 
 | 字段                     | 类型     | 描述       |
 | ---------------------- | ------ | -------- |
-| current_status         | string | 单据当前状态，RUNNING（处理中）/FINISHED（已结束）/TERMINATED（被终止）/ SUSPENDED（被挂起）/ REVOKED（被撤销）|
+| current_status         | string | 单据当前状态，RUNNING（处理中）/FINISHED（已结束）/TERMINATED（被终止）/ SUSPENDED（被挂起）/ REVOKED（被撤销） |
 | current_steps          | array  | 单据当前步骤列表   |
 | operations          | array  | 单据当前支持的操作列表   |
 | is_commented           | bool   | 单据是否已评价  |

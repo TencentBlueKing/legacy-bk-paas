@@ -19,6 +19,10 @@ Query department info
 
 ``` json
 {
+  "bk_app_code": "xxx",
+  "bk_app_secret": "xxx",
+  "bk_token": "xxx",
+  "bk_username": "xxx",
   "id": 1122,
   "fields": "name,id"
 }
@@ -31,8 +35,12 @@ Query department info
     "message": "Success",
     "code": 0,
     "data": {
-        "id": 4,
-        "username": "PaaS",
+      "id":1,
+      "name":"总公司",
+      "has_children":true,
+      "full_name":"总公司",
+      "children":[],
+      "parent":null
     },
     "result": true
 }
@@ -47,3 +55,13 @@ Query department info
 |message|string|error message|
 |data| array| result |
 
+**data** fields（The specific field depends on the parameter `fields`）
+
+| field      | type     | description      |
+|-----------|-----------|-----------|
+|id| int | department ID |
+|name|string| department name |
+|has_children|bool| if include children departments |
+|full_name| string | full route of department |
+|children| array| related children departments |
+|parent| object | parent department |

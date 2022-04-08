@@ -16,12 +16,22 @@
 | page         | object  | No   | 分页参数 |
 | search_key         | string  | No   | 名字过滤参数 |
 
+#### page
+
+| 字段      |  类型      | 必选   |  描述      |
+|-----------|------------|--------|------------|
+| start    |  int    | 是     | 记录开始位置 |
+| limit    |  int    | 是     | 每页限制条数,最大500 |
 
 ### 请求参数示例
 
 ```python
 
 {
+  "bk_app_code": "esb_test",
+  "bk_app_secret": "xxx",
+  "bk_username": "xxx",
+  "bk_token": "xxx",
   "bk_biz_id": 1,
   "page": {
     "start": 0,
@@ -49,6 +59,8 @@
   "result": true,
   "code": 0,
   "message": "success",
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "count": 1,
     "info": [
@@ -78,6 +90,8 @@
 | result | bool | 请求成功与否。true:请求成功；false请求失败 |
 | code | int | 错误编码。 0表示success，>0表示失败错误 |
 | message | string | 请求失败返回的错误信息 |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 | data | object | 请求返回的数据 |
 
 #### data 字段说明
@@ -89,11 +103,15 @@
 
 #### info 字段说明
 
-| 字段|类型|说明|Description|
-|---|---|---|---|
-|id|integer|服务实例ID||
-|name|array|服务实例名称||
-|service_template_id|integer|服务模板ID||
-|bk_module_id|integer|模块ID||
-|bk_host_id|integer|主机ID||
-|bk_host_innerip|string|内网IP||
+| 字段|类型|说明|
+|---|---|---|
+|id|int|服务实例ID|
+|name|string|服务实例名称|
+|bk_biz_id|int|业务ID|
+|bk_module_id|int|模块ID|
+|bk_host_id|int|主机ID|
+| creator              | string             | 本条数据创建者                                                                                 |
+| modifier             | string             | 本条数据的最后修改人员            |
+| create_time         | string | 创建时间     |
+| last_time           | string | 更新时间     |
+| bk_supplier_account | string       | 开发商账号 |

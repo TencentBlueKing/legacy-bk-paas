@@ -4,8 +4,6 @@ Query common flow templates list
 
 ### Request Parameters
 
-{{ common_args_desc }}
-
 #### Interface Parameters
 
 None
@@ -17,6 +15,7 @@ None
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
 }
 ```
 
@@ -32,7 +31,15 @@ None
             "edit_time": "2019-07-15 15:13:22 +0800",
             "create_time": "2019-07-15 15:13:22 +0800",
             "editor": "admin",
-            "id": 10014
+            "id": 10014,
+            "auth_actions": [
+                "common_flow_create_task",
+                "common_flow_edit",
+                "common_flow_delete",
+                "common_flow_view",
+                "common_flow_create",
+                "common_flow_create_periodic_task"
+            ]
         },
         {
             "category": "Other",
@@ -41,10 +48,20 @@ None
             "edit_time": "2019-07-15 15:13:22 +0800",
             "create_time": "2019-07-15 15:13:22 +0800",
             "editor": "admin",
-            "id": 10013
+            "id": 10013,
+            "auth_actions": [
+                "common_flow_create_task",
+                "common_flow_edit",
+                "common_flow_delete",
+                "common_flow_view",
+                "common_flow_create",
+                "common_flow_create_periodic_task"
+            ]
         },
     ],
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -55,6 +72,9 @@ None
 |  result   |    bool    |      true or false, indicate success or failure                      |
 |  data     |    dict    |      data returned when result is true, details are described below  |
 |  message  |    string  |      error message returned when result is false                     |
+|  request_id     |    string  | esb request id             |
+|  trace_id     |    string  | open telemetry trace_id        |
+|  auth_actions      |    array   |      actions with permissions for the current user   |
 
 #### data
 
@@ -62,7 +82,7 @@ None
 |-----------|----------|-----------|
 |  id            |    int       |      flow template ID             |
 |  name          |    string    |      flow template name            |
-|  category      |    string    |      template type，the value is described below    |
+|  category      |    string    |      flow template type，the value is described below    |
 |  creator       |    string    |      person who created this flow template      |
 |  create_time   |    string    |      datetime when this flow template created   |
 |  editor        |    string or null | person who edited this flow template last |

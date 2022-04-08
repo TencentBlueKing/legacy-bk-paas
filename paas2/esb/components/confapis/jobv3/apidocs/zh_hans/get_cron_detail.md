@@ -17,11 +17,11 @@
 
 ```json
 {
-  "bk_app_code": "esb_test",
-  "bk_app_secret": "xxx",
-  "bk_token": "xxx",
-  "bk_biz_id": 1,
-  "id": 1
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id": 1,
+    "id": 1
 }
 ```
 
@@ -29,63 +29,74 @@
 
 ```json
 {
-  "result": true,
-  "code": 0,
-  "message": "",
-  "data": {
-    "bk_biz_id": 1,
-    "job_plan_id": 100,
-    "id": 1,
-    "name": "test",
-    "status": 1,
-    "expression": "0/5 * * * ?",
-    "global_var_list": [
-      {
-        "id": 436,
-        "name": "ip",
-        "server": {
-          "dynamic_group_list": [
-              {
-                  "id": "blo8gojho0skft7pr5q0"
-              },
-              {
-                  "id": "blo8gojho0sabc7priuy"
-              }
-          ],
-          "ip_list": [
+    "result": true,
+    "code": 0,
+    "message": "",
+    "data": {
+        "bk_biz_id": 1,
+        "job_plan_id": 100,
+        "id": 1,
+        "name": "test",
+        "status": 1,
+        "expression": "0/5 * * * ?",
+        "global_var_list": [
             {
-              "bk_cloud_id": 0,
-              "ip": "10.0.0.1"
+                "id": 436,
+                "name": "ip",
+                "server": {
+                    "dynamic_group_list": [
+                        {
+                            "id": "blo8gojho0skft7pr5q0"
+                        },
+                        {
+                            "id": "blo8gojho0sabc7priuy"
+                        }
+                    ],
+                    "ip_list": [
+                        {
+                            "bk_cloud_id": 0,
+                            "ip": "10.0.0.1"
+                        },
+                        {
+                            "bk_cloud_id": 0,
+                            "ip": "10.0.0.2"
+                        }
+                    ],
+                    "topo_node_list": [
+                        {
+                            "id": 1000,
+                            "node_type": "module"
+                        }
+                    ]
+                }
             },
             {
-              "bk_cloud_id": 0,
-              "ip": "10.0.0.2"
+                "id": 437,
+                "name": "text",
+                "value": "new String value"
             }
-          ],
-          "topo_node_list": [
-            {
-              "id": 1000,
-              "node_type": "module"
-            }
-          ]
-        }
-      },
-      {
-        "id": 437,
-        "name": "text",
-        "value": "new String value"
-      }
-    ],
-    "creator": "admin",
-    "create_time": 1546272000000,
-    "last_modify_user": "admin",
-    "last_modify_time": 1577807999999
-  }
+        ],
+        "creator": "admin",
+        "create_time": 1546272000000,
+        "last_modify_user": "admin",
+        "last_modify_time": 1577807999999
+    }
 }
 ```
 
 ### 返回结果参数说明
 
+#### response
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| result       | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code         | int    | 错误编码。 0表示success，>0表示失败错误 |
+| message      | string | 请求失败返回的错误信息|
+| data         | object | 请求返回的数据|
+| permission   | object | 权限信息|
+| request_id   | string | 请求链id|
+
+#### data
 | 字段             | 类型      | 描述      |
 |------------------|-----------|-----------|
 | bk_biz_id        | long      | 业务 ID |

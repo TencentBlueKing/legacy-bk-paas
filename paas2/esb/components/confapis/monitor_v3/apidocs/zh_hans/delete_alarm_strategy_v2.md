@@ -18,24 +18,32 @@
 
 ```json
 {
-  "bk_biz_id": 7,
-  "ids": [49]
+    "bk_app_code": "xxx",
+    "bk_app_secret": "xxxxx",
+    "bk_token": "xxxx",
+    "bk_biz_id": 7,
+    "ids": [49]
 }
 ```
 
 ### 响应参数
-| 字段     | 类型  | 描述            |
-| ------- | ---- | --------------- |
-| data    | list | 已删除的策略ID列表 | 
+
+| 字段    | 类型   | 描述               |
+| ------- | ------ | ------------------ |
+| result  | bool   | 请求是否成功       |
+| code    | int    | 返回的状态码       |
+| message | string | 描述信息           |
+| data    | list   | 已删除的策略id列表 |
 
 #### 示例数据
+
 ```json
 {
-  "result": true,
-  "code": 200,
-  "message": "OK",
-  "data": [
-    49
-  ]
+    "result": true,
+    "code": 200,
+    "message": "OK",
+    "data": [
+        49
+    ]
 }
 ```

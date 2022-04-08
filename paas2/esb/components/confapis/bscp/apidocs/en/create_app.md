@@ -11,9 +11,9 @@ create new application
 | Field       | Type      | Required  | Description |
 |-------------|-----------|-----------|-------------|
 | biz_id      |  string   | Y         | business id (max_length: 64)   |
-| name        |  string   | Y         | application name (max_length: 64)   |
-| deploy_type |  integer  | Y         | deploy type, 0: container  1: process |
-| memo        |  string   | N         | memo description (max_length: 64) |
+| name        |  string   | Y         | application name (max_length: 128)   |
+| deploy_type |  integer  | Y         | deploy type, 1: container  2: process |
+| memo        |  string   | N         | memo description (max_length: 256) |
 
 ### Request Parameters Example
 
@@ -24,7 +24,7 @@ create new application
     "bk_token": "xxx",
     "biz_id": "xxx",
     "name": "myapp",
-    "deploy_type": 0,
+    "deploy_type": 1,
     "memo": "my first app"
 }
 ```

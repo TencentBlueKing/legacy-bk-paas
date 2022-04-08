@@ -12,10 +12,20 @@
 |----------------------|------------|--------|-----------------------|
 | bk_biz_id            | int  | 是   | 业务ID |
 | bk_module_id         | int  | 否   | 模块ID |
-| bk_host_id           | int  | 否   | 主机ID |
+| bk_host_id           | int  | 否   | 主机ID, 注意：该字段不再维护，请用bk_host_list字段 |
+| bk_host_list         | array| 否   | 主机ID列表 |
 | service_instance_ids | int  | 否   | 服务实例ID列表 |
 | selectors            | int  | 否   | label过滤功能，operator可选值: `=`,`!=`,`exists`,`!`,`in`,`notin`|
 | page                 | object  | 是   | 分页参数 |
+
+Note: 参数`bk_host_list`和`bk_host_id`只能有一个生效，`bk_host_id`不建议再使用。
+
+#### selectors
+| 字段                 |  类型      | 必选	   |  描述                 |
+| -------- | ------ | ---- | ------ |
+| key    | string | 否   | 字段名 |                                                              |
+| operator | string | 否   | operator可选值: `=`,`!=`,`exists`,`!`,`in`,`notin` |
+| values    | -      | 否 | 不同的operator对应不同的value格式                            |
 
 #### page 字段说明
 
@@ -29,13 +39,17 @@
 ```python
 
 {
+  "bk_app_code": "esb_test",
+  "bk_app_secret": "xxx",
+  "bk_username": "xxx",
+  "bk_token": "xxx",
   "bk_biz_id": 1,
   "page": {
     "start": 0,
     "limit": 10,
   },
   "bk_module_id": 8,
-  "bk_host_id": 11,
+  "bk_host_list": [11,12],
   "service_instance_ids": [49],
   "selectors": [{
     "key": "key1",
@@ -55,6 +69,7 @@
   "code": 0,
   "message": "success",
   "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "count": 1,
     "info": [
@@ -131,23 +146,25 @@
 | result | bool | 请求成功与否。true:请求成功；false请求失败 |
 | code | int | 错误编码。 0表示success，>0表示失败错误 |
 | message | string | 请求失败返回的错误信息 |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 | data | object | 请求返回的数据 |
 
 #### data 字段说明
 
-| 字段|类型|说明|描述|
-|---|---|---|---|
-|count|integer|总数||
-|info|array|返回结果||
+| 字段|类型|说明|
+|---|---|---|
+|count|int|总数|
+|info|array|返回结果|
 
-#### info 字段说明
+#### data.info 字段说明
 
 | 字段|类型|说明|Description|
 |---|---|---|---|
 |id|integer|服务实例ID||
 |name|array|服务实例名称||
-|service_template_id|integer|服务模板ID||
-|bk_host_id|integer|主机ID||
+|service_template_id|int|服务模板ID||
+|bk_host_id|int|主机ID||
 |bk_host_innerip|string|主机IP||
 |bk_module_id|integer|模块ID||
 |creator|string|创建人||
@@ -160,4 +177,52 @@
 |bk_biz_id|int|业务ID|业务ID||
 |process_instances.process|object|进程实例详情|进程属性字段||
 |process_instances.relation|object|进程实例的关联信息|比如主机ID，进程模板ID||
+
+#### data.info.process_instances[x].process 字段说明
+| 字段|类型|说明|
+|---|---|---|
+|auto_start|bool|是否自动拉起|
+|auto_time_gap|int|拉起间隔|
+|bk_biz_id|int|业务id|
+|bk_func_id|string|功能ID|
+|bk_func_name|string|进程名称|
+|bk_process_id|int|进程id|
+|bk_process_name|string|进程别名|
+|bk_start_param_regex|string|进程启动参数|
+|bk_supplier_account|string|开发商账号|
+|create_time|string|创建时间|
+|description|string|描述|
+|face_stop_cmd|string|强制停止命令|
+|last_time|string|更新时间|
+|pid_file|string|PID文件路径|
+|priority|int|启动优先级|
+|proc_num|int|启动数量|
+|reload_cmd|string|进程重载命令|
+|restart_cmd|string|重启命令|
+|start_cmd|string|启动命令|
+|stop_cmd|string|停止命令|
+|timeout|int|操作超时时长|
+|user|string|启动用户|
+|work_path|string|工作路径|
+|bind_info|object|绑定信息|
+
+#### data.info.process_instances[x].process.bind_info[n] 字段说明
+| 字段|类型|说明|
+|---|---|---|
+|enable|bool|端口是否启用|
+|ip|string|绑定的ip|
+|port|string|绑定的端口|
+|protocol|string|使用的协议|
+|template_row_id|int|实例化使用的模板行索引，进程内唯一|
+
+#### data.info.process_instances[x].relation 字段说明
+| 字段|类型|说明|
+|---|---|---|
+|bk_biz_id|int|业务id|
+|bk_process_id|int|进程id|
+|service_instance_id|int|服务实例id|
+|process_template_id|int|进程模版id|
+|bk_host_id|int|主机id|
+|bk_supplier_account|string|开发商账号|
+
 

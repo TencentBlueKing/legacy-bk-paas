@@ -13,7 +13,6 @@ List all users
 |-----------|------------|--------|------------|
 | lookup_field | string | no | lookup on which field, 'username' as default |
 | page | int | no | page num |
-| ~~no_page~~ | bool | no | deprecated, please remove this param |
 | page_size | int | no | page size |
 | fields | string | no | response fields, e.g. "username,id" |
 | exact_lookups | string | no | exact lookup list, e.g. "jack,pony" |
@@ -24,7 +23,16 @@ List all users
 
 ``` json
 {
-  "fields": "username,id"
+  "bk_app_code": "xxx",
+  "bk_app_secret": "xxx",
+  "bk_token": "xxx",
+  "bk_username": "xxx",
+  "lookup_field": "username",
+  "page": 1,
+  "page_size": 0,
+  "fields": "username,id",
+  "exact_lookups": "jack,pony",
+  "fuzzy_lookups": "jack,pony"
 }
 ```
 
@@ -35,8 +43,11 @@ List all users
     "message": "Success",
     "code": 0,
     "data": [{
-        "id": 4,
-        "username": "jackma",
+      "id":1,
+      "username":"admin",
+      "departments":[],
+      "extras":{},
+      "leader":[]
     }],
     "result": true
 }
@@ -51,3 +62,12 @@ List all users
 |message|string|error message|
 |data| array| result |
 
+**data** fields（The specific field depends on the parameter `fields`）
+
+| field      | type     | description     |
+|-----------|-----------|-----------|
+|id| int | user ID |
+|username|string| username |
+|departments|array| related departments |
+|extras| dict | extras fields |
+|leader| array| related leaders |

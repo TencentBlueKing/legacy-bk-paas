@@ -2,15 +2,6 @@
 
 获取某个业务下的任务列表，支持任务名关键词搜索
 
-#### 通用参数
-
-|   字段           |  类型       | 必选     |  描述             |
-|-----------------|-------------|---------|------------------|
-|   bk_app_code   |   string    |   是    |  应用ID |
-|   bk_app_secret |   string    |   是    |  安全密钥(应用 TOKEN)，可以通过 蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 获取 |
-|   bk_token      |   string    |   否    |  当前用户登录态，bk_token与bk_username必须一个有效，bk_token可以通过Cookie获取  |
-|   bk_username   |   string    |   否    |  当前用户用户名，应用免登录态验证白名单中的应用，用此字段指定当前用户              |
-
 #### 接口参数
 
 | 字段          |  类型       | 必选   |  描述             |
@@ -20,10 +11,8 @@
 |   keyword     |   string     |   否   |  根据任务名关键词过滤任务列表，默认不过滤 |
 |   is_started  |   bool       |   否   |  根据任务是否已开始过滤任务列表，默认不过滤 |
 |   is_finished |   bool       |   否   |  根据任务是否已结束过滤任务列表，默认不过滤 |
-|   limit       |   int        |   否   |  分页，返回任务列表任务数，默认为15 |
+|   limit       |   int        |   否   |  分页，返回任务列表任务数，默认为100 |
 |   offset      |   int        |   否   |  分页，返回任务列表起始任务下标，默认为0 |
-
-
 
 ### 请求参数示例
 
@@ -32,10 +21,14 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "bk_biz_id": "2",
     "keyword": "定时",
     "is_started": true,
     "limit": 5,
+    "offset":0,
+    "is_finished": "false",
+    "scope":"cmdb_biz"
 }
 ```
 
@@ -61,7 +54,15 @@
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         },
         {
             "id": 166,
@@ -79,7 +80,15 @@
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         },
         {
             "id": 159,
@@ -97,7 +106,15 @@
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         },
         {
             "id": 158,
@@ -115,7 +132,15 @@
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         },
         {
             "id": 157,
@@ -133,20 +158,36 @@
             "project_id": 1,
             "project_name": "蓝鲸",
             "bk_biz_id": 2,
-            "bk_biz_name": "蓝鲸"
+            "bk_biz_name": "蓝鲸",
+            "auth_actions": [
+                "task_view",
+                "task_edit",
+                "task_operate",
+                "task_claim",
+                "task_delete",
+                "task_clone"
+            ]
         }
-    ]
+    ],
+    "count": 5,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
 ### 返回结果说明
+
 |   名称   |  类型  |           说明             |
 | ------------ | ---------- | ------------------------------ |
 |  result      |    bool    |      true/false 操作是否成功     |
 |  data        |    list    |      result=true 时成功数据，详细信息请见下面说明     |
 |  message     |    string  |      result=false 时错误信息     |
+|  count       |    int     |      data列表数量                |
+|  request_id     |    string  |      esb 请求 id     |
+|  trace_id     |    string  |      open telemetry trace_id     |
 
 ##### data[item]
+
 |   名称   |  类型  |           说明             |
 | ------------ | ---------- | ------------------------------ |
 |  id          |    int     | 任务ID |
@@ -165,9 +206,4 @@
 |  project_name    |  string      | 项目名称   |
 |  bk_biz_id       |  int         | 业务ID    |
 |  bk_biz_name     |  string      | 业务名称   |
-
-
-
-
-
-
+|  auth_actions      |    array   |      用户对该资源有权限的操作   |

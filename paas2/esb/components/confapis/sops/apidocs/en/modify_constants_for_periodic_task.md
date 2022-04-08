@@ -4,8 +4,6 @@ modify global parameters for periodic task
 
 ### Request Parameters
 
-{{ common_args_desc }}
-
 #### Interface Parameters
 
 | Field          |  Type       | Required   |  Description             |
@@ -13,12 +11,13 @@ modify global parameters for periodic task
 |   task_id    |   string     |   YES   |  task ID |
 |   bk_biz_id    |   string     |   YES   |  business ID |
 |   constants    |   dict       |   NO    |  global variables，details are described below |
+| scope | string | NO | bk_biz_id scope. default value is 'cmdb_biz' and bk_sops will find a project which relate cmdb business id equal to bk_biz_id. otherwise, bk_sops will find a project which id equal to bk_biz_id when scope value is 'project'|
 
-#### constants.KEY
+#### constants KEY
 
 constant KEY, the format is like ${key}
 
-#### constants.VALUE
+#### constants VALUE
 
 constant value
 
@@ -29,9 +28,13 @@ constant value
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "bk_biz_id": "2",
     "task_id": "8",
-    "constants": {"${bk_timing}": "100"},
+    "constants": {
+        "${bk_timing}": "100"
+    },
+    "scope": "cmdb_biz"
 }
 ```
 
@@ -58,7 +61,9 @@ constant value
             "desc": ""
         }
     },
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -69,12 +74,14 @@ constant value
 |  result   |    bool    |      true or false, indicate success or failure                      |
 |  data     |    dict    |      data returned when result is true, details are described below  |
 |  message  |    string  |      error message returned when result is false                     |
+|  request_id     |    string  | esb request id         |
+|  trace_id     |    string  | open telemetry trace_id       |
 
-#### data.KEY
+#### data KEY
 
 KEY, the format is like ${key}
 
-#### data.VALUE
+#### data VALUE
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -84,5 +91,5 @@ KEY, the format is like ${key}
 |  desc      |    string    |     description   |
 |  source_type  | string   |      source of variable, custom mean manual variable, component_inputs means variables comes from task node inputs parameters, component_outputs means variables comes from task node outputs parameters   |
 |  custom_type  | string   |      custom type, which is not empty when source_type is custom,  the value is input ,or textarea, or datetime, or int |
-|  source_tag   | string   |      source tag and atom info, which is not empty when source_type is  component_inputs or component_outputs  |
+|  source_tag   | string   |      source tag and standard plugin info, which is not empty when source_type is  component_inputs or component_outputs  |
 |  source_info | dict    |        source info about task node ID  |

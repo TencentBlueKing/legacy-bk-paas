@@ -21,28 +21,29 @@
 选择 username 为 admin 的用户，只返回 username、id 字段（默认查找 username，无需指定 lookup_field）
 ``` json
 {
+  "bk_app_code": "xxx",
+  "bk_app_secret": "xxx",
+  "bk_token": "xxx",
+  "bk_username": "xxx",
   "id": "admin",
+  "lookup_field": "username",
   "fields": "username,id"
-}
-```
-
-选择 id 为 1122 的用户，返回全部字段
-``` json
-{
-  "id": "1122",
-  "lookup_field": "id"
 }
 ```
 
 ### 返回结果示例
 
+仅示意，请以实际请求结果为准
 ```json
 {
     "message": "Success",
     "code": 0,
     "data": {
-        "id": 4,
-        "username": "jackma",
+      "id":1,
+      "username":"admin",
+      "departments":[],
+      "extras":{},
+      "leader":[]
     },
     "result": true
 }
@@ -55,4 +56,14 @@
 |result| bool | 返回结果，true为成功，false为失败 |
 |code|int|返回码，0表示成功，其他值表示失败|
 |message|string|错误信息|
-|data| array| 结果 |
+|data| array| 结果，根据请求参数动态返回，可以参考上述返回结果示例 |
+
+**data** 字段简析（具体字段取决于参数 `fields`）
+
+| 字段      | 类型     | 描述      |
+|-----------|-----------|-----------|
+|id| int | 用户 ID |
+|username|string| 用户名 |
+|departments|array| 用户关联的部门列表 |
+|extras| dict | 用户扩展字段 |
+|leader| array| 用户关联上级 |

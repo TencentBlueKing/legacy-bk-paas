@@ -5,6 +5,7 @@
 查询一个自定义时序分组ID
 给定一个数据源和业务， 查询器具体的信息
 
+### 请求参数
 
 {{ common_args_desc }}
 
@@ -20,6 +21,9 @@
 
 ```json
 {
+    "bk_app_code": "xxx",
+  	"bk_app_secret": "xxxxx",
+  	"bk_token": "xxxx",
 	"time_series_group_id": 123,
 	"with_result_table_info": true
 }
@@ -27,39 +31,56 @@
 
 ### 返回结果
 
-#### 字段说明
+| 字段       | 类型   | 描述         |
+| ---------- | ------ | ------------ |
+| result     | bool   | 请求是否成功 |
+| code       | int    | 返回的状态码 |
+| message    | string | 描述信息     |
+| data       | dict   | 数据         |
+| request_id | string | 请求ID       |
+
+#### data字段说明
 
 | 字段                | 类型   | 描述     |
 | ------------------- | ------ | -------- |
-| bk\_time_series_group_id | int | 自定义时序分组ID  |
-| bk\_data_id | int | 数据源ID |
-| bk\_biz_id | int | 业务ID | 
-| time_series\_group_name | string | 自定义时序分组名 |
-| label | string | 自定义时序标签 | 
-| is_enable | bool | 是否启用 | 
-| creator | string | 创建者 | 
-| create_time | string | 创建时间 | 
-| last_modify_user | string | 最后修改者 | 
-| last_modify_time | string | 最后修改时间 | 
-| metric_info_list | array | Metric列表 |
-| shipper_list | object | 结果表配置信息 | 
+| bk_time_series_group_id | int | 自定义时序分组ID  |
+| bk_data_id | int | 数据源ID |
+| bk_biz_id | int | 业务ID |
+| time_series_group_name | string | 自定义时序分组名 |
+| label | string | 自定义时序标签 |
+| is_enable | bool | 是否启用 |
+| creator | string | 创建者 |
+| create_time | string | 创建时间 |
+| last_modify_user | string | 最后修改者 |
+| last_modify_time | string | 最后修改时间 |
+| metric_info_list | list | Metric列表 |
+| shipper_list | dict | 结果表配置信息 |
 
-#### metric_info_list具体内容说明
+#### data.metric_info_list具体内容说明
 
 | 字段                | 类型   | 描述     |
 | ------------------- | ------ | -------- |
-| field_id | int | Field ID  |
+| description | string | 描述 |
 | field_name | string | Field 名 |
-| tag_list | array | 维度列表, 元素为维度明 |
+| unit | string | 单位 |
+| type | string | 单位类型 |
+| tag_list | list | tag列表 |
 
+#### data.metric_info_list.tag_list具体说明
 
+| 字段        | 类型   | 描述     |
+| ----------- | ------ | -------- |
+| field_name  | string | 字段名   |
+| description | string | 描述     |
+| unit        | string | 单位     |
+| type        | string | 单位类型 |
 
 #### 结果示例
 
 ```json
 {
     "message":"OK",
-    "code":"0",
+    "code":200,
     "data": {
     	"time_series_group_id": 1001,
     	"bk_data_id": 123,

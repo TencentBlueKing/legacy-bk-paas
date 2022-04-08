@@ -9,3 +9,4 @@
   comp_codename: generic.v2.log_search.log_search_component
   dest_path: /o/bk_log_search/api/v1/esquery/search/
   dest_http_method: POST
+  is_hidden: True

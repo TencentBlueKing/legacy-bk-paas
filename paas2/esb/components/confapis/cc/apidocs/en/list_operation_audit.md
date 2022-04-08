@@ -87,12 +87,12 @@
       	"condition":[
           {
             "field":"user",
-            "operatior":"$in",
+            "operatior":"in",
             "value":"admin"
           },
           {
             "field":"resource_name",
-            "operatior":"$in",
+            "operatior":"in",
             "value":"1.1.1.1"
           }
         ],

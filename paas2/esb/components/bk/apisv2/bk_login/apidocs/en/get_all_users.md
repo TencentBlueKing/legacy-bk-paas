@@ -48,7 +48,14 @@ get all users
 
 ### Return Result Parameters Description
 
-#### data
+| field      | type      | description      |
+|-----------|-----------|-----------|
+|result| bool | returns a result, true for success and false for failure |
+|code|int|The return code, 0 for success, and other values for failure|
+|message|string|error message|
+|data| array| result, please refer to sample results |
+
+**data**
 
 | Field      | Type      | Description      |
 |-----------|-----------|-----------|

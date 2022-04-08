@@ -10,7 +10,7 @@ Get service role
 
 | Field        | Type     | Required  | Description                         |
 | --------- | ------ | --- | -------------------------- |
-| service_id | string    | YES   | service id |
+| service_id | string    | YES   | service id, Get from the `data["id"]` field in the `get_services` interface |
 | ticket_creator     | string    | NO   | ticket creator，used when instantiating the leader and myself |
 
 

@@ -1280,7 +1280,7 @@ msgid "管理工具"
 msgstr ""
 
 #: mainsite/templates/mainsite/base.html:6
-msgid "API网关|蓝鲸智云企业版"
+msgid "API网关 | 腾讯蓝鲸智云"
 msgstr ""
 
 #: mainsite/templates/mainsite/base.html:7
@@ -1319,13 +1319,13 @@ msgid "注销"
 msgstr ""
 
 #: mainsite/templates/mainsite/footer.html:5
-msgid "QQ咨询(800802001)"
+msgid "技术支持"
 msgstr ""
 
 #: mainsite/templates/mainsite/footer.html:6
-msgid "蓝鲸论坛"
+msgid "社区论坛"
 msgstr ""
 
 #: mainsite/templates/mainsite/footer.html:7
-msgid "蓝鲸官网"
+msgid "产品官网"
 msgstr ""

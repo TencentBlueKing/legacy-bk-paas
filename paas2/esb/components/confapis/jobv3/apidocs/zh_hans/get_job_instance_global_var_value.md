@@ -34,25 +34,31 @@
     "message": "",
     "data": {
         "job_instance_id": 100,
-        "step_instance_var_list": [{
+        "step_instance_var_list": [
+            {
                 "step_instance_id": 292778,
-                "global_var_list": [{
+                "global_var_list": [
+                    {
                         "name": "aa",
                         "value": "AA",
                         "type": 1
-                    }, {
+                    },
+                    {
                         "name": "password",
                         "value": "mypassword",
                         "type": 4
                     }
                 ]
-            }, {
+            },
+            {
                 "step_instance_id": 292779,
-                "global_var_list": [{
+                "global_var_list": [
+                    {
                         "name": "aa",
                         "value": "AAAA",
                         "type": 1
-                    }, {
+                    },
+                    {
                         "name": "password",
                         "value": "mypassword",
                         "type": 4
@@ -62,10 +68,19 @@
         ]
     }
 }
-
 ```
 
 ### 返回结果参数说明
+
+#### response
+| 字段      | 类型      | 描述      |
+|-----------|-----------|-----------|
+| result       | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code         | int    | 错误编码。 0表示success，>0表示失败错误 |
+| message      | string | 请求失败返回的错误信息|
+| data         | object | 请求返回的数据|
+| permission   | object | 权限信息|
+| request_id   | string | 请求链id|
 
 #### data
 

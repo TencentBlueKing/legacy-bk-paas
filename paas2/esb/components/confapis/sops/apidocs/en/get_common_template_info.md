@@ -4,13 +4,11 @@ Query common flow template details
 
 ### Request Parameters
 
-{{ common_args_desc }}
-
 #### Interface Parameters
 
-| Field          |  Type       | Required   |  Description          |
-|---------------|------------|--------|---------------|
-| template_id   | string     |   YES   |  the task ID       |
+| Field         |   Type     | Required   |  Description    |
+|---------------|------------|---------|--------------------|
+| template_id   | string     |   YES   |  the template ID       |
 
 ### Request Parameters Example
 
@@ -19,6 +17,7 @@ Query common flow template details
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "template_id": "30",
 }
 ```
@@ -170,6 +169,8 @@ Query common flow template details
         "id": 30,
         "editor": "admin"
     },
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -180,6 +181,8 @@ Query common flow template details
 |  result   |    bool    |      true or false, indicate success or failure                      |
 |  data     |    dict    |      data returned when result is true, details are described below  |
 |  message  |    string  |      error message returned when result is false                     |
+|  request_id     |    string  | esb request id             |
+|  trace_id     |    string  | open telemetry trace_id        |
 
 #### data
 
@@ -187,7 +190,7 @@ Query common flow template details
 |-----------|----------|-----------|
 |  id            |    int       |      flow template ID             |
 |  name          |    string    |      flow template name            |
-|  category      |    string    |      flow type，the value is described below    |
+|  category      |    string    |      flow template type, the value is described below    |
 |  creator       |    string    |      person who created this flow template      |
 |  create_time   |    string    |      datetime when this flow template created   |
 |  editor        |    string or null | person who edited this flow template last |
@@ -212,17 +215,17 @@ Query common flow template details
 |-----------|----------|-----------|
 |  start_event      |    dict    |      start node     |
 |  end_event      |    dict    |      end node    |
-|  activities      |    dict    |      task node（atoms or subprocess）info    |
+|  activities      |    dict    |      task node（standard plugins or subprocess）info    |
 |  gateways      |    dict    |      gateways（parallel gateway、exclusive gateway、exclusive gateway）info    |
 |  flows      |    dict    |      sequenceFlow（the line between nodes）info    |
 |  constants      |    dict    |  global variables, details are described below    |
 |  outputs      |    list    |    outputs info, indicate outputs field of global variables|
 
-#### data.pipeline_tree.constants.KEY
+#### data.pipeline_tree.constants KEY
 
 KEY, the format is like ${key}
 
-#### data.pipeline_tree.constants.VALUE
+#### data.pipeline_tree.constants VALUE
 
 | Field      | Type      | Description      |
 |-----------|----------|-----------|
@@ -231,6 +234,6 @@ KEY, the format is like ${key}
 |  index      |    int    |       display order at the front end   |
 |  desc      |    string    |     description   |
 |  source_type  | string   |      source of variable, custom mean manual variable, component_inputs means variables comes from task node inputs parameters, component_outputs means variables comes from task node outputs parameters   |
-|  custom_type  | string   |      custom type, which is not empty when source_type is custom,  the value is input ,or textarea, or datetime, or int |
-|  source_tag   | string   |      source tag and atom info, which is not empty when source_type is  component_inputs or component_outputs  |
+|  custom_type  | string   |      custom type, which is not empty when source_type is custom, the value is input ,or textarea, or datetime, or int |
+|  source_tag   | string   |      source tag and standard plugin info, which is not empty when source_type is  component_inputs or component_outputs  |
 |  source_info | dict    |        source info about task node ID  |

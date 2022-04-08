@@ -2,18 +2,10 @@
 
 获取模板的执行方案列表
 
-### 请求参数
-
-{{ common_args_desc }}
-
 #### 接口参数
 
-|   参数名称   |    参数类型  |  必须  |     参数说明     |
-| ------------ | ------------ | ------ | ---------------- |
-|   app_code      |   string     |   是   |  蓝鲸应用编码    |
-|   app_secret    |   string     |   是   |  蓝鲸应用私密key |
-|   access_token |   string     |   否   |  用户登录票据，bk_token 为空时必填 |
-|   bk_token       |   string     |   否   |  用户登录票据，access_token 为空时必填 |
+| 字段          |  类型       | 必选   |  描述             |
+|-----------------|-------------|---------|------------------|
 |   bk_biz_id       |   string     |   是   |  项目唯一 ID，项目 ID 或 CMDB 业务 ID |
 |   template_id       |   int     |   是   |  模板 ID |
 |   scope       |   string     |   否   |  唯一 ID 的范围，取值为 cmdb_biz 或 project，为 cmdb_biz 时 bk_biz_id 代表业务 ID，反之代表项目 ID，不传时默认为 cmdb_biz |
@@ -25,8 +17,10 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "bk_biz_id": "2",
-    "template_id": "12"
+    "template_id": "12",
+    "scope": "cmdb_biz"
 }
 ```
 
@@ -52,7 +46,9 @@
             "data": "[\"node88d9050f288765b94a15cbe023ab\"]"
         }
     ],
-    "code": 0
+    "code": 0,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -62,6 +58,8 @@
 |  result       | bool       | true/false 成功与否            |
 |  data         | dict       | result=true 时返回数据，详情见下面说明 |
 |  message      | string     | result=false 时错误信息        |
+|  request_id     |    string  |      esb 请求 id     |
+|  trace_id     |    string  |      open telemetry trace_id     |
 
 #### data说明
 |      名称     |     类型   |               说明             |

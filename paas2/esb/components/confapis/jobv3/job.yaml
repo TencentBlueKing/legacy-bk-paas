@@ -90,6 +90,16 @@
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/get_job_instance_ip_log/
   dest_http_method: POST
+
+- path: /v2/jobv3/batch_get_job_instance_ip_log/
+  name: batch_get_job_instance_ip_log
+  label: 根据ip列表批量查询作业执行日志
+  label_en: Batch get job instance ip log
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-execute/batch_get_job_instance_ip_log/
+  dest_http_method: POST
   
 - path: /v2/jobv3/get_job_instance_list/
   name: get_job_instance_list
@@ -350,5 +360,16 @@
   api_type: operate
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-file-gateway/update_file_source/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/jobv3/generate_local_file_upload_url/
+  name: generate_local_file_upload_url
+  label: 生成本地文件上传URL
+  label_en: Generate local file upload url
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/generate_local_file_upload_url/
   dest_http_method: POST
   is_hidden: True

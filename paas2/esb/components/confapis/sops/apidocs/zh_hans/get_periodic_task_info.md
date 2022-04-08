@@ -4,14 +4,13 @@
 
 ### 请求参数
 
-{{ common_args_desc }}
-
 #### 接口参数
 
 | 字段          |  类型       | 必选   |  描述             |
 |---------------|------------|--------|------------------|
 |   task_id    |   string     |   是   |  周期任务ID |
 |   bk_biz_id    |   string     |   是   |  模板所属业务ID |
+| scope | string | 否 | bk_biz_id 检索的作用域。默认为 cmdb_biz，此时检索的是绑定的 CMDB 业务 ID 为 bk_biz_id 的项目；当值为 project 时则检索项目 ID 为 bk_biz_id 的项目|
 
 ### 请求参数示例
 
@@ -20,8 +19,10 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
+    "bk_username": "xxx",
     "bk_biz_id": "2",
-    "task_id": "8"
+    "task_id": "8",
+    "scope":"cmdb_biz"
 }
 ```
 
@@ -218,7 +219,9 @@
         "id": 5,
         "template_id": "2"
     },
-    "result": true
+    "result": true,
+    "request_id": "xxx",
+    "trace_id": "xxx"
 }
 ```
 
@@ -229,6 +232,8 @@
 |  result      |    bool    |      true/false 操作是否成功     |
 |  data        |    dict      |      result=true 时成功数据，详细信息请见下面说明     |
 |  message        |    string      |      result=false 时错误信息     |
+|  request_id     |    string  |      esb 请求 id     |
+|  trace_id     |    string  |      open telemetry trace_id     |
 
 #### data
 
@@ -246,21 +251,22 @@
 |  pipeline_tree      |    dict    |    该周期任务的实例树   |
 
 #### data.pipeline_tree
+
 |   名称   |  类型  |           说明             |
 | ------------ | ---------- | ------------------------------ |
 |  start_event      |    dict    |      开始节点信息     |
 |  end_event      |    dict    |      结束节点信息    |
-|  activities      |    dict    |      任务节点（原子和子流程）信息    |
+|  activities      |    dict    |      任务节点（标准插件和子流程）信息    |
 |  gateways      |    dict    |      网关节点（并行网关、分支网关和汇聚网关）信息    |
 |  flows      |    dict    |     顺序流（节点连线）信息    |
 |  constants      |    dict    |  全局变量信息，详情见下面    |
 |  outputs      |    list    |  模板输出信息，标记 constants 中的输出字段    |
 
-#### data.form.KEY, data.pipeline_tree.constants.KEY
+#### data.form KEY, data.pipeline_tree.constants KEY
 
 全局变量 KEY，${key} 格式
 
-#### data.form.VALUE, data.pipeline_tree.constants.VALUE
+#### data.form VALUE, data.pipeline_tree.constants VALUE
 
 |   名称   |  类型  |           说明             |
 | ------------ | ---------- | ------------------------------ |
@@ -268,7 +274,7 @@
 |  name      |    string    |      变量名字    |
 |  index      |    int    |      变量在模板中的显示顺序    |
 |  desc      |    string    |      变量说明   |
-|  source_type      |    string    |      变量来源, 取值范围 custom: 自定义变量，component_inputs: 从原子输入参数勾选，component_outputs：从原子输出结果中勾选   |
+|  source_type      |    string    |      变量来源, 取值范围 custom: 自定义变量，component_inputs: 从标准插件输入参数勾选，component_outputs：从标准插件输出结果中勾选   |
 |  custom_type      |    string    |      source_type=custom 时有效，自定义变量类型， 取值范围 input: 输入框，textarea: 文本框，datetime: 日期时间，int: 整数|
-|  source_tag      |    string    |      source_type=component_inputs/component_outputs 时有效，变量的来源原子   |
+|  source_tag      |    string    |      source_type=component_inputs/component_outputs 时有效，变量的来源标准插件   |
 |  source_info   |   dict  |  source_type=component_inputs/component_outputs 时有效，变量的来源节点信息 |

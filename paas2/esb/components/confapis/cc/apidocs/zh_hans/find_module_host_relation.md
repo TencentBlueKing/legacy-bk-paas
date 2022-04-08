@@ -11,9 +11,9 @@
 | 字段          | 类型         | 必选 | 描述                                         |
 | ------------- | ------------ | ---- | -------------------------------------------- |
 | bk_biz_id     | int          | 是   | 业务ID                                       |
-| bk_module_ids | int array    | 是   | 模块ID数组，最多200条                        |
-| module_fields | string array | 是   | 模块属性列表，控制返回结果的模块里有哪些字段 |
-| host_fields   | string array | 是   | 主机属性列表，控制返回结果的主机里有哪些字段 |
+| bk_module_ids |  array    | 是   | 模块ID数组，最多200条                        |
+| module_fields |  array | 是   | 模块属性列表，控制返回结果的模块里有哪些字段 |
+| host_fields   |  array | 是   | 主机属性列表，控制返回结果的主机里有哪些字段 |
 | page          | object       | 是   | 分页参数                                     |
 
 #### page
@@ -29,6 +29,11 @@
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id": 1,
     "bk_module_ids": [
         1,
         2,
@@ -56,6 +61,8 @@
   "result": true,
   "code": 0,
   "message": "success",
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "count": 2,
     "relation": [
@@ -99,6 +106,8 @@
 | result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
 | code    | int    | 错误编码。 0表示success，>0表示失败错误    |
 | message | string | 请求失败返回的错误信息                     |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
 | data    | object | 请求返回的数据                             |
 
 data 字段说明：
@@ -106,12 +115,12 @@ data 字段说明：
 | 名称     | 类型         | 说明               |
 | -------- | ------------ | ------------------ |
 | count    | int          | 记录条数           |
-| relation | object array | 主机和模块实际数据 |
+| relation |  array | 主机和模块实际数据 |
 
 
-info 字段说明:
+relation 字段说明:
 
 | 名称    | 类型         | 说明               |
 | ------- | ------------ | ------------------ |
 | host    | object       | 主机数据           |
-| modules | object array | 主机所属的模块信息 |
+| modules |  array | 主机所属的模块信息 |

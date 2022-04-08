@@ -15,10 +15,16 @@ operate ticket's state
 | state_id  | int | YES   | state id |
 | action_type   | string | YES   | operation type： TRANSITION（submit）/CLAIM（claim）/DISTRIBUTE（assin）/DELIVER（deliver） |
 | fields    | array  | NO   | ticket fields (submit)|
-| processors_type    | string  | NO   | operator type（assign and deliver）： GENERAL（general role）/PERSON（person）|
-| processors    | string  | NO   | operator（assign and deliver）： role id when processors_type is GENERAL else username|
+| processors_type    | string  | NO   | operator type（assign and deliver）： GENERAL (general role list), ORGANIZATION (ORGANIZATION), PERSON (individual), STARTER (bill of lading person)|
+| processors    | string  | NO   | operator（assign and deliver）: processors_type is the system unique identifier if GENERAL, the role ID if ORGANIZATION, the username of the Blue Whale user if PERSON, and empty if STARTER|
 | action_message    | string  | NO   | operate message（deliver）|
 
+### fields
+
+| Field                     | Type    | Required | Description       |
+| ---------------------- | ------ | -------- |------|
+| key     | string |YES| Unique identification of bill of lading fields|
+| value | string |YES   |  Bill of lading field value|
 
 ### demo1：submit
 
@@ -27,17 +33,21 @@ operate ticket's state
     "bk_app_secret": "xxxx", 
     "bk_app_code": "xxxx", 
     "bk_token": "xxxx",
-	"sn": "NO2019110816441094",
-	"operator": "zhangsan",
-	"action_type": "TRANSITION",
-	"state_id": 4,
-    "fields": [{
+    "sn": "NO2019110816441094",
+    "operator": "zhangsan",
+    "action_type": "TRANSITION",
+    "action_message": "test",
+    "state_id": 4,
+    "fields": [
+      {
         "key": "SHENPIJIEGUO",
         "value": "TONGYI"
-    },{
+      },
+      {
         "key": "SHENPIBEIZHU",
         "value": "hello"
-    }]	
+      }
+    ]
 }  
 ```
 
@@ -45,13 +55,16 @@ operate ticket's state
 
 ```json
 {
-	"sn": "NO2019110710341888",
-	"operator": "zhangsan",
-	"action_type": "DELIVER",
-	"action_message": "test",
-	"processors": "zhangsan",
-	"processors_type": "PERSON",
-	"state_id": 4
+    "bk_app_secret": "xxxx", 
+    "bk_app_code": "xxxx", 
+    "bk_token": "xxxx",
+    "sn": "NO2019110710341888",
+    "operator": "zhangsan",
+    "action_type": "DELIVER",
+    "action_message": "test",
+    "processors": "zhangsan",
+    "processors_type": "PERSON",
+    "state_id": 4
 } 
 ```
 
@@ -60,10 +73,30 @@ operate ticket's state
 
 ```json
 {
-	"sn": "NO2019110816441094",
-	"operator": "zhangsan",
-	"action_type": "CLAIM",
-	"state_id": 4
+    "bk_app_secret": "xxxx", 
+    "bk_app_code": "xxxx", 
+    "bk_token": "xxxx",
+    "sn": "NO2019110816441094",
+    "operator": "zhangsan",
+    "action_type": "CLAIM",
+    "action_message": "test",
+    "state_id": 4
+}
+```
+
+
+### demo4：terminate
+
+```json
+{
+    "bk_app_secret": "xxxx", 
+    "bk_app_code": "xxxx", 
+    "bk_token": "xxxx",
+    "sn": "NO2019110816441094",
+    "operator": "zhangsan",
+    "action_type": "TERMINATE",
+    "action_message": "test",
+    "state_id": 4
 }
 ```
 

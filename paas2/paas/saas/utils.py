@@ -289,12 +289,12 @@ def extract_logo_file(filename, path, saas_app_code):
             is_replace_applog = filecmp.cmp(logo_local_path, applogo_path)
 
         # replace saaslogo/*.png
-        with open(logo_local_path, "w") as logo_f:
+        with open(logo_local_path, "wb") as logo_f:
             logo_f.write(logo_content)
 
         # if user not defined it, the put into applogo
         if not os.path.exists(applogo_path) or is_replace_applog:
-            with open(applogo_path, "w") as logo_f:
+            with open(applogo_path, "wb") as logo_f:
                 logo_f.write(logo_content)
     except Exception:
         message = u"%s Unzip to get app.yml failed" % filename

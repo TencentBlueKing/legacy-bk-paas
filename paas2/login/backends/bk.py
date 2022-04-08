@@ -75,10 +75,13 @@ class BkUserBackend(ModelBackend):
         # set the username to real username
         username = userinfo.get("username", username)
         UserModel = get_user_model()
-        try:
-            user = UserModel.objects.get(username=username)
-        except ObjectDoesNotExist:
-            user = UserModel.objects.create_user(username=username)
+
+        user = UserModel(username)
+        user.fill_with_userinfo(userinfo)
+        # try:
+        #     user = UserModel.objects.get(username=username)
+        # except ObjectDoesNotExist:
+        #     user = UserModel.objects.create_user(username=username)
 
         user.fill_with_userinfo(userinfo)
         return user
