@@ -14,6 +14,7 @@ from __future__ import unicode_literals
 
 from django.views.generic import View
 from django.utils import timezone
+from django.utils import translation
 
 from common.responses import OKJsonResponse
 from common.views.mako import MakoTemplateView
@@ -26,7 +27,54 @@ from home.utils import get_user_apps
 from user_center.wx_utils import get_user_wx_info
 
 
+def _get_greetings_message_en():
+    t = timezone.localtime(timezone.now())
+    now_s = t.strftime("%H:%M")
+    # use string compare to return greeting
+
+    if now_s >= "23:00" or now_s < "01:00":
+        return "{now} It's late night now ! For your own health, you should go to bed early.".format(now=now_s)
+    elif "01:00" <= now_s < "04:00":
+        return (
+            "It's {now} before dawn ! Less overwork, More health! "
+            "Overnight is easy to make mistake and hurt our body."
+        ).format(now=now_s)
+    elif "04:00" <= now_s < "05:00":
+        return (
+            "Welcome to JOB in the 4 O'clock in the earlier morning, Salute to the Legend!"
+            " Mamba Forever ! R.I.P. Kobe Bryant."
+        )
+    elif "05:00" <= now_s < "07:00":
+        return "Good Morning ! Great minds have purpose, others have wishes."
+    elif "07:00" <= now_s < "11:40":
+        return (
+            "It's {now} in the morning. If they throw stones at you, "
+            "don't throw back, use them to build your own foundation instead."
+        ).format(now=now_s)
+    elif "11:40" <= now_s < "12:30":
+        return "It's Lunch time! People are iron, Rice is steel, You'll feeling weak without a meal."
+    elif "12:30" <= now_s < "14:00":
+        return "We suggest you take a nap after lunch, it will make your spirit better in the afternoon."
+    elif "14:00" <= now_s < "18:00":
+        return (
+            "Good Afternoon ! A man is not old as long as he is seeking something. "
+            "A man is not old until regrets take the place of dreams."
+        )
+    elif "18:00" <= now_s < "19:30":
+        return "Good Evening ! Success is actually simple — when you are about to fail to hold, hang on a bit longer."
+    elif "19:30" <= now_s < "23:00":
+        return (
+            "It's {now} in the evening. Make the choice to be happy. "
+            "The biggest part of being happy is to simply make up your mind to be a happy person."
+        ).format(now=now_s)
+
+    return "A new day starts with efficient work!"
+
+
 def _get_greeting_message():
+    """
+    不是特别好用djaong.po处理, 直接翻译
+    """
     t = timezone.localtime(timezone.now())
     now_s = t.strftime("%H:%M")
     # use string compare to return greeting
@@ -51,7 +99,6 @@ def _get_greeting_message():
         return "晚上好！夜间人体内消化能力偏弱，饮食切忌太饱，健康绿色膳食为宜。"
     elif "19:30" <= now_s < "23:00":
         return "晚上好！少加班，多锻炼噢~ 只要每天做好规划，不怕事情做不好！"
-
     return "新的一天, 从高效的工作开始！"
 
 
@@ -59,7 +106,10 @@ def _make_greeting():
     t = timezone.localtime(timezone.now())
     month, day = t.month, t.day
 
-    return {"month": month, "day": day, "message": _get_greeting_message()}
+    is_en = translation.get_language() == "en"
+    message = _get_greetings_message_en() if is_en else _get_greeting_message()
+    month_display = t.strftime("%B") if is_en else ("%s月" % month)
+    return {"month": month_display, "day": day, "message": message}
 
 
 class IndexView(DeveloperExemptMixin, MakoTemplateView):

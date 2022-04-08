@@ -362,10 +362,13 @@ class App(models.Model):
             if saas_app.exists():
                 logo = saas_app[0].logo_url
 
+        introduction = self.introduction_en if translation.get_language() == "en" else self.introduction
+        if not introduction:
+            introduction = self.introduction
         return {
             "code": self.code,
-            "name": self.name,
-            "introduction": self.introduction,
+            "name": self.name_display,
+            "introduction": introduction,
             "logo": logo,
             "link": self.app_prod_url,
             "is_online": is_online,
