@@ -15,7 +15,7 @@ from django.conf import settings
 
 from common.base_validators import BaseValidator
 from common.errors import error_codes
-from esb.bkcore.models import AppComponentPerm, ESBChannel
+from esb.bkcore.models import AppComponentPerm
 
 
 class ComponentPermValidator(BaseValidator):

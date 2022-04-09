@@ -185,9 +185,14 @@ def buffet_component_view(request, path):
 def timeout_handler_for_buffet(comp_obj):
     """针对自助接入接口的超时时间"""
     timeout_time = comp_obj.timeout_time
-    if not timeout_time:
-        if comp_obj.type == 2:
-            timeout_time = comp_obj.system.query_timeout
-        else:
-            timeout_time = comp_obj.system.execute_timeout
-    return timeout_time
+    if timeout_time:
+        return timeout_time
+
+    system_timeout = _get_system_timeout(comp_obj.system_id)
+    if not system_timeout:
+        return None
+
+    if comp_obj.type == 2:
+        return system_timeout["query_timeout"]
+
+    return system_timeout["execute_timeout"]
