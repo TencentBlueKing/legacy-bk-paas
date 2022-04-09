@@ -11,9 +11,11 @@ specific language governing permissions and limitations under the License.
 """
 
 from django.conf import settings
+
 from common.djmysql_pool import patch_mysql
 
-patch_mysql(pool_options=settings.DJ_POOL_OPTIONS)
+if getattr(settings, "MYSQL_POOL_ENABLED", True):
+    patch_mysql(pool_options=settings.DJ_POOL_OPTIONS)
 
 from .utils.config import load_config  # noqa
 
