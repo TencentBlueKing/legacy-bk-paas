@@ -76,6 +76,7 @@ class SendSms(Component, SetupConfMixin):
                     "message": force_text(err),
                 }
                 self.response.payload = tools.inject_invalid_usernames(result, err.invalid_usernames)
+                return
 
             data.update(user_data)
 

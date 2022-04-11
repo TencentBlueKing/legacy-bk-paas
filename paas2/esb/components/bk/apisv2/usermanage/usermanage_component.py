@@ -10,6 +10,8 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from django.conf import settings
+
 from common.constants import API_TYPE_Q
 from components.component import ConfComponent
 from .toolkit import configs
@@ -27,7 +29,9 @@ class UsermanageComponent(ConfComponent):
             extra_params["username"] = username
 
         request_info = self.get_request_info(extra_params=extra_params)
-        # request_info = self.get_request_info()
+
+        if not self.request.app_code:
+            self.request.app_code = getattr(settings, "BK_APP_CODE", "")
 
         response = self.outgoing.http_client.request(
             self.dest_http_method,

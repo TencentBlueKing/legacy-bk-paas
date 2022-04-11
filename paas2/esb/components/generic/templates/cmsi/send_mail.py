@@ -122,6 +122,7 @@ class SendMail(Component, SetupConfMixin):
                 }
                 self.response.payload = tools.inject_invalid_usernames(result, err.invalid_usernames)
                 return
+
             data.update(user_data)
 
         if not data["sender"]:
