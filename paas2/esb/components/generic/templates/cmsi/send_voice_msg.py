@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 
 import json
 from django import forms
+from django.utils.encoding import force_text
 
 from components.component import Component, SetupConfMixin
 from common.forms import BaseComponentForm, TypeCheckField, ListField
@@ -69,10 +70,19 @@ class SendVoiceMsg(Component, SetupConfMixin):
         data = self.form_data
         # 将 receiver__username 中的用户名，转换为接口需要的 user_list_information 信息
         if data["receiver__username"]:
-            user_data = tools.get_user_contact_with_username(
-                username_list=data["receiver__username"],
-                contact_way=self.contact_way,
-            )
+            try:
+                user_data = tools.get_user_contact_with_username(
+                    username_list=data["receiver__username"],
+                    contact_way=self.contact_way,
+                )
+            except tools.NoValidUser as err:
+                result = {
+                    "result": False,
+                    "message": force_text(err),
+                }
+                self.response.payload = tools.inject_invalid_usernames(result, err.invalid_usernames)
+                return
+
             data["user_list_information"] = [
                 {
                     "username": username,
@@ -93,7 +103,7 @@ class SendVoiceMsg(Component, SetupConfMixin):
                     "data": result.get("data"),
                     "message": u"Some users failed to send voice. %s" % data["_extra_user_error_msg"],
                 }
-            self.response.payload = result
+            self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))
         elif self.qcloud_app_id and self.qcloud_app_key:
             params = {
                 "user_list_information": data["user_list_information"],
@@ -118,9 +128,10 @@ class SendVoiceMsg(Component, SetupConfMixin):
                 }
             else:
                 result = {"result": True, "data": ret, "message": "OK"}
-            self.response.payload = result
+            self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))
         else:
-            self.response.payload = {
+            result = {
                 "result": False,
                 "message": "Unfinished interface shall be improved by the component developer",
             }
+            self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))
