@@ -1,5 +1,10 @@
 Release Log
 ===============================
+# 2.12.48
+    - update: esb add invalid usernames for cmsi
+    - update: esb add cache for db query
+    - update: esb support disable mysql pool
+
 # 2.12.47
     - update: esb update usermanage apis, for bk_login
 
