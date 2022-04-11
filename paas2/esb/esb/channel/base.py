@@ -17,6 +17,8 @@ import time
 import uuid
 from builtins import object, str
 
+from cachetools import cached, TTLCache
+from django.conf import settings
 from django.http import HttpResponse
 
 from common.base_utils import (
@@ -380,16 +382,17 @@ class ChannelManager(object):
         return self.default_channel_classes
 
     def _get_channel_by_path_from_db(self, available_path_list, method):
-        qs = ESBChannel.objects.filter(path__in=available_path_list)
+        queryset = ESBChannel.objects.filter(path__in=available_path_list, method__in=[method, ""])
+        method_to_channel = {instance.method: instance for instance in queryset}
 
         # 数据库中有匹配方法的 channel
-        channel = qs.filter(method=method).first()
+        channel = method_to_channel.get(method)
         if not channel:
             if method not in ["GET", "POST"]:
                 return None
 
             # 默认支持 GET 和 POST 方法
-            channel = qs.filter(method="").first()
+            channel = method_to_channel.get("")
             if not channel:
                 return None
 
@@ -425,6 +428,12 @@ class ChannelManager(object):
                 return channel
         return None
 
+    @cached(
+        cache=TTLCache(
+            maxsize=getattr(settings, "ESB_CHANNEL_CACHE_MAXSIZE", 1000),
+            ttl=getattr(settings, "ESB_CHANNEL_CACHE_TTL_SECONDS", 300),
+        )
+    )
     def get_channel_by_path(self, path, method):
         """
         根据路径获取对应的channel配置
