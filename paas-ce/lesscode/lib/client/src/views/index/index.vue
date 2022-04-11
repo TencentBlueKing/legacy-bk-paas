@@ -259,13 +259,17 @@
             async fetchData () {
                 try {
                     this.isContentLoading = true
-                    const [pageDetail, pageList, projectDetail] = await Promise.all([
+                    const [pageDetail, pageList, projectDetail, functionData] = await Promise.all([
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
                         this.$store.dispatch('page/getList', {
                             projectId: this.projectId,
                             versionId: this.versionId
                         }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
+                        this.$store.dispatch('functions/getAllGroupAndFunction', {
+                            projectId: this.projectId,
+                            versionId: this.versionId
+                        }),
                         this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
                         this.$store.dispatch('route/getProjectPageRoute', {
                             projectId: this.projectId,
@@ -273,10 +277,6 @@
                         }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
-                        this.$store.dispatch('functions/getAllGroupFuncs', {
-                            projectId: this.projectId,
-                            versionId: this.versionId
-                        }),
                         this.$store.dispatch('dataSource/list', { projectId: this.projectId })
                     ])
 
@@ -296,6 +296,7 @@
                     this.$store.commit('page/setPageDetail', pageDetail || {})
                     this.$store.commit('page/setPageList', pageList || [])
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
+                    this.$store.commit('functions/setFunctionData', functionData)
 
                     // 设置初始targetData
                     LC.parseData(pageDetail.content)

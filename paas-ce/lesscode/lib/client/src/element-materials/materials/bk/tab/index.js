@@ -20,7 +20,12 @@ export default {
     events: [
         {
             name: 'tab-change',
-            tips: '选项卡切换时调用该事件函数，事件回调参数 (name: String)'
+            tips: '选项卡切换时调用该事件函数，事件回调参数 (name: String)',
+            functionTemplates: [{
+                funcName: 'handleTabChange',
+                funcParams: ['tabName'],
+                funcBody: '// 将选中 tab 的 name，赋值给 tab 组件的 active 属性的变量来记录当前选中的tab。lesscode[\'${prop:activeTab}\'] 可以替换成实际绑定的变量\nlesscode[\'${prop:activeTab}\'] = tabName\n'
+            }]
         },
         {
             name: 'close-panel',

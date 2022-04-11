@@ -56,6 +56,7 @@
             :title="detailTitle">
             <monaco
                 read-only
+                language="json"
                 :height="500"
                 :value="showDetailValue"
                 :options="options"
@@ -77,7 +78,7 @@
     } from 'shared/function/'
     import router from '@/router'
     import copyIcon from '@/components/copy-icon.js'
-    import monaco from '@/components/methods/monaco.vue'
+    import monaco from '@/components/monaco.vue'
 
     interface ITable {
         tableName: string,
@@ -167,9 +168,6 @@
             const isShowDetail = ref(false)
             const showDetailValue = ref('')
             const detailTitle = ref('')
-            const options = {
-                language: 'json'
-            }
 
             const apiList = computed(() => getDataApiList(activeTable.value.tableName, projectId, activeTable.value.columns))
 
@@ -188,7 +186,6 @@
                 isShowDetail,
                 showDetailValue,
                 detailTitle,
-                options,
                 showDetail,
                 firstUpperCase
             }

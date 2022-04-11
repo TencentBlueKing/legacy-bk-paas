@@ -11,7 +11,9 @@
 import VueCodeModel from './vue-code'
 import routeModel from './route'
 import PageCodeModel from './page-code'
-import FuncModel from './function'
+import {
+    getAllGroupAndFunction
+} from '../service/function'
 import VariableModel from './variable'
 import DataTableModifyRecord from './data-table-modify-record'
 import * as PageCompModel from './page-comp'
@@ -51,7 +53,7 @@ const projectCode = {
         ] = await Promise.all([
             routeModel.findProjectRoute(projectId, versionId),
             routeModel.queryProjectPageRoute(projectId, versionId),
-            FuncModel.allGroupFuncDetail(projectId, versionId),
+            getAllGroupAndFunction(projectId, versionId),
             VariableModel.getAll({ projectId, versionId })
         ])
 
@@ -172,7 +174,7 @@ const projectCode = {
                 ] = await Promise.all([
                     routeModel.findProjectRoute(projectId, versionId),
                     routeModel.queryProjectPageRoute(projectId, versionId),
-                    FuncModel.allGroupFuncDetail(projectId, versionId),
+                    getAllGroupAndFunction(projectId, versionId),
                     VariableModel.getAll({ projectId, versionId }),
                     LCDataService.get({
                         tableFileName: TABLE_FILE_NAME.DATA_TABLE,

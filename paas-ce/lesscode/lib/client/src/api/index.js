@@ -26,7 +26,6 @@ axios.interceptors.response.use(
         switch (data.code) {
             // 接口请求成功
             case 0:
-            case 499:
                 return data
             // 后端业务处理报错
             default:

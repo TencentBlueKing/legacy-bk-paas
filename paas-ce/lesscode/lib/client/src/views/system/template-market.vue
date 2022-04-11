@@ -341,7 +341,7 @@
         },
         methods: {
             ...mapActions('functions', [
-                'getAllGroupFuncs'
+                'getAllGroupAndFunction'
             ]),
             ...mapActions('variable', ['getAllVariable']),
             async getTemplateList () {
@@ -510,7 +510,7 @@
                             pageCode: fromTemplate.fromPageCode,
                             effectiveRange: 0
                         }, false),
-                        this.getAllGroupFuncs({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId }, false)
+                        this.getAllGroupAndFunction({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId })
                     ])
                     
                     const templateNode = LC.parseTemplate(JSON.parse(fromTemplate.content || {}))

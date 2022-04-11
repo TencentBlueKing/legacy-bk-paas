@@ -17,8 +17,10 @@
 import {
     getRepository,
     In,
+    IsNull,
     Like,
-    createQueryBuilder
+    createQueryBuilder,
+    getConnection
 } from 'typeorm'
 const fs = require('fs')
 const path = require('path')
@@ -32,6 +34,37 @@ files.forEach((name) => {
         entityMap[entityName] = module
     })
 })
+
+/**
+ * 修改查询参数为typeorm需要的结构
+ * @param {Object} query 查询参数
+ */
+function transformQuery (query) {
+    return Object.keys(query).reduce((acc, key) => {
+        const value = query[key]
+        const type = Object.prototype.toString.call(value)
+        switch (type) {
+            case '[object Array]':
+                acc[key] = In(value)
+                break
+            case '[object Undefined]':
+            case '[object Null]':
+                acc[key] = IsNull()
+                break
+            case '[object String]':
+                if (/^%.+%$/.test(value)) {
+                    acc[key] = Like(value)
+                } else {
+                    acc[key] = value
+                }
+                break
+            default:
+                acc[key] = value
+                break
+        }
+        return acc
+    }, {})
+}
 
 /**
  * 获取 DB ORM 的快捷操作
@@ -49,6 +82,65 @@ export function getDataService (name = 'default', customEntityMap) {
 
     return {
         /**
+         * 事务操作
+         * @param { add(tableFileName, list){}, update(tableFileName, list){}, delete(deleteEntityList){} } callBack 执行事务回调
+         * @returns Promise
+         */
+        transaction (callBack) {
+            return getConnection().transaction(async (transactionalEntityManager) => {
+                // 提供事务的基本操作。需要结合其他 dataService 来完成整个事务操作
+                const transactionalEntityHelper = {
+                    /**
+                     * 新增数据
+                     * @param {*} tableFileName 需要插入的表名
+                     * @param {*} list 新数据列表
+                     */
+                    add (tableFileName, list) {
+                        const repository = getRepositoryByName(tableFileName)
+                        const newList = repository.create(list)
+                        return transactionalEntityManager.save(newList)
+                    },
+                    /**
+                     * 更新数据
+                     * @param {*} tableFileName 需要更新的表名
+                     * @param {*} updateData 需更新的数据
+                     */
+                    async update (tableFileName, updateData) {
+                        const repository = getRepositoryByName(tableFileName)
+                        const editData = await repository.findOne({ where: { id: updateData.id } })
+                        if (editData === undefined) {
+                            throw new Error(`更新 ${tableFileName} 表数据的时候，未找到 id 为 【${updateData.id}】的数据，请检查数据后重试`)
+                        }
+                        for (const key in editData) {
+                            if (Reflect.has(editData, key) && Reflect.has(updateData, key)) {
+                                editData[key] = updateData[key]
+                            }
+                        }
+                        return transactionalEntityManager.save(editData)
+                    },
+                    /**
+                     * 删除数据
+                     * @param {*} deleteEntityList 需删除的 EntityList
+                     */
+                    delete (deleteEntityList) {
+                        return transactionalEntityManager.remove(deleteEntityList)
+                    },
+                    /**
+                     * 软删除数据
+                     * @param {*} deleteEntityList 需删除的 EntityList
+                     */
+                    softDelete (deleteEntityList) {
+                        deleteEntityList.forEach((deleteEntity) => {
+                            deleteEntity.deleteFlag = 0
+                        })
+                        return transactionalEntityManager.save(deleteEntityList)
+                    }
+                }
+                await callBack(transactionalEntityHelper)
+            })
+        },
+
+        /**
          * leftJoin 的方式多表联查
          * @param { String } tableName 主表名
          * @param { Array } leftJoins 联查信息，传入：[{ tableName: 'xxx', on: 'xxx.id = tableName.id' }]
@@ -64,7 +156,7 @@ export function getDataService (name = 'default', customEntityMap) {
             })
             // 添加查询条件
             if (query) {
-                queryBuilder.where(query.express, query.data)
+                queryBuilder.where(query.express, transformQuery(query.data))
             }
             // 添加分页
             if (pageData) {
@@ -77,12 +169,34 @@ export function getDataService (name = 'default', customEntityMap) {
         },
 
         /**
+         * 判断是否存在某条数据
+         * @param {*} tableFileName 表名
+         * @param {*} query 查询参数
+         * @returns BOOLEAN 是否存在该数据
+         */
+        async has (tableFileName, query = { deleteFlag: 0 }) {
+            const repository = getRepositoryByName(tableFileName)
+            const count = await repository.count(transformQuery(query))
+            return count > 0
+        },
+
+        /**
+         * 获取数量
+         * @param {*} tableFileName 表名
+         * @param {*} query 查询参数
+         * @returns Number 数量
+         */
+        count (tableFileName, query = { deleteFlag: 0 }) {
+            const repository = getRepositoryByName(tableFileName)
+            return repository.count(transformQuery(query))
+        },
+
+        /**
          * 分页的方式获取数据列表
          * @param {*} tableFileName 表名
          * @param {*} page 页码
          * @param {*} pageSize 每页数量
          * @param {*} query 查询参数
-         * @param {*} like 模糊搜索，传入：{ name: 'jack', middleName: 'tom' }
          * @param {*} order 排序，传入：{ updateTime: 'DESC' }
          * @returns 数据列表 & 总数
          */
@@ -91,12 +205,11 @@ export function getDataService (name = 'default', customEntityMap) {
             page,
             pageSize,
             query = { deleteFlag: 0 },
-            like,
             order = { updateTime: 'DESC' }
         }) {
             const repository = getRepositoryByName(tableFileName)
             const queryObject = {
-                where: query
+                where: transformQuery(query)
             }
             // 分页
             if (page && pageSize) {
@@ -109,13 +222,6 @@ export function getDataService (name = 'default', customEntityMap) {
                 const orderKeys = Object.keys(order)
                 orderKeys.forEach((key) => {
                     queryObject.order[key] = order[key]
-                })
-            }
-            // 模糊搜索
-            if (like) {
-                const likeKeys = Object.keys(like)
-                likeKeys.forEach((key) => {
-                    queryObject.where[key] = Like(`%${like[key]}%`)
                 })
             }
 
@@ -131,7 +237,7 @@ export function getDataService (name = 'default', customEntityMap) {
          */
         findOne (tableFileName, query = { deleteFlag: 0 }) {
             const repository = getRepositoryByName(tableFileName)
-            return repository.findOne(query) || {}
+            return repository.findOne(transformQuery(query)) || {}
         },
 
         /**

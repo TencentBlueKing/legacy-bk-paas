@@ -11,17 +11,23 @@
 
 <template>
     <section class="select-func-home">
-        <bk-select ref="selectFuncComp" :value="renderFunc.methodCode" @clear="clear" searchable>
+        <bk-select
+            ref="selectFuncComp"
+            searchable
+            :value="renderFunc.methodCode"
+            @clear="clear"
+        >
             <bk-option-group
                 v-for="(group, index) in funcGroups"
                 :name="group.groupName"
                 :key="index">
-                <bk-option class="function-option"
-                    v-for="option in group.functionList"
-                    @click.native="choose(option)"
+                <bk-option
+                    class="function-option"
+                    v-for="option in group.children"
                     :key="option.id"
                     :id="option.funcCode"
-                    :name="option.funcName">
+                    :name="option.funcName"
+                    @click.native="choose(option)">
                     <span class="funtion-name" :title="option.funcName">{{option.funcName}}</span>
                     <i class="bk-icon icon-info" v-bk-tooltips="option.funcSummary || '该函数暂无描述'"></i>
                 </bk-option>
@@ -35,17 +41,20 @@
             <i class="bk-icon icon-minus-circle" @click="handleDelete(index)"></i>
         </div>
         <div class="panel-add" @click="handleAdd" v-if="showAddParams"><i class="bk-icon icon-plus-circle"></i>添加函数执行参数</div>
-        <methods :show.sync="showMethod" :select-func-code="renderFunc.methodCode"></methods>
+        <edit-function-dialog
+            :show.sync="showMethod"
+            :select-func-code="renderFunc.methodCode"
+        ></edit-function-dialog>
     </section>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
-    import methods from '@/components/methods'
+    import EditFunctionDialog from '@/components/methods/edit-function-dialog/index.vue'
 
     export default {
         components: {
-            methods
+            EditFunctionDialog
         },
 
         model: {
@@ -69,6 +78,7 @@
         },
 
         computed: {
+            ...mapGetters('projectVersion', ['currentVersionId']),
             ...mapGetters('functions', ['funcGroups'])
         },
 

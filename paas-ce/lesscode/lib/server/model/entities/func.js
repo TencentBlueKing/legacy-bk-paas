@@ -34,9 +34,17 @@ export default class extends Base {
     @Column({ type: 'mediumtext' })
     funcBody
 
+    // 项目id
+    @Column({ type: 'int' })
+    projectId
+
     // 函数分类ID
     @Column({ type: 'int' })
     funcGroupId
+
+    // 函数分类名字
+    @Column({ type: 'varchar', length: 255 })
+    funcGroupName
 
     // 函数简介
     @Column({ type: 'tinytext' })
@@ -69,4 +77,7 @@ export default class extends Base {
     // 排序
     @Column({ type: 'int' })
     order
+
+    @Column({ type: 'int' })
+    versionId
 }

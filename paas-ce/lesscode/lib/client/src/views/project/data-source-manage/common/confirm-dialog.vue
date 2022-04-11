@@ -11,6 +11,7 @@
         <h5 class="confirm-title">{{ tips }}</h5>
         <monaco
             read-only
+            language="sql"
             :height="500"
             :value="sql"
             :options="options"
@@ -20,7 +21,7 @@
 
 <script lang="ts">
     import { defineComponent } from '@vue/composition-api'
-    import monaco from '@/components/methods/monaco.vue'
+    import monaco from '@/components/monaco.vue'
 
     export default defineComponent({
         components: {
@@ -49,10 +50,6 @@
         },
 
         setup (_, { emit }) {
-            const options = {
-                language: 'sql'
-            }
-
             const confirm = () => {
                 emit('confirm')
             }
@@ -62,7 +59,6 @@
             }
 
             return {
-                options,
                 confirm,
                 cancel
             }
