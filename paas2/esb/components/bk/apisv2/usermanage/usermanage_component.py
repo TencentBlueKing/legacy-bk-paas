@@ -30,6 +30,8 @@ class UsermanageComponent(ConfComponent):
 
         request_info = self.get_request_info(extra_params=extra_params)
 
+        # bk-user 要求 app_code 不能为空，而 cmsi tools 调用此组件时，未传递 app_code,
+        # 为更好地兼容 cmsi 作为自定义组件的场景，值为空时替换为网关的 app_code
         if not self.request.app_code:
             self.request.app_code = getattr(settings, "BK_APP_CODE", "")
 
