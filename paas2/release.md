@@ -1,5 +1,10 @@
 Release Log
 ===============================
+# 2.14.4
+    - update: esb add invalid usernames for cmsi
+    - update: esb add cache for db query
+    - update: esb support disable mysql pool
+
 # 2.14.3
     - bugfix: i18n issues
 
