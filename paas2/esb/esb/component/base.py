@@ -162,6 +162,7 @@ class BaseComponent(object):
                 request_id=self.request.request_id,
                 is_dummy=self.request.is_dummy,
                 app_code=self.request.app_code,
+                headers=self.request.headers,
                 timeout=timeout,
             )
         )

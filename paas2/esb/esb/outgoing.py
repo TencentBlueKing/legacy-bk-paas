@@ -298,6 +298,8 @@ class HttpClient(BasicHttpClient):
     DEFAULT_HEADERS = [
         "Blueking-Language",
         "Blueking-Timezone",
+        # for OpenTelemetry
+        "Traceparent",
     ]
 
     def __init__(self, component):
