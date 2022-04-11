@@ -1,5 +1,26 @@
 Release Log
 ===============================
+# 2.14.3
+    - bugfix: i18n issues
+
+# 2.14.2
+    - bugfix: login page follow-us missing
+
+# 2.14.1
+    - bugfix: login page follow-us missing
+
+# 2.14.0
+    - add: paas/ce call usermgr api via esb
+
+# 2.13.37
+    - bugfix: esb usermgr api username missing
+
+# 2.13.36
+    - bugfix: login call usermgr api via esb fail
+
+# 2.13.35
+    - update: login call usermgr api via esb
+
 # 2.13.34
     - update: esb update usermanage apis, for bk_login
 

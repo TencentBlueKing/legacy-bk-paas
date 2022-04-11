@@ -319,6 +319,10 @@ BK_APIGW_URL = ""
 # API 网关文档中心地址
 BK_APIGW_DOC_URL = ""
 
+# HTTP CONNECTIONS
+REQUESTS_POOL_CONNECTIONS = 20
+REQUESTS_POOL_MAXSIZE = 20
+
 ##################
 # ESB 信息 #
 ##################

@@ -18,7 +18,7 @@ from django.conf import settings
 
 # from app.models import App, DesktopSettings
 from app.models import App
-from home.constants import SYS_APP_INFO, LinkTypeEnum
+from home.constants import get_cmdb_job_info, LinkTypeEnum
 from home.models import UsefulLinks, UserSettings
 
 
@@ -45,7 +45,7 @@ def get_user_apps(username):
     for code in app_code_list:
         # cc,job 特殊处理逻辑
         if code in ["bk_cmdb", "bk_job"]:
-            user_app_list.append(SYS_APP_INFO.get(code))
+            user_app_list.append(get_cmdb_job_info(code))
             continue
 
         # 处理第三方应用的数据, code is like `_1` or `_123`

@@ -25,6 +25,7 @@ from django.template.response import TemplateResponse
 
 from bkauth.utils import set_bk_token_invalid, is_safe_url, record_login_log, get_bk_token
 from bkauth.constants import REDIRECT_FIELD_NAME
+from common.log import logger
 
 """
 actions for login success/fail
@@ -76,7 +77,14 @@ def login_success_response(request, user_or_form, redirect_to, app_id):
         redirect_to = "/console/"
 
     # 设置用户登录
-    auth_login(request, user)
+    # auth_login(request, user)
+    try:
+        # 这个是django默认的login函数
+        auth_login(request, user)
+    except Exception:  # pylint: disable=broad-except
+        # will raise django.db.utils.DatabaseError: Save with update_fields did not affect any rows.
+        # while auth_login at the final step user_logged_in.send, but it DO NOT MATTERS!
+        logger.debug("auth_login fail", exec_info=True)
     # 记录登录日志
     record_login_log(request, username, app_id)
 
