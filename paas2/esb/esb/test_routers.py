@@ -11,11 +11,19 @@ specific language governing permissions and limitations under the License.
 """
 
 import mock
-from common.errors import APIError, error_codes
+import pytest
+from ddf import G
 from django.http import Http404
 from django.test import TestCase
 
+from common.constants import API_TYPE_OP, API_TYPE_Q
+from common.errors import APIError, error_codes
+from esb.bkcore.models import ComponentSystem
+from esb.routers import timeout_handler, timeout_handler_for_buffet
+
 from . import routers
+
+pytestmark = pytest.mark.django_db
 
 
 class PatchesTestCase(TestCase):
@@ -189,3 +197,130 @@ class TestRouterView(PatchesTestCase):
         routers.router_view(self.channel_type, self.request, self.path)
 
         channel_obj.handle_request.assert_called_once_with(self.request)
+
+
+@pytest.mark.parametrize(
+    "esb_channel, comp_cls, expected",
+    [
+        # channel timeout is not None
+        (
+            {
+                "timeout_time": 5,
+            },
+            {},
+            5,
+        ),
+        # system is None
+        (
+            {
+                "timeout_time": None,
+                "component_system_id": None,
+            },
+            {},
+            None,
+        ),
+        # system is not None, api_type is API_TYPE_OP
+        (
+            {
+                "timeout_time": None,
+                "component_system_id": 1,
+            },
+            {
+                "api_type": API_TYPE_OP,
+            },
+            20,
+        ),
+        # system is not None, api_type is API_TYPE_Q
+        (
+            {
+                "timeout_time": None,
+                "component_system_id": 1,
+            },
+            {
+                "api_type": API_TYPE_Q,
+            },
+            10,
+        ),
+        # system is not None, api_type is not unknown
+        (
+            {
+                "timeout_time": None,
+                "component_system_id": 1,
+                "type": 1,
+            },
+            {
+                "api_type": "unknown"
+            },
+            20,
+        ),
+        # system is not None, api_type is not unknown
+        (
+            {
+                "timeout_time": None,
+                "component_system_id": 1,
+                "type": 0,
+            },
+            {
+                "api_type": "unknown"
+            },
+            10,
+        ),
+    ]
+)
+def test_timeout_handler(mocker, esb_channel, comp_cls, expected):
+    system = G(ComponentSystem, execute_timeout=20, query_timeout=10)
+
+    if esb_channel.get("component_system_id") is not None:
+        esb_channel["component_system_id"] = system.id
+
+    esb_channel = mocker.MagicMock(**esb_channel)
+    comp_cls = mocker.MagicMock(**comp_cls)
+    assert timeout_handler(esb_channel, comp_cls) == expected
+
+
+@pytest.mark.parametrize(
+    "comp_obj, expected",
+    [
+        # componet timeout is not None
+        (
+            {
+                "timeout_time": 5,
+            },
+            5,
+        ),
+        # system is None
+        (
+            {
+                "timeout_time": None,
+                "system_id": None,
+            },
+            None,
+        ),
+        # system is not None
+        (
+            {
+                "timeout_time": None,
+                "system_id": 1,
+                "type": 1,
+            },
+            20,
+        ),
+        # system is not None
+        (
+            {
+                "timeout_time": None,
+                "system_id": 1,
+                "type": 2,
+            },
+            10,
+        ),
+    ]
+)
+def test_timeout_handler(mocker, comp_obj, expected):
+    system = G(ComponentSystem, execute_timeout=20, query_timeout=10)
+
+    if comp_obj.get("system_id") is not None:
+        comp_obj["system_id"] = system.id
+
+    comp_obj = mocker.MagicMock(**comp_obj)
+    assert timeout_handler_for_buffet(comp_obj) == expected

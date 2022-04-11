@@ -14,6 +14,7 @@ import json
 import base64
 
 from django import forms
+from django.utils.encoding import force_text
 
 from components.component import Component, SetupConfMixin
 from common.forms import BaseComponentForm, ListField, DefaultBooleanField, TypeCheckField
@@ -108,12 +109,22 @@ class SendMail(Component, SetupConfMixin):
             tools.validate_receiver(data["cc"], contact_way=self.contact_way)
         # 根据蓝鲸平台用户数据，将用户名转换为邮箱地址
         if data["receiver__username"] or data["cc__username"]:
-            user_data = tools.get_receiver_with_username(
-                receiver__username=data["receiver__username"],
-                cc__username=data["cc__username"],
-                contact_way=self.contact_way,
-            )
+            try:
+                user_data = tools.get_receiver_with_username(
+                    receiver__username=data["receiver__username"],
+                    cc__username=data["cc__username"],
+                    contact_way=self.contact_way,
+                )
+            except tools.NoValidUser as err:
+                result = {
+                    "result": False,
+                    "message": force_text(err),
+                }
+                self.response.payload = tools.inject_invalid_usernames(result, err.invalid_usernames)
+                return
+
             data.update(user_data)
+
         if not data["sender"]:
             data["sender"] = self.mail_sender
 
@@ -127,7 +138,7 @@ class SendMail(Component, SetupConfMixin):
                     "result": False,
                     "message": u"Some users failed to send email. %s" % data["_extra_user_error_msg"],
                 }
-            self.response.payload = result
+            self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))
 
         elif self.smtp_host:
             # 如果配置了 SMTP 服务，则通过 SMTP 邮件服务器，发送邮件
@@ -149,9 +160,10 @@ class SendMail(Component, SetupConfMixin):
                     "message": u"Some users failed to send email. %s" % data["_extra_user_error_msg"],
                 }
 
-            self.response.payload = result
+            self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))
         else:
-            self.response.payload = {
+            result = {
                 "result": False,
                 "message": "Unfinished interface shall be improved by the component developer",
             }
+            self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))

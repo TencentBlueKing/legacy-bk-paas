@@ -10,15 +10,28 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from django.conf import settings
+import os
 
-from common.djmysql_pool import patch_mysql
+from common.constants import API_TYPE_Q
+from components.component import Component
 
-if getattr(settings, "MYSQL_POOL_ENABLED", True):
-    patch_mysql(pool_options=settings.DJ_POOL_OPTIONS)
-
-from .utils.config import load_config  # noqa
+from .toolkit import configs
 
 
-# load config for esb
-load_config()
+class Sleep(Component):
+    sys_name = configs.SYSTEM_NAME
+    api_type = API_TYPE_Q
+
+    def handle(self):
+        sleep = self.request.kwargs.get("sleep", 1000)
+        result = self.outgoing.http_client.request(
+            self.request.wsgi_request.method,
+            host=os.environ.get("ESB_ECHO_HOST"),
+            path="/sleep/%s/" % sleep,
+            response_type="text",
+        )
+        self.response.payload = {
+            "result": True,
+            "data": {},
+            "message": result,
+        }

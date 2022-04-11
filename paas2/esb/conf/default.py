@@ -30,6 +30,7 @@ except Exception:
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+BK_APP_CODE = "bk_apigateway"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -186,6 +187,13 @@ def get_loggings(log_level):
                 "maxBytes": LOG_MAX_BYTES,
                 "backupCount": LOG_BACKUP_COUNT,
             },
+            "mysql": {
+                "class": LOG_CLASS,
+                "formatter": "verbose",
+                "filename": os.path.join(LOG_DIR, "esb_mysql.log"),
+                "maxBytes": LOG_MAX_BYTES,
+                "backupCount": LOG_BACKUP_COUNT,
+            },
         },
         "loggers": {
             "django": {
@@ -193,12 +201,17 @@ def get_loggings(log_level):
                 "level": "INFO",
                 "propagate": True,
             },
-            "thrift": {
+            "django.request": {
                 "handlers": ["root"],
                 "level": "ERROR",
                 "propagate": True,
             },
-            "django.request": {
+            "django.db.backends": {
+                "handlers": ["mysql"],
+                "level": "ERROR",
+                "propagate": True,
+            },
+            "thrift": {
                 "handlers": ["root"],
                 "level": "ERROR",
                 "propagate": True,
@@ -251,4 +264,16 @@ REQUEST_TIMEOUT_SECS = 30
 RATE_LIMIT_KEY_NAMESPACE = "bk_esb_rate_limit"
 
 
-DJ_POOL_OPTIONS = {"pool_size": 20, "max_overflow": 100, "recycle": 600}
+DJ_POOL_OPTIONS = {"pool_size": 10, "max_overflow": 100, "recycle": 600}
+
+MYSQL_POOL_ENABLED = True
+ESB_CHANNEL_CACHE_MAXSIZE = 1000
+ESB_CHANNEL_CACHE_TTL_SECONDS = 300
+ESB_SYSTEM_TIMEOUT_CACHE_MAXSIZE = 100
+ESB_SYSTEM_TIMEOUT_CACHE_TTL_SECONDS = 300
+ESB_COMPONENT_PERMISSION_CACHE_MAXSIZE = 2000
+ESB_COMPONENT_PERMISSION_CACHE_TTL_SECONDS = 300
+ESB_ALL_BUFFET_COMPONENTS_CACHE_MAXSIZE = 10
+ESB_ALL_BUFFET_COMPONENTS_CACHE_TTL_SECONDS = 300
+ESB_BUFFET_COMPONENT_CACHE_MAXSIZE = 1000
+ESB_BUFFET_COMPONENT_CACHE_TTL_SECONDS = 300

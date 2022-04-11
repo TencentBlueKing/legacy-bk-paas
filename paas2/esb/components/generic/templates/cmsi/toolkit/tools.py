@@ -20,6 +20,12 @@ default_nation_code = "86"
 ICON_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+class NoValidUser(Exception):
+    def __init__(self, invalid_usernames, message):
+        self.invalid_usernames = invalid_usernames
+        super(NoValidUser, self).__init__(message)
+
+
 def valid_email(email):
     if not isinstance(email, basestring) or email.find("@") < 0:
         return False
@@ -116,9 +122,10 @@ def get_receiver_with_username(receiver__username=None, cc__username=None, conta
             u"The following users contact format are incorrect: %s" % ",".join(error_contact_user)
         )
     result["_extra_user_error_msg"] = ";".join(_extra_user_error_msg)
+    result["_invalid_usernames"] = not_exist_user
 
     if receiver__username and not result.get("receiver"):
-        raise CommonAPIError(u"All users message failed to be sent. %s" % result["_extra_user_error_msg"])
+        raise NoValidUser(not_exist_user, u"All users message failed to be sent. %s" % result["_extra_user_error_msg"])
 
     return result
 
@@ -150,9 +157,13 @@ def get_user_contact_with_username(username_list=None, contact_way="phone"):
     _extra_user_error_msg = ";".join(_extra_user_error_msg)
 
     if not user_contact_info:
-        raise CommonAPIError(u"All users contact information failed to get, %s" % _extra_user_error_msg)
+        raise NoValidUser(not_exist_user, u"All users contact information failed to get, %s" % _extra_user_error_msg)
 
-    return {"user_contact_info": user_contact_info, "_extra_user_error_msg": _extra_user_error_msg}
+    return {
+        "user_contact_info": user_contact_info,
+        "_extra_user_error_msg": _extra_user_error_msg,
+        "_invalid_usernames": not_exist_user,
+    }
 
 
 def get_base64_icon(path):
@@ -169,13 +180,19 @@ def _get_users(usernames):
             "no_page": True,
             "best_match": 1,
             "exact_lookups": ",".join(usernames),
-            "fields": "username,country_code,telephone,email,wx_userid",
+            "fields": "username,country_code,telephone,email,wx_userid,status,staff_status",
         }
     )
     if not result["result"]:
         raise CommonAPIError(u"Failed to get users contact information based on username, %s" % result["message"])
 
-    return {user["username"]: user for user in result["data"]}
+    return {
+        user["username"]: user
+        for user in result["data"]
+        # status: NORMAL: 正常, LOCKED: 被冻结, DELETED: 被删除, DISABLED: 被禁用
+        # staff_status: IN: 在职, OUT: 离职
+        if user["status"] in ("NORMAL", "LOCKED") and user["staff_status"] == "IN"
+    }
 
 
 def group_by_nation_code(telephones):
@@ -188,3 +205,17 @@ def group_by_nation_code(telephones):
             groups["other"].append(tel)
 
     return [groups[key] for key in sorted(groups.keys())]
+
+
+def inject_invalid_usernames(result, invalid_usernames):
+    try:
+        result.setdefault("data", {})
+        result["data"].update(
+            username_check={
+                "invalid": invalid_usernames or [],
+            }
+        )
+    except AttributeError:
+        pass
+
+    return result

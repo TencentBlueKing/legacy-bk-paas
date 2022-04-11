@@ -14,6 +14,7 @@ import base64
 
 from django import forms
 from django.utils import timezone
+from django.utils.encoding import force_text
 
 from components.component import Component, SetupConfMixin
 from common.forms import BaseComponentForm, ListField, TypeCheckField, DefaultBooleanField
@@ -130,10 +131,19 @@ class SendWeixin(Component, SetupConfMixin):
         data = self.form_data
         # 根据蓝鲸平台用户数据，将用户名转换为微信用户ID
         if data["receiver__username"]:
-            user_data = tools.get_receiver_with_username(
-                receiver__username=data["receiver__username"],
-                contact_way=self.contact_way,
-            )
+            try:
+                user_data = tools.get_receiver_with_username(
+                    receiver__username=data["receiver__username"],
+                    contact_way=self.contact_way,
+                )
+            except tools.NoValidUser as err:
+                result = {
+                    "result": False,
+                    "message": force_text(err),
+                }
+                self.response.payload = tools.inject_invalid_usernames(result, err.invalid_usernames)
+                return
+
             data.update(user_data)
 
         if self.wx_type == "mp":
@@ -167,4 +177,4 @@ class SendWeixin(Component, SetupConfMixin):
                 "result": False,
                 "message": u"Some users failed to send wechat message. %s" % data["_extra_user_error_msg"],
             }
-        self.response.payload = result
+        self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))

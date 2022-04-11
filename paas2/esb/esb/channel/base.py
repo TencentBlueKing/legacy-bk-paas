@@ -17,6 +17,8 @@ import string
 import time
 import uuid
 
+from cachetools import cached, TTLCache
+from django.conf import settings
 from django.http import HttpResponse
 
 from common.base_utils import (
@@ -118,7 +120,7 @@ class BaseChannel(object):
         for validator in self.request_validators:
             try:
                 validator.validate(request)
-            except ValidationError, e:
+            except ValidationError as e:
                 raise CommonAPIError(e.message)
 
     def log_request(self, request, response):
@@ -195,21 +197,21 @@ class BaseChannel(object):
                 self.comp.set_request(CompRequest(wsgi_request=request))
 
                 response = self.comp.invoke()
-        except APIError, e:
+        except APIError as e:
             response = e.code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.ARGUMENT_ERROR
-        except RequestThirdPartyException, e:
+        except RequestThirdPartyException as e:
             response = error_codes.REQUEST_THIRD_PARTY_ERROR.format_prompt(
                 e.get_message(), replace=True
             ).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except RequestSSLException, e:
+        except RequestSSLException as e:
             response = error_codes.REQUEST_SSL_ERROR.format_prompt(e.get_message(), replace=True).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except TestHostNotFoundException, e:
+        except TestHostNotFoundException as e:
             response = error_codes.TEST_HOST_NOT_FOUND.code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
-        except RequestBlockedException, e:
+        except RequestBlockedException as e:
             response = error_codes.REQUEST_BLOCKED.format_prompt(e.message).code.as_dict()
             request.g.component_status = COMPONENT_STATUSES.EXCEPTION
         except Exception:
@@ -379,16 +381,17 @@ class ChannelManager(object):
         return self.default_channel_classes
 
     def _get_channel_by_path_from_db(self, available_path_list, method):
-        qs = ESBChannel.objects.filter(path__in=available_path_list)
+        queryset = ESBChannel.objects.filter(path__in=available_path_list, method__in=[method, ""])
+        method_to_channel = {instance.method: instance for instance in queryset}
 
         # 数据库中有匹配方法的 channel
-        channel = qs.filter(method=method).first()
+        channel = method_to_channel.get(method)
         if not channel:
             if method not in ["GET", "POST"]:
                 return None
 
             # 默认支持 GET 和 POST 方法
-            channel = qs.filter(method="").first()
+            channel = method_to_channel.get("")
             if not channel:
                 return None
 
@@ -424,6 +427,12 @@ class ChannelManager(object):
                 return channel
         return None
 
+    @cached(
+        cache=TTLCache(
+            maxsize=getattr(settings, "ESB_CHANNEL_CACHE_MAXSIZE", 1000),
+            ttl=getattr(settings, "ESB_CHANNEL_CACHE_TTL_SECONDS", 300),
+        )
+    )
     def get_channel_by_path(self, path, method):
         """
         根据路径获取对应的channel配置

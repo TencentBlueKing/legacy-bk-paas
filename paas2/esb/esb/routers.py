@@ -11,16 +11,22 @@ specific language governing permissions and limitations under the License.
 """
 
 import functools
+import logging
 import os
+
+from cachetools import cached, TTLCache
+from django.conf import settings
+from django.http import Http404
 
 from common.constants import API_TYPE_OP
 from common.errors import error_codes
-from django.conf import settings
-from django.http import Http404
 from esb.channel import get_channel_manager
 from esb.channel.confapis import get_confapis_channel_manager
 from esb.component import get_components_manager
 from esb.component.buffet import get_buffet_comp_manager
+from esb.bkcore.models import ComponentSystem
+
+logger = logging.getLogger(__name__)
 
 # 把当前目录切换到项目目录，因为后面用到的路径都是相对路径
 try:
@@ -69,6 +75,7 @@ def router_view(channel_type, request, path):
     try:
         timeout_time = timeout_handler(esb_channel, comp_cls)
     except Exception:
+        logger.warning("get timeout for request %s error", path)
         timeout_time = settings.REQUEST_TIMEOUT_SECS
     # 针对本次请求存储timeout和系统名
     # 系统名用于访问频率控制
@@ -108,17 +115,31 @@ def get_channel_conf(path, request):
 
 
 def timeout_handler(esb_channel, comp_cls):
-    # 保存超时时间，API类型以文件中标识为准，如果文件中不存在，则以数据库为准
     timeout_time = esb_channel.timeout_time
-    execute_timeout = esb_channel.component_system.execute_timeout
-    query_timeout = esb_channel.component_system.query_timeout
+    if timeout_time:
+        return timeout_time
+
     # 获取系统级别的超时时间
-    if not timeout_time:
-        if comp_cls.api_type != "unknown":
-            timeout_time = execute_timeout if comp_cls.api_type == API_TYPE_OP else query_timeout
-        else:
-            timeout_time = execute_timeout if esb_channel.type == 1 else query_timeout
-    return timeout_time
+    system_timeout = _get_system_timeout(esb_channel.component_system_id)
+    if not system_timeout:
+        return None
+
+    # API类型以文件中标识为准，如果文件中不存在，则以数据库为准
+    if comp_cls.api_type != "unknown":
+        return system_timeout["execute_timeout"] if comp_cls.api_type == API_TYPE_OP else system_timeout["query_timeout"]
+    return system_timeout["execute_timeout"] if esb_channel.type == 1 else system_timeout["query_timeout"]
+
+
+@cached(
+    cache=TTLCache(
+        maxsize=getattr(settings, "ESB_SYSTEM_TIMEOUT_CACHE_MAXSIZE", 100),
+        ttl=getattr(settings, "ESB_SYSTEM_TIMEOUT_CACHE_TTL_SECONDS", 300),
+    )
+)
+def _get_system_timeout(system_id):
+    if not system_id:
+        return None
+    return ComponentSystem.objects.filter(id=system_id).values("execute_timeout", "query_timeout").first()
 
 
 api_router_view = functools.partial(router_view, "api")
@@ -164,9 +185,14 @@ def buffet_component_view(request, path):
 def timeout_handler_for_buffet(comp_obj):
     """针对自助接入接口的超时时间"""
     timeout_time = comp_obj.timeout_time
-    if not timeout_time:
-        if comp_obj.type == 2:
-            timeout_time = comp_obj.system.query_timeout
-        else:
-            timeout_time = comp_obj.system.execute_timeout
-    return timeout_time
+    if timeout_time:
+        return timeout_time
+
+    system_timeout = _get_system_timeout(comp_obj.system_id)
+    if not system_timeout:
+        return None
+
+    if comp_obj.type == 2:
+        return system_timeout["query_timeout"]
+
+    return system_timeout["execute_timeout"]

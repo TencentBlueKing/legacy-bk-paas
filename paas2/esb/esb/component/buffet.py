@@ -14,8 +14,10 @@ import re
 import json
 import urlparse
 
-from jinja2 import Template
+from cachetools import cached, TTLCache
+from django.conf import settings
 from django.http import HttpResponse
+from jinja2 import Template
 
 from esb.bkcore.models import ESBBuffetComponent, ESBBuffetMapping
 from esb.utils.base import RE_PATH_VARIABLE, PathVars, preprocess_path_tmpl
@@ -69,7 +71,7 @@ class BuffetComponentMaker(object):
                 if RE_PATH_VARIABLE.search(parsed_url.path):
                     try:
                         path = parsed_url.path.format(**self.request.path_vars.val_dict)
-                    except KeyError, e:
+                    except KeyError as e:
                         raise error_codes.BUFFET_CANNOT_FORMAT_PATH.format_prompt("{%s}" % e.args[0])
 
                 # 拼装请求参数
@@ -177,6 +179,12 @@ class BuffetComponentManager(object):
 
     VALID_HTTP_METHODS = ("GET", "POST", "PUT", "DELETE")
 
+    @cached(
+        cache=TTLCache(
+            maxsize=getattr(settings, "ESB_ALL_BUFFET_COMPONENTS_CACHE_MAXSIZE", 10),
+            ttl=getattr(settings, "ESB_ALL_BUFFET_COMPONENTS_CACHE_TTL_SECONDS", 300),
+        )
+    )
     def get_all_buffet_components(self):
         """
         从数据库中查询出所有的自助接入组件，并将其注册路径转换为正则表达式
@@ -192,6 +200,12 @@ class BuffetComponentManager(object):
             for obj in ESBBuffetComponent.objects.all()
         ]
 
+    @cached(
+        cache=TTLCache(
+            maxsize=getattr(settings, "ESB_BUFFET_COMPONENT_CACHE_MAXSIZE", 1000),
+            ttl=getattr(settings, "ESB_BUFFET_COMPONENT_CACHE_TTL_SECONDS", 300),
+        )
+    )
     def search_buffet_component(self, path, method):
         """
         根据当前路径寻找自助接入对象

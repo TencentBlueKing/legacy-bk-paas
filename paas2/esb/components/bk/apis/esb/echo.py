@@ -10,15 +10,24 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from django.conf import settings
+import os
 
-from common.djmysql_pool import patch_mysql
+from common.constants import API_TYPE_Q
+from components.component import Component
 
-if getattr(settings, "MYSQL_POOL_ENABLED", True):
-    patch_mysql(pool_options=settings.DJ_POOL_OPTIONS)
-
-from .utils.config import load_config  # noqa
+from .toolkit import configs
 
 
-# load config for esb
-load_config()
+class Echo(Component):
+    sys_name = configs.SYSTEM_NAME
+    api_type = API_TYPE_Q
+
+    def handle(self):
+        result = self.outgoing.http_client.request(
+            self.request.wsgi_request.method,
+            host=os.environ.get("ESB_ECHO_HOST"),
+            path="/echo/",
+            params=self.request.kwargs if self.request.wsgi_request.method == "GET" else None,
+            data=self.request.kwargs if self.request.wsgi_request.method == "POST" else None,
+        )
+        self.response.payload = {"result": True, "data": result}

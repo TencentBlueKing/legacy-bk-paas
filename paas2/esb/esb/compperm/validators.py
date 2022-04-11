@@ -10,9 +10,12 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
+from cachetools import cached, TTLCache
+from django.conf import settings
+
 from common.base_validators import BaseValidator
 from common.errors import error_codes
-from esb.bkcore.models import AppComponentPerm, ESBChannel
+from esb.bkcore.models import AppComponentPerm
 
 
 class ComponentPermValidator(BaseValidator):
@@ -26,30 +29,20 @@ class ComponentPermValidator(BaseValidator):
         if channel_conf.get("perm_level") in (None, 0) or channel_conf.get("id") is None:
             return
 
-        if not self.has_perm(app_code, channel_conf["id"]):
-            component_info = self.get_component_info(channel_conf["id"])
+        if not self._has_permission(app_code, channel_conf["id"]):
             raise error_codes.APP_PERMISSION_DENIED.format_prompt(
                 "APP has no permission to access the component ({component_name}) of the system ({system_name}). "
                 "The APP manager can go to the Developer Center and apply for permission to access the component".format(  # noqa
-                    **component_info
+                    system_name=request.g.system_name,
+                    component_name=request.g.component_alias_name,
                 )
             )
 
-    def has_perm(self, app_code, component_id):
-        component_perm_exists = AppComponentPerm.objects.filter(app_code=app_code, component_id=component_id).exists()
-        if component_perm_exists:
-            return True
-        return False
-
-    def get_component_info(self, component_id):
-        component = ESBChannel.objects.filter(id=component_id).values("component_name", "component_system__name")
-        if not component:
-            return {
-                "system_name": "unknown",
-                "component_name": "unknown",
-            }
-        component = component[0]
-        return {
-            "system_name": component["component_system__name"],
-            "component_name": component["component_name"],
-        }
+    @cached(
+        cache=TTLCache(
+            maxsize=getattr(settings, "ESB_COMPONENT_PERMISSION_CACHE_MAXSIZE", 2000),
+            ttl=getattr(settings, "ESB_COMPONENT_PERMISSION_CACHE_TTL_SECONDS", 300),
+        )
+    )
+    def _has_permission(self, app_code, component_id):
+        return AppComponentPerm.objects.filter(app_code=app_code, component_id=component_id).exists()
