@@ -8,296 +8,308 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { allGroupFuncDetail, getGroupList, addFuncGroup, editFuncGroups, deleteFuncGroup, addFunction, getFuncList, editFunction, deleteFunction, getFuncRelatePageList, getFuncGroupById, getFuncById } from '../model/function'
-import projectFuncMarket from '../model/project-func-market'
-import OperationLogger from '../service/operation-logger'
-const { checkFuncEslint, verifyAndFixFunc } = require('../util')
+import { LCDataService, TABLE_FILE_NAME } from '../service/data-service'
+import { PERM_CODE } from '../../shared/perm/constant'
+import {
+    Controller,
+    Get,
+    Post,
+    Put,
+    Delete,
+    BodyParams,
+    QueryParams,
+    DeleteAuthorization,
+    ProjectAuthorization,
+    OutputJson
+} from '../decorator'
+import {
+    checkFuncBody,
+    fixFuncBody,
+    doubleCheckFunction,
+    handleRelation,
+    injectRelation,
+    handleFunctionIntoDb,
+    handleFunctionOutDb,
+    getAllGroupAndFunction
+} from '../service/function'
 
-module.exports = {
-    async fixFunByEslint (ctx) {
-        try {
-            const func = ctx.request.body
-            const res = await verifyAndFixFunc(func)
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data: res
-            })
-        } catch (err) {
-            ctx.throwError({
-                message: err.message
-            })
-        }
-    },
+@Controller('/api/function')
+export default class FunctionController {
+    // 获取项目下的所有函数分类
+    @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.request.query.projectId })
+    @Get('/getAllGroupAndFunction')
+    getAllGroupAndFunction (
+        @QueryParams({ name: 'projectId', require: true }) projectId,
+        @QueryParams({ name: 'versionId' }) versionId
+    ) {
+        return getAllGroupAndFunction(projectId, versionId)
+    }
 
-    async getAllGroupFunc (ctx) {
-        try {
-            const query = ctx.request.query || {}
-            const projectId = query.projectId
-            const versionId = query.versionId
-            const groupList = await allGroupFuncDetail(projectId, versionId)
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data: groupList
-            })
-        } catch (err) {
-            ctx.throwError({
-                message: err.message
-            })
-        }
-    },
-
-    async getGroupList (ctx) {
-        try {
-            const query = ctx.request.query || {}
-            const projectId = query.projectId
-            const groupName = query.searchGroupStr
-            const versionId = ''
-            const data = await getGroupList(projectId, versionId, groupName)
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data
-            })
-        } catch (err) {
-            ctx.throwError({
-                message: err.message
-            })
-        }
-    },
-
-    async addFuncGroup (ctx) {
-        const operationLogger = new OperationLogger(ctx)
-        try {
-            const postData = ctx.request.body
-            const data = await addFuncGroup(postData)
-            operationLogger.success({
-                operateTarget: `分类名称：${postData.inputStr}`
-            })
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data
-            })
-        } catch (err) {
-            operationLogger.error(err, {
-                operateTarget: `分类名称：${ctx.request.body.inputStr}`
-            })
-            ctx.throwError({
-                message: err.message
-            })
-        }
-    },
-
-    async editFuncGroups (ctx) {
-        const operationLogger = new OperationLogger(ctx)
-        const postData = ctx.request.body
-        const group = postData[0]
-        const projectId = group.projectId
-        let operateTarget = ''
-        if (group) {
-            operateTarget = `分类名称：${group.groupName}`
-        }
-
-        try {
-            const data = await editFuncGroups(postData)
-
-            operationLogger.success({ projectId, operateTarget })
-
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data
-            })
-        } catch (err) {
-            operationLogger.error(err, { projectId, operateTarget })
-            ctx.throwError({
-                message: err.message
-            })
-        }
-    },
-
-    async deleteFuncGroup (ctx) {
-        const operationLogger = new OperationLogger(ctx)
-        try {
-            const query = ctx.request.query || {}
-            // 权限
-            const record = await getFuncGroupById(query.id)
-            const userInfo = ctx.session.userInfo || {}
-            ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
-            if (!ctx.hasPerm) return
-
-            const data = await deleteFuncGroup(query)
-            operationLogger.success({
-                projectId: query.projectId,
-                operateTarget: `分类名称：${query.name}`
-            })
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data
-            })
-        } catch (err) {
-            operationLogger.error(err, {
-                projectId: ctx.request.query.projectId,
-                operateTarget: `分类名称：${ctx.request.query.name}`
-            })
-            ctx.throwError({
-                message: err.message
-            })
-        }
-    },
-
-    async bulkAddFunction (ctx) {
-        const operationLogger = new OperationLogger(ctx)
-        try {
-            const { funcList, varWhere } = ctx.request.body
-            // 使用eslint做检查
-            let errMessage = ''
-            const checkFunc = async (func) => {
-                errMessage = await checkFuncEslint(func)
+    // 获取项目下的所有函数分类
+    @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.request.query.projectId })
+    @Get('/getGroupList')
+    async getTableList (
+        @QueryParams({ name: 'projectId', require: true }) projectId,
+        @QueryParams({ name: 'versionId' }) versionId
+    ) {
+        const { list } = await LCDataService.get({
+            tableFileName: TABLE_FILE_NAME.FUNC_GROUP,
+            query: {
+                projectId,
+                versionId,
+                deleteFlag: 0
+            },
+            order: {
+                order: 'ASC'
             }
-            await Promise.all(funcList.map(func => checkFunc(func)))
-            if (errMessage) {
-                ctx.throwBusinessError(errMessage)
-                // throw new global.BusinessError(errMessage)
+        })
+        return list
+    }
+
+    // 获取项目下的函数
+    @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.request.query.projectId })
+    @Get('/getFunctionList')
+    async getFunctionList (
+        @QueryParams({ name: 'projectId', require: true }) projectId,
+        @QueryParams({ name: 'funcGroupId' }) funcGroupId,
+        @QueryParams({ name: 'versionId' }) versionId
+    ) {
+        const query = {
+            versionId,
+            projectId,
+            deleteFlag: 0
+        }
+        if (funcGroupId !== undefined) {
+            query.funcGroupId = funcGroupId
+        }
+        const { list } = await LCDataService.get({
+            tableFileName: TABLE_FILE_NAME.FUNC,
+            query
+        })
+        const listWithRelation = await injectRelation(list, projectId, versionId)
+        const formattedList = handleFunctionOutDb(listWithRelation)
+        return formattedList
+    }
+
+    // 新增函数分类
+    @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.request.body.projectId })
+    @Post('/createFunctionGroup')
+    async createFunctionGroup (
+        @BodyParams({ name: 'projectId', require: true }) projectId,
+        @BodyParams({ name: 'groupName', require: true }) groupName,
+        @BodyParams({ name: 'versionId' }) versionId
+    ) {
+        const {
+            list: funcGroupList
+        } = await LCDataService.get({
+            tableFileName: TABLE_FILE_NAME.FUNC_GROUP,
+            query: {
+                versionId,
+                projectId,
+                deleteFlag: 0
             }
-            await addFunction(funcList, varWhere)
-            operationLogger.success({
-                operateTarget: '批量添加函数'
-            })
-            ctx.send({
-                code: 0,
-                message: 'success'
-            })
-        } catch (err) {
-            operationLogger.error(err, {
-                operateTarget: '批量添加函数'
-            })
-            ctx.throwError(err)
-        }
-    },
+        })
+        const groupNameList = groupName.split('/')
 
-    async addFunction (ctx) {
-        const operationLogger = new OperationLogger(ctx)
-        try {
-            const { func, varWhere } = ctx.request.body
-            // 使用eslint做检查
-            const errMessage = await checkFuncEslint(func)
-            if (errMessage) {
-                // throw new global.BusinessError(errMessage)
-                ctx.throwBusinessError(errMessage)
+        // 重复检查
+        const repeatGroup = funcGroupList.find(group => groupNameList.includes(group.groupName))
+        if (repeatGroup) {
+            throw new Error(`分类【${repeatGroup.groupName}】已存在，请修改后再试`)
+        }
+        // 新增分类
+        let order = funcGroupList[funcGroupList.length - 1]?.order || 0
+        const newGroupList = groupNameList.map((groupName) => ({
+            versionId,
+            projectId,
+            groupName,
+            order: ++order
+        }))
+        return LCDataService.bulkAdd(TABLE_FILE_NAME.FUNC_GROUP, newGroupList)
+    }
+
+    // 删除函数分类
+    @OutputJson()
+    @DeleteAuthorization({
+        perm: PERM_CODE.DELETE_FUNC_GROUP,
+        tableName: TABLE_FILE_NAME.FUNC_GROUP,
+        getId: ctx => ctx.request.query.funcGroupId
+    })
+    @Delete('/deleteFunctionGroup')
+    async deleteFunctionGroup (
+        @QueryParams({ name: 'funcGroupId', require: true }) funcGroupId
+    ) {
+        // 判断分类下已存在函数
+        const isExistFunc = await LCDataService.has(TABLE_FILE_NAME.FUNC, {
+            funcGroupId,
+            deleteFlag: 0
+        })
+        if (isExistFunc) {
+            throw new Error(`分类【ID：${funcGroupId}】下已存在函数，无法删除，请修改后再试`)
+        }
+        // 判断项目下是否只有一个分类
+        const group = await LCDataService.findOne(TABLE_FILE_NAME.FUNC_GROUP, {
+            id: funcGroupId
+        })
+        const count = await LCDataService.count(TABLE_FILE_NAME.FUNC_GROUP, {
+            projectId: group.projectId,
+            deleteFlag: 0
+        })
+        if (count <= 1) {
+            throw new Error(`项目【ID：${group.projectId}】下只有唯一一个分组，无法删除最后一个分组，请修改后再试`)
+        }
+        return LCDataService.delete(TABLE_FILE_NAME.FUNC_GROUP, funcGroupId)
+    }
+
+    // 编辑函数分类
+    @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.request.body.projectId })
+    @Put('/editFunctionGroups')
+    editFunctionGroups (
+        @BodyParams({ name: 'functionGroups', require: true }) functionGroups
+    ) {
+        return LCDataService.bulkUpdate(TABLE_FILE_NAME.FUNC_GROUP, functionGroups)
+    }
+
+    // 新增函数
+    @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.request.body.projectId })
+    @Post('/createFunction')
+    async createFunction (
+        @BodyParams({ require: true }) functionData
+    ) {
+        // 检查 code name 是否重复
+        await doubleCheckFunction(functionData, functionData.projectId, functionData.versionId)
+        // eslint 检查
+        await checkFuncBody(functionData)
+        // 入库事务
+        await LCDataService.transaction(async (transactionalEntityHelper) => {
+            // 插入数据库
+            await transactionalEntityHelper.add(TABLE_FILE_NAME.FUNC, handleFunctionIntoDb(functionData))
+            // 处理关联关系
+            await handleRelation(functionData, functionData.projectId, functionData.versionId, transactionalEntityHelper)
+        })
+        // 返回函数本身
+        return functionData
+    }
+
+    // 新增函数
+    @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.request.body.projectId })
+    @Put('/editFunction')
+    async editFunction (
+        @BodyParams({ require: true }) functionData
+    ) {
+        // 检查 code name 是否重复
+        await doubleCheckFunction(functionData, functionData.projectId, functionData.versionId)
+        // eslint 检查
+        await checkFuncBody(functionData)
+        // 入库事务
+        await LCDataService.transaction(async (transactionalEntityHelper) => {
+            // 插入数据库
+            await transactionalEntityHelper.update(TABLE_FILE_NAME.FUNC, handleFunctionIntoDb(functionData))
+            // 处理关联关系
+            await handleRelation(functionData, functionData.projectId, functionData.versionId, transactionalEntityHelper)
+        })
+        // 返回函数本身
+        return functionData
+    }
+
+    // 批量新增函数
+    @OutputJson()
+    @ProjectAuthorization({ getId: ctx => ctx.request.body.projectId })
+    @Post('/bulkCreateFunction')
+    async bulkCreateFunction (
+        @BodyParams({ name: 'functionList', require: true }) functionList,
+        @BodyParams({ name: 'projectId', require: true }) projectId,
+        @BodyParams({ name: 'versionId' }) versionId
+    ) {
+        // 检查 code name 是否重复
+        await doubleCheckFunction(functionList, projectId, versionId)
+        // eslint 检查
+        await checkFuncBody(functionList)
+        // 入库事务
+        await LCDataService.transaction(async (transactionalEntityHelper) => {
+            // 插入数据库
+            await transactionalEntityHelper.add(TABLE_FILE_NAME.FUNC, handleFunctionIntoDb(functionList))
+            // 处理关联关系
+            await handleRelation(functionList, projectId, versionId, transactionalEntityHelper)
+        })
+        // 返回函数列表
+        return functionList
+    }
+
+    // 删除函数
+    @OutputJson()
+    @DeleteAuthorization({
+        perm: PERM_CODE.DELETE_FUNC,
+        tableName: TABLE_FILE_NAME.FUNC,
+        getId: ctx => ctx.request.query.id
+    })
+    @Delete('/deleteFunction')
+    async deleteFunction (
+        @QueryParams({ name: 'id', require: true }) id
+    ) {
+        // 获取数据
+        const functionData = await LCDataService.findOne(TABLE_FILE_NAME.FUNC, { id })
+        const query = {
+            projectId: functionData.projectId,
+            versionId: functionData.versionId,
+            deleteFlag: 0
+        }
+        const [
+            { list: funcRelateList },
+            { list: varRelateList }
+        ] = await Promise.all([
+            LCDataService.get({
+                tableFileName: TABLE_FILE_NAME.FUNC_FUNC,
+                query: {
+                    ...query,
+                    parentFuncCode: functionData.funcCode
+                }
+            }),
+            LCDataService.get({
+                tableFileName: TABLE_FILE_NAME.FUNC_VARIABLE,
+                query: {
+                    ...query,
+                    funcCode: functionData.funcCode
+                }
+            })
+        ])
+        const {
+            useInfo: {
+                funcCodes,
+                pageNames,
+                variableCodes
             }
-            const [data] = await addFunction([func], varWhere)
-            data.funcParams = data.funcParams.split(',').filter(x => x !== '')
-            data.remoteParams = data.remoteParams.split(',').filter(x => x !== '')
-            operationLogger.success({
-                operateTarget: `函数名称：${func.funcName}`
-            })
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data
-            })
-        } catch (err) {
-            operationLogger.error(err, {
-                operateTarget: `函数名称：${ctx.request.body.funcName}`
-            })
-            ctx.throwError(err)
+        } = await injectRelation(functionData, functionData.projectId, functionData.versionId)
+        if (funcCodes.length > 0) {
+            throw new Error(`该函数被使用在函数标识为【${funcCodes.join(',')}】的函数中，不可删除，请修改后再试`)
         }
-    },
-
-    async getFuncList (ctx) {
-        try {
-            const query = ctx.request.query || {}
-            const id = query.id
-            const funcName = query.funcName
-            const funcList = await getFuncList([id], funcName)
-            const funcIds = funcList.map(x => x.id)
-            let pageList = []
-            if (funcIds.length) pageList = await getFuncRelatePageList(funcIds)
-            funcList.forEach((func) => {
-                const pages = pageList.filter(x => x.funcId === func.id)
-                func.pages = pages
-                func.funcParams = func.funcParams.split(',').filter(x => x !== '')
-                func.remoteParams = func.remoteParams.split(',').filter(x => x !== '')
-            })
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data: funcList
-            })
-        } catch (err) {
-            ctx.throwError({
-                message: err.message
-            })
+        if (pageNames.length > 0) {
+            throw new Error(`该函数被使用在页面名称为【${pageNames.join(',')}】的页面中，不可删除，请修改后再试`)
         }
-    },
-
-    async editFunction (ctx) {
-        const operationLogger = new OperationLogger(ctx)
-        try {
-            const { func, varWhere } = ctx.request.body
-            // 使用eslint做检查
-            const errMessage = await checkFuncEslint(func)
-            if (errMessage) {
-                // throw new global.BusinessError(errMessage)
-                ctx.throwBusinessError(errMessage)
-            }
-            const data = await editFunction([func], varWhere)
-            data.forEach((func) => {
-                func.funcParams = func.funcParams.split(',').filter(x => x !== '')
-                func.remoteParams = func.remoteParams.split(',').filter(x => x !== '')
-            })
-            operationLogger.success({
-                operateTarget: `函数名称：${func.funcName}`
-            })
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data
-            })
-        } catch (err) {
-            operationLogger.error(err, {
-                operateTarget: `函数名称：${ctx.request.body.funcName}`
-            })
-            ctx.throwError(err)
+        if (variableCodes.length > 0) {
+            throw new Error(`该函数被使用在变量标识为【${variableCodes.join(',')}】的变量中，不可删除，请修改后再试`)
         }
-    },
+        // 删除数据
+        await LCDataService.transaction(async (transactionalEntityManager) => {
+            await transactionalEntityManager.delete(functionData)
+            await transactionalEntityManager.delete(funcRelateList)
+            await transactionalEntityManager.delete(varRelateList)
+        })
+        return functionData
+    }
 
-    async deleteFunction (ctx) {
-        const operationLogger = new OperationLogger(ctx)
-        try {
-            const query = ctx.request.query || {}
-            const id = query.id
-
-            // 权限
-            const record = await getFuncById(id)
-            const userInfo = ctx.session.userInfo || {}
-            ctx.hasPerm = (record.createUser === userInfo.username) || ctx.hasPerm
-            if (!ctx.hasPerm) return
-
-            const data = await deleteFunction(id)
-            await projectFuncMarket.delete(id)
-
-            operationLogger.success({
-                projectId: query.projectId,
-                operateTarget: `函数名称：${query.funcName}`
-            })
-            ctx.send({
-                code: 0,
-                message: 'success',
-                data
-            })
-        } catch (err) {
-            operationLogger.error(err, {
-                projectId: ctx.request.query.projectId,
-                operateTarget: `函数名称：${ctx.request.query.funcName}`
-            })
-            ctx.throwError({
-                message: err.message
-            })
-        }
+    // 使用eslint修复函数
+    @OutputJson()
+    @Post('/fixFunByEslint')
+    fixFunByEslint (
+        @BodyParams({ require: true }) functionData
+    ) {
+        return fixFuncBody(functionData)
     }
 }

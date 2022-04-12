@@ -4,7 +4,9 @@ import * as TemplateCategoryModel from '../model/page-template-category'
 import * as PageTemplateModel from '../model/page-template'
 import Func from '../model/entities/func'
 import Variable from '../model/entities/variable'
-import FuncModel from '../model/function'
+import {
+    getAllGroupAndFunction
+} from '../service/function'
 import VariableModel from '../model/variable'
 import FuncVariable from '../model/entities/func-variable'
 
@@ -270,10 +272,10 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
     const funcIds = []
     const funcCodes = []
     const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
-    const projectFuncGroupList = await FuncModel.allGroupFuncDetail(projectId)
+    const projectFuncGroupList = await getAllGroupAndFunction(projectId)
     const projectFuncList = []
     projectFuncGroupList.map(item => {
-        projectFuncList.splice(0, 0, ...item.functionList)
+        projectFuncList.splice(0, 0, ...item.children)
     })
     const defaultFuncGroupId = projectFuncGroupList[0] && projectFuncGroupList[0].id
     funcList.map(func => {
@@ -306,10 +308,10 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
 
 const filterFuncAndVars = async ({ projectId, valList, funcList }) => {
     const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
-    const projectFuncGroupList = await FuncModel.allGroupFuncDetail(projectId)
+    const projectFuncGroupList = await getAllGroupAndFunction(projectId)
     const projectFuncList = []
     projectFuncGroupList.map(item => {
-        projectFuncList.splice(0, 0, ...item.functionList)
+        projectFuncList.splice(0, 0, ...item.children)
     })
     const defaultFuncGroupId = projectFuncGroupList[0] && projectFuncGroupList[0].id
     funcList = funcList.filter(item => !projectFuncList.find(func => func.funcCode === item.funcCode))

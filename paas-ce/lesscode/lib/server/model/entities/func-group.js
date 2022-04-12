@@ -22,7 +22,14 @@ export default class extends Base {
     @Column({ type: 'int' })
     parentId
 
+    // 项目id
+    @Column({ type: 'int' })
+    projectId
+
     // 排序
     @Column({ type: 'int' })
     order
+
+    @Column({ type: 'int' })
+    versionId
 }

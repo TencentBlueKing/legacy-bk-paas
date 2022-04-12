@@ -218,12 +218,7 @@ class PageCode {
             params = (methodCode.params || []).filter(param => param.value).map(param => this.getValue(param.value))
             methodCode = methodCode.methodCode
         }
-        let res
-        this.funcGroups.forEach((group) => {
-            const funChildren = group.functionList || []
-            const method = funChildren.find(x => x.funcCode === methodCode)
-            if (method) res = method
-        })
+        const res = this.funcGroups.map(group => group.children).flat().find(func => func.funcCode === methodCode)
         return [res || {}, params]
     }
 
@@ -1519,8 +1514,8 @@ class PageCode {
     }
 
     processFuncBody (code) {
-        const encodeCode = (code || '').replace(new RegExp('(<)([^>]+)(>)', 'gi'), (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`)
-        return replaceFuncKeyword(encodeCode, this.origin, (all, first, second, dirKey, funcStr, funcCode) => {
+        const encodeCode = (code || '').replace(/(<)(\/?)([^>\r\n]+)(>)/gi, (match, p1, p2, p3, p4, offset, string) => `\\${p1}` + `${p2 && `\\${p2}`}` + p3 + `\\${p4}`)
+        return replaceFuncKeyword(encodeCode, (all, first, second, dirKey, funcStr, funcCode) => {
             return this.handleVarInFunc(dirKey, funcCode) || all
         })
     }

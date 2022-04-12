@@ -24,28 +24,18 @@
         </bk-table>
         <span class="function-tips">注：如需使用函数，可添加至项目然后在项目中使用</span>
 
-        <bk-sideslider
+        <edit-func-sideslider
             title="添加至项目"
             :is-show.sync="showAddFunc.isShow"
-            :quick-close="false"
-            :transfer="true"
-            :width="796">
-            <func-form slot="content" ref="funcRef" :func-data="showAddFunc.func"></func-form>
-            <section slot="footer" class="add-footer">
-                <bk-button theme="primary" @click="submitAddFunc" :loading="showAddFunc.loading">提交</bk-button>
-                <bk-button @click="closeAddFunc">取消</bk-button>
-            </section>
-        </bk-sideslider>
+            :func-data.sync="showAddFunc.func"
+            :is-edit="false"
+        />
 
-        <section v-if="showSource.isShow" class="source-function">
-            <source-func :func-data="showSource.func" class="source-code">
-                <i
-                    class="bk-drag-icon bk-drag-close-line icon-style"
-                    slot="tools"
-                    @click="showSource.isShow = false"
-                ></i>
-            </source-func>
-        </section>
+        <show-func-dialog
+            :is-show="showSource.isShow"
+            :func-data="showSource.func"
+            :is-show-export="false"
+        />
     </article>
 </template>
 
@@ -56,17 +46,15 @@
         reactive,
         computed,
         onBeforeMount,
-        toRef,
-        ref
+        toRef
     } from '@vue/composition-api'
-    import sourceFunc from '@/components/methods/func-form/source-func.vue'
-    import funcForm from '@/components/methods/func-form/index.vue'
-    import funcHelper from '@/components/methods/function-helper.js'
+    import ShowFuncDialog from '@/components/methods/forms/show-func-dialog.vue'
+    import EditFuncSideslider from '@/components/methods/forms/edit-func-sideslider.vue'
     import {
-        FUNCTION_TYPE
-    } from 'shared/function/'
+        FUNCTION_TYPE,
+        getDefaultFunction
+    } from 'shared/function'
     import {
-        messageSuccess,
         messageError
     } from '@/common/bkmagic'
     import store from '@/store'
@@ -134,8 +122,8 @@
 
     export default defineComponent({
         components: {
-            sourceFunc,
-            funcForm
+            ShowFuncDialog,
+            EditFuncSideslider
         },
         props: {
             activeTable: Object as PropType<ITable>
@@ -144,8 +132,7 @@
             const projectId = router?.currentRoute?.params?.projectId
             const versionId = store.getters['projectVersion/currentVersionId']
             const activeTable = toRef(props, 'activeTable')
-            const functionList = computed(() => getDataFuncList(activeTable.value.tableName, projectId).map(funcHelper.getDefaultFunc))
-            const funcRef = ref(null)
+            const functionList = computed(() => getDataFuncList(activeTable.value.tableName, projectId).map(getDefaultFunction))
 
             const showAddFunc = reactive({
                 isShow: false,
@@ -168,28 +155,6 @@
                 showAddFunc.func = row
             }
 
-            const submitAddFunc = () => {
-                funcRef.value.validate().then((postData) => {
-                    showAddFunc.loading = true
-                    const varWhere = { projectId, versionId, effectiveRange: 0 }
-                    store.dispatch('functions/addFunc', { groupId: postData.funcGroupId, func: { projectId, ...postData }, varWhere }).then(() => {
-                        messageSuccess('添加成功')
-                        initData()
-                        closeAddFunc()
-                    }).catch(err => {
-                        messageError(err.message || err)
-                    }).finally(() => {
-                        showAddFunc.loading = false
-                    })
-                }).catch((validator) => {
-                    messageError(validator.content || validator)
-                })
-            }
-
-            const closeAddFunc = () => {
-                showAddFunc.isShow = false
-            }
-
             const initData = () => {
                 return Promise.all([
                     store.dispatch('functions/getAllGroupFuncs', { projectId, versionId }),
@@ -205,40 +170,14 @@
                 functionList,
                 showAddFunc,
                 showSource,
-                funcRef,
                 showCode,
-                addToProject,
-                submitAddFunc,
-                closeAddFunc
+                addToProject
             }
         }
     })
 </script>
 
 <style lang="postcss" scoped>
-    .source-function {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.6);
-        z-index: 3000;
-        .source-code {
-            position: absolute;
-            background: #fff;
-            width: 80%;
-            height: 74%;
-            top: 13%;
-            left: 10%;
-        }
-    }
-    .add-footer {
-        margin-left: 30px;
-        button {
-            margin-right: 10px;
-        }
-    }
     .function-tips {
         font-size: 12px;
         margin-top: 12px;

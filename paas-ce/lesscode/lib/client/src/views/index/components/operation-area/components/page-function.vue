@@ -50,7 +50,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import bkSelectFunc from '@/components/methods/select-func'
-    import { getCurUsedFuncs } from '@/components/methods/function-helper.js'
+    import LC from '@/element-materials/core'
 
     const lifeCycleDescMap = {
         created: '在页面创建完成后被立即调用，这个时候页面还未渲染，可以做获取远程数据的操作',
@@ -92,7 +92,7 @@
             ...mapGetters('page', {
                 page: 'pageDetail'
             }),
-            ...mapGetters('functions', ['funcGroups']),
+            ...mapGetters('functions', ['functionList']),
             disabled () {
                 const { editField, getFieldValue } = this
                 return editField.value === getFieldValue(editField.field)
@@ -139,7 +139,7 @@
 
                     this.unsetEditField()
                 } catch (e) {
-                    console.error(e)
+                    this.messageError(e.message || e)
                 } finally {
                     this.loadingState = this.loadingState.filter(exist => exist !== field)
                 }
@@ -153,11 +153,48 @@
                             [field.id]: value
                         }
                     }
-                    this.page.lifeCycle[field.id] = value
                 }
-                // 获取当前页面使用中的函数
-                const [usedFuncMap] = getCurUsedFuncs()
-                // 调用更新方法
+                // 遍历 node tree 收集组件中的引用信息
+                const relateFuncCodeMap = {}
+                const recTree = node => {
+                    if (!node) {
+                        return
+                    }
+
+                    Object.keys(node.method).forEach(methodPathKey => {
+                        const methodCode = node.method[methodPathKey].code
+                        relateFuncCodeMap[methodCode] = node.componentId
+                    })
+                    node.children.forEach(childNode => recTree(childNode))
+                }
+                recTree(LC.getRoot())
+                
+                // 收集生命周期的函数
+                Object.keys(fieldData.lifeCycle).forEach((key) => {
+                    const value = fieldData.lifeCycle[key]
+                    const methodCode = typeof value === 'object' ? value.methodCode : value
+                    if (methodCode) {
+                        relateFuncCodeMap[methodCode] = key
+                    }
+                })
+                // 转换成接口需要的数据
+                const functionData = []
+                const relateFuncCodeKey = Object.keys(relateFuncCodeMap)
+                const errorStack = []
+                for (let index = 0, l = relateFuncCodeKey.length; index < l; index++) {
+                    const methodCode = relateFuncCodeKey[index]
+                    const func = this.functionList.find(func => func.funcCode === methodCode)
+                    if (!func) {
+                        errorStack.push(`页面中【${relateFuncCodeMap[methodCode]}】使用了不存在的函数【${methodCode}】,请修改后再试`)
+                    } else {
+                        functionData.push(func.id)
+                    }
+                }
+                // 抛出错误
+                if (errorStack.length) {
+                    throw Error(errorStack.join(';'))
+                }
+                // 调用方法
                 const pageData = {
                     id: this.page.id,
                     ...fieldData
@@ -166,12 +203,13 @@
                 const res = await this.$store.dispatch('page/update', {
                     data: {
                         pageData,
-                        projectId: this.project.id,
+                        projectId: this.projectId,
                         versionId: this.versionId,
-                        functionData: Object.keys(usedFuncMap),
+                        functionData,
                         from: 'setting'
                     }
                 })
+                this.page.lifeCycle[field.id] = value
                 return res
             },
             getFieldDisplayValue (field) {
@@ -181,13 +219,7 @@
                     params = (methodCode.params || []).map(param => param.value)
                     methodCode = methodCode.methodCode
                 }
-                let curFunc = {}
-                this.funcGroups.forEach((group) => {
-                    const functionList = group.functionList || []
-                    functionList.forEach((func) => {
-                        if (func.funcCode === methodCode) curFunc = func
-                    })
-                })
+                const curFunc = this.functionList.find(func => func.funcCode === methodCode) || {}
                 return curFunc.funcName ? `${curFunc.funcName}(${params.join(', ')})` : ''
             },
             getFieldValue (field) {
