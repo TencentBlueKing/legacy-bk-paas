@@ -191,6 +191,7 @@
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
     import { getCssProperties } from '../common/util'
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
 
     export default {
         components: {
@@ -200,6 +201,7 @@
             AppendSelect,
             SizeInput
         },
+        mixins: [defaultUnitMixin],
         props: {
             value: {
                 type: Object,
@@ -237,16 +239,23 @@
                     verticalAlign: this.value.verticalAlign || 'baseline'
                 },
                 unitMap: {
-                    lineHeight: splitValueAndUnit('unit', this.value.lineHeight) || 'px',
-                    textIndent: splitValueAndUnit('unit', this.value.textIndent) || 'px'
+                    lineHeight: '',
+                    textIndent: ''
                 },
                 renderValueMap: {}
             }
         },
         mounted () {
             this.handleInitValueMap()
+            this.initData()
         },
         methods: {
+            initData () {
+                this.$set(this, 'unitMap', {
+                    lineHeight: splitValueAndUnit('unit', this.value.lineHeight) || this.defaultUnit,
+                    textIndent: splitValueAndUnit('unit', this.value.textIndent) || this.defaultUnit
+                })
+            },
             handleInitValueMap () {
                 const result = getCssProperties(this.valueMap, this.include, this.exclude)
                 if (result.hasOwnProperty('fontSize') || result.hasOwnProperty('fontWeight')) {
@@ -261,7 +270,7 @@
             },
             handleFontWithUnitChange (key, val) {
                 this.renderValueMap[key] = val
-                const newVal = val === '' ? '' : val + 'px'
+                const newVal = val === '' ? '' : val + this.defaultUnit
                 this.change(key, newVal)
             },
             handleInputChange (key, val) {

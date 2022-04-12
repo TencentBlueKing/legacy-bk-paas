@@ -11,13 +11,14 @@
 import VueCodeModel from './vue-code'
 import routeModel from './route'
 import PageCodeModel from './page-code'
-import FuncModel from './function'
+import {
+    getAllGroupAndFunction
+} from '../service/function'
 import VariableModel from './variable'
 import DataTableModifyRecord from './data-table-modify-record'
 import * as PageCompModel from './page-comp'
-import * as ComponentModel from './component'
 import { uuid, walkGrid } from '../util'
-import dataService from '../service/data-service'
+import { LCDataService, TABLE_FILE_NAME } from '../service/data-service'
 import { RequestContext } from '../middleware/request-context'
 import {
     BASE_COLUMNS
@@ -37,23 +38,28 @@ const fse = require('fs-extra')
 
 const DIR_PATH = '.'
 
+const SHARE_PATH = `${DIR_PATH}/lib/shared/`
+
 const STATIC_URL = `${DIR_PATH}/lib/server/project-template/`
 
 const projectCode = {
 
-    async previewCode (projectId, versionId) {
+    async previewCode (projectId, versionId, platform = 'PC') {
         // 获取预览相关的数据
         const [
-            routeList,
-            pageRouteList,
+            allRouteList,
+            allPageRouteList,
             funcGroups = [],
             allVarableList = []
         ] = await Promise.all([
             routeModel.findProjectRoute(projectId, versionId),
             routeModel.queryProjectPageRoute(projectId, versionId),
-            FuncModel.allGroupFuncDetail(projectId, versionId),
+            getAllGroupAndFunction(projectId, versionId),
             VariableModel.getAll({ projectId, versionId })
         ])
+
+        const routeList = allRouteList.filter(route => route.platform === platform)
+        const pageRouteList = allPageRouteList.filter(page => (page.pageType === platform || (!page.pageType && platform === 'PC')))
 
         const routeGroup = {}
         for (const route of routeList) {
@@ -172,9 +178,12 @@ const projectCode = {
                 ] = await Promise.all([
                     routeModel.findProjectRoute(projectId, versionId),
                     routeModel.queryProjectPageRoute(projectId, versionId),
-                    FuncModel.allGroupFuncDetail(projectId, versionId),
+                    getAllGroupAndFunction(projectId, versionId),
                     VariableModel.getAll({ projectId, versionId }),
-                    dataService.get('data-table', { projectId, deleteFlag: 0 }),
+                    LCDataService.get({
+                        tableFileName: TABLE_FILE_NAME.DATA_TABLE,
+                        query: { projectId, deleteFlag: 0 }
+                    }),
                     DataTableModifyRecord.getListByTime({ query: { projectId } })
                 ])
 
@@ -182,9 +191,14 @@ const projectCode = {
                 const routeMap = {}
 
                 let isUseElement = false
+                let hasMobilePage = false
                 routeList.forEach((route) => {
                     routeMap[route.pageCode] = route.pageId
 
+                    // 有一个页面是移动端，则要引入Vant-ui
+                    if (!hasMobilePage) {
+                        hasMobilePage = route.platform === 'MOBILE'
+                    }
                     // 每个 route 是一个页面，只有要一个页面使用了 element，那么其他页面就不用检测是否使用了
                     if (!isUseElement) {
                         const targetData = JSON.parse(route.content || '[]')
@@ -250,7 +264,7 @@ const projectCode = {
                         const meta = `meta: { pageName: '${route.pageName}' }`
                         if (route.redirectRoute) {
                             const { layoutPath, path } = route.redirectRoute
-                            const fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                            const fullPath = `${layoutPath}${layoutPath?.endsWith('/') ? '' : '/'}${path}`
                             const routeName = route.pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${route.id}`
                             const routeComponent = route.pageCode ? ` component: ${route.pageCode},` : ''
                             if (!firstChildRouteName) {
@@ -338,7 +352,7 @@ const projectCode = {
                         },\n`
                     }
                 })
-                if (routerStr.endsWith(',\n')) {
+                if (routerStr?.endsWith(',\n')) {
                     routerStr = routerStr.substr(0, routerStr.length - 2)
                 }
 
@@ -352,9 +366,9 @@ const projectCode = {
                 const defaultRoute = defaultHomeRoute || availableRoutList[0]
                 if (defaultRoute) {
                     const { id, layoutPath, path, pageCode, redirectRoute } = defaultRoute
-                    let fullPath = `${layoutPath}${layoutPath.endsWith('/') ? '' : '/'}${path}`
+                    let fullPath = `${layoutPath}${layoutPath?.endsWith('/') ? '' : '/'}${path}`
                     if (redirectRoute) {
-                        fullPath = `${redirectRoute.layoutPath}${redirectRoute.layoutPath.endsWith('/') ? '' : '/'}${redirectRoute.path}`
+                        fullPath = `${redirectRoute.layoutPath}${redirectRoute.layoutPath?.endsWith('/') ? '' : '/'}${redirectRoute.path}`
                     }
                     // 跳转路由可能没有pageCode，使用跳转路径作为name，同时跳转路径可能会重复加上路由id防止
                     const redirectRouteName = pageCode || `${fullPath.replace(/[\/\-\:]/g, '')}${id}`
@@ -383,27 +397,42 @@ const projectCode = {
                     return content.replace(/\$\{stateStr\}/, storeStr.join(',\n'))
                 })
 
-                // 对 element 组件库的处理
+                /**
+                 * 对element、vant处理
+                 */
                 const mainFilePath = path.join(targetPath, 'lib/client/src/main.js')
-                const mainFileContent = fs.readFileSync(mainFilePath, 'utf8')
+                const remJS = fs.readFileSync(path.join(SHARE_PATH, 'rem.js'), 'utf8')
+                let mainFileContent = fs.readFileSync(mainFilePath, 'utf8')
+
                 if (isUseElement) {
-                    fs.writeFileSync(
-                        mainFilePath,
-                        mainFileContent.replace(/\$\{importElementLib\}/, 'import \'@/common/element\''),
-                        'utf8'
-                    )
+                    mainFileContent = mainFileContent.replace(/\$\{importElementLib\}/, 'import \'@/common/element\'')
                     await this.writePackageJSON(
                         path.join(targetPath, 'package.json'),
                         [{ name: 'element-ui', version: 'latest' }]
                     )
                 } else {
-                    fs.writeFileSync(
-                        mainFilePath,
-                        mainFileContent.replace(/\$\{importElementLib\}/, ''),
-                        'utf8'
-                    )
+                    mainFileContent = mainFileContent.replace(/\$\{importElementLib\}/, '')
                     fs.unlinkSync(path.join(targetPath, 'lib/client/src/common/element.js'))
                 }
+
+                if (hasMobilePage) {
+                    mainFileContent = mainFileContent.replace(/\$\{importVantLib\}/, 'import \'@/common/vant\'')
+                    mainFileContent = mainFileContent.replace(/\$\{remJs\}/, remJS)
+                    await this.writePackageJSON(
+                        path.join(targetPath, 'package.json'),
+                        [{ name: 'vant', version: 'latest-v2' }]
+                    )
+                } else {
+                    mainFileContent = mainFileContent.replace(/\$\{importVantLib\}/, '')
+                    mainFileContent = mainFileContent.replace(/\$\{remJs\}/, '')
+                    fs.unlinkSync(path.join(targetPath, 'lib/client/src/common/vant.js'))
+                }
+
+                fs.writeFileSync(
+                    mainFilePath,
+                    mainFileContent,
+                    'utf8'
+                )
 
                 await this.generateDataSource(dataTables, dataTableModifyRecords, targetPath)
                 resolve('success')
@@ -553,7 +582,7 @@ const projectCode = {
                     projectId,
                     pageId,
                     layoutContent,
-                    isGenerateNav, 
+                    isGenerateNav,
                     isEmpty: false,
                     layoutType,
                     variableList: variableData,

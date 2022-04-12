@@ -27,7 +27,6 @@ export function parseFuncAndVar (templateNode, variableList, funcGroups) {
         }
 
         Object.keys(node.method).forEach(methodPathKey => {
-            console.log(node.method, 'method')
             const methodCode = node.method[methodPathKey].code
             if (methodCodes.indexOf(methodCode) === -1) {
                 methodCodes.push(methodCode)
@@ -51,7 +50,7 @@ export function parseFuncAndVar (templateNode, variableList, funcGroups) {
     }, {})
     // 项目中所有函数，以 funcCode 作为索引 key
     const projectMethodCodeMap = funcGroups.reduce((result, methodGroup) => {
-        methodGroup.functionList.forEach(methodData => {
+        methodGroup.children.forEach(methodData => {
             result[methodData.funcCode] = methodData
         })
         return result
@@ -97,7 +96,6 @@ export function parseFuncAndVar (templateNode, variableList, funcGroups) {
             })
         }
     })
-    console.log(varList, funcList, 'list')
     return {
         varList,
         funcList

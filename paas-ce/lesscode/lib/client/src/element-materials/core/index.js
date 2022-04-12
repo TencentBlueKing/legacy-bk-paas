@@ -26,13 +26,15 @@ import {
     clearMenu
 } from './menu'
 
+import { execCommand } from './helper/commands'
+
 import {
     getPageStyle,
     setPageStyle
 } from './page-style'
 
 export const root = new Node({
-    name: 'targetData',
+    name: 'root',
     type: 'root'
 })
 
@@ -72,8 +74,15 @@ core.addEventListener = addEventListener
 core.removeEventListener = removeEventListener
 core.triggerEventListener = triggerEventListener
 
+// 右键快捷面板
 core.showMenu = showMenu
 core.clearMenu = clearMenu
+
+// 执行快捷命令
+core.execCommand = execCommand
+
+// platform: 'PC' | 'MOBILE'
+core.platform = 'PC'
 
 core.addEventListener('ready', () => {
     core.isReady = true

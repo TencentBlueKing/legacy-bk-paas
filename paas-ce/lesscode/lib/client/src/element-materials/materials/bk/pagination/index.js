@@ -20,11 +20,41 @@ export default {
     events: [
         {
             name: 'change',
-            tips: '当前页码变化时调用该事件函数，事件回调参数 (current: Number)'
+            tips: '当前页码变化时调用该事件函数，事件回调参数 (current: Number)',
+            functionTemplates: [
+                {
+                    funcName: 'handlePageChange',
+                    funcParams: ['current'],
+                    funcBody: '// 先记录当前页码。下面的 lesscode[\'${prop:current}\'] 可以替换为绑定在分页组件 current 属性上的变量\n'
+                    + 'lesscode[\'${prop:current}\'] = current\n'
+                    + '// 请求接口获取最新的分页数据。下面的 url 替换为接口地址，参数根据接口进行修改\n'
+                    + 'this.$http.get(\'url\', { params: { page: lesscode[\'${prop:current}\'], pageSize: lesscode[\'${prop:limit}\'] } }).then((data) => {\n'
+                    + '    // 将接口返回的数据，赋值给绑定在 table 组件 data 属性的变量，table 就会自动展示新一页的数据。lesscode[\'${prop:tableData}\'] 为绑定在 data 属性上的变量\n'
+                    + '    lesscode[\'${prop:tableData}\'] = data.list\n'
+                    + '    // 记录总数，分页组件内部计算页码和总页数使用。lesscode[\'${prop:count}\'] 为绑定在 count 属性上的变量\n'
+                    + '    lesscode[\'${prop:count}\'] = data.count\n'
+                    + '})\n'
+                }
+            ]
         },
         {
             name: 'limit-change',
-            tips: '当前分页尺寸变化时调用该事件函数，事件回调参数 (limit: Number)'
+            tips: '当前分页尺寸变化时调用该事件函数，事件回调参数 (limit: Number)',
+            functionTemplates: [
+                {
+                    funcName: 'handleLimitChange',
+                    funcParams: ['limit'],
+                    funcBody: '// 先记录当前页码。下面的 lesscode[\'${prop:limit}\'] 可以替换为绑定在分页组件 limit 属性上的变量\n'
+                    + 'lesscode[\'${prop:limit}\'] = limit\n'
+                    + '// 请求接口获取最新的分页数据。下面的 url 替换为接口地址，参数根据接口进行修改\n'
+                    + 'this.$http.get(\'url\', { params: { page: lesscode[\'${prop:current}\'], pageSize: lesscode[\'${prop:limit}\'] } }).then((data) => {\n'
+                    + '    // 将接口返回的数据，赋值给绑定在 table 组件 data 属性的变量，table 就会自动展示新一页的数据。lesscode[\'${prop:tableData}\'] 为绑定在 data 属性上的变量\n'
+                    + '    lesscode[\'${prop:tableData}\'] = data.list\n'
+                    + '    // 记录总数，分页组件内部计算页码和总页数使用。lesscode[\'${prop:count}\'] 为绑定在 count 属性上的变量\n'
+                    + '    lesscode[\'${prop:count}\'] = data.count\n'
+                    + '})\n'
+                }
+            ]
         }
     ],
     styles: [

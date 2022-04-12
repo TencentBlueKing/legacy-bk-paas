@@ -69,7 +69,7 @@ const webpackConfig = merge(baseConf, {
                                 loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
                                 options: {
                                     modules: {
-                                        localIdentName: '[name]_[hash:base64:6]'
+                                        localIdentName: '[local]_[hash:base64:6]'
                                     },
                                     importLoaders: 1
                                 }
@@ -92,7 +92,7 @@ const webpackConfig = merge(baseConf, {
                                 loader: resolve(__dirname, pathToNodeModules, 'css-loader'),
                                 options: {
                                     modules: {
-                                        localIdentName: '[name]_[hash:base64:5]'
+                                        localIdentName: '[local]_[hash:base64:5]'
                                     },
                                     importLoaders: 1
                                 }

@@ -14,7 +14,12 @@
  * 部分业务需要进一步处理的，可以在model里面新增文件处理，也可以在这个基础上做数据处理
  * 请勿在此处添加特定业务
  */
-import { getRepository, In, Like } from 'typeorm'
+import {
+    getRepository,
+    In,
+    Like,
+    createQueryBuilder
+} from 'typeorm'
 const fs = require('fs')
 const path = require('path')
 
@@ -44,16 +49,31 @@ export function getDataService (name = 'default', customEntityMap) {
 
     return {
         /**
-         * 获取数据列表
-         * @param {*} tableFileName 表模型的文件名
-         * @param {*} query 查询参数
-         * @returns 数据列表
+         * leftJoin 的方式多表联查
+         * @param { String } tableName 主表名
+         * @param { Array } leftJoins 联查信息，传入：[{ tableName: 'xxx', on: 'xxx.id = tableName.id' }]
+         * @param { Array } query 查询条件，传入：{ express: 'xxx.id = :id AND xxx.name = :name', data: { id: 1, name: 'xxx' } }
+         * @param { Object } pageData 分页，传入：{ page, pageSize }
+         * @returns 数据列表和总数
          */
-        async get (tableFileName, query = {}) {
-            const repository = getRepositoryByName(tableFileName)
-            const list = await repository.find(query) || []
-            const count = list.length
-            return { list, count }
+        leftJoinQuery (tableName, leftJoins, query, pageData) {
+            const queryBuilder = createQueryBuilder(tableName)
+            // left join
+            leftJoins?.forEach((leftJoin) => {
+                queryBuilder.leftJoinAndSelect(leftJoin.tableName, leftJoin.tableName, leftJoin.on)
+            })
+            // 添加查询条件
+            if (query) {
+                queryBuilder.where(query.express, query.data)
+            }
+            // 添加分页
+            if (pageData) {
+                const { page, pageSize } = pageData
+                queryBuilder
+                    .skip((page - 1) * pageSize)
+                    .take(pageSize)
+            }
+            return queryBuilder.getManyAndCount()
         },
 
         /**
@@ -66,12 +86,22 @@ export function getDataService (name = 'default', customEntityMap) {
          * @param {*} order 排序，传入：{ updateTime: 'DESC' }
          * @returns 数据列表 & 总数
          */
-        async getByPage ({ tableFileName, page, pageSize, query = {}, like, order = { updateTime: 'DESC' } }) {
+        async get ({
+            tableFileName,
+            page,
+            pageSize,
+            query = { deleteFlag: 0 },
+            like,
+            order = { updateTime: 'DESC' }
+        }) {
             const repository = getRepositoryByName(tableFileName)
             const queryObject = {
-                skip: (page - 1) * pageSize,
-                take: pageSize,
                 where: query
+            }
+            // 分页
+            if (page && pageSize) {
+                queryObject.skip = (page - 1) * pageSize
+                queryObject.take = pageSize
             }
             // 排序
             if (order) {
@@ -89,10 +119,7 @@ export function getDataService (name = 'default', customEntityMap) {
                 })
             }
 
-            const [list, count] = await Promise.all([
-                repository.find(queryObject),
-                repository.count(query)
-            ])
+            const [list, count] = await repository.findAndCount(queryObject)
             return { list, count }
         },
 

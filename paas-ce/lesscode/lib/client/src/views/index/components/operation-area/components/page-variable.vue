@@ -36,6 +36,9 @@
 
         computed: {
             ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('projectVersion', {
+                versionId: 'currentVersionId'
+            }),
 
             projectId () {
                 return this.$route.params.projectId
@@ -54,7 +57,8 @@
                 const params = {
                     projectId: this.projectId,
                     pageCode: this.pageDetail.pageCode,
-                    effectiveRange: 0
+                    effectiveRange: 0,
+                    versionId: this.versionId
                 }
                 this.getAllVariable(params).catch((err) => {
                     this.$bkMessage({ theme: 'error', message: err.message || err })
@@ -74,6 +78,8 @@
 <style lang="postcss" scoped>
     .page-variable-home {
         padding: 28px 30px;
+        overflow: auto;
+        /* border: 1px solid #DCDEE5; */
     }
     .page-variable-header {
         display: flex;

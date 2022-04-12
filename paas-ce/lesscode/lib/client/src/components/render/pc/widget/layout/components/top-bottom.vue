@@ -4,7 +4,9 @@
             navigation-type="top-bottom"
             :need-menu="false"
             @toggle="handleToggle"
-            v-bind="curTemplateData.renderProps || {}">
+            v-bind="curTemplateData.renderProps || {}"
+            :head-theme-color="curTemplateData.theme"
+            :class="{ 'white-theme': isWhiteTheme }">
             <div
                 slot="side-header"
                 class="component-wrapper"
@@ -15,7 +17,7 @@
                 <span class="title-icon">
                     <img style="width: 28px; height: 28px" :src="curTemplateData.logo" />
                 </span>
-                <span class="title-desc">{{ curTemplateData.siteName }}</span>
+                <span :class="{ 'title-desc': true, 'theme-desc': !isDefaultTheme }">{{ curTemplateData.siteName }}</span>
             </div>
             <template slot="header">
                 <div
@@ -33,7 +35,11 @@
                             offset="0, -5"
                             placement="bottom"
                             :tippy-options="{ 'hideOnClick': false, flipBehavior: ['bottom'] }">
-                            <div class="navigation-header-item">
+                            <div
+                                class="navigation-header-item"
+                                :class="{
+                                    'theme-item': !isDefaultTheme
+                                }">
                                 {{topMemu.name}}
                             </div>
                             <template slot="content">
@@ -56,8 +62,8 @@
                     placement="bottom-start"
                     offset="-20, 10"
                     :tippy-options="{ 'hideOnClick': false }">
-                    <div>
-                        <span>{{ user.username }}</span>
+                    <div :class="{ 'header-user': true, 'theme-header': !isDefaultTheme }">
+                        <span class="user-name">{{ user.username }}</span>
                         <i class="bk-icon icon-down-shape"></i>
                     </div>
                     <template slot="content">
@@ -96,7 +102,13 @@
             ...mapGetters('drag', [
                 'curTemplateData'
             ]),
-            ...mapGetters('layout', ['pageLayout'])
+            ...mapGetters('layout', ['pageLayout']),
+            isDefaultTheme () {
+                return !this.curTemplateData?.theme || this.curTemplateData?.theme === '#182132'
+            },
+            isWhiteTheme () {
+                return this.curTemplateData?.theme && this.curTemplateData?.theme === '#FFFFFF'
+            }
         },
         created () {
             const activeCallback = () => {
@@ -140,6 +152,7 @@
                 const {
                     logo,
                     siteName,
+                    theme,
                     topMenuList,
                     renderProps
                 } = payload
@@ -147,6 +160,7 @@
                     ...this.curTemplateData,
                     logo,
                     siteName,
+                    theme,
                     topMenuList,
                     renderProps
                 })
@@ -188,6 +202,20 @@
     }
 </style>
 <style lang="postcss" scoped>
+    .theme-style {
+        color: #fff;
+        opacity: 0.86;
+        font-weight: normal;
+    }
+    .component-wrapper .theme-desc {
+        @extend .theme-style
+    }
+    .header-user.theme-header {
+        &:hover {
+            opacity: 1;
+        }
+        @extend .theme-style
+    }
     .top-menu-wraper{
         border: 1px  solid transparent;
         &:hover{
@@ -196,11 +224,36 @@
         &.selected {
             border: 1px solid #3a84ff;
         }
+        .theme-desc {
+            color: #fff;
+        }
         .navigation-header-item{
             white-space: nowrap;
+            &.theme-item {
+                color: #fff;
+                opacity: 0.68;
+                &:hover {
+                    opacity: 1;
+                }
+            }
         }
         .message-box{
             flex: 0 0 70px;
+        }
+    }
+    .white-theme {
+        .theme-desc {
+            color: #313238;
+        }
+        .navigation-header-item.theme-item {
+            color: #63656e;
+            opacity: 1;
+            &:hover {
+                color: #000000;
+            }
+        }
+        .header-user.theme-header {
+            color: #63656E;
         }
     }
 </style>

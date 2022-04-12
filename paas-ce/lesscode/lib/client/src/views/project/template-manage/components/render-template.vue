@@ -4,6 +4,7 @@
             <div class="templates-head">
                 <bk-button theme="primary" @click="handleImport">导入模板</bk-button>
                 <div class="extra">
+                    <type-select @select-change="handleSelectChange"></type-select>
                     <bk-input
                         :style="{ width: '400px' }"
                         placeholder="请输入模板名称"
@@ -31,7 +32,13 @@
                         </div>
                         <div class="item-ft">
                             <div class="col">
-                                <h3 class="name" :title="template.templateName">{{template.templateName}}</h3>
+                                <div class="template-name">
+                                    <span class="template-type">
+                                        <i v-if="template.templateType === 'MOBILE'" class="bk-drag-icon bk-drag-mobilephone"> </i>
+                                        <i v-else class="bk-drag-icon bk-drag-pc"> </i>
+                                    </span>
+                                    <div class="name" :title="template.templateName">{{template.templateName}}</div>
+                                </div>
                                 <div class="stat">{{ template.updateUser || template.createUser }}</div>
                             </div>
                             <div class="col">
@@ -69,11 +76,13 @@
     import templateEditDialog from './template-edit-dialog'
     import templateImportDialog from './template-import-dialog'
     import templateMixin from './template-mixin'
+    import typeSelect from '@/components/project/type-select'
 
     export default {
         components: {
             templateEditDialog,
-            templateImportDialog
+            templateImportDialog,
+            typeSelect
         },
         mixins: [templateMixin],
         props: {
@@ -92,7 +101,8 @@
                 templateList: [],
                 pageRouteList: [],
                 routeGroup: [],
-                isLoading: true
+                isLoading: true,
+                templateType: ''
             }
         },
         computed: {
@@ -220,6 +230,7 @@
                 } else {
                     this.renderList = this.templateList.filter(item => item.templateName.toLowerCase().indexOf(this.keyword.toLowerCase()) !== -1)
                 }
+                this.handleTypeChange()
             },
             async handleExport (template) {
                 const templateJson = {
@@ -229,7 +240,7 @@
                 }
                 const { varList: vars = [], funcList: functions = [] } = await this.getVarAndFuncList(template)
                 Object.assign(templateJson, { functions, vars }, { template })
-                console.log(templateJson, template)
+                
                 const jsonStr = JSON.stringify(templateJson)
                 const downlondEl = document.createElement('a')
                 const blob = new Blob([jsonStr])
@@ -248,6 +259,17 @@
                     return previewImg
                 }
                 return preivewErrImg
+            },
+            handleSelectChange (type) {
+                this.templateType = type
+                this.handleSearch(false)
+            },
+            handleTypeChange () {
+                if (this.templateType === 'PC') {
+                    this.renderList = this.renderList.filter(item => item.templateType !== 'MOBILE')
+                } else if (this.templateType === 'MOBILE') {
+                    this.renderList = this.renderList.filter(item => item.templateType === 'MOBILE')
+                }
             }
         }
     }
@@ -268,6 +290,9 @@
             margin-bottom: 17px;
             .help-tips {
                 color: #63656e;
+            }
+            .extra {
+                display: flex;
             }
         }
         .templates-body {
@@ -448,15 +473,33 @@
                         background: #f0f1f5;
                         border-radius: 4px 4px 0px 0px;
                     }
-                    .name {
-                        margin: 0;
-                        font-size: 12px;
-                        font-weight: 700;
-                        color: #63656E;
-                        width: 230px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
+                    .template-name {
+                        display: flex;
+                        align-items: center;
+                        margin: -2px 0 0 0;
+
+                        .name {
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: #63656E;
+                            width: 200px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            margin-left: 7px;
+                        }
+
+                        .template-type {
+                            font-size: 16px;
+                            line-height: 18px;
+                            height: 20px;
+                            width: 20px;
+                            text-align: center;
+                            margin-left: -2px;
+                            color: #979ba5;
+                            border-radius: 2px;
+                            background: #f0f1f5;
+                        }
                     }
                     .stat {
                         font-size: 12px;

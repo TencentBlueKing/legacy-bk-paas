@@ -23,7 +23,8 @@
         computed: {
             ...mapState('route', ['layoutPageList']),
             ...mapGetters('page', [
-                'pageDetail'
+                'pageDetail',
+                'platform'
             ]),
             ...mapGetters('drag', [
                 'curTemplateData'
@@ -45,8 +46,13 @@
                 }
                 const versionQuery = `${this.versionId ? `&v=${this.versionId}` : ''}`
                 const fullPath = getRouteFullPath(pageRoute)
-                const routerUrl = `/preview/project/${this.projectId}${fullPath}?pageCode=${this.pageDetail.pageCode}${versionQuery}`
-                window.open(routerUrl, '_blank')
+    
+                if (this.platform === 'MOBILE') {
+                    window.open(`/preview-mobile/project/${this.projectId}?pagePath=${fullPath}&pageCode=${this.pageDetail.pageCode}`, '_blank')
+                } else {
+                    const routerUrl = `/preview/project/${this.projectId}${fullPath}?pageCode=${this.pageDetail.pageCode}${versionQuery}`
+                    window.open(routerUrl, '_blank')
+                }
             }
         }
     }

@@ -3,15 +3,15 @@
         id="modifierPanel"
         class="draw-page-modifier-panel">
         <div>
-            <div class="component-info">
+            <div
+                v-if="componentId"
+                class="component-info">
                 <div
                     class="component-id"
                     v-bk-overflow-tips>
                     {{ componentId || '--' }}
                 </div>
-                <div
-                    v-if="componentId"
-                    class="action-wrapper">
+                <div class="action-wrapper">
                     <i
                         v-if="!isAttachToForm"
                         class="bk-drag-icon bk-drag-shanchu mr5"
@@ -41,7 +41,6 @@
     import _ from 'lodash'
     import LC from '@/element-materials/core'
     import MaterialModifier from '@/element-materials/modifier'
-    import { removeCallBack } from '@/element-materials/core/helper/commands'
 
     export default {
         name: '',
@@ -106,8 +105,7 @@
              * @desc 显示删除选中的元素弹框
              */
             handleRemoveElement () {
-                removeCallBack()
-                this.componentData.activeClear()
+                LC.execCommand('remove')
             },
             /**
              * @desc 切换交互组件显示状态

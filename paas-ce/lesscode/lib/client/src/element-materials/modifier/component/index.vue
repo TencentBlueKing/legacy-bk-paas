@@ -11,26 +11,28 @@
 
 <template>
     <div class="material-modifier">
-        <bk-tab
-            :active="tabPanelActive"
-            type="unborder-card"
-            ext-cls="king-tab"
-            @tab-change="handleModifier">
-            <bk-tab-panel
-                v-for="(tabPanel, panelIndex) in tabPanels"
-                v-bind="tabPanel"
-                :key="panelIndex" />
-        </bk-tab>
-        <div
-            v-if="renderKey"
-            class="material-modifier-container">
-            <template v-for="(com, index) in modifierComList">
-                <component
-                    :is="com"
-                    :key="`${renderKey}_${index}`" />
-            </template>
-        </div>
-        <div v-if="!renderKey" class="empty">
+        <template v-if="renderKey">
+            <bk-tab
+                :active="tabPanelActive"
+                type="unborder-card"
+                ext-cls="king-tab"
+                @tab-change="handleModifier">
+                <bk-tab-panel
+                    v-for="(tabPanel, panelIndex) in tabPanels"
+                    v-bind="tabPanel"
+                    :key="panelIndex" />
+            </bk-tab>
+            <div
+                
+                class="material-modifier-container">
+                <template v-for="(com, index) in modifierComList">
+                    <component
+                        :is="com"
+                        :key="`${renderKey}_${index}`" />
+                </template>
+            </div>
+        </template>
+        <div v-else class="empty">
             <span>请选择组件</span>
         </div>
     </div>
@@ -44,44 +46,6 @@
     import ModifierProps from './props'
     import ModifierEvents from './events'
     import ModifierDirectives from './directives'
-
-    // const dataClean = data => {
-    //     const isInvalid = val => {
-    //         return val === null || val === undefined
-    //     }
-    //     const result = {
-    //         renderStyles: {},
-    //         renderProps: {}
-    //     }
-    //     if (data.renderStyles) {
-    //         const styles = data.renderStyles
-    //         Object.keys(styles).forEach(key => {
-    //             if (isInvalid(styles[key]) || styles[key] === 'px') {
-    //                 return
-    //             }
-    //             result.renderStyles[key] = styles[key]
-    //         })
-    //     }
-    //     if (data.renderProps) {
-    //         const props = data.renderProps
-    //         Object.keys(props).forEach(key => {
-    //             if (isInvalid(props[key].val)) {
-    //                 return
-    //             }
-    //             result.renderProps[key] = props[key]
-    //         })
-    //     }
-    //     if (data.renderEvents) {
-    //         result.renderEvents = { ...data.renderEvents }
-    //     }
-    //     if (data.renderDirectives) {
-    //         result.renderDirectives = [...data.renderDirectives]
-    //     }
-    //     if (data.renderSlots) {
-    //         result.renderSlots = { ...data.renderSlots }
-    //     }
-    //     return result
-    // }
 
     export default {
         name: '',

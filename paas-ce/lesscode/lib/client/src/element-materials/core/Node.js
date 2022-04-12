@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { uuid } from '@/common/util'
+import { unitFilter } from 'shared/util.js'
 
 import toJSON from './extends/to-json'
 import active from './extends/active'
@@ -60,6 +61,8 @@ export default class Node {
         const uid = uuid()
         // 只有刚被拖入才会是 false，画布重新渲染（页面刷新）一直是 true
         this._isMounted = false
+        // 组件被渲染时对应画布中的根原素
+        this.$elm = null
             
         this.tabPanelActive = 'props' // 默认tab选中的面板
         this.componentId = `${name}-${uid}`
@@ -83,8 +86,15 @@ export default class Node {
         this.isActived = false
     }
     /**
-     * @desc 组件 material 配置
+     * @desc 是否是根节点
      * @returns { Boolean }
+     */
+    get root () {
+        return this.type === 'root'
+    }
+    /**
+     * @desc 组件 material 配置
+     * @returns { Object }
      */
     get material () {
         return getMaterial(this.type)
@@ -158,9 +168,7 @@ export default class Node {
             style[toHyphenate(key)] = customStyle[key]
         })
         Object.keys(this.renderStyles).forEach(key => {
-            if (key !== 'customStyle') {
-                style[toHyphenate(key)] = this.renderStyles[key]
-            }
+            style[toHyphenate(key)] = unitFilter(this.renderStyles[key])
         })
         
         return Object.seal(Object.assign(style, customStyle))
@@ -239,10 +247,12 @@ export default class Node {
         return validator(this)
     }
     /**
-     * @desc 管理组件是已经被渲染
+     * @desc 组件被画布渲染
+     * @param {Element} elm
      */
-    mounted () {
+    mounted (elm) {
         this._isMounted = true
+        this.$elm = elm
     }
     /**
      * @desc 获取节点的 JSON 数据

@@ -1,14 +1,17 @@
 import { getConnection, getRepository } from 'typeorm'
 import ApiMigraion from '../model/entities/api-migration'
 import Project from '../model/entities/project'
+import ProjectVersion from '../model/entities/project-version'
 import { logger } from '../logger'
 import Page from '../model/entities/page'
 import PageTemplate from '../model/entities/page-template'
 import PageTemplateCategory from '../model/entities/page-template-category'
+import Layout from '../model/entities/layout'
+import LayoutInst from '../model/entities/layout-inst'
 import { walkGrid, uuid } from '../util'
 
 // 将函数名称写到这个数组里，函数会自动执行，返回成功则后续不会再执行
-const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots']
+const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots', 'setProjectMobileLayoutInst']
 
 export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
@@ -21,6 +24,7 @@ export const executeApi = async () => {
             if (result && result.code === 0) {
                 console.log(result.message)
             } else {
+                console.log(result.message)
                 const deleteRes = await getRepository(ApiMigraion).delete({ id })
                 console.log(deleteRes, 'delete')
             }
@@ -1064,5 +1068,87 @@ export async function fixPageData (ctx) {
             message: error,
             data: null
         })
+    }
+}
+
+/**
+ *  layout表新增mobile布局模板, layoutInst表,为历史项目增加移动端空白模板实例
+ */
+// eslint-disable-next-line no-unused-vars
+async function setProjectMobileLayoutInst (apiName) {
+    const layoutRepo = getRepository(Layout)
+    try {
+        await getConnection().transaction(async transactionalEntityManager => {
+            // 更新布局模板类型
+            const layoutUpdateList = (await layoutRepo.find()).map(layout => {
+                return {
+                    id: layout.id,
+                    layoutType: 'PC'
+                }
+            })
+            await transactionalEntityManager.save(Layout, layoutUpdateList)
+            // 创建布局模板基本信息记录
+            const mobileLayout = layoutRepo.create({
+                layoutType: 'MOBILE',
+                defaultPath: '/mobile/',
+                defaultName: '空白布局',
+                defaultCode: 'mobileEmptyView',
+                type: 'mobile-empty',
+                defaultContent: JSON.stringify({}),
+                createUser: 'admin',
+                updateUser: 'admin'
+            })
+            const res = await transactionalEntityManager.save(mobileLayout)
+
+            const layoutId = res && res.id
+
+            const projectList = await getRepository(Project).find()
+            
+            // 先给项目列表的默认版本插一条移动端空白路由数据
+            const layoutInstList = projectList.map(project => {
+                const { id, createUser, updateUser } = project
+                
+                return {
+                    content: JSON.stringify({}),
+                    layoutId,
+                    projectId: id,
+                    routePath: '/mobile/',
+                    isDefault: 1,
+                    showName: '空白布局',
+                    layoutCode: 'mobileEmptyView',
+                    createUser,
+                    updateUser
+                }
+            })
+
+            const projectVersionList = await getRepository(ProjectVersion).find()
+            const versionLayoutInstList = projectVersionList.map(project => {
+                const { id, projectId, createUser, updateUser } = project
+                
+                return {
+                    content: JSON.stringify({}),
+                    layoutId,
+                    projectId,
+                    versionId: id,
+                    routePath: '/mobile/',
+                    isDefault: 1,
+                    showName: '空白布局',
+                    layoutCode: 'mobileEmptyView',
+                    createUser,
+                    updateUser
+                }
+            })
+            const finalList = layoutInstList.concat(versionLayoutInstList)
+            await transactionalEntityManager.save(LayoutInst, finalList)
+        })
+        return {
+            code: 0,
+            message: `${apiName}: Insert success`
+        }
+    } catch (err) {
+        return {
+            code: -1,
+            message: `${apiName}: ${err.message || err}`
+        }
     }
 }

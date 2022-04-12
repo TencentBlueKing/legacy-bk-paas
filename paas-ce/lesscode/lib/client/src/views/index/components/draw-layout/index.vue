@@ -2,16 +2,17 @@
     <div
         :class="{
             [$style['draw-layout']]: true,
-            [$style['left-collapse']]: isLeftCollapse,
-            [$style['right-collapse']]: isRightCollapse
+            [$style['is-left-collapsed']]: isLeftCollapse,
+            [$style['is-right-collapsed']]: isRightCollapse
         }">
-        <div :class="$style['left']">
+        <div :class="$style['layout-left']">
             <slot name="left" />
-            
         </div>
-        <div id="drawContent" :class="$style['center']">
+        <div
+            id="lesscodeDrawContent"
+            :class="$style['layout-center']">
             <div
-                :class="$style['left-btn']"
+                :class="$style['collapsed-left-btn']"
                 v-bk-tooltips.right="{
                     content: '查看所有组件',
                     disabled: !isLeftCollapse
@@ -21,7 +22,7 @@
             </div>
             <slot />
             <div
-                :class="$style['right-btn']"
+                :class="$style['collapsed-right-btn']"
                 v-bk-tooltips.right="{
                     content: '查看组件配置',
                     disabled: !isRightCollapse
@@ -30,7 +31,7 @@
                 <i class="bk-drag-icon bk-drag-angle-left" />
             </div>
         </div>
-        <div :class="$style['right']">
+        <div :class="$style['layout-right']">
             <slot name="right" />
         </div>
     </div>
@@ -55,53 +56,51 @@
     }
 </script>
 <style lang="postcss" module>
+    @import "@/css/mixins/scroller";
     .draw-layout{
         position: relative;
-        height: calc(100vh - 120px);
         padding-right: 300px;
         padding-left: 340px;
         transition: all .1s;
-        &.left-collapse{
+        &.is-left-collapsed{
             padding-left: 0;
-            .left {
-                /* transform: translateX(-100%); */
+            .layout-left {
                 width: 0;
                 overflow: hidden;
             }
-            .left-btn{
+            .collapsed-left-btn{
                 :global(.bk-drag-angle-left){
                     transform: rotate(180deg);
                 }
             }
-            
         }
-        &.right-collapse{
+        &.is-right-collapsed{
             padding-right: 0;
-            .right{
-                /* transform: translateX(100%); */
+            .layout-right{
                 width: 0;
                 overflow: hidden;
             }
-            .right-btn{
+            .collapsed-right-btn{
                 :global(.bk-drag-angle-left){
                     transform: rotate(0deg);
                 }
             }
         }
-        .left,
-        .right{
+        .layout-left,
+        .layout-right{
             transition: all .15s;
         }
-        .left{
+        .layout-left{
             position: absolute;
             top: 0;
             bottom: 0;
             left: 0;
+            z-index: 1;
             width: 340px;
             background: #fff;
             box-shadow: 2px 4px 4px 0 rgb(0 0 0 / 10%);
         }
-        .right{
+        .layout-right{
             position: absolute;
             top: 0;
             right: 0;
@@ -110,8 +109,14 @@
             background: #FFF;
             box-shadow: -2px 4px 4px 0px rgba(0,0,0,0.1);
         }
-        .left-btn,
-        .right-btn{
+        .layout-center{
+            position: relative;
+            height: 100%;
+            overflow: auto;
+            @mixin scroller;
+        }
+        .collapsed-left-btn,
+        .collapsed-right-btn{
             position: absolute;
             display: flex;
             justify-content: center;
@@ -122,7 +127,7 @@
             font-size: 12px;
             color: #fff;
             background: #C4C6CC;
-            transform: translateY(50%);
+            transform: translateY(-50%);
             cursor: pointer;
             &:hover {
                 background: #3A84FF;
@@ -132,24 +137,19 @@
                 transition: transform .15s;
             }
         }
-        .left-btn{
+        .collapsed-left-btn{
             left: 0;
             border-radius: 0 8px 8px 0;
             :global(.bk-drag-angle-left) {
                 transform: rotate(0deg);
             }
         }
-        .right-btn{
+        .collapsed-right-btn{
             right: 0;
             border-radius: 8px 0 0 8px;
             :global(.bk-drag-angle-left) {
                 transform: rotate(180deg);
             }
-        }
-        .center{
-            position: relative;
-            height: 100%;
-            padding: 20px;
         }
     }
 </style>

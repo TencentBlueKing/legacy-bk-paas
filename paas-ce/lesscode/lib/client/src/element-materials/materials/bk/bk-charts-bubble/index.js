@@ -130,7 +130,6 @@ export default {
                 }
             },
             remoteValidate (data) {
-                console.log(data, 'valid')
                 if (typeof data !== 'object') return '返回值需要是object'
             }
         }

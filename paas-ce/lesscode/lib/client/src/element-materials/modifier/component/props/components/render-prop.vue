@@ -85,6 +85,7 @@
     import TypeFreeLayoutItem from './strategy/free-layout-item.vue'
     import TypeSlotWrapper from './strategy/slot-wrapper'
     import TypeIcon from './strategy/icon'
+    import TypeVanIcon from './strategy/van-icon'
     import TypeColor from './strategy/color'
     import TypleElProps from './strategy/el-props'
     import TypeDataSource from './strategy/data-source.vue'
@@ -165,6 +166,7 @@
                     'slot-html': TypeSlot,
                     'free-layout-item': TypeFreeLayoutItem,
                     'icon': TypeIcon,
+                    'van-icon': TypeVanIcon,
                     'color': TypeColor,
                     'step': TypeSlotWrapper,
                     'function': TypeFunction,
@@ -197,6 +199,7 @@
                     'free-layout-item': 'free-layout-item',
                     'bread-crumb': 'bread-crumb',
                     'icon': 'icon',
+                    'van-icon': 'van-icon',
                     'form-item': 'form-item',
                     'color': 'color',
                     'step': 'step',
@@ -216,6 +219,7 @@
                     'html': 'string',
                     'json': 'object',
                     'icon': 'string',
+                    'van-icon': 'string',
                     'float': 'number'
                 }
 

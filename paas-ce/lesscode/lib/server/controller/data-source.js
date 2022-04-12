@@ -8,7 +8,10 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import dataService from '../service/data-service'
+import {
+    LCDataService,
+    TABLE_FILE_NAME
+} from '../service/data-service'
 import dataTableModifyRecord from '../model/data-table-modify-record'
 import OnlineDBService from '../service/online-db-service'
 import DBEngineService from '../service/db-engine-service'
@@ -35,6 +38,9 @@ import {
     generateExportDatas,
     generateExportStruct
 } from '../../shared/data-source'
+import {
+    PERM_CODE
+} from '../../shared/perm/constant.js'
 const util = require('../util')
 
 @Controller('/api/data-source')
@@ -44,7 +50,7 @@ export default class DataSourceController {
     @Post('/enable')
     async enable (@BodyParams() body) {
         const { projectId } = body
-        const projectInfo = await dataService.findOne('project', { id: projectId, deleteFlag: 0 })
+        const projectInfo = await LCDataService.findOne(TABLE_FILE_NAME.PROJECT, { id: projectId, deleteFlag: 0 })
         projectInfo.isEnableDataSource = 1
 
         const dbInfo = {
@@ -71,8 +77,8 @@ export default class DataSourceController {
 
         // 写入数据库
         return Promise.all([
-            dataService.update('project', projectInfo),
-            dataService.add('preview-db', dbInfo)
+            LCDataService.update(TABLE_FILE_NAME.PROJECT, projectInfo),
+            LCDataService.add(TABLE_FILE_NAME.PREVIEW_DB, dbInfo)
         ])
     }
 
@@ -84,19 +90,15 @@ export default class DataSourceController {
         @QueryParams({ name: 'pageSize' }) pageSize,
         @QueryParams({ name: 'page' }) page
     ) {
-        const queryParams = {
-            tableFileName: 'data-table',
+        const result = await LCDataService.get({
+            tableFileName: TABLE_FILE_NAME.DATA_TABLE,
             page,
             pageSize,
             query: {
                 projectId,
                 deleteFlag: 0
             }
-        }
-        const result = page && pageSize
-            ? await dataService.getByPage(queryParams)
-            : await dataService.get(queryParams.tableFileName, queryParams.query)
-
+        })
         result.list.forEach((data) => {
             data.columns = JSON.parse(data.columns)
             return data
@@ -111,7 +113,7 @@ export default class DataSourceController {
         @QueryParams({ name: 'id' }) id
     ) {
         const queryParams = { id, deleteFlag: 0 }
-        const data = await dataService.findOne('data-table', queryParams)
+        const data = await LCDataService.findOne(TABLE_FILE_NAME.DATA_TABLE, queryParams)
         data.columns = JSON.parse(data.columns)
         return data
     }
@@ -144,12 +146,12 @@ export default class DataSourceController {
         @BodyParams({ name: 'record', require: true }) record
     ) {
         dataTable.columns = JSON.stringify(dataTable.columns)
-        const data = await dataService.add('data-table', dataTable)
+        const data = await LCDataService.add(TABLE_FILE_NAME.DATA_TABLE, dataTable)
         const tableModifyRecord = {
             ...record,
             tableId: data.id
         }
-        await dataService.add('data-table-modify-record', tableModifyRecord)
+        await LCDataService.add(TABLE_FILE_NAME.DATA_TABLE_MODIFY_RECORD, tableModifyRecord)
         return data
     }
 
@@ -161,21 +163,21 @@ export default class DataSourceController {
         @BodyParams({ name: 'record', require: true }) record
     ) {
         dataTable.columns = JSON.stringify(dataTable.columns)
-        const data = await dataService.update('data-table', dataTable)
-        await dataService.add('data-table-modify-record', record)
+        const data = await LCDataService.update(TABLE_FILE_NAME.DATA_TABLE, dataTable)
+        await LCDataService.add(TABLE_FILE_NAME.DATA_TABLE_MODIFY_RECORD, record)
         return data
     }
 
     // 删除表结构
     @OutputJson()
-    @DeleteAuthorization({ perm: 'delete_table', tableName: 'data-table', getId: ctx => ctx.request.body.id })
+    @DeleteAuthorization({ perm: PERM_CODE.DELETE_TABLE, tableName: TABLE_FILE_NAME.DATA_TABLE, getId: ctx => ctx.request.body.id })
     @Put('/deleteTable')
     async deleteTable (
         @BodyParams({ name: 'ids', require: true }) ids,
         @BodyParams({ name: 'records', require: true }) records
     ) {
-        const data = await dataService.bulkSoftDelete('data-table', ids)
-        await dataService.add('data-table-modify-record', records)
+        const data = await LCDataService.bulkSoftDelete(TABLE_FILE_NAME.DATA_TABLE, ids)
+        await LCDataService.add(TABLE_FILE_NAME.DATA_TABLE_MODIFY_RECORD, records)
         return data
     }
 
@@ -248,7 +250,7 @@ export default class DataSourceController {
         let dataService
         try {
             dataService = await getPreviewDataService(projectId)
-            const queryParams = {
+            const result = await dataService.get({
                 tableFileName,
                 page,
                 pageSize,
@@ -256,10 +258,7 @@ export default class DataSourceController {
                     id: 'DESC'
                 },
                 query: {}
-            }
-            const result = page && pageSize
-                ? await dataService.getByPage(queryParams)
-                : await dataService.get(tableFileName, {})
+            })
             return result
         } catch (error) {
             throw new global.BusinessError(error.message || error, -1, 500, error.stack)
@@ -339,7 +338,13 @@ export default class DataSourceController {
         @PathParams({ name: 'projectId', require: true }) projectId,
         @PathParams({ name: 'fileType', require: true }) fileType
     ) {
-        const { list = [] } = await dataService.get('data-table', { deleteFlag: 0, projectId })
+        const { list = [] } = await LCDataService.get({
+            tableFileName: TABLE_FILE_NAME.DATA_TABLE,
+            query: {
+                projectId,
+                deleteFlag: 0
+            }
+        })
         if (list.length <= 0) {
             // 未查询到数据提示
             throw new Error('暂无表结构')

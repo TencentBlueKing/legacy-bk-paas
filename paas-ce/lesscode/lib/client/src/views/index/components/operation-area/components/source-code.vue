@@ -81,7 +81,8 @@
 
 <style lang="postcss">
     .vue-code {
-        height: 100%;
+        /* height: 100%; */
+        /* border: 1px solid #DCDEE5; */
         .hljs-attr {
             color: #a6e22e;
         }

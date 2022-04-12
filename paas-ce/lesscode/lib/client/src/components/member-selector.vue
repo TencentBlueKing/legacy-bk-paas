@@ -4,6 +4,7 @@
         multiple
         :value="users"
         @selected="chooseUser"
+        @clear="clear"
         searchable
         enable-virtual-scroll
         :list="userList"
@@ -51,6 +52,10 @@
 
             chooseUser (users) {
                 this.$emit('choose', users)
+            },
+
+            clear () {
+                this.$emit('clear')
             }
         }
     }

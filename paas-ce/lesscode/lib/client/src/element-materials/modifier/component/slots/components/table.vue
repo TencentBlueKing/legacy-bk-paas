@@ -78,7 +78,7 @@
                                             :name="group.groupName"
                                             :key="funcIndex">
                                             <bk-option class="function-option"
-                                                v-for="option in group.functionList"
+                                                v-for="option in group.children"
                                                 :key="option.id"
                                                 :id="option.funcCode"
                                                 :name="option.funcName">
@@ -135,13 +135,13 @@
             <span class="table-column-add" @click="handleAdd">添加默认列</span> |
             <span class="table-column-add" @click="handleAdd('customCol')"> 添加自定义内容列</span>
         </div>
-        <methods :show.sync="showMethod"></methods>
+        <edit-function-dialog :show.sync="showMethod"></edit-function-dialog>
     </div>
 </template>
 <script>
     import Vue from 'vue'
     import { mapGetters } from 'vuex'
-    import methods from '@/components/methods'
+    import EditFunctionDialog from '@/components/methods/edit-function-dialog/index.vue'
 
     const generateColumn = (index) => ({
         label: `选项${index}`,
@@ -159,7 +159,7 @@
     export default {
         name: 'slot-table',
         components: {
-            methods
+            EditFunctionDialog
         },
         props: {
             slotVal: {

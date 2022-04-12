@@ -17,6 +17,7 @@ import 'mavon-editor/dist/css/index.css'
 import '@/common/bkui-vue-complex'
 import '@/common/bkmagic'
 import '@/common/element'
+import '@/common/vant'
 import auth from '@/common/auth'
 
 import App from '@/App'
@@ -31,12 +32,12 @@ import header from '@/components/header.vue'
 import renderHtml from '@/components/render/html.vue'
 import ProjectVersionSelector from '@/components/project-version-selector.vue'
 
-import '@icon-cool/bk-icon-vue-drag-vis'
-import '@icon-cool/bk-icon-vue-drag-vis/src/index'
 import targetData from '@/common/targetData.js'
-// monaco 注入帮助文档
-import '../src/components/methods/provide-completion'
 import pureAxios from '@/api/pureAxios.js'
+
+import './bk-icon/style.css'
+import './bk-icon/iconcool.js'
+
 // 用户调用接口使用，无业务逻辑，直接返回数据
 Vue.prototype.$http = pureAxios
 Vue.prototype.$td = targetData

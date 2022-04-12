@@ -85,3 +85,18 @@ export function throttle (fn, delay = 200) {
         }, delay)
     }
 }
+
+/**
+ * 单位过滤，如果是rpx转为rem，否则直接输出
+ * 此处将屏幕分为20份， 即20rem = 750rpx = 100%屏幕宽度
+ * @param {String} value 需要过滤的值
+ * @returns
+ */
+export function unitFilter (value) {
+    if (/\d+rpx$/.test(value)) {
+        const sizeNumber = (/(\d+)rpx$/.exec(value)[1] / 750 * 20).toFixed(2)
+        const result = sizeNumber + 'rem'
+        return result
+    }
+    return value
+}

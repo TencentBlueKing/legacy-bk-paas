@@ -235,6 +235,10 @@
                                     const modifiers = (detail.modifiers || []).join('.')
                                     const modifierStr = modifiers ? `，修饰符为${modifiers}` : ''
                                     tips.push(`页面【${pageCode}】内组件【${detail.componentId}】的【${detail.prop}】属性${modifierStr}`)
+                                } else if (detail.source === 'prop') {
+                                    tips.push(`页面【${pageCode}】内组件【${detail.componentId}】的【${detail.key}】属性`)
+                                } else if (detail.source === 'slot') {
+                                    tips.push(`页面【${pageCode}】内组件【${detail.componentId}】的【${detail.key}】插槽`)
                                 } else if (detail.type === 'slots') {
                                     tips.push(`页面【${pageCode}】内组件【${detail.componentId}】的【${detail.slot}】插槽`)
                                 } else {
