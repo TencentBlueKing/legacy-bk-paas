@@ -1066,7 +1066,7 @@ class PageCode {
 
                 if (format !== 'value') {
                     this.handleUsedVariable(format, val, compId)
-                    propsStr = curPropStr
+                    propsStr += curPropStr
                     continue
                 } else if (type === 'remote') {
                     const curDir = dirProps.find((directive) => (directive.prop === i))
