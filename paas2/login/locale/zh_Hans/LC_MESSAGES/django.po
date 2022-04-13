@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-13 11:03+0800\n"
+"POT-Creation-Date: 2022-04-13 16:47+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,10 +60,6 @@ msgstr ""
 
 #: app/constants.py:47
 msgid "新标签页"
-msgstr ""
-
-#: backends/bk.py:73
-msgid "调用用户管理接口失败，请联系管理员, 查看登录日志获取错误详情"
 msgstr ""
 
 #: bk_oauth2/models.py:66
@@ -432,21 +428,21 @@ msgid "已阅读"
 msgstr ""
 
 #: templates/account/base.html:11
-msgid "用户管理|蓝鲸智云企业版"
+msgid "用户管理 | 腾讯蓝鲸智云"
 msgstr ""
 
 #: templates/account/base.html:12
 msgid ""
 "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,"
-"运维开发,蓝鲸企业版,企业版,作业平台,集成平台,配置平台,管控平台"
+"运维开发,作业平台,集成平台,配置平台,管控平台"
 msgstr ""
 
 #: templates/account/base.html:13
 msgid ""
-"蓝鲸智云软件企业版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变"
-"中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。"
-"该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵"
-"守《蓝鲸智云软件用户服务协议》。"
+"蓝鲸智云软件是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运"
+"维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本"
+"提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝"
+"鲸智云软件用户服务协议》。"
 msgstr ""
 
 #: templates/account/base.html:43 templates/account/base.html:98
@@ -495,8 +491,8 @@ msgstr ""
 msgid "蓝鲸智云 版权所有"
 msgstr ""
 
-#: templates/account/login.html:10
-msgid "登录|蓝鲸智云企业版"
+#: templates/account/login.html:10 templates/account/login_ce.html:11
+msgid "登录 | 腾讯蓝鲸智云"
 msgstr ""
 
 #: templates/account/login.html:54
@@ -553,10 +549,6 @@ msgstr ""
 
 #: templates/account/login.html:149
 msgid "企业证书校验无效，请联系系统管理员处理"
-msgstr ""
-
-#: templates/account/login_ce.html:11
-msgid "登录 | 腾讯蓝鲸智云"
 msgstr ""
 
 #: templates/account/login_ce.html:41
