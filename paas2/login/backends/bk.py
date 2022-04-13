@@ -70,7 +70,7 @@ class BkUserBackend(ModelBackend):
             # PASSWORD_EXPIRED = 3210018
             if code in [3210021, 3210018]:
                 raise PasswordNeedReset(message=message, reset_password_url=userinfo.get("reset_password_url"))
-            message = _("调用用户管理接口失败，请联系管理员, 查看登录日志获取错误详情")
+            # message = _("调用用户管理接口失败，请联系管理员, 查看登录日志获取错误详情")
             raise AuthenticationError(message=message, redirect_to=userinfo.get("redirect_to"))
 
         # here we got the userinfo, but the language is not update yet(async in signal)
