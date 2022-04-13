@@ -776,13 +776,28 @@ class PageCode {
                 \n item-hover-icon-color='#63656e'
                 \n item-child-icon-active-color='#699df4'
             `
+        } else if (!isDefaultTheme) {
+            themeColorProps += `
+                \n item-hover-bg-color='#ffffff14'
+                \n item-hover-color='#ffffff'
+                \n item-active-color='#ffffff'
+                \n item-default-bg-color='#1E1E1E'
+                \n item-default-color='#ffffffad'
+                \n item-default-icon-color='#ffffffad'
+                \n item-child-icon-default-color='#ffffffad'
+                \n item-child-icon-hover-color='#ffffff'
+                \n item-active-icon-color='#ffffff'
+                \n item-hover-icon-color='#ffffff'
+                \n item-child-icon-active-color='#ffffff'
+                \n sub-menu-open-bg-color='#000000e6'
+            `
         }
 
         this.dataTemplate(leftMenuKey, JSON.stringify(layoutContent.menuList))
         this.dataTemplate('toggleActive', 'false')
 
         return `
-            <bk-navigation ${componentProps} theme-color="${isWhiteTheme ? '#ffffff' : '#182132'}" navigation-type="left-right" need-menu class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v">
+            <bk-navigation ${componentProps} theme-color="${isWhiteTheme ? '#ffffff' : isDefaultTheme ? '#182132' : '#1E1E1E'}" navigation-type="left-right" need-menu class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v">
                 <template slot="side-header">
                     <span class="title-icon">
                         <img src="${layoutContent.logo}" style="width: 28px; height: 28px;">
@@ -842,25 +857,25 @@ class PageCode {
         const isDefaultTheme = theme === '#182132' // 默认主题色
         const isBlackTheme = theme === '#1A1A1A' // 黑色主题
         const isWhiteTheme = theme === '#FFFFFF' // 白色主题
-        const themeColor = isWhiteTheme ? 'ffffff' : '#2C354D' // 左侧导航默认背景色
+        const themeColor = isWhiteTheme ? 'ffffff' : isDefaultTheme ? '#2C354D' : '#1E1E1E' // 左侧导航默认背景色
         const headThemeColor = isDefaultTheme ? '#182132' : theme
         // 左侧选中项背景色 默认、黑色、白色、其他主题 共四种效果
         const targetTheme = isDefaultTheme ? '#0083FF' : isBlackTheme ? '#ffffff33' : isWhiteTheme ? '#E1ECFF' : theme
         // 左侧菜单白色与其他主题区分属性
         const themeColorProps = `
             item-active-bg-color="${targetTheme}"
-            item-hover-bg-color="${isWhiteTheme ? '#f0f1f5' : '#3a4561'}"
+            item-hover-bg-color="${isWhiteTheme ? '#f0f1f5' : isDefaultTheme ? '#3a4561' : '#ffffff14'}"
             item-hover-color="${isWhiteTheme ? '#63656e' : '#FFFFFF'}"
             item-active-color="${isWhiteTheme ? '#699df4' : '#FFFFFF'}"
-            item-default-bg-color="${isWhiteTheme ? '#ffffff' : '#2C354D'}"
-            item-default-color="${isWhiteTheme ? '#63656e' : '#acb5c6'}"
-            item-default-icon-color="${isWhiteTheme ? '#63656ead' : '#acb5c6'}"
-            item-child-icon-default-color="${isWhiteTheme ? '#63656ead' : '#acb5c6'}"
-            item-child-icon-hover-color="${isWhiteTheme ? '#313238' : '#acb5c6'}"
+            item-default-bg-color="${isWhiteTheme ? '#ffffff' : isDefaultTheme ? '#2C354D' : '#1E1E1E'}"
+            item-default-color="${isWhiteTheme ? '#63656e' : isDefaultTheme ? '#acb5c6' : '#ffffffad'}"
+            item-default-icon-color="${isWhiteTheme ? '#63656ead' : isDefaultTheme ? '#acb5c6' : '#ffffffad'}"
+            item-child-icon-default-color="${isWhiteTheme ? '#63656ead' : isDefaultTheme ? '#acb5c6' : '#ffffffad'}"
+            item-child-icon-hover-color="${isWhiteTheme ? '#313238' : isDefaultTheme ? '#acb5c6' : '#FFFFFF'}"
             item-active-icon-color="${isWhiteTheme ? '#699df4' : '#FFFFFF'}"
             item-hover-icon-color="${isWhiteTheme ? '#63656e' : '#FFFFFF'}"
             item-child-icon-active-color="${isWhiteTheme ? '#699df4' : '#FFFFFF'}"
-            sub-menu-open-bg-color="${isWhiteTheme ? '#f5f7fa' : '#272F45'}"
+            sub-menu-open-bg-color="${isWhiteTheme ? '#f5f7fa' : isDefaultTheme ? '#272F45' : '#000000e6'}"
         `
 
         this.dataTemplate('toggleActive', 'false')
