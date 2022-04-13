@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-04-08 14:22+0800\n"
+"POT-Creation-Date: 2022-04-13 16:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_Hans\n"
@@ -2919,124 +2919,112 @@ msgstr ""
 msgid "上传成功"
 msgstr ""
 
-#: templates/base.html:14
-msgid "开发者中心|蓝鲸智云企业版"
+#: templates/base.html:13
+msgid "开发者中心 | 腾讯蓝鲸智云"
 msgstr ""
 
-#: templates/base.html:15
-msgid "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸企业版,企业版,作业平台,集成平台,配置平台,管控平台"
+#: templates/base.html:14 templates/home/index.html:13
+msgid "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,作业平台,集成平台,配置平台,管控平台"
 msgstr ""
 
-#: templates/base.html:16
-msgid "蓝鲸智云软件企业版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。"
+#: templates/base.html:15 templates/home/index.html:14
+msgid "蓝鲸智云软件是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。"
 msgstr ""
 
-#: templates/base.html:18
-msgid "开发者中心|蓝鲸智云社区版"
-msgstr ""
-
-#: templates/base.html:19 templates/home/index.html:13
-msgid "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台"
-msgstr ""
-
-#: templates/base.html:20 templates/home/index.html:14
-msgid "蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。"
-msgstr ""
-
-#: templates/base.html:98 templates/base_profile.html:16
+#: templates/base.html:92 templates/base_profile.html:16
 msgid "蓝鲸智云桌面"
 msgstr ""
 
-#: templates/base.html:99 templates/base_profile.html:17
+#: templates/base.html:93 templates/base_profile.html:17
 msgid "img/logo/logo_develper_01.png"
 msgstr ""
 
-#: templates/base.html:101
+#: templates/base.html:95
 msgid "蓝鲸智云开发者中心"
 msgstr ""
 
-#: templates/base.html:102
+#: templates/base.html:96
 msgid "img/logo/logo_develper_02.png"
 msgstr ""
 
-#: templates/base.html:109
+#: templates/base.html:103
 msgid "体验新版开发者中心"
 msgstr ""
 
-#: templates/base.html:129 templates/base_profile.html:43
+#: templates/base.html:123 templates/base_profile.html:43
 #: templates/home/index.html:105
 msgid "注销"
 msgstr ""
 
-#: templates/base.html:161
+#: templates/base.html:155
 msgid "返回顶部"
 msgstr ""
 
-#: templates/base.html:164
+#: templates/base.html:158
 msgid "返回底部"
 msgstr ""
 
-#: templates/base.html:180 templates/home/index.html:319
+#: templates/base.html:174 templates/home/index.html:319
 msgid "技术支持"
 msgstr ""
 
-#: templates/base.html:181 templates/home/index.html:320
+#: templates/base.html:175 templates/home/index.html:320
 msgid "社区论坛"
 msgstr ""
 
-#: templates/base.html:182 templates/home/index.html:321
+#: templates/base.html:176 templates/home/index.html:321
 msgid "产品官网"
 msgstr ""
 
-#: templates/base.html:184 templates/home/index.html:323
+#: templates/base.html:178 templates/home/index.html:323
 msgid "关注我们"
 msgstr ""
 
-#: templates/base.html:189 templates/home/index.html:327
+#: templates/base.html:183 templates/home/index.html:327
 msgid "蓝鲸智云 版权所有"
 msgstr ""
 
-#: templates/base.html:199
+#: templates/base.html:193
 msgid "建议LOGO大小为100px*100px"
 msgstr ""
 
-#: templates/base.html:231
+#: templates/base.html:225
 msgid "马上体验全新蓝鲸开发者中心"
 msgstr ""
 
-#: templates/base.html:235
+#: templates/base.html:229
 msgid "蓝鲸开发者中心已经推出全新版本，包含以下特性："
 msgstr ""
 
-#: templates/base.html:237
+#: templates/base.html:231
 msgid "全新设计的用户界面，给您更友好的体验"
 msgstr ""
 
-#: templates/base.html:238
+#: templates/base.html:232
 msgid "支持使用 Node.js、Python 等语言开发应用"
 msgstr ""
 
-#: templates/base.html:239
+#: templates/base.html:233
 msgid "支持前后端分离的开发模式"
 msgstr ""
 
-#: templates/base.html:240
+#: templates/base.html:234
 msgid "支持自定义后台进程及启动命令"
 msgstr ""
 
-#: templates/base.html:241
+#: templates/base.html:235
 msgid "支持使用对象存储（bk-repo） 等“增强服务”"
 msgstr ""
 
-#: templates/base.html:242
+#: templates/base.html:236
 msgid "全面升级的应用开发框架"
 msgstr ""
 
-#: templates/base.html:245
+#: templates/base.html:239
 msgid "当前旧版已不再支持新应用创建，感谢您的支持。"
 msgstr ""
 
-#: templates/base.html:249
+#: templates/base.html:243
 msgid "去新版创建应用"
 msgstr ""
 
@@ -4674,7 +4662,7 @@ msgid "除系统默认的告警配置外（如负载），蓝鲸也支持开发�
 msgstr ""
 
 #: templates/home/index.html:12
-msgid "工作台|蓝鲸智云社区版"
+msgid "工作台 | 腾讯蓝鲸智云"
 msgstr ""
 
 #: templates/home/index.html:39 templates/home/index.html:126
@@ -4694,7 +4682,7 @@ msgid "绑定微信"
 msgstr ""
 
 #: templates/home/index.html:120
-msgid "欢迎来到蓝鲸社区版工作台！"
+msgid "欢迎来到腾讯蓝鲸智云工作台！"
 msgstr ""
 
 #: templates/home/index.html:238
@@ -5389,5 +5377,29 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "蓝鲸官网"
+#~ msgstr ""
+
+#~ msgid "开发者中心|蓝鲸智云企业版"
+#~ msgstr ""
+
+#~ msgid "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸企业版,企业版,作业平台,集成平台,配置平台,管控平台"
+#~ msgstr ""
+
+#~ msgid "蓝鲸智云软件企业版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。"
+#~ msgstr ""
+
+#~ msgid "开发者中心|蓝鲸智云社区版"
+#~ msgstr ""
+
+#~ msgid "开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台"
+#~ msgstr ""
+
+#~ msgid "蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。"
+#~ msgstr ""
+
+#~ msgid "工作台|蓝鲸智云社区版"
+#~ msgstr ""
+
+#~ msgid "欢迎来到蓝鲸社区版工作台！"
 #~ msgstr ""
 
