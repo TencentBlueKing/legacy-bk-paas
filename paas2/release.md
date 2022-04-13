@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.14.5
+    - bugfix: login password wrong 500
+    - update: login reset password if it's an initial password or password expired
+
 # 2.14.4
     - update: esb add invalid usernames for cmsi
     - update: esb add cache for db query
