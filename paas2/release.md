@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.7
+    - update: header and footer of pages
+
 # 2.14.6
     - bugfix: login show error message from bk-user
 
