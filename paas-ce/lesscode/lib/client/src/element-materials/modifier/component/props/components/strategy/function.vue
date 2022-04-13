@@ -16,7 +16,6 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
     import selectFunc from '@/components/methods/select-func'
 
     export default {
@@ -47,10 +46,6 @@
                 propDirMap: {},
                 usedMethodMap: {}
             }
-        },
-        computed: {
-            ...mapGetters('functions', ['funcGroups']),
-            ...mapGetters('drag', ['targetData'])
         },
         created () {
             this.remoteData = Object.assign({}, this.remoteData, this.payload)

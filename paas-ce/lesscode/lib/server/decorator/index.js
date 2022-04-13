@@ -12,3 +12,4 @@
 export * from './controller'
 export * from './authorization'
 export * from './send'
+export * from './check'

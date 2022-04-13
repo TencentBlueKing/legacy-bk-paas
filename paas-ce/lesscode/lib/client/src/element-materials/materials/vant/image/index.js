@@ -35,7 +35,7 @@ export default {
         'position',
         {
             name: 'size',
-            include: ['display']
+            include: ['display', 'width', 'height']
         },
         'margin',
         'pointer',
@@ -63,11 +63,13 @@ export default {
         },
         width: {
             type: ['string', 'number'],
-            tips: '宽度，默认单位为px'
+            tips: '宽度，默认单位为px',
+            val: 60
         },
         height: {
             type: ['string', 'number'],
-            tips: '高度，默认单位为px'
+            tips: '高度，默认单位为px',
+            val: 60
         },
         radius: {
             type: ['string', 'number'],

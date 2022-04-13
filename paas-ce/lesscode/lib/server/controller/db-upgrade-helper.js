@@ -17,6 +17,69 @@ import PageVariable from '../model/entities/page-variable'
 import FuncVariable from '../model/entities/func-variable'
 import { logger } from '../logger'
 
+export async function syncFuncData (ctx) {
+    try {
+        const funcRepository = getRepository(Func)
+        const funcList = await funcRepository.find()
+
+        const funcGroupRepository = getRepository(FuncGroup)
+        const funcGroupList = await funcGroupRepository.find()
+        const funcGroupMap = funcGroupList.reduce((acc, cur) => {
+            acc[cur.id] = cur.groupName
+            return acc
+        }, {})
+
+        const projectFuncGroupRepository = getRepository(ProjectFuncGroup)
+        const projectFuncGroupList = await projectFuncGroupRepository.find()
+        const funcGroupProjectMap = projectFuncGroupList.reduce((acc, cur) => {
+            acc[cur.funcGroupId] = cur.projectId
+            return acc
+        }, {})
+
+        const versionGroupMap = projectFuncGroupList.reduce((acc, cur) => {
+            acc[cur.funcGroupId] = cur.versionId
+            return acc
+        }, {})
+
+        await getConnection().transaction(async transactionalEntityManager => {
+            const funcTaskList = funcList.map(funcData => {
+                return transactionalEntityManager.update(Func, {
+                    id: funcData.id
+                }, {
+                    projectId: funcGroupProjectMap[funcData.funcGroupId],
+                    funcGroupName: funcGroupMap[funcData.funcGroupId],
+                    versionId: versionGroupMap[funcData.funcGroupId],
+                    updateTime: funcData.updateTime,
+                    updateUser: funcData.updateUser
+                })
+            })
+            const groupTaskList = funcGroupList.map(funcGroupData => {
+                return transactionalEntityManager.update(FuncGroup, {
+                    id: funcGroupData.id
+                }, {
+                    projectId: funcGroupProjectMap[funcGroupData.id],
+                    versionId: versionGroupMap[funcGroupData.id],
+                    updateTime: funcGroupData.updateTime,
+                    updateUser: funcGroupData.updateUser
+                })
+            })
+            await Promise.all([...funcTaskList, ...groupTaskList])
+        })
+        ctx.send({
+            code: 0,
+            message: `fix func data success：${(new Date()).toString()}`,
+            data: null
+        })
+    } catch (error) {
+        console.dir(error)
+        ctx.send({
+            code: -1,
+            message: error,
+            data: null
+        })
+    }
+}
+
 /**
  * 对现有的 slot 数据更新
  * 只能执行一次

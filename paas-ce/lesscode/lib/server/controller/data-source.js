@@ -38,6 +38,9 @@ import {
     generateExportDatas,
     generateExportStruct
 } from '../../shared/data-source'
+import {
+    PERM_CODE
+} from '../../shared/perm/constant.js'
 const util = require('../util')
 
 @Controller('/api/data-source')
@@ -87,7 +90,7 @@ export default class DataSourceController {
         @QueryParams({ name: 'pageSize' }) pageSize,
         @QueryParams({ name: 'page' }) page
     ) {
-        const queryParams = {
+        const result = await LCDataService.get({
             tableFileName: TABLE_FILE_NAME.DATA_TABLE,
             page,
             pageSize,
@@ -95,11 +98,7 @@ export default class DataSourceController {
                 projectId,
                 deleteFlag: 0
             }
-        }
-        const result = page && pageSize
-            ? await LCDataService.getByPage(queryParams)
-            : await LCDataService.get(queryParams.tableFileName, queryParams.query)
-
+        })
         result.list.forEach((data) => {
             data.columns = JSON.parse(data.columns)
             return data
@@ -171,7 +170,7 @@ export default class DataSourceController {
 
     // 删除表结构
     @OutputJson()
-    @DeleteAuthorization({ perm: 'delete_table', tableName: TABLE_FILE_NAME.DATA_TABLE, getId: ctx => ctx.request.body.id })
+    @DeleteAuthorization({ perm: PERM_CODE.DELETE_TABLE, tableName: TABLE_FILE_NAME.DATA_TABLE, getId: ctx => ctx.request.body.id })
     @Put('/deleteTable')
     async deleteTable (
         @BodyParams({ name: 'ids', require: true }) ids,
@@ -251,7 +250,7 @@ export default class DataSourceController {
         let dataService
         try {
             dataService = await getPreviewDataService(projectId)
-            const queryParams = {
+            const result = await dataService.get({
                 tableFileName,
                 page,
                 pageSize,
@@ -259,10 +258,7 @@ export default class DataSourceController {
                     id: 'DESC'
                 },
                 query: {}
-            }
-            const result = page && pageSize
-                ? await dataService.getByPage(queryParams)
-                : await dataService.get(tableFileName, {})
+            })
             return result
         } catch (error) {
             throw new global.BusinessError(error.message || error, -1, 500, error.stack)
@@ -342,7 +338,13 @@ export default class DataSourceController {
         @PathParams({ name: 'projectId', require: true }) projectId,
         @PathParams({ name: 'fileType', require: true }) fileType
     ) {
-        const { list = [] } = await LCDataService.get(TABLE_FILE_NAME.DATA_TABLE, { deleteFlag: 0, projectId })
+        const { list = [] } = await LCDataService.get({
+            tableFileName: TABLE_FILE_NAME.DATA_TABLE,
+            query: {
+                projectId,
+                deleteFlag: 0
+            }
+        })
         if (list.length <= 0) {
             // 未查询到数据提示
             throw new Error('暂无表结构')

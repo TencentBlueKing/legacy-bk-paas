@@ -35,6 +35,8 @@ const mergeData = (newNode, oldNode, deep) => {
                 }
                 return renderSlots
             }, {})
+        } else {
+            newNode.renderSlots = _.cloneDeep(oldNode.renderSlots)
         }
     }
 }

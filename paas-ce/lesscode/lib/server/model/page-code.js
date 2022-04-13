@@ -218,12 +218,7 @@ class PageCode {
             params = (methodCode.params || []).filter(param => param.value).map(param => this.getValue(param.value))
             methodCode = methodCode.methodCode
         }
-        let res
-        this.funcGroups.forEach((group) => {
-            const funChildren = group.functionList || []
-            const method = funChildren.find(x => x.funcCode === methodCode)
-            if (method) res = method
-        })
+        const res = this.funcGroups.map(group => group.children).flat().find(func => func.funcCode === methodCode)
         return [res || {}, params]
     }
 
@@ -369,7 +364,7 @@ class PageCode {
                             <!-- eslint-disable -->
                             <!-- prettier-ignore -->
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
-                                >${slotStr}</${item.type}>
+                            >${slotStr}</${item.type}>
                             <!-- eslint-enable -->`
                     } else {
                         if (item.type === 'bk-checkbox-group') {
@@ -1086,7 +1081,7 @@ class PageCode {
 
                 if (format !== 'value') {
                     this.handleUsedVariable(format, val, compId)
-                    propsStr = curPropStr
+                    propsStr += curPropStr
                     continue
                 } else if (type === 'remote') {
                     const curDir = dirProps.find((directive) => (directive.prop === i))
@@ -1344,7 +1339,7 @@ class PageCode {
             const slot = slots[key]
             const isDefaultSlot = key === 'default'
             compId = compId + key
-            slotStr += '\n'
+            slotStr += type === 'p' ? '' : '\n'
             if (!isDefaultSlot) slotStr += `<template slot="${key}">\n`
             if (Array.isArray(slot)) {
                 slotStr += this.generateCode(slot)
@@ -1534,8 +1529,8 @@ class PageCode {
     }
 
     processFuncBody (code) {
-        const encodeCode = (code || '').replace(new RegExp('(<)([^>]+)(>)', 'gi'), (match, p1, p2, p3, offset, string) => `\\${p1}` + p2 + `\\${p3}`)
-        return replaceFuncKeyword(encodeCode, this.origin, (all, first, second, dirKey, funcStr, funcCode) => {
+        const encodeCode = (code || '').replace(/(<)(\/?)([^>\r\n]+)(>)/gi, (match, p1, p2, p3, p4, offset, string) => `\\${p1}` + `${p2 && `\\${p2}`}` + p3 + `\\${p4}`)
+        return replaceFuncKeyword(encodeCode, (all, first, second, dirKey, funcStr, funcCode) => {
             return this.handleVarInFunc(dirKey, funcCode) || all
         })
     }

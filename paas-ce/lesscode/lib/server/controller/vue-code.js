@@ -13,7 +13,9 @@ import PageCodeModel from '../model/page-code'
 import routeModel from '../model/route'
 import variableModel from '../model/variable'
 
-import { allGroupFuncDetail } from '../model/function'
+import {
+    getAllGroupAndFunction
+} from '../service/function'
 import OperationLogger from '../service/operation-logger'
 
 const AU = require('ansi_up')
@@ -75,7 +77,7 @@ const VueCode = {
             } = ctx.request.body
 
             const [funcGroups, routeList, allVarableList] = await Promise.all([
-                allGroupFuncDetail(projectId, versionId),
+                getAllGroupAndFunction(projectId, versionId),
                 routeModel.findProjectRoute(projectId, versionId),
                 variableModel.getAll({ projectId, versionId })
             ])

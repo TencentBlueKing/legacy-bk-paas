@@ -199,7 +199,6 @@
                 routeGroup: 'routeGroup',
                 styleSetting: 'styleSetting'
             }),
-            ...mapGetters('functions', ['funcGroups']),
             disabled () {
                 const { errors, editField, getFieldValue } = this
                 return (errors[editField.field.id] || []).length > 0 || editField.value === getFieldValue(editField.field)

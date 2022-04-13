@@ -70,7 +70,10 @@ class PreviewSubscriber {
  */
 export const getPreviewDataService = async (projectId) => {
     const [{ list: tables }, config] = await Promise.all([
-        LCDataService.get(TABLE_FILE_NAME.DATA_TABLE, { projectId, deleteFlag: 0 }),
+        LCDataService.get({
+            tableFileName: TABLE_FILE_NAME.DATA_TABLE,
+            query: { projectId, deleteFlag: 0 }
+        }),
         getPreviewDbConfig(projectId)
     ])
 

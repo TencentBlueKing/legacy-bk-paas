@@ -10,7 +10,9 @@
  */
 
 import { getPreviewDataService } from '../service/preview-db-service'
-import func from '../model/function'
+import {
+    getAllGroupAndFunction
+} from '../service/function'
 import { Controller, All, Ctx } from '../decorator'
 
 // 用于 serverless web function 在预览环境使用
@@ -23,13 +25,8 @@ export default class ServerlessController {
             const { projectId, funcCode } = ctx.params || {}
             dataService = await getPreviewDataService(projectId)
 
-            const funcGroupList = await func.allGroupFuncDetail(projectId)
-            const curFunc = funcGroupList.reduce((acc, group) => {
-                const funcList = group.functionList || []
-                const func = funcList.find((func) => (func.funcCode === funcCode))
-                if (func) acc = func
-                return acc
-            }, {})
+            const funcGroupList = await getAllGroupAndFunction(projectId)
+            const curFunc = funcGroupList.map(group => group.children).flat().find(func => func.funcCode === funcCode)
             const funcBody = curFunc.funcBody || ''
 
             const Fn = Function

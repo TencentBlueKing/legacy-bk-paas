@@ -9,14 +9,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { getFunctionTips } from '../shared'
 import crypto from 'crypto'
 const os = require('os')
-const eslintConfig = require('./conf/eslint-config')
-const { ESLint } = require('eslint')
 const interactiveComponents = ['bk-dialog', 'bk-sideslider']
-const acorn = require('acorn')
-const { RequestContext } = require('./middleware/request-context')
 const algorithm = 'aes-256-ctr'
 let secretKey
 try {
@@ -64,33 +59,6 @@ exports.splitSql = (sqlString) => {
         if (/'|"|`/.test(sqlChar)) strCharNum++
     }
     return sqlArr
-}
-
-// 替换函数中的变量和函数
-exports.replaceFuncKeyword = (funcBody = '', callBack) => {
-    // remove comment
-    const ctx = RequestContext.getCurrentCtx()
-    const functionTips = getFunctionTips(ctx.origin)
-    Object.values(functionTips).forEach((tip) => {
-        funcBody = funcBody.replace(tip, '')
-    })
-
-    // parse keyword
-    const commentsPositions = []
-    acorn.parse(funcBody, {
-        onComment (isBlock, text, start, end) {
-            commentsPositions.push({
-                start,
-                end
-            })
-        },
-        allowReturnOutsideFunction: true,
-        allowAwaitOutsideFunction: true
-    })
-    return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
-        const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
-        return isInComments ? all : callBack(all, first, second, dirKey, funcStr, funcCode)
-    })
 }
 
 /**
@@ -483,58 +451,8 @@ export function ansiparse (str) {
     return result
 }
 
-function getEslintOption (func, customOptions = {}) {
-    const globals = { lesscode: true };
-    [...(func.funcParams || []), ...(func.remoteParams || [])].forEach((key) => {
-        globals[key] = true
+export function escapeHtmlStringList (htmlStringList) {
+    return htmlStringList.map((htmlString) => {
+        return (htmlString || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     })
-    const options = {
-        useEslintrc: true,
-        overrideConfig: {
-            ...eslintConfig,
-            globals
-        },
-        ...customOptions
-    }
-    return options
-}
-
-function getErrorHtmlMessage (errStrArr) {
-    return errStrArr.map((err) => {
-        return (err.message || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    }).join('')
-}
-
-export async function checkFuncEslint (func) {
-    const options = getEslintOption(func)
-    const eslint = new ESLint(options)
-    const code = func.funcBody || ''
-    const results = await eslint.lintText(code || '')
-    const formatter = await eslint.loadFormatter('stylish')
-    const formateRes = formatter.format(results)
-    const errStrArr = ansiparse(formateRes)
-    let mes = ''
-    if (errStrArr.length) mes = `<pre style="margin:0">eslint检查不通过，可点击 <i class="bk-drag-icon bk-drag-fix"></i> 进行自动修复：\n${getErrorHtmlMessage(errStrArr)}</pre>`
-    return mes
-}
-
-export async function verifyAndFixFunc (func) {
-    const options = getEslintOption(func, { fix: true })
-    const eslint = new ESLint(options)
-    const code = func.funcBody || ''
-    // fix code
-    const results = await eslint.lintText(code || '')
-    await ESLint.outputFixes(results)
-    // get message
-    const formatter = await eslint.loadFormatter('stylish')
-    const formateRes = formatter.format(results)
-    const errStrArr = ansiparse(formateRes)
-    let message = ''
-    if (errStrArr.length) message = `<pre style="margin:0">自动修复Eslint失败，请手动修复下面的问题后重试：\n${getErrorHtmlMessage(errStrArr)}</pre>`
-
-    const fixResult = {
-        code: results[0].output || '',
-        message
-    }
-    return fixResult
 }

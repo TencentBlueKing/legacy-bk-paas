@@ -94,7 +94,7 @@ export function throttle (fn, delay = 200) {
  */
 export function unitFilter (value) {
     if (/\d+rpx$/.test(value)) {
-        const sizeNumber = /(\d+)rpx$/.exec(value)[1] / 750 * 20
+        const sizeNumber = (/(\d+)rpx$/.exec(value)[1] / 750 * 20).toFixed(2)
         const result = sizeNumber + 'rem'
         return result
     }
