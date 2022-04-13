@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 11:33+0800\n"
+"POT-Creation-Date: 2022-04-13 11:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,6 +60,10 @@ msgstr ""
 
 #: app/constants.py:47
 msgid "新标签页"
+msgstr ""
+
+#: backends/bk.py:73
+msgid "调用用户管理接口失败，请联系管理员, 查看登录日志获取错误详情"
 msgstr ""
 
 #: bk_oauth2/models.py:66
@@ -132,8 +136,12 @@ msgstr ""
 msgid "长时间无操作，登录态已过期"
 msgstr ""
 
-#: bkauth/views.py:126
+#: bkauth/views.py:130
 msgid "账户或者密码错误，请重新输入"
+msgstr ""
+
+#: common/exceptions.py:47
+msgid "登录校验失败，请重置密码"
 msgstr ""
 
 #: common/license.py:40
@@ -442,7 +450,6 @@ msgid ""
 msgstr ""
 
 #: templates/account/base.html:43 templates/account/base.html:98
-#: templates/account/login.html:89
 msgid "蓝鲸智云桌面"
 msgstr ""
 
@@ -471,22 +478,20 @@ msgstr ""
 msgid "返回底部"
 msgstr ""
 
-#: templates/account/base.html:95 templates/account/login.html:86
-#: templates/account/login_ce_i18n.html:48
+#: templates/account/base.html:95 templates/account/login_ce_i18n.html:48
 msgid "QQ咨询"
 msgstr ""
 
-#: templates/account/base.html:96 templates/account/login.html:87
-#: templates/account/login_ce_i18n.html:49
+#: templates/account/base.html:96 templates/account/login_ce_i18n.html:49
 msgid "蓝鲸论坛"
 msgstr ""
 
-#: templates/account/base.html:97 templates/account/login.html:88
-#: templates/account/login_ce_i18n.html:50
+#: templates/account/base.html:97 templates/account/login_ce_i18n.html:50
 msgid "蓝鲸官网"
 msgstr ""
 
-#: templates/account/base.html:101 templates/account/login_ce.html:113
+#: templates/account/base.html:101 templates/account/login.html:133
+#: templates/account/login_ce.html:113
 msgid "蓝鲸智云 版权所有"
 msgstr ""
 
@@ -494,42 +499,59 @@ msgstr ""
 msgid "登录|蓝鲸智云企业版"
 msgstr ""
 
-#: templates/account/login.html:16
+#: templates/account/login.html:54
 msgid "img/logo/logo_cn.svg"
 msgstr ""
 
-#: templates/account/login.html:29
+#: templates/account/login.html:67
 msgid "用户名/邮箱/手机号"
 msgstr ""
 
-#: templates/account/login.html:37
+#: templates/account/login.html:75
 msgid "密码"
 msgstr ""
 
-#: templates/account/login.html:44 templates/account/login_ce_i18n.html:39
+#: templates/account/login.html:82 templates/account/login_ce_i18n.html:39
 msgid "登录"
 msgstr ""
 
-#: templates/account/login.html:45 templates/account/login.html:50
+#: templates/account/login.html:83 templates/account/login.html:88
 #: templates/account/login_ce_i18n.html:40
 msgid "查看用户协议"
 msgstr ""
 
-#: templates/account/login.html:53 templates/account/login_ce.html:73
+#: templates/account/login.html:91 templates/account/login_ce.html:73
 msgid "忘记密码？"
 msgstr ""
 
-#: templates/account/login.html:72
+#: templates/account/login.html:110
 msgid "img/logo/btn_cn.png"
 msgstr ""
 
-#: templates/account/login.html:99 templates/account/login_ce.html:120
+#: templates/account/login.html:124 templates/account/login_ce.html:104
+msgid "技术支持"
+msgstr ""
+
+#: templates/account/login.html:125 templates/account/login_ce.html:105
+msgid "社区论坛"
+msgstr ""
+
+#: templates/account/login.html:126 templates/account/login_ce.html:106
+msgid "产品官网"
+msgstr ""
+
+#: templates/account/login.html:128 templates/account/login_ce.html:108
+#: templates/account/login_ce_i18n.html:52
+msgid "关注我们"
+msgstr ""
+
+#: templates/account/login.html:145 templates/account/login_ce.html:120
 #: templates/account/login_ce_i18n.html:69
 msgid ""
 "您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果"
 msgstr ""
 
-#: templates/account/login.html:103
+#: templates/account/login.html:149
 msgid "企业证书校验无效，请联系系统管理员处理"
 msgstr ""
 
@@ -555,22 +577,6 @@ msgstr ""
 
 #: templates/account/login_ce.html:71
 msgid "用户协议 >"
-msgstr ""
-
-#: templates/account/login_ce.html:104
-msgid "技术支持"
-msgstr ""
-
-#: templates/account/login_ce.html:105
-msgid "社区论坛"
-msgstr ""
-
-#: templates/account/login_ce.html:106
-msgid "产品官网"
-msgstr ""
-
-#: templates/account/login_ce.html:108 templates/account/login_ce_i18n.html:52
-msgid "关注我们"
 msgstr ""
 
 #: templates/account/login_ce_i18n.html:10
