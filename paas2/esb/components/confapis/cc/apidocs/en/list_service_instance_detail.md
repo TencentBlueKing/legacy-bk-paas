@@ -13,11 +13,13 @@ list service instances with processes info
 | bk_supplier_account  | string     |Yes     | Supplier Account ID       |
 | bk_biz_id            | int  | Yes  | Business ID |
 | bk_module_id         | int  | No   | Module ID |
-| bk_host_id           | int  | No   | Host ID |
+| bk_host_id           | int  | No   | Host ID, deprecated: please do not use any more |
+| bk_host_list         | array| No   | Host ID list |
 | service_instance_ids | int  | No   | Service Instance IDs |
 | selectors            | int  | No   | label filters，available operator values are: `=`,`!=`,`exists`,`!`,`in`,`notin`|
 | page                 | object| Yes | page paremeters |
 
+Only one parameter between `bk_host_list` and `bk_host_id` can take effect. `bk_host_id` does not recommend using it again.
 #### page params
 
 | Field                 |  Type      | Required	   |  Description       | 
@@ -36,7 +38,7 @@ list service instances with processes info
     "limit": 1
   },
   "bk_module_id": 8,
-  "bk_host_id": 11,
+  "bk_host_list": [11,12],
   "service_instance_ids": [49],
   "selectors": [{
     "key": "key1",

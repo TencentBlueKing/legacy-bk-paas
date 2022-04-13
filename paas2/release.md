@@ -1,5 +1,75 @@
 Release Log
 ===============================
+# 2.14.6
+    - bugfix: login show error message from bk-user
+
+# 2.14.5
+    - bugfix: login password wrong 500
+    - update: login reset password if it's an initial password or password expired
+
+# 2.14.4
+    - update: esb add invalid usernames for cmsi
+    - update: esb add cache for db query
+    - update: esb support disable mysql pool
+
+# 2.14.3
+    - bugfix: i18n issues
+
+# 2.14.2
+    - bugfix: login page follow-us missing
+
+# 2.14.1
+    - bugfix: login page follow-us missing
+
+# 2.14.0
+    - add: paas/ce call usermgr api via esb
+
+# 2.13.37
+    - bugfix: esb usermgr api username missing
+
+# 2.13.36
+    - bugfix: login call usermgr api via esb fail
+
+# 2.13.35
+    - update: login call usermgr api via esb
+
+# 2.13.34
+    - update: esb update usermanage apis, for bk_login
+
+# 2.13.33
+    - update: esb update cc, jobv3, sops, monitor_v3, usermanage, bk_login apidocs
+    - update: esb cc add header Content-Type to backend
+    - update: esb add with_jwt_header for usermanage
+    - 社区版登录页面支持国际化
+
+# 2.13.32
+    - update: esb update cc, sops, bk-log, job, bkmonitor-v3, bk-docs-center apidocs
+
+# 2.13.31
+    - update: esb update cmsi, usermanage apidocs, update cc, monitor_v3 apis
+
+# 2.13.30
+    - bugfix: bkima permission name
+
+# 2.13.29
+    - update: bkiam action name/description
+
+# 2.13.28
+    - update: s-mart app use `develop_app` permission supported by IAM
+
+# 2.13.27
+    - update: fix console page display
+
+# 2.13.26
+    - update: esb update cc confapis; esb update cmsi apidocs
+    - update: esb update title/footer
+
+# 2.13.25
+    - update: esb update cc confapis to rename batch_create_instance
+
+# 2.13.24
+    - update: esb update channel is_hidden, add export_official_api_docs command, update api docs
+
 # 2.13.23
     - update: esb update data confapis, jobv3/monitor_v3 apidocs
 
@@ -72,6 +142,25 @@ Release Log
 # 2.13.0
     - add: support python2/3 both
 
+# 2.12.45
+    - update: esb update jobv3, sops, monitor_v3, usermanage, bk_login apidocs
+    - update: esb cc add header Content-Type to backend
+
+# 2.12.44
+    - update: esb update sops, bk-log, job, bkmonitor-v3, bk-docs-center apidocs
+
+# 2.12.43
+    - update: esb update cmsi, usermanage apidocs, update monitor_v3 apis
+
+# 2.12.43
+    - update: esb update cmsi, usermanage apidocs, update monitor_v3 apis
+
+# 2.12.42
+    - update: fix console page display
+
+# 2.12.39
+    - update: esb update channel is_hidden, add export_official_api_docs command, update api docs
+
 # 2.12.38
     - update: esb update data confapis, jobv3/monitor_v3 apidocs
 
@@ -137,7 +226,7 @@ Release Log
 
 # 2.12.18
     - esb: add get_weixin_config
-    - paas: use get_weixin_config to fetch weixin config 
+    - paas: use get_weixin_config to fetch weixin config
 
 # 2.12.17
     - esb: update esb cc confapis

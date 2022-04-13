@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-25 15:06+0800\n"
+"POT-Creation-Date: 2022-04-13 10:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: static/admin/js/SelectFilter2.js:45
-#, c-format
+#, javascript-format
 msgid "Available %s"
 msgstr "Available %s"
 
 #: static/admin/js/SelectFilter2.js:46
-#, c-format
+#, javascript-format
 msgid ""
 "This is the list of available %s. You may choose some by selecting them in "
 "the box below and then clicking the \"Choose\" arrow between the two boxes."
@@ -33,7 +33,7 @@ msgstr ""
 "the box below and then clicking the \"Choose\" arrow between the two boxes."
 
 #: static/admin/js/SelectFilter2.js:53
-#, c-format
+#, javascript-format
 msgid "Type into this box to filter down the list of available %s."
 msgstr "Type into this box to filter down the list of available %s."
 
@@ -46,7 +46,7 @@ msgid "Choose all"
 msgstr "Choose all"
 
 #: static/admin/js/SelectFilter2.js:61
-#, c-format
+#, javascript-format
 msgid "Click to choose all %s at once."
 msgstr "Click to choose all %s at once."
 
@@ -59,12 +59,12 @@ msgid "Remove"
 msgstr "Remove"
 
 #: static/admin/js/SelectFilter2.js:75
-#, c-format
+#, javascript-format
 msgid "Chosen %s"
 msgstr "Chosen %s"
 
 #: static/admin/js/SelectFilter2.js:76
-#, c-format
+#, javascript-format
 msgid ""
 "This is the list of chosen %s. You may remove some by selecting them in the "
 "box below and then clicking the \"Remove\" arrow between the two boxes."
@@ -77,7 +77,7 @@ msgid "Remove all"
 msgstr "Remove all"
 
 #: static/admin/js/SelectFilter2.js:80
-#, c-format
+#, javascript-format
 msgid "Click to remove all chosen %s at once."
 msgstr "Click to remove all chosen %s at once."
 
@@ -115,13 +115,13 @@ msgstr ""
 "button."
 
 #: static/admin/js/admin/DateTimeShortcuts.js:79
-#, c-format
+#, javascript-format
 msgid "Note: You are %s hour ahead of server time."
 msgid_plural "Note: You are %s hours ahead of server time."
 msgstr[0] "Note: You are %s hours ahead of server time."
 
 #: static/admin/js/admin/DateTimeShortcuts.js:87
-#, c-format
+#, javascript-format
 msgid "Note: You are %s hour behind server time."
 msgid_plural "Note: You are %s hours behind server time."
 msgstr[0] "Note: You are %s hour behind server time."
@@ -185,7 +185,7 @@ msgstr ""
 msgid "S M T W T F S"
 msgstr "S M T W T F S"
 
-#: static/admin/js/collapse.js:8 static/admin/js/collapse.js.c:19
+#: static/admin/js/collapse.js:8 static/admin/js/collapse.js:19
 #: static/admin/js/collapse.min.js:1
 msgid "Show"
 msgstr "Show"
@@ -194,7 +194,7 @@ msgstr "Show"
 msgid "Hide"
 msgstr "Hide"
 
-#: static/js/csrftoken.js:20 static/js/csrftoken.js.c:31
+#: static/js/csrftoken.js:20 static/js/csrftoken.js:31
 #: static/js/csrftoken.min.js:1
 msgid "提示"
 msgstr "提示"
@@ -207,7 +207,7 @@ msgstr "系统出现异常："
 msgid "不可同时修改多个用户信息，请先保存编辑中的用户信息"
 msgstr "不可同时修改多个用户信息，请先保存编辑中的用户信息"
 
-#: static/js/users.js:44 static/js/users.js.c:220 static/js/users.min.js:1
+#: static/js/users.js:44 static/js/users.js:220 static/js/users.min.js:1
 msgid "请输入用户名"
 msgstr "请输入用户名"
 
@@ -219,7 +219,7 @@ msgstr "请输入姓名"
 msgid "请输入联系电话"
 msgstr "请输入联系电话"
 
-#: static/js/users.js:53 static/js/users.js.c:223 static/js/users.min.js:1
+#: static/js/users.js:53 static/js/users.js:223 static/js/users.min.js:1
 msgid "请输入邮箱"
 msgstr "请输入邮箱"
 
@@ -243,7 +243,7 @@ msgstr "职能化用户"
 msgid "审计员"
 msgstr "审计员"
 
-#: static/js/users.js:65 static/js/users.js.c:309 static/js/users.js.c:328
+#: static/js/users.js:65 static/js/users.js:309 static/js/users.js:328
 #: static/js/users.min.js:1
 msgid "取消"
 msgstr "取消"
@@ -260,7 +260,7 @@ msgstr "编辑"
 msgid "删除"
 msgstr "删除"
 
-#: static/js/users.js:69 static/js/users.js.c:324 static/js/users.js.c:331
+#: static/js/users.js:69 static/js/users.js:324 static/js/users.js:331
 #: static/js/users.min.js:1
 msgid "重置密码"
 msgstr "重置密码"

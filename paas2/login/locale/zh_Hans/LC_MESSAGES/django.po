@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 10:49+0800\n"
+"POT-Creation-Date: 2022-04-13 11:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,169 +18,177 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: api/views.py:35 api/views.py:71 api/views.py:107
+#: api/views.py:46 api/views.py:82 api/views.py:118
 msgid "用户验证成功"
 msgstr ""
 
-#: api/views.py:57 api/views.py:93 api/views.py:130 bk_oauth2/views.py:28
+#: api/views.py:68 api/views.py:104 api/views.py:141 bk_oauth2/views.py:39
 msgid "用户信息获取成功"
 msgstr ""
 
-#: app/constants.py:18
+#: app/constants.py:29
 msgid "已下架"
 msgstr ""
 
-#: app/constants.py:19
+#: app/constants.py:30
 msgid "开发中"
 msgstr ""
 
-#: app/constants.py:20
+#: app/constants.py:31
 msgid "测试中"
 msgstr ""
 
-#: app/constants.py:21
+#: app/constants.py:32
 msgid "已上线"
 msgstr ""
 
-#: app/constants.py:22
+#: app/constants.py:33
 msgid "正在提测"
 msgstr ""
 
-#: app/constants.py:23
+#: app/constants.py:34
 msgid "正在上线"
 msgstr ""
 
-#: app/constants.py:24
+#: app/constants.py:35
 msgid "正在下架"
 msgstr ""
 
-#: app/constants.py:36
+#: app/constants.py:47
 msgid "桌面"
 msgstr ""
 
-#: app/constants.py:36
+#: app/constants.py:47
 msgid "新标签页"
 msgstr ""
 
-#: bk_oauth2/models.py:53
+#: backends/bk.py:73
+msgid "调用用户管理接口失败，请联系管理员, 查看登录日志获取错误详情"
+msgstr ""
+
+#: bk_oauth2/models.py:66
 msgid "Confidential"
 msgstr ""
 
-#: bk_oauth2/models.py:54
+#: bk_oauth2/models.py:67
 msgid "Public"
 msgstr ""
 
-#: bk_oauth2/models.py:62
+#: bk_oauth2/models.py:75
 msgid "Authorization code"
 msgstr ""
 
-#: bk_oauth2/models.py:63
+#: bk_oauth2/models.py:76
 msgid "Implicit"
 msgstr ""
 
-#: bk_oauth2/models.py:64
+#: bk_oauth2/models.py:77
 msgid "Resource owner password-based"
 msgstr ""
 
-#: bk_oauth2/models.py:65
+#: bk_oauth2/models.py:78
 msgid "Client credentials"
 msgstr ""
 
-#: bk_oauth2/models.py:81
+#: bk_oauth2/models.py:94
 msgid "Allowed URIs list, space separated"
 msgstr ""
 
-#: bk_oauth2/models.py:149
+#: bk_oauth2/models.py:162
 #, python-brace-format
 msgid "Redirect_uris could not be empty with {0} grant_type"
 msgstr ""
 
-#: bkaccount/manager.py:24
+#: bkaccount/manager.py:35
 msgid "记录成功"
 msgstr ""
 
-#: bkaccount/manager.py:26
+#: bkaccount/manager.py:37
 msgid "用户登录记录失败"
 msgstr ""
 
-#: bkauth/utils.py:53
+#: bkauth/utils.py:64
 msgid "缺少参数bk_token"
 msgstr ""
 
-#: bkauth/utils.py:64
+#: bkauth/utils.py:75
 msgid "参数bk_token非法"
 msgstr ""
 
-#: bkauth/utils.py:82
+#: bkauth/utils.py:93
 #, python-format
 msgid "不存在bk_token[%s]的记录"
 msgstr ""
 
-#: bkauth/utils.py:89
+#: bkauth/utils.py:100
 msgid "登录态已注销"
 msgstr ""
 
-#: bkauth/utils.py:93
+#: bkauth/utils.py:104
 msgid "登录态已过期"
 msgstr ""
 
-#: bkauth/utils.py:97
+#: bkauth/utils.py:108
 msgid "登录态有效期不合法"
 msgstr ""
 
-#: bkauth/utils.py:102
+#: bkauth/utils.py:113
 msgid "长时间无操作，登录态已过期"
 msgstr ""
 
-#: bkauth/views.py:115
+#: bkauth/views.py:130
 msgid "账户或者密码错误，请重新输入"
 msgstr ""
 
-#: common/license.py:29
+#: common/exceptions.py:47
+msgid "登录校验失败，请重置密码"
+msgstr ""
+
+#: common/license.py:40
 #, python-format
 msgid "证书文件(platform.cert)不存在: %s"
 msgstr ""
 
-#: common/license.py:32
+#: common/license.py:43
 #, python-format
 msgid "密钥文件(platform.key)不存在: %s"
 msgstr ""
 
-#: common/license.py:40
+#: common/license.py:51
 msgid "证书文件(platform.cert)为空或已被损坏"
 msgstr ""
 
-#: common/license.py:63
+#: common/license.py:74
 msgid "license_server请求校验证书异常"
 msgstr ""
 
-#: common/license.py:114
+#: common/license.py:125
 msgid "证书不可用，请求未返回有效期或返回格式有误"
 msgstr ""
 
-#: common/license.py:115
+#: common/license.py:126
 msgid "证书校验成功"
 msgstr ""
 
-#: conf/default.py:225
+#: conf/default.py:226
 msgid "English"
 msgstr ""
 
-#: conf/default.py:226
+#: conf/default.py:227
 msgid "简体中文"
-msgstr ""
-
-#: healthz/views.py:66
-#, python-format
-msgid "配置文件不正确, 缺失对应配置: %s"
 msgstr ""
 
 #: healthz/views.py:78
 #, python-format
+msgid "配置文件不正确, 缺失对应配置: %s"
+msgstr ""
+
+#: healthz/views.py:90
+#, python-format
 msgid "数据库连接存在问题: %s"
 msgstr ""
 
-#: healthz/views.py:87
+#: healthz/views.py:99
 #, python-format
 msgid "企业证书无效：%s; 只影响桌面版本信息的展示"
 msgstr ""
@@ -193,7 +201,7 @@ msgstr ""
 msgid "您需要登录蓝鲸智云"
 msgstr ""
 
-#: templates/401.html:21
+#: templates/401.html:21 templates/account/login_ce.html:66
 msgid "立即登录"
 msgstr ""
 
@@ -225,7 +233,7 @@ msgstr ""
 msgid "努力恢复中，请稍后再试......"
 msgstr ""
 
-#: templates/50x.html:6 templates/50x.html.py:19
+#: templates/50x.html:6 templates/50x.html:19
 msgid "服务故障，努力修复中..."
 msgstr ""
 
@@ -441,52 +449,49 @@ msgid ""
 "守《蓝鲸智云软件用户服务协议》。"
 msgstr ""
 
-#: templates/account/base.html:42 templates/account/base.html.py:97
-#: templates/account/login.html:89
+#: templates/account/base.html:43 templates/account/base.html:98
 msgid "蓝鲸智云桌面"
 msgstr ""
 
-#: templates/account/base.html:43
+#: templates/account/base.html:44
 msgid "img/logo/logo_user_01.png"
 msgstr ""
 
-#: templates/account/base.html:45
+#: templates/account/base.html:46
 msgid "蓝鲸智云用户管理"
 msgstr ""
 
-#: templates/account/base.html:46
+#: templates/account/base.html:47
 msgid "img/logo/logo_user_02.png"
 msgstr ""
 
-#: templates/account/base.html:67 templates/admin/base_site.html:14
+#: templates/account/base.html:68 templates/admin/base_site.html:14
 #: templates/admin/login.html:21
 msgid "注销"
 msgstr ""
 
-#: templates/account/base.html:82
+#: templates/account/base.html:83
 msgid "返回顶部"
 msgstr ""
 
-#: templates/account/base.html:85
+#: templates/account/base.html:86
 msgid "返回底部"
 msgstr ""
 
-#: templates/account/base.html:94 templates/account/login.html:86
-#: templates/account/login_ce_i18n.html:51
+#: templates/account/base.html:95 templates/account/login_ce_i18n.html:48
 msgid "QQ咨询"
 msgstr ""
 
-#: templates/account/base.html:95 templates/account/login.html:87
-#: templates/account/login_ce_i18n.html:52
+#: templates/account/base.html:96 templates/account/login_ce_i18n.html:49
 msgid "蓝鲸论坛"
 msgstr ""
 
-#: templates/account/base.html:96 templates/account/login.html:88
-#: templates/account/login_ce_i18n.html:53
+#: templates/account/base.html:97 templates/account/login_ce_i18n.html:50
 msgid "蓝鲸官网"
 msgstr ""
 
-#: templates/account/base.html:100
+#: templates/account/base.html:101 templates/account/login.html:133
+#: templates/account/login_ce.html:113
 msgid "蓝鲸智云 版权所有"
 msgstr ""
 
@@ -494,66 +499,96 @@ msgstr ""
 msgid "登录|蓝鲸智云企业版"
 msgstr ""
 
-#: templates/account/login.html:16
+#: templates/account/login.html:54
 msgid "img/logo/logo_cn.svg"
 msgstr ""
 
-#: templates/account/login.html:29
+#: templates/account/login.html:67
 msgid "用户名/邮箱/手机号"
 msgstr ""
 
-#: templates/account/login.html:37
+#: templates/account/login.html:75
 msgid "密码"
 msgstr ""
 
-#: templates/account/login.html:44 templates/account/login_ce_i18n.html:39
+#: templates/account/login.html:82 templates/account/login_ce_i18n.html:39
 msgid "登录"
 msgstr ""
 
-#: templates/account/login.html:45 templates/account/login.html.py:50
+#: templates/account/login.html:83 templates/account/login.html:88
 #: templates/account/login_ce_i18n.html:40
 msgid "查看用户协议"
 msgstr ""
 
-#: templates/account/login.html:53
+#: templates/account/login.html:91 templates/account/login_ce.html:73
 msgid "忘记密码？"
 msgstr ""
 
-#: templates/account/login.html:72
+#: templates/account/login.html:110
 msgid "img/logo/btn_cn.png"
 msgstr ""
 
-#: templates/account/login.html:99 templates/account/login_ce_i18n.html:72
+#: templates/account/login.html:124 templates/account/login_ce.html:104
+msgid "技术支持"
+msgstr ""
+
+#: templates/account/login.html:125 templates/account/login_ce.html:105
+msgid "社区论坛"
+msgstr ""
+
+#: templates/account/login.html:126 templates/account/login_ce.html:106
+msgid "产品官网"
+msgstr ""
+
+#: templates/account/login.html:128 templates/account/login_ce.html:108
+#: templates/account/login_ce_i18n.html:52
+msgid "关注我们"
+msgstr ""
+
+#: templates/account/login.html:145 templates/account/login_ce.html:120
+#: templates/account/login_ce_i18n.html:69
 msgid ""
 "您的浏览器非Chrome，建议您使用最新版本的Chrome浏览，以保证最好的体验效果"
 msgstr ""
 
-#: templates/account/login.html:103
+#: templates/account/login.html:149
 msgid "企业证书校验无效，请联系系统管理员处理"
+msgstr ""
+
+#: templates/account/login_ce.html:11
+msgid "登录 | 腾讯蓝鲸智云"
+msgstr ""
+
+#: templates/account/login_ce.html:41
+msgid "img/logo_ce/logo_ch.png"
+msgstr ""
+
+#: templates/account/login_ce.html:47 templates/account/login_ce_i18n.html:28
+msgid "请输入用户名"
+msgstr ""
+
+#: templates/account/login_ce.html:51
+msgid "请输入密码"
+msgstr ""
+
+#: templates/account/login_ce.html:57
+msgid "请修改密码"
+msgstr ""
+
+#: templates/account/login_ce.html:71
+msgid "用户协议 >"
 msgstr ""
 
 #: templates/account/login_ce_i18n.html:10
 msgid "登录|蓝鲸智云"
 msgstr ""
 
-#: templates/account/login_ce_i18n.html:28
-msgid "请输入用户名"
-msgstr ""
-
 #: templates/account/login_ce_i18n.html:32
 msgid "请输入用户密码"
 msgstr ""
 
-#: templates/account/login_ce_i18n.html:48
-msgid "青藤云安全提供安全检测"
-msgstr ""
-
-#: templates/account/login_ce_i18n.html:54
+#: templates/account/login_ce_i18n.html:51
 msgid "蓝鲸智云工作台"
-msgstr ""
-
-#: templates/account/login_ce_i18n.html:55
-msgid "关注我们"
 msgstr ""
 
 #: templates/account/no_right.html:5
@@ -728,7 +763,7 @@ msgstr ""
 msgid "新密码："
 msgstr ""
 
-#: templates/account/users.html:85 templates/account/users.html.py:91
+#: templates/account/users.html:85 templates/account/users.html:91
 msgid "必填"
 msgstr ""
 
@@ -763,7 +798,7 @@ msgstr ""
 msgid "您暂时不能访问该站点的后台管理，这是以下原因造成的："
 msgstr ""
 
-#: templates/admin/login.html:15 templates/admin/login.html.py:17
+#: templates/admin/login.html:15 templates/admin/login.html:17
 msgid "用户"
 msgstr ""
 
@@ -775,7 +810,7 @@ msgstr ""
 msgid "没有管理员权限，请联系管理员！"
 msgstr ""
 
-#: templates/csrf_failure.html:6 templates/csrf_failure.html.py:20
+#: templates/csrf_failure.html:6 templates/csrf_failure.html:20
 msgid "CSRF验证失败"
 msgstr ""
 

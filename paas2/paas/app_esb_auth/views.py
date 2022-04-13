@@ -13,7 +13,7 @@ specific language governing permissions and limitations under the License.
 from django.utils.translation import ugettext as _
 
 from blueking.component.shortcuts import get_client_by_request
-from common.decorators import app_exists, has_app_develop_permission_or_is_smart_admin
+from common.decorators import app_exists, has_app_develop_or_smart_develop_permission
 from common.mymako import render_mako_context, render_json
 from common.log import logger
 from app_esb_auth.constants import ESB_API_AUTH_LEVEL_DICT
@@ -21,7 +21,7 @@ from app_esb_auth.models import EsbAuthApplyReocrd
 
 
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 def home(request, app_code):
     """
     ESB权限申请 - 首页
@@ -52,7 +52,7 @@ def home(request, app_code):
 
 
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 def get_esb_api(request, app_code, sys_name):
     """
     通过组件系统名称获取该系统的api
@@ -98,7 +98,7 @@ def get_esb_api(request, app_code, sys_name):
 
 
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 def esb_api_auth_apply(request, app_code, sys_name):
     """
     组件权限申请
@@ -116,7 +116,7 @@ def esb_api_auth_apply(request, app_code, sys_name):
 
 
 @app_exists
-@has_app_develop_permission_or_is_smart_admin
+@has_app_develop_or_smart_develop_permission
 def esb_api_auth_batch_apply(request, app_code, sys_name):
     """
     组件权限批量申请

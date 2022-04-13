@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: static/js/jquery-1.7.2.min.js:2
+#: static/assets/jquery-1.8.2.min.js:2
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-28 16:10+0800\n"
+"POT-Creation-Date: 2022-04-08 11:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,17 +19,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: media/framework/static/admin/js/SelectFilter2.js:45
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:45
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:45
 #: static/admin/js/SelectFilter2.js:45
 #, javascript-format
 msgid "Available %s"
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:46
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:46
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:46
 #: static/admin/js/SelectFilter2.js:46
 #, javascript-format
 msgid ""
@@ -37,61 +31,37 @@ msgid ""
 "the box below and then clicking the \"Choose\" arrow between the two boxes."
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:53
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:53
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:53
 #: static/admin/js/SelectFilter2.js:53
 #, javascript-format
 msgid "Type into this box to filter down the list of available %s."
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:57
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:57
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:57
 #: static/admin/js/SelectFilter2.js:57
 msgid "Filter"
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:61
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:61
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:61
 #: static/admin/js/SelectFilter2.js:61
 msgid "Choose all"
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:61
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:61
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:61
 #: static/admin/js/SelectFilter2.js:61
 #, javascript-format
 msgid "Click to choose all %s at once."
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:67
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:67
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:67
 #: static/admin/js/SelectFilter2.js:67
 msgid "Choose"
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:69
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:69
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:69
 #: static/admin/js/SelectFilter2.js:69
 msgid "Remove"
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:75
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:75
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:75
 #: static/admin/js/SelectFilter2.js:75
 #, javascript-format
 msgid "Chosen %s"
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:76
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:76
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:76
 #: static/admin/js/SelectFilter2.js:76
 #, javascript-format
 msgid ""
@@ -99,51 +69,27 @@ msgid ""
 "box below and then clicking the \"Remove\" arrow between the two boxes."
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:80
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:80
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:80
 #: static/admin/js/SelectFilter2.js:80
 msgid "Remove all"
 msgstr ""
 
-#: media/framework/static/admin/js/SelectFilter2.js:80
-#: media/saas_files/bk_app_template/src/static/admin/js/SelectFilter2.js:80
-#: media/saas_files/bk_framework/src/static/admin/js/SelectFilter2.js:80
 #: static/admin/js/SelectFilter2.js:80
 #, javascript-format
 msgid "Click to remove all chosen %s at once."
 msgstr ""
 
-#: media/framework/static/admin/js/actions.js:22
-#: media/framework/static/admin/js/actions.min.js:1
-#: media/saas_files/bk_app_template/src/static/admin/js/actions.js:22
-#: media/saas_files/bk_app_template/src/static/admin/js/actions.min.js:1
-#: media/saas_files/bk_framework/src/static/admin/js/actions.js:22
-#: media/saas_files/bk_framework/src/static/admin/js/actions.min.js:1
 #: static/admin/js/actions.js:22 static/admin/js/actions.min.js:1
 msgid "%(sel)s of %(cnt)s selected"
 msgid_plural "%(sel)s of %(cnt)s selected"
 msgstr[0] ""
 msgstr[1] ""
 
-#: media/framework/static/admin/js/actions.js:114
-#: media/framework/static/admin/js/actions.min.js:4
-#: media/saas_files/bk_app_template/src/static/admin/js/actions.js:114
-#: media/saas_files/bk_app_template/src/static/admin/js/actions.min.js:4
-#: media/saas_files/bk_framework/src/static/admin/js/actions.js:114
-#: media/saas_files/bk_framework/src/static/admin/js/actions.min.js:4
 #: static/admin/js/actions.js:114 static/admin/js/actions.min.js:4
 msgid ""
 "You have unsaved changes on individual editable fields. If you run an "
 "action, your unsaved changes will be lost."
 msgstr ""
 
-#: media/framework/static/admin/js/actions.js:126
-#: media/framework/static/admin/js/actions.min.js:5
-#: media/saas_files/bk_app_template/src/static/admin/js/actions.js:126
-#: media/saas_files/bk_app_template/src/static/admin/js/actions.min.js:5
-#: media/saas_files/bk_framework/src/static/admin/js/actions.js:126
-#: media/saas_files/bk_framework/src/static/admin/js/actions.min.js:5
 #: static/admin/js/actions.js:126 static/admin/js/actions.min.js:5
 msgid ""
 "You have selected an action, but you haven't saved your changes to "
@@ -151,12 +97,6 @@ msgid ""
 "action."
 msgstr ""
 
-#: media/framework/static/admin/js/actions.js:128
-#: media/framework/static/admin/js/actions.min.js:5
-#: media/saas_files/bk_app_template/src/static/admin/js/actions.js:128
-#: media/saas_files/bk_app_template/src/static/admin/js/actions.min.js:5
-#: media/saas_files/bk_framework/src/static/admin/js/actions.js:128
-#: media/saas_files/bk_framework/src/static/admin/js/actions.min.js:5
 #: static/admin/js/actions.js:128 static/admin/js/actions.min.js:5
 msgid ""
 "You have selected an action, and you haven't made any changes on individual "
@@ -164,9 +104,6 @@ msgid ""
 "button."
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:79
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:79
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:79
 #: static/admin/js/admin/DateTimeShortcuts.js:79
 #, javascript-format
 msgid "Note: You are %s hour ahead of server time."
@@ -174,9 +111,6 @@ msgid_plural "Note: You are %s hours ahead of server time."
 msgstr[0] ""
 msgstr[1] ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:87
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:87
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:87
 #: static/admin/js/admin/DateTimeShortcuts.js:87
 #, javascript-format
 msgid "Note: You are %s hour behind server time."
@@ -184,131 +118,68 @@ msgid_plural "Note: You are %s hours behind server time."
 msgstr[0] ""
 msgstr[1] ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:114
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:149
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:114
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:149
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:114
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:149
 #: static/admin/js/admin/DateTimeShortcuts.js:114
 #: static/admin/js/admin/DateTimeShortcuts.js:149
 msgid "Now"
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:118
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:118
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:118
 #: static/admin/js/admin/DateTimeShortcuts.js:118
 msgid "Clock"
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:146
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:146
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:146
 #: static/admin/js/admin/DateTimeShortcuts.js:146
 msgid "Choose a time"
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:150
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:150
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:150
 #: static/admin/js/admin/DateTimeShortcuts.js:150
 msgid "Midnight"
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:151
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:151
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:151
 #: static/admin/js/admin/DateTimeShortcuts.js:151
 msgid "6 a.m."
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:152
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:152
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:152
 #: static/admin/js/admin/DateTimeShortcuts.js:152
 msgid "Noon"
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:156
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:276
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:156
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:276
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:156
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:276
 #: static/admin/js/admin/DateTimeShortcuts.js:156
 #: static/admin/js/admin/DateTimeShortcuts.js:276
 msgid "Cancel"
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:216
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:269
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:216
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:269
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:216
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:269
 #: static/admin/js/admin/DateTimeShortcuts.js:216
 #: static/admin/js/admin/DateTimeShortcuts.js:269
 msgid "Today"
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:220
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:220
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:220
 #: static/admin/js/admin/DateTimeShortcuts.js:220
 msgid "Calendar"
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:267
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:267
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:267
 #: static/admin/js/admin/DateTimeShortcuts.js:267
 msgid "Yesterday"
 msgstr ""
 
-#: media/framework/static/admin/js/admin/DateTimeShortcuts.js:271
-#: media/saas_files/bk_app_template/src/static/admin/js/admin/DateTimeShortcuts.js:271
-#: media/saas_files/bk_framework/src/static/admin/js/admin/DateTimeShortcuts.js:271
 #: static/admin/js/admin/DateTimeShortcuts.js:271
 msgid "Tomorrow"
 msgstr ""
 
-#: media/framework/static/admin/js/calendar.js:8
-#: media/saas_files/bk_app_template/src/static/admin/js/calendar.js:8
-#: media/saas_files/bk_framework/src/static/admin/js/calendar.js:8
 #: static/admin/js/calendar.js:8
 msgid ""
 "January February March April May June July August September October November "
 "December"
 msgstr ""
 
-#: media/framework/static/admin/js/calendar.js:9
-#: media/saas_files/bk_app_template/src/static/admin/js/calendar.js:9
-#: media/saas_files/bk_framework/src/static/admin/js/calendar.js:9
 #: static/admin/js/calendar.js:9
 msgid "S M T W T F S"
 msgstr ""
 
-#: media/framework/static/admin/js/collapse.js:8
-#: media/framework/static/admin/js/collapse.js:19
-#: media/framework/static/admin/js/collapse.min.js:1
-#: media/saas_files/bk_app_template/src/static/admin/js/collapse.js:8
-#: media/saas_files/bk_app_template/src/static/admin/js/collapse.js:19
-#: media/saas_files/bk_app_template/src/static/admin/js/collapse.min.js:1
-#: media/saas_files/bk_framework/src/static/admin/js/collapse.js:8
-#: media/saas_files/bk_framework/src/static/admin/js/collapse.js:19
-#: media/saas_files/bk_framework/src/static/admin/js/collapse.min.js:1
 #: static/admin/js/collapse.js:8 static/admin/js/collapse.js:19
 #: static/admin/js/collapse.min.js:1
 msgid "Show"
 msgstr ""
 
-#: media/framework/static/admin/js/collapse.js:16
-#: media/framework/static/admin/js/collapse.min.js:1
-#: media/saas_files/bk_app_template/src/static/admin/js/collapse.js:16
-#: media/saas_files/bk_app_template/src/static/admin/js/collapse.min.js:1
-#: media/saas_files/bk_framework/src/static/admin/js/collapse.js:16
-#: media/saas_files/bk_framework/src/static/admin/js/collapse.min.js:1
 #: static/admin/js/collapse.js:16 static/admin/js/collapse.min.js:1
 msgid "Hide"
 msgstr ""
@@ -398,7 +269,6 @@ msgstr "Delete"
 
 #: static/esb/js/channel_list.js:72 static/esb/js/channel_list.min.js:1
 #: static/esb/js/system_list.js:51 static/esb/js/system_list.min.js:1
-#: static/js/paas_app.js:18 static/js/paas_app.min.js:1
 #: static/js/paas_app_analysis.js:7 static/js/paas_app_analysis.min.js:1
 #: static/js/paas_app_env.js:130 static/js/paas_app_env.js:172
 #: static/js/paas_app_env.min.js:1 static/js/paas_app_log.js:91
@@ -558,133 +428,92 @@ msgstr ""
 msgid "系统出现异常："
 msgstr "The system is abnormal"
 
-#: static/js/paas_app.js:14 static/js/paas_app.js:21
-#: static/js/paas_app.min.js:1
-msgid "重置密码"
-msgstr "Reset password"
-
-#: static/js/paas_app.js:49 static/js/paas_app.min.js:1
-msgid "两次输入的新密码不一致"
-msgstr "Two new passwords you enter are not the same"
-
-#: static/js/paas_app.js:80 static/js/paas_app.min.js:1
-msgid "密码重置成功"
-msgstr "Password reset succeeded"
-
-#: static/js/paas_app.js:92 static/js/paas_app.min.js:1
-msgid "修改密码"
-msgstr "Change password"
-
-#: static/js/paas_app.js:103 static/js/paas_app.min.js:1
-msgid ""
-"中文名只能包含数字、字母、中文汉字、<br><span style='margin-left:105px'>下划"
-"线，长度在1-16个字符</span>"
-msgstr ""
-"English name can only contain numbers, letters, <br> <span style = 'margin-"
-"left: 105px'> underscores, with a length of 1-17 characters"
-
-#: static/js/paas_app.js:109 static/js/paas_app.min.js:1
-msgid "QQ只能包含数字，长度在5-13个字符"
-msgstr "Can only contain numbers, with a length of 5-13 characters"
-
-#: static/js/paas_app.js:115 static/js/paas_app.min.js:1
-msgid "联系电话只能为11位数字"
-msgstr "Contact phone numbers can only be 11 numbers"
-
-#: static/js/paas_app.js:121 static/js/paas_app.min.js:1
-msgid "请输入正确的邮箱"
-msgstr "Please enter a correct email address"
-
-#: static/js/paas_app.js:139 static/js/paas_app.min.js:1
-msgid "用户信息修改成功"
-msgstr "User information has been successfully modified "
-
-#: static/js/paas_app.js:181 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:32 static/js/paas_app.min.js:1
 #: static/js/paas_saas.js:26 static/js/paas_saas.min.js:1
 #: static/js/paas_tpapp.js:26 static/js/paas_tpapp.min.js:1
 msgid "错误的搜索参数! 参数中不能包含符号[&]"
 msgstr "Wrong search parameters! Parameters can not contain symbols [&]"
 
-#: static/js/paas_app.js:259 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:110 static/js/paas_app.min.js:1
 msgid "请填写应用 ID"
 msgstr "Please fill in application ID"
 
-#: static/js/paas_app.js:276 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:127 static/js/paas_app.min.js:1
 msgid "请填写应用名称"
 msgstr "Please fill in app name"
 
-#: static/js/paas_app.js:293 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:144 static/js/paas_app.min.js:1
 msgid "请填写应用简介"
 msgstr "Please fill in app introduction"
 
-#: static/js/paas_app.js:296 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:147 static/js/paas_app.min.js:1
 msgid "长度不能超过30个字符"
 msgstr "The length shall not exceed 30 characters"
 
-#: static/js/paas_app.js:330 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:181 static/js/paas_app.min.js:1
 msgid "请填写正确的系统URL，支持http和https"
 msgstr "Please fill in the correct system URL, which supports http and https"
 
-#: static/js/paas_app.js:343 static/js/paas_app.js:373
+#: static/js/paas_app.js:194 static/js/paas_app.js:224
 #: static/js/paas_app.min.js:1
 msgid "请填写正确的仓库地址"
 msgstr "Please fill in the correct repository address"
 
-#: static/js/paas_app.js:385 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:236 static/js/paas_app.min.js:1
 msgid "请填写账号"
 msgstr "Please fill in account"
 
-#: static/js/paas_app.js:399 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:250 static/js/paas_app.min.js:1
 msgid "请填写密码"
 msgstr "Please fill in password"
 
-#: static/js/paas_app.js:413 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:264 static/js/paas_app.min.js:1
 msgid "请填写HOST"
 msgstr "Please fill in HOST"
 
-#: static/js/paas_app.js:424 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:275 static/js/paas_app.min.js:1
 msgid "请填写端口，必须为数字"
 msgstr "Please fill in port that must be numbers"
 
-#: static/js/paas_app.js:435 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:286 static/js/paas_app.min.js:1
 msgid "请填写数据库用户名"
 msgstr "Please fill database username"
 
-#: static/js/paas_app.js:446 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:297 static/js/paas_app.min.js:1
 msgid "宽度超过10000px，请设置合适的宽度"
 msgstr "Width is greater than 10000px, please set a reasonable value"
 
-#: static/js/paas_app.js:450 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:301 static/js/paas_app.min.js:1
 msgid "高度超过10000px，请设置合适的宽度"
 msgstr "Height is greater than 10000px, please set a reasonable value"
 
-#: static/js/paas_app.js:455 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:306 static/js/paas_app.min.js:1
 msgid "请填写宽度，必须为正整数"
 msgstr "Please fill in the width that must be a positive integer"
 
-#: static/js/paas_app.js:461 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:312 static/js/paas_app.min.js:1
 msgid "请填写高度，必须为正整数"
 msgstr "Please fill in the height that must be a positive integer"
 
-#: static/js/paas_app.js:489 static/js/paas_app.js:510
+#: static/js/paas_app.js:340 static/js/paas_app.js:361
 #: static/js/paas_app.min.js:1
 msgid "正在创建应用，请稍后..."
 msgstr "Creating app, please wait"
 
-#: static/js/paas_app.js:682 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:533 static/js/paas_app.min.js:1
 msgid "\"应用未提测或已下架\""
 msgstr "\"The app has not been submitted for test or has been removed\""
 
-#: static/js/paas_app.js:688 static/js/paas_app.js:700
+#: static/js/paas_app.js:539 static/js/paas_app.js:551
 #: static/js/paas_app.min.js:1
 msgid "\"应用未上线或已下架\""
 msgstr "\"The app has not been online or has been removed\""
 
-#: static/js/paas_app.js:718 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:569 static/js/paas_app.min.js:1
 msgid "激活码申请流程"
 msgstr "Activation code application process"
 
-#: static/js/paas_app.js:791 static/js/paas_app.js:865
+#: static/js/paas_app.js:639 static/js/paas_app.js:713
 #: static/js/paas_app.min.js:1 static/js/paas_app_env.js:131
 #: static/js/paas_app_env.min.js:1 static/js/paas_engine.js:47
 #: static/js/paas_engine.min.js:1 static/js/paas_engine_third.js:42
@@ -692,27 +521,27 @@ msgstr "Activation code application process"
 msgid "编辑"
 msgstr "Edit"
 
-#: static/js/paas_app.js:804 static/js/paas_app.js:883
-#: static/js/paas_app.js:922 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:652 static/js/paas_app.js:732
+#: static/js/paas_app.js:773 static/js/paas_app.min.js:1
 msgid "显示密码"
 msgstr "Display password"
 
-#: static/js/paas_app.js:821 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:669 static/js/paas_app.min.js:1
 #: static/js/paas_app_env.js:129 static/js/paas_app_env.min.js:1
 #: static/js/paas_engine.js:45 static/js/paas_engine.min.js:1
 #: static/js/paas_engine_third.js:40 static/js/paas_engine_third.min.js:1
 msgid "保存"
 msgstr "Save"
 
-#: static/js/paas_app.js:898 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:749 static/js/paas_app.min.js:1
 msgid "支持以下协议：http(s)://, git://"
 msgstr "Support following protocols: http(s)://, git://"
 
-#: static/js/paas_app.js:899 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:750 static/js/paas_app.min.js:1
 msgid "通过Git方式获取应用代码"
 msgstr "Get app code by Git mode"
 
-#: static/js/paas_app.js:903 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:754 static/js/paas_app.min.js:1
 msgid ""
 "支持以下协议：http(s)://, svn://<br>请确保 <code>requirements.txt</code> 文件"
 "在该目录下"
@@ -720,11 +549,11 @@ msgstr ""
 "Support following protocols: http(s)://, svn://<br>; please make sure "
 "<code>requirements.txt</code> file is under the directory "
 
-#: static/js/paas_app.js:904 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:755 static/js/paas_app.min.js:1
 msgid "通过SVN方式获取应用代码"
 msgstr "Get app code by SVN mode"
 
-#: static/js/paas_app.js:917 static/js/paas_app.min.js:1
+#: static/js/paas_app.js:768 static/js/paas_app.min.js:1
 msgid "隐藏密码"
 msgstr "Conceal password"
 
@@ -1477,28 +1306,59 @@ msgstr ""
 "periodic tasks in execution! Are you sure you want to cancel the 'periodic "
 "tasks' deployment?"
 
-#: static/js/pagination.js:37 static/js/pagination.js:228
+#: static/js/pagination.js:37 static/js/pagination.js:236
 #: static/js/pagination.min.js:1
 msgid "正在努力加载数据。。。"
 msgstr "Trying to load data"
 
-#: static/js/pagination.js:146 static/js/pagination.js:148
+#: static/js/pagination.js:153 static/js/pagination.js:155
 #: static/js/pagination.min.js:1
 msgid "上一页"
 msgstr "Previous"
 
-#: static/js/pagination.js:184 static/js/pagination.js:186
+#: static/js/pagination.js:191 static/js/pagination.js:193
 #: static/js/pagination.min.js:1
 msgid "下一页"
 msgstr "Next"
 
-#: static/js/pagination.js:210 static/js/pagination.min.js:1
+#: static/js/pagination.js:218 static/js/pagination.min.js:1
 msgid "每页显示行"
 msgstr "Each page shows the line"
 
 #: static/js/utils.js:31 static/js/utils.min.js:1
 msgid "不能包含中文字符!"
 msgstr "Shall not contain Chinese characters"
+
+#~ msgid "重置密码"
+#~ msgstr "Reset password"
+
+#~ msgid "两次输入的新密码不一致"
+#~ msgstr "Two new passwords you enter are not the same"
+
+#~ msgid "密码重置成功"
+#~ msgstr "Password reset succeeded"
+
+#~ msgid "修改密码"
+#~ msgstr "Change password"
+
+#~ msgid ""
+#~ "中文名只能包含数字、字母、中文汉字、<br><span style='margin-left:105px'>下"
+#~ "划线，长度在1-16个字符</span>"
+#~ msgstr ""
+#~ "English name can only contain numbers, letters, <br> <span style = "
+#~ "'margin-left: 105px'> underscores, with a length of 1-17 characters"
+
+#~ msgid "QQ只能包含数字，长度在5-13个字符"
+#~ msgstr "Can only contain numbers, with a length of 5-13 characters"
+
+#~ msgid "联系电话只能为11位数字"
+#~ msgstr "Contact phone numbers can only be 11 numbers"
+
+#~ msgid "请输入正确的邮箱"
+#~ msgstr "Please enter a correct email address"
+
+#~ msgid "用户信息修改成功"
+#~ msgstr "User information has been successfully modified "
 
 #~ msgid "请填写开发负责人"
 #~ msgstr "Please fill in development manager"

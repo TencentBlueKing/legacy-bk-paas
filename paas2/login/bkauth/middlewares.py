@@ -58,7 +58,8 @@ class LoginMiddleware(object):
         """设置user"""
         # 静态资源不做登录态设置
         full_path = request.get_full_path()
-        if full_path.startswith(settings.STATIC_URL) or full_path == "/robots.txt":
+        if full_path.startswith(settings.STATIC_URL) or full_path == "/robots.txt" or "/static/" in full_path:
+        # if full_path.startswith(settings.STATIC_URL) or full_path == "/robots.txt":
             return None
 
         # 静态资源不做登录态设置
@@ -92,7 +93,8 @@ class LoginMiddleware(object):
     def process_view(self, request, view, args, kwargs):
         # 静态资源不做登录态验证
         full_path = request.get_full_path()
-        if full_path.startswith(settings.STATIC_URL) or full_path == "/robots.txt":
+        if full_path.startswith(settings.STATIC_URL) or full_path == "/robots.txt" or "/static/" in full_path:
+        # if full_path.startswith(settings.STATIC_URL) or full_path == "/robots.txt":
             return None
 
         # 静态资源不做登录态验证

@@ -9,9 +9,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>工作台|蓝鲸智云社区版</title>
-	<meta name="keywords" content="开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台" />
-	<meta name="description" content="蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。" />
+  <title>${_(u'工作台|蓝鲸智云社区版')}</title>
+  <meta name="keywords" content="${_(u'开发者中心,游戏运维,运维,服务器管理,模块配置,监控,腾讯游戏,蓝鲸,智云,devops,运维开发,蓝鲸社区版,社区版,作业平台,集成平台,配置平台,管控平台')}" />
+  <meta name="description" content="${_(u'蓝鲸智云软件社区版是由蓝鲸智云团队提供的一套基于PaaS的技术解决方案，旨在改变中国运维行业，帮助企业快速达到基础运维支撑能力，并提升技术人员的DevOps能力。该版本提供了配置平台，作业平台，集成平台等强大功能，用户在使用时，请查阅并遵守《蓝鲸智云软件用户服务协议》。')}" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 	<link href="${STATIC_URL}favicon.ico" rel="Shortcut Icon">
@@ -31,17 +31,17 @@
 <body>
 	<nav class="navbar">
 		<a href="${SITE_URL}" class="logo">
-			<img src="${STATIC_URL}home/images/logo.png" style="border: 0;">
+			<img src="${STATIC_URL}home/images/logo2.png" style="border: 0;">
 		</a>
 		<ul class="nav-list">
 			<li class="active">
 				<a href="${SITE_URL}">
-					<p>应用列表</p>
+					<p>${_(u'应用列表')}</p>
 				</a>
 			</li>
 			<li>
 				<a href="${SITE_URL}app/list/" target="_blank">
-					<p>开发者中心</p>
+					<p>${_(u'开发者中心')}</p>
 				</a>
 			</li>
 		</ul>
@@ -62,7 +62,7 @@
 						<a href="${SITE_URL}accounts/profile/" target="_blank">
 							<!-- <i class="icon icon-userinfo"></i> -->
 							<i class="list-icon paasee-icon icon-info-fill--2"></i>
-							<span>个人信息</span>
+							<span>${_(u'个人信息')}</span>
 						</a>
 					</li>
 					<!-- % if request.user.is_superuser: -->
@@ -80,37 +80,29 @@
                                 <a href="###" class="unbind_weixin">
 									<!-- <i class="icon icon-unbind-weixin"></i> -->
 									<i class="list-icon bk-icon icon-chain"></i>
-									<span>解绑微信</span></a>
+									<span>${_(u'解绑微信')}</span></a>
                             % else:
                                 % if wx_type == 'mp':
                                     <a href="###" class="bind_mp_weixin">
 										<!-- <i class="icon icon-bind-weixin"></i> -->
 										<i class="list-icon bk-icon icon-chain"></i>
-										<span>绑定微信</span></a>
+										<span>${_(u'绑定微信')}</span></a>
                                 % elif wx_type == 'qy' or wx_type == 'qywx':
                                     <a href="###" class="bind_qy_weixin">
 										<!-- <i class="icon icon-bind-weixin"></i> -->
 										<i class="list-icon bk-icon icon-chain"></i>
-										<span>绑定微信</span>
+										<span>${_(u'绑定微信')}</span>
 									</a>
                                 % endif
                             % endif
                         </li>
                     % endif
 
-					<!-- <li> -->
-					<!--   <a href="https://bk.tencent.com/docs/markdown/6.0/PaaS平台/产品白皮书/产品简介/README.md" target="_blank"> -->
-					<!--     [> <i class="icon icon-docs"></i> <] -->
-					<!--     <i class="list-icon bk-icon icon-order"></i> -->
-					<!--     <span>产品文档</span> -->
-					<!--   </a> -->
-					<!-- </li> -->
-
 					<li>
 						<a href="${SITE_URL}accounts/logout/">
 							<!-- <i class="icon icon-logout"></i> -->
 							<i class="list-icon paasee-icon icon-logout-fill"></i>
-							<span>注销</span>
+							<span>${_(u'注销')}</span>
 						</a>
 					</li>
 				</ul>
@@ -121,24 +113,17 @@
 	<div class="container cl">
 		<div class="top">
 			<div class="datatime">
-        <div class="month">${greeting.get("month")}月</div>
+        <div class="month">${greeting.get("month")}</div>
         <div class="day">${greeting.get("day")}</div>
 			</div>
 			<div class="text-wrapper">
-				<p class="welcome-text">Hi，${request.user.username}，欢迎来到蓝鲸社区版工作台！ </p>
+				<p class="welcome-text">Hi，${request.user.username}，${_(u'欢迎来到蓝鲸社区版工作台！')} </p>
         <p class="tip">${greeting.get("message")}</p>
 			</div>
 		</div>
 		<div class="main-left">
 			<div class="left-title cl">
-				<p>应用列表</p>
-				<!-- <div class="conf">
-					<div class="edit active">
-						<i class="gear"></i>
-						<span>排序</span>
-					</div>
-					<div class="comp">完成</div>
-				</div> -->
+        <p>${_(u'应用列表')}</p>
 			</div>
 			<ul class="app-list cl" id="app-list">
 			% for index, user_app in enumerate(user_app_list):
@@ -155,10 +140,7 @@
 						<div class="drag-icon">
 							<i class="icon paasee-icon icon-grag-fill"></i>
 						</div>
-			            <!-- <span class="mask">
-			                <span class="mask-text">${user_app.get('introduction')}</span>
-			            </span> -->
-			            % endif
+			      % endif
 			        </a>
 			    </li>
 			% endfor
@@ -171,8 +153,99 @@
 			<!-- % endif -->
 		</div>
 		<div class="main-right">
-			<div class="main-panel" style="margin-bottom: 16px;">
-				<p class="right-title"> 帮助指引</p>
+			<style>
+				@keyframes guide-float {
+					50% {
+						transform: translate(6px, 0);
+					}
+				}
+				.home-guide-wrapper {
+					position: absolute;
+					width: 206px;
+					border-radius: 2px;
+					box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.14);
+					transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+					z-index: 10;
+				}
+				.home-guide-wrapper.has-animation {
+					animation: guide-float 1s ease-out 5;
+				}
+				.home-guide-wrapper .content-wrapper {
+					position: relative;
+				}
+				.home-guide-wrapper .content-shade {
+					padding: 4px 8px;
+					background-color: #699df4;
+					border-radius: 3px;
+				}
+				.home-guide-wrapper .text {
+					line-height: 18px;
+					font-size: 12px;
+					color: #fff;
+					font-weight: normal;
+					word-break: break-all;
+				}
+				.home-guide-wrapper .knowed-action {
+					position: relative;
+					left: 138px;
+					width: 50px;
+					line-height: 18px;
+					background: #fff;
+					border-radius: 2px;
+					font-size: 12px;
+					color: #3a84ff;
+					text-align: center;
+					cursor: pointer;
+					margin-bottom: 4px;
+				}
+				.home-guide-wrapper .triangle {
+					position: absolute;
+					width: 6px;
+					height: 6px;
+					background: #699df4;
+					transform: rotate(45deg);
+					z-index: -1;
+				}
+				.home-guide-wrapper .triangle.top {
+					top: -4px;
+					left: 105px;
+					border-bottom: none;
+					border-right: none;
+				}
+				.home-guide-wrapper .triangle.right {
+					top: 16%;
+					transform: rotate(45deg) translateY(-50%);
+					right: -1px;
+					border-bottom: none;
+					border-left: none;
+				}
+				.home-guide-wrapper .triangle.bottom {
+					bottom: -4px;
+					left: 105px;
+					border-left: none;
+					border-top: none;
+				}
+				.home-guide-wrapper .triangle.left {
+					top: 50%;
+					transform: rotate(45deg) translateY(-50%);
+					left: -8px;
+					border-top: none;
+					border-right: none;
+				}
+			</style>
+			<div class="main-panel" style="margin-bottom: 16px; position: relative;">
+				<p class="right-title">
+					${_(u'帮助指引')}
+					<div class="home-guide-wrapper has-animation" data-idx="help" style="display: none; top: 15px; left: -200px;">
+						<div class="content-wrapper">
+							<section class="content-shade">
+								<div class="text">${_(u'新增 “帮助指引” 可以快速上手和找到入门文档')}</div>
+								<div class="knowed-action" data-idx="help">${_(u'知道了')}</div>
+							</section>
+							<div class="triangle right"></div>
+						</div>
+					</div>
+				</p>
 				<ul class="list special">
 					<li class="list-item">
 						<a target="_blank" href="${SITE_URL}download/docs/quick-start-v6.0.pdf">
@@ -181,7 +254,7 @@
 									<use xlink:href="#icon-light"></use>
 								</svg>
 							</div>
-							快速入门
+							${_(u'快速入门')}
 						</a>
 					</li>
 					<li class="list-item">
@@ -191,20 +264,31 @@
 											<use xlink:href="#icon-doc"></use>
 										</svg>
 									</div>
-								帮助文档
+								${_(u'帮助文档')}
 							</a>
 						</li>
 				</ul>
 			</div>
 
-			<div class="main-panel">
-				<p class="right-title">常用链接</p>
+			<div class="main-panel" style="position: relative;">
+				<p class="right-title">
+					${_(u'常用链接')}
+					<div class="home-guide-wrapper has-animation" data-idx="link" style="display: none; top: 15px; left: -200px;">
+						<div class="content-wrapper">
+							<section class="content-shade">
+								<div class="text">${_(u'新增 “常用链接” 可以快速找到相关教程和资源')}</div>
+								<div class="knowed-action" data-idx="link">${_(u'知道了')}</div>
+							</section>
+							<div class="triangle right"></div>
+						</div>
+					</div>
+				</p>
 				<ul class="list">
 					<li class="list-item">
-						<a target="_blank" href="http://bk.tencent.com/s-mart/">蓝鲸S-mart</a>
+            <a target="_blank" href="http://bk.tencent.com/s-mart/">${_(u'蓝鲸S-mart')}</a>
 					</li>
 					<li class="list-item">
-						<a target="_blank" href="https://ke.qq.com/course/3030664?taid=10315536490446472">视频教程</a>
+            <a target="_blank" href="https://ke.qq.com/course/3030664?taid=10315536490446472">${_(u'视频教程')}</a>
 					</li>
 					<li class="list-item">
 						<a target="_blank" href="http://magicbox.bk.tencent.com/">MagicBox</a>
@@ -218,7 +302,7 @@
 					<!--   <a target="_blank" href="${SITE_URL}accounts/profile/">个人信息</a> -->
 					<!-- </li> -->
 					<li class="list-item">
-						<a target="_blank" href="http://bk.tencent.com/info/#laws">服务协议</a>
+            <a target="_blank" href="http://bk.tencent.com/info/#laws">${_(u'服务协议')}</a>
 					</li>
 					% for _l in links:
 						<li class="list-item" style="text-overflow: ellipsis;overflow: hidden;">
@@ -231,14 +315,16 @@
 	</div>
 	<footer class="footer">
 		<p>
-		    <a id="contact_us" class="link">QQ咨询(800802001)</a>
-		    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸论坛</a>
-		    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸官网</a>
-		    <!-- | <a href="${SITE_URL}" target="_blank" hotrep="hp.footer.feedback" class="link">蓝鲸智云工作台</a> -->
-		    |<a class="follow-us" href="###">关注我们<span class="qr-box" style="z-index:1"><span class="qr"><img src="${STATIC_URL}home/images/qr.png"></span><span class="qr-caret"></span></span></a>
 		</p>
-		<p>Copyright © 2012-${NOW.year} Tencent BlueKing. All Rights Reserved.</p>
-		<p>蓝鲸智云 版权所有</p>
+                <a href="https://wpa1.qq.com/KziXGWJs?_type=wpa&qidian=true" class="link">${_(u'技术支持')}</a>
+                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'社区论坛')}</a>
+                    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">${_(u'产品官网')}</a>
+                    | <a href="###" hotrep="hp.footer.feedback" class="link follow-us" style="z-index:101;">
+                      ${_(u'关注我们')}
+                        <span class="qr-box"><img class="qr" src="../../../static/img/qr.png" alt=""></span>
+                      </a>
+		<p>Copyright © 2012-${NOW.year}</p>
+		<p>${_(u'蓝鲸智云 版权所有')}</p>
 	</footer>
   <script src="${STATIC_URL}assets/jquery-1.10.2.min.js"></script>
 	<script src="${STATIC_URL}home/js/Sortable.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
@@ -252,5 +338,58 @@
 	<!-- scripts -->
 	<script src="${STATIC_URL}home/js/particles.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
 	<script src="${STATIC_URL}home/js/app.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
+	<script>
+		$(document).ready(function () {
+			function getCookie (name) {
+    		var arr = '';
+				var reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
+    		if (arr = document.cookie.match(reg)) {
+					return unescape(arr[2]);
+				}
+        return null;
+			}
+			function getSecond (str) {
+				var str1 = str.substring(1, str.length) * 1;
+				var str2 = str.substring(0, 1);
+				if (str2 === 's') {
+					return str1 * 1000;
+				} else if (str2 === 'h') {
+					return str1 * 60 * 60 * 1000;
+				} else if (str2 == 'd') {
+					return str1 * 24 * 60 * 60 * 1000;
+				}
+			}
+			function setCookie (name, value, time) {
+				var strsec = getSecond(time);
+				var exp = new Date();
+				exp.setTime(exp.getTime() + strsec * 1);
+				document.cookie = name + '='+ escape (value) + ';expires=' + exp.toGMTString();
+			}
+
+			var cookieLink = getCookie('guide_link')
+			if (!cookieLink) {
+				var wrapper = $('.home-guide-wrapper[data-idx="link"]')
+				if (wrapper.length) {
+					wrapper.show()
+				}
+			}
+
+			var cookieHelp = getCookie('guide_help')
+			if (!cookieHelp) {
+				var wrapper = $('.home-guide-wrapper[data-idx="help"]')
+				if (wrapper.length) {
+					wrapper.show()
+				}
+			}
+
+			function knowdClickHandler () {
+				var idx = $(this).data('idx');
+				var cookie = getCookie('guide_' + idx)
+				setCookie('guide_' + idx, '1', 'd10');
+				$(this).parents('.home-guide-wrapper').fadeOut(500)
+			}
+			$('.knowed-action').click(knowdClickHandler)
+		})
+	</script>
 </body>
 </html>

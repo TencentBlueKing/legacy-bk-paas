@@ -4,8 +4,6 @@
 
 ### 请求参数
 
-{{ common_args_desc }}
-
 #### 接口参数
 
 |             字段   |     类型   |必选    |  描述    |
@@ -56,7 +54,13 @@
     "result": true,
     "code": 0,
     "message": "OK",
-    "data": [],
-    "request_id": "sdfdfdfsdfasdasdasas"
 }
 ```
+
+### 返回结果参数说明
+
+| 字段      | 类型      | 描述      |
+|-----------|----------|-----------|
+|  result   |    bool    |      返回结果，true 为成功，false 为失败     |
+|  code     |    int     |      返回码，0 表示成功，其它值表示失败 |
+|  message  |    string  |      错误信息      |

@@ -18,8 +18,11 @@
 
 ``` python
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "bk_obj_id": "test",
-    "bk_supplier_account": "0",
     "bk_biz_id": 2
 }
 ```
@@ -33,7 +36,9 @@
     "result": true,
     "code": 0,
     "message": "",
-   "data": [
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
+    "data": [
        {
            "bk_biz_id": 0,
            "bk_asst_obj_id": "",
@@ -92,6 +97,16 @@
 ```
 
 ### 返回结果参数说明
+#### response
+
+| 名称    | 类型   | 描述                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code    | int    | 错误编码。 0表示success，>0表示失败错误    |
+| message | string | 请求失败返回的错误信息                     |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data    | object | 请求返回的数据                             |
 
 #### data
 
@@ -115,7 +130,9 @@
 | bk_property_type    | string       | 定义的属性字段用于存储数据的数据类型 （singlechar,longchar,int,enum,date,time,objuser,singleasst,multiasst,timezone,bool)|
 | bk_asst_obj_id      | string       | 如果有关联其它的模型，那么就必需设置此字段，否则就不需要设置|
 | bk_biz_id           | int          | 业务自定义字段的业务id                                       |
-
+| create_time         | string | 创建时间     |
+| last_time           | string | 更新时间     |
+| id                  | int    | 查询对象的id值   |
 #### bk_property_type
 
 | 标识       | 名字     |

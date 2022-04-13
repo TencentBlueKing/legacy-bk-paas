@@ -9,41 +9,41 @@
       <div class="account_setting_area" id="svn_info">
         <ul>
           <li class="account_setting_item">
-            <h4>用户名：</h4>
+            <h4>${_(u'用户名：')}</h4>
             <div class="meta_content">
               ${username}
             </div>
           </li>
           <li class="account_setting_item">
-            <h4>中文名：</h4>
+            <h4>${_(u'中文名：')}</h4>
             <div class="meta_content">
               ${chname}
             </div>
           </li>
           <li class="account_setting_item">
-            <h4>联系电话：</h4>
+            <h4>${_(u'联系电话：')}</h4>
             <div class="meta_content">
                 ${phone}
             </div>
           </li>
           <li class="account_setting_item">
-            <h4>常用邮箱：</h4>
+            <h4>${_(u'常用邮箱：')}</h4>
             <div class="meta_content">
                 ${email}
             </div>
           </li>
           <li class="account_setting_item">
-              <h4>常用操作：</h4>
+              <h4>${_(u'常用操作：')}</h4>
               <div class="meta_content">
-                  <a href="###" id="show_modify_user" >修改个人信息</a>
-                  <a target="_blank" class="ml50" href="${reset_password_url}">重置密码</a>
+                  <a href="###" id="show_modify_user" >${_(u'修改个人信息')}</a>
+                  <a target="_blank" class="ml50" href="${reset_password_url}">${_(u'重置密码')}</a>
               </div>
           </li>
           % if request.user.is_superuser:
             <li class="account_setting_item">
-              <h4>用户管理：</h4>
+              <h4>${_(u'用户管理：')}</h4>
               <div class="meta_content">
-                  <a target="_blank" href="${user_manage_url}">用户管理</a>
+                  <a target="_blank" href="${user_manage_url}">${_(u'用户管理')}</a>
               </div>
             </li>
           % endif

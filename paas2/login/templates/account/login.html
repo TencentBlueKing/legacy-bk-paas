@@ -8,6 +8,44 @@
         <link href="{{STATIC_URL}}assets/bk-icon-2.0/iconfont.css" rel="stylesheet" type="text/css" />
         <link href="{{STATIC_URL}}css/login.{{CSS_SUFFIX}}?v={{STATIC_VERSION}}" rel="stylesheet" type="text/css" />
         <title>{% trans '登录|蓝鲸智云企业版' %}</title>
+        <style>
+            .follow-us {
+                position: relative;
+            }
+            .follow-us:hover {
+                cursor: pointer;
+            }
+            .follow-us:hover .qr-box{
+                display: inline-block;
+            }
+            .follow-us .qr-box {
+                position: absolute;
+                bottom: 25px;
+                right: -20px;
+                display: none;
+                width: 100px;
+                height: 100px;
+                background-color: #fff;
+                z-index: 101;
+            }
+            .follow-us .qr-box::before {
+                content: "";
+                width: 0px;
+                height: 0px;
+                border-top: 6px solid #fff;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                position: absolute;
+                top: 100px;
+                left: 50px;
+            }
+            .follow-us .qr-box .qr {
+                padding-top: 5px;
+            }
+
+
+        </style>
+
     </head>
     <body>
         <div class="page-content">
@@ -50,7 +88,7 @@
                                 <a href="javascript: void(0);" class="protocol-btn fl">{% trans '查看用户协议' %}</a>
                                 {% endif %}
 
-                                <a href="{{ reset_password_url }}" class="password-btn fr" target="_blank">{% trans '忘记密码？' %}</a>
+                                <a href="{{ forget_password_url }}" class="password-btn fr" target="_blank">{% trans '忘记密码？' %}</a>
                             </div>
                         </div>
                     </form>
@@ -81,15 +119,23 @@
 
             <!-- disable footer when /plain/ -->
             {% if "/plain/" not in APP_PATH %}
-            <div class="footer">
+            <footer class="footer">
                 <div class="footer-menu">
-                    <a id="contact_us" class="link">{% trans 'QQ咨询' %}(800802001)</a>
-                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '蓝鲸论坛' %}</a>
-                    | <a href="https://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '蓝鲸官网' %}</a>
-                    | <a href="https://{{CUR_DOMIAN}}/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '蓝鲸智云桌面' %}</a>
+                    <a href="https://wpa1.qq.com/KziXGWJs?_type=wpa&qidian=true" class="link">{% trans '技术支持' %}</a>
+                    | <a href="https://bk.tencent.com/s-mart/community/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '社区论坛' %}</a>
+                    | <a href="http://bk.tencent.com/" target="_blank" hotrep="hp.footer.feedback" class="link">{% trans '产品官网' %}</a>
+                    | <a href="###" hotrep="hp.footer.feedback" class="link follow-us" style="z-index:101;">
+                        {% trans '关注我们' %}
+                        <span class="qr-box" style="right: -20px;"><img class="qr" src="{{STATIC_URL}}img/logo/qr.png" alt=""></span>
+                      </a>
+
                     <p>Copyright © 2012-{{NOW.year}} Tencent BlueKing. All Rights Reserved.</p>
+                    <p>{% trans '蓝鲸智云 版权所有' %}</p>
+
+                    <p>
+                    </p>
                 </div>
-            </div>
+            </footer>
             {% endif %}
         </div>
         <!-- 查看用户协议 -->

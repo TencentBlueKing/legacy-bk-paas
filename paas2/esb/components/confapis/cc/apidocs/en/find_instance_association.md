@@ -12,27 +12,13 @@ find association between object's instance.
 |----------------------|------------|--------|-----------------------------|
 | metadata           | object     | Yes    | request meta data             |
 | condition | string map     | Yes   | query condition |
-
-
-metadata params
-
-| Field                 |  Type      | Required	   |  Description         |
-|---------------------|------------|--------|-----------------------------|
-| label           | string map     | Yes     |the label data request should with, such as biz info |
-
-
-label params
-
-| Field                 |  Type      | Required	   |  Description         |
-|---------------------|------------|--------|-----------------------------|
-| bk_biz_id           | string      | Yes     | business's ID |
+| bk_obj_id           | string     | YES     | the association's source object's id(v3.10+)|
 
 condition params
 | Field                 |  Type      | Required	   |  Description         |
 |---------------------|------------|--------|-----------------------------|
 | bk_obj_asst_id           | string     | Yes     | object's association unique id|
 | bk_asst_id           | string     | NO     | object's association kind unique name|
-| bk_obj_id           | string     | NO     | the association's source object's id|
 | bk_asst_obj_id           | string     | NO     | the association's destination object's id|
 
 
@@ -43,9 +29,9 @@ condition params
     "condition": {
         "bk_obj_asst_id": "bk_switch_belong_bk_host",
         "bk_asst_id": "",
-        "bk_object_id": "",
         "bk_asst_obj_id": ""
     },
+    "bk_object_id": "xxx",
     "metadata":{
         "label":{
             "bk_biz_id":"3"

@@ -54,9 +54,7 @@
 
       <dd class="menu_item none ${app_center}" style="margin-left: 4px;"><a href="${SITE_URL}app/list/"> ${_(u'我的应用')}</a></dd>
       <!-- 超级管理员才有权限查看 -->
-      % if auth.has_smart_manage_permission(request.user.username):
-        <dd class="menu_item none ${saas_center}" style="margin-left: 4px;"><a href="${SITE_URL}saas/list/"> ${_(u'S-mart应用')}</a></dd>
-      % endif
+      <dd class="menu_item none ${saas_center}" style="margin-left: 4px;"><a href="${SITE_URL}saas/list/"> ${_(u'S-mart应用')}</a></dd>
 
       % if EDITION == "ee":
       <dd class="menu_item none ${tpapp_center}" style="margin-left: 4px;"><a href="${SITE_URL}tpapp/list/"> ${_(u'外链应用')}</a></dd>

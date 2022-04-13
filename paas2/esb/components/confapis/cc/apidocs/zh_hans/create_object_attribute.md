@@ -47,23 +47,26 @@
 
 ```json
 {
-	"creator": "user",
-	"description": "test",
-	"editable": true,
-	"isonly": false,
-	"ispre": false,
-	"isreadonly": false,
-	"isrequired": false,
-	"option": {"min":"1","max":"2"},
-	"unit": "1",
-	"placeholder": "test",
-	"bk_property_group": "default",
-	"bk_obj_id": "cc_test_inst",
-	"bk_supplier_account": "0",
-	"bk_property_id": "cc_test",
-	"bk_property_name": "cc_test",
-	"bk_property_type": "singlechar",
-	"bk_asst_obj_id": "test"
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
+    "creator": "user",
+    "description": "test",
+    "editable": true,
+    "isonly": false,
+    "ispre": false,
+    "isreadonly": false,
+    "isrequired": false,
+    "option": {"min":"1","max":"2"},
+    "unit": "1",
+    "placeholder": "test",
+    "bk_property_group": "default",
+    "bk_obj_id": "cc_test_inst",
+    "bk_property_id": "cc_test",
+    "bk_property_name": "cc_test",
+    "bk_property_type": "singlechar",
+    "bk_asst_obj_id": "test"
 }
 ```
 
@@ -75,6 +78,8 @@
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
 	"data": {
 		"id": 7,
 		"bk_supplier_account": "0",
@@ -104,6 +109,16 @@
 ```
 
 ### 返回结果参数说明
+#### response
+
+| 名称    | 类型   | 描述                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code    | int    | 错误编码。 0表示success，>0表示失败错误    |
+| message | string | 请求失败返回的错误信息                    |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data    | object | 请求返回的数据                           |
 
 #### data
 
@@ -127,6 +142,8 @@
 | bk_property_type    | string       | 定义的属性字段用于存储数据的数据类型 （singlechar,longchar,int,enum,date,time,objuser,singleasst,multiasst,timezone,bool)|
 | bk_asst_obj_id      | string       | 如果有关联其它的模型，那么就必需设置此字段，否则就不需要设置|
 | bk_biz_id           | int          | 业务自定义字段的业务id                                       |
+| bk_asst_obj_id      | string       | 如果有关联其它的模型，那么就必需设置此字段，否则就不需要设置|
+| bk_property_group_name           | string          | 字段分栏的名字                                       |
 
 #### bk_property_type
 

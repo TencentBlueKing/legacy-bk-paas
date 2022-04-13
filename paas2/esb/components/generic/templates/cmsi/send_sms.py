@@ -18,55 +18,14 @@ from django.utils.encoding import force_text
 
 from components.component import Component, SetupConfMixin
 from common.forms import BaseComponentForm, ListField, DefaultBooleanField
-from common.constants import API_TYPE_OP
+from common.constants import API_TYPE_OP, HTTP_METHOD
 from .toolkit import configs, tools
 
 
 class SendSms(Component, SetupConfMixin):
-    """
-    apiLabel {{ _("发送短信") }}
-    apiMethod POST
-
-    ### {{ _("功能描述") }}
-
-    {{ _("发送短信") }}
-
-    ### {{ _("请求参数") }}
-
-    {{ common_args_desc }}
-
-    #### {{ _("接口参数") }}
-
-    | {{ _("字段") }}               |  {{ _("类型") }}      | {{ _("必选") }}   |  {{ _("描述") }}      |
-    |--------------------|------------|--------|------------|
-    | receiver           |  string    | {{ _("否") }}     | {{ _("短信接收者，包含接收者电话号码，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准") }} |
-    | receiver__username |  string    | {{ _("否") }}     | {{ _("短信接收者，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准") }} |
-    | content            |  string    | {{ _("是") }}     | {{ _("短信内容") }} |
-    | is_content_base64  |  bool      | {{ _("否") }}     | {{ _("消息内容是否base64编码，默认False，不编码，请使用base64.b64encode方法编码") }} |
-
-    ### {{ _("请求参数示例") }}
-
-    ```python
-    {
-        "bk_app_code": "esb_test",
-        "bk_app_secret": "xxx",
-        "bk_token": "xxx",
-        "receiver": "1234567890",
-        "receiver__username": "admin",
-        "content": "Welcome to Blueking",
-    }
-    ```
-
-    ### {{ _("返回结果示例") }}
-
-    ```python
-    {
-        "result": true,
-        "code": "00",
-        "message": "OK",
-    }
-    ```
-    """  # noqa
+    suggest_method = HTTP_METHOD.POST
+    label = u"发送短信"
+    label_en = "Send SMS"
 
     sys_name = configs.SYSTEM_NAME
     api_type = API_TYPE_OP
@@ -107,9 +66,18 @@ class SendSms(Component, SetupConfMixin):
         if data["receiver"]:
             tools.validate_receiver(data["receiver"], contact_way=self.contact_way)
         if data["receiver__username"]:
-            user_data = tools.get_receiver_with_username(
-                receiver__username=data["receiver__username"], contact_way=self.contact_way
-            )
+            try:
+                user_data = tools.get_receiver_with_username(
+                    receiver__username=data["receiver__username"], contact_way=self.contact_way
+                )
+            except tools.NoValidUser as err:
+                result = {
+                    "result": False,
+                    "message": force_text(err),
+                }
+                self.response.payload = tools.inject_invalid_usernames(result, err.invalid_usernames)
+                return
+
             data.update(user_data)
 
         # TODO: can be updated
@@ -122,7 +90,7 @@ class SendSms(Component, SetupConfMixin):
                     "message": u"Some users failed to send sms. %s" % data["_extra_user_error_msg"],
                 }
 
-            self.response.payload = result
+            self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))
         elif self.qcloud_app_id and self.qcloud_app_key:
             for tel in tools.group_by_nation_code(data["receiver"]):
                 params = {
@@ -143,9 +111,10 @@ class SendSms(Component, SetupConfMixin):
                     "result": False,
                     "message": u"Some users failed to send sms. %s" % data["_extra_user_error_msg"],
                 }
-            self.response.payload = result
+            self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))
         else:
-            self.response.payload = {
+            result = {
                 "result": False,
                 "message": "Unfinished interface shall be improved by the component developer",
             }
+            self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))

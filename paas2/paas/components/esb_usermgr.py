@@ -23,6 +23,8 @@ APP_CODE = settings.PAAS_APP_ID
 APP_SECRET = settings.ESB_TOKEN
 
 
+# FIXME: move into usermgr_api.py
+
 def _call_esb_api(http_func, path, data, bk_token, bk_username, timeout=None):
     headers = {}
     data.update(

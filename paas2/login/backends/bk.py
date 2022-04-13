@@ -15,10 +15,9 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import ugettext_lazy as _
 
-
-from common.exceptions import AuthenticationError
+from common.exceptions import AuthenticationError, PasswordNeedReset
 from components import usermgr_api
 from common.usermgr import get_categories_str
 
@@ -38,6 +37,7 @@ def _split_username(username):
     if length == 2:
         return parts[0], parts[1]
     return "@".join(parts[: length - 1]), parts[length - 1]
+
 
 
 class BkUserBackend(ModelBackend):
@@ -64,8 +64,14 @@ class BkUserBackend(ModelBackend):
         # 认证不通过
         if not ok:
             # 用户第一次登录，且需要修改初始密码
-            redirect_to = userinfo.get("url") if code == 3210017 else None
-            raise AuthenticationError(message=message, redirect_to=redirect_to)
+            # redirect_to = userinfo.get("url") if code == 3210017 else None
+            # raise AuthenticationError(message=message, redirect_to=redirect_to)
+            # SHOULD_CHANGE_INITIAL_PASSWORD = 3210021
+            # PASSWORD_EXPIRED = 3210018
+            if code in [3210021, 3210018]:
+                raise PasswordNeedReset(message=message, reset_password_url=userinfo.get("reset_password_url"))
+            # message = _("调用用户管理接口失败，请联系管理员, 查看登录日志获取错误详情")
+            raise AuthenticationError(message=message, redirect_to=userinfo.get("redirect_to"))
 
         # here we got the userinfo, but the language is not update yet(async in signal)
         # so we need to use the current language

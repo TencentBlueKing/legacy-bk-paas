@@ -11,7 +11,7 @@
 | 字段      |  类型      | 必选   |  描述      |
 |-----------|------------|--------|------------|
 | bk_biz_id |  int     | 是     | 业务ID |
-| condition |  dict    | 否     | 查询条件，condition 字段为自定义查询的属性字段, 可以是create_user, modify_user, name |
+| condition |  object    | 否     | 查询条件，condition 字段为自定义查询的属性字段, 可以是create_user, modify_user, name |
 | disable_counter |  bool | 否     | 是否返回总记录条数，默认返回 |
 | page     |  object   | 是     | 分页设置 |
 
@@ -29,6 +29,7 @@
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
+    "bk_username": "xxx",
     "bk_token": "xxx",
     "bk_biz_id": 1,
     "disable_counter": true,
@@ -49,6 +50,8 @@
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 0,
         "info": [
@@ -91,6 +94,9 @@
                 			}
                     ]
                 },
+                "name": "test",
+                "bk_obj_id": "host",
+                "id": "1111",
                 "create_user": "admin",
                 "create_time": "2018-03-27T16:22:43.271+08:00",
                 "modify_user": "admin",
@@ -102,6 +108,16 @@
 ```
 
 ### 返回结果参数
+#### response
+
+| 名称    | 类型   | 描述                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | 请求成功与否。true:请求成功；false请求失败 |
+| code    | int    | 错误编码。 0表示success，>0表示失败错误    |
+| message | string | 请求失败返回的错误信息                     |
+| permission    | object | 权限信息    |
+| request_id    | string | 请求链id    |
+| data    | object | 请求返回的数据                             |
 
 #### data
 

@@ -47,21 +47,7 @@ List all departments
       "name":"总公司",
       "has_children":true,
       "full_name":"总公司",
-      "order":1,
-      "extras":{},
-      "enabled":true,
-      "children":[{
-        "id":316,
-        "name":"子部门",
-        "full_name":"总公司/子公司",
-        "has_children":true
-      }],
-      "code":null,
-      "category_id":1,
-      "lft":1,
-      "rght":6900,
-      "tree_id":1004,
-      "level":0,
+      "children":[],
       "parent":null
     }],
     "result": true
@@ -77,3 +63,13 @@ List all departments
 |message|string|error message|
 |data| array| result, please refer to sample results |
 
+**data** fields（The specific field depends on the parameter `fields`）
+
+| field      | type     | description      |
+|-----------|-----------|-----------|
+|id| int | department ID |
+|name|string| department name |
+|has_children|bool| if include children departments |
+|full_name| string | full route of department |
+|children| array| related children departments |
+|parent| object | parent department |

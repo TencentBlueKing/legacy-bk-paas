@@ -253,7 +253,7 @@ def get_md5(src):
 
 def load_yaml(path):
     with open(path, "r") as fp:
-        return yaml.load(fp)
+        return yaml.safe_load(fp)
 
 
 def read_file(path):

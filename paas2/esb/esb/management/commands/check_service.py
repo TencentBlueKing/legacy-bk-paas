@@ -15,12 +15,10 @@ import json
 
 from django.core.management.base import BaseCommand
 
-"""
-检测服务可用性
-"""
-
 
 class Command(BaseCommand):
+    """检测服务可用性"""
+
     def add_arguments(self, parser):
         parser.add_argument("--service", action="store", dest="service", help="Service name")
 

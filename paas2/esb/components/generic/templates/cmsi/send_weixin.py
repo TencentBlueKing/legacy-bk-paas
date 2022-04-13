@@ -16,73 +16,16 @@ from django import forms
 from django.utils import timezone
 from django.utils.encoding import force_text
 
-from common.constants import API_TYPE_OP
+from common.constants import API_TYPE_OP, HTTP_METHOD
 from common.forms import BaseComponentForm, DefaultBooleanField, ListField, TypeCheckField
 from components.component import Component, SetupConfMixin
-
 from .toolkit import configs, tools
 
 
 class SendWeixin(Component, SetupConfMixin):
-    """
-    apiLabel {{ _("发送微信消息") }}
-    apiMethod POST
-
-    ### {{ _("功能描述") }}
-
-    {{ _("发送微信消息，支持微信公众号消息，及微信企业号消息") }}
-
-    ### {{ _("请求参数") }}
-
-    {{ common_args_desc }}
-
-    #### {{ _("接口参数") }}
-
-    | {{ _("字段") }}               |  {{ _("类型") }}      | {{ _("必选") }}   |  {{ _("描述") }}      |
-    |--------------------|------------|--------|------------|
-    | receiver           |  string    | {{ _("否") }}     | {{ _("微信接收者，包含绑定在指定公众号上的微信用户的 openid 或 企业号上的微信用户的用户ID，多个以逗号分隔") }} |
-    | receiver__username |  string    | {{ _("否") }}     | {{ _("微信接收者，包含用户名，用户需在蓝鲸平台注册，多个以逗号分隔，若receiver、receiver__username同时存在，以receiver为准") }} |
-    | data               |  dict      | {{ _("是") }}     | {{ _("消息内容") }} |
-    | wx_qy_agentid      |  string    | {{ _("否") }}     | agentid of WeChat app |
-    | wx_qy_corpsecret   |  string    | {{ _("否") }}     | secret of WeChat app |
-
-    #### {{ _("data 参数包含内容") }}
-
-    | {{ _("字段") }}               |  {{ _("类型") }}      | {{ _("必选") }}   |  {{ _("描述") }}      |
-    |--------------------|------------|--------|------------|
-    | heading            |  string    | {{ _("是") }}     | {{ _("通知头部文字") }} |
-    | message            |  string    | {{ _("是") }}     | {{ _("通知文字") }} |
-    | date               |  string    | {{ _("否") }}     | {{ _('通知发送时间，默认为当前时间 "YYYY-mm-dd HH:MM"') }} |
-    | remark             |  string    | {{ _("否") }}     | {{ _("通知尾部文字") }} |
-    | is_message_base64  |  bool      | {{ _("否") }}     | {{ _("通知文字message是否base64编码，默认False，不编码，若编码请使用base64.b64encode方法") }} |
-
-    ### {{ _("请求参数示例") }}
-
-    ```python
-    {
-        "bk_app_code": "esb_test",
-        "bk_app_secret": "xxx",
-        "bk_token": "xxx",
-        "receiver": "xxx",
-        "data": {
-            "heading": "blueking alarm",
-            "message": "This is a test.",
-            "date": "2017-02-22 15:36",
-            "remark": "This is a test!"
-        }
-    }
-    ```
-
-    ### {{ _("返回结果示例") }}
-
-    ```python
-    {
-        "result": true,
-        "code": "00",
-        "message": "OK",
-    }
-    ```
-    """  # noqa
+    suggest_method = HTTP_METHOD.POST
+    label = u"发送微信消息"
+    label_en = "Send WeChat"
 
     sys_name = configs.SYSTEM_NAME
     api_type = API_TYPE_OP
@@ -188,10 +131,19 @@ class SendWeixin(Component, SetupConfMixin):
         data = self.form_data
         # 根据蓝鲸平台用户数据，将用户名转换为微信用户ID
         if data["receiver__username"]:
-            user_data = tools.get_receiver_with_username(
-                receiver__username=data["receiver__username"],
-                contact_way=self.contact_way,
-            )
+            try:
+                user_data = tools.get_receiver_with_username(
+                    receiver__username=data["receiver__username"],
+                    contact_way=self.contact_way,
+                )
+            except tools.NoValidUser as err:
+                result = {
+                    "result": False,
+                    "message": force_text(err),
+                }
+                self.response.payload = tools.inject_invalid_usernames(result, err.invalid_usernames)
+                return
+
             data.update(user_data)
 
         if self.wx_type == "mp":
@@ -225,4 +177,4 @@ class SendWeixin(Component, SetupConfMixin):
                 "result": False,
                 "message": u"Some users failed to send wechat message. %s" % data["_extra_user_error_msg"],
             }
-        self.response.payload = result
+        self.response.payload = tools.inject_invalid_usernames(result, data.get("_invalid_usernames"))

@@ -24,7 +24,7 @@ from django.views.generic import View
 from django.utils.decorators import available_attrs
 
 from common.license import check_license
-from common.exceptions import AuthenticationError
+from common.exceptions import AuthenticationError, PasswordNeedReset
 from common.mixins.exempt import LoginExemptMixin
 from common.usermgr import get_categories_str
 from bkauth.utils import set_bk_token_invalid, is_safe_url
@@ -94,7 +94,8 @@ def _bk_login(request):
     authentication_form = BkAuthenticationForm
     # NOTE: account/login.html 为支持自适应大小的模板
     template_name = "account/login.html"
-    reset_password_url = "%s://%s/o/bk_user_manage/reset_password" % (settings.HTTP_SCHEMA, request.get_host())
+    forget_reset_password_url = "%s://%s/o/bk_user_manage/reset_password" % (settings.HTTP_SCHEMA, request.get_host())
+    token_set_password_url = ""
 
     redirect_to = request.POST.get(REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME, ""))
     # support oauth2 redirect ?next=
@@ -122,6 +123,9 @@ def _bk_login(request):
         except AuthenticationError as e:
             login_redirect_to = e.redirect_to
             error_message = e.message
+        except PasswordNeedReset as e:
+            token_set_password_url = e.reset_password_url
+            error_message = e.message
         else:
             error_message = _(u"账户或者密码错误，请重新输入")
     # GET
@@ -140,7 +144,8 @@ def _bk_login(request):
         "site_name": current_site.name,
         "app_id": app_id,
         "is_license_ok": is_license_ok,
-        "reset_password_url": reset_password_url,
+        "forget_password_url": forget_reset_password_url,
+        "token_set_password_url": token_set_password_url,
         "login_redirect_to": login_redirect_to,
         "categories": categories,
         "is_plain": request.path_info == "/plain/",
