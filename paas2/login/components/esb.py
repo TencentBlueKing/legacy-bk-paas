@@ -84,5 +84,5 @@ def _remove_sensitive_info(info):
 
     for key in sensitive_info_keys:
         if key in data:
-            data[key] = data[key][:6] + "******"
+            data[key] = data[key][:3] + "******"
     return str(data)
