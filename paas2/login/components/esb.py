@@ -50,6 +50,7 @@ def _call_esb_api(http_func, url_path, data, timeout=30):
 
     code = resp_data.get("code", -1)
     message = resp_data.get("message", "unknown")
+    _data = resp_data.get("data", {})
 
     # code may be string or int, and login v1 the code is "00"
     try:
@@ -68,7 +69,7 @@ def _call_esb_api(http_func, url_path, data, timeout=30):
         message,
     )
 
-    return False, code, message, None
+    return False, code, message, _data
 
 
 def _remove_sensitive_info(info):
@@ -79,7 +80,7 @@ def _remove_sensitive_info(info):
         return ""
 
     data = copy.copy(info)
-    sensitive_info_keys = ["bk_token", "bk_app_secret", "app_secret"]
+    sensitive_info_keys = ["bk_token", "bk_app_secret", "app_secret", "password"]
 
     for key in sensitive_info_keys:
         if key in data:
