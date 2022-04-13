@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.49
+    - add: login support encrypt password
+
 # 2.12.48
     - update: esb add invalid usernames for cmsi
     - update: esb add cache for db query
