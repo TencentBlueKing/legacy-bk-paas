@@ -12,6 +12,7 @@ specific language governing permissions and limitations under the License.
 
 from __future__ import unicode_literals
 
+import base64
 from django.utils import timezone
 import urlparse
 
@@ -26,6 +27,8 @@ context_processor for common(setting)
 def site_settings(request):
     real_static_url = urlparse.urljoin(settings.SITE_URL, "." + settings.STATIC_URL)
     cur_domain = request.get_host()
+    password_rsa_public_key = base64.b64encode(settings.PASSWORD_RSA_PUBLIC_KEY.encode())
+    enable_password_rsa_encrypted = str(settings.ENABLE_PASSWORD_RSA_ENCRYPTED).lower()
     return {
         "LOGIN_URL": settings.LOGIN_URL,
         "LOGOUT_URL": settings.LOGOUT_URL,
@@ -40,4 +43,6 @@ def site_settings(request):
         "JS_SUFFIX": settings.JS_SUFFIX,
         # 本地 css 后缀名
         "CSS_SUFFIX": settings.CSS_SUFFIX,
+        "PASSWORD_RSA_PUBLIC_KEY": password_rsa_public_key,
+        "ENABLE_PASSWORD_RSA_ENCRYPTED": enable_password_rsa_encrypted,
     }

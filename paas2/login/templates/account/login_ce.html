@@ -100,4 +100,25 @@
     <script src="{{STATIC_URL}}assets/jquery-1.10.2.min.js"></script>
     <script src="{{STATIC_URL}}js_ce/login.{{JS_SUFFIX}}?v={{STATIC_VERSION}}"></script>
 
+    <script src="{{STATIC_URL}}assets/jsencrypt-3.2.1.min.js"></script>
+    <script type="text/javascript">
+        PASSWORD_RSA_PUBLIC_KEY = "{{ PASSWORD_RSA_PUBLIC_KEY }}"
+        ENABLE_PASSWORD_RSA_ENCRYPTED = "{{ ENABLE_PASSWORD_RSA_ENCRYPTED }}" === "true"
+        // 密码传输rsa加密
+        function rsa_encrypt_password() {
+            var public_key = window.atob(PASSWORD_RSA_PUBLIC_KEY).split('\n').join("");
+            var password = $('#password').val();
+            var encrypt = new JSEncrypt();
+            encrypt.setKey(public_key);
+            var encrypted = encrypt.encrypt(password);
+            $('#password').val(encrypted);
+        }
+        $(document).ready(function(){
+             if (ENABLE_PASSWORD_RSA_ENCRYPTED) {
+                 $('#login-form').submit(() => {
+                     rsa_encrypt_password();
+                });
+            }
+        })
+    </script>
 </html>
