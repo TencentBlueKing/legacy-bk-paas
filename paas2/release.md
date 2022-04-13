@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.6
+    - bugfix: login show error message from bk-user
+
 # 2.14.5
     - bugfix: login password wrong 500
     - update: login reset password if it's an initial password or password expired
