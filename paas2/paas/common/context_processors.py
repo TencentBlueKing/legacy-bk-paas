@@ -44,4 +44,6 @@ def site_settings(request):
         "BK_APIGW_URL": settings.BK_APIGW_URL,
         # API 网关文档中心地址
         "BK_APIGW_DOC_URL": settings.BK_APIGW_DOC_URL,
+        # paas版本号
+        "PLATFORM_VERSION": settings.PLATFORM_VERSION,
     }

@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.14.8
+    - update: login remove sensitive info from log
+    - update: login/paas footer
+
 # 2.14.7
     - update: header and footer of pages
 

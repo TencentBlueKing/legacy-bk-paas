@@ -14,14 +14,13 @@ from __future__ import unicode_literals
 
 import logging
 import time
-import traceback
-from functools import partial
 from urllib.parse import urlparse
 
 import requests
 from django.conf import settings
 
 from common.log import logger
+from components.esb import _remove_sensitive_info
 
 logger = logging.getLogger("component")
 
@@ -71,7 +70,8 @@ def _http_request(method, url, headers=None, data=None, timeout=None, verify=Fal
         else:
             return False, {"error": "method not supported"}
     except requests.exceptions.RequestException as e:
-        logger.exception("http request error! %s %s, data: %s, request_id: %s", method, url, data, request_id)
+        logger.exception("http request error! %s %s, data: %s, request_id: %s",
+                        method, url, _remove_sensitive_info(data), request_id)
         return False, {"error": str(e)}
     else:
         # record for /metrics
@@ -86,7 +86,7 @@ def _http_request(method, url, headers=None, data=None, timeout=None, verify=Fal
             error_msg = (
                 "http request fail! %s %s, data: %s, request_id: %s, response.status_code: %s, response.body: %s"
             )
-            logger.error(error_msg, method, url, str(data), request_id, resp.status_code, content)
+            logger.error(error_msg, method, url, str(_remove_sensitive_info(data)), request_id, resp.status_code, content)
 
             return False, {
                 "error": (
