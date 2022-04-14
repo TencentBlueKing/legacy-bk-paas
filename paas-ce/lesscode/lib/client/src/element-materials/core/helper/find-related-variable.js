@@ -1,7 +1,7 @@
 export const findRelatedVariableFromRenderProps = renderProps => {
     return Object.keys(renderProps).reduce((variableMap, propName) => {
         const prop = renderProps[propName]
-        if (prop.format === 'variable') {
+        if (prop.format === 'variable' && prop.code) {
             variableMap[`prop.${propName}`] = {
                 source: 'prop',
                 key: propName,
@@ -14,7 +14,7 @@ export const findRelatedVariableFromRenderProps = renderProps => {
 
 export const findRelatedVariableFromRenderDirective = renderDirectives => {
     renderDirectives.reduce((variableMap, directive) => {
-        if (directive.format === 'variable') {
+        if (directive.format === 'variable' && directive.code) {
             variableMap[`${directive.type}${directive.prop ? '.' + directive.prop : ''}`] = {
                 source: directive.type,
                 key: directive.prop,
@@ -29,7 +29,7 @@ export const findRelatedVariableFromRenderDirective = renderDirectives => {
 export const findRelatedVariableFromRenderSlot = renderSlots => {
     return Object.keys(renderSlots).reduce((variableMap, slotName) => {
         const slot = renderSlots[slotName]
-        if (slot.format === 'variable') {
+        if (slot.format === 'variable' && slot.code) {
             variableMap[`slot.${slotName}`] = {
                 source: 'slot',
                 key: slotName,

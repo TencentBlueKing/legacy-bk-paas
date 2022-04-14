@@ -28,7 +28,8 @@ export function notify (target, name, descriptor) {
             'active',
             'toggleInteractive',
             'componentHover',
-            'componentMouserleave'
+            'componentMouserleave',
+            'mobilePreviewSwitch'
         ].includes(name)) {
             triggerEventListener('update', event)
         }

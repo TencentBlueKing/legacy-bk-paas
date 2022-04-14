@@ -112,6 +112,21 @@
                     'item-active-icon-color': '#699df4',
                     'item-hover-icon-color': '#63656e',
                     'item-child-icon-active-color': '#699df4'
+                },
+                otherThemeColorProps: {
+                    'item-hover-bg-color': '#ffffff14',
+                    'item-hover-color': '#FFFFFF',
+                    'item-active-bg-color': '#ffffff33',
+                    'item-active-color': '#FFFFFF',
+                    'item-default-bg-color': '#1E1E1E',
+                    'item-default-color': '#ffffffad',
+                    'item-default-icon-color': '#ffffffad',
+                    'item-child-icon-default-color': '#ffffffad',
+                    'item-child-icon-hover-color': '#FFFFFF',
+                    'item-active-icon-color': '#FFFFFF',
+                    'item-hover-icon-color': '#FFFFFF',
+                    'item-child-icon-active-color': '#FFFFFF',
+                    'sub-menu-open-bg-color': '#000000e6'
                 }
             }
         },
@@ -139,7 +154,7 @@
             },
             // 左侧导航主题色
             themeColor () {
-                return this.isWhiteTheme ? '#ffffff' : '#182132'
+                return this.isWhiteTheme ? '#ffffff' : this.isDefaultTheme ? '#182132' : '#1E1E1E'
             },
             themeColorProps () {
                 let props = {
@@ -147,6 +162,8 @@
                 }
                 if (this.isWhiteTheme) { // 白色主题需要设置以下属性
                     props = { props, ...this.whiteThemeColorProps }
+                } else if (!this.isDefaultTheme) { // 非白色且非默认主题需要设置以下属性
+                    props = { props, ...this.otherThemeColorProps }
                 }
                 return props
             }

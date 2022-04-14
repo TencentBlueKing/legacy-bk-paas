@@ -131,6 +131,21 @@
                     'item-hover-icon-color': '#FFFFFF',
                     'item-child-icon-active-color': '#FFFFFF',
                     'sub-menu-open-bg-color': '#272F45'
+                },
+                otherThemeColorProps: {
+                    'item-hover-bg-color': '#ffffff14',
+                    'item-hover-color': '#FFFFFF',
+                    'item-active-bg-color': '#ffffff33',
+                    'item-active-color': '#FFFFFF',
+                    'item-default-bg-color': '#1E1E1E',
+                    'item-default-color': '#ffffffad',
+                    'item-default-icon-color': '#ffffffad',
+                    'item-child-icon-default-color': '#ffffffad',
+                    'item-child-icon-hover-color': '#FFFFFF',
+                    'item-active-icon-color': '#FFFFFF',
+                    'item-hover-icon-color': '#FFFFFF',
+                    'item-child-icon-active-color': '#FFFFFF',
+                    'sub-menu-open-bg-color': '#000000e6'
                 }
             }
         },
@@ -158,10 +173,10 @@
                 return this.curTemplateData?.theme && this.curTemplateData?.theme === '#FFFFFF'
             },
             curThemeColorProps () {
-                return !this.isWhiteTheme ? this.defaultThemeColorProps : {}
+                return this.isWhiteTheme ? {} : this.isDefaultTheme ? this.defaultThemeColorProps : this.otherThemeColorProps
             },
             curThemeColor () {
-                return this.isWhiteTheme ? '#ffffff' : this.curThemeColorProps['item-default-bg-color']
+                return this.isWhiteTheme ? '#ffffff' : this.isDefaultTheme ? '#2C354D' : '#1E1E1E'
             }
         },
         watch: {

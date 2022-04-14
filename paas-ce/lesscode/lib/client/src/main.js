@@ -33,8 +33,6 @@ import renderHtml from '@/components/render/html.vue'
 import ProjectVersionSelector from '@/components/project-version-selector.vue'
 
 import targetData from '@/common/targetData.js'
-// monaco 注入帮助文档
-import '../src/components/methods/provide-completion'
 import pureAxios from '@/api/pureAxios.js'
 
 import './bk-icon/style.css'

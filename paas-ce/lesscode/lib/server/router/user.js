@@ -17,6 +17,7 @@ const {
     getMember,
     editMember,
     deleteMember,
+    deleteMultipleMember,
     setCurUserPermInfo
 } = require('../controller/user')
 
@@ -30,6 +31,7 @@ router.get('/getMember', getMember)
 router.post('/addMembers', addMembers)
 router.put('/editMember', editMember)
 router.delete('/deleteMember', deleteMember)
+router.delete('/deleteMultipleMember', deleteMultipleMember)
 router.post('/setCurUserPermInfo', setCurUserPermInfo)
 
 module.exports = router

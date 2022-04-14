@@ -189,8 +189,12 @@ export const getProjectBaseList = async (ctx) => {
     const manager = getManager()
 
     // 默认去除demo项目
-    const where = [`project.projectCode != 'demo'`, `project.deleteFlag = 0`]
+    const where = [`project.deleteFlag = 0`]
+    const excludeDemo = params.excludeDemo ?? true
 
+    if (excludeDemo) {
+        where.push(`project.projectCode != 'demo'`)
+    }
     const escaped = []
     if (params.time) {
         const [timeStart, timeEnd] = params.time

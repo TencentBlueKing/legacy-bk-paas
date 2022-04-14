@@ -44,12 +44,10 @@
 
         created () {
             this.getList()
-            this.getAllGroupFuncs({ projectId: this.projectId, versionId: this.versionId }).catch((err) => this.$bkMessage({ theme: 'error', message: err.message || err }))
         },
 
         methods: {
             ...mapActions('variable', ['getAllVariable', 'setVariableFormData']),
-            ...mapActions('functions', ['getAllGroupFuncs']),
 
             getList () {
                 const params = {

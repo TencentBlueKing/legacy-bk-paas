@@ -13,20 +13,20 @@ export default {
     methods: {
         handlePageChange (page) {
             this.pagination.current = page
-            this.fetchData()
+            this.getProjectBase()
         },
         handlePageLimitChange (limit) {
             this.pagination.limit = limit
             this.pagination.current = 1
-            this.fetchData()
+            this.getProjectBase()
         },
         handleKeywordClear () {
             this.pagination.current = 1
-            this.fetchData()
+            this.getProjectBase()
         },
         handleKeywordEnter () {
             this.pagination.current = 1
-            this.fetchData()
+            this.getProjectBase()
         }
     }
 }

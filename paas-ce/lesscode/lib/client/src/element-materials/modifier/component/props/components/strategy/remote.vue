@@ -34,7 +34,7 @@
             <bk-button
                 @click="getApiData"
                 theme="primary"
-                class="remote-button"
+                class="mt10"
                 size="small">
                 获取数据
             </bk-button>
@@ -49,7 +49,7 @@
     import { mapGetters } from 'vuex'
     import selectFunc from '@/components/methods/select-func'
     import { bus } from '@/common/bus'
-    import functionHelper from '@/components/methods/function-helper'
+    import { replaceFuncKeyword, replaceFuncParam } from 'shared/function'
     import remoteExample from './remote-example'
 
     export default {
@@ -98,7 +98,7 @@
             }
         },
         computed: {
-            ...mapGetters('functions', ['funcGroups']),
+            ...mapGetters('functions', ['functionList']),
             ...mapGetters('variable', ['variableList']),
             exampleData () {
                 return { name: this.name, value: this.defaultValue }
@@ -127,7 +127,7 @@
             },
 
             processVarInFunParams (str, funcName) {
-                return (str || '').replace(/\{\{([^\}]+)\}\}/g, (all, variableCode) => {
+                return replaceFuncParam(str || '', (variableCode) => {
                     const curVar = this.variableList.find((variable) => (variable.variableCode === variableCode))
                     if (curVar) {
                         return this.getVariableVal(curVar)
@@ -166,21 +166,14 @@
             },
 
             getMethodByCode (methodCode) {
-                let returnMethod
-                this.funcGroups.forEach((group) => {
-                    const funChildren = group.functionList || []
-                    const method = funChildren.find(x => x.funcCode === methodCode)
-                    if (method) {
-                        returnMethod = JSON.parse(JSON.stringify(method))
-                    }
-                })
+                const returnMethod = this.functionList.find(functionData => functionData.funcCode === methodCode)
                 this.usedMethodMap[returnMethod.funcCode] = returnMethod
                 returnMethod.funcBody = this.processFuncBody(returnMethod.funcName, returnMethod.funcBody)
                 return returnMethod
             },
 
             processFuncBody (funcName, funcBody) {
-                return functionHelper.replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
+                return replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
                     if (funcCode) {
                         const curFunc = this.usedMethodMap[funcCode] || this.getMethodByCode(funcCode)
                         if (curFunc.id) {
