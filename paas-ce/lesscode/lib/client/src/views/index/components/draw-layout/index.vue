@@ -11,28 +11,28 @@
         <div
             id="lesscodeDrawContent"
             :class="$style['layout-center']">
-            <div
-                :class="$style['collapsed-left-btn']"
-                v-bk-tooltips.right="{
-                    content: '查看所有组件',
-                    disabled: !isLeftCollapse
-                }"
-                @click="handleToggleLeft">
-                <i class="bk-drag-icon bk-drag-angle-left" />
-            </div>
             <slot />
-            <div
-                :class="$style['collapsed-right-btn']"
-                v-bk-tooltips.right="{
-                    content: '查看组件配置',
-                    disabled: !isRightCollapse
-                }"
-                @click="handleToggleRight">
-                <i class="bk-drag-icon bk-drag-angle-left" />
-            </div>
         </div>
         <div :class="$style['layout-right']">
             <slot name="right" />
+        </div>
+        <div
+            :class="$style['collapsed-left-btn']"
+            v-bk-tooltips.right="{
+                content: '查看所有组件',
+                disabled: !isLeftCollapse
+            }"
+            @click="handleToggleLeft">
+            <i class="bk-drag-icon bk-drag-angle-left" />
+        </div>
+        <div
+            :class="$style['collapsed-right-btn']"
+            v-bk-tooltips.right="{
+                content: '查看组件配置',
+                disabled: !isRightCollapse
+            }"
+            @click="handleToggleRight">
+            <i class="bk-drag-icon bk-drag-angle-left" />
         </div>
     </div>
 </template>
@@ -69,6 +69,7 @@
                 overflow: hidden;
             }
             .collapsed-left-btn{
+                left: 0;
                 :global(.bk-drag-angle-left){
                     transform: rotate(180deg);
                 }
@@ -81,6 +82,7 @@
                 overflow: hidden;
             }
             .collapsed-right-btn{
+                right: 0;
                 :global(.bk-drag-angle-left){
                     transform: rotate(0deg);
                 }
@@ -138,14 +140,14 @@
             }
         }
         .collapsed-left-btn{
-            left: 0;
+            left: 340px;
             border-radius: 0 8px 8px 0;
             :global(.bk-drag-angle-left) {
                 transform: rotate(0deg);
             }
         }
         .collapsed-right-btn{
-            right: 0;
+            right: 300px;
             border-radius: 8px 0 0 8px;
             :global(.bk-drag-angle-left) {
                 transform: rotate(180deg);

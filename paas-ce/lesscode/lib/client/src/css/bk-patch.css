@@ -56,3 +56,9 @@
         padding: 0;
     }
 }
+.mg-header{
+    right: 0;
+    left: 0;
+    width: unset !important;
+    min-width: unset !important;
+}

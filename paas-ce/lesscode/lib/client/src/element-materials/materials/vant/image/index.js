@@ -63,13 +63,11 @@ export default {
         },
         width: {
             type: ['string', 'number'],
-            tips: '宽度，默认单位为px',
-            val: 60
+            tips: '宽度，默认单位为px'
         },
         height: {
             type: ['string', 'number'],
-            tips: '高度，默认单位为px',
-            val: 60
+            tips: '高度，默认单位为px'
         },
         radius: {
             type: ['string', 'number'],
