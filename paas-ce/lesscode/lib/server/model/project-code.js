@@ -141,9 +141,14 @@ const projectCode = {
                 })
                 // 生成代码校验
                 if (pageDetail.codeErrMessage) {
-                    throw new Error(`页面【${route.pageCode}】里面，${pageDetail.codeErrMessage}`)
+                    route.isError = true
+                    route.content = ''
+                    route.meta = {
+                        message: `页面【${route.pageCode}】里面，${pageDetail.codeErrMessage}。请修复后刷新页面再试`
+                    }
+                } else {
+                    route.content = pageDetail.code
                 }
-                route.content = pageDetail.code
             }))
         }
 

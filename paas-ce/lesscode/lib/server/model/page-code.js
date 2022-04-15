@@ -1587,6 +1587,8 @@ class PageCode {
                 /* eslint-disable indent */
                 methods += `
                     goToPage (item) {
+                        if (this.$route.query.id === item.id) return
+
                         this.setNav(item.id)
                         const originQuery = item.query || ''
                         const queryStr = originQuery[0] === '?' ? originQuery.slice(1) : originQuery
@@ -1605,7 +1607,7 @@ class PageCode {
                         } else if (item.link) {
                             window.open(item.link, '_blank')
                         } else {
-                            this.$router.push({ name: '404' })
+                            this.$router.push({ path: '${this.uniqueKey}', query })
                         }
                     },
                 `
