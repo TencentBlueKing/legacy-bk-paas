@@ -15,6 +15,7 @@ import VueRouter from 'vue-router'
 import Vue from 'vue'
 import Home from './children/home.vue'
 import BkNotFound from './children/404.vue'
+import BkError from './children/bk-error.vue'
 import { bundless } from '@blueking/bundless'
 import bundlessPluginVue2 from '@blueking/bundless-plugin-vue2'
 
@@ -54,6 +55,8 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId)
                 routeConifg.redirect = {
                     path: getRouteFullPath(route.redirectRoute)
                 }
+            } else if (route.isError) {
+                routeConifg.component = BkError
             } else if (route.pageId !== -1) {
                 const source = route.pageCode === curPageData.id
                     ? curPageData.source
@@ -66,6 +69,10 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId)
                 routeConifg.redirect = {
                     path: '/404'
                 }
+            }
+            // 携带 meta 信息
+            if (route.meta) {
+                routeConifg.meta = route.meta
             }
 
             return routeConifg
@@ -113,7 +120,6 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId)
             redirect: { name: '404' }
         }
     ]
-
     return new VueRouter({
         mode: 'history',
         base: `/preview/project/${projectId}`,
