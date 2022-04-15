@@ -235,7 +235,11 @@
                         }
                         return this.getAllVariable(params)
                     }).catch((err) => {
-                        this.messageHtmlError(err.message)
+                        if (err?.code === 499) {
+                            this.messageHtmlError(err.message || err)
+                        } else {
+                            this.messageError(err.message || err)
+                        }
                     }).finally(() => {
                         this.isSaving = false
                     })

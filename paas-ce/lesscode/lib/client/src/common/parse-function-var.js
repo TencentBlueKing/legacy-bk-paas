@@ -50,7 +50,7 @@ export function parseFuncAndVar (templateNode, variableList, funcGroups) {
     }, {})
     // 项目中所有函数，以 funcCode 作为索引 key
     const projectMethodCodeMap = funcGroups.reduce((result, methodGroup) => {
-        methodGroup.functionList.forEach(methodData => {
+        methodGroup.children.forEach(methodData => {
             result[methodData.funcCode] = methodData
         })
         return result

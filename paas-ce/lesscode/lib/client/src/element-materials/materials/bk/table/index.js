@@ -20,7 +20,14 @@ export default {
     events: [
         {
             name: 'select',
-            tips: '当用户手动勾选数据行的 Checkbox 时调用该事件函数，事件回调参数 (selection: Array, row: Object)'
+            tips: '当用户手动勾选数据行的 Checkbox 时调用该事件函数，事件回调参数 (selection: Array, row: Object)',
+            functionTemplates: [
+                {
+                    funcName: 'handleSelect',
+                    funcParams: ['selection', 'row'],
+                    funcBody: '// 可以使用 selection 和 row 进行业务操作\nconsole.log(selection, row)\n'
+                }
+            ]
         },
         {
             name: 'select-all',
@@ -96,11 +103,41 @@ export default {
         },
         {
             name: 'page-change',
-            tips: '当用户切换表格分页时调用该事件函数，事件回调参数 (newPage: Number)'
+            tips: '当用户切换表格分页时调用该事件函数，事件回调参数 (newPage: Number)',
+            functionTemplates: [
+                {
+                    funcName: 'handlePageChange',
+                    funcParams: ['newPage'],
+                    funcBody: '// 先记录当前页码。下面的 lesscode[\'${prop:tablePagination}\'] 可以替换为绑定在分页属性上的变量\n'
+                    + 'lesscode[\'${prop:tablePagination}\'].current = newPage\n'
+                    + '// 请求接口获取最新的分页数据。下面的 url 替换为接口地址，参数根据接口进行修改\n'
+                    + 'this.$http.get(\'url\', { params: { page: lesscode[\'${prop:tablePagination}\'].current, pageSize: lesscode[\'${prop:tablePagination}\'].limit } }).then((data) => {\n'
+                    + '    // 将接口返回的数据，赋值给绑定在 table 组件 data 属性的变量上，table 就会自动展示新一页的数据\n'
+                    + '    lesscode[\'${prop:tableData}\'] = data.list\n'
+                    + '    // 记录总数，分页组件内部计算页码和总页数使用\n'
+                    + '    lesscode[\'${prop:tablePagination}\'].count = data.count\n'
+                    + '})\n'
+                }
+            ]
         },
         {
             name: 'page-limit-change',
-            tips: '当用户切换表格每页显示条数时调用该事件函数，事件回调参数 (limit: Number)'
+            tips: '当用户切换表格每页显示条数时调用该事件函数，事件回调参数 (limit: Number)',
+            functionTemplates: [
+                {
+                    funcName: 'handlePageLimitChange',
+                    funcParams: ['limit'],
+                    funcBody: '// 先记录当前展示的数量。下面的 lesscode[\'${prop:tablePagination}\'] 可以替换为绑定在分页属性上的变量\n'
+                    + 'lesscode[\'${prop:tablePagination}\'].limit = limit\n'
+                    + '// 请求接口获取最新的分页数据。下面的 url 替换为接口地址，参数根据接口进行修改\n'
+                    + 'this.$http.get(\'url\', { params: { page: lesscode[\'${prop:tablePagination}\'].current, pageSize: lesscode[\'${prop:tablePagination}\'].limit } }).then((data) => {\n'
+                    + '    // 将接口返回的数据，赋值给绑定在 table 组件 data 属性的变量上，table 就会自动展示新一页的数据\n'
+                    + '    lesscode[\'${prop:tableData}\'] = data\n'
+                    + '    // 记录总数，分页组件内部计算页码和总页数使用\n'
+                    + '    lesscode[\'${prop:tablePagination}\'].count = data.count\n'
+                    + '})\n'
+                }
+            ]
         }
     ],
     styles: ['position', 'size', 'margin', 'pointer', 'opacity'],

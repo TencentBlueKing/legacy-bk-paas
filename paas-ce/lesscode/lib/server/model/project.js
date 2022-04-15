@@ -48,18 +48,15 @@ const projectSelectFields = [
     'project.isEnableDataSource'
 ]
 
-const defaultGroup = {
-    groupName: '默认分类'
-}
-
-const getDefaultFunc = function (host) {
+const getDefaultFunc = function (options, host) {
     return [
         {
             funcName: 'getMockData',
             funcBody: `return this.$http.get(\'${host}/api/data/getMockData\').then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n    return res.data\r\n})\r\n`,
             funcSummary: '获取mock数据',
             funcType: 0,
-            funcCode: 'getMockData'
+            funcCode: 'getMockData',
+            ...options
         },
         {
             funcName: 'getApiData',
@@ -70,7 +67,8 @@ const getDefaultFunc = function (host) {
             funcMethod: 'get',
             funcApiUrl: `${host}/api/data/getMockData`,
             funcApiData: '{ \"page\": 1, \"pageSize\": 20 }',
-            funcCode: 'getApiData'
+            funcCode: 'getApiData',
+            ...options
         }
     ]
 }
@@ -399,15 +397,22 @@ export default {
                 }
             } else {
                 // 创建默认函数分组和函数
-                const funcGroup = getRepository(FuncGroup).create(defaultGroup)
-                const { id: funcGroupId } = await transactionalEntityManager.save(funcGroup)
+                const funcGroup = getRepository(FuncGroup).create({
+                    groupName: '默认分类',
+                    projectId
+                })
+                const { id: funcGroupId, groupName: funcGroupName } = await transactionalEntityManager.save(funcGroup)
                 const curCtx = RequestContext.getCurrentCtx()
-                const defaultFunc = getDefaultFunc(curCtx.origin)
-                defaultFunc.forEach((func) => (func.funcGroupId = funcGroupId))
+                const defaultFunc = getDefaultFunc(
+                    {
+                        projectId,
+                        funcGroupId,
+                        funcGroupName
+                    },
+                    curCtx.origin
+                )
                 const funcs = getRepository(Func).create(defaultFunc)
                 await transactionalEntityManager.save(funcs)
-                const projectFuncGroup = getRepository(ProjectFuncGroup).create({ projectId, funcGroupId })
-                await transactionalEntityManager.save(projectFuncGroup)
 
                 // 创建默认模板分类
                 const templateCategory = getRepository(TemplateCategory).create({
