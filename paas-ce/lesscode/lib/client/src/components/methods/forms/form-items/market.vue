@@ -41,7 +41,7 @@
         },
 
         methods: {
-            ...mapActions('functionMarket', ['getAllFuncFromMarket']),
+            ...mapActions('functionMarket', ['getFunctionList']),
 
             getTips (funcSummary) {
                 const tips = transformTipsWidth(funcSummary, 350)
@@ -62,7 +62,7 @@
             getMarketFuncs (isExpand) {
                 if (isExpand) {
                     this.isLoading = true
-                    this.getAllFuncFromMarket().then(res => {
+                    this.getFunctionList().then(res => {
                         this.marketFuncs = res || []
                     }).catch((err) => {
                         this.messageError(err.message || err)

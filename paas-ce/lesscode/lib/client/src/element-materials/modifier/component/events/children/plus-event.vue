@@ -5,12 +5,18 @@
         trigger="click"
         theme="light"
         ext-cls="g-popover-empty-padding"
-        v-if="computedEventList.length || searchEventName"
+        :class="{ 'empty-event': Object.keys(renderEvents).length <= 0 }"
+        :disabled="computedDisabled"
     >
         <bk-link
-            class="plus-event-icon"
             theme="primary"
             icon="bk-icon icon-plus-circle"
+            class="plus-event-icon"
+            :disabled="computedDisabled"
+            v-bk-tooltips="{
+                content: '暂无可添加事件',
+                disabled: !computedDisabled
+            }"
         >添加事件</bk-link>
         <div slot="content">
             <section class="plus-event">
@@ -73,6 +79,10 @@
                     }
                     return acc
                 }, [])
+            },
+
+            computedDisabled () {
+                return !this.computedEventList.length && !this.searchEventName
             }
         },
 
@@ -89,6 +99,9 @@
 <style lang='postcss' scoped>
     @import "@/css/mixins/scroller";
 
+    ::v-deep .empty-event {
+        margin-left: 107px;
+    }
     .plus-event-icon {
         margin: 10px 10px;
         ::v-deep .bk-link-text {
@@ -105,11 +118,15 @@
     .plus-event-search {
         width: 260px;
         margin: 0 5px;
+        ::v-deep input {
+            border-color: transparent transparent #EAEBF0;
+        }
     }
     .event-list {
         max-height: 350px;
         overflow-y: auto;
         margin-top: 4px;
+        padding-bottom: 8px;
         @mixin scroller;
     }
     .event-item {
