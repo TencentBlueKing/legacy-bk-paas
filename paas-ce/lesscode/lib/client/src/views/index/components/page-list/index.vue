@@ -230,9 +230,7 @@
 <style lang="postcss" scoped>
     .page-select {
         display: flex;
-        min-width: 450px;
         align-items: center;
-        margin-right: 18px;
         .page-name {
             display: flex;
             align-items: center;
