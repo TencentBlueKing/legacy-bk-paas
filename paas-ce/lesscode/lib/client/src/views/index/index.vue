@@ -340,7 +340,7 @@
     $pageHeaderHeight: 52px;
 
     .lessocde-editor-page {
-        min-width: 1280px;
+        min-width: 1366px;
         height: calc(100vh - $headerHeight);
         margin-top: $headerHeight;
     }
