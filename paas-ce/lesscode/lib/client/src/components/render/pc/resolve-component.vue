@@ -14,8 +14,8 @@
         ref="componentRoot"
         :class="{
             [$style['component']]: true,
-            [$style['selected']]: componentData.isActived,
-            [$style['hover']]: isHover,
+            [$style['precent-width']]: fixPercentStyleWidth,
+            [$style['precent-height']]: fixPercentStyleHeight,
             'bk-layout-custom-component-wrapper': componentData.isCustomComponent
         }"
         role="component-root"
@@ -27,25 +27,13 @@
         @mouseup="handleMouseup"
         @click.stop="handleClick"
         @contextmenu.stop="handleShowContextmenu">
-        <save-to-template
-            v-if="componentData.layoutType
-                && componentData.parentNode.layoutType
-                && componentData.isActived" />
         <render-component
             :ref="componentData.componentId"
             :component-data="componentData" />
-        <template v-if="componentData.isActived || isHover">
-            <div :class="$style['line-top']" key="lineTop" role="line-top" />
-            <div :class="$style['line-right']" key="lineRight" role="line-right" />
-            <div :class="$style['line-bottom']" key="lineBottom" role="line-bottom" />
-            <div :class="$style['line-left']" key="lineLeft" role="line-left" />
-        </template>
     </div>
 </template>
 <script>
-    import _ from 'lodash'
     import LC from '@/element-materials/core'
-    import SaveToTemplate from './components/save-to-template'
     import RenderComponent from './render-component'
     import RenderSlot from './render-slot'
 
@@ -67,8 +55,6 @@
         }
     }
 
-    // 记录鼠标 hover 组件的 id
-    let hoverComponentId = ''
     // 记录 mousedown 状态
     let isMousedown = false
 
@@ -143,12 +129,12 @@
             /* eslint-disable vue/no-unused-components */
             FreeLayout: () => import('./widget/free-layout'),
             RenderGrid: () => import('./widget/grid'),
+            RenderColumn: () => import('./widget/column'),
             WidgetForm: () => import('./widget/form'),
             WidgetFormItem: () => import('./widget/form-item'),
             ResolveComponent: () => import('./resolve-component'),
             RenderComponent,
-            RenderSlot,
-            SaveToTemplate
+            RenderSlot
         },
         inheritAttrs: false,
         props: {
@@ -169,9 +155,12 @@
                 }
             }
             return {
-                isHover: false,
                 // 默认会继承组件的 style 配置，如果直接继承有些样式会造成排版问题需要重置
-                safeStyles: Object.assign({}, safeStyles)
+                safeStyles: Object.assign({}, safeStyles),
+                // 百分比宽度时需要修正相对父级的值
+                fixPercentStyleWidth: false,
+                // 百分比高度时需要修正相对父级的值
+                fixPercentStyleHeight: false
             }
         },
         computed: {
@@ -183,6 +172,7 @@
                 const shadowComMap = {
                     'free-layout': true,
                     'render-grid': true,
+                    'render-column': true,
                     'widget-form': true,
                     'widget-form-item': true,
                     'resolve-component': true
@@ -196,40 +186,21 @@
             this.material = this.componentData.material
 
             // 编辑更新
-            const updateCallback = _.throttle((event) => {
-                const {
-                    target
-                } = event
-                if (target.componentId === this.componentData.componentId) {
-                    console.log('print event = ', event)
+            const updateCallback = (event) => {
+                if (event.target.componentId === this.componentData.componentId) {
+                    console.log(`\n${new Date()}`)
+                    console.log('record event : ', event)
                     this.safeStylesWithDisplay()
                     this.safeStyleWithWidth()
                     this.safeStyleWithHeight()
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
-            }, 20)
-            
-            const componentHoverCallback = _.throttle(() => {
-                this.isHover = hoverComponentId === this.componentData.componentId
-            }, 20)
-
-            const componentMouseleaveCallback = () => {
-                hoverComponentId = ''
-                this.isHover = false
             }
 
             LC.addEventListener('update', updateCallback)
-            LC.addEventListener('active', updateCallback)
-            LC.addEventListener('activeClear', updateCallback)
-            LC.addEventListener('componentHover', componentHoverCallback)
-            LC.addEventListener('componentMouserleave', componentMouseleaveCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
-                LC.removeEventListener('active', updateCallback)
-                LC.removeEventListener('activeClear', updateCallback)
-                LC.removeEventListener('componentHover', componentHoverCallback)
-                LC.removeEventListener('componentMouserleave', componentMouseleaveCallback)
             })
         },
         mounted () {
@@ -237,13 +208,11 @@
             this.safeStyleWithWidth()
             this.safeStyleWithHeight()
             this.setDefaultStyleWithAttachToFreelayout()
+            this.componentData.mounted(this.$refs.componentRoot)
             this.$emit('component-mounted')
         },
         beforeDestroy () {
-            if (hoverComponentId === this.componentData.componentId) {
-                hoverComponentId = ''
-                isMousedown = false
-            }
+            isMousedown = false
             // 销毁时如果组件被激活，取消激活状态
             if (this.componentData.isActived) {
                 this.componentData.activeClear()
@@ -297,6 +266,7 @@
                 }
                 // 优先使用自定义配置的 width
                 if (this.componentData.style.width) {
+                    this.fixPercentStyleWidth = /%$/.test(this.componentData.style.width)
                     return
                 }
 
@@ -307,11 +277,13 @@
                     }
                     const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
                     if ($baseComponentEl) {
-                        if ($baseComponentEl.style.width) {
+                        const styleWidth = $baseComponentEl.style.width
+                        if (styleWidth) {
                             this.safeStyles = Object.assign({}, this.safeStyles, {
-                                width: $baseComponentEl.style.width
+                                width: styleWidth
                             })
                         }
+                        this.fixPercentStyleWidth = /%$/.test(styleWidth)
                     }
                 })
             },
@@ -327,6 +299,7 @@
                 
                 // 优先使用自定义配置的 height
                 if (this.componentData.style.height) {
+                    this.fixPercentStyleHeight = /%$/.test(this.componentData.style.height)
                     return
                 }
 
@@ -337,11 +310,13 @@
                     }
                     const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
                     if ($baseComponentEl) {
-                        if ($baseComponentEl.style.height) {
+                        const styleHeight = $baseComponentEl.style.height
+                        if (styleHeight) {
                             this.safeStyles = Object.assign({}, this.safeStyles, {
-                                height: $baseComponentEl.style.height
+                                height: styleHeight
                             })
                         }
+                        this.fixPercentStyleHeight = /%$/.test(styleHeight)
                     }
                 })
             },
@@ -374,20 +349,6 @@
                 })
             },
             /**
-             * @desc 记录鼠标按下状态，抛出 component-mousedown 事件
-             * @param {Object} event 事件对象
-             */
-            handleMousedown (event) {
-                isMousedown = true
-                this.$emit('component-mousedown', event)
-            },
-            /**
-             * @desc 切换鼠标按下状态
-             */
-            handleMouseup () {
-                isMousedown = false
-            },
-            /**
              * @desc 组件点击事件回调
              */
             handleClick () {
@@ -406,6 +367,20 @@
                 LC.showMenu(event)
             },
             /**
+             * @desc 记录鼠标按下状态，抛出 component-mousedown 事件
+             * @param {Object} event 事件对象
+             */
+            handleMousedown (event) {
+                isMousedown = true
+                this.$emit('component-mousedown', event)
+            },
+            /**
+             * @desc 切换鼠标按下状态
+             */
+            handleMouseup () {
+                isMousedown = false
+            },
+            /**
              * @desc 组件 wrapper mousemove 事件回调
              * @param { Object } event
              *
@@ -420,69 +395,29 @@
                 event.stopImmediatePropagation()
                 event.stopPropagation()
                 event.preventDefault()
-                hoverComponentId = this.componentData.componentId
-                LC.triggerEventListener('componentHover')
+                LC.triggerEventListener('componentHover', {
+                    type: 'componentHover',
+                    target: this.componentData
+                })
             }
         }
     }
 </script>
 <style lang="postcss" module>
     .component {
+        position: relative;
+        min-height: 10px;
         pointer-events: auto !important;
         cursor: pointer;
-        -webkit-text-size-adjust: none;
-        min-height: 10px;
-        &.hover{
-            position: relative;
-            > .line-top,
-            > .line-right,
-            > .line-bottom,
-            > .line-left {
-                border-style: dashed;
+        &.precent-width{
+            & > * {
+                width: 100% !important;
             }
         }
-        &.selected{
-            position: relative;
-            > .line-top,
-            > .line-right,
-            > .line-bottom,
-            > .line-left {
-                border-style: solid;
+        &.precent-height{
+            & > * {
+                height: 100% !important;
             }
-        }
-        
-        .line-top,
-        .line-right,
-        .line-bottom,
-        .line-left{
-            position: absolute;
-            z-index: 9999999;
-            border-width: 0;
-            border-color: #3a84ff;
-        }
-        .line-top {
-            top: 0;
-            right: 0;
-            left: 0;
-            border-top-width: 1px;
-        }
-        .line-right{
-            top: 0;
-            right: 0;
-            bottom: 0;
-            border-right-width: 1px;
-        }
-        .line-bottom{
-            right: 0;
-            bottom: 0;
-            left: 0;
-            border-bottom-width: 1px;
-        }
-        .line-left{
-            top: 0;
-            bottom: 0;
-            left: 0;
-            border-left-width: 1px;
         }
     }
 </style>

@@ -101,7 +101,13 @@
                                 </div>
                                 <div class="item-ft">
                                     <div class="col">
-                                        <h3 class="name" :title="page.templateName">{{page.templateName}}</h3>
+                                        <div class="page-name">
+                                            <span class="page-type">
+                                                <i v-if="page.templateType === 'MOBILE'" class="bk-drag-icon bk-drag-mobilephone"> </i>
+                                                <i v-else class="bk-drag-icon bk-drag-pc"> </i>
+                                            </span>
+                                            <div class="name" :title="page.templateName">{{page.templateName}}</div>
+                                        </div>
                                         <div class="stat">{{page.createUser ? `由 ${page.createUser} 上传` : ''}}</div>
                                     </div>
                                 </div>
@@ -340,10 +346,7 @@
             this.getTemplateList()
         },
         methods: {
-            ...mapActions('functions', [
-                'getAllGroupAndFunction'
-            ]),
-            ...mapActions('variable', ['getAllVariable']),
+            ...mapActions('pageTemplate', ['getProjectFuncAndVar']),
             async getTemplateList () {
                 this.pageLoading = true
                 try {
@@ -496,28 +499,21 @@
                     const fromTemplate = this.dialog.page.curPage
                     const templateInfo = this.dialog.page.selectedList.map(item => ({
                         belongProjectId: item.id,
-                        categoryId: item.selectedCategory
+                        categoryId: item.selectedCategory,
+                        versionId: ''
                     }))
                     const data = {
                         id: fromTemplate.id,
                         fromProjectId: fromTemplate.belongProjectId,
                         templateInfo
                     }
-                    const [variableList, funcGroups] = await Promise.all([
-                        this.getAllVariable({
-                            projectId: fromTemplate.belongProjectId,
-                            versionId: fromTemplate.versionId,
-                            pageCode: fromTemplate.fromPageCode,
-                            effectiveRange: 0
-                        }, false),
-                        this.getAllGroupAndFunction({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId })
-                    ])
+                    const { variableList, funcGroups } = await this.getProjectFuncAndVar({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId, pageCode: fromTemplate.fromPageCode })
                     
                     const templateNode = LC.parseTemplate(JSON.parse(fromTemplate.content || {}))
                     // 解析出模板targetData绑定的变量和函数
                     const { varList: valList = [], funcList = [] } = parseFuncAndVar(templateNode, variableList, funcGroups)
                     Object.assign(data, { valList, funcList })
-                    console.log(data, 'submit data')
+                    
                     const res = await this.$store.dispatch('pageTemplate/apply', data)
                     if (res) {
                         this.$bkMessage({
@@ -781,6 +777,34 @@
                 font-weight: 700;
                 color: #63656E;
                 @mixin ellipsis 240px, block;
+            }
+            .page-name {
+                display: flex;
+                align-items: center;
+                margin: -2px 0 0 0;
+
+                .name {
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #63656E;
+                    width: 215px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    margin-left: 7px;
+                }
+
+                .page-type {
+                    font-size: 16px;
+                    line-height: 18px;
+                    height: 20px;
+                    width: 20px;
+                    text-align: center;
+                    margin-left: -2px;
+                    color: #979ba5;
+                    border-radius: 2px;
+                    background: #f0f1f5;
+                }
             }
             .stat {
                 font-size: 12px;

@@ -45,7 +45,6 @@
     import LC from '@/element-materials/core'
     import { mapGetters } from 'vuex'
     import html2canvas from 'html2canvas'
-    import safeStringify from '@/common/json-safe-stringify'
     import { bus } from '@/common/bus'
 
     export default {
@@ -54,7 +53,6 @@
             return {
                 isShow: false,
                 isWholePage: false,
-                eventData: {},
                 categoryList: [],
                 dialog: {
                     loading: false,
@@ -94,29 +92,6 @@
             ...mapGetters('layout', ['pageLayout']),
             projectId () {
                 return this.$route.params.projectId
-            },
-            templateData () {
-                let content = {}
-                if (this.isWholePage) {
-                    try {
-                        const targetData = this.eventData.value.renderSlots.default || []
-                        const children = targetData.filter(component => !LC.isInteractiveType(component.type))
-                        if (children.length === 1) {
-                            content = children[0]
-                        } else if (children.length > 1) {
-                            const gridNode = LC.createNode('render-grid')
-                            const gridData = JSON.parse(JSON.stringify(gridNode))
-                            gridData.renderSlots.default[0].renderSlots.default = children
-                            content = gridData
-                        }
-                    } catch (err) {
-                        console.log(err, err)
-                        content = {}
-                    }
-                } else {
-                    content = this.eventData.value || {}
-                }
-                return content
             }
         },
         watch: {
@@ -133,10 +108,10 @@
             }
         },
         created () {
-            const showCallback = (data) => {
+            this.eventData = {}
+            const showCallback = (event) => {
                 this.isShow = true
-                this.eventData = data || {}
-                this.isWholePage = data.isWholePage
+                this.eventData = event
             }
             LC.addEventListener('saveTemplate', showCallback)
             this.$once('hook:beforeDestroy', () => {
@@ -156,8 +131,8 @@
                 await this.$refs.pageTemplateFrom.validate()
                 
                 this.dialog.loading = true
-                const className = this.isWholePage ? (this.pageLayout && this.pageLayout.layoutType !== 'empty' ? '.container-content' : '.operation-area') : `div[data-component-id="${this.templateData.componentId}"]`
-                html2canvas(document.querySelector(className)).then(async (canvas) => {
+                const $rootElm = this.eventData.target.$elm
+                html2canvas($rootElm).then(async (canvas) => {
                     try {
                         const imgData = canvas.toDataURL('image/png')
                         
@@ -167,9 +142,10 @@
                                 templateName: this.dialog.formData.templateName,
                                 categoryId: this.dialog.formData.categoryId,
                                 belongProjectId: this.projectId,
+                                templateType: this.pageDetail.pageType,
                                 versionId: this.versionId,
                                 fromPageCode: this.pageDetail && this.pageDetail.pageCode,
-                                content: safeStringify(this.templateData),
+                                content: JSON.stringify(this.eventData.value),
                                 previewImg: imgData
                             }
                         }

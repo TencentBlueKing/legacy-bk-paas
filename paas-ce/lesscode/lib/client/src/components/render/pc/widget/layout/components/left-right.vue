@@ -7,7 +7,8 @@
             navigation-type="left-right"
             need-menu
             v-bind="curTemplateData.renderProps || {}"
-            @toggle="handleToggle">
+            @toggle="handleToggle"
+            :theme-color="themeColor">
             <template slot="side-header">
                 <div
                     class="component-wrapper"
@@ -48,7 +49,8 @@
                         ref="menu"
                         :unique-opened="false"
                         :default-active="navActive"
-                        :toggle-active="true">
+                        :toggle-active="true"
+                        v-bind="themeColorProps">
                         <bk-navigation-menu-item
                             v-for="(menuItem) in curTemplateData.menuList"
                             ref="item"
@@ -96,7 +98,36 @@
                 siteTitle: 'lesscode',
                 isToggle: false,
                 navActive: '首页',
-                isSideMenuSelected: false
+                isSideMenuSelected: false,
+                whiteThemeColorProps: {
+                    'item-default-bg-color': 'white',
+                    'item-hover-bg-color': '#f0f1f5',
+                    'sub-menu-open-bg-color': '#f5f7fa',
+                    'item-hover-color': '#63656e',
+                    'item-active-color': '#699df4',
+                    'item-default-color': '#63656e',
+                    'item-default-icon-color': '#63656ead',
+                    'item-child-icon-default-color': '#63656ead',
+                    'item-child-icon-hover-color': '#313238',
+                    'item-active-icon-color': '#699df4',
+                    'item-hover-icon-color': '#63656e',
+                    'item-child-icon-active-color': '#699df4'
+                },
+                otherThemeColorProps: {
+                    'item-hover-bg-color': '#ffffff14',
+                    'item-hover-color': '#FFFFFF',
+                    'item-active-bg-color': '#ffffff33',
+                    'item-active-color': '#FFFFFF',
+                    'item-default-bg-color': '#1E1E1E',
+                    'item-default-color': '#ffffffad',
+                    'item-default-icon-color': '#ffffffad',
+                    'item-child-icon-default-color': '#ffffffad',
+                    'item-child-icon-hover-color': '#FFFFFF',
+                    'item-active-icon-color': '#FFFFFF',
+                    'item-hover-icon-color': '#FFFFFF',
+                    'item-child-icon-active-color': '#FFFFFF',
+                    'sub-menu-open-bg-color': '#000000e6'
+                }
             }
         },
         computed: {
@@ -104,7 +135,38 @@
             ...mapGetters('drag', [
                 'curTemplateData'
             ]),
-            ...mapGetters('layout', ['pageLayout'])
+            ...mapGetters('layout', ['pageLayout']),
+            isDefaultTheme () {
+                return !this.curTemplateData?.theme || this.curTemplateData?.theme === '#182132'
+            },
+            isWhiteTheme () {
+                return this.curTemplateData?.theme && this.curTemplateData?.theme === '#FFFFFF'
+            },
+            isBlackTheme () {
+                return this.curTemplateData?.theme && this.curTemplateData?.theme === '#1A1A1A'
+            },
+            // 左侧导航菜单主题色 选中项背景色
+            activeTheme () {
+                return this.isDefaultTheme
+                    ? '#3c96ff' : this.isBlackTheme
+                        ? '#ffffff33' : this.isWhiteTheme
+                            ? '#E1ECFF' : this.curTemplateData?.theme
+            },
+            // 左侧导航主题色
+            themeColor () {
+                return this.isWhiteTheme ? '#ffffff' : this.isDefaultTheme ? '#182132' : '#1E1E1E'
+            },
+            themeColorProps () {
+                let props = {
+                    'item-active-bg-color': this.isWhiteTheme ? '#e1ecff' : this.activeTheme
+                }
+                if (this.isWhiteTheme) { // 白色主题需要设置以下属性
+                    props = { props, ...this.whiteThemeColorProps }
+                } else if (!this.isDefaultTheme) { // 非白色且非默认主题需要设置以下属性
+                    props = { props, ...this.otherThemeColorProps }
+                }
+                return props
+            }
         },
         created () {
             const activeCallback = () => {
@@ -177,14 +239,16 @@
                     logo,
                     siteName,
                     menuList,
-                    renderProps
+                    renderProps,
+                    theme
                 } = payload
                 this.setCurTemplateData({
                     ...this.curTemplateData,
                     logo,
                     siteName,
                     menuList,
-                    renderProps
+                    renderProps,
+                    theme
                 })
                 this.handleOpenMenu()
             },

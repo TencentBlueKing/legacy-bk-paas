@@ -17,7 +17,6 @@ export default {
     group: '布局',
     styles: ['padding', 'font', 'background'],
     renderStyles: {
-        'minHeight': '80px',
         'paddingTop': '5px',
         'paddingRight': '5px',
         'paddingBottom': '5px',

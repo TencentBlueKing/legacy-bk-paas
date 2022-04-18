@@ -33,6 +33,7 @@ const VariableManage = () => import(/* webpackChunkName: 'index' */'@/views/proj
 const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
 const RouterManage = () => import(/* webpackChunkName: 'route' */'@/views/project/router-manage')
+const Release = () => import(/* webpackChunkName: 'release' */'@/views/project/release')
 const Basic = () => import(/* webpackChunkName: 'basic' */'@/views/project/basic')
 const Logs = () => import(/* webpackChunkName: 'basic' */'@/views/project/logs')
 const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/layout')
@@ -41,6 +42,7 @@ const VersionManage = () => import(/* webpackChunkName: 'version' */'@/views/pro
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const PreviewTemplate = () => import(/* webpackChunkName: 'previewTemplate' */'@/views/preview/preview-template')
+const PreviewMobile = () => import(/* webpackChunkName: 'previewMobile' */'@/views/preview/preview-mobile')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
 
 const HealthPage = () => import(/* webpackChunkName: 'none' */'@/views/system/health')
@@ -78,6 +80,9 @@ const OperationStatsProject = () => import(/* webpackChunkName: 'operation-stats
 const OperationStatsFunc = () => import(/* webpackChunkName: 'operation-stats-func' */'@/views/system/operation/stats/func/index.vue')
 const OperationStatsComp = () => import(/* webpackChunkName: 'operation-stats-comp' */'@/views/system/operation/stats/comp/index.vue')
 
+// 平台管理
+const PlatformManageEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/index.vue')
+const ProjectMember = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/project-member/index.vue')
 const routes = [
     {
         path: '/help',
@@ -184,6 +189,22 @@ const routes = [
                         }
                     }
                 ]
+            },
+            {
+                name: 'pm-entry',
+                path: '/pm',
+                component: PlatformManageEntry,
+                redirect: { name: 'pm-project-member' },
+                children: [
+                    {
+                        path: 'platform/project-member',
+                        name: 'pm-project-member',
+                        component: ProjectMember,
+                        meta: {
+                            title: '项目成员'
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -283,6 +304,14 @@ const routes = [
                 }
             },
             {
+                path: 'release',
+                name: 'release',
+                component: Release,
+                meta: {
+                    title: '发布部署'
+                }
+            },
+            {
                 path: 'routes',
                 name: 'routes',
                 component: RouterManage,
@@ -346,6 +375,14 @@ const routes = [
         component: PreviewTemplate,
         meta: {
             title: '模板预览'
+        }
+    },
+    {
+        path: '/preview-mobile/project/:projectId',
+        name: 'previewMobile',
+        component: PreviewMobile,
+        meta: {
+            title: '移动端预览'
         }
     },
     {

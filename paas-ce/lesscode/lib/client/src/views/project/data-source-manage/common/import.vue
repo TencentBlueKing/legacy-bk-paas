@@ -49,7 +49,6 @@
 
             const importFile = (res) => {
                 const importContent = res.responseData.data
-                console.log(importContent)
             }
 
             return {

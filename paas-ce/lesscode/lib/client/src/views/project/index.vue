@@ -107,6 +107,13 @@
                         }
                     },
                     {
+                        title: '发布部署',
+                        icon: 'list-fill',
+                        toPath: {
+                            name: 'release'
+                        }
+                    },
+                    {
                         title: '路由配置',
                         icon: 'router',
                         toPath: {
@@ -328,7 +335,7 @@
                     }
 
                     .project-version-selector {
-                        width: 90px;
+                        max-width: 320px;
                     }
                 }
             }

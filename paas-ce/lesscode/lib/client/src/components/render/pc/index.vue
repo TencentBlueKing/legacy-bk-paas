@@ -13,13 +13,14 @@
     <layout>
         <div
             id="drawTarget"
+            ref="root"
             :class="$style['canvas']"
             @click="handleCanvaseClick"
             @mouseleave="handleMouseleave">
             <draggable
                 v-if="isReady"
                 class="target-drag-area"
-                :class="$style['editor']"
+                :class="[$style['editor']]"
                 :component-data="componentData"
                 :list="componentData.slot.default"
                 :sort="true"
@@ -43,6 +44,8 @@
                         :component-data="componentNode" />
                 </template>
             </draggable>
+            <lesscode-focus />
+            <lesscode-tools />
         </div>
         <div
             v-if="showNotVisibleMask"
@@ -57,15 +60,20 @@
     import Draggable, {
         getDragTargetGroup
     } from './components/draggable'
+    import LesscodeFocus from './components/lesscode-focus'
+    import LesscodeTools from './components/lesscode-tools'
     import Layout from './widget/layout'
+    import ResolveComponent from './resolve-component'
     import ResolveInteractiveComponent from './resolve-interactive-component'
 
     export default {
         name: 'render',
         components: {
             Draggable,
+            LesscodeFocus,
+            LesscodeTools,
             Layout,
-            ResolveComponent: () => import('./resolve-component'),
+            ResolveComponent,
             ResolveInteractiveComponent
         },
         provide () {
@@ -91,7 +99,7 @@
         created () {
             this.componentData = LC.getRoot()
 
-            const nodeTreeReadyCallback = () => {
+            const readyCallback = () => {
                 this.isReady = true
             }
 
@@ -102,28 +110,29 @@
                 }
             }
             /**
-             * @name interactiveWatcher
+             * @name interactiveCallbak
              * @description 当交互式组件的状态改变，每次更新需要监测是否显示“打开交互式组件”的提示
              */
-            const interactiveWatcher = event => {
+            const interactiveCallbak = event => {
                 const activeNode = LC.getActiveNode()
                 if (activeNode) {
                     this.showNotVisibleMask = activeNode.isInteractiveComponent && !activeNode.interactiveShow
                 }
             }
 
-            LC.addEventListener('ready', nodeTreeReadyCallback)
+            LC.addEventListener('ready', readyCallback)
             LC.addEventListener('update', updateCallback)
-            LC.addEventListener('active', interactiveWatcher)
-            LC.addEventListener('toggleInteractive', interactiveWatcher)
+            LC.addEventListener('active', interactiveCallbak)
+            LC.addEventListener('toggleInteractive', interactiveCallbak)
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('ready', nodeTreeReadyCallback)
+                LC.removeEventListener('ready', readyCallback)
                 LC.removeEventListener('update', updateCallback)
-                LC.removeEventListener('active', interactiveWatcher)
-                LC.removeEventListener('toggleInteractive', interactiveWatcher)
+                LC.removeEventListener('active', interactiveCallbak)
+                LC.removeEventListener('toggleInteractive', interactiveCallbak)
             })
         },
         mounted () {
+            this.componentData.mounted(this.$refs.root)
             const resetCallback = () => {
                 LC.clearMenu()
             }
@@ -139,9 +148,9 @@
             autoType: _.throttle(function () {
                 setTimeout(() => {
                     this.$refs.component.forEach((componentIns, index) => {
-                        componentIns.componentData.setStyle('marginBottom', '10px')
+                        componentIns.componentData.setStyle('margin-bottom', '10px')
                         if (index > 0) {
-                            componentIns.componentData.setStyle('marginTop', '10px')
+                            componentIns.componentData.setStyle('margin-top', '10px')
                         }
                     })
                 })
@@ -175,7 +184,9 @@
              * @returns { Boolean }
              */
             handleMouseleave () {
-                LC.triggerEventListener('componentMouserleave')
+                LC.triggerEventListener('componentMouserleave', {
+                    type: 'componentMouserleave'
+                })
             },
             /**
              * @desc 画布编辑区空白区域被点击取消组件的选中状态
@@ -187,7 +198,9 @@
                     if (activeNode) {
                         activeNode.activeClear()
                     }
-                    LC.triggerEventListener('componentMouserleave')
+                    LC.triggerEventListener('componentMouserleave', {
+                        type: 'componentMouserleave'
+                    })
                 }
             }
         }
@@ -197,16 +210,16 @@
     @import './widget/patch.css';
 
     .canvas{
+        position: relative;
+        z-index: 1000000000000 !important;
         min-height: calc(100% - 20px) !important;
-        z-index: 1000000000000;
-        /* 规避一些组件内部因为设置了 pointer-events 导致鼠标事件非法触发 */
-        * {
-            pointer-events: none;
-        }
     }
     .editor{
         padding-bottom: 300px;
-        z-index: 1000000000000 !important;
+        * {
+            /* 规避一些组件内部因为设置了 pointer-events 导致鼠标事件非法触发 */
+            pointer-events: none;
+        }
     }
     .not-visible-mask{
         position: fixed;

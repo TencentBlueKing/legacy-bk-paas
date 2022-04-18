@@ -2,6 +2,7 @@ import html2canvas from 'html2canvas'
 import { ref, computed } from '@vue/composition-api'
 import { useStore } from '@/store'
 import { useRoute } from '@/router'
+import LC from '@/element-materials/core'
 import previewErrorImg from '@/images/preview-error.png'
 
 export default () => {
@@ -14,7 +15,8 @@ export default () => {
 
     const submit = () => {
         isLoading.value = true
-        return html2canvas(document.querySelector('#drawTarget'))
+        const rootNode = LC.getRoot()
+        return html2canvas(rootNode.$elm)
             .then(async (canvas) => {
                 const imgData = canvas.toDataURL('image/png')
                 return store.dispatch('page/update', {

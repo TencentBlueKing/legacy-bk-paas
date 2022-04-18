@@ -103,6 +103,7 @@ const VueCode = {
             const pageTargetData = Array.isArray(targetData) && targetData.length > 0 ? targetData : JSON.parse(curPage.content || '[]')
             const pageCodeData = await PageCodeModel.getPageData({
                 targetData: pageTargetData,
+                platform: curPage.platform ? curPage.platform : 'PC',
                 pageType,
                 funcGroups,
                 lifeCycle: curPage.lifeCycle || {},

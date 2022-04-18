@@ -238,8 +238,7 @@
 <style lang="postcss" scoped>
     .page-setting {
         padding: 5px 40px 30px;
-        height: 100%;
-
+        overflow: auto;
         .title {
             font-size: 14px;
             font-weight: 700;

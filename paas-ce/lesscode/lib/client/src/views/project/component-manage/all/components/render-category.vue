@@ -222,7 +222,6 @@
                 this.handleShowCreate(event)
             },
             async handleDelete (category) {
-                console.log(category, '======category')
                 if (this.list.length === 1) {
                     this.messageError('组件分类不能为空')
                     return

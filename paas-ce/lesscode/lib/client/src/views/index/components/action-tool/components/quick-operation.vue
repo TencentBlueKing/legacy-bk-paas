@@ -45,7 +45,6 @@
     import { getNodeWithClass } from '@/common/util'
     import LC from '@/element-materials/core'
     import { NodeHistory } from '@/element-materials/core/Node-history'
-    import { remove, removeCallBack } from '@/element-materials/core/helper/commands'
 
     export default {
         components: {
@@ -114,10 +113,6 @@
                         if (!this.stopped) event.preventDefault()
                         return this
                     },
-                    isDelComponentConfirm: function () {
-                        if (!vm.delComponentConf.visiable) this.stopped = true
-                        return this
-                    },
                     exec: function (callBack) {
                         vm.$nextTick(() => {
                             if (!this.stopped) callBack()
@@ -135,7 +130,6 @@
                         break
                     case 67:
                         funcChainMap.isInDragArea().exec(this.putComponentData)
-                        console.log(566)
                         break
                     // case 83:
                     //     funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)
@@ -158,37 +152,38 @@
                     case 46:
                         funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
                         break
-                    case 13:
-                        funcChainMap.isDelComponentConfirm().exec(this.confirmDelComponent)
-                        break
                 }
             },
 
             // 剪切
             cutComponent () {
-                if (!this.hasCtrl || Object.keys(LC.getActiveNode() || {}).length <= 0) return
-
                 const copyNode = LC.getActiveNode()
+                if (!this.hasCtrl || !copyNode) return
+
                 NodeHistory.setCopyNode(copyNode)
-                remove(LC.getActiveNode())
+                copyNode.parentNode.removeChild(copyNode)
             },
 
             // 复制
             putComponentData () {
-                if (!this.hasCtrl || Object.keys(LC.getActiveNode() || {}).length <= 0) return
                 const copyNode = LC.getActiveNode()
+                if (!this.hasCtrl || !copyNode) return
+                
                 NodeHistory.setCopyNode(copyNode)
             },
 
             // 粘贴
             copyComponent () {
+                const activeNode = LC.getActiveNode()
                 const copyNode = NodeHistory.curCopyNode || {}
-                if (!this.hasCtrl || Object.keys(copyNode).length <= 0 || Object.keys(LC.getActiveNode() || {}).length <= 0) return
-                LC.getActiveNode().pasteNode(copyNode)
+                if (!this.hasCtrl || Object.keys(copyNode).length <= 0 || !activeNode) {
+                    return
+                }
+                activeNode.pasteNode(copyNode)
             },
 
             showDeleteElement () {
-                removeCallBack()
+                LC.execCommand('remove')
             },
 
             backHistory () {

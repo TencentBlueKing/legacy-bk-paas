@@ -8,7 +8,7 @@
         :ghost-class="ghostClass || $style['ghost']"
         filter="[data-render-drag='disabled']"
         @choose="handleChoose"
-        @onUnchoose="handleUnchoose"
+        @unchoose="handleUnchoose"
         @start="handleStart"
         @end="handleEnd"
         @add="handleAdd"
@@ -80,9 +80,6 @@
                 this.$refs.draggable.computeIndexes()
             })
         },
-        beforeDestroy () {
-            dragTargetGroup = ''
-        },
         methods: {
             /**
              * @desc 拖动选中
@@ -93,7 +90,7 @@
                 this.$emit('choose', event)
             },
             handleUnchoose (event) {
-                dragTargetGroup = ''
+                dragTargetGroup = null
                 this.$emit('unchoose', event)
             },
             /**
@@ -108,7 +105,7 @@
              * @param { Object } dragEvent
              */
             handleEnd (event) {
-                dragTargetGroup = ''
+                dragTargetGroup = null
                 this.$emit('end', event)
             },
             /**
@@ -129,30 +126,30 @@
                 let operationNode = null
                 const triggerEvent = {
                     target: this.componentData,
-                    type: ''
+                    type: '',
+                    child: null
                 }
                 if (event.added) {
                     operationNode = event.added.element
                     triggerEvent.type = 'appendChild'
-                    LC.triggerEventListener('appendChild', triggerEvent)
                 } else if (event.removed) {
                     operationNode = event.removed.element
                     triggerEvent.type = 'removeChild'
-                    LC.triggerEventListener('removeChild', triggerEvent)
                 } else if (event.moved) {
                     operationNode = event.moved.element
                     triggerEvent.type = 'moveChild'
-                    LC.triggerEventListener('moveChild', triggerEvent)
                 }
                 // 拖动组件需要重置会影响排版的样式
                 operationNode.setStyle({
                     marginTop: 'unset',
                     marginLeft: 'unset'
                 })
+                triggerEvent.child = operationNode
+                LC.triggerEventListener(triggerEvent.type, triggerEvent)
                 LC.triggerEventListener('update', triggerEvent)
                 // fix: vue-draggable 内部索引不更新的问题
                 this.$refs.draggable.computeIndexes()
-                dragTargetGroup = ''
+                dragTargetGroup = null
                 this.$emit('change', event)
             }
         }
@@ -161,7 +158,8 @@
 <style lang="postcss" module>
     .drag-area{
         position: relative;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
         pointer-events: auto !important;
     }
     .chosen{

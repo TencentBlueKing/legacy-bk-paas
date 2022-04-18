@@ -32,7 +32,7 @@
             class="select-item"
             :class="{ active: value === 'pageVariable' }"
             @click="handleChange('pageVariable')">
-            <i class="bk-drag-icon bk-drag-variable-manage" />
+            <i class="bk-drag-icon bk-drag-page-variable" />
             <span>页面变量</span>
         </div>
         <div
@@ -45,6 +45,8 @@
     </div>
 </template>
 <script>
+    import LC from '@/element-materials/core'
+
     export default {
         name: '',
         props: {
@@ -56,6 +58,13 @@
         methods: {
             handleChange (value) {
                 this.$emit('input', value)
+                const activeNode = LC.getActiveNode()
+                if (activeNode) {
+                    activeNode.activeClear()
+                }
+                LC.triggerEventListener('componentMouserleave', {
+                    type: 'componentMouserleave'
+                })
             }
         }
     }

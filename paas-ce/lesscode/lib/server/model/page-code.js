@@ -10,7 +10,7 @@
  */
 import { paramCase, camelCase, camelCaseTransformMerge } from 'change-case'
 
-import { uuid } from '../../shared/util.js'
+import { uuid, unitFilter } from '../../shared/util.js'
 import { replaceFuncKeyword } from '../../shared/function/helper'
 import slotRenderConfig from '../../client/src/element-materials/modifier/component/slots/render-config'
 import safeStringify from '../../client/src/common/json-safe-stringify'
@@ -41,6 +41,7 @@ class PageCode {
      * 3. projectCode: 生成整个项目代码
      */
     pageType = ''
+    platform = '' // ['PC', 'MOBILE']
     funcGroups = []
     code = ''
     scriptStr = ''
@@ -75,6 +76,7 @@ class PageCode {
         {
             targetData = [],
             pageType = 'vueCode',
+            platform = 'PC',
             funcGroups = [],
             lifeCycle = '',
             projectId,
@@ -92,6 +94,7 @@ class PageCode {
     ) {
         this.targetData = targetData || []
         this.pageType = pageType
+        this.platform = platform
         this.funcGroups = funcGroups || []
         this.uniqueKey = uuid()
         this.lifeCycle = lifeCycle || {}
@@ -361,10 +364,12 @@ class PageCode {
                             <!-- eslint-disable -->
                             <!-- prettier-ignore -->
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
-                                >${slotStr}
-                            </${item.type}>
+                            >${slotStr}</${item.type}>
                             <!-- eslint-enable -->`
                     } else {
+                        if (item.type === 'bk-checkbox-group') {
+                            console.log(itemProps, 1, vueDirective, 2, propDirective)
+                        }
                         componentCode += `
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
                                 >${slotStr}
@@ -591,7 +596,57 @@ class PageCode {
                 }
                
             `
+
+            // 设置了导航主题色 则添加以下样式
+            if (this.layoutContent.theme && this.layoutContent.theme !== '#182132') {
+                head += `
+                    .bk-navigation .theme-style {
+                        color:#FFFFFF;
+                        opacity:0.86;
+                        font-weight:normal;
+                    }
+                    .title-desc.white-theme-title {
+                        color:#313238;
+                        font-weight:normal;
+                    }
+                    .navigation-header .header-nav-item.theme-item {
+                        color:#FFFFFF !important;
+                        opacity:0.68;
+                    }
+                    .navigation-header .header-nav-item.theme-item:hover {
+                        opacity:1;
+                    }
+                    .header-user.theme-style:hover {
+                        color:#FFFFFF;
+                        opacity:1;
+                    }
+                    .white-navigation .theme-style {
+                        color:#313238;
+                    }
+                    .white-navigation .header-nav-item.theme-item {
+                        color:#63656E !important;
+                        opacity:1;
+                    }
+                    .white-navigation .header-nav-item.item-active,
+                    .white-navigation .header-nav-item.theme-item:hover {
+                        color:#000000 !important;
+                    }
+                    .white-navigation .header-user {
+                        color:#63656E;
+                    }
+                    .white-navigation .header-user:hover {
+                        color:#000000;
+                    }
+                    .white-theme-menu .navigation-sbmenu-title-arrow {
+                        color:#c4c6cc !important;
+                    }
+                    .white-theme-menu-item:hover .navigation-menu-item-name {
+                        color:#313238 !important;
+                    }
+                `
+            }
         }
+
         if (!this.isEmpty && this.layoutType !== 'empty') {
             head += `.bk-navigation-wrapper .navigation-container .container-content{
                 ${pageStyle}
@@ -652,20 +707,23 @@ class PageCode {
     getTopBottomLayout (navContent, componentProps) {
         const topMenuKey = 'topMenuLesscode'
         const { layoutContent } = this
+        const { theme = '#182132' } = layoutContent
+        const isDefaultTheme = theme === '#182132' // 默认主题
+        const isWhiteTheme = theme === '#FFFFFF' // 白色主题
         this.dataTemplate(topMenuKey, JSON.stringify(layoutContent.topMenuList))
 
         return `
-            <bk-navigation ${componentProps} navigation-type="top-bottom" :need-menu="false" class="bk-layout-custom-component-wrapper">
+            <bk-navigation head-theme-color=${theme} ${componentProps} navigation-type="top-bottom" :need-menu="false" class="bk-layout-custom-component-wrapper" :class="{ 'white-navigation': ${isWhiteTheme} }">
                 <template slot="side-header">
                     <span class="title-icon">
                         <img src="${layoutContent.logo}" style="width: 28px; height: 28px;">
                     </span>
-                    <span class="title-desc">${layoutContent.siteName}</span>
+                    <span class="title-desc" :class="{ 'theme-style': ${!isDefaultTheme} }">${layoutContent.siteName}</span>
                 </template>
                 <div class="navigation-header" slot="header">
                     <ol class="header-nav">
                         <bk-popover v-for="item in  ${topMenuKey}" :disabled="!item.children || item.children.length <= 0" :key="item.id" theme="light navigation-message" :arrow="false" offset="0, -5" placement="bottom" :tippy-options="{ flipBehavior: ['bottom'], appendTo: 'parent' }">
-                            <li class="header-nav-item" :class="{ 'item-active': item.id === curNav.id }" @click="goToPage(item)">
+                            <li class="header-nav-item" :class="{ 'item-active': item.id === curNav.id, 'theme-item': ${!isDefaultTheme} }" @click="goToPage(item)">
                                 {{item.name}}
                             </li>
                             <template slot="content">
@@ -678,7 +736,7 @@ class PageCode {
                         </bk-popover>
                     </ol>
                     <bk-popover class="nav-head-right" theme="light navigation-message" :arrow="false" offset="-10, 0" placement="bottom-start" :tippy-options="{ 'hideOnClick': false, appendTo: 'parent' }">
-                        <div class="header-user">
+                        <div class="header-user" :class="{ 'theme-style': ${!isDefaultTheme} }">
                             <span>{{ user.username }}</span>
                             <i class="bk-icon icon-down-shape"></i>
                         </div>
@@ -695,17 +753,56 @@ class PageCode {
     getLeftRightLayout (navContent, componentProps) {
         const leftMenuKey = 'leftMenuLesscode'
         const { layoutContent } = this
+        const { theme = '#182132' } = layoutContent
+        const isDefaultTheme = theme === '#182132' // 默认主题色
+        const isBlackTheme = theme === '#1A1A1A' // 黑色主题
+        const isWhiteTheme = theme === '#FFFFFF' // 白色主题
+        // 左侧选中项背景色 默认、黑色、白色、其他主题 共四种效果
+        const targetTheme = isDefaultTheme ? '#3c96ff' : isBlackTheme ? '#ffffff33' : isWhiteTheme ? '#E1ECFF' : theme
+
+        let themeColorProps = `item-active-bg-color="${isWhiteTheme ? '#e1ecff' : targetTheme}"`
+        if (isWhiteTheme) { // 当设置了白色主题 需要通过以下属性设置
+            themeColorProps += `
+                \n item-default-bg-color='white'
+                \n item-hover-bg-color='#f0f1f5'
+                \n sub-menu-open-bg-color='#f5f7fa'
+                \n item-hover-color='#63656e'
+                \n item-active-color='#699df4'
+                \n item-default-color='#63656e'
+                \n item-default-icon-color='#63656ead'
+                \n item-child-icon-default-color='#63656ead'
+                \n item-child-icon-hover-color='#313238'
+                \n item-active-icon-color='#699df4'
+                \n item-hover-icon-color='#63656e'
+                \n item-child-icon-active-color='#699df4'
+            `
+        } else if (!isDefaultTheme) {
+            themeColorProps += `
+                \n item-hover-bg-color='#ffffff14'
+                \n item-hover-color='#ffffff'
+                \n item-active-color='#ffffff'
+                \n item-default-bg-color='#1E1E1E'
+                \n item-default-color='#ffffffad'
+                \n item-default-icon-color='#ffffffad'
+                \n item-child-icon-default-color='#ffffffad'
+                \n item-child-icon-hover-color='#ffffff'
+                \n item-active-icon-color='#ffffff'
+                \n item-hover-icon-color='#ffffff'
+                \n item-child-icon-active-color='#ffffff'
+                \n sub-menu-open-bg-color='#000000e6'
+            `
+        }
 
         this.dataTemplate(leftMenuKey, JSON.stringify(layoutContent.menuList))
         this.dataTemplate('toggleActive', 'false')
 
         return `
-            <bk-navigation ${componentProps} navigation-type="left-right" need-menu class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v">
+            <bk-navigation ${componentProps} theme-color="${isWhiteTheme ? '#ffffff' : isDefaultTheme ? '#182132' : '#1E1E1E'}" navigation-type="left-right" need-menu class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v">
                 <template slot="side-header">
                     <span class="title-icon">
                         <img src="${layoutContent.logo}" style="width: 28px; height: 28px;">
                     </span>
-                    <span class="title-desc">${layoutContent.siteName}</span>
+                    <span class="title-desc" :class="{ 'white-theme-title': ${isWhiteTheme} }">${layoutContent.siteName}</span>
                 </template>
                 <div class="navigation-header" slot="header">
                     <div class="header-title">
@@ -721,7 +818,12 @@ class PageCode {
                         </template>
                     </bk-popover>
                 </div>
-                <bk-navigation-menu slot="menu" :default-active="curNav.id" :toggle-active="toggleActive">
+                <bk-navigation-menu
+                    slot="menu"
+                    :default-active="curNav.id"
+                    :toggle-active="toggleActive"
+                    :class="{ 'white-theme-menu': ${isWhiteTheme}}"
+                    ${themeColorProps}>
                     <bk-navigation-menu-item
                         @click="goToPage(child)"
                         :key="child.id"
@@ -735,7 +837,8 @@ class PageCode {
                                 @click="goToPage(set)"
                                 :key="set.id"
                                 v-for="set in child.children"
-                                :id="set.id">
+                                :id="set.id"
+                                :class="{ 'white-theme-menu-item': ${isWhiteTheme} && curNav.id !== set.id}">
                                 <span>{{set.name}}</span>
                             </bk-navigation-menu-item>
                         </div>
@@ -750,27 +853,51 @@ class PageCode {
         const complexMenuKey = 'complexMenuLesscode'
         const curLeftMenuKey = 'leftMenuLesscode'
         const { layoutContent } = this
+        const { theme = '#182132' } = layoutContent
+        const isDefaultTheme = theme === '#182132' // 默认主题色
+        const isBlackTheme = theme === '#1A1A1A' // 黑色主题
+        const isWhiteTheme = theme === '#FFFFFF' // 白色主题
+        const themeColor = isWhiteTheme ? 'ffffff' : isDefaultTheme ? '#2C354D' : '#1E1E1E' // 左侧导航默认背景色
+        const headThemeColor = isDefaultTheme ? '#182132' : theme
+        // 左侧选中项背景色 默认、黑色、白色、其他主题 共四种效果
+        const targetTheme = isDefaultTheme ? '#0083FF' : isBlackTheme ? '#ffffff33' : isWhiteTheme ? '#E1ECFF' : theme
+        // 左侧菜单白色与其他主题区分属性
+        const themeColorProps = `
+            item-active-bg-color="${targetTheme}"
+            item-hover-bg-color="${isWhiteTheme ? '#f0f1f5' : isDefaultTheme ? '#3a4561' : '#ffffff14'}"
+            item-hover-color="${isWhiteTheme ? '#63656e' : '#FFFFFF'}"
+            item-active-color="${isWhiteTheme ? '#699df4' : '#FFFFFF'}"
+            item-default-bg-color="${isWhiteTheme ? '#ffffff' : isDefaultTheme ? '#2C354D' : '#1E1E1E'}"
+            item-default-color="${isWhiteTheme ? '#63656e' : isDefaultTheme ? '#acb5c6' : '#ffffffad'}"
+            item-default-icon-color="${isWhiteTheme ? '#63656ead' : isDefaultTheme ? '#acb5c6' : '#ffffffad'}"
+            item-child-icon-default-color="${isWhiteTheme ? '#63656ead' : isDefaultTheme ? '#acb5c6' : '#ffffffad'}"
+            item-child-icon-hover-color="${isWhiteTheme ? '#313238' : isDefaultTheme ? '#acb5c6' : '#FFFFFF'}"
+            item-active-icon-color="${isWhiteTheme ? '#699df4' : '#FFFFFF'}"
+            item-hover-icon-color="${isWhiteTheme ? '#63656e' : '#FFFFFF'}"
+            item-child-icon-active-color="${isWhiteTheme ? '#699df4' : '#FFFFFF'}"
+            sub-menu-open-bg-color="${isWhiteTheme ? '#f5f7fa' : isDefaultTheme ? '#272F45' : '#000000e6'}"
+        `
 
         this.dataTemplate('toggleActive', 'false')
         this.dataTemplate(complexMenuKey, JSON.stringify(layoutContent.topMenuList))
         this.dataTemplate(curLeftMenuKey, '[]')
 
         return `
-            <bk-navigation ${componentProps} navigation-type="top-bottom" :need-menu="${curLeftMenuKey}.length > 0" class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v">
+            <bk-navigation ${componentProps} head-theme-color=${headThemeColor} navigation-type="top-bottom" :need-menu="${curLeftMenuKey}.length > 0" class="bk-layout-custom-component-wrapper" @toggle="v => toggleActive=v" theme-color="${themeColor}" :class="{ 'white-navigation': ${isWhiteTheme} }">
                 <template slot="side-header">
                     <span class="title-icon">
                         <img src="${layoutContent.logo}" style="width: 28px; height: 28px;">
                     </span>
-                    <span class="title-desc">${layoutContent.siteName}</span>
+                    <span class="title-desc" :class="{ 'theme-style': ${!isDefaultTheme} }">${layoutContent.siteName}</span>
                 </template>
                 <div class="navigation-header" slot="header">
                     <ul class="header-nav">
-                        <li v-for="(item) in ${complexMenuKey}" :class="{ 'item-active': item.id === curNav.id }" :key="item.id" theme="light navigation-message" class="header-nav-item" @click="goToPage(item)">
+                        <li v-for="(item) in ${complexMenuKey}" :class="{ 'item-active': item.id === curNav.id, 'theme-item': ${!isDefaultTheme} }" :key="item.id" theme="light navigation-message" class="header-nav-item" @click="goToPage(item)">
                             {{item.name}}
                         </li>
                     </ul>
                     <bk-popover class="nav-head-right" theme="light navigation-message" :arrow="false" offset="-10, 0" placement="bottom-start" :tippy-options="{ 'hideOnClick': false, appendTo: 'parent' }">
-                        <div class="header-user">
+                        <div class="header-user" :class="{ 'theme-style': ${!isDefaultTheme} }">
                             <span>{{ user.username }}</span>
                             <i class="bk-icon icon-down-shape"></i>
                         </div>
@@ -779,7 +906,7 @@ class PageCode {
                         </template>
                     </bk-popover>
                 </div>
-                <bk-navigation-menu slot="menu" :default-active="curNav.id" :toggle-active="toggleActive">
+                <bk-navigation-menu slot="menu" :default-active="curNav.id" :toggle-active="toggleActive" ${themeColorProps} :class="{ 'white-theme-menu': ${isWhiteTheme}}">
                     <bk-navigation-menu-item
                         @click="goToPage(child)"
                         :key="child.id"
@@ -793,7 +920,8 @@ class PageCode {
                                 @click="goToPage(set)"
                                 :key="set.id"
                                 v-for="set in child.children"
-                                :id="set.id">
+                                :id="set.id"
+                                :class="{ 'white-theme-menu-item': ${isWhiteTheme} && curNav.id !== set.id}">
                                 <span>{{set.name}}</span>
                             </bk-navigation-menu-item>
                         </div>
@@ -919,7 +1047,7 @@ class PageCode {
 
     getItemProps (type, props, compId, directives, slots) {
         const hasProps = props && typeof props === 'object' && Object.keys(props).length > 0
-        const dirProps = (directives || []).filter((directive) => (directive.code !== undefined && directive.code !== '' && directive.prop !== ''))
+        const dirProps = (directives || []).filter((directive) => (directive.code !== undefined && directive.code !== ''))
         let itemProps = ''
         if (hasProps || slots) {
             itemProps = this.getPropsStr(type, props, compId, dirProps, slots)
@@ -930,14 +1058,20 @@ class PageCode {
     getPropsStr (type, props, compId, dirProps, slots) {
         let propsStr = ''
         const preCompId = camelCase(compId, { transform: camelCaseTransformMerge })
-        let elementComId = ''
+        // 需配置vmodel的组件
+        let modelComId = ''
         const componentType = type
+        if (type === 'bk-table') {
+            if (props.hasOwnProperty('show-pagination-info') && props.hasOwnProperty('showPaginationInfo')) {
+                delete props.showPaginationInfo
+            }
+        }
         for (const i in props) {
             if (dirProps.find((directive) => (directive.prop === i)) && !['remote', 'data-source', 'table-data-source'].includes(props[i].type)) continue
 
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
-                if (i === 'value') elementComId = compId
+                if (i === 'value') modelComId = compId
                 
                 const { format, valueType: type, code: val, modifiers = [] } = props[i]
  
@@ -947,7 +1081,7 @@ class PageCode {
 
                 if (format !== 'value') {
                     this.handleUsedVariable(format, val, compId)
-                    propsStr = curPropStr
+                    propsStr += curPropStr
                     continue
                 } else if (type === 'remote') {
                     const curDir = dirProps.find((directive) => (directive.prop === i))
@@ -994,25 +1128,25 @@ class PageCode {
         const hasVModel = dirProps.filter(item => item.type === 'v-model').length
         if (type === 'bk-checkbox-group' && !hasVModel) {
             const checkedValue = (slots.default.code || []).filter(c => c.checked === true).map(c => c.value)
-            this.dataTemplate(compId, JSON.stringify(checkedValue))
-            propsStr += `v-model="${compId}"`
+            this.dataTemplate(`${compId}Vmodel`, JSON.stringify(checkedValue))
+            propsStr += `v-model="${compId}Vmodel"`
         }
         if (type === 'bk-radio-group' && !hasVModel) {
             const checkedItem = (slots.default.code || []).find(c => c.checked === true)
             const checkedValue = (checkedItem && checkedItem.value) || ''
-            this.dataTemplate(compId, `'${checkedValue}'`)
-            propsStr += `v-model="${compId}"`
+            this.dataTemplate(`${compId}Vmodel`, `'${checkedValue}'`)
+            propsStr += `v-model="${compId}Vmodel"`
         }
-        // element组件添加vmodel
-        if (type.startsWith('el-')) {
-            if (!hasVModel && elementComId !== '') {
+        // element组件、vant组件添加vmodel
+        if (type.startsWith('el-') || type.startsWith('van')) {
+            if (!hasVModel && modelComId !== '') {
                 const valueType = typeof props['value'].code
                 if (valueType !== 'array' && valueType !== 'object') {
                     let vModelValue = props['value'].code.toString()
                     if (valueType === 'string') vModelValue = `'${props['value'].code}'`
-                    this.dataTemplate(elementComId, vModelValue)
+                    this.dataTemplate(modelComId, vModelValue)
                 }
-                propsStr += `v-model="${elementComId}"`
+                propsStr += `v-model="${modelComId}"`
             }
         }
         return propsStr
@@ -1099,7 +1233,7 @@ class PageCode {
                 if (i === 'top' || i === 'left') {
                     tmpStr += `${i}: 0px;\n`
                 } else {
-                    tmpStr += `${paramCase(i)}: ${styles[i]};\n`
+                    tmpStr += `${paramCase(i)}: ${unitFilter(styles[i])};\n`
                 }
             }
 
@@ -1205,7 +1339,7 @@ class PageCode {
             const slot = slots[key]
             const isDefaultSlot = key === 'default'
             compId = compId + key
-            slotStr += '\n'
+            slotStr += type === 'p' ? '' : '\n'
             if (!isDefaultSlot) slotStr += `<template slot="${key}">\n`
             if (Array.isArray(slot)) {
                 slotStr += this.generateCode(slot)

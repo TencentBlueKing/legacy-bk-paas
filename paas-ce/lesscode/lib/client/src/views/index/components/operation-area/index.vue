@@ -1,9 +1,22 @@
 <template>
-    <div id="operationArea" class="operation-area">
-        <component :is="com" v-bind="$attrs" />
+    <div
+        ref="root"
+        id="lesscodeOperationArea"
+        :class="$style['operation-area']">
+        <div :class="$style['operation-wraper']">
+            <render
+                v-show="operation === 'edit'"
+                :style="renderStyles" />
+            <component
+                v-if="operation !== 'edit'"
+                :is="com"
+                v-bind="$attrs"
+                :style="oprationItemStyles" />
+        </div>
     </div>
 </template>
 <script>
+    import { getOffset } from '@/common/util'
     import Render from '@/components/render/index'
     import SourceCode from './components/source-code.vue'
     import PageSetting from './components/page-setting'
@@ -13,49 +26,70 @@
 
     export default {
         name: '',
+        components: {
+            Render
+        },
         props: {
             /**
-             * @value edit
+             * @value render
              * @value vueCode
              * @value pageFunction
              * @value setting
              * @value jsonSource
              * @value pageVariable
              */
-            operaion: {
+            operation: {
                 type: String,
                 required: true
             }
         },
         data () {
-            return {}
+            return {
+                renderStyles: {},
+                oprationItemStyles: {
+                    height: '200px'
+                }
+            }
         },
         computed: {
             com () {
                 const comMap = {
-                    edit: Render,
                     vueCode: SourceCode,
                     pageFunction: PageFunction,
                     setting: PageSetting,
                     jsonSource: PageJson,
                     pageVariable: PageVariable
                 }
-                return comMap[this.operaion]
+                return comMap[this.operation]
+            }
+        },
+        mounted () {
+            const {
+                top
+            } = getOffset(this.$refs.root)
+
+            this.renderStyles = {
+                'min-height': `calc(100vh - ${top}px - 20px)`
+            }
+            this.oprationItemStyles = {
+                'height': `calc(100vh - ${top}px - 20px)`
             }
         }
     }
 </script>
-<style lang="postcss">
+<style lang="postcss" module>
     @import "@/css/mixins/scroller";
 
     .operation-area{
-        height: 100%;
-        border: 1px solid #DCDEE5;
-        background: #FFF;
+        height: calc(100% - 40px);
+        min-width: min-content;
+        padding: 0 20px;
+        margin: 20px 0;
         overflow: auto;
         @mixin scroller;
-        & > * {
-            height: 100%;
+        .operation-wraper{
+            background: #fff;
+            min-width: min-content;
         }
     }
 </style>

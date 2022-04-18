@@ -190,7 +190,6 @@
         },
         mounted () {
             this.setData(this.data)
-            console.log('print trree = ', this)
         },
         methods: {
             setData (data) {
