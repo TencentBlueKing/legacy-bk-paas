@@ -53,6 +53,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import templateMixin from './template-mixin'
 
     export default {
@@ -104,6 +105,7 @@
             }
         },
         computed: {
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             projectId () {
                 return this.$route.params.projectId
             },
@@ -160,7 +162,7 @@
                         pageCode: '',
                         effectiveRange: 0
                     }))) || []
-                    Object.assign(this.templateJson, { belongProjectId: this.projectId, template, vars: newVars })
+                    Object.assign(this.templateJson, { belongProjectId: this.projectId, versionId: this.versionId, template, vars: newVars })
                     
                     const res = await this.$store.dispatch('pageTemplate/import', this.templateJson)
                     if (res) {

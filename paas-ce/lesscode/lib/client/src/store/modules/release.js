@@ -20,6 +20,12 @@ export default {
     getters: {
     },
     actions: {
+        checkConfig ({ state }) {
+            return http.get('/release/checkConfig').then(response => {
+                const data = response.data
+                return data
+            })
+        },
         applicationList ({ state }) {
             return http.get('/release/applicationList').then(response => {
                 const data = response.data || []
