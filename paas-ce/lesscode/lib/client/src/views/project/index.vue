@@ -254,12 +254,10 @@
         },
         watch: {
             '$route' (to, from) {
-                console.log('to', to, from)
                 this.defaultActive = to.name
             }
         },
         async created () {
-            console.log('this.defaultActive', this.defaultActive)
             try {
                 this.pageLoading = true
                 this.updateCurrentVersion(this.getInitialVersion())
