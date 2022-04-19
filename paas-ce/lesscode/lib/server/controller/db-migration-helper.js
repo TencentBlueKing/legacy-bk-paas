@@ -1,5 +1,5 @@
 import { walkGrid, uuid } from '../util'
-import { getConnection, getRepository } from 'typeorm'
+import { getConnection, getRepository, IsNull } from 'typeorm'
 import ApiMigraion from '../model/entities/api-migration'
 import Project from '../model/entities/project'
 import ProjectVersion from '../model/entities/project-version'
@@ -1160,11 +1160,16 @@ async function setProjectMobileLayoutInst (apiName) {
 async function syncFuncData () {
     try {
         const funcRepository = getRepository(Func)
-        const funcList = await funcRepository.find()
+        const funcList = await funcRepository.find({
+            projectId: IsNull()
+        })
 
         const funcGroupRepository = getRepository(FuncGroup)
-        const funcGroupList = await funcGroupRepository.find()
-        const funcGroupMap = funcGroupList.reduce((acc, cur) => {
+        const funcGroupList = await funcGroupRepository.find({
+            projectId: IsNull()
+        })
+        const allFuncGroupList = await funcGroupRepository.find()
+        const funcGroupMap = allFuncGroupList.reduce((acc, cur) => {
             acc[cur.id] = cur.groupName
             return acc
         }, {})

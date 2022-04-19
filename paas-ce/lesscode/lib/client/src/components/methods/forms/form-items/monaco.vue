@@ -15,7 +15,6 @@
     import monaco from '@/components/monaco'
     import mixins from './form-item-mixins'
     import { mapActions } from 'vuex'
-    import { bus } from '@/common/bus'
     import { FUNCTION_TIPS } from 'shared'
     import LC from '@/element-materials/core'
 
@@ -43,6 +42,7 @@
 
         data () {
             return {
+                FUNCTION_TIPS,
                 fixMethodTips: {
                     content: '自动修复 Eslint',
                     theme: 'light',
@@ -58,18 +58,20 @@
         },
 
         watch: {
-            'form.funcType': {
-                handler (type) {
+            'form.funcBody' (val) {
+                // 由于函数市场选择函数或者切换函数导致的函数体不一致，需要重置状态
+                if (this.multVal[this.form.funcType] !== val) {
+                    this.initMultVal()
+                }
+            },
+            'form.funcType' (type) {
+                if (this.multVal[type] !== this.form.funcBody) {
                     this.change(this.multVal[type])
                 }
             }
         },
 
         created () {
-            bus.$on('switch-fun-form', this.initMultVal)
-            this.$once('hook:beforeDestroy', () => {
-                bus.$off('switch-fun-form', this.initMultVal)
-            })
             this.initMultVal()
             this.initProposals()
         },
@@ -183,11 +185,9 @@
             },
 
             change (funcBody) {
-                if (this.multVal[this.form.funcType] !== funcBody) {
-                    this.multVal[this.form.funcType] = funcBody
-                    this.updateValue({ funcBody })
-                    this.$emit('change', funcBody)
-                }
+                this.multVal[this.form.funcType] = funcBody
+                this.updateValue({ funcBody })
+                this.$emit('change', funcBody)
             }
         }
     }

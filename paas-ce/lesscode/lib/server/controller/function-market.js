@@ -138,7 +138,7 @@ export default class FunctionMarketController {
             // 插入数据库
             const result = await transactionalEntityHelper.add(TABLE_FILE_NAME.FUNC, handleFunctionIntoDb(functionData))
             // 处理关联关系
-            await handleRelation(functionData, functionData.projectId, functionData.versionId, transactionalEntityHelper)
+            await handleRelation(functionData, functionData.projectId, functionData.versionId)
             // 记录关联关系
             await transactionalEntityHelper.add(
                 TABLE_FILE_NAME.PROJECT_FUNC_MARKET,

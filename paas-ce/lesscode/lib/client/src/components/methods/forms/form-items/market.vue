@@ -28,7 +28,6 @@
     import { transformTipsWidth } from '@/common/util'
     import mixins from './form-item-mixins'
     import { mapActions } from 'vuex'
-    import { bus } from '@/common/bus'
 
     export default {
         mixins: [mixins],
@@ -74,11 +73,7 @@
 
             changeMarketFunc (funcId) {
                 const { id, ...rest } = this.marketFuncs.find((func) => (func.id === funcId)) || {}
-                const copyVaule = JSON.parse(JSON.stringify(this.form))
-                Object.assign(copyVaule, rest)
-                this.$parent.formChanged = true
-                this.$emit('update:form', copyVaule)
-                bus.$emit('switch-fun-form', copyVaule)
+                this.updateValue(rest)
             }
         }
     }
