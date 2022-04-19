@@ -19,11 +19,38 @@
                 </bk-select>
             </div>
             <div class="side-bd" :class="{ 'no-click': pageLoading }">
-                <nav class="nav-list">
+                <!-- <nav class="nav-list">
                     <router-link tag="div" class="nav-item" v-for="item in navList" :key="item.title" :to="item.toPath">
                         <i :class="`bk-drag-icon bk-drag-${item.icon}`"></i>{{ item.title }} <i v-if="item.redPoint" class="red-point"></i>
                     </router-link>
-                </nav>
+                </nav> -->
+                <bk-navigation-menu
+                    ref="menu"
+                    class="nav-list"
+                    :unique-opened="defaultOpen"
+                    :default-active="defaultActive"
+                    :toggle-active="true"
+                    v-bind="defaultThemeColorProps">
+                    <bk-navigation-menu-item
+                        v-for="(menuItem) in navList"
+                        :key="`${menuItem.url}`"
+                        :has-child="menuItem.children && !!menuItem.children.length"
+                        :id="menuItem.url"
+                        @click="handleSelect">
+                        <i :class="`bk-drag-icon bk-drag-${menuItem.icon}`"></i>
+                        <span class="item-title">{{menuItem.title}}</span>
+                        <div slot="child" class="menu-child">
+                            <bk-navigation-menu-item
+                                v-for="(childrenItem) in menuItem.children"
+                                :key="childrenItem.url"
+                                :id="childrenItem.url"
+                                :url="childrenItem.url"
+                                @click="handleSelect">
+                                <span>{{ childrenItem.title }}</span>
+                            </bk-navigation-menu-item>
+                        </div>
+                    </bk-navigation-menu-item>
+                </bk-navigation-menu>
             </div>
         </aside>
         <div class="breadcrumbs" v-if="hasBreadcrumb">
@@ -55,96 +82,145 @@
                 pageLoading: false,
                 projectId: '',
                 projectVersionId: '',
+                defaultActive: '',
                 navList: [
                     {
-                        title: '页面列表',
-                        icon: 'list-fill',
+                        title: '页面管理',
+                        icon: 'page',
+                        url: 'pageList',
                         toPath: {
                             name: 'pageList'
                         }
                     },
                     {
-                        title: '自定义组件库',
-                        icon: 'template-fill',
-                        toPath: {
-                            name: 'componentManage'
-                        }
-                    },
-                    {
-                        title: '函数库',
-                        icon: 'function-fill',
-                        toPath: {
-                            name: 'functionManage'
-                        }
-                    },
-                    {
-                        title: '模板库',
-                        icon: 'template-fill',
-                        toPath: {
-                            name: 'templateManage'
-                        },
-                        redPoint: true
-                    },
-                    {
-                        title: '变量管理',
-                        icon: 'variable-manage',
-                        toPath: {
-                            name: 'variableManage'
-                        }
-                    },
-                    {
-                        title: '数据源管理',
-                        icon: 'data-source-manage',
-                        toPath: {
-                            name: 'dataSourceManage'
-                        }
-                    },
-                    {
-                        title: '布局模板实例',
-                        icon: 'template-fill-2',
-                        toPath: {
-                            name: 'layout'
-                        }
-                    },
-                    {
-                        title: '路由配置',
+                        title: '路由管理',
                         icon: 'router',
+                        url: 'routes',
                         toPath: {
                             name: 'routes'
                         }
                     },
                     {
-                        title: '版本管理',
-                        icon: 'version',
+                        title: '数据源管理',
+                        icon: 'data-source-manage',
+                        url: 'tableList',
                         toPath: {
-                            name: 'versions'
+                            name: 'tableList'
                         }
                     },
                     {
-                        title: '成员管理',
-                        icon: 'user-group',
-                        toPath: {
-                            name: 'memberManage'
-                        }
+                        title: '资源库',
+                        icon: 'source',
+                        url: 'componentManage',
+                        children: [
+                            {
+                                title: '自定义组件库',
+                                url: 'componentManage',
+                                toPath: {
+                                    name: 'componentManage'
+                                }
+                            },
+                            {
+                                title: '函数库',
+                                url: 'functionManage',
+                                toPath: {
+                                    name: 'functionManage'
+                                }
+                            },
+                            {
+                                title: '模板库',
+                                url: 'templateManage',
+                                toPath: {
+                                    name: 'templateManage'
+                                },
+                                redPoint: true
+                            },
+                            {
+                                title: '布局模板实例',
+                                url: 'layout',
+                                toPath: {
+                                    name: 'layout'
+                                }
+                            },
+                            {
+                                title: '变量配置',
+                                url: 'variableManage',
+                                toPath: {
+                                    name: 'variableManage'
+                                }
+                            }
+                        ]
                     },
                     {
-                        title: '基本信息',
-                        icon: 'info-fill',
-                        toPath: {
-                            name: 'basicInfo'
-                        }
+                        title: '发布管理',
+                        icon: '1_deploy-fill',
+                        url: 'versions',
+                        children: [
+                            {
+                                title: '版本管理',
+                                icon: 'version',
+                                url: 'versions',
+                                toPath: {
+                                    name: 'versions'
+                                }
+                            }
+                        ]
                     },
+
+                    {
+                        title: '基础设置',
+                        icon: 'set-fill',
+                        url: 'memberManage',
+                        children: [
+                            {
+                                title: '权限管理',
+                                icon: 'user-group',
+                                url: 'memberManage',
+                                toPath: {
+                                    name: 'memberManage'
+                                }
+                            },
+                            {
+                                title: '基本信息',
+                                icon: 'info-fill',
+                                url: 'basicInfo',
+                                toPath: {
+                                    name: 'basicInfo'
+                                }
+                            }
+                        ]
+                    },
+                    
                     {
                         title: '操作审计',
                         icon: 'audit',
+                        url: 'logs',
                         toPath: {
                             name: 'logs'
                         }
                     }
+                    
                 ],
                 projectList: [],
                 countdown: 3,
-                timer: null
+                timer: null,
+                defaultThemeColorProps: {
+                    'item-default-bg-color': '#fff',
+                    'sub-menu-open-bg-color': '#fff',
+                    'item-hover-bg-color': '#f0f1f5',
+                    'item-hover-color': '#63656e',
+                    'item-active-bg-color': '#e1ecff',
+                    'item-active-color': '#3A84FF',
+                    'item-default-color': '#63656e',
+                    'item-default-icon-color': '#63656e',
+                    'item-active-icon-color': '#63656e',
+                    'item-hover-icon-color': '#63656e',
+                    'item-child-icon-default-color': '#63656e',
+                    'item-child-icon-hover-color': '#63656e',
+                    'item-child-icon-active-color': '#3A84FF'
+                    
+                },
+                defaultOpen: true
             }
         },
         computed: {
@@ -168,7 +244,14 @@
             this.setCurrentProject()
             next()
         },
+        watch: {
+            '$route' (to, from) {
+                console.log('to', to, from)
+                this.defaultActive = to.name
+            }
+        },
         async created () {
+            console.log('this.defaultActive', this.defaultActive)
             try {
                 this.pageLoading = true
                 this.updateCurrentVersion(this.getInitialVersion())
@@ -183,6 +266,10 @@
             } finally {
                 this.pageLoading = false
             }
+        },
+        async mounted () {
+            this.defaultActive = this.$route.name
+            this.defaultOpen = false
         },
         methods: {
             toProjects () {
@@ -219,6 +306,12 @@
             },
             setCurrentVersion (version) {
                 this.$store.commit('projectVersion/setCurrentVersion', version)
+            },
+            handleSelect (routeName) {
+                console.log('routeName', routeName)
+                this.$router.push({
+                    name: routeName
+                })
             }
         }
     }
@@ -353,6 +446,18 @@
         }
 
         .nav-list {
+            background: #fff !important;
+            .bk-drag-icon {
+                font-size: 16px;
+                margin-right: 16px;
+            }
+            .menu-child{
+                .navigation-menu-item{
+                    &:hover {
+                        background: #f0f1f5;
+                    }
+                }
+            }
             .nav-item {
                 display: flex;
                 align-items: center;
@@ -363,10 +468,16 @@
                 margin: 0;
                 white-space: nowrap;
                 cursor: pointer;
+                .item-title{
+                    font-size: 16px;
+                    margin-right: 16px;
+                    color: #63656E !important;
+                }
 
                 .bk-drag-icon {
                     font-size: 16px;
-                    margin-right: 16px;
+                    margin-right: 16px !important;
+                    color: #63656E !important;
                 }
                 &:hover {
                     background: #F6F6F9;
