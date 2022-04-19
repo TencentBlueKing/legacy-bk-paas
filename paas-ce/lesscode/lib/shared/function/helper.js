@@ -16,19 +16,16 @@ import { FUNCTION_TIPS, FUNCTION_TYPE } from './constant'
  * 变量关键字：lesscode['${prop:variableCode}']
  * 函数关键字：lesscode['${func:funcCode}']()
  * @param {*} funcBody 函数体内容
- * @param {*} origin 域名，匹配 tips 使用
  * @param {*} callBack 匹配到关键字后的执行回调函数
  * @returns 返回替换完成后的字符串
  */
-export const replaceFuncKeyword = (funcBody, callBack) => {
-    // remove comment
-    Object.values(FUNCTION_TIPS).forEach((tip) => {
-        funcBody = funcBody.replace(tip, '')
-    })
+export const replaceFuncKeyword = (funcBody = '', callBack) => {
+    // 删除首行注释，这个是指导函数编写内置的注释，生成源码的时候需要删除
+    const funcBodyWithoutFirstComment = funcBody.replace(/^\/\*[\s\S]*?\*\//, '')
 
     // parse keyword
     const commentsPositions = []
-    parse(funcBody, {
+    parse(funcBodyWithoutFirstComment, {
         onComment (isBlock, text, start, end) {
             commentsPositions.push({
                 start,
@@ -36,11 +33,12 @@ export const replaceFuncKeyword = (funcBody, callBack) => {
             })
         },
         allowReturnOutsideFunction: true,
-        allowAwaitOutsideFunction: true
+        allowAwaitOutsideFunction: true,
+        ecmaVersion: 2020
     })
-    return funcBody.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, dirKey, funcStr, funcCode, index) => {
+    return funcBodyWithoutFirstComment.replace(/lesscode((\[\'\$\{prop:([\S]+)\}\'\])|(\[\'\$\{func:([\S]+)\}\'\]))/g, (all, first, second, variableCode, funcStr, funcCode, index) => {
         const isInComments = commentsPositions.some(position => position.start <= index && position.end >= index)
-        return isInComments ? all : callBack(all, first, second, dirKey, funcStr, funcCode)
+        return isInComments ? all : callBack(all, first, second, variableCode, funcStr, funcCode)
     })
 }
 
@@ -52,7 +50,7 @@ export const replaceFuncKeyword = (funcBody, callBack) => {
  */
 export const replaceFuncParam = (param = '', callBack) => {
     return param.replace(/\{\{([^\}]+)\}\}/g, (all, variableCode) => {
-        callBack(variableCode)
+        return callBack(variableCode)
     })
 }
 

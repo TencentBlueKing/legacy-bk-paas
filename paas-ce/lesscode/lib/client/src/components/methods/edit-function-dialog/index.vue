@@ -76,7 +76,7 @@
                 <edit-func-form
                     ref="functionForm"
                     :func-data="chosenFunction"
-                    @refresh="refreshStatus"
+                    @success-save="handleSuccessSave"
                     @close="handleCloseDialog"
                 />
             </layout>
@@ -260,6 +260,10 @@
                 } else {
                     chooseFunction()
                 }
+            },
+
+            handleSuccessSave () {
+                this.refreshStatus().then(this.handleChooseDefaultFunction)
             },
 
             handleGroupSort () {

@@ -104,7 +104,8 @@
                     visible: false,
                     code: '',
                     loading: false
-                }
+                },
+                projectVariableList: []
             }
         },
 
@@ -113,16 +114,32 @@
             ...mapState(['user']),
             ...mapGetters('member', ['userPerm']),
             ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
 
             filterVariableList () {
                 return (this.variableList || []).filter((variable) => {
                     return (variable.variableName || '').includes(this.variableName)
                 })
+            },
+
+            projectId () {
+                return this.$route.params.projectId
             }
         },
 
+        created () {
+            this.getProjectVariableList()
+        },
+
         methods: {
-            ...mapActions('variable', ['deleteVariable', 'setVariableFormData', 'getAllVariable']),
+            ...mapActions('variable', ['deleteVariable', 'setVariableFormData', 'getAllVariable', 'getAllProjectVariable']),
+
+            // 变量存在页面变量使用全局变量的情况，所以需要获取项目所有变量来展示
+            getProjectVariableList () {
+                this.getAllProjectVariable({ projectId: this.projectId, versionId: this.versionId }).then((res) => {
+                    this.projectVariableList = res || []
+                })
+            },
 
             getEditStatus (row) {
                 let tip = ''
@@ -226,7 +243,7 @@
                             tips.push(`函数【${funcCode}】`)
                             break
                         case 'var':
-                            const variable = this.variableList.find((variable) => (variable.id === parentVariableId)) || {}
+                            const variable = this.projectVariableList.find((variable) => (variable.id === parentVariableId)) || {}
                             tips.push(`变量【${variable.variableCode}】`)
                             break
                         default:
