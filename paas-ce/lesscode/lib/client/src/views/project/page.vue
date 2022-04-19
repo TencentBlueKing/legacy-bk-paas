@@ -283,7 +283,7 @@
             handleEditRoute (page) {
                 this.$refs.editRouteDialog.dialog.visible = true
                 this.$refs.editRouteDialog.dialog.pageId = page.id
-                this.editRouteGroup = this.routeGroup.filter(item => item.layoutType === page.pageType)
+                this.editRouteGroup = this.routeGroup.filter(item => item.layoutType === (page.pageType || 'PC'))
                 this.currentRoute = this.routeMap[page.id]
             },
             handleDelete (page) {
