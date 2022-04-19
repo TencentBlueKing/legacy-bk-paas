@@ -120,14 +120,37 @@
                 }
             }
 
+            const updateLogCallback = event => {
+                console.log('\n')
+                console.log(`%c${new Date().toString().slice(0, 25)}`,
+                            'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
+                console.log(`%c组件更新%c${event.target.componentId}`,
+                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
+                            'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
+                            event)
+            }
+            const activeLogCallback = event => {
+                console.log('\n')
+                console.log(`%c${new Date().toString().slice(0, 25)}`,
+                            'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
+                console.log(`%c组件选中%c${event.target.componentId}`,
+                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
+                            'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
+                            event)
+            }
+
             LC.addEventListener('ready', readyCallback)
             LC.addEventListener('update', updateCallback)
+            LC.addEventListener('update', updateLogCallback)
             LC.addEventListener('active', interactiveCallbak)
+            LC.addEventListener('active', activeLogCallback)
             LC.addEventListener('toggleInteractive', interactiveCallbak)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('ready', readyCallback)
                 LC.removeEventListener('update', updateCallback)
+                LC.removeEventListener('update', updateLogCallback)
                 LC.removeEventListener('active', interactiveCallbak)
+                LC.removeEventListener('active', activeLogCallback)
                 LC.removeEventListener('toggleInteractive', interactiveCallbak)
             })
         },

@@ -55,8 +55,7 @@
                 if (event.target.componentId === this.activeComponentData.componentId) {
                     return
                 }
-                console.log(`\n${new Date()}`)
-                console.log('record event : ', event)
+                
                 this.showActive(event.target)
                 this.activeComponentData = event.target
                 activeResizeObserver.observe(event.target.$elm)

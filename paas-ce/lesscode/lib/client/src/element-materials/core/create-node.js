@@ -44,6 +44,7 @@ export default function (elementType, parseSlot = true) {
     if (parseSlot) {
         // 创建节点时需要解析多层级的 slot 配置
         if (node.layoutType) {
+            // 布局类型组件
             if (Array.isArray(node.material.slots.default)) {
                 node.material.slots.default.forEach(slotTemplate => {
                     node.appendChild(parseTemplateTree(slotTemplate), 'default')
@@ -52,6 +53,7 @@ export default function (elementType, parseSlot = true) {
                 node.appendChild(parseTemplateTree(node.material.slots.default), 'default')
             }
         } else if (node.layoutSlot) {
+            // slot是可拖拽的
             Object.keys(node.layoutSlotType).forEach((slotName) => {
                 node.setRenderSlots(parseTemplateTree(node.material.slots[slotName]), slotName)
             })

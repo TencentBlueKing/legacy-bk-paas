@@ -46,6 +46,8 @@ import { toHyphenate } from './helper/utils'
 import getRoot from './get-root'
 import getMaterial from './get-material'
 
+import isLayoutType from './is-layout-type'
+
 export let activeNode = null
 
 export default class Node {
@@ -104,14 +106,7 @@ export default class Node {
      * @returns { Boolean }
      */
     get layoutType () {
-        return [
-            'root',
-            'render-grid',
-            'render-column',
-            'free-layout',
-            'widget-form',
-            'widget-form-item'
-        ].includes(this.type)
+        return isLayoutType(this.type)
     }
     /**
      * @desc 组件的slot支持拖拽

@@ -12,8 +12,7 @@
 <template>
     <div
         :class="{
-            [$style['column']]: true,
-            [$style['render-grid-empty']]: renderGrid.isColumnEmpty,
+            [$style['block']]: true,
             [$style['empty']]: componentData.children.length < 1
         }">
         <draggable
@@ -44,24 +43,19 @@
     import ResolveComponent from '../resolve-component'
 
     export default {
-        name: 'render-col',
+        name: 'render-block',
         components: {
             Draggable,
             ResolveComponent
         },
         inheritAttrs: false,
-        inject: ['renderGrid'],
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
             }
         },
-        computed: {
-            defaultMargin () {
-                return LC.platform === 'PC' ? '10px' : '20rpx'
-            }
-        },
+        
         created () {
             const nodeCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
@@ -124,14 +118,11 @@
     }
 </script>
 <style lang="postcss" module>
-    .column{
+    .block{
         position: relative;
-        width: 100% !important;
-        height: 100% !important;
-        &.render-grid-empty{
-            min-height: 64px !important;
-        }
+        border: 1px dashed #ccc;
         &.empty{
+            height: 64px !important;
             background: #FAFBFD;
             &::before{
                 content: "请拖入组件";

@@ -99,6 +99,13 @@
              */
             handleStart (event) {
                 this.$emit('start', event)
+                LC.triggerEventListener('componentMouserleave', {
+                    type: 'componentMouserleave'
+                })
+                const activeNode = LC.getActiveNode()
+                if (activeNode) {
+                    activeNode.activeClear()
+                }
             },
             /**
              * @desc 结束拖拽
@@ -132,6 +139,10 @@
                 if (event.added) {
                     operationNode = event.added.element
                     triggerEvent.type = 'appendChild'
+                    setTimeout(() => {
+                        // 新加的组件默认选中
+                        operationNode.active()
+                    })
                 } else if (event.removed) {
                     operationNode = event.removed.element
                     triggerEvent.type = 'removeChild'

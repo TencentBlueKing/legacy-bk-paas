@@ -10,6 +10,7 @@ import createNode from './create-node'
 import { registerMaterial, unregisterMaterial } from './get-material'
 import isNode from './is-node'
 import isInteractiveType from './is-interactive-type'
+import isLayoutType from './is-layout-type'
 
 import cloneNode from './extends/clone-node'
 import appendChild from './extends/append-child'
@@ -65,6 +66,7 @@ core.getNodeById = getNodeById
 core.getNodesByType = getNodesByType
 core.isNode = isNode
 core.isInteractiveType = isInteractiveType
+core.isLayoutType = isLayoutType
 core.createNode = createNode
 core.cloneNode = cloneNode
 core.appendChild = appendChild

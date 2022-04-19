@@ -130,6 +130,7 @@
             FreeLayout: () => import('./widget/free-layout'),
             RenderGrid: () => import('./widget/grid'),
             RenderColumn: () => import('./widget/column'),
+            RenderBlock: () => import('./widget/block.vue'),
             WidgetForm: () => import('./widget/form'),
             WidgetFormItem: () => import('./widget/form-item'),
             ResolveComponent: () => import('./resolve-component'),
@@ -188,8 +189,6 @@
             // 编辑更新
             const updateCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
-                    console.log(`\n${new Date()}`)
-                    console.log('record event : ', event)
                     this.safeStylesWithDisplay()
                     this.safeStyleWithWidth()
                     this.safeStyleWithHeight()
