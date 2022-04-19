@@ -36,6 +36,7 @@ downloadTemp
 lib/server/conf/data-base.js
 lib/server/conf/http.js
 lib/server/conf/db-migrate.json
+lib/server/conf/v3.js
 lib/server/conf/npm.js
 lib/server/conf/bk-repo.js
 lib/server/conf/data-source.js

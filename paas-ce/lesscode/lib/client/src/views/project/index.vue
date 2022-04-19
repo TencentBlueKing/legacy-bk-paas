@@ -154,8 +154,16 @@
                     {
                         title: '发布管理',
                         icon: '1_deploy-fill',
-                        url: 'versions',
+                        url: 'release',
                         children: [
+                            {
+                                title: '发布部署',
+                                icon: 'list-fill',
+                                url: 'release',
+                                toPath: {
+                                    name: 'release'
+                                }
+                            },
                             {
                                 title: '版本管理',
                                 icon: 'version',

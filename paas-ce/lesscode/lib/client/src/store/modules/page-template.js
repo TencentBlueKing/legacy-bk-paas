@@ -109,6 +109,12 @@ export default {
                 const data = response.data || ''
                 return data
             })
+        },
+        getProjectFuncAndVar (state, params = {}) {
+            return http.get('/pageTemplate/getProjectFuncAndVar', { params }).then(response => {
+                const data = response.data || ''
+                return data
+            })
         }
     }
 }

@@ -28,3 +28,11 @@
 #### npm.js (npm镜像仓库配置，用到自定义组件功能时需填写，未用到则可以忽略此文件)
 
 在 `lesscode/lib/server/conf` 中新建 `npm.js` 文件（复制 `npm.js.example`，并删除 `.example`即可）。然后依照 [npm.js.example](../../lib/server/conf/npm.js.example) 的注释填写本地开发和线上运行时的npm镜像仓库的配置信息。
+
+#### data-source.js (画布区域使用数据源，连接数据库的配置。如不需要数据源功能，可忽略此文件)
+
+在 `lesscode/lib/server/conf` 中新建 `data-source.js` 文件（复制 `data-source.js.example`，并删除 `.example`即可）。然后依照 [data-source.js.example](../../lib/server/conf/data-source.js.example) 的注释填写本地开发和线上运行时的数据库的配置信息。
+
+#### encrypt-secret-key.js (用于加密的key配置，不可忽略)
+
+在 `lesscode/lib/server/conf` 中新建 `encrypt-secret-key.js` 文件（复制 `encrypt-secret-key.js.example`，并删除 `.example`即可）。然后依照 [encrypt-secret-key.js.example](../../lib/server/conf/encrypt-secret-key.js.example) 的注释填写加密的key。

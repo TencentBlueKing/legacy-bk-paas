@@ -93,7 +93,7 @@ export default {
         },
         // 项目下的完整函数数据
         getProjectFuntionGroup ({ commit, state }) {
-            return Store.dispatch('functions/getAllGroupFuncs', state.projectId)
+            return Store.dispatch('functions/getAllGroupAndFunction', state.projectId)
                 .then(data => {
                     commit('setProjectFunctionGroup', data)
                 })

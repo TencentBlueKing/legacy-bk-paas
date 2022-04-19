@@ -180,12 +180,13 @@ const store = new Vuex.Store({
             } catch (error) {
                 targetData = []
             }
+            const funcGroups = JSON.parse(circleJSON(state.functions.funcGroups || []))
+            const variableList = JSON.parse(circleJSON(state.variable.variableList || []))
             const pageData = getPageData({
-                // targetData: JSON.parse(JSON.stringify(state.drag.targetData || [])),
                 targetData,
                 pageType: 'preview',
                 platform: state.page.pageDetail?.pageType,
-                funcGroups: state.functions.funcGroups,
+                funcGroups,
                 lifeCycle: state.page.pageDetail?.lifeCycle,
                 projectId: router.currentRoute.params?.projectId,
                 pageId: router.currentRoute.params?.pageId,
@@ -193,7 +194,7 @@ const store = new Vuex.Store({
                 isGenerateNav,
                 isEmpty: false,
                 layoutType: state.drag.curTemplateData?.layoutType,
-                variableList: state.variable.variableList,
+                variableList,
                 styleSetting: state.page.pageDetail?.styleSetting,
                 user: state.user,
                 npmConf: {},

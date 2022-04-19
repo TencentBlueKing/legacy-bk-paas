@@ -101,14 +101,24 @@ export const checkFuncBody = async (functionData) => {
     const checkList = Array.isArray(functionData)
         ? functionData
         : [functionData]
-    // eslint 检查
+    // 检查
     for (let index = 0; index < checkList.length; index++) {
         const checkItem = checkList[index]
-        const globals = { lesscode: true };
+        const globals = {};
         [...(checkItem.funcParams || []), ...(checkItem.remoteParams || [])].forEach((key) => {
             globals[key] = true
         })
-        await checkEslint(checkItem.funcBody, globals)
+        // 替换函数中使用到的函数和变量，防止错误使用 lesscode 关键字
+        const checkBody = replaceFuncKeyword(checkItem.funcBody, (all, first, second, variableCode, funcStr, funcCode) => {
+            if (variableCode) {
+                return `this.${variableCode}`
+            }
+            if (funcCode) {
+                return `this.${funcCode}`
+            }
+        })
+        // eslint 检查
+        await checkEslint(checkBody, globals)
     }
 }
 
@@ -212,7 +222,7 @@ export const doubleCheckFunction = async (functionData, projectId, versionId) =>
  * @param { Number } projectId 项目 id
  * @param { Number } versionId 版本 id
  */
-export const handleRelation = async (functionData, projectId, versionId, transactionalEntityHelper) => {
+export const handleRelation = async (functionData, projectId, versionId) => {
     // 抹平入参差异
     const functionList = Array.isArray(functionData)
         ? functionData
@@ -308,10 +318,12 @@ export const handleRelation = async (functionData, projectId, versionId, transac
         }
     })
     // 使用事务操作数据
-    await transactionalEntityHelper.add(TABLE_FILE_NAME.FUNC_FUNC, newFuncFuncRelateList)
-    await transactionalEntityHelper.add(TABLE_FILE_NAME.FUNC_VARIABLE, newFuncVarRelateList)
-    await transactionalEntityHelper.delete(funcFuncRelateList)
-    await transactionalEntityHelper.delete(funcVarRelateList)
+    await LCDataService.transaction(async (transactionalEntityHelper) => {
+        await transactionalEntityHelper.add(TABLE_FILE_NAME.FUNC_FUNC, newFuncFuncRelateList)
+        await transactionalEntityHelper.add(TABLE_FILE_NAME.FUNC_VARIABLE, newFuncVarRelateList)
+        await transactionalEntityHelper.delete(funcFuncRelateList)
+        await transactionalEntityHelper.delete(funcVarRelateList)
+    })
 }
 
 /**
