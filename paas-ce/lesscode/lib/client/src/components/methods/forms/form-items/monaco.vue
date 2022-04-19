@@ -42,7 +42,6 @@
 
         data () {
             return {
-                FUNCTION_TIPS,
                 fixMethodTips: {
                     content: '自动修复 Eslint',
                     theme: 'light',
