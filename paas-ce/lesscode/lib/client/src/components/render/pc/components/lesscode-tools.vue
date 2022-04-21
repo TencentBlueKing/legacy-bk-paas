@@ -104,20 +104,32 @@
             })
         },
         mounted () {
-            this.$containerEl = document.querySelector('#lesscodeOperationArea')
-            const refresh = () => {
+            const refresh = _.throttle(() => {
                 this.showHover(this.hoverComponentData)
                 this.showActive(this.activeComponentData)
-            }
-            this.$containerEl.addEventListener('scroll', refresh)
+            }, 20)
+            this.$horizontalWrapper = document.querySelector('#lesscodeDrawHorizontalWrapper')
+            this.$horizontalWrapper.addEventListener('scroll', refresh)
             this.$once('hook:beforeDestroy', () => {
-                this.$containerEl.removeEventListener('scroll', refresh)
+                this.$horizontalWrapper.removeEventListener('scroll', refresh)
             })
-            const $templateContainerEl = this.$containerEl.querySelector('.container-content')
+            this.$verticalWrapper = document.querySelector('#lesscodeDrawVerticalWrapper')
+            this.$verticalWrapper.addEventListener('scroll', refresh)
+            this.$once('hook:beforeDestroy', () => {
+                this.$verticalWrapper.removeEventListener('scroll', refresh)
+            })
+            const $templateContainerEl = this.$horizontalWrapper.querySelector('.container-content')
             if ($templateContainerEl) {
                 $templateContainerEl.addEventListener('scroll', refresh)
                 this.$once('hook:beforeDestroy', () => {
                     $templateContainerEl.removeEventListener('scroll', refresh)
+                })
+            }
+            const $mobileDrawEl = this.$horizontalWrapper.querySelector('#lesscodeMobileDraw')
+            if ($mobileDrawEl) {
+                $mobileDrawEl.addEventListener('scroll', refresh)
+                this.$once('hook:beforeDestroy', () => {
+                    $mobileDrawEl.removeEventListener('scroll', refresh)
                 })
             }
         },
@@ -136,7 +148,7 @@
                 const {
                     top: containerTop,
                     left: containerLeft
-                } = this.$containerEl.getBoundingClientRect()
+                } = this.$horizontalWrapper.getBoundingClientRect()
                 const {
                     top,
                     left
@@ -149,10 +161,10 @@
                     left: `${left - containerLeft}px`,
                     zIndex: zIndex
                 }
-                if (this.$refs.hover.parentNode !== this.$containerEl) {
-                    this.$containerEl.appendChild(this.$refs.hover)
+                if (this.$refs.hover.parentNode !== this.$horizontalWrapper) {
+                    this.$horizontalWrapper.appendChild(this.$refs.hover)
                     this.$once('hook:beforeDestroy', () => {
-                        this.$containerEl.removeChild(this.$refs.hover)
+                        this.$horizontalWrapper.removeChild(this.$refs.hover)
                     })
                 }
             },
@@ -169,7 +181,7 @@
                     top: containerTop,
                     right: containerRight,
                     left: containerLeft
-                } = this.$containerEl.getBoundingClientRect()
+                } = this.$horizontalWrapper.getBoundingClientRect()
 
                 const {
                     top,
@@ -192,10 +204,10 @@
                     left: `${realLeft}px`,
                     zIndex
                 }
-                if (this.$refs.active.parentNode !== this.$containerEl) {
-                    this.$containerEl.appendChild(this.$refs.active)
+                if (this.$refs.active.parentNode !== this.$horizontalWrapper) {
+                    this.$horizontalWrapper.appendChild(this.$refs.active)
                     this.$once('hook:beforeDestroy', () => {
-                        this.$containerEl.removeChild(this.$refs.active)
+                        this.$horizontalWrapper.removeChild(this.$refs.active)
                     })
                 }
             },

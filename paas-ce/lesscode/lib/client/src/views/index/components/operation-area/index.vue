@@ -1,9 +1,11 @@
 <template>
     <div
         ref="root"
-        id="lesscodeOperationArea"
-        :class="$style['operation-area']">
-        <div :class="$style['operation-wraper']">
+        id="lesscodeDrawHorizontalWrapper"
+        :class="$style['horizontal-wrapper']">
+        <div
+            id="lesscodeDrawVerticalWrapper"
+            :class="$style['vertical-wrapper']">
             <render
                 v-show="operation === 'edit'"
                 :style="renderStyles" />
@@ -80,16 +82,15 @@
 <style lang="postcss" module>
     @import "@/css/mixins/scroller";
 
-    .operation-area{
-        height: calc(100% - 40px);
-        min-width: min-content;
+    .horizontal-wrapper{
+        height: 100%;
         padding: 0 20px;
-        margin: 20px 0;
-        overflow: auto;
+        overflow-y: auto;
         @mixin scroller;
-        .operation-wraper{
-            background: #fff;
-            min-width: min-content;
-        }
+    }
+    .vertical-wrapper{
+        background: #fff;
+        overflow-x: auto;
+        @mixin scroller;
     }
 </style>
