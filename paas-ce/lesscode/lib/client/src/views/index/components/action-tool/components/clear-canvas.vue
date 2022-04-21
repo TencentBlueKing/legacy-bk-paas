@@ -30,10 +30,7 @@
                     subTitle: '包含的已下架自定义组件将不能再被使用',
                     confirmFn () {
                         const root = LC.getRoot()
-                        const gridNode = LC.createNode('render-grid')
-                        const slots = []
-                        slots.push(gridNode)
-                        root.setRenderSlots(slots)
+                        root.setRenderSlots([])
                     }
                 })
             }

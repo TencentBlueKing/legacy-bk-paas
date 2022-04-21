@@ -14,20 +14,24 @@
         <div
             id="drawTarget"
             ref="root"
-            :class="$style['canvas']"
+            :class="{
+                [$style['canvas']]: true,
+                [$style['empty']]: componentData.children.length < 1
+            }"
             @click="handleCanvaseClick"
             @mouseleave="handleMouseleave">
             <draggable
                 v-if="isReady"
+                ref="dragArea"
                 class="target-drag-area"
-                :class="[$style['editor']]"
+                :class="[$style['drag-area']]"
                 :component-data="componentData"
                 :list="componentData.slot.default"
                 :sort="true"
                 :group="{
                     name: 'layout',
                     pull: true,
-                    put: putCheck
+                    put: true
                 }">
                 <template v-for="componentNode in componentData.slot.default">
                     <!-- root 的子组件只会是布局组件和交互式组件 -->
@@ -57,9 +61,7 @@
 <script>
     import _ from 'lodash'
     import LC from '@/element-materials/core'
-    import Draggable, {
-        getDragTargetGroup
-    } from './components/draggable'
+    import Draggable from './components/draggable'
     import LesscodeFocus from './components/lesscode-focus'
     import LesscodeTools from './components/lesscode-tools'
     import Layout from './widget/layout'
@@ -170,37 +172,19 @@
              */
             autoType: _.throttle(function () {
                 setTimeout(() => {
+                    const {
+                        left: parentLeft
+                    } = this.$refs.dragArea.$el.getBoundingClientRect()
+                    
                     this.$refs.component.forEach((componentIns, index) => {
                         componentIns.componentData.setStyle('margin-bottom', '10px')
-                        if (index > 0) {
-                            componentIns.componentData.setStyle('margin-top', '10px')
+                        const { left } = componentIns.$el.getBoundingClientRect()
+                        if (left > parentLeft) {
+                            componentIns.componentData.setStyle('margin-left', '10px')
                         }
                     })
                 })
             }, 20),
-            /**
-             * @desc 只可以放入布局类型和交互是类型的组件
-             * @param { Object } target
-             * @param { Object } source
-             * @returns { Boolean }
-             */
-            putCheck (target, source) {
-                // 画布区域内部拖动
-                if (getDragTargetGroup() === 'layout') {
-                    return true
-                }
-                // 从物料区拖入
-                const {
-                    group
-                } = source.options
-                if ([
-                    'layout',
-                    'interactive'
-                ].includes(group.name)) {
-                    return true
-                }
-                return false
-            },
             /**
              * @desc 鼠标离开时清除组件 hover 效果
              * @param { Boolean } name
@@ -236,8 +220,24 @@
         position: relative;
         z-index: 1000000000000 !important;
         min-height: calc(100% - 20px) !important;
+        &.empty{
+            &::before{
+                content: "请拖入组件";
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 14px;
+                color: #C4C6CC;
+                pointer-events: all;
+            }
+        }
     }
-    .editor{
+    .drag-area{
         padding-bottom: 300px;
         * {
             /* 规避一些组件内部因为设置了 pointer-events 导致鼠标事件非法触发 */

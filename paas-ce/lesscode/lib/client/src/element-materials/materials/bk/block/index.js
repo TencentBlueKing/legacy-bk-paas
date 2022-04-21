@@ -18,11 +18,7 @@ export default {
     group: '布局',
     styles: ['size', 'padding', 'font', 'background'],
     renderStyles: {
-        width: '100%',
-        'paddingTop': '5px',
-        'paddingRight': '5px',
-        'paddingBottom': '5px',
-        'paddingLeft': '5px'
+        width: '100%'
     },
     props: {},
     slots: {

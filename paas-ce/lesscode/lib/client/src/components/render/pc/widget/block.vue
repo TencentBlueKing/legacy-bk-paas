@@ -37,7 +37,6 @@
     </div>
 </template>
 <script>
-    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
@@ -60,60 +59,43 @@
             const nodeCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
-                    // 需要同时触发父级 grid 更新
-                    this.autoType()
+                    setTimeout(() => {
+                        this.autoType(event.child)
+                    }, 20)
                 }
             }
 
             LC.addEventListener('appendChild', nodeCallback)
-            LC.addEventListener('removeChild', nodeCallback)
+            LC.addEventListener('moveChild', nodeCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('appendChild', nodeCallback)
-                LC.removeEventListener('removeChild', nodeCallback)
+                LC.removeEventListener('moveChild', nodeCallback)
             })
         },
         methods: {
             /**
              * @desc 自动排版子组件
              */
-            autoType: _.throttle(function () {
-                setTimeout(() => {
-                    if (!this.$refs.component) {
-                        return
-                    }
-                    const {
-                        width: boxWidth,
-                        left: boxLeft
-                    } = this.$refs.draggable.$el.getBoundingClientRect()
-                    const sepMarginLeft = 5
-                    
-                    // 计算 marginRight
-                    this.$refs.component.forEach(componentInstance => {
-                        const $el = componentInstance.$el
-                        const {
-                            left: componentLeft,
-                            width: componentWidth
-                        } = $el.getBoundingClientRect()
-                        const {
-                            marginLeft,
-                            marginBottom
-                        } = componentInstance.componentData.style
-                        if (componentInstance.componentData.layoutType
-                            || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', this.defaultMargin)
-                            return
-                        }
-                        if (!marginLeft || marginLeft === 'unset') {
-                            if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
-                                componentInstance.componentData.setStyle('marginRight', this.defaultMargin)
-                            }
-                        }
-                        if (!marginBottom || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', this.defaultMargin)
-                        }
-                    })
-                })
-            }, 20)
+            autoType (childNode) {
+                const {
+                    top: boxTop,
+                    left: boxLeft
+                } = this.$refs.draggable.$el.getBoundingClientRect()
+
+                const $childEl = childNode.$elm
+
+                const {
+                    top: componentTop,
+                    left: componentLeft
+                } = $childEl.getBoundingClientRect()
+                
+                if (componentTop > boxTop) {
+                    childNode.setStyle('marginTop', '10px')
+                }
+                if (componentLeft > boxLeft) {
+                    childNode.setStyle('marginLeft', '10px')
+                }
+            }
         }
     }
 </script>
