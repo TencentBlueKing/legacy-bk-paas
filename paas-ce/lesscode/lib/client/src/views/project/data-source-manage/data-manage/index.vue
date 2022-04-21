@@ -46,19 +46,21 @@
                         <div>暂无搜索结果</div>
                     </bk-exception>
                 </aside>
-                <bk-tab class="data-main">
-                    <bk-tab-panel
-                        v-for="panel in panels"
-                        v-bind="panel"
-                        :key="panel.name">
-                        <component
-                            :key="panel.name + pageStatus.activeTable.tableName"
-                            :is="panel.name"
-                            :environment="pageStatus.activeEnvironment"
-                            :active-table="pageStatus.activeTable"
-                        ></component>
-                    </bk-tab-panel>
-                </bk-tab>
+                <section class="data-main">
+                    <bk-tab :active.sync="pageStatus.currentTab">
+                        <bk-tab-panel
+                            v-for="panel in panels"
+                            v-bind="panel"
+                            :key="panel.name">
+                        </bk-tab-panel>
+                    </bk-tab>
+                    <component
+                        class="data-component"
+                        :is="pageStatus.currentTab"
+                        :environment="pageStatus.activeEnvironment"
+                        :active-table="pageStatus.activeTable"
+                    ></component>
+                </section>
             </layout>
             <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part" v-else>
                 <div v-if="!pageStatus.tableList.length">
@@ -122,7 +124,8 @@
                     columns: []
                 },
                 tableList: [],
-                errorCode: ''
+                errorCode: '',
+                currentTab: 'render-data'
             })
 
             const goBack = () => {
@@ -250,11 +253,10 @@
         }
         .data-main {
             height: 100%;
-            ::v-deep .bk-tab-section {
-                padding: 16px 15px;
+            .data-component {
+                padding: 20px;
                 height: calc(100% - 50px);
                 overflow-y: auto;
-                background-color: #fff;
             }
         }
     }

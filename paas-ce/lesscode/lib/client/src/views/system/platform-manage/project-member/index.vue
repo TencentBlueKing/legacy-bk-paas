@@ -5,7 +5,7 @@
                 <bk-input
                     class="filter-item search-input"
                     clearable
-                    placeholder="按项目名/ID搜索"
+                    placeholder="按项目名/项目Code搜索"
                     right-icon="bk-icon icon-search"
                     @clear="handleKeywordClear"
                     @enter="handleKeywordEnter"
@@ -87,8 +87,9 @@
                     limit: 10
                 },
                 columns: [
-                    { id: 'projectName', name: '项目名' },
-                    { id: 'projectCode', name: '项目ID' }
+                    { id: 'id', name: '项目ID' },
+                    { id: 'projectCode', name: '项目Code' },
+                    { id: 'projectName', name: '项目名' }
                 ],
                 filters: {
                     keyword: ''

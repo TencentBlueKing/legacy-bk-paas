@@ -35,10 +35,16 @@ const getNewVariableEntities = (list, { projectId, newVersionId }) => getReposit
 }))
 
 const buildRelationEntities = ({ projectId, newVersionId, variableIdMap }) => item => {
-    const { id, createTime, updateTime, variableId, ...others } = item
+    const { id, createTime, updateTime, variableId, parentVariableId, ...others } = item
     others.projectId = projectId
     others.versionId = newVersionId
     others.variableId = variableIdMap[variableId]
+
+    // 变量引用变更时存在
+    if (parentVariableId) {
+        others.parentVariableId = variableIdMap[parentVariableId]
+    }
+
     return others
 }
 const createRelationEntities = compose(map, buildRelationEntities)

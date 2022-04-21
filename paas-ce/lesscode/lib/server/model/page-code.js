@@ -1388,9 +1388,12 @@ class PageCode {
                     // table slot 可能会用到fun，需要特殊处理一下。其他情况也可以在slot value 里面加上 methodCode 字段来处理
                     if (Array.isArray(slot.val)) {
                         (slot.val || []).forEach((item) => {
-                            if (item.methodCode) {
-                                this.addUsedFunc(item.methodCode)
-                            }
+                            const methodCodeList = Array.isArray(item.methodCode) ? item.methodCode : [item.methodCode]
+                            methodCodeList.forEach((methodCode) => {
+                                if (methodCode) {
+                                    this.addUsedFunc(methodCode)
+                                }
+                            })
                         })
                     }
                     param.val = disPlayVal
@@ -1587,6 +1590,8 @@ class PageCode {
                 /* eslint-disable indent */
                 methods += `
                     goToPage (item) {
+                        if (this.$route.query.id === item.id) return
+
                         this.setNav(item.id)
                         const originQuery = item.query || ''
                         const queryStr = originQuery[0] === '?' ? originQuery.slice(1) : originQuery
@@ -1605,7 +1610,7 @@ class PageCode {
                         } else if (item.link) {
                             window.open(item.link, '_blank')
                         } else {
-                            this.$router.push({ name: '404' })
+                            this.$router.push({ path: '${this.uniqueKey}', query })
                         }
                     },
                 `

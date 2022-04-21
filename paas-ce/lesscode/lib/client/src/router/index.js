@@ -33,6 +33,7 @@ const VariableManage = () => import(/* webpackChunkName: 'index' */'@/views/proj
 const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
 const RouterManage = () => import(/* webpackChunkName: 'route' */'@/views/project/router-manage')
+const Release = () => import(/* webpackChunkName: 'release' */'@/views/project/release')
 const Basic = () => import(/* webpackChunkName: 'basic' */'@/views/project/basic')
 const Logs = () => import(/* webpackChunkName: 'basic' */'@/views/project/logs')
 const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/layout')
@@ -300,6 +301,14 @@ const routes = [
                 component: Layout,
                 meta: {
                     title: '布局模板实例'
+                }
+            },
+            {
+                path: 'release',
+                name: 'release',
+                component: Release,
+                meta: {
+                    title: '发布部署'
                 }
             },
             {

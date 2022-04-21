@@ -79,6 +79,20 @@ module.exports = {
         }
     },
 
+    async releaseEnvMap (ctx) {
+        const { versions } = ctx.request.body
+        try {
+            const envMap = await projectVersionService.getVersionReleaseEnvMap(versions)
+            ctx.send({
+                code: 0,
+                data: envMap,
+                message: 'success'
+            })
+        } catch (e) {
+            ctx.throw(e)
+        }
+    },
+
     async recover (ctx) {
         const { id: versionId } = ctx.request.body
         try {

@@ -33,8 +33,8 @@ export default () => {
     const variableList = computed(() => store.getters['variable/variableList'])
     const curTemplateData = computed(() => store.getters['drag/curTemplateData'])
     const pageDetail = computed(() => store.getters['page/pageDetail'])
-    const versionId = computed(() => store.getters['projectVersion/versionId'])
-    
+    const versionId = computed(() => store.getters['projectVersion/currentVersionId'])
+
     const currentInstance = getCurrentInstance()
 
     const submit = () => {
@@ -140,7 +140,7 @@ export default () => {
                 errorStack.push(`页面中标识为【${variableCode}】的函数与标识为【${variableCode}】的变量存在冲突`)
             }
         })
-        
+
         // 错误提示
         if (errorStack.length > 0) {
             const h = currentInstance.proxy.$createElement
@@ -205,7 +205,7 @@ export default () => {
                 from: '',
                 projectId: route.params.projectId,
                 pageCode: pageDetail.value.pageCode,
-                versionId: versionId.vlaue,
+                versionId: versionId.value,
                 pageData: {
                     id: parseInt(route.params.pageId),
                     content: JSON.stringify(LC.getRoot().toJSON().renderSlots.default)
