@@ -145,6 +145,7 @@
                     funcGroupName: this.group.groupName
                 })
                 this.$emit('insert-function', newFunction)
+                this.isOpen = true
             },
 
             handleChangeGroupName () {

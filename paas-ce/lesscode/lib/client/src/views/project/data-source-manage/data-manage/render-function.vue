@@ -33,7 +33,7 @@
         />
 
         <show-func-dialog
-            :is-show="showSource.isShow"
+            :is-show.sync="showSource.isShow"
             :func-data="showSource.func"
             :is-show-export="false"
         />

@@ -218,10 +218,6 @@
                 renderGroup.children.push(functionData)
                 // 选中新增的数据
                 this.handleChooseFunction(functionData)
-                // 新增设置编辑态
-                this.$nextTick(() => {
-                    this.$refs.functionForm.formChanged = true
-                })
             },
 
             handleChooseFunction (functionData) {
@@ -246,7 +242,11 @@
                     }
                     chooseFunction()
                 }
-                if (this.$refs.functionForm.formChanged) {
+                // 函数未保存或者函数经过了修改，需要给出切换提示
+                if (
+                    this.$refs.functionForm.formChanged
+                    || !this.chosenFunction.id
+                ) {
                     this.$bkInfo({
                         title: '确认切换',
                         subTitle: '不保存则会丢失当前数据',
