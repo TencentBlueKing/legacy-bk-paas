@@ -2,7 +2,8 @@ import getRoot from './get-root'
 import create, { createNode } from './create-node'
 import {
     triggerEventListener
-} from './event'
+} from '../event'
+import LC from '../index'
 
 let isClone = false
 
@@ -100,7 +101,7 @@ export default function (data) {
         } else {
             traverse(root, data, 'default')
         }
-        triggerEventListener('ready')
+        LC._ready()
     } catch (error) {
         console.error(error)
         triggerEventListener('error')

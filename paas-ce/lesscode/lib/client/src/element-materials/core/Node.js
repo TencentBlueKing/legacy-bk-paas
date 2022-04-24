@@ -43,10 +43,10 @@ import {
 import validator from './helper/validator'
 import { toHyphenate } from './helper/utils'
 
-import getRoot from './get-root'
-import getMaterial from './get-material'
+import getRoot from './static/get-root'
+import getMaterial from './static/get-material'
 
-import isLayoutType from './is-layout-type'
+import isLayoutType from './static/is-layout-type'
 
 export let activeNode = null
 

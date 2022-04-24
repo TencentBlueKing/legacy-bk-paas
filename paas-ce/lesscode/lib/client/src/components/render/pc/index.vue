@@ -21,7 +21,6 @@
             @click="handleCanvaseClick"
             @mouseleave="handleMouseleave">
             <draggable
-                v-if="isReady"
                 ref="dragArea"
                 class="target-drag-area"
                 :class="[$style['drag-area']]"
@@ -59,7 +58,6 @@
     </layout>
 </template>
 <script>
-    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import Draggable from './components/draggable'
     import LesscodeFocus from './components/lesscode-focus'
@@ -85,7 +83,7 @@
         },
         data () {
             return {
-                isReady: LC.isReady,
+                isReady: LC.__isReady,
                 showNotVisibleMask: false,
                 invisibleComponent: ''
             }
@@ -104,11 +102,32 @@
             const readyCallback = () => {
                 this.isReady = true
             }
+            const updateLogCallback = event => {
+                console.log('\n')
+                console.log(`%c${new Date().toString().slice(0, 25)}`,
+                            'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
+                console.log(`%c组件更新%c${event.target.componentId}`,
+                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
+                            'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
+                            event)
+            }
+            
+            const activeLogCallback = event => {
+                console.log('\n')
+                console.log(`%c${new Date().toString().slice(0, 25)}`,
+                            'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
+                console.log(`%c组件选中%c${event.target.componentId}`,
+                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
+                            'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
+                            event)
+            }
 
             const updateCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
-                    this.autoType()
+                    setTimeout(() => {
+                        this.autoType()
+                    }, 20)
                 }
             }
             /**
@@ -120,25 +139,6 @@
                 if (activeNode) {
                     this.showNotVisibleMask = activeNode.isInteractiveComponent && !activeNode.interactiveShow
                 }
-            }
-
-            const updateLogCallback = event => {
-                console.log('\n')
-                console.log(`%c${new Date().toString().slice(0, 25)}`,
-                            'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
-                console.log(`%c组件更新%c${event.target.componentId}`,
-                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
-                            'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
-                            event)
-            }
-            const activeLogCallback = event => {
-                console.log('\n')
-                console.log(`%c${new Date().toString().slice(0, 25)}`,
-                            'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
-                console.log(`%c组件选中%c${event.target.componentId}`,
-                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
-                            'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
-                            event)
             }
 
             LC.addEventListener('ready', readyCallback)
@@ -165,26 +165,34 @@
             this.$once('hook:beforeDestroy', () => {
                 document.body.removeEventListener('click', resetCallback)
             })
+            LC._mounted()
+        },
+        beforeDestroy () {
+            LC._unload()
+            window.addEventListener('unload', () => {
+                LC._unload()
+            })
         },
         methods: {
             /**
              * @desc 自动排版子组件
              */
-            autoType: _.throttle(function () {
-                setTimeout(() => {
-                    const {
-                        left: parentLeft
-                    } = this.$refs.dragArea.$el.getBoundingClientRect()
+            autoType () {
+                if (this._isDestroyed) {
+                    return
+                }
+                const {
+                    left: parentLeft
+                } = this.$refs.dragArea.$el.getBoundingClientRect()
                     
-                    this.$refs.component.forEach((componentIns, index) => {
-                        componentIns.componentData.setStyle('margin-bottom', '10px')
-                        const { left } = componentIns.$el.getBoundingClientRect()
-                        if (left > parentLeft) {
-                            componentIns.componentData.setStyle('margin-left', '10px')
-                        }
-                    })
+                this.$refs.component.forEach((componentIns) => {
+                    componentIns.componentData.setStyle('margin-bottom', '10px')
+                    const { left } = componentIns.$el.getBoundingClientRect()
+                    if (left > parentLeft) {
+                        componentIns.componentData.setStyle('margin-left', '10px')
+                    }
                 })
-            }, 20),
+            },
             /**
              * @desc 鼠标离开时清除组件 hover 效果
              * @param { Boolean } name

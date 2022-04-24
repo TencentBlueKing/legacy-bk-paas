@@ -1,6 +1,6 @@
 import getMaterial from './get-material'
 
-import Node from './Node'
+import Node from '../Node'
 
 export const createNode = type => {
     const material = getMaterial(type)

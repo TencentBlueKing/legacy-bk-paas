@@ -77,6 +77,9 @@
              * @desc 自动排版子组件
              */
             autoType (childNode) {
+                if (this._isDestroyed) {
+                    return
+                }
                 const {
                     top: boxTop,
                     left: boxLeft

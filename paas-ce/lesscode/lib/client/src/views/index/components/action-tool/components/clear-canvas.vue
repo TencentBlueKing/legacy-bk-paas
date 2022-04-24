@@ -29,8 +29,7 @@
                     title: '确定清空所有组件元素？',
                     subTitle: '包含的已下架自定义组件将不能再被使用',
                     confirmFn () {
-                        const root = LC.getRoot()
-                        root.setRenderSlots([])
+                        LC.reset()
                     }
                 })
             }

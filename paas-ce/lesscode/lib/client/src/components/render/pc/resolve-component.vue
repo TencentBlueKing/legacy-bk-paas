@@ -212,7 +212,6 @@
         },
         beforeDestroy () {
             isMousedown = false
-            console.log('======================= beforeDestroy', this.componentData.componentId, this.componentData.isActived)
             // 销毁时如果组件被激活，取消激活状态
             if (this.componentData.isActived) {
                 this.componentData.activeClear()

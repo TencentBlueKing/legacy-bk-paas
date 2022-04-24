@@ -209,7 +209,6 @@
         },
         beforeDestroy () {
             LC.removeEventListener('update', this.handleUpdatePreview)
-            LC.triggerEventListener('unload')
             
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
             localStorage.removeItem('ONLINE_PREVIEW')
