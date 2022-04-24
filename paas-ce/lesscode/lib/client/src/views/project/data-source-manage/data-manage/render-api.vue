@@ -59,7 +59,6 @@
                 language="json"
                 :height="500"
                 :value="showDetailValue"
-                :options="options"
             ></monaco>
         </bk-dialog>
     </article>

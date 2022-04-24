@@ -104,7 +104,9 @@
                 this.$refs.tree.setData(getDataFromNodeTree(LC.getRoot().children))
                 // 还原展开状态
                 expandIdListMemo.forEach((nodeId) => {
-                    this.$refs.tree.setExpanded(nodeId)
+                    if (this.$refs.tree.getNodeById(nodeId)) {
+                        this.$refs.tree.setExpanded(nodeId)
+                    }
                 })
             }, 100)
             /**
@@ -119,9 +121,11 @@
 
                 let activeNodeParent = activeNode.parentNode
                 while (activeNodeParent && !activeNodeParent.type.root) {
-                    this.$refs.tree.setExpanded(activeNodeParent.componentId, {
-                        expanded: true
-                    })
+                    if (this.$refs.tree.getNodeById(activeNodeParent.componentId)) {
+                        this.$refs.tree.setExpanded(activeNodeParent.componentId, {
+                            expanded: true
+                        })
+                    }
                     activeNodeParent = activeNodeParent.parentNode
                 }
                 

@@ -16,7 +16,7 @@ import Vue from 'vue'
 import Home from './children/home.vue'
 import BkNotFound from './children/404.vue'
 import BkError from './children/bk-error.vue'
-import { bundless } from '@blueking/bundless'
+import { bundless, triggleUpdate } from '@blueking/bundless'
 import bundlessPluginVue2 from '@blueking/bundless-plugin-vue2'
 
 Vue.use(VueRouter)
@@ -30,17 +30,34 @@ function registerComponent (source, id) {
     })
 }
 
+// 监听 storage 变化触发热更新
+window.addEventListener('storage', (event) => {
+    try {
+        if (['ONLINE_PREVIEW_CONTENT', 'ONLINE_PREVIEW_NAV'].includes(event.key)) {
+            const payload = JSON.parse(event.newValue)
+            if (payload) {
+                triggleUpdate(payload)
+            }
+        }
+    } catch (error) {
+        console.error(`热更新失败：${error.message || error}`)
+    }
+})
+
 // 生成路由
 module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId, platform) => {
     const routes = []
-    const curStorageData = localStorage.getItem('ONLINE_PREVIEW') || '{}'
-    const curPageData = JSON.parse(curStorageData)
+    // 当前编辑页面的内容信息
+    const editPageData = JSON.parse(localStorage.getItem('ONLINE_PREVIEW_CONTENT') || '{}')
+    // 当前编辑页面的导航信息
+    const editNavData = JSON.parse(localStorage.getItem('ONLINE_PREVIEW_NAV') || '{}')
 
     for (const key in routeGroup) {
         const layout = routeGroup[key]
 
         // 父路由
-        const parentCom = registerComponent(layout.content, layout.path)
+        const parentSource = layout.path === editNavData.id ? editNavData.source : layout.content
+        const parentCom = registerComponent(parentSource, layout.path)
 
         // 子路由
         const routeList = layout.children
@@ -58,10 +75,9 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId,
             } else if (route.isError) {
                 routeConifg.component = BkError
             } else if (route.pageId !== -1) {
-                const source = route.pageCode === curPageData.id
-                    ? curPageData.source
-                    : route.content
-
+                // 判断是从storage读取数据还是数据库
+                const source = route.pageCode === editPageData.id ? editPageData.source : route.content
+                // 生成页面
                 const childCom = registerComponent(source, route.pageCode)
                 routeConifg.name = getRouteName(route)
                 routeConifg.component = childCom

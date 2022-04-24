@@ -346,10 +346,7 @@
             this.getTemplateList()
         },
         methods: {
-            ...mapActions('functions', [
-                'getAllGroupAndFunction'
-            ]),
-            ...mapActions('variable', ['getAllVariable']),
+            ...mapActions('pageTemplate', ['getProjectFuncAndVar']),
             async getTemplateList () {
                 this.pageLoading = true
                 try {
@@ -502,22 +499,15 @@
                     const fromTemplate = this.dialog.page.curPage
                     const templateInfo = this.dialog.page.selectedList.map(item => ({
                         belongProjectId: item.id,
-                        categoryId: item.selectedCategory
+                        categoryId: item.selectedCategory,
+                        versionId: ''
                     }))
                     const data = {
                         id: fromTemplate.id,
                         fromProjectId: fromTemplate.belongProjectId,
                         templateInfo
                     }
-                    const [variableList, funcGroups] = await Promise.all([
-                        this.getAllVariable({
-                            projectId: fromTemplate.belongProjectId,
-                            versionId: fromTemplate.versionId,
-                            pageCode: fromTemplate.fromPageCode,
-                            effectiveRange: 0
-                        }, false),
-                        this.getAllGroupAndFunction({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId })
-                    ])
+                    const { variableList, funcGroups } = await this.getProjectFuncAndVar({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId, pageCode: fromTemplate.fromPageCode })
                     
                     const templateNode = LC.parseTemplate(JSON.parse(fromTemplate.content || {}))
                     // 解析出模板targetData绑定的变量和函数

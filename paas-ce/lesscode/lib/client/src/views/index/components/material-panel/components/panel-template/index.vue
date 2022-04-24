@@ -150,7 +150,7 @@
                         type: item.templateName,
                         name: item.templateName,
                         displayName: '',
-                        hasInstall: projectTemplateList.filter(template => template.parentId === item.id).length > 0
+                        hasInstall: projectTemplateList.filter(template => (template.parentId === item.id) || template.id === item.id).length > 0
                     })).filter(item => item.templateType === this.platform || (this.platform === 'PC' && !item.templateType))
 
                     this.projectTemplateGroupList = projectTemplateGroups.map(item => ({
@@ -165,7 +165,7 @@
                     }))
                     this.projectTemplateList = Object.freeze(projectTemplateList)
                     this.marketTemplateList = Object.freeze(marketTemplateList)
-                    this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
+                    this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
                 } catch (err) {
                     this.$bkMessage({
                         theme: 'error',
