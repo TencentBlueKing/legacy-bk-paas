@@ -11,8 +11,12 @@
         <div
             ref="active"
             :class="$style['tools-active']"
-            :style="activeStyles">
-            <div :class="$style['button']">
+            :style="activeStyles"
+            @contextmenu.stop="handleShowMenu">
+            <div
+                v-if="activeComponentData.componentId"
+                :class="$style['button']">
+                <i class="bk-drag-icon" :class="activeComponentData.material.icon" />
                 {{ activeComponentData.componentId }}
             </div>
             <div
@@ -21,6 +25,18 @@
                 @click="handleSaveTemplate">
                 <i class="bk-drag-icon bk-drag-template-fill" />
                 存为模板
+            </div>
+            <div
+                v-if="activeComponentData.parentNode && !activeComponentData.parentNode.root"
+                :class="$style['button']"
+                @click="handleSelectParent">
+                <i class="bk-drag-icon" :class="activeComponentData.parentNode.material.icon" />
+                选中父级
+            </div>
+            <div
+                :class="$style['button']"
+                @click="handleRemove">
+                <i class="bk-drag-icon bk-drag-shanchu" />
             </div>
         </div>
     </div>
@@ -90,17 +106,24 @@
                 }
             }
 
+            const resetCallback = () => {
+                componentMouserleaveCallback()
+                activeClearCallback()
+            }
+
             LC.addEventListener('active', activeCallback)
             LC.addEventListener('activeClear', activeClearCallback)
             LC.addEventListener('componentHover', componentHoverCallback)
             LC.addEventListener('componentMouserleave', componentMouserleaveCallback)
             LC.addEventListener('removeChild', removeChildCallbak)
+            LC.addEventListener('reset', resetCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('active', activeCallback)
                 LC.removeEventListener('activeClear', activeClearCallback)
                 LC.removeEventListener('componentHover', componentHoverCallback)
                 LC.removeEventListener('componentMouserleave', componentMouserleaveCallback)
                 LC.removeEventListener('removeChild', removeChildCallbak)
+                LC.removeEventListener('reset', resetCallback)
             })
         },
         mounted () {
@@ -222,6 +245,21 @@
                     target: activeNode,
                     value: templateJSON
                 })
+            },
+            /**
+             * @desc 选中父级容器组件
+             */
+            handleSelectParent () {
+                this.activeComponentData.parentNode.active()
+            },
+            /**
+             * @desc 删除组件
+             */
+            handleRemove () {
+                LC.execCommand('remove')
+            },
+            handleShowMenu (event) {
+                LC.showMenu(event)
             }
         }
     }
@@ -248,7 +286,7 @@
     .button{
         flex: 0 0 auto;
         height: 20px;
-        padding: 0 7px;
+        padding: 0 3px;
         margin-right: 4px;
         font-size: 12px;
         line-height: 20px;

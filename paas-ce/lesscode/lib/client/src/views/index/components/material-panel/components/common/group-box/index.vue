@@ -81,6 +81,7 @@
                     this.newNode = this.createFallback(this.list, event.oldIndex)
                 } else {
                     const materialConfig = this.list[event.oldIndex]
+                    // debugger
                     const node = LC.createNode(materialConfig.type)
 
                     Object.values(createHacker).forEach(task => task(node, materialConfig))
@@ -98,11 +99,7 @@
                 
                 let groupName = ''
                 
-                if ([
-                    'free-layout',
-                    'render-grid',
-                    'widget-form'
-                ].includes(this.newNode.type)) {
+                if (LC.isLayoutType(this.newNode.type)) {
                     groupName = 'layout'
                 } else if (LC.isInteractiveType(this.newNode.type)) {
                     groupName = 'interactive'

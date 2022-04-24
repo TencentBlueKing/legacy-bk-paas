@@ -24,5 +24,5 @@ export const getPageStyle = function () {
 
 export const setPageStyle = function (value) {
     Object.assign(config, value)
-    triggerEventListener('set-page-style')
+    triggerEventListener('setPageStyle')
 }

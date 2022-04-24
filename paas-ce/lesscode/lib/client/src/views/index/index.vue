@@ -138,8 +138,15 @@
             // 更新预览区域数据
             LC.addEventListener('ready', this.initPerviewData)
             // 卸载的时候，清除 storage 数据
-            LC.removeEventListener('unload', this.clearPerviewData)
             LC.addEventListener('unload', this.clearPerviewData)
+
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', this.handleUpdatePreviewContent)
+                // 更新预览区域数据
+                LC.removeEventListener('ready', this.initPerviewData)
+                // 卸载的时候，清除 storage 数据
+                LC.removeEventListener('unload', this.clearPerviewData)
+            })
 
             this.registerCustomComponent()
 
@@ -203,10 +210,6 @@
             ]
         },
         beforeDestroy () {
-            LC.removeEventListener('update', this.handleUpdatePreviewContent)
-            LC.removeEventListener('ready', this.initPerviewData)
-            LC.triggerEventListener('unload')
-
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
         },
         beforeRouteLeave (to, from, next) {
