@@ -173,7 +173,7 @@ const store = new Vuex.Store({
             })
         },
 
-        updatePreview ({ state }, { isGenerateNav, id, curTemplateData, types }) {
+        updatePreview ({ state }, { isGenerateNav, id, curTemplateData, types, storageKey }) {
             let targetData = []
             try {
                 targetData = JSON.parse(circleJSON(LC.getRoot().toJSON().renderSlots.default))
@@ -205,7 +205,7 @@ const store = new Vuex.Store({
                 source: pageData.code,
                 id
             })
-            localStorage.setItem('ONLINE_PREVIEW', payload)
+            localStorage.setItem(storageKey, payload)
         }
     }
 })

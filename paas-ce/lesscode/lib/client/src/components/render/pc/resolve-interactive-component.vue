@@ -41,12 +41,13 @@
                 LC.removeEventListener('update', updateCallback)
                 LC.removeEventListener('toggleInteractive', updateCallback)
             })
-        },
-        mounted () {
+            
+            // 新拖入的交互式组件默认要显示出来
             if (!this.componentData._isMounted) {
-                this.componentData.active()
                 this.componentData.toggleInteractive(true)
-                this.componentData.mounted()
+                this.$once('hook:mounted', () => {
+                    this.componentData.active()
+                })
             }
         }
     }
