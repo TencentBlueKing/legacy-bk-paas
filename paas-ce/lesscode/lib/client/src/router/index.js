@@ -41,6 +41,7 @@ const VersionManage = () => import(/* webpackChunkName: 'version' */'@/views/pro
 
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
+const EditNocode = () => import(/* webpackChunkName: 'editNocode' */'@/views/edit-nocode/index')
 const PreviewTemplate = () => import(/* webpackChunkName: 'previewTemplate' */'@/views/preview/preview-template')
 const PreviewMobile = () => import(/* webpackChunkName: 'previewMobile' */'@/views/preview/preview-mobile')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
@@ -366,6 +367,11 @@ const routes = [
                 path: '',
                 name: 'new',
                 component: Index
+            },
+            {
+                path: 'nocode',
+                name: 'editNocode',
+                component: EditNocode
             }
         ]
     },
