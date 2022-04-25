@@ -225,6 +225,9 @@ class PageCode {
     generateComponment (item, vueDirective, propDirective, inFreeLayout = false) {
         item = Object.assign({}, item, { componentId: camelCase(item.componentId, { transform: camelCaseTransformMerge }) })
         let css = ''
+        if (item.type === 'render-block') {
+            item.type = 'div'
+        }
         if (inFreeLayout) {
             css += 'position: absolute;'
             if (item.renderStyles.top) {
@@ -367,9 +370,6 @@ class PageCode {
                             >${slotStr}</${item.type}>
                             <!-- eslint-enable -->`
                     } else {
-                        if (item.type === 'bk-checkbox-group') {
-                            console.log(itemProps, 1, vueDirective, 2, propDirective)
-                        }
                         componentCode += `
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
                                 >${slotStr}
