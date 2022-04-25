@@ -335,7 +335,13 @@
 
                 // 跳转到预览入口页面
                 const versionQuery = `${this.versionId ? `&v=${this.versionId}` : ''}`
-                window.open(`/preview/project/${this.projectId}${route.fullPath}?pageCode=${page.pageCode}${versionQuery}`, '_blank')
+                
+                if (page.pageType === 'MOBILE') {
+                    window.open(`/preview-mobile/project/${this.projectId}?pagePath=${route.fullPath}&pageCode=${page.pageCode}`, '_blank')
+                } else {
+                    const routerUrl = `/preview/project/${this.projectId}${route.fullPath}?pageCode=${page.pageCode}${versionQuery}`
+                    window.open(routerUrl, '_blank')
+                }
             },
             handleDownLoadProject () {
                 this.$refs.downloadDialog.isShow = true

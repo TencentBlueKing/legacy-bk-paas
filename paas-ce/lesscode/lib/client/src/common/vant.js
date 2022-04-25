@@ -32,7 +32,9 @@ import { Button,
     Steps,
     Stepper,
     Slider,
-    Search } from 'vant'
+    Search,
+    Tabs,
+    Tab } from 'vant'
 import 'vant/lib/index.css'
 
 Vue.use(Button)
@@ -68,6 +70,8 @@ Vue.use(Steps)
 Vue.use(Stepper)
 Vue.use(Slider)
 Vue.use(Search)
+Vue.use(Tabs)
+Vue.use(Tab)
 
 // Vue.use(Calendar)
 Vue.use(Lazyload)
