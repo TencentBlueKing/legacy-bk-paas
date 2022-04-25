@@ -24,7 +24,7 @@
                     <bk-button v-else @click="handlePreviewPcProject">预览应用</bk-button>
                 </template>
                 <bk-button @click="handleDownLoadProject">源码下载</bk-button>
-                <bk-button @click="handleRelesa">我要发布</bk-button>
+                <bk-button @click="handleRelease">我要发布</bk-button>
                 <div class="extra">
                     <template>
                         <type-select v-if="hasMobilePage" @select-change="handleSelectChange"></type-select>
@@ -376,7 +376,7 @@
             },
 
             // 跳转到发布部署页面
-            handleRelesa () {
+            handleRelease () {
                 this.$router.push({
                     name: 'release'
                 })
