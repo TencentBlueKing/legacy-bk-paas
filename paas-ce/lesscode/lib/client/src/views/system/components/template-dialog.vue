@@ -12,7 +12,7 @@
             :close-icon="false"
             @value-change="handleDialogToggle">
             <div slot="header">
-                <span>从模板新建项目</span>
+                <span>从模板新建应用</span>
             </div>
             <div class="layout-left">
                 <bk-input
@@ -53,7 +53,7 @@
                         </div>
                         <div class="empty" v-show="!list.length">
                             <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
-                                <div>暂无项目模板</div>
+                                <div>暂无应用模板</div>
                             </bk-exception>
                         </div>
                     </div>
@@ -66,17 +66,17 @@
                             placeholder="模板名称">
                         </bk-input>
                     </bk-form-item>
-                    <bk-form-item label="项目名称" required property="projectName" error-display-type="normal">
+                    <bk-form-item label="应用名称" required property="projectName" error-display-type="normal">
                         <bk-input maxlength="60" v-model.trim="formData.projectName"
-                            placeholder="请输入项目名称，60个字符以内">
+                            placeholder="请输入应用名称，60个字符以内">
                         </bk-input>
                     </bk-form-item>
-                    <bk-form-item label="项目ID" required property="projectCode" error-display-type="normal">
+                    <bk-form-item label="应用ID" required property="projectCode" error-display-type="normal">
                         <bk-input maxlength="60" v-model.trim="formData.projectCode"
                             placeholder="只能由小写字母组成，该ID将作为自定义组件前缀，创建后不可更改">
                         </bk-input>
                     </bk-form-item>
-                    <bk-form-item label="项目简介" required property="projectDesc" error-display-type="normal">
+                    <bk-form-item label="应用简介" required property="projectDesc" error-display-type="normal">
                         <bk-input
                             v-model.trim="formData.projectDesc"
                             :type="'textarea'"
@@ -195,7 +195,7 @@
                     this.loading = true
                     const projectId = await this.$store.dispatch('project/create', { data })
 
-                    this.messageSuccess('项目创建成功')
+                    this.messageSuccess('应用创建成功')
                     this.isShow = false
 
                     setTimeout(() => {

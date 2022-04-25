@@ -16,7 +16,7 @@
                 class="tab-item"
                 :class="{ active: tab === 'project' }"
                 @click="handleToggleTab('project')">
-                <span class="tab-item-label">项目模板</span>
+                <span class="tab-item-label">应用模板</span>
             </div>
             <div
                 class="tab-item"
@@ -52,7 +52,7 @@
                                 theme="primary"
                                 size="small"
                                 @click.stop="handleApply(template)">
-                                应用
+                                添加到应用
                             </bk-button>
                         </div>
                     </div>
@@ -327,7 +327,7 @@
                     align-items: center;
                     .apply-btn {
                         display: none;
-                        margin-left: 32px;
+                        margin-left: 23px;
                     }
                 }
             }

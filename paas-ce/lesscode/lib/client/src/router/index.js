@@ -123,7 +123,7 @@ const routes = [
                 name: 'projects',
                 component: Projects,
                 meta: {
-                    title: '项目列表'
+                    title: '应用列表'
                 }
             },
             {
@@ -169,7 +169,7 @@ const routes = [
                         name: 'op-stats-project',
                         component: OperationStatsProject,
                         meta: {
-                            title: '项目数据'
+                            title: '应用数据'
                         }
                     },
                     {
@@ -201,7 +201,7 @@ const routes = [
                         name: 'pm-project-member',
                         component: ProjectMember,
                         meta: {
-                            title: '项目成员'
+                            title: '应用成员'
                         }
                     }
                 ]

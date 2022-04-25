@@ -11,7 +11,7 @@
             <bk-input
                 class="filter-item search-input"
                 clearable
-                placeholder="按项目名/ID搜索"
+                placeholder="按应用名/ID搜索"
                 right-icon="bk-icon icon-search"
                 @clear="handleKeywordClear"
                 @enter="handleKeywordEnter"
@@ -71,9 +71,9 @@
                 },
                 orderBy: undefined,
                 columns: [
-                    { id: 'projectName', name: '项目名', width: '360' },
-                    { id: 'projectCode', name: '项目ID', width: '360' },
-                    { id: 'pageCount', name: '项目页面数', sortable: 'custom', dynamic: true, type: 'number' }
+                    { id: 'projectName', name: '应用名', width: '360' },
+                    { id: 'projectCode', name: '应用ID', width: '360' },
+                    { id: 'pageCount', name: '应用页面数', sortable: 'custom', dynamic: true, type: 'number' }
                 ],
                 filters: {
                     keyword: '',

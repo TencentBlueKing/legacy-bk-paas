@@ -4,7 +4,7 @@
             <div v-show="!pageLoading">
                 <div class="project-template">
                     <div class="page-head" style="align-items: center">
-                        <span style="font-size: 16px;font-weight: 700">项目模板</span>
+                        <span style="font-size: 16px;font-weight: 700">应用模板</span>
                         <ul class="filter-links">
                             <li
                                 v-for="(link, index) in template.project.links"
@@ -32,11 +32,11 @@
                                 <div class="item-bd">
                                     <template>
                                         <div class="preview">
-                                            <page-preview-thumb alt="项目缩略预览" :project-id="project.id" />
+                                            <page-preview-thumb alt="应用缩略预览" :project-id="project.id" />
                                         </div>
                                     </template>
                                     <div class="operate-btns">
-                                        <bk-button style="margin-left: 22px;width: 76px" theme="primary" @click="handleApply(project)">应用</bk-button>
+                                        <bk-button style="margin-left: 7px;width: 106px" theme="primary" @click="handleApply(project)">创建为新应用</bk-button>
                                         <bk-button style="margin-left: 10px;width: 76px" @click="handlePreviewProject(project.id)">预览</bk-button>
                                         <bk-button style="margin-left: 10px;width: 76px" @click="handleDownloadProject(project)">下载源码</bk-button>
                                     </div>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="empty" v-show="!template.project.list.length">
                             <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
-                                <div>暂无项目模板</div>
+                                <div>暂无应用模板</div>
                             </bk-exception>
                         </div>
                     </div>
@@ -89,12 +89,12 @@
                                 <div class="item-bd">
                                     <template>
                                         <div class="preview">
-                                            <img class="page-img" v-if="page.previewImg" :src="getPreviewImg(page.previewImg)" alt="项目缩略预览">
+                                            <img class="page-img" v-if="page.previewImg" :src="getPreviewImg(page.previewImg)" alt="应用缩略预览">
                                             <div class="empty-preview-img" v-else>页面为空</div>
                                         </div>
                                     </template>
                                     <div class="operate-btns">
-                                        <bk-button style="margin-left: 17px;width: 86px" theme="primary" @click="handleAddToProject(page)">添加至项目</bk-button>
+                                        <bk-button style="margin-left: 17px;width: 86px" theme="primary" @click="handleAddToProject(page)">添加至应用</bk-button>
                                         <bk-button style="margin-left: 10px;width: 76px" @click="handlePreviewTemplate(page)">预览</bk-button>
                                         <bk-button style="margin-left: 10px;width: 76px" @click="handleDownloadTemplate(page)">下载源码</bk-button>
                                     </div>
@@ -138,17 +138,17 @@
             @value-change="handleProjectDialogToggle">
             <div class="selected-project">已选模板：{{dialog.project.templateName}}</div>
             <bk-form ref="createForm" :label-width="86" :rules="dialog.project.formRules" :model="dialog.project.formData">
-                <bk-form-item label="项目名称" required property="projectName" error-display-type="normal">
+                <bk-form-item label="应用名称" required property="projectName" error-display-type="normal">
                     <bk-input maxlength="60" v-model.trim="dialog.project.formData.projectName"
-                        placeholder="请输入项目名称，60个字符以内">
+                        placeholder="请输入应用名称，60个字符以内">
                     </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目ID" required property="projectCode" error-display-type="normal">
+                <bk-form-item label="应用ID" required property="projectCode" error-display-type="normal">
                     <bk-input maxlength="60" v-model.trim="dialog.project.formData.projectCode"
                         placeholder="只能由小写字母组成，该ID将作为自定义组件前缀，创建后不可更改">
                     </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目简介" required property="projectDesc" error-display-type="normal">
+                <bk-form-item label="应用简介" required property="projectDesc" error-display-type="normal">
                     <bk-input
                         v-model.trim="dialog.project.formData.projectDesc"
                         :type="'textarea'"
@@ -177,13 +177,13 @@
             header-position="left"
             ext-cls="page-create-dialog"
             @value-change="handlePageDialogToggle">
-            <div class="selected-project">已选模板：{{dialog.page.curPage.templateName}}，添加至项目后，可以在画布中拖拽使用</div>
+            <div class="selected-project">已选模板：{{dialog.page.curPage.templateName}}，添加至应用后，可以在画布中拖拽使用</div>
             <bk-form :label-width="86">
-                <bk-form-item label="项目" required :ext-cls="'selected-template-project'">
+                <bk-form-item label="应用" required :ext-cls="'selected-template-project'">
                     <bk-select searchable
                         multiple
                         display-tag
-                        :placeholder="'请选择项目，可多选'"
+                        :placeholder="'请选择应用，可多选'"
                         v-model="dialog.page.formData.project"
                         :loading="dialog.page.selectLoading"
                         @change="handleSelectChange"
@@ -198,7 +198,7 @@
                 </bk-form-item>
             </bk-form>
             <template v-if="dialog.page.selectedList.length">
-                <div style="margin: 20px 0">请指定添加至对应项目的模板分类：</div>
+                <div style="margin: 20px 0">请指定添加至对应应用的模板分类：</div>
                 <div style="min-height: 140px">
                     <bk-form ref="pageForm" :label-width="180">
                         <bk-form-item v-for="item in dialog.page.selectedList"
@@ -373,7 +373,7 @@
                     this.dialog.project.loading = true
                     const projectId = await this.$store.dispatch('project/create', { data })
 
-                    this.messageSuccess('项目创建成功')
+                    this.messageSuccess('应用创建成功')
                     this.dialog.project.visible = false
 
                     setTimeout(() => {
@@ -491,7 +491,7 @@
                 if (!this.dialog.page.selectedList.length) {
                     this.$bkMessage({
                         theme: 'error',
-                        message: '未选择项目'
+                        message: '未选择应用'
                     })
                     return
                 }
@@ -539,13 +539,13 @@
                 if (newValue.length > oldValue.length) {
                     const selectedProject = this.dialog.page.projectList.find(project => project.id === newValue[newValue.length - 1])
                     const selected = { id: selectedProject.id, projectName: selectedProject.projectName, selectedCategory: '' }
-                    // check是否已被添加到被选中的项目
+                    // check是否已被添加到被选中的应用
                     const hasApply = await this.$store.dispatch('pageTemplate/checkIsExist', { belongProjectId: selectedProject.id, parentId: this.dialog.page.curPage.id })
                     if (hasApply === true) {
                         this.dialog.page.formData.project.pop()
                         this.$bkMessage({
                             theme: 'warning',
-                            message: '模板已被该项目应用,无需重复添加'
+                            message: '模板已被该应用应用,无需重复添加'
                         })
                     } else {
                         await this.getTemplateCategory(selected)

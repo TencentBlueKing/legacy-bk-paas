@@ -134,7 +134,7 @@
         methods: {
             ...mapActions('variable', ['deleteVariable', 'setVariableFormData', 'getAllVariable', 'getAllProjectVariable']),
 
-            // 变量存在页面变量使用全局变量的情况，所以需要获取项目所有变量来展示
+            // 变量存在页面变量使用全局变量的情况，所以需要获取应用所有变量来展示
             getProjectVariableList () {
                 this.getAllProjectVariable({ projectId: this.projectId, versionId: this.versionId }).then((res) => {
                     this.projectVariableList = res || []
@@ -143,7 +143,7 @@
 
             getEditStatus (row) {
                 let tip = ''
-                if (this.simpleDisplay && row.effectiveRange === 0) tip = '项目级变量，请到变量管理进行修改'
+                if (this.simpleDisplay && row.effectiveRange === 0) tip = '应用级变量，请到变量管理进行修改'
                 return tip
             },
 
@@ -153,7 +153,7 @@
                 let tip = ''
                 if (this.userPerm.roleId !== 1 && username !== row.createUser) tip = '只有管理员或自己创建的才有删除权限'
                 if (this.getUseInfoTips(row.useInfo).length > 0) tip = '该变量被引用，无法删除'
-                if (this.simpleDisplay && row.effectiveRange === 0) tip = '项目级变量，请到变量管理进行删除'
+                if (this.simpleDisplay && row.effectiveRange === 0) tip = '应用级变量，请到变量管理进行删除'
                 return tip
             },
 
@@ -215,7 +215,7 @@
 
             effectiveRangeFormatter (obj, con, val) {
                 const rangeMap = {
-                    0: '本项目',
+                    0: '本应用',
                     1: `页面【${obj.pageCode}】`
                 }
                 return rangeMap[val]

@@ -71,7 +71,7 @@
                 columns: [
                     { id: 'fullName', name: '自定义组件名', width: '360', tooltip: true },
                     { id: 'type', name: '自定义组件ID', width: '300', tooltip: true },
-                    { id: 'projectUsedCount', name: '使用项目数', dynamic: true, type: 'number' },
+                    { id: 'projectUsedCount', name: '使用应用数', dynamic: true, type: 'number' },
                     { id: 'pageUsedCount', name: '使用页面数', dynamic: true, type: 'number' },
                     { id: 'versionCount', name: '版本数', dynamic: true, type: 'number' }
                 ],

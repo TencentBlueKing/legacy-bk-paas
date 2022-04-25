@@ -85,12 +85,12 @@ export default () => {
         })
 
         const errorStack = []
-        // 项目中所有变量，以 variableCode 作为索引 key
+        // 应用中所有变量，以 variableCode 作为索引 key
         const projectVarialbeCodeMap = variableList.value.reduce((result, variableData) => {
             result[variableData.variableCode] = variableData
             return result
         }, {})
-        // 项目中所有函数，以 funcCode 作为索引 key
+        // 应用中所有函数，以 funcCode 作为索引 key
         const projectMethodCodeMap = functionList.value.reduce((result, methodData) => {
             result[methodData.funcCode] = methodData
             return result
