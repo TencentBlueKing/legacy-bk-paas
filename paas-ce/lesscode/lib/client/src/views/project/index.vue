@@ -128,7 +128,7 @@
                                 }
                             },
                             {
-                                title: '模板库',
+                                title: '页面模板库',
                                 url: 'templateManage',
                                 toPath: {
                                     name: 'templateManage'
@@ -314,7 +314,6 @@
                 this.$store.commit('projectVersion/setCurrentVersion', version)
             },
             handleSelect (routeName) {
-                console.log('routeName', routeName)
                 this.$router.push({
                     name: routeName
                 })

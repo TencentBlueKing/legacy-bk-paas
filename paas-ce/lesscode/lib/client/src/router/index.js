@@ -246,7 +246,7 @@ const routes = [
                 name: 'templateManage',
                 component: TemplateManage,
                 meta: {
-                    title: '模板库'
+                    title: '页面模板库'
                 }
             },
             {

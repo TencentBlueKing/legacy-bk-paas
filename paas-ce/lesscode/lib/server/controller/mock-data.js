@@ -57,7 +57,7 @@ const Data = {
             ctx.send(re.data)
         } catch (err) {
             let message = err.message
-            if (message.match(/Parameters error \[reason=\"参数 app_code 为空，请进行检查\"\]/)) message = 'Parameters error [reason="参数 app_code 为空，请进行检查"]，请在该项目下凭证管理页面绑定蓝鲸应用信息并获取用户认证凭证'
+            if (message.match(/Parameters error \[reason=\"参数 app_code 为空，请进行检查\"\]/)) message = 'Parameters error [reason="参数 app_code 为空，请进行检查"]，请在该应用下凭证管理页面绑定蓝鲸应用信息并获取用户认证凭证'
             ctx.throwError({
                 message
             })
@@ -73,7 +73,7 @@ const Data = {
                 id: i,
                 projectId: `id-${i}`,
                 projectCode: `code-${i}`,
-                projectName: `项目-${i}`,
+                projectName: `应用-${i}`,
                 name: `名称-${i}`
             })
         }
