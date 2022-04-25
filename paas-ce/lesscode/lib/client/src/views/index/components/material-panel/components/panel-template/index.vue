@@ -16,7 +16,7 @@
                 class="tab-item"
                 :class="{ active: tab === 'project' }"
                 @click="handleToggleTab('project')">
-                <span class="tab-item-label">应用模板</span>
+                <span class="tab-item-label">页面模板</span>
             </div>
             <div
                 class="tab-item"
