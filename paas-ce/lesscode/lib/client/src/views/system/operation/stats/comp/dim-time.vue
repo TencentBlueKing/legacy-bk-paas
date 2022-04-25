@@ -101,7 +101,7 @@
                 ],
                 totalColumns: [
                     { id: 'comp', name: '自定义组件总数' },
-                    { id: 'projectUsed', name: '被项目使用的组件总数' }
+                    { id: 'projectUsed', name: '被应用使用的组件总数' }
                 ]
             }
         },

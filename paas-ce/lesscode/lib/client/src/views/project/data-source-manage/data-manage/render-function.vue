@@ -18,14 +18,14 @@
             <bk-table-column label="操作" width="180">
                 <template slot-scope="props">
                     <bk-button text @click="showCode(props.row)" class="mr10">查看源码</bk-button>
-                    <bk-button text @click="addToProject(props.row)">添加至项目</bk-button>
+                    <bk-button text @click="addToProject(props.row)">添加至应用</bk-button>
                 </template>
             </bk-table-column>
         </bk-table>
-        <span class="function-tips">注：如需使用函数，可添加至项目然后在项目中使用</span>
+        <span class="function-tips">注：如需使用函数，可添加至应用然后在应用中使用</span>
 
         <edit-func-sideslider
-            title="添加至项目"
+            title="添加至应用"
             :is-show="showAddFunc.isShow"
             :func-data="showAddFunc.func"
             :is-edit="false"

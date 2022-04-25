@@ -28,7 +28,7 @@
                 </bk-form-item>
                 <bk-form-item label="生效范围" :required="true" property="effectiveRange" error-display-type="normal">
                     <bk-radio-group v-model="copyForm.effectiveRange">
-                        <bk-radio :value="0" class="range-radio" :disabled="copyForm.valueType === 6">本项目</bk-radio>
+                        <bk-radio :value="0" class="range-radio" :disabled="copyForm.valueType === 6">本应用</bk-radio>
                         <bk-radio :value="1" v-if="pageId">本页面</bk-radio>
                     </bk-radio-group>
                 </bk-form-item>
@@ -94,7 +94,7 @@
                         const repeatVailable = this.allProjectVariableList.find(variable => variable.variableCode === variableCode && this.copyForm.id !== variable.id)
                         return this.copyForm.effectiveRange === 1 || (this.copyForm.effectiveRange === 0 && !repeatVailable)
                     },
-                    message: '项目级变量，变量标识全局唯一',
+                    message: '应用级变量，变量标识全局唯一',
                     trigger: 'blur'
                 },
                 keyWordRule: {

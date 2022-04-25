@@ -1,8 +1,8 @@
 <template>
     <bk-form :label-width="110" :model="form" ref="funcForm" :form-type="formType" class="func-form-bottom">
         <bk-form-item
-            :rules="[requireRule('项目')]"
-            label="项目"
+            :rules="[requireRule('应用')]"
+            label="应用"
             property="projectId"
             error-display-type="normal"
             required>

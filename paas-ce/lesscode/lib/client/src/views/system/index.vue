@@ -16,7 +16,7 @@
                 @mouseleave="asideHover = false">
                 <nav class="nav-list">
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="/projects">
-                        <i class="bk-drag-icon bk-drag-project-list"></i>项目列表
+                        <i class="bk-drag-icon bk-drag-project-list"></i>应用列表
                     </router-link>
                     <router-link tag="div" class="nav-item" to="/template-market">
                         <i class="bk-drag-icon bk-drag-template-fill"></i>模板市场<i class="red-point"></i>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="sub-nav">
                             <router-link tag="div" class="sub-nav-item" to="/op/stats/user">用户数据</router-link>
-                            <router-link tag="div" class="sub-nav-item" to="/op/stats/project">项目数据</router-link>
+                            <router-link tag="div" class="sub-nav-item" to="/op/stats/project">应用数据</router-link>
                             <router-link tag="div" class="sub-nav-item" to="/op/stats/func">函数数据</router-link>
                             <router-link tag="div" class="sub-nav-item" to="/op/stats/comp">自定义组件数据</router-link>
                         </div>
@@ -45,7 +45,7 @@
                             <i class="bk-drag-icon bk-drag-arrow-down"></i>
                         </div>
                         <div class="sub-nav">
-                            <router-link tag="div" class="sub-nav-item" to="/pm/platform/project-member">项目成员</router-link>
+                            <router-link tag="div" class="sub-nav-item" to="/pm/platform/project-member">应用成员</router-link>
                         </div>
                     </div>
                 </nav>

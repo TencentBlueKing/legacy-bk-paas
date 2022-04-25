@@ -8,7 +8,7 @@
         <div slot="content" class="form-content">
             <bk-alert class="alert-info" type="info" title="基于“默认”版本内容新建" v-if="!isEdit"></bk-alert>
             <bk-form :label-width="90" :model="formData" :rules="rules" ref="form">
-                <bk-form-item label="项目版本" :required="true" property="version" error-display-type="normal">
+                <bk-form-item label="应用版本" :required="true" property="version" error-display-type="normal">
                     <bk-input
                         placeholder="请输入版本号，仅支持英文、数字、下划线、中划线和英文句号"
                         maxlength="30"
@@ -86,7 +86,7 @@
             this.versionLogPlaceholder = 'eg: 新增 XXX 功能\n    优化 XXX 功能\n    修复 XXX 功能\n'
             this.rules = {
                 version: [
-                    { required: true, message: '项目版本不能为空', trigger: 'blur' },
+                    { required: true, message: '应用版本不能为空', trigger: 'blur' },
                     {
                         validator: value => {
                             return /^[\w-\.]{1,40}$/.test(value)
