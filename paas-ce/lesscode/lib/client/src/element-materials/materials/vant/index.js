@@ -9,10 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import grid1 from '../bk/grid/column1'
-import grid2 from '../bk/grid/column2'
-import grid3 from '../bk/grid/column3'
-import grid4 from '../bk/grid/column4'
+import block from '../bk/block'
+import grid from '../bk/grid'
 import freeLayout from '../bk/free-layout'
 
 import paragraph from './paragraph'
@@ -63,10 +61,8 @@ import Steps from './steps'
 // 其他
  
 const vantComponents = Object.seal([
-    grid1,
-    grid2,
-    grid3,
-    grid4,
+    block,
+    grid,
     freeLayout,
     paragraph,
     Button,
