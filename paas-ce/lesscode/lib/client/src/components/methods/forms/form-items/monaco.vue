@@ -3,6 +3,7 @@
         :value="form.funcBody"
         :height="height"
         :proposals="proposals"
+        ref="monaco"
         @change="change">
         <template v-slot:tools>
             <i class="bk-drag-icon bk-drag-fix icon-style" @click="fixMethod" v-bk-tooltips="fixMethodTips"></i>
