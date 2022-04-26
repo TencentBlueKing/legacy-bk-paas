@@ -47,7 +47,7 @@
 
 - [安装部署PaaS](docs/install/ce_paas_install.md)
 - [安装部署PaaSAgent](docs/install/ce_paas_agent_install.md)
-- [替换已安装的蓝鲸社区版指引](https://docs.bk.tencent.com/bk_osed/guide.html#osed)
+- [替换已安装的蓝鲸社区版指引](https://bk.tencent.com/docs/document/6.0/148/15382)
 
 
 ## Roadmap
