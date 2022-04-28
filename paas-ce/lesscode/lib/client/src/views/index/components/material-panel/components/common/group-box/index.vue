@@ -18,6 +18,7 @@
             </bk-exception>
             <vue-draggable
                 v-else
+                :options="dragOptions"
                 class="group-content"
                 :list="list"
                 :sort="false"
@@ -48,7 +49,11 @@
             // 为空，通过组件 type 动态计算 group 的值
             group: String,
             // 选中组件时的回调
-            createFallback: Function
+            createFallback: Function,
+            dragOptions: {
+                type: Object,
+                default: () => ({})
+            }
         },
         data () {
             return {
@@ -191,10 +196,13 @@
                     margin-top: 1px;
                     width: 100%;
                     overflow: hidden;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    display: -webkit-box;
+                    overflow: hidden;
                     text-overflow: ellipsis;
-                    white-space: nowrap;
-                    word-break: break-all;
                     white-space: normal;
+                    word-break: break-all;
                 }
             }
             .render-drag-icon-item{

@@ -10,72 +10,67 @@
 -->
 
 <template>
-    <div>
-        <template v-if="config.length">
-            <p class="style-setting-tips">样式面板中设置的样式将覆盖组件自带的默认样式，请谨慎调整</p>
-            <position
-                v-if="handleConfigIsShow('position')"
-                :value="lastStyles"
-                :include="handleGetConfig('position').include"
-                :exclude="handleGetConfig('position').exclude"
-                :change="handleChange" />
-            <size
-                v-if="handleConfigIsShow('size')"
-                :value="lastStyles"
-                :include="handleGetConfig('size').include"
-                :exclude="handleGetConfig('size').exclude"
-                :change="handleChange" />
-            <padding
-                v-if="handleConfigIsShow('padding')"
-                :value="lastStyles"
-                :include="handleGetConfig('padding').include"
-                :exclude="handleGetConfig('padding').exclude"
-                :change="handleChange" />
-            <margin
-                v-if="handleConfigIsShow('margin')"
-                :value="lastStyles"
-                :include="handleGetConfig('margin').include"
-                :exclude="handleGetConfig('margin').exclude"
-                :change="handleChange" />
-            <font-config
-                v-if="handleConfigIsShow('font')"
-                :value="lastStyles"
-                :include="handleGetConfig('font').include"
-                :exclude="handleGetConfig('font').exclude"
-                :change="handleChange" />
-            <pointer
-                v-if="handleConfigIsShow('pointer')"
-                :value="lastStyles"
-                :include="handleGetConfig('pointer').include"
-                :exclude="handleGetConfig('pointer').exclude"
-                :change="handleChange" />
-            <background
-                v-if="handleConfigIsShow('background')"
-                :value="lastStyles"
-                :include="handleGetConfig('background').include"
-                :exclude="handleGetConfig('background').exclude"
-                :change="handleChange" />
-            <border
-                v-if="handleConfigIsShow('border')"
-                :value="lastStyles"
-                :include="handleGetConfig('border').include"
-                :exclude="handleGetConfig('border').exclude"
-                :change="handleChange" />
-            <opacity
-                v-if="handleConfigIsShow('opacity')"
-                :value="lastStyles"
-                :include="handleGetConfig('opacity').include"
-                :exclude="handleGetConfig('opacity').exclude"
-                :change="handleChange" />
-        </template>
+    <div v-if="config.length">
+        <p class="style-setting-tips">样式面板中设置的样式将覆盖组件自带的默认样式，请谨慎调整</p>
+        <position
+            v-if="handleConfigIsShow('position')"
+            :value="lastStyles"
+            :include="handleGetConfig('position').include"
+            :exclude="handleGetConfig('position').exclude"
+            :change="handleChange" />
+        <size
+            v-if="handleConfigIsShow('size')"
+            :value="lastStyles"
+            :include="handleGetConfig('size').include"
+            :exclude="handleGetConfig('size').exclude"
+            :change="handleChange" />
+        <padding
+            v-if="handleConfigIsShow('padding')"
+            :value="lastStyles"
+            :include="handleGetConfig('padding').include"
+            :exclude="handleGetConfig('padding').exclude"
+            :change="handleChange" />
+        <margin
+            v-if="handleConfigIsShow('margin')"
+            :value="lastStyles"
+            :include="handleGetConfig('margin').include"
+            :exclude="handleGetConfig('margin').exclude"
+            :change="handleChange" />
+        <font-config
+            v-if="handleConfigIsShow('font')"
+            :value="lastStyles"
+            :include="handleGetConfig('font').include"
+            :exclude="handleGetConfig('font').exclude"
+            :change="handleChange" />
+        <pointer
+            v-if="handleConfigIsShow('pointer')"
+            :value="lastStyles"
+            :include="handleGetConfig('pointer').include"
+            :exclude="handleGetConfig('pointer').exclude"
+            :change="handleChange" />
+        <background
+            v-if="handleConfigIsShow('background')"
+            :value="lastStyles"
+            :include="handleGetConfig('background').include"
+            :exclude="handleGetConfig('background').exclude"
+            :change="handleChange" />
+        <border
+            v-if="handleConfigIsShow('border')"
+            :value="lastStyles"
+            :include="handleGetConfig('border').include"
+            :exclude="handleGetConfig('border').exclude"
+            :change="handleChange" />
+        <opacity
+            v-if="handleConfigIsShow('opacity')"
+            :value="lastStyles"
+            :include="handleGetConfig('opacity').include"
+            :exclude="handleGetConfig('opacity').exclude"
+            :change="handleChange" />
         <style-custom
             v-if="isShowCustom"
             :component-id="componentId"
             :value="lastStyles"
             :change="handleChange" />
-        <!-- <div v-else class="no-style">
-            <span v-if="Object.keys(config).length">该组件暂无样式</span>
-        </div> -->
     </div>
 </template>
 <script>

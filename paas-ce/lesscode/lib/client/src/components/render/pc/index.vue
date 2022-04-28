@@ -208,7 +208,7 @@
              * @param { Object } event
              */
             handleCanvaseClick (event) {
-                if (event.target.classList.contains(this.$style['editor'])) {
+                if (event.target.classList.contains(this.$style['drag-area'])) {
                     const activeNode = LC.getActiveNode()
                     if (activeNode) {
                         activeNode.activeClear()
