@@ -57,6 +57,9 @@
 </script>
 <style lang="postcss" module>
     @import "@/css/mixins/scroller";
+    $layoutLeftWidth: 340px;
+    $layoutRightWidth: 300px;
+
     .draw-layout{
         position: relative;
         padding-right: 300px;
@@ -98,7 +101,7 @@
             bottom: 0;
             left: 0;
             z-index: 1;
-            width: 340px;
+            width: $layoutLeftWidth;
             background: #fff;
             box-shadow: 2px 4px 4px 0 rgb(0 0 0 / 10%);
         }
@@ -107,15 +110,15 @@
             top: 0;
             right: 0;
             bottom: 0;
-            width: 300px;
+            width: $layoutRightWidth;
             background: #FFF;
             box-shadow: -2px 4px 4px 0px rgba(0,0,0,0.1);
         }
         .layout-center{
             position: relative;
             height: 100%;
-            overflow: auto;
-            @mixin scroller;
+            padding: 20px 0;
+            overflow: hidden;
         }
         .collapsed-left-btn,
         .collapsed-right-btn{

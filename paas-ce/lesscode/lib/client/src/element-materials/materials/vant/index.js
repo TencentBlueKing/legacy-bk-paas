@@ -57,6 +57,7 @@ import TreeSelect from './tree-select'
 import Pagination from './pagination'
 import Navbar from './navbar'
 import Steps from './steps'
+import Tab from './tab'
  
 // 其他
  
@@ -94,7 +95,8 @@ const vantComponents = Object.seal([
     Steps,
     Stepper,
     Slider,
-    Search
+    Search,
+    Tab
 ])
  
 export default vantComponents
