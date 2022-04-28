@@ -10,17 +10,15 @@
 -->
 
 <template>
-    <div>
-        <template v-if="hasMaterialConfig">
-            <template v-for="(item, key) in propsConfig">
-                <render-prop
-                    v-if="item.type !== 'hidden'"
-                    :describe="item"
-                    :last-value="lastProps[key]"
-                    :name="key"
-                    :key="key"
-                    @on-change="handleChange" />
-            </template>
+    <div v-if="hasMaterialConfig">
+        <template v-for="(item, key) in propsConfig">
+            <render-prop
+                v-if="item.type !== 'hidden'"
+                :describe="item"
+                :last-value="lastProps[key]"
+                :name="key"
+                :key="key"
+                @on-change="handleChange" />
         </template>
     </div>
 </template>

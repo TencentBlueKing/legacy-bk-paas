@@ -100,6 +100,9 @@
                 isLoading: false,
                 tab: 'project',
                 type: 'project',
+                dragOptions: {
+                    disabled: false
+                },
                 marketTemplateGroups: PAGE_TEMPLATE_TYPE,
                 projectTemplateList: [],
                 marketTemplateList: [],
@@ -185,7 +188,17 @@
             handleToggleTab (tab) {
                 this.tab = tab
                 this.type = tab
-                this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
+                if (this.type === 'project') {
+                    this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
+                    this.dragOptions = {
+                        disabled: false
+                    }
+                } else {
+                    this.renderGroupTemplateList = Object.freeze(this.marketTemplateGroupList)
+                    this.dragOptions = {
+                        disabled: true
+                    }
+                }
             },
             onChoose (e, list) {
                 const contentStr = list[e.oldIndex] && list[e.oldIndex].content
