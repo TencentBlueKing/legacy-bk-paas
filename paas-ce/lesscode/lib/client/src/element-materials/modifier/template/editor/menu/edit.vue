@@ -164,7 +164,7 @@
         },
         mounted () {
             this.$nextTick(() => {
-                // 可选项目icon
+                // 可选应用icon
                 this.initPopover()
             })
         },

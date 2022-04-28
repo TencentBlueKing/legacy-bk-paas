@@ -10,9 +10,9 @@
         header-position="left">
         <div :class="{ 'scope-specify': scope === ScopeValue.Specify }">
             <bk-radio-group v-model="scope" class="scope-radio-group">
-                <bk-radio :value="ScopeValue.Self">仅本项目</bk-radio>
-                <bk-radio :value="ScopeValue.Specify">特定项目</bk-radio>
-                <bk-radio :value="ScopeValue.All">所有项目，包含后续新增</bk-radio>
+                <bk-radio :value="ScopeValue.Self">仅本应用</bk-radio>
+                <bk-radio :value="ScopeValue.Specify">特定应用</bk-radio>
+                <bk-radio :value="ScopeValue.All">所有应用，包含后续新增</bk-radio>
             </bk-radio-group>
             <div class="scope-transfer-wrapper" v-if="scope === ScopeValue.Specify">
                 <bk-transfer
@@ -66,8 +66,8 @@
                     loading: false
                 },
                 transfer: {
-                    title: ['项目列表', '公开项目'],
-                    emptyContent: ['无项目', '未选择项目'],
+                    title: ['应用列表', '公开应用'],
+                    emptyContent: ['无应用', '未选择应用'],
                     displayKey: 'projectName',
                     settingKey: 'id'
                 }
@@ -103,10 +103,10 @@
             appendSourceProject () {
                 if (this.scope === this.ScopeValue.Specify) {
                     const targetProjects = this.data.scope[0] || []
-                    // 用户A1共享项目P给A2，P项目组件C公开范围为特定项目P1此项目只属于A1，A2查看项目P的组件C公开范围设置时，在“公开项目”中看不到P1
-                    // 因为逻辑上设置特定项目时的项目数据只能是当前用户A2的项目（包括共享项目），P1项目不属于A2
-                    // 所以，此处将P1项目也共享给A2即可在设置中正常显示出P1，但由于共享其它项目的组件并非强制项目一定要属于用户，因此为了满足设置上的需求
-                    // 在现有数据的基础上，将非当前用户的项目数据追加到项目列表中
+                    // 用户A1共享应用P给A2，P应用组件C公开范围为特定应用P1此应用只属于A1，A2查看应用P的组件C公开范围设置时，在“公开应用”中看不到P1
+                    // 因为逻辑上设置特定应用时的应用数据只能是当前用户A2的应用（包括共享应用），P1应用不属于A2
+                    // 所以，此处将P1应用也共享给A2即可在设置中正常显示出P1，但由于共享其它应用的组件并非强制应用一定要属于用户，因此为了满足设置上的需求
+                    // 在现有数据的基础上，将非当前用户的应用数据追加到应用列表中
                     const appendProjects = targetProjects.filter(item => this.sourceProjectList.findIndex(source => source.id === item.projectId) === -1)
                     this.sourceProjectList.push(...appendProjects.map(item => ({
                         id: item.projectId,

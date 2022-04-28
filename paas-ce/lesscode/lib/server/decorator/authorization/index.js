@@ -28,7 +28,7 @@ export const Authorization = (perm) => {
                     const userPermsInfo = ctx.session.permsInfo
                     const exitPermCodes = userPermsInfo.permCodes || []
                     const noPermission = needPerms.some(perm => !exitPermCodes.includes(perm))
-                    if (noPermission) throw new global.BusinessError('暂无执行该操作权限，请联系项目管理员开通权限后重试', 403, 403)
+                    if (noPermission) throw new global.BusinessError('暂无执行该操作权限，请联系应用管理员开通权限后重试', 403, 403)
                 }
 
                 return await originValue.apply(this, [ctx])
@@ -63,7 +63,7 @@ export const DeleteAuthorization = ({ perm, tableName, getId = ctx => ctx.reques
                     const userInfo = ctx.session.userInfo
                     const notCreateUser = record.createUser !== userInfo.username
 
-                    if (noPermission && notCreateUser) throw new global.BusinessError('暂无执行该操作权限，请联系项目管理员开通权限后重试', 403, 403)
+                    if (noPermission && notCreateUser) throw new global.BusinessError('暂无执行该操作权限，请联系应用管理员开通权限后重试', 403, 403)
                 }
 
                 return await originValue.apply(this, [ctx])
@@ -87,7 +87,7 @@ export const ProjectAuthorization = ({ getId = ctx => ctx.request.query.projectI
                 const userInfo = ctx.session.userInfo
                 const project = await projectModel.findUserProjectById(userInfo.id, projectId)
                 if (!project) {
-                    throw new global.BusinessError(`您没有项目[ID:${projectId}]的权限，请联系管理员授权后再试`, 403, 403)
+                    throw new global.BusinessError(`您没有应用[ID:${projectId}]的权限，请联系管理员授权后再试`, 403, 403)
                 } else {
                     return await originValue.apply(this, [ctx])
                 }

@@ -115,7 +115,7 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId,
         }
     })
 
-    // 项目默认首页
+    // 应用默认首页
     const defaultRoute = getProjectDefaultRoute(projectPageRouteList, projectRouteList, platform)
 
     const allRoutes = [

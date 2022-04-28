@@ -15,7 +15,7 @@
             :class="{
                 active: value === 'template'
             }"
-            v-bk-tooltips.right="'模板库'"
+            v-bk-tooltips.right="'页面模板库'"
             role="template-panel-tab"
             @click="handleChange('template')">
             <i class="bk-drag-icon bk-drag-template-fill" />

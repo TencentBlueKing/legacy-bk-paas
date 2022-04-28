@@ -17,7 +17,7 @@
                         <bk-radio :value="0">否</bk-radio>
                     </bk-radio-group>
                 </bk-form-item>
-                <bk-form-item label="项目模板分类" required property="offcialType" error-display-type="normal">
+                <bk-form-item label="应用模板分类" required property="offcialType" error-display-type="normal">
                     <bk-select
                         :clearable="false"
                         v-model="formData.offcialType"

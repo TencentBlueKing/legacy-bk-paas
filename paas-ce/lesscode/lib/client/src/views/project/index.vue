@@ -2,9 +2,9 @@
     <main :class="['project-layout', { 'no-breadcrumb': !hasBreadcrumb }]">
         <aside class="aside">
             <div class="side-hd">
-                <i class="back-icon bk-drag-icon bk-drag-arrow-back" title="返回项目列表" @click="toProjects"></i>
+                <i class="back-icon bk-drag-icon bk-drag-arrow-back" title="返回应用列表" @click="toProjects"></i>
                 <span class="seperate-line">|</span>
-                <span class="bk-drag-icon template-logo" title="返回项目列表" @click="toProjects">
+                <span class="bk-drag-icon template-logo" title="返回应用列表" @click="toProjects">
                     <svg aria-hidden="true" width="16" height="16">
                         <use xlink:href="#bk-drag-logo"></use>
                     </svg>
@@ -63,7 +63,7 @@
             </div>
             <extra-links></extra-links>
         </div>
-        <!-- 使用v-if因子组件依赖获取的项目信息 -->
+        <!-- 使用v-if因子组件依赖获取的应用信息 -->
         <div class="main-container" v-bkloading="{ isLoading: pageLoading }">
             <router-view v-if="!pageLoading" :key="routeKey"></router-view>
         </div>
@@ -128,7 +128,7 @@
                                 }
                             },
                             {
-                                title: '模板库',
+                                title: '页面模板库',
                                 url: 'templateManage',
                                 toPath: {
                                     name: 'templateManage'
@@ -314,7 +314,6 @@
                 this.$store.commit('projectVersion/setCurrentVersion', version)
             },
             handleSelect (routeName) {
-                console.log('routeName', routeName)
                 this.$router.push({
                     name: routeName
                 })

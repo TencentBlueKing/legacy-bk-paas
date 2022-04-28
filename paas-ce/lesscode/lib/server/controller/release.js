@@ -400,7 +400,7 @@ const Realease = {
         projects = projects.filter(item => item.id !== projectId)
         if (projects && projects.length) {
             ctx.throwError({
-                message: '该蓝鲸应用模块已被其它项目绑定，请重新选择'
+                message: '该蓝鲸应用模块已被其它应用绑定，请重新选择'
             })
         } else {
             ctx.send({
