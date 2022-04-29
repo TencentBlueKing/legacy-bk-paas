@@ -51,7 +51,7 @@
 > `v-for`指令可以将一组数据渲染成一组元素。下面实例演示如何使用`v-for`:
 :::info
 * 画布拖入`Card`组件，`Card`组件内部拖入一个`Paragraph`组件`Image`组件
-* 选中`Card`组件，切换到指令面板，给`v-for`指令绑定一个变量`cardList`(如下图一所示)。注：项目里面需要存在变量`cardList`，它是一个有4个子元素的数组，每个子元素都有`img`和`name`属性
+* 选中`Card`组件，切换到指令面板，给`v-for`指令绑定一个变量`cardList`(如下图一所示)。注：应用里面需要存在变量`cardList`，它是一个有4个子元素的数组，每个子元素都有`img`和`name`属性
 * `v-for`指令上面的显示的`card06fb0729Item`，可以为当前组件和子组件的指令赋值，当前组件的 v-if 和 v-show 除外
 * 选中`Image`组件，给组件的`src`属性填入表达式`card06fb0729Item.img`(如下图二所示)。注：变量`cardList`的子项`card06fb0729Item`需要有`img`属性
 * 选中`Paragraph`组件，给组件的`文本配置`属性填入表达式`card06fb0729Item.name`(如下图三所示)。注：变量`cardList`的子项`card06fb0729Item`需要有`img`属性

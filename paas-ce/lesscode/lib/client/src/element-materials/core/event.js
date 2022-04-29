@@ -1,4 +1,6 @@
-import { bus } from '@/common/bus'
+import Vue from 'vue'
+
+const bus = new Vue()
 
 /**
  * EVENT LIST:
@@ -30,6 +32,14 @@ import { bus } from '@/common/bus'
  * moveChild
  * mobilePreviewSwitch
  */
+
+export const resetEventListener = () => {
+    Object.keys(bus._events).forEach(event => {
+        bus._events[event].forEach(callback => {
+            bus.$off(event, callback)
+        })
+    })
+}
 
 export const addEventListener = (eventName, callback) => {
     bus.$on(eventName, callback)

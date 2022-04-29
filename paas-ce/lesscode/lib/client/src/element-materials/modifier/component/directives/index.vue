@@ -10,46 +10,43 @@
 -->
 
 <template>
-    <section class="directive-home">
-        <template v-if="directiveList.length">
-            <h3 class="directive-tip">
-                编辑函数时，可以使用 lesscode.指令值，必须通过编辑器自动补全功能选择对应属性指令值，来获取或者修改当前页面中配置了指令的组件属性值
-            </h3>
-            <bk-form form-type="vertical" :label-width="280">
-                <bk-form-item
-                    v-for="(directive, index) in directiveList"
-                    :key="index"
-                    class="directive-item">
-                    <variable-select
-                        :options="directive"
-                        :value="lastDirectiveMap[genDirectiveKey(directive)]"
-                        :readonly="isAttachToForm"
-                        @change="value => handleVariableFormatChange(directive, value)">
-                        <template v-slot:title>
-                            <span
-                                v-bk-tooltips="{
-                                    content: directive.tips && directive.tips(directive),
-                                    disabled: !directive.tips,
-                                    width: 290
-                                }"
-                                :class="{
-                                    'under-line': directive.tips,
-                                    'directive-label': true
-                                }">
-                                {{ getLabel(directive) }}
-                            </span>
-                        </template>
-                        <bk-input
-                            :value="directive.val"
-                            @change="(val) => handleCodeChange(directive, val)"
-                            clearable />
-                    </variable-select>
-                </bk-form-item>
-            </bk-form>
-        </template>
-        <!-- <div class="no-prop" v-else>
-            该组件暂无指令
-        </div> -->
+    <section
+        v-if="directiveList.length"
+        class="directive-home">
+        <h3 class="directive-tip">
+            编辑函数时，可以使用 lesscode.指令值，必须通过编辑器自动补全功能选择对应属性指令值，来获取或者修改当前页面中配置了指令的组件属性值
+        </h3>
+        <bk-form form-type="vertical" :label-width="280">
+            <bk-form-item
+                v-for="(directive, index) in directiveList"
+                :key="index"
+                class="directive-item">
+                <variable-select
+                    :options="directive"
+                    :value="lastDirectiveMap[genDirectiveKey(directive)]"
+                    :readonly="isAttachToForm"
+                    @change="value => handleVariableFormatChange(directive, value)">
+                    <template v-slot:title>
+                        <span
+                            v-bk-tooltips="{
+                                content: directive.tips && directive.tips(directive),
+                                disabled: !directive.tips,
+                                width: 290
+                            }"
+                            :class="{
+                                'under-line': directive.tips,
+                                'directive-label': true
+                            }">
+                            {{ getLabel(directive) }}
+                        </span>
+                    </template>
+                    <bk-input
+                        :value="directive.val"
+                        @change="(val) => handleCodeChange(directive, val)"
+                        clearable />
+                </variable-select>
+            </bk-form-item>
+        </bk-form>
     </section>
 </template>
 

@@ -1,5 +1,5 @@
 import { walkGrid, uuid, transformOldGrid } from '../util'
-import { getConnection, getRepository, In } from 'typeorm'
+import { getConnection, getRepository, In, IsNull } from 'typeorm'
 import Page from '../model/entities/page'
 import Route from '../model/entities/route'
 import PageRoute from '../model/entities/page-route'
@@ -20,11 +20,16 @@ import { logger } from '../logger'
 export async function syncFuncData (ctx) {
     try {
         const funcRepository = getRepository(Func)
-        const funcList = await funcRepository.find()
+        const funcList = await funcRepository.find({
+            projectId: IsNull()
+        })
 
         const funcGroupRepository = getRepository(FuncGroup)
-        const funcGroupList = await funcGroupRepository.find()
-        const funcGroupMap = funcGroupList.reduce((acc, cur) => {
+        const funcGroupList = await funcGroupRepository.find({
+            projectId: IsNull()
+        })
+        const allFuncGroupList = await funcGroupRepository.find()
+        const funcGroupMap = allFuncGroupList.reduce((acc, cur) => {
             acc[cur.id] = cur.groupName
             return acc
         }, {})

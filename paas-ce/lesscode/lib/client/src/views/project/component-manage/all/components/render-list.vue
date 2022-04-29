@@ -211,14 +211,14 @@
             },
             getPublicScope (compId) {
                 let scope
-                // 是否公开给所有项目
+                // 是否公开给所有应用
                 const isAll = this.publicScope.all.findIndex(item => item.id === compId) !== -1
                 if (isAll) {
-                    scope = ['所有项目', 1]
+                    scope = ['所有应用', 1]
                 } else if (this.publicScope.specify[compId]) {
                     scope = [this.publicScope.specify[compId], -1]
                 } else {
-                    scope = ['仅本项目', 0]
+                    scope = ['仅本应用', 0]
                 }
                 this.componentScope[compId] = scope
                 return scope

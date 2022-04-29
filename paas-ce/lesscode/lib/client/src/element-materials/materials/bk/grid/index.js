@@ -9,40 +9,39 @@
  * specific language governing permissions and limitations under the License.
  */
 
-export default function (children) {
-    const base = {
-        name: 'grid',
-        type: 'render-grid',
-        order: 1,
-        group: '布局',
-        styles: [
-            'position',
-            'size',
-            'margin',
-            'padding',
-            'background',
-            'font',
-            'opacity',
-            'pointer',
-            'border'
-        ],
-        renderStyles: {
-            'margin-bottom': '10px'
-        },
-        props: {
-            'margin-horizontal': {
-                type: 'number',
-                val: 0
+export default {
+    name: 'grid',
+    type: 'render-grid',
+    displayName: '多列',
+    icon: 'bk-drag-grid-2',
+    group: '布局',
+    order: 2,
+    styles: [
+        'position',
+        'size',
+        'margin',
+        'padding',
+        'background',
+        'font',
+        'opacity',
+        'pointer',
+        'border'
+    ],
+    renderStyles: {
+        'margin-bottom': '10px'
+    },
+    props: {
+    },
+    slots: {
+        default: [
+            {
+                name: ['layout'],
+                type: ['render-column']
             },
-            'margin-vertical': {
-                type: 'number',
-                val: 0
+            {
+                name: ['layout'],
+                type: ['render-column']
             }
-        },
-        slots: {
-            default: []
-        }
+        ]
     }
-
-    return Object.assign(base, children)
 }

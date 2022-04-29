@@ -5,7 +5,7 @@
                 <bk-input
                     class="filter-item search-input"
                     clearable
-                    placeholder="按项目名/项目Code搜索"
+                    placeholder="按应用名/应用Code搜索"
                     right-icon="bk-icon icon-search"
                     @clear="handleKeywordClear"
                     @enter="handleKeywordEnter"
@@ -43,7 +43,7 @@
                                 class="mr5"
                                 theme="primary"
                                 @click="editManager(row.id)"
-                            >编辑项目管理员</bk-button>
+                            >编辑应用管理员</bk-button>
                         </template>
                         
                     </bk-table-column>
@@ -52,7 +52,7 @@
         </div>
         <bk-sideslider :is-show.sync="sideObj.isShow" :title="sideObj.title" quick-close :width="796" @hidden="clearForm">
             <bk-form :label-width="130" :model="sideObj.form" class="member-form" slot="content">
-                <bk-form-item label="项目管理员" :required="true" property="users">
+                <bk-form-item label="应用管理员" :required="true" property="users">
                     <member-selector class="member-form-select" @clear="clearForm" v-model="sideObj.form.users" :user-list.sync="filterUserList"></member-selector>
                 </bk-form-item>
                 <bk-form-item>
@@ -87,9 +87,9 @@
                     limit: 10
                 },
                 columns: [
-                    { id: 'id', name: '项目ID' },
-                    { id: 'projectCode', name: '项目Code' },
-                    { id: 'projectName', name: '项目名' }
+                    { id: 'id', name: '应用ID' },
+                    { id: 'projectCode', name: '应用Code' },
+                    { id: 'projectName', name: '应用名' }
                 ],
                 filters: {
                     keyword: ''
@@ -101,7 +101,7 @@
                 sideObj: {
                     isShow: false,
                     isLoading: false,
-                    title: '编辑项目管理员',
+                    title: '编辑应用管理员',
                     form: {
                         users: []
                     }
@@ -210,7 +210,7 @@
                     }
                     if (needAddMembersData.length) {
                         const payload = {
-                            roleId: 1, // 项目管理员
+                            roleId: 1, // 应用管理员
                             users: needAddMembersData,
                             projectId: this.projectId
                         }

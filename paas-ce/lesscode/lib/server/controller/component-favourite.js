@@ -4,7 +4,7 @@ export const list = async (ctx) => {
     try {
         const { projectId } = ctx.query
         if (!projectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         const data = await CompFavouriteModel.all({
             projectId
@@ -31,7 +31,7 @@ export const add = async (ctx) => {
             throw new Error('组件id不能为空')
         }
         if (!projectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         const params = {
             compId,
@@ -61,7 +61,7 @@ export const favouriteDelete = async (ctx) => {
             throw new Error('组件id不能为空')
         }
         if (!projectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         const params = {
             compId,

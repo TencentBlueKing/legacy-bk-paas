@@ -18,15 +18,9 @@ import Vue from 'vue'
  * @param {*} html html字符串
  */
 export function transformHtmlToVnode (html) {
-    const htmlComponent = Vue.compile(html)
-    const globalComponent = global.mainComponent
-    const { $options, $createElement } = globalComponent
-    const _staticRenderFns = $options.staticRenderFns
-
-    $options.staticRenderFns = htmlComponent.staticRenderFns
-    const htmlVnode = htmlComponent.render.call(globalComponent, $createElement)
-    $options.staticRenderFns = _staticRenderFns
-    return htmlVnode
+    const { render, staticRenderFns } = Vue.compile(html)
+    const htmlComponent = new Vue({ render, staticRenderFns })
+    return htmlComponent._render()
 }
 
 /**

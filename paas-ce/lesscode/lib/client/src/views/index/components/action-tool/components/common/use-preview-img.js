@@ -9,7 +9,7 @@ export default () => {
     const store = useStore()
     const route = useRoute()
 
-    const versionId = computed(() => store.getters['projectVersion/versionId'])
+    const versionId = computed(() => store.getters['projectVersion/currentVersionId'])
 
     const isLoading = ref(false)
 

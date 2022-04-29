@@ -190,7 +190,7 @@ export default class FunctionController {
             // 插入数据库
             await transactionalEntityHelper.add(TABLE_FILE_NAME.FUNC, handleFunctionIntoDb(functionData))
             // 处理关联关系
-            await handleRelation(functionData, functionData.projectId, functionData.versionId, transactionalEntityHelper)
+            await handleRelation(functionData, functionData.projectId, functionData.versionId)
         })
         // 返回函数本身
         return functionData
@@ -212,7 +212,7 @@ export default class FunctionController {
             // 插入数据库
             await transactionalEntityHelper.update(TABLE_FILE_NAME.FUNC, handleFunctionIntoDb(functionData))
             // 处理关联关系
-            await handleRelation(functionData, functionData.projectId, functionData.versionId, transactionalEntityHelper)
+            await handleRelation(functionData, functionData.projectId, functionData.versionId)
         })
         // 返回函数本身
         return functionData
@@ -236,7 +236,7 @@ export default class FunctionController {
             // 插入数据库
             await transactionalEntityHelper.add(TABLE_FILE_NAME.FUNC, handleFunctionIntoDb(functionList))
             // 处理关联关系
-            await handleRelation(functionList, projectId, versionId, transactionalEntityHelper)
+            await handleRelation(functionList, projectId, versionId)
         })
         // 返回函数列表
         return functionList

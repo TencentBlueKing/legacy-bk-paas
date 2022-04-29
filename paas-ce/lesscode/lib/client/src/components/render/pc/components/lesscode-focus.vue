@@ -55,8 +55,7 @@
                 if (event.target.componentId === this.activeComponentData.componentId) {
                     return
                 }
-                console.log(`\n${new Date()}`)
-                console.log('record event : ', event)
+                
                 this.showActive(event.target)
                 this.activeComponentData = event.target
                 activeResizeObserver.observe(event.target.$elm)
@@ -100,17 +99,24 @@
                 }
             }
 
+            const resetCallback = () => {
+                componentMouserleaveCallback()
+                activeClearCallback()
+            }
+
             LC.addEventListener('active', activeCallback)
             LC.addEventListener('activeClear', activeClearCallback)
             LC.addEventListener('componentHover', hoverCallback)
             LC.addEventListener('componentMouserleave', componentMouserleaveCallback)
             LC.addEventListener('removeChild', removeChildCallbak)
+            LC.addEventListener('reset', resetCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('active', activeCallback)
                 LC.removeEventListener('activeClear', activeClearCallback)
                 LC.removeEventListener('componentHover', hoverCallback)
                 LC.removeEventListener('componentMouserleave', componentMouserleaveCallback)
                 LC.removeEventListener('removeChild', removeChildCallbak)
+                LC.removeEventListener('removeChild', resetCallback)
             })
         },
         methods: {

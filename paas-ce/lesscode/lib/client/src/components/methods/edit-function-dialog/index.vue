@@ -76,7 +76,7 @@
                 <edit-func-form
                     ref="functionForm"
                     :func-data="chosenFunction"
-                    @refresh="refreshStatus"
+                    @success-save="handleSuccessSave"
                     @close="handleCloseDialog"
                 />
             </layout>
@@ -218,15 +218,17 @@
                 renderGroup.children.push(functionData)
                 // 选中新增的数据
                 this.handleChooseFunction(functionData)
-                // 新增设置编辑态
-                this.$nextTick(() => {
-                    this.$refs.functionForm.formChanged = true
-                })
             },
 
             handleChooseFunction (functionData) {
                 const chooseFunction = () => {
                     this.chosenFunction = functionData
+                    // 当前选中的数据未保存，设置编辑态
+                    if (!functionData.id) {
+                        this.$nextTick(() => {
+                            this.$refs.functionForm.formChanged = true
+                        })
+                    }
                 }
                 const saveChooseFunction = () => {
                     this.$refs
@@ -246,6 +248,7 @@
                     }
                     chooseFunction()
                 }
+                // 函数未保存或者函数经过了修改，需要给出切换提示
                 if (this.$refs.functionForm.formChanged) {
                     this.$bkInfo({
                         title: '确认切换',
@@ -260,6 +263,10 @@
                 } else {
                     chooseFunction()
                 }
+            },
+
+            handleSuccessSave () {
+                this.refreshStatus().then(this.handleChooseDefaultFunction)
             },
 
             handleGroupSort () {

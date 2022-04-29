@@ -1,4 +1,4 @@
-import { activeNode } from './Node'
+import { activeNode } from '../Node'
 
 export default function () {
     return activeNode

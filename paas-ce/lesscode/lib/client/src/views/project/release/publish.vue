@@ -56,7 +56,7 @@
                                 :id="option.name"
                                 :disabled="option.disabled"
                                 :name="option.name">
-                                <span v-if="option.disabled" :title="`${option.name}: 已被其它项目绑定`">{{ option.name }}</span>
+                                <span v-if="option.disabled" :title="`${option.name}: 已被其它应用绑定`">{{ option.name }}</span>
                             </bk-option>
                             <template v-if="createLinkUrl && tmpAppCode">
                                 <div slot="extension" :class="$style['selector-create-item']">
@@ -147,7 +147,7 @@
                     <div :class="$style['type']">
                         <span :class="$style['version-label']">源码包</span>
                         <bk-radio-group v-model="versionForm.releaseType" :class="$style['version-type']" @change="getReleaseSql">
-                            <bk-radio value="NEW_VERSION">项目默认版本
+                            <bk-radio value="NEW_VERSION">应用默认版本
                                 <i :class="['bk-icon', 'icon-info', $style['icon']]"
                                     v-bk-tooltips="{
                                         content: '部署时基于“默认”版本生成新的版本号，后续可在“版本管理”页面已归档版本中查看',
@@ -155,7 +155,7 @@
                                     }"
                                 ></i>
                             </bk-radio>
-                            <bk-radio value="PROJECT_VERSION" style="margin-left: 70px">项目已有版本
+                            <bk-radio value="PROJECT_VERSION" style="margin-left: 70px">应用已有版本
                                 <i :class="['bk-icon', 'icon-info', $style['icon']]"
                                     v-bk-tooltips="{
                                         content: '“版本管理”页面中未归档的版本'
@@ -187,7 +187,7 @@
                             </bk-input>
                             <p :class="$style['version-err-tips']" v-show="versionErrTips">{{versionErrTips}}</p>
                         </div>
-                        <bk-select v-else-if="isProjVersion" placeholder="请选择要部署的项目版本" style="width: 400px"
+                        <bk-select v-else-if="isProjVersion" placeholder="请选择要部署的应用版本" style="width: 400px"
                             v-model="versionForm.projVersionSelect" :loading="projVersionLoading" @toggle="toggleProjVersionList">
                             <bk-option v-for="option in projVersionList"
                                 :key="option.version"
@@ -233,7 +233,7 @@
                 ext-cls="offline-dialog"
             >
                 <div>
-                    <bk-alert type="warning" title="下架成功后，项目对应的访问入口将会被关闭"></bk-alert>
+                    <bk-alert type="warning" title="下架成功后，应用对应的访问入口将会被关闭"></bk-alert>
                     <div :class="[$style['offline-env-div'], $style['type']]">
                         <span :class="$style['offline-label']">下架环境</span>
                         <bk-radio-group v-model="offlineEnv" :class="$style['offline-type']">

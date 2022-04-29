@@ -9,22 +9,19 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import Extends from './extends'
-
-export default Extends({
-    name: 'grid',
-    type: 'render-grid',
-    displayName: '单格',
-    icon: 'bk-drag-grid-1',
+export default {
+    name: 'block',
+    type: 'render-block',
+    displayName: '行',
     order: 1,
-    props: {
+    icon: 'bk-drag-grid-1',
+    group: '布局',
+    styles: ['size', 'padding', 'font', 'background'],
+    renderStyles: {
+        width: '100%'
     },
+    props: {},
     slots: {
-        default: [
-            {
-                name: ['layout'],
-                type: ['render-column']
-            }
-        ]
+        default: []
     }
-})
+}

@@ -6,6 +6,7 @@
             trigger="click"
             theme="light"
             ext-cls="g-popover-empty-padding"
+            :tippy-options="{ arrow: false }"
             :on-show="getFunctionListFromApi"
         >
             <bk-input
@@ -17,6 +18,7 @@
             <div slot="content">
                 <section class="choose-function" v-bkloading="{ isLoading }">
                     <bk-tab
+                        class="function-tab"
                         type="border-card"
                         :label-height="42"
                         :active.sync="functionType"
@@ -238,10 +240,14 @@
         .choose-function-search {
             width: 280px;
             margin: 4px 10px;
+            ::v-deep input {
+                border-color: transparent transparent #EAEBF0;
+            }
         }
         .function-list {
             max-height: 350px;
             overflow-y: auto;
+            padding-bottom: 8px;
             @mixin scroller;
         }
         .function-group {
@@ -290,5 +296,32 @@
         ::v-deep .bk-tab-section {
             padding: 0;
         }
+    }
+    .function-tab {
+        ::v-deep .bk-tab-header {
+            height: 32px !important;
+            border-top: none;
+            background-image: none !important;
+        }
+        ::v-deep .bk-tab-label-wrapper, ::v-deep .bk-tab-label-list, ::v-deep .bk-tab-label-list li {
+            height: 32px !important;
+            line-height: 32px !important;
+        }
+        ::v-deep .bk-tab-label-list li {
+            border: none;
+            background: #f0f1f5;
+            &:nth-child(2) {
+                border-radius: 0px 0px 4px 0px;
+            }
+            &:last-child {
+                border-radius: 0px 0px 0px 4px;
+            }
+        }
+        ::v-deep .bk-tab-label-list li .bk-tab-label {
+            font-size: 12px;
+        }
+    }
+    ::v-deep .tippy-active .choose-input .bk-input-text input {
+        border-color: #3a84ff !important;
     }
 </style>

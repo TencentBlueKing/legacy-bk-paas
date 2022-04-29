@@ -225,6 +225,9 @@ class PageCode {
     generateComponment (item, vueDirective, propDirective, inFreeLayout = false) {
         item = Object.assign({}, item, { componentId: camelCase(item.componentId, { transform: camelCaseTransformMerge }) })
         let css = ''
+        if (item.type === 'render-block') {
+            item.type = 'div'
+        }
         if (inFreeLayout) {
             css += 'position: absolute;'
             if (item.renderStyles.top) {
@@ -367,9 +370,6 @@ class PageCode {
                             >${slotStr}</${item.type}>
                             <!-- eslint-enable -->`
                     } else {
-                        if (item.type === 'bk-checkbox-group') {
-                            console.log(itemProps, 1, vueDirective, 2, propDirective)
-                        }
                         componentCode += `
                             <${item.type} ${itemProps} ${itemStyles} ${itemClass} ${itemEvents} ${vueDirective} ${propDirective}
                                 >${slotStr}
@@ -1388,9 +1388,12 @@ class PageCode {
                     // table slot 可能会用到fun，需要特殊处理一下。其他情况也可以在slot value 里面加上 methodCode 字段来处理
                     if (Array.isArray(slot.val)) {
                         (slot.val || []).forEach((item) => {
-                            if (item.methodCode) {
-                                this.addUsedFunc(item.methodCode)
-                            }
+                            const methodCodeList = Array.isArray(item.methodCode) ? item.methodCode : [item.methodCode]
+                            methodCodeList.forEach((methodCode) => {
+                                if (methodCode) {
+                                    this.addUsedFunc(methodCode)
+                                }
+                            })
                         })
                     }
                     param.val = disPlayVal

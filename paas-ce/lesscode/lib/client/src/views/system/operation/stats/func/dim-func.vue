@@ -69,7 +69,7 @@
                 },
                 columns: [
                     { id: 'funcName', name: '函数名', width: '360' },
-                    { id: 'projectName', name: '所属项目', width: '360' },
+                    { id: 'projectName', name: '所属应用', width: '360' },
                     { id: 'pageUsedCount', name: '使用页面数', dynamic: true, type: 'number' }
                 ],
                 filters: {

@@ -40,7 +40,7 @@
                 <div slot="footer" class="foot-main">
                     <bk-button text class="foot-btn" @click.stop="handleShowSource(card)">查看源码</bk-button>
                     <bk-divider direction="vertical"></bk-divider>
-                    <bk-button text class="foot-btn" @click.stop="handleShowAddFuncFromMarket(card)">添加至项目</bk-button>
+                    <bk-button text class="foot-btn" @click.stop="handleShowAddFuncFromMarket(card)">添加至应用</bk-button>
                     <template v-if="isPlatformAdmin">
                         <bk-divider direction="vertical"></bk-divider>
                         <bk-button text class="foot-btn" @click.stop="handleShowEditFunc(card)">编辑</bk-button>

@@ -18,12 +18,9 @@ export const remove = () => {
         msg = `组件 ${parentNode.type} 的 slot 容器不能刪除`
     } else if (parentNode.type === 'widget-form-item') {
         msg = '表单内元素不可删除,请在右侧面板编辑'
-    } else if (parentNode.root
-        && parentNode.children.length < 2) {
-        msg = '画布中至少要有一个布局组件'
     } else if (activeNode.type === 'render-column') {
-        if (parentNode.children.length <= 1) {
-            msg = '列数至少为 1 列'
+        if (parentNode.children.length <= 2) {
+            msg = '列数至少为 2 列'
         }
     }
 
