@@ -13,10 +13,18 @@ instance.interceptors.response.use(
     response => response.data,
     // 解析 http status code (非 200)
     error => {
-        const { response } = error
+        let {
+            message = '接口访问异常',
+            status: code = '-1',
+            status: httpStatus = 500
+        } = error
+        const {
+            response,
+            stack
+        } = error
         if (response) {
             // 默认提示 http 状态码错误标记
-            let message = response.statusText
+            message = response.statusText
             // 兼容接口响应时通过body返回错误信息
             if (response.data && response.data.message) {
                 message = response.data.message
@@ -24,14 +32,14 @@ instance.interceptors.response.use(
             if (response.data && response.data.detail) {
                 message = response.data.detail
             }
+            httpStatus = response.status || 500
             // 默认给出的 code
-            let code = response.status || -1
+            code = response.status || -1
             if (response.data && response.data.code) {
                 code = response.data.code
             }
-            return Promise.reject(new global.BusinessError(message, code))
         }
-        return Promise.reject(new global.BusinessError('接口访问异常', -1))
+        return Promise.reject(new global.BusinessError(message, code, httpStatus, stack))
     }
 )
 
