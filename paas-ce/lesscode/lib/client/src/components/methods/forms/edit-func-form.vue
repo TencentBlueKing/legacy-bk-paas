@@ -95,7 +95,10 @@
                 const confirmFn = () => {
                     this.$emit('close')
                 }
-                if (this.formChanged) {
+                const monacoRef = this.$refs?.monaco?.$refs?.monaco
+                if (monacoRef?.isFull) {
+                    monacoRef?.exitFullScreen()
+                } else if (this.formChanged) {
                     this.$bkInfo({
                         title: '请确认是否关闭',
                         subTitle: '存在未保存的函数，关闭后不会保存更改',
@@ -107,54 +110,49 @@
             },
 
             handleSaveFunction () {
-                return this.validate().then((form) => {
-                    if (form.id) {
-                        return this.submitEdit(form)
-                    } else {
-                        return this.submitCreate(form)
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        this.isSubmitting = true
+                        const form = await this.validate()
+                        if (form.id) {
+                            await this.submitEdit(form)
+                        } else {
+                            await this.submitCreate(form)
+                        }
+                        resolve()
+                    } catch (err) {
+                        if (err?.code === 499) {
+                            this.messageHtmlError(err.message)
+                        } else if (err?.content) {
+                            this.messageError(err.content || err)
+                        } else {
+                            this.messageError(err.message || err)
+                        }
+                        reject(err)
+                    } finally {
+                        this.isSubmitting = false
+                        this.refreshLayoutFunctionList()
                     }
-                }).catch((validator) => {
-                    this.messageError(validator.content || validator)
                 })
             },
 
             submitEdit (form) {
-                this.isSubmitting = true
-                this.editFunction(form).then(() => {
+                return this.editFunction(form).then(() => {
                     this.formChanged = false
                     this.messageSuccess('编辑函数成功')
-                    this.$emit('refresh')
-                }).catch((err) => {
-                    if (err?.code === 499) {
-                        this.messageHtmlError(err.message)
-                    } else {
-                        this.messageError(err.message || err)
-                    }
-                }).finally(() => {
-                    this.isSubmitting = false
-                    this.refreshLayoutFunctionList()
+                    this.$emit('success-save')
                 })
             },
 
             submitCreate (form) {
-                this.isSubmitting = true
-                this.createFunction({
+                return this.createFunction({
                     ...form,
                     projectId: this.projectId,
                     versionId: this.currentVersionId
                 }).then(() => {
                     this.formChanged = false
                     this.messageSuccess('新增函数成功')
-                    this.$emit('refresh')
-                }).catch((err) => {
-                    if (err?.code === 499) {
-                        this.messageHtmlError(err.message)
-                    } else {
-                        this.messageError(err.message || err)
-                    }
-                }).finally(() => {
-                    this.isSubmitting = false
-                    this.refreshLayoutFunctionList()
+                    this.$emit('success-save')
                 })
             },
 

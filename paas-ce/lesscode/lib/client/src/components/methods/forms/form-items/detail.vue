@@ -2,7 +2,7 @@
     <bk-form :label-width="110" :model="form" ref="funcForm" :form-type="formType" class="func-form-item">
         <bk-form-item label="函数类型" property="funcType">
             <bk-radio-group
-                v-model="form.funcType"
+                :value="form.funcType"
                 @change="(funcType) => updateValue({ funcType })"
             >
                 <bk-radio-button

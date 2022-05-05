@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import isNode from '../is-node'
+import isNode from '../static/is-node'
 
 const getChild = slot => {
     return isNode(slot) ? slot.toJSON() : slot

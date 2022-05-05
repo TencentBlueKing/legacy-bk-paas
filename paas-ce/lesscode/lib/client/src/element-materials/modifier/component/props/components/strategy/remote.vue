@@ -50,6 +50,7 @@
     import selectFunc from '@/components/methods/select-func'
     import { bus } from '@/common/bus'
     import { replaceFuncKeyword, replaceFuncParam } from 'shared/function'
+    import { VARIABLE_TYPE, VARIABLE_VALUE_TYPE } from 'shared/variable'
     import remoteExample from './remote-example'
 
     export default {
@@ -94,7 +95,8 @@
                     methodCode: '',
                     params: []
                 },
-                usedMethodMap: {}
+                usedMethodMap: {},
+                usedVariableMap: {}
             }
         },
         computed: {
@@ -116,23 +118,40 @@
             },
 
             getVariableVal (variable) {
-                const { defaultValue, defaultValueType, valueType } = variable
-                let value = defaultValueType === 0 ? defaultValue.all : defaultValue.stag
-                if (valueType === 6) value = ''
-                if ([0, 5].includes(valueType)) value = `'${value}'`
-
-                // 对象类型，加上 ()，让直接 . 引用属性不会报错
-                if (valueType === 4) value = `(${value})`
+                const copyVariable = JSON.parse(JSON.stringify(variable))
+                const { defaultValue, defaultValueType, valueType } = copyVariable
+                let value = defaultValueType === VARIABLE_VALUE_TYPE.SAME ? defaultValue.all : defaultValue.stag
+                // 计算变量，赋为空值
+                if (valueType === VARIABLE_TYPE.COMPUTED.VAL) {
+                    value = ''
+                }
+                // 对象类型，解析为object
+                if (valueType === VARIABLE_TYPE.OBJECT.VAL && typeof value !== 'object') {
+                    value = JSON.parse(value)
+                }
                 return value
             },
 
-            processVarInFunParams (str, funcName) {
+            processVarInFunApiData (str, funcName) {
                 return replaceFuncParam(str || '', (variableCode) => {
                     const curVar = this.variableList.find((variable) => (variable.variableCode === variableCode))
                     if (curVar) {
-                        return this.getVariableVal(curVar)
+                        this.usedVariableMap[variableCode] = this.getVariableVal(curVar)
+                        return `this.${variableCode}`
                     } else {
-                        throw new Error(`函数【${funcName}】里引用的变量【${variableCode}】不存在，请检查`)
+                        throw new Error(`函数【${funcName}】Api Data里引用的变量【${variableCode}】不存在，请检查`)
+                    }
+                })
+            },
+
+            processVarInFunApiUrl (str, funcName) {
+                return replaceFuncParam(str || '', (variableCode) => {
+                    const curVar = this.variableList.find((variable) => (variable.variableCode === variableCode))
+                    if (curVar) {
+                        this.usedVariableMap[variableCode] = this.getVariableVal(curVar)
+                        return `\${this.${variableCode}}`
+                    } else {
+                        throw new Error(`函数【${funcName}】Api Url里引用的变量【${variableCode}】不存在，请检查`)
                     }
                 })
             },
@@ -153,9 +172,9 @@
                 if (returnMethod.funcType === 1) {
                     const remoteParams = (returnMethod.remoteParams || []).join(', ')
                     const data = `{
-                        url: '${this.processVarInFunParams(returnMethod.funcApiUrl, returnMethod.funcName)}',
+                        url: \`${this.processVarInFunApiUrl(returnMethod.funcApiUrl, returnMethod.funcName)}\`,
                         type: '${returnMethod.funcMethod}',
-                        apiData: ${this.processVarInFunParams(returnMethod.funcApiData, returnMethod.funcName) || '\'\''},
+                        apiData: ${this.processVarInFunApiData(returnMethod.funcApiData, returnMethod.funcName) || '\'\''},
                         withToken: ${returnMethod.withToken}
                     }`
                     returnMethod.funcStr = `const ${returnMethod.funcName} = (${funcParams}) => { return this.$store.dispatch('getApiData', ${data}).then((${remoteParams}) => { ${returnMethod.funcBody} }) };`
@@ -173,7 +192,7 @@
             },
 
             processFuncBody (funcName, funcBody) {
-                return replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
+                return replaceFuncKeyword(funcBody, (all, first, second, variableCode, funcStr, funcCode) => {
                     if (funcCode) {
                         const curFunc = this.usedMethodMap[funcCode] || this.getMethodByCode(funcCode)
                         if (curFunc.id) {
@@ -182,15 +201,19 @@
                             throw new Error(`函数【${funcName}】里引用的函数【${funcCode}】不存在，请检查`)
                         }
                     }
-                    if (dirKey) {
-                        const curVar = this.variableList.find((variable) => (variable.variableCode === dirKey))
-                        if (curVar) return this.getVariableVal(curVar)
-                        else throw new Error(`函数【${funcName}】里引用的变量【${dirKey}】不存在，请检查`)
+                    if (variableCode) {
+                        const curVar = this.variableList.find((variable) => (variable.variableCode === variableCode))
+                        if (curVar) {
+                            this.usedVariableMap[variableCode] = this.getVariableVal(curVar)
+                            return `this.${variableCode}`
+                        } else {
+                            throw new Error(`函数【${funcName}】里引用的变量【${variableCode}】不存在，请检查`)
+                        }
                     }
                 })
             },
 
-            createSandBox () {
+            createSandBox (contextProxy = {}) {
                 const Fn = Function
                 const global = Fn('return this')()
                 const vm = this
@@ -231,7 +254,7 @@
                     })
                     return proxy
                 }
-                const context = createProxy({})
+                const context = createProxy(contextProxy)
                 const sandbox = (script) => {
                     const hasAwait = /await\s/.test(script)
                     const Fn = Function
@@ -277,7 +300,7 @@
                 }
                 
                 try {
-                    const sandBox = this.createSandBox()
+                    const sandBox = this.createSandBox(this.usedVariableMap)
                     const res = await sandBox.exec(methodStr, this.remoteData.params)
                     
                     let message = this.remoteValidate(res)
@@ -303,7 +326,6 @@
             handleShowExample () {
                 this.$refs.example.isShow = true
             }
-
         }
     }
 </script>

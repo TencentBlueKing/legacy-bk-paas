@@ -33,7 +33,7 @@
             tableSheetName () {
                 const nameMap = {
                     user: '按用户',
-                    project: '按项目',
+                    project: '按应用',
                     func: '按函数',
                     comp: '按自定义组件'
                 }

@@ -1,4 +1,3 @@
-import { bus } from '@/common/bus'
 import { getDefaultFunction } from 'shared/function'
 
 import formMarket from './form-items/market.vue'
@@ -39,14 +38,13 @@ export default {
 
     watch: {
         funcData: {
-            handler (val) {
+            handler (val = {}) {
                 const copyForm = JSON.parse(JSON.stringify(val), (a, b) => {
                     if (b !== undefined && b !== null) return b
                 })
                 Object.assign(this.form, defaultForm, copyForm)
                 this.formChanged = false
                 this.clearError()
-                bus.$emit('switch-fun-form', this.form)
             },
             immediate: true,
             deep: true

@@ -1,6 +1,6 @@
 <template>
     <bk-sideslider
-        title="添加至项目"
+        title="添加至应用"
         :is-show.sync="isShow"
         :quick-close="true"
         :width="796"

@@ -35,12 +35,12 @@
                         <bk-radio-button :value="2">
                             <span :class="['check-radio', { choose: sideObj.form.roleId === 2 }]"></span>
                             <span class="check-radio-title">开发者</span><br>
-                            拥有项目的页面、函数、组件开发权限及部署权限
+                            拥有应用的页面、函数、组件开发权限及部署权限
                         </bk-radio-button>
                         <bk-radio-button :value="1">
                             <span :class="['check-radio', { choose: sideObj.form.roleId === 1 }]"></span>
                             <span class="check-radio-title">管理员</span><br>
-                            拥有项目的所有权限
+                            拥有应用的所有权限
                         </bk-radio-button>
                     </bk-radio-group>
                 </bk-form-item>
@@ -61,7 +61,7 @@
             :mask-close="false"
             :auto-close="false"
         >
-            确定删除成员{{ deleteObj.name }}？删除后该成员将失去项目【{{ deleteObj.roleId === 1 ? '管理员' : '开发者' }}】角色权限
+            确定删除成员{{ deleteObj.name }}？删除后该成员将失去应用【{{ deleteObj.roleId === 1 ? '管理员' : '开发者' }}】角色权限
             <div class="dialog-footer" slot="footer">
                 <bk-button
                     theme="danger"

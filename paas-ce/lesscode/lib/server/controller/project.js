@@ -35,7 +35,7 @@ module.exports = {
             const { projectName, projectCode } = projectData
 
             if (invalidProjectIds.includes(projectCode)) {
-                ctx.throw(200, '项目ID不能为内置关键字', { code: CODE.BIZ.PROJECT_ID_INVALID })
+                ctx.throw(200, '应用ID不能为内置关键字', { code: CODE.BIZ.PROJECT_ID_INVALID })
             }
 
             // 检查名称和英文ID的唯一性
@@ -45,11 +45,11 @@ module.exports = {
             ])
 
             if (foundNameProject && foundNameProject.length) {
-                ctx.throw(400, '项目名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
+                ctx.throw(400, '应用名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
             }
 
             if (foundCodeProject && foundCodeProject.length) {
-                ctx.throw(400, '项目ID已经存在', { code: CODE.BIZ.PROJECT_ID_EXISTED })
+                ctx.throw(400, '应用ID已经存在', { code: CODE.BIZ.PROJECT_ID_EXISTED })
             }
 
             const { projectId } = await projectModel.createProject(projectData, userProjectRoleData, layoutData)
@@ -225,7 +225,7 @@ module.exports = {
         try {
             const foundNameProject = await projectModel.findOneProjectByNameAndUserId(name, ctx.session.userInfo.id)
             if (foundNameProject && foundNameProject.length) {
-                ctx.throw(200, '项目名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
+                ctx.throw(200, '应用名称已经存在', { code: CODE.BIZ.PROJECT_NAME_EXISTED })
             }
             ctx.send(res)
         } catch (e) {

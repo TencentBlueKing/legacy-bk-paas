@@ -32,6 +32,9 @@ url("fonts/iconcool.eot?#iefix") format("embedded-opentype");
 .bk-drag-close-circle-fill:before {
 	content: "\e181";
 }
+.bk-drag-setting-fill:before {
+	content: "\e1f4";
+}
 .bk-drag-play:before {
 	content: "\e103";
 }
@@ -694,4 +697,46 @@ url("fonts/iconcool.eot?#iefix") format("embedded-opentype");
 }
 .bk-drag-icon-2:before {
 	content: "\e1e5";
+}
+.bk-drag-it-new-desktop:before {
+	content: "\e1e6";
+}
+.bk-drag-set-fill:before {
+	content: "\e1e7";
+}
+.bk-drag-battery:before {
+	content: "\e1e8";
+}
+.bk-drag-wifi:before {
+	content: "\e1ea";
+}
+.bk-drag-cellular-connection:before {
+	content: "\e1e9";
+}
+.bk-drag-column:before {
+	content: "\e1eb";
+}
+.bk-drag-grid:before {
+	content: "\e1ec";
+}
+.bk-drag-info:before {
+	content: "\e1ed";
+}
+.bk-drag-page:before {
+	content: "\e1ee";
+}
+.bk-drag-picture:before {
+	content: "\e1ef";
+}
+.bk-drag-flow:before {
+	content: "\e1f0";
+}
+.bk-drag-source:before {
+	content: "\e1f1";
+}
+.bk-drag-column:before {
+	content: "\e1f2";
+}
+.bk-drag-grid:before {
+	content: "\e1f3";
 }

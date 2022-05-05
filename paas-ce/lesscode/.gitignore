@@ -41,6 +41,7 @@ lib/server/conf/npm.js
 lib/server/conf/bk-repo.js
 lib/server/conf/data-source.js
 lib/server/conf/encrypt-secret-key.js
+lib/server/conf/no-code.js
 
 !lib/server/project-template/project-init-code/bin
 lib/server/project-template/project-target*

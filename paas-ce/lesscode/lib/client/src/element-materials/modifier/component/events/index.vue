@@ -11,7 +11,13 @@
 
 <template>
     <section v-if="configEvents.length">
-        <h3 class="event-tip">可添加丰富的事件，以实现复杂的业务需求</h3>
+        <h3
+            class="empty-event"
+            v-if="Object.keys(renderEvents).length <= 0"
+        >
+            <img src="../../../../images/empty-event.png" />
+            <span class="event-tip">可添加丰富的事件，以实现复杂的业务需求</span>
+        </h3>
         <ul>
             <render-event
                 v-for="(eventValue, eventName) in renderEvents"
@@ -103,5 +109,15 @@
         padding: 0;
         font-size: 12px;
         font-weight: normal;
+    }
+    .empty-event {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin: 21px 0 6px;
+        img {
+            width: 66px;
+            height: 66px;
+        }
     }
 </style>

@@ -389,7 +389,7 @@ export const categoryCount = async (ctx) => {
     try {
         const belongProjectId = parseInt(ctx.query.projectId)
         if (!belongProjectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         const res = await getRepository(PageTemplate)
             .createQueryBuilder()
