@@ -7,8 +7,9 @@
                         <bk-button theme="primary" icon-right="icon-angle-down">新建</bk-button>
                     </div>
                     <ul class="bk-dropdown-list" slot="dropdown-content">
-                        <li><a href="javascript:;" @click="handleCreate">空白页面</a></li>
-                        <li><a href="javascript:;" @click="handleTempCreate">从模板新建</a></li>
+                        <li><a href="javascript:;" @click="handleCreate('PC', '')">自定义页面</a></li>
+                        <li><a href="javascript:;" @click="handleCreate('MOBILE', '')">移动端页面</a></li>
+                        <li><a href="javascript:;" @click="handleCreate('PC', 'FORM')">普通表单页面</a></li>
                     </ul>
                 </bk-dropdown-menu>
                 <template>
@@ -105,7 +106,7 @@
             <page-dialog ref="pageDialog" :action="action" :current-name="currentName" :refresh-list="getPageList"></page-dialog>
             <download-dialog ref="downloadDialog"></download-dialog>
             <edit-route-dialog ref="editRouteDialog" :route-group="editRouteGroup" :current-route="currentRoute" @success="getPageList" />
-            <page-from-template-dialog ref="pageFromTemplateDialog"></page-from-template-dialog>
+            <create-page-dialog ref="createPageDialog" :platform="createPlatform" :nocode-type="createNocodeType" />
         </main>
     </section>
 </template>
@@ -113,10 +114,9 @@
 <script>
     import { mapGetters } from 'vuex'
     import pageDialog from '@/components/project/page-dialog'
-    import pagePreviewThumb from '@/components/project/page-preview-thumb.vue'
     import downloadDialog from '@/views/system/components/download-dialog'
     import editRouteDialog from '@/components/project/edit-route-dialog'
-    import pageFromTemplateDialog from '@/components/project/page-from-template-dialog.vue'
+    import createPageDialog from '@/components/project/create-page-dialog.vue'
     import { getRouteFullPath } from 'shared/route'
     import typeSelect from '@/components/project/type-select'
     import dayjs from 'dayjs'
@@ -128,14 +128,15 @@
     export default {
         components: {
             pageDialog,
-            pagePreviewThumb,
             downloadDialog,
             editRouteDialog,
-            pageFromTemplateDialog,
+            createPageDialog,
             typeSelect
         },
         data () {
             return {
+                createPlatform: '',
+                createNocodeType: '',
                 action: '',
                 currentName: '',
                 currentRoute: {},
@@ -216,14 +217,10 @@
                     this.isLoading = false
                 }
             },
-            handleCreate () {
-                this.action = 'create'
-                this.$refs.pageDialog.dialog.formData.id = undefined
-                this.$refs.pageDialog.dialog.formData.pageName = ''
-                this.$refs.pageDialog.dialog.formData.pageCode = ''
-                this.$refs.pageDialog.dialog.formData.pageRoute = ''
-                this.$refs.pageDialog.dialog.formData.layoutId = null
-                this.$refs.pageDialog.dialog.visible = true
+            handleCreate (platform, nocodeType) {
+                this.createPlatform = platform
+                this.createNocodeType = nocodeType
+                this.$refs.createPageDialog.isShow = true
             },
             handlePreviewPcProject () {
                 // 跳转到预览入口页面
@@ -237,12 +234,11 @@
             async handleCopy (page) {
                 this.action = 'copy'
                 const layoutId = this.routeMap[page.id].layoutId
+                this.$refs.pageDialog.layoutId = layoutId
                 this.$refs.pageDialog.dialog.formData.id = page.id
-                this.$refs.pageDialog.dialog.formData.pageType = page.pageType
                 this.$refs.pageDialog.dialog.formData.pageName = `${page.pageName}-copy`
                 this.$refs.pageDialog.dialog.formData.pageCode = ''
                 this.$refs.pageDialog.dialog.formData.pageRoute = ''
-                this.$refs.pageDialog.dialog.formData.layoutId = layoutId
                 this.$refs.pageDialog.dialog.visible = true
             },
             async handleDownloadSource (targetData, pageId, styleSetting) {
@@ -273,12 +269,10 @@
             async handleRename (page) {
                 this.action = 'rename'
                 this.currentName = page.pageName
-                this.$refs.pageDialog.dialog.formData.pageType = page.pageType
+                this.$refs.pageDialog.layoutId = null
                 this.$refs.pageDialog.dialog.formData.pageName = page.pageName
-                this.$refs.pageDialog.dialog.formData.pageCode = page.pageCode
-                this.$refs.pageDialog.dialog.formData.pageRoute = page.pageRoute
                 this.$refs.pageDialog.dialog.formData.id = page.id
-                this.$refs.pageDialog.dialog.formData.layoutId = null
+                
                 this.$refs.pageDialog.dialog.visible = true
             },
             handleEditRoute (page) {
@@ -376,11 +370,6 @@
                 this.pageType = type
                 this.handleSearch(false)
             },
-            // 从模板创建
-            handleTempCreate () {
-                this.$refs.pageFromTemplateDialog.isShow = true
-            },
-
             // 跳转到发布部署页面
             handleRelease () {
                 this.$router.push({
