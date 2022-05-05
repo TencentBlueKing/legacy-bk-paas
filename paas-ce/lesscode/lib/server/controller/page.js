@@ -45,6 +45,7 @@ export const createDemoPage = async (data) => {
         }
 
         pageData.pageRoute = formatRoutePath(pageData.pageRoute)
+        pageData.pageType = 'PC'
 
         const layoutInst = await getRepository(LayoutInst).findOne({ where: { projectId, isDefault: 1, deleteFlag: 0 } })
 
