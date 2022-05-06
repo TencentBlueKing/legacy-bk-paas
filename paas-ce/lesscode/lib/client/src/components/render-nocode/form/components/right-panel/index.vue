@@ -1,7 +1,7 @@
 <template>
     <div>
         <layout-setting v-if="editType === 'layout'" />
-        <form-setting v-else />
+        <form-setting v-else :field="field" :list="list" />
     </div>
 </template>
 
@@ -17,6 +17,15 @@
             editType: {
                 type: String,
                 default: 'form'
+            },
+            appId: String,
+            field: {
+                type: Object,
+                default: () => ({})
+            },
+            list: {
+                type: Array,
+                default: () => []
             }
         },
         data () {

@@ -93,6 +93,7 @@
     "@blueking/bundless": "0.0.7",
     "@blueking/bundless-plugin-vue2": "0.0.4",
     "@blueking/magicbox-header": "~1.1.30",
+    "@blueking/process-form-plugin": "0.0.3",
     "@icon-cool/bk-icon-vue-drag-vis": "^0.2.12",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.31.2",

@@ -6,7 +6,8 @@
         <div :class="$style['operation-wraper']">
             <render-nocode
                 v-show="operation === 'edit'"
-                :style="renderStyles" />
+                :style="renderStyles"
+                @change="handleChange" />
             <component
                 v-if="operation !== 'edit'"
                 :is="com"
@@ -57,22 +58,28 @@
                 }
                 return comMap[this.operation]
             }
+        },
+        methods: {
+            handleChange ($event) {
+                console.log($event)
+            }
         }
     }
 </script>
 <style lang="postcss" module>
-    @import "@/css/mixins/scroller";
+@import "@/css/mixins/scroller";
 
-    .operation-area{
-        height: 100%;
-        min-width: min-content;
-        padding: 0 20px;
-        /* margin: 20px 0; */
-        overflow: auto;
-        @mixin scroller;
-        .operation-wraper{
-            background: #fff;
-            min-width: min-content;
-        }
-    }
+.operation-area {
+  height: 100%;
+  min-width: min-content;
+  padding: 0 20px;
+  /* margin: 20px 0; */
+  overflow: auto;
+  @mixin scroller;
+
+  .operation-wraper {
+    background: #fff;
+    min-width: min-content;
+  }
+}
 </style>

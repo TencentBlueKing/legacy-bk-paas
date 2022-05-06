@@ -1,7 +1,7 @@
 <template>
     <div>
         <render-flow v-if="nocodeType === 'flow'" />
-        <render-form v-else />
+        <render-form v-else @change="$emit('change',$event)" />
     </div>
 </template>
 
@@ -19,5 +19,6 @@
                 nocodeType: 'form'
             }
         }
+
     }
 </script>
