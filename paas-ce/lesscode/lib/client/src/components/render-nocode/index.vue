@@ -19,7 +19,7 @@
         },
         data () {
             return {
-                nocodeType: 'flow'
+                nocodeType: 'form'
             }
         }
     }
