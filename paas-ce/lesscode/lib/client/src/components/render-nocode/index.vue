@@ -1,6 +1,7 @@
 <template>
     <div>
         <render-flow v-if="nocodeType === 'flow'" />
+        <render-data-manage v-else-if="nocodeType === 'dataManage'"></render-data-manage>
         <render-form v-else />
     </div>
 </template>
@@ -8,15 +9,17 @@
 <script>
     import RenderFlow from './flow'
     import RenderForm from './form'
+    import RenderDataManage from './data-manage'
 
     export default {
         components: {
             RenderFlow,
-            RenderForm
+            RenderForm,
+            RenderDataManage
         },
         data () {
             return {
-                nocodeType: 'form'
+                nocodeType: 'flow'
             }
         }
     }
