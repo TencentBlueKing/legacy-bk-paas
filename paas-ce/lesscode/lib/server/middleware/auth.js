@@ -91,8 +91,8 @@ module.exports = () => {
                         projectData: {
                             copyFrom: null,
                             projectCode: 'demo',
-                            projectName: 'Demo项目',
-                            projectDesc: '欢迎使用蓝鲸可视化开发平台，这是为您提供的Demo项目，欢迎体验。'
+                            projectName: 'Demo应用',
+                            projectDesc: '欢迎使用蓝鲸可视化开发平台，这是为您提供的Demo应用，欢迎体验。'
                         }
                     })
                 } else {

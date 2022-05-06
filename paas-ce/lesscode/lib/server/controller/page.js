@@ -11,6 +11,7 @@ import { invalidPageIds } from '../conf/system'
 import { getConnection, getRepository } from 'typeorm'
 import OperationLogger from '../service/operation-logger'
 import { POST_PAGE_CREATE, PUT_PAGE_UPDATE } from '../conf/operate-log'
+import { whereVersionLiteral } from '../model/common'
 
 const fs = require('fs')
 
@@ -45,6 +46,7 @@ export const createDemoPage = async (data) => {
         }
 
         pageData.pageRoute = formatRoutePath(pageData.pageRoute)
+        pageData.pageType = 'PC'
 
         const layoutInst = await getRepository(LayoutInst).findOne({ where: { projectId, isDefault: 1, deleteFlag: 0 } })
 
@@ -247,7 +249,9 @@ export const updatePage = async (ctx) => {
             // 页面与变量关联更新
             if (usedVariableMap) {
                 const variableIds = Object.keys(usedVariableMap || {})
-                const exitsUsedVariables = await getRepository(PageVariable).find({ where: { projectId, versionId, pageCode } }) || []
+                const exitsUsedVariables = await getRepository(PageVariable).find({
+                    where: { projectId, versionId: whereVersionLiteral(versionId), pageCode }
+                }) || []
                 // 新增部分
                 const addUsedVariables = variableIds.filter((id) => exitsUsedVariables.findIndex(x => x.id === id) < 0)
                 const addUsedVariableValues = getRepository(PageVariable).create(addUsedVariables.map(variableId => ({

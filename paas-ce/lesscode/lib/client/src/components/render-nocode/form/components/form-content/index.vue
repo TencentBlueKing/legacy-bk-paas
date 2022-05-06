@@ -1,33 +1,52 @@
 <template>
     <!--    <div>render-form</div>-->
-    <div class="form-panel">
-        <draggable
-            filter=".actions-area"
-            :class="['fields-container', activeCls]"
-            :value="fields"
-            :group="{ name: 'form', pull: true, put: ['menu', 'half-row-field'] }"
-            @add="add"
-            @end="end">
-            <field-element
-                v-for="(item, index) in fields"
-                :key="`${item.type}_${index}`"
-                :class="{ actived: selectedIndex === index }"
-                :field="item"
-                @action="handleFormAction($event, index)">
-            </field-element>
-            <bk-exception v-if="fields.length === 0" class="fields-empty" type="empty" scene="part">
-                暂无内容，请在左侧选择需要添加的控件
-            </bk-exception>
-        </draggable>
+<!--    <div class="form-panel">-->
+<!--        <draggable-->
+<!--            filter=".actions-area"-->
+<!--            :class="['fields-container', activeCls]"-->
+<!--            :value="fields"-->
+<!--            :group="{ name: 'form', pull: true, put: ['menu', 'half-row-field'] }"-->
+<!--            @add="add"-->
+<!--            @end="end">-->
+<!--            <field-element-->
+<!--                v-for="(item, index) in fields"-->
+<!--                :key="`${item.type}_${index}`"-->
+<!--                :class="{ actived: selectedIndex === index }"-->
+<!--                :field="item"-->
+<!--                @action="handleFormAction($event, index)">-->
+<!--            </field-element>-->
+<!--            <bk-exception v-if="fields.length === 0" class="fields-empty" type="empty" scene="part">-->
+<!--                暂无内容，请在左侧选择需要添加的控件-->
+<!--            </bk-exception>-->
+<!--        </draggable>-->
+<!--    </div>-->
+    <div>
+        <h3>form组件整个引用：</h3>
+        <hr />
+        <process-form-plugin :fields="formFields"></process-form-plugin>
+        <br />
+        <br />
+        <h3>form组件单个field引用：</h3>
+        <hr />
+        <process-field-item :field="formFields[0]"></process-field-item>
+        <br />
     </div>
 </template>
 
 <script>
-    import draggable from 'vuedraggable'
-    import cloneDeep from 'lodash.clonedeep'
-    import FieldElement from '../from-edit/fieldElement'
-    import { FIELDS_TYPES } from '../../constant/forms'
+    // import draggable from 'vuedraggable'
+    // import cloneDeep from 'lodash.clonedeep'
+    // import FieldElement from '../from-edit/fieldElement'
+    // import { FIELDS_TYPES } from '../../constant/forms'
 
+    import Vue from 'vue'
+    import { ProcessFormPlugin, ProcessFieldItem } from '../../../common/processFormPlugin.js'
+    import '../../../common/processFormPlugin.css'
+    import jsonData from '../../../common/mockFormData.json'
+    console.log(jsonData)
+
+    Vue.use(ProcessFormPlugin)
+    Vue.use(ProcessFieldItem)
     export default {
         components: {
             draggable,
@@ -121,6 +140,9 @@
                     ]
                 }
                 return []
+            }
+            return {
+                formFields: jsonData
             }
         }
     }

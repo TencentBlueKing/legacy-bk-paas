@@ -14,7 +14,6 @@
             language="sql"
             :height="500"
             :value="sql"
-            :options="options"
         ></monaco>
     </bk-dialog>
 </template>

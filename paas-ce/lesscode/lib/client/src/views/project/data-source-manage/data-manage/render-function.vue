@@ -18,21 +18,22 @@
             <bk-table-column label="操作" width="180">
                 <template slot-scope="props">
                     <bk-button text @click="showCode(props.row)" class="mr10">查看源码</bk-button>
-                    <bk-button text @click="addToProject(props.row)">添加至项目</bk-button>
+                    <bk-button text @click="addToProject(props.row)">添加至应用</bk-button>
                 </template>
             </bk-table-column>
         </bk-table>
-        <span class="function-tips">注：如需使用函数，可添加至项目然后在项目中使用</span>
+        <span class="function-tips">注：如需使用函数，可添加至应用然后在应用中使用</span>
 
         <edit-func-sideslider
-            title="添加至项目"
-            :is-show.sync="showAddFunc.isShow"
-            :func-data.sync="showAddFunc.func"
+            title="添加至应用"
+            :is-show="showAddFunc.isShow"
+            :func-data="showAddFunc.func"
             :is-edit="false"
+            @close="handleClose"
         />
 
         <show-func-dialog
-            :is-show="showSource.isShow"
+            :is-show.sync="showSource.isShow"
             :func-data="showSource.func"
             :is-show-export="false"
         />
@@ -45,7 +46,6 @@
         PropType,
         reactive,
         computed,
-        onBeforeMount,
         toRef
     } from '@vue/composition-api'
     import ShowFuncDialog from '@/components/methods/forms/show-func-dialog.vue'
@@ -54,10 +54,6 @@
         FUNCTION_TYPE,
         getDefaultFunction
     } from 'shared/function'
-    import {
-        messageError
-    } from '@/common/bkmagic'
-    import store from '@/store'
     import router from '@/router'
 
     interface ITable {
@@ -79,7 +75,8 @@
                     + '}).catch((err) => {\r\n'
                     + '    console.log(err)\r\n'
                     + '})\r\n',
-                funcSummary: `分页获取 ${tableName} 表的数据,返回该页数据和数据总数目`
+                funcSummary: `分页获取 ${tableName} 表的数据,返回该页数据和数据总数目`,
+                projectId
             },
             {
                 funcName: 'addData',
@@ -91,7 +88,8 @@
                     + '}).catch((err) => {\r\n'
                     + '    console.log(err)\r\n'
                     + '})\r\n',
-                funcSummary: `新增 ${tableName} 表的数据。注意：非空字段必填`
+                funcSummary: `新增 ${tableName} 表的数据。注意：非空字段必填`,
+                projectId
             },
             {
                 funcName: 'updateData',
@@ -103,7 +101,8 @@
                     + '}).catch((err) => {\r\n'
                     + '    console.log(err)\r\n'
                     + '})\r\n',
-                funcSummary: `更新 ${tableName} 表的数据。注意：传入的数据一定要包含 id 字段`
+                funcSummary: `更新 ${tableName} 表的数据。注意：传入的数据一定要包含 id 字段`,
+                projectId
             },
             {
                 funcName: 'deleteData',
@@ -115,7 +114,8 @@
                     + '}).catch((err) => {\r\n'
                     + '    console.log(err)\r\n'
                     + '})\r\n',
-                funcSummary: `删除 ${tableName} 表的数据`
+                funcSummary: `删除 ${tableName} 表的数据`,
+                projectId
             }
         ]
     }
@@ -130,7 +130,6 @@
         },
         setup (props) {
             const projectId = router?.currentRoute?.params?.projectId
-            const versionId = store.getters['projectVersion/currentVersionId']
             const activeTable = toRef(props, 'activeTable')
             const functionList = computed(() => getDataFuncList(activeTable.value.tableName, projectId).map(getDefaultFunction))
 
@@ -150,27 +149,21 @@
                 showSource.func = row
             }
 
+            const handleClose = () => {
+                showAddFunc.isShow = false
+            }
+
             const addToProject = (row) => {
                 showAddFunc.isShow = true
                 showAddFunc.func = row
             }
-
-            const initData = () => {
-                return Promise.all([
-                    store.dispatch('functions/getAllGroupFuncs', { projectId, versionId }),
-                    store.dispatch('variable/getAllVariable', { projectId, versionId, effectiveRange: 0 })
-                ]).catch((err) => {
-                    messageError(err.message || err)
-                })
-            }
-
-            onBeforeMount(initData)
 
             return {
                 functionList,
                 showAddFunc,
                 showSource,
                 showCode,
+                handleClose,
                 addToProject
             }
         }

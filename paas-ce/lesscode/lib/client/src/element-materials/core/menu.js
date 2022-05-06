@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Menu from './widget/menu'
-import getActiveNode from './get-active-node'
+import getActiveNode from './static/get-active-node'
 let instance = null
 
 export const showMenu = (domEevent) => {

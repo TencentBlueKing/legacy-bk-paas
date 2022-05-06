@@ -88,8 +88,8 @@
                     running: '中'
                 },
                 releaseTypeMap: {
-                    NEW_VERSION: '项目默认版本',
-                    PROJECT_VERSION: '项目已有版本',
+                    NEW_VERSION: '应用默认版本',
+                    PROJECT_VERSION: '应用已有版本',
                     HISTORY_VERSION: '历史部署包',
                     FROM_V3: 'PaaS平台部署包'
                 },

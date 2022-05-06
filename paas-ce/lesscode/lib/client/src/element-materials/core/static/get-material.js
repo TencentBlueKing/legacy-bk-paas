@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import ElementMaterials from '../materials'
+import ElementMaterials from '../../materials'
 
 const {
     bk,

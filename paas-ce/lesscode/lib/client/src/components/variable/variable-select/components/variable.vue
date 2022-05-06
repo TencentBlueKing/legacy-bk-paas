@@ -84,7 +84,7 @@
                     title="primary"
                     @click="handleGoGlobalVariableManage">
                     <i class="bk-drag-icon bk-drag-jump-link"></i>
-                    管理项目级公共变量
+                    管理应用级公共变量
                 </bk-button>
             </footer>
         </div>

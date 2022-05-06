@@ -54,7 +54,6 @@ export default {
         },
         size: {
             type: 'string',
-            val: '',
             options: ['large'],
             tips: '单元格大小'
         },
@@ -105,8 +104,8 @@ export default {
         },
         'arrow-direction': {
             type: 'string',
-            val: 'right',
-            options: ['left', 'up', 'right', 'down'],
+            val: '',
+            options: ['left', 'up', 'down', ''],
             tips: '箭头方向'
         }
     }

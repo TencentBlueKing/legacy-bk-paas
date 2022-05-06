@@ -18,7 +18,7 @@ module.exports = {
         try {
             const has = await projectVersionService.has(projectId, version)
             if (has) {
-                ctx.throw(400, '项目版本已存在', { code: CODE.BIZ.PROJECT_VERSION_EXISTED })
+                ctx.throw(400, '应用版本已存在', { code: CODE.BIZ.PROJECT_VERSION_EXISTED })
             }
 
             const newVersionId = await projectVersionService.create({

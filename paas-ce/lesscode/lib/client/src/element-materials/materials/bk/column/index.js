@@ -16,12 +16,6 @@ export default {
     order: 1,
     group: '布局',
     styles: ['padding', 'font', 'background'],
-    renderStyles: {
-        'paddingTop': '5px',
-        'paddingRight': '5px',
-        'paddingBottom': '5px',
-        'paddingLeft': '5px'
-    },
     props: {
         'span': {
             type: 'number',

@@ -16,7 +16,7 @@
                 class="tab-item"
                 :class="{ active: tab === 'project' }"
                 @click="handleToggleTab('project')">
-                <span class="tab-item-label">项目模板</span>
+                <span class="tab-item-label">页面模板</span>
             </div>
             <div
                 class="tab-item"
@@ -52,7 +52,7 @@
                                 theme="primary"
                                 size="small"
                                 @click.stop="handleApply(template)">
-                                应用
+                                添加到应用
                             </bk-button>
                         </div>
                     </div>
@@ -100,6 +100,9 @@
                 isLoading: false,
                 tab: 'project',
                 type: 'project',
+                dragOptions: {
+                    disabled: false
+                },
                 marketTemplateGroups: PAGE_TEMPLATE_TYPE,
                 projectTemplateList: [],
                 marketTemplateList: [],
@@ -185,7 +188,17 @@
             handleToggleTab (tab) {
                 this.tab = tab
                 this.type = tab
-                this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
+                if (this.type === 'project') {
+                    this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
+                    this.dragOptions = {
+                        disabled: false
+                    }
+                } else {
+                    this.renderGroupTemplateList = Object.freeze(this.marketTemplateGroupList)
+                    this.dragOptions = {
+                        disabled: true
+                    }
+                }
             },
             onChoose (e, list) {
                 const contentStr = list[e.oldIndex] && list[e.oldIndex].content
@@ -327,7 +340,7 @@
                     align-items: center;
                     .apply-btn {
                         display: none;
-                        margin-left: 32px;
+                        margin-left: 23px;
                     }
                 }
             }

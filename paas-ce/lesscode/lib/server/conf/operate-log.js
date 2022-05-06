@@ -32,31 +32,31 @@ module.exports = {
         // 项目
         'POST-/api/project/create': {
             code: 'create_project',
-            codeText: '创建项目',
+            codeText: '创建应用',
             target (req, res) {
-                return `项目名称：${req.body.projectName}`
+                return `应用名称：${req.body.projectName}`
             },
             manualSuccess: false,
             manualFail: false
         },
         'PUT-/api/project/update': {
             code: 'update_project',
-            codeText: '更新项目',
+            codeText: '更新应用',
             target (req, res) {
                 const projectId = req.body.id
                 const { projectName, projectDesc, appCode, moduleCode } = req.body.fields
                 if (projectName || projectDesc) {
-                    return `基本信息（项目ID：${projectId}）`
+                    return `基本信息（应用ID：${projectId}）`
                 }
                 if (appCode || moduleCode) {
-                    return `绑定应用信息（项目ID：${projectId}）`
+                    return `绑定应用信息（应用ID：${projectId}）`
                 }
                 return 'unknown'
             }
         },
         'GET-/api/projectCode/downloadCode': {
             code: 'download_project',
-            codeText: '下载项目源码',
+            codeText: '下载应用源码',
             manualSuccess: true,
             manualFail: true
         },
@@ -207,7 +207,7 @@ module.exports = {
         }
     },
     objNameMap: {
-        'project': '项目',
+        'project': '应用',
         'page': '页面',
         'component': '自定义组件',
         'component_category': '自定义组件分类',

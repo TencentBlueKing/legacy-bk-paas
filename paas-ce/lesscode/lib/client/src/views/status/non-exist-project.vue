@@ -12,8 +12,8 @@
 <template>
     <div :class="[$style['container'], 'preview-exception']">
         <bk-exception :class="$style['exception-wrap']" type="403">
-            <div>{{ pageId ? '页面' : '项目' }}不存在或无权限</div>
-            <div :class="$style['text-subtitle']">系统将在 {{countdown}}s 后返回项目列表页</div>
+            <div>{{ pageId ? '页面' : '应用' }}不存在或无权限</div>
+            <div :class="$style['text-subtitle']">系统将在 {{countdown}}s 后返回应用列表页</div>
         </bk-exception>
     </div>
 </template>

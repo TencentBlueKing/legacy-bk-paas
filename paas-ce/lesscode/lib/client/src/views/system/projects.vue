@@ -6,7 +6,7 @@
                     <bk-button theme="primary" icon-right="icon-angle-down">新建</bk-button>
                 </div>
                 <ul class="bk-dropdown-list" slot="dropdown-content">
-                    <li><a href="javascript:;" @click="handleCreate">空白项目</a></li>
+                    <li><a href="javascript:;" @click="handleCreate">空白应用</a></li>
                     <li><a href="javascript:;" @click="handleTempCreate">从模板新建</a></li>
                 </ul>
             </bk-dropdown-menu>
@@ -20,10 +20,10 @@
                 </li>
             </ul>
             <div class="extra">
-                <span class="total" v-show="projectList.length">共<em class="count">{{projectList.length}}</em>个项目</span>
+                <span class="total" v-show="projectList.length">共<em class="count">{{projectList.length}}</em>个应用</span>
                 <bk-input
                     style="width: 400px"
-                    placeholder="请输入项目名称或描述"
+                    placeholder="请输入应用名称或描述"
                     :clearable="true"
                     :right-icon="'bk-icon icon-search'"
                     v-model="keyword"
@@ -39,14 +39,14 @@
                         <div class="item-bd">
                             <template v-if="pageMap[project.id] && pageMap[project.id].length > 0">
                                 <div class="preview">
-                                    <page-preview-thumb alt="项目缩略预览" :project-id="project.id" />
+                                    <page-preview-thumb alt="应用缩略预览" :project-id="project.id" />
                                 </div>
                             </template>
                             <div class="empty" v-else>
                                 暂无页面
                             </div>
                             <div class="operate-btns">
-                                <bk-button class="edit-btn" theme="primary" @click="toPage(project.id)">进入项目</bk-button>
+                                <bk-button class="edit-btn" theme="primary" @click="toPage(project.id)">开发应用</bk-button>
                                 <bk-button class="preview-btn" @click="preview(project.id)">预览</bk-button>
                             </div>
                         </div>
@@ -77,14 +77,14 @@
                                 @click.stop="handleClickFavorite(project)"
                             ></i>
                         </span>
-                        <span v-if="project.isOffcial" class="default-tag">项目模板</span>
+                        <span v-if="project.isOffcial" class="default-tag">应用模板</span>
                     </div>
                 </div>
                 <div class="empty" v-show="!projectList.length">
                     <bk-exception class="exception-wrap-item exception-part" type="empty" scene="part">
                         <div v-if="$route.query.q">无搜索结果</div>
                         <div v-else>
-                            暂无项目
+                            暂无应用
                             <span v-show="!filter.length || filter === 'my'">
                                 ，<bk-link theme="primary" @click="handleCreate">立即创建</bk-link>
                             </span>
@@ -97,7 +97,7 @@
         <bk-dialog v-model="dialog.create.visible"
             render-directive="if"
             theme="primary"
-            :title="isCopy ? '复制项目' : '创建项目'"
+            :title="isCopy ? '复制应用' : '创建应用'"
             width="750"
             :position="{ top: 100 }"
             :mask-close="false"
@@ -106,17 +106,17 @@
             ext-cls="project-create-dialog"
             @value-change="handleCreateDialogToggle">
             <bk-form ref="createForm" :label-width="86" :rules="dialog.create.formRules" :model="dialog.create.formData">
-                <bk-form-item label="项目名称" required property="projectName" error-display-type="normal">
+                <bk-form-item label="应用名称" required property="projectName" error-display-type="normal">
                     <bk-input maxlength="60" v-model.trim="dialog.create.formData.projectName"
-                        placeholder="请输入项目名称，60个字符以内">
+                        placeholder="请输入应用名称，60个字符以内">
                     </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目ID" required property="projectCode" error-display-type="normal">
+                <bk-form-item label="应用ID" required property="projectCode" error-display-type="normal">
                     <bk-input maxlength="60" v-model.trim="dialog.create.formData.projectCode"
                         placeholder="只能由小写字母组成，该ID将作为自定义组件前缀，创建后不可更改">
                     </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目简介" required property="projectDesc" error-display-type="normal">
+                <bk-form-item label="应用简介" required property="projectDesc" error-display-type="normal">
                     <bk-input
                         v-model.trim="dialog.create.formData.projectDesc"
                         :type="'textarea'"
@@ -125,7 +125,7 @@
                     </bk-input>
                 </bk-form-item>
                 <bk-form-item label="布局模板" style="margin-top: 10px" v-if="!isCopy" error-display-type="normal">
-                    <span class="layout-desc">可多选，作为创建项目页面时可供选择的布局模板，便于项目中统一修改与配置</span>
+                    <span class="layout-desc">可多选，作为创建应用页面时可供选择的布局模板，便于应用中统一修改与配置</span>
                     <layout-thumb-list :list="defaultLayoutList" @change-checked="handleLayoutChecked" @set-default="handleLayoutDefault" />
                 </bk-form-item>
             </bk-form>
@@ -147,11 +147,11 @@
             header-position="left"
             @after-leave="handleRenameDialogAfterLeave">
             <bk-form ref="renameForm" class="rename-form" :label-width="90" :rules="dialog.rename.formRules" :model="dialog.rename.formData">
-                <bk-form-item label="项目名称" required property="projectName" error-display-type="normal">
+                <bk-form-item label="应用名称" required property="projectName" error-display-type="normal">
                     <bk-input ref="projectRenameInput"
                         maxlength="60"
                         v-model="dialog.rename.formData.projectName"
-                        placeholder="请输入项目名称，60个字符以内">
+                        placeholder="请输入应用名称，60个字符以内">
                     </bk-input>
                 </bk-form-item>
             </bk-form>
@@ -169,7 +169,7 @@
             render-directive="if"
             theme="primary"
             ext-cls="delete-dialog-wrapper"
-            title="确认删除该项目？"
+            title="确认删除该应用？"
             width="500"
             footer-position="center"
             :mask-close="false"
@@ -181,7 +181,7 @@
                     <bk-input
                         maxlength="60"
                         v-model="dialog.delete.formData.projectName"
-                        placeholder="请输入项目名称">
+                        placeholder="请输入应用名称">
                     </bk-input>
                 </bk-form-item>
             </bk-form>
@@ -241,7 +241,7 @@
                 projectList: [],
                 pageMap: {},
                 filterLinks: [
-                    { name: '全部项目', value: '' },
+                    { name: '全部应用', value: '' },
                     { name: '我创建的', value: 'my' },
                     { name: '我收藏的', value: 'favorite' }
                     // { name: '我的共享', value: 'share' }
@@ -407,7 +407,7 @@
                     this.dialog.create.loading = true
                     const projectId = await this.$store.dispatch('project/create', { data })
 
-                    this.messageSuccess('项目创建成功')
+                    this.messageSuccess('应用创建成功')
                     this.dialog.create.visible = false
 
                     setTimeout(() => {

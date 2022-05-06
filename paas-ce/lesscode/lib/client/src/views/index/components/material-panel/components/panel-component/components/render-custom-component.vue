@@ -40,7 +40,7 @@
                 </template>
                 <group-box
                     :list="publicComponentList"
-                    :group-name="'其他项目公开的组件'"
+                    :group-name="'其他应用公开的组件'"
                     key="publice">
                     <render-component
                         v-for="component in publicComponentList"
@@ -135,7 +135,7 @@
                     this.groupComponentMap = Object.freeze(groupComponentMap)
                     this.renderGroupComponentMap = Object.freeze({
                         '我的收藏': this.favoriteComponentList,
-                        '其他项目公开的组件': this.publicComponentList,
+                        '其他应用公开的组件': this.publicComponentList,
                         ...this.groupComponentMap
                     })
                     this.searchList = Object.freeze(searchList)
@@ -164,7 +164,7 @@
                     this.isSearch = false
                     this.renderGroupComponentMap = Object.freeze({
                         '我的收藏': this.favoriteComponentList,
-                        '其他项目公开的组件': this.publicComponentList,
+                        '其他应用公开的组件': this.publicComponentList,
                         ...this.groupComponentMap
                     })
                     return

@@ -83,7 +83,7 @@ const bkRenderMap = {
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"
-                    :key="index"
+                    :key="item.templateCol"
                 >
                     <template slot-scope="props">
                         <render-html

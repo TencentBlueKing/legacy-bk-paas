@@ -99,6 +99,13 @@
              */
             handleStart (event) {
                 this.$emit('start', event)
+                LC.triggerEventListener('componentMouserleave', {
+                    type: 'componentMouserleave'
+                })
+                const activeNode = LC.getActiveNode()
+                if (activeNode) {
+                    activeNode.activeClear()
+                }
             },
             /**
              * @desc 结束拖拽
@@ -132,6 +139,22 @@
                 if (event.added) {
                     operationNode = event.added.element
                     triggerEvent.type = 'appendChild'
+                    // 拖动组件需要重置会影响排版的样式
+                    operationNode.setStyle({
+                        position: '',
+                        top: '',
+                        right: '',
+                        bottom: '',
+                        left: '',
+                        marginTop: '',
+                        marginRight: '',
+                        marginBottom: '',
+                        marginLeft: ''
+                    })
+                    setTimeout(() => {
+                        // 新加的组件默认选中
+                        operationNode.active()
+                    }, 100)
                 } else if (event.removed) {
                     operationNode = event.removed.element
                     triggerEvent.type = 'removeChild'
@@ -139,11 +162,7 @@
                     operationNode = event.moved.element
                     triggerEvent.type = 'moveChild'
                 }
-                // 拖动组件需要重置会影响排版的样式
-                operationNode.setStyle({
-                    marginTop: 'unset',
-                    marginLeft: 'unset'
-                })
+                
                 triggerEvent.child = operationNode
                 LC.triggerEventListener(triggerEvent.type, triggerEvent)
                 LC.triggerEventListener('update', triggerEvent)

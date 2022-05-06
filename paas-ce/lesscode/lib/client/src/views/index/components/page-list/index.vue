@@ -8,7 +8,7 @@
             <span class="seperate-line">|</span>
             <span
                 class="bk-drag-icon template-logo"
-                title="返回项目列表"
+                title="返回应用列表"
                 @click="handleBackProjectList">
                 <svg
                     aria-hidden="true"
@@ -151,7 +151,7 @@
                 })
             },
             /**
-             * @desc 返回项目页面列表
+             * @desc 返回应用页面列表
              */
             handleBackPageList () {
                 this.$router.push({
@@ -163,7 +163,7 @@
                 })
             },
             /**
-             * @desc 返回用户项目列表
+             * @desc 返回用户应用列表
              */
             handleBackProjectList () {
                 this.$router.push({

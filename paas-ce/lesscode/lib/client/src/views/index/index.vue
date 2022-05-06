@@ -105,46 +105,48 @@
         watch: {
             curTemplateData: {
                 handler () {
-                    this.handleUpdatePreview({
-                        isGenerateNav: true,
-                        id: this.pageRoute.layoutPath,
-                        curTemplateData: this.curTemplateData,
-                        types: ['reload']
-                    })
+                    this.handleUpdateNavPerview()
                 }
             },
             layoutPageList: {
                 handler () {
-                    this.handleUpdatePreview({
-                        isGenerateNav: true,
-                        id: this.pageRoute.layoutPath,
-                        curTemplateData: this.curTemplateData,
-                        types: ['reload']
-                    })
+                    this.handleUpdateNavPerview()
                 }
             },
             variableList () {
                 // 变量发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             },
             funcGroups () {
                 // 函数发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             },
             'pageDetail.lifeCycle' () {
                 // 生命周期发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             },
             'pageDetail.styleSetting' () {
                 // 页面样式发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             }
         },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
 
-            LC.addEventListener('update', this.handleUpdatePreview)
+            LC.addEventListener('update', this.handleUpdatePreviewContent)
+            // 更新预览区域数据
+            LC.addEventListener('ready', this.initPerviewData)
+            // 卸载的时候，清除 storage 数据
+            LC.addEventListener('unload', this.clearPerviewData)
+
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', this.handleUpdatePreviewContent)
+                // 更新预览区域数据
+                LC.removeEventListener('ready', this.initPerviewData)
+                // 卸载的时候，清除 storage 数据
+                LC.removeEventListener('unload', this.clearPerviewData)
+            })
 
             this.registerCustomComponent()
 
@@ -208,11 +210,7 @@
             ]
         },
         beforeDestroy () {
-            LC.removeEventListener('update', this.handleUpdatePreview)
-            LC.triggerEventListener('unload')
-            
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
-            localStorage.removeItem('ONLINE_PREVIEW')
         },
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
@@ -301,7 +299,6 @@
                     LC.pageStyle = pageDetail.styleSetting
 
                     LC.platform = this.platform
-                    this.handleUpdatePreview()
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -323,14 +320,35 @@
                 (event || window.event).returnValue = confirmationMessage
                 return confirmationMessage
             },
-            handleUpdatePreview (setting = {}) {
+            initPerviewData () {
+                // 更新导航
+                this.handleUpdateNavPerview()
+                // 更新内容区域
+                this.handleUpdatePreviewContent()
+            },
+            clearPerviewData () {
+                localStorage.removeItem('ONLINE_PREVIEW_CONTENT')
+                localStorage.removeItem('ONLINE_PREVIEW_NAV')
+            },
+            handleUpdatePreviewContent (setting = {}) {
                 const defaultSetting = {
                     isGenerateNav: false,
                     id: this.pageDetail.pageCode,
                     curTemplateData: {},
+                    storageKey: 'ONLINE_PREVIEW_CONTENT',
                     types: ['reload', 'update_style']
                 }
                 this.debounceUpdatePreview(Object.assign(defaultSetting, setting))
+            },
+            handleUpdateNavPerview (setting = {}) {
+                const defaultSetting = {
+                    isGenerateNav: true,
+                    id: this.pageRoute.layoutPath,
+                    curTemplateData: this.curTemplateData,
+                    storageKey: 'ONLINE_PREVIEW_NAV',
+                    types: ['reload']
+                }
+                this.updatePreview(Object.assign(defaultSetting, setting))
             }
         }
     }
