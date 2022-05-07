@@ -24,7 +24,7 @@
     import draggable from 'vuedraggable'
     import cloneDeep from 'lodash.clonedeep'
     import { FIELDS_TYPES } from '../../constant/forms'
-    import FieldElement from '../from-edit/fieldElement.vue'
+    import FieldElement from '../form-edit/fieldElement.vue'
     import pinyin from 'pinyin'
 
     export default {

@@ -16,7 +16,7 @@
 <script>
     import cloneDeep from 'lodash.clonedeep'
     import { FIELDS_TYPES_MAPS } from '../../constant/forms'
-    import fieldEdit from '../from-edit/fieldEdit.vue'
+    import fieldEdit from '../form-edit/fieldEdit.vue'
     export default {
         name: 'FormSetting',
         components: {
