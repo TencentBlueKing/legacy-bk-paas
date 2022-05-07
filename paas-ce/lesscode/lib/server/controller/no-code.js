@@ -39,7 +39,6 @@ export default class NoCodeController {
         } else {
             httpParams.push(body)
         }
-        console.log(httpParams)
         const { result, data, message } = await http[httpMethod](...httpParams)
         if (result) {
             return data
