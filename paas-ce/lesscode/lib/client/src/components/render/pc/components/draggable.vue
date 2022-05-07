@@ -6,6 +6,7 @@
         :group="dragGroup"
         :chosen-class="$style['chosen']"
         :ghost-class="ghostClass || $style['ghost']"
+        :style="styles"
         filter="[data-render-drag='disabled']"
         @choose="handleChoose"
         @unchoose="handleUnchoose"
@@ -21,11 +22,6 @@
 </template>
 <script>
     import LC from '@/element-materials/core'
-
-    let dragTargetGroup = null
-    export const getDragTargetGroup = () => {
-        return dragTargetGroup
-    }
 
     export default {
         name: 'render-draggable',
@@ -49,11 +45,11 @@
         inject: ['attachToInteractiveComponent'],
         data () {
             return {
-                dragGroup: this.group
+                dragGroup: this.group,
+                styles: {}
             }
         },
         created () {
-            dragTargetGroup = null
             const dragableCheck = (event) => {
                 /**
                  * 交互式组件状态更新
@@ -86,11 +82,16 @@
              * @param { Object } dragEvent
              */
             handleChoose (event) {
-                dragTargetGroup = event.item.dataset['layout'] ? 'layout' : 'component'
+                const {
+                    height
+                } = this.$refs.draggable.$el.getBoundingClientRect()
+                this.styles = {
+                    height: `${height}px`
+                }
                 this.$emit('choose', event)
             },
             handleUnchoose (event) {
-                dragTargetGroup = null
+                this.styles = {}
                 this.$emit('unchoose', event)
             },
             /**
@@ -99,9 +100,7 @@
              */
             handleStart (event) {
                 this.$emit('start', event)
-                LC.triggerEventListener('componentMouserleave', {
-                    type: 'componentMouserleave'
-                })
+                LC.triggerEventListener('componentMouserleave')
                 const activeNode = LC.getActiveNode()
                 if (activeNode) {
                     activeNode.activeClear()
@@ -112,7 +111,7 @@
              * @param { Object } dragEvent
              */
             handleEnd (event) {
-                dragTargetGroup = null
+                this.styles = {}
                 this.$emit('end', event)
             },
             /**
@@ -168,7 +167,6 @@
                 LC.triggerEventListener('update', triggerEvent)
                 // fix: vue-draggable 内部索引不更新的问题
                 this.$refs.draggable.computeIndexes()
-                dragTargetGroup = null
                 this.$emit('change', event)
             }
         }
@@ -177,8 +175,8 @@
 <style lang="postcss" module>
     .drag-area{
         position: relative;
-        width: 100% !important;
-        height: 100% !important;
+        width: 100%;
+        height: 100%;
         pointer-events: auto !important;
     }
     .chosen{
@@ -189,17 +187,18 @@
         &:after {
             content: "放在这里";
             display: block;
-            height: 32px;
+            height: 24px;
             padding: 0 5px;
             font-size: 12px;
             color: #fff;
             text-align: center;
-            line-height: 32px;
+            line-height: 24px;
             background-color: #C2D7F9;
         }
         &:global(.inline),
         &:global(.inline-block) {
             display: inline-block;
+            vertical-align: sub;
             &:after {
                 width: 60px;
                 display: inline-block;

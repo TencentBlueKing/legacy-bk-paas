@@ -104,7 +104,7 @@
             }
             const updateLogCallback = event => {
                 console.log('\n')
-                console.log(`%c${new Date().toString().slice(0, 25)}`,
+                console.log(`%c>> ${new Date().toString().slice(0, 25)}`,
                             'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
                 console.log(`%c组件更新%c${event.target.componentId}`,
                             'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
@@ -114,7 +114,7 @@
             
             const activeLogCallback = event => {
                 console.log('\n')
-                console.log(`%c${new Date().toString().slice(0, 25)}`,
+                console.log(`%c>> ${new Date().toString().slice(0, 25)}`,
                             'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
                 console.log(`%c组件选中%c${event.target.componentId}`,
                             'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
@@ -130,6 +130,7 @@
                     }, 20)
                 }
             }
+
             /**
              * @name interactiveCallbak
              * @description 当交互式组件的状态改变，每次更新需要监测是否显示“打开交互式组件”的提示
@@ -141,12 +142,23 @@
                 }
             }
 
+            const nodeCallback = (event) => {
+                if (event.target.componentId === this.componentData.componentId) {
+                    this.$forceUpdate()
+                    setTimeout(() => {
+                        this.autoType(event.child)
+                    }, 20)
+                }
+            }
+
             LC.addEventListener('ready', readyCallback)
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('update', updateLogCallback)
             LC.addEventListener('active', interactiveCallbak)
             LC.addEventListener('active', activeLogCallback)
             LC.addEventListener('toggleInteractive', interactiveCallbak)
+            LC.addEventListener('appendChild', nodeCallback)
+            LC.addEventListener('moveChild', nodeCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('ready', readyCallback)
                 LC.removeEventListener('update', updateCallback)
@@ -154,6 +166,8 @@
                 LC.removeEventListener('active', interactiveCallbak)
                 LC.removeEventListener('active', activeLogCallback)
                 LC.removeEventListener('toggleInteractive', interactiveCallbak)
+                LC.removeEventListener('appendChild', nodeCallback)
+                LC.removeEventListener('moveChild', nodeCallback)
             })
         },
         mounted () {
@@ -177,21 +191,28 @@
             /**
              * @desc 自动排版子组件
              */
-            autoType () {
-                if (this._isDestroyed) {
+            autoType (childNode) {
+                if (this._isDestroyed || !childNode) {
                     return
                 }
                 const {
-                    left: parentLeft
+                    top: boxTop,
+                    left: boxLeft
                 } = this.$refs.dragArea.$el.getBoundingClientRect()
-                    
-                this.$refs.component.forEach((componentIns) => {
-                    componentIns.componentData.setStyle('margin-bottom', '10px')
-                    const { left } = componentIns.$el.getBoundingClientRect()
-                    if (left > parentLeft) {
-                        componentIns.componentData.setStyle('margin-left', '10px')
-                    }
-                })
+
+                const $childEl = childNode.$elm
+
+                const {
+                    top: componentTop,
+                    left: componentLeft
+                } = $childEl.getBoundingClientRect()
+                
+                if (componentTop > boxTop) {
+                    childNode.setStyle('marginTop', '10px')
+                }
+                if (componentLeft > boxLeft) {
+                    childNode.setStyle('marginLeft', '10px')
+                }
             },
             /**
              * @desc 鼠标离开时清除组件 hover 效果

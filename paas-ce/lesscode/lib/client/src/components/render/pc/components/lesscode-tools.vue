@@ -12,6 +12,7 @@
             ref="active"
             :class="$style['tools-active']"
             :style="activeStyles"
+            @click.stop=""
             @contextmenu.stop="handleShowMenu">
             <div
                 v-if="activeComponentData.componentId"
